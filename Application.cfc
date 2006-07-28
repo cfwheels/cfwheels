@@ -83,7 +83,7 @@
 	
 	<!--- Runs before each page load --->
 	<cffunction name="onRequestStart">
-		<cfif (cgi.script_name CONTAINS "/config/" OR cgi.script_name CONTAINS "/app/") OR (cgi.script_name CONTAINS "generator.cfm" AND application.settings.environment IS "production")>
+		<cfif (left(cgi.script_name, 8) IS "/config/" OR left(cgi.script_name, 5) IS "/app/" OR left(cgi.script_name, 10) IS "/cfwheels/") OR (left(cgi.script_name, 14) IS "/generator.cfm" AND application.settings.environment IS "production")>
 			<cfthrow type="wheels.unauthorizedAccess">
 		</cfif>
 	</cffunction>
