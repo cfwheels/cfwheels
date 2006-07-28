@@ -1,0 +1,4 @@
+name: cfwheels
+version: 0.5
+summary: ColdFusion on Wheels is an MVC framework modeled after Ruby on Rails. "A CF framework for the rest of us!"
+message: Thanks for installing ColdFusion on Wheels! We hope you find that it's a great way to maintain your code and helps make developing fun again. It requires a mapping in the ColdFusion Administrator: map "/cfwheels" to "{{HADRON_PATH}}/cfwheels"

@@ -1,0 +1,9 @@
+RewriteEngine on
+
+# These rules, by default, behave as follows:
+# If there is nothing in cgi.query_string, send the request to /public/index.htm
+
+RewriteRule ^$ index.cfm [QSA]
+RewriteRule ^([^.]+)$ $1.htm [QSA]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ dispatch.cfc?method=dispatch&cf_request=%{REQUEST_URI} [QSA,L]

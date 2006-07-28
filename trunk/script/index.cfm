@@ -1,0 +1,1 @@
+<cfinclude template="/cfwheels/script/index.cfm">
