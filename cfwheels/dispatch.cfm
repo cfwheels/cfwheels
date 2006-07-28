@@ -206,7 +206,7 @@
 <cfset request.params = duplicate(params)>
 
 <!--- Send to index.cfm when no default route has been setup and the index.cfm file exists (IIS only) --->
-<cfif request.currentrequest IS "/" AND NOT isDefined("request.params.controller") AND fileExists(application.pathTo.webroot&'index.cfm')>
+<cfif request.currentrequest IS "/" AND NOT isDefined("request.params.controller") AND fileExists(application.absolutePathTo.webroot&'index.cfm')>
 	<cflocation url="/index.cfm" addtoken="No">
 </cfif>
 

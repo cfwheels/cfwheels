@@ -16,7 +16,7 @@
 		<cfset var routeFileHash = "">
 		<cfset var datesStruct = structNew()>
 
-		<cfinclude template="/cfwheels/dispatch.cfm">
+		<cfinclude template="#application.pathTo.cfwheels#/dispatch.cfm">
 		
 	</cffunction>
 
