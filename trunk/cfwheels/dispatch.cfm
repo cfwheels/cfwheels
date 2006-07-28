@@ -21,18 +21,18 @@
 <!---------------------->
 
 <!--- fix URL variables (IIS only) --->
-<cfif url["cf_request"] Contains "?">
-	<cfset var_match = REFind("\?.*=", url["cf_request"], 1, "TRUE")>
-	<cfset val_match = REFind("=.*$", url["cf_request"], 1, "TRUE")>
-	<cfset var = Mid(url["cf_request"], (var_match.pos[1]+1), (var_match.len[1]-2))>
-	<cfset val = Mid(url["cf_request"], (val_match.pos[1]+1), (val_match.len[1]-1))>
+<cfif url["wheelsaction"] Contains "?">
+	<cfset var_match = REFind("\?.*=", url["wheelsaction"], 1, "TRUE")>
+	<cfset val_match = REFind("=.*$", url["wheelsaction"], 1, "TRUE")>
+	<cfset var = Mid(url["wheelsaction"], (var_match.pos[1]+1), (var_match.len[1]-2))>
+	<cfset val = Mid(url["wheelsaction"], (val_match.pos[1]+1), (val_match.len[1]-1))>
 	<cfset "url.#var#" = val>
-	<cfset url.cf_request = Mid(url["cf_request"], 1, (var_match.pos[1]-1))>
+	<cfset url.wheelsaction = Mid(url["wheelsaction"], 1, (var_match.pos[1]-1))>
 </cfif>
 
 <!--- Remove the leading slash in the request (if there was something more than just a slash to begin with) to match our routes --->
 <cfif len(requestString) GT 1>
-	<cfset requestString = right(url.cf_request,len(url.cf_request)-1)>
+	<cfset requestString = right(url.wheelsaction,len(url.wheelsaction)-1)>
 </cfif>
 <cfif right(requestString,1) IS NOT "/">
 	<cfset requestString = requestString & "/">
@@ -99,7 +99,7 @@
 <cfset request.get = true>
 <cfset request.post = false>
 <cfset request.xhr = false>
-<cfset request.currentRequest = url.cf_request>
+<cfset request.currentRequest = url.wheelsaction>
 
 <!--- Populate the params structure with the proper parts of the URL --->
 <cfloop from="1" to="#arrayLen(routeParams)#" index="i">
@@ -190,10 +190,10 @@
 	<cfset request.post = true>
 </cfif>
 
-<!--- Take any URL variables (except cf_request and method) and put them in params 
+<!--- Take any URL variables (except wheelsaction and method) and put them in params 
 	  If a FORM and URL variable are named the same, URL will win and go into params --->
 <cfloop collection="#url#" item="key">
-	<cfif key IS NOT "method" AND key IS NOT "cf_request">
+	<cfif key IS NOT "method" AND key IS NOT "wheelsaction">
 		<cfset "params.#lCase(key)#" = url[key]>
 	</cfif>
 </cfloop>
