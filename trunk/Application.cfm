@@ -58,3 +58,7 @@
 	<cfset application.initialized = true>
 
 </cfif>
+
+<cfif (left(cgi.script_name, 8) IS "/config/" OR left(cgi.script_name, 5) IS "/app/" OR left(cgi.script_name, 10) IS "/cfwheels/") OR (left(cgi.script_name, 14) IS "/generator.cfm" AND application.settings.environment IS "production")>
+	<cfthrow type="wheels.unauthorizedAccess">
+</cfif>
