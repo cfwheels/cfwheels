@@ -29,7 +29,7 @@
 	<h3>Now what do I do?</h3>
 	<p>First, read some of the <a href="http://www.cfwheels.com/documentation" title="Documentation">online documentation</a>, then:</p>
 	<ol>
-		<li>Open up the <a href="/generator.cfm" title="Go to the CFW Generator">Script page</a> and open the <strong>CFWheels Generator</strong> in your browser (by default, somewhere like <code>http://localhost/script</code>)</li>
+		<li>Open up the <a href="/generator.cfm" title="Go to the CFW Generator">CFWheels Generator</a> in your browser (by default, somewhere like <code>http://localhost/generator.cfm</code>)</li>
 		<li>Use the Generator to create a controller and some associated actions</li>
 		<li>Start putting some processing code in your controller and display code in your views and you're off and running!</li>
 	</ol>
@@ -37,7 +37,7 @@
 	<h3>How about some instant gratification?</h3>
 	<p>All right, try this:</p>
 	<ol>
-		<li>Get to the <a href="/generator.cfm" title="Go to the CFW Generator">CFWheels Generator</a>.  Enter "say" as your controller name and "index" as the action name.  Click generate.</li>
+		<li>Get to the <a href="/generator.cfm" title="Go to the CFW Generator">CFWheels Generator</a>. Enter "say" as your controller name and "index" as the action name.  Click generate.</li>
 		<li>Open up <code>/app/controllers/say_controller.cfc</code>.  Inside the <code>index</code> function enter this code:
 			<blockquote>
 				<code>&lt;cfset text = &quot;Hello, world!&quot;&gt;</code>
