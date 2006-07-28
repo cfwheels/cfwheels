@@ -1,1 +1,1 @@
-<cfinclude template="/cfwheels/script/index.cfm">
+<cfinclude template="../#application.pathTo.cfwheels#/script/index.cfm">

@@ -702,9 +702,9 @@
 		<cfif isDefined('coreFiles[i].xmlAttributes.action') AND coreFiles[i].xmlAttributes.name IS "delete">
 			<!--- Delete the file if action="delete" in the XML file --->
 			<cfif listLen(coreFiles[i].xmlAttributes.name, "/") GT 1>
-				<cfset fileDir = application.pathTo.cfwheels & replace(listDeleteAt(coreFiles[i].xmlAttributes.name, listLen(coreFiles[i].xmlAttributes.name,"/"), "/"),"/","\","all")>
+				<cfset fileDir = application.absolutePathTo.cfwheels & replace(listDeleteAt(coreFiles[i].xmlAttributes.name, listLen(coreFiles[i].xmlAttributes.name,"/"), "/"),"/","\","all")>
 			<cfelse>
-				<cfset fileDir = application.pathTo.cfwheels>
+				<cfset fileDir = application.absolutePathTo.cfwheels>
 			</cfif>
 			<cfset fileName = listLast(coreFiles[i].xmlAttributes.name, "/")>
 			<cfset delFile(fileDir,fileName)>
@@ -718,9 +718,9 @@
 				<cfset remoteFile = getRemoteFile(coreFiles[i].xmlAttributes.name)>
 				<!--- If this file is in a subdirectory, figure out what it is and add it to the path --->
 				<cfif listLen(coreFiles[i].xmlAttributes.name, "/") GT 1>
-					<cfset fileDir = application.pathTo.cfwheels & replace(listDeleteAt(coreFiles[i].xmlAttributes.name, listLen(coreFiles[i].xmlAttributes.name,"/"), "/"),"/","\","all")>
+					<cfset fileDir = application.absolutePathTo.cfwheels & replace(listDeleteAt(coreFiles[i].xmlAttributes.name, listLen(coreFiles[i].xmlAttributes.name,"/"), "/"),"/","\","all")>
 				<cfelse>
-					<cfset fileDir = application.pathTo.cfwheels>
+					<cfset fileDir = application.absolutePathTo.cfwheels>
 				</cfif>
 				<!--- Get the filename --->
 				<cfset fileName = listLast(coreFiles[i].xmlAttributes.name, "/")>
@@ -767,7 +767,7 @@
 	
 	<cfset var localMd5 = "">
 	<cfset var fileHash = "">
-	<cfset var filePath = "#application.pathTo.cfwheels##replace(arguments.file,"/","\","all")#">
+	<cfset var filePath = "#application.absolutePathTo.cfwheels##replace(arguments.file,"/","\","all")#">
 	
 	<cfif fileExists(filePath)>
 		<cffile action="read" file="#filePath#" variable="fileContents">

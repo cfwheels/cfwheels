@@ -510,7 +510,7 @@
 	</cfif>
 
 	<cfif NOT application.settings.rewriteURLs>
-		<cfset url = "/index.cfm?cf_request=" & url>
+		<cfset url = "/index.cfm?wheelsaction=" & url>
 	</cfif>
 
 	<cfif NOT arguments.onlyPath>
