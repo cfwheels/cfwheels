@@ -1,4 +1,8 @@
-<cfapplication name="myAppName" clientmanagement="false" sessionmanagement="true">
+<cfset appName = GetDirectoryFromPath(getCurrentTemplatePath())>
+<cfset appName = left(appName, len(appName)-1)>
+<cfset appName = replace(appName, "\", "/", "all")>
+<cfset appName = reverse(spanExcluding(reverse(appName), "/"))>
+<cfapplication name="#appName#" clientmanagement="false" sessionmanagement="true">
 <!--- 
 	IMPORTANT: Only use this file if you have ColdFusion MX 6.1
 	If you have ColdFusion MX 7 or higher you should use Application.cfc instead and can safely delete this file
