@@ -1,0 +1,53 @@
+body#scaffold {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 90%;
+	}
+	
+body#scaffold table {
+	font-size: 90%;
+	}
+	
+body#scaffold table td {
+	padding: .2em;
+	border-left: 1px solid #CCCCCC;
+	}
+
+body#scaffold form label {
+	display: block;
+	margin-top: 10px;
+	}
+
+body#scaffold form input {
+	display: block;
+	}
+	
+body#scaffold form textarea {
+	width: 30em;
+	height: 7em;
+	}
+
+body#scaffold form input[type=submit] {
+	margin-top: 10px;
+	}
+
+div#errorExplanation {
+	border: 2px solid #990000;
+	background: #EEEEEE;
+	padding: 1em;
+	width: 400px;
+	}
+	
+#errorExplanation h2 {
+	padding: .5em;
+	font-size: 100%;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #990000;
+	margin: -1em;
+	}
+	
+.fieldWithErrors {
+	padding: 2px;
+	background-color: #990000;
+	display: table;
+	}
