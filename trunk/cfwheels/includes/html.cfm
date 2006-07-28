@@ -509,8 +509,8 @@
 		<cfset url = url & "###arguments.anchor#">
 	</cfif>
 
-	<cfif NOT application.settings.rewriteURLs>
-		<cfset url = "/index.cfm?wheelsaction=" & url>
+	<cfif cgi.script_name CONTAINS "dispatch.cfm">
+		<cfset url = "/dispatch.cfm?wheelsaction=" & url>
 	</cfif>
 
 	<cfif NOT arguments.onlyPath>
