@@ -47,7 +47,7 @@
 
 <!--- 	When you're ready to have your root index file (the page that currently says 
 		"Congratulations, you've put ColdFusion on Wheels!") point to an actual page 
-		in your app, delete /public/index.cfm and uncomment the route below.  Then 
+		in your app, delete index.cfm and uncomment the route below.  Then 
 		change your controller and action to whatever you want in your real app --->
 <!---
 <cfset route.pattern = "">
