@@ -3,7 +3,7 @@
 	If you have ColdFusion MX 7 or higher you should use Application.cfc instead and can safely delete this file
 --->
 
-<cfinclude template="#application.pathTo.cfwheels#/root/application.cfm">
+<cfinclude template="/cfwheels/root/application.cfm">
 
 <!---
    Copyright 2006 Rob Cameron

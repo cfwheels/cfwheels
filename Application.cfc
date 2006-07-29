@@ -4,7 +4,7 @@
 --->
 <cfcomponent>
 
-	<cfinclude template="#application.pathTo.cfwheels#/root/application_functions.cfm">
+	<cfinclude template="/cfwheels/root/application_functions.cfm">
 
 <!---
    Copyright 2006 Rob Cameron
