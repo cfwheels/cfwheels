@@ -3,7 +3,6 @@
 	<cfset this._initialized = false>
 	<cfset this._reload = false>
 	<cfset this._modelName = "">
-	<cfset this._name = "">
 	<cfset this._tableName = "">
 	<cfset this._primaryKey = "id">
 	<cfset this.query = "">
@@ -1250,20 +1249,19 @@
 		
 		<!--- <cfinclude template="#application.pathTo.includes#/text.cfm" /> --->
 		
-		<!--- Have the model keep track of it's full name and path --->
-		<cfset this._modelName = getMetaData().name>
-		<cfset this._name = application.core.getBaseModel(this._modelName)>
+		<!--- Have the model keep track of it's name --->
+		<cfset this._modelName = application.core.getBaseModel(getMetaData().name)>
 		<!--- Have the model keep track of the table it's accessing --->
 		<cfif isDefined('this.tableName')>
 			<cfset this._tableName = this.tableName>
 		<cfelse>
-			<cfset this._tableName = application.core.tableNameFromModel(this._name)>
+			<cfset this._tableName = application.core.tableNameFromModel(this._modelName)>
 		</cfif>
 		<cfif isDefined('this.primaryKey')>
 			<cfset this._primaryKey = this.primaryKey>
 		</cfif>
 
-		<cfif NOT isDefined('application.wheels.models.#this._name#') OR application.settings.environment IS "development">
+		<cfif NOT isDefined('application.wheels.models.#this._modelName#') OR application.settings.environment IS "development">
 			<!--- If the tables have never been hashed, or we're in development, run the code generator --->
 			<cfset createObject("component","cfwheels.models.generator").init(this)>
 		</cfif>
@@ -1304,7 +1302,7 @@
 		<cfset var theArray = arrayNew(1)>
 		
 		<cfloop from="1" to="#arrayLen(queryStruct)#" index="i">
-			<cfset theModel = application.core.model(this._name).findByID(queryStruct[i].id)>
+			<cfset theModel = application.core.model(this._modelName).findByID(queryStruct[i].id)>
 			<cfset arrayAppend(theArray, theModel)>
 		</cfloop>
 		
@@ -1317,6 +1315,15 @@
 		
 		<cfreturn variables.fields>
 		
+	</cffunction>
+	
+
+	<cffunction name="executeSQL" access="public" returntype="void" output="false">
+		<cfargument name="sql" type="string" required="yes">
+		<cfset var executeSQLQuery = "">
+		<cfquery name="executeSQLQuery" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.name#">
+			#preserveSingleQuotes(arguments.sql)#
+		</cfquery>
 	</cffunction>
 	
 <!---

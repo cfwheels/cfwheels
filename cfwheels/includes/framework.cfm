@@ -200,13 +200,3 @@
 </cffunction>
 
 <cfset application.core.queryColumnValuesToList = queryColumnValuesToList>
-
-<cffunction name="executeSQL" access="public" returntype="void" output="false">
-	<cfargument name="sql" type="string" required="yes">
-	<cfset var executeSQLQuery = "">
-	<cfquery name="executeSQLQuery" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.name#">
-		#preserveSingleQuotes(arguments.sql)#
-	</cfquery>
-</cffunction>
-
-<cfset application.core.executeSQL = executeSQL>

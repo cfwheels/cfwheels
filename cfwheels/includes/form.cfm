@@ -1054,7 +1054,7 @@
 			<cfoutput>
 				<div id="#arguments.id#" class="#arguments.class#">
 					<cfif NOT arguments.listOnly>
-						<#arguments.headerTag#>#arrayLen(errors)# error<cfif arrayLen(errors) GT 1>s</cfif> prevented this #arguments.model._name# from being saved</#arguments.headerTag#>
+						<#arguments.headerTag#>#arrayLen(errors)# error<cfif arrayLen(errors) GT 1>s</cfif> prevented this #arguments.model._modelName# from being saved</#arguments.headerTag#>
 						<p>There were problems with the following fields:</p>
 					</cfif>
 					<ul>
