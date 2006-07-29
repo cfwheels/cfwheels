@@ -6,10 +6,8 @@
 
 <title>ColdFusion on Wheels Generator</title>
 
-<cfif fileExists(expandPath('/dispatch.cfc'))>
-	<script type="text/javascript" src="<cfoutput>#application.pathTo.javascripts#</cfoutput>/prototype.js"></script>
-	<script type="text/javascript" src="<cfoutput>#application.pathTo.javascripts#</cfoutput>/scriptaculous.js"></script>
-</cfif>
+<script type="text/javascript" src="<cfoutput>#application.pathTo.javascripts#</cfoutput>/prototype.js"></script>
+<script type="text/javascript" src="<cfoutput>#application.pathTo.javascripts#</cfoutput>/scriptaculous.js"></script>
 
 <script type="text/javascript">
 	function beforeUpdate() {
@@ -166,7 +164,7 @@
 				<p>Using the form below you can generate new controllers and related actions/views.  It will create
 					a controller, layout, helper and any views you specify. <strong>Separate action names with a comma.</strong></p>
 					
-				<form name="formControllers" id="formControllers" onsubmit="new Ajax.Updater('result','/script/script.cfc?method=generate', {asynchronous:true, evalScripts:true, onComplete:function(){ new Effect.Highlight('result'); }, parameters:Form.serialize(this)}); return false;">
+				<form name="formControllers" id="formControllers" onsubmit="new Ajax.Updater('result','/generator.cfc?method=generate', {asynchronous:true, evalScripts:true, onComplete:function(){ new Effect.Highlight('result'); }, parameters:Form.serialize(this)}); return false;">
 					<input type="hidden" name="type" value="controller" />
 					<label for="controller_name">Controller Name</label>
 					<input type="textbox" id="controller_name" name="controller_name" />
@@ -181,7 +179,7 @@
 				<p>The form below will build the basic component files needed for a model. It will assume that your table
 					name is the plural of your model name.  If this is not true you will need to manually edit the model file
 					created by this form (in /app/models). <strong>Model names should be singular ('product')</strong></p>
-				<form name="formModel" id="formModel" method="post" onsubmit="new Ajax.Updater('result','/script/script.cfc?method=generate', {asynchronous:true, evalScripts:true, onComplete:function(){ new Effect.Highlight('result'); }, parameters:Form.serialize(this)}); return false;">
+				<form name="formModel" id="formModel" method="post" onsubmit="new Ajax.Updater('result','/generator.cfc?method=generate', {asynchronous:true, evalScripts:true, onComplete:function(){ new Effect.Highlight('result'); }, parameters:Form.serialize(this)}); return false;">
 					<input type="hidden" name="type" value="model" />
 					<label for="model_name">Model Name</label>
 					<input type="textbox" id="model_name" name="model_name" />
@@ -195,7 +193,7 @@
 					This form will create a model, controller and several associated views. 
 					<strong>Your database must be configured before a scaffold can be built (see /config/database.cfm)</strong></p>
 
-				<form name="formScaffold" id="formScaffold" method="post" onsubmit="new Ajax.Updater('result','/script/script.cfc?method=generate', {asynchronous:true, evalScripts:true, onComplete:function(){ new Effect.Highlight('result'); }, parameters:Form.serialize(this)}); return false;">
+				<form name="formScaffold" id="formScaffold" method="post" onsubmit="new Ajax.Updater('result','/generator.cfc?method=generate', {asynchronous:true, evalScripts:true, onComplete:function(){ new Effect.Highlight('result'); }, parameters:Form.serialize(this)}); return false;">
 					<input type="hidden" name="type" value="scaffold" />
 					<label for="controller_name">Controller Name</label>
 					<input type="textbox" id="controller_name" name="controller_name" />
@@ -204,15 +202,6 @@
 					<input type="submit" name="scaffold_submit" id="scaffold_submit" value="Generate" />
 				</form>
 			</div>
-		</div>
-	
-		<div id="generateSkeleton" class="#skeletonClass#">
-			<p>It appears that you are creating a new application. Have Wheels create your application skeleton by clicking the button below.</p>
-			<form name="formSkeleton" id="formSkeleton" method="post" action="/script/script.cfc">
-				<input type="hidden" name="method" value="generate" />
-				<input type="hidden" name="type" value="skeleton" />
-				<input type="submit" name="skeleton_submit" id="skeleton_submit" value="Create Application Skeleton" />
-			</form>
 		</div>
 	
 	</cfoutput>

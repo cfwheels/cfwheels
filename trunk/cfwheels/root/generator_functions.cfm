@@ -62,7 +62,6 @@
 	<cfelse>
 		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
 	</cfif>
-	<cflog file="#application.name#" type="information" text="File created: #fileDir#/#fileName#">
 	
 	
 	<!--- Create layout --->
@@ -84,7 +83,6 @@
 	<cfelse>
 		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
 	</cfif>
-	<cflog file="#application.name#" type="information" text="File created: #fileDir#/#fileName#">
 	
 	
 	
@@ -99,7 +97,6 @@
 	<cfelse>
 		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
 	</cfif>
-	<cflog file="#application.name#" type="information" text="File created: #fileDir#/#fileName#">
 	
 	
 	
@@ -123,7 +120,6 @@
 		<cfelse>
 			<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
 		</cfif>
-		<cflog file="#application.name#" type="information" text="File created: #fileDir#/#fileName#">
 	</cfloop>
 	
 	
@@ -147,7 +143,6 @@
 	<cfelse>
 		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
 	</cfif>
-	<cflog file="#application.name#" type="information" text="File created: #fileDir#/#fileName#">
 
 	<!--- Create system model --->
 	<cfset newModel = generateSystemModelCode(arguments.model_name)>
@@ -159,7 +154,6 @@
 	<cfelse>
 		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
 	</cfif>
-	<cflog file="#application.name#" type="information" text="File created: #fileDir#/#fileName#">
 			
 	<cfreturn returnString>
 	
@@ -258,7 +252,6 @@
 	<cfelse>
 		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
 	</cfif>
-	<cflog file="#application.name#" type="information" text="File created: #fileDir#/#fileName#">
 	
 	
 	
@@ -297,7 +290,6 @@
 	<cfelse>
 		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
 	</cfif>
-	<cflog file="#application.name#" type="information" text="File created: #fileDir#/#fileName#">
 	
 
 		
@@ -436,111 +428,10 @@
 		<cfelse>
 			<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
 		</cfif>
-		<cflog file="#application.name#" type="information" text="File created: #fileDir#/#fileName#">
 	</cfloop>
 	
 	
 	<cfreturn returnString>
-	
-</cffunction>
-
-
-<cffunction name="copyDirectory" returntype="void">
-	<cfargument name="Source" type="string" required="yes">
-	<cfargument name="Destination" type="string" required="yes">
-	<cfargument name="Recurse" type="boolean" required="no" default="False">
-	<cfargument name="OverWrite" type="boolean" required="no" default="True">
-	<cfargument name="calledItself" type="boolean" required="no" default="False">
-
-<!---
-	Author:  Rick Root, rick@webworksllc.com, www.webworksllc.com
-	Based originally on code written by Martin Parry (http://www.beetrootstreet.com)
---->
-	
-	<cfset var myDirectory = "">
-	<cfset var DoCopy = "True">
-
-	<cfif right(Arguments.Source, 1) is not "/">
-		<cfset Arguments.Source = Arguments.Source & "/">
-	</cfif>
-	
-	<cfif right(Arguments.Destination, 1) is not "/">
-		<cfset Arguments.Destination = Arguments.Destination & "/">
-	</cfif>
-	<cfdirectory action="LIST" directory="#Arguments.Source#"
-	name="myDirectory" >
-	
-	<cfif not arguments.calledItself>
-		<cfif not directoryExists(arguments.destination & getFileFromPath(arguments.source))>
-			<cfdirectory action="create" directory="#arguments.destination##getFileFromPath(arguments.source)#">
-		</cfif>
-		<cfset arguments.destination = arguments.destination & getFileFromPath(arguments.source) & "/">
-	<cfelse>
-		<cfif not directoryExists(arguments.destination)>
-			<cfdirectory action="create" directory="#arguments.destination#">
-		</cfif>
-	</cfif>
-
-	<cfloop query="myDirectory">
-		<cfif myDirectory.name is not "." AND myDirectory.name is not "..">
-			<cfswitch expression="#myDirectory.Type#">
-			
-				<cfcase value="dir">
-					<!--- If recurse is on, move down to next level and copy that folder --->
-					<cfif Arguments.Recurse>
-						<cfset copyDirectory(
-							Arguments.Source & myDirectory.Name,
-							Arguments.Destination & myDirectory.Name,
-							Arguments.Recurse,
-							Arguments.OverWrite,
-							"True" )>
-					</cfif>
-				</cfcase>
-				
-				<cfcase value="file">
-					<!--- Copy file --->
-					<cfset DoCopy = True>
-	
-					<cfif NOT Arguments.OverWrite AND fileExists("#Arguments.Destination##myDirectory.Name#")>
-						<cfset DoCopy = False>
-					</cfif>
-					<cfif DoCopy>
-						<cffile action="COPY" source="#Arguments.Source##myDirectory.Name#" destination="#Arguments.Destination##myDirectory.Name#">
-					</cfif>
-				</cfcase>			
-			</cfswitch>
-		</cfif>
-	</cfloop>
-</cffunction>
-
-
-<cffunction name="makeSkeleton" access="public" returntype="string" output="true" hint="Creates the directory structure for an application">
-
-	<cfset var skeleton = "">
-	<cfset var app_directory = expandPath("../")>
-	<cfset var skeleton_directory = "/cfwheels/skeleton">
-	<cfset var app_name = listLast(listChangeDelims(app_directory, "/", "\"), "/")>
-	<cfset var temp = "">
-	<cfset var dir_file_name = "">
-	
-	<!--- Get the entire structure of the skeleton directory in the wheels core package --->
-	<cfdirectory directory="#skeleton_directory#" name="skeleton" action="list">
-	<cfif skeleton.recordCount IS 0>
-		<cfdirectory directory="#expandPath("../skeleton")#" name="skeleton" action="list">	
-	</cfif>
-	
-	<!--- Loop through the directories and copy them (and the files) as needed --->
-	<cfloop query="skeleton">
-		<cfif type IS "dir">
-			<cfset copyDirectory("#skeleton_directory#/#name#", "#app_directory#/#name#", true, false)>
-		<cfelse>
-			<cfif NOT fileExists("#app_directory#/#name#")>
-				<cffile action="copy" source="#skeleton_directory#/#name#" destination="#app_directory#/#name#">
-			</cfif>
-		</cfif>
-	</cfloop>
-
-	<cflocation url="/script" addtoken="false">
 	
 </cffunction>
 
