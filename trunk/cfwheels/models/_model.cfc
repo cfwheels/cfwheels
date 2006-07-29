@@ -1252,11 +1252,6 @@
 		<!--- Have the model keep track of it's name --->
 		<cfset this._modelName = application.core.getBaseModel(getMetaData().name)>
 		<!--- Have the model keep track of the table it's accessing --->
-		<cfif isDefined('this.tableName')>
-			<cfset this._tableName = this.tableName>
-		<cfelse>
-			<cfset this._tableName = application.core.tableNameFromModel(this._modelName)>
-		</cfif>
 		<cfif isDefined('this.primaryKey')>
 			<cfset this._primaryKey = this.primaryKey>
 		</cfif>
