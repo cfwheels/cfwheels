@@ -1,2 +1,1 @@
-<cfparam name="url.wheelsaction" default="">
-<cfset createObject("component","dispatch").dispatch()>
+<cfinclude template="#application.pathTo.cfwheels#/root/dispatch.cfm">

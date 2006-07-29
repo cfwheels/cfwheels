@@ -1,1 +1,1 @@
-<cfinclude template="#application.pathTo.cfwheels#/generator/page.cfm">
+<cfinclude template="#application.pathTo.cfwheels#/root/generator.cfm">

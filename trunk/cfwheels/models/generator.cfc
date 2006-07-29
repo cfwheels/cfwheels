@@ -699,11 +699,29 @@
 	</cgfunction>
 
 	<cgfunction name="build#arguments.modelName#" access="public" returntype="any">
-		<cgreturn application.core.model("#arguments.modelName#").new(#arguments.foreignKey#=this.id, argumentCollection=arguments)>
+		<cgset var newArgs = structNew()>
+		<cgloop collection="##arguments##" item="key">
+			<cgif isStruct(arguments[key])>
+				<cgset newArgs.attributes = structCopy(arguments[key])>
+			<cgelse>
+				<cgset newArgs[key] = arguments[key]>			
+			</cgif>
+		</cgloop>
+		<cgset newArgs["#arguments.foreignKey#"] = this.id>
+		<cgreturn application.core.model("#arguments.modelName#").new(argumentCollection=newArgs)>
 	</cgfunction>
 
 	<cgfunction name="create#arguments.modelName#" access="public" returntype="any">
-		<cgreturn application.core.model("#arguments.modelName#").create(#arguments.foreignKey#=this.id, argumentCollection=arguments)>
+		<cgset var newArgs = structNew()>
+		<cgloop collection="##arguments##" item="key">
+			<cgif isStruct(arguments[key])>
+				<cgset newArgs.attributes = structCopy(arguments[key])>
+			<cgelse>
+				<cgset newArgs[key] = arguments[key]>			
+			</cgif>
+		</cgloop>
+		<cgset newArgs["#arguments.foreignKey#"] = this.id>
+		<cgreturn application.core.model("#arguments.modelName#").create(argumentCollection=newArgs)>
 	</cgfunction>
 
 	<cgfunction name="#arguments.name#For" access="public" returntype="any">
@@ -919,11 +937,29 @@
 	</cgfunction>
 
 	<cgfunction name="build#arguments.name#" access="public" returntype="any">
-		<cgreturn application.core.model("#arguments.modelName#").new(#arguments.foreignKey#=this.id, argumentCollection=arguments)>
+		<cgset var newArgs = structNew()>
+		<cgloop collection="##arguments##" item="key">
+			<cgif isStruct(arguments[key])>
+				<cgset newArgs.attributes = structCopy(arguments[key])>
+			<cgelse>
+				<cgset newArgs[key] = arguments[key]>			
+			</cgif>
+		</cgloop>
+		<cgset newArgs["#arguments.foreignKey#"] = this.id>
+		<cgreturn application.core.model("#arguments.modelName#").new(argumentCollection=newArgs)>
 	</cgfunction>
 
 	<cgfunction name="create#arguments.name#" access="public" returntype="any">
-		<cgreturn application.core.model("#arguments.modelName#").create(#arguments.foreignKey#=this.id, argumentCollection=arguments)>
+		<cgset var newArgs = structNew()>
+		<cgloop collection="##arguments##" item="key">
+			<cgif isStruct(arguments[key])>
+				<cgset newArgs.attributes = structCopy(arguments[key])>
+			<cgelse>
+				<cgset newArgs[key] = arguments[key]>			
+			</cgif>
+		</cgloop>
+		<cgset newArgs["#arguments.foreignKey#"] = this.id>
+		<cgreturn application.core.model("#arguments.modelName#").create(argumentCollection=newArgs)>
 	</cgfunction>
 
 	<cgfunction name="#arguments.name#For" access="public" returntype="any">
