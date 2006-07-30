@@ -653,8 +653,7 @@
 	<cffunction name="hasMany" access="private" output="false" hint="Outputs some generated code for hasMany relationships">
 		<cfargument name="name" type="string" required="yes">
 		<cfargument name="modelName" type="string" required="no" default="#application.core.singularize(arguments.name)#">
-		<cfargument name="tableName" type="string" required="no" default="#arguments.name#">
-		<cfargument name="foreignKey" type="string" required="no" default="#application.core.singularize(variables.model._tableName)#_id">
+		<cfargument name="foreignKey" type="string" required="no" default="#application.core.singularize(arguments.name)#_id">
 		<cfargument name="order" type="string" required="no" default="">
 		<cfargument name="conditions" type="string" required="no" default="">
 
@@ -796,7 +795,6 @@
 	<cffunction name="belongsTo" access="private" output="false" hint="Outputs some generated code for belongsTo relationships">
 		<cfargument name="name" type="string" required="yes">
 		<cfargument name="modelName" type="string" required="no" default="#arguments.name#">
-		<cfargument name="tableName" type="string" required="no" default="#application.core.pluralize(arguments.name)#">
 		<cfargument name="foreignKey" type="string" required="no" default="#arguments.modelName#_id">
 
 		<cfset var output = "">
@@ -865,10 +863,9 @@
 	<cffunction name="hasAndBelongsToMany" access="private" output="false" hint="Outputs some generated code for hasAndBelongsToMany relationships">
 		<cfargument name="name" type="string" required="yes">
 		<cfargument name="modelName" type="string" required="no" default="#application.core.singularize(arguments.name)#">
-		<cfargument name="tableName" type="string" required="no" default="#arguments.name#">
 		<cfargument name="foreignKey" type="string" required="no" default="#variables.model._modelName#_id">
 		<cfargument name="associationForeignKey" type="string" required="no" default="#arguments.modelName#_id">
-		<cfargument name="joinTable" type="string" required="no" default="#application.core.joinTableName(variables.model._tableName, arguments.tableName)#">
+		<cfargument name="joinTable" type="string" required="no" default="#application.core.joinTableName(variables.model._tableName, arguments.name)#">
 		<cfargument name="order" type="string" required="no" default="">
 
 		<cfset var output = "">
@@ -880,8 +877,9 @@
 	<cgfunction name="#arguments.name#" access="public" returntype="any">
 		<cgargument name="forceReload" type="boolean" required="no" default="false">
 		<cgif NOT isObject(this._#arguments.name#) OR arguments.forceReload>
-			<cgset this._#arguments.name# = application.core.model("#arguments.modelName#").findAllBySQL("SELECT #arguments.modelName#.* FROM #arguments.modelName# INNER JOIN #arguments.joinTable# ON #arguments.modelName#.id = #arguments.joinTable#.#arguments.associationForeignKey# WHERE #arguments.joinTable#.#arguments.foreignKey# = ##this.id##<cfif arguments.order IS NOT ""> ORDER BY #arguments.order#</cfif>")>
-		</cgif>
+			<cgset this._#arguments.name# = application.core.model("#arguments.modelName#").findAll(where="#arguments.joinTable#.#arguments.foreignKey# = ##this.id##", joins="INNER JOIN #arguments.joinTable# ON #arguments.name#.id = #arguments.joinTable#.#arguments.associationForeignKey#"<cfif arguments.order IS NOT "">, order="#arguments.order#"</cfif>)>
+<!--- 			<cgset this._#arguments.name# = application.core.model("#arguments.modelName#").findAllBySQL("SELECT #arguments.modelName#.* FROM #arguments.modelName# INNER JOIN #arguments.joinTable# ON #arguments.modelName#.id = #arguments.joinTable#.#arguments.associationForeignKey# WHERE #arguments.joinTable#.#arguments.foreignKey# = ##this.id##<cfif arguments.order IS NOT ""> ORDER BY #arguments.order#</cfif>")>
+ --->		</cgif>
 		<cgreturn this._#arguments.name#>
 	</cgfunction>
 
@@ -957,7 +955,6 @@
 	<cffunction name="hasOne" access="private" output="false" hint="Outputs some generated code for hasOne relationships">
 		<cfargument name="name" type="string" required="yes">
 		<cfargument name="modelName" type="string" required="no" default="#arguments.name#">
-		<cfargument name="tableName" type="string" required="no" default="#application.core.pluralize(arguments.name)#">
 		<cfargument name="foreignKey" type="string" required="no" default="#application.core.singularize(variables.model._tableName)#_id">
 		<cfargument name="order" type="string" required="no" default="">
 		<cfargument name="conditions" type="string" required="no" default="">
