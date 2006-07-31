@@ -1,4 +1,4 @@
-<cfset appName = GetDirectoryFromPath(getCurrentTemplatePath())>
+<cfset appName = GetDirectoryFromPath(getBaseTemplatePath())>
 <cfset appName = left(appName, len(appName)-1)>
 <cfset appName = replace(appName, "\", "/", "all")>
 <cfset appName = reverse(spanExcluding(reverse(appName), "/"))>
