@@ -731,6 +731,11 @@
 		<cgreturn application.core.model("#arguments.modelName#").count(where="#arguments.foreignKey# = ##this.id##")>
 	</cgfunction>
 
+	<cgfunction name="find#application.core.singularize(arguments.name)#ByID" access="public" returntype="any">
+		<cgargument name="id" required="yes" type="numeric">
+		<cgreturn application.core.model("#arguments.modelName#").findOne(where="#arguments.foreignKey# = ##this.id## AND id=##arguments.id##")>
+	</cgfunction>
+
 	<cgfunction name="find#application.core.singularize(arguments.name)#" access="public" returntype="any">
 		<cgset var AddToWhere = "#arguments.foreignKey# = ##this.id##">
 		<cgif structKeyExists(arguments, "where")>
@@ -878,8 +883,7 @@
 		<cgargument name="forceReload" type="boolean" required="no" default="false">
 		<cgif NOT isObject(this._#arguments.name#) OR arguments.forceReload>
 			<cgset this._#arguments.name# = application.core.model("#arguments.modelName#").findAll(where="#arguments.joinTable#.#arguments.foreignKey# = ##this.id##", joins="INNER JOIN #arguments.joinTable# ON #arguments.name#.id = #arguments.joinTable#.#arguments.associationForeignKey#"<cfif arguments.order IS NOT "">, order="#arguments.order#"</cfif>)>
-<!--- 			<cgset this._#arguments.name# = application.core.model("#arguments.modelName#").findAllBySQL("SELECT #arguments.modelName#.* FROM #arguments.modelName# INNER JOIN #arguments.joinTable# ON #arguments.modelName#.id = #arguments.joinTable#.#arguments.associationForeignKey# WHERE #arguments.joinTable#.#arguments.foreignKey# = ##this.id##<cfif arguments.order IS NOT ""> ORDER BY #arguments.order#</cfif>")>
- --->		</cgif>
+		</cgif>
 		<cgreturn this._#arguments.name#>
 	</cgfunction>
 
@@ -941,6 +945,16 @@
 
 	<cgfunction name="#application.core.singularize(arguments.modelName)#Count" access="public" returntype="numeric">
 		<cgreturn countBySQL("SELECT COUNT(*) FROM #arguments.joinTable# WHERE #arguments.foreignKey# = ##this.id##")>
+	</cgfunction>
+
+	<cgfunction name="find#application.core.singularize(arguments.name)#ByID" access="public" returntype="any">
+		<cgargument name="id" required="yes" type="numeric">
+		<cgreturn application.core.model("#arguments.modelName#").findOne(where="#arguments.joinTable#.#arguments.foreignKey# = ##this.id## AND #arguments.joinTable#.#arguments.associationForeignKey#=##arguments.id##", joins="INNER JOIN #arguments.joinTable# ON #arguments.name#.id = #arguments.joinTable#.#arguments.associationForeignKey#")>
+	</cgfunction>
+
+	<cgfunction name="#arguments.name#For" access="public" returntype="any">
+		<cgargument name="foreignKey" required="yes" type="numeric">
+		<cgreturn application.core.model("#arguments.modelName#").findAll(where="#arguments.joinTable#.#arguments.foreignKey# = ##arguments.foreignKey##", joins="INNER JOIN #arguments.joinTable# ON #arguments.name#.id = #arguments.joinTable#.#arguments.associationForeignKey#"<cfif arguments.order IS NOT "">, order="#arguments.order#"</cfif>)>
 	</cgfunction>
 
 	#chr(7)#
