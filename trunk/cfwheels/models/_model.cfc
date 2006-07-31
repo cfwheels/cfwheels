@@ -381,7 +381,7 @@
 		<cfargument name="name" type="string" required="no" default="" hint="The attribute to update">
 		<cfargument name="value" type="string" required="no" default="" hint="The value to set on the attribute">
 
-		<cfif structCount(arguments) IS 1>
+		<cfif structCount(arguments) IS 2>
 			<cfset this[arguments.name] = arguments.value>
 		<cfelse>
 			<cfloop collection="#arguments#" item="key">
@@ -423,9 +423,14 @@
 
 	<cffunction name="update" returntype="any" access="public" output="false" hint="[DOCS] Finds the record from the passed id, instantly saves it with the passed attributes (if the validation permits it), and returns it">
 		<cfargument name="id" type="numeric" required="true" hint="The record to find and update">
-		<cfargument name="attributes" type="struct" required="true" default="" hint="The attributes to update">
+		<cfargument name="attributes" type="struct" required="false" default="#structNew()#" hint="The attributes to update">
 		
 		<cfset findByID(arguments.id)>
+		<cfloop collection="#arguments#" item="key">
+			<cfif key IS NOT "id" AND key IS NOT "attributes">
+				<cfset arguments.attributes[key] = arguments[key]>
+			</cfif>
+		</cfloop>
 		<cfset updateAttributes(arguments.attributes)>
 		<cfset save()>
 		
@@ -437,19 +442,28 @@
 		<cfargument name="updates" type="string" required="true" hint="The SQL fragment to be used in the SET clause of the query">
 		<cfargument name="conditions" type="string" required="false" default="" hint="The SQL fragment to be used in the WHERE clause of the query">
 		
+		<!--- Extra safety added --->
+		<cfif structCount(arguments) GT 1>
+			<cfloop list="#structKeyList(arguments)#" index="arg">
+				<cfif arg IS NOT "updates" AND arg IS NOT "conditions">
+					<cfthrow type="wheels.disallowedArgument" message="disallowedArgument: '#arg#'" detail="You tried passing in the argument '#arg#'. The only allowed arguments for this function are: 'updates', 'conditions'.">
+				</cfif>
+			</cfloop>	
+		</cfif>
+
 		<cfquery name="checkUpdated" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.name#">
 			SELECT *
 			FROM #this._tableName#
 			<cfif arguments.conditions IS NOT "">
-				WHERE #arguments.conditions#
+				WHERE #preserveSingleQuotes(arguments.conditions)#
 			</cfif>
 		</cfquery>
 		<cfif checkUpdated.recordCount IS NOT 0>
 			<cfquery name="updateRecord" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.name#">
 				UPDATE #this._tableName#
-				SET #arguments.updates#
+				SET #preserveSingleQuotes(arguments.updates)#
 				<cfif arguments.conditions IS NOT "">
-					WHERE #arguments.conditions#
+					WHERE #preserveSingleQuotes(arguments.conditions)#
 				</cfif>
 			</cfquery>
 		</cfif>
@@ -515,7 +529,7 @@
 		<cfset var checkDeleted = "">
 		<cfset var deleteRecord = "">
 
-		<!--- Extra safety added here since this is a database delete operation --->
+		<!--- Extra safety added --->
 		<cfif structCount(arguments) GT 0>
 			<cfloop list="#structKeyList(arguments)#" index="arg">
 				<cfif arg IS NOT "conditions">
@@ -528,14 +542,14 @@
 			SELECT *
 			FROM #this._tableName#
 			<cfif arguments.conditions IS NOT "">
-				WHERE #arguments.conditions#
+				WHERE #preserveSingleQuotes(arguments.conditions)#
 			</cfif>
 		</cfquery>
 		<cfif checkDeleted.recordCount IS NOT 0>
 			<cfquery name="deleteRecord" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.name#">
 				DELETE FROM #this._tableName#
 				<cfif arguments.conditions IS NOT "">
-					WHERE #arguments.conditions#
+					WHERE #preserveSingleQuotes(arguments.conditions)#
 				</cfif>
 			</cfquery>		
 		</cfif>

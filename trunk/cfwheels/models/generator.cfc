@@ -653,7 +653,7 @@
 	<cffunction name="hasMany" access="private" output="false" hint="Outputs some generated code for hasMany relationships">
 		<cfargument name="name" type="string" required="yes">
 		<cfargument name="modelName" type="string" required="no" default="#application.core.singularize(arguments.name)#">
-		<cfargument name="foreignKey" type="string" required="no" default="#application.core.singularize(arguments.name)#_id">
+		<cfargument name="foreignKey" type="string" required="no" default="#variables.model._modelName#_id">
 		<cfargument name="order" type="string" required="no" default="">
 		<cfargument name="conditions" type="string" required="no" default="">
 
