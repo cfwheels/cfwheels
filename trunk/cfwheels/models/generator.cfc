@@ -674,7 +674,7 @@
 	<cgfunction name="set#arguments.name#" access="public" returntype="any">
 		<cgargument name="object" type="any" required="yes">
 		<cgset var objArray = arrayNew(1)>
-		<cgset clear#arguments.name#()>
+		<cgset this.clear#arguments.name#()>
 		<cgif isArray(arguments.object)>
 			<cgset objArray = arguments.object>		
 		<cgelse>
@@ -683,7 +683,7 @@
 		<cgloop from="1" to="##arrayLen(objArray)##" index="i">
 			<cgset objArray[i].updateAttribute("#arguments.foreignKey#", this.id)>
 		</cgloop>	
-		<cgreturn #arguments.name#(forceReload=true)>
+		<cgreturn this.#arguments.name#(forceReload=true)>
 	</cgfunction>
 
 	<cgfunction name="add#application.core.singularize(arguments.name)#" access="public" returntype="any">
@@ -697,7 +697,7 @@
 		<cgloop from="1" to="##arrayLen(objArray)##" index="i">
 			<cgset objArray[i].updateAttribute("#arguments.foreignKey#", this.id)>
 		</cgloop>	
-		<cgreturn #arguments.name#(forceReload=true)>
+		<cgreturn this.#arguments.name#(forceReload=true)>
 	</cgfunction>
 
 	<cgfunction name="delete#application.core.singularize(arguments.name)#" access="public" returntype="any">
@@ -711,16 +711,16 @@
 		<cgloop from="1" to="##arrayLen(objArray)##" index="i">
 			<cgset objArray[i].updateAttribute("#arguments.foreignKey#", "null")>
 		</cgloop>	
-		<cgreturn #arguments.name#(forceReload=true)>
+		<cgreturn this.#arguments.name#(forceReload=true)>
 	</cgfunction>
 
 	<cgfunction name="clear#arguments.name#" access="public" returntype="any">
 		<cgset application.core.model("#arguments.modelName#").updateAll(updates="#arguments.foreignKey# = NULL", conditions="#arguments.foreignKey# = ##this.id##")>
-		<cgreturn #arguments.name#(forceReload=true)>
+		<cgreturn this.#arguments.name#(forceReload=true)>
 	</cgfunction>
 
 	<cgfunction name="has#arguments.name#" access="public" returntype="boolean">
-		<cgif #application.core.singularize(arguments.name)#Count() IS 0>
+		<cgif this.#application.core.singularize(arguments.name)#Count() IS 0>
 			<cgreturn true>
 		<cgelse>
 			<cgreturn false>
@@ -739,7 +739,7 @@
 	<cgfunction name="find#application.core.singularize(arguments.name)#" access="public" returntype="any">
 		<cgset var AddToWhere = "#arguments.foreignKey# = ##this.id##">
 		<cgif structKeyExists(arguments, "where")>
-			<cgset arguments.where = AddToWhere & " AND " & arguments.where>
+			<cgset arguments.where = "(" & AddToWhere & ") AND (" & arguments.where & ")">
 		<cgelse>
 			<cgset arguments.where = AddToWhere>
 		</cgif>
@@ -749,7 +749,7 @@
 	<cgfunction name="find#arguments.name#" access="public" returntype="any">
 		<cgset var AddToWhere = "#arguments.foreignKey# = ##this.id##">
 		<cgif structKeyExists(arguments, "where")>
-			<cgset arguments.where = AddToWhere & " AND " & arguments.where>
+			<cgset arguments.where = "(" & AddToWhere & ") AND (" & arguments.where & ")">
 		<cgelse>
 			<cgset arguments.where = AddToWhere>
 		</cgif>
@@ -818,7 +818,7 @@
 
 	<cgfunction name="set#arguments.name#" access="public" returntype="any">
 		<cgargument name="object" type="any" required="yes">
-		<cgset updateAttribute("#arguments.foreignKey#", arguments.object.id)>
+		<cgset this.updateAttribute("#arguments.foreignKey#", arguments.object.id)>
 		<cgreturn #arguments.name#(forceReload=true)>
 	</cgfunction>
 
@@ -890,16 +890,16 @@
 	<cgfunction name="set#arguments.name#" access="public" returntype="any">
 		<cgargument name="object" type="any" required="yes">
 		<cgset var objArray = arrayNew(1)>
-		<cgset clear#arguments.name#()>
+		<cgset this.clear#arguments.name#()>
 		<cgif isArray(arguments.object)>
 			<cgset objArray = arguments.object>		
 		<cgelse>
 			<cgset arrayAppend(objArray, arguments.object)>
 		</cgif>
 		<cgloop from="1" to="##arrayLen(objArray)##" index="i">
-			<cgset executeSQL("INSERT INTO #arguments.joinTable# (#arguments.foreignKey#, #arguments.associationForeignKey#) VALUES (##this.id##, ##objArray[i].id##)")>
+			<cgset this.executeSQL("INSERT INTO #arguments.joinTable# (#arguments.foreignKey#, #arguments.associationForeignKey#) VALUES (##this.id##, ##objArray[i].id##)")>
 		</cgloop>	
-		<cgreturn #arguments.name#(forceReload=true)>
+		<cgreturn this.#arguments.name#(forceReload=true)>
 	</cgfunction>
 
 	<cgfunction name="add#application.core.singularize(arguments.modelName)#" access="public" returntype="any">
@@ -911,9 +911,9 @@
 			<cgset arrayAppend(objArray, arguments.object)>
 		</cgif>
 		<cgloop from="1" to="##arrayLen(objArray)##" index="i">
-			<cgset executeSQL("INSERT INTO #arguments.joinTable# (#arguments.foreignKey#, #arguments.associationForeignKey#) VALUES (##this.id##, ##objArray[i].id##)")>
+			<cgset this.executeSQL("INSERT INTO #arguments.joinTable# (#arguments.foreignKey#, #arguments.associationForeignKey#) VALUES (##this.id##, ##objArray[i].id##)")>
 		</cgloop>	
-		<cgreturn #arguments.name#(forceReload=true)>
+		<cgreturn this.#arguments.name#(forceReload=true)>
 	</cgfunction>
 
 	<cgfunction name="delete#application.core.singularize(arguments.modelName)#" access="public" returntype="any">
@@ -925,18 +925,18 @@
 			<cgset arrayAppend(objArray, arguments.object)>
 		</cgif>
 		<cgloop from="1" to="##arrayLen(objArray)##" index="i">
-			<cgset executeSQL("DELETE FROM #arguments.joinTable# WHERE #arguments.associationForeignKey# = ##objArray[i].id##")>
+			<cgset this.executeSQL("DELETE FROM #arguments.joinTable# WHERE #arguments.associationForeignKey# = ##objArray[i].id##")>
 		</cgloop>	
-		<cgreturn #arguments.name#(forceReload=true)>
+		<cgreturn this.#arguments.name#(forceReload=true)>
 	</cgfunction>
 
 	<cgfunction name="clear#arguments.name#" access="public" returntype="any">
-			<cgset executeSQL("DELETE FROM #arguments.joinTable# WHERE #arguments.foreignKey# = ##this.id##")>
-		<cgreturn #arguments.name#(forceReload=true)>
+		<cgset this.executeSQL("DELETE FROM #arguments.joinTable# WHERE #arguments.foreignKey# = ##this.id##")>
+		<cgreturn this.#arguments.name#(forceReload=true)>
 	</cgfunction>
 
 	<cgfunction name="has#arguments.name#" access="public" returntype="boolean">
-		<cgif #application.core.singularize(arguments.modelName)#Count() IS 0>
+		<cgif this.#application.core.singularize(arguments.modelName)#Count() IS 0>
 			<cgreturn true>
 		<cgelse>
 			<cgreturn false>
@@ -944,7 +944,7 @@
 	</cgfunction>
 
 	<cgfunction name="#application.core.singularize(arguments.modelName)#Count" access="public" returntype="numeric">
-		<cgreturn countBySQL("SELECT COUNT(*) FROM #arguments.joinTable# WHERE #arguments.foreignKey# = ##this.id##")>
+		<cgreturn this.countBySQL("SELECT COUNT(*) FROM #arguments.joinTable# WHERE #arguments.foreignKey# = ##this.id##")>
 	</cgfunction>
 
 	<cgfunction name="find#application.core.singularize(arguments.name)#ByID" access="public" returntype="any">
@@ -990,7 +990,7 @@
 	<cgfunction name="set#arguments.name#" access="public" returntype="any">
 		<cgargument name="object" type="any" required="yes">
 		<cgset arguments.object.updateAttribute("#arguments.foreignKey#", this.id)>
-		<cgreturn #arguments.name#(forceReload=true)>
+		<cgreturn this.#arguments.name#(forceReload=true)>
 	</cgfunction>
 
 	<cgfunction name="has#arguments.name#" access="public" returntype="boolean">

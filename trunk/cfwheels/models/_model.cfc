@@ -43,7 +43,9 @@
 				<cfif isDefined("beforeCreate") AND NOT beforeCreate()>
 					<cfreturn false>
 				</cfif>
-				<cfreturn insertRecord()>
+				<cfif NOT insertRecord()>
+					<cfreturn false>
+				</cfif>
 				<cfif isDefined("afterCreate") AND NOT afterCreate()>
 					<cfreturn false>
 				</cfif>
@@ -51,7 +53,9 @@
 				<cfif isDefined("beforeUpdate") AND NOT beforeUpdate()>
 					<cfreturn false>
 				</cfif>
-				<cfreturn updateRecord()>					
+				<cfif NOT updateRecord()>
+					<cfreturn false>
+				</cfif>
 				<cfif isDefined("afterUpdate") AND NOT afterUpdate()>
 					<cfreturn false>
 				</cfif>
@@ -62,6 +66,7 @@
 		<cfelse>
 			<cfreturn false>
 		</cfif>
+		<cfreturn true>
 
 	</cffunction>
 
@@ -210,7 +215,11 @@
 		<cfset var orderByColumns = "">
 		<cfset var orderByColumnsForPagination = "">
 
-		<cfset selectColumns = getSelectColumns(argumentCollection=arguments)>
+		<cfif arguments.select IS "">
+			<cfset selectColumns = getSelectColumns(argumentCollection=arguments)>
+		<cfelse>
+			<cfset selectColumns = arguments.select>		
+		</cfif>
 		<cfset fromTables = getfromTables(argumentCollection=arguments)>
 		<cfset orderByColumns = getOrderByColumns(argumentCollection=arguments)>
 	
@@ -300,7 +309,11 @@
 		<cfset var fromTables = "">
 		<cfset var orderByColumns = "">
 
-		<cfset selectColumns = getSelectColumns(argumentCollection=arguments)>
+		<cfif arguments.select IS "">
+			<cfset selectColumns = getSelectColumns(argumentCollection=arguments)>
+		<cfelse>
+			<cfset selectColumns = arguments.select>		
+		</cfif>
 		<cfset fromTables = getfromTables(argumentCollection=arguments)>
 		<cfset orderByColumns = getOrderByColumns(argumentCollection=arguments)>
 
@@ -1134,58 +1147,30 @@
 		<cfset var otherModelSelectColumns = "">
 		<cfset var pos = 0>
 		<cfset var added = "">
-
-		<cfif arguments.select IS "">
-			<cfset pos = 0>
-			<cfloop list="#this.columnList#" index="column">
-				<cfset pos = pos + 1>
-				<cfset selectColumns = selectColumns & this._tableName & "." & trim(column)>			
-				<cfif listLen(this.columnList) GT pos>
-					<cfset selectColumns = selectColumns & ",">
-				</cfif>
-			</cfloop>
-			<cfif StructKeyExists(arguments, "include") AND arguments.include IS NOT "">
-				<cfloop list="#arguments.include#" index="model">
-					<cfset otherModel = application.core.model(trim(model))>
-					<cfset otherModelSelectColumns = listDeleteAt(otherModel.columnList,listFind(otherModel.columnList,"id"))>
-					<cfif listFind(otherModelSelectColumns,"#application.core.singularize(this._tableName)#_id") IS NOT 0>
-						<cfset otherModelSelectColumns = listDeleteAt(otherModelSelectColumns,listFind(otherModelSelectColumns,"#application.core.singularize(this._tableName)#_id"))>
-					</cfif>
-					<cfloop list="#otherModelSelectColumns#" index="column">
+		
+		<cfset pos = 0>
+		<cfloop list="#this.columnList#" index="column">
+			<cfset pos = pos + 1>
+			<cfset selectColumns = selectColumns & this._tableName & "." & trim(column)>			
+			<cfif listLen(this.columnList) GT pos>
+				<cfset selectColumns = selectColumns & ",">
+			</cfif>
+		</cfloop>
+		<cfif StructKeyExists(arguments, "include") AND arguments.include IS NOT "">
+			<cfloop list="#arguments.include#" index="model">
+				<cfset otherModel = application.core.model(trim(model))>
+				<cfloop list="#otherModel.columnList#" index="column">
+					<cfif listContainsNoCase(selectColumns, "." & trim(column)) IS 0>
 						<cfset selectColumns = selectColumns & "," & application.core.pluralize(model) & "." & trim(column)>
-					</cfloop>
-					<cfif listFind(selectColumns,"#this._tableName#.#trim(model)#_id") IS 0>
-						<cfset selectColumns = selectColumns & "," & application.core.pluralize(model) & ".id AS " & trim(model) & "_" & "id">
+					<cfelse>
+						<cfif listContainsNoCase(selectColumns, "." & model & "_" & trim(column)) IS 0>
+							<cfset selectColumns = selectColumns & "," & application.core.pluralize(model) & "." & trim(column) & " AS " & model & "_" & trim(column)>
+						</cfif>
 					</cfif>
 				</cfloop>
-			</cfif>
-		<cfelse>
-			<cfset pos = 0>
-			<cfloop list="#arguments.select#" index="column">
-				<cfset pos = pos + 1>
-				<cfif column Does Not Contain ".">
-					<cfset added = false>
-					<cfif arguments.include IS NOT "">
-						<cfloop list="#arguments.include#" index="model">
-							<cfset otherModel = application.core.model(trim(model))>
-							<cfif listFindNoCase(otherModel.columnList, trim(column)) IS NOT 0 AND listFindNoCase(this.columnList, trim(column)) IS 0>
-								<cfset selectColumns = selectColumns & otherModel._tableName & "." & trim(column)>					
-								<cfset added = true>
-							</cfif>
-						</cfloop>
-					</cfif>
-					<cfif NOT added>
-						<cfset selectColumns = selectColumns & this._tableName & "." & trim(column)>					
-					</cfif>
-				<cfelse>
-					<cfset selectColumns = selectColumns & trim(column)>
-				</cfif>
-				<cfif listLen(arguments.select) GT pos>
-					<cfset selectColumns = selectColumns & ",">
-				</cfif>
 			</cfloop>
 		</cfif>
-		
+
 		<cfreturn selectColumns>
 	</cffunction>
 
