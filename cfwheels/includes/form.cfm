@@ -480,16 +480,21 @@
 
 
 <cffunction name="select" output="false" returntype="string" hint="Outputs HTML for a select form object">
-	<cfargument name="model" type="string" required="true" hint="Name of the model to associate to this textfield">
-	<cfargument name="field" type="string" required="true" hint="Name of the field in the model that this textfield represents">
-	<cfargument name="choices" type="any" required="true" hint="The choices to display in the dropdown (can be array, struct, query)">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this field">
-	<cfargument name="label" type="string" required="false" default="" hint="Label for this field">
+	<!--- Arguments for all form elements --->
+	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
+	<cfargument name="class" type="string" required="false" default="" hint="Class name for this form element">
+	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
+	<!--- Arguments for all model form elements --->
+	<cfargument name="model" type="string" required="true" hint="Name of the model to associate to this form element">
+	<cfargument name="field" type="string" required="true" hint="Name of the field in the model that this form element represents">
+	<cfargument name="errorDisplay" type="string" required="false" default="div" hint="Determines how errors are displayed. Possible values are: div, span, inline">
+	<!--- Arguments for this function only --->
 	<cfargument name="size" type="numeric" required="false" default=0 hint="Number of rows to display">
+	<cfargument name="choices" type="any" required="true" hint="The choices to display in the dropdown (can be list, array, struct, query)">
 	<cfargument name="type" type="string" required="false" default="single" hint="Menu or multiple select (single|multiple)" />
 	<cfargument name="key" type="string" required="false" default="name" hint="The field to use as the value in the <option>s" />
 	<cfargument name="value" type="string" required="false" default="id" hint="The field to use as the text displayed in the choices" />
-	<cfargument name="onchange" type="string" required="false" default="" hint="Javascript onChange event">
 	
 	<cfset var output = "">
 	<cfset var keyArray = arrayNew(1)>
@@ -502,16 +507,16 @@
 	<cfset keyArray = options.keyArray>
 	<cfset valueArray = options.valueArray>
 	
+	<cfset arguments.showError = setShowError(argumentCollection=arguments)>
 	<cfif isDefined(evaluate("arguments.model"))>
 		<cfset currentValue = evaluate("#arguments.model#.#arguments.field#")>
 	</cfif>
+	<cfset arguments.class = setClass(argumentCollection=arguments)>
 	
 	<cfsavecontent variable="output">
 		<cfoutput>
-			<cfif arguments.label IS NOT "">
-				<label for="#arguments.model#_#arguments.field#">#arguments.label#</label>
-			</cfif>
-			<select name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#"#iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.type IS "multiple", de(' multiple="multiple"'),de(''))##iif(arguments.size IS NOT 0, de(' size="#arguments.size#"'),de(''))##iif(arguments.onchange IS NOT "", de(' onchange="#arguments.onchange#"'),de(''))#>
+			#beforeElement(argumentCollection=arguments)#
+			<select name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#"#iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.type IS "multiple", de(' multiple="multiple"'),de(''))##iif(arguments.size IS NOT 0, de(' size="#arguments.size#"'),de(''))#>
 				<cfloop from="1" to="#arrayLen(keyArray)#" index="i">
 					<cfif listFind(currentValue, valueArray[i])>
 						<option value="#valueArray[i]#" selected="selected">#keyArray[i]#</option>
@@ -520,6 +525,7 @@
 					</cfif>
 				</cfloop>
 			</select>
+			#afterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
 	
@@ -528,15 +534,20 @@
 
 
 <cffunction name="selectTag" output="false" returntype="string" hint="Outputs HTML for a select form object">
-	<cfargument name="name" type="string" required="false" default="select" hint="Name of the field in the model that this textfield represents">
+	<!--- Arguments for all form elements --->
+	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
+	<cfargument name="class" type="string" required="false" default="" hint="Class name for this form element">
+	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
+	<!--- Arguments for non model form elements --->
+	<cfargument name="name" type="string" required="true" hint="Name and ID attribute for this form element">
+	<!--- Arguments for this function only --->
+	<cfargument name="size" type="numeric" required="false" default=0 hint="Number of rows to display">
 	<cfargument name="choices" type="any" required="true" hint="The choices to display in the dropdown (can be array, struct, query)">
-	<cfargument name="label" type="string" required="false" default="" hint="Label to give the select box">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this field">
-	<cfargument name="selected" type="string" required="false" default="" hint="Default selected element">
-	<cfargument name="onchange" type="string" required="false" default="" hint="Javascript onChange event">
 	<cfargument name="type" type="string" required="false" default="single" hint="Menu or multiple select (single|multiple)" />
 	<cfargument name="key" type="string" required="false" default="name" hint="The field to use as the value in the <option>s" />
 	<cfargument name="value" type="string" required="false" default="id" hint="The field to use as the text displayed in the choices" />
+	<cfargument name="selected" type="string" required="false" default="" hint="Default selected element">
 	
 	<cfset var output = "">
 	<cfset var keyArray = arrayNew(1)>
@@ -550,10 +561,8 @@
 	
 	<cfsavecontent variable="output">
 		<cfoutput>
-			<cfif arguments.label IS NOT "">
-				<label for="#arguments.name#">#arguments.label#</label>
-			</cfif>
-			<select name="#arguments.name#" id="#arguments.name#"#iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.type IS "multiple", de(' multiple="multiple"'),de(''))##iif(arguments.onchange IS NOT "", de(' onchange="#arguments.onchange#"'),de(''))#>
+			#beforeElement(argumentCollection=arguments)#
+			<select name="#arguments.name#" id="#arguments.name#"#iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.type IS "multiple", de(' multiple="multiple"'),de(''))##iif(arguments.size IS NOT 0, de(' size="#arguments.size#"'),de(''))#>
 				<cfloop from="1" to="#arrayLen(keyArray)#" index="i">
 					<cfif valueArray[i] IS arguments.selected>
 						<option value="#valueArray[i]#" selected="selected">#keyArray[i]#</option>
@@ -562,6 +571,7 @@
 					</cfif>
 				</cfloop>
 			</select>
+			#afterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
 	
@@ -582,7 +592,6 @@
 	
 	<cfif isArray(arguments.choices)>
 		<!--- If the choices are in an array, check to see if it's an array of arrays --->
-
 		<cfif isArray(arguments.choices[1])>
 			<!--- If so, take the first value and make that the value, take the second value and make that the key --->
 			<cfloop from="1" to="#arrayLen(arguments.choices)#" index="i">
@@ -599,7 +608,6 @@
 			<cfset keyArray = arguments.choices>
 			<cfset valueArray = arguments.choices>
 		</cfif>
-
 	<cfelseif isStruct(arguments.choices)>
 		<!--- If it's a struct, set the name of the key is the text to be displayed and the value as the value="" attribute of <option> --->
 		<cfloop collection="#arguments.choices#" item="key">
@@ -613,6 +621,12 @@
 			<cfset keyArray[i] = evaluate("arguments.choices.#arguments.key#")>
 			<cfset valueArray[i] = evaluate("arguments.choices.#arguments.value#")>
 			<cfset i = i + 1>
+		</cfloop>
+	<cfelse>
+		<!--- We assume the values are in a plain list --->
+		<cfloop list="#arguments.choices#" index="i">
+			<cfset arrayAppend(keyArray, i)>
+			<cfset arrayAppend(valueArray, i)>
 		</cfloop>
 	</cfif>
 	
