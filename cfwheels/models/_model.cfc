@@ -1100,9 +1100,9 @@
 	<cffunction name="getOrderByColumns" access="public" returntype="string" output="false" hint="">
 
 		<cfset var orderByColumns = "">
-		<cfset var otherModel = "">
-		<cfset var pos = 0>
+		<cfset var modelObj = "">
 		<cfset var added = "">
+		<cfset var pos = 0>
 
 		<cfif arguments.order IS "">
 			<cfset orderByColumns = this._tableName & ".id ASC">
@@ -1116,10 +1116,10 @@
 				<cfif column Does Not Contain ".">
 					<cfset added = false>
 					<cfif StructKeyExists(arguments, "include") AND arguments.include IS NOT "">
-						<cfloop list="#arguments.include#" index="model">
-							<cfset otherModel = application.core.model(trim(model))>
-							<cfif listFindNoCase(otherModel.columnList, replaceNoCase(replaceNoCase(trim(column), " DESC", ""), " ASC", "")) IS NOT 0 AND listFindNoCase(this.columnList, replaceNoCase(replaceNoCase(trim(column), " DESC", ""), " ASC", "")) IS 0>
-								<cfset orderByColumns = orderByColumns & otherModel._tableName & "." & trim(column)>					
+						<cfloop list="#arguments.include#" index="name">
+							<cfset modelObj = application.core.model(trim(name))>
+							<cfif listFindNoCase(modelObj.columnList, replaceNoCase(replaceNoCase(trim(column), " DESC", ""), " ASC", "")) IS NOT 0 AND listFindNoCase(this.columnList, replaceNoCase(replaceNoCase(trim(column), " DESC", ""), " ASC", "")) IS 0>
+								<cfset orderByColumns = orderByColumns & modelObj._tableName & "." & trim(column)>					
 								<cfset added = true>
 							</cfif>
 						</cfloop>
@@ -1143,11 +1143,9 @@
 	<cffunction name="getSelectColumns" access="public" returntype="string" output="false" hint="">
 
 		<cfset var selectColumns = "">
-		<cfset var otherModel = "">
-		<cfset var otherModelSelectColumns = "">
-		<cfset var pos = 0>
-		<cfset var added = "">
+		<cfset var modelObj = "">
 		<cfset var flattendedInclude = "">
+		<cfset var pos = 0>
 		
 		<cfset pos = 0>
 		<cfloop list="#this.columnList#" index="column">
@@ -1159,14 +1157,14 @@
 		</cfloop>
 		<cfif StructKeyExists(arguments, "include") AND arguments.include IS NOT "">
 			<cfset flattendedInclude = replace(replace(arguments.include, "(", ",", "all"), ")", "", "all")>
-			<cfloop list="#flattendedInclude#" index="model">
-				<cfset otherModel = application.core.model(application.core.singularize(trim(model)))>
-				<cfloop list="#otherModel.columnList#" index="column">
+			<cfloop list="#flattendedInclude#" index="name">
+				<cfset modelObj = application.core.model(application.core.singularize(trim(name)))>
+				<cfloop list="#modelObj.columnList#" index="column">
 					<cfif listContainsNoCase(selectColumns, "." & trim(column)) IS 0>
-						<cfset selectColumns = selectColumns & "," & application.core.pluralize(model) & "." & trim(column)>
+						<cfset selectColumns = selectColumns & "," & modelObj._tableName & "." & trim(column)>
 					<cfelse>
-						<cfif listContainsNoCase(selectColumns, "." & model & "_" & trim(column)) IS 0>
-							<cfset selectColumns = selectColumns & "," & application.core.pluralize(model) & "." & trim(column) & " AS " & model & "_" & trim(column)>
+						<cfif listContainsNoCase(selectColumns, "." & modelObj._modelName & "_" & trim(column)) IS 0>
+							<cfset selectColumns = selectColumns & "," & modelObj._tableName & "." & trim(column) & " AS " & modelObj._modelName & "_" & trim(column)>
 						</cfif>
 					</cfif>
 				</cfloop>
@@ -1180,23 +1178,22 @@
 	<cffunction name="getFromTables" access="public" returntype="string" output="false" hint="">
 
 		<cfset var fromTables = "">
-		<cfset var singularizedModel = "">
-		<cfset var pluralizedModel = "">
-
+		<cfset var expandedInclude = "">
 		<cfset var modelString = "">
 		<cfset var innerModelList = "">
 		<cfset var outerModel = "">
 		<cfset var innerModel = "">
+		<cfset var joinTable = "">
 		<cfset var pos = 0>
 
 		<cfif StructKeyExists(arguments, "include") AND arguments.include IS NOT "">
-			<cfset arguments.include = "recordings(#arguments.include#)">
-			<cfloop from="1" to="10" index="i">
+			<cfset expandedInclude = "#this._modelName#(#arguments.include#)">
+			<cfloop condition="#expandedInclude# Contains '('">
 				<cfset pos = 1>
-				<cfloop condition="#reFindNoCase('\(([a-z]|,)*\)', arguments.include, pos, true).pos[1]# GT 0">
-					<cfset modelString = reFindNoCase("\(([a-z]|,)*\)", arguments.include, pos, true)>
-					<cfset outerModel = application.core.model(application.core.singularize(reverse(spanExcluding(reverse(left(arguments.include, modelString.pos[1]-1)), ",("))))>
-					<cfset innerModelList = replaceList(mid(arguments.include, modelString.pos[1], modelString.len[1]), "(,)", ",")>
+				<cfloop condition="#reFindNoCase('\(([a-z]|,)*\)', expandedInclude, pos, true).pos[1]# GT 0">
+					<cfset modelString = reFindNoCase("\(([a-z]|,)*\)", expandedInclude, pos, true)>
+					<cfset outerModel = application.core.model(application.core.singularize(reverse(spanExcluding(reverse(left(expandedInclude, modelString.pos[1]-1)), ",("))))>
+					<cfset innerModelList = replaceList(mid(expandedInclude, modelString.pos[1], modelString.len[1]), "(,)", ",")>
 					<cfloop list="#innerModelList#" index="model">
 						<cfset innerModel = application.core.model(application.core.singularize(model))>
 						<cfif listFindNoCase(outerModel.columnList, "#innerModel._modelName#_id")>
@@ -1213,7 +1210,7 @@
 					</cfloop>
 					<cfset pos = modelString.pos[2]>
 				</cfloop>
-				<cfset arguments.include = reReplaceNoCase(arguments.include, "\(([a-z]|,)*\)", "", "all")>
+				<cfset expandedInclude = reReplaceNoCase(expandedInclude, "\(([a-z]|,)*\)", "", "all")>
 			</cfloop>
 			<cfset fromTables = this._tableName & " " & fromTables>
 		<cfelse>
