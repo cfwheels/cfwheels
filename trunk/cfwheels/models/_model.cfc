@@ -1147,6 +1147,7 @@
 		<cfset var otherModelSelectColumns = "">
 		<cfset var pos = 0>
 		<cfset var added = "">
+		<cfset var flattendedInclude = "">
 		
 		<cfset pos = 0>
 		<cfloop list="#this.columnList#" index="column">
@@ -1157,8 +1158,9 @@
 			</cfif>
 		</cfloop>
 		<cfif StructKeyExists(arguments, "include") AND arguments.include IS NOT "">
-			<cfloop list="#arguments.include#" index="model">
-				<cfset otherModel = application.core.model(trim(model))>
+			<cfset flattendedInclude = replace(replace(arguments.include, "(", ",", "all"), ")", "", "all")>
+			<cfloop list="#flattendedInclude#" index="model">
+				<cfset otherModel = application.core.model(application.core.singularize(trim(model)))>
 				<cfloop list="#otherModel.columnList#" index="column">
 					<cfif listContainsNoCase(selectColumns, "." & trim(column)) IS 0>
 						<cfset selectColumns = selectColumns & "," & application.core.pluralize(model) & "." & trim(column)>
@@ -1178,18 +1180,46 @@
 	<cffunction name="getFromTables" access="public" returntype="string" output="false" hint="">
 
 		<cfset var fromTables = "">
+		<cfset var singularizedModel = "">
+		<cfset var pluralizedModel = "">
 
-		<cfset fromTables = this._tableName>
+		<cfset var modelString = "">
+		<cfset var innerModelList = "">
+		<cfset var outerModel = "">
+		<cfset var innerModel = "">
+		<cfset var pos = 0>
+
 		<cfif StructKeyExists(arguments, "include") AND arguments.include IS NOT "">
-			<cfloop list="#arguments.include#" index="model">
-				<cfset fromTables = "#fromTables# LEFT OUTER JOIN #application.core.pluralize(trim(model))#">
-				<cfif listFindNoCase(this.columnList, "#trim(model)#_id")>
-					<cfset fromTables = "#fromTables# ON #this._tableName#.#trim(model)#_id = #application.core.pluralize(trim(model))#.id">
-				<cfelse>
-					<cfset fromTables = "#fromTables# ON #this._tableName#.id = #application.core.pluralize(trim(model))#.#application.core.singularize(this._tableName)#_id">
-				</cfif>
+			<cfset arguments.include = "recordings(#arguments.include#)">
+			<cfloop from="1" to="10" index="i">
+				<cfset pos = 1>
+				<cfloop condition="#reFindNoCase('\(([a-z]|,)*\)', arguments.include, pos, true).pos[1]# GT 0">
+					<cfset modelString = reFindNoCase("\(([a-z]|,)*\)", arguments.include, pos, true)>
+					<cfset outerModel = application.core.model(application.core.singularize(reverse(spanExcluding(reverse(left(arguments.include, modelString.pos[1]-1)), ",("))))>
+					<cfset innerModelList = replaceList(mid(arguments.include, modelString.pos[1], modelString.len[1]), "(,)", ",")>
+					<cfloop list="#innerModelList#" index="model">
+						<cfset innerModel = application.core.model(application.core.singularize(model))>
+						<cfif listFindNoCase(outerModel.columnList, "#innerModel._modelName#_id")>
+							<!--- belongsTo --->
+							<cfset fromTables = "LEFT OUTER JOIN #innerModel._tableName# ON #outerModel._tableName#.#innerModel._modelName#_id = #innerModel._tableName#.id" & " " & fromTables>
+						<cfelseif listFindNoCase(innerModel.columnList, "#outerModel._modelName#_id")>
+							<!--- hasOne, hasMany --->
+							<cfset fromTables = "LEFT OUTER JOIN #innerModel._tableName# ON #outerModel._tableName#.id = #innerModel._tableName#.#outerModel._modelName#_id" & " " & fromTables>
+						<cfelse>
+							<!--- hasAndBelongsToMany --->
+							<cfset joinTable = application.core.joinTableName(outerModel._tableName, innerModel._tableName)>
+							<cfset fromTables = "LEFT OUTER JOIN #joinTable# ON #outerModel._tableName#.id = #joinTable#.#outerModel._modelName#_id LEFT OUTER JOIN #innerModel._tableName# ON #joinTable#.#outerModel._modelName#_id = #innerModel._tableName#.id" & " " & fromTables>
+						</cfif>
+					</cfloop>
+					<cfset pos = modelString.pos[2]>
+				</cfloop>
+				<cfset arguments.include = reReplaceNoCase(arguments.include, "\(([a-z]|,)*\)", "", "all")>
 			</cfloop>
+			<cfset fromTables = this._tableName & " " & fromTables>
+		<cfelse>
+			<cfset fromTables = this._tableName>		
 		</cfif>
+
 		<cfif StructKeyExists(arguments, "joins") AND arguments.joins IS NOT "">
 			<cfset fromTables = fromTables & " " & arguments.joins>
 		</cfif>
