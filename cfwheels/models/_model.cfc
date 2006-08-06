@@ -85,7 +85,7 @@
 
 		<cfif NOT structIsEmpty(arguments.attributes)>
 			<cfloop collection="#arguments.attributes#" item="key">
-				<cfset this[key] = arguments.attributes[key]>
+				<cfset setValue(key, arguments.attributes[key])>
 			</cfloop>
 		</cfif>
 		
@@ -395,11 +395,11 @@
 		<cfargument name="value" type="string" required="no" default="" hint="The value to set on the attribute">
 
 		<cfif structCount(arguments) IS 2>
-			<cfset this[arguments.name] = arguments.value>
+			<cfset setValue(arguments.name, arguments.value)>
 		<cfelse>
 			<cfloop collection="#arguments#" item="key">
 				<cfif key IS NOT "name" AND key IS NOT "value">
-					<cfset this[key] = arguments[key]>
+					<cfset setValue(key, arguments[key])>
 				</cfif>
 			</cfloop>
 		</cfif>
@@ -413,22 +413,15 @@
 
 		<cfloop collection="#arguments#" item="key">
 			<cfif key IS NOT "attributes">
-				<cfset arguments.attributes[key] = arguments[key]>
+				<cfset setValue(arguments.attributes[key], arguments[key])>
 			</cfif>
 		</cfloop>
 
 		<cfif NOT structIsEmpty(arguments.attributes)>
 			<cfloop collection="#arguments.attributes#" item="key">
-				<cfset this[key] = arguments.attributes[key]>
+				<cfset setValue(key, arguments.attributes[key])>
 			</cfloop>
 		</cfif>
-
-		<!--- TESTING IF THIS CAN BE REMOVED (MIGHT NEED TO ADD A HIDDEN FIELD TO CHECKBOXES/RADIOBUTTONS FORM HELPERS --->
-		<!--- <cfif arguments.attributes[key] IS NOT "" OR variables.fields[key].cfDataType IS NOT "numeric">
-			<cfset this[key] = arguments.attributes[key]>
-		<cfelse>
-			<cfset this[key] = 0>
-		</cfif> --->
 
 		<cfreturn save()>
 	</cffunction>
@@ -966,6 +959,25 @@
 		<cfreturn this>
 	</cffunction>
 
+
+	<cffunction name="setValue" returntype="void" access="public" output="false" hint="">
+		<cfargument name="name" type="string" required="true">
+		<cfargument name="value" type="string" required="true">
+
+		<cfif variables.fields[arguments.name].cfDataType IS "boolean" AND NOT isBoolean(arguments.value)>
+			<cfif arguments.value IS "" OR arguments.value IS 0>
+				<cfset this[arguments.name] = false>
+			<cfelse>
+				<cfset this[arguments.name] = true>
+			</cfif>
+		<cfelseif variables.fields[arguments.name].cfDataType IS "numeric" AND NOT isNumeric(arguments.value)>
+			<cfset this[arguments.name] = 0>
+		<cfelse>
+			<cfset this[arguments.name] = arguments.value>
+		</cfif>
+
+	</cffunction>
+
 	
 	<cffunction name="insertRecord" access="private" output="false" returntype="boolean" hint="Inserts a new record into the database">
 	
@@ -1256,9 +1268,9 @@
 
 		<cfif isBoolean(this[arguments.attribute])>
 			<cfif this[arguments.attribute]>
-				<cfset this[arguments.attribute] = false>
+				<cfset setValue(arguments.attribute, false)>
 			<cfelse>
-				<cfset this[arguments.attribute] = true>
+				<cfset setValue(arguments.attribute, true)>
 			</cfif>
 		<cfelse>
 			<cfreturn false>

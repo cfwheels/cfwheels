@@ -1,4 +1,4 @@
-<!--- Functions that return form elements --->
+<!--- Start/end form tags --->
 
 <cffunction name="startFormTag" output="false" returntype="string" hint="Outputs HTML for an opening form tag">
 	<cfargument name="link" type="string" required="no" default="" hint="The full URL to link to (only use this when not using controller/action/id type links)">
@@ -29,9 +29,11 @@
 		<cfset url = "">
 	</cfif>
 
-	<cfsavecontent variable="output"><cfoutput>
-		<form name="#arguments.name#" id="#arguments.name#" action="#url#" method="#arguments.method#"#iif(arguments.target IS NOT "", de(' target="#arguments.target#"'), de(''))##iif(arguments.multipart, de(' enctype="multipart/form-data"'), de(''))##iif(arguments.class IS NOT "", de(' class="#arguments.class#"'), de(''))##iif(arguments.onsubmit IS NOT "", de(' onsubmit="#arguments.onsubmit#"'), de(''))#>
-	</cfoutput></cfsavecontent>	
+	<cfsavecontent variable="output">¨
+		<cfoutput>
+			<form name="#arguments.name#" id="#arguments.name#" action="#url#" method="#arguments.method#"#iif(arguments.target IS NOT "", de(' target="#arguments.target#"'), de(''))##iif(arguments.multipart, de(' enctype="multipart/form-data"'), de(''))##iif(arguments.class IS NOT "", de(' class="#arguments.class#"'), de(''))##iif(arguments.onsubmit IS NOT "", de(' onsubmit="#arguments.onsubmit#"'), de(''))#>
+		</cfoutput>
+	</cfsavecontent>	
 
 	<cfreturn trim(output)>
 </cffunction>
@@ -104,421 +106,391 @@
 		<cfset actionLink = "">
 	</cfif>
 
-	<cfsavecontent variable="output"><cfoutput>
-		<form name="#arguments.name#" id="#arguments.name#" action="#actionLink#" method="#arguments.method#" onsubmit="#ajaxCall# return false;"#iif(arguments.target IS NOT "", de(' target="#arguments.target#"'), de(''))##iif(arguments.multipart, de(' enctype="multipart/form-data"'), de(''))##iif(arguments.class IS NOT "", de(' class="#arguments.class#"'), de(''))#>
-	</cfoutput></cfsavecontent>	
-	<cfreturn output>
+	<cfsavecontent variable="output">
+		<cfoutput>
+			<form name="#arguments.name#" id="#arguments.name#" action="#actionLink#" method="#arguments.method#" onsubmit="#ajaxCall# return false;"#iif(arguments.target IS NOT "", de(' target="#arguments.target#"'), de(''))##iif(arguments.multipart, de(' enctype="multipart/form-data"'), de(''))##iif(arguments.class IS NOT "", de(' class="#arguments.class#"'), de(''))#>
+		</cfoutput>
+	</cfsavecontent>	
+	<cfreturn trim(output)>
 </cffunction>
 
 
 <cffunction name="endFormTag" output="false" returntype="string" hint="Outputs HTML for a closing form tag">
 
 	<cfset var output = "">
-	<cfsavecontent variable="output"></form></cfsavecontent>
+
+	<cfsavecontent variable="output">
+		</form>
+	</cfsavecontent>
 	
-	<cfreturn output>
+	<cfreturn trim(output)>
 </cffunction>
 
 
+<!--- Object form input elements --->
+
+
 <cffunction name="textField" returntype="string" output="false" hint="Outputs HTML for a textfield form object">
-	<!--- Arguments for all form elements --->
-	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this form element">
-	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
-	<cfargument name="value" type="string" required="false" default="" hint="The default value of this form element">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
-	<!--- Arguments for all model form elements --->
 	<cfargument name="model" type="string" required="true" hint="Name of the model to associate to this form element">
 	<cfargument name="field" type="string" required="true" hint="Name of the field in the model that this form element represents">
 	<cfargument name="errorDisplay" type="string" required="false" default="div" hint="Determines how errors are displayed. Possible values are: div, span, inline">
-	<!--- Arguments for this function only --->
-	<cfargument name="size" type="string" required="false" default="" hint="Size of the text field">
+	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
+	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
 
 	<cfset var output = "">
+	<cfset var HTMLOptions = "">
 	
-	<cfset arguments.showError = setShowError(argumentCollection=arguments)>
 	<cfset arguments.value = setValue(argumentCollection=arguments)>
 	<cfset arguments.class = setClass(argumentCollection=arguments)>
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
 	
 	<cfsavecontent variable="output">
 		<cfoutput>			
 			#beforeElement(argumentCollection=arguments)#
-			<input type="text" name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#" value="#arguments.value#"#iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.size IS NOT "", de(' size="#arguments.size#"'),de(''))# />
+			<input type="text" name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#"#HTMLOptions# />
 			#afterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
 	
-	<cfreturn output>
-</cffunction>
-
-
-<cffunction name="textFieldTag" output="false" returntype="string" hint="Outputs HTML for a textfield form object">
-	<!--- Arguments for all form elements --->
-	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this form element">
-	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
-	<cfargument name="value" type="string" required="false" default="" hint="The default value of this form element">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
-	<!--- Arguments for non model form elements --->
-	<cfargument name="name" type="string" required="true" hint="Name and ID attribute for this form element">
-	<!--- Arguments for this function only --->
-	<cfargument name="size" type="string" required="false" default="" hint="Size of the text field">
-
-	<cfset var output = "">
-	
-	<cfsavecontent variable="output">
-		<cfoutput>
-			#beforeElement(argumentCollection=arguments)#
-			<input type="text" name="#arguments.name#" id="#arguments.name#"#iif(arguments.value IS NOT "", de(' value="#value#"'),de(''))##iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.size IS NOT "", de(' size="#arguments.size#"'),de(''))# />
-			#afterElement(argumentCollection=arguments)#
-		</cfoutput>
-	</cfsavecontent>
-	
-	<cfreturn output>
-</cffunction>
-
-
-<cffunction name="fileFieldTag" returntype="string" output="false" hint="Outputs HTML for a file field form object">
-	<!--- Arguments for all form elements (excluding 'value' which is not available for a file input) --->
-	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this form element">
-	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
-	<!--- Arguments for non model form elements --->
-	<cfargument name="name" type="string" required="true" hint="Name and ID attribute for this form element">
-	<!--- Arguments for this function only --->
-	<cfargument name="size" type="string" required="false" default="" hint="Size of the file field">
-
-	<cfset var output = "">
-	
-	<cfsavecontent variable="output">
-		<cfoutput>
-			#beforeElement(argumentCollection=arguments)#
-			<input type="file" name="#arguments.name#" id="#arguments.name#"#iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.size IS NOT "", de(' size="#arguments.size#"'),de(''))# />
-			#afterElement(argumentCollection=arguments)#
-		</cfoutput>
-	</cfsavecontent>
-	
-	<cfreturn output>
-</cffunction>
-
-
-<cffunction name="hiddenField" output="false" returntype="string" hint="Outputs HTML for a hidden field form object">
-	<!--- Arguments for all model form elements (excluding 'errorDisplay') --->
-	<cfargument name="model" type="string" required="true" hint="Name of the model to associate to this form element">
-	<cfargument name="field" type="string" required="true" hint="Name of the field in the model that this form element represents">
-	<!--- Arguments for all form elements (excluding the ones related to the label) --->
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this form element">
-	<cfargument name="value" type="string" required="false" default="" hint="The default value of this form element">
-
-	<cfset var output = "">
-
-	<cfset arguments.value = setValue(arguments)>
-	
-	<cfsavecontent variable="output">
-		<cfoutput>
-			<input type="hidden" name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#"#iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.value IS NOT "", de(' value="#arguments.value#"'),de(''))# />
-		</cfoutput>
-	</cfsavecontent>
-	
-	<cfreturn output>
-</cffunction>
-
-
-<cffunction name="hiddenFieldTag" output="false" returntype="string" hint="Outputs HTML for a hidden field form object">
-	<!--- Arguments for all form elements (excluding the ones related to the label) --->
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this form element">
-	<cfargument name="value" type="string" required="false" default="" hint="The default value of this form element">
-	<!--- Arguments for non model form elements --->
-	<cfargument name="name" type="string" required="true" hint="Name and ID attribute for this form element">
-
-	<cfset var output = "">
-	
-	<cfsavecontent variable="output">
-		<cfoutput>
-			<input type="hidden" name="#arguments.name#" id="#arguments.name#"#iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.value IS NOT "", de(' value="#arguments.value#"'),de(''))# />
-		</cfoutput>
-	</cfsavecontent>
-	
-	<cfreturn output>
+	<cfreturn trim(output)>
 </cffunction>
 
 
 <cffunction name="passwordField" output="false" returntype="string" hint="Outputs HTML for a password form object">
-	<!--- Arguments for all form elements --->
-	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this form element">
-	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
-	<cfargument name="value" type="string" required="false" default="" hint="The default value of this form element">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
-	<!--- Arguments for all model form elements --->
 	<cfargument name="model" type="string" required="true" hint="Name of the model to associate to this form element">
 	<cfargument name="field" type="string" required="true" hint="Name of the field in the model that this form element represents">
 	<cfargument name="errorDisplay" type="string" required="false" default="div" hint="Determines how errors are displayed. Possible values are: div, span, inline">
-	<!--- Arguments for this function only --->
-	<cfargument name="size" type="string" required="false" default="" hint="Size of the password field">
+	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
+	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
 
 	<cfset var output = "">
+	<cfset var HTMLOptions = "">
 	
-	<cfset arguments.showError = setShowError(argumentCollection=arguments)>
 	<cfset arguments.value = setValue(argumentCollection=arguments)>
 	<cfset arguments.class = setClass(argumentCollection=arguments)>
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
 	
 	<cfsavecontent variable="output">
 		<cfoutput>			
 			#beforeElement(argumentCollection=arguments)#
-			<input type="password" name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#" value="#arguments.value#"#iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.size IS NOT "", de(' size="#arguments.size#"'),de(''))# />
+			<input type="password" name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#"#HTMLOptions# />
 			#afterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
 	
-	<cfreturn output>
-</cffunction>
-
-
-<cffunction name="passwordFieldTag" output="false" returntype="string" hint="Outputs HTML for a password form object">
-	<!--- Arguments for all form elements --->
-	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this form element">
-	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
-	<cfargument name="value" type="string" required="false" default="" hint="The default value of this form element">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
-	<!--- Arguments for non model form elements --->
-	<cfargument name="name" type="string" required="true" hint="Name and ID attribute for this form element">
-	<!--- Arguments for this function only --->
-	<cfargument name="size" type="string" required="false" default="" hint="Size of the text field">
-
-	<cfset var output = "">
-	
-	<cfsavecontent variable="output">
-		<cfoutput>
-			#beforeElement(argumentCollection=arguments)#
-			<input type="password" name="#arguments.name#" id="#arguments.name#"#iif(arguments.value IS NOT "", de(' value="#value#"'),de(''))##iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.size IS NOT "", de(' size="#arguments.size#"'),de(''))# />
-			#afterElement(argumentCollection=arguments)#
-		</cfoutput>
-	</cfsavecontent>
-	
-	<cfreturn output>
-</cffunction>
-
-
-<cffunction name="textArea" output="false" returntype="string" hint="Outputs HTML for a textfarea form object">
-	<!--- Arguments for all form elements --->
-	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this form element">
-	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
-	<cfargument name="value" type="string" required="false" default="" hint="The default value of this form element">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
-	<!--- Arguments for all model form elements --->
-	<cfargument name="model" type="string" required="true" hint="Name of the model to associate to this form element">
-	<cfargument name="field" type="string" required="true" hint="Name of the field in the model that this form element represents">
-	<cfargument name="errorDisplay" type="string" required="false" default="div" hint="Determines how errors are displayed. Possible values are: div, span, inline">
-	<!--- Arguments for this function only --->
-	<cfargument name="cols" type="numeric" required="false" default=0 hint="Number of columns (characters) to display">
-	<cfargument name="rows" type="numeric" required="false" default=0 hint="Number of rows (lines) to display">
-
-	<cfset var output = "">
-	
-	<cfset arguments.showError = setShowError(argumentCollection=arguments)>
-	<cfset arguments.value = setValue(argumentCollection=arguments)>
-	<cfset arguments.class = setClass(argumentCollection=arguments)>
-	
-	<cfsavecontent variable="output">
-		<cfoutput>			
-			#beforeElement(argumentCollection=arguments)#
-			<textarea name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#"#iif(arguments.cols IS NOT 0, de(' cols="#arguments.cols#"'),de(''))##iif(arguments.rows IS NOT 0, de(' rows="#arguments.rows#"'),de(''))##iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))#>#arguments.value#</textarea>
-			#afterElement(argumentCollection=arguments)#
-		</cfoutput>
-	</cfsavecontent>
-	
-	<cfreturn output>
-</cffunction>
-
-
-<cffunction name="textAreaTag" output="false" returntype="string" hint="Outputs HTML for a textfarea form object">
-	<!--- Arguments for all form elements --->
-	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this form element">
-	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
-	<cfargument name="value" type="string" required="false" default="" hint="The default value of this form element">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
-	<!--- Arguments for non model form elements --->
-	<cfargument name="name" type="string" required="true" hint="Name and ID attribute for this form element">
-	<!--- Arguments for this function only --->
-	<cfargument name="cols" type="numeric" required="false" default=0 hint="Number of columns (characters) to display">
-	<cfargument name="rows" type="numeric" required="false" default=0 hint="Number of rows (lines) to display">
-
-	<cfset var output = "">
-	
-	<cfsavecontent variable="output">
-		<cfoutput>
-			#beforeElement(argumentCollection=arguments)#
-			<textarea name="#arguments.name#" id="#arguments.name#"#iif(arguments.cols IS NOT 0, de(' cols="#arguments.cols#"'),de(''))##iif(arguments.rows IS NOT 0, de(' rows="#arguments.rows#"'),de(''))##iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))#>#arguments.value#</textarea>
-			#afterElement(argumentCollection=arguments)#
-		</cfoutput>
-	</cfsavecontent>
-	
-	<cfreturn output>
+	<cfreturn trim(output)>
 </cffunction>
 
 
 <cffunction name="radioButton" output="false" returntype="string" hint="Outputs HTML for a radio form object">
-	<cfargument name="model" type="string" required="true" hint="Name of the model to associate to this textfield">
-	<cfargument name="field" type="string" required="true" hint="Name of the field in the model that this textfield represents">
-	<cfargument name="value" type="string" required="true" hint="The value of this radio button">
-	<cfargument name="checked" type="boolean" required="false" default="false" hint="Whether this radio button should already be turned on (true) or not (false)">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this field">
-	<cfargument name="label" type="string" required="false" default="" hint="Label for this field">
-	<cfargument name="onchange" type="string" required="false" default="" hint="">
-	
+	<cfargument name="model" type="string" required="true" hint="Name of the model to associate to this form element">
+	<cfargument name="field" type="string" required="true" hint="Name of the field in the model that this form element represents">
+	<cfargument name="errorDisplay" type="string" required="false" default="div" hint="Determines how errors are displayed. Possible values are: div, span, inline">
+	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
+	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
+	<!--- Arguments for this function only --->
+	<cfargument name="tagValue" type="string" required="false" default="" hint="The value of this form element">
+
 	<cfset var output = "">
-	<cfset var modelValue = "">
+	<cfset var HTMLOptions = "">
 	
-	<cfif isDefined(evaluate("arguments.model"))>
-		<!--- Check to see if the "value" passed in, and the value of the field in the model are the same. If so, turn this box on --->
-		<cfset modelValue = evaluate("#arguments.model#.#arguments.field#")>
-		<cfif modelValue IS arguments.value>
-			<cfset arguments.checked = true>
-		</cfif>
-	</cfif>
-	
+	<cfset arguments.value = setValue(argumentCollection=arguments)>
+	<cfset arguments.class = setClass(argumentCollection=arguments)>
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
+
 	<cfsavecontent variable="output">
-		<cfoutput>
-			<cfif arguments.label IS NOT "">
-				<label for="#arguments.field#">#arguments.label#</label>
-			</cfif>
-			<input type="radio" name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#" value="#arguments.value#"#iif(arguments.checked IS true, de(' checked="checked"'),de(''))##iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.onchange IS NOT "", de(' onchange="#arguments.onchange#"'),de(''))# />
+		<cfoutput>			
+			#beforeElement(argumentCollection=arguments)#
+			<input type="radio" name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#" value="#arguments.tagValue#"#iif(arguments.tagValue IS arguments.value, de(' checked="checked"'),de(''))##HTMLOptions# />
+			#afterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
 	
-	<cfreturn output>
-</cffunction>
-
-
-<cffunction name="radioButtonTag" output="false" returntype="string" hint="Outputs HTML for a radio form object">
-	<cfargument name="name" type="string" required="true" hint="Name of the field in the model that this textfield represents">
-	<cfargument name="value" type="string" required="true" hint="The value of this radio button">
-	<cfargument name="id" type="string" required="false" default="" hint="Name of the field in the model that this textfield represents">
-	<cfargument name="checked" type="boolean" required="false" default="false" hint="Whether this radio button should already be turned on (true) or not (false)">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this field">
-	<cfargument name="label" type="string" required="false" default="" hint="Label for this field">
-	<cfargument name="onchange" type="string" required="false" default="" hint="">
-	
-	<cfset var output = "">
-
-	<cfif arguments.id IS "">
-		<cfset arguments.id = arguments.name>
-	</cfif>
-
-	<cfsavecontent variable="output">
-		<cfoutput>
-			<cfif arguments.label IS NOT "">
-				<label for="#arguments.name#">#arguments.label#</label>
-			</cfif>
-			<input type="radio" name="#arguments.name#" id="#arguments.id#" value="#arguments.value#"#iif(arguments.checked IS true, de(' checked="checked"'),de(''))##iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.onchange IS NOT "", de(' onchange="#arguments.onchange#"'),de(''))# />
-		</cfoutput>
-	</cfsavecontent>
-	
-	<cfreturn output>
+	<cfreturn trim(output)>
 </cffunction>
 
 
 <cffunction name="checkBox" output="false" returntype="string" hint="Outputs HTML for a checkbox form object">
-	<cfargument name="model" type="string" required="true" hint="Name of the model to associate to this textfield">
-	<cfargument name="field" type="string" required="true" hint="Name of the field in the model that this textfield represents">
-	<cfargument name="value" type="string" required="true" hint="The value of this checkbox when checked on">
-	<cfargument name="checked" type="boolean" required="false" default="false" hint="Whether this checkbox should already be turned on (true) or not (false)">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this field">
-	<cfargument name="label" type="string" required="false" default="" hint="Label for this field">
-	<cfargument name="onchange" type="string" required="false" default="" hint="Stuff to do on the onchange">
-	
-	<cfset var output = "">
-	<cfset var modelValue = "">
-	
-	<cfif isDefined(evaluate("arguments.model"))>
-		<!--- Check to see if the "value" passed in, and the value of the field in the model are the same. If so, turn this box on --->
-		<cfset modelValue = evaluate("#arguments.model#.#arguments.field#")>
-		<cfif modelValue IS arguments.value>
-			<cfset arguments.checked = true>
-		</cfif>
-	</cfif>
-	
-	<cfsavecontent variable="output">
-		<cfoutput>
-			<cfif arguments.label IS NOT "">
-				<label for="#arguments.field#">#arguments.label#</label>
-			</cfif>
-			<input type="checkbox" name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#" value="#arguments.value#"#iif(arguments.checked IS true, de(' checked="checked"'),de(''))##iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.onchange IS NOT "", de(' onchange="#arguments.onchange#"'),de(''))# />
-		</cfoutput>
-	</cfsavecontent>
-	
-	<cfreturn output>
-</cffunction>
-
-
-<cffunction name="checkBoxTag" output="false" returntype="string" hint="Outputs HTML for a checkbox form object">
-	<cfargument name="name" type="string" required="true" hint="Name of the field in the model that this textfield represents">
-	<cfargument name="value" type="string" required="true" hint="The value of this checkbox when checked on">
-	<cfargument name="checked" type="boolean" required="false" default="false" hint="Whether this checkbox should already be turned on (true) or not (false)">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this field">
-	<cfargument name="label" type="string" required="false" default="" hint="Label for this field">
-	<cfargument name="onchange" type="string" required="false" default="" hint="Stuff to do on the onchange">
-	
-	<cfset var output = "">
-	
-	<cfsavecontent variable="output">
-		<cfoutput>
-			<cfif arguments.label IS NOT "">
-				<label for="#arguments.name#">#arguments.label#</label>
-			</cfif>
-			<input type="checkbox" name="#arguments.name#" id="#arguments.name#" value="#arguments.value#"#iif(arguments.checked IS true, de(' checked="checked"'),de(''))##iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.onchange IS NOT "", de(' onchange="#arguments.onchange#"'),de(''))# />
-		</cfoutput>
-	</cfsavecontent>
-	
-	<cfreturn output>
-</cffunction>
-
-
-<cffunction name="select" output="false" returntype="string" hint="Outputs HTML for a select form object">
-	<!--- Arguments for all form elements --->
-	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this form element">
-	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
-	<!--- Arguments for all model form elements --->
 	<cfargument name="model" type="string" required="true" hint="Name of the model to associate to this form element">
 	<cfargument name="field" type="string" required="true" hint="Name of the field in the model that this form element represents">
 	<cfargument name="errorDisplay" type="string" required="false" default="div" hint="Determines how errors are displayed. Possible values are: div, span, inline">
-	<!--- Arguments for this function only --->
-	<cfargument name="size" type="numeric" required="false" default=0 hint="Number of rows to display">
-	<cfargument name="choices" type="any" required="true" hint="The choices to display in the dropdown (can be list, array, struct, query)">
-	<cfargument name="type" type="string" required="false" default="single" hint="Menu or multiple select (single|multiple)" />
-	<cfargument name="key" type="string" required="false" default="name" hint="The field to use as the value in the <option>s" />
-	<cfargument name="value" type="string" required="false" default="id" hint="The field to use as the text displayed in the choices" />
-	
+	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
+	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
+
 	<cfset var output = "">
-	<cfset var keyArray = arrayNew(1)>
-	<cfset var valueArray = arrayNew(1)>
-	<cfset var thisSet = "">
-	<cfset var i = 1>
-	<cfset var currentValue = "">
-	<cfset var options = figureSelectChoices(arguments.choices,arguments.key,arguments.value)>
+	<cfset var HTMLOptions = "">
 	
-	<cfset keyArray = options.keyArray>
-	<cfset valueArray = options.valueArray>
-	
-	<cfset arguments.showError = setShowError(argumentCollection=arguments)>
-	<cfif isDefined(evaluate("arguments.model"))>
-		<cfset currentValue = evaluate("#arguments.model#.#arguments.field#")>
-	</cfif>
+	<cfset arguments.value = setValue(argumentCollection=arguments)>
 	<cfset arguments.class = setClass(argumentCollection=arguments)>
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
+
+	<cfsavecontent variable="output">
+		<cfoutput>			
+			#beforeElement(argumentCollection=arguments)#
+			<input type="checkbox" name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#" value="1"#iif(arguments.value, de(' checked="checked"'),de(''))##HTMLOptions# />
+		    <input name="#arguments.model#[#arguments.field#]" type="hidden" value="" />
+			#afterElement(argumentCollection=arguments)#
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trim(output)>
+</cffunction>
+
+
+<cffunction name="hiddenField" output="false" returntype="string" hint="Outputs HTML for a hidden field form object">
+	<cfargument name="model" type="string" required="true" hint="Name of the model to associate to this form element">
+	<cfargument name="field" type="string" required="true" hint="Name of the field in the model that this form element represents">
+
+	<cfset var output = "">
+
+	<cfset arguments.value = setValue(argumentCollection=arguments)>
+	<cfset arguments.class = setClass(argumentCollection=arguments)>
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
+	
+	<cfsavecontent variable="output">
+		<cfoutput>
+			<input type="hidden" name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#"#HTMLOptions# />
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trim(output)>
+</cffunction>
+
+
+<!--- Non object form input elements --->
+
+
+<cffunction name="textFieldTag" output="false" returntype="string" hint="Outputs HTML for a textfield form object">
+	<cfargument name="name" type="string" required="true" hint="Name and ID attribute for this form element">
+	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
+	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
+
+	<cfset var output = "">
+	<cfset var HTMLOptions = "">
+	
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
 	
 	<cfsavecontent variable="output">
 		<cfoutput>
 			#beforeElement(argumentCollection=arguments)#
-			<select name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#"#iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.type IS "multiple", de(' multiple="multiple"'),de(''))##iif(arguments.size IS NOT 0, de(' size="#arguments.size#"'),de(''))#>
+			<input type="text" name="#arguments.name#" id="#arguments.name#"#HTMLOptions# />
+			#afterElement(argumentCollection=arguments)#
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trim(output)>
+</cffunction>
+
+
+<cffunction name="passwordFieldTag" output="false" returntype="string" hint="Outputs HTML for a password form object">
+	<cfargument name="name" type="string" required="true" hint="Name and ID attribute for this form element">
+	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
+	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
+
+	<cfset var output = "">
+	<cfset var HTMLOptions = "">
+	
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
+	
+	<cfsavecontent variable="output">
+		<cfoutput>
+			#beforeElement(argumentCollection=arguments)#
+			<input type="password" name="#arguments.name#" id="#arguments.name#"#HTMLOptions# />
+			#afterElement(argumentCollection=arguments)#
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trim(output)>
+</cffunction>
+
+
+<cffunction name="radioButtonTag" output="false" returntype="string" hint="Outputs HTML for a radio form object">
+	<cfargument name="name" type="string" required="true" hint="Name and ID attribute for this form element">
+	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
+	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
+	<!--- Arguments for this function only --->
+	<cfargument name="checked" type="boolean" required="false" default="false" hint="Whether this form element should be turned on or not">
+	
+	<cfset var output = "">
+	<cfset var HTMLOptions = "">
+	
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
+
+	<cfsavecontent variable="output">
+		<cfoutput>
+			#beforeElement(argumentCollection=arguments)#
+			<input type="radio" name="#arguments.name#" id="#arguments.name#"#iif(arguments.checked, de(' checked="checked"'),de(''))##HTMLOptions# />
+			#afterElement(argumentCollection=arguments)#
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trim(output)>
+</cffunction>
+
+
+<cffunction name="checkBoxTag" output="false" returntype="string" hint="Outputs HTML for a checkbox form object">
+	<cfargument name="name" type="string" required="true" hint="Name and ID attribute for this form element">
+	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
+	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
+	<!--- Arguments for this function only --->
+	<cfargument name="checked" type="boolean" required="false" default="false" hint="Whether this form element should be turned on or not">
+	
+	<cfset var output = "">
+	<cfset var HTMLOptions = "">
+	
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
+	
+	<cfsavecontent variable="output">
+		<cfoutput>
+			#beforeElement(argumentCollection=arguments)#
+			<input type="checkbox" name="#arguments.name#" id="#arguments.name#"#iif(arguments.checked IS true, de(' checked="checked"'),de(''))##HTMLOptions# />
+			#afterElement(argumentCollection=arguments)#
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trim(output)>
+</cffunction>
+
+
+<cffunction name="hiddenFieldTag" output="false" returntype="string" hint="Outputs HTML for a hidden form object">
+	<cfargument name="name" type="string" required="true" hint="Name and ID attribute for this form element">
+
+	<cfset var output = "">
+	<cfset var HTMLOptions = "">
+	
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
+	
+	<cfsavecontent variable="output">
+		<cfoutput>
+			<input type="hidden" name="#arguments.name#" id="#arguments.name#"#HTMLOptions# />
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trim(output)>
+</cffunction>
+
+
+<cffunction name="fileFieldTag" returntype="string" output="false" hint="Outputs HTML for a file field form object">
+	<cfargument name="name" type="string" required="true" hint="Name and ID attribute for this form element">
+	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
+	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
+	
+	<cfset var output = "">
+	<cfset var HTMLOptions = "">
+	
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
+
+	<cfsavecontent variable="output">
+		<cfoutput>
+			#beforeElement(argumentCollection=arguments)#
+			<input type="file" name="#arguments.name#" id="#arguments.name#"#HTMLOptions# />
+			#afterElement(argumentCollection=arguments)#
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trim(output)>
+</cffunction>
+
+
+<!--- Text area form elements --->
+
+
+<cffunction name="textArea" output="false" returntype="string" hint="Outputs HTML for a textfarea form object">
+	<cfargument name="model" type="string" required="true" hint="Name of the model to associate to this form element">
+	<cfargument name="field" type="string" required="true" hint="Name of the field in the model that this form element represents">
+	<cfargument name="errorDisplay" type="string" required="false" default="div" hint="Determines how errors are displayed. Possible values are: div, span, inline">
+	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
+	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
+
+	<cfset var output = "">
+	<cfset var HTMLOptions = "">
+	
+	<cfset arguments.value = setValue(argumentCollection=arguments)>
+	<cfset arguments.class = setClass(argumentCollection=arguments)>
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
+	
+	<cfsavecontent variable="output">
+		<cfoutput>			
+			#beforeElement(argumentCollection=arguments)#
+			<textarea name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#"#HTMLOptions#><cfif structKeyExists(arguments, "value")>#arguments.value#</cfif></textarea>
+			#afterElement(argumentCollection=arguments)#
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trim(output)>
+</cffunction>
+
+
+<cffunction name="textAreaTag" output="false" returntype="string" hint="Outputs HTML for a textfarea form object">
+	<cfargument name="name" type="string" required="true" hint="Name and ID attribute for this form element">
+	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
+	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
+
+	<cfset var output = "">
+	<cfset var HTMLOptions = "">
+	
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
+	
+	<cfsavecontent variable="output">
+		<cfoutput>
+			#beforeElement(argumentCollection=arguments)#
+			<textarea name="#arguments.name#" id="#arguments.name#"#HTMLOptions#><cfif structKeyExists(arguments, "value")>#arguments.value#</cfif></textarea>
+			#afterElement(argumentCollection=arguments)#
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trim(output)>
+</cffunction>
+
+
+<!--- Select form elements --->
+
+
+<cffunction name="select" output="false" returntype="string" hint="Outputs HTML for a select form object">
+	<cfargument name="model" type="string" required="true" hint="Name of the model to associate to this form element">
+	<cfargument name="field" type="string" required="true" hint="Name of the field in the model that this form element represents">
+	<cfargument name="errorDisplay" type="string" required="false" default="div" hint="Determines how errors are displayed. Possible values are: div, span, inline">
+	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
+	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
+	<!--- Arguments for this function only --->
+	<cfargument name="choices" type="any" required="true" hint="The choices to display in the dropdown (can be list, array, struct or query)">
+	<cfargument name="keyField" type="string" required="false" default="name" hint="The field to use as the value in the options" />
+	<cfargument name="valueField" type="string" required="false" default="id" hint="The field to use as the text displayed in the choices" />
+
+	<cfset var output = "">
+	<cfset var HTMLOptions = "">
+	<cfset var keyArray = arrayNew(1)>
+	<cfset var valueArray = arrayNew(1)>
+	<cfset var thisSet = "">
+	<cfset var i = 1>
+	<cfset var options = "">
+	
+	<cfset arguments.value = setValue(argumentCollection=arguments)>
+	<cfset arguments.class = setClass(argumentCollection=arguments)>
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
+
+	<cfset options = figureSelectChoices(argumentCollection=arguments)>
+	<cfset keyArray = options.keyArray>
+	<cfset valueArray = options.valueArray>
+	
+	<cfsavecontent variable="output">
+		<cfoutput>
+			#beforeElement(argumentCollection=arguments)#
+			<select name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#"#HTMLOptions#>
 				<cfloop from="1" to="#arrayLen(keyArray)#" index="i">
-					<cfif listFind(currentValue, valueArray[i])>
+					<cfif listFind(arguments.value, valueArray[i])>
 						<option value="#valueArray[i]#" selected="selected">#keyArray[i]#</option>
 					<cfelse>
 						<option value="#valueArray[i]#">#keyArray[i]#</option>
@@ -529,40 +501,39 @@
 		</cfoutput>
 	</cfsavecontent>
 	
-	<cfreturn output>
+	<cfreturn trim(output)>
 </cffunction>
 
 
 <cffunction name="selectTag" output="false" returntype="string" hint="Outputs HTML for a select form object">
-	<!--- Arguments for all form elements --->
+	<cfargument name="name" type="string" required="true" hint="Name and ID attribute for this form element">
 	<cfargument name="label" type="string" required="false" default="" hint="Label for this form element">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this form element">
 	<cfargument name="labelClass" type="string" required="false" default="" hint="Class name for the label tag">
 	<cfargument name="wrapLabel" type="boolean" required="false" default="false" hint="if true will wrap the label tag around the form element instead of displaying it before">
-	<!--- Arguments for non model form elements --->
-	<cfargument name="name" type="string" required="true" hint="Name and ID attribute for this form element">
 	<!--- Arguments for this function only --->
-	<cfargument name="size" type="numeric" required="false" default=0 hint="Number of rows to display">
-	<cfargument name="choices" type="any" required="true" hint="The choices to display in the dropdown (can be array, struct, query)">
-	<cfargument name="type" type="string" required="false" default="single" hint="Menu or multiple select (single|multiple)" />
-	<cfargument name="key" type="string" required="false" default="name" hint="The field to use as the value in the <option>s" />
-	<cfargument name="value" type="string" required="false" default="id" hint="The field to use as the text displayed in the choices" />
+	<cfargument name="choices" type="any" required="true" hint="The choices to display in the dropdown (can be list, array, struct or query)">
+	<cfargument name="keyField" type="string" required="false" default="name" hint="The field to use as the value in the options" />
+	<cfargument name="valueField" type="string" required="false" default="id" hint="The field to use as the text displayed in the choices" />
 	<cfargument name="selected" type="string" required="false" default="" hint="Default selected element">
 	
 	<cfset var output = "">
+	<cfset var HTMLOptions = "">
 	<cfset var keyArray = arrayNew(1)>
 	<cfset var valueArray = arrayNew(1)>
 	<cfset var thisSet = "">
 	<cfset var i = 1>
-	<cfset var options = figureSelectChoices(arguments.choices,arguments.key,arguments.value)>
+	<cfset var options = "">
 	
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
+
+	<cfset options = figureSelectChoices(argumentCollection=arguments)>
 	<cfset keyArray = options.keyArray>
 	<cfset valueArray = options.valueArray>
-	
+
 	<cfsavecontent variable="output">
 		<cfoutput>
 			#beforeElement(argumentCollection=arguments)#
-			<select name="#arguments.name#" id="#arguments.name#"#iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.type IS "multiple", de(' multiple="multiple"'),de(''))##iif(arguments.size IS NOT 0, de(' size="#arguments.size#"'),de(''))#>
+			<select name="#arguments.name#" id="#arguments.name#"#HTMLOptions#>
 				<cfloop from="1" to="#arrayLen(keyArray)#" index="i">
 					<cfif valueArray[i] IS arguments.selected>
 						<option value="#valueArray[i]#" selected="selected">#keyArray[i]#</option>
@@ -575,133 +546,34 @@
 		</cfoutput>
 	</cfsavecontent>
 	
-	<cfreturn output>
+	<cfreturn trim(output)>
 </cffunction>
-
-
-<cffunction name="figureSelectChoices" access="private" returntype="struct" output="false" hint="">
-	<cfargument name="choices" type="any" required="true" hint="">
-	<cfargument name="key" type="string" required="false" default="name" hint="The field to use as the value in the <option>s" />
-	<cfargument name="value" type="string" required="false" default="id" hint="The field to use as the text displayed in the choices" />
-	
-	<cfset var options = structNew()>
-	<cfset var keyArray = arrayNew(1)>
-	<cfset var valueArray = arrayNew(1)>
-	<cfset var i = 1>
-	<cfset var thisSet = arrayNew(1)>
-	
-	<cfif isArray(arguments.choices)>
-		<!--- If the choices are in an array, check to see if it's an array of arrays --->
-		<cfif isArray(arguments.choices[1])>
-			<!--- If so, take the first value and make that the value, take the second value and make that the key --->
-			<cfloop from="1" to="#arrayLen(arguments.choices)#" index="i">
-				<cfset thisSet = arguments.choices[i]>
-				<cfset keyArray[i] = thisSet[1]>
-				<cfset valueArray[i] = thisSet[2]>
-			</cfloop>
-		<cfelseif isStruct(arguments.choices[1])>
-			<cfloop from="1" to="#arrayLen(arguments.choices)#" index="i">
-				<cfset keyArray[i] = arguments.choices[i][arguments.key]>
-				<cfset valueArray[i] = arguments.choices[i][arguments.value]>
-			</cfloop>
-		<cfelse>
-			<cfset keyArray = arguments.choices>
-			<cfset valueArray = arguments.choices>
-		</cfif>
-	<cfelseif isStruct(arguments.choices)>
-		<!--- If it's a struct, set the name of the key is the text to be displayed and the value as the value="" attribute of <option> --->
-		<cfloop collection="#arguments.choices#" item="key">
-			<cfset keyArray[i] = key>
-			<cfset valueArray[i] = arguments.choices[key]>
-			<cfset i = i + 1>
-		</cfloop>
-	<cfelseif isQuery(arguments.choices)>
-		<!--- If it's a query, assume that it has an "id" column as the value and "name" column as the key --->
-		<cfloop query="arguments.choices">
-			<cfset keyArray[i] = evaluate("arguments.choices.#arguments.key#")>
-			<cfset valueArray[i] = evaluate("arguments.choices.#arguments.value#")>
-			<cfset i = i + 1>
-		</cfloop>
-	<cfelse>
-		<!--- We assume the values are in a plain list --->
-		<cfloop list="#arguments.choices#" index="i">
-			<cfset arrayAppend(keyArray, i)>
-			<cfset arrayAppend(valueArray, i)>
-		</cfloop>
-	</cfif>
-	
-	<cfset options.keyArray = keyArray>
-	<cfset options.valueArray = valueArray>
-	
-	<cfreturn options>
-	
-</cffunction>
-
-
-<!---
-<cffunction name="collectionSelect" output="false" returntype="string" hint="Outputs HTML for a textfield form object">
-	<cfargument name="model" type="string" required="true" hint="Name of the model to associate to this textfield">
-	<cfargument name="field" type="string" required="true" hint="Name of the field in the model that this textfield represents">
-	<cfargument name="choices" type="query" required="true" hint="The choices to display in the dropdown (can be array, struct, query)">
-	<cfargument name="value" type="string" required="true" hint="The column in the choices query to use as the value">
-	<cfargument name="key" type="string" required="true" hint="The column in the choices query to use as the key">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this field">
-	
-	<cfset var output = "">
-	<cfset var keyArray = arrayNew(1)>
-	<cfset var valueArray = arrayNew(1)>
-	<cfset var i = 1>
-	
-	<cfloop query="arguments.choices">
-		<cfset keyArray[i] = evaluate("#arguments.key#")>
-		<cfset valueArray[i] = evaluate("#arguments.value#")>
-		<cfset i = i + 1>
-	</cfloop>
-
-	<cfsavecontent variable="output">
-		<cfoutput>
-			<select name="#arguments.model#[#arguments.field#]" id="#arguments.model#_#arguments.field#" #iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))#>
-				<cfloop from="1" to="#arrayLen(keyArray)#" index="i">
-					<cfif valueArray[i] IS arguments.field>
-						<option value="#valueArray[i]#" selected="selected">#keyArray[i]#</option>
-					<cfelse>
-						<option value="#valueArray[i]#">#keyArray[i]#</option>
-					</cfif>
-				</cfloop>
-			</select>
-		</cfoutput>
-	</cfsavecontent>
-	
-	<cfreturn output>
-	
-</cffunction>
---->
 
 
 <cffunction name="submitTag" output="false" returntype="string" hint="Outputs HTML for a submit form object">
 	<cfargument name="name" type="string" required="false" default="commit" hint="The name for this button">
-	<cfargument name="value" type="string" required="false" default="" hint="Text to display on the button">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this field">
-	<cfargument name="onclick" type="string" required="false" default="" hint="Javascript to execute when this button is clicked">
+	<cfargument name="value" type="string" required="false" default="Save Changes" hint="Text to display on the button">
+	<cfargument name="disableWith" type="string" required="false" default="" hint="String to show when button is disabled on submission">
+	<cfargument name="type" type="string" required="false" default="submit" hint="The type of button, possible values are submit|button">
 
+	<cfset var onclickStr = "this.disabled=true;this.value='#arguments.disableWith#';this.form.submit();">
 	<cfset var output = "">
-	<cfsavecontent variable="output">
-		<cfoutput><input type="submit" name="#arguments.name#" id="#arguments.name#" value="#arguments.value#"#iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.onclick IS NOT "", de(' onclick="#arguments.onclick#"'),de(''))# /></cfoutput>
-	</cfsavecontent>
-	
-	<cfreturn output>
-</cffunction>
+	<cfset var HTMLOptions = "">
 
-
-<cffunction name="buttonTag" output="false" returntype="string" hint="Outputs HTML for a button form object">
-	<cfargument name="name" type="string" required="false" default="" hint="The name for this button">
-	<cfargument name="value" type="string" required="false" default="" hint="Text to display on the button">
-	<cfargument name="class" type="string" required="false" default="" hint="Class name for this field">
-	<cfargument name="onclick" type="string" required="false" default="" hint="Javascript to execute when this button is clicked">
+	<cfif arguments.disableWith IS NOT "">
+		<cfif structKeyExists(arguments, "onclick")>
+			<cfset arguments.onclick = arguments.onclick & onclickStr>
+		<cfelse>
+			<cfset arguments.onclick = onclickStr>
+		</cfif>
+	</cfif>
 	
-	<cfset var output = "">
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
+
 	<cfsavecontent variable="output">
-		<cfoutput><input type="button" name="#arguments.name#"#iif(arguments.value IS NOT "", de(' value="#arguments.value#"'),de(''))##iif(arguments.class IS NOT "", de(' class="#arguments.class#"'),de(''))##iif(arguments.onclick IS NOT "", de(' onclick="#arguments.onclick#"'),de(''))# /></cfoutput>
+		<cfoutput>
+			<input type="#arguments.type#" name="#arguments.name#" id="#arguments.name#"#HTMLOptions# />
+		</cfoutput>
 	</cfsavecontent>
 	
 	<cfreturn output>
@@ -1088,7 +960,78 @@
 <!--- Internal functions called from the other form functions --->
 
 
-<cffunction name="setShowError" access="private" output="false" returntype="boolean" hint="">
+<cffunction name="figureSelectChoices" access="private" returntype="struct" output="false" hint="">
+	<cfargument name="choices" type="any" required="true" hint="">
+	<cfargument name="keyField" type="string" required="false" default="name">
+	<cfargument name="valueField" type="string" required="false" default="id">
+	
+	<cfset var options = structNew()>
+	<cfset var keyArray = arrayNew(1)>
+	<cfset var valueArray = arrayNew(1)>
+	<cfset var i = 1>
+	<cfset var thisSet = arrayNew(1)>
+	
+	<cfif isArray(arguments.choices)>
+		<!--- If the choices are in an array, check to see if it's an array of arrays --->
+		<cfif isArray(arguments.choices[1])>
+			<!--- If so, take the first value and make that the value, take the second value and make that the key --->
+			<cfloop from="1" to="#arrayLen(arguments.choices)#" index="i">
+				<cfset thisSet = arguments.choices[i]>
+				<cfset keyArray[i] = thisSet[1]>
+				<cfset valueArray[i] = thisSet[2]>
+			</cfloop>
+		<cfelseif isStruct(arguments.choices[1])>
+			<cfloop from="1" to="#arrayLen(arguments.choices)#" index="i">
+				<cfset keyArray[i] = arguments.choices[i][arguments.keyField]>
+				<cfset valueArray[i] = arguments.choices[i][arguments.valueField]>
+			</cfloop>
+		<cfelse>
+			<cfset keyArray = arguments.choices>
+			<cfset valueArray = arguments.choices>
+		</cfif>
+	<cfelseif isStruct(arguments.choices)>
+		<!--- If it's a struct, set the name of the key is the text to be displayed and the value as the value="" attribute of <option> --->
+		<cfloop collection="#arguments.choices#" item="key">
+			<cfset keyArray[i] = key>
+			<cfset valueArray[i] = arguments.choices[key]>
+			<cfset i = i + 1>
+		</cfloop>
+	<cfelseif isQuery(arguments.choices)>
+		<!--- If it's a query, assume that it has an "id" column as the value and "name" column as the key --->
+		<cfloop query="arguments.choices">
+			<cfset keyArray[i] = evaluate("arguments.choices.#arguments.keyField#")>
+			<cfset valueArray[i] = evaluate("arguments.choices.#arguments.valueField#")>
+			<cfset i = i + 1>
+		</cfloop>
+	<cfelse>
+		<!--- We assume the values are in a plain list --->
+		<cfloop list="#arguments.choices#" index="i">
+			<cfset arrayAppend(keyArray, i)>
+			<cfset arrayAppend(valueArray, i)>
+		</cfloop>
+	</cfif>
+	
+	<cfset options.keyArray = keyArray>
+	<cfset options.valueArray = valueArray>
+	
+	<cfreturn options>
+	
+</cffunction>
+
+
+<cffunction name="setHTMLOptions">
+	<cfset var output = "">
+	<cfset var skipList = "disableWith,selected,choices,keyField,valueField,checked,tagValue,name,label,labelClass,wrapLabel,model,field,errorDisplay">
+	<cfloop collection="#arguments#" item="key">
+		<cfif listFindNoCase(skipList, key) IS 0 AND arguments[key] IS NOT "">
+			<cfset output = output & " " & key & "=""" & arguments[key] & """">
+		</cfif>
+	</cfloop>
+	<cfreturn output>
+</cffunction>
+
+
+<cffunction name="objectHasErrors" access="private" output="false" returntype="boolean" hint="">
 
 	<cfset var thisModel = "">
 
@@ -1107,11 +1050,11 @@
 	<cfset var output = "">
 	<cfset var thisModel = "">
 
-	<cfif arguments.value IS "">
+	<cfif structKeyExists(arguments, "value")>
+		<cfset output = arguments.value>
+	<cfelse>
 		<cfset thisModel = evaluate("#arguments.model#")>
 		<cfset output = thisModel[arguments.field]>
-	<cfelse>
-		<cfset output = arguments.value>
 	</cfif>
 
 	<cfreturn output>	
@@ -1122,13 +1065,13 @@
 
 	<cfset var output = "">
 
-	<cfif arguments.showError AND arguments.errorDisplay IS "inline">
-		<cfif arguments.class IS NOT "">
+	<cfif objectHasErrors(argumentCollection=arguments) AND arguments.errorDisplay IS "inline">
+		<cfif structKeyExists(arguments, "class")>
 			<cfset output = arguments.class & " fieldWithErrors">
 		<cfelse>
 			<cfset output = "fieldWithErrors">
 		</cfif>
-	<cfelse>
+	<cfelseif structKeyExists(arguments, "class")>
 		<cfset output = arguments.class>
 	</cfif>
 
@@ -1154,7 +1097,7 @@
 					</label>
 				</cfif>
 			</cfif>
-			<cfif isDefined("arguments.model") AND arguments.showError AND arguments.errorDisplay IS NOT "inline">
+			<cfif isDefined("arguments.model") AND objectHasErrors(argumentCollection=arguments) AND arguments.errorDisplay IS NOT "inline">
 				<#arguments.errorDisplay# class="fieldWithErrors">
 			</cfif>
 		</cfoutput>
@@ -1170,7 +1113,7 @@
 
 	<cfsavecontent variable="output">
 		<cfoutput>
-			<cfif isDefined("arguments.model") AND arguments.showError AND arguments.errorDisplay IS NOT "inline">
+			<cfif isDefined("arguments.model") AND objectHasErrors(argumentCollection=arguments) AND arguments.errorDisplay IS NOT "inline">
 				</#arguments.errorDisplay#>
 			</cfif>
 			<cfif arguments.label IS NOT "" AND arguments.wrapLabel IS true>
