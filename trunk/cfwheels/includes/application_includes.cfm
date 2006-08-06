@@ -1,5 +1,5 @@
 <cfset application.wheels = structNew()>
-<cfset application.wheels.version = "0.4">
+<cfset application.wheels.version = "0.6">
 <cfset application.wheels.models = structNew()>
 
 <!--- Used for pluralization and singularization functions --->
