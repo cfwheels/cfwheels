@@ -212,51 +212,28 @@
 		<cfset var findAllQuery = "">
 		<cfset var selectColumns = "">
 		<cfset var fromTables = "">
+		<cfset var whereClause = "">
 		<cfset var orderByColumns = "">
-		<cfset var orderByColumnsForPagination = "">
 
-		<cfif arguments.select IS "">
-			<cfset selectColumns = getSelectColumns(argumentCollection=arguments)>
-		<cfelse>
-			<cfset selectColumns = arguments.select>		
-		</cfif>
+		<cfset selectColumns = getSelectColumns(argumentCollection=arguments)>
 		<cfset fromTables = getfromTables(argumentCollection=arguments)>
+		<cfset whereClause = getWhereClause(argumentCollection=arguments)>
 		<cfset orderByColumns = getOrderByColumns(argumentCollection=arguments)>
 	
-		<cfif arguments.paginate>
-			<cfset selectColumnsForPagination = getselectColumnsForPagination(selectColumns=selectColumns)>
-			<cfset orderByColumnsForPagination = getOrderByColumnsForPagination(orderByColumns=orderByColumns)>
-			<cfif isDefined("request.params.page") AND arguments.page IS 0>
-				<cfset this._paginatorCurrentPage = request.params.page>			
-			<cfelseif arguments.page IS NOT 0>
-				<cfset this._paginatorCurrentPage = arguments.page>			
-			<cfelse>
-				<cfset this._paginatorCurrentPage = 1>
-			</cfif>
-			<cfset this._paginatorTotalRecords = this.count(argumentCollection=arguments)>
-			<cfset this._paginatorTotalPages = ceiling(this._paginatorTotalRecords/arguments.perPage)>
-			<cfset arguments.offset = (this._paginatorCurrentPage * arguments.perPage) - (arguments.perPage)>
-			<cfset arguments.limit = arguments.perPage>
-			<cfif (arguments.limit + arguments.offset) GT this._paginatorTotalRecords>
-				<cfset arguments.limit = this._paginatorTotalRecords - arguments.offset>
-			</cfif>
-		</cfif>
-	
 		<cfquery name="findAllQuery" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.name#">
-			<cfif application.database.type IS "sqlserver" AND arguments.paginate>
-				<!--- need a special query here since offset is not supported by SQL server --->
-				SELECT #selectColumnsForPagination#
+			<cfif application.database.type IS "sqlserver" AND arguments.offset IS NOT 0>
+				SELECT #reReplaceNoCase(selectColumns, "[^,]*\.", "", "all")#
 				FROM (
-					SELECT TOP #arguments.limit# #selectColumnsForPagination#
+					SELECT TOP #arguments.limit# #reReplaceNoCase(selectColumns, "[^,]*\.", "", "all")#
 					FROM (
 						SELECT TOP #(arguments.limit + arguments.offset)# #selectColumns#
 						FROM #fromTables#
-						<cfif arguments.where IS NOT "">
-							WHERE #preserveSingleQuotes(arguments.where)#
+						<cfif whereClause IS NOT "">
+							WHERE #preserveSingleQuotes(whereClause)#
 						</cfif>
 						ORDER BY #orderByColumns#<cfif listContainsNoCase(orderByColumns, "#this._tableName#.id ") IS 0>, #this._tableName#.id ASC</cfif>) as x
-					ORDER BY #replaceNoCase(replaceNoCase(replaceNoCase(orderByColumnsForPagination, "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all")#<cfif listContainsNoCase(orderByColumnsForPagination, "id ") IS 0>, id DESC</cfif>) as y
-				ORDER BY #orderByColumnsForPagination#<cfif listContainsNoCase(orderByColumnsForPagination, "id ") IS 0>, id ASC</cfif>
+					ORDER BY #replaceNoCase(replaceNoCase(replaceNoCase(reReplaceNoCase(orderByColumns, "[^,]*\.", "", "all"), "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all")#<cfif listContainsNoCase(reReplaceNoCase(orderByColumns, "[^,]*\.", "", "all"), "id ") IS 0>, id DESC</cfif>) as y
+				ORDER BY #reReplaceNoCase(orderByColumns, "[^,]*\.", "", "all")#<cfif listContainsNoCase(reReplaceNoCase(orderByColumns, "[^,]*\.", "", "all"), "id ") IS 0>, id ASC</cfif>
 			<cfelse>
 				SELECT
 				<cfif application.database.type IS "sqlserver" AND arguments.limit IS NOT 0>
@@ -264,8 +241,8 @@
 				</cfif>
 				#selectColumns#
 				FROM #fromTables#
-				<cfif arguments.where IS NOT "">
-					WHERE #preserveSingleQuotes(arguments.where)#
+				<cfif whereClause IS NOT "">
+					WHERE #preserveSingleQuotes(whereClause)#
 				</cfif>
 				ORDER BY #orderByColumns#
 				<cfif application.database.type IS NOT "sqlserver" AND arguments.limit IS NOT 0>
@@ -413,7 +390,7 @@
 
 		<cfloop collection="#arguments#" item="key">
 			<cfif key IS NOT "attributes">
-				<cfset setValue(arguments.attributes[key], arguments[key])>
+				<cfset arguments.attributes[key] = arguments[key]>
 			</cfif>
 		</cfloop>
 
@@ -1109,49 +1086,6 @@
 	</cffunction>
 
 
-	<cffunction name="getOrderByColumns" access="public" returntype="string" output="false" hint="">
-
-		<cfset var orderByColumns = "">
-		<cfset var modelObj = "">
-		<cfset var added = "">
-		<cfset var pos = 0>
-
-		<cfif arguments.order IS "">
-			<cfset orderByColumns = this._tableName & ".id ASC">
-		<cfelse>
-			<cfset pos = 0>
-			<cfloop list="#arguments.order#" index="column">
-				<cfset pos = pos + 1>
-				<cfif column Does not Contain "ASC" AND column Does not Contain "DESC">
-					<cfset column = column & " ASC">
-				</cfif>
-				<cfif column Does Not Contain ".">
-					<cfset added = false>
-					<cfif StructKeyExists(arguments, "include") AND arguments.include IS NOT "">
-						<cfloop list="#arguments.include#" index="name">
-							<cfset modelObj = application.core.model(trim(name))>
-							<cfif listFindNoCase(modelObj.columnList, replaceNoCase(replaceNoCase(trim(column), " DESC", ""), " ASC", "")) IS NOT 0 AND listFindNoCase(this.columnList, replaceNoCase(replaceNoCase(trim(column), " DESC", ""), " ASC", "")) IS 0>
-								<cfset orderByColumns = orderByColumns & modelObj._tableName & "." & trim(column)>					
-								<cfset added = true>
-							</cfif>
-						</cfloop>
-					</cfif>
-					<cfif NOT added>
-						<cfset orderByColumns = orderByColumns & this._tableName & "." & trim(column)>
-					</cfif>
-				<cfelse>
-					<cfset orderByColumns = orderByColumns & trim(column)>
-				</cfif>
-				<cfif listLen(arguments.order) GT pos>
-					<cfset orderByColumns = orderByColumns & ",">
-				</cfif>
-			</cfloop>
-		</cfif>
-
-		<cfreturn orderByColumns>
-	</cffunction>
-
-
 	<cffunction name="getSelectColumns" access="public" returntype="string" output="false" hint="">
 
 		<cfset var selectColumns = "">
@@ -1159,28 +1093,32 @@
 		<cfset var flattendedInclude = "">
 		<cfset var pos = 0>
 		
-		<cfset pos = 0>
-		<cfloop list="#this.columnList#" index="column">
-			<cfset pos = pos + 1>
-			<cfset selectColumns = selectColumns & this._tableName & "." & trim(column)>			
-			<cfif listLen(this.columnList) GT pos>
-				<cfset selectColumns = selectColumns & ",">
-			</cfif>
-		</cfloop>
-		<cfif StructKeyExists(arguments, "include") AND arguments.include IS NOT "">
-			<cfset flattendedInclude = replace(replace(arguments.include, "(", ",", "all"), ")", "", "all")>
-			<cfloop list="#flattendedInclude#" index="name">
-				<cfset modelObj = application.core.model(application.core.singularize(trim(name)))>
-				<cfloop list="#modelObj.columnList#" index="column">
-					<cfif listContainsNoCase(selectColumns, "." & trim(column)) IS 0>
-						<cfset selectColumns = selectColumns & "," & modelObj._tableName & "." & trim(column)>
-					<cfelse>
-						<cfif listContainsNoCase(selectColumns, "." & modelObj._modelName & "_" & trim(column)) IS 0>
-							<cfset selectColumns = selectColumns & "," & modelObj._tableName & "." & trim(column) & " AS " & modelObj._modelName & "_" & trim(column)>
-						</cfif>
-					</cfif>
-				</cfloop>
+		<cfif arguments.select IS NOT "">
+			<cfset selectColumns = arguments.select>
+		<cfelse>
+			<cfset pos = 0>
+			<cfloop list="#this.columnList#" index="column">
+				<cfset pos = pos + 1>
+				<cfset selectColumns = selectColumns & this._tableName & "." & trim(column)>			
+				<cfif listLen(this.columnList) GT pos>
+					<cfset selectColumns = selectColumns & ",">
+				</cfif>
 			</cfloop>
+			<cfif StructKeyExists(arguments, "include") AND arguments.include IS NOT "">
+				<cfset flattendedInclude = replace(replace(arguments.include, "(", ",", "all"), ")", "", "all")>
+				<cfloop list="#flattendedInclude#" index="name">
+					<cfset modelObj = application.core.model(application.core.singularize(trim(name)))>
+					<cfloop list="#modelObj.columnList#" index="column">
+						<cfif listContainsNoCase(selectColumns, "." & trim(column)) IS 0>
+							<cfset selectColumns = selectColumns & "," & modelObj._tableName & "." & trim(column)>
+						<cfelse>
+							<cfif listContainsNoCase(selectColumns, "." & modelObj._modelName & "_" & trim(column)) IS 0>
+								<cfset selectColumns = selectColumns & "," & modelObj._tableName & "." & trim(column) & " AS " & modelObj._modelName & "_" & trim(column)>
+							</cfif>
+						</cfif>
+					</cfloop>
+				</cfloop>
+			</cfif>
 		</cfif>
 
 		<cfreturn selectColumns>
@@ -1237,30 +1175,94 @@
 	</cffunction>
 
 
-	<cffunction name="getOrderByColumnsForPagination" access="public" returntype="string" output="false" hint="">
-		<cfargument name="orderByColumns" required="yes" type="string" hint="">
+	<cffunction name="getWhereClause" access="public" returntype="string" output="false" hint="">
 
-		<cfset var orderByColumnsForPagination = "">
+		<cfset var whereClause = "">
+		<cfset var selectIDsForPagination = "">
+		<cfset var paginationArgs = "">
 
-		<cfloop list="#arguments.orderByColumns#" index="column">
-			<cfset orderByColumnsForPagination = listAppend(orderByColumnsForPagination, reverse(spanExcluding(reverse(trim(column)), ".")))>
-		</cfloop>
+		<cfif NOT arguments.paginate>
+			<cfset whereClause = arguments.where>
+		<cfelse>
+			<cfif isDefined("request.params.page") AND arguments.page IS 0>
+				<cfset this._paginatorCurrentPage = request.params.page>			
+			<cfelseif arguments.page IS NOT 0>
+				<cfset this._paginatorCurrentPage = arguments.page>			
+			<cfelse>
+				<cfset this._paginatorCurrentPage = 1>
+			</cfif>
+			<cfset this._paginatorTotalRecords = this.count(select="#this._tableName#.id", distinct=true, where=arguments.where)>
+			<cfset this._paginatorTotalPages = ceiling(this._paginatorTotalRecords/arguments.perPage)>
+			<cfset paginationArgs = structNew()>
+			<cfset paginationArgs.where = arguments.where>
+			<cfset paginationArgs.order = arguments.order>
+			<cfset paginationArgs.include = arguments.include>
+			<cfset paginationArgs.joins = arguments.joins>
+			<cfset paginationArgs.offset = (this._paginatorCurrentPage * arguments.perPage) - (arguments.perPage)>
+			<cfset paginationArgs.limit = arguments.perPage>
+			<cfif (paginationArgs.limit + paginationArgs.offset) GT this._paginatorTotalRecords>
+				<cfset paginationArgs.limit = this._paginatorTotalRecords - paginationArgs.offset>
+			</cfif>
+			<cfset paginationArgs.select = "DISTINCT #this._tableName#.id">
+			<cfset selectIDsForPagination = this.findAll(argumentCollection=paginationArgs)>
+			<cfif arguments.where IS "">
+				<cfset whereClause = "#this._tableName#.id IN (#valueList(selectIDsForPagination.query.id)#)">
+			<cfelse>
+				<cfset whereClause = "(#arguments.where#) AND (#this._tableName#.id IN (#valueList(selectIDsForPagination.query.id)#))">			
+			</cfif>
+		</cfif>
 
-		<cfreturn orderByColumnsForPagination>
+		<cfreturn whereClause>
 	</cffunction>
 
 
-	<cffunction name="getSelectColumnsForPagination" access="public" returntype="string" output="false" hint="">
-		<cfargument name="selectColumns" required="yes" type="string" hint="">
+	<cffunction name="getOrderByColumns" access="public" returntype="string" output="false" hint="">
 
-		<cfset var selectColumnsForPagination = "">
+		<cfset var orderByColumns = "">
+		<cfset var modelObj = "">
+		<cfset var added = "">
+		<cfset var pos = 0>
 
-		<cfloop list="#arguments.selectColumns#" index="column">
-			<cfset selectColumnsForPagination = listAppend(selectColumnsForPagination, reverse(spanExcluding(reverse(trim(column)), ".")))>
-		</cfloop>
+		<cfif arguments.order IS "">
+			<cfset orderByColumns = this._tableName & ".id ASC">
+		<cfelse>
+			<cfset pos = 0>
+			<cfloop list="#arguments.order#" index="column">
+				<cfset pos = pos + 1>
+				<cfif column Does not Contain "ASC" AND column Does not Contain "DESC">
+					<cfset column = column & " ASC">
+				</cfif>
+				<cfif column Does Not Contain ".">
+					<cfset added = false>
+					<cfif StructKeyExists(arguments, "include") AND arguments.include IS NOT "">
+						<cfloop list="#arguments.include#" index="name">
+							<cfset modelObj = application.core.model(application.core.singularize(trim(name)))>
+							<cfif listFindNoCase(modelObj.columnList, replaceNoCase(replaceNoCase(trim(column), " DESC", ""), " ASC", "")) IS NOT 0 AND listFindNoCase(this.columnList, replaceNoCase(replaceNoCase(trim(column), " DESC", ""), " ASC", "")) IS 0>
+								<cfset orderByColumns = orderByColumns & modelObj._tableName & "." & trim(column)>					
+								<cfset added = true>
+							</cfif>
+						</cfloop>
+					</cfif>
+					<cfif NOT added>
+						<cfset orderByColumns = orderByColumns & this._tableName & "." & trim(column)>
+					</cfif>
+				<cfelse>
+					<cfset orderByColumns = orderByColumns & trim(column)>
+				</cfif>
+				<cfif listLen(arguments.order) GT pos>
+					<cfset orderByColumns = orderByColumns & ",">
+				</cfif>
+			</cfloop>
+		</cfif>
 
-		<cfreturn selectColumnsForPagination>
+		<cfreturn orderByColumns>
 	</cffunction>
+
+
+
+
+
+
 
 
 	<cffunction name="doToggle" access="public" output="false" returntype="boolean" hint="">
@@ -1268,9 +1270,9 @@
 
 		<cfif isBoolean(this[arguments.attribute])>
 			<cfif this[arguments.attribute]>
-				<cfset setValue(arguments.attribute, false)>
+				<cfset setValue(arguments.attribute, 0)>
 			<cfelse>
-				<cfset setValue(arguments.attribute, true)>
+				<cfset setValue(arguments.attribute, 1)>
 			</cfif>
 		<cfelse>
 			<cfreturn false>

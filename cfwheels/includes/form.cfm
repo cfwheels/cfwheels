@@ -29,7 +29,7 @@
 		<cfset url = "">
 	</cfif>
 
-	<cfsavecontent variable="output">¨
+	<cfsavecontent variable="output">
 		<cfoutput>
 			<form name="#arguments.name#" id="#arguments.name#" action="#url#" method="#arguments.method#"#iif(arguments.target IS NOT "", de(' target="#arguments.target#"'), de(''))##iif(arguments.multipart, de(' enctype="multipart/form-data"'), de(''))##iif(arguments.class IS NOT "", de(' class="#arguments.class#"'), de(''))##iif(arguments.onsubmit IS NOT "", de(' onsubmit="#arguments.onsubmit#"'), de(''))#>
 		</cfoutput>
