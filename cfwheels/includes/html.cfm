@@ -395,28 +395,28 @@
 
 	<cfsavecontent variable="output"><cfoutput>
 		<cfif arguments.alwaysShowAnchors>
-			<cfif (thisModel._paginatorCurrentPage - arguments.windowSize) GT 1>
+			<cfif (thisModel.paginatorCurrentPage - arguments.windowSize) GT 1>
 				<cfset "linkToArgs.#arguments.name#" = 1>
 				<cfset linkToArgs.name = 1>
 				#linkTo(argumentCollection=linkToArgs)# ...
 			</cfif>
 		</cfif>
-		<cfloop from="1" to="#thisModel._paginatorTotalPages#" index="i">
-			<cfif (i GTE (thisModel._paginatorCurrentPage - arguments.windowSize) AND i LTE thisModel._paginatorCurrentPage) OR (i LTE (thisModel._paginatorCurrentPage + arguments.windowSize) AND i GTE thisModel._paginatorCurrentPage)>
+		<cfloop from="1" to="#thisModel.paginatorTotalPages#" index="i">
+			<cfif (i GTE (thisModel.paginatorCurrentPage - arguments.windowSize) AND i LTE thisModel.paginatorCurrentPage) OR (i LTE (thisModel.paginatorCurrentPage + arguments.windowSize) AND i GTE thisModel.paginatorCurrentPage)>
 				<cfset "linkToArgs.#arguments.name#" = i>
 				<cfset linkToArgs.name = i>
-				<cfif arguments.classForCurrent IS NOT "" AND thisModel._paginatorCurrentPage IS i>
+				<cfif arguments.classForCurrent IS NOT "" AND thisModel.paginatorCurrentPage IS i>
 					<cfset linkToArgs.class = arguments.classForCurrent>
 				<cfelse>
 					<cfset linkToArgs.class = "">
 				</cfif>
-				<cfif arguments.prependToLink IS NOT "">#arguments.prependToLink#</cfif><cfif thisModel._paginatorCurrentPage IS NOT i OR arguments.linkToCurrentPage>#linkTo(argumentCollection=linkToArgs)#<cfelse><cfif arguments.classForCurrent IS NOT ""><span class="#arguments.classForCurrent#">#i#</span><cfelse>#i#</cfif></cfif><cfif arguments.appendToLink IS NOT "">#arguments.appendToLink#</cfif>
+				<cfif arguments.prependToLink IS NOT "">#arguments.prependToLink#</cfif><cfif thisModel.paginatorCurrentPage IS NOT i OR arguments.linkToCurrentPage>#linkTo(argumentCollection=linkToArgs)#<cfelse><cfif arguments.classForCurrent IS NOT ""><span class="#arguments.classForCurrent#">#i#</span><cfelse>#i#</cfif></cfif><cfif arguments.appendToLink IS NOT "">#arguments.appendToLink#</cfif>
 			</cfif>
 		</cfloop>
 		<cfif arguments.alwaysShowAnchors>
-			<cfif thisModel._paginatorTotalPages GT (thisModel._paginatorCurrentPage + arguments.windowSize)>
-				<cfset "linkToArgs.#arguments.name#" = thisModel._paginatorTotalPages>
-				<cfset linkToArgs.name = thisModel._paginatorTotalPages>
+			<cfif thisModel.paginatorTotalPages GT (thisModel.paginatorCurrentPage + arguments.windowSize)>
+				<cfset "linkToArgs.#arguments.name#" = thisModel.paginatorTotalPages>
+				<cfset linkToArgs.name = thisModel.paginatorTotalPages>
 			... #linkTo(argumentCollection=linkToArgs)#
 			</cfif>
 		</cfif>
