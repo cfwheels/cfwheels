@@ -17,6 +17,20 @@
 
 	<cffunction name="save" returntype="boolean" access="public" output="false" hint="[DOCS] Creates a new record or updates an existing one with values matching those of the object attributes">
 
+		<!---
+		[DOCS:COMMENTS START]
+		This function will also call all validation and callback functions for the object being saved.
+		[DOCS:COMMENTS END]
+
+		[DOCS:EXAMPLE 1 START]
+		Create an empty user object, fill it with some data and save it to the database:
+		<cfset aUser = model("user").new()>
+		<cfset aUser.name = "John Doe">
+		<cfset aUser.age = 33>
+		<cfset aUser.save()>
+		[DOCS:EXAMPLE 1 END]
+		--->
+
 		<cfif valid()>
 			<cfif isDefined("beforeValidation") AND NOT beforeValidation()>
 				<cfreturn false>
@@ -77,6 +91,27 @@
 	<cffunction name="new" returntype="any" access="public" output="false" hint="[DOCS] Create a new instance of this model">
 		<cfargument name="attributes" type="struct" required="false" default="#structNew()#" hint="The values used to populate the new model instance">
 
+		<!---
+		[DOCS:COMMENTS START]
+		This function can also be called with named arguments instead of or in addition to a struct.
+		[DOCS:COMMENTS END]
+
+		[DOCS:EXAMPLE 1 START]
+		Create an empty user object:
+		<cfset aUser = model("user").new()>
+		[DOCS:EXAMPLE 1 END]
+		
+		[DOCS:EXAMPLE 2 START]
+		Create a user object by passing in a struct of values (often done from a form submission):
+		<cfset aUser = model("user").new(request.params.new_user)>
+		[DOCS:EXAMPLE 2 END]
+		
+		[DOCS:EXAMPLE 3 START]
+		Create a user object by passing in named arguments:
+		<cfset aUser = model("user").new(first_name="John", last_name="Doe")>
+		[DOCS:EXAMPLE 3 END]
+		--->
+
 		<cfloop collection="#arguments#" item="key">
 			<cfif key IS NOT "attributes">
 				<cfset arguments.attributes[key] = arguments[key]>
@@ -96,6 +131,22 @@
 	<cffunction name="create" returntype="any" access="public" output="false" hint="[DOCS] Creates an object, instantly saves it as a record (if the validation permits it), and returns it">
 		<cfargument name="attributes" type="struct" required="false" default="#structNew()#" hint="The values used to populate the new model instance">
 		
+		<!---
+		[DOCS:COMMENTS START]
+		This function can also be called with named arguments instead of or in addition to a struct.
+		[DOCS:COMMENTS END]
+		
+		[DOCS:EXAMPLE 1 START]
+		Create a user object and save it to the database by passing in a struct of values (often done from a form submission):
+		<cfset aUser = model("user").create(request.params.new_user)>
+		[DOCS:EXAMPLE 1 END]
+		
+		[DOCS:EXAMPLE 2 START]
+		Create a user object by passing in named arguments:
+		<cfset aUser = model("user").create(first_name="John", last_name="Doe")>
+		[DOCS:EXAMPLE 2 END]
+		--->
+
 		<cfloop collection="#arguments#" item="key">
 			<cfif key IS NOT "attributes">
 				<cfset arguments.attributes[key] = arguments[key]>
@@ -126,18 +177,23 @@
 		[DOCS:EXAMPLE 1 END]
 		
 		[DOCS:EXAMPLE 2 START]
+		Return the user with id 33 on the http://localhost/admin/edit_user/33 URL:
+		<cfset aUser = model("user").findByID(request.params.id)>
+		[DOCS:EXAMPLE 2 END]
+
+		[DOCS:EXAMPLE 3 START]
 		Use a list to return users 1, 6 and 7:
 		<cfset someUsers = model("user").findByID("1,6,7")>
-		[DOCS:EXAMPLE 2 END]
+		[DOCS:EXAMPLE 3 END]
 		
-		[DOCS:EXAMPLE 3 START]
+		[DOCS:EXAMPLE 4 START]
 		Use an array to return users 43, 99 and 110:
 		<cfset userArray = arrayNew(1)>
 		<cfset userArray[1] = 43>
 		<cfset userArray[2] = 99>
 		<cfset userArray[3] = 110>
 		<cfset someUsers = model("user").findByID(userArray)>
-		[DOCS:EXAMPLE 3 END]
+		[DOCS:EXAMPLE 4 END]
 		--->
 
 		<cfset var findByIDQuery = "">
@@ -175,8 +231,8 @@
 		<cfargument name="where" type="string" required="no" default="" hint="The SQL fragment to be used in the WHERE clause of the query">
 		<cfargument name="order" type="string" required="no" default="" hint="The SQL fragment to be used in the ORDER BY clause of the query">
 		<cfargument name="select" type="string" required="no" default="" hint="The SQL fragment to be used in the SELECT clause of the query">
+		<cfargument name="joins" type="string" required="no" default="" hint="The SQL fragment for additional joins">
 		<cfargument name="include" type="string" required="no" default="" hint="List of other model(s) to include in query using a left outer join">
-		<cfargument name="joins" type="string" required="no" default="" hint="An SQL fragment for additional joins">
 		<cfargument name="limit" type="numeric" required="no" default=0 hint="An integer determining the limit on the number of rows that should be returned">
 		<cfargument name="offset" type="numeric" required="no" default=0 hint="An integer determining the offset from where the rows should be fetched">
 		<cfargument name="distinct" type="boolean" required="no" default="false" hint="Whether or not to use select distinct records">
@@ -199,9 +255,14 @@
 		[DOCS:EXAMPLE 2 END]
 
 		[DOCS:EXAMPLE 3 START]
-		Paginate all users with 10 on each page and return the 2nd page (users 11-20):
-		<cfset users = model("user").findAll(order="last_name", page=2, perPage=10)>
+		Paginate all users with 25 on each page and return the 2nd page (users 26-50):
+		<cfset users = model("user").findAll(order="last_name", page=2, perPage=25)>
 		[DOCS:EXAMPLE 3 END]
+
+		[DOCS:EXAMPLE 4 START]
+		Return all comments, the article it belongs to, the user who made the comment, the tags associated with the article and the author who wrote the article:
+		<cfset comments = model("comment").findAll(include="article(author,tags),user")>
+		[DOCS:EXAMPLE 4 END]
 		--->
 
 		<cfset var findAllQuery = "">
