@@ -1217,10 +1217,14 @@
 				<cfset limit = this.paginatorTotalRecords - offset>
 			</cfif>
 			<cfset selectIDs = this.findAll(distinct=true, select="#this._tableName#.id, #replaceList(getOrderByColumns(order=arguments.order, include=arguments.include), " ASC, DESC", ",")#", offset=offset, limit=limit, where=arguments.where, order=arguments.order, include=arguments.include, joins=arguments.joins)>
-			<cfif arguments.where IS "">
-				<cfset whereClause = "#this._tableName#.id IN (#valueList(selectIDs.query.id)#)">
+			<cfif selectIDs.recordFound>
+				<cfif arguments.where IS "">
+					<cfset whereClause = "#this._tableName#.id IN (#valueList(selectIDs.query.id)#)">
+				<cfelse>
+					<cfset whereClause = "(#arguments.where#) AND (#this._tableName#.id IN (#valueList(selectIDs.query.id)#))">
+				</cfif>
 			<cfelse>
-				<cfset whereClause = "(#arguments.where#) AND (#this._tableName#.id IN (#valueList(selectIDs.query.id)#))">			
+				<cfset whereClause = arguments.where>
 			</cfif>
 		</cfif>
 
