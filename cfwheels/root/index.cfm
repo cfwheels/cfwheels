@@ -43,7 +43,7 @@
 				<code>&lt;cfset text = &quot;Hello, world!&quot;&gt;</code>
 			</blockquote>
 		</li>
-		<li>Open up <code>/app/views/index.cfm</code> and add this code:
+		<li>Open up <code>/app/views/say/index.cfm</code> and add this code:
 			<blockquote>
 <pre>
 &lt;cfoutput&gt;
@@ -52,7 +52,7 @@
 </pre>
 			</blockquote>
 		</li>
-		<li>Point your browser to that controller (ex: <code>http://localhost/say</code>)</li>
+		<li>Point your browser to that controller (ex: <code>http://localhost/say</code> with URL rewriting on or <code>http://localhost/dispatch.cfm?wheelsaction=/say</code> with URL rewriting off)</li>
 		<li>Voila!</li>
 	</ol>
 	
