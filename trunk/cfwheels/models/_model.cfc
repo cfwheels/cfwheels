@@ -179,7 +179,7 @@
 		<cfargument name="joins" type="string" required="no" default="" hint="An SQL fragment for additional joins">
 		<cfargument name="limit" type="numeric" required="no" default=0 hint="An integer determining the limit on the number of rows that should be returned">
 		<cfargument name="offset" type="numeric" required="no" default=0 hint="An integer determining the offset from where the rows should be fetched">
-		<cfargument name="paginate" type="boolean" required="no" default="false" hint="Whether or not results should be paginated">
+		<cfargument name="distinct" type="boolean" required="no" default="false" hint="Whether or not to use select distinct records">
 		<cfargument name="page" type="numeric" required="no" default=0 hint="The page to retrieve records for when using pagination">
 		<cfargument name="perPage" type="numeric" required="no" default=10 hint="Number of records to retrieve per page when using pagination">
 
@@ -200,13 +200,8 @@
 
 		[DOCS:EXAMPLE 3 START]
 		Paginate all users with 10 on each page and return the 2nd page (users 11-20):
-		<cfset users = model("user").findAll(order="last_name", paginate=true, page=2, perPage=10)>
+		<cfset users = model("user").findAll(order="last_name", page=2, perPage=10)>
 		[DOCS:EXAMPLE 3 END]
-
-		[DOCS:EXAMPLE 4 START]
-		Paginate all users and return the page that corresponds to the request.params.page variable (when you don't supply "page" and "perPage" the function defaults to 10 for each page and to look at the request.params.page variable to get the requested page number:
-		<cfset users = model("user").findAll(order="last_name", paginate=true)>
-		[DOCS:EXAMPLE 4 END]
 		--->
 
 		<cfset var findAllQuery = "">
@@ -215,10 +210,10 @@
 		<cfset var whereClause = "">
 		<cfset var orderByColumns = "">
 
-		<cfset selectColumns = getSelectColumns(argumentCollection=arguments)>
-		<cfset fromTables = getfromTables(argumentCollection=arguments)>
-		<cfset whereClause = getWhereClause(argumentCollection=arguments)>
-		<cfset orderByColumns = getOrderByColumns(argumentCollection=arguments)>
+		<cfset selectColumns = getSelectColumns(select=arguments.select, include=arguments.include)>
+		<cfset fromTables = getfromTables(include=arguments.include, joins=arguments.joins)>
+		<cfset whereClause = getWhereClause(where=arguments.where, order=arguments.order, include=arguments.include, joins=arguments.joins, page=arguments.page, perPage=arguments.perPage)>
+		<cfset orderByColumns = getOrderByColumns(order=arguments.order, include=arguments.include)>
 	
 		<cfquery name="findAllQuery" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.name#">
 			<cfif application.database.type IS "sqlserver" AND arguments.offset IS NOT 0>
@@ -226,7 +221,11 @@
 				FROM (
 					SELECT TOP #arguments.limit# #reReplaceNoCase(selectColumns, "[^,]*\.", "", "all")#
 					FROM (
-						SELECT TOP #(arguments.limit + arguments.offset)# #selectColumns#
+						SELECT 
+						<cfif arguments.distinct>
+							DISTINCT
+						</cfif>
+						TOP #(arguments.limit + arguments.offset)# #selectColumns#
 						FROM #fromTables#
 						<cfif whereClause IS NOT "">
 							WHERE #preserveSingleQuotes(whereClause)#
@@ -236,6 +235,9 @@
 				ORDER BY #reReplaceNoCase(orderByColumns, "[^,]*\.", "", "all")#<cfif listContainsNoCase(reReplaceNoCase(orderByColumns, "[^,]*\.", "", "all"), "id ") IS 0>, id ASC</cfif>
 			<cfelse>
 				SELECT
+				<cfif arguments.distinct>
+					DISTINCT
+				</cfif>
 				<cfif application.database.type IS "sqlserver" AND arguments.limit IS NOT 0>
 					TOP #arguments.limit#
 				</cfif>
@@ -287,12 +289,12 @@
 		<cfset var orderByColumns = "">
 
 		<cfif arguments.select IS "">
-			<cfset selectColumns = getSelectColumns(argumentCollection=arguments)>
+			<cfset selectColumns = getSelectColumns(select=arguments.select, include=arguments.include)>
 		<cfelse>
 			<cfset selectColumns = arguments.select>		
 		</cfif>
-		<cfset fromTables = getfromTables(argumentCollection=arguments)>
-		<cfset orderByColumns = getOrderByColumns(argumentCollection=arguments)>
+		<cfset fromTables = getfromTables(include=arguments.include, joins=arguments.joins)>
+		<cfset orderByColumns = getOrderByColumns(order=arguments.order, include=arguments.include)>
 
 		<cfquery name="findOneQuery" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.name#" maxrows="1">
 			SELECT #selectColumns#
@@ -593,7 +595,7 @@
 		<cfset var averageQuery = "">
 		<cfset var fromTables = "">
 
-		<cfset fromTables = getfromTables(argumentCollection=arguments)>
+		<cfset fromTables = getfromTables()>
 
 		<cfquery name="averageQuery" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.name#">
 			SELECT AVG(<cfif arguments.distinct>DISTINCT </cfif>cast(#arguments.fieldName# as float)) AS average
@@ -609,6 +611,8 @@
 
 	<cffunction name="count" returntype="numeric" access="public" output="false" hint="[DOCS] Returns a count of the records in the table based on the supplied arguments">
 		<cfargument name="where" type="string" required="no" default="" hint="The SQL fragment to be used in the WHERE clause of the query">
+		<cfargument name="joins" type="string" required="no" default="" hint="An SQL fragment for additional joins">
+		<cfargument name="include" type="string" required="no" default="" hint="List of other model(s) to include in query using a left outer join">
 		<cfargument name="select" type="string" required="no" default="" hint="The SQL fragment to be used in the SELECT clause of the query">
 		<cfargument name="distinct" type="boolean" required="no" default="false" hint="Set this to true to make this a distinct calculation">
 
@@ -619,20 +623,29 @@
 		[DOCS:EXAMPLE 1 END]
 		--->
 
+
 		<cfset var countQuery = "">
+		<cfset var selectColumns = "">
 		<cfset var fromTables = "">
+		<cfset var whereClause = "">
+
+		<cfif arguments.include IS NOT "">
+			<cfset arguments.distinct = true>
+		</cfif>
 
 		<cfif arguments.select IS "">
 			<cfset arguments.select = "*">
 		</cfif>
 
-		<cfset fromTables = getfromTables(argumentCollection=arguments)>
+		<cfset selectColumns = getSelectColumns(select=arguments.select, include=arguments.include)>
+		<cfset fromTables = getfromTables(include=arguments.include, joins=arguments.joins)>
+		<cfset whereClause = getWhereClause(where=arguments.where, include=arguments.include, joins=arguments.joins)>
 
 		<cfquery name="countQuery" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.name#">
 			SELECT COUNT(<cfif arguments.distinct>DISTINCT </cfif>#arguments.select#) AS total
 			FROM #fromTables#
-			<cfif arguments.where IS NOT "">
-				WHERE #preserveSingleQuotes(arguments.where)#
+			<cfif whereClause IS NOT "">
+				WHERE #preserveSingleQuotes(whereClause)#
 			</cfif>
 		</cfquery>
 
@@ -667,7 +680,7 @@
 		<cfset var maximumQuery = "">
 		<cfset var fromTables = "">
 
-		<cfset fromTables = getfromTables(argumentCollection=arguments)>
+		<cfset fromTables = getfromTables()>
 
 		<cfquery name="maximumQuery" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.name#">
 			SELECT MAX(#arguments.fieldName#) AS maximum
@@ -688,7 +701,7 @@
 		<cfset var minimumQuery = "">
 		<cfset var fromTables = "">
 
-		<cfset fromTables = getfromTables(argumentCollection=arguments)>
+		<cfset fromTables = getfromTables()>
 
 		<cfquery name="minimumQuery" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.name#">
 			SELECT MIN(#arguments.fieldName#) AS minimum
@@ -710,7 +723,7 @@
 		<cfset var sumQuery = "">
 		<cfset var fromTables = "">
 
-		<cfset fromTables = getfromTables(argumentCollection=arguments)>
+		<cfset fromTables = getfromTables()>
 
 		<cfquery name="sumQuery" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.name#">
 			SELECT SUM(<cfif arguments.distinct>DISTINCT </cfif>#arguments.fieldName#) AS total
@@ -1087,6 +1100,8 @@
 
 
 	<cffunction name="getSelectColumns" access="public" returntype="string" output="false" hint="">
+		<cfargument name="select" type="string" required="no" default="">
+		<cfargument name="include" type="string" required="no" default="">
 
 		<cfset var selectColumns = "">
 		<cfset var modelObj = "">
@@ -1104,7 +1119,7 @@
 					<cfset selectColumns = selectColumns & ",">
 				</cfif>
 			</cfloop>
-			<cfif StructKeyExists(arguments, "include") AND arguments.include IS NOT "">
+			<cfif arguments.include IS NOT "">
 				<cfset flattendedInclude = replace(replace(arguments.include, "(", ",", "all"), ")", "", "all")>
 				<cfloop list="#flattendedInclude#" index="name">
 					<cfset modelObj = application.core.model(application.core.singularize(trim(name)))>
@@ -1126,6 +1141,8 @@
 
 
 	<cffunction name="getFromTables" access="public" returntype="string" output="false" hint="">
+		<cfargument name="include" type="string" required="no" default="">
+		<cfargument name="joins" type="string" required="no" default="">
 
 		<cfset var fromTables = "">
 		<cfset var expandedInclude = "">
@@ -1136,7 +1153,7 @@
 		<cfset var joinTable = "">
 		<cfset var pos = 0>
 
-		<cfif StructKeyExists(arguments, "include") AND arguments.include IS NOT "">
+		<cfif arguments.include IS NOT "">
 			<cfset expandedInclude = "#this._modelName#(#arguments.include#)">
 			<cfloop condition="#expandedInclude# Contains '('">
 				<cfset pos = 1>
@@ -1155,7 +1172,7 @@
 						<cfelse>
 							<!--- hasAndBelongsToMany --->
 							<cfset joinTable = application.core.joinTableName(outerModel._tableName, innerModel._tableName)>
-							<cfset fromTables = "LEFT OUTER JOIN #joinTable# ON #outerModel._tableName#.id = #joinTable#.#outerModel._modelName#_id LEFT OUTER JOIN #innerModel._tableName# ON #joinTable#.#outerModel._modelName#_id = #innerModel._tableName#.id" & " " & fromTables>
+							<cfset fromTables = "LEFT OUTER JOIN #joinTable# ON #outerModel._tableName#.id = #joinTable#.#outerModel._modelName#_id LEFT OUTER JOIN #innerModel._tableName# ON #joinTable#.#innerModel._modelName#_id = #innerModel._tableName#.id" & " " & fromTables>
 						</cfif>
 					</cfloop>
 					<cfset pos = modelString.pos[2]>
@@ -1167,7 +1184,7 @@
 			<cfset fromTables = this._tableName>		
 		</cfif>
 
-		<cfif StructKeyExists(arguments, "joins") AND arguments.joins IS NOT "">
+		<cfif arguments.joins IS NOT "">
 			<cfset fromTables = fromTables & " " & arguments.joins>
 		</cfif>
 
@@ -1176,39 +1193,34 @@
 
 
 	<cffunction name="getWhereClause" access="public" returntype="string" output="false" hint="">
+		<cfargument name="where" type="string" required="no" default="">
+		<cfargument name="order" type="string" required="no" default="">
+		<cfargument name="include" type="string" required="no" default="">
+		<cfargument name="joins" type="string" required="no" default="">
+		<cfargument name="page" type="numeric" required="no" default=0>
+		<cfargument name="perPage" type="numeric" required="no" default=10>
 
 		<cfset var whereClause = "">
-		<cfset var selectIDsForPagination = "">
-		<cfset var paginationArgs = "">
+		<cfset var selectIDs = "">
+		<cfset var limit = "">
+		<cfset var offset = "">
 
-		<cfif NOT arguments.paginate>
+		<cfif arguments.page IS 0>
 			<cfset whereClause = arguments.where>
 		<cfelse>
-			<cfif isDefined("request.params.page") AND arguments.page IS 0>
-				<cfset this._paginatorCurrentPage = request.params.page>			
-			<cfelseif arguments.page IS NOT 0>
-				<cfset this._paginatorCurrentPage = arguments.page>			
-			<cfelse>
-				<cfset this._paginatorCurrentPage = 1>
+			<cfset this.paginatorCurrentPage = arguments.page>
+			<cfset this.paginatorTotalRecords = this.count(select="#this._tableName#.id", where=arguments.where, joins=arguments.joins, include=arguments.include)>
+			<cfset this.paginatorTotalPages = ceiling(this.paginatorTotalRecords/arguments.perPage)>
+			<cfset offset = (arguments.page * arguments.perPage) - (arguments.perPage)>
+			<cfset limit = arguments.perPage>
+			<cfif (limit + offset) GT this.paginatorTotalRecords>
+				<cfset limit = this.paginatorTotalRecords - offset>
 			</cfif>
-			<cfset this._paginatorTotalRecords = this.count(select="#this._tableName#.id", distinct=true, where=arguments.where)>
-			<cfset this._paginatorTotalPages = ceiling(this._paginatorTotalRecords/arguments.perPage)>
-			<cfset paginationArgs = structNew()>
-			<cfset paginationArgs.where = arguments.where>
-			<cfset paginationArgs.order = arguments.order>
-			<cfset paginationArgs.include = arguments.include>
-			<cfset paginationArgs.joins = arguments.joins>
-			<cfset paginationArgs.offset = (this._paginatorCurrentPage * arguments.perPage) - (arguments.perPage)>
-			<cfset paginationArgs.limit = arguments.perPage>
-			<cfif (paginationArgs.limit + paginationArgs.offset) GT this._paginatorTotalRecords>
-				<cfset paginationArgs.limit = this._paginatorTotalRecords - paginationArgs.offset>
-			</cfif>
-			<cfset paginationArgs.select = "DISTINCT #this._tableName#.id">
-			<cfset selectIDsForPagination = this.findAll(argumentCollection=paginationArgs)>
+			<cfset selectIDs = this.findAll(distinct=true, select="#this._tableName#.id, #replaceList(getOrderByColumns(order=arguments.order, include=arguments.include), " ASC, DESC", ",")#", offset=offset, limit=limit, where=arguments.where, order=arguments.order, include=arguments.include, joins=arguments.joins)>
 			<cfif arguments.where IS "">
-				<cfset whereClause = "#this._tableName#.id IN (#valueList(selectIDsForPagination.query.id)#)">
+				<cfset whereClause = "#this._tableName#.id IN (#valueList(selectIDs.query.id)#)">
 			<cfelse>
-				<cfset whereClause = "(#arguments.where#) AND (#this._tableName#.id IN (#valueList(selectIDsForPagination.query.id)#))">			
+				<cfset whereClause = "(#arguments.where#) AND (#this._tableName#.id IN (#valueList(selectIDs.query.id)#))">			
 			</cfif>
 		</cfif>
 
@@ -1217,9 +1229,12 @@
 
 
 	<cffunction name="getOrderByColumns" access="public" returntype="string" output="false" hint="">
+		<cfargument name="order" type="string" required="no" default="">
+		<cfargument name="include" type="string" required="no" default="">
 
 		<cfset var orderByColumns = "">
 		<cfset var modelObj = "">
+		<cfset var flattendedInclude = "">
 		<cfset var added = "">
 		<cfset var pos = 0>
 
@@ -1234,8 +1249,9 @@
 				</cfif>
 				<cfif column Does Not Contain ".">
 					<cfset added = false>
-					<cfif StructKeyExists(arguments, "include") AND arguments.include IS NOT "">
-						<cfloop list="#arguments.include#" index="name">
+					<cfif arguments.include IS NOT "">
+						<cfset flattendedInclude = replace(replace(arguments.include, "(", ",", "all"), ")", "", "all")>
+						<cfloop list="#flattendedInclude#" index="name">
 							<cfset modelObj = application.core.model(application.core.singularize(trim(name)))>
 							<cfif listFindNoCase(modelObj.columnList, replaceNoCase(replaceNoCase(trim(column), " DESC", ""), " ASC", "")) IS NOT 0 AND listFindNoCase(this.columnList, replaceNoCase(replaceNoCase(trim(column), " DESC", ""), " ASC", "")) IS 0>
 								<cfset orderByColumns = orderByColumns & modelObj._tableName & "." & trim(column)>					
@@ -1257,12 +1273,6 @@
 
 		<cfreturn orderByColumns>
 	</cffunction>
-
-
-
-
-
-
 
 
 	<cffunction name="doToggle" access="public" output="false" returntype="boolean" hint="">
