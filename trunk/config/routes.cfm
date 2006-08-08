@@ -52,7 +52,7 @@
 <!---
 <cfset route.pattern = "">
 <cfset route.controller = "say">
-<cfset route.action = "hello">
+<cfset route.action = "index">
 <cfset arrayAppend(routes,duplicate(route))>
 <cfset structClear(route)>
 --->
