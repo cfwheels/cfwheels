@@ -12,9 +12,7 @@
 	<cfset var routeFileLocation = "">
 	<cfset var routeFileHash = "">
 	<cfset var datesStruct = structNew()>
-	
-	<cftrace text="dispatch.cfc - START">
-	
+
 	<!---------------------->
 	<!------ Routes -------->
 	<!---------------------->
@@ -51,8 +49,6 @@
 		
 		<!--- Set the has to the current file --->
 		<cfset application.routes.hash = routeFileHash>
-		
-		<cftrace text="Rewrote application.routes.hash">
 	</cfif>
 	
 	<!--- Compare route to URL --->
@@ -209,9 +205,6 @@
 		<cflocation url="/index.cfm" addtoken="No">
 	</cfif>
 	
-	<cftrace text="dispatch.cfc - After params">
-	
-	
 	<!--------------------------->
 	<!----- Flash notices ------->
 	<!--------------------------->
@@ -244,8 +237,6 @@
 	<!--- Initialize the controller --->
 	<cfset Controller.init()>
 	
-	<cftrace text="dispatch.cfc - After controller creation">
-	
 	<!--- Before Filters --->
 	<cfif isDefined('Controller.beforeFilters')>
 		<cfloop index="i" from="1" to="#arraylen(Controller.beforeFilters)#">
@@ -266,8 +257,6 @@
 		</cfloop>
 	</cfif>
 	
-	<cftrace text="dispatch.cfc - After Before Filters">
-	
 	<!--- Try to call the action --->
 	<!--- If this is development, check to see if the file exists --->
 	<cfif isDefined('Controller.#request.params.action#')>
@@ -279,8 +268,6 @@
 		</cfif>
 	</cfif>
 	
-	<cftrace text="dispatch.cfc - After action call">
-	
 	<!--- 	
 		When processing returns to this point, either the controller is done and is ready for the action to be run
 		or the controller has called a render() (which went and called a different action already).  We check for this
@@ -291,8 +278,6 @@
 	<cfif NOT getPageContext().getResponse().isCommitted() AND len(trim(getPageContext().getOut().buffer)) IS 0>
 		<cfoutput>#Controller.render(action=request.params.action)#</cfoutput>
 	</cfif>
-	
-	<cftrace text="dispatch.cfc - After render()">
 	
 	<!--- After Filters --->
 	<cfif isDefined('Controller.afterFilters')>
@@ -314,10 +299,7 @@
 		</cfloop>
 	</cfif>
 	
-	<cftrace text="dispatch.cfc - After After Filters">
-	
 	<!--- Clear out the flash --->
 	<cfset structClear(session.flash)>
 	
-	<cftrace text="dispatch.cfc - END">		
 </cffunction>

@@ -9,7 +9,6 @@
 		
 		<!--- Include common functions for everything --->
 		<cfinclude template="#application.pathTo.includes#/controller_includes.cfm">
-		<cftrace text="_controller.cfc - include controller_includes.cfm">
 		
 		<cfset core = application.core>
 		
@@ -20,8 +19,7 @@
 		<cfif fileExists(expandPath("#application.pathTo.helpers#/#request.params.controller#_helper.cfm"))>
 			<cfinclude template="#application.pathTo.helpers#/#request.params.controller#_helper.cfm">
 		</cfif>
-		
-		<cftrace text="_controller.cfc - include helpers">
+	
 	</cffunction>
 	
 	
