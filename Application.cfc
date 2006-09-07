@@ -4,11 +4,7 @@
 --->
 <cfcomponent>
 
-	<cfset appName = GetDirectoryFromPath(getBaseTemplatePath())>
-	<cfset appName = left(appName, len(appName)-1)>
-	<cfset appName = replace(appName, "\", "/", "all")>
-	<cfset appName = reverse(spanExcluding(reverse(appName), "/"))>
-	<cfset this.name = appName>
+	<cfset this.name = listLast(getDirectoryFromPath(getBaseTemplatePath()),'/')>
 	<cfset this.clientManagement = false>
 	<cfset this.sessionManagement = true>
 	
@@ -61,8 +57,13 @@
 			<cfinclude template="#application.pathTo.includes#/core_includes.cfm">
 	
 			<!--- Include environment and database connection info --->
+			<!---
 			<cfinclude template="#application.pathTo.config#/environment.cfm" />
 			<cfinclude template="#application.pathTo.config#/database.cfm" />
+			--->
+			
+			<!--- Possible values are "development" and "production" --->
+			<cfset application.settings.environment = "development">
 	
 		</cflock>
 	
@@ -90,14 +91,8 @@
 	<!--- Runs before each page load --->
 	<cffunction name="onRequestStart">
 		
-		<!---
-		<cfif (left(cgi.script_name, 8) IS "/config/" OR left(cgi.script_name, 5) IS "/app/" OR left(cgi.script_name, 10) IS "/cfwheels/") OR (left(cgi.script_name, 14) IS "/generator.cfm" AND application.settings.environment IS "production")>
-			<cfthrow type="wheels.unauthorizedAccess">
-		</cfif>
-		--->
-		
 		<!--- Some handy development-only features --->
-		<cfif application.wheels.environment IS "development">
+		<cfif application.settings.environment IS "development">
 			
 			<!--- Reload all application variables --->
 			<cfif structKeyExists(url,'reload')>
@@ -111,6 +106,7 @@
 				
 		</cfif>
 		
+		<!---<cfdump var="#application#">--->	
 	</cffunction>
 	
 	
