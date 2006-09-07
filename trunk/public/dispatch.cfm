@@ -1,1 +1,0 @@
-<cfinclude template="#application.pathTo.cfwheels#/root/dispatch.cfm">

@@ -570,7 +570,7 @@
 	
 </cffunction>
 
-
+<!---
 <cffunction name="update" access="remote" returntype="string" output="true" hint="Updates the CFWheels application.core files">
 	
 	<cfset var meta = xmlParse(getMeta())>
@@ -644,7 +644,7 @@
 	<cfreturn cfhttp.fileContent>
 	
 </cffunction>
-
+--->
 
 <cffunction name="getRemoteMd5" access="private" returntype="string" output="false" hint="Gets a hash of the remote the file">
 	<cfargument name="file" type="string" required="true" hint="The file to get">

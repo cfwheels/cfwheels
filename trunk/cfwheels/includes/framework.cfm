@@ -20,6 +20,7 @@
 
 <cfset application.core.isMethod = isMethod>
 
+<!---
 <cffunction name="pluralize" access="public" output="false" returntype="string" hint="Accepts a word and returns the pluralized version">
 	<cfargument name="text" type="string" required="yes">
 	
@@ -118,6 +119,7 @@
 </cffunction>
 
 <cfset application.core.joinTableName = joinTableName>
+--->
 
 <cffunction name="componentPathToWebPath" access="public" output="false" returntype="any" hint="Takes a component path and turns it into a web path">
 	<cfargument name="componentPath" type="string" required="yes" hint="The name of the model to return">
@@ -131,7 +133,7 @@
 <cffunction name="componentPathToFilePath" access="public" output="false" returntype="any" hint="Takes a component path and turns it into a file path">
 	<cfargument name="componentPath" type="string" required="yes" hint="The name of the model to return">
 	
-	<cfset var filePath = "/" & replace(arguments.componentPath,".","\","all")>
+	<cfset var filePath = "/" & replace(arguments.componentPath,".","/","all")>
 	<cfreturn filePath>
 </cffunction>
 
@@ -152,7 +154,7 @@
 <cffunction name="filePathToComponentPath" access="public" output="false" returntype="any" hint="Takes a file path and turns it into a component path">
 	<cfargument name="filePath" type="string" required="yes" hint="The name of the model to return">
 	
-	<cfset var componentPath = replace(arguments.filePath,"\",".","all")>
+	<cfset var componentPath = replace(arguments.filePath,"/",".","all")>
 	<cfif left(componentPath,1) IS ".">
 		<cfset componentPath = right(componentPath,len(componentPath)-1)>
 	</cfif>
@@ -164,7 +166,8 @@
 <cffunction name="webPathToFilePath" access="public" output="false" returntype="any" hint="Takes a web path and turns it into a file path">
 	<cfargument name="webPath" type="string" required="yes" hint="The name of the model to return">
 	
-	<cfreturn replace(arguments.webPath,"/","\","all")>
+	<!--- <cfreturn replace(arguments.webPath,"/","\","all")> --->
+	<cfreturn arguments.webPath>
 </cffunction>
 
 <cfset application.core.webPathToFilePath = webPathToFilePath>
@@ -172,7 +175,8 @@
 <cffunction name="filePathToWebPath" access="public" output="false" returntype="any" hint="Takes a file path and turns it into a web path">
 	<cfargument name="filePath" type="string" required="yes" hint="The name of the model to return">
 	
-	<cfreturn replace(arguments.filePath,"\","/","all")>
+	<!--- <cfreturn replace(arguments.filePath,"\","/","all")> --->
+	<cfreturn arguments.filePath>
 </cffunction>
 
 <cfset application.core.filePathToWebPath = filePathToWebPath>
