@@ -89,9 +89,28 @@
 	
 	<!--- Runs before each page load --->
 	<cffunction name="onRequestStart">
+		
+		<!---
 		<cfif (left(cgi.script_name, 8) IS "/config/" OR left(cgi.script_name, 5) IS "/app/" OR left(cgi.script_name, 10) IS "/cfwheels/") OR (left(cgi.script_name, 14) IS "/generator.cfm" AND application.settings.environment IS "production")>
 			<cfthrow type="wheels.unauthorizedAccess">
 		</cfif>
+		--->
+		
+		<!--- Some handy development-only features --->
+		<cfif application.wheels.environment IS "development">
+			
+			<!--- Reload all application variables --->
+			<cfif structKeyExists(url,'reload')>
+				<cfset this.onApplicationStart()>
+			</cfif>
+			
+			<!--- Clear out session data --->
+			<cfif structKeyExists(url,'clearsession')>
+				<cfset structClear(session)>
+			</cfif>
+				
+		</cfif>
+		
 	</cffunction>
 	
 	

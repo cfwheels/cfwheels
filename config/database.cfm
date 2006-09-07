@@ -1,6 +1,7 @@
 <!--- 
 	Valid database types are "mysql5" and "sqlserver" (MySQL 4.1 is not supported at this time)
-	You can leave user and pass blank if you have your username and password setup in the datasource in ColdFusion Administrator
+	You can leave user and pass blank if you have your username and password setup in the
+	datasource in ColdFusion Administrator
 --->
 
 <cfif application.settings.environment IS "development">
