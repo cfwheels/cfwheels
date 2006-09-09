@@ -1,17 +1,16 @@
-<cfset variables.defaults = structNew()>
-<cfset variables.defaults.layout_content = "<cgset contentForLayout(request.params)>">
-
-
 <cffunction name="generate" access="remote" returntype="string" hint="Orchestrates other generator actions">
 	<cfargument name="type" type="string" required="true" hint="The type of thing to generate (controller, model, scaffold)">
 	<cfargument name="controller_name" type="string" required="false" hint="Name of the controller to create">
 	<cfargument name="action_name" type="string" required="false" hint="Name of the action(s) to create">
 	<cfargument name="model_name" type="string" required="false" hint="Name of the model to create">
 	
+	<cfset var returnString = "">
+	
 	<cfswitch expression="#arguments.type#">
 		<cfcase value="controller">
 			<cfset returnString = makeController(arguments.controller_name, arguments.action_name)>
 		</cfcase>
+		<!---
 		<cfcase value="model">
 			<cfset returnString = makeModel(arguments.model_name)>
 		</cfcase>
@@ -24,6 +23,7 @@
 		<cfcase value="skeleton">
 			<cfset returnString = makeSkeleton()>
 		</cfcase>
+		--->
 		<cfdefaultcase>
 			<cfthrow type="cfwheels.generator.invalid_type" message="Invalid type" detail="This isn't a type that the generator can create">
 		</cfdefaultcase>
@@ -40,16 +40,19 @@
 	
 	<cfset var returnString = "">
 	<cfset var actionsCode = "">
-	
-	
+	<cfset var action = "">
+	<cfset var newController = "">
+	<cfset var newLayout = "">
+	<cfset var newHelper = "">
+	<cfset var newView = "">
+	<cfset var fileDir = "">
+	<cfset var fileName = "">
+	<cfset var fileResult = "">
 	
 	<!--- Create actions --->
 	<cfloop list="#arguments.action_name#" index="action">
 		<cfset actionsCode = actionsCode & generateActionCode(action,"")>
 	</cfloop>
-	
-	
-	
 	
 	<!--- Create controller --->
 	<cfset newController = generateControllerCode(controller_name,actionsCode)>
@@ -64,14 +67,12 @@
 	</cfif>
 	
 	
+	
 	<!--- Create layout --->
 	<cfsavecontent variable="layoutContent">
-		<cfoutput>
-<!-- HTML that you want on every page that's output by this controller -->
+		<cfoutput><!-- HTML that you want on every page that's output by this controller -->
 
-<!-- Your layout must contain this call to display the code in your view -->
-<cgset contentForLayout()>
-			</cfoutput>
+<cgset contentForLayout()></cfoutput>
 	</cfsavecontent>
 	
 	<cfset newLayout = generateLayoutCode(controller_name,layoutContent)>
@@ -85,8 +86,6 @@
 	</cfif>
 	
 	
-	
-	
 	<!--- Create helper --->
 	<cfset newHelper = generateHelperCode(controller_name)>
 	<cfset fileDir = expandPath("#application.pathTo.helpers#")>
@@ -97,8 +96,6 @@
 	<cfelse>
 		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
 	</cfif>
-	
-	
 	
 	
 	<!--- Create views --->
@@ -128,6 +125,7 @@
 </cffunction>
 
 
+<!---
 <cffunction name="makeModel" access="private" returntype="string" output="false" hint="Generates a controller">
 	<cfargument name="model_name" type="string" required="false" hint="Name of the model to create">
 	
@@ -453,11 +451,13 @@
 	<cfreturn application.core.cleanup(output)>
 	
 </cffunction>
-
+--->
 
 <cffunction name="generateActionCode" access="private" returntype="string" output="false" hint="Generates a controller">
 	<cfargument name="action_name" type="string" required="true" hint="Name of the action(s) to create inside the controller">
 	<cfargument name="content" type="string" required="true" hint="The code to put inside the action">
+	
+	<cfset var output = "">
 	
 	<cfsavecontent variable="output">
 		<cfoutput>
@@ -476,6 +476,7 @@
 </cffunction>
 
 
+<!---
 <cffunction name="generateUserModelCode" access="private" returntype="string" output="false" hint="Generates a model">
 	<cfargument name="model_name" type="string" required="true" hint="Name of the model to create">
 
@@ -524,12 +525,15 @@
 	<cfreturn output>
 	
 </cffunction>
+--->
 
 
 <cffunction name="generateViewCode" access="private" returntype="string" output="false" hint="Generates a view">
 	<cfargument name="controller_name" type="string" required="true" hint="Name of the generator these views belong to">
 	<cfargument name="action_name" type="string" required="true" hint="Name(s) of the view files to create">
 	<cfargument name="content" type="string" required="true" hint="The code to put in the view">
+	
+	<cfset var output = "">
 	
 	<cfsavecontent variable="output">
 		<cfoutput>
@@ -544,6 +548,8 @@
 
 <cffunction name="generateHelperCode" access="private" returntype="string" output="false" hint="Generates a helper">
 	<cfargument name="controller_name" type="string" required="true" hint="Name of the controller this helper belongs to">
+	
+	<cfset var output = "">
 	
 	<cfsavecontent variable="output">
 		<cfoutput>
@@ -560,6 +566,8 @@
 	<cfargument name="controller_name" type="string" required="true" hint="Name of the layout this controller belongs to">
 	<cfargument name="content" type="string" required="true" hint="Name of the layout this controller belongs to">
 	
+	<cfset var output = "">
+	
 	<cfsavecontent variable="output">
 		<cfoutput>
 #arguments.content#
@@ -570,81 +578,6 @@
 	
 </cffunction>
 
-<!---
-<cffunction name="update" access="remote" returntype="string" output="true" hint="Updates the CFWheels application.core files">
-	
-	<cfset var meta = xmlParse(getMeta())>
-	<cfset var coreFiles = arrayNew(1)>
-	<cfset var remoteMd5 = "">
-	<cfset var localMd5 = "">
-	<cfset var remoteFile = "">
-	<cfset var fileDir = "">
-	<cfset var fileName = "">
-	<cfset var fileResult = "">
-	<cfset var returnString = "">
-	
-	<!--- Connect to the web service --->
-	<cfobject name="remoteService" webservice="http://www.cfwheels.com/updater/update.cfc?wsdl">
-			
-	<!--- Get to the application.core files --->
-	<cfset coreFiles = meta.cfwheels.application.core.xmlChildren>
-	
-	<cfloop from="1" to="#arrayLen(coreFiles)#" index="i">
-		<cfif isDefined('coreFiles[i].xmlAttributes.action') AND coreFiles[i].xmlAttributes.name IS "delete">
-			<!--- Delete the file if action="delete" in the XML file --->
-			<cfif listLen(coreFiles[i].xmlAttributes.name, "/") GT 1>
-				<cfset fileDir = application.absolutePathTo.cfwheels & replace(listDeleteAt(coreFiles[i].xmlAttributes.name, listLen(coreFiles[i].xmlAttributes.name,"/"), "/"),"/","\","all")>
-			<cfelse>
-				<cfset fileDir = application.absolutePathTo.cfwheels>
-			</cfif>
-			<cfset fileName = listLast(coreFiles[i].xmlAttributes.name, "/")>
-			<cfset delFile(fileDir,fileName)>
-		<cfelse>
-			<!--- Get the file and find out if we need to update the local copy --->
-			<cfset remoteMd5 = getRemoteMd5(coreFiles[i].xmlAttributes.name)>
-			<cfset localMd5 = getLocalMd5(coreFiles[i].xmlAttributes.name)>
-			<!--- Check to see if the file has been updated --->
-			<cfif remoteMd5 IS NOT localMd5>
-				<!--- Get the remote file --->
-				<cfset remoteFile = getRemoteFile(coreFiles[i].xmlAttributes.name)>
-				<!--- If this file is in a subdirectory, figure out what it is and add it to the path --->
-				<cfif listLen(coreFiles[i].xmlAttributes.name, "/") GT 1>
-					<cfset fileDir = application.absolutePathTo.cfwheels & replace(listDeleteAt(coreFiles[i].xmlAttributes.name, listLen(coreFiles[i].xmlAttributes.name,"/"), "/"),"/","\","all")>
-				<cfelse>
-					<cfset fileDir = application.absolutePathTo.cfwheels>
-				</cfif>
-				<!--- Get the filename --->
-				<cfset fileName = listLast(coreFiles[i].xmlAttributes.name, "/")>
-				<!--- Write the file to the filesystem --->
-				<cfset fileResult = application.core.saveFile(fileDir,fileName,remoteFile)>
-				<!--- Prepare results for the log --->
-				<cfif fileResult>
-					<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong>updated</strong><br />">
-				<cfelse>
-					<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>error!</strong><br />">
-				</cfif>
-			</cfif>
-		</cfif>
-	</cfloop>
-	
-	<!--- If no files have been updated, let the user know --->
-	<cfif returnString IS "">
-		<cfset returnString = "Nothing to update, all files are the most current versions!">
-	</cfif>
-	
-	<cfoutput>#returnString#</cfoutput>
-	
-</cffunction>
-
-
-<cffunction name="getMeta" access="private" returntype="string" output="false" hint="Gets the metadata XML file from CFWheels.com">
-	
-	<cfhttp url="http://www.cfwheels.com/updater/meta.xml" method="get">
-	
-	<cfreturn cfhttp.fileContent>
-	
-</cffunction>
---->
 
 <cffunction name="getRemoteMd5" access="private" returntype="string" output="false" hint="Gets a hash of the remote the file">
 	<cfargument name="file" type="string" required="true" hint="The file to get">
@@ -656,8 +589,8 @@
 <cffunction name="getLocalMd5" access="private" returntype="string" output="false" hint="Gets an MD5 has of the local version of a file">
 	<cfargument name="file" type="string" required="true" hint="The file to get">
 	
-	<cfset var localMd5 = "">
 	<cfset var fileHash = "">
+	<cfset var fileContents = "">
 	<cfset var filePath = "#application.absolutePathTo.cfwheels##replace(arguments.file,"/","\","all")#">
 	
 	<cfif fileExists(filePath)>

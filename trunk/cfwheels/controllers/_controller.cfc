@@ -7,10 +7,10 @@
 
 	<cffunction name="init" access="public" output="false" hint="Called when a controller is instantiated">
 		
+		<cfset core = application.core>
+				
 		<!--- Include common functions for everything --->
 		<cfinclude template="#application.pathTo.includes#/controller_includes.cfm">
-		
-		<cfset core = application.core>
 		
 		<!--- Include helpers if they exist --->
 		<cfif fileExists(expandPath("#application.pathTo.helpers#/application_helper.cfm"))>
@@ -25,7 +25,8 @@
 	
 	<cffunction name="renderToString" access="public" returntype="string" output="false" hint="Calls render and returns the results as a string">
 		
-		<cfset renderResult = render(arguments=arguments, saveToString=true)>
+		<cfset var renderResult = render(arguments=arguments, saveToString=true)>
+		
 		<cfreturn renderResult>
 
 	</cffunction>
@@ -48,6 +49,9 @@
 		<!--- This is only set when called from the renderToString function above --->
 		<cfargument name="saveToString" type="boolean" required="false" default="false" hint="If TRUE the result of the rendering will be returned as a string and not rendered to the browser">
 
+		<cfset var arg = "">
+		<cfset var renderResult = "">
+		
 		<!--- layout was not passed in so set the default for it depending on the type of rendering to be done --->
 		<cfif arguments.layout IS "">
 			<cfif arguments.action IS NOT "" OR arguments.template IS NOT "">
@@ -100,12 +104,13 @@
 		</cfif>
 
 		<cfsavecontent variable="renderResult">
-		<cfif arguments.layout IS NOT false>
-			<cfset renderLayout(argumentCollection=arguments)>
-		<cfelse>
-			<cfset contentForLayout()>
-		</cfif>
+			<cfif arguments.layout IS NOT false>
+				<cfset renderLayout(argumentCollection=arguments)>
+			<cfelse>
+				<cfset contentForLayout()>
+			</cfif>
 		</cfsavecontent>
+		
 		<cfif arguments.saveToString IS TRUE>
 			<cfreturn renderResult>
 		<cfelse>
@@ -135,6 +140,7 @@
 		<cfset var templateArrayForPartial = "">
 		<cfset var directoryForPartial = "">
 		<cfset var filenameForPartial = "">
+		<cfset var local = "">
 
 		<cfif isDefined("request._render.partial") AND request._render.partial IS NOT "">
 			<cfif isDefined("request._render.locals")>
@@ -230,6 +236,8 @@
 		<cfargument name="only" type="string" required="false" default="" hint="Execute the supplied filter(s) for these actions only">
 		<cfargument name="except" type="string" required="false" default="" hint="Execute the supplied filter(s) for all actions except these">
 		
+		<cfset var thisFilter = structNew()>
+		
 		<cfif NOT isDefined("this.beforeFilters")>
 			<cfset this.beforeFilters = arrayNew(1)>
 		</cfif>
@@ -239,7 +247,7 @@
 			<cfset thisFilter.filter = trim(filter)>
 			<cfset thisFilter.only = replace(arguments.only, ", ", ",", "all")>
 			<cfset thisFilter.except = replace(arguments.except, ", ", ",", "all")>
-			<cfset arrayAppend(this.beforeFilters, thisFilter)>
+			<cfset arrayAppend(this.beforeFilters, duplicate(thisFilter))>
 		</cfloop>
 		
 	</cffunction>
@@ -250,6 +258,8 @@
 		<cfargument name="only" type="string" required="false" default="" hint="Execute the supplied filter(s) for these actions only">
 		<cfargument name="except" type="string" required="false" default="" hint="Execute the supplied filter(s) for all actions except these">
 		
+		<cfset var thisFilter = structNew()>
+		
 		<cfif NOT isDefined("this.afterFilters")>
 			<cfset this.afterFilters = arrayNew(1)>
 		</cfif>
@@ -259,7 +269,7 @@
 			<cfset thisFilter.filter = trim(filter)>
 			<cfset thisFilter.only = replace(arguments.only, ", ", ",", "all")>
 			<cfset thisFilter.except = replace(arguments.except, ", ", ",", "all")>
-			<cfset arrayAppend(this.afterFilters, thisFilter)>
+			<cfset arrayAppend(this.afterFilters, duplicate(thisFilter))>
 		</cfloop>
 		
 	</cffunction>
