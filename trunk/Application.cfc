@@ -90,20 +90,15 @@
 	
 	<!--- Runs before each page load --->
 	<cffunction name="onRequestStart">
+			
+		<!--- Reload all application variables --->
+		<cfif structKeyExists(url,'reload')>
+			<cfset this.onApplicationStart()>
+		</cfif>
 		
-		<!--- Some handy development-only features --->
-		<cfif application.settings.environment IS "development">
-			
-			<!--- Reload all application variables --->
-			<cfif structKeyExists(url,'reload')>
-				<cfset this.onApplicationStart()>
-			</cfif>
-			
-			<!--- Clear out session data --->
-			<cfif structKeyExists(url,'clearsession')>
-				<cfset structClear(session)>
-			</cfif>
-				
+		<!--- Clear out session data --->
+		<cfif structKeyExists(url,'clearsession')>
+			<cfset structClear(session)>
 		</cfif>
 		
 		<!---<cfdump var="#application#">--->	

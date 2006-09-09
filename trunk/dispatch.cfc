@@ -223,24 +223,24 @@
 		<!--------------------------->
 		
 		<!--- Try to create an instance of the required controller --->
-		<!--- If this is development, check to see if the file exists --->
 		<cfset controllerName = "#application.componentPathTo.controllers#.#request.params.controller#_controller">
 		<cfif application.settings.environment IS "development">
+			<!--- If this is development, make sure the controller exists and put a copy in the application scope --->
 			<cfif fileExists(expandPath(core.componentPathToFilePath(controllerName)&'.cfc'))>
-				<cfif structKeyExists(application.wheels.controllers,request.params.controller)>
-					<cfset Controller = application.wheels.controllers[request.params.controller]>
-				<cfelse>
-					<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
-				</cfif>
-				<!--- <cfset Controller = createObject("component",controllerName)> --->
-				<cfset Controller = application.wheels.controllers[request.params.controller]>
+				<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
 			<cfelse>
 				<cfthrow type="cfwheels.controllerMissing" message="There is no controller named '#request.params.controller#' in this application" detail="Use the Wheels Generator to create a controller!">
 				<cfabort>
 			</cfif>
 		<cfelse>
-			<cfset Controller = createObject("component",controllerName)>
+			<!--- If we're in production, put the controller code into the application scope --->
+			<cfif NOT structKeyExists(application.wheels.controllers,request.params.controller)>
+				<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
+			</cfif>
 		</cfif>
+		
+		<!--- Get the instance of this controller --->
+		<cfset Controller = application.wheels.controllers[request.params.controller]>
 		
 		<!--- Initialize the controller --->
 		<cfset Controller.init()>
