@@ -12,7 +12,7 @@
 		
 		<cfset core = application.core>
 		
-		<!--- Include helpers if they exist --->		
+		<!--- Include helpers if they exist --->
 		<cfif fileExists(expandPath("#application.pathTo.helpers#/application_helper.cfm"))>
 			<cfinclude template="#application.pathTo.helpers#/application_helper.cfm">
 		</cfif>
@@ -192,36 +192,36 @@
 	
 	
 	<cffunction name="redirectTo" access="public" returntype="void" output="true" hint="Redirects to another page">
-	<cfargument name="link" type="string" required="no" default="" hint="The full URL to link to (only use this when not using controller/action/id type links)">
-	<cfargument name="back" type="boolean" required="no" default="false" hint="When true redirects back to the referring page">
-	<cfargument name="token" type="boolean" required="false" default="false" hint="Whether or not to append the url token to the URL">
-
-	<!---
-	[DOCS:ARGUMENTS]
-	URLFor
-	[DOCS:ARGUMENTS END]
-	--->
-
-	<cfset var url = "">
-
-	<cfif arguments.link IS NOT "">
-		<cfset url = arguments.link>
-	<cfelseif arguments.back>
-		<cfif cgi.http_referer IS NOT "">
-			<cfset url = cgi.http_referer>
+		<cfargument name="link" type="string" required="no" default="" hint="The full URL to link to (only use this when not using controller/action/id type links)">
+		<cfargument name="back" type="boolean" required="no" default="false" hint="When true redirects back to the referring page">
+		<cfargument name="token" type="boolean" required="false" default="false" hint="Whether or not to append the url token to the URL">
+	
+		<!---
+		[DOCS:ARGUMENTS]
+		URLFor
+		[DOCS:ARGUMENTS END]
+		--->
+	
+		<cfset var url = "">
+	
+		<cfif arguments.link IS NOT "">
+			<cfset url = arguments.link>
+		<cfelseif arguments.back>
+			<cfif cgi.http_referer IS NOT "">
+				<cfset url = cgi.http_referer>
+			<cfelse>
+				<cfset url = "/">
+			</cfif>
 		<cfelse>
-			<cfset url = "/">
+			<cfset url = URLFor(argumentCollection=createArgs(args=arguments, skipArgs="link,back,token"))>
 		</cfif>
-	<cfelse>
-		<cfset url = URLFor(argumentCollection=createArgs(args=arguments, skipArgs="link,back,token"))>
-	</cfif>
-
-	<cfif arguments.token>
-		<cflocation url="#url#">
-	<cfelse>
-		<cflocation url="#url#" addtoken="false">
-	</cfif>
-		
+	
+		<cfif arguments.token>
+			<cflocation url="#url#">
+		<cfelse>
+			<cflocation url="#url#" addtoken="false">
+		</cfif>
+			
 	</cffunction>
 	
 
@@ -264,21 +264,5 @@
 		
 	</cffunction>
 	
-	
-<!---
-   Copyright 2006 Rob Cameron
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
---->
 
 </cfcomponent>

@@ -6,7 +6,7 @@
 
 	<!---
 	[DOCS:COMMENTS START]
-	You have to place all .css files in the "/public/stylesheets/" folder or below it when using this function to include them. 
+	You have to place all .css files in the "/stylesheets" folder or below it when using this function to include them. 
 	If you supply the media argument it applies to all supplied stylesheets so if you need to output links for different media types you should call this function multiple times.
 	[DOCS:COMMENTS END]
 
@@ -34,7 +34,7 @@
 	
 	<!---
 	[DOCS:COMMENTS START]
-	You have to place all .js files in the "/public/javascripts/" folder or below it when using this function to include them. 
+	You have to place all .js files in the "/javascripts" folder or below it when using this function to include them. 
 	[DOCS:COMMENTS END]
 
 	[DOCS:EXAMPLE 1 START]
@@ -61,11 +61,11 @@
 
 	<!---
 	[DOCS:COMMENTS START]
-	The source argument can be supplied as a full path, a filename which assumes the image is in "/public/images/" or a name only which assumes the image is in "/public/images/" and is in the PNG format.
+	The source argument can be supplied as a full path, a filename which assumes the image is in "/images" or a name only which assumes the image is in "/images" and is in the PNG format.
 	[DOCS:COMMENTS END]
 
 	[DOCS:EXAMPLE 1 START]
-	Display logo.png in the "/public/images/" folder:
+	Display logo.png in the "/images" folder:
 	#imageTag(source="logo")#
 	[DOCS:EXAMPLE 1 END]
 	--->

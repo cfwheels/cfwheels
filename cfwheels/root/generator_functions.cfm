@@ -2,7 +2,7 @@
 <cfset variables.defaults.layout_content = "<cgset contentForLayout(request.params)>">
 
 
-<cffunction name="generate" access="remote" hint="Orchestrates other generator actions">
+<cffunction name="generate" access="remote" returntype="string" hint="Orchestrates other generator actions">
 	<cfargument name="type" type="string" required="true" hint="The type of thing to generate (controller, model, scaffold)">
 	<cfargument name="controller_name" type="string" required="false" hint="Name of the controller to create">
 	<cfargument name="action_name" type="string" required="false" hint="Name of the action(s) to create">
@@ -29,7 +29,7 @@
 		</cfdefaultcase>
 	</cfswitch>
 	
-	<cfoutput>#returnString#</cfoutput>
+	<cfreturn returnString>
 	
 </cffunction>
 
