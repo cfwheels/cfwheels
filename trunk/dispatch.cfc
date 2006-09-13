@@ -252,7 +252,8 @@
 						(Controller.beforeFilters[i].only IS NOT "" AND listFindNoCase(Controller.beforeFilters[i].only, request.params.action)) OR
 						(Controller.beforeFilters[i].except IS NOT "" AND NOT listFindNoCase(Controller.beforeFilters[i].except, request.params.action))>
 					<cfset methodName = trim(Controller.beforeFilters[i].filter)>
-					<cfif methodName Does NOT Contain "(">
+					<!--- Add parenthesis to make this a real method call --->
+					<cfif methodName DOES NOT CONTAIN "(">
 						<cfset methodName = methodName & "()">
 					</cfif>
 					<cfif isDefined('Controller.#spanExcluding(methodName, "(")#')>
@@ -294,7 +295,7 @@
 						(Controller.afterFilters[i].only IS NOT "" AND listFindNoCase(Controller.afterFilters[i].only, request.params.action)) OR
 						(Controller.afterFilters[i].except IS NOT "" AND NOT listFindNoCase(Controller.afterFilters[i].except, request.params.action))>
 					<cfset methodName = trim(Controller.afterFilters[i].filter)>
-					<cfif methodName Does NOT Contain "(">
+					<cfif methodName DOES NOT CONTAIN "(">
 						<cfset methodName = methodName & "()">
 					</cfif>
 					<cfif isDefined('Controller.#spanExcluding(methodName, "(")#')>
