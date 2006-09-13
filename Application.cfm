@@ -3,12 +3,7 @@
 	If you have ColdFusion MX 7 or higher you should use Application.cfc instead and can safely delete this file
 --->
 
-<cfset appName = GetDirectoryFromPath(getBaseTemplatePath())>
-<cfset appName = left(appName, len(appName)-1)>
-<cfset appName = replace(appName, "\", "/", "all")>
-<cfset appName = reverse(spanExcluding(reverse(appName), "/"))>
-
-<cfapplication name="#appName#" clientmanagement="false" sessionmanagement="true">
+<cfapplication name="#listLast(getDirectoryFromPath(getBaseTemplatePath()),'/')#" clientmanagement="false" sessionmanagement="true">
 
 <cfif NOT structKeyExists(application, "initialized")>
 	
@@ -21,8 +16,10 @@
 		<cfset application.filePathTo.controllers = "/app/controllers">
 		<cfset application.componentPathTo.models = "app.models">
 		<cfset application.filePathTo.models = "/app/models">
+		<!---
 		<cfset application.componentPathTo.generatedModels = application.componentPathTo.models & ".generated">
 		<cfset application.filePathTo.generatedModels = application.filePathTo.models & "/generated">
+		--->
 		
 		<!--- App directory paths --->
 		<cfset application.pathTo = structNew()>
@@ -56,8 +53,13 @@
 		<cfinclude template="#application.pathTo.includes#/core_includes.cfm">
 
 		<!--- Include environment and database connection info --->
+		<!---
 		<cfinclude template="#application.pathTo.config#/environment.cfm" />
 		<cfinclude template="#application.pathTo.config#/database.cfm" />
+		--->
+		
+		<!--- Possible values are "development" and "production" --->
+		<cfset application.settings.environment = "development">
 
 	</cflock>
 
@@ -65,6 +67,12 @@
 
 </cfif>
 
-<cfif (left(cgi.script_name, 8) IS "/config/" OR left(cgi.script_name, 5) IS "/app/" OR left(cgi.script_name, 10) IS "/cfwheels/") OR (left(cgi.script_name, 14) IS "/generator.cfm" AND application.settings.environment IS "production")>
-	<cfthrow type="wheels.unauthorizedAccess">
+<!--- Reload all application variables --->
+<cfif structKeyExists(url,'reload')>
+	<cfset this.onApplicationStart()>
+</cfif>
+
+<!--- Clear out session data --->
+<cfif structKeyExists(url,'clearsession')>
+	<cfset structClear(session)>
 </cfif>

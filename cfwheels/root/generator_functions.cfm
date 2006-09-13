@@ -432,7 +432,7 @@
 	<cfreturn returnString>
 	
 </cffunction>
-
+--->
 
 <cffunction name="generateControllerCode" access="private" returntype="string" output="false" hint="Generates a controller">
 	<cfargument name="controller_name" type="string" required="true" hint="Name of the controller to create">
@@ -451,7 +451,7 @@
 	<cfreturn application.core.cleanup(output)>
 	
 </cffunction>
---->
+
 
 <cffunction name="generateActionCode" access="private" returntype="string" output="false" hint="Generates a controller">
 	<cfargument name="action_name" type="string" required="true" hint="Name of the action(s) to create inside the controller">

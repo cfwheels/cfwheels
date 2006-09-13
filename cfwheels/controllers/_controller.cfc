@@ -43,7 +43,7 @@
 		<cfargument name="nothing" type="string" required="false" default="">
 		<!--- layout and status applies to all types of rendering --->
 		<cfargument name="layout" type="string" required="false" default="">
-		<cfargument name="status" type="numeric" required="false" default="200">
+		<cfargument name="status" type="numeric" required="false" default=200>
 		<!--- useFullPath applies to file rendering only --->
 		<cfargument name="useFullPath" type="boolean" required="false" default="false" hint="If TRUE the rendering will be done relative to the template root (app/views). Applies to file rendering only">
 		<!--- This is only set when called from the renderToString function above --->
