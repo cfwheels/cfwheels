@@ -63,7 +63,7 @@
 			--->
 			
 			<!--- Possible values are "development" and "production" --->
-			<cfset application.settings.environment = "development">
+			<cfset application.settings.environment = "production">
 	
 		</cflock>
 	
