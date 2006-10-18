@@ -12,26 +12,11 @@
 
 <title>ColdFusion on Wheels Generator</title>
 
+<cfoutput>
+	<link href="#application.pathTo.stylesheets#/wheels.css" rel="stylesheet" media="all" type="text/css" />
+</cfoutput>
+
 <style type="text/css" media="all">
-	body {
-		font-family: Trebuchet MS, Verdana, Arial, sans-serif;
-		font-size: 1em;
-		line-height: 1.2em;
-	}
-	
-	h1 {
-		font-size: 200%;
-		font-weight: bold;
-	}
-	
-	a {
-		color: #990000;
-	}
-	a:hover {
-		color: #FFFFFF;
-		background-color: #990000;
-		text-decoration: none;
-	}
 	
 	.show {
 		}
@@ -103,11 +88,9 @@
 
 </head>
 
-<body>
-
-	<div style="text-align:center;float:left;margin-right:1em;">
-		<img src="http://www.cfwheels.com/images/logo.png" alt="CFWheels Logo" />
-	</div>
+<body id="generator">
+	
+<div id="content">
 	
 	<h1>CF Wheels Generator</h1>
 	<p>The Generator assists in your application development by automating tasks for you. It creates the basic structure of the files you use
@@ -142,5 +125,7 @@
 	
 	</cfoutput>
 	
+</div>
+
 </body>
 </html>

@@ -232,7 +232,7 @@
 			<cfif fileExists(expandPath(application.core.componentPathToFilePath(controllerName)&'.cfc'))>
 				<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
 			<cfelse>
-				<cfthrow type="cfwheels.controllerMissing" message="There is no controller named '#request.params.controller#' in this application" detail="Use the Wheels Generator to create a controller!">
+				<cfthrow type="cfwheels.controllerMissing" message="There is no controller named '#request.params.controller#' in this application" detail="Use the <a href=""#application.pathTo.scripts#"">Generator</a> to create a controller!">
 				<cfabort>
 			</cfif>
 		<cfelseif application.settings.environment IS "production">

@@ -31,6 +31,7 @@
 			<cfset application.pathTo.app = "/app">
 			<cfset application.pathTo.cfwheels = "/cfwheels">
 			<cfset application.pathTo.config = "/config">
+			<cfset application.pathTo.scripts = "/script/index.cfm">
 			<cfset application.pathTo.views = application.pathTo.app & "/views">
 			<cfset application.pathTo.layouts = application.pathTo.views & "/layouts">
 			<cfset application.pathTo.helpers = application.pathTo.app & "/helpers">
@@ -66,7 +67,7 @@
 			--->
 			
 			<!--- Possible values are "development" and "production" --->
-			<cfset application.settings.environment = "production">
+			<cfset application.settings.environment = "development">
 	
 		</cflock>
 	
