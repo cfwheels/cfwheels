@@ -93,7 +93,7 @@
 	<h3>How do I remove this page?</h3>
 	<p>First delete it from the root of your site's directory. Then, add a new 
 		<dfn title="A route tells Wheels about how your URLs should map to files in your application">route</dfn> 
-		(located in <code>/config/routes.cfm</code>) to specify a default controller and action:</p>
+		(located in <code>/config/routes.cfm</code>) to the end of the file to specify a default controller and action:</p>
 	
 	<code class="block">
 		&lt;cfset route.pattern = ""&gt;<br />

@@ -3,7 +3,6 @@
 	<cffunction name="dispatch" access="remote" output="true">
 		<cfset var methodName = "">
 		<cfset var controllerName = "">
-		<cfset var core = application.core>
 		<cfset var requestString = url.wheelsaction>
 		<cfset var routes = arrayNew(1)>
 		<cfset var routeParams = arrayNew(1)>
@@ -95,6 +94,8 @@
 		<!--- Sets what kind of request this was.  By default, it's a GET --->
 		<cfset request.get = true>
 		<cfset request.post = false>
+		<cfset request.put = false>
+		<cfset request.delete = false>
 		<cfset request.xhr = false>
 		<cfset request.currentRequest = url.wheelsaction>
 		
@@ -140,7 +141,7 @@
 		
 					<cfelse>
 					
-					<!--- regular model-type field --->
+						<!--- regular model-type field --->
 						<cfif NOT isDefined("params.#model#")>
 							<cfset params[model] = structNew()>
 						</cfif>
@@ -182,6 +183,7 @@
 					<cfset "params.#model#.#key#" = thisDate>
 				</cfloop>
 			</cfif>
+			
 			<!--- If there are any FORM variables, this is a POST --->
 			<cfset request.get = false>
 			<cfset request.post = true>
@@ -201,8 +203,9 @@
 		
 		<!--- Set the REQUEST scope to the value of the params --->
 		<cfset request.params = duplicate(params)>
+		<cfset params = "">
 		
-		<!--- Send to index.cfm when no default route has been setup and the index.cfm file exists (IIS only) --->
+		<!--- Send to index.cfm when no default route has been setup and the index.cfm file exists --->
 		<cfif request.currentrequest IS "/" AND NOT isDefined("request.params.controller") AND fileExists(application.absolutePathTo.webroot&'index.cfm')>
 			<cflocation url="/index.cfm" addtoken="No">
 		</cfif>
@@ -224,20 +227,28 @@
 		
 		<!--- Try to create an instance of the required controller --->
 		<cfset controllerName = "#application.componentPathTo.controllers#.#request.params.controller#_controller">
+		<!---
 		<cfif application.settings.environment IS "development">
 			<!--- If this is development, make sure the controller exists and put a copy in the application scope --->
-			<cfif fileExists(expandPath(core.componentPathToFilePath(controllerName)&'.cfc'))>
+			<cfif fileExists(expandPath(application.core.componentPathToFilePath(controllerName)&'.cfc'))>
 				<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
 			<cfelse>
 				<cfthrow type="cfwheels.controllerMissing" message="There is no controller named '#request.params.controller#' in this application" detail="Use the Wheels Generator to create a controller!">
 				<cfabort>
 			</cfif>
 		<cfelse>
-			<!--- If we're in production, put the controller code into the application scope --->
+		--->
+			<!--- If we're in production, put the controller code into the application scope if it's not already there --->
 			<cfif NOT structKeyExists(application.wheels.controllers,request.params.controller)>
+				<cfoutput>
+					I think the struct key doesn't exist: #request.params.controller#<br />
+					#structKeyExists(application.wheels.controllers, "say")#
+				</cfoutput>
 				<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
 			</cfif>
+		<!---
 		</cfif>
+		--->
 		
 		<!--- Get the instance of this controller --->
 		<cfset Controller = application.wheels.controllers[request.params.controller]>
