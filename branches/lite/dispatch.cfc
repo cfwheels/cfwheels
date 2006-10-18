@@ -235,11 +235,18 @@
 				<cfthrow type="cfwheels.controllerMissing" message="There is no controller named '#request.params.controller#' in this application" detail="Use the Wheels Generator to create a controller!">
 				<cfabort>
 			</cfif>
-		<cfelse>
-			<!--- If we're in production, put the controller code into the application scope if it's not already there --->
-			<cfif NOT structKeyExists(application.wheels.controllers,request.params.controller)>
-				<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
-			</cfif>
+		<cfelseif application.settings.environment IS "production">
+			<!---	If we're in production, put the controller code into the application scope if it's not already there 
+					If there's an error then show a page not found --->
+			<cftry>
+				<cfif NOT structKeyExists(application.wheels.controllers,request.params.controller)>
+					<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
+				</cfif>
+				<cfcatch>
+					<cfinclude template="#application.templates.pageNotFound#">
+					<cfabort>
+				</cfcatch>
+			</cftry>
 		</cfif>
 		
 		<!--- Get the instance of this controller --->
@@ -268,16 +275,24 @@
 				</cfif>
 			</cfloop>
 		</cfif>
+
 		
 		<!--- Try to call the action --->
 		<!--- If this is development, check to see if the file exists --->
 		<cfif isDefined('Controller.#request.params.action#')>
 			<cfoutput><cfset evaluate("Controller.#request.params.action#()")></cfoutput>
-		<cfelseif application.settings.environment IS "development">
-			<cfif NOT fileExists("#expandPath(application.pathTo.views)#/#request.params.controller#/#request.params.action#.cfm")>
-				<cfthrow type="cfwheels.actionMissing" message="There is no action named '#request.params.action#' in the '#request.params.controller#' controller" detail="Create a function called '#request.params.action#' in your controller, or create an action called 'methodMissing()' in your controller to handle requests to undefined actions">
-				<cfabort>		
-			</cfif>
+		<cfelseif isDefined('Controller.methodMissing')>
+			<cfoutput><cfset Controller.methodMissing()></cfoutput>
+		<cfelse>
+			<!--- <cfif NOT fileExists("#expandPath(application.pathTo.views)#/#request.params.controller#/#request.params.action#.cfm")> --->
+				<cfif application.settings.environment IS "development">
+					<cfthrow type="cfwheels.actionMissing" message="There is no action named '#request.params.action#' in the '#request.params.controller#' controller" detail="Create a function called '#request.params.action#' in your controller, or create an action called 'methodMissing()' in your controller to handle requests to undefined actions">
+					<cfabort>
+				<cfelseif application.settings.environment IS "production">
+					<cfinclude template="#application.templates.pageNotFound#">
+					<cfabort>
+				</cfif>
+			<!--- </cfif> --->
 		</cfif>
 		
 		<!--- 	

@@ -15,7 +15,7 @@
 		}
 		
     div#content { 
-		width: 600px;
+		width: 780px;
 		margin: 0 auto 2em;
 		padding: 2em;
 		background-color: #FFFFFF;

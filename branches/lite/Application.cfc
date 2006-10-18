@@ -7,6 +7,7 @@
 	<cfset this.name = listLast(getDirectoryFromPath(getBaseTemplatePath()),'/')>
 	<cfset this.clientManagement = false>
 	<cfset this.sessionManagement = true>
+	<cferror exception="cfwheels" template="/error.cfm" type="exception">
 	
 	<!--- Runs the first time the application is started --->
 	<cffunction name="onApplicationStart">
@@ -39,6 +40,8 @@
 			<cfset application.pathTo.images = "/images">
 			<cfset application.pathTo.stylesheets = "/stylesheets">
 			<cfset application.pathTo.javascripts = "/javascripts">
+			<cfset application.templates.pageNotFound = "/404.cfm">
+			<cfset application.templates.applicationError = "/500.cfm">
 			
 			<!--- File system paths --->
 			<cfset application.absolutePathTo = structNew()>
