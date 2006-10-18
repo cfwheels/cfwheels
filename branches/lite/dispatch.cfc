@@ -227,7 +227,6 @@
 		
 		<!--- Try to create an instance of the required controller --->
 		<cfset controllerName = "#application.componentPathTo.controllers#.#request.params.controller#_controller">
-		<!---
 		<cfif application.settings.environment IS "development">
 			<!--- If this is development, make sure the controller exists and put a copy in the application scope --->
 			<cfif fileExists(expandPath(application.core.componentPathToFilePath(controllerName)&'.cfc'))>
@@ -237,18 +236,11 @@
 				<cfabort>
 			</cfif>
 		<cfelse>
-		--->
 			<!--- If we're in production, put the controller code into the application scope if it's not already there --->
 			<cfif NOT structKeyExists(application.wheels.controllers,request.params.controller)>
-				<cfoutput>
-					I think the struct key doesn't exist: #request.params.controller#<br />
-					#structKeyExists(application.wheels.controllers, "say")#
-				</cfoutput>
 				<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
 			</cfif>
-		<!---
 		</cfif>
-		--->
 		
 		<!--- Get the instance of this controller --->
 		<cfset Controller = application.wheels.controllers[request.params.controller]>
