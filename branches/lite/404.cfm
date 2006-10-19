@@ -26,6 +26,7 @@
 		<p>This page doesn't exist, but here are a couple of things you can try:</p>
 		<ul>
 			<li>If you typed in the address to this page, double check that it was typed correctly</li>
+			<li>If you followed a link here then the link may be bad</li>
 			<li><a href="##" onclick="history.go(-1); return false;">Go back</a> to the last page you were on</li>
 			<li>Go to the <a href="/">homepage</a> of this site</li>
 			<li>Head to your favorite <a href="http://www.google.com">search engine</a></li>

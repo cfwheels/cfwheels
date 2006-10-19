@@ -142,8 +142,8 @@
 		<cfset var filenameForPartial = "">
 		<cfset var local = "">
 
-		<cfif isDefined("request._render.partial") AND request._render.partial IS NOT "">
-			<cfif isDefined("request._render.locals")>
+		<cfif structKeyExists(request._render,'partial') AND request._render.partial IS NOT "">
+			<cfif structKeyExists(request._render,'locals')>
 				<cfloop collection="#request._render.locals#" item="local">
 					<cfset "#local#" = evaluate("request._render.locals.#local#")>
 				</cfloop>
@@ -163,12 +163,12 @@
 				<cfinclude template="#filePathForPartial#" />
 			</cfif>
 			<cfset request._render.partial = "">
-		<cfelseif isDefined("request._render.action") AND request._render.action IS NOT "">
+		<cfelseif structKeyExists(request._render,'action') AND request._render.action IS NOT "">
 			<cfif fileExists(expandPath("#application.pathTo.views#/#request._render.controller#/#request._render.action#.cfm"))>
 				<cfinclude template="#application.pathTo.views#/#request._render.controller#/#request._render.action#.cfm">
 			</cfif>				
 			<cfset request._render.action = "">
-		<cfelseif isDefined("request._render.file") AND request._render.file IS NOT "">
+		<cfelseif structKeyExists(request._render,'file') AND request._render.file IS NOT "">
 			<cfif request._render.useFullPath IS TRUE>
 				<cfif fileExists(expandPath("#application.pathTo.views#/#request._render.file#"))>
 					<cfinclude template="#application.pathTo.views#/#request._render.file#">
@@ -181,15 +181,15 @@
 			</cfif>
 			<cfset request._render.file = "">
 			<cfset request._render.useFullPath = "">
-		<cfelseif isDefined("request._render.template") AND request._render.template IS NOT "">
+		<cfelseif structKeyExists(request._render,'template') AND request._render.template IS NOT "">
 			<cfif fileExists(expandPath("#application.pathTo.views#/#request._render.template#.cfm"))>
 				<cfinclude template="#application.pathTo.views#/#request._render.template#.cfm">
 			</cfif>
 			<cfset request._render.template = "">
-		<cfelseif isDefined("request._render.text") AND request._render.text IS NOT "">
+		<cfelseif structKeyExists(request._render,'text') AND request._render.text IS NOT "">
 			#request._render.text#
 			<cfset request._render.text = "">
-		<cfelseif isDefined("request._render.nothing") AND request._render.nothing IS NOT "">
+		<cfelseif structKeyExists(request._render,'nothing') AND request._render.nothing IS NOT "">
 			<cfset request._render.nothing = "">
 			<cfabort>
 		</cfif>

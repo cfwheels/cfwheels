@@ -18,20 +18,16 @@
 	<cfoutput>
 		<h1>Application Error</h1>
 		
-		<p>The server encountered an error. This is a potentially serious error and will be fixed soon.</p>
+		<p>The server encountered an error. This isn't because of anything you did.</p>
 		
 		<h3>Next Steps</h3>
 		
-		<p><a href="##" onclick="history.go(-1); return false;">Go back</a> to the last page you were on</p>
+		<p>Unfortunately there's not much you can do at this point. The webmaster of the site has been notified and should
+		fix the problem soon. If you'd like you can:
 		<ul>
-			<li><a href="##" onclick="history.go(-1); return false;">Go back</a> to the last page you were on</li>
-		</ul>
-		
-		<p>To learn more about Wheels:</p>
-		<ul>
-			<li>Read <a href="##">Building Web Applications with ColdFusion on Wheels</a>, the book</li>
-			<li>Visit the online API docs at <a href="http://docs.cfwheels.com">http://docs.cfwheels.com</a></li>
-		</ul>
+			<li>Try <a href="##" onclick="history.go(0); return false;" title="Reload your browser">reloading this page</a> (but it probably won't help)</li>
+			<li>Return to the <a href="/" title="Go to the home page">homepage</a></p>
+
 		
 	</cfoutput>
 </div>

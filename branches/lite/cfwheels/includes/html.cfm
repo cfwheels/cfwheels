@@ -203,29 +203,29 @@
 
 	<cfset arguments.name = chr(7)>
 	
-	<cfif isDefined("arguments.linkClass") AND arguments.linkClass IS NOT "">
+	<cfif structKeyExists(arguments,'linkClass') AND arguments.linkClass IS NOT "">
 		<cfset arguments.class = arguments.linkClass>
 	<cfelse>
 		<cfset arguments.class = "">
 	</cfif>
-	<cfif isDefined("arguments.linkStyle") AND arguments.linkStyle IS NOT "">
+	<cfif structKeyExists(arguments,'linkStyle') AND arguments.linkStyle IS NOT "">
 		<cfset arguments.style = arguments.linkStyle>
 	<cfelse>
 		<cfset arguments.style = "">
 	</cfif>
 	<cfset theLink = linkTo(argumentCollection=createArgs(args=arguments, skipArgs="source,alt,size,imageID,imageClass,imageStyle,linkClass,linkStyle"))>
 	
-	<cfif isDefined("arguments.imageClass") AND arguments.imageClass IS NOT "">
+	<cfif structKeyExists(arguments,'imageClass') AND arguments.imageClass IS NOT "">
 		<cfset arguments.class = arguments.imageClass>
 	<cfelse>
 		<cfset arguments.class = "">
 	</cfif>
-	<cfif isDefined("arguments.imageStyle") AND arguments.imageStyle IS NOT "">
+	<cfif structKeyExists(arguments,'imageStyle') AND arguments.imageStyle IS NOT "">
 		<cfset arguments.style = arguments.imageStyle>
 	<cfelse>
 		<cfset arguments.style = "">
 	</cfif>
-	<cfif isDefined("arguments.imageID") AND arguments.imageID IS NOT "">
+	<cfif structKeyExists(arguments,'imageID') AND arguments.imageID IS NOT "">
 		<cfset arguments.id = arguments.imageID>
 	<cfelse>
 		<cfset arguments.id = "">

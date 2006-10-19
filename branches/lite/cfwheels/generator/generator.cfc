@@ -1,3 +1,6 @@
+<cfcomponent>
+	
+
 <cffunction name="generate" access="remote" returntype="string" hint="Orchestrates other generator actions">
 	<cfargument name="type" type="string" required="true" hint="The type of thing to generate (controller, model, scaffold)">
 	<cfargument name="controller_name" type="string" required="false" hint="Name of the controller to create">
@@ -61,9 +64,9 @@
 	<cfset fileResult = application.core.saveFile(fileDir,fileName,newController)>
 
 	<cfif fileResult>
-		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong>created</strong><br />">
+		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""good"">created</span><br />">
 	<cfelse>
-		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
+		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""bad"">already exists, overwrote!</span><br />">
 	</cfif>
 	
 	
@@ -80,9 +83,9 @@
 	<cfset fileName = arguments.controller_name & "_layout.cfm">
 	<cfset fileResult = application.core.saveFile(fileDir,fileName,newLayout)>
 	<cfif fileResult>
-		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong>created</strong><br />">
+		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""good"">created</span><br />">
 	<cfelse>
-		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
+		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""bad"">already exists, overwrote!</span><br />">
 	</cfif>
 	
 	
@@ -92,9 +95,9 @@
 	<cfset fileName = arguments.controller_name & "_helper.cfm">
 	<cfset fileResult = application.core.saveFile(fileDir,fileName,newHelper)>
 	<cfif fileResult>
-		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong>created</strong><br />">
+		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""good"">created</span><br />">
 	<cfelse>
-		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
+		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""bad"">already exists, overwrote!</span><br />">
 	</cfif>
 	
 	
@@ -113,9 +116,9 @@
 		<cfset fileName = trim(action) & ".cfm">
 		<cfset fileResult = application.core.saveFile(fileDir,fileName,newView)>
 		<cfif fileResult>
-			<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong>created</strong><br />">
+			<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""good"">created</span><br />">
 		<cfelse>
-			<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
+			<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""bad"">already exists, overwrote!</span><br />">
 		</cfif>
 	</cfloop>
 	
@@ -137,9 +140,9 @@
 	<cfset fileName = arguments.model_name & ".cfc">
 	<cfset fileResult = application.core.saveFile(fileDir,fileName,newModel)>
 	<cfif fileResult>
-		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong>created</strong><br />">
+		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""good"">created</span><br />">
 	<cfelse>
-		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
+		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""bad"">already exists, overwrote!</span><br />">
 	</cfif>
 
 	<!--- Create system model --->
@@ -148,9 +151,9 @@
 	<cfset fileName = "_" & arguments.model_name & ".cfc">
 	<cfset fileResult = application.core.saveFile(fileDir,fileName,newModel)>
 	<cfif fileResult>
-		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong>created</strong><br />">
+		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""good"">created</span><br />">
 	<cfelse>
-		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
+		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""bad"">already exists, overwrote!</span><br />">
 	</cfif>
 			
 	<cfreturn returnString>
@@ -246,9 +249,9 @@
 	<cfset fileResult = application.core.saveFile(fileDir,fileName,newController)>
 
 	<cfif fileResult>
-		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong>created</strong><br />">
+		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""good"">created</span><br />">
 	<cfelse>
-		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
+		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""bad"">already exists, overwrote!</span><br />">
 	</cfif>
 	
 	
@@ -268,7 +271,7 @@
 
 <body id="scaffold">
 
-	<cgif isDefined('request.flash.notice')>
+	<cgif structKeyExists(request.flash,'notice')>
 		<cgoutput><p style="color: green">##request.flash.notice##</p></cgoutput>
 	</cgif>
 
@@ -284,9 +287,9 @@
 	<cfset fileName = arguments.controller_name & "_layout.cfm">
 	<cfset fileResult = application.core.saveFile(fileDir,fileName,newLayout)>
 	<cfif fileResult>
-		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong>created</strong><br />">
+		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""good"">created</span><br />">
 	<cfelse>
-		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
+		<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""good"">already exists, overwrote!</span><br />">
 	</cfif>
 	
 
@@ -422,9 +425,9 @@
 		<cfset fileName = view & ".cfm">
 		<cfset fileResult = application.core.saveFile(fileDir,fileName,newView)>
 		<cfif fileResult>
-			<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong>created</strong><br />">
+			<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""good"">created</span><br />">
 		<cfelse>
-			<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <strong style='color:##990000;'>already exists, overwrote!</strong><br />">
+			<cfset returnString = returnString & application.core.filePathToWebPath(fileDir) & "/" & fileName & " <span class=""bad"">already exists, overwrote!</span><br />">
 		</cfif>
 	</cfloop>
 	
@@ -607,3 +610,6 @@
 
 	<cfreturn remoteService.getFile(arguments.file)>
 </cffunction>
+
+	
+</cfcomponent>

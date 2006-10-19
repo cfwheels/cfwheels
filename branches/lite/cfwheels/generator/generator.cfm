@@ -1,8 +1,8 @@
 <cfsetting enablecfoutputonly="false">
 
-<cfif isDefined('form.controller_submit')>
-	<cfset generator = createObject("component","script.generator")>
-	<cfset results = generator.generate(type=form.type,controller_name=form.controller_name,action_name=form.action_name)>
+<cfif structKeyExists(form,'controller_submit')>
+	<cfset variables.generator = createObject("component","cfwheels.root.generator")>
+	<cfset variables.results = variables.generator.generate(type=form.type,controller_name=form.controller_name,action_name=form.action_name)>
 </cfif>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -15,76 +15,6 @@
 <cfoutput>
 	<link href="#application.pathTo.stylesheets#/wheels.css" rel="stylesheet" media="all" type="text/css" />
 </cfoutput>
-
-<style type="text/css" media="all">
-	
-	.show {
-		}
-		
-	.hide {
-		display: none;
-		}
-	
-	div#controllers {
-		background-color: #EEEEEE;		
-	}
-	
-	div#models {
-		background-color: #DDDDDD;		
-	}
-	
-	div#scaffolds {
-		background-color: #CCCCCC;		
-	}
-	
-	div#result {
-		font-size: 90%;
-		}
-	
-	div#result span.title {
-		font-weight: bold;
-		}
-	
-	div.column {
-		width: 30%;
-		float: left;
-		margin: 1em .25em;
-		padding: .5em;
-	}
-	
-	input {
-		display: block;
-		width: 12em;
-		margin-bottom: 1em;
-		font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-	}
-	
-	label {
-		font-size: 90%;
-		color: #666666;
-	}
-	
-	div#generateSkeleton {
-		width: 400px;
-		padding: 2em;
-		background-color: #FFFFCC;
-		text-align: center;
-		margin: 2em auto;
-		border: 3px solid #FFCC99;
-		}
-		
-	div#generateSkeleton p.small {
-		font-size: 80%;
-		color: #999999;
-		}
-		
-	div#generateSkeleton input#skeleton_submit { 
-		padding: .5em;
-		width: 300px;
-		margin: 0 auto;
-		}
-	
-</style>
 
 </head>
 
@@ -99,8 +29,8 @@
 	<cfoutput>
 	
 		<div id="generator">
-			<div id="controllers" class="column">
-				<h2>Controllers</h2>
+			<div id="controllers" class="generator_group">
+				<h3>Controllers</h3>
 				<p>Using the form below you can generate new controllers and related actions/views.  It will create
 					a controller, layout, helper and any views you specify. <strong>Separate action names with a comma.</strong></p>
 					
@@ -110,14 +40,14 @@
 					<input type="textbox" id="controller_name" name="controller_name" />
 					<label for="action_name">Action Name(s)</label>
 					<input type="textbox" id="action_name" name="action_name" />
-					<input type="submit" name="controller_submit" id="controller_submit" value="Generate" />
+					<input type="submit" name="controller_submit" id="controller_submit" value="Generate" class="button" />
 				</form>
 			</div>
 			
-			<cfif isDefined('results')>
+			<cfif structKeyExists(variables,'results')>
 				<div id="result" class="column">
 					<span class="title">The following files were generated:</span>
-					#results#
+					#variables.results#
 				</div>
 			</cfif>
 			
