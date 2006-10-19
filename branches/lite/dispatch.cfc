@@ -1,4 +1,6 @@
 <cfcomponent>
+	
+	<cfset variables._routes = arrayNew(1)>
 
 	<cffunction name="dispatch" access="remote" output="true">
 		<cfset var methodName = "">
@@ -41,12 +43,12 @@
 		<cffile action="read" file="#routeFileLocation#" variable="routeFile">
 		<cfset routeFileHash = hash(routeFile)>
 		
-		<cfif NOT isDefined('application.routes.hash') OR application.routes.hash IS NOT routeFileHash>
+		<cfif NOT structKeyExists(application.routes,'hash') OR application.routes.hash IS NOT routeFileHash>
 			<!--- Re-read file and parse apart routes --->
 			<cfinclude template="#application.pathTo.config#/routes.cfm">
 			
 			<cfset application.routes.theRoutes = arrayNew(1)>
-			<cfset application.routes.theRoutes = routes>
+			<cfset application.routes.theRoutes = variables._routes>
 			
 			<!--- Set the has to the current file --->
 			<cfset application.routes.hash = routeFileHash>
@@ -134,7 +136,7 @@
 						<cfset dateFieldPart = left(mid(field, match.pos[3], match.len[3]),1)>
 						<cfset dateFieldValue = form[key]>
 						
-						<cfif NOT isDefined('datesStruct.#dateFieldName#')>
+						<cfif NOT structKeyExists(datesStruct,'#dateFieldName#')>
 							<cfset datesStruct[dateFieldName] = arrayNew(1)>
 						</cfif>
 						<cfset arraySet(datesStruct[dateFieldName],dateFieldPart,dateFieldPart,dateFieldValue)>
@@ -142,7 +144,7 @@
 					<cfelse>
 					
 						<!--- regular model-type field --->
-						<cfif NOT isDefined("params.#model#")>
+						<cfif NOT structKeyExists(params,'#model#')>
 							<cfset params[model] = structNew()>
 						</cfif>
 						<!--- Should only happen if field does not contain a () --->
@@ -197,7 +199,7 @@
 			</cfif>
 		</cfloop>
 		<!--- Set the default action if one isn't defined --->
-		<cfif NOT isDefined('params.action')>
+		<cfif NOT structKeyExists(params,'action')>
 			<cfset params.action = application.default.action>
 		</cfif>
 		
@@ -205,16 +207,18 @@
 		<cfset request.params = duplicate(params)>
 		<cfset params = "">
 		
+		<!---
 		<!--- Send to index.cfm when no default route has been setup and the index.cfm file exists --->
-		<cfif request.currentrequest IS "/" AND NOT isDefined("request.params.controller") AND fileExists(application.absolutePathTo.webroot&'index.cfm')>
+		<cfif request.currentrequest IS "/" AND NOT structKeyExists(request.params'controller') AND fileExists('#application.absolutePathTo.webroot#index.cfm')>
 			<cflocation url="/index.cfm" addtoken="No">
 		</cfif>
+		--->
 		
 		<!--------------------------->
 		<!----- Flash notices ------->
 		<!--------------------------->
 		
-		<cfif NOT isDefined('session.flash')>
+		<cfif NOT structKeyExists(session,'flash')>
 			<cfset session.flash = structNew()>
 		</cfif>
 		<!--- Creates a pointer to session.flash so that when something is changed in request.flash it's also changed in session.flash ---> 
@@ -228,7 +232,6 @@
 		<!--- Try to create an instance of the required controller --->
 		<cfset controllerName = "#application.componentPathTo.controllers#.#request.params.controller#_controller">
 		<cfif application.settings.environment IS "development">
-			<!--- If this is development, make sure the controller exists and put a copy in the application scope --->
 			<cfif fileExists(expandPath(application.core.componentPathToFilePath(controllerName)&'.cfc'))>
 				<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
 			<cfelse>
@@ -256,7 +259,7 @@
 		<cfset Controller.init()>
 		
 		<!--- Before Filters --->
-		<cfif isDefined('Controller.beforeFilters')>
+		<cfif structKeyExists(Controller,'beforeFilters')>
 			<cfloop index="i" from="1" to="#arraylen(Controller.beforeFilters)#">
 				<cfif	(Controller.beforeFilters[i].only IS "" AND Controller.beforeFilters[i].except IS "") OR
 						(Controller.beforeFilters[i].only IS NOT "" AND listFindNoCase(Controller.beforeFilters[i].only, request.params.action)) OR
@@ -266,10 +269,10 @@
 					<cfif methodName DOES NOT CONTAIN "(">
 						<cfset methodName = methodName & "()">
 					</cfif>
-					<cfif isDefined('Controller.#spanExcluding(methodName, "(")#')>
+					<cfif structKeyExists(Controller,'#spanExcluding(methodName, "(")#')>
 						<cfoutput><cfset evaluate("Controller.#methodName#")></cfoutput>
 					<cfelse>
-						<cfthrow type="cfwheels.beforeFilterMissing" message="There is no action called '#methodName#' which is trying to be called as a before filter" detail="Remove this action from your beforeFilter declaration, or create the action">
+						<cfthrow type="cfwheels.beforeFilterMissing" message="There is no action called '#methodName#' which is trying to be called as a beforeFilter()" detail="Remove this action from your beforeFilter declaration, or create an action called '#request.params.action#' in your '#request.params.controller#' controller">
 						<cfabort>
 					</cfif>
 				</cfif>
@@ -279,9 +282,9 @@
 		
 		<!--- Try to call the action --->
 		<!--- If this is development, check to see if the file exists --->
-		<cfif isDefined('Controller.#request.params.action#')>
+		<cfif structKeyExists(Controller,request.params.action)>
 			<cfoutput><cfset evaluate("Controller.#request.params.action#()")></cfoutput>
-		<cfelseif isDefined('Controller.methodMissing')>
+		<cfelseif structKeyExists(Controller,'methodMissing')>
 			<cfoutput><cfset Controller.methodMissing()></cfoutput>
 		<cfelse>
 			<!--- <cfif NOT fileExists("#expandPath(application.pathTo.views)#/#request.params.controller#/#request.params.action#.cfm")> --->
@@ -307,7 +310,7 @@
 		</cfif>
 		
 		<!--- After Filters --->
-		<cfif isDefined('Controller.afterFilters')>
+		<cfif structKeyExists(Controller,'afterFilters')>
 			<cfloop index="i" from="1" to="#arraylen(Controller.afterFilters)#">
 				<cfif	(Controller.afterFilters[i].only IS "" AND Controller.afterFilters[i].except IS "") OR
 						(Controller.afterFilters[i].only IS NOT "" AND listFindNoCase(Controller.afterFilters[i].only, request.params.action)) OR
@@ -316,7 +319,7 @@
 					<cfif methodName DOES NOT CONTAIN "(">
 						<cfset methodName = methodName & "()">
 					</cfif>
-					<cfif isDefined('Controller.#spanExcluding(methodName, "(")#')>
+					<cfif structKeyExists(Controller,'#spanExcluding(methodName, "(")#')>
 						<cfoutput><cfset evaluate("Controller.#methodName#")></cfoutput>
 					<cfelse>
 						<cfthrow type="cfwheels.afterFilterMissing" message="There is no action called '#methodName#' which is trying to be called as an after filter" detail="Remove this action from your afterFilter declaration, or create the action">
@@ -329,6 +332,23 @@
 		<!--- Clear out the flash --->
 		<cfset structClear(session.flash)>
 		
+	</cffunction>
+	
+	
+	<cffunction name="route" access="private">
+		<cfargument name="pattern" type="string" required="true">
+
+		<cfset var thisRoute = structNew()>
+		
+		<cfset thisRoute.pattern = arguments.pattern>
+		<cfloop collection="#arguments#" item="arg">
+			<cfif arg IS NOT 'pattern'>
+				<cfset thisRoute[arg] = arguments[arg]>
+			</cfif>
+		</cfloop>
+		
+		<cfset arrayAppend(variables._routes,thisRoute)>
+	
 	</cffunction>
 
 
