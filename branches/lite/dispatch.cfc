@@ -38,27 +38,17 @@
 			<cfset requestString = requestString & "/">
 		</cfif>
 		
-		<!--- Hash the file to see if it's changed --->
-		<cfset routeFileLocation = expandPath(application.pathTo.config) & "/routes.cfm">
-		<cffile action="read" file="#routeFileLocation#" variable="routeFile">
-		<cfset routeFileHash = hash(routeFile)>
-		
-		<cfif NOT structKeyExists(application.routes,'hash') OR application.routes.hash IS NOT routeFileHash>
-			<!--- Re-read file and parse apart routes --->
+		<!--- Only include the routes if we're in development, or in production but don't already have the variable --->
+		<cfif application.settings.environment IS "development" OR (application.settings.environment IS "production" AND arrayLen(application.wheels.routes) IS 0)>
 			<cfinclude template="#application.pathTo.config#/routes.cfm">
-			
-			<cfset application.routes.theRoutes = arrayNew(1)>
-			<cfset application.routes.theRoutes = variables._routes>
-			
-			<!--- Set the has to the current file --->
-			<cfset application.routes.hash = routeFileHash>
+			<cfset application.wheels.routes = variables._routes>
 		</cfif>
 		
 		<!--- Compare route to URL --->
 		<!--- For each route in /config/routes.cfm --->
-		<cfloop from="1" to="#arrayLen(application.routes.theRoutes)#" index="i">
+		<cfloop from="1" to="#arrayLen(application.wheels.routes)#" index="i">
 			<cfset arrayClear(routeParams)>
-			<cfset thisRoute = application.routes.theRoutes[i]>
+			<cfset thisRoute = application.wheels.routes[i]>
 			
 			<!--- Add a trailing slash to ease pattern matching --->
 			<cfif right(thisRoute.pattern,1) IS NOT "/">
