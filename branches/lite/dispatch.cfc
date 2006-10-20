@@ -7,21 +7,197 @@
 		<cfset var controllerName = "">
 		<cfset var datesStruct = structNew()>
 		
+		<!--- If wheelsaction isn't present, we can't do anything --->
 		<cfif NOT structKeyExists(url,'wheelsaction')>
 			<cfthrow type="cfwheels.missingWheelsAction" message="There is no 'wheelsaction' variable present in the url" detail="This is most likely caused by a problem with URL rewriting. Check that your URL is being rewritten as '?wheelsaction=/the/original/url'">
 			<cfabort>
 		</cfif>
-	
-		<!---------------------->
-		<!------ Routes -------->
-		<!---------------------->
-		
-		<cfset request.params = findRoute(url.wheelsaction)>
 
-		
-		<!--------------------->
+		<!------ Routes -------->
+		<cfset findRoute(url.wheelsaction)>
+
 		<!------ Params ------->
-		<!--------------------->
+		<cfset setParams()>
+		
+		<!----- Flash notices ------->		
+		<cfset setFlash()>
+		
+		<!------ Controller ------>
+		<cfset controller = createController()>
+	
+		<!------ beforeFilters ------>
+		<cfif structKeyExists(controller,'beforeFilters')>
+			<cfset callBeforeFilters(controller)>
+		</cfif>
+		
+		<!------ Action ------>
+		<cfset callAction(controller)>
+		
+		<!--- 	
+			When processing returns to this point, either the controller is done and is ready for the action to be run
+			or the controller has called a render() (which went and called a different action already).  We check for this
+			by looking to see if the buffer has ever been flushed (which means render() has NOT been called) or if there's 
+			currently anything in it.  If not, call the proper action.  
+		--->
+		
+		<cfif NOT getPageContext().getResponse().isCommitted() AND len(trim(getPageContext().getOut().buffer)) IS 0>
+			<cfoutput>#controller.render(action=request.params.action)#</cfoutput>
+		</cfif>
+		
+		<!------ afterFilters ------>
+		<cfif structKeyExists(controller,'afterFilters')>
+			<cfset callAfterFilters(controller)>
+		</cfif>
+		
+		<!--- Clear the flash --->
+		<cfset clearFlash()>
+		
+	</cffunction>
+	
+	
+	<cffunction name="createController" access="private" hint="Creates an instance of the required controller">
+	
+		<cfset var controllerName = "#application.componentPathTo.controllers#.#request.params.controller#_controller">
+		<cfset var controller = "">
+		
+		<cfif application.settings.environment IS "development">
+			<cfif fileExists(expandPath(application.core.componentPathToFilePath(controllerName)&'.cfc'))>
+				<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
+			<cfelse>
+				<cfthrow type="cfwheels.controllerMissing" message="There is no controller named '#request.params.controller#' in this application" detail="Use the <a href=""#application.pathTo.scripts#"">Generator</a> to create a controller!">
+				<cfabort>
+			</cfif>
+		<cfelseif application.settings.environment IS "production">
+			<!---	If we're in production, put the controller code into the application scope if it's not already there 
+					If there's an error then show a page not found --->
+			<cftry>
+				<cfif NOT structKeyExists(application.wheels.controllers,request.params.controller)>
+					<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
+				</cfif>
+				<cfcatch>
+					<cfinclude template="#application.templates.pageNotFound#">
+					<cfabort>
+				</cfcatch>
+			</cftry>
+		</cfif>
+		
+		<!--- Get the instance of this controller --->
+		<cfset controller = application.wheels.controllers[request.params.controller]>
+		<!--- Initialize the controller --->
+		<cfset controller.init()>
+		
+		<cfreturn controller>
+	
+	</cffunction>
+	
+	
+	<cffunction name="callAction" access="private" returntype="void" hint="Calls the action on a controller">
+		<cfargument name="controller" required="true" type="any" hint="The controller to call actions on">
+		
+		<!--- If this is development, check to see if the file exists --->
+		<cfif structKeyExists(arguments.controller,request.params.action)>
+			<cfoutput><cfset evaluate("arguments.controller.#request.params.action#()")></cfoutput>
+		<cfelseif structKeyExists(arguments.controller,'methodMissing')>
+			<cfoutput><cfset arguments.controller.methodMissing()></cfoutput>
+		<cfelse>
+			<!--- <cfif NOT fileExists("#expandPath(application.pathTo.views)#/#request.params.controller#/#request.params.action#.cfm")> --->
+				<cfif application.settings.environment IS "development">
+					<cfthrow type="cfwheels.actionMissing" message="There is no action named '#request.params.action#' in the '#request.params.controller#' controller" detail="Create a function called '#request.params.action#' in your controller, or create an action called 'methodMissing()' in your controller to handle requests to undefined actions">
+					<cfabort>
+				<cfelseif application.settings.environment IS "production">
+					<cfinclude template="#application.templates.pageNotFound#">
+					<cfabort>
+				</cfif>
+			<!--- </cfif> --->
+		</cfif>
+	
+	</cffunction>
+	
+	
+	<cffunction name="setFlash" access="private" output="false" returntype="void" hint="Sets up the flash to persist between requests">
+	
+		<cfif NOT structKeyExists(session,'flash')>
+			<cfset session.flash = structNew()>
+		</cfif>
+		<!--- Creates a pointer to session.flash so that when something is changed in request.flash
+			  it's also changed in session.flash ---> 
+		<cfset request.flash = session.flash>
+	
+	</cffunction>
+	
+	
+	<cffunction name="clearFlash" access="private" output="false" returntype="void" hint="Clears out the flash (called at the end of a request)">
+	
+		<cfset structClear(session.flash)>
+	
+	</cffunction>
+	
+	
+	<cffunction name="callBeforeFilters" access="private" returntype="void" hint="Calls the before filters in a controller">
+		<cfargument name="controller" type="any" required="true" hint="The controller to call beforeFilters on">
+	
+		<!--- Before Filters --->
+		<cfif structKeyExists(arguments.controller,'beforeFilters')>
+			<cfloop index="i" from="1" to="#arraylen(Controller.beforeFilters)#">
+				<cfif	(arguments.controller.beforeFilters[i].only IS "" AND Controller.beforeFilters[i].except IS "") OR
+						(arguments.controller.beforeFilters[i].only IS NOT "" AND listFindNoCase(arguments.controller.beforeFilters[i].only, request.params.action)) OR
+						(arguments.controller.beforeFilters[i].except IS NOT "" AND NOT listFindNoCase(arguments.controller.beforeFilters[i].except, request.params.action))>
+					<cfset methodName = trim(arguments.controller.beforeFilters[i].filter)>
+					<!--- Add parenthesis to make this a real method call --->
+					<cfif methodName DOES NOT CONTAIN "(">
+						<cfset methodName = methodName & "()">
+					</cfif>
+					<cfif structKeyExists(arguments.controller,'#spanExcluding(methodName, "(")#')>
+						<cfoutput><cfset evaluate("arguments.controller.#methodName#")></cfoutput>
+					<cfelse>
+						<cfthrow type="cfwheels.beforeFilterMissing" message="There is no action called '#methodName#' which is trying to be called as a beforeFilter()" detail="Remove this action from your beforeFilter declaration, or create an action called '#request.params.action#' in your '#request.params.controller#' controller">
+						<cfabort>
+					</cfif>
+				</cfif>
+			</cfloop>
+		</cfif>
+	
+	</cffunction>
+	
+	
+	<cffunction name="callAfterFilters" access="private" returntype="void" hint="Calls the after filters in a controller">
+		<cfargument name="controller" type="any" required="true" hint="The controller to call beforeFilters on">
+
+		<cfif structKeyExists(arguments.controller,'afterFilters')>
+			<cfloop index="i" from="1" to="#arraylen(arguments.controller.afterFilters)#">
+				<cfif	(arguments.controller.afterFilters[i].only IS "" AND Controller.afterFilters[i].except IS "") OR
+						(arguments.controller.afterFilters[i].only IS NOT "" AND listFindNoCase(arguments.controller.afterFilters[i].only, request.params.action)) OR
+						(arguments.controller.afterFilters[i].except IS NOT "" AND NOT listFindNoCase(arguments.controller.afterFilters[i].except, request.params.action))>
+					<cfset methodName = trim(arguments.controller.afterFilters[i].filter)>
+					<cfif methodName DOES NOT CONTAIN "(">
+						<cfset methodName = methodName & "()">
+					</cfif>
+					<cfif structKeyExists(arguments.controller,'#spanExcluding(methodName, "(")#')>
+						<cfoutput><cfset evaluate("arguments.controller.#methodName#")></cfoutput>
+					<cfelse>
+						<cfthrow type="cfwheels.afterFilterMissing" message="There is no action called '#methodName#' which is trying to be called as an after filter" detail="Remove this action from your afterFilter declaration, or create the action">
+						<cfabort>
+					</cfif>
+				</cfif>
+			</cfloop>
+		</cfif>
+	
+	</cffunction>
+	
+	
+	<cffunction name="setParams" access="private" output="false" returntype="void" hint="Populates request.params with url and form variables">
+	
+		<cfset var match = arrayNew(1)>
+		<cfset var model = "">
+		<cfset var field = "">
+		<cfset var dateFieldName = "">
+		<cfset var dateFieldPart = "">
+		<cfset var dateFieldValue = "">
+		<cfset var datesStruct = structNew()>
+		<cfset var thisDate = "">
+		<cfset var tempArray = arrayNew(1)>
+		<cfset var separator = "">
+		<cfset var key = "">
 		
 		<!--- Sets what kind of request this was.  By default, it's a GET --->
 		<cfset request.get = true>
@@ -118,135 +294,11 @@
 			<cfset request.params.action = application.default.action>
 		</cfif>
 		
-		<!---
-		<!--- Send to index.cfm when no default route has been setup and the index.cfm file exists --->
-		<cfif request.currentrequest IS "/" AND NOT structKeyExists(request.params'controller') AND fileExists('#application.absolutePathTo.webroot#index.cfm')>
-			<cflocation url="/index.cfm" addtoken="No">
-		</cfif>
-		--->
-		
-		<!--------------------------->
-		<!----- Flash notices ------->
-		<!--------------------------->
-		
-		<cfif NOT structKeyExists(session,'flash')>
-			<cfset session.flash = structNew()>
-		</cfif>
-		<!--- Creates a pointer to session.flash so that when something is changed in request.flash it's also changed in session.flash ---> 
-		<cfset request.flash = session.flash>
-		
-		
-		<!--------------------------->
-		<!---- Controller/Action ---->
-		<!--------------------------->
-		
-		<!--- Try to create an instance of the required controller --->
-		<cfset controllerName = "#application.componentPathTo.controllers#.#request.params.controller#_controller">
-		<cfif application.settings.environment IS "development">
-			<cfif fileExists(expandPath(application.core.componentPathToFilePath(controllerName)&'.cfc'))>
-				<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
-			<cfelse>
-				<cfthrow type="cfwheels.controllerMissing" message="There is no controller named '#request.params.controller#' in this application" detail="Use the <a href=""#application.pathTo.scripts#"">Generator</a> to create a controller!">
-				<cfabort>
-			</cfif>
-		<cfelseif application.settings.environment IS "production">
-			<!---	If we're in production, put the controller code into the application scope if it's not already there 
-					If there's an error then show a page not found --->
-			<cftry>
-				<cfif NOT structKeyExists(application.wheels.controllers,request.params.controller)>
-					<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
-				</cfif>
-				<cfcatch>
-					<cfinclude template="#application.templates.pageNotFound#">
-					<cfabort>
-				</cfcatch>
-			</cftry>
-		</cfif>
-		
-		<!--- Get the instance of this controller --->
-		<cfset Controller = application.wheels.controllers[request.params.controller]>
-		
-		<!--- Initialize the controller --->
-		<cfset Controller.init()>
-		
-		<!--- Before Filters --->
-		<cfif structKeyExists(Controller,'beforeFilters')>
-			<cfloop index="i" from="1" to="#arraylen(Controller.beforeFilters)#">
-				<cfif	(Controller.beforeFilters[i].only IS "" AND Controller.beforeFilters[i].except IS "") OR
-						(Controller.beforeFilters[i].only IS NOT "" AND listFindNoCase(Controller.beforeFilters[i].only, request.params.action)) OR
-						(Controller.beforeFilters[i].except IS NOT "" AND NOT listFindNoCase(Controller.beforeFilters[i].except, request.params.action))>
-					<cfset methodName = trim(Controller.beforeFilters[i].filter)>
-					<!--- Add parenthesis to make this a real method call --->
-					<cfif methodName DOES NOT CONTAIN "(">
-						<cfset methodName = methodName & "()">
-					</cfif>
-					<cfif structKeyExists(Controller,'#spanExcluding(methodName, "(")#')>
-						<cfoutput><cfset evaluate("Controller.#methodName#")></cfoutput>
-					<cfelse>
-						<cfthrow type="cfwheels.beforeFilterMissing" message="There is no action called '#methodName#' which is trying to be called as a beforeFilter()" detail="Remove this action from your beforeFilter declaration, or create an action called '#request.params.action#' in your '#request.params.controller#' controller">
-						<cfabort>
-					</cfif>
-				</cfif>
-			</cfloop>
-		</cfif>
-
-		
-		<!--- Try to call the action --->
-		<!--- If this is development, check to see if the file exists --->
-		<cfif structKeyExists(Controller,request.params.action)>
-			<cfoutput><cfset evaluate("Controller.#request.params.action#()")></cfoutput>
-		<cfelseif structKeyExists(Controller,'methodMissing')>
-			<cfoutput><cfset Controller.methodMissing()></cfoutput>
-		<cfelse>
-			<!--- <cfif NOT fileExists("#expandPath(application.pathTo.views)#/#request.params.controller#/#request.params.action#.cfm")> --->
-				<cfif application.settings.environment IS "development">
-					<cfthrow type="cfwheels.actionMissing" message="There is no action named '#request.params.action#' in the '#request.params.controller#' controller" detail="Create a function called '#request.params.action#' in your controller, or create an action called 'methodMissing()' in your controller to handle requests to undefined actions">
-					<cfabort>
-				<cfelseif application.settings.environment IS "production">
-					<cfinclude template="#application.templates.pageNotFound#">
-					<cfabort>
-				</cfif>
-			<!--- </cfif> --->
-		</cfif>
-		
-		<!--- 	
-			When processing returns to this point, either the controller is done and is ready for the action to be run
-			or the controller has called a render() (which went and called a different action already).  We check for this
-			by looking to see if the buffer has ever been flushed (which means render() has NOT been called) or if there's 
-			currently anything in it.  If not, call the proper action.  
-		--->
-		
-		<cfif NOT getPageContext().getResponse().isCommitted() AND len(trim(getPageContext().getOut().buffer)) IS 0>
-			<cfoutput>#Controller.render(action=request.params.action)#</cfoutput>
-		</cfif>
-		
-		<!--- After Filters --->
-		<cfif structKeyExists(Controller,'afterFilters')>
-			<cfloop index="i" from="1" to="#arraylen(Controller.afterFilters)#">
-				<cfif	(Controller.afterFilters[i].only IS "" AND Controller.afterFilters[i].except IS "") OR
-						(Controller.afterFilters[i].only IS NOT "" AND listFindNoCase(Controller.afterFilters[i].only, request.params.action)) OR
-						(Controller.afterFilters[i].except IS NOT "" AND NOT listFindNoCase(Controller.afterFilters[i].except, request.params.action))>
-					<cfset methodName = trim(Controller.afterFilters[i].filter)>
-					<cfif methodName DOES NOT CONTAIN "(">
-						<cfset methodName = methodName & "()">
-					</cfif>
-					<cfif structKeyExists(Controller,'#spanExcluding(methodName, "(")#')>
-						<cfoutput><cfset evaluate("Controller.#methodName#")></cfoutput>
-					<cfelse>
-						<cfthrow type="cfwheels.afterFilterMissing" message="There is no action called '#methodName#' which is trying to be called as an after filter" detail="Remove this action from your afterFilter declaration, or create the action">
-						<cfabort>
-					</cfif>
-				</cfif>
-			</cfloop>
-		</cfif>
-		
-		<!--- Clear out the flash --->
-		<cfset structClear(session.flash)>
-		
+	
 	</cffunction>
 	
 	
-	<cffunction name="findRoute" access="private" hint="Figures out which route matches this request">
+	<cffunction name="findRoute" access="private" output="false" returntype="void" hint="Figures out which route matches this request">
 		<cfargument name="wheelsaction" type="string" required="true">
 		
 		<cfset var varMatch = "">
@@ -322,16 +374,14 @@
 		
 		<!--- Populate the params structure with the proper parts of the URL --->
 		<cfloop from="1" to="#arrayLen(routeParams)#" index="i">
-			<cfset "params.#routeParams[i]#" = mid(requestString,match.pos[i+1],match.len[i+1])>
+			<cfset "request.params.#routeParams[i]#" = mid(requestString,match.pos[i+1],match.len[i+1])>
 		</cfloop>
 		<!--- Now set the rest of the variables in the route --->
 		<cfloop collection="#foundRoute#" item="key">
 			<cfif key IS NOT "pattern">
-				<cfset params[key] = foundRoute[key]>
+				<cfset request.params[key] = foundRoute[key]>
 			</cfif>
 		</cfloop>
-		
-		<cfreturn params>
 	
 	</cffunction>
 	
