@@ -2,7 +2,7 @@
 	
 	<cfset variables._routes = arrayNew(1)>
 
-	<cffunction name="dispatch" access="remote" output="true">
+	<cffunction name="dispatch" access="remote" output="true" hint="Takes a request and calls the proper controller/action">
 		<cfset var methodName = "">
 		<cfset var controllerName = "">
 		<cfset var requestString = url.wheelsaction>
@@ -41,7 +41,7 @@
 		<!--- Only include the routes if we're in development, or in production but don't already have the variable --->
 		<cfif application.settings.environment IS "development" OR (application.settings.environment IS "production" AND arrayLen(application.wheels.routes) IS 0)>
 			<cfinclude template="#application.pathTo.config#/routes.cfm">
-			<cfset application.wheels.routes = variables._routes>
+			<cfset application.wheels.routes = duplicate(variables._routes)>
 		</cfif>
 		
 		<!--- Compare route to URL --->
@@ -106,14 +106,14 @@
 			<cfset request.xhr = true>
 		</cfif>
 		
-		
-		
 		<!--- Take any FORM variables and put them in params --->
 		<cfif NOT structIsEmpty(form)>
 			<cfloop collection="#form#" item="key">
 				<!--- If a FORM variable contains brackets [] then it represents a model. Build a struct to hold the data, named after the model --->
 				<cfset match = reFindNoCase("(.*?)\[(.*?)\]",key,1,true)>
+				
 				<cfif arrayLen(match.pos) IS 3>
+				
 					<cfset model = lCase(mid(key, match.pos[2], match.len[2]))>
 					<cfset field = lCase(mid(key, match.pos[3], match.len[3]))>
 					
@@ -130,20 +130,16 @@
 							<cfset datesStruct[dateFieldName] = arrayNew(1)>
 						</cfif>
 						<cfset arraySet(datesStruct[dateFieldName],dateFieldPart,dateFieldPart,dateFieldValue)>
-		
 					<cfelse>
-					
 						<!--- regular model-type field --->
 						<cfif NOT structKeyExists(params,'#model#')>
 							<cfset params[model] = structNew()>
 						</cfif>
 						<!--- Should only happen if field does not contain a () --->
 						<cfset "params.#model#.#field#" = form[key]>
-					
 					</cfif>
 					
 				<cfelse>
-				
 					<!--- Just some random form field --->
 					<cfset params[key] = form[key]>
 				</cfif>
@@ -169,7 +165,6 @@
 								<cfset separator = "">
 							</cfdefaultcase>
 						</cfswitch>
-						
 						<cfset thisDate = thisDate & separator & tempArray[i]>
 					</cfloop>
 					<cfset "params.#model#.#key#" = thisDate>
@@ -325,9 +320,9 @@
 	</cffunction>
 	
 	
-	<cffunction name="route" access="private">
-		<cfargument name="pattern" type="string" required="true">
-
+	<cffunction name="route" access="private" hint="Adds a route to dispatch">
+		<cfargument name="pattern" type="string" required="true" hint="The pattern to match against the URL">
+		
 		<cfset var thisRoute = structNew()>
 		
 		<cfset thisRoute.pattern = arguments.pattern>

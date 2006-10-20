@@ -443,7 +443,7 @@
 	
 	<cfsavecontent variable="output">
 		<cfoutput>
-<cgcomponent name="#left(ucase(arguments.controller_name),1)##right(lcase(arguments.controller_name),len(arguments.controller_name)-1)# controller" extends="cfwheels.controllers._controller">
+<cgcomponent name="#left(ucase(arguments.controller_name),1)##right(lcase(arguments.controller_name),len(arguments.controller_name)-1)# controller" extends="cfwheels._controller">
 
 #arguments.actionsCode#
 

@@ -1,7 +1,7 @@
 <cfsetting enablecfoutputonly="false">
 
 <cfif structKeyExists(form,'controller_submit')>
-	<cfset variables.generator = createObject("component","cfwheels.root.generator")>
+	<cfset variables.generator = createObject("component","cfwheels.generator.engine")>
 	<cfset variables.results = variables.generator.generate(type=form.type,controller_name=form.controller_name,action_name=form.action_name)>
 </cfif>
 
