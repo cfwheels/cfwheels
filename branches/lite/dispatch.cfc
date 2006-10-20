@@ -5,8 +5,12 @@
 	<cffunction name="dispatch" access="remote" output="true" hint="Takes a request and calls the proper controller/action">
 		<cfset var methodName = "">
 		<cfset var controllerName = "">
-		<cfset var requestString = url.wheelsaction>
 		<cfset var datesStruct = structNew()>
+		
+		<cfif NOT structKeyExists(url,'wheelsaction')>
+			<cfthrow type="cfwheels.missingWheelsAction" message="There is no 'wheelsaction' variable present in the url" detail="This is most likely caused by a problem with URL rewriting. Check that your URL is being rewritten as '?wheelsaction=/the/original/url'">
+			<cfabort>
+		</cfif>
 	
 		<!---------------------->
 		<!------ Routes -------->
@@ -247,7 +251,7 @@
 		
 		<cfset var varMatch = "">
 		<cfset var valMatch = "">
-		<cfset var var = "">
+		<cfset var vari = "">
 		<cfset var val = "">
 		<cfset var requestString = arguments.wheelsaction>
 		<cfset var routeParams = arrayNew(1)>
@@ -259,18 +263,18 @@
 		<cfset var params = structNew()>
 	
 		<!--- fix URL variables (IIS only) --->
-		<cfif arguments.wheelsaction CONTAINS "?">
-			<cfset var_match = REFind("\?.*=", arguments.wheelsaction, 1, "TRUE")>
-			<cfset val_match = REFind("=.*$", arguments.wheelsaction, 1, "TRUE")>
-			<cfset var = Mid(arguments.wheelsaction, (var_match.pos[1]+1), (var_match.len[1]-2))>
-			<cfset val = Mid(arguments.wheelsaction, (val_match.pos[1]+1), (val_match.len[1]-1))>
-			<cfset "url.#var#" = val>
-			<cfset arguments.wheelsaction = Mid(arguments.wheelsaction, 1, (var_match.pos[1]-1))>
+		<cfif requestString CONTAINS "?">
+			<cfset varMatch = REFind("\?.*=", requestString, 1, "TRUE")>
+			<cfset valMatch = REFind("=.*$", requestString, 1, "TRUE")>
+			<cfset vari = Mid(requestString, (varMatch.pos[1]+1), (varMatch.len[1]-2))>
+			<cfset val = Mid(requestString, (valMatch.pos[1]+1), (valMatch.len[1]-1))>
+			<cfset url[vari] = val>
+			<cfset requestString = Mid(requestString, 1, (var_match.pos[1]-1))>
 		</cfif>
 		
 		<!--- Remove the leading slash in the request (if there was something more than just a slash to begin with) to match our routes --->
 		<cfif len(requestString) GT 1>
-			<cfset requestString = right(arguments.wheelsaction,len(arguments.wheelsaction)-1)>
+			<cfset requestString = right(requestString,len(requestString)-1)>
 		</cfif>
 		<cfif right(requestString,1) IS NOT "/">
 			<cfset requestString = requestString & "/">
