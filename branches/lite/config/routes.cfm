@@ -1,9 +1,9 @@
 <!--- 	
 Define special patterns to match against the URL. Each route is a structure and should follow this format:
 	
-<cfset route(	pattern="controller/action/:id",	# Set the pattern
-				controller="controller_name",		# Set the controller
-				action="action_name" )>				# Set the action
+<cfset addRoute(	pattern="controller/action/:id",	# Set the pattern
+					controller="controller_name",		# Set the controller
+					action="action_name" )>				# Set the action
 
 For the above example, when Wheels sees a URL that matches the above pattern
 (three directories, the first named "controller" and the second named "action")
@@ -13,9 +13,9 @@ that contains the value of the ":id" placeholder in the URL (the third directory
 The default is "id" but you could make this whatever you wanted.  For example, if you were 
 working on a blog and wanted the date built into the URL, you could create a route like:
 
-<cfset route(	pattern="blog/entry/:year/:month/:day",
-				controller="blog",
-				action="entry" )>
+<cfset addRoute(	pattern="blog/entry/:year/:month/:day",
+					controller="blog",
+					action="entry" )>
 
 So that when a user goes to http://www.cfwheels.com/blog/entry/2005/11/06 the params
 structure will have three variables available (year, month and day) and they will be set to
@@ -33,9 +33,9 @@ to put quotes and stuff
 
 <!--- If nothing else matches, fall back to the standard routes (you probably shouldn't edit these) --->
 
-<cfset route(":controller/:action/:id")>
-<cfset route(":controller/:action")>
-<cfset route(":controller")>
+<cfset addRoute(":controller/:action/:id")>
+<cfset addRoute(":controller/:action")>
+<cfset addRoute(":controller")>
 
 <!--- 	
 When you're ready to have your root index file (the page that currently says 
@@ -47,5 +47,5 @@ else matches.
 --->
 
 <!---
-<cfset route(pattern="",controller="say",action="hello")>
+<cfset addRoute(pattern="",controller="say",action="hello")>
 --->

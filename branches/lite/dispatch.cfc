@@ -6,78 +6,14 @@
 		<cfset var methodName = "">
 		<cfset var controllerName = "">
 		<cfset var requestString = url.wheelsaction>
-		<cfset var routes = arrayNew(1)>
-		<cfset var routeParams = arrayNew(1)>
-		<cfset var foundRoute = structNew()>
-		<cfset var params = structNew()>
-		<cfset var thisPattern = "">
-		<cfset var thisRoute = structNew()>
-		<cfset var routeFileLocation = "">
-		<cfset var routeFileHash = "">
 		<cfset var datesStruct = structNew()>
 	
 		<!---------------------->
 		<!------ Routes -------->
 		<!---------------------->
 		
-		<!--- fix URL variables (IIS only) --->
-		<cfif url["wheelsaction"] CONTAINS "?">
-			<cfset var_match = REFind("\?.*=", url["wheelsaction"], 1, "TRUE")>
-			<cfset val_match = REFind("=.*$", url["wheelsaction"], 1, "TRUE")>
-			<cfset var = Mid(url["wheelsaction"], (var_match.pos[1]+1), (var_match.len[1]-2))>
-			<cfset val = Mid(url["wheelsaction"], (val_match.pos[1]+1), (val_match.len[1]-1))>
-			<cfset "url.#var#" = val>
-			<cfset url.wheelsaction = Mid(url["wheelsaction"], 1, (var_match.pos[1]-1))>
-		</cfif>
-		
-		<!--- Remove the leading slash in the request (if there was something more than just a slash to begin with) to match our routes --->
-		<cfif len(requestString) GT 1>
-			<cfset requestString = right(url.wheelsaction,len(url.wheelsaction)-1)>
-		</cfif>
-		<cfif right(requestString,1) IS NOT "/">
-			<cfset requestString = requestString & "/">
-		</cfif>
-		
-		<!--- Only include the routes if we're in development, or in production but don't already have the variable --->
-		<cfif application.settings.environment IS "development" OR (application.settings.environment IS "production" AND arrayLen(application.wheels.routes) IS 0)>
-			<cfinclude template="#application.pathTo.config#/routes.cfm">
-			<cfset application.wheels.routes = duplicate(variables._routes)>
-		</cfif>
-		
-		<!--- Compare route to URL --->
-		<!--- For each route in /config/routes.cfm --->
-		<cfloop from="1" to="#arrayLen(application.wheels.routes)#" index="i">
-			<cfset arrayClear(routeParams)>
-			<cfset thisRoute = application.wheels.routes[i]>
-			
-			<!--- Add a trailing slash to ease pattern matching --->
-			<cfif right(thisRoute.pattern,1) IS NOT "/">
-				<cfset thisRoute.pattern = thisRoute.pattern & "/">
-			</cfif>
-		
-			<!--- Replace any :parts with a regular expression for matching against the URL --->
-			<cfset thisPattern = REReplace(thisRoute.pattern, ":.*?/", "(.+?)/", "all")>
-			<!--- Try to match this route against the URL --->
-			<cfset match = REFindNoCase(thisPattern,requestString,1,true)>
-			
-			<!--- If a match was made, use the result to route the request --->
-			<cfif match.len[1] IS NOT 0>
-				<cfset foundRoute = thisRoute>
-				
-				<!--- For each part of the URL in the route --->
-				<cfloop list="#thisRoute.pattern#" delimiters="/" index="thisPattern">
-					<!--- if this part of the route pattern is a variable --->
-					<cfif find(":",thisPattern)>
-						<cfset arrayAppend(routeParams,right(thisPattern,len(thisPattern)-1))>
-					</cfif>
-				</cfloop>
-				
-				<!--- And leave the loop 'cause we found our route --->
-				<cfbreak>
-			</cfif>
-			
-		</cfloop>
-		
+		<cfset request.params = findRoute(url.wheelsaction)>
+
 		
 		<!--------------------->
 		<!------ Params ------->
@@ -91,16 +27,6 @@
 		<cfset request.xhr = false>
 		<cfset request.currentRequest = url.wheelsaction>
 		
-		<!--- Populate the params structure with the proper parts of the URL --->
-		<cfloop from="1" to="#arrayLen(routeParams)#" index="i">
-			<cfset "params.#routeParams[i]#" = mid(requestString,match.pos[i+1],match.len[i+1])>
-		</cfloop>
-		<!--- Now set the rest of the variables in the route --->
-		<cfloop collection="#foundRoute#" item="key">
-			<cfif key IS NOT "pattern">
-				<cfset "params.#key#" = foundRoute[key]>
-			</cfif>
-		</cfloop>
 		<!--- Check to see if this is an XMLHttpRequest --->
 		<cfif cgi.http_accept CONTAINS "text/javascript">
 			<cfset request.xhr = true>
@@ -133,15 +59,15 @@
 					<cfelse>
 						<!--- regular model-type field --->
 						<cfif NOT structKeyExists(params,'#model#')>
-							<cfset params[model] = structNew()>
+							<cfset request.params[model] = structNew()>
 						</cfif>
 						<!--- Should only happen if field does not contain a () --->
-						<cfset "params.#model#.#field#" = form[key]>
+						<cfset request.params[model][field] = form[key]>
 					</cfif>
 					
 				<cfelse>
 					<!--- Just some random form field --->
-					<cfset params[key] = form[key]>
+					<cfset request.params[key] = form[key]>
 				</cfif>
 			</cfloop>
 			
@@ -167,7 +93,7 @@
 						</cfswitch>
 						<cfset thisDate = thisDate & separator & tempArray[i]>
 					</cfloop>
-					<cfset "params.#model#.#key#" = thisDate>
+					<cfset request.params[model][key] = thisDate>
 				</cfloop>
 			</cfif>
 			
@@ -180,17 +106,13 @@
 			  If a FORM and URL variable are named the same, URL will win and go into params --->
 		<cfloop collection="#url#" item="key">
 			<cfif key IS NOT "method" AND key IS NOT "wheelsaction">
-				<cfset "params.#lCase(key)#" = url[key]>
+				<cfset request.params[lCase(key)] = url[key]>
 			</cfif>
 		</cfloop>
 		<!--- Set the default action if one isn't defined --->
-		<cfif NOT structKeyExists(params,'action')>
-			<cfset params.action = application.default.action>
+		<cfif NOT structKeyExists(request.params,'action')>
+			<cfset request.params.action = application.default.action>
 		</cfif>
-		
-		<!--- Set the REQUEST scope to the value of the params --->
-		<cfset request.params = duplicate(params)>
-		<cfset params = "">
 		
 		<!---
 		<!--- Send to index.cfm when no default route has been setup and the index.cfm file exists --->
@@ -320,7 +242,97 @@
 	</cffunction>
 	
 	
-	<cffunction name="route" access="private" hint="Adds a route to dispatch">
+	<cffunction name="findRoute" access="private" hint="Figures out which route matches this request">
+		<cfargument name="wheelsaction" type="string" required="true">
+		
+		<cfset var varMatch = "">
+		<cfset var valMatch = "">
+		<cfset var var = "">
+		<cfset var val = "">
+		<cfset var requestString = arguments.wheelsaction>
+		<cfset var routeParams = arrayNew(1)>
+		<cfset var thisRoute = structNew()>
+		<cfset var thisPattern = "">
+		<cfset var match = structNew()>
+		<cfset var foundRoute = structNew()>
+		<cfset var returnRoute = structNew()>
+		<cfset var params = structNew()>
+	
+		<!--- fix URL variables (IIS only) --->
+		<cfif arguments.wheelsaction CONTAINS "?">
+			<cfset var_match = REFind("\?.*=", arguments.wheelsaction, 1, "TRUE")>
+			<cfset val_match = REFind("=.*$", arguments.wheelsaction, 1, "TRUE")>
+			<cfset var = Mid(arguments.wheelsaction, (var_match.pos[1]+1), (var_match.len[1]-2))>
+			<cfset val = Mid(arguments.wheelsaction, (val_match.pos[1]+1), (val_match.len[1]-1))>
+			<cfset "url.#var#" = val>
+			<cfset arguments.wheelsaction = Mid(arguments.wheelsaction, 1, (var_match.pos[1]-1))>
+		</cfif>
+		
+		<!--- Remove the leading slash in the request (if there was something more than just a slash to begin with) to match our routes --->
+		<cfif len(requestString) GT 1>
+			<cfset requestString = right(arguments.wheelsaction,len(arguments.wheelsaction)-1)>
+		</cfif>
+		<cfif right(requestString,1) IS NOT "/">
+			<cfset requestString = requestString & "/">
+		</cfif>
+		
+		<!--- Only include the routes if we're in development, or in production but don't already have the variable --->
+		<cfif application.settings.environment IS "development" OR (application.settings.environment IS "production" AND arrayLen(application.wheels.routes) IS 0)>
+			<cfinclude template="#application.pathTo.config#/routes.cfm">
+			<cfset application.wheels.routes = duplicate(variables._routes)>
+		</cfif>
+		
+		<!--- Compare route to URL --->
+		<!--- For each route in /config/routes.cfm --->
+		<cfloop from="1" to="#arrayLen(application.wheels.routes)#" index="i">
+			<cfset arrayClear(routeParams)>
+			<cfset thisRoute = application.wheels.routes[i]>
+			
+			<!--- Add a trailing slash to ease pattern matching --->
+			<cfif right(thisRoute.pattern,1) IS NOT "/">
+				<cfset thisRoute.pattern = thisRoute.pattern & "/">
+			</cfif>
+		
+			<!--- Replace any :parts with a regular expression for matching against the URL --->
+			<cfset thisPattern = REReplace(thisRoute.pattern, ":.*?/", "(.+?)/", "all")>
+			<!--- Try to match this route against the URL --->
+			<cfset match = REFindNoCase(thisPattern,requestString,1,true)>
+			
+			<!--- If a match was made, use the result to route the request --->
+			<cfif match.len[1] IS NOT 0>
+				<cfset foundRoute = thisRoute>
+				
+				<!--- For each part of the URL in the route --->
+				<cfloop list="#thisRoute.pattern#" delimiters="/" index="thisPattern">
+					<!--- if this part of the route pattern is a variable --->
+					<cfif find(":",thisPattern)>
+						<cfset arrayAppend(routeParams,right(thisPattern,len(thisPattern)-1))>
+					</cfif>
+				</cfloop>
+				
+				<!--- And leave the loop 'cause we found our route --->
+				<cfbreak>
+			</cfif>
+			
+		</cfloop>
+		
+		<!--- Populate the params structure with the proper parts of the URL --->
+		<cfloop from="1" to="#arrayLen(routeParams)#" index="i">
+			<cfset "params.#routeParams[i]#" = mid(requestString,match.pos[i+1],match.len[i+1])>
+		</cfloop>
+		<!--- Now set the rest of the variables in the route --->
+		<cfloop collection="#foundRoute#" item="key">
+			<cfif key IS NOT "pattern">
+				<cfset params[key] = foundRoute[key]>
+			</cfif>
+		</cfloop>
+		
+		<cfreturn params>
+	
+	</cffunction>
+	
+	
+	<cffunction name="addRoute" access="private" hint="Adds a route to dispatch">
 		<cfargument name="pattern" type="string" required="true" hint="The pattern to match against the URL">
 		
 		<cfset var thisRoute = structNew()>
