@@ -204,3 +204,21 @@
 </cffunction>
 
 <cfset application.core.queryColumnValuesToList = queryColumnValuesToList>
+
+<cffunction name="createArgs" access="public" output="false" returntype="struct" hint="Creates a struct">
+	<cfargument name="args" type="struct" required="yes">
+	<cfargument name="skipArgs" type="string" required="yes">
+
+	<cfset var argsStruct = structNew()>
+	<cfset var arg = "">
+
+	<cfloop collection="#arguments.args#" item="arg">
+		<cfif NOT listFindNoCase(arguments.skipArgs, arg)>
+			<cfset "argsStruct.#arg#" = evaluate("args.#arg#")>
+		</cfif>
+	</cfloop>
+
+	<cfreturn argsStruct>
+</cffunction>
+
+<cfset application.core.createArgs = createArgs>

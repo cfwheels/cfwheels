@@ -39,14 +39,3 @@
 </cffunction>
 
 <cfset application.core.queryRowToStruct = queryRowToStruct>
-
-<cffunction name="capitalize" access="public" returntype="string" output="false" hint="">
-	<cfargument name="text" type="string" required="true" hint="">
-
-	<cfset var output = uCase(left(arguments.text,1)) & lCase(right(arguments.text,len(arguments.text)-1))>
-	
-	<cfreturn output>
-	
-</cffunction>
-
-<cfset application.core.capitalize = capitalize>

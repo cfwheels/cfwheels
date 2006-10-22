@@ -26,7 +26,7 @@
 		<cfset controller = createController()>
 	
 		<!------ beforeFilters ------>
-		<cfif structKeyExists(controller,'beforeFilters')>
+		<cfif arrayLen(controller.getBeforeFilters()) IS NOT 0>
 			<cfset callBeforeFilters(controller)>
 		</cfif>
 		
@@ -35,9 +35,9 @@
 		
 		<!--- 	
 			When processing returns to this point, either the controller is done and is ready for the action to be run
-			or the controller has called a render() (which went and called a different action already).  We check for this
+			or the controller has called a render() (which went and called a different action/view already).  We check for this
 			by looking to see if the buffer has ever been flushed (which means render() has NOT been called) or if there's 
-			currently anything in it.  If not, call the proper action.  
+			currently anything in it.  If not, render the action's view to the browser   
 		--->
 		
 		<cfif NOT getPageContext().getResponse().isCommitted() AND len(trim(getPageContext().getOut().buffer)) IS 0>
@@ -45,7 +45,7 @@
 		</cfif>
 		
 		<!------ afterFilters ------>
-		<cfif structKeyExists(controller,'afterFilters')>
+		<cfif arrayLen(controller.getAfterFilters()) IS NOT 0>
 			<cfset callAfterFilters(controller)>
 		</cfif>
 		
@@ -62,7 +62,7 @@
 		
 		<cfif application.settings.environment IS "development">
 			<cfif fileExists(expandPath(application.core.componentPathToFilePath(controllerName)&'.cfc'))>
-				<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
+				<cfset controller = createObject("component",controllerName)>
 			<cfelse>
 				<cfthrow type="cfwheels.controllerMissing" message="There is no controller named '#request.params.controller#' in this application" detail="Use the <a href=""#application.pathTo.scripts#"">Generator</a> to create a controller!">
 				<cfabort>
@@ -72,7 +72,7 @@
 					If there's an error then show a page not found --->
 			<cftry>
 				<cfif NOT structKeyExists(application.wheels.controllers,request.params.controller)>
-					<cfset application.wheels.controllers[request.params.controller] = createObject("component",controllerName)>
+					<cfset controller = createObject("component",controllerName)>
 				</cfif>
 				<cfcatch>
 					<cfinclude template="#application.templates.pageNotFound#">
@@ -81,12 +81,8 @@
 			</cftry>
 		</cfif>
 		
-		<!--- Get the instance of this controller --->
-		<cfset controller = application.wheels.controllers[request.params.controller]>
-		<!--- Initialize the controller --->
-		<cfset controller.init()>
-		
-		<cfreturn controller>
+		<!--- Initialize the controller and return it --->
+		<cfreturn controller.init()>
 	
 	</cffunction>
 	
@@ -136,26 +132,25 @@
 	<cffunction name="callBeforeFilters" access="private" returntype="void" hint="Calls the before filters in a controller">
 		<cfargument name="controller" type="any" required="true" hint="The controller to call beforeFilters on">
 	
-		<!--- Before Filters --->
-		<cfif structKeyExists(arguments.controller,'beforeFilters')>
-			<cfloop index="i" from="1" to="#arraylen(Controller.beforeFilters)#">
-				<cfif	(arguments.controller.beforeFilters[i].only IS "" AND Controller.beforeFilters[i].except IS "") OR
-						(arguments.controller.beforeFilters[i].only IS NOT "" AND listFindNoCase(arguments.controller.beforeFilters[i].only, request.params.action)) OR
-						(arguments.controller.beforeFilters[i].except IS NOT "" AND NOT listFindNoCase(arguments.controller.beforeFilters[i].except, request.params.action))>
-					<cfset methodName = trim(arguments.controller.beforeFilters[i].filter)>
-					<!--- Add parenthesis to make this a real method call --->
-					<cfif methodName DOES NOT CONTAIN "(">
-						<cfset methodName = methodName & "()">
-					</cfif>
-					<cfif structKeyExists(arguments.controller,'#spanExcluding(methodName, "(")#')>
-						<cfoutput><cfset evaluate("arguments.controller.#methodName#")></cfoutput>
-					<cfelse>
-						<cfthrow type="cfwheels.beforeFilterMissing" message="There is no action called '#methodName#' which is trying to be called as a beforeFilter()" detail="Remove this action from your beforeFilter declaration, or create an action called '#request.params.action#' in your '#request.params.controller#' controller">
-						<cfabort>
-					</cfif>
+		<cfset var beforeFilters = arguments.controller.getBeforeFilters()>
+		
+		<cfloop index="i" from="1" to="#arraylen(beforeFilters)#">
+			<cfif	(beforeFilters[i].only IS "" AND beforeFilters[i].except IS "") OR
+					(beforeFilters[i].only IS NOT "" AND listFindNoCase(beforeFilters[i].only, request.params.action)) OR
+					(beforeFilters[i].except IS NOT "" AND NOT listFindNoCase(beforeFilters[i].except, request.params.action))>
+				<cfset methodName = trim(beforeFilters[i].filter)>
+				<!--- Add parenthesis to make this a real method call --->
+				<cfif methodName DOES NOT CONTAIN "(">
+					<cfset methodName = methodName & "()">
 				</cfif>
-			</cfloop>
-		</cfif>
+				<cfif structKeyExists(arguments.controller,'#spanExcluding(methodName, "(")#')>
+					<cfoutput><cfset evaluate("arguments.controller.#methodName#")></cfoutput>
+				<cfelse>
+					<cfthrow type="cfwheels.beforeFilterMissing" message="There is no action called '#methodName#' which is trying to be called as a beforeFilter()" detail="Remove this action from your beforeFilter declaration, or create an action called '#request.params.action#' in your '#request.params.controller#' controller">
+					<cfabort>
+				</cfif>
+			</cfif>
+		</cfloop>
 	
 	</cffunction>
 	
@@ -163,24 +158,24 @@
 	<cffunction name="callAfterFilters" access="private" returntype="void" hint="Calls the after filters in a controller">
 		<cfargument name="controller" type="any" required="true" hint="The controller to call beforeFilters on">
 
-		<cfif structKeyExists(arguments.controller,'afterFilters')>
-			<cfloop index="i" from="1" to="#arraylen(arguments.controller.afterFilters)#">
-				<cfif	(arguments.controller.afterFilters[i].only IS "" AND Controller.afterFilters[i].except IS "") OR
-						(arguments.controller.afterFilters[i].only IS NOT "" AND listFindNoCase(arguments.controller.afterFilters[i].only, request.params.action)) OR
-						(arguments.controller.afterFilters[i].except IS NOT "" AND NOT listFindNoCase(arguments.controller.afterFilters[i].except, request.params.action))>
-					<cfset methodName = trim(arguments.controller.afterFilters[i].filter)>
-					<cfif methodName DOES NOT CONTAIN "(">
-						<cfset methodName = methodName & "()">
-					</cfif>
-					<cfif structKeyExists(arguments.controller,'#spanExcluding(methodName, "(")#')>
-						<cfoutput><cfset evaluate("arguments.controller.#methodName#")></cfoutput>
-					<cfelse>
-						<cfthrow type="cfwheels.afterFilterMissing" message="There is no action called '#methodName#' which is trying to be called as an after filter" detail="Remove this action from your afterFilter declaration, or create the action">
-						<cfabort>
-					</cfif>
+		<cfset var afterFilters = arguments.controller.getAfterFilters()>
+		
+		<cfloop index="i" from="1" to="#arraylen(afterFilters)#">
+			<cfif	(afterFilters[i].only IS "" AND Controller.afterFilters[i].except IS "") OR
+					(afterFilters[i].only IS NOT "" AND listFindNoCase(afterFilters[i].only, request.params.action)) OR
+					(afterFilters[i].except IS NOT "" AND NOT listFindNoCase(afterFilters[i].except, request.params.action))>
+				<cfset methodName = trim(afterFilters[i].filter)>
+				<cfif methodName DOES NOT CONTAIN "(">
+					<cfset methodName = methodName & "()">
 				</cfif>
-			</cfloop>
-		</cfif>
+				<cfif structKeyExists(arguments.controller,'#spanExcluding(methodName, "(")#')>
+					<cfoutput><cfset evaluate("arguments.controller.#methodName#")></cfoutput>
+				<cfelse>
+					<cfthrow type="cfwheels.afterFilterMissing" message="There is no action called '#methodName#' which is trying to be called as an afterFilter()" detail="Remove this action from your afterFilter declaration, or create the action">
+					<cfabort>
+				</cfif>
+			</cfif>
+		</cfloop>
 	
 	</cffunction>
 	
@@ -334,7 +329,7 @@
 		
 		<!--- Only include the routes if we're in development, or in production but don't already have the variable --->
 		<cfif application.settings.environment IS "development" OR (application.settings.environment IS "production" AND arrayLen(application.wheels.routes) IS 0)>
-			<cfinclude template="#application.pathTo.config#/routes.cfm">
+			<cfinclude template="#application.pathTo.config#/routes.ini">
 			<cfset application.wheels.routes = duplicate(variables._routes)>
 		</cfif>
 		

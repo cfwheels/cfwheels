@@ -21,6 +21,8 @@
 	[DOCS:EXAMPLE 2 END]
 	--->
 
+	<cfset var output = "">
+	
 	<cfsavecontent variable="output"><cfoutput>
 		<cfloop list="#arguments.name#" index="thisSheet"><link rel="stylesheet" href="#application.pathTo.stylesheets#/#Trim(thisSheet)#.css" type="text/css" media="#arguments.media#" /></cfloop>
 	</cfoutput></cfsavecontent>
@@ -43,6 +45,8 @@
 	[DOCS:EXAMPLE 1 END]
 	--->
 
+	<cfset var output = "">
+	
 	<cfsavecontent variable="output"><cfoutput>
 		<cfloop list="#arguments.name#" index="thisScript"><script src="#application.pathTo.javascripts#/#Trim(thisScript)#.js" type="text/javascript"></script></cfloop>
 	</cfoutput></cfsavecontent>
@@ -72,7 +76,8 @@
 
 	<cfset var src = "">
 	<cfset var sizeArray = ArrayNew(1)>
-
+	<cfset var output = "">
+	
 	<cfif Left(arguments.source, 1) IS "/">
 		<cfset src = arguments.source>
 	<cfelseif arguments.source Contains ".">
@@ -121,6 +126,7 @@
 	
 	<cfset var js = "">
 	<cfset var encoded = "">
+	<cfset var output = "">
 	
 	<cfsavecontent variable="output"><cfoutput>
 		<a href="mailto:#arguments.email_address#"<cfif arguments.id IS NOT ""> id="#arguments.id#"</cfif><cfif arguments.class IS NOT ""> class="#arguments.class#"</cfif><cfif arguments.style IS NOT ""> style="#arguments.style#"</cfif><cfif arguments.title IS NOT ""> title="#arguments.title#"</cfif>><cfif arguments.name IS NOT "">#arguments.name#<cfelse>#arguments.email_address#</cfif></a>
@@ -163,11 +169,12 @@
 	--->
 
 	<cfset var url = "">
-
+	<cfset var output = "">
+	
 	<cfif arguments.link IS NOT "">
 		<cfset url = arguments.link>
 	<cfelse>
-		<cfset url = URLFor(argumentCollection=createArgs(args=arguments, skipArgs="link,name,linkID,class,style,title,target,confirm"))>
+		<cfset url = URLFor(argumentCollection=application.core.createArgs(args=arguments, skipArgs="link,name,linkID,class,style,title,target,confirm"))>
 	</cfif>
 	
 	<cfif arguments.name IS "">
@@ -200,7 +207,8 @@
 	<cfset var theLink = "">
 	<cfset var theImage = "">
 	<cfset var imageLink = "">
-
+	<cfset var output = "">
+	
 	<cfset arguments.name = chr(7)>
 	
 	<cfif structKeyExists(arguments,'linkClass') AND arguments.linkClass IS NOT "">
@@ -213,7 +221,7 @@
 	<cfelse>
 		<cfset arguments.style = "">
 	</cfif>
-	<cfset theLink = linkTo(argumentCollection=createArgs(args=arguments, skipArgs="source,alt,size,imageID,imageClass,imageStyle,linkClass,linkStyle"))>
+	<cfset theLink = linkTo(argumentCollection=application.core.createArgs(args=arguments, skipArgs="source,alt,size,imageID,imageClass,imageStyle,linkClass,linkStyle"))>
 	
 	<cfif structKeyExists(arguments,'imageClass') AND arguments.imageClass IS NOT "">
 		<cfset arguments.class = arguments.imageClass>
@@ -230,7 +238,7 @@
 	<cfelse>
 		<cfset arguments.id = "">
 	</cfif>
-	<cfset theImage = imageTag(argumentCollection=createArgs(args=arguments, skipArgs="link,controller,action,anchor,onlypath,trailingSlash,host,protocol,imageID,imageClass,imageStyle,linkID,linkClass,linkStyle,title,target,confirm"))>
+	<cfset theImage = imageTag(argumentCollection=application.core.createArgs(args=arguments, skipArgs="link,controller,action,anchor,onlypath,trailingSlash,host,protocol,imageID,imageClass,imageStyle,linkID,linkClass,linkStyle,title,target,confirm"))>
 
 	<cfset output = replace(theLink, chr(7), Trim(theImage))>
 
@@ -253,27 +261,29 @@
 	[DOCS:EXAMPLE 1 END]
 	--->
 		
+	<cfset var output = "">
+	
 	<cfsavecontent variable="output">	
-	<cfif isCurrentPage(controller=arguments.controller, action=arguments.action, id=arguments.id) IS true>
-		<cfif arguments.imageClass IS NOT "">
-			<cfset arguments.class = arguments.imageClass>
+		<cfif isCurrentPage(controller=arguments.controller, action=arguments.action, id=arguments.id) IS true>
+			<cfif arguments.imageClass IS NOT "">
+				<cfset arguments.class = arguments.imageClass>
+			<cfelse>
+				<cfset arguments.class = "">
+			</cfif>
+			<cfif arguments.imageStyle IS NOT "">
+				<cfset arguments.style = arguments.imageStyle>
+			<cfelse>
+				<cfset arguments.style = "">
+			</cfif>
+			<cfif arguments.imageID IS NOT "">
+				<cfset arguments.id = arguments.imageID>
+			<cfelse>
+				<cfset arguments.id = "">
+			</cfif>
+			<cfoutput>#imageTag(argumentCollection=application.core.createArgs(args=arguments, skipArgs="link,controller,action,anchor,onlypath,trailingSlash,host,protocol,imageID,imageClass,imageStyle,linkID,linkClass,linkStyle,title,target,confirm"))#</cfoutput>
 		<cfelse>
-			<cfset arguments.class = "">
+			<cfoutput>#linkImageTo(argumentCollection=arguments)#</cfoutput>
 		</cfif>
-		<cfif arguments.imageStyle IS NOT "">
-			<cfset arguments.style = arguments.imageStyle>
-		<cfelse>
-			<cfset arguments.style = "">
-		</cfif>
-		<cfif arguments.imageID IS NOT "">
-			<cfset arguments.id = arguments.imageID>
-		<cfelse>
-			<cfset arguments.id = "">
-		</cfif>
-		<cfoutput>#imageTag(argumentCollection=createArgs(args=arguments, skipArgs="link,controller,action,anchor,onlypath,trailingSlash,host,protocol,imageID,imageClass,imageStyle,linkID,linkClass,linkStyle,title,target,confirm"))#</cfoutput>
-	<cfelse>
-		<cfoutput>#linkImageTo(argumentCollection=arguments)#</cfoutput>
-	</cfif>
 	</cfsavecontent>
 
 	<cfreturn trim(output)>
@@ -301,13 +311,15 @@
 	</ul>
 	[DOCS:EXAMPLE 1 END]
 	--->
-			
+	
+	<cfset var output = "">
+	
 	<cfsavecontent variable="output"><cfoutput>
-	<cfif isCurrentPage(argumentCollection=arguments) IS true>
-		#arguments.name#
-	<cfelse>
-		#linkTo(argumentCollection=arguments)#
-	</cfif>
+		<cfif isCurrentPage(argumentCollection=arguments) IS true>
+			#arguments.name#
+		<cfelse>
+			#linkTo(argumentCollection=arguments)#
+		</cfif>
 	</cfoutput></cfsavecontent>
 
 	<cfreturn trim(output)>
@@ -328,7 +340,9 @@
 	#simpleFormat(comment)#
 	[DOCS:EXAMPLE 1 END]
 	--->
-
+	
+	<cfset var output = "">
+	
 	<cfsavecontent variable="output"><cfoutput>
 		<p>#replace(replace(replace(replace(arguments.text, "#chr(13)##chr(10)##chr(13)##chr(10)#", "</p><p>", "all"), "#chr(13)##chr(10)#", "<br />", "all"), "#chr(10)##chr(10)#", "</p><p>", "all"), "#chr(10)#", "<br />", "all")#</p>
 	</cfoutput></cfsavecontent>
@@ -337,6 +351,7 @@
 </cffunction>
 
 
+<!---
 <cffunction name="truncate" output="false" returntype="string" hint="[DOCS] Truncates text to the supplied length and replaces the last three characters with the supplied truncate_string if the text is longer than length">
 	<cfargument name="text" type="string" required="yes" hint="The text to truncate">
 	<cfargument name="length" type="numeric" required="yes" hint="The length to truncate at">
@@ -355,6 +370,8 @@
 	[DOCS:EXAMPLE 2 END]
 	--->
 
+	<cfset var output = "">
+	
 	<cfsavecontent variable="output"><cfoutput>
 		<cfif len(arguments.text) GT arguments.length>
 			#left(arguments.text, (arguments.length-3))##arguments.truncateString#
@@ -391,8 +408,9 @@
 	--->
 
 	<cfset var thisModel = evaluate("#arguments.model#")>
-	<cfset var linkToArgs = createArgs(args=arguments, skipArgs="model,name,windowSize,linkToCurrentPage,prependToLink,appendToLink,classForCurrent,alwaysShowAnchors")>
-
+	<cfset var linkToArgs = application.core.createArgs(args=arguments, skipArgs="model,name,windowSize,linkToCurrentPage,prependToLink,appendToLink,classForCurrent,alwaysShowAnchors")>
+	<cfset var output = "">
+	
 	<cfsavecontent variable="output"><cfoutput>
 		<cfif arguments.alwaysShowAnchors>
 			<cfif (thisModel.paginatorCurrentPage - arguments.windowSize) GT 1>
@@ -424,7 +442,7 @@
 	
 	<cfreturn trim(output)>
 </cffunction>
-
+--->
 
 <!--- Internal Functions --->
 
@@ -530,17 +548,8 @@
 </cffunction>
 
 
-<cffunction name="createArgs" output="false" returntype="struct" hint="Creates a struct">
-	<cfargument name="args" type="struct" required="yes">
-	<cfargument name="skipArgs" type="string" required="yes">
+<cffunction name="capitalize" access="public" returntype="string" output="false" hint="">
+	<cfargument name="text" type="string" required="true" hint="">
 
-	<cfset var argsStruct = structNew()>
-
-	<cfloop collection="#arguments.args#" item="arg">
-		<cfif NOT listFindNoCase(arguments.skipArgs, arg)>
-			<cfset "argsStruct.#arg#" = evaluate("args.#arg#")>
-		</cfif>
-	</cfloop>
-
-	<cfreturn argsStruct>
+	<cfreturn uCase(left(arguments.text,1)) & lCase(right(arguments.text,len(arguments.text)-1))>
 </cffunction>

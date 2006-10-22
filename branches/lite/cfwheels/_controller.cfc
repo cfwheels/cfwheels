@@ -4,11 +4,12 @@
 	<cfif fileExists(expandPath("#application.filePathTo.controllers#/application_functions.cfm"))>
 		<cfinclude template="#application.filePathTo.controllers#/application_functions.cfm">
 	</cfif>
+	
+	<cfset variables.beforeFilters = arrayNew(1)>
+	<cfset variables.afterFilters = arrayNew(1)>
 
 	<cffunction name="init" access="public" output="false" hint="Called when a controller is instantiated">
 		
-		<cfset core = application.core>
-				
 		<!--- Include common functions for everything --->
 		<cfinclude template="#application.pathTo.includes#/controller_includes.cfm">
 		
@@ -19,15 +20,15 @@
 		<cfif fileExists(expandPath("#application.pathTo.helpers#/#request.params.controller#_helper.cfm"))>
 			<cfinclude template="#application.pathTo.helpers#/#request.params.controller#_helper.cfm">
 		</cfif>
+		
+		<cfreturn this>
 	
 	</cffunction>
 	
 	
 	<cffunction name="renderToString" access="public" returntype="string" output="false" hint="Calls render and returns the results as a string">
 		
-		<cfset var renderResult = render(arguments=arguments, saveToString=true)>
-		
-		<cfreturn renderResult>
+		<cfreturn render(arguments=arguments, saveToString=true)>
 
 	</cffunction>
 	
@@ -219,7 +220,7 @@
 				<cfset url = "/">
 			</cfif>
 		<cfelse>
-			<cfset url = URLFor(argumentCollection=createArgs(args=arguments, skipArgs="link,back,token"))>
+			<cfset url = URLFor(argumentCollection=application.core.createArgs(args=arguments, skipArgs="link,back,token"))>
 		</cfif>
 	
 		<cfif arguments.token>
@@ -237,17 +238,13 @@
 		<cfargument name="except" type="string" required="false" default="" hint="Execute the supplied filter(s) for all actions except these">
 		
 		<cfset var thisFilter = structNew()>
-		
-		<cfif NOT isDefined("this.beforeFilters")>
-			<cfset this.beforeFilters = arrayNew(1)>
-		</cfif>
 
 		<cfloop list="#arguments.filters#" index="filter">
 			<cfset thisFilter = structNew()>
 			<cfset thisFilter.filter = trim(filter)>
 			<cfset thisFilter.only = replace(arguments.only, ", ", ",", "all")>
 			<cfset thisFilter.except = replace(arguments.except, ", ", ",", "all")>
-			<cfset arrayAppend(this.beforeFilters, duplicate(thisFilter))>
+			<cfset arrayAppend(variables.beforeFilters, duplicate(thisFilter))>
 		</cfloop>
 		
 	</cffunction>
@@ -259,19 +256,29 @@
 		<cfargument name="except" type="string" required="false" default="" hint="Execute the supplied filter(s) for all actions except these">
 		
 		<cfset var thisFilter = structNew()>
-		
-		<cfif NOT isDefined("this.afterFilters")>
-			<cfset this.afterFilters = arrayNew(1)>
-		</cfif>
 
 		<cfloop list="#arguments.filters#" index="filter">
 			<cfset thisFilter = structNew()>
 			<cfset thisFilter.filter = trim(filter)>
 			<cfset thisFilter.only = replace(arguments.only, ", ", ",", "all")>
 			<cfset thisFilter.except = replace(arguments.except, ", ", ",", "all")>
-			<cfset arrayAppend(this.afterFilters, duplicate(thisFilter))>
+			<cfset arrayAppend(variables.afterFilters, duplicate(thisFilter))>
 		</cfloop>
 		
+	</cffunction>
+	
+	
+	<cffunction name="getBeforeFilters" access="public" returntype="array" output="false" hint="Returns the beforeFilters for this controller">
+	
+		<cfreturn variables.beforeFilters>
+	
+	</cffunction>
+	
+	
+	<cffunction name="getAfterFilters" access="public" returntype="array" output="false" hint="Returns the beforeFilters for this controller">
+	
+		<cfreturn variables.afterFilters>
+	
 	</cffunction>
 	
 

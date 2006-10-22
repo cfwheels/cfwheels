@@ -21,7 +21,7 @@
 	<cfif arguments.link IS NOT "">
 		<cfset url = arguments.link>
 	<cfelse>
-		<cfset url = URLFor(argumentCollection=createArgs(args=arguments, skipArgs="link,name,method,class,onsubmit,multipart,target,spamProtection"))>
+		<cfset url = URLFor(argumentCollection=application.core.createArgs(args=arguments, skipArgs="link,name,method,class,onsubmit,multipart,target,spamProtection"))>
 	</cfif>
 
 	<cfif arguments.spamProtection>
