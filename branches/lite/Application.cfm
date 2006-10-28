@@ -5,9 +5,16 @@
 
 <cfapplication name="#listLast(getDirectoryFromPath(getBaseTemplatePath()),'/')#" clientmanagement="false" sessionmanagement="true">
 
-<cfif NOT structKeyExists(application, "initialized")>
+<cferror exception="cfwheels" template="/error.cfm" type="exception">
+
+<!--- Reload all application variables --->
+<cfif structKeyExists(url,'reload')>
+	<cfset application.initialized = false>
+</cfif>
+
+<cfif NOT structKeyExists(application, "initialized") OR NOT application.initialized>
 	
-	<cflock scope="application" type="exclusive" timeout="30">
+	<cflock scope="application" type="exclusive" timeout="10">
 
 		<!--- Component paths --->
 		<cfset application.componentPathTo = structNew()>
@@ -26,6 +33,7 @@
 		<cfset application.pathTo.app = "/app">
 		<cfset application.pathTo.cfwheels = "/cfwheels">
 		<cfset application.pathTo.config = "/config">
+		<cfset application.pathTo.scripts = "/script/index.cfm">
 		<cfset application.pathTo.views = application.pathTo.app & "/views">
 		<cfset application.pathTo.layouts = application.pathTo.views & "/layouts">
 		<cfset application.pathTo.helpers = application.pathTo.app & "/helpers">
@@ -35,15 +43,16 @@
 		<cfset application.pathTo.images = "/images">
 		<cfset application.pathTo.stylesheets = "/stylesheets">
 		<cfset application.pathTo.javascripts = "/javascripts">
+		<cfset application.templates.pageNotFound = "/404.cfm">
+		<cfset application.templates.applicationError = "/500.cfm">
 		
 		<!--- File system paths --->
 		<cfset application.absolutePathTo = structNew()>
 		<cfset application.absolutePathTo.webroot = expandPath("/")>
 		<cfset application.absolutePathTo.cfwheels = expandPath(application.pathTo.cfwheels)>
 		
-		<!--- Setup some sensible defaults --->
+		<!--- Create the defaults structure --->
 		<cfset application.default = structNew()>
-		<cfset application.default.action = "index">
 		
 		<!--- Include some Wheels specific stuff --->
 		<cfinclude template="#application.pathTo.includes#/application_includes.cfm">
@@ -53,23 +62,13 @@
 		<cfinclude template="#application.pathTo.includes#/core_includes.cfm">
 
 		<!--- Include environment and database connection info --->
-		<!---
-		<cfinclude template="#application.pathTo.config#/environment.cfm" />
-		<cfinclude template="#application.pathTo.config#/database.cfm" />
-		--->
-		
-		<!--- Possible values are "development" and "production" --->
-		<cfset application.settings.environment = "development">
+		<cfinclude template="#application.pathTo.config#/environment.ini" />
+		<cfinclude template="#application.pathTo.config#/database.ini" />
 
 	</cflock>
 
 	<cfset application.initialized = true>
 
-</cfif>
-
-<!--- Reload all application variables --->
-<cfif structKeyExists(url,'reload')>
-	<cfset this.onApplicationStart()>
 </cfif>
 
 <!--- Clear out session data --->

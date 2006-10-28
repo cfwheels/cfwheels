@@ -3,4 +3,4 @@ RewriteEngine on
 RewriteRule ^$ index.cfm [QSA]
 RewriteRule ^([^.]+)$ $1.htm [QSA]
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ dispatch.cfc?method=dispatch&wheelsaction=%{REQUEST_URI} [QSA,L]
+RewriteRule ^(.*)$ dispatch.cfm?wheelsaction=%{REQUEST_URI} [QSA,L]

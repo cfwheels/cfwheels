@@ -3,9 +3,7 @@
 	<cfset variables._routes = arrayNew(1)>
 
 	<cffunction name="dispatch" access="remote" output="true" hint="Takes a request and calls the proper controller/action">
-		<cfset var methodName = "">
-		<cfset var controllerName = "">
-		<cfset var datesStruct = structNew()>
+		<cfset var controller = "">
 		
 		<!--- If wheelsaction isn't present, we can't do anything --->
 		<cfif NOT structKeyExists(url,'wheelsaction')>
@@ -68,12 +66,9 @@
 				<cfabort>
 			</cfif>
 		<cfelseif application.settings.environment IS "production">
-			<!---	If we're in production, put the controller code into the application scope if it's not already there 
-					If there's an error then show a page not found --->
+			<!---	If we're in production and there's an error then show a page not found --->
 			<cftry>
-				<cfif NOT structKeyExists(application.wheels.controllers,request.params.controller)>
-					<cfset controller = createObject("component",controllerName)>
-				</cfif>
+				<cfset controller = createObject("component",controllerName)>
 				<cfcatch>
 					<cfinclude template="#application.templates.pageNotFound#">
 					<cfabort>
@@ -133,6 +128,7 @@
 		<cfargument name="controller" type="any" required="true" hint="The controller to call beforeFilters on">
 	
 		<cfset var beforeFilters = arguments.controller.getBeforeFilters()>
+		<cfset var methodName = "">
 		
 		<cfloop index="i" from="1" to="#arraylen(beforeFilters)#">
 			<cfif	(beforeFilters[i].only IS "" AND beforeFilters[i].except IS "") OR
@@ -159,6 +155,7 @@
 		<cfargument name="controller" type="any" required="true" hint="The controller to call beforeFilters on">
 
 		<cfset var afterFilters = arguments.controller.getAfterFilters()>
+		<cfset var methodName = "">
 		
 		<cfloop index="i" from="1" to="#arraylen(afterFilters)#">
 			<cfif	(afterFilters[i].only IS "" AND Controller.afterFilters[i].except IS "") OR
@@ -299,7 +296,7 @@
 		<cfset var varMatch = "">
 		<cfset var valMatch = "">
 		<cfset var vari = "">
-		<cfset var val = "">
+		<cfset var vali = "">
 		<cfset var requestString = arguments.wheelsaction>
 		<cfset var routeParams = arrayNew(1)>
 		<cfset var thisRoute = structNew()>
@@ -308,14 +305,16 @@
 		<cfset var foundRoute = structNew()>
 		<cfset var returnRoute = structNew()>
 		<cfset var params = structNew()>
+		<cfset var key = "">
+		<cfset var i = "">
 	
 		<!--- fix URL variables (IIS only) --->
 		<cfif requestString CONTAINS "?">
 			<cfset varMatch = REFind("\?.*=", requestString, 1, "TRUE")>
 			<cfset valMatch = REFind("=.*$", requestString, 1, "TRUE")>
 			<cfset vari = Mid(requestString, (varMatch.pos[1]+1), (varMatch.len[1]-2))>
-			<cfset val = Mid(requestString, (valMatch.pos[1]+1), (valMatch.len[1]-1))>
-			<cfset url[vari] = val>
+			<cfset vali = Mid(requestString, (valMatch.pos[1]+1), (valMatch.len[1]-1))>
+			<cfset url[vari] = vali>
 			<cfset requestString = Mid(requestString, 1, (var_match.pos[1]-1))>
 		</cfif>
 		
@@ -385,6 +384,7 @@
 		<cfargument name="pattern" type="string" required="true" hint="The pattern to match against the URL">
 		
 		<cfset var thisRoute = structNew()>
+		<cfset var arg = "">
 		
 		<cfset thisRoute.pattern = arguments.pattern>
 		<cfloop collection="#arguments#" item="arg">
