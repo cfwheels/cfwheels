@@ -1,4 +1,4 @@
-<cfif application.settings.environment IS "development">
+<cfif application.settings.environment IS "production">
 	<cfif NOT structKeyExists(application.wheels, "dispatch")>
 	    <cflock name="dispatchLock" type="exclusive" timeout="5">
 	        <cfif NOT structKeyExists(application.wheels, "dispatch")>
