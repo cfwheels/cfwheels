@@ -170,11 +170,13 @@
 
 	<cfset var url = "">
 	<cfset var output = "">
+	<cfset var argumentCollection = "">
 	
 	<cfif arguments.link IS NOT "">
 		<cfset url = arguments.link>
 	<cfelse>
-		<cfset url = URLFor(argumentCollection=application.core.createArgs(args=arguments, skipArgs="link,name,linkID,class,style,title,target,confirm"))>
+		<cfset argumentCollection = application.core.createArgs(arguments,"link,name,linkID,class,style,title,target,confirm")>
+		<cfset url = URLFor(argumentCollection=argumentCollection)>
 	</cfif>
 	
 	<cfif arguments.name IS "">
@@ -460,7 +462,7 @@
 </cffunction>
 
 
-<cffunction name="URLFor" output="false" returntype="string" hint="Outputs a URL for the included parameters">
+<cffunction name="URLFor" output="true" returntype="string" hint="Outputs a URL for the included parameters">
 	<cfargument name="controller" type="string" required="no" default="" hint="The controller to link to">
 	<cfargument name="action" type="string" required="no" default="" hint="The action to link to">
 	<cfargument name="id" type="numeric" required="no" default=0 hint="The ID to link to">
@@ -502,18 +504,19 @@
 	</cfif>
 
 	<cfloop collection="#arguments#" item="arg">
-	<cfif NOT listFindNoCase(argList, arg)>
-		<cfif newParams Does Not Contain "?">
-			<cfset newParams = "?">
+		<cfif NOT listFindNoCase(argList, arg)>
+			<cfif newParams Does Not Contain "?">
+				<cfset newParams = "?">
+			</cfif>
+			<cfset newParams = newParams & arg & "=" & evaluate("arguments.#arg#") & "&">
 		</cfif>
-		<cfset newParams = newParams & arg & "=" & evaluate("arguments.#arg#") & "&">
-	</cfif>
 	</cfloop>
 	<cfif newParams IS NOT "">
 		<cfset newParams = left(newParams, len(newParams)-1)>
 	</cfif>
 
-	<cfset url = "/#newController#/#newAction#">	
+	<cfset url = "/#newController#/#newAction#">
+	
 	<cfif newID IS NOT "">
 		<cfset url = url & "/#newID#">	
 	</cfif>

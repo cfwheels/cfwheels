@@ -112,7 +112,7 @@
 			</cfif>
 		</cfsavecontent>
 		
-		<cfif arguments.saveToString IS TRUE>
+		<cfif arguments.saveToString IS true>
 			<cfreturn renderResult>
 		<cfelse>
 			#renderResult#
@@ -123,12 +123,16 @@
 	<cffunction name="renderLayout" access="public" returntype="void" output="true" hint="Includes the layout for the given controller">
 		
 		<cfif arguments.layout IS NOT true AND fileExists(expandPath("#application.pathTo.layouts#/#Replace(arguments.layout, " ", "_", "ALL")#_layout.cfm"))>
+			<!--- Another designated layout --->
 			<cfinclude template="#application.pathTo.layouts#/#Replace(arguments.layout, " ", "_", "ALL")#_layout.cfm" />
 		<cfelseif fileExists(expandPath("#application.pathTo.layouts#/#arguments.controller#_layout.cfm"))>
+			<!--- The current controller's layout --->
 			<cfinclude template="#application.pathTo.layouts#/#arguments.controller#_layout.cfm" />
 		<cfelseif fileExists(expandPath("#application.pathTo.layouts#/application_layout.cfm"))>
+			<!--- Application layout --->
 			<cfinclude template="#application.pathTo.layouts#/application_layout.cfm" />
 		<cfelse>
+			<!--- No layout available, just display the view --->
 			<cfset contentForLayout()>
 		</cfif>
 
@@ -220,10 +224,10 @@
 				<cfset url = "/">
 			</cfif>
 		<cfelse>
-			<cfset url = URLFor(argumentCollection=application.core.createArgs(args=arguments, skipArgs="link,back,token"))>
+			<cfset url = urlFor(argumentCollection=application.core.createArgs(args=arguments, skipArgs="link,back,token"))>
 		</cfif>
 	
-		<cfif arguments.token>
+		<cfif arguments.token IS true>
 			<cflocation url="#url#">
 		<cfelse>
 			<cflocation url="#url#" addtoken="false">
