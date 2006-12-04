@@ -26,27 +26,23 @@
 		
 		<p>To learn more about Wheels:</p>
 		<ul>
-			<li>Read <a href="##">Building Web Applications with ColdFusion on Wheels</a>, the book</li>
-			<li>Visit the online API docs at <a href="http://docs.cfwheels.com">http://docs.cfwheels.com</a></li>
+			<li>Visit the <a href="http://www.cfwheels.com">official website</a> to keep up to date on everything related to Wheels</li>
+			<li>Go to <a href="http://cfwheels.stikipad.com/docs">the documentation wiki</a> to read tutorials and view the API</li>
+			<li>Ask questions and get answers at the <a href="http://groups.google.com/group/cfwheels">Google Group</a></li>
 		</ul>
 		
-		<p>To get involved with the community:</p>
+		<p>To contribute to the Wheels project:</p>
 		<ul>
-			<li>Visit <a href="http://www.cfwheels.com" title="Go to CFWheels.com">The Official Site</a> and <a href="http://www.cfwheels.com/weblog" title="Go to the CFWheels weblog">Blog</a></li>
-			<li>Ask questions and get answers at the <a href="##">CFWheels Google Group</a></li>
+			<li>Submit bug reports, request new features and download the source code at <a href="http://code.google.com/p/cfwheels/" title="Go to Google Code">Google Code</a></li>
 		</ul>
 		
 		<h3>How do I remove this page?</h3>
 		<p>First delete it from the root of your site's directory. Then, add a new 
 			<dfn title="A route tells Wheels about how your URLs should map to files in your application">route</dfn> 
-			(located in <code>#application.pathTo.config#/routes.cfm</code>) to the end of the file to specify a default controller and action:</p>
+			(located in <code>#application.pathTo.config#/routes.ini</code>) to the end of the file to specify a default controller and action:</p>
 		
 		<code class="block">
-			&lt;cfset route.pattern = ""&gt;<br />
-			&lt;cfset route.controller = "say"&gt;<br />
-			&lt;cfset route.action = "hello"&gt;<br />
-			&lt;cfset arrayAppend(routes,duplicate(route))&gt;<br />
-			&lt;cfset structClear(route)&gt;<br />
+			&lt;cfset addRoute(pattern="", controller="say", action="hello")&gt;
 		</code>
 	</cfoutput>
 </div>
