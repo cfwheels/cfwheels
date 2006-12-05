@@ -170,13 +170,17 @@
 
 	<cfset var url = "">
 	<cfset var output = "">
-	<cfset var argumentCollection = "">
+	<cfset var new_arguments = "">
+	<cfset var i = "">
 	
 	<cfif arguments.link IS NOT "">
 		<cfset url = arguments.link>
 	<cfelse>
-		<cfset argumentCollection = application.core.createArgs(arguments,"link,name,linkID,class,style,title,target,confirm")>
-		<cfset url = URLFor(argumentCollection=argumentCollection)>
+		<cfset new_arguments = duplicate(arguments)>
+		<cfloop list="link,name,linkID,class,style,title,target,confirm" index="i">
+			<cfset structDelete(new_arguments, i)>
+		</cfloop>
+		<cfset url = urlFor(argumentCollection=new_arguments)>
 	</cfif>
 	
 	<cfif arguments.name IS "">
@@ -210,6 +214,8 @@
 	<cfset var theImage = "">
 	<cfset var imageLink = "">
 	<cfset var output = "">
+	<cfset var new_arguments = "">
+	<cfset var i = "">
 	
 	<cfset arguments.name = chr(7)>
 	
@@ -223,8 +229,13 @@
 	<cfelse>
 		<cfset arguments.style = "">
 	</cfif>
-	<cfset theLink = linkTo(argumentCollection=application.core.createArgs(args=arguments, skipArgs="source,alt,size,imageID,imageClass,imageStyle,linkClass,linkStyle"))>
 	
+	<cfset new_arguments = duplicate(arguments)>
+	<cfloop list="source,alt,size,imageID,imageClass,imageStyle,linkClass,linkStyle" index="i">
+		<cfset structDelete(new_arguments, i)>
+	</cfloop>
+	<cfset theLink = linkTo(argumentCollection=new_arguments)>
+
 	<cfif structKeyExists(arguments,'imageClass') AND arguments.imageClass IS NOT "">
 		<cfset arguments.class = arguments.imageClass>
 	<cfelse>
@@ -240,7 +251,12 @@
 	<cfelse>
 		<cfset arguments.id = "">
 	</cfif>
-	<cfset theImage = imageTag(argumentCollection=application.core.createArgs(args=arguments, skipArgs="link,controller,action,anchor,onlypath,trailingSlash,host,protocol,imageID,imageClass,imageStyle,linkID,linkClass,linkStyle,title,target,confirm"))>
+
+	<cfset new_arguments = duplicate(arguments)>
+	<cfloop list="link,controller,action,anchor,onlypath,trailingSlash,host,protocol,imageID,imageClass,imageStyle,linkID,linkClass,linkStyle,title,target,confirm" index="i">
+		<cfset structDelete(new_arguments, i)>
+	</cfloop>
+	<cfset theImage = imageTag(argumentCollection=new_arguments)>
 
 	<cfset output = replace(theLink, chr(7), Trim(theImage))>
 
@@ -264,6 +280,8 @@
 	--->
 		
 	<cfset var output = "">
+	<cfset var new_arguments = "">
+	<cfset var i = "">
 	
 	<cfsavecontent variable="output">	
 		<cfif isCurrentPage(controller=arguments.controller, action=arguments.action, id=arguments.id) IS true>
@@ -282,7 +300,11 @@
 			<cfelse>
 				<cfset arguments.id = "">
 			</cfif>
-			<cfoutput>#imageTag(argumentCollection=application.core.createArgs(args=arguments, skipArgs="link,controller,action,anchor,onlypath,trailingSlash,host,protocol,imageID,imageClass,imageStyle,linkID,linkClass,linkStyle,title,target,confirm"))#</cfoutput>
+			<cfset new_arguments = duplicate(arguments)>
+			<cfloop list="link,controller,action,anchor,onlypath,trailingSlash,host,protocol,imageID,imageClass,imageStyle,linkID,linkClass,linkStyle,title,target,confirm" index="i">
+				<cfset structDelete(new_arguments, i)>
+			</cfloop>
+			<cfoutput>#imageTag(argumentCollection=new_arguments)#</cfoutput>
 		<cfelse>
 			<cfoutput>#linkImageTo(argumentCollection=arguments)#</cfoutput>
 		</cfif>
@@ -410,34 +432,40 @@
 	--->
 
 	<cfset var thisModel = evaluate("#arguments.model#")>
-	<cfset var linkToArgs = application.core.createArgs(args=arguments, skipArgs="model,name,windowSize,linkToCurrentPage,prependToLink,appendToLink,classForCurrent,alwaysShowAnchors")>
+	<cfset var new_arguments = "">
+	<cfset var i = "">
 	<cfset var output = "">
+
+	<cfset new_arguments = duplicate(arguments)>
+	<cfloop list="model,name,windowSize,linkToCurrentPage,prependToLink,appendToLink,classForCurrent,alwaysShowAnchors" index="i">
+		<cfset structDelete(new_arguments, i)>
+	</cfloop>
 	
 	<cfsavecontent variable="output"><cfoutput>
 		<cfif arguments.alwaysShowAnchors>
 			<cfif (thisModel.paginatorCurrentPage - arguments.windowSize) GT 1>
-				<cfset "linkToArgs.#arguments.name#" = 1>
-				<cfset linkToArgs.name = 1>
-				#linkTo(argumentCollection=linkToArgs)# ...
+				<cfset "new_arguments.#arguments.name#" = 1>
+				<cfset new_arguments.name = 1>
+				#linkTo(argumentCollection=new_arguments)# ...
 			</cfif>
 		</cfif>
 		<cfloop from="1" to="#thisModel.paginatorTotalPages#" index="i">
 			<cfif (i GTE (thisModel.paginatorCurrentPage - arguments.windowSize) AND i LTE thisModel.paginatorCurrentPage) OR (i LTE (thisModel.paginatorCurrentPage + arguments.windowSize) AND i GTE thisModel.paginatorCurrentPage)>
-				<cfset "linkToArgs.#arguments.name#" = i>
-				<cfset linkToArgs.name = i>
+				<cfset "new_arguments.#arguments.name#" = i>
+				<cfset new_arguments.name = i>
 				<cfif arguments.classForCurrent IS NOT "" AND thisModel.paginatorCurrentPage IS i>
-					<cfset linkToArgs.class = arguments.classForCurrent>
+					<cfset new_arguments.class = arguments.classForCurrent>
 				<cfelse>
-					<cfset linkToArgs.class = "">
+					<cfset new_arguments.class = "">
 				</cfif>
-				<cfif arguments.prependToLink IS NOT "">#arguments.prependToLink#</cfif><cfif thisModel.paginatorCurrentPage IS NOT i OR arguments.linkToCurrentPage>#linkTo(argumentCollection=linkToArgs)#<cfelse><cfif arguments.classForCurrent IS NOT ""><span class="#arguments.classForCurrent#">#i#</span><cfelse>#i#</cfif></cfif><cfif arguments.appendToLink IS NOT "">#arguments.appendToLink#</cfif>
+				<cfif arguments.prependToLink IS NOT "">#arguments.prependToLink#</cfif><cfif thisModel.paginatorCurrentPage IS NOT i OR arguments.linkToCurrentPage>#linkTo(argumentCollection=new_arguments)#<cfelse><cfif arguments.classForCurrent IS NOT ""><span class="#arguments.classForCurrent#">#i#</span><cfelse>#i#</cfif></cfif><cfif arguments.appendToLink IS NOT "">#arguments.appendToLink#</cfif>
 			</cfif>
 		</cfloop>
 		<cfif arguments.alwaysShowAnchors>
 			<cfif thisModel.paginatorTotalPages GT (thisModel.paginatorCurrentPage + arguments.windowSize)>
-				<cfset "linkToArgs.#arguments.name#" = thisModel.paginatorTotalPages>
-				<cfset linkToArgs.name = thisModel.paginatorTotalPages>
-			... #linkTo(argumentCollection=linkToArgs)#
+				<cfset "new_arguments.#arguments.name#" = thisModel.paginatorTotalPages>
+				<cfset new_arguments.name = thisModel.paginatorTotalPages>
+			... #linkTo(argumentCollection=new_arguments)#
 			</cfif>
 		</cfif>
 	</cfoutput></cfsavecontent>

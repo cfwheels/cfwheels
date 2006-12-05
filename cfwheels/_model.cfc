@@ -1,10 +1,8 @@
 <cfcomponent name="Model">
 
-	<!--- Include common functions --->
 	<cfinclude template="#application.pathTo.includes#/request_includes.cfm">
 
 
-	<!--- Initialize the current object (do it from the model file stored in application scope if it is available to speed things up) --->
 	<cffunction name="init" returntype="any" access="public" output="false">
 		<cfset var get_columns_query = "">	
 	

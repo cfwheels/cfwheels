@@ -17,11 +17,17 @@
 	--->
 
 	<cfset var url = "">
+	<cfset var new_arguments = "">
+	<cfset var i = "">
 
 	<cfif arguments.link IS NOT "">
 		<cfset url = arguments.link>
 	<cfelse>
-		<cfset url = URLFor(argumentCollection=application.core.createArgs(args=arguments, skipArgs="link,name,method,class,onsubmit,multipart,target,spamProtection"))>
+		<cfset new_arguments = duplicate(arguments)>
+		<cfloop list="link,name,method,class,onsubmit,multipart,target,spamProtection" index="i">
+			<cfset structDelete(new_arguments, i)>
+		</cfloop>
+		<cfset url = urlFor(argumentCollection=new_arguments)>
 	</cfif>
 
 	<cfif arguments.spamProtection>
