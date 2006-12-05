@@ -227,7 +227,6 @@
 				<cfset url = "/">
 			</cfif>
 		<cfelse>
-			<cfdump var="#arguments#">
 			<cfset new_arguments = duplicate(arguments)>
 			<cfset structDelete(new_arguments, "link")>
 			<cfset structDelete(new_arguments, "back")>
