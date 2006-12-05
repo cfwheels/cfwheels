@@ -1,5 +1,8 @@
 <cfcomponent displayname="Application Controller" hint="The base class of all controllers">
 	
+	<!--- Include common functions --->
+	<cfinclude template="#application.pathTo.includes#/request_includes.cfm">
+
 	<!--- Include functions that should be available to all controllers --->
 	<cfif fileExists(expandPath("#application.filePathTo.controllers#/application_functions.cfm"))>
 		<cfinclude template="#application.filePathTo.controllers#/application_functions.cfm">

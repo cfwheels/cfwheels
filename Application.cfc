@@ -95,7 +95,8 @@
 			<cfset structClear(session)>
 		</cfif>
 		
-		<!---<cfdump var="#application#">--->	
+		<cfinclude template="#application.pathTo.includes#/request_includes.cfm">
+
 	</cffunction>
 	
 	

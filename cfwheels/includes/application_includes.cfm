@@ -2,7 +2,7 @@
 <cfset application.wheels.version = "0.6">
 <cfset application.wheels.controllers = structNew()>
 <cfset application.wheels.routes = arrayNew(1)>
-<!--- <cfset application.wheels.models = structNew()> --->
+<cfset application.wheels.models = structNew()>
 
 <!---
 <!--- Used for pluralization and singularization functions --->
