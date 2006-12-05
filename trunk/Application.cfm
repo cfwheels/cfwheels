@@ -75,3 +75,5 @@
 <cfif structKeyExists(url,'clearsession')>
 	<cfset structClear(session)>
 </cfif>
+
+<cfinclude template="#application.pathTo.includes#/request_includes.cfm">
