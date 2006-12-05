@@ -1,10 +1,12 @@
 <cfset application.wheels = structNew()>
-<cfset application.wheels.version = "0.6">
+<cfset application.wheels.version = "0.6.1">
 <cfset application.wheels.controllers = structNew()>
 <cfset application.wheels.routes = arrayNew(1)>
 <cfset application.wheels.models = structNew()>
 
-<!---
+<cfset application.wheels.model_functions = "findByID,findAll,findOne,new,create,init,getColumnInfo,getColumnList,setTableName,getTableName,setPrimaryKey,getPrimaryKey">
+<cfset application.wheels.object_functions = "init,update,destroy,save,model,isNewRecord">
+
 <!--- Used for pluralization and singularization functions --->
 <cfset application.wheels.pluralizationRules = arrayNew(2)>
 <cfset application.wheels.singularizationRules = arrayNew(2)>
@@ -154,4 +156,3 @@
 <cfset application.wheels.singularizationRules[36][2] = "\1ews">
 <cfset application.wheels.singularizationRules[37][1] = "s$">
 <cfset application.wheels.singularizationRules[37][2] = "">
---->

@@ -230,7 +230,7 @@
 						<cfset arraySet(datesStruct[dateFieldName],dateFieldPart,dateFieldPart,dateFieldValue)>
 					<cfelse>
 						<!--- regular model-type field --->
-						<cfif NOT structKeyExists(params,'#model#')>
+						<cfif NOT structKeyExists(request.params,'#model#')>
 							<cfset request.params[model] = structNew()>
 						</cfif>
 						<!--- Should only happen if field does not contain a () --->
