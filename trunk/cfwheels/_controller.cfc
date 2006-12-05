@@ -227,7 +227,12 @@
 				<cfset url = "/">
 			</cfif>
 		<cfelse>
-			<cfset url = urlFor(argumentCollection=application.core.createArgs(args=arguments, skipArgs="link,back,token"))>
+			<cfdump var="#arguments#">
+			<cfset new_arguments = duplicate(arguments)>
+			<cfset structDelete(new_arguments, "link")>
+			<cfset structDelete(new_arguments, "back")>
+			<cfset structDelete(new_arguments, "token")>
+			<cfset url = urlFor(argumentCollection=new_arguments)>
 		</cfif>
 	
 		<cfif arguments.token IS true>

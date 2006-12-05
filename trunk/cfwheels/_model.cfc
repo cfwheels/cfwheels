@@ -1,9 +1,5 @@
 <cfcomponent name="Model">
 
-	<!--- Global variables --->
-	<cfset this.model_functions = "findByID,findAll,findOne,new,create,init,getColumnInfo,getColumnList,setTableName,getTableName,setPrimaryKey,getPrimaryKey">
-	<cfset this.object_functions = "init,update,destroy,save,model,isNewRecord">
-
 	<!--- Include common functions --->
 	<cfinclude template="#application.pathTo.includes#/request_includes.cfm">
 
@@ -142,7 +138,7 @@
 			<cfset new_object.recordfound = true>
 			<cfset new_object.recordcount = arguments.value_collection.recordcount>
 			<cfloop list="#arguments.value_collection.columnlist#" index="i">
-				<cfif listFindNoCase(variables.column_list, i) IS NOT 0>
+				<cfif listFindNoCase(variables.column_list, replaceNoCase(i, (variables.model_name & "_"), "")) IS NOT 0>
 					<cfset new_object[replaceNoCase(i, (variables.model_name & "_"), "")] = arguments.value_collection[i][1]>
 				</cfif>
 			</cfloop>
@@ -162,7 +158,7 @@
 		</cfif>
 		
 		<!--- Remove model functions --->
-		<cfloop list="#this.model_functions#" index="i">
+		<cfloop list="#application.wheels.model_functions#" index="i">
 			<cfset "new_object.#i#" = "Model function (not available for individual objects)">
 		</cfloop>
 	
@@ -226,7 +222,7 @@
 		<cfif application.database.type IS "sqlserver">
 			SCOPE_IDENTITY() AS last_id
 		<cfelseif application.database.type IS "mysql5">
-			LAST_INSERTED_ID() AS last_id
+			LAST_INSERT_ID() AS last_id
 		</cfif>
 		</cfquery>
 		<cfset this[variables.primary_key] = get_id_query.last_id>
