@@ -31,11 +31,87 @@
 				<cfloop list="#application.wheels.object_functions#" index="i">
 					<cfset "application.wheels.models.#arguments.name#.#i#" = "Object function (only available for individual objects)">
 				</cfloop>
-	        </cfif>
+			</cfif>
 	    </cflock>
 	</cfif>
 
 	<cfset "application.wheels.models.#arguments.name#_hash" = model_hash>
 
 	<cfreturn application.wheels.models[arguments.name]>
+</cffunction>
+
+<cffunction name="pluralize" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="yes">
+	<cfargument name="from_singularize" type="boolean" required="no" default="false">
+	
+	<cfset var output = arguments.text>
+	<cfset var firstLetter = left(output,1)>
+	
+	<cfloop index="i" from="1" to="#ArrayLen(application.wheels.pluralizationRules)#">
+		<cfif REFindNoCase(application.wheels.pluralizationRules[i][1], arguments.text)>
+			<cfset output = REReplaceNoCase(arguments.text, application.wheels.pluralizationRules[i][1], application.wheels.pluralizationRules[i][2])>
+			<cfset output = firstLetter & right(output,len(output)-1)>
+			<cfbreak> 
+		</cfif>
+	</cfloop>
+	
+	<cfif NOT arguments.from_singularize AND output IS singularize(output, true)>
+		<cfset output = arguments.text>
+	</cfif>
+	
+	<cfreturn output>
+</cffunction>
+
+
+<cffunction name="singularize" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="yes">
+	<cfargument name="from_pluralize" type="boolean" required="no" default="false">
+
+	<cfset var output = arguments.text>
+	<cfset var firstLetter = left(output,1)>
+	
+	<cfloop index="i" from="1" to="#ArrayLen(application.wheels.singularizationRules)#">
+		<cfif REFindNoCase(application.wheels.singularizationRules[i][1], arguments.text)>
+			<cfset output = REReplaceNoCase(arguments.text, application.wheels.singularizationRules[i][1], application.wheels.singularizationRules[i][2])>
+			<cfset output = firstLetter & right(output,len(output)-1)>
+			<cfbreak> 
+		</cfif>
+	</cfloop>
+
+	<cfif NOT arguments.from_pluralize AND output IS pluralize(output, true)>
+		<cfset output = arguments.text>
+	</cfif>
+	
+	<cfreturn output>
+</cffunction>
+
+
+<cffunction name="camelCase" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="yes">
+
+	<cfset var output = "">
+	
+		<cfloop list="#arguments.text#" delimiters="_" index="i">
+			<cfset output = output & uCase(left(i,1)) & lCase(right(i,len(i)-1))>
+		</cfloop>
+		<cfset output = lCase(left(output,1)) & right(output,len(output)-1)>
+
+	<cfreturn output>
+</cffunction>
+
+
+<cffunction name="unCamelCase" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="yes">
+
+	<cfset var output = arguments.text>
+	<cfset var pos = 2>
+
+	<cfloop condition="#reFind('[A-Z]', arguments.text, pos)# GT 0">
+		<cfset pos = reFind('[A-Z]', arguments.text, pos)>
+		<cfset output = insert("_", output, pos-1)>
+		<cfset pos = pos + 1>
+	</cfloop>
+	<cfset output = lCase(output)>
+
+	<cfreturn output>
 </cffunction>
