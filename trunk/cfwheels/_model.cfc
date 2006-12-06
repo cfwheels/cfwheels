@@ -74,6 +74,11 @@
 	</cffunction>
 	
 	
+	<cffunction name="getModelName" returntype="string" access="public" output="false">
+		<cfreturn variables.model_name>
+	</cffunction>
+	
+	
 	<cffunction name="getTableName" returntype="string" access="public" output="false">
 		<cfreturn variables.table_name>
 	</cffunction>
@@ -128,8 +133,10 @@
 		<cfset var new_object = "">
 		
 		<cfset new_object = createObject("component", "app.models.#variables.model_name#").init()>
-		<cfset new_object.recordfound = false>
+		<cfset new_object.errors = arrayNew(1)>
+		<cfset new_object.query = "">
 		<cfset new_object.recordcount = 0>
+		<cfset new_object.recordfound = false>
 
 		<cfif isQuery(arguments.value_collection) AND arguments.value_collection.recordcount GT 0>
 			<cfset new_object.query = arguments.value_collection>
@@ -166,14 +173,54 @@
 	
 	<cffunction name="save" returntype="boolean" access="public" output="false">
 
-		<cfif isNewRecord()>
-			<cfif NOT insertRecord()>
+		<cfif valid()>
+			<cfif isDefined("beforeValidation") AND NOT beforeValidation()>
+				<cfreturn false>
+			</cfif>
+			<cfif isNewRecord()>
+				<cfset validateOnCreate()>
+				<cfif isDefined("afterValidationOnCreate") AND NOT afterValidationOnCreate()>
+					<cfreturn false>
+				</cfif>
+			<cfelse>
+				<cfset validateOnUpdate()>		
+				<cfif isDefined("afterValidationOnUpdate") AND NOT afterValidationOnUpdate()>
+					<cfreturn false>
+				</cfif>
+			</cfif>
+			<cfset validate()>
+			<cfif isDefined("afterValidation") AND NOT afterValidation()>
+				<cfreturn false>
+			</cfif>
+			<cfif isDefined("beforeSave") AND NOT beforeSave()>
+				<cfreturn false>
+			</cfif>
+			<cfif isNewRecord()>
+				<cfif isDefined("beforeCreate") AND NOT beforeCreate()>
+					<cfreturn false>
+				</cfif>
+				<cfif NOT insertRecord()>
+					<cfreturn false>
+				</cfif>
+				<cfif isDefined("afterCreate") AND NOT afterCreate()>
+					<cfreturn false>
+				</cfif>
+			<cfelse>
+				<cfif isDefined("beforeUpdate") AND NOT beforeUpdate()>
+					<cfreturn false>
+				</cfif>
+				<cfif NOT updateRecord()>
+					<cfreturn false>
+				</cfif>
+				<cfif isDefined("afterUpdate") AND NOT afterUpdate()>
+					<cfreturn false>
+				</cfif>
+			</cfif>
+			<cfif isDefined("afterSave") AND NOT afterSave()>
 				<cfreturn false>
 			</cfif>
 		<cfelse>
-			<cfif NOT updateRecord()>
-				<cfreturn false>
-			</cfif>
+			<cfreturn false>
 		</cfif>
 	
 		<cfreturn true>
@@ -461,6 +508,82 @@
 	</cffunction>
 
 
+	<cffunction name="addError" returntype="boolean" access="public" output="false">
+		<cfargument name="field" required="yes" type="string">
+		<cfargument name="message" required="yes" type="string">
+		
+		<cfset var this_error = structNew()>
+	
+		<cfset this_error.field = arguments.field>
+		<cfset this_error.message = arguments.message>
+		
+		<cfset arrayAppend(this.errors, this_error)>
+		
+		<cfreturn true>
+	</cffunction>
+	
+	
+	<cffunction name="valid" access="public" returntype="boolean">
+		<cfif isNewRecord()>
+			<cfset validateOnCreate()>
+		<cfelse>
+			<cfset validateOnUpdate()>		
+		</cfif>
+		<cfset validate()>
+		<cfreturn errorsIsEmpty()>
+	</cffunction>
+	
+	
+	<cffunction name="errorsIsEmpty" returntype="boolean" access="public" output="false">
+		<cfif arrayLen(this.errors) GT 0>
+			<cfreturn false>
+		<cfelse>
+			<cfreturn true>
+		</cfif>		
+	</cffunction>
+	
+	
+	<cffunction name="clearErrors" returntype="boolean" access="public" output="false">
+		<cfset arrayClear(this.errors)>
+		<cfreturn true>
+	</cffunction>
+	
+	
+	<cffunction name="errorsFullMessages" returntype="any" access="public" output="false">
+	
+		<cfset var all_error_messages = arrayNew(1)>
+		
+		<cfloop from="1" to="#arrayLen(this.errors)#" index="i">
+			<cfset arrayAppend(all_error_messages, this.errors[i].message)>
+		</cfloop>
+	
+		<cfif arrayLen(all_error_messages) IS 0>
+			<cfreturn false>
+		<cfelse>
+			<cfreturn all_error_messages>
+		</cfif>
+	</cffunction>
+	
+	
+	<cffunction name="errorsOn" returntype="any" access="public" output="false">
+		<cfargument name="field" required="yes" type="string">
+	
+		<cfset var all_error_messages = arrayNew(1)>
+		
+		<cfloop from="1" to="#arrayLen(this.errors)#" index="i">
+			<cfif this.errors[i].field IS arguments.field>
+				<cfset arrayAppend(all_error_messages, this.errors[i].message)>
+			</cfif>
+		</cfloop>
+	
+		<cfif arrayLen(all_error_messages) IS 0>
+			<cfreturn false>
+		<cfelse>
+			<cfreturn all_error_messages>
+		</cfif>
+	</cffunction>
+
+
 	<cffunction name="validatesConfirmationOf" returntype="void" access="public" output="false">
 		<cfargument name="field" type="string" required="yes">
 		<cfargument name="message" type="string" required="no" default="#arguments.field# is reserved">
@@ -577,17 +700,23 @@
 
 	
 	<cffunction name="validate" returntype="void" access="public" output="false">
-		<cfset runValidation(variables.validations_on_save)>
+		<cfif structKeyExists(variables, "validations_on_save")>
+			<cfset runValidation(variables.validations_on_save)>
+		</cfif>
 	</cffunction>
 	
 	
 	<cffunction name="validateOnCreate" returntype="void" access="public" output="false">
-		<cfset runValidation(variables.validations_on_create)>
+		<cfif structKeyExists(variables, "validations_on_create")>
+			<cfset runValidation(variables.validations_on_create)>
+		</cfif>
 	</cffunction>
 	
 	
 	<cffunction name="validateOnUpdate" returntype="void" access="public" output="false">
-		<cfset runValidation(variables.validations_on_update)>
+		<cfif structKeyExists(variables, "validations_on_update")>
+			<cfset runValidation(variables.validations_on_update)>
+		</cfif>
 	</cffunction>
 
 
