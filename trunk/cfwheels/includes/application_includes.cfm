@@ -4,9 +4,6 @@
 <cfset application.wheels.routes = arrayNew(1)>
 <cfset application.wheels.models = structNew()>
 
-<cfset application.wheels.model_functions = "findByID,findAll,findOne,new,create,init,getColumnInfo,getColumnList,setTableName,getTableName,setPrimaryKey,getPrimaryKey">
-<cfset application.wheels.object_functions = "init,update,destroy,save,model,isNewRecord">
-
 <!--- Used for pluralization and singularization functions --->
 <cfset application.wheels.pluralizationRules = arrayNew(2)>
 <cfset application.wheels.singularizationRules = arrayNew(2)>
