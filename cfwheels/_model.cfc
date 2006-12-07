@@ -3,49 +3,55 @@
 	<cfinclude template="#application.pathTo.includes#/request_includes.cfm">
 
 
-	<cffunction name="init" returntype="any" access="public" output="false">
+	<cffunction name="initModel" returntype="any" access="public" output="false">
 		<cfset var get_columns_query = "">	
-	
-		<cfset variables.model_name = listLast(getMetaData(this).name, ".")>
-		<cfset variables.cacheUUID = 0>
-	
-		<cfif structKeyExists(application.wheels.models, variables.model_name)>
-		
-			<cfset variables.table_name = application.wheels.models[variables.model_name].getTableName()>
-			<cfset variables.primary_key = application.wheels.models[variables.model_name].getPrimaryKey()>
-			<cfset variables.column_list = application.wheels.models[variables.model_name].getColumnList()>
-			<cfset variables.column_info = duplicate(application.wheels.models[variables.model_name].getColumnInfo())>
-	
-		<cfelse>
-		
-			<cfif NOT structKeyExists(variables, "table_name")>
-				<cfset variables.table_name = pluralize(variables.model_name)>
-			</cfif>
-			<cfif NOT structKeyExists(variables, "primary_key")>
-				<cfset variables.primary_key = "id">
-			</cfif>
-		
-			<cfquery name="get_columns_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
-			SELECT column_name, data_type, is_nullable, character_maximum_length, column_default
-			FROM information_schema.columns
-			WHERE table_name = '#variables.table_name#' AND table_schema = '#application.database.name#'
-			</cfquery>
 
-			<cfset variables.column_list = valueList(get_columns_query.column_name)>
-			<cfloop query="get_columns_query">
-				<cfset "variables.column_info.#column_name#.db_sql_type" = data_type>		
-				<cfset "variables.column_info.#column_name#.cf_sql_type" = getCFSQLType(data_type)>		
-				<cfset "variables.column_info.#column_name#.cf_data_type" = getCFDataType(data_type)>
-				<cfset "variables.column_info.#column_name#.nullable" = is_nullable>		
-				<cfset "variables.column_info.#column_name#.max_length" = character_maximum_length>		
-				<cfset "variables.column_info.#column_name#.default" = column_default>		
-			</cfloop>
-		
+		<cfset variables.model_name = listLast(getMetaData(this).name, ".")>
+
+		<cfif NOT structKeyExists(variables, "table_name")>
+			<cfset variables.table_name = pluralize(variables.model_name)>
+		</cfif>
+		<cfif NOT structKeyExists(variables, "primary_key")>
+			<cfset variables.primary_key = "id">
 		</cfif>
 	
+		<cfquery name="get_columns_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+		SELECT column_name, data_type, is_nullable, character_maximum_length, column_default
+		FROM information_schema.columns
+		WHERE table_name = '#variables.table_name#' AND table_schema = '#application.database.name#'
+		</cfquery>
+
+		<cfset variables.column_list = valueList(get_columns_query.column_name)>
+		<cfloop query="get_columns_query">
+			<cfset "variables.column_info.#column_name#.db_sql_type" = data_type>		
+			<cfset "variables.column_info.#column_name#.cf_sql_type" = getCFSQLType(data_type)>		
+			<cfset "variables.column_info.#column_name#.cf_data_type" = getCFDataType(data_type)>
+			<cfset "variables.column_info.#column_name#.nullable" = is_nullable>		
+			<cfset "variables.column_info.#column_name#.max_length" = character_maximum_length>		
+			<cfset "variables.column_info.#column_name#.default" = column_default>		
+		</cfloop>
+
 		<cfreturn this>
 	</cffunction>
-	
+
+	<cffunction name="initObject" returntype="any" access="public" output="false">
+
+		<!--- Copy model variables --->
+		<cfset variables.model_name = listLast(getMetaData(this).name, ".")>
+		<cfset variables.table_name = application.wheels.models[variables.model_name].getTableName()>
+		<cfset variables.primary_key = application.wheels.models[variables.model_name].getPrimaryKey()>
+		<cfset variables.column_list = application.wheels.models[variables.model_name].getColumnList()>
+		<cfset variables.column_info = duplicate(application.wheels.models[variables.model_name].getColumnInfo())>
+		
+		<!--- Create object variables --->
+		<cfset this.errors = arrayNew(1)>
+		<cfset this.query = "">
+		<cfset this.recordcount = 0>
+		<cfset this.recordfound = false>
+
+		<cfreturn this>
+	</cffunction>
+
 	
 	<cffunction name="getCFSQLType" returntype="string" access="private" output="false">
 		<cfargument name="db_sql_type" type="string" required="yes">	
@@ -74,7 +80,7 @@
 		<cfset variables.primary_key = arguments.name>
 	</cffunction>
 	
-	
+
 	<cffunction name="getModelName" returntype="string" access="public" output="false">
 		<cfreturn variables.model_name>
 	</cffunction>
@@ -133,11 +139,7 @@
 		<cfset var i = "">
 		<cfset var new_object = "">
 		
-		<cfset new_object = createObject("component", "app.models.#variables.model_name#").init()>
-		<cfset new_object.errors = arrayNew(1)>
-		<cfset new_object.query = "">
-		<cfset new_object.recordcount = 0>
-		<cfset new_object.recordfound = false>
+		<cfset new_object = createObject("component", "app.models.#variables.model_name#").initObject()>
 
 		<cfif isQuery(arguments.value_collection) AND arguments.value_collection.recordcount GT 0>
 			<cfset new_object.query = arguments.value_collection>
@@ -162,11 +164,6 @@
 				</cfif>
 			</cfloop>
 		</cfif>
-		
-		<!--- Remove model functions --->
-		<cfloop list="#application.wheels.model_functions#" index="i">
-			<cfset "new_object.#i#" = "Model function (not available for individual objects)">
-		</cfloop>
 	
 		<cfreturn new_object>
 	</cffunction>
@@ -364,7 +361,7 @@
 
 	
 	<cffunction name="expireCache" returntype="void" access="public" output="false">
-		<cfset variables.cacheUUID = createUUID()>
+		<cfset "application.wheels.caches.#variables.model_name#" = replace(createUUID(), "-", "_", "all")>
 	</cffunction>
 	
 	<cffunction name="findAll" returntype="any" access="public" output="false">
@@ -392,7 +389,7 @@
 			<cfset local.cached_within = createTimeSpan(0,0,0,0)>
 		</cfif>
 		
-		<cfquery name="local.finder_query_#variables.cacheUUID#" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#" cachedwithin="#local.cached_within#">
+		<cfquery name="local.finder_query_#application.wheels.caches[variables.model_name]#" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#" cachedwithin="#local.cached_within#">
 		SELECT
 		<cfif application.database.type IS "sqlserver" AND arguments.limit IS NOT 0>
 			TOP #arguments.limit#
@@ -408,7 +405,7 @@
 		</cfif>
 		</cfquery>
 
-		<cfreturn newObject(evaluate("local.finder_query_#variables.cacheUUID#"))>
+		<cfreturn newObject(evaluate("local.finder_query_#application.wheels.caches[variables.model_name]#"))>
 	</cffunction>
 
 
