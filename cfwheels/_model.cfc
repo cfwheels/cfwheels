@@ -7,6 +7,7 @@
 		<cfset var get_columns_query = "">	
 	
 		<cfset variables.model_name = listLast(getMetaData(this).name, ".")>
+		<cfset variables.cacheUUID = 0>
 	
 		<cfif structKeyExists(application.wheels.models, variables.model_name)>
 		
@@ -202,6 +203,7 @@
 				<cfif NOT insertRecord()>
 					<cfreturn false>
 				</cfif>
+				<cfset expireCache()>
 				<cfif isDefined("afterCreate") AND NOT afterCreate()>
 					<cfreturn false>
 				</cfif>
@@ -212,6 +214,7 @@
 				<cfif NOT updateRecord()>
 					<cfreturn false>
 				</cfif>
+				<cfset expireCache()>
 				<cfif isDefined("afterUpdate") AND NOT afterUpdate()>
 					<cfreturn false>
 				</cfif>
@@ -323,10 +326,11 @@
 	</cffunction>
 	
 
-	<cffunction name="findByID" access="public" returntype="any" output="false">
+	<cffunction name="findByID" returntype="any" access="public" output="false">
 		<cfargument name="id" required="yes" type="numeric">
 		<cfargument name="select" type="string" required="no" default="">
 		<cfargument name="joins" type="string" required="no" default="">
+		<cfargument name="cache" type="any" required="no" default="">
 	
 		<cfset var returned_object = "">
 
@@ -343,11 +347,12 @@
 	</cffunction>
 	
 	
-	<cffunction name="findOne" access="public" returntype="any" output="false">
+	<cffunction name="findOne" returntype="any" access="public" output="false">
 		<cfargument name="where" type="string" required="no" default="">
 		<cfargument name="order" type="string" required="no" default="">
 		<cfargument name="select" type="string" required="no" default="">
 		<cfargument name="joins" type="string" required="no" default="">
+		<cfargument name="cache" type="any" required="no" default="">
 	
 		<cfset var returned_object = "">
 
@@ -358,21 +363,36 @@
 	</cffunction>
 
 	
-	<cffunction name="findAll" access="public" output="false" hint="">
+	<cffunction name="expireCache" returntype="void" access="public" output="false">
+		<cfset variables.cacheUUID = createUUID()>
+	</cffunction>
+	
+	<cffunction name="findAll" returntype="any" access="public" output="false">
 		<cfargument name="where" type="string" required="no" default="">
 		<cfargument name="order" type="string" required="no" default="">
 		<cfargument name="select" type="string" required="no" default="">
 		<cfargument name="joins" type="string" required="no" default="">
 		<cfargument name="limit" type="numeric" required="no" default=0>
+		<cfargument name="cache" type="any" required="no" default="">
 
-		<cfset var finder_query = "">
+		<cfset var local = structNew()>
 
 		<cfset select_clause = createSelectClause(argumentCollection=arguments)>
 		<cfset from_clause = createfromClause(argumentCollection=arguments)>
 		<cfset where_clause = createWhereClause(argumentCollection=arguments)>
 		<cfset order_clause = createOrderClause(argumentCollection=arguments)>
 		
-		<cfquery name="finder_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+		<cfif arguments.cache IS NOT "">
+			<cfif isNumeric(arguments.cache)>
+				<cfset local.cached_within = createTimeSpan(0,0,arguments.cache,0)>
+			<cfelseif isBoolean(arguments.cache) AND arguments.cache>
+				<cfset local.cached_within = createTimeSpan(1,0,0,0)>
+			</cfif>
+		<cfelse>
+			<cfset local.cached_within = createTimeSpan(0,0,0,0)>
+		</cfif>
+		
+		<cfquery name="local.finder_query_#variables.cacheUUID#" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#" cachedwithin="#local.cached_within#">
 		SELECT
 		<cfif application.database.type IS "sqlserver" AND arguments.limit IS NOT 0>
 			TOP #arguments.limit#
@@ -388,7 +408,7 @@
 		</cfif>
 		</cfquery>
 
-		<cfreturn newObject(finder_query)>
+		<cfreturn newObject(evaluate("local.finder_query_#variables.cacheUUID#"))>
 	</cffunction>
 
 
@@ -397,7 +417,7 @@
 		<cfset var select_clause = "">
 		<cfset var i = "">
 		
-		<cfif arguments.select IS NOT "">
+		<cfif structKeyExists(arguments, "select") AND arguments.select IS NOT "">
 			<!--- Loop through the fields the developer supplied, prepend table name where necessary --->
 			<cfloop list="#arguments.select#" index="i">
 				<cfif i Contains ".">
@@ -422,7 +442,7 @@
 		<cfset var from_clause = "">
 		
 		<cfset from_clause = variables.table_name>
-		<cfif arguments.joins IS NOT "">
+		<cfif structKeyExists(arguments, "joins") AND arguments.joins IS NOT "">
 			<cfset from_clause = from_clause & " " & arguments.joins>	
 		</cfif>
 	
@@ -434,7 +454,7 @@
 	
 		<cfset var where_clause = "">
 		
-		<cfif arguments.where IS NOT "">
+		<cfif structKeyExists(arguments, "where") AND arguments.where IS NOT "">
 			<cfset where_clause = arguments.where>	
 		</cfif>
 	
@@ -447,7 +467,7 @@
 		<cfset var order_clause = "">
 		<cfset var i = "">
 		
-		<cfif arguments.order IS NOT "">
+		<cfif structKeyExists(arguments, "order") AND arguments.order IS NOT "">
 			<cfloop list="#arguments.order#" index="i">
 				<cfif i Does Not Contain "ASC" AND i Does Not Contain "DESC">
 					<cfset i = trim(i) & " ASC">
@@ -844,6 +864,126 @@
 			</cfloop>
 		</cfloop>
 		
+	</cffunction>
+
+
+	<cffunction name="sum" returntype="numeric" access="public" output="false">
+		<cfargument name="field" type="string" required="yes">
+		<cfargument name="where" type="string" required="no" default="">
+		<cfargument name="distinct" type="boolean" required="no" default="false">
+	
+		<cfset var sum_query = "">
+		<cfset var from_clause = "">
+	
+		<cfset from_clause = createFromClause(argumentCollection=arguments)>
+	
+		<cfquery name="sum_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+			SELECT SUM(<cfif arguments.distinct>DISTINCT </cfif>#arguments.field#) AS total
+			FROM #from_clause#
+			<cfif arguments.where IS NOT "">
+				WHERE #preserveSingleQuotes(arguments.where)#
+			</cfif>
+		</cfquery>
+	
+		<cfreturn sum_query.total>
+	</cffunction>
+	
+
+	<cffunction name="minimum" returntype="numeric" access="public" output="false">
+		<cfargument name="field" type="string" required="yes">
+		<cfargument name="where" type="string" required="no" default="">
+	
+		<cfset var minimum_query = "">
+		<cfset var from_clause = "">
+	
+		<cfset from_clause = createFromClause(argumentCollection=arguments)>
+	
+		<cfquery name="minimum_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+			SELECT MIN(#arguments.field#) AS minimum
+			FROM #from_clause#
+			<cfif arguments.where IS NOT "">
+				WHERE #preserveSingleQuotes(arguments.where)#
+			</cfif>
+		</cfquery>
+	
+		<cfreturn minimum_query.minimum>
+	</cffunction>
+	
+	
+	<cffunction name="maximum" returntype="numeric" access="public" output="false">
+		<cfargument name="field" type="string" required="yes">
+		<cfargument name="where" type="string" required="no" default="">
+	
+		<cfset var maximum_query = "">
+		<cfset var from_clause = "">
+	
+		<cfset from_clause = createFromClause(argumentCollection=arguments)>
+	
+		<cfquery name="maximum_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+			SELECT MAX(#arguments.field#) AS maximum
+			FROM #from_clause#
+			<cfif arguments.where IS NOT "">
+				WHERE #preserveSingleQuotes(arguments.where)#
+			</cfif>
+		</cfquery>
+	
+		<cfreturn maximum_query.maximum>
+	</cffunction>
+
+
+	<cffunction name="average" returntype="numeric" access="public" output="false">
+		<cfargument name="field" type="string" required="yes">
+		<cfargument name="where" type="string" required="no" default="">
+		<cfargument name="distinct" type="boolean" required="no" default="false">
+	
+		<cfset var average_query = "">
+		<cfset var from_clause = "">
+		<cfset var result = 0>
+	
+		<cfset from_clause = createFromClause(argumentCollection=arguments)>
+	
+		<cfquery name="average_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+			SELECT AVG(<cfif arguments.distinct>DISTINCT </cfif>#arguments.field#) AS average
+			FROM #from_clause#
+			<cfif arguments.where IS NOT "">
+				WHERE #preserveSingleQuotes(arguments.where)#
+			</cfif>
+		</cfquery>
+		
+		<cfif average_query.average IS NOT "">
+			<cfset result = average_query.average>
+		</cfif>
+	
+		<cfreturn result>
+	</cffunction>
+	
+	
+	<cffunction name="count" returntype="numeric" access="public" output="false">
+		<cfargument name="where" type="string" required="no" default="">
+		<cfargument name="joins" type="string" required="no" default="">
+		<cfargument name="select" type="string" required="no" default="">
+		<cfargument name="distinct" type="boolean" required="no" default="false">
+	
+		<cfset var count_query = "">
+		<cfset var select_clause = "">
+		<cfset var from_clause = "">
+		<cfset var where_clause = "">
+	
+		<cfif arguments.select IS "">
+			<cfset arguments.select = variables.primary_key>
+		</cfif>
+	
+		<cfset from_clause = createFromClause(argumentCollection=arguments)>
+	
+		<cfquery name="count_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+			SELECT COUNT(<cfif arguments.distinct>DISTINCT </cfif>#arguments.select#) AS total
+			FROM #from_clause#
+			<cfif arguments.where IS NOT "">
+				WHERE #preserveSingleQuotes(arguments.where)#
+			</cfif>
+		</cfquery>
+	
+		<cfreturn count_query.total>
 	</cffunction>
 
 </cfcomponent>
