@@ -1,6 +1,6 @@
 <cfcomponent name="Model">
 
-	<cfinclude template="#application.pathTo.includes#/request_includes.cfm">
+	<cfinclude template="#application.pathTo.includes#/request_functions.cfm">
 
 
 	<cffunction name="initModel" returntype="any" access="public" output="false">
@@ -33,6 +33,7 @@
 
 		<cfreturn this>
 	</cffunction>
+
 
 	<cffunction name="initObject" returntype="any" access="public" output="false">
 
@@ -133,13 +134,71 @@
 	</cffunction>
 
 
+	<cffunction name="getObject" returntype="any" access="private" output="false">
+		<cfargument name="model_name" type="string" required="yes">
+	
+		<cfset var new_object = "">
+		<cfset var vacant_objects = "">
+		<cfset var UUID = 0>
+
+		<cfif application.settings.environment IS "production">
+
+			<!--- Find a vacant object in pool (lock code so that another thread can not get the same object before it has been set to 'is_taken') --->
+			<cflock name="pool_lock_for_#arguments.model_name#" type="exclusive" timeout="5">
+				<cfset vacant_objects = structFindValue(application.wheels.pools[arguments.model_name], "is_vacant", "one")>
+				<cfif arrayLen(vacant_objects) IS NOT 0>
+					<cfset UUID = listFirst(vacant_objects[1].path, ".")>
+					<cfset application.wheels.pools[arguments.model_name][UUID].status = "is_taken">
+				</cfif>
+			</cflock>
+			
+			<cfif UUID IS NOT 0>
+				<!--- Create a reference to the object in the pool and reset all instance specific data in the object so it can be re-used --->
+				<cfset new_object = application.wheels.pools[arguments.model_name][UUID].object>
+				<cfset new_object.reset()>
+			<cfelse>
+				<!--- Create a new object since no vacant ones were found in the pool (or we're in development mode) --->
+				<cfset UUID = createUUID()>
+				<cfset new_object = createObject("component", "app.models.#arguments.model_name#").initObject()>
+				<cfset application.wheels.pools[arguments.model_name][UUID] = structNew()>
+				<cfset application.wheels.pools[arguments.model_name][UUID].status = "is_taken">
+				<cfset application.wheels.pools[arguments.model_name][UUID].object = new_object>
+			</cfif>
+			
+			<!--- Add this object's UUID to a list in the request scope so it can be set to vacant again on request end --->
+			<cfset request.wheels.taken_objects = listAppend(request.wheels.taken_objects, UUID)>
+
+		<cfelse>
+
+			<cfset new_object = createObject("component", "app.models.#arguments.model_name#").initObject()>
+
+		</cfif>
+
+		<cfreturn new_object>
+	</cffunction>
+	
+
+	<cffunction name="reset" returntype="void" access="public" output="false">
+		<cfset var i = 0>
+		
+		<cfloop list="#variables.column_list#" index="i">
+			<cfset structDelete(this, i)>
+			<cfset structDelete(this, "#i#_confirmation")>
+		</cfloop>
+		<cfset this.errors = arrayNew(1)>
+		<cfset this.query = "">
+		<cfset this.recordcount = 0>
+		<cfset this.recordfound = false>	
+	</cffunction>
+	
+
 	<cffunction name="newObject" returntype="any" access="private" output="false">
 		<cfargument name="value_collection" type="any" required="yes">
 	
 		<cfset var i = "">
 		<cfset var new_object = "">
 		
-		<cfset new_object = createObject("component", "app.models.#variables.model_name#").initObject()>
+		<cfset new_object = getObject(variables.model_name)>
 
 		<cfif isQuery(arguments.value_collection) AND arguments.value_collection.recordcount GT 0>
 			<cfset new_object.query = arguments.value_collection>
@@ -338,7 +397,7 @@
 		<cfif returned_object.recordfound>
 			<cfreturn returned_object>
 		<cfelse>
-			<cfthrow type="wheels.record_not_found" message="Record Not Found: a record with an id of #arguments.id# was not found in the '#variables.table_name#' table." detail="Correct the '#variables.table_name#' table by adding a record with an id of #arguments.id# or look for a different record.">
+			<cfthrow type="cfwheels.record_not_found" message="Record Not Found: a record with an id of #arguments.id# was not found in the '#variables.table_name#' table." detail="Correct the '#variables.table_name#' table by adding a record with an id of #arguments.id# or look for a different record.">
 		</cfif>
 		
 	</cffunction>

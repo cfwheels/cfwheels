@@ -1,7 +1,7 @@
 <cfcomponent displayname="Application Controller" hint="The base class of all controllers">
 	
 	<!--- Include common functions --->
-	<cfinclude template="#application.pathTo.includes#/request_includes.cfm">
+	<cfinclude template="#application.pathTo.includes#/request_functions.cfm">
 
 	<!--- Include functions that should be available to all controllers --->
 	<cfif fileExists(expandPath("#application.filePathTo.controllers#/application_functions.cfm"))>
@@ -234,7 +234,10 @@
 			<cfset url = urlFor(argumentCollection=new_arguments)>
 		</cfif>
 	
-		<cfif arguments.token IS true>
+		<!--- Need to include the on request end code manually here since cflocation does not run that code --->
+		<cfinclude template="#application.pathTo.cfwheels#/on_request_end.cfm">
+
+		<cfif arguments.token>
 			<cflocation url="#url#">
 		<cfelse>
 			<cflocation url="#url#" addtoken="false">
