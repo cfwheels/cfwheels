@@ -204,11 +204,13 @@
 			<cfset new_object.query = arguments.value_collection>
 			<cfset new_object.recordfound = true>
 			<cfset new_object.recordcount = arguments.value_collection.recordcount>
-			<cfloop list="#arguments.value_collection.columnlist#" index="i">
-				<cfif listFindNoCase(variables.column_list, replaceNoCase(i, (variables.model_name & "_"), "")) IS NOT 0>
-					<cfset new_object[replaceNoCase(i, (variables.model_name & "_"), "")] = arguments.value_collection[i][1]>
-				</cfif>
-			</cfloop>
+			<cfif arguments.value_collection.recordcount IS 1>
+				<cfloop list="#arguments.value_collection.columnlist#" index="i">
+					<cfif listFindNoCase(variables.column_list, replaceNoCase(i, (variables.model_name & "_"), "")) IS NOT 0>
+						<cfset new_object[replaceNoCase(i, (variables.model_name & "_"), "")] = arguments.value_collection[i][1]>
+					</cfif>
+				</cfloop>
+			</cfif>
 		<cfelseif isStruct(arguments.value_collection) AND structCount(arguments.value_collection) GT 0>
 			<cfset new_object.query = queryNew(structKeyList(arguments.value_collection))>
 			<cfset queryAddRow(new_object.query, 1)>
@@ -217,11 +219,13 @@
 			</cfloop>
 			<cfset new_object.recordfound = true>
 			<cfset new_object.recordcount = structCount(arguments.value_collection)>
-			<cfloop collection="#arguments.value_collection#" item="i">
-				<cfif listFindNoCase(variables.column_list, i) IS NOT 0>
-					<cfset new_object[i] = arguments.value_collection[i]>
-				</cfif>
-			</cfloop>
+			<cfif structCount(arguments.value_collection) IS 1>
+				<cfloop collection="#arguments.value_collection#" item="i">
+					<cfif listFindNoCase(variables.column_list, i) IS NOT 0>
+						<cfset new_object[i] = arguments.value_collection[i]>
+					</cfif>
+				</cfloop>
+			</cfif>
 		</cfif>
 	
 		<cfreturn new_object>
@@ -382,20 +386,26 @@
 	</cffunction>
 	
 
+	<cffunction name="expireCache" returntype="void" access="public" output="false">
+		<cfset "application.wheels.caches.#variables.model_name#" = "smart_cache_id_#dateFormat(now(), 'yyyymmdd')#_#timeFormat(now(), 'HHmmss')#_#randRange(1000,9999)#">
+	</cffunction>
+
+
 	<cffunction name="findByID" returntype="any" access="public" output="false">
 		<cfargument name="id" required="yes" type="numeric">
 		<cfargument name="select" type="string" required="no" default="">
 		<cfargument name="joins" type="string" required="no" default="">
 		<cfargument name="cache" type="any" required="no" default="">
 	
-		<cfset var returned_object = "">
-
-		<cfset structInsert(arguments, "where", "#variables.table_name#.#variables.primary_key# = #arguments.id#")>
-		<cfset structDelete(arguments, "id")>
-		<cfset returned_object = findAll(argumentCollection=arguments)>
+		<cfset var local = structNew()>
+		
+		<cfset local.find_all_arguments = duplicate(arguments)>
+		<cfset structInsert(local.find_all_arguments, "where", "#variables.table_name#.#variables.primary_key# = #arguments.id#")>
+		<cfset structDelete(local.find_all_arguments, "id")>
+		<cfset local.return_object = findAll(argumentCollection=local.find_all_arguments)>
 	
-		<cfif returned_object.recordfound>
-			<cfreturn returned_object>
+		<cfif local.return_object.recordfound>
+			<cfreturn local.return_object>
 		<cfelse>
 			<cfthrow type="cfwheels.record_not_found" message="Record Not Found: a record with an id of #arguments.id# was not found in the '#variables.table_name#' table." detail="Correct the '#variables.table_name#' table by adding a record with an id of #arguments.id# or look for a different record.">
 		</cfif>
@@ -410,33 +420,41 @@
 		<cfargument name="joins" type="string" required="no" default="">
 		<cfargument name="cache" type="any" required="no" default="">
 	
-		<cfset var returned_object = "">
-
-		<cfset structInsert(arguments, "limit", 1)>
-		<cfset returned_object = findAll(argumentCollection=arguments)>
+		<cfset var local = structNew()>
+		
+		<cfset local.find_all_arguments = duplicate(arguments)>
+		<cfset structInsert(local.find_all_arguments, "limit", 1)>
+		<cfset local.return_object = findAll(argumentCollection=local.find_all_arguments)>
 	
-		<cfreturn returned_object>
+		<cfreturn local.return_object>
 	</cffunction>
 
-	
-	<cffunction name="expireCache" returntype="void" access="public" output="false">
-		<cfset "application.wheels.caches.#variables.model_name#" = replace(createUUID(), "-", "_", "all")>
-	</cffunction>
 	
 	<cffunction name="findAll" returntype="any" access="public" output="false">
 		<cfargument name="where" type="string" required="no" default="">
 		<cfargument name="order" type="string" required="no" default="">
 		<cfargument name="select" type="string" required="no" default="">
 		<cfargument name="joins" type="string" required="no" default="">
+		<cfargument name="distinct" type="boolean" required="no" default="false">
 		<cfargument name="limit" type="numeric" required="no" default=0>
+		<cfargument name="offset" type="numeric" required="no" default=0>
 		<cfargument name="cache" type="any" required="no" default="">
+		<cfargument name="page" type="numeric" required="no" default=0>
+		<cfargument name="per_page" type="numeric" required="no" default=10>
 
 		<cfset var local = structNew()>
 
-		<cfset select_clause = createSelectClause(argumentCollection=arguments)>
-		<cfset from_clause = createfromClause(argumentCollection=arguments)>
-		<cfset where_clause = createWhereClause(argumentCollection=arguments)>
-		<cfset order_clause = createOrderClause(argumentCollection=arguments)>
+		<cfset local.select_clause = createSelectClause(argumentCollection=duplicate(arguments))>
+		<cfset local.from_clause = createfromClause(argumentCollection=duplicate(arguments))>
+		<cfset local.order_clause = createOrderClause(argumentCollection=duplicate(arguments))>
+		
+		<cfif arguments.page IS NOT 0>
+			<cfset local.pagination_details = createPaginationWhereClause(argumentCollection=duplicate(arguments))>
+			<cfset local.where_clause = local.pagination_details.where_clause>
+			<cfset local.paginator = local.pagination_details.paginator>
+		<cfelse>
+			<cfset local.where_clause = createWhereClause(argumentCollection=duplicate(arguments))>
+		</cfif>
 		
 		<cfif arguments.cache IS NOT "">
 			<cfif isNumeric(arguments.cache)>
@@ -448,97 +466,145 @@
 			<cfset local.cached_within = createTimeSpan(0,0,0,0)>
 		</cfif>
 		
-		<cfquery name="local.finder_query_#application.wheels.caches[variables.model_name]#" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#" cachedwithin="#local.cached_within#">
+		<cfquery name="local.#application.wheels.caches[variables.model_name]#" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#" cachedwithin="#local.cached_within#">
 		SELECT
+		<cfif arguments.distinct>
+			DISTINCT
+		</cfif>
 		<cfif application.database.type IS "sqlserver" AND arguments.limit IS NOT 0>
 			TOP #arguments.limit#
 		</cfif>
-		#select_clause#
-		FROM #from_clause#
-		<cfif where_clause IS NOT "">
-			WHERE #preserveSingleQuotes(where_clause)#
+		#local.select_clause#
+		FROM #local.from_clause#
+		<cfif local.where_clause IS NOT "">
+			WHERE #preserveSingleQuotes(local.where_clause)#
 		</cfif>
-		ORDER BY #order_clause#
+		ORDER BY #local.order_clause#
 		<cfif application.database.type IS "mysql5" AND arguments.limit IS NOT 0>
 			LIMIT #arguments.limit#
 		</cfif>
+		<cfif application.database.type IS "mysql5" AND arguments.offset IS NOT 0>
+			OFFSET #arguments.offset#
+		</cfif>
 		</cfquery>
 
-		<cfreturn newObject(evaluate("local.finder_query_#application.wheels.caches[variables.model_name]#"))>
+		<cfset local.new_object = newObject(local[application.wheels.caches[variables.model_name]])>
+	
+		<cfif arguments.page IS NOT 0>
+			<cfset local.new_object.paginator = local.paginator>
+		</cfif>
+
+		<cfreturn local.new_object>
+	</cffunction>
+
+	<cffunction name="createPaginationWhereClause" returntype="struct" access="private" output="false">
+
+		<cfset var local = structNew()>
+
+		<cfset local.find_all_arguments = duplicate(arguments)>
+		<cfset local.count_arguments = duplicate(arguments)>
+		<cfset local.paginator.current_page = arguments.page>
+		<cfset local.count_arguments.distinct = true>
+		<cfset local.paginator.total_records = count(argumentCollection=local.count_arguments)>
+		<cfset local.paginator.total_pages = ceiling(local.paginator.total_records/arguments.per_page)>
+		<cfset local.find_all_arguments.offset = (arguments.page * arguments.per_page) - (arguments.per_page)>
+		<cfset local.find_all_arguments.limit = arguments.per_page>
+		<cfif (local.find_all_arguments.limit + local.find_all_arguments.offset) GT local.paginator.total_records>
+			<cfset local.find_all_arguments.limit = local.paginator.total_records - local.find_all_arguments.offset>
+		</cfif>
+		<cfset local.find_all_arguments.distinct = true>
+		<cfset local.find_all_arguments.select = "#variables.primary_key# AS id">
+		<cfset local.find_all_arguments.page = 0>
+		<cfset local.find_all_arguments.per_page = 10>
+		<cfset local.get_ids = findAll(argumentCollection=local.find_all_arguments)>
+		<cfif local.get_ids.recordfound>
+			<cfset local.ids = valueList(local.get_ids.query.id)>
+		</cfif>
+		<cfset local.where_clause = "#variables.table_name#.#variables.primary_key# IN (#local.ids#)">
+
+		<cfreturn local>
 	</cffunction>
 
 
 	<cffunction name="createSelectClause" returntype="string" access="private" output="false">
 	
-		<cfset var select_clause = "">
-		<cfset var i = "">
+		<cfset var local = structNew()>
+		
+		<cfset local.select_clause = "">
 		
 		<cfif structKeyExists(arguments, "select") AND arguments.select IS NOT "">
-			<!--- Loop through the fields the developer supplied, prepend table name where necessary --->
-			<cfloop list="#arguments.select#" index="i">
-				<cfif i Contains ".">
-					<cfset select_clause = listAppend(select_clause, "#trim(i)# AS #variables.model_name#_#listLast(trim(i), '.')#")>
-				<cfelse>
-					<cfset select_clause = listAppend(select_clause, "#variables.table_name#.#trim(i)# AS #variables.model_name#_#trim(i)#")>
+			<!--- Loop through the fields the developer supplied, prepend table name and "AS" where necessary --->
+			<cfloop list="#arguments.select#" index="local.i">
+				<cfif local.i Does Not Contain "." AND local.i Does Not Contain " AS ">
+					<cfset local.select_clause = listAppend(local.select_clause, "#variables.table_name#.#trim(local.i)# AS #variables.model_name#_#trim(local.i)#")>
+				<cfelseif local.i Contains "." AND local.i Does Not Contain " AS ">
+					<cfset local.select_clause = listAppend(local.select_clause, "#trim(local.i)# AS #variables.model_name#_#trim(local.i)#")>
+				<cfelseif local.i Does Not Contain "." AND local.i Contains " AS ">
+					<cfset local.select_clause = listAppend(local.select_clause, "#variables.table_name#.#trim(local.i)#")>
+				<cfelseif local.i Contains "." AND local.i Contains " AS ">
+					<cfset local.select_clause = listAppend(local.select_clause, "#trim(local.i)#")>
 				</cfif>
 			</cfloop>
 		<cfelse>
 			<!--- Loop through list of columns and select all of them in the query --->
-			<cfloop list="#variables.column_list#" index="i">
-				<cfset select_clause = listAppend(select_clause, "#variables.table_name#.#trim(i)# AS #variables.model_name#_#trim(i)#")>
+			<cfloop list="#variables.column_list#" index="local.i">
+				<cfset local.select_clause = listAppend(local.select_clause, "#variables.table_name#.#trim(local.i)# AS #variables.model_name#_#trim(local.i)#")>
 			</cfloop>
 		</cfif>
 	
-		<cfreturn select_clause>
+		<cfreturn local.select_clause>
 	</cffunction>
 	
 
 	<cffunction name="createFromClause" returntype="string" access="private" output="false">
 	
-		<cfset var from_clause = "">
+		<cfset var local = structNew()>
 		
-		<cfset from_clause = variables.table_name>
+		<cfset local.from_clause = variables.table_name>
 		<cfif structKeyExists(arguments, "joins") AND arguments.joins IS NOT "">
-			<cfset from_clause = from_clause & " " & arguments.joins>	
+			<cfset local.from_clause = local.from_clause & " " & arguments.joins>	
 		</cfif>
 	
-		<cfreturn from_clause>
+		<cfreturn local.from_clause>
 	</cffunction>
 
 
 	<cffunction name="createWhereClause" returntype="string" access="private" output="false">
 	
-		<cfset var where_clause = "">
+		<cfset var local = structNew()>
 		
 		<cfif structKeyExists(arguments, "where") AND arguments.where IS NOT "">
-			<cfset where_clause = arguments.where>	
+			<cfset local.where_clause = arguments.where>
+		<cfelse>
+			<cfset local.where_clause = "">
 		</cfif>
-	
-		<cfreturn where_clause>
+
+		<cfreturn local.where_clause>
 	</cffunction>
 
 
 	<cffunction name="createOrderClause" returntype="string" access="private" output="false">
 	
-		<cfset var order_clause = "">
-		<cfset var i = "">
+		<cfset var local = structNew()>
+		
+		<cfset order_clause = "">
 		
 		<cfif structKeyExists(arguments, "order") AND arguments.order IS NOT "">
-			<cfloop list="#arguments.order#" index="i">
-				<cfif i Does Not Contain "ASC" AND i Does Not Contain "DESC">
-					<cfset i = trim(i) & " ASC">
+			<cfloop list="#arguments.order#" index="local.i">
+				<cfif local.i Does Not Contain "ASC" AND local.i Does Not Contain "DESC">
+					<cfset local.i = trim(local.i) & " ASC">
 				</cfif>
-				<cfif i Contains ".">
-					<cfset order_clause = listAppend(order_clause, trim(i))>
+				<cfif local.i Contains ".">
+					<cfset local.order_clause = listAppend(local.order_clause, trim(local.i))>
 				<cfelse>
-					<cfset order_clause = listAppend(order_clause, "#variables.table_name#.#trim(i)#")>
+					<cfset local.order_clause = listAppend(local.order_clause, "#variables.table_name#.#trim(local.i)#")>
 				</cfif>
 			</cfloop>
 		<cfelse>
-			<cfset order_clause = variables.table_name & "." & variables.primary_key & " ASC">
+			<cfset local.order_clause = variables.table_name & "." & variables.primary_key & " ASC">
 		</cfif>
 	
-		<cfreturn order_clause>
+		<cfreturn local.order_clause>
 	</cffunction>
 
 
@@ -1026,7 +1092,7 @@
 		<cfset var where_clause = "">
 	
 		<cfif arguments.select IS "">
-			<cfset arguments.select = variables.primary_key>
+			<cfset arguments.select = "#variables.table_name#.#variables.primary_key#">
 		</cfif>
 	
 		<cfset from_clause = createFromClause(argumentCollection=arguments)>

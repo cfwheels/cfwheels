@@ -27,17 +27,17 @@
 <cfif (NOT structKeyExists(application.wheels.models, arguments.name)) OR (application.settings.environment IS "development" AND NOT structKeyExists(application.wheels.models, "#arguments.name#_hash")) OR (application.settings.environment IS "development" AND application.wheels.models[arguments.name & "_hash"] IS NOT model_hash)>
 		<cflock name="model_lock" type="exclusive" timeout="5">
 	        <cfif (NOT structKeyExists(application.wheels.models, arguments.name)) OR (application.settings.environment IS "development" AND NOT structKeyExists(application.wheels.models, "#arguments.name#_hash")) OR (application.settings.environment IS "development" AND application.wheels.models[arguments.name & "_hash"] IS NOT model_hash)>
-				<cfset "application.wheels.caches.#arguments.name#" = replace(createUUID(), "-", "_", "all")>
+				<cfset "application.wheels.caches.#arguments.name#" = "smart_cache_id_#dateFormat(now(), 'yyyymmdd')#_#timeFormat(now(), 'HHmmss')#_#randRange(1000,9999)#">
 				<cfset "application.wheels.pools.#arguments.name#" = structNew()>
 				<cfset "application.wheels.models.#arguments.name#" = createObject("component", "app.models.#arguments.name#").initModel()>
 	        </cfif>
 	    </cflock>
 	</cfif>
 
-	<!--- UNCOMMENT THIS WHEN MAKING CHANGES INSIDE _MODEL.CFC
+	<!--- UNCOMMENT THIS WHEN MAKING CHANGES INSIDE _MODEL.CFC --->
 	<cfset "application.wheels.models.#arguments.name#" = createObject("component", "app.models.#arguments.name#").initModel()>
-	<cfset "application.wheels.caches.#arguments.name#" = replace(createUUID(), "-", "_", "all")>
-	--->	
+	<cfset "application.wheels.caches.#arguments.name#" = "smart_cache_id_#dateFormat(now(), 'yyyymmdd')#_#timeFormat(now(), 'HHmmss')#_#randRange(1000,9999)#">
+	
 
 	<cfif application.settings.environment IS "development">
 		<cfset "application.wheels.models.#arguments.name#_hash" = model_hash>
