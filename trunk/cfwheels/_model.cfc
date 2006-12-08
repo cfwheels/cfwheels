@@ -211,21 +211,19 @@
 					</cfif>
 				</cfloop>
 			</cfif>
-		<cfelseif isStruct(arguments.value_collection) AND structCount(arguments.value_collection) GT 0>
+		<cfelseif isStruct(arguments.value_collection)>
 			<cfset new_object.query = queryNew(structKeyList(arguments.value_collection))>
 			<cfset queryAddRow(new_object.query, 1)>
 			<cfloop collection="#arguments.value_collection#" item="i">
 				<cfset querySetCell(new_object.query, i, arguments.value_collection[i])>
 			</cfloop>
 			<cfset new_object.recordfound = true>
-			<cfset new_object.recordcount = structCount(arguments.value_collection)>
-			<cfif structCount(arguments.value_collection) IS 1>
-				<cfloop collection="#arguments.value_collection#" item="i">
-					<cfif listFindNoCase(variables.column_list, i) IS NOT 0>
-						<cfset new_object[i] = arguments.value_collection[i]>
-					</cfif>
-				</cfloop>
-			</cfif>
+			<cfset new_object.recordcount = 1>
+			<cfloop collection="#arguments.value_collection#" item="i">
+				<cfif listFindNoCase(variables.column_list, i) IS NOT 0>
+					<cfset new_object[i] = arguments.value_collection[i]>
+				</cfif>
+			</cfloop>
 		</cfif>
 	
 		<cfreturn new_object>
@@ -312,6 +310,14 @@
 			</cfif>
 		</cfloop>
 	
+		<cfif listFindNoCase(variables.column_list, "created_at") IS NOT 0>
+			<cfset this.created_at = createODBCDateTime(now())>
+		</cfif>
+		
+		<cfif listFindNoCase(variables.column_list, "created_on")>
+			<cfset this.created_on = createODBCDate(now())>
+		</cfif>
+
 		<cfquery name="insert_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
 		INSERT INTO	#variables.table_name#(#insert_columns#)
 		VALUES (
@@ -358,6 +364,14 @@
 				<cfset update_columns = listAppend(update_columns, i)>
 			</cfif>
 		</cfloop>
+	
+		<cfif listFindNoCase(variables.column_list, "updated_at") IS NOT 0>
+			<cfset this.updated_at = createODBCDateTime(now())>
+		</cfif>
+		
+		<cfif listFindNoCase(variables.column_list, "updated_on")>
+			<cfset this.updated_on = createODBCDate(now())>
+		</cfif>
 	
 		<cfquery name="get_id_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#" maxrows="1">
 		SELECT #variables.primary_key#
@@ -497,6 +511,7 @@
 		<cfreturn local.new_object>
 	</cffunction>
 
+
 	<cffunction name="createPaginationWhereClause" returntype="struct" access="private" output="false">
 
 		<cfset var local = structNew()>
@@ -573,8 +588,12 @@
 	
 		<cfset var local = structNew()>
 		
-		<cfif structKeyExists(arguments, "where") AND arguments.where IS NOT "">
+		<cfif structKeyExists(arguments, "where") AND arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
 			<cfset local.where_clause = arguments.where>
+		<cfelseif structKeyExists(arguments, "where") AND arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+			<cfset local.where_clause = "#arguments.where# AND #variables.table_name#.deleted_at IS NULL">
+		<cfelseif listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+			<cfset local.where_clause = "#variables.table_name#.deleted_at IS NULL">
 		<cfelse>
 			<cfset local.where_clause = "">
 		</cfif>
@@ -629,24 +648,31 @@
 	
 	<cffunction name="destroy" returntype="boolean" access="public" output="false">
 	
-		<cfset var check_deleted = "">
-		<cfset var delete_record = "">
+		<cfset var local = structNew()>
 	
-		<cfquery name="check_deleted" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+		<cfquery name="local.check_deleted" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
 		SELECT #variables.primary_key#
 		FROM #variables.table_name#
 		WHERE #variables.primary_key# = #this[variables.primary_key]#
 		</cfquery>
 	
-		<cfif check_deleted.recordCount IS NOT 0>
-			<cfquery name="delete_record" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
-			DELETE
-			FROM #variables.table_name#
-			WHERE #variables.primary_key# = #this[variables.primary_key]#
-			</cfquery>
+		<cfif local.check_deleted.recordcount IS NOT 0>
+			<cfif listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+				<cfquery name="local.delete_record" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+				UPDATE #variables.table_name#
+				SET deleted_at = #createODBCDateTime(now())#
+				WHERE #variables.primary_key# = #this[variables.primary_key]#
+				</cfquery>
+			<cfelse>
+				<cfquery name="local.delete_record" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+				DELETE
+				FROM #variables.table_name#
+				WHERE #variables.primary_key# = #this[variables.primary_key]#
+				</cfquery>
+			</cfif>
 		</cfif>
 	
-		<cfreturn check_deleted.recordcount>
+		<cfreturn local.check_deleted.recordcount>
 	</cffunction>
 
 
@@ -1002,8 +1028,12 @@
 		<cfquery name="sum_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
 			SELECT SUM(<cfif arguments.distinct>DISTINCT </cfif>#arguments.field#) AS total
 			FROM #from_clause#
-			<cfif arguments.where IS NOT "">
+			<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
 				WHERE #preserveSingleQuotes(arguments.where)#
+			<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+				WHERE #preserveSingleQuotes(arguments.where)# AND deleted_at IS NULL
+			<cfelseif arguments.where IS "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+				WHERE deleted_at IS NULL
 			</cfif>
 		</cfquery>
 	
@@ -1023,8 +1053,12 @@
 		<cfquery name="minimum_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
 			SELECT MIN(#arguments.field#) AS minimum
 			FROM #from_clause#
-			<cfif arguments.where IS NOT "">
+			<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
 				WHERE #preserveSingleQuotes(arguments.where)#
+			<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+				WHERE #preserveSingleQuotes(arguments.where)# AND deleted_at IS NULL
+			<cfelseif arguments.where IS "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+				WHERE deleted_at IS NULL
 			</cfif>
 		</cfquery>
 	
@@ -1044,8 +1078,12 @@
 		<cfquery name="maximum_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
 			SELECT MAX(#arguments.field#) AS maximum
 			FROM #from_clause#
-			<cfif arguments.where IS NOT "">
+			<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
 				WHERE #preserveSingleQuotes(arguments.where)#
+			<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+				WHERE #preserveSingleQuotes(arguments.where)# AND deleted_at IS NULL
+			<cfelseif arguments.where IS "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+				WHERE deleted_at IS NULL
 			</cfif>
 		</cfquery>
 	
@@ -1067,8 +1105,12 @@
 		<cfquery name="average_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
 			SELECT AVG(<cfif arguments.distinct>DISTINCT </cfif>#arguments.field#) AS average
 			FROM #from_clause#
-			<cfif arguments.where IS NOT "">
+			<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
 				WHERE #preserveSingleQuotes(arguments.where)#
+			<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+				WHERE #preserveSingleQuotes(arguments.where)# AND deleted_at IS NULL
+			<cfelseif arguments.where IS "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+				WHERE deleted_at IS NULL
 			</cfif>
 		</cfquery>
 		
@@ -1100,8 +1142,12 @@
 		<cfquery name="count_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
 			SELECT COUNT(<cfif arguments.distinct>DISTINCT </cfif>#arguments.select#) AS total
 			FROM #from_clause#
-			<cfif arguments.where IS NOT "">
+			<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
 				WHERE #preserveSingleQuotes(arguments.where)#
+			<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+				WHERE #preserveSingleQuotes(arguments.where)# AND deleted_at IS NULL
+			<cfelseif arguments.where IS "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+				WHERE deleted_at IS NULL
 			</cfif>
 		</cfquery>
 	
