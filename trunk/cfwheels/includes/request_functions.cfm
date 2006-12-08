@@ -34,10 +34,10 @@
 	    </cflock>
 	</cfif>
 
-	<!--- UNCOMMENT THIS WHEN MAKING CHANGES INSIDE _MODEL.CFC --->
+	<!--- UNCOMMENT THIS WHEN MAKING CHANGES INSIDE _MODEL.CFC
 	<cfset "application.wheels.models.#arguments.name#" = createObject("component", "app.models.#arguments.name#").initModel()>
 	<cfset "application.wheels.caches.#arguments.name#" = "smart_cache_id_#dateFormat(now(), 'yyyymmdd')#_#timeFormat(now(), 'HHmmss')#_#randRange(1000,9999)#">
-	
+	 --->
 
 	<cfif application.settings.environment IS "development">
 		<cfset "application.wheels.models.#arguments.name#_hash" = model_hash>
