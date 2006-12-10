@@ -16,6 +16,7 @@
 <cfset application.pathTo.layouts = application.pathTo.views & "/layouts">
 <cfset application.pathTo.helpers = application.pathTo.app & "/helpers">
 <cfset application.pathTo.includes = application.pathTo.cfwheels & "/includes">
+<cfset application.pathTo.functions = application.pathTo.cfwheels & "/functions">
 
 <!--- Default public paths --->
 <cfset application.pathTo.images = "/media/images">
