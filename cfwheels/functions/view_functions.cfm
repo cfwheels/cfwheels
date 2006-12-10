@@ -1548,22 +1548,22 @@
 </cffunction>
 
 
-<cffunction name="errorMessageOn" output="false" returntype="string" hint="[DOCS] Returns a string containing the error message for the field name on the model, if one exists">
-	<cfargument name="model" type="any" required="yes" hint="The model to display errors for">
-	<cfargument name="fieldName" type="any" required="yes" hint="The field name to display errors for">
-	<cfargument name="prependText" type="string" required="no" default="" hint="Text to prepend to the error message">
-	<cfargument name="appendText" type="string" required="no" default="" hint="Text to append to the error message">
-	<cfargument name="class" type="string" required="no" default="formError" hint="Content for the class attribute">
-	<cfargument name="errorDisplay" type="string" required="false" default="div" hint="Determines how errors are displayed. Possible values are: div and span">
+<cffunction name="errorMessageOn" output="false" returntype="string">
+	<cfargument name="object" type="any" required="yes">
+	<cfargument name="field" type="any" required="yes">
+	<cfargument name="prepend_text" type="string" required="no" default="">
+	<cfargument name="append_text" type="string" required="no" default="">
+	<cfargument name="class" type="string" required="no" default="formError">
+	<cfargument name="error_display" type="string" required="false" default="div">
 
 	<cfset var output = "">
 	<cfset var error = "">
 
-	<cfset error = arguments.model.errorsOn(arguments.fieldName)>
+	<cfset error = arguments.object.errorsOn(arguments.field)>
 	<cfif NOT isBoolean(error)>
 		<cfsavecontent variable="output">
 			<cfoutput>
-				<#arguments.errorDisplay# class="#arguments.class#">#arguments.prependText##error[1]##arguments.appendText#</#arguments.errorDisplay#>
+				<#arguments.error_display# class="#arguments.class#">#arguments.prepend_text##error[1]##arguments.append_text#</#arguments.error_display#>
 			</cfoutput>
 		</cfsavecontent>
 	</cfif>
@@ -1572,23 +1572,23 @@
 </cffunction>
 
 
-<cffunction name="errorMessagesFor" output="false" returntype="string" hint="[DOCS] Returns a string containing all the error messages for the model">
-	<cfargument name="model" type="any" required="true" hint="The model to display errors for">
-	<cfargument name="headerTag" type="string" required="false" default="h2" hint="The HTML tag to use as the header">
-	<cfargument name="id" type="string" required="false" default="errorExplanation" hint="Content for the id attribute">
-	<cfargument name="class" type="string" required="false" default="errorExplanation" hint="Content for the class attribute">
-	<cfargument name="listOnly" type="boolean" required="false" default="false" hint="if true will only return the list of errors and not the header and paragraph">
+<cffunction name="errorMessagesFor" output="false" returntype="string">
+	<cfargument name="object" type="any" required="true">
+	<cfargument name="header_tag" type="string" required="false" default="h2">
+	<cfargument name="id" type="string" required="false" default="error_explanation">
+	<cfargument name="class" type="string" required="false" default="error_explanation">
+	<cfargument name="list_only" type="boolean" required="false" default="false">
 
 	<cfset var output = "">
 	<cfset var errors = arrayNew(1)>
 
-	<cfif NOT arguments.model.errorsIsEmpty()>
-		<cfset errors = arguments.model.errorsFullMessages()>
+	<cfif NOT arguments.object.errorsIsEmpty()>
+		<cfset errors = arguments.object.errorsFullMessages()>
 		<cfsavecontent variable="output">
 			<cfoutput>
 				<div id="#arguments.id#" class="#arguments.class#">
-					<cfif NOT arguments.listOnly>
-						<#arguments.headerTag#>#arrayLen(errors)# error<cfif arrayLen(errors) GT 1>s</cfif> prevented this #arguments.model._modelName# from being saved</#arguments.headerTag#>
+					<cfif NOT arguments.list_only>
+						<#arguments.header_tag#>#arrayLen(errors)# error<cfif arrayLen(errors) GT 1>s</cfif> prevented this #arguments.object.getModelName()# from being saved</#arguments.header_tag#>
 						<p>There were problems with the following fields:</p>
 					</cfif>
 					<ul>
