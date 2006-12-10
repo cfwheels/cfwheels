@@ -558,7 +558,7 @@
 		<cfset url = url & "###arguments.anchor#">
 	</cfif>
 
-	<cfif cgi.script_name CONTAINS "dispatch.cfm">
+	<cfif cgi.script_name Contains "dispatch.cfm">
 		<cfset url = "/dispatch.cfm?wheelsaction=" & url>
 	</cfif>
 
