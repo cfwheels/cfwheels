@@ -15,7 +15,7 @@
 
 <div id="content">
 	
-	<h1>CFWheels Error</h1>
+	<h1>ColdFusion on Wheels Error</h1>
 	
 	<cfoutput>
 		<h3>#error.message#</h3>
