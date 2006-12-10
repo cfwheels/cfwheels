@@ -7,7 +7,7 @@
 	<cfset this.name = listLast(getDirectoryFromPath(getBaseTemplatePath()),'/')>
 	<cfset this.clientManagement = false>
 	<cfset this.sessionManagement = true>
-	<cferror exception="cfwheels" template="/error.cfm" type="exception">
+	<cferror exception="cfwheels" template="/app/error.cfm" type="exception">
 	
 	<!--- Runs the first time the application is started --->
 	<cffunction name="onApplicationStart">
