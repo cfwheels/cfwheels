@@ -1,7 +1,7 @@
 <cffunction name="init" access="public" output="false" hint="Called when a controller is instantiated">
 	
-	<!--- Include common functions for everything --->
-	<cfinclude template="#application.pathTo.includes#/controller_includes.cfm">
+	<!--- Include view functions --->
+	<cfinclude template="#application.pathTo.functions#/view_functions.cfm">
 	
 	<!--- Include helpers if they exist --->
 	<cfif fileExists(expandPath("#application.pathTo.helpers#/application_helper.cfm"))>
