@@ -584,3 +584,58 @@
 
 	<cfreturn uCase(left(arguments.text,1)) & lCase(right(arguments.text,len(arguments.text)-1))>
 </cffunction>
+
+<cffunction name="distanceOfTimeInWords" returntype="string" access="public" output="false" hint="[DOCS] Reports the approximate distance in time between two dates">
+	<cfargument name="fromTime" type="date" required="yes" hint="The start date/time">
+	<cfargument name="toTime" type="date" required="yes" hint="The end date/time">
+	<cfargument name="includeSeconds" type="boolean" required="no" default="false" hint="When set to true will give more detailed wording when difference is less than 1 minute">
+	
+	<cfset var minuteDiff = dateDiff("n", fromTime, toTime)>
+	<cfset var secondDiff = dateDiff("s", fromTime, toTime)>
+	<cfset var hours = 0>
+	<cfset var days = 0>
+	<cfset var output = "">
+
+	<cfif minuteDiff LT 1>
+		<cfif arguments.includeSeconds>
+			<cfif secondDiff LTE 5>
+				<cfset output = "less than 5 seconds">
+			<cfelseif secondDiff LTE 10>
+				<cfset output = "less than 10 seconds">
+			<cfelseif secondDiff LTE 20>
+				<cfset output = "less than 20 seconds">
+			<cfelseif secondDiff LTE 40>
+				<cfset output = "half a minute">
+			<cfelse>
+				<cfset output = "less than a minute">
+			</cfif>
+		<cfelse>
+			<cfset output = "less than a minute">
+		</cfif>	
+	<cfelseif minuteDiff LT 2>
+		<cfset output = "1 minute">
+	<cfelseif minuteDiff LTE 45>
+		<cfset output = minuteDiff & " minutes">
+	<cfelseif minuteDiff LTE 90>
+		<cfset output = "about 1 hour">
+	<cfelseif minuteDiff LTE 1440>
+		<cfset hours = ceiling(minuteDiff/60)>
+		<cfset output = "about #hours# hours">
+	<cfelseif minuteDiff LTE 2880>
+		<cfset output = "1 day">
+	<cfelse>
+		<cfset days = int(minuteDiff/60/24)>
+		<cfset output = days & " days">
+	</cfif>
+
+	<cfreturn output>
+</cffunction>
+
+<cffunction name="timeAgoInWords" returntype="string" access="public" output="false" hint="[DOCS] Reports the approximate distance in time between the supplied date and the current date">
+	<cfargument name="fromTime" type="date" required="yes" hint="The start date/time">
+	<cfargument name="includeSeconds" type="boolean" required="no" default="false" hint="When set to true will give more detailed wording when difference is less than 1 minute">
+	
+	<cfset arguments.toTime = now()>
+	
+	<cfreturn distanceOfTimeInWords(argumentCollection=arguments)>
+</cffunction>
