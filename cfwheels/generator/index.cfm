@@ -34,7 +34,7 @@
 				<p>Using the form below you can generate new controllers and related actions/views.  It will create
 					a controller, layout, helper and any views you specify. <strong>Separate action names with a comma.</strong></p>
 					
-				<form name="formControllers" id="formControllers" action="/script/index.cfm" method="post">
+				<form name="formControllers" id="formControllers" action="/generator/index.cfm" method="post">
 					<input type="hidden" name="type" value="controller" />
 					<label for="controller_name">Controller Name</label>
 					<input type="textbox" id="controller_name" name="controller_name" />
