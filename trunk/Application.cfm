@@ -7,7 +7,7 @@
 <cferror exception="cfwheels" template="/app/error.cfm" type="exception">
 
 <cfif NOT structKeyExists(application, "initialized") OR NOT application.initialized>
-	<cflock scope="application" type="exclusive" timeout="10">
+	<cflock scope="application" type="exclusive" timeout="30">
 		<cfinclude template="/cfwheels/on_application_start.cfm">
 	</cflock>
 	<cfset application.initialized = true>

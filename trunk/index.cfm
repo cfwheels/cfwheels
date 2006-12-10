@@ -21,7 +21,7 @@
 		
 		<p>To get started building your app:</p>
 		<ul>
-			<li>Head over to the <a href="/script/index.cfm">Generator</a> to build the framework for your app</li>
+			<li>Head over to the <a href="/generator/index.cfm">Generator</a> to build the framework for your app</li>
 		</ul>
 		
 		<p>To learn more about Wheels:</p>

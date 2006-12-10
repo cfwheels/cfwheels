@@ -1,3 +1,5 @@
+<cfset variables._routes = arrayNew(1)>
+
 <cffunction name="dispatch" access="remote" output="true" hint="Takes a request and calls the proper controller/action">
 	<cfset var controller = "">
 	
@@ -58,7 +60,7 @@
 		<cfif fileExists(expandPath("/" & replace(controllerName, ".", "/", "all") & ".cfc"))>
 			<cfset controller = createObject("component",controllerName)>
 		<cfelse>
-			<cfthrow type="cfwheels.controllerMissing" message="There is no controller named '#request.params.controller#' in this application" detail="Use the <a href=""#application.pathTo.scripts#"">Generator</a> to create a controller!">
+			<cfthrow type="cfwheels.controllerMissing" message="There is no controller named '#request.params.controller#' in this application" detail="Use the <a href=""#application.pathTo.generator#"">Generator</a> to create a controller!">
 			<cfabort>
 		</cfif>
 	<cfelseif application.settings.environment IS "production">
@@ -196,7 +198,7 @@
 	<cfset request.currentRequest = url.wheelsaction>
 	
 	<!--- Check to see if this is an XMLHttpRequest --->
-	<cfif cgi.http_accept CONTAINS "text/javascript">
+	<cfif cgi.http_accept Contains "text/javascript">
 		<cfset request.xhr = true>
 	</cfif>
 	
