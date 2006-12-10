@@ -189,10 +189,6 @@
 <cfset application.wheels.singularizationRules[37][1] = "s$">
 <cfset application.wheels.singularizationRules[37][2] = "">
 
-<!--- Take the framework functions and save them to application --->
-<cfset application.core = structNew()>
-<cfinclude template="#application.pathTo.includes#/core_includes.cfm">
-
 <!--- Include environment and database connection info --->
 <cfinclude template="#application.pathTo.config#/environment.ini" />
 <cfinclude template="#application.pathTo.config#/database.ini" />
