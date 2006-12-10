@@ -189,5 +189,8 @@
 <cfset application.wheels.singularizationRules[37][2] = "">
 
 <!--- Include environment and database connection info --->
-<cfinclude template="#application.pathTo.config#/environment.ini" />
-<cfinclude template="#application.pathTo.config#/database.ini" />
+<cfinclude template="#application.pathTo.config#/environment.ini">
+<cfinclude template="#application.pathTo.config#/database.ini">
+
+<!--- Load developer on application start code --->
+<cfinclude template="#application.pathTo.app#/on_application_start.cfm">

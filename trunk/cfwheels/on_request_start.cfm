@@ -6,10 +6,13 @@
 
 <cfif structKeyExists(url, "reload")>
 	<cfset structDelete(application, "wheels")>
-	<cfinclude template="/wheels/on_application_start.cfm">
+	<cfinclude template="#application.pathTo.cfwheels#/on_application_start.cfm">
 </cfif>
 
 <cfset request.wheels = structNew()>
 <cfset request.wheels.taken_objects = "">
 
-<cfinclude template="#application.pathTo.includes#/request_functions.cfm">
+<!--- Load developer on request start code --->
+<cfinclude template="#application.pathTo.app#/on_request_start.cfm">
+
+<cfinclude template="#application.pathTo.functions#/helper_functions.cfm">
