@@ -4,7 +4,7 @@
 --->
 
 <cfapplication name="#listLast(getDirectoryFromPath(getBaseTemplatePath()),'/')#" clientmanagement="false" sessionmanagement="true">
-<cferror exception="cfwheels" template="/error.cfm" type="exception">
+<cferror exception="cfwheels" template="/app/error.cfm" type="exception">
 
 <cfif NOT structKeyExists(application, "initialized") OR NOT application.initialized>
 	<cflock scope="application" type="exclusive" timeout="10">

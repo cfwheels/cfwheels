@@ -1,29 +1,40 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta name="Description" content="" />
-	<meta name="Keywords" content="" />
-	<title>SingSnap</title>
-	<link rel="stylesheet" href="/media/stylesheets/singsnap.css" type="text/css" media="all" />
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />	
-<style>
 
-</style>
+<title>ColdFusion on Wheels - Error</title>
+
+<cfoutput>
+	<link href="#application.pathTo.stylesheets#/wheels.css" rel="stylesheet" media="all" type="text/css" />
+</cfoutput>
+  
 </head>
-<body style="background: none;">
 
-<div id="wrapper">
+<body id="error">
 
-<div id="content" style="margin-top: 15px;"> 
-
-<p class="message alert">Oops, that seems to have caused an unexpected error...</p>
-
-<p style="font-weight: bold; text-align: center;">An automatic email has already been sent to notify us of this problem you encountered. If you want to give us more details about what happened or want to be notified as soon as the problem is fixed then you can just drop us an email at <a href="mailto:support@singsnap.com">support@singsnap.com</a>.</p>
-<p style="font-weight: bold; text-align: center;">Thank you and sorry for the inconvenience!</p>
-
-</div>
-
+<div id="content">
+	
+	<h1>ColdFusion on Wheels Error</h1>
+	
+	<cfoutput>
+		<h3>#error.message#</h3>
+		<h4><strong>To fix this error:</strong> <br />#error.rootCause.detail#</h4>
+		
+		<!---
+		<ul id="variables">
+			<li><strong>Browser:</strong> #error.browser#</li>
+			<li><strong>Remote Address:</strong> #error.remoteAddress#</li>
+			<li><strong>Referrer:</strong> #error.httpReferer#</li>
+			<li><strong>Datetime:</strong> #dateFormat(error.dateTime, 'd mmmm, yyyy')# at #lCase(timeFormat(error.dateTime, 'h:mm:sstt'))#</li>
+		</ul>
+		--->
+		
+		<h3>Stack trace</h3>
+		<code id="stack_trace" class="block">
+			#error.stackTrace#
+		</code>
+	</cfoutput>
 </div>
 
 </body>

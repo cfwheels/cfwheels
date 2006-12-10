@@ -11,18 +11,17 @@
 <cfset application.pathTo.app = "/app">
 <cfset application.pathTo.cfwheels = "/cfwheels">
 <cfset application.pathTo.config = "/config">
-<cfset application.pathTo.scripts = "/script/index.cfm">
+<cfset application.pathTo.scripts = "/generator/index.cfm">
 <cfset application.pathTo.views = application.pathTo.app & "/views">
 <cfset application.pathTo.layouts = application.pathTo.views & "/layouts">
 <cfset application.pathTo.helpers = application.pathTo.app & "/helpers">
 <cfset application.pathTo.includes = application.pathTo.cfwheels & "/includes">
 
 <!--- Default public paths --->
-<cfset application.pathTo.images = "/images">
-<cfset application.pathTo.stylesheets = "/stylesheets">
-<cfset application.pathTo.javascripts = "/javascripts">
-<cfset application.templates.pageNotFound = "/404.cfm">
-<cfset application.templates.applicationError = "/500.cfm">
+<cfset application.pathTo.images = "/media/images">
+<cfset application.pathTo.stylesheets = "/media/stylesheets">
+<cfset application.pathTo.javascripts = "/media/javascripts">
+<cfset application.templates.pageNotFound = "/app/404.cfm">
 
 <!--- File system paths --->
 <cfset application.absolutePathTo = structNew()>
