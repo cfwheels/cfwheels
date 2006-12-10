@@ -1,5 +1,5 @@
 <cfset application.wheels = structNew()>
-<cfset application.wheels.version = "0.6.1">
+<cfset application.wheels.version = "0.7">
 <cfset application.wheels.controllers = structNew()>
 <cfset application.wheels.routes = arrayNew(1)>
 <cfset application.wheels.models = structNew()>
