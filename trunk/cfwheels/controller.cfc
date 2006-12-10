@@ -12,6 +12,6 @@
 	</cfif>
 
 	<!--- Include ColdFusion on Wheels controller functions --->
-	<cfinclude template="#application.filePathTo.functions#/controller_functions.cfm">
+	<cfinclude template="#application.pathTo.functions#/controller_functions.cfm">
 
 </cfcomponent>
