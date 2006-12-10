@@ -1,3 +1,52 @@
+<cffunction name="saveFile" access="private" returntype="boolean" output="false" hint="Creates a file on the filesystem">
+	<cfargument name="fileDir" type="string" required="true" hint="The directory to put this file in">
+	<cfargument name="fileName" type="string" required="true" hint="The name of the file">
+	<cfargument name="contents" type="string" required="true" hint="The content of the file to be written">
+	
+	<cfif NOT directoryExists(arguments.fileDir)>
+		<cfdirectory action="create" directory="#arguments.fileDir#">
+	</cfif>
+	
+	<cfif NOT fileExists("#arguments.fileDir#/#arguments.fileName#")>
+		<cffile action="write" file="#arguments.fileDir#/#arguments.fileName#" nameconflict="overwrite" output="#arguments.contents#">
+		<cfreturn true>
+	<cfelse>
+		<cffile action="write" file="#arguments.fileDir#/#arguments.fileName#" nameconflict="overwrite" output="#arguments.contents#">
+		<cfreturn false>
+	</cfif>
+	
+</cffunction>
+
+<cfset application.core.saveFile = saveFile>
+
+<cffunction name="delFile" access="private" returntype="boolean" output="false" hint="Creates a file on the filesystem">
+	<cfargument name="fileDir" type="string" required="true" hint="The directory to put this file in">
+	<cfargument name="fileName" type="string" required="true" hint="The name of the file">
+	
+	<cfif fileExists("#arguments.fileDir#/#arguments.fileName#")>
+		<cffile action="delete" file="#fileDir#/#arguments.fileName#">
+	</cfif>
+	
+	<cfreturn true>
+	
+</cffunction>
+
+<cfset application.core.delFile = delFile>
+
+<cffunction name="cleanup" access="private" returntype="string" output="false" hint="Prepare generator output to be written into a real CF file">
+	<cfargument name="contents" type="string" required="true" hint="The text to cleanup">
+	
+	<cfset var output = trim(arguments.contents)>
+	<cfset output = replace(output,"<cg","<cf","all")>
+	<cfset output = replace(output,"</cg","</cf","all")>
+	<cfset output = replace(output,"<!--","<!---","all")>
+	<cfset output = replace(output,"-->","--->","all")>
+	
+	<cfreturn output>
+</cffunction>
+
+<cfset application.core.cleanup = cleanup>
+
 <!--- Functions that support the framework --->
 
 <cffunction name="isMethod" returntype="boolean">
@@ -222,3 +271,45 @@
 </cffunction>
 
 <cfset application.core.createArgs = createArgs>
+
+<cffunction name="arrayDefinedAt" access="public" returntype="boolean" output="false" hint="Takes an array and position and lets us know if the position has a value">
+	<cfargument name="array" required="true" type="array" hint="The array to check">
+	<cfargument name="position" required="true" type="numeric" hint="The position to check for">
+
+	<cfset var temp = "">
+	
+	<cftry>
+		<cfset temp = array[position]>
+		<cfreturn true>
+
+		<cfcatch type="coldfusion.runtime.UndefinedElementException">
+			<cfreturn false>
+		</cfcatch>
+		
+		<cfcatch type="coldfusion.runtime.CfJspPage$ArrayBoundException">
+			<cfreturn false>
+		</cfcatch>
+	</cftry>
+
+</cffunction>
+<cfset application.core.arrayDefinedAt = arrayDefinedAt>
+
+<cffunction name="queryRowToStruct" access="public" returntype="struct" hint="Returns structure for a row in a query">
+	<cfargument name="theQuery" required="yes" type="query" hint="The query to convert">
+	<cfargument name="row" required="yes" type="numeric" hint="The row to return">
+	
+	<cfset var queryCols = listToArray(arguments.theQuery.columnList)>
+	<cfset var queryRow = structNew()>
+	<cfset var i = 1>
+	
+	<!--- Loop through each column in the query --->
+	<cfloop index="i" from="1" to="#arrayLen(queryCols)#">
+		<!--- For each row, change the column names into struct keys and the column data into struct values --->
+		<cfset queryRow[queryCols[i]] = arguments.theQuery[queryCols[i]][currentRow]>
+	</cfloop>
+	
+	<cfreturn queryRow>
+	
+</cffunction>
+
+<cfset application.core.queryRowToStruct = queryRowToStruct>

@@ -55,7 +55,7 @@
 	<cfset var controller = "">
 	
 	<cfif application.settings.environment IS "development">
-		<cfif fileExists(expandPath(application.core.componentPathToFilePath(controllerName)&'.cfc'))>
+		<cfif fileExists(expandPath("/" & replace(controllerName, ".", "/", "all") & ".cfc"))>
 			<cfset controller = createObject("component",controllerName)>
 		<cfelse>
 			<cfthrow type="cfwheels.controllerMissing" message="There is no controller named '#request.params.controller#' in this application" detail="Use the <a href=""#application.pathTo.scripts#"">Generator</a> to create a controller!">
