@@ -47,8 +47,12 @@ div#error_explanation {
 	margin-right: -1em;
 	margin-left: -1em;
 	}
-		
+	
 .field_with_errors {
+	display: inline;
+	}
+		
+.field_with_errors input, .field_with_errors textarea, .field_with_errors select {
 	padding: 2px;
 	border: 2px solid #990000;
 	background: #EEEEEE;
