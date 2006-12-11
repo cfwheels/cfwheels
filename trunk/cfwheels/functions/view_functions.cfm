@@ -32,26 +32,23 @@
 <cffunction name="imageTag" returntype="any" access="public" output="false">
 	<cfargument name="source" type="any" required="yes">
 	<cfargument name="size" type="any" required="no" default="">
+	<cfargument name="attributes" type="any" required="false" default="">
 	
 	<cfset var local = structNew()>
 
-	<cfset arguments.custom_attributes = "alt,longdesc,usemap,ismap">
-
 	<cfif left(arguments.source, 1) IS "/">
-		<cfset arguments.attribute_src = arguments.source>
+		<cfset local.src = arguments.source>
 	<cfelse>
-		<cfset arguments.attribute_src = "#application.pathTo.images#/#arguments.source#">
+		<cfset local.src = "#application.pathTo.images#/#arguments.source#">
 	</cfif>
 	
 	<cfif arguments.size IS NOT "">
 		<cfset local.size_array = listToArray(arguments.size, "x")>
-		<cfset arguments.attribute_width = local.size_array[1]>
-		<cfset arguments.attribute_height = local.size_array[2]>
 	</cfif>
 	
 	<cfsavecontent variable="local.output">
 		<cfoutput>
-			<img#HTMLAttributes(argumentCollection=arguments)# />
+			<img src="#local.src#"<cfif arguments.size IS NOT ""> width="#local.size_array[1]#" height="#local.size_array[2]#"</cfif> #arguments.attributes# />
 		</cfoutput>
 	</cfsavecontent>
 	
@@ -62,10 +59,9 @@
 <cffunction name="mailTo" returntype="any" access="public" output="false">
 	<cfargument name="email_address" type="any" required="yes">
 	<cfargument name="encode" type="any" required="no" default="false">
+	<cfargument name="attributes" type="any" required="no" default="">
 	
 	<cfset var local = structNew()>
-
-	<cfset arguments.skip_list = "email_address,encode">
 
 	<cfset arguments.link = "mailto:#arguments.email_address#">
 	<cfif NOT structKeyExists(arguments, "text")>
@@ -74,7 +70,7 @@
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
-			#linkTo(argumentCollection=passThroughArguments(argumentCollection=arguments))#
+			#linkTo(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
 
@@ -95,27 +91,26 @@
 	<cfargument name="link" type="string" required="no" default="">
 	<cfargument name="text" type="string" required="no" default="">
 	<cfargument name="confirm" type="string" required="no" default="">
+	<cfargument name="params" type="string" required="no" default="">
+	<cfargument name="attributes" type="any" required="no" default="">
 
 	<cfset var local = structNew()>
-
-	<cfset arguments.skip_list = "link,text,confirm">
-	<cfset arguments.custom_attributes = "onfocus,onblur,rel,rev,accesskey,tabindex">
 	
 	<cfif arguments.link IS NOT "">
-		<cfset arguments.attribute_href = arguments.link>
+		<cfset local.href = arguments.link>
 	<cfelse>
-		<cfset arguments.attribute_href = urlFor(argumentCollection=passThroughArguments(argumentCollection=arguments))>
+		<cfset local.href = urlFor(argumentCollection=arguments)>
 	</cfif>
 	
 	<cfif arguments.text IS NOT "">
 		<cfset local.link_text = arguments.text>
 	<cfelse>
-		<cfset local.link_text = arguments.attribute_href>	
+		<cfset local.link_text = local.href>	
 	</cfif>
 	
 	<cfsavecontent variable="local.output">
 		<cfoutput>	
-			<a#HTMLAttributes(argumentCollection=arguments)#<cfif arguments.confirm IS NOT ""> onclick="return confirm('#JSStringFormat(arguments.confirm)#');"</cfif>>#local.link_text#</a>
+			<a href="#local.href#"<cfif arguments.confirm IS NOT ""> onclick="return confirm('#JSStringFormat(arguments.confirm)#');"</cfif> #arguments.attributes#>#local.link_text#</a>
 		</cfoutput>
 	</cfsavecontent>
 
@@ -127,14 +122,12 @@
 
 	<cfset var local = structNew()>
 	
-	<cfset arguments.skip_list = "link,text,confirm">
-
 	<cfsavecontent variable="local.output">
 		<cfoutput>
-			<cfif isCurrentPage(argumentCollection=passThroughArguments(argumentCollection=arguments))>
+			<cfif isCurrentPage(argumentCollection=arguments)>
 				#arguments.text#
 			<cfelse>
-				#linkTo(argumentCollection=passThroughArguments(argumentCollection=arguments))#
+				#linkTo(argumentCollection=arguments)#
 			</cfif>
 		</cfoutput>
 	</cfsavecontent>
@@ -233,7 +226,7 @@
 
 
 <cffunction name="isCurrentPage" returntype="any" access="private" output="false">
-	<cfif #replace(urlFor(argumentCollection=arguments), "/dispatch.cfm?wheelsaction=", "")# IS #request.currentrequest#>
+	<cfif replace(urlFor(argumentCollection=arguments), "/dispatch.cfm?wheelsaction=", "") IS request.currentrequest>
 		<cfreturn true>
 	<cfelse>
 		<cfreturn false>
@@ -250,11 +243,9 @@
 	<cfargument name="trailing_slash" type="any" required="no" default="false">
 	<cfargument name="host" type="any" required="no" default="">
 	<cfargument name="protocol" type="any" required="no" default="">
+	<cfargument name="params" type="any" required="no" default="">
 	
 	<cfset var local = structNew()>
-
-	<!--- List of link (a) attributes, common HTML 4 attributes and the arguments for this function --->
-	<cfset local.skip_attributes = "id,class,style,title,onclick,ondblclick,onmousedown,,onmouseup,onmouseover,onmousemove,onmouseout,onkeypress,onkeydown,onkeyup,onfocus,onblur,rel,rev,accesskey,tabindex,controller,action,anchor,only_path,trailing_slash,host,protocol,custom_attributes">
 
 	<cfif arguments.controller IS NOT "">
 		<cfset local.new_controller = arguments.controller>
@@ -271,7 +262,7 @@
 		</cfif>
 	</cfif>
 
-	<cfif arguments.id IS NOT 0 AND isNumeric(arguments.id)>
+	<cfif arguments.id IS NOT 0>
 		<cfset local.new_id = arguments.id>
 	<cfelse>
 		<cfif structKeyExists(request.params, "id") AND request.params.id IS NOT "" AND local.new_controller IS request.params.controller AND local.new_action IS request.params.action>
@@ -280,30 +271,20 @@
 		</cfif>
 	</cfif>
 
-	<cfset local.new_params = "">
-	<cfloop collection="#arguments#" item="local.i">
-		<cfif listFindNoCase(local.skip_attributes, local.i) IS 0 OR left(local.i, 6) IS "param_">
-			<cfif cgi.script_name Contains "dispatch.cfm">
-				<!--- URL rewriting is not on so use "&" --->
-				<cfset local.new_params = "&">
-			<cfelse>
-				<!--- URL rewriting is on so use "?" --->
-				<cfset local.new_params = "?">
-			</cfif>
-			<cfset local.new_params = local.new_params & replace(local.i, "param_", "") & "=" & arguments[local.i] & "&">
-		</cfif>
-	</cfloop>
-	<cfif local.new_params IS NOT "">
-		<cfset local.new_params = left(local.new_params, len(local.new_params)-1)>
-	</cfif>
-
 	<cfset local.url = "/#local.new_controller#/#local.new_action#">
 	
 	<cfif structKeyExists(local, "new_id") AND local.new_id IS NOT "">
 		<cfset local.url = local.url & "/#local.new_id#">	
 	</cfif>
-	<cfif local.new_params IS NOT "">
-		<cfset local.url = local.url & "#local.new_params#">	
+	<cfif arguments.params IS NOT "">
+		<cfif cgi.script_name Contains "dispatch.cfm">
+			<!--- URL rewriting is not on so use "&" --->
+			<cfset local.url = local.url & "&">
+		<cfelse>
+			<!--- URL rewriting is on so use "?" --->
+			<cfset local.url = local.url & "?">
+		</cfif>
+		<cfset local.url = local.url & "#arguments.params#">
 	</cfif>
 	<cfif arguments.trailing_slash>
 		<cfset local.url = local.url & "/">	
@@ -456,16 +437,131 @@
 </cffunction>
 
 
+<cffunction name="startFormTag" returntype="any" access="public" output="false">
+	<cfargument name="link" type="any" required="no" default="">
+	<cfargument name="name" type="any" required="no" default="form">
+	<cfargument name="method" type="any" required="no" default="post">
+	<cfargument name="multipart" type="any" required="no" default="false">
+	<cfargument name="spam_protection" type="any" required="no" default="false">
+	<cfargument name="attributes" type="any" required="no" default="">
+	
+	<cfset var local = structNew()>
+
+	<cfif arguments.link IS NOT "">
+		<cfset local.url = arguments.link>
+	<cfelse>
+		<cfset local.url = URLFor(argumentCollection=arguments)>
+	</cfif>
+
+	<cfif arguments.spam_protection>
+		<cfset local.onsubmit = "this.action='#left(local.url, int((len(local.url)/2)))#'+'#right(local.url, ceiling((len(local.url)/2)))#';">
+		<cfset local.url = "">
+	</cfif>
+
+	<cfsavecontent variable="local.output">
+		<cfoutput>
+			<form name="#arguments.name#" id="#arguments.name#" action="#local.url#" method="#arguments.method#"<cfif arguments.multipart> enctype="multipart/form-data"</cfif><cfif structKeyExists(local, "onsubmit")> onsubmit="#local.onsubmit#"</cfif> #arguments.attributes#>
+		</cfoutput>
+	</cfsavecontent>	
+
+	<cfreturn trimIt(local.output)>
+</cffunction>
+
+
+<cffunction name="formRemoteTag" returntype="any" access="public" output="false">
+	<cfargument name="link" type="any" required="no" default="">
+	<cfargument name="name" type="any" required="no" default="form">
+	<cfargument name="method" type="any" required="no" default="post">
+	<cfargument name="spam_protection" type="any" required="no" default="false">
+	<cfargument name="attributes" type="any" required="no" default="">
+	<!--- Ajax call specific stuff --->
+	<cfargument name="update" type="any" required="no" default="">
+	<cfargument name="insertion" type="any" required="no" default="">
+	<cfargument name="serialize" type="any" required="no" default="false">
+	<cfargument name="on_loading" type="any" required="no" default="">
+	<cfargument name="on_complete" type="any" required="no" default="">
+	<cfargument name="on_success" type="any" required="no" default="">
+	<cfargument name="on_failure" type="any" required="no" default="">
+	
+	<cfset var local = structNew()>
+
+	<cfif arguments.link IS NOT "">
+		<cfset local.url = arguments.link>
+	<cfelse>
+		<cfset local.url = URLFor(argumentCollection=arguments)>
+	</cfif>
+	
+	<cfset local.ajax_call = "new Ajax.">
+	
+	<!--- Figure out the parameters for the Ajax call --->
+	<cfif arguments.update IS NOT "">
+		<cfset local.ajax_call = local.ajax_call & "Updater('#arguments.update#',">
+	<cfelse>
+		<cfset local.ajax_call = local.ajax_call & "Request(">
+	</cfif>
+	
+	<cfset local.ajax_call = local.ajax_call & "'#local.url#', { asynchronous:true">
+	
+	<cfif arguments.insertion IS NOT "">
+		<cfset local.ajax_call = local.ajax_call & ",insertion:Insertion.#arguments.insertion#">
+	</cfif>
+	
+	<cfif arguments.serialize>
+		<cfset local.ajax_call = local.ajax_call & ",parameters:Form.serialize(this)">
+	</cfif>
+	
+	<cfif arguments.on_loading IS NOT "">
+		<cfset local.ajax_call = local.ajax_call & ",onLoading:#arguments.on_loading#">
+	</cfif>
+
+	<cfif arguments.on_complete IS NOT "">
+		<cfset local.ajax_call = local.ajax_call & ",onComplete:#arguments.on_complete#">
+	</cfif>
+	
+	<cfif arguments.on_success IS NOT "">
+		<cfset local.ajax_call = local.ajax_call & ",onSuccess:#arguments.on_success#">
+	</cfif>
+	
+	<cfif arguments.on_failure IS NOT "">
+		<cfset local.ajax_call = local.ajax_call & ",onFailure:#arguments.on_failure#">
+	</cfif>
+	
+	<cfset local.ajax_call = local.ajax_call & "});">
+	
+	<cfif arguments.spam_protection>
+		<cfset local.url = "">
+	</cfif>
+
+	<cfsavecontent variable="local.output">
+		<cfoutput>
+			<form name="#arguments.name#" id="#arguments.name#" action="#local.url#" method="#arguments.method#" onsubmit="#local.ajax_call# return false;" #arguments.attributes#>
+		</cfoutput>
+	</cfsavecontent>	
+	
+	<cfreturn trimIt(local.output)>
+</cffunction>
+
+
+<cffunction name="endFormTag" returntype="any" access="public" output="false">
+	<cfreturn "</form>">
+</cffunction>
+
+
 <cffunction name="textField" returntype="any" access="public" output="false">
 	<cfargument name="object_name" type="any" required="yes">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="input_attributes" type="any" required="false" default="">
+	<cfargument name="attributes" type="any" required="false" default="">
 	<cfargument name="label" type="any" required="false" default="">
 	<cfargument name="label_attributes" type="any" required="false" default="">
 
 	<cfset var local = structNew()>
 
 	<cfset local.error = NOT isBoolean(variables[arguments.object_name].errorsOn(arguments.field))>
+	<cfif structKeyExists(variables[arguments.object_name], arguments.field)>
+		<cfset local.value = variables[arguments.object_name][arguments.field]>
+	<cfelse>
+		<cfset local.value = "">
+	</cfif>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>			
@@ -473,7 +569,7 @@
 			<cfif local.error>
 				<div class="field_with_errors">
 			</cfif>
-			<input type="text" name="#arguments.object_name#[#arguments.field#]" id="#arguments.object_name#_#arguments.field#" value="#variables[arguments.object_name][arguments.field]#" #arguments.input_attributes# />
+			<input type="text" name="#arguments.object_name#[#arguments.field#]" id="#arguments.object_name#_#arguments.field#" value="#local.value#" #arguments.attributes# />
 			<cfif local.error>
 				</div>
 			</cfif>
@@ -485,59 +581,26 @@
 </cffunction>
 
 
-<!--- <cffunction name="setValue" returntype="any" access="private" output="false">
-	<cfset var local = structNew()>
+<cffunction name="textFieldTag" returntype="any" access="public" output="false">
+	<cfargument name="name" type="any" required="true">
+	<cfargument name="value" type="any" required="false" default="">
+	<cfargument name="attributes" type="any" required="false" default="">
+	<cfargument name="label" type="any" required="false" default="">
+	<cfargument name="label_attributes" type="any" required="false" default="">
 
-	<cfif structKeyExists(arguments, "value")>
-		<cfset local.output = arguments.value>
+	<cfset var local = structNew()>
+	
+	<cfif arguments.value IS NOT "">
+		<cfset local.value = arguments.value>
 	<cfelse>
-		<cfset local.object = variables[arguments.object_name]>
-		<cfif structKeyExists(local.object, arguments.field)>
-			<cfset local.output = variables[arguments.object_name][arguments.field]>
-		<cfelse>
-			<cfset local.output = "">
-		</cfif>
+		<cfset local.value = "">
 	</cfif>
-
-	<cfreturn local.output>	
-</cffunction>
-
-
-<cffunction name="setClass" returntype="any" access="private" output="false">
-	<cfset var local = structNew()>
-
-	<cfif objectHasErrors(argumentCollection=arguments) AND arguments.error_display IS "inline">
-		<cfif structKeyExists(arguments, "class")>
-			<cfset local.output = arguments.class & " field_with_errors">
-		<cfelse>
-			<cfset local.output = "field_with_errors">
-		</cfif>
-	<cfelseif structKeyExists(arguments, "class")>
-		<cfset local.output = arguments.class>
-	<cfelse>
-		<cfset local.output = "">
-	</cfif>
-
-	<cfreturn local.output>	
-</cffunction> --->
-
-
-<cffunction name="beforeElement" returntype="any" access="private" output="false">
-	<cfset var local = structNew()>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
-			<cfif arguments.label IS NOT "">
-				<cfif structKeyExists(arguments, "object_name")>
-					<cfset local.for_attribute = arguments.object_name & "_" & arguments.field>
-				<cfelse>
-					<cfset local.for_attribute = arguments.name>
-				</cfif>
-				<label for="#local.for_attribute#" #arguments.attributes#>#arguments.label#
-			</cfif>
-			<cfif structKeyExists(arguments, "object_name") AND NOT isBoolean(variables[arguments.object_name].errorsOn(arguments.field))>
-				<div class="field_with_errors">
-			</cfif>
+			<label for="#arguments.name#" #arguments.label_attributes#>#arguments.label#
+			<input type="text" name="#arguments.name#" id="#arguments.name#" value="#local.value#" #arguments.attributes# />
+			</label>
 		</cfoutput>
 	</cfsavecontent>
 	
@@ -545,12 +608,30 @@
 </cffunction>
 
 
-<!--- <cffunction name="afterElement" returntype="any" access="private" output="false">
+<cffunction name="passwordField" returntype="any" access="public" output="false">
+	<cfargument name="object_name" type="any" required="yes">
+	<cfargument name="field" type="any" required="yes">
+	<cfargument name="attributes" type="any" required="false" default="">
+	<cfargument name="label" type="any" required="false" default="">
+	<cfargument name="label_attributes" type="any" required="false" default="">
+
 	<cfset var local = structNew()>
 
+	<cfset local.error = NOT isBoolean(variables[arguments.object_name].errorsOn(arguments.field))>
+	<cfif structKeyExists(variables[arguments.object_name], arguments.field)>
+		<cfset local.value = variables[arguments.object_name][arguments.field]>
+	<cfelse>
+		<cfset local.value = "">
+	</cfif>
+
 	<cfsavecontent variable="local.output">
-		<cfoutput>
-			<cfif structKeyExists(arguments, "object_name") AND NOT isBoolean(variables[arguments.object_name].errorsOn(arguments.field))>
+		<cfoutput>			
+			<label for="#arguments.object_name#_#arguments.field#" #arguments.label_attributes#>#arguments.label#
+			<cfif local.error>
+				<div class="field_with_errors">
+			</cfif>
+			<input type="password" name="#arguments.object_name#[#arguments.field#]" id="#arguments.object_name#_#arguments.field#" value="#local.value#" #arguments.attributes# />
+			<cfif local.error>
 				</div>
 			</cfif>
 			</label>
@@ -558,55 +639,196 @@
 	</cfsavecontent>
 	
 	<cfreturn trimIt(local.output)>
-</cffunction> --->
-
-
-<!--- <cffunction name="objectHasErrors" returntype="any" access="private" output="false">
-	<cfif NOT isBoolean(variables[arguments.object_name].errorsOn(arguments.field))>
-		<cfreturn true>
-	<cfelse>
-		<cfreturn false>
-	</cfif>
-</cffunction> --->
-
-
-<cffunction name="passThroughArguments" returntype="any" access="private" output="false">
-	<cfset var local = structNew()>
-
-	<cfset local.new_arguments = structNew()>
-	<cfloop collection="#arguments#" item="local.i">
-		<cfif listFindNoCase(arguments.skip_list, local.i) IS 0 AND local.i IS NOT "skip_list">
-			<cfset structInsert(local.new_arguments, local.i, arguments[local.i])>
-		</cfif>
-	</cfloop>
-
-	<cfreturn local.new_arguments>
 </cffunction>
 
 
-<cffunction name="HTMLAttributes" returntype="any" access="private" output="false">
+<cffunction name="passwordFieldTag" returntype="any" access="public" output="false">
+	<cfargument name="name" type="any" required="true">
+	<cfargument name="value" type="any" required="false" default="">
+	<cfargument name="attributes" type="any" required="false" default="">
+	<cfargument name="label" type="any" required="false" default="">
+	<cfargument name="label_attributes" type="any" required="false" default="">
+
+	<cfset var local = structNew()>
+	
+	<cfif arguments.value IS NOT "">
+		<cfset local.value = arguments.value>
+	<cfelse>
+		<cfset local.value = "">
+	</cfif>
+
+	<cfsavecontent variable="local.output">
+		<cfoutput>
+			<label for="#arguments.name#" #arguments.label_attributes#>#arguments.label#
+			<input type="password" name="#arguments.name#" id="#arguments.name#" value="#local.value#" #arguments.attributes# />
+			</label>
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trimIt(local.output)>
+</cffunction>
+
+
+<cffunction name="textArea" returntype="any" access="public" output="false">
+	<cfargument name="object_name" type="any" required="yes">
+	<cfargument name="field" type="any" required="yes">
+	<cfargument name="attributes" type="any" required="false" default="">
+	<cfargument name="label" type="any" required="false" default="">
+	<cfargument name="label_attributes" type="any" required="false" default="">
+
 	<cfset var local = structNew()>
 
-	<cfset local.common_attributes = "class,style,title,onclick,ondblclick,onmousedown,onmouseup,onmouseover,onmousemove,onmouseout,onkeypress,onkeydown,onkeyup">
+	<cfset local.error = NOT isBoolean(variables[arguments.object_name].errorsOn(arguments.field))>
+	<cfif structKeyExists(variables[arguments.object_name], arguments.field)>
+		<cfset local.value = variables[arguments.object_name][arguments.field]>
+	<cfelse>
+		<cfset local.value = "">
+	</cfif>
 
-	<cfset local.output = "">
-	<cfloop collection="#arguments#" item="local.i">
-		<cfif arguments[local.i] IS NOT "">
-			<cfif listFindNoCase(local.common_attributes, local.i) IS NOT 0 OR listFindNoCase(arguments.custom_attributes, local.i) IS NOT 0 OR left(local.i, 10) IS "attribute_">
-				<cfset local.output = local.output & " " & lCase(replaceNoCase(local.i, "attribute_", "")) & "=""" & arguments[local.i] & """">
+	<cfsavecontent variable="local.output">
+		<cfoutput>			
+			<label for="#arguments.object_name#_#arguments.field#" #arguments.label_attributes#>#arguments.label#
+			<cfif local.error>
+				<div class="field_with_errors">
 			</cfif>
-		</cfif>
-	</cfloop>
-	<!--- Add id attribute if not numeric --->
-	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
-		<cfset local.output = local.output & " id=""" & arguments.id & """">	
+			<textarea name="#arguments.object_name#[#arguments.field#]" id="#arguments.object_name#_#arguments.field#" #arguments.attributes#>#local.value#</textarea>
+			<cfif local.error>
+				</div>
+			</cfif>
+			</label>
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trimIt(local.output)>
+</cffunction>
+
+
+<cffunction name="textAreaTag" returntype="any" access="public" output="false">
+	<cfargument name="name" type="any" required="true">
+	<cfargument name="value" type="any" required="false" default="">
+	<cfargument name="attributes" type="any" required="false" default="">
+	<cfargument name="label" type="any" required="false" default="">
+	<cfargument name="label_attributes" type="any" required="false" default="">
+
+	<cfset var local = structNew()>
+	
+	<cfif arguments.value IS NOT "">
+		<cfset local.value = arguments.value>
+	<cfelse>
+		<cfset local.value = "">
+	</cfif>
+
+	<cfsavecontent variable="local.output">
+		<cfoutput>
+			<label for="#arguments.name#" #arguments.label_attributes#>#arguments.label#
+			<textarea name="#arguments.name#" id="#arguments.name#" #arguments.attributes#>#local.value#</textarea>
+			</label>
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trimIt(local.output)>
+</cffunction>
+
+
+<cffunction name="hiddenField" returntype="any" access="public" output="false">
+	<cfargument name="object_name" type="any" required="yes">
+	<cfargument name="field" type="any" required="yes">
+	<cfargument name="attributes" type="any" required="false" default="">
+
+	<cfset var local = structNew()>
+
+	<cfif structKeyExists(variables[arguments.object_name], arguments.field)>
+		<cfset local.value = variables[arguments.object_name][arguments.field]>
+	<cfelse>
+		<cfset local.value = "">
+	</cfif>
+
+	<cfsavecontent variable="local.output">
+		<cfoutput>			
+			<input type="hidden" name="#arguments.object_name#[#arguments.field#]" id="#arguments.object_name#_#arguments.field#" value="#local.value#" #arguments.attributes# />
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trimIt(local.output)>
+</cffunction>
+
+
+<cffunction name="hiddenFieldTag" returntype="any" access="public" output="false">
+	<cfargument name="name" type="any" required="true">
+	<cfargument name="value" type="any" required="false" default="">
+	<cfargument name="attributes" type="any" required="false" default="">
+
+	<cfset var local = structNew()>
+	
+	<cfif arguments.value IS NOT "">
+		<cfset local.value = arguments.value>
+	<cfelse>
+		<cfset local.value = "">
+	</cfif>
+
+	<cfsavecontent variable="local.output">
+		<cfoutput>
+			<input type="hidden" name="#arguments.name#" id="#arguments.name#" value="#local.value#" #arguments.attributes# />
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trimIt(local.output)>
+</cffunction>
+
+
+<cffunction name="fileFieldTag" returntype="any" access="public" output="false">
+	<cfargument name="name" type="any" required="true">
+	<cfargument name="value" type="any" required="false" default="">
+	<cfargument name="attributes" type="any" required="false" default="">
+	<cfargument name="label" type="any" required="false" default="">
+	<cfargument name="label_attributes" type="any" required="false" default="">
+
+	<cfset var local = structNew()>
+	
+	<cfif arguments.value IS NOT "">
+		<cfset local.value = arguments.value>
+	<cfelse>
+		<cfset local.value = "">
+	</cfif>
+
+	<cfsavecontent variable="local.output">
+		<cfoutput>
+			<label for="#arguments.name#" #arguments.label_attributes#>#arguments.label#
+			<input type="file" name="#arguments.name#" id="#arguments.name#" value="#local.value#" #arguments.attributes# />
+			</label>
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trimIt(local.output)>
+</cffunction>
+
+
+<cffunction name="submitTag" returntype="any" access="public" output="false">
+	<cfargument name="name" type="any" required="true">
+	<cfargument name="value" type="any" required="false" default="">
+	<cfargument name="attributes" type="any" required="false" default="">
+	<cfargument name="disable_with" type="string" required="false" default="">
+	<cfargument name="type" type="string" required="false" default="submit">
+
+	<cfset var local = structNew()>
+
+	<cfif arguments.disable_with IS NOT "">
+		<cfset local.onclick = "this.disabled=true;this.value='#arguments.disable_with#';this.form.submit();">
 	</cfif>
 	
-	<cfreturn local.output>
+	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
+
+	<cfsavecontent variable="local.output">
+		<cfoutput>
+			<input type="#arguments.type#" name="#arguments.name#" id="#arguments.name#" value="#local.value#" #arguments.attributes# />
+		</cfoutput>
+	</cfsavecontent>
+	
+	<cfreturn trimIt(local.output)>
 </cffunction>
 
 
 <cffunction name="trimIt" returntype="any" access="private" output="false">
 	<cfargument name="str" type="any" required="yes">
-	<cfreturn replaceList(trim(arguments.str), "#chr(9)#,#chr(10)#,#chr(13)#", ",,")>
+	<cfreturn replaceList(trim(arguments.str), " >,#chr(9)#,#chr(10)#,#chr(13)#", ">,,")>
 </cffunction>
