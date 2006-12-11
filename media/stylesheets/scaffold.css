@@ -14,6 +14,7 @@ body#scaffold table td {
 
 body#scaffold form label {
 	display: block;
+	font-weight: bold;
 	margin-top: 10px;
 	}
 
@@ -30,24 +31,26 @@ body#scaffold form input[type=submit] {
 	margin-top: 10px;
 	}
 
-div#errorExplanation {
+div#error_explanation {
 	border: 2px solid #990000;
 	background: #EEEEEE;
 	padding: 1em;
-	width: 400px;
 	}
 	
-#errorExplanation h2 {
+#error_explanation h2 {
 	padding: .5em;
 	font-size: 100%;
 	font-weight: bold;
 	color: #FFFFFF;
 	background-color: #990000;
-	margin: -1em;
+	margin-top: -1em;
+	margin-right: -1em;
+	margin-left: -1em;
 	}
-	
-.fieldWithErrors {
+		
+.field_with_errors {
 	padding: 2px;
-	background-color: #990000;
+	border: 2px solid #990000;
+	background: #EEEEEE;
 	display: table;
 	}
