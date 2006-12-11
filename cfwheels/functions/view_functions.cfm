@@ -91,7 +91,7 @@
 </cffunction>
 
 
-<cffunction name="linkTo" returntype="string" access="public" output="false">
+<cffunction name="linkTo" returntype="any" access="public" output="false">
 	<cfargument name="link" type="string" required="no" default="">
 	<cfargument name="text" type="string" required="no" default="">
 	<cfargument name="confirm" type="string" required="no" default="">
@@ -179,7 +179,7 @@
 </cffunction>
 
 
-<cffunction name="paginationLinks" output="false" returntype="string" hint="[DOCS] Creates links for the given paginator">
+<cffunction name="paginationLinks" returntype="any" access="public" output="false">
 	<cfargument name="model" type="string" required="yes" hint="Name of the model to create links for">
 	<cfargument name="name" type="string" required="no" default="page" hint="The variable name for this paginator">
 	<cfargument name="windowSize" type="numeric" required="no" default=2 hint="The number of pages to show around the current page">
@@ -232,7 +232,7 @@
 </cffunction>
 
 
-<cffunction name="isCurrentPage" returntype="any" access="public" output="false">			
+<cffunction name="isCurrentPage" returntype="any" access="private" output="false">
 	<cfif #replace(urlFor(argumentCollection=arguments), "/dispatch.cfm?wheelsaction=", "")# IS #request.currentrequest#>
 		<cfreturn true>
 	<cfelse>
@@ -241,7 +241,7 @@
 </cffunction>
 
 
-<cffunction name="URLFor" returntype="any" access="public" output="false">
+<cffunction name="URLFor" returntype="any" access="private" output="false">
 	<cfargument name="controller" type="any" required="no" default="">
 	<cfargument name="action" type="any" required="no" default="">
 	<cfargument name="id" type="any" required="no" default=0>
@@ -339,6 +339,7 @@
 	<cfreturn uCase(left(arguments.text,1)) & lCase(right(arguments.text,len(arguments.text)-1))>
 </cffunction>
 
+
 <cffunction name="distanceOfTimeInWords" returntype="any" access="public" output="false">
 	<cfargument name="from_time" type="any" required="yes">
 	<cfargument name="to_time" type="any" required="yes">
@@ -422,7 +423,7 @@
 </cffunction>
 
 
-<cffunction name="errorMessagesFor" returntype="any" access="public" output="false" >
+<cffunction name="errorMessagesFor" returntype="any" access="public" output="false">
 	<cfargument name="object" type="any" required="true">
 	<cfargument name="header_tag" type="any" required="false" default="h2">
 	<cfargument name="id" type="any" required="false" default="error_explanation">
@@ -458,20 +459,25 @@
 <cffunction name="textField" returntype="any" access="public" output="false">
 	<cfargument name="object_name" type="any" required="yes">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="error_display" type="any" required="false" default="div">
-	<cfargument name="label" type="any" required="false" default="false">
-	<cfargument name="label_text" type="any" required="false" default="">
+	<cfargument name="input_attributes" type="any" required="false" default="">
+	<cfargument name="label" type="any" required="false" default="">
+	<cfargument name="label_attributes" type="any" required="false" default="">
 
 	<cfset var local = structNew()>
 
+	<cfset local.error = NOT isBoolean(variables[arguments.object_name].errorsOn(arguments.field))>
+
 	<cfsavecontent variable="local.output">
 		<cfoutput>			
-			#beforeElement(argumentCollection=arguments)#
-			<cfset arguments.custom_attributes = "value,onfocus,onblur,onselect,onchange,accesskey,tabindex,disabled,readonly,size">
-			<cfset arguments.value = setValue(argumentCollection=arguments)>
-			<cfset arguments.class = setClass(argumentCollection=arguments)>
-			<input type="text" name="#arguments.object_name#[#arguments.field#]" id="#arguments.object_name#_#arguments.field#"#HTMLAttributes(argumentCollection=arguments)# />
-			#afterElement(argumentCollection=arguments)#
+			<label for="#arguments.object_name#_#arguments.field#" #arguments.label_attributes#>#arguments.label#
+			<cfif local.error>
+				<div class="field_with_errors">
+			</cfif>
+			<input type="text" name="#arguments.object_name#[#arguments.field#]" id="#arguments.object_name#_#arguments.field#" value="#variables[arguments.object_name][arguments.field]#" #arguments.input_attributes# />
+			<cfif local.error>
+				</div>
+			</cfif>
+			</label>
 		</cfoutput>
 	</cfsavecontent>
 	
@@ -479,7 +485,7 @@
 </cffunction>
 
 
-<cffunction name="setValue" returntype="any" access="private" output="false">
+<!--- <cffunction name="setValue" returntype="any" access="private" output="false">
 	<cfset var local = structNew()>
 
 	<cfif structKeyExists(arguments, "value")>
@@ -487,7 +493,7 @@
 	<cfelse>
 		<cfset local.object = variables[arguments.object_name]>
 		<cfif structKeyExists(local.object, arguments.field)>
-			<cfset local.output = local.object[arguments.field]>
+			<cfset local.output = variables[arguments.object_name][arguments.field]>
 		<cfelse>
 			<cfset local.output = "">
 		</cfif>
@@ -513,68 +519,55 @@
 	</cfif>
 
 	<cfreturn local.output>	
-</cffunction>
+</cffunction> --->
 
 
 <cffunction name="beforeElement" returntype="any" access="private" output="false">
 	<cfset var local = structNew()>
 
-	<cfset local.label_arguments = structNew()>
-	<cfset local.label_arguments.custom_attributes = "for,accesskey,onfocus,onblur">
-
 	<cfsavecontent variable="local.output">
 		<cfoutput>
-			<cfif (isBoolean(arguments.label) AND arguments.label) OR arguments.label IS "wrap">
+			<cfif arguments.label IS NOT "">
 				<cfif structKeyExists(arguments, "object_name")>
-					<cfset local.label_arguments.for = arguments.object_name & "_" & arguments.field>
+					<cfset local.for_attribute = arguments.object_name & "_" & arguments.field>
 				<cfelse>
-					<cfset local.label_arguments.for = arguments.name>
+					<cfset local.for_attribute = arguments.name>
 				</cfif>
-				<cfloop collection="#arguments#" item="i">
-					<cfif i Contains "label_">
-						<cfset structInsert(local.label_arguments, replace(i, "label_", ""), arguments[i])>
-					</cfif>
-				</cfloop>
-				<label#HTMLAttributes(argumentCollection=local.label_arguments)#>#arguments.label_text#
-				<cfif arguments.label IS NOT "wrap">
-					</label>
-				</cfif>
+				<label for="#local.for_attribute#" #arguments.attributes#>#arguments.label#
 			</cfif>
-			<cfif structKeyExists(arguments, "object_name") AND objectHasErrors(argumentCollection=arguments) AND arguments.error_display IS NOT "inline">
-				<#arguments.error_display# class="field_with_errors">
+			<cfif structKeyExists(arguments, "object_name") AND NOT isBoolean(variables[arguments.object_name].errorsOn(arguments.field))>
+				<div class="field_with_errors">
 			</cfif>
 		</cfoutput>
 	</cfsavecontent>
 	
-	<cfreturn local.output>
+	<cfreturn trimIt(local.output)>
 </cffunction>
 
 
-<cffunction name="afterElement" returntype="any" access="private" output="false">
+<!--- <cffunction name="afterElement" returntype="any" access="private" output="false">
 	<cfset var local = structNew()>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
-			<cfif structKeyExists(arguments, "object_name") AND objectHasErrors(argumentCollection=arguments) AND arguments.error_display IS NOT "inline">
-				</#arguments.error_display#>
+			<cfif structKeyExists(arguments, "object_name") AND NOT isBoolean(variables[arguments.object_name].errorsOn(arguments.field))>
+				</div>
 			</cfif>
-			<cfif arguments.label IS "wrap">
-				</label>
-			</cfif>	
+			</label>
 		</cfoutput>
 	</cfsavecontent>
 	
-	<cfreturn local.output>
-</cffunction>
+	<cfreturn trimIt(local.output)>
+</cffunction> --->
 
 
-<cffunction name="objectHasErrors" returntype="any" access="private" output="false">
+<!--- <cffunction name="objectHasErrors" returntype="any" access="private" output="false">
 	<cfif NOT isBoolean(variables[arguments.object_name].errorsOn(arguments.field))>
 		<cfreturn true>
 	<cfelse>
 		<cfreturn false>
 	</cfif>
-</cffunction>
+</cffunction> --->
 
 
 <cffunction name="passThroughArguments" returntype="any" access="private" output="false">
