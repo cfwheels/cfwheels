@@ -21,6 +21,9 @@
 	<!------ Controller ------>
 	<cfset controller = createController()>
 
+	<!--- Run developer on request start code --->
+	<cfinclude template="#application.pathTo.app#/on_request_start.cfm">
+
 	<!------ beforeFilters ------>
 	<cfif arrayLen(controller.getBeforeFilters()) IS NOT 0>
 		<cfset callBeforeFilters(controller)>

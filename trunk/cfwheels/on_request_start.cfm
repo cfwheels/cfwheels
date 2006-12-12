@@ -12,7 +12,4 @@
 <cfset request.wheels = structNew()>
 <cfset request.wheels.taken_objects = "">
 
-<!--- Load developer on request start code --->
-<cfinclude template="#application.pathTo.app#/on_request_start.cfm">
-
 <cfinclude template="#application.pathTo.functions#/helper_functions.cfm">
