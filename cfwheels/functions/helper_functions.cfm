@@ -1,14 +1,11 @@
 <cffunction name="model" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="yes">
 
-	<cfset var model_query = "">
-	<cfset var model_file = "">
-	<cfset var model_hash = "">
-	<cfset var i = "">
+	<cfset var local = structNew()>
 
 	<cfif application.settings.environment IS "development">
 
-		<cfquery name="model_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+		<cfquery name="local.model_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
 		SELECT 
 		<cfif application.database.type IS "sqlserver">
 			(column_name + '' + data_type + '' + is_nullable + '' + character_maximum_length + '' + column_default) AS info
@@ -19,14 +16,19 @@
 		WHERE table_schema = '#application.database.name#'
 		</cfquery>
 	
-		<cffile action="read" file="#expandPath(application.filePathTo.models & '/' & arguments.name & '.cfc')#" variable="model_file">
-		<cfset model_hash = hash(valueList(model_query.info)) & hash(model_file)>
+		<cfif fileExists(expandPath(application.filePathTo.models & '/' & arguments.name & '.cfc'))>
+			<cffile action="read" file="#expandPath(application.filePathTo.models & '/' & arguments.name & '.cfc')#" variable="local.model_file">
+		<cfelse>
+			<cfthrow type="cfwheels.model_missing" message="There is no model named ""#arguments.name#"" in this application." detail="Create the ""#arguments.name#.cfc"" file manually in the ""app/models"" folder (it should extend ""cfwheels.model"") or use the <a href=""#application.pathTo.generator#"">Generator</a>. If you have already created the file this problem could also occur because you are referencing it incorrectly - always use singular form when referencing a model.">
+		</cfif>
+
+		<cfset local.model_hash = hash(valueList(local.model_query.info)) & hash(local.model_file)>
 
 	</cfif>
 
-<cfif (NOT structKeyExists(application.wheels.models, arguments.name)) OR (application.settings.environment IS "development" AND NOT structKeyExists(application.wheels.models, "#arguments.name#_hash")) OR (application.settings.environment IS "development" AND application.wheels.models[arguments.name & "_hash"] IS NOT model_hash)>
+	<cfif (NOT structKeyExists(application.wheels.models, arguments.name)) OR (application.settings.environment IS "development" AND NOT structKeyExists(application.wheels.models, "#arguments.name#_hash")) OR (application.settings.environment IS "development" AND application.wheels.models[arguments.name & "_hash"] IS NOT local.model_hash)>
 		<cflock name="model_lock" type="exclusive" timeout="5">
-	        <cfif (NOT structKeyExists(application.wheels.models, arguments.name)) OR (application.settings.environment IS "development" AND NOT structKeyExists(application.wheels.models, "#arguments.name#_hash")) OR (application.settings.environment IS "development" AND application.wheels.models[arguments.name & "_hash"] IS NOT model_hash)>
+	        <cfif (NOT structKeyExists(application.wheels.models, arguments.name)) OR (application.settings.environment IS "development" AND NOT structKeyExists(application.wheels.models, "#arguments.name#_hash")) OR (application.settings.environment IS "development" AND application.wheels.models[arguments.name & "_hash"] IS NOT local.model_hash)>
 				<cfset "application.wheels.caches.#arguments.name#" = "smart_cache_id_#dateFormat(now(), 'yyyymmdd')#_#timeFormat(now(), 'HHmmss')#_#randRange(1000,9999)#">
 				<cfset "application.wheels.pools.#arguments.name#" = structNew()>
 				<cfset "application.wheels.models.#arguments.name#" = createObject("component", "app.models.#arguments.name#").initModel()>
@@ -34,13 +36,13 @@
 	    </cflock>
 	</cfif>
 
-	<!--- UNCOMMENT THIS WHEN MAKING CHANGES INSIDE _MODEL.CFC
+	<!--- UNCOMMENT THIS WHEN MAKING CHANGES INSIDE _MODEL.CFC --->
 	<cfset "application.wheels.models.#arguments.name#" = createObject("component", "app.models.#arguments.name#").initModel()>
 	<cfset "application.wheels.caches.#arguments.name#" = "smart_cache_id_#dateFormat(now(), 'yyyymmdd')#_#timeFormat(now(), 'HHmmss')#_#randRange(1000,9999)#">
-	 --->
+	
 
 	<cfif application.settings.environment IS "development">
-		<cfset "application.wheels.models.#arguments.name#_hash" = model_hash>
+		<cfset "application.wheels.models.#arguments.name#_hash" = local.model_hash>
 	</cfif>
 
 	<cfreturn application.wheels.models[arguments.name]>

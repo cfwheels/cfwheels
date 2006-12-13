@@ -13,7 +13,12 @@
 	<cfquery name="get_columns_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
 	SELECT column_name, data_type, is_nullable, character_maximum_length, column_default
 	FROM information_schema.columns
-	WHERE table_name = '#variables.table_name#' AND table_schema = '#application.database.name#'
+	WHERE table_name = '#variables.table_name#' AND
+	<cfif application.database.type IS "mysql5">
+		table_schema = '#application.database.name#'
+	<cfelseif application.database.type IS "sqlserver">
+		table_catalog = '#application.database.name#'	
+	</cfif>
 	</cfquery>
 
 	<cfset variables.column_list = valueList(get_columns_query.column_name)>
@@ -601,7 +606,7 @@
 
 	<cfset var local = structNew()>
 	
-	<cfset order_clause = "">
+	<cfset local.order_clause = "">
 	
 	<cfif structKeyExists(arguments, "order") AND arguments.order IS NOT "">
 		<cfloop list="#arguments.order#" index="local.i">
