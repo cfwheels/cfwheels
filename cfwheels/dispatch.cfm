@@ -21,11 +21,8 @@
 	<!------ Controller ------>
 	<cfset controller = createController()>
 
-	<!--- Run developer's application start and request start code --->
-	<cfif structKeyExists(request, "application_start")>
-		<cfset controller.applicationStart()>
-	</cfif>
-	<cfset controller.requestStart()>
+	<!--- Run global before filter --->
+	<cfset controller.globalBeforeFilter()>
 
 	<!------ beforeFilters ------>
 	<cfif arrayLen(controller.getBeforeFilters()) IS NOT 0>
@@ -51,8 +48,8 @@
 		<cfset callAfterFilters(controller)>
 	</cfif>
 	
-	<!--- Run developer's request end code --->
-	<cfset controller.requestEnd()>
+	<!--- Run global after filter --->
+	<cfset controller.globalAfterFilter()>
 
 	<!--- Clear the flash --->
 	<cfset clearFlash()>
