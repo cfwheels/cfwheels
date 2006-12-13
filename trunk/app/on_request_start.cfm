@@ -1,4 +1,4 @@
-<!--- Write code here that you want executed at the start of each request (please note that at this point the framework has not been loaded so you can't use any of it's functions --->
+<!--- W code here that you want executed at the start of each request --->
 
 <!--- Get active user from database from cookie if it does not exist in session already --->
 <cfif NOT isDefined("session.active_user") AND isDefined("cookie.screen_name")>
