@@ -1,1 +1,1 @@
-<!--- Add code here that you want executed on application start up --->
+<!--- Add code here that you want executed on application start up (no Wheels functions can be used here though) --->

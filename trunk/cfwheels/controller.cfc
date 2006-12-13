@@ -10,6 +10,6 @@
 	<cfinclude template="#application.pathTo.functions#/helper_functions.cfm">
 
 	<!--- Include developer functions that should be available to all controllers --->
-	<cfinclude template="#application.filePathTo.controllers#/shared_functions.cfm">
+	<cfinclude template="#application.filePathTo.controllers#/application_functions.cfm">
 
 </cfcomponent>

@@ -1,1 +1,1 @@
-<!--- Add code here that you want executed at the end of each request --->
+<!--- Add code here that you want executed at the end of each request (no Wheels functions can be used here though) --->
