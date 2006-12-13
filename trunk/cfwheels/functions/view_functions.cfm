@@ -556,9 +556,10 @@
 
 	<cfset var local = structNew()>
 
-	<cfset local.error = NOT isBoolean(variables[arguments.object_name].errorsOn(arguments.field))>
-	<cfif structKeyExists(variables[arguments.object_name], arguments.field)>
-		<cfset local.value = variables[arguments.object_name][arguments.field]>
+	<cfset local.obj = evaluate(arguments.object_name)>
+	<cfset local.error = NOT isBoolean(local.obj.errorsOn(arguments.field))>
+	<cfif structKeyExists(local.obj, arguments.field)>
+		<cfset local.value = local.obj[arguments.field]>
 	<cfelse>
 		<cfset local.value = "">
 	</cfif>
@@ -617,9 +618,10 @@
 
 	<cfset var local = structNew()>
 
-	<cfset local.error = NOT isBoolean(variables[arguments.object_name].errorsOn(arguments.field))>
-	<cfif structKeyExists(variables[arguments.object_name], arguments.field)>
-		<cfset local.value = variables[arguments.object_name][arguments.field]>
+	<cfset local.obj = evaluate(arguments.object_name)>
+	<cfset local.error = NOT isBoolean(local.obj.errorsOn(arguments.field))>
+	<cfif structKeyExists(local.obj, arguments.field)>
+		<cfset local.value = local.obj[arguments.field]>
 	<cfelse>
 		<cfset local.value = "">
 	</cfif>
@@ -678,9 +680,10 @@
 
 	<cfset var local = structNew()>
 
-	<cfset local.error = NOT isBoolean(variables[arguments.object_name].errorsOn(arguments.field))>
-	<cfif structKeyExists(variables[arguments.object_name], arguments.field)>
-		<cfset local.value = variables[arguments.object_name][arguments.field]>
+	<cfset local.obj = evaluate(arguments.object_name)>
+	<cfset local.error = NOT isBoolean(local.obj.errorsOn(arguments.field))>
+	<cfif structKeyExists(local.obj, arguments.field)>
+		<cfset local.value = local.obj[arguments.field]>
 	<cfelse>
 		<cfset local.value = "">
 	</cfif>
@@ -737,8 +740,9 @@
 
 	<cfset var local = structNew()>
 
-	<cfif structKeyExists(variables[arguments.object_name], arguments.field)>
-		<cfset local.value = variables[arguments.object_name][arguments.field]>
+	<cfset local.obj = evaluate(arguments.object_name)>
+	<cfif structKeyExists(local.obj, arguments.field)>
+		<cfset local.value = local.obj[arguments.field]>
 	<cfelse>
 		<cfset local.value = "">
 	</cfif>
@@ -815,12 +819,10 @@
 	<cfif arguments.disable_with IS NOT "">
 		<cfset local.onclick = "this.disabled=true;this.value='#arguments.disable_with#';this.form.submit();">
 	</cfif>
-	
-	<cfset HTMLOptions = setHTMLOptions(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
-			<input type="#arguments.type#" name="#arguments.name#" id="#arguments.name#" value="#local.value#" #arguments.attributes# />
+			<input type="#arguments.type#" name="#arguments.name#" id="#arguments.name#" value="#local.value#"<cfif arguments.disable_with IS NOT ""> onclick="#local.onclick#"</cfif> #arguments.attributes# />
 		</cfoutput>
 	</cfsavecontent>
 	

@@ -4,8 +4,8 @@
 	<cfset var controller = "">
 	
 	<!--- If wheelsaction isn't present, we can't do anything --->
-	<cfif NOT structKeyExists(url,'wheelsaction')>
-		<cfthrow type="cfwheels.missingWheelsAction" message="There is no 'wheelsaction' variable present in the url" detail="This is most likely caused by a problem with URL rewriting. Check that your URL is being rewritten as '?wheelsaction=/the/original/url'">
+	<cfif NOT structKeyExists(url, "wheelsaction")>
+		<cfthrow type="cfwheels.missing_wheels_action" message="There is no ""wheelsaction"" variable present in the url." detail="This is most likely caused by a problem with URL rewriting. Check that your URL is being rewritten as ""?wheelsaction=/the/original/url"".">
 		<cfabort>
 	</cfif>
 
@@ -21,8 +21,11 @@
 	<!------ Controller ------>
 	<cfset controller = createController()>
 
-	<!--- Run developer on request start code --->
-	<cfinclude template="#application.pathTo.app#/on_request_start.cfm">
+	<!--- Run developer's application start and request start code --->
+	<cfif structKeyExists(request, "application_start")>
+		<cfset controller.applicationStart()>
+	</cfif>
+	<cfset controller.requestStart()>
 
 	<!------ beforeFilters ------>
 	<cfif arrayLen(controller.getBeforeFilters()) IS NOT 0>
@@ -48,6 +51,9 @@
 		<cfset callAfterFilters(controller)>
 	</cfif>
 	
+	<!--- Run developer's request end code --->
+	<cfset controller.requestEnd()>
+
 	<!--- Clear the flash --->
 	<cfset clearFlash()>
 	
@@ -63,8 +69,7 @@
 		<cfif fileExists(expandPath("/" & replace(controllerName, ".", "/", "all") & ".cfc"))>
 			<cfset controller = createObject("component",controllerName)>
 		<cfelse>
-			<cfthrow type="cfwheels.controllerMissing" message="There is no controller named '#request.params.controller#' in this application" detail="Use the <a href=""#application.pathTo.generator#"">Generator</a> to create a controller!">
-			<cfabort>
+			<cfthrow type="cfwheels.controller_missing" message="There is no controller named ""#request.params.controller#"" in this application." detail="Create the ""#request.params.controller#_controller.cfc"" file manually in the ""app/controllers"" folder (it should extend ""cfwheels.controller"") or use the <a href=""#application.pathTo.generator#"">Generator</a>.">
 		</cfif>
 	<cfelseif application.settings.environment IS "production">
 		<!---	If we're in production and there's an error then show a page not found --->
@@ -92,15 +97,12 @@
 	<cfelseif structKeyExists(arguments.controller,'methodMissing')>
 		<cfoutput><cfset arguments.controller.methodMissing()></cfoutput>
 	<cfelse>
-		<!--- <cfif NOT fileExists("#expandPath(application.pathTo.views)#/#request.params.controller#/#request.params.action#.cfm")> --->
-			<cfif application.settings.environment IS "development">
-				<cfthrow type="cfwheels.actionMissing" message="There is no action named '#request.params.action#' in the '#request.params.controller#' controller" detail="Create a function called '#request.params.action#' in your controller, or create an action called 'methodMissing()' in your controller to handle requests to undefined actions">
-				<cfabort>
-			<cfelseif application.settings.environment IS "production">
-				<cfinclude template="#application.templates.pageNotFound#">
-				<cfabort>
-			</cfif>
-		<!--- </cfif> --->
+		<cfif application.settings.environment IS "development">
+			<cfthrow type="cfwheels.action_missing" message="There is no action named ""#request.params.action#"" in the ""#request.params.controller#"" controller" detail="Create a function called ""#request.params.action#"" in your controller, or create a function called ""methodMissing"" in your controller to handle requests to undefined actions.">
+		<cfelseif application.settings.environment IS "production">
+			<cfinclude template="#application.templates.pageNotFound#">
+			<cfabort>
+		</cfif>
 	</cfif>
 
 </cffunction>

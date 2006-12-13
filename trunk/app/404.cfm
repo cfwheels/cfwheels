@@ -6,7 +6,7 @@
 <title>Page Not Found</title>
 
 <cfoutput>
-	<link href="#application.pathTo.stylesheets#/wheels.css" rel="stylesheet" media="all" type="text/css" />
+	#styleSheetLinkTag("wheels")#
 </cfoutput>
   
 </head>
@@ -30,7 +30,7 @@
 			<li><a href="##" onclick="history.go(-1); return false;">Go back</a> to the last page you were on</li>
 			<li>Go to the <a href="/">homepage</a> of this site</li>
 			<li>Head to your favorite <a href="http://www.google.com">search engine</a></li>
-			<li><a href="webmaster@localhost.com">Notify the webmaster</a> of the site that he has a broken page</li>
+			<li><a href="mailto:webmaster@localhost.com">Notify the webmaster</a> of the site that he has a broken page</li>
 		</ul>
 	</cfoutput>
 </div>
