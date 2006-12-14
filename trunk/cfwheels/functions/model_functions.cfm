@@ -445,29 +445,32 @@
 
 
 <cffunction name="findAll" returntype="any" access="public" output="false">
-	<cfargument name="where" type="string" required="no" default="">
-	<cfargument name="order" type="string" required="no" default="">
-	<cfargument name="select" type="string" required="no" default="">
-	<cfargument name="joins" type="string" required="no" default="">
-	<cfargument name="distinct" type="boolean" required="no" default="false">
-	<cfargument name="limit" type="numeric" required="no" default=0>
-	<cfargument name="offset" type="numeric" required="no" default=0>
+	<cfargument name="where" type="any" required="no" default="">
+	<cfargument name="order" type="any" required="no" default="">
+	<cfargument name="select" type="any" required="no" default="">
+	<cfargument name="joins" type="any" required="no" default="">
+	<cfargument name="distinct" type="any" required="no" default="false">
+	<cfargument name="limit" type="any" required="no" default=0>
 	<cfargument name="cache" type="any" required="no" default="">
-	<cfargument name="page" type="numeric" required="no" default=0>
-	<cfargument name="per_page" type="numeric" required="no" default=10>
+	<cfargument name="page" type="any" required="no" default=0>
+	<cfargument name="per_page" type="any" required="no" default=10>
 
 	<cfset var local = structNew()>
 
 	<cfset local.select_clause = createSelectClause(argumentCollection=duplicate(arguments))>
 	<cfset local.from_clause = createfromClause(argumentCollection=duplicate(arguments))>
 	<cfset local.order_clause = createOrderClause(argumentCollection=duplicate(arguments))>
+	<cfset local.where_clause = createWhereClause(argumentCollection=duplicate(arguments))>
 	
 	<cfif arguments.page IS NOT 0>
-		<cfset local.pagination_details = createPaginationWhereClause(argumentCollection=duplicate(arguments))>
-		<cfset local.where_clause = local.pagination_details.where_clause>
-		<cfset local.paginator = local.pagination_details.paginator>
-	<cfelse>
-		<cfset local.where_clause = createWhereClause(argumentCollection=duplicate(arguments))>
+		<!--- return a paginator struct and override where clause --->
+		<cfset local.pagination_arguments = duplicate(arguments)>
+		<cfset local.pagination_arguments.from_clause = local.from_clause>
+		<cfset local.pagination_arguments.where_clause = local.where_clause>
+		<cfset local.pagination_arguments.order_clause = local.order_clause>
+		<cfset local.pagination = pagination(argumentCollection=local.pagination_arguments)>
+		<cfset local.paginator = local.pagination.paginator>
+		<cfset local.where_clause = local.pagination.where_clause>
 	</cfif>
 	
 	<cfif arguments.cache IS NOT "">
@@ -497,9 +500,6 @@
 	<cfif application.database.type IS "mysql5" AND arguments.limit IS NOT 0>
 		LIMIT #arguments.limit#
 	</cfif>
-	<cfif application.database.type IS "mysql5" AND arguments.offset IS NOT 0>
-		OFFSET #arguments.offset#
-	</cfif>
 	</cfquery>
 
 	<cfset local.new_object = newObject(local[application.wheels.caches[variables.model_name]])>
@@ -512,36 +512,82 @@
 </cffunction>
 
 
-<cffunction name="createPaginationWhereClause" returntype="struct" access="private" output="false">
-
+<cffunction name="pagination" returntype="any" access="private" output="false">
 	<cfset var local = structNew()>
 
-	<cfset local.find_all_arguments = duplicate(arguments)>
-	<cfset local.count_arguments = duplicate(arguments)>
-	<cfset local.paginator.current_page = arguments.page>
-	<cfset local.count_arguments.distinct = true>
-	<cfset local.paginator.total_records = count(argumentCollection=local.count_arguments)>
-	<cfset local.paginator.total_pages = ceiling(local.paginator.total_records/arguments.per_page)>
-	<cfset local.find_all_arguments.offset = (arguments.page * arguments.per_page) - (arguments.per_page)>
-	<cfset local.find_all_arguments.limit = arguments.per_page>
-	<cfif (local.find_all_arguments.limit + local.find_all_arguments.offset) GT local.paginator.total_records>
-		<cfset local.find_all_arguments.limit = local.paginator.total_records - local.find_all_arguments.offset>
-	</cfif>
-	<cfset local.find_all_arguments.distinct = true>
-	<cfset local.find_all_arguments.select = "#variables.primary_key# AS id">
-	<cfset local.find_all_arguments.page = 0>
-	<cfset local.find_all_arguments.per_page = 10>
-	<cfset local.get_ids = findAll(argumentCollection=local.find_all_arguments)>
-	<cfif local.get_ids.recordfound>
-		<cfset local.ids = valueList(local.get_ids.query.id)>
-	</cfif>
-	<cfset local.where_clause = "#variables.table_name#.#variables.primary_key# IN (#local.ids#)">
+	<cfset local.pagination.paginator.current_page = arguments.page>
 
-	<cfreturn local>
+	<!--- remove everything from the FROM clause unless it's referenced in the WHERE clause --->
+	<cfset local.from_clause = "">
+	<cfset local.pos = 0>
+	<cfloop list="#replaceNoCase(arguments.from_clause, ' LEFT OUTER JOIN ', chr(7), 'all')#" index="local.i" delimiters="#chr(7)#">
+		<cfset local.pos = local.pos + 1>
+		<cfif local.pos IS 1 OR arguments.where_clause Contains (spanExcluding(local.i, " ") & ".")>
+			<cfset local.from_clause = listAppend(local.from_clause, local.i, chr(7))>
+		</cfif>
+	</cfloop>
+	<cfset local.from_clause = replaceNoCase(local.from_clause, chr(7), ' LEFT OUTER JOIN ', 'all')>
+
+	<cfquery name="local.count_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+	SELECT COUNT(
+	<cfif local.from_clause Contains " ">
+		DISTINCT
+	</cfif>
+	#variables.table_name#.#variables.primary_key#) AS total
+	FROM #local.from_clause#
+	<cfif arguments.where_clause IS NOT "">
+		WHERE #preserveSingleQuotes(arguments.where_clause)#
+	</cfif>
+	</cfquery>
+
+	<cfset local.pagination.paginator.total_records = local.count_query.total>
+	<cfset local.pagination.paginator.total_pages = ceiling(local.pagination.paginator.total_records/arguments.per_page)>
+
+	<cfset local.offset = (arguments.page * arguments.per_page) - (arguments.per_page)>
+	<cfset local.limit = arguments.per_page>
+	<cfif (local.limit + local.offset) GT local.pagination.paginator.total_records>
+		<cfset local.limit = local.pagination.paginator.total_records - local.offset>
+	</cfif>
+
+	<cfif application.database.type IS "mysql5">
+		<cfquery name="local.ids_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+		SELECT
+		<cfif local.from_clause Contains " ">
+			DISTINCT
+		</cfif>
+		#variables.table_name#.#variables.primary_key#
+		<cfif variables.primary_key IS NOT "id">
+			AS id
+		</cfif>
+		<cfif local.from_clause Contains " " AND arguments.order_clause IS NOT "#variables.table_name#.#variables.primary_key# ASC">
+			, #replaceList(arguments.order_clause, " ASC, DESC", ",")#
+		</cfif>
+		FROM #local.from_clause#
+		<cfif arguments.where_clause IS NOT "">
+			WHERE #preserveSingleQuotes(arguments.where_clause)#
+		</cfif>
+		ORDER BY #arguments.order_clause#
+		<cfif local.limit IS NOT 0>
+			LIMIT #local.limit#
+		</cfif>
+		<cfif local.offset IS NOT 0>
+			OFFSET #local.offset#
+		</cfif>
+		</cfquery>
+	<cfelseif application.database.type IS "sqlserver">
+	<!--- Weirdo query goes here --->
+	</cfif>
+
+	<cfif local.ids_query.recordcount IS NOT 0>
+		<cfset local.ids = valueList(local.ids_query.id)>
+	</cfif>
+	<cfset local.pagination.where_clause = "#variables.table_name#.#variables.primary_key# IN (#local.ids#)">
+
+	<cfreturn local.pagination>
 </cffunction>
 
 
-<cffunction name="createSelectClause" returntype="string" access="private" output="false">
+<cffunction name="createSelectClause" returntype="any" access="private" output="false">
 
 	<cfset var local = structNew()>
 	
@@ -553,7 +599,7 @@
 			<cfif local.i Does Not Contain "." AND local.i Does Not Contain " AS ">
 				<cfset local.select_clause = listAppend(local.select_clause, "#variables.table_name#.#trim(local.i)# AS #variables.model_name#_#trim(local.i)#")>
 			<cfelseif local.i Contains "." AND local.i Does Not Contain " AS ">
-				<cfset local.select_clause = listAppend(local.select_clause, "#trim(local.i)# AS #variables.model_name#_#trim(local.i)#")>
+				<cfset local.select_clause = listAppend(local.select_clause, "#trim(local.i)# AS #variables.model_name#_#trim(listLast(local.i,"."))#")>
 			<cfelseif local.i Does Not Contain "." AND local.i Contains " AS ">
 				<cfset local.select_clause = listAppend(local.select_clause, "#variables.table_name#.#trim(local.i)#")>
 			<cfelseif local.i Contains "." AND local.i Contains " AS ">
@@ -571,7 +617,7 @@
 </cffunction>
 
 
-<cffunction name="createFromClause" returntype="string" access="private" output="false">
+<cffunction name="createFromClause" returntype="any" access="private" output="false">
 
 	<cfset var local = structNew()>
 	
@@ -584,7 +630,7 @@
 </cffunction>
 
 
-<cffunction name="createWhereClause" returntype="string" access="private" output="false">
+<cffunction name="createWhereClause" returntype="any" access="private" output="false">
 
 	<cfset var local = structNew()>
 	
@@ -602,7 +648,7 @@
 </cffunction>
 
 
-<cffunction name="createOrderClause" returntype="string" access="private" output="false">
+<cffunction name="createOrderClause" returntype="any" access="private" output="false">
 
 	<cfset var local = structNew()>
 	
@@ -1031,9 +1077,9 @@
 		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
 			WHERE #preserveSingleQuotes(arguments.where)#
 		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
-			WHERE #preserveSingleQuotes(arguments.where)# AND deleted_at IS NULL
+			WHERE #preserveSingleQuotes(arguments.where)# AND #variables.table_name#.deleted_at IS NULL
 		<cfelseif arguments.where IS "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
-			WHERE deleted_at IS NULL
+			WHERE #variables.table_name#.deleted_at IS NULL
 		</cfif>
 	</cfquery>
 
@@ -1056,9 +1102,9 @@
 		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
 			WHERE #preserveSingleQuotes(arguments.where)#
 		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
-			WHERE #preserveSingleQuotes(arguments.where)# AND deleted_at IS NULL
+			WHERE #preserveSingleQuotes(arguments.where)# AND #variables.table_name#.deleted_at IS NULL
 		<cfelseif arguments.where IS "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
-			WHERE deleted_at IS NULL
+			WHERE #variables.table_name#.deleted_at IS NULL
 		</cfif>
 	</cfquery>
 
@@ -1081,9 +1127,9 @@
 		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
 			WHERE #preserveSingleQuotes(arguments.where)#
 		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
-			WHERE #preserveSingleQuotes(arguments.where)# AND deleted_at IS NULL
+			WHERE #preserveSingleQuotes(arguments.where)# AND #variables.table_name#.deleted_at IS NULL
 		<cfelseif arguments.where IS "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
-			WHERE deleted_at IS NULL
+			WHERE #variables.table_name#.deleted_at IS NULL
 		</cfif>
 	</cfquery>
 
@@ -1108,9 +1154,9 @@
 		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
 			WHERE #preserveSingleQuotes(arguments.where)#
 		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
-			WHERE #preserveSingleQuotes(arguments.where)# AND deleted_at IS NULL
+			WHERE #preserveSingleQuotes(arguments.where)# AND #variables.table_name#.deleted_at IS NULL
 		<cfelseif arguments.where IS "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
-			WHERE deleted_at IS NULL
+			WHERE #variables.table_name#.deleted_at IS NULL
 		</cfif>
 	</cfquery>
 	
@@ -1122,11 +1168,11 @@
 </cffunction>
 
 
-<cffunction name="count" returntype="numeric" access="public" output="false">
-	<cfargument name="where" type="string" required="no" default="">
-	<cfargument name="joins" type="string" required="no" default="">
-	<cfargument name="select" type="string" required="no" default="">
-	<cfargument name="distinct" type="boolean" required="no" default="false">
+<cffunction name="count" returntype="any" access="public" output="false">
+	<cfargument name="where" type="any" required="no" default="">
+	<cfargument name="joins" type="any" required="no" default="">
+	<cfargument name="select" type="any" required="no" default="">
+	<cfargument name="distinct" type="any" required="no" default="false">
 
 	<cfset var count_query = "">
 	<cfset var select_clause = "">
@@ -1145,9 +1191,9 @@
 		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
 			WHERE #preserveSingleQuotes(arguments.where)#
 		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
-			WHERE #preserveSingleQuotes(arguments.where)# AND deleted_at IS NULL
+			WHERE #preserveSingleQuotes(arguments.where)# AND #variables.table_name#.deleted_at IS NULL
 		<cfelseif arguments.where IS "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
-			WHERE deleted_at IS NULL
+			WHERE #variables.table_name#.deleted_at IS NULL
 		</cfif>
 	</cfquery>
 

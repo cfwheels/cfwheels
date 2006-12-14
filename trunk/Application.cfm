@@ -13,4 +13,5 @@
 	<cfset application.initialized = true>
 </cfif>
 
+<cftrace category="Wheels Request Start"></cftrace>
 <cfinclude template="/cfwheels/on_request_start.cfm">
