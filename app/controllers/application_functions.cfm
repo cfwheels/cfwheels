@@ -3,7 +3,7 @@
 	You can place code in the globalBeforeFilter and globalAfterFilter functions which will then be executed before/after every call to any controller's other filters and function.
 --->
 
-<cffunction name="globalBeforeFilter">
+<cffunction name="globalBeforeFilter">	
 	<cfset var user = "">
 
 	<!--- Get active user from database from cookie if it does not exist in session already --->

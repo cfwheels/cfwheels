@@ -8,14 +8,19 @@
 		<cfquery name="local.model_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
 		SELECT 
 		<cfif application.database.type IS "sqlserver">
-			(column_name + '' + data_type + '' + is_nullable + '' + character_maximum_length + '' + column_default) AS info
+			(CASE WHEN column_name IS NULL THEN '' ELSE column_name END) + '' + (CASE WHEN data_type IS NULL THEN '' ELSE data_type END) + '' + (CASE WHEN is_nullable IS NULL THEN '' ELSE is_nullable END) + '' + (CASE WHEN character_maximum_length IS NULL THEN '' ELSE CAST(character_maximum_length AS varchar) END) + '' + (CASE WHEN column_default IS NULL THEN '' ELSE column_default END) AS info
 		<cfelseif application.database.type IS "mysql5">
 			CONCAT((CASE WHEN column_name IS NULL THEN '' ELSE column_name END),(CASE WHEN data_type IS NULL THEN '' ELSE data_type END),(CASE WHEN is_nullable IS NULL THEN '' ELSE is_nullable END),(CASE WHEN character_maximum_length IS NULL THEN '' ELSE character_maximum_length END),(CASE WHEN column_default IS NULL THEN '' ELSE column_default END)) AS info
 		</cfif>
 		FROM information_schema.columns
-		WHERE table_schema = '#application.database.name#'
+		WHERE
+		<cfif application.database.type IS "mysql5">
+			table_schema = '#application.database.name#'
+		<cfelseif application.database.type IS "sqlserver">
+			table_catalog = '#application.database.name#'	
+		</cfif>
 		</cfquery>
-	
+		
 		<cfif fileExists(expandPath(application.filePathTo.models & '/' & arguments.name & '.cfc'))>
 			<cffile action="read" file="#expandPath(application.filePathTo.models & '/' & arguments.name & '.cfc')#" variable="local.model_file">
 		<cfelse>
