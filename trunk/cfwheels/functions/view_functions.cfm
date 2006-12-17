@@ -173,55 +173,51 @@
 
 
 <cffunction name="paginationLinks" returntype="any" access="public" output="false">
-	<cfargument name="model" type="string" required="yes" hint="Name of the model to create links for">
-	<cfargument name="name" type="string" required="no" default="page" hint="The variable name for this paginator">
-	<cfargument name="windowSize" type="numeric" required="no" default=2 hint="The number of pages to show around the current page">
-	<cfargument name="linkToCurrentPage" type="boolean" required="no" default="false" hint="Whether or not the current page should be linked to">
-	<cfargument name="prependToLink" type="string" required="no" default="" hint="The HTML to prepend to each link">
-	<cfargument name="appendToLink" type="string" required="no" default="" hint="The HTML to append to each link">
-	<cfargument name="classForCurrent" type="string" required="no" default="" hint="The class to set for the link to the current page (if linkToCurrentPage is set to false the number is wrapped in a span tag with the class)">
-	<cfargument name="alwaysShowAnchors" type="boolean" required="no" default="true" hint="Whether or not the first and last pages should always be shown">
+	<cfargument name="object_name" type="any" required="yes">
+	<cfargument name="name" type="any" required="no" default="page">
+	<cfargument name="window_size" type="any" required="no" default=2>
+	<cfargument name="link_to_current_page" type="any" required="no" default="false">
+	<cfargument name="prepend_to_link" type="any" required="no" default="">
+	<cfargument name="append_to_link" type="any" required="no" default="">
+	<cfargument name="class_for_current" type="any" required="no" default="">
+	<cfargument name="always_show_anchors" type="any" required="no" default="true">
 
-	<cfset var thisModel = evaluate("#arguments.model#")>
-	<cfset var new_arguments = "">
-	<cfset var i = "">
-	<cfset var output = "">
+	<cfset var local = structNew()>
 
-	<cfset new_arguments = duplicate(arguments)>
-	<cfloop list="model,name,windowSize,linkToCurrentPage,prependToLink,appendToLink,classForCurrent,alwaysShowAnchors" index="i">
-		<cfset structDelete(new_arguments, i)>
-	</cfloop>
-	
-	<cfsavecontent variable="output"><cfoutput>
-		<cfif arguments.alwaysShowAnchors>
-			<cfif (thisModel.paginatorCurrentPage - arguments.windowSize) GT 1>
-				<cfset "new_arguments.#arguments.name#" = 1>
-				<cfset new_arguments.name = 1>
-				#linkTo(argumentCollection=new_arguments)# ...
-			</cfif>
-		</cfif>
-		<cfloop from="1" to="#thisModel.paginatorTotalPages#" index="i">
-			<cfif (i GTE (thisModel.paginatorCurrentPage - arguments.windowSize) AND i LTE thisModel.paginatorCurrentPage) OR (i LTE (thisModel.paginatorCurrentPage + arguments.windowSize) AND i GTE thisModel.paginatorCurrentPage)>
-				<cfset "new_arguments.#arguments.name#" = i>
-				<cfset new_arguments.name = i>
-				<cfif arguments.classForCurrent IS NOT "" AND thisModel.paginatorCurrentPage IS i>
-					<cfset new_arguments.class = arguments.classForCurrent>
-				<cfelse>
-					<cfset new_arguments.class = "">
+	<cfset local.this_object = evaluate("#arguments.object_name#")>
+
+	<cfsavecontent variable="local.output">
+		<cfoutput>
+			<cfif arguments.always_show_anchors>
+				<cfif (local.this_object.paginator.current_page - arguments.window_size) GT 1>
+					<cfset local.link_to_arguments.params = "#arguments.name#=1">
+					<cfset local.link_to_arguments.text = local.i>
+					#linkTo(argumentCollection=local.link_to_arguments)# ...
 				</cfif>
-				<cfif arguments.prependToLink IS NOT "">#arguments.prependToLink#</cfif><cfif thisModel.paginatorCurrentPage IS NOT i OR arguments.linkToCurrentPage>#linkTo(argumentCollection=new_arguments)#<cfelse><cfif arguments.classForCurrent IS NOT ""><span class="#arguments.classForCurrent#">#i#</span><cfelse>#i#</cfif></cfif><cfif arguments.appendToLink IS NOT "">#arguments.appendToLink#</cfif>
 			</cfif>
-		</cfloop>
-		<cfif arguments.alwaysShowAnchors>
-			<cfif thisModel.paginatorTotalPages GT (thisModel.paginatorCurrentPage + arguments.windowSize)>
-				<cfset "new_arguments.#arguments.name#" = thisModel.paginatorTotalPages>
-				<cfset new_arguments.name = thisModel.paginatorTotalPages>
-			... #linkTo(argumentCollection=new_arguments)#
+			<cfloop from="1" to="#local.this_object.paginator.total_pages#" index="local.i">
+				<cfif (local.i GTE (local.this_object.paginator.current_page - arguments.window_size) AND local.i LTE local.this_object.paginator.current_page) OR (local.i LTE (local.this_object.paginator.current_page + arguments.window_size) AND local.i GTE local.this_object.paginator.current_page)>
+					<cfset local.link_to_arguments.params = "#arguments.name#=#local.i#">
+					<cfset local.link_to_arguments.text = local.i>
+					<cfif arguments.class_for_current IS NOT "" AND local.this_object.paginator.current_page IS local.i>
+						<cfset local.link_to_arguments.attributes = "class=#arguments.class_for_current#">
+					<cfelse>
+						<cfset local.link_to_arguments.attributes = "">
+					</cfif>
+					<cfif arguments.prepend_to_link IS NOT "">#arguments.prepend_to_link#</cfif><cfif local.this_object.paginator.current_page IS NOT local.i OR arguments.link_to_current_page>#linkTo(argumentCollection=local.link_to_arguments)#<cfelse><cfif arguments.class_for_current IS NOT ""><span class="#arguments.class_for_current#">#local.i#</span><cfelse>#local.i#</cfif></cfif><cfif arguments.append_to_link IS NOT "">#arguments.append_to_link#</cfif>
+				</cfif>
+			</cfloop>
+			<cfif arguments.always_show_anchors>
+				<cfif local.this_object.paginator.total_pages GT (local.this_object.paginator.current_page + arguments.window_size)>
+					<cfset local.link_to_arguments.params = "#arguments.name#=#local.this_object.paginator.total_pages#">
+					<cfset local.link_to_arguments.text = local.this_object.paginator.total_pages>
+				... #linkTo(argumentCollection=local.link_to_arguments)#
+				</cfif>
 			</cfif>
-		</cfif>
-	</cfoutput></cfsavecontent>
+		</cfoutput>
+	</cfsavecontent>
 	
-	<cfreturn trimIt(output)>
+	<cfreturn trimIt(local.output)>
 </cffunction>
 
 
