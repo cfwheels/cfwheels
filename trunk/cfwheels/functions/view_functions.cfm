@@ -447,6 +447,10 @@
 	
 	<cfset var local = structNew()>
 
+	<cfif arguments.attributes IS NOT "">
+		<cfset arguments.attributes = replace(arguments.attributes, "'", """", "all")>
+	</cfif>
+
 	<cfif arguments.link IS NOT "">
 		<cfset local.url = arguments.link>
 	<cfelse>
@@ -484,6 +488,10 @@
 	<cfargument name="on_failure" type="any" required="no" default="">
 	
 	<cfset var local = structNew()>
+
+	<cfif arguments.attributes IS NOT "">
+		<cfset arguments.attributes = replace(arguments.attributes, "'", """", "all")>
+	</cfif>
 
 	<cfif arguments.link IS NOT "">
 		<cfset local.url = arguments.link>
@@ -543,6 +551,7 @@
 
 
 <cffunction name="endFormTag" returntype="any" access="public" output="false">
+
 	<cfreturn "</form>">
 </cffunction>
 
@@ -556,6 +565,10 @@
 
 	<cfset var local = structNew()>
 
+	<cfif arguments.attributes IS NOT "">
+		<cfset arguments.attributes = replace(arguments.attributes, "'", """", "all")>
+	</cfif>
+
 	<cfset local.obj = evaluate(arguments.object_name)>
 	<cfset local.error = NOT isBoolean(local.obj.errorsOn(arguments.field))>
 	<cfif structKeyExists(local.obj, arguments.field)>
@@ -564,16 +577,18 @@
 		<cfset local.value = "">
 	</cfif>
 
+	<cfif local.error>
+		<cfif arguments.attributes Contains "class=">
+			<cfset arguments.attributes = replace(arguments.attributes, "class=""", "class=""field_with_errors ")>
+		<cfelse>
+			<cfset arguments.attributes = "class='field_with_errors'">
+		</cfif>
+	</cfif>
+
 	<cfsavecontent variable="local.output">
 		<cfoutput>			
-			<label for="#arguments.object_name#_#arguments.field#" #arguments.label_attributes#>#arguments.label#
-			<cfif local.error>
-				<div class="field_with_errors">
-			</cfif>
-			<input type="text" name="#arguments.object_name#[#arguments.field#]" id="#arguments.object_name#_#arguments.field#" value="#local.value#" #arguments.attributes# />
-			<cfif local.error>
-				</div>
-			</cfif>
+			<label for="#listLast(arguments.object_name,".")#_#arguments.field#" #arguments.label_attributes#>#arguments.label#
+			<input type="text" name="#listLast(arguments.object_name,".")#[#arguments.field#]" id="#listLast(arguments.object_name,".")#_#arguments.field#" value="#local.value#" #arguments.attributes# />
 			</label>
 		</cfoutput>
 	</cfsavecontent>
@@ -591,6 +606,10 @@
 
 	<cfset var local = structNew()>
 	
+	<cfif arguments.attributes IS NOT "">
+		<cfset arguments.attributes = replace(arguments.attributes, "'", """", "all")>
+	</cfif>
+
 	<cfif arguments.value IS NOT "">
 		<cfset local.value = arguments.value>
 	<cfelse>
@@ -618,6 +637,10 @@
 
 	<cfset var local = structNew()>
 
+	<cfif arguments.attributes IS NOT "">
+		<cfset arguments.attributes = replace(arguments.attributes, "'", """", "all")>
+	</cfif>
+
 	<cfset local.obj = evaluate(arguments.object_name)>
 	<cfset local.error = NOT isBoolean(local.obj.errorsOn(arguments.field))>
 	<cfif structKeyExists(local.obj, arguments.field)>
@@ -626,13 +649,21 @@
 		<cfset local.value = "">
 	</cfif>
 
+	<cfif local.error>
+		<cfif arguments.attributes Contains "class=">
+			<cfset arguments.attributes = replace(arguments.attributes, "class=""", "class=""field_with_errors ")>
+		<cfelse>
+			<cfset arguments.attributes = "class='field_with_errors'">
+		</cfif>
+	</cfif>
+
 	<cfsavecontent variable="local.output">
 		<cfoutput>			
-			<label for="#arguments.object_name#_#arguments.field#" #arguments.label_attributes#>#arguments.label#
+			<label for="#listLast(arguments.object_name,".")#_#arguments.field#" #arguments.label_attributes#>#arguments.label#
 			<cfif local.error>
 				<div class="field_with_errors">
 			</cfif>
-			<input type="password" name="#arguments.object_name#[#arguments.field#]" id="#arguments.object_name#_#arguments.field#" value="#local.value#" #arguments.attributes# />
+			<input type="password" name="#listLast(arguments.object_name,".")#[#arguments.field#]" id="#listLast(arguments.object_name,".")#_#arguments.field#" value="#local.value#" #arguments.attributes# />
 			<cfif local.error>
 				</div>
 			</cfif>
@@ -653,6 +684,10 @@
 
 	<cfset var local = structNew()>
 	
+	<cfif arguments.attributes IS NOT "">
+		<cfset arguments.attributes = replace(arguments.attributes, "'", """", "all")>
+	</cfif>
+
 	<cfif arguments.value IS NOT "">
 		<cfset local.value = arguments.value>
 	<cfelse>
@@ -680,6 +715,10 @@
 
 	<cfset var local = structNew()>
 
+	<cfif arguments.attributes IS NOT "">
+		<cfset arguments.attributes = replace(arguments.attributes, "'", """", "all")>
+	</cfif>
+
 	<cfset local.obj = evaluate(arguments.object_name)>
 	<cfset local.error = NOT isBoolean(local.obj.errorsOn(arguments.field))>
 	<cfif structKeyExists(local.obj, arguments.field)>
@@ -688,13 +727,21 @@
 		<cfset local.value = "">
 	</cfif>
 
+	<cfif local.error>
+		<cfif arguments.attributes Contains "class=">
+			<cfset arguments.attributes = replace(arguments.attributes, "class=""", "class=""field_with_errors ")>
+		<cfelse>
+			<cfset arguments.attributes = "class='field_with_errors'">
+		</cfif>
+	</cfif>
+
 	<cfsavecontent variable="local.output">
 		<cfoutput>			
-			<label for="#arguments.object_name#_#arguments.field#" #arguments.label_attributes#>#arguments.label#
+			<label for="#listLast(arguments.object_name,".")#_#arguments.field#" #arguments.label_attributes#>#arguments.label#
 			<cfif local.error>
 				<div class="field_with_errors">
 			</cfif>
-			<textarea name="#arguments.object_name#[#arguments.field#]" id="#arguments.object_name#_#arguments.field#" #arguments.attributes#>#local.value#</textarea>
+			<textarea name="#listLast(arguments.object_name,".")#[#arguments.field#]" id="#listLast(arguments.object_name,".")#_#arguments.field#" #arguments.attributes#>#local.value#</textarea>
 			<cfif local.error>
 				</div>
 			</cfif>
@@ -715,6 +762,10 @@
 
 	<cfset var local = structNew()>
 	
+	<cfif arguments.attributes IS NOT "">
+		<cfset arguments.attributes = replace(arguments.attributes, "'", """", "all")>
+	</cfif>
+
 	<cfif arguments.value IS NOT "">
 		<cfset local.value = arguments.value>
 	<cfelse>
@@ -740,6 +791,10 @@
 
 	<cfset var local = structNew()>
 
+	<cfif arguments.attributes IS NOT "">
+		<cfset arguments.attributes = replace(arguments.attributes, "'", """", "all")>
+	</cfif>
+
 	<cfset local.obj = evaluate(arguments.object_name)>
 	<cfif structKeyExists(local.obj, arguments.field)>
 		<cfset local.value = local.obj[arguments.field]>
@@ -749,7 +804,7 @@
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>			
-			<input type="hidden" name="#arguments.object_name#[#arguments.field#]" id="#arguments.object_name#_#arguments.field#" value="#local.value#" #arguments.attributes# />
+			<input type="hidden" name="#listLast(arguments.object_name,".")#[#arguments.field#]" id="#listLast(arguments.object_name,".")#_#arguments.field#" value="#local.value#" #arguments.attributes# />
 		</cfoutput>
 	</cfsavecontent>
 	
@@ -764,6 +819,10 @@
 
 	<cfset var local = structNew()>
 	
+	<cfif arguments.attributes IS NOT "">
+		<cfset arguments.attributes = replace(arguments.attributes, "'", """", "all")>
+	</cfif>
+
 	<cfif arguments.value IS NOT "">
 		<cfset local.value = arguments.value>
 	<cfelse>
@@ -789,6 +848,10 @@
 
 	<cfset var local = structNew()>
 	
+	<cfif arguments.attributes IS NOT "">
+		<cfset arguments.attributes = replace(arguments.attributes, "'", """", "all")>
+	</cfif>
+
 	<cfif arguments.value IS NOT "">
 		<cfset local.value = arguments.value>
 	<cfelse>
@@ -815,6 +878,10 @@
 	<cfargument name="type" type="string" required="false" default="submit">
 
 	<cfset var local = structNew()>
+
+	<cfif arguments.attributes IS NOT "">
+		<cfset arguments.attributes = replace(arguments.attributes, "'", """", "all")>
+	</cfif>
 
 	<cfif arguments.disable_with IS NOT "">
 		<cfset local.onclick = "this.disabled=true;this.value='#arguments.disable_with#';this.form.submit();">
