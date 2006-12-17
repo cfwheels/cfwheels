@@ -21,8 +21,16 @@
 	<!------ Controller ------>
 	<cfset controller = createController()>
 
-	<!--- Run global before filter --->
-	<cfset controller.globalBeforeFilter()>
+	<!--- Run event start functions --->
+	<cfif structKeyExists(request.wheels, "run_on_application_start") AND structKeyExists(controller, "onApplicationStart")>
+		<cfset controller.onApplicationStart()>
+	</cfif>
+	<cfif structKeyExists(request.wheels, "run_on_session_start") AND structKeyExists(controller, "onSessionStart")>
+		<cfset controller.onSessionStart()>
+	</cfif>
+	<cfif structKeyExists(controller, "onRequestStart")>
+		<cfset controller.onRequestStart()>
+	</cfif>
 
 	<!------ beforeFilters ------>
 	<cfif arrayLen(controller.getBeforeFilters()) IS NOT 0>
@@ -48,8 +56,16 @@
 		<cfset callAfterFilters(controller)>
 	</cfif>
 	
-	<!--- Run global after filter --->
-	<cfset controller.globalAfterFilter()>
+	<!--- Run event end functions --->
+	<cfif structKeyExists(controller, "onRequestEnd")>
+		<cfset controller.onRequestEnd()>
+	</cfif>
+	<cfif structKeyExists(request.wheels, "run_on_session_end") AND structKeyExists(controller, "onSessionEnd")>
+		<cfset controller.onSessionEnd()>
+	</cfif>
+	<cfif structKeyExists(request.wheels, "run_on_application_end") AND structKeyExists(controller, "onApplicationEnd")>
+		<cfset controller.onApplicationEnd()>
+	</cfif>
 
 	<!--- Clear the flash --->
 	<cfset clearFlash()>

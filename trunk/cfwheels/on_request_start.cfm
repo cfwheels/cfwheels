@@ -9,8 +9,4 @@
 	<cfinclude template="#application.pathTo.cfwheels#/on_application_start.cfm">
 </cfif>
 
-<cfset request.wheels = structNew()>
 <cfset request.wheels.taken_objects = "">
-
-<!--- Run developer on request start code --->
-<cfinclude template="#application.pathTo.app#/on_request_start.cfm">
