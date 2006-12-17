@@ -1,6 +1,3 @@
-<!--- Load developer on request end code --->
-<cfinclude template="#application.pathTo.app#/on_request_end.cfm">
-
 <!--- Set all taken objects to vacant again now that the request is complete --->
 <cfif structKeyExists(request.wheels, "taken_objects")>
 	<cfloop list="#request.wheels.taken_objects#" index="i">

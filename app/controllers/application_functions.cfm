@@ -3,7 +3,14 @@
 	You can place code in the globalBeforeFilter and globalAfterFilter functions which will then be executed before/after every call to any controller's other filters and function.
 --->
 
-<cffunction name="globalBeforeFilter">
+<cffunction name="onApplicationStart">
+</cffunction>
+
+<cffunction name="onSessionStart">	
+	<!--- Only available if you're running Coldfusion MX 7 or higher --->
+</cffunction>
+
+<cffunction name="onRequestStart">
 	<cfset var local = structNew()>
 
 	<!--- Get active user from database from cookie if it does not exist in session already --->
@@ -34,7 +41,15 @@
 
 </cffunction>
 
-<cffunction name="globalAfterFilter">
+<cffunction name="onRequestEnd">
+</cffunction>
+
+<cffunction name="onSessionEnd">	
+	<!--- Only available if you're running Coldfusion MX 7 or higher --->
+</cffunction>
+
+<cffunction name="onApplicationEnd">
+	<!--- Only available if you're running Coldfusion MX 7 or higher --->
 </cffunction>
 
 <cffunction name="restrictAccess">

@@ -196,6 +196,3 @@
 <cfif application.database.type IS "" OR application.database.name IS "" OR application.database.source IS "">
 	<cfthrow type="cfwheels.settings" message="Database settings are missing or incorrect." detail="Set the type, name and source variables correctly in the config/database.ini file and try again.">
 </cfif>
-
-<!--- Load developer on application start code --->
-<cfinclude template="#application.pathTo.app#/on_application_start.cfm">

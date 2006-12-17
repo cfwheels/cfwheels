@@ -11,31 +11,31 @@
 	
 	<!--- Runs the first time the application is started --->
 	<cffunction name="onApplicationStart">
+		<cfset request.wheels.run_on_application_start = true>
 		<cfinclude template="/cfwheels/on_application_start.cfm" >
 	</cffunction>
 	
 	
 	<!--- Runs when the application ends or the server is shut down --->
 	<cffunction name="onApplicationEnd">
-	
+		<cfset request.wheels.run_on_application_end = true>
 	</cffunction>
 	
 	
 	<!--- Runs the first time a user comes to the site (when their session begins) --->
 	<cffunction name="onSessionStart">
-	
+		<cfset request.wheels.run_on_session_start = true>
 	</cffunction>
 	
 	
 	<!--- Runs when a user's session expires --->
 	<cffunction name="onSessionEnd">
-	
+		<cfset request.wheels.run_on_session_end = true>
 	</cffunction>
 	
 	
 	<!--- Runs before each page load --->
 	<cffunction name="onRequestStart">
-		<cftrace category="Wheels Request Start"></cftrace>
 		<cfinclude template="/cfwheels/on_request_start.cfm">
 	</cffunction>
 	
@@ -43,7 +43,6 @@
 	<!--- Runs at the end of each page load --->
 	<cffunction name="onRequestEnd">
 		<cfinclude template="/cfwheels/on_request_end.cfm">
-		<cftrace category="Wheels Request End"></cftrace>
 	</cffunction>
 
 
