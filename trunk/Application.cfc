@@ -19,6 +19,7 @@
 	
 	<!--- Runs before each page load --->
 	<cffunction name="onRequestStart">
+		<cftrace category="Wheels Request Start"></cftrace>
 		<cfinclude template="/cfwheels/on_request_start.cfm">
 	</cffunction>
 	
@@ -26,6 +27,7 @@
 	<!--- Runs at the end of each page load --->
 	<cffunction name="onRequestEnd">
 		<cfinclude template="/cfwheels/on_request_end.cfm">
+		<cftrace category="Wheels Request End"></cftrace>
 	</cffunction>
 
 </cfcomponent>
