@@ -3,6 +3,8 @@
 <cffunction name="dispatch" access="remote" output="true" hint="Takes a request and calls the proper controller/action">
 	<cfset var controller = "">
 	
+	<cftrace category="Wheels Dispatch Start"></cftrace>
+	
 	<!--- If wheelsaction isn't present, we can't do anything --->
 	<cfif NOT structKeyExists(url, "wheelsaction")>
 		<cfthrow type="cfwheels.missing_wheels_action" message="There is no ""wheelsaction"" variable present in the url." detail="This is most likely caused by a problem with URL rewriting. Check that your URL is being rewritten as ""?wheelsaction=/the/original/url"".">
@@ -19,8 +21,11 @@
 	<cfset setFlash()>
 	
 	<!------ Controller ------>
+	<cftrace category="Wheels Create Controller Start"></cftrace>
 	<cfset controller = createController()>
+	<cftrace category="Wheels Create Controller End"></cftrace>
 
+	<cftrace category="Wheels Before Filters & Events Start"></cftrace>
 	<!--- Run event start functions --->
 	<cfif structKeyExists(request.wheels, "run_on_application_start") AND structKeyExists(controller, "onApplicationStart")>
 		<cfset controller.onApplicationStart()>
@@ -33,8 +38,10 @@
 	<cfif arrayLen(controller.getBeforeFilters()) IS NOT 0>
 		<cfset callBeforeFilters(controller)>
 	</cfif>
+	<cftrace category="Wheels Before Filters & Events End"></cftrace>
 	
 	<!------ Action ------>
+	<cftrace category="Wheels Call Action Start"></cftrace>
 	<cfset callAction(controller)>
 	
 	<!--- 	
@@ -47,7 +54,9 @@
 	<cfif NOT getPageContext().getResponse().isCommitted() AND len(trim(getPageContext().getOut().buffer)) IS 0>
 		<cfoutput>#controller.render(action=request.params.action)#</cfoutput>
 	</cfif>
+	<cftrace category="Wheels Call Action End"></cftrace>
 	
+	<cftrace category="Wheels After Filters & Events Start"></cftrace>
 	<!------ afterFilters ------>
 	<cfif arrayLen(controller.getAfterFilters()) IS NOT 0>
 		<cfset callAfterFilters(controller)>
@@ -57,9 +66,12 @@
 	<cfif structKeyExists(controller, "onRequestEnd")>
 		<cfset controller.onRequestEnd()>
 	</cfif>
+	<cftrace category="Wheels After Filters & Events End"></cftrace>
 
 	<!--- Clear the flash --->
 	<cfset clearFlash()>
+	
+	<cftrace category="Wheels Dispatch End"></cftrace>
 	
 </cffunction>
 
