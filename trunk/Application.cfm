@@ -9,9 +9,9 @@
 <cfif NOT structKeyExists(application, "initialized") OR NOT application.initialized>
 	<cflock scope="application" type="exclusive" timeout="30">
 		<cfinclude template="/cfwheels/on_application_start.cfm">
+		<cfset request.wheels.run_on_application_start = true>
 	</cflock>
 	<cfset application.initialized = true>
 </cfif>
 
-<cftrace category="Wheels Request Start"></cftrace>
 <cfinclude template="/cfwheels/on_request_start.cfm">
