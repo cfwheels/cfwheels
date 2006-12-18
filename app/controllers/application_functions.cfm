@@ -6,10 +6,6 @@
 <cffunction name="onApplicationStart">
 </cffunction>
 
-<cffunction name="onSessionStart">	
-	<!--- Only available if you're running Coldfusion MX 7 or higher --->
-</cffunction>
-
 <cffunction name="onRequestStart">
 	<cfset var local = structNew()>
 
@@ -42,14 +38,6 @@
 </cffunction>
 
 <cffunction name="onRequestEnd">
-</cffunction>
-
-<cffunction name="onSessionEnd">	
-	<!--- Only available if you're running Coldfusion MX 7 or higher --->
-</cffunction>
-
-<cffunction name="onApplicationEnd">
-	<!--- Only available if you're running Coldfusion MX 7 or higher --->
 </cffunction>
 
 <cffunction name="restrictAccess">

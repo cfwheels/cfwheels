@@ -25,9 +25,6 @@
 	<cfif structKeyExists(request.wheels, "run_on_application_start") AND structKeyExists(controller, "onApplicationStart")>
 		<cfset controller.onApplicationStart()>
 	</cfif>
-	<cfif structKeyExists(request.wheels, "run_on_session_start") AND structKeyExists(controller, "onSessionStart")>
-		<cfset controller.onSessionStart()>
-	</cfif>
 	<cfif structKeyExists(controller, "onRequestStart")>
 		<cfset controller.onRequestStart()>
 	</cfif>
@@ -59,12 +56,6 @@
 	<!--- Run event end functions --->
 	<cfif structKeyExists(controller, "onRequestEnd")>
 		<cfset controller.onRequestEnd()>
-	</cfif>
-	<cfif structKeyExists(request.wheels, "run_on_session_end") AND structKeyExists(controller, "onSessionEnd")>
-		<cfset controller.onSessionEnd()>
-	</cfif>
-	<cfif structKeyExists(request.wheels, "run_on_application_end") AND structKeyExists(controller, "onApplicationEnd")>
-		<cfset controller.onApplicationEnd()>
 	</cfif>
 
 	<!--- Clear the flash --->
