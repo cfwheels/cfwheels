@@ -317,7 +317,7 @@
 </cffunction>
 
 
-<cffunction name="distanceOfTimeInWords" returntype="any" access="public" output="false">
+<cffunction name="distanceOfTimeInWords" returntype="any" access="public" output="true">
 	<cfargument name="from_time" type="any" required="yes">
 	<cfargument name="to_time" type="any" required="yes">
 	<cfargument name="include_seconds" type="any" required="no" default="false">
@@ -354,7 +354,7 @@
 		<cfset local.output = "about 1 hour">
 	<cfelseif local.minute_diff LTE 1440>
 		<cfset local.hours = ceiling(local.minute_diff/60)>
-		<cfset output = "about #local.hours# hours">
+		<cfset local.output = "about #local.hours# hours">
 	<cfelseif local.minute_diff LTE 2880>
 		<cfset local.output = "1 day">
 	<cfelse>
@@ -574,10 +574,12 @@
 	</cfif>
 
 	<cfif local.error>
-		<cfif arguments.attributes Contains "class=">
+		<cfif arguments.attributes IS "">
+			<cfset arguments.attributes = "class='field_with_errors'">
+		<cfelseif arguments.attributes Contains "class=">
 			<cfset arguments.attributes = replace(arguments.attributes, "class=""", "class=""field_with_errors ")>
 		<cfelse>
-			<cfset arguments.attributes = "class='field_with_errors'">
+			<cfset arguments.attributes = "class='field_with_errors'" & " " & arguments.attributes>
 		</cfif>
 	</cfif>
 
@@ -646,10 +648,12 @@
 	</cfif>
 
 	<cfif local.error>
-		<cfif arguments.attributes Contains "class=">
+		<cfif arguments.attributes IS "">
+			<cfset arguments.attributes = "class='field_with_errors'">
+		<cfelseif arguments.attributes Contains "class=">
 			<cfset arguments.attributes = replace(arguments.attributes, "class=""", "class=""field_with_errors ")>
 		<cfelse>
-			<cfset arguments.attributes = "class='field_with_errors'">
+			<cfset arguments.attributes = "class='field_with_errors'" & " " & arguments.attributes>
 		</cfif>
 	</cfif>
 
@@ -724,23 +728,19 @@
 	</cfif>
 
 	<cfif local.error>
-		<cfif arguments.attributes Contains "class=">
+		<cfif arguments.attributes IS "">
+			<cfset arguments.attributes = "class='field_with_errors'">
+		<cfelseif arguments.attributes Contains "class=">
 			<cfset arguments.attributes = replace(arguments.attributes, "class=""", "class=""field_with_errors ")>
 		<cfelse>
-			<cfset arguments.attributes = "class='field_with_errors'">
+			<cfset arguments.attributes = "class='field_with_errors'" & " " & arguments.attributes>
 		</cfif>
 	</cfif>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>			
 			<label for="#listLast(arguments.object_name,".")#_#arguments.field#" #arguments.label_attributes#>#arguments.label#
-			<cfif local.error>
-				<div class="field_with_errors">
-			</cfif>
 			<textarea name="#listLast(arguments.object_name,".")#[#arguments.field#]" id="#listLast(arguments.object_name,".")#_#arguments.field#" #arguments.attributes#>#local.value#</textarea>
-			<cfif local.error>
-				</div>
-			</cfif>
 			</label>
 		</cfoutput>
 	</cfsavecontent>
