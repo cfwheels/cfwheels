@@ -610,8 +610,10 @@
 
 	<cfif local.ids_query.recordcount IS NOT 0>
 		<cfset local.ids = valueList(local.ids_query.id)>
+		<cfset local.pagination.where_clause = "#variables.table_name#.#variables.primary_key# IN (#local.ids#)">
+	<cfelse>
+		<cfset local.pagination.where_clause = arguments.where_clause>
 	</cfif>
-	<cfset local.pagination.where_clause = "#variables.table_name#.#variables.primary_key# IN (#local.ids#)">
 
 	<cfreturn local.pagination>
 </cffunction>
@@ -1204,20 +1206,17 @@
 	<cfargument name="select" type="any" required="no" default="">
 	<cfargument name="distinct" type="any" required="no" default="false">
 
-	<cfset var count_query = "">
-	<cfset var select_clause = "">
-	<cfset var from_clause = "">
-	<cfset var where_clause = "">
+	<cfset var local = structNew()>
 
 	<cfif arguments.select IS "">
 		<cfset arguments.select = "#variables.table_name#.#variables.primary_key#">
 	</cfif>
 
-	<cfset from_clause = createFromClause(argumentCollection=arguments)>
+	<cfset local.from_clause = createFromClause(argumentCollection=arguments)>
 
-	<cfquery name="count_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+	<cfquery name="local.count_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
 		SELECT COUNT(<cfif arguments.distinct>DISTINCT </cfif>#arguments.select#) AS total
-		FROM #from_clause#
+		FROM #local.from_clause#
 		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
 			WHERE #preserveSingleQuotes(arguments.where)#
 		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
@@ -1227,5 +1226,5 @@
 		</cfif>
 	</cfquery>
 
-	<cfreturn count_query.total>
+	<cfreturn local.count_query.total>
 </cffunction>
