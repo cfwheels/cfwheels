@@ -1,0 +1,10 @@
+#summary Introduction to how you validate your model objects before saving them to the
+database..
+
+= Introduction =
+
+Before Wheels saves an obect to the database, either by inserting a new record or updating
+an existing one, it always validates it to the rules you have specified in your model
+file. If any errors are found during validation the object does not get saved to the
+database and instead error information is added to the object. You can then use this
+information and display them as error messages to the user.
