@@ -1,5 +1,4 @@
-#summary Introduction to how you validate your model objects before saving them to the
-database..
+#summary Introduction to how you validate model objects before saving them.
 
 = Introduction =
 
