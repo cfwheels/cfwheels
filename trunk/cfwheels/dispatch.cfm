@@ -5,14 +5,14 @@
 	
 	<cftrace category="Wheels Dispatch Start"></cftrace>
 	
-	<!--- If wheelsaction isn't present, we can't do anything --->
-	<cfif NOT structKeyExists(url, "wheelsaction")>
-		<cfthrow type="cfwheels.missing_wheels_action" message="There is no ""wheelsaction"" variable present in the url." detail="This is most likely caused by a problem with URL rewriting. Check that your URL is being rewritten as ""?wheelsaction=/the/original/url"".">
+	<!--- If the wheels variable isn't present, we can't do anything --->
+	<cfif NOT structKeyExists(url, "wheels")>
+		<cfthrow type="cfwheels.missing_wheels_action" message="There is no ""wheels"" variable present in the url." detail="This is most likely caused by a problem with URL rewriting. Check that your URL is being rewritten as ""?wheels=/the/original/url"".">
 		<cfabort>
 	</cfif>
 
 	<!------ Routes -------->
-	<cfset findRoute(url.wheelsaction)>
+	<cfset findRoute(url.wheels)>
 
 	<!------ Params ------->
 	<cfset setParams()>
@@ -216,7 +216,7 @@
 	<cfset request.put = false>
 	<cfset request.delete = false>
 	<cfset request.xhr = false>
-	<cfset request.currentRequest = url.wheelsaction>
+	<cfset request.currentRequest = url.wheels>
 	
 	<!--- Check to see if this is an XMLHttpRequest --->
 	<cfif cgi.http_accept Contains "text/javascript">
@@ -293,10 +293,10 @@
 		<cfset request.post = true>
 	</cfif>
 	
-	<!--- Take any URL variables (except wheelsaction and method) and put them in params 
+	<!--- Take any URL variables (except wheels and method) and put them in params 
 		  If a FORM and URL variable are named the same, URL will win and go into params --->
 	<cfloop collection="#url#" item="key">
-		<cfif key IS NOT "method" AND key IS NOT "wheelsaction">
+		<cfif key IS NOT "method" AND key IS NOT "wheels">
 			<cfset request.params[lCase(key)] = url[key]>
 		</cfif>
 	</cfloop>
@@ -310,13 +310,13 @@
 
 
 <cffunction name="findRoute" access="private" output="false" returntype="void" hint="Figures out which route matches this request">
-	<cfargument name="wheelsaction" type="string" required="true">
+	<cfargument name="wheels" type="string" required="true">
 	
 	<cfset var varMatch = "">
 	<cfset var valMatch = "">
 	<cfset var vari = "">
 	<cfset var vali = "">
-	<cfset var requestString = arguments.wheelsaction>
+	<cfset var requestString = arguments.wheels>
 	<cfset var routeParams = arrayNew(1)>
 	<cfset var thisRoute = structNew()>
 	<cfset var thisPattern = "">
