@@ -524,12 +524,12 @@
 
 	<cfset local.pagination.paginator.current_page = arguments.page>
 
-	<!--- remove everything from the FROM clause unless it's referenced in the WHERE clause --->
+	<!--- remove everything from the FROM clause unless it's referenced in the WHERE or ORDER BY clause --->
 	<cfset local.from_clause = "">
 	<cfset local.pos = 0>
 	<cfloop list="#replaceNoCase(arguments.from_clause, ' LEFT OUTER JOIN ', chr(7), 'all')#" index="local.i" delimiters="#chr(7)#">
 		<cfset local.pos = local.pos + 1>
-		<cfif local.pos IS 1 OR arguments.where_clause Contains (spanExcluding(local.i, " ") & ".")>
+		<cfif local.pos IS 1 OR arguments.where_clause Contains (spanExcluding(local.i, " ") & ".") OR arguments.order_clause Contains (spanExcluding(local.i, " ") & ".")>
 			<cfset local.from_clause = listAppend(local.from_clause, local.i, chr(7))>
 		</cfif>
 	</cfloop>
