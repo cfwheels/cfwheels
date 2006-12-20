@@ -222,7 +222,7 @@
 
 
 <cffunction name="isCurrentPage" returntype="any" access="private" output="false">
-	<cfif replace(urlFor(argumentCollection=arguments), "/dispatch.cfm?wheels=", "") IS request.currentrequest>
+	<cfif replace(urlFor(argumentCollection=arguments), "/index.cfm?wheels=", "") IS request.currentrequest>
 		<cfreturn true>
 	<cfelse>
 		<cfreturn false>
@@ -273,7 +273,7 @@
 		<cfset local.url = local.url & "/#local.new_id#">	
 	</cfif>
 	<cfif arguments.params IS NOT "">
-		<cfif cgi.script_name Contains "dispatch.cfm">
+		<cfif cgi.script_name Contains ".cfm">
 			<!--- URL rewriting is not on so use "&" --->
 			<cfset local.url = local.url & "&">
 		<cfelse>
@@ -289,8 +289,8 @@
 		<cfset local.url = local.url & "###arguments.anchor#">
 	</cfif>
 
-	<cfif cgi.script_name Contains "dispatch.cfm">
-		<cfset local.url = "/dispatch.cfm?wheels=" & local.url>
+	<cfif cgi.script_name Contains ".cfm">
+		<cfset local.url = "/index.cfm?wheels=" & local.url>
 	</cfif>
 
 	<cfif NOT arguments.only_path>
