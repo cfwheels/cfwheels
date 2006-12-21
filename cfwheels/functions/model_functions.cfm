@@ -142,44 +142,33 @@
 <cffunction name="getObject" returntype="any" access="private" output="false">
 	<cfargument name="model_name" type="any" required="yes">
 
-	<cfset var new_object = "">
-	<cfset var vacant_objects = "">
-	<cfset var UUID = 0>
+	<cfset var local = structNew()>
 
 	<cfif application.settings.environment IS "production">
-
 		<!--- Find a vacant object in pool (lock code so that another thread can not get the same object before it has been set to 'is_taken') --->
 		<cflock name="pool_lock_for_#arguments.model_name#" type="exclusive" timeout="5">
-			<cfset vacant_objects = structFindValue(application.wheels.pools[arguments.model_name], "is_vacant", "one")>
-			<cfif arrayLen(vacant_objects) IS NOT 0>
-				<cfset UUID = listFirst(vacant_objects[1].path, ".")>
-				<cfset application.wheels.pools[arguments.model_name][UUID].status = "is_taken">
+			<cfset local.vacant_objects = structFindValue(application.wheels.pools[arguments.model_name], "is_vacant", "one")>
+			<cfif arrayLen(local.vacant_objects) IS NOT 0>
+				<!--- Create a reference to the object in the pool and reset all instance specific data in the object so it can be re-used --->
+				<cfset local.UUID = listFirst(local.vacant_objects[1].path, ".")>
+				<cfset local.new_object = application.wheels.pools[arguments.model_name][local.UUID].object>
+				<cfset local.new_object.reset()>
+			<cfelse>
+				<!--- Create a new object since no vacant ones were found in the pool --->
+				<cfset local.UUID = createUUID()>
+				<cfset local.new_object = createObject("component", "app.models.#arguments.model_name#").initObject()>
+				<cfset application.wheels.pools[arguments.model_name][local.UUID] = structNew()>
+				<cfset application.wheels.pools[arguments.model_name][local.UUID].object = local.new_object>
 			</cfif>
+			<!--- Set object to taken and add object's UUID to a list in the request scope so it can be set to vacant again on request end --->
+			<cfset application.wheels.pools[arguments.model_name][local.UUID].status = "is_taken">
+			<cfset request.wheels.taken_objects = listAppend(request.wheels.taken_objects, local.UUID)>
 		</cflock>
-		
-		<cfif UUID IS NOT 0>
-			<!--- Create a reference to the object in the pool and reset all instance specific data in the object so it can be re-used --->
-			<cfset new_object = application.wheels.pools[arguments.model_name][UUID].object>
-			<cfset new_object.reset()>
-		<cfelse>
-			<!--- Create a new object since no vacant ones were found in the pool (or we're in development mode) --->
-			<cfset UUID = createUUID()>
-			<cfset new_object = createObject("component", "app.models.#arguments.model_name#").initObject()>
-			<cfset application.wheels.pools[arguments.model_name][UUID] = structNew()>
-			<cfset application.wheels.pools[arguments.model_name][UUID].status = "is_taken">
-			<cfset application.wheels.pools[arguments.model_name][UUID].object = new_object>
-		</cfif>
-		
-		<!--- Add this object's UUID to a list in the request scope so it can be set to vacant again on request end --->
-		<cfset request.wheels.taken_objects = listAppend(request.wheels.taken_objects, UUID)>
-
 	<cfelse>
-
-		<cfset new_object = createObject("component", "app.models.#arguments.model_name#").initObject()>
-
+		<cfset local.new_object = createObject("component", "app.models.#arguments.model_name#").initObject()>
 	</cfif>
 
-	<cfreturn new_object>
+	<cfreturn local.new_object>
 </cffunction>
 
 
@@ -192,8 +181,9 @@
 	</cfloop>
 	<cfset this.errors = arrayNew(1)>
 	<cfset this.query = "">
+	<cfset this.paginator = "">
 	<cfset this.recordcount = 0>
-	<cfset this.recordfound = false>	
+	<cfset this.recordfound = false>
 </cffunction>
 
 
@@ -340,7 +330,7 @@
 	<cfquery name="get_id_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
 	SELECT
 	<cfif application.database.type IS "sqlserver">
-		SCOPE_IDENTITY() AS last_id
+		@@IDENTITY AS last_id
 	<cfelseif application.database.type IS "mysql5">
 		LAST_INSERT_ID() AS last_id
 	</cfif>

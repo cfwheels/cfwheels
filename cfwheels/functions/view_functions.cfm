@@ -191,13 +191,19 @@
 			<cfif arguments.always_show_anchors>
 				<cfif (local.this_object.paginator.current_page - arguments.window_size) GT 1>
 					<cfset local.link_to_arguments.params = "#arguments.name#=1">
-					<cfset local.link_to_arguments.text = local.i>
+					<cfif structKeyExists(arguments, "params")>
+						<cfset local.link_to_arguments.params = local.link_to_arguments.params & "&" & arguments.params>					
+					</cfif>
+					<cfset local.link_to_arguments.text = 1>
 					#linkTo(argumentCollection=local.link_to_arguments)# ...
 				</cfif>
 			</cfif>
 			<cfloop from="1" to="#local.this_object.paginator.total_pages#" index="local.i">
 				<cfif (local.i GTE (local.this_object.paginator.current_page - arguments.window_size) AND local.i LTE local.this_object.paginator.current_page) OR (local.i LTE (local.this_object.paginator.current_page + arguments.window_size) AND local.i GTE local.this_object.paginator.current_page)>
 					<cfset local.link_to_arguments.params = "#arguments.name#=#local.i#">
+					<cfif structKeyExists(arguments, "params")>
+						<cfset local.link_to_arguments.params = local.link_to_arguments.params & "&" & arguments.params>					
+					</cfif>
 					<cfset local.link_to_arguments.text = local.i>
 					<cfif arguments.class_for_current IS NOT "" AND local.this_object.paginator.current_page IS local.i>
 						<cfset local.link_to_arguments.attributes = "class=#arguments.class_for_current#">
@@ -210,6 +216,9 @@
 			<cfif arguments.always_show_anchors>
 				<cfif local.this_object.paginator.total_pages GT (local.this_object.paginator.current_page + arguments.window_size)>
 					<cfset local.link_to_arguments.params = "#arguments.name#=#local.this_object.paginator.total_pages#">
+					<cfif structKeyExists(arguments, "params")>
+						<cfset local.link_to_arguments.params = local.link_to_arguments.params & "&" & arguments.params>					
+					</cfif>
 					<cfset local.link_to_arguments.text = local.this_object.paginator.total_pages>
 				... #linkTo(argumentCollection=local.link_to_arguments)#
 				</cfif>
@@ -660,13 +669,7 @@
 	<cfsavecontent variable="local.output">
 		<cfoutput>			
 			<label for="#listLast(arguments.object_name,".")#_#arguments.field#" #arguments.label_attributes#>#arguments.label#
-			<cfif local.error>
-				<div class="field_with_errors">
-			</cfif>
 			<input type="password" name="#listLast(arguments.object_name,".")#[#arguments.field#]" id="#listLast(arguments.object_name,".")#_#arguments.field#" value="#local.value#" #arguments.attributes# />
-			<cfif local.error>
-				</div>
-			</cfif>
 			</label>
 		</cfoutput>
 	</cfsavecontent>
