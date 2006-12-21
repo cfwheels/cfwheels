@@ -201,9 +201,7 @@
 		<cfset new_object.recordcount = arguments.value_collection.recordcount>
 		<cfif arguments.value_collection.recordcount IS 1>
 			<cfloop list="#arguments.value_collection.columnlist#" index="i">
-				<cfif listFindNoCase(variables.column_list, replaceNoCase(i, (variables.model_name & "_"), "")) IS NOT 0>
-					<cfset new_object[replaceNoCase(i, (variables.model_name & "_"), "")] = arguments.value_collection[i][1]>
-				</cfif>
+				<cfset new_object[replaceNoCase(i, (variables.model_name & "_"), "")] = arguments.value_collection[i][1]>
 			</cfloop>
 		</cfif>
 	<cfelseif isStruct(arguments.value_collection)>
@@ -215,9 +213,7 @@
 		<cfset new_object.recordfound = true>
 		<cfset new_object.recordcount = 1>
 		<cfloop collection="#arguments.value_collection#" item="i">
-			<cfif listFindNoCase(variables.column_list, i) IS NOT 0>
-				<cfset new_object[i] = arguments.value_collection[i]>
-			</cfif>
+			<cfset new_object[i] = arguments.value_collection[i]>
 		</cfloop>
 	</cfif>
 
@@ -718,6 +714,10 @@
 
 	<cfset var local = structNew()>
 
+	<cfif isDefined("beforeDestroy") AND NOT beforeDestroy()>
+		<cfreturn false>
+	</cfif>
+
 	<cfquery name="local.check_deleted" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
 	SELECT #variables.primary_key#
 	FROM #variables.table_name#
@@ -738,6 +738,10 @@
 			WHERE #variables.primary_key# = #this[variables.primary_key]#
 			</cfquery>
 		</cfif>
+	</cfif>
+
+	<cfif isDefined("afterDestroy") AND NOT afterDestroy()>
+		<cfreturn false>
 	</cfif>
 
 	<cfreturn local.check_deleted.recordcount>
