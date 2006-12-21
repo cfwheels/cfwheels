@@ -3,13 +3,9 @@
 <cffunction name="dispatch" access="remote" output="true" hint="Takes a request and calls the proper controller/action">
 	<cfset var controller = "">
 	
-	<cftrace category="Wheels Dispatch Start"></cftrace>
+	<cftry>
 	
-	<!--- If the wheels variable isn't present, we can't do anything --->
-	<cfif NOT structKeyExists(url, "wheels")>
-		<cfthrow type="cfwheels.missing_wheels_action" message="There is no ""wheels"" variable present in the url." detail="This is most likely caused by a problem with URL rewriting. Check that your URL is being rewritten as ""?wheels=/the/original/url"".">
-		<cfabort>
-	</cfif>
+	<cftrace category="Wheels Dispatch Start"></cftrace>
 
 	<!------ Routes -------->
 	<cfset findRoute(url.wheels)>
@@ -72,6 +68,45 @@
 	<cfset clearFlash()>
 	
 	<cftrace category="Wheels Dispatch End"></cftrace>
+	
+	<cfcatch>
+		<cfif application.settings.environment IS "production">
+			<cfif application.settings.error_email_address IS NOT "">
+				<cfmail to="#application.settings.error_email_address#" from="#application.settings.error_email_address#" subject="#listLast(getDirectoryFromPath(getBaseTemplatePath()),'\')# error" type="html">
+					<ul>
+						<cfif isDefined("cfcatch.type") AND cfcatch.type IS NOT ""><li><strong>Type:</strong><br />#cfcatch.type#</li></cfif>
+						<cfif isDefined("cfcatch.message") AND cfcatch.message IS NOT ""><li><strong>Message:</strong><br />#cfcatch.message#</li></cfif>
+						<cfif isDefined("cfcatch.detail") AND cfcatch.detail IS NOT ""><li><strong>Detail:</strong><br />#cfcatch.detail#</li></cfif>
+						<cfif isDefined("CGI.script_name") AND CGI.script_name IS NOT ""><li><strong>Page:</strong><br />#CGI.script_name#</li></cfif>
+						<cfif isDefined("CGI.query_string") AND CGI.query_string IS NOT ""><li><strong>Query String:</strong><br />#CGI.query_string#</li></cfif>
+						<cfif isDefined("CGI.http_referer") AND CGI.http_referer IS NOT ""><li><strong>Referer:</strong><br />#CGI.http_referer#</li></cfif>
+						<cfif isDefined("CGI.remote_addr") AND CGI.remote_addr IS NOT ""><li><strong>IP Address:</strong><br />#CGI.remote_addr#</li></cfif>
+						<cfif isDefined("CGI.http_user_agent") AND CGI.http_user_agent IS NOT ""><li><strong>User Agent:</strong><br />#CGI.http_user_agent#</li></cfif>
+						<cfif isDefined("cfcatch.NativeErrorCode") AND cfcatch.NativeErrorCode IS NOT ""><li><strong>Native Error Code:</strong><br />#cfcatch.NativeErrorCode#</li></cfif>
+						<cfif isDefined("cfcatch.SQLState") AND cfcatch.SQLState IS NOT ""><li><strong>SQL State:</strong><br />#cfcatch.SQLState#</li></cfif>
+						<cfif isDefined("cfcatch.Sql") AND cfcatch.Sql IS NOT ""><li><strong>SQL:</strong><br />#cfcatch.Sql#</li></cfif>
+						<cfif isDefined("cfcatch.queryError") AND cfcatch.queryError IS NOT ""><li><strong>Query Error:</strong><br />#cfcatch.queryError#</li></cfif>
+						<cfif isDefined("cfcatch.where") AND cfcatch.where IS NOT ""><li><strong>Where:</strong><br />#cfcatch.where#</li></cfif>
+						<cfif isDefined("cfcatch.ErrNumber") AND cfcatch.ErrNumber IS NOT 0><li><strong>Error Number:</strong><br />#cfcatch.ErrNumber#</li></cfif>
+						<cfif isDefined("cfcatch.MissingFileName") AND cfcatch.MissingFileName IS NOT ""><li><strong>Missing File Name:</strong><br />#cfcatch.MissingFileName#</li></cfif>
+						<cfif isDefined("cfcatch.LockName") AND cfcatch.LockName IS NOT ""><li><strong>Lock Name:</strong><br />#cfcatch.LockName#</li></cfif>
+						<cfif isDefined("cfcatch.LockOperation") AND cfcatch.LockOperation IS NOT ""><li><strong>Lock Operation:</strong><br />#cfcatch.LockOperation#</li></cfif>
+						<cfif isDefined("cfcatch.ErrorCode") AND cfcatch.ErrorCode IS NOT ""><li><strong>Error Code:</strong><br />#cfcatch.ErrorCode#</li></cfif>
+						<cfif isDefined("cfcatch.ExtendedInfo") AND cfcatch.ExtendedInfo IS NOT ""><li><strong>Extended Info:</strong><br />#cfcatch.ExtendedInfo#</li></cfif>
+					</ul>
+				</cfmail>
+			</cfif>
+			<cfinclude template="#application.pathTo.app#/error_production.cfm">
+		<cfelse>
+			<cfif isDefined("cfcatch.type") AND cfcatch.type Contains "cfwheels">
+				<cfinclude template="#application.pathTo.app#/error_development.cfm">
+			<cfelse>
+				<cfrethrow>			
+			</cfif>
+		</cfif>
+	</cfcatch>
+	</cftry>
+	
 	
 </cffunction>
 
@@ -334,7 +369,7 @@
 		<cfset vari = Mid(requestString, (varMatch.pos[1]+1), (varMatch.len[1]-2))>
 		<cfset vali = Mid(requestString, (valMatch.pos[1]+1), (valMatch.len[1]-1))>
 		<cfset url[vari] = vali>
-		<cfset requestString = Mid(requestString, 1, (var_match.pos[1]-1))>
+		<cfset requestString = Mid(requestString, 1, (varMatch.pos[1]-1))>
 	</cfif>
 	
 	<!--- Remove the leading slash in the request (if there was something more than just a slash to begin with) to match our routes --->
