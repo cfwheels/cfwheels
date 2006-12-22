@@ -46,7 +46,8 @@
 	
 	<!--- Create object variables --->
 	<cfset this.errors = arrayNew(1)>
-	<cfset this.query = "">
+	<cfset this.query = queryNew("")>
+	<cfset this.paginator = structNew()>
 	<cfset this.recordcount = 0>
 	<cfset this.recordfound = false>
 
@@ -180,8 +181,8 @@
 		<cfset structDelete(this, "#i#_confirmation")>
 	</cfloop>
 	<cfset this.errors = arrayNew(1)>
-	<cfset this.query = "">
-	<cfset this.paginator = "">
+	<cfset this.query = queryNew("")>
+	<cfset this.paginator = structNew()>
 	<cfset this.recordcount = 0>
 	<cfset this.recordfound = false>
 </cffunction>
