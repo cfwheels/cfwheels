@@ -467,19 +467,19 @@
 		<cfset local.where_clause = local.pagination.where_clause>
 	</cfif>
 	
+	<cfset local.query_name = "finder_query">
 	<cfif arguments.cache IS NOT "">
 		<cfif isNumeric(arguments.cache)>
 			<cfset local.cached_within = createTimeSpan(0,0,arguments.cache,0)>
 		<cfelseif isBoolean(arguments.cache) AND arguments.cache>
 			<cfset local.cached_within = createTimeSpan(1,0,0,0)>
+			<cfset local.query_name = application.wheels.caches[variables.model_name]>
 		</cfif>
 	<cfelse>
 		<cfset local.cached_within = createTimeSpan(0,0,0,0)>
 	</cfif>
 	
-	<cfset local.current_cache = application.wheels.caches[variables.model_name]>
-	
-	<cfquery name="local.#local.current_cache#" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#" cachedwithin="#local.cached_within#">
+	<cfquery name="local.#local.query_name#" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#" cachedwithin="#local.cached_within#">
 	SELECT
 	<cfif arguments.distinct>
 		DISTINCT
@@ -498,7 +498,7 @@
 	</cfif>
 	</cfquery>
 
-	<cfset local.new_object = newObject(local[local.current_cache])>
+	<cfset local.new_object = newObject(local[local.query_name])>
 
 	<cfif arguments.page IS NOT 0>
 		<cfset local.new_object.paginator = local.paginator>
