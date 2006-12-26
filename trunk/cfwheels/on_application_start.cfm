@@ -191,8 +191,3 @@
 <!--- Include environment and database connection info --->
 <cfinclude template="#application.pathTo.config#/environment.ini">
 <cfinclude template="#application.pathTo.config#/database.ini">
-
-<!--- throw an error if database settings are not specified --->
-<cfif application.database.type IS "" OR application.database.name IS "" OR application.database.source IS "">
-	<cfthrow type="cfwheels.settings" message="Database settings are missing or incorrect." detail="Set the type, name and source variables correctly in the config/database.ini file and try again.">
-</cfif>
