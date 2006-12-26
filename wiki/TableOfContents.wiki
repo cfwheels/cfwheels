@@ -2,14 +2,14 @@
 
 = Introduction =
 
- * WelcomeToWheels!
+ * [WelcomeToWheels!]
  * SystemRequirements
- * InstallingWheels
- * RewritingURLs
+ * [Installation]
+ * [RewritingURLs]
  * DirectoryStructure
- * WheelsConfiguration
+ * [Configuration]
  * NamingConventions
- * HelloWorld!
+ * [HelloWorld!]
 
 = Building a blog =
 
@@ -24,13 +24,13 @@
  * TablesAndClasses
  * ColumnsAndAttributes
  * PrimaryKeys
- * CreateReadUpdateDelete
- * UsingFinders
+ * [CRUDFunctions]
+ * [Finders]
  * DynamicFinders
  * GettingPaginatedData
  * CachingQueries
  * EagerLoading
- * PerformingCalculations
+ * [Calculations]
  * SettingRelationships
  * UsingRelationShips
  * ObjectValidation
@@ -52,7 +52,7 @@
  * DisplayingFlashMessages
  * DisplayingObjectErrors
  * UsingHelpers
- * AJAXAndJavascriptEffects
+ * [AJAXAndJavascriptEffects]
  * MiscellaneousViewFunctions
 
 = Controller =
