@@ -2,14 +2,14 @@
 
 = Introduction =
 
- * [WelcomeToWheels!]
+ * WelcomeToWheels
  * SystemRequirements
  * [Installation]
  * [RewritingURLs]
  * DirectoryStructure
  * [Configuration]
  * NamingConventions
- * [HelloWorld!]
+ * HelloWorld
 
 = Building a blog =
 
