@@ -1,15 +1,15 @@
-#summary Table of contents with links for the ColdFusion on Wheels documentation.
+#summary Table of contents for the ColdFusion on Wheels documentation.
 
 = Introduction =
 
-WelcomeToWheels!
-SystemRequirements
-InstallingWheels
-RewritingURLs
-DirectoryStructure
-WheelsConfiguration
-NamingConventions
-HelloWorld!
+* WelcomeToWheels!
+* SystemRequirements
+* InstallingWheels
+* RewritingURLs
+* DirectoryStructure
+* WheelsConfiguration
+* NamingConventions
+* HelloWorld!
 
 = Building a blog =
 
