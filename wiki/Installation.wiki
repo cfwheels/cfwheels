@@ -1,6 +1,6 @@
 #summary Instruction for installing Wheels on Apache and IIS.
 
-= Installing Wheels =
+= Installation =
 
 If you've ever installed a framework then you know it's generally pretty easy: copy a few files, maybe add a mapping in the !ColdFusion Administrator and you're off and running. Wheels is no different. If you've never installed a framework before, don’t worry. You might even enjoy the process! All right, "enjoy" is a strong word. Maybe "tolerate".
 
@@ -24,28 +24,8 @@ Let's assume you have downloaded the latest official release (really, you should
 
 = Webserver Setup =
 
-Wheels is known to work with Apache and IIS. Just create a new website for your app however you'd normally do it. There is one very important decision to make here though - whether or not to use URL rewriting (yeah, those clean looking URLs that all the cool kids are using nowadays). If you intend to use URL rewriting then your default document should be index.cfm. If you're old skool and do not want URL rewriting then you should make the default document dispatch.cfm instead. If this is the first time you're creating a Wheels app we recommend not using URL rewriting for now and instead turn it on later.
+Wheels is known to work with Apache and IIS. Just create a new website for your app however you'd normally do it. There is one very important decision to make here though - whether or not to use URL rewriting (yeah, those clean looking URLs that all the cool kids are using nowadays). If you intend to use URL rewriting then your default document should be index.cfm. If you're old school and do not want URL rewriting then you should make the default document dispatch.cfm instead. If this is the first time you're creating a Wheels app we recommend not using URL rewriting for now and instead turn it on later.
 
 = Installing Wheels =
 
-This step is simple, just extract the contents of the Wheels.zip to your new website's home directory. Boom, you're done! Now go to http://localhost (or the domain you're using) and a nice "ColdFusion is on Wheels" page will be shown to you. 
-
-= URL Rewriting =
-
-Thanks to Wheels, most URLs are, with URL rewriting turned on, what we call "pretty"a - very easy to decifer and usually tell you, the developer, right where to look when you need to update something. 
-
-Which do you think is prettier:
-www.myapp.com/marketing/reports/sales_by_year
-or
-www.myapp.com/index.cfm?dept=marketing&action=reports&type=sales_by_year
-
-These beautiful URLs come at a price, though. By default, Wheels needs to be at the root of the site. Meaning that you can't easily drop Wheels into the middle of an existing site and have it just know what to do. While this is possible, it's not for the faint of heart. It would require changes to a few rewrite rules which means intimate knowledge of regular expressions. These are found in .htaccess (for Apache) and IsapiRewrite4.ini (for iis). 
-
-Wheels requires that Apache be configured to use url rewriting rules. To turn them on first find the following line in your httpd.conf file (the Windows default location is C:\Program Files\Apache Group\Apache2\conf):
-#LoadModule rewrite_module modules/mod_rewrite.so
-Remove that pound sign (#) at the beginning to un-comment that rule and make it active.
-
-Wheels requires that iis be setup with an isapi filter that rewrites urls. You’ll need to download this yourself from http://cheeso.members.winisp.net/IIRF.aspx Unzip this file and put the IsapiRewrite4.dll file somewhere good—you’re going to point iis to it.
-To enable the ISAPI Rewrite Filter in iis you’ll go to the “Properties” dialog for your website and then go to the “ISAPI Filters” tab and click the “Add…” button. Type in anything you want as the “Filter Name” (“ISAPI Rewrite” will probably make the mose sense later) and point the “Executable” to the IsapiRewrite4.dll, 
-
-There you go—installing Wheels in about ten pages. That wasn’t so hard, was it? On to chapter two where we start building an application.
+This step is simple, just extract the contents of the Wheels ZIP file to your new website's home directory. Boom, you're done! Now go to http://localhost (or the domain you're using) and a nice "ColdFusion is on Wheels" page will be shown to you. 
