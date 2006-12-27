@@ -6,33 +6,40 @@ If you've ever installed a framework then you know it's generally pretty easy: c
 
 We have tried to make it extremely simple to get up and running with Wheels - there actually only two things you need to do before you can start working on your app (although  you can tweak your installation later on by for example introducing URL rewriting and moving the Wheels core files out of your application's folder).
 
- * Get and save the base Wheels files
- * Set up your webserver to point to your new app
+ * Get the latest Wheels release and save on your computer
+ * Create a new website for your app in your webserver
+ * Extract the contents of the .zip to your new website's home/root directory
 
 The rest of these instructions are going to assume that you're somewhat familiar with Apache or IIS and can already get to the !ColdFusion Administrator. If you're really starting from scratch, google the "ColdFusion ACME Guide". It's a comprehensive guide to building a development workstation using Apache, ColdFusion MX 7, MySQL and Eclipse.
 
 = Getting Wheels =
 
-You have two choices when download the Wheels code. Either you go to the official website at www.cfwheels.com and get the latest release in the "Download" section.
+You have two choices when downloading Wheels. You can either use the latest official release of Wheels (0.6 at the time of this writing) or you can take a walk on the wild side and go with the latest committed source code in our Subversion repository.
+
+To find the latest Wheels release you can go to the official website at www.cfwheels.com and go to the "Download" section. The SVN trunk is available at our Google Code site located at http://code.google.com/p/cfwheels.
+
+So, "what should I get then" you might ask with a confused look on your face. Well, in most cases we recommend going with the official release since it's well documented and has been through a lot of bug testing. Only if you're in desperate need of a feature that has not been released yet would we advice you to go with the SVN trunk.
+
+Let's assume you have downloaded the latest official release (really, you should go with this option) then you'll now have a .zip file saved somewhere on your computer. On to the next step...
+
+= Webserver Setup =
+
+Wheels is known to work with Apache and IIS. Just create a new website for your app however you'd normally do it. There is one very important decision to make here though - whether or not to use URL rewriting (yeah, those clean looking URLs that all the cool kids are using nowadays). If you intend to use URL rewriting then your default document should be index.cfm. If you're old skool and do not want URL rewriting then you should make the default document dispatch.cfm instead. 
+
+= Installing Wheels =
+
+This step is simple, just extract the contents of the Wheels.zip to your new website's home directory. Boom, you're done! Now go to http://localhost (or the domain you're using) and a nice "ColdFusion is on Wheels" page will be shown to you. 
+
+= URL Rewriting =
+
+= Advanced Options =
+
+All you have to do to get a working installation of Wheels running is extract the contents to the directory from where your website is being run (the website's root/home directory).
 
 
-There are two methods you can use to download Wheels. The first, and recommended method, is using the Hadron package management application. Second is to download a .zip file and extract the contents to a directory. Both methods are described below.
-1
-2
-3
-4
-Chapter 1: Installing CFWheels
-Hadron method
-Hadron makes downloading and managing frameworks, cfcs and custom tags easy. You simply download a small .exe file which you use at the command line. This mini-app connects to hadronforge.org to download the packages you request (called “hadrons”) and saves them to your system. When a new version of the package becomes available you tell Hadron to download it and it will automatically archive the previous version and make the newest one the primary. You can easily roll back to previous versions if you need to test or just to see the code.
-To download Hadron, head to http://www.hadronforge.org and you’ll find a link to download the newest version. Unzip the downloaded file and place the .exe in a location that you’d like all of your packages to reside in. (All downloaded hadrons will be placed in subdirectories of the directory in which hadron.exe is installed.) We recommend c:\{cf_root}\hadron, where {cf_root} is wherever you installed ColdFusion to (usually C:\CFusionMX7) by default on Windows machines).
-Open up a command prompt (in Windows go to Start > Run… and type “cmd”). Now get into the directory that contains hadron.exe. If you kept the default settings when you installed ColdFusion then you would type “cd c:\cfusionmx7\hadron” to get there.
-If getting to the command line doesn’t make you nostalgic for “the good ol’ days” then all this typing may be freaking you out a little. Don’t worry, the commands are short and sweet and we’ll have you back to the gui in no time!
-Now you simply tell Hadron what package you want to download. In this case we want the package “cfwheels” so at the command prompt we type “hadron install cfwheels” (without the quotes, of course). After a moment you’ll see some new text telling you that Hadron is attempting a download and, when complete, where the package was saved and that it was promoted to the primary version. You’ll also see a welcome messages that comes along with Wheels letting you know about a mapping you need to create in the ColdFusion Administrator (more on that later).
-Image 1.1 – Installing Hadron via the command line
-In order to let ColdFusion know where all of your hadrons are stored you’ll need to add the path to the directory containing hadron.exe as a Custom Tag directory in the ColdFusion Administrator.
-Image 1.2 – Adding a new Custom Tag path in the ColdFusion Administrator
-To read more about Hadron, including a full tutorial on downloading packages as well as creating your own, check out Appendix A.
-Hadron
+
+
+
 Chapter 1: Installing CFWheels
 .zip method
 Head over to http://www.cfwheels.com/ and download the most up-to-date version. Save this file wherever you like. Open up the .zip file and you’ll see two directories and a couple of files.
