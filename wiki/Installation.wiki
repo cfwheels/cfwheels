@@ -24,7 +24,7 @@ Let's assume you have downloaded the latest official release (really, you should
 
 = Webserver Setup =
 
-Wheels is known to work with Apache and IIS. Just create a new website for your app however you'd normally do it. There is one very important decision to make here though - whether or not to use URL rewriting (yeah, those clean looking URLs that all the cool kids are using nowadays). If you intend to use URL rewriting then your default document should be index.cfm. If you're old skool and do not want URL rewriting then you should make the default document dispatch.cfm instead. 
+Wheels is known to work with Apache and IIS. Just create a new website for your app however you'd normally do it. There is one very important decision to make here though - whether or not to use URL rewriting (yeah, those clean looking URLs that all the cool kids are using nowadays). If you intend to use URL rewriting then your default document should be index.cfm. If you're old skool and do not want URL rewriting then you should make the default document dispatch.cfm instead. If this is the first time you're creating a Wheels app we recommend not using URL rewriting for now and instead turn it on later.
 
 = Installing Wheels =
 
@@ -32,109 +32,20 @@ This step is simple, just extract the contents of the Wheels.zip to your new web
 
 = URL Rewriting =
 
-= Advanced Options =
+Thanks to Wheels, most URLs are, with URL rewriting turned on, what we call "pretty"a - very easy to decifer and usually tell you, the developer, right where to look when you need to update something. 
 
-All you have to do to get a working installation of Wheels running is extract the contents to the directory from where your website is being run (the website's root/home directory).
-
-
-
-
-
-Chapter 1: Installing CFWheels
-.zip method
-Head over to http://www.cfwheels.com/ and download the most up-to-date version. Save this file wherever you like. Open up the .zip file and you’ll see two directories and a couple of files.
-Image 1.3 – Contents of a cfwheels .zip filee
-The /cfwheels directory contains all of the core files that your Wheels applications will share. The /template directory contains a couple of subdirectories. Whenever you start a new application or site you’ll copy everything inside of /template into your new directory and go from there (instructions on this below). The hadronspec file is only needed if you downloaded your package using Hadron. You can safely remove this file if you’re getting your package in the form of a .zip file.
-You’ll want to keep both of these directories together and it’s always a good idea to put them outside of any application directories (like we do below).
-Let’s say that you’re serving your websites from the standard Windows location, C:\Inetpub\wwwroot. A good location for the Wheels files would be a new /cfwheels directory in which you would place the contents of the .zip file. Here it will be accessible from any site on the server but not from any url.
-Some people tend to get a bit confused here, so let me clarify something before we go any further: you will only ever have a single copy of the CFWheels core files on your system. Each application that you bulid will reference this single copy. It’s never necessary to copy the
-/cfwheels directory into each of your applications. Only the files in the /template directory will be copied into each app that you create. We’ll discuss this shortly.
-ColdFusion Setup
-Now that we've got our files we'll need to add a mapping in the ColdFusion Administrator. This will tell all of your Wheels apps where to go to get to the CFWheels core files. The core files are in that /cfwheels directory in the install package. If you followed the Hadron install method then you'd point your mapping to C:\{cfroot}\hadron\cfwheels\cfwheels. If you downloaded the files via a .zip file then you’d create a mapping to the location of the Wheels core files, C:\Inetpub\wwwroot\cfwheels\cfwheels if you used the install location in the previous section.
-Open up the ColdFusion Administrator and go to the Mappings screen. Add a new mapping called /cfwheels and point it to whichever directory is appropriate. Restart the ColdFusion Server to make sure everything sticks.
-Image 1.5 – A mapping to the Wheels core files in the ColdFusion Administrator
-Wheels and URLs
-Thanks to Wheels, most urls are what we call “pretty”—
-very easy to decifer and usually tell you, the developer, right where to look when you need to update something. Which do you think is prettier:
+Which do you think is prettier:
 www.myapp.com/marketing/reports/sales_by_year
 or
 www.myapp.com/index.cfm?dept=marketing&action=reports&type=sales_by_year
-These beautiful urls come at a price, though. By default, Wheels needs to be at the root of the site. Meaning that you can’t easily drop Wheels into the middle of an existing site and have it just know what to do. While this is possible, it’s not for the faint of heart. It would require changes to a few rewrite rules which means intimate knowledge of regular expressions. These are found in /public/.htaccess (for Apache) and /public/IsapiRewrite4.ini (for iis). Check http://www.cfwheels.com for more information.
-ColdFusion Setup
-Chapter 1: Installing CFWheels 10
-Web Server Setup —Apache
+
+These beautiful URLs come at a price, though. By default, Wheels needs to be at the root of the site. Meaning that you can't easily drop Wheels into the middle of an existing site and have it just know what to do. While this is possible, it's not for the faint of heart. It would require changes to a few rewrite rules which means intimate knowledge of regular expressions. These are found in .htaccess (for Apache) and IsapiRewrite4.ini (for iis). 
+
 Wheels requires that Apache be configured to use url rewriting rules. To turn them on first find the following line in your httpd.conf file (the Windows default location is C:\Program Files\Apache Group\Apache2\conf):
 #LoadModule rewrite_module modules/mod_rewrite.so
 Remove that pound sign (#) at the beginning to un-comment that rule and make it active.
-Pay close attention now—
-you’ll perform the following steps each and every time you create a new application or site with Wheels. First we need to tell Apache where our application files are and how it should serve them. This is defined as a VirtualHost in the config file. Here’s a good generic Apache entry you can use while testing locally. You’ll create an entry like this each time you create a new app or site. These entries usually go at the very bottom of your config file. Of course you would replace “helloworld” which the actual directory your new app is in. If you're going though this book from front to back then you'll find that the first thing we do is create a Hello, world! app in the next chapter. In that case, go ahead and use the entry below:
-<VirtualHost *:80>
-ServerName localhost
-DocumentRoot "c:/Inetpub/wwwroot/helloworld/public"
-<Directory "c:/Inetpub/wwwroot/helloworld/public">
-AllowOverride All
-</Directory>
-# Allows us to access the ColdFusion administrator
-# (you should comment these out when you go live with your app)
-Alias /cfide "C:/inetpub/wwwroot/CFIDE"
-Alias /CFIDE "C:/inetpub/wwwroot/CFIDE"
-Alias /script "c:/Inetpub/wwwroot/helloworld/script"
-# Allows your application to access the /config directory
-Alias /config "c:/Inetpub/wwwroot/helloworld/config"
-<Directory "c:/Inetpub/wwwroot/helloworld/config">
-Order Deny,Allow
-Deny from all
-Allow from 127.0.0.1
-</Directory>
-# Allows your application to access the /app directory
-Alias /app "c:/Inetpub/wwwroot/helloworld/app"
-<Directory "c:/Inetpub/wwwroot/helloworld/app">
-Order Deny,Allow
-Deny from all
-Allow from 127.0.0.1
-</Directory>
-</VirtualHost>
-11
-Keep in mind that these instructions assume that http://localhost will be the root of your website or app. If not, you’ll need to make changes to your web server setups as needed. For an example of a very flexible development environment capable of serving multiple sites from a single machine (each with its own local domain name), check out Appendix B where we walk you through setting up Apache with name-based virtual hosts. For the official Apache name-based hosting documentation, visit http://httpd.apache.org/docs/2.0/vhosts/name-based.html
-For Reference here’s the actual Apache setup we use for www.cfwheels.com:
-<VirtualHost 70.84.66.218:80>
-ServerName cfwheels_com
-ServerAlias *.cfwheels.com cfwheels.com *.cfwheels.org cfwheels.org ¬ *.cfonwheels.com cfonwheels.com *.coldfusiononwheels.com coldfusiononwheels.com
-DocumentRoot "c:/wwwroot/www_cfwheels_com/web/public"
-ErrorLog logs/cfwheels-error_log
-CustomLog logs/cfwheels-access_log common
-<Directory "c:/wwwroot/www_cfwheels_com/web/public">
-AllowOverride All
-</Directory>
-# Alias /cfide "C:/inetpub/wwwroot/CFIDE"
-# Alias /CFIDE "C:/inetpub/wwwroot/CFIDE"
-# Alias /script "C:/wwwroot/www_cfwheels_com/web/script"
-Alias /config "C:/wwwroot/www_cfwheels_com/web/config"
-<Directory "C:/wwwroot/www_cfwheels_com/web/config">
-Order Deny,Allow
-Deny from all
-Allow from 127.0.0.1
-</Directory>
-Alias /app "C:/wwwroot/www_cfwheels_com/web/app"
-<Directory "C:/wwwroot/www_cfwheels_com/web/app">
-Order Deny,Allow
-Deny from all
-Allow from 127.0.0.1
-</Directory>
-</VirtualHost>
-You’ll need to keep a /cfide alias if you intend to use ColdFusion Flash Forms. You’ll want to restrict it similar to /app and /config (make sure it’s only accessible from the server itself, 127.0.0.1)
-Web Server Setup—Apache
-Chapter 1: Installing CFWheels 12
-That’s it! The web server portion is done. If you haven’t created a directory for your application and copied the /template directories into it then you may get a warning when you restart Apache. Once you copy these files then everything will be okay (we’ll step through this process in the next chapter).
-Oh yeah, that readme.txt file in that /template directory gives you a basic rundown of these settings along with a sample Apache configuration entry.
-Web Server Setup — IIS
+
 Wheels requires that iis be setup with an isapi filter that rewrites urls. You’ll need to download this yourself from http://cheeso.members.winisp.net/IIRF.aspx Unzip this file and put the IsapiRewrite4.dll file somewhere good—you’re going to point iis to it.
-These steps will need to be followed each time you create a new application or site, so pay attention! Create a new website for your application and set the home directory to be the /public folder of your app. For example, C:\Inetpub\wwwroot\helloworld\public. Set the host header value to “localhost”. Now you’ll need to create some virtual directories. Start with creating a virtual directory called “app” and point it to the /app folder which is at the same level as the /public folder. Follow the same procedure and create virtual directories for “config” and “script” as well. You’ll want to edit the security settings for these virtual directories so that they’re only accessible from the server itself, 127.0.0.1. It should deny access from any other ip address (this lets your application access these files but no one can browse to http://www.helloworld.com/app and see the internal structure of your system).
-Image 1.6 – Site set up in IIS
-To enable the ISAPI Rewrite Filter in iis you’ll go to the “Properties” dialog for your website and then go to the “ISAPI Filters” tab and click the “Add…” button. Type in anything you want as the “Filter Name” (“ISAPI Rewrite” will probably make the mose sense later) and point the “Executable” to the IsapiRewrite4.dll, wherever you put it. Just restart iis and you’re done!
-13
-Web Server Setup — ColdFusion
-Because CFWheels currently relies on url rewriting it doesn’t work with the built-in ColdFusion server. Maybe Adobe will add this capability in the future, but for now you’ll need to use either Apache or iis. Check out the ACME Guide mentioned at the beginning of this chapter for help setting up Apache on your system. The Wheels development team is also working on letting Wheels function without rewriting. Your urls won’t look as nice, but everything will work just the same. So if you insist on using cf’s built-in server, or can’t quite get rewriting working on Apache or iis, you still have hope!
-Installation Complete
+To enable the ISAPI Rewrite Filter in iis you’ll go to the “Properties” dialog for your website and then go to the “ISAPI Filters” tab and click the “Add…” button. Type in anything you want as the “Filter Name” (“ISAPI Rewrite” will probably make the mose sense later) and point the “Executable” to the IsapiRewrite4.dll, 
+
 There you go—installing Wheels in about ten pages. That wasn’t so hard, was it? On to chapter two where we start building an application.
-Web Server Setup—ColdFusion
