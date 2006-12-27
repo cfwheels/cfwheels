@@ -1,0 +1,16 @@
+#summary URL rewriting in Apache or IIS
+#labels Draft
+
+= Rewriting URLs =
+
+URL rewriting is an optional feature of Wheels.
+
+Thanks to Wheels, most urls are what we call “pretty”—
+very easy to decifer and usually tell you, the developer, right where to look when you need to update something. 
+
+Which do you think is prettier:
+www.myapp.com/marketing/reports/sales_by_year
+or
+www.myapp.com/index.cfm?dept=marketing&action=reports&type=sales_by_year
+
+These beautiful urls come at a price, though. By default, Wheels needs to be at the root of the site. Meaning that you can’t easily drop Wheels into the middle of an existing site and have it just know what to do. While this is possible, it’s not for the faint of heart. It would require changes to a few rewrite rules which means intimate knowledge of regular expressions. These are found in /public/.htaccess (for Apache) and /public/IsapiRewrite4.ini (for iis). Check http://www.cfwheels.com for more information.
