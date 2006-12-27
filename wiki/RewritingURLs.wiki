@@ -14,3 +14,10 @@ or
 www.myapp.com/index.cfm?dept=marketing&action=reports&type=sales_by_year
 
 These beautiful urls come at a price, though. By default, Wheels needs to be at the root of the site. Meaning that you can’t easily drop Wheels into the middle of an existing site and have it just know what to do. While this is possible, it’s not for the faint of heart. It would require changes to a few rewrite rules which means intimate knowledge of regular expressions. These are found in /public/.htaccess (for Apache) and /public/IsapiRewrite4.ini (for iis). Check http://www.cfwheels.com for more information.
+
+Configure Apache to use url rewriting rules. To turn them on first find the following line in your httpd.conf file (the Windows default location is C:\Program Files\Apache Group\Apache2\conf):
+#LoadModule rewrite_module modules/mod_rewrite.so
+Remove that pound sign (#) at the beginning to un-comment that rule and make it active.
+
+Setup IIS that rewrites urls. You’ll need to download this yourself from http://cheeso.members.winisp.net/IIRF.aspx Unzip this file and put the IsapiRewrite4.dll file somewhere good—you’re going to point iis to it.
+To enable the ISAPI Rewrite Filter in iis you’ll go to the “Properties” dialog for your website and then go to the “ISAPI Filters” tab and click the “Add…” button. Type in anything you want as the “Filter Name” (“ISAPI Rewrite” will probably make the mose sense later) and point the “Executable” to the IsapiRewrite4.dll, wherever you put it.
