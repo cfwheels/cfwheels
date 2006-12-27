@@ -1,16 +1,21 @@
-#summary One-sentence summary of this page.
+#summary Instruction for installing Wheels on Apache and IIS.
 
-Chapter 1
-Installing CFWheels
-If you’ve ever installed a framework then you know it’s generally pretty easy: copy a few files, maybe add a mapping in the ColdFusion Administrator and you’re off and running. Wheels is no different. If you’ve never installed a framework before, don’t worry. You might even enjoy the process! All right, “enjoy” is a strong word. Maybe “tolerate.”
-There are just two steps to installing Wheels on your system for the first time, and two that you’ll perform whenever you create a new application or site:
-Get and save the base CFWheels files
-Create a mapping in the ColdFusion Administrator
-Copy a couple of directories into your new application’s root
-Set up your webserver to point to your new app
-We use the term “app” to mean both a web application and just a plain old website.
-The rest of these instructions are going to assume that you’re somewhat familiar with Apache or iis and can already get to the CF Admin. If you’re really starting from scratch, check out Appendix B where we demonstrate the ultimate Apache development environment. along with MySQL, all set up from scratch.
-Getting Wheels
+= Installing Wheels =
+
+If you've ever installed a framework then you know it's generally pretty easy: copy a few files, maybe add a mapping in the !ColdFusion Administrator and you're off and running. Wheels is no different. If you've never installed a framework before, don’t worry. You might even enjoy the process! All right, "enjoy" is a strong word. Maybe "tolerate".
+
+We have tried to make it extremely simple to get up and running with Wheels - there actually only two things you need to do before you can start working on your app (although  you can tweak your installation later on by for example introducing URL rewriting and moving the Wheels core files out of your application's folder).
+
+ * Get and save the base Wheels files
+ * Set up your webserver to point to your new app
+
+The rest of these instructions are going to assume that you're somewhat familiar with Apache or IIS and can already get to the !ColdFusion Administrator. If you're really starting from scratch, google the "ColdFusion ACME Guide". It's a comprehensive guide to building a development workstation using Apache, ColdFusion MX 7, MySQL and Eclipse.
+
+= Getting Wheels =
+
+You have two choices when download the Wheels code. Either you go to the official website at www.cfwheels.com and get the latest release in the "Download" section.
+
+
 There are two methods you can use to download Wheels. The first, and recommended method, is using the Hadron package management application. Second is to download a .zip file and extract the contents to a directory. Both methods are described below.
 1
 2
