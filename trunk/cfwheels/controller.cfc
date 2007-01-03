@@ -1,9 +1,9 @@
-<cfcomponent displayname="Application Controller" hint="The base class of all controllers">
+<cfcomponent name="Controller">
 	
-	<cfset variables.beforeFilters = arrayNew(1)>
-	<cfset variables.afterFilters = arrayNew(1)>
+	<cfset variables.before_filters = arrayNew(1)>
+	<cfset variables.after_filters = arrayNew(1)>
 
-	<!--- Include ColdFusion on Wheels controller functions --->
+	<!--- Include controller functions --->
 	<cfinclude template="#application.pathTo.functions#/controller_functions.cfm">
 
 	<!--- Include common functions --->

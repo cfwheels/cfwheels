@@ -1,7 +1,8 @@
 <cfset variables._routes = arrayNew(1)>
 
-<cffunction name="dispatch" access="remote" output="true" hint="Takes a request and calls the proper controller/action">
-	<cfset var controller = "">
+<cffunction name="dispatch" returntype="any" access="remote" output="true">
+
+	<cfset var local = structNew()>
 	
 	<cftry>
 	
@@ -18,27 +19,27 @@
 	
 	<!------ Controller ------>
 	<cftrace category="Wheels Create Controller Start"></cftrace>
-	<cfset controller = createController()>
+	<cfset local.controller = createController()>
 	<cftrace category="Wheels Create Controller End"></cftrace>
 
 	<cftrace category="Wheels Before Filters & Events Start"></cftrace>
 	<!--- Run event start functions --->
-	<cfif structKeyExists(request.wheels, "run_on_application_start") AND structKeyExists(controller, "onApplicationStart")>
-		<cfset controller.onApplicationStart()>
+	<cfif structKeyExists(request.wheels, "run_on_application_start") AND structKeyExists(local.controller, "onApplicationStart")>
+		<cfset local.controller.onApplicationStart()>
 	</cfif>
-	<cfif structKeyExists(controller, "onRequestStart")>
-		<cfset controller.onRequestStart()>
+	<cfif structKeyExists(local.controller, "onRequestStart")>
+		<cfset local.controller.onRequestStart()>
 	</cfif>
 
 	<!------ beforeFilters ------>
-	<cfif arrayLen(controller.getBeforeFilters()) IS NOT 0>
-		<cfset callBeforeFilters(controller)>
+	<cfif arrayLen(local.controller.getBeforeFilters()) IS NOT 0>
+		<cfset callBeforeFilters(local.controller)>
 	</cfif>
 	<cftrace category="Wheels Before Filters & Events End"></cftrace>
 	
 	<!------ Action ------>
 	<cftrace category="Wheels Call Action Start"></cftrace>
-	<cfset callAction(controller)>
+	<cfset callAction(local.controller)>
 	
 	<!--- 	
 		When processing returns to this point, either the controller is done and is ready for the action to be run
@@ -48,19 +49,19 @@
 	--->
 	
 	<cfif NOT getPageContext().getResponse().isCommitted() AND len(trim(getPageContext().getOut().buffer)) IS 0>
-		<cfoutput>#controller.render(action=request.params.action)#</cfoutput>
+		#local.controller.render(action=request.params.action)#
 	</cfif>
 	<cftrace category="Wheels Call Action End"></cftrace>
 	
 	<cftrace category="Wheels After Filters & Events Start"></cftrace>
 	<!------ afterFilters ------>
-	<cfif arrayLen(controller.getAfterFilters()) IS NOT 0>
-		<cfset callAfterFilters(controller)>
+	<cfif arrayLen(local.controller.getAfterFilters()) IS NOT 0>
+		<cfset callAfterFilters(local.controller)>
 	</cfif>
 	
 	<!--- Run event end functions --->
-	<cfif structKeyExists(controller, "onRequestEnd")>
-		<cfset controller.onRequestEnd()>
+	<cfif structKeyExists(local.controller, "onRequestEnd")>
+		<cfset local.controller.onRequestEnd()>
 	</cfif>
 	<cftrace category="Wheels After Filters & Events End"></cftrace>
 
@@ -73,32 +74,44 @@
 		<cfif application.settings.environment IS "production">
 			<cfif application.settings.error_email_address IS NOT "">
 				<cfmail to="#application.settings.error_email_address#" from="#application.settings.error_email_address#" subject="#listLast(getDirectoryFromPath(getBaseTemplatePath()),'\')# error" type="html">
+					<h1>Summary</h1>
 					<ul>
-						<cfif isDefined("cfcatch.type") AND cfcatch.type IS NOT ""><li><strong>Type:</strong><br />#cfcatch.type#</li></cfif>
-						<cfif isDefined("cfcatch.message") AND cfcatch.message IS NOT ""><li><strong>Message:</strong><br />#cfcatch.message#</li></cfif>
-						<cfif isDefined("cfcatch.detail") AND cfcatch.detail IS NOT ""><li><strong>Detail:</strong><br />#cfcatch.detail#</li></cfif>
-						<cfif isDefined("CGI.script_name") AND CGI.script_name IS NOT ""><li><strong>Page:</strong><br />#CGI.script_name#</li></cfif>
-						<cfif isDefined("CGI.query_string") AND CGI.query_string IS NOT ""><li><strong>Query String:</strong><br />#CGI.query_string#</li></cfif>
-						<cfif isDefined("CGI.http_referer") AND CGI.http_referer IS NOT ""><li><strong>Referer:</strong><br />#CGI.http_referer#</li></cfif>
-						<cfif isDefined("CGI.remote_addr") AND CGI.remote_addr IS NOT ""><li><strong>IP Address:</strong><br />#CGI.remote_addr#</li></cfif>
-						<cfif isDefined("CGI.http_user_agent") AND CGI.http_user_agent IS NOT ""><li><strong>User Agent:</strong><br />#CGI.http_user_agent#</li></cfif>
-						<cfif isDefined("cfcatch.NativeErrorCode") AND cfcatch.NativeErrorCode IS NOT ""><li><strong>Native Error Code:</strong><br />#cfcatch.NativeErrorCode#</li></cfif>
-						<cfif isDefined("cfcatch.SQLState") AND cfcatch.SQLState IS NOT ""><li><strong>SQL State:</strong><br />#cfcatch.SQLState#</li></cfif>
-						<cfif isDefined("cfcatch.Sql") AND cfcatch.Sql IS NOT ""><li><strong>SQL:</strong><br />#cfcatch.Sql#</li></cfif>
-						<cfif isDefined("cfcatch.queryError") AND cfcatch.queryError IS NOT ""><li><strong>Query Error:</strong><br />#cfcatch.queryError#</li></cfif>
-						<cfif isDefined("cfcatch.where") AND cfcatch.where IS NOT ""><li><strong>Where:</strong><br />#cfcatch.where#</li></cfif>
-						<cfif isDefined("cfcatch.ErrNumber") AND cfcatch.ErrNumber IS NOT 0><li><strong>Error Number:</strong><br />#cfcatch.ErrNumber#</li></cfif>
-						<cfif isDefined("cfcatch.MissingFileName") AND cfcatch.MissingFileName IS NOT ""><li><strong>Missing File Name:</strong><br />#cfcatch.MissingFileName#</li></cfif>
-						<cfif isDefined("cfcatch.LockName") AND cfcatch.LockName IS NOT ""><li><strong>Lock Name:</strong><br />#cfcatch.LockName#</li></cfif>
-						<cfif isDefined("cfcatch.LockOperation") AND cfcatch.LockOperation IS NOT ""><li><strong>Lock Operation:</strong><br />#cfcatch.LockOperation#</li></cfif>
-						<cfif isDefined("cfcatch.ErrorCode") AND cfcatch.ErrorCode IS NOT ""><li><strong>Error Code:</strong><br />#cfcatch.ErrorCode#</li></cfif>
-						<cfif isDefined("cfcatch.ExtendedInfo") AND cfcatch.ExtendedInfo IS NOT ""><li><strong>Extended Info:</strong><br />#cfcatch.ExtendedInfo#</li></cfif>
+						<li><strong>Error:</strong><br />#cfcatch.message#</li>
+						<li><strong>URL:</strong><br />http://#CGI.server_name##CGI.script_name#?#CGI.query_string#</li>
+						<li><strong>IP Address:</strong><br />#CGI.remote_addr#</li>
+					</ul>					
+					<h1>Error</h1>
+					<ul>
+					<cfloop collection="#cfcatch#" item="local.i">
+						<cfif isSimpleValue(cfcatch[local.i]) AND local.i IS NOT "StackTrace" AND cfcatch[local.i] IS NOT "">
+							<li><strong>#local.i#:</strong><br />#cfcatch[local.i]#</li>
+						</cfif>
+					</cfloop>
+						<li><strong>Context:</strong><br />
+						<cfloop index="local.i" from="1" to="#arrayLen(cfcatch.tagContext)#">
+							Line #cfcatch.tagContext[local.i]["line"]# in #cfcatch.tagContext[local.i]["template"]#<br />
+						</cfloop>
+						</li>
 					</ul>
+					<cfset local.scopes = "CGI,Request,Form,URL,Session,Cookie">
+					<cfloop list="#local.scopes#" index="local.i">
+						<cfset local.this_scope = evaluate(local.i)>
+						<cfif structCount(local.this_scope) GT 0>
+							<h1>#local.i#</h1>
+							<ul>
+							<cfloop collection="#local.this_scope#" item="local.j">
+								<cfif isSimpleValue(local.this_scope[local.j]) AND local.this_scope[local.j] IS NOT "">
+									<li><strong>#local.j#:</strong><br />#local.this_scope[local.j]#</li>
+								</cfif>
+							</cfloop>
+							</ul>					
+						</cfif>
+					</cfloop>
 				</cfmail>
 			</cfif>
 			<cfinclude template="#application.pathTo.app#/error_production.cfm">
 		<cfelse>
-			<cfif isDefined("cfcatch.type") AND cfcatch.type Contains "cfwheels">
+			<cfif structKeyExists(cfcatch, "type") AND cfcatch.type Contains "cfwheels">
 				<cfinclude template="#application.pathTo.app#/error_development.cfm">
 			<cfelse>
 				<cfrethrow>			
@@ -111,21 +124,22 @@
 </cffunction>
 
 
-<cffunction name="createController" access="private" hint="Creates an instance of the required controller">
+<cffunction name="createController" returntype="any" access="private" output="false">
 
-	<cfset var controllerName = "#application.componentPathTo.controllers#.#request.params.controller#_controller">
-	<cfset var controller = "">
+	<cfset var local = structNew()>
+	
+	<cfset local.controller_name = "#application.componentPathTo.controllers#.#request.params.controller#_controller">
 	
 	<cfif application.settings.environment IS "development">
-		<cfif fileExists(expandPath("/" & replace(controllerName, ".", "/", "all") & ".cfc"))>
-			<cfset controller = createObject("component",controllerName)>
+		<cfif fileExists(expandPath("/" & replace(local.controller_name, ".", "/", "all") & ".cfc"))>
+			<cfset local.controller = createObject("component", local.controller_name)>
 		<cfelse>
 			<cfthrow type="cfwheels.controller_missing" message="There is no controller named ""#request.params.controller#"" in this application." detail="Create the ""#request.params.controller#_controller.cfc"" file manually in the ""app/controllers"" folder (it should extend ""cfwheels.controller"") or use the <a href=""#application.pathTo.generator#"">Generator</a>.">
 		</cfif>
 	<cfelseif application.settings.environment IS "production">
 		<!---	If we're in production and there's an error then show a page not found --->
 		<cftry>
-			<cfset controller = createObject("component",controllerName)>
+			<cfset local.controller = createObject("component", local.controller_name)>
 			<cfcatch>
 				<cfinclude template="#application.templates.pageNotFound#">
 				<cfabort>
@@ -134,19 +148,19 @@
 	</cfif>
 	
 	<!--- Initialize the controller and return it --->
-	<cfreturn controller.init()>
+	<cfreturn local.controller.init()>
 
 </cffunction>
 
 
-<cffunction name="callAction" access="private" returntype="void" hint="Calls the action on a controller">
-	<cfargument name="controller" required="true" type="any" hint="The controller to call actions on">
+<cffunction name="callAction" returntype="any" access="private" output="true">
+	<cfargument name="controller" type="any" required="yes">
 	
 	<!--- If this is development, check to see if the file exists --->
-	<cfif structKeyExists(arguments.controller,request.params.action)>
-		<cfoutput><cfset evaluate("arguments.controller.#request.params.action#()")></cfoutput>
-	<cfelseif structKeyExists(arguments.controller,'methodMissing')>
-		<cfoutput><cfset arguments.controller.methodMissing()></cfoutput>
+	<cfif structKeyExists(arguments.controller, request.params.action)>
+		<cfset evaluate("arguments.controller.#request.params.action#()")>
+	<cfelseif structKeyExists(arguments.controller, "methodMissing")>
+		<cfset arguments.controller.methodMissing()>
 	<cfelse>
 		<cfif application.settings.environment IS "development">
 			<cfthrow type="cfwheels.action_missing" message="There is no action named ""#request.params.action#"" in the ""#request.params.controller#"" controller" detail="Create a function called ""#request.params.action#"" in your controller, or create a function called ""methodMissing"" in your controller to handle requests to undefined actions.">
@@ -159,44 +173,44 @@
 </cffunction>
 
 
-<cffunction name="setFlash" access="private" output="false" returntype="void" hint="Sets up the flash to persist between requests">
+<cffunction name="setFlash" returntype="any" access="private" output="false">
 
-	<cfif NOT structKeyExists(session,'flash')>
+	<cfif NOT structKeyExists(session, "flash")>
 		<cfset session.flash = structNew()>
 	</cfif>
-	<!--- Creates a pointer to session.flash so that when something is changed in request.flash
-		  it's also changed in session.flash ---> 
+	<!--- Creates a pointer to session.flash so that when something is changed in request.flash it's also changed in session.flash --->
 	<cfset request.flash = session.flash>
 
 </cffunction>
 
 
-<cffunction name="clearFlash" access="private" output="false" returntype="void" hint="Clears out the flash (called at the end of a request)">
+<cffunction name="clearFlash" returntype="any" access="private" output="false">
 
 	<cfset structClear(session.flash)>
 
 </cffunction>
 
 
-<cffunction name="callBeforeFilters" access="private" returntype="void" hint="Calls the before filters in a controller">
-	<cfargument name="controller" type="any" required="true" hint="The controller to call beforeFilters on">
+<cffunction name="callBeforeFilters" returntype="any" access="private" output="false">
+	<cfargument name="controller" type="any" required="yes">
 
-	<cfset var beforeFilters = arguments.controller.getBeforeFilters()>
-	<cfset var methodName = "">
+	<cfset var local = structNew()>
 	
-	<cfloop index="i" from="1" to="#arraylen(beforeFilters)#">
-		<cfif	(beforeFilters[i].only IS "" AND beforeFilters[i].except IS "") OR
-				(beforeFilters[i].only IS NOT "" AND listFindNoCase(beforeFilters[i].only, request.params.action)) OR
-				(beforeFilters[i].except IS NOT "" AND NOT listFindNoCase(beforeFilters[i].except, request.params.action))>
-			<cfset methodName = trim(beforeFilters[i].filter)>
+	<cfset local.before_filters = arguments.controller.getBeforeFilters()>
+	
+	<cfloop from="1" to="#arraylen(local.before_filters)#" index="local.i">
+		<cfif	(local.before_filters[local.i].only IS "" AND local.before_filters[local.i].except IS "") OR
+				(local.before_filters[local.i].only IS NOT "" AND listFindNoCase(local.before_filters[local.i].only, request.params.action)) OR
+				(local.before_filters[local.i].except IS NOT "" AND NOT listFindNoCase(local.before_filters[local.i].except, request.params.action))>
+			<cfset local.method_name = trim(local.before_filters[local.i].filter)>
 			<!--- Add parenthesis to make this a real method call --->
-			<cfif methodName DOES NOT CONTAIN "(">
-				<cfset methodName = methodName & "()">
+			<cfif local.method_name Does Not Contain "(">
+				<cfset local.method_name = local.method_name & "()">
 			</cfif>
-			<cfif structKeyExists(arguments.controller,'#spanExcluding(methodName, "(")#')>
-				<cfoutput><cfset evaluate("arguments.controller.#methodName#")></cfoutput>
+			<cfif structKeyExists(arguments.controller, "#spanExcluding(local.method_name, "(")#")>
+				<cfset evaluate("arguments.controller.#local.method_name#")>
 			<cfelse>
-				<cfthrow type="cfwheels.beforeFilterMissing" message="There is no action called '#methodName#' which is trying to be called as a beforeFilter()" detail="Remove this action from your beforeFilter declaration, or create an action called '#request.params.action#' in your '#request.params.controller#' controller">
+				<cfthrow type="cfwheels.beforeFilterMissing" message="There is no action called '#local.method_name#' which is trying to be called as a beforeFilter()" detail="Remove this action from your beforeFilter declaration, or create an action called '#request.params.action#' in your '#request.params.controller#' controller">
 				<cfabort>
 			</cfif>
 		</cfif>
@@ -205,24 +219,26 @@
 </cffunction>
 
 
-<cffunction name="callAfterFilters" access="private" returntype="void" hint="Calls the after filters in a controller">
-	<cfargument name="controller" type="any" required="true" hint="The controller to call beforeFilters on">
+<cffunction name="callAfterFilters" returntype="any" access="private" output="false">
+	<cfargument name="controller" type="any" required="yes">
 
-	<cfset var afterFilters = arguments.controller.getAfterFilters()>
-	<cfset var methodName = "">
+	<cfset var local = structNew()>
 	
-	<cfloop index="i" from="1" to="#arraylen(afterFilters)#">
-		<cfif	(afterFilters[i].only IS "" AND Controller.afterFilters[i].except IS "") OR
-				(afterFilters[i].only IS NOT "" AND listFindNoCase(afterFilters[i].only, request.params.action)) OR
-				(afterFilters[i].except IS NOT "" AND NOT listFindNoCase(afterFilters[i].except, request.params.action))>
-			<cfset methodName = trim(afterFilters[i].filter)>
-			<cfif methodName DOES NOT CONTAIN "(">
-				<cfset methodName = methodName & "()">
+	<cfset local.after_filters = arguments.controller.getAfterFilters()>
+	
+	<cfloop from="1" to="#arraylen(local.after_filters)#" index="local.i">
+		<cfif	(local.after_filters[local.i].only IS "" AND local.after_filters[local.i].except IS "") OR
+				(local.after_filters[local.i].only IS NOT "" AND listFindNoCase(local.after_filters[local.i].only, request.params.action)) OR
+				(local.after_filters[local.i].except IS NOT "" AND NOT listFindNoCase(local.after_filters[local.i].except, request.params.action))>
+			<cfset local.method_name = trim(local.after_filters[local.i].filter)>
+			<!--- Add parenthesis to make this a real method call --->
+			<cfif local.method_name Does Not Contain "(">
+				<cfset local.method_name = local.method_name & "()">
 			</cfif>
-			<cfif structKeyExists(arguments.controller,'#spanExcluding(methodName, "(")#')>
-				<cfoutput><cfset evaluate("arguments.controller.#methodName#")></cfoutput>
+			<cfif structKeyExists(arguments.controller, "#spanExcluding(local.method_name, "(")#")>
+				<cfset evaluate("arguments.controller.#local.method_name#")>
 			<cfelse>
-				<cfthrow type="cfwheels.afterFilterMissing" message="There is no action called '#methodName#' which is trying to be called as an afterFilter()" detail="Remove this action from your afterFilter declaration, or create the action">
+				<cfthrow type="cfwheels.afterFilterMissing" message="There is no action called '#local.method_name#' which is trying to be called as an afterFilter()" detail="Remove this action from your afterFilter declaration, or create the action">
 				<cfabort>
 			</cfif>
 		</cfif>
@@ -231,19 +247,13 @@
 </cffunction>
 
 
-<cffunction name="setParams" access="private" output="false" returntype="void" hint="Populates request.params with url and form variables">
+<cffunction name="setParams" returntype="any" access="private" output="false">
 
-	<cfset var match = arrayNew(1)>
-	<cfset var model = "">
-	<cfset var field = "">
-	<cfset var dateFieldName = "">
-	<cfset var dateFieldPart = "">
-	<cfset var dateFieldValue = "">
-	<cfset var datesStruct = structNew()>
-	<cfset var thisDate = "">
-	<cfset var tempArray = arrayNew(1)>
-	<cfset var separator = "">
-	<cfset var key = "">
+	<cfset var local = structNew()>
+
+	<cfset local.match = arrayNew(1)>
+	<cfset local.temp_array = arrayNew(1)>
+	<cfset local.dates_struct = structNew()>
 	
 	<!--- Sets what kind of request this was.  By default, it's a GET --->
 	<cfset request.get = true>
@@ -251,75 +261,75 @@
 	<cfset request.put = false>
 	<cfset request.delete = false>
 	<cfset request.xhr = false>
-	<cfset request.currentRequest = url.wheels>
+	<cfset request.current_request = url.wheels>
 	
 	<!--- Check to see if this is an XMLHttpRequest --->
-	<cfif cgi.http_accept Contains "text/javascript">
+	<cfif CGI.http_accept Contains "text/javascript">
 		<cfset request.xhr = true>
 	</cfif>
 	
 	<!--- Take any FORM variables and put them in params --->
 	<cfif NOT structIsEmpty(form)>
-		<cfloop collection="#form#" item="key">
+		<cfloop collection="#form#" item="local.key">
 			<!--- If a FORM variable contains brackets [] then it represents a model. Build a struct to hold the data, named after the model --->
-			<cfset match = reFindNoCase("(.*?)\[(.*?)\]",key,1,true)>
+			<cfset local.match = reFindNoCase("(.*?)\[(.*?)\]", local.key, 1, true)>
 			
-			<cfif arrayLen(match.pos) IS 3>
+			<cfif arrayLen(local.match.pos) IS 3>
 			
-				<cfset model = lCase(mid(key, match.pos[2], match.len[2]))>
-				<cfset field = lCase(mid(key, match.pos[3], match.len[3]))>
+				<cfset local.model = lCase(mid(local.key, local.match.pos[2], local.match.len[2]))>
+				<cfset local.field = lCase(mid(local.key, local.match.pos[3], local.match.len[3]))>
 				
 				<!--- Check to see if this field is part of a date --->
-				<cfset match = reFindNoCase("(.*)\((.*)\)",field,1,true)>
+				<cfset local.match = reFindNoCase("(.*)\((.*)\)", local.field, 1, true)>
 				
-				<cfif arrayLen(match.pos) IS 3>
+				<cfif arrayLen(local.match.pos) IS 3>
 					<!--- date field --->
-					<cfset dateFieldName = lCase(mid(field, match.pos[2], match.len[2]))>
-					<cfset dateFieldPart = left(mid(field, match.pos[3], match.len[3]),1)>
-					<cfset dateFieldValue = form[key]>
+					<cfset local.date_field_name = lCase(mid(local.field, local.match.pos[2], local.match.len[2]))>
+					<cfset local.date_field_part = left(mid(local.field, local.match.pos[3], local.match.len[3]),1)>
+					<cfset local.date_field_value = form[local.key]>
 					
-					<cfif NOT structKeyExists(datesStruct,'#dateFieldName#')>
-						<cfset datesStruct[dateFieldName] = arrayNew(1)>
+					<cfif NOT structKeyExists(local.dates_struct, local.date_field_name)>
+						<cfset local.dates_struct[local.date_field_name] = arrayNew(1)>
 					</cfif>
-					<cfset arraySet(datesStruct[dateFieldName],dateFieldPart,dateFieldPart,dateFieldValue)>
+					<cfset arraySet(local.dates_struct[local.date_field_name], local.date_field_part, local.date_field_part, local.date_field_value)>
 				<cfelse>
 					<!--- regular model-type field --->
-					<cfif NOT structKeyExists(request.params,'#model#')>
-						<cfset request.params[model] = structNew()>
+					<cfif NOT structKeyExists(request.params, local.model)>
+						<cfset request.params[local.model] = structNew()>
 					</cfif>
 					<!--- Should only happen if field does not contain a () --->
-					<cfset request.params[model][field] = form[key]>
+					<cfset request.params[local.model][local.field] = form[local.key]>
 				</cfif>
 				
 			<cfelse>
 				<!--- Just some random form field --->
-				<cfset request.params[key] = form[key]>
+				<cfset request.params[local.key] = form[local.key]>
 			</cfif>
 		</cfloop>
 		
 		<!--- If there are any date fields, figure them out --->
-		<cfif NOT structIsEmpty(datesStruct)>
-			<cfloop collection="#datesStruct#" item="key">
-				<cfset thisDate = "">
-				<cfset tempArray = datesStruct[key]>
-				<cfloop from="1" to="#arrayLen(tempArray)#" index="i">
-					<cfswitch expression="#i#">
+		<cfif NOT structIsEmpty(local.dates_struct)>
+			<cfloop collection="#local.dates_struct#" item="local.key">
+				<cfset local.this_date = "">
+				<cfset local.temp_array = local.dates_struct[local.key]>
+				<cfloop from="1" to="#arrayLen(local.temp_array)#" index="local.i">
+					<cfswitch expression="#local.i#">
 						<cfcase value="2,3">
-							<cfset separator = "-">
+							<cfset local.separator = "-">
 						</cfcase>
 						<cfcase value="4">
-							<cfset separator = " ">
+							<cfset local.separator = " ">
 						</cfcase>
 						<cfcase value="5,6">
-							<cfset separator = ":">
+							<cfset local.separator = ":">
 						</cfcase>
 						<cfdefaultcase>
-							<cfset separator = "">
+							<cfset local.separator = "">
 						</cfdefaultcase>
 					</cfswitch>
-					<cfset thisDate = thisDate & separator & tempArray[i]>
+					<cfset local.this_date = local.this_date & local.separator & local.temp_array[local.i]>
 				</cfloop>
-				<cfset request.params[model][key] = thisDate>
+				<cfset request.params[local.model][local.key] = local.this_date>
 			</cfloop>
 		</cfif>
 		
@@ -330,13 +340,13 @@
 	
 	<!--- Take any URL variables (except wheels and method) and put them in params 
 		  If a FORM and URL variable are named the same, URL will win and go into params --->
-	<cfloop collection="#url#" item="key">
-		<cfif key IS NOT "method" AND key IS NOT "wheels">
-			<cfset request.params[lCase(key)] = url[key]>
+	<cfloop collection="#url#" item="local.key">
+		<cfif local.key IS NOT "method" AND local.key IS NOT "wheels">
+			<cfset request.params[lCase(local.key)] = url[local.key]>
 		</cfif>
 	</cfloop>
 	<!--- Set the default action if one isn't defined --->
-	<cfif NOT structKeyExists(request.params,'action')>
+	<cfif NOT structKeyExists(request.params, "action")>
 		<cfset request.params.action = application.default.action>
 	</cfif>
 	
@@ -344,43 +354,33 @@
 </cffunction>
 
 
-<cffunction name="findRoute" access="private" output="false" returntype="void" hint="Figures out which route matches this request">
-	<cfargument name="wheels" type="string" required="true">
+<cffunction name="findRoute" returntype="any" access="private" output="false">
+	<cfargument name="wheels" type="any" required="yes">
 	
-	<cfset var varMatch = "">
-	<cfset var valMatch = "">
-	<cfset var vari = "">
-	<cfset var vali = "">
-	<cfset var requestString = arguments.wheels>
-	<cfset var routeParams = arrayNew(1)>
-	<cfset var thisRoute = structNew()>
-	<cfset var thisPattern = "">
-	<cfset var match = structNew()>
-	<cfset var foundRoute = structNew()>
-	<cfset var returnRoute = structNew()>
-	<cfset var params = structNew()>
-	<cfset var key = "">
-	<cfset var i = "">
+	<cfset var local = structNew()>
+
+	<cfset local.request_string = arguments.wheels>
+	<cfset local.route_params = arrayNew(1)>
 
 	<!--- fix URL variables (IIS only) --->
-	<cfif requestString CONTAINS "?">
-		<cfset varMatch = REFind("\?.*=", requestString, 1, "TRUE")>
-		<cfset valMatch = REFind("=.*$", requestString, 1, "TRUE")>
-		<cfset vari = Mid(requestString, (varMatch.pos[1]+1), (varMatch.len[1]-2))>
-		<cfset vali = Mid(requestString, (valMatch.pos[1]+1), (valMatch.len[1]-1))>
-		<cfset url[vari] = vali>
-		<cfset requestString = Mid(requestString, 1, (varMatch.pos[1]-1))>
+	<cfif local.request_string Contains "?">
+		<cfset local.var_match = REFind("\?.*=", local.request_string, 1, "true")>
+		<cfset local.val_match = REFind("=.*$", local.request_string, 1, "true")>
+		<cfset local.vari = Mid(local.request_string, (local.var_match.pos[1]+1), (local.var_match.len[1]-2))>
+		<cfset local.vali = Mid(local.request_string, (local.val_match.pos[1]+1), (local.val_match.len[1]-1))>
+		<cfset url[local.vari] = local.vali>
+		<cfset local.request_string = Mid(local.request_string, 1, (local.var_match.pos[1]-1))>
 	</cfif>
 	
 	<!--- Remove the leading slash in the request (if there was something more than just a slash to begin with) to match our routes --->
-	<cfif len(requestString) GT 1>
-		<cfset requestString = right(requestString,len(requestString)-1)>
+	<cfif len(local.request_string) GT 1>
+		<cfset local.request_string = right(local.request_string,len(local.request_string)-1)>
 	</cfif>
-	<cfif right(requestString,1) IS NOT "/">
-		<cfset requestString = requestString & "/">
+	<cfif right(local.request_string,1) IS NOT "/">
+		<cfset local.request_string = local.request_string & "/">
 	</cfif>
 	
-	<!--- Only include the routes if we're in development, or in production but don't already have the variable --->
+	<!--- Only include the routes if we're in development or in production but don't already have the variable --->
 	<cfif application.settings.environment IS "development" OR (application.settings.environment IS "production" AND arrayLen(application.wheels.routes) IS 0)>
 		<cfinclude template="#application.pathTo.config#/routes.ini">
 		<cfset application.wheels.routes = duplicate(variables._routes)>
@@ -388,29 +388,29 @@
 	
 	<!--- Compare route to URL --->
 	<!--- For each route in /config/routes.cfm --->
-	<cfloop from="1" to="#arrayLen(application.wheels.routes)#" index="i">
-		<cfset arrayClear(routeParams)>
-		<cfset thisRoute = application.wheels.routes[i]>
+	<cfloop from="1" to="#arrayLen(application.wheels.routes)#" index="local.i">
+		<cfset arrayClear(local.route_params)>
+		<cfset local.this_route = application.wheels.routes[local.i]>
 		
 		<!--- Add a trailing slash to ease pattern matching --->
-		<cfif right(thisRoute.pattern,1) IS NOT "/">
-			<cfset thisRoute.pattern = thisRoute.pattern & "/">
+		<cfif right(local.this_route.pattern,1) IS NOT "/">
+			<cfset local.this_route.pattern = local.this_route.pattern & "/">
 		</cfif>
 	
 		<!--- Replace any :parts with a regular expression for matching against the URL --->
-		<cfset thisPattern = REReplace(thisRoute.pattern, ":.*?/", "(.+?)/", "all")>
+		<cfset local.this_pattern = REReplace(local.this_route.pattern, ":.*?/", "(.+?)/", "all")>
 		<!--- Try to match this route against the URL --->
-		<cfset match = REFindNoCase(thisPattern,requestString,1,true)>
+		<cfset local.match = REFindNoCase(local.this_pattern, local.request_string, 1, true)>
 		
 		<!--- If a match was made, use the result to route the request --->
-		<cfif match.len[1] IS NOT 0>
-			<cfset foundRoute = thisRoute>
+		<cfif local.match.len[1] IS NOT 0>
+			<cfset local.found_route = local.this_route>
 			
 			<!--- For each part of the URL in the route --->
-			<cfloop list="#thisRoute.pattern#" delimiters="/" index="thisPattern">
+			<cfloop list="#local.this_route.pattern#" delimiters="/" index="local.i">
 				<!--- if this part of the route pattern is a variable --->
-				<cfif find(":",thisPattern)>
-					<cfset arrayAppend(routeParams,right(thisPattern,len(thisPattern)-1))>
+				<cfif find(":", local.i)>
+					<cfset arrayAppend(local.route_params, right(local.i, len(local.i)-1))>
 				</cfif>
 			</cfloop>
 			
@@ -421,32 +421,31 @@
 	</cfloop>
 	
 	<!--- Populate the params structure with the proper parts of the URL --->
-	<cfloop from="1" to="#arrayLen(routeParams)#" index="i">
-		<cfset "request.params.#routeParams[i]#" = mid(requestString,match.pos[i+1],match.len[i+1])>
+	<cfloop from="1" to="#arrayLen(local.route_params)#" index="local.i">
+		<cfset "request.params.#local.route_params[local.i]#" = mid(local.request_string, local.match.pos[local.i+1], local.match.len[local.i+1])>
 	</cfloop>
 	<!--- Now set the rest of the variables in the route --->
-	<cfloop collection="#foundRoute#" item="key">
-		<cfif key IS NOT "pattern">
-			<cfset request.params[key] = foundRoute[key]>
+	<cfloop collection="#local.found_route#" item="local.i">
+		<cfif local.i IS NOT "pattern">
+			<cfset request.params[local.i] = local.found_route[local.i]>
 		</cfif>
 	</cfloop>
 
 </cffunction>
 
 
-<cffunction name="addRoute" access="private" hint="Adds a route to dispatch">
-	<cfargument name="pattern" type="string" required="true" hint="The pattern to match against the URL">
+<cffunction name="addRoute" returntype="any" access="private" output="false">
+	<cfargument name="pattern" type="string" required="yes">
 	
-	<cfset var thisRoute = structNew()>
-	<cfset var arg = "">
+	<cfset var local = structNew()>
 	
-	<cfset thisRoute.pattern = arguments.pattern>
-	<cfloop collection="#arguments#" item="arg">
-		<cfif arg IS NOT 'pattern'>
-			<cfset thisRoute[arg] = arguments[arg]>
+	<cfset local.this_route.pattern = arguments.pattern>
+	<cfloop collection="#arguments#" item="local.i">
+		<cfif local.i IS NOT "pattern">
+			<cfset local.this_route[local.i] = arguments[local.i]>
 		</cfif>
 	</cfloop>
 	
-	<cfset arrayAppend(variables._routes,thisRoute)>
+	<cfset arrayAppend(variables._routes, local.this_route)>
 
 </cffunction>

@@ -1,4 +1,4 @@
-<cffunction name="init" access="public" output="false" hint="Called when a controller is instantiated">
+<cffunction name="init" returntype="any" access="public" output="false">
 	
 	<!--- Include view functions --->
 	<cfinclude template="#application.pathTo.functions#/view_functions.cfm">
@@ -16,56 +16,53 @@
 </cffunction>
 
 
-<cffunction name="renderToString" access="public" returntype="string" output="false" hint="Calls render and returns the results as a string">
+<cffunction name="renderToString" returntype="any" access="public" output="false">
 	
-	<cfreturn render(arguments=arguments, saveToString=true)>
+	<cfset var local = structNew()>
+	
+	<cfset local.render_arguments = duplicate(arguments)>
+	<cfset local.render_arguments.save_to_string = true>
+	<cfreturn render(argumentCollection=local.render_arguments)>
 
 </cffunction>
 
 
-<cffunction name="render" access="public" returntype="string" output="true" hint="Renders all visual stuff for a given action">
-	<!--- Types of rendering --->
-	<cfargument name="action" type="string" required="false" default="" hint="The action to render">
-	<cfargument name="controller" type="string" required="false" default="#request.params.controller#" hint="The controller to render">
-	<cfargument name="file" type="string" required="false" default="" hint="The file to render (absolute path)">
-	<cfargument name="template" type="string" required="false" default="" hint="The template to render (use relative path)">
-	<cfargument name="partial" type="string" required="false" default="" hint="The partial to render">
-	<cfargument name="text" type="string" required="false" default="" hint="String to render">
-	<cfargument name="nothing" type="string" required="false" default="">
-	<!--- layout and status applies to all types of rendering --->
-	<cfargument name="layout" type="string" required="false" default="">
-	<cfargument name="status" type="numeric" required="false" default=200>
-	<!--- useFullPath applies to file rendering only --->
-	<cfargument name="useFullPath" type="boolean" required="false" default="false" hint="If TRUE the rendering will be done relative to the template root (app/views). Applies to file rendering only">
-	<!--- This is only set when called from the renderToString function above --->
-	<cfargument name="saveToString" type="boolean" required="false" default="false" hint="If TRUE the result of the rendering will be returned as a string and not rendered to the browser">
+<cffunction name="render" returntype="any" access="public" output="true">
+	<cfargument name="action" type="any" required="no" default="">
+	<cfargument name="controller" type="any" required="no" default="#request.params.controller#">
+	<cfargument name="file" type="any" required="no" default="">
+	<cfargument name="template" type="any" required="no" default="">
+	<cfargument name="partial" type="any" required="no" default="">
+	<cfargument name="text" type="any" required="no" default="">
+	<cfargument name="nothing" type="any" required="no" default="">
+	<cfargument name="layout" type="any" required="no" default="">
+	<cfargument name="status" type="any" required="no" default=200>
+	<cfargument name="use_full_path" type="any" required="no" default="false">
+	<cfargument name="save_to_string" type="any" required="no" default="false">
 
-	<cfset var arg = "">
-	<cfset var renderResult = "">
+	<cfset var local = structNew()>
 	
-	<!--- layout was not passed in so set the default for it depending on the type of rendering to be done --->
-	<cfif arguments.layout IS "">
+	<cfif isBoolean(arguments.nothing) AND arguments.nothing>
+		<!--- Never render a layout with the nothing option --->
+		<cfset arguments.layout = false>				
+	<cfelseif arguments.layout IS "">
+		<!--- layout was not passed in so set the default for it depending on the type of rendering to be done --->
 		<cfif arguments.action IS NOT "" OR arguments.template IS NOT "">
 			<cfset arguments.layout = true>
 		<cfelse>
 			<cfset arguments.layout = false>		
 		</cfif>
 	</cfif>
-
-	<!--- Never render a layout with the nothing option --->
-	<cfif arguments.nothing IS true>
-		<cfset arguments.layout = false>				
-	</cfif>
-
+	
 	<cfif arguments.status IS NOT 200>
-		<cfheader statusCode="#arguments.status#">
+		<cfheader statuscode="#arguments.status#">
 	</cfif>
 
 	<cfif arguments.partial IS NOT "">
 		<!--- Set local variables for partial --->
-		<cfloop collection="#arguments#" item="arg">
-			<cfif NOT listFindNoCase("action,controller,file,template,partial,text,nothing,layout,status,useFullPath,saveToString", arg)>
-				<cfset "request._render.locals.#arg#" = evaluate("arguments.#arg#")>
+		<cfloop collection="#arguments#" item="local.i">
+			<cfif NOT listFindNoCase("action,controller,file,template,partial,text,nothing,layout,status,use_full_path,save_to_string", local.i)>
+				<cfset "request._render.local_variables.#local.i#" = arguments[local.i]>
 			</cfif>
 		</cfloop>
 	</cfif>
@@ -90,31 +87,31 @@
 	<cfif arguments.nothing IS NOT "">
 		<cfset request._render.nothing = arguments.nothing>
 	</cfif>
-	<cfif arguments.useFullPath IS NOT "">
-		<cfset request._render.useFullPath = arguments.useFullPath>
+	<cfif arguments.use_full_path IS NOT "">
+		<cfset request._render.use_full_path = arguments.use_full_path>
 	</cfif>
 
-	<cfsavecontent variable="renderResult">
-		<cfif arguments.layout IS NOT false>
+	<cfsavecontent variable="local.render_result">
+		<cfif (isBoolean(arguments.layout) AND arguments.layout) OR (NOT isBoolean(arguments.layout) AND arguments.layout IS NOT "")>
 			<cfset renderLayout(argumentCollection=arguments)>
 		<cfelse>
 			<cfset contentForLayout()>
 		</cfif>
 	</cfsavecontent>
 	
-	<cfif arguments.saveToString IS true>
-		<cfreturn renderResult>
+	<cfif arguments.save_to_string>
+		<cfreturn local.render_result>
 	<cfelse>
-		#renderResult#
+		#local.render_result#
 	</cfif>
 </cffunction>
 
 
-<cffunction name="renderLayout" access="public" returntype="void" output="true" hint="Includes the layout for the given controller">
+<cffunction name="renderLayout" returntype="any" access="public" output="true">
 	
-	<cfif arguments.layout IS NOT true AND fileExists(expandPath("#application.pathTo.layouts#/#Replace(arguments.layout, " ", "_", "ALL")#_layout.cfm"))>
+	<cfif NOT arguments.layout AND fileExists(expandPath("#application.pathTo.layouts#/#Replace(arguments.layout, " ", "_", "all")#_layout.cfm"))>
 		<!--- Another designated layout --->
-		<cfinclude template="#application.pathTo.layouts#/#Replace(arguments.layout, " ", "_", "ALL")#_layout.cfm" />
+		<cfinclude template="#application.pathTo.layouts#/#Replace(arguments.layout, " ", "_", "all")#_layout.cfm" />
 	<cfelseif fileExists(expandPath("#application.pathTo.layouts#/#arguments.controller#_layout.cfm"))>
 		<!--- The current controller's layout --->
 		<cfinclude template="#application.pathTo.layouts#/#arguments.controller#_layout.cfm" />
@@ -129,155 +126,143 @@
 </cffunction>
 
 
-<cffunction name="contentForLayout" access="public" returntype="void" output="true" hint="Includes the current view">
+<cffunction name="contentForLayout" returntype="any" access="public" output="true">
 	
-	<cfset var filePathForPartial = application.pathTo.views>
-	<cfset var templateArrayForPartial = "">
-	<cfset var directoryForPartial = "">
-	<cfset var filenameForPartial = "">
-	<cfset var local = "">
-
-	<cfif structKeyExists(request._render,'partial') AND request._render.partial IS NOT "">
-		<cfif structKeyExists(request._render,'locals')>
-			<cfloop collection="#request._render.locals#" item="local">
-				<cfset "#local#" = evaluate("request._render.locals.#local#")>
+	<cfset var local = structNew()>
+	<cfif structKeyExists(request._render, "partial") AND request._render.partial IS NOT "">
+		<cfif structKeyExists(request._render, "local_variables")>
+			<cfloop collection="#request._render.local_variables#" item="local.local_variable">
+				<cfset "#local.local_variable#" = evaluate("request._render.local_variables.#local.local_variable#")>
 			</cfloop>
 		</cfif>
 		<cfif request._render.partial Contains "/">
 			<!--- this is a shared partial --->
-			<cfset templateArrayForPartial = ListToArray(request._render.partial, "/")>
-			<cfset directoryForPartial = templateArrayForPartial[1]>
-			<cfset filenameForPartial = templateArrayForPartial[2]>
+			<cfset local.template_array_for_partial = listToArray(request._render.partial, "/")>
+			<cfset local.directory_for_partial = local.template_array_for_partial[1]>
+			<cfset local.filename_for_partial = local.template_array_for_partial[2]>
 		<cfelse>
 			<!--- this is a normal partial --->
-			<cfset directoryForPartial = request._render.controller>
-			<cfset filenameForPartial = request._render.partial>
+			<cfset local.directory_for_partial = request._render.controller>
+			<cfset local.filename_for_partial = request._render.partial>
 		</cfif>
-		<cfset filePathForPartial = "#filePathForPartial#/#directoryForPartial#/_#Replace(filenameForPartial, " ", "_", "ALL")#.cfm">
-		<cfif fileExists(expandPath(filePathForPartial))>
-			<cfinclude template="#filePathForPartial#" />
+		<cfset local.filepath_for_partial = "#application.pathTo.views#/#local.directory_for_partial#/_#replace(local.filename_for_partial, " ", "_", "all")#.cfm">
+		<cfif fileExists(expandPath(local.filepath_for_partial))>
+			<cfinclude template="#local.filepath_for_partial#">
 		</cfif>
 		<cfset request._render.partial = "">
-	<cfelseif structKeyExists(request._render,'action') AND request._render.action IS NOT "">
+	<cfelseif structKeyExists(request._render, "action") AND request._render.action IS NOT "">
 		<cfif fileExists(expandPath("#application.pathTo.views#/#request._render.controller#/#request._render.action#.cfm"))>
 			<cfinclude template="#application.pathTo.views#/#request._render.controller#/#request._render.action#.cfm">
 		</cfif>				
 		<cfset request._render.action = "">
-	<cfelseif structKeyExists(request._render,'file') AND request._render.file IS NOT "">
-		<cfif request._render.useFullPath IS TRUE>
+	<cfelseif structKeyExists(request._render, "file") AND request._render.file IS NOT "">
+		<cfif request._render.use_full_path>
 			<cfif fileExists(expandPath("#application.pathTo.views#/#request._render.file#"))>
 				<cfinclude template="#application.pathTo.views#/#request._render.file#">
 			</cfif>
 		<cfelse>
 			<cfif fileExists(request._render.file)>
-				<cffile action="read" file="#request._render.file#" variable="filecontent">
-				#filecontent#
+				<cffile action="read" file="#request._render.file#" variable="local.filecontent">
+				#local.filecontent#
 			</cfif>			
 		</cfif>
 		<cfset request._render.file = "">
-		<cfset request._render.useFullPath = "">
-	<cfelseif structKeyExists(request._render,'template') AND request._render.template IS NOT "">
+		<cfset request._render.use_full_path = "">
+	<cfelseif structKeyExists(request._render, "template") AND request._render.template IS NOT "">
 		<cfif fileExists(expandPath("#application.pathTo.views#/#request._render.template#.cfm"))>
 			<cfinclude template="#application.pathTo.views#/#request._render.template#.cfm">
 		</cfif>
 		<cfset request._render.template = "">
-	<cfelseif structKeyExists(request._render,'text') AND request._render.text IS NOT "">
+	<cfelseif structKeyExists(request._render, "text") AND request._render.text IS NOT "">
 		#request._render.text#
 		<cfset request._render.text = "">
-	<cfelseif structKeyExists(request._render,'nothing') AND request._render.nothing IS NOT "">
-		<cfset request._render.nothing = "">
+	<cfelseif structKeyExists(request._render, "nothing") AND request._render.nothing IS NOT "">
+		<cfinclude template="#application.pathTo.cfwheels#/on_request_end.cfm">
 		<cfabort>
 	</cfif>
 	
-</cffunction>		
+</cffunction>
 
 
-<cffunction name="redirectTo" access="public" returntype="void" output="true" hint="Redirects to another page">
-	<cfargument name="link" type="string" required="no" default="" hint="The full URL to link to (only use this when not using controller/action/id type links)">
-	<cfargument name="back" type="boolean" required="no" default="false" hint="When true redirects back to the referring page">
-	<cfargument name="token" type="boolean" required="false" default="false" hint="Whether or not to append the url token to the URL">
+<cffunction name="redirectTo" returntype="any" access="public" output="true">
+	<cfargument name="link" type="any" required="no" default="">
+	<cfargument name="back" type="any" required="no" default="false">
+	<cfargument name="token" type="any" required="no" default="false">
 
-	<!---
-	[DOCS:ARGUMENTS]
-	URLFor
-	[DOCS:ARGUMENTS END]
-	--->
-
-	<cfset var url = "">
+	<cfset var local = structNew()>
 
 	<cfif arguments.link IS NOT "">
-		<cfset url = arguments.link>
+		<cfset local.url = arguments.link>
 	<cfelseif arguments.back>
-		<cfif cgi.http_referer IS NOT "">
-			<cfset url = cgi.http_referer>
+		<cfif CGI.http_referer IS NOT "">
+			<cfset local.url = CGI.http_referer>
 		<cfelse>
-			<cfset url = "/">
+			<cfset local.url = "/">
 		</cfif>
 	<cfelse>
-		<cfset new_arguments = duplicate(arguments)>
-		<cfset structDelete(new_arguments, "link")>
-		<cfset structDelete(new_arguments, "back")>
-		<cfset structDelete(new_arguments, "token")>
-		<cfset url = urlFor(argumentCollection=new_arguments)>
+		<cfset local.url_for_arguments = duplicate(arguments)>
+		<cfset structDelete(local.url_for_arguments, "link")>
+		<cfset structDelete(local.url_for_arguments, "back")>
+		<cfset structDelete(local.url_for_arguments, "token")>
+		<cfset local.url = urlFor(argumentCollection=local.url_for_arguments)>
 	</cfif>
 
-	<!--- Need to include the on request end code manually here since cflocation does not run that code --->
 	<cfinclude template="#application.pathTo.cfwheels#/on_request_end.cfm">
 
 	<cfif arguments.token>
-		<cflocation url="#url#">
+		<cflocation url="#local.url#">
 	<cfelse>
-		<cflocation url="#url#" addtoken="false">
+		<cflocation url="#local.url#" addtoken="false">
 	</cfif>
 		
 </cffunction>
 
 
-<cffunction name="beforeFilter" access="public" returntype="void" output="false" hint="adds a before filter">
-	<cfargument name="filters" type="string" required="true" hint="The filter(s) to add">
-	<cfargument name="only" type="string" required="false" default="" hint="Execute the supplied filter(s) for these actions only">
-	<cfargument name="except" type="string" required="false" default="" hint="Execute the supplied filter(s) for all actions except these">
+<cffunction name="beforeFilter" returntype="any" access="public" output="false">
+	<cfargument name="filters" type="any" required="yes">
+	<cfargument name="only" type="any" required="no" default="">
+	<cfargument name="except" type="any" required="no" default="">
 	
-	<cfset var thisFilter = structNew()>
+	<cfset var local = structNew()>
 
-	<cfloop list="#arguments.filters#" index="filter">
-		<cfset thisFilter = structNew()>
-		<cfset thisFilter.filter = trim(filter)>
-		<cfset thisFilter.only = replace(arguments.only, ", ", ",", "all")>
-		<cfset thisFilter.except = replace(arguments.except, ", ", ",", "all")>
-		<cfset arrayAppend(variables.beforeFilters, duplicate(thisFilter))>
+	<cfloop list="#arguments.filters#" index="local.i">
+		<cfset local.this_filter = structNew()>
+		<cfset local.this_filter.filter = trim(local.i)>
+		<cfset local.this_filter.only = replace(arguments.only, ", ", ",", "all")>
+		<cfset local.this_filter.except = replace(arguments.except, ", ", ",", "all")>
+		<cfset arrayAppend(variables.before_filters, duplicate(local.this_filter))>
 	</cfloop>
 	
 </cffunction>
 
 
-<cffunction name="afterFilter" access="public" returntype="void" output="false" hint="adds an after filter">
-	<cfargument name="filters" type="string" required="true" hint="The filter(s) to add">
-	<cfargument name="only" type="string" required="false" default="" hint="Execute the supplied filter(s) for these actions only">
-	<cfargument name="except" type="string" required="false" default="" hint="Execute the supplied filter(s) for all actions except these">
+<cffunction name="afterFilter" returntype="any" access="public" output="false">
+	<cfargument name="filters" type="any" required="yes">
+	<cfargument name="only" type="any" required="no" default="">
+	<cfargument name="except" type="any" required="no" default="">
 	
-	<cfset var thisFilter = structNew()>
+	<cfset var local = structNew()>
 
-	<cfloop list="#arguments.filters#" index="filter">
-		<cfset thisFilter = structNew()>
-		<cfset thisFilter.filter = trim(filter)>
-		<cfset thisFilter.only = replace(arguments.only, ", ", ",", "all")>
-		<cfset thisFilter.except = replace(arguments.except, ", ", ",", "all")>
-		<cfset arrayAppend(variables.afterFilters, duplicate(thisFilter))>
+	<cfloop list="#arguments.filters#" index="local.i">
+		<cfset local.this_filter = structNew()>
+		<cfset local.this_filter.filter = trim(local.i)>
+		<cfset local.this_filter.only = replace(arguments.only, ", ", ",", "all")>
+		<cfset local.this_filter.except = replace(arguments.except, ", ", ",", "all")>
+		<cfset arrayAppend(variables.after_filters, duplicate(local.this_filter))>
 	</cfloop>
 	
 </cffunction>
 
 
-<cffunction name="getBeforeFilters" access="public" returntype="array" output="false" hint="Returns the beforeFilters for this controller">
+<cffunction name="getBeforeFilters" returntype="any" access="public" output="false">
 
-	<cfreturn variables.beforeFilters>
+	<cfreturn variables.before_filters>
 
 </cffunction>
 
 
-<cffunction name="getAfterFilters" access="public" returntype="array" output="false" hint="Returns the beforeFilters for this controller">
+<cffunction name="getAfterFilters" returntype="any" access="public" output="false">
 
-	<cfreturn variables.afterFilters>
+	<cfreturn variables.after_filters>
 
 </cffunction>
