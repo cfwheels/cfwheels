@@ -147,7 +147,7 @@
 
 	<cfif application.settings.environment IS "production">
 		<!--- Find a vacant object in pool (lock code so that another thread can not get the same object before it has been set to 'is_taken') --->
-		<cflock name="pool_lock_for_#arguments.model_name#" type="exclusive" timeout="5">
+		<cflock name="pool_lock_for_#arguments.model_name#" type="exclusive" timeout="30">
 			<cfset local.vacant_objects = structFindValue(application.wheels.pools[arguments.model_name], "is_vacant", "one")>
 			<cfif arrayLen(local.vacant_objects) IS NOT 0>
 				<!--- Create a reference to the object in the pool and reset all instance specific data in the object so it can be re-used --->
@@ -411,13 +411,8 @@
 	<cfset structInsert(local.find_all_arguments, "where", "#variables.table_name#.#variables.primary_key# = #arguments.id#")>
 	<cfset structDelete(local.find_all_arguments, "id")>
 	<cfset local.return_object = findAll(argumentCollection=local.find_all_arguments)>
-
-	<cfif local.return_object.recordfound>
-		<cfreturn local.return_object>
-	<cfelse>
-		<cfthrow type="cfwheels.record_not_found" message="Record Not Found: a record with an id of #arguments.id# was not found in the '#variables.table_name#' table." detail="Correct the '#variables.table_name#' table by adding a record with an id of #arguments.id# or look for a different record.">
-	</cfif>
 	
+	<cfreturn local.return_object>
 </cffunction>
 
 
@@ -501,7 +496,7 @@
 	<cfset local.new_object = newObject(local[local.query_name])>
 
 	<cfif arguments.page IS NOT 0>
-		<cfset local.new_object.paginator = local.paginator>
+		<cfset local.new_object.paginator = structCopy(local.paginator)>
 	</cfif>
 
 	<cfreturn local.new_object>
@@ -545,63 +540,66 @@
 		<cfset local.limit = local.pagination.paginator.total_records - local.offset>
 	</cfif>
 
-	<!--- Create select clauses which contains the primary key and the order by clause (need this when using DISTINCT and for SQL Server sub queries), with and without full table name qualification --->
-	<cfset local.select_clause_with_tables = variables.table_name & "." & variables.primary_key>
-	<cfif variables.primary_key IS NOT "id">
-		<cfset local.select_clause_with_tables = local.select_clause_with_tables & " AS id">
-	</cfif>
-	<cfif arguments.order_clause IS NOT "#variables.table_name#.#variables.primary_key# ASC">
-		<cfset local.select_clause_with_tables = local.select_clause_with_tables &  "," & replaceList(arguments.order_clause, " ASC, DESC", ",")>
-	</cfif>
+	<cfif local.limit LTE 0>
 
-	<cfset local.select_clause_without_tables = variables.primary_key>
-	<cfif arguments.order_clause IS NOT "#variables.table_name#.#variables.primary_key# ASC">
-		<cfset local.select_clause_without_tables = local.select_clause_without_tables &  "," & replaceList(reReplaceNoCase(arguments.order_clause, "[^,]*\.", "", "all"), " ASC, DESC", ",")>
-	</cfif>
+		<cfset local.pagination.where_clause = "#variables.table_name#.#variables.primary_key# IN (0)">
 
-	<cfquery name="local.ids_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
-	<cfif application.database.type IS "mysql5">
-		SELECT
-		<cfif local.from_clause Contains " ">
-			DISTINCT
-		</cfif>
-		#local.select_clause_with_tables#
-		FROM #local.from_clause#
-		<cfif arguments.where_clause IS NOT "">
-			WHERE #preserveSingleQuotes(arguments.where_clause)#
-		</cfif>
-		ORDER BY #arguments.order_clause#
-		<cfif local.limit IS NOT 0>
-			LIMIT #local.limit#
-		</cfif>
-		<cfif local.offset IS NOT 0>
-			OFFSET #local.offset#
-		</cfif>
-	<cfelseif application.database.type IS "sqlserver">
-		SELECT #local.select_clause_without_tables#
-		FROM (
-			SELECT TOP #local.limit# #local.select_clause_without_tables#
-			FROM (
-				SELECT 
-				<cfif local.from_clause Contains " ">
-					DISTINCT
-				</cfif>
-				TOP #(local.limit + local.offset)# #local.select_clause_with_tables#
-				FROM #local.from_clause#
-				<cfif arguments.where_clause IS NOT "">
-					WHERE #preserveSingleQuotes(arguments.where_clause)#
-				</cfif>
-				ORDER BY #arguments.order_clause#<cfif listContainsNoCase(arguments.order_clause, "#variables.table_name#.#variables.primary_key# ") IS 0>, #variables.table_name#.#variables.primary_key# ASC</cfif>) as x
-			ORDER BY #replaceNoCase(replaceNoCase(replaceNoCase(reReplaceNoCase(arguments.order_clause, "[^,]*\.", "", "all"), "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all")#<cfif listContainsNoCase(reReplaceNoCase(arguments.order_clause, "[^,]*\.", "", "all"), "#variables.primary_key# ") IS 0>, #variables.primary_key# DESC</cfif>) as y
-		ORDER BY #reReplaceNoCase(arguments.order_clause, "[^,]*\.", "", "all")#<cfif listContainsNoCase(reReplaceNoCase(arguments.order_clause, "[^,]*\.", "", "all"), "#variables.primary_key# ") IS 0>, #variables.primary_key# ASC</cfif>
-	</cfif>
-	</cfquery>
-
-	<cfif local.ids_query.recordcount IS NOT 0>
-		<cfset local.ids = valueList(local.ids_query.id)>
-		<cfset local.pagination.where_clause = "#variables.table_name#.#variables.primary_key# IN (#local.ids#)">
 	<cfelse>
-		<cfset local.pagination.where_clause = arguments.where_clause>
+	
+		<!--- Create select clauses which contains the primary key and the order by clause (need this when using DISTINCT and for SQL Server sub queries), with and without full table name qualification --->
+		<cfset local.select_clause_with_tables = variables.table_name & "." & variables.primary_key>
+		<cfif variables.primary_key IS NOT "id">
+			<cfset local.select_clause_with_tables = local.select_clause_with_tables & " AS id">
+		</cfif>
+		<cfif arguments.order_clause IS NOT "#variables.table_name#.#variables.primary_key# ASC">
+			<cfset local.select_clause_with_tables = local.select_clause_with_tables &  "," & replaceList(arguments.order_clause, " ASC, DESC", ",")>
+		</cfif>
+	
+		<cfset local.select_clause_without_tables = variables.primary_key>
+		<cfif arguments.order_clause IS NOT "#variables.table_name#.#variables.primary_key# ASC">
+			<cfset local.select_clause_without_tables = local.select_clause_without_tables &  "," & replaceList(reReplaceNoCase(arguments.order_clause, "[^,]*\.", "", "all"), " ASC, DESC", ",")>
+		</cfif>
+	
+		<cfquery name="local.ids_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+		<cfif application.database.type IS "mysql5">
+			SELECT
+			<cfif local.from_clause Contains " ">
+				DISTINCT
+			</cfif>
+			#local.select_clause_with_tables#
+			FROM #local.from_clause#
+			<cfif arguments.where_clause IS NOT "">
+				WHERE #preserveSingleQuotes(arguments.where_clause)#
+			</cfif>
+			ORDER BY #arguments.order_clause#
+			<cfif local.limit IS NOT 0>
+				LIMIT #local.limit#
+			</cfif>
+			<cfif local.offset IS NOT 0>
+				OFFSET #local.offset#
+			</cfif>
+		<cfelseif application.database.type IS "sqlserver">
+			SELECT #local.select_clause_without_tables#
+			FROM (
+				SELECT TOP #local.limit# #local.select_clause_without_tables#
+				FROM (
+					SELECT 
+					<cfif local.from_clause Contains " ">
+						DISTINCT
+					</cfif>
+					TOP #(local.limit + local.offset)# #local.select_clause_with_tables#
+					FROM #local.from_clause#
+					<cfif arguments.where_clause IS NOT "">
+						WHERE #preserveSingleQuotes(arguments.where_clause)#
+					</cfif>
+					ORDER BY #arguments.order_clause#<cfif listContainsNoCase(arguments.order_clause, "#variables.table_name#.#variables.primary_key# ") IS 0>, #variables.table_name#.#variables.primary_key# ASC</cfif>) as x
+				ORDER BY #replaceNoCase(replaceNoCase(replaceNoCase(reReplaceNoCase(arguments.order_clause, "[^,]*\.", "", "all"), "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all")#<cfif listContainsNoCase(reReplaceNoCase(arguments.order_clause, "[^,]*\.", "", "all"), "#variables.primary_key# ") IS 0>, #variables.primary_key# DESC</cfif>) as y
+			ORDER BY #reReplaceNoCase(arguments.order_clause, "[^,]*\.", "", "all")#<cfif listContainsNoCase(reReplaceNoCase(arguments.order_clause, "[^,]*\.", "", "all"), "#variables.primary_key# ") IS 0>, #variables.primary_key# ASC</cfif>
+		</cfif>
+		</cfquery>
+	
+		<cfset local.pagination.where_clause = "#variables.table_name#.#variables.primary_key# IN (#valueList(local.ids_query.id)#)">
+
 	</cfif>
 
 	<cfreturn local.pagination>

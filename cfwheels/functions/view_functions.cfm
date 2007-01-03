@@ -231,7 +231,7 @@
 
 
 <cffunction name="isCurrentPage" returntype="any" access="private" output="false">
-	<cfif replace(urlFor(argumentCollection=arguments), "/index.cfm?wheels=", "") IS request.currentrequest>
+	<cfif replace(urlFor(argumentCollection=arguments), "/index.cfm?wheels=", "") IS request.current_request>
 		<cfreturn true>
 	<cfelse>
 		<cfreturn false>
