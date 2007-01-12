@@ -748,7 +748,7 @@
 		</cfoutput>
 	</cfsavecontent>
 	
-	<cfreturn trimIt(local.output)>
+	<cfreturn local.output>
 </cffunction>
 
 
@@ -779,7 +779,7 @@
 		</cfoutput>
 	</cfsavecontent>
 	
-	<cfreturn trimIt(local.output)>
+	<cfreturn local.output>
 </cffunction>
 
 
