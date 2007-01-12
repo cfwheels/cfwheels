@@ -1,8 +1,8 @@
-<cffunction name="initModel" returntype="any" access="public" output="false">
-	<cfset var get_columns_query = "">	
-
+<cffunction name="initModel" returntype="any" access="public" output="true">
+	<cfset var local = structNew()>	
+	
 	<cfset variables.model_name = listLast(getMetaData(this).name, ".")>
-
+	
 	<cfif NOT structKeyExists(variables, "table_name")>
 		<cfset variables.table_name = pluralize(variables.model_name)>
 	</cfif>
@@ -10,7 +10,86 @@
 		<cfset variables.primary_key = "id">
 	</cfif>
 
-	<cfquery name="get_columns_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+	<cfset variables.functions = "">
+	<cfif NOT structKeyExists(variables, "relationships")>
+		<cfset variables.relationships = "">
+	<cfelse>
+		<cfloop collection="#variables.relationships#" item="local.i">
+			<cfif local.i IS "has_one">
+				<cfset local.has_one_functions = "object,setObject,hasObject,buildObject,createObject">
+				<cfloop collection="#variables.relationships.has_one#" item="local.j">	
+					<cfif variables.relationships.has_one[local.j].model_name IS "">
+						<cfset variables.relationships.has_one[local.j].model_name = local.j>
+					</cfif>
+					<cfif variables.relationships.has_one[local.j].foreign_key IS "">
+						<cfset variables.relationships.has_one[local.j].foreign_key = variables.model_name & "_id">
+					</cfif>
+					<cfset variables.relationships.has_one[local.j].functions = "">
+					<cfloop list="#local.has_one_functions#" index="local.k">
+						<cfset variables.functions = listAppend(variables.functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
+						<cfset variables.relationships.has_one[local.j].functions = listAppend(variables.relationships.has_one[local.j].functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
+					</cfloop>
+				</cfloop>
+			<cfelseif local.i IS "has_many">
+				<cfset local.has_many_functions = "objects,addObject,deleteObject,clearObjects,hasObjects,objectCount,findOneObject,findAllObjects,findObjectByID,buildObject,createObject">
+				<cfloop collection="#variables.relationships.has_many#" item="local.j">	
+					<cfif variables.relationships.has_many[local.j].model_name IS "">
+						<cfset variables.relationships.has_many[local.j].model_name = singularize(local.j)>
+					</cfif>
+					<cfif variables.relationships.has_many[local.j].foreign_key IS "">
+						<cfset variables.relationships.has_many[local.j].foreign_key = variables.model_name & "_id">
+					</cfif>
+					<cfset variables.relationships.has_many[local.j].functions = "">
+					<cfloop list="#local.has_many_functions#" index="local.k">
+						<cfset variables.functions = listAppend(variables.functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
+						<cfset variables.relationships.has_many[local.j].functions = listAppend(variables.relationships.has_many[local.j].functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
+					</cfloop>
+				</cfloop>
+			<cfelseif local.i IS "belongs_to">
+				<cfset local.belongs_to_functions = "object,setObject,hasObject,buildObject,createObject">
+				<cfloop collection="#variables.relationships.belongs_to#" item="local.j">	
+					<cfif variables.relationships.belongs_to[local.j].model_name IS "">
+						<cfset variables.relationships.belongs_to[local.j].model_name = local.j>
+					</cfif>
+					<cfif variables.relationships.belongs_to[local.j].foreign_key IS "">
+						<cfset variables.relationships.belongs_to[local.j].foreign_key = variables.relationships.belongs_to[local.j].model_name & "_id">
+					</cfif>
+					<cfset variables.relationships.belongs_to[local.j].functions = "">
+					<cfloop list="#local.belongs_to_functions#" index="local.k">
+						<cfset variables.functions = listAppend(variables.functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
+						<cfset variables.relationships.belongs_to[local.j].functions = listAppend(variables.relationships.belongs_to[local.j].functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
+					</cfloop>
+				</cfloop>
+			<!--- <cfelseif local.i IS "has_and_belongs_to_many">
+				<cfset local.has_and_belongs_to_many_functions = "objects,addObject,deleteObject,clearObjects,hasObjects,objectCount,findOneObject,findAllObjects,findObjectByID">
+				<cfloop collection="#variables.relationships.has_and_belongs_to_many#" item="local.j">	
+					<cfif variables.relationships.has_and_belongs_to_many[local.j].model_name IS "">
+						<cfset variables.relationships.has_and_belongs_to_many[local.j].model_name = singularize(local.j)>
+					</cfif>
+					<cfif variables.relationships.has_and_belongs_to_many[local.j].foreign_key IS "">
+						<cfset variables.relationships.has_and_belongs_to_many[local.j].foreign_key = variables.model_name & "_id">
+					</cfif>
+					<cfif variables.relationships.has_and_belongs_to_many[local.j].join_table IS "">
+						<cfif left(lCase(local.j), 1) LT left(lCase(variables.model_name), 1)>
+							<cfset variables.relationships.has_and_belongs_to_many[local.j].join_table = name & "_" & pluralize(variables.model_name)>
+						<cfelse>
+							<cfset variables.relationships.has_and_belongs_to_many[local.j].join_table = pluralize(variables.model_name) & "_" & local.j>					
+						</cfif>
+					</cfif>
+					<cfif variables.relationships.has_and_belongs_to_many[local.j].association_foreign_key IS "">
+						<cfset variables.relationships.has_and_belongs_to_many[local.j].association_foreign_key = variables.relationships.has_and_belongs_to_many[local.j].model_name & "_id">
+					</cfif>
+					<cfset variables.relationships.has_and_belongs_to_many[local.j].functions = "">
+					<cfloop list="#local.has_and_belongs_to_many_functions#" index="local.k">
+						<cfset variables.functions = listAppend(variables.functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
+						<cfset variables.relationships.has_and_belongs_to_many[local.j].functions = listAppend(variables.relationships.has_and_belongs_to_many[local.j].functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
+					</cfloop>
+				</cfloop> --->
+			</cfif>
+		</cfloop>
+	</cfif>
+
+	<cfquery name="local.get_columns_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
 	SELECT column_name, data_type, is_nullable, character_maximum_length, column_default
 	FROM information_schema.columns
 	WHERE table_name = '#variables.table_name#' AND
@@ -21,8 +100,8 @@
 	</cfif>
 	</cfquery>
 
-	<cfset variables.column_list = valueList(get_columns_query.column_name)>
-	<cfloop query="get_columns_query">
+	<cfset variables.column_list = valueList(local.get_columns_query.column_name)>
+	<cfloop query="local.get_columns_query">
 		<cfset "variables.column_info.#column_name#.db_sql_type" = data_type>		
 		<cfset "variables.column_info.#column_name#.cf_sql_type" = getCFSQLType(data_type)>		
 		<cfset "variables.column_info.#column_name#.cf_data_type" = getCFDataType(data_type)>
@@ -37,13 +116,22 @@
 
 <cffunction name="initObject" returntype="any" access="public" output="false">
 
+	<cfset var local = structNew()>
+
 	<!--- Copy model variables --->
 	<cfset variables.model_name = listLast(getMetaData(this).name, ".")>
 	<cfset variables.table_name = application.wheels.models[variables.model_name].getTableName()>
 	<cfset variables.primary_key = application.wheels.models[variables.model_name].getPrimaryKey()>
+	<cfset variables.relationships = application.wheels.models[variables.model_name].getRelationships()>
+	<cfset variables.functions = application.wheels.models[variables.model_name].getFunctions()>
 	<cfset variables.column_list = application.wheels.models[variables.model_name].getColumnList()>
 	<cfset variables.column_info = duplicate(application.wheels.models[variables.model_name].getColumnInfo())>
 	
+	<!--- Point dynamic object functions to methodMissing --->
+	<cfloop list="#variables.functions#" index="local.i">
+		<cfset "this.#local.i#" = this.methodMissing>
+	</cfloop>
+
 	<!--- Create object variables --->
 	<cfset this.errors = arrayNew(1)>
 	<cfset this.query = queryNew("")>
@@ -52,6 +140,21 @@
 	<cfset this.recordfound = false>
 
 	<cfreturn this>
+</cffunction>
+
+
+<cffunction name="reset" returntype="any" access="public" output="false">
+	<cfset var i = 0>
+	
+	<cfloop list="#variables.column_list#" index="i">
+		<cfset structDelete(this, i)>
+		<cfset structDelete(this, "#i#_confirmation")>
+	</cfloop>
+	<cfset this.errors = arrayNew(1)>
+	<cfset this.query = queryNew("")>
+	<cfset this.paginator = structNew()>
+	<cfset this.recordcount = 0>
+	<cfset this.recordfound = false>
 </cffunction>
 
 
@@ -68,6 +171,267 @@
 	<cfset var result = "">
 	<cfinclude template="includes/cf_#application.database.type#.cfm">
 	<cfreturn result>
+</cffunction>
+
+
+<cffunction name="methodMissing" returntype="any" access="public" output="false">
+	<cfset var local = structNew()>
+
+	<cftry>
+		<cfthrow>
+		<cfcatch>
+			<cfset local.file = replaceList(replace(cfcatch.tagcontext[2].template, application.absolutePathTo.webroot, ""), ".,/,\", "_,_,_") & "_" & cfcatch.tagcontext[2].line>
+			<cfif application.settings.environment IS "production" AND structKeyExists(application.wheels.cached_function_args, local.file)>
+				<!--- dynamic function arguments was found in application scope --->
+				<cfset local.preset = application.wheels.cached_function_args[local.file]>
+			<cfelse>
+				<!--- Get the line in the source that the stack trace refers to --->
+				<cffile action="read" file="#cfcatch.tagcontext[2].template#" variable="local.source_file">
+				<cfset local.source_line = replace(listGetAt(local.source_file, cfcatch.tagcontext[2].line, chr(10)), " ", ".", "all")>
+				<cfloop list="#variables.functions#" index="local.i">
+					<cfif local.source_line Contains ".#local.i#(" OR local.source_line Contains " #local.i#(">
+						<cfif isDefined("local.source_method")>
+							<cfthrow type="cfwheels.multiple_dynamic_functions" message="You can not have more than one dynamic function on the same line." detail="Change your source code so that it only has one dynamic function (any function with a model name in it) per line.">
+						<cfelse>
+							<cfset local.source_method = local.i>
+						</cfif>					
+					</cfif>
+				</cfloop>
+				<cfloop collection="#variables.relationships#" item="local.i">
+					<cfloop collection="#variables.relationships[local.i]#" item="local.j">
+						<cfif listFindNoCase(variables.relationships[local.i][local.j].functions, local.source_method) IS NOT 0>
+							<cfset local.preset.method = local.source_method>
+							<cfset local.preset.type = local.i>
+							<cfset local.preset.name = local.j>
+						</cfif>
+					</cfloop>
+				</cfloop>
+				<!--- Store arguments in application scope so we don't have to read the source code on subsequent requests --->
+				<cfset "application.wheels.cached_function_args.#local.file#" = local.preset>
+			</cfif>
+		</cfcatch>
+	</cftry>
+
+	<cfset local.options = variables.relationships[local.preset.type][local.preset.name]>
+	<cfif local.preset.type IS "has_one" OR local.preset.type IS "has_many">
+		<cfset local.where = "#local.options.foreign_key# = #this[variables.primary_key]#">
+	<cfelseif local.preset.type IS "belongs_to">
+		<cfset local.where = "#model(local.options.model_name).getPrimaryKey()# = #this[local.options.foreign_key]#">
+	</cfif>
+	<cfif local.options.where IS NOT "">
+		<cfset local.where = "(#local.where#) AND (#local.options.where#)">
+	</cfif>
+	<cfif local.options.order IS NOT "">
+		<cfset local.order = local.options.order>
+	<cfelse>
+		<cfset local.order = "">		
+	</cfif>
+
+	<cfif local.preset.type IS "has_one">
+		<cfif local.preset.method Contains "set">
+			<cfset local.args[local.options.foreign_key] = this[variables.primary_key]>
+			<cfset arguments[listFirst(structKeyList(arguments))].update(local.args)>
+		<cfelseif local.preset.method Contains "has">
+			<cfreturn model(local.options.model_name).count(where=local.where) IS NOT 0>		
+		<cfelseif local.preset.method Contains "build">
+			<cfloop collection="#arguments#" item="local.i">
+				<cfif isStruct(arguments[local.i])>
+					<cfset local.args.attributes = arguments[local.i]>
+				<cfelse>
+					<cfset local.args[local.i] = arguments[local.i]>			
+				</cfif>
+			</cfloop>
+			<cfset local.args[local.options.foreign_key] = this[variables.primary_key]>
+			<cfreturn model(local.options.model_name).new(argumentCollection=local.args)>
+		<cfelseif local.preset.method Contains "create">
+			<cfloop collection="#arguments#" item="local.i">
+				<cfif isStruct(arguments[local.i])>
+					<cfset local.args.attributes = arguments[local.i]>
+				<cfelse>
+					<cfset local.args[local.i] = arguments[local.i]>			
+				</cfif>
+			</cfloop>
+			<cfset local.args[local.options.foreign_key] = this[variables.primary_key]>
+			<cfreturn model(local.options.model_name).create(argumentCollection=local.args)>
+		<cfelse>
+			<cfreturn model(local.options.model_name).findOne(where=local.where, order=local.order)>
+		</cfif>
+	<cfelseif local.preset.type IS "has_many">
+		<cfif local.preset.method Contains "add">
+			<cfset local.args[local.options.foreign_key] = this[variables.primary_key]>
+			<cfset arguments[listFirst(structKeyList(arguments))].update(local.args)>
+		<cfelseif local.preset.method Contains "delete">
+			<cfset local.args[local.options.foreign_key] = "">
+			<cfset arguments[listFirst(structKeyList(arguments))].update(local.args)>
+		<cfelseif local.preset.method Contains "clear">
+			<cfset model(local.options.model_name).updateAll(updates="#local.options.foreign_key# = ''", conditions=local.where)>
+		<cfelseif local.preset.method Contains "has">
+			<cfreturn model(local.options.model_name).count(where=local.where) IS NOT 0>
+		<cfelseif local.preset.method Contains "count">
+			<cfif structKeyExists(arguments, "where")>
+				<cfset arguments.where = "#local.where# AND (#arguments.where#)">
+			<cfelse>
+				<cfset arguments.where = local.where>
+			</cfif>
+			<cfreturn model(local.options.model_name).count(argumentCollection=arguments)>
+		<cfelseif local.preset.method Contains "findOne">
+			<cfif structKeyExists(arguments, "where")>
+				<cfset arguments.where = "#local.where# AND (#arguments.where#)">
+			<cfelse>
+				<cfset arguments.where = local.where>
+			</cfif>
+			<cfif local.options.order IS NOT "" AND structKeyExists(arguments, "order")>
+				<cfset arguments.order = "#local.options.order#, #arguments.order#">
+			<cfelseif local.options.order IS NOT "" AND NOT structKeyExists(arguments, "order")>
+				<cfset arguments.order = local.options.order>
+			</cfif>
+			<cfreturn model(local.options.model_name).findOne(argumentCollection=arguments)>
+		<cfelseif local.preset.method Contains "findAll">
+			<cfif structKeyExists(arguments, "where")>
+				<cfset arguments.where = "#local.where# AND (#arguments.where#)">
+			<cfelse>
+				<cfset arguments.where = local.where>
+			</cfif>
+			<cfif local.order IS NOT "" AND structKeyExists(arguments, "order")>
+				<cfset arguments.order = "#local.order#, #arguments.order#">
+			<cfelseif local.order IS NOT "" AND NOT structKeyExists(arguments, "order")>
+				<cfset arguments.order = local.order>
+			</cfif>
+			<cfreturn model(local.options.model_name).findAll(argumentCollection=arguments)>
+		<cfelseif local.preset.method Contains "ByID">
+			<cfset arguments.where = "(#local.where#) AND (#model(local.options.model_name).getPrimaryKey()# = #arguments[listFirst(structKeyList(arguments))]#)">
+			<cfreturn model(local.options.model_name).findOne(argumentCollection=arguments)>
+		<cfelseif local.preset.method Contains "build">
+			<cfloop collection="#arguments#" item="local.i">
+				<cfif isStruct(arguments[local.i])>
+					<cfset local.args.attributes = arguments[local.i]>
+				<cfelse>
+					<cfset local.args[local.i] = arguments[local.i]>			
+				</cfif>
+			</cfloop>
+			<cfset local.args[local.options.foreign_key] = this[variables.primary_key]>
+			<cfreturn model(local.options.model_name).new(argumentCollection=local.args)>
+		<cfelseif local.preset.method Contains "create">
+			<cfloop collection="#arguments#" item="local.i">
+				<cfif isStruct(arguments[local.i])>
+					<cfset local.args.attributes = arguments[local.i]>
+				<cfelse>
+					<cfset local.args[local.i] = arguments[local.i]>			
+				</cfif>
+			</cfloop>
+			<cfset local.args[local.options.foreign_key] = this[variables.primary_key]>
+			<cfreturn model(local.options.model_name).create(argumentCollection=local.args)>
+		<cfelse>
+			<cfreturn model(local.options.model_name).findAll(where=local.where, order=local.order)>
+		</cfif>
+	<cfelseif local.preset.type IS "belongs_to">
+		<cfif local.preset.method Contains "set">
+			<cfset local.args[model(local.options.model_name).getPrimaryKey()] = this[local.options.foreign_key]>
+			<cfset arguments[listFirst(structKeyList(arguments))].update(local.args)>
+		<cfelseif local.preset.method Contains "has">
+			<cfreturn model(local.options.model_name).count(where=local.where) IS NOT 0>
+		<cfelseif local.preset.method Contains "build">
+			<cfloop collection="#arguments#" item="local.i">
+				<cfif isStruct(arguments[local.i])>
+					<cfset local.args.attributes = arguments[local.i]>
+				<cfelse>
+					<cfset local.args[local.i] = arguments[local.i]>			
+				</cfif>
+			</cfloop>
+			<cfset local.args[model(local.options.model_name).getPrimaryKey()] = this[local.options.foreign_key]>
+			<cfreturn model(local.options.model_name).new(argumentCollection=local.args)>
+		<cfelseif local.preset.method Contains "create">
+			<cfloop collection="#arguments#" item="local.i">
+				<cfif isStruct(arguments[local.i])>
+					<cfset local.args.attributes = arguments[local.i]>
+				<cfelse>
+					<cfset local.args[local.i] = arguments[local.i]>			
+				</cfif>
+			</cfloop>
+			<cfset local.args[model(local.options.model_name).getPrimaryKey()] = this[local.options.foreign_key]>
+			<cfreturn model(local.options.model_name).create(argumentCollection=local.args)>
+		<cfelse>
+			<cfreturn model(local.options.model_name).findAll(where=local.where, order=local.order)>
+		</cfif>
+	<!--- <cfelseif local.preset.type IS "has_and_belongs_to_many">
+		<cfif local.preset.method Contains "add">
+		<cfelseif local.preset.method Contains "delete">
+		<cfelseif local.preset.method Contains "clear">
+		<cfelseif local.preset.method Contains "has">
+		<cfelseif local.preset.method Contains "count">
+		<cfelseif local.preset.method Contains "findOne">
+		<cfelseif local.preset.method Contains "findAll">
+		<cfelseif local.preset.method Contains "ByID">
+		<cfelse>
+		</cfif> --->
+	</cfif>
+
+</cffunction>
+
+
+<cffunction name="hasOne" returntype="any" access="public" output="false">
+	<cfargument name="name" type="any" required="yes">
+	<cfargument name="model_name" type="any" required="no" default="">
+	<cfargument name="foreign_key" type="any" required="no" default="">
+	<cfargument name="where" type="any" required="no" default="">
+	<cfargument name="order" type="any" required="no" default="">
+	<cfset "variables.relationships.has_one.#arguments.name#.model_name" = arguments.model_name>
+	<cfset "variables.relationships.has_one.#arguments.name#.foreign_key" = arguments.foreign_key>
+	<cfset "variables.relationships.has_one.#arguments.name#.where" = arguments.where>
+	<cfset "variables.relationships.has_one.#arguments.name#.order" = arguments.order>
+</cffunction>
+
+
+<cffunction name="hasMany" returntype="any" access="public" output="false">
+	<cfargument name="name" type="any" required="yes">
+	<cfargument name="model_name" type="any" required="no" default="">
+	<cfargument name="foreign_key" type="any" required="no" default="">
+	<cfargument name="where" type="any" required="no" default="">
+	<cfargument name="order" type="any" required="no" default="">
+	<cfset "variables.relationships.has_many.#arguments.name#.model_name" = arguments.model_name>
+	<cfset "variables.relationships.has_many.#arguments.name#.foreign_key" = arguments.foreign_key>
+	<cfset "variables.relationships.has_many.#arguments.name#.where" = arguments.where>
+	<cfset "variables.relationships.has_many.#arguments.name#.order" = arguments.order>
+</cffunction>
+
+
+<cffunction name="belongsTo" returntype="any" access="public" output="false">
+	<cfargument name="name" type="any" required="yes">
+	<cfargument name="model_name" type="any" required="no" default="">
+	<cfargument name="foreign_key" type="any" required="no" default="">
+	<cfargument name="where" type="any" required="no" default="">
+	<cfargument name="order" type="any" required="no" default="">
+	<cfset "variables.relationships.belongs_to.#arguments.name#.model_name" = arguments.model_name>
+	<cfset "variables.relationships.belongs_to.#arguments.name#.foreign_key" = arguments.foreign_key>
+	<cfset "variables.relationships.belongs_to.#arguments.name#.where" = arguments.where>
+	<cfset "variables.relationships.belongs_to.#arguments.name#.order" = arguments.order>
+</cffunction>
+
+
+<!--- <cffunction name="hasAndBelongsToMany" returntype="any" access="public" output="false">
+	<cfargument name="name" type="any" required="yes">
+	<cfargument name="model_name" type="any" required="no" default="">
+	<cfargument name="foreign_key" type="any" required="no" default="">
+	<cfargument name="where" type="any" required="no" default="">
+	<cfargument name="order" type="any" required="no" default="">
+	<cfset "variables.relationships.has_and_belongs_to_many.#arguments.name#.model_name" = arguments.model_name>
+	<cfset "variables.relationships.has_and_belongs_to_many.#arguments.name#.foreign_key" = arguments.foreign_key>
+	<cfset "variables.relationships.has_and_belongs_to_many.#arguments.name#.where" = arguments.where>
+	<cfset "variables.relationships.has_and_belongs_to_many.#arguments.name#.order" = arguments.order>
+	<cfset "variables.relationships.has_and_belongs_to_many.#arguments.name#.join_table" = arguments.join_table>
+	<cfset "variables.relationships.has_and_belongs_to_many.#arguments.name#.association_foreign_key" = arguments.association_foreign_key>
+</cffunction> --->
+
+
+<cffunction name="getRelationships" returntype="any" access="public" output="false">
+	
+	<cfreturn variables.relationships>
+</cffunction>
+
+
+<cffunction name="getFunctions" returntype="any" access="public" output="false">
+	
+	<cfreturn variables.functions>
 </cffunction>
 
 
@@ -132,7 +496,6 @@
 	<cfargument name="attributes" type="any" required="false" default="#structNew()#">
 
 	<cfset var new_object = "">
-
 	<cfset new_object = new(argumentCollection=arguments)>
 	<cfset new_object.save()>
 	
@@ -170,21 +533,6 @@
 	</cfif>
 
 	<cfreturn local.new_object>
-</cffunction>
-
-
-<cffunction name="reset" returntype="any" access="public" output="false">
-	<cfset var i = 0>
-	
-	<cfloop list="#variables.column_list#" index="i">
-		<cfset structDelete(this, i)>
-		<cfset structDelete(this, "#i#_confirmation")>
-	</cfloop>
-	<cfset this.errors = arrayNew(1)>
-	<cfset this.query = queryNew("")>
-	<cfset this.paginator = structNew()>
-	<cfset this.recordcount = 0>
-	<cfset this.recordfound = false>
 </cffunction>
 
 
