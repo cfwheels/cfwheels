@@ -1,8 +1,8 @@
 Class level method which allows you update all rows that matches your specified condition. The number of affected rows will be returned.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
-|| updates || yes || string || "" || the `SET` part of the query ||
-|| conditions || no || string || "" || conditions for the `WHERE` part of the query ||
+|| updates || yes || string || || the `SET` part of the query ||
+|| conditions || no || string || || conditions for the `WHERE` part of the query ||
 
 Examples:
 {{{
