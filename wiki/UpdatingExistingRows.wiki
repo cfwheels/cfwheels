@@ -19,7 +19,7 @@ To update multiple values at the same time you call the [updateAttributes]() met
 <cfset post.updateAttributes(request.params.post)>
 }}}
 
-To cut down even more on the lines of code used you can also combine the reading and saving of the objects by using the class level methods [update]() and [updateAll](). These methods take an id as it's first argument and then either a struct or named arguments for the values you want to update. It gets the object, saves it and then returns it. Here is an example of the [update]() method:
+To cut down even more on the lines of code used you can also combine the reading and saving of the objects by using the class level methods [update]() and [updateAll](). These methods take an id as it's first argument and then either a struct or named arguments for the values you want to update. It gets the object, saves it and then returns it. Here are two examples of the [update]() method:
 {{{
 <cfset post = model("post").update(33, request.params.post)>
 }}}
@@ -28,4 +28,9 @@ To cut down even more on the lines of code used you can also combine the reading
 <cfset post = model("post").update(id=33, title="New version of Wheels just released", published=1)>
 }}}
 
-Keep in mind that if you use named arguments for the values you also have to name the first argument {{{id}}} since you can't mix named and unnamed arguments in !ColdFusion.
+Keep in mind that if you use named arguments for the values you also have to name the first argument `id` since you can't mix named and unnamed arguments in !ColdFusion.
+
+The [updateAll]() method allows you update more than one row in one single call by specifying what rows to update with the conditions arguments (used in the `WHERE` clause of the query) and multiple named arguments to tell the Wheels ORM what database columns to  perform the update on. It's very important to note that this method does NOT invoke eventual callbacks and validations you have specified on the model so be careful when using this.
+{{{
+<cfset post = model("post").updateAll(conditions="published=0", published=1, published_at=now())>
+}}}
