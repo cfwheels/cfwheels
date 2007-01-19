@@ -7,30 +7,38 @@ Example of getting a blog post from the database, updating it's title and saving
 <cfset post.save()>
 }}}
 
-You can also change the value of an attribute and save it to the database in one single call using [updateAttribute]() like this:
+You can also change the values of one or more attributes and save it to the database in one single call using the [update]() method like this:
 {{{
 <cfset post = model("post").findByID(33)>
-<cfset post.updateAttribute(title = "New version of Wheels just released")>
+<cfset post.update(title = "New version of Wheels just released")>
 }}}
 
-To update multiple values at the same time you call the [updateAttributes]() method on the object and pass in either named arguments or a struct with name/value pairs. The main reason this method accepts a struct as the argument is so that you can easily use it with forms. This is how it can look when you want to update the attributes for a post based on a submitted form.
+You can also pass in name/value pairs to update as a struct. The main reason this method accepts a struct is so that you can easily use it with forms. This is how it can look when you want to update the attributes for a post based on a submitted form.
 {{{
 <cfset post = model("post").findByID(request.params.id)>
 <cfset post.updateAttributes(request.params.post)>
 }}}
 
-To cut down even more on the lines of code used you can also combine the reading and saving of the objects by using the class level methods [update]() and [updateAll](). These methods take an id as it's first argument and then either a struct or named arguments for the values you want to update. It gets the object, saves it and then returns it. Here are two examples of the [update]() method:
+It's also possible to combine named arguments with a struct but then you have to name the struct argument with `attributes`. Example:
 {{{
-<cfset post = model("post").update(33, request.params.post)>
+<cfset post = model("post").findByID(request.params.id)>
+<cfset post.update(title="New version of Wheels just released", attributes=request.params.post)>
+}}}
+
+To cut down even more on the lines of code used you can also combine the reading and saving of the objects by using the class level methods [updateByID]() and [updateAll](). These methods take an id as it's first argument and then either a struct or named arguments for the values you want to update. 
+
+The [updateByID]() method gets the object, saves it and then returns it to you. Here are two examples:
+{{{
+<cfset post = model("post").updateByID(33, request.params.post)>
 }}}
 
 {{{
-<cfset post = model("post").update(id=33, title="New version of Wheels just released", published=1)>
+<cfset post = model("post").updateByID(id=33, title="New version of Wheels just released", published=1)>
 }}}
 
 Keep in mind that if you use named arguments for the values you also have to name the first argument `id` since you can't mix named and unnamed arguments in !ColdFusion.
 
-The [updateAll]() method allows you update more than one row in one single call by specifying what rows to update with the conditions arguments (used in the `WHERE` clause of the query) and multiple named arguments to tell the Wheels ORM what database columns to  perform the update on. It's very important to note that this method does NOT invoke eventual callbacks and validations you have specified on the model so be careful when using this.
+The [updateAll]() method allows you update more than one row in one single call by specifying what rows to update with the conditions argument (used in the `WHERE` clause of the query) and multiple named arguments to tell Wheels what database columns to perform the update on. It's very important to note that this method does NOT invoke eventual callbacks and validations you have specified on the model so be careful when using this method.
 {{{
 <cfset post = model("post").updateAll(conditions="published=0", published=1, published_at=now())>
 }}}
