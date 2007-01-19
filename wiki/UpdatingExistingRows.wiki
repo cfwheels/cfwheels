@@ -16,7 +16,7 @@ You can also change the values of one or more attributes and save it to the data
 You can also pass in name/value pairs to update as a struct. The main reason this method accepts a struct is so that you can easily use it with forms. This is how it can look when you want to update the attributes for a post based on a submitted form.
 {{{
 <cfset post = model("post").findByID(request.params.id)>
-<cfset post.updateAttributes(request.params.post)>
+<cfset post.update(request.params.post)>
 }}}
 
 It's also possible to combine named arguments with a struct but then you have to name the struct argument with `attributes`. Example:
