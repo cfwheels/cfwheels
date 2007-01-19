@@ -4,6 +4,7 @@ Class level method which allows you update all rows that matches your specified 
 || updates || yes || string || "" || the `SET` part of the query ||
 || conditions || no || string || "" || conditions for the `WHERE` part of the query ||
 
+Examples:
 {{{
 <cfset records_returned = model("category").updateAll(updates="active=1", conditions="name='Wheels Tutorials'")>
 }}}
