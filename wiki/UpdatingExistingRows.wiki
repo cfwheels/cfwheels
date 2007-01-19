@@ -7,8 +7,25 @@ Example of getting a blog post from the database, updating it's title and saving
 <cfset post.save()>
 }}}
 
-You can also change the value of an attribute and save it to the database in one single call using [updateAttribute] like this:
+You can also change the value of an attribute and save it to the database in one single call using [updateAttribute]() like this:
 {{{
 <cfset post = model("post").findByID(33)>
 <cfset post.updateAttribute(title = "New version of Wheels just released")>
 }}}
+
+To update multiple values at the same time you call the [updateAttributes]() method on the object and pass in either named arguments or a struct with name/value pairs. The main reason this method accepts a struct as the argument is so that you can easily use it with forms. This is how it can look when you want to update the attributes for a post based on a submitted form.
+{{{
+<cfset post = model("post").findByID(request.params.id)>
+<cfset post.updateAttributes(request.params.post)>
+}}}
+
+To cut down even more on the lines of code used you can also combine the reading and saving of the objects by using the class level methods [update]() and [updateAll](). These methods take an id as it's first argument and then either a struct or named arguments for the values you want to update. It gets the object, saves it and then returns it. Here is an example of the [update]() method:
+{{{
+<cfset post = model("post").update(33, request.params.post)>
+}}}
+
+{{{
+<cfset post = model("post").update(id=33, title="New version of Wheels just released", published=1)>
+}}}
+
+Keep in mind that if you use named arguments for the values you also have to name the first argument {{{id}}} since you can't mix named and unnamed arguments in !ColdFusion.
