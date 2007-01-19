@@ -1,0 +1,17 @@
+When you have created or retrieved an object you can save it to the database by calling it's  {{{save()}}} method. If the object's [primary] key matches one in the database the contents of that row will be updated, if not, a new row will be inserted.
+
+Example of getting a blog post from the database, updating it's title and saving it back:
+{{{
+<cfset post = model("post").findByID(33)>
+<cfset post.title = "New version of Wheels just released">
+<cfset post.save()>
+}}}
+
+You can also change the value of an attribute and save it to the database in one single call using {{{updateAttribute()}}} like this:
+{{{
+<cfset post = model("post").findByID(33)>
+<cfset post.updateAttribute(title = "New version of Wheels just released")>
+}}}
+
+
+
