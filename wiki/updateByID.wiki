@@ -1,13 +1,18 @@
 Class level method which allows you to pass in an id, update the row and return the record. This method returns the object with the `id` you specified. If the object did not pass validation it will be returned anyway but nothing will be saved to the database.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
-|| id || yes || numeric || || ||
-|| attributes || yes, if no named arguments are present || struct || || ||
-|| named argument(s) || yes, if no `attributes` argument is present || || || ||
+|| id || yes || numeric || || primary key value of row to update ||
+|| attributes || yes, if no named arguments are present || struct || || attribute name/value pairs ||
+|| named argument(s) || yes, if no `attributes` argument is present || || || attribute value (the argument name should match the name of the attribute) ||
 
 Examples:
 {{{
-<cfset category = model("category").updateByID(16, updates="name='HAHA'", conditions="description = 'description14'")>
-
-
+<cfset post = model("post").updateByID(33, request.params.post)>
 }}}
+{{{
+<cfset post = model("post").updateByID(id=33, title="New version of Wheels just released", published=1)>
+}}}
+{{{
+<cfset post = model("post").updateByID(id=33, title="New version of Wheels just released", published=1, attributes=request.params.other_stuff)>
+}}}
+
