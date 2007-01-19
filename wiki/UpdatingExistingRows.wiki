@@ -40,5 +40,5 @@ Keep in mind that if you use named arguments for the values you also have to nam
 
 The [updateAll]() method allows you to update more than one row in a single call by specifying what rows to update with the `conditions` argument (used in the `WHERE` clause of the query) and multiple named arguments to tell Wheels what database columns to perform the update on. It's very important to note that this method does NOT invoke eventual [callbacks] and [validations] you have specified on the model so be careful when using this method.
 {{{
-<cfset post = model("post").updateAll(conditions="published=0", published=1, published_at=now())>
+<cfset records_returned = model("post").updateAll(updates="published=1, published_at=#now()#", conditions="published=0")>
 }}}
