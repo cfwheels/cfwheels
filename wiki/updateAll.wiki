@@ -2,7 +2,7 @@ Class level method which allows you update all rows that matches your specified 
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || updates || yes || string || || the `SET` part of the query ||
-|| conditions || no || string || || conditions for the `WHERE` part of the query ||
+|| conditions || no || string || || the `WHERE` part of the query ||
 
 Examples:
 {{{
