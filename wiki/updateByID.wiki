@@ -1,4 +1,4 @@
-Class level method which allows you to pass in an id, update the row and return the record. This method returns the object with the `id` you specified. If the object did not pass validation it will be returned anyway but nothing will be saved to the database.
+Class level method which allows you to pass in an id, update the row and return the record in one single call. This method returns the object with the `id` you specified. If the object did not pass validation it will be returned anyway but nothing will be saved to the database.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || id || yes || numeric || || primary key value of row to update ||
@@ -15,4 +15,3 @@ Examples:
 {{{
 <cfset post = model("post").updateByID(id=33, title="New version of Wheels just released", published=1, attributes=request.params.other_stuff)>
 }}}
-
