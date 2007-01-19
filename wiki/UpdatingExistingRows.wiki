@@ -25,9 +25,9 @@ It's also possible to combine named arguments with a struct but then you have to
 <cfset post.update(title="New version of Wheels just released", attributes=request.params.post)>
 }}}
 
-To cut down even more on the lines of code used you can also combine the reading and saving of the objects by using the class level methods [updateByID]() and [updateAll](). These methods take an id as it's first argument and then either a struct or named arguments for the values you want to update. 
+To cut down even more on the lines of code used you can also combine the reading and saving of the objects by using the class level methods [updateByID]() and [updateAll](). 
 
-The [updateByID]() method gets the object, saves it and then returns it to you. Here are two examples:
+The [updateByID]() method takes a primary key value as it's first argument and then either a struct or named arguments for the values you want to update. It then gets the object, saves it and returns it to you (even if it fails validation and can't be saved the unsaved object will be returned). Here are two examples:
 {{{
 <cfset post = model("post").updateByID(33, request.params.post)>
 }}}
@@ -38,7 +38,7 @@ The [updateByID]() method gets the object, saves it and then returns it to you. 
 
 Keep in mind that if you use named arguments for the values you also have to name the first argument `id` since you can't mix named and unnamed arguments in !ColdFusion.
 
-The [updateAll]() method allows you update more than one row in one single call by specifying what rows to update with the conditions argument (used in the `WHERE` clause of the query) and multiple named arguments to tell Wheels what database columns to perform the update on. It's very important to note that this method does NOT invoke eventual callbacks and validations you have specified on the model so be careful when using this method.
+The [updateAll]() method allows you to update more than one row in a single call by specifying what rows to update with the `conditions` argument (used in the `WHERE` clause of the query) and multiple named arguments to tell Wheels what database columns to perform the update on. It's very important to note that this method does NOT invoke eventual [callbacks] and [validations] you have specified on the model so be careful when using this method.
 {{{
 <cfset post = model("post").updateAll(conditions="published=0", published=1, published_at=now())>
 }}}
