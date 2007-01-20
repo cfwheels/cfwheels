@@ -7,6 +7,7 @@ This documentation is for the upcoming version 0.7 release.
 = Introduction =
 
  * WelcomeToWheels
+ * WheelsVersions
  * SystemRequirements
  * [Installation]
  * [RewritingURLs]
