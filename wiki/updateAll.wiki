@@ -1,14 +1,19 @@
-#labels api,model
-Class level method which allows you update all rows that matches your specified condition. The number of affected rows will be returned.
+#labels model,api,class
+Similar to the updateByID method but instead of passing in an `id` you supply this method with a `WHERE` clause to use in a `SELECT` query.
+Unlike updateByID this method will NOT instantiate the objects by default (since that could be slow if you want to update a lot of rows at once).
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
-|| updates || yes || string || || the `SET` part of the query ||
-|| conditions || no || string || || the `WHERE` part of the query ||
+|| where || yes || numeric || || SQL to use in the `WHERE` clause ||
+|| attributes || yes, if no named arguments are present || struct || || attribute name/value pairs ||
+|| instantiate || no || boolean || false || `true` will instantiate all objects and call their `update` methods, `false` will update using a query ||
+|| named argument(s) || yes, if no `attributes` argument is present || || || attribute value (the argument name should match the name of the attribute) ||
 
 Examples:
 {{{
-<cfset records_returned = model("category").updateAll(updates="active=1", conditions="name='Wheels Tutorials'")>
+<!--- Set author to "Me" for all published posts --->
+<cfset post = model("post").updateAll(where="published=1", set="author='Me'")>
 }}}
 {{{
-<cfset model("user").updateAll(admin=1)>
+<!--- Update all published posts with the names/values in the struct --->
+<cfset post = model("post").updateAll("published=1", request.params.things_to_update)>
 }}}

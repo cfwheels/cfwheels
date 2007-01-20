@@ -1,4 +1,4 @@
-#labels model,api,class-method
+#labels model,api,class
 Give this method a primary key value in the `id` argument and it will update the corresponding row in your table with the attributes you give it.
 You can pass in the attributes either as named arguments or as a struct to the `attributes` argument.
 By default it will fetch the object first and call the [update]() method on it, thus invoking any callbacks and validations you have specified for the model.
