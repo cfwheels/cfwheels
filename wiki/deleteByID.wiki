@@ -1,4 +1,4 @@
-#labels api,model,"class method"
+#labels model,api,classmethod
 Give this method a primary key value in the `id` argument and it will delete the corresponding row in your table.
 By default it will fetch the object first and call the [delete]() method on it, thus invoking any callbacks you have specified for the model.
 You can change this behavior by passing in `instantiate=false`, then it will just delete the row from the table using a simple `DELETE` query.
