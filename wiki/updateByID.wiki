@@ -1,18 +1,26 @@
-#labels api,model
-Class level method which allows you to pass in an id, update the row and return the record in one single call. This method returns the object with the `id` you specified. If the object did not pass validation it will be returned anyway but nothing will be saved to the database.
+#labels model,api,class-method
+Give this method a primary key value in the `id` argument and it will update the corresponding row in your table with the attributes you give it.
+You can pass in the attributes either as named arguments or as a struct to the `attributes` argument.
+By default it will fetch the object first and call the [update]() method on it, thus invoking any callbacks and validations you have specified for the model.
+You can change this behavior by passing in `instantiate=false`, then it will just update the row from the table using a simple `UPDATE` query.
+This method returns the object with the `id` you specified. If the object does not pass validation it will be returned anyway but nothing will be saved to the database.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || id || yes || numeric || || primary key value of row to update ||
 || attributes || yes, if no named arguments are present || struct || || attribute name/value pairs ||
+|| instantiate || no || boolean || true || `true` will instantiate the object and call its `update` method, `false` will update using a query ||
 || named argument(s) || yes, if no `attributes` argument is present || || || attribute value (the argument name should match the name of the attribute) ||
 
 Examples:
 {{{
+<!--- Update post with the primary key of 33 with a struct created from a form submission --->
 <cfset post = model("post").updateByID(33, request.params.post)>
 }}}
 {{{
-<cfset post = model("post").updateByID(id=33, title="New version of Wheels just released", published=1)>
+<!--- Update using named arguments --->
+<cfset model("post").updateByID(id=33, title="New version of Wheels just released", published=1)>
 }}}
 {{{
+<!--- Update using both named arguments and a struct --->
 <cfset post = model("post").updateByID(id=33, title="New version of Wheels just released", published=1, attributes=request.params.other_stuff)>
 }}}
