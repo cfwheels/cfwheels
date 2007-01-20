@@ -1,5 +1,9 @@
 #summary Table of contents for the ColdFusion on Wheels documentation.
 
+= IMPORTANT =
+
+This documentation is for the upcoming version 0.7 release.
+
 = Introduction =
 
  * WelcomeToWheels
