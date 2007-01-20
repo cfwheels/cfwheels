@@ -1,3 +1,4 @@
+#labels api,model
 Object level method which allows you to save an object to the database. If the object's primary key matches one in the database the contents of that row will be updated, if not, a new row will be inserted. This method returns true if the model object passes all validations and the object was saved to the database, otherwise it returns false.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
