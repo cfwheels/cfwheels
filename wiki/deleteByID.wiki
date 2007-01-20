@@ -1,12 +1,18 @@
 #labels api,model
 Give this class level method a primary key value in the `id` argument and it will delete the corresponding row in your database table.
-By default it will fetch the row first and call the object level `delete` method on it, thus invoking any callbacks you have specified for the model.
+By default it will fetch the row first and call the object level `[delete]` method on it, [delete]() method, thus invoking any callbacks you have specified for the model.
 You can change this behavior by passing in `instantiate=false`. Then it will just delete the row from the table using a simple `DELETE` query.
 This method returns true on successful deletion of the row.
 
+`[delete]()`
+
+`[delete]`()
+
+[delete]()
+
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || id || yes || numeric || || primary key value of row to delete ||
-|| instantiate || no || boolean || true || `true` = will instantiate the object and call its `delete` method, `false` = will delete using a query ||
+|| instantiate || no || boolean || true || `true` will instantiate the object and call its `delete` method, `false` will delete using a query ||
 
 Examples:
 {{{
@@ -17,6 +23,6 @@ Examples:
 }}}
 {{{
 <cfif model("user").deleteByID(request.params.id)>
-	<!--- Do something... --->
+  <!--- Do something... --->
 </cfif>
 }}}
