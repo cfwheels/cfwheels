@@ -4,7 +4,7 @@ By default it will fetch the row first and call the object level `[delete]` meth
 You can change this behavior by passing in `instantiate=false`. Then it will just delete the row from the table using a simple `DELETE` query.
 This method returns true on successful deletion of the row.
 
-`[delete]()`
+[`delete`]()
 
 `[delete]`()
 
