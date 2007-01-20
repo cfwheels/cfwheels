@@ -1,3 +1,4 @@
+#labels api,model
 Object level method which allows you to update the values of an object and save it to the database. You can pass in both named arguments and/or an attributes struct. This method return true if the object was saved successfully to the database and false otherwise.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
