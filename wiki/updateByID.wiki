@@ -1,9 +1,6 @@
 #labels model,api,class
-Give this method a primary key value in the `id` argument and it will update the corresponding row in your table with the attributes you give it.
-You can pass in the attributes either as named arguments or as a struct to the `attributes` argument.
-By default it will fetch the object first and call the [update]() method on it, thus invoking any callbacks and validations you have specified for the model.
-You can change this behavior by passing in `instantiate=false`, then it will just update the row from the table using a simple `UPDATE` query.
-This method returns the object with the `id` you specified. If the object does not pass validation it will be returned anyway but nothing will be saved to the database.
+Fetches the record with the passed `id`, saves it with the passed `attributes` (if the validation permits it), and returns it. If the save fails because of validation errors, the unsaved object is still returned.
+Read the updatingExistingRows tutorial for more information and examples.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || id || yes || numeric || || primary key value of row to update ||
