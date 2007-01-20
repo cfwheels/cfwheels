@@ -15,3 +15,8 @@ Examples:
 {{{
 <cfset model("post").deleteByID(request.params.id, false)>
 }}}
+{{{
+<cfif model("user").deleteByID(request.params.id)>
+	<!--- Do something... --->
+</cfif>
+}}}
