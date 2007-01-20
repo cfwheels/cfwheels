@@ -1,0 +1,17 @@
+#labels api,model
+Give this class level method a primary key value in the `id` argument and it will delete the corresponding row in your database table.
+By default it will fetch the row first and call the object level `delete` method on it, thus invoking any callbacks you have specified for the model.
+You can change this behavior by passing in `instantiate=false`. Then it will just delete the row from the table using a simple `DELETE` query.
+This method returns true on successful deletion of the row.
+
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| id || yes || numeric || || primary key value of row to delete ||
+|| instantiate || no || boolean || true || `true` = will instantiate the object and call its `delete` method, `false` = will delete using a query ||
+
+Examples:
+{{{
+<cfset result = model("post").deleteByID(1)>
+}}}
+{{{
+<cfset model("post").deleteByID(request.params.id, false)>
+}}}
