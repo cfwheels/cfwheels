@@ -1,7 +1,7 @@
 #labels model,api,class
 This is a class level method.
-Returns all the records matched by the options you pass in.
-If no records are found an object with an empty query is returned and the `objectfound` attribute on the object is set to `false`
+It returns an object containing a variable named `query` which contains all the records matched by the options you pass in.
+If no records are found the object is returned with an empty query and the `objectfound` variable on the object is set to `false`
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || select || no || string || || string to use in the `select` clause of query ||

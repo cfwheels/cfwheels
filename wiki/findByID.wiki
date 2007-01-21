@@ -1,1 +1,11 @@
-tbd...
+#labels model,api,class
+This is a class level method.
+It returns the object matching the `id` passed in.
+If no record is found an object is still returned and the `objectfound` variable is set to `false`.
+
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| id || yes || numeric || || primary key value of row to get ||
+|| select || no || string || || string to use in the `select` clause of query ||
+|| include || no || string || || associations to include in query using `left outer join` statements ||
+
+See the section on ReadingExistingRows for more information and code examples.
