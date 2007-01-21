@@ -29,8 +29,10 @@ This documentation is for the upcoming version 0.7 release.
  * TablesAndClasses
  * ColumnsAndAttributes
  * PrimaryKeys
- * [CRUDFunctions]
- * [Finders]
+ * CreatingNewRows
+ * ReadingExistingRows
+ * UpdatingExistingRows
+ * DeletingRows
  * DynamicFinders
  * GettingPaginatedData
  * CachingQueries
