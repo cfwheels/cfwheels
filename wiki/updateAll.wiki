@@ -1,22 +1,18 @@
 #labels model,api,class
-Descriptoipn
 
-*Arguments*
+Updates all attributes for the rows that match the `where` argument.
+Attribute name and values can be passed in either using named arguments or as a struct to the `attributes` argument.
+
+*Method Type*
+This is a class level method.
+
+*Returns*
+Returns the number of records updated.
+
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || where || yes || numeric || || SQL to use in the `WHERE` clause ||
 || attributes || yes, if no named arguments are present || struct || || attribute name/value pairs ||
 || instantiate || no || boolean || false || `true` will instantiate all objects and call their `update` methods, `false` will update using a query ||
 || named argument(s) || yes, if no `attributes` argument is present || || || attribute value (the argument name should match the name of the attribute) ||
 
-= Returns =
-asdad
-
-Examples:
-{{{
-<!--- Set author to "Me" for all published posts --->
-<cfset post = model("post").updateAll(where="published=1", set="author='Me'")>
-}}}
-{{{
-<!--- Update all published posts with the names/values in the struct --->
-<cfset post = model("post").updateAll("published=1", request.params.things_to_update)>
-}}}
+See the section on UpdatingExistingRows for more information and code examples.
