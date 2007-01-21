@@ -1,12 +1,15 @@
 #labels model,api,class
-Similar to the updateByID method but instead of passing in an `id` you supply this method with a `WHERE` clause to use in a `SELECT` query.
-Unlike updateByID this method will NOT instantiate the objects by default (since that could be slow if you want to update a lot of rows at once).
 
+
+== Arguments ==
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || where || yes || numeric || || SQL to use in the `WHERE` clause ||
 || attributes || yes, if no named arguments are present || struct || || attribute name/value pairs ||
 || instantiate || no || boolean || false || `true` will instantiate all objects and call their `update` methods, `false` will update using a query ||
 || named argument(s) || yes, if no `attributes` argument is present || || || attribute value (the argument name should match the name of the attribute) ||
+
+= Returns =
+asdad
 
 Examples:
 {{{
