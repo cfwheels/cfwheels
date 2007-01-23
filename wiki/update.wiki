@@ -1,20 +1,11 @@
 #labels api,model
-Object level method which allows you to update the values of an object and save it to the database. You can pass in both named arguments and/or an attributes struct. This method return true if the object was saved successfully to the database and false otherwise.
+This is an object level method.
+It updates the values for the object and saves it to the database.
+Attribute names and values can be passed in either using named arguments or as a struct to the `attributes` argument.
+Returns `true` if the object was saved successfully to the database and `false` otherwise.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || attributes || yes, if no named arguments are present || struct || || attribute name/value pairs ||
 || named argument(s) || yes, if no `attributes` argument is present || || || attribute value (the argument name should match the name of the attribute) ||
 
-Examples:
-{{{
-<cfset post = model("post").findByID(33)>
-<cfset post.update(title = "New version of Wheels just released")>
-}}}
-{{{
-<cfset last_post = model("post").findOne(order="posted_at DESC")>
-<cfset last_post.update(request.params.post)>
-}}}
-{{{
-<cfset post = model("post").findByID(33)>
-<cfset post.update(title="New version of Wheels just released", attributes=request.params.post)>
-}}}
+See the section on UpdatingExistingRows for more information and code examples.

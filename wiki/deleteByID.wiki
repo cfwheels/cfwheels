@@ -1,27 +1,12 @@
 #labels model,api,class
-Give this method a primary key value in the `id` argument and it will delete the corresponding row in your table.
-By default it will fetch the object first and call the [delete]() method on it, thus invoking any callbacks you have specified for the model.
-You can change this behavior by passing in `instantiate=false`, then it will just delete the row from the table using a simple `DELETE` query.
-This method returns true on successful deletion of the row.
+This is a class level method.
+It deletes the row corresponding to the passed in `id`.
+By default it will fetch the object first and call the [delete] method on it, thus invoking any callbacks you have specified for the model.
+You can change this behavior by passing in `instantiate=false`, then it will just delete the row from the table using a simple `delete` query.
+Returns `true` on successful deletion of the row, `false` otherwise.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || id || yes || numeric || || primary key value of row to delete ||
 || instantiate || no || boolean || true || `true` will instantiate the object and call its `delete` method, `false` will delete using a query ||
 
-Examples:
-{{{
-<!--- Delete post with the primary key of 1 --->
-<cfset result = model("post").deleteByID(1)>
-}}}
-{{{
-<!--- Delete post with the primary key passed in the URL without instantiating the object first --->
-<cfset model("post").deleteByID(request.params.id, false)>
-}}}
-{{{
-<!--- Delete user with the primary key passed in the URL and use the result of the function to decide what to do --->
-<cfif model("user").deleteByID(request.params.id)>
-  <!--- Do something... --->
-<cfelse>
-  <!--- Do something else... --->
-</cfif>
-}}}
+See the section on DeletingRows for more information and code examples.

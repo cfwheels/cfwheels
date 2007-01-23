@@ -1,6 +1,7 @@
 #labels model,api,class
-Fetches the record with the passed `id`, saves it with the passed `attributes` (if the validation permits it), and returns it. If the save fails because of validation errors, the unsaved object is still returned.
-Read the UpdatingExistingRows tutorial for more information and examples.
+Fetches the record with the passed `id`, saves it with the passed `attributes` or named arguments (if the validation permits it), and returns it.
+If the save fails because of validation errors, the unsaved object is still returned.
+Attribute names and values can be passed in either using named arguments or as a struct to the `attributes` argument.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || id || yes || numeric || || primary key value of row to update ||
@@ -8,7 +9,4 @@ Read the UpdatingExistingRows tutorial for more information and examples.
 || instantiate || no || boolean || true || `true` will instantiate the object and call its `update` method, `false` will update using a query ||
 || named argument(s) || yes, if no `attributes` argument is present || || || attribute value (the argument name should match the name of the attribute) ||
 
-Example:
-{{{
-<cfset post = model("post").updateByID(1, request.params.post)>
-}}}
+See the section on UpdatingExistingRows for more information and code examples.

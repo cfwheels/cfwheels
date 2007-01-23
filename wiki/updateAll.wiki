@@ -1,5 +1,4 @@
 #labels model,api,class
-
 This is a class level method.
 It updates all attributes for the rows that match the `where` argument.
 Attribute names and values can be passed in either using named arguments or as a struct to the `attributes` argument.

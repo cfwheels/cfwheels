@@ -1,0 +1,9 @@
+#labels api,model
+This is an object level method.
+It deletes the row corresponding to the current object.
+Returns `true` on successful deletion of the row, `false` otherwise.
+
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| This method takes no arguments || || || || ||
+
+See the section on DeletingRows for more information and code examples.

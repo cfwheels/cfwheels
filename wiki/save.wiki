@@ -1,23 +1,10 @@
 #labels api,model
-Object level method which allows you to save an object to the database. If the object's primary key matches one in the database the contents of that row will be updated, if not, a new row will be inserted. This method returns true if the model object passes all validations and the object was saved to the database, otherwise it returns false.
+This is an object level method.
+It saves the current object to the database.
+If the object's primary key matches one in the database the contents of that row will be updated, if not, a new row will be inserted.
+Returns true if the object passes all validations and the object was saved to the database, otherwise it returns false.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || This method takes no arguments || || || || ||
 
-Examples:
-{{{
-<cfset post = model("post").findByID(33)>
-<cfset post.title = "New version of Wheels just released">
-<cfset post.save()>
-}}}
-{{{
-<cfset new_user = model("user").new(request.params.new_user)>
-<cfset new_user.ip_address = CGI.remote_addr>
-<cfif new_user.save()>
-  <cfset request.flash.notice = "You have successfully created an account!">
-  <cfset redirectTo(action="myAccount")>
-<cfelse>
-  <cfset request.flash.alert = "Error!">
-  <cfset render(action="signUp")>		
-</cfif>		
-}}}
+See the sections on CreatingNewRows and UpdatingExistingRows for more information and code examples.
