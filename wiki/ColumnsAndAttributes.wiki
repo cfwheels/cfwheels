@@ -1,0 +1,5 @@
+#labels model,tutorial
+Objects in Wheels have attributes that correspond to the columns in the table it maps to.
+The first time (or every time if you're in development mode) you call a method on a model Wheels will reflect on the schema inside the database for the model's table and extract all the column information.
+To keep things as simple as possible there are no getters or setters in Wheels, instead all the attributes are made available in the `this` scope.
+Nothing is stopping you from creating these on your own though if this is something you're used to having.

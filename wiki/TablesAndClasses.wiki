@@ -30,8 +30,6 @@ This method should be placed in the pseudo-constructor area of your model file, 
 `app/models/author.cfc`
 {{{
 <cfcomponent extends="cfwheels.model">
-
   <cfset setTableName("auth_tbl")>
-
 </cfcomponent>
 }}}
