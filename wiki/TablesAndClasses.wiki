@@ -3,22 +3,22 @@ Wheels comes with a custom built ORM.
 ORM stands for "object-relational mapping" and means that tables in your relational database map to models (or "classes" if you prefer that term) in your application.
 The rows in your tables map to objects (or "instances" if you prefer that term) of your models and the columns in these tables map to object attributes.
 
-To create a model in your application that maps to a table in your database all you have to do is create a new model file in your models directory and make it extend cfwheels.model:
+To create a model in your application that maps to a table in your database all you have to do is create a new model file in your `app/models` directory and make it extend `cfwheels.model`.
 
-app/models/author.cfc
+`app/models/author.cfc`
 {{{
 <cfcomponent extends="cfwheels.model">
 </cfcomponent>
 }}}
 
-By default a table name should be the plural version of the model name so if you have an author class the table name should be authors.
-To change this you can use the setTableName method, like this (this should go in the pseudo-constructor area of your model file):
+By default a table name should be the plural version of the model name so if you have an `author` class the table name should be `authors`.
+To change this you can use the setTableName method. This method should be placed in the pseudo-constructor area of your model file, in other words directly after the `cfcomponent` start tag before any functions.
 
-app/models/author.cfc
 {{{
+app/models/author.cfc
 <cfcomponent extends="cfwheels.model">
 
-  *<cfset setTableName("auth_tbl")>*
+  <cfset setTableName("auth_tbl")>
 
 </cfcomponent>
 }}}
