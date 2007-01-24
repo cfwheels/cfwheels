@@ -12,17 +12,12 @@ To create a model in your application that maps to a table in your database all 
 }}}
 
 After creating this file you now have a bunch of methods available for you to use that handles reading and writing to the `authors` table.
-For example you can do the following in a controller file to get the author with the primary key of 1, change his first name and save the row back to the database.
+For example you can do the following to get the author with the primary key of 1, change his first name and save the row back to the database.
 
-`app/controllers/blog_controller.cfc`
 {{{
-<cfcomponent extends="cfwheels.controller">
-  <cffunction name="test">
-	<cfset auth = model("author").findByID(1)>
-    <cfset auth.first_name = "Joe">
-    <cfset auth.save()>
-  </cffunction>
-</cfcomponent>
+<cfset auth = model("author").findByID(1)>
+<cfset auth.first_name = "Joe">
+<cfset auth.save()>
 }}}
 
 This code makes use of the class level method findByID, updates the object attribute in memory and then saves it back using the object level method [save].
