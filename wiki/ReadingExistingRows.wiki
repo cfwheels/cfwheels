@@ -1,1 +1,51 @@
-tbd...
+#labels tutorial,model
+In Wheels there are 3 class level methods that lets you read rows from the database and turn them into objects.
+Let's start this tutorial by looking at the simplest of them, findByID.
+findByID takes one argument - the primary key of the row you want to get.
+If the row exists it is returned to you as an object, if not you will still get the object back but it will be empty and the `recordfound` variable will be set to `false`.
+Here's one example of how you can use findByID:
+
+In your controller action:
+{{{
+<cfset user = model("user").findByID(request.params.id)>
+<cfif NOT user.recordfound>
+  <cfset redirectTo(back=true)>
+</cfif>
+}}}
+
+In your view:
+<cfoutput>
+  Hello #user.first_name# #user.last_name#!
+</cfoutput>
+
+; findByID, findAll and findOne.
+Let's look at the simplest one first, findByID.
+This method takes a primary key, reads the row from the database and turns it into an object for you.
+{{{
+<cfset my_user = model("user").findByID(1)>
+}}}
+
+
+- specify conditions, order get back an object as object or with query
+- simplest way, by ID
+- find all, where maps to where etc
+- desribe all options to findall, where, order etc
+- findone, same query, maxrows forced to 1
+- explain include applies to all
+
+
+
+
+
+
+
+
+When you have created or retrieved an object you can save it to the database by calling its [save] method.
+If the object's primary key matches one in the database the contents of that row will be updated, if not, a new row will be inserted. [save]() returns true if the model object passes all validations and the object was saved to the database, otherwise it returns false.
+
+Example of getting a blog post from the database, updating it's title and saving it back:
+{{{
+<cfset post = model("post").findByID(33)>
+<cfset post.title = "New version of Wheels just released">
+<cfset post.save()>
+}}}
