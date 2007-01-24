@@ -11,11 +11,25 @@ To create a model in your application that maps to a table in your database all 
 </cfcomponent>
 }}}
 
-By default a table name should be the plural version of the model name so if you have an `author` class the table name should be `authors`.
-To change this you can use the setTableName method. This method should be placed in the pseudo-constructor area of your model file, in other words directly after the `cfcomponent` start tag before any functions.
+After creating this file you now have a bunch of methods available for you to use that handles reading and writing to the `authors` table.
+For example you can do the following in a controller file to get the author with the primary key of 1, change his first name and save the row back to the database.
 
+`app/controllers/blog_controller.cfc`
 {{{
-app/models/author.cfc
+<cfset auth = model("author").findByID(1)>
+<cfset auth.first_name = "Joe">
+<cfset auth.save()>
+}}}
+
+This code makes use of the class level method findByID, updates the object attribute in memory and then saves it back using the object level method [save].
+We'll get back to all these methods and more later of course.
+
+By default a table name should be the plural version of the model name so if you have an `author` class the table name should be `authors`.
+To change this behavior you can use the setTableName method.
+This method should be placed in the pseudo-constructor area of your model file, in other words directly after the `cfcomponent` start tag and before any functions.
+
+`app/models/author.cfc`
+{{{
 <cfcomponent extends="cfwheels.model">
 
   <cfset setTableName("auth_tbl")>
