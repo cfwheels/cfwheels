@@ -7,11 +7,10 @@ This documentation is for the upcoming version 0.7 release.
 = Introduction =
 
  * [Introduction]
- * WheelsLiteVsStandard
  * SystemRequirements
  * [Installation]
- * [RewritingURLs]
- * FolderStructure
+ * [URLRewriting]
+ * DirectoryStructure
  * [Configuration]
  * [Conventions]
  * HelloWorld

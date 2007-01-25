@@ -1,7 +1,7 @@
 #labels tutorial,model
 In Wheels there are 3 class level methods that lets you read rows from the database and turn them into objects.
 Let's start this tutorial by looking at the simplest of them, [findByID].
-findByID takes one argument - the primary key of the row you want to get.
+[findByID] takes one argument - the primary key of the row you want to get.
 If the row exists it is returned to you as an object, if not you will still get the object back but it will be empty and the `recordfound` variable will be set to `false`.
 In the following example we assume the `request.params.id` variable has been created from the URL (example: http://localhost/blog/viewauthor/7)
 
