@@ -29,7 +29,7 @@ This documentation is for the upcoming version 0.7 release.
  * TablesAndClasses
  * ColumnsAndAttributes
  * PrimaryKeys
- * ClassLevelMethodsVsObjectLevelMethods
+ * ClassMethodsVsObjectMethods
  * CreatingNewRows
  * ReadingExistingRows
  * UpdatingExistingRows
