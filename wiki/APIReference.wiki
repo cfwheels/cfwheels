@@ -1,0 +1,22 @@
+#labels api
+*Model Class Level Methods*
+ * new
+ * create
+ * findByID
+ * findOne
+ * findAll
+ * updateByID
+ * updateAll
+ * deleteByID
+ * deleteAll
+
+*Model Object Level Methods*
+ * save
+ * update
+ * delete
+
+*View Methods*
+ * xxx
+
+*Controller Methods*
+ * xxx

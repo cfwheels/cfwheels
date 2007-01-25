@@ -40,10 +40,10 @@ This documentation is for the upcoming version 0.7 release.
  * CachingQueries
  * EagerLoading
  * SettingAssociations
- * UsingTheHasOneAssociation
- * UsingTheHasManyAssociation
- * UsingTheBelongsToAssociation
- * UsingTheHasAndBelongsToManyAssociation
+ * UsingHasOne
+ * UsingHasMany
+ * UsingBelongsTo
+ * UsingHasAndBelongsToMany
  * ObjectValidation
  * ObjectCallbacks
  * SoftDelete
@@ -81,4 +81,4 @@ This documentation is for the upcoming version 0.7 release.
  * HandlingErrors
  * SwitchingEnvironments
  * OverridingConventions
- * [WheelsAPIReference]
+ * [APIReference]
