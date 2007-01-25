@@ -1,0 +1,28 @@
+#labels model,tutorial
+Unlike most other languages there is no notion of class level methods in !ColdFusion.
+This means that even if you call a method that does not need to use any instance data you still have to create an object.
+In Wheels we create this object like this.
+
+{{{
+<cfset model("author")>
+}}}
+
+The model function will return a reference to an author object in the application scope (unless it's the first time you call this function in which case it will also create and store it in the application scope).
+Once you have the author object you can start calling class level methods on it like [findByID] for example.
+
+{{{
+<cfset auth_class = model("author")>
+<cfset auth = auth_class.findByID(1)>
+}}}
+
+For readability, this is usually combined into the following though.
+
+{{{
+<cfset auth = model("author").findByID(1)>
+}}}
+
+Now `auth` is an object instance of the author class and you can call object level methods on it like [update], [save] etc.
+
+{{{
+<cfset auth.update(first_name="Joe")>
+}}}

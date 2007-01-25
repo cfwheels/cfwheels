@@ -3,27 +3,24 @@ In Wheels there are 3 class level methods that lets you read rows from the datab
 Let's start this tutorial by looking at the simplest of them, findByID.
 findByID takes one argument - the primary key of the row you want to get.
 If the row exists it is returned to you as an object, if not you will still get the object back but it will be empty and the `recordfound` variable will be set to `false`.
-Here's one example of how you can use findByID:
+In the following example we assume the `request.params.id` variable has been created from the URL (example: http://localhost/blog/viewauthor/7)
 
-In your controller action:
+In your controller:
 {{{
-<cfset user = model("user").findByID(request.params.id)>
-<cfif NOT user.recordfound>
+<cfset author = model("author").findByID(request.params.id)>
+<cfif NOT author.recordfound>
+  <cfset request.flash = "Author #request.params.id# was not found">
   <cfset redirectTo(back=true)>
 </cfif>
 }}}
 
 In your view:
-<cfoutput>
-  Hello #user.first_name# #user.last_name#!
-</cfoutput>
-
-; findByID, findAll and findOne.
-Let's look at the simplest one first, findByID.
-This method takes a primary key, reads the row from the database and turns it into an object for you.
 {{{
-<cfset my_user = model("user").findByID(1)>
+<cfoutput>
+  Hello #author.first_name# #author.last_name#!
+</cfoutput>
 }}}
+
 
 
 - specify conditions, order get back an object as object or with query

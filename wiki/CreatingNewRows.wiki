@@ -1,1 +1,47 @@
-tbd...
+#labels model,tutorial
+In Wheels one way to create objects that represent rows in our table is by calling the [new] class level method.
+
+{{{
+<cfset auth = model("author").new()>
+}}}
+
+We now have an empty author object that we can start filling in values for (corresponding to columns in the database).
+
+{{{
+<cfset auth.first_name = "Joe">
+<cfset auth.last_name = "Jones">
+}}}
+
+At this point the `auth` object only exists in memory.
+We save it to the database by calling it's [save] method.
+
+{{{
+<cfset auth.save()>
+}}}
+
+If you want to create a new object based on parameters sent in from a form request the [new] method conveniently accepts a struct as well.
+As we'll see later, when you use the Wheels form helpers they automatically turn your form variables into a struct that you can pass into [new] and other methods.
+Given that `request.params.new_auth` is a struct containing the `first_name` and `last_name` variables the below code does the same as the code above (without saving it though).
+
+{{{
+<cfset auth = model("author").new(request.params.new_auth)>
+}}}
+
+If you want to save it to the database right away you can use the [create] method instead.
+
+{{{
+<cfset model("author").create(request.params.new_auth)>
+}}}
+
+Note that we never have to set a value for the `id` attribute.
+This is because we use the Wheels convention of having auto incrementing integer columns as the primary key.
+After saving the object to the database the `id` attribute will be added to the object so you can check it by doing this.
+
+{{{
+<cfset auth = model("author").new()>
+<cfset auth.first_name = "Joe">
+<cfset auth.last_name = "Jones">
+<cfset auth.save()>
+<!--- Later on in your view file... --->
+<cfoutput>#auth.id#</cfoutput>
+}}}

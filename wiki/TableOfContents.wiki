@@ -7,7 +7,7 @@ This documentation is for the upcoming version 0.7 release.
 = Introduction =
 
  * WelcomeToWheels
- * WheelsVersions
+ * WheelsLiteVsStandard
  * SystemRequirements
  * [Installation]
  * [RewritingURLs]
@@ -16,7 +16,7 @@ This documentation is for the upcoming version 0.7 release.
  * NamingConventions
  * HelloWorld
 
-= Building a blog =
+= Building A Blog =
 
  * PartOne - ...
  * PartTwo - ...
@@ -29,23 +29,27 @@ This documentation is for the upcoming version 0.7 release.
  * TablesAndClasses
  * ColumnsAndAttributes
  * PrimaryKeys
+ * ClassLevelMethodsVsObjectLevelMethods
  * CreatingNewRows
  * ReadingExistingRows
  * UpdatingExistingRows
  * DeletingRows
+ * ColumnStatistics
  * DynamicFinders
  * GettingPaginatedData
  * CachingQueries
  * EagerLoading
- * [Calculations]
- * SettingRelationships
- * UsingRelationShips
+ * SettingAssociations
+ * UsingTheHasOneAssociation
+ * UsingTheHasManyAssociation
+ * UsingTheBelongsToAssociation
+ * UsingTheHasAndBelongsToManyAssociation
  * ObjectValidation
  * ObjectCallbacks
  * SoftDelete
  * AutomaticTimeStamps
  * LockingTableRows
- * AutomagicColumnNames
+ * MagicColumnNames
  * MiscellaneousModelFunctions
 
 = View =
@@ -55,7 +59,7 @@ This documentation is for the upcoming version 0.7 release.
  * LinkingPages
  * UsingLayouts
  * FormHelpers
- * DisplayingPaginationLinks
+ * DisplayingPaginatedData
  * DisplayingFlashMessages
  * DisplayingObjectErrors
  * UsingHelpers
@@ -74,7 +78,6 @@ This documentation is for the upcoming version 0.7 release.
 
 = Miscellaneous =
 
- * TheGenerator
  * HandlingErrors
  * SwitchingEnvironments
  * OverridingConventions
