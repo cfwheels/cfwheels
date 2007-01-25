@@ -6,8 +6,10 @@
  * [findOne]
  * [findAll]
  * [updateByID]
+ * [updateOne]
  * [updateAll]
  * [deleteByID]
+ * [deleteOne]
  * [deleteAll]
 
 *Model Object Level Methods*

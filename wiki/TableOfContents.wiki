@@ -6,14 +6,14 @@ This documentation is for the upcoming version 0.7 release.
 
 = Introduction =
 
- * WelcomeToWheels
+ * [Introduction]
  * WheelsLiteVsStandard
  * SystemRequirements
  * [Installation]
  * [RewritingURLs]
- * DirectoryStructure
+ * FolderStructure
  * [Configuration]
- * NamingConventions
+ * [Conventions]
  * HelloWorld
 
 = Building A Blog =
@@ -80,5 +80,4 @@ This documentation is for the upcoming version 0.7 release.
 
  * HandlingErrors
  * SwitchingEnvironments
- * OverridingConventions
  * [APIReference]
