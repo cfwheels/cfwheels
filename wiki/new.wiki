@@ -6,7 +6,9 @@ Attribute names should correspond to column names in the associated table.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || attributes || no || struct || || attribute name/value pairs ||
-|| named argument(s) || no || || || attribute value (the argument name should match the name of the attribute) ||
+|| named argument(s) || no || || || attribute value (the argument name should match the attribute name) ||
+
+*Examples:*
 
 {{{
 <cfset new_author = model("author").new()>
