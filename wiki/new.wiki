@@ -1,10 +1,23 @@
 #labels model,api,class
-This is a class level method.
-It returns an object that exists only in memory (it is not saved to the database).
+This class level method creates a new object (empty or with pre-set attributes) and returns it to you.
+The object is not saved to the database, it only exists in memory.
 Attribute names and values can be passed in either using named arguments or as a struct to the `attributes` argument.
+Attribute names should correspond to column names in the associated table.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || attributes || no || struct || || attribute name/value pairs ||
 || named argument(s) || no || || || attribute value (the argument name should match the name of the attribute) ||
+
+{{{
+<cfset new_author = model("author").new()>
+}}}
+
+{{{
+<cfset new_author = model("author").new(request.params.author_struct)>
+}}}
+
+{{{
+<cfset new_author = model("author").new(first_name="Per", last_name="Djurner")>
+}}}
 
 See the section on CreatingNewRows for more information and code examples.
