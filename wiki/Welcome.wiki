@@ -1,38 +1,45 @@
+#labels tutorial
 #summary Introduction to the ColdFusion on Wheels framework.
 
-= Welcome to ColdFusion on Wheels! =
+*Welcome to ColdFusion on Wheels!*
 
-I like to think of Wheels as "the framework for the rest of us", It wasn't developed by a guy with a Ph.D in computer science. It was created, and is supported, by people probably a lot like you: someone who was comfortable around HTML and heard that dynamic websites and databases were really where the power was. If you weren't a classically trained programmer and needed to get dynamic data onto the web, !ColdFusion was, and in most ways still is, the fastest and easiest way to do so. !ColdFusion takes complex concepts like connecting to a database or invoking a web service, and gives you a single, simple tag that does all the hard work for you. Leaving you, the developer, to worry about the important stuff like implementing the business rules of your application and making sure the user interface is simple, clean and easy to use.
+I like to think of Wheels as "the framework for the rest of us", It wasn't developed by a guy with a Ph.D in computer science.
+It was created, and is supported, by people probably a lot like you: someone who was comfortable around HTML and heard that dynamic websites and databases were really where the power was.
+If you weren't a classically trained programmer and needed to get dynamic data onto the web, !ColdFusion was, and in most ways still is, the fastest and easiest way to do so.
+!ColdFusion takes complex concepts like connecting to a database or invoking a web service, and gives you a single, simple tag that does all the hard work for you.
+Leaving you, the developer, to worry about the important stuff like implementing the business rules of your application and making sure the user interface is simple, clean and easy to use.
 
-If !ColdFusion is so simple then what do you need Wheels for? Ahh, that's the rub, isn't it. How could !ColdFusion development get any faster, or easier, or more fun? I know it's hard to believe, but Wheels does all of this. And it just happens to help you organize your code which means it's easier to maintain (and as we all know, after the initial rush of creating an app comes the loooong cycle of maintenance).
+If !ColdFusion is so simple then what do you need Wheels for? Ahh, that's the rub, isn't it.
+How could !ColdFusion development get any faster, or easier, or more fun? I know it's hard to believe, but Wheels does all of this.
+And it just happens to help you organize your code which means it's easier to maintain (and as we all know, after the initial rush of creating an app comes the loooong cycle of maintenance).
 
 "What makes Wheels better than any of those other frameworks", you ask? It's not necessarily better, just different. Very different. Wheels just feels right. I know that's a bold statement but see if you don't agree after developing your first few Wheels sample applications. It takes a lot of "chore" out of developing an app and leaves you to worry about all the interesting bits, the fun bits.
 
 If you've ever downloaded a piece of open source software then you know that most projects lack documentation. Wheels hopes to change that. We're hoping that by putting together complete, up-to-date documentation that this framework will appeal, and be usable, by everyone, even someone who has little !ColdFusion programming background, let alone experience with frameworks.
 
-= What's with all this framework business? =
+*What's with all this framework business?*
 
 The idea behind a framework is to make it quicker and easier for a developer to write and maintain her code. Most of the tedious work is handled for her by the structure of the framework. It also makes it easier to update her code in the future because everything is in its own well defined place (hopefully).
 
 Frameworks usually include several methods that do things for you, give you access to certain parts of your code, etc. Some frameworks seem to get in the way more than others. You'll notice the presence of Wheels everywhere, but it never gets in your way.
 
-= Model-View-Controller =
+*Model-View-Controller*
 
 If you've investigated frameworks in the past then you've probably heard this phrase before. Model-View-Controller, or MVC, is a way to structure your code so that it is broken down into three easy-to-manage pieces:
 
- * The Model - just another name for the representation of data, usually a database table
- * The View - what the user sees and interacts with (a web page in our case)
- * The Controller - the behind-the-scenes guy that's coordinating everything
+ - The Model - just another name for the representation of data, usually a database table
+ - The View - what the user sees and interacts with (a web page in our case)
+ - The Controller - the behind-the-scenes guy that's coordinating everything
 
 "Uh, yeah... so what's this got to do with anything?" MVC is how Wheels structures your code for you. As you start working with Wheels apps you'll see that most of the code you write (database queries, forms and data manipulation before output for the user or input to the database) are very nicely separated into one of these three categories.
 
 The benefits of MVC are limitless, but one of the major ones is that you almost always know right where to go when something needs to change. If you've added a column to the vehicles table in your database and need to give the user the ability to edit that field, all you need to change is your View, that's where the form is presented to the user for editing. If you find yourself constantly getting a list of all the red cars in your inventory, you can add a new method to your Model called getRedCars() that does all the work for you. Then when you want that list, just add a call to that method in your Controller and you've got 'em!
 
-= Ruby on Rails takes over the world =
+*Ruby on Rails takes over the world*
 
 You've probably heard of Ruby on Rails by now. Ruby is a programming language and Rails is the framework. It was created by David Heinemeier Hansson of 37signals as he built Basecamp, their project management software. There has been quite a flurry of activity and opinions around Ruby and Rails, both what it's good at (ultra-rapid application development, for one) and whether it can compete with so-called "enterprise software" like Java. Some predict that Ruby will be Java's successor, others think it will stay confined to the web but with a very loyal community (like Perl). Just about every major programming community out there is having discussions about losing people to Ruby on Rails because of its ease of use. Enter !ColdFusion on Wheels.
 
-= ColdFusion on Wheels - the framework for the rest of us =
+*ColdFusion on Wheels - the framework for the rest of us!*
 
 I owe just about everything in Wheels to Ruby on Rails and DHH. Rails has changed my life as a web developer, and I want to bring that same sense of wonder to the !ColdFusion folks. With the Wheels Generator, you can get a site up and running in seconds. And I'm not talking about a "Hello, world" index.cfm page, either (granted, it won't be the most beautiful website in the world, but that's your job!). There are no lengthy XML files to create and read through just to figure out how your own application works - you'll know exactly which files you need and where you have to go from the basic directory structure you'll be using. No object factories or DAOs, gateways or façades (if you don't know what any of these are, you're better off, trust me). Just simple !ColdFusion code and an application that makes sense.
 

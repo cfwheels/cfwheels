@@ -19,7 +19,7 @@ Attribute names should correspond to column names in the associated table.
 }}}
 
 {{{
-<cfset new_author = model("author").new(first_name="Per", last_name="Djurner")>
+<cfset new_author = model("author").new(first_name="John", last_name="Doe")>
 }}}
 
-See the section on CreatingNewRows for more information and code examples.
+See the section on [CreatingNewRows] for more information and code examples.
