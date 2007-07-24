@@ -1,3 +1,5 @@
+#summary All Wheels methods listed by category.
+
 *Model Class Level Methods*
 - xxx
 
