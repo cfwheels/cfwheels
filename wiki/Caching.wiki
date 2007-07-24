@@ -76,6 +76,6 @@ You can cache result sets returned by your queries too. As a ColdFusion develope
 If the three caching methods above are not good enough for you you can always make use of the lower level [addToCache], [getFromCache] and [removeFromCache] functions. Now the task of creating keys for your cached items are handed over to you but in return you get full control of the cache.
 
 *Additional methods*
-Wanna know what's in the cache? Just use the [dumpCache] function. To clear the entire cache, use the [clearCache] function.
+Wanna know what's in the cache? Just use the [dumpCache] function to dump the entire cache or the [cacheCount] if you just want the number of items in the cache returned. To clear the entire cache, use the [clearCache] function.
 
 Happy Caching :)
