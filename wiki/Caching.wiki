@@ -28,6 +28,9 @@ In your `config/settings.cfm` file there is a section devoted to cache configura
 *Three ways to cache*
 In Wheels you can cache data in three different ways:
 
+  * A list
+  * Of bulleted items
+
  - Action caching
  - Partial caching
  - Query caching
