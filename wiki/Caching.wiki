@@ -1,6 +1,6 @@
 #summary How to cache content.
 
-If your website doesn't get a whole lot of traffic then you can probably skip this chapter completely. On the other hand, you're probably hoping for massive amounts of traffic to reach your website very soon, an imminent sell-out to Google and a good life drinking Margaritas in the Caribbean... knowing a little bit of caching will prepare you for this (except for the Margaritas, you're on your own with those).
+If your website doesn't get a whole lot of traffic then you can probably skip this chapter completely. On the other hand, you're probably hoping for massive amounts of traffic to reach your website very soon, an imminent sell-out to Google and a good life drinking Margaritas in the Caribbean... knowing a little bit of caching will prepare you for this (except for the Margaritas, you're on your own with those ;)).
 
 Consider a typical page on a Wheels website. It will likely call a controller action, get some data from your model using a finder method and render the view for the user using some of the handy built-in functions. All this takes time and resources on your web/database server. Let's assume this page is accessed frequently, rarely changes and looks the same for all users, then you have a perfect candidate for caching. 
 
@@ -25,8 +25,11 @@ In your `config/settings.cfm` file there is a section devoted to cache configura
 
 `cache_cull_interval` is number of seconds between each culling action. The reason the cache is not culled during each request is to keep performance as high as possible.
 
+*Three ways to cache*
+In Wheels you can cache data in three different ways: action, partial and query caching. Action caching is the most effective of these since it caches the entire resulting HTML for the user. Use partial caching when you only want to cache specific parts of pages (one reason for this could be that the page is personalized for a specific user and you can only cache the sections that are not personalized). Query caching is the least effective of the three caching options since it only caches results sets you get back from the database but if you have a busy database and you're not too concerned with not caching pages/partials this could be a good option for you. Besides these high level options for caching items you can also use the low-level caching functions directly in Wheels. This is good when you need to create your own cache keys (or if you're just a control freak in general!).
+
 *Action caching*
-In Wheels you can cache data in three different ways: action, partial and query caching. Action caching is the most effective of these since it caches the entire resulting HTML for the user. The following code specifies that you want to cache the browseByUser and browseByTitle actions:
+The following code specifies that you want to cache the browseByUser and browseByTitle actions:
 
 {{{
 <cfcomponent extends="ApplicationController">
@@ -44,7 +47,7 @@ In Wheels you can cache data in three different ways: action, partial and query 
 
 As you can see the [cachesAction] function call goes at the top of your controller file and accepts a list of action names (or just one action name) and the number of seconds the actions should be cached for.
 
-So what happens when a users request the browseByUser page?
+So what happens when users request the browseByUser page?
 
 paginated pages are cached
 filters are run
