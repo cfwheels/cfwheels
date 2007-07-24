@@ -28,12 +28,9 @@ In your `config/settings.cfm` file there is a section devoted to cache configura
 *Three ways to cache*
 In Wheels you can cache data in three different ways:
 
-  * A list
-  * Of bulleted items
-
- - Action caching
- - Partial caching
- - Query caching
+  * Action caching
+  * Partial caching
+  * Query caching
 
 Action caching is the most effective of these since it caches the entire resulting HTML for the user. Use partial caching when you only want to cache specific parts of pages (one reason for this could be that the page is personalized for a specific user and you can only cache the sections that are not personalized). Query caching is the least effective of the three caching options since it only caches results sets you get back from the database but if you have a busy database and you're not too concerned with not caching pages/partials this could be a good option for you. Besides these high level options for caching items you can also use the low-level caching functions directly in Wheels. This is good when you need to create your own cache keys (or if you're just a control freak in general!).
 
