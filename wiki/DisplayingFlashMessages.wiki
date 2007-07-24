@@ -9,9 +9,11 @@ The Flash is actually a very simple concept and no, it has nothing to do with Ad
 
 In the view for the `edit` controller:
 
+{{{
 <cfif isDefined("session.flash.error")>
   <p class="error-message"><cfoutput>#session.flash.error#</cfoutput></p>
 </cfif>
+}}}
 
 The error part of the `session.flash` struct could have been anything you wanted. For example you can use one struct for storing error messages and one for storing success messages.
 
