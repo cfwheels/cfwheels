@@ -1,6 +1,6 @@
-#summary .
+#summary This function returns the number of items you have in your cache.
 
-This function returns the number of items you have in your cache. Pass in the `category` argument to only return the count items of a specific type (action, partial etc).
+Pass in the `category` argument to only return the count items of a specific type (action, partial etc).
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || category || no || string || || "action", "partial" or "query" ||
