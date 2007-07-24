@@ -30,6 +30,7 @@ In Wheels you can cache data in three different ways: action, partial and query 
 
 {{{
 <cfcomponent extends="ApplicationController">
+
   <cfset cachesAction("browseByUser,browseByTitle", 1800)>
 
   <cffunction name="browseByUser">
