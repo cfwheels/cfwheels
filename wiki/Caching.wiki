@@ -84,7 +84,7 @@ If the three caching methods above are not good enough for you you can always ma
 *Additional methods*
 Wanna know what's in the cache? Just use the [dumpCache] function to dump the entire cache or the [cacheCount] if you just want the number of items in the cache returned. To clear the entire cache, use the [clearCache] function.
 
-*Planned editions and enhancements*
+*Planned additions and enhancements*
 - Ability to cache complete requests (incl. filters) so that Wheels is not invoked at all
 - Function to expire cached items manually without having to use the low-level functions
 - Functions to tell whether or not an item already exists in the cache
