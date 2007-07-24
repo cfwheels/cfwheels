@@ -26,7 +26,13 @@ In your `config/settings.cfm` file there is a section devoted to cache configura
 `cache_cull_interval` is the number of seconds between each culling action. The reason the cache is not culled during each request is to keep performance as high as possible.
 
 *Three ways to cache*
-In Wheels you can cache data in three different ways: action, partial and query caching. Action caching is the most effective of these since it caches the entire resulting HTML for the user. Use partial caching when you only want to cache specific parts of pages (one reason for this could be that the page is personalized for a specific user and you can only cache the sections that are not personalized). Query caching is the least effective of the three caching options since it only caches results sets you get back from the database but if you have a busy database and you're not too concerned with not caching pages/partials this could be a good option for you. Besides these high level options for caching items you can also use the low-level caching functions directly in Wheels. This is good when you need to create your own cache keys (or if you're just a control freak in general!).
+In Wheels you can cache data in three different ways:
+
+  * Action caching
+  * Partial caching
+  * Query caching
+
+Action caching is the most effective of these since it caches the entire resulting HTML for the user. Use partial caching when you only want to cache specific parts of pages (one reason for this could be that the page is personalized for a specific user and you can only cache the sections that are not personalized). Query caching is the least effective of the three caching options since it only caches results sets you get back from the database but if you have a busy database and you're not too concerned with not caching pages/partials this could be a good option for you. Besides these high level options for caching items you can also use the low-level caching functions directly in Wheels. This is good when you need to create your own cache keys (or if you're just a control freak in general!).
 
 *Action caching*
 The following code specifies that you want to cache the browseByUser and browseByTitle actions:
@@ -77,5 +83,13 @@ If the three caching methods above are not good enough for you you can always ma
 
 *Additional methods*
 Wanna know what's in the cache? Just use the [dumpCache] function to dump the entire cache or the [cacheCount] if you just want the number of items in the cache returned. To clear the entire cache, use the [clearCache] function.
+
+*Planned editions and enhancements*
+  * Ability to cache complete requests (incl. filters) so that Wheels is not invoked at all.
+  * Function to expire cached items manually without having to use the low-level functions
+  * Functions to tell whether or not an item already exists in the cache
+  * Automatic query caching during the life of a request (so that two identical queries can never be run)
+  * Add a scope argument to all caching functions (choice between application and session)
+  * Add an option to have the cache on disk or in the database instead
 
 Happy Caching :)
