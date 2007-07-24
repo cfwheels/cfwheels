@@ -59,9 +59,9 @@ When Wheels receives the first request for this page it will handle everything a
 
 When the second user requests the same page it will serve the HTML directly from the cache. Note that any before/after filters set for the action _are_ being run. This means that if you do authentication in the before filter (which is a common technique for sites with content where you have to login first to see it) you can still cache those pages safely using [cachesAction].
 
-All subsequent requests now get the cached page until it expires but there are two exception to this (which you can make good use of in your code to have the cache re-created at the right times): If the request is a post request (normally coming from a form submission) or if the [Flash] is not empty then the cache won't be used and instead a new fresh page will be created. One way to use this feature is to submit your forms to the same page to have the it re-created or redirect to the cached page with a message in the [Flash].
+All subsequent requests now get the cached page until it expires but there are two exception to this (which you can make good use of in your code to have the cache re-created at the right times): If the request is a post request (normally coming from a form submission) or if the [DisplayingFlashMessages Flash] is not empty then the cache won't be used and instead a new fresh page will be created. One way to use this feature is to submit your forms to the same page to have the it re-created or redirect to the cached page with a message in the [DisplayingFlashMessages Flash].
 
-Here is some code that shows this technique with using the Flash to expire the cache (imagine that the showArticle page is cached and a user is adding a new comment for it):
+Here is some code that shows this technique with using the [DisplayingFlashMessages Flash] to expire the cache (imagine that the showArticle page is cached and a user is adding a new comment for it):
 
 {{{
 <cfset session.flash.message = "Your comment was added">
