@@ -4,6 +4,33 @@ If your website doesn't get a whole lot of traffic then you can probably skip th
 
 Consider a typical page on a Wheels website. It will likely call a controller action, get some data from your model using a finder method and render the view for the user using some of the handy built-in functions. All this takes time and resources on your web/database server. Let's assume this page is accessed frequently, rarely changes and looks the same for all users, then you have a perfect candidate for caching. 
 
+*Configuring the cache*
+In your `config/settings.cfm` file there is a section devoted to cache configuration. You don't really have to change anything in here though. If you leave everything to the defaults caching will be on (with reasonable settings for cache size and culling) in production mode and off during development and testing. Here are the values you can change and a description of what they do:
+
+{{{
+<cfset application.settings.perform_caching = true>
+<cfset application.settings.default_cache_time = 3600>
+<cfset application.settings.maximum_items_to_cache = 1000>
+<cfset application.settings.cache_cull_percentage = 10>
+<cfset application.settings.cache_cull_interval = 300>
+}}}
+
+`perform_caching` is a boolean value and just specifies whether or not content should be cached at all (this makes it easy to globally switch all caching on/off without changing individual files). Note that the `config/settings.cfm` file sets this to false but the `config/environments/production.cfm` file overrides this setting to turn on caching in production mode only.
+
+`default_cache_time` is the number of seconds an item should be cached when no value is passed in to the functions that perform the caching in Wheels (ie cachesAction, renderPartial etc).
+
+`maximum_items_to_cache` is the total amount of items the cache can hold whether it is actions, partials or queries. When the cache is full, items will automatically be deleted from it at a regular interval based on the settings below.
+
+
+* default_cache_time: numeric (seconds)
+* maximum_items_to_cache: numeric
+* cache_cull_percentage
+* cache_cull_interval
+
+
+In Wheels you can cache data in three different ways: action, partial and query caching. With action caching you can cache an entire page, note that before authentication 
+
+*Action caching*
 
 
 = Introduction =
