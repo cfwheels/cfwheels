@@ -19,28 +19,33 @@ In your `config/settings.cfm` file there is a section devoted to cache configura
 
 `default_cache_time` is the number of seconds an item should be cached when no value is passed in to the functions that perform the caching in Wheels (ie cachesAction, renderPartial etc).
 
-`maximum_items_to_cache` is the total amount of items the cache can hold whether it is actions, partials or queries. When the cache is full, items will automatically be deleted from it at a regular interval based on the settings below.
+`maximum_items_to_cache` is the total amount of items the cache can hold. When the cache is full, items will automatically be deleted from it at a regular interval based on the settings below.
 
+`cache_cull_percentage` is the percentage of items that are culled when from the cache when `maximum_items_to_cache` has been reached. For example, if you set this value to 10 then at the most 10% of expired items will be deleted from the cache. If you set it to 100 then all expired items will be deleted from the cache. This is perfectly fine for small caches but can be problematic if the cache is very large.
 
-* default_cache_time: numeric (seconds)
-* maximum_items_to_cache: numeric
-* cache_cull_percentage
-* cache_cull_interval
-
-
-In Wheels you can cache data in three different ways: action, partial and query caching. With action caching you can cache an entire page, note that before authentication 
+`cache_cull_interval` is number of seconds between each culling action. The reason the cache is not culled during each request is to keep performance as high as possible.
 
 *Action caching*
+In Wheels you can cache data in three different ways: action, partial and query caching. Action caching is the most effective of these since it caches the entire resulting HTML for the user. The following code specifies that you want to cache the browseByUser action:
+
+{{{
+<cfcomponent extends="ApplicationController">
+
+	<cfset cachesAction("browseByUser,browseByTitle", 1800)>
+
+	<cffunction name="browseByUser">
+	</cffunction>
+
+	<cffunction name="browseByUser">
+	</cffunction>
+
+	<cffunction name="otherFunction">
+	</cffunction>
+
+</cfcomponent>
+}}}
+
+As you can see the cachesAction function call goes at the top of your controller file and accepts a list of action names and a time in seconds in which to cache the actions for.
 
 
-= Introduction =
-
-Add your content here.
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+With action caching you can cache an entire page, note that before authentication 
