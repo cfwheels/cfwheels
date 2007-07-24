@@ -1,27 +1,19 @@
-#labels api
 *Model Class Level Methods*
- * [new]
- * [create]
- * [findByID]
- * [findOne]
- * [findAll]
- * [updateByID]
- * [updateOne]
- * [updateAll]
- * [deleteByID]
- * [deleteOne]
- * [deleteAll]
+- xxx
 
 *Model Object Level Methods*
- * [save]
- * [update]
- * [delete]
+- xxx
 
 *View Methods*
- * xxx
+- xxx
 
 *Controller Methods*
- * xxx
+- xxx
 
 *Support Methods*
- * [cacheCount]
+- [addToCache]
+- [getFromCache]
+- [removeFromCache]
+- [dumpCache]
+- [clearCache]
+- [cacheCount]
