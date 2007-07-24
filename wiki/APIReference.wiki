@@ -22,3 +22,6 @@
 
 *Controller Methods*
  * xxx
+
+*Support Methods*
+ * [cacheCount]
