@@ -56,3 +56,26 @@ Here is some code that shows this technique with using the Flash to expire the c
 <cfset session.flash.message = "Your comment was added">
 <cfset redirectTo(action="showArticle", id=params.id)>
 }}}
+
+*Partial Caching*
+When your site contains personalized information (maybe some text specifying who you are logged in as, a list of items in your shopping cart etc) then action caching is not an option and you have to cache at a lower level. This is where being able to cache only specific parts of pages is handy. In Wheels this is done by using the `cache` argument in a call to [renderPartial]. You can pass in `cache=true` or `cache=xx` where `xx` is the number of seconds you want to cache the partial for. if you just pass in `true` the default cache expiration time will be used. So if you have an e-commerce site that lists products with a shopping cart in the sidebar then you'd create a partial for the list of products and cache only that.
+
+Example code:
+{{{
+#renderPartial(name="listing", cache=true)#
+}}}
+
+*Query Caching*
+You can cache result sets returned by your queries too. As a ColdFusion developer this shouldn't be new to you since you've always been able to use the `cachedWithin` with a `cfquery` tag. This option is available for all finder methods and looks like this:
+
+{{{
+<cfset users = findAll(where="name LIKE 'a%'", cache=120)#
+}}}
+
+*Low-level Caching*
+If the three caching methods above are not good enough for you you can always make use of the lower level [addToCache], [getFromCache] and [removeFromCache] functions. Now the task of creating keys for your cached items are handed over to you but in return you get full control of the cache.
+
+*Additional methods*
+Wanna know what's in the cache? Just use the [dumpCache] function. To clear the entire cache, use the [clearCache] function.
+
+Happy Caching :)
