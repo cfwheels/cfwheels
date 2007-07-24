@@ -1,0 +1,19 @@
+#summary How to cache content.
+
+If your website doesn't get a whole lot of traffic then you can probably skip this chapter completely. On the other hand, you're probably hoping for massive amounts of traffic to reach your website very soon, an imminent sell-out to Google and a good life drinking Margaritas in the Caribbean... knowing a little bit of caching will prepare you for this (except for the Margaritas, you're on your own with those).
+
+Consider a typical page on a Wheels website. It will likely call a controller action, get some data from your model using a finder method and render the view for the user using some of the handy built-in functions. All this takes time and resources on your web/database server. Let's assume this page is accessed frequently, rarely changes and looks the same for all users, then you have a perfect candidate for caching. 
+
+
+
+= Introduction =
+
+Add your content here.
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
