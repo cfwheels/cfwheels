@@ -3,6 +3,28 @@
 
 *Welcome to ColdFusion on Wheels!*
 
+
+what does it do, easier to develop etc
+
+no weird wordsm gateways, facades etc
+lots of documentation based on examples, details real-world in context
+simple OO in CF
+80% of work, still do cfquery etc
+structure your code
+conventions
+no XML, all CF (fusebox example) can still go old school, wheels does not stop you
+DRY
+less in database, more in models
+makes web 2.0 easy 80% concept applies here as well, easy to go too far with ajax and scriptaculous
+
+
+
+explain MVC and how it relates to Wheels
+
+
+need sub headers in here!!
+
+
 I like to think of Wheels as "the framework for the rest of us", It wasn't developed by a guy with a Ph.D in computer science.
 It was created, and is supported, by people probably a lot like you: someone who was comfortable around HTML and heard that dynamic websites and databases were really where the power was.
 If you weren't a classically trained programmer and needed to get dynamic data onto the web, !ColdFusion was, and in most ways still is, the fastest and easiest way to do so.
