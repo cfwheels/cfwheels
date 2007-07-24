@@ -19,33 +19,35 @@ In your `config/settings.cfm` file there is a section devoted to cache configura
 
 `default_cache_time` is the number of seconds an item should be cached when no value is passed in to the functions that perform the caching in Wheels (ie cachesAction, renderPartial etc).
 
-`maximum_items_to_cache` is the total amount of items the cache can hold. When the cache is full, items will automatically be deleted from it at a regular interval based on the settings below.
+`maximum_items_to_cache` is the total amount of items the cache can hold. When the cache is full, items will automatically be deleted from it at a regular interval based on the settings below. Note that the cache is stored in ColdFusion's application scope so take this into consideration when deciding the number of items to store.
 
 `cache_cull_percentage` is the percentage of items that are culled when from the cache when `maximum_items_to_cache` has been reached. For example, if you set this value to 10 then at the most 10% of expired items will be deleted from the cache. If you set it to 100 then all expired items will be deleted from the cache. This is perfectly fine for small caches but can be problematic if the cache is very large.
 
 `cache_cull_interval` is number of seconds between each culling action. The reason the cache is not culled during each request is to keep performance as high as possible.
 
 *Action caching*
-In Wheels you can cache data in three different ways: action, partial and query caching. Action caching is the most effective of these since it caches the entire resulting HTML for the user. The following code specifies that you want to cache the browseByUser action:
+In Wheels you can cache data in three different ways: action, partial and query caching. Action caching is the most effective of these since it caches the entire resulting HTML for the user. The following code specifies that you want to cache the browseByUser and browseByTitle actions:
 
 {{{
 <cfcomponent extends="ApplicationController">
+  <cfset cachesAction("browseByUser,browseByTitle", 1800)>
 
-	<cfset cachesAction("browseByUser,browseByTitle", 1800)>
+  <cffunction name="browseByUser">
+  </cffunction>
 
-	<cffunction name="browseByUser">
-	</cffunction>
-
-	<cffunction name="browseByUser">
-	</cffunction>
-
-	<cffunction name="otherFunction">
-	</cffunction>
+  <cffunction name="browseByUser">
+  </cffunction>
 
 </cfcomponent>
 }}}
 
-As you can see the cachesAction function call goes at the top of your controller file and accepts a list of action names and a time in seconds in which to cache the actions for.
+As you can see the [cachesAction] function call goes at the top of your controller file and accepts a list of action names (or just one action name) and the number of seconds the actions should be cached for.
 
+So what happens when a users request the browseByUser page?
+
+paginated pages are cached
+filters are run
+session.flash overrides the cache
+form overrides the cache
 
 With action caching you can cache an entire page, note that before authentication 
