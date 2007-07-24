@@ -77,6 +77,7 @@ This documentation is for the upcoming version 0.7 release.
 
 = Miscellaneous =
 
+ * Caching
  * HandlingErrors
  * SwitchingEnvironments
  * [APIReference]
