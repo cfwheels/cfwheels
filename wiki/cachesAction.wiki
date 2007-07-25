@@ -1,1 +1,19 @@
 #summary This function tells a controller which actions that should be cached.
+
+Put this function at the top of your controller file. Pass in a list of action names to be cached and the time they should be cached it for (in seconds). If the cache time is different for your actions you can use multiple cachesAction calls.
+
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| actions || yes || list || || the action(s) to be cached ||
+|| time || no || numeric || application.settings.default_cache_time || the time in seconds to cache the action for ||
+
+*Examples:*
+
+{{{
+<cfset cachesAction("article")>
+}}}
+
+{{{
+<cfset cachesAction("browseByUser,browseByTitle", 120)>
+}}}
+
+See the section on [Caching] for more information and code examples.
