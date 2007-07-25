@@ -1,28 +1,100 @@
 #summary An alphabetical listing of all functions in Wheels.
 
 *A*
+- [addToCache]
 
 *B*
+
 *C*
+
 - [cacheCount]
+- [cachesAction]
+- [camelcase]
+- [capitalize]
+- [checkBox]
+- [checkBoxTag]
+- [classify]
+- [clearCache]
+
 *D*
+
+- [decryptParam]
+- [dumpCache]
+
 *E*
+
+- [encryptParam]
+- [errorMessagesFor]
+- [errorMessageOn]
+
 *F*
+
+- [fileField]
+- [fileFieldTag]
+- [formRemoteTag]
+
 *G*
+
+- [getFromCache]
+
 *H*
+
+- [hiddenField]
+- [hiddenFieldTag]
+- [humanize]
+
 *I*
+
+- [imageTag]
+
 *J*
+
+- [javascriptIncludeTag]
+
 *K*
 *L*
 *M*
+
+- [model]
+
 *N*
 *O*
 *P*
+
+- [passwordField]
+- [passwordFieldTag]
+- [pluralize]
+
 *Q*
 *R*
+
+- [radioButton]
+- [radioButtonTag]
+- [removeFromCache]
+
 *S*
+
+- [singularize]
+- [startFormTag]
+- [stylesheetLinkTag]
+- [submitTag]
+- [select]
+- [selectTag]
+
 *T*
+
+- [tableize]
+- [textArea]
+- [textAreaTag]
+- [textField]
+- [textFieldTag]
+- [titleize]
+
 *U*
+
+- [underscore]
+- [URLFor]
+
 *V*
 *W*
 *Z*
