@@ -1,0 +1,57 @@
+#summary How to write code that performs tasks during the life cycle of an object.
+
+A callback is a set of functions in Wheels that allows you to have code executed before and/or after certain operations on an object. This requires some further explanation so let's run through an example that details the life cycle of an order object in an e-commerce application. Let's look at a possible scenario for what happens when the visitor submits her credit card details to finalize her order.
+
+- You create a new order object using the [new] function based on the incoming form parameters.
+- You call the [save] function on the order object which will cause Wheels to first validate the object and then store it in the database if it passes validation.
+- The next day you call the update function on the object since the user decided to change the shipping method for the order.
+- Another day passes and you call the [delete] function on the object because the visitor called in to cancel the order.
+
+Let's say you want to have the following things executed somewhere in the code: stripping out dashes from the credit card number to make it as easy as possible for the user to make a purchase, calculate shipping cost based on the country the package is being sent to and finally send a confirmation email to the user whenever an order is canceled.
+
+It's tempting to put this code right in the Checkout controller isn't it? But if you think ahead a little you'll realize that you might build an administrative interface for orders and maybe an express checkout as well at some point in the future. You don't want to duplicate all your logic in all these places, do you? Didn't think so.
+
+Object callbacks to the rescue, just implement the following to keep complex logic out of the controller and ensure you follow the DRY principle ([http://en.wikipedia.org/wiki/Don't_repeat_yourself "Don't Repeat Yourself"]):
+
+
+
+cancel the order
+
+
+new
+validated
+saved
+
+
+validated
+
+- The order is created when the 
+- saved
+
+before validate (strip out - from cc)
+
+
+- beforeValidation
+- afterValidationOnCreate or afterValidationOnUpdate
+- afterValidation
+- beforeSave
+- beforeCreate or beforeUpdate
+- afterCreate or afterUpdate
+- afterSave
+
+Which callback that will be executed for the conditional ones above depends on whether the object is new and being saved to the database or an existing object that is being updated.
+
+FirstThe order object is created after the visitor submits her credit card details. First, the comment is created when a visitor to your blog submits her comment and you call the [save] or [create] function to store it in the database.
+
+
+Since most operations on an object in Wheels is performed by some function 
+
+The concept of callbacks is that  Wheels is that 
+The life cycle of an object in Wheels involves several events; an object 
+
+The beauty of it, from one place, 
+
+
+
+note that sometimes you have to pass in instantiate to make sure callbacks are executed
+note to avoid manual queries
