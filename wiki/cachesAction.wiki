@@ -1,0 +1,1 @@
+#summary This function tells a controller which actions that should be cached.
