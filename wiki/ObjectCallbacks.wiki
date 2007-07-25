@@ -14,7 +14,7 @@ Let's say you want to have the following things executed somewhere in the code: 
 
 It's tempting to put this code right in the controller, isn't it? But if you think ahead a little you'll realize that you might build an administrative interface for orders and maybe an express checkout as well at some point in the future. You don't want to duplicate all your logic in all these places, do you?
 
-Object callbacks to the rescue... just implement something similar to the following to keep complex logic out of your controllers and to ensure you stay DRY [http://en.wikipedia.org/wiki/Don't_repeat_yourself Don't Repeat Yourself".
+Object callbacks to the rescue... just implement something similar to the following to keep complex logic out of your controllers and to ensure you stay DRY ("Don't Repeat Yourself", http://en.wikipedia.org/wiki/Don't_repeat_yourself).
 
 Part of the `Order.cfc` model file:
 
