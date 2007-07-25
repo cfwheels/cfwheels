@@ -5,14 +5,28 @@
 - [addError]
 - [addErrorToBase]
 - [addToCache]
+- [afterCreate]
+- [afterDelete]
 - [afterFilter]
+- [afterSave]
+- [afterUpdate]
+- [afterValidation]
+- [afterValidationOnCreate]
+- [afterValidationOnUpdate]
 - [allErrors]
 - [autoLink]
 - [average]
 
 *B*
 
+- [beforeCreate]
+- [beforeDelete]
 - [beforeFilter]
+- [beforeSave]
+- [beforeUpdate]
+- [beforeValidation]
+- [beforeValidationOnCreate]
+- [beforeValidationOnUpdate]
 - [belongsTo]
 - [buttonTo]
 
