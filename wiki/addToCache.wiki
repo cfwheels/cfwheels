@@ -1,0 +1,1 @@
+#summary This function adds an item to the cache.
