@@ -1,1 +1,8 @@
-#summary This function adds an item to the cache.
+#summary This low-level function adds an item to the cache.
+
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| key || yes || string || || a unique key to identify the cache item by ||
+|| value || yes || string || || the value to be cached ||
+|| cache_time || no || string || application.settings.default_cache_time || number of seconds to cache item for ||
+
+See the section on [Caching] for information and code examples.
