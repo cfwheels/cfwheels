@@ -1,1 +1,18 @@
 #summary This function dumps the contents of your cache.
+
+Pass in the `category` argument to only dump the items of a specific type (action, partial etc). This function uses cfdump internally to dump the cache.
+
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| category || no || string || || "action", "partial" or "query" ||
+
+*Examples:*
+
+{{{
+#dumpCache()#
+}}}
+
+{{{
+#dumpCache("query")#
+}}}
+
+See the section on [Caching] for more information and code examples.
