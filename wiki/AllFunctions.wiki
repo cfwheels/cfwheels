@@ -2,8 +2,15 @@
 
 *A*
 - [addToCache]
+- [afterFilter]
+- [autoLink]
+- [average]
 
 *B*
+
+- [beforeFilter]
+- [belongsTo]
+- [buttonTo]
 
 *C*
 
@@ -15,15 +22,21 @@
 - [checkBoxTag]
 - [classify]
 - [clearCache]
+- [contentForLayout]
+- [count]
+- [create]
+- [cycle]
 
 *D*
 
 - [decryptParam]
+- [distanceOfTimeInWords]
 - [dumpCache]
 
 *E*
 
 - [encryptParam]
+- [excerpt]
 - [errorMessagesFor]
 - [errorMessageOn]
 
@@ -39,13 +52,21 @@
 
 *H*
 
+- [hasAndBelongsToMany]
+- [hasMany]
+- [hasOne]
 - [hiddenField]
 - [hiddenFieldTag]
+- [highlight]
 - [humanize]
 
 *I*
 
 - [imageTag]
+- [isAjax]
+- [isCurrentPage]
+- [isGet]
+- [isPost]
 
 *J*
 
@@ -53,14 +74,29 @@
 
 *K*
 *L*
+
+- [linkTo]
+- [linkToUnlessCurrent]
+
 *M*
 
+- [mailTo]
+- [maximum]
+- [minimum]
 - [model]
 
 *N*
+
+- [new]
+
 *O*
 *P*
 
+- [paginationCurrentPage]
+- [paginationHasNext]
+- [paginationHasPrevious]
+- [paginationLinks]
+- [paginationTotalPages]
 - [passwordField]
 - [passwordFieldTag]
 - [pluralize]
@@ -70,16 +106,26 @@
 
 - [radioButton]
 - [radioButtonTag]
+- [redirectTo]
 - [removeFromCache]
+- [renderNothing]
+- [renderPage]
+- [renderPageToString]
+- [renderPartial]
+- [renderText]
 
 *S*
 
-- [singularize]
-- [startFormTag]
-- [stylesheetLinkTag]
-- [submitTag]
 - [select]
 - [selectTag]
+- [simpleFormat]
+- [singularize]
+- [startFormTag]
+- [stripLinks]
+- [stripTags]
+- [stylesheetLinkTag]
+- [submitTag]
+- [sum]
 
 *T*
 
@@ -88,11 +134,14 @@
 - [textAreaTag]
 - [textField]
 - [textFieldTag]
+- [timeAgoInWords]
 - [titleize]
+- [truncate]
 
 *U*
 
 - [underscore]
+- [update]
 - [URLFor]
 
 *V*
