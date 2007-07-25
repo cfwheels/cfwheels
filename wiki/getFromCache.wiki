@@ -1,0 +1,1 @@
+#summary This function retrieves an item from the cache.
