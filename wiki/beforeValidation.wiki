@@ -2,4 +2,4 @@
 
 This function does not actually exist in Wheels but if you create it in your model file it will be called automatically before validation is performed on an object.
 
-See the section on [ObjectCallbacks Object Callbacks] for more information and code examples.
+See the [ObjectCallbacks] page for more information and code examples.
