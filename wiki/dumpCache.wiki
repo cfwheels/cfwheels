@@ -1,0 +1,1 @@
+#summary This function dumps the contents of your cache.
