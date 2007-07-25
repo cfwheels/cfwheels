@@ -1,1 +1,18 @@
 #summary This function clears the cache.
+
+Pass in the `category` argument to only clear the items of a specific type (action, partial etc).
+
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| category || no || string || || "action", "partial" or "query" ||
+
+*Examples:*
+
+{{{
+<cfset clearCache()>
+}}}
+
+{{{
+<cfset clearCache("partial")>
+}}}
+
+See the section on [Caching] for more information and code examples.
