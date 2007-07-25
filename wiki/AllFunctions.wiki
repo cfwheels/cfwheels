@@ -2,31 +2,31 @@
 
 *A*
 
-- [addError] &#42;
+- [addError]
 - [addErrorToBase]
 - [addToCache]
-- [afterCreate]
-- [afterDelete]
+- [afterCreate]^1^
+- [afterDelete]^1^
 - [afterFilter]
-- [afterSave]
-- [afterUpdate]
-- [afterValidation]
-- [afterValidationOnCreate]
-- [afterValidationOnUpdate]
+- [afterSave]^1^
+- [afterUpdate]^1^
+- [afterValidation]^1^
+- [afterValidationOnCreate]^1^
+- [afterValidationOnUpdate]^1^
 - [allErrors]
 - [autoLink]
 - [average]
 
 *B*
 
-- [beforeCreate]
-- [beforeDelete]
+- [beforeCreate]^1^
+- [beforeDelete]^1^
 - [beforeFilter]
-- [beforeSave]
-- [beforeUpdate]
-- [beforeValidation]
-- [beforeValidationOnCreate]
-- [beforeValidationOnUpdate]
+- [beforeSave]^1^
+- [beforeUpdate]^1^
+- [beforeValidation]^1^
+- [beforeValidationOnCreate]^1^
+- [beforeValidationOnUpdate]^1^
 - [belongsTo]
 - [buttonTo]
 
