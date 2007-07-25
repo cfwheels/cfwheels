@@ -1,4 +1,4 @@
-#summary This low-level function adds an item to the cache.
+#summary This function adds an item to the cache.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || key || yes || string || || a unique key to identify the cache item by ||
