@@ -1,0 +1,30 @@
+#summary An alphabetical listing of all functions in Wheels.
+
+*A*
+
+*B*
+*C*
+- [cacheCount]
+*D*
+*E*
+*F*
+*G*
+*H*
+*I*
+*J*
+*K*
+*L*
+*M*
+*N*
+*O*
+*P*
+*Q*
+*R*
+*S*
+*T*
+*U*
+*V*
+*W*
+*Z*
+*Y*
+*Z*
