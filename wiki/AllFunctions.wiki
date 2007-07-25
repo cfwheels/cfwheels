@@ -70,8 +70,12 @@
 - [fileField]
 - [fileFieldTag]
 - [findAll]
+- [findAllByX]^2^
+- [findAllByXAndX]^2^
 - [findByID]
 - [findOne]
+- [findOneByX]^2^
+- [findOneByXAndX]^2^
 - [formRemoteTag]
 
 *G*
@@ -206,3 +210,7 @@
 *Y*
 
 *Z*
+
+^1^ = This function does not actually exist in Wheels but if you create it in your model file it will be called automatically as a callback (see the section on [ObjectCallbacks]).
+
+^2^ = This is a dynamic finder, replace X with a field from your model, for example findOneByUsernameAndEmail (see the section on [dynamicFinders]).
