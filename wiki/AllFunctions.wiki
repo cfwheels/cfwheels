@@ -1,8 +1,12 @@
 #summary An alphabetical listing of all functions in Wheels.
 
 *A*
+
+- [addError]
+- [addErrorToBase]
 - [addToCache]
 - [afterFilter]
+- [allErrors]
 - [autoLink]
 - [average]
 
@@ -22,6 +26,7 @@
 - [checkBoxTag]
 - [classify]
 - [clearCache]
+- [clearErrors]
 - [contentForLayout]
 - [count]
 - [create]
@@ -30,20 +35,29 @@
 *D*
 
 - [decryptParam]
+- [delete]
+- [deleteAll]
 - [distanceOfTimeInWords]
 - [dumpCache]
 
 *E*
 
 - [encryptParam]
-- [excerpt]
+- [errorCount]
 - [errorMessagesFor]
 - [errorMessageOn]
+- [errorsOn]
+- [errorsOnBase]
+- [excerpt]
 
 *F*
 
+- [fieldWasModified]
 - [fileField]
 - [fileFieldTag]
+- [findAll]
+- [findByID]
+- [findOne]
 - [formRemoteTag]
 
 *G*
@@ -53,7 +67,9 @@
 *H*
 
 - [hasAndBelongsToMany]
+- [hasErrors]
 - [hasMany]
+- [hasNoErrors]
 - [hasOne]
 - [hiddenField]
 - [hiddenFieldTag]
@@ -73,6 +89,7 @@
 - [javascriptIncludeTag]
 
 *K*
+
 *L*
 
 - [linkTo]
@@ -84,12 +101,14 @@
 - [maximum]
 - [minimum]
 - [model]
+- [modifiedFields]
 
 *N*
 
 - [new]
 
 *O*
+
 *P*
 
 - [paginationCurrentPage]
@@ -102,6 +121,7 @@
 - [pluralize]
 
 *Q*
+
 *R*
 
 - [radioButton]
@@ -116,8 +136,11 @@
 
 *S*
 
+- [save]
 - [select]
 - [selectTag]
+- [setPrimaryKey]
+- [setTableName]
 - [simpleFormat]
 - [singularize]
 - [startFormTag]
@@ -142,10 +165,30 @@
 
 - [underscore]
 - [update]
+- [updateAll]
 - [URLFor]
 
 *V*
+
+- [valid]
+- [validate]
+- [validateOnCreate]
+- [validateOnUpdate]
+- [validatesConfirmationOf]
+- [validatesExclusionOf]
+- [validatesFormatOf]
+- [validatesInclusionOf]
+- [validatesLengthOf]
+- [validatesNumericalityOf]
+- [validatesPresenceOf]
+- [validatesUniquenessOf]
+
 *W*
+
+- [wasModified]
+
 *Z*
+
 *Y*
+
 *Z*
