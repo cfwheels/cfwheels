@@ -2,7 +2,7 @@
 
 *A*
 
-- [addError] \*
+- [addError] !*
 - [addErrorToBase]
 - [addToCache]
 - [afterCreate]
