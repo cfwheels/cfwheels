@@ -1,12 +1,13 @@
 #summary What you need to know to get the most out of Wheels.
 
-Yes, there are actually some things you should familiarize yourself with before starting to use Wheels. Don't worry though, you don't need to be an expert on any on of them, just a basic understanding of the concepts is enough.
+Yes, there are actually some things you should familiarize yourself with before starting to use Wheels. Don't worry though, you don't need to be an expert on any on of them, just a basic understanding is good enough.
 
 - You should know the ColdFusion programming language (surprise!).
-- You should understand the concept of object oriented programming and specifically how it applies to ColdFusion.
+- You should understand the concept of object oriented programming and how it applies to ColdFusion.
 - You should know the theory behind the Model-View-Controller development pattern.
 
 *ColdFusion*
-Simply the best programming language in the world! The best way to learn it in my opinion is to get the free developer edition ([http://www.adobe.com/products/coldfusion/]), buy Ben Forta's "ColdFusion Web Application Construction Kit" ([http://www.amazon.com/Macromedia-ColdFusion-Web-Application-Construction/dp/0321223675/ref=pd_bbs_sr_1/002-5031277-7874448?ie=UTF8&s=books&qid=1185442723&sr=8-1])  and start coding using CFEclipse ([http://www.cfeclipse.org/]).
+Simply the best programming language in the world! The best way to learn it is to get [http://www.adobe.com/products/coldfusion/ the free developer edition], buy Ben Forta's "[http://www.amazon.com/Macromedia-ColdFusion-Web-Application-Construction/dp/0321223675/ref=pd_bbs_sr_1/002-5031277-7874448?ie=UTF8&s=books&qid=1185442723&sr=8-1 ColdFusion Web Application Construction Kit]" and start coding using [http://www.cfeclipse.org/ CFEclipse].
 
 *Object Oriented Programming*
+This is a programming methodology that uses objects to design applications. Objects model real world entities in your application. It is based on several techniques, including inheritance, modularity, polymorphism, and encapsulation. 
