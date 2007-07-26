@@ -5,13 +5,13 @@ When working with database tables it is very common to have a field that holds t
 *created_on*
 If Wheels sees this field in your table it will use it to store the current date when an `INSERT` operation is made (which could happen through a [save] or [create] operation for example).
 
-- created_at
+*created_at*
 If Wheels sees this field it will do the same as above but also include the current time of the insert.
 
-- updated_on
+*updated_on*
 If Wheels sees this field it will use it to store the current date when an `UPDATE` operation is made (which could happen through a [save] or [update] operation for example).
 
-- updated_at
+*updated_at*
 If Wheels sees this field it will do the same as above but also include the current time of the update.
 
 If you add any of these fields to your table, make sure they are of the `datetime` type and allows `NULL` values.
