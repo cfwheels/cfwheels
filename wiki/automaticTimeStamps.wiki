@@ -1,6 +1,6 @@
 #summary Let Wheels handle time stamping of records.
 
-When working with database tables it is very common to have a field that holds the time the record was added to the table. If you have an e-commerce website with an `orders` table you want to store the date and time the order was made, if you run a blog you want to know when someone left a comment and so on. As with anything that is a common task performed by developers it makes a good candidate for abstracting to the framework level, and that's what we did. If you have any of the following fields in your database table Wheels will see them and treat them a little differently than others.
+When working with database tables it is very common to have a field that holds the time that the record was added or last modified. If you have an e-commerce website with an `orders` table you want to store the date and time the order was made, if you run a blog you want to know when someone left a comment and so on. As with anything that is a common task performed by many developers it makes a good candidate for abstracting to the framework level, so that's what we did. If you have any of the following fields in your database table Wheels will see them and treat them a little differently than others.
 
 *created_on*
 If Wheels sees this field in your table it will use it to store the current date when an `INSERT` operation is made (which could happen through a [save] or [create] operation for example).
@@ -14,4 +14,4 @@ If Wheels sees this field it will use it to store the current date when an `UPDA
 - updated_at
 If Wheels sees this field it will do the same as above but also include the current time of the update.
 
-These fields has to be of the `datetime` type and should allow `NULL` values.
+If you add any of these fields to your table, make sure they are of the `datetime` type and allows `NULL` values.
