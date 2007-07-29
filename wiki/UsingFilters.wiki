@@ -28,8 +28,8 @@ Sure, that works but you're already starting to repeat yourself in the code... w
 
   <cffunction name="secretStuff">
     <cfif CGI.remote_addr Does Not Contain "212.55">
-      <cfset session.flash.msg = "Sorry, we’re not open in that area">
-      <cfset redirectTo(action=”sorry”)>
+      <cfset session.flash.msg = "Sorry, we're not open in that area">
+      <cfset redirectTo(action="sorry")>
     <cfelseif NOT structKeyExists(session, "user_id")>
       <cfset session.flash.msg = "Please login first!">
       <cfset redirectTo(action=”login”)>
@@ -38,8 +38,8 @@ Sure, that works but you're already starting to repeat yourself in the code... w
 
   <cffunction name="evenMoreSecretStuff">
     <cfif CGI.remote_addr Does Not Contain "212.55">
-      <cfset session.flash.msg = "Sorry, we’re not open in that area">
-      <cfset redirectTo(action=”sorry”)>
+      <cfset session.flash.msg = "Sorry, we're not open in that area">
+      <cfset redirectTo(action="sorry")>
     <cfelseif NOT structKeyExists(session, "user_id")>
       <cfset session.flash.msg = "Please login first!">
       <cfset redirectTo(action=”login”)>
@@ -54,8 +54,8 @@ Ouch, you're now setting yourself up for a maintenance nightmare when you need t
 
   <cffunction name="restrictAccess">
     <cfif CGI.remote_addr Does Not Contain "212.55">
-      <cfset session.flash.msg = "Sorry, we’re not open in that area">
-      <cfset redirectTo(action=”sorry”)>
+      <cfset session.flash.msg = "Sorry, we're not open in that area">
+      <cfset redirectTo(action="sorry")>
     <cfelseif NOT structKeyExists(session, "user_id")>
       <cfset session.flash.msg = "Please login first!">
       <cfset redirectTo(action=”login”)>
@@ -82,8 +82,8 @@ Much better! Wheels can take this process of avoiding repetition one step furthe
 
   <cffunction name="restrictAccess">
     <cfif CGI.remote_addr Does Not Contain "212.55">
-      <cfset session.flash.msg = "Sorry, we’re not open in that area">
-      <cfset redirectTo(action=”sorry”)>
+      <cfset session.flash.msg = "Sorry, we're not open in that area">
+      <cfset redirectTo(action="sorry")>
     <cfelseif NOT structKeyExists(session, "user_id")>
       <cfset session.flash.msg = "Please login first!">
       <cfset redirectTo(action=”login”)>
