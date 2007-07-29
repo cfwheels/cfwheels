@@ -1,0 +1,216 @@
+#summary An alphabetical listing of all methods in Wheels.
+
+*A*
+
+- [addError]
+- [addErrorToBase]
+- [addToCache]
+- [afterCreate]^1^
+- [afterDelete]^1^
+- [afterFilter]
+- [afterSave]^1^
+- [afterUpdate]^1^
+- [afterValidation]^1^
+- [afterValidationOnCreate]^1^
+- [afterValidationOnUpdate]^1^
+- [allErrors]
+- [autoLink]
+- [average]
+
+*B*
+
+- [beforeCreate]^1^
+- [beforeDelete]^1^
+- [beforeFilter]
+- [beforeSave]^1^
+- [beforeUpdate]^1^
+- [beforeValidation]^1^
+- [beforeValidationOnCreate]^1^
+- [beforeValidationOnUpdate]^1^
+- [belongsTo]
+- [buttonTo]
+
+*C*
+
+- [cacheCount]
+- [cachesAction]
+- [camelcase]
+- [capitalize]
+- [checkBox]
+- [checkBoxTag]
+- [classify]
+- [clearCache]
+- [clearErrors]
+- [contentForLayout]
+- [count]
+- [create]
+- [cycle]
+
+*D*
+
+- [decryptParam]
+- [delete]
+- [deleteAll]
+- [distanceOfTimeInWords]
+- [dumpCache]
+
+*E*
+
+- [encryptParam]
+- [errorCount]
+- [errorMessagesFor]
+- [errorMessageOn]
+- [errorsOn]
+- [errorsOnBase]
+- [excerpt]
+
+*F*
+
+- [fieldWasModified]
+- [fileField]
+- [fileFieldTag]
+- [findAll]
+- [findAllByX]^2^
+- [findAllByXAndX]^2^
+- [findByID]
+- [findOne]
+- [findOneByX]^2^
+- [findOneByXAndX]^2^
+- [formRemoteTag]
+
+*G*
+
+- [getFromCache]
+
+*H*
+
+- [hasAndBelongsToMany]
+- [hasErrors]
+- [hasMany]
+- [hasNoErrors]
+- [hasOne]
+- [hiddenField]
+- [hiddenFieldTag]
+- [highlight]
+- [humanize]
+
+*I*
+
+- [imageTag]
+- [isAjax]
+- [isCurrentPage]
+- [isGet]
+- [isPost]
+
+*J*
+
+- [javascriptIncludeTag]
+
+*K*
+
+*L*
+
+- [linkTo]
+- [linkToUnlessCurrent]
+
+*M*
+
+- [mailTo]
+- [maximum]
+- [minimum]
+- [model]
+- [modifiedFields]
+
+*N*
+
+- [new]
+
+*O*
+
+*P*
+
+- [paginationCurrentPage]
+- [paginationHasNext]
+- [paginationHasPrevious]
+- [paginationLinks]
+- [paginationTotalPages]
+- [passwordField]
+- [passwordFieldTag]
+- [pluralize]
+
+*Q*
+
+*R*
+
+- [radioButton]
+- [radioButtonTag]
+- [redirectTo]
+- [removeFromCache]
+- [renderNothing]
+- [renderPage]
+- [renderPageToString]
+- [renderPartial]
+- [renderText]
+
+*S*
+
+- [save]
+- [select]
+- [selectTag]
+- [setPrimaryKey]
+- [setTableName]
+- [simpleFormat]
+- [singularize]
+- [startFormTag]
+- [stripLinks]
+- [stripTags]
+- [stylesheetLinkTag]
+- [submitTag]
+- [sum]
+
+*T*
+
+- [tableize]
+- [textArea]
+- [textAreaTag]
+- [textField]
+- [textFieldTag]
+- [timeAgoInWords]
+- [titleize]
+- [truncate]
+
+*U*
+
+- [underscore]
+- [update]
+- [updateAll]
+- [URLFor]
+
+*V*
+
+- [valid]
+- [validate]
+- [validateOnCreate]
+- [validateOnUpdate]
+- [validatesConfirmationOf]
+- [validatesExclusionOf]
+- [validatesFormatOf]
+- [validatesInclusionOf]
+- [validatesLengthOf]
+- [validatesNumericalityOf]
+- [validatesPresenceOf]
+- [validatesUniquenessOf]
+
+*W*
+
+- [wasModified]
+
+*X*
+
+*Y*
+
+*Z*
+
+^1^ = This function does not actually exist in Wheels but if you create it in your model file it will be called automatically as a callback (see the section on [ObjectCallbacks]).
+
+^2^ = This is a dynamic finder, replace X with a field from your model, for example findOneByUsernameAndEmail (see the section on [dynamicFinders]).
