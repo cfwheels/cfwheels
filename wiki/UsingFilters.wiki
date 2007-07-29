@@ -21,7 +21,7 @@ One common thing you might find yourself doing is authenticating users before yo
   </cffunction>
 }}}
 
-Sure, that works but you’re already starting to repeat yourself in the code... what if the logic of your application grows bigger. It could end up looking like this:
+Sure, that works but you're already starting to repeat yourself in the code... what if the logic of your application grows bigger. It could end up looking like this:
 
 {{{
 <cfcomponent extends="ApplicationController">
