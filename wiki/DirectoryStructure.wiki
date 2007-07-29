@@ -1,0 +1,36 @@
+#summary Finding your way around a Wheels application.
+
+After download and unzipping Wheels, here's the directory structure you will see:
+
+- `config`
+- `controllers`
+- `events`
+- `wheels`
+- `images`
+- `javascripts`
+- `models`
+- `stylesheets`
+- `views`
+Application.cfc
+index.cfm
+
+*Quick Summary*
+Your configuration settings will be done in the `config` directory. Your code will end up in four of the folders, namely `controllers`, `events`, `models` and `views`. Static media files should be placed in `images`, `javascripts` and `stylesheets`. And the last directory? That's the framework itself, it exists in the `wheels` directory. Please go in there and have a look around. If you find anything you can improve or new features that you want to add, send us a patch!
+
+*Detailed Overview*
+Let's go through all of the files and directories now starting with the ones you'll spend most of your time in, the code directories.
+
+`controllers`
+This is where you create your controllers. You'll see one file in here already - ApplicationController.cfc. You can place methods inside ApplicationController.cfc to have that method shared between all the controllers you create (this works since all your controllers will extend ApplicationController).
+
+models
+This is where you create your model files (or classes if you prefer that term). All model files you create should map to one table in the database. The setup in the directory is similar to the one for controllers, to share methods you can place them in the existing ApplicationModel.cfc file.
+
+views
+This is where you prepare the views for your users. As you work on your website you will create one view directory for each controller. Before doing that though you already have two directories: layouts and helpers. Layouts are used to wrap your content 
+
+fine to add more dirs
+protection index.cfm
+you can have another file instead of index.cfm
+can update by just replacing wheels
+use events instead of app.cfc
