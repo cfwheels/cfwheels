@@ -1,113 +1,74 @@
 <cffunction name="initModel" returntype="any" access="public" output="true">
-	<cfset var local = structNew()>	
-	
+	<cfset var local = structNew()>
+
 	<cfset variables.model_name = listLast(getMetaData(this).name, ".")>
-	
+	<cfset variables.pluralized_model_name = pluralize(variables.model_name)>
+
 	<cfif NOT structKeyExists(variables, "table_name")>
-		<cfset variables.table_name = pluralize(variables.model_name)>
+		<cfset variables.table_name = variables.pluralized_model_name>
 	</cfif>
 	<cfif NOT structKeyExists(variables, "primary_key")>
 		<cfset variables.primary_key = "id">
 	</cfif>
 
-	<cfset variables.functions = "">
-	<cfif NOT structKeyExists(variables, "relationships")>
-		<cfset variables.relationships = "">
+	<!--- <cfset variables.functions = "">
+	<cfif NOT structKeyExists(variables, "associations")>
+		<cfset variables.associations = "">
 	<cfelse>
-		<cfloop collection="#variables.relationships#" item="local.i">
-			<cfif local.i IS "has_one">
-				<cfset local.has_one_functions = "object,setObject,hasObject,buildObject,createObject">
-				<cfloop collection="#variables.relationships.has_one#" item="local.j">	
-					<cfif variables.relationships.has_one[local.j].model_name IS "">
-						<cfset variables.relationships.has_one[local.j].model_name = local.j>
-					</cfif>
-					<cfif variables.relationships.has_one[local.j].foreign_key IS "">
-						<cfset variables.relationships.has_one[local.j].foreign_key = variables.model_name & "_id">
-					</cfif>
-					<cfset variables.relationships.has_one[local.j].functions = "">
-					<cfloop list="#local.has_one_functions#" index="local.k">
-						<cfset variables.functions = listAppend(variables.functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
-						<cfset variables.relationships.has_one[local.j].functions = listAppend(variables.relationships.has_one[local.j].functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
-					</cfloop>
-				</cfloop>
-			<cfelseif local.i IS "has_many">
-				<cfset local.has_many_functions = "objects,addObject,deleteObject,clearObjects,hasObjects,objectCount,findOneObject,findAllObjects,findObjectByID,buildObject,createObject">
-				<cfloop collection="#variables.relationships.has_many#" item="local.j">	
-					<cfif variables.relationships.has_many[local.j].model_name IS "">
-						<cfset variables.relationships.has_many[local.j].model_name = singularize(local.j)>
-					</cfif>
-					<cfif variables.relationships.has_many[local.j].foreign_key IS "">
-						<cfset variables.relationships.has_many[local.j].foreign_key = variables.model_name & "_id">
-					</cfif>
-					<cfset variables.relationships.has_many[local.j].functions = "">
-					<cfloop list="#local.has_many_functions#" index="local.k">
-						<cfset variables.functions = listAppend(variables.functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
-						<cfset variables.relationships.has_many[local.j].functions = listAppend(variables.relationships.has_many[local.j].functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
-					</cfloop>
-				</cfloop>
-			<cfelseif local.i IS "belongs_to">
-				<cfset local.belongs_to_functions = "object,setObject,hasObject,buildObject,createObject">
-				<cfloop collection="#variables.relationships.belongs_to#" item="local.j">	
-					<cfif variables.relationships.belongs_to[local.j].model_name IS "">
-						<cfset variables.relationships.belongs_to[local.j].model_name = local.j>
-					</cfif>
-					<cfif variables.relationships.belongs_to[local.j].foreign_key IS "">
-						<cfset variables.relationships.belongs_to[local.j].foreign_key = variables.relationships.belongs_to[local.j].model_name & "_id">
-					</cfif>
-					<cfset variables.relationships.belongs_to[local.j].functions = "">
-					<cfloop list="#local.belongs_to_functions#" index="local.k">
-						<cfset variables.functions = listAppend(variables.functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
-						<cfset variables.relationships.belongs_to[local.j].functions = listAppend(variables.relationships.belongs_to[local.j].functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
-					</cfloop>
-				</cfloop>
-			<!--- <cfelseif local.i IS "has_and_belongs_to_many">
-				<cfset local.has_and_belongs_to_many_functions = "objects,addObject,deleteObject,clearObjects,hasObjects,objectCount,findOneObject,findAllObjects,findObjectByID">
-				<cfloop collection="#variables.relationships.has_and_belongs_to_many#" item="local.j">	
-					<cfif variables.relationships.has_and_belongs_to_many[local.j].model_name IS "">
-						<cfset variables.relationships.has_and_belongs_to_many[local.j].model_name = singularize(local.j)>
-					</cfif>
-					<cfif variables.relationships.has_and_belongs_to_many[local.j].foreign_key IS "">
-						<cfset variables.relationships.has_and_belongs_to_many[local.j].foreign_key = variables.model_name & "_id">
-					</cfif>
-					<cfif variables.relationships.has_and_belongs_to_many[local.j].join_table IS "">
-						<cfif left(lCase(local.j), 1) LT left(lCase(variables.model_name), 1)>
-							<cfset variables.relationships.has_and_belongs_to_many[local.j].join_table = name & "_" & pluralize(variables.model_name)>
-						<cfelse>
-							<cfset variables.relationships.has_and_belongs_to_many[local.j].join_table = pluralize(variables.model_name) & "_" & local.j>					
-						</cfif>
-					</cfif>
-					<cfif variables.relationships.has_and_belongs_to_many[local.j].association_foreign_key IS "">
-						<cfset variables.relationships.has_and_belongs_to_many[local.j].association_foreign_key = variables.relationships.has_and_belongs_to_many[local.j].model_name & "_id">
-					</cfif>
-					<cfset variables.relationships.has_and_belongs_to_many[local.j].functions = "">
-					<cfloop list="#local.has_and_belongs_to_many_functions#" index="local.k">
-						<cfset variables.functions = listAppend(variables.functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
-						<cfset variables.relationships.has_and_belongs_to_many[local.j].functions = listAppend(variables.relationships.has_and_belongs_to_many[local.j].functions, replaceNoCase(replaceNoCase(local.k, "objects", pluralize(local.j)), "object", singularize(local.j)))>
-					</cfloop>
-				</cfloop> --->
+		<cfset local.functions.has_one = "object,setObject,hasObject,buildObject,createObject">
+		<cfset local.functions.has_many = "objects,addObject,deleteObject,clearObjects,hasObjects,objectCount,findOneObject,findAllObjects,findObjectByID,buildObject,createObject">
+		<cfset local.functions.belongs_to = "object,setObject,hasObject,buildObject,createObject">
+		<cfset local.functions.has_and_belongs_to_many = "objects,addObject,deleteObject,clearObjects,hasObjects,objectCount,findOneObject,findAllObjects,findObjectByID">
+		<cfloop collection="#variables.associations#" item="local.i">
+			<cfif variables.associations[local.i].model_name IS "">
+				<cfset variables.associations[local.i].model_name = singularize(local.i)>
 			</cfif>
+			<cfif variables.associations[local.i].foreign_key IS "">
+				<cfif variables.associations[local.i].type IS "belongs_to">
+					<cfset variables.associations[local.i].foreign_key = variables.associations[local.i].model_name & "_id">
+				<cfelse>
+					<cfset variables.associations[local.i].foreign_key = variables.model_name & "_id">
+				</cfif>
+			</cfif>
+			<cfif variables.associations[local.i].type IS "has_and_belongs_to_many">
+				<cfif variables.associations[local.i].join_table IS "">
+					<cfif left(lCase(local.i), 1) LT left(lCase(variables.pluralized_model_name), 1)>
+						<cfset variables.associations[local.i].join_table = local.i & "_" & variables.pluralized_model_name>
+					<cfelse>
+						<cfset variables.associations[local.i].join_table = variables.pluralized_model_name & "_" & local.i>
+					</cfif>
+				</cfif>
+				<cfif variables.associations[local.i].association_foreign_key IS "">
+					<cfset variables.associations[local.i].association_foreign_key = variables.associations[local.i].model_name & "_id">
+				</cfif>
+			</cfif>
+			<cfset variables.associations[local.i].functions = "">
+			<cfloop list="#local.functions[variables.associations[local.i].type]#" index="local.j">
+				<cfset variables.functions = listAppend(variables.functions, replaceNoCase(replaceNoCase(local.j, "objects", pluralize(local.i)), "object", singularize(local.i)))>
+				<cfset variables.associations[local.i].functions = listAppend(variables.associations[local.i].functions, replaceNoCase(replaceNoCase(local.j, "objects", pluralize(local.i)), "object", singularize(local.i)))>
+			</cfloop>
 		</cfloop>
-	</cfif>
+	</cfif> --->
 
-	<cfquery name="local.get_columns_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+	<cfquery name="local.get_columns_query" datasource="ss_userlevel">
 	SELECT column_name, data_type, is_nullable, character_maximum_length, column_default
 	FROM information_schema.columns
 	WHERE table_name = '#variables.table_name#' AND
 	<cfif application.database.type IS "mysql5">
 		table_schema = '#application.database.name#'
 	<cfelseif application.database.type IS "sqlserver">
-		table_catalog = '#application.database.name#'	
+		table_catalog = '#application.database.name#'
 	</cfif>
 	</cfquery>
 
-	<cfset variables.column_list = valueList(local.get_columns_query.column_name)>
+	<cfset variables.columns = valueList(local.get_columns_query.column_name)>
 	<cfloop query="local.get_columns_query">
-		<cfset "variables.column_info.#column_name#.db_sql_type" = data_type>		
-		<cfset "variables.column_info.#column_name#.cf_sql_type" = getCFSQLType(data_type)>		
+		<cfset "variables.column_info.#column_name#.db_sql_type" = data_type>
+		<cfset "variables.column_info.#column_name#.cf_sql_type" = getCFSQLType(data_type)>
 		<cfset "variables.column_info.#column_name#.cf_data_type" = getCFDataType(data_type)>
-		<cfset "variables.column_info.#column_name#.nullable" = is_nullable>		
-		<cfset "variables.column_info.#column_name#.max_length" = character_maximum_length>		
-		<cfset "variables.column_info.#column_name#.default" = column_default>		
+		<cfset "variables.column_info.#column_name#.nullable" = is_nullable>
+		<cfset "variables.column_info.#column_name#.max_length" = character_maximum_length>
+		<cfset "variables.column_info.#column_name#.default" = column_default>
 	</cfloop>
 
 	<cfreturn this>
@@ -122,15 +83,15 @@
 	<cfset variables.model_name = listLast(getMetaData(this).name, ".")>
 	<cfset variables.table_name = application.wheels.models[variables.model_name].getTableName()>
 	<cfset variables.primary_key = application.wheels.models[variables.model_name].getPrimaryKey()>
-	<cfset variables.relationships = application.wheels.models[variables.model_name].getRelationships()>
-	<cfset variables.functions = application.wheels.models[variables.model_name].getFunctions()>
-	<cfset variables.column_list = application.wheels.models[variables.model_name].getColumnList()>
+	<!--- <cfset variables.associations = application.wheels.models[variables.model_name].getAssociations()>
+	<cfset variables.functions = application.wheels.models[variables.model_name].getFunctions()> --->
+	<cfset variables.columns = application.wheels.models[variables.model_name].columns()>
 	<cfset variables.column_info = duplicate(application.wheels.models[variables.model_name].getColumnInfo())>
-	
+
 	<!--- Point dynamic object functions to methodMissing --->
-	<cfloop list="#variables.functions#" index="local.i">
+	<!--- <cfloop list="#variables.functions#" index="local.i">
 		<cfset "this.#local.i#" = this.methodMissing>
-	</cfloop>
+	</cfloop> --->
 
 	<!--- Create object variables --->
 	<cfset this.errors = arrayNew(1)>
@@ -145,8 +106,8 @@
 
 <cffunction name="reset" returntype="any" access="public" output="false">
 	<cfset var i = 0>
-	
-	<cfloop list="#variables.column_list#" index="i">
+
+	<cfloop list="#variables.columns#" index="i">
 		<cfset structDelete(this, i)>
 		<cfset structDelete(this, "#i#_confirmation")>
 	</cfloop>
@@ -159,7 +120,7 @@
 
 
 <cffunction name="getCFSQLType" returntype="any" access="private" output="false">
-	<cfargument name="db_sql_type" type="any" required="yes">	
+	<cfargument name="db_sql_type" type="any" required="yes">
 	<cfset var result = "">
 	<cfinclude template="includes/db_#application.database.type#.cfm">
 	<cfreturn result>
@@ -167,23 +128,23 @@
 
 
 <cffunction name="getCFDataType" returntype="any" access="private" output="false">
-	<cfargument name="db_sql_type" type="any" required="yes">	
+	<cfargument name="db_sql_type" type="any" required="yes">
 	<cfset var result = "">
 	<cfinclude template="includes/cf_#application.database.type#.cfm">
 	<cfreturn result>
 </cffunction>
 
 
-<cffunction name="methodMissing" returntype="any" access="public" output="false">
+<!--- <cffunction name="methodMissing" returntype="any" access="public" output="false">
 	<cfset var local = structNew()>
 
 	<cftry>
 		<cfthrow>
 		<cfcatch>
 			<cfset local.file = replaceList(replace(cfcatch.tagcontext[2].template, application.absolutePathTo.webroot, ""), ".,/,\", "_,_,_") & "_" & cfcatch.tagcontext[2].line>
-			<cfif application.settings.environment IS "production" AND structKeyExists(application.wheels.cached_function_args, local.file)>
+			<cfif application.settings.environment IS "production" AND structKeyExists(application.wheels.method_missing_cache, local.file)>
 				<!--- dynamic function arguments was found in application scope --->
-				<cfset local.preset = application.wheels.cached_function_args[local.file]>
+				<cfset local.method_missing_cache = application.wheels.method_missing_cache[local.file]>
 			<cfelse>
 				<!--- Get the line in the source that the stack trace refers to --->
 				<cffile action="read" file="#cfcatch.tagcontext[2].template#" variable="local.source_file">
@@ -191,32 +152,29 @@
 				<cfloop list="#variables.functions#" index="local.i">
 					<cfif local.source_line Contains ".#local.i#(" OR local.source_line Contains " #local.i#(">
 						<cfif isDefined("local.source_method")>
-							<cfthrow type="cfwheels.multiple_dynamic_functions" message="You can not have more than one dynamic function on the same line." detail="Change your source code so that it only has one dynamic function (any function with a model name in it) per line.">
+							<cfthrow type="cfwheels.multiple_dynamic_functions" message="You can not have more than one dynamic function on the same line." detail="Change your source code so that it only has one dynamic function per line.">
 						<cfelse>
 							<cfset local.source_method = local.i>
-						</cfif>					
+						</cfif>
 					</cfif>
 				</cfloop>
-				<cfloop collection="#variables.relationships#" item="local.i">
-					<cfloop collection="#variables.relationships[local.i]#" item="local.j">
-						<cfif listFindNoCase(variables.relationships[local.i][local.j].functions, local.source_method) IS NOT 0>
-							<cfset local.preset.method = local.source_method>
-							<cfset local.preset.type = local.i>
-							<cfset local.preset.name = local.j>
-						</cfif>
-					</cfloop>
+				<cfloop collection="#variables.associations#" item="local.i">
+					<cfif listFindNoCase(variables.associations[local.i].functions, local.source_method) IS NOT 0>
+						<cfset local.method_missing_cache.function_name = local.source_method>
+						<cfset local.method_missing_cache.association_name = local.i>
+					</cfif>
 				</cfloop>
 				<!--- Store arguments in application scope so we don't have to read the source code on subsequent requests --->
-				<cfset "application.wheels.cached_function_args.#local.file#" = local.preset>
+				<cfset "application.wheels.method_missing_cache.#local.file#" = local.method_missing_cache>
 			</cfif>
 		</cfcatch>
 	</cftry>
 
-	<cfset local.options = variables.relationships[local.preset.type][local.preset.name]>
-	<cfif local.preset.type IS "has_one" OR local.preset.type IS "has_many">
-		<cfset local.where = "#local.options.foreign_key# = #this[variables.primary_key]#">
-	<cfelseif local.preset.type IS "belongs_to">
+	<cfset local.options = variables.associations[local.method_missing_cache.association_name]>
+	<cfif local.options.type IS "belongs_to">
 		<cfset local.where = "#model(local.options.model_name).getPrimaryKey()# = #this[local.options.foreign_key]#">
+	<cfelse>
+		<cfset local.where = "#local.options.foreign_key# = #this[variables.primary_key]#">
 	</cfif>
 	<cfif local.options.where IS NOT "">
 		<cfset local.where = "(#local.where#) AND (#local.options.where#)">
@@ -224,31 +182,31 @@
 	<cfif local.options.order IS NOT "">
 		<cfset local.order = local.options.order>
 	<cfelse>
-		<cfset local.order = "">		
+		<cfset local.order = "">
 	</cfif>
 
-	<cfif local.preset.type IS "has_one">
-		<cfif local.preset.method Contains "set">
+	<cfif local.options.type IS "has_one">
+		<cfif local.method_missing_cache.function_name Contains "set">
 			<cfset local.args[local.options.foreign_key] = this[variables.primary_key]>
-			<cfset arguments[listFirst(structKeyList(arguments))].update(local.args)>
-		<cfelseif local.preset.method Contains "has">
-			<cfreturn model(local.options.model_name).count(where=local.where) IS NOT 0>		
-		<cfelseif local.preset.method Contains "build">
+			<cfreturn arguments[listFirst(structKeyList(arguments))].update(local.args)>
+		<cfelseif local.method_missing_cache.function_name Contains "has">
+			<cfreturn model(local.options.model_name).count(where=local.where) IS NOT 0>
+		<cfelseif local.method_missing_cache.function_name Contains "build">
 			<cfloop collection="#arguments#" item="local.i">
 				<cfif isStruct(arguments[local.i])>
 					<cfset local.args.attributes = arguments[local.i]>
 				<cfelse>
-					<cfset local.args[local.i] = arguments[local.i]>			
+					<cfset local.args[local.i] = arguments[local.i]>
 				</cfif>
 			</cfloop>
 			<cfset local.args[local.options.foreign_key] = this[variables.primary_key]>
 			<cfreturn model(local.options.model_name).new(argumentCollection=local.args)>
-		<cfelseif local.preset.method Contains "create">
+		<cfelseif local.method_missing_cache.function_name Contains "create">
 			<cfloop collection="#arguments#" item="local.i">
 				<cfif isStruct(arguments[local.i])>
 					<cfset local.args.attributes = arguments[local.i]>
 				<cfelse>
-					<cfset local.args[local.i] = arguments[local.i]>			
+					<cfset local.args[local.i] = arguments[local.i]>
 				</cfif>
 			</cfloop>
 			<cfset local.args[local.options.foreign_key] = this[variables.primary_key]>
@@ -256,25 +214,30 @@
 		<cfelse>
 			<cfreturn model(local.options.model_name).findOne(where=local.where, order=local.order)>
 		</cfif>
-	<cfelseif local.preset.type IS "has_many">
-		<cfif local.preset.method Contains "add">
+	<cfelseif local.options.type IS "has_many">
+		<cfif local.method_missing_cache.function_name Contains "add">
 			<cfset local.args[local.options.foreign_key] = this[variables.primary_key]>
-			<cfset arguments[listFirst(structKeyList(arguments))].update(local.args)>
-		<cfelseif local.preset.method Contains "delete">
+			<cfreturn arguments[listFirst(structKeyList(arguments))].update(local.args)>
+		<cfelseif local.method_missing_cache.function_name Contains "delete">
 			<cfset local.args[local.options.foreign_key] = "">
-			<cfset arguments[listFirst(structKeyList(arguments))].update(local.args)>
-		<cfelseif local.preset.method Contains "clear">
-			<cfset model(local.options.model_name).updateAll(updates="#local.options.foreign_key# = ''", conditions=local.where)>
-		<cfelseif local.preset.method Contains "has">
+			<cfreturn arguments[listFirst(structKeyList(arguments))].update(local.args)>
+		<cfelseif local.method_missing_cache.function_name Contains "clear">
+			<cfquery name="local.clear_query" datasource="ss_master">
+			UPDATE #model(local.options.model_name).getTableName()#
+			SET #model(local.options.model_name).getTableName()#.#local.options.foreign_key# = NULL
+			WHERE #local.where#
+			</cfquery>
+			<cfreturn true>
+		<cfelseif local.method_missing_cache.function_name Contains "has">
 			<cfreturn model(local.options.model_name).count(where=local.where) IS NOT 0>
-		<cfelseif local.preset.method Contains "count">
+		<cfelseif local.method_missing_cache.function_name Contains "count">
 			<cfif structKeyExists(arguments, "where")>
 				<cfset arguments.where = "#local.where# AND (#arguments.where#)">
 			<cfelse>
 				<cfset arguments.where = local.where>
 			</cfif>
 			<cfreturn model(local.options.model_name).count(argumentCollection=arguments)>
-		<cfelseif local.preset.method Contains "findOne">
+		<cfelseif local.method_missing_cache.function_name Contains "findOne">
 			<cfif structKeyExists(arguments, "where")>
 				<cfset arguments.where = "#local.where# AND (#arguments.where#)">
 			<cfelse>
@@ -286,7 +249,7 @@
 				<cfset arguments.order = local.options.order>
 			</cfif>
 			<cfreturn model(local.options.model_name).findOne(argumentCollection=arguments)>
-		<cfelseif local.preset.method Contains "findAll">
+		<cfelseif local.method_missing_cache.function_name Contains "findAll">
 			<cfif structKeyExists(arguments, "where")>
 				<cfset arguments.where = "#local.where# AND (#arguments.where#)">
 			<cfelse>
@@ -298,25 +261,25 @@
 				<cfset arguments.order = local.order>
 			</cfif>
 			<cfreturn model(local.options.model_name).findAll(argumentCollection=arguments)>
-		<cfelseif local.preset.method Contains "ByID">
+		<cfelseif local.method_missing_cache.function_name Contains "ByID">
 			<cfset arguments.where = "(#local.where#) AND (#model(local.options.model_name).getPrimaryKey()# = #arguments[listFirst(structKeyList(arguments))]#)">
 			<cfreturn model(local.options.model_name).findOne(argumentCollection=arguments)>
-		<cfelseif local.preset.method Contains "build">
+		<cfelseif local.method_missing_cache.function_name Contains "build">
 			<cfloop collection="#arguments#" item="local.i">
 				<cfif isStruct(arguments[local.i])>
 					<cfset local.args.attributes = arguments[local.i]>
 				<cfelse>
-					<cfset local.args[local.i] = arguments[local.i]>			
+					<cfset local.args[local.i] = arguments[local.i]>
 				</cfif>
 			</cfloop>
 			<cfset local.args[local.options.foreign_key] = this[variables.primary_key]>
 			<cfreturn model(local.options.model_name).new(argumentCollection=local.args)>
-		<cfelseif local.preset.method Contains "create">
+		<cfelseif local.method_missing_cache.function_name Contains "create">
 			<cfloop collection="#arguments#" item="local.i">
 				<cfif isStruct(arguments[local.i])>
 					<cfset local.args.attributes = arguments[local.i]>
 				<cfelse>
-					<cfset local.args[local.i] = arguments[local.i]>			
+					<cfset local.args[local.i] = arguments[local.i]>
 				</cfif>
 			</cfloop>
 			<cfset local.args[local.options.foreign_key] = this[variables.primary_key]>
@@ -324,28 +287,28 @@
 		<cfelse>
 			<cfreturn model(local.options.model_name).findAll(where=local.where, order=local.order)>
 		</cfif>
-	<cfelseif local.preset.type IS "belongs_to">
-		<cfif local.preset.method Contains "set">
+	<cfelseif local.options.type IS "belongs_to">
+		<cfif local.method_missing_cache.function_name Contains "set">
 			<cfset local.args[model(local.options.model_name).getPrimaryKey()] = this[local.options.foreign_key]>
-			<cfset arguments[listFirst(structKeyList(arguments))].update(local.args)>
-		<cfelseif local.preset.method Contains "has">
+			<cfreturn arguments[listFirst(structKeyList(arguments))].update(local.args)>
+		<cfelseif local.method_missing_cache.function_name Contains "has">
 			<cfreturn model(local.options.model_name).count(where=local.where) IS NOT 0>
-		<cfelseif local.preset.method Contains "build">
+		<cfelseif local.method_missing_cache.function_name Contains "build">
 			<cfloop collection="#arguments#" item="local.i">
 				<cfif isStruct(arguments[local.i])>
 					<cfset local.args.attributes = arguments[local.i]>
 				<cfelse>
-					<cfset local.args[local.i] = arguments[local.i]>			
+					<cfset local.args[local.i] = arguments[local.i]>
 				</cfif>
 			</cfloop>
 			<cfset local.args[model(local.options.model_name).getPrimaryKey()] = this[local.options.foreign_key]>
 			<cfreturn model(local.options.model_name).new(argumentCollection=local.args)>
-		<cfelseif local.preset.method Contains "create">
+		<cfelseif local.method_missing_cache.function_name Contains "create">
 			<cfloop collection="#arguments#" item="local.i">
 				<cfif isStruct(arguments[local.i])>
 					<cfset local.args.attributes = arguments[local.i]>
 				<cfelse>
-					<cfset local.args[local.i] = arguments[local.i]>			
+					<cfset local.args[local.i] = arguments[local.i]>
 				</cfif>
 			</cfloop>
 			<cfset local.args[model(local.options.model_name).getPrimaryKey()] = this[local.options.foreign_key]>
@@ -353,17 +316,17 @@
 		<cfelse>
 			<cfreturn model(local.options.model_name).findAll(where=local.where, order=local.order)>
 		</cfif>
-	<!--- <cfelseif local.preset.type IS "has_and_belongs_to_many">
-		<cfif local.preset.method Contains "add">
-		<cfelseif local.preset.method Contains "delete">
-		<cfelseif local.preset.method Contains "clear">
-		<cfelseif local.preset.method Contains "has">
-		<cfelseif local.preset.method Contains "count">
-		<cfelseif local.preset.method Contains "findOne">
-		<cfelseif local.preset.method Contains "findAll">
-		<cfelseif local.preset.method Contains "ByID">
+	<cfelseif local.options.type IS "has_and_belongs_to_many">
+		<cfif local.method_missing_cache.function_name Contains "add">
+		<cfelseif local.method_missing_cache.function_name Contains "delete">
+		<cfelseif local.method_missing_cache.function_name Contains "clear">
+		<cfelseif local.method_missing_cache.function_name Contains "has">
+		<cfelseif local.method_missing_cache.function_name Contains "count">
+		<cfelseif local.method_missing_cache.function_name Contains "findOne">
+		<cfelseif local.method_missing_cache.function_name Contains "findAll">
+		<cfelseif local.method_missing_cache.function_name Contains "ByID">
 		<cfelse>
-		</cfif> --->
+		</cfif>
 	</cfif>
 
 </cffunction>
@@ -375,10 +338,11 @@
 	<cfargument name="foreign_key" type="any" required="no" default="">
 	<cfargument name="where" type="any" required="no" default="">
 	<cfargument name="order" type="any" required="no" default="">
-	<cfset "variables.relationships.has_one.#arguments.name#.model_name" = arguments.model_name>
-	<cfset "variables.relationships.has_one.#arguments.name#.foreign_key" = arguments.foreign_key>
-	<cfset "variables.relationships.has_one.#arguments.name#.where" = arguments.where>
-	<cfset "variables.relationships.has_one.#arguments.name#.order" = arguments.order>
+	<cfset "variables.associations.#arguments.name#.type" = "has_one">
+	<cfset "variables.associations.#arguments.name#.model_name" = arguments.model_name>
+	<cfset "variables.associations.#arguments.name#.foreign_key" = arguments.foreign_key>
+	<cfset "variables.associations.#arguments.name#.where" = arguments.where>
+	<cfset "variables.associations.#arguments.name#.order" = arguments.order>
 </cffunction>
 
 
@@ -388,10 +352,11 @@
 	<cfargument name="foreign_key" type="any" required="no" default="">
 	<cfargument name="where" type="any" required="no" default="">
 	<cfargument name="order" type="any" required="no" default="">
-	<cfset "variables.relationships.has_many.#arguments.name#.model_name" = arguments.model_name>
-	<cfset "variables.relationships.has_many.#arguments.name#.foreign_key" = arguments.foreign_key>
-	<cfset "variables.relationships.has_many.#arguments.name#.where" = arguments.where>
-	<cfset "variables.relationships.has_many.#arguments.name#.order" = arguments.order>
+	<cfset "variables.associations.#arguments.name#.type" = "has_many">
+	<cfset "variables.associations.#arguments.name#.model_name" = arguments.model_name>
+	<cfset "variables.associations.#arguments.name#.foreign_key" = arguments.foreign_key>
+	<cfset "variables.associations.#arguments.name#.where" = arguments.where>
+	<cfset "variables.associations.#arguments.name#.order" = arguments.order>
 </cffunction>
 
 
@@ -401,38 +366,40 @@
 	<cfargument name="foreign_key" type="any" required="no" default="">
 	<cfargument name="where" type="any" required="no" default="">
 	<cfargument name="order" type="any" required="no" default="">
-	<cfset "variables.relationships.belongs_to.#arguments.name#.model_name" = arguments.model_name>
-	<cfset "variables.relationships.belongs_to.#arguments.name#.foreign_key" = arguments.foreign_key>
-	<cfset "variables.relationships.belongs_to.#arguments.name#.where" = arguments.where>
-	<cfset "variables.relationships.belongs_to.#arguments.name#.order" = arguments.order>
+	<cfset "variables.associations.#arguments.name#.type" = "belongs_to">
+	<cfset "variables.associations.#arguments.name#.model_name" = arguments.model_name>
+	<cfset "variables.associations.#arguments.name#.foreign_key" = arguments.foreign_key>
+	<cfset "variables.associations.#arguments.name#.where" = arguments.where>
+	<cfset "variables.associations.#arguments.name#.order" = arguments.order>
 </cffunction>
 
 
-<!--- <cffunction name="hasAndBelongsToMany" returntype="any" access="public" output="false">
+<cffunction name="hasAndBelongsToMany" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="yes">
 	<cfargument name="model_name" type="any" required="no" default="">
 	<cfargument name="foreign_key" type="any" required="no" default="">
 	<cfargument name="where" type="any" required="no" default="">
 	<cfargument name="order" type="any" required="no" default="">
-	<cfset "variables.relationships.has_and_belongs_to_many.#arguments.name#.model_name" = arguments.model_name>
-	<cfset "variables.relationships.has_and_belongs_to_many.#arguments.name#.foreign_key" = arguments.foreign_key>
-	<cfset "variables.relationships.has_and_belongs_to_many.#arguments.name#.where" = arguments.where>
-	<cfset "variables.relationships.has_and_belongs_to_many.#arguments.name#.order" = arguments.order>
-	<cfset "variables.relationships.has_and_belongs_to_many.#arguments.name#.join_table" = arguments.join_table>
-	<cfset "variables.relationships.has_and_belongs_to_many.#arguments.name#.association_foreign_key" = arguments.association_foreign_key>
-</cffunction> --->
+	<cfset "variables.associations.#arguments.name#.type" = "has_and_belongs_to_many">
+	<cfset "variables.associations.#arguments.name#.model_name" = arguments.model_name>
+	<cfset "variables.associations.#arguments.name#.foreign_key" = arguments.foreign_key>
+	<cfset "variables.associations.#arguments.name#.where" = arguments.where>
+	<cfset "variables.associations.#arguments.name#.order" = arguments.order>
+	<cfset "variables.associations.#arguments.name#.join_table" = arguments.join_table>
+	<cfset "variables.associations..#arguments.name#.association_foreign_key" = arguments.association_foreign_key>
+</cffunction>
 
 
-<cffunction name="getRelationships" returntype="any" access="public" output="false">
-	
-	<cfreturn variables.relationships>
+<cffunction name="getAssociations" returntype="any" access="public" output="false">
+
+	<cfreturn variables.associations>
 </cffunction>
 
 
 <cffunction name="getFunctions" returntype="any" access="public" output="false">
-	
+
 	<cfreturn variables.functions>
-</cffunction>
+</cffunction> --->
 
 
 <cffunction name="setTableName" returntype="any" access="public" output="false">
@@ -448,58 +415,57 @@
 
 
 <cffunction name="getModelName" returntype="any" access="public" output="false">
-	
+
 	<cfreturn variables.model_name>
 </cffunction>
 
 
 <cffunction name="getTableName" returntype="any" access="public" output="false">
-	
+
 	<cfreturn variables.table_name>
 </cffunction>
 
 
 <cffunction name="getPrimaryKey" returntype="any" access="public" output="false">
-	
+
 	<cfreturn variables.primary_key>
 </cffunction>
 
 
-<cffunction name="getColumnList" returntype="any" access="public" output="false">
-	
-	<cfreturn variables.column_list>
+<cffunction name="columns" returntype="any" access="public" output="false">
+
+	<cfreturn variables.columns>
 </cffunction>
 
 
 <cffunction name="getColumnInfo" returntype="any" access="public" output="false">
-	
+
 	<cfreturn variables.column_info>
 </cffunction>
 
 
 <cffunction name="new" returntype="any" access="public" output="false">
-	<cfargument name="attributes" type="any" required="false" default="#structNew()#">
+	<cfargument name="attributes" type="any" required="no" default="#structNew()#">
+	<cfset var local = structNew()>
 
-	<cfset var i = "">
-
-	<cfloop collection="#arguments#" item="i">
-		<cfif i IS NOT "attributes">
-			<cfset arguments.attributes[i] = arguments[i]>
+	<cfloop collection="#arguments#" item="local.i">
+		<cfif local.i IS NOT "attributes">
+			<cfset arguments.attributes[local.i] = arguments[local.i]>
 		</cfif>
 	</cfloop>
-	
+
 	<cfreturn newObject(arguments.attributes)>
 </cffunction>
 
 
 <cffunction name="create" returntype="any" access="public" output="false">
-	<cfargument name="attributes" type="any" required="false" default="#structNew()#">
+	<cfargument name="attributes" type="any" required="no" default="#structNew()#">
+	<cfset var local = structNew()>
 
-	<cfset var new_object = "">
-	<cfset new_object = new(argumentCollection=arguments)>
-	<cfset new_object.save()>
-	
-	<cfreturn new_object>
+	<cfset local.new_object = new(argumentCollection=arguments)>
+	<cfset local.new_object.save()>
+
+	<cfreturn local.new_object>
 </cffunction>
 
 
@@ -541,7 +507,7 @@
 
 	<cfset var i = "">
 	<cfset var new_object = "">
-	
+
 	<cfset new_object = getObject(variables.model_name)>
 
 	<cfif isQuery(arguments.value_collection) AND arguments.value_collection.recordcount GT 0>
@@ -559,8 +525,6 @@
 		<cfloop collection="#arguments.value_collection#" item="i">
 			<cfset querySetCell(new_object.query, i, arguments.value_collection[i])>
 		</cfloop>
-		<cfset new_object.recordfound = true>
-		<cfset new_object.recordcount = 1>
 		<cfloop collection="#arguments.value_collection#" item="i">
 			<cfset new_object[i] = arguments.value_collection[i]>
 		</cfloop>
@@ -645,21 +609,21 @@
 	<cfset var pos = 0>
 	<cfset var i = "">
 
-	<cfif listFindNoCase(variables.column_list, "created_at") IS NOT 0>
+	<cfif listFindNoCase(variables.columns, "created_at") IS NOT 0>
 		<cfset this.created_at = createODBCDateTime(now())>
 	</cfif>
-	
-	<cfif listFindNoCase(variables.column_list, "created_on")>
+
+	<cfif listFindNoCase(variables.columns, "created_on")>
 		<cfset this.created_on = createODBCDate(now())>
 	</cfif>
 
-	<cfloop list="#variables.column_list#" index="i">
+	<cfloop list="#variables.columns#" index="i">
 		<cfif structKeyExists(this, i) AND i IS NOT variables.primary_key>
 			<cfset insert_columns = listAppend(insert_columns, i)>
 		</cfif>
 	</cfloop>
 
-	<cfquery name="insert_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+	<cfquery name="insert_query" datasource="ss_master">
 	INSERT INTO	#variables.table_name#(#insert_columns#)
 	VALUES (
 	<cfset pos = 0>
@@ -672,7 +636,7 @@
 	</cfloop>
 	)
 	</cfquery>
-	<cfquery name="get_id_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+	<cfquery name="get_id_query" datasource="ss_userlevel">
 	SELECT
 	<cfif application.database.type IS "sqlserver">
 		@@IDENTITY AS last_id
@@ -681,14 +645,14 @@
 	</cfif>
 	</cfquery>
 	<cfset this[variables.primary_key] = get_id_query.last_id>
-	
+
 	<!--- If the database sets any defaults, set them here if they're not already defined --->
 	<cfloop list="#insert_columns#" index="i">
 		<cfif NOT structKeyExists(this, i) AND variables.column_info[i].default IS NOT "">
 			<cfset this[i] = replaceList(variables.column_info[i].default, "',(,)", ",,")>
 		</cfif>
 	</cfloop>
-	
+
 	<cfreturn true>
 </cffunction>
 
@@ -700,21 +664,21 @@
 	<cfset var pos = 0>
 	<cfset var i = "">
 
-	<cfif listFindNoCase(variables.column_list, "updated_at") IS NOT 0>
+	<cfif listFindNoCase(variables.columns, "updated_at") IS NOT 0>
 		<cfset this.updated_at = createODBCDateTime(now())>
 	</cfif>
-	
-	<cfif listFindNoCase(variables.column_list, "updated_on")>
+
+	<cfif listFindNoCase(variables.columns, "updated_on")>
 		<cfset this.updated_on = createODBCDate(now())>
 	</cfif>
 
-	<cfloop list="#variables.column_list#" index="i">
+	<cfloop list="#variables.columns#" index="i">
 		<cfif structKeyExists(this, i) AND i IS NOT variables.primary_key>
 			<cfset update_columns = listAppend(update_columns, i)>
 		</cfif>
 	</cfloop>
 
-	<cfquery name="get_id_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#" maxrows="1">
+	<cfquery name="get_id_query" datasource="ss_userlevel" maxrows="1">
 	SELECT #variables.primary_key#
 	FROM #variables.table_name#
 	WHERE #variables.primary_key# = #this[variables.primary_key]#
@@ -722,7 +686,7 @@
 
 	<cfif get_id_query.recordcount IS NOT 0>
 
-		<cfquery name="update_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+		<cfquery name="update_query" datasource="ss_master">
 		UPDATE #variables.table_name#
 		SET
 		<cfloop list="#update_columns#" index="i">
@@ -733,7 +697,7 @@
 			</cfif>
 		</cfloop>
 		WHERE #variables.primary_key# = #this[variables.primary_key]#
-		</cfquery>		
+		</cfquery>
 		<cfreturn true>
 	<cfelse>
 		<cfreturn false>
@@ -742,7 +706,7 @@
 
 
 <cffunction name="expireCache" returntype="any" access="public" output="false">
-	
+
 	<cfset "application.wheels.caches.#variables.model_name#" = "smart_cache_id_#dateFormat(now(), 'yyyymmdd')#_#timeFormat(now(), 'HHmmss')#_#randRange(1000,9999)#">
 </cffunction>
 
@@ -750,29 +714,31 @@
 <cffunction name="findByID" returntype="any" access="public" output="false">
 	<cfargument name="id" type="any" required="yes">
 	<cfargument name="select" type="any" required="no" default="">
+	<cfargument name="include" type="any" required="no" default="">
 	<cfargument name="joins" type="any" required="no" default="">
 	<cfargument name="cache" type="any" required="no" default="">
 
 	<cfset var local = structNew()>
-	
+
 	<cfset local.find_all_arguments = duplicate(arguments)>
 	<cfset structInsert(local.find_all_arguments, "where", "#variables.table_name#.#variables.primary_key# = #arguments.id#")>
 	<cfset structDelete(local.find_all_arguments, "id")>
 	<cfset local.return_object = findAll(argumentCollection=local.find_all_arguments)>
-	
+
 	<cfreturn local.return_object>
 </cffunction>
 
 
 <cffunction name="findOne" returntype="any" access="public" output="false">
+	<cfargument name="select" type="any" required="no" default="">
 	<cfargument name="where" type="any" required="no" default="">
 	<cfargument name="order" type="any" required="no" default="">
-	<cfargument name="select" type="any" required="no" default="">
+	<cfargument name="include" type="any" required="no" default="">
 	<cfargument name="joins" type="any" required="no" default="">
 	<cfargument name="cache" type="any" required="no" default="">
 
 	<cfset var local = structNew()>
-	
+
 	<cfset local.find_all_arguments = duplicate(arguments)>
 	<cfset structInsert(local.find_all_arguments, "limit", 1)>
 	<cfset local.return_object = findAll(argumentCollection=local.find_all_arguments)>
@@ -782,15 +748,16 @@
 
 
 <cffunction name="findAll" returntype="any" access="public" output="false">
+	<cfargument name="select" type="any" required="no" default="">
 	<cfargument name="where" type="any" required="no" default="">
 	<cfargument name="order" type="any" required="no" default="">
-	<cfargument name="select" type="any" required="no" default="">
+	<cfargument name="include" type="any" required="no" default="">
+	<cfargument name="page" type="any" required="no" default=0>
+	<cfargument name="per_page" type="any" required="no" default=10>
 	<cfargument name="joins" type="any" required="no" default="">
 	<cfargument name="distinct" type="any" required="no" default="false">
 	<cfargument name="limit" type="any" required="no" default=0>
 	<cfargument name="cache" type="any" required="no" default="">
-	<cfargument name="page" type="any" required="no" default=0>
-	<cfargument name="per_page" type="any" required="no" default=10>
 
 	<cfset var local = structNew()>
 
@@ -798,7 +765,7 @@
 	<cfset local.from_clause = createfromClause(argumentCollection=duplicate(arguments))>
 	<cfset local.order_clause = createOrderClause(argumentCollection=duplicate(arguments))>
 	<cfset local.where_clause = createWhereClause(argumentCollection=duplicate(arguments))>
-	
+
 	<cfif arguments.page IS NOT 0>
 		<!--- return a paginator struct and override where clause --->
 		<cfset local.pagination_arguments = duplicate(arguments)>
@@ -809,7 +776,7 @@
 		<cfset local.paginator = local.pagination.paginator>
 		<cfset local.where_clause = local.pagination.where_clause>
 	</cfif>
-	
+
 	<cfset local.query_name = "finder_query">
 	<cfif arguments.cache IS NOT "">
 		<cfif isNumeric(arguments.cache)>
@@ -821,8 +788,8 @@
 	<cfelse>
 		<cfset local.cached_within = createTimeSpan(0,0,0,0)>
 	</cfif>
-	
-	<cfquery name="local.#local.query_name#" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#" cachedwithin="#local.cached_within#">
+
+	<cfquery name="local.#local.query_name#" datasource="ss_userlevel" cachedwithin="#local.cached_within#">
 	SELECT
 	<cfif arguments.distinct>
 		DISTINCT
@@ -867,7 +834,7 @@
 	</cfloop>
 	<cfset local.from_clause = replaceNoCase(local.from_clause, chr(7), ' LEFT OUTER JOIN ', 'all')>
 
-	<cfquery name="local.count_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+	<cfquery name="local.count_query" datasource="ss_userlevel">
 	SELECT COUNT(
 	<cfif local.from_clause Contains " ">
 		DISTINCT
@@ -893,7 +860,7 @@
 		<cfset local.pagination.where_clause = "#variables.table_name#.#variables.primary_key# IN (0)">
 
 	<cfelse>
-	
+
 		<!--- Create select clauses which contains the primary key and the order by clause (need this when using DISTINCT and for SQL Server sub queries), with and without full table name qualification --->
 		<cfset local.select_clause_with_tables = variables.table_name & "." & variables.primary_key>
 		<cfif variables.primary_key IS NOT "id">
@@ -902,13 +869,13 @@
 		<cfif arguments.order_clause IS NOT "#variables.table_name#.#variables.primary_key# ASC">
 			<cfset local.select_clause_with_tables = local.select_clause_with_tables &  "," & replaceList(arguments.order_clause, " ASC, DESC", ",")>
 		</cfif>
-	
+
 		<cfset local.select_clause_without_tables = variables.primary_key>
 		<cfif arguments.order_clause IS NOT "#variables.table_name#.#variables.primary_key# ASC">
 			<cfset local.select_clause_without_tables = local.select_clause_without_tables &  "," & replaceList(reReplaceNoCase(arguments.order_clause, "[^,]*\.", "", "all"), " ASC, DESC", ",")>
 		</cfif>
-	
-		<cfquery name="local.ids_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+
+		<cfquery name="local.ids_query" datasource="ss_userlevel">
 		<cfif application.database.type IS "mysql5">
 			SELECT
 			<cfif local.from_clause Contains " ">
@@ -931,7 +898,7 @@
 			FROM (
 				SELECT TOP #local.limit# #local.select_clause_without_tables#
 				FROM (
-					SELECT 
+					SELECT
 					<cfif local.from_clause Contains " ">
 						DISTINCT
 					</cfif>
@@ -945,7 +912,7 @@
 			ORDER BY #reReplaceNoCase(arguments.order_clause, "[^,]*\.", "", "all")#<cfif listContainsNoCase(reReplaceNoCase(arguments.order_clause, "[^,]*\.", "", "all"), "#variables.primary_key# ") IS 0>, #variables.primary_key# ASC</cfif>
 		</cfif>
 		</cfquery>
-	
+
 		<cfset local.pagination.where_clause = "#variables.table_name#.#variables.primary_key# IN (#valueList(local.ids_query.id)#)">
 
 	</cfif>
@@ -954,29 +921,43 @@
 </cffunction>
 
 
-<cffunction name="createSelectClause" returntype="any" access="private" output="false">
+<cffunction name="createSelectClause" returntype="any" access="private" output="true">
 
 	<cfset var local = structNew()>
-	
-	<cfset local.select_clause = "">
-	
-	<cfif structKeyExists(arguments, "select") AND arguments.select IS NOT "">
-		<!--- Loop through the fields the developer supplied, prepend table name and "AS" where necessary --->
-		<cfloop list="#arguments.select#" index="local.i">
-			<cfif local.i Does Not Contain "." AND local.i Does Not Contain " AS ">
-				<cfset local.select_clause = listAppend(local.select_clause, "#variables.table_name#.#trim(local.i)# AS #variables.model_name#_#trim(local.i)#")>
-			<cfelseif local.i Contains "." AND local.i Does Not Contain " AS ">
-				<cfset local.select_clause = listAppend(local.select_clause, "#trim(local.i)# AS #variables.model_name#_#trim(listLast(local.i,"."))#")>
-			<cfelseif local.i Does Not Contain "." AND local.i Contains " AS ">
-				<cfset local.select_clause = listAppend(local.select_clause, "#variables.table_name#.#trim(local.i)#")>
-			<cfelseif local.i Contains "." AND local.i Contains " AS ">
-				<cfset local.select_clause = listAppend(local.select_clause, "#trim(local.i)#")>
-			</cfif>
-		</cfloop>
+
+	<cfif structKeyExists(arguments, "select") AND (arguments.select Contains " AS " OR arguments.select Contains ".")>
+		<cfset local.select_clause = arguments.select>
 	<cfelse>
-		<!--- Loop through list of columns and select all of them in the query --->
-		<cfloop list="#variables.column_list#" index="local.i">
-			<cfset local.select_clause = listAppend(local.select_clause, "#variables.table_name#.#trim(local.i)# AS #variables.model_name#_#trim(local.i)#")>
+		<cfset local.models = variables.model_name>
+		<cfset local.select_clause = "">
+		<!--- <cfif arguments.include IS NOT "">
+			<cfset local.pos = 1>
+			<cfset local.parent = variables.model_name>
+			<cfset local.include = replace(arguments.include, " ", "", "all") & " ">
+			<cfloop from="1" to="#listLen(replace(arguments.include,'(',',','all'))#" index="local.i">
+				<cfset local.delim_pos = findOneOf("(), ", local.include, local.pos)>
+				<cfset local.delim = mid(local.include, local.delim_pos, 1)>
+				<cfset local.name = mid(local.include, local.pos, local.delim_pos-local.pos)>
+				<cfset local.pos = REFindNoCase("[a-z]", local.include, local.delim_pos)>
+				<cfset local.model = model(listLast(local.parent))>
+				<cfset local.model_associations = local.model.getAssociations()>
+				<cfset local.models = listAppend(local.models, local.model_associations[local.name].model_name)>
+				<cfif local.delim IS "(">
+					<cfset local.parent = listAppend(local.parent, local.model_associations[local.name].model_name)>
+				<cfelseif local.delim IS ")">
+					<cfset local.parent = listDeleteAt(local.parent, listLen(local.parent))>
+				</cfif>
+			</cfloop>
+		</cfif> --->
+		<cfloop list="#local.models#" index="local.i">
+			<cfset local.columns = model(local.i).columns()>
+			<cfset local.table_name = model(local.i).getTableName()>
+			<cfloop list="#local.columns#" index="local.j">
+				<cfif NOT structKeyExists(arguments, "select") OR arguments.select IS "" OR listFindNoCase(replace(arguments.select, " ", "", "all"), local.j)>
+					<cfset local.to_add = "#local.i#_#local.j#">
+					<cfset local.select_clause = listAppend(local.select_clause, "#local.table_name#.#local.j# AS #local.to_add#")>
+				</cfif>
+			</cfloop>
 		</cfloop>
 	</cfif>
 
@@ -987,10 +968,42 @@
 <cffunction name="createFromClause" returntype="any" access="private" output="false">
 
 	<cfset var local = structNew()>
-	
+
 	<cfset local.from_clause = variables.table_name>
+
+	<!--- <cfif arguments.include IS NOT "">
+		<cfset local.pos = 1>
+		<cfset local.parent = variables.model_name>
+		<cfset local.include = replace(arguments.include, " ", "", "all") & " ">
+		<cfloop from="1" to="#listLen(replace(arguments.include,'(',',','all'))#" index="local.i">
+			<cfset local.delim_pos = findOneOf("(), ", local.include, local.pos)>
+			<cfset local.delim = mid(local.include, local.delim_pos, 1)>
+			<cfset local.name = mid(local.include, local.pos, local.delim_pos-local.pos)>
+			<cfset local.pos = REFindNoCase("[a-z]", local.include, local.delim_pos)>
+			<cfset local.model = model(listLast(local.parent))>
+			<cfset local.model_associations = local.model.getAssociations()>
+			<cfif local.model_associations[local.name].type IS "has_one" OR local.model_associations[local.name].type IS "has_many">
+				<cfset local.from_clause = local.from_clause & " " & "LEFT OUTER JOIN #model(local.model_associations[local.name].model_name).getTableName()# on #local.model.getTableName()#.#local.model.getPrimaryKey()# = #model(local.model_associations[local.name].model_name).getTableName()#.#local.model_associations[local.name].foreign_key#">
+			<cfelseif local.model_associations[local.name].type IS "belongs_to">
+				<cfset local.from_clause = local.from_clause & " " & "LEFT OUTER JOIN #model(local.model_associations[local.name].model_name).getTableName()# ON #local.model.getTableName()#.#local.model_associations[local.name].foreign_key# = #model(local.model_associations[local.name].model_name).getTableName()#.#model(local.model_associations[local.name].model_name).getPrimaryKey()#">
+			<cfelseif variables.associations[local.association_name].type IS "has_and_belongs_to_many">
+				<cfif left(lCase(innerModel.getTableName()), 1) LT left(lCase(outerModel.getTableName()), 1)>
+					<cfset joinTable = innerModel.getTableName() & "_" & outerModel.getTableName()>
+				<cfelse>
+					<cfset joinTable = outerModel.getTableName() & "_" & innerModel.getTableName()>
+				</cfif>
+				<cfset fromTables = "LEFT OUTER JOIN #joinTable# ON #outerModel.getTableName()#.#outerModel.getPrimaryKey()# = #joinTable#.#outerModel.getModelName()#_id LEFT OUTER JOIN #innerModel.getTableName()# ON #joinTable#.#innerModel.getModelName()#_id = #innerModel.getTableName()#.#innerModel.getPrimaryKey()#" & " " & fromTables>
+			</cfif>
+			<cfif local.delim IS "(">
+				<cfset local.parent = listAppend(local.parent, local.model_associations[local.name].model_name)>
+			<cfelseif local.delim IS ")">
+				<cfset local.parent = listDeleteAt(local.parent, listLen(local.parent))>
+			</cfif>
+		</cfloop>
+	</cfif> --->
+
 	<cfif structKeyExists(arguments, "joins") AND arguments.joins IS NOT "">
-		<cfset local.from_clause = local.from_clause & " " & arguments.joins>	
+		<cfset local.from_clause = local.from_clause & " " & arguments.joins>
 	</cfif>
 
 	<cfreturn local.from_clause>
@@ -1000,12 +1013,12 @@
 <cffunction name="createWhereClause" returntype="any" access="private" output="false">
 
 	<cfset var local = structNew()>
-	
-	<cfif structKeyExists(arguments, "where") AND arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
+
+	<cfif structKeyExists(arguments, "where") AND arguments.where IS NOT "" AND listFindNoCase(variables.columns, "deleted_at") IS 0>
 		<cfset local.where_clause = arguments.where>
-	<cfelseif structKeyExists(arguments, "where") AND arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+	<cfelseif structKeyExists(arguments, "where") AND arguments.where IS NOT "" AND listFindNoCase(variables.columns, "deleted_at") IS NOT 0>
 		<cfset local.where_clause = "#arguments.where# AND #variables.table_name#.deleted_at IS NULL">
-	<cfelseif listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+	<cfelseif listFindNoCase(variables.columns, "deleted_at") IS NOT 0>
 		<cfset local.where_clause = "#variables.table_name#.deleted_at IS NULL">
 	<cfelse>
 		<cfset local.where_clause = "">
@@ -1018,9 +1031,9 @@
 <cffunction name="createOrderClause" returntype="any" access="private" output="false">
 
 	<cfset var local = structNew()>
-	
+
 	<cfset local.order_clause = "">
-	
+
 	<cfif structKeyExists(arguments, "order") AND arguments.order IS NOT "">
 		<cfloop list="#arguments.order#" index="local.i">
 			<cfif local.i Does Not Contain "ASC" AND local.i Does Not Contain "DESC">
@@ -1042,46 +1055,102 @@
 
 <cffunction name="update" returntype="any" access="public" output="false">
 	<cfargument name="attributes" type="any" required="no" default="#structNew()#">
+	<cfset var local = structNew()>
 
-	<cfset var i = "">
-
-	<cfloop collection="#arguments#" item="i">
-		<cfif i IS NOT "attributes">
-			<cfset arguments.attributes[i] = arguments[i]>
+	<cfloop collection="#arguments#" item="local.i">
+		<cfif local.i IS NOT "attributes">
+			<cfset arguments.attributes[local.i] = arguments[local.i]>
 		</cfif>
 	</cfloop>
 
-	<cfloop collection="#arguments.attributes#" item="i">
-		<cfset this[i] = arguments.attributes[i]>
+	<cfloop collection="#arguments.attributes#" item="local.i">
+		<cfset this[local.i] = arguments.attributes[local.i]>
+		<cfset this.query['#variables.model_name#_#local.i#'][1] = arguments.attributes[local.i]>
 	</cfloop>
 
 	<cfreturn save()>
 </cffunction>
 
 
-<cffunction name="destroy" returntype="any" access="public" output="false">
+<cffunction name="updateByID" returntype="any" access="public" output="false">
+	<cfargument name="id" type="any" required="yes">
+	<cfargument name="attributes" type="any" required="no" default="#structNew()#">
+	<cfargument name="instantiate" type="any" required="no" default="true">
+	<cfset var local = structNew()>
+
+	<cfset local.object = findByID(arguments.id)>
+
+	<cfloop collection="#arguments#" item="local.i">
+		<cfif local.i IS NOT "id">
+			<cfif isStruct(arguments[local.i])>
+				<cfset local.args.attributes = arguments[local.i]>
+			<cfelse>
+				<cfset local.args[local.i] = arguments[local.i]>
+			</cfif>
+		</cfif>
+	</cfloop>
+
+	<cfset local.object.update(argumentCollection=local.args)>
+
+	<cfreturn local.object>
+</cffunction>
+
+
+<cffunction name="updateOne" returntype="any" access="public" output="false">
+</cffunction>
+
+
+<cffunction name="updateAll" returntype="any" access="public" output="false">
+	<cfargument name="where" type="any" required="no" default="">
+	<cfargument name="attributes" type="any" required="no" default="#structNew()#">
+	<cfargument name="instantiate" type="any" required="no" default="false">
+	<cfset var local = structNew()>
+
+	<cfquery name="local.check_updated" datasource="ss_userlevel">
+		SELECT #variables.primary_key#
+		FROM #variables.table_name#
+		<cfif arguments.where IS NOT "">
+			WHERE #preserveSingleQuotes(arguments.where)#
+		</cfif>
+	</cfquery>
+
+	<cfif local.check_updated.recordcount IS NOT 0>
+		<cfquery name="local.update_record" datasource="ss_master">
+			UPDATE #variables.table_name#
+			SET #preserveSingleQuotes(arguments.updates)#
+			<cfif arguments.conditions IS NOT "">
+				WHERE #preserveSingleQuotes(arguments.conditions)#
+			</cfif>
+		</cfquery>
+	</cfif>
+
+	<cfreturn local.check_updated.recordcount>
+</cffunction>
+
+
+<cffunction name="delete" returntype="any" access="public" output="false">
 
 	<cfset var local = structNew()>
 
-	<cfif isDefined("beforeDestroy") AND NOT beforeDestroy()>
+	<cfif isDefined("beforeDelete") AND NOT beforeDelete()>
 		<cfreturn false>
 	</cfif>
 
-	<cfquery name="local.check_deleted" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+	<cfquery name="local.check_deleted" datasource="ss_userlevel">
 	SELECT #variables.primary_key#
 	FROM #variables.table_name#
 	WHERE #variables.primary_key# = #this[variables.primary_key]#
 	</cfquery>
 
 	<cfif local.check_deleted.recordcount IS NOT 0>
-		<cfif listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
-			<cfquery name="local.delete_record" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+		<cfif listFindNoCase(variables.columns, "deleted_at") IS NOT 0>
+			<cfquery name="local.delete_record" datasource="ss_master">
 			UPDATE #variables.table_name#
 			SET deleted_at = #createODBCDateTime(now())#
 			WHERE #variables.primary_key# = #this[variables.primary_key]#
 			</cfquery>
 		<cfelse>
-			<cfquery name="local.delete_record" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+			<cfquery name="local.delete_record" datasource="ss_master">
 			DELETE
 			FROM #variables.table_name#
 			WHERE #variables.primary_key# = #this[variables.primary_key]#
@@ -1089,7 +1158,7 @@
 		</cfif>
 	</cfif>
 
-	<cfif isDefined("afterDestroy") AND NOT afterDestroy()>
+	<cfif isDefined("afterDelete") AND NOT afterDelete()>
 		<cfreturn false>
 	</cfif>
 
@@ -1097,17 +1166,29 @@
 </cffunction>
 
 
+<cffunction name="deleteByID" returntype="any" access="public" output="false">
+</cffunction>
+
+
+<cffunction name="deleteOne" returntype="any" access="public" output="false">
+</cffunction>
+
+
+<cffunction name="deleteAll" returntype="any" access="public" output="false">
+</cffunction>
+
+
 <cffunction name="addError" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
 	<cfargument name="message" type="any" required="yes">
-	
+
 	<cfset var local = structNew()>
 
 	<cfset local.error.field = arguments.field>
 	<cfset local.error.message = arguments.message>
-	
+
 	<cfset arrayAppend(this.errors, local.error)>
-	
+
 	<cfreturn true>
 </cffunction>
 
@@ -1116,7 +1197,7 @@
 	<cfif isNewRecord()>
 		<cfset validateOnCreate()>
 	<cfelse>
-		<cfset validateOnUpdate()>		
+		<cfset validateOnUpdate()>
 	</cfif>
 	<cfset validate()>
 	<cfreturn errorsIsEmpty()>
@@ -1128,7 +1209,7 @@
 		<cfreturn false>
 	<cfelse>
 		<cfreturn true>
-	</cfif>		
+	</cfif>
 </cffunction>
 
 
@@ -1141,7 +1222,7 @@
 <cffunction name="errorsFullMessages" returntype="any" access="public" output="false">
 
 	<cfset var all_error_messages = arrayNew(1)>
-	
+
 	<cfloop from="1" to="#arrayLen(this.errors)#" index="i">
 		<cfset arrayAppend(all_error_messages, this.errors[i].message)>
 	</cfloop>
@@ -1158,7 +1239,7 @@
 	<cfargument name="field" type="any" required="yes">
 
 	<cfset var all_error_messages = arrayNew(1)>
-	
+
 	<cfloop from="1" to="#arrayLen(this.errors)#" index="i">
 		<cfif this.errors[i].field IS arguments.field>
 			<cfset arrayAppend(all_error_messages, this.errors[i].message)>
@@ -1177,7 +1258,7 @@
 	<cfargument name="field" type="any" required="yes">
 	<cfargument name="message" type="any" required="no" default="#arguments.field# is reserved">
 	<cfargument name="on" type="any" required="no" default="save">
-	
+
 	<cfset "variables.validations_on_#arguments.on#.validates_confirmation_of.#arguments.field#.message" = arguments.message>
 
 </cffunction>
@@ -1188,7 +1269,7 @@
 	<cfargument name="message" type="any" required="no" default="#arguments.field# is reserved">
 	<cfargument name="in" type="any" required="yes">
 	<cfargument name="allow_nil" type="any" required="no" default="false">
-	
+
 	<cfset arguments.in = replace(arguments.in, ", ", ",", "all")>
 
 	<cfset "variables.validations_on_save.validates_exclusion_of.#arguments.field#.message" = arguments.message>
@@ -1204,7 +1285,7 @@
 	<cfargument name="allow_nil" type="any" required="no" default="false">
 	<cfargument name="with" type="any" required="yes">
 	<cfargument name="on" type="any" required="no" default="save">
-	
+
 	<cfset "variables.validations_on_#arguments.on#.validates_format_of.#arguments.field#.message" = arguments.message>
 	<cfset "variables.validations_on_#arguments.on#.validates_format_of.#arguments.field#.allow_nil" = arguments.allow_nil>
 	<cfset "variables.validations_on_#arguments.on#.validates_format_of.#arguments.field#.with" = arguments.with>
@@ -1238,7 +1319,7 @@
 	<cfargument name="on" type="any" required="no" default="save">
 
 	<cfif arguments.within IS NOT "">
-		<cfset arguments.within = listToArray(replace(arguments.within, ", ", ",", "all"))>		
+		<cfset arguments.within = listToArray(replace(arguments.within, ", ", ",", "all"))>
 	</cfif>
 
 	<cfset "variables.validations_on_#arguments.on#.validates_length_of.#arguments.field#.message" = arguments.message>
@@ -1319,7 +1400,7 @@
 	<cfset var i = "">
 	<cfset var pos = 0>
 	<cfset var virtual_confirm_field = "">
-	
+
 	<cfloop collection="#arguments.validations#" item="type">
 		<cfloop collection="#arguments.validations[type]#" item="field">
 			<cfset settings = arguments.validations[type][field]>
@@ -1329,7 +1410,7 @@
 					<cfif structKeyExists(this, virtual_confirm_field)>
 						<cfif this[field] IS NOT this[virtual_confirm_field]>
 							<cfset addError(virtual_confirm_field, settings.message)>
-						</cfif>							
+						</cfif>
 					</cfif>
 				</cfcase>
 				<cfcase value="validates_exclusion_of">
@@ -1339,7 +1420,7 @@
 						<cfif structKeyExists(this, field) AND this[field] IS NOT "">
 							<cfif listFindNoCase(settings.in, this[field]) IS NOT 0>
 								<cfset addError(field, settings.message)>
-							</cfif>							
+							</cfif>
 						</cfif>
 					</cfif>
 				</cfcase>
@@ -1350,7 +1431,7 @@
 						<cfif structKeyExists(this, field) AND this[field] IS NOT "">
 							<cfif NOT REFindNoCase(settings.with, this[field])>
 								<cfset addError(field, settings.message)>
-							</cfif>							
+							</cfif>
 						</cfif>
 					</cfif>
 				</cfcase>
@@ -1361,7 +1442,7 @@
 						<cfif structKeyExists(this, field) AND this[field] IS NOT "">
 							<cfif listFindNoCase(settings.in, this[field]) IS 0>
 								<cfset addError(field, settings.message)>
-							</cfif>							
+							</cfif>
 						</cfif>
 					</cfif>
 				</cfcase>
@@ -1386,7 +1467,7 @@
 								<cfif len(this[field]) LT settings.within[1] OR len(this[field]) GT settings.within[2]>
 									<cfset addError(field, settings.message)>
 								</cfif>
-							</cfif>							
+							</cfif>
 						</cfif>
 					</cfif>
 				</cfcase>
@@ -1409,18 +1490,18 @@
 					</cfif>
 				</cfcase>
 				<cfcase value="validates_uniqueness_of">
-					<cfquery name="find_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+					<cfquery name="find_query" datasource="ss_userlevel">
 						SELECT #variables.primary_key#, #field#
 						FROM #variables.table_name#
 						WHERE #field# = '#this[field]#'
 						<cfif settings.scope IS NOT "">
-							AND 
+							AND
 							<cfset pos = 0>
 							<cfloop list="#settings.scope#" index="i">
 								<cfset pos = pos + 1>
 								#i# = '#this[i]#'
 								<cfif listLen(settings.scope) GT pos>
-									AND 
+									AND
 								</cfif>
 							</cfloop>
 						</cfif>
@@ -1432,7 +1513,7 @@
 			</cfswitch>
 		</cfloop>
 	</cfloop>
-	
+
 </cffunction>
 
 
@@ -1446,14 +1527,14 @@
 
 	<cfset from_clause = createFromClause(argumentCollection=arguments)>
 
-	<cfquery name="sum_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+	<cfquery name="sum_query" datasource="ss_userlevel">
 		SELECT SUM(<cfif arguments.distinct>DISTINCT </cfif>#arguments.field#) AS total
 		FROM #from_clause#
-		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
+		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.columns, "deleted_at") IS 0>
 			WHERE #preserveSingleQuotes(arguments.where)#
-		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.columns, "deleted_at") IS NOT 0>
 			WHERE #preserveSingleQuotes(arguments.where)# AND #variables.table_name#.deleted_at IS NULL
-		<cfelseif arguments.where IS "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+		<cfelseif arguments.where IS "" AND listFindNoCase(variables.columns, "deleted_at") IS NOT 0>
 			WHERE #variables.table_name#.deleted_at IS NULL
 		</cfif>
 	</cfquery>
@@ -1471,14 +1552,14 @@
 
 	<cfset from_clause = createFromClause(argumentCollection=arguments)>
 
-	<cfquery name="minimum_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+	<cfquery name="minimum_query" datasource="ss_userlevel">
 		SELECT MIN(#arguments.field#) AS minimum
 		FROM #from_clause#
-		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
+		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.columns, "deleted_at") IS 0>
 			WHERE #preserveSingleQuotes(arguments.where)#
-		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.columns, "deleted_at") IS NOT 0>
 			WHERE #preserveSingleQuotes(arguments.where)# AND #variables.table_name#.deleted_at IS NULL
-		<cfelseif arguments.where IS "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+		<cfelseif arguments.where IS "" AND listFindNoCase(variables.columns, "deleted_at") IS NOT 0>
 			WHERE #variables.table_name#.deleted_at IS NULL
 		</cfif>
 	</cfquery>
@@ -1496,14 +1577,14 @@
 
 	<cfset from_clause = createFromClause(argumentCollection=arguments)>
 
-	<cfquery name="maximum_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+	<cfquery name="maximum_query" datasource="ss_userlevel">
 		SELECT MAX(#arguments.field#) AS maximum
 		FROM #from_clause#
-		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
+		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.columns, "deleted_at") IS 0>
 			WHERE #preserveSingleQuotes(arguments.where)#
-		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.columns, "deleted_at") IS NOT 0>
 			WHERE #preserveSingleQuotes(arguments.where)# AND #variables.table_name#.deleted_at IS NULL
-		<cfelseif arguments.where IS "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+		<cfelseif arguments.where IS "" AND listFindNoCase(variables.columns, "deleted_at") IS NOT 0>
 			WHERE #variables.table_name#.deleted_at IS NULL
 		</cfif>
 	</cfquery>
@@ -1523,18 +1604,18 @@
 
 	<cfset from_clause = createFromClause(argumentCollection=arguments)>
 
-	<cfquery name="average_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+	<cfquery name="average_query" datasource="ss_userlevel">
 		SELECT AVG(<cfif arguments.distinct>DISTINCT </cfif>#arguments.field#) AS average
 		FROM #from_clause#
-		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
+		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.columns, "deleted_at") IS 0>
 			WHERE #preserveSingleQuotes(arguments.where)#
-		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.columns, "deleted_at") IS NOT 0>
 			WHERE #preserveSingleQuotes(arguments.where)# AND #variables.table_name#.deleted_at IS NULL
-		<cfelseif arguments.where IS "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+		<cfelseif arguments.where IS "" AND listFindNoCase(variables.columns, "deleted_at") IS NOT 0>
 			WHERE #variables.table_name#.deleted_at IS NULL
 		</cfif>
 	</cfquery>
-	
+
 	<cfif average_query.average IS NOT "">
 		<cfset result = average_query.average>
 	</cfif>
@@ -1557,14 +1638,14 @@
 
 	<cfset local.from_clause = createFromClause(argumentCollection=arguments)>
 
-	<cfquery name="local.count_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
+	<cfquery name="local.count_query" datasource="ss_userlevel">
 		SELECT COUNT(<cfif arguments.distinct>DISTINCT </cfif>#arguments.select#) AS total
 		FROM #local.from_clause#
-		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS 0>
+		<cfif arguments.where IS NOT "" AND listFindNoCase(variables.columns, "deleted_at") IS 0>
 			WHERE #preserveSingleQuotes(arguments.where)#
-		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+		<cfelseif arguments.where IS NOT "" AND listFindNoCase(variables.columns, "deleted_at") IS NOT 0>
 			WHERE #preserveSingleQuotes(arguments.where)# AND #variables.table_name#.deleted_at IS NULL
-		<cfelseif arguments.where IS "" AND listFindNoCase(variables.column_list, "deleted_at") IS NOT 0>
+		<cfelseif arguments.where IS "" AND listFindNoCase(variables.columns, "deleted_at") IS NOT 0>
 			WHERE #variables.table_name#.deleted_at IS NULL
 		</cfif>
 	</cfquery>

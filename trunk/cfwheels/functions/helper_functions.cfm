@@ -5,8 +5,8 @@
 
 	<cfif application.settings.environment IS "development">
 
-		<cfquery name="local.model_query" username="#application.database.user#" password="#application.database.pass#" datasource="#application.database.source#">
-		SELECT 
+		<cfquery name="local.model_query" datasource="ss_userlevel">
+		SELECT
 		<cfif application.database.type IS "sqlserver">
 			(CASE WHEN column_name IS NULL THEN '' ELSE column_name END) + '' + (CASE WHEN data_type IS NULL THEN '' ELSE data_type END) + '' + (CASE WHEN is_nullable IS NULL THEN '' ELSE is_nullable END) + '' + (CASE WHEN character_maximum_length IS NULL THEN '' ELSE CAST(character_maximum_length AS varchar) END) + '' + (CASE WHEN column_default IS NULL THEN '' ELSE column_default END) AS info
 		<cfelseif application.database.type IS "mysql5">
@@ -17,10 +17,10 @@
 		<cfif application.database.type IS "mysql5">
 			table_schema = '#application.database.name#'
 		<cfelseif application.database.type IS "sqlserver">
-			table_catalog = '#application.database.name#'	
+			table_catalog = '#application.database.name#'
 		</cfif>
 		</cfquery>
-		
+
 		<cfif fileExists(expandPath(application.filePathTo.models & '/' & arguments.name & '.cfc'))>
 			<cffile action="read" file="#expandPath(application.filePathTo.models & '/' & arguments.name & '.cfc')#" variable="local.model_file">
 		<cfelse>
@@ -54,25 +54,44 @@
 </cffunction>
 
 
+<cffunction name="capitalize" returntype="any" access="public" output="false">
+	<cfargument name="text" type="any" required="yes">
+	<cfreturn uCase(left(arguments.text, 1)) & lCase(mid(arguments.text, 2, len(arguments.text)-1))>
+</cffunction>
+
+
+<cffunction name="titleize" returntype="any" access="public" output="false">
+	<cfargument name="text" type="any" required="yes">
+	<cfset var local = structNew()>
+
+	<cfset local.output = "">
+	<cfloop list="#arguments.text#" delimiters=" " index="local.i">
+		<cfset local.output = listAppend(local.output, capitalize(local.i), " ")>
+	</cfloop>
+
+	<cfreturn local.output>
+</cffunction>
+
+
 <cffunction name="pluralize" returntype="string" access="public" output="false">
 	<cfargument name="text" type="string" required="yes">
 	<cfargument name="from_singularize" type="boolean" required="no" default="false">
-	
+
 	<cfset var output = arguments.text>
 	<cfset var firstLetter = left(output,1)>
-	
+
 	<cfloop index="i" from="1" to="#ArrayLen(application.wheels.pluralizationRules)#">
 		<cfif REFindNoCase(application.wheels.pluralizationRules[i][1], arguments.text)>
 			<cfset output = REReplaceNoCase(arguments.text, application.wheels.pluralizationRules[i][1], application.wheels.pluralizationRules[i][2])>
 			<cfset output = firstLetter & right(output,len(output)-1)>
-			<cfbreak> 
+			<cfbreak>
 		</cfif>
 	</cfloop>
-	
+
 	<cfif NOT arguments.from_singularize AND output IS singularize(output, true)>
 		<cfset output = arguments.text>
 	</cfif>
-	
+
 	<cfreturn output>
 </cffunction>
 
@@ -83,19 +102,19 @@
 
 	<cfset var output = arguments.text>
 	<cfset var firstLetter = left(output,1)>
-	
+
 	<cfloop index="i" from="1" to="#ArrayLen(application.wheels.singularizationRules)#">
 		<cfif REFindNoCase(application.wheels.singularizationRules[i][1], arguments.text)>
 			<cfset output = REReplaceNoCase(arguments.text, application.wheels.singularizationRules[i][1], application.wheels.singularizationRules[i][2])>
 			<cfset output = firstLetter & right(output,len(output)-1)>
-			<cfbreak> 
+			<cfbreak>
 		</cfif>
 	</cfloop>
 
 	<cfif NOT arguments.from_pluralize AND output IS pluralize(output, true)>
 		<cfset output = arguments.text>
 	</cfif>
-	
+
 	<cfreturn output>
 </cffunction>
 
@@ -104,7 +123,7 @@
 	<cfargument name="text" type="string" required="yes">
 
 	<cfset var output = "">
-	
+
 		<cfloop list="#arguments.text#" delimiters="_" index="i">
 			<cfset output = output & uCase(left(i,1)) & lCase(right(i,len(i)-1))>
 		</cfloop>
