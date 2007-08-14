@@ -168,7 +168,7 @@
 		<cfargument name="model_name" type="string" required="true" hint="Name of the controller to create">
 	
 		<cfset var returnString = "">
-		<cfset var action_name = "index,list,show,new,edit,update,create,destroy">
+		<cfset var action_name = "index,list,show,new,edit,update,create,delete">
 		<cfset var views = "_form,list,show,new,edit">
 		<cfset var actionsCode = "">
 		<cfset var modelName = arguments.model_name>
@@ -229,9 +229,9 @@
 				<cgset render(action="new")>
 			</cgif>
 						</cfcase>
-						<cfcase value="destroy">
+						<cfcase value="delete">
 			<cgset #modelName# = model("#modelName#").findByID(request.params.id)>
-			<cgset #modelName#.destroy()>
+			<cgset #modelName#.delete()>
 			<cgset redirectTo(action="index")>
 						</cfcase>
 					</cfswitch>
@@ -360,7 +360,7 @@
 					<td>
 						##linkTo(name="Show", action="show", id=id)##
 						##linkTo(name="Edit", action="edit", id=id)##
-						##linkTo(name="Destroy", action="destroy", id=id)##
+						##linkTo(name="Delete", action="delete", id=id)##
 					</td>
 				</tr>
 			</cgloop>

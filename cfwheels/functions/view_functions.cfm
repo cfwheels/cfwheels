@@ -36,7 +36,7 @@
 	
 	<cfset var local = structNew()>
 
-	<cfif left(arguments.source, 1) IS "/">
+	<cfif left(arguments.source, 1) IS "/" OR left(arguments.source, 7) IS "http://">
 		<cfset local.src = arguments.source>
 	<cfelse>
 		<cfset local.src = "#application.pathTo.images#/#arguments.source#">
@@ -93,7 +93,6 @@
 	<cfargument name="confirm" type="string" required="no" default="">
 	<cfargument name="params" type="string" required="no" default="">
 	<cfargument name="attributes" type="any" required="no" default="">
-
 	<cfset var local = structNew()>
 	
 	<cfif arguments.link IS NOT "">
@@ -138,16 +137,109 @@
 
 <cffunction name="simpleFormat" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="yes">
-		
 	<cfset var local = structNew()>
 	
-	<cfsavecontent variable="local.output">
-		<cfoutput>
-			<p>#replace(replace(replace(replace(arguments.text, "#chr(13)##chr(10)##chr(13)##chr(10)#", "</p><p>", "all"), "#chr(13)##chr(10)#", "<br />", "all"), "#chr(10)##chr(10)#", "</p><p>", "all"), "#chr(10)#", "<br />", "all")#</p>
-		</cfoutput>
-	</cfsavecontent>
+	<!--- Replace single newline characters with HTML break tags and double newline characters with HTML paragraph tags --->
+	<cfset local.output = arguments.text>
+	<cfset local.output = trim(local.output)>
+	<cfset local.output = replace(local.output, "#chr(10)##chr(10)#", "</p><p>", "all")>
+	<cfset local.output = replace(local.output, "#chr(10)#", "<br />", "all")>
+	<cfset local.output = "<p>" & local.output & "</p>">
 	
-	<cfreturn trimIt(local.output)>
+	<cfreturn local.output>
+</cffunction>
+
+
+<cffunction name="autoLink" returntype="any" access="public" output="false">
+	<cfargument name="text" type="any" required="yes">
+	<cfargument name="link" type="any" required="no" default="all">
+	<cfargument name="attributes" type="any" required="no" default="">
+	<cfset var local = structNew()>
+
+	<cfif arguments.attributes IS NOT "">
+		<!--- Add a space to the beginning so it can be directly inserted in the HTML link element below --->
+		<cfset arguments.attributes = " " & arguments.attributes>
+	</cfif>
+
+	<cfset local.output = arguments.text>
+	<cfif arguments.link IS NOT "urls">
+		<!--- Auto link all email addresses --->
+		<cfset local.output = REReplaceNoCase(local.output, "(([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,}))", "<a href=""mailto:\1""#arguments.attributes#>\1</a>", "all")>
+	</cfif>
+	<cfif arguments.link IS NOT "email_addresses">
+		<!--- Auto link all URLs --->
+		<cfset local.output = REReplaceNoCase(local.output, "(\b(?:https?|ftp)://(?:[a-z\d-]+\.)+[a-z]{2,6}(?:/\S*)?)", "<a href=""\1""#arguments.attributes#>\1</a>", "all")>
+	</cfif>
+
+	<cfreturn local.output>
+</cffunction>
+
+
+<cffunction name="cycle" returntype="any" access="public" output="false">
+	<cfargument name="values" type="any" required="yes">
+	<cfargument name="name" type="any" required="no" default="default">
+	<cfset var local = structNew()>
+
+	<cfif NOT isDefined("request._cycle.#arguments.name#")>
+		<cfset "request._cycle.#arguments.name#" = listGetAt(arguments.values, 1)>	
+	<cfelse>
+		<cfset local.found_at = listFindNoCase(arguments.values, request._cycle[arguments.name])>
+		<cfif local.found_at IS listLen(arguments.values)>
+			<cfset local.found_at = 0>
+		</cfif>
+		<cfset "request._cycle.#arguments.name#" = listGetAt(arguments.values, local.found_at + 1)>	
+	</cfif>
+
+	<cfreturn request._cycle[arguments.name]>
+</cffunction>
+
+
+<cffunction name="stripTags" returntype="any" access="public" output="false">
+	<cfargument name="text" type="any" required="yes">
+	<cfreturn REReplaceNoCase(arguments.text, "<[a-z].*?>(.*?)</[a-z]>", "\1" , "all")>
+</cffunction>
+
+
+<cffunction name="stripLinks" returntype="any" access="public" output="false">
+	<cfargument name="text" type="any" required="yes">
+	<cfreturn REReplaceNoCase(arguments.text, "<a.*?>(.*?)</a>", "\1" , "all")>
+</cffunction>
+
+
+<cffunction name="highlight" returntype="any" access="public" output="false">
+	<cfargument name="text" type="any" required="yes">
+	<cfargument name="phrase" type="any" required="yes">
+	<cfargument name="class" type="any" required="no" default="highlight">
+	<cfreturn REReplaceNoCase(arguments.text, "(#arguments.phrase#)", "<span class=""#arguments.class#"">\1</span>", "all")>
+</cffunction>
+
+
+<cffunction name="excerpt" returntype="any" access="public" output="false">
+	<cfargument name="text" type="any" required="yes">
+	<cfargument name="phrase" type="any" required="yes">
+	<cfargument name="radius" type="any" required="no" default="100">
+	<cfargument name="excerpt_string" type="any" required="no" default="...">
+	<cfset var local = structNew()>
+
+	<cfset local.pos = findNoCase(arguments.phrase, arguments.text, 1)>
+	<cfif local.pos IS NOT 0>
+		<cfset local.excerpt_string_start = arguments.excerpt_string>
+		<cfset local.excerpt_string_end = arguments.excerpt_string>
+		<cfset local.start = local.pos-arguments.radius>
+		<cfif local.start LTE 0>
+			<cfset local.start = 1>
+			<cfset local.excerpt_string_start = "">
+		</cfif>
+		<cfset local.count = len(arguments.phrase)+(arguments.radius*2)>
+		<cfif local.count GT (len(arguments.text)-local.start)>
+			<cfset local.excerpt_string_end = "">
+		</cfif>
+		<cfset local.output = local.excerpt_string_start & mid(arguments.text, local.start, local.count) & local.excerpt_string_end>
+	<cfelse>
+		<cfset local.output = "">
+	</cfif>
+
+	<cfreturn local.output>
 </cffunction>
 
 
@@ -155,20 +247,15 @@
 	<cfargument name="text" type="any" required="yes">
 	<cfargument name="length" type="any" required="yes">
 	<cfargument name="truncate_string" type="any" required="no" default="...">
-
 	<cfset var local = structNew()>
 	
-	<cfsavecontent variable="local.output">
-		<cfoutput>
-			<cfif len(arguments.text) GT arguments.length>
-				#left(arguments.text, (arguments.length-3))##arguments.truncate_string#
-			<cfelse>
-				#arguments.text#
-			</cfif>
-		</cfoutput>
-	</cfsavecontent>
-	
-	<cfreturn trimIt(local.output)>
+	<cfif len(arguments.text) GT arguments.length>
+		<cfset local.output = left(arguments.text, arguments.length-3) & arguments.truncate_string>
+	<cfelse>
+		<cfset local.output = arguments.text>
+	</cfif>
+
+	<cfreturn local.output>
 </cffunction>
 
 
@@ -301,6 +388,10 @@
 	<cfif cgi.script_name Contains ".cfm">
 		<cfset local.url = "/index.cfm?wheels=" & local.url>
 	</cfif>
+	
+	<cfif cgi.script_name Contains "/snap">
+		<cfset local.url = "/snap" & local.url>
+	</cfif>
 
 	<cfif NOT arguments.only_path>
 		<cfif arguments.host IS NOT "">
@@ -316,13 +407,6 @@
 	</cfif>
 
 	<cfreturn local.url>
-</cffunction>
-
-
-<cffunction name="capitalize" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="true">
-	
-	<cfreturn uCase(left(arguments.text,1)) & lCase(right(arguments.text,len(arguments.text)-1))>
 </cffunction>
 
 
