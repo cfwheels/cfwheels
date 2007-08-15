@@ -1,6 +1,10 @@
 <cfinclude template="wheels/global/assets.cfm">
 <cfinclude template="wheels/global/caching.cfm">
-<cfinclude template="wheels/global/forms.cfm">
+<cfinclude template="wheels/global/form_errors.cfm">
+<cfinclude template="wheels/global/form_internal.cfm">
+<cfinclude template="wheels/global/form_miscellaneous.cfm">
+<cfinclude template="wheels/global/form_model.cfm">
+<cfinclude template="wheels/global/form_simple.cfm">
 <cfinclude template="wheels/global/miscellaneous.cfm">
 <cfinclude template="wheels/global/strings.cfm">
 <cfinclude template="wheels/global/urls.cfm">
