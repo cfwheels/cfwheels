@@ -1,6 +1,10 @@
 <cfinclude template="assets.cfm">
 <cfinclude template="caching.cfm">
-<cfinclude template="forms.cfm">
+<cfinclude template="form_errors.cfm">
+<cfinclude template="form_internal.cfm">
+<cfinclude template="form_miscellaneous.cfm">
+<cfinclude template="form_model.cfm">
+<cfinclude template="form_simple.cfm">
 <cfinclude template="miscellaneous.cfm">
 <cfinclude template="strings.cfm">
 <cfinclude template="urls.cfm">
