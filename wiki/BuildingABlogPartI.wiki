@@ -32,6 +32,7 @@ Unfortunately there is no built-in URL rewriting mechanism in IIS so getting Whe
 This part is easy, just create a new database in SQL server or MySQL and add a new data source for it in the !ColdFusion Administrator just as you'd normally do. Give the data source the same name as the folder of your website, in our case this is "wheelsblog". This is really all you have to do before Wheels can connect to your database and start working it's magic. Of course if you wish to name your data source differently or have Wheels use the username/password in the code instead of through the !ColdFusion Administrator this is all possible via different configuration settings. You can read more about configuration [Configuration here].
 
 =Test it!=
+
 When you've configured the web server and the database you can test your installation by typing `http://localhost` in your web browser. You should get a page saying "Welcome to Wheels!".
 
 With all that boring setup stuff out of the way, let's move on to some actual code in the next chapter...
