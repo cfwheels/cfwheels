@@ -23,11 +23,11 @@ Ok, when you're all done make sure that the website is working by typing `http:/
 
 This step is completely optional and all the URL rewriting does is get rid of the `index.cfm` part of the URL. So, if you want the shortest and prettiest URLs possible follow the instructions below, if not, just skip this step and move on to setting up the database.
 
-==URL rewriting in Apache==
+*URL rewriting in Apache*
 
 If you have a default installation of Apache all you have to do is uncomment the rewrite rules inside `C:\Inetpub\wwwroot\wheelsblog\.htaccess` and restart Apache.
 
-==URL rewriting in IIS==
+*URL rewriting in IIS*
 
 Unfortunately there is no built-in URL rewriting mechanism in IIS so getting Wheels working with pretty URLs is a little more complicated than with Apache. Here's what you do: First, download "Ionic's ISAPI Rewrite Filter" from [http://cheeso.members.winisp.net/IIRF.aspx cheeso.members.winisp.net]. Unzip the file and put the `.dll` file in the `C:\Inetpub\wwwroot\wheelsblog` folder. To enable the rewrite filter in IIS you click on `Properties` for your website, then go to the `ISAPI Filters` tab and click the `Add...` button. Type in anything you want as the `Filter Name` and point the `Executable` to `C:\Inetpub\wwwroot\wheelsblog\IsapiRewrite4.dll`.
 
