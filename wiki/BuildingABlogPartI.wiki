@@ -10,14 +10,14 @@ Getting an empty website running with Wheels installed is an easy process if you
 
 In case you don't know your way around a web server though, here are the instructions for setting up an empty Wheels site that can be accessed when typing `localhost` in your browser. The instructions refer to a system running Windows Server 2003 and IIS but you should be able to follow along and apply the instructions with minor modifications to your system (Wheels has been tested on Windows XP / Windows Server 2003 using IIS and on Mac OS / Linux running Apache).
 
- * Create a new folder under your web root (usually `C:\Inetpub\wwwroot`) called `wheelsblog`.
+ * Create a new folder under your web root (usually `C:\Inetpub\wwwroot`) named `wheelsblog`.
  * Create a new website called "Wheels Blog" with `localhost` as the host header name and `C:\Inetpub\wwwroot\wheelsblog` as the path to your home directory.
 
 If you want to run a Wheels powered application from a sub folder in an existing website, this is entirely possible, but you'll have to live with the fact that you can never turn on URL rewriting and get those pretty URLs. Specifically it means your URLs will look like this: `http://localhost/index.cfm/blog/list/2007/08` instead of this: `http://localhost/blog/list/2007/08`.
 
 Ok, when you're all done make sure that the website is working by typing `http://localhost` in your web browser. You should get the "Welcome to Wheels!" page.
 
-*Turn on URL rewriting*
+=Turn on URL rewriting=
 This step is completely optional and all the URL rewriting does is get rid of the `index.cfm` part of the URL. So, if you want the shortest and prettiest URLs possible follow the instructions below, if not, just skip this step and move on to setting up the database.
 
 ==URL rewriting in Apache==
