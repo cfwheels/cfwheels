@@ -17,6 +17,8 @@ In case you don't know your way around a web server though, here are the instruc
 
 If you want to run a Wheels powered application from a sub folder in an existing website, this is entirely possible, but you'll have to live with the fact that you can never turn on URL rewriting and get those pretty URLs. Specifically it means your URLs will look like this: `http://localhost/index.cfm/blog/list/2007/08` instead of this: `http://localhost/blog/list/2007/08`.
 
+See the section about [InstallationInstructions installing Wheels] for more details.
+
 =Turn on URL rewriting=
 
 This step is completely optional and all the URL rewriting does is get rid of the `index.cfm` part of the URL. So, if you want the shortest and prettiest URLs possible follow the instructions below, if not, just skip this step and move on to setting up the database.
