@@ -1,4 +1,4 @@
-<cfset this.name = listLast(getDirectoryFromPath(getBaseTemplatePath()), "\")>
+<cfset this.name = listLast(replace(getDirectoryFromPath(getBaseTemplatePath()), "\", "/", "all"), "/")>
 <cfset this.sessionmanagement = true>
 
 <cfinclude template="wheels/global/functions_from_root.cfm">

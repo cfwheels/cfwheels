@@ -5,7 +5,7 @@
 		<cfset request.wheels.execution.components.setting_up_request = getTickCount()>
 	</cfif>
 
-	<cfif CGI.path_info IS CGI.script_name OR CGI.path_info IS "/">
+	<cfif CGI.path_info IS CGI.script_name OR CGI.path_info IS "/" OR CGI.path_info IS "">
 		<cfset local.route = "">
 	<cfelse>
 		<cfset local.route = right(CGI.path_info, len(CGI.path_info)-1)>

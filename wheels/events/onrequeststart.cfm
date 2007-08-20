@@ -3,11 +3,6 @@
 	<cfset onApplicationStart()>
 </cfif>
 
-<!--- Block user from accessing everything but the default file --->
-<cfif listLast(CGI.script_name, "/") IS NOT replace(CGI.script_name, "/", "")>
-	<cfthrow type="wheels" message="Wheels: Unauthorized Access" detail="This file cannot be accessed directly from the web.">
-</cfif>
-
 <cfset request.wheels = structNew()>
 <cfset request.wheels.cache = structNew()>
 
