@@ -35,6 +35,22 @@
 		</cfif>
 	</cfloop>
 
+	<!--- create a list of all columns in the table --->
+	<cfset variables.class.field_list = lCase(local.query.columnlist)>
+
+	<!--- create a list of the virtual fields if they exist --->
+	<cfif structKeyExists(variables.class, "virtual_fields")>
+		<cfset variables.class.virtual_field_list = structKeyList(variables.class.virtual_fields)>
+	<cfelse>
+		<cfset variables.class.virtual_field_list = "">
+	</cfif>
+
+	<!--- create a list of all attributes (columns in the table and composed columns) --->
+	<cfset variables.class.attribute_list = variables.class.field_list>
+	<cfif variables.class.virtual_field_list IS NOT "">
+		<cfset variables.class.attribute_list = listAppend(variables.class.attribute_list, variables.class.virtual_field_list)>
+	</cfif>
+
 	<cfreturn this>
 </cffunction>
 
