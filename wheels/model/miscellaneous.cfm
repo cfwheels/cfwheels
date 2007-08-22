@@ -189,3 +189,12 @@
 
 	<cfreturn local.result>
 </cffunction>
+
+
+<cffunction name="hasVirtualField" returntype="any" access="public" output="false">
+	<cfargument name="name" type="any" required="true">
+	<cfargument name="sql" type="any" required="true">
+	<cfargument name="cfsqltype" type="any" required="false" default="cf_sql_varchar">
+	<cfset "variables.class.virtual_fields.#arguments.name#.sql" = arguments.sql>
+	<cfset "variables.class.virtual_fields.#arguments.name#.cfsqltype" = arguments.cfsqltype>
+</cffunction>
