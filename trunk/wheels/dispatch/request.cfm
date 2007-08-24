@@ -130,7 +130,7 @@
 
 	<cfif local.action_is_cachable>
 		<cfset local.category = "action">
-		<cfset local.key = "#CGI.path_info#_#local.query_string#">
+		<cfset local.key = "#CGI.script_name#_#CGI.path_info#_#CGI.query_string#">
 		<cfset local.lock_name = local.category & local.key>
 		<cflock name="#local.lock_name#" type="readonly" timeout="10">
 			<cfset request.wheels.response = getFromCache(local.key, local.category)>

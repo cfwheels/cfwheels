@@ -61,7 +61,7 @@
 			</cfcatch>
 			</cftry>
 			<!--- Show the error page --->
-			<cfinclude template="../events/on_error.cfm">
+			<cfinclude template="../events/onerror.cfm">
 		</cfif>
 </cfcatch>
 </cftry>
