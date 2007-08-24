@@ -239,13 +239,13 @@
 								<cfset local.i = FL_extractFromAssociations(include=arguments.include, type="first_column_match_for_select", match=local.i)>
 							</cfif>
 						</cfif>
-						<cfset local.sql.select = listAppend(local.sql.select, local.i)>
+						<cfset local.sql.select = listAppend(local.sql.select, local.i, chr(7))>
 					</cfloop>
 				<cfelse>
-					<cfset local.sql.select = "#variables.class.table_name#.#replace(variables.class.field_list, ',', ',#variables.class.table_name#.', 'all')#">
+					<cfset local.sql.select = "#variables.class.table_name#.#replace(variables.class.field_list, ',', '#chr(7)##variables.class.table_name#.', 'all')#">
 					<cfif len(variables.class.virtual_field_list) IS NOT 0>
 						<cfloop collection="#variables.class.virtual_fields#" item="local.i">
-							<cfset local.sql.select = listAppend(local.sql.select, "#variables.class.virtual_fields[local.i].sql# AS #local.i#")>
+							<cfset local.sql.select = listAppend(local.sql.select, "#variables.class.virtual_fields[local.i].sql# AS #local.i#", chr(7))>
 						</cfloop>
 					</cfif>
 					<cfif len(arguments.include) IS NOT 0>
@@ -255,6 +255,12 @@
 
 				<!--- add order clause --->
 				<cfset local.sql.order = "">
+				<cfset local.sql.pagination.qualified_select = "">
+				<cfset local.sql.pagination.simple_select = "">
+				<cfset local.sql.pagination.qualified_order = "">
+				<cfset local.sql.pagination.simple_order = "">
+				<cfset local.sql.pagination.qualified_order_reversed = "">
+				<cfset local.sql.pagination.simple_order_reversed = "">
 				<cfif len(arguments.order) IS NOT 0>
 					<cfif arguments.order IS "random">
 						<cfif application.wheels.database.type IS "sqlserver">
@@ -263,14 +269,12 @@
 							<cfset local.sql.order = "RAND()">
 						</cfif>
 					<cfelse>
-						<cfset local.sql.pagination.qualified_order = "">
-						<cfset local.sql.pagination.simple_order = "">
 						<cfloop list="#arguments.order#" index="local.i">
 							<cfset local.i = trim(local.i)>
 							<cfif local.i Does Not Contain " ASC" AND local.i Does Not Contain " DESC">
 								<cfset local.i = local.i & " ASC">
 							</cfif>
-							<cfset local.sql.pagination.simple_order = listAppend(local.sql.pagination.simple_order, listLast(local.i, "."))>
+							<cfset local.sql.pagination.simple_order = listAppend(local.sql.pagination.simple_order, listLast(local.i, "."), chr(7))>
 							<cfif (local.i Contains "." AND listFirst(local.i, ".") IS variables.class.table_name OR local.i Does Not Contain ".") AND listFindNoCase(variables.class.field_list, listLast(spanExcluding(local.i, " "), ".")) IS NOT 0>
 								<cfset local.i = variables.class.table_name & "." & listLast(local.i, ".")>
 							<cfelseif (local.i Contains "." AND listFirst(local.i, ".") IS variables.class.table_name OR local.i Does Not Contain ".") AND listFindNoCase(variables.class.virtual_field_list, listLast(spanExcluding(local.i, " "), ".")) IS NOT 0>
@@ -278,37 +282,38 @@
 							<cfelse>
 								<cfset local.i = FL_extractFromAssociations(include=arguments.include, type="first_column_match_for_order", match=local.i)>
 							</cfif>
-							<cfset local.sql.order = listAppend(local.sql.order, local.i)>
-							<cfset local.sql.pagination.qualified_order = listAppend(local.sql.pagination.qualified_order, local.i)>
+							<cfset local.sql.order = listAppend(local.sql.order, local.i, chr(7))>
+							<cfset local.sql.pagination.qualified_order = listAppend(local.sql.pagination.qualified_order, local.i, chr(7))>
 						</cfloop>
+
 						<!--- create a select string for pagination that has the primary key and all fields from the order clause --->
-						<cfset local.sql.pagination.simple_select = REReplaceNoCase(local.sql.pagination.simple_order, " (ASC)|(DESC)", "", "all") & "," & variables.class.primary_key>
-						<cfset local.sql.pagination.qualified_select = REReplaceNoCase(local.sql.pagination.qualified_order, " (ASC)|(DESC)", "", "all") & "," & variables.class.table_name & "." & variables.class.primary_key>
+						<cfset local.sql.pagination.simple_select = REReplaceNoCase(local.sql.pagination.simple_order, " (ASC)|(DESC)", "", "all") & chr(7) & variables.class.primary_key>
+						<cfset local.sql.pagination.qualified_select = REReplaceNoCase(local.sql.pagination.qualified_order, " (ASC)|(DESC)", "", "all") & chr(7) & variables.class.table_name & "." & variables.class.primary_key>
 						<!--- delete the primary key from select if it is not the last element of the list (because it has to be last in the list and not duplicated) --->
-						<cfif listFindNoCase(local.sql.pagination.simple_select, variables.class.primary_key) IS NOT listLen(local.sql.pagination.simple_select)>
-							<cfset local.sql.pagination.simple_select = listDeleteAt(local.sql.pagination.simple_select, listFindNoCase(local.sql.pagination.simple_select, variables.class.primary_key))>
+						<cfif listFindNoCase(local.sql.pagination.simple_select, variables.class.primary_key, chr(7)) IS NOT listLen(local.sql.pagination.simple_select, chr(7))>
+							<cfset local.sql.pagination.simple_select = listDeleteAt(local.sql.pagination.simple_select, listFindNoCase(local.sql.pagination.simple_select, variables.class.primary_key, chr(7)), chr(7))>
 						</cfif>
-						<cfif listFindNoCase(local.sql.pagination.qualified_select, "#variables.class.table_name#.#variables.class.primary_key#") IS NOT listLen(local.sql.pagination.qualified_select)>
-							<cfset local.sql.pagination.qualified_select = listDeleteAt(local.sql.pagination.qualified_select, listFindNoCase(local.sql.pagination.qualified_select, "#variables.class.table_name#.#variables.class.primary_key#"))>
+						<cfif listFindNoCase(local.sql.pagination.qualified_select, "#variables.class.table_name#.#variables.class.primary_key#", chr(7)) IS NOT listLen(local.sql.pagination.qualified_select, chr(7))>
+							<cfset local.sql.pagination.qualified_select = listDeleteAt(local.sql.pagination.qualified_select, listFindNoCase(local.sql.pagination.qualified_select, "#variables.class.table_name#.#variables.class.primary_key#", chr(7)), chr(7))>
 						</cfif>
 						<!--- add primary key to pagination order unless it is already there (to guarantee a unique order) --->
 						<cfif REFindNoCase("#variables.class.table_name#.#variables.class.primary_key# (ASC)|(DESC)", local.sql.pagination.qualified_order) IS 0>
-							<cfset local.sql.pagination.qualified_order = listAppend(local.sql.pagination.qualified_order, "#variables.class.table_name#.#variables.class.primary_key# ASC")>
+							<cfset local.sql.pagination.qualified_order = listAppend(local.sql.pagination.qualified_order, "#variables.class.table_name#.#variables.class.primary_key# ASC", chr(7))>
 						</cfif>
 						<cfif REFindNoCase("#variables.class.primary_key# (ASC)|(DESC)", local.sql.pagination.simple_order) IS 0>
-							<cfset local.sql.pagination.simple_order = listAppend(local.sql.pagination.simple_order, "#variables.class.primary_key# ASC")>
+							<cfset local.sql.pagination.simple_order = listAppend(local.sql.pagination.simple_order, "#variables.class.primary_key# ASC", chr(7))>
 						</cfif>
 						<!--- reverse the order for use in SQL Server pagination SQL --->
-						<cfset local.sql.pagination.simple_order_reversed = replaceNoCase(replaceNoCase(replaceNoCase(local.sql.pagination.simple_order, "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all")>
-						<cfset local.sql.pagination.qualified_order_reversed = replaceNoCase(replaceNoCase(replaceNoCase(local.sql.pagination.qualified_order, "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all")>
+						<cfset local.sql.pagination.simple_order_reversed = replaceNoCase(replaceNoCase(replaceNoCase(local.sql.pagination.simple_order, "DESC", chr(164), "all"), "ASC", "DESC", "all"), chr(164), "ASC", "all")>
+						<cfset local.sql.pagination.qualified_order_reversed = replaceNoCase(replaceNoCase(replaceNoCase(local.sql.pagination.qualified_order, "DESC", chr(164), "all"), "ASC", "DESC", "all"), chr(164), "ASC", "all")>
 						<!--- loop through qualified select string and add "AS xxx" for all virtual fields --->
 						<cfset local.pos = 0>
-						<cfloop list="#local.sql.pagination.qualified_select#" index="local.i">
+						<cfloop list="#local.sql.pagination.qualified_select#" index="local.i" delimiters="#chr(7)#">
 							<cfset local.pos = local.pos + 1>
-							<cfif REFindNoCase("^[a-z0-9-_]*\.#listGetAt(local.sql.pagination.simple_select, local.pos)#$", local.i) IS 0>
-								<cfset local.i = local.i & " AS " & listGetAt(local.sql.pagination.simple_select, local.pos)>
+							<cfif REFindNoCase("^[a-z0-9-_]*\.#listGetAt(local.sql.pagination.simple_select, local.pos, chr(7))#$", local.i) IS 0>
+								<cfset local.i = local.i & " AS " & listGetAt(local.sql.pagination.simple_select, local.pos, chr(7))>
 							</cfif>
-							<cfset local.sql.pagination.qualified_select = listSetAt(local.sql.pagination.qualified_select, local.pos, local.i)>
+							<cfset local.sql.pagination.qualified_select = listSetAt(local.sql.pagination.qualified_select, local.pos, local.i, chr(7))>
 						</cfloop>
 					</cfif>
 				</cfif>
@@ -396,6 +401,14 @@
 
 <cffunction name="FL_executeQuery" returntype="any" access="private" output="false">
 	<cfset var locals = structNew()>
+	<cfset arguments.sql.order = listChangeDelims(arguments.sql.order, ",", chr(7))>
+	<cfset arguments.sql.select = listChangeDelims(arguments.sql.select, ",", chr(7))>
+	<cfset arguments.sql.pagination.simple_select = listChangeDelims(arguments.sql.pagination.simple_select, ",", chr(7))>
+	<cfset arguments.sql.pagination.qualified_select = listChangeDelims(arguments.sql.pagination.qualified_select, ",", chr(7))>
+	<cfset arguments.sql.pagination.simple_order = listChangeDelims(arguments.sql.pagination.simple_order, ",", chr(7))>
+	<cfset arguments.sql.pagination.qualified_order = listChangeDelims(arguments.sql.pagination.qualified_order, ",", chr(7))>
+	<cfset arguments.sql.pagination.simple_order_reversed = listChangeDelims(arguments.sql.pagination.simple_order_reversed, ",", chr(7))>
+	<cfset arguments.sql.pagination.qualified_order_reversed = listChangeDelims(arguments.sql.pagination.qualified_order_reversed, ",", chr(7))>
 
 	<cfif application.settings.environment IS NOT "production">
 		<cfset locals.query_start_time = getTickCount()>
@@ -541,10 +554,10 @@
 
 		<!--- Get the requested data --->
 		<cfif arguments.type IS "full_select_clause">
-			<cfset local.return_data = "#local.return_data#,#local.associated_table_name#.#replace(local.associated_model.getFieldList(), ',', ',#local.associated_table_name#.', 'all')#">
+			<cfset local.return_data = "#local.return_data##chr(7)##local.associated_table_name#.#replace(local.associated_model.getFieldList(), ',', '#chr(7)##local.associated_table_name#.', 'all')#">
 			<cfif len(local.virtual_field_list) IS NOT 0>
 				<cfloop collection="#local.virtual_fields#" item="local.i">
-					<cfset local.return_data = listAppend(local.return_data, "#local.virtual_fields[local.i].sql# AS #local.i#")>
+					<cfset local.return_data = listAppend(local.return_data, "#local.virtual_fields[local.i].sql# AS #local.i#", chr(7))>
 				</cfloop>
 			</cfif>
 
