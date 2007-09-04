@@ -2,7 +2,7 @@
 
 Callback in Wheels are a set of functions that allow you to have code executed before and/or after certain operations on an object. This requires some further explanation so let's go straight to an example of a real-world application, the e-commerce checkout.
 
-*A real-world example of using callbacks*
+=A real-world example of using callbacks=
 Let's look at a possible scenario for what happens when a visitor to your imaginary e-commerce website submits her credit card details to finalize an order:
 
 - You create a new `order` object using the [new] function based on the incoming form parameters.
@@ -39,7 +39,7 @@ Part of the `Order.cfc` model file:
 
 When Wheels validates, inserts, updates and deletes an object it will look for these functions in your model file and execute them if they exist.
 
-*All possible callbacks*
+=All possible callbacks=
 Wheels will look for the following 14 callback functions:
 
 - `beforeValidation`
