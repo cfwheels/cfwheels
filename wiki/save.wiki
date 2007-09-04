@@ -5,4 +5,20 @@ If the object's primary key matches one in the database the contents of that row
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || This method takes no arguments || || || || ||
 
+*Examples:*
+
+{{{
+<cfset user.save()>
+}}}
+
+{{{
+<cfif user.save()>
+  <cfset session.flash.notice = "The user was saved!">
+  <cfset redirectTo(action="userEdit")
+<cfelse>
+  <cfset session.flash.alert = "Error, please correct!">
+  <cfset renderPage(action="userEdit")
+</cfif>
+}}}
+
 See the sections on [CreatingNewRows] and [UpdatingExistingRows] for more information and code examples.
