@@ -1,8 +1,14 @@
 #summary Building the home page.
 
-Finally time for some code... let's first get rid of the Wheels welcome page and replace it with our own default home page. A quick introduction to Wheels URLs and the Model-View-Controller pattern (MVC) is needed before we do that though. URLs in Wheels generally look like this: `http://localhost/blog/index`.
+Finally time for some code... let's first get rid of the Wheels welcome page and replace it with our own default home page. A quick introduction to Wheels URLs is needed before we do that though.
 
-In this case `blog` is the name of the controller to call and `index` is the name of the action to call on that controller. Unless you're familiar with the Model-View-Controller pattern you're probably wondering what a controller is. Put very simply a controller takes an incoming requests and based on the parameters in the URL it decides what (if any) data to get from the model and which view should be displayed to the user. Let's build the `blog` controller and the `index` action to clarify how this works. Create a file named `blog.cfc` in the `wheelsblog\controllers` folder and put the following code in it:
+=URLs in Wheels=
+
+URLs in Wheels generally look like this: `http://localhost/blog/index`. In this case `blog` is the name of the controller to call and `index` is the name of the action to call on that controller. Unless you're familiar with the Model-View-Controller pattern you're probably wondering what a controller is. Put very simply a controller takes an incoming request and, based on the parameters in the URL, decides what (if any) data to get from the model (which in most cases means your database) and which view (which in most cases means a CFML file producing HTML output) to display to the user.
+
+=Creating a page=
+
+Let's build the `blog` controller and the `index` action to clarify how this works. Create a file named `blog.cfc` in the `wheelsblog\controllers` folder and put the following code in it:
 
 {{{
 <cfcomponent extends="controller">
@@ -14,11 +20,13 @@ In this case `blog` is the name of the controller to call and `index` is the nam
 </cfcomponent>
 }}}
 
-Since we have not yet created a database this controller action doesn't get any data from it (we'll get back to that part later though). The only thing it does is call a view page to render using the renderPage method. The renderPage method is available to you since the Blog controller extends the Wheels controller so don't forget that extends line at the top as you build new controllers since otherwise you won't be able to do much.
+Since we have not yet created a database this controller action doesn't get any data from it (we'll get back to that part later though). The only thing it does is call a view page to render using the renderPage method. The renderPage method is available to you since the Blog controller extends the main Wheels controller so don't forget to include that `extends` argument in the `cfcomponent` tag as you build new controllers since otherwise you won't be able to do much.
 
-So, how does renderPage works? Well, it accepts the arguments `controller` and `action` among others band based on these it will try to include the file `wheelsblog\views\blog\index.cfm`. Create that folder and file, go to `http://localhost/blog/index` and you should see whatever you wrote being displayed.
+So, how does renderPage work? Well, it accepts the arguments `controller` and `action` among others and based on these it will try to include a view file, in our case this is the file: `wheelsblog\views\blog\index.cfm`. So, go ahead and create that folder and file, then go to `http://localhost/blog/index` and you should see whatever you wrote in the view file being displayed.
 
-By the way, Wheels assumes a lot of things... one of them being that if you call renderPage you want to call the current controller and action. Therefore you can change the code to:
+=Wheels assumptions=
+
+Wheels assumes a lot of things... one of them being that if you call renderPage without arguments you want to include the view page for the current controller and action. Therefore you can change the code to:
 
 {{{
 <cfcomponent extends="controller">
@@ -32,7 +40,7 @@ By the way, Wheels assumes a lot of things... one of them being that if you call
 
 ... and it will still work just fine.
 
-Does Wheels assume anything else? Sure it does. You can actually remove the entire renderPage call because Wheels will assume you want to call the view page for the current controller and action when the processing in the controller is done. This leaves you with this code:
+Does Wheels assume anything else? Sure it does. You can actually remove the entire renderPage call because Wheels will assume that you always want to call a view page when the processing in the controller is done and simply call it for you behind the scenes. This leaves you with this code:
 
 {{{
 <cfcomponent extends="controller">
@@ -43,17 +51,34 @@ Does Wheels assume anything else? Sure it does. You can actually remove the enti
 </cfcomponent>
 }}}
 
-That looks rather silly, an index function with no code what so ever. What do you think will happen if you just remove that entire function? Like this:
+That looks rather silly, an index function with no code what so ever. What do you think will happen if you just remove that entire function leaving you with this code?
 
 {{{
 <cfcomponent extends="controller">
 </cfcomponent>
 }}}
 
-
 ... if you guessed that Wheels will just assume you don't need any code for the index action and just want the view rendered directly, then you are correct. This is quite useful when you're just adding simple pages to a website and you don't need the controller and model to be involved at all. For example you can create a file named `about.cfm` in the `wheelsblog/views/blog` folder and access it at `http://localhost/blog/about` without having to create a specific action for it in the controller.
 
+This also highlights the fact that Wheels is a very easy framework to get started in since you can basically program just as you normally would by creating simple pages like this and then gradually "Wheelsify" your code as you learn the framework.
 
+=Setting a page as the default one=
+Setting your newly created index action in the blog controller as the default page is done by editing the config/settings.cfm file. Look for the lines below and make your changes:
+
+{{{
+<cfset application.settings.default_controller = "blog">
+<cfset application.settings.default_action = "index">
+}}}
+
+Now, when you go http://localhost Wheels will call the index action on your blog controller.
+
+=Getting data from the model=
+
+A home page for a blog normally shows the most recent articles so let's mimic that here too and get that data from the model and output it on the home page. We won't do anything too fancy here, let's just get the 10 most recent articles (the id and title) and show them in a list with links to their individual pages. Here is the code for getting the articles:
+
+{{{
+<cfset recent_articles = model("article").findAll(order="created_at DESC", maxrows=10)>
+}}}
 
 
 This is a controller action in it's most simple form - the first line gets some data from your database (the last ten published posts) and the second line calls a page to be rendered to the user.
@@ -79,44 +104,4 @@ Open up the `config/settings.cfm` file and look for the following line:
 
 These lines tell Wheels what controller and action to invoke when none has been specified in the URL. In other words when you go to 
 
-That line tells Wheels that the sample controller should be the default one for this application should be sample
- 
-
-Welcome to the first part of a series of chapters in which I will show you how to build a simple blog application using the !ColdFusion on Wheels framework. This is meant as a crash course in Wheels more than anything else and therefore I will leave out some advanced concepts related specifically to blogs (like trackbacks, RSS feeds etc) and focus more on the general concepts in Wheels so that you learn the thinking behind it and can apply your new knowledge to any application you build using Wheels in the future. Also, while we code the blog application I will sometimes go on small detours here and there to show specific concepts and features in Wheels and sometimes I'll even add completely unnecessary things to the blog just so that I can cover the most important aspects of Wheels. Bottom line; don't expect to end up with a finished product that you can use as your own blog but do expect to learn a whole lot about Wheels.
-
-=Download !ColdFusion on Wheels=
-
-The very first thing you have to do is of course to download the !ColdFusion on Wheels code base. So, head on over to the !ColdFusion on Wheels [http://www.cfwheels.com/download download page] and grab the latest release (or get it from the SVN trunk if you prefer). Please note that Wheels only works on !ColdFusion 8 so if you're running an older version of !ColdFusion you need to update it to 8 (there is a free developer edition available at [http://www.adobe.com adobe]).
-
-=Setting up the web site=
-
-Getting an empty website running with Wheels installed is an easy process if you already know your way around IIS or Apache. Basically, all you have to do is create a new website in your web server of choice and unzip the contents of the file you just downloaded.
-
-In case you don't know your way around a web server though, here are the instructions for setting up an empty Wheels site that can be accessed when typing `localhost` in your browser. The instructions refer to a system running Windows Server 2003 and IIS but you should be able to follow along and apply the instructions with minor modifications to your system (Wheels has been tested on Windows XP / Windows Server 2003 using IIS and on Mac OS / Linux running Apache).
-
- * Create a new folder under your web root (usually `C:\Inetpub\wwwroot`) named `wheelsblog`.
- * Create a new website called "Wheels Blog" with `localhost` as the host header name and `C:\Inetpub\wwwroot\wheelsblog` as the path to your home directory.
-
-If you want to run a Wheels powered application from a sub folder in an existing website, this is entirely possible, but you'll have to live with the fact that you can never turn on URL rewriting and get those pretty URLs. Specifically it means your URLs will look like this: `http://localhost/index.cfm/blog/list/2007/08` instead of this: `http://localhost/blog/list/2007/08`.
-
-See the section about [InstallationInstructions installing Wheels] for more details.
-
-=Turn on URL rewriting=
-
-This step is completely optional and all the URL rewriting does is get rid of the `index.cfm` part of the URL. So, if you want the shortest and prettiest URLs possible follow the instructions below, if not, just skip this step and move on to setting up the database.
-
-*URL rewriting in Apache*
-If you have a default installation of Apache all you have to do is uncomment the rewrite rules inside `C:\Inetpub\wwwroot\wheelsblog\.htaccess` and restart Apache.
-
-*URL rewriting in IIS*
-Unfortunately there is no built-in URL rewriting mechanism in IIS so getting Wheels working with pretty URLs is a little more complicated than with Apache. Here's what you do: First, download "Ionic's ISAPI Rewrite Filter" from [http://cheeso.members.winisp.net/IIRF.aspx cheeso.members.winisp.net]. Unzip the file and put the `.dll` file in the `C:\Inetpub\wwwroot\wheelsblog` folder. To enable the rewrite filter in IIS you click on `Properties` for your website, then go to the `ISAPI Filters` tab and click the `Add...` button. Type in anything you want as the `Filter Name` and point the `Executable` to `C:\Inetpub\wwwroot\wheelsblog\IsapiRewrite4.dll`.
-
-=Setting up the database=
-
-This part is easy, just create a new database in SQL server or MySQL and add a new data source for it in the !ColdFusion Administrator just as you'd normally do. Give the data source the same name as the folder of your website, in our case this is "wheelsblog". This is really all you have to do before Wheels can connect to your database and start working it's magic. Of course if you wish to name your data source differently or have Wheels use the username/password in the code instead of through the !ColdFusion Administrator this is all possible via different configuration settings. You can read more about configuration [Configuration here].
-
-=Test it!=
-
-When you've configured the web server and the database you can test your installation by typing `http://localhost` in your web browser. You should get a page saying "Welcome to Wheels!".
-
-With all that boring setup stuff out of the way, let's move on to some actual code in the next chapter...
+That line tells Wheels that the sample controller should be the default one for this application should be sample.
