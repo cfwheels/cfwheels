@@ -1,5 +1,6 @@
 #summary This class level method returns a query result set matching the options you pass in.
 
+If you don't specify table names in the `select`, `where` and `order` clause Wheels will guess what column you intended to get back and prepend the table name to your supplied column names.
 If you don't specify the `select` argument it will default to get all columns.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
@@ -10,8 +11,12 @@ If you don't specify the `select` argument it will default to get all columns.
 || maxrows || no || numeric || || number of records to return ||
 || page || no || numeric || || page number if you want paginated records returned ||
 || per_page || no || numeric || 10 || number of records per page to return ||
-|| cache || no || numeric || 10 || minutes to cache query for ||
+|| cache || no || numeric || || minutes to cache query for ||
 
-*Example*
+*Example:*
+
+{{{
+<cfset articles = model("article ").findAll(where="published=1", order="created_at DESC", include="author")>
+}}}
 
 See the section on [ReadingExistingRows] for more information and code examples.
