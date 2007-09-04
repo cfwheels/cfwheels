@@ -1,11 +1,10 @@
-#labels api,model
-This is an object level method.
-It updates the values for the object and saves it to the database.
-Attribute names and values can be passed in either using named arguments or as a struct to the `attributes` argument.
+#summary This object level method updates the values for the object and saves it to the database.
+
+Attribute names and values can be passed in either using named arguments or as a struct in the `attributes` argument.
 Returns `true` if the object was saved successfully to the database and `false` otherwise.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || attributes || yes, if no named arguments are present || struct || || attribute name/value pairs ||
 || named argument(s) || yes, if no `attributes` argument is present || || || attribute value (the argument name should match the name of the attribute) ||
 
-See the section on UpdatingExistingRows for more information and code examples.
+See the section on [UpdatingExistingRows] for more information and code examples.
