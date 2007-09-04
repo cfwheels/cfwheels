@@ -14,4 +14,4 @@ If Wheels sees this field it will use it to store the current date when an `UPDA
 *updated_at*
 If Wheels sees this field it will do the same as above but also include the current time of the update.
 
-If you add any of these fields to your table, make sure they are of the `datetime` type and allows `NULL` values.
+If you add any of these fields to your table, make sure they are of the `datetime` type and allow `NULL` values.
