@@ -1,7 +1,7 @@
-#labels model,api,class
-This class level method creates a new object, saves it to the database (if the validation permits it) and returns it to you.
+#summary This class level method creates a new object, saves it to the database (if the validation permits it) and returns it to you.
+
 If the validation fails, the unsaved object (with errors added to it) is still returned.
-Attribute names and values can be passed in either using named arguments or as a struct to the `attributes` argument.
+Attribute names and values can be passed in either using named arguments or as a struct in the `attributes` argument.
 Attribute names should correspond to column names in the associated table.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
@@ -11,11 +11,15 @@ Attribute names should correspond to column names in the associated table.
 *Examples:*
 
 {{{
-<cfset new_author = model("author").create(request.params.author_struct)>
+<cfset new_author = model("author").create(params.author)>
 }}}
 
 {{{
 <cfset new_author = model("author").create(first_name="John", last_name="Doe")>
 }}}
 
-See the section on CreatingNewRows for more information and code examples.
+{{{
+<cfset new_author = model("author").create(active=1, attributes=params.author)>
+}}}
+
+See the section on [CreatingNewRows] for more information and code examples.
