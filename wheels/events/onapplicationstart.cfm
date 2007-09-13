@@ -36,7 +36,7 @@
 	<cfset application.wheels.cfc_path = replace(right(application.wheels.web_path, len(application.wheels.web_path)-1), "/", ".", "all")>
 </cfif>
 
-<cfif len(application.settings.dsn) GT 0>
+<cftry>
 	<!--- determine and set database brand --->
 	<cfquery name="local.database" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
 	SELECT @@version AS info
@@ -47,7 +47,9 @@
 		<cfset application.wheels.database.type = "mysql">
 	</cfif>
 	<cfset application.wheels.adapter = createObject("component", "#application.wheels.cfc_path#wheels.model.adapters.#application.wheels.database.type#")>
-</cfif>
+<cfcatch>
+</cfcatch>
+</cftry>
 
 <cfset application.wheels.dispatch = createObject("component", "#application.wheels.cfc_path#Dispatch")>
 <cfset application.wheels.java_awt_toolkit = createObject("java", "java.awt.Toolkit")>
