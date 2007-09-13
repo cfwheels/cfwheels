@@ -6,8 +6,8 @@ Make sure to leave a blank line between a heading and the text. You can write *b
 
 You can do a list like this:
 
- * Create a new folder under your web root (usually `C:\Inetpub\wwwroot`) named `wheelsblog`.
- * Create a new website called "Wheels Blog" with `localhost` as the host header name and `C:\Inetpub\wwwroot\wheelsblog` as the path to your home directory.
+ * list item 1.
+ * list item 2.
 
 Here comes a code block (leave a blank lines above and below the block)
 
