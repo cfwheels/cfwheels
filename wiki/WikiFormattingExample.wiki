@@ -1,17 +1,18 @@
 #summary One-sentence summary of this page.
 
-=Heading1=
+=Heading=
 
-Make sure to leave a blank line between a Heading1 and the text. You can write *bold text*, inline code
+Make sure to leave a blank line between a heading and the text. You can write *bold text*, _italic_ text and `inline code text`
 
-=H1=
+You can do a list like this:
 
-Add your content here.
+ * list item 1
+ * list item 2
 
+Here comes a code block
 
-= Details =
+{{{
+verbatim code block
+}}}
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+Always link to other pages like this: [wikiFormattingExample ]
