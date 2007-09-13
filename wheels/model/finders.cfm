@@ -285,10 +285,9 @@
 							<cfset local.sql.order = listAppend(local.sql.order, local.i, chr(7))>
 							<cfset local.sql.pagination.qualified_order = listAppend(local.sql.pagination.qualified_order, local.i, chr(7))>
 						</cfloop>
-
 						<!--- create a select string for pagination that has the primary key and all fields from the order clause --->
-						<cfset local.sql.pagination.simple_select = REReplaceNoCase(local.sql.pagination.simple_order, " (ASC)|(DESC)", "", "all") & chr(7) & variables.class.primary_key>
-						<cfset local.sql.pagination.qualified_select = REReplaceNoCase(local.sql.pagination.qualified_order, " (ASC)|(DESC)", "", "all") & chr(7) & variables.class.table_name & "." & variables.class.primary_key>
+						<cfset local.sql.pagination.simple_select = REReplaceNoCase(local.sql.pagination.simple_order, "( ASC)|( DESC)", "", "all") & chr(7) & variables.class.primary_key>
+						<cfset local.sql.pagination.qualified_select = REReplaceNoCase(local.sql.pagination.qualified_order, "( ASC)|( DESC)", "", "all") & chr(7) & variables.class.table_name & "." & variables.class.primary_key>
 						<!--- delete the primary key from select if it is not the last element of the list (because it has to be last in the list and not duplicated) --->
 						<cfif listFindNoCase(local.sql.pagination.simple_select, variables.class.primary_key, chr(7)) IS NOT listLen(local.sql.pagination.simple_select, chr(7))>
 							<cfset local.sql.pagination.simple_select = listDeleteAt(local.sql.pagination.simple_select, listFindNoCase(local.sql.pagination.simple_select, variables.class.primary_key, chr(7)), chr(7))>
@@ -297,10 +296,10 @@
 							<cfset local.sql.pagination.qualified_select = listDeleteAt(local.sql.pagination.qualified_select, listFindNoCase(local.sql.pagination.qualified_select, "#variables.class.table_name#.#variables.class.primary_key#", chr(7)), chr(7))>
 						</cfif>
 						<!--- add primary key to pagination order unless it is already there (to guarantee a unique order) --->
-						<cfif REFindNoCase("#variables.class.table_name#.#variables.class.primary_key# (ASC)|(DESC)", local.sql.pagination.qualified_order) IS 0>
+						<cfif REFindNoCase("#variables.class.table_name#.#variables.class.primary_key#( ASC)|( DESC)", local.sql.pagination.qualified_order) IS 0>
 							<cfset local.sql.pagination.qualified_order = listAppend(local.sql.pagination.qualified_order, "#variables.class.table_name#.#variables.class.primary_key# ASC", chr(7))>
 						</cfif>
-						<cfif REFindNoCase("#variables.class.primary_key# (ASC)|(DESC)", local.sql.pagination.simple_order) IS 0>
+						<cfif REFindNoCase("#variables.class.primary_key#( ASC)|( DESC)", local.sql.pagination.simple_order) IS 0>
 							<cfset local.sql.pagination.simple_order = listAppend(local.sql.pagination.simple_order, "#variables.class.primary_key# ASC", chr(7))>
 						</cfif>
 						<!--- reverse the order for use in SQL Server pagination SQL --->

@@ -49,3 +49,11 @@
 	<cfinclude template="events/onapplicationend.cfm">
 	<cfinclude template="../events/onapplicationend.cfm">
 </cffunction>
+
+<cffunction name="onMissingTemplate" output="false">
+	<cfargument name="targetpage">
+	<cfset var local = structNew()>
+	<cfinclude template="events/onmissingtemplate.cfm">
+	<cfinclude template="../events/onmissingtemplate.cfm">
+	<cfabort>
+</cffunction>
