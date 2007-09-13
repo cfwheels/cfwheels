@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Write a summary here.
 
 =Heading=
 
@@ -9,10 +9,10 @@ You can do a list like this:
  * list item 1
  * list item 2
 
-Here comes a code block
+Here comes a code block (leave a blank lines above and below the block)
 
 {{{
 verbatim code block
 }}}
 
-Always link to other pages like this: [wikiFormattingExample ]
+Always link to other pages like this: [wikiFormattingExample]
