@@ -375,7 +375,7 @@
 	<cfset var local = structNew()>
 
 	<!--- Replace single newline characters with HTML break tags and double newline characters with HTML paragraph tags --->
-	<cfset local.output = trim(HTMLEditFormat(arguments.text))>
+	<cfset local.output = trim(arguments.text)>
 	<cfset local.output = replace(local.output, "#chr(10)##chr(10)#", "</p><p>", "all")>
 	<cfset local.output = replace(local.output, "#chr(10)#", "<br />", "all")>
 	<cfif local.output IS NOT "">

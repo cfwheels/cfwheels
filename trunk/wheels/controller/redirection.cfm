@@ -6,13 +6,12 @@
 
 	<cfif arguments.back>
 		<cfif len(CGI.http_referer) IS 0>
-			<cfthrow type="wheels" message="Wheels: Redirect To Back Error" detail="Cannot perform redirection because referer is blank.">
+			<cfset local.url = urlFor(controller=application.settings.default_controller, action=application.settings.default_action)>
 		<cfelse>
-			<cfif structKeyExists(arguments, "params")>
-				<cfset local.url = CGI.http_referer & FL_constructParams(arguments.params)>
-			<cfelse>
-				<cfset local.url = CGI.http_referer>
-			</cfif>
+			<cfset local.url = CGI.http_referer>
+		</cfif>
+		<cfif structKeyExists(arguments, "params")>
+			<cfset local.url = local.url & FL_constructParams(arguments.params)>
 		</cfif>
 	<cfelse>
 		<cfif arguments.link IS NOT "">
