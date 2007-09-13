@@ -1,0 +1,17 @@
+#summary One-sentence summary of this page.
+
+=Heading1=
+
+Make sure to leave a blank line between a Heading1 and the text. You can write *bold text*, inline code
+
+=H1=
+
+Add your content here.
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
