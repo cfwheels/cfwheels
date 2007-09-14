@@ -41,3 +41,4 @@ Some of you may be raising an eyebrow about the 85 in the URL shown in figure 1 
 Okay, let's get to some code. If you're like me when you pick up a new programming language you're dying to get your hands on some code. Well you wait is over. Let's role up our sleeves and get our hands a little dirty. What are we going to build you may be asking? Well, I feel obligated to create the ubiquitous Hello World! application, so that is what we'll build but we'll add some Wheels magic along the way. So let's get started.
  
  
+ 
