@@ -12,9 +12,9 @@ Okay, so you have Wheels installed and can see the Wheels welcome page as shown 
 
 http://cfwheels.googlecode.com/files/ig.fig.1.jpg
 
-== The Model-View-Controller Methodology ==
+== The Model-View-Controller Framework ==
 
-I'm not trying to scare you off already by using some unfamiliar words but we need to take a brief look at the Model-View-Controller (MVC for short) methodology in order to understand how Wheels works. At the very basic level a MVC methodology breaks the components that make up an application into three distinct pieces with each piece having a very well defined role and responsibility. Imagine a football team where everyone tried to be the quarterback. Things would get pretty messy rather quickly. On a football team, or any team sport for that matter, each member of the team has a specific job and responsibility. 
+I'm not trying to scare you off already by using some unfamiliar words but we need to take a brief look at the Model-View-Controller (MVC for short) framework in order to understand how Wheels works. At the very basic level a MVC framework breaks the components that make up an application into three distinct pieces with each piece having a very well defined role and responsibility. Imagine a football team where everyone tried to be the quarterback. Things would get pretty messy rather quickly. On a football team, or any team sport for that matter, each member of the team has a specific job and responsibility. 
 
 A Wheels application has three distinct players each with their own distinct roles and responsibilities. The players in this case are named Model, View, and Controller. Very original, I know. Anyway, the model is responsible for the data objects of your application. It generally will deal with your databases, if any, and contain your specific business rules that tells your application how to use that data. The View is responsible for the user interface of your application. It will build and present the web pages that make up your application. The Controller is the central command of your application. It defines and knows about the functions or actions your application can handle. These actions are generally the web requests initiated by the users of your application. The Controller's job is to listen for these actions, talk to the Model to get any data that is needed by the action, and then finally hand off the results to the View so the View can display a page for the user.
 
@@ -38,8 +38,5 @@ Some of you may be raising an eyebrow about the 85 in the URL shown in figure 1 
 
 = Hello, Wheels! =
 
-Okay, let's get to some code. If you're like me when you pick up a new programming language you're dying to get your hands on some code. Well you wait is over. Let's role up our sleeves and get our hands a little dirty. What are we going to build you may be asking? Well, I feel obligated to create the ubiquitous Hello World! application, so that is what we'll build but we'll add some Wheels magic along the way. So let's get started.
- 
- 
- 
+Okay, let's get to some code. If you're like me when you pick up a new programming environment you're dying to get your hands on some code. Well your wait is over. Let's role up our sleeves and get our hands a little dirty. What are we going to build you may be asking? Well, I feel obligated to create the ubiquitous Hello World! application, but we'll add some Wheels magic along the way. So let's get started.
  
