@@ -26,7 +26,7 @@ We just finished a discussion about the MVC methodology so lets see how that rel
 
 http://www.mywheelsapp.com/index.cfm/say/hello
 
-In the URL above the http://www.mywheelsapp.com/ portion of the URL, defines the location of your application. This portion is similar to any other URL on the internet. Really not much to see here, so let's move on. The index.cfm portion is the pages that everything flows through. Again we're used to that already. The next portion is where the magic happens. After the page name we are used to seeing variables separated by ? and &. Wheels on the other hands uses what are commonly referred to as _pretty URLs_. An this portion of the URL defines which function within the application gets called by the URL. What's more, it identifies which function is which controller gets called by the URL. The URL above tells our application to go to the *say* controller and call the *hello* function. So this is how the URL of a Wheels application is related to the MVC methodology described above. 
+In the URL above the http://www.mywheelsapp.com/ portion of the URL, defines the location of your application. This portion is similar to any other URL on the internet. Really not much to see here, so let's move on. The index.cfm portion is the pages that everything flows through. Again we're used to that already, so lets move on. The next portion is where the magic happens. After the page name we are used to seeing variables separated by ? and &. Wheels on the other hands uses what is commonly referred to as _pretty URLs_. Instead of using variables separated by ? and &, simple words are used to tell the application what to do. This portion of our URL defines which function within the application gets called by the URL. What's more, it identifies which function is which controller gets called by the URL. The URL above tells our application to go to the *say* controller and call the *hello* function. So this is how the URL of a Wheels application is related to the MVC methodology described above. 
 
 There is a way to make the URL even prettier by getting rid of the index.cfm page in the middle of the URL. So the above URL would become:
 
@@ -39,4 +39,5 @@ Some of you may be raising an eyebrow about the 85 in the URL shown in figure 1 
 = Hello, Wheels! =
 
 Okay, let's get to some code. If you're like me when you pick up a new programming language you're dying to get your hands on some code. Well you wait is over. Let's role up our sleeves and get our hands a little dirty. What are we going to build you may be asking? Well, I feel obligated to create the ubiquitous Hello World! application, so that is what we'll build but we'll add some Wheels magic along the way. So let's get started.
+ 
  
