@@ -86,15 +86,21 @@
 	</cfif>
 
 	<!--- Create requested controller --->
-	<cfif application.settings.environment IS NOT "production">
-		<cfif fileExists(expandPath("controllers/#local.params.controller#.cfc"))>
-			<cfset local.controller = createObject("component", "#application.wheels.cfc_path#controllers.#local.params.controller#").FL_initController(local.params)>
-		<cfelse>
-			<cfthrow type="wheels.controllerMissing" message="There is no controller named '#local.params.controller#'">
-		</cfif>
-	<cfelse>
+	<cftry>
 		<cfset local.controller = createObject("component", "#application.wheels.cfc_path#controllers.#local.params.controller#").FL_initController(local.params)>
-	</cfif>
+	<cfcatch>
+		<cfif fileExists(expandPath("controllers/#local.params.controller#.cfc"))>
+			<cfrethrow>
+		<cfelse>
+			<cfif application.settings.environment IS "production">
+				<cfinclude template="../../events/onmissingtemplate.cfm">
+				<cfabort>
+			<cfelse>
+				<cfthrow type="wheels.controllerMissing" message="There is no controller named '#local.params.controller#'">
+			</cfif>
+		</cfif>
+	</cfcatch>
+	</cftry>
 
 	<cfif application.settings.environment IS NOT "production">
 		<cfset request.wheels.execution.components.setting_up_request = getTickCount() - request.wheels.execution.components.setting_up_request>
@@ -186,14 +192,21 @@
 	</cfif>
 	<cfif NOT structKeyExists(request.wheels, "response") OR (isBoolean(request.wheels.response) AND NOT request.wheels.response)>
 		<!--- A render function has not been called yet so call it here --->
-		<cfif application.settings.environment IS NOT "production">
-			<cfif fileExists(expandPath("views/#arguments.controller_name#/#arguments.action_name#.cfm"))>
-				<cfset arguments.controller.renderPage()>
-			<cfelse>
-				<cfthrow type="wheels.actionMissing" message="There is no action named '#arguments.action_name#'">
-			</cfif>
-		<cfelse>
+		<cftry>
 			<cfset arguments.controller.renderPage()>
-		</cfif>
+		<cfcatch>
+			<cfif fileExists(expandPath("views/#arguments.controller_name#/#arguments.action_name#.cfm"))>
+				<cfrethrow>
+			<cfelse>
+				<cfif application.settings.environment IS "production">
+					<cfinclude template="../../events/onmissingtemplate.cfm">
+					<cfabort>
+				<cfelse>
+					<cfthrow type="wheels.actionMissing" message="There is no action named '#arguments.action_name#'">
+				</cfif>
+			</cfif>
+		</cfcatch>
+		</cftry>
 	</cfif>
+
 </cffunction>
