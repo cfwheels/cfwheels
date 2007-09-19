@@ -33,7 +33,7 @@ There are ways to define the default action a controller calls if only the contr
 
 Some of you may be raising an eyebrow about the 85 in the URL shown in figure 1 above. That just has to do with the way I have Wheels installed on my local development server. It is not a requirement of Wheels. In fact Wheels will work on any port you configure your web server on. Wheels will also work in directories off the root. Earlier versions of Wheels required the application to be installed at the root of the web server. This was difficult for some developers to achieve, so they found it hard to use Wheels at all. About the only feature you give up by running in a sub directory off the web server root is the ability to get rid of the index.cfm in the URL. 
 
-=Hello, Wheels!=
+=Hello Wheels=
 
 Okay, let's get to some code. If you're like me when you pick up a new programming environment you're dying to get your hands on some code. Well your wait is over. Let's role up our sleeves and get our hands a little dirty. What are we going to build you may be asking? Well, I feel obligated to create the ubiquitous Hello World! application, but we'll add some Wheels magic along the way. So let's get started.
 
@@ -42,3 +42,4 @@ Create say controller.
 
 *Our First View*
 Create hello view.
+ 
