@@ -1,3 +1,5 @@
+#summary Deleting rows from your database tables.
+
 Deleting rows in Wheels is simple. If you have fetched an object you can just call its [delete] method.
 If you don't have any callbacks specified for the model all that will happen is that the row will be deleted from the table and `true` will be returned.
 If you have callbacks however, this is what happens:
@@ -14,3 +16,4 @@ Example of deleting a row:
 }}}
 
 There are also three class level delete methods available, [deleteByID], [deleteOne] and [deleteAll]. These function similarly to the class level methods for updating (read more about them in [updatingNewRows]).
+ 
