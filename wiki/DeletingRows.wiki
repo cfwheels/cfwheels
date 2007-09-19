@@ -4,13 +4,13 @@ If you have callbacks however, this is what happens:
 First, the [beforeDelete] callback code is executed (if it exists).
 If this returns `true` Wheels will proceed and delete the row from the table.
 If false is returned from the [beforeDelete] callback processing will return to your code without any row being deleted (false is returned to you in this case).
-If the row was deleted the [afterDelete] callback code is executed and whatever that code returns will be returned to you (you should make all your callbacks return true or false)
+If the row was deleted the [afterDelete] callback code is executed and whatever that code returns will be returned to you (you should make all your callbacks return true or false).
 
+Example of deleting a row:
 
 {{{
 <cfset post = model("post").findByID(33)>
-<cfset post.title = "New version of Wheels just released">
-<cfset post.save()>
+<cfset post.delete()>
 }}}
 
-Example of deleting a row
+There are also three class level delete methods available, [deleteByID], [deleteOne] and [deleteAll]. These function similarly to the class level methods for updating (read more about them in [updatingNewRows]).
