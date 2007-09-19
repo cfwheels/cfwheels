@@ -1,0 +1,47 @@
+#summary What you need before you start programming in Wheels.
+
+=Project Requirements=
+
+Before you even start checking off the list of things you need installed on your server to use Wheels it's essential to take a moment and think about the project you intend to use Wheels on. Is it a 10 page website with little need for recurring updates, is it a space flight simulator program for NASA or is it something in between? If it's something in between then read on, if not, go look for another framework.
+
+Most websites are at it's core simple data manipulation applications, you get a row here, make some updates to it, stick it back in the database and so on. This is the target market for Wheels - the simple CRUD (create, read, update, delete) websites/applications.
+
+Another thing worth noting right off the bat is that Wheels takes a very data-centric approach to the development process. What we mean by that is that it should be possible to visualize the database design and implement it early on in the project life cycle. So, if you're looking at a project with an extensive period of object oriented analysis and design which then, as a last step almost, looks at how to persist the objects for storage, then you should probably also look for another framework.
+
+Still reading?
+Good ;)
+Let's continue with what you as a developer need to know before trying to program in Wheels (don't worry, it's not much really)
+
+
+
+=System Requirements=
+
+ColdFusion on Wheels is based heavily on CFC's which were introduced in the "MX" version of ColdFusion so therefore you need at least ColdFusion MX 6 or higher (we recommend MX 6.1 or higher though).
+
+This can be installed on Windows (XP, 2003 or Vista), Macintosh or Linux - they all work just fine with Wheels.
+
+You also need a web server of course and the web servers we know for sure works with Wheels are Apache and IIS (5.1 and 6).
+The built-in web server that comes with the ColdFusion installation should work too but this has not been confirmed so try at your own risk.
+
+Finally, to build any kind of meaningful website or web application you will likely interact with a database.
+Currently supported databases are SQL Server 7, SQL Server 2000 and MySQL 5.
+Note that this only applies to the Full version, the Lite version does not interact with a database at all.
+Also note that MySQL 4 is NOT supported.
+ 
+
+
+
+=Developer Requirements=
+
+Yes, there are actually some things you should familiarize yourself with before starting to use Wheels. Don't worry though, you don't need to be an expert on any on of them, just a basic understanding is good enough.
+
+- You should know the ColdFusion programming language (surprise!).
+- You should understand the concept of object oriented programming and how it applies to ColdFusion.
+- You should know the theory behind the Model-View-Controller development pattern.
+
+*ColdFusion*
+Simply the best programming language in the world! The best way to learn it is to get [http://www.adobe.com/products/coldfusion/ the free developer edition], buy Ben Forta's "[http://www.amazon.com/Macromedia-ColdFusion-Web-Application-Construction/dp/0321223675/ref=pd_bbs_sr_1/002-5031277-7874448?ie=UTF8&s=books&qid=1185442723&sr=8-1 ColdFusion Web Application Construction Kit]" and start coding using [http://www.cfeclipse.org/ CFEclipse].
+
+*Object Oriented Programming*
+This is a programming methodology that uses objects to design applications. Objects model real world entities in your application. It is based on several techniques, including inheritance, modularity, polymorphism, and encapsulation. 
+ 
