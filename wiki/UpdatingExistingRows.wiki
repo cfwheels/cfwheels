@@ -1,3 +1,5 @@
+#summary Updating rows in your database tables.
+
 When you have created or retrieved an object you can save it to the database by calling its [save] method.
 If the object's primary key matches one in the database the contents of that row will be updated, if not, a new row will be inserted. [save] returns true if the model object passes all validations and the object was saved to the database, otherwise it returns false.
 
@@ -48,4 +50,5 @@ Unlike [updateByID] this method will NOT instantiate the objects by default (sin
 {{{
 <cfset records_returned = model("post").updateAll(set="published=1, published_at=#now()#", where="published=0")>
 }}}
+ 
  
