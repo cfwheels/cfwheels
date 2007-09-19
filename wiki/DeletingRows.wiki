@@ -1,60 +1,16 @@
-#labels tutorial,model
 Deleting rows in Wheels is simple. If you have fetched an object you can just call its [delete] method.
-If you don't have any [callbacks] specified for the model all that will happen is that the row will be deleted from the table and `true` will be returned.
-If you have [callbacks] however, this is what happens:
-First, the beforeDelete callback code is executed (if it exists).
+If you don't have any callbacks specified for the model all that will happen is that the row will be deleted from the table and `true` will be returned.
+If you have callbacks however, this is what happens:
+First, the [beforeDelete] callback code is executed (if it exists).
 If this returns `true` Wheels will proceed and delete the row from the table.
-If false is returned from the beforeDelete callback processing will return to your code without any row being deleted (false is returned to you in this case).
-If the row was deleted the afterDelete callback code is executed and whatever that code returns will be returned to you (you should make all your callbacks return true or false)
+If false is returned from the [beforeDelete] callback processing will return to your code without any row being deleted (false is returned to you in this case).
+If the row was deleted the [afterDelete] callback code is executed and whatever that code returns will be returned to you (you should make all your callbacks return true or false)
 
 
-Example of deleting a row
-
-
-
-This will invoke the beforeDelete callback if specified and afterDelete callbacks if you have set any for the model and 
-
-When you have created or retrieved an object you can save it to the database by calling it's  [save]() method. If the object's primary key matches one in the database the contents of that row will be updated, if not, a new row will be inserted. [save]() returns true if the model object passes all validations and the object was saved to the database, otherwise it returns false.
-
-Example of getting a blog post from the database, updating it's title and saving it back:
 {{{
 <cfset post = model("post").findByID(33)>
 <cfset post.title = "New version of Wheels just released">
 <cfset post.save()>
 }}}
 
-You can also change the values of one or more attributes and save it to the database in one single call using the [update]() method like this:
-{{{
-<cfset post = model("post").findByID(33)>
-<cfset post.update(title = "New version of Wheels just released")>
-}}}
-
-You can also pass in name/value pairs to update as a struct. The main reason this method accepts a struct is so that you can easily use it with forms. This is how it can look when you want to update the attributes for a post based on a submitted form.
-{{{
-<cfset post = model("post").findByID(request.params.id)>
-<cfset post.update(request.params.post)>
-}}}
-
-It's also possible to combine named arguments with a struct but then you have to name the struct argument with `attributes`. Example:
-{{{
-<cfset post = model("post").findByID(request.params.id)>
-<cfset post.update(title="New version of Wheels just released", attributes=request.params.post)>
-}}}
-
-To cut down even more on the lines of code used you can also combine the reading and saving of the objects by using the class level methods [updateByID]() and [updateAll](). 
-
-The [updateByID]() method takes a primary key value as it's first argument and then either a struct or named arguments for the values you want to update. It then gets the object, saves it and returns it to you (even if it fails validation and can't be saved the unsaved object will be returned). Here are two examples:
-{{{
-<cfset post = model("post").updateByID(33, request.params.post)>
-}}}
-
-{{{
-<cfset post = model("post").updateByID(id=33, title="New version of Wheels just released", published=1)>
-}}}
-
-Keep in mind that if you use named arguments for the values you also have to name the first argument `id` since you can't mix named and unnamed arguments in !ColdFusion.
-
-The [updateAll]() method allows you to update more than one row in a single call by specifying what rows to update with the `conditions` argument (used in the `WHERE` clause of the query) and telling Wheels what updates to make using the `updates` argument (this is used in the `SET` clause of the query). It's very important to note that this method does NOT invoke eventual [callbacks] and [validations] you have specified on the model so be careful when using this method.
-{{{
-<cfset records_returned = model("post").updateAll(updates="published=1, published_at=#now()#", conditions="published=0")>
-}}}
+Example of deleting a row
