@@ -1,8 +1,10 @@
 #summary What you need before you start programming in Wheels.
 
+We see three different types of requirements that you should be ware of; what type of project you're about to embark on, what you should learn before learning Wheels itself and finally what software you need installed on your system to make it all run.
+
 =Project Requirements=
 
-Before you even start checking off the list of things you need installed on your server to use Wheels it's essential to take a moment and think about the project you intend to use Wheels on. Is it a 10 page website with little need for recurring updates, is it a space flight simulator program for NASA or is it something in between? If it's something in between then read on, if not, go look for another framework.
+Before you even start checking off the list of things you need installed on your server to use Wheels it's essential to take a moment and think about the project you intend to use Wheels on. Is it a ten page website with little need for recurring updates, is it a space flight simulator program for NASA or is it something in between? If it's something in between then read on, if not, go look for another framework.
 
 Most websites are at it's core simple data manipulation applications, you get a row here, make some updates to it, stick it back in the database and so on. This is the target market for Wheels - the simple CRUD (create, read, update, delete) websites/applications.
 
@@ -44,4 +46,5 @@ Simply the best programming language in the world! The best way to learn it is t
 
 *Object Oriented Programming*
 This is a programming methodology that uses objects to design applications. Objects model real world entities in your application. It is based on several techniques, including inheritance, modularity, polymorphism, and encapsulation. 
+ 
  
