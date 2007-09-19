@@ -6,7 +6,7 @@ If you find the need to run a piece of code before or after several controller a
 One common thing you might find yourself doing is authenticating users before you allow them to see your content. Let's use this scenario to show how to use filters properly. You might start out with something like this:
 
 {{{
-<cfcomponent extends="ApplicationController">
+<cfcomponent extends="controller">
 
   <cffunction name="secretStuff">
     <cfif NOT structKeyExists(session, "user_id")>
@@ -24,7 +24,7 @@ One common thing you might find yourself doing is authenticating users before yo
 Sure, that works but you're already starting to repeat yourself in the code... what if the logic of your application grows bigger. It could end up looking like this:
 
 {{{
-<cfcomponent extends="ApplicationController">
+<cfcomponent extends="controller">
 
   <cffunction name="secretStuff">
     <cfif CGI.remote_addr Does Not Contain "212.55">
@@ -50,7 +50,7 @@ Sure, that works but you're already starting to repeat yourself in the code... w
 Ouch, you're now setting yourself up for a maintenance nightmare when you need to update that IP range or the messages given to the user etc - One day you are bound to miss updating it in one of the places. As the smart coder you are, you re-factor this to another method so your code ends up like this:
 
 {{{
-<cfcomponent extends="ApplicationController">
+<cfcomponent extends="controller">
 
   <cffunction name="restrictAccess">
     <cfif CGI.remote_addr Does Not Contain "212.55">
@@ -74,7 +74,7 @@ Ouch, you're now setting yourself up for a maintenance nightmare when you need t
 Much better! Wheels can take this process of avoiding repetition one step further though. By placing a [beforeFilter] call in the `init` method of the controller you can tell Wheels what method to run before any desired action(s).
 
 {{{
-<cfcomponent extends="ApplicationController">
+<cfcomponent extends="controller">
 
   <cffunction name="init">
     <cfset beforeFilter(“restrictAccess”)
@@ -105,7 +105,7 @@ Besides the advantage of not having to call `restrictAccess` twice (which grante
 All of these advantages will become much more obvious as your application grows, this was just a very simple example to put filters into context.
 
 *Sharing filters between controllers*
-So far we've only been dealing with one controller but unless you're building a very simple website you'll end up with a lot more. The question then becomes: where do I place the `restrictAccess` function so I can call it from any one of my controllers? The answer is that since all controllers extend `ApplicationController` you should put it there. The `init` function itself with the call to [beforeFilter] should remain inside your individual controllers though. If you actually want to set the same filters to be run for all controllers though, you can go ahead and move it to `ApplicationController` as well. Just remember that you will have to call `super.init()` from the `init` functions of your individual controllers (I would recommend checking whether you can use the `onRequestStart` method instead for situations like this).
+So far we've only been dealing with one controller but unless you're building a very simple website you'll end up with a lot more. The question then becomes: where do I place the `restrictAccess` function so I can call it from any one of my controllers? The answer is that since all controllers extend `controller.cfc` you should put it there. The `init` function itself with the call to [beforeFilter] should remain inside your individual controllers though. If you actually want to set the same filters to be run for all controllers though, you can go ahead and move it to `ApplicationController` as well. Just remember that you will have to call `super.init()` from the `init` functions of your individual controllers (I would recommend checking whether you can use the `onRequestStart` method instead for situations like this).
 
 *Two types of filters*
 The example with authentication showed a before filter in action. The other type of filter you can run is an after filter. As you can tell from the name it executes code _after_ the action has been completed. This can be used to make some last minute modifications to the HTML before it is sent to the browser (think translation, compressing etc) for example.
