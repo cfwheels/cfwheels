@@ -67,15 +67,11 @@
 	<!--- setup object attributes in the this scope --->
 	<cfif isQuery(arguments.attributes) AND arguments.attributes.recordcount IS NOT 0>
 		<cfloop list="#arguments.attributes.columnlist#" index="local.i">
-			<cfif structKeyExists(variables.class.columns, local.i)>
-				<cfset this[local.i] = arguments.attributes[local.i][1]>
-			</cfif>
+			<cfset this[local.i] = arguments.attributes[local.i][1]>
 		</cfloop>
 	<cfelseif isStruct(arguments.attributes) AND NOT structIsEmpty(arguments.attributes)>
 		<cfloop collection="#arguments.attributes#" item="local.i">
-			<cfif structKeyExists(variables.class.columns, local.i)>
-				<cfset this[local.i] = arguments.attributes[local.i]>
-			</cfif>
+			<cfset this[local.i] = arguments.attributes[local.i]>
 		</cfloop>
 	</cfif>
 

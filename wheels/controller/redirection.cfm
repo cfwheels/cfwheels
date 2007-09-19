@@ -5,7 +5,7 @@
 	<cfset var local = structNew()>
 
 	<cfif arguments.back>
-		<cfif len(CGI.http_referer) IS 0>
+		<cfif len(CGI.http_referer) IS 0 OR CGI.http_referer Does Not Contain CGI.server_name>
 			<cfset local.url = urlFor(controller=application.settings.default_controller, action=application.settings.default_action)>
 		<cfelse>
 			<cfset local.url = CGI.http_referer>
