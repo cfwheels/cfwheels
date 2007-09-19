@@ -1,0 +1,2 @@
+<cfcomponent extends="model">
+</cfcomponent>
