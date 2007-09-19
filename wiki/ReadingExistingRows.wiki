@@ -1,15 +1,17 @@
-#labels tutorial,model
-In Wheels there are 3 class level methods that lets you read rows from the database and turn them into objects.
-Let's start this tutorial by looking at the simplest of them, [findByID].
+#summary Returning rows from your database tables as objects or queries.
+
+Reading rows from your database typically involves using one of the three finder methods available in Wheels; [findByID], [findOne] and [findAll]. The first two of these ([findByID] and [findOne]) returns an object to you while the last one ([findAll]) returns a `cfquery` resultset.
+
+Let's start by looking at the simplest of the finder methods, [findByID].
 [findByID] takes one argument - the primary key of the row you want to get.
-If the row exists it is returned to you as an object, if not you will still get the object back but it will be empty and the `recordfound` variable will be set to `false`.
-In the following example we assume the `request.params.id` variable has been created from the URL (example: http://localhost/blog/viewauthor/7)
+If the row exists it is returned to you as an object, if not you will still get the object back but it will be empty and a variabled named `found` variable will be set to `false` (which of course will be set to `true` when you do get a filled object back).
+In the following example we assume the `params.id` variable has been created from the URL (for example an URL such as `http://localhost/blog/viewauthor/7`)
 
 In your controller:
 {{{
-<cfset author = model("author").findByID(request.params.id)>
-<cfif NOT author.recordfound>
-  <cfset request.flash = "Author #request.params.id# was not found">
+<cfset author = model("author").findByID(params.id)>
+<cfif NOT author.found>
+  <cfset session.flash = "Author #params.id# was not found">
   <cfset redirectTo(back=true)>
 </cfif>
 }}}
@@ -21,28 +23,19 @@ In your view:
 </cfoutput>
 }}}
 
+Often you'll find yourself wanting to get a row (or many) based on a criteria other than just the primary key value though. If you want to get the last order made by a customer you can for example achieve this by using the [findOne] method:
 
-
-- specify conditions, order get back an object as object or with query
-- simplest way, by ID
-- find all, where maps to where etc
-- desribe all options to findall, where, order etc
-- findone, same query, maxrows forced to 1
-- explain include applies to all
-
-
-
-
-
-
-
-
-When you have created or retrieved an object you can save it to the database by calling its [save] method.
-If the object's primary key matches one in the database the contents of that row will be updated, if not, a new row will be inserted. [save]() returns true if the model object passes all validations and the object was saved to the database, otherwise it returns false.
-
-Example of getting a blog post from the database, updating it's title and saving it back:
 {{{
-<cfset post = model("post").findByID(33)>
-<cfset post.title = "New version of Wheels just released">
-<cfset post.save()>
+<cfset an_order = model("order").findOne(order="date_purchased DESC")>
 }}}
+
+[findOne] will in this case force the `maxrows` argument to the `cfquery` tag to 1.
+Since you're specifically asking to get one row from the database Wheels will return this as an object. However, when you use [findAll] you are asking to get one or more rows from the database in which case Wheels will return this as a `cfquery` resultset (which could be empty if nothing was found based on your criteria). Besides these differences [findOne] and [findAll] accept the same arguments. Let's have a closer look at these arguments:
+
+*select*
+*where*
+*order*
+*include*
+*maxrows*
+*page / per_page*
+*cache*
