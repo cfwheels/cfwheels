@@ -5,7 +5,6 @@
 Let's write a simple application to make sure we have Wheels installed properly and that everything is working properly. Along the way we'll get to know a little about how Wheels applications work.
 
 *Let's make sure we're all on the same page*
-
 I'm going to assume that you've already downloaded the latest version of Wheels and have it installed on your system. If you haven't done that, stop and read [BuildingABlogPartI] and get everything setup. It's okay, we'll wait for you...
 
 Okay, so you have Wheels installed and can see the Wheels welcome page as shown in figure 1 below. That wasn't that hard now, was it? 
@@ -13,7 +12,6 @@ Okay, so you have Wheels installed and can see the Wheels welcome page as shown 
 http://cfwheels.googlecode.com/files/ig.fig.1.jpg
 
 *The Model-View-Controller Framework*
-
 I'm not trying to scare you off already by using some unfamiliar words but we need to take a brief look at the Model-View-Controller (MVC for short) framework in order to understand how Wheels works. At the very basic level a MVC framework breaks the components that make up an application into three distinct pieces with each piece having a very well defined role and responsibility. Imagine a football team where everyone tried to be the quarterback. Things would get pretty messy rather quickly. On a football team, or any team sport for that matter, each member of the team has a specific job and responsibility. 
 
 A Wheels application has three distinct players each with their own distinct roles and responsibilities. The players in this case are named Model, View, and Controller. Very original, I know. Anyway, the model is responsible for the data objects of your application. It generally will deal with your databases, if any, and contain your specific business rules that tells your application how to use that data. The View is responsible for the user interface of your application. It will build and present the web pages that make up your application. The Controller is the central command of your application. It defines and knows about the functions or actions your application can handle. These actions are generally the web requests initiated by the users of your application. The Controller's job is to listen for these actions, talk to the Model to get any data that is needed by the action, and then finally hand off the results to the View so the View can display a page for the user.
@@ -21,7 +19,6 @@ A Wheels application has three distinct players each with their own distinct rol
 Others have written entire volumes describing the MVC methodology and it's pros and cons. Some of these books are even great reads, but this high level understanding of the MVC methodology presented here is all you need to get starting using Wheels.
 
 *A little bit about Wheels URLs*
-
 We just finished a discussion about the MVC methodology so lets see how that relates to the URL of a Wheels application. Let's look at the URL below:
 
 http://www.mywheelsapp.com/index.cfm/say/hello
@@ -41,9 +38,7 @@ Some of you may be raising an eyebrow about the 85 in the URL shown in figure 1 
 Okay, let's get to some code. If you're like me when you pick up a new programming environment you're dying to get your hands on some code. Well your wait is over. Let's role up our sleeves and get our hands a little dirty. What are we going to build you may be asking? Well, I feel obligated to create the ubiquitous Hello World! application, but we'll add some Wheels magic along the way. So let's get started.
 
 *Our First Controller*
-
 Create say controller.
 
 *Our First View*
-
 Create hello view.
