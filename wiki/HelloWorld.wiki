@@ -1,4 +1,5 @@
 #summary Let's get started and build our first Wheels application.
+#labels tutorial
 
 =Getting Started=
 
@@ -42,3 +43,4 @@ Create say controller.
 
 *Our First View*
 Create hello view.
+ 
