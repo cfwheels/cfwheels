@@ -1,4 +1,5 @@
 #summary What you need before you start programming in Wheels.
+#labels chapter
 
 We see three different types of requirements that you should be ware of; what type of project you're about to embark on, what you should learn before learning Wheels itself and finally what software you need installed on your system to make it all run.
 
@@ -46,5 +47,6 @@ Simply the best programming language in the world! The best way to learn it is t
 
 *Object Oriented Programming*
 This is a programming methodology that uses objects to design applications. Objects model real world entities in your application. It is based on several techniques, including inheritance, modularity, polymorphism, and encapsulation. 
+ 
  
  
