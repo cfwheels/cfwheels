@@ -1,4 +1,5 @@
 #summary Web server and database setup.
+#labels draft
 
 Welcome to the first part of a series of chapters in which I will show you how to build a simple blog application using the !ColdFusion on Wheels framework. This is meant as a crash course in Wheels more than anything else and therefore I will leave out some advanced concepts related specifically to blogs (like trackbacks, RSS feeds etc) and focus more on the general concepts in Wheels so that you learn the thinking behind it and can apply your new knowledge to any application you build using Wheels in the future. Also, while we code the blog application I will sometimes go on small detours here and there to show specific concepts and features in Wheels and sometimes I'll even add completely unnecessary things to the blog just so that I can cover the most important aspects of Wheels. Bottom line; don't expect to end up with a finished product that you can use as your own blog but do expect to learn a whole lot about Wheels.
 
@@ -38,3 +39,4 @@ This part is easy, just create a new database in SQL server or MySQL and add a n
 When you've configured the web server and the database you can test your installation by typing `http://localhost` in your web browser. You should get a page saying "Welcome to Wheels!".
 
 With all that boring setup stuff out of the way, let's move on to some actual code in the next chapter...
+ 
