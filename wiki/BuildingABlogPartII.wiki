@@ -1,4 +1,5 @@
 #summary Building the home page.
+#labels draft
 
 Finally time for some code... let's first get rid of the Wheels welcome page and replace it with our own default home page. A quick introduction to Wheels URLs is needed before we do that though.
 
@@ -105,3 +106,4 @@ Open up the `config/settings.cfm` file and look for the following line:
 These lines tell Wheels what controller and action to invoke when none has been specified in the URL. In other words when you go to 
 
 That line tells Wheels that the sample controller should be the default one for this application should be sample.
+ 
