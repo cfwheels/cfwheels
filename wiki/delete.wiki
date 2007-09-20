@@ -1,4 +1,5 @@
 #summary This object level method deletes the row corresponding to the current object.
+#labels method
 
 Returns `true` on successful deletion of the row, `false` otherwise.
 
@@ -6,3 +7,4 @@ Returns `true` on successful deletion of the row, `false` otherwise.
 || This method takes no arguments || || || || ||
 
 See the section on [DeletingRows] for more information and code examples.
+ 
