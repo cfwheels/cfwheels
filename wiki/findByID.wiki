@@ -1,4 +1,4 @@
-#labels model,api,class
+#labels method
 This is a class level method.
 It returns the object matching the `id` passed in.
 If no record is found an object is still returned and the `objectfound` variable is set to `false`.
@@ -9,3 +9,4 @@ If no record is found an object is still returned and the `objectfound` variable
 || include || no || string || || associations to include in query using `left outer join` statements ||
 
 See the section on ReadingExistingRows for more information and code examples.
+ 
