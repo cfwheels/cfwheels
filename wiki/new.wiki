@@ -1,4 +1,4 @@
-#labels model,api,class
+#labels method
 This class level method creates a new object (empty or with pre-set attributes) and returns it to you.
 The object is not saved to the database, it only exists in memory.
 Attribute names and values can be passed in either using named arguments or as a struct to the `attributes` argument.
@@ -23,3 +23,4 @@ Attribute names should correspond to column names in the associated table.
 }}}
 
 See the section on [CreatingNewRows] for more information and code examples.
+ 
