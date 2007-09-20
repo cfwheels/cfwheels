@@ -1,16 +1,93 @@
-#summary One-sentence summary of this page.
+#summary What's an ORM and how is it used in Wheels.
 #labels chapter
 
-= Introduction =
+=Class methods and object methods=
 
-Add your content here.
+Unlike most other languages there is no notion of class level methods in !ColdFusion.
+This means that even if you call a method that does not need to use any instance data you still have to create an object.
+In Wheels we create this object like this.
 
+{{{
+<cfset model("author")>
+}}}
 
-= Details =
+The model function will return a reference to an author object in the application scope (unless it's the first time you call this function in which case it will also create and store it in the application scope).
+Once you have the author object you can start calling class level methods on it like [findByID] for example.
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+{{{
+<cfset auth_class = model("author")>
+<cfset auth = auth_class.findByID(1)>
+}}}
 
+For readability, this is usually combined into the following though.
+
+{{{
+<cfset auth = model("author").findByID(1)>
+}}}
+
+Now `auth` is an object instance of the author class and you can call object level methods on it like [update], [save] etc.
+
+{{{
+<cfset auth.update(first_name="Joe")>
+}}}
+
+=Primary Keys=
+
+The convention in Wheels when it comes to primary keys is that they should be named `id` and be auto incrementing integers.
+If you want to you can override this convention by specifying the primary key name like this:
+
+`app/models/author.cfc`
+{{{
+<cfcomponent extends="cfwheels.model">
+  <cfset setPrimaryKey("auth_id")>
+</cfcomponent>
+}}}
+
+You can't override the fact that they have to be auto incrementing integers though.
+The only time this rule does not apply is for tables you use to join [hasAndBelongsToMany] associations.
+Those do not need an `id` primary key column but we'll get back to this later.
+
+=Tables and Classes=
+
+Wheels comes with a custom built ORM.
+ORM stands for "[http://en.wikipedia.org/wiki/Object-relational_mapping object-relational mapping]" and means that tables in your relational database map to models (or "classes" if you prefer that term) in your application.
+The rows in your tables map to objects (or "instances" if you prefer that term) of your models and the columns in these tables map to object attributes.
+
+To create a model in your application that maps to a table in your database all you have to do is create a new model file in your `app/models` directory and make it extend `cfwheels.model`.
+
+`app/models/author.cfc`
+{{{
+<cfcomponent extends="cfwheels.model">
+</cfcomponent>
+}}}
+
+After creating this file you now have a bunch of methods available for you to use that handles reading and writing to the `authors` table.
+For example you can do the following to get the author with the primary key of 1, change his first name and save the row back to the database.
+
+{{{
+<cfset auth = model("author").findByID(1)>
+<cfset auth.first_name = "Joe">
+<cfset auth.save()>
+}}}
+
+This code makes use of the class level method [findByID], updates the object attribute in memory and then saves it back using the object level method [save].
+We'll get back to all these methods and more later of course.
+
+By default a table name should be the plural version of the model name so if you have an `author` class the table name should be `authors`.
+To change this behavior you can use the setTableName method.
+This method should be placed in the pseudo-constructor area of your model file, in other words directly after the `cfcomponent` start tag and before any functions.
+
+`app/models/author.cfc`
+{{{
+<cfcomponent extends="cfwheels.model">
+  <cfset setTableName("auth_tbl")>
+</cfcomponent>
+}}}
+ 
+=Columns and Attributes=
+
+Objects in Wheels have attributes that correspond to the columns in the table it maps to.
+The first time (or every time if you're in development mode) you call a method on a model Wheels will reflect on the schema inside the database for the model's table and extract all the column information.
+To keep things as simple as possible there are no getters or setters in Wheels, instead all the attributes are made available in the `this` scope.
+Nothing is stopping you from creating these on your own though if this is something you're used to having.
  
