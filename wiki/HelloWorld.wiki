@@ -39,10 +39,19 @@ Some of you may be raising an eyebrow about the 85 in the URL shown in figure 1 
 Okay, let's get to some code. If you're like me when you pick up a new programming environment you're dying to get your hands on some code. Well your wait is over. Let's role up our sleeves and get our hands a little dirty. What are we going to build you may be asking? Well, I feel obligated to create the ubiquitous Hello World! application, but we'll add some Wheels magic along the way. So let's get started.
 
 *Our First Controller*
-Create say controller.
+When you download Wheels it comes with a Sample controller which displays the Welcome to Wheels screen. We'll create a controller from scratch here to show how easy it is to setup a controller and plug it into the Wheels framework. Let's create a file called say.cfc in the _InstallationDirectory_/controllers/ directory and the code below to the file.
+
+{{{
+<cfcomponent extends="controller">
+	
+</cfcomponent>
+}}}
+
+Congradulations you just created your first Wheels controller. What does this controller do, you might ask? Well, to be honest, not much. It has no functions defined so it doesn't add any new functionality to our Wheels application but since it extends the base controller class it inherites quite a bit of functionality and is now tied into our Wheels application. 
 
 *Our First View*
 Create hello view.
+ 
  
  
  
