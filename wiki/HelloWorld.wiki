@@ -24,7 +24,7 @@ We just finished a discussion about the MVC methodology so lets see how that rel
 
 http://www.mywheelsapp.com/index.cfm/say/hello
 
-In the URL above the _http://www.mywheelsapp.com/_ portion of the URL, defines the location of your application. This portion is similar to any other URL on the internet. Really not much to see here, so let's move on. The _index.cfm_ portion is the page that everything flows through. Again we're used to that already, so lets move on. The next portion is where the magic happens. After the page name we are used to seeing variables separated by ? and &. Wheels on the other hands uses what is commonly referred to as _pretty URLs_. Instead of using variables separated by ? and &, simple words are used to tell the application what to do. This portion of our URL defines which function within the application gets called by the URL. What's more, it identifies which function is which controller gets called by the URL. The URL above tells our application to go to the *say* controller and call the *hello* function. So this is how the URL of a Wheels application is related to the MVC methodology described above. 
+In the URL above the _http://www.mywheelsapp.com/_ portion of the URL, defines the location of your application. This portion is similar to any other URL on the internet. Really not much to see here, so let's move on. The _index.cfm_ portion is the page that everything flows through. Again we're used to that already, so lets move on. The next portion is where the magic happens. After the page name we are used to seeing variables separated by ? and &. Wheels on the other hands uses what is commonly referred to as _pretty URLs_. Instead of using variables separated by ? and &, simple words are used to tell the application what to do. This portion of our URL defines which function within the application gets called by the URL. What's more, it identifies which function in a particular controller will get called by the URL. The URL above tells our application to go to the *say* controller and call the *hello* function. So this is how the URL of a Wheels application is related to the MVC methodology described above. 
 
 There is a way to make the URL even prettier by getting rid of the index.cfm page in the middle of the URL. So the above URL would become:
 
@@ -43,4 +43,5 @@ Create say controller.
 
 *Our First View*
 Create hello view.
+ 
  
