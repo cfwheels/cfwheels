@@ -47,10 +47,19 @@ When you download Wheels it comes with a Sample controller which displays the We
 </cfcomponent>
 }}}
 
-Congradulations you just created your first Wheels controller. What does this controller do, you might ask? Well, to be honest, not much. It has no functions defined so it doesn't add any new functionality to our Wheels application but since it extends the base controller class it inherites quite a bit of functionality and is now tied into our Wheels application. 
+Congratulations you just created your first Wheels controller. What does this controller do, you might ask? Well, to be honest, not much. It has no functions defined so it doesn't add any new functionality to our Wheels application but since it extends the base controller class it inherits quite a bit of functionality and is now tied into our Wheels application. So what happens if we try to call our new controller right now? Lets see! open your browser and point your browser to the new controller. Since my server is installed on port 85 my URL is http://localhost:85/index.cfm/say. You may have to change this URL depending on where your Wheels application is installed.
 
+If you did everything right, you will get an error from Wheels as shown in Figure 2 below.
+
+
+http://cfwheels.googlecode.com/files/hw.fig.2.jpg
+
+The error says "There is no action named 'index'." Where did index come from? The URL we typed only specified a controller name and not any particular action within the controller. When an action is not specified Wheels assumes you we want the default action. Out of the box the default action is set to index, therefore Wheels is trying to find the index action and throws an error since it doesn't find it.
+
+ 
 *Our First View*
 Create hello view.
+ 
  
  
  
