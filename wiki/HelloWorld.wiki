@@ -6,7 +6,7 @@
 Let's write a simple application to make sure we have Wheels installed properly and that everything is working properly. Along the way we'll get to know a little about how Wheels applications work.
 
 *Let's make sure we're all on the same page*
-I'm going to assume that you've already downloaded the latest version of Wheels and have it installed on your system. If you haven't done that, stop and read [BuildingABlogPartI] and get everything setup. It's okay, we'll wait for you...
+I'm going to assume that you've already downloaded the latest version of Wheels and have it installed on your system. If you haven't done that, stop and read the [Installation] chapter and get everything setup. It's okay, we'll wait for you...
 
 Okay, so you have Wheels installed and can see the Wheels welcome page as shown in figure 1 below. That wasn't that hard now, was it? 
 
