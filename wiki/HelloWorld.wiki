@@ -58,12 +58,14 @@ The error says "There is no action named 'index'." Where did index come from? Th
 
 Now that we have our first controller created, lets extend it by adding our first action to it. We'll create a hello action in our say controller. Change your say controller so it looks like the code block below:
 
+{{{
 <cfcomponent extends="controller">
 
 	<cffunction name="hello">
 	</cffunction>
 
 </cfcomponent>
+}}}
 
 Now that we have added our first action to our controller lets call our action and see what we get. To call our hello action we simply add /hello to the end of the previous URL we used to call our say controller. So the complete URL will look like:
  
@@ -75,7 +77,9 @@ Let's remedy the situation and create our first view file. View files are simple
 
 Find the views directory in the root of your Wheels installation. There will be a few directories in there already. We will look at the helpers and layouts directories in later examples. For now we need to create a new directory in the views directory called say. This is the same name as our controller we created above. Now inside the say directory create a file called hello.cfm. To the hello.cfm file add the following line of code:
 
+{{{
 <h1>Hello!<h1/>
+}}}
 
 Save your hello.cfm file and lets call our say/hello action once again. We have our first working Wheels page. your browser should look like figure 3 below.
 
@@ -85,6 +89,7 @@ Congratulations you have just created your first functional Wheels page. Albeit 
 
 First thing we are going to do is to add some dynamic content to our say/hello controller action. Modify your say controller so it looks like the code block below:
 
+{{{
 <cfcomponent extends="controller">
 	
 	<cffunction name="hello">
@@ -92,11 +97,14 @@ First thing we are going to do is to add some dynamic content to our say/hello c
 	</cffunction>
 
 </cfcomponent>
+}}}
 
 All we are doing here is creating a variable called time and setting it's contents equal to the current server time using the basic ColdFusion now() function. Next we will modify our say/hello.cfm view so it looks like the code block bellow so the variable we just created is displayed to the users.
 
+{{{
 <h1>Hello!</h1>
 <p>Current time: <cfoutput>#time#</cfoutput></p>
+}}}
 
 Now let's call our say/hello action again using our browser. Your browser should look like figure 4 below.
 
@@ -108,6 +116,7 @@ Now we will expand the functionality of our application once again by adding a s
 
 Modify the the say controller file so it looks like the code block below.
 
+{{{
 <cfcomponent extends="controller">
 
 	<cffunction name="hello">
@@ -118,10 +127,13 @@ Modify the the say controller file so it looks like the code block below.
 	</cffunction>
 
 </cfcomponent>
+}}}
 
 Now go to the views/say directory and create a goodbye.cfm page. Add the following code to the goodbye.cfm page and save your goodbye.cfm page
 
+{{{
 <h1>Goodbye!</h1>
+}}}
 
 If we did everything right, we should be able to call the new say/goodbye action using the following URL:
 
@@ -133,9 +145,11 @@ http://cfwheels.googlecode.com/files/hw.fig.5.jpg
 
 Now let's link our two actions together. We will do this by adding a link to the bottom of each of our pages to call the other page. Open the say/hello.cfm view file. We are going to add a line of code to the end of this file so our say/hello.cfm file should look like the code block below:
 
+{{{
 <h1>Hello!</h1>
 <p>Current time: <cfoutput>#time#</cfoutput></p>
 <p>Time to say <cfoutput>#linkTo(text="goodbye", action="goodbye")#?</cfoutput></p>
+}}}
 
 The linkTo() function is a built in Wheels function. Here we are passing two parameters to it. The first parameter is the text parameter which is the text that will be used in our hyper link. The second parameter is action and it defines the action within the current controller to build a URL to. By using the built in functions your application's main URL may change and even controllers and actions may get shifted around but you wont suffer from the dreaded dead link. Wheels will always create a valid link for you.
 
@@ -147,8 +161,10 @@ You can see that although we didn't specify how to get to the goodbye action Whe
 
 Let's complete our little app and add a corresponding link to the bottom of our say/goodbye.cfm view page. Open your say/goodbye.cfm view page and modify it so it looks like the code block below.
 
+{{{
 <h1>Goodbye!</h1>
 <p>Time to say <cfoutput>#linkTo(text="hello", action="hello")#?</cfoutput></p>
+}}}
 
 If you now call the goodbye action in your browser, your browser should look like figure 7 below.
 
