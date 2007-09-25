@@ -373,7 +373,6 @@
 
 	<cfset arguments.sql = local.sql>
 
-	<!--- double-checked lock --->
 	<cfif application.settings.perform_caching AND len(arguments.cache) IS NOT 0>
 		<cfset local.category = "query">
 		<cfset local.key = "#variables.class.model_name#_#hashStruct(arguments)#">
@@ -393,6 +392,8 @@
 	<cfelse>
 		<cfset local.query = FL_executeQuery(argumentCollection=arguments)>
 	</cfif>
+
+		<!--- <cfset local.query = FL_executeQuery(argumentCollection=arguments)> --->
 
 	<cfreturn local.query>
 </cffunction>
@@ -417,6 +418,15 @@
 	<cfif NOT arguments.reload AND isDefined("request.wheels.cache") AND structKeyExists(request.wheels.cache, locals.key)>
 		<cfset locals.query = request.wheels.cache[locals.key]>
 	<cfelse>
+		<!--- <cfset locals.cache_time = 0>
+		<cfif application.settings.perform_caching AND len(arguments.cache) IS NOT 0>
+			<cfif isNumeric(arguments.cache)>
+				<cfset locals.cache_time = arguments.cache>
+			<cfelseif isBoolean(arguments.cache) AND arguments.cache>
+				<cfset locals.cache_time = application.settings.default_cache_time>
+			</cfif>
+		</cfif> --->
+		<!--- cachedwithin="#createTimeSpan(0,0,locals.cache_time,0)#" --->
 		<cfquery name="locals.query" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
 		<cfif application.wheels.database.type IS "sqlserver" AND len(arguments.limit) IS NOT 0 AND len(arguments.offset) IS NOT 0>
 		SELECT #preserveSingleQuotes(arguments.sql.pagination.simple_select)# AS primary_key
