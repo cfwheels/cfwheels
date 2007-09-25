@@ -202,7 +202,7 @@
 					<cfinclude template="../../events/onmissingtemplate.cfm">
 					<cfabort>
 				<cfelse>
-					<cfthrow type="wheels.actionMissing" message="There is no action named '#arguments.action_name#'">
+					<cfthrow type="wheels.viewMissing" message="No view page for the action '#arguments.action_name#' could be found">
 				</cfif>
 			</cfif>
 		</cfcatch>
