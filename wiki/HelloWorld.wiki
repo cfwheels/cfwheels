@@ -56,9 +56,110 @@ http://cfwheels.googlecode.com/files/hw.fig.2.jpg
 
 The error says "There is no action named 'index'." Where did index come from? The URL we typed only specified a controller name and not any particular action within the controller. When an action is not specified Wheels assumes you we want the default action. Out of the box the default action is set to index, therefore Wheels is trying to find the index action and throws an error since it doesn't find it.
 
+Now that we have our first controller created, lets extend it by adding our first action to it. We'll create a hello action in our say controller. Change your say controller so it looks like the code block below:
+
+<cfcomponent extends="controller">
+
+	<cffunction name="hello">
+	</cffunction>
+
+</cfcomponent>
+
+Now that we have added our first action to our controller lets call our action and see what we get. To call our hello action we simply add /hello to the end of the previous URL we used to call our say controller. So the complete URL will look like:
  
-*Our First View*
-Create hello view.
+http://localhost:85/index.cfm/say/hello
+
+Once again we get an error message. Although we have created the controller and added the hello action to it, we haven't created any view files. By default when a controller action is called Wheels will look for a view file with the same name as the controller function being called and will hand off the processing to the view to complete and display the user interface. In our case, Wheels tries to find a view file for our say/hello action and cannot find one so it throws an error.
+
+Let's remedy the situation and create our first view file. View files are simple CFML pages that handle the web pages of our application. By default the view files will have the same name as our controller actions and will be grouped into a directory under the views directory. This directory will have the same name as our controller. Have I confused you enough? Let's see what all this means. 
+
+Find the views directory in the root of your Wheels installation. There will be a few directories in there already. We will look at the helpers and layouts directories in later examples. For now we need to create a new directory in the views directory called say. This is the same name as our controller we created above. Now inside the say directory create a file called hello.cfm. To the hello.cfm file add the following line of code:
+
+<h1>Hello!<h1/>
+
+Save your hello.cfm file and lets call our say/hello action once again. We have our first working Wheels page. your browser should look like figure 3 below.
+
+http://cfwheels.googlecode.com/files/hw.fig.3.jpg
+
+Congratulations you have just created your first functional Wheels page. Albeit it is a very simple page. Pat yourself on the back, go grab a snack and when you're ready lets go on and extend the functionality of our hello world application a little more. We will add some dynamic content to our hello action and add a second action to the application and then tie the two actions together. Let's get started.
+
+First thing we are going to do is to add some dynamic content to our say/hello controller action. Modify your say controller so it looks like the code block below:
+
+<cfcomponent extends="controller">
+	
+	<cffunction name="hello">
+		<cfset time = now()>
+	</cffunction>
+
+</cfcomponent>
+
+All we are doing here is creating a variable called time and setting it's contents equal to the current server time using the basic ColdFusion now() function. Next we will modify our say/hello.cfm view so it looks like the code block bellow so the variable we just created is displayed to the users.
+
+<h1>Hello!</h1>
+<p>Current time: <cfoutput>#time#</cfoutput></p>
+
+Now let's call our say/hello action again using our browser. Your browser should look like figure 4 below.
+
+http://cfwheels.googlecode.com/files/hw.fig.4.jpg
+
+This simple example shows that any dynamic content created in a controller action is available to the corresponding view file. In our application we created a time variable in the say/hello controller action and display that variable in our say/hello view file. 
+
+Now we will expand the functionality of our application once again by adding a second action to our say controller. If you feel adventurous go ahead and add a goodbye action to the say controller, then create a goodbye.cfm view file that displays a goodbye message to the user. We'll quickly go step by step and catch up with you.
+
+Modify the the say controller file so it looks like the code block below.
+
+<cfcomponent extends="controller">
+
+	<cffunction name="hello">
+		<cfset time = now()>
+	</cffunction>
+
+	<cffunction name="goodbye">
+	</cffunction>
+
+</cfcomponent>
+
+Now go to the views/say directory and create a goodbye.cfm page. Add the following code to the goodbye.cfm page and save your goodbye.cfm page
+
+<h1>Goodbye!</h1>
+
+If we did everything right, we should be able to call the new say/goodbye action using the following URL:
+
+http://localhost:85/index.cfm/say/goodbye
+
+Our browser should look like figure 5 below:
+
+http://cfwheels.googlecode.com/files/hw.fig.5.jpg
+
+Now let's link our two actions together. We will do this by adding a link to the bottom of each of our pages to call the other page. Open the say/hello.cfm view file. We are going to add a line of code to the end of this file so our say/hello.cfm file should look like the code block below:
+
+<h1>Hello!</h1>
+<p>Current time: <cfoutput>#time#</cfoutput></p>
+<p>Time to say <cfoutput>#linkTo(text="goodbye", action="goodbye")#?</cfoutput></p>
+
+The linkTo() function is a built in Wheels function. Here we are passing two parameters to it. The first parameter is the text parameter which is the text that will be used in our hyper link. The second parameter is action and it defines the action within the current controller to build a URL to. By using the built in functions your application's main URL may change and even controllers and actions may get shifted around but you wont suffer from the dreaded dead link. Wheels will always create a valid link for you.
+
+So once you have added the additional line of code to the end of the say/hello.cfm view file save your file and lets call the say/hello controller action from our browser. Your browser should look like figure 6 below.
+
+http://cfwheels.googlecode.com/files/hw.fig.6.jpg
+
+You can see that although we didn't specify how to get to the goodbye action Wheels created a link for us and added an appropriate URL for the say/goodbye controller action to the link.
+
+Let's complete our little app and add a corresponding link to the bottom of our say/goodbye.cfm view page. Open your say/goodbye.cfm view page and modify it so it looks like the code block below.
+
+<h1>Goodbye!</h1>
+<p>Time to say <cfoutput>#linkTo(text="hello", action="hello")#?</cfoutput></p>
+
+If you now call the goodbye action in your browser, your browser should look like figure 7 below.
+
+http://cfwheels.googlecode.com/files/hw.fig.7.jpg
+
+Now lets take a look at the concept of environments within a Wheels application. A wheels application has three environments. These are development, testing, and production. You as the developer can define variables that have different values in each environment. 
+
+This is accomplished by modifying the three environments files in the config/environments directory. The three files are called development.cfm, testing.cfm, and production.cfm and correspond to the development, testing, and production environments. These files are a perfect place to define database or mail server related variables or any other variable or setting that needs to have a different value in each environment. 
+
+Another key difference between the development and production environments is that, in development mode Wheels displays some debug information at the bottom of the page. You've seen this information in the figures above. Lets change our application into the production environment. We do this by modifying the config/environment.cfm file. Open this file and change the the environment to production. Your config/environment.cfm file should now look like the code block below.
+
  
  
  
