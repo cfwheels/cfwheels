@@ -1,0 +1,19 @@
+#labels method
+Pass in two dates to this method and it will return a string describing the difference between them. If the difference between the two dates you pass in is 2 hours, 13 minutes and 10 seconds it will return "about 2 hours" for example. This method is useful when you want to describe the time that has passed since a certain event (examople: "Comment added by Per Djurner about 3 weeks ago") or the time left until a certain event (example: "Next chat sessions starts in about 5 hours") instead of just writing out the date itself.
+
+Set include_seconds to true if you want details in the string for time differences less than one minute.
+
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| from_time || yes || date || || date to compare from ||
+|| to_time || yes || date || || date to compare to ||
+|| include_seconds || no || date || false || set to true if you want a more detailed description when the time difference is less than one minute ||
+
+*Example:*
+
+{{{
+#distanceOfTimeInWords(order.purchase_date, order.delivery_date)#
+}}}
+
+*More information:*
+
+[timeAgoInWords] and [timeUntilInWords].
