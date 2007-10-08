@@ -1,5 +1,5 @@
 #summary Returns a HTML select tag with hours as options.
-#labels method,helper,date
+#labels method,view,date,form
 
 This method returns hours from 0 to 23.
 
