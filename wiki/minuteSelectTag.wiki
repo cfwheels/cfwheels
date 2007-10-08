@@ -1,5 +1,5 @@
 #summary Returns a HTML select tag with minutes as options.
-#labels method,helper,date
+#labels method,view,date,form
 
 This method returns minutes from 0 to 59. If you don't want every minute between 0 and 59 included in the drop-down you can limit it by passing in the minute_step argument. If you for example pass in minute_step=15 you will get 00,15,30 and 45 as options.
 
