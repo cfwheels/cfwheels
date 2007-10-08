@@ -1,0 +1,12 @@
+#summary Returns a HTML select tag with days as options.
+#labels method,helper,date
+
+This method returns days 1-31.
+
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+
+*Examples:*
+
+{{{
+#daySelectTag()#
+}}}
