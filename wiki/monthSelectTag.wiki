@@ -9,5 +9,9 @@ You can use the `month_display` argument to control the display of the option ta
 *Examples:*
 
 {{{
+#monthSelectTag()#
+}}}
+
+{{{
 #monthSelectTag(month_display="abbreviations")#
 }}}
