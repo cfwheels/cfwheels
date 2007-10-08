@@ -1,14 +1,14 @@
-#summary One-sentence summary of this page.
+#summary Returns HTML select tags for choosing year, month and day.
 #labels method,view,date,form
 
-= Introduction =
+You can pass in a different order to change the order in which the select tags appear on the page. You can also exclude one select tag completely by specifying an order with only one or two items. You can also change the separator character that goes between the select tags.
 
-Add your content here.
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| order || no || list || "month,day,year" || use to change the order of or exclude select tags ||
+|| separator || no || string || " " || use to change the character that is displayed between the select tags ||
 
+*Examples:*
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+{{{
+#dateSelectTag(order="year,month,day")#
+}}}
