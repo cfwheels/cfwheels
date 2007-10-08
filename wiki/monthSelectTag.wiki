@@ -1,10 +1,10 @@
 #summary Returns a HTML select tag with months as options.
 #labels method,helper,date
 
-You can use the `month_display` argument to control the display of the option tags. By default the full month names will be used but you can change to show abbreviations or month numbers. 
+You can use the `month_display` argument to control the display of the option tags. By default the full month names will be used but you can change to show abbreviations or just month numbers. 
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
-|| month_display || no || string || names || names, numbers or abbreviations ||
+|| month_display || no || string || names || pass in "names", "numbers" or "abbreviations" to control display ||
 
 *Examples:*
 
