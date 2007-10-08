@@ -1,14 +1,17 @@
-#summary One-sentence summary of this page.
+#summary Returns HTML select tags for choosing year, month, day, hour, minute and second.
 #labels method,view,date,form
 
-= Introduction =
+You can pass in a different order to change the order in which the select tags appear on the page. You can also exclude one select tag completely by specifying an order with only one or two items. You can also change the separator characters that goes between the select tags and the character that goes between the entire site of select tags (after the first three date select tags but before the last three time select tags).
 
-Add your content here.
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| date_order || no || list || "month,day,year" || use to change the order of or exclude date select tags ||
+|| time_order || no || list || "hour,minute,second" || use to change the order of or exclude time select tags ||
+|| date_separator || no || string || " " || use to change the character that is displayed between the date select tags ||
+|| time_separator || no || string || ":" || use to change the character that is displayed between the time select tags ||
+|| separator || no || string || " - " || use to change the character that is displayed between the first and second set of select tags ||
 
+*Examples:*
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+{{{
+#dateTimeSelectTag(date_order="year,month,day", month_display="abbreviations")#
+}}}
