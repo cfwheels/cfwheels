@@ -1,0 +1,17 @@
+#summary Returns a HTML select tag with minutes as options.
+#labels method,helper,date
+
+This method returns minutes from 1 to 59. If you don't want every minute between 1 and 59 included in the drop-down you can limit it by passing in the minute_step argument. If you for example pass in minute_step=15 you will get 00,15,30 and 45 as options.
+
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| minute_step || no || numeric || 1 || use to limit the amount of minutes to display ||
+
+*Examples:*
+
+{{{
+#minuteSelectTag()#
+}}}
+
+{{{
+#minuteSelectTag(minute_step=10)#
+}}}
