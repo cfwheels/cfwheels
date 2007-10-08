@@ -1,5 +1,5 @@
 #summary One-sentence summary of this page.
-#labels method,helper,date,model
+#labels method,view,date,model
 
 = Introduction =
 
