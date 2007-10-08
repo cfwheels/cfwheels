@@ -1,0 +1,13 @@
+#summary Returns a HTML select tag with seconds as options.
+#labels method,helper,date
+
+This method returns seconds from 0 to 59.
+
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| This method takes no arguments || || || || ||
+
+*Examples:*
+
+{{{
+#secondSelectTag()#
+}}}
