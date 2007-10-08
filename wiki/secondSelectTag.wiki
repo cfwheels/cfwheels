@@ -1,5 +1,5 @@
 #summary Returns a HTML select tag with seconds as options.
-#labels method,helper,date
+#labels method,view,date,form
 
 This method returns seconds from 0 to 59.
 
