@@ -1,0 +1,14 @@
+#summary Returns a HTML select tag with years as options.
+#labels method,helper,date
+
+By default the option tags will include 11 years, 5 on each side of the current year. You can change this by passing in `start_year` and `end_year`.
+
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| start_year || yes || date || || first year in option list ||
+|| end_year || yes || date || || last year in option list ||
+
+*Examples:*
+
+{{{
+#yearSelectTag(start_year=1900, end_year=year(now()))#
+}}}
