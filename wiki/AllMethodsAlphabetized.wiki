@@ -48,6 +48,11 @@
 
 *D*
 
+- [dateSelect]
+- [dateSelectTag]
+- [dateTimeSelect]
+- [dateTimeSelectTag]
+- [daySelectTag]
 - [decryptParam]
 - [delete]
 - [deleteAll]
@@ -92,6 +97,7 @@
 - [hiddenField]
 - [hiddenFieldTag]
 - [highlight]
+- [hourSelectTag]
 - [humanize]
 
 *I*
@@ -118,8 +124,10 @@
 - [mailTo]
 - [maximum]
 - [minimum]
+- [minuteSelectTag]
 - [model]
 - [modifiedFields]
+- [monthSelectTag]
 
 *N*
 
@@ -155,6 +163,7 @@
 *S*
 
 - [save]
+- [secondSelectTag]
 - [select]
 - [selectTag]
 - [setPrimaryKey]
@@ -176,6 +185,9 @@
 - [textField]
 - [textFieldTag]
 - [timeAgoInWords]
+- [timeSelect]
+- [timeSelectTag]
+- [timeUntilInWords]
 - [titleize]
 - [truncate]
 
@@ -208,6 +220,8 @@
 *X*
 
 *Y*
+
+- [yearSelectTag]
 
 *Z*
 
