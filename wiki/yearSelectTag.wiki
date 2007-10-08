@@ -10,5 +10,9 @@ By default the option tags will include 11 years, 5 on each side of the current 
 *Examples:*
 
 {{{
+#yearSelectTag()#
+}}}
+
+{{{
 #yearSelectTag(start_year=1900, end_year=year(now()))#
 }}}
