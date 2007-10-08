@@ -1,5 +1,5 @@
 #summary Returns a HTML select tag with days as options.
-#labels method,helper,date
+#labels method,view,date,form
 
 This method returns days 1-31.
 
