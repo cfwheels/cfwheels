@@ -4,8 +4,8 @@
 By default the option tags will include 11 years, 5 on each side of the current year. You can change this by passing in `start_year` and `end_year`.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
-|| start_year || yes || date || || first year in option list ||
-|| end_year || yes || date || || last year in option list ||
+|| start_year || false || numeric || year(now())-5 || first year in option list ||
+|| end_year || false || numeric || year(now())+5 || last year in option list ||
 
 *Examples:*
 
