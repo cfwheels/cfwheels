@@ -4,6 +4,7 @@
 This method returns days 1-31.
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| This method takes no arguments || || || || ||
 
 *Examples:*
 
