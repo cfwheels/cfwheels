@@ -1,5 +1,5 @@
 #summary Returns a HTML select tag with years as options.
-#labels method,helper,date
+#labels method,view,date,form
 
 By default the option tags will include 11 years, 5 on each side of the current year. You can change this by passing in `start_year` and `end_year`.
 
