@@ -23,12 +23,12 @@ Ok, so that was the high level overview of what frameworks are meant to do - abs
 
 Most web development frameworks set out to address some or all of these common concerns:
 
- * Map incoming requests to the code that handles them.
- * Separate your business logic from your presentation code.
- * Lets you work at a higher level of abstraction thus making it quicker to solve common problems.
- * Gives you a good code organization structure to follow.
- * Encourages clean and pragmatic design.
- * Simplifies saving data to a storage layer.
+ - Map incoming requests to the code that handles them.
+ - Separate your business logic from your presentation code.
+ - Lets you work at a higher level of abstraction thus making it quicker to solve common problems.
+ - Gives you a good code organization structure to follow.
+ - Encourages clean and pragmatic design.
+ - Simplifies saving data to a storage layer.
 
 Like all other good frameworks Wheels does all this but there are some subtle differences and certain things are more important in Wheels than in other frameworks and vice versa. Let's have a look at the specific goals with Wheels and how it relates to the overall goals of frameworks in general.
 
@@ -42,11 +42,11 @@ If you've ever downloaded a piece of open source software then you know that mos
 *Simplicity*
 We strive for simplicity on a lot of different levels in Wheels. We'll gladly trade code beauty in the core framework for simplicity for the developers who will use it. This goal to keep things simple is evident in a lot of different areas in Wheels, here are some of the most notable ones:
 
- * The concept of object oriented programming is very simple and data-centric in Wheels rather than 100% "pure" at all times.
- * You'll always get a cfquery resultset back when dealing with multiple objects/records simply because that is the way we're all used to outputting data.
- * Wheels encourages best practices but it will never give you an error if you go against any of them.
- * With Wheels you won't program yourself into a corner, if worse comes to worst you can always drop right out of the framework easily and go back to old school code for a while if necessary.
- * Good old ColdFusion code is used for everything so there is no need to learn XML for example.
+ - The concept of object oriented programming is very simple and data-centric in Wheels rather than 100% "pure" at all times.
+ - You'll always get a cfquery resultset back when dealing with multiple objects/records simply because that is the way we're all used to outputting data.
+ - Wheels encourages best practices but it will never give you an error if you go against any of them.
+ - With Wheels you won't program yourself into a corner, if worse comes to worst you can always drop right out of the framework easily and go back to old school code for a while if necessary.
+ - Good old ColdFusion code is used for everything so there is no need to learn XML for example.
 
 What this means is that you don't have to be a fantastic programmer to use the framework (although it doesn't hurt...), it's enough if you're an average programmer. After using Wheels for a while you'll probably find that you've become a better programmer though!
 
@@ -65,9 +65,9 @@ Beautiful (for lack of a better word) code is code that you can scan through and
 *Model-View-Controller (MVC)*
 If you've investigated frameworks in the past then you've probably heard this phrase before. Model-View-Controller, or MVC, is a way to structure your code so that it is broken down into three easy-to-manage pieces:
 
- * The Model - just another name for the representation of data, usually a database table.
- * The View - what the user sees and interacts with (a web page in our case).
- * The Controller - the behind-the-scenes guy that's coordinating everything.
+ - The Model - just another name for the representation of data, usually a database table.
+ - The View - what the user sees and interacts with (a web page in our case).
+ - The Controller - the behind-the-scenes guy that's coordinating everything.
 
 "Uh, yeah... so what's this got to do with anything?" MVC is how Wheels structures your code for you. As you start working with Wheels applications you'll see that most of the code you write (database queries, forms and data manipulation before output for the user or input to the database) are very nicely separated into one of these three categories.
 
