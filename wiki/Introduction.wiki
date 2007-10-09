@@ -28,7 +28,7 @@ Most web development frameworks set out to address some or all of these common c
  * Lets you work at a higher level of abstraction thus making it quicker to solve common problems.
  * Gives you a good code organization structure to follow.
  * Encourages clean and pragmatic design.
- * Simplifies saving data to a storage layer. 
+ * Simplifies saving data to a storage layer.
 
 Like all other good frameworks Wheels does all this but there are some subtle differences and certain things are more important in Wheels than in other frameworks and vice versa. Let's have a look at the specific goals with Wheels and how it relates to the overall goals of frameworks in general.
 
