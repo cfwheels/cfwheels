@@ -37,11 +37,9 @@ Like all other good frameworks Wheels does all this but there are some subtle di
 As we've said before Wheels is heavily based on Ruby on Rails but it's not a direct port and there are some things that have been changed to better fit the ColdFusion language and our own vision for how a Rails type framework should work in ColdFusion. Here's a brief overview of the goals we're striving for with Wheels (most of these will be covered in greater detail in later chapters).:
 
 *Documentation*
-
 If you've ever downloaded a piece of open source software then you know that most projects lack documentation. Wheels hopes to change that. We're hoping that by putting together complete, up-to-date documentation that this framework will appeal, and be usable, by everyone, even someone who has little !ColdFusion programming background, let alone experience with frameworks.
 
 *Simplicity*
-
 We strive for simplicity on a lot of different levels in Wheels. We'll gladly trade code beauty in the core framework for simplicity for the developers who will use it. This goal to keep things simple is evident in a lot of different areas in Wheels, here are some of the most notable ones:
 
 - The concept of object oriented programming is very simple and data-centric in Wheels rather than 100% "pure" at all times.
@@ -53,6 +51,7 @@ We strive for simplicity on a lot of different levels in Wheels. We'll gladly tr
 What this means is that you don't have to be a fantastic programmer to use the framework (although it doesn't hurt...), it's enough if you're an average programmer. After using Wheels for a while you'll probably find that you've become a better programmer though!
 
 =Key Wheels concepts=
+
 Besides what is already mentioned above there are some very key concepts in Wheels that it makes sense to familiarize yourself with early on. The reason for this is that if you don't feel these are to your liking you can look for a different framework or stick to using no framework. Too often programmers have chosen a framework and spent weeks trying to bend it to do what they want to do rather than follow the framework conventions.
 
 Speaking of conventions, this brings us to the first key concept:
@@ -64,7 +63,6 @@ Instead of having to set up tons of configuration variables, Wheels will just as
 Beautiful (for lack of a better word) code is code that you can scan through and immediately see what it's meant to do, it's code that is never repeated anywhere else and most of all it's code that you'll enjoy writing AND enjoy coming back to in six months from now. Sometimes the Wheels structure itself encourages beautiful code (separating business logic from request handling for example), sometimes it's just something that comes naturally after reading documentation, viewing others Wheels applications and talking to other Wheels developers (naming methods to be highly readable to name one example). 
 
 *Model-View-Controller (MVC)*
-
 If you've investigated frameworks in the past then you've probably heard this phrase before. Model-View-Controller, or MVC, is a way to structure your code so that it is broken down into three easy-to-manage pieces:
 
 - The Model - just another name for the representation of data, usually a database table.
