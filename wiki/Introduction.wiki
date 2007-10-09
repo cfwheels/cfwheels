@@ -1,7 +1,55 @@
 #summary Introduction to the ColdFusion on Wheels framework.
 #labels chapter
 
-*Welcome to ColdFusion on Wheels!*
+This chapter will introduce you to frameworks in general and later specifically to ColdFusion on Wheels. We'll go over if you even need a framework at all and what common problems a framework tries to solve. If we're able to convince you that using a framework is the right thing for you then we'll present our goals with creating Wheels and show you some of they key Wheels concepts to get you in the right mindset.
+
+So, let's get started...
+
+=Do I really need to use a framework?=
+
+Short answer, No... if you don't mind doing the same thing over and over again and is getting paid by the hour to do so, then by all means keep doing that ;)
+
+Slightly longer answer, No... if you're working on a highly customized project that does not fall within what 9 out of 10 web sites/applications normally do then you likely need custom code and a framework will not help much.
+
+However, if you're like most of us and have noticed that for every new project you start on or even every new feature you add to an existing project you waste a lot of time re-creating the wheel, then you should read on because Wheels may just be the solution for you!
+
+Wheels will make starting a new project or building a new feature quick and painless and you can get straight to solving business problems on day one.
+
+All good frameworks rise from the need to solve real problems in real-world situations. Wheels is based heavily on the Rails framework for Ruby and also gets inspiration from Django and, although to a lesser extent, other frameworks in the ColdFusion space like Fusebox for example. Over the years the contributors to these frameworks have identified problems and tedious tasks in their own development process, built a solution for it and abstracted (made it more generic so it suits any project) the solution into the framework in question. Piggy-backing on what all these great programmers have already created and adding a few nice solutions of our own, Wheels stands on solid ground.
+
+Ok, so that was the high level overview of what frameworks are set out to do - abstract common problems and provide a quicker and easier way of solving them - but let's get a little more specific...
+
+=Framework goals in general=
+
+Most web development frameworks set out to address some or all of these common concerns:
+
+Map incoming requests to code that handles them
+
+It separates your business logic from your presentation code
+
+it lets you work at a higher level of abstraction thus making it quicker to solve common problems
+It gives you a good code organization structure to follow
+It encourages clean and pragmatic design
+It simplifies saving data to a storage layer (usually a database). 
+
+Like all other good frameworks Wheels does all this but there are some subtle differences and certain things are more important in Wheels than in other frameworks and vice versa. Let's have a look at the specific goals with Wheels and how it relates to the overall goals of frameworks in general.
+
+=Our goals with Wheels=
+
+enourage clean design
+no force, drop oit when neceesaruy
+docs
+simple . cfquery, trade beauty on the inside for easy in the API
+no facades, gateways etc
+no XML
+simple OO
+
+
+*Key Wheels concepts*
+
+MVC
+ORM
+
 
 what does it do, easier to develop etc
 
