@@ -65,9 +65,9 @@ Beautiful (for lack of a better word) code is code that you can scan through and
 *Model-View-Controller (MVC)*
 If you've investigated frameworks in the past then you've probably heard this phrase before. Model-View-Controller, or MVC, is a way to structure your code so that it is broken down into three easy-to-manage pieces:
 
-- The Model - just another name for the representation of data, usually a database table.
-- The View - what the user sees and interacts with (a web page in our case).
-- The Controller - the behind-the-scenes guy that's coordinating everything.
+ * The Model - just another name for the representation of data, usually a database table.
+ * The View - what the user sees and interacts with (a web page in our case).
+ * The Controller - the behind-the-scenes guy that's coordinating everything.
 
 "Uh, yeah... so what's this got to do with anything?" MVC is how Wheels structures your code for you. As you start working with Wheels applications you'll see that most of the code you write (database queries, forms and data manipulation before output for the user or input to the database) are very nicely separated into one of these three categories.
 
