@@ -43,11 +43,11 @@
 	<cfset local.key = hashStruct(arguments)>
 	<cfset local.lock_name = local.category & local.key>
 	<!--- double-checked lock --->
-	<cflock name="#local.lock_name#" type="readonly" timeout="10">
+	<cflock name="#local.lock_name#" type="readonly" timeout="#application.settings.query_timeout#">
 		<cfset local.html = getFromCache(local.key, local.category, "internal")>
 	</cflock>
 	<cfif isBoolean(local.html) AND NOT local.html>
-   	<cflock name="#local.lock_name#" type="exclusive" timeout="10">
+   	<cflock name="#local.lock_name#" type="exclusive" timeout="#application.settings.query_timeout#">
 			<cfset local.html = getFromCache(local.key, local.category, "internal")>
 			<cfif isBoolean(local.html) AND NOT local.html>
 

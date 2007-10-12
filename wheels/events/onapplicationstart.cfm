@@ -38,7 +38,7 @@
 
 <cftry>
 	<!--- determine and set database brand --->
-	<cfquery name="local.database" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
+	<cfquery name="local.database" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 	SELECT @@version AS info
 	</cfquery>
 	<cfif local.database.info Contains "SQL Server">

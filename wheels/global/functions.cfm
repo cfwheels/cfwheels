@@ -9,3 +9,4 @@
 <cfinclude template="strings.cfm">
 <cfinclude template="urls.cfm">
 <cfinclude template="internal.cfm">
+<cfinclude template="dates.cfm">

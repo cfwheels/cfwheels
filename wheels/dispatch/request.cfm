@@ -63,22 +63,84 @@
 		</cfloop>
 	</cfif>
 
-	<!--- add form variables to the params struct --->
-	<cfloop collection="#form#" item="local.i">
-		<cfset local.match = reFindNoCase("(.*?)\[(.*?)\]", local.i, 1, true)>
-		<cfif arrayLen(local.match.pos) IS 3>
-			<!--- Model object form field, build a struct to hold the data, named after the model object --->
-			<cfset local.object_name = lCase(mid(local.i, local.match.pos[2], local.match.len[2]))>
-			<cfset local.field_name = lCase(mid(local.i, local.match.pos[3], local.match.len[3]))>
-			<cfif NOT structKeyExists(local.params, local.object_name)>
-				<cfset local.params[local.object_name] = structNew()>
+	<cfif structCount(form) IS NOT 0>
+
+		<!--- loop through form variables and merge any date variables into one --->
+		<cfset local.dates = structNew()>
+		<cfloop collection="#form#" item="local.i">
+			<cfif REFindNoCase(".*\((FL_year|FL_month|FL_day|FL_hour|FL_minute|FL_second)\)$", local.i) IS NOT 0>
+				<cfset local.temp = listToArray(local.i, "(")>
+				<cfset local.first_key = local.temp[1]>
+				<cfset local.second_key = spanExcluding(local.temp[2], ")")>
+				<cfif NOT structKeyExists(local.dates, local.first_key)>
+					<cfset local.dates[local.first_key] = structNew()>
+				</cfif>
+				<cfset local.dates[local.first_key][replaceNoCase(local.second_key, "FL_", "")] = form[local.i]>
 			</cfif>
-			<cfset local.params[local.object_name][local.field_name] = form[local.i]>
-		<cfelse>
-			<!--- Normal form field --->
-			<cfset local.params[local.i] = form[local.i]>
-		</cfif>
-	</cfloop>
+		</cfloop>
+		<cfloop collection="#local.dates#" item="local.i">
+			<cfif NOT structKeyExists(local.dates[local.i], "year")>
+				<cfset local.dates[local.i].year = 1899>
+			</cfif>
+			<cfif NOT structKeyExists(local.dates[local.i], "month")>
+				<cfset local.dates[local.i].month = 12>
+			</cfif>
+			<cfif NOT structKeyExists(local.dates[local.i], "day")>
+				<cfset local.dates[local.i].day = 30>
+			</cfif>
+			<cfif NOT structKeyExists(local.dates[local.i], "hour")>
+				<cfset local.dates[local.i].hour = 0>
+			</cfif>
+			<cfif NOT structKeyExists(local.dates[local.i], "minute")>
+				<cfset local.dates[local.i].minute = 0>
+			</cfif>
+			<cfif NOT structKeyExists(local.dates[local.i], "second")>
+				<cfset local.dates[local.i].second = 0>
+			</cfif>
+			<cftry>
+				<cfset form[local.i] = createDateTime(local.dates[local.i].year, local.dates[local.i].month, local.dates[local.i].day, local.dates[local.i].hour, local.dates[local.i].minute, local.dates[local.i].second)>
+			<cfcatch>
+				<cfset form[local.i] = "">
+			</cfcatch>
+			</cftry>
+			<cfif structKeyExists(form, "#local.i#(FL_year)")>
+				<cfset structDelete(form, "#local.i#(FL_year)")>
+			</cfif>
+			<cfif structKeyExists(form, "#local.i#(FL_month)")>
+				<cfset structDelete(form, "#local.i#(FL_month)")>
+			</cfif>
+			<cfif structKeyExists(form, "#local.i#(FL_day)")>
+				<cfset structDelete(form, "#local.i#(FL_day)")>
+			</cfif>
+			<cfif structKeyExists(form, "#local.i#(FL_hour)")>
+				<cfset structDelete(form, "#local.i#(FL_hour)")>
+			</cfif>
+			<cfif structKeyExists(form, "#local.i#(FL_minute)")>
+				<cfset structDelete(form, "#local.i#(FL_minute)")>
+			</cfif>
+			<cfif structKeyExists(form, "#local.i#(FL_second)")>
+				<cfset structDelete(form, "#local.i#(FL_second)")>
+			</cfif>
+		</cfloop>
+
+		<!--- add form variables to the params struct --->
+		<cfloop collection="#form#" item="local.i">
+			<cfset local.match = reFindNoCase("(.*?)\[(.*?)\]", local.i, 1, true)>
+			<cfif arrayLen(local.match.pos) IS 3>
+				<!--- Model object form field, build a struct to hold the data, named after the model object --->
+				<cfset local.object_name = lCase(mid(local.i, local.match.pos[2], local.match.len[2]))>
+				<cfset local.field_name = lCase(mid(local.i, local.match.pos[3], local.match.len[3]))>
+				<cfif NOT structKeyExists(local.params, local.object_name)>
+					<cfset local.params[local.object_name] = structNew()>
+				</cfif>
+				<cfset local.params[local.object_name][local.field_name] = form[local.i]>
+			<cfelse>
+				<!--- Normal form field --->
+				<cfset local.params[local.i] = form[local.i]>
+			</cfif>
+		</cfloop>
+
+	</cfif>
 
 	<!--- Create an empty flash unless it already exists --->
 	<cfif NOT structKeyExists(session, "flash")>
@@ -138,11 +200,11 @@
 		<cfset local.category = "action">
 		<cfset local.key = "#CGI.script_name#_#CGI.path_info#_#CGI.query_string#">
 		<cfset local.lock_name = local.category & local.key>
-		<cflock name="#local.lock_name#" type="readonly" timeout="10">
+		<cflock name="#local.lock_name#" type="readonly" timeout="#application.settings.query_timeout#">
 			<cfset request.wheels.response = getFromCache(local.key, local.category)>
 		</cflock>
 		<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
-	   	<cflock name="#local.lock_name#" type="exclusive" timeout="10">
+	   	<cflock name="#local.lock_name#" type="exclusive" timeout="#application.settings.query_timeout#">
 				<cfset request.wheels.response = getFromCache(local.key, local.category)>
 				<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
 					<cfset FL_callAction(local.controller, local.params.controller, local.params.action)>

@@ -9,3 +9,4 @@
 <cfinclude template="wheels/global/strings.cfm">
 <cfinclude template="wheels/global/urls.cfm">
 <cfinclude template="wheels/global/internal.cfm">
+<cfinclude template="wheels/global/dates.cfm">

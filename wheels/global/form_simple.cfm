@@ -7,9 +7,8 @@
 	<cfargument name="append" type="any" required="false" default="">
 	<cfargument name="prepend_to_label" type="any" required="false" default="">
 	<cfargument name="append_to_label" type="any" required="false" default="">
-	<cfargument name="error_element" type="any" required="false" default="div">
 	<cfset var local = structNew()>
-	<cfset arguments.FL_named_arguments = "name,value,label,wrap_label,prepend,append,prepend_to_label,append_to_label,error_element">
+	<cfset arguments.FL_named_arguments = "name,value,label,wrap_label,prepend,append,prepend_to_label,append_to_label">
 	<cfset local.attributes = FL_getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
@@ -34,9 +33,8 @@
 	<cfargument name="append" type="any" required="false" default="">
 	<cfargument name="prepend_to_label" type="any" required="false" default="">
 	<cfargument name="append_to_label" type="any" required="false" default="">
-	<cfargument name="error_element" type="any" required="false" default="div">
 	<cfset var local = structNew()>
-	<cfset arguments.FL_named_arguments = "name,value,checked,label,wrap_label,prepend,append,prepend_to_label,append_to_label,error_element">
+	<cfset arguments.FL_named_arguments = "name,value,checked,label,wrap_label,prepend,append,prepend_to_label,append_to_label">
 	<cfset local.attributes = FL_getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
@@ -61,9 +59,8 @@
 	<cfargument name="append" type="any" required="false" default="">
 	<cfargument name="prepend_to_label" type="any" required="false" default="">
 	<cfargument name="append_to_label" type="any" required="false" default="">
-	<cfargument name="error_element" type="any" required="false" default="div">
 	<cfset var local = structNew()>
-	<cfset arguments.FL_named_arguments = "name,value,checked,label,wrap_label,prepend,append,prepend_to_label,append_to_label,error_element">
+	<cfset arguments.FL_named_arguments = "name,value,checked,label,wrap_label,prepend,append,prepend_to_label,append_to_label">
 	<cfset local.attributes = FL_getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
@@ -87,9 +84,8 @@
 	<cfargument name="append" type="any" required="false" default="">
 	<cfargument name="prepend_to_label" type="any" required="false" default="">
 	<cfargument name="append_to_label" type="any" required="false" default="">
-	<cfargument name="error_element" type="any" required="false" default="div">
 	<cfset var local = structNew()>
-	<cfset arguments.FL_named_arguments = "name,value,label,wrap_label,prepend,append,prepend_to_label,append_to_label,error_element">
+	<cfset arguments.FL_named_arguments = "name,value,label,wrap_label,prepend,append,prepend_to_label,append_to_label">
 	<cfset local.attributes = FL_getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
@@ -135,9 +131,8 @@
 	<cfargument name="append" type="any" required="false" default="">
 	<cfargument name="prepend_to_label" type="any" required="false" default="">
 	<cfargument name="append_to_label" type="any" required="false" default="">
-	<cfargument name="error_element" type="any" required="false" default="div">
 	<cfset var local = structNew()>
-	<cfset arguments.FL_named_arguments = "name,value,label,wrap_label,prepend,append,prepend_to_label,append_to_label,error_element">
+	<cfset arguments.FL_named_arguments = "name,value,label,wrap_label,prepend,append,prepend_to_label,append_to_label">
 	<cfset local.attributes = FL_getAttributes(argumentCollection=arguments)>
 
 	<cfset local.output = "">
@@ -160,9 +155,8 @@
 	<cfargument name="append" type="any" required="false" default="">
 	<cfargument name="prepend_to_label" type="any" required="false" default="">
 	<cfargument name="append_to_label" type="any" required="false" default="">
-	<cfargument name="error_element" type="any" required="false" default="div">
 	<cfset var local = structNew()>
-	<cfset arguments.FL_named_arguments = "name,value,label,wrap_label,prepend,append,prepend_to_label,append_to_label,error_element">
+	<cfset arguments.FL_named_arguments = "name,value,label,wrap_label,prepend,append,prepend_to_label,append_to_label">
 	<cfset local.attributes = FL_getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
@@ -191,9 +185,8 @@
 	<cfargument name="append" type="any" required="false" default="">
 	<cfargument name="prepend_to_label" type="any" required="false" default="">
 	<cfargument name="append_to_label" type="any" required="false" default="">
-	<cfargument name="error_element" type="any" required="false" default="div">
 	<cfset var local = structNew()>
-	<cfset arguments.FL_named_arguments = "name,value,options,include_blank,multiple,value_field,text_field,label,wrap_label,prepend,append,prepend_to_label,append_to_label,error_element">
+	<cfset arguments.FL_named_arguments = "name,value,options,include_blank,multiple,value_field,text_field,label,wrap_label,prepend,append,prepend_to_label,append_to_label">
 	<cfset local.attributes = FL_getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
@@ -216,4 +209,3 @@
 
 	<cfreturn FL_trimHTML(local.output)>
 </cffunction>
-

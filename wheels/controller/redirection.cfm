@@ -1,6 +1,7 @@
 <cffunction name="redirectTo" returntype="any" access="public" output="false">
 	<cfargument name="link" type="any" required="false" default="">
 	<cfargument name="back" type="any" required="false" default="false">
+	<cfargument name="params" type="any" required="false" default="">
 	<!--- Accepts URLFor arguments --->
 	<cfset var local = structNew()>
 
@@ -10,8 +11,14 @@
 		<cfelse>
 			<cfset local.url = CGI.http_referer>
 		</cfif>
-		<cfif structKeyExists(arguments, "params")>
-			<cfset local.url = local.url & FL_constructParams(arguments.params)>
+		<cfif arguments.params IS NOT "">
+			<cfset local.params = FL_constructParams(arguments.params)>
+			<cfset local.params = right(local.params, len(local.params)-1)>
+			<cfif local.url Contains "?">
+				<cfset local.url = local.url & "&" & local.params>
+			<cfelse>
+				<cfset local.url = local.url & "?" & local.params>
+			</cfif>
 		</cfif>
 	<cfelse>
 		<cfif arguments.link IS NOT "">
