@@ -226,5 +226,3 @@
 
 	<cfreturn local.output>
 </cffunction>
-
-

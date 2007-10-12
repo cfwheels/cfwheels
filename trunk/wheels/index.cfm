@@ -10,7 +10,7 @@
 				<cfinclude template="events/onrequestend.cfm">
 				<cfif application.settings.send_email_on_error>
 					<!--- Send an email with error details (wrap with try/catch so we avoid showing an error message on screen when there is an error sending the email itself) --->
-					<cfmail to="#application.settings.error_email_address#" from="#application.settings.error_email_address#" subject="#application.applicationname# error" type="html">
+					<cfmail to="#application.settings.error_email_address#" from="#application.settings.error_email_address#" subject="#application.applicationname# error" type="html" server="#application.settings.error_mail_server#">
 						<h1>Summary</h1>
 						<ul>
 							<li><strong>Error:</strong><br />#cfcatch.message#</li>

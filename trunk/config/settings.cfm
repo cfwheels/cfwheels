@@ -11,3 +11,5 @@
 <cfset application.settings.obfuscate_urls = false>
 <cfset application.settings.send_email_on_error = false>
 <cfset application.settings.error_email_address = "">
+<cfset application.settings.error_mail_server = "">
+<cfset application.settings.query_timeout = 20>

@@ -1,6 +1,8 @@
 <!--- Reload the application if reload=true --->
 <cfif structKeyExists(URL, "reload")>
-	<cfset onApplicationStart()>
+	<cflock scope="application" type="exclusive" timeout="30">
+		<cfset onApplicationStart()>
+	</cflock>
 </cfif>
 
 <cfset request.wheels = structNew()>

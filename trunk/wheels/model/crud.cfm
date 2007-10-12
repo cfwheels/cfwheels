@@ -58,7 +58,7 @@
 					<cfset arguments.attributes[local.i] = arguments[local.i]>
 				</cfif>
 			</cfloop>
-			<cfquery name="local.update_records" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
+			<cfquery name="local.update_records" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 			UPDATE #variables.class.table_name#
 			SET
 			<cfloop collection="#arguments.attributes#" item="local.i">
@@ -198,7 +198,7 @@
 		</cfif>
 	</cfif>
 
-	<cfquery name="local.check_deleted" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
+	<cfquery name="local.check_deleted" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 	SELECT #variables.class.primary_key#
 	FROM #variables.class.table_name#
 	WHERE #variables.class.primary_key# = <cfqueryparam cfsqltype="cf_sql_integer" value="#this[variables.class.primary_key]#">
@@ -206,13 +206,13 @@
 
 	<cfif local.check_deleted.recordcount IS NOT 0>
 		<cfif structKeyExists(variables.class.columns, "deleted_at")>
-			<cfquery name="local.delete_record" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
+			<cfquery name="local.delete_record" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 			UPDATE #variables.class.table_name#
 			SET deleted_at = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#now()#">
 			WHERE #variables.class.primary_key# = <cfqueryparam cfsqltype="cf_sql_integer" value="#this[variables.class.primary_key]#">
 			</cfquery>
 		<cfelse>
-			<cfquery name="local.delete_record" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
+			<cfquery name="local.delete_record" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 			DELETE
 			FROM #variables.class.table_name#
 			WHERE #variables.class.primary_key# = <cfqueryparam cfsqltype="cf_sql_integer" value="#this[variables.class.primary_key]#">
@@ -242,7 +242,7 @@
 		<!--- just do a regular delete query --->
 		<cfif local.records.recordcount IS NOT 0>
 			<cfif structKeyExists(variables.class.columns, "deleted_at")>
-				<cfquery name="local.delete_records" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
+				<cfquery name="local.delete_records" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 				UPDATE #variables.class.table_name#
 				SET deleted_at = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#now()#">
 				<cfif len(arguments.where) IS NOT 0>
@@ -250,7 +250,7 @@
 				</cfif>
 				</cfquery>
 			<cfelse>
-				<cfquery name="local.delete_records" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
+				<cfquery name="local.delete_records" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 				DELETE
 				FROM #variables.class.table_name#
 				<cfif len(arguments.where) IS NOT 0>
@@ -308,7 +308,7 @@
 		</cfif>
 	</cfloop>
 
-	<cfquery name="local.insert_query" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
+	<cfquery name="local.insert_query" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 	INSERT INTO	#variables.class.table_name# (#variables.modified_fields#)
 	VALUES
 	(
@@ -322,7 +322,7 @@
 	</cfloop>
 	)
 	</cfquery>
-	<cfquery name="local.get_id_query" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
+	<cfquery name="local.get_id_query" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 	SELECT #application.wheels.adapter.selectLastID()# AS last_id
 	</cfquery>
 	<cfset this[variables.class.primary_key] = local.get_id_query.last_id>
@@ -342,7 +342,7 @@
 		<cfset this.updated_on = createDate(year(now()), month(now()), day(now()))>
 	</cfif>
 
-	<cfquery name="local.get_data_query" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
+	<cfquery name="local.get_data_query" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 	SELECT #structKeyList(variables.class.columns)#
 	FROM #variables.class.table_name#
 	WHERE #variables.class.primary_key# = <cfqueryparam cfsqltype="cf_sql_integer" value="#this[variables.class.primary_key]#">
@@ -357,7 +357,7 @@
 
 	<cfif local.get_data_query.recordcount IS NOT 0>
 		<cfif variables.modified_fields IS NOT "">
-			<cfquery name="local.update_query" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
+			<cfquery name="local.update_query" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 			UPDATE #variables.class.table_name#
 			SET
 			<cfset local.pos = 0>

@@ -16,7 +16,7 @@
 		<cfset variables.class.primary_key = "id">
 	</cfif>
 
-	<cfquery name="local.query" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
+	<cfquery name="local.query" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 	SELECT<cfif application.wheels.database.type IS "sqlserver"> TOP 1</cfif> *
 	FROM #variables.class.table_name#
 	<cfif application.wheels.database.type IS "mysql">LIMIT 1</cfif>
@@ -60,7 +60,7 @@
 	<cfset var local = structNew()>
 
 	<!--- create a reference to the class data for this object --->
-	<cflock name="model_lock" type="readonly" timeout="10">
+	<cflock name="model_lock" type="readonly" timeout="#application.settings.query_timeout#">
 		<cfset variables.class = application.wheels.models[listLast(getMetaData(this).name, ".")].getClassData()>
 	</cflock>
 

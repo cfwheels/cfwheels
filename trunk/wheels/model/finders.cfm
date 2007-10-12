@@ -159,12 +159,12 @@
 	<cfset local.category = "sql">
 	<cfset local.key = "#variables.class.model_name#_#hashStruct(local.paramed_arguments)#">
 	<cfset local.lock_name = local.category & local.key>
-	<cflock name="#local.lock_name#" type="readonly" timeout="10">
+	<cflock name="#local.lock_name#" type="readonly" timeout="#application.settings.query_timeout#">
 		<cfset local.sql = getFromCache(local.key, local.category, "internal")>
 	</cflock>
 
 	<cfif isBoolean(local.sql) AND NOT local.sql>
-   	<cflock name="#local.lock_name#" type="exclusive" timeout="10">
+   	<cflock name="#local.lock_name#" type="exclusive" timeout="#application.settings.query_timeout#">
 			<cfset local.sql = getFromCache(local.key, local.category, "internal")>
 			<cfif isBoolean(local.sql) AND NOT local.sql>
 				<!--- nothing was found in the cache so start figuring out where, order, joins clauses etc --->
@@ -377,11 +377,11 @@
 		<cfset local.category = "query">
 		<cfset local.key = "#variables.class.model_name#_#hashStruct(arguments)#">
 		<cfset local.lock_name = local.category & local.key>
-		<cflock name="#local.lock_name#" type="readonly" timeout="10">
+		<cflock name="#local.lock_name#" type="readonly" timeout="#application.settings.query_timeout#">
 			<cfset local.query = getFromCache(local.key, local.category)>
 		</cflock>
 		<cfif isBoolean(local.query) AND NOT local.query>
-	   	<cflock name="#local.lock_name#" type="exclusive" timeout="10">
+	   	<cflock name="#local.lock_name#" type="exclusive" timeout="#application.settings.query_timeout#">
 				<cfset local.query = getFromCache(local.key, local.category)>
 				<cfif isBoolean(local.query) AND NOT local.query>
 					<cfset local.query = FL_executeQuery(argumentCollection=arguments)>
@@ -427,7 +427,7 @@
 			</cfif>
 		</cfif> --->
 		<!--- cachedwithin="#createTimeSpan(0,0,locals.cache_time,0)#" --->
-		<cfquery name="locals.query" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
+		<cfquery name="locals.query" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 		<cfif application.wheels.database.type IS "sqlserver" AND len(arguments.limit) IS NOT 0 AND len(arguments.offset) IS NOT 0>
 		SELECT #preserveSingleQuotes(arguments.sql.pagination.simple_select)# AS primary_key
 		FROM (

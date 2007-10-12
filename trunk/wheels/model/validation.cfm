@@ -354,7 +354,7 @@
 					</cfif>
 				</cfcase>
 				<cfcase value="validates_uniqueness_of">
-						<cfquery name="local.query" datasource="#application.settings.dsn#" timeout="10" username="#application.settings.username#" password="#application.settings.password#">
+						<cfquery name="local.query" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 						SELECT #variables.class.primary_key#, #local.field#
 						FROM #variables.class.table_name#
 						WHERE #local.field# = <cfqueryparam cfsqltype="#variables.class.columns[local.field].cfsqltype#" value="#this[local.field]#">

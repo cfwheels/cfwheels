@@ -34,11 +34,11 @@
 		<cfset local.category = "action">
 		<cfset local.key = "#arguments.action#_#hashStruct(variables.params)#_#hashStruct(arguments)#">
 		<cfset local.lock_name = local.category & local.key>
-		<cflock name="#local.lock_name#" type="readonly" timeout="10">
+		<cflock name="#local.lock_name#" type="readonly" timeout="#application.settings.query_timeout#">
 			<cfset request.wheels.response = getFromCache(local.key, local.category)>
 		</cflock>
 		<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
-	   	<cflock name="#local.lock_name#" type="exclusive" timeout="10">
+	   	<cflock name="#local.lock_name#" type="exclusive" timeout="#application.settings.query_timeout#">
 				<cfset request.wheels.response = getFromCache(local.key, local.category)>
 				<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
 					<cfset FL_renderPage(argumentCollection=arguments)>
@@ -113,11 +113,11 @@
 		<cfset local.category = "partial">
 		<cfset local.key = "#arguments.name#_#hashStruct(variables.params)#_#hashStruct(arguments)#">
 		<cfset local.lock_name = local.category & local.key>
-		<cflock name="#local.lock_name#" type="readonly" timeout="10">
+		<cflock name="#local.lock_name#" type="readonly" timeout="#application.settings.query_timeout#">
 			<cfset local.partial = getFromCache(local.key, local.category)>
 		</cflock>
 		<cfif isBoolean(local.partial) AND NOT local.partial>
-	   	<cflock name="#local.lock_name#" type="exclusive" timeout="10">
+	   	<cflock name="#local.lock_name#" type="exclusive" timeout="#application.settings.query_timeout#">
 				<cfset local.partial = getFromCache(local.key, local.category)>
 				<cfif isBoolean(local.partial) AND NOT local.partial>
 					<cfset local.partial = FL_renderPartial(argumentCollection=arguments)>
