@@ -358,8 +358,13 @@
 						SELECT #variables.class.primary_key#, #local.field#
 						FROM #variables.class.table_name#
 						WHERE #local.field# = <cfqueryparam cfsqltype="#variables.class.columns[local.field].cfsqltype#" value="#this[local.field]#">
-						<cfif structKeyExists(variables.class.columns, "deleted_at")>
-							AND #variables.class.table_name#.deleted_at IS NULL
+						<cfif structKeyExists(variables.class.columns, "deleted_at") OR structKeyExists(variables.class.columns, "deleted_on")>
+							<cfif structKeyExists(variables.class.columns, "deleted_at")>
+								<cfset local.soft_delete_field = "deleted_at">
+							<cfelseif structKeyExists(variables.class.columns, "deleted_on")>
+								<cfset local.soft_delete_field = "deleted_on">
+							</cfif>
+							AND #variables.class.table_name#.#local.soft_delete_field# IS NULL
 						</cfif>
 						<cfif len(local.settings.scope) IS NOT 0>
 							AND

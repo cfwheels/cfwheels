@@ -238,12 +238,6 @@
 <cffunction name="sendEmail" returntype="any" access="public" output="false">
 	<cfargument name="template" type="any" required="true">
 	<cfargument name="layout" type="any" required="false" default="false">
-	<cfargument name="to" type="any" required="false" default="">
-	<cfargument name="from" type="any" required="false" default="">
-	<cfargument name="cc" type="any" required="false" default="">
-	<cfargument name="bcc" type="any" required="false" default="">
-	<cfargument name="subject" type="any" required="false" default="">
-	<cfargument name="type" type="any" required="false" default="text">
 	<cfset var local = structNew()>
 
 	<cfsavecontent variable="request.wheels.response">
@@ -262,7 +256,15 @@
 		</cfif>
 	</cfif>
 
-	<cfmail subject="#arguments.subject#" to="#arguments.to#" from="#arguments.from#" cc="#arguments.cc#" bcc="#arguments.bcc#" type="#arguments.type#">
+	<cfset local.attributes = structCopy(arguments)>
+	<cfset local.cfmail_valid_attributes = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext">
+	<cfloop collection="#local.attributes#" item="local.i">
+		<cfif listFindNoCase(local.cfmail_valid_attributes, local.i) IS 0>
+			<cfset structDelete(local.attributes, local.i)>
+		</cfif>
+	</cfloop>
+
+	<cfmail attributecollection="#local.attributes#">
 	#request.wheels.response#
 	</cfmail>
 

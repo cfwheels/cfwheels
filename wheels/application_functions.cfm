@@ -11,36 +11,50 @@
 
 <cffunction name="onSessionStart" output="false">
 	<cfset var local = structNew()>
-	<cfinclude template="events/onsessionstart.cfm">
-	<cfinclude template="../events/onsessionstart.cfm">
+	<cflock scope="application" type="readonly" timeout="30">
+		<cfinclude template="events/onsessionstart.cfm">
+		<cfinclude template="../events/onsessionstart.cfm">
+	</cflock>
 </cffunction>
 
 <cffunction name="onRequestStart" output="false">
 	<cfargument name="targetpage">
 	<cfset var local = structNew()>
-	<cfinclude template="events/onrequeststart.cfm">
-	<cfinclude template="../events/onrequeststart.cfm">
+	<cfif structKeyExists(URL, "reload")>
+		<cflock scope="application" type="exclusive" timeout="30">
+			<cfset onApplicationStart()>
+		</cflock>
+	</cfif>
+	<cflock scope="application" type="readonly" timeout="30">
+		<cfinclude template="events/onrequeststart.cfm">
+		<cfinclude template="../events/onrequeststart.cfm">
+	</cflock>
 </cffunction>
 
 <cffunction name="onRequest" output="true">
 	<cfargument name="targetpage">
-	<cfset var local = structNew()>
-	<cfinclude template="events/onrequest.cfm">
+	<cflock scope="application" type="readonly" timeout="30">
+		<cfinclude template="events/onrequest.cfm">
+	</cflock>
 </cffunction>
 
 <cffunction name="onRequestEnd" output="false">
 	<cfargument name="targetpage">
 	<cfset var local = structNew()>
-	<cfinclude template="events/onrequestend.cfm">
-	<cfinclude template="../events/onrequestend.cfm">
+	<cflock scope="application" type="readonly" timeout="30">
+		<cfinclude template="events/onrequestend.cfm">
+		<cfinclude template="../events/onrequestend.cfm">
+	</cflock>
 </cffunction>
 
 <cffunction name="onSessionEnd" output="false">
 	<cfargument name="sessionscope">
   <cfargument name="applicationscope">
 	<cfset var local = structNew()>
-	<cfinclude template="events/onsessionend.cfm">
-	<cfinclude template="../events/onsessionend.cfm">
+	<cflock scope="application" type="readonly" timeout="30">
+		<cfinclude template="events/onsessionend.cfm">
+		<cfinclude template="../events/onsessionend.cfm">
+	</cflock>
 </cffunction>
 
 <cffunction name="onApplicationEnd" output="false">
