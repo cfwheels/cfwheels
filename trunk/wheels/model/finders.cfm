@@ -286,8 +286,8 @@
 							<cfset local.sql.pagination.qualified_order = listAppend(local.sql.pagination.qualified_order, local.i, chr(7))>
 						</cfloop>
 						<!--- create a select string for pagination that has the primary key and all fields from the order clause --->
-						<cfset local.sql.pagination.simple_select = REReplaceNoCase(local.sql.pagination.simple_order, "( ASC)|( DESC)", "", "all") & chr(7) & variables.class.primary_key>
-						<cfset local.sql.pagination.qualified_select = REReplaceNoCase(local.sql.pagination.qualified_order, "( ASC)|( DESC)", "", "all") & chr(7) & variables.class.table_name & "." & variables.class.primary_key>
+						<cfset local.sql.pagination.simple_select = REReplaceNoCase(local.sql.pagination.simple_order, " (asc|desc)", "", "all") & chr(7) & variables.class.primary_key>
+						<cfset local.sql.pagination.qualified_select = REReplaceNoCase(local.sql.pagination.qualified_order, " (asc|desc)", "", "all") & chr(7) & variables.class.table_name & "." & variables.class.primary_key>
 						<!--- delete the primary key from select if it is not the last element of the list (because it has to be last in the list and not duplicated) --->
 						<cfif listFindNoCase(local.sql.pagination.simple_select, variables.class.primary_key, chr(7)) IS NOT listLen(local.sql.pagination.simple_select, chr(7))>
 							<cfset local.sql.pagination.simple_select = listDeleteAt(local.sql.pagination.simple_select, listFindNoCase(local.sql.pagination.simple_select, variables.class.primary_key, chr(7)), chr(7))>
@@ -296,10 +296,10 @@
 							<cfset local.sql.pagination.qualified_select = listDeleteAt(local.sql.pagination.qualified_select, listFindNoCase(local.sql.pagination.qualified_select, "#variables.class.table_name#.#variables.class.primary_key#", chr(7)), chr(7))>
 						</cfif>
 						<!--- add primary key to pagination order unless it is already there (to guarantee a unique order) --->
-						<cfif REFindNoCase("#variables.class.table_name#.#variables.class.primary_key#( ASC)|( DESC)", local.sql.pagination.qualified_order) IS 0>
+						<cfif REFindNoCase("#variables.class.table_name#.#variables.class.primary_key# (asc|desc)", local.sql.pagination.qualified_order) IS 0>
 							<cfset local.sql.pagination.qualified_order = listAppend(local.sql.pagination.qualified_order, "#variables.class.table_name#.#variables.class.primary_key# ASC", chr(7))>
 						</cfif>
-						<cfif REFindNoCase("#variables.class.primary_key#( ASC)|( DESC)", local.sql.pagination.simple_order) IS 0>
+						<cfif REFindNoCase("#variables.class.primary_key# (asc|desc)", local.sql.pagination.simple_order) IS 0>
 							<cfset local.sql.pagination.simple_order = listAppend(local.sql.pagination.simple_order, "#variables.class.primary_key# ASC", chr(7))>
 						</cfif>
 						<!--- reverse the order for use in SQL Server pagination SQL --->
@@ -418,6 +418,18 @@
 	<cfif NOT arguments.reload AND isDefined("request.wheels.cache") AND structKeyExists(request.wheels.cache, locals.key)>
 		<cfset locals.query = request.wheels.cache[locals.key]>
 	<cfelse>
+
+	<cfif structKeyExists(variables.class.columns, "deleted_at") OR structKeyExists(variables.class.columns, "deleted_on")>
+		<cfset locals.soft_delete = true>
+		<cfif structKeyExists(variables.class.columns, "deleted_at")>
+			<cfset locals.soft_delete_field = "deleted_at">
+		<cfelseif structKeyExists(variables.class.columns, "deleted_on")>
+			<cfset locals.soft_delete_field = "deleted_on">
+		</cfif>
+	<cfelse>
+		<cfset locals.soft_delete = false>
+	</cfif>
+
 		<!--- <cfset locals.cache_time = 0>
 		<cfif application.settings.perform_caching AND len(arguments.cache) IS NOT 0>
 			<cfif isNumeric(arguments.cache)>
@@ -441,7 +453,7 @@
 		</cfif>
 		<cfif len(arguments.sql.where) IS NOT 0>
 			WHERE
-			<cfif arguments.soft_delete_check AND structKeyExists(variables.class.columns, "deleted_at") AND arguments.where Contains " OR ">
+			<cfif arguments.soft_delete_check AND locals.soft_delete AND arguments.where Contains " OR ">
 				(
 			</cfif>
 			<cfset locals.pos = 0>
@@ -470,15 +482,15 @@
 					</cfif>
 				</cfif>
 			</cfloop>
-			<cfif arguments.soft_delete_check AND structKeyExists(variables.class.columns, "deleted_at")>
+			<cfif arguments.soft_delete_check AND locals.soft_delete>
 				<cfif arguments.where Contains " OR ">
 					)
 				</cfif>
-				AND #variables.class.table_name#.deleted_at IS NULL
+				AND #variables.class.table_name#.#locals.soft_delete_field# IS NULL
 			</cfif>
 		<cfelse>
-			<cfif arguments.soft_delete_check AND structKeyExists(variables.class.columns, "deleted_at")>
-				WHERE #variables.class.table_name#.deleted_at IS NULL
+			<cfif arguments.soft_delete_check AND locals.soft_delete>
+				WHERE #variables.class.table_name#.#locals.soft_delete_field# IS NULL
 			</cfif>
 		</cfif>
 		<cfif application.wheels.database.type IS "sqlserver" AND len(arguments.limit) IS NOT 0 AND len(arguments.offset) IS NOT 0>

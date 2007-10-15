@@ -205,10 +205,17 @@
 	</cfquery>
 
 	<cfif local.check_deleted.recordcount IS NOT 0>
-		<cfif structKeyExists(variables.class.columns, "deleted_at")>
+		<cfif structKeyExists(variables.class.columns, "deleted_at") OR structKeyExists(variables.class.columns, "deleted_on")>
+			<cfif structKeyExists(variables.class.columns, "deleted_at")>
+				<cfset local.soft_delete_field = "deleted_at">
+				<cfset local.soft_delete_timestamp = createDateTime(year(now()), month(now()), day(now()), hour(now()), minute(now()), second(now()))>
+			<cfelseif structKeyExists(variables.class.columns, "deleted_on")>
+				<cfset local.soft_delete_field = "deleted_on">
+				<cfset local.soft_delete_timestamp = createDate(year(now()), month(now()), day(now()))>
+			</cfif>
 			<cfquery name="local.delete_record" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 			UPDATE #variables.class.table_name#
-			SET deleted_at = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#now()#">
+			SET #local.soft_delete_field# = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#local.soft_delete_timestamp#">
 			WHERE #variables.class.primary_key# = <cfqueryparam cfsqltype="cf_sql_integer" value="#this[variables.class.primary_key]#">
 			</cfquery>
 		<cfelse>
@@ -241,10 +248,17 @@
 	<cfif NOT arguments.instantiate>
 		<!--- just do a regular delete query --->
 		<cfif local.records.recordcount IS NOT 0>
-			<cfif structKeyExists(variables.class.columns, "deleted_at")>
+			<cfif structKeyExists(variables.class.columns, "deleted_at") OR structKeyExists(variables.class.columns, "deleted_on")>
+				<cfif structKeyExists(variables.class.columns, "deleted_at")>
+					<cfset local.soft_delete_field = "deleted_at">
+					<cfset local.soft_delete_timestamp = createDateTime(year(now()), month(now()), day(now()), hour(now()), minute(now()), second(now()))>
+				<cfelseif structKeyExists(variables.class.columns, "deleted_on")>
+					<cfset local.soft_delete_field = "deleted_on">
+					<cfset local.soft_delete_timestamp = createDate(year(now()), month(now()), day(now()))>
+				</cfif>
 				<cfquery name="local.delete_records" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 				UPDATE #variables.class.table_name#
-				SET deleted_at = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#now()#">
+				SET #local.soft_delete_field# = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#local.soft_delete_timestamp#">
 				<cfif len(arguments.where) IS NOT 0>
 					WHERE #variables.class.primary_key# IN (<cfqueryparam cfsqltype="cf_sql_integer" list="true" value="#valueList(local.records.primary_key)#">)
 				</cfif>
