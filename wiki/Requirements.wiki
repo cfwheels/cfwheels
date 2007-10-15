@@ -22,6 +22,7 @@ Good :)
 Moving on...
 
 =Developer Requirements=
+
 Yes, there are actually some things you should familiarize yourself with before starting to use Wheels. Don't worry though, you don't need to be an expert on any on of them, just a basic understanding is good enough.
 
 - You should know the !ColdFusion programming language (surprise!).
