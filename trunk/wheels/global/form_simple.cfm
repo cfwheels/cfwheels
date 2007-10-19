@@ -14,7 +14,7 @@
 	<cfsavecontent variable="local.output">
 		<cfoutput>
 			#FL_formBeforeElement(argumentCollection=arguments)#
-			<input name="#arguments.name#" id="#arguments.name#" type="text" value="#FL_formValue(argumentCollection=arguments)#"#local.attributes# />
+			<input name="#arguments.name#" id="#arguments.name#" type="text" value="#HTMLEditFormat(FL_formValue(argumentCollection=arguments))#"#local.attributes# />
 			#FL_formAfterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
@@ -91,7 +91,7 @@
 	<cfsavecontent variable="local.output">
 		<cfoutput>
 			#FL_formBeforeElement(argumentCollection=arguments)#
-			<input name="#arguments.name#" id="#arguments.name#" type="password" value="#FL_formValue(argumentCollection=arguments)#"#local.attributes# />
+			<input name="#arguments.name#" id="#arguments.name#" type="password" value="#HTMLEditFormat(FL_formValue(argumentCollection=arguments))#"#local.attributes# />
 			#FL_formAfterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
@@ -114,7 +114,7 @@
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
-			<input name="#arguments.name#" id="#arguments.name#" type="hidden" value="#local.value#"#local.attributes# />
+			<input name="#arguments.name#" id="#arguments.name#" type="hidden" value="#HTMLEditFormat(local.value)#"#local.attributes# />
 		</cfoutput>
 	</cfsavecontent>
 
@@ -162,7 +162,7 @@
 	<cfsavecontent variable="local.output">
 		<cfoutput>
 			#FL_formBeforeElement(argumentCollection=arguments)#
-			<input type="file" name="#arguments.name#" id="#arguments.name#" value="#FL_formValue(argumentCollection=arguments)#"#local.attributes# />
+			<input type="file" name="#arguments.name#" id="#arguments.name#" value="#HTMLEditFormat(FL_formValue(argumentCollection=arguments))#"#local.attributes# />
 			#FL_formAfterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
