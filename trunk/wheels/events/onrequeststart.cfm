@@ -11,6 +11,10 @@
 	<cfset request.wheels.execution.partial_total = 0>
 </cfif>
 
+<cfif application.settings.environment IS NOT "production">
+	<cfset request.wheels.execution.components.running_request_start = getTickCount()>
+</cfif>
+
 <cfif application.settings.environment IS "development">
 	<!--- clear models in application scope in development mode so that the database and developer files get re-checked once on each request --->
 	<cfset structClear(application.wheels.models)>

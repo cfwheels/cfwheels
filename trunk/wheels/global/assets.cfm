@@ -18,7 +18,7 @@
 
 
 <cffunction name="javascriptIncludeTag" returntype="any" access="public" output="false">
-	<cfargument name="sources" type="any" required="false" default="application,prototype,scriptaculous">
+	<cfargument name="sources" type="any" required="false" default="application,protoculous">
 	<cfset var local = structNew()>
 	<cfset arguments.FL_named_arguments = "sources">
 	<cfset local.attributes = FL_getAttributes(argumentCollection=arguments)>

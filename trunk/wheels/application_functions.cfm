@@ -29,6 +29,9 @@
 		<cfinclude template="events/onrequeststart.cfm">
 		<cfinclude template="../events/onrequeststart.cfm">
 	</cflock>
+	<cfif application.settings.environment IS NOT "production">
+		<cfset request.wheels.execution.components.running_request_start = getTickCount() - request.wheels.execution.components.running_request_start>
+	</cfif>
 </cffunction>
 
 <cffunction name="onRequest" output="true">
@@ -38,12 +41,19 @@
 	</cflock>
 </cffunction>
 
-<cffunction name="onRequestEnd" output="false">
+<cffunction name="onRequestEnd" output="true">
 	<cfargument name="targetpage">
 	<cfset var local = structNew()>
+	<cfif application.settings.environment IS NOT "production">
+		<cfset request.wheels.execution.components.running_request_end = getTickCount()>
+	</cfif>
 	<cflock scope="application" type="readonly" timeout="30">
 		<cfinclude template="events/onrequestend.cfm">
 		<cfinclude template="../events/onrequestend.cfm">
+		<cfif application.settings.environment IS NOT "production">
+			<cfset request.wheels.execution.components.running_request_end = getTickCount() - request.wheels.execution.components.running_request_end>
+		</cfif>
+		<cfinclude template="debug.cfm">
 	</cflock>
 </cffunction>
 
@@ -69,4 +79,19 @@
 	<cfset var local = structNew()>
 	<cfinclude template="events/onmissingtemplate.cfm">
 	<cfinclude template="../events/onmissingtemplate.cfm">
+</cffunction>
+
+<cffunction name="onError" output="true">
+	<cfargument name="exception">
+	<cfargument name="eventname">
+	<cfset var local = structNew()>
+	<cfsetting requesttimeout="120">
+	<cfset local.run_time = dateDiff("s", GetPageContext().GetFusionContext().GetStartTime(), now())>
+	<cfsetting requesttimeout="#(local.run_time+10)#">
+	<cfif application.settings.environment IS NOT "production">
+		<cfthrow object="#arguments.exception#">
+	<cfelse>
+		<cfinclude template="events/onerror.cfm">
+		<cfinclude template="../events/onerror.cfm">
+	</cfif>
 </cffunction>
