@@ -129,7 +129,7 @@
 
 <cffunction name="validatesConfirmationOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#arguments.field# is reserved">
+	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# should match confirmation">
 	<cfargument name="on" type="any" required="no" default="save">
 	<cfset "variables.class.validations_on_#arguments.on#.validates_confirmation_of.#arguments.field#.message" = arguments.message>
 </cffunction>
@@ -137,7 +137,7 @@
 
 <cffunction name="validatesExclusionOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#arguments.field# is reserved">
+	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# is reserved">
 	<cfargument name="in" type="any" required="yes">
 	<cfargument name="allow_nil" type="any" required="no" default="false">
 	<cfset arguments.in = replace(arguments.in, ", ", ",", "all")>
@@ -149,7 +149,7 @@
 
 <cffunction name="validatesFormatOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#arguments.field# is invalid">
+	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# is invalid">
 	<cfargument name="allow_nil" type="any" required="no" default="false">
 	<cfargument name="with" type="any" required="yes">
 	<cfargument name="on" type="any" required="no" default="save">
@@ -161,7 +161,7 @@
 
 <cffunction name="validatesInclusionOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#arguments.field# is not included in the list">
+	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# is not included in the list">
 	<cfargument name="in" type="any" required="yes">
 	<cfargument name="allow_nil" type="any" required="no" default="false">
 	<cfset arguments.in = replace(arguments.in, ", ", ",", "all")>
@@ -173,7 +173,7 @@
 
 <cffunction name="validatesLengthOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#arguments.field# is the wrong length">
+	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# is the wrong length">
 	<cfargument name="allow_nil" type="any" required="no" default="false">
 	<cfargument name="exactly" type="any" required="no" default=0>
 	<cfargument name="maximum" type="any" required="no" default=0>
@@ -194,7 +194,7 @@
 
 <cffunction name="validatesNumericalityOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#arguments.field# is not a number">
+	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# is not a number">
 	<cfargument name="allow_nil" type="any" required="no" default="false">
 	<cfargument name="only_integer" type="any" required="false" default="false">
 	<cfargument name="on" type="any" required="no" default="save">
@@ -206,7 +206,7 @@
 
 <cffunction name="validatesPresenceOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#arguments.field# can't be empty">
+	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# can't be empty">
 	<cfargument name="on" type="any" required="no" default="save">
 	<cfset "variables.class.validations_on_#arguments.on#.validates_presence_of.#arguments.field#.message" = arguments.message>
 </cffunction>
@@ -214,7 +214,7 @@
 
 <cffunction name="validatesUniquenessOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#arguments.field# has already been taken">
+	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# has already been taken">
 	<cfargument name="scope" type="any" required="no" default="">
 	<cfset arguments.scope = replace(arguments.scope, ", ", ",", "all")>
 	<cfset "variables.class.validations_on_save.validates_uniqueness_of.#arguments.field#.message" = arguments.message>
