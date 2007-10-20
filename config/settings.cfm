@@ -13,3 +13,13 @@
 <cfset application.settings.error_email_address = "">
 <cfset application.settings.error_mail_server = "">
 <cfset application.settings.query_timeout = 20>
+
+<!--- validation --->
+<cfset application.settings.validates_confirmation_of.message = "[field_name] should match confirmation">
+<cfset application.settings.validates_exclusion_of.message = "[field_name] is reserved">
+<cfset application.settings.validates_format_of.message = "[field_name] is invalid">
+<cfset application.settings.validates_inclusion_of.message = "[field_name] is not included in the list">
+<cfset application.settings.validates_length_of.message = "[field_name] is the wrong length">
+<cfset application.settings.validates_numericality_of.message = "[field_name] is not a number">
+<cfset application.settings.validates_presence_of.message = "[field_name] can't be empty">
+<cfset application.settings.validates_uniqueness_of.message = "[field_name] has already been taken">
