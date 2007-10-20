@@ -129,96 +129,168 @@
 
 <cffunction name="validatesConfirmationOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# should match confirmation">
+	<cfargument name="message" type="any" required="no" default="">
 	<cfargument name="on" type="any" required="no" default="save">
-	<cfset "variables.class.validations_on_#arguments.on#.validates_confirmation_of.#arguments.field#.message" = arguments.message>
+	<cfset var local = structNew()>
+	<cfloop list="#arguments.field#" index="local.i">
+		<cfif arguments.message IS NOT "">
+			<cfset local.message = arguments.message>
+		<cfelse>
+			<cfset local.message = application.settings.validates_confirmation_of.message>
+		</cfif>
+		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
+		<cfset "variables.class.validations_on_#arguments.on#.validates_confirmation_of.#trim(local.i)#.message" = local.message>
+	</cfloop>
 </cffunction>
 
 
 <cffunction name="validatesExclusionOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# is reserved">
+	<cfargument name="message" type="any" required="no" default="">
 	<cfargument name="in" type="any" required="yes">
 	<cfargument name="allow_nil" type="any" required="no" default="false">
+	<cfset var local = structNew()>
 	<cfset arguments.in = replace(arguments.in, ", ", ",", "all")>
-	<cfset "variables.class.validations_on_save.validates_exclusion_of.#arguments.field#.message" = arguments.message>
-	<cfset "variables.class.validations_on_save.validates_exclusion_of.#arguments.field#.allow_nil" = arguments.allow_nil>
-	<cfset "variables.class.validations_on_save.validates_exclusion_of.#arguments.field#.in" = arguments.in>
+	<cfloop list="#arguments.field#" index="local.i">
+		<cfif arguments.message IS NOT "">
+			<cfset local.message = arguments.message>
+		<cfelse>
+			<cfset local.message = application.settings.validates_exclusion_of.message>
+		</cfif>
+		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
+		<cfset "variables.class.validations_on_save.validates_exclusion_of.#trim(local.i)#.message" = local.message>
+		<cfset "variables.class.validations_on_save.validates_exclusion_of.#trim(local.i)#.allow_nil" = arguments.allow_nil>
+		<cfset "variables.class.validations_on_save.validates_exclusion_of.#trim(local.i)#.in" = arguments.in>
+	</cfloop>
 </cffunction>
 
 
 <cffunction name="validatesFormatOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# is invalid">
+	<cfargument name="message" type="any" required="no" default="">
 	<cfargument name="allow_nil" type="any" required="no" default="false">
 	<cfargument name="with" type="any" required="yes">
 	<cfargument name="on" type="any" required="no" default="save">
-	<cfset "variables.class.validations_on_#arguments.on#.validates_format_of.#arguments.field#.message" = arguments.message>
-	<cfset "variables.class.validations_on_#arguments.on#.validates_format_of.#arguments.field#.allow_nil" = arguments.allow_nil>
-	<cfset "variables.class.validations_on_#arguments.on#.validates_format_of.#arguments.field#.with" = arguments.with>
+	<cfset var local = structNew()>
+	<cfloop list="#arguments.field#" index="local.i">
+		<cfif arguments.message IS NOT "">
+			<cfset local.message = arguments.message>
+		<cfelse>
+			<cfset local.message = application.settings.validates_format_of.message>
+		</cfif>
+		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
+		<cfset "variables.class.validations_on_#arguments.on#.validates_format_of.#trim(local.i)#.message" = local.message>
+		<cfset "variables.class.validations_on_#arguments.on#.validates_format_of.#trim(local.i)#.allow_nil" = arguments.allow_nil>
+		<cfset "variables.class.validations_on_#arguments.on#.validates_format_of.#trim(local.i)#.with" = arguments.with>
+	</cfloop>
 </cffunction>
 
 
 <cffunction name="validatesInclusionOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# is not included in the list">
+	<cfargument name="message" type="any" required="no" default="">
 	<cfargument name="in" type="any" required="yes">
 	<cfargument name="allow_nil" type="any" required="no" default="false">
+	<cfset var local = structNew()>
 	<cfset arguments.in = replace(arguments.in, ", ", ",", "all")>
-	<cfset "variables.class.validations_on_save.validates_inclusion_of.#arguments.field#.message" = arguments.message>
-	<cfset "variables.class.validations_on_save.validates_inclusion_of.#arguments.field#.allow_nil" = arguments.allow_nil>
-	<cfset "variables.class.validations_on_save.validates_inclusion_of.#arguments.field#.in" = arguments.in>
+	<cfloop list="#arguments.field#" index="local.i">
+		<cfif arguments.message IS NOT "">
+			<cfset local.message = arguments.message>
+		<cfelse>
+			<cfset local.message = application.settings.validates_inclusion_of.message>
+		</cfif>
+		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
+		<cfset "variables.class.validations_on_save.validates_inclusion_of.#trim(local.i)#.message" = local.message>
+		<cfset "variables.class.validations_on_save.validates_inclusion_of.#trim(local.i)#.allow_nil" = arguments.allow_nil>
+		<cfset "variables.class.validations_on_save.validates_inclusion_of.#trim(local.i)#.in" = arguments.in>
+	</cfloop>
 </cffunction>
 
 
 <cffunction name="validatesLengthOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# is the wrong length">
+	<cfargument name="message" type="any" required="no" default="">
 	<cfargument name="allow_nil" type="any" required="no" default="false">
 	<cfargument name="exactly" type="any" required="no" default=0>
 	<cfargument name="maximum" type="any" required="no" default=0>
 	<cfargument name="minimum" type="any" required="no" default=0>
 	<cfargument name="within" type="any" required="no" default="">
 	<cfargument name="on" type="any" required="no" default="save">
+	<cfset var local = structNew()>
 	<cfif len(arguments.within) IS NOT 0>
 		<cfset arguments.within = listToArray(replace(arguments.within, ", ", ",", "all"))>
 	</cfif>
-	<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#arguments.field#.message" = arguments.message>
-	<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#arguments.field#.allow_nil" = arguments.allow_nil>
-	<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#arguments.field#.exactly" = arguments.exactly>
-	<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#arguments.field#.maximum" = arguments.maximum>
-	<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#arguments.field#.minimum" = arguments.minimum>
-	<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#arguments.field#.within" = arguments.within>
+	<cfloop list="#arguments.field#" index="local.i">
+		<cfif arguments.message IS NOT "">
+			<cfset local.message = arguments.message>
+		<cfelse>
+			<cfset local.message = application.settings.validates_length_of.message>
+		</cfif>
+		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
+		<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#trim(local.i)#.message" = local.message>
+		<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#trim(local.i)#.allow_nil" = arguments.allow_nil>
+		<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#trim(local.i)#.exactly" = arguments.exactly>
+		<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#trim(local.i)#.maximum" = arguments.maximum>
+		<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#trim(local.i)#.minimum" = arguments.minimum>
+		<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#trim(local.i)#.within" = arguments.within>
+	</cfloop>
 </cffunction>
 
 
 <cffunction name="validatesNumericalityOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# is not a number">
+	<cfargument name="message" type="any" required="no" default="">
 	<cfargument name="allow_nil" type="any" required="no" default="false">
 	<cfargument name="only_integer" type="any" required="false" default="false">
 	<cfargument name="on" type="any" required="no" default="save">
-	<cfset "variables.class.validations_on_#arguments.on#.validates_numericality_of.#arguments.field#.message" = arguments.message>
-	<cfset "variables.class.validations_on_#arguments.on#.validates_numericality_of.#arguments.field#.allow_nil" = arguments.allow_nil>
-	<cfset "variables.class.validations_on_#arguments.on#.validates_numericality_of.#arguments.field#.only_integer" = arguments.only_integer>
+	<cfset var local = structNew()>
+	<cfloop list="#arguments.field#" index="local.i">
+		<cfif arguments.message IS NOT "">
+			<cfset local.message = arguments.message>
+		<cfelse>
+			<cfset local.message = application.settings.validates_numericality_of.message>
+		</cfif>
+		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
+		<cfset "variables.class.validations_on_#arguments.on#.validates_numericality_of.#trim(local.i)#.message" = local.message>
+		<cfset "variables.class.validations_on_#arguments.on#.validates_numericality_of.#trim(local.i)#.allow_nil" = arguments.allow_nil>
+		<cfset "variables.class.validations_on_#arguments.on#.validates_numericality_of.#trim(local.i)#.only_integer" = arguments.only_integer>
+	</cfloop>
 </cffunction>
 
 
 <cffunction name="validatesPresenceOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# can't be empty">
+	<cfargument name="message" type="any" required="no" default="">
 	<cfargument name="on" type="any" required="no" default="save">
-	<cfset "variables.class.validations_on_#arguments.on#.validates_presence_of.#arguments.field#.message" = arguments.message>
+	<cfset var local = structNew()>
+	<cfloop list="#arguments.field#" index="local.i">
+		<cfif arguments.message IS NOT "">
+			<cfset local.message = arguments.message>
+		<cfelse>
+			<cfset local.message = application.settings.validates_presence_of.message>
+		</cfif>
+		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
+		<cfset "variables.class.validations_on_#arguments.on#.validates_presence_of.#trim(local.i)#.message" = local.message>
+	</cfloop>
 </cffunction>
 
 
 <cffunction name="validatesUniquenessOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
-	<cfargument name="message" type="any" required="no" default="#humanize(arguments.field)# has already been taken">
+	<cfargument name="message" type="any" required="no" default="">
 	<cfargument name="scope" type="any" required="no" default="">
+	<cfset var local = structNew()>
 	<cfset arguments.scope = replace(arguments.scope, ", ", ",", "all")>
-	<cfset "variables.class.validations_on_save.validates_uniqueness_of.#arguments.field#.message" = arguments.message>
-	<cfset "variables.class.validations_on_save.validates_uniqueness_of.#arguments.field#.scope" = arguments.scope>
+	<cfloop list="#arguments.field#" index="local.i">
+		<cfif arguments.message IS NOT "">
+			<cfset local.message = arguments.message>
+		<cfelse>
+			<cfset local.message = application.settings.validates_uniqueness_of.message>
+		</cfif>
+		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
+		<cfset "variables.class.validations_on_save.validates_uniqueness_of.#trim(local.i)#.message" = local.message>
+		<cfset "variables.class.validations_on_save.validates_uniqueness_of.#trim(local.i)#.scope" = arguments.scope>
+	</cfloop>
 </cffunction>
 
 
