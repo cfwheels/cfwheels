@@ -1,0 +1,11 @@
+#summary Returns whether the request was a normal (GET) request or not.
+#labels method,controller
+
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| this method takes no arguments || || || || ||
+
+*Examples:*
+
+{{{
+<cfset request_is_get = isGet()>
+}}}
