@@ -1,0 +1,11 @@
+#summary Returns whether the request came from a form submission or not.
+#labels method,controller
+
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| this method takes no arguments || || || || ||
+
+*Examples:*
+
+{{{
+<cfset request_is_post = isPost()>
+}}}
