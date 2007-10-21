@@ -1,5 +1,5 @@
 #summary Sets which methods to run before an action is executed.
-#labels method,controller,filter
+#labels method,controller,init
 
 The methods corresponding to the names you pass in will be executed before the action on the controller is executed. You can pass in one or many method names in a list. By default the methods will be executed before all actions in the controller but you can control this by using the only and exclude arguments.
 
