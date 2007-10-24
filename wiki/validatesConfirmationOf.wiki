@@ -18,20 +18,6 @@ This method, when added to a model, will ensure that the specified field is equa
 <cfset validatesConfirmationOf("email") />
 }}}
 
-*Controller:*
-{{{
-<cffunction name="save">
-	<cfset user = model("user").create(params.user) />
-	<cfif user.save()>
-		<cfset next = "saved" />
-	<cfelse>
-		<cfset next = "add" />
-	</cfif>
-		
-	<cfset renderPage(action="#next#") />
-</cffunction>
-}}}
-
 *View (add.cfm):*
 {{{
 <cfoutput>
@@ -57,4 +43,18 @@ This method, when added to a model, will ensure that the specified field is equa
 #endFormTag()#
 
 </cfoutput>
+}}}
+
+*Controller:*
+{{{
+<cffunction name="save">
+	<cfset user = model("user").create(params.user) />
+	<cfif user.save()>
+		<cfset next = "saved" />
+	<cfelse>
+		<cfset next = "add" />
+	</cfif>
+		
+	<cfset renderPage(action="#next#") />
+</cffunction>
 }}}
