@@ -1,4 +1,4 @@
-#summary Returns whether the specified field is equal to it's confirmation field.
+#summary Validates that a form field is equal to it's confirmation field.
 #labels method,model,validation
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
@@ -7,7 +7,7 @@
 || on || no || any || save || the method when the validation should occur (save, create, update) ||
 
 *Overview:*
-This method, when added to a model, will ensure that the specified field is equal to it's confirmation field before committing any changes to the database.  The confirmation field is the same as name of the field with '___confirmation__' appended to the end.  If the two fields do not match, then calling the method specified in "on" will return false.
+This method, when added to a model, will ensure that the specified field is equal to it's confirmation field before committing any changes to the database.  The confirmation field is the same as name of the field with `_`confirmation appended to the end.  If the two fields do not match, then calling the method specified in "on" will return false.
 
 *Examples:*
 
