@@ -7,7 +7,7 @@
 || on || no || any || save || the method when the validation should occur (save, create, update) ||
 
 *Overview:*
-This method, when added to a model, will ensure that the specified field is equal to it's confirmation field before committing any changes to the database.  The confirmation field is the same as name of the field with '__confirmation' appended to the end.  If the two fields do not match, then calling the method specified in "on" will return false.
+This method, when added to a model, will ensure that the specified field is equal to it's confirmation field before committing any changes to the database.  The confirmation field is the same as name of the field with '__confirmation__' appended to the end.  If the two fields do not match, then calling the method specified in "on" will return false.
 
 *Examples:*
 
