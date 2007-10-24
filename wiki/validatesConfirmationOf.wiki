@@ -1,14 +1,11 @@
-#summary One-sentence summary of this page.
+#summary Returns whether the specified field is equal to it's confirmation field.
 #labels method,model,validation
 
-= Introduction =
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| this method takes no arguments || || || || ||
 
-Add your content here.
+*Examples:*
 
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+{{{
+<cfset request_is_ajax = isAjax()>
+}}}
