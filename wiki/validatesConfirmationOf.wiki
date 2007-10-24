@@ -2,7 +2,9 @@
 #labels method,model,validation
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
-|| this method takes no arguments || || || || ||
+|| field || yes || any || n/a || the field on which to perform validation ||
+|| message || no || any || null || a custom error message ||
+|| on || no || any || save || when the validation should occur (save, create, update) ||
 
 *Examples:*
 
