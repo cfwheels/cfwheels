@@ -1,14 +1,15 @@
 #summary Validates that a form field is equal to it's confirmation field.
 #labels method,model,validation
 
-===arguments===
+====Arguments====
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || field || yes || any || || the field on which to perform validation ||
 || message || no || any || "" || a custom error message ||
 || on || no || any || save || the method when the validation should occur (save, create, update) ||
 
-===Overview:===
+
+====Overview:====
 
 This method, when added to a model, will ensure that the specified field is equal to it's confirmation field before committing any changes to the database.  The confirmation field is the same as name of the field with _`_`confirmation_ appended to the end.  If the two fields do not match, then calling the method specified by the _on_ argument will return false.
 
