@@ -2,12 +2,57 @@
 #labels method,model,validation
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
-|| field || yes || any || n/a || the field on which to perform validation ||
-|| message || no || any || null || a custom error message ||
-|| on || no || any || save || when the validation should occur (save, create, update) ||
+|| field || yes || any || || the field on which to perform validation ||
+|| message || no || any || "" || a custom error message ||
+|| on || no || any || save || the method when the validation should occur (save, create, update) ||
+
+*Overview:*
+This method, when added to a model, will ensure that the specified field is equal to it's confirmation field before committing any changes to the database.  The confirmation field is the same as name of the field with '_confirmation' appended to the end.  If the two fields do not match, then calling the method specified in "on" will return false.
 
 *Examples:*
 
+Model:
 {{{
-<cfset request_is_ajax = isAjax()>
+<cfset validatesConfirmationOf("email") />
+}}}
+
+Controller:
+{{{
+<cffunction name="save">
+	<cfset user = model("user").create(params.user) />
+	<cfif user.save()>
+		<cfset next = "saved" />
+	<cfelse>
+		<cfset next = "add" />
+	</cfif>
+		
+	<cfset renderPage(action="#next#") />
+</cffunction>
+}}}
+
+View (add.cfm):
+{{{
+<cfoutput>
+
+<cfif user.hasErrors()>
+<cfset errors = user.allErrors() />
+<div id="errors">
+	<ul>
+	<cfloop from="1" to="#arrayLen(errors)#" index="i">
+		<li>#errors[i]#</li>
+	</cfloop>
+	</ul>
+</div>
+</cfif>
+	
+#startFormTag(link="/wheels/index.cfm/user/save")#
+
+#hiddenField(object_name="user", field="id")#
+#textField(object_name="user", field="email", label="email:")#<br />
+#textField(object_name="user", field="email_confirmation", label="confirm email:")#<br />
+#submitTag()#
+
+#endFormTag()#
+
+</cfoutput>
 }}}
