@@ -1,1 +1,1 @@
-<cfinclude template="wheels/index_rewrite.cfm">
+<cfinclude template="wheels/index.cfm">
