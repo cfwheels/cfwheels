@@ -8,7 +8,7 @@
 	<cfsavecontent variable="local.html">
 		<cfoutput>
 			<cfloop list="#arguments.sources#" index="local.i">
-				<link rel="stylesheet" type="text/css" media="#arguments.media#" href="#application.wheels.web_path#stylesheets/#trim(local.i)#<cfif local.i Does Not Contain ".">.css</cfif>"#local.attributes# />
+				<link rel="stylesheet" type="text/css" media="#arguments.media#" href="#application.wheels.web_path##application.settings.paths.stylesheets#/#trim(local.i)#<cfif local.i Does Not Contain ".">.css</cfif>"#local.attributes# />
 			</cfloop>
 		</cfoutput>
 	</cfsavecontent>
@@ -26,7 +26,7 @@
 	<cfsavecontent variable="local.html">
 		<cfoutput>
 			<cfloop list="#arguments.sources#" index="local.i">
-				<script type="text/javascript" src="#application.wheels.web_path#javascripts/#trim(local.i)#<cfif local.i Does Not Contain ".">.js</cfif>"#local.attributes#></script>
+				<script type="text/javascript" src="#application.wheels.web_path##application.settings.paths.javascripts#/#trim(local.i)#<cfif local.i Does Not Contain ".">.js</cfif>"#local.attributes#></script>
 			</cfloop>
 		</cfoutput>
 	</cfsavecontent>
@@ -43,11 +43,11 @@
 	<cfset local.key = hashStruct(arguments)>
 	<cfset local.lock_name = local.category & local.key>
 	<!--- double-checked lock --->
-	<cflock name="#local.lock_name#" type="readonly" timeout="#application.settings.query_timeout#">
+	<cflock name="#local.lock_name#" type="readonly" timeout="30">
 		<cfset local.html = getFromCache(local.key, local.category, "internal")>
 	</cflock>
 	<cfif isBoolean(local.html) AND NOT local.html>
-   	<cflock name="#local.lock_name#" type="exclusive" timeout="#application.settings.query_timeout#">
+   	<cflock name="#local.lock_name#" type="exclusive" timeout="30">
 			<cfset local.html = getFromCache(local.key, local.category, "internal")>
 			<cfif isBoolean(local.html) AND NOT local.html>
 
@@ -55,14 +55,12 @@
 				<cfif left(arguments.source, 7) IS "http://">
 					<cfset local.source = arguments.source>
 				<cfelse>
-					<cfset local.source = "#application.wheels.web_path#images/#arguments.source#">
+					<cfset local.source = "#application.wheels.web_path##application.settings.paths.images#/#arguments.source#">
 					<cfif NOT structKeyExists(arguments, "width") OR NOT structKeyExists(arguments, "height")>
-						<cfset local.img = application.wheels.java_awt_toolkit.getDefaultToolkit().getImage(expandPath(local.source))>
-						<cfset local.width = local.img.getWidth()>
-						<cfset local.height = local.img.getHeight()>
-						<cfif local.width GT 0 AND local.height GT 0>
-							<cfset local.args.width = local.width>
-							<cfset local.args.height = local.height>
+						<cfimage action="info" source="#expandPath(local.source)#" structname="local.image">
+						<cfif local.image.width GT 0 AND local.image.height GT 0>
+							<cfset local.args.width = local.image.width>
+							<cfset local.args.height = local.image.height>
 						</cfif>
 					</cfif>
 				</cfif>
@@ -72,7 +70,9 @@
 				<cfset local.args.FL_named_arguments = "source">
 				<cfset local.attributes = FL_getAttributes(argumentCollection=local.args)>
 				<cfset local.html = "<img src=""#local.source#""#local.attributes# />">
-				<cfset addToCache(local.key, local.html, 86400, local.category, "internal")>
+				<cfif application.settings.cache_images>
+					<cfset addToCache(local.key, local.html, 86400, local.category, "internal")>
+				</cfif>
 
 			</cfif>
 		</cflock>

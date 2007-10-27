@@ -155,7 +155,7 @@
 	</cfif>
 
 	<cfif len(arguments.image) IS NOT 0>
-		<cfset local.source = "#application.wheels.web_path#images/#arguments.image#">
+		<cfset local.source = "#application.wheels.web_path##application.settings.paths.images#/#arguments.image#">
 	</cfif>
 
 	<cfsavecontent variable="local.output">

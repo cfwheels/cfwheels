@@ -44,15 +44,16 @@
 
 
 <cffunction name="buttonTo" returntype="any" access="public" output="false">
-	<cfargument name="link" type="string" required="false" default="">
-	<cfargument name="text" type="string" required="false" default="">
-	<cfargument name="confirm" type="string" required="false" default="">
-	<cfargument name="image" type="string" required="false" default="">
-	<cfargument name="class" type="string" required="false" default="button-to">
+	<cfargument name="link" type="any" required="false" default="">
+	<cfargument name="text" type="any" required="false" default="">
+	<cfargument name="confirm" type="any" required="false" default="">
+	<cfargument name="image" type="any" required="false" default="">
+	<cfargument name="disable" type="any" required="false" default="">
+	<cfargument name="class" type="any" required="false" default="button-to">
 	<!--- Accepts URLFor arguments --->
 	<cfset var local = structNew()>
 
-	<cfset arguments.FL_named_arguments = "link,text,confirm,image,controller,action,id,anchor,only_path,host,protocol,params">
+	<cfset arguments.FL_named_arguments = "link,text,confirm,image,disable,controller,action,id,anchor,only_path,host,protocol,params">
 	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
 		<!--- Since a non-numeric id was passed in we assume it is meant as a HTML attribute and therefore remove it from the named arguments list so that it will be set in the attributes --->
 		<cfset arguments.FL_named_arguments = listDeleteAt(arguments.FL_named_arguments, listFindNoCase(arguments.FL_named_arguments, "id"))>
@@ -69,16 +70,39 @@
 	</cfif>
 
 	<cfif len(arguments.image) IS NOT 0>
-		<cfset local.source = "#application.wheels.web_path#images/#arguments.image#">
+		<cfset local.source = "#application.wheels.web_path##application.settings.paths.images#/#arguments.image#">
 	</cfif>
 
-	<cfsavecontent variable="local.html">
-		<cfoutput>
-			<form action="#local.action#" method="post"<cfif len(arguments.confirm) IS NOT 0> onsubmit="return confirm('#JSStringFormat(arguments.confirm)#');"</cfif>#local.attributes#><input<cfif len(arguments.text) IS NOT 0> value="#arguments.text#"</cfif><cfif len(arguments.image) IS 0> type="submit"<cfelse> type="image" src="#local.source#"</cfif> /></form>
-		</cfoutput>
-	</cfsavecontent>
+	<cfif len(arguments.disable) IS NOT 0>
+		<cfset local.onclick = "this.disabled=true;">
+		<cfif len(arguments.image) IS 0 AND NOT isBoolean(arguments.disable)>
+			<cfset local.onclick = local.onclick & "this.value='#arguments.disable#';">
+		</cfif>
+		<cfset local.onclick = local.onclick & "this.form.submit();">
+	</cfif>
 
-	<cfreturn FL_trimHTML(local.html)>
+	<cfset local.html = "">
+	<cfset local.html = local.html & "<form action=""#local.action#"" method=""post""">
+	<cfif len(arguments.confirm) IS NOT 0>
+		<cfset local.html = local.html & " onsubmit=""return confirm('#JSStringFormat(arguments.confirm)#');""">
+	</cfif>
+	<cfset local.html = local.html & local.attributes>
+	<cfset local.html = local.html & ">">
+	<cfset local.html = local.html & "<input">
+	<cfif len(arguments.text) IS NOT 0>
+		<cfset local.html = local.html & " value=""#arguments.text#""">
+	</cfif>
+	<cfif len(arguments.image) IS 0>
+		<cfset local.html = local.html & " type=""submit""">
+	<cfelse>
+		<cfset local.html = local.html & " type=""image"" src=""#local.source#""">
+	</cfif>
+	<cfif len(arguments.disable) IS NOT 0>
+		<cfset local.html = local.html & " onclick=""#local.onclick#""">
+	</cfif>
+	<cfset local.html = local.html & " /></form>">
+
+	<cfreturn local.html>
 </cffunction>
 
 

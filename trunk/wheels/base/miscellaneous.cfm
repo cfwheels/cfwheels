@@ -1,3 +1,32 @@
+<cffunction name="flash" returntype="any" access="public" output="false">
+	<cfif structCount(arguments) IS 0>
+		<!--- return true unless flash is empty --->
+		<cflock scope="session" type="readonly" timeout="30">
+			<cfif structIsEmpty(session.flash)>
+				<cfreturn false>
+			<cfelse>
+				<cfreturn true>
+			</cfif>
+		</cflock>
+	<cfelseif structKeyExists(arguments, "1")>
+		<!--- return value in flash --->
+		<cflock scope="session" type="readonly" timeout="30">
+			<cfif structKeyExists(session.flash, arguments[1])>
+				<cfreturn session.flash[arguments[1]]>
+			<cfelse>
+				<cfreturn "">
+			</cfif>
+		</cflock>
+	<cfelse>
+		<!--- add value to flash --->
+		<cflock scope="session" type="exclusive" timeout="30">
+			<cfset session.flash[structKeyList(arguments)] = arguments[1]>
+		</cflock>
+		<cfreturn true>
+	</cfif>
+</cffunction>
+
+
 <cffunction name="addRoute" returntype="any" access="public" output="false">
 	<cfargument name="pattern" type="any" required="false" default="">
 	<cfset var local = structNew()>
@@ -28,7 +57,7 @@
 	<cfset var local = structNew()>
 
 	<cfif NOT structKeyExists(application.wheels.models, arguments.model_name)>
-   	<cflock name="model_lock" type="exclusive" timeout="#application.settings.query_timeout#">
+   	<cflock name="model_lock" type="exclusive" timeout="30">
 			<cfif NOT structKeyExists(application.wheels.models, arguments.model_name)>
 				<cfset application.wheels.models[arguments.model_name] = createObject("component", "#application.wheels.cfc_path#models.#lCase(arguments.model_name)#").FL_initModel()>
 			</cfif>
@@ -91,7 +120,10 @@
 
 	<cfif structKeyExists(local, "new_id")>
 		<!--- Add the id to the link --->
-		<cfset local.url = local.url & FL_constructID(local.new_id)>
+		<cfif application.settings.obfuscate_urls>
+			<cfset local.new_id = encryptParam(local.new_id)>
+		</cfif>
+		<cfset local.url = local.url & "/#local.new_id#">
 	</cfif>
 
 	<cfif len(arguments.params) IS NOT 0>
@@ -117,18 +149,6 @@
 	</cfif>
 
 	<cfreturn lCase(local.url)>
-</cffunction>
-
-
-<cffunction name="FL_constructID" returntype="any" access="private" output="false">
-	<cfargument name="id" type="any" required="true">
-
-	<cfif application.settings.obfuscate_urls>
-		<cfset arguments.id = encryptParam(arguments.id)>
-	</cfif>
-	<cfset arguments.id = "/#arguments.id#">
-
-	<cfreturn arguments.id>
 </cffunction>
 
 

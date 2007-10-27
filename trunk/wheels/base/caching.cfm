@@ -1,7 +1,7 @@
 <cffunction name="addToCache" returntype="any" access="public" output="false">
 	<cfargument name="key" type="any" required="true">
 	<cfargument name="value" type="any" required="true">
-	<cfargument name="cache_time" type="any" required="false" default="">
+	<cfargument name="cache_time" type="any" required="true">
 	<cfargument name="category" type="any" required="false" default="main">
 	<cfargument name="FL_type" type="any" required="false" default="external">
 	<cfset var local = structNew()>
@@ -26,10 +26,6 @@
 	</cfif>
 
 	<cfif arguments.FL_type IS "internal" OR cacheCount() LT application.settings.maximum_items_to_cache>
-		<cfif len(arguments.cache_time) IS 0 OR NOT isNumeric(arguments.cache_time)>
-			<!--- use the default set in the application scope if nothing is specified or if just true is passed in --->
-			<cfset arguments.cache_time = application.settings.default_cache_time>
-		</cfif>
 		<cfset application.wheels.cache[arguments.FL_type][arguments.category][arguments.key] = structNew()>
 		<cfset application.wheels.cache[arguments.FL_type][arguments.category][arguments.key].expires_at = dateAdd("s", arguments.cache_time, now())>
 		<cfif isSimpleValue(arguments.value)>
