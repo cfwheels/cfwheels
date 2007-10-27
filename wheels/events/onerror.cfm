@@ -22,7 +22,7 @@
 			</cfloop>
 			</li>
 		</ul>
-		<cfset local.scopes = "CGI,Request,Form,URL,Session,Cookie">
+		<cfset local.scopes = "CGI,Request,Form,URL,Cookie">
 		<cfloop list="#local.scopes#" index="local.i">
 			<cfset local.this_scope = evaluate(local.i)>
 			<cfif structCount(local.this_scope) GT 0>
@@ -36,11 +36,21 @@
 				</ul>
 			</cfif>
 		</cfloop>
+		<h1>Session</h1>
+		<ul>
+		<cflock scope="session" type="readonly" timeout="5">
+			<cfloop collection="#session#" item="local.k">
+				<cfif isSimpleValue(session[local.k]) AND len(session[local.k]) IS NOT 0>
+					<li><strong>#local.k#:</strong><br />#session[local.k]#</li>
+				</cfif>
+			</cfloop>
+		</cflock>
+		</ul>
 		<h1>Application</h1>
 		<ul>
-		<cfloop collection="#Application#" item="local.k">
-			<cfif isSimpleValue(Application[local.k]) AND len(Application[local.k]) IS NOT 0>
-				<li><strong>#local.k#:</strong><br />#Application[local.k]#</li>
+		<cfloop collection="#Application#" item="local.l">
+			<cfif isSimpleValue(Application[local.l]) AND len(Application[local.l]) IS NOT 0>
+				<li><strong>#local.l#:</strong><br />#Application[local.l]#</li>
 			</cfif>
 		</cfloop>
 		</ul>

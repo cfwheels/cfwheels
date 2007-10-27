@@ -17,7 +17,7 @@
 	<cfargument name="cache" type="any" required="false" default="">
 	<cfset var local = structNew()>
 
-	<cfif application.settings.environment IS NOT "production">
+	<cfif application.settings.show_debug_information>
 		<cfset request.wheels.execution.components.rendering_view_page = getTickCount()>
 	</cfif>
 
@@ -26,22 +26,25 @@
 
 	<!--- if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request --->
 	<cfif arguments.layout>
-		<cfset request.wheels.show_debug_info = true>
+		<cfset request.wheels.show_debug_information = true>
 	</cfif>
 
 	<!--- double-checked lock --->
-	<cfif application.settings.perform_caching AND len(arguments.cache) IS NOT 0>
+	<cfif application.settings.cache_pages AND (isNumeric(arguments.cache) OR (isBoolean(arguments.cache) AND arguments.cache))>
 		<cfset local.category = "action">
 		<cfset local.key = "#arguments.action#_#hashStruct(variables.params)#_#hashStruct(arguments)#">
 		<cfset local.lock_name = local.category & local.key>
-		<cflock name="#local.lock_name#" type="readonly" timeout="#application.settings.query_timeout#">
+		<cflock name="#local.lock_name#" type="readonly" timeout="30">
 			<cfset request.wheels.response = getFromCache(local.key, local.category)>
 		</cflock>
 		<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
-	   	<cflock name="#local.lock_name#" type="exclusive" timeout="#application.settings.query_timeout#">
+	   	<cflock name="#local.lock_name#" type="exclusive" timeout="30">
 				<cfset request.wheels.response = getFromCache(local.key, local.category)>
 				<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
 					<cfset FL_renderPage(argumentCollection=arguments)>
+					<cfif NOT isNumeric(arguments.cache)>
+						<cfset arguments.cache = application.settings.caching.pages>
+					</cfif>
 					<cfset addToCache(local.key, request.wheels.response, arguments.cache, local.category)>
 				</cfif>
 			</cflock>
@@ -50,7 +53,7 @@
 		<cfset FL_renderPage(argumentCollection=arguments)>
 	</cfif>
 
-	<cfif application.settings.environment IS NOT "production">
+	<cfif application.settings.show_debug_information>
 		<cfset request.wheels.execution.components.rendering_view_page = getTickCount() - request.wheels.execution.components.rendering_view_page>
 	</cfif>
 
@@ -104,23 +107,26 @@
 	<cfargument name="cache" type="any" required="false" default="">
 	<cfset var local = structNew()>
 
-	<cfif application.settings.environment IS NOT "production">
+	<cfif application.settings.show_debug_information>
 		<cfset local.partial_start_time = getTickCount()>
 	</cfif>
 
 	<!--- double-checked lock --->
-	<cfif application.settings.perform_caching AND len(arguments.cache) IS NOT 0>
+	<cfif application.settings.cache_partials AND (isNumeric(arguments.cache) OR (isBoolean(arguments.cache) AND arguments.cache))>
 		<cfset local.category = "partial">
 		<cfset local.key = "#arguments.name#_#hashStruct(variables.params)#_#hashStruct(arguments)#">
 		<cfset local.lock_name = local.category & local.key>
-		<cflock name="#local.lock_name#" type="readonly" timeout="#application.settings.query_timeout#">
+		<cflock name="#local.lock_name#" type="readonly" timeout="30">
 			<cfset local.partial = getFromCache(local.key, local.category)>
 		</cflock>
 		<cfif isBoolean(local.partial) AND NOT local.partial>
-	   	<cflock name="#local.lock_name#" type="exclusive" timeout="#application.settings.query_timeout#">
+	   	<cflock name="#local.lock_name#" type="exclusive" timeout="30">
 				<cfset local.partial = getFromCache(local.key, local.category)>
 				<cfif isBoolean(local.partial) AND NOT local.partial>
 					<cfset local.partial = FL_renderPartial(argumentCollection=arguments)>
+					<cfif NOT isNumeric(arguments.cache)>
+						<cfset arguments.cache = application.settings.caching.partials>
+					</cfif>
 					<cfset addToCache(local.key, local.partial, arguments.cache, local.category)>
 				</cfif>
 			</cflock>
@@ -129,7 +135,7 @@
 		<cfset local.partial = FL_renderPartial(argumentCollection=arguments)>
 	</cfif>
 
-	<cfif application.settings.environment IS NOT "production">
+	<cfif application.settings.show_debug_information>
 		<cfset local.partial_total_time = getTickCount() - local.partial_start_time>
 		<cfset request.wheels.execution.partial_total = request.wheels.execution.partial_total + local.partial_total_time>
 		<cfif structKeyExists(request.wheels.execution.partials, replace(arguments.name, "/", "_", "all"))>
