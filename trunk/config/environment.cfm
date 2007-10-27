@@ -1,1 +1,1 @@
-<cfset application.settings.environment = "development">
+<cfset application.settings.environment = "design">
