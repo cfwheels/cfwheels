@@ -60,7 +60,7 @@
 	<cfset var local = structNew()>
 
 	<!--- create a reference to the class data for this object --->
-	<cflock name="model_lock" type="readonly" timeout="#application.settings.query_timeout#">
+	<cflock name="model_lock" type="readonly" timeout="30">
 		<cfset variables.class = application.wheels.models[listLast(getMetaData(this).name, ".")].getClassData()>
 	</cflock>
 

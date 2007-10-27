@@ -159,12 +159,12 @@
 	<cfset local.category = "sql">
 	<cfset local.key = "#variables.class.model_name#_#hashStruct(local.paramed_arguments)#">
 	<cfset local.lock_name = local.category & local.key>
-	<cflock name="#local.lock_name#" type="readonly" timeout="#application.settings.query_timeout#">
+	<cflock name="#local.lock_name#" type="readonly" timeout="30">
 		<cfset local.sql = getFromCache(local.key, local.category, "internal")>
 	</cflock>
 
 	<cfif isBoolean(local.sql) AND NOT local.sql>
-   	<cflock name="#local.lock_name#" type="exclusive" timeout="#application.settings.query_timeout#">
+   	<cflock name="#local.lock_name#" type="exclusive" timeout="30">
 			<cfset local.sql = getFromCache(local.key, local.category, "internal")>
 			<cfif isBoolean(local.sql) AND NOT local.sql>
 				<!--- nothing was found in the cache so start figuring out where, order, joins clauses etc --->
@@ -373,18 +373,21 @@
 
 	<cfset arguments.sql = local.sql>
 
-	<cfif application.settings.perform_caching AND len(arguments.cache) IS NOT 0>
+	<cfif application.settings.cache_queries AND (isNumeric(arguments.cache) OR (isBoolean(arguments.cache) AND arguments.cache))>
 		<cfset local.category = "query">
 		<cfset local.key = "#variables.class.model_name#_#hashStruct(arguments)#">
 		<cfset local.lock_name = local.category & local.key>
-		<cflock name="#local.lock_name#" type="readonly" timeout="#application.settings.query_timeout#">
+		<cflock name="#local.lock_name#" type="readonly" timeout="30">
 			<cfset local.query = getFromCache(local.key, local.category)>
 		</cflock>
 		<cfif isBoolean(local.query) AND NOT local.query>
-	   	<cflock name="#local.lock_name#" type="exclusive" timeout="#application.settings.query_timeout#">
+	   	<cflock name="#local.lock_name#" type="exclusive" timeout="30">
 				<cfset local.query = getFromCache(local.key, local.category)>
 				<cfif isBoolean(local.query) AND NOT local.query>
 					<cfset local.query = FL_executeQuery(argumentCollection=arguments)>
+					<cfif NOT isNumeric(arguments.cache)>
+						<cfset arguments.cache = application.settings.caching.queries>
+					</cfif>
 					<cfset addToCache(local.key, local.query, arguments.cache, local.category)>
 				</cfif>
 			</cflock>
@@ -392,8 +395,6 @@
 	<cfelse>
 		<cfset local.query = FL_executeQuery(argumentCollection=arguments)>
 	</cfif>
-
-		<!--- <cfset local.query = FL_executeQuery(argumentCollection=arguments)> --->
 
 	<cfreturn local.query>
 </cffunction>
@@ -410,7 +411,7 @@
 	<cfset arguments.sql.pagination.simple_order_reversed = listChangeDelims(arguments.sql.pagination.simple_order_reversed, ",", chr(7))>
 	<cfset arguments.sql.pagination.qualified_order_reversed = listChangeDelims(arguments.sql.pagination.qualified_order_reversed, ",", chr(7))>
 
-	<cfif application.settings.environment IS NOT "production">
+	<cfif application.settings.show_debug_information>
 		<cfset locals.query_start_time = getTickCount()>
 	</cfif>
 
@@ -418,27 +419,16 @@
 	<cfif NOT arguments.reload AND isDefined("request.wheels.cache") AND structKeyExists(request.wheels.cache, locals.key)>
 		<cfset locals.query = request.wheels.cache[locals.key]>
 	<cfelse>
-
-	<cfif structKeyExists(variables.class.columns, "deleted_at") OR structKeyExists(variables.class.columns, "deleted_on")>
-		<cfset locals.soft_delete = true>
-		<cfif structKeyExists(variables.class.columns, "deleted_at")>
-			<cfset locals.soft_delete_field = "deleted_at">
-		<cfelseif structKeyExists(variables.class.columns, "deleted_on")>
-			<cfset locals.soft_delete_field = "deleted_on">
-		</cfif>
-	<cfelse>
-		<cfset locals.soft_delete = false>
-	</cfif>
-
-		<!--- <cfset locals.cache_time = 0>
-		<cfif application.settings.perform_caching AND len(arguments.cache) IS NOT 0>
-			<cfif isNumeric(arguments.cache)>
-				<cfset locals.cache_time = arguments.cache>
-			<cfelseif isBoolean(arguments.cache) AND arguments.cache>
-				<cfset locals.cache_time = application.settings.default_cache_time>
+		<cfif structKeyExists(variables.class.columns, "deleted_at") OR structKeyExists(variables.class.columns, "deleted_on")>
+			<cfset locals.soft_delete = true>
+			<cfif structKeyExists(variables.class.columns, "deleted_at")>
+				<cfset locals.soft_delete_field = "deleted_at">
+			<cfelseif structKeyExists(variables.class.columns, "deleted_on")>
+				<cfset locals.soft_delete_field = "deleted_on">
 			</cfif>
-		</cfif> --->
-		<!--- cachedwithin="#createTimeSpan(0,0,locals.cache_time,0)#" --->
+		<cfelse>
+			<cfset locals.soft_delete = false>
+		</cfif>
 		<cfquery name="locals.query" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
 		<cfif application.wheels.database.type IS "sqlserver" AND len(arguments.limit) IS NOT 0 AND len(arguments.offset) IS NOT 0>
 		SELECT #preserveSingleQuotes(arguments.sql.pagination.simple_select)# AS primary_key
@@ -513,14 +503,13 @@
 			</cfif>
 		</cfif>
 		</cfquery>
-
 		<!--- store in request cache so we never run the exact same query twice in the same request --->
 		<cfif isDefined("request.wheels.cache")>
 			<cfset request.wheels.cache[locals.key] = locals.query>
 		</cfif>
 	</cfif>
 
-	<cfif application.settings.environment IS NOT "production" AND isDefined("request.wheels")>
+	<cfif application.settings.show_debug_information AND isDefined("request.wheels")>
 		<cfset locals.query_total_time = getTickCount() - locals.query_start_time>
 		<cfset request.wheels.execution.query_total = request.wheels.execution.query_total + locals.query_total_time>
 		<cfset "request.wheels.execution.queries.#arguments.FL_query_name#" = locals.query_total_time>

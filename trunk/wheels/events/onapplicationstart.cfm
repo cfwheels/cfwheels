@@ -1,5 +1,6 @@
 <cfset application.wheels = structNew()>
 <cfset application.wheels.version = "0.7">
+<cfset application.wheels.controllers = structNew()>
 <cfset application.wheels.models = structNew()>
 <cfset application.wheels.routes = arrayNew(1)>
 
@@ -18,7 +19,10 @@
 <cfset application.wheels.cache_last_culled_at = now()>
 
 <!--- load environment settings --->
-<cfif structKeyExists(URL, "reload") AND NOT isBoolean(URL.reload)>
+
+
+
+<cfif structKeyExists(URL, "reload") AND NOT isBoolean(URL.reload) AND (len(application.settings.reload_password) IS 0 OR (structKeyExists(URL, "password") AND URL.password IS application.settings.reload_password))>
 	<cfset application.settings.environment = URL.reload>
 <cfelse>
 	<cfinclude template="../../config/environment.cfm">
@@ -51,5 +55,4 @@
 </cfcatch>
 </cftry>
 
-<cfset application.wheels.dispatch = createObject("component", "#application.wheels.cfc_path#Dispatch")>
-<cfset application.wheels.java_awt_toolkit = createObject("java", "java.awt.Toolkit")>
+<cfset application.wheels.dispatch = createObject("component", "wheels.dispatch")>

@@ -3,7 +3,6 @@
 	<cfargument name="only" type="any" required="false" default="">
 	<cfargument name="except" type="any" required="false" default="">
 	<cfset var local = structNew()>
-
 	<cfloop list="#arguments.filters#" index="local.i">
 		<cfset local.this_filter = structNew()>
 		<cfset local.this_filter.filter = trim(local.i)>
@@ -11,7 +10,6 @@
 		<cfset local.this_filter.except = replace(arguments.except, ", ", ",", "all")>
 		<cfset arrayAppend(variables.before_filters, local.this_filter)>
 	</cfloop>
-
 </cffunction>
 
 
@@ -20,7 +18,6 @@
 	<cfargument name="only" type="any" required="false" default="">
 	<cfargument name="except" type="any" required="false" default="">
 	<cfset var local = structNew()>
-
 	<cfloop list="#arguments.filters#" index="local.i">
 		<cfset local.this_filter = structNew()>
 		<cfset local.this_filter.filter = trim(local.i)>
@@ -28,15 +25,41 @@
 		<cfset local.this_filter.except = replace(arguments.except, ", ", ",", "all")>
 		<cfset arrayAppend(variables.after_filters, local.this_filter)>
 	</cfloop>
-
 </cffunction>
 
 
-<cffunction name="getBeforeFilters" returntype="any" access="public" output="false">
+<cffunction name="verify" returntype="any" access="public" output="false">
+	<cfargument name="post" type="any" required="false" default="false">
+	<cfargument name="get" type="any" required="false" default="false">
+	<cfargument name="ajax" type="any" required="false" default="false">
+	<cfargument name="params" type="any" required="false" default="">
+	<cfargument name="session" type="any" required="false" default="">
+	<cfargument name="cookie" type="any" required="false" default="">
+	<cfargument name="back" type="any" required="false" default="false">
+	<cfargument name="only" type="any" required="false" default="">
+	<cfargument name="except" type="any" required="false" default="">
+	<cfset var local = structNew()>
+	<cfset local.this_verification = structNew()>
+	<cfloop collection="#arguments#" item="local.i">
+		<cfif listFindNoCase("post,get,ajax,params,session,cookie,back,only,except", local.i)>
+			<cfset local.this_verification[lCase(local.i)] = replace(arguments[local.i], ", ", ",", "all")>
+		<cfelse>
+			<cfset local.this_verification["flash_#lCase(local.i)#"] = arguments[local.i]>
+		</cfif>
+	</cfloop>
+	<cfset arrayAppend(variables.verifications, local.this_verification)>
+</cffunction>
+
+<cffunction name="FL_getBeforeFilters" returntype="any" access="public" output="false">
 	<cfreturn variables.before_filters>
 </cffunction>
 
 
-<cffunction name="getAfterFilters" returntype="any" access="public" output="false">
+<cffunction name="FL_getAfterFilters" returntype="any" access="public" output="false">
 	<cfreturn variables.after_filters>
+</cffunction>
+
+
+<cffunction name="FL_getVerifications" returntype="any" access="public" output="false">
+	<cfreturn variables.verifications>
 </cffunction>

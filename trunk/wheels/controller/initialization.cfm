@@ -2,6 +2,7 @@
 	<cfargument name="params" type="any" required="true">
 
 	<cfset variables.params = arguments.params>
+	<cfset variables.verifications = arrayNew(1)>
 	<cfset variables.before_filters = arrayNew(1)>
 	<cfset variables.after_filters = arrayNew(1)>
 	<cfset variables.cachable_requests = arrayNew(1)>
@@ -11,7 +12,7 @@
 		<cfset init()>
 	</cfif>
 
-	<cfif application.settings.environment IS "development">
+	<cfif application.settings.environment IS "design">
 		<cfif NOT fileExists(expandPath("views/helpers/application_helpers.cfm"))>
 			<cffile action="write" file="#expandPath('views/helpers/application_helpers.cfm')#" output="" addnewline="false">
 		</cfif>

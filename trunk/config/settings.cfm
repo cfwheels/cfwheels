@@ -23,3 +23,9 @@
 <cfset application.settings.validates_numericality_of.message = "[field_name] is not a number">
 <cfset application.settings.validates_presence_of.message = "[field_name] can't be empty">
 <cfset application.settings.validates_uniqueness_of.message = "[field_name] has already been taken">
+
+<!--- caching --->
+<cfset application.settings.caching.actions = 600>
+<cfset application.settings.caching.pages = 600>
+<cfset application.settings.caching.partials = 600>
+<cfset application.settings.caching.queries = 600>

@@ -1,7 +1,7 @@
 <cffunction name="request" output="false">
 	<cfset var local = structNew()>
 
-	<cfif application.settings.environment IS NOT "production">
+	<cfif application.settings.show_debug_information>
 		<cfset request.wheels.execution.components.setting_up_request = getTickCount()>
 	</cfif>
 
@@ -143,8 +143,13 @@
 	</cfif>
 
 	<!--- Create an empty flash unless it already exists --->
-	<cfif NOT structKeyExists(session, "flash")>
-		<cfset session.flash = structNew()>
+	<cflock scope="session" type="readonly" timeout="30">
+		<cfset local.flash_exists = structKeyExists(session, "flash")>
+	</cflock>
+	<cfif NOT local.flash_exists>
+		<cflock scope="session" type="exclusive" timeout="30">
+			<cfset session.flash = structNew()>
+		</cflock>
 	</cfif>
 
 	<!--- Create requested controller --->
@@ -154,23 +159,82 @@
 		<cfif fileExists(expandPath("controllers/#local.params.controller#.cfc"))>
 			<cfrethrow>
 		<cfelse>
-			<cfif application.settings.environment IS "production">
+			<cfif application.settings.show_error_information>
+				<cfthrow type="wheels.controllerMissing" message="There is no controller named '#local.params.controller#'">
+			<cfelse>
 				<cfinclude template="../../events/onmissingtemplate.cfm">
 				<cfabort>
-			<cfelse>
-				<cfthrow type="wheels.controllerMissing" message="There is no controller named '#local.params.controller#'">
 			</cfif>
 		</cfif>
 	</cfcatch>
 	</cftry>
 
-	<cfif application.settings.environment IS NOT "production">
+	<cfif application.settings.show_debug_information>
 		<cfset request.wheels.execution.components.setting_up_request = getTickCount() - request.wheels.execution.components.setting_up_request>
-		<cfset request.wheels.execution.components.running_before_filters = getTickCount()>
+		<cfset request.wheels.execution.components.running_before_filters_and_verifications = getTickCount()>
+	</cfif>
+
+	<!--- confirm verifications on controller if they exist --->
+	<cfset local.verifications = local.controller.FL_getVerifications()>
+	<cfset local.abort = false>
+	<cfif arrayLen(local.verifications) IS NOT 0>
+		<cfloop from="1" to="#arraylen(local.verifications)#" index="local.i">
+			<cfset local.verification = local.verifications[local.i]>
+			<cfif	(len(local.verification.only) IS 0 AND len(local.verification.except) IS 0) OR (len(local.verification.only) IS NOT 0 AND listFindNoCase(local.verification.only, local.params.action)) OR (len(local.verification.except) IS NOT 0 AND NOT listFindNoCase(local.verification.except, local.params.action))>
+				<cfif local.verification.post AND CGI.request_method IS NOT "post">
+					<cfset local.abort = true>
+				</cfif>
+				<cfif local.verification.get AND CGI.request_method IS NOT "get">
+					<cfset local.abort = true>
+				</cfif>
+				<cfif local.verification.ajax AND CGI.HTTP_x_requested_with IS NOT "XMLHTTPRequest">
+					<cfset local.abort = true>
+				</cfif>
+				<cfif local.verification.params IS NOT "">
+					<cfloop list="#local.verification.params#" index="local.j">
+						<cfif NOT structKeyExists(local.params, local.j)>
+							<cfset local.abort = true>
+						</cfif>
+					</cfloop>
+				</cfif>
+				<cfif local.verification.session IS NOT "">
+					<cfloop list="#local.verification.session#" index="local.j">
+						<cflock scope="session" type="readonly" timeout="30">
+							<cfset local.session_variable_exists = structKeyExists(session, local.j)>
+						</cflock>
+						<cfif NOT local.session_variable_exists>
+							<cfset local.abort = true>
+						</cfif>
+					</cfloop>
+				</cfif>
+				<cfif local.verification.cookie IS NOT "">
+					<cfloop list="#local.verification.cookie#" index="local.j">
+						<cfif NOT structKeyExists(cookie, local.j)>
+							<cfset local.abort = true>
+						</cfif>
+					</cfloop>
+				</cfif>
+			</cfif>
+			<cfif local.abort>
+				<cfif local.verification.back AND len(CGI.http_referer) IS NOT 0>
+					<cfloop collection="#local.verification#" item="local.j">
+						<cfif left(local.j, 6) IS "flash_">
+							<cfset local.args = structNew()>
+							<cfset local.args[replaceNoCase(local.j, "flash_", "")] = local.verification[local.j]>
+							<cfset flash(argumentCollection=local.args)>
+						</cfif>
+					</cfloop>
+					<cflocation url="#CGI.http_referer#" addtoken="false">
+				<cfelse>
+					<cfset request.wheels.response = "">
+					<cfreturn request.wheels.response>
+				</cfif>
+			</cfif>
+		</cfloop>
 	</cfif>
 
 	<!--- Call before filters on controller if they exist --->
-	<cfset local.before_filters = local.controller.getBeforeFilters()>
+	<cfset local.before_filters = local.controller.FL_getBeforeFilters()>
 	<cfif arrayLen(local.before_filters) IS NOT 0>
 		<cfloop from="1" to="#arraylen(local.before_filters)#" index="local.i">
 			<cfif	(len(local.before_filters[local.i].only) IS 0 AND len(local.before_filters[local.i].except) IS 0) OR (len(local.before_filters[local.i].only) IS NOT 0 AND listFindNoCase(local.before_filters[local.i].only, local.params.action)) OR (len(local.before_filters[local.i].except) IS NOT 0 AND NOT listFindNoCase(local.before_filters[local.i].except, local.params.action))>
@@ -179,15 +243,15 @@
 		</cfloop>
 	</cfif>
 
-	<cfif application.settings.environment IS NOT "production">
-		<cfset request.wheels.execution.components.running_before_filters = getTickCount() - request.wheels.execution.components.running_before_filters>
+	<cfif application.settings.show_debug_information>
+		<cfset request.wheels.execution.components.running_before_filters_and_verifications = getTickCount() - request.wheels.execution.components.running_before_filters_and_verifications>
 		<cfset request.wheels.execution.components.running_controller_action = getTickCount()>
 	</cfif>
 
 	<!--- Call action on controller if it exists --->
 	<cfset local.action_is_cachable = false>
-	<cfif application.settings.perform_caching AND structIsEmpty(session.flash) AND structIsEmpty(form)>
-		<cfset local.cachable_actions = local.controller.getCachableActions()>
+	<cfif application.settings.cache_actions AND NOT flash() AND structIsEmpty(form)>
+		<cfset local.cachable_actions = local.controller.FL_getCachableActions()>
 		<cfloop from="1" to="#arrayLen(local.cachable_actions)#" index="local.i">
 			<cfif local.cachable_actions[local.i].action IS local.params.action>
 				<cfset local.action_is_cachable = true>
@@ -200,11 +264,11 @@
 		<cfset local.category = "action">
 		<cfset local.key = "#CGI.script_name#_#CGI.path_info#_#CGI.query_string#">
 		<cfset local.lock_name = local.category & local.key>
-		<cflock name="#local.lock_name#" type="readonly" timeout="#application.settings.query_timeout#">
+		<cflock name="#local.lock_name#" type="readonly" timeout="30">
 			<cfset request.wheels.response = getFromCache(local.key, local.category)>
 		</cflock>
 		<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
-	   	<cflock name="#local.lock_name#" type="exclusive" timeout="#application.settings.query_timeout#">
+	   	<cflock name="#local.lock_name#" type="exclusive" timeout="30">
 				<cfset request.wheels.response = getFromCache(local.key, local.category)>
 				<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
 					<cfset FL_callAction(local.controller, local.params.controller, local.params.action)>
@@ -216,7 +280,7 @@
 		<cfset FL_callAction(local.controller, local.params.controller, local.params.action)>
 	</cfif>
 
-	<cfif application.settings.environment IS NOT "production">
+	<cfif application.settings.show_debug_information>
 		<cfset request.wheels.execution.components.running_controller_action = getTickCount() - request.wheels.execution.components.running_controller_action>
 		<cfif structKeyExists(request.wheels.execution.components, "rendering_view_page")>
 			<cfset request.wheels.execution.components.running_controller_action = request.wheels.execution.components.running_controller_action - request.wheels.execution.components.rendering_view_page>
@@ -224,7 +288,7 @@
 		<cfset request.wheels.execution.components.running_after_filters = getTickCount()>
 	</cfif>
 
-	<cfset local.after_filters = local.controller.getAfterFilters()>
+	<cfset local.after_filters = local.controller.FL_getAfterFilters()>
 	<cfif arrayLen(local.after_filters) IS NOT 0>
 		<cfloop from="1" to="#arraylen(local.after_filters)#" index="local.i">
 			<cfif	(len(local.after_filters[local.i].only) IS 0 AND len(local.after_filters[local.i].except) IS 0) OR (len(local.after_filters[local.i].only) IS NOT 0 AND listFindNoCase(local.after_filters[local.i].only, local.params.action)) OR (len(local.after_filters[local.i].except) IS NOT 0 AND NOT listFindNoCase(local.after_filters[local.i].except, local.params.action))>
@@ -233,12 +297,14 @@
 		</cfloop>
 	</cfif>
 
-	<cfif application.settings.environment IS NOT "production">
+	<cfif application.settings.show_debug_information>
 		<cfset request.wheels.execution.components.running_after_filters = getTickCount() - request.wheels.execution.components.running_after_filters>
 	</cfif>
 
 	<!--- Clear the flash (note that this is not done for redirectTo since the processing does not get here) --->
-	<cfset structClear(session.flash)>
+	<cflock scope="session" type="exclusive" timeout="30">
+		<cfset structClear(session.flash)>
+	</cflock>
 
 	<cfreturn request.wheels.response>
 </cffunction>
@@ -260,11 +326,11 @@
 			<cfif fileExists(expandPath("views/#arguments.controller_name#/#arguments.action_name#.cfm"))>
 				<cfrethrow>
 			<cfelse>
-				<cfif application.settings.environment IS "production">
+				<cfif application.settings.show_error_information>
+					<cfthrow type="wheels.viewMissing" message="No view page for the action '#arguments.action_name#' could be found">
+				<cfelse>
 					<cfinclude template="../../events/onmissingtemplate.cfm">
 					<cfabort>
-				<cfelse>
-					<cfthrow type="wheels.viewMissing" message="No view page for the action '#arguments.action_name#' could be found">
 				</cfif>
 			</cfif>
 		</cfcatch>
