@@ -34,12 +34,12 @@
 
 
 <cffunction name="valid" returntype="any" access="public" output="false">
-	<cfif FL_isNew()>
-		<cfset FL_validateOnCreate()>
+	<cfif CFW_isNew()>
+		<cfset CFW_validateOnCreate()>
 	<cfelse>
-		<cfset FL_validateOnUpdate()>
+		<cfset CFW_validateOnUpdate()>
 	</cfif>
-	<cfset FL_validate()>
+	<cfset CFW_validate()>
 	<cfreturn hasNoErrors()>
 </cffunction>
 
@@ -294,46 +294,46 @@
 </cffunction>
 
 
-<cffunction name="FL_validate" returntype="any" access="public" output="false">
+<cffunction name="CFW_validate" returntype="any" access="public" output="false">
 	<cfset var local = structNew()>
 	<cfif structKeyExists(variables, "validate")>
 		<cfset local.result = validate()>
 	</cfif>
 	<cfif NOT isDefined("local.result") OR (isBoolean(local.result) AND local.result)>
 		<cfif structKeyExists(variables.class, "validations_on_save")>
-			<cfset FL_runValidation(variables.class.validations_on_save)>
+			<cfset CFW_runValidation(variables.class.validations_on_save)>
 		</cfif>
 	</cfif>
 </cffunction>
 
 
-<cffunction name="FL_validateOnCreate" returntype="any" access="public" output="false">
+<cffunction name="CFW_validateOnCreate" returntype="any" access="public" output="false">
 	<cfset var local = structNew()>
 	<cfif structKeyExists(variables, "validateOnCreate")>
 		<cfset local.result = validateOnCreate()>
 	</cfif>
 	<cfif NOT isDefined("local.result") OR (isBoolean(local.result) AND local.result)>
 		<cfif structKeyExists(variables.class, "validations_on_create")>
-			<cfset FL_runValidation(variables.class.validations_on_create)>
+			<cfset CFW_runValidation(variables.class.validations_on_create)>
 		</cfif>
 	</cfif>
 </cffunction>
 
 
-<cffunction name="FL_validateOnUpdate" returntype="any" access="public" output="false">
+<cffunction name="CFW_validateOnUpdate" returntype="any" access="public" output="false">
 	<cfset var local = structNew()>
 	<cfif structKeyExists(variables, "validateOnUpdate")>
 		<cfset local.result = validateOnUpdate()>
 	</cfif>
 	<cfif NOT isDefined("local.result") OR (isBoolean(local.result) AND local.result)>
 		<cfif structKeyExists(variables.class, "validations_on_update")>
-			<cfset FL_runValidation(variables.class.validations_on_update)>
+			<cfset CFW_runValidation(variables.class.validations_on_update)>
 		</cfif>
 	</cfif>
 </cffunction>
 
 
-<cffunction name="FL_runValidation" returntype="any" access="private" output="false">
+<cffunction name="CFW_runValidation" returntype="any" access="private" output="false">
 	<cfargument name="validations" type="any" required="true">
 	<cfset var local = structNew()>
 

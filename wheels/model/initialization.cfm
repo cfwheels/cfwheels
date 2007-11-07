@@ -1,15 +1,16 @@
-<cffunction name="FL_initModel" returntype="any" access="public" output="false">
+<cffunction name="_initModelClass" returntype="any" access="public" output="false">
+	<cfargument name="name" type="any" required="true">
+
 	<cfset var local = structNew()>
 
-	<cfset variables.class.model_name = listLast(getMetaData(this).name, ".")>
+	<cfset variables.class.name = arguments.name>
 
-	<!--- call the init function if the developer has created one (for setting up associations, validations etc) --->
 	<cfif structKeyExists(variables, "init")>
 		<cfset init()>
 	</cfif>
 
 	<cfif NOT structKeyExists(variables.class, "table_name")>
-		<cfset variables.class.table_name = pluralize(variables.class.model_name)>
+		<cfset variables.class.table_name = pluralize(variables.class.name)>
 	</cfif>
 
 	<cfif NOT structKeyExists(variables.class, "primary_key")>
@@ -55,13 +56,19 @@
 </cffunction>
 
 
-<cffunction name="FL_initObject" returntype="any" access="public" output="false">
+<cffunction name="_createModelObject" returntype="any" access="private" output="false">
+	<cfargument name="attributes" type="any" required="no" default="">
+	<cfreturn createObject("component", "models.#variables.class.name#")._initModelObject(variables.class.name, arguments.attributes)>
+</cffunction>
+
+
+<cffunction name="_initModelObject" returntype="any" access="public" output="false">
+	<cfargument name="name" type="any" required="yes">
 	<cfargument name="attributes" type="any" required="no" default="">
 	<cfset var local = structNew()>
 
-	<!--- create a reference to the class data for this object --->
 	<cflock name="model_lock" type="readonly" timeout="30">
-		<cfset variables.class = application.wheels.models[listLast(getMetaData(this).name, ".")].getClassData()>
+		<cfset variables.class = application.wheels.models[arguments.name].getModelClassData()>
 	</cflock>
 
 	<!--- setup object attributes in the this scope --->

@@ -41,7 +41,7 @@
 	   	<cflock name="#local.lock_name#" type="exclusive" timeout="30">
 				<cfset request.wheels.response = getFromCache(local.key, local.category)>
 				<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
-					<cfset FL_renderPage(argumentCollection=arguments)>
+					<cfset CFW_renderPage(argumentCollection=arguments)>
 					<cfif NOT isNumeric(arguments.cache)>
 						<cfset arguments.cache = application.settings.caching.pages>
 					</cfif>
@@ -50,7 +50,7 @@
 			</cflock>
 		</cfif>
 	<cfelse>
-		<cfset FL_renderPage(argumentCollection=arguments)>
+		<cfset CFW_renderPage(argumentCollection=arguments)>
 	</cfif>
 
 	<cfif application.settings.show_debug_information>
@@ -60,13 +60,13 @@
 </cffunction>
 
 
-<cffunction name="FL_renderPage" returntype="any" access="public" output="false">
+<cffunction name="CFW_renderPage" returntype="any" access="public" output="false">
 	<cfif len(arguments.template) IS NOT 0>
-		<cfset request.wheels.response = FL_include("../../views/#arguments.template#.cfm")>
+		<cfset request.wheels.response = CFW_include("../../views/#arguments.template#.cfm")>
 	<cfelse>
-		<cfset request.wheels.response = FL_include("../../views/#arguments.controller#/#arguments.action#.cfm")>
+		<cfset request.wheels.response = CFW_include("../../views/#arguments.controller#/#arguments.action#.cfm")>
 	</cfif>
-	<cfset FL_renderLayout(layout=arguments.layout)>
+	<cfset CFW_renderLayout(layout=arguments.layout)>
 </cffunction>
 
 
@@ -81,7 +81,7 @@
 </cffunction>
 
 
-<cffunction name="FL_renderPartial" returntype="any" access="public" output="false">
+<cffunction name="CFW_renderPartial" returntype="any" access="public" output="false">
 	<cfset var local = structNew()>
 
 	<!--- Setup local variables --->
@@ -92,10 +92,10 @@
 	</cfloop>
 	<cfif arguments.name Contains "/">
 		<!--- Include a file in a sub folder to views --->
-		<cfset local.partial = FL_include("../../views/#reverse(listRest(reverse(arguments.name), '/'))#/_#reverse(listFirst(reverse(arguments.name), '/'))#.cfm")>
+		<cfset local.partial = CFW_include("../../views/#reverse(listRest(reverse(arguments.name), '/'))#/_#reverse(listFirst(reverse(arguments.name), '/'))#.cfm")>
 	<cfelse>
 		<!--- Include a file in the current controller's view folder --->
-		<cfset local.partial = FL_include("../../views/#variables.params.controller#/_#arguments.name#.cfm")>
+		<cfset local.partial = CFW_include("../../views/#variables.params.controller#/_#arguments.name#.cfm")>
 	</cfif>
 
 	<cfreturn local.partial>
@@ -123,7 +123,7 @@
 	   	<cflock name="#local.lock_name#" type="exclusive" timeout="30">
 				<cfset local.partial = getFromCache(local.key, local.category)>
 				<cfif isBoolean(local.partial) AND NOT local.partial>
-					<cfset local.partial = FL_renderPartial(argumentCollection=arguments)>
+					<cfset local.partial = CFW_renderPartial(argumentCollection=arguments)>
 					<cfif NOT isNumeric(arguments.cache)>
 						<cfset arguments.cache = application.settings.caching.partials>
 					</cfif>
@@ -132,7 +132,7 @@
 			</cflock>
 		</cfif>
 	<cfelse>
-		<cfset local.partial = FL_renderPartial(argumentCollection=arguments)>
+		<cfset local.partial = CFW_renderPartial(argumentCollection=arguments)>
 	</cfif>
 
 	<cfif application.settings.show_debug_information>
@@ -153,29 +153,29 @@
 </cffunction>
 
 
-<cffunction name="FL_include" returntype="any" access="private" output="false">
-	<cfargument name="FL_path" type="any" required="true">
-	<cfset var FL_local = structNew()>
-	<cfsavecontent variable="FL_local.output">
-		<cfinclude template="#arguments.FL_path#">
+<cffunction name="CFW_include" returntype="any" access="private" output="false">
+	<cfargument name="CFW_path" type="any" required="true">
+	<cfset var CFW_local = structNew()>
+	<cfsavecontent variable="CFW_local.output">
+		<cfinclude template="#arguments.CFW_path#">
 	</cfsavecontent>
-	<cfreturn trim(FL_local.output)>
+	<cfreturn trim(CFW_local.output)>
 </cffunction>
 
 
-<cffunction name="FL_renderLayout" returntype="any" access="private" output="false">
+<cffunction name="CFW_renderLayout" returntype="any" access="private" output="false">
 	<cfargument name="layout" type="any" required="true">
 
 	<cfif (isBoolean(arguments.layout) AND arguments.layout) OR (arguments.layout IS NOT "false")>
 		<cfif NOT isBoolean(arguments.layout)>
 			<!--- Include a designated layout --->
-			<cfset request.wheels.response = FL_include("../../views/layouts/#replace(arguments.layout, ' ', '_', 'all')#_layout.cfm")>
+			<cfset request.wheels.response = CFW_include("../../views/layouts/#replace(arguments.layout, ' ', '_', 'all')#_layout.cfm")>
 		<cfelseif fileExists(expandPath("views/layouts/#variables.params.controller#_layout.cfm"))>
 			<!--- Include the current controller's layout if one exists --->
-			<cfset request.wheels.response = FL_include("../../views/layouts/#variables.params.controller#_layout.cfm")>
+			<cfset request.wheels.response = CFW_include("../../views/layouts/#variables.params.controller#_layout.cfm")>
 		<cfelse>
 			<!--- The application wide layout --->
-			<cfset request.wheels.response = FL_include("../../views/layouts/application_layout.cfm")>
+			<cfset request.wheels.response = CFW_include("../../views/layouts/application_layout.cfm")>
 		</cfif>
 	</cfif>
 

@@ -1,6 +1,6 @@
 <cffunction name="hasOne" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
-	<cfargument name="model_name" type="any" required="false" default="#listLast(getMetaData(this).name, '.')#">
+	<cfargument name="model_name" type="any" required="false" default="#variables.class.name#">
 	<cfargument name="associated_model_name" type="any" required="false" default="#arguments.name#">
 	<cfargument name="table_name" type="any" required="false" default="#lCase(pluralize(arguments.model_name))#">
 	<cfargument name="associated_table_name" type="any" required="false" default="#lCase(pluralize(arguments.associated_model_name))#">
@@ -20,7 +20,7 @@
 
 <cffunction name="hasMany" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
-	<cfargument name="model_name" type="any" required="false" default="#capitalize(listLast(getMetaData(this).name, '.'))#">
+	<cfargument name="model_name" type="any" required="false" default="#capitalize(variables.class.name)#">
 	<cfargument name="associated_model_name" type="any" required="false" default="#capitalize(singularize(arguments.name))#">
 	<cfargument name="table_name" type="any" required="false" default="#lCase(pluralize(arguments.model_name))#">
 	<cfargument name="associated_table_name" type="any" required="false" default="#lCase(pluralize(arguments.associated_model_name))#">
@@ -40,7 +40,7 @@
 
 <cffunction name="belongsTo" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
-	<cfargument name="model_name" type="any" required="false" default="#listLast(getMetaData(this).name, '.')#">
+	<cfargument name="model_name" type="any" required="false" default="#variables.class.name#">
 	<cfargument name="associated_model_name" type="any" required="false" default="#arguments.name#">
 	<cfargument name="table_name" type="any" required="false" default="#lCase(pluralize(arguments.model_name))#">
 	<cfargument name="associated_table_name" type="any" required="false" default="#lCase(pluralize(arguments.associated_model_name))#">

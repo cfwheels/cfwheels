@@ -1,29 +1,49 @@
-<cffunction name="flash" returntype="any" access="public" output="false">
-	<cfif structCount(arguments) IS 0>
-		<!--- return true unless flash is empty --->
-		<cflock scope="session" type="readonly" timeout="30">
-			<cfif structIsEmpty(session.flash)>
-				<cfreturn false>
-			<cfelse>
-				<cfreturn true>
-			</cfif>
-		</cflock>
-	<cfelseif structKeyExists(arguments, "1")>
-		<!--- return value in flash --->
-		<cflock scope="session" type="readonly" timeout="30">
-			<cfif structKeyExists(session.flash, arguments[1])>
-				<cfreturn session.flash[arguments[1]]>
-			<cfelse>
-				<cfreturn "">
-			</cfif>
-		</cflock>
-	<cfelse>
-		<!--- add value to flash --->
-		<cflock scope="session" type="exclusive" timeout="30">
-			<cfset session.flash[structKeyList(arguments)] = arguments[1]>
-		</cflock>
-		<cfreturn true>
+<cffunction name="contentForLayout" returntype="any" access="public" output="false">
+	<cfreturn request.wheels.response>
+</cffunction>
+
+<cffunction name="linkTo" returntype="any" access="public" output="false">
+	<cfargument name="link" type="any" required="false" default="">
+	<cfargument name="text" type="any" required="false" default="">
+	<cfargument name="confirm" type="any" required="false" default="">
+	<!--- Accepts URLFor arguments --->
+	<cfset var local = structNew()>
+	<cfset local.named_arguments = "link,text,confirm,controller,action,id,anchor,only_path,host,protocol,params">
+	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
+		<!--- Since a non-numeric id was passed in we assume it is meant as a HTML attribute and therefore remove it from the named arguments list so that it will be set in the attributes --->
+		<cfset local.named_arguments = listDeleteAt(local.named_arguments, listFindNoCase(local.named_arguments, "id"))>
 	</cfif>
+
+	<cfset local.attributes = "">
+	<cfloop collection="#arguments#" item="local.i">
+		<cfif listFindNoCase(local.named_arguments, local.i) IS 0>
+			<cfset local.attributes = "#local.attributes# #lCase(local.i)#=""#arguments[local.i]#""">
+		</cfif>
+	</cfloop>
+
+	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
+		<cfset structDelete(arguments, "id")>
+	</cfif>
+
+	<cfif len(arguments.link) IS NOT 0>
+		<cfset local.href = arguments.link>
+	<cfelse>
+		<cfset local.href = URLFor(argumentCollection=arguments)>
+	</cfif>
+
+	<cfif len(arguments.text) IS NOT 0>
+		<cfset local.text = arguments.text>
+	<cfelse>
+		<cfset local.text = local.href>
+	</cfif>
+
+	<cfif len(arguments.confirm) IS NOT 0>
+		<cfset local.html = "<a href=""#HTMLEditFormat(local.href)#"" onclick=""return confirm('#JSStringFormat(arguments.confirm)#');""#local.attributes#>#local.text#</a>">
+	<cfelse>
+		<cfset local.html = "<a href=""#HTMLEditFormat(local.href)#""#local.attributes#>#local.text#</a>">
+	</cfif>
+
+	<cfreturn local.html>
 </cffunction>
 
 
@@ -53,18 +73,37 @@
 
 
 <cffunction name="model" returntype="any" access="public" output="false">
-	<cfargument name="model_name" type="any" required="true">
+	<cfargument name="name" type="any" required="true">
 	<cfset var local = structNew()>
+	<cfif application.settings.environment IS NOT "production">
+		<cfinclude template="../errors/model.cfm">
+	</cfif>
 
-	<cfif NOT structKeyExists(application.wheels.models, arguments.model_name)>
+	<cfif NOT structKeyExists(application.wheels.models, arguments.name)>
    	<cflock name="model_lock" type="exclusive" timeout="30">
-			<cfif NOT structKeyExists(application.wheels.models, arguments.model_name)>
-				<cfset application.wheels.models[arguments.model_name] = createObject("component", "#application.wheels.cfc_path#models.#lCase(arguments.model_name)#").FL_initModel()>
+			<cfif NOT structKeyExists(application.wheels.models, arguments.name)>
+				<cfset application.wheels.models[arguments.name] = createObject("component", "models.#lCase(arguments.name)#")._initModelClass(arguments.name)>
 			</cfif>
 		</cflock>
 	</cfif>
 
-	<cfreturn application.wheels.models[arguments.model_name]>
+	<cfreturn application.wheels.models[arguments.name]>
+</cffunction>
+
+
+<cffunction name="_controller" returntype="any" access="public" output="false">
+	<cfargument name="name" type="any" required="true">
+	<cfset var local = structNew()>
+
+	<cfif NOT structKeyExists(application.wheels.controllers, arguments.name)>
+   	<cflock name="controller_lock" type="exclusive" timeout="30">
+			<cfif NOT structKeyExists(application.wheels.controllers, arguments.name)>
+				<cfset application.wheels.controllers[arguments.name] = createObject("component", "controllers.#lCase(arguments.name)#")._initControllerClass(arguments.name)>
+			</cfif>
+		</cflock>
+	</cfif>
+
+	<cfreturn application.wheels.controllers[arguments.name]>
 </cffunction>
 
 
@@ -128,7 +167,7 @@
 
 	<cfif len(arguments.params) IS NOT 0>
 		<!--- add the params to the link --->
-		<cfset local.url = local.url & FL_constructParams(arguments.params)>
+		<cfset local.url = local.url & CFW_constructParams(arguments.params)>
 	</cfif>
 
 	<cfif len(arguments.anchor) IS NOT 0>
@@ -149,29 +188,6 @@
 	</cfif>
 
 	<cfreturn lCase(local.url)>
-</cffunction>
-
-
-<cffunction name="FL_constructParams" returntype="any" access="private" output="false">
-	<cfargument name="params" type="any" required="true">
-	<cfset var local = structNew()>
-
-	<cfset local.delim = "?">
-	<cfif application.settings.obfuscate_urls>
-		<cfset local.params = "">
-		<cfloop list="#arguments.params#" delimiters="&" index="local.i">
-			<cfset local.temp = listToArray(local.i, "=")>
-			<cfset local.params = local.params & local.delim & local.temp[1] & "=">
-			<cfif arrayLen(local.temp) IS 2>
-				<cfset local.params = local.params & encryptParam(local.temp[2])>
-			</cfif>
-			<cfset local.delim = "&">
-		</cfloop>
-	<cfelse>
-		<cfset local.params = local.delim & arguments.params>
-	</cfif>
-
-	<cfreturn local.params>
 </cffunction>
 
 
@@ -291,249 +307,4 @@
 	<!--- set to false so that Wheels does not think we have rendered an actual response to the browser --->
 	<cfset request.wheels.response = false>
 
-</cffunction>
-
-
-<cffunction name="contentForLayout" returntype="any" access="public" output="false">
-	<cfreturn request.wheels.response>
-</cffunction>
-
-
-<cffunction name="cycle" returntype="any" access="public" output="false">
-	<cfargument name="values" type="any" required="true">
-	<cfargument name="name" type="any" required="false" default="default">
-	<cfset var local = structNew()>
-
-	<cfif NOT isDefined("request.wheels.cycle.#arguments.name#")>
-		<cfset "request.wheels.cycle.#arguments.name#" = listGetAt(arguments.values, 1)>
-	<cfelse>
-		<cfset local.found_at = listFindNoCase(arguments.values, request.wheels.cycle[arguments.name])>
-		<cfif local.found_at IS listLen(arguments.values)>
-			<cfset local.found_at = 0>
-		</cfif>
-		<cfset "request.wheels.cycle.#arguments.name#" = listGetAt(arguments.values, local.found_at + 1)>
-	</cfif>
-
-	<cfreturn request.wheels.cycle[arguments.name]>
-</cffunction>
-
-
-<cffunction name="truncate" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="true">
-	<cfargument name="length" type="any" required="true">
-	<cfargument name="truncate_string" type="any" required="false" default="...">
-	<cfset var local = structNew()>
-
-	<cfif len(arguments.text) GT arguments.length>
-		<cfset local.output = left(arguments.text, arguments.length-3) & arguments.truncate_string>
-	<cfelse>
-		<cfset local.output = arguments.text>
-	</cfif>
-
-	<cfreturn local.output>
-</cffunction>
-
-
-<cffunction name="simpleFormat" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="yes">
-	<cfset var local = structNew()>
-
-	<!--- Replace single newline characters with HTML break tags and double newline characters with HTML paragraph tags --->
-	<cfset local.output = trim(arguments.text)>
-	<cfset local.output = replace(local.output, "#chr(10)##chr(10)#", "</p><p>", "all")>
-	<cfset local.output = replace(local.output, "#chr(10)#", "<br />", "all")>
-	<cfif local.output IS NOT "">
-		<cfset local.output = "<p>" & local.output & "</p>">
-	</cfif>
-
-	<cfreturn local.output>
-</cffunction>
-
-
-<cffunction name="autoLink" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="yes">
-	<cfargument name="link" type="any" required="no" default="all">
-	<cfargument name="attributes" type="any" required="no" default="">
-	<cfset var local = structNew()>
-
-	<cfset local.url_regex = "(?ix)([^(url=)|(href=)'""])(((https?)://([^:]+\:[^@]*@)?)([\d\w\-]+\.)?[\w\d\-\.]+\.(com|net|org|info|biz|tv|co\.uk|de|ro|it)(( / [\w\d\.\-@%\\\/:]* )+)?(\?[\w\d\?%,\.\/\##!@:=\+~_\-&amp;]*(?<![\.]))?)">
-	<cfset local.mail_regex = "(([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,}))">
-
-	<cfif len(arguments.attributes) IS NOT 0>
-		<!--- Add a space to the beginning so it can be directly inserted in the HTML link element below --->
-		<cfset arguments.attributes = " " & arguments.attributes>
-	</cfif>
-
-	<cfset local.output = arguments.text>
-	<cfif arguments.link IS NOT "urls">
-		<!--- Auto link all email addresses --->
-		<!--- <cfset local.output = REReplaceNoCase(local.output, "(([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,}))", "<a href=""mailto:\1""#arguments.attributes#>\1</a>", "all")> --->
-		<cfset local.output = REReplaceNoCase(local.output, local.mail_regex, "<a href=""mailto:\1""#arguments.attributes#>\1</a>", "all")>
-	</cfif>
-	<cfif arguments.link IS NOT "email_addresses">
-		<!--- Auto link all URLs --->
-		<!--- <cfset local.output = REReplaceNoCase(local.output, "(\b(?:https?|ftp)://(?:[a-z\d-]+\.)+[a-z]{2,6}(?:/\S*)?)", "<a href=""\1""#arguments.attributes#>\1</a>", "all")> --->
-		<cfset local.output = local.output.ReplaceAll(local.url_regex, "$1<a href=""$2""#arguments.attributes#>$2</a>")>
-	</cfif>
-
-	<cfreturn local.output>
-</cffunction>
-
-<cffunction name="highlight" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="yes">
-	<cfargument name="phrase" type="any" required="yes">
-	<cfargument name="class" type="any" required="no" default="highlight">
-	<cfreturn REReplaceNoCase(arguments.text, "(#arguments.phrase#)", "<span class=""#arguments.class#"">\1</span>", "all")>
-</cffunction>
-
-
-<cffunction name="stripTags" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="true">
-	<cfreturn REReplaceNoCase(arguments.text, "<[a-z].*?>(.*?)</[a-z]>", "\1" , "all")>
-</cffunction>
-
-
-<cffunction name="stripLinks" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="true">
-	<cfreturn REReplaceNoCase(arguments.text, "<a.*?>(.*?)</a>", "\1" , "all")>
-</cffunction>
-
-
-<cffunction name="excerpt" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="true">
-	<cfargument name="phrase" type="any" required="true">
-	<cfargument name="radius" type="any" required="false" default="100">
-	<cfargument name="excerpt_string" type="any" required="false" default="...">
-	<cfset var local = structNew()>
-
-	<cfset local.pos = findNoCase(arguments.phrase, arguments.text, 1)>
-	<cfif local.pos IS NOT 0>
-		<cfset local.excerpt_string_start = arguments.excerpt_string>
-		<cfset local.excerpt_string_end = arguments.excerpt_string>
-		<cfset local.start = local.pos-arguments.radius>
-		<cfif local.start LTE 0>
-			<cfset local.start = 1>
-			<cfset local.excerpt_string_start = "">
-		</cfif>
-		<cfset local.count = len(arguments.phrase)+(arguments.radius*2)>
-		<cfif local.count GT (len(arguments.text)-local.start)>
-			<cfset local.excerpt_string_end = "">
-		</cfif>
-		<cfset local.output = local.excerpt_string_start & mid(arguments.text, local.start, local.count) & local.excerpt_string_end>
-	<cfelse>
-		<cfset local.output = "">
-	</cfif>
-
-	<cfreturn local.output>
-</cffunction>
-
-
-<cffunction name="paginationHasPrevious" returntype="any" access="public" output="false">
-	<cfargument name="handle" type="any" required="false" default="paginated">
-	<cfif request.wheels[arguments.handle].current_page GT 1>
-		<cfreturn true>
-	<cfelse>
-		<cfreturn false>
-	</cfif>
-</cffunction>
-
-
-<cffunction name="paginationHasNext" returntype="any" access="public" output="false">
-	<cfargument name="handle" type="any" required="false" default="paginated">
-	<cfif request.wheels[arguments.handle].current_page LT request.wheels[arguments.handle].total_pages>
-		<cfreturn true>
-	<cfelse>
-		<cfreturn false>
-	</cfif>
-</cffunction>
-
-
-<cffunction name="paginationTotalPages" returntype="any" access="public" output="false">
-	<cfargument name="handle" type="any" required="false" default="paginated">
-	<cfreturn request.wheels[arguments.handle].total_pages>
-</cffunction>
-
-
-<cffunction name="paginationCurrentPage" returntype="any" access="public" output="false">
-	<cfargument name="handle" type="any" required="false" default="paginated">
-	<cfreturn request.wheels[arguments.handle].current_page>
-</cffunction>
-
-
-<cffunction name="paginationLinks" returntype="any" access="public" output="false">
-	<cfargument name="handle" type="any" required="false" default="paginated">
-	<cfargument name="name" type="any" required="false" default="page">
-	<cfargument name="window_size" type="any" required="false" default=2>
-	<cfargument name="always_show_anchors" type="any" required="false" default="true">
-	<cfargument name="link_to_current_page" type="any" required="false" default="false">
-	<cfargument name="prepend_to_link" type="any" required="false" default="">
-	<cfargument name="append_to_link" type="any" required="false" default="">
-	<cfargument name="class_for_current" type="any" required="false" default="">
-	<cfargument name="params" type="any" required="false" default="">
-	<cfset var local = structNew()>
-
-	<cfset local.current_page = request.wheels[arguments.handle].current_page>
-	<cfset local.total_pages = request.wheels[arguments.handle].total_pages>
-
-	<cfsavecontent variable="local.output">
-		<cfoutput>
-			<cfif arguments.always_show_anchors>
-				<cfif (local.current_page - arguments.window_size) GT 1>
-					<cfset local.link_to_arguments.params = "#arguments.name#=1">
-					<cfif len(arguments.params) IS NOT 0>
-						<cfset local.link_to_arguments.params = local.link_to_arguments.params & "&" & arguments.params>
-					</cfif>
-					<cfset local.link_to_arguments.text = 1>
-					#linkTo(argumentCollection=local.link_to_arguments)# ...
-				</cfif>
-			</cfif>
-			<cfloop from="1" to="#local.total_pages#" index="local.i">
-				<cfif (local.i GTE (local.current_page - arguments.window_size) AND local.i LTE local.current_page) OR (local.i LTE (local.current_page + arguments.window_size) AND local.i GTE local.current_page)>
-					<cfset local.link_to_arguments.params = "#arguments.name#=#local.i#">
-					<cfif len(arguments.params) IS NOT 0>
-						<cfset local.link_to_arguments.params = local.link_to_arguments.params & "&" & arguments.params>
-					</cfif>
-					<cfset local.link_to_arguments.text = local.i>
-					<cfif len(arguments.class_for_current) IS NOT 0 AND local.current_page IS local.i>
-						<cfset local.link_to_arguments.attributes = "class=#arguments.class_for_current#">
-					<cfelse>
-						<cfset local.link_to_arguments.attributes = "">
-					</cfif>
-					<cfif len(arguments.prepend_to_link) IS NOT 0>#arguments.prepend_to_link#</cfif><cfif local.current_page IS NOT local.i OR arguments.link_to_current_page>#linkTo(argumentCollection=local.link_to_arguments)#<cfelse><cfif len(arguments.class_for_current) IS NOT 0><span class="#arguments.class_for_current#">#local.i#</span><cfelse>#local.i#</cfif></cfif><cfif len(arguments.append_to_link) IS NOT 0>#arguments.append_to_link#</cfif>
-				</cfif>
-			</cfloop>
-			<cfif arguments.always_show_anchors>
-				<cfif local.total_pages GT (local.current_page + arguments.window_size)>
-					<cfset local.link_to_arguments.params = "#arguments.name#=#local.total_pages#">
-					<cfif len(arguments.params) IS NOT 0>
-						<cfset local.link_to_arguments.params = local.link_to_arguments.params & "&" & arguments.params>
-					</cfif>
-					<cfset local.link_to_arguments.text = local.total_pages>
-				... #linkTo(argumentCollection=local.link_to_arguments)#
-				</cfif>
-			</cfif>
-		</cfoutput>
-	</cfsavecontent>
-
-	<cfreturn FL_trimHTML(local.output)>
-</cffunction>
-
-
-<cffunction name="FL_trimHTML" returntype="any" access="private" output="false">
-	<cfargument name="str" type="any" required="true">
-	<cfreturn replaceList(trim(arguments.str), "#chr(9)#,#chr(10)#,#chr(13)#", ",,")>
-</cffunction>
-
-
-<cffunction name="FL_getAttributes" returntype="any" access="private" output="false">
-	<cfset var local = structNew()>
-
-	<cfset local.attributes = "">
-	<cfloop collection="#arguments#" item="local.i">
-		<cfif local.i Does Not Contain "_" AND listFindNoCase(arguments.FL_named_arguments, local.i) IS 0>
-			<cfset local.attributes = "#local.attributes# #lCase(local.i)#=""#arguments[local.i]#""">
-		</cfif>
-	</cfloop>
-
-	<cfreturn local.attributes>
 </cffunction>

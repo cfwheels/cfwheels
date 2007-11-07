@@ -8,7 +8,7 @@
 		</cfif>
 	</cfloop>
 
-	<cfreturn FL_new(arguments.attributes)>
+	<cfreturn _createModelObject(arguments.attributes)>
 </cffunction>
 
 
@@ -93,14 +93,14 @@
 			<cfreturn false>
 		</cfif>
 	</cfif>
-	<cfif FL_isNew()>
+	<cfif CFW_isNew()>
 		<cfif isDefined("beforeValidationOnCreate")>
 			<cfset local.callback_result = beforeValidationOnCreate()>
 			<cfif isDefined("local.callback_result") AND NOT local.callback_result>
 				<cfreturn false>
 			</cfif>
 		</cfif>
-		<cfset FL_validateOnCreate()>
+		<cfset CFW_validateOnCreate()>
 		<cfif hasErrors()>
 			<cfreturn false>
 		</cfif>
@@ -117,7 +117,7 @@
 				<cfreturn false>
 			</cfif>
 		</cfif>
-		<cfset FL_validateOnUpdate()>
+		<cfset CFW_validateOnUpdate()>
 		<cfif hasErrors()>
 			<cfreturn false>
 		</cfif>
@@ -128,7 +128,7 @@
 			</cfif>
 		</cfif>
 	</cfif>
-	<cfset FL_validate()>
+	<cfset CFW_validate()>
 	<cfif hasErrors()>
 		<cfreturn false>
 	</cfif>
@@ -144,14 +144,14 @@
 			<cfreturn false>
 		</cfif>
 	</cfif>
-	<cfif FL_isNew()>
+	<cfif CFW_isNew()>
 		<cfif isDefined("beforeCreate")>
 			<cfset local.callback_result = beforeCreate()>
 			<cfif isDefined("local.callback_result") AND NOT local.callback_result>
 				<cfreturn false>
 			</cfif>
 		</cfif>
-		<cfif NOT FL_insert()>
+		<cfif NOT CFW_insert()>
 			<cfreturn false>
 		</cfif>
 		<cfif isDefined("afterCreate")>
@@ -167,7 +167,7 @@
 				<cfreturn false>
 			</cfif>
 		</cfif>
-		<cfif NOT FL_update()>
+		<cfif NOT CFW_update()>
 			<cfreturn false>
 		</cfif>
 		<cfif isDefined("afterUpdate")>
@@ -285,17 +285,7 @@
 </cffunction>
 
 
-<cffunction name="FL_new" returntype="any" access="private" output="false">
-	<cfargument name="attributes" type="any" required="no" default="">
-	<cfset var local = structNew()>
-
-	<cfset local.object = createObject("component", "#application.wheels.cfc_path#models.#variables.class.model_name#").FL_initObject(arguments.attributes)>
-
-	<cfreturn local.object>
-</cffunction>
-
-
-<cffunction name="FL_isNew" returntype="any" access="private" output="false">
+<cffunction name="CFW_isNew" returntype="any" access="private" output="false">
 	<cfif structKeyExists(this, variables.class.primary_key) AND this[variables.class.primary_key] IS NOT 0>
 		<cfreturn false>
 	<cfelse>
@@ -304,7 +294,7 @@
 </cffunction>
 
 
-<cffunction name="FL_insert" returntype="any" access="private" output="false">
+<cffunction name="CFW_insert" returntype="any" access="private" output="false">
 	<cfset var local = structNew()>
 
 	<cfif structKeyExists(variables.class.columns, "created_at")>
@@ -345,7 +335,7 @@
 </cffunction>
 
 
-<cffunction name="FL_update" returntype="any" access="private" output="false">
+<cffunction name="CFW_update" returntype="any" access="private" output="false">
 	<cfset var local = structNew()>
 
 	<cfif structKeyExists(variables.class.columns, "updated_at")>

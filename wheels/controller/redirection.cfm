@@ -12,7 +12,7 @@
 			<cfset local.url = CGI.http_referer>
 		</cfif>
 		<cfif arguments.params IS NOT "">
-			<cfset local.params = FL_constructParams(arguments.params)>
+			<cfset local.params = CFW_constructParams(arguments.params)>
 			<cfset local.params = right(local.params, len(local.params)-1)>
 			<cfif local.url Contains "?">
 				<cfset local.url = local.url & "&" & local.params>
@@ -28,6 +28,5 @@
 		</cfif>
 	</cfif>
 
-	<cfinclude template="../events/onrequestend.cfm">
 	<cflocation url="#local.url#" addtoken="false">
 </cffunction>
