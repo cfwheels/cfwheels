@@ -66,7 +66,7 @@
 		<cfset arguments.select = "#arguments.type#(#variables.class.table_name#.#arguments.field#) AS result">
 	</cfif>
 
-	<cfset local.query = FL_query(argumentCollection=arguments)>
+	<cfset local.query = CFW_query(argumentCollection=arguments)>
 
 	<cfif len(local.query.result) IS NOT 0>
 		<cfset local.result = local.query.result>

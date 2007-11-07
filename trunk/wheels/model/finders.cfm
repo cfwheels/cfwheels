@@ -14,7 +14,7 @@
 	<cfset var local = structNew()>
 
 	<cfset arguments.where = "#variables.class.primary_key# = #arguments.id#">
-	<cfset arguments.FL_query_name = "findByID">
+	<cfset arguments.CFW_query_name = "findByID">
 	<cfset structDelete(arguments, "id")>
 
 	<cfreturn findOne(argumentCollection=arguments)>
@@ -33,9 +33,9 @@
 	<cfset var local = structNew()>
 
 	<cfset arguments.maxrows = 1>
-	<cfset arguments.FL_query_name = "findOne">
-	<cfset local.query = FL_query(argumentCollection=arguments)>
-	<cfset local.object = FL_new(local.query)>
+	<cfset arguments.CFW_query_name = "findOne">
+	<cfset local.query = CFW_query(argumentCollection=arguments)>
+	<cfset local.object = _createModelObject(local.query)>
 
 	<cfif local.query.recordcount IS NOT 0>
 		<cfset local.object.found = true>
@@ -74,8 +74,8 @@
 		<cfif isDefined("arguments.indexes.count")>
 			<cfset local.count_arguments.indexes =  arguments.indexes.count>
 		</cfif>
-		<cfset local.count_arguments.FL_query_name = "pagination_count">
-		<cfset local.count_query = FL_query(argumentCollection=local.count_arguments)>
+		<cfset local.count_arguments.CFW_query_name = "pagination_count">
+		<cfset local.count_query = CFW_query(argumentCollection=local.count_arguments)>
 		<cfset local.total_records = local.count_query.total>
 		<cfset local.current_page = arguments.page>
 		<cfif local.total_records IS 0>
@@ -97,16 +97,16 @@
 			<cfif isDefined("arguments.indexes.ids")>
 				<cfset local.pagination_arguments.indexes = arguments.indexes.ids>
 			</cfif>
-			<cfset local.pagination_arguments.FL_query_name = "pagination_ids">
-			<cfset local.primary_keys = FL_query(argumentCollection=local.pagination_arguments)>
+			<cfset local.pagination_arguments.CFW_query_name = "pagination_ids">
+			<cfset local.primary_keys = CFW_query(argumentCollection=local.pagination_arguments)>
 			<cfset local.ids = valueList(local.primary_keys.primary_key)>
 		</cfif>
 		<cfset arguments.where = "#variables.class.table_name#.#variables.class.primary_key# IN (#local.ids#)">
 		<cfset arguments.soft_delete_check = false>
 	</cfif>
 
-	<cfset arguments.FL_query_name = "findAll">
-	<cfset local.query = FL_query(argumentCollection=arguments)>
+	<cfset arguments.CFW_query_name = "findAll">
+	<cfset local.query = CFW_query(argumentCollection=arguments)>
 
 	<cfif len(arguments.page) IS NOT 0>
 		<!--- store pagination info in the request scope so paginationlinks can access it --->
@@ -120,7 +120,7 @@
 </cffunction>
 
 
-<cffunction name="FL_query" returntype="any" access="private" output="false">
+<cffunction name="CFW_query" returntype="any" access="private" output="false">
 	<cfargument name="select" type="any" required="false" default="">
 	<cfargument name="from" type="any" required="false" default="">
 	<cfargument name="where" type="any" required="false" default="">
@@ -134,7 +134,7 @@
 	<cfargument name="soft_delete_check" type="any" required="false" default="true">
 	<cfargument name="skip_param" type="any" required="false" default="">
 	<cfargument name="reload" type="any" required="false" default="false">
-	<cfargument name="FL_query_name" type="any" required="false" default="query">
+	<cfargument name="CFW_query_name" type="any" required="false" default="query">
 	<cfset var local = structNew()>
 
 	<!--- Remove parenthesis from date formatting to make it easier to parse --->
@@ -157,7 +157,7 @@
 
  	<!--- get where, order, joins info etc from the cache (double-checked lock) --->
 	<cfset local.category = "sql">
-	<cfset local.key = "#variables.class.model_name#_#hashStruct(local.paramed_arguments)#">
+	<cfset local.key = "#variables.class.name#_#hashStruct(local.paramed_arguments)#">
 	<cfset local.lock_name = local.category & local.key>
 	<cflock name="#local.lock_name#" type="readonly" timeout="30">
 		<cfset local.sql = getFromCache(local.key, local.category, "internal")>
@@ -206,7 +206,7 @@
 								<cfset local.param.field_name = listLast(local.param.field, ".")>
 								<cfset local.param.field = variables.class.virtual_fields[listLast(local.param.field, ".")].sql>
 							<cfelse>
-								<cfset local.temp = FL_extractFromAssociations(include=arguments.include, type="first_column_match_for_where", match=local.param.field)>
+								<cfset local.temp = CFW_extractFromAssociations(include=arguments.include, type="first_column_match_for_where", match=local.param.field)>
 								<cfset local.param.field = local.temp.field>
 								<cfset local.param.cfsqltype = local.temp.cfsqltype>
 								<cfset local.param.field_name = local.temp.field_name>
@@ -236,7 +236,7 @@
 							<cfelseif (local.i Contains "." AND listFirst(local.i, ".") IS variables.class.table_name OR local.i Does Not Contain ".") AND listFindNoCase(variables.class.virtual_field_list, listLast(local.i, ".")) IS NOT 0>
 								<cfset local.i = variables.class.virtual_fields[listLast(local.i, ".")].sql & " AS " & listLast(local.i, ".")>
 							<cfelse>
-								<cfset local.i = FL_extractFromAssociations(include=arguments.include, type="first_column_match_for_select", match=local.i)>
+								<cfset local.i = CFW_extractFromAssociations(include=arguments.include, type="first_column_match_for_select", match=local.i)>
 							</cfif>
 						</cfif>
 						<cfset local.sql.select = listAppend(local.sql.select, local.i, chr(7))>
@@ -249,7 +249,7 @@
 						</cfloop>
 					</cfif>
 					<cfif len(arguments.include) IS NOT 0>
-						<cfset local.sql.select = local.sql.select & FL_extractFromAssociations(include=arguments.include, type="full_select_clause")>
+						<cfset local.sql.select = local.sql.select & CFW_extractFromAssociations(include=arguments.include, type="full_select_clause")>
 					</cfif>
 				</cfif>
 
@@ -280,7 +280,7 @@
 							<cfelseif (local.i Contains "." AND listFirst(local.i, ".") IS variables.class.table_name OR local.i Does Not Contain ".") AND listFindNoCase(variables.class.virtual_field_list, listLast(spanExcluding(local.i, " "), ".")) IS NOT 0>
 								<cfset local.i = replace(local.i, spanExcluding(local.i, " "), variables.class.virtual_fields[listLast(spanExcluding(local.i, " "), ".")].sql)>
 							<cfelse>
-								<cfset local.i = FL_extractFromAssociations(include=arguments.include, type="first_column_match_for_order", match=local.i)>
+								<cfset local.i = CFW_extractFromAssociations(include=arguments.include, type="first_column_match_for_order", match=local.i)>
 							</cfif>
 							<cfset local.sql.order = listAppend(local.sql.order, local.i, chr(7))>
 							<cfset local.sql.pagination.qualified_order = listAppend(local.sql.pagination.qualified_order, local.i, chr(7))>
@@ -320,7 +320,7 @@
 				<!--- add from clause --->
 				<cfset local.sql.from = variables.class.table_name>
 				<cfif len(arguments.include) IS NOT 0>
-					<cfset local.join_statements = FL_extractFromAssociations(include=arguments.include, type="join_statements")>
+					<cfset local.join_statements = CFW_extractFromAssociations(include=arguments.include, type="join_statements")>
 					<cfset local.join = " ">
 					<cfloop from="#arrayLen(local.join_statements)#" to="1" step="-1" index="local.i">
 						<cfset local.join = listAppend(local.join, local.join_statements[local.i], " ")>
@@ -375,7 +375,7 @@
 
 	<cfif application.settings.cache_queries AND (isNumeric(arguments.cache) OR (isBoolean(arguments.cache) AND arguments.cache))>
 		<cfset local.category = "query">
-		<cfset local.key = "#variables.class.model_name#_#hashStruct(arguments)#">
+		<cfset local.key = "#variables.class.name#_#hashStruct(arguments)#">
 		<cfset local.lock_name = local.category & local.key>
 		<cflock name="#local.lock_name#" type="readonly" timeout="30">
 			<cfset local.query = getFromCache(local.key, local.category)>
@@ -384,7 +384,7 @@
 	   	<cflock name="#local.lock_name#" type="exclusive" timeout="30">
 				<cfset local.query = getFromCache(local.key, local.category)>
 				<cfif isBoolean(local.query) AND NOT local.query>
-					<cfset local.query = FL_executeQuery(argumentCollection=arguments)>
+					<cfset local.query = CFW_executeQuery(argumentCollection=arguments)>
 					<cfif NOT isNumeric(arguments.cache)>
 						<cfset arguments.cache = application.settings.caching.queries>
 					</cfif>
@@ -393,14 +393,14 @@
 			</cflock>
 		</cfif>
 	<cfelse>
-		<cfset local.query = FL_executeQuery(argumentCollection=arguments)>
+		<cfset local.query = CFW_executeQuery(argumentCollection=arguments)>
 	</cfif>
 
 	<cfreturn local.query>
 </cffunction>
 
 
-<cffunction name="FL_executeQuery" returntype="any" access="private" output="false">
+<cffunction name="CFW_executeQuery" returntype="any" access="private" output="false">
 	<cfset var locals = structNew()>
 	<cfset arguments.sql.order = listChangeDelims(arguments.sql.order, ",", chr(7))>
 	<cfset arguments.sql.select = listChangeDelims(arguments.sql.select, ",", chr(7))>
@@ -415,7 +415,7 @@
 		<cfset locals.query_start_time = getTickCount()>
 	</cfif>
 
-	<cfset locals.key = FL_hashArguments(arguments)>
+	<cfset locals.key = CFW_hashArguments(arguments)>
 	<cfif NOT arguments.reload AND isDefined("request.wheels.cache") AND structKeyExists(request.wheels.cache, locals.key)>
 		<cfset locals.query = request.wheels.cache[locals.key]>
 	<cfelse>
@@ -512,14 +512,14 @@
 	<cfif application.settings.show_debug_information AND isDefined("request.wheels")>
 		<cfset locals.query_total_time = getTickCount() - locals.query_start_time>
 		<cfset request.wheels.execution.query_total = request.wheels.execution.query_total + locals.query_total_time>
-		<cfset "request.wheels.execution.queries.#arguments.FL_query_name#" = locals.query_total_time>
+		<cfset "request.wheels.execution.queries.#arguments.CFW_query_name#" = locals.query_total_time>
 	</cfif>
 
 	<cfreturn locals.query>
 </cffunction>
 
 
-<cffunction name="FL_extractFromAssociations" returntype="any" access="private" output="false">
+<cffunction name="CFW_extractFromAssociations" returntype="any" access="private" output="false">
 	<cfargument name="include" type="any" required="true">
 	<cfargument name="type" type="any" required="true">
 	<cfargument name="match" type="any" required="false" default="">

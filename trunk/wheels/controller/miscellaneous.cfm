@@ -23,3 +23,8 @@
 		<cfreturn false>
 	</cfif>
 </cffunction>
+
+
+<cffunction name="getControllerClassData" returntype="any" access="public" output="false">
+	<cfreturn variables.class>
+</cffunction>

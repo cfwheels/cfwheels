@@ -148,6 +148,9 @@
 		</cfloop>
 	</cfif>
 
+	<!--- if we get to here it means there is no method with this name so just throw an error instead --->
+	<cfthrow type="wheels" extendedinfo="OnMissingMethod" message="Method <tt>#arguments.missingmethodname#</tt> does not exist" detail="Make sure you spelled the method name correctly.">
+
 </cffunction>
 
 

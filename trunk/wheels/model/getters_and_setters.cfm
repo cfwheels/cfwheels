@@ -1,5 +1,5 @@
 <cffunction name="getModelName" returntype="any" access="public" output="false">
-	<cfreturn variables.class.model_name>
+	<cfreturn variables.class.name>
 </cffunction>
 
 
@@ -20,7 +20,7 @@
 </cffunction>
 
 
-<cffunction name="getClassData" returntype="any" access="public" output="false">
+<cffunction name="getModelClassData" returntype="any" access="public" output="false">
 	<cfreturn variables.class>
 </cffunction>
 

@@ -1,28 +1,29 @@
-<cffunction name="camelcase" returntype="any" access="public" output="false">
+<cffunction name="excerpt" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">
+	<cfargument name="phrase" type="any" required="true">
+	<cfargument name="radius" type="any" required="false" default="100">
+	<cfargument name="excerpt_string" type="any" required="false" default="...">
 	<cfset var local = structNew()>
-	<cfset local.output = REReplace(arguments.text, "_([a-z])", "\u\1", "all")>
-	<cfreturn local.output>
-</cffunction>
 
-
-<cffunction name="underscore" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="true">
-	<cfset var local = structNew()>
-	<cfset local.output = REReplace(arguments.text, "([A-Z])", "_\l\1", "all")>
-	<cfif left(local.output, 1) IS "_">
-		<cfset local.output = right(local.output, len(local.output)-1)>
+	<cfset local.pos = findNoCase(arguments.phrase, arguments.text, 1)>
+	<cfif local.pos IS NOT 0>
+		<cfset local.excerpt_string_start = arguments.excerpt_string>
+		<cfset local.excerpt_string_end = arguments.excerpt_string>
+		<cfset local.start = local.pos-arguments.radius>
+		<cfif local.start LTE 0>
+			<cfset local.start = 1>
+			<cfset local.excerpt_string_start = "">
+		</cfif>
+		<cfset local.count = len(arguments.phrase)+(arguments.radius*2)>
+		<cfif local.count GT (len(arguments.text)-local.start)>
+			<cfset local.excerpt_string_end = "">
+		</cfif>
+		<cfset local.output = local.excerpt_string_start & mid(arguments.text, local.start, local.count) & local.excerpt_string_end>
+	<cfelse>
+		<cfset local.output = "">
 	</cfif>
+
 	<cfreturn local.output>
-</cffunction>
-
-
-<cffunction name="humanize" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="true">
-	<cfset var local = structNew()>
-	<cfset local.output = replace(arguments.text, "_id", "", "all")>
-	<cfset local.output = replace(local.output, "_", " ", "all")>
-	<cfreturn capitalize(local.output)>
 </cffunction>
 
 
@@ -41,6 +42,69 @@
 		<cfset local.output = listAppend(local.output, capitalize(local.i), " ")>
 	</cfloop>
 
+	<cfreturn local.output>
+</cffunction>
+
+
+<cffunction name="cycle" returntype="any" access="public" output="false">
+	<cfargument name="values" type="any" required="true">
+	<cfargument name="name" type="any" required="false" default="default">
+	<cfset var local = structNew()>
+
+	<cfif NOT isDefined("request.wheels.cycle.#arguments.name#")>
+		<cfset "request.wheels.cycle.#arguments.name#" = listGetAt(arguments.values, 1)>
+	<cfelse>
+		<cfset local.found_at = listFindNoCase(arguments.values, request.wheels.cycle[arguments.name])>
+		<cfif local.found_at IS listLen(arguments.values)>
+			<cfset local.found_at = 0>
+		</cfif>
+		<cfset "request.wheels.cycle.#arguments.name#" = listGetAt(arguments.values, local.found_at + 1)>
+	</cfif>
+
+	<cfreturn request.wheels.cycle[arguments.name]>
+</cffunction>
+
+
+<cffunction name="truncate" returntype="any" access="public" output="false">
+	<cfargument name="text" type="any" required="true">
+	<cfargument name="length" type="any" required="true">
+	<cfargument name="truncate_string" type="any" required="false" default="...">
+	<cfset var local = structNew()>
+
+	<cfif len(arguments.text) GT arguments.length>
+		<cfset local.output = left(arguments.text, arguments.length-3) & arguments.truncate_string>
+	<cfelse>
+		<cfset local.output = arguments.text>
+	</cfif>
+
+	<cfreturn local.output>
+</cffunction>
+
+
+<cffunction name="humanize" returntype="any" access="public" output="false">
+	<cfargument name="text" type="any" required="true">
+	<cfset var local = structNew()>
+	<cfset local.output = replace(arguments.text, "_id", "", "all")>
+	<cfset local.output = replace(local.output, "_", " ", "all")>
+	<cfreturn capitalize(local.output)>
+</cffunction>
+
+
+<cffunction name="camelcase" returntype="any" access="public" output="false">
+	<cfargument name="text" type="any" required="true">
+	<cfset var local = structNew()>
+	<cfset local.output = REReplace(arguments.text, "_([a-z])", "\u\1", "all")>
+	<cfreturn local.output>
+</cffunction>
+
+
+<cffunction name="underscore" returntype="any" access="public" output="false">
+	<cfargument name="text" type="any" required="true">
+	<cfset var local = structNew()>
+	<cfset local.output = REReplace(arguments.text, "([A-Z])", "_\l\1", "all")>
+	<cfif left(local.output, 1) IS "_">
+		<cfset local.output = right(local.output, len(local.output)-1)>
+	</cfif>
 	<cfreturn local.output>
 </cffunction>
 

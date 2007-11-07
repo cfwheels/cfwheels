@@ -68,14 +68,14 @@
 		<!--- loop through form variables and merge any date variables into one --->
 		<cfset local.dates = structNew()>
 		<cfloop collection="#form#" item="local.i">
-			<cfif REFindNoCase(".*\((FL_year|FL_month|FL_day|FL_hour|FL_minute|FL_second)\)$", local.i) IS NOT 0>
+			<cfif REFindNoCase(".*\((CFW_year|CFW_month|CFW_day|CFW_hour|CFW_minute|CFW_second)\)$", local.i) IS NOT 0>
 				<cfset local.temp = listToArray(local.i, "(")>
 				<cfset local.first_key = local.temp[1]>
 				<cfset local.second_key = spanExcluding(local.temp[2], ")")>
 				<cfif NOT structKeyExists(local.dates, local.first_key)>
 					<cfset local.dates[local.first_key] = structNew()>
 				</cfif>
-				<cfset local.dates[local.first_key][replaceNoCase(local.second_key, "FL_", "")] = form[local.i]>
+				<cfset local.dates[local.first_key][replaceNoCase(local.second_key, "CFW_", "")] = form[local.i]>
 			</cfif>
 		</cfloop>
 		<cfloop collection="#local.dates#" item="local.i">
@@ -103,23 +103,23 @@
 				<cfset form[local.i] = "">
 			</cfcatch>
 			</cftry>
-			<cfif structKeyExists(form, "#local.i#(FL_year)")>
-				<cfset structDelete(form, "#local.i#(FL_year)")>
+			<cfif structKeyExists(form, "#local.i#(CFW_year)")>
+				<cfset structDelete(form, "#local.i#(CFW_year)")>
 			</cfif>
-			<cfif structKeyExists(form, "#local.i#(FL_month)")>
-				<cfset structDelete(form, "#local.i#(FL_month)")>
+			<cfif structKeyExists(form, "#local.i#(CFW_month)")>
+				<cfset structDelete(form, "#local.i#(CFW_month)")>
 			</cfif>
-			<cfif structKeyExists(form, "#local.i#(FL_day)")>
-				<cfset structDelete(form, "#local.i#(FL_day)")>
+			<cfif structKeyExists(form, "#local.i#(CFW_day)")>
+				<cfset structDelete(form, "#local.i#(CFW_day)")>
 			</cfif>
-			<cfif structKeyExists(form, "#local.i#(FL_hour)")>
-				<cfset structDelete(form, "#local.i#(FL_hour)")>
+			<cfif structKeyExists(form, "#local.i#(CFW_hour)")>
+				<cfset structDelete(form, "#local.i#(CFW_hour)")>
 			</cfif>
-			<cfif structKeyExists(form, "#local.i#(FL_minute)")>
-				<cfset structDelete(form, "#local.i#(FL_minute)")>
+			<cfif structKeyExists(form, "#local.i#(CFW_minute)")>
+				<cfset structDelete(form, "#local.i#(CFW_minute)")>
 			</cfif>
-			<cfif structKeyExists(form, "#local.i#(FL_second)")>
-				<cfset structDelete(form, "#local.i#(FL_second)")>
+			<cfif structKeyExists(form, "#local.i#(CFW_second)")>
+				<cfset structDelete(form, "#local.i#(CFW_second)")>
 			</cfif>
 		</cfloop>
 
@@ -154,13 +154,13 @@
 
 	<!--- Create requested controller --->
 	<cftry>
-		<cfset local.controller = createObject("component", "#application.wheels.cfc_path#controllers.#local.params.controller#").FL_initController(local.params)>
+		<cfset local.controller = _controller(local.params.controller)._createControllerObject(local.params)>
 	<cfcatch>
 		<cfif fileExists(expandPath("controllers/#local.params.controller#.cfc"))>
 			<cfrethrow>
 		<cfelse>
 			<cfif application.settings.show_error_information>
-				<cfthrow type="wheels.controllerMissing" message="There is no controller named '#local.params.controller#'">
+				<cfthrow type="wheels" message="Could not find the <tt>#local.params.controller#</tt> controller" detail="Create a file named <tt>#local.params.controller#.cfc</tt> in the <tt>controllers</tt> directory containing this code: <pre><code>#htmlEditFormat('<cfcomponent extends="wheels.controller"></cfcomponent>')#</code></pre>">
 			<cfelse>
 				<cfinclude template="../../events/onmissingtemplate.cfm">
 				<cfabort>
@@ -175,7 +175,7 @@
 	</cfif>
 
 	<!--- confirm verifications on controller if they exist --->
-	<cfset local.verifications = local.controller.FL_getVerifications()>
+	<cfset local.verifications = local.controller.CFW_getVerifications()>
 	<cfset local.abort = false>
 	<cfif arrayLen(local.verifications) IS NOT 0>
 		<cfloop from="1" to="#arraylen(local.verifications)#" index="local.i">
@@ -200,11 +200,10 @@
 				<cfif local.verification.session IS NOT "">
 					<cfloop list="#local.verification.session#" index="local.j">
 						<cflock scope="session" type="readonly" timeout="30">
-							<cfset local.session_variable_exists = structKeyExists(session, local.j)>
+							<cfif NOT structKeyExists(session, local.j)>
+								<cfset local.abort = true>
+							</cfif>
 						</cflock>
-						<cfif NOT local.session_variable_exists>
-							<cfset local.abort = true>
-						</cfif>
 					</cfloop>
 				</cfif>
 				<cfif local.verification.cookie IS NOT "">
@@ -219,9 +218,7 @@
 				<cfif local.verification.back AND len(CGI.http_referer) IS NOT 0>
 					<cfloop collection="#local.verification#" item="local.j">
 						<cfif left(local.j, 6) IS "flash_">
-							<cfset local.args = structNew()>
-							<cfset local.args[replaceNoCase(local.j, "flash_", "")] = local.verification[local.j]>
-							<cfset flash(argumentCollection=local.args)>
+							<cfset session.flash[replaceNoCase(local.j, "flash_", "")] = local.verification[local.j]>
 						</cfif>
 					</cfloop>
 					<cflocation url="#CGI.http_referer#" addtoken="false">
@@ -234,7 +231,7 @@
 	</cfif>
 
 	<!--- Call before filters on controller if they exist --->
-	<cfset local.before_filters = local.controller.FL_getBeforeFilters()>
+	<cfset local.before_filters = local.controller.CFW_getBeforeFilters()>
 	<cfif arrayLen(local.before_filters) IS NOT 0>
 		<cfloop from="1" to="#arraylen(local.before_filters)#" index="local.i">
 			<cfif	(len(local.before_filters[local.i].only) IS 0 AND len(local.before_filters[local.i].except) IS 0) OR (len(local.before_filters[local.i].only) IS NOT 0 AND listFindNoCase(local.before_filters[local.i].only, local.params.action)) OR (len(local.before_filters[local.i].except) IS NOT 0 AND NOT listFindNoCase(local.before_filters[local.i].except, local.params.action))>
@@ -250,8 +247,8 @@
 
 	<!--- Call action on controller if it exists --->
 	<cfset local.action_is_cachable = false>
-	<cfif application.settings.cache_actions AND NOT flash() AND structIsEmpty(form)>
-		<cfset local.cachable_actions = local.controller.FL_getCachableActions()>
+	<cfif application.settings.cache_actions AND structIsEmpty(session.flash) AND structIsEmpty(form)>
+		<cfset local.cachable_actions = local.controller.CFW_getCachableActions()>
 		<cfloop from="1" to="#arrayLen(local.cachable_actions)#" index="local.i">
 			<cfif local.cachable_actions[local.i].action IS local.params.action>
 				<cfset local.action_is_cachable = true>
@@ -271,13 +268,13 @@
 	   	<cflock name="#local.lock_name#" type="exclusive" timeout="30">
 				<cfset request.wheels.response = getFromCache(local.key, local.category)>
 				<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
-					<cfset FL_callAction(local.controller, local.params.controller, local.params.action)>
+					<cfset CFW_callAction(local.controller, local.params.controller, local.params.action)>
 					<cfset addToCache(local.key, request.wheels.response, local.time_to_cache, local.category)>
 				</cfif>
 			</cflock>
 		</cfif>
 	<cfelse>
-		<cfset FL_callAction(local.controller, local.params.controller, local.params.action)>
+		<cfset CFW_callAction(local.controller, local.params.controller, local.params.action)>
 	</cfif>
 
 	<cfif application.settings.show_debug_information>
@@ -288,7 +285,7 @@
 		<cfset request.wheels.execution.components.running_after_filters = getTickCount()>
 	</cfif>
 
-	<cfset local.after_filters = local.controller.FL_getAfterFilters()>
+	<cfset local.after_filters = local.controller.CFW_getAfterFilters()>
 	<cfif arrayLen(local.after_filters) IS NOT 0>
 		<cfloop from="1" to="#arraylen(local.after_filters)#" index="local.i">
 			<cfif	(len(local.after_filters[local.i].only) IS 0 AND len(local.after_filters[local.i].except) IS 0) OR (len(local.after_filters[local.i].only) IS NOT 0 AND listFindNoCase(local.after_filters[local.i].only, local.params.action)) OR (len(local.after_filters[local.i].except) IS NOT 0 AND NOT listFindNoCase(local.after_filters[local.i].except, local.params.action))>
@@ -310,7 +307,7 @@
 </cffunction>
 
 
-<cffunction name="FL_callAction" returntype="any" access="private" output="false">
+<cffunction name="CFW_callAction" returntype="any" access="private" output="false">
 	<cfargument name="controller" type="any" required="true">
 	<cfargument name="controller_name" type="any" required="true">
 	<cfargument name="action_name" type="any" required="true">
@@ -327,7 +324,7 @@
 				<cfrethrow>
 			<cfelse>
 				<cfif application.settings.show_error_information>
-					<cfthrow type="wheels.viewMissing" message="No view page for the action '#arguments.action_name#' could be found">
+					<cfthrow type="wheels" message="Could not find the view page for the <tt>#arguments.action_name#</tt> action in the <tt>#arguments.controller_name#</tt> controller" detail="Create a file named <tt>#arguments.action_name#.cfm</tt> in the <tt>views/#arguments.controller_name#</tt> directory (create the directory as well if necessary).">
 				<cfelse>
 					<cfinclude template="../../events/onmissingtemplate.cfm">
 					<cfabort>

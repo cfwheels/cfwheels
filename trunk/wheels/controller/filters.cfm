@@ -8,7 +8,7 @@
 		<cfset local.this_filter.filter = trim(local.i)>
 		<cfset local.this_filter.only = replace(arguments.only, ", ", ",", "all")>
 		<cfset local.this_filter.except = replace(arguments.except, ", ", ",", "all")>
-		<cfset arrayAppend(variables.before_filters, local.this_filter)>
+		<cfset arrayAppend(variables.class.before_filters, local.this_filter)>
 	</cfloop>
 </cffunction>
 
@@ -23,7 +23,7 @@
 		<cfset local.this_filter.filter = trim(local.i)>
 		<cfset local.this_filter.only = replace(arguments.only, ", ", ",", "all")>
 		<cfset local.this_filter.except = replace(arguments.except, ", ", ",", "all")>
-		<cfset arrayAppend(variables.after_filters, local.this_filter)>
+		<cfset arrayAppend(variables.class.after_filters, local.this_filter)>
 	</cfloop>
 </cffunction>
 
@@ -47,19 +47,19 @@
 			<cfset local.this_verification["flash_#lCase(local.i)#"] = arguments[local.i]>
 		</cfif>
 	</cfloop>
-	<cfset arrayAppend(variables.verifications, local.this_verification)>
+	<cfset arrayAppend(variables.class.verifications, local.this_verification)>
 </cffunction>
 
-<cffunction name="FL_getBeforeFilters" returntype="any" access="public" output="false">
-	<cfreturn variables.before_filters>
-</cffunction>
-
-
-<cffunction name="FL_getAfterFilters" returntype="any" access="public" output="false">
-	<cfreturn variables.after_filters>
+<cffunction name="CFW_getBeforeFilters" returntype="any" access="public" output="false">
+	<cfreturn variables.class.before_filters>
 </cffunction>
 
 
-<cffunction name="FL_getVerifications" returntype="any" access="public" output="false">
-	<cfreturn variables.verifications>
+<cffunction name="CFW_getAfterFilters" returntype="any" access="public" output="false">
+	<cfreturn variables.class.after_filters>
+</cffunction>
+
+
+<cffunction name="CFW_getVerifications" returntype="any" access="public" output="false">
+	<cfreturn variables.class.verifications>
 </cffunction>
