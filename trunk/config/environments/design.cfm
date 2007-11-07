@@ -1,3 +1,4 @@
+<cfset application.settings.cache_database_schema = false>
 <cfset application.settings.cache_images = false>
 <cfset application.settings.cache_model_initialization = false>
 <cfset application.settings.cache_controller_initialization = false>
