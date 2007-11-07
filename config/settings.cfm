@@ -1,14 +1,9 @@
-<!--- database --->
-<cfset application.settings.dsn = application.applicationname>
-<cfset application.settings.username = "">
-<cfset application.settings.password = "">
-<cfset application.settings.query_timeout = 30>
-
 <!--- miscellaneous --->
 <cfset application.settings.default_controller = "sample">
 <cfset application.settings.default_action = "index">
 <cfset application.settings.obfuscate_urls = false>
 <cfset application.settings.reload_password = "">
+<cfset application.settings.query_timeout = 20>
 
 <!--- validation --->
 <cfset application.settings.validates_confirmation_of.message = "[field_name] should match confirmation">
