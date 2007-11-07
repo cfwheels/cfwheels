@@ -1,1 +1,0 @@
-<cfset session.wheels = structNew()>
