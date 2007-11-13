@@ -28,3 +28,4 @@
 <cfset application.settings.paths.images = "images">
 <cfset application.settings.paths.javascripts = "javascripts">
 <cfset application.settings.paths.stylesheets = "stylesheets">
+<cfset application.settings.paths.files = "files">

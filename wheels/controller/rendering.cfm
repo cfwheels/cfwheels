@@ -25,7 +25,7 @@
 	<cfset request.wheels.rendering_page = true>
 
 	<!--- if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request --->
-	<cfif arguments.layout>
+	<cfif NOT isBoolean(arguments.layout) OR arguments.layout>
 		<cfset request.wheels.show_debug_information = true>
 	</cfif>
 
