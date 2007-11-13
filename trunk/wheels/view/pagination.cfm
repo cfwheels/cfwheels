@@ -24,6 +24,12 @@
 </cffunction>
 
 
+<cffunction name="paginationTotalRecords" returntype="any" access="public" output="false">
+	<cfargument name="handle" type="any" required="false" default="paginated">
+	<cfreturn request.wheels[arguments.handle].total_records>
+</cffunction>
+
+
 <cffunction name="paginationCurrentPage" returntype="any" access="public" output="false">
 	<cfargument name="handle" type="any" required="false" default="paginated">
 	<cfreturn request.wheels[arguments.handle].current_page>

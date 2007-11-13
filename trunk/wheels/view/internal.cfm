@@ -118,7 +118,11 @@
 
 	<cfif len(arguments.label) IS NOT 0>
 		<cfset local.output = local.output & arguments.prepend_to_label>
-		<cfset local.output = local.output & "<label for=""#listLast(arguments.object_name,'.')#_#arguments.field#""">
+		<cfif len(arguments.object_name) IS NOT 0>
+			<cfset local.output = local.output & "<label for=""#listLast(arguments.object_name,'.')#_#arguments.field#""">
+		<cfelse>
+			<cfset local.output = local.output & "<label for=""#arguments.name#""">
+		</cfif>
 		<cfloop collection="#arguments#" item="local.i">
 			<cfif left(local.i, 6) IS "label_">
 				<cfset local.output = local.output & " #replace(local.i, 'label_', '')#=""#arguments[local.i]#""">

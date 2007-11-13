@@ -20,6 +20,11 @@
 </cffunction>
 
 
+<cffunction name="getPrimaryKey" returntype="any" access="public" output="false">
+	<cfreturn variables.class.primary_key>
+</cffunction>
+
+
 <cffunction name="getModelClassData" returntype="any" access="public" output="false">
 	<cfreturn variables.class>
 </cffunction>
