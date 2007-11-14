@@ -3,36 +3,44 @@
 
 =Introduction=
 
-asdasdasdasd
-
-*About The Documentation*
-  - aasddas
-  - aasddas
+Important notes about the documentation and an introduction to the ColdFusion on Wheels framework.
 
 *Table Of Contents*
-  - aasddas
-  - aasddas
+
+*About The Documentation*
 
 *Welcome To Wheels*
-  - aasddas
-  - aasddas
+  - header1
+  - header2
 
 =Getting Started=
 
-intro
- 
- * Requirements.
- * Installation.
- * Where To Go From Here.
+What you need to know before you start programming in Wheels, how to get it setup correctly and what to read next to get the most out of it.
 
-test
+*Requirements*
+  - header1
+  - header2
+
+*Installation*
+  - header1
+  - header2
+
+*Next Steps*
+  - header1
+  - header2
 
 =Learn By Doing=
 
-intro
+Tutorials for those who learn best by following along as we show how to build some basic Wheels applications.
 
- * Hello World.
- * Site Map.
- * Authentication.
+*Hello World*
+  - header1
+  - header2
 
-test
+*Site Map*
+  - header1
+  - header2
+
+*Authentication*
+  - header1
+  - header2
