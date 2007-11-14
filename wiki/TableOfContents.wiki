@@ -5,22 +5,22 @@
 
 intro
 
- * About the Documentation
- * Table of Contents
- * Welcome to Wheels
+ * About The Documentation.
+ * Table Of Contents.
+ * Welcome To Wheels.
 
 =Getting Started=
 
 intro
  
- * Requirements
- * Installation
- * What's Next?
+ * Requirements.
+ * Installation.
+ * Where To Go From Here.
 
 =Learn By Doing=
 
 intro
 
- * Hello World
- * Site Map
- * Authentication
+ * Hello World.
+ * Site Map.
+ * Authentication.
