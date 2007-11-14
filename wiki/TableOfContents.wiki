@@ -36,3 +36,32 @@ Tutorials for those who learn best by following along as we build some basic Whe
 *Authentication*
   - header1
   - header2
+
+
+=Handling Requests With Controllers=
+
+TBD.
+
+*Using Routes*
+  - TBD
+
+*Rendering Pages*
+  - TBD
+
+*Redirecting Users*
+  - TBD
+
+*Sending Email*
+  - TBD
+
+*Sending Files*
+  - TBD
+
+*Using the Flash*
+  - TBD
+
+*Using Filters*
+  - TBD
+
+*Caching*
+  - TBD
