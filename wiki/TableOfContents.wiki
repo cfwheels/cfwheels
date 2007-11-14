@@ -1,37 +1,29 @@
 #summary A full overview of the documentation.
 #labels chapter
 
-=Introduction=
-
-Important notes about the documentation and an introduction to the ColdFusion on Wheels framework.
-
-*Table Of Contents*
-
-*About The Documentation*
-
-*Welcome To Wheels*
-  - header1
-  - header2
-
 =Getting Started=
 
-What you need to know before you start programming in Wheels, how to get it setup correctly and what to read next to get the most out of it.
+An introduction to Wheels, what you need to know before you start programming in it and how to get it setup correctly.
+
+*Welcome To Wheels*
+  - TBD
+  - About the documentation
 
 *Requirements*
-  - header1
-  - header2
+  - Project requirements
+  - Developer requirements
+  - System requirements
 
 *Installation*
-  - header1
-  - header2
-
-*Next Steps*
-  - header1
-  - header2
+  - Getting the code
+  - Setting up the webserver
+  - Installing it
+  - Did it work?
+  - Now what?
 
 =Learn By Doing=
 
-Tutorials for those who learn best by following along as we show how to build some basic Wheels applications.
+Tutorials for those who learn best by following along as we build some basic Wheels applications.
 
 *Hello World*
   - header1
