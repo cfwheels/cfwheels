@@ -58,6 +58,6 @@ As you can see, we just wrote code to put *every view's content in context* of t
 
 == Overriding the Default `application_layout.cfm` Layout ==
 
-Now you want to create a layout to be used *only for views in a single controller* called `blog`. Simply create the layout and save it as `{wheelsroot}/views/layouts/blog_layout.cfm`.
+Now you want to create a layout to be used only by a single controller called `blog`. Simply create the layout and save it as `{wheelsroot}/views/layouts/blog_layout.cfm`.
 
 As you can see, the convention is to name your layout file `CONTROLLER_layout.cfm`, replacing the word `CONTROLLER` with the controller that the layout should be used for.
