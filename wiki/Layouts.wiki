@@ -1,34 +1,29 @@
 #summary Working with layouts in ColdFusion on Wheels.
 #labels chapter
 
-= Introduction =
-
 Every page in your application displays a lot of the same HTML. Usually, every page spits out HTML that is used to display a header, navigation, and a footer.
 
 As a red-blooded ColdFusion developer, you're used to creating include files like `header.cfm` and `footer.cfm`, and then using `<cfinclude>` on every single page to include them. Does that mean that you should `<cfinclude>` your headers and footers in every single view? Heck no!
 
-We're proud to say that CFWheels has a better way to handle this. They're called _layouts_.
+We're proud to say that CFWheels has a better way to handle this. They're called "layouts".
 
-
-= Details =
-
-In your CFWheels installation, layouts are stored in *`{wheelsroot}/views/layouts/`*. 
+In your CFWheels installation, layouts are stored in `{webroot}/views/layouts/`. 
 
 Let's go over how these work.
 
-== The Default Layout: `application_layout.cfm` ==
+=The default layout=
 
-`application_layout.cfm` kind of works the same way that ColdFusion's standard `Application.cfm` works. Think of it as the default layout to be used in any given controller.
+One of the two layout files that are already created for you is the `application_layout.cfm` file (the other one is the default layout to be used when sending emails but more on that later). It kind of works the same way that ColdFusion's standard `Application.cfc` / `Application.cfm` works. Think of it as the default layout to be used in any given controller.
 
-If you're writing code for a controller called `press` and there is no layout created for `press`, CF Wheels will use `application_layout.cfm` as the layout for the `press` controller.
+If you're writing code for a controller called `press` and there is no layout created for `press`, CFWheels will use `application_layout.cfm` as the layout for the `press` controller.
 
 If you do implement a layout for the `press` controller, then it will be run instead of the default layout.
 
-== Implementing a Layout ==
+=Implementing a layout=
 
 Let's say that you want to define one layout to be used by every view in your application.
 
-If you open the the default layout at `{wheelsroot}/views/layouts/application_layout.cfm`, you'll notice this line of code:
+If you open the the default layout at `{webroot}/views/layouts/application_layout.cfm`, you'll notice this line of code:
 
 {{{
 <cfoutput>#contentForLayout()#</cfoutput>
@@ -56,8 +51,8 @@ For most purposes, this means that you could write code for your page header bef
 
 As you can see, we just wrote code to put every view's content in context of the layout. Pretty cool, huh?
 
-== Overriding the Default `application_layout.cfm` Layout ==
+=Overriding the default layout=
 
-Now you want to create a layout to be used only by a single controller called `blog`. Simply create the layout and save it as `{wheelsroot}/views/layouts/blog_layout.cfm`.
+Now you want to create a layout to be used only by a single controller called `blog`. Simply create the layout and save it as `{webroot}/views/layouts/blog_layout.cfm`.
 
 As you can see, the convention is to name your layout file `CONTROLLER_layout.cfm`, replacing the word `CONTROLLER` with the controller that the layout should be used for.
