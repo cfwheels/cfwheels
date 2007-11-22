@@ -19,7 +19,8 @@
 	</cffunction>
 
 	<cffunction name="welcome">
-		<cfset welcome_message = "Welcome to Wheels!">
+		<cfset version = 0.7>
+		<cfset renderPage(show_debug=false)>
 	</cffunction>
 
 	<cffunction name="admin">

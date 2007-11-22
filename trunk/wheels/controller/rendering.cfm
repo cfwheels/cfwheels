@@ -15,6 +15,7 @@
 	<cfargument name="template" type="any" required="false" default="">
 	<cfargument name="layout" type="any" required="false" default="true">
 	<cfargument name="cache" type="any" required="false" default="">
+	<cfargument name="show_debug" type="any" required="false" default="#application.settings.show_debug_information#">
 	<cfset var local = structNew()>
 
 	<cfif application.settings.show_debug_information>
@@ -25,7 +26,7 @@
 	<cfset request.wheels.rendering_page = true>
 
 	<!--- if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request --->
-	<cfif NOT isBoolean(arguments.layout) OR arguments.layout>
+	<cfif (NOT isBoolean(arguments.layout) OR arguments.layout) AND arguments.show_debug>
 		<cfset request.wheels.show_debug_information = true>
 	</cfif>
 
