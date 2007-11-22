@@ -7,12 +7,12 @@
 		<cfset local.this_action = structNew()>
 		<cfset local.this_action.action = trim(local.i)>
 		<cfset local.this_action.time = arguments.time>
-		<cfset arrayAppend(variables.class.cachable_actions, local.this_action)>
+		<cfset arrayAppend(variables.wheels.cachable_actions, local.this_action)>
 	</cfloop>
 
 </cffunction>
 
 
 <cffunction name="CFW_getCachableActions" returntype="any" access="public" output="false">
-	<cfreturn variables.class.cachable_actions>
+	<cfreturn variables.wheels.cachable_actions>
 </cffunction>

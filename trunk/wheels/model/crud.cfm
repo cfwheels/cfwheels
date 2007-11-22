@@ -8,7 +8,7 @@
 		</cfif>
 	</cfloop>
 
-	<cfreturn _createModelObject(arguments.attributes)>
+	<cfreturn CFW_createModelObject(arguments.attributes)>
 </cffunction>
 
 
@@ -47,7 +47,6 @@
 	<cfargument name="instantiate" type="any" required="false" default="false">
 	<cfset var local = structNew()>
 
-
 	<cfset local.records = findAll(select="#variables.class.primary_key# AS primary_key", where=arguments.where)>
 
 	<cfif NOT arguments.instantiate>
@@ -58,7 +57,7 @@
 					<cfset arguments.attributes[local.i] = arguments[local.i]>
 				</cfif>
 			</cfloop>
-			<cfquery name="local.update_records" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
+			<cfquery name="local.update_records" datasource="#variables.class.database.update.datasource#" username="#variables.class.database.update.username#" password="#variables.class.database.update.password#" timeout="#variables.class.database.update.timeout#">
 			UPDATE #variables.class.table_name#
 			SET
 			<cfloop collection="#arguments.attributes#" item="local.i">
@@ -85,18 +84,19 @@
 
 
 <cffunction name="save" returntype="any" access="public" output="false">
+	<cfset var local = structNew()>
 
 	<cfset clearErrors()>
-	<cfif isDefined("beforeValidation")>
+	<cfif structKeyExists(variables, "beforeValidation")>
 		<cfset local.callback_result = beforeValidation()>
-		<cfif isDefined("local.callback_result") AND NOT local.callback_result>
+		<cfif structKeyExists(local, "callback_result") AND NOT local.callback_result>
 			<cfreturn false>
 		</cfif>
 	</cfif>
 	<cfif CFW_isNew()>
-		<cfif isDefined("beforeValidationOnCreate")>
+		<cfif structKeyExists(variables, "beforeValidationOnCreate")>
 			<cfset local.callback_result = beforeValidationOnCreate()>
-			<cfif isDefined("local.callback_result") AND NOT local.callback_result>
+			<cfif structKeyExists(local, "callback_result") AND NOT local.callback_result>
 				<cfreturn false>
 			</cfif>
 		</cfif>
@@ -104,16 +104,16 @@
 		<cfif hasErrors()>
 			<cfreturn false>
 		</cfif>
-		<cfif isDefined("afterValidationOnCreate")>
+		<cfif structKeyExists(variables, "afterValidationOnCreate")>
 			<cfset local.callback_result = afterValidationOnCreate()>
-			<cfif isDefined("local.callback_result") AND NOT local.callback_result>
+			<cfif structKeyExists(local, "callback_result") AND NOT local.callback_result>
 				<cfreturn false>
 			</cfif>
 		</cfif>
 	<cfelse>
-		<cfif isDefined("beforeValidationOnUpdate")>
+		<cfif structKeyExists(variables, "beforeValidationOnUpdate")>
 			<cfset local.callback_result = beforeValidationOnUpdate()>
-			<cfif isDefined("local.callback_result") AND NOT local.callback_result>
+			<cfif structKeyExists(local, "callback_result") AND NOT local.callback_result>
 				<cfreturn false>
 			</cfif>
 		</cfif>
@@ -121,9 +121,9 @@
 		<cfif hasErrors()>
 			<cfreturn false>
 		</cfif>
-		<cfif isDefined("afterValidationOnUpdate")>
+		<cfif structKeyExists(variables, "afterValidationOnUpdate")>
 			<cfset local.callback_result = afterValidationOnUpdate()>
-			<cfif isDefined("local.callback_result") AND NOT local.callback_result>
+			<cfif structKeyExists(local, "callback_result") AND NOT local.callback_result>
 				<cfreturn false>
 			</cfif>
 		</cfif>
@@ -132,54 +132,54 @@
 	<cfif hasErrors()>
 		<cfreturn false>
 	</cfif>
-	<cfif isDefined("afterValidation")>
+	<cfif structKeyExists(variables, "afterValidation")>
 		<cfset local.callback_result = afterValidation()>
-		<cfif isDefined("local.callback_result") AND NOT local.callback_result>
+		<cfif structKeyExists(local, "callback_result") AND NOT local.callback_result>
 			<cfreturn false>
 		</cfif>
 	</cfif>
-	<cfif isDefined("beforeSave")>
+	<cfif structKeyExists(variables, "beforeSave")>
 		<cfset local.callback_result = beforeSave()>
-		<cfif isDefined("local.callback_result") AND NOT local.callback_result>
+		<cfif structKeyExists(local, "callback_result") AND NOT local.callback_result>
 			<cfreturn false>
 		</cfif>
 	</cfif>
 	<cfif CFW_isNew()>
-		<cfif isDefined("beforeCreate")>
+		<cfif structKeyExists(variables, "beforeCreate")>
 			<cfset local.callback_result = beforeCreate()>
-			<cfif isDefined("local.callback_result") AND NOT local.callback_result>
+			<cfif structKeyExists(local, "callback_result") AND NOT local.callback_result>
 				<cfreturn false>
 			</cfif>
 		</cfif>
 		<cfif NOT CFW_insert()>
 			<cfreturn false>
 		</cfif>
-		<cfif isDefined("afterCreate")>
+		<cfif structKeyExists(variables, "afterCreate")>
 			<cfset local.callback_result = afterCreate()>
-			<cfif isDefined("local.callback_result") AND NOT local.callback_result>
+			<cfif structKeyExists(local, "callback_result") AND NOT local.callback_result>
 				<cfreturn false>
 			</cfif>
 		</cfif>
 	<cfelse>
-		<cfif isDefined("beforeUpdate")>
+		<cfif structKeyExists(variables, "beforeUpdate")>
 			<cfset local.callback_result = beforeUpdate()>
-			<cfif isDefined("local.callback_result") AND NOT local.callback_result>
+			<cfif structKeyExists(local, "callback_result") AND NOT local.callback_result>
 				<cfreturn false>
 			</cfif>
 		</cfif>
 		<cfif NOT CFW_update()>
 			<cfreturn false>
 		</cfif>
-		<cfif isDefined("afterUpdate")>
+		<cfif structKeyExists(variables, "afterUpdate")>
 			<cfset local.callback_result = afterUpdate()>
-			<cfif isDefined("local.callback_result") AND NOT local.callback_result>
+			<cfif structKeyExists(local, "callback_result") AND NOT local.callback_result>
 				<cfreturn false>
 			</cfif>
 		</cfif>
 	</cfif>
-	<cfif isDefined("afterSave")>
+	<cfif structKeyExists(variables, "afterSave")>
 		<cfset local.callback_result = afterSave()>
-		<cfif isDefined("local.callback_result") AND NOT local.callback_result>
+		<cfif structKeyExists(local, "callback_result") AND NOT local.callback_result>
 			<cfreturn false>
 		</cfif>
 	</cfif>
@@ -191,14 +191,14 @@
 <cffunction name="delete" returntype="any" access="public" output="false">
 	<cfset var local = structNew()>
 
-	<cfif isDefined("beforeDelete")>
+	<cfif structKeyExists(variables, "beforeDelete")>
 		<cfset local.callback_result = beforeDelete()>
-		<cfif isDefined("local.callback_result") AND NOT local.callback_result>
+		<cfif structKeyExists(local, "callback_result") AND NOT local.callback_result>
 			<cfreturn false>
 		</cfif>
 	</cfif>
 
-	<cfquery name="local.check_deleted" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
+	<cfquery name="local.check_deleted" datasource="#variables.class.database.delete.datasource#" username="#variables.class.database.delete.username#" password="#variables.class.database.delete.password#" timeout="#variables.class.database.delete.timeout#">
 	SELECT #variables.class.primary_key#
 	FROM #variables.class.table_name#
 	WHERE #variables.class.primary_key# = <cfqueryparam cfsqltype="cf_sql_integer" value="#this[variables.class.primary_key]#">
@@ -213,13 +213,13 @@
 				<cfset local.soft_delete_field = "deleted_on">
 				<cfset local.soft_delete_timestamp = createDate(year(now()), month(now()), day(now()))>
 			</cfif>
-			<cfquery name="local.delete_record" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
+			<cfquery name="local.delete_record" datasource="#variables.class.database.delete.datasource#" username="#variables.class.database.delete.username#" password="#variables.class.database.delete.password#" timeout="#variables.class.database.delete.timeout#">
 			UPDATE #variables.class.table_name#
 			SET #local.soft_delete_field# = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#local.soft_delete_timestamp#">
 			WHERE #variables.class.primary_key# = <cfqueryparam cfsqltype="cf_sql_integer" value="#this[variables.class.primary_key]#">
 			</cfquery>
 		<cfelse>
-			<cfquery name="local.delete_record" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
+			<cfquery name="local.delete_record" datasource="#variables.class.database.delete.datasource#" username="#variables.class.database.delete.username#" password="#variables.class.database.delete.password#" timeout="#variables.class.database.delete.timeout#">
 			DELETE
 			FROM #variables.class.table_name#
 			WHERE #variables.class.primary_key# = <cfqueryparam cfsqltype="cf_sql_integer" value="#this[variables.class.primary_key]#">
@@ -227,9 +227,9 @@
 		</cfif>
 	</cfif>
 
-	<cfif isDefined("afterDelete")>
+	<cfif structKeyExists(variables, "afterDelete")>
 		<cfset local.callback_result = afterDelete()>
-		<cfif isDefined("local.callback_result") AND NOT local.callback_result>
+		<cfif structKeyExists(local, "callback_result") AND NOT local.callback_result>
 			<cfreturn false>
 		</cfif>
 	</cfif>
@@ -256,7 +256,7 @@
 					<cfset local.soft_delete_field = "deleted_on">
 					<cfset local.soft_delete_timestamp = createDate(year(now()), month(now()), day(now()))>
 				</cfif>
-				<cfquery name="local.delete_records" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
+				<cfquery name="local.delete_records" datasource="#variables.class.database.delete.datasource#" username="#variables.class.database.delete.username#" password="#variables.class.database.delete.password#" timeout="#variables.class.database.delete.timeout#">
 				UPDATE #variables.class.table_name#
 				SET #local.soft_delete_field# = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#local.soft_delete_timestamp#">
 				<cfif len(arguments.where) IS NOT 0>
@@ -264,7 +264,7 @@
 				</cfif>
 				</cfquery>
 			<cfelse>
-				<cfquery name="local.delete_records" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
+				<cfquery name="local.delete_records" datasource="#variables.class.database.delete.datasource#" username="#variables.class.database.delete.username#" password="#variables.class.database.delete.password#" timeout="#variables.class.database.delete.timeout#">
 				DELETE
 				FROM #variables.class.table_name#
 				<cfif len(arguments.where) IS NOT 0>
@@ -312,7 +312,7 @@
 		</cfif>
 	</cfloop>
 
-	<cfquery name="local.insert_query" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
+	<cfquery name="local.insert_query" datasource="#variables.class.database.create.datasource#" username="#variables.class.database.create.username#" password="#variables.class.database.create.password#" timeout="#variables.class.database.create.timeout#">
 	INSERT INTO	#variables.class.table_name# (#variables.modified_fields#)
 	VALUES
 	(
@@ -326,7 +326,7 @@
 	</cfloop>
 	)
 	</cfquery>
-	<cfquery name="local.get_id_query" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
+	<cfquery name="local.get_id_query" datasource="#variables.class.database.create.datasource#" username="#variables.class.database.create.username#" password="#variables.class.database.create.password#" timeout="#variables.class.database.create.timeout#">
 	SELECT #application.wheels.adapter.selectLastID()# AS last_id
 	</cfquery>
 	<cfset this[variables.class.primary_key] = local.get_id_query.last_id>
@@ -346,7 +346,7 @@
 		<cfset this.updated_on = createDate(year(now()), month(now()), day(now()))>
 	</cfif>
 
-	<cfquery name="local.get_data_query" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
+	<cfquery name="local.get_data_query" datasource="#variables.class.database.update.datasource#" username="#variables.class.database.update.username#" password="#variables.class.database.update.password#" timeout="#variables.class.database.update.timeout#">
 	SELECT #structKeyList(variables.class.columns)#
 	FROM #variables.class.table_name#
 	WHERE #variables.class.primary_key# = <cfqueryparam cfsqltype="cf_sql_integer" value="#this[variables.class.primary_key]#">
@@ -361,7 +361,7 @@
 
 	<cfif local.get_data_query.recordcount IS NOT 0>
 		<cfif variables.modified_fields IS NOT "">
-			<cfquery name="local.update_query" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
+			<cfquery name="local.update_query" datasource="#variables.class.database.update.datasource#" username="#variables.class.database.update.username#" password="#variables.class.database.update.password#" timeout="#variables.class.database.update.timeout#">
 			UPDATE #variables.class.table_name#
 			SET
 			<cfset local.pos = 0>

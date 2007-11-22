@@ -29,7 +29,7 @@
 
 <cffunction name="capitalize" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">
-	<cfreturn uCase(left(arguments.text, 1)) & lCase(mid(arguments.text, 2, len(arguments.text)-1))>
+	<cfreturn uCase(left(arguments.text, 1)) & mid(arguments.text, 2, len(arguments.text)-1)>
 </cffunction>
 
 
@@ -86,7 +86,7 @@
 	<cfset var local = structNew()>
 	<cfset local.output = replace(arguments.text, "_id", "", "all")>
 	<cfset local.output = replace(local.output, "_", " ", "all")>
-	<cfreturn capitalize(local.output)>
+	<cfreturn capitalize(lCase(local.output))>
 </cffunction>
 
 

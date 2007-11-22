@@ -43,7 +43,15 @@
 	<cftry>
 		<!--- determine and set database brand --->
 		<cfinclude template="../config/database.cfm">
-		<cfquery name="local.database" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
+		<cfloop list="create,read,update,delete" index="local.i">
+			<cfif application.settings.database[local.i].datasource IS "">
+				<cfset application.settings.database[local.i].datasource = application.settings.database.datasource>
+				<cfset application.settings.database[local.i].username = application.settings.database.username>
+				<cfset application.settings.database[local.i].password = application.settings.database.password>
+				<cfset application.settings.database[local.i].timeout = application.settings.database.timeout>
+			</cfif>
+		</cfloop>
+		<cfquery name="local.database" datasource="#application.settings.database.read.datasource#" timeout="#application.settings.database.read.timeout#" username="#application.settings.database.read.username#" password="#application.settings.database.read.password#">
 		SELECT @@version AS info
 		</cfquery>
 		<cfif local.database.info Contains "SQL Server">

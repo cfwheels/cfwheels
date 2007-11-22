@@ -37,7 +37,7 @@
 				<cfset local.result = "cf_sql_float">
 			</cfcase>
 
-			<cfcase value="int">
+			<cfcase value="int,integer">
 				<cfset local.result = "cf_sql_integer">
 			</cfcase>
 
