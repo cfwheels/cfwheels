@@ -32,4 +32,4 @@
 <!--- admin --->
 <cfset application.settings.admin.authenticate_by_method = "">
 <cfset application.settings.admin.authenticate_by_ip = "127.0.0.1">
-<cfset application.settings.admin.layout = "admin">
+<cfset application.settings.admin.layout = "wheels">
