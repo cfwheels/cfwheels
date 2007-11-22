@@ -1,5 +1,30 @@
 <cffunction name="reload" returntype="any" access="public" output="false">
-	<cfreturn findByID(id=this.id, reload=true)>
+	<cfset arguments.id = this.id>
+	<cfset arguments.reload = true>
+	<cfreturn findByID(argumentCollection=arguments)>
+</cffunction>
+
+
+<cffunction name="exists" returntype="any" access="public" output="false">
+	<cfargument name="id_or_where" type="any" required="false" default="">
+	<cfargument name="id" type="any" required="false" default="">
+	<cfargument name="where" type="any" required="false" default="">
+	<cfif arguments.id IS NOT "">
+		<cfset arguments.id_or_where = arguments.id>
+	<cfelseif arguments.where IS NOT "">
+		<cfset arguments.id_or_where = arguments.where>
+	</cfif>
+	<cfif isNumeric(arguments.id_or_where)>
+		<cfset arguments.id = arguments.id_or_where>
+		<cfset structDelete(arguments, "id_or_where")>
+		<cfset structDelete(arguments, "where")>
+		<cfreturn findByID(argumentCollection=arguments).found>
+	<cfelse>
+		<cfset arguments.where = arguments.id_or_where>
+		<cfset structDelete(arguments, "id_or_where")>
+		<cfset structDelete(arguments, "id")>
+		<cfreturn findOne(argumentCollection=arguments).found>
+	</cfif>
 </cffunction>
 
 
@@ -35,7 +60,7 @@
 	<cfset arguments.maxrows = 1>
 	<cfset arguments.CFW_query_name = "findOne">
 	<cfset local.query = CFW_query(argumentCollection=arguments)>
-	<cfset local.object = _createModelObject(local.query)>
+	<cfset local.object = CFW_createModelObject(local.query)>
 
 	<cfif local.query.recordcount IS NOT 0>
 		<cfset local.object.found = true>
@@ -157,7 +182,7 @@
 
  	<!--- get where, order, joins info etc from the cache (double-checked lock) --->
 	<cfset local.category = "sql">
-	<cfset local.key = "#variables.class.name#_#hashStruct(local.paramed_arguments)#">
+	<cfset local.key = "#variables.class.name#_#CFW_hashStruct(local.paramed_arguments)#">
 	<cfset local.lock_name = local.category & local.key>
 	<cflock name="#local.lock_name#" type="readonly" timeout="30">
 		<cfset local.sql = getFromCache(local.key, local.category, "internal")>
@@ -375,7 +400,7 @@
 
 	<cfif application.settings.cache_queries AND (isNumeric(arguments.cache) OR (isBoolean(arguments.cache) AND arguments.cache))>
 		<cfset local.category = "query">
-		<cfset local.key = "#variables.class.name#_#hashStruct(arguments)#">
+		<cfset local.key = "#variables.class.name#_#CFW_hashStruct(arguments)#">
 		<cfset local.lock_name = local.category & local.key>
 		<cflock name="#local.lock_name#" type="readonly" timeout="30">
 			<cfset local.query = getFromCache(local.key, local.category)>
@@ -429,7 +454,8 @@
 		<cfelse>
 			<cfset locals.soft_delete = false>
 		</cfif>
-		<cfquery name="locals.query" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
+
+		<cfquery name="locals.query" datasource="#variables.class.database.read.datasource#" username="#variables.class.database.read.username#" password="#variables.class.database.read.password#" timeout="#variables.class.database.read.timeout#">
 		<cfif application.wheels.database.type IS "sqlserver" AND len(arguments.limit) IS NOT 0 AND len(arguments.offset) IS NOT 0>
 		SELECT #preserveSingleQuotes(arguments.sql.pagination.simple_select)# AS primary_key
 		FROM (

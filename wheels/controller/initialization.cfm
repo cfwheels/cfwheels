@@ -1,12 +1,12 @@
 <cffunction name="_initControllerClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
 
-	<cfset variables.class.name = arguments.name>
-	<cfset variables.class.verifications = arrayNew(1)>
-	<cfset variables.class.before_filters = arrayNew(1)>
-	<cfset variables.class.after_filters = arrayNew(1)>
-	<cfset variables.class.cachable_requests = arrayNew(1)>
-	<cfset variables.class.cachable_actions = arrayNew(1)>
+	<cfset variables.wheels.name = arguments.name>
+	<cfset variables.wheels.verifications = arrayNew(1)>
+	<cfset variables.wheels.before_filters = arrayNew(1)>
+	<cfset variables.wheels.after_filters = arrayNew(1)>
+	<cfset variables.wheels.cachable_requests = arrayNew(1)>
+	<cfset variables.wheels.cachable_actions = arrayNew(1)>
 
 	<cfif structKeyExists(variables, "init")>
 		<cfset init()>
@@ -16,9 +16,9 @@
 </cffunction>
 
 
-<cffunction name="_createControllerObject" returntype="any" access="public" output="false">
+<cffunction name="CFW_createControllerObject" returntype="any" access="public" output="false">
 	<cfargument name="params" type="any" required="true">
-	<cfreturn createObject("component", "controllers.#variables.class.name#")._initControllerObject(variables.class.name, arguments.params)>
+	<cfreturn createObject("component", "controllers.#variables.wheels.name#")._initControllerObject(variables.wheels.name, arguments.params)>
 </cffunction>
 
 
@@ -26,7 +26,7 @@
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="params" type="any" required="true">
 	<cflock name="controller_lock" type="readonly" timeout="30">
-		<cfset variables.class = application.wheels.controllers[arguments.name].getControllerClassData()>
+		<cfset variables.wheels = application.wheels.controllers[arguments.name].getControllerClassData()>
 	</cflock>
 	<cfset variables.params = arguments.params>
 	<cfreturn this>

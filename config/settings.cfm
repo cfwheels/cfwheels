@@ -1,9 +1,8 @@
 <!--- miscellaneous --->
-<cfset application.settings.default_controller = "sample">
-<cfset application.settings.default_action = "index">
+<cfset application.settings.default_controller = "wheels">
+<cfset application.settings.default_action = "welcome">
 <cfset application.settings.obfuscate_urls = false>
 <cfset application.settings.reload_password = "">
-<cfset application.settings.query_timeout = 20>
 
 <!--- validation --->
 <cfset application.settings.validates_confirmation_of.message = "[field_name] should match confirmation">
@@ -29,3 +28,8 @@
 <cfset application.settings.paths.javascripts = "javascripts">
 <cfset application.settings.paths.stylesheets = "stylesheets">
 <cfset application.settings.paths.files = "files">
+
+<!--- admin --->
+<cfset application.settings.admin.authenticate_by_method = "">
+<cfset application.settings.admin.authenticate_by_ip = "127.0.0.1">
+<cfset application.settings.admin.layout = "admin">

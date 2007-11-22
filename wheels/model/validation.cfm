@@ -426,29 +426,29 @@
 					</cfif>
 				</cfcase>
 				<cfcase value="validates_uniqueness_of">
-						<cfquery name="local.query" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
-						SELECT #variables.class.primary_key#, #local.field#
-						FROM #variables.class.table_name#
-						WHERE #local.field# = <cfqueryparam cfsqltype="#variables.class.columns[local.field].cfsqltype#" value="#this[local.field]#">
-						<cfif structKeyExists(variables.class.columns, "deleted_at") OR structKeyExists(variables.class.columns, "deleted_on")>
-							<cfif structKeyExists(variables.class.columns, "deleted_at")>
-								<cfset local.soft_delete_field = "deleted_at">
-							<cfelseif structKeyExists(variables.class.columns, "deleted_on")>
-								<cfset local.soft_delete_field = "deleted_on">
+					<cfquery name="local.query" datasource="#variables.class.database.read.datasource#" timeout="#variables.class.database.read.timeout#" username="#variables.class.database.read.username#" password="#variables.class.database.read.password#">
+					SELECT #variables.class.primary_key#, #local.field#
+					FROM #variables.class.table_name#
+					WHERE #local.field# = <cfqueryparam cfsqltype="#variables.class.columns[local.field].cfsqltype#" value="#this[local.field]#">
+					<cfif structKeyExists(variables.class.columns, "deleted_at") OR structKeyExists(variables.class.columns, "deleted_on")>
+						<cfif structKeyExists(variables.class.columns, "deleted_at")>
+							<cfset local.soft_delete_field = "deleted_at">
+						<cfelseif structKeyExists(variables.class.columns, "deleted_on")>
+							<cfset local.soft_delete_field = "deleted_on">
+						</cfif>
+						AND #variables.class.table_name#.#local.soft_delete_field# IS NULL
+					</cfif>
+					<cfif len(local.settings.scope) IS NOT 0>
+						AND
+						<cfset local.pos = 0>
+						<cfloop list="#local.settings.scope#" index="local.i">
+							<cfset local.pos = local.pos + 1>
+							#local.i# = <cfqueryparam cfsqltype="#variables.class.columns[local.field].cfsqltype#" value="#this[local.i]#">
+							<cfif listLen(local.settings.scope) GT local.pos>
+								AND
 							</cfif>
-							AND #variables.class.table_name#.#local.soft_delete_field# IS NULL
-						</cfif>
-						<cfif len(local.settings.scope) IS NOT 0>
-							AND
-							<cfset local.pos = 0>
-							<cfloop list="#local.settings.scope#" index="local.i">
-								<cfset local.pos = local.pos + 1>
-								#local.i# = <cfqueryparam cfsqltype="#variables.class.columns[local.field].cfsqltype#" value="#this[local.i]#">
-								<cfif listLen(local.settings.scope) GT local.pos>
-									AND
-								</cfif>
-							</cfloop>
-						</cfif>
+						</cfloop>
+					</cfif>
 					</cfquery>
 					<cfif (NOT structKeyExists(this, variables.class.primary_key) AND local.query.recordcount GT 0) OR (structKeyExists(this, variables.class.primary_key) AND local.query.recordcount GT 0 AND local.query[variables.class.primary_key][1] IS NOT this[variables.class.primary_key])>
 						<cfset addError(local.field, local.settings.message)>

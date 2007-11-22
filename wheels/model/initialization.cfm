@@ -1,23 +1,27 @@
 <cffunction name="_initModelClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
-
 	<cfset var local = structNew()>
 
+	<!--- set model name --->
 	<cfset variables.class.name = arguments.name>
 
+	<!--- set defaults --->
+	<cfset variables.class.table_name = pluralize(variables.class.name)>
+	<cfset variables.class.primary_key = "id">
+	<cfloop list="create,read,update,delete" index="local.i">
+		<cfset variables.class.database[local.i] = structNew()>
+		<cfset variables.class.database[local.i].datasource = application.settings.database[local.i].datasource>
+		<cfset variables.class.database[local.i].username = application.settings.database[local.i].username>
+		<cfset variables.class.database[local.i].password = application.settings.database[local.i].password>
+		<cfset variables.class.database[local.i].timeout = application.settings.database[local.i].timeout>
+	</cfloop>
+
+	<!--- call init to override defaults if it exists --->
 	<cfif structKeyExists(variables, "init")>
 		<cfset init()>
 	</cfif>
 
-	<cfif NOT structKeyExists(variables.class, "table_name")>
-		<cfset variables.class.table_name = pluralize(variables.class.name)>
-	</cfif>
-
-	<cfif NOT structKeyExists(variables.class, "primary_key")>
-		<cfset variables.class.primary_key = "id">
-	</cfif>
-
-	<cfquery name="local.query" datasource="#application.settings.dsn#" timeout="#application.settings.query_timeout#" username="#application.settings.username#" password="#application.settings.password#">
+	<cfquery name="local.query" datasource="#variables.class.database.read.datasource#" timeout="#variables.class.database.read.timeout#" username="#variables.class.database.read.username#" password="#variables.class.database.read.password#">
 	SELECT<cfif application.wheels.database.type IS "sqlserver"> TOP 1</cfif> *
 	FROM #variables.class.table_name#
 	<cfif application.wheels.database.type IS "mysql">LIMIT 1</cfif>
@@ -56,13 +60,13 @@
 </cffunction>
 
 
-<cffunction name="_createModelObject" returntype="any" access="private" output="false">
+<cffunction name="CFW_createModelObject" returntype="any" access="private" output="false">
 	<cfargument name="attributes" type="any" required="no" default="">
-	<cfreturn createObject("component", "models.#variables.class.name#")._initModelObject(variables.class.name, arguments.attributes)>
+	<cfreturn createObject("component", "models.#variables.class.name#").CFW_initModelObject(variables.class.name, arguments.attributes)>
 </cffunction>
 
 
-<cffunction name="_initModelObject" returntype="any" access="public" output="false">
+<cffunction name="CFW_initModelObject" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="yes">
 	<cfargument name="attributes" type="any" required="no" default="">
 	<cfset var local = structNew()>

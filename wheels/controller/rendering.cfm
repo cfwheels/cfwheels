@@ -32,7 +32,7 @@
 	<!--- double-checked lock --->
 	<cfif application.settings.cache_pages AND (isNumeric(arguments.cache) OR (isBoolean(arguments.cache) AND arguments.cache))>
 		<cfset local.category = "action">
-		<cfset local.key = "#arguments.action#_#hashStruct(variables.params)#_#hashStruct(arguments)#">
+		<cfset local.key = "#arguments.action#_#CFW_hashStruct(variables.params)#_#CFW_hashStruct(arguments)#">
 		<cfset local.lock_name = local.category & local.key>
 		<cflock name="#local.lock_name#" type="readonly" timeout="30">
 			<cfset request.wheels.response = getFromCache(local.key, local.category)>
@@ -114,7 +114,7 @@
 	<!--- double-checked lock --->
 	<cfif application.settings.cache_partials AND (isNumeric(arguments.cache) OR (isBoolean(arguments.cache) AND arguments.cache))>
 		<cfset local.category = "partial">
-		<cfset local.key = "#arguments.name#_#hashStruct(variables.params)#_#hashStruct(arguments)#">
+		<cfset local.key = "#arguments.name#_#CFW_hashStruct(variables.params)#_#CFW_hashStruct(arguments)#">
 		<cfset local.lock_name = local.category & local.key>
 		<cflock name="#local.lock_name#" type="readonly" timeout="30">
 			<cfset local.partial = getFromCache(local.key, local.category)>

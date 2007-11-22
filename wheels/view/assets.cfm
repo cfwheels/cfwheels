@@ -43,7 +43,7 @@
 	</cfif>
 
 	<cfset local.category = "image">
-	<cfset local.key = hashStruct(arguments)>
+	<cfset local.key = CFW_hashStruct(arguments)>
 	<cfset local.lock_name = local.category & local.key>
 	<!--- double-checked lock --->
 	<cflock name="#local.lock_name#" type="readonly" timeout="30">

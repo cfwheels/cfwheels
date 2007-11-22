@@ -154,7 +154,7 @@
 
 	<!--- Create requested controller --->
 	<cftry>
-		<cfset local.controller = _controller(local.params.controller)._createControllerObject(local.params)>
+		<cfset local.controller = CFW_controller(local.params.controller).CFW_createControllerObject(local.params)>
 	<cfcatch>
 		<cfif fileExists(expandPath("controllers/#local.params.controller#.cfc"))>
 			<cfrethrow>
