@@ -1,14 +1,14 @@
 #summary How to use more than one database.
 
-Sometimes you need to pull data from more than one database, whether it's by choice (for performance or security reasons perhaps) or whether it's just the way your infrastructure is setup and you can't change it. Wheels has built-in functionality for this so that you don't have to revert back to writing the queries and setting the data source manually whenever you need to use a data source other than the default one.
+Sometimes you need to pull data from more than one database, whether it's by choice (for performance or security reasons perhaps) or whether it's just because that's the way your infrastructure is setup and you can't change it. Wheels has built-in functionality for this so that you don't have to revert back to writing the queries and setting the data source manually whenever you need to use a data source other than the default one.
 
 =Configuring the data sources=
 
-If you need to use more than one database there are two ways to accomplish this in Wheels. You can either set it globally by using the `config/database.cfm` file or you can specify it on a per model basis by calling any of these functions: `[setDataSource]`, `setCreateDataSource`, `setReadDataSource`, `setUpdateDataSource` and `setDeleteDataSource` from the `init` method in your model file.
+If you need to use more than one database there are two ways to accomplish this in Wheels. You can either set it globally by using the `config/database.cfm` file or you can specify it on a per model basis by calling the `[setDataSource]`, `[setCreateDataSource]`, `[setReadDataSource]`, `[setUpdateDataSource]` or `[setDeleteDataSource]` function from the `init` function in your model file.
 
-As you have probably figured out already by the naming of those methods listed above you can have Wheels use one data source for all SQL operations or you can have it read from one database and write to another for example.
+As you have probably figured out already by the naming of those functions listed above you can have Wheels use one data source for all SQL operations or you can have it read from one database and write to another for example.
 
-What data source Wheels will use internally for each operation is not solely decided by whether it's a `SELECT`, `INSERT`, `UPDATE` or `DELETE` statement. Instead it's decided by the current context of the operation, for example if you insert a new record to a table using one data srouce Wheels will of course use that same data source when getting back the primary key of the record you just inserted. Keep this in mind when setting access permissions on your tables.
+What data source Wheels will use internally for each operation is not solely decided by whether it's a `SELECT`, `INSERT`, `UPDATE` or `DELETE` statement though. Instead it's decided by the current context of the operation, for example if you insert a new record to a table using one data source Wheels will of course use that same data source when getting back the primary key of the record you just inserted. Keep this in mind when setting access permissions on your tables.
 
 = Planned improvements =
-The ability to specify a data source as an argument to all individual methods as well (ie findAll, save, create etc).
+The ability to specify a data source as an argument to all individual functions as well (ie `[findAll]`, `[save]`, `[create]` etc).
