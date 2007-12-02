@@ -4,7 +4,7 @@ Sometimes you need to pull data from more than one database, whether it's by cho
 
 =Configuring the data sources=
 
-If you need to use more than one database there are two ways to accomplish this in Wheels. You can either set it globally by using the `config/database.cfm` file or you can specify it on a per model basis by calling any of these functions: `setDataSource`, `setCreateDataSource`, `setReadDataSource`, `setUpdateDataSource` and `setDeleteDataSource` from the `init` method in your model file.
+If you need to use more than one database there are two ways to accomplish this in Wheels. You can either set it globally by using the `config/database.cfm` file or you can specify it on a per model basis by calling any of these functions: `[setDataSource]`, `setCreateDataSource`, `setReadDataSource`, `setUpdateDataSource` and `setDeleteDataSource` from the `init` method in your model file.
 
 As you have probably figured out already by the naming of those methods listed above you can have Wheels use one data source for all SQL operations or you can have it read from one database and write to another for example.
 
