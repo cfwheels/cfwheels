@@ -1,7 +1,7 @@
 #summary What you need before you start programming in Wheels.
 #labels chapter
 
-We can identify three different types of requirements that you should be aware of; project requirements (is Wheels a good fit for your project?), developer requirements (do you have the necessary knowledge and mindset to program effectively in Wheels) and system requirements (is your server ready for Wheels).
+We can identify three different types of requirements that you should be aware of; project requirements (is Wheels a good fit for your project?), developer requirements (do you have the necessary knowledge and mindset to program effectively in Wheels?) and system requirements (is your server ready for Wheels?).
 
 =Project Requirements=
 
@@ -25,26 +25,26 @@ Moving on...
 
 Yes, there are actually some things you should familiarize yourself with before starting to use Wheels. Don't worry though, you don't need to be an expert on any on of them, just a basic understanding is good enough.
 
-- You should know the !ColdFusion programming language (surprise!).
-- You should understand the concept of object oriented programming and how it applies to !ColdFusion.
+- You should know the ColdFusion programming language (surprise!).
+- You should understand the concept of object oriented programming and how it applies to ColdFusion.
 - You should know the theory behind the Model-View-Controller development pattern.
 
 *ColdFusion*
 Simply the best programming language in the world! The best way to learn it, in our humble opinion, is to get [http://www.adobe.com/products/coldfusion/ the free developer edition], buy Ben Forta's ColdFusion Web Application Construction Kit ([http://www.amazon.com/gp/product/032151548X/ref=pd_cp_b_4/002-9234634-3460835?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=center-41&pf_rd_r=1TQ31D6SXC8A9WNGFQ5R&pf_rd_t=201&pf_rd_p=252362401&pf_rd_i=0321223675 Volume I], [http://www.amazon.com/Adobe-ColdFusion-Web-Application-Construction/dp/0321515463/ref=pd_bxgy_b_img_b/002-9234634-3460835 Volume II], [http://www.amazon.com/Adobe-ColdFusion-Web-Application-Construction/dp/0321515471/ref=cm_lmf_tit_3_rdssss1/002-9234634-3460835 Volume III]) and start coding using [http://www.cfeclipse.org/ CFEclipse].
 
-*Object Oriented Programming (OOP)*
-This is a programming methodology that uses objects to design applications. Objects model real world entities in your application. It is based on several techniques, including inheritance, modularity, polymorphism and encapsulation. Most of these techniques are supported in ColdFusion making it a true object oriented language. At the most basic level a `.cfc` file in ColdFusion is a class and you create an instance of a class by calling the `createObject` method. Trying to squeeze an explanation of OOP and how it's used in ColdFusion into a few sentences is almost impossible and a detailed overview of OOP is outside the scope of this chapter. There are lots of high quality information online though and a good starting point is [http://www.cfoop.org].
+*Object Oriented Programming*
+This is a programming methodology that uses objects to design applications. Objects model real world entities in your application. It is based on several techniques, including inheritance, modularity, polymorphism and encapsulation. Most of these techniques are supported in ColdFusion making it a true object oriented language. At the most basic level a `.cfc` file in ColdFusion is a class and you create an instance of a class by calling the `createObject` method. Trying to squeeze an explanation of object oriented programming¨and how it's used in ColdFusion into a few sentences is almost impossible and a detailed overview of it is outside the scope of this chapter. There are lots of high quality information online though so go ahead and google it ;)
 
 *Model-View-Controller*
 The same 
 
 =System Requirements=
 
-Apologies to everyone still running on older versions of ColdFusion... you're gonna need to upgrade to ColdFusion 8. The good news is that not only will you be able to run Wheels you will also benefit from the tons of performance enhancements and cool new features that have been added to ColdFusion 8, it really is worth the upgrade!
+Apologies to everyone still running on older versions of ColdFusion... you're gonna need to upgrade to ColdFusion 8. The good news is that not only will you be able to run Wheels, you will also benefit from the tons of performance enhancements and cool new features that have been added to ColdFusion 8, it really is worth the upgrade!
 
 Your setup with ColdFusion 8 and Wheels can then can be installed on Windows (XP, 2003 or Vista), Macintosh or Linux - they all work just fine.
 
-You also need a web server of course and the web servers we know for sure works with Wheels are Apache and Microsoft IIS (5.1 and 6).
+You also need a web server of course and the web servers that we know works with Wheels are Apache and Microsoft IIS (5.1 and 6). There is no reason other web servers won't work though so give it a try even if you're not using Apache or IIS.
 
 Finally, to build any kind of meaningful website or web application you will likely interact with a database.
-Currently supported databases are SQL Server 7, SQL Server 2000 and MySQL 5 (note that MySQL 4 is NOT supported).
+Currently supported databases are SQL Server 7, SQL Server 2000, SQL Server 2005 and MySQL 5 (note that MySQL 4 is not supported).
