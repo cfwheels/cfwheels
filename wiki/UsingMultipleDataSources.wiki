@@ -5,11 +5,12 @@ Sometimes you need to pull data from more than one database, whether it's by cho
 
 =Configuring the data sources=
 
-If you need to use more than one database there are two ways to accomplish this in Wheels. You can either set it globally by using the `config/database.cfm` file or you can specify it on a per model basis by calling the `[setDataSource]`, `[setCreateDataSource]`, `[setReadDataSource]`, `[setUpdateDataSource]` or `[setDeleteDataSource]` function from the `init` function in your model file.
+If you need to use more than one database there are two ways to accomplish this in Wheels. You can either set it globally by using the `config/database.cfm` file or you can specify it on a per model basis by using the `[setDataSource]`, `[setCreateDataSource]`, `[setReadDataSource]`, `[setUpdateDataSource]` and `[setDeleteDataSource]` functions from the `init` function in your model file.
 
-As you have probably figured out already by the naming of those functions listed above you can have Wheels use one data source for all SQL operations or you can have it read from one database and write to another for example.
+As you have probably figured out already by the naming of those functions listed above you can have Wheels use one data source for all SQL operations (by using the `[setDataSource]` function) or you can have it read from one database and write to another for example (by using the `[setReadDataSource]` function to specify what data source to use when reading and by using the remaining three, `[setCreateDataSource]` / `[setUpdateDataSource]` / `[setDeleteDataSource]`, to specify what data source to use when writing).
 
 What data source Wheels will use internally for each operation is not solely decided by whether it's a `SELECT`, `INSERT`, `UPDATE` or `DELETE` statement though. Instead it's decided by the current context of the operation, for example if you insert a new record to a table using one data source Wheels will of course use that same data source when getting back the primary key of the record you just inserted. Keep this in mind when setting access permissions on your tables.
 
-= Planned improvements =
+=Planned improvements=
+
 The ability to specify a data source as an argument to all individual functions as well (ie `[findAll]`, `[save]`, `[create]` etc).
