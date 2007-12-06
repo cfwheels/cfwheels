@@ -57,7 +57,7 @@ To help document this, you may want to consider using `<cfparam>` tags at the to
 
 One of the two layout files that are already created for you is the `application_layout.cfm` file (the other one is the default layout to be used when sending emails, but more on that later). It kind of works the same way that ColdFusion's standard `Application.cfc` / `Application.cfm` files work. Think of it as the default layout to be used by any given controller.
 
-If you're writing code for a controller called `press` and there is no layout created for `press`, CFWheels will use `application_layout.cfm` as the layout for the `press` controller.
+If you're writing code for a controller called `press` and there is no layout created for `press`, CFWheels will automatically use `application_layout.cfm` as the layout.
 
 If you implement a layout for the `press` controller, then that layout will be used instead of the default `application_layout.cfm` layout.
 
