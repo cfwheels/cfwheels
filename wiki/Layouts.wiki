@@ -49,10 +49,10 @@ For most purposes, this means that you could write code for your page header bef
 </html>
 }}}
 
-As you can see, we just wrote code to put every view's content in context of the layout. Pretty cool, huh?
+As you can see, we just wrote code that wraps every view's content with the layout. Pretty cool, huh?
 
 =Overriding the default layout=
 
 Now you want to create a layout to be used only by a single controller called `blog`. Simply create the layout and save it as `{webroot}/views/layouts/blog_layout.cfm`.
 
-As you can see, the convention is to name your layout file `CONTROLLER_layout.cfm`, replacing the word `CONTROLLER` with the controller that the layout should be used for.
+As you can see, the convention is to name your layout file `controller_layout.cfm`, replacing the word `controller` with the controller that the layout should be used by.
