@@ -62,7 +62,7 @@ Here's an example:
 <cfparam name="title" type="string">
 
 <!--- Because this is XHTML, we need to output the DOCTYPE as the first
-    character of the first line, or else we get Quirks Mode! --->
+      character of the first line, or else we get Quirks Mode! --->
 <cfoutput><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
