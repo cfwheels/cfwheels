@@ -91,7 +91,7 @@ If you're writing code for a controller called `press` and there is no layout cr
 
 If you implement a layout for the `press` controller, then that layout will be used instead of the default `application_layout.cfm` layout.
 
-==Overriding the default layout==
+=Overriding the default layout with a controller-specific layout=
 
 Let's pretend that you want to create a layout to be used only by a single controller called `blog`. Simply create the layout and save it as `{webroot}/views/layouts/blog_layout.cfm`.
 
