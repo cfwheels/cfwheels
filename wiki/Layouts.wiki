@@ -1,6 +1,8 @@
 #summary Working with layouts in ColdFusion on Wheels.
 #labels chapter
 
+=Introduction=
+
 Every page in your application displays a lot of the same HTML. Usually, every page spits out HTML that is used to display a header, navigation, and a footer.
 
 As a red-blooded ColdFusion developer, you're used to creating include files like `header.cfm` and `footer.cfm`, and then using `<cfinclude>` on every single page to include them. Does that mean that you should `<cfinclude>` your headers and footers in every single view? Heck no!
