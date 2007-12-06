@@ -53,6 +53,36 @@ Notice in the above code example that there is a variable called `#title#` being
 
 To help document this, you may want to consider using `<cfparam>` tags at the top of your layout file. That way any developer using your layout in the future could easily see which variables need to be set by the controller.
 
+Here's an example:
+
+{{{
+<cfsetting enablecfoutputonly="true">
+
+<!--- Title is required --->
+<cfparam name="title" type="string">
+
+<!--- Because this is XHTML, we need to output the DOCTYPE as the first
+    character of the first line, or else we get Quirks Mode! --->
+<cfoutput><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>#title#</title>
+</head>
+
+<body>
+
+<!--- View's Content --->
+#contentForLayout()#
+
+</body>
+</html>
+
+</cfoutput>
+
+<cfsetting enablecfoutputonly="false">
+}}}
+
 =The default layout=
 
 One of the two layout files that are already created for you is the `application_layout.cfm` file (the other one is the default layout to be used when sending emails, but more on that later). It kind of works the same way that ColdFusion's standard `Application.cfc` / `Application.cfm` files work. Think of it as the default layout to be used by any given controller.
