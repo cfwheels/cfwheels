@@ -23,6 +23,8 @@ If you open the the default layout at `{webroot}/views/layouts/application_layou
 
 This snippet of code represents the output of your view. Whatever code you put before this snippet will be run before the view. Similarly, whatever code you put after the snippet will be run afterward.
 
+==Example==
+
 For most purposes, this means that you could write code for your page header before the snippet, and write code for the footer after. Here is a simple example of wrapping your view's content with a standard XHTML header and footer.
 
 {{{
