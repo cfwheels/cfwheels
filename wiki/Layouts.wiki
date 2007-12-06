@@ -43,6 +43,14 @@ For most purposes, this means that you could write code for your page header bef
 
 As you can see, we just wrote code that wraps every view's content with the layout. Pretty cool, huh?
 
+==Use of variables in the layout==
+
+Just like views in CFWheels, any variable declared by your application's controller can be used within your layouts.
+
+Notice in the above code example that there is a variable called `#title#` being output in between the `<title>` tags. This would require that any controller using this particular layout would need to `<cfset>` a variable named `title`.
+
+To help document this, you may want to consider using `<cfparam>` tags at the top of your layout file. That way any developer using your layout in the future could easily see which variables need to be set by the controller.
+
 =The default layout=
 
 One of the two layout files that are already created for you is the `application_layout.cfm` file (the other one is the default layout to be used when sending emails, but more on that later). It kind of works the same way that ColdFusion's standard `Application.cfc` / `Application.cfm` files work. Think of it as the default layout to be used by any given controller.
