@@ -109,10 +109,20 @@ These CFWheels functions give you that control by letting you call them at the e
 
 ==`renderPage()`==
 
+Description coming soon.
+
 ==`renderPartial()`==
+
+Description coming soon.
 
 ==`renderNothing()`==
 
+Description coming soon.
+
 ==`renderText()`==
 
+Description coming soon.
+
 ==`renderPageToString()`==
+
+Description coming soon.
