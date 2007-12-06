@@ -11,14 +11,6 @@ In your CFWheels installation, layouts are stored in `{webroot}/views/layouts/`.
 
 Let's go over how these work.
 
-=The default layout=
-
-One of the two layout files that are already created for you is the `application_layout.cfm` file (the other one is the default layout to be used when sending emails, but more on that later). It kind of works the same way that ColdFusion's standard `Application.cfc` / `Application.cfm` files work. Think of it as the default layout to be used by any given controller.
-
-If you're writing code for a controller called `press` and there is no layout created for `press`, CFWheels will use `application_layout.cfm` as the layout for the `press` controller.
-
-If you implement a layout for the `press` controller, then that layout will be used instead of the default `application_layout.cfm` layout.
-
 =Implementing a layout=
 
 Let's say that you want to define one layout to be used by every view in your application.
@@ -51,8 +43,16 @@ For most purposes, this means that you could write code for your page header bef
 
 As you can see, we just wrote code that wraps every view's content with the layout. Pretty cool, huh?
 
-=Overriding the default layout=
+=The default layout=
 
-Now you want to create a layout to be used only by a single controller called `blog`. Simply create the layout and save it as `{webroot}/views/layouts/blog_layout.cfm`.
+One of the two layout files that are already created for you is the `application_layout.cfm` file (the other one is the default layout to be used when sending emails, but more on that later). It kind of works the same way that ColdFusion's standard `Application.cfc` / `Application.cfm` files work. Think of it as the default layout to be used by any given controller.
+
+If you're writing code for a controller called `press` and there is no layout created for `press`, CFWheels will use `application_layout.cfm` as the layout for the `press` controller.
+
+If you implement a layout for the `press` controller, then that layout will be used instead of the default `application_layout.cfm` layout.
+
+==Overriding the default layout==
+
+Let's pretend that you want to create a layout to be used only by a single controller called `blog`. Simply create the layout and save it as `{webroot}/views/layouts/blog_layout.cfm`.
 
 As you can see, the convention is to name your layout file `controller_layout.cfm`, replacing the word `controller` with the controller that the layout should be used by.
