@@ -98,3 +98,21 @@ If you implement a layout for the `press` controller, then that layout will be u
 Let's pretend that you want to create a layout to be used only by a single controller called `blog`. Simply create the layout and save it as `{webroot}/views/layouts/blog_layout.cfm`.
 
 As you can see, the convention is to name your layout file `controller_layout.cfm`, replacing the word `controller` with the controller that the layout should be used by.
+
+=Overriding the default and controller-specific layouts=
+
+As you may already know, the last thing run in a controller's action is CFWheel's `renderPage()` function. This function is run automatically by CFWheels, so most of the time, you won't need to call it.
+
+But let's pretend that you don't want the action that your coding to use your default layout _or_ your controller's layout. Or let's pretend that you don't want to use a layout at all.
+
+These CFWheels functions give you that control by letting you call them at the end of your action code, overriding the default behavior.
+
+==`renderPage()`==
+
+==`renderPartial()`==
+
+==`renderNothing()`==
+
+==`renderText()`==
+
+==`renderPageToString()`==
