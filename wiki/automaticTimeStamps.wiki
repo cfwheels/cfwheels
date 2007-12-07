@@ -1,17 +1,22 @@
 #summary Let Wheels handle time stamping of records.
+#labels chapter
 
-When working with database tables it is very common to have a field that holds the time that the record was added or last modified. If you have an e-commerce website with an `orders` table you want to store the date and time the order was made, if you run a blog you want to know when someone left a comment and so on. As with anything that is a common task performed by many developers it makes a good candidate for abstracting to the framework level, so that's what we did. If you have any of the following fields in your database table Wheels will see them and treat them a little differently than others.
+When working with database tables it is very common to have a field that holds the time that the record was added or last modified. If you have an e-commerce website with an `orders` table you want to store the date and time the order was made, if you run a blog you want to know when someone left a comment and so on. As with anything that is a common task performed by many developers it makes a good candidate for abstracting to the framework level, so that's what we did...
+
+=Fields used for timestamps=
+
+If you have any of the following fields in your database table Wheels will see them and treat them a little differently than others.
 
 *created_on*
-If Wheels sees this field in your table it will use it to store the current date when an `INSERT` operation is made (which could happen through a [save] or [create] operation for example).
+If Wheels sees this field in your table it will use it to store the current date when an `INSERT` operation is made (which could happen through a `[save]` or `[create]` operation for example).
 
 *created_at*
 If Wheels sees this field it will do the same as above but also include the current time of the insert.
 
 *updated_on*
-If Wheels sees this field it will use it to store the current date when an `UPDATE` operation is made (which could happen through a [save] or [update] operation for example).
+If Wheels sees this field it will use it to store the current date when an `UPDATE` operation is made (which could happen through a `[save]` or `[update]` operation for example).
 
 *updated_at*
 If Wheels sees this field it will do the same as above but also include the current time of the update.
 
-If you add any of these fields to your table, make sure they are of the `datetime` type and allow `NULL` values.
+If you add any of these fields to your table, make sure they can accept date/time values (like `datetime` or `timestamp` for example) and that they can be set to `NULL`.
