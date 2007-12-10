@@ -28,7 +28,7 @@ renderPage(layout="blog")
 
 =Related Methods=
 
-  * `[renderPage renderPartial()]`
+  * `[renderPartial renderPartial()]`
   * `renderNothing()`
   * `renderText()`
   * `renderPageToString()`
