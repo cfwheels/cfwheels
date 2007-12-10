@@ -1,7 +1,7 @@
 #summary Displays view with your specifications of controller, action, template, and layout.
 #labels method
 
-====Arguments:====
+=Arguments:=
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || controller || No || string || #params.controller# || Controller to run. Affects which layout may be used. ||
 || action || No || string || #params.action# || Action to run the view for. ||
