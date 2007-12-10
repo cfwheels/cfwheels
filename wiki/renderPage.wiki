@@ -25,3 +25,10 @@ For example, let's say that you just want to change the layout that your view wi
 {{{
 renderPage(layout="blog")
 }}}
+
+=Related Methods=
+
+* `renderPartial()`
+* `renderNothing()`
+* `renderText()`
+* `renderPageToString()`
