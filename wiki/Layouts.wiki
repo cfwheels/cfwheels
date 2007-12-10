@@ -111,18 +111,18 @@ These CFWheels functions give you that control by letting you call them at the e
 
 Description coming soon.
 
-==`renderPartial()`==
+==[http://code.google.com/p/cfwheels/wiki/renderPartial renderPartial()]==
 
 Description coming soon.
 
-==`renderNothing()`==
+==[http://code.google.com/p/cfwheels/wiki/renderNothing renderNothing()]==
 
 Description coming soon.
 
-==`renderText()`==
+==[http://code.google.com/p/cfwheels/wiki/renderText renderText()]==
 
 Description coming soon.
 
-==`renderPageToString()`==
+==[http://code.google.com/p/cfwheels/wiki/renderPageToString renderPageToString()]==
 
 Description coming soon.
