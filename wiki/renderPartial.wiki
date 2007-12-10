@@ -1,4 +1,5 @@
 #summary One-sentence summary of this page.
+#labels method,controller
 
 = Introduction =
 
