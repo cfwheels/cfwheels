@@ -5,7 +5,7 @@
 
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
 || controller || No || string || #params.controller# || Controller to run. Affects which layout may be used. ||
-|| action || No || string || #params.action# || Action to run the view for. ||
+|| action || No || string || #params.action# || Action to run. ||
 || template || No || string || _[empty string]_ || Name of view file to use, without `.cfm` at the end. ||
 || layout || No || string || _[empty string]_ || Name of layout to use, without `_layout.cfm` at the end. ||
 || cache || No || string || _[empty string]_ || ... ||
@@ -17,3 +17,11 @@ Wheels's built-in `renderPage()` is always run by Wheels after your controller c
 `renderPage()` is available at all times in your controller code.
 
 =Examples=
+
+All parameters are optional, so you can call them in any combination to affect which pieces of code that will run.
+
+For example, let's say that you just want to change the layout file that your view will use. To run a layout called "blog" (stored in `{webroot}/views/layouts/blog_layout.cfm`), your code would look like this:
+
+{{{
+renderPage(layout="blog")
+}}}
