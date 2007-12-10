@@ -14,4 +14,4 @@
 =Overview=
 Wheels's built-in `renderPage()` is always run by Wheels after your controller code executes, even if you don't explicitly call it in your code. But sometimes you may want for it to behave in a different way than its default behavior. If that's the case, then you can call it manually at the end of your controller code to modify which files it uses for controller, action, template, and layout. 
 
-`renderPage()` is available in your controller code at all times.
+`renderPage()` is available at all times in your controller code.
