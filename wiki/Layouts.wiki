@@ -107,7 +107,7 @@ But let's pretend that you don't want the action that your coding to use your de
 
 These CFWheels functions give you that control by letting you call them at the end of your action code, overriding the default behavior.
 
-==`renderPage()`==
+==[http://code.google.com/p/cfwheels/wiki/renderPage renderPage()]==
 
 Description coming soon.
 
