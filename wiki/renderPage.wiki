@@ -1,5 +1,5 @@
+#summary Displays view with your specifications of controller, action, template, and layout.
 #labels method
-#Displays view with your specifications of controller, action, template, and layout.
 
 = Introduction =
 
