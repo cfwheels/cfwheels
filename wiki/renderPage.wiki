@@ -20,7 +20,7 @@ Wheels's built-in `renderPage()` is always run by Wheels after your controller c
 
 All parameters are optional, so you can call them in any combination to affect which pieces of code that will run.
 
-For example, let's say that you just want to change the layout file that your view will use. To run a layout called "blog" (stored in `{webroot}/views/layouts/blog_layout.cfm`), your code would look like this:
+For example, let's say that you just want to change the layout that your view will use. To run a layout called "blog" (stored in `{webroot}/views/layouts/blog_layout.cfm`), your code would look like this:
 
 {{{
 renderPage(layout="blog")
