@@ -29,6 +29,6 @@ renderPage(layout="blog")
 =Related Methods=
 
   * [http://code.google.com/p/cfwheels/wiki/renderPartial renderPartial()]
-  * `renderNothing()`
-  * `renderText()`
-  * `renderPageToString()`
+  * [http://code.google.com/p/cfwheels/wiki/renderNothing renderNothing()]
+  * [http://code.google.com/p/cfwheels/wiki/renderText renderText()]
+  * [http://code.google.com/p/cfwheels/wiki/renderPageToString renderPageToString()]
