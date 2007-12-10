@@ -1,5 +1,5 @@
 #summary Displays view with your specifications of controller, action, template, and layout.
-#labels method
+#labels method,view
 
 =Arguments:=
 || *Name* || *Required* || *Type* || *Default* || *Description* ||
