@@ -1,14 +1,10 @@
 #summary Displays view with your specifications of controller, action, template, and layout.
 #labels method
 
-= Introduction =
-
-Add your content here.
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+====Arguments:====
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| controller || No || string || #params.controller# || Controller to run. Affects which layout may be used. ||
+|| action || No || string || #params.action# || Action to run the view for. ||
+|| template || No || string || _[empty string]_ || Name of view file to use, without `.cfm` at the end. ||
+|| layout || No || string || _[empty string]_ || Name of layout to use, without `_layout.cfm` at the end. ||
+|| cache || No || string || _[empty string]_ || ... ||
