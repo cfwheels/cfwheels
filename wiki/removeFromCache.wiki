@@ -1,6 +1,0 @@
-#summary This function removes an item from the cache.
-
-|| *Name* || *Required* || *Type* || *Default* || *Description* ||
-|| key || yes || string || || the key for the cache item to remove ||
-
-See the section on [Caching] for information and code examples.
