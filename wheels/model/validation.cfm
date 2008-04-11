@@ -1,16 +1,16 @@
 <cffunction name="addError" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="true">
 	<cfargument name="message" type="any" required="true">
-	<cfset var local = structNew()>
+	<cfset var locals = structNew()>
 
-	<cfset local.error.field = arguments.field>
-	<cfset local.error.message = arguments.message>
+	<cfset locals.error.field = arguments.field>
+	<cfset locals.error.message = arguments.message>
 
 	<cfif NOT structKeyExists(variables, "errors")>
 		<cfset variables.errors = arrayNew(1)>
 	</cfif>
 
-	<cfset arrayAppend(variables.errors, local.error)>
+	<cfset arrayAppend(variables.errors, locals.error)>
 
 	<cfreturn true>
 </cffunction>
@@ -18,28 +18,28 @@
 
 <cffunction name="addErrorToBase" returntype="any" access="public" output="false">
 	<cfargument name="message" type="any" required="true">
-	<cfset var local = structNew()>
+	<cfset var locals = structNew()>
 
-	<cfset local.error.field = "">
-	<cfset local.error.message = arguments.message>
+	<cfset locals.error.field = "">
+	<cfset locals.error.message = arguments.message>
 
 	<cfif NOT structKeyExists(variables, "errors")>
 		<cfset variables.errors = arrayNew(1)>
 	</cfif>
 
-	<cfset arrayAppend(variables.errors, local.error)>
+	<cfset arrayAppend(variables.errors, locals.error)>
 
 	<cfreturn true>
 </cffunction>
 
 
 <cffunction name="valid" returntype="any" access="public" output="false">
-	<cfif CFW_isNew()>
-		<cfset CFW_validateOnCreate()>
+	<cfif _isNew()>
+		<cfset _validateOnCreate()>
 	<cfelse>
-		<cfset CFW_validateOnUpdate()>
+		<cfset _validateOnUpdate()>
 	</cfif>
-	<cfset CFW_validate()>
+	<cfset _validate()>
 	<cfreturn hasNoErrors()>
 </cffunction>
 
@@ -81,48 +81,48 @@
 
 <cffunction name="errorsOn" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="true">
-	<cfset var local = structNew()>
+	<cfset var locals = structNew()>
 
-	<cfset local.all_error_messages = arrayNew(1)>
+	<cfset locals.allErrorMessages = arrayNew(1)>
 
 	<cfif structKeyExists(variables, "errors")>
-		<cfloop from="1" to="#arrayLen(variables.errors)#" index="local.i">
-			<cfif variables.errors[local.i].field IS arguments.field>
-				<cfset arrayAppend(local.all_error_messages, variables.errors[local.i].message)>
+		<cfloop from="1" to="#arrayLen(variables.errors)#" index="locals.i">
+			<cfif variables.errors[locals.i].field IS arguments.field>
+				<cfset arrayAppend(locals.allErrorMessages, variables.errors[locals.i].message)>
 			</cfif>
 		</cfloop>
 	</cfif>
 
-	<cfif NOT structKeyExists(variables, "errors") OR arrayLen(local.all_error_messages) IS 0>
+	<cfif NOT structKeyExists(variables, "errors") OR arrayLen(locals.allErrorMessages) IS 0>
 		<cfreturn false>
 	<cfelse>
-		<cfreturn local.all_error_messages>
+		<cfreturn locals.allErrorMessages>
 	</cfif>
 </cffunction>
 
 
 <cffunction name="errorsOnBase" returntype="any" access="public" output="false">
-	<cfset var local = structNew()>
-	<cfset local.output = errorsOn(field="")>
-	<cfreturn local.output>
+	<cfset var locals = structNew()>
+	<cfset locals.result = errorsOn(field="")>
+	<cfreturn locals.result>
 </cffunction>
 
 
 <cffunction name="allErrors" returntype="any" access="public" output="false">
-	<cfset var local = structNew()>
+	<cfset var locals = structNew()>
 
-	<cfset local.all_error_messages = arrayNew(1)>
+	<cfset locals.allErrorMessages = arrayNew(1)>
 
 	<cfif structKeyExists(variables, "errors")>
-		<cfloop from="1" to="#arrayLen(variables.errors)#" index="local.i">
-			<cfset arrayAppend(local.all_error_messages, variables.errors[local.i].message)>
+		<cfloop from="1" to="#arrayLen(variables.errors)#" index="locals.i">
+			<cfset arrayAppend(locals.allErrorMessages, variables.errors[locals.i].message)>
 		</cfloop>
 	</cfif>
 
-	<cfif NOT structKeyExists(variables, "errors") OR arrayLen(local.all_error_messages) IS 0>
+	<cfif NOT structKeyExists(variables, "errors") OR arrayLen(locals.allErrorMessages) IS 0>
 		<cfreturn false>
 	<cfelse>
-		<cfreturn local.all_error_messages>
+		<cfreturn locals.allErrorMessages>
 	</cfif>
 </cffunction>
 
@@ -131,15 +131,15 @@
 	<cfargument name="field" type="any" required="yes">
 	<cfargument name="message" type="any" required="no" default="">
 	<cfargument name="on" type="any" required="no" default="save">
-	<cfset var local = structNew()>
-	<cfloop list="#arguments.field#" index="local.i">
+	<cfset var locals = structNew()>
+	<cfloop list="#arguments.field#" index="locals.i">
 		<cfif arguments.message IS NOT "">
-			<cfset local.message = arguments.message>
+			<cfset locals.message = arguments.message>
 		<cfelse>
-			<cfset local.message = application.settings.validates_confirmation_of.message>
+			<cfset locals.message = application.settings.validatesConfirmationOf.message>
 		</cfif>
-		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
-		<cfset "variables.class.validations_on_#arguments.on#.validates_confirmation_of.#trim(local.i)#.message" = local.message>
+		<cfset locals.message = replace(locals.message, "[fieldName]", locals.i)>
+		<cfset "variables.class.validationsOn#arguments.on#.validatesConfirmationOf.#trim(locals.i)#.message" = locals.message>
 	</cfloop>
 </cffunction>
 
@@ -148,19 +148,19 @@
 	<cfargument name="field" type="any" required="yes">
 	<cfargument name="message" type="any" required="no" default="">
 	<cfargument name="in" type="any" required="yes">
-	<cfargument name="allow_nil" type="any" required="no" default="false">
-	<cfset var local = structNew()>
+	<cfargument name="allowBlank" type="any" required="no" default="false">
+	<cfset var locals = structNew()>
 	<cfset arguments.in = replace(arguments.in, ", ", ",", "all")>
-	<cfloop list="#arguments.field#" index="local.i">
+	<cfloop list="#arguments.field#" index="locals.i">
 		<cfif arguments.message IS NOT "">
-			<cfset local.message = arguments.message>
+			<cfset locals.message = arguments.message>
 		<cfelse>
-			<cfset local.message = application.settings.validates_exclusion_of.message>
+			<cfset locals.message = application.settings.validatesExclusionOf.message>
 		</cfif>
-		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
-		<cfset "variables.class.validations_on_save.validates_exclusion_of.#trim(local.i)#.message" = local.message>
-		<cfset "variables.class.validations_on_save.validates_exclusion_of.#trim(local.i)#.allow_nil" = arguments.allow_nil>
-		<cfset "variables.class.validations_on_save.validates_exclusion_of.#trim(local.i)#.in" = arguments.in>
+		<cfset locals.message = replace(locals.message, "[fieldName]", locals.i)>
+		<cfset "variables.class.validationsOnSave.validatesExclusionOf.#trim(locals.i)#.message" = locals.message>
+		<cfset "variables.class.validationsOnSave.validatesExclusionOf.#trim(locals.i)#.allowBlank" = arguments.allowBlank>
+		<cfset "variables.class.validationsOnSave.validatesExclusionOf.#trim(locals.i)#.in" = arguments.in>
 	</cfloop>
 </cffunction>
 
@@ -168,20 +168,20 @@
 <cffunction name="validatesFormatOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
 	<cfargument name="message" type="any" required="no" default="">
-	<cfargument name="allow_nil" type="any" required="no" default="false">
+	<cfargument name="allowBlank" type="any" required="no" default="false">
 	<cfargument name="with" type="any" required="yes">
 	<cfargument name="on" type="any" required="no" default="save">
-	<cfset var local = structNew()>
-	<cfloop list="#arguments.field#" index="local.i">
+	<cfset var locals = structNew()>
+	<cfloop list="#arguments.field#" index="locals.i">
 		<cfif arguments.message IS NOT "">
-			<cfset local.message = arguments.message>
+			<cfset locals.message = arguments.message>
 		<cfelse>
-			<cfset local.message = application.settings.validates_format_of.message>
+			<cfset locals.message = application.settings.validatesFormatOf.message>
 		</cfif>
-		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
-		<cfset "variables.class.validations_on_#arguments.on#.validates_format_of.#trim(local.i)#.message" = local.message>
-		<cfset "variables.class.validations_on_#arguments.on#.validates_format_of.#trim(local.i)#.allow_nil" = arguments.allow_nil>
-		<cfset "variables.class.validations_on_#arguments.on#.validates_format_of.#trim(local.i)#.with" = arguments.with>
+		<cfset locals.message = replace(locals.message, "[fieldName]", locals.i)>
+		<cfset "variables.class.validationsOn#arguments.on#.validatesFormatOf.#trim(locals.i)#.message" = locals.message>
+		<cfset "variables.class.validationsOn#arguments.on#.validatesFormatOf.#trim(locals.i)#.allowBlank" = arguments.allowBlank>
+		<cfset "variables.class.validationsOn#arguments.on#.validatesFormatOf.#trim(locals.i)#.with" = arguments.with>
 	</cfloop>
 </cffunction>
 
@@ -190,19 +190,19 @@
 	<cfargument name="field" type="any" required="yes">
 	<cfargument name="message" type="any" required="no" default="">
 	<cfargument name="in" type="any" required="yes">
-	<cfargument name="allow_nil" type="any" required="no" default="false">
-	<cfset var local = structNew()>
+	<cfargument name="allowBlank" type="any" required="no" default="false">
+	<cfset var locals = structNew()>
 	<cfset arguments.in = replace(arguments.in, ", ", ",", "all")>
-	<cfloop list="#arguments.field#" index="local.i">
+	<cfloop list="#arguments.field#" index="locals.i">
 		<cfif arguments.message IS NOT "">
-			<cfset local.message = arguments.message>
+			<cfset locals.message = arguments.message>
 		<cfelse>
-			<cfset local.message = application.settings.validates_inclusion_of.message>
+			<cfset locals.message = application.settings.validatesInclusionOf.message>
 		</cfif>
-		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
-		<cfset "variables.class.validations_on_save.validates_inclusion_of.#trim(local.i)#.message" = local.message>
-		<cfset "variables.class.validations_on_save.validates_inclusion_of.#trim(local.i)#.allow_nil" = arguments.allow_nil>
-		<cfset "variables.class.validations_on_save.validates_inclusion_of.#trim(local.i)#.in" = arguments.in>
+		<cfset locals.message = replace(locals.message, "[fieldName]", locals.i)>
+		<cfset "variables.class.validationsOnsave.validatesInclusionOf.#trim(locals.i)#.message" = locals.message>
+		<cfset "variables.class.validationsOnsave.validatesInclusionOf.#trim(locals.i)#.allowBlank" = arguments.allowBlank>
+		<cfset "variables.class.validationsOnsave.validatesInclusionOf.#trim(locals.i)#.in" = arguments.in>
 	</cfloop>
 </cffunction>
 
@@ -210,29 +210,29 @@
 <cffunction name="validatesLengthOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
 	<cfargument name="message" type="any" required="no" default="">
-	<cfargument name="allow_nil" type="any" required="no" default="false">
+	<cfargument name="allowBlank" type="any" required="no" default="false">
 	<cfargument name="exactly" type="any" required="no" default=0>
 	<cfargument name="maximum" type="any" required="no" default=0>
 	<cfargument name="minimum" type="any" required="no" default=0>
 	<cfargument name="within" type="any" required="no" default="">
 	<cfargument name="on" type="any" required="no" default="save">
-	<cfset var local = structNew()>
+	<cfset var locals = structNew()>
 	<cfif len(arguments.within) IS NOT 0>
 		<cfset arguments.within = listToArray(replace(arguments.within, ", ", ",", "all"))>
 	</cfif>
-	<cfloop list="#arguments.field#" index="local.i">
+	<cfloop list="#arguments.field#" index="locals.i">
 		<cfif arguments.message IS NOT "">
-			<cfset local.message = arguments.message>
+			<cfset locals.message = arguments.message>
 		<cfelse>
-			<cfset local.message = application.settings.validates_length_of.message>
+			<cfset locals.message = application.settings.validatesLengthOf.message>
 		</cfif>
-		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
-		<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#trim(local.i)#.message" = local.message>
-		<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#trim(local.i)#.allow_nil" = arguments.allow_nil>
-		<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#trim(local.i)#.exactly" = arguments.exactly>
-		<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#trim(local.i)#.maximum" = arguments.maximum>
-		<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#trim(local.i)#.minimum" = arguments.minimum>
-		<cfset "variables.class.validations_on_#arguments.on#.validates_length_of.#trim(local.i)#.within" = arguments.within>
+		<cfset locals.message = replace(locals.message, "[fieldName]", locals.i)>
+		<cfset "variables.class.validationsOn#arguments.on#.validatesLengthOf.#trim(locals.i)#.message" = locals.message>
+		<cfset "variables.class.validationsOn#arguments.on#.validatesLengthOf.#trim(locals.i)#.allowBlank" = arguments.allowBlank>
+		<cfset "variables.class.validationsOn#arguments.on#.validatesLengthOf.#trim(locals.i)#.exactly" = arguments.exactly>
+		<cfset "variables.class.validationsOn#arguments.on#.validatesLengthOf.#trim(locals.i)#.maximum" = arguments.maximum>
+		<cfset "variables.class.validationsOn#arguments.on#.validatesLengthOf.#trim(locals.i)#.minimum" = arguments.minimum>
+		<cfset "variables.class.validationsOn#arguments.on#.validatesLengthOf.#trim(locals.i)#.within" = arguments.within>
 	</cfloop>
 </cffunction>
 
@@ -240,20 +240,20 @@
 <cffunction name="validatesNumericalityOf" returntype="any" access="public" output="false">
 	<cfargument name="field" type="any" required="yes">
 	<cfargument name="message" type="any" required="no" default="">
-	<cfargument name="allow_nil" type="any" required="no" default="false">
-	<cfargument name="only_integer" type="any" required="false" default="false">
+	<cfargument name="allowBlank" type="any" required="no" default="false">
+	<cfargument name="onlyInteger" type="any" required="false" default="false">
 	<cfargument name="on" type="any" required="no" default="save">
-	<cfset var local = structNew()>
-	<cfloop list="#arguments.field#" index="local.i">
+	<cfset var locals = structNew()>
+	<cfloop list="#arguments.field#" index="locals.i">
 		<cfif arguments.message IS NOT "">
-			<cfset local.message = arguments.message>
+			<cfset locals.message = arguments.message>
 		<cfelse>
-			<cfset local.message = application.settings.validates_numericality_of.message>
+			<cfset locals.message = application.settings.validatesNumericalityOf.message>
 		</cfif>
-		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
-		<cfset "variables.class.validations_on_#arguments.on#.validates_numericality_of.#trim(local.i)#.message" = local.message>
-		<cfset "variables.class.validations_on_#arguments.on#.validates_numericality_of.#trim(local.i)#.allow_nil" = arguments.allow_nil>
-		<cfset "variables.class.validations_on_#arguments.on#.validates_numericality_of.#trim(local.i)#.only_integer" = arguments.only_integer>
+		<cfset locals.message = replace(locals.message, "[fieldName]", locals.i)>
+		<cfset "variables.class.validationsOn#arguments.on#.validatesNumericalityOf.#trim(locals.i)#.message" = locals.message>
+		<cfset "variables.class.validationsOn#arguments.on#.validatesNumericalityOf.#trim(locals.i)#.allowBlank" = arguments.allowBlank>
+		<cfset "variables.class.validationsOn#arguments.on#.validatesNumericalityOf.#trim(locals.i)#.onlyInteger" = arguments.onlyInteger>
 	</cfloop>
 </cffunction>
 
@@ -262,15 +262,15 @@
 	<cfargument name="field" type="any" required="yes">
 	<cfargument name="message" type="any" required="no" default="">
 	<cfargument name="on" type="any" required="no" default="save">
-	<cfset var local = structNew()>
-	<cfloop list="#arguments.field#" index="local.i">
+	<cfset var locals = structNew()>
+	<cfloop list="#arguments.field#" index="locals.i">
 		<cfif arguments.message IS NOT "">
-			<cfset local.message = arguments.message>
+			<cfset locals.message = arguments.message>
 		<cfelse>
-			<cfset local.message = application.settings.validates_presence_of.message>
+			<cfset locals.message = application.settings.validatesPresenceOf.message>
 		</cfif>
-		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
-		<cfset "variables.class.validations_on_#arguments.on#.validates_presence_of.#trim(local.i)#.message" = local.message>
+		<cfset locals.message = replace(locals.message, "[fieldName]", locals.i)>
+		<cfset "variables.class.validationsOn#arguments.on#.validatesPresenceOf.#trim(locals.i)#.message" = locals.message>
 	</cfloop>
 </cffunction>
 
@@ -279,179 +279,179 @@
 	<cfargument name="field" type="any" required="yes">
 	<cfargument name="message" type="any" required="no" default="">
 	<cfargument name="scope" type="any" required="no" default="">
-	<cfset var local = structNew()>
+	<cfset var locals = structNew()>
 	<cfset arguments.scope = replace(arguments.scope, ", ", ",", "all")>
-	<cfloop list="#arguments.field#" index="local.i">
+	<cfloop list="#arguments.field#" index="locals.i">
 		<cfif arguments.message IS NOT "">
-			<cfset local.message = arguments.message>
+			<cfset locals.message = arguments.message>
 		<cfelse>
-			<cfset local.message = application.settings.validates_uniqueness_of.message>
+			<cfset locals.message = application.settings.validatesUniquenessOf.message>
 		</cfif>
-		<cfset local.message = replace(local.message, "[field_name]", humanize(local.i))>
-		<cfset "variables.class.validations_on_save.validates_uniqueness_of.#trim(local.i)#.message" = local.message>
-		<cfset "variables.class.validations_on_save.validates_uniqueness_of.#trim(local.i)#.scope" = arguments.scope>
+		<cfset locals.message = replace(locals.message, "[fieldName]", locals.i)>
+		<cfset "variables.class.validationsOnsave.validatesUniquenessOf.#trim(locals.i)#.message" = locals.message>
+		<cfset "variables.class.validationsOnsave.validatesUniquenessOf.#trim(locals.i)#.scope" = arguments.scope>
 	</cfloop>
 </cffunction>
 
 
-<cffunction name="CFW_validate" returntype="any" access="public" output="false">
-	<cfset var local = structNew()>
+<cffunction name="_validate" returntype="any" access="public" output="false">
+	<cfset var locals = structNew()>
 	<cfif structKeyExists(variables, "validate")>
-		<cfset local.result = validate()>
+		<cfset locals.result = validate()>
 	</cfif>
-	<cfif NOT isDefined("local.result") OR (isBoolean(local.result) AND local.result)>
-		<cfif structKeyExists(variables.class, "validations_on_save")>
-			<cfset CFW_runValidation(variables.class.validations_on_save)>
+	<cfif NOT isDefined("locals.result") OR (isBoolean(locals.result) AND locals.result)>
+		<cfif structKeyExists(variables.class, "validationsOnSave")>
+			<cfset _runValidation(variables.class.validationsOnSave)>
 		</cfif>
 	</cfif>
 </cffunction>
 
 
-<cffunction name="CFW_validateOnCreate" returntype="any" access="public" output="false">
-	<cfset var local = structNew()>
+<cffunction name="_validateOnCreate" returntype="any" access="public" output="false">
+	<cfset var locals = structNew()>
 	<cfif structKeyExists(variables, "validateOnCreate")>
-		<cfset local.result = validateOnCreate()>
+		<cfset locals.result = validateOnCreate()>
 	</cfif>
-	<cfif NOT isDefined("local.result") OR (isBoolean(local.result) AND local.result)>
-		<cfif structKeyExists(variables.class, "validations_on_create")>
-			<cfset CFW_runValidation(variables.class.validations_on_create)>
+	<cfif NOT isDefined("locals.result") OR (isBoolean(locals.result) AND locals.result)>
+		<cfif structKeyExists(variables.class, "validationsOnCreate")>
+			<cfset _runValidation(variables.class.validationsOnCreate)>
 		</cfif>
 	</cfif>
 </cffunction>
 
 
-<cffunction name="CFW_validateOnUpdate" returntype="any" access="public" output="false">
-	<cfset var local = structNew()>
+<cffunction name="_validateOnUpdate" returntype="any" access="public" output="false">
+	<cfset var locals = structNew()>
 	<cfif structKeyExists(variables, "validateOnUpdate")>
-		<cfset local.result = validateOnUpdate()>
+		<cfset locals.result = validateOnUpdate()>
 	</cfif>
-	<cfif NOT isDefined("local.result") OR (isBoolean(local.result) AND local.result)>
-		<cfif structKeyExists(variables.class, "validations_on_update")>
-			<cfset CFW_runValidation(variables.class.validations_on_update)>
+	<cfif NOT isDefined("locals.result") OR (isBoolean(locals.result) AND locals.result)>
+		<cfif structKeyExists(variables.class, "validationsOnUpdate")>
+			<cfset _runValidation(variables.class.validationsOnUpdate)>
 		</cfif>
 	</cfif>
 </cffunction>
 
 
-<cffunction name="CFW_runValidation" returntype="any" access="private" output="false">
+<cffunction name="_runValidation" returntype="any" access="private" output="false">
 	<cfargument name="validations" type="any" required="true">
-	<cfset var local = structNew()>
+	<cfset var locals = structNew()>
 
-	<cfloop collection="#arguments.validations#" item="local.type">
-		<cfloop collection="#arguments.validations[local.type]#" item="local.field">
-			<cfset local.settings = arguments.validations[local.type][local.field]>
-			<cfswitch expression="#local.type#">
-				<cfcase value="validates_confirmation_of">
-					<cfset local.virtual_confirm_field = "#local.field#_confirmation">
-					<cfif structKeyExists(this, local.virtual_confirm_field)>
-						<cfif this[local.field] IS NOT this[local.virtual_confirm_field]>
-							<cfset addError(local.virtual_confirm_field, local.settings.message)>
+	<cfloop collection="#arguments.validations#" item="locals.type">
+		<cfloop collection="#arguments.validations[locals.type]#" item="locals.field">
+			<cfset locals.settings = arguments.validations[locals.type][locals.field]>
+			<cfswitch expression="#locals.type#">
+				<cfcase value="validatesConfirmationOf">
+					<cfset locals.virtualConfirmField = "#locals.field#Confirmation">
+					<cfif structKeyExists(this, locals.virtualConfirmField)>
+						<cfif this[locals.field] IS NOT this[locals.virtualConfirmField]>
+							<cfset addError(locals.virtualConfirmField, locals.settings.message)>
 						</cfif>
 					</cfif>
 				</cfcase>
-				<cfcase value="validates_exclusion_of">
-					<cfif NOT local.settings.allow_nil AND (NOT structKeyExists(this, local.field) OR len(this[local.field]) IS 0)>
-						<cfset addError(local.field, local.settings.message)>
+				<cfcase value="validatesExclusionOf">
+					<cfif NOT locals.settings.allowBlank AND (NOT structKeyExists(this, locals.field) OR len(this[locals.field]) IS 0)>
+						<cfset addError(locals.field, locals.settings.message)>
 					<cfelse>
-						<cfif structKeyExists(this, local.field) AND len(this[local.field]) IS NOT 0>
-							<cfif listFindNoCase(local.settings.in, this[local.field]) IS NOT 0>
-								<cfset addError(local.field, local.settings.message)>
+						<cfif structKeyExists(this, locals.field) AND len(this[locals.field]) IS NOT 0>
+							<cfif listFindNoCase(locals.settings.in, this[locals.field]) IS NOT 0>
+								<cfset addError(locals.field, locals.settings.message)>
 							</cfif>
 						</cfif>
 					</cfif>
 				</cfcase>
-				<cfcase value="validates_format_of">
-					<cfif NOT local.settings.allow_nil AND (NOT structKeyExists(this, local.field) OR len(this[local.field]) IS 0)>
-						<cfset addError(local.field, local.settings.message)>
+				<cfcase value="validatesFormatOf">
+					<cfif NOT locals.settings.allowBlank AND (NOT structKeyExists(this, locals.field) OR len(this[locals.field]) IS 0)>
+						<cfset addError(locals.field, locals.settings.message)>
 					<cfelse>
-						<cfif structKeyExists(this, local.field) AND len(this[local.field]) IS NOT 0>
-							<cfif NOT REFindNoCase(local.settings.with, this[local.field])>
-								<cfset addError(local.field, local.settings.message)>
+						<cfif structKeyExists(this, locals.field) AND len(this[locals.field]) IS NOT 0>
+							<cfif NOT REFindNoCase(locals.settings.with, this[locals.field])>
+								<cfset addError(locals.field, locals.settings.message)>
 							</cfif>
 						</cfif>
 					</cfif>
 				</cfcase>
-				<cfcase value="validates_inclusion_of">
-					<cfif NOT local.settings.allow_nil AND (NOT structKeyExists(this, local.field) OR len(this[local.field]) IS 0)>
-						<cfset addError(local.field, local.settings.message)>
+				<cfcase value="validatesInclusionOf">
+					<cfif NOT locals.settings.allowBlank AND (NOT structKeyExists(this, locals.field) OR len(this[locals.field]) IS 0)>
+						<cfset addError(locals.field, locals.settings.message)>
 					<cfelse>
-						<cfif structKeyExists(this, local.field) AND len(this[local.field]) IS NOT 0>
-							<cfif listFindNoCase(local.settings.in, this[local.field]) IS 0>
-								<cfset addError(local.field, local.settings.message)>
+						<cfif structKeyExists(this, locals.field) AND len(this[locals.field]) IS NOT 0>
+							<cfif listFindNoCase(locals.settings.in, this[locals.field]) IS 0>
+								<cfset addError(locals.field, locals.settings.message)>
 							</cfif>
 						</cfif>
 					</cfif>
 				</cfcase>
-				<cfcase value="validates_length_of">
-					<cfif NOT local.settings.allow_nil AND (NOT structKeyExists(this, local.field) OR len(this[local.field]) IS 0)>
-						<cfset addError(local.field, local.settings.message)>
+				<cfcase value="validatesLengthOf">
+					<cfif NOT locals.settings.allowBlank AND (NOT structKeyExists(this, locals.field) OR len(this[locals.field]) IS 0)>
+						<cfset addError(locals.field, locals.settings.message)>
 					<cfelse>
-						<cfif structKeyExists(this, local.field) AND len(this[local.field]) IS NOT 0>
-							<cfif local.settings.maximum IS NOT 0>
-								<cfif len(this[local.field]) GT local.settings.maximum>
-									<cfset addError(local.field, local.settings.message)>
+						<cfif structKeyExists(this, locals.field) AND len(this[locals.field]) IS NOT 0>
+							<cfif locals.settings.maximum IS NOT 0>
+								<cfif len(this[locals.field]) GT locals.settings.maximum>
+									<cfset addError(locals.field, locals.settings.message)>
 								</cfif>
-							<cfelseif local.settings.minimum IS NOT 0>
-								<cfif len(this[local.field]) LT local.settings.minimum>
-									<cfset addError(local.field, local.settings.message)>
+							<cfelseif locals.settings.minimum IS NOT 0>
+								<cfif len(this[locals.field]) LT locals.settings.minimum>
+									<cfset addError(locals.field, locals.settings.message)>
 								</cfif>
-							<cfelseif local.settings.exactly IS NOT 0>
-								<cfif len(this[local.field]) IS NOT local.settings.exactly>
-									<cfset addError(local.field, local.settings.message)>
+							<cfelseif locals.settings.exactly IS NOT 0>
+								<cfif len(this[locals.field]) IS NOT locals.settings.exactly>
+									<cfset addError(locals.field, locals.settings.message)>
 								</cfif>
-							<cfelseif isArray(local.settings.within) AND arrayLen(local.settings.within) IS NOT 0>
-								<cfif len(this[local.field]) LT local.settings.within[1] OR len(this[local.field]) GT local.settings.within[2]>
-									<cfset addError(local.field, local.settings.message)>
+							<cfelseif isArray(locals.settings.within) AND arrayLen(locals.settings.within) IS NOT 0>
+								<cfif len(this[locals.field]) LT locals.settings.within[1] OR len(this[locals.field]) GT locals.settings.within[2]>
+									<cfset addError(locals.field, locals.settings.message)>
 								</cfif>
 							</cfif>
 						</cfif>
 					</cfif>
 				</cfcase>
-				<cfcase value="validates_numericality_of">
-					<cfif NOT local.settings.allow_nil AND (NOT structKeyExists(this, local.field) OR len(this[local.field]) IS 0)>
+				<cfcase value="validatesNumericalityOf">
+					<cfif NOT locals.settings.allowBlank AND (NOT structKeyExists(this, locals.field) OR len(this[locals.field]) IS 0)>
 						<cfset addError(field, settings.message)>
 					<cfelse>
-						<cfif structKeyExists(this, local.field) AND len(this[local.field]) IS NOT 0>
-							<cfif NOT isNumeric(this[local.field])>
-								<cfset addError(local.field, local.settings.message)>
-							<cfelseif local.settings.only_integer AND round(this[local.field]) IS NOT this[local.field]>
-								<cfset addError(local.field, local.settings.message)>
+						<cfif structKeyExists(this, locals.field) AND len(this[locals.field]) IS NOT 0>
+							<cfif NOT isNumeric(this[locals.field])>
+								<cfset addError(locals.field, locals.settings.message)>
+							<cfelseif locals.settings.onlyInteger AND round(this[locals.field]) IS NOT this[locals.field]>
+								<cfset addError(locals.field, locals.settings.message)>
 							</cfif>
 						</cfif>
 					</cfif>
 				</cfcase>
-				<cfcase value="validates_presence_of">
-					<cfif NOT structKeyExists(this, local.field) OR len(this[local.field]) IS 0>
-						<cfset addError(local.field, local.settings.message)>
+				<cfcase value="validatesPresenceOf">
+					<cfif NOT structKeyExists(this, locals.field) OR len(this[locals.field]) IS 0>
+						<cfset addError(locals.field, locals.settings.message)>
 					</cfif>
 				</cfcase>
-				<cfcase value="validates_uniqueness_of">
-					<cfquery name="local.query" datasource="#variables.class.database.read.datasource#" timeout="#variables.class.database.read.timeout#" username="#variables.class.database.read.username#" password="#variables.class.database.read.password#">
-					SELECT #variables.class.primary_key#, #local.field#
-					FROM #variables.class.table_name#
-					WHERE #local.field# = <cfqueryparam cfsqltype="#variables.class.columns[local.field].cfsqltype#" value="#this[local.field]#">
-					<cfif structKeyExists(variables.class.columns, "deleted_at") OR structKeyExists(variables.class.columns, "deleted_on")>
-						<cfif structKeyExists(variables.class.columns, "deleted_at")>
-							<cfset local.soft_delete_field = "deleted_at">
-						<cfelseif structKeyExists(variables.class.columns, "deleted_on")>
-							<cfset local.soft_delete_field = "deleted_on">
+				<cfcase value="validatesUniquenessOf">
+					<cfquery name="locals.query" datasource="#variables.class.database.read.datasource#" username="#variables.class.database.read.username#" password="#variables.class.database.read.password#">
+					SELECT #variables.class.primaryKey#, #locals.field#
+					FROM #variables.class.tableName#
+					WHERE #locals.field# = <cfqueryparam cfsqltype="#variables.class.fields[locals.field].cfsqltype#" value="#this[locals.field]#">
+					<cfif structKeyExists(variables.class.fields, "deletedAt") OR structKeyExists(variables.class.fields, "deletedOn")>
+						<cfif structKeyExists(variables.class.fields, "deletedAt")>
+							<cfset locals.softDeleteField = "deletedAt">
+						<cfelseif structKeyExists(variables.class.fields, "deletedOn")>
+							<cfset locals.softDeleteField = "deletedOn">
 						</cfif>
-						AND #variables.class.table_name#.#local.soft_delete_field# IS NULL
+						AND #variables.class.tableName#.#locals.softDeleteField# IS NULL
 					</cfif>
-					<cfif len(local.settings.scope) IS NOT 0>
+					<cfif len(locals.settings.scope) IS NOT 0>
 						AND
-						<cfset local.pos = 0>
-						<cfloop list="#local.settings.scope#" index="local.i">
-							<cfset local.pos = local.pos + 1>
-							#local.i# = <cfqueryparam cfsqltype="#variables.class.columns[local.field].cfsqltype#" value="#this[local.i]#">
-							<cfif listLen(local.settings.scope) GT local.pos>
+						<cfset locals.pos = 0>
+						<cfloop list="#locals.settings.scope#" index="locals.i">
+							<cfset locals.pos = locals.pos + 1>
+							#locals.i# = <cfqueryparam cfsqltype="#variables.class.fields[locals.field].cfsqltype#" value="#this[locals.i]#">
+							<cfif listLen(locals.settings.scope) GT locals.pos>
 								AND
 							</cfif>
 						</cfloop>
 					</cfif>
 					</cfquery>
-					<cfif (NOT structKeyExists(this, variables.class.primary_key) AND local.query.recordcount GT 0) OR (structKeyExists(this, variables.class.primary_key) AND local.query.recordcount GT 0 AND local.query[variables.class.primary_key][1] IS NOT this[variables.class.primary_key])>
-						<cfset addError(local.field, local.settings.message)>
+					<cfif (NOT structKeyExists(this, variables.class.primaryKey) AND locals.query.recordCount GT 0) OR (structKeyExists(this, variables.class.primaryKey) AND locals.query.recordCount GT 0 AND locals.query[variables.class.primaryKey][1] IS NOT this[variables.class.primaryKey])>
+						<cfset addError(locals.field, locals.settings.message)>
 					</cfif>
 				</cfcase>
 			</cfswitch>

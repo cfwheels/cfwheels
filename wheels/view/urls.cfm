@@ -1,63 +1,82 @@
-<cffunction name="buttonTo" returntype="any" access="public" output="false">
-	<cfargument name="link" type="any" required="false" default="">
+<cffunction name="linkTo" returntype="any" access="public" output="false">
+	<cfargument name="url" type="any" required="false" default="">
 	<cfargument name="text" type="any" required="false" default="">
 	<cfargument name="confirm" type="any" required="false" default="">
-	<cfargument name="image" type="any" required="false" default="">
-	<cfargument name="disable" type="any" required="false" default="">
-	<cfargument name="class" type="any" required="false" default="button-to">
+	<cfargument name="attributes" type="any" required="false" default="">
 	<!--- Accepts URLFor arguments --->
-	<cfset var local = structNew()>
+	<cfset var locals = structNew()>
 
-	<cfset arguments.CFW_named_arguments = "link,text,confirm,image,disable,controller,action,id,anchor,only_path,host,protocol,params">
-	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
-		<!--- Since a non-numeric id was passed in we assume it is meant as a HTML attribute and therefore remove it from the named arguments list so that it will be set in the attributes --->
-		<cfset arguments.CFW_named_arguments = listDeleteAt(arguments.CFW_named_arguments, listFindNoCase(arguments.CFW_named_arguments, "id"))>
-	</cfif>
-	<cfset local.attributes = CFW_getAttributes(argumentCollection=arguments)>
-	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
-		<cfset structDelete(arguments, "id")>
-	</cfif>
-
-	<cfif len(arguments.link) IS NOT 0>
-		<cfset local.action = arguments.link>
+	<cfif len(arguments.url) IS NOT 0>
+		<cfset locals.href = arguments.url>
 	<cfelse>
-		<cfset local.action = URLFor(argumentCollection=arguments)>
+		<cfset locals.href = URLFor(argumentCollection=arguments)>
 	</cfif>
 
-	<cfif len(arguments.image) IS NOT 0>
-		<cfset local.source = "#application.wheels.web_path##application.settings.paths.images#/#arguments.image#">
+	<cfif len(arguments.text) IS 0>
+		<cfset arguments.text = locals.href>
 	</cfif>
 
-	<cfif len(arguments.disable) IS NOT 0>
-		<cfset local.onclick = "this.disabled=true;">
-		<cfif len(arguments.image) IS 0 AND NOT isBoolean(arguments.disable)>
-			<cfset local.onclick = local.onclick & "this.value='#arguments.disable#';">
-		</cfif>
-		<cfset local.onclick = local.onclick & "this.form.submit();">
-	</cfif>
-
-	<cfset local.html = "">
-	<cfset local.html = local.html & "<form action=""#local.action#"" method=""post""">
 	<cfif len(arguments.confirm) IS NOT 0>
-		<cfset local.html = local.html & " onsubmit=""return confirm('#JSStringFormat(arguments.confirm)#');""">
-	</cfif>
-	<cfset local.html = local.html & local.attributes>
-	<cfset local.html = local.html & ">">
-	<cfset local.html = local.html & "<input">
-	<cfif len(arguments.text) IS NOT 0>
-		<cfset local.html = local.html & " value=""#arguments.text#""">
-	</cfif>
-	<cfif len(arguments.image) IS 0>
-		<cfset local.html = local.html & " type=""submit""">
+		<cfset locals.confirm = " onclick=""return confirm('#arguments.confirm#')"" ">
 	<cfelse>
-		<cfset local.html = local.html & " type=""image"" src=""#local.source#""">
+		<cfset locals.confirm = "">
+	</cfif>
+
+	<cfset locals.result = "<a href=""#locals.href#""#locals.confirm##_HTMLAttributes(attributes)#>#arguments.text#</a>">
+
+	<cfreturn locals.result>
+</cffunction>
+
+
+<cffunction name="buttonTo" returntype="any" access="public" output="false">
+	<cfargument name="url" type="any" required="false" default="">
+	<cfargument name="text" type="any" required="false" default="">
+	<cfargument name="confirm" type="any" required="false" default="">
+	<cfargument name="disable" type="any" required="false" default="">
+	<cfargument name="source" type="any" required="false" default="">
+	<!--- Accepts URLFor arguments --->
+	<cfset var locals = structNew()>
+
+	<cfif len(arguments.url) IS NOT 0>
+		<cfset locals.action = arguments.url>
+	<cfelse>
+		<cfset locals.action = URLFor(argumentCollection=arguments)>
+	</cfif>
+
+	<!--- create the form tag --->
+	<cfset locals.result = "<form action=""#locals.action#"" method=""post""">
+	<cfif len(arguments.confirm) IS NOT 0>
+		<cfset locals.result = locals.result & " onsubmit=""return confirm('#JSStringFormat(replace(arguments.confirm, """", '&quot;', 'all'))#');""">
+	</cfif>
+	<cfset locals.result = locals.result & ">">
+
+	<!--- create the input tag --->
+	<cfset locals.result = locals.result & "<input">
+	<cfif len(arguments.text) IS NOT 0>
+		<cfset arguments.html_value = arguments.text>
+	</cfif>
+	<cfif len(arguments.source) IS 0>
+		<cfset arguments.html_type = "submit">
+	<cfelse>
+		<cfset arguments.html_type = "image">
+		<cfset arguments.html_src = "#application.wheels.web_path##application.settings.paths.images#/#arguments.source#">
 	</cfif>
 	<cfif len(arguments.disable) IS NOT 0>
-		<cfset local.html = local.html & " onclick=""#local.onclick#""">
+		<cfset arguments.html_onclick = locals.onclick>
 	</cfif>
-	<cfset local.html = local.html & " /></form>">
+	<cfif len(arguments.disable) IS NOT 0>
+		<cfset arguments.html_onclick = "this.disabled=true;">
+		<cfif len(arguments.source) IS 0 AND NOT isBoolean(arguments.disable)>
+			<cfset arguments.html_onclick = arguments.html_onclick & "this.value='#arguments.disable#';">
+		</cfif>
+		<cfset arguments.html_onclick = arguments.html_onclick & "this.form.submit();">
+	</cfif>
+	<cfset locals.result = locals.result & "#_HTMLAttributes(argumentCollection=arguments)# />">
 
-	<cfreturn local.html>
+	<!--- create the closing form tag --->
+	<cfset locals.result = locals.result & "</form>">
+
+	<cfreturn locals.result>
 </cffunction>
 
 
@@ -65,63 +84,56 @@
 	<cfargument name="email" type="any" required="true">
 	<cfargument name="text" type="any" required="false" default="">
 	<cfargument name="encode" type="any" required="false" default="false">
-	<cfset var local = structNew()>
+	<cfset var locals = structNew()>
 
-	<cfset link_to_arguments = structNew()>
-
-	<cfset link_to_arguments.link = "mailto:#arguments.email#">
+	<cfset locals.linkToArguments = structNew()>
+	<cfset locals.linkToArguments.url = "mailto:#arguments.email#">
 	<cfif len(arguments.text) IS 0>
-		<cfset link_to_arguments.text = arguments.email>
+		<cfset locals.linkToArguments.text = arguments.email>
 	<cfelse>
-		<cfset link_to_arguments.text = arguments.text>
+		<cfset locals.linkToArguments.text = arguments.text>
 	</cfif>
-
-	<cfsavecontent variable="local.html">
-		<cfoutput>
-			#linkTo(argumentCollection=link_to_arguments)#
-		</cfoutput>
-	</cfsavecontent>
+	<cfset locals.result = linkTo(argumentCollection=locals.linkToArguments)>
 
 	<cfif arguments.encode>
-		<cfset local.js = "document.write('#trim(local.html)#');">
-		<cfset local.encoded = "">
-		<cfloop from="1" to="#len(local.js)#" index="local.i">
-			<cfset local.encoded = local.encoded & "%" & right("0" & formatBaseN(asc(mid(local.js,local.i,1)),16),2)>
+		<cfset locals.js = "document.write('#trim(locals.result)#');">
+		<cfset locals.encoded = "">
+		<cfloop from="1" to="#len(locals.js)#" index="locals.i">
+			<cfset locals.encoded = locals.encoded & "%" & right("0" & formatBaseN(asc(mid(locals.js,locals.i,1)),16),2)>
 		</cfloop>
-		<cfset local.html = "<script type=""text/javascript"" language=""javascript"">eval(unescape('#local.encoded#'))</script>">
+		<cfset locals.result = "<script type=""text/javascript"" language=""javascript"">eval(unescape('#locals.encoded#'))</script>">
 	</cfif>
 
-	<cfreturn CFW_trimHTML(local.html)>
+	<cfreturn locals.result>
 </cffunction>
 
 
 <cffunction name="linkToUnlessCurrent" returntype="any" access="public" output="false">
-	<!--- accepts URLFor arguments --->
-	<cfset var local = structNew()>
-
-	<cfsavecontent variable="local.output">
-		<cfoutput>
-			<cfif isCurrentPage(argumentCollection=arguments)>
-				#arguments.text#
-			<cfelse>
-				#linkTo(argumentCollection=arguments)#
-			</cfif>
-		</cfoutput>
-	</cfsavecontent>
-
-	<cfreturn CFW_trimHTML(local.output)>
+	<!--- accepts linkTo and URLFor arguments --->
+	<cfset var locals = structNew()>
+	<cfif isCurrentPage(argumentCollection=arguments)>
+		<cfset locals.result = arguments.text>
+	<cfelse>
+		<cfset locals.result = linkTo(argumentCollection=arguments)>
+	</cfif>
+	<cfreturn locals.result>
 </cffunction>
 
 
-<cffunction name="isCurrentPage" returntype="any" access="private" output="false">
+<cffunction name="isCurrentPage" returntype="any" access="public" output="false">
 	<!--- accepts URLFor arguments --->
-	<cfset var local = structNew()>
-	<cfset local.new_url = urlFor(argumentCollection=arguments)>
-	<cfset local.current_url = right(CGI.script_name, len(CGI.script_name)-1)>
-	<cfif len(CGI.query_string) IS NOT 0>
-		<cfset local.current_url = local.current_url & "?" & CGI.query_string>
+	<cfset var locals = structNew()>
+	<cfset locals.new_url = urlFor(argumentCollection=arguments)>
+	<cfset locals.current_url = CGI.script_name>
+	<cfif CGI.script_name IS NOT CGI.path_info>
+		<cfset locals.current_url = locals.current_url & CGI.path_info>
 	</cfif>
-	<cfif local.current_url IS local.new_url>
+	<cfset locals.current_url = replace(locals.current_url, "rewrite.cfm/", "")>
+	<cfif len(CGI.query_string) IS NOT 0>
+		<cfset locals.current_url = locals.current_url & "?" & CGI.query_string>
+	</cfif>
+	<!--- <cfoutput>#locals.current_url# IS #locals.new_url#</cfoutput><cfabort> --->
+	<cfif locals.current_url IS locals.new_url OR locals.current_url IS "/index.cfm" AND locals.new_url IS "/">
 		<cfreturn true>
 	<cfelse>
 		<cfreturn false>

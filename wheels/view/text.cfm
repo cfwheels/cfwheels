@@ -1,3 +1,22 @@
+<cffunction name="capitalize" returntype="any" access="public" output="false">
+	<cfargument name="text" type="any" required="true">
+	<cfreturn uCase(left(arguments.text, 1)) & mid(arguments.text, 2, len(arguments.text)-1)>
+</cffunction>
+
+
+<cffunction name="titleize" returntype="any" access="public" output="false">
+	<cfargument name="text" type="any" required="true">
+	<cfset var locals = structNew()>
+
+	<cfset locals.result = "">
+	<cfloop list="#arguments.text#" delimiters=" " index="locals.i">
+		<cfset locals.result = listAppend(locals.result, capitalize(locals.i), " ")>
+	</cfloop>
+
+	<cfreturn locals.result>
+</cffunction>
+
+
 <cffunction name="simpleFormat" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="yes">
 	<cfset var local = structNew()>
@@ -60,4 +79,49 @@
 <cffunction name="stripLinks" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">
 	<cfreturn REReplaceNoCase(arguments.text, "<a.*?>(.*?)</a>", "\1" , "all")>
+</cffunction>
+
+
+<cffunction name="excerpt" returntype="any" access="public" output="false">
+	<cfargument name="text" type="any" required="true">
+	<cfargument name="phrase" type="any" required="true">
+	<cfargument name="radius" type="any" required="false" default="100">
+	<cfargument name="excerpt_string" type="any" required="false" default="...">
+	<cfset var local = structNew()>
+
+	<cfset local.pos = findNoCase(arguments.phrase, arguments.text, 1)>
+	<cfif local.pos IS NOT 0>
+		<cfset local.excerpt_string_start = arguments.excerpt_string>
+		<cfset local.excerpt_string_end = arguments.excerpt_string>
+		<cfset local.start = local.pos-arguments.radius>
+		<cfif local.start LTE 0>
+			<cfset local.start = 1>
+			<cfset local.excerpt_string_start = "">
+		</cfif>
+		<cfset local.count = len(arguments.phrase)+(arguments.radius*2)>
+		<cfif local.count GT (len(arguments.text)-local.start)>
+			<cfset local.excerpt_string_end = "">
+		</cfif>
+		<cfset local.output = local.excerpt_string_start & mid(arguments.text, local.start, local.count) & local.excerpt_string_end>
+	<cfelse>
+		<cfset local.output = "">
+	</cfif>
+
+	<cfreturn local.output>
+</cffunction>
+
+
+<cffunction name="truncate" returntype="any" access="public" output="false">
+	<cfargument name="text" type="any" required="true">
+	<cfargument name="length" type="any" required="true">
+	<cfargument name="truncate_string" type="any" required="false" default="...">
+	<cfset var local = structNew()>
+
+	<cfif len(arguments.text) GT arguments.length>
+		<cfset local.output = left(arguments.text, arguments.length-3) & arguments.truncate_string>
+	<cfelse>
+		<cfset local.output = arguments.text>
+	</cfif>
+
+	<cfreturn local.output>
 </cffunction>

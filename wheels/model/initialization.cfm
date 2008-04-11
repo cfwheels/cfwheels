@@ -1,19 +1,19 @@
 <cffunction name="_initModelClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
-	<cfset var local = structNew()>
+	<cfset var locals = structNew()>
 
-	<!--- set model name --->
+	<!--- setup defaults --->
+	<cfset variables.class = structNew()>
+	<cfset variables.class.fields = structNew()>
+	<cfset variables.class.composedFields = structNew()>
 	<cfset variables.class.name = arguments.name>
-
-	<!--- set defaults --->
-	<cfset variables.class.table_name = pluralize(variables.class.name)>
-	<cfset variables.class.primary_key = "id">
-	<cfloop list="create,read,update,delete" index="local.i">
-		<cfset variables.class.database[local.i] = structNew()>
-		<cfset variables.class.database[local.i].datasource = application.settings.database[local.i].datasource>
-		<cfset variables.class.database[local.i].username = application.settings.database[local.i].username>
-		<cfset variables.class.database[local.i].password = application.settings.database[local.i].password>
-		<cfset variables.class.database[local.i].timeout = application.settings.database[local.i].timeout>
+	<cfset variables.class.tableName = _pluralize(variables.class.name)>
+	<cfset variables.class.primaryKey = "id">
+	<cfloop list="create,read,update,delete" index="locals.i">
+		<cfset variables.class.database[locals.i] = structNew()>
+		<cfset variables.class.database[locals.i].datasource = application.settings.database[locals.i].datasource>
+		<cfset variables.class.database[locals.i].username = application.settings.database[locals.i].username>
+		<cfset variables.class.database[locals.i].password = application.settings.database[locals.i].password>
 	</cfloop>
 
 	<!--- call init to override defaults if it exists --->
@@ -21,68 +21,57 @@
 		<cfset init()>
 	</cfif>
 
-	<cfquery name="local.query" datasource="#variables.class.database.read.datasource#" timeout="#variables.class.database.read.timeout#" username="#variables.class.database.read.username#" password="#variables.class.database.read.password#">
+	<cfquery name="locals.query" datasource="#variables.class.database.read.datasource#" username="#variables.class.database.read.username#" password="#variables.class.database.read.password#">
 	SELECT<cfif application.wheels.database.type IS "sqlserver"> TOP 1</cfif> *
-	FROM #variables.class.table_name#
+	FROM #variables.class.tableName#
 	<cfif application.wheels.database.type IS "mysql">LIMIT 1</cfif>
 	</cfquery>
 
-	<cfset local.query_metadata = getMetaData(local.query)>
-	<cfloop from="1" to="#arrayLen(local.query_metadata)#" index="local.i">
-		<cfset local.name = local.query_metadata[local.i].Name>
-		<cfset local.type = spanExcluding(local.query_metadata[local.i].TypeName, " ")>
-		<cfset "variables.class.columns.#local.name#.type" = local.type>
-		<cfset "variables.class.columns.#local.name#.cfsqltype" = application.wheels.adapter.getCFSQLType(local.type)>
-		<cfif local.name IS variables.class.primary_key>
-			<cfset "variables.class.columns.#local.name#.primary_key" = true>
+	<!--- setup fields --->
+	<cfset locals.queryMetadata = getMetaData(locals.query)>
+	<cfloop from="1" to="#arrayLen(locals.queryMetadata)#" index="locals.i">
+		<cfset locals.name = locals.queryMetadata[locals.i].name>
+		<cfset locals.type = spanExcluding(locals.queryMetadata[locals.i].typeName, " ")>
+		<cfset variables.class.fields[locals.name] = structNew()>
+		<cfset variables.class.fields[locals.name].type = locals.type>
+		<cfset variables.class.fields[locals.name].cfsqltype = application.wheels.adapter.getCFSQLType(locals.type)>
+		<cfif locals.name IS variables.class.primaryKey>
+			<cfset variables.class.fields[locals.name].primaryKey = true>
 		<cfelse>
-			<cfset "variables.class.columns.#local.name#.primary_key" = false>
+			<cfset variables.class.fields[locals.name].primaryKey = false>
 		</cfif>
 	</cfloop>
-
-	<!--- create a list of all columns in the table --->
-	<cfset variables.class.field_list = lCase(local.query.columnlist)>
-
-	<!--- create a list of the virtual fields if they exist --->
-	<cfif structKeyExists(variables.class, "virtual_fields")>
-		<cfset variables.class.virtual_field_list = structKeyList(variables.class.virtual_fields)>
-	<cfelse>
-		<cfset variables.class.virtual_field_list = "">
-	</cfif>
-
-	<!--- create a list of all attributes (columns in the table and composed columns) --->
-	<cfset variables.class.attribute_list = variables.class.field_list>
-	<cfif variables.class.virtual_field_list IS NOT "">
-		<cfset variables.class.attribute_list = listAppend(variables.class.attribute_list, variables.class.virtual_field_list)>
-	</cfif>
+	<cfset variables.class.fieldList = structKeyList(variables.class.fields)>
+	<cfset variables.class.composedFieldList = structKeyList(variables.class.composedFields)>
+	<cfset variables.class.propertyList = listAppend(variables.class.fieldList, variables.class.composedFieldList)>
 
 	<cfreturn this>
 </cffunction>
 
 
-<cffunction name="CFW_createModelObject" returntype="any" access="private" output="false">
-	<cfargument name="attributes" type="any" required="no" default="">
-	<cfreturn createObject("component", "models.#variables.class.name#").CFW_initModelObject(variables.class.name, arguments.attributes)>
+<cffunction name="_createModelObject" returntype="any" access="private" output="false">
+	<cfargument name="properties" type="any" required="true">
+	<cfreturn createObject("component", "modelRoot.#variables.class.name#")._initModelObject(variables.class.name, arguments.properties)>
 </cffunction>
 
 
-<cffunction name="CFW_initModelObject" returntype="any" access="public" output="false">
+<cffunction name="_initModelObject" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="yes">
-	<cfargument name="attributes" type="any" required="no" default="">
-	<cfset var local = structNew()>
+	<cfargument name="properties" type="any" required="no" default="">
+	<cfset var locals = structNew()>
 
-	<cflock name="model_lock" type="readonly" timeout="30">
-		<cfset variables.class = application.wheels.models[arguments.name].getModelClassData()>
+	<cflock name="modelLock" type="readonly" timeout="30">
+		<cfset variables.class = application.wheels.models[arguments.name]._getModelClassData()>
 	</cflock>
 
-	<!--- setup object attributes in the this scope --->
-	<cfif isQuery(arguments.attributes) AND arguments.attributes.recordcount IS NOT 0>
-		<cfloop list="#arguments.attributes.columnlist#" index="local.i">
-			<cfset this[local.i] = arguments.attributes[local.i][1]>
+	<!--- setup object properties in the this scope --->
+	<cfif isQuery(arguments.properties) AND arguments.properties.recordCount IS NOT 0>
+		<cfloop list="#arguments.properties.columnList#" index="locals.i">
+			<cfset this[locals.i] = arguments.properties[locals.i][1]>
 		</cfloop>
-	<cfelseif isStruct(arguments.attributes) AND NOT structIsEmpty(arguments.attributes)>
-		<cfloop collection="#arguments.attributes#" item="local.i">
-			<cfset this[local.i] = arguments.attributes[local.i]>
+	<cfelseif isStruct(arguments.properties) AND NOT structIsEmpty(arguments.properties)>
+		<cfloop collection="#arguments.properties#" item="locals.i">
+			<cfset this[locals.i] = arguments.properties[locals.i]>
 		</cfloop>
 	</cfif>
 

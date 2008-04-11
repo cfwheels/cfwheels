@@ -1,5 +1,5 @@
 # RewriteEngine on
-# RewriteRule ^$ /index_rewrite.cfm [QSA]
+# RewriteRule ^$ /rewrite.cfm [QSA]
 # RewriteRule ^([^.]+)$ $1.htm [QSA]
 # RewriteCond %{REQUEST_FILENAME} !-f
-# RewriteRule ^(.*)$ /index_rewrite.cfm/%{REQUEST_URI} [QSA,L]
+# RewriteRule ^(.*)$ /rewrite.cfm/%{REQUEST_URI} [QSA,L]

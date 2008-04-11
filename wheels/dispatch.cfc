@@ -1,3 +1,3 @@
-<cfcomponent extends="wheels.base" output="false">
+<cfcomponent extends="base" output="false">
 	<cfinclude template="dispatch/request.cfm">
 </cfcomponent>

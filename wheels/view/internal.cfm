@@ -1,12 +1,28 @@
-<cffunction name="CFW_optionsForSelect" returntype="any" access="private" output="false">
+<cffunction name="_HTMLAttributes" returntype="any" access="private" output="false">
+	<cfargument name="attributes" type="any" required="true">
+	<cfset var locals = structNew()>
+	<cfset locals.result = arguments.attributes>
+	<cfif len(locals.result) IS NOT 0>
+		<cfif locals.result Does Not Contain """" AND locals.result Does Not Contain "'">
+			<cfset locals.result = REReplace(locals.result, "=", "=""", "all")>
+			<cfset locals.result = REReplace(locals.result, "( [^=]*=)", """\1", "all")>
+			<cfset locals.result = locals.result & """">
+		</cfif>
+		<cfset locals.result = " " & locals.result>
+	</cfif>
+	<cfreturn locals.result>
+</cffunction>
+
+
+<cffunction name="_optionsForSelect" returntype="any" access="private" output="false">
 	<cfargument name="options" type="any" required="true">
 	<cfargument name="value_field" type="any" required="false" default="id">
 	<cfargument name="text_field" type="any" required="false" default="name">
 	<cfset var local = structNew()>
 
-	<cfset local.value = CFW_formValue(argumentCollection=arguments)>
+	<cfset local.value = _formValue(argumentCollection=arguments)>
 	<cfif structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
-		<cfset local.value = encryptParam(local.value)>
+		<cfset local.value = obfuscateParam(local.value)>
 	</cfif>
 
 	<cfsavecontent variable="local.output">
@@ -16,7 +32,7 @@
 					<cfset local.option_value = arguments.options[arguments.value_field][currentrow]>
 					<cfset local.option_text = arguments.options[arguments.text_field][currentrow]>
 					<cfif structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
-						<cfset local.option_value = encryptParam(local.option_value)>
+						<cfset local.option_value = obfuscateParam(local.option_value)>
 					</cfif>
 					<option value="#local.option_value#"<cfif listFindNoCase(local.value, local.option_value) IS NOT 0> selected="selected"</cfif>>#local.option_text#</option>
 				</cfloop>
@@ -25,7 +41,7 @@
 					<cfset local.option_value = local.i>
 					<cfset local.option_text = arguments.options[local.i]>
 					<cfif structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
-						<cfset local.option_value = encryptParam(local.option_value)>
+						<cfset local.option_value = obfuscateParam(local.option_value)>
 					</cfif>
 					<option value="#local.option_value#"<cfif listFindNoCase(local.value, local.option_value) IS NOT 0> selected="selected"</cfif>>#local.option_text#</option>
 				</cfloop>
@@ -34,7 +50,7 @@
 					<cfset local.option_value = local.i>
 					<cfset local.option_text = arguments.options[local.i]>
 					<cfif structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
-						<cfset local.option_value = encryptParam(local.option_value)>
+						<cfset local.option_value = obfuscateParam(local.option_value)>
 					</cfif>
 					<option value="#local.option_value#"<cfif listFindNoCase(local.value, local.option_value) IS NOT 0> selected="selected"</cfif>>#local.option_text#</option>
 				</cfloop>
@@ -43,7 +59,7 @@
 					<cfset local.option_value = local.i>
 					<cfset local.option_text = local.i>
 					<cfif structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
-						<cfset local.option_value = encryptParam(local.option_value)>
+						<cfset local.option_value = obfuscateParam(local.option_value)>
 					</cfif>
 					<option value="#local.option_value#"<cfif listFindNoCase(local.value, local.option_value) IS NOT 0> selected="selected"</cfif>>#local.option_text#</option>
 				</cfloop>
@@ -51,11 +67,11 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn CFW_trimHTML(local.output)>
+	<cfreturn _trimHTML(local.output)>
 </cffunction>
 
 
-<cffunction name="CFW_formValue" returntype="any" access="private" output="false">
+<cffunction name="_formValue" returntype="any" access="private" output="false">
 	<cfargument name="object_name" type="any" required="false" default="">
 	<cfargument name="field" type="any" required="false" default="">
 	<cfargument name="name" type="any" required="false" default="">
@@ -78,7 +94,7 @@
 </cffunction>
 
 
-<cffunction name="CFW_formHasError" returntype="any" access="private" output="false">
+<cffunction name="_formHasError" returntype="any" access="private" output="false">
 	<cfargument name="object_name" type="any" required="false" default="">
 	<cfargument name="field" type="any" required="false" default="">
 	<cfargument name="name" type="any" required="false" default="">
@@ -97,7 +113,7 @@
 </cffunction>
 
 
-<cffunction name="CFW_formBeforeElement" returntype="any" access="private" output="false">
+<cffunction name="_formBeforeElement" returntype="any" access="private" output="false">
 	<cfargument name="object_name" type="any" required="false" default="">
 	<cfargument name="field" type="any" required="false" default="">
 	<cfargument name="name" type="any" required="false" default="">
@@ -112,7 +128,7 @@
 	<cfset var local = structNew()>
 
 	<cfset local.output = "">
-	<cfif CFW_formHasError(argumentCollection=arguments)>
+	<cfif _formHasError(argumentCollection=arguments)>
 		<cfset local.output = local.output & "<#arguments.error_element# class=""field-with-errors"">">
 	</cfif>
 
@@ -139,7 +155,7 @@
 </cffunction>
 
 
-<cffunction name="CFW_formAfterElement" returntype="any" access="private" output="false">
+<cffunction name="_formAfterElement" returntype="any" access="private" output="false">
 	<cfargument name="object_name" type="any" required="false" default="">
 	<cfargument name="field" type="any" required="false" default="">
 	<cfargument name="name" type="any" required="false" default="">
@@ -161,7 +177,7 @@
 			<cfset local.output = local.output & arguments.append_to_label>
 		</cfif>
 	</cfif>
-	<cfif CFW_formHasError(argumentCollection=arguments)>
+	<cfif _formHasError(argumentCollection=arguments)>
 		<cfset local.output = local.output & "</#arguments.error_element#>">
 	</cfif>
 

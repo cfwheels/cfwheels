@@ -1,18 +1,18 @@
-<cffunction name="cachesAction" returntype="any" access="public" output="false">
-	<cfargument name="actions" type="any" required="true">
-	<cfargument name="time" type="any" required="false" default="#application.settings.caching.actions#">
-	<cfset var local = structNew()>
+<cffunction name="caches" returntype="any" access="public" output="false">
+	<cfargument name="actions" type="any" required="false" default="">
+	<cfargument name="time" type="any" required="false" default="#application.settings.defaultCacheTime#">
+	<cfset var locals = structNew()>
 
-	<cfloop list="#arguments.actions#" index="local.i">
-		<cfset local.this_action = structNew()>
-		<cfset local.this_action.action = trim(local.i)>
-		<cfset local.this_action.time = arguments.time>
-		<cfset arrayAppend(variables.wheels.cachable_actions, local.this_action)>
+	<cfloop list="#arguments.actions#" index="locals.i">
+		<cfset locals.thisAction = structNew()>
+		<cfset locals.thisAction.action = trim(locals.i)>
+		<cfset locals.thisAction.time = arguments.time>
+		<cfset arrayAppend(variables.wheels.cachableActions, locals.thisAction)>
 	</cfloop>
 
 </cffunction>
 
 
-<cffunction name="CFW_getCachableActions" returntype="any" access="public" output="false">
-	<cfreturn variables.wheels.cachable_actions>
+<cffunction name="_getCachableActions" returntype="any" access="public" output="false">
+	<cfreturn variables.wheels.cachableActions>
 </cffunction>
