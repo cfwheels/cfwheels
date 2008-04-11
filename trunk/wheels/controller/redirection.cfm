@@ -1,32 +1,24 @@
 <cffunction name="redirectTo" returntype="any" access="public" output="false">
-	<cfargument name="link" type="any" required="false" default="">
+	<cfargument name="url" type="any" required="false" default="">
 	<cfargument name="back" type="any" required="false" default="false">
-	<cfargument name="params" type="any" required="false" default="">
+	<cfargument name="addToken" type="any" required="false" default="false">
+	<cfargument name="statusCode" type="any" required="false" default="302">
 	<!--- Accepts URLFor arguments --->
-	<cfset var local = structNew()>
+	<cfset var locals = structNew()>
 
 	<cfif arguments.back>
-		<cfif len(CGI.http_referer) IS 0 OR CGI.http_referer Does Not Contain CGI.server_name>
-			<cfset local.url = urlFor(controller=application.settings.default_controller, action=application.settings.default_action)>
+		<cfif len(CGI.HTTP_REFERER) IS 0 OR CGI.HTTP_REFERER Does Not Contain CGI.SERVER_NAME>
+			<cfset locals.url = "/">
 		<cfelse>
-			<cfset local.url = CGI.http_referer>
-		</cfif>
-		<cfif arguments.params IS NOT "">
-			<cfset local.params = CFW_constructParams(arguments.params)>
-			<cfset local.params = right(local.params, len(local.params)-1)>
-			<cfif local.url Contains "?">
-				<cfset local.url = local.url & "&" & local.params>
-			<cfelse>
-				<cfset local.url = local.url & "?" & local.params>
-			</cfif>
+			<cfset locals.url = CGI.HTTP_REFERER>
 		</cfif>
 	<cfelse>
-		<cfif arguments.link IS NOT "">
-			<cfset local.url = arguments.link>
+		<cfif arguments.url IS NOT "">
+			<cfset locals.url = arguments.url>
 		<cfelse>
-			<cfset local.url = URLFor(argumentCollection=arguments)>
+			<cfset locals.url = URLFor(argumentCollection=arguments)>
 		</cfif>
 	</cfif>
 
-	<cflocation url="#local.url#" addtoken="false">
+	<cflocation url="#locals.url#" addToken="#arguments.addToken#" statusCode="#arguments.statusCode#">
 </cffunction>

@@ -1,35 +1,25 @@
 <!--- miscellaneous --->
-<cfset application.settings.default_controller = "wheels">
-<cfset application.settings.default_action = "welcome">
-<cfset application.settings.obfuscate_urls = false>
-<cfset application.settings.reload_password = "">
+<cfset application.settings.obfuscateURLs = false>
+<cfset application.settings.reloadPassword = "">
 
 <!--- validation --->
-<cfset application.settings.validates_confirmation_of.message = "[field_name] should match confirmation">
-<cfset application.settings.validates_exclusion_of.message = "[field_name] is reserved">
-<cfset application.settings.validates_format_of.message = "[field_name] is invalid">
-<cfset application.settings.validates_inclusion_of.message = "[field_name] is not included in the list">
-<cfset application.settings.validates_length_of.message = "[field_name] is the wrong length">
-<cfset application.settings.validates_numericality_of.message = "[field_name] is not a number">
-<cfset application.settings.validates_presence_of.message = "[field_name] can't be empty">
-<cfset application.settings.validates_uniqueness_of.message = "[field_name] has already been taken">
+<cfset application.settings.validatesConfirmationOf.message = "[fieldName] should match confirmation">
+<cfset application.settings.validatesExclusionOf.message = "[fieldName] is reserved">
+<cfset application.settings.validatesFormatOf.message = "[fieldName] is invalid">
+<cfset application.settings.validatesInclusionOf.message = "[fieldName] is not included in the list">
+<cfset application.settings.validatesLengthOf.message = "[fieldName] is the wrong length">
+<cfset application.settings.validatesNumericalityOf.message = "[fieldName] is not a number">
+<cfset application.settings.validatesPresenceOf.message = "[fieldName] can't be empty">
+<cfset application.settings.validatesUniquenessOf.message = "[fieldName] has already been taken">
 
 <!--- caching --->
-<cfset application.settings.maximum_items_to_cache = 1000>
-<cfset application.settings.cache_cull_percentage = 10>
-<cfset application.settings.cache_cull_interval = 300>
-<cfset application.settings.caching.actions = 600>
-<cfset application.settings.caching.pages = 600>
-<cfset application.settings.caching.partials = 600>
-<cfset application.settings.caching.queries = 600>
+<cfset application.settings.maximumItemsToCache = 1000>
+<cfset application.settings.cacheCullPercentage = 10>
+<cfset application.settings.cacheCullInterval = 5>
+<cfset application.settings.defaultCacheTime = 15>
 
 <!--- paths --->
+<cfset application.settings.paths.files = "files">
 <cfset application.settings.paths.images = "images">
 <cfset application.settings.paths.javascripts = "javascripts">
 <cfset application.settings.paths.stylesheets = "stylesheets">
-<cfset application.settings.paths.files = "files">
-
-<!--- admin --->
-<cfset application.settings.admin.authenticate_by_method = "">
-<cfset application.settings.admin.authenticate_by_ip = "127.0.0.1">
-<cfset application.settings.admin.layout = "wheels">

@@ -1,85 +1,82 @@
 <cffunction name="stylesheetLinkTag" returntype="any" access="public" output="false">
 	<cfargument name="sources" type="any" required="false" default="application">
-	<cfargument name="media" type="any" required="no" default="all">
-	<cfset var local = structNew()>
-	<cfset arguments.CFW_named_arguments = "sources,media">
-	<cfset local.attributes = CFW_getAttributes(argumentCollection=arguments)>
+	<cfargument name="attributes" type="any" required="false" default="">
+	<cfset var locals = structNew()>
 
-	<cfsavecontent variable="local.html">
-		<cfoutput>
-			<cfloop list="#arguments.sources#" index="local.i">
-				<link rel="stylesheet" type="text/css" media="#arguments.media#" href="#application.wheels.web_path##application.settings.paths.stylesheets#/#trim(local.i)#<cfif local.i Does Not Contain ".">.css</cfif>"#local.attributes# />
-			</cfloop>
-		</cfoutput>
-	</cfsavecontent>
+	<cfset locals.result = "">
+	<cfloop list="#arguments.sources#" index="locals.i">
+		<cfset locals.href = "#application.wheels.webPath##application.settings.paths.stylesheets#/#trim(locals.i)#">
+		<cfif locals.i Does Not Contain ".">
+			<cfset locals.href = locals.href & ".css">
+		</cfif>
+		<cfset locals.result = locals.result & '<link rel="stylesheet" type="text/css" media="all" href="#locals.href#"#_HTMLAttributes(attributes)# />'>
+	</cfloop>
 
-	<cfreturn CFW_trimHTML(local.html)>
+	<cfreturn locals.result>
 </cffunction>
 
 
 <cffunction name="javascriptIncludeTag" returntype="any" access="public" output="false">
 	<cfargument name="sources" type="any" required="false" default="application,protoculous">
-	<cfset var local = structNew()>
-	<cfset arguments.CFW_named_arguments = "sources">
-	<cfset local.attributes = CFW_getAttributes(argumentCollection=arguments)>
+	<cfargument name="attributes" type="any" required="false" default="">
+	<cfset var locals = structNew()>
 
-	<cfsavecontent variable="local.html">
-		<cfoutput>
-			<cfloop list="#arguments.sources#" index="local.i">
-				<script type="text/javascript" src="#application.wheels.web_path##application.settings.paths.javascripts#/#trim(local.i)#<cfif local.i Does Not Contain ".">.js</cfif>"#local.attributes#></script>
-			</cfloop>
-		</cfoutput>
-	</cfsavecontent>
+	<cfset locals.result = "">
+	<cfloop list="#arguments.sources#" index="locals.i">
+		<cfset locals.src = "#application.wheels.webPath##application.settings.paths.javascripts#/#trim(locals.i)#">
+		<cfif locals.i Does Not Contain ".">
+			<cfset locals.src = locals.src & ".js">
+		</cfif>
+		<cfset locals.result = locals.result & '<script type="text/javascript" src="#locals.src#"#_HTMLAttributes(attributes)#></script>'>
+	</cfloop>
 
-	<cfreturn CFW_trimHTML(local.html)>
+	<cfreturn locals.result>
 </cffunction>
 
 
 <cffunction name="imageTag" returntype="any" access="public" output="false">
 	<cfargument name="source" type="any" required="false" default="">
-	<cfset var local = structNew()>
+	<cfargument name="attributes" type="any" required="false" default="">
+	<cfset var locals = structNew()>
 	<cfif application.settings.environment IS NOT "production">
-		<cfinclude template="../errors/image_tag.cfm">
+		<cfinclude template="../errors/imagetag.cfm">
 	</cfif>
 
-	<cfset local.category = "image">
-	<cfset local.key = CFW_hashStruct(arguments)>
-	<cfset local.lock_name = local.category & local.key>
+	<cfset locals.category = "image">
+	<cfset locals.key = _hashStruct(arguments)>
+	<cfset locals.lockName = locals.category & locals.key>
 	<!--- double-checked lock --->
-	<cflock name="#local.lock_name#" type="readonly" timeout="30">
-		<cfset local.html = getFromCache(local.key, local.category, "internal")>
+	<cflock name="#locals.lockName#" type="readonly" timeout="30">
+		<cfset locals.result = _getFromCache(locals.key, locals.category, "internal")>
 	</cflock>
-	<cfif isBoolean(local.html) AND NOT local.html>
-   	<cflock name="#local.lock_name#" type="exclusive" timeout="30">
-			<cfset local.html = getFromCache(local.key, local.category, "internal")>
-			<cfif isBoolean(local.html) AND NOT local.html>
+	<cfif isBoolean(locals.result) AND NOT locals.result>
+   	<cflock name="#locals.lockName#" type="exclusive" timeout="30">
+			<cfset locals.result = _getFromCache(locals.key, locals.category, "internal")>
+			<cfif isBoolean(locals.result) AND NOT locals.result>
 
-				<cfset local.args = duplicate(arguments)>
+				<cfset locals.attributes = _HTMLAttributes(arguments.attributes)>
 				<cfif left(arguments.source, 7) IS "http://">
-					<cfset local.source = arguments.source>
+					<cfset locals.src = arguments.source>
 				<cfelse>
-					<cfset local.source = "#application.wheels.web_path##application.settings.paths.images#/#arguments.source#">
-					<cfif NOT structKeyExists(arguments, "width") OR NOT structKeyExists(arguments, "height")>
-						<cfimage action="info" source="#expandPath(local.source)#" structname="local.image">
-						<cfif local.image.width GT 0 AND local.image.height GT 0>
-							<cfset local.args.width = local.image.width>
-							<cfset local.args.height = local.image.height>
+					<cfset locals.src = "#application.wheels.webPath##application.settings.paths.images#/#arguments.source#">
+					<cfif arguments.attributes Does Not Contain "width" OR arguments.attributes Does Not Contain "height">
+						<cfimage action="info" source="#expandPath(locals.src)#" structname="locals.image">
+						<cfif locals.image.width GT 0 AND locals.image.height GT 0>
+							<cfset locals.attributes = locals.attributes & " width=""#locals.image.width#"" height=""#locals.image.height#""">
 						</cfif>
 					</cfif>
 				</cfif>
-				<cfif NOT structKeyExists(arguments, "alt")>
-					<cfset local.args.alt = titleize(replaceList(spanExcluding(reverse(spanExcluding(reverse(local.source), "/")), "."), "-,_", " , "))>
+				<cfif arguments.attributes Does Not Contain "alt">
+					<cfset locals.attributes = locals.attributes & " alt=""#titleize(replaceList(spanExcluding(reverse(spanExcluding(reverse(locals.src), "/")), "."), "-,_", " , "))#""">
 				</cfif>
-				<cfset local.args.CFW_named_arguments = "source">
-				<cfset local.attributes = CFW_getAttributes(argumentCollection=local.args)>
-				<cfset local.html = "<img src=""#local.source#""#local.attributes# />">
-				<cfif application.settings.cache_images>
-					<cfset addToCache(local.key, local.html, 86400, local.category, "internal")>
+				<cfset locals.result = "<img src=""#locals.src#""#locals.attributes# />">
+				<cfif application.settings.cacheImages>
+					<cfset _addToCache(locals.key, locals.result, 86400, locals.category, "internal")>
 				</cfif>
 
 			</cfif>
 		</cflock>
 	</cfif>
 
-	<cfreturn local.html>
+	<cfreturn locals.result>
 </cffunction>

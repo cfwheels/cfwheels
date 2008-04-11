@@ -1,58 +1,58 @@
 <cffunction name="hasOne" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
-	<cfargument name="model_name" type="any" required="false" default="#variables.class.name#">
-	<cfargument name="associated_model_name" type="any" required="false" default="#arguments.name#">
-	<cfargument name="table_name" type="any" required="false" default="#lCase(pluralize(arguments.model_name))#">
-	<cfargument name="associated_table_name" type="any" required="false" default="#lCase(pluralize(arguments.associated_model_name))#">
-	<cfargument name="primary_key" type="any" required="false" default="id">
-	<cfargument name="foreign_key" type="any" required="false" default="#lCase(arguments.model_name)#_id">
-	<cfset "variables.class.associations.#arguments.name#.type" = "has_one">
-	<cfset "variables.class.associations.#arguments.name#.model_name" = arguments.model_name>
-	<cfset "variables.class.associations.#arguments.name#.associated_model_name" = arguments.associated_model_name>
-	<cfset "variables.class.associations.#arguments.name#.table_name" = arguments.table_name>
-	<cfset "variables.class.associations.#arguments.name#.associated_table_name" = arguments.associated_table_name>
-	<cfset "variables.class.associations.#arguments.name#.primary_key" = arguments.primary_key>
-	<cfset "variables.class.associations.#arguments.name#.foreign_key" = arguments.foreign_key>
-	<cfset "variables.class.associations.#arguments.name#.join_string" = "LEFT OUTER JOIN #arguments.associated_table_name# ON #arguments.table_name#.#arguments.primary_key# = #arguments.associated_table_name#.#arguments.foreign_key#">
-	<cfset "variables.class.associations.#arguments.name#.methods" = "#lCase(arguments.associated_model_name)#,set#arguments.associated_model_name#,new#arguments.associated_model_name#,create#arguments.associated_model_name#,has#arguments.associated_model_name#">
+	<cfargument name="modelName" type="any" required="false" default="#variables.class.name#">
+	<cfargument name="associatedModelName" type="any" required="false" default="#arguments.name#">
+	<cfargument name="tableName" type="any" required="false" default="#lCase(_pluralize(arguments.modelName))#">
+	<cfargument name="associatedTableName" type="any" required="false" default="#lCase(_pluralize(arguments.associatedModelName))#">
+	<cfargument name="primaryKey" type="any" required="false" default="id">
+	<cfargument name="foreignKey" type="any" required="false" default="#lCase(arguments.modelName)#Id">
+	<cfset "variables.class.associations.#arguments.name#.type" = "hasOne">
+	<cfset "variables.class.associations.#arguments.name#.modelName" = arguments.modelName>
+	<cfset "variables.class.associations.#arguments.name#.associatedModelName" = arguments.associatedModelName>
+	<cfset "variables.class.associations.#arguments.name#.tableName" = arguments.tableName>
+	<cfset "variables.class.associations.#arguments.name#.associatedTableName" = arguments.associatedTableName>
+	<cfset "variables.class.associations.#arguments.name#.primaryKey" = arguments.primaryKey>
+	<cfset "variables.class.associations.#arguments.name#.foreignKey" = arguments.foreignKey>
+	<cfset "variables.class.associations.#arguments.name#.joinString" = "LEFT OUTER JOIN #arguments.associatedTableName# ON #arguments.tableName#.#arguments.primaryKey# = #arguments.associatedTableName#.#arguments.foreignKey#">
+	<cfset "variables.class.associations.#arguments.name#.methods" = "#lCase(arguments.associatedModelName)#,set#arguments.associatedModelName#,new#arguments.associatedModelName#,create#arguments.associatedModelName#,has#arguments.associatedModelName#">
 </cffunction>
 
 
 <cffunction name="hasMany" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
-	<cfargument name="model_name" type="any" required="false" default="#capitalize(variables.class.name)#">
-	<cfargument name="associated_model_name" type="any" required="false" default="#capitalize(singularize(arguments.name))#">
-	<cfargument name="table_name" type="any" required="false" default="#lCase(pluralize(arguments.model_name))#">
-	<cfargument name="associated_table_name" type="any" required="false" default="#lCase(pluralize(arguments.associated_model_name))#">
-	<cfargument name="primary_key" type="any" required="false" default="id">
-	<cfargument name="foreign_key" type="any" required="false" default="#lCase(arguments.model_name)#_id">
-	<cfset "variables.class.associations.#arguments.name#.type" = "has_many">
-	<cfset "variables.class.associations.#arguments.name#.model_name" = arguments.model_name>
-	<cfset "variables.class.associations.#arguments.name#.associated_model_name" = arguments.associated_model_name>
-	<cfset "variables.class.associations.#arguments.name#.table_name" = arguments.table_name>
-	<cfset "variables.class.associations.#arguments.name#.associated_table_name" = arguments.associated_table_name>
-	<cfset "variables.class.associations.#arguments.name#.primary_key" = arguments.primary_key>
-	<cfset "variables.class.associations.#arguments.name#.foreign_key" = arguments.foreign_key>
-	<cfset "variables.class.associations.#arguments.name#.join_string" = "LEFT OUTER JOIN #arguments.associated_table_name# ON #arguments.table_name#.#arguments.primary_key# = #arguments.associated_table_name#.#arguments.foreign_key#">
-	<cfset "variables.class.associations.#arguments.name#.methods" = "#lCase(pluralize(arguments.associated_model_name))#,add#arguments.associated_model_name#,delete#arguments.associated_model_name#,clear#pluralize(arguments.associated_model_name)#,new#arguments.associated_model_name#,create#arguments.associated_model_name#,findOne#arguments.associated_model_name#,find#arguments.associated_model_name#ByID,has#pluralize(arguments.associated_model_name)#,#lCase(arguments.associated_model_name)#Count">
+	<cfargument name="modelName" type="any" required="false" default="#variables.class.name#">
+	<cfargument name="associatedModelName" type="any" required="false" default="#_singularize(arguments.name)#">
+	<cfargument name="tableName" type="any" required="false" default="#lCase(_pluralize(arguments.modelName))#">
+	<cfargument name="associatedTableName" type="any" required="false" default="#lCase(_pluralize(arguments.associatedModelName))#">
+	<cfargument name="primaryKey" type="any" required="false" default="id">
+	<cfargument name="foreignKey" type="any" required="false" default="#lCase(arguments.modelName)#Id">
+	<cfset "variables.class.associations.#arguments.name#.type" = "hasMany">
+	<cfset "variables.class.associations.#arguments.name#.modelName" = arguments.modelName>
+	<cfset "variables.class.associations.#arguments.name#.associatedModelName" = arguments.associatedModelName>
+	<cfset "variables.class.associations.#arguments.name#.tableName" = arguments.tableName>
+	<cfset "variables.class.associations.#arguments.name#.associatedTableName" = arguments.associatedTableName>
+	<cfset "variables.class.associations.#arguments.name#.primaryKey" = arguments.primaryKey>
+	<cfset "variables.class.associations.#arguments.name#.foreignKey" = arguments.foreignKey>
+	<cfset "variables.class.associations.#arguments.name#.joinString" = "LEFT OUTER JOIN #arguments.associatedTableName# ON #arguments.tableName#.#arguments.primaryKey# = #arguments.associatedTableName#.#arguments.foreignKey#">
+	<cfset "variables.class.associations.#arguments.name#.methods" = "#lCase(_pluralize(arguments.associatedModelName))#,add#arguments.associatedModelName#,delete#arguments.associatedModelName#,clear#_pluralize(arguments.associatedModelName)#,new#arguments.associatedModelName#,create#arguments.associatedModelName#,findOne#arguments.associatedModelName#,find#arguments.associatedModelName#ById,has#_pluralize(arguments.associatedModelName)#,#lCase(arguments.associatedModelName)#Count">
 </cffunction>
 
 
 <cffunction name="belongsTo" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
-	<cfargument name="model_name" type="any" required="false" default="#variables.class.name#">
-	<cfargument name="associated_model_name" type="any" required="false" default="#arguments.name#">
-	<cfargument name="table_name" type="any" required="false" default="#lCase(pluralize(arguments.model_name))#">
-	<cfargument name="associated_table_name" type="any" required="false" default="#lCase(pluralize(arguments.associated_model_name))#">
-	<cfargument name="primary_key" type="any" required="false" default="id">
-	<cfargument name="foreign_key" type="any" required="false" default="#lCase(arguments.associated_model_name)#_id">
-	<cfset "variables.class.associations.#arguments.name#.type" = "belongs_to">
-	<cfset "variables.class.associations.#arguments.name#.model_name" = arguments.model_name>
-	<cfset "variables.class.associations.#arguments.name#.associated_model_name" = arguments.associated_model_name>
-	<cfset "variables.class.associations.#arguments.name#.table_name" = arguments.table_name>
-	<cfset "variables.class.associations.#arguments.name#.associated_table_name" = arguments.associated_table_name>
-	<cfset "variables.class.associations.#arguments.name#.primary_key" = arguments.primary_key>
-	<cfset "variables.class.associations.#arguments.name#.foreign_key" = arguments.foreign_key>
-	<cfset "variables.class.associations.#arguments.name#.join_string" = "LEFT OUTER JOIN #arguments.associated_table_name# ON #arguments.table_name#.#arguments.foreign_key# = #arguments.associated_table_name#.#arguments.primary_key#">
-	<cfset "variables.class.associations.#arguments.name#.methods" = "#lCase(arguments.associated_model_name)#,set#arguments.associated_model_name#,new#arguments.associated_model_name#,create#arguments.associated_model_name#,has#arguments.associated_model_name#">
+	<cfargument name="modelName" type="any" required="false" default="#variables.class.name#">
+	<cfargument name="associatedModelName" type="any" required="false" default="#arguments.name#">
+	<cfargument name="tableName" type="any" required="false" default="#lCase(_pluralize(arguments.modelName))#">
+	<cfargument name="associatedTableName" type="any" required="false" default="#lCase(_pluralize(arguments.associatedModelName))#">
+	<cfargument name="primaryKey" type="any" required="false" default="id">
+	<cfargument name="foreignKey" type="any" required="false" default="#lCase(arguments.associatedModelName)#Id">
+	<cfset "variables.class.associations.#arguments.name#.type" = "belongsTo">
+	<cfset "variables.class.associations.#arguments.name#.modelName" = arguments.modelName>
+	<cfset "variables.class.associations.#arguments.name#.associatedModelName" = arguments.associatedModelName>
+	<cfset "variables.class.associations.#arguments.name#.tableName" = arguments.tableName>
+	<cfset "variables.class.associations.#arguments.name#.associatedTableName" = arguments.associatedTableName>
+	<cfset "variables.class.associations.#arguments.name#.primaryKey" = arguments.primaryKey>
+	<cfset "variables.class.associations.#arguments.name#.foreignKey" = arguments.foreignKey>
+	<cfset "variables.class.associations.#arguments.name#.joinString" = "LEFT OUTER JOIN #arguments.associatedTableName# ON #arguments.tableName#.#arguments.foreignKey# = #arguments.associatedTableName#.#arguments.primaryKey#">
+	<cfset "variables.class.associations.#arguments.name#.methods" = "#lCase(arguments.associatedModelName)#,set#arguments.associatedModelName#,new#arguments.associatedModelName#,create#arguments.associatedModelName#,has#arguments.associatedModelName#">
 </cffunction>

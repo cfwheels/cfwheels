@@ -1,18 +1,17 @@
-<cfset application.settings.cache_database_schema = true>
-<cfset application.settings.cache_images = true>
-<cfset application.settings.cache_model_initialization = true>
-<cfset application.settings.cache_controller_initialization = true>
-<cfset application.settings.cache_routes = true>
-<cfset application.settings.cache_requests = true>
-<cfset application.settings.cache_actions = true>
-<cfset application.settings.cache_pages = true>
-<cfset application.settings.cache_partials = true>
-<cfset application.settings.cache_queries = true>
-<cfset application.settings.show_debug_information = false>
-<cfset application.settings.show_error_information = false>
-<cfif CGI.server_name Contains ".">
-	<cfset application.settings.send_email_on_error = true>
-	<cfset application.settings.error_email_address = "webmaster@" & reverse(listGetAt(reverse(CGI.server_name), 2,".")) & "." & reverse(listGetAt(reverse(CGI.server_name), 1, "."))>
+<cfset application.settings.cacheDatabaseSchema = true>
+<cfset application.settings.cacheImages = true>
+<cfset application.settings.cacheModelInitialization = true>
+<cfset application.settings.cacheControllerInitialization = true>
+<cfset application.settings.cacheRoutes = true>
+<cfset application.settings.cacheActions = true>
+<cfset application.settings.cachePages = true>
+<cfset application.settings.cachePartials = true>
+<cfset application.settings.cacheQueries = true>
+<cfset application.settings.showDebugInformation = false>
+<cfset application.settings.showErrorInformation = false>
+<cfif CGI.SERVER_NAME Contains ".">
+	<cfset application.settings.sendEmailOnError = true>
+	<cfset application.settings.errorEmailAddress = "webmaster@" & reverse(listGetAt(reverse(CGI.SERVER_NAME), 2,".")) & "." & reverse(listGetAt(reverse(CGI.SERVER_NAME), 1, "."))>
 <cfelse>
-	<cfset application.settings.send_email_on_error = false>
+	<cfset application.settings.sendEmailOnError = false>
 </cfif>

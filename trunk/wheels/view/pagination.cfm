@@ -91,5 +91,5 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn CFW_trimHTML(local.output)>
+	<cfreturn _trimHTML(local.output)>
 </cffunction>

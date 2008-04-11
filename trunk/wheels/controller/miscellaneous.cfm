@@ -1,181 +1,86 @@
-<cffunction name="CFW_trimHTML" returntype="any" access="private" output="false">
-	<cfargument name="str" type="any" required="true">
-	<cfreturn replaceList(trim(arguments.str), "#chr(9)#,#chr(10)#,#chr(13)#", ",,")>
-</cffunction>
-
-
-<cffunction name="CFW_getAttributes" returntype="any" access="private" output="false">
-	<cfset var local = structNew()>
-
-	<cfset local.attributes = "">
-	<cfloop collection="#arguments#" item="local.i">
-		<cfif local.i Does Not Contain "_" AND listFindNoCase(arguments.CFW_named_arguments, local.i) IS 0>
-			<cfset local.attributes = "#local.attributes# #lCase(local.i)#=""#arguments[local.i]#""">
-		</cfif>
-	</cfloop>
-
-	<cfreturn local.attributes>
-</cffunction>
-
-
-<cffunction name="CFW_constructParams" returntype="any" access="private" output="false">
-	<cfargument name="params" type="any" required="true">
-	<cfset var local = structNew()>
-
-	<cfset local.delim = "?">
-	<cfif application.settings.obfuscate_urls>
-		<cfset local.params = "">
-		<cfloop list="#arguments.params#" delimiters="&" index="local.i">
-			<cfset local.temp = listToArray(local.i, "=")>
-			<cfset local.params = local.params & local.delim & local.temp[1] & "=">
-			<cfif arrayLen(local.temp) IS 2>
-				<cfset local.params = local.params & encryptParam(local.temp[2])>
-			</cfif>
-			<cfset local.delim = "&">
-		</cfloop>
-	<cfelse>
-		<cfset local.params = local.delim & arguments.params>
-	</cfif>
-
-	<cfreturn local.params>
-</cffunction>
-
-
 <cffunction name="URLFor" returntype="any" access="private" output="false">
+	<cfargument name="route" type="any" required="false" default="">
 	<cfargument name="controller" type="any" required="false" default="">
 	<cfargument name="action" type="any" required="false" default="">
-	<cfargument name="id" type="any" required="false" default=0>
+	<cfargument name="id" type="any" required="false" default="">
+	<cfargument name="params" type="any" required="false" default="">
 	<cfargument name="anchor" type="any" required="false" default="">
-	<cfargument name="only_path" type="any" required="false" default="true">
+	<cfargument name="onlyPath" type="any" required="false" default="true">
 	<cfargument name="host" type="any" required="false" default="">
 	<cfargument name="protocol" type="any" required="false" default="">
-	<cfargument name="params" type="any" required="false" default="">
-	<cfset var local = structNew()>
+	<cfset var locals = structNew()>
 
-	<cfif len(arguments.controller) IS NOT 0>
-		<cfset local.new_controller = arguments.controller>
+	<!--- build the link --->
+	<cfif len(arguments.route) IS 0 AND len(arguments.controller) IS 0 AND len(arguments.action) IS 0 AND len(arguments.id) IS 0 AND len(arguments.params) IS 0>
+		<cfset locals.url = "/">
 	<cfelse>
-		<cfset local.new_controller = variables.params.controller>
-	</cfif>
-
-	<cfif len(arguments.action) IS NOT 0>
-		<cfset local.new_action = arguments.action>
-	<cfelse>
-		<cfif local.new_controller IS variables.params.controller>
-			<!--- Keep the action only if controller stays the same --->
-			<cfset local.new_action = variables.params.action>
-		</cfif>
-	</cfif>
-
-	<cfif arguments.id IS NOT 0>
-		<cfset local.new_id = arguments.id>
-	<cfelse>
-		<cfif structKeyExists(variables.params, "id") AND len(variables.params.id) IS NOT 0 AND local.new_controller IS variables.params.controller AND local.new_action IS variables.params.action>
-			<!--- Keep the ID only if controller and action stays the same --->
-			<cfset local.new_id = variables.params.id>
-		</cfif>
-	</cfif>
-
-	<!--- Build the link --->
-	<cfset local.url = application.wheels.web_path & listLast(CGI.script_name, "/")>
-
-	<!--- Add the controller to the link --->
-	<cfset local.url = local.url & "/#local.new_controller#">
-
-	<!--- Fix when URL rewriting is in use --->
-
-	<cfset local.url = replace(local.url, "index_rewrite.cfm/", "")>
-
-	<cfif structKeyExists(local, "new_action")>
-		<!--- Add the action to the link --->
-		<cfset local.url = local.url & "/#local.new_action#">
-	</cfif>
-
-	<cfif structKeyExists(local, "new_id")>
-		<!--- Add the id to the link --->
-		<cfif application.settings.obfuscate_urls>
-			<cfset local.new_id = encryptParam(local.new_id)>
-		</cfif>
-		<cfset local.url = local.url & "/#local.new_id#">
-	</cfif>
-
-	<cfif len(arguments.params) IS NOT 0>
-		<!--- add the params to the link --->
-		<cfset local.url = local.url & CFW_constructParams(arguments.params)>
-	</cfif>
-
-	<cfif len(arguments.anchor) IS NOT 0>
-		<cfset local.url = local.url & "##" & arguments.anchor>
-	</cfif>
-
-	<cfif NOT arguments.only_path>
-		<cfif len(arguments.host) IS NOT 0>
-			<cfset local.url = arguments.host & local.url>
+		<cfset locals.url = application.wheels.webPath & listLast(CGI.SCRIPT_NAME, "/")>
+		<cfif len(arguments.route) IS NOT 0>
+			<!--- link for a named route --->
+			<cfset locals.route = application.wheels.routes[application.wheels.namedRoutePositions[arguments.route]]>
+			<cfloop list="#locals.route.pattern#" index="locals.i" delimiters="/">
+				<cfif locals.i Contains "[">
+					<!--- get param from arguments --->
+					<cfset locals.url = locals.url & "/" & arguments[mid(locals.i, 2, len(locals.i)-2)]>
+				<cfelse>
+					<!--- add hard coded param from route --->
+					<cfset locals.url = locals.url & "/" & locals.i>
+				</cfif>
+			</cfloop>
 		<cfelse>
-			<cfset local.url = CGI.server_name & local.url>
+			<!--- link based on controller/action/id --->
+			<cfif len(arguments.controller) IS NOT 0>
+				<!--- add controller from arguments --->
+				<cfset locals.url = locals.url & "/" & arguments.controller>
+			<cfelse>
+				<!--- keep the controller name from the current request --->
+				<cfset locals.url = locals.url & "/" & variables.params.controller>
+			</cfif>
+			<cfif len(arguments.action) IS NOT 0>
+				<!--- add the action --->
+				<cfset locals.url = locals.url & "/" & arguments.action>
+			</cfif>
+			<cfif len(arguments.id) IS NOT 0>
+				<!--- add the id and obfuscate if necessary --->
+				<cfif application.settings.obfuscateURLs>
+					<cfset locals.url = locals.url & "/" & obfuscateParam(arguments.id)>
+				<cfelse>
+					<cfset locals.url = locals.url & "/" & arguments.id>
+				</cfif>
+			</cfif>
+		</cfif>
+		<cfif len(arguments.params) IS NOT 0>
+			<!--- add the params and obfuscate if necessary --->
+			<cfset locals.url = locals.url & _constructParams(arguments.params)>
+		</cfif>
+		<cfif len(arguments.anchor) IS NOT 0>
+			<!--- add the anchor --->
+			<cfset locals.url = locals.url & "##" & arguments.anchor>
+		</cfif>
+		<!--- Fix when URL rewriting is in use --->
+		<cfset locals.url = replace(locals.url, "rewrite.cfm/", "")>
+	</cfif>
+
+	<cfif NOT arguments.onlyPath>
+		<!--- add host and protocol --->
+		<cfif len(arguments.host) IS NOT 0>
+			<cfset locals.url = arguments.host & locals.url>
+		<cfelse>
+			<cfset locals.url = CGI.SERVER_NAME & locals.url>
 		</cfif>
 		<cfif len(arguments.protocol) IS NOT 0>
-			<cfset local.url = arguments.protocol & "://" & local.url>
+			<cfset locals.url = arguments.protocol & "://" & locals.url>
 		<cfelse>
-			<cfset local.url = lCase(spanExcluding(CGI.server_protocol, "/")) & "://" & local.url>
+			<cfset locals.url = lCase(spanExcluding(CGI.SERVER_PROTOCOL, "/")) & "://" & locals.url>
 		</cfif>
 	</cfif>
 
-	<cfreturn lCase(local.url)>
-</cffunction>
-
-
-<cffunction name="contentForLayout" returntype="any" access="public" output="false">
-	<cfreturn request.wheels.response>
-</cffunction>
-
-<cffunction name="linkTo" returntype="any" access="public" output="false">
-	<cfargument name="link" type="any" required="false" default="">
-	<cfargument name="text" type="any" required="false" default="">
-	<cfargument name="confirm" type="any" required="false" default="">
-	<!--- Accepts URLFor arguments --->
-	<cfset var local = structNew()>
-	<cfset local.named_arguments = "link,text,confirm,controller,action,id,anchor,only_path,host,protocol,params">
-	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
-		<!--- Since a non-numeric id was passed in we assume it is meant as a HTML attribute and therefore remove it from the named arguments list so that it will be set in the attributes --->
-		<cfset local.named_arguments = listDeleteAt(local.named_arguments, listFindNoCase(local.named_arguments, "id"))>
-	</cfif>
-
-	<cfset local.attributes = "">
-	<cfloop collection="#arguments#" item="local.i">
-		<cfif listFindNoCase(local.named_arguments, local.i) IS 0>
-			<cfset local.attributes = "#local.attributes# #lCase(local.i)#=""#arguments[local.i]#""">
-		</cfif>
-	</cfloop>
-
-	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
-		<cfset structDelete(arguments, "id")>
-	</cfif>
-
-	<cfif len(arguments.link) IS NOT 0>
-		<cfset local.href = arguments.link>
-	<cfelse>
-		<cfset local.href = URLFor(argumentCollection=arguments)>
-	</cfif>
-
-	<cfif len(arguments.text) IS NOT 0>
-		<cfset local.text = arguments.text>
-	<cfelse>
-		<cfset local.text = local.href>
-	</cfif>
-
-	<cfif len(arguments.confirm) IS NOT 0>
-		<cfset local.html = "<a href=""#HTMLEditFormat(local.href)#"" onclick=""return confirm('#JSStringFormat(arguments.confirm)#');""#local.attributes#>#local.text#</a>">
-	<cfelse>
-		<cfset local.html = "<a href=""#HTMLEditFormat(local.href)#""#local.attributes#>#local.text#</a>">
-	</cfif>
-
-	<cfreturn local.html>
+	<cfreturn lCase(locals.url)>
 </cffunction>
 
 
 <cffunction name="isGet" returntype="any" access="public" output="false">
-	<cfif CGI.request_method IS "get">
+	<cfif CGI.REQUEST_METHOD IS "get">
 		<cfreturn true>
 	<cfelse>
 		<cfreturn false>
@@ -184,7 +89,7 @@
 
 
 <cffunction name="isPost" returntype="any" access="public" output="false">
-	<cfif CGI.request_method IS "post">
+	<cfif CGI.REQUEST_METHOD IS "post">
 		<cfreturn true>
 	<cfelse>
 		<cfreturn false>
@@ -193,7 +98,7 @@
 
 
 <cffunction name="isAjax" returntype="any" access="public" output="false">
-	<cfif CGI.HTTP_x_requested_with IS "XMLHTTPRequest">
+	<cfif CGI.HTTP_X_REQUESTED_WITH IS "XMLHTTPRequest">
 		<cfreturn true>
 	<cfelse>
 		<cfreturn false>
@@ -207,93 +112,99 @@
 	<cfset var local = structNew()>
 
 	<cfsavecontent variable="request.wheels.response">
-		<cfinclude template="../../views/email/#replaceNoCase(arguments.template, '.cfm', '')#.cfm">
+		<cfinclude template="../../view/email/#replaceNoCase(arguments.template, '.cfm', '')#.cfm">
 	</cfsavecontent>
 
 	<cfif (isBoolean(arguments.layout) AND arguments.layout) OR (arguments.layout IS NOT "false")>
 		<cfif NOT isBoolean(arguments.layout)>
 			<cfsavecontent variable="request.wheels.response">
-				<cfinclude template="../../views/layouts/#replace(arguments.layout, ' ', '_', 'all')#_layout.cfm">
+				<cfinclude template="../../view/layouts/#replace(arguments.layout, ' ', '', 'all')#.cfm">
 			</cfsavecontent>
 		<cfelse>
 			<cfsavecontent variable="request.wheels.response">
-				<cfinclude template="../../views/layouts/email_layout.cfm">
+				<cfinclude template="../../view/layouts/email.cfm">
 			</cfsavecontent>
 		</cfif>
 	</cfif>
 
-	<cfset local.attributes = structCopy(arguments)>
-	<cfset local.cfmail_valid_attributes = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext">
-	<cfloop collection="#local.attributes#" item="local.i">
-		<cfif listFindNoCase(local.cfmail_valid_attributes, local.i) IS 0>
-			<cfset structDelete(local.attributes, local.i)>
+	<cfset locals.attributes = structCopy(arguments)>
+	<cfset locals.cfmailAttributes = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext">
+	<cfloop collection="#locals.attributes#" item="locals.i">
+		<cfif listFindNoCase(locals.cfmailAttributes, locals.i) IS 0>
+			<cfset structDelete(locals.attributes, locals.i)>
 		</cfif>
 	</cfloop>
 
-	<cfmail attributecollection="#local.attributes#">
-	#request.wheels.response#
-	</cfmail>
+	<cfmail attributecollection="#locals.attributes#">#trim(request.wheels.response)#</cfmail>
 
-	<!--- set to false so that Wheels does not think we have rendered an actual response to the browser --->
-	<cfset request.wheels.response = false>
+	<!--- delete the response so that Wheels does not think we have rendered an actual response to the browser --->
+	<cfset structDelete(request.wheels, "response")>
 
 </cffunction>
 
 
 <cffunction name="sendFile" returntype="any" access="public" output="false">
-	<cfargument name="path" required="true">
-	<cfargument name="filename" required="false" default="">
+	<cfargument name="file" required="true">
+	<cfargument name="name" required="false" default="">
 	<cfargument name="type" required="false" default="">
 	<cfargument name="disposition" required="false" default="attachment">
-	<cfset var local = structNew()>
+	<cfset var locals = structNew()>
 
-	<cfset local.file_directory = expandPath(application.settings.paths.files)>
-
-	<cfif arguments.path Contains ".">
-		<cfset local.path = arguments.path>
+	<cfset arguments.file = replace(arguments.file, "\", "/", "all")>
+	<cfset locals.path = reverse(listRest(reverse(arguments.file), "/"))>
+	<cfset locals.folder = application.settings.paths.files>
+	<cfif len(locals.path) IS NOT 0>
+		<cfset locals.folder = locals.folder & "/" & locals.path>
+		<cfset locals.file = replace(arguments.file, locals.path, "")>
+		<cfset locals.file = right(locals.file, len(locals.file)-1)>
 	<cfelse>
-		<cfdirectory action="list" directory="#local.file_directory#" name="local.match" filter="#arguments.path#.*">
-		<cfset local.path = arguments.path & "." & listLast(local.match.name, ".")>
+		<cfset locals.file = arguments.file>
+	</cfif>
+	<cfset locals.folder = expandPath(locals.folder)>
+	<cfif NOT fileExists(locals.folder & "/" & locals.file)>
+		<cfdirectory action="list" directory="#locals.folder#" name="locals.match" filter="#locals.file#.*">
+		<cfif locals.match.recordcount IS 0>
+			<cfthrow type="wheels" message="File not found" detail="Make sure a file with the name <tt>#locals.file#</tt> exists in the <tt>#locals.folder#</tt> folder.">
+		</cfif>
+		<cfset locals.file = locals.file & "." & listLast(locals.match.name, ".")>
 	</cfif>
 
-	<cfset local.filename = listLast(local.path, "/")>
+	<cfset locals.fullPath = locals.folder & "/" & locals.file>
 
-	<cfset local.extension = listLast(local.path, ".")>
-	<cfif local.extension IS "txt">
-		<cfset local.type = "text/plain">
-	<cfelseif local.extension IS "gif">
-		<cfset local.type = "image/gif">
-	<cfelseif local.extension IS "jpg">
-		<cfset local.type = "image/jpg">
-	<cfelseif local.extension IS "png">
-		<cfset local.type = "image/png">
-	<cfelseif local.extension IS "wav">
-		<cfset local.type = "audio/wav">
-	<cfelseif local.extension IS "mp3">
-		<cfset local.type = "audio/mpeg3">
-	<cfelseif local.extension IS "pdf">
-		<cfset local.type = "application/pdf">
-	<cfelseif local.extension IS "zip">
-		<cfset local.type = "application/zip">
-	<cfelseif local.extension IS "ppt">
-		<cfset local.type = "application/powerpoint">
-	<cfelseif local.extension IS "doc">
-		<cfset local.type = "application/word">
-	<cfelseif local.extension IS "xls">
-		<cfset local.type = "application/excel">
+	<cfif len(arguments.name) IS NOT 0>
+		<cfset locals.name = arguments.name>
 	<cfelse>
-		<cfset local.type = "application/octet-stream">
+		<cfset locals.name = locals.file>
 	</cfif>
 
-	<cfset local.file = "#local.file_directory#/#local.path#">
+	<cfset locals.extension = listLast(locals.file, ".")>
+	<cfif locals.extension IS "txt">
+		<cfset locals.type = "text/plain">
+	<cfelseif locals.extension IS "gif">
+		<cfset locals.type = "image/gif">
+	<cfelseif locals.extension IS "jpg">
+		<cfset locals.type = "image/jpg">
+	<cfelseif locals.extension IS "png">
+		<cfset locals.type = "image/png">
+	<cfelseif locals.extension IS "wav">
+		<cfset locals.type = "audio/wav">
+	<cfelseif locals.extension IS "mp3">
+		<cfset locals.type = "audio/mpeg3">
+	<cfelseif locals.extension IS "pdf">
+		<cfset locals.type = "application/pdf">
+	<cfelseif locals.extension IS "zip">
+		<cfset locals.type = "application/zip">
+	<cfelseif locals.extension IS "ppt">
+		<cfset locals.type = "application/powerpoint">
+	<cfelseif locals.extension IS "doc">
+		<cfset locals.type = "application/word">
+	<cfelseif locals.extension IS "xls">
+		<cfset locals.type = "application/excel">
+	<cfelse>
+		<cfset locals.type = "application/octet-stream">
+	</cfif>
 
-	<cfheader name="content-disposition" value="#arguments.disposition#; filename=#local.filename#">
-	<cfcontent type="#local.type#" file="#local.file#">
+	<cfheader name="content-disposition" value="#arguments.disposition#; filename=""#locals.name#""">
+	<cfcontent type="#locals.type#" file="#locals.fullPath#">
 
-	<cfreturn true>
-</cffunction>
-
-
-<cffunction name="getControllerClassData" returntype="any" access="public" output="false">
-	<cfreturn variables.wheels>
 </cffunction>

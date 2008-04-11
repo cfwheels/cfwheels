@@ -4,8 +4,8 @@
 	<cfif NOT structKeyExists(arguments, "class")>
 		<cfset arguments.class = "error-messages">
 	</cfif>
-	<cfset arguments.CFW_named_arguments = "object_name">
-	<cfset local.attributes = CFW_getAttributes(argumentCollection=arguments)>
+	<cfset arguments._named_arguments = "object_name">
+	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfset local.object = evaluate(arguments.object_name)>
 	<cfset local.errors = local.object.allErrors()>
@@ -23,7 +23,7 @@
 		</cfsavecontent>
 	</cfif>
 
-	<cfreturn CFW_trimHTML(local.output)>
+	<cfreturn _trimHTML(local.output)>
 </cffunction>
 
 
@@ -37,8 +37,8 @@
 	<cfif NOT structKeyExists(arguments, "class")>
 		<cfset arguments.class = "error-message">
 	</cfif>
-	<cfset arguments.CFW_named_arguments = "object_name,field,prepend_text,append_text,wrapper_element">
-	<cfset local.attributes = CFW_getAttributes(argumentCollection=arguments)>
+	<cfset arguments._named_arguments = "object_name,field,prepend_text,append_text,wrapper_element">
+	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfset local.object = evaluate(arguments.object_name)>
 	<cfset local.error = local.object.errorsOn(arguments.field)>
@@ -52,5 +52,5 @@
 		</cfsavecontent>
 	</cfif>
 
-	<cfreturn CFW_trimHTML(local.output)>
+	<cfreturn _trimHTML(local.output)>
 </cffunction>

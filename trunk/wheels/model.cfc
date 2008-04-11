@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.base" output="false">
+<cfcomponent extends="base" output="false">
 	<cfinclude template="model/initialization.cfm">
 	<cfinclude template="model/associations.cfm">
 	<cfinclude template="model/calculations.cfm">
