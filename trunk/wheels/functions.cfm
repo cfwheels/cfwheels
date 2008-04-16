@@ -1,4 +1,4 @@
-<cfset this.name = listLast(replace(getDirectoryFromPath(getBaseTemplatePath()), "\", "/", "all"), "/")>
+<cfset this.name = right(getBaseTemplatePath(),64)>
 <cfset this.mappings["/wheels"] = getDirectoryFromPath(getBaseTemplatePath()) & "wheels">
 <cfset this.mappings["/controllerRoot"] = getDirectoryFromPath(getBaseTemplatePath()) & "controller">
 <cfset this.mappings["/modelRoot"] = getDirectoryFromPath(getBaseTemplatePath()) & "model">
