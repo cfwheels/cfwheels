@@ -1,4 +1,4 @@
-<cfset application.settings.database.datasource = application.applicationname>
+<cfset application.settings.database.datasource = "cfwheels">
 <cfset application.settings.database.username = "">
 <cfset application.settings.database.password = "">
 
