@@ -1,7 +1,10 @@
-<cfset this.name = right(getBaseTemplatePath(),64)>
-<cfset this.mappings["/wheels"] = getDirectoryFromPath(getBaseTemplatePath()) & "wheels">
-<cfset this.mappings["/controllerRoot"] = getDirectoryFromPath(getBaseTemplatePath()) & "controller">
-<cfset this.mappings["/modelRoot"] = getDirectoryFromPath(getBaseTemplatePath()) & "model">
+<!--- path of calling application.cfc will become the root dir --->
+<cfset this.rootdir = getDirectoryFromPath(getBaseTemplatePath())>
+<!--- niffty way to have unique application names and not have to worry about the 64 character length limit --->
+<cfset this.name = hash(this.rootdir)>
+<cfset this.mappings["/wheels"] = this.rootdir & "wheels">
+<cfset this.mappings["/controllerRoot"] = this.rootdir & "controller">
+<cfset this.mappings["/modelRoot"] = this.rootdir & "model">
 <cfset this.sessionmanagement = true>
 
 <cfinclude template="wheels/base/internal.cfm">
