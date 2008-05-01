@@ -1,6 +1,8 @@
 <cffunction name="capitalize" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">
-	<cfreturn uCase(left(arguments.text, 1)) & mid(arguments.text, 2, len(arguments.text)-1)>
+	<cfif len(arguments.text)>
+		<cfreturn uCase(left(arguments.text, 1)) & mid(arguments.text, 2, len(arguments.text)-1)>
+	</cfif>
 </cffunction>
 
 
