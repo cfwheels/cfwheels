@@ -2,7 +2,7 @@
 
 	<cffunction name="selectLastID" returntype="any" access="public" output="false">
 		<cfset var locals = structNew()>
-		<cfset locals.sql = "@@IDENTITY">
+		<cfset locals.sql = "SCOPE_IDENTITY()">
 		<cfreturn locals.sql>
 	</cffunction>
 
