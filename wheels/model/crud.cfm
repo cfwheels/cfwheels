@@ -403,11 +403,32 @@
 		</cfif>
 	</cfloop>
 	)
+
+		<!---
+		sql server supports multiple statements. using this and scope_identity() we
+		can guarentee that we are returning the correct identity value that was last
+		inserted
+		 --->
+		<cfif application.wheels.database.type IS "sqlserver">
+		SELECT #application.wheels.adapter.selectLastID()# AS lastId
+		</cfif>
+
 	</cfquery>
-	<cfquery name="locals.getIdQuery" datasource="#variables.class.database.create.datasource#" username="#variables.class.database.create.username#" password="#variables.class.database.create.password#">
-	SELECT #application.wheels.adapter.selectLastID()# AS lastId
-	</cfquery>
-	<cfset this[variables.class.primaryKey] = locals.getIdQuery.lastId>
+
+	<!--- for sqlserver we need to get the identity from multi statement insert --->
+	<cfif application.wheels.database.type IS "sqlserver">
+		<cfset this[variables.class.primaryKey] = locals.insertQuery.lastId>
+	</cfif>
+
+	<!--- getting identity value from a mysql database --->
+	<cfif application.wheels.database.type IS "mysql">
+
+		<cfquery name="locals.getIdQuery" datasource="#variables.class.database.create.datasource#" username="#variables.class.database.create.username#" password="#variables.class.database.create.password#">
+		SELECT #application.wheels.adapter.selectLastID()# AS lastId
+		</cfquery>
+		<cfset this[variables.class.primaryKey] = locals.getIdQuery.lastId>
+
+	</cfif>
 
 	<cfreturn true>
 </cffunction>
