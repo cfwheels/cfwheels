@@ -31,7 +31,7 @@
 	<cfset application.wheels.cache.external.query = structNew()>
 	<cfset application.wheels.cacheLastCulledAt = now()>
 	<!--- load environment settings --->
-	<cfif structKeyExists(URL, "reload") AND NOT isBoolean(URL.reload) AND (len(application.settings.reloadPassword) IS 0 OR (structKeyExists(URL, "password") AND URL.password IS application.settings.reloadPassword))>
+	<cfif structKeyExists(URL, "reload") AND NOT isBoolean(URL.reload) AND len(url.reload) AND (len(application.settings.reloadPassword) IS 0 OR (structKeyExists(URL, "password") AND URL.password IS application.settings.reloadPassword))>
 		<cfset application.settings.environment = URL.reload>
 	<cfelse>
 		<cfinclude template="../config/environment.cfm">
