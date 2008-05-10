@@ -9,6 +9,7 @@
 	<cfset variables.class.name = arguments.name>
 	<cfset variables.class.tableName = _pluralize(variables.class.name)>
 	<cfset variables.class.primaryKey = "id">
+	<cfset variables.class.associations = {}>
 	<cfloop list="create,read,update,delete" index="locals.i">
 		<cfset variables.class.database[locals.i] = structNew()>
 		<cfset variables.class.database[locals.i].datasource = application.settings.database[locals.i].datasource>
