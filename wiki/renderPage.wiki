@@ -1,0 +1,17 @@
+#summary Displays view with your specifications of controller, action, template, and layout.
+#labels method,controller
+
+=Arguments:=
+|| *Name* || *Required* || *Type* || *Default* || *Description* ||
+|| controller || No || string || #params.controller# || Controller to run. Affects which layout may be used. ||
+|| action || No || string || #params.action# || Action to run the view for. ||
+|| template || No || string || _[empty string]_ || Name of view file to use, without `.cfm` at the end. ||
+|| layout || No || string || _[empty string]_ || Name of layout to use, without `_layout.cfm` at the end. ||
+|| cache || No || string || _[empty string]_ || ... ||
+
+
+
+=Overview=
+Wheels's built-in `renderPage()` is always run by Wheels after your controller code executes, even if you don't explicitly call it in your code. But sometimes you may want for it to behave in a different way than its default behavior. If that's the case, then you can call it manually at the end of your controller code to modify which files it uses for controller, action, template, and layout. 
+
+`renderPage()` is available at all times in your controller code.
