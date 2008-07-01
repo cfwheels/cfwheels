@@ -1,0 +1,1 @@
+<cfinclude template="#application.pathTo.cfwheels#/generator/index.cfm">
