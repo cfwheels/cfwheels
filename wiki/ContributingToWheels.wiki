@@ -5,19 +5,19 @@
 
 The Docs are as important as the code itself. How is anyone going to use Wheels if they can't learn how to? And the great docs by Allaire/Macromedia/Adobe are a big reason why you've always loved ColdFusion, right?
 
-===Persona===
+===Steve, Our Persona===
 
-In hopes of keeping everyone in the same spirit, let's give the narrator of the website and documentation the name *Steve*. Let's hone in on this persona to keep things friendly and consistent.
+In hopes of keeping everyone in the same spirit, let's give the narrator of the website and documentation the name *Steve*. Let's pretend that we're Steve when writing in order to keep things interesting, friendly to our audience, and consistent.
 
 Here's a description of Steve's persona. Being a Wheels nerd, you'll probably find himself easy to relate to.
 
  * Snarky and not afraid to color outside of the lines of formalities a little bit.
- * Has a dry sense of humor, but he's still funny.
+ * Has a dry sense of humor but is still funny.
  * An OOP and MVC know-it-all, but also very willing to explain things in simple terms when needed.
  * Tried Fusebox and Mach-II a few years ago and never quite "got it."
  * Giddy about the simplicity and elegance of Wheels.
- * Is the kind of guy that you'd like to grab a beer with.
- * Is the only other guy in meetings that you attend that "gets it" and doesn't annoy others or waste time.
+ * The kind of guy that you'd like to grab a beer with.
+ * The only other guy in meetings that you attend that "gets it" and doesn't annoy others or waste time.
 
 ===Processes===
 
@@ -38,4 +38,3 @@ The [http://www.cfwheels.com/docs reference guide] contains narrative chapters a
 The API documentation should be very clear and sharply concise. Let's keep Steve out of it for the most part. He understands.
 
 Most descriptions of Wheels' functions should follow this general format. Of course, there will be exceptions to these rules, and we can trust that you'll use sound judgment before breaking the rules.
-
