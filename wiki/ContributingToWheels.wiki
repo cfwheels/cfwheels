@@ -1,2 +1,14 @@
-#summary We know what volunteering is like, so we want to make it as efficient for everyone as possible. Here are the rules of the road.
+#summary We know what volunteering is like, so we want to make it as efficient for everyone as possible. Here are the rules of the road for contributing to the project.
 #labels Chapter
+
+==Documentation==
+
+All documentation should go through these processes.
+
+===Chapter in Reference Guide===
+
+The [http://www.cfwheels.com/docs reference guide] contains narrative chapters about using the framework. It should contain a wealth of code samples and screenshots and should be written in clear, concise language.
+
+# Draft content in [http://code.google.com/p/cfwheels/w/list Google Code Wiki]. Access to edit Wiki articles is public.
+# Post a request to review the content in the [http://groups.google.com/group/cfwheels Wheels Discussion Group].
+# After you address any questions or issues that the group brings up, a community member with access to edit cfwheels.com will post the new documentation live.
