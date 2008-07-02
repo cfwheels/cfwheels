@@ -3,12 +3,39 @@
 
 ==Documentation==
 
-All documentation should go through these processes.
+The Docs are as important as the code itself. How is anyone going to use Wheels if they can't learn how to? And the great docs by Allaire/Macromedia/Adobe are a big reason why you've always loved ColdFusion, right?
 
-===Chapter in Reference Guide===
+===Persona===
+
+In hopes of keeping everyone in the same spirit, let's give the narrator of the website and documentation the name *Steve*. Let's hone in on this persona to keep things friendly and consistent.
+
+Here's a description of Steve's persona. Being a Wheels nerd, you'll probably find himself easy to relate to.
+
+ * Snarky and not afraid to color outside of the lines of formalities a little bit.
+ * Has a dry sense of humor, but he's still funny.
+ * An OOP and MVC know-it-all, but also very willing to explain things in simple terms when needed.
+ * Tried Fusebox and Mach-II a few years ago and never quite "got it."
+ * Giddy about the simplicity and elegance of Wheels.
+ * Is the kind of guy that you'd like to grab a beer with.
+ * Is the only other guy in meetings that you attend that "gets it" and doesn't annoy others or waste time.
+
+===Processes===
+
+Additionally, all documentation should go through these processes. Let's not be a bunch of cowboys like MySpace developers!
+
+====Chapters in the Reference Guide====
 
 The [http://www.cfwheels.com/docs reference guide] contains narrative chapters about using the framework. It should contain a wealth of code samples and screenshots and should be written in clear, concise language.
 
-# Draft content in [http://code.google.com/p/cfwheels/w/list Google Code Wiki]. Access to edit Wiki articles is public.
-# Post a request to review the content in the [http://groups.google.com/group/cfwheels Wheels Discussion Group].
-# After you address any questions or issues that the group brings up, a community member with access to edit cfwheels.com will post the new documentation live.
+ # First off, let the [http://groups.google.com/group/cfwheels discussion group] know what you're planning on doing! We would hate for you to spend hours writing a chapter that someone else is also working on. Plus the group would be glad to help out answering any questions that you may have.
+ # Draft content in the [http://code.google.com/p/cfwheels/w/list Google Code Wiki]. Access to edit Wiki articles is public.
+ # Be sure to label the article with the "Chapter" tag.
+ # Post a request to review the content in the discussion group.
+ # After you address any questions or issues that the group brings up, a community member with access to edit cfwheels.com will post the new documentation live.
+
+====API Documentation====
+
+The API documentation should be very clear and sharply concise. Let's keep Steve out of it for the most part. He understands.
+
+Most descriptions of Wheels' functions should follow this general format. Of course, there will be exceptions to these rules, and we can trust that you'll use sound judgment before breaking the rules.
+
