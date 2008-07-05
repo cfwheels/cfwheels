@@ -9,7 +9,7 @@ Anyone may check out a read only copy of the code using this command:
 `svn checkout http://cfwheels.googlecode.com/svn/trunk/ cfwheels-read-only`
 
 The repository contains a standard SVN structure.
- * The *trunk* contains the latest working copy of the project as committed by the project's developers. It may contain bugs.
+ * The *trunk* contains the latest working copy of the project as committed by the project's developers. It may contain bugs and will be in a constant state of flux until it is tagged in a new release.
  * *tags* contains official release code.
  * *branches* contain any off-shoot efforts that the group has decided to develop independently from the rest of the code.
 
@@ -31,6 +31,20 @@ Once you have write access to the project, here's the process that we'd like for
  # When committing your code, please include your issue number in your comment. Also post a comment with your SVN revision number in your Google Code issue.
  # A project administrator will review unit tests and post any necessary feedback.
  # Once everything is resolved, the issue will be marked as "Fixed." A project administrator will probably also shower you with glory in the Google Group, blog, and/or Community section of the Wheels site.
+ # Open an issue in Google Code to have the additions and changes in your revision documented. You may claim the issue if you'd like to do this, but it's entirely your choice.
 
 ==Code Style==
 
+All framework code must follow the following style. This will make things more readable and will keep everyone on the same page. If you're working on code and notice any violations of the official style, feel free to correct it!
+
+===Naming Conventions===
+
+To stay true to our ColdFusion and Java roots, all names must be camelCase. In some cases, the first letter should be capitalized as well. Refer to these examples.
+
+|| *Code Element* || *Examples* || Description ||
+|| CFC Names || `MyCfc.cfc`, `BlogEntry.cfc` || CapitalizedCamelCase || 
+|| Variable Names || `myVariable`, `storyId` || camelCase || 
+|| UDF Names || `myFunction()` || camelCase ||
+|| Built-in CF Variables || `result.RecordCount`, `cfhttp.FileContent` || CapitalizedCamelCase ||
+|| Built-in CF Functions || `IsNumeric()`, `Trim()` || CapitalizedCamelCase ||
+|| Scopes || `application.myVariable`, `session.userId` || lowercase.camelCase ||
