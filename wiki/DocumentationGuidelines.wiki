@@ -1,11 +1,9 @@
-#summary We know what volunteering is like, so we want to make it as efficient for everyone as possible. Here are the rules of the road for contributing to the project.
+#summary We know what volunteering is like, so we want to make it as efficient for everyone as possible. Here are the rules of the road for contributing documentation to the project.
 #labels chapter
-
-==Documentation==
 
 The Docs are as important as the code itself. How is anyone going to use Wheels if they can't learn how to? And the great docs by Allaire/Macromedia/Adobe are a big reason why you've always loved ColdFusion, right?
 
-===Steve, Our Persona===
+==Steve, Our Persona==
 
 In hopes of keeping everyone in the same spirit, let's give the narrator of the website and documentation the name *Steve*. Let's pretend that we're Steve when writing in order to keep things interesting, friendly to our audience, and consistent.
 
@@ -19,11 +17,11 @@ Here's a description of Steve's persona. Being a Wheels nerd, you'll probably fi
  * The kind of guy that you'd like to grab a beer with.
  * The only other guy in meetings that you attend that "gets it" and doesn't annoy others or waste time.
 
-===Processes===
+==Processes==
 
 Additionally, all documentation should go through these processes. Let's not be a bunch of cowboys like MySpace developers!
 
-====Chapters in the Reference Guide====
+===Chapters in the Reference Guide===
 
 The [http://www.cfwheels.com/docs reference guide] contains narrative chapters about using the framework. It should contain a wealth of code samples and screenshots and should be written in clear, concise language.
 
@@ -33,43 +31,43 @@ The [http://www.cfwheels.com/docs reference guide] contains narrative chapters a
  # Post a request to review the content in the discussion group.
  # After you address any questions or issues that the group brings up, a community member with access to edit cfwheels.com will post the new documentation live.
 
-====API Documentation====
+===API Documentation===
 
 The API documentation should be very clear and concise. Let's keep Steve out of it for the most part. He understands.
 
 Most descriptions of Wheels' functions should follow this general format, inspired by the CFML function reference in the [http://livedocs.adobe.com/coldfusion/8/htmldocs/index.html ColdFusion 8 Live Docs].
 
- =====Description=====
+ ====Description====
  
  A concise description of what the function does. Also include any notes like what types of values that are supported.
  
- =====Returns=====
+ ====Returns====
  
  Short description of what is returned from the function, if anything.
  
- =====Function Syntax=====
+ ====Function Syntax====
  
  {{{
  functionName(argument1, argument2, [optionalArgument])
  }}}
  
- =====History=====
+ ====History====
  
  History of how function behavior changes from version to version of Wheels.
  
  Of course, there will be exceptions to these rules, and we can trust that you'll use sound judgment before breaking them.
 
- =====CFML Engines Supported=====
+ ====CFML Engines Supported====
  
  List of tested and supported versions of ColdFusion, Railo, OpenBD, etc.
  
- =====Parameters=====
+ ====Parameters====
  
  || *Parameter* || *Required* || *Default* || *Description* ||
  || `argument1` || Yes || N/A || A description of `argument1`, including type and possible values if applicable. ||
  || `argument2` || Yes || N/A || A description of `argument2`. ||
  || `optionalArgument` || No || Default Value || A description of `optionalArgument`, including default value if applicable. ||
  
- =====Usage=====
+ ====Usage====
  
  Narrative of common use cases for the function, with plenty of examples.
