@@ -1,0 +1,36 @@
+#summary Here are the rules of the road for contributing code to the project. Let's follow this process so that we don't duplicate effort and so the code base is easy to maintain over the long haul.
+#labels chapter,contributing
+
+==Subversion Repository==
+
+The official Subversion repository for Wheels is located at our [http://code.google.com/p/cfwheels/ Google Code site].
+
+Anyone may check out a read only copy of the code using this command:
+`svn checkout http://cfwheels.googlecode.com/svn/trunk/ cfwheels-read-only`
+
+The repository contains a standard SVN structure.
+ * The *trunk* contains the latest working copy of the project as committed by the project's developers. It may contain bugs.
+ * *tags* contains official release code.
+ * *branches* contain any off-shoot efforts that the group has decided to develop independently from the rest of the code.
+
+===Gaining Write Access===
+
+We're pretty open about anyone joining that wants to contribute. The more, the merrier. And hey, if you start screwing things up too much, we can just boot you and your code. :)
+
+To request write access, just send a message to the Wheels Google Group. Be sure to let us know what you will be working on so we can coordinate your efforts with others'.
+
+===Process for Implementing Changes to the Code===
+
+Once you have write access to the project, here's the process that we'd like for you to follow. This process is in place mainly to encourage everyone to communicate openly. This gives us the opportunity to have a great peer-review process, which will result in quality. Who doesn't like quality?
+
+ # Open an issue in the Wheels code site, outlining the changes or additions that you would like to make.
+ # A project administrator will review your submission and leave feedback if necessary.
+ # Once the administrator is satisfied with the scope of the issue, they will schedule it for a release and mark your issue as "Approved." This is your green light to start working. Get to coding, grasshopper!
+ # Need help or running across any issues while coding? Run it by the Google Group. They all have opinions and love to let you know all about them. :)
+ # Once we have a unit testing methodology in place, all code will need to have unit tests that validate common and boundary scenarios. Unit testing methodology TBD.
+ # When committing your code, please include your issue number in your comment. Also post a comment with your SVN revision number in your Google Code issue.
+ # A project administrator will review unit tests and post any necessary feedback.
+ # Once everything is resolved, the issue will be marked as "Fixed." A project administrator will probably also shower you with glory in the Google Group, blog, and/or Community section of the Wheels site.
+
+==Code Style==
+
