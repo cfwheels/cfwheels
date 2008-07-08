@@ -111,7 +111,7 @@
 			<cfset locals.paginationArguments.select = "#variables.class.tableName#.#variables.class.primaryKey# AS primaryKey">
 			<cfset locals.paginationArguments.limit = arguments.perPage>
 			<cfset locals.paginationArguments.offset = (arguments.perPage * arguments.page) - arguments.perPage>
-			<cfif (local.paginationArguments.limit + locals.paginationArguments.offset) GT locals.totalRecords>
+			<cfif (locals.paginationArguments.limit + locals.paginationArguments.offset) GT locals.totalRecords>
 				<cfset locals.paginationArguments.limit = locals.totalRecords - locals.paginationArguments.offset>
 			</cfif>
 			<cfif isDefined("arguments.indexes.ids")>
