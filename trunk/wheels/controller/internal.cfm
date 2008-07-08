@@ -9,7 +9,7 @@
 			<cfset local.temp = listToArray(local.i, "=")>
 			<cfset local.params = local.params & local.delim & local.temp[1] & "=">
 			<cfif arrayLen(local.temp) IS 2>
-				<cfset local.params = local.params & encryptParam(local.temp[2])>
+				<cfset local.params = local.params & obfuscateParam(local.temp[2])>
 			</cfif>
 			<cfset local.delim = "&">
 		</cfloop>
