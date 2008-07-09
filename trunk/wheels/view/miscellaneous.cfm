@@ -5,7 +5,6 @@
 	<cfreturn _includeOrRenderPartial(argumentCollection=arguments)>
 </cffunction>
 
-
 <cffunction name="cycle" returntype="any" access="public" output="false">
 	<cfargument name="values" type="any" required="true">
 	<cfargument name="name" type="any" required="false" default="default">

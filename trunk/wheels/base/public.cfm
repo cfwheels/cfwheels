@@ -17,7 +17,6 @@
 	<cfreturn locals.result>
 </cffunction>
 
-
 <cffunction name="deobfuscateParam" returntype="any" access="public" output="false">
 	<cfargument name="param" type="any" required="true">
 	<cfset var locals = structNew()>
@@ -45,7 +44,6 @@
 	<cfreturn locals.result>
 </cffunction>
 
-
 <cffunction name="addRoute" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="pattern" type="any" required="true">
@@ -66,21 +64,16 @@
 
 </cffunction>
 
-
 <cffunction name="model" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
-
 	<cfif application.settings.environment IS NOT "production">
 		<cfinclude template="../errors/model.cfm">
 	</cfif>
-
-	<cfif NOT structKeyExists(application.wheels.models, arguments.name)>
-   	<cflock name="modelLock" type="exclusive" timeout="30">
-			<cfif NOT structKeyExists(application.wheels.models, arguments.name)>
-				<cfset application.wheels.models[arguments.name] = createObject("component", "modelRoot.#lCase(arguments.name)#")._initModelClass(arguments.name)>
-			</cfif>
-		</cflock>
-	</cfif>
-
+	<cfset $doubleCheckedLock(name="modelLock", path=application.wheels.models, key=arguments.name, method="$createClass", args=arguments)>
 	<cfreturn application.wheels.models[arguments.name]>
+</cffunction>
+
+<cffunction name="$createClass" returntype="any" access="private" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfreturn CreateObject("component", "modelRoot.#arguments.name#").$initClass(arguments.name)>
 </cffunction>

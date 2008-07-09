@@ -27,7 +27,6 @@
 	<cfreturn locals.result>
 </cffunction>
 
-
 <cffunction name="buttonTo" returntype="any" access="public" output="false">
 	<cfargument name="url" type="any" required="false" default="">
 	<cfargument name="text" type="any" required="false" default="">
@@ -79,7 +78,6 @@
 	<cfreturn locals.result>
 </cffunction>
 
-
 <cffunction name="mailTo" returntype="any" access="public" output="false">
 	<cfargument name="email" type="any" required="true">
 	<cfargument name="text" type="any" required="false" default="">
@@ -107,7 +105,6 @@
 	<cfreturn locals.result>
 </cffunction>
 
-
 <cffunction name="linkToUnlessCurrent" returntype="any" access="public" output="false">
 	<!--- accepts linkTo and URLFor arguments --->
 	<cfset var locals = structNew()>
@@ -118,7 +115,6 @@
 	</cfif>
 	<cfreturn locals.result>
 </cffunction>
-
 
 <cffunction name="isCurrentPage" returntype="any" access="public" output="false">
 	<!--- accepts URLFor arguments --->

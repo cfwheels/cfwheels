@@ -13,7 +13,7 @@
 <cffunction name="onApplicationStart" output="false">
 	<cfset var locals = structNew()>
 	<cfset application.wheels = structNew()>
-	<cfset application.wheels.version = "0.7">
+	<cfset application.wheels.version = "0.7.1">
 	<cfset application.wheels.controllers = structNew()>
 	<cfset application.wheels.models = structNew()>
 	<cfset application.wheels.routes = arrayNew(1)>
@@ -45,22 +45,10 @@
 	<cftry>
 		<!--- determine and set database brand --->
 		<cfinclude template="../config/database.cfm">
-		<cfloop list="create,read,update,delete" index="locals.i">
-			<cfif application.settings.database[locals.i].datasource IS "">
-				<cfset application.settings.database[locals.i].datasource = application.settings.database.datasource>
-				<cfset application.settings.database[locals.i].username = application.settings.database.username>
-				<cfset application.settings.database[locals.i].password = application.settings.database.password>
-			</cfif>
-		</cfloop>
-		<cfquery name="locals.database" datasource="#application.settings.database.read.datasource#" username="#application.settings.database.read.username#" password="#application.settings.database.read.password#">
-		SELECT @@version AS info
-		</cfquery>
-		<cfif locals.database.info Contains "SQL Server">
-			<cfset application.wheels.database.type = "sqlserver">
-		<cfelse>
-			<cfset application.wheels.database.type = "mysql">
+		<cfset locals.info = $dbinfo(datasource=application.settings.database.datasource, type="version")>
+		<cfif locals.info.recordCount>
+			<cfset application.wheels.adapter = createObject("component", "wheels.model.adapters.#Replace(locals.info.database_productname, " ", "", "all")#")>
 		</cfif>
-		<cfset application.wheels.adapter = createObject("component", "wheels.model.adapters.#application.wheels.database.type#")>
 	<cfcatch>
 	</cfcatch>
 	</cftry>

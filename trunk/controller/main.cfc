@@ -1,7 +1,7 @@
 <cfcomponent extends="controller">
 
 	<cffunction name="welcomeToWheels">
-		<cfset version = 0.7>
+		<cfset version = application.wheels.version>
 	</cffunction>
 
 </cfcomponent>

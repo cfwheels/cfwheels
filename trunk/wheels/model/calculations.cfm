@@ -1,78 +1,84 @@
-<cffunction name="sum" returntype="any" access="public" output="false">
-	<cfargument name="field" type="any" required="true">
-	<cfargument name="where" type="any" required="false" default="">
-	<cfargument name="include" type="any" required="false" default="">
-	<cfargument name="distinct" type="any" required="false" default="false">
-	<cfset arguments.type = "SUM">
-	<cfreturn calculate(argumentCollection=arguments)>
+<cffunction name="sum" returntype="numeric" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="distinct" type="any" required="false" default="">
+	<cfscript>
+		arguments.type = "SUM";
+	</cfscript>
+	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-
-<cffunction name="minimum" returntype="any" access="public" output="false">
-	<cfargument name="field" type="any" required="true">
-	<cfargument name="where" type="any" required="false" default="">
-	<cfargument name="include" type="any" required="false" default="">
-	<cfargument name="distinct" type="any" required="false" default="false">
-	<cfset arguments.type = "MIN">
-	<cfreturn calculate(argumentCollection=arguments)>
+<cffunction name="minimum" returntype="numeric" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="distinct" type="any" required="false" default="">
+	<cfscript>
+		arguments.type = "MIN";
+	</cfscript>
+	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-
-<cffunction name="maximum" returntype="any" access="public" output="false">
-	<cfargument name="field" type="any" required="true">
-	<cfargument name="where" type="any" required="false" default="">
-	<cfargument name="include" type="any" required="false" default="">
-	<cfargument name="distinct" type="any" required="false" default="false">
-	<cfset arguments.type = "MAX">
-	<cfreturn calculate(argumentCollection=arguments)>
+<cffunction name="maximum" returntype="numeric" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="distinct" type="any" required="false" default="">
+	<cfscript>
+		arguments.type = "MAX";
+	</cfscript>
+	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-
-<cffunction name="average" returntype="any" access="public" output="false">
-	<cfargument name="field" type="any" required="true">
-	<cfargument name="where" type="any" required="false" default="">
-	<cfargument name="include" type="any" required="false" default="">
-	<cfargument name="distinct" type="any" required="false" default="false">
-	<cfset arguments.type = "AVG">
-	<cfreturn calculate(argumentCollection=arguments)>
+<cffunction name="average" returntype="numeric" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="distinct" type="any" required="false" default="">
+	<cfscript>
+		arguments.type = "AVG";
+	</cfscript>
+	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-
-<cffunction name="count" returntype="any" access="public" output="false">
-	<cfargument name="where" type="any" required="false" default="">
-	<cfargument name="include" type="any" required="false" default="">
-	<cfargument name="distinct" type="any" required="false" default="false">
-	<cfset arguments.field = variables.class.primaryKey>
-	<cfset arguments.type = "COUNT">
-	<cfreturn calculate(argumentCollection=arguments)>
+<cffunction name="count" returntype="numeric" access="public" output="false">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="distinct" type="any" required="false" default="">
+	<cfscript>
+		arguments.property = ListFirst(variables.wheels.class.keys);
+		arguments.type = "COUNT";
+	</cfscript>
+	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-
-<cffunction name="calculate" returntype="any" access="public" output="false">
-	<cfargument name="type" type="any" required="true">
-	<cfargument name="field" type="any" required="true">
-	<cfargument name="where" type="any" required="false" default="">
-	<cfargument name="include" type="any" required="false" default="">
-	<cfargument name="distinct" type="any" required="false" default="false">
-	<cfset var locals = structNew()>
-
-	<cfif len(arguments.include) IS NOT 0>
-		<cfset arguments.distinct = true>
-	</cfif>
-
-	<cfif arguments.distinct>
-		<cfset arguments.select = "#arguments.type#(DISTINCT #variables.class.tableName#.#arguments.field#) AS result">
-	<cfelse>
-		<cfset arguments.select = "#arguments.type#(#variables.class.tableName#.#arguments.field#) AS result">
-	</cfif>
-
-	<cfset locals.query = _query(argumentCollection=arguments)>
-
-	<cfif len(locals.query.result) IS NOT 0>
-		<cfset locals.result = locals.query.result>
-	<cfelse>
-		<cfset locals.result = 0>
-	</cfif>
-
-	<cfreturn locals.result>
+<cffunction name="$calculate" returntype="numeric" access="private" output="false">
+	<cfargument name="type" type="string" required="true">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="where" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="distinct" type="any" required="false" default="">
+	<cfscript>
+		var loc = {};
+		if (!Len(arguments.distinct))
+		{
+			if (Len(arguments.include))
+				arguments.distinct = true;
+			else
+				arguments.distinct = false;
+		}
+		arguments.select = "#arguments.type#(";
+		if (arguments.distinct)
+			arguments.select = arguments.select & "DISTINCT ";
+		arguments.select = arguments.select & "#variables.wheels.class.tableName#.#arguments.property#) AS result";
+		StructDelete(arguments, "type");
+		StructDelete(arguments, "property");
+		loc.query = findAll(argumentCollection=arguments);
+		if (Len(loc.query.result))
+			loc.returnValue = loc.query.result;
+		else
+			loc.returnValue = 0;
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>

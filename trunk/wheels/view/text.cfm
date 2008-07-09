@@ -5,7 +5,6 @@
 	</cfif>
 </cffunction>
 
-
 <cffunction name="titleize" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">
 	<cfset var locals = structNew()>
@@ -17,7 +16,6 @@
 
 	<cfreturn locals.result>
 </cffunction>
-
 
 <cffunction name="simpleFormat" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="yes">
@@ -33,7 +31,6 @@
 
 	<cfreturn local.output>
 </cffunction>
-
 
 <cffunction name="autoLink" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="yes">
@@ -71,18 +68,15 @@
 	<cfreturn REReplaceNoCase(arguments.text, "(#arguments.phrase#)", "<span class=""#arguments.class#"">\1</span>", "all")>
 </cffunction>
 
-
 <cffunction name="stripTags" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">
 	<cfreturn REReplaceNoCase(arguments.text, "<[a-z].*?>(.*?)</[a-z]>", "\1" , "all")>
 </cffunction>
 
-
 <cffunction name="stripLinks" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">
 	<cfreturn REReplaceNoCase(arguments.text, "<a.*?>(.*?)</a>", "\1" , "all")>
 </cffunction>
-
 
 <cffunction name="excerpt" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">
@@ -111,7 +105,6 @@
 
 	<cfreturn local.output>
 </cffunction>
-
 
 <cffunction name="truncate" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">

@@ -55,7 +55,6 @@
 	<cfreturn local.output>
 </cffunction>
 
-
 <cffunction name="timeAgoInWords" returntype="any" access="public" output="false">
 	<cfargument name="from_time" type="any" required="true">
 	<cfargument name="include_seconds" type="any" required="false" default="false">
@@ -64,7 +63,6 @@
 
 	<cfreturn distanceOfTimeInWords(argumentCollection=arguments)>
 </cffunction>
-
 
 <cffunction name="timeUntilInWords" returntype="any" access="public" output="false">
 	<cfargument name="to_time" type="any" required="true">

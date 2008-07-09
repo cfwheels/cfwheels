@@ -1,31 +1,9 @@
-<cffunction name="reload" returntype="any" access="public" output="false">
-	<cfreturn findById(id=this.id, reload=true)>
-</cffunction>
 
 
-<cffunction name="exists" returntype="any" access="public" output="false">
-	<cfargument name="conditions" type="any" required="false" default="">
-	<cfargument name="id" type="any" required="false" default="">
-	<cfargument name="where" type="any" required="false" default="">
-	<cfif arguments.id IS NOT "">
-		<cfset arguments.conditions = arguments.id>
-	<cfelseif arguments.where IS NOT "">
-		<cfset arguments.conditions = arguments.where>
-	</cfif>
-	<cfif isNumeric(arguments.conditions)>
-		<cfset arguments.id = arguments.conditions>
-		<cfset structDelete(arguments, "conditions")>
-		<cfset structDelete(arguments, "where")>
-		<cfreturn findById(argumentCollection=arguments).found>
-	<cfelse>
-		<cfset arguments.where = arguments.conditions>
-		<cfset structDelete(arguments, "conditions")>
-		<cfset structDelete(arguments, "id")>
-		<cfreturn findOne(argumentCollection=arguments).found>
-	</cfif>
-</cffunction>
 
 
+<<<<<<< .mine
+=======
 <cffunction name="findById" returntype="any" access="public" output="false">
 	<cfargument name="id" type="any" required="true">
 	<cfargument name="select" type="any" required="false" default="">
@@ -627,4 +605,4 @@
 	</cfloop>
 
 	<cfreturn locals.returnData>
-</cffunction>
+</cffunction>>>>>>>> .r721

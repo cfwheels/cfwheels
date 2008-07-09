@@ -2,10 +2,10 @@
 	<cfargument name="link" type="any" required="false" default="">
 	<cfargument name="method" type="any" required="false" default="post">
 	<cfargument name="multipart" type="any" required="false" default="false">
-	<cfargument name="spam_protection" type="any" required="false" default="false">
+	<cfargument name="spamProtection" type="any" required="false" default="false">
 	<!--- Accepts URLFor arguments --->
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "link,method,multipart,spam_protection,controller,action,id,anchor,only_path,host,protocol,params">
+	<cfset arguments._named_arguments = "link,method,multipart,spamProtection,controller,action,id,anchor,only_path,host,protocol,params">
 	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
 		<!--- Since a non-numeric id was passed in we assume it is meant as a HTML attribute and therefore remove it from the named arguments list so that it will be set in the attributes --->
 		<cfset arguments._named_arguments = listDeleteAt(arguments._named_arguments, listFindNoCase(arguments._named_arguments, "id"))>
@@ -24,7 +24,7 @@
 	</cfif>
 	<cfset local.url = HTMLEditFormat(local.url)>
 
-	<cfif arguments.spam_protection>
+	<cfif arguments.spamProtection>
 		<cfset local.onsubmit = "this.action='#left(local.url, int((len(local.url)/2)))#'+'#right(local.url, ceiling((len(local.url)/2)))#';">
 		<cfset local.url = "">
 	</cfif>
@@ -42,17 +42,17 @@
 <cffunction name="formRemoteTag" returntype="any" access="public" output="false">
 	<cfargument name="link" type="any" required="false" default="">
 	<cfargument name="method" type="any" required="false" default="post">
-	<cfargument name="spam_protection" type="any" required="false" default="false">
+	<cfargument name="spamProtection" type="any" required="false" default="false">
 	<cfargument name="update" type="any" required="false" default="">
 	<cfargument name="insertion" type="any" required="false" default="">
 	<cfargument name="serialize" type="any" required="false" default="false">
-	<cfargument name="on_loading" type="any" required="false" default="">
-	<cfargument name="on_complete" type="any" required="false" default="">
-	<cfargument name="on_success" type="any" required="false" default="">
-	<cfargument name="on_failure" type="any" required="false" default="">
+	<cfargument name="onLoading" type="any" required="false" default="">
+	<cfargument name="onComplete" type="any" required="false" default="">
+	<cfargument name="onSuccess" type="any" required="false" default="">
+	<cfargument name="onFailure" type="any" required="false" default="">
 	<!--- Accepts URLFor arguments --->
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "link,method,spam_protection,update,insertion,serialize,on_loading,on_complete,on_success,on_failure,controller,action,id,anchor,only_path,host,protocol,params">
+	<cfset arguments._named_arguments = "link,method,spamProtection,update,insertion,serialize,onLoading,onComplete,onSuccess,onFailure,controller,action,id,anchor,only_path,host,protocol,params">
 	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
 		<!--- Since a non-numeric id was passed in we assume it is meant as a HTML attribute and therefore remove it from the named arguments list so that it will be set in the attributes --->
 		<cfset arguments._named_arguments = listDeleteAt(arguments._named_arguments, listFindNoCase(arguments._named_arguments, "id"))>
@@ -87,25 +87,25 @@
 		<cfset local.ajax_call = local.ajax_call & ",parameters:Form.serialize(this)">
 	</cfif>
 
-	<cfif len(arguments.on_loading) IS NOT 0>
-		<cfset local.ajax_call = local.ajax_call & ",onLoading:#arguments.on_loading#">
+	<cfif len(arguments.onLoading) IS NOT 0>
+		<cfset local.ajax_call = local.ajax_call & ",onLoading:#arguments.onLoading#">
 	</cfif>
 
-	<cfif len(arguments.on_complete) IS NOT 0>
-		<cfset local.ajax_call = local.ajax_call & ",onComplete:#arguments.on_complete#">
+	<cfif len(arguments.onComplete) IS NOT 0>
+		<cfset local.ajax_call = local.ajax_call & ",onComplete:#arguments.onComplete#">
 	</cfif>
 
-	<cfif len(arguments.on_success) IS NOT 0>
-		<cfset local.ajax_call = local.ajax_call & ",onSuccess:#arguments.on_success#">
+	<cfif len(arguments.onSuccess) IS NOT 0>
+		<cfset local.ajax_call = local.ajax_call & ",onSuccess:#arguments.onSuccess#">
 	</cfif>
 
-	<cfif len(arguments.on_failure) IS NOT 0>
-		<cfset local.ajax_call = local.ajax_call & ",onFailure:#arguments.on_failure#">
+	<cfif len(arguments.onFailure) IS NOT 0>
+		<cfset local.ajax_call = local.ajax_call & ",onFailure:#arguments.onFailure#">
 	</cfif>
 
 	<cfset local.ajax_call = local.ajax_call & "});">
 
-	<cfif arguments.spam_protection>
+	<cfif arguments.spamProtection>
 		<cfset local.url = "">
 	</cfif>
 
@@ -158,23 +158,23 @@
 
 
 <cffunction name="textField" returntype="any" access="public" output="false">
-	<cfargument name="object_name" type="any" required="true">
-	<cfargument name="field" type="any" required="true">
+	<cfargument name="objectName" type="any" required="true">
+	<cfargument name="property" type="any" required="true">
 	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrap_label" type="any" required="false" default="true">
+	<cfargument name="wrapLabel" type="any" required="false" default="true">
 	<cfargument name="prepend" type="any" required="false" default="">
 	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prepend_to_label" type="any" required="false" default="">
-	<cfargument name="append_to_label" type="any" required="false" default="">
-	<cfargument name="error_element" type="any" required="false" default="div">
+	<cfargument name="prependToLabel" type="any" required="false" default="">
+	<cfargument name="appendToLabel" type="any" required="false" default="">
+	<cfargument name="errorElement" type="any" required="false" default="div">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "object_name,field,label,wrap_label,prepend,append,prepend_to_label,append_to_label,error_element">
+	<cfset arguments._named_arguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
 			#_formBeforeElement(argumentCollection=arguments)#
-			<input type="text" name="#listLast(arguments.object_name,".")#[#arguments.field#]" id="#listLast(arguments.object_name,".")#_#arguments.field#" value="#HTMLEditFormat(_formValue(argumentCollection=arguments))#"#local.attributes# />
+			<input type="text" name="#listLast(arguments.objectName,".")#[#arguments.property#]" id="#listLast(arguments.objectName,".")#_#arguments.property#" value="#HTMLEditFormat(_formValue(argumentCollection=arguments))#"#local.attributes# />
 			#_formAfterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
@@ -184,24 +184,24 @@
 
 
 <cffunction name="radioButton" returntype="any" access="public" output="false">
-	<cfargument name="object_name" type="any" required="true">
-	<cfargument name="field" type="any" required="true">
-	<cfargument name="tag_value" type="any" required="true">
+	<cfargument name="objectName" type="any" required="true">
+	<cfargument name="property" type="any" required="true">
+	<cfargument name="tagValue" type="any" required="true">
 	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrap_label" type="any" required="false" default="true">
+	<cfargument name="wrapLabel" type="any" required="false" default="true">
 	<cfargument name="prepend" type="any" required="false" default="">
 	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prepend_to_label" type="any" required="false" default="">
-	<cfargument name="append_to_label" type="any" required="false" default="">
-	<cfargument name="error_element" type="any" required="false" default="div">
+	<cfargument name="prependToLabel" type="any" required="false" default="">
+	<cfargument name="appendToLabel" type="any" required="false" default="">
+	<cfargument name="errorElement" type="any" required="false" default="div">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "object_name,field,tag_value,label,wrap_label,prepend,append,prepend_to_label,append_to_label,error_element">
+	<cfset arguments._named_arguments = "objectName,property,tagValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
 			#_formBeforeElement(argumentCollection=arguments)#
-			<input type="radio" name="#listLast(arguments.object_name,".")#[#arguments.field#]" id="#listLast(arguments.object_name,".")#_#arguments.field#" value="#arguments.tag_value#"<cfif arguments.tag_value IS _formValue(argumentCollection=arguments)> checked="checked"</cfif>#local.attributes# />
+			<input type="radio" name="#listLast(arguments.objectName,".")#[#arguments.property#]" id="#listLast(arguments.objectName,".")#_#arguments.property#" value="#arguments.tagValue#"<cfif arguments.tagValue IS _formValue(argumentCollection=arguments)> checked="checked"</cfif>#local.attributes# />
 			#_formAfterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
@@ -211,19 +211,19 @@
 
 
 <cffunction name="checkBox" returntype="any" access="public" output="false">
-	<cfargument name="object_name" type="any" required="true">
-	<cfargument name="field" type="any" required="true">
-	<cfargument name="checked_value" type="any" required="false" default="1">
-	<cfargument name="unchecked_value" type="any" required="false" default="0">
+	<cfargument name="objectName" type="any" required="true">
+	<cfargument name="property" type="any" required="true">
+	<cfargument name="checkedValue" type="any" required="false" default="1">
+	<cfargument name="uncheckedValue" type="any" required="false" default="0">
 	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrap_label" type="any" required="false" default="true">
+	<cfargument name="wrapLabel" type="any" required="false" default="true">
 	<cfargument name="prepend" type="any" required="false" default="">
 	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prepend_to_label" type="any" required="false" default="">
-	<cfargument name="append_to_label" type="any" required="false" default="">
-	<cfargument name="error_element" type="any" required="false" default="div">
+	<cfargument name="prependToLabel" type="any" required="false" default="">
+	<cfargument name="appendToLabel" type="any" required="false" default="">
+	<cfargument name="errorElement" type="any" required="false" default="div">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "object_name,field,checked_value,unchecked_value,label,wrap_label,prepend,append,prepend_to_label,append_to_label,error_element">
+	<cfset arguments._named_arguments = "objectName,property,checkedValue,uncheckedValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfset local.value = _formValue(argumentCollection=arguments)>
@@ -236,8 +236,8 @@
 	<cfsavecontent variable="local.output">
 		<cfoutput>
 			#_formBeforeElement(argumentCollection=arguments)#
-			<input type="checkbox" name="#listLast(arguments.object_name,".")#[#arguments.field#]" id="#listLast(arguments.object_name,".")#_#arguments.field#" value="#arguments.checked_value#"<cfif local.checked> checked="checked"</cfif>#local.attributes# />
-	    <input name="#listLast(arguments.object_name,".")#[#arguments.field#]" type="hidden" value="#arguments.unchecked_value#" />
+			<input type="checkbox" name="#listLast(arguments.objectName,".")#[#arguments.property#]" id="#listLast(arguments.objectName,".")#_#arguments.property#" value="#arguments.checkedValue#"<cfif local.checked> checked="checked"</cfif>#local.attributes# />
+	    <input name="#listLast(arguments.objectName,".")#[#arguments.property#]" type="hidden" value="#arguments.uncheckedValue#" />
 			#_formAfterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
@@ -247,23 +247,23 @@
 
 
 <cffunction name="passwordField" returntype="any" access="public" output="false">
-	<cfargument name="object_name" type="any" required="true">
-	<cfargument name="field" type="any" required="true">
+	<cfargument name="objectName" type="any" required="true">
+	<cfargument name="property" type="any" required="true">
 	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrap_label" type="any" required="false" default="true">
+	<cfargument name="wrapLabel" type="any" required="false" default="true">
 	<cfargument name="prepend" type="any" required="false" default="">
 	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prepend_to_label" type="any" required="false" default="">
-	<cfargument name="append_to_label" type="any" required="false" default="">
-	<cfargument name="error_element" type="any" required="false" default="div">
+	<cfargument name="prependToLabel" type="any" required="false" default="">
+	<cfargument name="appendToLabel" type="any" required="false" default="">
+	<cfargument name="errorElement" type="any" required="false" default="div">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "object_name,field,label,wrap_label,prepend,append,prepend_to_label,append_to_label,error_element">
+	<cfset arguments._named_arguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
 			#_formBeforeElement(argumentCollection=arguments)#
-			<input type="password" name="#listLast(arguments.object_name,".")#[#arguments.field#]" id="#listLast(arguments.object_name,".")#_#arguments.field#" value="#HTMLEditFormat(_formValue(argumentCollection=arguments))#"#local.attributes# />
+			<input type="password" name="#listLast(arguments.objectName,".")#[#arguments.property#]" id="#listLast(arguments.objectName,".")#_#arguments.property#" value="#HTMLEditFormat(_formValue(argumentCollection=arguments))#"#local.attributes# />
 			#_formAfterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
@@ -273,10 +273,10 @@
 
 
 <cffunction name="hiddenField" returntype="any" access="public" output="false">
-	<cfargument name="object_name" type="any" required="true">
-	<cfargument name="field" type="any" required="true">
+	<cfargument name="objectName" type="any" required="true">
+	<cfargument name="property" type="any" required="true">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "object_name,field">
+	<cfset arguments._named_arguments = "objectName,property">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfset local.value = _formValue(argumentCollection=arguments)>
@@ -286,7 +286,7 @@
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
-			<input type="hidden" name="#listLast(arguments.object_name,".")#[#arguments.field#]" id="#listLast(arguments.object_name,".")#_#arguments.field#" value="#HTMLEditFormat(local.value)#"#local.attributes# />
+			<input type="hidden" name="#listLast(arguments.objectName,".")#[#arguments.property#]" id="#listLast(arguments.objectName,".")#_#arguments.property#" value="#HTMLEditFormat(local.value)#"#local.attributes# />
 		</cfoutput>
 	</cfsavecontent>
 
@@ -295,22 +295,22 @@
 
 
 <cffunction name="textArea" returntype="any" access="public" output="false">
-	<cfargument name="object_name" type="any" required="true">
-	<cfargument name="field" type="any" required="true">
+	<cfargument name="objectName" type="any" required="true">
+	<cfargument name="property" type="any" required="true">
 	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrap_label" type="any" required="false" default="true">
+	<cfargument name="wrapLabel" type="any" required="false" default="true">
 	<cfargument name="prepend" type="any" required="false" default="">
 	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prepend_to_label" type="any" required="false" default="">
-	<cfargument name="append_to_label" type="any" required="false" default="">
-	<cfargument name="error_element" type="any" required="false" default="div">
+	<cfargument name="prependToLabel" type="any" required="false" default="">
+	<cfargument name="appendToLabel" type="any" required="false" default="">
+	<cfargument name="errorElement" type="any" required="false" default="div">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "object_name,field,label,wrap_label,prepend,append,prepend_to_label,append_to_label,error_element">
+	<cfset arguments._named_arguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfset local.output = "">
 	<cfset local.output = local.output & _formBeforeElement(argumentCollection=arguments)>
-	<cfset local.output = local.output & "<textarea name=""#listLast(arguments.object_name, '.')#[#arguments.field#]"" id=""#listLast(arguments.object_name, '.')#_#arguments.field#""#local.attributes#>">
+	<cfset local.output = local.output & "<textarea name=""#listLast(arguments.objectName, '.')#[#arguments.property#]"" id=""#listLast(arguments.objectName, '.')#_#arguments.property#""#local.attributes#>">
 	<cfset local.output = local.output & _formValue(argumentCollection=arguments)>
 	<cfset local.output = local.output & "</textarea>">
 	<cfset local.output = local.output & _formAfterElement(argumentCollection=arguments)>
@@ -320,23 +320,23 @@
 
 
 <cffunction name="fileField" returntype="any" access="public" output="false">
-	<cfargument name="object_name" type="any" required="true">
-	<cfargument name="field" type="any" required="true">
+	<cfargument name="objectName" type="any" required="true">
+	<cfargument name="property" type="any" required="true">
 	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrap_label" type="any" required="false" default="true">
+	<cfargument name="wrapLabel" type="any" required="false" default="true">
 	<cfargument name="prepend" type="any" required="false" default="">
 	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prepend_to_label" type="any" required="false" default="">
-	<cfargument name="append_to_label" type="any" required="false" default="">
-	<cfargument name="error_element" type="any" required="false" default="div">
+	<cfargument name="prependToLabel" type="any" required="false" default="">
+	<cfargument name="appendToLabel" type="any" required="false" default="">
+	<cfargument name="errorElement" type="any" required="false" default="div">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "object_name,field,label,wrap_label,prepend,append,prepend_to_label,append_to_label,error_element">
+	<cfset arguments._named_arguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
 			#_formBeforeElement(argumentCollection=arguments)#
-			<input type="file" name="#listLast(arguments.object_name,".")#[#arguments.field#]" id="#listLast(arguments.object_name,".")#_#arguments.field#" value=""#local.attributes# />
+			<input type="file" name="#listLast(arguments.objectName,".")#[#arguments.property#]" id="#listLast(arguments.objectName,".")#_#arguments.property#" value=""#local.attributes# />
 			#_formAfterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
@@ -346,34 +346,34 @@
 
 
 <cffunction name="select" returntype="any" access="public" output="false">
-	<cfargument name="object_name" type="any" required="true">
-	<cfargument name="field" type="any" required="true">
+	<cfargument name="objectName" type="any" required="true">
+	<cfargument name="property" type="any" required="true">
 	<cfargument name="options" type="any" required="true">
-	<cfargument name="include_blank" type="any" required="false" default="false">
+	<cfargument name="includeBlank" type="any" required="false" default="false">
 	<cfargument name="multiple" type="any" required="false" default="false">
-	<cfargument name="value_field" type="any" required="false" default="id">
-	<cfargument name="text_field" type="any" required="false" default="name">
+	<cfargument name="valueField" type="any" required="false" default="id">
+	<cfargument name="textField" type="any" required="false" default="name">
 	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrap_label" type="any" required="false" default="true">
+	<cfargument name="wrapLabel" type="any" required="false" default="true">
 	<cfargument name="prepend" type="any" required="false" default="">
 	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prepend_to_label" type="any" required="false" default="">
-	<cfargument name="append_to_label" type="any" required="false" default="">
-	<cfargument name="error_element" type="any" required="false" default="div">
+	<cfargument name="prependToLabel" type="any" required="false" default="">
+	<cfargument name="appendToLabel" type="any" required="false" default="">
+	<cfargument name="errorElement" type="any" required="false" default="div">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "object_name,field,options,include_blank,multiple,value_field,text_field,label,wrap_label,prepend,append,prepend_to_label,append_to_label,error_element">
+	<cfset arguments._named_arguments = "objectName,property,options,includeBlank,multiple,valueField,textField,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfset local.output = "">
 	<cfset local.output = local.output & _formBeforeElement(argumentCollection=arguments)>
-	<cfset local.output = local.output & "<select name=""#listLast(arguments.object_name,'.')#[#arguments.field#]"" id=""#listLast(arguments.object_name,'.')#_#arguments.field#"">">
+	<cfset local.output = local.output & "<select name=""#listLast(arguments.objectName,'.')#[#arguments.property#]"" id=""#listLast(arguments.objectName,'.')#_#arguments.property#"">">
 	<cfif arguments.multiple>
 		<cfset local.output = local.output & " multiple">
 	</cfif>
 	<cfset local.output = local.output & local.attributes>
-	<cfif NOT isBoolean(arguments.include_blank) OR arguments.include_blank>
-		<cfif NOT isBoolean(arguments.include_blank)>
-			<cfset local.text = arguments.include_blank>
+	<cfif NOT isBoolean(arguments.includeBlank) OR arguments.includeBlank>
+		<cfif NOT isBoolean(arguments.includeBlank)>
+			<cfset local.text = arguments.includeBlank>
 		<cfelse>
 			<cfset local.text = "">
 		</cfif>
@@ -391,13 +391,13 @@
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="value" type="any" required="false" default="">
 	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrap_label" type="any" required="false" default="true">
+	<cfargument name="wrapLabel" type="any" required="false" default="true">
 	<cfargument name="prepend" type="any" required="false" default="">
 	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prepend_to_label" type="any" required="false" default="">
-	<cfargument name="append_to_label" type="any" required="false" default="">
+	<cfargument name="prependToLabel" type="any" required="false" default="">
+	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "name,value,label,wrap_label,prepend,append,prepend_to_label,append_to_label">
+	<cfset arguments._named_arguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
@@ -417,13 +417,13 @@
 	<cfargument name="value" type="any" required="false" default="">
 	<cfargument name="checked" type="any" required="false" default="false">
 	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrap_label" type="any" required="false" default="true">
+	<cfargument name="wrapLabel" type="any" required="false" default="true">
 	<cfargument name="prepend" type="any" required="false" default="">
 	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prepend_to_label" type="any" required="false" default="">
-	<cfargument name="append_to_label" type="any" required="false" default="">
+	<cfargument name="prependToLabel" type="any" required="false" default="">
+	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "name,value,checked,label,wrap_label,prepend,append,prepend_to_label,append_to_label">
+	<cfset arguments._named_arguments = "name,value,checked,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
@@ -443,13 +443,13 @@
 	<cfargument name="value" type="any" required="false" default="1">
 	<cfargument name="checked" type="any" required="false" default="false">
 	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrap_label" type="any" required="false" default="true">
+	<cfargument name="wrapLabel" type="any" required="false" default="true">
 	<cfargument name="prepend" type="any" required="false" default="">
 	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prepend_to_label" type="any" required="false" default="">
-	<cfargument name="append_to_label" type="any" required="false" default="">
+	<cfargument name="prependToLabel" type="any" required="false" default="">
+	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "name,value,checked,label,wrap_label,prepend,append,prepend_to_label,append_to_label">
+	<cfset arguments._named_arguments = "name,value,checked,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
@@ -468,13 +468,13 @@
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="value" type="any" required="false" default="">
 	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrap_label" type="any" required="false" default="true">
+	<cfargument name="wrapLabel" type="any" required="false" default="true">
 	<cfargument name="prepend" type="any" required="false" default="">
 	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prepend_to_label" type="any" required="false" default="">
-	<cfargument name="append_to_label" type="any" required="false" default="">
+	<cfargument name="prependToLabel" type="any" required="false" default="">
+	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "name,value,label,wrap_label,prepend,append,prepend_to_label,append_to_label">
+	<cfset arguments._named_arguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
@@ -515,13 +515,13 @@
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="value" type="any" required="false" default="">
 	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrap_label" type="any" required="false" default="true">
+	<cfargument name="wrapLabel" type="any" required="false" default="true">
 	<cfargument name="prepend" type="any" required="false" default="">
 	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prepend_to_label" type="any" required="false" default="">
-	<cfargument name="append_to_label" type="any" required="false" default="">
+	<cfargument name="prependToLabel" type="any" required="false" default="">
+	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "name,value,label,wrap_label,prepend,append,prepend_to_label,append_to_label">
+	<cfset arguments._named_arguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfset local.output = "">
@@ -539,13 +539,13 @@
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="value" type="any" required="false" default="">
 	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrap_label" type="any" required="false" default="true">
+	<cfargument name="wrapLabel" type="any" required="false" default="true">
 	<cfargument name="prepend" type="any" required="false" default="">
 	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prepend_to_label" type="any" required="false" default="">
-	<cfargument name="append_to_label" type="any" required="false" default="">
+	<cfargument name="prependToLabel" type="any" required="false" default="">
+	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "name,value,label,wrap_label,prepend,append,prepend_to_label,append_to_label">
+	<cfset arguments._named_arguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
@@ -564,27 +564,27 @@
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="value" type="any" required="false" default="">
 	<cfargument name="options" type="any" required="true">
-	<cfargument name="include_blank" type="any" required="false" default="false">
+	<cfargument name="includeBlank" type="any" required="false" default="false">
 	<cfargument name="multiple" type="any" required="false" default="false">
-	<cfargument name="value_field" type="any" required="false" default="id">
-	<cfargument name="text_field" type="any" required="false" default="name">
+	<cfargument name="valueField" type="any" required="false" default="id">
+	<cfargument name="textField" type="any" required="false" default="name">
 	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrap_label" type="any" required="false" default="true">
+	<cfargument name="wrapLabel" type="any" required="false" default="true">
 	<cfargument name="prepend" type="any" required="false" default="">
 	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prepend_to_label" type="any" required="false" default="">
-	<cfargument name="append_to_label" type="any" required="false" default="">
+	<cfargument name="prependToLabel" type="any" required="false" default="">
+	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "name,value,options,include_blank,multiple,value_field,text_field,label,wrap_label,prepend,append,prepend_to_label,append_to_label">
+	<cfset arguments._named_arguments = "name,value,options,includeBlank,multiple,valueField,textField,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
 			#_formBeforeElement(argumentCollection=arguments)#
 			<select name="#arguments.name#" id="#arguments.name#"<cfif arguments.multiple> multiple</cfif>#local.attributes#>
-			<cfif NOT isBoolean(arguments.include_blank) OR arguments.include_blank>
-				<cfif NOT isBoolean(arguments.include_blank)>
-					<cfset local.text = arguments.include_blank>
+			<cfif NOT isBoolean(arguments.includeBlank) OR arguments.includeBlank>
+				<cfif NOT isBoolean(arguments.includeBlank)>
+					<cfset local.text = arguments.includeBlank>
 				<cfelse>
 					<cfset local.text = "">
 				</cfif>
@@ -601,30 +601,30 @@
 
 
 <cffunction name="yearSelectTag" returntype="any" access="public" output="false">
-	<cfargument name="start_year" type="any" required="false" default="#year(now())-5#">
-	<cfargument name="end_year" type="any" required="false" default="#year(now())+5#">
-	<cfset arguments._loop_from = arguments.start_year>
-	<cfset arguments._loop_to = arguments.end_year>
+	<cfargument name="startYear" type="any" required="false" default="#year(now())-5#">
+	<cfargument name="endYear" type="any" required="false" default="#year(now())+5#">
+	<cfset arguments._loop_from = arguments.startYear>
+	<cfset arguments._loop_to = arguments.endYear>
 	<cfset arguments._type = "year">
 	<cfset arguments._step = 1>
-	<cfset structDelete(arguments, "start_year")>
-	<cfset structDelete(arguments, "end_year")>
+	<cfset structDelete(arguments, "startYear")>
+	<cfset structDelete(arguments, "endYear")>
 	<cfreturn _yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
 
 <cffunction name="monthSelectTag" returntype="any" access="public" output="false">
-	<cfargument name="month_display" type="any" required="false" default="names">
+	<cfargument name="monthDisplay" type="any" required="false" default="names">
 	<cfset arguments._loop_from = 1>
 	<cfset arguments._loop_to = 12>
 	<cfset arguments._type = "month">
 	<cfset arguments._step = 1>
-	<cfif arguments.month_display IS "abbreviations">
+	<cfif arguments.monthDisplay IS "abbreviations">
 		<cfset arguments._option_names = "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec">
-	<cfelseif month_display IS "names">
+	<cfelseif arguments.monthDisplay IS "names">
 		<cfset arguments._option_names = "January,February,March,April,May,June,July,August,September,October,November,December">
 	</cfif>
-	<cfset structDelete(arguments, "month_display")>
+	<cfset structDelete(arguments, "monthDisplay")>
 	<cfreturn _yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
@@ -648,12 +648,12 @@
 
 
 <cffunction name="minuteSelectTag" returntype="any" access="public" output="false">
-	<cfargument name="minute_step" type="any" required="false" default="1">
+	<cfargument name="minuteStep" type="any" required="false" default="1">
 	<cfset arguments._loop_from = 0>
 	<cfset arguments._loop_to = 59>
 	<cfset arguments._type = "minute">
-	<cfset arguments._step = arguments.minute_step>
-	<cfset structDelete(arguments, "minute_step")>
+	<cfset arguments._step = arguments.minuteStep>
+	<cfset structDelete(arguments, "minuteStep")>
 	<cfreturn _yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
@@ -669,13 +669,13 @@
 <cffunction name="_yearMonthHourMinuteSecondSelectTag" returntype="any" access="private" output="false">
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="value" type="any" required="false" default="">
-	<cfargument name="include_blank" type="any" required="false" default="false">
+	<cfargument name="includeBlank" type="any" required="false" default="false">
 	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrap_label" type="any" required="false" default="true">
+	<cfargument name="wrapLabel" type="any" required="false" default="true">
 	<cfargument name="prepend" type="any" required="false" default="">
 	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prepend_to_label" type="any" required="false" default="">
-	<cfargument name="append_to_label" type="any" required="false" default="">
+	<cfargument name="prependToLabel" type="any" required="false" default="">
+	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfargument name="_type" type="any" required="true" default="">
 	<cfargument name="_loop_from" type="any" required="true" default="">
 	<cfargument name="_loop_to" type="any" required="true" default="">
@@ -683,19 +683,19 @@
 	<cfargument name="_option_names" type="any" required="false" default="">
 	<cfargument name="_step" type="any" required="false" default="">
 	<cfset var local = structNew()>
-	<cfset arguments._named_arguments = "name,value,include_blank,label,wrap_label,prepend,append,prepend_to_label,append_to_label,_type,_loop_from,_loop_to,_id,_option_names,_step">
+	<cfset arguments._named_arguments = "name,value,includeBlank,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,_type,_loop_from,_loop_to,_id,_option_names,_step">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
-	<cfif arguments.value IS "" AND NOT arguments.include_blank>
+	<cfif arguments.value IS "" AND NOT arguments.includeBlank>
 		<cfset arguments.value = evaluate("#arguments._type#(now())")>
 	</cfif>
 
 	<cfset local.html = "">
 	<cfset local.html = local.html & _formBeforeElement(argumentCollection=arguments)>
 	<cfset local.html = local.html & "<select name=""#arguments.name#"" id=""#arguments._id#""#local.attributes#>">
-	<cfif NOT isBoolean(arguments.include_blank) OR arguments.include_blank>
-		<cfif NOT isBoolean(arguments.include_blank)>
-			<cfset local.text = arguments.include_blank>
+	<cfif NOT isBoolean(arguments.includeBlank) OR arguments.includeBlank>
+		<cfif NOT isBoolean(arguments.includeBlank)>
+			<cfset local.text = arguments.includeBlank>
 		<cfelse>
 			<cfset local.text = "">
 		</cfif>
@@ -803,14 +803,14 @@
 <cffunction name="_dateOrTimeSelect" returntype="any" access="private" output="false">
 	<cfargument name="name" type="any" required="false" default="">
 	<cfargument name="value" type="any" required="false" default="">
-	<cfargument name="object_name" type="any" required="false" default="">
-	<cfargument name="field" type="any" required="false" default="">
+	<cfargument name="objectName" type="any" required="false" default="">
+	<cfargument name="property" type="any" required="false" default="">
 	<cfargument name="_function_name" type="any" required="true">
 	<cfset var local = structNew()>
 
-	<cfif len(arguments.object_name) IS NOT 0>
-		<cfset local.name = "#listLast(arguments.object_name,".")#[#arguments.field#]">
-		<cfset arguments._id = "#listLast(arguments.object_name,".")#_#arguments.field#">
+	<cfif len(arguments.objectName) IS NOT 0>
+		<cfset local.name = "#listLast(arguments.objectName,".")#[#arguments.property#]">
+		<cfset arguments._id = "#listLast(arguments.objectName,".")#_#arguments.property#">
 		<cfset local.value = _formValue(argumentCollection=arguments)>
 	<cfelse>
 		<cfset local.name = arguments.name>
