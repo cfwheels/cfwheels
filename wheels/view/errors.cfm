@@ -1,13 +1,13 @@
 <cffunction name="errorMessagesFor" returntype="any" access="public" output="false">
-	<cfargument name="object_name" type="any" required="true">
+	<cfargument name="objectName" type="any" required="true">
 	<cfset var local = structNew()>
 	<cfif NOT structKeyExists(arguments, "class")>
 		<cfset arguments.class = "error-messages">
 	</cfif>
-	<cfset arguments._named_arguments = "object_name">
+	<cfset arguments._named_arguments = "objectName">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
-	<cfset local.object = evaluate(arguments.object_name)>
+	<cfset local.object = evaluate(arguments.objectName)>
 	<cfset local.errors = local.object.allErrors()>
 	<cfset local.output = "">
 
@@ -16,7 +16,7 @@
 			<cfoutput>
 				<ul#local.attributes#>
 					<cfloop from="1" to="#arrayLen(local.errors)#" index="local.i">
-						<li>#local.errors[local.i]#</li>
+						<li>#local.errors[local.i].message#</li>
 					</cfloop>
 				</ul>
 			</cfoutput>
@@ -26,28 +26,27 @@
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
 
-
 <cffunction name="errorMessageOn" returntype="any" access="public" output="false">
-	<cfargument name="object_name" type="any" required="true">
-	<cfargument name="field" type="any" required="true">
-	<cfargument name="prepend_text" type="any" required="false" default="">
-	<cfargument name="append_text" type="any" required="false" default="">
-	<cfargument name="wrapper_element" type="any" required="false" default="div">
+	<cfargument name="objectName" type="any" required="true">
+	<cfargument name="property" type="any" required="true">
+	<cfargument name="prependText" type="any" required="false" default="">
+	<cfargument name="appendText" type="any" required="false" default="">
+	<cfargument name="wrapperElement" type="any" required="false" default="div">
 	<cfset var local = structNew()>
 	<cfif NOT structKeyExists(arguments, "class")>
 		<cfset arguments.class = "error-message">
 	</cfif>
-	<cfset arguments._named_arguments = "object_name,field,prepend_text,append_text,wrapper_element">
+	<cfset arguments._named_arguments = "objectName,property,prependText,appendText,wrapperElement">
 	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
 
-	<cfset local.object = evaluate(arguments.object_name)>
-	<cfset local.error = local.object.errorsOn(arguments.field)>
+	<cfset local.object = evaluate(arguments.objectName)>
+	<cfset local.error = local.object.errorsOn(arguments.property)>
 	<cfset local.output = "">
 
 	<cfif NOT isBoolean(local.error)>
 		<cfsavecontent variable="local.output">
 			<cfoutput>
-				<#arguments.wrapper_element##local.attributes#>#arguments.prepend_text##local.error[1]##arguments.append_text#</#arguments.wrapper_element#>
+				<#arguments.wrapperElement##local.attributes#>#arguments.prependText##local.error[1]##arguments.appendText#</#arguments.wrapperElement#>
 			</cfoutput>
 		</cfsavecontent>
 	</cfif>

@@ -8,7 +8,6 @@
 	<cfreturn locals.result>
 </cffunction>
 
-
 <cffunction name="renderPage" returntype="any" access="public" output="false">
 	<cfargument name="controller" type="any" required="false" default="#variables.params.controller#">
 	<cfargument name="action" type="any" required="false" default="#variables.params.action#">
@@ -56,23 +55,20 @@
 
 </cffunction>
 
-
 <cffunction name="renderNothing" returntype="any" access="public" output="false">
+
 	<cfset request.wheels.response = "">
 </cffunction>
-
 
 <cffunction name="renderText" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">
 	<cfset request.wheels.response = arguments.text>
 </cffunction>
 
-
 <cffunction name="_renderPage" returntype="any" access="private" output="false">
 	<cfset request.wheels.response = _include("../../view/#arguments.controller#/#arguments.action#.cfm")>
 	<cfset _renderLayout(layout=arguments.layout)>
 </cffunction>
-
 
 <cffunction name="renderPartial" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
@@ -116,7 +112,6 @@
 
 </cffunction>
 
-
 <cffunction name="_includePartial" returntype="any" access="private" output="false">
 	<cfset var locals = structNew()>
 
@@ -134,7 +129,6 @@
 	<cfreturn locals.result>
 </cffunction>
 
-
 <cffunction name="_include" returntype="any" access="private" output="false">
 	<cfargument name="_path" type="any" required="true">
 	<cfset var locals = structNew()>
@@ -143,7 +137,6 @@
 	</cfsavecontent>
 	<cfreturn trim(locals.result)>
 </cffunction>
-
 
 <cffunction name="_renderLayout" returntype="any" access="private" output="false">
 	<cfargument name="layout" type="any" required="true">

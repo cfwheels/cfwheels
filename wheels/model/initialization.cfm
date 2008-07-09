@@ -1,80 +1,154 @@
-<cffunction name="_initModelClass" returntype="any" access="public" output="false">
-	<cfargument name="name" type="any" required="true">
-	<cfset var locals = structNew()>
-
-	<!--- setup defaults --->
-	<cfset variables.class = structNew()>
-	<cfset variables.class.fields = structNew()>
-	<cfset variables.class.composedFields = structNew()>
-	<cfset variables.class.name = arguments.name>
-	<cfset variables.class.tableName = _pluralize(variables.class.name)>
-	<cfset variables.class.primaryKey = "id">
-	<cfset variables.class.associations = {}>
-	<cfloop list="create,read,update,delete" index="locals.i">
-		<cfset variables.class.database[locals.i] = structNew()>
-		<cfset variables.class.database[locals.i].datasource = application.settings.database[locals.i].datasource>
-		<cfset variables.class.database[locals.i].username = application.settings.database[locals.i].username>
-		<cfset variables.class.database[locals.i].password = application.settings.database[locals.i].password>
-	</cfloop>
-
-	<!--- call init to override defaults if it exists --->
-	<cfif structKeyExists(variables, "init")>
-		<cfset init()>
-	</cfif>
-
-	<cfquery name="locals.query" datasource="#variables.class.database.read.datasource#" username="#variables.class.database.read.username#" password="#variables.class.database.read.password#">
-	SELECT<cfif application.wheels.database.type IS "sqlserver"> TOP 1</cfif> *
-	FROM #variables.class.tableName#
-	<cfif application.wheels.database.type IS "mysql">LIMIT 1</cfif>
-	</cfquery>
-
-	<!--- setup fields --->
-	<cfset locals.queryMetadata = getMetaData(locals.query)>
-	<cfloop from="1" to="#arrayLen(locals.queryMetadata)#" index="locals.i">
-		<cfset locals.name = locals.queryMetadata[locals.i].name>
-		<cfset locals.type = spanExcluding(locals.queryMetadata[locals.i].typeName, " ")>
-		<cfset variables.class.fields[locals.name] = structNew()>
-		<cfset variables.class.fields[locals.name].type = locals.type>
-		<cfset variables.class.fields[locals.name].cfsqltype = application.wheels.adapter.getCFSQLType(locals.type)>
-		<cfif locals.name IS variables.class.primaryKey>
-			<cfset variables.class.fields[locals.name].primaryKey = true>
-		<cfelse>
-			<cfset variables.class.fields[locals.name].primaryKey = false>
-		</cfif>
-	</cfloop>
-	<cfset variables.class.fieldList = structKeyList(variables.class.fields)>
-	<cfset variables.class.composedFieldList = structKeyList(variables.class.composedFields)>
-	<cfset variables.class.propertyList = listAppend(variables.class.fieldList, variables.class.composedFieldList)>
-
-	<cfreturn this>
+<cffunction name="table" returntype="void" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfscript>
+	variables.wheels.class.tableName = arguments.name;
+	</cfscript>
 </cffunction>
 
-
-<cffunction name="_createModelObject" returntype="any" access="private" output="false">
-	<cfargument name="properties" type="any" required="true">
-	<cfreturn createObject("component", "modelRoot.#variables.class.name#")._initModelObject(variables.class.name, arguments.properties)>
+<cffunction name="property" returntype="void" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="column" type="string" required="true">
+	<cfscript>
+	variables.wheels.class.mapping[arguments.column] = arguments.name;
+	</cfscript>
 </cffunction>
 
+<cffunction name="SetSoftDeleteColumn" returntype="void" access="public" output="false" hint="Init, Sets a column to use for soft deletion">
+	<cfargument name="name" type="any" required="true" hint="Name of column">
+	<cfscript>
+		variables.wheels.class.softDeletion = true;
+		variables.wheels.class.softDeleteColumn = arguments.column;
+	</cfscript>
+</cffunction>
 
-<cffunction name="_initModelObject" returntype="any" access="public" output="false">
-	<cfargument name="name" type="any" required="yes">
-	<cfargument name="properties" type="any" required="no" default="">
-	<cfset var locals = structNew()>
+<cffunction name="disableSoftDeletion" returntype="void" access="public" output="false" hint="Init, Disables soft deletion completely (overriding database introspection that may have turned on soft deletion)">
+	<cfscript>
+		variables.wheels.class.softDeletion = false;
+		if (StructKeyExists(variables.wheels.class, "softDeleteColumn"))
+			StructDelete(variables.wheels.class, "softDeleteColumn");
+	</cfscript>
+</cffunction>
 
-	<cflock name="modelLock" type="readonly" timeout="30">
-		<cfset variables.class = application.wheels.models[arguments.name]._getModelClassData()>
-	</cflock>
+<cffunction name="SetTimeStampColumns" returntype="void" access="public" output="false" hint="Init, Sets column(s) to use for time stamping records">
+	<cfargument name="create" type="string" required="false" default="" hint="Column to use for time stamping on creating new records">
+	<cfargument name="update" type="string" required="false" default="" hint="Column to use for time stamping on updating existing records">
+	<cfscript>
+		if (Len(arguments.create) != 0)
+		{
+			variables.wheels.class.timeStampingOnCreate = true;
+			variables.wheels.class.timeStampOnCreateColumn = arguments.create;
+		}
+		if (Len(arguments.update) != 0)
+		{
+			variables.wheels.class.timeStampingOnUpdate = true;
+			variables.wheels.class.timeStampOnUpdateColumn = arguments.update;
+		}
+	</cfscript>
+</cffunction>
 
-	<!--- setup object properties in the this scope --->
-	<cfif isQuery(arguments.properties) AND arguments.properties.recordCount IS NOT 0>
-		<cfloop list="#arguments.properties.columnList#" index="locals.i">
-			<cfset this[locals.i] = arguments.properties[locals.i][1]>
-		</cfloop>
-	<cfelseif isStruct(arguments.properties) AND NOT structIsEmpty(arguments.properties)>
-		<cfloop collection="#arguments.properties#" item="locals.i">
-			<cfset this[locals.i] = arguments.properties[locals.i]>
-		</cfloop>
-	</cfif>
+<cffunction name="disableTimeStamping" returntype="void" access="public" output="false" hint="Init, Disables timestamping completely (overriding database introspection that may have turned on timestamping)">
+	<cfscript>
+		variables.wheels.class.timeStampingOnCreate = true;
+		variables.wheels.class.timeStampingOnUpdate = true;
+		if (StructKeyExists(variables.wheels.class, "timeStampOnCreateColumn"))
+			StructDelete(variables.wheels.class, "timeStampOnCreateColumn");
+		if (StructKeyExists(variables.wheels.class, "timeStampOnUpdateColumn"))
+			StructDelete(variables.wheels.class, "timeStampOnCreateColumn");
+	</cfscript>
+</cffunction>
 
+<cffunction name="$initClass" returntype="any" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		variables.wheels = {};
+		variables.wheels.class = {};
+		variables.wheels.class.name = arguments.name;
+		variables.wheels.class.mapping = {};
+		variables.wheels.class.associations = {};
+		variables.wheels.class.callbacks = {};
+		loc.callbacks = "beforeDelete,afterDelete,beforeSave,afterSave,beforeCreate,afterCreate,beforeUpdate,afterUpdate,beforeValidation,afterValidation,beforeValidationOnCreate,afterValidationOnCreate,beforeValidationOnUpdate,afterValidationOnUpdate";
+		for (loc.i=1; loc.i<=ListLen(loc.callbacks); loc.i++)
+			variables.wheels.class.callbacks[ListGetAt(loc.callbacks, loc.i)] = ArrayNew(1);
+		loc.validations = "onSave,onCreate,onUpdate";
+		for (loc.i=1; loc.i<=ListLen(loc.validations); loc.i++)
+			variables.wheels.class.validations[ListGetAt(loc.validations, loc.i)] = ArrayNew(1);
+		// run developer's init method
+		if (StructKeyExists(variables, "init"))
+		{
+			init();
+		}
+
+		// set the table name unless set manually by the developer
+		if (!StructKeyExists(variables.wheels.class, "tableName"))
+			variables.wheels.class.tableName = $pluralize(variables.wheels.class.name);
+
+		// introspect the database
+		loc.columns = $dbinfo(datasource=application.settings.database.datasource, type="columns", table=variables.wheels.class.tableName);
+		variables.wheels.class.keys = "";
+		variables.wheels.class.propertyList = "";
+		variables.wheels.class.columnList = "";
+		for (loc.i=1; loc.i<=loc.columns.recordCount; loc.i++)
+		{
+			if (StructKeyExists(variables.wheels.class.mapping, loc.columns["column_name"][loc.i]))
+				loc.property = variables.wheels.class.mapping[loc.columns["column_name"][loc.i]];
+			else
+				loc.property = loc.columns["column_name"][loc.i];
+			variables.wheels.class.properties[loc.property] = {};
+			variables.wheels.class.properties[loc.property].column = loc.columns["column_name"][loc.i];
+			variables.wheels.class.properties[loc.property].typeName = loc.columns["type_name"][loc.i];
+			variables.wheels.class.properties[loc.property].nullable = loc.columns["is_nullable"][loc.i];
+			variables.wheels.class.properties[loc.property].size = loc.columns["column_size"][loc.i];
+			variables.wheels.class.properties[loc.property].key = loc.columns["is_primarykey"][loc.i];
+			variables.wheels.class.properties[loc.property].type = application.wheels.adapter.getType(loc.columns["type_name"][loc.i]);
+			if (loc.columns["is_primarykey"][loc.i])
+			{
+				variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.property);
+			}
+			variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, loc.property);
+			variables.wheels.class.columnList = ListAppend(variables.wheels.class.columnList, variables.wheels.class.properties[loc.property].column);
+		}
+
+		// setup soft deletion info unless set manually by the developer
+		if (!StructKeyExists(variables.wheels.class, "softDeletion"))
+		{
+			if (StructKeyExists(variables.wheels.class.properties, application.settings.defaultSoftDeleteColumn))
+			{
+				variables.wheels.class.softDeletion = true;
+				variables.wheels.class.softDeleteColumn = application.settings.defaultSoftDeleteColumn;
+			}
+			else
+			{
+				variables.wheels.class.softDeletion = false;
+			}
+		}
+
+		// setup time stamping info unless set manually by the developer
+		if (!StructKeyExists(variables.wheels.class, "timeStampingOnCreate"))
+		{
+			if (StructKeyExists(variables.wheels.class.properties, application.settings.defaultTimeStampOnCreateColumn))
+			{
+				variables.wheels.class.timeStampingOnCreate = true;
+				variables.wheels.class.timeStampOnCreateColumn = application.settings.defaultTimeStampOnCreateColumn;
+			}
+			else
+			{
+				variables.wheels.class.timeStampingOnCreate = false;
+			}
+
+		}
+		if (!StructKeyExists(variables.wheels.class, "timeStampingOnUpdate"))
+		{
+			if (StructKeyExists(variables.wheels.class.properties, application.settings.defaultTimeStampOnUpdateColumn))
+			{
+				variables.wheels.class.timeStampingOnUpdate = true;
+				variables.wheels.class.timeStampOnUpdateColumn = application.settings.defaultTimeStampOnUpdateColumn;
+			}
+			else
+			{
+				variables.wheels.class.timeStampingOnUpdate = false;
+			}
+		}
+	</cfscript>
 	<cfreturn this>
 </cffunction>

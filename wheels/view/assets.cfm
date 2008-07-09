@@ -15,7 +15,6 @@
 	<cfreturn locals.result>
 </cffunction>
 
-
 <cffunction name="javascriptIncludeTag" returntype="any" access="public" output="false">
 	<cfargument name="sources" type="any" required="false" default="application,protoculous">
 	<cfargument name="attributes" type="any" required="false" default="">
@@ -32,7 +31,6 @@
 
 	<cfreturn locals.result>
 </cffunction>
-
 
 <cffunction name="imageTag" returntype="any" access="public" output="false">
 	<cfargument name="source" type="any" required="false" default="">
