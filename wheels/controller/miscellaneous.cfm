@@ -108,17 +108,17 @@
 	<cfset var local = structNew()>
 
 	<cfsavecontent variable="request.wheels.response">
-		<cfinclude template="../../view/email/#replaceNoCase(arguments.template, '.cfm', '')#.cfm">
+		<cfinclude template="../../views/email/#replaceNoCase(arguments.template, '.cfm', '')#.cfm">
 	</cfsavecontent>
 
 	<cfif (isBoolean(arguments.layout) AND arguments.layout) OR (arguments.layout IS NOT "false")>
 		<cfif NOT isBoolean(arguments.layout)>
 			<cfsavecontent variable="request.wheels.response">
-				<cfinclude template="../../view/layouts/#replace(arguments.layout, ' ', '', 'all')#.cfm">
+				<cfinclude template="../../views/layouts/#replace(arguments.layout, ' ', '', 'all')#.cfm">
 			</cfsavecontent>
 		<cfelse>
 			<cfsavecontent variable="request.wheels.response">
-				<cfinclude template="../../view/layouts/email.cfm">
+				<cfinclude template="../../views/layouts/email.cfm">
 			</cfsavecontent>
 		</cfif>
 	</cfif>

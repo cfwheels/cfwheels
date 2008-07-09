@@ -326,11 +326,11 @@
 		<cftry>
 			<cfset arguments.controller.renderPage()>
 		<cfcatch>
-			<cfif fileExists(expandPath("view/#arguments.controllerName#/#arguments.actionName#.cfm"))>
+			<cfif fileExists(expandPath("views/#arguments.controllerName#/#arguments.actionName#.cfm"))>
 				<cfrethrow>
 			<cfelse>
 				<cfif application.settings.showErrorInformation>
-					<cfthrow type="wheels" message="Could not find the view page for the <tt>#arguments.actionName#</tt> action in the <tt>#arguments.controllerName#</tt> controller" detail="Create a file named <tt>#arguments.actionName#.cfm</tt> in the <tt>view/#arguments.controllerName#</tt> directory (create the directory as well if necessary).">
+					<cfthrow type="wheels" message="Could not find the view page for the <tt>#arguments.actionName#</tt> action in the <tt>#arguments.controllerName#</tt> controller" detail="Create a file named <tt>#arguments.actionName#.cfm</tt> in the <tt>views/#arguments.controllerName#</tt> directory (create the directory as well if necessary).">
 				<cfelse>
 					<cfinclude template="../../events/onmissingtemplate.cfm">
 					<cfabort>
