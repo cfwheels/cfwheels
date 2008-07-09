@@ -66,7 +66,7 @@
 </cffunction>
 
 <cffunction name="_renderPage" returntype="any" access="private" output="false">
-	<cfset request.wheels.response = _include("../../view/#arguments.controller#/#arguments.action#.cfm")>
+	<cfset request.wheels.response = _include("../../views/#arguments.controller#/#arguments.action#.cfm")>
 	<cfset _renderLayout(layout=arguments.layout)>
 </cffunction>
 
@@ -117,13 +117,13 @@
 
 	<cfif left(arguments.name, 1) IS "/">
 		<!--- Include a file in a sub folder to view --->
-		<cfset locals.result = _include("../../view#reverse(listRest(reverse(arguments.name), '/'))#/_#reverse(listFirst(reverse(arguments.name), '/'))#.cfm")>
+		<cfset locals.result = _include("../../views#reverse(listRest(reverse(arguments.name), '/'))#/_#reverse(listFirst(reverse(arguments.name), '/'))#.cfm")>
 	<cfelseif arguments.name  Contains "/">
 		<!--- Include a file in a sub folder of the curent controller --->
-		<cfset locals.result = _include("../../view/#variables.params.controller#/#reverse(listRest(reverse(arguments.name), '/'))#/_#reverse(listFirst(reverse(arguments.name), '/'))#.cfm")>
+		<cfset locals.result = _include("../../views/#variables.params.controller#/#reverse(listRest(reverse(arguments.name), '/'))#/_#reverse(listFirst(reverse(arguments.name), '/'))#.cfm")>
 	<cfelse>
 		<!--- Include a file in the current controller's view folder --->
-		<cfset locals.result = _include("../../view/#variables.params.controller#/_#arguments.name#.cfm")>
+		<cfset locals.result = _include("../../views/#variables.params.controller#/_#arguments.name#.cfm")>
 	</cfif>
 
 	<cfreturn locals.result>
@@ -144,13 +144,13 @@
 	<cfif (isBoolean(arguments.layout) AND arguments.layout) OR (arguments.layout IS NOT "false")>
 		<cfif NOT isBoolean(arguments.layout)>
 			<!--- Include a designated layout --->
-			<cfset request.wheels.response = _include("../../view/layouts/#replace(arguments.layout, ' ', '_', 'all')#.cfm")>
-		<cfelseif fileExists(expandPath("view/layouts/#variables.params.controller#.cfm"))>
+			<cfset request.wheels.response = _include("../../views/layouts/#replace(arguments.layout, ' ', '_', 'all')#.cfm")>
+		<cfelseif fileExists(expandPath("views/layouts/#variables.params.controller#.cfm"))>
 			<!--- Include the current controller's layout if one exists --->
-			<cfset request.wheels.response = _include("../../view/layouts/#variables.params.controller#.cfm")>
+			<cfset request.wheels.response = _include("../../views/layouts/#variables.params.controller#.cfm")>
 		<cfelse>
 			<!--- The application wide layout --->
-			<cfset request.wheels.response = _include("../../view/layouts/default.cfm")>
+			<cfset request.wheels.response = _include("../../views/layouts/default.cfm")>
 		</cfif>
 	</cfif>
 
