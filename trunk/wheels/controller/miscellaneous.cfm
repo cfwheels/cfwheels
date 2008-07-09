@@ -1,17 +1,17 @@
-<cffunction name="URLFor" returntype="any" access="private" output="false">
-	<cfargument name="route" type="any" required="false" default="">
-	<cfargument name="controller" type="any" required="false" default="">
-	<cfargument name="action" type="any" required="false" default="">
-	<cfargument name="id" type="any" required="false" default="">
-	<cfargument name="params" type="any" required="false" default="">
-	<cfargument name="anchor" type="any" required="false" default="">
-	<cfargument name="onlyPath" type="any" required="false" default="true">
-	<cfargument name="host" type="any" required="false" default="">
-	<cfargument name="protocol" type="any" required="false" default="">
+<cffunction name="URLFor" returntype="string" access="private" output="false">
+	<cfargument name="route" type="string" required="false" default="">
+	<cfargument name="controller" type="string" required="false" default="">
+	<cfargument name="action" type="string" required="false" default="">
+	<cfargument name="id" type="numeric" required="false" default=0>
+	<cfargument name="params" type="string" required="false" default="">
+	<cfargument name="anchor" type="string" required="false" default="">
+	<cfargument name="onlyPath" type="boolean" required="false" default="true">
+	<cfargument name="host" type="string" required="false" default="">
+	<cfargument name="protocol" type="string" required="false" default="">
 	<cfset var locals = structNew()>
 
 	<!--- build the link --->
-	<cfif len(arguments.route) IS 0 AND len(arguments.controller) IS 0 AND len(arguments.action) IS 0 AND len(arguments.id) IS 0 AND len(arguments.params) IS 0>
+	<cfif len(arguments.route) IS 0 AND len(arguments.controller) IS 0 AND len(arguments.action) IS 0 AND arguments.id IS 0 AND len(arguments.params) IS 0>
 		<cfset locals.url = "/">
 	<cfelse>
 		<cfset locals.url = application.wheels.webPath & listLast(CGI.SCRIPT_NAME, "/")>
@@ -40,7 +40,7 @@
 				<!--- add the action --->
 				<cfset locals.url = locals.url & "/" & arguments.action>
 			</cfif>
-			<cfif len(arguments.id) IS NOT 0>
+			<cfif arguments.id IS NOT 0>
 				<!--- add the id and obfuscate if necessary --->
 				<cfif application.settings.obfuscateURLs>
 					<cfset locals.url = locals.url & "/" & obfuscateParam(arguments.id)>
@@ -51,7 +51,7 @@
 		</cfif>
 		<cfif len(arguments.params) IS NOT 0>
 			<!--- add the params and obfuscate if necessary --->
-			<cfset locals.url = locals.url & _constructParams(arguments.params)>
+			<cfset locals.url = locals.url & $constructParams(arguments.params)>
 		</cfif>
 		<cfif len(arguments.anchor) IS NOT 0>
 			<!--- add the anchor --->
@@ -78,7 +78,7 @@
 	<cfreturn lCase(locals.url)>
 </cffunction>
 
-<cffunction name="isGet" returntype="any" access="public" output="false">
+<cffunction name="isGet" returntype="boolean" access="public" output="false">
 	<cfif CGI.REQUEST_METHOD IS "get">
 		<cfreturn true>
 	<cfelse>
@@ -86,7 +86,7 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="isPost" returntype="any" access="public" output="false">
+<cffunction name="isPost" returntype="boolean" access="public" output="false">
 	<cfif CGI.REQUEST_METHOD IS "post">
 		<cfreturn true>
 	<cfelse>
@@ -94,7 +94,7 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="isAjax" returntype="any" access="public" output="false">
+<cffunction name="isAjax" returntype="boolean" access="public" output="false">
 	<cfif CGI.HTTP_X_REQUESTED_WITH IS "XMLHTTPRequest">
 		<cfreturn true>
 	<cfelse>
@@ -102,8 +102,8 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="sendEmail" returntype="any" access="public" output="false">
-	<cfargument name="template" type="any" required="true">
+<cffunction name="sendEmail" returntype="void" access="public" output="false">
+	<cfargument name="template" type="string" required="true">
 	<cfargument name="layout" type="any" required="false" default="false">
 	<cfset var local = structNew()>
 
@@ -138,11 +138,11 @@
 
 </cffunction>
 
-<cffunction name="sendFile" returntype="any" access="public" output="false">
-	<cfargument name="file" required="true">
-	<cfargument name="name" required="false" default="">
-	<cfargument name="type" required="false" default="">
-	<cfargument name="disposition" required="false" default="attachment">
+<cffunction name="sendFile" returntype="void" access="public" output="false">
+	<cfargument name="file" type="string" required="true">
+	<cfargument name="name" type="string" required="false" default="">
+	<cfargument name="type" type="string" required="false" default="">
+	<cfargument name="disposition" type="string" required="false" default="attachment">
 	<cfset var locals = structNew()>
 
 	<cfset arguments.file = replace(arguments.file, "\", "/", "all")>

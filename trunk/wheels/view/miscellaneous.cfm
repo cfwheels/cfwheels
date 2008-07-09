@@ -2,7 +2,7 @@
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="cache" type="any" required="false" default="">
 	<cfargument name="_type" type="any" required="false" default="include">
-	<cfreturn _includeOrRenderPartial(argumentCollection=arguments)>
+	<cfreturn $includeOrRenderPartial(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="cycle" returntype="any" access="public" output="false">
