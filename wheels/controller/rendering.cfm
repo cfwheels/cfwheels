@@ -28,20 +28,20 @@
 	<!--- double-checked lock --->
 	<cfif application.settings.cachePages AND (isNumeric(arguments.cache) OR (isBoolean(arguments.cache) AND arguments.cache))>
 		<cfset locals.category = "action">
-		<cfset locals.key = "#arguments.action#_#_hashStruct(variables.params)#_#_hashStruct(arguments)#">
+		<cfset locals.key = "#arguments.action#_#$hashStruct(variables.params)#_#$hashStruct(arguments)#">
 		<cfset locals.lockName = locals.category & locals.key>
 		<cflock name="#locals.lockName#" type="readonly" timeout="30">
-			<cfset request.wheels.response = _getFromCache(locals.key, locals.category)>
+			<cfset request.wheels.response = $getFromCache(locals.key, locals.category)>
 		</cflock>
 		<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
 	   	<cflock name="#locals.lockName#" type="exclusive" timeout="30">
-				<cfset request.wheels.response = _getFromCache(locals.key, locals.category)>
+				<cfset request.wheels.response = $getFromCache(locals.key, locals.category)>
 				<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
 					<cfset _renderPage(argumentCollection=arguments)>
 					<cfif NOT isNumeric(arguments.cache)>
 						<cfset arguments.cache = application.settings.defaultCacheTime>
 					</cfif>
-					<cfset _addToCache(locals.key, request.wheels.response, arguments.cache, locals.category)>
+					<cfset $addToCache(locals.key, request.wheels.response, arguments.cache, locals.category)>
 				</cfif>
 			</cflock>
 		</cfif>
@@ -83,20 +83,20 @@
 	<!--- double-checked lock --->
 	<cfif application.settings.cachePartials AND (isNumeric(arguments.cache) OR (isBoolean(arguments.cache) AND arguments.cache))>
 		<cfset locals.category = "partial">
-		<cfset locals.key = "#arguments.name#_#_hashStruct(variables.params)#_#_hashStruct(arguments)#">
+		<cfset locals.key = "#arguments.name#_#$hashStruct(variables.params)#_#$hashStruct(arguments)#">
 		<cfset locals.lockName = locals.category & locals.key>
 		<cflock name="#locals.lockName#" type="readonly" timeout="30">
-			<cfset locals.result = _getFromCache(locals.key, locals.category)>
+			<cfset locals.result = $getFromCache(locals.key, locals.category)>
 		</cflock>
 		<cfif isBoolean(locals.result) AND NOT locals.result>
 	   	<cflock name="#locals.lockName#" type="exclusive" timeout="30">
-				<cfset locals.result = _getFromCache(locals.key, locals.category)>
+				<cfset locals.result = $getFromCache(locals.key, locals.category)>
 				<cfif isBoolean(locals.result) AND NOT locals.result>
 					<cfset locals.result = _includePartial(argumentCollection=arguments)>
 					<cfif NOT isNumeric(arguments.cache)>
 						<cfset arguments.cache = application.settings.defaultCacheTime>
 					</cfif>
-					<cfset _addToCache(locals.key, locals.result, arguments.cache, locals.category)>
+					<cfset $addToCache(locals.key, locals.result, arguments.cache, locals.category)>
 				</cfif>
 			</cflock>
 		</cfif>

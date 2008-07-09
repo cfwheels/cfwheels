@@ -9,9 +9,9 @@
 <cfset application.settings.cacheQueries = true>
 <cfset application.settings.showDebugInformation = false>
 <cfset application.settings.showErrorInformation = false>
-<cfif CGI.SERVER_NAME Contains ".">
+<cfif cgi.server_name Contains ".">
 	<cfset application.settings.sendEmailOnError = true>
-	<cfset application.settings.errorEmailAddress = "webmaster@" & reverse(listGetAt(reverse(CGI.SERVER_NAME), 2,".")) & "." & reverse(listGetAt(reverse(CGI.SERVER_NAME), 1, "."))>
+	<cfset application.settings.errorEmailAddress = "webmaster@" & Reverse(ListGetAt(Reverse(cgi.server_name), 2,".")) & "." & Reverse(ListGetAt(Reverse(cgi.server_name), 1, "."))>
 <cfelse>
 	<cfset application.settings.sendEmailOnError = false>
 </cfif>
