@@ -164,7 +164,7 @@
 
 	<!--- Create requested controller --->
 	<cftry>
-		<cfset locals.controller = $controller(locals.params.controller)._createControllerObject(locals.params)>
+		<cfset locals.controller = $controller(locals.params.controller).$createControllerObject(locals.params)>
 	<cfcatch>
 		<cfif fileExists(expandPath("controllers/#locals.params.controller#.cfc"))>
 			<cfrethrow>
@@ -185,7 +185,7 @@
 	</cfif>
 
 	<!--- confirm verifications on controller if they exist --->
-	<cfset locals.verifications = locals.controller._getVerifications()>
+	<cfset locals.verifications = locals.controller.$getVerifications()>
 	<cfset locals.abort = false>
 	<cfif arrayLen(locals.verifications) IS NOT 0>
 		<cfloop from="1" to="#arraylen(locals.verifications)#" index="locals.i">
@@ -237,7 +237,7 @@
 	</cfif>
 
 	<!--- Call before filters on controller if they exist --->
-	<cfset locals.beforeFilters = locals.controller._getBeforeFilters()>
+	<cfset locals.beforeFilters = locals.controller.$getBeforeFilters()>
 	<cfif arrayLen(locals.beforeFilters) IS NOT 0>
 		<cfloop from="1" to="#arraylen(locals.beforeFilters)#" index="locals.i">
 			<cfif	(len(locals.beforeFilters[locals.i].only) IS 0 AND len(locals.beforeFilters[locals.i].except) IS 0) OR (len(locals.beforeFilters[locals.i].only) IS NOT 0 AND listFindNoCase(locals.beforeFilters[locals.i].only, locals.params.action)) OR (len(locals.beforeFilters[locals.i].except) IS NOT 0 AND NOT listFindNoCase(locals.beforeFilters[locals.i].except, locals.params.action))>
@@ -254,7 +254,7 @@
 	<!--- Call action on controller if it exists --->
 	<cfset locals.actionIsCachable = false>
 	<cfif application.settings.cacheActions AND structIsEmpty(session.flash) AND structIsEmpty(form)>
-		<cfset locals.cachableActions = locals.controller._getCachableActions()>
+		<cfset locals.cachableActions = locals.controller.$getCachableActions()>
 		<cfloop from="1" to="#arrayLen(locals.cachableActions)#" index="locals.i">
 			<cfif locals.cachableActions[locals.i].action IS locals.params.action>
 				<cfset locals.actionIsCachable = true>
@@ -274,13 +274,13 @@
 	   	<cflock name="#locals.lockName#" type="exclusive" timeout="30">
 				<cfset request.wheels.response = $getFromCache(locals.key, locals.category)>
 				<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
-					<cfset _callAction(locals.controller, locals.params.controller, locals.params.action)>
+					<cfset $callAction(locals.controller, locals.params.controller, locals.params.action)>
 					<cfset $addToCache(locals.key, request.wheels.response, locals.timeToCache, locals.category)>
 				</cfif>
 			</cflock>
 		</cfif>
 	<cfelse>
-		<cfset _callAction(locals.controller, locals.params.controller, locals.params.action)>
+		<cfset $callAction(locals.controller, locals.params.controller, locals.params.action)>
 	</cfif>
 
 	<cfif application.settings.showDebugInformation>
@@ -291,7 +291,7 @@
 		<cfset request.wheels.execution.components.afterFilters = getTickCount()>
 	</cfif>
 
-	<cfset locals.afterFilters = locals.controller._getAfterFilters()>
+	<cfset locals.afterFilters = locals.controller.$getAfterFilters()>
 	<cfif arrayLen(locals.afterFilters) IS NOT 0>
 		<cfloop from="1" to="#arraylen(locals.afterFilters)#" index="locals.i">
 			<cfif	(len(locals.afterFilters[locals.i].only) IS 0 AND len(locals.afterFilters[locals.i].except) IS 0) OR (len(locals.afterFilters[locals.i].only) IS NOT 0 AND listFindNoCase(locals.afterFilters[locals.i].only, locals.params.action)) OR (len(locals.afterFilters[locals.i].except) IS NOT 0 AND NOT listFindNoCase(locals.afterFilters[locals.i].except, locals.params.action))>
@@ -312,11 +312,10 @@
 	<cfreturn request.wheels.response>
 </cffunction>
 
-
-<cffunction name="_callAction" returntype="any" access="private" output="false">
+<cffunction name="$callAction" returntype="void" access="private" output="false">
 	<cfargument name="controller" type="any" required="true">
-	<cfargument name="controllerName" type="any" required="true">
-	<cfargument name="actionName" type="any" required="true">
+	<cfargument name="controllerName" type="string" required="true">
+	<cfargument name="actionName" type="string" required="true">
 
 	<cfif structKeyExists(arguments.controller, arguments.actionName)>
 		<cfinvoke component="#arguments.controller#" method="#arguments.actionName#">

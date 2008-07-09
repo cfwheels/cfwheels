@@ -5,7 +5,7 @@
 		<cfset arguments.class = "error-messages">
 	</cfif>
 	<cfset arguments._named_arguments = "objectName">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset local.object = evaluate(arguments.objectName)>
 	<cfset local.errors = local.object.allErrors()>
@@ -23,7 +23,7 @@
 		</cfsavecontent>
 	</cfif>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="errorMessageOn" returntype="any" access="public" output="false">
@@ -37,7 +37,7 @@
 		<cfset arguments.class = "error-message">
 	</cfif>
 	<cfset arguments._named_arguments = "objectName,property,prependText,appendText,wrapperElement">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset local.object = evaluate(arguments.objectName)>
 	<cfset local.error = local.object.errorsOn(arguments.property)>
@@ -51,5 +51,5 @@
 		</cfsavecontent>
 	</cfif>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>

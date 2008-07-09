@@ -10,7 +10,7 @@
 		<!--- Since a non-numeric id was passed in we assume it is meant as a HTML attribute and therefore remove it from the named arguments list so that it will be set in the attributes --->
 		<cfset arguments._named_arguments = listDeleteAt(arguments._named_arguments, listFindNoCase(arguments._named_arguments, "id"))>
 	</cfif>
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
 		<cfset structDelete(arguments, "id")>
 	</cfif>
@@ -35,7 +35,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="formRemoteTag" returntype="any" access="public" output="false">
@@ -56,7 +56,7 @@
 		<!--- Since a non-numeric id was passed in we assume it is meant as a HTML attribute and therefore remove it from the named arguments list so that it will be set in the attributes --->
 		<cfset arguments._named_arguments = listDeleteAt(arguments._named_arguments, listFindNoCase(arguments._named_arguments, "id"))>
 	</cfif>
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
 		<cfset structDelete(arguments, "id")>
 	</cfif>
@@ -114,7 +114,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="endFormTag" returntype="any" access="public" output="false">
@@ -130,7 +130,7 @@
 	<cfargument name="disable" type="any" required="false" default="">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "value,image,disable">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfif len(arguments.disable) IS NOT 0>
 		<cfset local.onclick = "this.disabled=true;">
@@ -150,7 +150,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="textField" returntype="any" access="public" output="false">
@@ -165,7 +165,7 @@
 	<cfargument name="errorElement" type="any" required="false" default="div">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
@@ -175,7 +175,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="radioButton" returntype="any" access="public" output="false">
@@ -191,7 +191,7 @@
 	<cfargument name="errorElement" type="any" required="false" default="div">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "objectName,property,tagValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
@@ -201,7 +201,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="checkBox" returntype="any" access="public" output="false">
@@ -218,7 +218,7 @@
 	<cfargument name="errorElement" type="any" required="false" default="div">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "objectName,property,checkedValue,uncheckedValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset local.value = _formValue(argumentCollection=arguments)>
 	<cfif (isBoolean(local.value) AND local.value) OR (isNumeric(local.value) AND local.value GTE 1)>
@@ -236,7 +236,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="passwordField" returntype="any" access="public" output="false">
@@ -251,7 +251,7 @@
 	<cfargument name="errorElement" type="any" required="false" default="div">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
@@ -261,7 +261,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="hiddenField" returntype="any" access="public" output="false">
@@ -269,7 +269,7 @@
 	<cfargument name="property" type="any" required="true">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "objectName,property">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset local.value = _formValue(argumentCollection=arguments)>
 	<cfif structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
@@ -282,7 +282,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="textArea" returntype="any" access="public" output="false">
@@ -297,7 +297,7 @@
 	<cfargument name="errorElement" type="any" required="false" default="div">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset local.output = "">
 	<cfset local.output = local.output & _formBeforeElement(argumentCollection=arguments)>
@@ -321,7 +321,7 @@
 	<cfargument name="errorElement" type="any" required="false" default="div">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
@@ -331,7 +331,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="select" returntype="any" access="public" output="false">
@@ -351,7 +351,7 @@
 	<cfargument name="errorElement" type="any" required="false" default="div">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "objectName,property,options,includeBlank,multiple,valueField,textField,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset local.output = "">
 	<cfset local.output = local.output & _formBeforeElement(argumentCollection=arguments)>
@@ -386,7 +386,7 @@
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
@@ -396,7 +396,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="radioButtonTag" returntype="any" access="public" output="false">
@@ -411,7 +411,7 @@
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "name,value,checked,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
@@ -421,7 +421,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="checkBoxTag" returntype="any" access="public" output="false">
@@ -436,7 +436,7 @@
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "name,value,checked,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
@@ -446,7 +446,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="passwordFieldTag" returntype="any" access="public" output="false">
@@ -460,7 +460,7 @@
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
@@ -470,7 +470,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="hiddenFieldTag" returntype="any" access="public" output="false">
@@ -478,7 +478,7 @@
 	<cfargument name="value" type="any" required="false" default="">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "name,value">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset local.value = _formValue(argumentCollection=arguments)>
 	<cfif structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
@@ -491,7 +491,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="textAreaTag" returntype="any" access="public" output="false">
@@ -505,7 +505,7 @@
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset local.output = "">
 	<cfset local.output = local.output & _formBeforeElement(argumentCollection=arguments)>
@@ -528,7 +528,7 @@
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
@@ -538,7 +538,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="selectTag" returntype="any" access="public" output="false">
@@ -557,7 +557,7 @@
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "name,value,options,includeBlank,multiple,valueField,textField,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfsavecontent variable="local.output">
 		<cfoutput>
@@ -577,7 +577,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="yearSelectTag" returntype="any" access="public" output="false">
@@ -589,7 +589,7 @@
 	<cfset arguments._step = 1>
 	<cfset structDelete(arguments, "startYear")>
 	<cfset structDelete(arguments, "endYear")>
-	<cfreturn _yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
+	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="monthSelectTag" returntype="any" access="public" output="false">
@@ -604,7 +604,7 @@
 		<cfset arguments._option_names = "January,February,March,April,May,June,July,August,September,October,November,December">
 	</cfif>
 	<cfset structDelete(arguments, "monthDisplay")>
-	<cfreturn _yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
+	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="daySelectTag" returntype="any" access="public" output="false">
@@ -612,7 +612,7 @@
 	<cfset arguments._loop_to = 31>
 	<cfset arguments._type = "day">
 	<cfset arguments._step = 1>
-	<cfreturn _yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
+	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="hourSelectTag" returntype="any" access="public" output="false">
@@ -620,7 +620,7 @@
 	<cfset arguments._loop_to = 23>
 	<cfset arguments._type = "hour">
 	<cfset arguments._step = 1>
-	<cfreturn _yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
+	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="minuteSelectTag" returntype="any" access="public" output="false">
@@ -630,7 +630,7 @@
 	<cfset arguments._type = "minute">
 	<cfset arguments._step = arguments.minuteStep>
 	<cfset structDelete(arguments, "minuteStep")>
-	<cfreturn _yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
+	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="secondSelectTag" returntype="any" access="public" output="false">
@@ -638,10 +638,116 @@
 	<cfset arguments._loop_to = 59>
 	<cfset arguments._type = "second">
 	<cfset arguments._step = 1>
-	<cfreturn _yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
+	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="_yearMonthHourMinuteSecondSelectTag" returntype="any" access="private" output="false">
+<cffunction name="dateTimeSelect" returntype="any" access="public" output="false">
+	<cfset arguments._function_name = "dateTimeSelect">
+	<cfreturn $dateTimeSelect(argumentCollection=arguments)>
+</cffunction>
+
+<cffunction name="dateTimeSelectTag" returntype="any" access="public" output="false">
+	<cfset arguments._function_name = "dateTimeSelectTag">
+	<cfreturn $dateTimeSelect(argumentCollection=arguments)>
+</cffunction>
+
+<cffunction name="dateSelect" returntype="any" access="public" output="false">
+	<cfargument name="order" type="any" required="false" default="month,day,year">
+	<cfargument name="separator" type="any" required="false" default=" ">
+	<cfset arguments._function_name = "dateSelect">
+	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
+</cffunction>
+
+<cffunction name="dateSelectTag" returntype="any" access="public" output="false">
+	<cfargument name="order" type="any" required="false" default="month,day,year">
+	<cfargument name="separator" type="any" required="false" default=" ">
+	<cfset arguments._function_name = "dateSelectTag">
+	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
+</cffunction>
+
+<cffunction name="timeSelect" returntype="any" access="public" output="false">
+	<cfargument name="order" type="any" required="false" default="hour,minute,second">
+	<cfargument name="separator" type="any" required="false" default=":">
+	<cfset arguments._function_name = "timeSelect">
+	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
+</cffunction>
+
+<cffunction name="timeSelectTag" returntype="any" access="public" output="false">
+	<cfargument name="order" type="any" required="false" default="hour,minute,second">
+	<cfargument name="separator" type="any" required="false" default=":">
+	<cfset arguments._function_name = "timeSelectTag">
+	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
+</cffunction>
+
+<cffunction name="$dateTimeSelect" returntype="any" access="public" output="false">
+	<cfargument name="date_order" type="any" required="false" default="month,day,year">
+	<cfargument name="time_order" type="any" required="false" default="hour,minute,second">
+	<cfargument name="date_separator" type="any" required="false" default=" ">
+	<cfargument name="time_separator" type="any" required="false" default=":">
+	<cfargument name="separator" type="any" required="false" default=" - ">
+	<cfargument name="_function_name" type="any" required="true">
+	<cfset var local = structNew()>
+
+	<cfset local.html = "">
+	<cfset local.separator = arguments.separator>
+
+	<cfset arguments.order = arguments.date_order>
+	<cfset arguments.separator = arguments.date_separator>
+	<cfif arguments._function_name IS "dateTimeSelect">
+		<cfset local.html = local.html & dateSelect(argumentCollection=arguments)>
+	<cfelseif  arguments._function_name IS "dateTimeSelectTag">
+		<cfset local.html = local.html & dateSelectTag(argumentCollection=arguments)>
+	</cfif>
+	<cfset local.html = local.html & local.separator>
+	<cfset arguments.order = arguments.time_order>
+	<cfset arguments.separator = arguments.time_separator>
+	<cfif arguments._function_name IS "dateTimeSelect">
+		<cfset local.html = local.html & timeSelect(argumentCollection=arguments)>
+	<cfelseif  arguments._function_name IS "dateTimeSelectTag">
+		<cfset local.html = local.html & timeSelectTag(argumentCollection=arguments)>
+	</cfif>
+
+	<cfreturn local.html>
+</cffunction>
+
+<cffunction name="$dateOrTimeSelect" returntype="any" access="private" output="false">
+	<cfargument name="name" type="any" required="false" default="">
+	<cfargument name="value" type="any" required="false" default="">
+	<cfargument name="objectName" type="any" required="false" default="">
+	<cfargument name="property" type="any" required="false" default="">
+	<cfargument name="_function_name" type="any" required="true">
+	<cfset var local = structNew()>
+
+	<cfif len(arguments.objectName) IS NOT 0>
+		<cfset local.name = "#listLast(arguments.objectName,".")#[#arguments.property#]">
+		<cfset arguments._id = "#listLast(arguments.objectName,".")#_#arguments.property#">
+		<cfset local.value = _formValue(argumentCollection=arguments)>
+	<cfelse>
+		<cfset local.name = arguments.name>
+		<cfset arguments._id = arguments.name>
+		<cfset local.value = arguments.value>
+	</cfif>
+
+	<cfset local.html = "">
+	<cfset local.first_done = false>
+	<cfloop list="#arguments.order#" index="local.i">
+		<cfset arguments.name = local.name & "(_" & local.i & ")">
+		<cfif local.value IS NOT "">
+			<cfset arguments.value = evaluate("#local.i#(local.value)")>
+		<cfelse>
+			<cfset arguments.value = "">
+		</cfif>
+		<cfif local.first_done>
+			<cfset local.html = local.html & arguments.separator>
+		</cfif>
+		<cfset local.html = local.html & evaluate("#local.i#SelectTag(argumentCollection=arguments)")>
+		<cfset local.first_done = true>
+	</cfloop>
+
+	<cfreturn local.html>
+</cffunction>
+
+<cffunction name="$yearMonthHourMinuteSecondSelectTag" returntype="any" access="private" output="false">
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="value" type="any" required="false" default="">
 	<cfargument name="includeBlank" type="any" required="false" default="false">
@@ -659,7 +765,7 @@
 	<cfargument name="_step" type="any" required="false" default="">
 	<cfset var local = structNew()>
 	<cfset arguments._named_arguments = "name,value,includeBlank,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,_type,_loop_from,_loop_to,_id,_option_names,_step">
-	<cfset local.attributes = _getAttributes(argumentCollection=arguments)>
+	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfif arguments.value IS "" AND NOT arguments.includeBlank>
 		<cfset arguments.value = evaluate("#arguments._type#(now())")>
@@ -694,112 +800,6 @@
 	</cfloop>
 	<cfset local.html = local.html & "</select>">
 	<cfset local.html = local.html & _formAfterElement(argumentCollection=arguments)>
-
-	<cfreturn local.html>
-</cffunction>
-
-<cffunction name="dateTimeSelect" returntype="any" access="public" output="false">
-	<cfset arguments._function_name = "dateTimeSelect">
-	<cfreturn _dateTimeSelect(argumentCollection=arguments)>
-</cffunction>
-
-<cffunction name="dateTimeSelectTag" returntype="any" access="public" output="false">
-	<cfset arguments._function_name = "dateTimeSelectTag">
-	<cfreturn _dateTimeSelect(argumentCollection=arguments)>
-</cffunction>
-
-<cffunction name="dateSelect" returntype="any" access="public" output="false">
-	<cfargument name="order" type="any" required="false" default="month,day,year">
-	<cfargument name="separator" type="any" required="false" default=" ">
-	<cfset arguments._function_name = "dateSelect">
-	<cfreturn _dateOrTimeSelect(argumentCollection=arguments)>
-</cffunction>
-
-<cffunction name="dateSelectTag" returntype="any" access="public" output="false">
-	<cfargument name="order" type="any" required="false" default="month,day,year">
-	<cfargument name="separator" type="any" required="false" default=" ">
-	<cfset arguments._function_name = "dateSelectTag">
-	<cfreturn _dateOrTimeSelect(argumentCollection=arguments)>
-</cffunction>
-
-<cffunction name="timeSelect" returntype="any" access="public" output="false">
-	<cfargument name="order" type="any" required="false" default="hour,minute,second">
-	<cfargument name="separator" type="any" required="false" default=":">
-	<cfset arguments._function_name = "timeSelect">
-	<cfreturn _dateOrTimeSelect(argumentCollection=arguments)>
-</cffunction>
-
-<cffunction name="timeSelectTag" returntype="any" access="public" output="false">
-	<cfargument name="order" type="any" required="false" default="hour,minute,second">
-	<cfargument name="separator" type="any" required="false" default=":">
-	<cfset arguments._function_name = "timeSelectTag">
-	<cfreturn _dateOrTimeSelect(argumentCollection=arguments)>
-</cffunction>
-
-<cffunction name="_dateTimeSelect" returntype="any" access="public" output="false">
-	<cfargument name="date_order" type="any" required="false" default="month,day,year">
-	<cfargument name="time_order" type="any" required="false" default="hour,minute,second">
-	<cfargument name="date_separator" type="any" required="false" default=" ">
-	<cfargument name="time_separator" type="any" required="false" default=":">
-	<cfargument name="separator" type="any" required="false" default=" - ">
-	<cfargument name="_function_name" type="any" required="true">
-	<cfset var local = structNew()>
-
-	<cfset local.html = "">
-	<cfset local.separator = arguments.separator>
-
-	<cfset arguments.order = arguments.date_order>
-	<cfset arguments.separator = arguments.date_separator>
-	<cfif arguments._function_name IS "dateTimeSelect">
-		<cfset local.html = local.html & dateSelect(argumentCollection=arguments)>
-	<cfelseif  arguments._function_name IS "dateTimeSelectTag">
-		<cfset local.html = local.html & dateSelectTag(argumentCollection=arguments)>
-	</cfif>
-	<cfset local.html = local.html & local.separator>
-	<cfset arguments.order = arguments.time_order>
-	<cfset arguments.separator = arguments.time_separator>
-	<cfif arguments._function_name IS "dateTimeSelect">
-		<cfset local.html = local.html & timeSelect(argumentCollection=arguments)>
-	<cfelseif  arguments._function_name IS "dateTimeSelectTag">
-		<cfset local.html = local.html & timeSelectTag(argumentCollection=arguments)>
-	</cfif>
-
-	<cfreturn local.html>
-</cffunction>
-
-<cffunction name="_dateOrTimeSelect" returntype="any" access="private" output="false">
-	<cfargument name="name" type="any" required="false" default="">
-	<cfargument name="value" type="any" required="false" default="">
-	<cfargument name="objectName" type="any" required="false" default="">
-	<cfargument name="property" type="any" required="false" default="">
-	<cfargument name="_function_name" type="any" required="true">
-	<cfset var local = structNew()>
-
-	<cfif len(arguments.objectName) IS NOT 0>
-		<cfset local.name = "#listLast(arguments.objectName,".")#[#arguments.property#]">
-		<cfset arguments._id = "#listLast(arguments.objectName,".")#_#arguments.property#">
-		<cfset local.value = _formValue(argumentCollection=arguments)>
-	<cfelse>
-		<cfset local.name = arguments.name>
-		<cfset arguments._id = arguments.name>
-		<cfset local.value = arguments.value>
-	</cfif>
-
-	<cfset local.html = "">
-	<cfset local.first_done = false>
-	<cfloop list="#arguments.order#" index="local.i">
-		<cfset arguments.name = local.name & "(_" & local.i & ")">
-		<cfif local.value IS NOT "">
-			<cfset arguments.value = evaluate("#local.i#(local.value)")>
-		<cfelse>
-			<cfset arguments.value = "">
-		</cfif>
-		<cfif local.first_done>
-			<cfset local.html = local.html & arguments.separator>
-		</cfif>
-		<cfset local.html = local.html & evaluate("#local.i#SelectTag(argumentCollection=arguments)")>
-		<cfset local.first_done = true>
-	</cfloop>
 
 	<cfreturn local.html>
 </cffunction>

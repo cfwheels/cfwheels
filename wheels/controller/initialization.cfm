@@ -14,21 +14,21 @@
 	<cfreturn this>
 </cffunction>
 
-<cffunction name="_createControllerObject" returntype="any" access="public" output="false">
-	<cfargument name="params" type="any" required="true">
-	<cfreturn createObject("component", "controllerRoot.#variables.wheels.name#")._initControllerObject(variables.wheels.name, arguments.params)>
+<cffunction name="$createControllerObject" returntype="any" access="public" output="false">
+	<cfargument name="params" type="struct" required="true">
+	<cfreturn createObject("component", "controllerRoot.#variables.wheels.name#").$initControllerObject(variables.wheels.name, arguments.params)>
 </cffunction>
 
-<cffunction name="_initControllerObject" returntype="any" access="public" output="false">
-	<cfargument name="name" type="any" required="true">
-	<cfargument name="params" type="any" required="true">
+<cffunction name="$initControllerObject" returntype="any" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="params" type="struct" required="true">
 	<cflock name="controllerLock" type="readonly" timeout="30">
-		<cfset variables.wheels = application.wheels.controllers[arguments.name].getControllerClassData()>
+		<cfset variables.wheels = application.wheels.controllers[arguments.name].$getControllerClassData()>
 	</cflock>
 	<cfset variables.params = arguments.params>
 	<cfreturn this>
 </cffunction>
 
-<cffunction name="getControllerClassData" returntype="any" access="public" output="false">
+<cffunction name="$getControllerClassData" returntype="struct" access="public" output="false">
 	<cfreturn variables.wheels>
 </cffunction>

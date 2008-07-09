@@ -1,4 +1,4 @@
-<cffunction name="_constructParams" returntype="any" access="private" output="false">
+<cffunction name="$constructParams" returntype="string" access="private" output="false">
 	<cfargument name="params" type="any" required="true">
 	<cfset var local = structNew()>
 
@@ -20,12 +20,12 @@
 	<cfreturn local.params>
 </cffunction>
 
-<cffunction name="_trimHTML" returntype="any" access="private" output="false">
-	<cfargument name="str" type="any" required="true">
+<cffunction name="$trimHTML" returntype="string" access="private" output="false">
+	<cfargument name="str" type="string" required="true">
 	<cfreturn replaceList(trim(arguments.str), "#chr(9)#,#chr(10)#,#chr(13)#", ",,")>
 </cffunction>
 
-<cffunction name="_getAttributes" returntype="any" access="private" output="false">
+<cffunction name="$getAttributes" returntype="string" access="private" output="false">
 	<cfset var local = structNew()>
 
 	<cfset local.attributes = "">

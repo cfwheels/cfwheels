@@ -1,6 +1,6 @@
-<cffunction name="caches" returntype="any" access="public" output="false">
-	<cfargument name="actions" type="any" required="false" default="">
-	<cfargument name="time" type="any" required="false" default="#application.settings.defaultCacheTime#">
+<cffunction name="caches" returntype="void" access="public" output="false">
+	<cfargument name="actions" type="string" required="false" default="">
+	<cfargument name="time" type="numeric" required="false" default="#application.settings.defaultCacheTime#">
 	<cfset var locals = structNew()>
 
 	<cfloop list="#arguments.actions#" index="locals.i">
@@ -12,6 +12,6 @@
 
 </cffunction>
 
-<cffunction name="_getCachableActions" returntype="any" access="public" output="false">
+<cffunction name="$getCachableActions" returntype="array" access="public" output="false">
 	<cfreturn variables.wheels.cachableActions>
 </cffunction>

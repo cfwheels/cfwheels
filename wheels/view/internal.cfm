@@ -66,7 +66,7 @@
 		</cfoutput>
 	</cfsavecontent>
 
-	<cfreturn _trimHTML(local.output)>
+	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
 <cffunction name="_formValue" returntype="any" access="private" output="false">
