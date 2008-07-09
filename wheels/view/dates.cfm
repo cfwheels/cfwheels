@@ -1,17 +1,17 @@
 <cffunction name="distanceOfTimeInWords" returntype="any" access="public" output="false">
-	<cfargument name="from_time" type="any" required="true">
-	<cfargument name="to_time" type="any" required="true">
-	<cfargument name="include_seconds" type="any" required="false" default="false">
+	<cfargument name="fromTime" type="any" required="true">
+	<cfargument name="toTime" type="any" required="true">
+	<cfargument name="includeSeconds" type="any" required="false" default="false">
 	<cfset var local = structNew()>
 
-	<cfset local.minute_diff = dateDiff("n", arguments.from_time, arguments.to_time)>
-	<cfset local.second_diff = dateDiff("s", arguments.from_time, arguments.to_time)>
+	<cfset local.minute_diff = dateDiff("n", arguments.fromTime, arguments.toTime)>
+	<cfset local.second_diff = dateDiff("s", arguments.fromTime, arguments.toTime)>
 	<cfset local.hours = 0>
 	<cfset local.days = 0>
 	<cfset local.output = "">
 
 	<cfif local.minute_diff LT 1>
-		<cfif arguments.include_seconds>
+		<cfif arguments.includeSeconds>
 			<cfif local.second_diff LTE 5>
 				<cfset local.output = "less than 5 seconds">
 			<cfelseif local.second_diff LTE 10>
@@ -56,19 +56,19 @@
 </cffunction>
 
 <cffunction name="timeAgoInWords" returntype="any" access="public" output="false">
-	<cfargument name="from_time" type="any" required="true">
-	<cfargument name="include_seconds" type="any" required="false" default="false">
+	<cfargument name="fromTime" type="any" required="true">
+	<cfargument name="includeSeconds" type="any" required="false" default="false">
 
-	<cfset arguments.to_time = now()>
+	<cfset arguments.toTime = now()>
 
 	<cfreturn distanceOfTimeInWords(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="timeUntilInWords" returntype="any" access="public" output="false">
-	<cfargument name="to_time" type="any" required="true">
-	<cfargument name="include_seconds" type="any" required="false" default="false">
+	<cfargument name="toTime" type="any" required="true">
+	<cfargument name="includeSeconds" type="any" required="false" default="false">
 
-	<cfset arguments.from_time = now()>
+	<cfset arguments.fromTime = now()>
 
 	<cfreturn distanceOfTimeInWords(argumentCollection=arguments)>
 </cffunction>

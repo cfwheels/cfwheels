@@ -82,13 +82,13 @@
 	<cfargument name="text" type="any" required="true">
 	<cfargument name="phrase" type="any" required="true">
 	<cfargument name="radius" type="any" required="false" default="100">
-	<cfargument name="excerpt_string" type="any" required="false" default="...">
+	<cfargument name="excerptString" type="any" required="false" default="...">
 	<cfset var local = structNew()>
 
 	<cfset local.pos = findNoCase(arguments.phrase, arguments.text, 1)>
 	<cfif local.pos IS NOT 0>
-		<cfset local.excerpt_string_start = arguments.excerpt_string>
-		<cfset local.excerpt_string_end = arguments.excerpt_string>
+		<cfset local.excerpt_string_start = arguments.excerptString>
+		<cfset local.excerpt_string_end = arguments.excerptString>
 		<cfset local.start = local.pos-arguments.radius>
 		<cfif local.start LTE 0>
 			<cfset local.start = 1>
@@ -109,11 +109,11 @@
 <cffunction name="truncate" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">
 	<cfargument name="length" type="any" required="true">
-	<cfargument name="truncate_string" type="any" required="false" default="...">
+	<cfargument name="truncateString" type="any" required="false" default="...">
 	<cfset var local = structNew()>
 
 	<cfif len(arguments.text) GT arguments.length>
-		<cfset local.output = left(arguments.text, arguments.length-3) & arguments.truncate_string>
+		<cfset local.output = left(arguments.text, arguments.length-3) & arguments.truncateString>
 	<cfelse>
 		<cfset local.output = arguments.text>
 	</cfif>

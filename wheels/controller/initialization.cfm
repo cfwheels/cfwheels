@@ -14,12 +14,10 @@
 	<cfreturn this>
 </cffunction>
 
-
 <cffunction name="_createControllerObject" returntype="any" access="public" output="false">
 	<cfargument name="params" type="any" required="true">
 	<cfreturn createObject("component", "controllerRoot.#variables.wheels.name#")._initControllerObject(variables.wheels.name, arguments.params)>
 </cffunction>
-
 
 <cffunction name="_initControllerObject" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
@@ -30,7 +28,6 @@
 	<cfset variables.params = arguments.params>
 	<cfreturn this>
 </cffunction>
-
 
 <cffunction name="getControllerClassData" returntype="any" access="public" output="false">
 	<cfreturn variables.wheels>

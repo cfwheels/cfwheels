@@ -38,7 +38,6 @@
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
 
-
 <cffunction name="formRemoteTag" returntype="any" access="public" output="false">
 	<cfargument name="link" type="any" required="false" default="">
 	<cfargument name="method" type="any" required="false" default="post">
@@ -118,14 +117,12 @@
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
 
-
 <cffunction name="endFormTag" returntype="any" access="public" output="false">
 	<cfif structKeyExists(request.wheels, "current_form_method")>
 		<cfset structDelete(request.wheels, "current_form_method")>
 	</cfif>
 	<cfreturn "</form>">
 </cffunction>
-
 
 <cffunction name="submitTag" returntype="any" access="public" output="false">
 	<cfargument name="value" type="any" required="false" default="Save changes">
@@ -156,7 +153,6 @@
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
 
-
 <cffunction name="textField" returntype="any" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="any" required="true">
@@ -181,7 +177,6 @@
 
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
-
 
 <cffunction name="radioButton" returntype="any" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
@@ -208,7 +203,6 @@
 
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
-
 
 <cffunction name="checkBox" returntype="any" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
@@ -245,7 +239,6 @@
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
 
-
 <cffunction name="passwordField" returntype="any" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="any" required="true">
@@ -271,7 +264,6 @@
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
 
-
 <cffunction name="hiddenField" returntype="any" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="any" required="true">
@@ -292,7 +284,6 @@
 
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
-
 
 <cffunction name="textArea" returntype="any" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
@@ -318,7 +309,6 @@
 	<cfreturn local.output>
 </cffunction>
 
-
 <cffunction name="fileField" returntype="any" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="any" required="true">
@@ -343,7 +333,6 @@
 
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
-
 
 <cffunction name="select" returntype="any" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
@@ -386,7 +375,6 @@
 	<cfreturn local.output>
 </cffunction>
 
-
 <cffunction name="textFieldTag" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="value" type="any" required="false" default="">
@@ -410,7 +398,6 @@
 
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
-
 
 <cffunction name="radioButtonTag" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
@@ -437,7 +424,6 @@
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
 
-
 <cffunction name="checkBoxTag" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="value" type="any" required="false" default="1">
@@ -463,7 +449,6 @@
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
 
-
 <cffunction name="passwordFieldTag" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="value" type="any" required="false" default="">
@@ -488,7 +473,6 @@
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
 
-
 <cffunction name="hiddenFieldTag" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="value" type="any" required="false" default="">
@@ -509,7 +493,6 @@
 
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
-
 
 <cffunction name="textAreaTag" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
@@ -534,7 +517,6 @@
 	<cfreturn local.output>
 </cffunction>
 
-
 <cffunction name="fileFieldTag" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="value" type="any" required="false" default="">
@@ -558,7 +540,6 @@
 
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
-
 
 <cffunction name="selectTag" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
@@ -599,7 +580,6 @@
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
 
-
 <cffunction name="yearSelectTag" returntype="any" access="public" output="false">
 	<cfargument name="startYear" type="any" required="false" default="#year(now())-5#">
 	<cfargument name="endYear" type="any" required="false" default="#year(now())+5#">
@@ -611,7 +591,6 @@
 	<cfset structDelete(arguments, "endYear")>
 	<cfreturn _yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
-
 
 <cffunction name="monthSelectTag" returntype="any" access="public" output="false">
 	<cfargument name="monthDisplay" type="any" required="false" default="names">
@@ -628,7 +607,6 @@
 	<cfreturn _yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
-
 <cffunction name="daySelectTag" returntype="any" access="public" output="false">
 	<cfset arguments._loop_from = 1>
 	<cfset arguments._loop_to = 31>
@@ -637,7 +615,6 @@
 	<cfreturn _yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
-
 <cffunction name="hourSelectTag" returntype="any" access="public" output="false">
 	<cfset arguments._loop_from = 0>
 	<cfset arguments._loop_to = 23>
@@ -645,7 +622,6 @@
 	<cfset arguments._step = 1>
 	<cfreturn _yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
-
 
 <cffunction name="minuteSelectTag" returntype="any" access="public" output="false">
 	<cfargument name="minuteStep" type="any" required="false" default="1">
@@ -664,7 +640,6 @@
 	<cfset arguments._step = 1>
 	<cfreturn _yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
-
 
 <cffunction name="_yearMonthHourMinuteSecondSelectTag" returntype="any" access="private" output="false">
 	<cfargument name="name" type="any" required="true">
@@ -723,18 +698,15 @@
 	<cfreturn local.html>
 </cffunction>
 
-
 <cffunction name="dateTimeSelect" returntype="any" access="public" output="false">
 	<cfset arguments._function_name = "dateTimeSelect">
 	<cfreturn _dateTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
-
 <cffunction name="dateTimeSelectTag" returntype="any" access="public" output="false">
 	<cfset arguments._function_name = "dateTimeSelectTag">
 	<cfreturn _dateTimeSelect(argumentCollection=arguments)>
 </cffunction>
-
 
 <cffunction name="dateSelect" returntype="any" access="public" output="false">
 	<cfargument name="order" type="any" required="false" default="month,day,year">
@@ -743,14 +715,12 @@
 	<cfreturn _dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
-
 <cffunction name="dateSelectTag" returntype="any" access="public" output="false">
 	<cfargument name="order" type="any" required="false" default="month,day,year">
 	<cfargument name="separator" type="any" required="false" default=" ">
 	<cfset arguments._function_name = "dateSelectTag">
 	<cfreturn _dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
-
 
 <cffunction name="timeSelect" returntype="any" access="public" output="false">
 	<cfargument name="order" type="any" required="false" default="hour,minute,second">
@@ -759,14 +729,12 @@
 	<cfreturn _dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
-
 <cffunction name="timeSelectTag" returntype="any" access="public" output="false">
 	<cfargument name="order" type="any" required="false" default="hour,minute,second">
 	<cfargument name="separator" type="any" required="false" default=":">
 	<cfset arguments._function_name = "timeSelectTag">
 	<cfreturn _dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
-
 
 <cffunction name="_dateTimeSelect" returntype="any" access="public" output="false">
 	<cfargument name="date_order" type="any" required="false" default="month,day,year">
@@ -798,7 +766,6 @@
 
 	<cfreturn local.html>
 </cffunction>
-
 
 <cffunction name="_dateOrTimeSelect" returntype="any" access="private" output="false">
 	<cfargument name="name" type="any" required="false" default="">
