@@ -7,7 +7,6 @@
 	</cfif>
 </cffunction>
 
-
 <cffunction name="paginationHasNext" returntype="any" access="public" output="false">
 	<cfargument name="handle" type="any" required="false" default="paginatedQuery">
 	<cfif request.wheels[arguments.handle].currentPage LT request.wheels[arguments.handle].totalPages>
@@ -17,24 +16,20 @@
 	</cfif>
 </cffunction>
 
-
 <cffunction name="paginationTotalPages" returntype="any" access="public" output="false">
 	<cfargument name="handle" type="any" required="false" default="paginatedQuery">
 	<cfreturn request.wheels[arguments.handle].totalPages>
 </cffunction>
-
 
 <cffunction name="paginationTotalRecords" returntype="any" access="public" output="false">
 	<cfargument name="handle" type="any" required="false" default="paginatedQuery">
 	<cfreturn request.wheels[arguments.handle].totalRecords>
 </cffunction>
 
-
 <cffunction name="paginationCurrentPage" returntype="any" access="public" output="false">
 	<cfargument name="handle" type="any" required="false" default="paginatedQuery">
 	<cfreturn request.wheels[arguments.handle].currentPage>
 </cffunction>
-
 
 <cffunction name="paginationLinks" returntype="any" access="public" output="false">
 	<cfargument name="handle" type="any" required="false" default="paginatedQuery">

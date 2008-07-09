@@ -13,7 +13,6 @@
 	<cfreturn locals.result>
 </cffunction>
 
-
 <cffunction name="_optionsForSelect" returntype="any" access="private" output="false">
 	<cfargument name="options" type="any" required="true">
 	<cfargument name="valueField" type="any" required="false" default="id">
@@ -70,7 +69,6 @@
 	<cfreturn _trimHTML(local.output)>
 </cffunction>
 
-
 <cffunction name="_formValue" returntype="any" access="private" output="false">
 	<cfargument name="objectName" type="any" required="false" default="">
 	<cfargument name="property" type="any" required="false" default="">
@@ -93,7 +91,6 @@
 	<cfreturn local.value>
 </cffunction>
 
-
 <cffunction name="_formHasError" returntype="any" access="private" output="false">
 	<cfargument name="objectName" type="any" required="false" default="">
 	<cfargument name="property" type="any" required="false" default="">
@@ -111,7 +108,6 @@
 
 	<cfreturn local.error>
 </cffunction>
-
 
 <cffunction name="_formBeforeElement" returntype="any" access="private" output="false">
 	<cfargument name="objectName" type="any" required="false" default="">
@@ -153,7 +149,6 @@
 
 	<cfreturn local.output>
 </cffunction>
-
 
 <cffunction name="_formAfterElement" returntype="any" access="private" output="false">
 	<cfargument name="objectName" type="any" required="false" default="">

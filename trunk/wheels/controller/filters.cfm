@@ -17,7 +17,6 @@
 	</cfloop>
 </cffunction>
 
-
 <cffunction name="verifies" returntype="any" access="public" output="false">
 	<cfargument name="only" type="any" required="false" default="">
 	<cfargument name="except" type="any" required="false" default="">
@@ -31,16 +30,13 @@
 	<cfset arrayAppend(variables.wheels.verifications, structCopy(arguments))>
 </cffunction>
 
-
 <cffunction name="_getBeforeFilters" returntype="any" access="public" output="false">
 	<cfreturn variables.wheels.beforeFilters>
 </cffunction>
 
-
 <cffunction name="_getAfterFilters" returntype="any" access="public" output="false">
 	<cfreturn variables.wheels.afterFilters>
 </cffunction>
-
 
 <cffunction name="_getVerifications" returntype="any" access="public" output="false">
 	<cfreturn variables.wheels.verifications>

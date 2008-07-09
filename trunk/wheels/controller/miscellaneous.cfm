@@ -78,7 +78,6 @@
 	<cfreturn lCase(locals.url)>
 </cffunction>
 
-
 <cffunction name="isGet" returntype="any" access="public" output="false">
 	<cfif CGI.REQUEST_METHOD IS "get">
 		<cfreturn true>
@@ -86,7 +85,6 @@
 		<cfreturn false>
 	</cfif>
 </cffunction>
-
 
 <cffunction name="isPost" returntype="any" access="public" output="false">
 	<cfif CGI.REQUEST_METHOD IS "post">
@@ -96,7 +94,6 @@
 	</cfif>
 </cffunction>
 
-
 <cffunction name="isAjax" returntype="any" access="public" output="false">
 	<cfif CGI.HTTP_X_REQUESTED_WITH IS "XMLHTTPRequest">
 		<cfreturn true>
@@ -104,7 +101,6 @@
 		<cfreturn false>
 	</cfif>
 </cffunction>
-
 
 <cffunction name="sendEmail" returntype="any" access="public" output="false">
 	<cfargument name="template" type="any" required="true">
@@ -141,7 +137,6 @@
 	<cfset structDelete(request.wheels, "response")>
 
 </cffunction>
-
 
 <cffunction name="sendFile" returntype="any" access="public" output="false">
 	<cfargument name="file" required="true">

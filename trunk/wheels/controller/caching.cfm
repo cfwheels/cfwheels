@@ -12,7 +12,6 @@
 
 </cffunction>
 
-
 <cffunction name="_getCachableActions" returntype="any" access="public" output="false">
 	<cfreturn variables.wheels.cachableActions>
 </cffunction>
