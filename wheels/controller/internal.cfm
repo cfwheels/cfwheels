@@ -3,7 +3,7 @@
 	<cfset var local = structNew()>
 
 	<cfset local.delim = "?">
-	<cfif application.settings.obfuscate_urls>
+	<cfif application.settings.obfuscateUrls>
 		<cfset local.params = "">
 		<cfloop list="#arguments.params#" delimiters="&" index="local.i">
 			<cfset local.temp = listToArray(local.i, "=")>
@@ -24,7 +24,6 @@
 	<cfargument name="str" type="any" required="true">
 	<cfreturn replaceList(trim(arguments.str), "#chr(9)#,#chr(10)#,#chr(13)#", ",,")>
 </cffunction>
-
 
 <cffunction name="_getAttributes" returntype="any" access="private" output="false">
 	<cfset var local = structNew()>
