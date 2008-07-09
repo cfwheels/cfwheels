@@ -101,7 +101,7 @@
 			<cfinclude template="routes.cfm">
 		</cfif>
 		<cfif NOT application.settings.cacheDatabaseSchema>
-			<cfset _clearCache("sql", "internal")>
+			<cfset $clearCache("sql", "internal")>
 		</cfif>
 		<cfinclude template="../events/onrequeststart.cfm">
 	</cflock>

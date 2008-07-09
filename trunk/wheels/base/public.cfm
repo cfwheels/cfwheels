@@ -1,5 +1,5 @@
-<cffunction name="obfuscateParam" returntype="any" access="public" output="false">
-	<cfargument name="param" type="any" required="true">
+<cffunction name="obfuscateParam" returntype="string" access="public" output="false">
+	<cfargument name="param" type="numeric" required="true">
 	<cfset var locals = structNew()>
 
 	<cfset locals.result = arguments.param>
@@ -17,8 +17,8 @@
 	<cfreturn locals.result>
 </cffunction>
 
-<cffunction name="deobfuscateParam" returntype="any" access="public" output="false">
-	<cfargument name="param" type="any" required="true">
+<cffunction name="deobfuscateParam" returntype="string" access="public" output="false">
+	<cfargument name="param" type="string" required="true">
 	<cfset var locals = structNew()>
 
 	<cftry>
@@ -44,11 +44,11 @@
 	<cfreturn locals.result>
 </cffunction>
 
-<cffunction name="addRoute" returntype="any" access="public" output="false">
-	<cfargument name="name" type="any" required="true">
-	<cfargument name="pattern" type="any" required="true">
-	<cfargument name="controller" type="any" required="true">
-	<cfargument name="action" type="any" required="true">
+<cffunction name="addRoute" returntype="void" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="pattern" type="string" required="true">
+	<cfargument name="controller" type="string" required="true">
+	<cfargument name="action" type="string" required="true">
 	<cfset var locals = structNew()>
 
 	<cfset locals.thisRoute = structCopy(arguments)>
@@ -65,15 +65,10 @@
 </cffunction>
 
 <cffunction name="model" returntype="any" access="public" output="false">
-	<cfargument name="name" type="any" required="true">
+	<cfargument name="name" type="string" required="true">
 	<cfif application.settings.environment IS NOT "production">
 		<cfinclude template="../errors/model.cfm">
 	</cfif>
 	<cfset $doubleCheckedLock(name="modelLock", path=application.wheels.models, key=arguments.name, method="$createClass", args=arguments)>
 	<cfreturn application.wheels.models[arguments.name]>
-</cffunction>
-
-<cffunction name="$createClass" returntype="any" access="private" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfreturn CreateObject("component", "modelRoot.#arguments.name#").$initClass(arguments.name)>
 </cffunction>

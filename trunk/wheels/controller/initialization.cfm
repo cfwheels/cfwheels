@@ -1,5 +1,5 @@
-<cffunction name="_initControllerClass" returntype="any" access="public" output="false">
-	<cfargument name="name" type="any" required="true">
+<cffunction name="$initControllerClass" returntype="any" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
 
 	<cfset variables.wheels.name = arguments.name>
 	<cfset variables.wheels.verifications = arrayNew(1)>

@@ -121,8 +121,8 @@
 			}
 
 			// get info from cache when available, otherwise create the generic select, from, where and order by clause
-			loc.queryShellKey = variables.wheels.class.name & $hashArguments(arguments);
-			loc.sql = _getFromCache(loc.queryShellKey);
+			loc.queryShellKey = variables.wheels.class.name & $hashStruct(arguments);
+			loc.sql = $getFromCache(loc.queryShellKey);
 			if (!IsArray(loc.sql))
 			{
 				loc.sql = [];
@@ -130,7 +130,7 @@
 				loc.sql = $addFromClause(sql=loc.sql, include=arguments.include);
 				loc.sql = $addWhereClause(sql=loc.sql, where=loc.genericWhere, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 				loc.sql = $addOrderByClause(sql=loc.sql, order=arguments.order, include=arguments.include);
-				_addToCache(loc.queryShellKey, loc.sql, 86400);
+				$addToCache(loc.queryShellKey, loc.sql, 86400);
 			}
 
 			// add where clause parameters to the generic sql info
@@ -161,7 +161,7 @@
 			}
 
 			// return existing query result if it has been run already in current request, otherwise pass off the sql array to the query
-			loc.queryKey = "wheels" & variables.wheels.class.name & $hashArguments(arguments);
+			loc.queryKey = "wheels" & variables.wheels.class.name & $hashStruct(arguments);
 			if (!arguments.reload && StructKeyExists(request, loc.queryKey))
 			{
 				loc.findAll = request[loc.queryKey];

@@ -164,7 +164,7 @@
 
 	<!--- Create requested controller --->
 	<cftry>
-		<cfset locals.controller = _controller(locals.params.controller)._createControllerObject(locals.params)>
+		<cfset locals.controller = $controller(locals.params.controller)._createControllerObject(locals.params)>
 	<cfcatch>
 		<cfif fileExists(expandPath("controllers/#locals.params.controller#.cfc"))>
 			<cfrethrow>
@@ -268,14 +268,14 @@
 		<cfset locals.key = "#CGI.SCRIPT_NAME#_#CGI.PATH_INFO#_#CGI.QUERY_STRING#">
 		<cfset locals.lockName = locals.category & locals.key>
 		<cflock name="#locals.lockName#" type="readonly" timeout="30">
-			<cfset request.wheels.response = _getFromCache(locals.key, locals.category)>
+			<cfset request.wheels.response = $getFromCache(locals.key, locals.category)>
 		</cflock>
 		<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
 	   	<cflock name="#locals.lockName#" type="exclusive" timeout="30">
-				<cfset request.wheels.response = _getFromCache(locals.key, locals.category)>
+				<cfset request.wheels.response = $getFromCache(locals.key, locals.category)>
 				<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
 					<cfset _callAction(locals.controller, locals.params.controller, locals.params.action)>
-					<cfset _addToCache(locals.key, request.wheels.response, locals.timeToCache, locals.category)>
+					<cfset $addToCache(locals.key, request.wheels.response, locals.timeToCache, locals.category)>
 				</cfif>
 			</cflock>
 		</cfif>

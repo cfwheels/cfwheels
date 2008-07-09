@@ -41,15 +41,15 @@
 	</cfif>
 
 	<cfset locals.category = "image">
-	<cfset locals.key = _hashStruct(arguments)>
+	<cfset locals.key = $hashStruct(arguments)>
 	<cfset locals.lockName = locals.category & locals.key>
 	<!--- double-checked lock --->
 	<cflock name="#locals.lockName#" type="readonly" timeout="30">
-		<cfset locals.result = _getFromCache(locals.key, locals.category, "internal")>
+		<cfset locals.result = $getFromCache(locals.key, locals.category, "internal")>
 	</cflock>
 	<cfif isBoolean(locals.result) AND NOT locals.result>
    	<cflock name="#locals.lockName#" type="exclusive" timeout="30">
-			<cfset locals.result = _getFromCache(locals.key, locals.category, "internal")>
+			<cfset locals.result = $getFromCache(locals.key, locals.category, "internal")>
 			<cfif isBoolean(locals.result) AND NOT locals.result>
 
 				<cfset locals.attributes = _HTMLAttributes(arguments.attributes)>
@@ -69,7 +69,7 @@
 				</cfif>
 				<cfset locals.result = "<img src=""#locals.src#""#locals.attributes# />">
 				<cfif application.settings.cacheImages>
-					<cfset _addToCache(locals.key, locals.result, 86400, locals.category, "internal")>
+					<cfset $addToCache(locals.key, locals.result, 86400, locals.category, "internal")>
 				</cfif>
 
 			</cfif>
