@@ -1,5 +1,0 @@
-#summary Automatically called by Wheels as a callback.
-
-This function does not actually exist in Wheels but if you create it in your model file it will be called automatically after an existing object has been updated.
-
-See the [ObjectCallbacks] page for more information and code examples.
