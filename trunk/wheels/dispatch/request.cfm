@@ -166,11 +166,11 @@
 	<cftry>
 		<cfset locals.controller = _controller(locals.params.controller)._createControllerObject(locals.params)>
 	<cfcatch>
-		<cfif fileExists(expandPath("controller/#locals.params.controller#.cfc"))>
+		<cfif fileExists(expandPath("controllers/#locals.params.controller#.cfc"))>
 			<cfrethrow>
 		<cfelse>
 			<cfif application.settings.showErrorInformation>
-				<cfthrow type="wheels" message="Could not find the <tt>#locals.params.controller#</tt> controller" detail="Create a file named <tt>#locals.params.controller#.cfc</tt> in the <tt>controller</tt> directory containing this code: <pre><code>#htmlEditFormat('<cfcomponent extends="wheels.controller"></cfcomponent>')#</code></pre>">
+				<cfthrow type="wheels" message="Could not find the <tt>#locals.params.controller#</tt> controller" detail="Create a file named <tt>#locals.params.controller#.cfc</tt> in the <tt>controllers</tt> directory containing this code: <pre><code>#htmlEditFormat('<cfcomponent extends="wheels.controller"></cfcomponent>')#</code></pre>">
 			<cfelse>
 				<cfinclude template="../../events/onmissingtemplate.cfm">
 				<cfabort>
