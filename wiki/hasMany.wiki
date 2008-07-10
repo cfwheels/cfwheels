@@ -1,4 +1,4 @@
-#summary [api-init] hasMany(foreignKey,class,name)
+#labels api,init#summary hasMany(foreignKey,class,name)
 
 *Description*: Sets up a 'has many' association between this class and the specified one
 
