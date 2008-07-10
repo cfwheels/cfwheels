@@ -1,5 +1,5 @@
 #summary We know what volunteering is like, so we want to make it as efficient for everyone as possible. Here are the rules of the road for contributing documentation to the project.
-#labels chapter
+#labels chapter,0.7
 
 The Docs are as important as the code itself. How is anyone going to use Wheels if they can't learn how to? And the great docs by Allaire/Macromedia/Adobe are a big reason why you've always loved ColdFusion, right?
 
