@@ -1,4 +1,4 @@
-<cffunction name="hasMany" returntype="void" access="public" output="false" hint="Init, Sets up a 'has many' association between this class and the specified one">
+<cffunction name="hasMany" returntype="void" access="public" output="false" hint="Init, Sets up a 'has many' association with another class">
 	<cfargument name="name" type="string" required="true" hint="Name of the association">
 	<cfargument name="class" type="string" required="false" default="" hint="Name of associated class">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="Foreign key property name">

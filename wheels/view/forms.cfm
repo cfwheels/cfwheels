@@ -580,9 +580,17 @@
 	<cfreturn $trimHTML(local.output)>
 </cffunction>
 
-<cffunction name="yearSelectTag" returntype="any" access="public" output="false">
-	<cfargument name="startYear" type="any" required="false" default="#year(now())-5#">
-	<cfargument name="endYear" type="any" required="false" default="#year(now())+5#">
+<cffunction name="yearSelectTag" returntype="any" access="public" output="false" hint="Returns a HTML select tag with years as options">
+	<cfargument name="startYear" type="any" required="false" default="#year(now())-5#" hint="First year in select list">
+	<cfargument name="endYear" type="any" required="false" default="#year(now())+5#" hint="Last year in select list">
+	<!---
+		DETAILS:
+		By default the option tags will include 11 years, 5 on each side of the current year.
+		You can change this by passing in startYear and endYear.
+		EXAMPLES:
+		#yearSelectTag()#
+		#yearSelectTag(startYear=1900, endYear=year(now()))#
+	--->
 	<cfset arguments._loop_from = arguments.startYear>
 	<cfset arguments._loop_to = arguments.endYear>
 	<cfset arguments._type = "year">
@@ -592,8 +600,16 @@
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="monthSelectTag" returntype="any" access="public" output="false">
-	<cfargument name="monthDisplay" type="any" required="false" default="names">
+<cffunction name="monthSelectTag" returntype="any" access="public" output="false" hint="Returns a HTML select tag with months as options">
+	<cfargument name="monthDisplay" type="any" required="false" default="names" hint="pass in 'names', 'numbers' or 'abbreviations' to control display">
+	<!---
+		DETAILS:
+		You can use the monthDisplay argument to control the display of the option tags.
+		By default the full month names will be used but you can change to show abbreviations or just month numbers.
+		EXAMPLES:
+		#monthSelectTag()#
+		#monthSelectTag(monthDisplay="abbreviations")#
+	--->
 	<cfset arguments._loop_from = 1>
 	<cfset arguments._loop_to = 12>
 	<cfset arguments._type = "month">
@@ -607,7 +623,13 @@
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="daySelectTag" returntype="any" access="public" output="false">
+<cffunction name="daySelectTag" returntype="any" access="public" output="false" hint="Returns a HTML select tag with days as options">
+	<!---
+		DETAILS:
+		This method returns days 1-31.
+		EXAMPLES:
+		#daySelectTag()#
+	--->
 	<cfset arguments._loop_from = 1>
 	<cfset arguments._loop_to = 31>
 	<cfset arguments._type = "day">
@@ -615,7 +637,13 @@
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="hourSelectTag" returntype="any" access="public" output="false">
+<cffunction name="hourSelectTag" returntype="any" access="public" output="false" hint="Returns a HTML select tag with days as options">
+	<!---
+		DETAILS:
+		This method returns hours from 0-23.
+		EXAMPLES:
+		#hourSelectTag()#
+	--->
 	<cfset arguments._loop_from = 0>
 	<cfset arguments._loop_to = 23>
 	<cfset arguments._type = "hour">
@@ -623,8 +651,17 @@
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="minuteSelectTag" returntype="any" access="public" output="false">
+<cffunction name="minuteSelectTag" returntype="any" access="public" output="false" hint="Returns a HTML select tag with minutes as options">
 	<cfargument name="minuteStep" type="any" required="false" default="1">
+	<!---
+		DETAILS:
+		This method returns minutes from 0 to 59.
+		If you don't want every minute between 0 and 59 included in the drop-down you can limit it by using the minuteStep argument.
+		If you for example pass in minuteStep=15 you will get 00,15,30 and 45 as options.
+		EXAMPLES:
+		#minuteSelectTag()#
+		#minuteSelectTag(minuteStep=10)#
+	--->
 	<cfset arguments._loop_from = 0>
 	<cfset arguments._loop_to = 59>
 	<cfset arguments._type = "minute">
@@ -633,7 +670,13 @@
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="secondSelectTag" returntype="any" access="public" output="false">
+<cffunction name="secondSelectTag" returntype="any" access="public" output="false" hint="Returns a HTML select tag with seconds as options">
+	<!---
+		DETAILS:
+		This method returns seconds from 0 to 59.
+		EXAMPLES:
+		#secondSelectTag()#
+	--->
 	<cfset arguments._loop_from = 0>
 	<cfset arguments._loop_to = 59>
 	<cfset arguments._type = "second">
@@ -646,7 +689,15 @@
 	<cfreturn $dateTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="dateTimeSelectTag" returntype="any" access="public" output="false">
+<cffunction name="dateTimeSelectTag" returntype="any" access="public" output="false" hint="Returns HTML select tags for choosing year, month, day, hour, minute and second">
+	<!---
+		DETAILS:
+		You can pass in a different order to change the order in which the select tags appear on the page.
+		You can also exclude one select tag completely by specifying an order with only one or two items.
+		You can also change the separator character that goes between the select tags and the character that goes between the entire set of select tags (after the first three date select tags but before the last three time select tags).
+		EXAMPLES:
+		#dateTimeSelectTag(dateOrder="year,month,day", monthDisplay="abbreviations")#
+	--->
 	<cfset arguments._function_name = "dateTimeSelectTag">
 	<cfreturn $dateTimeSelect(argumentCollection=arguments)>
 </cffunction>
@@ -658,9 +709,17 @@
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="dateSelectTag" returntype="any" access="public" output="false">
-	<cfargument name="order" type="any" required="false" default="month,day,year">
-	<cfargument name="separator" type="any" required="false" default=" ">
+<cffunction name="dateSelectTag" returntype="any" access="public" output="false" hint="Returns HTML select tags for choosing year, month and day">
+	<cfargument name="order" type="any" required="false" default="month,day,year" hint="Use to change the order of or exclude select tags">
+	<cfargument name="separator" type="any" required="false" default=" " hint="Use to change the character that is displayed between the select tags">
+	<!---
+		DETAILS:
+		You can pass in a different order to change the order in which the select tags appear on the page.
+		You can also exclude one select tag completely by specifying an order with only one or two items.
+		You can also change the separator character that goes between the select tags.
+		EXAMPLES:
+		#dateSelectTag(order="year,month,day")#
+	--->
 	<cfset arguments._function_name = "dateSelectTag">
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
@@ -672,19 +731,27 @@
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="timeSelectTag" returntype="any" access="public" output="false">
-	<cfargument name="order" type="any" required="false" default="hour,minute,second">
-	<cfargument name="separator" type="any" required="false" default=":">
+<cffunction name="timeSelectTag" returntype="any" access="public" output="false" hint="Returns HTML select tags for choosing hour, minute and second">
+	<cfargument name="order" type="any" required="false" default="hour,minute,second" hint="Use to change the order of or exclude select tags">
+	<cfargument name="separator" type="any" required="false" default=":" hint="Use to change the character that is displayed between the select tags">
+	<!---
+		DETAILS:
+		You can pass in a different order to change the order in which the select tags appear on the page.
+		You can also exclude one select tag completely by specifying an order with only one or two items.
+		You can also change the separator character that goes between the select tags.
+		EXAMPLES:
+		#timeSelectTag(order="hour,minute", separator=" - ")#
+	--->
 	<cfset arguments._function_name = "timeSelectTag">
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$dateTimeSelect" returntype="any" access="public" output="false">
-	<cfargument name="date_order" type="any" required="false" default="month,day,year">
-	<cfargument name="time_order" type="any" required="false" default="hour,minute,second">
-	<cfargument name="date_separator" type="any" required="false" default=" ">
-	<cfargument name="time_separator" type="any" required="false" default=":">
-	<cfargument name="separator" type="any" required="false" default=" - ">
+	<cfargument name="dateOrder" type="any" required="false" default="month,day,year" hint="Use to change the order of or exclude date select tags">
+	<cfargument name="timeOrder" type="any" required="false" default="hour,minute,second" hint="Use to change the order of or exclude time select tags ">
+	<cfargument name="dateSeparator" type="any" required="false" default=" " hint="Use to change the character that is displayed between the date select tags ">
+	<cfargument name="timeSeparator" type="any" required="false" default=":" hint="Use to change the character that is displayed between the time select tags ">
+	<cfargument name="separator" type="any" required="false" default=" - " hint="Use to change the character that is displayed between the first and second set of select tags ">
 	<cfargument name="_function_name" type="any" required="true">
 	<cfset var local = structNew()>
 

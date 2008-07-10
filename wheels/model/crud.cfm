@@ -9,6 +9,10 @@
 	<cfargument name="parameterize" type="any" required="false" default="#application.settings.findById.parameterize#">
 	<cfargument name="$create" type="boolean" required="false" default="true">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
+	<!---
+		DETAILS:
+		Returns false if no record is found.
+	--->
 	<cfscript>
 		var loc = {};
 		arguments.where = $keyWhereString(values=arguments.id);
@@ -28,6 +32,10 @@
 	<cfargument name="parameterize" type="any" required="false" default="#application.settings.findOne.parameterize#">
 	<cfargument name="$create" type="boolean" required="false" default="true">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
+	<!---
+		DETAILS:
+		Returns false if no record is found.
+	--->
 	<cfscript>
 		var loc = {};
 		loc.create = arguments.$create;
@@ -65,6 +73,12 @@
 	<cfargument name="$limit" type="numeric" required="false" default=0>
 	<cfargument name="$offset" type="numeric" required="false" default=0>
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
+	<!---
+		DETAILS:
+		If you don't specify table names in the select, where and order clause Wheels will guess what column you intended to get back and prepend the table name to your supplied column names. If you don't specify the select argument it will default to get all columns.
+		EXAMPLES:
+		<cfset articles = model("article ").findAll(where="published=1", order="createdAt DESC", include="author")>
+	--->
 	<cfscript>
 		var loc = {};
 
@@ -550,6 +564,12 @@
 <cffunction name="updateById" returntype="boolean" access="public" output="false" hint="Class, Gets an object by id and updates it with the supplied properties">
 	<cfargument name="id" type="any" required="true" hint="Primary key value for the object">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
+	<!---
+		DETAILS:
+		Finds the record with the supplied id and saves it (if the validation permits it) with the supplied properties or named arguments.
+		Property names and values can be passed in either using named arguments or as a struct to the properties argument.
+		Returns true if the save was successful, false otherwise.
+	--->
 	<cfscript>
 		var loc = {};
 		arguments.where = $keyWhereString(values=arguments.id);
@@ -583,6 +603,11 @@
   <cfargument name="instantiate" type="boolean" required="false" default="#application.settings.updateAll.instantiate#" hint="Whether or not to instantiate the object(s) before the update">
 	<cfargument name="parameterize" type="any" required="false" default="#application.settings.updateAll.parameterize#">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
+	<!---
+		DETAILS:
+		Updates all properties for the records that match the where argument. Property names and values can be passed in either using named arguments or as a struct to the properties argument. By default objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in instantiate=true.
+		Returns the number of records that were updated.
+	--->
 	<cfscript>
 		var loc = {};
 		if (arguments.instantiate)
@@ -625,8 +650,15 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="deleteById" returntype="boolean" access="public" output="false" hint="Class, Gets an object and deletes">
-	<cfargument name="id" type="any" required="true" hint="Primary key value for the object">
+<cffunction name="deleteById" returntype="boolean" access="public" output="false" hint="Class, Gets an object and deletes it">
+	<cfargument name="id" type="any" required="true" hint="Primary key value(s) for the object">
+	<!---
+		DETAILS:
+		Deletes the row corresponding to the passed in id.
+		By default it will fetch the object first and call the delete method on it, thus invoking any callbacks you have specified for the model.
+		You can change this behavior by passing in instantiate=false, then it will just delete the row from the table using a simple delete query.
+		Returns true on successful deletion of the row, false otherwise.
+	--->
 	<cfscript>
 		var loc = {};
 		loc.where = $keyWhereString(values=arguments.id);
@@ -655,6 +687,13 @@
   <cfargument name="instantiate" type="boolean" required="false" default="#application.settings.deleteAll.instantiate#">
 	<cfargument name="parameterize" type="any" required="false" default="#application.settings.deleteAll.parameterize#">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
+	<!---
+		DETAILS:
+		Deletes all records that match the where argument.
+		By default objects will not be instantiated and therefore callbacks and validations are not invoked.
+		You can change this behavior by passing in instantiate=true.
+		Returns the number of records deleted.
+	--->
 	<cfscript>
 		var loc = {};
 		if (arguments.instantiate)
@@ -683,10 +722,20 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<!--- Object Methods --->
-
 <cffunction name="save" returntype="boolean" access="public" output="false" hint="Object, Saves the object if it passes validation and callbacks">
 	<cfargument name="parameterize" type="any" required="false" default="#application.settings.save.parameterize#">
+	<!---
+		EXAMPLES:
+		<cfset user.save()>
+
+		<cfif user.save()>
+		  <cfset FlashInsert(notice="The user was saved!")>
+		  <cfset redirectTo(action="userEdit")>
+		<cfelse>
+		  <cfset FlashInsert(alert="Error, please correct!")>
+		  <cfset renderPage(action="userEdit")
+		</cfif>
+	--->
 	<cfscript>
 		var loc = {};
 		loc.returnValue = false;
@@ -710,6 +759,11 @@
 
 <cffunction name="update" returntype="boolean" access="public" output="false" hint="Object, Updates the object with the supplied properties and saves it to the database">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
+	<!---
+		DETAILS:
+		This object level method updates the properties for the object with the passed in values and tries to save it to the database.
+		Returns true if the object was saved successfully to the database and false otherwise.
+	--->
 	<cfscript>
 		var loc = {};
 		for (loc.key in arguments)
@@ -724,9 +778,12 @@
 
 <cffunction name="delete" returntype="boolean" access="public" output="false" hint="Object, Deletes the object from the database">
 	<cfargument name="parameterize" type="any" required="false" default="#application.settings.delete.parameterize#">
+	<!---
+		DETAILS:
+		Returns true on successful deletion of the row, false otherwise.
+	--->
 	<cfscript>
 		var loc = {};
-
 		loc.proceed = true;
 		for (loc.i=1; loc.i<=ArrayLen(variables.wheels.class.callbacks.beforeDelete); loc.i++)
 		{
@@ -763,6 +820,15 @@
 
 <cffunction name="new" returntype="any" access="public" output="false" hint="Class, Creates a new object based on supplied properties and returns it">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
+	<!---
+		DETAILS:
+		The object is not saved to the database, it only exists in memory.
+		Property names and values can be passed in either using named arguments or as a struct to the properties argument.
+		EXAMPLES:
+		<cfset newAuthor = model("author").new()>
+		<cfset newAuthor = model("author").new(params.authorStruct)>
+		<cfset newAuthor = model("author").new(firstName="John", lastName="Doe")>
+	--->
 	<cfscript>
 		var loc = {};
 		for (loc.key in arguments)
@@ -775,6 +841,16 @@
 
 <cffunction name="create" returntype="any" access="public" output="false" hint="Class, Creates a new object based on supplied properties, saves it and returns it">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
+	<!---
+		DETAILS:
+		This is a class level method that creates a new object, saves it to the database (if the validation permits it) and returns it.
+		If the validation fails, the unsaved object (with errors added to it) is still returned.
+		Property names and values can be passed in either using named arguments or as a struct to the properties argument.
+		EXAMPLES:
+		<cfset newAuthor = model("author").create(params.author)>
+		<cfset newAuthor = model("author").create(firstName="John", lastName="Doe")>
+		<cfset newAuthor = model("author").create(active=1, properties=params.author)>
+	--->
 	<cfscript>
 		var loc = {};
 		loc.returnValue = new(argumentCollection=arguments);
