@@ -23,14 +23,14 @@ All documentation should go through these processes. Let's not be a bunch of cow
 
  # First off, let the [http://groups.google.com/group/cfwheels discussion group] know what you're planning on doing! We would hate for you to spend hours writing a document that someone else is also working on. Plus the group would be glad to help out answering any questions that you may have.
  # Draft content in the [http://code.google.com/p/cfwheels/w/list Google Code Wiki]. Access to edit Wiki articles is public.
- # Label the Wiki article with the "Chapter" tag for Reference Guide chapters and the "Function" tag for API documentation.
+ # Label the Wiki article with the "chapter" tag for Reference Guide chapters and the "api" tag for API documentation.
  # Label the Wiki article with the version of Wheels that it applies to. For example, if an article was updated for the 1.0 release, make sure that the version tag is set to "1.0".
  # Post a request to review the content in the discussion group.
- # After you address any questions or issues that the group may bring up, a member of the core team will post the new documentation live on the website (if the Wiki entry applies to the current version).
+ # After you address any questions or issues that the group may bring up, a member of the core team will post the new documentation live on the website (if the Wiki entry applies to the current version). The core team member may also make minor stylistic edits to the content before posting as well. Please don't take offense to this; they're only trying to help!
 
 ==Additional Style Guidelines==
 
-Let's ride in style!
+Here's a description of the different types of documentation and general expectations. Let's ride in style!
 
 ===Chapters in the Reference Guide===
 
