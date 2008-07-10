@@ -78,7 +78,11 @@
 	<cfreturn lCase(locals.url)>
 </cffunction>
 
-<cffunction name="isGet" returntype="boolean" access="public" output="false">
+<cffunction name="isGet" returntype="boolean" access="public" output="false" hint="Returns whether the request was a normal (GET) request or not">
+	<!---
+		EXAMPLES:
+		<cfset requestIsGet = isGet()>
+	--->
 	<cfif CGI.REQUEST_METHOD IS "get">
 		<cfreturn true>
 	<cfelse>
@@ -86,7 +90,11 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="isPost" returntype="boolean" access="public" output="false">
+<cffunction name="isPost" returntype="boolean" access="public" output="false" hint="Returns whether the request came from a form submission or not">
+	<!---
+		EXAMPLES:
+		<cfset requestIsPost = isPost()>
+	--->
 	<cfif CGI.REQUEST_METHOD IS "post">
 		<cfreturn true>
 	<cfelse>
@@ -94,7 +102,11 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="isAjax" returntype="boolean" access="public" output="false">
+<cffunction name="isAjax" returntype="boolean" access="public" output="false" hint="Returns whether the page was called from JavaScript or not">
+	<!---
+		EXAMPLES:
+		<cfset requestIsAjax = isAjax()>
+	--->
 	<cfif CGI.HTTP_X_REQUESTED_WITH IS "XMLHTTPRequest">
 		<cfreturn true>
 	<cfelse>

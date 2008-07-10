@@ -1,7 +1,15 @@
-<cffunction name="distanceOfTimeInWords" returntype="any" access="public" output="false">
-	<cfargument name="fromTime" type="any" required="true">
-	<cfargument name="toTime" type="any" required="true">
-	<cfargument name="includeSeconds" type="any" required="false" default="false">
+<cffunction name="distanceOfTimeInWords" returntype="any" access="public" output="false" hint="Pass in two dates to this method and it will return a string describing the difference between them">
+	<cfargument name="fromTime" type="any" required="true" hint="Date to compare from">
+	<cfargument name="toTime" type="any" required="true" hint="Date to compare to">
+	<cfargument name="includeSeconds" type="any" required="false" default="false" hint="Set to true for detailed description when the difference is less than one minute">
+	<!---
+		DETAILS:
+		If the difference between the two dates you pass in is 2 hours, 13 minutes and 10 seconds it will return "about 2 hours" for example.
+		This method is useful when you want to describe the time that has passed since a certain event (example: "Comment added by Per Djurner about 3 weeks ago") or the time left until a certain event (example: "Next chat sessions starts in about 5 hours") instead of just writing out the date itself.
+		EXAMPLES:
+		#distanceOfTimeInWords(order.purchaseDate, order.deliveryDate)#
+		#distanceOfTimeInWords(fromTime=pageViewStartTime, toTime=pageViewEndTime, includeSeconds=true)#
+	--->
 	<cfset var local = structNew()>
 
 	<cfset local.minute_diff = dateDiff("n", arguments.fromTime, arguments.toTime)>
