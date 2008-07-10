@@ -1,5 +1,5 @@
 #summary We know what volunteering is like, so we want to make it as efficient for everyone as possible. Here are the rules of the road for contributing documentation to the project.
-#labels chapter
+#labels Chapter
 
 The Docs are as important as the code itself. How is anyone going to use Wheels if they can't learn how to? And the great docs by Allaire/Macromedia/Adobe are a big reason why you've always loved ColdFusion, right?
 
@@ -17,19 +17,28 @@ Here's a description of Steve's persona. Being a Wheels nerd, you'll probably fi
  * The kind of guy that you'd like to grab a beer with.
  * The only other guy in meetings that you attend that "gets it" and doesn't annoy others or waste time.
 
-==Processes==
+==Process==
 
-Additionally, all documentation should go through these processes. Let's not be a bunch of cowboys like MySpace developers!
+All documentation should go through these processes. Let's not be a bunch of cowboys like MySpace developers!
+
+ # First off, let the [http://groups.google.com/group/cfwheels discussion group] know what you're planning on doing! We would hate for you to spend hours writing a document that someone else is also working on. Plus the group would be glad to help out answering any questions that you may have.
+ # Draft content in the [http://code.google.com/p/cfwheels/w/list Google Code Wiki]. Access to edit Wiki articles is public.
+ # Label the Wiki article with the "Chapter" tag for Reference Guide chapters and the "Function" tag for API documentation.
+ # Label the Wiki article with the version of Wheels that it applies to. For example, if an article was updated for the 1.0 release, make sure that the version tag is set to "1.0".
+ # Post a request to review the content in the discussion group.
+ # After you address any questions or issues that the group may bring up, a member of the core team will post the new documentation live on the website (if the Wiki entry applies to the current version).
+
+==Additional Style Guidelines==
+
+Let's ride in style!
 
 ===Chapters in the Reference Guide===
 
 The [http://www.cfwheels.com/docs reference guide] contains narrative chapters about using the framework. It should contain a wealth of code samples and screenshots and should be written in clear, concise language.
 
- # First off, let the [http://groups.google.com/group/cfwheels discussion group] know what you're planning on doing! We would hate for you to spend hours writing a chapter that someone else is also working on. Plus the group would be glad to help out answering any questions that you may have.
- # Draft content in the [http://code.google.com/p/cfwheels/w/list Google Code Wiki]. Access to edit Wiki articles is public.
- # Be sure to label the article with the "Chapter" tag.
- # Post a request to review the content in the discussion group.
- # After you address any questions or issues that the group brings up, a community member with access to edit cfwheels.com will post the new documentation live.
+===Video Tutorials===
+
+Video tutorials should cover an area of Wheels that hasn't been covered in previous videos. Please publish the video in Flash or Quicktime format at a maximum width of 800 pixels. The core team will make the final decision on whether or not the video will be published on the Wheels site.
 
 ===API Documentation===
 
@@ -63,10 +72,10 @@ Most descriptions of Wheels' functions should follow this general format, inspir
  
  ====Parameters====
  
- || *Parameter* || *Required* || *Default* || *Description* ||
- || `argument1` || Yes || N/A || A description of `argument1`, including type and possible values if applicable. ||
- || `argument2` || Yes || N/A || A description of `argument2`. ||
- || `optionalArgument` || No || Default Value || A description of `optionalArgument`, including default value if applicable. ||
+ || *Parameter* || *Type* || *Required* || *Default* || *Description* ||
+ || `argument1` || string || Yes || N/A || A description of `argument1`, including type and possible values if applicable. ||
+ || `argument2` || string || Yes || N/A || A description of `argument2`. ||
+ || `optionalArgument` || boolean || No || Default Value || A description of `optionalArgument`, including default value if applicable. ||
  
  ====Usage====
  
