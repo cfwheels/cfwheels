@@ -1,5 +1,5 @@
 #summary Here are the rules of the road for contributing code to the project. Let's follow this process so that we don't duplicate effort and so the code base is easy to maintain over the long haul.
-#labels chapter,contributing
+#labels chapter,0.7
 
 ==Subversion Repository==
 
@@ -13,38 +13,74 @@ The repository contains a standard SVN structure.
  * *tags* contains official release code.
  * *branches* contain any off-shoot efforts that the group has decided to develop independently from the rest of the code.
 
-===Gaining Write Access===
+===Core Team Has Write Access===
 
-We're pretty open about anyone joining that wants to contribute. The more, the merrier. And hey, if you start screwing things up too much, we can just boot you and your code. :)
+To make sure that we don't have too many chefs in the kitchen, we will be limiting SVN write access to a core team of developers.
 
-To request write access, just send a message to the Wheels Google Group. Be sure to let us know what you will be working on so we can coordinate your efforts with others'.
+At this time, the core team consists of these developers:
+
+ * Per Djurner
+ * Chris Peters
+ * Peter Amiri
+ * Tony Petruzzi
+
+This does not restrict you from being able to contribute. See "Process for Implementing Changes to the Code" below for instructions on volunteering. With enough dedication, you can earn a seat on the core team as well!
 
 ===Process for Implementing Changes to the Code===
 
 Once you have write access to the project, here's the process that we'd like for you to follow. This process is in place mainly to encourage everyone to communicate openly. This gives us the opportunity to have a great peer-review process, which will result in quality. Who doesn't like quality?
 
- # Open an issue in the Wheels code site, outlining the changes or additions that you would like to make.
- # A project administrator will review your submission and leave feedback if necessary.
- # Once the administrator is satisfied with the scope of the issue, they will schedule it for a release and mark your issue as "Approved." This is your green light to start working. Get to coding, grasshopper!
+ # Open an issue in the Wheels Google Code site, outlining the changes or additions that you would like to make.
+ # A member of the core team will review your submission and leave feedback if necessary.
+ # Once the core team member is satisfied with the scope of the issue, they will schedule it for a release and mark your issue as "Approved." This is your green light to start working. Get to coding, grasshopper!
  # Need help or running across any issues while coding? Run it by the Google Group. They all have opinions and love to let you know all about them. :)
- # Once we have a unit testing methodology in place, all code will need to have unit tests that validate common and boundary scenarios. Unit testing methodology TBD.
- # When committing your code, please include your issue number in your comment. Also post a comment with your SVN revision number in your Google Code issue.
- # A project administrator will review unit tests and post any necessary feedback.
- # Once everything is resolved, the issue will be marked as "Fixed." A project administrator will probably also shower you with glory in the Google Group, blog, and/or Community section of the Wheels site.
- # Open an issue in Google Code to have the additions and changes in your revision documented. You may claim the issue if you'd like to do this, but it's entirely your choice.
+ # Once we have a unit testing methodology in place, all code will need to have unit tests that validate common and boundary scenarios. Let's run without one until it is announced.
+ # When you have implemented your enhancement or change, use your Subversion utility to create a patch with your changes. Attach the patch to your Google Code issue.
+ # A core team will review unit tests and post any necessary feedback in the Google Code issue.
+ # Once everything is resolved, the issue will be marked as "Fixed." A core team member when then commit your patch to the SVN trunk. He or she will probably also shower you with glory in the Google Group, blog, and/or Community section of the Wheels site.
+ # If needed, open an issue in Google Code to have the additions and changes in your revision documented. You may claim the issue if you'd like to do this, but it's entirely your choice.
 
 ==Code Style==
 
-All framework code must follow the following style. This will make things more readable and will keep everyone on the same page. If you're working on code and notice any violations of the official style, feel free to correct it!
+All framework code should use the following style. This will make things more readable and will keep everyone on the same page. If you're working on code and notice any violations of the official style, feel free to correct it!
+
+Additionally, we recommend that any applications written using the Wheels framework follow the same style. This is optional, of course, but still strongly recommended.
+
+===Supported CFML Engines===
+
+Until further notice, all code for Wheels should be written for use with Adobe ColdFusion 8. The Wheels community is currently discussing the possibility of supporting other CFML engines like OpenBD and Railo.
 
 ===Naming Conventions===
 
 To stay true to our ColdFusion and Java roots, all names must be camelCase. In some cases, the first letter should be capitalized as well. Refer to these examples.
 
-|| *Code Element* || *Examples* || Description ||
+|| *Code Element* || *Examples* || *Description* ||
 || CFC Names || `MyCfc.cfc`, `BlogEntry.cfc` || CapitalizedCamelCase || 
 || Variable Names || `myVariable`, `storyId` || camelCase || 
 || UDF Names || `myFunction()` || camelCase ||
 || Built-in CF Variables || `result.RecordCount`, `cfhttp.FileContent` || CapitalizedCamelCase ||
 || Built-in CF Functions || `IsNumeric()`, `Trim()` || CapitalizedCamelCase ||
 || Scopes || `application.myVariable`, `session.userId` || lowercase.camelCase ||
+|| CGI Variables || `cgi.remote_addr`, `cgi.server_name` || cgi.lowercase_underscored_name ||
+
+===CFC Conventions===
+
+===Local variables===
+
+Everyone doing OOP with ColdFusion loves all of the the room for error that the `var` keyword allows! To help eliminate confusion, define a local struct at the top of CFC methods called `locals`. Any variable whose value should _not_ persist for the life of the CFC instance should be stored in the `locals` struct.
+
+For example:
+
+{{{
+<cffunction name="someMethod" access="public" returntype="void">
+    <cfargument name="someArgument" type="string" required="true">
+    
+    <cfset var locals = {}>
+    
+    <cfset locals.i = 0>
+    <cfloop array="variables.someArray" index="i">
+        <!--- Some code --->
+    </cfloop>
+    
+</cffunction>
+}}}
