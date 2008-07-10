@@ -1,5 +1,4 @@
 #summary hasOne(foreignKey,class,name)
-
 #labels api,init
 
 *Description*: Sets up a 'has one' association between this class and the specified one

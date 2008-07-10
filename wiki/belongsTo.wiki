@@ -1,5 +1,4 @@
 #summary belongsTo(foreignKey,class,name)
-
 #labels api,init
 
 *Description*: Sets up a 'belongs to' association between this class and the specified one

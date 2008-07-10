@@ -1,5 +1,4 @@
 #summary hasMany(foreignKey,class,name)
-
 #labels api,init
 
 *Description*: Sets up a 'has many' association between this class and the specified one
