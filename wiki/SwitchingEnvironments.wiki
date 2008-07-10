@@ -29,7 +29,7 @@ Besides these two environments mentioned there are three more, let's go through 
  * Sends an email to you when an error is encountered.
 
 `Testing`
- * Same caching settings as the production mode but with the error handling of the development mode (good for testing an application at its true speed while still getting errors reported on screen).
+ * Same caching settings as the production mode but using the error handling of the development mode (good for testing an application at its true speed while still getting errors reported on screen).
 
 `Maintenance`
  * Shows your custom maintenance page unless the requesting IP address is in the exception list (set in the xxx variable in xxx or passed along in the URL as except=127.0.0.1,127.0.0.1.
@@ -45,6 +45,6 @@ Issuing a reload request is the easiest way to go from one environment to anothe
 
 There's also a shortcut for lazy developers who don't want to change this file at all, to use it just issue the reload request like this instead: reload=testing. This will make Wheels skip your config/environment.cfm file and just use the URL variable instead (testing in this case).
 
-For added protection you can set the reload_password variable in config/settings.cfm. When set a reload request will only be honored when the correct password is also supplied, like this: reload=true&password=mypass
+For added protection you can set the `reloadPassword` variable in `config/settings.cfm`. When set a reload request will only be honored when the correct password is also supplied, like this: `reload=true&password=mypass`
 
 All details about what to cache and whether or not to send errors by email can be viewed in the files...
