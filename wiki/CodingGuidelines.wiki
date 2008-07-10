@@ -28,7 +28,7 @@ This does not restrict you from being able to contribute. See "Process for Imple
 
 ===Process for Implementing Changes to the Code===
 
-Once you have write access to the project, here's the process that we'd like for you to follow. This process is in place mainly to encourage everyone to communicate openly. This gives us the opportunity to have a great peer-review process, which will result in quality. Who doesn't like quality?
+Here's the process that we'd like for you to follow. This process is in place mainly to encourage everyone to communicate openly. This gives us the opportunity to have a great peer-review process, which will result in quality. Who doesn't like quality?
 
  # Open an issue in the Wheels Google Code site, outlining the changes or additions that you would like to make.
  # A member of the core team will review your submission and leave feedback if necessary.
@@ -37,7 +37,7 @@ Once you have write access to the project, here's the process that we'd like for
  # Once we have a unit testing methodology in place, all code will need to have unit tests that validate common and boundary scenarios. Let's run without one until it is announced.
  # When you have implemented your enhancement or change, use your Subversion utility to create a patch with your changes. Attach the patch to your Google Code issue.
  # A core team will review unit tests and post any necessary feedback in the Google Code issue.
- # Once everything is resolved, the issue will be marked as "Fixed." A core team member when then commit your patch to the SVN trunk. He or she will probably also shower you with glory in the Google Group, blog, and/or Community section of the Wheels site.
+ # Once everything is resolved, the issue will be marked as "Fixed." A core team member will then commit your patch to the SVN trunk. He or she will probably also shower you with glory in the Google Group, blog, and/or Community section of the Wheels site.
  # If needed, open an issue in Google Code to have the additions and changes in your revision documented. You may claim the issue if you'd like to do this, but it's entirely your choice.
 
 ==Code Style==
@@ -67,7 +67,7 @@ To stay true to our ColdFusion and Java roots, all names must be camelCase. In s
 
 ===Local variables===
 
-Everyone doing OOP with ColdFusion loves all of the the room for error that the `var` keyword allows! To help eliminate confusion, define a local struct at the top of CFC methods called `locals`. Any variable whose value should _not_ persist for the life of the CFC instance should be stored in the `locals` struct.
+Everyone doing OOP with ColdFusion loves all of the the room for error that the `var` keyword allows! To help eliminate confusion, define a local struct at the top of CFC methods called `loc`. Any variable whose value should _not_ persist for the life of the CFC instance should be stored in the `loc` struct.
 
 For example:
 
@@ -75,10 +75,10 @@ For example:
 <cffunction name="someMethod" access="public" returntype="void">
     <cfargument name="someArgument" type="string" required="true">
     
-    <cfset var locals = {}>
+    <cfset var loc = {}>
     
-    <cfset locals.i = 0>
-    <cfloop array="variables.someArray" index="i">
+    <cfset loc.someVariable = true>
+    <cfloop array="variables.someArray" index="loc.i">
         <!--- Some code --->
     </cfloop>
     
