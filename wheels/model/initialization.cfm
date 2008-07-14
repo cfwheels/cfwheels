@@ -33,12 +33,12 @@
 	<cfargument name="create" type="string" required="false" default="" hint="Column to use for time stamping on creating new records">
 	<cfargument name="update" type="string" required="false" default="" hint="Column to use for time stamping on updating existing records">
 	<cfscript>
-		if (Len(arguments.create) != 0)
+		if (Len(arguments.create) IS NOT 0)
 		{
 			variables.wheels.class.timeStampingOnCreate = true;
 			variables.wheels.class.timeStampOnCreateColumn = arguments.create;
 		}
-		if (Len(arguments.update) != 0)
+		if (Len(arguments.update) IS NOT 0)
 		{
 			variables.wheels.class.timeStampingOnUpdate = true;
 			variables.wheels.class.timeStampOnUpdateColumn = arguments.update;
@@ -68,10 +68,10 @@
 		variables.wheels.class.associations = {};
 		variables.wheels.class.callbacks = {};
 		loc.callbacks = "beforeDelete,afterDelete,beforeSave,afterSave,beforeCreate,afterCreate,beforeUpdate,afterUpdate,beforeValidation,afterValidation,beforeValidationOnCreate,afterValidationOnCreate,beforeValidationOnUpdate,afterValidationOnUpdate";
-		for (loc.i=1; loc.i<=ListLen(loc.callbacks); loc.i++)
+		for (loc.i=1; loc.i LTE ListLen(loc.callbacks); loc.i=loc.i+1)
 			variables.wheels.class.callbacks[ListGetAt(loc.callbacks, loc.i)] = ArrayNew(1);
 		loc.validations = "onSave,onCreate,onUpdate";
-		for (loc.i=1; loc.i<=ListLen(loc.validations); loc.i++)
+		for (loc.i=1; loc.i LTE ListLen(loc.validations); loc.i=loc.i+1)
 			variables.wheels.class.validations[ListGetAt(loc.validations, loc.i)] = ArrayNew(1);
 		// run developer's init method
 		if (StructKeyExists(variables, "init"))
@@ -88,7 +88,7 @@
 		variables.wheels.class.keys = "";
 		variables.wheels.class.propertyList = "";
 		variables.wheels.class.columnList = "";
-		for (loc.i=1; loc.i<=loc.columns.recordCount; loc.i++)
+		for (loc.i=1; loc.i LTE loc.columns.recordCount; loc.i=loc.i+1)
 		{
 			if (StructKeyExists(variables.wheels.class.mapping, loc.columns["column_name"][loc.i]))
 				loc.property = variables.wheels.class.mapping[loc.columns["column_name"][loc.i]];

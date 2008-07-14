@@ -7,8 +7,13 @@
 <cfset this.mappings["/modelRoot"] = this.rootdir & "models">
 <cfset this.sessionmanagement = true>
 
-<cfinclude template="wheels/base/internal.cfm">
-<cfinclude template="wheels/base/public.cfm">
+<cfif IsDefined("server.coldfusion.productname") AND server.coldfusion.productname IS "ColdFusion Server">
+	<cfinclude template="wheels/base/internal.cfm">
+	<cfinclude template="wheels/base/public.cfm">
+<cfelse>
+	<cfinclude template="base/internal.cfm">
+	<cfinclude template="base/public.cfm">
+</cfif>
 
 <cffunction name="onApplicationStart" output="false">
 	<cfset var locals = structNew()>
@@ -46,8 +51,13 @@
 		<!--- determine and set database brand --->
 		<cfinclude template="../config/database.cfm">
 		<cfset locals.info = $dbinfo(datasource=application.settings.database.datasource, type="version")>
+		<cfif locals.info.driver_name Contains "MySQL">
+			<cfset locals.adapterName = "MySQL">
+		<cfelse>
+			<cfset locals.adapterName = "MicrosoftSQLServer">
+		</cfif>
 		<cfif locals.info.recordCount>
-			<cfset application.wheels.adapter = createObject("component", "wheels.model.adapters.#Replace(locals.info.database_productname, " ", "", "all")#")>
+			<cfset application.wheels.adapter = createObject("component", "wheels.model.adapters.#locals.adapterName#")>
 		</cfif>
 	<cfcatch>
 	</cfcatch>
@@ -150,7 +160,7 @@
 	<cfinclude template="../events/onmissingtemplate.cfm">
 </cffunction>
 
-<cffunction name="onError" output="true">
+<!--- <cffunction name="onError" output="true">
 	<cfargument name="exception">
 	<cfargument name="eventname">
 	<cfset var locals = structNew()>
@@ -173,4 +183,4 @@
 	<cfelse>
 		<cfinclude template="../events/onerror.cfm">
 	</cfif>
-</cffunction>
+</cffunction> --->

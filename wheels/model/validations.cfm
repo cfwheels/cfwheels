@@ -10,7 +10,7 @@
 		else
 			loc.genericMessage = application.settings.validatesConfirmationOf.message;
 		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(loc.genericMessage, "[property]", loc.args.property);
@@ -34,7 +34,7 @@
 		else
 			loc.genericMessage = application.settings.validatesExclusionOf.message;
 		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(loc.genericMessage, "[property]", loc.args.property);
@@ -59,7 +59,7 @@
 		else
 			loc.genericMessage = application.settings.validatesFormatOf.message;
 		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(loc.genericMessage, "[property]", loc.args.property);
@@ -85,7 +85,7 @@
 		else
 			loc.genericMessage = application.settings.validatesInclusionOf.message;
 		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(loc.genericMessage, "[property]", loc.args.property);
@@ -115,7 +115,7 @@
 		loc.iEnd = ListLen(arguments.property);
 		if (Len(arguments.within))
 			arguments.within = ListToArray(Replace(arguments.within, ", ", ",", "all"));
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(loc.genericMessage, "[property]", loc.args.property);
@@ -143,7 +143,7 @@
 		else
 			loc.genericMessage = application.settings.validatesNumericalityOf.message;
 		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(loc.genericMessage, "[property]", loc.args.property);
@@ -166,7 +166,7 @@
 		else
 			loc.genericMessage = application.settings.validatesPresenceOf.message;
 		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(loc.genericMessage, "[property]", loc.args.property);
@@ -189,7 +189,7 @@
 			loc.genericMessage = application.settings.validatesUniquenessOf.message;
 		arguments.scope = Replace(arguments.scope, ", ", ",", "all");
 		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(loc.genericMessage, "[property]", loc.args.property);
@@ -221,7 +221,7 @@
 	<cfscript>
 		var loc = {};
 		loc.iEnd = ListLen(arguments.methods);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.iItem = Trim(ListGetAt(arguments.methods, loc.i));
 			loc.validation = {};
@@ -236,7 +236,7 @@
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		for (loc.i=1; loc.i<=ArrayLen(variables.wheels.class.validations[arguments.type]); loc.i++)
+		for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.validations[arguments.type]); loc.i=loc.i+1)
 			$invoke(method=variables.wheels.class.validations[arguments.type][loc.i].method, argumentCollection=variables.wheels.class.validations[arguments.type][loc.i].args);
 		loc.returnValue = !hasErrors();
 	</cfscript>
@@ -262,7 +262,7 @@
 		var loc = {};
 		loc.virtualConfirmProperty = arguments.property & "Confirmation";
 		if (StructKeyExists(this, loc.virtualConfirmProperty))
-			if (this[arguments.property] != this[loc.virtualConfirmProperty])
+			if (this[arguments.property] IS NOT this[loc.virtualConfirmProperty])
 				addError(property=loc.virtualConfirmProperty, message=arguments.message);
 	</cfscript>
 </cffunction>
@@ -300,22 +300,22 @@
 			{
 				if (arguments.maximum)
 				{
-					if (Len(this[arguments.property]) > arguments.maximum)
+					if (Len(this[arguments.property]) GT arguments.maximum)
 						addError(property=arguments.property, message=arguments.message);
 				}
 				else if (arguments.minimum)
 				{
-					if (Len(this[arguments.property]) < arguments.minimum)
+					if (Len(this[arguments.property]) LT arguments.minimum)
 						addError(property=arguments.property, message=arguments.message);
 				}
 				else if (arguments.exactly)
 				{
-					if (Len(this[arguments.property]) != arguments.exactly)
+					if (Len(this[arguments.property]) IS NOT arguments.exactly)
 						addError(property=arguments.property, message=arguments.message);
 				}
 				else if (IsArray(arguments.within) && ArrayLen(arguments.within))
 				{
-					if (Len(this[arguments.property]) < arguments.within[1] || Len(this[arguments.property]) > arguments.within[2])
+					if (Len(this[arguments.property]) LT arguments.within[1] || Len(this[arguments.property]) GT arguments.within[2])
 						addError(property=arguments.property, message=arguments.message);
 				}
 			}
@@ -335,7 +335,7 @@
 			{
 				if (!IsNumeric(this[arguments.property]))
 					addError(property=arguments.property, message=arguments.message);
-				else if (arguments.onlyInteger && Round(this[arguments.property]) != this[arguments.property])
+				else if (arguments.onlyInteger && Round(this[arguments.property]) IS NOT this[arguments.property])
 					addError(property=arguments.property, message=arguments.message);
 			}
 		}
@@ -359,7 +359,7 @@
 		if (!IsNumeric(this[arguments.property]))
 			loc.where = loc.where & "'";
 		loc.iEnd = ListLen(arguments.scope);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.where = loc.where & " AND ";
 			loc.property = Trim(ListGetAt(arguments.scope, loc.i));
