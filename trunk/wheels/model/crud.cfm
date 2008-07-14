@@ -44,7 +44,7 @@
 		loc.query = findAll(argumentCollection=arguments);
 		if (loc.create)
 		{
-			if (loc.query.recordCount != 0)
+			if (loc.query.recordCount IS NOT 0)
 				loc.returnValue = $createInstance(properties=loc.query, persisted=true);
 			else
 				loc.returnValue = false;
@@ -91,13 +91,13 @@
 				loc.distinct = false;
 			loc.totalRecords = count(distinct=loc.distinct, where=arguments.where, include=arguments.include, reload=arguments.reload, cachedAfter=arguments.cachedAfter, cachedWithin=arguments.cachedWithin);
 			loc.currentPage = arguments.page;
-			if (loc.totalRecords == 0)
+			if (loc.totalRecords IS 0)
 				loc.totalPages = 0;
 			else
 				loc.totalPages = Ceiling(loc.totalRecords/arguments.perPage);
 			loc.limit = arguments.perPage;
 			loc.offset = (arguments.perPage * arguments.page) - arguments.perPage;
-			if ((loc.limit + loc.offset) > loc.totalRecords)
+			if ((loc.limit + loc.offset) GT loc.totalRecords)
 				loc.limit = loc.totalRecords - loc.offset;
 			loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cachedAfter=arguments.cachedAfter, cachedWithin=arguments.cachedWithin);
 			if (!loc.values.recordCount)
@@ -108,7 +108,7 @@
 			{
 				arguments.where = "";
 				loc.iEnd = ListLen(variables.wheels.class.keys);
-				for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+				for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 				{
 					loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
 					loc.list = Evaluate("QuotedValueList(loc.values.#loc.property#)");
@@ -152,10 +152,10 @@
 			{
 				loc.start = 1;
 				loc.originalValues = [];
-				while (!StructKeyExists(loc, "temp") || ArrayLen(loc.temp.len) > 1)
+				while (!StructKeyExists(loc, "temp") || ArrayLen(loc.temp.len) GT 1)
 				{
 					loc.temp = REFind(loc.regex, arguments.where, loc.start, true);
-					if (ArrayLen(loc.temp.len) > 1)
+					if (ArrayLen(loc.temp.len) GT 1)
 					{
 						loc.start = loc.temp.pos[4] + loc.temp.len[4];
 						ArrayAppend(loc.originalValues, ReplaceList(Chr(7) & Mid(arguments.where, loc.temp.pos[4], loc.temp.len[4]) & Chr(7), "#Chr(7)#(,)#Chr(7)#,#Chr(7)#','#Chr(7)#,#Chr(7)#"",""#Chr(7)#,#Chr(7)#", ",,,,,,"));
@@ -164,11 +164,11 @@
 
 				loc.pos = 0;
 				loc.iEnd = ArrayLen(loc.sql);
-				for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+				for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 				{
 					if (IsStruct(loc.sql[loc.i]))
 					{
-						loc.pos++;
+						loc.pos = loc.pos + 1;
 						loc.sql[loc.i].value = loc.originalValues[loc.pos];
 					}
 				}
@@ -188,9 +188,9 @@
 				loc.finderArgs.parameterize = arguments.parameterize;
 				loc.finderArgs.limit = arguments.$limit;
 				loc.finderArgs.offset = arguments.$offset;
-				if (Len(arguments.cachedAfter) && application.settings.environment == "production")
+				if (Len(arguments.cachedAfter) && application.settings.environment IS "production")
 					loc.finderArgs.cachedAfter = arguments.cachedAfter;
-				if (Len(arguments.cachedWithin) && application.settings.environment == "production")
+				if (Len(arguments.cachedWithin) && application.settings.environment IS "production")
 					loc.finderArgs.cachedWithin = arguments.cachedWithin;
 				loc.findAll = application.wheels.adapter.query(argumentCollection=loc.finderArgs);
 				request[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
@@ -218,11 +218,11 @@
 		if (!Len(arguments.select))
 		{
 			loc.iEnd = ArrayLen(loc.classes);
-			for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.classData = loc.classes[loc.i];
 				loc.jEnd = ListLen(loc.classData.propertyList);
-				for (loc.j=1; loc.j<=loc.jEnd; loc.j++)
+				for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
 				{
 					loc.jItem = Trim(ListGetAt(loc.classData.propertyList, loc.j));
 					if (!ListFind(arguments.select, loc.jItem))
@@ -234,13 +234,13 @@
 		// now let's go through the properties and map them to the database
 		loc.select = "";
 		loc.iEnd = ListLen(arguments.select);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.iItem = Trim(ListGetAt(arguments.select, loc.i));
 			if (loc.iItem Does Not Contain "." && loc.iItem Does Not Contain " AS ")
 			{
 				loc.jEnd = ArrayLen(loc.classes);
-				for (loc.j=1; loc.j<=loc.jEnd; loc.j++)
+				for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
 				{
 					loc.classData = loc.classes[loc.j];
 					if (ListFindNoCase(loc.classData.propertyList, loc.iItem))
@@ -280,7 +280,7 @@
 				loc.classes = $expandedAssociations(include=arguments.include);
 			ArrayPrepend(loc.classes, variables.wheels.class);
 			loc.iEnd = ArrayLen(loc.classes);
-			for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.classData = loc.classes[loc.i];
 				if (StructKeyExists(loc.classData, "join"))
@@ -314,7 +314,7 @@
 			loc.paramedWhere = REReplace(arguments.where, loc.regex, "\1?\8" , "all");
 			loc.params = ArrayNew(1);
 			loc.where = ReplaceList(loc.paramedWhere, "AND,OR", "#chr(7)#AND,#chr(7)#OR");
-			for (loc.i=1; loc.i<=ListLen(loc.where, Chr(7)); loc.i++)
+			for (loc.i=1; loc.i LTE ListLen(loc.where, Chr(7)); loc.i=loc.i+1)
 			{
 				loc.element = Replace(ListGetAt(loc.where, loc.i, Chr(7)), Chr(7), "", "one");
 				if (Find("(", loc.element) && Find(")", loc.element))
@@ -328,15 +328,15 @@
 				loc.elementDataPart = Trim(ReplaceList(loc.elementDataPart, "AND,OR", ""));
 				loc.param = {};
 				loc.temp = REFind("^([^ ]*) ?(=|<>|<|>|<=|>=|!=|!<|!>| LIKE)", loc.elementDataPart, 1, true);
-				if (ArrayLen(loc.temp.len) > 1)
+				if (ArrayLen(loc.temp.len) GT 1)
 				{
 					loc.where = Replace(loc.where, loc.element, Replace(loc.element, loc.elementDataPart, "?", "one"));
 					loc.param.property = Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]);
 					loc.jEnd = ArrayLen(loc.classes);
-					for (loc.j=1; loc.j<=loc.jEnd; loc.j++)
+					for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
 					{
 						loc.classData = loc.classes[loc.j];
-						if ((loc.param.property Contains "." && ListFirst(loc.param.property, ".") == loc.classData.tableName || loc.param.property Does Not Contain ".") && ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
+						if ((loc.param.property Contains "." && ListFirst(loc.param.property, ".") IS loc.classData.tableName || loc.param.property Does Not Contain ".") && ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
 						{
 							loc.param.type = loc.classData.properties[ListLast(loc.param.property, ".")].type;
 							loc.param.column = loc.classData.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
@@ -353,16 +353,16 @@
 			// add to sql array
 			loc.where = " #loc.where# ";
 			loc.iEnd = ListLen(loc.where, "?");
-			for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.item = ListGetAt(loc.where, loc.i, "?");
 				if (Len(Trim(loc.item)))
 					ArrayAppend(arguments.sql, loc.item);
-				if (loc.i < ListLen(loc.where, "?"))
+				if (loc.i LT ListLen(loc.where, "?"))
 				{
 					loc.column = loc.params[loc.i].column;
 					ArrayAppend(arguments.sql, "#PreserveSingleQuotes(loc.column)#	#loc.params[loc.i].operator#");
-					if (application.settings.environment != "production" && !StructKeyExists(loc.params[loc.i], "type"))
+					if (application.settings.environment IS NOT "production" && !StructKeyExists(loc.params[loc.i], "type"))
 							$throw(type="Wheels", message="Column Not Found", detail="Wheels looked for a column named '#loc.column#' but couldn't find it.");
 					loc.param = {property=loc.params[loc.i].property, column=loc.params[loc.i].column, type=loc.params[loc.i].type};
 					ArrayAppend(arguments.sql, loc.param);
@@ -393,7 +393,7 @@
 		var loc = {};
 		if (Len(arguments.order))
 		{
-			if (arguments.order == "random")
+			if (arguments.order IS "random")
 			{
 				loc.order = application.wheels.adapter.randomOrder();
 			}
@@ -407,7 +407,7 @@
 
 				loc.order = "";
 				loc.iEnd = ListLen(arguments.order);
-				for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+				for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 				{
 					loc.iItem = Trim(ListGetAt(arguments.order, loc.i));
 					if (loc.iItem Does Not Contain " ASC" && loc.iItem Does Not Contain " DESC")
@@ -421,7 +421,7 @@
 						loc.property = ListLast(SpanExcluding(loc.iItem, " "), ".");
 						loc.toAdd = variables.wheels.class.tableName & "." & loc.iItem;
 						loc.jEnd = ArrayLen(loc.classes);
-						for (loc.j=1; loc.j<=loc.jEnd; loc.j++)
+						for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
 						{
 							loc.classData = loc.classes[loc.j];
 							loc.toAdd = loc.classData.tableName & "." & loc.iItem;
@@ -457,7 +457,7 @@
 		loc.include = Replace(arguments.include, " ", "", "all") & ",";
 
 		loc.pos = 1;
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			// look for the next delimiter in the string and set it
 			loc.delimPos = FindOneOf("(),", loc.include, loc.pos);
@@ -474,7 +474,7 @@
 			// infer class name and foreign key from association name unless developer specified it already
 			if (!Len(loc.classAssociations[loc.name].class))
 			{
-				if (loc.classAssociations[loc.name].type == "belongsTo")
+				if (loc.classAssociations[loc.name].type IS "belongsTo")
 				{
 					loc.classAssociations[loc.name].class = loc.name;
 				}
@@ -489,7 +489,7 @@
 
 			if (!Len(loc.classAssociations[loc.name].foreignKey))
 			{
-				if (loc.classAssociations[loc.name].type == "belongsTo")
+				if (loc.classAssociations[loc.name].type IS "belongsTo")
 				{
 					loc.classAssociations[loc.name].foreignKey = loc.associatedClass.$classData().name & Replace(loc.associatedClass.$classData().keys, ",", ",#loc.associatedClass.$classData().name#", "all");
 				}
@@ -505,12 +505,12 @@
 			loc.classAssociations[loc.name].properties = loc.associatedClass.$classData().properties;
 
 			// create the join string
-			if (loc.classAssociations[loc.name].type == "belongsTo")
+			if (loc.classAssociations[loc.name].type IS "belongsTo")
 			{
 				loc.classAssociations[loc.name].join = "INNER JOIN #loc.classAssociations[loc.name].tableName# ON ";
 				loc.iEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
 				loc.toAppend = "";
-				for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+				for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 				{
 					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.i)].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[ListGetAt(loc.associatedClass.$classData().keys, loc.i)].column#");
 				}
@@ -521,7 +521,7 @@
 				loc.classAssociations[loc.name].join = "LEFT OUTER JOIN #loc.classAssociations[loc.name].tableName# ON ";
 				loc.iEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
 				loc.toAppend = "";
-				for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+				for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 				{
 					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[ListGetAt(loc.class.$classData().keys, loc.i)].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.i)].column#");
 				}
@@ -529,9 +529,9 @@
 			}
 
 			// go up or down one level in the association tree
-			if (loc.delimChar == "(")
+			if (loc.delimChar IS "(")
 				loc.levels = ListAppend(loc.levels, loc.classAssociations[loc.name].class);
-			else if (loc.delimChar == ")")
+			else if (loc.delimChar IS ")")
 				loc.levels = ListDeleteAt(loc.levels, ListLen(loc.levels));
 
 			// add info to the array that we will return
@@ -549,14 +549,14 @@
 	<cfargument name="parameterize" type="any" required="false" default="#application.settings.exists.parameterize#">
 	<cfscript>
 		var loc = {};
-		if (application.settings.environment != "production")
+		if (application.settings.environment IS NOT "production")
 			if (!Len(arguments.id) && !Len(arguments.where))
 				$throw(type="Wheels", message="Incorrect Arguments", detail="You have to pass in either 'id' or 'where'.");
 
 		if (Len(arguments.where))
-			loc.returnValue = findOne(where=arguments.where, reload=arguments.reload, $create=false).recordCount == 1;
+			loc.returnValue = findOne(where=arguments.where, reload=arguments.reload, $create=false).recordCount IS 1;
 		else
-			loc.returnValue = findById(id=arguments.id, reload=arguments.reload, $create=false).recordCount == 1;
+			loc.returnValue = findById(id=arguments.id, reload=arguments.reload, $create=false).recordCount IS 1;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -619,11 +619,11 @@
 			StructDelete(arguments, "instantiate");
 			loc.iEnd = loc.records.recordCount;
 			loc.returnValue = 0;
-			for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.object = $createInstance(properties=loc.records, row=loc.i, persisted=true);
 				if (loc.object.update(argumentCollection=arguments))
-					loc.returnValue++;
+					loc.returnValue = loc.returnValue + 1;
 			}
 		}
 		else
@@ -633,7 +633,7 @@
 			ArrayAppend(loc.sql, "UPDATE #variables.wheels.class.tableName# SET");
 			for (loc.key in arguments)
 			{
-				if (loc.key != "where" && loc.key != "include" && loc.key != "properties" && loc.key != "instantiate")
+				if (loc.key IS NOT "where" && loc.key IS NOT "include" && loc.key IS NOT "properties" && loc.key IS NOT "instantiate")
 					arguments.properties[loc.key] = arguments[loc.key];
 			}
 			for (loc.key in arguments.properties)
@@ -702,11 +702,11 @@
 			loc.records = findAll(select=variables.wheels.class.propertyList, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize);
 			loc.iEnd = loc.records.recordCount;
 			loc.returnValue = 0;
-			for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.object = $createInstance(properties=loc.records, row=loc.i, persisted=true);
 				if (loc.object.delete())
-					loc.returnValue++;
+					loc.returnValue = loc.returnValue + 1;
 			}
 		}
 		else
@@ -767,7 +767,7 @@
 	<cfscript>
 		var loc = {};
 		for (loc.key in arguments)
-			if (loc.key != "properties")
+			if (loc.key IS NOT "properties")
 				arguments.properties[loc.key] = arguments[loc.key];
 		for (loc.key in arguments.properties)
 			this[loc.key] = arguments.properties[loc.key];
@@ -785,7 +785,7 @@
 	<cfscript>
 		var loc = {};
 		loc.proceed = true;
-		for (loc.i=1; loc.i<=ArrayLen(variables.wheels.class.callbacks.beforeDelete); loc.i++)
+		for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.callbacks.beforeDelete); loc.i=loc.i+1)
 		{
 			loc.proceed = $invoke(method=variables.wheels.class.callbacks.beforeDelete[loc.i]);
 			if (StructKeyExists(loc, "proceed") && !loc.proceed)
@@ -799,7 +799,7 @@
 			loc.sql = $addKeyWhereClause(sql=loc.sql);
 			loc.del = application.wheels.adapter.query(sql=loc.sql, parameterize=arguments.parameterize);
 			loc.proceed = true;
-			for (loc.i=1; loc.i<=ArrayLen(variables.wheels.class.callbacks.afterDelete); loc.i++)
+			for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.callbacks.afterDelete); loc.i=loc.i+1)
 			{
 				loc.proceed = $invoke(method=variables.wheels.class.callbacks.afterDelete[loc.i]);
 				if (StructKeyExists(loc, "proceed") && !loc.proceed)
@@ -832,7 +832,7 @@
 	<cfscript>
 		var loc = {};
 		for (loc.key in arguments)
-			if (loc.key != "properties")
+			if (loc.key IS NOT "properties")
 				arguments.properties[loc.key] = arguments[loc.key];
 		loc.returnValue = $createInstance(properties=arguments.properties, persisted=false);
 	</cfscript>
@@ -874,7 +874,7 @@
 			{
 				ArrayAppend(loc.sql, variables.wheels.class.properties[loc.key].column);
 				ArrayAppend(loc.sql, ",");
-				loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, list=false, null=this[loc.key]==""};
+				loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, list=false, null=this[loc.key] IS ""};
 				ArrayAppend(loc.sql2, loc.param);
 				ArrayAppend(loc.sql2, ",");
 			}
@@ -884,7 +884,7 @@
 		ArrayAppend(loc.sql, ")");
 		ArrayAppend(loc.sql2, ")");
 		loc.len = ArrayLen(loc.sql);
-		for (loc.i=1; loc.i <= loc.len; loc.i++)
+		for (loc.i=1; loc.i LTE loc.len; loc.i=loc.i+1)
 			ArrayAppend(loc.sql, loc.sql2[loc.i]);
 		loc.ins = application.wheels.adapter.query(sql=loc.sql, parameterize=arguments.parameterize);
 		loc.generatedKey = application.wheels.adapter.generatedKey();
@@ -907,10 +907,10 @@
 			ArrayAppend(loc.sql, "UPDATE #variables.wheels.class.tableName# SET ");
 			for (loc.key in variables.wheels.class.properties)
 			{
-				if (StructKeyExists(this, loc.key) && (!StructKeyExists(variables.$persistedProperties, loc.key) || this[loc.key] != variables.$persistedProperties[loc.key]))
+				if (StructKeyExists(this, loc.key) && (!StructKeyExists(variables.$persistedProperties, loc.key) || this[loc.key] IS NOT variables.$persistedProperties[loc.key]))
 				{
 					ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
-					loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, list=false, null=this[loc.key]==""};
+					loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, list=false, null=this[loc.key] IS ""};
 					ArrayAppend(loc.sql, loc.param);
 					ArrayAppend(loc.sql, ",");
 				}
@@ -944,9 +944,9 @@
 		// copy class variables from the object in the application scope
 		variables.wheels.class = $namedReadLock(name="classLock", object=application.wheels.models[arguments.name], method="$classData");
 		// setup object properties in the this scope
-		if (IsQuery(arguments.properties) && arguments.properties.recordCount != 0)
+		if (IsQuery(arguments.properties) && arguments.properties.recordCount IS NOT 0)
 		{
-			for (loc.i=1; loc.i<=ListLen(arguments.properties.columnList); loc.i++)
+			for (loc.i=1; loc.i LTE ListLen(arguments.properties.columnList); loc.i=loc.i+1)
 			{
 				this[ListGetAt(arguments.properties.columnList, loc.i)] = arguments.properties[ListGetAt(arguments.properties.columnList, loc.i)][arguments.row];
 			}
@@ -990,7 +990,7 @@
 		if (hasChanged())
 		{
 			loc.changedProperties = changedProperties();
-			for (loc.i=1; loc.i <= ListLen(loc.changedProperties); loc.i++)
+			for (loc.i=1; loc.i LTE ListLen(loc.changedProperties); loc.i=loc.i+1)
 			{
 				loc.item = ListGetAt(loc.changedProperties, loc.i);
 				loc.returnValue[loc.item] = {};
@@ -1008,7 +1008,7 @@
 		var loc = {};
 		loc.returnValue = false;
 		for (loc.key in variables.wheels.class.properties)
-			if (!StructKeyExists(this, loc.key) || !StructKeyExists(variables.$persistedProperties, loc.key) || this[loc.key] != variables.$persistedProperties[loc.key] && (Len(arguments.property) == 0 || loc.key == arguments.property))
+			if (!StructKeyExists(this, loc.key) || !StructKeyExists(variables.$persistedProperties, loc.key) || this[loc.key] IS NOT variables.$persistedProperties[loc.key] && (Len(arguments.property) IS 0 || loc.key IS arguments.property))
 				loc.returnValue = true;
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -1040,14 +1040,14 @@
 		var loc = {};
 		loc.id = "";
 		loc.iEnd = ListLen(variables.wheels.class.keys);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
 			loc.id = ListAppend(loc.id, this[loc.property]);
 		}
 		loc.query = findById(id=loc.id, reload=true, $create=false);
 		loc.iEnd = ListLen(variables.wheels.class.propertyList);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.property = ListGetAt(variables.wheels.class.propertyList, loc.i);
 			this[loc.property] = loc.query[loc.property][1];
@@ -1079,13 +1079,13 @@
 		var loc = {};
 		ArrayAppend(arguments.sql, " WHERE ");
 		loc.iEnd = ListLen(variables.wheels.class.keys);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
 			ArrayAppend(arguments.sql, "#variables.wheels.class.properties[loc.property].column# = ");
 			loc.param = {value=this[loc.property], type=variables.wheels.class.properties[loc.property].type, list=false, null=false};
 			ArrayAppend(arguments.sql, loc.param);
-			if (loc.i < loc.iEnd)
+			if (loc.i LT loc.iEnd)
 				ArrayAppend(arguments.sql, " AND ");
 		}
 	</cfscript>
@@ -1100,7 +1100,7 @@
 		var loc = {};
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.properties);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.property = Trim(ListGetAt(arguments.properties, loc.i));
 			if (Len(arguments.values))
@@ -1114,7 +1114,7 @@
 			if (!IsNumeric(loc.value))
 				loc.toAppend = loc.toAppend & "'";
 			loc.returnValue = ListAppend(loc.returnValue, loc.toAppend, " ");
-			if (loc.i < loc.iEnd)
+			if (loc.i LT loc.iEnd)
 				loc.returnValue = ListAppend(loc.returnValue, "AND", " ");
 		}
 	</cfscript>

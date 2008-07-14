@@ -36,7 +36,7 @@
 		var loc = {};
 		variables.wheels.class.associations[arguments.name] = {};
 		for (loc.key in arguments)
-			if (loc.key != "name")
+			if (loc.key IS NOT "name")
 				variables.wheels.class.associations[arguments.name][loc.key] = arguments[loc.key];
 	</cfscript>
 </cffunction>

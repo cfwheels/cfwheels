@@ -143,7 +143,7 @@
 		</cfif>
 	</cfloop>
 
-	<cfmail attributecollection="#locals.attributes#">#trim(request.wheels.response)#</cfmail>
+	<cfmail from="#arguments.from#" to="#arguments.to#" subject="#arguments.subject#" attributecollection="#locals.attributes#">#trim(request.wheels.response)#</cfmail>
 
 	<!--- delete the response so that Wheels does not think we have rendered an actual response to the browser --->
 	<cfset structDelete(request.wheels, "response")>
