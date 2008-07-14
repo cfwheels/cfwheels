@@ -20,7 +20,7 @@
 	<cfset var local = structNew()>
 
 	<cfset local.value = _formValue(argumentCollection=arguments)>
-	<cfif structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
+	<cfif application.settings.obfuscateURLs AND structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
 		<cfset local.value = obfuscateParam(local.value)>
 	</cfif>
 
@@ -30,7 +30,7 @@
 				<cfloop query="arguments.options">
 					<cfset local.option_value = arguments.options[arguments.valueField][currentrow]>
 					<cfset local.option_text = arguments.options[arguments.textField][currentrow]>
-					<cfif structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
+					<cfif application.settings.obfuscateURLs AND structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
 						<cfset local.option_value = obfuscateParam(local.option_value)>
 					</cfif>
 					<option value="#local.option_value#"<cfif listFindNoCase(local.value, local.option_value) IS NOT 0> selected="selected"</cfif>>#local.option_text#</option>
@@ -39,7 +39,7 @@
 				<cfloop collection="#arguments.options#" item="local.i">
 					<cfset local.option_value = local.i>
 					<cfset local.option_text = arguments.options[local.i]>
-					<cfif structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
+					<cfif application.settings.obfuscateURLs AND structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
 						<cfset local.option_value = obfuscateParam(local.option_value)>
 					</cfif>
 					<option value="#local.option_value#"<cfif listFindNoCase(local.value, local.option_value) IS NOT 0> selected="selected"</cfif>>#local.option_text#</option>
@@ -48,7 +48,7 @@
 				<cfloop from="1" to="#arrayLen(arguments.options)#" index="local.i">
 					<cfset local.option_value = local.i>
 					<cfset local.option_text = arguments.options[local.i]>
-					<cfif structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
+					<cfif application.settings.obfuscateURLs AND structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
 						<cfset local.option_value = obfuscateParam(local.option_value)>
 					</cfif>
 					<option value="#local.option_value#"<cfif listFindNoCase(local.value, local.option_value) IS NOT 0> selected="selected"</cfif>>#local.option_text#</option>
@@ -57,7 +57,7 @@
 				<cfloop list="#arguments.options#" index="local.i">
 					<cfset local.option_value = local.i>
 					<cfset local.option_text = local.i>
-					<cfif structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
+					<cfif application.settings.obfuscateURLs AND structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
 						<cfset local.option_value = obfuscateParam(local.option_value)>
 					</cfif>
 					<option value="#local.option_value#"<cfif listFindNoCase(local.value, local.option_value) IS NOT 0> selected="selected"</cfif>>#local.option_text#</option>

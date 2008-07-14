@@ -272,7 +272,7 @@
 	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset local.value = _formValue(argumentCollection=arguments)>
-	<cfif structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
+	<cfif application.settings.obfuscateURLs AND structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
 		<cfset local.value = obfuscateParam(local.value)>
 	</cfif>
 
@@ -481,7 +481,7 @@
 	<cfset local.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset local.value = _formValue(argumentCollection=arguments)>
-	<cfif structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
+	<cfif application.settings.obfuscateURLs AND structKeyExists(request.wheels, "current_form_method") AND request.wheels.current_form_method IS "get">
 		<cfset local.value = obfuscateParam(local.value)>
 	</cfif>
 
