@@ -64,4 +64,4 @@ Example (`views/blog/listauthors.cfm`):
 </cfoutput>
 }}}
 
- * paginationLinks
+ * [paginationLinks paginationLinks]
