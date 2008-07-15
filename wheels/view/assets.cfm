@@ -48,10 +48,10 @@
 	<cflock name="#loc.lockName#" type="readonly" timeout="30">
 		<cfset loc.result = $getFromCache(loc.key, loc.category, "internal")>
 	</cflock>
-	<cfif isBoolean(loc.result) AND NOT loc.result>
+	<cfif IsBoolean(loc.result) AND NOT loc.result>
    	<cflock name="#loc.lockName#" type="exclusive" timeout="30">
 			<cfset loc.result = $getFromCache(loc.key, loc.category, "internal")>
-			<cfif isBoolean(loc.result) AND NOT loc.result>
+			<cfif IsBoolean(loc.result) AND NOT loc.result>
 				<cfset arguments.$namedArguments = "source">
 				<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 				<cfif Left(arguments.source, 7) IS "http://">

@@ -43,7 +43,7 @@
 	<cfset loc.error = loc.object.errorsOn(arguments.property)>
 	<cfset loc.output = "">
 
-	<cfif NOT isBoolean(loc.error)>
+	<cfif NOT IsBoolean(loc.error)>
 		<cfsavecontent variable="loc.output">
 			<cfoutput>
 				<#arguments.wrapperElement##loc.attributes#>#arguments.prependText##loc.error[1]##arguments.appendText#</#arguments.wrapperElement#>

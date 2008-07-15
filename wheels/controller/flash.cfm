@@ -1,6 +1,6 @@
 <cffunction name="flashClear" returntype="void" access="public" output="false">
 	<cflock scope="session" type="exclusive" timeout="30">
-		<cfset session.flash = structNew()>
+		<cfset session.flash = StructNew()>
 	</cflock>
 </cffunction>
 
@@ -40,7 +40,7 @@
 
 <cffunction name="flashInsert" returntype="void" access="public" output="false">
 	<cflock scope="session" type="exclusive" timeout="30">
-		<cfset session.flash[structKeyList(arguments)] = arguments[1]>
+		<cfset session.flash[StructKeyList(arguments)] = arguments[1]>
 	</cflock>
 </cffunction>
 

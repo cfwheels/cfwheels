@@ -14,14 +14,14 @@
 	<cfif Len(arguments.route) IS 0 AND Len(arguments.controller) IS 0 AND Len(arguments.action) IS 0 AND arguments.id IS 0 AND Len(arguments.params) IS 0>
 		<cfset loc.url = "/">
 	<cfelse>
-		<cfset loc.url = application.wheels.webPath & listLast(cgi.script_name, "/")>
+		<cfset loc.url = application.wheels.webPath & ListLast(cgi.script_name, "/")>
 		<cfif Len(arguments.route) IS NOT 0>
 			<!--- link for a named route --->
 			<cfset loc.route = application.wheels.routes[application.wheels.namedRoutePositions[arguments.route]]>
 			<cfloop list="#loc.route.pattern#" index="loc.i" delimiters="/">
 				<cfif loc.i Contains "[">
 					<!--- get param from arguments --->
-					<cfset loc.url = loc.url & "/" & arguments[mid(loc.i, 2, Len(loc.i)-2)]>
+					<cfset loc.url = loc.url & "/" & arguments[Mid(loc.i, 2, Len(loc.i)-2)]>
 				<cfelse>
 					<!--- add hard coded param from route --->
 					<cfset loc.url = loc.url & "/" & loc.i>
@@ -58,7 +58,7 @@
 			<cfset loc.url = loc.url & "##" & arguments.anchor>
 		</cfif>
 		<!--- Fix when URL rewriting is in use --->
-		<cfset loc.url = replace(loc.url, "rewrite.cfm/", "")>
+		<cfset loc.url = Replace(loc.url, "rewrite.cfm/", "")>
 	</cfif>
 
 	<cfif NOT arguments.onlyPath>
@@ -120,13 +120,13 @@
 	<cfset var loc = {}>
 
 	<cfsavecontent variable="request.wheels.response">
-		<cfinclude template="../../views/email/#replaceNoCase(arguments.template, '.cfm', '')#.cfm">
+		<cfinclude template="../../views/email/#ReplaceNoCase(arguments.template, '.cfm', '')#.cfm">
 	</cfsavecontent>
 
-	<cfif (isBoolean(arguments.layout) AND arguments.layout) OR (arguments.layout IS NOT "false")>
-		<cfif NOT isBoolean(arguments.layout)>
+	<cfif (IsBoolean(arguments.layout) AND arguments.layout) OR (arguments.layout IS NOT "false")>
+		<cfif NOT IsBoolean(arguments.layout)>
 			<cfsavecontent variable="request.wheels.response">
-				<cfinclude template="../../views/layouts/#replace(arguments.layout, ' ', '', 'all')#.cfm">
+				<cfinclude template="../../views/layouts/#Replace(arguments.layout, ' ', '', 'all')#.cfm">
 			</cfsavecontent>
 		<cfelse>
 			<cfsavecontent variable="request.wheels.response">
@@ -138,7 +138,7 @@
 	<cfset loc.attributes = structCopy(arguments)>
 	<cfset loc.cfmailAttributes = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext">
 	<cfloop collection="#loc.attributes#" item="loc.i">
-		<cfif listFindNoCase(loc.cfmailAttributes, loc.i) IS 0>
+		<cfif ListFindNoCase(loc.cfmailAttributes, loc.i) IS 0>
 			<cfset StructDelete(loc.attributes, loc.i)>
 		</cfif>
 	</cfloop>
@@ -157,23 +157,23 @@
 	<cfargument name="disposition" type="string" required="false" default="attachment">
 	<cfset var loc = {}>
 
-	<cfset arguments.file = replace(arguments.file, "\", "/", "all")>
+	<cfset arguments.file = Replace(arguments.file, "\", "/", "all")>
 	<cfset loc.path = Reverse(ListRest(Reverse(arguments.file), "/"))>
 	<cfset loc.folder = application.settings.paths.files>
 	<cfif Len(loc.path) IS NOT 0>
 		<cfset loc.folder = loc.folder & "/" & loc.path>
-		<cfset loc.file = replace(arguments.file, loc.path, "")>
+		<cfset loc.file = Replace(arguments.file, loc.path, "")>
 		<cfset loc.file = Right(loc.file, Len(loc.file)-1)>
 	<cfelse>
 		<cfset loc.file = arguments.file>
 	</cfif>
-	<cfset loc.folder = expandPath(loc.folder)>
-	<cfif NOT fileExists(loc.folder & "/" & loc.file)>
+	<cfset loc.folder = ExpandPath(loc.folder)>
+	<cfif NOT FileExists(loc.folder & "/" & loc.file)>
 		<cfdirectory action="list" directory="#loc.folder#" name="loc.match" filter="#loc.file#.*">
 		<cfif loc.match.recordcount IS 0>
 			<cfthrow type="Wheels" message="File Not Found" extendedInfo="Make sure a file with the name <tt>#loc.file#</tt> exists in the <tt>#loc.folder#</tt> folder.">
 		</cfif>
-		<cfset loc.file = loc.file & "." & listLast(loc.match.name, ".")>
+		<cfset loc.file = loc.file & "." & ListLast(loc.match.name, ".")>
 	</cfif>
 
 	<cfset loc.fullPath = loc.folder & "/" & loc.file>

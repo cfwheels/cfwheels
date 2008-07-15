@@ -48,7 +48,7 @@
 	<!--- create the form tag --->
 	<cfset loc.result = "<form action=""#loc.action#"" method=""post""">
 	<cfif Len(arguments.confirm) IS NOT 0>
-		<cfset loc.result = loc.result & " onsubmit=""return confirm('#JSStringFormat(replace(arguments.confirm, """", '&quot;', 'all'))#');""">
+		<cfset loc.result = loc.result & " onsubmit=""return confirm('#JSStringFormat(Replace(arguments.confirm, """", '&quot;', 'all'))#');""">
 	</cfif>
 	<cfset loc.result = loc.result & ">">
 
@@ -64,7 +64,7 @@
 	</cfif>
 	<cfif Len(arguments.disable) IS NOT 0>
 		<cfset loc.result = loc.result & " onclick=""this.disabled=true;">
-		<cfif Len(arguments.source) IS 0 AND NOT isBoolean(arguments.disable)>
+		<cfif Len(arguments.source) IS 0 AND NOT IsBoolean(arguments.disable)>
 			<cfset loc.result = loc.result & "this.value='#arguments.disable#';">
 		</cfif>
 		<cfset loc.result = loc.result & "this.form.submit();""">
@@ -83,7 +83,7 @@
 	<cfargument name="encode" type="any" required="false" default="false">
 	<cfset var loc = {}>
 
-	<cfset loc.linkToArguments = structNew()>
+	<cfset loc.linkToArguments = StructNew()>
 	<cfset loc.linkToArguments.url = "mailto:#arguments.email#">
 	<cfif Len(arguments.text) IS 0>
 		<cfset loc.linkToArguments.text = arguments.email>
@@ -96,7 +96,7 @@
 		<cfset loc.js = "document.write('#trim(loc.result)#');">
 		<cfset loc.encoded = "">
 		<cfloop from="1" to="#Len(loc.js)#" index="loc.i">
-			<cfset loc.encoded = loc.encoded & "%" & Right("0" & formatBaseN(asc(mid(loc.js,loc.i,1)),16),2)>
+			<cfset loc.encoded = loc.encoded & "%" & Right("0" & formatBaseN(asc(Mid(loc.js,loc.i,1)),16),2)>
 		</cfloop>
 		<cfset loc.result = "<script type=""text/javascript"" language=""javascript"">eval(unescape('#loc.encoded#'))</script>">
 	</cfif>
@@ -123,7 +123,7 @@
 	<cfif cgi.script_name IS NOT cgi.path_info>
 		<cfset loc.currentUrl = loc.currentUrl & cgi.path_info>
 	</cfif>
-	<cfset loc.currentUrl = replace(loc.currentUrl, "rewrite.cfm/", "")>
+	<cfset loc.currentUrl = Replace(loc.currentUrl, "rewrite.cfm/", "")>
 	<cfif Len(cgi.query_string) IS NOT 0>
 		<cfset loc.currentUrl = loc.currentUrl & "?" & cgi.query_string>
 	</cfif>

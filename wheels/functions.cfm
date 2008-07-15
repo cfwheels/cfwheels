@@ -17,26 +17,26 @@
 
 <cffunction name="onApplicationStart" output="false">
 	<cfset var loc = {}>
-	<cfset application.wheels = structNew()>
+	<cfset application.wheels = StructNew()>
 	<cfset application.wheels.version = "0.8">
-	<cfset application.wheels.controllers = structNew()>
-	<cfset application.wheels.models = structNew()>
+	<cfset application.wheels.controllers = StructNew()>
+	<cfset application.wheels.models = StructNew()>
 	<cfset application.wheels.routes = arrayNew(1)>
-	<cfset application.wheels.namedRoutePositions = structNew()>
+	<cfset application.wheels.namedRoutePositions = StructNew()>
 	<!--- Set up struct for caches --->
-	<cfset application.wheels.cache = structNew()>
-	<cfset application.wheels.cache.internal = structNew()>
-	<cfset application.wheels.cache.internal.sql = structNew()>
-	<cfset application.wheels.cache.internal.image = structNew()>
-	<cfset application.wheels.cache.external = structNew()>
-	<cfset application.wheels.cache.external.main = structNew()>
-	<cfset application.wheels.cache.external.action = structNew()>
-	<cfset application.wheels.cache.external.page = structNew()>
-	<cfset application.wheels.cache.external.partial = structNew()>
-	<cfset application.wheels.cache.external.query = structNew()>
+	<cfset application.wheels.cache = StructNew()>
+	<cfset application.wheels.cache.internal = StructNew()>
+	<cfset application.wheels.cache.internal.sql = StructNew()>
+	<cfset application.wheels.cache.internal.image = StructNew()>
+	<cfset application.wheels.cache.external = StructNew()>
+	<cfset application.wheels.cache.external.main = StructNew()>
+	<cfset application.wheels.cache.external.action = StructNew()>
+	<cfset application.wheels.cache.external.page = StructNew()>
+	<cfset application.wheels.cache.external.partial = StructNew()>
+	<cfset application.wheels.cache.external.query = StructNew()>
 	<cfset application.wheels.cacheLastCulledAt = now()>
 	<!--- load environment settings --->
-	<cfif StructKeyExists(URL, "reload") AND NOT isBoolean(URL.reload) AND Len(url.reload) AND (Len(application.settings.reloadPassword) IS 0 OR (StructKeyExists(URL, "password") AND URL.password IS application.settings.reloadPassword))>
+	<cfif StructKeyExists(URL, "reload") AND NOT IsBoolean(URL.reload) AND Len(url.reload) AND (Len(application.settings.reloadPassword) IS 0 OR (StructKeyExists(URL, "password") AND URL.password IS application.settings.reloadPassword))>
 		<cfset application.settings.environment = URL.reload>
 	<cfelse>
 		<cfinclude template="../config/environment.cfm">
@@ -46,7 +46,7 @@
 	<!--- Load developer routes and add wheels default ones --->
 	<cfinclude template="../config/routes.cfm">
 	<cfinclude template="routes.cfm">
-	<cfset application.wheels.webPath = replace(cgi.script_name, Reverse(spanExcluding(Reverse(cgi.script_name), "/")), "")>
+	<cfset application.wheels.webPath = Replace(cgi.script_name, Reverse(spanExcluding(Reverse(cgi.script_name), "/")), "")>
 	<cftry>
 		<!--- determine and set database brand --->
 		<cfinclude template="../config/database.cfm">
@@ -90,12 +90,12 @@
 				<cfabort>
 			</cfif>
 		</cfif>
-		<cfset request.wheels = structNew()>
-		<cfset request.wheels.params = structNew()>
-		<cfset request.wheels.cache = structNew()>
+		<cfset request.wheels = StructNew()>
+		<cfset request.wheels.params = StructNew()>
+		<cfset request.wheels.cache = StructNew()>
 		<cfif application.settings.showDebugInformation>
-			<cfset request.wheels.execution = structNew()>
-			<cfset request.wheels.execution.components = structNew()>
+			<cfset request.wheels.execution = StructNew()>
+			<cfset request.wheels.execution.components = StructNew()>
 			<cfset request.wheels.execution.componentTotal = getTickCount()>
 			<cfset request.wheels.execution.components.requestStart = getTickCount()>
 		</cfif>
