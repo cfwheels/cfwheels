@@ -36,7 +36,7 @@
 		</cfif>
 	</cfloop>
 	<cfif NOT structKeyExists(loc, "foundRoute")>
-		<cfthrow type="wheels" message="Routing error" detail="Make sure there is a route setup in your <tt>config/routes.cfm</tt> file that matches the <tt>#loc.route#</tt>request">
+		<cfthrow type="Wheels" message="Route Not Found" extendedInfo="Make sure there is a route setup in your <tt>config/routes.cfm</tt> file that matches the <tt>#loc.route#</tt>request">
 	</cfif>
 
 	<!--- create the params struct and add any values that should be retrieved from the URL --->
@@ -170,7 +170,7 @@
 			<cfrethrow>
 		<cfelse>
 			<cfif application.settings.showErrorInformation>
-				<cfthrow type="wheels" message="Could not find the <tt>#loc.params.controller#</tt> controller" detail="Create a file named <tt>#loc.params.controller#.cfc</tt> in the <tt>controllers</tt> directory containing this code: <pre><code>#htmlEditFormat('<cfcomponent extends="wheels.controller"></cfcomponent>')#</code></pre>">
+				<cfthrow type="Wheels" message="Could not find the <tt>#loc.params.controller#</tt> controller" extendedInfo="Create a file named <tt>#loc.params.controller#.cfc</tt> in the <tt>controllers</tt> directory containing this code: <pre><code>#htmlEditFormat('<cfcomponent extends="wheels.controller"></cfcomponent>')#</code></pre>">
 			<cfelse>
 				<cfinclude template="../../events/onmissingtemplate.cfm">
 				<cfabort>
@@ -329,7 +329,7 @@
 				<cfrethrow>
 			<cfelse>
 				<cfif application.settings.showErrorInformation>
-					<cfthrow type="wheels" message="Could not find the view page for the <tt>#arguments.actionName#</tt> action in the <tt>#arguments.controllerName#</tt> controller" detail="Create a file named <tt>#arguments.actionName#.cfm</tt> in the <tt>views/#arguments.controllerName#</tt> directory (create the directory as well if necessary).">
+					<cfthrow type="Wheels" message="Could not find the view page for the <tt>#arguments.actionName#</tt> action in the <tt>#arguments.controllerName#</tt> controller" extendedInfo="Create a file named <tt>#arguments.actionName#.cfm</tt> in the <tt>views/#arguments.controllerName#</tt> directory (create the directory as well if necessary).">
 				<cfelse>
 					<cfinclude template="../../events/onmissingtemplate.cfm">
 					<cfabort>

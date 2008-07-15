@@ -363,7 +363,7 @@
 					loc.column = loc.params[loc.i].column;
 					ArrayAppend(arguments.sql, "#PreserveSingleQuotes(loc.column)#	#loc.params[loc.i].operator#");
 					if (application.settings.environment IS NOT "production" && !StructKeyExists(loc.params[loc.i], "type"))
-							$throw(type="Wheels", message="Column Not Found", detail="Wheels looked for a column named '#loc.column#' but couldn't find it.");
+							$throw(type="Wheels", message="Column Not Found", extendedInfo="Wheels looked for a column named '#loc.column#' but couldn't find it.");
 					loc.param = {property=loc.params[loc.i].property, column=loc.params[loc.i].column, type=loc.params[loc.i].type};
 					ArrayAppend(arguments.sql, loc.param);
 				}
@@ -551,7 +551,7 @@
 		var loc = {};
 		if (application.settings.environment IS NOT "production")
 			if (!Len(arguments.id) && !Len(arguments.where))
-				$throw(type="Wheels", message="Incorrect Arguments", detail="You have to pass in either 'id' or 'where'.");
+				$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You have to pass in either 'id' or 'where'.");
 
 		if (Len(arguments.where))
 			loc.returnValue = findOne(where=arguments.where, reload=arguments.reload, $create=false).recordCount IS 1;

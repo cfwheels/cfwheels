@@ -18,7 +18,7 @@
 <cffunction name="onApplicationStart" output="false">
 	<cfset var loc = structNew()>
 	<cfset application.wheels = structNew()>
-	<cfset application.wheels.version = "0.7.1">
+	<cfset application.wheels.version = "0.8">
 	<cfset application.wheels.controllers = structNew()>
 	<cfset application.wheels.models = structNew()>
 	<cfset application.wheels.routes = arrayNew(1)>
