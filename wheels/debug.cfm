@@ -14,14 +14,14 @@
 	<tr>
 		<td valign="top"><strong>Params:</strong></td>
 		<td>
-		<cfloop collection="#request.wheels.params#" item="locals.i">
-			<cfif locals.i IS NOT "fieldnames">
-				<cfif isStruct(request.wheels.params[locals.i])>
-					<cfloop collection="#request.wheels.params[locals.i]#" item="locals.j">
-						#lCase(locals.i)#.#lCase(locals.j)# = #request.wheels.params[locals.i][locals.j]#<br />
+		<cfloop collection="#request.wheels.params#" item="loc.i">
+			<cfif loc.i IS NOT "fieldnames">
+				<cfif isStruct(request.wheels.params[loc.i])>
+					<cfloop collection="#request.wheels.params[loc.i]#" item="loc.j">
+						#lCase(loc.i)#.#lCase(loc.j)# = #request.wheels.params[loc.i][loc.j]#<br />
 					</cfloop>
 				<cfelse>
-					#lCase(locals.i)# = #request.wheels.params[locals.i]#<br />
+					#lCase(loc.i)# = #request.wheels.params[loc.i]#<br />
 				</cfif>
 			</cfif>
 		</cfloop>
@@ -34,9 +34,9 @@
 	<tr>
 		<td valign="top"><strong>Execution Time Details:</strong></td>
 		<td>
-		<cfset locals.keys = structSort(request.wheels.execution.components, "numeric", "desc")>
-		<cfloop from="1" to="#arrayLen(locals.keys)#" index="locals.i">
-			~#request.wheels.execution.components[locals.keys[locals.i]]#ms - #lCase(locals.keys[locals.i])#<br />
+		<cfset loc.keys = structSort(request.wheels.execution.components, "numeric", "desc")>
+		<cfloop from="1" to="#arrayLen(loc.keys)#" index="loc.i">
+			~#request.wheels.execution.components[loc.keys[loc.i]]#ms - #lCase(loc.keys[loc.i])#<br />
 		</cfloop>
 	</td>
 	</tr>

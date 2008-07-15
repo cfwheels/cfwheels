@@ -4,21 +4,21 @@
 	<cfargument name="addToken" type="boolean" required="false" default="false">
 	<cfargument name="statusCode" type="numeric" required="false" default=302>
 	<!--- Accepts URLFor arguments --->
-	<cfset var locals = structNew()>
+	<cfset var loc = structNew()>
 
 	<cfif arguments.back>
 		<cfif len(cgi.http_referer) IS 0 OR cgi.http_referer Does Not Contain cgi.server_name>
-			<cfset locals.url = "/">
+			<cfset loc.url = "/">
 		<cfelse>
-			<cfset locals.url = cgi.http_referer>
+			<cfset loc.url = cgi.http_referer>
 		</cfif>
 	<cfelse>
 		<cfif arguments.url IS NOT "">
-			<cfset locals.url = arguments.url>
+			<cfset loc.url = arguments.url>
 		<cfelse>
-			<cfset locals.url = URLFor(argumentCollection=arguments)>
+			<cfset loc.url = URLFor(argumentCollection=arguments)>
 		</cfif>
 	</cfif>
 
-	<cflocation url="#locals.url#" addToken="#arguments.addToken#" statusCode="#arguments.statusCode#">
+	<cflocation url="#loc.url#" addToken="#arguments.addToken#" statusCode="#arguments.statusCode#">
 </cffunction>

@@ -10,57 +10,57 @@
 		#distanceOfTimeInWords(order.purchaseDate, order.deliveryDate)#
 		#distanceOfTimeInWords(fromTime=pageViewStartTime, toTime=pageViewEndTime, includeSeconds=true)#
 	--->
-	<cfset var local = structNew()>
+	<cfset var loc = structNew()>
 
-	<cfset local.minute_diff = dateDiff("n", arguments.fromTime, arguments.toTime)>
-	<cfset local.second_diff = dateDiff("s", arguments.fromTime, arguments.toTime)>
-	<cfset local.hours = 0>
-	<cfset local.days = 0>
-	<cfset local.output = "">
+	<cfset loc.minuteDiff = dateDiff("n", arguments.fromTime, arguments.toTime)>
+	<cfset loc.secondDiff = dateDiff("s", arguments.fromTime, arguments.toTime)>
+	<cfset loc.hours = 0>
+	<cfset loc.days = 0>
+	<cfset loc.output = "">
 
-	<cfif local.minute_diff LT 1>
+	<cfif loc.minuteDiff LT 1>
 		<cfif arguments.includeSeconds>
-			<cfif local.second_diff LTE 5>
-				<cfset local.output = "less than 5 seconds">
-			<cfelseif local.second_diff LTE 10>
-				<cfset local.output = "less than 10 seconds">
-			<cfelseif local.second_diff LTE 20>
-				<cfset local.output = "less than 20 seconds">
-			<cfelseif local.second_diff LTE 40>
-				<cfset local.output = "half a minute">
+			<cfif loc.secondDiff LTE 5>
+				<cfset loc.output = "less than 5 seconds">
+			<cfelseif loc.secondDiff LTE 10>
+				<cfset loc.output = "less than 10 seconds">
+			<cfelseif loc.secondDiff LTE 20>
+				<cfset loc.output = "less than 20 seconds">
+			<cfelseif loc.secondDiff LTE 40>
+				<cfset loc.output = "half a minute">
 			<cfelse>
-				<cfset local.output = "less than a minute">
+				<cfset loc.output = "less than a minute">
 			</cfif>
 		<cfelse>
-			<cfset local.output = "less than a minute">
+			<cfset loc.output = "less than a minute">
 		</cfif>
-	<cfelseif local.minute_diff LT 2>
-		<cfset local.output = "1 minute">
-	<cfelseif local.minute_diff LTE 45>
-		<cfset local.output = local.minute_diff & " minutes">
-	<cfelseif local.minute_diff LTE 90>
-		<cfset local.output = "about 1 hour">
-	<cfelseif local.minute_diff LTE 1440>
-		<cfset local.hours = ceiling(local.minute_diff/60)>
-		<cfset local.output = "about #local.hours# hours">
-	<cfelseif local.minute_diff LTE 2880>
-		<cfset local.output = "1 day">
-	<cfelseif local.minute_diff LTE 43200>
-		<cfset local.days = int(local.minute_diff/1440)>
-		<cfset local.output = local.days & " days">
-	<cfelseif local.minute_diff LTE 86400>
-		<cfset local.output = "about 1 month">
-	<cfelseif local.minute_diff LTE 525960>
-		<cfset local.months = int(local.minute_diff/43200)>
-		<cfset local.output = local.months & " months">
-	<cfelseif local.minute_diff LTE 1051920>
-		<cfset local.output = "about 1 year">
+	<cfelseif loc.minuteDiff LT 2>
+		<cfset loc.output = "1 minute">
+	<cfelseif loc.minuteDiff LTE 45>
+		<cfset loc.output = loc.minuteDiff & " minutes">
+	<cfelseif loc.minuteDiff LTE 90>
+		<cfset loc.output = "about 1 hour">
+	<cfelseif loc.minuteDiff LTE 1440>
+		<cfset loc.hours = ceiling(loc.minuteDiff/60)>
+		<cfset loc.output = "about #loc.hours# hours">
+	<cfelseif loc.minuteDiff LTE 2880>
+		<cfset loc.output = "1 day">
+	<cfelseif loc.minuteDiff LTE 43200>
+		<cfset loc.days = int(loc.minuteDiff/1440)>
+		<cfset loc.output = loc.days & " days">
+	<cfelseif loc.minuteDiff LTE 86400>
+		<cfset loc.output = "about 1 month">
+	<cfelseif loc.minuteDiff LTE 525960>
+		<cfset loc.months = int(loc.minuteDiff/43200)>
+		<cfset loc.output = loc.months & " months">
+	<cfelseif loc.minuteDiff LTE 1051920>
+		<cfset loc.output = "about 1 year">
 	<cfelse>
-		<cfset local.years = int(local.minute_diff/525960)>
-		<cfset local.output = "over " & local.years & " years">
+		<cfset loc.years = int(loc.minuteDiff/525960)>
+		<cfset loc.output = "over " & loc.years & " years">
 	</cfif>
 
-	<cfreturn local.output>
+	<cfreturn loc.output>
 </cffunction>
 
 <cffunction name="timeAgoInWords" returntype="any" access="public" output="false">

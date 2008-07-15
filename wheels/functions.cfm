@@ -1,10 +1,10 @@
 <!--- path of calling application.cfc will become the root dir --->
-<cfset this.rootdir = getDirectoryFromPath(getBaseTemplatePath())>
+<cfset this.rootDir = getDirectoryFromPath(getBaseTemplatePath())>
 <!--- niffty way to have unique application names and not have to worry about the 64 character length limit --->
-<cfset this.name = hash(this.rootdir)>
-<cfset this.mappings["/wheels"] = this.rootdir & "wheels">
-<cfset this.mappings["/controllerRoot"] = this.rootdir & "controllers">
-<cfset this.mappings["/modelRoot"] = this.rootdir & "models">
+<cfset this.name = hash(this.rootDir)>
+<cfset this.mappings["/wheels"] = this.rootDir & "wheels">
+<cfset this.mappings["/controllerRoot"] = this.rootDir & "controllers">
+<cfset this.mappings["/modelRoot"] = this.rootDir & "models">
 <cfset this.sessionmanagement = true>
 
 <cfif IsDefined("server.coldfusion.productname") AND server.coldfusion.productname IS "ColdFusion Server">
@@ -16,7 +16,7 @@
 </cfif>
 
 <cffunction name="onApplicationStart" output="false">
-	<cfset var locals = structNew()>
+	<cfset var loc = structNew()>
 	<cfset application.wheels = structNew()>
 	<cfset application.wheels.version = "0.7.1">
 	<cfset application.wheels.controllers = structNew()>
@@ -46,18 +46,18 @@
 	<!--- Load developer routes and add wheels default ones --->
 	<cfinclude template="../config/routes.cfm">
 	<cfinclude template="routes.cfm">
-	<cfset application.wheels.webPath = replace(CGI.SCRIPT_NAME, reverse(spanExcluding(reverse(CGI.SCRIPT_NAME), "/")), "")>
+	<cfset application.wheels.webPath = replace(cgi.script_name, reverse(spanExcluding(reverse(cgi.script_name), "/")), "")>
 	<cftry>
 		<!--- determine and set database brand --->
 		<cfinclude template="../config/database.cfm">
-		<cfset locals.info = $dbinfo(datasource=application.settings.database.datasource, type="version")>
-		<cfif locals.info.driver_name Contains "MySQL">
-			<cfset locals.adapterName = "MySQL">
+		<cfset loc.info = $dbinfo(datasource=application.settings.database.datasource, type="version")>
+		<cfif loc.info.driver_name Contains "MySQL">
+			<cfset loc.adapterName = "MySQL">
 		<cfelse>
-			<cfset locals.adapterName = "MicrosoftSQLServer">
+			<cfset loc.adapterName = "MicrosoftSQLServer">
 		</cfif>
-		<cfif locals.info.recordCount>
-			<cfset application.wheels.adapter = createObject("component", "wheels.model.adapters.#locals.adapterName#")>
+		<cfif loc.info.recordCount>
+			<cfset application.wheels.adapter = createObject("component", "wheels.model.adapters.#loc.adapterName#")>
 		</cfif>
 	<cfcatch>
 	</cfcatch>
@@ -74,7 +74,7 @@
 
 <cffunction name="onRequestStart" output="false">
 	<cfargument name="targetpage">
-	<cfset var locals = structNew()>
+	<cfset var loc = structNew()>
 	<cfif structKeyExists(URL, "reload") AND (len(application.settings.reloadPassword) IS 0 OR (structKeyExists(URL, "password") AND URL.password IS application.settings.reloadPassword))>
 		<cflock scope="application" type="exclusive" timeout="30">
 			<cfset onApplicationStart()>
@@ -85,7 +85,7 @@
 			<cfif structKeyExists(URL, "except")>
 				<cfset application.settings.ipExceptions = URL.except>
 			</cfif>
-			<cfif len(application.settings.ipExceptions) IS 0 OR listFind(application.settings.ipExceptions, CGI.REMOTE_ADDR) IS 0>
+			<cfif len(application.settings.ipExceptions) IS 0 OR listFind(application.settings.ipExceptions, cgi.remote_addr) IS 0>
 				<cfinclude template="../events/onmaintenance.cfm">
 				<cfabort>
 			</cfif>
@@ -129,7 +129,7 @@
 
 <cffunction name="onRequestEnd" output="true">
 	<cfargument name="targetpage">
-	<cfset var locals = structNew()>
+	<cfset var loc = structNew()>
 	<cfif application.settings.showDebugInformation>
 		<cfset request.wheels.execution.components.requestEnd = getTickCount()>
 	</cfif>
