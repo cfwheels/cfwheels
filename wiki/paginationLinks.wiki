@@ -1,11 +1,16 @@
 #summary paginationLinks([classForCurrent,prependToLink,handle,linkToCurrentPage,windowSize,params,alwaysShowAnchors,name,appendToLink])
 #labels api,0.8,view,helper
 
-*Description*: Creates links to pages for a paginated query
+*Description*:
+Creates links to pages for a paginated query
 
-*Return Type*: string
+*Return Type*:
+string 
 
-|| *Arguments* || *Type* || *Required* || *Default* || *Description* ||
+*Parameters*:
+
+
+||   || *Type* || *Required* || *Default* || *Description* ||
 || *classForCurrent* || string || false ||  || Class name for the link to the current page ||
 || *prependToLink* || string || false ||  || String to be prepended before all links ||
 || *handle* || string || false || paginatedQuery || The handle given to the query that the pagination links should be displayed for ||
