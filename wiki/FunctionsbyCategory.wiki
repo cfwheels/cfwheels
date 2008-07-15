@@ -1,14 +1,41 @@
-#summary One-sentence summary of this page.
+#summary All functions in Wheels listed by category.
 #labels chapter,0.8
 
-= Introduction =
+All functions in Wheels fall into one of these six categories:
 
-Add your content here.
+ * Model Initialization
+ * Model Class
+ * Model Object
+ * View Helper
+ * Controller Initialization
+ * Controller Request
 
+==Model Initialization==
 
-= Details =
+These functions are called from the `init` function of your model files.
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+ * coming soon...
+ * coming soon...
+
+==Model Class==
+
+These functions operate on the class as a whole and not on individual objects and thus need to be prefaced with `model("Name")`. Example:
+
+{{{
+<cfset allAuthors = model("Author").findAll()>
+}}}
+
+ * coming soon...
+ * coming soon...
+
+==Model Object==
+
+These functions operate on individual objects which means you first have to fetch or create an object and then call the functions on that object. Example:
+
+{{{
+<cfset anAuthor = model("Author").findById(1)>
+<cfset anAuthor.delete()>
+}}}
+
+ * coming soon...
+ * coming soon...
