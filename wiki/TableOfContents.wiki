@@ -48,7 +48,7 @@
  * Linking Pages
  * Using Layouts
  * Form Helpers and Showing Errors
- * [DisplayingLinksForPagination Displaying Links for Pagination]
+ * [DisplayingLinksforPagination Displaying Links for Pagination]
  * Miscellaneous Helpers
 
 ==Miscellaneous==
