@@ -1,4 +1,4 @@
-#summary paginationLinks(classForCurrent,prependToLink,handle,linkToCurrentPage,windowSize,params,alwaysShowAnchors,name,appendToLink)
+#summary paginationLinks([classForCurrent,prependToLink,handle,linkToCurrentPage,windowSize,params,alwaysShowAnchors,name,appendToLink])
 #labels api,0.8,view,helper
 
 *Description*: Creates links to pages for a paginated query
@@ -10,7 +10,7 @@
 || *prependToLink* || string || false ||  || String to be prepended before all links ||
 || *handle* || string || false || paginatedQuery || The handle given to the query that the pagination links should be displayed for ||
 || *linkToCurrentPage* || boolean || false || false || Whether or not the current page should be linked to ||
-|| *windowSize* || numeric || false ||  hint= || The number of page links to show around the current page ||
+|| *windowSize* || numeric || false || 2 || The number of page links to show around the current page ||
 || *params* || string || false ||  || Any additional parameters that should be appended to the links ||
 || *alwaysShowAnchors* || boolean || false || true || Whether or not links to the first and last page should always be displayed ||
 || *name* || string || false || page || The name of the param that holds the current page number ||
