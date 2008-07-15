@@ -160,13 +160,9 @@
 	<cfinclude template="../events/onmissingtemplate.cfm">
 </cffunction>
 
-<!--- <cffunction name="onError" output="true">
+<cffunction name="onError" output="true">
 	<cfargument name="exception">
 	<cfargument name="eventname">
-	<cfset var locals = structNew()>
-	<cfsetting requesttimeout="120">
-	<cfset locals.runTime = dateDiff("s", GetPageContext().GetFusionContext().GetStartTime(), now())>
-	<cfsetting requesttimeout="#(locals.runTime+10)#">
 	<cfif application.settings.sendEmailOnError>
 		<cfmail to="#application.settings.errorEmailAddress#" from="#application.settings.errorEmailAddress#" subject="#application.applicationname# error" type="html">
 			<cfinclude template="error.cfm">
@@ -183,4 +179,4 @@
 	<cfelse>
 		<cfinclude template="../events/onerror.cfm">
 	</cfif>
-</cffunction> --->
+</cffunction>
