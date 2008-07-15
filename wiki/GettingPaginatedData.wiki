@@ -1,14 +1,11 @@
 #summary One-sentence summary of this page.
 #labels chapter,0.8
 
-= Introduction =
-
-Add your content here.
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+google example
+query db for only needed info key principle in wheels
+pagination is done thru findAll
+page, perPage
+handle
+count
+paginate by objects, not records!
+how does the SQL look (SQL server vs mysql)
