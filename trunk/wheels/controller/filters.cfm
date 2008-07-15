@@ -5,10 +5,10 @@
 	<cfargument name="type" type="string" required="false" default="before">
 	<cfset var loc = {}>
 	<cfloop list="#arguments.through#" index="loc.i">
-		<cfset loc.thisFilter = structNew()>
+		<cfset loc.thisFilter = StructNew()>
 		<cfset loc.thisFilter.through = trim(loc.i)>
-		<cfset loc.thisFilter.only = replace(arguments.only, ", ", ",", "all")>
-		<cfset loc.thisFilter.except = replace(arguments.except, ", ", ",", "all")>
+		<cfset loc.thisFilter.only = Replace(arguments.only, ", ", ",", "all")>
+		<cfset loc.thisFilter.except = Replace(arguments.except, ", ", ",", "all")>
 		<cfif arguments.type IS "before">
 			<cfset arrayAppend(variables.wheels.beforeFilters, loc.thisFilter)>
 		<cfelse>

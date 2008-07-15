@@ -2,10 +2,10 @@
 	<cfargument name="name" type="string" required="true">
 
 	<cfset variables.wheels.name = arguments.name>
-	<cfset variables.wheels.verifications = arrayNew(1)>
-	<cfset variables.wheels.beforeFilters = arrayNew(1)>
-	<cfset variables.wheels.afterFilters = arrayNew(1)>
-	<cfset variables.wheels.cachableActions = arrayNew(1)>
+	<cfset variables.wheels.verifications = ArrayNew(1)>
+	<cfset variables.wheels.beforeFilters = ArrayNew(1)>
+	<cfset variables.wheels.afterFilters = ArrayNew(1)>
+	<cfset variables.wheels.cachableActions = ArrayNew(1)>
 
 	<cfif StructKeyExists(variables, "init")>
 		<cfset init()>

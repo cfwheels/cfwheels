@@ -1,7 +1,7 @@
 <cffunction name="capitalize" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">
 	<cfif Len(arguments.text)>
-		<cfreturn UCase(Left(arguments.text, 1)) & mid(arguments.text, 2, Len(arguments.text)-1)>
+		<cfreturn UCase(Left(arguments.text, 1)) & Mid(arguments.text, 2, Len(arguments.text)-1)>
 	</cfif>
 </cffunction>
 
@@ -23,8 +23,8 @@
 
 	<!--- Replace single newline characters with HTML break tags and double newline characters with HTML paragraph tags --->
 	<cfset loc.output = trim(arguments.text)>
-	<cfset loc.output = replace(loc.output, "#chr(10)##chr(10)#", "</p><p>", "all")>
-	<cfset loc.output = replace(loc.output, "#chr(10)#", "<br />", "all")>
+	<cfset loc.output = Replace(loc.output, "#chr(10)##chr(10)#", "</p><p>", "all")>
+	<cfset loc.output = Replace(loc.output, "#chr(10)#", "<br />", "all")>
 	<cfif loc.output IS NOT "">
 		<cfset loc.output = "<p>" & loc.output & "</p>">
 	</cfif>

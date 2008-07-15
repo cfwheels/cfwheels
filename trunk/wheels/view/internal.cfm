@@ -140,7 +140,7 @@
 		</cfif>
 		<cfloop collection="#arguments#" item="loc.i">
 			<cfif Left(loc.i, 5) IS "label" AND Len(loc.i) GT 5>
-				<cfset loc.output = loc.output & " #replace(loc.i, 'label', '')#=""#arguments[loc.i]#""">
+				<cfset loc.output = loc.output & " #Replace(loc.i, 'label', '')#=""#arguments[loc.i]#""">
 			</cfif>
 		</cfloop>
 		<cfset loc.output = loc.output & ">" & arguments.label>

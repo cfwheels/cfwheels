@@ -4,7 +4,7 @@
 	<cfset var loc = {}>
 
 	<cfloop list="#arguments.actions#" index="loc.i">
-		<cfset loc.thisAction = structNew()>
+		<cfset loc.thisAction = StructNew()>
 		<cfset loc.thisAction.action = trim(loc.i)>
 		<cfset loc.thisAction.time = arguments.time>
 		<cfset arrayAppend(variables.wheels.cachableActions, loc.thisAction)>

@@ -134,7 +134,7 @@
 
 	<cfif Len(arguments.disable) IS NOT 0>
 		<cfset loc.onclick = "this.disabled=true;">
-		<cfif Len(arguments.image) IS 0 AND NOT isBoolean(arguments.disable)>
+		<cfif Len(arguments.image) IS 0 AND NOT IsBoolean(arguments.disable)>
 			<cfset loc.onclick = loc.onclick & "this.value='#arguments.disable#';">
 		</cfif>
 		<cfset loc.onclick = loc.onclick & "this.form.submit();">
@@ -221,7 +221,7 @@
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset loc.value = $formValue(argumentCollection=arguments)>
-	<cfif (isBoolean(loc.value) AND loc.value) OR (isNumeric(loc.value) AND loc.value GTE 1)>
+	<cfif (IsBoolean(loc.value) AND loc.value) OR (isNumeric(loc.value) AND loc.value GTE 1)>
 		<cfset loc.checked = true>
 	<cfelse>
 		<cfset loc.checked = false>
@@ -360,8 +360,8 @@
 		<cfset loc.output = loc.output & " multiple">
 	</cfif>
 	<cfset loc.output = loc.output & loc.attributes>
-	<cfif NOT isBoolean(arguments.includeBlank) OR arguments.includeBlank>
-		<cfif NOT isBoolean(arguments.includeBlank)>
+	<cfif NOT IsBoolean(arguments.includeBlank) OR arguments.includeBlank>
+		<cfif NOT IsBoolean(arguments.includeBlank)>
 			<cfset loc.text = arguments.includeBlank>
 		<cfelse>
 			<cfset loc.text = "">
@@ -563,8 +563,8 @@
 		<cfoutput>
 			#$formBeforeElement(argumentCollection=arguments)#
 			<select name="#arguments.name#" id="#arguments.name#"<cfif arguments.multiple> multiple</cfif>#loc.attributes#>
-			<cfif NOT isBoolean(arguments.includeBlank) OR arguments.includeBlank>
-				<cfif NOT isBoolean(arguments.includeBlank)>
+			<cfif NOT IsBoolean(arguments.includeBlank) OR arguments.includeBlank>
+				<cfif NOT IsBoolean(arguments.includeBlank)>
 					<cfset loc.text = arguments.includeBlank>
 				<cfelse>
 					<cfset loc.text = "">
@@ -841,8 +841,8 @@
 	<cfset loc.html = "">
 	<cfset loc.html = loc.html & $formBeforeElement(argumentCollection=arguments)>
 	<cfset loc.html = loc.html & "<select name=""#arguments.name#"" id=""#arguments.$id#""#loc.attributes#>">
-	<cfif NOT isBoolean(arguments.includeBlank) OR arguments.includeBlank>
-		<cfif NOT isBoolean(arguments.includeBlank)>
+	<cfif NOT IsBoolean(arguments.includeBlank) OR arguments.includeBlank>
+		<cfif NOT IsBoolean(arguments.includeBlank)>
 			<cfset loc.text = arguments.includeBlank>
 		<cfelse>
 			<cfset loc.text = "">

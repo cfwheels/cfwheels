@@ -73,16 +73,16 @@
 	<cfif structCount(form) IS NOT 0>
 
 		<!--- loop through form variables and merge any date variables into one --->
-		<cfset loc.dates = structNew()>
+		<cfset loc.dates = StructNew()>
 		<cfloop collection="#form#" item="loc.i">
 			<cfif REFindNoCase(".*\((\$year|\$month|\$day|\$hour|\$minute|\$second)\)$", loc.i) IS NOT 0>
 				<cfset loc.temp = listToArray(loc.i, "(")>
 				<cfset loc.firstKey = loc.temp[1]>
 				<cfset loc.secondKey = spanExcluding(loc.temp[2], ")")>
 				<cfif NOT StructKeyExists(loc.dates, loc.firstKey)>
-					<cfset loc.dates[loc.firstKey] = structNew()>
+					<cfset loc.dates[loc.firstKey] = StructNew()>
 				</cfif>
-				<cfset loc.dates[loc.firstKey][replaceNoCase(loc.secondKey, "$", "")] = form[loc.i]>
+				<cfset loc.dates[loc.firstKey][ReplaceNoCase(loc.secondKey, "$", "")] = form[loc.i]>
 			</cfif>
 		</cfloop>
 		<cfloop collection="#loc.dates#" item="loc.i">
@@ -135,10 +135,10 @@
 			<cfset loc.match = reFindNoCase("(.*?)\[(.*?)\]", loc.i, 1, true)>
 			<cfif arrayLen(loc.match.pos) IS 3>
 				<!--- Model object form field, build a struct to hold the data, named after the model object --->
-				<cfset loc.objectName = lCase(mid(loc.i, loc.match.pos[2], loc.match.len[2]))>
-				<cfset loc.fieldName = lCase(mid(loc.i, loc.match.pos[3], loc.match.len[3]))>
+				<cfset loc.objectName = lCase(Mid(loc.i, loc.match.pos[2], loc.match.len[2]))>
+				<cfset loc.fieldName = lCase(Mid(loc.i, loc.match.pos[3], loc.match.len[3]))>
 				<cfif NOT StructKeyExists(loc.params, loc.objectName)>
-					<cfset loc.params[loc.objectName] = structNew()>
+					<cfset loc.params[loc.objectName] = StructNew()>
 				</cfif>
 				<cfset loc.params[loc.objectName][loc.fieldName] = form[loc.i]>
 			<cfelse>
@@ -158,7 +158,7 @@
 	</cflock>
 	<cfif NOT loc.flashExists>
 		<cflock scope="session" type="exclusive" timeout="30">
-			<cfset session.flash = structNew()>
+			<cfset session.flash = StructNew()>
 		</cflock>
 	</cfif>
 
@@ -191,13 +191,13 @@
 		<cfloop from="1" to="#arrayLen(loc.verifications)#" index="loc.i">
 			<cfset loc.verification = loc.verifications[loc.i]>
 			<cfif	(Len(loc.verification.only) IS 0 AND Len(loc.verification.except) IS 0) OR (Len(loc.verification.only) IS NOT 0 AND listFindNoCase(loc.verification.only, loc.params.action)) OR (Len(loc.verification.except) IS NOT 0 AND NOT listFindNoCase(loc.verification.except, loc.params.action))>
-				<cfif isBoolean(loc.verification.post) AND ((loc.verification.post AND cgi.request_method IS NOT "post") OR (NOT loc.verification.post AND cgi.request_method IS "post"))>
+				<cfif IsBoolean(loc.verification.post) AND ((loc.verification.post AND cgi.request_method IS NOT "post") OR (NOT loc.verification.post AND cgi.request_method IS "post"))>
 					<cfset loc.abort = true>
 				</cfif>
-				<cfif isBoolean(loc.verification.get) AND ((loc.verification.get AND cgi.request_method IS NOT "get") OR (NOT loc.verification.get AND cgi.request_method IS "get"))>
+				<cfif IsBoolean(loc.verification.get) AND ((loc.verification.get AND cgi.request_method IS NOT "get") OR (NOT loc.verification.get AND cgi.request_method IS "get"))>
 					<cfset loc.abort = true>
 				</cfif>
-				<cfif isBoolean(loc.verification.ajax) AND ((loc.verification.ajax AND cgi.http_x_requested_with IS NOT "XMLHTTPRequest") OR (NOT loc.verification.ajax AND cgi.http_x_requested_with IS "XMLHTTPRequest"))>
+				<cfif IsBoolean(loc.verification.ajax) AND ((loc.verification.ajax AND cgi.http_x_requested_with IS NOT "XMLHTTPRequest") OR (NOT loc.verification.ajax AND cgi.http_x_requested_with IS "XMLHTTPRequest"))>
 					<cfset loc.abort = true>
 				</cfif>
 				<cfif loc.verification.params IS NOT "">
@@ -270,10 +270,10 @@
 		<cflock name="#loc.lockName#" type="readonly" timeout="30">
 			<cfset request.wheels.response = $getFromCache(loc.key, loc.category)>
 		</cflock>
-		<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
+		<cfif IsBoolean(request.wheels.response) AND NOT request.wheels.response>
 	   	<cflock name="#loc.lockName#" type="exclusive" timeout="30">
 				<cfset request.wheels.response = $getFromCache(loc.key, loc.category)>
-				<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
+				<cfif IsBoolean(request.wheels.response) AND NOT request.wheels.response>
 					<cfset $callAction(loc.controller, loc.params.controller, loc.params.action)>
 					<cfset $addToCache(loc.key, request.wheels.response, loc.timeToCache, loc.category)>
 				</cfif>

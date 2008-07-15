@@ -21,22 +21,22 @@
 	</cfif>
 
 	<!--- if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request --->
-	<cfif (NOT isBoolean(arguments.layout) OR arguments.layout) AND arguments.$showDebugInformation>
+	<cfif (NOT IsBoolean(arguments.layout) OR arguments.layout) AND arguments.$showDebugInformation>
 		<cfset request.wheels.showDebugInformation = true>
 	</cfif>
 
 	<!--- double-checked lock --->
-	<cfif application.settings.cachePages AND (isNumeric(arguments.cache) OR (isBoolean(arguments.cache) AND arguments.cache))>
+	<cfif application.settings.cachePages AND (isNumeric(arguments.cache) OR (IsBoolean(arguments.cache) AND arguments.cache))>
 		<cfset loc.category = "action">
 		<cfset loc.key = "#arguments.action##$hashStruct(variables.params)##$hashStruct(arguments)#">
 		<cfset loc.lockName = loc.category & loc.key>
 		<cflock name="#loc.lockName#" type="readonly" timeout="30">
 			<cfset request.wheels.response = $getFromCache(loc.key, loc.category)>
 		</cflock>
-		<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
+		<cfif IsBoolean(request.wheels.response) AND NOT request.wheels.response>
 	   	<cflock name="#loc.lockName#" type="exclusive" timeout="30">
 				<cfset request.wheels.response = $getFromCache(loc.key, loc.category)>
-				<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
+				<cfif IsBoolean(request.wheels.response) AND NOT request.wheels.response>
 					<cfset $renderPage(argumentCollection=arguments)>
 					<cfif NOT isNumeric(arguments.cache)>
 						<cfset arguments.cache = application.settings.defaultCacheTime>
@@ -81,17 +81,17 @@
 	<cfset var loc = {}>
 
 	<!--- double-checked lock --->
-	<cfif application.settings.cachePartials AND (isNumeric(arguments.cache) OR (isBoolean(arguments.cache) AND arguments.cache))>
+	<cfif application.settings.cachePartials AND (isNumeric(arguments.cache) OR (IsBoolean(arguments.cache) AND arguments.cache))>
 		<cfset loc.category = "partial">
 		<cfset loc.key = "#arguments.name##$hashStruct(variables.params)##$hashStruct(arguments)#">
 		<cfset loc.lockName = loc.category & loc.key>
 		<cflock name="#loc.lockName#" type="readonly" timeout="30">
 			<cfset loc.result = $getFromCache(loc.key, loc.category)>
 		</cflock>
-		<cfif isBoolean(loc.result) AND NOT loc.result>
+		<cfif IsBoolean(loc.result) AND NOT loc.result>
 	   	<cflock name="#loc.lockName#" type="exclusive" timeout="30">
 				<cfset loc.result = $getFromCache(loc.key, loc.category)>
-				<cfif isBoolean(loc.result) AND NOT loc.result>
+				<cfif IsBoolean(loc.result) AND NOT loc.result>
 					<cfset loc.result = $includePartial(argumentCollection=arguments)>
 					<cfif NOT isNumeric(arguments.cache)>
 						<cfset arguments.cache = application.settings.defaultCacheTime>
@@ -141,10 +141,10 @@
 <cffunction name="$renderLayout" returntype="void" access="private" output="false">
 	<cfargument name="layout" type="any" required="true">
 
-	<cfif (isBoolean(arguments.layout) AND arguments.layout) OR (arguments.layout IS NOT "false")>
-		<cfif NOT isBoolean(arguments.layout)>
+	<cfif (IsBoolean(arguments.layout) AND arguments.layout) OR (arguments.layout IS NOT "false")>
+		<cfif NOT IsBoolean(arguments.layout)>
 			<!--- Include a designated layout --->
-			<cfset request.wheels.response = $include("../../views/layouts/#replace(arguments.layout, ' ', '', 'all')#.cfm")>
+			<cfset request.wheels.response = $include("../../views/layouts/#Replace(arguments.layout, ' ', '', 'all')#.cfm")>
 		<cfelseif fileExists(expandPath("views/layouts/#variables.params.controller#.cfm"))>
 			<!--- Include the current controller's layout if one exists --->
 			<cfset request.wheels.response = $include("../../views/layouts/#variables.params.controller#.cfm")>

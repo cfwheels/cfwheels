@@ -8,7 +8,7 @@
 		<cfloop list="#arguments.params#" delimiters="&" index="loc.i">
 			<cfset loc.temp = listToArray(loc.i, "=")>
 			<cfset loc.params = loc.params & loc.delim & loc.temp[1] & "=">
-			<cfif arrayLen(loc.temp) IS 2>
+			<cfif ArrayLen(loc.temp) IS 2>
 				<cfset loc.params = loc.params & obfuscateParam(loc.temp[2])>
 			</cfif>
 			<cfset loc.delim = "&">

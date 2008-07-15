@@ -76,7 +76,7 @@
 	</cfif>
 
 	<cfif arguments.type IS "internal" OR $cacheCount() LT application.settings.maximumItemsToCache>
-		<cfset application.wheels.cache[arguments.type][arguments.category][arguments.key] = structNew()>
+		<cfset application.wheels.cache[arguments.type][arguments.category][arguments.key] = StructNew()>
 		<cfset application.wheels.cache[arguments.type][arguments.category][arguments.key].expiresAt = dateAdd("n", arguments.time, now())>
 		<cfif isSimpleValue(arguments.value)>
 			<cfset application.wheels.cache[arguments.type][arguments.category][arguments.key].value = arguments.value>
