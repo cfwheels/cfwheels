@@ -1,7 +1,7 @@
 <cffunction name="errorMessagesFor" returntype="any" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
-	<cfset var loc = structNew()>
-	<cfif NOT structKeyExists(arguments, "class")>
+	<cfset var loc = {}>
+	<cfif NOT StructKeyExists(arguments, "class")>
 		<cfset arguments.class = "error-messages">
 	</cfif>
 	<cfset arguments.$namedArguments = "objectName">
@@ -32,8 +32,8 @@
 	<cfargument name="prependText" type="any" required="false" default="">
 	<cfargument name="appendText" type="any" required="false" default="">
 	<cfargument name="wrapperElement" type="any" required="false" default="div">
-	<cfset var loc = structNew()>
-	<cfif NOT structKeyExists(arguments, "class")>
+	<cfset var loc = {}>
+	<cfif NOT StructKeyExists(arguments, "class")>
 		<cfset arguments.class = "error-message">
 	</cfif>
 	<cfset arguments.$namedArguments = "objectName,property,prependText,appendText,wrapperElement">

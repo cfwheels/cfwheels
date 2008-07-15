@@ -85,7 +85,7 @@
 			<cfif arguments.alwaysShowAnchors>
 				<cfif (loc.currentPage - arguments.windowSize) GT 1>
 					<cfset loc.linkToArguments.params = "#arguments.name#=1">
-					<cfif len(arguments.params) IS NOT 0>
+					<cfif Len(arguments.params) IS NOT 0>
 						<cfset loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params>
 					</cfif>
 					<cfset loc.linkToArguments.text = 1>
@@ -95,22 +95,22 @@
 			<cfloop from="1" to="#loc.totalPages#" index="loc.i">
 				<cfif (loc.i GTE (loc.currentPage - arguments.windowSize) AND loc.i LTE loc.currentPage) OR (loc.i LTE (loc.currentPage + arguments.windowSize) AND loc.i GTE loc.currentPage)>
 					<cfset loc.linkToArguments.params = "#arguments.name#=#loc.i#">
-					<cfif len(arguments.params) IS NOT 0>
+					<cfif Len(arguments.params) IS NOT 0>
 						<cfset loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params>
 					</cfif>
 					<cfset loc.linkToArguments.text = loc.i>
-					<cfif len(arguments.classForCurrent) IS NOT 0 AND loc.currentPage IS loc.i>
+					<cfif Len(arguments.classForCurrent) IS NOT 0 AND loc.currentPage IS loc.i>
 						<cfset loc.linkToArguments.attributes = "class=#arguments.classForCurrent#">
 					<cfelse>
 						<cfset loc.linkToArguments.attributes = "">
 					</cfif>
-					<cfif len(arguments.prependToLink) IS NOT 0>#arguments.prependToLink#</cfif><cfif loc.currentPage IS NOT loc.i OR arguments.linkToCurrentPage>#linkTo(argumentCollection=loc.linkToArguments)#<cfelse><cfif len(arguments.classForCurrent) IS NOT 0><span class="#arguments.classForCurrent#">#loc.i#</span><cfelse>#loc.i#</cfif></cfif><cfif len(arguments.appendToLink) IS NOT 0>#arguments.appendToLink#</cfif>
+					<cfif Len(arguments.prependToLink) IS NOT 0>#arguments.prependToLink#</cfif><cfif loc.currentPage IS NOT loc.i OR arguments.linkToCurrentPage>#linkTo(argumentCollection=loc.linkToArguments)#<cfelse><cfif Len(arguments.classForCurrent) IS NOT 0><span class="#arguments.classForCurrent#">#loc.i#</span><cfelse>#loc.i#</cfif></cfif><cfif Len(arguments.appendToLink) IS NOT 0>#arguments.appendToLink#</cfif>
 				</cfif>
 			</cfloop>
 			<cfif arguments.alwaysShowAnchors>
 				<cfif loc.totalPages GT (loc.currentPage + arguments.windowSize)>
 					<cfset loc.linkToArguments.params = "#arguments.name#=#loc.totalPages#">
-					<cfif len(arguments.params) IS NOT 0>
+					<cfif Len(arguments.params) IS NOT 0>
 						<cfset loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params>
 					</cfif>
 					<cfset loc.linkToArguments.text = loc.totalPages>

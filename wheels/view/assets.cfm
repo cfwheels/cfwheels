@@ -1,6 +1,6 @@
 <cffunction name="stylesheetLinkTag" returntype="any" access="public" output="false">
 	<cfargument name="sources" type="any" required="false" default="application">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "sources">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -18,7 +18,7 @@
 
 <cffunction name="javascriptIncludeTag" returntype="any" access="public" output="false">
 	<cfargument name="sources" type="any" required="false" default="application,protoculous">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "sources">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -36,7 +36,7 @@
 
 <cffunction name="imageTag" returntype="any" access="public" output="false">
 	<cfargument name="source" type="any" required="false" default="">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfif application.settings.environment IS NOT "production">
 		<cfinclude template="../errors/imagetag.cfm">
 	</cfif>
@@ -54,7 +54,7 @@
 			<cfif isBoolean(loc.result) AND NOT loc.result>
 				<cfset arguments.$namedArguments = "source">
 				<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
-				<cfif left(arguments.source, 7) IS "http://">
+				<cfif Left(arguments.source, 7) IS "http://">
 					<cfset loc.src = arguments.source>
 				<cfelse>
 					<cfset loc.src = "#application.wheels.webPath##application.settings.paths.images#/#arguments.source#">
@@ -66,7 +66,7 @@
 					</cfif>
 				</cfif>
 				<cfif arguments.attributes Does Not Contain "alt">
-					<cfset loc.attributes = loc.attributes & " alt=""#titleize(replaceList(spanExcluding(reverse(spanExcluding(reverse(loc.src), "/")), "."), "-,_", " , "))#""">
+					<cfset loc.attributes = loc.attributes & " alt=""#titleize(replaceList(spanExcluding(Reverse(spanExcluding(Reverse(loc.src), "/")), "."), "-,_", " , "))#""">
 				</cfif>
 				<cfset loc.result = "<img src=""#loc.src#""#loc.attributes# />">
 				<cfif application.settings.cacheImages>

@@ -8,7 +8,7 @@
 <cffunction name="cycle" returntype="any" access="public" output="false">
 	<cfargument name="values" type="any" required="true">
 	<cfargument name="name" type="any" required="false" default="default">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfif NOT isDefined("request.wheels.cycle.#arguments.name#")>
 		<cfset "request.wheels.cycle.#arguments.name#" = listGetAt(arguments.values, 1)>

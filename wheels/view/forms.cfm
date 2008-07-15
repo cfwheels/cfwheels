@@ -4,20 +4,20 @@
 	<cfargument name="multipart" type="any" required="false" default="false">
 	<cfargument name="spamProtection" type="any" required="false" default="false">
 	<!--- Accepts URLFor arguments --->
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "link,method,multipart,spamProtection,controller,action,id,anchor,onlyPath,host,protocol,params">
-	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
+	<cfif StructKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
 		<!--- Since a non-numeric id was passed in we assume it is meant as a HTML attribute and therefore remove it from the named arguments list so that it will be set in the attributes --->
 		<cfset arguments.$namedArguments = listDeleteAt(arguments.$namedArguments, listFindNoCase(arguments.$namedArguments, "id"))>
 	</cfif>
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
-	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
-		<cfset structDelete(arguments, "id")>
+	<cfif StructKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
+		<cfset StructDelete(arguments, "id")>
 	</cfif>
 
 	<cfset request.wheels.currentFormMethod = arguments.method>
 
-	<cfif len(arguments.link) IS NOT 0>
+	<cfif Len(arguments.link) IS NOT 0>
 		<cfset loc.url = arguments.link>
 	<cfelse>
 		<cfset loc.url = URLFor(argumentCollection=arguments)>
@@ -25,7 +25,7 @@
 	<cfset loc.url = HTMLEditFormat(loc.url)>
 
 	<cfif arguments.spamProtection>
-		<cfset loc.onsubmit = "this.action='#left(loc.url, int((len(loc.url)/2)))#'+'#right(loc.url, ceiling((len(loc.url)/2)))#';">
+		<cfset loc.onsubmit = "this.action='#Left(loc.url, int((Len(loc.url)/2)))#'+'#Right(loc.url, ceiling((Len(loc.url)/2)))#';">
 		<cfset loc.url = "">
 	</cfif>
 
@@ -50,18 +50,18 @@
 	<cfargument name="onSuccess" type="any" required="false" default="">
 	<cfargument name="onFailure" type="any" required="false" default="">
 	<!--- Accepts URLFor arguments --->
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "link,method,spamProtection,update,insertion,serialize,onLoading,onComplete,onSuccess,onFailure,controller,action,id,anchor,onlyPath,host,protocol,params">
-	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
+	<cfif StructKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
 		<!--- Since a non-numeric id was passed in we assume it is meant as a HTML attribute and therefore remove it from the named arguments list so that it will be set in the attributes --->
 		<cfset arguments.$namedArguments = listDeleteAt(arguments.$namedArguments, listFindNoCase(arguments.$namedArguments, "id"))>
 	</cfif>
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
-	<cfif structKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
-		<cfset structDelete(arguments, "id")>
+	<cfif StructKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
+		<cfset StructDelete(arguments, "id")>
 	</cfif>
 
-	<cfif len(arguments.link) IS NOT 0>
+	<cfif Len(arguments.link) IS NOT 0>
 		<cfset loc.url = arguments.link>
 	<cfelse>
 		<cfset loc.url = URLFor(argumentCollection=arguments)>
@@ -70,7 +70,7 @@
 	<cfset loc.ajaxCall = "new Ajax.">
 
 	<!--- Figure out the parameters for the Ajax call --->
-	<cfif len(arguments.update) IS NOT 0>
+	<cfif Len(arguments.update) IS NOT 0>
 		<cfset loc.ajaxCall = loc.ajaxCall & "Updater('#arguments.update#',">
 	<cfelse>
 		<cfset loc.ajaxCall = loc.ajaxCall & "Request(">
@@ -78,7 +78,7 @@
 
 	<cfset loc.ajaxCall = loc.ajaxCall & "'#loc.url#', { asynchronous:true">
 
-	<cfif len(arguments.insertion) IS NOT 0>
+	<cfif Len(arguments.insertion) IS NOT 0>
 		<cfset loc.ajaxCall = loc.ajaxCall & ",insertion:Insertion.#arguments.insertion#">
 	</cfif>
 
@@ -86,19 +86,19 @@
 		<cfset loc.ajaxCall = loc.ajaxCall & ",parameters:Form.serialize(this)">
 	</cfif>
 
-	<cfif len(arguments.onLoading) IS NOT 0>
+	<cfif Len(arguments.onLoading) IS NOT 0>
 		<cfset loc.ajaxCall = loc.ajaxCall & ",onLoading:#arguments.onLoading#">
 	</cfif>
 
-	<cfif len(arguments.onComplete) IS NOT 0>
+	<cfif Len(arguments.onComplete) IS NOT 0>
 		<cfset loc.ajaxCall = loc.ajaxCall & ",onComplete:#arguments.onComplete#">
 	</cfif>
 
-	<cfif len(arguments.onSuccess) IS NOT 0>
+	<cfif Len(arguments.onSuccess) IS NOT 0>
 		<cfset loc.ajaxCall = loc.ajaxCall & ",onSuccess:#arguments.onSuccess#">
 	</cfif>
 
-	<cfif len(arguments.onFailure) IS NOT 0>
+	<cfif Len(arguments.onFailure) IS NOT 0>
 		<cfset loc.ajaxCall = loc.ajaxCall & ",onFailure:#arguments.onFailure#">
 	</cfif>
 
@@ -118,8 +118,8 @@
 </cffunction>
 
 <cffunction name="endFormTag" returntype="any" access="public" output="false">
-	<cfif structKeyExists(request.wheels, "currentFormMethod")>
-		<cfset structDelete(request.wheels, "currentFormMethod")>
+	<cfif StructKeyExists(request.wheels, "currentFormMethod")>
+		<cfset StructDelete(request.wheels, "currentFormMethod")>
 	</cfif>
 	<cfreturn "</form>">
 </cffunction>
@@ -128,25 +128,25 @@
 	<cfargument name="value" type="any" required="false" default="Save changes">
 	<cfargument name="image" type="string" required="false" default="">
 	<cfargument name="disable" type="any" required="false" default="">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "value,image,disable">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
-	<cfif len(arguments.disable) IS NOT 0>
+	<cfif Len(arguments.disable) IS NOT 0>
 		<cfset loc.onclick = "this.disabled=true;">
-		<cfif len(arguments.image) IS 0 AND NOT isBoolean(arguments.disable)>
+		<cfif Len(arguments.image) IS 0 AND NOT isBoolean(arguments.disable)>
 			<cfset loc.onclick = loc.onclick & "this.value='#arguments.disable#';">
 		</cfif>
 		<cfset loc.onclick = loc.onclick & "this.form.submit();">
 	</cfif>
 
-	<cfif len(arguments.image) IS NOT 0>
+	<cfif Len(arguments.image) IS NOT 0>
 		<cfset loc.source = "#application.wheels.webPath##application.settings.paths.images#/#arguments.image#">
 	</cfif>
 
 	<cfsavecontent variable="loc.output">
 		<cfoutput>
-			<input value="#arguments.value#"<cfif len(arguments.image) IS 0> type="submit"<cfelse> type="image" src="#loc.source#"</cfif><cfif len(arguments.disable) IS NOT 0> onclick="#loc.onclick#"</cfif>#loc.attributes# />
+			<input value="#arguments.value#"<cfif Len(arguments.image) IS 0> type="submit"<cfelse> type="image" src="#loc.source#"</cfif><cfif Len(arguments.disable) IS NOT 0> onclick="#loc.onclick#"</cfif>#loc.attributes# />
 		</cfoutput>
 	</cfsavecontent>
 
@@ -163,7 +163,7 @@
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfargument name="errorElement" type="any" required="false" default="div">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -189,7 +189,7 @@
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfargument name="errorElement" type="any" required="false" default="div">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property,tagValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -216,7 +216,7 @@
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfargument name="errorElement" type="any" required="false" default="div">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property,checkedValue,uncheckedValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -249,7 +249,7 @@
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfargument name="errorElement" type="any" required="false" default="div">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -267,12 +267,12 @@
 <cffunction name="hiddenField" returntype="any" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="any" required="true">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset loc.value = $formValue(argumentCollection=arguments)>
-	<cfif application.settings.obfuscateURLs AND structKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
+	<cfif application.settings.obfuscateURLs AND StructKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
 		<cfset loc.value = obfuscateParam(loc.value)>
 	</cfif>
 
@@ -295,7 +295,7 @@
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfargument name="errorElement" type="any" required="false" default="div">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -319,7 +319,7 @@
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfargument name="errorElement" type="any" required="false" default="div">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -349,7 +349,7 @@
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfargument name="errorElement" type="any" required="false" default="div">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property,options,includeBlank,multiple,valueField,textField,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -384,7 +384,7 @@
 	<cfargument name="append" type="any" required="false" default="">
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -409,7 +409,7 @@
 	<cfargument name="append" type="any" required="false" default="">
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "name,value,checked,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -434,7 +434,7 @@
 	<cfargument name="append" type="any" required="false" default="">
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "name,value,checked,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -458,7 +458,7 @@
 	<cfargument name="append" type="any" required="false" default="">
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -476,12 +476,12 @@
 <cffunction name="hiddenFieldTag" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="value" type="any" required="false" default="">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "name,value">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset loc.value = $formValue(argumentCollection=arguments)>
-	<cfif application.settings.obfuscateURLs AND structKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
+	<cfif application.settings.obfuscateURLs AND StructKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
 		<cfset loc.value = obfuscateParam(loc.value)>
 	</cfif>
 
@@ -503,7 +503,7 @@
 	<cfargument name="append" type="any" required="false" default="">
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -526,7 +526,7 @@
 	<cfargument name="append" type="any" required="false" default="">
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -555,7 +555,7 @@
 	<cfargument name="append" type="any" required="false" default="">
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "name,value,options,includeBlank,multiple,valueField,textField,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -595,8 +595,8 @@
 	<cfset arguments.$loopTo = arguments.endYear>
 	<cfset arguments.$type = "year">
 	<cfset arguments.$step = 1>
-	<cfset structDelete(arguments, "startYear")>
-	<cfset structDelete(arguments, "endYear")>
+	<cfset StructDelete(arguments, "startYear")>
+	<cfset StructDelete(arguments, "endYear")>
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
@@ -619,7 +619,7 @@
 	<cfelseif arguments.monthDisplay IS "names">
 		<cfset arguments.$optionNames = "January,February,March,April,May,June,July,August,September,October,November,December">
 	</cfif>
-	<cfset structDelete(arguments, "monthDisplay")>
+	<cfset StructDelete(arguments, "monthDisplay")>
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
@@ -666,7 +666,7 @@
 	<cfset arguments.$loopTo = 59>
 	<cfset arguments.$type = "minute">
 	<cfset arguments.$step = arguments.minuteStep>
-	<cfset structDelete(arguments, "minuteStep")>
+	<cfset StructDelete(arguments, "minuteStep")>
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
@@ -753,7 +753,7 @@
 	<cfargument name="timeSeparator" type="any" required="false" default=":" hint="Use to change the character that is displayed between the time select tags ">
 	<cfargument name="separator" type="any" required="false" default=" - " hint="Use to change the character that is displayed between the first and second set of select tags ">
 	<cfargument name="$functionName" type="any" required="true">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfset loc.html = "">
 	<cfset loc.separator = arguments.separator>
@@ -783,9 +783,9 @@
 	<cfargument name="objectName" type="any" required="false" default="">
 	<cfargument name="property" type="any" required="false" default="">
 	<cfargument name="$functionName" type="any" required="true">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
-	<cfif len(arguments.objectName) IS NOT 0>
+	<cfif Len(arguments.objectName) IS NOT 0>
 		<cfset loc.name = "#listLast(arguments.objectName,".")#[#arguments.property#]">
 		<cfset arguments.$id = "#listLast(arguments.objectName,".")#-#arguments.property#">
 		<cfset loc.value = $formValue(argumentCollection=arguments)>
@@ -830,7 +830,7 @@
 	<cfargument name="$id" type="any" required="false" default="#arguments.name#">
 	<cfargument name="$optionNames" type="any" required="false" default="">
 	<cfargument name="$step" type="any" required="false" default="">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "name,value,includeBlank,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,$type,$loopFrom,$loopTo,$id,$optionNames,$step">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 

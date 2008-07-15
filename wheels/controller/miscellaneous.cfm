@@ -8,20 +8,20 @@
 	<cfargument name="onlyPath" type="boolean" required="false" default="true">
 	<cfargument name="host" type="string" required="false" default="">
 	<cfargument name="protocol" type="string" required="false" default="">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<!--- build the link --->
-	<cfif len(arguments.route) IS 0 AND len(arguments.controller) IS 0 AND len(arguments.action) IS 0 AND arguments.id IS 0 AND len(arguments.params) IS 0>
+	<cfif Len(arguments.route) IS 0 AND Len(arguments.controller) IS 0 AND Len(arguments.action) IS 0 AND arguments.id IS 0 AND Len(arguments.params) IS 0>
 		<cfset loc.url = "/">
 	<cfelse>
 		<cfset loc.url = application.wheels.webPath & listLast(cgi.script_name, "/")>
-		<cfif len(arguments.route) IS NOT 0>
+		<cfif Len(arguments.route) IS NOT 0>
 			<!--- link for a named route --->
 			<cfset loc.route = application.wheels.routes[application.wheels.namedRoutePositions[arguments.route]]>
 			<cfloop list="#loc.route.pattern#" index="loc.i" delimiters="/">
 				<cfif loc.i Contains "[">
 					<!--- get param from arguments --->
-					<cfset loc.url = loc.url & "/" & arguments[mid(loc.i, 2, len(loc.i)-2)]>
+					<cfset loc.url = loc.url & "/" & arguments[mid(loc.i, 2, Len(loc.i)-2)]>
 				<cfelse>
 					<!--- add hard coded param from route --->
 					<cfset loc.url = loc.url & "/" & loc.i>
@@ -29,14 +29,14 @@
 			</cfloop>
 		<cfelse>
 			<!--- link based on controller/action/id --->
-			<cfif len(arguments.controller) IS NOT 0>
+			<cfif Len(arguments.controller) IS NOT 0>
 				<!--- add controller from arguments --->
 				<cfset loc.url = loc.url & "/" & arguments.controller>
 			<cfelse>
 				<!--- keep the controller name from the current request --->
 				<cfset loc.url = loc.url & "/" & variables.params.controller>
 			</cfif>
-			<cfif len(arguments.action) IS NOT 0>
+			<cfif Len(arguments.action) IS NOT 0>
 				<!--- add the action --->
 				<cfset loc.url = loc.url & "/" & arguments.action>
 			</cfif>
@@ -49,11 +49,11 @@
 				</cfif>
 			</cfif>
 		</cfif>
-		<cfif len(arguments.params) IS NOT 0>
+		<cfif Len(arguments.params) IS NOT 0>
 			<!--- add the params and obfuscate if necessary --->
 			<cfset loc.url = loc.url & $constructParams(arguments.params)>
 		</cfif>
-		<cfif len(arguments.anchor) IS NOT 0>
+		<cfif Len(arguments.anchor) IS NOT 0>
 			<!--- add the anchor --->
 			<cfset loc.url = loc.url & "##" & arguments.anchor>
 		</cfif>
@@ -63,12 +63,12 @@
 
 	<cfif NOT arguments.onlyPath>
 		<!--- add host and protocol --->
-		<cfif len(arguments.host) IS NOT 0>
+		<cfif Len(arguments.host) IS NOT 0>
 			<cfset loc.url = arguments.host & loc.url>
 		<cfelse>
 			<cfset loc.url = cgi.server_name & loc.url>
 		</cfif>
-		<cfif len(arguments.protocol) IS NOT 0>
+		<cfif Len(arguments.protocol) IS NOT 0>
 			<cfset loc.url = arguments.protocol & "://" & loc.url>
 		<cfelse>
 			<cfset loc.url = lCase(spanExcluding(cgi.server_protocol, "/")) & "://" & loc.url>
@@ -117,7 +117,7 @@
 <cffunction name="sendEmail" returntype="void" access="public" output="false">
 	<cfargument name="template" type="string" required="true">
 	<cfargument name="layout" type="any" required="false" default="false">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfsavecontent variable="request.wheels.response">
 		<cfinclude template="../../views/email/#replaceNoCase(arguments.template, '.cfm', '')#.cfm">
@@ -139,14 +139,14 @@
 	<cfset loc.cfmailAttributes = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext">
 	<cfloop collection="#loc.attributes#" item="loc.i">
 		<cfif listFindNoCase(loc.cfmailAttributes, loc.i) IS 0>
-			<cfset structDelete(loc.attributes, loc.i)>
+			<cfset StructDelete(loc.attributes, loc.i)>
 		</cfif>
 	</cfloop>
 
 	<cfmail from="#arguments.from#" to="#arguments.to#" subject="#arguments.subject#" attributecollection="#loc.attributes#">#trim(request.wheels.response)#</cfmail>
 
 	<!--- delete the response so that Wheels does not think we have rendered an actual response to the browser --->
-	<cfset structDelete(request.wheels, "response")>
+	<cfset StructDelete(request.wheels, "response")>
 
 </cffunction>
 
@@ -155,15 +155,15 @@
 	<cfargument name="name" type="string" required="false" default="">
 	<cfargument name="type" type="string" required="false" default="">
 	<cfargument name="disposition" type="string" required="false" default="attachment">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfset arguments.file = replace(arguments.file, "\", "/", "all")>
-	<cfset loc.path = reverse(listRest(reverse(arguments.file), "/"))>
+	<cfset loc.path = Reverse(ListRest(Reverse(arguments.file), "/"))>
 	<cfset loc.folder = application.settings.paths.files>
-	<cfif len(loc.path) IS NOT 0>
+	<cfif Len(loc.path) IS NOT 0>
 		<cfset loc.folder = loc.folder & "/" & loc.path>
 		<cfset loc.file = replace(arguments.file, loc.path, "")>
-		<cfset loc.file = right(loc.file, len(loc.file)-1)>
+		<cfset loc.file = Right(loc.file, Len(loc.file)-1)>
 	<cfelse>
 		<cfset loc.file = arguments.file>
 	</cfif>
@@ -178,7 +178,7 @@
 
 	<cfset loc.fullPath = loc.folder & "/" & loc.file>
 
-	<cfif len(arguments.name) IS NOT 0>
+	<cfif Len(arguments.name) IS NOT 0>
 		<cfset loc.name = arguments.name>
 	<cfelse>
 		<cfset loc.name = loc.file>

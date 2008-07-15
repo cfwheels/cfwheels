@@ -7,7 +7,7 @@
 <cffunction name="flashDelete" returntype="void" access="public" output="false">
 	<cfargument name="key" type="string" required="true">
 	<cflock scope="session" type="exclusive" timeout="30">
-		<cfset structDelete(session.flash, arguments.key)>
+		<cfset StructDelete(session.flash, arguments.key)>
 	</cflock>
 </cffunction>
 
@@ -31,7 +31,7 @@
 	<cfargument name="key" type="string" required="true">
 	<cfset var result = false>
 	<cflock scope="session" type="readonly" timeout="30">
-		<cfif structKeyExists(session.flash, arguments.key)>
+		<cfif StructKeyExists(session.flash, arguments.key)>
 			<cfset result = true>
 		</cfif>
 	</cflock>
@@ -47,7 +47,7 @@
 <cffunction name="flash" returntype="any" access="public" output="false">
 	<cfset var result = "">
 	<cflock scope="session" type="readonly" timeout="30">
-		<cfif structKeyExists(session.flash, arguments[1])>
+		<cfif StructKeyExists(session.flash, arguments[1])>
 			<cfset result = session.flash[arguments[1]]>
 		</cfif>
 	</cflock>

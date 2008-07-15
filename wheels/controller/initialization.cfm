@@ -7,7 +7,7 @@
 	<cfset variables.wheels.afterFilters = arrayNew(1)>
 	<cfset variables.wheels.cachableActions = arrayNew(1)>
 
-	<cfif structKeyExists(variables, "init")>
+	<cfif StructKeyExists(variables, "init")>
 		<cfset init()>
 	</cfif>
 
@@ -16,7 +16,7 @@
 
 <cffunction name="$createControllerObject" returntype="any" access="public" output="false">
 	<cfargument name="params" type="struct" required="true">
-	<cfreturn createObject("component", "controllerRoot.#variables.wheels.name#").$initControllerObject(variables.wheels.name, arguments.params)>
+	<cfreturn CreateObject("component", "controllerRoot.#variables.wheels.name#").$initControllerObject(variables.wheels.name, arguments.params)>
 </cffunction>
 
 <cffunction name="$initControllerObject" returntype="any" access="public" output="false">

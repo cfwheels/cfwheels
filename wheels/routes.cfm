@@ -7,7 +7,7 @@
 <cfset loc.pos = 0>
 <cfloop array="#application.wheels.routes#" index="loc.i">
 	<cfset loc.pos = loc.pos + 1>
-	<cfif structKeyExists(loc.i, "name")>
+	<cfif StructKeyExists(loc.i, "name")>
 		<cfset application.wheels.namedRoutePositions[loc.i.name] = loc.pos>
 	</cfif>
 </cfloop>

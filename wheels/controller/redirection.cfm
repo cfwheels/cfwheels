@@ -4,10 +4,10 @@
 	<cfargument name="addToken" type="boolean" required="false" default="false">
 	<cfargument name="statusCode" type="numeric" required="false" default=302>
 	<!--- Accepts URLFor arguments --->
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfif arguments.back>
-		<cfif len(cgi.http_referer) IS 0 OR cgi.http_referer Does Not Contain cgi.server_name>
+		<cfif Len(cgi.http_referer) IS 0 OR cgi.http_referer Does Not Contain cgi.server_name>
 			<cfset loc.url = "/">
 		<cfelse>
 			<cfset loc.url = cgi.http_referer>

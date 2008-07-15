@@ -1,17 +1,17 @@
 <cffunction name="capitalize" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">
-	<cfif len(arguments.text)>
-		<cfreturn uCase(left(arguments.text, 1)) & mid(arguments.text, 2, len(arguments.text)-1)>
+	<cfif Len(arguments.text)>
+		<cfreturn UCase(Left(arguments.text, 1)) & mid(arguments.text, 2, Len(arguments.text)-1)>
 	</cfif>
 </cffunction>
 
 <cffunction name="titleize" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfset loc.result = "">
 	<cfloop list="#arguments.text#" delimiters=" " index="loc.i">
-		<cfset loc.result = listAppend(loc.result, capitalize(loc.i), " ")>
+		<cfset loc.result = ListAppend(loc.result, capitalize(loc.i), " ")>
 	</cfloop>
 
 	<cfreturn loc.result>
@@ -19,7 +19,7 @@
 
 <cffunction name="simpleFormat" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="yes">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<!--- Replace single newline characters with HTML break tags and double newline characters with HTML paragraph tags --->
 	<cfset loc.output = trim(arguments.text)>
@@ -36,12 +36,12 @@
 	<cfargument name="text" type="any" required="yes">
 	<cfargument name="link" type="any" required="no" default="all">
 	<cfargument name="attributes" type="any" required="no" default="">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfset loc.urlRegex = "(?ix)([^(url=)|(href=)'""])(((https?)://([^:]+\:[^@]*@)?)([\d\w\-]+\.)?[\w\d\-\.]+\.(com|net|org|info|biz|tv|co\.uk|de|ro|it)(( / [\w\d\.\-@%\\\/:]* )+)?(\?[\w\d\?%,\.\/\##!@:=\+~_\-&amp;]*(?<![\.]))?)">
 	<cfset loc.mailRegex = "(([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,}))">
 
-	<cfif len(arguments.attributes) IS NOT 0>
+	<cfif Len(arguments.attributes) IS NOT 0>
 		<!--- Add a space to the beginning so it can be directly inserted in the HTML link element below --->
 		<cfset arguments.attributes = " " & arguments.attributes>
 	</cfif>
@@ -81,9 +81,9 @@
 	<cfargument name="phrase" type="any" required="true">
 	<cfargument name="radius" type="any" required="false" default="100">
 	<cfargument name="excerptString" type="any" required="false" default="...">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
-	<cfset loc.pos = findNoCase(arguments.phrase, arguments.text, 1)>
+	<cfset loc.pos = FindNoCase(arguments.phrase, arguments.text, 1)>
 	<cfif loc.pos IS NOT 0>
 		<cfset loc.excerptStringStart = arguments.excerptString>
 		<cfset loc.excerptStringEnd = arguments.excerptString>
@@ -92,11 +92,11 @@
 			<cfset loc.start = 1>
 			<cfset loc.excerptStringStart = "">
 		</cfif>
-		<cfset loc.count = len(arguments.phrase)+(arguments.radius*2)>
-		<cfif loc.count GT (len(arguments.text)-loc.start)>
+		<cfset loc.count = Len(arguments.phrase)+(arguments.radius*2)>
+		<cfif loc.count GT (Len(arguments.text)-loc.start)>
 			<cfset loc.excerptStringEnd = "">
 		</cfif>
-		<cfset loc.output = loc.excerptStringStart & mid(arguments.text, loc.start, loc.count) & loc.excerptStringEnd>
+		<cfset loc.output = loc.excerptStringStart & Mid(arguments.text, loc.start, loc.count) & loc.excerptStringEnd>
 	<cfelse>
 		<cfset loc.output = "">
 	</cfif>
@@ -108,10 +108,10 @@
 	<cfargument name="text" type="any" required="true">
 	<cfargument name="length" type="any" required="true">
 	<cfargument name="truncateString" type="any" required="false" default="...">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
-	<cfif len(arguments.text) GT arguments.length>
-		<cfset loc.output = left(arguments.text, arguments.length-3) & arguments.truncateString>
+	<cfif Len(arguments.text) GT arguments.length>
+		<cfset loc.output = Left(arguments.text, arguments.length-3) & arguments.truncateString>
 	<cfelse>
 		<cfset loc.output = arguments.text>
 	</cfif>
