@@ -4,7 +4,7 @@
 </cffunction>
 
 <cffunction name="$getAttributes" returntype="string" access="private" output="false">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfset loc.attributes = "">
 	<cfloop collection="#arguments#" item="loc.i">
@@ -20,10 +20,10 @@
 	<cfargument name="options" type="any" required="true">
 	<cfargument name="valueField" type="any" required="false" default="id">
 	<cfargument name="textField" type="any" required="false" default="name">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfset loc.value = $formValue(argumentCollection=arguments)>
-	<cfif application.settings.obfuscateURLs AND structKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
+	<cfif application.settings.obfuscateURLs AND StructKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
 		<cfset loc.value = obfuscateParam(loc.value)>
 	</cfif>
 
@@ -33,7 +33,7 @@
 				<cfloop query="arguments.options">
 					<cfset loc.optionValue = arguments.options[arguments.valueField][currentrow]>
 					<cfset loc.optionText = arguments.options[arguments.textField][currentrow]>
-					<cfif application.settings.obfuscateURLs AND structKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
+					<cfif application.settings.obfuscateURLs AND StructKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
 						<cfset loc.optionValue = obfuscateParam(loc.optionValue)>
 					</cfif>
 					<option value="#loc.optionValue#"<cfif listFindNoCase(loc.value, loc.optionValue) IS NOT 0> selected="selected"</cfif>>#loc.optionText#</option>
@@ -42,7 +42,7 @@
 				<cfloop collection="#arguments.options#" item="loc.i">
 					<cfset loc.optionValue = loc.i>
 					<cfset loc.optionText = arguments.options[loc.i]>
-					<cfif application.settings.obfuscateURLs AND structKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
+					<cfif application.settings.obfuscateURLs AND StructKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
 						<cfset loc.optionValue = obfuscateParam(loc.optionValue)>
 					</cfif>
 					<option value="#loc.optionValue#"<cfif listFindNoCase(loc.value, loc.optionValue) IS NOT 0> selected="selected"</cfif>>#loc.optionText#</option>
@@ -51,7 +51,7 @@
 				<cfloop from="1" to="#arrayLen(arguments.options)#" index="loc.i">
 					<cfset loc.optionValue = loc.i>
 					<cfset loc.optionText = arguments.options[loc.i]>
-					<cfif application.settings.obfuscateURLs AND structKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
+					<cfif application.settings.obfuscateURLs AND StructKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
 						<cfset loc.optionValue = obfuscateParam(loc.optionValue)>
 					</cfif>
 					<option value="#loc.optionValue#"<cfif listFindNoCase(loc.value, loc.optionValue) IS NOT 0> selected="selected"</cfif>>#loc.optionText#</option>
@@ -60,7 +60,7 @@
 				<cfloop list="#arguments.options#" index="loc.i">
 					<cfset loc.optionValue = loc.i>
 					<cfset loc.optionText = loc.i>
-					<cfif application.settings.obfuscateURLs AND structKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
+					<cfif application.settings.obfuscateURLs AND StructKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
 						<cfset loc.optionValue = obfuscateParam(loc.optionValue)>
 					</cfif>
 					<option value="#loc.optionValue#"<cfif listFindNoCase(loc.value, loc.optionValue) IS NOT 0> selected="selected"</cfif>>#loc.optionText#</option>
@@ -77,12 +77,12 @@
 	<cfargument name="property" type="any" required="false" default="">
 	<cfargument name="name" type="any" required="false" default="">
 	<cfargument name="value" type="any" required="false" default="">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
-	<cfif len(arguments.objectName) IS NOT 0>
+	<cfif Len(arguments.objectName) IS NOT 0>
 		<!--- this is a form field for a model object --->
 		<cfset loc.object = evaluate(arguments.objectName)>
-		<cfif structKeyExists(loc.object, arguments.property)>
+		<cfif StructKeyExists(loc.object, arguments.property)>
 			<cfset loc.value = loc.object[arguments.property]>
 		<cfelse>
 			<cfset loc.value = "">
@@ -99,9 +99,9 @@
 	<cfargument name="property" type="any" required="false" default="">
 	<cfargument name="name" type="any" required="false" default="">
 	<cfargument name="value" type="any" required="false" default="">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
-	<cfif len(arguments.objectName) IS NOT 0>
+	<cfif Len(arguments.objectName) IS NOT 0>
 		<!--- this is a form field for a model object --->
 		<cfset loc.object = evaluate(arguments.objectName)>
 		<cfset loc.error = ArrayLen(loc.object.errorsOn(arguments.property))>
@@ -124,22 +124,22 @@
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfargument name="errorElement" type="any" required="false" default="div">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfset loc.output = "">
 	<cfif $formHasError(argumentCollection=arguments)>
 		<cfset loc.output = loc.output & "<#arguments.errorElement# class=""field-with-errors"">">
 	</cfif>
 
-	<cfif len(arguments.label) IS NOT 0>
+	<cfif Len(arguments.label) IS NOT 0>
 		<cfset loc.output = loc.output & arguments.prependToLabel>
-		<cfif len(arguments.objectName) IS NOT 0>
+		<cfif Len(arguments.objectName) IS NOT 0>
 			<cfset loc.output = loc.output & "<label for=""#listLast(arguments.objectName,'.')#-#arguments.property#""">
 		<cfelse>
 			<cfset loc.output = loc.output & "<label for=""#arguments.name#""">
 		</cfif>
 		<cfloop collection="#arguments#" item="loc.i">
-			<cfif left(loc.i, 5) IS "label" AND Len(loc.i) GT 5>
+			<cfif Left(loc.i, 5) IS "label" AND Len(loc.i) GT 5>
 				<cfset loc.output = loc.output & " #replace(loc.i, 'label', '')#=""#arguments[loc.i]#""">
 			</cfif>
 		</cfloop>
@@ -165,11 +165,11 @@
 	<cfargument name="prependToLabel" type="any" required="false" default="">
 	<cfargument name="appendToLabel" type="any" required="false" default="">
 	<cfargument name="errorElement" type="any" required="false" default="div">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfset loc.output = "">
 	<cfset loc.output = loc.output & arguments.append>
-	<cfif len(arguments.label) IS NOT 0>
+	<cfif Len(arguments.label) IS NOT 0>
 		<cfif arguments.wrapLabel>
 			<cfset loc.output = loc.output & "</label>">
 			<cfset loc.output = loc.output & arguments.appendToLabel>

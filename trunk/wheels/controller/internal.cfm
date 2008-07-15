@@ -1,6 +1,6 @@
 <cffunction name="$constructParams" returntype="string" access="private" output="false">
 	<cfargument name="params" type="any" required="true">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfset loc.delim = "?">
 	<cfif application.settings.obfuscateUrls>

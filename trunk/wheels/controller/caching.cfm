@@ -1,7 +1,7 @@
 <cffunction name="caches" returntype="void" access="public" output="false">
 	<cfargument name="actions" type="string" required="false" default="">
 	<cfargument name="time" type="numeric" required="false" default="#application.settings.defaultCacheTime#">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfloop list="#arguments.actions#" index="loc.i">
 		<cfset loc.thisAction = structNew()>

@@ -16,7 +16,7 @@
 </cfif>
 
 <cffunction name="onApplicationStart" output="false">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfset application.wheels = structNew()>
 	<cfset application.wheels.version = "0.8">
 	<cfset application.wheels.controllers = structNew()>
@@ -36,7 +36,7 @@
 	<cfset application.wheels.cache.external.query = structNew()>
 	<cfset application.wheels.cacheLastCulledAt = now()>
 	<!--- load environment settings --->
-	<cfif structKeyExists(URL, "reload") AND NOT isBoolean(URL.reload) AND len(url.reload) AND (len(application.settings.reloadPassword) IS 0 OR (structKeyExists(URL, "password") AND URL.password IS application.settings.reloadPassword))>
+	<cfif StructKeyExists(URL, "reload") AND NOT isBoolean(URL.reload) AND Len(url.reload) AND (Len(application.settings.reloadPassword) IS 0 OR (StructKeyExists(URL, "password") AND URL.password IS application.settings.reloadPassword))>
 		<cfset application.settings.environment = URL.reload>
 	<cfelse>
 		<cfinclude template="../config/environment.cfm">
@@ -46,7 +46,7 @@
 	<!--- Load developer routes and add wheels default ones --->
 	<cfinclude template="../config/routes.cfm">
 	<cfinclude template="routes.cfm">
-	<cfset application.wheels.webPath = replace(cgi.script_name, reverse(spanExcluding(reverse(cgi.script_name), "/")), "")>
+	<cfset application.wheels.webPath = replace(cgi.script_name, Reverse(spanExcluding(Reverse(cgi.script_name), "/")), "")>
 	<cftry>
 		<!--- determine and set database brand --->
 		<cfinclude template="../config/database.cfm">
@@ -57,12 +57,12 @@
 			<cfset loc.adapterName = "MicrosoftSQLServer">
 		</cfif>
 		<cfif loc.info.recordCount>
-			<cfset application.wheels.adapter = createObject("component", "wheels.model.adapters.#loc.adapterName#")>
+			<cfset application.wheels.adapter = CreateObject("component", "wheels.model.adapters.#loc.adapterName#")>
 		</cfif>
 	<cfcatch>
 	</cfcatch>
 	</cftry>
-	<cfset application.wheels.dispatch = createObject("component", "wheels.dispatch")>
+	<cfset application.wheels.dispatch = CreateObject("component", "wheels.dispatch")>
 	<cfinclude template="../events/onapplicationstart.cfm">
 </cffunction>
 
@@ -74,18 +74,18 @@
 
 <cffunction name="onRequestStart" output="false">
 	<cfargument name="targetpage">
-	<cfset var loc = structNew()>
-	<cfif structKeyExists(URL, "reload") AND (len(application.settings.reloadPassword) IS 0 OR (structKeyExists(URL, "password") AND URL.password IS application.settings.reloadPassword))>
+	<cfset var loc = {}>
+	<cfif StructKeyExists(URL, "reload") AND (Len(application.settings.reloadPassword) IS 0 OR (StructKeyExists(URL, "password") AND URL.password IS application.settings.reloadPassword))>
 		<cflock scope="application" type="exclusive" timeout="30">
 			<cfset onApplicationStart()>
 		</cflock>
 	</cfif>
 	<cflock scope="application" type="readonly" timeout="30">
 		<cfif application.settings.environment IS "maintenance">
-			<cfif structKeyExists(URL, "except")>
+			<cfif StructKeyExists(URL, "except")>
 				<cfset application.settings.ipExceptions = URL.except>
 			</cfif>
-			<cfif len(application.settings.ipExceptions) IS 0 OR listFind(application.settings.ipExceptions, cgi.remote_addr) IS 0>
+			<cfif Len(application.settings.ipExceptions) IS 0 OR listFind(application.settings.ipExceptions, cgi.remote_addr) IS 0>
 				<cfinclude template="../events/onmaintenance.cfm">
 				<cfabort>
 			</cfif>
@@ -129,7 +129,7 @@
 
 <cffunction name="onRequestEnd" output="true">
 	<cfargument name="targetpage">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfif application.settings.showDebugInformation>
 		<cfset request.wheels.execution.components.requestEnd = getTickCount()>
 	</cfif>

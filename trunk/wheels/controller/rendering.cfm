@@ -1,5 +1,5 @@
 <cffunction name="renderPageToString" returntype="string" access="public" output="false">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfset renderPage(argumentCollection=arguments)>
 	<cfset loc.result = request.wheels.response>
@@ -14,7 +14,7 @@
 	<cfargument name="layout" type="any" required="false" default="true">
 	<cfargument name="cache" type="any" required="false" default="">
 	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.settings.showDebugInformation#">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfif application.settings.showDebugInformation>
 		<cfset request.wheels.execution.components.view = getTickCount()>
@@ -78,7 +78,7 @@
 </cffunction>
 
 <cffunction name="$includeOrRenderPartial" returntype="void" access="private" output="false">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<!--- double-checked lock --->
 	<cfif application.settings.cachePartials AND (isNumeric(arguments.cache) OR (isBoolean(arguments.cache) AND arguments.cache))>
@@ -113,14 +113,14 @@
 </cffunction>
 
 <cffunction name="$includePartial" returntype="string" access="private" output="false">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
-	<cfif left(arguments.name, 1) IS "/">
+	<cfif Left(arguments.name, 1) IS "/">
 		<!--- Include a file in a sub folder to view --->
 		<cfset loc.result = $include("../../views#Reverse(ListRest(Reverse(arguments.name), '/'))#/_#Reverse(ListFirst(Reverse(arguments.name), '/'))#.cfm")>
 	<cfelseif arguments.name  Contains "/">
 		<!--- Include a file in a sub folder of the curent controller --->
-		<cfset loc.result = $include("../../views/#variables.params.controller#/#reverse(listRest(reverse(arguments.name), '/'))#/_#reverse(listFirst(reverse(arguments.name), '/'))#.cfm")>
+		<cfset loc.result = $include("../../views/#variables.params.controller#/#Reverse(ListRest(Reverse(arguments.name), '/'))#/_#Reverse(listFirst(Reverse(arguments.name), '/'))#.cfm")>
 	<cfelse>
 		<!--- Include a file in the current controller's view folder --->
 		<cfset loc.result = $include("../../views/#variables.params.controller#/_#arguments.name#.cfm")>
@@ -131,7 +131,7 @@
 
 <cffunction name="$include" returntype="string" access="private" output="false">
 	<cfargument name="$path" type="string" required="true">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfsavecontent variable="loc.result">
 		<cfinclude template="#arguments.$path#">
 	</cfsavecontent>

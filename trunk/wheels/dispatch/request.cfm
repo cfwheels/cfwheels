@@ -1,5 +1,5 @@
 <cffunction name="request" output="false">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfif application.settings.showDebugInformation>
 		<cfset request.wheels.execution.components.setup = getTickCount()>
@@ -9,7 +9,7 @@
 	<cfif cgi.path_info IS cgi.script_name OR cgi.path_info IS "/" OR cgi.path_info IS "">
 		<cfset loc.route = "">
 	<cfelse>
-		<cfset loc.route = right(cgi.path_info, len(cgi.path_info)-1)>
+		<cfset loc.route = Right(cgi.path_info, Len(cgi.path_info)-1)>
 	</cfif>
 	<cfloop from="1" to="#arrayLen(application.wheels.routes)#" index="loc.i">
 		<cfset loc.currentRoute = application.wheels.routes[loc.i].pattern>
@@ -24,7 +24,7 @@
 					<cfset loc.pos = loc.pos + 1>
 					<cfset loc.thisRoute = replaceList(loc.j, "[,]", ",")>
 					<cfset loc.thisURL = listGetAt(loc.route, loc.pos, "/")>
-					<cfif left(loc.j, 1) IS NOT "[" AND loc.thisRoute IS NOT loc.thisURL>
+					<cfif Left(loc.j, 1) IS NOT "[" AND loc.thisRoute IS NOT loc.thisURL>
 						<cfset loc.match = false>
 					</cfif>
 				</cfloop>
@@ -35,7 +35,7 @@
 			</cfif>
 		</cfif>
 	</cfloop>
-	<cfif NOT structKeyExists(loc, "foundRoute")>
+	<cfif NOT StructKeyExists(loc, "foundRoute")>
 		<cfthrow type="Wheels" message="Route Not Found" extendedInfo="Make sure there is a route setup in your <tt>config/routes.cfm</tt> file that matches the <tt>#loc.route#</tt>request">
 	</cfif>
 
@@ -44,16 +44,16 @@
 	<cfset loc.pos = 0>
 	<cfloop list="#loc.foundRoute.pattern#" delimiters="/" index="loc.i">
 		<cfset loc.pos = loc.pos + 1>
-		<cfif left(loc.i, 1) IS "[">
+		<cfif Left(loc.i, 1) IS "[">
 			<cfset loc.params[replaceList(loc.i, "[,]", ",")] = listGetAt(loc.route, loc.pos, "/")>
 		</cfif>
 	</cfloop>
 
 	<!--- add controller and action unless they already exist --->
-	<cfif NOT structKeyExists(loc.params, "controller")>
+	<cfif NOT StructKeyExists(loc.params, "controller")>
 		<cfset loc.params.controller = loc.foundRoute.controller>
 	</cfif>
-	<cfif NOT structKeyExists(loc.params, "action")>
+	<cfif NOT StructKeyExists(loc.params, "action")>
 		<cfset loc.params.action = loc.foundRoute.action>
 	</cfif>
 
@@ -79,29 +79,29 @@
 				<cfset loc.temp = listToArray(loc.i, "(")>
 				<cfset loc.firstKey = loc.temp[1]>
 				<cfset loc.secondKey = spanExcluding(loc.temp[2], ")")>
-				<cfif NOT structKeyExists(loc.dates, loc.firstKey)>
+				<cfif NOT StructKeyExists(loc.dates, loc.firstKey)>
 					<cfset loc.dates[loc.firstKey] = structNew()>
 				</cfif>
 				<cfset loc.dates[loc.firstKey][replaceNoCase(loc.secondKey, "$", "")] = form[loc.i]>
 			</cfif>
 		</cfloop>
 		<cfloop collection="#loc.dates#" item="loc.i">
-			<cfif NOT structKeyExists(loc.dates[loc.i], "year")>
+			<cfif NOT StructKeyExists(loc.dates[loc.i], "year")>
 				<cfset loc.dates[loc.i].year = 1899>
 			</cfif>
-			<cfif NOT structKeyExists(loc.dates[loc.i], "month")>
+			<cfif NOT StructKeyExists(loc.dates[loc.i], "month")>
 				<cfset loc.dates[loc.i].month = 12>
 			</cfif>
-			<cfif NOT structKeyExists(loc.dates[loc.i], "day")>
+			<cfif NOT StructKeyExists(loc.dates[loc.i], "day")>
 				<cfset loc.dates[loc.i].day = 30>
 			</cfif>
-			<cfif NOT structKeyExists(loc.dates[loc.i], "hour")>
+			<cfif NOT StructKeyExists(loc.dates[loc.i], "hour")>
 				<cfset loc.dates[loc.i].hour = 0>
 			</cfif>
-			<cfif NOT structKeyExists(loc.dates[loc.i], "minute")>
+			<cfif NOT StructKeyExists(loc.dates[loc.i], "minute")>
 				<cfset loc.dates[loc.i].minute = 0>
 			</cfif>
-			<cfif NOT structKeyExists(loc.dates[loc.i], "second")>
+			<cfif NOT StructKeyExists(loc.dates[loc.i], "second")>
 				<cfset loc.dates[loc.i].second = 0>
 			</cfif>
 			<cftry>
@@ -110,23 +110,23 @@
 				<cfset form[loc.i] = "">
 			</cfcatch>
 			</cftry>
-			<cfif structKeyExists(form, "#loc.i#($year)")>
-				<cfset structDelete(form, "#loc.i#($year)")>
+			<cfif StructKeyExists(form, "#loc.i#($year)")>
+				<cfset StructDelete(form, "#loc.i#($year)")>
 			</cfif>
-			<cfif structKeyExists(form, "#loc.i#($month)")>
-				<cfset structDelete(form, "#loc.i#($month)")>
+			<cfif StructKeyExists(form, "#loc.i#($month)")>
+				<cfset StructDelete(form, "#loc.i#($month)")>
 			</cfif>
-			<cfif structKeyExists(form, "#loc.i#($day)")>
-				<cfset structDelete(form, "#loc.i#($day)")>
+			<cfif StructKeyExists(form, "#loc.i#($day)")>
+				<cfset StructDelete(form, "#loc.i#($day)")>
 			</cfif>
-			<cfif structKeyExists(form, "#loc.i#($hour)")>
-				<cfset structDelete(form, "#loc.i#($hour)")>
+			<cfif StructKeyExists(form, "#loc.i#($hour)")>
+				<cfset StructDelete(form, "#loc.i#($hour)")>
 			</cfif>
-			<cfif structKeyExists(form, "#loc.i#($minute)")>
-				<cfset structDelete(form, "#loc.i#($minute)")>
+			<cfif StructKeyExists(form, "#loc.i#($minute)")>
+				<cfset StructDelete(form, "#loc.i#($minute)")>
 			</cfif>
-			<cfif structKeyExists(form, "#loc.i#($second)")>
-				<cfset structDelete(form, "#loc.i#($second)")>
+			<cfif StructKeyExists(form, "#loc.i#($second)")>
+				<cfset StructDelete(form, "#loc.i#($second)")>
 			</cfif>
 		</cfloop>
 
@@ -137,7 +137,7 @@
 				<!--- Model object form field, build a struct to hold the data, named after the model object --->
 				<cfset loc.objectName = lCase(mid(loc.i, loc.match.pos[2], loc.match.len[2]))>
 				<cfset loc.fieldName = lCase(mid(loc.i, loc.match.pos[3], loc.match.len[3]))>
-				<cfif NOT structKeyExists(loc.params, loc.objectName)>
+				<cfif NOT StructKeyExists(loc.params, loc.objectName)>
 					<cfset loc.params[loc.objectName] = structNew()>
 				</cfif>
 				<cfset loc.params[loc.objectName][loc.fieldName] = form[loc.i]>
@@ -154,7 +154,7 @@
 
 	<!--- Create an empty flash unless it already exists --->
 	<cflock scope="session" type="readonly" timeout="30">
-		<cfset loc.flashExists = structKeyExists(session, "flash")>
+		<cfset loc.flashExists = StructKeyExists(session, "flash")>
 	</cflock>
 	<cfif NOT loc.flashExists>
 		<cflock scope="session" type="exclusive" timeout="30">
@@ -188,9 +188,9 @@
 	<cfset loc.verifications = loc.controller.$getVerifications()>
 	<cfset loc.abort = false>
 	<cfif arrayLen(loc.verifications) IS NOT 0>
-		<cfloop from="1" to="#arraylen(loc.verifications)#" index="loc.i">
+		<cfloop from="1" to="#arrayLen(loc.verifications)#" index="loc.i">
 			<cfset loc.verification = loc.verifications[loc.i]>
-			<cfif	(len(loc.verification.only) IS 0 AND len(loc.verification.except) IS 0) OR (len(loc.verification.only) IS NOT 0 AND listFindNoCase(loc.verification.only, loc.params.action)) OR (len(loc.verification.except) IS NOT 0 AND NOT listFindNoCase(loc.verification.except, loc.params.action))>
+			<cfif	(Len(loc.verification.only) IS 0 AND Len(loc.verification.except) IS 0) OR (Len(loc.verification.only) IS NOT 0 AND listFindNoCase(loc.verification.only, loc.params.action)) OR (Len(loc.verification.except) IS NOT 0 AND NOT listFindNoCase(loc.verification.except, loc.params.action))>
 				<cfif isBoolean(loc.verification.post) AND ((loc.verification.post AND cgi.request_method IS NOT "post") OR (NOT loc.verification.post AND cgi.request_method IS "post"))>
 					<cfset loc.abort = true>
 				</cfif>
@@ -202,7 +202,7 @@
 				</cfif>
 				<cfif loc.verification.params IS NOT "">
 					<cfloop list="#loc.verification.params#" index="loc.j">
-						<cfif NOT structKeyExists(loc.params, loc.j)>
+						<cfif NOT StructKeyExists(loc.params, loc.j)>
 							<cfset loc.abort = true>
 						</cfif>
 					</cfloop>
@@ -210,7 +210,7 @@
 				<cfif loc.verification.session IS NOT "">
 					<cfloop list="#loc.verification.session#" index="loc.j">
 						<cflock scope="session" type="readonly" timeout="30">
-							<cfif NOT structKeyExists(session, loc.j)>
+							<cfif NOT StructKeyExists(session, loc.j)>
 								<cfset loc.abort = true>
 							</cfif>
 						</cflock>
@@ -218,7 +218,7 @@
 				</cfif>
 				<cfif loc.verification.cookie IS NOT "">
 					<cfloop list="#loc.verification.cookie#" index="loc.j">
-						<cfif NOT structKeyExists(cookie, loc.j)>
+						<cfif NOT StructKeyExists(cookie, loc.j)>
 							<cfset loc.abort = true>
 						</cfif>
 					</cfloop>
@@ -239,8 +239,8 @@
 	<!--- Call before filters on controller if they exist --->
 	<cfset loc.beforeFilters = loc.controller.$getBeforeFilters()>
 	<cfif arrayLen(loc.beforeFilters) IS NOT 0>
-		<cfloop from="1" to="#arraylen(loc.beforeFilters)#" index="loc.i">
-			<cfif	(len(loc.beforeFilters[loc.i].only) IS 0 AND len(loc.beforeFilters[loc.i].except) IS 0) OR (len(loc.beforeFilters[loc.i].only) IS NOT 0 AND listFindNoCase(loc.beforeFilters[loc.i].only, loc.params.action)) OR (len(loc.beforeFilters[loc.i].except) IS NOT 0 AND NOT listFindNoCase(loc.beforeFilters[loc.i].except, loc.params.action))>
+		<cfloop from="1" to="#arrayLen(loc.beforeFilters)#" index="loc.i">
+			<cfif	(Len(loc.beforeFilters[loc.i].only) IS 0 AND Len(loc.beforeFilters[loc.i].except) IS 0) OR (Len(loc.beforeFilters[loc.i].only) IS NOT 0 AND listFindNoCase(loc.beforeFilters[loc.i].only, loc.params.action)) OR (Len(loc.beforeFilters[loc.i].except) IS NOT 0 AND NOT listFindNoCase(loc.beforeFilters[loc.i].except, loc.params.action))>
 				<cfinvoke component="#loc.controller#" method="#loc.beforeFilters[loc.i].through#">
 			</cfif>
 		</cfloop>
@@ -285,7 +285,7 @@
 
 	<cfif application.settings.showDebugInformation>
 		<cfset request.wheels.execution.components.action = getTickCount() - request.wheels.execution.components.action>
-		<cfif structKeyExists(request.wheels.execution.components, "view")>
+		<cfif StructKeyExists(request.wheels.execution.components, "view")>
 			<cfset request.wheels.execution.components.action = request.wheels.execution.components.action - request.wheels.execution.components.view>
 		</cfif>
 		<cfset request.wheels.execution.components.afterFilters = getTickCount()>
@@ -293,8 +293,8 @@
 
 	<cfset loc.afterFilters = loc.controller.$getAfterFilters()>
 	<cfif arrayLen(loc.afterFilters) IS NOT 0>
-		<cfloop from="1" to="#arraylen(loc.afterFilters)#" index="loc.i">
-			<cfif	(len(loc.afterFilters[loc.i].only) IS 0 AND len(loc.afterFilters[loc.i].except) IS 0) OR (len(loc.afterFilters[loc.i].only) IS NOT 0 AND listFindNoCase(loc.afterFilters[loc.i].only, loc.params.action)) OR (len(loc.afterFilters[loc.i].except) IS NOT 0 AND NOT listFindNoCase(loc.afterFilters[loc.i].except, loc.params.action))>
+		<cfloop from="1" to="#arrayLen(loc.afterFilters)#" index="loc.i">
+			<cfif	(Len(loc.afterFilters[loc.i].only) IS 0 AND Len(loc.afterFilters[loc.i].except) IS 0) OR (Len(loc.afterFilters[loc.i].only) IS NOT 0 AND listFindNoCase(loc.afterFilters[loc.i].only, loc.params.action)) OR (Len(loc.afterFilters[loc.i].except) IS NOT 0 AND NOT listFindNoCase(loc.afterFilters[loc.i].except, loc.params.action))>
 				<cfinvoke component="#loc.controller#" method="#loc.afterFilters[loc.i].through#">
 			</cfif>
 		</cfloop>
@@ -317,10 +317,10 @@
 	<cfargument name="controllerName" type="string" required="true">
 	<cfargument name="actionName" type="string" required="true">
 
-	<cfif structKeyExists(arguments.controller, arguments.actionName)>
+	<cfif StructKeyExists(arguments.controller, arguments.actionName)>
 		<cfinvoke component="#arguments.controller#" method="#arguments.actionName#">
 	</cfif>
-	<cfif NOT structKeyExists(request.wheels, "response")>
+	<cfif NOT StructKeyExists(request.wheels, "response")>
 		<!--- A render function has not been called yet so call it here --->
 		<cftry>
 			<cfset arguments.controller.renderPage()>

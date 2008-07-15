@@ -3,7 +3,7 @@
 	<cfargument name="only" type="string" required="false" default="">
 	<cfargument name="except" type="string" required="false" default="">
 	<cfargument name="type" type="string" required="false" default="before">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 	<cfloop list="#arguments.through#" index="loc.i">
 		<cfset loc.thisFilter = structNew()>
 		<cfset loc.thisFilter.through = trim(loc.i)>

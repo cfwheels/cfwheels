@@ -1,10 +1,10 @@
 <cffunction name="$controller" returntype="any" access="private" output="false">
 	<cfargument name="name" type="string" required="true">
 
-	<cfif NOT structKeyExists(application.wheels.controllers, arguments.name)>
+	<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
    	<cflock name="controllerLock" type="exclusive" timeout="30">
-			<cfif NOT structKeyExists(application.wheels.controllers, arguments.name)>
-				<cfset application.wheels.controllers[arguments.name] = createObject("component", "controllerRoot.#$capitalize(arguments.name)#").$initControllerClass(arguments.name)>
+			<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
+				<cfset application.wheels.controllers[arguments.name] = CreateObject("component", "controllerRoot.#$capitalize(arguments.name)#").$initControllerClass(arguments.name)>
 			</cfif>
 		</cflock>
 	</cfif>
@@ -54,7 +54,7 @@
 	<cfargument name="time" type="numeric" required="true">
 	<cfargument name="category" type="string" required="false" default="main">
 	<cfargument name="type" type="string" required="false" default="external">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
 	<cfif arguments.type IS "external" AND application.settings.cacheCullPercentage GT 0 AND application.wheels.cacheLastCulledAt LT dateAdd("n", -application.settings.cacheCullInterval, now()) AND $cacheCount() GTE application.settings.maximumItemsToCache>
 		<!--- cache is full so flush out expired items from this cache to make more room if possible --->
@@ -92,7 +92,7 @@
 	<cfargument name="category" type="string" required="false" default="main">
 	<cfargument name="type" type="string" required="false" default="external">
 
-	<cfif structKeyExists(application.wheels.cache[arguments.type][arguments.category], arguments.key)>
+	<cfif StructKeyExists(application.wheels.cache[arguments.type][arguments.category], arguments.key)>
 		<cfif now() GT application.wheels.cache[arguments.type][arguments.category][arguments.key].expiresAt>
 			<cfset $removeFromCache(key=arguments.key, category=arguments.category, type=arguments.type)>
 			<cfreturn false>
@@ -113,15 +113,15 @@
 	<cfargument name="key" type="string" required="true">
 	<cfargument name="category" type="string" required="false" default="main">
 	<cfargument name="type" type="string" required="false" default="external">
-	<cfset structDelete(application.wheels.cache[arguments.type][arguments.category], arguments.key)>
+	<cfset StructDelete(application.wheels.cache[arguments.type][arguments.category], arguments.key)>
 </cffunction>
 
 <cffunction name="$cacheCount" returntype="numeric" access="private" output="false">
 	<cfargument name="category" type="string" required="false" default="">
 	<cfargument name="type" type="string" required="false" default="external">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
-	<cfif len(arguments.category) IS NOT 0>
+	<cfif Len(arguments.category) IS NOT 0>
 		<cfset loc.result = structCount(application.wheels.cache[arguments.type][arguments.category])>
 	<cfelse>
 		<cfset loc.result = 0>
@@ -136,9 +136,9 @@
 <cffunction name="$clearCache" returntype="void" access="private" output="false">
 	<cfargument name="category" type="string" required="false" default="">
 	<cfargument name="type" type="string" required="false" default="external">
-	<cfset var loc = structNew()>
+	<cfset var loc = {}>
 
-	<cfif len(arguments.category) IS NOT 0>
+	<cfif Len(arguments.category) IS NOT 0>
 		<cfset structClear(application.wheels.cache[arguments.type][arguments.category])>
 	<cfelse>
 		<cfloop collection="#application.wheels.cache[arguments.type]#" item="loc.i">
