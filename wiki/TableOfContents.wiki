@@ -59,5 +59,9 @@
 
 ==Contributing to Wheels==
 
- * Requirements
- * Installation
+ * [CodingGuidelines Coding Guidelines]
+ * [DocumentationGuidelines Documentation Guidelines]
+
+==API==
+
+ * [FunctionsbyCategory Functions by Category]
