@@ -1,13 +1,13 @@
 <cffunction name="caches" returntype="void" access="public" output="false">
 	<cfargument name="actions" type="string" required="false" default="">
 	<cfargument name="time" type="numeric" required="false" default="#application.settings.defaultCacheTime#">
-	<cfset var locals = structNew()>
+	<cfset var loc = structNew()>
 
-	<cfloop list="#arguments.actions#" index="locals.i">
-		<cfset locals.thisAction = structNew()>
-		<cfset locals.thisAction.action = trim(locals.i)>
-		<cfset locals.thisAction.time = arguments.time>
-		<cfset arrayAppend(variables.wheels.cachableActions, locals.thisAction)>
+	<cfloop list="#arguments.actions#" index="loc.i">
+		<cfset loc.thisAction = structNew()>
+		<cfset loc.thisAction.action = trim(loc.i)>
+		<cfset loc.thisAction.time = arguments.time>
+		<cfset arrayAppend(variables.wheels.cachableActions, loc.thisAction)>
 	</cfloop>
 
 </cffunction>

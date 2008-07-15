@@ -7,58 +7,56 @@
 
 <cffunction name="titleize" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">
-	<cfset var locals = structNew()>
+	<cfset var loc = structNew()>
 
-	<cfset locals.result = "">
-	<cfloop list="#arguments.text#" delimiters=" " index="locals.i">
-		<cfset locals.result = listAppend(locals.result, capitalize(locals.i), " ")>
+	<cfset loc.result = "">
+	<cfloop list="#arguments.text#" delimiters=" " index="loc.i">
+		<cfset loc.result = listAppend(loc.result, capitalize(loc.i), " ")>
 	</cfloop>
 
-	<cfreturn locals.result>
+	<cfreturn loc.result>
 </cffunction>
 
 <cffunction name="simpleFormat" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="yes">
-	<cfset var local = structNew()>
+	<cfset var loc = structNew()>
 
 	<!--- Replace single newline characters with HTML break tags and double newline characters with HTML paragraph tags --->
-	<cfset local.output = trim(arguments.text)>
-	<cfset local.output = replace(local.output, "#chr(10)##chr(10)#", "</p><p>", "all")>
-	<cfset local.output = replace(local.output, "#chr(10)#", "<br />", "all")>
-	<cfif local.output IS NOT "">
-		<cfset local.output = "<p>" & local.output & "</p>">
+	<cfset loc.output = trim(arguments.text)>
+	<cfset loc.output = replace(loc.output, "#chr(10)##chr(10)#", "</p><p>", "all")>
+	<cfset loc.output = replace(loc.output, "#chr(10)#", "<br />", "all")>
+	<cfif loc.output IS NOT "">
+		<cfset loc.output = "<p>" & loc.output & "</p>">
 	</cfif>
 
-	<cfreturn local.output>
+	<cfreturn loc.output>
 </cffunction>
 
 <cffunction name="autoLink" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="yes">
 	<cfargument name="link" type="any" required="no" default="all">
 	<cfargument name="attributes" type="any" required="no" default="">
-	<cfset var local = structNew()>
+	<cfset var loc = structNew()>
 
-	<cfset local.url_regex = "(?ix)([^(url=)|(href=)'""])(((https?)://([^:]+\:[^@]*@)?)([\d\w\-]+\.)?[\w\d\-\.]+\.(com|net|org|info|biz|tv|co\.uk|de|ro|it)(( / [\w\d\.\-@%\\\/:]* )+)?(\?[\w\d\?%,\.\/\##!@:=\+~_\-&amp;]*(?<![\.]))?)">
-	<cfset local.mail_regex = "(([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,}))">
+	<cfset loc.urlRegex = "(?ix)([^(url=)|(href=)'""])(((https?)://([^:]+\:[^@]*@)?)([\d\w\-]+\.)?[\w\d\-\.]+\.(com|net|org|info|biz|tv|co\.uk|de|ro|it)(( / [\w\d\.\-@%\\\/:]* )+)?(\?[\w\d\?%,\.\/\##!@:=\+~_\-&amp;]*(?<![\.]))?)">
+	<cfset loc.mailRegex = "(([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,}))">
 
 	<cfif len(arguments.attributes) IS NOT 0>
 		<!--- Add a space to the beginning so it can be directly inserted in the HTML link element below --->
 		<cfset arguments.attributes = " " & arguments.attributes>
 	</cfif>
 
-	<cfset local.output = arguments.text>
+	<cfset loc.output = arguments.text>
 	<cfif arguments.link IS NOT "urls">
 		<!--- Auto link all email addresses --->
-		<!--- <cfset local.output = REReplaceNoCase(local.output, "(([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,}))", "<a href=""mailto:\1""#arguments.attributes#>\1</a>", "all")> --->
-		<cfset local.output = REReplaceNoCase(local.output, local.mail_regex, "<a href=""mailto:\1""#arguments.attributes#>\1</a>", "all")>
+		<cfset loc.output = REReplaceNoCase(loc.output, loc.mailRegex, "<a href=""mailto:\1""#arguments.attributes#>\1</a>", "all")>
 	</cfif>
-	<cfif arguments.link IS NOT "email_addresses">
+	<cfif arguments.link IS NOT "emails">
 		<!--- Auto link all URLs --->
-		<!--- <cfset local.output = REReplaceNoCase(local.output, "(\b(?:https?|ftp)://(?:[a-z\d-]+\.)+[a-z]{2,6}(?:/\S*)?)", "<a href=""\1""#arguments.attributes#>\1</a>", "all")> --->
-		<cfset local.output = local.output.ReplaceAll(local.url_regex, "$1<a href=""$2""#arguments.attributes#>$2</a>")>
+		<cfset loc.output = loc.output.ReplaceAll(loc.urlRegex, "$1<a href=""$2""#arguments.attributes#>$2</a>")>
 	</cfif>
 
-	<cfreturn local.output>
+	<cfreturn loc.output>
 </cffunction>
 
 <cffunction name="highlight" returntype="any" access="public" output="false">
@@ -83,40 +81,40 @@
 	<cfargument name="phrase" type="any" required="true">
 	<cfargument name="radius" type="any" required="false" default="100">
 	<cfargument name="excerptString" type="any" required="false" default="...">
-	<cfset var local = structNew()>
+	<cfset var loc = structNew()>
 
-	<cfset local.pos = findNoCase(arguments.phrase, arguments.text, 1)>
-	<cfif local.pos IS NOT 0>
-		<cfset local.excerpt_string_start = arguments.excerptString>
-		<cfset local.excerpt_string_end = arguments.excerptString>
-		<cfset local.start = local.pos-arguments.radius>
-		<cfif local.start LTE 0>
-			<cfset local.start = 1>
-			<cfset local.excerpt_string_start = "">
+	<cfset loc.pos = findNoCase(arguments.phrase, arguments.text, 1)>
+	<cfif loc.pos IS NOT 0>
+		<cfset loc.excerptStringStart = arguments.excerptString>
+		<cfset loc.excerptStringEnd = arguments.excerptString>
+		<cfset loc.start = loc.pos-arguments.radius>
+		<cfif loc.start LTE 0>
+			<cfset loc.start = 1>
+			<cfset loc.excerptStringStart = "">
 		</cfif>
-		<cfset local.count = len(arguments.phrase)+(arguments.radius*2)>
-		<cfif local.count GT (len(arguments.text)-local.start)>
-			<cfset local.excerpt_string_end = "">
+		<cfset loc.count = len(arguments.phrase)+(arguments.radius*2)>
+		<cfif loc.count GT (len(arguments.text)-loc.start)>
+			<cfset loc.excerptStringEnd = "">
 		</cfif>
-		<cfset local.output = local.excerpt_string_start & mid(arguments.text, local.start, local.count) & local.excerpt_string_end>
+		<cfset loc.output = loc.excerptStringStart & mid(arguments.text, loc.start, loc.count) & loc.excerptStringEnd>
 	<cfelse>
-		<cfset local.output = "">
+		<cfset loc.output = "">
 	</cfif>
 
-	<cfreturn local.output>
+	<cfreturn loc.output>
 </cffunction>
 
 <cffunction name="truncate" returntype="any" access="public" output="false">
 	<cfargument name="text" type="any" required="true">
 	<cfargument name="length" type="any" required="true">
 	<cfargument name="truncateString" type="any" required="false" default="...">
-	<cfset var local = structNew()>
+	<cfset var loc = structNew()>
 
 	<cfif len(arguments.text) GT arguments.length>
-		<cfset local.output = left(arguments.text, arguments.length-3) & arguments.truncateString>
+		<cfset loc.output = left(arguments.text, arguments.length-3) & arguments.truncateString>
 	<cfelse>
-		<cfset local.output = arguments.text>
+		<cfset loc.output = arguments.text>
 	</cfif>
 
-	<cfreturn local.output>
+	<cfreturn loc.output>
 </cffunction>

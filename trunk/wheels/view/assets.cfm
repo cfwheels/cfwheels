@@ -1,80 +1,81 @@
 <cffunction name="stylesheetLinkTag" returntype="any" access="public" output="false">
 	<cfargument name="sources" type="any" required="false" default="application">
-	<cfargument name="attributes" type="any" required="false" default="">
-	<cfset var locals = structNew()>
+	<cfset var loc = structNew()>
+	<cfset arguments.$namedArguments = "sources">
+	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
-	<cfset locals.result = "">
-	<cfloop list="#arguments.sources#" index="locals.i">
-		<cfset locals.href = "#application.wheels.webPath##application.settings.paths.stylesheets#/#trim(locals.i)#">
-		<cfif locals.i Does Not Contain ".">
-			<cfset locals.href = locals.href & ".css">
+	<cfset loc.result = "">
+	<cfloop list="#arguments.sources#" index="loc.i">
+		<cfset loc.href = "#application.wheels.webPath##application.settings.paths.stylesheets#/#trim(loc.i)#">
+		<cfif loc.i Does Not Contain ".">
+			<cfset loc.href = loc.href & ".css">
 		</cfif>
-		<cfset locals.result = locals.result & '<link rel="stylesheet" type="text/css" media="all" href="#locals.href#"#_HTMLAttributes(attributes)# />'>
+		<cfset loc.result = loc.result & '<link rel="stylesheet" type="text/css" media="all" href="#loc.href#"#loc.attributes# />'>
 	</cfloop>
 
-	<cfreturn locals.result>
+	<cfreturn loc.result>
 </cffunction>
 
 <cffunction name="javascriptIncludeTag" returntype="any" access="public" output="false">
 	<cfargument name="sources" type="any" required="false" default="application,protoculous">
-	<cfargument name="attributes" type="any" required="false" default="">
-	<cfset var locals = structNew()>
+	<cfset var loc = structNew()>
+	<cfset arguments.$namedArguments = "sources">
+	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
-	<cfset locals.result = "">
-	<cfloop list="#arguments.sources#" index="locals.i">
-		<cfset locals.src = "#application.wheels.webPath##application.settings.paths.javascripts#/#trim(locals.i)#">
-		<cfif locals.i Does Not Contain ".">
-			<cfset locals.src = locals.src & ".js">
+	<cfset loc.result = "">
+	<cfloop list="#arguments.sources#" index="loc.i">
+		<cfset loc.src = "#application.wheels.webPath##application.settings.paths.javascripts#/#trim(loc.i)#">
+		<cfif loc.i Does Not Contain ".">
+			<cfset loc.src = loc.src & ".js">
 		</cfif>
-		<cfset locals.result = locals.result & '<script type="text/javascript" src="#locals.src#"#_HTMLAttributes(attributes)#></script>'>
+		<cfset loc.result = loc.result & '<script type="text/javascript" src="#loc.src#"#loc.attributes#></script>'>
 	</cfloop>
 
-	<cfreturn locals.result>
+	<cfreturn loc.result>
 </cffunction>
 
 <cffunction name="imageTag" returntype="any" access="public" output="false">
 	<cfargument name="source" type="any" required="false" default="">
-	<cfargument name="attributes" type="any" required="false" default="">
-	<cfset var locals = structNew()>
+	<cfset var loc = structNew()>
 	<cfif application.settings.environment IS NOT "production">
 		<cfinclude template="../errors/imagetag.cfm">
 	</cfif>
 
-	<cfset locals.category = "image">
-	<cfset locals.key = $hashStruct(arguments)>
-	<cfset locals.lockName = locals.category & locals.key>
+	<cfset loc.category = "image">
+	<cfset loc.key = $hashStruct(arguments)>
+	<cfset loc.lockName = loc.category & loc.key>
 	<!--- double-checked lock --->
-	<cflock name="#locals.lockName#" type="readonly" timeout="30">
-		<cfset locals.result = $getFromCache(locals.key, locals.category, "internal")>
+	<cflock name="#loc.lockName#" type="readonly" timeout="30">
+		<cfset loc.result = $getFromCache(loc.key, loc.category, "internal")>
 	</cflock>
-	<cfif isBoolean(locals.result) AND NOT locals.result>
-   	<cflock name="#locals.lockName#" type="exclusive" timeout="30">
-			<cfset locals.result = $getFromCache(locals.key, locals.category, "internal")>
-			<cfif isBoolean(locals.result) AND NOT locals.result>
-
-				<cfset locals.attributes = _HTMLAttributes(arguments.attributes)>
+	<cfif isBoolean(loc.result) AND NOT loc.result>
+   	<cflock name="#loc.lockName#" type="exclusive" timeout="30">
+			<cfset loc.result = $getFromCache(loc.key, loc.category, "internal")>
+			<cfif isBoolean(loc.result) AND NOT loc.result>
+				<cfset arguments.$namedArguments = "source">
+				<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 				<cfif left(arguments.source, 7) IS "http://">
-					<cfset locals.src = arguments.source>
+					<cfset loc.src = arguments.source>
 				<cfelse>
-					<cfset locals.src = "#application.wheels.webPath##application.settings.paths.images#/#arguments.source#">
+					<cfset loc.src = "#application.wheels.webPath##application.settings.paths.images#/#arguments.source#">
 					<cfif arguments.attributes Does Not Contain "width" OR arguments.attributes Does Not Contain "height">
-						<cfimage action="info" source="#expandPath(locals.src)#" structname="locals.image">
-						<cfif locals.image.width GT 0 AND locals.image.height GT 0>
-							<cfset locals.attributes = locals.attributes & " width=""#locals.image.width#"" height=""#locals.image.height#""">
+						<cfimage action="info" source="#expandPath(loc.src)#" structname="loc.image">
+						<cfif loc.image.width GT 0 AND loc.image.height GT 0>
+							<cfset loc.attributes = loc.attributes & " width=""#loc.image.width#"" height=""#loc.image.height#""">
 						</cfif>
 					</cfif>
 				</cfif>
 				<cfif arguments.attributes Does Not Contain "alt">
-					<cfset locals.attributes = locals.attributes & " alt=""#titleize(replaceList(spanExcluding(reverse(spanExcluding(reverse(locals.src), "/")), "."), "-,_", " , "))#""">
+					<cfset loc.attributes = loc.attributes & " alt=""#titleize(replaceList(spanExcluding(reverse(spanExcluding(reverse(loc.src), "/")), "."), "-,_", " , "))#""">
 				</cfif>
-				<cfset locals.result = "<img src=""#locals.src#""#locals.attributes# />">
+				<cfset loc.result = "<img src=""#loc.src#""#loc.attributes# />">
 				<cfif application.settings.cacheImages>
-					<cfset $addToCache(locals.key, locals.result, 86400, locals.category, "internal")>
+					<cfset $addToCache(loc.key, loc.result, 86400, loc.category, "internal")>
 				</cfif>
 
 			</cfif>
 		</cflock>
 	</cfif>
 
-	<cfreturn locals.result>
+	<cfreturn loc.result>
 </cffunction>

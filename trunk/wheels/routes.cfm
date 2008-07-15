@@ -1,13 +1,13 @@
-<cfset locals.route = {pattern="[controller]/[action]/[id]"}>
-<cfset arrayAppend(application.wheels.routes, locals.route)>
-<cfset locals.route = {pattern="[controller]/[action]"}>
-<cfset arrayAppend(application.wheels.routes, locals.route)>
-<cfset locals.route = {pattern="[controller]", action="index"}>
-<cfset arrayAppend(application.wheels.routes, locals.route)>
-<cfset locals.pos = 0>
-<cfloop array="#application.wheels.routes#" index="locals.i">
-	<cfset locals.pos = locals.pos + 1>
-	<cfif structKeyExists(locals.i, "name")>
-		<cfset application.wheels.namedRoutePositions[locals.i.name] = locals.pos>
+<cfset loc.route = {pattern="[controller]/[action]/[id]"}>
+<cfset arrayAppend(application.wheels.routes, loc.route)>
+<cfset loc.route = {pattern="[controller]/[action]"}>
+<cfset arrayAppend(application.wheels.routes, loc.route)>
+<cfset loc.route = {pattern="[controller]", action="index"}>
+<cfset arrayAppend(application.wheels.routes, loc.route)>
+<cfset loc.pos = 0>
+<cfloop array="#application.wheels.routes#" index="loc.i">
+	<cfset loc.pos = loc.pos + 1>
+	<cfif structKeyExists(loc.i, "name")>
+		<cfset application.wheels.namedRoutePositions[loc.i.name] = loc.pos>
 	</cfif>
 </cfloop>

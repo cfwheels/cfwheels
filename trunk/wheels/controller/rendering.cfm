@@ -1,11 +1,11 @@
 <cffunction name="renderPageToString" returntype="string" access="public" output="false">
-	<cfset var locals = structNew()>
+	<cfset var loc = structNew()>
 
 	<cfset renderPage(argumentCollection=arguments)>
-	<cfset locals.result = request.wheels.response>
+	<cfset loc.result = request.wheels.response>
 	<cfset request.wheels.response = "">
 
-	<cfreturn locals.result>
+	<cfreturn loc.result>
 </cffunction>
 
 <cffunction name="renderPage" returntype="void" access="public" output="false">
@@ -13,35 +13,35 @@
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#">
 	<cfargument name="layout" type="any" required="false" default="true">
 	<cfargument name="cache" type="any" required="false" default="">
-	<cfargument name="_showDebugInformation" type="any" required="false" default="#application.settings.showDebugInformation#">
-	<cfset var locals = structNew()>
+	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.settings.showDebugInformation#">
+	<cfset var loc = structNew()>
 
 	<cfif application.settings.showDebugInformation>
 		<cfset request.wheels.execution.components.view = getTickCount()>
 	</cfif>
 
 	<!--- if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request --->
-	<cfif (NOT isBoolean(arguments.layout) OR arguments.layout) AND arguments._showDebugInformation>
+	<cfif (NOT isBoolean(arguments.layout) OR arguments.layout) AND arguments.$showDebugInformation>
 		<cfset request.wheels.showDebugInformation = true>
 	</cfif>
 
 	<!--- double-checked lock --->
 	<cfif application.settings.cachePages AND (isNumeric(arguments.cache) OR (isBoolean(arguments.cache) AND arguments.cache))>
-		<cfset locals.category = "action">
-		<cfset locals.key = "#arguments.action#_#$hashStruct(variables.params)#_#$hashStruct(arguments)#">
-		<cfset locals.lockName = locals.category & locals.key>
-		<cflock name="#locals.lockName#" type="readonly" timeout="30">
-			<cfset request.wheels.response = $getFromCache(locals.key, locals.category)>
+		<cfset loc.category = "action">
+		<cfset loc.key = "#arguments.action##$hashStruct(variables.params)##$hashStruct(arguments)#">
+		<cfset loc.lockName = loc.category & loc.key>
+		<cflock name="#loc.lockName#" type="readonly" timeout="30">
+			<cfset request.wheels.response = $getFromCache(loc.key, loc.category)>
 		</cflock>
 		<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
-	   	<cflock name="#locals.lockName#" type="exclusive" timeout="30">
-				<cfset request.wheels.response = $getFromCache(locals.key, locals.category)>
+	   	<cflock name="#loc.lockName#" type="exclusive" timeout="30">
+				<cfset request.wheels.response = $getFromCache(loc.key, loc.category)>
 				<cfif isBoolean(request.wheels.response) AND NOT request.wheels.response>
 					<cfset $renderPage(argumentCollection=arguments)>
 					<cfif NOT isNumeric(arguments.cache)>
 						<cfset arguments.cache = application.settings.defaultCacheTime>
 					</cfif>
-					<cfset $addToCache(locals.key, request.wheels.response, arguments.cache, locals.category)>
+					<cfset $addToCache(loc.key, request.wheels.response, arguments.cache, loc.category)>
 				</cfif>
 			</cflock>
 		</cfif>
@@ -73,69 +73,69 @@
 <cffunction name="renderPartial" returntype="void" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="cache" type="any" required="false" default="">
-	<cfargument name="_type" type="string" required="false" default="render">
+	<cfargument name="$type" type="string" required="false" default="render">
 	<cfreturn $includeOrRenderPartial(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$includeOrRenderPartial" returntype="void" access="private" output="false">
-	<cfset var locals = structNew()>
+	<cfset var loc = structNew()>
 
 	<!--- double-checked lock --->
 	<cfif application.settings.cachePartials AND (isNumeric(arguments.cache) OR (isBoolean(arguments.cache) AND arguments.cache))>
-		<cfset locals.category = "partial">
-		<cfset locals.key = "#arguments.name#_#$hashStruct(variables.params)#_#$hashStruct(arguments)#">
-		<cfset locals.lockName = locals.category & locals.key>
-		<cflock name="#locals.lockName#" type="readonly" timeout="30">
-			<cfset locals.result = $getFromCache(locals.key, locals.category)>
+		<cfset loc.category = "partial">
+		<cfset loc.key = "#arguments.name##$hashStruct(variables.params)##$hashStruct(arguments)#">
+		<cfset loc.lockName = loc.category & loc.key>
+		<cflock name="#loc.lockName#" type="readonly" timeout="30">
+			<cfset loc.result = $getFromCache(loc.key, loc.category)>
 		</cflock>
-		<cfif isBoolean(locals.result) AND NOT locals.result>
-	   	<cflock name="#locals.lockName#" type="exclusive" timeout="30">
-				<cfset locals.result = $getFromCache(locals.key, locals.category)>
-				<cfif isBoolean(locals.result) AND NOT locals.result>
-					<cfset locals.result = $includePartial(argumentCollection=arguments)>
+		<cfif isBoolean(loc.result) AND NOT loc.result>
+	   	<cflock name="#loc.lockName#" type="exclusive" timeout="30">
+				<cfset loc.result = $getFromCache(loc.key, loc.category)>
+				<cfif isBoolean(loc.result) AND NOT loc.result>
+					<cfset loc.result = $includePartial(argumentCollection=arguments)>
 					<cfif NOT isNumeric(arguments.cache)>
 						<cfset arguments.cache = application.settings.defaultCacheTime>
 					</cfif>
-					<cfset $addToCache(locals.key, locals.result, arguments.cache, locals.category)>
+					<cfset $addToCache(loc.key, loc.result, arguments.cache, loc.category)>
 				</cfif>
 			</cflock>
 		</cfif>
 	<cfelse>
-		<cfset locals.result = $includePartial(argumentCollection=arguments)>
+		<cfset loc.result = $includePartial(argumentCollection=arguments)>
 	</cfif>
 
-	<cfif arguments._type IS "include">
-		<cfreturn locals.result>
-	<cfelseif arguments._type IS "render">
-		<cfset request.wheels.response = locals.result>
+	<cfif arguments.$type IS "include">
+		<cfreturn loc.result>
+	<cfelseif arguments.$type IS "render">
+		<cfset request.wheels.response = loc.result>
 	</cfif>
 
 </cffunction>
 
 <cffunction name="$includePartial" returntype="string" access="private" output="false">
-	<cfset var locals = structNew()>
+	<cfset var loc = structNew()>
 
 	<cfif left(arguments.name, 1) IS "/">
 		<!--- Include a file in a sub folder to view --->
-		<cfset locals.result = $include("../../views#Reverse(ListRest(Reverse(arguments.name), '/'))#/_#Reverse(ListFirst(Reverse(arguments.name), '/'))#.cfm")>
+		<cfset loc.result = $include("../../views#Reverse(ListRest(Reverse(arguments.name), '/'))#/_#Reverse(ListFirst(Reverse(arguments.name), '/'))#.cfm")>
 	<cfelseif arguments.name  Contains "/">
 		<!--- Include a file in a sub folder of the curent controller --->
-		<cfset locals.result = $include("../../views/#variables.params.controller#/#reverse(listRest(reverse(arguments.name), '/'))#/_#reverse(listFirst(reverse(arguments.name), '/'))#.cfm")>
+		<cfset loc.result = $include("../../views/#variables.params.controller#/#reverse(listRest(reverse(arguments.name), '/'))#/_#reverse(listFirst(reverse(arguments.name), '/'))#.cfm")>
 	<cfelse>
 		<!--- Include a file in the current controller's view folder --->
-		<cfset locals.result = $include("../../views/#variables.params.controller#/_#arguments.name#.cfm")>
+		<cfset loc.result = $include("../../views/#variables.params.controller#/_#arguments.name#.cfm")>
 	</cfif>
 
-	<cfreturn locals.result>
+	<cfreturn loc.result>
 </cffunction>
 
 <cffunction name="$include" returntype="string" access="private" output="false">
-	<cfargument name="_path" type="string" required="true">
-	<cfset var locals = structNew()>
-	<cfsavecontent variable="locals.result">
-		<cfinclude template="#arguments._path#">
+	<cfargument name="$path" type="string" required="true">
+	<cfset var loc = structNew()>
+	<cfsavecontent variable="loc.result">
+		<cfinclude template="#arguments.$path#">
 	</cfsavecontent>
-	<cfreturn trim(locals.result)>
+	<cfreturn trim(loc.result)>
 </cffunction>
 
 <cffunction name="$renderLayout" returntype="void" access="private" output="false">
@@ -144,7 +144,7 @@
 	<cfif (isBoolean(arguments.layout) AND arguments.layout) OR (arguments.layout IS NOT "false")>
 		<cfif NOT isBoolean(arguments.layout)>
 			<!--- Include a designated layout --->
-			<cfset request.wheels.response = $include("../../views/layouts/#replace(arguments.layout, ' ', '_', 'all')#.cfm")>
+			<cfset request.wheels.response = $include("../../views/layouts/#replace(arguments.layout, ' ', '', 'all')#.cfm")>
 		<cfelseif fileExists(expandPath("views/layouts/#variables.params.controller#.cfm"))>
 			<!--- Include the current controller's layout if one exists --->
 			<cfset request.wheels.response = $include("../../views/layouts/#variables.params.controller#.cfm")>

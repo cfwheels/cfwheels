@@ -3,16 +3,16 @@
 	<cfargument name="only" type="string" required="false" default="">
 	<cfargument name="except" type="string" required="false" default="">
 	<cfargument name="type" type="string" required="false" default="before">
-	<cfset var locals = structNew()>
-	<cfloop list="#arguments.through#" index="locals.i">
-		<cfset locals.thisFilter = structNew()>
-		<cfset locals.thisFilter.through = trim(locals.i)>
-		<cfset locals.thisFilter.only = replace(arguments.only, ", ", ",", "all")>
-		<cfset locals.thisFilter.except = replace(arguments.except, ", ", ",", "all")>
+	<cfset var loc = structNew()>
+	<cfloop list="#arguments.through#" index="loc.i">
+		<cfset loc.thisFilter = structNew()>
+		<cfset loc.thisFilter.through = trim(loc.i)>
+		<cfset loc.thisFilter.only = replace(arguments.only, ", ", ",", "all")>
+		<cfset loc.thisFilter.except = replace(arguments.except, ", ", ",", "all")>
 		<cfif arguments.type IS "before">
-			<cfset arrayAppend(variables.wheels.beforeFilters, locals.thisFilter)>
+			<cfset arrayAppend(variables.wheels.beforeFilters, loc.thisFilter)>
 		<cfelse>
-			<cfset arrayAppend(variables.wheels.afterFilters, locals.thisFilter)>
+			<cfset arrayAppend(variables.wheels.afterFilters, loc.thisFilter)>
 		</cfif>
 	</cfloop>
 </cffunction>

@@ -54,19 +54,19 @@
 	<cfargument name="time" type="numeric" required="true">
 	<cfargument name="category" type="string" required="false" default="main">
 	<cfargument name="type" type="string" required="false" default="external">
-	<cfset var locals = structNew()>
+	<cfset var loc = structNew()>
 
 	<cfif arguments.type IS "external" AND application.settings.cacheCullPercentage GT 0 AND application.wheels.cacheLastCulledAt LT dateAdd("n", -application.settings.cacheCullInterval, now()) AND $cacheCount() GTE application.settings.maximumItemsToCache>
 		<!--- cache is full so flush out expired items from this cache to make more room if possible --->
-		<cfset locals.deletedItems = 0>
-		<cfset locals.cacheCount = $cacheCount()>
-		<cfloop collection="#application.wheels.cache[arguments.type][arguments.category]#" item="locals.i">
-			<cfif now() GT application.wheels.cache[arguments.type][arguments.category][locals.i].expiresAt>
-				<cfset $removeFromCache(key=locals.i, category=arguments.category, type=arguments.type)>
+		<cfset loc.deletedItems = 0>
+		<cfset loc.cacheCount = $cacheCount()>
+		<cfloop collection="#application.wheels.cache[arguments.type][arguments.category]#" item="loc.i">
+			<cfif now() GT application.wheels.cache[arguments.type][arguments.category][loc.i].expiresAt>
+				<cfset $removeFromCache(key=loc.i, category=arguments.category, type=arguments.type)>
 				<cfif application.settings.cacheCullPercentage LT 100>
-					<cfset locals.deletedItems = locals.deletedItems + 1>
-					<cfset locals.percentageDeleted = (locals.deletedItems / locals.cacheCount) * 100>
-					<cfif locals.percentageDeleted GTE application.settings.cacheCullPercentage>
+					<cfset loc.deletedItems = loc.deletedItems + 1>
+					<cfset loc.percentageDeleted = (loc.deletedItems / loc.cacheCount) * 100>
+					<cfif loc.percentageDeleted GTE application.settings.cacheCullPercentage>
 						<cfbreak>
 					</cfif>
 				</cfif>
@@ -119,30 +119,30 @@
 <cffunction name="$cacheCount" returntype="numeric" access="private" output="false">
 	<cfargument name="category" type="string" required="false" default="">
 	<cfargument name="type" type="string" required="false" default="external">
-	<cfset var locals = structNew()>
+	<cfset var loc = structNew()>
 
 	<cfif len(arguments.category) IS NOT 0>
-		<cfset locals.result = structCount(application.wheels.cache[arguments.type][arguments.category])>
+		<cfset loc.result = structCount(application.wheels.cache[arguments.type][arguments.category])>
 	<cfelse>
-		<cfset locals.result = 0>
-		<cfloop collection="#application.wheels.cache[arguments.type]#" item="locals.i">
-			<cfset locals.result = locals.result + structCount(application.wheels.cache[arguments.type][locals.i])>
+		<cfset loc.result = 0>
+		<cfloop collection="#application.wheels.cache[arguments.type]#" item="loc.i">
+			<cfset loc.result = loc.result + structCount(application.wheels.cache[arguments.type][loc.i])>
 		</cfloop>
 	</cfif>
 
-	<cfreturn locals.result>
+	<cfreturn loc.result>
 </cffunction>
 
 <cffunction name="$clearCache" returntype="void" access="private" output="false">
 	<cfargument name="category" type="string" required="false" default="">
 	<cfargument name="type" type="string" required="false" default="external">
-	<cfset var locals = structNew()>
+	<cfset var loc = structNew()>
 
 	<cfif len(arguments.category) IS NOT 0>
 		<cfset structClear(application.wheels.cache[arguments.type][arguments.category])>
 	<cfelse>
-		<cfloop collection="#application.wheels.cache[arguments.type]#" item="locals.i">
-			<cfset structClear(application.wheels.cache[locals.i])>
+		<cfloop collection="#application.wheels.cache[arguments.type]#" item="loc.i">
+			<cfset structClear(application.wheels.cache[loc.i])>
 		</cfloop>
 	</cfif>
 
