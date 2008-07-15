@@ -30,7 +30,7 @@
  * Deleting Records
  * Column Statistics
  * Dynamic Finders
- * Getting Paginated Data
+ * [GettingPaginatedData Getting Paginated Data]
  * Setting Associations
  * Using the hasOne Association 
  * Using the hasMany Association 
