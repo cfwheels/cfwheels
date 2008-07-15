@@ -169,6 +169,9 @@
 		</cfmail>
 	</cfif>
 	<cfif application.settings.showErrorInformation>
+		<cfif NOT StructKeyExists(arguments.exception, "cause")>
+			<cfset arguments.exception.cause = arguments.exception>
+		</cfif>
 		<cfif arguments.exception.cause.type IS "wheels">
 			<cfinclude template="errors/header.cfm">
 			<cfinclude template="errors/error.cfm">
