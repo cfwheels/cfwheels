@@ -1,5 +1,5 @@
 #summary paginationLinks(windowSize)
-#labels function,viewhelper,0.8
+#labels function,view,helper
 
 *Description*: Sets up a 'has many' association between this class and the specified one
 
