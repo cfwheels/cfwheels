@@ -35,7 +35,7 @@ Yes, there are actually some things you should familiarize yourself with before 
 
 ===!ColdFusion===
 
-Simply the best web development language in the world! The best way to learn it, in our humble opinion, is to [http://www.adobe.com/products/coldfusion get the free developer edition from Adobe], buy Ben Forta's [http://www.forta.com/books/032151548x !ColdFusion Web Application Construction Kit] series, and start coding using your programming editor of choice.
+Simply the best web development language in the world! The best way to learn it, in our humble opinion, is to [http://www.adobe.com/products/coldfusion get the free developer edition from Adobe], buy Ben Forta's [http://www.forta.com/books/032151548x ColdFusion Web Application Construction Kit] series, and start coding using your programming editor of choice.
 
 ===Object Oriented Programming (OOP)===
 
