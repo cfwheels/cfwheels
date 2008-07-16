@@ -20,10 +20,12 @@ boolean
 
 *Usage*:
 
--
+This function can be used when you need more control over pagination than the paginationLinks function provides.
 
 *Examples*:
 
 {{{
--
+<cfif paginationHasPrevious()>
+  do something...
+</cfif>
 }}}

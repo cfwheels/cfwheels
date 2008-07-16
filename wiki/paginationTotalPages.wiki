@@ -20,10 +20,12 @@ numeric
 
 *Usage*:
 
--
+This function can be used when you need more control over pagination than the paginationLinks function provides.
 
 *Examples*:
 
 {{{
--
+<cfoutput>
+  Showing page #paginationCurrentPage()# of #paginationTotalPages()# total.
+</cfoutput>
 }}}
