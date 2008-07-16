@@ -1,0 +1,21 @@
+#summary Using the Flash to pass data from one request to the next.
+#labels chapter,0.8
+
+The Flash is actually a very simple concept and no, it has nothing to do with Adobe's Flash player. The Flash is just a struct in the session scope with some added functionality; it is cleared at the end of the *next* page that the user views. This means it's a good fit for storing messages or variables from one request to the next.
+
+==An example using the Flash==
+
+The code below is commonly used in Wheels applications to store a message about an error in the Flash and then redirect to another URL which then displays the message in its view page.
+
+In a controller action that handles a form submission:
+
+{{{
+<cfset flashInsert(error="Oops! Please correct your errors and try again")>
+<cfset redirectTo(action="edit")>
+}}}
+
+In the view page for the edit action:
+
+{{{
+<p class="error-message"><cfoutput>#flash("error")#</cfoutput></p>
+}}}
