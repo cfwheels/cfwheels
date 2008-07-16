@@ -93,3 +93,7 @@ To make this concept easier to grasp, imagine a login form on your website that 
 || params.password || 1234 ||
 
 Now instead of accessing the variables as `URL.sendto`, `form.username` etc you can just use the params struct for all of them instead. This concept becomes even more useful once we start getting into creating forms specifically meant for accessing object properties but let's save the details of all that for the [FormHelpersandShowingErrors Form Helpers and Showing Errors chapter].
+
+==Routing==
+
+For more advanced URL to code mappings you can use a concept called "routing". It allows you to fully customize every URL in your application. You can read more about this in the chapter called [UsingRoutes Using Routes].
