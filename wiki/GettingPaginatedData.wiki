@@ -5,7 +5,7 @@ If you search for ColdFusion on Google, would you want all results to be returne
 
 In Wheels it's really simple to do this type of pagination, here's how:
 
- # First you need to get records from the database based on a page number (going back to the Google example this would mean getting records 11-20 when the user is viewing the second results page for example). This is (mostly) done using the `[findAll findAll()]` function and the `page` and `perPage` arguments.
+ # First you need to get records from the database based on a page number (going back to the Google example this would mean getting records 11-20 when the user is viewing the second results page for example). This is (mostly) done using the [findAll findAll()] function and the `page` and `perPage` arguments.
  # Secondly you need to display the links to all the other pages that the user should be able to go to. This is done using the [paginationLinks paginationLinks()] function or using the lower level function such as [paginationHasNext paginationHasNext()] etc (see "related" section below for more info.
 
 This chapter will deal with the first part, getting the paginated data. Please proceed to the chapter called DisplayingLinksforPagination if you wish to learn how to output the page links in your view.
