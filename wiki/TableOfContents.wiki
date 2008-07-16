@@ -17,7 +17,7 @@
  * [UsingtheFlash Using the Flash]
  * Filters and Verification
  * Event Handlers
- * URL Rewriting
+ * [URLRewriting URL Rewriting]
  * Using Routes
  * Obfuscating URLs
 
