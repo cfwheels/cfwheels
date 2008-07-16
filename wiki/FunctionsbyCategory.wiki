@@ -64,9 +64,43 @@ Example (`views/blog/listauthors.cfm`):
 </cfoutput>
 }}}
 
- * [paginationLinks paginationLinks]
- * [paginationHasPrevious paginationHasPrevious]
- * [paginationHasNext paginationHasNext]
- * [paginationTotalPages paginationTotalPages]
- * [paginationTotalRecords paginationTotalRecords]
- * [paginationCurrentPage paginationCurrentPage]
+ * [paginationCurrentPage paginationCurrentPage()]
+ * [paginationHasNext paginationHasNext()]
+ * [paginationHasPrevious paginationHasPrevious()]
+ * [paginationLinks paginationLinks()]
+ * [paginationTotalPages paginationTotalPages()]
+ * [paginationTotalRecords paginationTotalRecords()]
+
+==Controller, Initialization==
+
+These functions are called from the `init` function of your controller files.
+
+Example (`controllers/Blog.cfc`):
+
+{{{
+<cffunction name="init">
+  <cfset filters(through="userVerification")>
+</cffunction>
+}}}
+
+ * [flash flash()]
+ * [flashClear flashClear()]
+ * [flashCount flashCount()]
+ * [flashDelete flashDelete()]
+ * [flashInsert flashInsert()]
+ * [flashIsEmpty flashIsEmpty()]
+ * [flashKeyExists flashKeyExists()]
+
+==Controller, Request==
+
+These functions are called from actions in your controller files.
+
+Example (`controllers/Blog.cfc`):
+
+{{{
+<cffunction name="sendToWheels">
+  <cfset redirectTo(url="http://www.cfwheels.com")>
+</cffunction>
+}}}
+
+ * [redirectTo redirectTo()]
