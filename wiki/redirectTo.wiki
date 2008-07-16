@@ -29,8 +29,8 @@ Void
 || *action* || string || false ||  || Pass-through argument; see documentation for URLFor ||
 || *host* || string || false ||  || Pass-through argument; see documentation for URLFor ||
 || *route* || string || false ||  || Pass-through argument; see documentation for URLFor ||
-|| *id* || numeric || false ||  hint= || Pass-through argument; see documentation for URLFor ||
-|| *statusCode* || numeric || false || 02 hint= || Pass-through argument; see documentation for cflocation ||
+|| *id* || numeric || false || 0 || Pass-through argument; see documentation for URLFor ||
+|| *statusCode* || numeric || false || 302 || Pass-through argument; see documentation for cflocation ||
 
 *Usage*:
 
