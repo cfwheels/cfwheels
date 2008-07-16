@@ -30,4 +30,15 @@ This function can be used when you need more control over pagination than the pa
 <cfoutput>
   Showing page #paginationCurrentPage()# of #paginationTotalPages()# total.
 </cfoutput>
+
 }}}
+
+*Related*:
+
+GettingPaginatedData (chapter)
+		DisplayingLinksforPagination (chapter)
+		[paginationLinks paginationLinks()] (function)
+		[paginationHasPrevious paginationHasPrevious()] (function)
+		[paginationHasNext paginationHasNext()] (function)
+		[paginationTotalPages paginationTotalPages()] (function)
+		[paginationTotalRecords paginationTotalRecords()] (function)

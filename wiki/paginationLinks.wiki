@@ -60,4 +60,15 @@ View code...
 <ul>
   <cfoutput>#paginationLinks(handle="authQuery", prependToLink="<li>", appendToLink="</li>")#</cfoutput>
 </ul>
+
 }}}
+
+*Related*:
+
+GettingPaginatedData (chapter)
+		DisplayingLinksforPagination (chapter)
+		[paginationLinks paginationLinks()] (function)
+		[paginationHasPrevious paginationHasPrevious()] (function)
+		[paginationHasNext paginationHasNext()] (function)
+		[paginationTotalPages paginationTotalPages()] (function)
+		[paginationTotalRecords paginationTotalRecords()] (function)
