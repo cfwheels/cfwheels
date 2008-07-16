@@ -65,10 +65,10 @@ View code...
 
 *Related*:
 
-GettingPaginatedData (chapter)
-DisplayingLinksforPagination (chapter)
-[paginationHasPrevious paginationHasPrevious()] (function)
-[paginationHasNext paginationHasNext()] (function)
-[paginationTotalPages paginationTotalPages()] (function)
-[paginationTotalRecords paginationTotalRecords()] (function)
-[paginationCurrentPage paginationCurrentPage()] (function)
+ * GettingPaginatedData (chapter)
+ * DisplayingLinksforPagination (chapter)
+ * [paginationHasPrevious paginationHasPrevious()] (function)
+ * [paginationHasNext paginationHasNext()] (function)
+ * [paginationTotalPages paginationTotalPages()] (function)
+ * [paginationTotalRecords paginationTotalRecords()] (function)
+ * [paginationCurrentPage paginationCurrentPage()] (function)

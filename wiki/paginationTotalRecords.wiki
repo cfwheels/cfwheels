@@ -33,10 +33,10 @@ This function can be used when you need more control over pagination than the pa
 
 *Related*:
 
-GettingPaginatedData (chapter)
-DisplayingLinksforPagination (chapter)
-[paginationLinks paginationLinks()] (function)
-[paginationHasPrevious paginationHasPrevious()] (function)
-[paginationHasNext paginationHasNext()] (function)
-[paginationTotalPages paginationTotalPages()] (function)
-[paginationCurrentPage paginationCurrentPage()] (function)
+ * GettingPaginatedData (chapter)
+ * DisplayingLinksforPagination (chapter)
+ * [paginationLinks paginationLinks()] (function)
+ * [paginationHasPrevious paginationHasPrevious()] (function)
+ * [paginationHasNext paginationHasNext()] (function)
+ * [paginationTotalPages paginationTotalPages()] (function)
+ * [paginationCurrentPage paginationCurrentPage()] (function)
