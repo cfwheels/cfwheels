@@ -11,7 +11,7 @@
 
  * Request Handling
  * Rendering Pages
- * Redirecting Users
+ * [RedirectingUsers Redirecting Users]
  * Sending Files
  * Sending Email
  * [UsingtheFlash Using the Flash]
