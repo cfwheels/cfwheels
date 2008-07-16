@@ -65,7 +65,7 @@
 	<cfargument name="maxRows" type="numeric" required="false" default="-1" hint="Maximum number of records to retrieve">
 	<cfargument name="page" type="numeric" required="false" default=0>
 	<cfargument name="perPage" type="numeric" required="false" default=10>
-	<cfargument name="paginationHandle" type="string" required="false" default="paginatedQuery">
+	<cfargument name="handle" type="string" required="false" default="query">
 	<cfargument name="cachedAfter" type="string" required="false" default="">
 	<cfargument name="cachedWithin" type="string" required="false" default="">
 	<cfargument name="reload" type="boolean" required="false" default="#application.settings.findAll.reload#">
@@ -118,10 +118,10 @@
 				arguments.$softDeleteCheck = false;
 			}
 			// store pagination info in the request scope so all pagination methods can access it
-			request.wheels[arguments.paginationHandle] = {};
-			request.wheels[arguments.paginationHandle].currentPage = loc.currentPage;
-			request.wheels[arguments.paginationHandle].totalPages = loc.totalPages;
-			request.wheels[arguments.paginationHandle].totalRecords = loc.totalRecords;
+			request.wheels[arguments.handle] = {};
+			request.wheels[arguments.handle].currentPage = loc.currentPage;
+			request.wheels[arguments.handle].totalPages = loc.totalPages;
+			request.wheels[arguments.handle].totalRecords = loc.totalRecords;
 		}
 
 		if (!StructKeyExists(loc, "returnValue"))
