@@ -1,0 +1,39 @@
+#summary flashClear()
+#labels api,0.8,controller,request
+
+*Description*:
+
+Delete everything from the Flash.
+
+*Return Type*:
+
+Void
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+*Usage*:
+
+-
+
+*Examples*:
+
+{{{
+<cfset flashClear()>
+
+}}}
+
+*Related*:
+
+ * UsingtheFlash (chapter)
+ * [flashClear flashClear()] (function)
+ * [flashDelete flashDelete()] (function)
+ * [flashIsEmpty flashIsEmpty()] (function)
+ * [flashCount flashCount()] (function)
+ * [flashKeyExists flashKeyExists()] (function)
+ * [flashInsert flashInsert()] (function)
+ * [flash flash()] (function)

@@ -1,0 +1,43 @@
+#summary flash(key)
+#labels api,0.8,controller,request
+
+*Description*:
+
+Get the value of a specific key in the Flash.
+
+*Return Type*:
+
+String
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *key* || string || true ||  || The key to get the value for ||
+
+*Usage*:
+
+-
+
+*Examples*:
+
+{{{
+<p><cfoutput>#flash("message")#</cfoutput></p>
+
+}}}
+
+*Related*:
+
+ * UsingtheFlash (chapter)
+ * [flashClear flashClear()] (function)
+ * [flashDelete flashDelete()] (function)
+ * [flashIsEmpty flashIsEmpty()] (function)
+ * [flashCount flashCount()] (function)
+ * [flashKeyExists flashKeyExists()] (function)
+ * [flashInsert flashInsert()] (function)
+ * [flash flash()] (function)

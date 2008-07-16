@@ -1,0 +1,45 @@
+#summary flashKeyExists(key)
+#labels api,0.8,controller,request
+
+*Description*:
+
+Check if a specific key exists in the Flash.
+
+*Return Type*:
+
+Boolean
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *key* || string || true ||  || The key to check if it exists ||
+
+*Usage*:
+
+-
+
+*Examples*:
+
+{{{
+<cfif flashKeyExists("error")>
+do something...
+</cfif>
+
+}}}
+
+*Related*:
+
+ * UsingtheFlash (chapter)
+ * [flashClear flashClear()] (function)
+ * [flashDelete flashDelete()] (function)
+ * [flashIsEmpty flashIsEmpty()] (function)
+ * [flashCount flashCount()] (function)
+ * [flashKeyExists flashKeyExists()] (function)
+ * [flashInsert flashInsert()] (function)
+ * [flash flash()] (function)

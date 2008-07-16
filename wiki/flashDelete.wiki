@@ -1,0 +1,43 @@
+#summary flashDelete(key)
+#labels api,0.8,controller,request
+
+*Description*:
+
+Delete a specific key from the Flash.
+
+*Return Type*:
+
+Void
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *key* || string || true ||  || The key to delete ||
+
+*Usage*:
+
+-
+
+*Examples*:
+
+{{{
+<cfset flashDelete(key="errorMessage")>
+
+}}}
+
+*Related*:
+
+ * UsingtheFlash (chapter)
+ * [flashClear flashClear()] (function)
+ * [flashDelete flashDelete()] (function)
+ * [flashIsEmpty flashIsEmpty()] (function)
+ * [flashCount flashCount()] (function)
+ * [flashKeyExists flashKeyExists()] (function)
+ * [flashInsert flashInsert()] (function)
+ * [flash flash()] (function)

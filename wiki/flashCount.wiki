@@ -1,0 +1,41 @@
+#summary flashCount()
+#labels api,0.8,controller,request
+
+*Description*:
+
+Check how many keys exist in the Flash.
+
+*Return Type*:
+
+Numeric
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+*Usage*:
+
+-
+
+*Examples*:
+
+{{{
+<cfif NOT flashIsEmpty()>
+<cfabort>
+</cfif>
+
+}}}
+
+*Related*:
+
+ * UsingtheFlash (chapter)
+ * [flashClear flashClear()] (function)
+ * [flashDelete flashDelete()] (function)
+ * [flashIsEmpty flashIsEmpty()] (function)
+ * [flashCount flashCount()] (function)
+ * [flashKeyExists flashKeyExists()] (function)
+ * [flashInsert flashInsert()] (function)
+ * [flash flash()] (function)
