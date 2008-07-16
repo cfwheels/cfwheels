@@ -13,7 +13,7 @@ Before you start learning Wheels and making sure all the necessary software is i
 
 Most websites are, at their cores, simple data manipulation applications. You fetch a row, make some updates to it, stick it back in the database and so on. This is the "target market" for Wheels - simple CRUD (create, read, update, delete) website applications.
 
-A simple ten page website won't do much data manipulation, so you don't need Wheels for that (or even ColdFusion in some cases). A flight simulator program will do so much more than simple CRUD work, so in that case, Wheels is a poor match for you (and so is ColdFusion).
+A simple ten page website won't do much data manipulation, so you don't need Wheels for that (or even !ColdFusion in some cases). A flight simulator program will do so much more than simple CRUD work, so in that case, Wheels is a poor match for you (and so is !ColdFusion).
 
 If your website falls somewhere in between these two extreme examples, then read on. If not, go look for another programming language and framework. ;)
 
@@ -29,19 +29,19 @@ Moving on...
 
 Yes, there are actually some things you should familiarize yourself with before starting to use Wheels. Don't worry though. You don't need to be an expert on any on of them. A basic understanding is good enough.
 
- * *ColdFusion.* You should know CFML, the ColdFusion programming language. (Surprise!)
- * *Object Oriented Programming.* You should grasp the concept of object oriented programming and how it applies to ColdFusion.
+ * *!ColdFusion.* You should know CFML, the !ColdFusion programming language. (Surprise!)
+ * *Object Oriented Programming.* You should grasp the concept of object oriented programming and how it applies to !ColdFusion.
  * *Model-View-Controller.* You should know the theory behind the Model-View-Controller development pattern.
 
-===ColdFusion===
+===!ColdFusion===
 
-Simply the best web development language in the world! The best way to learn it, in our humble opinion, is to [http://www.adobe.com/products/coldfusion get the free developer edition from Adobe], buy Ben Forta's [http://www.forta.com/books/032151548x ColdFusion Web Application Construction Kit] series, and start coding using your programming editor of choice.
+Simply the best web development language in the world! The best way to learn it, in our humble opinion, is to [http://www.adobe.com/products/coldfusion get the free developer edition from Adobe], buy Ben Forta's [http://www.forta.com/books/032151548x !ColdFusion Web Application Construction Kit] series, and start coding using your programming editor of choice.
 
 ===Object Oriented Programming (OOP)===
 
-This is a programming methodology that uses constructs called _objects_ to design applications. Objects model real world entities in your application. OOP is based on several techniques including _inheritance_, _modularity_, _polymorphism_ and _encapsulation_. Most of these techniques are supported in ColdFusion, making it a fairly functional object oriented language. At the most basic level, a `.cfc` file in ColdFusion is a class, and you create an instance of a class by using the `CreateObject` function or the `<cfobject>` tag.
+This is a programming methodology that uses constructs called _objects_ to design applications. Objects model real world entities in your application. OOP is based on several techniques including _inheritance_, _modularity_, _polymorphism_ and _encapsulation_. Most of these techniques are supported in !ColdFusion, making it a fairly functional object oriented language. At the most basic level, a `.cfc` file in !ColdFusion is a class, and you create an instance of a class by using the `CreateObject` function or the `<cfobject>` tag.
 
-Trying to squeeze an explanation of object oriented programming and how it's used in ColdFusion into a few sentences is impossible, and a detailed overview of it is outside the scope of this chapter. There is lots of high quality information online, so go ahead and Google it.
+Trying to squeeze an explanation of object oriented programming and how it's used in !ColdFusion into a few sentences is impossible, and a detailed overview of it is outside the scope of this chapter. There is lots of high quality information online, so go ahead and Google it.
 
 ===Model-View-Controller===
 
@@ -55,14 +55,14 @@ MVC is how Wheels structures your code for you. As you start working with Wheels
 
 ==3. System Requirements==
 
-Apologies to everyone still running on older versions of Adobe ColdFusion... You're going to need to upgrade to *Adobe ColdFusion 8.0.1*. The good news is that not only will you be able to run Wheels, you will also benefit from the tons of performance enhancements and cool new features that have been added to ColdFusion 8. It really is worth the upgrade!
+Apologies to everyone still running on older versions of Adobe !ColdFusion... You're going to need to upgrade to *Adobe !ColdFusion 8.0.1*. The good news is that not only will you be able to run Wheels, you will also benefit from the tons of performance enhancements and cool new features that have been added to !ColdFusion 8. It really is worth the upgrade!
 
-If you prefer a free version of ColdFusion you can also run Wheels on *Railo 3.0*.
+If you prefer a free version of !ColdFusion you can also run Wheels on *Railo 3.0*.
 
 Your setup with Wheels can then can be installed on *Windows*, *Macintosh*, *Unix*, or *Linux* - they all work just fine.
 
 You also need a web server. The web servers that we know work with Wheels are *Apache (2.2.6 or later)* and Microsoft *IIS (5.1 or later)*. There is no reason other web servers won't work though, so give it a try even if you're not using Apache or IIS (or if you're using a different version of Apache/IIS).
 
-Finally, to build any kind of meaningful website application, you will likely interact with a database. Currently supported databases are *SQL Server 7 or later* *MySQL 5*. (Please note that MySQL 4 is not supported.)
+Finally, to build any kind of meaningful website application, you will likely interact with a database. Currently supported databases are *SQL Server 7 or later* and *MySQL 5*. (Please note that MySQL 4 is not supported.)
 
 Ok, hopefully this chapter didn't scare you too much and you can move on knowing that you have the basic knowledge needed, the software to run Wheels on, and a suitable project to start with.
