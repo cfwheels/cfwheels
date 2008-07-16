@@ -7,13 +7,15 @@ Returns true if more pages exists in the pagination
 
 *Return Type*:
 
-boolean
+Boolean
 
 *
 
 *History*:
 
--Parameters*:
+-
+
+Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
 || *handle* || string || false || paginatedQuery || The handle given to the query that the pagination links should be displayed for ||

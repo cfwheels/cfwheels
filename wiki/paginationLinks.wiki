@@ -7,13 +7,15 @@ Builds and returns a string containing links to pages based on a paginated query
 
 *Return Type*:
 
-string
+String
 
 *
 
 *History*:
 
--Parameters*:
+-
+
+Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
 || *classForCurrent* || string || false ||  || Class name for the link to the current page ||

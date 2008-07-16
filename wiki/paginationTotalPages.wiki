@@ -7,13 +7,15 @@ Returns the total number of pages in the pagination
 
 *Return Type*:
 
-numeric
+Numeric
 
 *
 
 *History*:
 
--Parameters*:
+-
+
+Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
 || *handle* || string || false || paginatedQuery || The handle given to the query that the pagination links should be displayed for ||
