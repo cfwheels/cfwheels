@@ -25,6 +25,7 @@ string
 *Usage*:
 
 If you have paginated more than one query in the controller you can use the handle argument to reference them (don't forget to pass in a handle to the findAll function in your controller first though).
+
 All other arguments are used to customize the output.
 
 *History*:
