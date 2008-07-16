@@ -5,7 +5,7 @@
 	<!---
 		DETAILS:
 		If the difference between the two dates you pass in is 2 hours, 13 minutes and 10 seconds it will return "about 2 hours" for example.
-		This method is useful when you want to describe the time that has passed since a certain event (example: "Comment added by Per Djurner about 3 weeks ago") or the time left until a certain event (example: "Next chat sessions starts in about 5 hours") instead of just writing out the date itself.
+		This method is useful when you want to describe the time that has passed since a certain event (example: "Comment added by Joe about 3 weeks ago") or the time left until a certain event (example: "Next chat sessions starts in about 5 hours") instead of just writing out the date itself.
 		EXAMPLES:
 		#distanceOfTimeInWords(order.purchaseDate, order.deliveryDate)#
 		#distanceOfTimeInWords(fromTime=pageViewStartTime, toTime=pageViewEndTime, includeSeconds=true)#

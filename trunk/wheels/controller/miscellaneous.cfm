@@ -1,14 +1,28 @@
-<cffunction name="URLFor" returntype="string" access="private" output="false">
-	<cfargument name="route" type="string" required="false" default="">
-	<cfargument name="controller" type="string" required="false" default="">
-	<cfargument name="action" type="string" required="false" default="">
-	<cfargument name="id" type="numeric" required="false" default=0>
-	<cfargument name="params" type="string" required="false" default="">
-	<cfargument name="anchor" type="string" required="false" default="">
-	<cfargument name="onlyPath" type="boolean" required="false" default="true">
-	<cfargument name="host" type="string" required="false" default="">
-	<cfargument name="protocol" type="string" required="false" default="">
+<cffunction name="URLFor" returntype="string" access="private" output="false" hint="View, Helper, Creates an URL based on supplied arguments.">
+	<cfargument name="route" type="string" required="false" default="" hint="Name of a route that you have configured">
+	<cfargument name="controller" type="string" required="false" default="" hint="Name of the controller to include in the URL">
+	<cfargument name="action" type="string" required="false" default="" hint="Name of the action to include in the URL">
+	<cfargument name="id" type="numeric" required="false" default="0" hint="Id to include in the URL">
+	<cfargument name="params" type="string" required="false" default="" hint="Any additional params to be set in the query string">
+	<cfargument name="anchor" type="string" required="false" default="" hint="Sets an anchor name to be appended to the path">
+	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="If true, returns only the relative URL (no protocol, host name or port)">
+	<cfargument name="host" type="string" required="false" default="" hint="Set this to override the current host (domain name)">
+	<cfargument name="protocol" type="string" required="false" default="" hint="Set this to override the current protocol (http)">
 	<cfset var loc = {}>
+
+	<!---
+		HISTORY:
+		-
+
+		USAGE:
+		-
+
+		EXAMPLES:
+		<cfoutput>#URLFor(action="comments", anchor="comment10")#</cfoutput>
+
+		RELATED:
+		 * RequestHandling (chapter)
+	--->
 
 	<!--- build the link --->
 	<cfif Len(arguments.route) IS 0 AND Len(arguments.controller) IS 0 AND Len(arguments.action) IS 0 AND arguments.id IS 0 AND Len(arguments.params) IS 0>
@@ -78,11 +92,23 @@
 	<cfreturn lCase(loc.url)>
 </cffunction>
 
-<cffunction name="isGet" returntype="boolean" access="public" output="false" hint="Returns whether the request was a normal (GET) request or not">
+<cffunction name="isGet" returntype="boolean" access="public" output="false" hint="Controller, Request, Returns whether the request was a normal (GET) request or not.">
+
 	<!---
+		HISTORY:
+		-
+
+		USAGE:
+		-
+
 		EXAMPLES:
 		<cfset requestIsGet = isGet()>
+
+		RELATED:
+		 * [isPost isPost()] (function)
+		 * [isAjax isAjax()] (function)
 	--->
+
 	<cfif cgi.request_method IS "get">
 		<cfreturn true>
 	<cfelse>
@@ -90,11 +116,23 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="isPost" returntype="boolean" access="public" output="false" hint="Returns whether the request came from a form submission or not">
+<cffunction name="isPost" returntype="boolean" access="public" output="false" hint="Controller, Request, Returns whether the request came from a form submission or not.">
+
 	<!---
+		HISTORY:
+		-
+
+		USAGE:
+		-
+
 		EXAMPLES:
 		<cfset requestIsPost = isPost()>
+
+		RELATED:
+		 * [isGet isGet()] (function)
+		 * [isAjax isAjax()] (function)
 	--->
+
 	<cfif cgi.request_method IS "post">
 		<cfreturn true>
 	<cfelse>
@@ -102,11 +140,23 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="isAjax" returntype="boolean" access="public" output="false" hint="Returns whether the page was called from JavaScript or not">
+<cffunction name="isAjax" returntype="boolean" access="public" output="false" hint="Controller, Request, Returns whether the page was called from JavaScript or not.">
+
 	<!---
+		HISTORY:
+		-
+
+		USAGE:
+		-
+
 		EXAMPLES:
 		<cfset requestIsAjax = isAjax()>
+
+		RELATED:
+		 * [isGet isGet()] (function)
+		 * [isPost isPost()] (function)
 	--->
+
 	<cfif cgi.http_x_requested_with IS "XMLHTTPRequest">
 		<cfreturn true>
 	<cfelse>
