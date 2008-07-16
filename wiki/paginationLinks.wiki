@@ -15,7 +15,7 @@ String
 
 -
 
-Parameters*:
+*Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
 || *classForCurrent* || string || false ||  || Class name for the link to the current page ||
