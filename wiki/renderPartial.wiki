@@ -1,4 +1,4 @@
-#summary renderPartial(name[cache,$type])
+#summary renderPartial(name[cache])
 #labels api,0.8,controller,request
 
 *Description*:
@@ -20,7 +20,6 @@ Void
 ||   || *Type* || *Required* || *Default* || *Description* ||
 || *name* || string || true ||  || Name of partial to include ||
 || *cache* || any || false ||  || Minutes to cache the content for ||
-|| *$type* || type= || false || render || gument name= ||
 
 *Usage*:
 

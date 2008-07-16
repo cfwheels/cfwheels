@@ -1,4 +1,4 @@
-#summary renderPage([$showDebugInformation,action,layout,cache,controller])
+#summary renderPage([action,layout,cache,controller])
 #labels api,0.8,controller,request
 
 *Description*:
@@ -18,7 +18,6 @@ Void
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *$showDebugInformation* || any || false || #application.settings.showDebugInformation# || gument name= ||
 || *action* || string || false || #variables.params.action# || Action to include the view page for ||
 || *layout* || any || false || true || The layout to wrap the content in ||
 || *cache* || any || false ||  || Minutes to cache the content for ||

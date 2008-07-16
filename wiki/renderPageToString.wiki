@@ -1,4 +1,4 @@
-#summary renderPageToString([$showDebugInformation,action,layout,cache,controller])
+#summary renderPageToString([action,layout,cache,controller])
 #labels api,0.8,controller,request
 
 *Description*:
@@ -18,7 +18,6 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *$showDebugInformation* || any || false || #application.settings.showDebugInformation# || gument name= ||
 || *action* || string || false || #variables.params.action# || Pass-through argument; see documentation for renderPage ||
 || *layout* || any || false || true || Pass-through argument; see documentation for renderPage ||
 || *cache* || any || false ||  || Pass-through argument; see documentation for renderPage ||
