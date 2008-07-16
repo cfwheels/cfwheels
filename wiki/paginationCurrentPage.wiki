@@ -1,0 +1,29 @@
+#summary paginationCurrentPage([handle])
+#labels api,0.8,view,helper
+
+*Description*:
+
+Returns the number of the page that is currently being displayed
+
+*Return Type*:
+
+numeric
+
+*
+
+*History*:
+
+-Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *handle* || string || false || paginatedQuery || The handle given to the query that the pagination links should be displayed for ||
+
+*Usage*:
+
+-
+
+*Examples*:
+
+{{{
+-
+}}}

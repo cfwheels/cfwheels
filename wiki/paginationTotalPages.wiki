@@ -1,0 +1,29 @@
+#summary paginationTotalPages([handle])
+#labels api,0.8,view,helper
+
+*Description*:
+
+Returns the total number of pages in the pagination
+
+*Return Type*:
+
+numeric
+
+*
+
+*History*:
+
+-Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *handle* || string || false || paginatedQuery || The handle given to the query that the pagination links should be displayed for ||
+
+*Usage*:
+
+-
+
+*Examples*:
+
+{{{
+-
+}}}
