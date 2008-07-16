@@ -16,7 +16,7 @@ After downloading and unzipping Wheels, here's the directory structure you will 
  * .htaccess
  * Application.cfc
  * index.cfm
- * IsapiRewrite4.ini
+ * !IsapiRewrite4.ini
  * rewrite.cfm
 
 ==Quick Summary==
@@ -71,7 +71,7 @@ This is the framework itself. When a new version of Wheels is released it is oft
 
 This file is used by Apache and you specifically need it for URL rewriting to work properly. If you're not using Apache you can safely delete it.
 
-===IsapiRewrite4.ini===
+===!IsapiRewrite4.ini===
 
 If you use IIS and want to use URL rewriting you'll need this file, otherwise you can safely delete it.
 
