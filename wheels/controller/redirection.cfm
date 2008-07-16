@@ -1,12 +1,12 @@
-<cffunction name="redirectTo" returntype="void" access="public" output="false" hint="View, Helper, Redirects the browser to the supplied action, URL or to the referring URL.">
+<cffunction name="redirectTo" returntype="void" access="public" output="false" hint="Controller, Request, Redirects the browser to the supplied action, URL or to the referring URL.">
 	<cfargument name="url" type="string" required="false" default="" hint="Address to redirect to">
 	<cfargument name="back" type="boolean" required="false" default="false" hint="Whether or not to redirect back to the referring address">
 	<cfargument name="addToken" type="boolean" required="false" default="false" hint="Pass-through argument; see documentation for cflocation">
-	<cfargument name="statusCode" type="numeric" required="false" default=302 hint="Pass-through argument; see documentation for cflocation">
+	<cfargument name="statusCode" type="numeric" required="false" default="302" hint="Pass-through argument; see documentation for cflocation">
 	<cfargument name="route" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
 	<cfargument name="controller" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
 	<cfargument name="action" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
-	<cfargument name="id" type="numeric" required="false" default=0 hint="Pass-through argument; see documentation for URLFor">
+	<cfargument name="id" type="numeric" required="false" default="0" hint="Pass-through argument; see documentation for URLFor">
 	<cfargument name="params" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
 	<cfargument name="anchor" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
 	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="Pass-through argument; see documentation for URLFor">
@@ -25,7 +25,7 @@
 
 		EXAMPLES:
 		<cfif user.save()>
-			<cfset redirectTo(action="saveSuccessful")>
+		  <cfset redirectTo(action="saveSuccessful")>
 		</cfif>
 
 		<cfset redirectTo(url="http://www.cfwheels.com")>
