@@ -65,3 +65,8 @@ Example (`views/blog/listauthors.cfm`):
 }}}
 
  * [paginationLinks paginationLinks]
+ * [paginationHasPrevious paginationHasPrevious]
+ * [paginationHasNext paginationHasNext]
+ * [paginationTotalPages paginationTotalPages]
+ * [paginationTotalRecords paginationTotalRecords]
+ * [paginationCurrentPage paginationCurrentPage]
