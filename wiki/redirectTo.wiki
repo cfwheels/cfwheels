@@ -1,0 +1,60 @@
+#summary redirectTo([url,protocol,onlyPath,addToken,anchor,params,controller,back,action,host,route,id,statusCode])
+#labels api,0.8,view,helper
+
+*Description*:
+
+Redirects the browser to the supplied action, URL or to the referring URL.
+
+*Return Type*:
+
+Void
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *url* || string || false ||  || Address to redirect to ||
+|| *protocol* || string || false ||  || Pass-through argument; see documentation for URLFor ||
+|| *onlyPath* || boolean || false || true || Pass-through argument; see documentation for URLFor ||
+|| *addToken* || boolean || false || false || Pass-through argument; see documentation for cflocation ||
+|| *anchor* || string || false ||  || Pass-through argument; see documentation for URLFor ||
+|| *params* || string || false ||  || Pass-through argument; see documentation for URLFor ||
+|| *controller* || string || false ||  || Pass-through argument; see documentation for URLFor ||
+|| *back* || boolean || false || false || Whether or not to redirect back to the referring address ||
+|| *action* || string || false ||  || Pass-through argument; see documentation for URLFor ||
+|| *host* || string || false ||  || Pass-through argument; see documentation for URLFor ||
+|| *route* || string || false ||  || Pass-through argument; see documentation for URLFor ||
+|| *id* || numeric || false ||  hint= || Pass-through argument; see documentation for URLFor ||
+|| *statusCode* || numeric || false || 02 hint= || Pass-through argument; see documentation for cflocation ||
+
+*Usage*:
+
+This function uses the cflocation tag to redirect the browser.
+You can redirect to a controller/action/id in your application, a specific URL or back to the referring URL.
+Internally it uses URLFor (when a controller/action/id is supplied) to build the URL to redirect to so it can also accept all arguments of URLFor.
+
+*Examples*:
+
+{{{
+<cfif user.save()>
+<cfset redirectTo(action="saveSuccessful")>
+</cfif>
+}}}
+
+{{{
+<cfset redirectTo(url="http://www.cfwheels.com")>
+}}}
+
+{{{
+<cfset redirectTo(back=true)>
+
+}}}
+
+*Related*:
+
+ * RedirectingUsers (chapter)
