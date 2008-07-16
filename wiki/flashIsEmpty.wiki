@@ -24,7 +24,7 @@ Boolean
 
 {{{
 <cfif NOT flashIsEmpty()>
-<cfabort>
+  <cfabort>
 </cfif>
 
 }}}
@@ -34,7 +34,6 @@ Boolean
  * UsingtheFlash (chapter)
  * [flashClear flashClear()] (function)
  * [flashDelete flashDelete()] (function)
- * [flashIsEmpty flashIsEmpty()] (function)
  * [flashCount flashCount()] (function)
  * [flashKeyExists flashKeyExists()] (function)
  * [flashInsert flashInsert()] (function)

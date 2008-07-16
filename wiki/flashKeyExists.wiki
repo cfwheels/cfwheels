@@ -28,7 +28,7 @@ Boolean
 
 {{{
 <cfif flashKeyExists("error")>
-do something...
+  do something...
 </cfif>
 
 }}}
@@ -40,6 +40,5 @@ do something...
  * [flashDelete flashDelete()] (function)
  * [flashIsEmpty flashIsEmpty()] (function)
  * [flashCount flashCount()] (function)
- * [flashKeyExists flashKeyExists()] (function)
  * [flashInsert flashInsert()] (function)
  * [flash flash()] (function)

@@ -3,7 +3,7 @@
 
 *Description*:
 
-Builds and returns a string containing links to pages based on a paginated query
+Builds and returns a string containing links to pages based on a paginated query.
 
 *Return Type*:
 
@@ -20,7 +20,7 @@ String
 ||   || *Type* || *Required* || *Default* || *Description* ||
 || *classForCurrent* || string || false ||  || Class name for the link to the current page ||
 || *prependToLink* || string || false ||  || String to be prepended before all links ||
-|| *handle* || string || false || paginatedQuery || The handle given to the query that the pagination links should be displayed for ||
+|| *handle* || string || false || query || The handle given to the query that the pagination links should be displayed for ||
 || *linkToCurrentPage* || boolean || false || false || Whether or not the current page should be linked to ||
 || *windowSize* || numeric || false || 2 || The number of page links to show around the current page ||
 || *params* || string || false ||  || Any additional parameters that should be appended to the links ||

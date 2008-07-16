@@ -35,7 +35,6 @@ Void
 
  * UsingtheFlash (chapter)
  * [flashClear flashClear()] (function)
- * [flashDelete flashDelete()] (function)
  * [flashIsEmpty flashIsEmpty()] (function)
  * [flashCount flashCount()] (function)
  * [flashKeyExists flashKeyExists()] (function)

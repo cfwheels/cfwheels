@@ -40,4 +40,3 @@ String
  * [flashCount flashCount()] (function)
  * [flashKeyExists flashKeyExists()] (function)
  * [flashInsert flashInsert()] (function)
- * [flash flash()] (function)

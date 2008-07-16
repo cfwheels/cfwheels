@@ -3,7 +3,7 @@
 
 *Description*:
 
-Returns the number of the page that is currently being displayed
+Returns the number of the page that is currently being displayed.
 
 *Return Type*:
 
@@ -18,7 +18,7 @@ Numeric
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *handle* || string || false || paginatedQuery || The handle given to the query that the pagination links should be displayed for ||
+|| *handle* || string || false || query || The handle given to the query that the pagination links should be displayed for ||
 
 *Usage*:
 

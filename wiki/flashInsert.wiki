@@ -35,5 +35,4 @@ Use a named argument to set a key/value in the Flash.
  * [flashIsEmpty flashIsEmpty()] (function)
  * [flashCount flashCount()] (function)
  * [flashKeyExists flashKeyExists()] (function)
- * [flashInsert flashInsert()] (function)
  * [flash flash()] (function)
