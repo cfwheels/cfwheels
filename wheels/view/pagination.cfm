@@ -1,38 +1,5 @@
-<cffunction name="paginationHasPrevious" returntype="any" access="public" output="false">
-	<cfargument name="handle" type="any" required="false" default="paginatedQuery">
-	<cfif request.wheels[arguments.handle].currentPage GT 1>
-		<cfreturn true>
-	<cfelse>
-		<cfreturn false>
-	</cfif>
-</cffunction>
-
-<cffunction name="paginationHasNext" returntype="any" access="public" output="false">
-	<cfargument name="handle" type="any" required="false" default="paginatedQuery">
-	<cfif request.wheels[arguments.handle].currentPage LT request.wheels[arguments.handle].totalPages>
-		<cfreturn true>
-	<cfelse>
-		<cfreturn false>
-	</cfif>
-</cffunction>
-
-<cffunction name="paginationTotalPages" returntype="any" access="public" output="false">
-	<cfargument name="handle" type="any" required="false" default="paginatedQuery">
-	<cfreturn request.wheels[arguments.handle].totalPages>
-</cffunction>
-
-<cffunction name="paginationTotalRecords" returntype="any" access="public" output="false">
-	<cfargument name="handle" type="any" required="false" default="paginatedQuery">
-	<cfreturn request.wheels[arguments.handle].totalRecords>
-</cffunction>
-
-<cffunction name="paginationCurrentPage" returntype="any" access="public" output="false">
-	<cfargument name="handle" type="any" required="false" default="paginatedQuery">
-	<cfreturn request.wheels[arguments.handle].currentPage>
-</cffunction>
-
 <cffunction name="paginationLinks" returntype="string" access="public" output="false" hint="View, Helper, Builds and returns a string containing links to pages based on a paginated query.">
-	<cfargument name="handle" type="string" required="false" default="paginatedQuery" hint="The handle given to the query that the pagination links should be displayed for">
+	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
 	<cfargument name="name" type="string" required="false" default="page" hint="The name of the param that holds the current page number">
 	<cfargument name="windowSize" type="numeric" required="false" default="2" hint="The number of page links to show around the current page">
 	<cfargument name="alwaysShowAnchors" type="boolean" required="false" default="true" hint="Whether or not links to the first and last page should always be displayed">
@@ -41,6 +8,8 @@
 	<cfargument name="appendToLink" type="string" required="false" default="" hint="String to be appended after all links">
 	<cfargument name="classForCurrent" type="string" required="false" default="" hint="Class name for the link to the current page">
 	<cfargument name="params" type="string" required="false" default="" hint="Any additional parameters that should be appended to the links">
+	<cfset var loc = {}>
+
 	<!---
 		HISTORY:
 		-
@@ -50,10 +19,10 @@
 		All other arguments are used to customize the output.
 
 		EXAMPLES:
-		(the following code should be placed in a controller file...)
+		Controller code...
 		<cfparam name="params.page" default="1">
 		<cfset allAuthors = model("Author").findAll(page=params.page, perPage=25)>
-		(the following code should be placed in a view file...)
+		View code...
 		<ul>
 		  <cfoutput query="allAuthors">
 		    <li>#firstName# #lastName#</li>
@@ -61,20 +30,28 @@
 		</ul>
 		<cfoutput>#paginationLinks()#</cfoutput>
 
-		(the following code should be placed in a view file...)
+		View code...
 		<cfoutput>#paginationLinks(windowSize=5)#</cfoutput>
 
-		(the following code should be placed in a controller file...)
+		Controller code...
 		<cfset allAuthors = model("Author").findAll(handle="authQuery", page=5)>
-		(the following code should be placed in a view file...)
+		View code...
 		<ul>
 		  <cfoutput>#paginationLinks(handle="authQuery", prependToLink="<li>", appendToLink="</li>")#</cfoutput>
 		</ul>
-	--->
-	<cfset var loc = {}>
 
-	<cfset loc.currentPage = request.wheels[arguments.handle].currentPage>
-	<cfset loc.totalPages = request.wheels[arguments.handle].totalPages>
+		RELATED:
+		 * GettingPaginatedData (chapter)
+		 * DisplayingLinksforPagination (chapter)
+		 * [paginationHasPrevious paginationHasPrevious()] (function)
+		 * [paginationHasNext paginationHasNext()] (function)
+		 * [paginationTotalPages paginationTotalPages()] (function)
+		 * [paginationTotalRecords paginationTotalRecords()] (function)
+		 * [paginationCurrentPage paginationCurrentPage()] (function)
+	--->
+
+	<cfset loc.currentPage = paginationCurrentPage(arguments.handle)>
+	<cfset loc.totalPages = paginationTotalPages(arguments.handle)>
 	<cfset loc.linkToArguments.action = variables.params.action>
 	<cfif StructKeyExists(variables.params, "id")>
 		<cfset loc.linkToArguments.id = variables.params.id>
@@ -121,4 +98,150 @@
 	</cfsavecontent>
 
 	<cfreturn $trimHTML(loc.output)>
+</cffunction>
+
+<cffunction name="paginationHasPrevious" returntype="boolean" access="public" output="false" hint="View, Helper, Returns true if previous pages exists in the pagination.">
+	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
+
+	<!---
+		HISTORY:
+		-
+
+		USAGE:
+		This function can be used when you need more control over pagination than the paginationLinks function provides.
+
+		EXAMPLES:
+		<cfif paginationHasPrevious()>
+		  do something...
+		</cfif>
+
+		RELATED:
+		 * GettingPaginatedData (chapter)
+		 * DisplayingLinksforPagination (chapter)
+		 * [paginationLinks paginationLinks()] (function)
+		 * [paginationHasNext paginationHasNext()] (function)
+		 * [paginationTotalPages paginationTotalPages()] (function)
+		 * [paginationTotalRecords paginationTotalRecords()] (function)
+		 * [paginationCurrentPage paginationCurrentPage()] (function)
+	--->
+
+	<cfif request.wheels[arguments.handle].currentPage GT 1>
+		<cfreturn true>
+	<cfelse>
+		<cfreturn false>
+	</cfif>
+</cffunction>
+
+<cffunction name="paginationHasNext" returntype="boolean" access="public" output="false" hint="View, Helper, Returns true if more pages exists in the pagination.">
+	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
+
+	<!---
+		HISTORY:
+		-
+
+		USAGE:
+		This function can be used when you need more control over pagination than the paginationLinks function provides.
+
+		EXAMPLES:
+		<cfif paginationHasNext(handle="handleGivenInFindAllCall")>
+		  do something...
+		</cfif>
+
+		RELATED:
+		 * GettingPaginatedData (chapter)
+		 * DisplayingLinksforPagination (chapter)
+		 * [paginationLinks paginationLinks()] (function)
+		 * [paginationHasPrevious paginationHasPrevious()] (function)
+		 * [paginationTotalPages paginationTotalPages()] (function)
+		 * [paginationTotalRecords paginationTotalRecords()] (function)
+		 * [paginationCurrentPage paginationCurrentPage()] (function)
+	--->
+
+	<cfif request.wheels[arguments.handle].currentPage LT request.wheels[arguments.handle].totalPages>
+		<cfreturn true>
+	<cfelse>
+		<cfreturn false>
+	</cfif>
+</cffunction>
+
+<cffunction name="paginationTotalPages" returntype="numeric" access="public" output="false" hint="View, Helper, Returns the total number of pages in the pagination.">
+	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
+
+	<!---
+		HISTORY:
+		-
+
+		USAGE:
+		This function can be used when you need more control over pagination than the paginationLinks function provides.
+
+		EXAMPLES:
+		<cfoutput>
+		  Showing page #paginationCurrentPage()# of #paginationTotalPages()# total.
+		</cfoutput>
+
+		RELATED:
+		 * GettingPaginatedData (chapter)
+		 * DisplayingLinksforPagination (chapter)
+		 * [paginationLinks paginationLinks()] (function)
+		 * [paginationHasPrevious paginationHasPrevious()] (function)
+		 * [paginationHasNext paginationHasNext()] (function)
+		 * [paginationTotalRecords paginationTotalRecords()] (function)
+		 * [paginationCurrentPage paginationCurrentPage()] (function)
+	--->
+
+	<cfreturn request.wheels[arguments.handle].totalPages>
+</cffunction>
+
+<cffunction name="paginationTotalRecords" returntype="numeric" access="public" output="false" hint="View, Helper, Returns the total number of records in the pagination.">
+	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
+
+	<!---
+		HISTORY:
+		-
+
+		USAGE:
+		This function can be used when you need more control over pagination than the paginationLinks function provides.
+
+		EXAMPLES:
+		<cfoutput>#paginationTotalRecords()#</cfoutput>
+
+		RELATED:
+		 * GettingPaginatedData (chapter)
+		 * DisplayingLinksforPagination (chapter)
+		 * [paginationLinks paginationLinks()] (function)
+		 * [paginationHasPrevious paginationHasPrevious()] (function)
+		 * [paginationHasNext paginationHasNext()] (function)
+		 * [paginationTotalPages paginationTotalPages()] (function)
+		 * [paginationCurrentPage paginationCurrentPage()] (function)
+	--->
+
+	<cfreturn request.wheels[arguments.handle].totalRecords>
+</cffunction>
+
+<cffunction name="paginationCurrentPage" returntype="numeric" access="public" output="false" hint="View, Helper, Returns the number of the page that is currently being displayed.">
+	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
+
+	<!---
+		HISTORY:
+		-
+
+		USAGE:
+		This function can be used when you need more control over pagination than the paginationLinks function provides.
+
+		EXAMPLES:
+		<cfoutput>
+		  Showing page #paginationCurrentPage()# of #paginationTotalPages()# total.
+		</cfoutput>
+
+		RELATED:
+		 * GettingPaginatedData (chapter)
+		 * DisplayingLinksforPagination (chapter)
+		 * [paginationLinks paginationLinks()] (function)
+		 * [paginationHasPrevious paginationHasPrevious()] (function)
+		 * [paginationHasNext paginationHasNext()] (function)
+		 * [paginationTotalPages paginationTotalPages()] (function)
+		 * [paginationTotalRecords paginationTotalRecords()] (function)
+	--->
+
+	<cfreturn request.wheels[arguments.handle].currentPage>
 </cffunction>
