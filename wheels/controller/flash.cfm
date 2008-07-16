@@ -12,7 +12,6 @@
 
 		RELATED:
 		 * UsingtheFlash (chapter)
-		 * [flashClear flashClear()] (function)
 		 * [flashDelete flashDelete()] (function)
 		 * [flashIsEmpty flashIsEmpty()] (function)
 		 * [flashCount flashCount()] (function)
@@ -40,7 +39,6 @@
 		RELATED:
 		 * UsingtheFlash (chapter)
 		 * [flashClear flashClear()] (function)
-		 * [flashDelete flashDelete()] (function)
 		 * [flashIsEmpty flashIsEmpty()] (function)
 		 * [flashCount flashCount()] (function)
 		 * [flashKeyExists flashKeyExists()] (function)
@@ -62,14 +60,13 @@
 
 		EXAMPLES:
 		<cfif NOT flashIsEmpty()>
-			<cfabort>
+		  <cfabort>
 		</cfif>
 
 		RELATED:
 		 * UsingtheFlash (chapter)
 		 * [flashClear flashClear()] (function)
 		 * [flashDelete flashDelete()] (function)
-		 * [flashIsEmpty flashIsEmpty()] (function)
 		 * [flashCount flashCount()] (function)
 		 * [flashKeyExists flashKeyExists()] (function)
 		 * [flashInsert flashInsert()] (function)
@@ -94,7 +91,7 @@
 
 		EXAMPLES:
 		<cfif NOT flashIsEmpty()>
-			<cfabort>
+		  <cfabort>
 		</cfif>
 
 		RELATED:
@@ -102,7 +99,6 @@
 		 * [flashClear flashClear()] (function)
 		 * [flashDelete flashDelete()] (function)
 		 * [flashIsEmpty flashIsEmpty()] (function)
-		 * [flashCount flashCount()] (function)
 		 * [flashKeyExists flashKeyExists()] (function)
 		 * [flashInsert flashInsert()] (function)
 		 * [flash flash()] (function)
@@ -123,7 +119,7 @@
 
 		EXAMPLES:
 		<cfif flashKeyExists("error")>
-			do something...
+		  do something...
 		</cfif>
 
 		RELATED:
@@ -132,7 +128,6 @@
 		 * [flashDelete flashDelete()] (function)
 		 * [flashIsEmpty flashIsEmpty()] (function)
 		 * [flashCount flashCount()] (function)
-		 * [flashKeyExists flashKeyExists()] (function)
 		 * [flashInsert flashInsert()] (function)
 		 * [flash flash()] (function)
 	--->
@@ -163,7 +158,6 @@
 		 * [flashIsEmpty flashIsEmpty()] (function)
 		 * [flashCount flashCount()] (function)
 		 * [flashKeyExists flashKeyExists()] (function)
-		 * [flashInsert flashInsert()] (function)
 		 * [flash flash()] (function)
 	--->
 
@@ -191,7 +185,6 @@
 		 * [flashCount flashCount()] (function)
 		 * [flashKeyExists flashKeyExists()] (function)
 		 * [flashInsert flashInsert()] (function)
-		 * [flash flash()] (function)
 	--->
 
 	<cfif flashKeyExists(arguments.key)>
