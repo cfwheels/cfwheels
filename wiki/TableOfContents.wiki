@@ -39,7 +39,7 @@
  * Object Validation
  * Object Callbacks
  * Soft Delete
- * Automatic Time Stamps
+ * [AutomaticTimeStamps Automatic Time Stamps]
 
 ==Displaying Views to Users==
 
