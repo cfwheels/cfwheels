@@ -1,5 +1,5 @@
 #summary redirectTo([url,protocol,onlyPath,addToken,anchor,params,controller,back,action,host,route,id,statusCode])
-#labels api,0.8,view,helper
+#labels api,0.8,controller,request
 
 *Description*:
 
@@ -42,7 +42,7 @@ Internally it uses URLFor (when a controller/action/id is supplied) to build the
 
 {{{
 <cfif user.save()>
-<cfset redirectTo(action="saveSuccessful")>
+  <cfset redirectTo(action="saveSuccessful")>
 </cfif>
 }}}
 
