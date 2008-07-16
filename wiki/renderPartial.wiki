@@ -1,0 +1,42 @@
+#summary renderPartial(name[cache,$type])
+#labels api,0.8,controller,request
+
+*Description*:
+
+Renders content to the browser by including a partial.
+
+*Return Type*:
+
+Void
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *name* || string || true ||  || Name of partial to include ||
+|| *cache* || any || false ||  || Minutes to cache the content for ||
+|| *$type* || type= || false || render || gument name= ||
+
+*Usage*:
+
+-
+
+*Examples*:
+
+{{{
+<cfset renderPartial("comment")>
+
+}}}
+
+*Related*:
+
+ * RenderingPages (chapter)
+ * [renderPageToString renderPageToString()] (function)
+ * [renderPage renderPage()] (function)
+ * [renderNothing renderNothing()] (function)
+ * [renderText renderText()] (function)

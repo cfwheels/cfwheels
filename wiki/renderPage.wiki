@@ -1,0 +1,48 @@
+#summary renderPage([$showDebugInformation,action,layout,cache,controller])
+#labels api,0.8,controller,request
+
+*Description*:
+
+Renders content to the browser by including the view page for the specified controller and action.
+
+*Return Type*:
+
+Void
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *$showDebugInformation* || any || false || #application.settings.showDebugInformation# || gument name= ||
+|| *action* || string || false || #variables.params.action# || Action to include the view page for ||
+|| *layout* || any || false || true || The layout to wrap the content in ||
+|| *cache* || any || false ||  || Minutes to cache the content for ||
+|| *controller* || string || false || #variables.params.controller# || Controller to include the view page for ||
+
+*Usage*:
+
+This form of rendering (including a view file based on the controller and action) is the most commonly used and is the one used by Wheels as the default when nothing is explicitly rendered.
+
+*Examples*:
+
+{{{
+<cfset renderPage(action="someOtherAction")>
+}}}
+
+{{{
+<cfset renderPage(layout=false, cache=60)>
+
+}}}
+
+*Related*:
+
+ * RenderingPages (chapter)
+ * [renderPageToString renderPageToString()] (function)
+ * [renderNothing renderNothing()] (function)
+ * [renderText renderText()] (function)
+ * [renderPartial renderPartial()] (function)

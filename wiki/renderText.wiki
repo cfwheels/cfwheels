@@ -1,0 +1,40 @@
+#summary renderText(text)
+#labels api,0.8,controller,request
+
+*Description*:
+
+Renders the specified text to the browser.
+
+*Return Type*:
+
+Void
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *text* || any || true ||  || The text to be rendered ||
+
+*Usage*:
+
+-
+
+*Examples*:
+
+{{{
+<cfset renderText("Done!")>
+
+}}}
+
+*Related*:
+
+ * RenderingPages (chapter)
+ * [renderPageToString renderPageToString()] (function)
+ * [renderPage renderPage()] (function)
+ * [renderNothing renderNothing()] (function)
+ * [renderPartial renderPartial()] (function)

@@ -1,0 +1,44 @@
+#summary renderPageToString([$showDebugInformation,action,layout,cache,controller])
+#labels api,0.8,controller,request
+
+*Description*:
+
+Includes the view page for the specified controller and action and returns it as a string.
+
+*Return Type*:
+
+String
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *$showDebugInformation* || any || false || #application.settings.showDebugInformation# || gument name= ||
+|| *action* || string || false || #variables.params.action# || Pass-through argument; see documentation for renderPage ||
+|| *layout* || any || false || true || Pass-through argument; see documentation for renderPage ||
+|| *cache* || any || false ||  || Pass-through argument; see documentation for renderPage ||
+|| *controller* || string || false || #variables.params.controller# || Pass-through argument; see documentation for renderPage ||
+
+*Usage*:
+
+-
+
+*Examples*:
+
+{{{
+<cfset response = renderPageToString(layout=false)>
+
+}}}
+
+*Related*:
+
+ * RenderingPages (chapter)
+ * [renderPage renderPage()] (function)
+ * [renderNothing renderNothing()] (function)
+ * [renderText renderText()] (function)
+ * [renderPartial renderPartial()] (function)

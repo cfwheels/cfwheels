@@ -1,0 +1,36 @@
+#summary renderNothing()
+#labels api,0.8,controller,request
+
+*Description*:
+
+Renders a blank string to the browser.
+
+*Return Type*:
+
+Void
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+*Usage*:
+
+This is very similar to just doing a <cfabort> with the advantage that any after filters you have set on the action will still be run.
+
+*Examples*:
+
+{{{
+<cfset renderNothing()>
+
+}}}
+
+*Related*:
+
+ * RenderingPages (chapter)
+ * [renderPageToString renderPageToString()] (function)
+ * [renderPage renderPage()] (function)
+ * [renderText renderText()] (function)
+ * [renderPartial renderPartial()] (function)
