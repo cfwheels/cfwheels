@@ -34,28 +34,5 @@ Test1Test2Test3
 *Examples*:
 
 {{{
-Controller code...
-<cfparam name="params.page" default="1">
-<cfset allAuthors = model("Author").findAll(page=params.page, perPage=25)>
-View code...
-<ul>
-  <cfoutput query="allAuthors">
-    <li>#firstName# #lastName#</li>
-  </cfoutput>
-</ul>
-<cfoutput>#paginationLinks()#</cfoutput>
-}}}
-
-{{{
-View code...
-<cfoutput>#paginationLinks(windowSize=5)#</cfoutput>
-}}}
-
-{{{
-Controller code...
-<cfset allAuthors = model("Author").findAll(handle="authQuery", page=5)>
-View code...
-<ul>
-  <cfoutput>#paginationLinks(handle="authQuery", prependToLink="<li>", appendToLink="</li>")#</cfoutput>
-</ul>
+<!--- Controller code.
 }}}
