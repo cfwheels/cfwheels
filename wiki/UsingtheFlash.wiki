@@ -20,10 +20,10 @@ In the view page for the edit action:
 <p class="error-message"><cfoutput>#flash("error")#</cfoutput></p>
 }}}
 
-As you can see above you use the `flashInsert` function when you want to store data in the Flash and the `flash` function when you want to display the data in a view. The key chosen above is `error` but it could have been anything, just like with a normal struct the naming of the struct keys is your job. As an example you may choose to use one key for storing error messages and another one for storing success messages.
+As you can see above you use the `[flashInsert flashInsert]` function when you want to store data in the Flash and the `flash` function when you want to display the data in a view. The key chosen above is `error` but it could have been anything, just like with a normal struct the naming of the struct keys is your job. As an example you may choose to use one key for storing error messages and another one for storing success messages.
 
 ==More Flashy Functions==
 
-Besides `flash` and `flashInsert` that are used to read from / insert to the Flash there are a few other functions worth mentioning; `flashCount` is used to count how many key/value pairs there are in the Flash. `flashKeyExists` is used to check if a specific key exists so it would make sense to make use of that function in the code listed above to avoid outputting an empty p tag on requests where the Flash is empty (`flash` will return an empty string when the specified key does not exist). Check out the [FunctionsByCategory API] for the rest of the functions that deal with the Flash.
+Besides `flash` and `flashInsert` that are used to read from / insert to the Flash there are a few other functions worth mentioning; `flashCount` is used to count how many key/value pairs there are in the Flash. `flashKeyExists` is used to check if a specific key exists so it would make sense to make use of that function in the code listed above to avoid outputting an empty p tag on requests where the Flash is empty (`flash` will return an empty string when the specified key does not exist). Check out the [FunctionsbyCategory API] for the rest of the functions that deal with the Flash.
 
 By the way, the name "Flash" comes from Ruby on Rails like so many other cool things in Wheels.
