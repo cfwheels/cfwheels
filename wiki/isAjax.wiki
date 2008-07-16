@@ -1,0 +1,33 @@
+#summary isAjax()
+#labels api,0.8,controller,request
+
+*Description*:
+
+Returns whether the page was called from JavaScript or not.
+
+*Return Type*:
+
+Boolean
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+*Usage*:
+
+-
+
+*Examples*:
+
+{{{
+<cfset requestIsAjax = isAjax()>
+
+}}}
+
+*Related*:
+
+ * [isGet isGet()] (function)
+ * [isPost isPost()] (function)

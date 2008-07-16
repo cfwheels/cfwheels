@@ -1,0 +1,33 @@
+#summary isGet()
+#labels api,0.8,controller,request
+
+*Description*:
+
+Returns whether the request was a normal (GET) request or not.
+
+*Return Type*:
+
+Boolean
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+*Usage*:
+
+-
+
+*Examples*:
+
+{{{
+<cfset requestIsGet = isGet()>
+
+}}}
+
+*Related*:
+
+ * [isPost isPost()] (function)
+ * [isAjax isAjax()] (function)

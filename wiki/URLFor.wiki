@@ -1,0 +1,44 @@
+#summary URLFor([host,action,protocol,controller,onlyPath,anchor,params,route,id])
+#labels api,0.8,view,helper
+
+*Description*:
+
+Creates an URL based on supplied arguments.
+
+*Return Type*:
+
+String
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *host* || string || false ||  || Set this to override the current host (domain name) ||
+|| *action* || string || false ||  || Name of the action to include in the URL ||
+|| *protocol* || string || false ||  || Set this to override the current protocol (http) ||
+|| *controller* || string || false ||  || Name of the controller to include in the URL ||
+|| *onlyPath* || boolean || false || true || If true, returns only the relative URL (no protocol, host name or port) ||
+|| *anchor* || string || false ||  || Sets an anchor name to be appended to the path ||
+|| *params* || string || false ||  || Any additional params to be set in the query string ||
+|| *route* || string || false ||  || Name of a route that you have configured ||
+|| *id* || numeric || false || 0 || Id to include in the URL ||
+
+*Usage*:
+
+-
+
+*Examples*:
+
+{{{
+<cfoutput>#URLFor(action="comments", anchor="comment10")#</cfoutput>
+
+}}}
+
+*Related*:
+
+ * RequestHandling (chapter)

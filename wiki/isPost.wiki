@@ -1,0 +1,33 @@
+#summary isPost()
+#labels api,0.8,controller,request
+
+*Description*:
+
+Returns whether the request came from a form submission or not.
+
+*Return Type*:
+
+Boolean
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+*Usage*:
+
+-
+
+*Examples*:
+
+{{{
+<cfset requestIsPost = isPost()>
+
+}}}
+
+*Related*:
+
+ * [isGet isGet()] (function)
+ * [isAjax isAjax()] (function)
