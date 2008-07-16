@@ -2,13 +2,14 @@
 #labels api,0.8,view,helper
 
 *Description*:
-Creates links to pages for a paginated query
+
+Builds and returns a string containing links to pages based on a paginated query.
 
 *Return Type*:
+
 string 
 
 *Parameters*:
-
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
 || *classForCurrent* || string || false ||  || Class name for the link to the current page ||
@@ -21,3 +22,30 @@ string
 || *name* || string || false || page || The name of the param that holds the current page number ||
 || *appendToLink* || string || false ||  || String to be appended after all links ||
 
+*Usage*:
+
+If you have paginated more than one query in the controller you can use the handle argument to reference them (don't forget to pass in a handle to the findAll function in your controller first though).
+All other arguments are used to customize the output.
+
+*History*:
+
+Test1Test2Test3
+
+*Examples*:
+
+{{{Controller code...
+<cfparam name="params.page" default="1">
+<cfset allAuthors = model("Author").findAll(page=params.page, perPage=25)>
+View code...
+<ul>
+  <cfoutput query="allAuthors">
+    <li>#firstName# #lastName#</li>
+  </cfoutput>
+</ul>
+<cfoutput>#paginationLinks()#</cfoutput>}}}{{{View code...
+<cfoutput>#paginationLinks(windowSize=5)#</cfoutput>}}}{{{Controller code...
+<cfset allAuthors = model("Author").findAll(handle="authQuery", page=5)>
+View code...
+<ul>
+  <cfoutput>#paginationLinks(handle="authQuery", prependToLink="<li>", appendToLink="</li>")#</cfoutput>
+</ul>}}}
