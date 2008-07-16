@@ -10,7 +10,7 @@
 ==Handling Requests With Controllers==
 
  * [RequestHandling Request Handling]
- * Rendering Pages
+ * [RenderingPages Rendering Pages]
  * [RedirectingUsers Redirecting Users]
  * Sending Files
  * Sending Email
