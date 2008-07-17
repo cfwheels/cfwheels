@@ -1,0 +1,21 @@
+#summary One-sentence summary of this page.
+#labels chapter,0.8
+
+These functions are called from the `init` function of your model files.
+
+==Example==
+
+`models/Author.cfc`:
+
+{{{
+<cffunction name="init">
+  <cfset hasMany("posts")>
+</cffunction>
+}}}
+
+==Functions==
+
+ * [hasOne hasOne()]
+ * [hasMany hasMany ()]
+ * [belongsTo belongsTo()]
+ * [validatesPresenceOf validatesPresenceOf()]
