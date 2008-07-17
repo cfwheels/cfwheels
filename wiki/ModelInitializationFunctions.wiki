@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Listing of all model initialization functions.
 #labels chapter,0.8
 
 These functions are called from the `init` function of your model files.
