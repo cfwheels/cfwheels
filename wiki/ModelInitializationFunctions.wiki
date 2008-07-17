@@ -1,9 +1,17 @@
 #summary One-sentence summary of this page.
 #labels chapter,0.8
 
-= Introduction =
+These functions are called from the `init` function of your model files.
 
-Add your content here.
+Example (`models/Author.cfc`):
 
+{{{
+<cffunction name="init">
+  <cfset hasMany("posts")>
+</cffunction>
+}}}
 
-= Details =asddasasdki pages
+ * [hasOne hasOne()]
+ * [hasMany hasMany ()]
+ * [belongsTo belongsTo()]
+ * [validatesPresenceOf validatesPresenceOf()]
