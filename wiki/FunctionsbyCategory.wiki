@@ -1,6 +1,0 @@
-#summary All functions in Wheels listed by category.
-#labels chapter,0.8
-
-
-
-==Controller, Request==
