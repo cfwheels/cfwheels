@@ -64,4 +64,10 @@
 
 ==API==
 
- * [FunctionsbyCategory Functions by Category]
+ * [ModelInitializationFunctions Model Initialization Functions]
+ * [ModelClassFunctions Model Class Functions]
+ * [ModelObjectFunctions Model Object Functions]
+ * [ViewHelperFunctions View Helper Functions]
+ * [ControllerInitializationFunctions Controller Initialization Functions]
+ * [ControllerRequestFunctions Controller Request Functions]
+ * [GlobalHelperFunctions Global Helper Functions]
