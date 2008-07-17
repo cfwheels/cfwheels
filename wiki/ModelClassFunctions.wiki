@@ -1,21 +1,19 @@
-#summary One-sentence summary of this page.
+#summary Listing of all model class functions.
 #labels chapter,0.8
 
-These functions are called from the `init` function of your model files.
+These functions operate on the class as a whole and not on individual objects and thus need to be prefaced with `model("Name")`. You can call these functions from anywhere but it is not recommended to call them from view pages. When calling them from its own model file it is recommended to reference the scope explicitly with the `this` keyword.
 
 ==Example==
 
-`models/Author.cfc`:
+`controllers/Blog.cfc`:
 
 {{{
-<cffunction name="init">
-  <cfset hasMany("posts")>
-</cffunction>
+<cfset allAuthors = model("Author").findAll()>
 }}}
 
 ==Functions==
 
- * [hasOne hasOne()]
- * [hasMany hasMany ()]
- * [belongsTo belongsTo()]
- * [validatesPresenceOf validatesPresenceOf()]
+ * [findById findById()]
+ * [findOne findOne()]
+ * [findAll findAll()]
+ * [new new()]
