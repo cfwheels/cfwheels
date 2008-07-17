@@ -1,25 +1,6 @@
 #summary All functions in Wheels listed by category.
 #labels chapter,0.8
 
-==View, Helper==
-
-These functions can be called from the controller and the view but are mostly used in the view to create output for use in a HTML page.
-
-Example (`views/blog/listauthors.cfm`):
-
-{{{
-<cfoutput>
-  #paginationLinks(windowSize=5)#
-</cfoutput>
-}}}
-
- * [paginationCurrentPage paginationCurrentPage()]
- * [paginationHasNext paginationHasNext()]
- * [paginationHasPrevious paginationHasPrevious()]
- * [paginationLinks paginationLinks()]
- * [paginationTotalPages paginationTotalPages()]
- * [paginationTotalRecords paginationTotalRecords()]
-
 ==Controller, Initialization==
 
 These functions are called from the `init` function of your controller files.
