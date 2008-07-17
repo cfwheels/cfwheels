@@ -1,43 +1,6 @@
 #summary All functions in Wheels listed by category.
 #labels chapter,0.8
 
-All functions in Wheels fall into one of these six categories:
-
- * Model, Initialization
- * Model, Class
- * Model, Object
- * View, Helper
- * Controller, Initialization
- * Controller, Request
-
-==Model, Initialization==
-
-These functions are called from the `init` function of your model files.
-
-Example (`models/Author.cfc`):
-
-{{{
-<cffunction name="init">
-  <cfset hasMany("posts")>
-</cffunction>
-}}}
-
- * coming soon...
- * coming soon...
-
-==Model, Class==
-
-These functions operate on the class as a whole and not on individual objects and thus need to be prefaced with `model("Name")`. You can call these functions from anywhere but it is not recommended to call them from view pages. When calling them from its own model file it is recommended to reference the scope explicitly with the `this` keyword.
-
-Example (`controllers/Blog.cfc`):
-
-{{{
-<cfset allAuthors = model("Author").findAll()>
-}}}
-
- * coming soon...
- * coming soon...
-
 ==Model, Object==
 
 These functions operate on individual objects which means you first have to fetch or create an object and then call the function on that object. You can call these functions from anywhere but it is not recommended to call them from view pages. When calling them from its own model file it is recommended to reference the scope explicitly with the `this` keyword.
