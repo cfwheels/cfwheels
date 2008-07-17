@@ -1,20 +1,6 @@
 #summary All functions in Wheels listed by category.
 #labels chapter,0.8
 
-==Model, Object==
-
-These functions operate on individual objects which means you first have to fetch or create an object and then call the function on that object. You can call these functions from anywhere but it is not recommended to call them from view pages. When calling them from its own model file it is recommended to reference the scope explicitly with the `this` keyword.
-
-Example (`controllers/Blog.cfc`):
-
-{{{
-<cfset anAuthor = model("Author").findById(1)>
-<cfset anAuthor.delete()>
-}}}
-
- * coming soon...
- * coming soon...
-
 ==View, Helper==
 
 These functions can be called from the controller and the view but are mostly used in the view to create output for use in a HTML page.
