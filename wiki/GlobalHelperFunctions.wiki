@@ -1,18 +1,14 @@
-#summary Listing of all model object functions.
+#summary Listing of all global helper functions.
 #labels chapter,0.8
 
-These functions operate on individual objects which means you first have to fetch or create an object and then call the function on that object. You can call these functions from anywhere but it is not recommended to call them from view pages. When calling them from its own model file it is recommended to reference the scope explicitly with the `this` keyword.
+These functions are general purpose functions and can be called from anywhere.
 
 ==Example==
 
-`controllers/Blog.cfc`:
-
 {{{
-<cfset anAuthor = model("Author").findById(1)>
-<cfset anAuthor.delete()>
+<cfoutput>#URLFor(action="anAction")#</cfoutput>
 }}}
 
 ==Functions==
 
- * [save save()]
- * [delete delete()]
+ * [URLFor URLFor()]
