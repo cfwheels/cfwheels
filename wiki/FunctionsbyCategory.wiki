@@ -1,25 +1,7 @@
 #summary All functions in Wheels listed by category.
 #labels chapter,0.8
 
-==Controller, Initialization==
 
-These functions are called from the `init` function of your controller files.
-
-Example (`controllers/Blog.cfc`):
-
-{{{
-<cffunction name="init">
-  <cfset filters(through="userVerification")>
-</cffunction>
-}}}
-
- * [flash flash()]
- * [flashClear flashClear()]
- * [flashCount flashCount()]
- * [flashDelete flashDelete()]
- * [flashInsert flashInsert()]
- * [flashIsEmpty flashIsEmpty()]
- * [flashKeyExists flashKeyExists()]
 
 ==Controller, Request==
 
