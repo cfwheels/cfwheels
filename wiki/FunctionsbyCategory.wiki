@@ -4,15 +4,3 @@
 
 
 ==Controller, Request==
-
-These functions are called from actions in your controller files.
-
-Example (`controllers/Blog.cfc`):
-
-{{{
-<cffunction name="sendToWheels">
-  <cfset redirectTo(url="http://www.cfwheels.com")>
-</cffunction>
-}}}
-
- * [redirectTo redirectTo()]
