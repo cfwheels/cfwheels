@@ -40,6 +40,7 @@ That's all there is to it really, the best way to learn pagination is to play ar
 
  * GettingPaginatedData (chapter)
  * DisplayingLinksforPagination (chapter)
+ * [findAll findAll()] (function)
  * [paginationLinks paginationLinks()] (function)
  * [paginationHasPrevious paginationHasPrevious()] (function)
  * [paginationHasNext paginationHasNext()] (function)
