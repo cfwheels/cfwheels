@@ -1,0 +1,15 @@
+#summary Our listing of steps to take while upgrading your Wheels application from 0.7 to 0.8.
+#labels 0.8,chapter
+
+==File System Changes==
+
+ # Change the `controller` folder to `controllers`.
+ # Change the `model` folder to `models`.
+ # Change the `view` folder to `views`.
+ # Rename all of your CFCs in `models` and `controllers` to UpperCamelCase. So `controller.cfc` will become `Controller.cfc`, `adminUser.cfc` will become `AdminUser.cfc`, and so on.
+
+==Database Changes==
+
+===MySQL===
+
+ # Review your integer columns and make sure that they are not set as `UNSIGNED`. If so, remove this property because it will throw a ColdFusion error.
