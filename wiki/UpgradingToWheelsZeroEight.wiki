@@ -3,13 +3,18 @@
 
 ==File System Changes==
 
- # Change the `controller` folder to `controllers`.
- # Change the `model` folder to `models`.
- # Change the `view` folder to `views`.
- # Rename all of your CFCs in `models` and `controllers` to UpperCamelCase. So `controller.cfc` will become `Controller.cfc`, `adminUser.cfc` will become `AdminUser.cfc`, and so on.
+ * Change the `controller` folder to `controllers`.
+ * Change the `model` folder to `models`.
+ * Change the `view` folder to `views`.
+ * Rename all of your CFCs in `models` and `controllers` to UpperCamelCase. So `controller.cfc` will become `Controller.cfc`, `adminUser.cfc` will become `AdminUser.cfc`, and so on.
 
-==Database Changes==
+==Database Structure Changes==
 
 ===MySQL===
 
- # Review your integer columns and make sure that they are not set as `UNSIGNED`. If so, remove this property because it will throw a ColdFusion error.
+ * Review your integer columns and make sure that they are not set as `UNSIGNED`. If so, remove this property because it will throw a ColdFusion error.
+
+==CFML Code Changes==
+
+===Model Code===
+ * When using a model's `findAll()`, 'findById()`, and `findOne()` functions, the `found` property is no longer available. Instead, use ColdFusion's built-in `IsObject()` and `IsBoolean()` methods to determind if a record was found. If it was found, the return value will be an object; if not, it will return `false`.
