@@ -1,11 +1,11 @@
-<!--- path of calling application.cfc will become the root dir --->
+<!--- path of calling Application.cfc will become the root dir --->
 <cfset this.rootDir = getDirectoryFromPath(getBaseTemplatePath())>
 <!--- niffty way to have unique application names and not have to worry about the 64 character length limit --->
-<cfset this.name = hash(this.rootDir)>
+<cfset this.name = Hash(this.rootDir)>
 <cfset this.mappings["/wheels"] = this.rootDir & "wheels">
 <cfset this.mappings["/controllerRoot"] = this.rootDir & "controllers">
 <cfset this.mappings["/modelRoot"] = this.rootDir & "models">
-<cfset this.sessionmanagement = true>
+<cfset this.sessionManagement = true>
 
 <cfif IsDefined("server.coldfusion.productname") AND server.coldfusion.productname IS "ColdFusion Server">
 	<cfinclude template="wheels/base/internal.cfm">
@@ -85,7 +85,7 @@
 			<cfif StructKeyExists(URL, "except")>
 				<cfset application.settings.ipExceptions = URL.except>
 			</cfif>
-			<cfif Len(application.settings.ipExceptions) IS 0 OR listFind(application.settings.ipExceptions, cgi.remote_addr) IS 0>
+			<cfif Len(application.settings.ipExceptions) IS 0 OR ListFind(application.settings.ipExceptions, cgi.remote_addr) IS 0>
 				<cfinclude template="../events/onmaintenance.cfm">
 				<cfabort>
 			</cfif>
@@ -96,8 +96,8 @@
 		<cfif application.settings.showDebugInformation>
 			<cfset request.wheels.execution = StructNew()>
 			<cfset request.wheels.execution.components = StructNew()>
-			<cfset request.wheels.execution.componentTotal = getTickCount()>
-			<cfset request.wheels.execution.components.requestStart = getTickCount()>
+			<cfset request.wheels.execution.componentTotal = GetTickCount()>
+			<cfset request.wheels.execution.components.requestStart = GetTickCount()>
 		</cfif>
 		<cfif NOT application.settings.cacheModelInitialization>
 			<cfset structClear(application.wheels.models)>
@@ -116,7 +116,7 @@
 		<cfinclude template="../events/onrequeststart.cfm">
 	</cflock>
 	<cfif application.settings.showDebugInformation>
-		<cfset request.wheels.execution.components.requestStart = getTickCount() - request.wheels.execution.components.requestStart>
+		<cfset request.wheels.execution.components.requestStart = GetTickCount() - request.wheels.execution.components.requestStart>
 	</cfif>
 </cffunction>
 
@@ -136,7 +136,7 @@
 	<cflock scope="application" type="readonly" timeout="30">
 		<cfinclude template="../events/onrequestend.cfm">
 		<cfif application.settings.showDebugInformation>
-			<cfset request.wheels.execution.components.requestEnd = getTickCount() - request.wheels.execution.components.requestEnd>
+			<cfset request.wheels.execution.components.requestEnd = GetTickCount() - request.wheels.execution.components.requestEnd>
 		</cfif>
 		<cfinclude template="debug.cfm">
 	</cflock>

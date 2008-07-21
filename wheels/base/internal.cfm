@@ -179,14 +179,16 @@
 <cffunction name="$directory" returntype="any" access="private" output="false">
 	<cfset var loc = StructNew()>
 	<cfset arguments.name = "loc.returnValue">
-	<cfdirectory directory="#arguments.directory#" attributeCollection="#arguments#">
+	<!--- directory="#arguments.directory#" --->
+	<cfdirectory attributeCollection="#arguments#">
 	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$file" returntype="any" access="private" output="false">
 	<cfset var loc = StructNew()>
 	<cfset arguments.variable = "loc.returnValue">
-	<cffile action="#arguments.action#" attributeCollection="#arguments#">
+	<!--- action="#arguments.action#" --->
+	<cffile attributeCollection="#arguments#">
 	<cfreturn loc.returnValue>
 </cffunction>
 
@@ -206,7 +208,8 @@
 <cffunction name="$dbinfo" returntype="any" access="private" output="false">
 	<cfset var loc = StructNew()>
 	<cfset arguments.name = "loc.returnValue">
-	<cfdbinfo datasource="#arguments.datasource#" name="#arguments.name#" type="#arguments.type#" attributeCollection="#arguments#">
+	<!--- datasource="#arguments.datasource#" name="#arguments.name#" type="#arguments.type#" --->
+	<cfdbinfo attributeCollection="#arguments#">
 	<cfreturn loc.returnValue>
 </cffunction>
 

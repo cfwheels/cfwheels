@@ -53,7 +53,8 @@
 		<cfset StructDelete(arguments, "sql")>
 		<cfset StructDelete(arguments, "$limit")>
 		<cfset StructDelete(arguments, "$offset")>
-		<cfquery name="#arguments.name#" attributeCollection="#arguments#"><cfloop array="#loc.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfqueryparam cfsqltype="#loc.i.type#" value="#loc.i.value#"><cfelse>#preserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif loc.limit>LIMIT #loc.limit#<cfif loc.offset>#chr(13)##chr(10)#OFFSET #loc.offset#</cfif></cfif></cfquery>
+		<!--- name="#arguments.name#" --->
+		<cfquery attributeCollection="#arguments#"><cfloop array="#loc.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfqueryparam cfsqltype="#loc.i.type#" value="#loc.i.value#"><cfelse>#preserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif loc.limit>LIMIT #loc.limit#<cfif loc.offset>#chr(13)##chr(10)#OFFSET #loc.offset#</cfif></cfif></cfquery>
 		<cfset loc.returnValue.result = loc.result>
 		<cfif StructKeyExists(query, "name")>
 			<cfset loc.returnValue.query = query.name>
