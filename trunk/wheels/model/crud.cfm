@@ -3,8 +3,7 @@
 <cffunction name="findById" returntype="any" access="public" output="false" hint="Class, fetches the requested record from the database and returns it as an object">
 	<cfargument name="id" type="any" required="true" hint="Primary key value(s) of record to look for">
 	<cfargument name="select" type="string" required="false" default="" hint="Properties to select">
-	<cfargument name="cachedAfter" type="string" required="false" default="">
-	<cfargument name="cachedWithin" type="string" required="false" default="">
+	<cfargument name="cache" type="any" required="false" default="">
 	<cfargument name="reload" type="boolean" required="false" default="#application.settings.findById.reload#">
 	<cfargument name="parameterize" type="any" required="false" default="#application.settings.findById.parameterize#">
 	<cfargument name="$create" type="boolean" required="false" default="true">
@@ -26,8 +25,7 @@
 	<cfargument name="where" type="string" required="false" default="" hint="String to use in where clause of query">
 	<cfargument name="order" type="string" required="false" default="" hint="String to use in order by clause of query">
 	<cfargument name="select" type="string" required="false" default="" hint="Properties to select">
-	<cfargument name="cachedAfter" type="string" required="false" default="">
-	<cfargument name="cachedWithin" type="string" required="false" default="">
+	<cfargument name="cache" type="any" required="false" default="">
 	<cfargument name="reload" type="boolean" required="false" default="#application.settings.findOne.reload#">
 	<cfargument name="parameterize" type="any" required="false" default="#application.settings.findOne.parameterize#">
 	<cfargument name="$create" type="boolean" required="false" default="true">
@@ -66,8 +64,7 @@
 	<cfargument name="page" type="numeric" required="false" default=0>
 	<cfargument name="perPage" type="numeric" required="false" default=10>
 	<cfargument name="handle" type="string" required="false" default="query">
-	<cfargument name="cachedAfter" type="string" required="false" default="">
-	<cfargument name="cachedWithin" type="string" required="false" default="">
+	<cfargument name="cache" type="any" required="false" default="">
 	<cfargument name="reload" type="boolean" required="false" default="#application.settings.findAll.reload#">
 	<cfargument name="parameterize" type="any" required="false" default="#application.settings.findAll.parameterize#">
 	<cfargument name="$limit" type="numeric" required="false" default=0>
@@ -89,7 +86,7 @@
 				loc.distinct = true;
 			else
 				loc.distinct = false;
-			loc.totalRecords = count(distinct=loc.distinct, where=arguments.where, include=arguments.include, reload=arguments.reload, cachedAfter=arguments.cachedAfter, cachedWithin=arguments.cachedWithin);
+			loc.totalRecords = count(distinct=loc.distinct, where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache);
 			loc.currentPage = arguments.page;
 			if (loc.totalRecords IS 0)
 				loc.totalPages = 0;
@@ -99,7 +96,7 @@
 			loc.offset = (arguments.perPage * arguments.page) - arguments.perPage;
 			if ((loc.limit + loc.offset) GT loc.totalRecords)
 				loc.limit = loc.totalRecords - loc.offset;
-			loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cachedAfter=arguments.cachedAfter, cachedWithin=arguments.cachedWithin);
+			loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache);
 			if (!loc.values.recordCount)
 			{
 				loc.returnValue = QueryNew("");
@@ -188,10 +185,13 @@
 				loc.finderArgs.parameterize = arguments.parameterize;
 				loc.finderArgs.limit = arguments.$limit;
 				loc.finderArgs.offset = arguments.$offset;
-				if (Len(arguments.cachedAfter) && application.settings.environment IS "production")
-					loc.finderArgs.cachedAfter = arguments.cachedAfter;
-				if (Len(arguments.cachedWithin) && application.settings.environment IS "production")
-					loc.finderArgs.cachedWithin = arguments.cachedWithin;
+				if (Len(arguments.cache) && application.settings.environment IS "production")
+				{
+					if (IsBoolean(arguments.cache) && arguments.cache)
+						loc.finderArgs.cachedWithin = CreateTimeSpan(0,0,application.settings.defaultCacheTime,0);
+					else if (IsNumeric(arguments.cache))
+						loc.finderArgs.cachedWithin = CreateTimeSpan(0,0,arguments.cache,0);
+				}
 				loc.findAll = application.wheels.adapter.query(argumentCollection=loc.finderArgs);
 				request[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}

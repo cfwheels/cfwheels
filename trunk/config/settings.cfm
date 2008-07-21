@@ -4,6 +4,7 @@
 <cfset application.settings.defaultSoftDeleteColumn = "deletedAt">
 <cfset application.settings.defaultTimeStampOnCreateColumn = "createdAt">
 <cfset application.settings.defaultTimeStampOnUpdateColumn = "updatedAt">
+<cfset application.settings.ipExceptions = "">
 
 <!--- default for functions --->
 <cfset application.settings.findById.parameterize = true>

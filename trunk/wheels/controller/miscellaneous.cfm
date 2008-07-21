@@ -192,8 +192,8 @@
 			<cfset StructDelete(loc.attributes, loc.i)>
 		</cfif>
 	</cfloop>
-
-	<cfmail from="#arguments.from#" to="#arguments.to#" subject="#arguments.subject#" attributecollection="#loc.attributes#">#trim(request.wheels.response)#</cfmail>
+	<!--- from="#arguments.from#" to="#arguments.to#" subject="#arguments.subject#" --->
+	<cfmail attributecollection="#loc.attributes#">#trim(request.wheels.response)#</cfmail>
 
 	<!--- delete the response so that Wheels does not think we have rendered an actual response to the browser --->
 	<cfset StructDelete(request.wheels, "response")>
