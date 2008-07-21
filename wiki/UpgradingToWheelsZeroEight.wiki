@@ -11,10 +11,9 @@
 ==Database Structure Changes==
 
 ===MySQL===
-
- * Review your integer columns and make sure that they are not set as `UNSIGNED`. If so, remove this property because it will throw a ColdFusion error.
+ * Review your integer columns and make sure that they are not set as `UNSIGNED`. If so, remove this property or else it will throw a ColdFusion error.
 
 ==CFML Code Changes==
 
 ===Model Code===
- * When using a model's `findAll()`, 'findById()`, and `findOne()` functions, the `found` property is no longer available. Instead, use ColdFusion's built-in `IsObject()` and `IsBoolean()` methods to determind if a record was found. If it was found, the return value will be an object; if not, it will return `false`.
+ * When using a model's `findAll()`, 'findById()`, and `findOne()` functions, the `found` property is no longer available. Instead, use ColdFusion's built-in `IsObject()` and `IsBoolean()` functions to determind if a record was found. If it was found, the return value will be an object; if not, it will return `false`.
