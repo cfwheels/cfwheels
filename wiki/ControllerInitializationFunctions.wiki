@@ -15,10 +15,6 @@ These functions are called from the `init` function of your controller files.
 
 ==Functions==
 
- * [flash flash()]
- * [flashClear flashClear()]
- * [flashCount flashCount()]
- * [flashDelete flashDelete()]
- * [flashInsert flashInsert()]
- * [flashIsEmpty flashIsEmpty()]
- * [flashKeyExists flashKeyExists()]
+ * [caches caches()]
+ * [filters filters()]
+ * [verifies verifies()]

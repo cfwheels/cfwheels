@@ -13,7 +13,20 @@ These functions operate on the class as a whole and not on individual objects an
 
 ==Functions==
 
+ * [average average()]
+ * [count count()]
+ * [create create()]
+ * [deleteAll deleteAll()]
+ * [deleteById deleteById()]
+ * [deleteOne deleteOne()]
+ * [exists exists()]
+ * [findAll findAll()]
  * [findById findById()]
  * [findOne findOne()]
- * [findAll findAll()]
+ * [maximum maximum()]
+ * [minimum minimum()]
  * [new new()]
+ * [sum sum()]
+ * [updateAll updateAll()]
+ * [updateById updateById()]
+ * [updateOne updateOne()] 

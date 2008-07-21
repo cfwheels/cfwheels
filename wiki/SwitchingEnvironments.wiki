@@ -37,7 +37,7 @@ Besides the two environments mentioned above there are three more, let's go thro
 
 ===Maintenance===
 
- * Shows your custom maintenance page unless the requesting IP address is in the exception list (set in the `application.settings.exceptIPs` variable in `config/settings.cfm` or passed along in the URL as `exceptips=127.0.0.1,127.0.0.1`.
+ * Shows your custom maintenance page unless the requesting IP address is in the exception list (set in the `application.settings.ipExceptions` variable in `config/settings.cfm` or passed along in the URL as `except=127.0.0.1,127.0.0.1`.
 
 This environment mode comes in handy when you want to briefly take your website offline to upload changes or modify databases on production servers).
 

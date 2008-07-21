@@ -15,4 +15,21 @@ These functions are called from actions in your controller files.
 
 ==Functions==
 
+ * [flash flash()]
+ * [flashClear flashClear()]
+ * [flashCount flashCount()]
+ * [flashDelete flashDelete()]
+ * [flashInsert flashInsert()]
+ * [flashIsEmpty flashIsEmpty()]
+ * [flashKeyExists flashKeyExists()]
+ * [isAjax isAjax()]
+ * [isGet isGet()]
+ * [isPost isPost()]
  * [redirectTo redirectTo()]
+ * [renderNothing renderNothing()]
+ * [renderPage renderPage()]
+ * [renderPageToString renderPageToString()]
+ * [renderPartial renderPartial()]
+ * [renderText renderText()]
+ * [sendEmail sendEmail()]
+ * [sendFile sendFile()]

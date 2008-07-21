@@ -14,5 +14,24 @@ These functions operate on individual objects which means you first have to fetc
 
 ==Functions==
 
- * [save save()]
+ * [addError addError()]
+ * [addErrorToBase addErrorToBase()]
+ * [allChanges allChanges()]
+ * [allErrors allErrors()]
+ * [changedProperties changedProperties()]
+ * [clearErrors clearErrors()]
  * [delete delete()]
+ * [errorCount errorCount()]
+ * [errorsOn errorsOn()]
+ * [errorsOnBase errorsOnBase()]
+ * [hasChanged hasChanged()]
+ * [hasErrors hasErrors()]
+ * [reload reload()]
+ * [save save()]
+ * [update update()]
+ * [valid valid()]
+ 
+ 
+ 
+ 
+ 
