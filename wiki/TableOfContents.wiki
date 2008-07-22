@@ -3,12 +3,8 @@
 
 ==Introduction==
 
- * [WhyUseaFramework Why Use a Framework?]
- * [WhyUseWheels Why Use Wheels?]
+ * [FrameworksandWheels Frameworks and Wheels]
  * [Requirements Requirements]
-
-==Getting Started==
-
  * [Installation Installation]
  * [HelloWorld Hello World!]
 
