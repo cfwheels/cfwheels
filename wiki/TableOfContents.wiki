@@ -49,6 +49,7 @@
  * [UsingLayouts Using Layouts]
  * Form Helpers and Showing Errors
  * Displaying Links for Pagination
+ * AJAX and JavaScript Effects
  * Miscellaneous Helpers
 
 ==Miscellaneous==
