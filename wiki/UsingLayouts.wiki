@@ -1,0 +1,64 @@
+#summary Use the concept of layouts to wrap your content.
+
+Wheels allows you to create layouts so that you don't need to `<cfinclude>` header and footer code on every single view template. We'll show you how to setup default layouts, controller-specific layouts, and layouts for your emails.
+
+==Introduction==
+
+As a red-blooded CFML developer, you're used to creating include files like `header.cfm` and `footer.cfm`, and then using `<cfinclude>` on every single page to include them. The popular way to do it looks something like this:
+
+{{{
+<cfinclude template="/includes/header.cfm">
+<p>Some page content</p>
+<cfinclude template="/includes/footer.cfm">
+}}}
+
+Does that mean that you should `<cfinclude>` your headers and footers in every view in your Wheels app? Heck no! If the structure of your pages ever changed, you would need to edit _every single page_ on your site to make the fix.
+
+Layouts to the rescue!
+
+==Implementing a Layout==
+
+In your Wheels installation, layout files are stored in `views/layouts`. Let's go over how these work.
+
+Let's say that you want to define one layout to be used by every view in your application. You would accomplish this by editing the default layout. If you open the the _default layout_ at `views/layouts/default.cfm`, you'll notice that it only contains one line of code:
+
+{{{
+<cfoutput>#contentForLayout()#</cfoutput>
+}}}
+
+
+The call to [contentForLayout contentForLayout()] represents the output of your page stored in your view files. Whatever code you put before this snippet will be run before the view. Similarly, whatever code you put after the snippet will be run afterward.
+
+===Simple Example===
+
+For most purposes, this means that you could write code for your page header before the snippet, and write code for the footer after. Here is a simple example of wrapping your view's content with a header and footer.
+
+{{{
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <title><cfoutput>#title#</cfoutput></title>
+  #stylesheetLinkTag(sources="base.css")#
+  </head>
+ 
+  <body>
+
+    <div id="container">
+      <div id="navigation">
+        <ul>
+          <cfoutput>
+          <li>#linkTo(text="Home", controller="main")#</li>
+          <li>#linkTo(text="About Us", controller="about")#</li>
+          <li>#linkTo(text="Contact Us", controller="contact")#</li>
+          </cfoutput>
+        </ul>
+      </div>
+      <div id="content">
+        <cfoutput>#contentForLayout()#</cfoutput>
+      </div>
+    </div>
+
+  </body>
+</html>
+}}}
