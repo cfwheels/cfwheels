@@ -45,7 +45,7 @@
 			if (loc.query.recordCount IS NOT 0)
 				loc.returnValue = $createInstance(properties=loc.query, persisted=true);
 			else
-				loc.returnValue = false;
+				$throw(type="Wheels.RecordNotFound", message="The requested record could not be found in the database table.")
 		}
 		else
 		{

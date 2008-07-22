@@ -221,7 +221,7 @@
 	<cfif NOT FileExists(loc.folder & "/" & loc.file)>
 		<cfdirectory action="list" directory="#loc.folder#" name="loc.match" filter="#loc.file#.*">
 		<cfif loc.match.recordcount IS 0>
-			<cfthrow type="Wheels" message="File Not Found" extendedInfo="Make sure a file with the name <tt>#loc.file#</tt> exists in the <tt>#loc.folder#</tt> folder.">
+			<cfthrow type="Wheels.FileNotFound" message="File Not Found" extendedInfo="Make sure a file with the name <tt>#loc.file#</tt> exists in the <tt>#loc.folder#</tt> folder.">
 		</cfif>
 		<cfset loc.file = loc.file & "." & ListLast(loc.match.name, ".")>
 	</cfif>
