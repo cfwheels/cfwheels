@@ -15,7 +15,7 @@
  * Sending Files
  * Sending Email
  * [UsingtheFlash Using the Flash]
- * Filters and Verification
+ * [FiltersandVerification Filters and Verification]
  * Event Handlers
  * [URLRewriting URL Rewriting]
  * Using Routes
