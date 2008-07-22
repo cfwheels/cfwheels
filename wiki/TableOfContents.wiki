@@ -54,7 +54,7 @@
  * Linking Pages
  * [UsingLayouts Using Layouts]
  * Form Helpers and Showing Errors
- * Displaying Links for Pagination
+ * [DisplayingLinksforPagination Displaying Links for Pagination]
  * AJAX and Javascript Effects
  * Miscellaneous Helpers
 
