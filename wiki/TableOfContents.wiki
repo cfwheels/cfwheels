@@ -5,7 +5,7 @@
 
  * [Requirements Requirements]
  * [Installation Installation]
- * Hello World!
+ * [HelloWorld Hello World!]
 
 ==Handling Requests With Controllers==
 
@@ -25,9 +25,9 @@
 
  * Object Relational Mapping Basics
  * [CreatingRecords Creating Records]
- * Reading Records
- * Updating Records
- * Deleting Records
+ * [ReadingRecords Reading Records]
+ * [UpdatingRecords Updating Records]
+ * [DeletingRecords Deleting Records]
  * Column Statistics
  * Dynamic Finders
  * [GettingPaginatedData Getting Paginated Data]
@@ -37,7 +37,7 @@
  * Using the belongsTo Association 
  * Joining Tables
  * Object Validation
- * Object Callbacks
+ * [ObjectCallbacks Object Callbacks]
  * [SoftDelete Soft Delete]
  * [AutomaticTimeStamps Automatic Time Stamps]
 
@@ -49,7 +49,7 @@
  * [UsingLayouts Using Layouts]
  * Form Helpers and Showing Errors
  * Displaying Links for Pagination
- * AJAX and JavaScript Effects
+ * AJAX and Javascript Effects
  * Miscellaneous Helpers
 
 ==Miscellaneous==
