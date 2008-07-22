@@ -37,13 +37,11 @@
 </cfloop>
 <h1>Session</h1>
 <ul>
-<cflock scope="session" type="readonly" timeout="5">
-	<cfloop collection="#session#" item="loc.k">
-		<cfif isSimpleValue(session[loc.k]) AND Len(session[loc.k]) IS NOT 0>
-			<li><strong>#loc.k#:</strong><br />#session[loc.k]#</li>
-		</cfif>
-	</cfloop>
-</cflock>
+<cfloop collection="#session#" item="loc.k">
+	<cfif IsSimpleValue(session[loc.k]) AND Len(session[loc.k]) IS NOT 0>
+		<li><strong>#loc.k#:</strong><br />#session[loc.k]#</li>
+	</cfif>
+</cfloop>
 </ul>
 <h1>Application</h1>
 <ul>
