@@ -3,17 +3,20 @@
 
 ==File System Changes==
 
- * Change the `controller` folder to `controllers`.
- * Change the `model` folder to `models`.
- * Change the `view` folder to `views`.
- * Rename all of your CFCs in `models` and `controllers` to UpperCamelCase. So `controller.cfc` will become `Controller.cfc`, `adminUser.cfc` will become `AdminUser.cfc`, and so on.
+  * Change the `controller` folder to `controllers`.
+  * Change the `model` folder to `models`.
+  * Change the `view` folder to `views`.
+  * Rename all of your CFCs in `models` and `controllers` to UpperCamelCase. So `controller.cfc` will become `Controller.cfc`, `adminUser.cfc` will become `AdminUser.cfc`, and so on.
 
 ==Database Structure Changes==
 
 ===MySQL===
- * Review your integer columns and make sure that they are not set as `UNSIGNED`. If so, remove this property or else it will throw a ColdFusion error.
+
+  * Review your integer columns and make sure that they are not set as `UNSIGNED`. If so, remove this property or else it will throw a ColdFusion error.
 
 ==CFML Code Changes==
 
 ===Model Code===
- * When using a model's `findAll()`, 'findById()`, and `findOne()` functions, the `found` property is no longer available. Instead, use ColdFusion's built-in `IsObject()` and `IsBoolean()` functions to determind if a record was found. If it was found, the return value will be an object; if not, it will return `false`.
+
+  * When using a model's `findById()` and `findOne()` functions, the `found` property is no longer available. Instead, we've adopted the "Rails way" of doing this, which involves the function throwing an error of type "Wheels.RecordNotFound" if the record was not found. Use a `cftry`/`cfcatch` block to catch the error.
+  * A model's `errorsOn()` function now always returns an array, even if there are no errors on the field. When there are errors for the field, the array elements will contain a struct with `name`, `fieldName`, and `message` elements.
