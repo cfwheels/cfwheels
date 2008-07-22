@@ -38,7 +38,7 @@
  * Joining Tables
  * Object Validation
  * Object Callbacks
- * Soft Delete
+ * [SoftDelete Soft Delete]
  * [AutomaticTimeStamps Automatic Time Stamps]
 
 ==Displaying Views to Users==
