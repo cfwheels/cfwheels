@@ -55,7 +55,7 @@
 
  * [DirectoryStructure Directory Structure]
  * [SwitchingEnvironments Switching Environments]
- * [Deployment Deployment]
+ * Deployment
 
 ==Contributing to Wheels==
 
