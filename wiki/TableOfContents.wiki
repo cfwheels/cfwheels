@@ -16,7 +16,7 @@
  * Sending Email
  * [UsingtheFlash Using the Flash]
  * [FiltersandVerification Filters and Verification]
- * Event Handlers
+ * [EventHandlers Event Handlers]
  * [URLRewriting URL Rewriting]
  * Using Routes
  * [ObfuscatingURLs Obfuscating URLs]
