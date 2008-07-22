@@ -1,4 +1,5 @@
 #summary Use the concept of layouts to wrap your content.
+#labels chapter,0.8
 
 Wheels allows you to create layouts so that you don't need to `<cfinclude>` header and footer code on every single view template. We'll show you how to setup default layouts, controller-specific layouts, and layouts for your emails.
 
@@ -36,29 +37,149 @@ For most purposes, this means that you could write code for your page header bef
 {{{
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-  <title><cfoutput>#title#</cfoutput></title>
-  #stylesheetLinkTag(sources="base.css")#
-  </head>
- 
-  <body>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title><cfoutput>#title#</cfoutput></title>
+#stylesheetLinkTag(sources="base.css")#
+</head>
 
-    <div id="container">
-      <div id="navigation">
-        <ul>
-          <cfoutput>
-          <li>#linkTo(text="Home", controller="main")#</li>
-          <li>#linkTo(text="About Us", controller="about")#</li>
-          <li>#linkTo(text="Contact Us", controller="contact")#</li>
-          </cfoutput>
-        </ul>
-      </div>
-      <div id="content">
-        <cfoutput>#contentForLayout()#</cfoutput>
-      </div>
+<body>
+
+  <div id="container">
+    <div id="navigation">
+      <ul>
+        <cfoutput>
+        <li>#linkTo(text="Home", controller="main")#</li>
+        <li>#linkTo(text="About Us", controller="about")#</li>
+        <li>#linkTo(text="Contact Us", controller="contact")#</li>
+        </cfoutput>
+      </ul>
     </div>
+    <div id="content">
+      <cfoutput>#contentForLayout()#</cfoutput>
+    </div>
+  </div>
 
-  </body>
+</body>
 </html>
 }}}
+
+As you can see, we just wrote code that wraps every view's content with the layout. Pretty cool, huh?
+
+Also notice the call to [stylesheetLinkTag stylesheetLinkTag()] in the HTML `<head>`. You can use this function to generate any stylesheet tags that your layout needs. It refers to your configured stylesheet directory (by default, the `stylesheets` directory).
+
+==Use of Variables in the Layout==
+
+Just like views in Wheels, any variable declared by your application's controller can be used within your layouts. In addition to that, any variables that you set in view templates are accessible to the layouts as well.
+
+Notice in the above code example that there is a variable called `title` being output in between the `<title>` tags. This would require that any controller or view using this particular layout would need to `<cfset>` a variable named `title`.
+
+To help document this, you should consider using `<cfparam>` tags at the top of your layout files. That way any developer using your layout in the future could easily see which variables need to be set by the controller.
+
+Here's an example:
+
+{{{
+<cfsetting enablecfoutputonly="true">
+
+<!--- Title is required --->
+<cfparam name="title" type="string">
+
+<!--- Because this is XHTML, we need to output the DOCTYPE as the first
+character of the first line, or else we get Quirks Mode! --->
+<cfoutput><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>#title#</title>
+</head>
+
+<body>
+
+<!--- View's Content --->
+<h1>#title#</h1>
+#contentForLayout()#
+
+</body>
+</html>
+
+</cfoutput>
+
+<cfsetting enablecfoutputonly="false">
+}}}
+
+==The Default Layout==
+
+One of the two layout files that are already created for you is `default.cfm`. (The other one is the default layout to be used when sending emails, but more on that later.) Think of it as the default layout to be used by any given controller.
+
+If you're writing code for a controller called `press` and there is no layout created for `press`, Wheels will automatically use `default.cfm` as the layout.
+
+If you implement a layout for the `press` controller, then that layout will be used instead of the default layout.
+
+==Overriding the Default Layout with a Controller-Specific Layout==
+
+Let's pretend that you want to create a layout to be used only in a controller called `blog`. To do this, you would simply create the layout and save it as `views/layouts/blog.cfm`.
+
+As you can see, the convention is to name your layout file `foo.cfm`, replacing `foo` with the name of the controller that will be using the layout.
+
+==Overriding the Default and Controller-Specific Layouts==
+
+As you may already know, Wheels' [renderPage renderPage()]  function is the last thing called in your actions. This function is run automatically by Wheels, so most of the time, you won't need to call it explicitly in your code.
+
+But there may be times that you won't want the action that your coding to use your default layout or your controller's layout. Sometimes you won't want to use a layout at all, like if your action is outputting XML or data to be used by an AJAX call.
+
+===Using a Different Layout than the Default Layout===
+
+If you want to use a layout not named after your controller or the default layout, simply use the `layout` argument of the [renderPage renderPage()] function.
+
+Take a look at this example action, called `display`:
+
+{{{
+<cffunction name="display">
+  <cfset title = "My Page">
+  <cfset renderPage(layout="visitor")>
+</cffunction>
+}}}
+
+This assumes that you want for your action to use the layout stored at `views/layouts/visitor.cfm`.
+
+===Using No Layout===
+
+If you don't want for a given template to be wrapped by a layout at all, you may want to consider creating the page as a _partial_. See the chapter about [IncludingPartials Including Partials] for more information.
+
+Another alternative is to create a layout with only the call to the [contentForLayout contentForLayout()] function in it and referencing it as described above in _Using a Different Layout_.
+
+Lastly, if your view needs to return XML code or other data for JavaScript calls, then you should reference the [renderNothing renderNothing()], [renderText renderText()], or [renderPageToString renderPageToString()] functions to see which would be best used by your action.
+
+==Email Layouts==
+
+The built-in Wheels [sendEmail sendEmail()] function also adds some layout conventions to make your life easier.
+
+===The Default Email Layout===
+
+As hinted earlier in this chapter, the default layout for your emails is stored at `views/layouts/email.cfm`. To have Wheels include the default email layout in your [sendEmail sendEmail()] call, pass `layout=true` as an argument.
+
+For example:
+
+{{{
+<cfset user = model("user").findOne(where="email='#params.email#'")>
+<cfset sendEmail(template="loginDetails", layout=true, subject="...", to=user.email, from="...")>
+<cfset flashInsert(notice="Your login details were sent to #user.email#")>
+<cfset redirectTo(action="entrance")>
+}}}
+
+Note that a difference in email layouts is that you can't set email layouts for specific controllers. Wheels does not look for controller-specific email layouts.
+
+===Using a Different Email Layout than the Default Layout===
+
+All email layouts that need to be called instead of `email.cfm` need to be called explicitly by the `layout` attribute of [sendEmail sendEmail()].
+
+Here's an example of calling a non-default email template in your controller:
+
+{{{
+<cfset user = model("user").findOne(where="email='#params.email#'")>
+<cfset sendEmail(template="loginDetails", layout="someEmailLayout", subject="...", to=user.email, from="...")>
+<cfset flashInsert(notice="Your login details were sent to #user.email#")>
+<cfset redirectTo(action="entrance")>
+}}}
+
+The above assumes that you are intending to use a layout stored at `views/layouts/someemaillayout.cfm`.
