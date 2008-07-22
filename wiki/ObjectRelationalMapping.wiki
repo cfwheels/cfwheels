@@ -1,0 +1,64 @@
+#summary What's an ORM and how is it used in Wheels.
+#labels chapter,0.8
+
+Mapping objects in your application to records in your database tables is a key concept in Wheels. Let's take a look at exactly how this mapping is performed.
+
+==Class and Object Methods==
+
+Unlike most other languages there is no notion of class level (a.k.a. `static`) methods in !ColdFusion. This means that even if you call a method that does not need to use any instance data you still have to create an object first. In Wheels we create this object like this.
+
+{{{
+<cfset model("Author")>
+}}}
+
+The model function will return a reference to an `author` object in the application scope (unless it's the first time you call this function in which case it will also create and store it in the application scope). Once you have the `author` object you can start calling class methods on it, like [findById findById()] for example. Obviously `Author` is just an example here and you'll use the names of the `.cfc` files you have created in the `models` folder.
+
+{{{
+<cfset authorClass = model("Author")>
+<cfset authorObject = authorClass.findById(1)>
+}}}
+
+For readability, this is usually combined into the following though.
+
+{{{
+<cfset authorObject = model("Author").findById(1)>
+}}}
+
+Now `authorObject` is an object instance of the `author` class and you can call object level methods on it like [update update()] and [save save()] etc.
+
+{{{
+<cfset authorObject.update(firstName="Joe")>
+}}}
+
+==Primary Keys==
+
+The convention in Wheels when it comes to primary keys is that they should be named `id`, increment automatically and be of the `integer` data type. If you want to you can override these conventions in practically any way you want to though. You can use _natural keys_ (`varchar` for example), you can use _composite keys_ (having multiple columns as primary keys) and you can name the key(s) whatever you want. You can also choose whether the database creates the key for you (using auto-incrementation for example) or create them yourself directly in the !ColdFusion code. Wheels will introspect the database to see what choices you have made and act accordingly.
+
+==Tables and Classes==
+
+Wheels comes with a custom built ORM. ORM stands for "Object-Relational Mapping" and means that tables in your relational database map to classes in your application. The records in your tables map to objects of your classes and the fields in these tables map to properties on the objects.
+
+To create a class in your application that maps to a table in your database all you have to do is create a new class file in your model folder and make it extend the model.cfc file.
+
+<cfcomponent extends="model">
+</cfcomponent>
+
+After creating this file you now have a bunch of methods available for you to use that handles reading and writing to the authors table (for the purpose of showing some examples we will assume you have created a file named author.cfc which will then be mapped to the authors table in the database). For example you can do the following to get the author with the primary key of 1, change his first name and save the record back to the database.
+
+<cfset auth = model("author").findById(1)>
+<cfset auth.firstName = "Joe">
+<cfset auth.save()>
+
+This code makes use of the class methods findById(), updates the object property in memory and then saves it back using the object method save(). We'll get back to all these methods and more later of course.
+
+By default a table name should be the plural version of the class name so if you have an author class the table name should be authors. To change this behavior you can use the setTable() method. This method call should be placed in the init method of your class file.
+
+<cfcomponent extends="model">
+  <cffunction name="init">
+   <cfset setTable(name="tbl_authors")>
+  </cffunction>
+</cfcomponent>
+
+Fields and properties
+
+Objects in Wheels have properties that correspond to the fields in the table it maps to. The first time (or every time if you're in design mode) you call a method on a model Wheels will reflect on the schema inside the database for the table the class maps to and extract all the field information. To keep things as simple as possible there are no getters or setters in Wheels, instead all the properties are made available in the this scope.
