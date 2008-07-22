@@ -24,7 +24,7 @@
 ==Database Interaction Through Models==
 
  * Object Relational Mapping Basics
- * Creating Records
+ * [CreatingRecords Creating Records]
  * Reading Records
  * Updating Records
  * Deleting Records
