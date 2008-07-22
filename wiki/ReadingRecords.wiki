@@ -1,0 +1,48 @@
+#summary Returning records from your database tables as objects or queries.
+#labels chapter,0.8
+
+Reading records from your database typically involves using one of the three finder methods available in Wheels; findById(), findOne() and findAll(). The first two of these ( findById() and findOne()) returns an object to you while the last one ( findAll()) returns the result from a cfquery tag.
+
+Let's start by looking at the simplest of the finder methods, findById(). findById() takes one argument - the primary key of the record you want to get. If the record exists it is returned to you as an object, if not you will still get the object back but it will be empty and a property named found will be set to false (which of course will be set to true when you do get a filled object back). In the following example we assume the params.id variable has been created from the URL (for example an URL such as http://localhost/blog/viewauthor/7)
+
+In your controller:
+
+<cfset author = model("author").findById(params.id)>
+<cfif NOT author.found>
+<cfset flashInsert(message="Author #params.id# was not found")>
+<cfset redirectTo(back=true)>
+</cfif>
+
+In your view:
+
+<cfoutput>Hello #author.firstName# #author.lastName#!</cfoutput>
+
+Often you'll find yourself wanting to get a record (or many) based on a criteria other than just the primary key value though. If you want to get the last order made by a customer you can for example achieve this by using the findOne() method like this:
+
+<cfset anOrder = model("order").findOne(order="datePurchased DESC")>
+
+findOne() will in this case force the maxRows argument of the cfquery tag to 1. Since you're specifically asking to get one record from the database Wheels will return this as an object. However, when you use findAll() you are asking to get one or more records from the database in which case Wheels will return this as a cfquery result (which could be empty if nothing was found based on your criteria). Besides these differences findOne() and findAll() accept the same arguments. Let's have a closer look at these arguments:
+select
+
+This maps to the SELECT clause of the SQL statement. By default Wheels will select all columns in your table but if you want to override this you can specify a list of column names here. You don't have to include the table name in the list (for example, you don't need author.firstName, just firstName is good enough). Even if you select from more than one table (see the include argument below) you still don't have to fully qualify the names but you should be aware that Wheels will try to guess which table you are referring to if you have firstName in both tables for example. A tip is to turn on debugging when you're learning Wheels so you can get a good understanding of how Wheels creates the SQL statements.
+where
+
+This maps to the WHERE clause of the SQL statement. Wheels will also convert all your input into cfqueryparam tags for you automatically. There are some limitations to what you can use in the where argument though but most "normal" SQL will work (=, !=, <, AND OR, IN and so on).
+order
+
+This maps to the ORDER clause of the SQL statement. If you don't specify an order at all, none will be used (makes sense, eh) so in those cases the database engine will decide in what order to return the records.
+include
+
+This is a powerful feature that you can use if you have setup associations in your models. if, for example, you have specified that one author has many articles then you can return all authors and articles in the same call by doing this:
+
+<cfset bobsArticles = model("author").findAll(where="firstName='bob'", include="articles")>
+
+maxRows
+
+This limits the number of records to return. Please note that if you call findAll() with maxRows=1 you will still get a cfquery result back and not an object (use findOne() if you want an object returned).
+page, perPage
+
+Set these if you want to get paginated data back, that is records 11-20 for example (page=2, perPage=10).
+cache
+
+Number of minutes to cache the query for.
