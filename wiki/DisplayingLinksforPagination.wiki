@@ -3,7 +3,7 @@
 
 In the chapter titled [GettingPaginatedData Getting Paginated Data] we talked about how to get pages of records from the database (records 11-20 for example). Now we'll show you how to create links to other pages in your view.
 
-==The PaginationLinks Function==
+==The !PaginationLinks Function==
 
 This function is the one you'll almost always want to use when displaying links to other pages in your pagination. However, if you need more control over the code than [paginationLinks paginationLinks()] provides then there are a few lower level functions at your disposal as well, see the "Related" section below for more information.
 
