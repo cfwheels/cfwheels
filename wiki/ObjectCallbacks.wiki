@@ -3,28 +3,29 @@
 
 Callbacks in Wheels is a concept that allows you to have code executed before and/or after certain operations on an object. This requires some further explanation so let's go straight to an example of a real-world application, the e-commerce checkout.
 
-A real-world example of using callbacks
+==A Real-World Example of Using Callbacks==
 
 Let's look at a possible scenario for what happens when a visitor to your imaginary e-commerce website submits her credit card details to finalize an order:
 
-    * You create a new order object using the new() method based on the incoming form parameters.
-    * You call the save() method on the order object which will cause Wheels to first validate the object and then store it in the database if it passes validation.
-    * The next day you call the update() method on the object since the user decided to change the shipping method for the order.
-    * Another day passes and you call the delete() method on the object because the visitor called in to cancel the order.
+ * You create a new order object using the [new new()] method based on the incoming form parameters.
+ * You call the [save save()] method on the order object which will cause Wheels to first validate the object and then store it in the database if it passes validation.
+ * The next day you call the [update update()] method on the object since the user decided to change the shipping method for the order.
+ * Another day passes and you call the [delete delete()] method on the object because the visitor called in to cancel the order.
 
 Let's say you want to have the following things executed somewhere in the code:
 
-    * Stripping out dashes from the credit card number to make it as easy as possible for the user to make a purchase.
-    * Calculating shipping cost based on the country the package will be sent to.
-    * Sending a confirmation email to the user if the order is cancelled.
+ * Stripping out dashes from the credit card number to make it as easy as possible for the user to make a purchase.
+ * Calculating shipping cost based on the country the package will be sent to.
+ * Sending a confirmation email to the user if the order is canceled.
 
 It's tempting to put this code right in the controller, isn't it? But if you think ahead a little you'll realize that you might build an administrative interface for orders and maybe an express checkout as well at some point in the future. You don't want to duplicate all your logic in all these places, do you?
 
-Object callbacks to the rescue... just implement something similar to the following to keep complex logic out of your controllers and to ensure you stay "DRY" (Don't Repeat Yourself).
+Object callbacks to the rescue... just implement something similar to the following to keep complex logic out of your controllers and to ensure you stay _"DRY"_ (Don't Repeat Yourself).
 
-Part of the order.cfc model file:
+Part of the `Order.cfc` model file:
 
-<cfcomponent extends="model">
+{{{
+<cfcomponent extends="Model">
   <cffunction name="beforeValidationOnCreate">
     Code for stripping out dashes in credit card numbers goes here...
     <cfreturn true>
@@ -39,25 +40,27 @@ Part of the order.cfc model file:
     Code for sending confirmation email goes here...
     <cfreturn true>
   </cffunction>
+}}}
 
 When Wheels validates, inserts, updates and deletes an object it will look for these functions in your model file and execute them if they exist.
-All possible callbacks
+
+==All possible callbacks==
 
 Wheels will look for the following 14 callback functions:
 
-    * beforeValidation
-    * beforeValidationOnCreate or beforeValidationOnUpdate
-    * afterValidation
-    * afterValidationOnCreate or afterValidationOnUpdate
-    * beforeSave
-    * beforeCreate or beforeUpdate
-    * afterCreate or afterUpdate
-    * afterSave
-    * beforeDelete
-    * afterDelete
+ * beforeValidation
+ * beforeValidationOnCreate or beforeValidationOnUpdate
+ * afterValidation
+ * afterValidationOnCreate or afterValidationOnUpdate
+ * beforeSave
+ * beforeCreate or beforeUpdate
+ * afterCreate or afterUpdate
+ * afterSave
+ * beforeDelete
+ * afterDelete
 
-As you can see above there are places (4 to be exact) where one callback or the other will be executed but not both. Which callback that will be executed depends on whether the object is being saved to the database for the first time or not. The "Create" type callbacks will be executed for new objects and the "Update" type callbacks for existing objects.
+As you can see above there are places (four to be exact) where one callback or the other will be executed but not both. Which callback that will be executed depends on whether the object is being saved to the database for the first time or not. The "Create" type callbacks will be executed for new objects and the "Update" type callbacks for existing objects.
 
-Please note that if you use the updateAll() or the deleteAll() methods in Wheels they will not instantiate objects by default and thus any callbacks will be skipped. This is good for performance reasons since if you update 1,000 records at once you probably don't want to run the callbacks on each object, especially not if they involve database calls. If you do however want to execute all callbacks in those methods as well, all you have to do is pass in instantiate=true to the updateAll() / deleteAll() methods.
+Please note that if you use the [updateAll updateAll()] or the [deleteAll deleteAll()] methods in Wheels they will not instantiate objects by default and thus any callbacks will be skipped. This is good for performance reasons since if you update 1,000 records at once you probably don't want to run the callbacks on each object, especially not if they involve database calls. If you do however want to execute all callbacks in those methods as well, all you have to do is pass in `instantiate=true` to the [updateAll updateAll()] / [deleteAll deleteAll()] methods.
 
-If you want to completely break the save/delete operation chain for an object you can do so by returning false from your callback method (otherwise always return true or nothing at all). By breaking the chain I mean that if you, for example, have called the save() method on a new object and your beforeCreate() method returns false the method will exit early returning false and no record will be inserted in the database.
+If you want to completely break the save/delete operation chain for an object you can do so by returning `false` from your callback method (otherwise always return `true` or nothing at all). By breaking the chain I mean that if you, for example, have called the [save save()] method on a new object and your beforeCreate() method returns `false` the method will exit early returning `false` and no record will be inserted in the database.
