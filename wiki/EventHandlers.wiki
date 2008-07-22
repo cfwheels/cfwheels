@@ -5,6 +5,8 @@ Since the `Application.cfc` file in the root of your website just includes the `
 
 While it's perfectly possible to add your code directly in the `wheels/functions.cfm` file we certainly don't recommend it. If you add code in there you both increase the risk of accidentally modifying how the framework functions and you also make it a lot harder to upgrade to future versions of Wheels since you have now made it impossible to just drop a new Wheels version in the `wheels` folder without changing how your application works.
 
+==The Events Folder==
+
 The general recommendation is to never touch any files in the `wheels` folder. OK, with that little warning out of the way how does one go about using the CFML events?!
 
 The answer is to use the `events` folder. There is a file in there for every single event that CFML triggers so if you want some code executed on application start for example, just place your code in `onapplicationstart.cfm` and Wheels will run it when your application starts.
