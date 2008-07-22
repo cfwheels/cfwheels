@@ -1,6 +1,11 @@
 #summary Documentation for Wheels 0.8.
 #labels chapter,0.8
 
+==Introduction==
+
+ * [WhyUseaFramework Why Use a Framework?]
+ * [WhyUseWheels Why Use Wheels?]
+
 ==Getting Started==
 
  * [Requirements Requirements]
@@ -20,6 +25,7 @@
  * [URLRewriting URL Rewriting]
  * Using Routes
  * [ObfuscatingURLs Obfuscating URLs]
+ * [Caching Caching]
 
 ==Database Interaction Through Models==
 
@@ -52,11 +58,11 @@
  * AJAX and Javascript Effects
  * Miscellaneous Helpers
 
-==Miscellaneous==
+==Working With Wheels==
 
  * [DirectoryStructure Directory Structure]
- * [Caching Caching]
  * [SwitchingEnvironments Switching Environments]
+ * [Deployment Deployment]
 
 ==Contributing to Wheels==
 
