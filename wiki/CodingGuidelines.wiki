@@ -9,9 +9,9 @@ Anyone may check out a read only copy of the code using this command:
 `svn checkout http://cfwheels.googlecode.com/svn/trunk/ cfwheels-read-only`
 
 The repository contains a standard SVN structure.
- * The *trunk* contains the latest working copy of the project as committed by the project's developers. It may contain bugs and will be in a constant state of flux until it is tagged in a new release.
- * *tags* contains official release code.
- * *branches* contain any off-shoot efforts that the group has decided to develop independently from the rest of the code.
+  * The *trunk* contains the latest working copy of the project as committed by the project's developers. It may contain bugs and will be in a constant state of flux until it is tagged in a new release.
+  * *tags* contains official release code.
+  * *branches* contain any off-shoot efforts that the group has decided to develop independently from the rest of the code.
 
 ===Core Team Has Write Access===
 
@@ -19,10 +19,10 @@ To make sure that we don't have too many chefs in the kitchen, we will be limiti
 
 At this time, the core team consists of these developers:
 
- * Per Djurner
- * Chris Peters
- * Peter Amiri
- * Tony Petruzzi
+  * Per Djurner
+  * Chris Peters
+  * Peter Amiri
+  * Tony Petruzzi
 
 This does not restrict you from being able to contribute. See "Process for Implementing Changes to the Code" below for instructions on volunteering. With enough dedication, you can earn a seat on the core team as well!
 
@@ -30,15 +30,17 @@ This does not restrict you from being able to contribute. See "Process for Imple
 
 Here's the process that we'd like for you to follow. This process is in place mainly to encourage everyone to communicate openly. This gives us the opportunity to have a great peer-review process, which will result in quality. Who doesn't like quality?
 
- # Open an issue in the Wheels Google Code site, outlining the changes or additions that you would like to make.
- # A member of the core team will review your submission and leave feedback if necessary.
- # Once the core team member is satisfied with the scope of the issue, they will schedule it for a release and mark your issue as "Approved." This is your green light to start working. Get to coding, grasshopper!
- # Need help or running across any issues while coding? Run it by the Google Group. They all have opinions and love to let you know all about them. :)
- # Once we have a unit testing methodology in place, all code will need to have unit tests that validate common and boundary scenarios. Let's run without one until it is announced.
- # When you have implemented your enhancement or change, use your Subversion utility to create a patch with your changes. Attach the patch to your Google Code issue.
- # A core team will review unit tests and post any necessary feedback in the Google Code issue.
- # Once everything is resolved, the issue will be marked as "Fixed." A core team member will then commit your patch to the SVN trunk. He or she will probably also shower you with glory in the Google Group, blog, and/or Community section of the Wheels site.
- # If needed, open an issue in Google Code to have the additions and changes in your revision documented. You may claim the issue if you'd like to do this, but it's entirely your choice.
+  # Open an issue in the Wheels Google Code site, outlining the changes or additions that you would like to make.
+  # A member of the core team will review your submission and leave feedback if necessary.
+  # Once the core team member is satisfied with the scope of the issue, they will schedule it for a release and mark your issue as "Approved." This is your green light to start working. Get to coding, grasshopper!
+  # Need help or running across any issues while coding? Run it by the Google Group. They all have opinions and love to let you know all about them. :)
+  # Once we have a unit testing methodology in place, all code will need to have unit tests that validate common and boundary scenarios. Let's run without one until it is announced.
+  # When you have implemented your enhancement or change, use your Subversion utility to create a patch with your changes. Attach the patch to your Google Code issue.
+  # A core team will review unit tests and post any necessary feedback in the Google Code issue.
+  # Once everything is resolved, the issue will be marked as "Fixed." A core team member will then commit your patch to the SVN trunk.
+    * The core team member should annotate the SVN commit with the issue number as `issue 55` if the code issue is `55`. This causes Google code to auto-link the revision to the code site issue.
+    * The core team member should also annotate the code issue with a comment indicating the revision number as `r123` if the revision number was `123`. This causes Google to auto-link the issue to the SVN issue.
+  # If needed, open an issue in Google Code to have the additions and changes in your revision documented. Be sure to use the format `r123` if your revision number was `123`. You may claim the issue if you'd like to do this, but that's entirely optional.
 
 ==Code Style==
 
@@ -65,7 +67,7 @@ To stay true to our ColdFusion and Java roots, all names must be camelCase. In s
 
 ===CFC Conventions===
 
-===Local variables===
+===Local Variables===
 
 Everyone doing OOP with ColdFusion loves all of the the room for error that the `var` keyword allows! To help eliminate confusion, define a local struct at the top of CFC methods called `loc`. Any variable whose value should _not_ persist for the life of the CFC instance should be stored in the `loc` struct.
 
@@ -84,3 +86,7 @@ For example:
     
 </cffunction>
 }}}
+
+===Private Methods===
+
+Private methods within CFCs should be prefixed with an underscore. An example would be `_query()`.
