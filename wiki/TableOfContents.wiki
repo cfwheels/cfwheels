@@ -33,23 +33,20 @@
  * Column Statistics
  * Dynamic Finders
  * [GettingPaginatedData Getting Paginated Data]
- * Setting Associations
- * Using the hasOne Association 
- * Using the hasMany Association 
- * Using the belongsTo Association 
- * Joining Tables
- * Object Validation
+ * [SettingAssociations Setting Associations]
+ * [UsingtheAssociations Using the Associations]
+ * [ObjectValidation Object Validation]
  * [ObjectCallbacks Object Callbacks]
  * [SoftDelete Soft Delete]
  * [AutomaticTimeStamps Automatic Time Stamps]
 
 ==Displaying Views to Users==
 
- * Locating the View Files
- * Including Partials
- * Linking Pages
+ * [LocatingtheViewFiles Locating the View Files]
+ * [IncludingPartials Including Partials]
+ * [LinkingPages Linking Pages]
  * [UsingLayouts Using Layouts]
- * Form Helpers and Showing Errors
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors]
  * [DisplayingLinksforPagination Displaying Links for Pagination]
  * AJAX and Javascript Effects
  * Miscellaneous Helpers
