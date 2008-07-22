@@ -53,7 +53,7 @@ This is a powerful feature that you can use if you have setup associations in yo
 
 This limits the number of records to return. Please note that if you call [findAll findAll()] with `maxRows=1` you will still get a `cfquery` result back and not an object (use [findOne findOne()] if you want an object returned).
 
-==Page, PerPage==
+==Page, !PerPage==
 
 Set these if you want to get paginated data back, that is records 11-20 for example (`page=2`, `perPage=10`).
 
