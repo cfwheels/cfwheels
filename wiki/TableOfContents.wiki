@@ -5,10 +5,10 @@
 
  * [WhyUseaFramework Why Use a Framework?]
  * [WhyUseWheels Why Use Wheels?]
+ * [Requirements Requirements]
 
 ==Getting Started==
 
- * [Requirements Requirements]
  * [Installation Installation]
  * [HelloWorld Hello World!]
 
@@ -69,7 +69,7 @@
  * [CodingGuidelines Coding Guidelines]
  * [DocumentationGuidelines Documentation Guidelines]
 
-==API==
+==Wheels API==
 
  * [ModelInitializationFunctions Model Initialization Functions]
  * [ModelClassFunctions Model Class Functions]
