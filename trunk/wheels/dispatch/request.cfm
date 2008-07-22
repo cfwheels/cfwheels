@@ -153,13 +153,8 @@
 	<cfset request.wheels.params = loc.params>
 
 	<!--- Create an empty flash unless it already exists --->
-	<cflock scope="session" type="readonly" timeout="30">
-		<cfset loc.flashExists = StructKeyExists(session, "flash")>
-	</cflock>
-	<cfif NOT loc.flashExists>
-		<cflock scope="session" type="exclusive" timeout="30">
-			<cfset session.flash = StructNew()>
-		</cflock>
+	<cfif NOT StructKeyExists(session, "flash")>
+		<cfset session.flash = StructNew()>
 	</cfif>
 
 	<!--- Create requested controller --->
@@ -209,11 +204,9 @@
 				</cfif>
 				<cfif loc.verification.session IS NOT "">
 					<cfloop list="#loc.verification.session#" index="loc.j">
-						<cflock scope="session" type="readonly" timeout="30">
-							<cfif NOT StructKeyExists(session, loc.j)>
-								<cfset loc.abort = true>
-							</cfif>
-						</cflock>
+						<cfif NOT StructKeyExists(session, loc.j)>
+							<cfset loc.abort = true>
+						</cfif>
 					</cfloop>
 				</cfif>
 				<cfif loc.verification.cookie IS NOT "">
@@ -305,9 +298,7 @@
 	</cfif>
 
 	<!--- Clear the flash (note that this is not done for redirectTo since the processing does not get here) --->
-	<cflock scope="session" type="exclusive" timeout="30">
-		<cfset structClear(session.flash)>
-	</cflock>
+	<cfset StructClear(session.flash)>
 
 	<cfreturn request.wheels.response>
 </cffunction>
