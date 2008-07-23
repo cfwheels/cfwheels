@@ -1,6 +1,6 @@
 <!--- path of calling Application.cfc will become the root dir --->
 <cfset this.rootDir = getDirectoryFromPath(getBaseTemplatePath())>
-<!--- niffty way to have unique application names and not have to worry about the 64 character length limit --->
+<!--- nifty way to have unique application names and not have to worry about the 64 character length limit --->
 <cfset this.name = Hash(this.rootDir)>
 <cfset this.mappings["/wheels"] = this.rootDir & "wheels">
 <cfset this.mappings["/controllerRoot"] = this.rootDir & "controllers">
@@ -67,54 +67,48 @@
 </cffunction>
 
 <cffunction name="onSessionStart" output="false">
-	<cflock scope="application" type="readonly" timeout="30">
-		<cfinclude template="../events/onsessionstart.cfm">
-	</cflock>
+	<cfinclude template="../events/onsessionstart.cfm">
 </cffunction>
 
 <cffunction name="onRequestStart" output="false">
 	<cfargument name="targetpage">
 	<cfset var loc = {}>
 	<cfif StructKeyExists(URL, "reload") AND (Len(application.settings.reloadPassword) IS 0 OR (StructKeyExists(URL, "password") AND URL.password IS application.settings.reloadPassword))>
-		<cflock scope="application" type="exclusive" timeout="30">
-			<cfset onApplicationStart()>
-		</cflock>
+		<cfset onApplicationStart()>
 	</cfif>
-	<cflock scope="application" type="readonly" timeout="30">
-		<cfif application.settings.environment IS "maintenance">
-			<cfif StructKeyExists(URL, "except")>
-				<cfset application.settings.ipExceptions = URL.except>
-			</cfif>
-			<cfif Len(application.settings.ipExceptions) IS 0 OR ListFind(application.settings.ipExceptions, cgi.remote_addr) IS 0>
-				<cfinclude template="../events/onmaintenance.cfm">
-				<cfabort>
-			</cfif>
+	<cfif application.settings.environment IS "maintenance">
+		<cfif StructKeyExists(URL, "except")>
+			<cfset application.settings.ipExceptions = URL.except>
 		</cfif>
-		<cfset request.wheels = StructNew()>
-		<cfset request.wheels.params = StructNew()>
-		<cfset request.wheels.cache = StructNew()>
-		<cfif application.settings.showDebugInformation>
-			<cfset request.wheels.execution = StructNew()>
-			<cfset request.wheels.execution.components = StructNew()>
-			<cfset request.wheels.execution.componentTotal = GetTickCount()>
-			<cfset request.wheels.execution.components.requestStart = GetTickCount()>
+		<cfif Len(application.settings.ipExceptions) IS 0 OR ListFind(application.settings.ipExceptions, cgi.remote_addr) IS 0>
+			<cfinclude template="../events/onmaintenance.cfm">
+			<cfabort>
 		</cfif>
-		<cfif NOT application.settings.cacheModelInitialization>
-			<cfset structClear(application.wheels.models)>
-		</cfif>
-		<cfif NOT application.settings.cacheControllerInitialization>
-			<cfset structClear(application.wheels.controllers)>
-		</cfif>
-		<cfif NOT application.settings.cacheRoutes>
-			<cfset arrayClear(application.wheels.routes)>
-			<cfinclude template="../config/routes.cfm">
-			<cfinclude template="routes.cfm">
-		</cfif>
-		<cfif NOT application.settings.cacheDatabaseSchema>
-			<cfset $clearCache("sql", "internal")>
-		</cfif>
-		<cfinclude template="../events/onrequeststart.cfm">
-	</cflock>
+	</cfif>
+	<cfset request.wheels = StructNew()>
+	<cfset request.wheels.params = StructNew()>
+	<cfset request.wheels.cache = StructNew()>
+	<cfif application.settings.showDebugInformation>
+		<cfset request.wheels.execution = StructNew()>
+		<cfset request.wheels.execution.components = StructNew()>
+		<cfset request.wheels.execution.componentTotal = GetTickCount()>
+		<cfset request.wheels.execution.components.requestStart = GetTickCount()>
+	</cfif>
+	<cfif NOT application.settings.cacheModelInitialization>
+		<cfset structClear(application.wheels.models)>
+	</cfif>
+	<cfif NOT application.settings.cacheControllerInitialization>
+		<cfset structClear(application.wheels.controllers)>
+	</cfif>
+	<cfif NOT application.settings.cacheRoutes>
+		<cfset arrayClear(application.wheels.routes)>
+		<cfinclude template="../config/routes.cfm">
+		<cfinclude template="routes.cfm">
+	</cfif>
+	<cfif NOT application.settings.cacheDatabaseSchema>
+		<cfset $clearCache("sql", "internal")>
+	</cfif>
+	<cfinclude template="../events/onrequeststart.cfm">
 	<cfif application.settings.showDebugInformation>
 		<cfset request.wheels.execution.components.requestStart = GetTickCount() - request.wheels.execution.components.requestStart>
 	</cfif>
@@ -122,9 +116,7 @@
 
 <cffunction name="onRequest" output="true">
 	<cfargument name="targetpage">
-	<cflock scope="application" type="readonly" timeout="30">
-		<cfinclude template="#arguments.targetpage#">
-	</cflock>
+	<cfinclude template="#arguments.targetpage#">
 </cffunction>
 
 <cffunction name="onRequestEnd" output="true">
@@ -133,21 +125,17 @@
 	<cfif application.settings.showDebugInformation>
 		<cfset request.wheels.execution.components.requestEnd = getTickCount()>
 	</cfif>
-	<cflock scope="application" type="readonly" timeout="30">
-		<cfinclude template="../events/onrequestend.cfm">
-		<cfif application.settings.showDebugInformation>
-			<cfset request.wheels.execution.components.requestEnd = GetTickCount() - request.wheels.execution.components.requestEnd>
-		</cfif>
-		<cfinclude template="debug.cfm">
-	</cflock>
+	<cfinclude template="../events/onrequestend.cfm">
+	<cfif application.settings.showDebugInformation>
+		<cfset request.wheels.execution.components.requestEnd = GetTickCount() - request.wheels.execution.components.requestEnd>
+	</cfif>
+	<cfinclude template="debug.cfm">
 </cffunction>
 
 <cffunction name="onSessionEnd" output="false">
 	<cfargument name="sessionscope">
   <cfargument name="applicationscope">
-	<cflock scope="application" type="readonly" timeout="30">
-		<cfinclude template="../events/onsessionend.cfm">
-	</cflock>
+	<cfinclude template="../events/onsessionend.cfm">
 </cffunction>
 
 <cffunction name="onApplicationEnd" output="false">
