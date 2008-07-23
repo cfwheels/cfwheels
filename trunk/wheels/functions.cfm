@@ -67,107 +67,124 @@
 </cffunction>
 
 <cffunction name="onSessionStart" output="false">
-	<cfinclude template="../events/onsessionstart.cfm">
+	<cflock scope="application" type="readonly" timeout="30">
+		<cfinclude template="../events/onsessionstart.cfm">
+	</cflock>
 </cffunction>
 
 <cffunction name="onRequestStart" output="false">
 	<cfargument name="targetpage">
 	<cfset var loc = {}>
 	<cfif StructKeyExists(URL, "reload") AND (Len(application.settings.reloadPassword) IS 0 OR (StructKeyExists(URL, "password") AND URL.password IS application.settings.reloadPassword))>
-		<cfset onApplicationStart()>
+		<cflock scope="application" type="exclusive" timeout="30">
+			<cfset onApplicationStart()>
+		</cflock>
 	</cfif>
-	<cfif application.settings.environment IS "maintenance">
-		<cfif StructKeyExists(URL, "except")>
-			<cfset application.settings.ipExceptions = URL.except>
+	<cflock scope="application" type="readonly" timeout="30">
+		<cfif application.settings.environment IS "maintenance">
+			<cfif StructKeyExists(URL, "except")>
+				<cfset application.settings.ipExceptions = URL.except>
+			</cfif>
+			<cfif Len(application.settings.ipExceptions) IS 0 OR ListFind(application.settings.ipExceptions, cgi.remote_addr) IS 0>
+				<cfinclude template="../events/onmaintenance.cfm">
+				<cfabort>
+			</cfif>
 		</cfif>
-		<cfif Len(application.settings.ipExceptions) IS 0 OR ListFind(application.settings.ipExceptions, cgi.remote_addr) IS 0>
-			<cfinclude template="../events/onmaintenance.cfm">
-			<cfabort>
+		<cfset request.wheels = StructNew()>
+		<cfset request.wheels.params = StructNew()>
+		<cfset request.wheels.cache = StructNew()>
+		<cfif application.settings.showDebugInformation>
+			<cfset request.wheels.execution = StructNew()>
+			<cfset request.wheels.execution.components = StructNew()>
+			<cfset request.wheels.execution.componentTotal = GetTickCount()>
+			<cfset request.wheels.execution.components.requestStart = GetTickCount()>
 		</cfif>
-	</cfif>
-	<cfset request.wheels = StructNew()>
-	<cfset request.wheels.params = StructNew()>
-	<cfset request.wheels.cache = StructNew()>
-	<cfif application.settings.showDebugInformation>
-		<cfset request.wheels.execution = StructNew()>
-		<cfset request.wheels.execution.components = StructNew()>
-		<cfset request.wheels.execution.componentTotal = GetTickCount()>
-		<cfset request.wheels.execution.components.requestStart = GetTickCount()>
-	</cfif>
-	<cfif NOT application.settings.cacheModelInitialization>
-		<cfset structClear(application.wheels.models)>
-	</cfif>
-	<cfif NOT application.settings.cacheControllerInitialization>
-		<cfset structClear(application.wheels.controllers)>
-	</cfif>
-	<cfif NOT application.settings.cacheRoutes>
-		<cfset arrayClear(application.wheels.routes)>
-		<cfinclude template="../config/routes.cfm">
-		<cfinclude template="routes.cfm">
-	</cfif>
-	<cfif NOT application.settings.cacheDatabaseSchema>
-		<cfset $clearCache("sql", "internal")>
-	</cfif>
-	<cfinclude template="../events/onrequeststart.cfm">
-	<cfif application.settings.showDebugInformation>
-		<cfset request.wheels.execution.components.requestStart = GetTickCount() - request.wheels.execution.components.requestStart>
-	</cfif>
+		<cfif NOT application.settings.cacheModelInitialization>
+			<cfset structClear(application.wheels.models)>
+		</cfif>
+		<cfif NOT application.settings.cacheControllerInitialization>
+			<cfset structClear(application.wheels.controllers)>
+		</cfif>
+		<cfif NOT application.settings.cacheRoutes>
+			<cfset arrayClear(application.wheels.routes)>
+			<cfinclude template="../config/routes.cfm">
+			<cfinclude template="routes.cfm">
+		</cfif>
+		<cfif NOT application.settings.cacheDatabaseSchema>
+			<cfset $clearCache("sql", "internal")>
+		</cfif>
+		<cfinclude template="../events/onrequeststart.cfm">
+		<cfif application.settings.showDebugInformation>
+			<cfset request.wheels.execution.components.requestStart = GetTickCount() - request.wheels.execution.components.requestStart>
+		</cfif>
+	</cflock>
 </cffunction>
 
 <cffunction name="onRequest" output="true">
 	<cfargument name="targetpage">
-	<cfinclude template="#arguments.targetpage#">
-</cffunction>
-
-<cffunction name="onRequestEnd" output="true">
-	<cfargument name="targetpage">
-	<cfset var loc = {}>
-	<cfif application.settings.showDebugInformation>
-		<cfset request.wheels.execution.components.requestEnd = getTickCount()>
-	</cfif>
-	<cfinclude template="../events/onrequestend.cfm">
-	<cfif application.settings.showDebugInformation>
-		<cfset request.wheels.execution.components.requestEnd = GetTickCount() - request.wheels.execution.components.requestEnd>
-	</cfif>
-	<cfinclude template="debug.cfm">
-</cffunction>
-
-<cffunction name="onSessionEnd" output="false">
-	<cfargument name="sessionscope">
-  <cfargument name="applicationscope">
-	<cfinclude template="../events/onsessionend.cfm">
-</cffunction>
-
-<cffunction name="onApplicationEnd" output="false">
-	<cfargument name="applicationscope">
-	<cfinclude template="../events/onapplicationend.cfm">
+	<cflock scope="application" type="readonly" timeout="30">
+		<cfinclude template="#arguments.targetpage#">
+	</cflock>
 </cffunction>
 
 <cffunction name="onMissingTemplate" output="true">
 	<cfargument name="targetpage">
-	<cfinclude template="../events/onmissingtemplate.cfm">
+	<cflock scope="application" type="readonly" timeout="30">
+		<cfinclude template="../events/onmissingtemplate.cfm">
+	</cflock>
 </cffunction>
 
 <cffunction name="onError" output="true">
 	<cfargument name="exception">
 	<cfargument name="eventname">
-	<cfif application.settings.sendEmailOnError>
-		<cfmail to="#application.settings.errorEmailAddress#" from="#application.settings.errorEmailAddress#" subject="#application.applicationname# error" type="html">
-			<cfinclude template="error.cfm">
-		</cfmail>
-	</cfif>
-	<cfif application.settings.showErrorInformation>
-		<cfif NOT StructKeyExists(arguments.exception, "cause")>
-			<cfset arguments.exception.cause = arguments.exception>
+	<cfset var loc = {}>
+	<cflock scope="application" type="readonly" timeout="30">
+		<cfif application.settings.sendEmailOnError>
+			<cfmail to="#application.settings.errorEmailAddress#" from="#application.settings.errorEmailAddress#" subject="#application.applicationname# error" type="html">
+				<cfinclude template="error.cfm">
+			</cfmail>
 		</cfif>
-		<cfif arguments.exception.cause.type IS "wheels">
-			<cfinclude template="errors/header.cfm">
-			<cfinclude template="errors/error.cfm">
-			<cfinclude template="errors/footer.cfm">
+		<cfif application.settings.showErrorInformation>
+			<cfif NOT StructKeyExists(arguments.exception, "cause")>
+				<cfset arguments.exception.cause = arguments.exception>
+			</cfif>
+			<cfif arguments.exception.cause.type IS "wheels">
+				<cfinclude template="errors/header.cfm">
+				<cfinclude template="errors/error.cfm">
+				<cfinclude template="errors/footer.cfm">
+			<cfelse>
+				<cfthrow object="#arguments.exception#">
+			</cfif>
 		<cfelse>
-			<cfthrow object="#arguments.exception#">
+			<cfinclude template="../events/onerror.cfm">
 		</cfif>
-	<cfelse>
-		<cfinclude template="../events/onerror.cfm">
-	</cfif>
+	</cflock>
+</cffunction>
+
+<cffunction name="onRequestEnd" output="true">
+	<cfargument name="targetpage">
+	<cfset var loc = {}>
+	<cflock scope="application" type="readonly" timeout="30">
+		<cfif application.settings.showDebugInformation>
+			<cfset request.wheels.execution.components.requestEnd = getTickCount()>
+		</cfif>
+		<cfinclude template="../events/onrequestend.cfm">
+		<cfif application.settings.showDebugInformation>
+			<cfset request.wheels.execution.components.requestEnd = GetTickCount() - request.wheels.execution.components.requestEnd>
+		</cfif>
+		<cfinclude template="debug.cfm">
+	</cflock>
+</cffunction>
+
+<cffunction name="onSessionEnd" output="false">
+	<cfargument name="sessionscope">
+  <cfargument name="applicationscope">
+	<cflock scope="application" type="readonly" timeout="30">
+		<cfinclude template="../events/onsessionend.cfm">
+	</cflock>
+</cffunction>
+
+<cffunction name="onApplicationEnd" output="false">
+	<cfargument name="applicationscope">
+	<cfinclude template="../events/onapplicationend.cfm">
 </cffunction>
