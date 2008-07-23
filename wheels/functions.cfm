@@ -53,6 +53,8 @@
 		<cfset loc.info = $dbinfo(datasource=application.settings.database.datasource, type="version")>
 		<cfif loc.info.driver_name Contains "MySQL">
 			<cfset loc.adapterName = "MySQL">
+		<cfelseif loc.info.driver_name Contains "Oracle">
+			<cfset loc.adapterName = "Oracle">
 		<cfelse>
 			<cfset loc.adapterName = "MicrosoftSQLServer">
 		</cfif>
