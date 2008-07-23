@@ -16,21 +16,20 @@
 			{
 				case "bigint": {loc.returnValue = "cf_sql_bigint"; break;}
 				case "binary": {loc.returnValue = "cf_sql_binary"; break;}
-				case "bit": case "bool": case "boolean": {loc.returnValue = "cf_sql_bit"; break;}
-				case "tinyblob": case "blob": case "mediumblob": case "longblob":	{loc.returnValue = "cf_sql_blob";	break;}
+				case "bit": case "bool": {loc.returnValue = "cf_sql_bit";	break;}
+				case "blob": case "tinyblob": case "mediumblob": case "longblob": {loc.returnValue = "cf_sql_blob";	break;}
 				case "char": {loc.returnValue = "cf_sql_char"; break;}
 				case "date": {loc.returnValue = "cf_sql_date"; break;}
-				case "double": case "decimal": {loc.returnValue = "cf_sql_double"; break;}
-				case "float":	case "real": {loc.returnValue = "cf_sql_float";	break;}
-				case "mediumint":	case "int":	case "integer": {loc.returnValue = "cf_sql_integer"; break;}
-				case "tinytext": case "text":	case "mediumtext": case "longtext": {loc.returnValue = "cf_sql_longvarchar"; break;}
-				case "numeric":	{loc.returnValue = "cf_sql_numeric"; break;}
-				case "smallint": case "year":	{loc.returnValue = "cf_sql_smallint";	break;}
+				case "decimal": {loc.returnValue = "cf_sql_decimal"; break;}
+				case "double": {loc.returnValue = "cf_sql_double"; break;}
+				case "float": {loc.returnValue = "cf_sql_float"; break;}
+				case "int": case "mediumint": {loc.returnValue = "cf_sql_integer"; break;}
+				case "smallint": case "year": {loc.returnValue = "cf_sql_smallint"; break;}
 				case "time": {loc.returnValue = "cf_sql_time"; break;}
-				case "datetime": case "timestamp": {loc.returnValue = "cf_sql_timestamp";	break;}
-				case "tinyint":	{loc.returnValue = "cf_sql_tinyint"; break;}
-				case "varbinary":	{loc.returnValue = "cf_sql_varbinary"; break;}
-				case "varchar": {loc.returnValue = "cf_sql_varchar"; break;}
+				case "datetime": case "timestamp": {loc.returnValue = "cf_sql_timestamp"; break;}
+				case "tinyint": {loc.returnValue = "cf_sql_tinyint"; break;}
+				case "varbinary": {loc.returnValue = "cf_sql_varbinary"; break;}
+				case "varchar": case "text": case "mediumtext": case "longtext": case "tinytext": case "enum": case "set": {loc.returnValue = "cf_sql_varchar"; break;}
 			}
 		</cfscript>
 		<cfreturn loc.returnValue>
