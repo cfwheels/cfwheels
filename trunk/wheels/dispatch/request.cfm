@@ -72,10 +72,17 @@
 
 	<cfif structCount(form) IS NOT 0>
 
-		<!--- loop through form variables and merge any date variables into one --->
+		<!--- loop through form variables, merge any date variables into one, fix checkbox submissions --->
 		<cfset loc.dates = StructNew()>
 		<cfloop collection="#form#" item="loc.i">
-			<cfif REFindNoCase(".*\((\$year|\$month|\$day|\$hour|\$minute|\$second)\)$", loc.i) IS NOT 0>
+			<cfif FindNoCase("($checkbox)", loc.i)>
+				<!--- if no other form parameter exists with this name it means that the checkbox was left blank and therefore we force the value to 0 (to get around the problem that unchecked checkboxes don't post at all) --->
+				<cfset loc.formParamName = ReplaceNoCase(loc.i, "($checkbox)", "")>
+				<cfif NOT StructKeyExists(form, loc.formParamName)>
+					<cfset form[loc.formParamName] = 0>
+				</cfif>
+				<cfset StructDelete(form, loc.i)>
+			<cfelseif REFindNoCase(".*\((\$year|\$month|\$day|\$hour|\$minute|\$second)\)$", loc.i) IS NOT 0>
 				<cfset loc.temp = listToArray(loc.i, "(")>
 				<cfset loc.firstKey = loc.temp[1]>
 				<cfset loc.secondKey = spanExcluding(loc.temp[2], ")")>

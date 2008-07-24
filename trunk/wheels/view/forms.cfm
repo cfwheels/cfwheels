@@ -231,7 +231,7 @@
 		<cfoutput>
 			#$formBeforeElement(argumentCollection=arguments)#
 			<input type="checkbox" name="#listLast(arguments.objectName,".")#[#arguments.property#]" id="#listLast(arguments.objectName,".")#-#arguments.property#" value="#arguments.checkedValue#"<cfif loc.checked> checked="checked"</cfif>#loc.attributes# />
-	    <input name="#listLast(arguments.objectName,".")#[#arguments.property#]" type="hidden" value="#arguments.uncheckedValue#" />
+	    <input name="#listLast(arguments.objectName,".")#[#arguments.property#]($checkbox)" type="hidden" value="#arguments.uncheckedValue#" />
 			#$formAfterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
@@ -856,7 +856,7 @@
 			<cfset loc.selected = "">
 		</cfif>
 		<cfif arguments.$optionNames IS NOT "">
-			<cfset loc.optionName = listGetAt(arguments.$option$ames, loc.i)>
+			<cfset loc.optionName = listGetAt(arguments.$optionNames, loc.i)>
 		<cfelse>
 			<cfset loc.optionName = loc.i>
 		</cfif>
