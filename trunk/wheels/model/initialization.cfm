@@ -100,7 +100,7 @@
 			variables.wheels.class.properties[loc.property].nullable = loc.columns["is_nullable"][loc.i];
 			variables.wheels.class.properties[loc.property].size = loc.columns["column_size"][loc.i];
 			variables.wheels.class.properties[loc.property].key = loc.columns["is_primarykey"][loc.i];
-			variables.wheels.class.properties[loc.property].type = application.wheels.adapter.getType(loc.columns["type_name"][loc.i]);
+			variables.wheels.class.properties[loc.property].type = application.wheels.adapter.getType(SpanExcluding(loc.columns["type_name"][loc.i], " "));
 			if (loc.columns["is_primarykey"][loc.i])
 			{
 				variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.property);
