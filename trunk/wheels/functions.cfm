@@ -150,7 +150,7 @@
 			<cfif NOT StructKeyExists(arguments.exception, "cause")>
 				<cfset arguments.exception.cause = arguments.exception>
 			</cfif>
-			<cfif arguments.exception.cause.type IS "wheels">
+			<cfif Left(arguments.exception.cause.type, 6) IS "Wheels">
 				<cfinclude template="errors/header.cfm">
 				<cfinclude template="errors/error.cfm">
 				<cfinclude template="errors/footer.cfm">
