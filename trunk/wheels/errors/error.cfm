@@ -1,5 +1,5 @@
 <cfoutput>
-<h1>Wheels Error!</h1>
+<h1>#arguments.exception.cause.type#</h1>
 <p>#arguments.exception.cause.message#</p>
 <h2>Suggested action</h2>
 <p>#arguments.exception.cause.extendedInfo#</p>
