@@ -14,8 +14,9 @@
 			var loc = {};
 			switch(arguments.type)
 			{
-				case "bit": {loc.returnValue = "cf_sql_bit"; break;}
+				case "bigint":	{loc.returnValue = "cf_sql_bigint"; break;}
 				case "binary": case "timestamp": {loc.returnValue = "cf_sql_binary"; break;}
+				case "bit": {loc.returnValue = "cf_sql_bit"; break;}
 				case "char": case "nchar": case "uniqueidentifier": {loc.returnValue = "cf_sql_char"; break;}
 				case "decimal": case "money": case "smallmoney": {loc.returnValue = "cf_sql_decimal"; break;}
 				case "float": {loc.returnValue = "cf_sql_float"; break;}
