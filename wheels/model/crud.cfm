@@ -45,7 +45,7 @@
 			if (loc.query.recordCount IS NOT 0)
 				loc.returnValue = $createInstance(properties=loc.query, persisted=true);
 			else
-				$throw(type="Wheels.RecordNotFound", message="The requested record could not be found in the database table.");
+				$throw(type="Wheels.RecordNotFound", message="The requested record could not be found in the database.", extendedInfo="Make sure that the record exists in the database or catch this error in your code.");
 		}
 		else
 		{
@@ -63,6 +63,7 @@
 	<cfargument name="maxRows" type="numeric" required="false" default="-1" hint="Maximum number of records to retrieve">
 	<cfargument name="page" type="numeric" required="false" default=0>
 	<cfargument name="perPage" type="numeric" required="false" default=10>
+	<cfargument name="count" type="numeric" required="false" default="0">
 	<cfargument name="handle" type="string" required="false" default="query">
 	<cfargument name="cache" type="any" required="false" default="">
 	<cfargument name="reload" type="boolean" required="false" default="#application.settings.findAll.reload#">
@@ -82,11 +83,16 @@
 		// count records and get primary keys for pagination
 		if (arguments.page)
 		{
+			if (!Len(arguments.order))
+				$throw(type="Wheels.InvalidPagination", message="Cannot use pagination without order.", extendedInfo="Specify what property to order by using the 'order' argument to 'findAll'.");
 			if (Len(arguments.include))
 				loc.distinct = true;
 			else
 				loc.distinct = false;
-			loc.totalRecords = count(distinct=loc.distinct, where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache);
+			if (arguments.count GT 0)
+				loc.totalRecords = arguments.count;
+			else
+				loc.totalRecords = count(distinct=loc.distinct, where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache);
 			loc.currentPage = arguments.page;
 			if (loc.totalRecords IS 0)
 				loc.totalPages = 0;
