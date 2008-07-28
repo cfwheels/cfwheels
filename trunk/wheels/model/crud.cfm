@@ -92,7 +92,7 @@
 			if (arguments.count GT 0)
 				loc.totalRecords = arguments.count;
 			else
-				loc.totalRecords = count(distinct=loc.distinct, where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache);
+				loc.totalRecords = this.count(distinct=loc.distinct, where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache);
 			loc.currentPage = arguments.page;
 			if (loc.totalRecords IS 0)
 				loc.totalPages = 0;
