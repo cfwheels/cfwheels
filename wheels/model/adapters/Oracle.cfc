@@ -35,6 +35,14 @@
 		<cfargument name="parameterize" type="any" required="true">
 		<cfset var loc = StructNew()>
 		<cfset var query = StructNew()>
+
+		<cfif arguments.limit GT 0>
+			<cfset loc.beforeWhere = "SELECT * FROM (SELECT a.*, rownum rnum FROM (">
+			<cfset loc.afterWhere = ") a WHERE rownum <=" & arguments.limit+arguments.offset & ")" & " WHERE rnum >" & arguments.offset>
+			<cfset ArrayPrepend(arguments.sql, loc.beforeWhere)>
+			<cfset ArrayAppend(arguments.sql, loc.afterWhere)>
+		</cfif>
+
 		<cfset arguments.name = "query.name">
 		<cfset arguments.result = "loc.result">
 		<cfset arguments.datasource = application.settings.database.datasource>
