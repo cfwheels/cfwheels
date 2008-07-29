@@ -6,9 +6,9 @@
 </cfif>
 
 <!--- file does not exist --->
-<cfif Left(arguments.source, 7) IS NOT "http://" AND NOT fileExists(expandPath("#application.wheels.webPath##application.settings.paths.images#/#arguments.source#"))>
-	<cfset loc.$error = "<tt>#expandPath('#application.wheels.webPath##application.settings.paths.images#/#arguments.source#')#</tt> does not exist">
-	<cfset loc.$suggestion = "Pass in a correct relative path from <tt>#expandPath('#application.wheels.webPath##application.settings.paths.images#\')#</tt> to an image in the <tt>source</tt> argument.">
+<cfif Left(arguments.source, 7) IS NOT "http://" AND NOT fileExists(expandPath("#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#"))>
+	<cfset loc.$error = "<tt>#expandPath('#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#')#</tt> does not exist">
+	<cfset loc.$suggestion = "Pass in a correct relative path from <tt>#expandPath('#application.wheels.webPath##application.wheels.imagePath#\')#</tt> to an image in the <tt>source</tt> argument.">
 	<cfthrow type="Wheels" message="#loc.$error#" extendedInfo="#loc.$suggestion#">
 </cfif>
 

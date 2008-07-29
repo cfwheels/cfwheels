@@ -35,9 +35,3 @@
 <cfset application.settings.cacheCullPercentage = 10>
 <cfset application.settings.cacheCullInterval = 5>
 <cfset application.settings.defaultCacheTime = 15>
-
-<!--- paths --->
-<cfset application.settings.paths.files = "files">
-<cfset application.settings.paths.images = "images">
-<cfset application.settings.paths.javascripts = "javascripts">
-<cfset application.settings.paths.stylesheets = "stylesheets">

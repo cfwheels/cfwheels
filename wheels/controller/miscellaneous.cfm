@@ -209,7 +209,7 @@
 
 	<cfset arguments.file = Replace(arguments.file, "\", "/", "all")>
 	<cfset loc.path = Reverse(ListRest(Reverse(arguments.file), "/"))>
-	<cfset loc.folder = application.settings.paths.files>
+	<cfset loc.folder = application.wheels.filePath>
 	<cfif Len(loc.path) IS NOT 0>
 		<cfset loc.folder = loc.folder & "/" & loc.path>
 		<cfset loc.file = Replace(arguments.file, loc.path, "")>

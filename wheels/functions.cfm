@@ -47,10 +47,16 @@
 	<cfinclude template="../config/routes.cfm">
 	<cfinclude template="routes.cfm">
 	<cfset application.wheels.webPath = Replace(cgi.script_name, Reverse(spanExcluding(Reverse(cgi.script_name), "/")), "")>
+	<cfset application.wheels.filePath = "files">
+	<cfset application.wheels.imagePath = "images">
+	<cfset application.wheels.javascriptPath = "javascripts">
+	<cfset application.wheels.stylesheetPath = "stylesheets">
 	<cftry>
 		<!--- determine and set database brand --->
 		<cfinclude template="../config/database.cfm">
 		<cfset loc.info = $dbinfo(datasource=application.settings.database.datasource, type="version")>
+		<cfset application.wheels.databaseProductName = loc.info.database_productname>
+		<cfset application.wheels.databaseVersion = loc.info.database_version>
 		<cfif loc.info.driver_name Contains "MySQL">
 			<cfset loc.adapterName = "MySQL">
 		<cfelseif loc.info.driver_name Contains "Oracle">
