@@ -57,7 +57,7 @@
 	<cfif Len(arguments.source) IS 0>
 		<cfset loc.result = loc.result & " type=""submit""">
 	<cfelse>
-		<cfset loc.result = loc.result & " type=""image"" src=""#application.wheels.webPath##application.settings.paths.images#/#arguments.source#""">
+		<cfset loc.result = loc.result & " type=""image"" src=""#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#""">
 	</cfif>
 	<cfif Len(arguments.text) IS NOT 0>
 		<cfset loc.result = loc.result & " value=""#arguments.text#""">

@@ -6,7 +6,7 @@
 
 	<cfset loc.result = "">
 	<cfloop list="#arguments.sources#" index="loc.i">
-		<cfset loc.href = "#application.wheels.webPath##application.settings.paths.stylesheets#/#trim(loc.i)#">
+		<cfset loc.href = "#application.wheels.webPath##application.wheels.stylesheetPath#/#trim(loc.i)#">
 		<cfif loc.i Does Not Contain ".">
 			<cfset loc.href = loc.href & ".css">
 		</cfif>
@@ -24,7 +24,7 @@
 
 	<cfset loc.result = "">
 	<cfloop list="#arguments.sources#" index="loc.i">
-		<cfset loc.src = "#application.wheels.webPath##application.settings.paths.javascripts#/#trim(loc.i)#">
+		<cfset loc.src = "#application.wheels.webPath##application.wheels.javascriptPath#/#trim(loc.i)#">
 		<cfif loc.i Does Not Contain ".">
 			<cfset loc.src = loc.src & ".js">
 		</cfif>
@@ -57,7 +57,7 @@
 				<cfif Left(arguments.source, 7) IS "http://">
 					<cfset loc.src = arguments.source>
 				<cfelse>
-					<cfset loc.src = "#application.wheels.webPath##application.settings.paths.images#/#arguments.source#">
+					<cfset loc.src = "#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#">
 					<cfif arguments.attributes Does Not Contain "width" OR arguments.attributes Does Not Contain "height">
 						<cfimage action="info" source="#expandPath(loc.src)#" structname="loc.image">
 						<cfif loc.image.width GT 0 AND loc.image.height GT 0>
