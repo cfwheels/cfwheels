@@ -14,15 +14,16 @@
 			var loc = {};
 			switch(arguments.type)
 			{
-				case "number": {loc.returnValue = "cf_sql_float"; break;}
-				case "varchar2": case "nvarchar2": {loc.returnValue = "cf_sql_varchar"; break;}
-				case "date": {loc.returnValue = "cf_sql_timestamp"; break;}
+				case "blob": case "bfile": {loc.returnValue = "cf_sql_blob"; break;}
+				case "char": case "nchar": {loc.returnValue = "cf_sql_char"; break;}
+				case "clob": case "nclob": {loc.returnValue = "cf_sql_clob"; break;}
 				case "timestamp": {loc.returnValue = "cf_sql_date"; break;}
-				case "char": {loc.returnValue = "cf_sql_char"; break;}
-				case "clob": {loc.returnValue = "cf_sql_clob"; break;}
-				case "blob": {loc.returnValue = "cf_sql_blob"; break;}
-				case "binary_float": {loc.returnValue = "cf_sql_float"; break;}
 				case "binary_double": {loc.returnValue = "cf_sql_double"; break;}
+				case "number": case "float": case "binary_float": {loc.returnValue = "cf_sql_float"; break;}
+				case "long": {loc.returnValue = "cf_sql_longvarchar"; break;}
+				case "date": {loc.returnValue = "cf_sql_timestamp"; break;}
+				case "raw": {loc.returnValue = "cf_sql_varbinary"; break;}
+				case "varchar2": case "nvarchar2": {loc.returnValue = "cf_sql_varchar"; break;}
 			}
 		</cfscript>
 		<cfreturn loc.returnValue>
