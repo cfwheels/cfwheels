@@ -51,24 +51,28 @@
 	<cfargument name="action" type="string" required="true">
 	<cfset var loc = {}>
 
-	<cfset loc.thisRoute = structCopy(arguments)>
+	<cfset loc.thisRoute = StructCopy(arguments)>
 
 	<cfset loc.thisRoute.variables = "">
 	<cfloop list="#arguments.pattern#" index="loc.i" delimiters="/">
 		<cfif loc.i Contains "[">
-			<cfset loc.thisRoute.variables = ListAppend(loc.thisRoute.variables, replaceList(loc.i, "[,]", ","))>
+			<cfset loc.thisRoute.variables = ListAppend(loc.thisRoute.variables, ReplaceList(loc.i, "[,]", ","))>
 		</cfif>
 	</cfloop>
 
-	<cfset arrayAppend(application.wheels.routes, loc.thisRoute)>
+	<cfset ArrayAppend(application.wheels.routes, loc.thisRoute)>
 
 </cffunction>
 
 <cffunction name="model" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
-	<cfif application.settings.environment IS NOT "production">
-		<cfinclude template="../errors/model.cfm">
-	</cfif>
-	<cfset $doubleCheckedLock(name="modelLock", path=application.wheels.models, key=arguments.name, method="$createClass", args=arguments)>
+	<cfscript>
+		if (application.settings.environment IS NOT "production")
+		{
+			if (!StructKeyExists(application.wheels, "adapter"))
+				$throw(type="Wheels.DataSourceNotFound", message="Wheels could not find a data source to work with.", extendedInfo="Add a datasource with the name '#application.settings.database.datasource#' in the ColdFusion Administrator unless you've already done so. If you have already set a datasource with this name it will be picked up by Wheels if you issue a '?reload=true' request (or when you restart the ColdFusion service).");
+		}
+		$doubleCheckedLock(name="modelLock", path=application.wheels.models, key=arguments.name, method="$createClass", args=arguments);
+	</cfscript>
 	<cfreturn application.wheels.models[arguments.name]>
 </cffunction>

@@ -34,11 +34,15 @@
 	<cfreturn loc.result>
 </cffunction>
 
-<cffunction name="imageTag" returntype="any" access="public" output="false">
-	<cfargument name="source" type="any" required="false" default="">
+<cffunction name="imageTag" returntype="string" access="public" output="false">
+	<cfargument name="source" type="string" required="true">
 	<cfset var loc = {}>
 	<cfif application.settings.environment IS NOT "production">
-		<cfinclude template="../errors/imagetag.cfm">
+		<cfif Left(arguments.source, 7) IS NOT "http://" AND NOT FileExists(ExpandPath("#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#"))>
+			<cfset $throw(type="Wheels.ImageFileNotFound", message="Wheels could not find '#expandPath('#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#')#' on the local file system.", extendedInfo="Pass in a correct relative path from '#expandPath('#application.wheels.webPath##application.wheels.imagePath#\')#' to an image.")>
+		<cfelseif Left(arguments.source, 7) IS NOT "http://" AND arguments.source Does Not Contain ".jpg" AND arguments.source Does Not Contain ".gif" AND arguments.source Does Not Contain ".png">
+			<cfset $throw(type="Wheels.ImageFormatNotSupported", message="Wheels can't read image files with that format.", extendedInfo="Use a GIF, JPG or PNG image instead.")>
+		</cfif>
 	</cfif>
 
 	<cfset loc.category = "image">
@@ -58,21 +62,20 @@
 					<cfset loc.src = arguments.source>
 				<cfelse>
 					<cfset loc.src = "#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#">
-					<cfif arguments.attributes Does Not Contain "width" OR arguments.attributes Does Not Contain "height">
+					<cfif NOT StructKeyExists(arguments, "width") OR NOT StructKeyExists(arguments, "height")>
 						<cfimage action="info" source="#expandPath(loc.src)#" structname="loc.image">
 						<cfif loc.image.width GT 0 AND loc.image.height GT 0>
 							<cfset loc.attributes = loc.attributes & " width=""#loc.image.width#"" height=""#loc.image.height#""">
 						</cfif>
 					</cfif>
 				</cfif>
-				<cfif arguments.attributes Does Not Contain "alt">
+				<cfif NOT StructKeyExists(arguments, "alt")>
 					<cfset loc.attributes = loc.attributes & " alt=""#titleize(replaceList(spanExcluding(Reverse(spanExcluding(Reverse(loc.src), "/")), "."), "-,_", " , "))#""">
 				</cfif>
 				<cfset loc.result = "<img src=""#loc.src#""#loc.attributes# />">
 				<cfif application.settings.cacheImages>
 					<cfset $addToCache(loc.key, loc.result, 86400, loc.category, "internal")>
 				</cfif>
-
 			</cfif>
 		</cflock>
 	</cfif>
