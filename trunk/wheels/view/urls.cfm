@@ -115,10 +115,33 @@
 	<cfreturn loc.result>
 </cffunction>
 
-<cffunction name="isCurrentPage" returntype="any" access="public" output="false">
-	<!--- accepts URLFor arguments --->
+<cffunction name="isCurrentPage" returntype="boolean" access="public" output="false" hint="View, Helper, Tells you if the parameters passed in represent the current page.">
+	<cfargument name="route" type="string" required="false" default="" hint="Passed through to URLFor()">
+	<cfargument name="controller" type="string" required="false" default="" hint="Passed through to URLFor()">
+	<cfargument name="action" type="string" required="false" default="" hint="Passed through to URLFor()">
+	<cfargument name="id" type="numeric" required="false" default="0" hint="Passed through to URLFor()">
+	<cfargument name="params" type="string" required="false" default="" hint="Passed through to URLFor()">
+	<cfargument name="anchor" type="string" required="false" default="" hint="Passed through to URLFor()">
+	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="Passed through to URLFor()">
+	<cfargument name="host" type="string" required="false" default="" hint="Passed through to URLFor()">
+	<cfargument name="protocol" type="string" required="false" default="" hint="Passed through to URLFor()">
+
+	<!---
+		HISTORY:
+		-
+
+		USAGE:
+		-
+
+		EXAMPLES:
+		-
+
+		RELATED:
+		 * [linkToUnlessCurrent linkToUnlessCurrent()] (function)
+	--->
+
 	<cfset var loc = {}>
-	<cfset loc.newUrl = urlFor(argumentCollection=arguments)>
+	<cfset loc.newUrl = URLFor(argumentCollection=arguments)>
 	<cfset loc.currentUrl = cgi.script_name>
 	<cfif cgi.script_name IS NOT cgi.path_info>
 		<cfset loc.currentUrl = loc.currentUrl & cgi.path_info>
