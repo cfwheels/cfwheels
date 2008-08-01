@@ -172,7 +172,7 @@
 </cffunction>
 
 <cffunction name="$renderPage" returntype="void" access="private" output="false">
-	<cfset request.wheels.response = $include("../../views/#arguments.controller#/#arguments.action#.cfm")>
+	<cfset request.wheels.response = $include("../../#application.wheels.viewPath#/#arguments.controller#/#arguments.action#.cfm")>
 	<cfset $renderLayout(layout=arguments.layout)>
 </cffunction>
 
@@ -216,13 +216,13 @@
 
 	<cfif Left(arguments.name, 1) IS "/">
 		<!--- Include a file in a sub folder to view --->
-		<cfset loc.result = $include("../../views#Reverse(ListRest(Reverse(arguments.name), '/'))#/_#Reverse(ListFirst(Reverse(arguments.name), '/'))#.cfm")>
+		<cfset loc.result = $include("../../#application.wheels.viewPath##Reverse(ListRest(Reverse(arguments.name), '/'))#/_#Reverse(ListFirst(Reverse(arguments.name), '/'))#.cfm")>
 	<cfelseif arguments.name  Contains "/">
 		<!--- Include a file in a sub folder of the curent controller --->
-		<cfset loc.result = $include("../../views/#variables.params.controller#/#Reverse(ListRest(Reverse(arguments.name), '/'))#/_#Reverse(listFirst(Reverse(arguments.name), '/'))#.cfm")>
+		<cfset loc.result = $include("../../#application.wheels.viewPath#/#variables.params.controller#/#Reverse(ListRest(Reverse(arguments.name), '/'))#/_#Reverse(listFirst(Reverse(arguments.name), '/'))#.cfm")>
 	<cfelse>
 		<!--- Include a file in the current controller's view folder --->
-		<cfset loc.result = $include("../../views/#variables.params.controller#/_#arguments.name#.cfm")>
+		<cfset loc.result = $include("../../#application.wheels.viewPath#/#variables.params.controller#/_#arguments.name#.cfm")>
 	</cfif>
 
 	<cfreturn loc.result>
@@ -243,13 +243,13 @@
 	<cfif (IsBoolean(arguments.layout) AND arguments.layout) OR (arguments.layout IS NOT "false")>
 		<cfif NOT IsBoolean(arguments.layout)>
 			<!--- Include a designated layout --->
-			<cfset request.wheels.response = $include("../../views/layouts/#Replace(arguments.layout, ' ', '', 'all')#.cfm")>
+			<cfset request.wheels.response = $include("../../#application.wheels.viewPath#/layouts/#Replace(arguments.layout, ' ', '', 'all')#.cfm")>
 		<cfelseif fileExists(expandPath("views/layouts/#variables.params.controller#.cfm"))>
 			<!--- Include the current controller's layout if one exists --->
-			<cfset request.wheels.response = $include("../../views/layouts/#variables.params.controller#.cfm")>
+			<cfset request.wheels.response = $include("../../#application.wheels.viewPath#/layouts/#variables.params.controller#.cfm")>
 		<cfelse>
 			<!--- The application wide layout --->
-			<cfset request.wheels.response = $include("../../views/layouts/default.cfm")>
+			<cfset request.wheels.response = $include("../../#application.wheels.viewPath#/layouts/default.cfm")>
 		</cfif>
 	</cfif>
 

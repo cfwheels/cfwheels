@@ -4,6 +4,10 @@
 	<div style="clear:both;margin-top:100px;text-align:left;background:##ececec;padding:10px;border-top:2px solid ##808080;border-bottom:2px solid ##808080;">
 	<table cellspacing="0">
 	<tr>
+		<td valign="top"><strong>Application Name:</strong></td>
+		<td>#application.applicationName#</td>
+	</tr>
+	<tr>
 		<td valign="top"><strong>Framework:</strong></td>
 		<td>Wheels #application.wheels.version#</td>
 	</tr>

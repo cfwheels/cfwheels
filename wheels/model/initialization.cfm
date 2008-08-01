@@ -81,7 +81,11 @@
 
 		// set the table name unless set manually by the developer
 		if (!StructKeyExists(variables.wheels.class, "tableName"))
+		{
 			variables.wheels.class.tableName = $pluralize(variables.wheels.class.name);
+			if (Len(application.settings.tableNamePrefix))
+				variables.wheels.class.tableName = application.settings.tableNamePrefix & "_" & variables.wheels.class.tableName;
+		}
 
 		// introspect the database
 		loc.columns = $dbinfo(datasource=application.settings.database.datasource, type="columns", table=variables.wheels.class.tableName);
