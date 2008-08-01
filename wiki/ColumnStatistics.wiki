@@ -19,10 +19,16 @@ What if you only want to count authors with a last name starting on "A"? Like th
 <cfset authorCount = model("Author").count(where="lastName LIKE 'A%'")>
 }}}
 
-Simple enough but what if you want to count only authors in the U.S.A. and that information is stored in a different table. Let's say you have stored country information in a table called `profiles` and also setup a `hasOne` association between the `author` and `profile` models. Just like in the [findAll findAll()] function you can now use the `include` argument to reference other tables. In our case the code would end up looking something like this:
+Simple enough but what if you want to count only authors in the U.S.A. and that information is stored in a different table. Let's say you have stored country information in a table called `profiles` and also setup a `hasOne` / `belongsTo` association between the `author` and `profile` models. Just like in the [findAll findAll()] function you can now use the `include` argument to reference other tables. In our case the code would end up looking something like this:
 
 {{{
 <cfset authorCount = model("Author").count(include="profile", where="countryId=1 AND lastName LIKE 'A%'")>
+}}}
+
+Or if you care more about readability than performance why not just join in the countries table as well:
+
+{{{
+<cfset authorCount = model("Author").count(include="profile(country)", where="name='U.S.A.' AND lastName LIKE 'A%'")>
 }}}
 
 If you want a count and include a `hasMany` association though you'll likely want to pass in `distinct=true` as well to the [count count()] function to make sure you're only counting unique authors:
