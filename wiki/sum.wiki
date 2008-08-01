@@ -24,16 +24,18 @@ Numeric
 *Examples*:
 
 {{{
-<cfoutput>#paginationTotalRecords()#</cfoutput>
+<cfset allSalaries = model("Employee").sum(property="salary")>
+}}}
+
+{{{
+<cfset allSalaries = model("Employee").sum(property="salary", include="country", where="name='Australia'")>
 
 }}}
 
 *Related*:
 
- * GettingPaginatedData (chapter)
- * DisplayingLinksforPagination (chapter)
- * [paginationLinks paginationLinks()] (function)
- * [paginationHasPrevious paginationHasPrevious()] (function)
- * [paginationHasNext paginationHasNext()] (function)
- * [paginationTotalPages paginationTotalPages()] (function)
- * [paginationCurrentPage paginationCurrentPage()] (function)
+ * ColumnStatistics (chapter)
+ * [minimum minimum()] (function)
+ * [maximum maximum()] (function)
+ * [average average()] (function)
+ * [count count()] (function)
