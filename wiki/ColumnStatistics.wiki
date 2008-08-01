@@ -31,10 +31,26 @@ Or if you care more about readability than performance why not just join in the 
 <cfset authorCount = model("Author").count(include="profile(country)", where="name='U.S.A.' AND lastName LIKE 'A%'")>
 }}}
 
-If you want a count and include a `hasMany` association though you'll likely want to pass in `distinct=true` as well to the [count count()] function to make sure you're only counting unique authors:
+In the background these functions all perform SQL that looks like this
+
+{{{
+SELECT COUNT(*)
+FROM Authors
+WHERE ...
+}}}
+
+However, if you include a hasMany association Wheels will be smart enough to add the DISTINCT keyword to the SQL to make sure you're only counting unique rows. For example, the following function call...
 
 {{{
 <cfset authorCount = model("Author").count(include="books", where="title LIKE 'Wheels%'")>
+}}}
+
+... will, presuming `id` is the primary key of the `Authors` table and the correct associations have been setup, execute this SQL:
+
+{{{
+SELECT COUNT(DISTINCT Authors.id)
+FROM Authors LEFT OUTER JOIN Books ON Authors.id = Books.authorId
+WHERE ...
 }}}
 
 OK, so now we've covered the count function but there are a few other functions you can use as well to get column statistics...
