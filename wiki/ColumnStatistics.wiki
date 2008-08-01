@@ -1,0 +1,18 @@
+#summary Use Wheels to get statistics on the values in a column.
+#labels chapter,0.8
+
+Since Wheels simplifies so much for you when you select, insert, update and delete rows from the database it would suck if you had to revert back to using `cfquery` and `COUNT(id) AS x` type queries when you want to get aggregate values, right? Well, good news... of course you don't have to do this, just use the built-in functions [sum sum()], [minimum minimum()], [maximum maximum()], [average average()] and [count count()].
+
+==
+
+= Introduction =
+
+Add your content here.
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
