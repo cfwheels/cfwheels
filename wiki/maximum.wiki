@@ -1,0 +1,36 @@
+#summary maximum(property[where,include])
+#labels api,0.8,model,class
+
+*Description*:
+
+Calculates the maximum value for a given property. Uses the SQL function MAX.
+
+*Return Type*:
+
+Numeric
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *property* || string || true ||  || Name of the property to get the highest value for (has to be a property of a numeric data type). ||
+|| *where* || string || false ||  || A SQL fragment such as categoryId=4 for example. ||
+|| *include* || string || false ||  || Any associations that needs to be included in the query. ||
+
+
+
+*Examples*:
+
+{{{
+<cfset highestSalary = model("Employee").maximum("salary")>
+
+}}}
+
+*Related*:
+
+ * ColumnStatistics (chapter)
+ * [average average()] (function)
+ * [count count()] (function)
+ * [minimum minimum()] (function)
+ * [sum sum()] (function)

@@ -1,0 +1,37 @@
+#summary average(property[distinct,where,include])
+#labels api,0.8,model,class
+
+*Description*:
+
+Calculates the average value for a given property. Uses the SQL function AVG.
+
+*Return Type*:
+
+Numeric
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *property* || string || true ||  || Name of the property to calculate the average for. ||
+|| *distinct* || boolean || false || false || When true, AVG will be performed only on each unique instance of a value, regardless of how many times the value occurs. ||
+|| *where* || string || false ||  || A SQL fragment such as lastName LIKE 'A%' for example. ||
+|| *include* || string || false ||  || Any associations that needs to be included in the query. ||
+
+
+
+*Examples*:
+
+{{{
+<cfset avgSalary = model("Employee").average("salary")>
+
+}}}
+
+*Related*:
+
+ * ColumnStatistics (chapter)
+ * [count count()] (function)
+ * [maximum maximum()] (function)
+ * [minimum minimum()] (function)
+ * [sum sum()] (function)

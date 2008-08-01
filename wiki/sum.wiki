@@ -3,7 +3,7 @@
 
 *Description*:
 
-Calculates the sum of values on a given column.
+Calculates the sum of values for a given property. Uses the SQL function SUM.
 
 *Return Type*:
 
@@ -15,7 +15,7 @@ Numeric
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
 || *property* || string || true ||  || Name of the property to get the sum for (has to be a property of a numeric data type). ||
-|| *distinct* || boolean || false || false || When true SUM returns the sum of unique values only. ||
+|| *distinct* || boolean || false || false || When true, SUM returns the sum of unique values only. ||
 || *where* || string || false ||  || A SQL fragment such as lastName LIKE 'A%' for example. ||
 || *include* || string || false ||  || Any associations that needs to be included in the query. ||
 
@@ -28,14 +28,14 @@ Numeric
 }}}
 
 {{{
-<cfset allSalaries = model("Employee").sum(property="salary", include="country", where="name='Australia'")>
+<cfset allAustralianSalaries = model("Employee").sum(property="salary", include="country", where="name='Australia'")>
 
 }}}
 
 *Related*:
 
  * ColumnStatistics (chapter)
- * [minimum minimum()] (function)
- * [maximum maximum()] (function)
  * [average average()] (function)
  * [count count()] (function)
+ * [maximum maximum()] (function)
+ * [minimum minimum()] (function)

@@ -1,0 +1,43 @@
+#summary count([where,include])
+#labels api,0.8,model,class
+
+*Description*:
+
+Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function COUNT.
+
+*Return Type*:
+
+Numeric
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *where* || string || false ||  || A SQL fragment such as admin=1 for example. ||
+|| *include* || string || false ||  || Any associations that needs to be included in the query. ||
+
+
+
+*Examples*:
+
+{{{
+<cfset authorCount = model("Author").count()>
+}}}
+
+{{{
+<cfset authorOnACount = model("Author").count(where="lastName LIKE 'A%'")>
+}}}
+
+{{{
+<cfset authorWithBooksOnACount = model("Author").count(include="books", where="title LIKE 'A%'")>
+
+}}}
+
+*Related*:
+
+ * ColumnStatistics (chapter)
+ * [average average()] (function)
+ * [maximum maximum()] (function)
+ * [minimum minimum()] (function)
+ * [sum sum()] (function)
