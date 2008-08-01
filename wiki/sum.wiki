@@ -1,0 +1,39 @@
+#summary sum(property[distinct,where,include])
+#labels api,0.8,model,class
+
+*Description*:
+
+Calculates the sum of values on a given column.
+
+*Return Type*:
+
+Numeric
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *property* || string || true ||  || Name of the property to get the sum for (has to be a property of a numeric data type). ||
+|| *distinct* || boolean || false || false || When true SUM returns the sum of unique values only. ||
+|| *where* || string || false ||  || A SQL fragment such as lastName LIKE 'A%' for example. ||
+|| *include* || string || false ||  || Any associations that needs to be included in the query. ||
+
+
+
+*Examples*:
+
+{{{
+<cfoutput>#paginationTotalRecords()#</cfoutput>
+
+}}}
+
+*Related*:
+
+ * GettingPaginatedData (chapter)
+ * DisplayingLinksforPagination (chapter)
+ * [paginationLinks paginationLinks()] (function)
+ * [paginationHasPrevious paginationHasPrevious()] (function)
+ * [paginationHasNext paginationHasNext()] (function)
+ * [paginationTotalPages paginationTotalPages()] (function)
+ * [paginationCurrentPage paginationCurrentPage()] (function)
