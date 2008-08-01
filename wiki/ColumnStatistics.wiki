@@ -3,7 +3,7 @@
 
 Since Wheels simplifies so much for you when you select, insert, update and delete rows from the database it would suck if you had to revert back to using `cfquery` and `COUNT(id) AS x` type queries when you want to get aggregate values, right? Well, good news... of course you don't have to do this, just use the built-in functions [sum sum()], [minimum minimum()], [maximum maximum()], [average average()] and [count count()] :)
 
-Let's start with the [count count()] functions shall we?
+Let's start with the [count count()] function shall we?
 
 ==Counting Rows==
 
@@ -25,8 +25,14 @@ Simple enough but what if you want to count only authors in the U.S.A. and that 
 <cfset authorCount = model("Author").count(include="profile", where="countryId=1 AND lastName LIKE 'A%'")>
 }}}
 
-If you want a count and include a `hasMany` association though you'll likely want to pass in `distinct=true` as well to the [count count()] function to make sure you're only counting unique authors.
+If you want a count and include a `hasMany` association though you'll likely want to pass in `distinct=true` as well to the [count count()] function to make sure you're only counting unique authors:
 
 {{{
 <cfset authorCount = model("Author").count(include="books", where="title LIKE 'Wheels%'")>
 }}}
+
+OK, so now we've covered the count function but there are a few other functions you can use as well to get column statistics...
+
+==Getting an Average==
+
+You can use the [average average()] function to get the average value on any given column. The difference between this function and the [count count()] function is that this operates on a single column while the [count count()] function operates on complete records. Therefore you have to pass in the name of the property you want to get an average for. The same goes for the remaining column statistics functions as well; they all accept the `property` argument.
