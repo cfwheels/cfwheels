@@ -69,8 +69,6 @@
 	<cfinclude template="../#application.wheels.configPath#/routes.cfm">
 	<cfinclude template="routes.cfm">
 	<cfset application.wheels.webPath = Replace(cgi.script_name, Reverse(spanExcluding(Reverse(cgi.script_name), "/")), "")>
-
-
 	<cftry>
 		<!--- determine and set database brand --->
 		<cfinclude template="../#application.wheels.configPath#/database.cfm">
