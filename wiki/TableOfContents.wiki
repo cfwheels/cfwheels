@@ -30,7 +30,7 @@
  * [ReadingRecords Reading Records]
  * [UpdatingRecords Updating Records]
  * [DeletingRecords Deleting Records]
- * Column Statistics
+ * [ColumnStatistics Column Statistics]
  * Dynamic Finders
  * [GettingPaginatedData Getting Paginated Data]
  * [SettingAssociations Setting Associations]
