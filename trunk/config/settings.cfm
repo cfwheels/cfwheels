@@ -1,4 +1,5 @@
 <!--- miscellaneous --->
+<cfset application.settings.tableNamePrefix = "">
 <cfset application.settings.obfuscateURLs = false>
 <cfset application.settings.reloadPassword = "">
 <cfset application.settings.defaultSoftDeleteColumn = "deletedAt">

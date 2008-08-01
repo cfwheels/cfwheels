@@ -1,10 +1,6 @@
-<!--- path of calling Application.cfc will become the root dir --->
 <cfset this.rootDir = getDirectoryFromPath(getBaseTemplatePath())>
-<!--- nifty way to have unique application names and not have to worry about the 64 character length limit --->
-<cfset this.name = Hash(this.rootDir)>
+<cfset this.name = Hash(this.rootDir & cgi.http_host)>
 <cfset this.mappings["/wheels"] = this.rootDir & "wheels">
-<cfset this.mappings["/controllerRoot"] = this.rootDir & "controllers">
-<cfset this.mappings["/modelRoot"] = this.rootDir & "models">
 <cfset this.sessionManagement = true>
 
 <cfif IsDefined("server.coldfusion.productname") AND server.coldfusion.productname IS "ColdFusion Server">
@@ -21,8 +17,34 @@
 	<cfset application.wheels.version = "0.8">
 	<cfset application.wheels.controllers = StructNew()>
 	<cfset application.wheels.models = StructNew()>
-	<cfset application.wheels.routes = arrayNew(1)>
+	<cfset application.wheels.routes = ArrayNew(1)>
 	<cfset application.wheels.namedRoutePositions = StructNew()>
+	<!--- setup folder paths --->
+	<cfif DirectoryExists(this.rootDir & "config")>
+		<cfset loc.root = this.rootDir>
+		<cfset loc.path = "">
+		<cfset loc.componentPath = "">
+	<cfelse>
+		<cfset loc.folder = cgi.http_host>
+		<cfset loc.folder = ListDeleteAt(loc.folder, ListLen(loc.folder, "."), ".")>
+		<cfset loc.folder = Replace(loc.folder, "www.", "")>
+		<cfset loc.folder = Replace(loc.folder, ".co", "")>
+		<cfset ListLast(loc.folder, ".") >
+		<cfset loc.root = this.rootDir & loc.folder & "/">
+		<cfset loc.path = loc.folder & "/">
+		<cfset loc.componentPath = loc.folder & ".">
+	</cfif>
+	<cfset application.wheels.configPath = loc.path & "config">
+	<cfset application.wheels.controllerPath = loc.path & "controllers">
+	<cfset application.wheels.controllerComponentPath = loc.componentPath & "controllers">
+	<cfset application.wheels.eventPath = loc.path & "events">
+	<cfset application.wheels.filePath = loc.path & "files">
+	<cfset application.wheels.imagePath = loc.path & "images">
+	<cfset application.wheels.javascriptPath = loc.path & "javascripts">
+	<cfset application.wheels.modelPath = loc.path & "models">
+	<cfset application.wheels.modelComponentPath = loc.componentPath & "models">
+	<cfset application.wheels.stylesheetPath = loc.path & "stylesheets">
+	<cfset application.wheels.viewPath = loc.path & "views">
 	<!--- Set up struct for caches --->
 	<cfset application.wheels.cache = StructNew()>
 	<cfset application.wheels.cache.internal = StructNew()>
@@ -34,26 +56,24 @@
 	<cfset application.wheels.cache.external.page = StructNew()>
 	<cfset application.wheels.cache.external.partial = StructNew()>
 	<cfset application.wheels.cache.external.query = StructNew()>
-	<cfset application.wheels.cacheLastCulledAt = now()>
+	<cfset application.wheels.cacheLastCulledAt = Now()>
 	<!--- load environment settings --->
 	<cfif StructKeyExists(URL, "reload") AND NOT IsBoolean(URL.reload) AND Len(url.reload) AND (Len(application.settings.reloadPassword) IS 0 OR (StructKeyExists(URL, "password") AND URL.password IS application.settings.reloadPassword))>
 		<cfset application.settings.environment = URL.reload>
 	<cfelse>
-		<cfinclude template="../config/environment.cfm">
+		<cfinclude template="../#application.wheels.configPath#/environment.cfm">
 	</cfif>
-	<cfinclude template="../config/settings.cfm">
-	<cfinclude template="../config/environments/#application.settings.environment#.cfm">
+	<cfinclude template="../#application.wheels.configPath#/settings.cfm">
+	<cfinclude template="../#application.wheels.configPath#/environments/#application.settings.environment#.cfm">
 	<!--- Load developer routes and add wheels default ones --->
-	<cfinclude template="../config/routes.cfm">
+	<cfinclude template="../#application.wheels.configPath#/routes.cfm">
 	<cfinclude template="routes.cfm">
 	<cfset application.wheels.webPath = Replace(cgi.script_name, Reverse(spanExcluding(Reverse(cgi.script_name), "/")), "")>
-	<cfset application.wheels.filePath = "files">
-	<cfset application.wheels.imagePath = "images">
-	<cfset application.wheels.javascriptPath = "javascripts">
-	<cfset application.wheels.stylesheetPath = "stylesheets">
+
+
 	<cftry>
 		<!--- determine and set database brand --->
-		<cfinclude template="../config/database.cfm">
+		<cfinclude template="../#application.wheels.configPath#/database.cfm">
 		<cfset loc.info = $dbinfo(datasource=application.settings.database.datasource, type="version")>
 		<cfset application.wheels.databaseProductName = loc.info.database_productname>
 		<cfset application.wheels.databaseVersion = loc.info.database_version>
@@ -71,12 +91,12 @@
 	</cfcatch>
 	</cftry>
 	<cfset application.wheels.dispatch = CreateObject("component", "wheels.dispatch")>
-	<cfinclude template="../events/onapplicationstart.cfm">
+	<cfinclude template="../#application.wheels.eventPath#/onapplicationstart.cfm">
 </cffunction>
 
 <cffunction name="onSessionStart" output="false">
 	<cflock scope="application" type="readonly" timeout="30">
-		<cfinclude template="../events/onsessionstart.cfm">
+		<cfinclude template="../#application.wheels.eventPath#/onsessionstart.cfm">
 	</cflock>
 </cffunction>
 
@@ -94,7 +114,7 @@
 				<cfset application.settings.ipExceptions = URL.except>
 			</cfif>
 			<cfif Len(application.settings.ipExceptions) IS 0 OR ListFind(application.settings.ipExceptions, cgi.remote_addr) IS 0>
-				<cfinclude template="../events/onmaintenance.cfm">
+				<cfinclude template="../#application.wheels.eventPath#/onmaintenance.cfm">
 				<cfabort>
 			</cfif>
 		</cfif>
@@ -115,13 +135,13 @@
 		</cfif>
 		<cfif NOT application.settings.cacheRoutes>
 			<cfset arrayClear(application.wheels.routes)>
-			<cfinclude template="../config/routes.cfm">
+			<cfinclude template="../#application.wheels.configPath#/routes.cfm">
 			<cfinclude template="routes.cfm">
 		</cfif>
 		<cfif NOT application.settings.cacheDatabaseSchema>
 			<cfset $clearCache("sql", "internal")>
 		</cfif>
-		<cfinclude template="../events/onrequeststart.cfm">
+		<cfinclude template="../#application.wheels.eventPath#/onrequeststart.cfm">
 		<cfif application.settings.showDebugInformation>
 			<cfset request.wheels.execution.components.requestStart = GetTickCount() - request.wheels.execution.components.requestStart>
 		</cfif>
@@ -138,7 +158,7 @@
 <cffunction name="onMissingTemplate" output="true">
 	<cfargument name="targetpage">
 	<cflock scope="application" type="readonly" timeout="30">
-		<cfinclude template="../events/onmissingtemplate.cfm">
+		<cfinclude template="../#application.wheels.eventPath#/onmissingtemplate.cfm">
 	</cflock>
 </cffunction>
 
@@ -164,7 +184,7 @@
 				<cfthrow object="#arguments.exception#">
 			</cfif>
 		<cfelse>
-			<cfinclude template="../events/onerror.cfm">
+			<cfinclude template="../#application.wheels.eventPath#/onerror.cfm">
 		</cfif>
 	</cflock>
 </cffunction>
@@ -176,7 +196,7 @@
 		<cfif application.settings.showDebugInformation>
 			<cfset request.wheels.execution.components.requestEnd = getTickCount()>
 		</cfif>
-		<cfinclude template="../events/onrequestend.cfm">
+		<cfinclude template="../#application.wheels.eventPath#/onrequestend.cfm">
 		<cfif application.settings.showDebugInformation>
 			<cfset request.wheels.execution.components.requestEnd = GetTickCount() - request.wheels.execution.components.requestEnd>
 		</cfif>
@@ -188,11 +208,11 @@
 	<cfargument name="sessionscope">
   <cfargument name="applicationscope">
 	<cflock scope="application" type="readonly" timeout="30">
-		<cfinclude template="../events/onsessionend.cfm">
+		<cfinclude template="../#arguments.applicationscope.wheels.eventPath#/onsessionend.cfm">
 	</cflock>
 </cffunction>
 
 <cffunction name="onApplicationEnd" output="false">
 	<cfargument name="applicationscope">
-	<cfinclude template="../events/onapplicationend.cfm">
+	<cfinclude template="../#arguments.applicationscope.wheels.eventPath#/onapplicationend.cfm">
 </cffunction>

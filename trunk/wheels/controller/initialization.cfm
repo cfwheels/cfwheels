@@ -16,7 +16,7 @@
 
 <cffunction name="$createControllerObject" returntype="any" access="public" output="false">
 	<cfargument name="params" type="struct" required="true">
-	<cfreturn CreateObject("component", "controllerRoot.#variables.wheels.name#").$initControllerObject(variables.wheels.name, arguments.params)>
+	<cfreturn CreateObject("component", "#application.wheels.controllerComponentPath#.#variables.wheels.name#").$initControllerObject(variables.wheels.name, arguments.params)>
 </cffunction>
 
 <cffunction name="$initControllerObject" returntype="any" access="public" output="false">
