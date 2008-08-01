@@ -1,18 +1,22 @@
 #summary Use Wheels to get statistics on the values in a column.
 #labels chapter,0.8
 
-Since Wheels simplifies so much for you when you select, insert, update and delete rows from the database it would suck if you had to revert back to using `cfquery` and `COUNT(id) AS x` type queries when you want to get aggregate values, right? Well, good news... of course you don't have to do this, just use the built-in functions [sum sum()], [minimum minimum()], [maximum maximum()], [average average()] and [count count()].
+Since Wheels simplifies so much for you when you select, insert, update and delete rows from the database it would suck if you had to revert back to using `cfquery` and `COUNT(id) AS x` type queries when you want to get aggregate values, right? Well, good news... of course you don't have to do this, just use the built-in functions [sum sum()], [minimum minimum()], [maximum maximum()], [average average()] and [count count()] :)
 
-==
+Let's start with the [count count()] functions shall we?
 
-= Introduction =
+==Counting Rows==
 
-Add your content here.
+To count how many rows you have in your `authors` table, simply do this:
 
+{{{
+<cfset authorCount = model("Author").count()>
+}}}
 
-= Details =
+What if you only want to count authors with a last name starting on "A"? Like the [findAll findAll()] function, [count count()] will accept a `where` argument so you can do this:
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+{{{
+<cfset authorCount = model("Author").count(where="lastName LIKE 'A%'")>
+}}}
+
+Simple enough but what if you want to count 
