@@ -880,7 +880,7 @@
 			{
 				ArrayAppend(loc.sql, variables.wheels.class.properties[loc.key].column);
 				ArrayAppend(loc.sql, ",");
-				loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, list=false, null=this[loc.key] IS ""};
+				loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, list=false, null=this[loc.key] IS ""};
 				ArrayAppend(loc.sql2, loc.param);
 				ArrayAppend(loc.sql2, ",");
 			}
@@ -916,7 +916,7 @@
 				if (StructKeyExists(this, loc.key) && (!StructKeyExists(variables.$persistedProperties, loc.key) || this[loc.key] IS NOT variables.$persistedProperties[loc.key]))
 				{
 					ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
-					loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, list=false, null=this[loc.key] IS ""};
+					loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, list=false, null=this[loc.key] IS ""};
 					ArrayAppend(loc.sql, loc.param);
 					ArrayAppend(loc.sql, ",");
 				}
@@ -1089,7 +1089,7 @@
 		{
 			loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
 			ArrayAppend(arguments.sql, "#variables.wheels.class.properties[loc.property].column# = ");
-			loc.param = {value=this[loc.property], type=variables.wheels.class.properties[loc.property].type, list=false, null=false};
+			loc.param = {value=this[loc.property], type=variables.wheels.class.properties[loc.property].type, scale=variables.wheels.class.properties[loc.property].scale, list=false, null=false};
 			ArrayAppend(arguments.sql, loc.param);
 			if (loc.i LT loc.iEnd)
 				ArrayAppend(arguments.sql, " AND ");
