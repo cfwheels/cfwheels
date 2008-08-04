@@ -46,7 +46,7 @@
 		if (Len(arguments.include))
 		{
 			arguments.distinct = true;
-			arguments.property = ListFirst(variables.wheels.class.keys);
+			arguments.property = variables.wheels.class.keys;
 		}
 		else
 		{
@@ -141,9 +141,22 @@
 		arguments.select = "#arguments.type#(";
 		if (arguments.distinct)
 			arguments.select = arguments.select & "DISTINCT ";
-		if (arguments.property IS NOT "*")
-			arguments.select = arguments.select & variables.wheels.class.tableName & ".";
-		arguments.select = arguments.select & arguments.property & ") AS result";
+		if (arguments.property IS "*")
+		{
+			arguments.select = arguments.select & arguments.property;
+		}
+		else
+		{
+			loc.properties = "";
+			loc.iEnd = ListLen(arguments.property);
+			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+			{
+				loc.iItem = Trim(ListGetAt(arguments.property, loc.i));
+				loc.properties = ListAppend(loc.properties, variables.wheels.class.tableName & "." & variables.wheels.class.properties[loc.iItem].column);
+			}
+			arguments.select = arguments.select & loc.properties;
+		}
+		arguments.select = arguments.select & ") AS result";
 		StructDelete(arguments, "type");
 		StructDelete(arguments, "property");
 		loc.query = findAll(argumentCollection=arguments);
