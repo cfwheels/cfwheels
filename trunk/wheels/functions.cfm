@@ -73,8 +73,6 @@
 		<!--- determine and set database brand --->
 		<cfinclude template="../#application.wheels.configPath#/database.cfm">
 		<cfset loc.info = $dbinfo(datasource=application.settings.database.datasource, type="version")>
-		<cfset application.wheels.databaseProductName = loc.info.database_productname>
-		<cfset application.wheels.databaseVersion = loc.info.database_version>
 		<cfif loc.info.driver_name Contains "MySQL">
 			<cfset loc.adapterName = "MySQL">
 		<cfelseif loc.info.driver_name Contains "Oracle">
@@ -85,7 +83,13 @@
 		<cfif loc.info.recordCount>
 			<cfset application.wheels.adapter = CreateObject("component", "wheels.model.adapters.#loc.adapterName#")>
 		</cfif>
+		<cfset application.wheels.dataSource = application.settings.database.datasource>
+		<cfset application.wheels.databaseProductName = loc.info.database_productname>
+		<cfset application.wheels.databaseVersion = loc.info.database_version>
 	<cfcatch>
+		<cfset application.wheels.dataSource = "None">
+		<cfset application.wheels.databaseProductName = "None">
+		<cfset application.wheels.databaseVersion = "">
 	</cfcatch>
 	</cftry>
 	<cfset application.wheels.dispatch = CreateObject("component", "wheels.dispatch")>

@@ -25,7 +25,7 @@
 	</tr>
 	<tr>
 		<td valign="top"><strong>Data Source:</strong></td>
-		<td>#application.settings.database.datasource#</td>
+		<td>#application.wheels.dataSource#</td>
 	</tr>
 	<tr>
 		<td valign="top"><strong>URL Rewriting:</strong></td>
