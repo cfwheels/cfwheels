@@ -1,6 +1,6 @@
 <cfoutput>
 <h1>#arguments.exception.cause.type#</h1>
-<p>#arguments.exception.cause.message#</p>
+<p><strong>#arguments.exception.cause.message#</strong></p>
 <h2>Suggested action</h2>
 <p>#arguments.exception.cause.extendedInfo#</p>
 <h2>Error location</h2>
