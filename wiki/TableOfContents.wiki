@@ -31,7 +31,7 @@
  * [UpdatingRecords Updating Records]
  * [DeletingRecords Deleting Records]
  * [ColumnStatistics Column Statistics]
- * [DynamicFinders] Dynamic Finders
+ * [DynamicFinders Dynamic Finders]
  * [GettingPaginatedData Getting Paginated Data]
  * [SettingAssociations Setting Associations]
  * [UsingtheAssociations Using the Associations]
