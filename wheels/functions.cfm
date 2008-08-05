@@ -69,9 +69,9 @@
 	<cfinclude template="../#application.wheels.configPath#/routes.cfm">
 	<cfinclude template="routes.cfm">
 	<cfset application.wheels.webPath = Replace(cgi.script_name, Reverse(spanExcluding(Reverse(cgi.script_name), "/")), "")>
-	<cftry>
-		<!--- determine and set database brand --->
-		<cfinclude template="../#application.wheels.configPath#/database.cfm">
+	<!--- determine and set database brand --->
+	<cfinclude template="../#application.wheels.configPath#/database.cfm">
+	<cfif Len(application.settings.database.datasource)>
 		<cfset loc.info = $dbinfo(datasource=application.settings.database.datasource, type="version")>
 		<cfif loc.info.driver_name Contains "MySQL">
 			<cfset loc.adapterName = "MySQL">
@@ -86,12 +86,11 @@
 		<cfset application.wheels.dataSource = application.settings.database.datasource>
 		<cfset application.wheels.databaseProductName = loc.info.database_productname>
 		<cfset application.wheels.databaseVersion = loc.info.database_version>
-	<cfcatch>
+	<cfelse>
 		<cfset application.wheels.dataSource = "None">
 		<cfset application.wheels.databaseProductName = "None">
 		<cfset application.wheels.databaseVersion = "">
-	</cfcatch>
-	</cftry>
+	</cfif>
 	<cfset application.wheels.dispatch = CreateObject("component", "wheels.dispatch")>
 	<cfinclude template="../#application.wheels.eventPath#/onapplicationstart.cfm">
 </cffunction>

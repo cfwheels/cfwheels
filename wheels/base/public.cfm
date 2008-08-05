@@ -69,8 +69,8 @@
 	<cfscript>
 		if (application.settings.environment IS NOT "production")
 		{
-			if (!StructKeyExists(application.wheels, "adapter"))
-				$throw(type="Wheels.DataSourceNotFound", message="Wheels could not find a data source to work with.", extendedInfo="Add a datasource with the name '#application.settings.database.datasource#' in the ColdFusion Administrator unless you've already done so. If you have already set a datasource with this name it will be picked up by Wheels if you issue a '?reload=true' request (or when you restart the ColdFusion service).");
+			if (!Len(application.settings.database.datasource))
+				$throw(type="Wheels.MissingDataSource", message="No data source has been added.", extendedInfo="Tell Wheels what data source you want to use by specifying it in 'config/database.cfm'. Don't forget to also add the data source in the ColdFusion Administrator. When you have made your changes you need to issue a '?reload=true' request or restart the ColdFusion service for the changes to be picked up by Wheels.");
 		}
 		$doubleCheckedLock(name="modelLock", path=application.wheels.models, key=arguments.name, method="$createClass", args=arguments);
 	</cfscript>
