@@ -27,4 +27,4 @@ In this case Wheels will split the function name on the "And" part and determine
 
 In the examples above we've used the [findOne findOne()] function but you can use the same approach on a [findAll findAll()] function as well.
 
-Keep in mind that this will break down if you ever name a column `somethingAndSomethingElse` since Wheels will then split the function name incorrectly.
+Keep in mind that this will break down if you ever name a column `something*And*SomethingElse` since Wheels will then split the function name incorrectly.
