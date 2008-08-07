@@ -1,23 +1,30 @@
 #summary Make your code more readable by using dynamic finders.
 #labels chapter,0.8
 
-With the recent introduction of `onMissingMethod` in ColdFusion 8 (Thanks Adobe!) we have now been able to port over the concept of dynamic finders from Rails to Wheels.
+With the recent introduction of `onMissingMethod` in ColdFusion 8 (Thanks Adobe!) we have been able to port over the concept of dynamic finders from Rails to Wheels.
 
-==What are Dynamic Finders?==
-
-The concept is simple... instead of using arguments to tell Wheels what you want to do you can use a dynamically named function. For example, the following code:{{{
-verbatim code block
+The concept is simple... instead of using arguments to tell Wheels what you want to do you can use a dynamically named function. For example, the following code:
 
 {{{
-<cfset me = model("Song").findOne(where="email='my@myself.com'")>
+<cfset me = model("User").findOne(where="email='my@myself.com'")>
 }}}
 
 Can also be written as:
 
 {{{
-<cfset me = model("Song").findOneByEmail("my@myself.com")>
+<cfset me = model("User").findOneByEmail("my@myself.com")>
 }}}
 
 Through the power of `onMissingMethod` Wheels will parse the function name and figure out that the value supplied is supposed to be matched against the `email` column.
 
-==How Do I Use Them==
+You can take this one step further by using code such as:
+
+{{{
+<cfset me = model("User").findOneByUserNameAndPassword("perd,pass")>
+}}}
+
+In this case Wheels will split the function name on the "And" part and determine that you want to do find the record where the `username` column is "perd" and the password column is "pass".
+
+In the examples above we've used the [findOne findOne()] function but you can use the same approach on a [findAll findAll()] function as well.
+
+Keep in mind that this will break down if you ever name a column `somethingAndSomethingElse` since Wheels will then split the function name incorrectly.
