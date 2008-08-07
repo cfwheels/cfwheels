@@ -45,7 +45,7 @@ To create a class in your application that maps to a table in your database all 
 </cfcomponent>
 }}}
 
-After creating this file you now have a bunch of methods available for you to use that handles reading and writing to the `authors` table (for the purpose of showing some examples we will assume you have created a file named `Author.cfc` which will then be mapped to the `authors` table in the database). For example you can do the following to get the author with the primary key of `1`, change his first name and save the record back to the database.
+After creating this file you now have a bunch of methods available for you to use that handles reading and writing to the `Authors` table (for the purpose of showing some examples we will assume you have created a file named `Author.cfc` which will then be mapped to the `Authors` table in the database). For example you can do the following to get the author with the primary key of `1`, change his first name and save the record back to the database.
 
 {{{
 <cfset auth = model("author").findById(1)>
@@ -55,7 +55,7 @@ After creating this file you now have a bunch of methods available for you to us
 
 This code makes use of the class methods [findById findById()], updates the object property in memory and then saves it back using the object method [save save()]. We'll get back to all these methods and more later of course.
 
-By default a table name should be the plural version of the class name so if you have an `author` class the table name should be `authors`. To change this behavior you can use the [table table()] method. This method call should be placed in the `init` method of your class file.
+By default a table name should be the plural version of the class name so if you have an `Author.cfc` class the table name should be `Authors`. To change this behavior you can use the [table table()] method. This method call should be placed in the `init` method of your class file.
 
 {{{
 <cfcomponent extends="Model">
