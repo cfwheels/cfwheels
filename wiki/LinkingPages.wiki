@@ -1,0 +1,3 @@
+#summary Wheels does some magic to help you link to other pages within your app. Read on to learn why you'll rarely use an <a> tag ever again.
+#labels chapter,0.8
+
