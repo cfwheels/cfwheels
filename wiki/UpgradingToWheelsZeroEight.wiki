@@ -16,6 +16,10 @@
 
 ==CFML Code Changes==
 
+===Config Code===
+
+  * In config/settings.cfm, remove the statements that set application.settings.paths values. We had to remove these option in order to hardcode the folders into the URL rewriting feature. Consequently, all images must be stored in `images`, files in `files`, JavaScript files in `javascripts`, and CSS files in `stylesheets` folders off of the root.
+
 ===Model Code===
 
   * When using a model's `findById()` and `findOne()` functions, the `found` property is no longer available. Instead, we've adopted the "Rails way" of doing this, which involves the function throwing an error of type "Wheels.RecordNotFound" if the record was not found. Use a `cftry`/`cfcatch` block to catch the error.
