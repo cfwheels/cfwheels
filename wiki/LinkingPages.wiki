@@ -1,7 +1,7 @@
 #summary Wheels does some magic to help you link to other pages within your app. Read on to learn why you'll rarely use an `<a>` tag ever again.
 #labels chapter,0.8
 
-==Use this Function for Portability==
+==Use the linkTo() Function for Portability==
 
 An `<a>` tag is easy enough, isn't it? Why would we need to use a function to do this mundane task? It turns out that there are some advantages. Here's the deal.
 
