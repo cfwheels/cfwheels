@@ -176,7 +176,7 @@
 	<cfset $renderLayout(layout=arguments.layout)>
 </cffunction>
 
-<cffunction name="$includeOrRenderPartial" returntype="void" access="private" output="false">
+<cffunction name="$includeOrRenderPartial" returntype="any" access="private" output="false">
 	<cfset var loc = {}>
 
 	<!--- double-checked lock --->
