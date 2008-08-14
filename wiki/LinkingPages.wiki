@@ -1,6 +1,48 @@
 #summary Wheels does some magic to help you link to other pages within your app. Read on to learn why you'll rarely use an `<a>` tag ever again.
 #labels chapter,0.8
 
+==`linkTo()`, the Heart of Linking to Other Pages==
+
+Wheels's built-in `linkTo()` function does all of the heavy lifting involved with linking the different pages of your application together. You'll generally be using `linkTo()` within your view code.
+
+`linkTo()` accepts the following arguments:
+
+|| *Argument* || *Description* ||
+|| url || If linking to a direct URL, put that URL here. This is especially useful for external links or links to non-Wheels application pages. The URL can be absolute, document relative, or site root relative ||
+|| text || The text content of the link. For all intents and purposes, he blue underlined text. ||
+|| confirm || Passing a message to this causes a JavaScript confirmation dialogue box to pop up containing the message. ||
+|| route || If the link maps to a specific route that you have configured, pass the name here. ||
+|| controller || Name of the controller to include in the link. Only needs to be specified if different than the current controller. ||
+|| action || Name of the action that the link needs to point to. ||
+|| id || If following the link points to a page with the conventional Wheels `controller/action/id` link structure, this is the value of the ID. ||
+|| params || Any additional parameters to set in the query string. ||
+|| anchor || Sets the anchor name that needs to be appended to the path after a pound sign (#) ||
+|| onlyPath || If true, returns only the relative URL (no protocol, host name or port) ||
+|| host || Set this to override the current host (domain name). ||
+|| protocol || Set this to override the current protocol (http). ||
+
+===Basic Example===
+
+As a basic example, if we wanted to link to the page that is the `authors` action in the `blog` controller, this is the code that we would write:
+
+{{{
+#linkTo(text="List of Authors", controller="blog", action="authors")#
+}}}
+
+The above code would generate this markup:
+
+{{{
+<a href="/blog/authors">List of Authors</a>
+}}}
+
+===Extreme Example===
+
+If we were to use of the parameters except for `route` and `url`, our code may look something like this:
+
+{{{
+#linkTo()#
+}}}
+
 ==Use the `linkTo()` Function for Portability==
 
 An `<a>` tag is easy enough, isn't it? Why would we need to use a function to do this mundane task? It turns out that there are some advantages. Here's the deal.
