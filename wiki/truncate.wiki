@@ -1,0 +1,40 @@
+#summary truncate(text[length,truncateString])
+#labels api,0.8,view,helper
+
+*Description*:
+
+Truncates a string to the specified length and replaces the last characters with the specified truncate string (defaults to '...').
+
+*Return Type*:
+
+Any
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *text* || string || true ||  || Text to truncate. ||
+|| *length* || numeric || false || 30 || Length of the truncated string. ||
+|| *truncateString* || string || false || ... || String to replace the last characters with. ||
+
+
+
+*Examples*:
+
+{{{
+<cfoutput>#truncate(text="Wheels is a framework for ColdFusion", length=20)#</cfoutput>
+
+}}}
+
+*Related*:
+
+ * [capitalize capitalize()] (function)
+ * [titleize titleize()] (function)
+ * [simpleFormat simpleFormat()] (function)
+ * [autoLink autoLink()] (function)
+ * [highlight highlight()] (function)
+ * [stripTags stripTags()] (function)
+ * [stripLinks stripLinks()] (function)
+ * [excerpt excerpt()] (function)
+ * [truncate truncate()] (function)
