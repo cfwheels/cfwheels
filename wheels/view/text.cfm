@@ -76,45 +76,82 @@
 	<cfreturn REReplaceNoCase(arguments.text, "<a.*?>(.*?)</a>", "\1" , "all")>
 </cffunction>
 
-<cffunction name="excerpt" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="true">
-	<cfargument name="phrase" type="any" required="true">
-	<cfargument name="radius" type="any" required="false" default="100">
-	<cfargument name="excerptString" type="any" required="false" default="...">
-	<cfset var loc = {}>
+<cffunction name="excerpt" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="true">
+	<cfargument name="phrase" type="string" required="true">
+	<cfargument name="radius" type="numeric" required="false" default="100">
+	<cfargument name="excerptString" type="string" required="false" default="...">
 
-	<cfset loc.pos = FindNoCase(arguments.phrase, arguments.text, 1)>
-	<cfif loc.pos IS NOT 0>
-		<cfset loc.excerptStringStart = arguments.excerptString>
-		<cfset loc.excerptStringEnd = arguments.excerptString>
-		<cfset loc.start = loc.pos-arguments.radius>
-		<cfif loc.start LTE 0>
-			<cfset loc.start = 1>
-			<cfset loc.excerptStringStart = "">
-		</cfif>
-		<cfset loc.count = Len(arguments.phrase)+(arguments.radius*2)>
-		<cfif loc.count GT (Len(arguments.text)-loc.start)>
-			<cfset loc.excerptStringEnd = "">
-		</cfif>
-		<cfset loc.output = loc.excerptStringStart & Mid(arguments.text, loc.start, loc.count) & loc.excerptStringEnd>
-	<cfelse>
-		<cfset loc.output = "">
-	</cfif>
+	<!---
+		EXAMPLES:
+		<cfoutput>#excerpt(text="Wheels is a framework for ColdFusion", length=20)#</cfoutput>
 
-	<cfreturn loc.output>
+		RELATED:
+		 * [capitalize capitalize()] (function)
+		 * [titleize titleize()] (function)
+		 * [simpleFormat simpleFormat()] (function)
+		 * [autoLink autoLink()] (function)
+		 * [highlight highlight()] (function)
+		 * [stripTags stripTags()] (function)
+		 * [stripLinks stripLinks()] (function)
+		 * [excerpt excerpt()] (function)
+		 * [truncate truncate()] (function)
+	--->
+
+	<cfscript>
+	var loc = {};
+	loc.pos = FindNoCase(arguments.phrase, arguments.text, 1);
+	if (loc.pos != 0)
+	{
+		loc.excerptStringStart = arguments.excerptString;
+		loc.excerptStringEnd = arguments.excerptString;
+		loc.start = loc.pos - arguments.radius;
+		if (loc.start <= 0)
+		{
+			loc.start = 1;
+			loc.excerptStringStart = "";
+		}
+		loc.count = Len(arguments.phrase) + (arguments.radius*2);
+		if (loc.count > (Len(arguments.text)-loc.start))
+			loc.excerptStringEnd = "";
+		loc.returnValue = loc.excerptStringStart & Mid(arguments.text, loc.start, loc.count) & loc.excerptStringEnd;
+	}
+	else
+	{
+		loc.returnValue = "";
+	}
+
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="truncate" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="true">
-	<cfargument name="length" type="any" required="true">
-	<cfargument name="truncateString" type="any" required="false" default="...">
-	<cfset var loc = {}>
+<cffunction name="truncate" returntype="string" access="public" output="false" hint="View, Helper, Truncates a string to the specified length and replaces the last characters with the specified truncate string (defaults to '...').">
+	<cfargument name="text" type="string" required="true" hint="Text to truncate.">
+	<cfargument name="length" type="numeric" required="false" default="30" hint="Length of the truncated string.">
+	<cfargument name="truncateString" type="string" required="false" default="..." hint="String to replace the last characters with.">
 
-	<cfif Len(arguments.text) GT arguments.length>
-		<cfset loc.output = Left(arguments.text, arguments.length-3) & arguments.truncateString>
-	<cfelse>
-		<cfset loc.output = arguments.text>
-	</cfif>
+	<!---
+		EXAMPLES:
+		<cfoutput>#truncate(text="Wheels is a framework for ColdFusion", length=20)#</cfoutput>
 
-	<cfreturn loc.output>
+		RELATED:
+		 * [capitalize capitalize()] (function)
+		 * [titleize titleize()] (function)
+		 * [simpleFormat simpleFormat()] (function)
+		 * [autoLink autoLink()] (function)
+		 * [highlight highlight()] (function)
+		 * [stripTags stripTags()] (function)
+		 * [stripLinks stripLinks()] (function)
+		 * [excerpt excerpt()] (function)
+		 * [truncate truncate()] (function)
+	--->
+
+	<cfscript>
+		var loc = {};
+		if (Len(arguments.text) > arguments.length)
+			loc.returnValue = Left(arguments.text, arguments.length-Len(arguments.truncateString)) & arguments.truncateString;
+		else
+			loc.returnValue = arguments.text;
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
