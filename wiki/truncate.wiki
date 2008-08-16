@@ -7,7 +7,7 @@ Truncates a string to the specified length and replaces the last characters with
 
 *Return Type*:
 
-Any
+String
 
 *
 
