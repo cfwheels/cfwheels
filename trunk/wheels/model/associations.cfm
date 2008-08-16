@@ -4,7 +4,7 @@
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="Foreign key property name">
 	<cfscript>
 		arguments.type = "hasMany";
-		arguments.methods = "#arguments.name#,add#$capitalize($singularize(arguments.name))#,delete#$capitalize($singularize(arguments.name))#,clear#$capitalize(arguments.name)#,new#$capitalize($singularize(arguments.name))#,create#$capitalize($singularize(arguments.name))#,findOne#$capitalize($singularize(arguments.name))#,findAll#$capitalize(arguments.name)#,has#$capitalize(arguments.name)#,#$capitalize($singularize(arguments.name))#Count";
+		arguments.methods = "#arguments.name#,add#capitalize(singularize(arguments.name))#,delete#capitalize(singularize(arguments.name))#,clear#capitalize(arguments.name)#,new#capitalize(singularize(arguments.name))#,create#capitalize(singularize(arguments.name))#,findOne#capitalize(singularize(arguments.name))#,findAll#capitalize(arguments.name)#,has#capitalize(arguments.name)#,#capitalize(singularize(arguments.name))#Count";
 		$registerAssociation(argumentCollection=arguments);
 	</cfscript>
 </cffunction>
@@ -15,7 +15,7 @@
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="Foreign key property name">
 	<cfscript>
 		arguments.type = "hasOne";
-		arguments.methods = "#arguments.name#,set#$capitalize(arguments.name)#,new#$capitalize(arguments.name)#,create#$capitalize(arguments.name)#,has#$capitalize(arguments.name)#";
+		arguments.methods = "#arguments.name#,set#capitalize(arguments.name)#,new#capitalize(arguments.name)#,create#capitalize(arguments.name)#,has#capitalize(arguments.name)#";
 		$registerAssociation(argumentCollection=arguments);
 	</cfscript>
 </cffunction>
@@ -26,7 +26,7 @@
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="Foreign key property name">
 	<cfscript>
 		arguments.type = "belongsTo";
-		arguments.methods = "#arguments.name#,set#$capitalize(arguments.name)#,has#$capitalize(arguments.name)#";
+		arguments.methods = "#arguments.name#,set#capitalize(arguments.name)#,has#capitalize(arguments.name)#";
 		$registerAssociation(argumentCollection=arguments);
 	</cfscript>
 </cffunction>

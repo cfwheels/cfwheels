@@ -486,7 +486,7 @@
 				}
 				else
 				{
-					loc.classAssociations[loc.name].class = $singularize(loc.name);
+					loc.classAssociations[loc.name].class = singularize(loc.name);
 				}
 			}
 

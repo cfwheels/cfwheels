@@ -4,7 +4,7 @@
 	<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
    	<cflock name="controllerLock" type="exclusive" timeout="30">
 			<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
-				<cfset application.wheels.controllers[arguments.name] = CreateObject("component", "#application.wheels.controllerComponentPath#.#$capitalize(arguments.name)#").$initControllerClass(arguments.name)>
+				<cfset application.wheels.controllers[arguments.name] = CreateObject("component", "#application.wheels.controllerComponentPath#.#capitalize(arguments.name)#").$initControllerClass(arguments.name)>
 			</cfif>
 		</cflock>
 	</cfif>
@@ -258,15 +258,12 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$capitalize" returntype="string" access="public" output="false">
-	<cfargument name="text" type="string" required="true">
-	<cfscript>
-		var returnValue = UCase(Left(arguments.text, 1)) & Right(arguments.text, Len(arguments.text)-1);
-	</cfscript>
-	<cfreturn returnValue>
+<cffunction name="capitalize" returntype="string" access="public" output="false" hint="View, Helper, Returns the text with the first character converted to uppercase and the rest to lowercase.">
+	<cfargument name="text" type="string" required="true" hint="Text to capitalize">
+	<cfreturn UCase(Left(arguments.text, 1)) & Mid(arguments.text, 2, Len(arguments.text)-1)>
 </cffunction>
 
-<cffunction name="$singularize" returntype="string" access="private" output="false">
+<cffunction name="singularize" returntype="string" access="private" output="false">
 	<cfargument name="text" type="string" required="true">
 	<cfscript>
 		var returnValue = $singularizeOrPluralize(text=arguments.text, which="singularize");
@@ -274,7 +271,7 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="$pluralize" returntype="string" access="private" output="false">
+<cffunction name="pluralize" returntype="string" access="private" output="false">
 	<cfargument name="text" type="string" required="true">
 	<cfscript>
 		var returnValue = $singularizeOrPluralize(text=arguments.text, which="pluralize");
