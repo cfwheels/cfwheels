@@ -1,100 +1,62 @@
-<cffunction name="capitalize" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="true">
-	<cfif Len(arguments.text)>
-		<cfreturn UCase(Left(arguments.text, 1)) & Mid(arguments.text, 2, Len(arguments.text)-1)>
-	</cfif>
-</cffunction>
-
-<cffunction name="titleize" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="true">
-	<cfset var loc = {}>
-
-	<cfset loc.result = "">
-	<cfloop list="#arguments.text#" delimiters=" " index="loc.i">
-		<cfset loc.result = ListAppend(loc.result, capitalize(loc.i), " ")>
-	</cfloop>
-
-	<cfreturn loc.result>
-</cffunction>
-
-<cffunction name="simpleFormat" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="yes">
-	<cfset var loc = {}>
-
-	<!--- Replace single newline characters with HTML break tags and double newline characters with HTML paragraph tags --->
-	<cfset loc.output = trim(arguments.text)>
-	<cfset loc.output = Replace(loc.output, "#chr(10)##chr(10)#", "</p><p>", "all")>
-	<cfset loc.output = Replace(loc.output, "#chr(10)#", "<br />", "all")>
-	<cfif loc.output IS NOT "">
-		<cfset loc.output = "<p>" & loc.output & "</p>">
-	</cfif>
-
-	<cfreturn loc.output>
-</cffunction>
-
-<cffunction name="autoLink" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="yes">
-	<cfargument name="link" type="any" required="no" default="all">
-	<cfargument name="attributes" type="any" required="no" default="">
-	<cfset var loc = {}>
-
-	<cfset loc.urlRegex = "(?ix)([^(url=)|(href=)'""])(((https?)://([^:]+\:[^@]*@)?)([\d\w\-]+\.)?[\w\d\-\.]+\.(com|net|org|info|biz|tv|co\.uk|de|ro|it)(( / [\w\d\.\-@%\\\/:]* )+)?(\?[\w\d\?%,\.\/\##!@:=\+~_\-&amp;]*(?<![\.]))?)">
-	<cfset loc.mailRegex = "(([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,}))">
-
-	<cfif Len(arguments.attributes) IS NOT 0>
-		<!--- Add a space to the beginning so it can be directly inserted in the HTML link element below --->
-		<cfset arguments.attributes = " " & arguments.attributes>
-	</cfif>
-
-	<cfset loc.output = arguments.text>
-	<cfif arguments.link IS NOT "urls">
-		<!--- Auto link all email addresses --->
-		<cfset loc.output = REReplaceNoCase(loc.output, loc.mailRegex, "<a href=""mailto:\1""#arguments.attributes#>\1</a>", "all")>
-	</cfif>
-	<cfif arguments.link IS NOT "emails">
-		<!--- Auto link all URLs --->
-		<cfset loc.output = loc.output.ReplaceAll(loc.urlRegex, "$1<a href=""$2""#arguments.attributes#>$2</a>")>
-	</cfif>
-
-	<cfreturn loc.output>
-</cffunction>
-
-<cffunction name="highlight" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="yes">
-	<cfargument name="phrase" type="any" required="yes">
-	<cfargument name="class" type="any" required="no" default="highlight">
-	<cfreturn REReplaceNoCase(arguments.text, "(#arguments.phrase#)", "<span class=""#arguments.class#"">\1</span>", "all")>
-</cffunction>
-
-<cffunction name="stripTags" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="true">
-	<cfreturn REReplaceNoCase(arguments.text, "<[a-z].*?>(.*?)</[a-z]>", "\1" , "all")>
-</cffunction>
-
-<cffunction name="stripLinks" returntype="any" access="public" output="false">
-	<cfargument name="text" type="any" required="true">
-	<cfreturn REReplaceNoCase(arguments.text, "<a.*?>(.*?)</a>", "\1" , "all")>
-</cffunction>
-
-<cffunction name="excerpt" returntype="string" access="public" output="false">
-	<cfargument name="text" type="string" required="true">
-	<cfargument name="phrase" type="string" required="true">
-	<cfargument name="radius" type="numeric" required="false" default="100">
-	<cfargument name="excerptString" type="string" required="false" default="...">
+<cffunction name="autoLink" returntype="string" access="public" output="false" hint="View, Helper, Turns all URLs and e-mail addresses into clickable links.">
+	<cfargument name="text" type="string" required="true" hint="The text to create links in.">
+	<cfargument name="link" type="string" required="false" default="all" hint="Whether to link URLs, email addresses or both. Possible values are: 'all' (default), 'URLs' and 'emailAddresses'.">
 
 	<!---
 		EXAMPLES:
-		<cfoutput>#excerpt(text="Wheels is a framework for ColdFusion", length=20)#</cfoutput>
+		#autoLink("Download Wheels from http://www.cfwheels.com/download")#
+		-> Download Wheels from <a href="http://www.cfwheels.com/download">http://www.cfwheels.com/download</a>
+
+		#autoLink("Email us at info@cfwheels.com")#
+		-> Email us at <a href="mailto:info@cfwheels.com">info@cfwheels.com</a>
 
 		RELATED:
 		 * [capitalize capitalize()] (function)
-		 * [titleize titleize()] (function)
-		 * [simpleFormat simpleFormat()] (function)
-		 * [autoLink autoLink()] (function)
-		 * [highlight highlight()] (function)
-		 * [stripTags stripTags()] (function)
-		 * [stripLinks stripLinks()] (function)
 		 * [excerpt excerpt()] (function)
+		 * [highlight highlight()] (function)
+		 * [pluralize pluralize()] (function)
+		 * [simpleFormat simpleFormat()] (function)
+		 * [singularize singularize()] (function)
+		 * [stripLinks stripLinks()] (function)
+		 * [stripTags stripTags()] (function)
+		 * [titleize titleize()] (function)
+		 * [truncate truncate()] (function)
+	--->
+
+	<cfscript>
+		var loc = {};
+		loc.urlRegex = "(?ix)([^(url=)|(href=)'""])(((https?)://([^:]+\:[^@]*@)?)([\d\w\-]+\.)?[\w\d\-\.]+\.(com|net|org|info|biz|tv|co\.uk|de|ro|it)(( / [\w\d\.\-@%\\\/:]* )+)?(\?[\w\d\?%,\.\/\##!@:=\+~_\-&amp;]*(?<![\.]))?)";
+		loc.mailRegex = "(([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,}))";
+		loc.returnValue = arguments.text;
+		if (arguments.link IS NOT "URLs")
+			loc.returnValue = REReplaceNoCase(loc.returnValue, loc.mailRegex, "<a href=""mailto:\1"">\1</a>", "all");
+		if (arguments.link IS NOT "emailAddresses")
+			loc.returnValue = loc.returnValue.ReplaceAll(loc.urlRegex, "$1<a href=""$2"">$2</a>");
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="excerpt" returntype="string" access="public" output="false" hint="View, Helper, Extracts an excerpt from text that matches the first instance of phrase.">
+	<cfargument name="text" type="string" required="true" hint="The text to extract an excerpt from.">
+	<cfargument name="phrase" type="string" required="true" hint="The phrase to extract.">
+	<cfargument name="radius" type="numeric" required="false" default="100" hint="Number of characters to extract surronding the phrase.">
+	<cfargument name="excerptString" type="string" required="false" default="..." hint="String to replace first and/or last characters with.">
+
+	<!---
+		EXAMPLES:
+		#excerpt(text="Wheels is a framework for ColdFusion", phrase="framework", radius=5)#
+		-> ...is a framework for ...
+		
+		RELATED:
+		 * [autoLink autoLink()] (function)
+		 * [capitalize capitalize()] (function)
+		 * [highlight highlight()] (function)
+		 * [pluralize pluralize()] (function)
+		 * [simpleFormat simpleFormat()] (function)
+		 * [singularize singularize()] (function)
+		 * [stripLinks stripLinks()] (function)
+		 * [stripTags stripTags()] (function)
+		 * [titleize titleize()] (function)
 		 * [truncate truncate()] (function)
 	--->
 
@@ -125,25 +87,177 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="truncate" returntype="string" access="public" output="false" hint="View, Helper, Truncates a string to the specified length and replaces the last characters with the specified truncate string (defaults to '...').">
-	<cfargument name="text" type="string" required="true" hint="Text to truncate.">
-	<cfargument name="length" type="numeric" required="false" default="30" hint="Length of the truncated string.">
+<cffunction name="highlight" returntype="string" access="public" output="false" hint="View, Helper, Highlights the phrase(s) everywhere in the text if found by wrapping it in a strong tag (by default).">
+	<cfargument name="text" type="string" required="true">
+	<cfargument name="phrases" type="string" required="true">
+	<cfargument name="highlighter" type="string" required="false" default="<strong class=""highlight"">\1</strong>">
+
+	<!---
+		EXAMPLES:
+		#highlight(text="You searched for: Wheels", phrases="Wheels")#
+		-> You searched for: <strong class="highlight">Wheels</strong>
+
+		RELATED:
+		 * [autoLink autoLink()] (function)
+		 * [capitalize capitalize()] (function)
+		 * [excerpt excerpt()] (function)
+		 * [pluralize pluralize()] (function)
+		 * [simpleFormat simpleFormat()] (function)
+		 * [singularize singularize()] (function)
+		 * [stripLinks stripLinks()] (function)
+		 * [stripTags stripTags()] (function)
+		 * [titleize titleize()] (function)
+		 * [truncate truncate()] (function)
+	--->
+	
+	<cfscript>
+		var loc = {};
+		loc.returnValue = arguments.text;
+		loc.iEnd = ListLen(arguments.phrases);
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+		{
+			loc.returnValue = REReplaceNoCase(loc.returnValue, "(#ListGetAt(arguments.phrases, loc.i)#)", arguments.highlighter, "all");
+		}		
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="simpleFormat" returntype="string" access="public" output="false" hint="View, Helper, Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards).">
+	<cfargument name="text" type="string" required="true" hint="The text to format.">
+
+	<!---
+		EXAMPLES:
+		#simpleFormat(params.content)#
+
+		RELATED:
+		 * [autoLink autoLink()] (function)
+		 * [capitalize capitalize()] (function)
+		 * [excerpt excerpt()] (function)
+		 * [highlight highlight()] (function)
+		 * [pluralize pluralize()] (function)
+		 * [singularize singularize()] (function)
+		 * [stripLinks stripLinks()] (function)
+		 * [stripTags stripTags()] (function)
+		 * [titleize titleize()] (function)
+		 * [truncate truncate()] (function)
+	--->
+
+	<cfscript>
+		var loc = {};
+		loc.returnValue = Trim(arguments.text);
+		loc.returnValue = Replace(loc.returnValue, "#Chr(10)##Chr(10)#", "</p><p>", "all");
+		loc.returnValue = Replace(loc.returnValue, "#Chr(10)#", "<br />", "all");
+		if (loc.returnValue != "")
+			loc.returnValue = "<p>" & loc.returnValue & "</p>";
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="stripLinks" returntype="string" access="public" output="false" hint="View, Helper, Removes all links from the text (leaving just the link text).">
+	<cfargument name="text" type="string" required="true" hint="The text to remove links from.">
+
+	<!---
+		EXAMPLES:
+		#stripLinks("Wheels is a framework for <a href='http://www.adobe.com'>ColdFusion</a>")#
+		-> Wheels is a framework for ColdFusion
+
+		RELATED:
+		 * [autoLink autoLink()] (function)
+		 * [capitalize capitalize()] (function)
+		 * [excerpt excerpt()] (function)
+		 * [highlight highlight()] (function)
+		 * [pluralize pluralize()] (function)
+		 * [simpleFormat simpleFormat()] (function)
+		 * [singularize singularize()] (function)
+		 * [stripTags stripTags()] (function)
+		 * [titleize titleize()] (function)
+		 * [truncate truncate()] (function)
+	--->
+
+	<cfreturn REReplaceNoCase(arguments.text, "<a.*?>(.*?)</a>", "\1" , "all")>
+</cffunction>
+
+<cffunction name="stripTags" returntype="string" access="public" output="false" hint="View, Helper, Removes all tags from the text.">
+	<cfargument name="text" type="string" required="true" hint="The text to remove links from.">
+
+	<!---
+		EXAMPLES:
+		#stripTags("Wheels is a <b>framework</b> for <a href='http://www.adobe.com'>ColdFusion</a>")#
+		-> Wheels is a framework for ColdFusion
+
+		RELATED:
+		 * [autoLink autoLink()] (function)
+		 * [capitalize capitalize()] (function)
+		 * [excerpt excerpt()] (function)
+		 * [highlight highlight()] (function)
+		 * [pluralize pluralize()] (function)
+		 * [simpleFormat simpleFormat()] (function)
+		 * [singularize singularize()] (function)
+		 * [stripLinks stripLinks()] (function)
+		 * [titleize titleize()] (function)
+		 * [truncate truncate()] (function)
+	--->
+
+	<cfreturn REReplaceNoCase(arguments.text, "<[a-z].*?>(.*?)</[a-z]>", "\1" , "all")>
+</cffunction>
+
+<cffunction name="titleize" returntype="string" access="public" output="false" hint="View, Helper, Capitalizes all words in the text to create a nicer looking title.">
+	<cfargument name="text" type="string" required="true" hint="The text to turn into a title.">
+
+	<!---
+		EXAMPLES:
+		#titleize("Wheels is a framework for ColdFusion")#
+		-> Wheels Is A Framework For ColdFusion
+
+		RELATED:
+		 * [autoLink autoLink()] (function)
+		 * [capitalize capitalize()] (function)
+		 * [excerpt excerpt()] (function)
+		 * [highlight highlight()] (function)
+		 * [pluralize pluralize()] (function)
+		 * [simpleFormat simpleFormat()] (function)
+		 * [singularize singularize()] (function)
+		 * [stripLinks stripLinks()] (function)
+		 * [stripTags stripTags()] (function)
+		 * [truncate truncate()] (function)
+	--->
+
+	<cfscript>
+		var loc = {};
+		loc.returnValue = "";
+		loc.iEnd = ListLen(arguments.text, " ");
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+		{
+			loc.returnValue = ListAppend(loc.returnValue, capitalize(ListGetAt(arguments.text, loc.i, " ")), " ");
+		}		
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="truncate" returntype="string" access="public" output="false" hint="View, Helper, Truncates text to the specified length and replaces the last characters with the specified truncate string (defaults to '...').">
+	<cfargument name="text" type="string" required="true" hint="The text to truncate.">
+	<cfargument name="length" type="numeric" required="false" default="30" hint="Length to truncate the text to.">
 	<cfargument name="truncateString" type="string" required="false" default="..." hint="String to replace the last characters with.">
 
 	<!---
 		EXAMPLES:
-		<cfoutput>#truncate(text="Wheels is a framework for ColdFusion", length=20)#</cfoutput>
+		#truncate(text="Wheels is a framework for ColdFusion", length=20)#
+		-> Wheels is a frame... 
+
+		#truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")#
+		-> Wheels is a fra... (continued) 
 
 		RELATED:
-		 * [capitalize capitalize()] (function)
-		 * [titleize titleize()] (function)
-		 * [simpleFormat simpleFormat()] (function)
 		 * [autoLink autoLink()] (function)
-		 * [highlight highlight()] (function)
-		 * [stripTags stripTags()] (function)
-		 * [stripLinks stripLinks()] (function)
+		 * [capitalize capitalize()] (function)
 		 * [excerpt excerpt()] (function)
-		 * [truncate truncate()] (function)
+		 * [highlight highlight()] (function)
+		 * [pluralize pluralize()] (function)
+		 * [simpleFormat simpleFormat()] (function)
+		 * [singularize singularize()] (function)
+		 * [stripLinks stripLinks()] (function)
+		 * [stripTags stripTags()] (function)
+		 * [titleize titleize()] (function)
 	--->
 
 	<cfscript>

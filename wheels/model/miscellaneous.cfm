@@ -44,7 +44,7 @@
 				if (ListFindNoCase(variables.wheels.class.associations[loc.key].methods, arguments.missingMethodName))
 				{
 					// set name from "posts" to "objects", for example, so we can use it in the switch below --->
-					loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, $pluralize(loc.key), "objects"), $singularize(loc.key), "object");
+					loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, pluralize(loc.key), "objects"), singularize(loc.key), "object");
 					if (loc.name IS "setObject" || loc.name IS "addObject" || loc.name IS "deleteObject")
 					{
 						loc.object = arguments.missingMethodArguments[ListFirst(StructKeyList(arguments.missingMethodArguments))];
