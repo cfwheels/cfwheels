@@ -1,29 +1,27 @@
-#summary One-sentence summary of this page.
+#summary In the chapter titled [GettingPaginatedData Getting Paginated Data] we talked about how to get pages of records from the database (records 11-20, for example). Now we'll show you how to create links to other pages in your view.
 #labels chapter,0.8
 
-In the chapter titled [GettingPaginatedData Getting Paginated Data] we talked about how to get pages of records from the database (records 11-20 for example). Now we'll show you how to create links to other pages in your view.
+==Displaying Paginated Links with the `paginationLinks()` Function==
 
-==The !PaginationLinks Function==
+This function is the one you'll almost always want to use when displaying links to other pages in your pagination.
 
-This function is the one you'll almost always want to use when displaying links to other pages in your pagination. However, if you need more control over the code than [paginationLinks paginationLinks()] provides then there are a few lower level functions at your disposal as well, see the "Related" section below for more information.
+However, if you need more control over the code than [paginationLinks paginationLinks()] provides then there are a few lower level functions at your disposal as well. See the "Related" section below for more information.
 
-Now, let's get to it...
-
-To get some page links to show up all you have to do is this actually:
+Now, let's get to it! To get some page links to show up, all you need to do is this:
 
 {{{
 <cfoutput>#paginationLinks()#</cfoutput>
 }}}
 
-Given that you have only fetched one paginated query in your controller file this will output the links for that query using some sensible defaults.
+Given that you have only fetched one paginated query in your controller, this will output the links for that query using some sensible defaults.
 
-==The Arguments Used for Customization==
+==Arguments Used for Customization==
 
-You can control the output of the links in a number of ways, we'll show you the most important ones here. Please refer to the [paginationLinks paginationLinks()] documentation for all other uses.
+You can control the output of the links in a number of ways. We'll show you the most important ones here. Please refer to the [paginationLinks paginationLinks()] documentation for all other uses.
 
-===Name===
+===`name`===
 
-By default Wheels will create all links with `page` as the variable that holds the page numbers so the HTML code will look something like this:
+By default, Wheels will create all links with `page` as the variable that holds the page numbers. So the HTML code will look something like this:
 
 {{{
 <a href="/main/userlisting?page=1">
@@ -31,21 +29,27 @@ By default Wheels will create all links with `page` as the variable that holds t
 <a href="/main/userlisting?page=3">
 }}}
 
-To change `page` to something else you use the `name` argument.
+To change `page` to something else, you use the `name` argument like so:
 
-===!WindowSize===
+{{{
+<cfoutput>#paginationLinks(name="somethingElse")#</cfoutput>
+}}}
 
-This controls how many links to show around the current page. If you are currently displaying page six and you pass in `windowSize=3` it means that links to pages 3,4,5,6,7,8 and 9 will be shown (three on each side of the current page).
+===`windowSize`===
 
-===!AlwaysShowAnchors===
+This controls how many links to show around the current page. If you are currently displaying page 6 and pass in `windowSize=3`, Wheels will generate links to pages 3, 4, 5, 6, 7, 8, and 9 (three on each side of the current page).
 
-If you pass in `true` here it means that no matter where you currently are in the pagination or how many page numbers exist in total, links to the first and last page will always be visible.
+===`alwaysShowAnchors`===
+
+If you pass in `true` here, it means that no matter where you currently are in the pagination or how many page numbers exist in total, links to the first and last page will always be visible.
 
 ==Managing More Than One Paginated Query Per Page==
 
-Most of the time you'll only deal with one paginated query per page but in those cases where you need to get/show more than one paginated query you can use the `handle` argument to tell Wheels which query it is you are referring to. This argument has to be passed in to both the [findAll findAll()] function and the [paginationLinks paginationLinks()] function (you assign a handle name in the [findAll findAll()] function and then request the data for it in [paginationLinks paginationLinks()]).
+Most of the time you'll only deal with one paginated query per page. But in those cases where you need to get/show more than one paginated query, you can use the `handle` argument to tell Wheels which query it is that you are referring to.
 
-Here is an example using handles:
+This argument has to be passed in to both the [findAll findAll()] function and the [paginationLinks paginationLinks()] function. (You assign a handle name in the [findAll findAll()] function and then request the data for it in [paginationLinks paginationLinks()].)
+
+Here is an example of using handles:
 
 In the controller...
 {{{
@@ -55,13 +59,15 @@ In the controller...
 
 In the view...
 {{{
-<cfoutput query="users">
-  #name#<br>
-</cfoutput>
+<ul>
+    <cfoutput query="users">
+        <li>#users.name#</li>
+    </cfoutput>
+</ul>
 <cfoutput>#paginationLinks(handle="userQuery")#</cfoutput>
 
 <cfoutput query="pictures">
-  #imageTag(source=src)#<br>
+  #imageTag(source=pictures.src)#<br />
 </cfoutput>
 <cfoutput>#paginationLinks(handle="pictureQuery")#</cfoutput>
 }}}
