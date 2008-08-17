@@ -12,9 +12,11 @@
 
 		RELATED:
 		 * [capitalize capitalize()] (function)
+		 * [cycle cycle()] (function)
 		 * [excerpt excerpt()] (function)
 		 * [highlight highlight()] (function)
 		 * [pluralize pluralize()] (function)
+		 * [resetCycle resetCycle()] (function)
 		 * [simpleFormat simpleFormat()] (function)
 		 * [singularize singularize()] (function)
 		 * [stripLinks stripLinks()] (function)
@@ -36,6 +38,48 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="cycle" returntype="string" access="public" output="false" hint="View, Helper, Cycles through list values every time it is called.">
+	<cfargument name="values" type="string" required="true" hint="List of values to cycle through.">
+	<cfargument name="name" type="string" required="false" default="default" hint="Name to give the cycle, useful when you use multiple cycles on a page.">
+
+	<!---
+		EXAMPLES:
+		<tr class="#cycle("even,odd")#">...</tr>
+
+		RELATED:
+		 * [autoLink autoLink()] (function)
+		 * [capitalize capitalize()] (function)
+		 * [excerpt excerpt()] (function)
+		 * [highlight highlight()] (function)
+		 * [pluralize pluralize()] (function)
+		 * [resetCycle resetCycle()] (function)
+		 * [simpleFormat simpleFormat()] (function)
+		 * [singularize singularize()] (function)
+		 * [stripLinks stripLinks()] (function)
+		 * [stripTags stripTags()] (function)
+		 * [titleize titleize()] (function)
+		 * [truncate truncate()] (function)
+	--->
+
+	<cfscript>
+		var loc = {};
+		if (!StructKeyExists(request.wheels, "cycle"))
+			request.wheels.cycle = {};
+		if (!StructKeyExists(request.wheels.cycle, arguments.name))
+		{
+			request.wheels.cycle[arguments.name] = ListGetAt(arguments.values, 1);
+		}
+		else
+		{
+			loc.foundAt = ListFindNoCase(arguments.values, request.wheels.cycle[arguments.name])
+			if (loc.foundAt IS ListLen(arguments.values))
+				loc.foundAt = 0;
+			request.wheels.cycle[arguments.name] = ListGetAt(arguments.values, loc.foundAt + 1);
+		}
+	</cfscript>
+	<cfreturn request.wheels.cycle[arguments.name]>
+</cffunction>
+
 <cffunction name="excerpt" returntype="string" access="public" output="false" hint="View, Helper, Extracts an excerpt from text that matches the first instance of phrase.">
 	<cfargument name="text" type="string" required="true" hint="The text to extract an excerpt from.">
 	<cfargument name="phrase" type="string" required="true" hint="The phrase to extract.">
@@ -46,12 +90,14 @@
 		EXAMPLES:
 		#excerpt(text="Wheels is a framework for ColdFusion", phrase="framework", radius=5)#
 		-> ...is a framework for ...
-		
+
 		RELATED:
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
+		 * [cycle cycle()] (function)
 		 * [highlight highlight()] (function)
 		 * [pluralize pluralize()] (function)
+		 * [resetCycle resetCycle()] (function)
 		 * [simpleFormat simpleFormat()] (function)
 		 * [singularize singularize()] (function)
 		 * [stripLinks stripLinks()] (function)
@@ -100,7 +146,43 @@
 		RELATED:
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
+		 * [cycle cycle()] (function)
 		 * [excerpt excerpt()] (function)
+		 * [pluralize pluralize()] (function)
+		 * [resetCycle resetCycle()] (function)
+		 * [simpleFormat simpleFormat()] (function)
+		 * [singularize singularize()] (function)
+		 * [stripLinks stripLinks()] (function)
+		 * [stripTags stripTags()] (function)
+		 * [titleize titleize()] (function)
+		 * [truncate truncate()] (function)
+	--->
+
+	<cfscript>
+		var loc = {};
+		loc.returnValue = arguments.text;
+		loc.iEnd = ListLen(arguments.phrases);
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+		{
+			loc.returnValue = REReplaceNoCase(loc.returnValue, "(#ListGetAt(arguments.phrases, loc.i)#)", arguments.highlighter, "all");
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="resetCycle" returntype="void" access="public" output="false" hint="View, Helper, Resets a cycle so that it starts from the first list value the next time it is called.">
+	<cfargument name="name" type="string" required="true" hint="The name of the cycle to reset.">
+
+	<!---
+		EXAMPLES:
+		<cfset resetCycle("tableRows")>
+
+		RELATED:
+		 * [autoLink autoLink()] (function)
+		 * [capitalize capitalize()] (function)
+		 * [cycle cycle()] (function)
+		 * [excerpt excerpt()] (function)
+		 * [highlight highlight()] (function)
 		 * [pluralize pluralize()] (function)
 		 * [simpleFormat simpleFormat()] (function)
 		 * [singularize singularize()] (function)
@@ -109,17 +191,12 @@
 		 * [titleize titleize()] (function)
 		 * [truncate truncate()] (function)
 	--->
-	
+
 	<cfscript>
 		var loc = {};
-		loc.returnValue = arguments.text;
-		loc.iEnd = ListLen(arguments.phrases);
-		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
-		{
-			loc.returnValue = REReplaceNoCase(loc.returnValue, "(#ListGetAt(arguments.phrases, loc.i)#)", arguments.highlighter, "all");
-		}		
+		if (StructKeyExists(request.wheels, "cycle") AND StructKeyExists(request.wheels.cycle, arguments.name))
+			StructDelete(request.wheels.cycle, arguments.name);
 	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="simpleFormat" returntype="string" access="public" output="false" hint="View, Helper, Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards).">
@@ -132,9 +209,11 @@
 		RELATED:
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
+		 * [cycle cycle()] (function)
 		 * [excerpt excerpt()] (function)
 		 * [highlight highlight()] (function)
 		 * [pluralize pluralize()] (function)
+		 * [resetCycle resetCycle()] (function)
 		 * [singularize singularize()] (function)
 		 * [stripLinks stripLinks()] (function)
 		 * [stripTags stripTags()] (function)
@@ -164,9 +243,11 @@
 		RELATED:
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
+		 * [cycle cycle()] (function)
 		 * [excerpt excerpt()] (function)
 		 * [highlight highlight()] (function)
 		 * [pluralize pluralize()] (function)
+		 * [resetCycle resetCycle()] (function)
 		 * [simpleFormat simpleFormat()] (function)
 		 * [singularize singularize()] (function)
 		 * [stripTags stripTags()] (function)
@@ -188,9 +269,11 @@
 		RELATED:
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
+		 * [cycle cycle()] (function)
 		 * [excerpt excerpt()] (function)
 		 * [highlight highlight()] (function)
 		 * [pluralize pluralize()] (function)
+		 * [resetCycle resetCycle()] (function)
 		 * [simpleFormat simpleFormat()] (function)
 		 * [singularize singularize()] (function)
 		 * [stripLinks stripLinks()] (function)
@@ -212,9 +295,11 @@
 		RELATED:
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
+		 * [cycle cycle()] (function)
 		 * [excerpt excerpt()] (function)
 		 * [highlight highlight()] (function)
 		 * [pluralize pluralize()] (function)
+		 * [resetCycle resetCycle()] (function)
 		 * [simpleFormat simpleFormat()] (function)
 		 * [singularize singularize()] (function)
 		 * [stripLinks stripLinks()] (function)
@@ -229,7 +314,7 @@
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.returnValue = ListAppend(loc.returnValue, capitalize(ListGetAt(arguments.text, loc.i, " ")), " ");
-		}		
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -242,17 +327,19 @@
 	<!---
 		EXAMPLES:
 		#truncate(text="Wheels is a framework for ColdFusion", length=20)#
-		-> Wheels is a frame... 
+		-> Wheels is a frame...
 
 		#truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")#
-		-> Wheels is a fra... (continued) 
+		-> Wheels is a fra... (continued)
 
 		RELATED:
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
+		 * [cycle cycle()] (function)
 		 * [excerpt excerpt()] (function)
 		 * [highlight highlight()] (function)
 		 * [pluralize pluralize()] (function)
+		 * [resetCycle resetCycle()] (function)
 		 * [simpleFormat simpleFormat()] (function)
 		 * [singularize singularize()] (function)
 		 * [stripLinks stripLinks()] (function)
