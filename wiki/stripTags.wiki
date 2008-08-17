@@ -1,0 +1,40 @@
+#summary stripTags(text)
+#labels api,0.8,view,helper
+
+*Description*:
+
+Removes all tags from the text.
+
+*Return Type*:
+
+String
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *text* || string || true ||  || The text to remove links from. ||
+
+
+
+*Examples*:
+
+{{{
+#stripTags("Wheels is a <b>framework</b> for <a href='http://www.adobe.com'>ColdFusion</a>")#
+-> Wheels is a framework for ColdFusion
+
+}}}
+
+*Related*:
+
+ * [autoLink autoLink()] (function)
+ * [capitalize capitalize()] (function)
+ * [excerpt excerpt()] (function)
+ * [highlight highlight()] (function)
+ * [pluralize pluralize()] (function)
+ * [simpleFormat simpleFormat()] (function)
+ * [singularize singularize()] (function)
+ * [stripLinks stripLinks()] (function)
+ * [titleize titleize()] (function)
+ * [truncate truncate()] (function)

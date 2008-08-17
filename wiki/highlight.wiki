@@ -1,0 +1,42 @@
+#summary highlight(text,phrases[highlighter])
+#labels api,0.8,view,helper
+
+*Description*:
+
+Highlights the phrase(s) everywhere in the text if found by wrapping it in a strong tag (by default).
+
+*Return Type*:
+
+String
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *text* || string || true ||  || gument name= ||
+|| *highlighter* || string || false || <strong class= || gument name= ||
+|| *phrases* || string || true ||  || gument name= ||
+
+
+
+*Examples*:
+
+{{{
+#highlight(text="You searched for: Wheels", phrases="Wheels")#
+-> You searched for: <strong class="highlight">Wheels</strong>
+
+}}}
+
+*Related*:
+
+ * [autoLink autoLink()] (function)
+ * [capitalize capitalize()] (function)
+ * [excerpt excerpt()] (function)
+ * [pluralize pluralize()] (function)
+ * [simpleFormat simpleFormat()] (function)
+ * [singularize singularize()] (function)
+ * [stripLinks stripLinks()] (function)
+ * [stripTags stripTags()] (function)
+ * [titleize titleize()] (function)
+ * [truncate truncate()] (function)

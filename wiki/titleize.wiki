@@ -1,0 +1,40 @@
+#summary titleize(text)
+#labels api,0.8,view,helper
+
+*Description*:
+
+Capitalizes all words in the text to create a nicer looking title.
+
+*Return Type*:
+
+String
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *text* || string || true ||  || The text to turn into a title. ||
+
+
+
+*Examples*:
+
+{{{
+#titleize("Wheels is a framework for ColdFusion")#
+-> Wheels Is A Framework For ColdFusion
+
+}}}
+
+*Related*:
+
+ * [autoLink autoLink()] (function)
+ * [capitalize capitalize()] (function)
+ * [excerpt excerpt()] (function)
+ * [highlight highlight()] (function)
+ * [pluralize pluralize()] (function)
+ * [simpleFormat simpleFormat()] (function)
+ * [singularize singularize()] (function)
+ * [stripLinks stripLinks()] (function)
+ * [stripTags stripTags()] (function)
+ * [truncate truncate()] (function)

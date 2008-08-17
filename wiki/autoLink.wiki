@@ -1,0 +1,46 @@
+#summary autoLink(text[link])
+#labels api,0.8,view,helper
+
+*Description*:
+
+Turns all URLs and e-mail addresses into clickable links.
+
+*Return Type*:
+
+String
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *text* || string || true ||  || The text to create links in. ||
+|| *link* || string || false || all || Whether to link URLs, email addresses or both. Possible values are: 'all' (default), 'URLs' and 'emailAddresses'. ||
+
+
+
+*Examples*:
+
+{{{
+#autoLink("Download Wheels from http://www.cfwheels.com/download")#
+-> Download Wheels from <a href="http://www.cfwheels.com/download">http://www.cfwheels.com/download</a>
+}}}
+
+{{{
+#autoLink("Email us at info@cfwheels.com")#
+-> Email us at <a href="mailto:info@cfwheels.com">info@cfwheels.com</a>
+
+}}}
+
+*Related*:
+
+ * [capitalize capitalize()] (function)
+ * [excerpt excerpt()] (function)
+ * [highlight highlight()] (function)
+ * [pluralize pluralize()] (function)
+ * [simpleFormat simpleFormat()] (function)
+ * [singularize singularize()] (function)
+ * [stripLinks stripLinks()] (function)
+ * [stripTags stripTags()] (function)
+ * [titleize titleize()] (function)
+ * [truncate truncate()] (function)

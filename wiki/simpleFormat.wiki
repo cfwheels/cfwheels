@@ -1,0 +1,39 @@
+#summary simpleFormat(text)
+#labels api,0.8,view,helper
+
+*Description*:
+
+Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards).
+
+*Return Type*:
+
+String
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *text* || string || true ||  || The text to format. ||
+
+
+
+*Examples*:
+
+{{{
+#simpleFormat(params.content)#
+
+}}}
+
+*Related*:
+
+ * [autoLink autoLink()] (function)
+ * [capitalize capitalize()] (function)
+ * [excerpt excerpt()] (function)
+ * [highlight highlight()] (function)
+ * [pluralize pluralize()] (function)
+ * [singularize singularize()] (function)
+ * [stripLinks stripLinks()] (function)
+ * [stripTags stripTags()] (function)
+ * [titleize titleize()] (function)
+ * [truncate truncate()] (function)

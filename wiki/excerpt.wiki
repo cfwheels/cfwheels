@@ -1,0 +1,43 @@
+#summary excerpt(text,phrase[excerptString,radius])
+#labels api,0.8,view,helper
+
+*Description*:
+
+Extracts an excerpt from text that matches the first instance of phrase.
+
+*Return Type*:
+
+String
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *text* || string || true ||  || The text to extract an excerpt from. ||
+|| *excerptString* || string || false || ... || String to replace first and/or last characters with. ||
+|| *radius* || numeric || false || 100 || Number of characters to extract surronding the phrase. ||
+|| *phrase* || string || true ||  || The phrase to extract. ||
+
+
+
+*Examples*:
+
+{{{
+#excerpt(text="Wheels is a framework for ColdFusion", phrase="framework", radius=5)#
+-> ...is a framework for ...
+
+}}}
+
+*Related*:
+
+ * [autoLink autoLink()] (function)
+ * [capitalize capitalize()] (function)
+ * [highlight highlight()] (function)
+ * [pluralize pluralize()] (function)
+ * [simpleFormat simpleFormat()] (function)
+ * [singularize singularize()] (function)
+ * [stripLinks stripLinks()] (function)
+ * [stripTags stripTags()] (function)
+ * [titleize titleize()] (function)
+ * [truncate truncate()] (function)
