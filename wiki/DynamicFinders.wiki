@@ -1,4 +1,4 @@
-#summary Make your code more readable by using dynamic finders.
+#summary Make your model calls more readable by using dynamic finders.
 #labels chapter,0.8
 
 With the recent introduction of `onMissingMethod` in ColdFusion 8 (Thanks, Adobe!), we have been able to port over the concept of _dynamic finders_ from Rails to Wheels.
