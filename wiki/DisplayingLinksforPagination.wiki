@@ -7,7 +7,7 @@ In the chapter titled [GettingPaginatedData Getting Paginated Data], we talked a
 
 This function is the one you'll almost always want to use when displaying links to other pages in your pagination.
 
-However, if you need more control over the code than [paginationLinks paginationLinks()] provides then there are a few lower level functions at your disposal as well. See the "Related" section below for more information.
+However, if you need more control over the code than [paginationLinks paginationLinks()] provides, then there are a few lower level functions at your disposal as well. See the "Related" section below for more information.
 
 Now, let's get to it! To get some page links to show up, all you need to do is this:
 
