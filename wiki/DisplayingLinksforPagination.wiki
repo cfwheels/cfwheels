@@ -21,7 +21,7 @@ Given that you have only fetched one paginated query in your controller, this wi
 
 You can control the output of the links in a number of ways. We'll show you the most important ones here. Please refer to the [paginationLinks paginationLinks()] documentation for all other uses.
 
-===`name`===
+===The `name` Argument===
 
 By default, Wheels will create all links with `page` as the variable that holds the page numbers. So the HTML code will look something like this:
 
@@ -37,11 +37,11 @@ To change `page` to something else, you use the `name` argument like so:
 <cfoutput>#paginationLinks(name="somethingElse")#</cfoutput>
 }}}
 
-===`windowSize`===
+===The `windowSize` Argument===
 
 This controls how many links to show around the current page. If you are currently displaying page 6 and pass in `windowSize=3`, Wheels will generate links to pages 3, 4, 5, 6, 7, 8, and 9 (three on each side of the current page).
 
-===`alwaysShowAnchors`===
+===The `alwaysShowAnchors` Argument===
 
 If you pass in `true` here, it means that no matter where you currently are in the pagination or how many page numbers exist in total, links to the first and last page will always be visible.
 
