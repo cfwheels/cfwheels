@@ -30,9 +30,11 @@ String
 
  * [autoLink autoLink()] (function)
  * [capitalize capitalize()] (function)
+ * [cycle cycle()] (function)
  * [excerpt excerpt()] (function)
  * [highlight highlight()] (function)
  * [pluralize pluralize()] (function)
+ * [resetCycle resetCycle()] (function)
  * [simpleFormat simpleFormat()] (function)
  * [singularize singularize()] (function)
  * [stripLinks stripLinks()] (function)

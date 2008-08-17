@@ -1,9 +1,9 @@
-#summary simpleFormat(text)
+#summary cycle(values[name])
 #labels api,0.8,view,helper
 
 *Description*:
 
-Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards).
+Cycles through list values every time it is called.
 
 *Return Type*:
 
@@ -14,14 +14,15 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *text* || string || true ||  || The text to format. ||
+|| *name* || string || false || default || Name to give the cycle, useful when you use multiple cycles on a page. ||
+|| *values* || string || true ||  || List of values to cycle through. ||
 
 
 
 *Examples*:
 
 {{{
-#simpleFormat(params.content)#
+<tr class="#cycle("even,odd")#">...</tr>
 
 }}}
 
@@ -29,11 +30,11 @@ String
 
  * [autoLink autoLink()] (function)
  * [capitalize capitalize()] (function)
- * [cycle cycle()] (function)
  * [excerpt excerpt()] (function)
  * [highlight highlight()] (function)
  * [pluralize pluralize()] (function)
  * [resetCycle resetCycle()] (function)
+ * [simpleFormat simpleFormat()] (function)
  * [singularize singularize()] (function)
  * [stripLinks stripLinks()] (function)
  * [stripTags stripTags()] (function)

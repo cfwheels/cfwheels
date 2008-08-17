@@ -24,12 +24,12 @@ String
 
 {{{
 #truncate(text="Wheels is a framework for ColdFusion", length=20)#
--> Wheels is a frame... 
+-> Wheels is a frame...
 }}}
 
 {{{
 #truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")#
--> Wheels is a fra... (continued) 
+-> Wheels is a fra... (continued)
 
 }}}
 
@@ -37,9 +37,11 @@ String
 
  * [autoLink autoLink()] (function)
  * [capitalize capitalize()] (function)
+ * [cycle cycle()] (function)
  * [excerpt excerpt()] (function)
  * [highlight highlight()] (function)
  * [pluralize pluralize()] (function)
+ * [resetCycle resetCycle()] (function)
  * [simpleFormat simpleFormat()] (function)
  * [singularize singularize()] (function)
  * [stripLinks stripLinks()] (function)
