@@ -7,8 +7,8 @@ Callbacks in Wheels allow you to have code executed before and/or after certain 
 
 Let's look at a possible scenario for what happens when a visitor to your imaginary e-commerce website submits her credit card details to finalize an order:
 
- * You create a new order object using the [new new()] method based on the incoming form parameters.
- * You call the [save save()] method on the order object, which will cause Wheels to first validate the object and then store it in the database if it passes validation.
+ * You create a new `Order` object using the [new new()] method based on the incoming form parameters.
+ * You call the [save save()] method on the `Order` object, which will cause Wheels to first validate the object and then store it in the database if it passes validation.
  * The next day, you call the [update update()] method on the object because the user decided to change the shipping method for the order.
  * Another day passes, and you call the [delete delete()] method on the object because the visitor called in to cancel the order.
 
