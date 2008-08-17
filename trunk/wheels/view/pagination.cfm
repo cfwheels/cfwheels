@@ -11,13 +11,6 @@
 	<cfset var loc = {}>
 
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		If you have paginated more than one query in the controller you can use the handle argument to reference them (don't forget to pass in a handle to the findAll function in your controller first though).
-		All other arguments are used to customize the output.
-
 		EXAMPLES:
 		Controller code...
 		<cfparam name="params.page" default="1">
@@ -30,15 +23,15 @@
 		</ul>
 		<cfoutput>#paginationLinks()#</cfoutput>
 
-		View code...
-		<cfoutput>#paginationLinks(windowSize=5)#</cfoutput>
-
 		Controller code...
 		<cfset allAuthors = model("Author").findAll(handle="authQuery", page=5)>
 		View code...
 		<ul>
 		  <cfoutput>#paginationLinks(handle="authQuery", prependToLink="<li>", appendToLink="</li>")#</cfoutput>
 		</ul>
+
+		View code...
+		<cfoutput>#paginationLinks(windowSize=5)#</cfoutput>
 
 		RELATED:
 		 * GettingPaginatedData (chapter)
@@ -104,12 +97,6 @@
 	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
 
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		This function can be used when you need more control over pagination than the paginationLinks function provides.
-
 		EXAMPLES:
 		<cfif paginationHasPrevious()>
 		  do something...
@@ -136,12 +123,6 @@
 	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
 
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		This function can be used when you need more control over pagination than the paginationLinks function provides.
-
 		EXAMPLES:
 		<cfif paginationHasNext(handle="handleGivenInFindAllCall")>
 		  do something...
@@ -168,16 +149,8 @@
 	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
 
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		This function can be used when you need more control over pagination than the paginationLinks function provides.
-
 		EXAMPLES:
-		<cfoutput>
-		  Showing page #paginationCurrentPage()# of #paginationTotalPages()# total.
-		</cfoutput>
+		Showing page <cfoutput>#paginationCurrentPage()#</cfoutput> of <cfoutput>#paginationTotalPages()#</cfoutput> total.
 
 		RELATED:
 		 * GettingPaginatedData (chapter)
@@ -196,12 +169,6 @@
 	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
 
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		This function can be used when you need more control over pagination than the paginationLinks function provides.
-
 		EXAMPLES:
 		<cfoutput>#paginationTotalRecords()#</cfoutput>
 
@@ -222,16 +189,8 @@
 	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
 
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		This function can be used when you need more control over pagination than the paginationLinks function provides.
-
 		EXAMPLES:
-		<cfoutput>
-		  Showing page #paginationCurrentPage()# of #paginationTotalPages()# total.
-		</cfoutput>
+		Showing page <cfoutput>#paginationCurrentPage()#</cfoutput> of <cfoutput>#paginationTotalPages()#</cfoutput> total.
 
 		RELATED:
 		 * GettingPaginatedData (chapter)
