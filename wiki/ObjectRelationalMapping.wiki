@@ -7,7 +7,7 @@ Mapping objects in your application to records in your database tables is a key 
 
 Unlike most other languages, there is no notion of class level (aka "static") methods in !ColdFusion. This means that even if you call a method that does not need to use any instance data, you still have to create an object first.
 
-In Wheels we create an object like this.
+In Wheels, we create an object like this.
 
 {{{
 <cfset model("Author")>
