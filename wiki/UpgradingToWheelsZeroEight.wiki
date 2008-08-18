@@ -1,12 +1,15 @@
 #summary Our listing of steps to take while upgrading your Wheels application from 0.7 to 0.8.
 #labels 0.8,chapter
 
+The easiest way to upgrade is to setup an empty 0.8 website and then transfer your application code to it. When transferring, please make note of the following changes and make the appropriate changes to your code: 
+
 ==File System Changes==
 
-  * Change the `controller` folder to `controllers`.
-  * Change the `model` folder to `models`.
-  * Change the `view` folder to `views`.
+  * The `controller` folder has been changed to `controllers`.
+  * The `model` folder has been changed to `models`.
+  * The `view` folder has been changed to `views`.
   * Rename all of your CFCs in `models` and `controllers` to UpperCamelCase. So `controller.cfc` will become `Controller.cfc`, `adminUser.cfc` will become `AdminUser.cfc`, and so on.
+ * All images must now be stored in the `images` folder, files in the `files` folder, JavaScript files in the `javascripts` folder, and CSS files in the `stylesheets` folder off of the root (in 0.7 you were able to specify the path yourself).
 
 ==Database Structure Changes==
 
@@ -15,8 +18,6 @@
 ==CFML Code Changes==
 
 ===Config Code===
-
-  * In `config/settings.cfm`, remove the statements that set application.settings.paths values. We had to remove these option in order to hardcode the folders into the URL rewriting feature. Consequently, all images must be stored in `images`, files in `files`, JavaScript files in `javascripts`, and CSS files in `stylesheets` folders off of the root.
 
 ===Model Code===
 
