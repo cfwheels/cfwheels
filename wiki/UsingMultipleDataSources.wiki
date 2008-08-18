@@ -17,7 +17,7 @@ If you need to use more than one database, there are 2 ways to accomplish this i
 
 As you have probably figured out by reading the functions' names, you can have Wheels use one data source for all SQL operations by using the [setDataSource setDataSource()] function.
 
-Or you can have it read from one database and write to another, for example by using the [setDataSource setDataSource()] function to specify what data source to use when reading and by using the remaining 3, [setCreateDataSource setCreateDataSource()] / [setUpdateDataSource setUpdateDataSource()] / [setDeleteDataSource setDeleteDataSource()], to specify what data source to use when writing.
+Or you can have it read from one database and write to another, for example by using the [setDataSource setDataSource()] function to specify what data source to use when reading and by using the remaining 3--[setCreateDataSource setCreateDataSource()], [setUpdateDataSource setUpdateDataSource()], [setDeleteDataSource setDeleteDataSource()]--to specify what data source to use when writing.
 
 ==Minor Caveat: Create Data Source Also Reads After `INSERT`==
 
