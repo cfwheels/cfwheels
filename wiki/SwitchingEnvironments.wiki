@@ -1,13 +1,17 @@
 #summary Environments that match your development stages.
 #labels chapter,0.8
 
-Each environment in Wheels matches a stage in your development cycle. By default all new applications will start in the `design` environment. The `design` environment is the most convenient one to use as you start building your application since it does not cache any data. Therefore, if you make any changes to your database for example it will immediately be picked up by Wheels. Other environment modes caches this information in order to speed up the framework as much as possible. Making changes to the database in these environment modes will cause Wheels to throw an error (although that can be avoided with a `reload` call, more on that later).
+Each environment in Wheels matches a stage in your development cycle.
+
+By default, all new applications will start in the `design` environment. The `design` environment is the most convenient one to use as you start building your application because it does not cache any data. Therefore, if you make any changes to your database, for example, it will immediately be picked up by Wheels.
+
+Other environment modes caches this information in order to speed up your application as much as possible. Making changes to the database in these environment modes will cause Wheels to throw an error. (Although that can be avoided with a `reload` call. More on that later.)
 
 The fastest environment mode in terms of page load time is the `production` mode. This is what you should set your application to run in before you launch your website.
 
-==The Five Environment Modes==
+==The 5 Environment Modes==
 
-Besides the two environments mentioned above there are three more, let's go through them all one by one so you can see the differences between them and choose the most appropriate one given your current stage of development.
+Besides the 2 environments mentioned above, there are 3 more. Let's go through them all one by one so you can see the differences between them and choose the most appropriate one given your current stage of development.
 
 ===Design===
 
@@ -17,8 +21,8 @@ Besides the two environments mentioned above there are three more, let's go thro
 
 ===Development===
 
- * Handles errors the same way as the design mode.
- * Caches controller and model initialization (the `init` methods).
+ * Handles errors the same way as the Design mode.
+ * Caches controller and model initialization (the `init()` methods).
  * Caches the database schema.
  * Caches routes.
  * Caches image information.
@@ -33,21 +37,37 @@ Besides the two environments mentioned above there are three more, let's go thro
 
 ===Testing===
 
- * Same caching settings as the production mode but using the error handling of the development mode (good for testing an application at its true speed while still getting errors reported on screen).
+ * Same caching settings as the Production mode but using the error handling of the Development mode. (Good for testing an application at its true speed while still getting errors reported on screen.)
 
 ===Maintenance===
 
- * Shows your custom maintenance page unless the requesting IP address is in the exception list (set in the `application.settings.ipExceptions` variable in `config/settings.cfm` or passed along in the URL as `except=127.0.0.1,127.0.0.1`.
+ * Shows your custom maintenance page unless the requesting IP address is in the exception list (set in the `application.settings.ipExceptions` variable in `config/settings.cfm` or passed along in the URL as `except=127.0.0.1,127.0.0.1`).
 
 This environment mode comes in handy when you want to briefly take your website offline to upload changes or modify databases on production servers).
 
-=How to Switch Modes=
+==How to Switch Modes==
 
-You change the current environment by modifying the `config/environment.cfm` file. After you've modified it you need to either restart the !ColdFusion service or issue a `reload` request (see below for more info).
+You change the current environment by modifying the `config/environment.cfm` file. After you've modified it, you need to either restart the !ColdFusion service or issue a `reload` request. (See below for more info.)
 
-=The Reload Request=
-Issuing a reload request is the easiest way to go from one environment to another. It's done by passing in `reload` as a parameter on the URL, like this: `http://www.mysite.com/?reload=true`. This tells Wheels to reload the entire framework (it will also run your code in the `events/onapplicationstart.cfm` file) and thus picking up any changes made in the `config/environment.cfm` file.
+==The Reload Request==
+Issuing a reload request is the easiest way to go from one environment to another. It's done by passing in `reload` as a parameter in the URL, like this:
 
-There's also a shortcut for lazy developers who don't want to change this file at all, to use it just issue the reload request like this instead: `reload=testing`. This will make Wheels skip your `config/environment.cfm` file and just use the URL variable instead (`testing` in this case).
+{{{
+http://www.mysite.com/?reload=true
+}}}
 
-For added protection you can set the `reloadPassword` variable in `config/settings.cfm`. When set a reload request will only be honored when the correct password is also supplied, like this: `reload=true&password=mypass`.
+This tells Wheels to reload the entire framework (it will also run your code in the `events/onapplicationstart.cfm` file), thus picking up any changes made in the `config/environment.cfm` file.
+
+There's also a shortcut for lazy developers who don't want to change this file at all. To use it, just issue the reload request like this instead:
+
+{{{
+http://www.mysite.com/?reload=testing
+}}}
+
+This will make Wheels skip your `config/environment.cfm` file and just use the URL value instead (`testing`, in this case).
+
+For added protection, you can set the `reloadPassword` variable in `config/settings.cfm`. When set, a reload request will only be honored when the correct password is also supplied, like this:
+
+{{{
+http://www.mysite.com/?reload=testing&password=mypass
+}}}
