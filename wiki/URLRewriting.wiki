@@ -3,13 +3,13 @@
 
 URL rewriting is a completely optional feature of Wheels, and all it does is get rid of the `index.cfm` part of the URL.
 
-For example, with URL rewriting off a URL in your application cold look like this:
+For example, with URL rewriting off, a URL in your application cold look like this:
 
 {{{
 http://localhost/index.cfm/blog/new
 }}}
 
-After turning on URL rewriting it would look like this:
+After turning on URL rewriting, it would look like this:
 
 {{{
 http://localhost/blog/new
