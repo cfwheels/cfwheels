@@ -1,7 +1,7 @@
 #summary Finding your way around a Wheels application.
 #labels chapter,0.8
 
-After downloading and unzipping Wheels, here's the directory structure that you will see (plus signs indicates folders):
+After downloading and unzipping Wheels, here's the directory structure that you will see (plus signs indicate folders):
 
  * + config
  * + controllers
