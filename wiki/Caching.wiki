@@ -28,7 +28,7 @@ Here are the values you can change and a description of what they do (starting w
 
 The total amount of items the cache can hold. When the cache is full, items will be deleted automatically at a regular interval based on the other settings below.
 
-Note that the cache is stored in !ColdFusion's application scope, so take this into consideration when deciding the number of items to store.
+Note that the cache is stored in !ColdFusion's `application` scope, so take this into consideration when deciding the number of items to store.
 
 ===`cacheCullPercentage` Setting===
 
