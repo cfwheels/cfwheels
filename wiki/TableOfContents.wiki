@@ -50,8 +50,9 @@
  * [UsingLayouts Using Layouts]
  * Form Helpers and Showing Errors
  * [DisplayingLinksforPagination Displaying Links for Pagination]
- * AJAX and Javascript Effects
  * Miscellaneous Helpers
+ * Adding Your Own Helpers
+ * AJAX and Javascript Effects
 
 ==Working With Wheels==
 
