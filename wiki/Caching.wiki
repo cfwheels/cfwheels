@@ -175,4 +175,4 @@ So there you have it: 4 easy ways to speed up your website!
 
 When working with objects in Wheels, you'll likely find yourself using all of the convenient association functions Wheels makes available to you.
 
-For example, if you have set up a `belongsTo` association from `Article` to `Author`, then you will likely write a lot of `article.author().name()` calls. In this case, Wheels is smart enough to only call the database once per request if the queries are identical. So don't worry about adding multiple calls like that to your code.
+For example, if you have set up a `belongsTo` association from `Article` to `Author`, then you will likely write a lot of `article.author().name()` calls. In this case, Wheels is smart enough to only call the database once per request if the queries are identical. So don't worry about adding performance hits when making multiple calls like that in your code.
