@@ -33,7 +33,7 @@
  * [ColumnStatistics Column Statistics]
  * [DynamicFinders Dynamic Finders]
  * [GettingPaginatedData Getting Paginated Data]
- * [SettingAssociations Setting Associations]
+ * Setting Associations
  * [UsingtheAssociations Using the Associations]
  * [ObjectValidation Object Validation]
  * [ObjectCallbacks Object Callbacks]
