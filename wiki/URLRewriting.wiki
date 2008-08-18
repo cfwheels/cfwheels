@@ -1,7 +1,7 @@
 #summary Making URLs prettier using URL rewriting.
 #labels chapter,0.8
 
-URL rewriting is a completely optional feature of Wheels and all it does is get rid of the `index.cfm` part of the URL.
+URL rewriting is a completely optional feature of Wheels, and all it does is get rid of the `index.cfm` part of the URL.
 
 For example, with URL rewriting off a URL in your application cold look like this:
 
