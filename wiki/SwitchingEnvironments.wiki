@@ -29,7 +29,7 @@ Besides the 2 environments mentioned above, there are 3 more. Let's go through t
 
 ===Production===
 
- * Caches everything that the development mode caches.
+ * Caches everything that the Development mode caches.
  * Activates all developer controlled caching (actions, pages, queries and partials).
  * Shows your custom error page when an error is encountered.
  * Shows your custom 404 page when a controller or action is not found.
@@ -43,7 +43,7 @@ Besides the 2 environments mentioned above, there are 3 more. Let's go through t
 
  * Shows your custom maintenance page unless the requesting IP address is in the exception list (set in the `application.settings.ipExceptions` variable in `config/settings.cfm` or passed along in the URL as `except=127.0.0.1,127.0.0.1`).
 
-This environment mode comes in handy when you want to briefly take your website offline to upload changes or modify databases on production servers).
+This environment mode comes in handy when you want to briefly take your website offline to upload changes or modify databases on production servers.
 
 ==How to Switch Modes==
 
