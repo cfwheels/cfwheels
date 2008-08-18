@@ -42,7 +42,7 @@ If you want to save your new author to the database right away, you can use the 
 
 Note that we never have to set a value for the primary key property. This is because we use the Wheels convention of having an auto-incrementing integer field named `id` as the primary key.
 
-After saving the object to the database, the `id` property will be added to the object so you can read the value by doing something like this this:
+After saving the object to the database, the `id` property will be added to the object so you can read the value by doing something like this:
 
 {{{
 <cfset newAuthor = model("Author").new()>
