@@ -49,7 +49,7 @@ This environment mode comes in handy when you want to briefly take your website 
 
 You change the current environment by modifying the `config/environment.cfm` file. After you've modified it, you need to either restart the !ColdFusion service or issue a `reload` request. (See below for more info.)
 
-==The Reload Request==
+===The `reload` Request===
 Issuing a reload request is the easiest way to go from one environment to another. It's done by passing in `reload` as a parameter in the URL, like this:
 
 {{{
