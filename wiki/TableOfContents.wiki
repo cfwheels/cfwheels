@@ -34,8 +34,8 @@
  * [DynamicFinders Dynamic Finders]
  * [GettingPaginatedData Getting Paginated Data]
  * Setting Associations
- * [UsingtheAssociations Using the Associations]
- * [ObjectValidation Object Validation]
+ * Using the Associations
+ * Object Validation
  * [ObjectCallbacks Object Callbacks]
  * [SoftDelete Soft Delete]
  * [AutomaticTimeStamps Automatic Time Stamps]
