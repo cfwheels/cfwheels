@@ -28,7 +28,7 @@ In your controller:
 In your view:
 
 {{{
-<cfoutput>Hello #author.firstName# #author.lastName#!</cfoutput>
+<cfoutput>Hello, #author.firstName# #author.lastName#!</cfoutput>
 }}}
 
 ==Fetching a Row by a Value Other Than ID==
@@ -41,7 +41,7 @@ As an example, let's say that you want to get the last order made by a customer.
 <cfset anOrder = model("Order").findOne(order="datePurchased DESC")>
 }}}
 
-In this case, [findOne findOne()] will force the `maxRows` argument of the `cfquery` tag to `1`. Since you're specifically asking to get one record from the database, Wheels will return this as an object.
+In this case, [findOne findOne()] will force the `maxRows` argument of the `cfquery` tag to `1`. Because you're specifically asking to get one record from the database, Wheels will return this as an object.
 
 ==Fetching Multiple Rows==
 
