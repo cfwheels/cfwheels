@@ -26,28 +26,36 @@ Part of the `Order.cfc` model file:
 
 {{{
 <cfcomponent extends="Model">
-    <cffunction name="beforeValidationOnCreate">
-        Code for stripping out dashes in credit card numbers goes here...
-        <cfreturn true>
-    </cffunction>
+  
+  <cffunction name="init">
+    <cfset beforeValidationOnCreate("fixCreditCard")>
+    <cfset afterValidation("calculateShippingCost")>
+    <cfset afterDelete("sendConfirmationEmail")>
+  </cffunction>  
 
-    <cffunction name="afterValidation">
-        Code for calculating shipping cost goes here...
-        <cfreturn true>
-    </cffunction>
+  <cffunction name="fixCreditCard">
+    Code for stripping out dashes in credit card numbers goes here...
+    <cfreturn true>
+  </cffunction>
 
-    <cffunction name="afterDelete">
-        Code for sending confirmation email goes here...
-        <cfreturn true>
-    </cffunction>
+  <cffunction name="calculateShippingCost">
+    Code for calculating shipping cost goes here...
+    <cfreturn true>
+  </cffunction>
+
+  <cffunction name="sendConfirmationEmail">
+    Code for sending confirmation email goes here...
+    <cfreturn true>
+  </cffunction>
+
 </cfcomponent>
 }}}
 
-When Wheels validates, inserts, updates, and deletes an object it will look for these functions in your model file and execute them if they exist.
+The above code registers 3 methods to be run at specific points in the life cycle of all objects in your application. 
 
 ==All Possible Callbacks==
 
-Wheels will look for the following 14 callback functions:
+The following 14 functions can be used to register callbacks.
 
  * `beforeValidation()`
  * `beforeValidationOnCreate()` or `beforeValidationOnUpdate()`
@@ -66,4 +74,4 @@ Please note that if you use the [updateAll updateAll()] or the [deleteAll delete
 
 However, if you want to execute all callbacks in those methods as well, all you have to do is pass in `instantiate=true` to the [updateAll updateAll()]/[deleteAll deleteAll()] methods.
 
-If you want to completely break the save/delete operation chain for an object, you can do so by returning `false` from your callback method. (Otherwise, always return `true` or nothing at all.) By breaking the chain, we mean that if you, for example, have called the [save save()] method on a new object and your `beforeCreate()` method returns `false`, the method will exit early, returning `false` and no record will be inserted in the database.
+If you want to completely break the save/delete operation chain for an object, you can do so by returning `false` from your callback method. (Otherwise, always return `true` or nothing at all.) By breaking the chain, we mean that if you, for example, have called the [save save()] method on a new object and the method you've registered with a `beforeCreate()` call returns `false`, the method will exit early, returning `false` and no record will be inserted in the database.
