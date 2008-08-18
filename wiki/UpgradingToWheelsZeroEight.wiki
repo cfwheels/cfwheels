@@ -1,7 +1,7 @@
 #summary Our listing of steps to take while upgrading your Wheels application from 0.7 to 0.8.
 #labels 0.8,chapter
 
-The easiest way to upgrade is to setup an empty 0.8 website and then transfer your application code to it. When transferring, please make note of the following changes and make the appropriate changes to your code.
+The easiest way to upgrade is to setup an empty website, deploy a fresh copy of Wheels 0.8, and then transfer your application code to it. When transferring, please make note of the following changes and make the appropriate changes to your code.
 
 ==File System Changes==
 
