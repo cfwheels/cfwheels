@@ -1,62 +1,102 @@
 #summary Returning records from your database tables as objects or queries.
 #labels chapter,0.8
 
-Reading records from your database typically involves using one of the three finder methods available in Wheels; [findById findById()], [findOne findOne()] and [findAll findAll()]. The first two of these ([findById findById()] and [findOne findOne()]) returns an object to you while the last one ([findAllfindAll()]) returns the result from a `cfquery` tag.
+Reading records from your database typically involves using one of the 3 finder methods available in Wheels: [findById findById()], [findOne findOne()] and [findAll findAll()].
 
-Let's start by looking at the simplest of the finder methods, [findById findById()]. [findById findById()] takes one argument - the primary key (or several keys if you're using composite keys) of the record you want to get. If the record exists it is returned to you as an object, if not Wheels will throw an error of type `Wheels.RecordNotFound`. In the following example we assume the `params.id` variable has been created from the URL (for example an URL such as `http://localhost/blog/viewauthor/7`)
+The first 2 of these, ([findById findById()] and [findOne findOne()]), returns an object to you, while the last one ([findAllfindAll()]) returns the result from a `cfquery` tag.
+
+==Fetching by a Row by ID==
+
+Let's start by looking at the simplest of the finder methods, [findById findById()]. This method takes one argument: the primary key (or several keys if you're using composite keys) of the record you want to get.
+
+If the record exists, it is returned to you as an object. If not, Wheels will throw an error of type `Wheels.RecordNotFound`.
+
+In the following example, we assume that the `params.id` variable has been created from the URL (for example an URL such as `http://localhost/blog/viewauthor/7`)
 
 In your controller:
 
 {{{
 <cftry>
-  <cfset author = model("author").findById(params.id)>
-  <cfcatch type="Wheels.RecordNotFound">
-    <cfset flashInsert(message="Author #params.id# was not found")>
-    <cfset redirectTo(back=true)>
-  </cfcatch>
+    <cfset author = model("Author").findById(params.id)>
+    <cfcatch type="Wheels.RecordNotFound">
+        <cfset flashInsert(message="Author #params.id# was not found")>
+        <cfset redirectTo(back=true)>
+    </cfcatch>
 </cftry>
 }}}
 
 In your view:
 
+{{{
 <cfoutput>Hello #author.firstName# #author.lastName#!</cfoutput>
-
-Often you'll find yourself wanting to get a record (or many) based on a criteria other than just the primary key value though. If you want to get the last order made by a customer you can for example achieve this by using the [findOne findOne()] method like this:
-
-{{{
-<cfset anOrder = model("order").findOne(order="datePurchased DESC")>
 }}}
 
-[findOne findOne()] will in this case force the `maxRows` argument of the `cfquery` tag to `1`. Since you're specifically asking to get one record from the database Wheels will return this as an object. However, when you use [findAll findAll()] you are asking to get one or more records from the database in which case Wheels will return this as a `cfquery` result (which could be empty if nothing was found based on your criteria). Besides these differences [findOne findOne()] and [findAll findAll()] accept the same arguments. Let's have a closer look at these arguments:
+==Fetching a Row by a Value Other Than ID==
 
-==Select==
+Often, you'll find yourself wanting to get a record (or many) based on a criteria other than just the primary key value though.
 
-This maps to the `SELECT` clause of the SQL statement. By default Wheels will select all columns in your table but if you want to override this you can specify a list of column names here. You don't have to include the table name in the list (for example, you don't need `author.firstName`, just `firstName` is good enough). Even if you select from more than one table (see the `include` argument below) you still don't have to fully qualify the names but you should be aware that Wheels will try to guess which table you are referring to if you have `firstName` in both tables for example. A tip is to turn on debugging when you're learning Wheels so you can get a good understanding of how Wheels creates the SQL statements.
-
-==Where==
-
-This maps to the `WHERE` clause of the SQL statement. Wheels will also convert all your input to `cfqueryparam` tags for you automatically. There are some limitations to what you can use in the `where` argument though but most "normal" SQL will work (`=`, `!=`, `<`, `AND`, `OR`, `IN` and so on).
-
-==Order==
-
-This maps to the `ORDER` clause of the SQL statement. If you don't specify an order at all, none will be used (makes sense, eh) so in those cases the database engine will decide in what order to return the records.
-
-==Include==
-
-This is a powerful feature that you can use if you have setup associations in your models. if, for example, you have specified that one `author` has many `articles` then you can return all authors and articles in the same call by doing this:
+As an example, let's say that you want to get the last order made by a customer. You can achieve this by using the [findOne findOne()] method like so:
 
 {{{
-<cfset bobsArticles = model("author").findAll(where="firstName='bob'", include="articles")>
+<cfset anOrder = model("Order").findOne(order="datePurchased DESC")>
 }}}
 
-==maxRows==
+In this case, [findOne findOne()] will force the `maxRows` argument of the `cfquery` tag to `1`. Since you're specifically asking to get one record from the database, Wheels will return this as an object.
 
-This limits the number of records to return. Please note that if you call [findAll findAll()] with `maxRows=1` you will still get a `cfquery` result back and not an object (use [findOne findOne()] if you want an object returned).
+==Fetching Multiple Rows==
 
-==Page, !PerPage==
+You can use [findAll findAll()] when you are asking to get one or more records from the database. Wheels will return this as a `cfquery` result (which could be empty if nothing was found based on your criteria).
 
-Set these if you want to get paginated data back, that is records 11-20 for example (`page=2`, `perPage=10`).
+==Arguments for `findOne()` and `findAll()`==
 
-==Cache==
+Besides the difference in return type, [findOne findOne()] and [findAll findAll()] accept the same arguments. Let's have a closer look at these arguments.
+
+==`select` Argument==
+
+This maps to the `SELECT` clause of the SQL statement.
+
+By default, Wheels will select all columns in your table. But if you want to override this you can specify a list of column names here.
+
+You don't need to include the table name in the list. For example, you don't need `author.firstName`. Just `firstName` is good enough.
+
+Even if you select from more than one table (see the `include` argument below), you still don't need to fully qualify the names. But you should be aware that Wheels will try to guess which table you are referring to if you have `firstName` in both tables, for example.
+
+A tip is to turn on debugging when you're learning Wheels so you can get a good understanding of how Wheels creates the SQL statements.
+
+==`where` Argument==
+
+This maps to the `WHERE` clause of the SQL statement. Wheels will also convert all your input to `cfqueryparam` tags for you automatically.
+
+There are some limitations to what you can use in the `where` argument, but most "normal" SQL will work (`=`, `!=`, `<>`, `<`, `AND`, `OR`, `IN`, and so on).
+
+==`order` Argument==
+
+This maps to the `ORDER` clause of the SQL statement. If you don't specify an order at all, none will be used (makes sense, eh?). So in those cases, the database engine will decide in what order to return the records.
+
+==`include` Argument==
+
+This is a powerful feature that you can use if you have set up associations in your models.
+
+If, for example, you have specified that one `Author` has many `Articles`, then you can return all authors and articles in the same call by doing this:
+
+{{{
+<cfset bobsArticles = model("Author").findAll(where="firstName='Bob'", include="Articles")>
+}}}
+
+==`maxRows` Argument==
+
+This limits the number of records to return. Please note that if you call [findAll findAll()] with `maxRows=1`, you will still get a `cfquery` result back and not an object. (Use [findOne findOne()] if you want for an object to be returned.)
+
+==`page` and `perPage` Arguments==
+
+Set these if you want to get paginated data back.
+
+So if you wanted records 11-20, for example, you write this code:
+
+{{{
+<cfset bobsArticles = model("Author").findAll(where="firstName='Bob'", include="Articles", page=2, perPage=10)>
+}}}
+
+==`cache` Argument==
 
 Number of minutes to cache the query for.
