@@ -12,6 +12,8 @@ And in Wheels, it's really simple to do this type of pagination. Here's how:
 
 This chapter will deal with the first part: getting the paginated data. Please proceed to the chapter called DisplayingLinksforPagination if you wish to learn how to output the page links in your view.
 
+==Learning by Example==
+
 Let's jump straight to an example:
 
 {{{
