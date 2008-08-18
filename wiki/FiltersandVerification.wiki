@@ -113,10 +113,10 @@ Much better! But Wheels can take this process of avoiding repetition one step fu
 </cfcomponent>
 }}}
 
-Besides the advantage of not having to call `restrictAccess` twice, you have also gained two other things:
+Besides the advantage of not having to call `restrictAccess()` twice, you have also gained two other things:
 
- * The developer coding `secretStuff` and `evenMoreSecretStuff` can now focus on the main tasks of those two methods without having to worry about site-wide logic like authentication.
- * The `init` method is now starting to act like an overview for the entire controller.
+ * The developer coding `secretStuff()` and `evenMoreSecretStuff()` can now focus on the main tasks of those two methods without having to worry about site-wide logic like authentication.
+ * The `init()` method is now starting to act like an overview for the entire controller.
 
 All of these advantages will become much more obvious as your applications grow. This was just a simple example to put filters into context.
 
@@ -124,7 +124,7 @@ All of these advantages will become much more obvious as your applications grow.
 
 So far, we've only been dealing with one controller. Unless you're building a very simple website, you'll end up with a lot more.
 
-The question then becomes, "Where do I place the `restrictAccess()` function so I can call it from any one of my controllers?" The answer is that because all controllers extend `Controller.cfc` you should probably put it there.
+The question then becomes, "Where do I place the `restrictAccess()` function so I can call it from any one of my controllers?" The answer is that because all controllers extend `Controller.cfc`, you should probably put it there.
 
 The `init()` method itself with the call to [filters filters()] should remain inside your individual controllers though. If you actually want to set the same filters to be run for all controllers, you can go ahead and move it to `Controller.cfc`'s `init()` method as well. Just remember that you will have to call `super.init()` from the `init()` methods of your individual controllers.
 
