@@ -1,12 +1,20 @@
-#summary How to use more than one database.
-#labels chapter,0.9
+#summary How to use more than one database in your Wheels app.
+#labels chapter,0.8
 
-Sometimes you need to pull data from more than one database, whether it's by choice (for performance or security reasons perhaps) or whether it's just because that's the way your infrastructure is setup and you can't change it. Wheels has built-in functionality for this so that you don't have to revert back to writing the queries and setting the data source manually whenever you need to use a data source other than the default one.
+Sometimes you need to pull data from more than one database, whether it's by choice (for performance or security reasons, perhaps) or it's just because that's the way your infrastructure is set up.
+
+Wheels has built-in functionality for this so that you don't have to revert back to writing the queries and setting the data source manually whenever you need to use a data source other than the default one.
 
 ==Configuring the Data Sources==
 
-If you need to use more than one database there are two ways to accomplish this in Wheels. You can either set it globally by using the `config/database.cfm` file or you can specify it on a per model basis by using the [setDataSource setDataSource()], [setCreateDataSource setCreateDataSource()], [setReadDataSource setReadDataSource()], [setUpdateDataSource setUpdateDataSource()] and [setDeleteDataSource setDeleteDataSource()] functions from the `init` function in your model file.
+If you need to use more than one database, there are 2 ways to accomplish this in Wheels. You can either set it globally by using the `config/database.cfm` file, or you can specify it on a per model basis by using the [setDataSource setDataSource()], [setCreateDataSource setCreateDataSource()], [setReadDataSource setReadDataSource()], [setUpdateDataSource setUpdateDataSource()], and [setDeleteDataSource setDeleteDataSource()] functions in the `init` function in your model file.
 
-As you have probably figured out already by the naming of those functions listed above you can have Wheels use one data source for all SQL operations (by using the [setDataSource setDataSource()] function) or you can have it read from one database and write to another for example (by using the [setDataSource setDataSource()] function to specify what data source to use when reading and by using the remaining three, [setCreateDataSource setCreateDataSource()] / [setUpdateDataSource setUpdateDataSource()] / [setDeleteDataSource setDeleteDataSource()], to specify what data source to use when writing).
+As you have probably figured out by reading the functions' names, you can have Wheels use one data source for all SQL operations by using the [setDataSource setDataSource()] function).
 
-What data source Wheels will use internally for each operation is not solely decided by whether it's a `SELECT`, `INSERT`, `UPDATE` or `DELETE` statement though. Instead it's decided by the current context of the operation, for example if you insert a new record to a table using one data source Wheels will of course use that same data source when getting back the primary key of the record you just inserted. Keep this in mind when setting access permissions on your tables.
+Or you can have it read from one database and write to another, for example by using the [setDataSource setDataSource()] function to specify what data source to use when reading and by using the remaining 3, [setCreateDataSource setCreateDataSource()] / [setUpdateDataSource setUpdateDataSource()] / [setDeleteDataSource setDeleteDataSource()], to specify what data source to use when writing).
+
+==Minor Caveat: Create Data Source Also Reads After `INSERT`==
+
+What data source Wheels will use internally for each operation is not solely decided by whether it's a `SELECT`, `INSERT`, `UPDATE` or `DELETE` statement though. Instead, it's decided by the current context of the operation.
+
+For example, if you insert a new record to a table using one data source, Wheels will use that same data source when getting back the primary key of the record you just inserted. Keep this in mind when setting access permissions on your tables.
