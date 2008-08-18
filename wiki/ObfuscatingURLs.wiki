@@ -11,9 +11,9 @@ When URL obfuscation is turned off (which is the default setting in Wheels), thi
 http://localhost/user/profile/99
 }}}
 
-Here `99` is the primary key value of a record in your `users` table.
+Here, `99` is the primary key value of a record in your `users` table.
 
-After turning on URL obfuscation, this is how those URLs will look instead:
+After enabling URL obfuscation, this is how those URLs will look instead:
 
 {{{
 http://localhost/user/profile/b7ab9a50
