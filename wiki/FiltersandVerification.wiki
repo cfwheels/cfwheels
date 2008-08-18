@@ -57,7 +57,7 @@ Sure, that works. But you're already starting to repeat yourself in the code. Wh
 </cfcomponent>
 }}}
 
-Ouch! You're now setting yourself up for a maintenance nightmare when you need to update that IP range or the messages given to the user, etc. One day you are bound to miss updating it in one of the places.
+Ouch! You're now setting yourself up for a maintenance nightmare when you need to update that IP range or the messages given to the user, etc. One day, you are bound to miss updating it in one of the places.
 
 As the smart coder that you are, you re-factor this to another method so your code ends up like this:
 
