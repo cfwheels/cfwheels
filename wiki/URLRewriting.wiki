@@ -23,7 +23,7 @@ Unfortunately if you're running your Wheels powered site in a sub folder of anot
 
 First, check that the Apache `rewrite_module` has been loaded by ensuring there is no pound signs before the line that says `LoadModule rewrite_module modules/mod_rewrite.so` in the `httpd.conf` file.
 
-Next, make sure that Apache has permission to load the rewrite rules from the `.htaccess` file in the web root. This is done by setting `AllowOverride` to `All` under the `Directory` section corresponding to the website yo plan on using Wheels on (still inside the `httpd.conf` file).
+Next, make sure that Apache has permission to load the rewrite rules from the `.htaccess` file in the web root. This is done by setting `AllowOverride` to `All` under the `Directory` section corresponding to the website you plan on using Wheels on (still inside the `httpd.conf` file).
 
 Finally, uncomment the rewrite rules inside the `.htaccess` file itself located in the web root (remove the pound signs). For some Apache setups this is actually the only thing you have to do.
 
