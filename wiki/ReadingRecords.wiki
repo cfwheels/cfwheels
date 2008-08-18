@@ -1,7 +1,7 @@
 #summary Returning records from your database tables as objects or queries.
 #labels chapter,0.8
 
-Reading records from your database typically involves using one of the 3 finder methods available in Wheels: [findById findById()], [findOne findOne()] and [findAll findAll()].
+Reading records from your database typically involves using one of the 3 finder methods available in Wheels: [findById findById()], [findOne findOne()], and [findAll findAll()].
 
 The first 2 of these, ([findById findById()] and [findOne findOne()]), returns an object to you, while the last one ([findAllfindAll()]) returns the result from a `cfquery` tag.
 
