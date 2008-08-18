@@ -96,7 +96,7 @@ Much better! But Wheels can take this process of avoiding repetition one step fu
 
     <cffunction name="restrictAccess">
         <cfif cgi.remote_addr Does Not Contain "212.55">
-            <cfset flashInsert(msg="Sorry, we're not open in that area")>
+            <cfset flashInsert(msg="Sorry, we're not open in that area.")>
             <cfset redirectTo(action="sorry")>
         <cfelseif NOT StructKeyExists(session, "userId")>
             <cfset flashInsert(msg="Please login first!")>
