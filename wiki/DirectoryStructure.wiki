@@ -31,7 +31,7 @@ And the last directory? That's the framework itself. It exists in the `wheels` d
 
 ==Detailed Overview==
 
-Let's go through all of the files and directories now starting with the ones you'll spend most of your time in; the code directories.
+Let's go through all of the files and directories now starting with the ones you'll spend most of your time in: the code directories.
 
 ===`controllers`===
 
