@@ -35,7 +35,7 @@ Let's go through all of the files and directories now starting with the ones you
 
 ===`controllers`===
 
-This is where you create your controllers. You'll see one file in here already: `Controller.cfc`. You can place functions inside `Controller.cfc` to have that function shared between all the controllers you create. (This works because all your controllers will extend `Controller.cfc`).
+This is where you create your controllers. You'll see one file in here already: `Controller.cfc`. You can place functions inside `Controller.cfc` to have that function shared between all the controllers you create. (This works because all your controllers will extend `Controller`.)
 
 ===`models`===
 
