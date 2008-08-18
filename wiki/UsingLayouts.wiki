@@ -45,20 +45,20 @@ For most purposes, this means that you could write code for your page header bef
 
 <body>
 
-  <div id="container">
+<div id="container">
     <div id="navigation">
-      <ul>
-        <cfoutput>
-        <li>#linkTo(text="Home", controller="main")#</li>
-        <li>#linkTo(text="About Us", controller="about")#</li>
-        <li>#linkTo(text="Contact Us", controller="contact")#</li>
-        </cfoutput>
-      </ul>
+        <ul>
+            <cfoutput>
+            <li>#linkTo(text="Home", controller="main")#</li>
+            <li>#linkTo(text="About Us", controller="about")#</li>
+            <li>#linkTo(text="Contact Us", controller="contact")#</li>
+            </cfoutput>
+        </ul>
     </div>
     <div id="content">
-      <cfoutput>#contentForLayout()#</cfoutput>
+        <cfoutput>#contentForLayout()#</cfoutput>
     </div>
-  </div>
+</div>
 
 </body>
 </html>
@@ -135,8 +135,7 @@ Take a look at this example action, called `display`:
 
 {{{
 <cffunction name="display">
-  <cfset title = "My Page">
-  <cfset renderPage(layout="visitor")>
+    <cfset renderPage(layout="visitor")>
 </cffunction>
 }}}
 
@@ -148,7 +147,7 @@ If you don't want for a given template to be wrapped by a layout at all, you may
 
 Another alternative is to create a layout with only the call to the [contentForLayout contentForLayout()] function in it and referencing it as described above in _Using a Different Layout_.
 
-Lastly, if your view needs to return XML code or other data for JavaScript calls, then you should reference the [renderNothing renderNothing()], [renderText renderText()], or [renderPageToString renderPageToString()] functions to see which would be best used by your action.
+Lastly, if your view needs to return XML code or other data for JavaScript calls, then you should reference the [renderNothing renderNothing()], [renderText renderText()], and [renderPageToString renderPageToString()] functions to see which would be best used by your action.
 
 ==Email Layouts==
 
@@ -161,7 +160,7 @@ As hinted earlier in this chapter, the default layout for your emails is stored 
 For example:
 
 {{{
-<cfset user = model("user").findOne(where="email='#params.email#'")>
+<cfset user = model("User").findOne(where="email='#params.email#'")>
 <cfset sendEmail(template="loginDetails", layout=true, subject="...", to=user.email, from="...")>
 <cfset flashInsert(notice="Your login details were sent to #user.email#")>
 <cfset redirectTo(action="entrance")>
@@ -176,7 +175,7 @@ All email layouts that need to be called instead of `email.cfm` need to be calle
 Here's an example of calling a non-default email template in your controller:
 
 {{{
-<cfset user = model("user").findOne(where="email='#params.email#'")>
+<cfset user = model("User").findOne(where="email='#params.email#'")>
 <cfset sendEmail(template="loginDetails", layout="someEmailLayout", subject="...", to=user.email, from="...")>
 <cfset flashInsert(notice="Your login details were sent to #user.email#")>
 <cfset redirectTo(action="entrance")>
