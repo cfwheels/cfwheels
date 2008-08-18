@@ -5,7 +5,7 @@
 
 ==How to Use Soft Deletion==
 
-If you create a new date column (the column type will depend on your database vendor, but usually you want to use `date`, `datetime`, or `timestamp`) on a table and name it `deletedAt`, Wheels will automagically start using it for soft deletes.
+If you create a new date column (the column type will depend on your database vendor, but usually you want to use `date`, `datetime`, or `timestamp`) on a table and name it `deletedAt`, Wheels will automagically start using it to record soft deletes.
 
 Without the soft delete in place, a [delete delete()] call on an object will delete the record from the table using a `DELETE` statement. With the soft delete in place, an `UPDATE` statement is sent instead (that sets the `deletedAt` field to the current time).
 
