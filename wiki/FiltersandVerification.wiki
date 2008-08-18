@@ -81,6 +81,8 @@ As the smart coder that you are, you re-factor this to another method so your co
     <cffunction name="evenMoreSecretStuff">
         <cfset restrictAccess()>
     </cffunction>
+
+</cfcomponent>
 }}}
 
 Much better! But Wheels can take this process of avoiding repetition one step further. By placing a [filters filters()] call in the `init` method of the controller, you can tell Wheels what function to run before any desired action(s).
