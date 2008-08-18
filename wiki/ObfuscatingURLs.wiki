@@ -21,7 +21,7 @@ http://localhost/user/profile/b7ab9a50
 
 The value `99` has now been obfuscated by Wheels to `b7ab9a50`. This makes it harder for nosy users to substitute the value to see how many records are in your `users` table, to name just one example.
 
-==How to Use it==
+==How to Use It==
 
 To turn on URL obfuscation, all you have to do is set `application.settings.obfuscateURLs` to `true` in the `config/settings.cfm` file.
 
