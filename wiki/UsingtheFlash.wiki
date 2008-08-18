@@ -24,7 +24,7 @@ In the view page for the edit action:
 
 As you can see above, you use the [flashInsert flashInsert()] function when you want to store data in the Flash and the [flash flash()] function when you want to display the data in a view.
 
-The key chosen above is `error`, but it could have been anything. Just like with a normal `struct`, the naming of the `struct` keys is your job.
+The key chosen above is `error`, but it could have been anything. Just like with a normal `struct`, the naming of the keys is your job.
 
 As an example, you may choose to use one key for storing error messages and another one for storing success messages.
 
