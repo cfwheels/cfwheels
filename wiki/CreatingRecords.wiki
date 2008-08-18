@@ -52,6 +52,6 @@ After saving the object to the database, the `id` property will be added to the 
 <cfoutput>#newAuthor.id#</cfoutput>
 }}}
 
-You don't need to follow these conventions at all though. You can name your primary key something other than `id` and you can even use composite keys, natural keys, non auto-incrementing and so on.
+You don't need to follow these conventions at all though. You can name your primary key something other than `id`, and you can even use composite keys, natural keys, non auto-incrementing, and so on.
 
 No matter which method you prefer, Wheels will use database introspection to see how your table is structured and act accordingly.
