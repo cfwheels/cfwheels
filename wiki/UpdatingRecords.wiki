@@ -66,7 +66,6 @@ And an example of using `updateById()` by passing named arguments:
 <cfset post = model("Post").updateById(id=33, title="New version of Wheels just released", published=1)>
 }}}
 
-
 Keep in mind that if you use named arguments for the property values, you also need to name all other arguments too because you can't mix named and unnamed arguments in !ColdFusion.
 
 ===Updating Multiple Rows with `updateAll()`===
@@ -75,10 +74,10 @@ The [updateAll updateAll()] method allows you to update more than one record in 
 
 The `where` argument is used exactly as you specify it in the `WHERE` clause of the query (with the exception that Wheels automatically wraps everything properly in `cfqueryparam` tags). So make sure that you place those commas and quotes correctly!
 
-Unlike [updateById updateById()], the `updateAll()` method will not instantiate the objects by default. That could be really slow if you wanted to update a lot of records at once.
-
 An example:
 
 {{{
 <cfset recordsReturned = model("Post").updateAll(published=1, publishedAt=Now(), where="published=0")>
 }}}
+
+Unlike [updateById updateById()], the `updateAll()` method will not instantiate the objects by default. That could be really slow if you wanted to update a lot of records at once.
