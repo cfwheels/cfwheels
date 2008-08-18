@@ -1,7 +1,7 @@
 #summary Environments that match your development stages.
 #labels chapter,0.8
 
-Each environment in Wheels matches a stage in your development cycle.
+Wheels allows you to set up different "environments" that matches a stage in your development cycle. That way, you can configure different values that match what services to call and how your app behaves based on where you are in your development.
 
 By default, all new applications will start in the `design` environment. The `design` environment is the most convenient one to use as you start building your application because it does not cache any data. Therefore, if you make any changes to your database, for example, it will immediately be picked up by Wheels.
 
