@@ -7,11 +7,17 @@ Wheels has built-in functionality for this so that you don't have to revert back
 
 ==Configuring the Data Sources==
 
-If you need to use more than one database, there are 2 ways to accomplish this in Wheels. You can either set it globally by using the `config/database.cfm` file, or you can specify it on a per model basis by using the [setDataSource setDataSource()], [setCreateDataSource setCreateDataSource()], [setReadDataSource setReadDataSource()], [setUpdateDataSource setUpdateDataSource()], and [setDeleteDataSource setDeleteDataSource()] functions in the `init` function in your model file.
+If you need to use more than one database, there are 2 ways to accomplish this in Wheels. You can either set it globally by using the `config/database.cfm` file, or you can specify it on a per model basis by using the following functions in the `init` function in your model file:
 
-As you have probably figured out by reading the functions' names, you can have Wheels use one data source for all SQL operations by using the [setDataSource setDataSource()] function).
+ * [setDataSource setDataSource()]
+ * [setCreateDataSource setCreateDataSource()]
+ * [setReadDataSource setReadDataSource()]
+ * [setUpdateDataSource setUpdateDataSource()]
+ * [setDeleteDataSource setDeleteDataSource()]
 
-Or you can have it read from one database and write to another, for example by using the [setDataSource setDataSource()] function to specify what data source to use when reading and by using the remaining 3, [setCreateDataSource setCreateDataSource()] / [setUpdateDataSource setUpdateDataSource()] / [setDeleteDataSource setDeleteDataSource()], to specify what data source to use when writing).
+As you have probably figured out by reading the functions' names, you can have Wheels use one data source for all SQL operations by using the [setDataSource setDataSource()] function.
+
+Or you can have it read from one database and write to another, for example by using the [setDataSource setDataSource()] function to specify what data source to use when reading and by using the remaining 3, [setCreateDataSource setCreateDataSource()] / [setUpdateDataSource setUpdateDataSource()] / [setDeleteDataSource setDeleteDataSource()], to specify what data source to use when writing.
 
 ==Minor Caveat: Create Data Source Also Reads After `INSERT`==
 
