@@ -76,10 +76,10 @@ This means that if you prefer to have all cache settings on a global basis inste
 
 In Wheels, you can cache data in 4 different ways:
 
- # _Action caching_ is the most effective of these methods since it caches the entire resulting HTML for the user.
- # _Page caching_ is similar to action caching, but it will only cache the view page itself and in reality, this caching method is rarely used.
- # _Partial caching_ is used when you only want to cache specific parts of pages. One reason for this could be that the page is personalized for a specific user, and you can only cache the sections that are not personalized.
- # _Query caching_ is the least effective of the 4 caching options because it only caches result sets that you get back from the database. But if you have a busy database and you're not too concerned with leaving pages/partials uncached, this could be a good option for you.
+ # *Action caching* is the most effective of these methods since it caches the entire resulting HTML for the user.
+ # *Page caching* is similar to action caching, but it will only cache the view page itself and in reality, this caching method is rarely used.
+ # *Partial caching* is used when you only want to cache specific parts of pages. One reason for this could be that the page is personalized for a specific user, and you can only cache the sections that are not personalized.
+ # *Query caching* is the least effective of the 4 caching options because it only caches result sets that you get back from the database. But if you have a busy database and you're not too concerned with leaving pages/partials uncached, this could be a good option for you.
 
 ===Action Caching===
 
