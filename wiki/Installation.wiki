@@ -30,9 +30,7 @@ If you want to run a Wheels powered application from a subfolder in an existing 
 
 Setting up the database is actually a completely optional step. You can run a Wheels site without ever involving a database. But because it's highly unlikely you would do that, we're including the instructions in this chapter.
 
-Create a new database in SQL Server or MySQL and add a new data source for it named `wheels` in the !ColdFusion/Railo Administrator, just as you'd normally do. This is really all that you need to do before Wheels can connect to your database and start working its magic.
-
-If you wish to name your data source differently or have Wheels use the username/password in your code instead of through the !ColdFusion/Railo Administrator, this is all possible via different configuration settings. You can read more about that in the [Configuration configuration chapter].
+Create a new database in SQL Server, Oracle or MySQL and add a new data source for it in the !ColdFusion Administrator, just as you'd normally do. Now open up `config/database.cfm` and set the `application.settings.database.datasource` variable to the name you chose for the data source. This is all that you need to do before Wheels can connect to your database and start working its magic.
 
 ==4. Test It==
 
