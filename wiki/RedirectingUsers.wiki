@@ -1,28 +1,32 @@
 #summary Use redirection to keep your application user friendly.
 #labels chapter,0.8
 
-When a user submits a form you do *not* want to show any content on the page that handles the form submission! Why? Because if you do, and the user hits refresh in their browser, the form handling code could be triggered again possibly causing duplicate entries in your database, multiple emails being sent etc.
+When a user submits a form, you do *not* want to show any content on the page that handles the form submission! Why? Because if you do, and the user hits refresh in their browser, the form handling code could be triggered again, possibly causing duplicate entries in your database, multiple emails being sent, etc.
 
 ==Remember to Redirect==
 
-To avoid the above problem it is recommended to always redirect the user after submitting a form. In Wheels this is done with the [redirectTo redirectTo()] function. It is basically a wrapper around the `cflocation` tag in !ColdFusion. Being that it's a Wheels function it can of course accept the `controller`, `action` and `id` arguments so that you can easily redirect to other actions in your application.
+To avoid the above problem, it is recommended to always redirect the user after submitting a form. In Wheels this is done with the [redirectTo redirectTo()] function. It is basically a wrapper around the `cflocation` tag in CFML.
 
-==Three Ways to Redirect==
+Being that `redirectTo()` a Wheels function, it can of course accept the `controller`, `action` and `id` arguments so that you can easily redirect to other actions in your application.
 
-Let's look at the three ways you can redirect in Wheels:
+==3 Ways to Redirect==
+
+Let's look at the 3 ways you can redirect in Wheels.
 
 ===Redirecting to Another Action===
 
-You can redirect the user to another action in your application simply by passing in the `controller`, `action` and `id` arguments. You can also pass in any other arguments that are accepted by the [URLFor URLFor()] function like `host`, `params` etc (the [URLFor URLFor()] function is what Wheels uses internally to produce the URL to redirect to).
+You can redirect the user to another action in your application simply by passing in the `controller`, `action`, and `id` arguments. You can also pass in any other arguments that are accepted by the [URLFor URLFor()] function, like `host`, `params`, etc. (The [URLFor URLFor()] function is what Wheels uses internally to produce the URL to redirect to.)
 
 ===Redirecting to Another URL===
 
-The [redirectTo redirectTo()] function also accepts a `URL` argument which when supplied is passed along unchanged to the `URL` attribute of the `cflocation` tag.
+The [redirectTo redirectTo()] function also accepts a `URL` argument, which, when supplied, is passed along unchanged to the `URL` attribute of the `cflocation` tag.
 
 ===Redirecting to the Referring URL===
 
-It's very common that all you want to do when a user submits a form is send them back to where they came from (think of a user posting a comment on a blog post and then being redirected back to view the post with their new comment visible as well). For this we have the `back` argument to [redirectTo redirectTo()]. Simply pass in `back=true` and the user will be redirected back to the page they came from.
+It's very common that all you want to do when a user submits a form is send them back to where they came from. (Think of a user posting a comment on a blog post and then being redirected back to view the post with their new comment visible as well.) For this, we have the `back` argument. Simply pass in `back=true` to `redirecTo`, and the user will be redirected back to the page they came from.
 
-A word of warning; the referring URL is retrieved from the `cgi.http_referer` value and if it is blank or comes from a different domain than the current one the user will be redirected to the root of the website instead.
+A word of warning: the referring URL is retrieved from the `cgi.http_referer` value. If this value is is blank or comes from a different domain than the current one, the user will be redirected to the root of the website instead.
 
-Common for all three methods above is that you can also pass in the `addToken` and `statusCode` arguments which will be directly passed along to !ColdFusion's `cflocation` tag.
+==`addToken` and `statusCode`==
+
+Common for all three methods above is that you can also pass in the `addToken` and `statusCode` arguments, which will be directly passed along to !ColdFusion's `cflocation` tag.
