@@ -24,13 +24,13 @@ Here are the values you can change and a description of what they do (starting w
 <cfset application.settings.defaultCacheTime = 15>
 }}}
 
-===maximumItemsToCache Setting===
+===`maximumItemsToCache` Setting===
 
 The total amount of items the cache can hold. When the cache is full, items will be deleted automatically at a regular interval based on the other settings below.
 
 Note that the cache is stored in !ColdFusion's application scope, so take this into consideration when deciding the number of items to store.
 
-===cacheCullPercentage Setting===
+===`cacheCullPercentage` Setting===
 
 This is the percentage of items that are culled from the cache when `maximumItemsToCache` has been reached.
 
@@ -38,11 +38,11 @@ For example, if you set this value to `10`, then at most, 10% of expired items w
 
 If you set this to `100`, then all expired items will be deleted. Setting it to 100 is perfectly fine for small caches but can be problematic if the cache is very large.
 
-===cacheCullInterval Setting===
+===`cacheCullInterval` Setting===
 
 This is the number of minutes between each culling action. The reason the cache is not culled during each request is to keep performance as high as possible.
 
-===defaultCacheTime Setting===
+===`defaultCacheTime` Setting===
 
 The number of minutes an item should be cached when it has not been specifically set through one of the functions that perform the caching in Wheels (i.e., [caches caches()], [findAll findAll()], [includePartial includePartial()], etc).
 
