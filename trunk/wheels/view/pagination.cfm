@@ -34,8 +34,8 @@
 		<cfoutput>#paginationLinks(windowSize=5)#</cfoutput>
 
 		RELATED:
-		 * GettingPaginatedData (chapter)
-		 * DisplayingLinksforPagination (chapter)
+		 * [GettingPaginatedData] (chapter)
+		 * [DisplayingLinksforPagination] (chapter)
 		 * [paginationHasPrevious paginationHasPrevious()] (function)
 		 * [paginationHasNext paginationHasNext()] (function)
 		 * [paginationTotalPages paginationTotalPages()] (function)
@@ -103,8 +103,8 @@
 		</cfif>
 
 		RELATED:
-		 * GettingPaginatedData (chapter)
-		 * DisplayingLinksforPagination (chapter)
+		 * [GettingPaginatedData] (chapter)
+		 * [DisplayingLinksforPagination] (chapter)
 		 * [paginationLinks paginationLinks()] (function)
 		 * [paginationHasNext paginationHasNext()] (function)
 		 * [paginationTotalPages paginationTotalPages()] (function)
@@ -129,8 +129,8 @@
 		</cfif>
 
 		RELATED:
-		 * GettingPaginatedData (chapter)
-		 * DisplayingLinksforPagination (chapter)
+		 * [GettingPaginatedData] (chapter)
+		 * [DisplayingLinksforPagination] (chapter)
 		 * [paginationLinks paginationLinks()] (function)
 		 * [paginationHasPrevious paginationHasPrevious()] (function)
 		 * [paginationTotalPages paginationTotalPages()] (function)
@@ -153,8 +153,8 @@
 		Showing page <cfoutput>#paginationCurrentPage()#</cfoutput> of <cfoutput>#paginationTotalPages()#</cfoutput> total.
 
 		RELATED:
-		 * GettingPaginatedData (chapter)
-		 * DisplayingLinksforPagination (chapter)
+		 * [GettingPaginatedData] (chapter)
+		 * [DisplayingLinksforPagination] (chapter)
 		 * [paginationLinks paginationLinks()] (function)
 		 * [paginationHasPrevious paginationHasPrevious()] (function)
 		 * [paginationHasNext paginationHasNext()] (function)
@@ -173,8 +173,8 @@
 		<cfoutput>#paginationTotalRecords()#</cfoutput>
 
 		RELATED:
-		 * GettingPaginatedData (chapter)
-		 * DisplayingLinksforPagination (chapter)
+		 * [GettingPaginatedData] (chapter)
+		 * [DisplayingLinksforPagination] (chapter)
 		 * [paginationLinks paginationLinks()] (function)
 		 * [paginationHasPrevious paginationHasPrevious()] (function)
 		 * [paginationHasNext paginationHasNext()] (function)
@@ -193,8 +193,8 @@
 		Showing page <cfoutput>#paginationCurrentPage()#</cfoutput> of <cfoutput>#paginationTotalPages()#</cfoutput> total.
 
 		RELATED:
-		 * GettingPaginatedData (chapter)
-		 * DisplayingLinksforPagination (chapter)
+		 * [GettingPaginatedData] (chapter)
+		 * [DisplayingLinksforPagination] (chapter)
 		 * [paginationLinks paginationLinks()] (function)
 		 * [paginationHasPrevious paginationHasPrevious()] (function)
 		 * [paginationHasNext paginationHasNext()] (function)

@@ -1,158 +1,230 @@
-<cffunction name="linkTo" returntype="any" access="public" output="false">
-	<cfargument name="url" type="any" required="false" default="">
-	<cfargument name="text" type="any" required="false" default="">
-	<cfargument name="confirm" type="any" required="false" default="">
-	<!--- Accepts URLFor arguments --->
-	<cfset var loc = {}>
-	<cfset arguments.$namedArguments = "url,text,confirm,controller,action,id,anchor,onlyPath,host,protocol,params">
-	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
+<cffunction name="linkTo" returntype="string" access="public" output="false" hint="View, Helper, Creates a link to another page in your application or externally. Pass in a route name to use your configured routes, controller/action/id to use that Wheels convention or the URL itself.">
+	<cfargument name="url" type="string" required="false" default="" hint="If linking to a direct URL, pass in that URL here. This is especially useful for external links or links to non-Wheels application pages. The URL can be absolute, document relative, or site root relative.">
+	<cfargument name="text" type="string" required="false" default="" hint="The text content of the link. For all intents and purposes, the blue underlined text.">
+	<cfargument name="confirm" type="string" required="false" default="" hint="Pass a message here to cause a JavaScript confirmation dialogue box to pop up containing the message.">
+	<cfargument name="route" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="action" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="id" type="numeric" required="false" default="0" hint="See documentation for URLFor">
+	<cfargument name="params" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="See documentation for URLFor">
+	<cfargument name="host" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="protocol" type="string" required="false" default="" hint="See documentation for URLFor">
 
-	<cfif Len(arguments.url) IS NOT 0>
-		<cfset loc.href = arguments.url>
-	<cfelse>
-		<cfset loc.href = URLFor(argumentCollection=arguments)>
-	</cfif>
+	<!---
+		EXAMPLES:
+		#linkTo(text="Log Out", controller="account", action="logOut")#
+		-> <a href="/account/logout">Log Out</a>
 
-	<cfif Len(arguments.text) IS 0>
-		<cfset arguments.text = loc.href>
-	</cfif>
+		#linkTo(text="Log Out", action="logOut")#
+		-> <a href="/account/logout">Log Out</a> (if you're already in the "account" controller Wheels will assume that's where you want the link to go.)
 
-	<cfif Len(arguments.confirm) IS NOT 0>
-		<cfset loc.confirm = " onclick=""return confirm('#arguments.confirm#')"" ">
-	<cfelse>
-		<cfset loc.confirm = "">
-	</cfif>
+		#linkTo(text="View Post", controller="blog" action="post", id=99)#
+		-> <a href="/blog/post/99">View Post</a>
 
-	<cfset loc.result = "<a href=""#loc.href#""#loc.confirm##loc.attributes#>#arguments.text#</a>">
+		#linkTo(text="View Settings", action="settings", params="show=all&sort=asc")#
+		-> <a href="/account/settings?show=all&sort=asc">View Settings</a>
 
-	<cfreturn loc.result>
+		#linkTo(text="Joe's Profile", route="userProfile", userName="joe")#
+		-> <a href="/user/joe">Joe's Profile</a> (given that a "userProfile" route has been configured in "config/routes.cfm".)
+
+		#linkTo(url="http://www.google.com", text="Google")#
+		-> <a href="http://www.google.com">Google</a>
+
+		#linkTo("http://www.google.com")#
+		-> <a href="http://www.google.com">http://www.google.com</a> (When leaving out the text argument Wheels will use the link as the text as well.)
+
+		RELATED:
+		 * [linkingPages] (chapter)
+		 * [buttonTo buttonTo()] (function)
+		 * [linkToUnlessCurrent linkToUnlessCurrent()] (function)
+		 * [URLFor URLFor()] (function)
+	--->
+
+	<cfscript>
+		var loc = {};
+		arguments.$namedArguments = "url,text,confirm,route,controller,action,id,params,anchor,onlyPath,host,protocol";
+		loc.attributes = $getAttributes(argumentCollection=arguments);
+		if (Len(arguments.url) IS NOT 0)
+			loc.href = arguments.url;
+		else
+			loc.href = URLFor(argumentCollection=arguments);
+		if (Len(arguments.text) IS 0)
+			arguments.text = loc.href;
+		if (Len(arguments.confirm) IS NOT 0)
+			loc.confirm = " onclick=""return confirm('#arguments.confirm#')"" ";
+		else
+			loc.confirm = "";
+		loc.returnValue = "<a href=""" & loc.href & """" & loc.confirm & loc.attributes & ">" & arguments.text & "</a>";
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="buttonTo" returntype="any" access="public" output="false">
-	<cfargument name="url" type="any" required="false" default="">
-	<cfargument name="text" type="any" required="false" default="">
-	<cfargument name="confirm" type="any" required="false" default="">
-	<cfargument name="disable" type="any" required="false" default="">
-	<cfargument name="source" type="any" required="false" default="">
-	<!--- Accepts URLFor arguments --->
-	<cfset var loc = {}>
-	<cfset arguments.$namedArguments = "url,text,confirm,disable,source,controller,action,id,anchor,onlyPath,host,protocol,params">
-	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
+<cffunction name="buttonTo" returntype="string" access="public" output="false" hint="View, Helper, Creates a form containing a single button that submits to the URL. The URL is built the same way as the linkTo function.">
+	<cfargument name="url" type="string" required="false" default="" hint="If linking to a direct URL, pass in that URL here.">
+	<cfargument name="text" type="string" required="false" default="" hint="The text content of the link.">
+	<cfargument name="confirm" type="string" required="false" default="" hint="Pass a message here to cause a JavaScript confirmation dialogue box to pop up containing the message.">
+	<cfargument name="disable" type="any" required="false" default="" hint="Pass in true if you want the button to be disabled when clicked (can help prevent multiple clicks). Pass in a string if you want the button disabled and the text on the button updated (to 'please wait...' for example).">
+	<cfargument name="source" type="string" required="false" default="" hint="If you want to use an image for the button pass in the link to it here (relative from the /images/ folder).">
+	<cfargument name="route" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="action" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="id" type="numeric" required="false" default="0" hint="See documentation for URLFor">
+	<cfargument name="params" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="See documentation for URLFor">
+	<cfargument name="host" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="protocol" type="string" required="false" default="" hint="See documentation for URLFor">
 
-	<cfif Len(arguments.url) IS NOT 0>
-		<cfset loc.action = arguments.url>
-	<cfelse>
-		<cfset loc.action = URLFor(argumentCollection=arguments)>
-	</cfif>
+	<!---
+		EXAMPLES:
+		#buttonTo(action="delete", disabled="Wait...")#
 
-	<!--- create the form tag --->
-	<cfset loc.result = "<form action=""#loc.action#"" method=""post""">
-	<cfif Len(arguments.confirm) IS NOT 0>
-		<cfset loc.result = loc.result & " onsubmit=""return confirm('#JSStringFormat(Replace(arguments.confirm, """", '&quot;', 'all'))#');""">
-	</cfif>
-	<cfset loc.result = loc.result & ">">
+		RELATED:
+		 * [linkingPages] (chapter)
+		 * [linkTo linkTo()] (function)
+		 * [URLFor URLFor()] (function)
+	--->
 
-	<!--- create the input tag --->
-	<cfset loc.result = loc.result & "<input">
-	<cfif Len(arguments.source) IS 0>
-		<cfset loc.result = loc.result & " type=""submit""">
-	<cfelse>
-		<cfset loc.result = loc.result & " type=""image"" src=""#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#""">
-	</cfif>
-	<cfif Len(arguments.text) IS NOT 0>
-		<cfset loc.result = loc.result & " value=""#arguments.text#""">
-	</cfif>
-	<cfif Len(arguments.disable) IS NOT 0>
-		<cfset loc.result = loc.result & " onclick=""this.disabled=true;">
-		<cfif Len(arguments.source) IS 0 AND NOT IsBoolean(arguments.disable)>
-			<cfset loc.result = loc.result & "this.value='#arguments.disable#';">
-		</cfif>
-		<cfset loc.result = loc.result & "this.form.submit();""">
-	</cfif>
-	<cfset loc.result = loc.result & "#loc.attributes# />">
-
-	<!--- create the closing form tag --->
-	<cfset loc.result = loc.result & "</form>">
-
-	<cfreturn loc.result>
+	<cfscript>
+		var loc = {};
+		arguments.$namedArguments = "url,text,confirm,disable,source,route,controller,action,id,params,anchor,onlyPath,host,protocol";
+		loc.attributes = $getAttributes(argumentCollection=arguments);
+		if (Len(arguments.url) IS NOT 0)
+			loc.action = arguments.url;
+		else
+			loc.action = URLFor(argumentCollection=arguments);
+		loc.returnValue = "<form";
+		loc.returnValue = loc.returnValue & " action=""#loc.action#"" method=""post""";
+		if (Len(arguments.confirm) != 0)
+			loc.returnValue = loc.returnValue & " onsubmit=""return confirm('#JSStringFormat(Replace(arguments.confirm, """", '&quot;', 'all'))#');""";
+		loc.returnValue = loc.returnValue & ">";
+		loc.returnValue = loc.returnValue & "<input";
+		if (Len(arguments.source) IS 0)
+			loc.returnValue = loc.returnValue & " type=""submit""";
+		else
+			loc.returnValue = loc.returnValue & " type=""image"" src=""#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#""";
+		if (Len(arguments.text) IS NOT 0)
+			loc.returnValue = loc.returnValue & " value=""#arguments.text#""";
+		if (Len(arguments.disable) IS NOT 0)
+		{
+			loc.returnValue = loc.returnValue & " onclick=""this.disabled=true;";
+			if (Len(arguments.source) IS 0 AND NOT IsBoolean(arguments.disable))
+				loc.returnValue = loc.returnValue & "this.value='#arguments.disable#';";
+			loc.returnValue = loc.returnValue & "this.form.submit();""";
+		}
+		loc.returnValue = loc.returnValue & "#loc.attributes# />";
+		loc.returnValue = loc.returnValue & "</form>";
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="mailTo" returntype="any" access="public" output="false">
-	<cfargument name="email" type="any" required="true">
-	<cfargument name="text" type="any" required="false" default="">
-	<cfargument name="encode" type="any" required="false" default="false">
-	<cfset var loc = {}>
+<cffunction name="mailTo" returntype="string" access="public" output="false" hint="View, Helper, Creates a mailto link tag to the specified email address, which is also used as the name of the link unless name is specified.">
+	<cfargument name="emailAddress" type="string" required="true" hint="The email address to link to.">
+	<cfargument name="name" type="string" required="false" default="" hint="A string to use as the link text ('Joe' or 'Support Department' for example)">
+	<cfargument name="encode" type="boolean" required="false" default="false" hint="Pass true here to encode the email address, making it harder for bots to harvest it.">
 
-	<cfset loc.linkToArguments = StructNew()>
-	<cfset loc.linkToArguments.url = "mailto:#arguments.email#">
-	<cfif Len(arguments.text) IS 0>
-		<cfset loc.linkToArguments.text = arguments.email>
-	<cfelse>
-		<cfset loc.linkToArguments.text = arguments.text>
-	</cfif>
-	<cfset loc.result = linkTo(argumentCollection=loc.linkToArguments)>
+	<!---
+		EXAMPLES:
+		#mailTo("support@mysite.com")#
 
-	<cfif arguments.encode>
-		<cfset loc.js = "document.write('#trim(loc.result)#');">
-		<cfset loc.encoded = "">
-		<cfloop from="1" to="#Len(loc.js)#" index="loc.i">
-			<cfset loc.encoded = loc.encoded & "%" & Right("0" & formatBaseN(asc(Mid(loc.js,loc.i,1)),16),2)>
-		</cfloop>
-		<cfset loc.result = "<script type=""text/javascript"" language=""javascript"">eval(unescape('#loc.encoded#'))</script>">
-	</cfif>
+		#mailTo(emailAddress="support@mysite.com", name="Website Support", encode=true)#
 
-	<cfreturn loc.result>
+		RELATED:
+		-
+	--->
+
+	<cfscript>
+		var loc = {};
+		loc.linkToArguments = {};
+		loc.linkToArguments.url = "mailto:#arguments.emailAddress#";
+		if (Len(arguments.name))
+			loc.linkToArguments.text = arguments.name;
+		else
+			loc.linkToArguments.text = arguments.emailAddress;
+		loc.returnValue = linkTo(argumentCollection=loc.linkToArguments);
+		if (arguments.encode)
+		{
+			loc.js = "document.write('#trim(loc.returnValue)#');";
+			loc.encoded = "";
+			loc.iEnd = Len(loc.js);
+			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+			{
+				loc.encoded = loc.encoded & "%" & Right("0" & formatBaseN(asc(Mid(loc.js,loc.i,1)),16),2);
+			}
+			loc.returnValue = "<script type=""text/javascript"" language=""javascript"">eval(unescape('#loc.encoded#'))</script>";
+
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="linkToUnlessCurrent" returntype="any" access="public" output="false">
-	<!--- accepts linkTo and URLFor arguments --->
-	<cfset var loc = {}>
-	<cfif isCurrentPage(argumentCollection=arguments)>
-		<cfset loc.result = arguments.text>
-	<cfelse>
-		<cfset loc.result = linkTo(argumentCollection=arguments)>
-	</cfif>
-	<cfreturn loc.result>
+<cffunction name="linkToUnlessCurrent" returntype="string" access="public" output="false" hint="View, Helper, Creates a link unless the current request URL is the same as the link you're trying to create. If it is the same, then only the text of the link is returned.">
+	<cfargument name="url" type="string" required="false" default="" hint="See documentation for linkTo">
+	<cfargument name="text" type="string" required="false" default="" hint="See documentation for linkTo">
+	<cfargument name="confirm" type="string" required="false" default="" hint="See documentation for linkTo">
+	<cfargument name="route" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="action" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="id" type="numeric" required="false" default="0" hint="See documentation for URLFor">
+	<cfargument name="params" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="See documentation for URLFor">
+	<cfargument name="host" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="protocol" type="string" required="false" default="" hint="See documentation for URLFor">
+
+	<!---
+		EXAMPLES:
+		#linkToUnlessCurrent(text="Back To Start", action="start")#
+
+		RELATED:
+		 * [linkingPages] (chapter)
+		 * [linkTo linkTo()] (function)
+	--->
+
+	<cfscript>
+		var loc = {};
+		if (isCurrentPage(argumentCollection=arguments))
+			loc.returnValue = arguments.text;
+		else
+			loc.returnValue = linkTo(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="isCurrentPage" returntype="boolean" access="public" output="false" hint="View, Helper, Tells you if the parameters passed in represent the current page.">
-	<cfargument name="route" type="string" required="false" default="" hint="Passed through to URLFor()">
-	<cfargument name="controller" type="string" required="false" default="" hint="Passed through to URLFor()">
-	<cfargument name="action" type="string" required="false" default="" hint="Passed through to URLFor()">
-	<cfargument name="id" type="numeric" required="false" default="0" hint="Passed through to URLFor()">
-	<cfargument name="params" type="string" required="false" default="" hint="Passed through to URLFor()">
-	<cfargument name="anchor" type="string" required="false" default="" hint="Passed through to URLFor()">
-	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="Passed through to URLFor()">
-	<cfargument name="host" type="string" required="false" default="" hint="Passed through to URLFor()">
-	<cfargument name="protocol" type="string" required="false" default="" hint="Passed through to URLFor()">
+	<cfargument name="route" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="action" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="id" type="numeric" required="false" default="0" hint="See documentation for URLFor">
+	<cfargument name="params" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="See documentation for URLFor">
+	<cfargument name="host" type="string" required="false" default="" hint="See documentation for URLFor">
+	<cfargument name="protocol" type="string" required="false" default="" hint="See documentation for URLFor">
 
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		-
-
 		EXAMPLES:
-		-
+		<cfif isCurrentPage(action="editUser")>
 
 		RELATED:
 		 * [linkToUnlessCurrent linkToUnlessCurrent()] (function)
 	--->
 
-	<cfset var loc = {}>
-	<cfset loc.newUrl = URLFor(argumentCollection=arguments)>
-	<cfset loc.currentUrl = cgi.script_name>
-	<cfif cgi.script_name IS NOT cgi.path_info>
-		<cfset loc.currentUrl = loc.currentUrl & cgi.path_info>
-	</cfif>
-	<cfset loc.currentUrl = Replace(loc.currentUrl, "rewrite.cfm/", "")>
-	<cfif Len(cgi.query_string) IS NOT 0>
-		<cfset loc.currentUrl = loc.currentUrl & "?" & cgi.query_string>
-	</cfif>
-	<cfif loc.currentUrl IS loc.newUrl OR loc.currentUrl IS "/index.cfm" AND loc.newUrl IS "/">
-		<cfreturn true>
-	<cfelse>
-		<cfreturn false>
-	</cfif>
+	<cfscript>
+		var loc = {};
+		loc.newUrl = URLFor(argumentCollection=arguments);
+		loc.currentUrl = cgi.script_name;
+		if (cgi.script_name IS NOT cgi.path_info)
+			loc.currentUrl = loc.currentUrl & cgi.path_info;
+		loc.currentUrl = Replace(loc.currentUrl, "rewrite.cfm/", "");
+		if (Len(cgi.query_string) IS NOT 0)
+			loc.currentUrl = loc.currentUrl & "?" & cgi.query_string;
+		if (loc.currentUrl IS loc.newUrl OR loc.currentUrl IS "/index.cfm" AND loc.newUrl IS "/")
+			loc.returnValue = true;
+		else
+			loc.returnValue = false;
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
