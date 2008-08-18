@@ -23,7 +23,7 @@ The [redirectTo redirectTo()] function also accepts a `URL` argument, which, whe
 
 ===Redirecting to the Referring URL===
 
-It's very common that all you want to do when a user submits a form is send them back to where they came from. (Think of a user posting a comment on a blog post and then being redirected back to view the post with their new comment visible as well.) For this, we have the `back` argument. Simply pass in `back=true` to `redirecTo`, and the user will be redirected back to the page they came from.
+It's very common that all you want to do when a user submits a form is send them back to where they came from. (Think of a user posting a comment on a blog post and then being redirected back to view the post with their new comment visible as well.) For this, we have the `back` argument. Simply pass in `back=true` to `redirectTo()`, and the user will be redirected back to the page they came from.
 
 A word of warning: the referring URL is retrieved from the `cgi.http_referer` value. If this value is is blank or comes from a different domain than the current one, the user will be redirected to the root of the website instead.
 
