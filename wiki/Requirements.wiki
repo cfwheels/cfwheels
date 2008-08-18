@@ -57,12 +57,18 @@ MVC is how Wheels structures your code for you. As you start working with Wheels
 
 Apologies to everyone still running on older versions of Adobe !ColdFusion... You're going to need to upgrade to *Adobe !ColdFusion 8.0.1*. The good news is that not only will you be able to run Wheels, you will also benefit from the tons of performance enhancements and cool new features that have been added to !ColdFusion 8. It really is worth the upgrade!
 
-If you prefer a free version of !ColdFusion you can also run Wheels on *Railo 3.0*.
+If you prefer a free version of !ColdFusion, you can also run Wheels on *Railo 3.0*.
+
+===Operating Systems===
 
 Your setup with Wheels can then can be installed on *Windows*, *Macintosh*, *Unix*, or *Linux* - they all work just fine.
 
+===Web Servers===
+
 You also need a web server. The web servers that we know work with Wheels are *Apache (2.2.6 or later)* and Microsoft *IIS (5.1 or later)*. There is no reason other web servers won't work though, so give it a try even if you're not using Apache or IIS (or if you're using a different version of Apache/IIS).
 
-Finally, to build any kind of meaningful website application, you will likely interact with a database. Currently supported databases are *SQL Server 7 or later* and *MySQL 5*. (Please note that MySQL 4 is not supported.)
+===Database Engines===
+
+Finally, to build any kind of meaningful website application, you will likely interact with a database. Currently supported databases are *SQL Server 7 or later*, *Oracle 10g or later*, and *MySQL 5*. (Please note that MySQL 4 is not supported.)
 
 Ok, hopefully this chapter didn't scare you too much and you can move on knowing that you have the basic knowledge needed, the software to run Wheels on, and a suitable project to start with.
