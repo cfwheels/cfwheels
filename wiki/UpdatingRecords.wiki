@@ -48,9 +48,7 @@ To cut down even more on lines of code, you can also combine the reading and sav
 
 ===The `updateById()` Method===
 
-Give the [updateById updateById()] method a primary key value (or several if you use composite keys) in the `id` argument, and it will update the corresponding record in your table with the properties you give it.
-
-You can pass in the properties either as named arguments or as a `struct` to the `properties` argument.
+Give the [updateById updateById()] method a primary key value (or several if you use composite keys) in the `id` argument, and it will update the corresponding record in your table with the properties you give it. You can pass in the properties either as named arguments or as a `struct` to the `properties` argument.
 
 This method returns the object with the primary key value you specified. If the object does not pass validation, it will be returned anyway, but nothing will be saved to the database.
 
