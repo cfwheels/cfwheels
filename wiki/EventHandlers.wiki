@@ -9,7 +9,7 @@ While it's perfectly possible to add your code directly to the `wheels/functions
 
 The general recommendation is to never touch any files in the `wheels` folder. OK, with that little warning out of the way, how does one go about using the CFML events?
 
-The answer is to use the `events` folder. There is a file in there for every single event that CFML triggers, so if you want some code executed on application start for example, just place your code in `onapplicationstart.cfm`, and Wheels will run it when your application starts.
+The answer is to use the `events` folder. There is a file in there for every single event that CFML triggers. So if you want some code executed on application start for example, just place your code in `onapplicationstart.cfm`, and Wheels will run it when your application starts.
 
 ==Wheels Includes Some Extra Bonus Events==
 
