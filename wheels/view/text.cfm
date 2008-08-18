@@ -71,7 +71,7 @@
 		}
 		else
 		{
-			loc.foundAt = ListFindNoCase(arguments.values, request.wheels.cycle[arguments.name])
+			loc.foundAt = ListFindNoCase(arguments.values, request.wheels.cycle[arguments.name]);
 			if (loc.foundAt IS ListLen(arguments.values))
 				loc.foundAt = 0;
 			request.wheels.cycle[arguments.name] = ListGetAt(arguments.values, loc.foundAt + 1);
