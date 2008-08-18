@@ -79,6 +79,8 @@ The `where` argument is used exactly as you specify it in the `WHERE` clause of 
 
 Unlike [updateById updateById()], the `updateAll()` method will not instantiate the objects by default. That could be really slow if you wanted to update a lot of records at once.
 
+An example:
+
 {{{
 <cfset recordsReturned = model("Post").updateAll(published=1, publishedAt=Now(), where="published=0")>
 }}}
