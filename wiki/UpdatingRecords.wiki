@@ -44,7 +44,7 @@ Example:
 
 ==Combine Reading and Updating into a Single Call==
 
-To cut down even more on lines of code, you can also combine the reading and saving of the objects by using the class-level methods, [updateById updateById()] and [updateAll updateAll()].
+To cut down even more on lines of code, you can also combine the reading and saving of the objects by using the class-level methods [updateById updateById()] and [updateAll updateAll()].
 
 ===The `updateById()` Method===
 
