@@ -1,0 +1,75 @@
+#summary linkTo([host,text,onlyPath,route,action,controller,anchor,params,protocol,id,url,confirm])
+#labels api,0.8,view,helper
+
+*Description*:
+
+Creates a link to another page in your application or externally. Pass in a route name to use your configured routes, controller/action/id to use that Wheels convention or the URL itself.
+
+*Return Type*:
+
+String
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *host* || string || false ||  || See documentation for URLFor ||
+|| *text* || string || false ||  || The text content of the link. For all intents and purposes, the blue underlined text. ||
+|| *onlyPath* || boolean || false || true || See documentation for URLFor ||
+|| *route* || string || false ||  || See documentation for URLFor ||
+|| *action* || string || false ||  || See documentation for URLFor ||
+|| *controller* || string || false ||  || See documentation for URLFor ||
+|| *anchor* || string || false ||  || See documentation for URLFor ||
+|| *params* || string || false ||  || See documentation for URLFor ||
+|| *protocol* || string || false ||  || See documentation for URLFor ||
+|| *id* || numeric || false || 0 || See documentation for URLFor ||
+|| *url* || string || false ||  || If linking to a direct URL, pass in that URL here. This is especially useful for external links or links to non-Wheels application pages. The URL can be absolute, document relative, or site root relative. ||
+|| *confirm* || string || false ||  || Pass a message here to cause a JavaScript confirmation dialogue box to pop up containing the message. ||
+
+
+
+*Examples*:
+
+{{{
+#linkTo(text="Log Out", controller="account", action="logOut")#
+-> <a href="/account/logout">Log Out</a>
+}}}
+
+{{{
+#linkTo(text="Log Out", action="logOut")#
+-> <a href="/account/logout">Log Out</a> (if you're already in the "account" controller Wheels will assume that's where you want the link to go.)
+}}}
+
+{{{
+#linkTo(text="View Post", controller="blog" action="post", id=99)#
+-> <a href="/blog/post/99">View Post</a>
+}}}
+
+{{{
+#linkTo(text="View Settings", action="settings", params="show=all&sort=asc")#
+-> <a href="/account/settings?show=all&sort=asc">View Settings</a>
+}}}
+
+{{{
+#linkTo(text="Joe's Profile", route="userProfile", userName="joe")#
+-> <a href="/user/joe">Joe's Profile</a> (given that a "userProfile" route has been configured in "config/routes.cfm".)
+}}}
+
+{{{
+#linkTo(url="http://www.google.com", text="Google")#
+-> <a href="http://www.google.com">Google</a>
+}}}
+
+{{{
+#linkTo("http://www.google.com")#
+-> <a href="http://www.google.com">http://www.google.com</a> (When leaving out the text argument Wheels will use the link as the text as well.)
+
+}}}
+
+*Related*:
+
+ * [linkingPages] (chapter)
+ * [buttonTo buttonTo()] (function)
+ * [linkToUnlessCurrent linkToUnlessCurrent()] (function)
+ * [URLFor URLFor()] (function)

@@ -1,0 +1,42 @@
+#summary linkToUnlessCurrent([host,text,onlyPath,route,action,controller,anchor,params,protocol,id,url,confirm])
+#labels api,0.8,view,helper
+
+*Description*:
+
+Creates a link unless the current request URL is the same as the link you're trying to create. If it is the same, then only the text of the link is returned.
+
+*Return Type*:
+
+String
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *host* || string || false ||  || See documentation for URLFor ||
+|| *text* || string || false ||  || See documentation for linkTo ||
+|| *onlyPath* || boolean || false || true || See documentation for URLFor ||
+|| *route* || string || false ||  || See documentation for URLFor ||
+|| *action* || string || false ||  || See documentation for URLFor ||
+|| *controller* || string || false ||  || See documentation for URLFor ||
+|| *anchor* || string || false ||  || See documentation for URLFor ||
+|| *params* || string || false ||  || See documentation for URLFor ||
+|| *protocol* || string || false ||  || See documentation for URLFor ||
+|| *id* || numeric || false || 0 || See documentation for URLFor ||
+|| *url* || string || false ||  || See documentation for linkTo ||
+|| *confirm* || string || false ||  || See documentation for linkTo ||
+
+
+
+*Examples*:
+
+{{{
+#linkToUnlessCurrent(text="Back To Start", action="start")#
+
+}}}
+
+*Related*:
+
+ * [linkingPages] (chapter)
+ * [linkTo linkTo()] (function)
