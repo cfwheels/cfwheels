@@ -13,7 +13,7 @@ All this takes time and resources on your web and database servers. Let's assume
 
 In `config/settings.cfm` and the environment specific settings files (`config/environments/design.cfm`, `config/environments/development.cfm`, etc), there are entire sections devoted to cache configuration. You don't really need to change anything in here though.
 
-If you leave everything to the defaults, caching will be optimized for the different environment modes (and set to have reasonable settings for cache size and culling). This means that all caching is off when working in design mode but on when in production mode.
+If you leave everything to the defaults, caching will be optimized for the different environment modes (and set to have reasonable settings for cache size and culling). This means that all caching is off when working in Design mode but on when in Production mode.
 
 Here are the values you can change and a description of what they do (starting with the `config/settings.cfm` file):
 
