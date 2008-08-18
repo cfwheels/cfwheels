@@ -19,12 +19,12 @@ Let's assume you have downloaded the latest official release. (Really, you shoul
 
 Getting an empty website running with Wheels installed is an easy process if you already know your way around IIS or Apache. Basically, you need to create a new website in your web server of choice and unzip the contents of the file into the root of it.
 
-In case your not sure, here are the instructions for setting up an empty Wheels site that can be accessed when typing `localhost` in your browser. The instructions refer to a system running Windows Server 2003 and IIS, but you should be able to follow along and apply the instructions with minor modifications to your system. (See the [Requirements requirements chapter] for a list of tested systems).
+In case you're not sure, here are the instructions for setting up an empty Wheels site that can be accessed when typing `http://localhost` in your browser. The instructions refer to a system running Windows Server 2003 and IIS, but you should be able to follow along and apply the instructions with minor modifications to your system. (See the [Requirements requirements chapter] for a list of tested systems).
 
  * Create a new folder under your web root (usually `C:\Inetpub\wwwroot`) named `mysite` and unzip the Wheels `.zip` file into the root of it.
  * Create a new website using IIS called `My Site` with `localhost` as the host header name and `C:\Inetpub\wwwroot\mysite` as the path to your home directory.
 
-If you want to run a Wheels powered application from a sub folder in an existing website, this is entirely possible, but you'll have to live with the fact that you can never turn on URL rewriting and get those pretty URLs (read more about this in the [URLRewriting URL Rewriting chapter]).
+If you want to run a Wheels powered application from a subfolder in an existing website, this is entirely possible, but you'll have to live with the fact that you can never turn on URL rewriting and get those pretty URLs. (Read more about this in the [URLRewriting URL Rewriting chapter].)
 
 ==3. Setup the Database==
 
