@@ -39,6 +39,8 @@
  * [ObjectCallbacks Object Callbacks]
  * [SoftDelete Soft Delete]
  * [AutomaticTimeStamps Automatic Time Stamps]
+ * Advanced Properties
+ * Locking Table Rows
 
 ==Displaying Views to Users==
 
