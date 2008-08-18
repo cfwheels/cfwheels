@@ -1,30 +1,34 @@
 #summary Hide your primary key values from nosy users.
 #labels chapter,0.8
 
-The Wheels convention of using an auto-incrementing integer value as the primary key in your database tables will lead to a lot of URLs on your website exposing this value. Using the built-in URL obfuscation functionality in Wheels you can hide this value from nosy users.
+The Wheels convention of using an auto-incrementing integer value as the primary key in your database tables will lead to a lot of URLs on your website exposing this value. Using the built-in URL obfuscation functionality in Wheels, you can hide this value from nosy users.
 
 ==What URL Obfuscation Does==
 
-When URL obfuscation is turned off (which is the default setting in Wheels) this is how a lot of your URLs will end up looking:
+When URL obfuscation is turned off (which is the default setting in Wheels), this is how a lot of your URLs will end up looking:
 
 {{{
 http://localhost/user/profile/99
 }}}
 
-Here `99` is the primary key value of a record in your `users` table. After turning on URL obfuscation this is how those URLs will look instead:
+Here `99` is the primary key value of a record in your `users` table.
+
+After turning on URL obfuscation, this is how those URLs will look instead:
 
 {{{
 http://localhost/user/profile/b7ab9a50
 }}}
 
-The value `99` has now been obfuscated by Wheels to `b7ab9a50`. This makes it harder for nosy users to substitute the value to see how many records are in your `users` table to name just one example.
+The value `99` has now been obfuscated by Wheels to `b7ab9a50`. This makes it harder for nosy users to substitute the value to see how many records are in your `users` table, to name just one example.
 
 ==How to Use it==
 
-To turn on URL obfuscation all you have to do is set `application.settings.obfuscateURLs` to `true` in the `config/settings.cfm` file. Once done Wheels will handle everything else. Obviously the main things Wheels does is obfuscate the primary key value when using the [linkTo linkTo()] function and deobfuscate it on the receiving end. It will also obfuscate all other params sent in to [linkTo linkTo()] as well as any value in a form sent using a `get` request.
+To turn on URL obfuscation, all you have to do is set `application.settings.obfuscateURLs` to `true` in the `config/settings.cfm` file.
 
-In some circumstances you will need to obfuscate and deobfuscate values yourself. If you link to pages without using the [linkTo linkTo()] function for example. In these cases you can use the [obfuscateParam obfuscateParam()] and [deObfuscateParam deObfuscateParam()] functions to do the job for you.
+Once you do that, Wheels will handle everything else. Obviously the main things Wheels does is obfuscate the primary key value when using the [linkTo linkTo()] function and deobfuscate it on the receiving end. Wheels will also obfuscate all other params sent in to [linkTo linkTo()] as well as any value in a form sent using a `get` request.
 
-==Is This Secure?==
+In some circumstances, you will need to obfuscate and deobfuscate values yourself if you link to pages without using the [linkTo linkTo()] function, for example. In these cases, you can use the [obfuscateParam obfuscateParam()] and [deObfuscateParam deObfuscateParam()] functions to do the job for you.
 
-No, this is *not* meant to secure your application in any way - it just obfuscates the values making casual observation harder, it does not encrypt them so keep that in mind when using this approach.
+==Is This Really Secure?==
+
+No, this is not meant to add a high level of security to your application. It just obfuscates the values, making casual observation harder. It does not encrypt values, so keep that in mind when using this approach.
