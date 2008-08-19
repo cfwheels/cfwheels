@@ -1,10 +1,10 @@
 <cffunction name="$controller" returntype="any" access="private" output="false">
 	<cfargument name="name" type="string" required="true">
-
+	<cfset arguments.name = capitalize(arguments.name)>
 	<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
    	<cflock name="controllerLock" type="exclusive" timeout="30">
 			<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
-				<cfset application.wheels.controllers[arguments.name] = CreateObject("component", "#application.wheels.controllerComponentPath#.#capitalize(arguments.name)#").$initControllerClass(arguments.name)>
+				<cfset application.wheels.controllers[arguments.name] = CreateObject("component", "#application.wheels.controllerComponentPath#.#arguments.name#").$initControllerClass(arguments.name)>
 			</cfif>
 		</cflock>
 	</cfif>
@@ -281,5 +281,6 @@
 
 <cffunction name="$createClass" returntype="any" access="private" output="false">
 	<cfargument name="name" type="string" required="true">
+	<cfset arguments.name = capitalize(arguments.name)>
 	<cfreturn CreateObject("component", "#application.wheels.modelComponentPath#.#arguments.name#").$initClass(arguments.name)>
 </cffunction>

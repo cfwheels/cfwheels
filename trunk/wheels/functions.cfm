@@ -91,7 +91,7 @@
 		<cfset application.wheels.databaseProductName = "None">
 		<cfset application.wheels.databaseVersion = "">
 	</cfif>
-	<cfset application.wheels.dispatch = CreateObject("component", "wheels.dispatch")>
+	<cfset application.wheels.dispatch = CreateObject("component", "wheels.Dispatch")>
 	<cfinclude template="../#application.wheels.eventPath#/onapplicationstart.cfm">
 </cffunction>
 
