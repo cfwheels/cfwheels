@@ -1,45 +1,68 @@
-#summary Let's get started and build our first Wheels application.
+#summary In this tutorial, we'll be writing a simple application to make sure we have Wheels installed properly and that everything is working properly. Along the way, you'll get to know some basics about how applications built on top of Wheels work.
 #labels tutorial
 
-=Getting Started=
+==Testing Your Install==
 
-Let's write a simple application to make sure we have Wheels installed properly and that everything is working. Along the way we'll get to know a little about how Wheels applications work.
+Let's make sure we're all on the same page. I'm going to assume that you've already [http://www.cfwheels.com/download downloaded the latest version of Wheels] and have it installed on your system. If you haven't done that, stop and read the [Installation Installation] chapter and get everything setup. It's okay, this web page will wait for you.
 
-*Let's make sure we're all on the same page*
-I'm going to assume that you've already downloaded the latest version of Wheels and have it installed on your system. If you haven't done that, stop and read the [Installation] chapter and get everything setup. It's okay, we'll wait for you...
-
-Okay, so you have Wheels installed and can see the Wheels welcome page as shown in figure 1 below. That wasn't that hard now, was it? 
+Okay, so you have Wheels installed and can see the Wheels congratulations page as shown in _Figure 1_ below. That wasn't that hard now, was it?
 
 http://cfwheels.googlecode.com/files/hello-world-0.8-fig-1.jpg
+_Figure 1: Wheels congratulations screen._
 
-*The Model-View-Controller Framework*
-I'm not trying to scare you off already by using some unfamiliar words but we need to take a brief look at the Model-View-Controller (MVC for short) framework in order to understand how Wheels works. At the very basic level a MVC framework breaks the components that make up an application into three distinct pieces with each piece having a very well defined role and responsibility. Imagine a football team where everyone tried to be the quarterback. Things would get pretty messy rather quickly. On a football team, or any team sport for that matter, each member of the team has a specific job and responsibility. 
+==The Role of MVC in Wheels==
 
-A Wheels application has three distinct players each with their own distinct roles and responsibilities. The players in this case are named Model, View, and Controller. Very original, I know. Anyway, the model is responsible for the data objects of your application. It generally will deal with your databases, if any, and contain your specific business rules that tells your application how to use that data. The View is responsible for the user interface of your application. It will build and present the web pages that make up your application. The Controller is the central command of your application. It defines and knows about the functions or actions your application can handle. These actions are generally the web requests initiated by the users of your application. The Controller's job is to listen for these actions, talk to the Model to get any data that is needed by the action, and then finally hand off the results to the View so the View can display a page for the user.
+Imagine a football team where everyone tries to be quarterback. Things would get pretty messy rather quickly. On a football team, or any team for that matter, each member should have a specific job and responsibility.
 
-Others have written entire volumes describing the MVC methodology and it's pros and cons. Some of these books are even great reads, but this high level understanding of the MVC methodology presented here is all you need to get starting using Wheels.
+Wheels helps clean up this mess by using a design pattern called _Model-View-Controller (MVC)_. Let's take a brief look at MVC and see how it helps organize your Wheels applications.
 
-*A little bit about Wheels URLs*
-We just finished a discussion about the MVC methodology so lets see how that relates to the URL of a Wheels application. Let's look at the URL below:
+At a basic level, a MVC framework like Wheels breaks your application into 3 distinct pieces, each having a well-defined role and responsibility. The 3 pieces are called models, views, and controllers. Pretty intuitive so far, eh?
 
-http://www.mywheelsapp.com/index.cfm/say/hello
+===Model Layer===
 
-In the URL above the _http://www.mywheelsapp.com/_ portion of the URL, defines the location of your application. This portion is similar to any other URL on the internet. Really not much to see here, so let's move on. The _index.cfm_ portion is the page that everything flows through. Again we're used to that already, so lets move on. The next portion is where the magic happens. After the page name we are used to seeing variables separated by ? and &. Wheels on the other hands uses what is commonly referred to as _pretty URLs_. Instead of using variables separated by ? and &, simple words are used to tell the application what to do. This portion of our URL defines which function within the application gets called by the URL. What's more, it identifies which function in a particular controller will get called by the URL. The URL above tells our application to go to the *say* controller and call the *hello* function. So this is how the URL of a Wheels application is related to the MVC methodology described above. 
+The *model* is responsible for the data objects of your application. In general, models interact with your databases and contain any specific business rules that tell your applications how to use that data.
 
-There is a way to make the URL even prettier by getting rid of the index.cfm page in the middle of the URL. So the above URL would become:
+===View Layer===
 
-http://www.mywheelsapp.com/say/hello
+The *view* is responsible for the user interface, or presentation layer, of your application. Views build and present the web pages and other interface elements that make up your application.
 
-There are ways to define the default action a controller calls if only the controller is specified in the URL and no action is specifically sent in. There is even a way to define the default controller and action that gets called if neither the controller nor the action are specifically defined.
+===Controller Layer===
 
-Some of you may be raising an eyebrow about the 85 in the URL shown in figure 1 above. That just has to do with the way I have Wheels installed on my local development server. It is not a requirement of Wheels. In fact Wheels will work on any port you configure your web server on. Wheels will also work in directories off the root. Earlier versions of Wheels required the application to be installed at the root of the web server. This was difficult for some developers to achieve, so they found it hard to use Wheels at all. About the only feature you give up by running in a sub directory off the web server root is the ability to get rid of the index.cfm in the URL. 
+The *controller* is the central command of your application. Controllers define and know about the functions or actions that your application can handle. These actions are generally the web requests initiated by the users by invoking URLs. A controller's job is to listen for these actions, interact with the model to get any data that is needed by the action, and then finally hand off the data to the view so it can display a page for the user.
 
-=Hello Wheels=
+Others have written entire volumes describing the MVC pattern and its pros and cons. Some of these books are great reads, but this high level understanding of MVC should be all that you need in order to get starting using Wheels.
 
-Okay, let's get to some code. If you're like me when you pick up a new programming environment you're dying to get your hands on some code. Well your wait is over. Let's role up our sleeves and get our hands a little dirty. What are we going to build you may be asking? Well, I feel obligated to create the ubiquitous Hello World! application, but we'll add some Wheels magic along the way. So let's get started.
+==URLs in Wheels==
 
-*Our First Controller*
-When you download Wheels it comes with a Sample controller which displays the Welcome to Wheels screen. We'll create a controller from scratch here to show how easy it is to setup a controller and plug it into the Wheels framework. Let's create a file called Say.cfc in the *controllers* directory and add the code below to the file.
+The built-in URL-rewriting functionality of Wheels helps you create friendly, search engine safe URLs. No more are the days of URLs polluted with question marks, ampersands, and equals signs!
+
+Consider the URL below:
+
+{{{
+http://www.example.com/say/hello
+}}}
+
+Like all URLs that you're familiar with, the `http://www.example.com/` portion of the URL defines the domain or server name of your application. This portion is similar to any other URL on the Web. Really not much to see here, so let's move on.
+
+The next portion is where the magic happens.
+
+In other ColdFusion frameworks, we're used to seeing variables separated by `?` and `&`. With Fusebox, for example, we'd probably see a URL like `http://www.example.com/index.cfm?fuseaction=say.hello`. Yuck.
+
+Wheels, on the other hand, uses _URL rewriting_. Instead of specifying variables by separating them with `?` and `&`, the different variables are passed to the application as folder names.
+
+Our example URL defines which components and methods within the application get called by the URL. The example URL above tells our application to execute the `say` controller and call the `hello` action within that controller. So this is how the URL of a Wheels application maps to the parts of the MVC pattern described above.
+
+==Hello World: Your First Wheels App==
+
+Okay, let's get to some example code. We know that you've been dying to get your hands on some code!
+
+To continue with Programming Tutorial Tradition, we'll create the ubiquitous _Hello World!_ application. But to keep things interesting, let's add a little Wheels magic along the way.
+
+===Setting up the Controller===
+
+Let's create a controller from scratch to illustrate how easy it is to set up a controller and plug it into the Wheels framework.
+
+First, create a file called `say.cfc` in the `controller` directory and add the code below to the file.
 
 {{{
 <cfcomponent extends="Controller">
@@ -47,88 +70,117 @@ When you download Wheels it comes with a Sample controller which displays the We
 </cfcomponent>
 }}}
 
-Congratulations, you just created your first Wheels controller. What does this controller do, you might ask? Well, to be honest, not much. It has no functions defined so it doesn't add any new functionality to our Wheels application but since it extends the base controller class it inherits quite a bit of functionality and is now tied into our Wheels application. So what happens if we try to call our new controller right now? Lets see! Open your browser and point your browser to the new controller. Since my server is installed on port 85 my URL is http://localhost:85/index.cfm/say. You may have to change this URL depending on where your Wheels application is installed.
+Congratulations, you just created your first Wheels controller! What does this controller do, you might ask? Well, to be honest, not much. It has no functions defined so it doesn't add any new functionality to our Wheels application. But because it extends the base `controller` component, it inherits quite a bit of powerful functionality and is now tied into our Wheels application.
 
-If you did everything right, you will get an error from Wheels as shown in Figure 2 below.
+So what happens if we try to call our new controller right now? Lets take a look! Open your browser and point your browser to the new controller. Because my server is installed on port 80, my URL is `http://localhost/say`. You may need to enter a different URL, depending on how your web server is configured.
+
+If you did everything right, you will get the Wheels error shown below in _Figure 2_. (Ironic that getting an error is doing something right, huh? Don't get used to it, buddy!)
 
 http://cfwheels.googlecode.com/files/hw.fig.2.jpg
+_Figure 2: Wheels error after setting up your blank `say` controller._
 
-The error says "There is no action named 'index'." Where did index come from? The URL we typed only specified a controller name and not any particular action within the controller. When an action is not specified Wheels assumes you we want the default action. Out of the box the default action is set to index, therefore Wheels is trying to find the index action and throws an error since it doesn't find it.
+The error says "There is no action named 'index'." Where did "index" come from? The URL we typed in only specified a controller name but no action. When an action is not specified in the URL, Wheels assumes that we want the _default action_. Out of the box, the default action in Wheels is set to `index`. So in our example, Wheels tried to find the `index` action within the say controller, and it threw an error because it couldn't find it.
 
-Now that we have our first controller created, lets extend it by adding our first action to it. We'll create a hello action in our say controller. Change your say controller so it looks like the code block below:
+===Setting up an Action===
+
+But let's jump ahead. Now that we have the controller created, let's add an action to it called `hello`. Change your `say` controller so it looks like the code block below:
 
 {{{
 <cfcomponent extends="Controller">
 
-	<cffunction name="hello">
-	</cffunction>
+    <cffunction name="hello">
+    </cffunction>
 
 </cfcomponent>
 }}}
 
-Now that we have added our first action to our controller lets call our action and see what we get. To call our hello action we simply add /hello to the end of the previous URL we used to call our say controller. So the complete URL will look like:
- 
-http://localhost:85/index.cfm/say/hello
+As you can see, we created an empty method named `hello`.
 
-Once again we get an error message. Although we have created the controller and added the hello action to it, we haven't created any view files. By default when a controller action is called Wheels will look for a view file with the same name as the controller function being called and will hand off the processing to the view to complete and display the user interface. In our case, Wheels tries to find a view file for our say/hello action and cannot find one so it throws an error.
+Now let's call our new action in the browser and see what we get. To call the `hello` action we simply add `/hello` to the end of the previous URL that we used to call our `say` controller:
 
-Let's remedy the situation and create our first view file. View files are simple CFML pages that handle the web pages of our application. By default the view files will have the same name as our controller actions and will be grouped into a directory under the views directory. This directory will have the same name as our controller. Have I confused you enough? Let's see what all this means. 
+{{{
+http://localhost/say/hello
+}}}
 
-Find the views directory in the root of your Wheels installation. There will be a few directories in there already. We will look at those later though. For now we need to create a new directory in the views directory called say. This is the same name as our controller we created above. Now inside the say directory create a file called hello.cfm. To the hello.cfm file add the following line of code:
+Once again, we get a ColdFusion error. Although we have created the controller and added the `hello` action to it, we haven't created the _view_.
+
+===Setting up the View===
+
+By default, when an action is called, Wheels will look for a view file with the same name as the action. It then hands off the processing to the view to display the user interface. In our case, Wheels tried to find a view file for our `say/hello` action and couldn't find one.
+
+Let's remedy the situation and create a view file. View files are simple CFML pages that handle the output of our application. In most cases, views will return HTML code to the brower. By default, the view files will have the same name as our controller actions and will be grouped into a directory under the `view` directory. This new directory will have the same name as our controller.
+
+Find the `view` directory in the root of your Wheels installation. There will be a few directories in there already. For now, we need to create a new directory in the `view` directory called `say`. This is the same name as the controller that we created above.
+
+Now inside the `say` directory, create a file called `hello.cfm`. In the `hello.cfm` file, add the following line of code:
 
 {{{
 <h1>Hello!<h1/>
 }}}
 
-Save your hello.cfm file and lets call our say/hello action once again. We have our first working Wheels page. your browser should look like figure 3 below.
+Save your `hello.cfm` file, and let's call our `say/hello` action once again. You have your first working Wheels page if your browser looks like _Figure 3_ below.
 
 http://cfwheels.googlecode.com/files/hw.fig.3.jpg
+_Figure 3: Your first working Wheels action._
 
-Congratulations you have just created your first functional Wheels page. Albeit it is a very simple page. Pat yourself on the back, go grab a snack and when you're ready lets go on and extend the functionality of our hello world application a little more. We will add some dynamic content to our hello action and add a second action to the application and then tie the two actions together. Let's get started.
+You have just created your first functional Wheels page, albeit it is a very simple one. Pat yourself on the back, go grab a snack, and when you're ready, let's go on and extend the functionality of our _Hello World!_ application a little more.
 
-First thing we are going to do is to add some dynamic content to our say/hello controller action. Modify your say controller so it looks like the code block below:
+==Adding Dynamic Content to Your View==
+
+We will add some simple dynamic content to our `hello` action and add a second action to the application. We'll then use some Wheels code to tie the 2 actions together. Let's get get to it!
 
 {{{
 <cfcomponent extends="Controller">
 	
-	<cffunction name="hello">
-		<cfset time = Now()>
-	</cffunction>
+    <cffunction name="hello">
+        <cfset time = Now()>
+    </cffunction>
 
 </cfcomponent>
 }}}
 
-All we are doing here is creating a variable called time and setting it's contents equal to the current server time using the basic ColdFusion Now() function. Next we will modify our say/hello.cfm view so it looks like the code block below so the variable we just created is displayed to the users.
+All we are doing here is creating a variable called `time` and setting its value to the current server time using the basic ColdFusion `Now()` function. When we do this, the variable becomes immediately available to our view code.
+
+Why not just set up this value directly in the view? If you think about it, maybe the logic behind the value of `time` may eventually change. What if eventually we want to display its value based on the user's time zone? What if later we decide to pull it from a web service instead? Remember, the controller is supposed to coordinate all of the data and business logic, not the view.
+
+===Displaying the Dynamic Content===
+
+Next, we will modify our `say/hello.cfm` view file so that it looks like the code block bellow. When we do this, the value will be displayed in the browser.
 
 {{{
 <h1>Hello!</h1>
 <p>Current time: <cfoutput>#time#</cfoutput></p>
 }}}
 
-Now let's call our say/hello action again using our browser. Your browser should look like figure 4 below.
+Now call your `say/hello` action again in your browser. Your browser should look like _Figure 4_ below.
 
 http://cfwheels.googlecode.com/files/hw.fig.4.jpg
+_Figure 4: Hello World with the current date and time._
 
-This simple example shows that any dynamic content created in a controller action is available to the corresponding view file. In our application we created a time variable in the say/hello controller action and display that variable in our say/hello view file. 
+This simple example showed that any dynamic content created in a controller action is available to the corresponding view file. In our application, we created a `time` variable in the `say/hello` controller action and display that variable in our `say/hello.cfm` view file.
 
-Now we will expand the functionality of our application once again by adding a second action to our say controller. If you feel adventurous go ahead and add a goodbye action to the say controller, then create a goodbye.cfm view file that displays a goodbye message to the user. We'll quickly go step by step and catch up with you.
+===Adding a Second Controller: Goodbye===
 
-Modify the the say controller file so it looks like the code block below.
+Now we will expand the functionality of our application once again by adding a second action to our `say` controller. If you feel adventurous, go ahead and add a `goodbye` action to the `say` controller on your own, then create a `goodbye.cfm` view file that displays a "Goodbye" message to the user. If you're not feeling that adventurous, we'll quickly go step by step.
+
+First, modify the the `say` controller file so that it looks like the code block below.
 
 {{{
 <cfcomponent extends="Controller">
 
-	<cffunction name="hello">
-		<cfset time = Now()>
-	</cffunction>
+    <cffunction name="hello">
+        <cfset time = Now()>
+    </cffunction>
 
-	<cffunction name="goodbye">
-	</cffunction>
+    <cffunction name="goodbye">
+    </cffunction>
 
 </cfcomponent>
 }}}
 
-Now go to the views/say directory and create a goodbye.cfm page. Add the following code to the goodbye.cfm page and save your goodbye.cfm page
+Now go to the `view/say` directory and create a `goodbye.cfm` page.
+
+Add the following code to the `goodbye.cfm` page and save it.
 
 {{{
 <h1>Goodbye!</h1>
@@ -136,13 +188,22 @@ Now go to the views/say directory and create a goodbye.cfm page. Add the followi
 
 If we did everything right, we should be able to call the new say/goodbye action using the following URL:
 
-http://localhost:85/index.cfm/say/goodbye
+{{{
+http://localhost/say/goodbye
+}}}
 
-Our browser should look like figure 5 below:
+Your browser should look like _Figure 5_ below:
 
 http://cfwheels.googlecode.com/files/hw.fig.5.jpg
+_Figure 3: Your new `goodbye` action._
 
-Now let's link our two actions together. We will do this by adding a link to the bottom of each of our pages to call the other page. Open the say/hello.cfm view file. We are going to add a line of code to the end of this file so our say/hello.cfm file should look like the code block below:
+===Linking to Other Actions===
+
+Now let's link our two actions together. We will do this by adding a link to the bottom of each page so that it calls the other page.
+
+====Linking Hello to Goodbye====
+
+Open the `say/hello.cfm` view file. We are going to add a line of code to the end of this file so our `say/hello.cfm` view file looks like the code block below:
 
 {{{
 <h1>Hello!</h1>
@@ -150,15 +211,20 @@ Now let's link our two actions together. We will do this by adding a link to the
 <p>Time to say <cfoutput>#linkTo(text="goodbye", action="goodbye")#?</cfoutput></p>
 }}}
 
-The linkTo() function is a built in Wheels function. Here we are passing two parameters to it. The first parameter is the text parameter which is the text that will be used in our hyper link. The second parameter is action and it defines the action within the current controller to build a URL to. By using the built in functions your application's main URL may change and even controllers and actions may get shifted around but you wont suffer from the dreaded dead link. Wheels will always create a valid link for you.
+The `linkTo()` function is a built-in Wheels function. In this case, we are passing 2 named parameters to it. The first parameter, `text`, is the text that will be displayed in the hyperlink. The second parameter, `action`, defines the action to point the link to. By using this built-in function, your application's main URL may change, and even controllers and actions may get shifted around, but you won't suffer from the dreaded dead link. Wheels will always create a valid link for you as long as you configure it correctly when you make infrastructure changes to your application.
 
-So once you have added the additional line of code to the end of the say/hello.cfm view file save your file and lets call the say/hello controller action from our browser. Your browser should look like figure 6 below.
+Once you have added the additional line of code to the end of the `say/hello.cfm` view file, save your file and call the `say/hello` action from your browser. Your browser should look like _Figure 6_ below.
 
 http://cfwheels.googlecode.com/files/hw.fig.6.jpg
+_Figure 6: Your `say/hello` action with a link to the `goodbye` action._
 
-You can see that although we didn't specify how to get to the goodbye action Wheels created a link for us and added an appropriate URL for the say/goodbye controller action to the link.
+You can see that Wheels created a link for us and added an appropriate URL for the `say/goodbye` action to the link.
 
-Let's complete our little app and add a corresponding link to the bottom of our say/goodbye.cfm view page. Open your say/goodbye.cfm view page and modify it so it looks like the code block below.
+====Linking Goodbye to Hello====
+
+Let's complete our little app and add a corresponding link to the bottom of our `say/goodbye.cfm` view page.
+
+Open your `say/goodbye.cfm` view page and modify it so it looks like the code block below.
 
 {{{
 <h1>Goodbye!</h1>
@@ -167,19 +233,13 @@ Let's complete our little app and add a corresponding link to the bottom of our 
 
 If you now call the goodbye action in your browser, your browser should look like figure 7 below.
 
+If you now call the say/goodbye action in your browser, your browser should look like Figure 7 below.
+
 http://cfwheels.googlecode.com/files/hw.fig.7.jpg
+_Figure 7: Your `say/goodbye` action with a link to the `hello` action._
 
-Now lets take a look at the concept of environments within a Wheels application. A wheels application has three environments. These are development, testing, and production. You as the developer can define variables that have different values in each environment. 
+==Much More to Learn==
 
-This is accomplished by modifying the three environments files in the config/environments directory. The three files are called development.cfm, testing.cfm, and production.cfm and correspond to the development, testing, and production environments. These files are a perfect place to define database or mail server related variables or any other variable or setting that needs to have a different value in each environment. 
+You now know enough to be dangerous with ColdFusion on Wheels. Look out! But there are many more powerful features to cover. You may have noticed that we haven't even talked about the M in MVC.
 
-Another key difference between the development and production environments is that, in development mode Wheels displays some debug information at the bottom of the page. You've seen this information in the figures above. Lets change our application into the production environment. We do this by modifying the config/environment.cfm file. Open this file and change the the environment to production. Your config/environment.cfm file should now look like the code block below.
-
- 
- 
- 
- 
- 
- 
- 
- 
+No worries. We will get there. And we think you will enjoy it.
