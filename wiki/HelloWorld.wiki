@@ -3,7 +3,7 @@
 
 =Getting Started=
 
-Let's write a simple application to make sure we have Wheels installed properly and that everything is working properly. Along the way we'll get to know a little about how Wheels applications work.
+Let's write a simple application to make sure we have Wheels installed properly and that everything is working. Along the way we'll get to know a little about how Wheels applications work.
 
 *Let's make sure we're all on the same page*
 I'm going to assume that you've already downloaded the latest version of Wheels and have it installed on your system. If you haven't done that, stop and read the [Installation] chapter and get everything setup. It's okay, we'll wait for you...
@@ -39,18 +39,17 @@ Some of you may be raising an eyebrow about the 85 in the URL shown in figure 1 
 Okay, let's get to some code. If you're like me when you pick up a new programming environment you're dying to get your hands on some code. Well your wait is over. Let's role up our sleeves and get our hands a little dirty. What are we going to build you may be asking? Well, I feel obligated to create the ubiquitous Hello World! application, but we'll add some Wheels magic along the way. So let's get started.
 
 *Our First Controller*
-When you download Wheels it comes with a Sample controller which displays the Welcome to Wheels screen. We'll create a controller from scratch here to show how easy it is to setup a controller and plug it into the Wheels framework. Let's create a file called say.cfc in the *controllers* directory and add the code below to the file.
+When you download Wheels it comes with a Sample controller which displays the Welcome to Wheels screen. We'll create a controller from scratch here to show how easy it is to setup a controller and plug it into the Wheels framework. Let's create a file called Say.cfc in the *controllers* directory and add the code below to the file.
 
 {{{
-<cfcomponent extends="controller">
+<cfcomponent extends="Controller">
 	
 </cfcomponent>
 }}}
 
-Congratulations you just created your first Wheels controller. What does this controller do, you might ask? Well, to be honest, not much. It has no functions defined so it doesn't add any new functionality to our Wheels application but since it extends the base controller class it inherits quite a bit of functionality and is now tied into our Wheels application. So what happens if we try to call our new controller right now? Lets see! Open your browser and point your browser to the new controller. Since my server is installed on port 85 my URL is http://localhost:85/index.cfm/say. You may have to change this URL depending on where your Wheels application is installed.
+Congratulations, you just created your first Wheels controller. What does this controller do, you might ask? Well, to be honest, not much. It has no functions defined so it doesn't add any new functionality to our Wheels application but since it extends the base controller class it inherits quite a bit of functionality and is now tied into our Wheels application. So what happens if we try to call our new controller right now? Lets see! Open your browser and point your browser to the new controller. Since my server is installed on port 85 my URL is http://localhost:85/index.cfm/say. You may have to change this URL depending on where your Wheels application is installed.
 
 If you did everything right, you will get an error from Wheels as shown in Figure 2 below.
-
 
 http://cfwheels.googlecode.com/files/hw.fig.2.jpg
 
@@ -59,7 +58,7 @@ The error says "There is no action named 'index'." Where did index come from? Th
 Now that we have our first controller created, lets extend it by adding our first action to it. We'll create a hello action in our say controller. Change your say controller so it looks like the code block below:
 
 {{{
-<cfcomponent extends="controller">
+<cfcomponent extends="Controller">
 
 	<cffunction name="hello">
 	</cffunction>
@@ -75,7 +74,7 @@ Once again we get an error message. Although we have created the controller and 
 
 Let's remedy the situation and create our first view file. View files are simple CFML pages that handle the web pages of our application. By default the view files will have the same name as our controller actions and will be grouped into a directory under the views directory. This directory will have the same name as our controller. Have I confused you enough? Let's see what all this means. 
 
-Find the views directory in the root of your Wheels installation. There will be a few directories in there already. We will look at the helpers and layouts directories in later examples. For now we need to create a new directory in the views directory called say. This is the same name as our controller we created above. Now inside the say directory create a file called hello.cfm. To the hello.cfm file add the following line of code:
+Find the views directory in the root of your Wheels installation. There will be a few directories in there already. We will look at those later though. For now we need to create a new directory in the views directory called say. This is the same name as our controller we created above. Now inside the say directory create a file called hello.cfm. To the hello.cfm file add the following line of code:
 
 {{{
 <h1>Hello!<h1/>
@@ -90,16 +89,16 @@ Congratulations you have just created your first functional Wheels page. Albeit 
 First thing we are going to do is to add some dynamic content to our say/hello controller action. Modify your say controller so it looks like the code block below:
 
 {{{
-<cfcomponent extends="controller">
+<cfcomponent extends="Controller">
 	
 	<cffunction name="hello">
-		<cfset time = now()>
+		<cfset time = Now()>
 	</cffunction>
 
 </cfcomponent>
 }}}
 
-All we are doing here is creating a variable called time and setting it's contents equal to the current server time using the basic ColdFusion now() function. Next we will modify our say/hello.cfm view so it looks like the code block bellow so the variable we just created is displayed to the users.
+All we are doing here is creating a variable called time and setting it's contents equal to the current server time using the basic ColdFusion Now() function. Next we will modify our say/hello.cfm view so it looks like the code block below so the variable we just created is displayed to the users.
 
 {{{
 <h1>Hello!</h1>
@@ -117,10 +116,10 @@ Now we will expand the functionality of our application once again by adding a s
 Modify the the say controller file so it looks like the code block below.
 
 {{{
-<cfcomponent extends="controller">
+<cfcomponent extends="Controller">
 
 	<cffunction name="hello">
-		<cfset time = now()>
+		<cfset time = Now()>
 	</cffunction>
 
 	<cffunction name="goodbye">
