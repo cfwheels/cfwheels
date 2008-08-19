@@ -10,7 +10,7 @@ I'm going to assume that you've already downloaded the latest version of Wheels 
 
 Okay, so you have Wheels installed and can see the Wheels welcome page as shown in figure 1 below. That wasn't that hard now, was it? 
 
-http://cfwheels.googlecode.com/files/hw.fig.1.jpg
+http://cfwheels.googlecode.com/files/hello-world-0.8-fig-1.jpg
 
 *The Model-View-Controller Framework*
 I'm not trying to scare you off already by using some unfamiliar words but we need to take a brief look at the Model-View-Controller (MVC for short) framework in order to understand how Wheels works. At the very basic level a MVC framework breaks the components that make up an application into three distinct pieces with each piece having a very well defined role and responsibility. Imagine a football team where everyone tried to be the quarterback. Things would get pretty messy rather quickly. On a football team, or any team sport for that matter, each member of the team has a specific job and responsibility. 
