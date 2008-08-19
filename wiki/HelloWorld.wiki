@@ -8,6 +8,7 @@ Let's make sure we're all on the same page. I'm going to assume that you've alre
 Okay, so you have Wheels installed and can see the Wheels congratulations page as shown in _Figure 1_ below. That wasn't that hard now, was it?
 
 http://cfwheels.googlecode.com/files/hello-world-0.8-fig-1.jpg
+
 _Figure 1: Wheels congratulations screen._
 
 ==The Role of MVC in Wheels==
@@ -77,6 +78,7 @@ So what happens if we try to call our new controller right now? Lets take a look
 If you did everything right, you will get the Wheels error shown below in _Figure 2_. (Ironic that getting an error is doing something right, huh? Don't get used to it, buddy!)
 
 http://cfwheels.googlecode.com/files/hw.fig.2.jpg
+
 _Figure 2: Wheels error after setting up your blank `say` controller._
 
 The error says "There is no action named 'index'." Where did "index" come from? The URL we typed in only specified a controller name but no action. When an action is not specified in the URL, Wheels assumes that we want the _default action_. Out of the box, the default action in Wheels is set to `index`. So in our example, Wheels tried to find the `index` action within the say controller, and it threw an error because it couldn't find it.
@@ -121,6 +123,7 @@ Now inside the `say` directory, create a file called `hello.cfm`. In the `hello.
 Save your `hello.cfm` file, and let's call our `say/hello` action once again. You have your first working Wheels page if your browser looks like _Figure 3_ below.
 
 http://cfwheels.googlecode.com/files/hw.fig.3.jpg
+
 _Figure 3: Your first working Wheels action._
 
 You have just created your first functional Wheels page, albeit it is a very simple one. Pat yourself on the back, go grab a snack, and when you're ready, let's go on and extend the functionality of our _Hello World!_ application a little more.
@@ -155,6 +158,7 @@ Next, we will modify our `say/hello.cfm` view file so that it looks like the cod
 Now call your `say/hello` action again in your browser. Your browser should look like _Figure 4_ below.
 
 http://cfwheels.googlecode.com/files/hw.fig.4.jpg
+
 _Figure 4: Hello World with the current date and time._
 
 This simple example showed that any dynamic content created in a controller action is available to the corresponding view file. In our application, we created a `time` variable in the `say/hello` controller action and display that variable in our `say/hello.cfm` view file.
@@ -195,6 +199,7 @@ http://localhost/say/goodbye
 Your browser should look like _Figure 5_ below:
 
 http://cfwheels.googlecode.com/files/hw.fig.5.jpg
+
 _Figure 3: Your new `goodbye` action._
 
 ===Linking to Other Actions===
@@ -216,6 +221,7 @@ The `linkTo()` function is a built-in Wheels function. In this case, we are pass
 Once you have added the additional line of code to the end of the `say/hello.cfm` view file, save your file and call the `say/hello` action from your browser. Your browser should look like _Figure 6_ below.
 
 http://cfwheels.googlecode.com/files/hw.fig.6.jpg
+
 _Figure 6: Your `say/hello` action with a link to the `goodbye` action._
 
 You can see that Wheels created a link for us and added an appropriate URL for the `say/goodbye` action to the link.
@@ -236,6 +242,7 @@ If you now call the goodbye action in your browser, your browser should look lik
 If you now call the say/goodbye action in your browser, your browser should look like Figure 7 below.
 
 http://cfwheels.googlecode.com/files/hw.fig.7.jpg
+
 _Figure 7: Your `say/goodbye` action with a link to the `hello` action._
 
 ==Much More to Learn==
