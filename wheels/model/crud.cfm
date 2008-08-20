@@ -935,7 +935,10 @@
 	<cfargument name="properties" type="any" required="true">
 	<cfargument name="persisted" type="boolean" required="true">
 	<cfargument name="row" type="numeric" required="false" default="1">
-	<cfreturn CreateObject("component", "#application.wheels.modelComponentPath#.#variables.wheels.class.name#").$initObject(name=variables.wheels.class.name, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row)>
+	<cfset var loc = {}>
+	<cfset loc.rootObject = "ModelObject">
+	<cfinclude template="../../root.cfm">
+	<cfreturn loc.rootObject>
 </cffunction>
 
 <cffunction name="$initObject" returntype="any" access="public" output="false">
