@@ -10,7 +10,7 @@ Wheels's built-in `linkTo()` function does all of the heavy lifting involved wit
 || *Argument* || *Description* ||
 || url || If linking to a direct URL, put that URL here. This is especially useful for external links or links to non-Wheels application pages. The URL can be absolute, document relative, or site root relative ||
 || text || The text content of the link. For all intents and purposes, he blue underlined text. ||
-|| confirm || Passing a message to this causes a JavaScript confirmation dialogue box to pop up containing the message. ||
+|| confirm || Passing a message to this causes a !JavaScript confirmation dialogue box to pop up containing the message. ||
 || route || If the link maps to a specific route that you have configured, pass the name here. ||
 || controller || Name of the controller to include in the link. Only needs to be specified if different than the current controller. ||
 || action || Name of the action that the link needs to point to. ||
@@ -37,10 +37,16 @@ The above code would generate this markup:
 
 ===Extreme Example===
 
-If we were to use of the parameters except for `route` and `url`, our code may look something like this:
+If we were to use of the parameters except for `route` and `url` (more on those later), our code may look something like this:
 
 {{{
-#linkTo()#
+#linkTo(text="Wheels Rocks!", controller="wheels", action="rocks", id=55, params="rocks=yes&referral=cfwheels.com", anchor="rockin", host="www.securesite.com", protocol="https", onlyPath=false)#
+}}}
+
+Which would generate this HTML:
+
+{{{
+<a href="https://www.securesite.com/wheels/rocks/55?rocks=yes&amp;referral=cfwheels.com#rockin">Wheels Rocks!</a>
 }}}
 
 ==Use the `linkTo()` Function for Portability==
