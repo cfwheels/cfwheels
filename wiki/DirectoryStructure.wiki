@@ -18,6 +18,7 @@ After downloading and unzipping Wheels, here's the directory structure that you 
  * index.cfm
  * !IsapiRewrite4.ini
  * rewrite.cfm
+ * root.cfm
 
 ==Quick Summary==
 
