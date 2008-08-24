@@ -1,7 +1,7 @@
 #summary Wheels does some magic to help you link to other pages within your app. Read on to learn why you'll rarely use an `<a>` tag ever again.
 #labels chapter,0.8
 
-==`linkTo()`, the Heart of Linking to Other Pages==
+==`linkTo()`, the Function for Linking to Other Pages==
 
 Wheels's built-in `linkTo()` function does all of the heavy lifting involved with linking the different pages of your application together. You'll generally be using `linkTo()` within your view code.
 
@@ -77,6 +77,28 @@ Which would generate this markup:
 
 {{{
 <a href="/cfide/administrator/index.cfm">ColdFusion Administrator</a>
+}}}
+
+==What If I Don't Have URL Rewriting Enabled?==
+
+Wheels will handle linking to pages without URL rewriting for you automatically. Let's pretend that you still have Wheels installed in your site root, but you do not have URL rewriting on. How you write your `linkTo()` call will not change:
+
+{{{
+#linkTo(text="This link still works", controller="company", action="contact", id=3)#
+}}}
+
+But Wheels will still correctly build the link markup:
+
+{{{
+<a href="/index.cfm/company/contact/3">This link still works</a>
+}}}
+
+===Linking in a Subfolder Deployment of Wheels===
+
+The same would be true if you had Wheels installed in a subfolder, thus eliminating your ability to use URL rewriting. The same `linkTo()` code above would generate this HTML if you had Wheels installed in a subfolder called `foo`:
+
+{{{
+<a href="/foo/index.cfm?controller=company&amp;action=contact&amp;id=3">This link still works</a>
 }}}
 
 ==Use the `linkTo()` Function for Portability==
