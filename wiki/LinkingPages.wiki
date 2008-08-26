@@ -8,8 +8,8 @@ Wheels's built-in `linkTo()` function does all of the heavy lifting involved wit
 `linkTo()` accepts the following arguments:
 
 || *Argument* || *Description* ||
-|| `url` || If linking to a direct URL, put that URL here. This is especially useful for external links or links to non-Wheels application pages. The URL can be absolute, document relative, or site root relative ||
-|| `text` || The text content of the link. For all intents and purposes, he blue underlined text. ||
+|| `url` || If linking to a direct URL, put that URL here. This is especially useful for external links or links to non-Wheels application pages. The URL can be absolute, document relative, or site root relative. ||
+|| `text` || The text content of the link. For all intents and purposes, the blue underlined text. ||
 || `confirm` || Passing a message to this causes a !JavaScript confirmation dialogue box to pop up containing the message. ||
 || `route` || If the link maps to a specific route that you have configured, pass the name here. ||
 || `controller` || Name of the controller to include in the link. Only needs to be specified if different than the current controller. ||
