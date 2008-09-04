@@ -129,13 +129,9 @@
 
 		if (!StructKeyExists(loc, "returnValue"))
 		{
-			// create a generic where clause for use in caching
-			loc.genericWhere = "";
-			if (Len(arguments.where))
-			{
-				loc.regex = "((=|<>|<|>|<=|>=|!=|!<|!>| LIKE) ?)(''|'.+?'()|([0-9]|\.)+()|\([0-9]+(,[0-9]+)*\))(($|\)| (AND|OR)))";
-				loc.genericWhere = REReplace(arguments.where, loc.regex, "\1?\8" , "all");
-			}
+			// make the where clause generic for use in caching
+			loc.originalWhere = arguments.where;
+			arguments.where = REReplace(arguments.where, variables.wheels.class.whereRegex, "\1?\8" , "all");
 
 			// get info from cache when available, otherwise create the generic select, from, where and order by clause
 			loc.queryShellKey = variables.wheels.class.name & $hashStruct(arguments);
@@ -145,40 +141,16 @@
 				loc.sql = [];
 				loc.sql = $addSelectClause(sql=loc.sql, select=arguments.select, include=arguments.include);
 				loc.sql = $addFromClause(sql=loc.sql, include=arguments.include);
-				loc.sql = $addWhereClause(sql=loc.sql, where=loc.genericWhere, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
+				loc.sql = $addWhereClause(sql=loc.sql, where=loc.originalWhere, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 				loc.sql = $addOrderByClause(sql=loc.sql, order=arguments.order, include=arguments.include);
 				$addToCache(loc.queryShellKey, loc.sql, 86400);
 			}
 
 			// add where clause parameters to the generic sql info
-			if (Len(arguments.where))
-			{
-				loc.start = 1;
-				loc.originalValues = [];
-				while (!StructKeyExists(loc, "temp") || ArrayLen(loc.temp.len) GT 1)
-				{
-					loc.temp = REFind(loc.regex, arguments.where, loc.start, true);
-					if (ArrayLen(loc.temp.len) GT 1)
-					{
-						loc.start = loc.temp.pos[4] + loc.temp.len[4];
-						ArrayAppend(loc.originalValues, ReplaceList(Chr(7) & Mid(arguments.where, loc.temp.pos[4], loc.temp.len[4]) & Chr(7), "#Chr(7)#(,)#Chr(7)#,#Chr(7)#','#Chr(7)#,#Chr(7)#"",""#Chr(7)#,#Chr(7)#", ",,,,,,"));
-					}
-				}
-
-				loc.pos = 0;
-				loc.iEnd = ArrayLen(loc.sql);
-				for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
-				{
-					if (IsStruct(loc.sql[loc.i]))
-					{
-						loc.pos = loc.pos + 1;
-						loc.sql[loc.i].value = loc.originalValues[loc.pos];
-					}
-				}
-			}
+			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=loc.originalWhere);
 
 			// return existing query result if it has been run already in current request, otherwise pass off the sql array to the query
-			loc.queryKey = "wheels" & variables.wheels.class.name & $hashStruct(arguments);
+			loc.queryKey = "wheels" & variables.wheels.class.name & $hashStruct(arguments) & loc.originalWhere;
 			if (!arguments.reload && StructKeyExists(request, loc.queryKey))
 			{
 				loc.findAll = request[loc.queryKey];
@@ -307,6 +279,9 @@
 		var loc = {};
 		if (Len(arguments.where))
 		{
+			<!--- make the where clause generic --->
+			arguments.where = REReplace(arguments.where, variables.wheels.class.whereRegex, "\1?\8" , "all");
+
 			// setup an array containing class info for current class and all the ones that should be included
 			loc.classes = [];
 			if (Len(arguments.include))
@@ -386,6 +361,40 @@
 			ArrayAppend(arguments.sql, "#variables.wheels.class.tableName#.#variables.wheels.class.softDeleteColumn# IS NULL");
 			if (Len(arguments.where))
 				ArrayAppend(arguments.sql, ")");
+		}
+	</cfscript>
+	<cfreturn arguments.sql>
+</cffunction>
+
+<cffunction name="$addWhereClauseParameters" returntype="array" access="private" output="false">
+	<cfargument name="sql" type="array" required="true">
+	<cfargument name="where" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		if (Len(arguments.where))
+		{
+			loc.start = 1;
+			loc.originalValues = [];
+			while (!StructKeyExists(loc, "temp") || ArrayLen(loc.temp.len) GT 1)
+			{
+				loc.temp = REFind(variables.wheels.class.whereRegex, arguments.where, loc.start, true);
+				if (ArrayLen(loc.temp.len) GT 1)
+				{
+					loc.start = loc.temp.pos[4] + loc.temp.len[4];
+					ArrayAppend(loc.originalValues, ReplaceList(Chr(7) & Mid(arguments.where, loc.temp.pos[4], loc.temp.len[4]) & Chr(7), "#Chr(7)#(,)#Chr(7)#,#Chr(7)#','#Chr(7)#,#Chr(7)#"",""#Chr(7)#,#Chr(7)#", ",,,,,,"));
+				}
+			}
+
+			loc.pos = 0;
+			loc.iEnd = ArrayLen(arguments.sql);
+			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+			{
+				if (IsStruct(arguments.sql[loc.i]))
+				{
+					loc.pos = loc.pos + 1;
+					arguments.sql[loc.i].value = loc.originalValues[loc.pos];
+				}
+			}
 		}
 	</cfscript>
 	<cfreturn arguments.sql>
@@ -649,6 +658,7 @@
 				ArrayAppend(loc.sql, loc.param);
 			}
 			loc.sql = $addWhereClause(sql=loc.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
+			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=arguments.where);
 			loc.upd = application.wheels.adapter.query(sql=loc.sql, parameterize=arguments.parameterize);
 			loc.returnValue = loc.upd.result.recordCount;
 		}
@@ -721,6 +731,7 @@
 			loc.sql = [];
 			loc.sql = $addDeleteClause(sql=loc.sql);
 			loc.sql = $addWhereClause(sql=loc.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
+			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=arguments.where);
 			loc.del = application.wheels.adapter.query(sql=loc.sql, parameterize=arguments.parameterize);
 			loc.returnValue = loc.del.result.recordCount;
 		}
