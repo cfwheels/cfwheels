@@ -114,13 +114,13 @@
 		loc.excerptStringStart = arguments.excerptString;
 		loc.excerptStringEnd = arguments.excerptString;
 		loc.start = loc.pos - arguments.radius;
-		if (loc.start <= 0)
+		if (loc.start LTE 0)
 		{
 			loc.start = 1;
 			loc.excerptStringStart = "";
 		}
 		loc.count = Len(arguments.phrase) + (arguments.radius*2);
-		if (loc.count > (Len(arguments.text)-loc.start))
+		if (loc.count GT (Len(arguments.text)-loc.start))
 			loc.excerptStringEnd = "";
 		loc.returnValue = loc.excerptStringStart & Mid(arguments.text, loc.start, loc.count) & loc.excerptStringEnd;
 	}
@@ -349,7 +349,7 @@
 
 	<cfscript>
 		var loc = {};
-		if (Len(arguments.text) > arguments.length)
+		if (Len(arguments.text) GT arguments.length)
 			loc.returnValue = Left(arguments.text, arguments.length-Len(arguments.truncateString)) & arguments.truncateString;
 		else
 			loc.returnValue = arguments.text;
