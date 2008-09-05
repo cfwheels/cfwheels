@@ -279,7 +279,7 @@
 		var loc = {};
 		if (Len(arguments.where))
 		{
-			<!--- make the where clause generic --->
+			// make the where clause generic
 			arguments.where = REReplace(arguments.where, variables.wheels.class.whereRegex, "\1?\8" , "all");
 
 			// setup an array containing class info for current class and all the ones that should be included
