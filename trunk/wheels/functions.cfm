@@ -29,7 +29,6 @@
 		<cfset loc.folder = ListDeleteAt(loc.folder, ListLen(loc.folder, "."), ".")>
 		<cfset loc.folder = Replace(loc.folder, "www.", "")>
 		<cfset loc.folder = Replace(loc.folder, ".co", "")>
-		<cfset ListLast(loc.folder, ".") >
 		<cfset loc.root = this.rootDir & loc.folder & "/">
 		<cfset loc.path = loc.folder & "/">
 		<cfset loc.componentPath = loc.folder & ".">
