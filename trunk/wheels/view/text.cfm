@@ -111,24 +111,32 @@
 	loc.pos = FindNoCase(arguments.phrase, arguments.text, 1);
 	if (loc.pos != 0)
 	{
-		loc.excerptStringStart = arguments.excerptString;
-		loc.excerptStringEnd = arguments.excerptString;
-		loc.start = loc.pos - arguments.radius;
-		if (loc.start LTE 0)
+		if ((loc.pos-arguments.radius) < 1)
 		{
-			loc.start = 1;
-			loc.excerptStringStart = "";
+			loc.startPos = 1;
+			loc.truncateStart = "";
 		}
-		loc.count = Len(arguments.phrase) + (arguments.radius*2);
-		if (loc.count GT (Len(arguments.text)-loc.start))
-			loc.excerptStringEnd = "";
-		loc.returnValue = loc.excerptStringStart & Mid(arguments.text, loc.start, loc.count) & loc.excerptStringEnd;
+		else
+		{
+			loc.startPos = loc.pos - arguments.radius;
+			loc.truncateStart = arguments.excerptString;
+		}
+		if ((loc.pos+Len(arguments.phrase)+arguments.radius) > Len(arguments.text))
+		{
+			loc.endPos = Len(arguments.text);
+			loc.truncateEnd = "";
+		}
+		else
+		{
+			loc.endPos = loc.pos + arguments.radius;
+			loc.truncateEnd = arguments.excerptString;
+		}
+		loc.returnValue = loc.truncateStart & Mid(arguments.text, loc.startPos, ((loc.endPos+Len(arguments.phrase))-(loc.startPos))) & loc.truncateEnd;
 	}
 	else
 	{
 		loc.returnValue = "";
 	}
-
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
