@@ -1,4 +1,4 @@
-#summary pluralize(text)
+#summary pluralize(word[returnCount,count])
 #labels api,0.8,view,helper
 
 *Description*:
@@ -14,7 +14,9 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *text* || string || true ||  || String to pluralize. ||
+|| *returnCount* || boolean || false || true || Will return the count prepended to the pluralization when true and count is not -1. ||
+|| *word* || string || true ||  || The word to pluralize. ||
+|| *count* || numeric || false || -1 || Pluralization will occur when this value is not 1. ||
 
 
 
@@ -23,6 +25,10 @@ String
 {{{
 #pluralize("person")#
 -> people
+}}}
+
+{{{
+Your search returned #pluralize(word="person", count=users.recordCount)#.
 
 }}}
 

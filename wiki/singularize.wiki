@@ -1,4 +1,4 @@
-#summary singularize(text)
+#summary singularize(word)
 #labels api,0.8,view,helper
 
 *Description*:
@@ -14,7 +14,7 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *text* || string || true ||  || String to singularize. ||
+|| *word* || string || true ||  || String to singularize. ||
 
 
 

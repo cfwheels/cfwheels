@@ -71,5 +71,4 @@ String
 
  * [linkingPages] (chapter)
  * [buttonTo buttonTo()] (function)
- * [linkToUnlessCurrent linkToUnlessCurrent()] (function)
  * [URLFor URLFor()] (function)

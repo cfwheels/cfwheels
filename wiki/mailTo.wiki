@@ -33,4 +33,4 @@ String
 
 *Related*:
 
--
+ * [linkTo linkTo()] (function)

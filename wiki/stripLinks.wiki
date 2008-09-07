@@ -1,9 +1,9 @@
-#summary stripLinks(text)
+#summary stripLinks(html)
 #labels api,0.8,view,helper
 
 *Description*:
 
-Removes all links from the text (leaving just the link text).
+Removes all links from the html (leaving just the link text).
 
 *Return Type*:
 
@@ -14,7 +14,7 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *text* || string || true ||  || The text to remove links from. ||
+|| *html* || string || true ||  || The html to remove links from. ||
 
 
 

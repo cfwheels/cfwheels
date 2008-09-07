@@ -1,4 +1,4 @@
-#summary titleize(text)
+#summary titleize(word)
 #labels api,0.8,view,helper
 
 *Description*:
@@ -14,7 +14,7 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *text* || string || true ||  || The text to turn into a title. ||
+|| *word* || string || true ||  || The text to turn into a title. ||
 
 
 

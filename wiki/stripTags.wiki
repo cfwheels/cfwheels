@@ -1,9 +1,9 @@
-#summary stripTags(text)
+#summary stripTags(html)
 #labels api,0.8,view,helper
 
 *Description*:
 
-Removes all tags from the text.
+Removes all tags from the html.
 
 *Return Type*:
 
@@ -14,7 +14,7 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *text* || string || true ||  || The text to remove links from. ||
+|| *html* || string || true ||  || The html to remove links from. ||
 
 
 
