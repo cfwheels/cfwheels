@@ -1,0 +1,38 @@
+#summary includePartial(name[cache])
+#labels api,0.8,view,helper
+
+*Description*:
+
+Includes a specified file.
+
+*Return Type*:
+
+Any
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *name* || any || true ||  || The name to the file to be included (starting with an optional path and with the underscore excluded). When only the name is supplied Wheels will look for the file in the current controller's view folder. When passing in a path it should be relative to the views folder. All partials should be saved with a leading underscore but the underscore should not be passed in to this function. ||
+|| *cache* || any || false ||  || Number of minutes to cache the partial for. ||
+
+
+
+*Examples*:
+
+{{{
+<cfoutput>#includePartial("login")#</cfoutput>
+-> If we're in the "Admin" controller Wheels will include the file "views/admin/_login.cfm".
+}}}
+
+{{{
+<cfoutput>#includePartial(name="shared/button", cache=15)#</cfoutput>
+-> Wheels will include the file "views/shared/_button.cfm" and cache it for 30 minutes.
+
+}}}
+
+*Related*:
+
+ * [IncludingPartials Including Partials] (chapter)
+ * [renderPartial renderPartial()] (function)
