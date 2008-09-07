@@ -231,6 +231,7 @@
 		-> Wheels is a framework
 
 		RELATED:
+		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
 		 * [autoLink autoLink()] (function)
 		 * [cycle cycle()] (function)
 		 * [excerpt excerpt()] (function)
@@ -300,6 +301,7 @@
 		-> language
 
 		RELATED:
+		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
 		 * [cycle cycle()] (function)
@@ -330,6 +332,7 @@
 		Your search returned #pluralize(word="person", count=users.recordCount)#.
 
 		RELATED:
+		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
 		 * [cycle cycle()] (function)
