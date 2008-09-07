@@ -240,8 +240,8 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="stripLinks" returntype="string" access="public" output="false" hint="View, Helper, Removes all links from the text (leaving just the link text).">
-	<cfargument name="text" type="string" required="true" hint="The text to remove links from.">
+<cffunction name="stripLinks" returntype="string" access="public" output="false" hint="View, Helper, Removes all links from the html (leaving just the link text).">
+	<cfargument name="html" type="string" required="true" hint="The html to remove links from.">
 
 	<!---
 		EXAMPLES:
@@ -263,11 +263,11 @@
 		 * [truncate truncate()] (function)
 	--->
 
-	<cfreturn REReplaceNoCase(arguments.text, "<a.*?>(.*?)</a>", "\1" , "all")>
+	<cfreturn REReplaceNoCase(arguments.html, "<a.*?>(.*?)</a>", "\1" , "all")>
 </cffunction>
 
-<cffunction name="stripTags" returntype="string" access="public" output="false" hint="View, Helper, Removes all tags from the text.">
-	<cfargument name="text" type="string" required="true" hint="The text to remove links from.">
+<cffunction name="stripTags" returntype="string" access="public" output="false" hint="View, Helper, Removes all tags from the html.">
+	<cfargument name="html" type="string" required="true" hint="The html to remove links from.">
 
 	<!---
 		EXAMPLES:
@@ -289,11 +289,11 @@
 		 * [truncate truncate()] (function)
 	--->
 
-	<cfreturn REReplaceNoCase(arguments.text, "<[a-z].*?>(.*?)</[a-z]>", "\1" , "all")>
+	<cfreturn REReplaceNoCase(arguments.html, "<[a-z].*?>(.*?)</[a-z]>", "\1" , "all")>
 </cffunction>
 
 <cffunction name="titleize" returntype="string" access="public" output="false" hint="View, Helper, Capitalizes all words in the text to create a nicer looking title.">
-	<cfargument name="text" type="string" required="true" hint="The text to turn into a title.">
+	<cfargument name="word" type="string" required="true" hint="The text to turn into a title.">
 
 	<!---
 		EXAMPLES:
@@ -318,10 +318,10 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
-		loc.iEnd = ListLen(arguments.text, " ");
+		loc.iEnd = ListLen(arguments.word, " ");
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
-			loc.returnValue = ListAppend(loc.returnValue, capitalize(ListGetAt(arguments.text, loc.i, " ")), " ");
+			loc.returnValue = ListAppend(loc.returnValue, capitalize(ListGetAt(arguments.word, loc.i, " ")), " ");
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>

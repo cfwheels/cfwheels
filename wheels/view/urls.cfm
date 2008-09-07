@@ -38,7 +38,6 @@
 		RELATED:
 		 * [linkingPages] (chapter)
 		 * [buttonTo buttonTo()] (function)
-		 * [linkToUnlessCurrent linkToUnlessCurrent()] (function)
 		 * [URLFor URLFor()] (function)
 	--->
 
@@ -132,7 +131,7 @@
 		#mailTo(emailAddress="support@mysite.com", name="Website Support", encode=true)#
 
 		RELATED:
-		-
+		 * [linkTo linkTo()] (function)
 	--->
 
 	<cfscript>
@@ -154,7 +153,6 @@
 				loc.encoded = loc.encoded & "%" & Right("0" & formatBaseN(asc(Mid(loc.js,loc.i,1)),16),2);
 			}
 			loc.returnValue = "<script type=""text/javascript"" language=""javascript"">eval(unescape('#loc.encoded#'))</script>";
-
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
