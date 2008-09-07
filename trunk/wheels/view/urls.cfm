@@ -36,7 +36,7 @@
 		-> <a href="http://www.google.com">http://www.google.com</a> (When leaving out the text argument Wheels will use the link as the text as well.)
 
 		RELATED:
-		 * [linkingPages] (chapter)
+		 * [LinkingPages Linking Pages] (chapter)
 		 * [buttonTo buttonTo()] (function)
 		 * [URLFor URLFor()] (function)
 	--->
@@ -81,7 +81,7 @@
 		#buttonTo(action="delete", disabled="Wait...")#
 
 		RELATED:
-		 * [linkingPages] (chapter)
+		 * [LinkingPages Linking Pages] (chapter)
 		 * [linkTo linkTo()] (function)
 		 * [URLFor URLFor()] (function)
 	--->

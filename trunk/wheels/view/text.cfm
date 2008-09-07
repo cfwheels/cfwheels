@@ -11,6 +11,7 @@
 		-> Email us at <a href="mailto:info@cfwheels.com">info@cfwheels.com</a>
 
 		RELATED:
+		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
 		 * [capitalize capitalize()] (function)
 		 * [cycle cycle()] (function)
 		 * [excerpt excerpt()] (function)
@@ -47,6 +48,7 @@
 		<tr class="#cycle("even,odd")#">...</tr>
 
 		RELATED:
+		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
 		 * [excerpt excerpt()] (function)
@@ -92,6 +94,7 @@
 		-> ...is a framework for ...
 
 		RELATED:
+		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
 		 * [cycle cycle()] (function)
@@ -152,6 +155,7 @@
 		-> You searched for: <strong class="highlight">Wheels</strong>
 
 		RELATED:
+		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
 		 * [cycle cycle()] (function)
@@ -186,6 +190,7 @@
 		<cfset resetCycle("tableRows")>
 
 		RELATED:
+		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
 		 * [cycle cycle()] (function)
@@ -215,6 +220,7 @@
 		#simpleFormat(params.content)#
 
 		RELATED:
+		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
 		 * [cycle cycle()] (function)
@@ -249,6 +255,7 @@
 		-> Wheels is a framework for ColdFusion
 
 		RELATED:
+		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
 		 * [cycle cycle()] (function)
@@ -275,6 +282,7 @@
 		-> Wheels is a framework for ColdFusion
 
 		RELATED:
+		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
 		 * [cycle cycle()] (function)
@@ -301,6 +309,7 @@
 		-> Wheels Is A Framework For ColdFusion
 
 		RELATED:
+		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
 		 * [cycle cycle()] (function)
@@ -341,6 +350,7 @@
 		-> Wheels is a fra... (continued)
 
 		RELATED:
+		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
 		 * [autoLink autoLink()] (function)
 		 * [capitalize capitalize()] (function)
 		 * [cycle cycle()] (function)
