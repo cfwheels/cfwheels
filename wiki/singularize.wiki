@@ -1,0 +1,42 @@
+#summary singularize(text)
+#labels api,0.8,view,helper
+
+*Description*:
+
+Returns the singular form of the passed in word.
+
+*Return Type*:
+
+String
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *text* || string || true ||  || String to singularize. ||
+
+
+
+*Examples*:
+
+{{{
+#singularize("languages")#
+-> language
+
+}}}
+
+*Related*:
+
+ * [autoLink autoLink()] (function)
+ * [capitalize capitalize()] (function)
+ * [cycle cycle()] (function)
+ * [excerpt excerpt()] (function)
+ * [highlight highlight()] (function)
+ * [pluralize pluralize()] (function)
+ * [resetCycle resetCycle()] (function)
+ * [simpleFormat simpleFormat()] (function)
+ * [stripLinks stripLinks()] (function)
+ * [stripTags stripTags()] (function)
+ * [titleize titleize()] (function)
+ * [truncate truncate()] (function)

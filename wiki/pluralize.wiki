@@ -1,0 +1,42 @@
+#summary pluralize(text)
+#labels api,0.8,view,helper
+
+*Description*:
+
+Returns the plural form of the passed in word.
+
+*Return Type*:
+
+String
+
+*
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *text* || string || true ||  || String to pluralize. ||
+
+
+
+*Examples*:
+
+{{{
+#pluralize("person")#
+-> people
+
+}}}
+
+*Related*:
+
+ * [autoLink autoLink()] (function)
+ * [capitalize capitalize()] (function)
+ * [cycle cycle()] (function)
+ * [excerpt excerpt()] (function)
+ * [highlight highlight()] (function)
+ * [resetCycle resetCycle()] (function)
+ * [simpleFormat simpleFormat()] (function)
+ * [singularize singularize()] (function)
+ * [stripLinks stripLinks()] (function)
+ * [stripTags stripTags()] (function)
+ * [titleize titleize()] (function)
+ * [truncate truncate()] (function)
