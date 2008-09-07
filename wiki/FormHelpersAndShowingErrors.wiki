@@ -1,5 +1,5 @@
 #summary Wheels ties your application's forms together with your model layer elegantly. With Wheels form conventions, you'll find yourself spending less time writing repetitive markup to display forms and error messages.
-#labels chapter,0.7
+#labels chapter,0.8
 
 ==Simple Example: The Old Way==
 
@@ -10,24 +10,24 @@ Let's take a look at a simple form for editing a user profile. Normally, you wou
 
 <form action="/profile/save" method="post">
     <div>
-        <label for="firstName">First Name</label>
-        <input id="firstName" name="firstName" value="#profile.firstName#" />
+        <label for="firstName">First Name
+        <input id="firstName" name="firstName" value="#profile.firstName#" /></label>
     </div>
     <div>
-        <label for="lastName">Last Name</label>
-        <input id="lastName" name="lastName" value="#profile.lastName#" />
+        <label for="lastName">Last Name
+        <input id="lastName" name="lastName" value="#profile.lastName#" /></label>
     </div>
     <div>
-        <label for="email">Email</label>
-        <input id="email" name="email" value="#profle.email#" />
+        <label for="email">Email
+        <input id="email" name="email" value="#profle.email#" /></label>
     </div>
     <div>
-        <label for="department">Department</label>
+        <label for="department">Department
         <select id="department" name="departmentId">
             <cfloop query="departments">
                 <option value="#departments.id#">#departments.name#</option>
             </cfloop>
-        </select>
+        </select></label>
     </div>
     <div>
         <input type="submit" value="Save Changes" />
@@ -43,7 +43,7 @@ We know that you are quite familiar with the drudgery of typing this sort of cod
 
 ==Making Life Easier: The New Way==
 
-The good news is that Wheels simplifies this quite a bit for you. At first, it looks a little different using these conventions, but you'll quickly see how it all ties together and saves you time.
+The good news is that Wheels simplifies this quite a bit for you. At first, it looks a little different using these conventions, but you'll quickly see how it all ties together and saves you some serious time.
 
 ===Rewriting the Form with Wheels Conventions===
 
@@ -54,10 +54,10 @@ Let's rewrite and then explain.
 
 #startFormTag(action="save")#
 
-    <div>#textField(label="First Name", object_name="profile", field="firstName", value=profile.firstName)#</div>
-    <div>#textField(label="Last Name", object_name="profile", field="lastName", value=profile.lastName)#</div>
-    <div>#selectTag(label="Department", object_name="department")#</div>
-    <div>#submitTag()#</div>
+    #textField(label="First Name", objectName="profile", property="firstName", prepend="<div>", append="</div>")#
+    #textField(label="Last Name", objectName="profile", property="lastName", prepend="<div>", append="</div>")#
+    #selectTag(label="Department", objectName="department", prepend="<div>", append="</div>")#
+    #submitTag(prepend="<div>", append="</div>")#
 
 #endFormTag()#
 
