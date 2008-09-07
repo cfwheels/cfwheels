@@ -260,23 +260,80 @@
 
 <cffunction name="capitalize" returntype="string" access="public" output="false" hint="View, Helper, Returns the text with the first character converted to uppercase and the rest to lowercase.">
 	<cfargument name="text" type="string" required="true" hint="Text to capitalize">
+
+	<!---
+		EXAMPLES:
+		#capitalize("wheels is a framework")#
+		-> Wheels is a framework
+
+		RELATED:
+		 * [autoLink autoLink()] (function)
+		 * [cycle cycle()] (function)
+		 * [excerpt excerpt()] (function)
+		 * [highlight highlight()] (function)
+		 * [pluralize pluralize()] (function)
+		 * [resetCycle resetCycle()] (function)
+		 * [simpleFormat simpleFormat()] (function)
+		 * [singularize singularize()] (function)
+		 * [stripLinks stripLinks()] (function)
+		 * [stripTags stripTags()] (function)
+		 * [titleize titleize()] (function)
+		 * [truncate truncate()] (function)
+	--->
+
 	<cfreturn UCase(Left(arguments.text, 1)) & Mid(arguments.text, 2, Len(arguments.text)-1)>
 </cffunction>
 
-<cffunction name="singularize" returntype="string" access="private" output="false">
-	<cfargument name="text" type="string" required="true">
-	<cfscript>
-		var returnValue = $singularizeOrPluralize(text=arguments.text, which="singularize");
-	</cfscript>
-	<cfreturn returnValue>
+<cffunction name="singularize" returntype="string" access="public" output="false" hint="View, Helper, Returns the singular form of the passed in word.">
+	<cfargument name="text" type="string" required="true" hint="String to singularize.">
+
+	<!---
+		EXAMPLES:
+		#singularize("languages")#
+		-> language
+
+		RELATED:
+		 * [autoLink autoLink()] (function)
+		 * [capitalize capitalize()] (function)
+		 * [cycle cycle()] (function)
+		 * [excerpt excerpt()] (function)
+		 * [highlight highlight()] (function)
+		 * [pluralize pluralize()] (function)
+		 * [resetCycle resetCycle()] (function)
+		 * [simpleFormat simpleFormat()] (function)
+		 * [stripLinks stripLinks()] (function)
+		 * [stripTags stripTags()] (function)
+		 * [titleize titleize()] (function)
+		 * [truncate truncate()] (function)
+	--->
+
+	<cfreturn $singularizeOrPluralize(text=arguments.text, which="singularize")>
 </cffunction>
 
-<cffunction name="pluralize" returntype="string" access="private" output="false">
-	<cfargument name="text" type="string" required="true">
-	<cfscript>
-		var returnValue = $singularizeOrPluralize(text=arguments.text, which="pluralize");
-	</cfscript>
-	<cfreturn returnValue>
+<cffunction name="pluralize" returntype="string" access="public" output="false" hint="View, Helper, Returns the plural form of the passed in word.">
+	<cfargument name="text" type="string" required="true" hint="String to pluralize.">
+
+	<!---
+		EXAMPLES:
+		#pluralize("person")#
+		-> people
+
+		RELATED:
+		 * [autoLink autoLink()] (function)
+		 * [capitalize capitalize()] (function)
+		 * [cycle cycle()] (function)
+		 * [excerpt excerpt()] (function)
+		 * [highlight highlight()] (function)
+		 * [resetCycle resetCycle()] (function)
+		 * [simpleFormat simpleFormat()] (function)
+		 * [singularize singularize()] (function)
+		 * [stripLinks stripLinks()] (function)
+		 * [stripTags stripTags()] (function)
+		 * [titleize titleize()] (function)
+		 * [truncate truncate()] (function)
+	--->
+
+	<cfreturn $singularizeOrPluralize(text=arguments.text, which="pluralize")>
 </cffunction>
 
 <cffunction name="$createClass" returntype="any" access="private" output="false">
