@@ -1,0 +1,35 @@
+#summary contentForLayout()
+#labels api,0.8,view,helper
+
+*Description*:
+
+Used inside a layout file to output the HTML created in the view.
+
+*Return Type*:
+
+Any
+
+*
+
+*Parameters*:
+
+
+*Examples*:
+
+{{{
+<html>
+<head>
+<title>My Site</title>
+</head>
+<body>
+<cfoutput>
+#contentForLayout()#
+</cfoutput>
+</body>
+</html>
+
+}}}
+
+*Related*:
+
+ * [UsingLayouts Using Layouts] (chapter)
