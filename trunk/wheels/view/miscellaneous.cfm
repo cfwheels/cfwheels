@@ -18,3 +18,21 @@
 
 	<cfreturn $includeOrRenderPartial(argumentCollection=arguments)>
 </cffunction>
+
+<cffunction name="$trimHTML" returntype="string" access="private" output="false">
+	<cfargument name="str" type="string" required="true">
+	<cfreturn replaceList(trim(arguments.str), "#chr(9)#,#chr(10)#,#chr(13)#", ",,")>
+</cffunction>
+
+<cffunction name="$getAttributes" returntype="string" access="private" output="false">
+	<cfset var loc = {}>
+
+	<cfset loc.attributes = "">
+	<cfloop collection="#arguments#" item="loc.i">
+		<cfif loc.i Does Not Contain "$" AND listFindNoCase(arguments.$namedArguments, loc.i) IS 0>
+			<cfset loc.attributes = "#loc.attributes# #lCase(loc.i)#=""#arguments[loc.i]#""">
+		</cfif>
+	</cfloop>
+
+	<cfreturn loc.attributes>
+</cffunction>
