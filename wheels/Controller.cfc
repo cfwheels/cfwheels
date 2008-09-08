@@ -11,7 +11,6 @@
 	<cfinclude template="view/dates.cfm">
 	<cfinclude template="view/errors.cfm">
 	<cfinclude template="view/forms.cfm">
-	<cfinclude template="view/internal.cfm">
 	<cfinclude template="view/layout.cfm">
 	<cfinclude template="view/miscellaneous.cfm">
 	<cfinclude template="view/pagination.cfm">
