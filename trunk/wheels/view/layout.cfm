@@ -1,4 +1,4 @@
-<cffunction name="contentForLayout" returntype="any" access="public" output="false" hint="View, Helper, Used inside a layout file to output the HTML created in the view.">
+<cffunction name="contentForLayout" returntype="string" access="public" output="false" hint="View, Helper, Used inside a layout file to output the HTML created in the view.">
 
 	<!---
 		EXAMPLES:
