@@ -124,7 +124,7 @@
 			loc.startPos = loc.pos - arguments.radius;
 			loc.truncateStart = arguments.excerptString;
 		}
-		if ((loc.pos+Len(arguments.phrase)+arguments.radius) > Len(arguments.text))
+		if ((loc.pos+Len(arguments.phrase)+arguments.radius) GT Len(arguments.text))
 		{
 			loc.endPos = Len(arguments.text);
 			loc.truncateEnd = "";
