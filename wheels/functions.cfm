@@ -71,7 +71,7 @@
 	<!--- determine and set database brand --->
 	<cfinclude template="../#application.wheels.configPath#/database.cfm">
 	<cfif Len(application.settings.database.datasource)>
-		<cfset loc.info = $dbinfo(datasource=application.settings.database.datasource, type="version")>
+		<cfset loc.info = $dbinfo(datasource=application.settings.database.datasource, username=application.settings.database.username, password=application.settings.database.password, type="version")>
 		<cfif loc.info.driver_name Contains "MySQL">
 			<cfset loc.adapterName = "MySQL">
 		<cfelseif loc.info.driver_name Contains "Oracle">
