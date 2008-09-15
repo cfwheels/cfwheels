@@ -194,7 +194,7 @@
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset loc.name = ListLast(arguments.objectName, ".") & "[" & arguments.property & "]">
-	<cfset loc.id = ListLast(arguments.objectName, ".") & "-" & arguments.property & "-" & arguments.tagValue>
+	<cfset loc.id = ListLast(arguments.objectName, ".") & "-" & arguments.property & "-" & LCase(Replace(ReReplaceNoCase(arguments.tagValue, "[^a-z0-9 ]", "", "all"), " ", "-", "all"))>
 	<cfset arguments.name = loc.id>
 
 	<cfsavecontent variable="loc.output">
@@ -359,11 +359,11 @@
 
 	<cfset loc.output = "">
 	<cfset loc.output = loc.output & $formBeforeElement(argumentCollection=arguments)>
-	<cfset loc.output = loc.output & "<select name=""#listLast(arguments.objectName,'.')#[#arguments.property#]"" id=""#listLast(arguments.objectName,'.')#-#arguments.property#"">">
+	<cfset loc.output = loc.output & "<select name=""#listLast(arguments.objectName,'.')#[#arguments.property#]"" id=""#listLast(arguments.objectName,'.')#-#arguments.property#""">
 	<cfif arguments.multiple>
 		<cfset loc.output = loc.output & " multiple">
 	</cfif>
-	<cfset loc.output = loc.output & loc.attributes>
+	<cfset loc.output = loc.output & loc.attributes & ">">
 	<cfif NOT IsBoolean(arguments.includeBlank) OR arguments.includeBlank>
 		<cfif NOT IsBoolean(arguments.includeBlank)>
 			<cfset loc.text = arguments.includeBlank>
@@ -418,7 +418,7 @@
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset loc.name = arguments.name>
-	<cfset loc.id = arguments.name & "-" & arguments.value>
+	<cfset loc.id = arguments.name & "-" & LCase(Replace(ReReplaceNoCase(arguments.value, "[^a-z0-9 ]", "", "all"), " ", "-", "all"))>
 	<cfset arguments.name = loc.id>
 
 	<cfsavecontent variable="loc.output">
