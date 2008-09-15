@@ -101,8 +101,12 @@
 </cffunction>
 
 <cffunction name="onRequestStart" output="false">
-	<cfargument name="targetpage">
+	<cfargument name="targetPage">
 	<cfset var loc = {}>
+	<cfif Right(arguments.targetPage, 4) IS ".cfc">
+		<cfset StructDelete(this, "onRequest")>
+		<cfset StructDelete(variables, "onRequest")>
+	</cfif>
 	<cfif StructKeyExists(URL, "reload") AND (Len(application.settings.reloadPassword) IS 0 OR (StructKeyExists(URL, "password") AND URL.password IS application.settings.reloadPassword))>
 		<cflock scope="application" type="exclusive" timeout="30">
 			<cfset onApplicationStart()>
