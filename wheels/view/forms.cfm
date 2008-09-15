@@ -193,10 +193,14 @@
 	<cfset arguments.$namedArguments = "objectName,property,tagValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
+	<cfset loc.name = ListLast(arguments.objectName, ".") & "[" & arguments.property & "]">
+	<cfset loc.id = ListLast(arguments.objectName, ".") & "-" & arguments.property & "-" & arguments.tagValue>
+	<cfset arguments.name = loc.id>
+
 	<cfsavecontent variable="loc.output">
 		<cfoutput>
 			#$formBeforeElement(argumentCollection=arguments)#
-			<input type="radio" name="#listLast(arguments.objectName,".")#[#arguments.property#]" id="#listLast(arguments.objectName,".")#-#arguments.property#" value="#arguments.tagValue#"<cfif arguments.tagValue IS $formValue(argumentCollection=arguments)> checked="checked"</cfif>#loc.attributes# />
+			<input type="radio" name="#loc.name#" id="#loc.id#" value="#arguments.tagValue#"<cfif arguments.tagValue IS $formValue(argumentCollection=arguments)> checked="checked"</cfif>#loc.attributes# />
 			#$formAfterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
@@ -413,10 +417,14 @@
 	<cfset arguments.$namedArguments = "name,value,checked,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
+	<cfset loc.name = arguments.name>
+	<cfset loc.id = arguments.name & "-" & arguments.value>
+	<cfset arguments.name = loc.id>
+
 	<cfsavecontent variable="loc.output">
 		<cfoutput>
 			#$formBeforeElement(argumentCollection=arguments)#
-			<input name="#arguments.name#" id="#arguments.name#" type="radio" value="#$formValue(argumentCollection=arguments)#"<cfif arguments.checked> checked="checked"</cfif>#loc.attributes# />
+			<input name="#loc.name#" id="#loc.id#" type="radio" value="#$formValue(argumentCollection=arguments)#"<cfif arguments.checked> checked="checked"</cfif>#loc.attributes# />
 			#$formAfterElement(argumentCollection=arguments)#
 		</cfoutput>
 	</cfsavecontent>
