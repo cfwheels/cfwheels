@@ -308,26 +308,21 @@
 					loc.elementDataPart = loc.element;
 				loc.elementDataPart = Trim(ReplaceList(loc.elementDataPart, "AND,OR", ""));
 				loc.param = {};
-				loc.temp = REFind("^([^ ]*) ?(=|<>|<|>|<=|>=|!=|!<|!>| LIKE)", loc.elementDataPart, 1, true);
-				if (ArrayLen(loc.temp.len) GT 1)
+				loc.param.property = SpanExcluding(loc.elementDataPart, " =!><");
+				loc.param.operator = ReplaceList(loc.elementDataPart, "?,#loc.param.property#, ", ",,");
+				loc.where = Replace(loc.where, loc.element, Replace(loc.element, loc.elementDataPart, "?", "one"));
+				loc.jEnd = ArrayLen(loc.classes);
+				for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
 				{
-					loc.where = Replace(loc.where, loc.element, Replace(loc.element, loc.elementDataPart, "?", "one"));
-					loc.param.property = Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]);
-					loc.jEnd = ArrayLen(loc.classes);
-					for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
+					loc.classData = loc.classes[loc.j];
+					if ((loc.param.property Contains "." && ListFirst(loc.param.property, ".") IS loc.classData.tableName || loc.param.property Does Not Contain ".") && ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
 					{
-						loc.classData = loc.classes[loc.j];
-						if ((loc.param.property Contains "." && ListFirst(loc.param.property, ".") IS loc.classData.tableName || loc.param.property Does Not Contain ".") && ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
-						{
-							loc.param.type = loc.classData.properties[ListLast(loc.param.property, ".")].type;
-							loc.param.column = loc.classData.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
-							break;
-						}
+						loc.param.type = loc.classData.properties[ListLast(loc.param.property, ".")].type;
+						loc.param.column = loc.classData.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
+						break;
 					}
-					loc.temp = REFind("^[^ ]* ?(=|<>|<|>|<=|>=|!=|!<|!>| LIKE)", loc.elementDataPart, 1, true);
-					loc.param.operator = Trim(Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]));
-					ArrayAppend(loc.params, loc.param);
 				}
+				ArrayAppend(loc.params, loc.param);
 			}
 			loc.where = ReplaceList(loc.where, "#Chr(7)#AND,#Chr(7)#OR", "AND,OR");
 
