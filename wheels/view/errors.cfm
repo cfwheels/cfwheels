@@ -1,5 +1,15 @@
-<cffunction name="errorMessagesFor" returntype="any" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
+<cffunction name="errorMessagesFor" returntype="string" access="public" output="false" hint="View, Helper, Returns a list (UL tag with a class of 'error-messages') containing all the error messages that exists on the object.">
+	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to display error messages for.">
+
+	<!---
+		EXAMPLES:
+		<cfoutput>#errorMessagesFor("aUser")#</cfoutput>
+
+		RELATED:
+		 * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
+		 * [errorMessageOn errorMessageOn()] (function)
+	--->
+
 	<cfset var loc = {}>
 	<cfif NOT StructKeyExists(arguments, "class")>
 		<cfset arguments.class = "error-messages">
@@ -26,12 +36,22 @@
 	<cfreturn $trimHTML(loc.output)>
 </cffunction>
 
-<cffunction name="errorMessageOn" returntype="any" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="any" required="true">
-	<cfargument name="prependText" type="any" required="false" default="">
-	<cfargument name="appendText" type="any" required="false" default="">
-	<cfargument name="wrapperElement" type="any" required="false" default="div">
+<cffunction name="errorMessageOn" returntype="string" access="public" output="false" hint="View, Helper, Returns the error message, if one exists, on the object's property.">
+	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to display the error message for.">
+	<cfargument name="property" type="string" required="true" hint="The property to display the error message for.">
+	<cfargument name="prependText" type="string" required="false" default="" hint="String to prepend to the error message.">
+	<cfargument name="appendText" type="string" required="false" default="" hint="String to append to the error message.">
+	<cfargument name="wrapperElement" type="string" required="false" default="div" hint="HTML element to wrap the error message in.">
+
+	<!---
+		EXAMPLES:
+		<cfoutput>#errorMessageOn(objectName="aUser", property="firstName")#</cfoutput>
+
+		RELATED:
+		 * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
+		 * [errorMessagesFor errorMessagesFor()] (function)
+	--->
+
 	<cfset var loc = {}>
 	<cfif NOT StructKeyExists(arguments, "class")>
 		<cfset arguments.class = "error-message">
