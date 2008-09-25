@@ -115,7 +115,7 @@
 				{
 					loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
 					loc.list = Evaluate("QuotedValueList(loc.values.#loc.property#)");
-					arguments.where = ListAppend(arguments.where, "#loc.property# IN (#loc.list#)", Chr(7));
+					arguments.where = ListAppend(arguments.where, "#variables.wheels.class.tableName#.#loc.property# IN (#loc.list#)", Chr(7));
 				}
 				arguments.where = Replace(arguments.where, Chr(7), " AND ", "all");
 				arguments.$softDeleteCheck = false;
