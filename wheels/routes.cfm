@@ -1,4 +1,4 @@
-<cfset loc.route = {pattern="[controller]/[action]/[id]"}>
+<cfset loc.route = {pattern="[controller]/[action]/[key]"}>
 <cfset arrayAppend(application.wheels.routes, loc.route)>
 <cfset loc.route = {pattern="[controller]/[action]"}>
 <cfset arrayAppend(application.wheels.routes, loc.route)>

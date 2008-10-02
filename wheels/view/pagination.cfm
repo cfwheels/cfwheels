@@ -46,8 +46,8 @@
 	<cfset loc.currentPage = paginationCurrentPage(arguments.handle)>
 	<cfset loc.totalPages = paginationTotalPages(arguments.handle)>
 	<cfset loc.linkToArguments.action = variables.params.action>
-	<cfif StructKeyExists(variables.params, "id")>
-		<cfset loc.linkToArguments.id = variables.params.id>
+	<cfif StructKeyExists(variables.params, "key")>
+		<cfset loc.linkToArguments.key = variables.params.key>
 	</cfif>
 
 	<cfsavecontent variable="loc.output">
