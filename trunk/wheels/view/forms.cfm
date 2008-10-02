@@ -5,15 +5,8 @@
 	<cfargument name="spamProtection" type="any" required="false" default="false">
 	<!--- Accepts URLFor arguments --->
 	<cfset var loc = {}>
-	<cfset arguments.$namedArguments = "link,method,multipart,spamProtection,controller,action,id,anchor,onlyPath,host,protocol,params">
-	<cfif StructKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
-		<!--- Since a non-numeric id was passed in we assume it is meant as a HTML attribute and therefore remove it from the named arguments list so that it will be set in the attributes --->
-		<cfset arguments.$namedArguments = listDeleteAt(arguments.$namedArguments, listFindNoCase(arguments.$namedArguments, "id"))>
-	</cfif>
+	<cfset arguments.$namedArguments = "link,method,multipart,spamProtection,controller,action,key,anchor,onlyPath,host,protocol,params">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
-	<cfif StructKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
-		<cfset StructDelete(arguments, "id")>
-	</cfif>
 
 	<cfset request.wheels.currentFormMethod = arguments.method>
 
@@ -51,15 +44,8 @@
 	<cfargument name="onFailure" type="any" required="false" default="">
 	<!--- Accepts URLFor arguments --->
 	<cfset var loc = {}>
-	<cfset arguments.$namedArguments = "link,method,spamProtection,update,insertion,serialize,onLoading,onComplete,onSuccess,onFailure,controller,action,id,anchor,onlyPath,host,protocol,params">
-	<cfif StructKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
-		<!--- Since a non-numeric id was passed in we assume it is meant as a HTML attribute and therefore remove it from the named arguments list so that it will be set in the attributes --->
-		<cfset arguments.$namedArguments = listDeleteAt(arguments.$namedArguments, listFindNoCase(arguments.$namedArguments, "id"))>
-	</cfif>
+	<cfset arguments.$namedArguments = "link,method,spamProtection,update,insertion,serialize,onLoading,onComplete,onSuccess,onFailure,controller,action,key,anchor,onlyPath,host,protocol,params">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
-	<cfif StructKeyExists(arguments, "id") AND NOT isNumeric(arguments.id)>
-		<cfset StructDelete(arguments, "id")>
-	</cfif>
 
 	<cfif Len(arguments.link) IS NOT 0>
 		<cfset loc.url = arguments.link>

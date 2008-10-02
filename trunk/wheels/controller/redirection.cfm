@@ -6,7 +6,7 @@
 	<cfargument name="route" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
 	<cfargument name="controller" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
 	<cfargument name="action" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
-	<cfargument name="id" type="numeric" required="false" default="0" hint="Pass-through argument; see documentation for URLFor">
+	<cfargument name="key" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
 	<cfargument name="params" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
 	<cfargument name="anchor" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
 	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="Pass-through argument; see documentation for URLFor">
@@ -20,8 +20,8 @@
 
 		USAGE:
 		This function uses the cflocation tag to redirect the browser.
-		You can redirect to a controller/action/id in your application, a specific URL or back to the referring URL.
-		Internally it uses URLFor (when a controller/action/id is supplied) to build the URL to redirect to so it can also accept all arguments of URLFor.
+		You can redirect to a controller/action/key in your application, a specific URL or back to the referring URL.
+		Internally it uses URLFor (when a controller/action/key is supplied) to build the URL to redirect to so it can also accept all arguments of URLFor.
 
 		EXAMPLES:
 		<cfif user.save()>

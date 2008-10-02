@@ -1,95 +1,93 @@
-<cffunction name="URLFor" returntype="string" access="private" output="false" hint="View, Helper, Creates an URL based on supplied arguments.">
-	<cfargument name="route" type="string" required="false" default="" hint="Name of a route that you have configured">
-	<cfargument name="controller" type="string" required="false" default="" hint="Name of the controller to include in the URL">
-	<cfargument name="action" type="string" required="false" default="" hint="Name of the action to include in the URL">
-	<cfargument name="id" type="numeric" required="false" default="0" hint="Id to include in the URL">
-	<cfargument name="params" type="string" required="false" default="" hint="Any additional params to be set in the query string">
-	<cfargument name="anchor" type="string" required="false" default="" hint="Sets an anchor name to be appended to the path">
-	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="If true, returns only the relative URL (no protocol, host name or port)">
-	<cfargument name="host" type="string" required="false" default="" hint="Set this to override the current host (domain name)">
-	<cfargument name="protocol" type="string" required="false" default="" hint="Set this to override the current protocol (http)">
-	<cfset var loc = {}>
+<cffunction name="URLFor" returntype="string" access="private" output="false" hint="View, Helper, Creates an internal URL based on supplied arguments.">
+	<cfargument name="route" type="string" required="false" default="" hint="Name of a route that you have configured in 'config/routes.cfm'.">
+	<cfargument name="controller" type="string" required="false" default="" hint="Name of the controller to include in the URL.">
+	<cfargument name="action" type="string" required="false" default="" hint="Name of the action to include in the URL.">
+	<cfargument name="key" type="string" required="false" default="" hint="Key(s) to include in the URL.">
+	<cfargument name="params" type="string" required="false" default="" hint="Any additional params to be set in the query string.">
+	<cfargument name="anchor" type="string" required="false" default="" hint="Sets an anchor name to be appended to the path.">
+	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="If true, returns only the relative URL (no protocol, host name or port).">
+	<cfargument name="host" type="string" required="false" default="" hint="Set this to override the current host.">
+	<cfargument name="protocol" type="string" required="false" default="" hint="Set this to override the current protocol.">
+	<cfargument name="port" type="numeric" required="false" default="0" hint="Set this to override the current port number.">
 
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		-
-
 		EXAMPLES:
-		<cfoutput>#URLFor(action="comments", anchor="comment10")#</cfoutput>
+		#URLFor(text="Log Out", controller="account", action="logOut")#
+		-> /account/logout
 
 		RELATED:
-		 * RequestHandling (chapter)
+		 * [LinkingPages Linking Pages] (chapter)
+		 * [buttonTo buttonTo()] (function)
+		 * [linkTo linkTo()] (function)
 	--->
 
-	<!--- build the link --->
-	<cfif Len(arguments.route) IS 0 AND Len(arguments.controller) IS 0 AND Len(arguments.action) IS 0 AND arguments.id IS 0 AND Len(arguments.params) IS 0>
-		<cfset loc.url = "/">
-	<cfelse>
-		<cfset loc.url = application.wheels.webPath & ListLast(cgi.script_name, "/")>
-		<cfif Len(arguments.route) IS NOT 0>
-			<!--- link for a named route --->
-			<cfset loc.route = application.wheels.routes[application.wheels.namedRoutePositions[arguments.route]]>
-			<cfloop list="#loc.route.pattern#" index="loc.i" delimiters="/">
-				<cfif loc.i Contains "[">
-					<!--- get param from arguments --->
-					<cfset loc.url = loc.url & "/" & arguments[Mid(loc.i, 2, Len(loc.i)-2)]>
-				<cfelse>
-					<!--- add hard coded param from route --->
-					<cfset loc.url = loc.url & "/" & loc.i>
-				</cfif>
-			</cfloop>
-		<cfelse>
-			<!--- link based on controller/action/id --->
-			<cfif Len(arguments.controller) IS NOT 0>
-				<!--- add controller from arguments --->
-				<cfset loc.url = loc.url & "/" & arguments.controller>
-			<cfelse>
-				<!--- keep the controller name from the current request --->
-				<cfset loc.url = loc.url & "/" & variables.params.controller>
-			</cfif>
-			<cfif Len(arguments.action) IS NOT 0>
-				<!--- add the action --->
-				<cfset loc.url = loc.url & "/" & arguments.action>
-			</cfif>
-			<cfif arguments.id IS NOT 0>
-				<!--- add the id and obfuscate if necessary --->
-				<cfif application.settings.obfuscateURLs>
-					<cfset loc.url = loc.url & "/" & obfuscateParam(arguments.id)>
-				<cfelse>
-					<cfset loc.url = loc.url & "/" & arguments.id>
-				</cfif>
-			</cfif>
-		</cfif>
-		<cfif Len(arguments.params) IS NOT 0>
-			<!--- add the params and obfuscate if necessary --->
-			<cfset loc.url = loc.url & $constructParams(arguments.params)>
-		</cfif>
-		<cfif Len(arguments.anchor) IS NOT 0>
-			<!--- add the anchor --->
-			<cfset loc.url = loc.url & "##" & arguments.anchor>
-		</cfif>
-		<!--- Fix when URL rewriting is in use --->
-		<cfset loc.url = Replace(loc.url, "rewrite.cfm/", "")>
-	</cfif>
-
-	<cfif NOT arguments.onlyPath>
-		<!--- add host and protocol --->
-		<cfif Len(arguments.host) IS NOT 0>
-			<cfset loc.url = arguments.host & loc.url>
-		<cfelse>
-			<cfset loc.url = cgi.server_name & loc.url>
-		</cfif>
-		<cfif Len(arguments.protocol) IS NOT 0>
-			<cfset loc.url = arguments.protocol & "://" & loc.url>
-		<cfelse>
-			<cfset loc.url = lCase(spanExcluding(cgi.server_protocol, "/")) & "://" & loc.url>
-		</cfif>
-	</cfif>
-
-	<cfreturn lCase(loc.url)>
+	<cfscript>
+		var loc = {};
+		if (application.settings.environment != "production")
+		{
+			if (!Len(arguments.route) && !Len(arguments.controller) && !Len(arguments.action))
+				$throw(type="Wheels.IncorrectArguments", message="The 'route', 'controller' or 'action' argument is required.", extendedInfo="Pass in either the name of a 'route' you have configured in 'confirg/routes.cfm' or a 'controller' / 'action' / 'key' combination.");
+			if (Len(arguments.route) && (Len(arguments.controller) || Len(arguments.action) || Len(arguments.key)))
+				$throw(type="Wheels.IncorrectArguments", message="The 'route' argument is mutually exclusive with the 'controller', 'action' and 'key' arguments.", extendedInfo="Choose whether to use a pre-configured 'route' or 'controller' / 'action' / 'key' combination.");
+			if (arguments.onlyPath && (Len(arguments.host) || Len(arguments.protocol)))
+				$throw(type="Wheels.IncorrectArguments", message="Can't use the 'host' or 'protocol' arguments when 'onlyPath' is 'true'.", extendedInfo="Set 'onlyPath' to 'false' so that linkTo will create absolute URLs and thus allowing you to set the 'host' and 'protocol' on the link.");
+		}
+		// build the link
+		loc.returnValue = application.wheels.webPath & ListLast(cgi.script_name, "/");
+		if (Len(arguments.route))
+		{
+			// link for a named route
+			loc.route = application.wheels.routes[application.wheels.namedRoutePositions[arguments.route]];
+			loc.iEnd = ListLen(loc.route.pattern, "/");
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.property = ListGetAt(loc.route.pattern, loc.i, "/");
+				if (loc.property Contains "[")
+					loc.returnValue = loc.returnValue & "/" & arguments[Mid(loc.property, 2, Len(loc.property)-2)]; // get param from arguments
+				else
+					loc.returnValue = loc.returnValue & "/" & loc.property; // add hard coded param from route
+			}		
+		}
+		else
+		{
+			// link based on controller/action/key
+			if (Len(arguments.controller))
+				loc.returnValue = loc.returnValue & "/" & arguments.controller; // add controller from arguments
+			else
+				loc.returnValue = loc.returnValue & "/" & variables.params.controller; // keep the controller name from the current request
+			if (Len(arguments.action))
+				loc.returnValue = loc.returnValue & "/" & arguments.action;
+			if (Len(arguments.key))
+			{
+				if (application.settings.obfuscateURLs)
+					loc.returnValue = loc.returnValue & "/" & obfuscateParam(arguments.key);
+				else
+					loc.returnValue = loc.returnValue & "/" & arguments.key;
+			}
+		}
+		if (Len(arguments.params))
+			loc.returnValue = loc.returnValue & $constructParams(arguments.params);
+		if (Len(arguments.anchor))
+			loc.returnValue = loc.returnValue & "##" & arguments.anchor;
+		loc.returnValue = Replace(loc.returnValue, "rewrite.cfm/", ""); // fix when url rewriting is in use
+		if (!arguments.onlyPath)
+		{
+			if (arguments.port != 0)
+				loc.returnValue = ":" & arguments.port & loc.returnValue;
+			else if (cgi.server_port != 80)
+				loc.returnValue = ":" & cgi.server_port & loc.returnValue;
+			if (Len(arguments.host))
+				loc.returnValue = arguments.host & loc.returnValue;
+			else
+				loc.returnValue = cgi.server_name & loc.returnValue;
+			if (Len(arguments.protocol))
+				loc.returnValue = arguments.protocol & "://" & loc.returnValue;
+			else
+				loc.returnValue = SpanExcluding(cgi.server_protocol, "/") & "://" & loc.returnValue;
+		}
+		loc.returnValue = LCase(loc.returnValue);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="isGet" returntype="boolean" access="public" output="false" hint="Controller, Request, Returns whether the request was a normal (GET) request or not.">

@@ -43,18 +43,18 @@
 		<td valign="top"><strong>Action:</strong></td>
 		<td>#request.wheels.params.action#</td>
 	</tr>
-	<cfif StructKeyExists(request.wheels.params, "id")>
+	<cfif StructKeyExists(request.wheels.params, "key")>
 		<tr>
-			<td valign="top"><strong>Id:</strong></td>
-			<td>#request.wheels.params.id#</td>
+			<td valign="top"><strong>Key(s):</strong></td>
+			<td>#request.wheels.params.key#</td>
 		</tr>
 	</cfif>
-	<cfif StructCount(request.wheels.params) GT 3 OR (StructCount(request.wheels.params) GT 2 AND NOT StructKeyExists(request.wheels.params, "id"))>
+	<cfif StructCount(request.wheels.params) GT 3 OR (StructCount(request.wheels.params) GT 2 AND NOT StructKeyExists(request.wheels.params, "key"))>
 		<tr>
 			<td valign="top"><strong>Additional Params:</strong></td>
 			<td>
 			<cfloop collection="#request.wheels.params#" item="loc.i">
-				<cfif loc.i IS NOT "fieldnames" AND loc.i IS NOT "controller" AND loc.i IS NOT "action" AND loc.i IS NOT "id">
+				<cfif loc.i IS NOT "fieldnames" AND loc.i IS NOT "controller" AND loc.i IS NOT "action" AND loc.i IS NOT "key">
 					<cfif isStruct(request.wheels.params[loc.i])>
 						<cfloop collection="#request.wheels.params[loc.i]#" item="loc.j">
 							#lCase(loc.i)#.#lCase(loc.j)# = #request.wheels.params[loc.i][loc.j]#<br />

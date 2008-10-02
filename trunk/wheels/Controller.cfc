@@ -13,7 +13,6 @@
 	<cfinclude template="view/forms.cfm">
 	<cfinclude template="view/layout.cfm">
 	<cfinclude template="view/miscellaneous.cfm">
-	<cfinclude template="view/pagination.cfm">
 	<cfinclude template="view/text.cfm">
 	<cfinclude template="view/urls.cfm">
 </cfcomponent>
