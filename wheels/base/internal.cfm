@@ -354,6 +354,11 @@
 	<cfargument name="name" type="string" required="true">
 	<cfset var loc = {}>
 	<cfset arguments.name = capitalize(arguments.name)>
+	<cfif fileExists(expandPath("#application.wheels.modelPath#/#arguments.name#.cfc"))>
+		<cfset arguments.fileName = arguments.name>
+	<cfelse>
+		<cfset arguments.fileName = "Model">
+	</cfif>
 	<cfset loc.rootObject = "modelClass">
 	<cfinclude template="../../root.cfm">
 	<cfreturn loc.rootObject>

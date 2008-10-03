@@ -1,12 +1,12 @@
 <cffunction name="paginationLinks" returntype="string" access="public" output="false" hint="View, Helper, Builds and returns a string containing links to pages based on a paginated query.">
-	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
-	<cfargument name="name" type="string" required="false" default="page" hint="The name of the param that holds the current page number">
 	<cfargument name="windowSize" type="numeric" required="false" default="2" hint="The number of page links to show around the current page">
 	<cfargument name="alwaysShowAnchors" type="boolean" required="false" default="true" hint="Whether or not links to the first and last page should always be displayed">
 	<cfargument name="linkToCurrentPage" type="boolean" required="false" default="false" hint="Whether or not the current page should be linked to">
 	<cfargument name="prependToLink" type="string" required="false" default="" hint="String to be prepended before all links">
 	<cfargument name="appendToLink" type="string" required="false" default="" hint="String to be appended after all links">
 	<cfargument name="classForCurrent" type="string" required="false" default="" hint="Class name for the link to the current page">
+	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
+	<cfargument name="name" type="string" required="false" default="page" hint="The name of the param that holds the current page number">
 	<cfargument name="params" type="string" required="false" default="" hint="Any additional parameters that should be appended to the links">
 	<cfset var loc = {}>
 

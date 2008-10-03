@@ -75,11 +75,6 @@
 <cffunction name="model" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
-		if (application.settings.environment IS NOT "production")
-		{
-			if (!Len(application.settings.database.datasource))
-				$throw(type="Wheels.MissingDataSource", message="No data source has been added.", extendedInfo="Tell Wheels what data source you want to use by specifying it in 'config/database.cfm'. Don't forget to also add the data source in the ColdFusion Administrator. When you have made your changes you need to issue a '?reload=true' request or restart the ColdFusion service for the changes to be picked up by Wheels.");
-		}
 		$doubleCheckedLock(name="modelLock", path=application.wheels.models, key=arguments.name, method="$createClass", args=arguments);
 	</cfscript>
 	<cfreturn application.wheels.models[arguments.name]>
