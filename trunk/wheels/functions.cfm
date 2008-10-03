@@ -14,6 +14,13 @@
 <cffunction name="onApplicationStart" output="false">
 	<cfset var loc = {}>
 	<cfset application.wheels = StructNew()>
+	<cfif IsDefined("server.coldfusion.productname") AND server.coldfusion.productname IS "ColdFusion Server">
+		<cfset application.wheels.serverName = "Adobe ColdFusion">
+		<cfset application.wheels.serverVersion = server.coldfusion.productversion>
+	<cfelse>
+		<cfset application.wheels.serverName = "Railo">
+		<cfset application.wheels.serverVersion = "">
+	</cfif>
 	<cfset application.wheels.version = "1.0 RC 1">
 	<cfset application.wheels.controllers = StructNew()>
 	<cfset application.wheels.models = StructNew()>
@@ -70,26 +77,27 @@
 	<cfset application.wheels.webPath = Replace(cgi.script_name, Reverse(spanExcluding(Reverse(cgi.script_name), "/")), "")>
 	<!--- determine and set database brand --->
 	<cfinclude template="../#application.wheels.configPath#/database.cfm">
-	<cfif Len(application.settings.database.datasource)>
-		<cfset loc.info = $dbinfo(datasource=application.settings.database.datasource, username=application.settings.database.username, password=application.settings.database.password, type="version")>
-		<cfif loc.info.driver_name Contains "MySQL">
-			<cfset loc.adapterName = "MySQL">
-		<cfelseif loc.info.driver_name Contains "Oracle">
-			<cfset loc.adapterName = "Oracle">
-		<cfelse>
-			<cfset loc.adapterName = "MicrosoftSQLServer">
-		</cfif>
-		<cfif loc.info.recordCount>
-			<cfset application.wheels.adapter = CreateObject("component", "wheels.model.adapters.#loc.adapterName#")>
-		</cfif>
-		<cfset application.wheels.dataSource = application.settings.database.datasource>
-		<cfset application.wheels.databaseProductName = loc.info.database_productname>
-		<cfset application.wheels.databaseVersion = loc.info.database_version>
-	<cfelse>
-		<cfset application.wheels.dataSource = "None">
-		<cfset application.wheels.databaseProductName = "None">
-		<cfset application.wheels.databaseVersion = "">
+	<cfif !Len(application.settings.database.datasource)>
+		<cfset application.settings.database.datasource = LCase(ListLast(this.rootDir, Right(this.rootDir, 1)))>
 	</cfif>
+	<cftry>
+		<cfset loc.info = $dbinfo(datasource=application.settings.database.datasource, username=application.settings.database.username, password=application.settings.database.password, type="version")>
+	<cfcatch>
+		<cfset $throw(type="Wheels.DataSourceNotFound", message="The '#application.settings.database.datasource#' data source could not be found.", extendedInfo="You need to add a data source with this name in the #application.wheels.serverName# Administrator before running Wheels. You can specify a different name for the data source in 'config/database.cfm' if necessary. When done, issue a 'reload=true' request (or restart the #application.wheels.serverName# service) and Wheels will attempt to connect to your data source again.")>
+	</cfcatch>
+	</cftry>
+	<cfif loc.info.driver_name Contains "MySQL">
+		<cfset loc.adapterName = "MySQL">
+	<cfelseif loc.info.driver_name Contains "Oracle">
+		<cfset loc.adapterName = "Oracle">
+	<cfelseif loc.info.driver_name Contains "SQLServer">
+		<cfset loc.adapterName = "MicrosoftSQLServer">
+	<cfelse>
+		<cfset $throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, Oracle or MySQL.")>
+	</cfif>
+	<cfset application.wheels.adapter = CreateObject("component", "wheels.model.adapters.#loc.adapterName#")>
+	<cfset application.wheels.databaseProductName = loc.info.database_productname>
+	<cfset application.wheels.databaseVersion = loc.info.database_version>
 	<cfset application.wheels.dispatch = CreateObject("component", "wheels.Dispatch")>
 	<cfinclude template="../#application.wheels.eventPath#/onapplicationstart.cfm">
 </cffunction>

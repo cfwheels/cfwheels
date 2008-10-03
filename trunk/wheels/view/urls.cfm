@@ -29,12 +29,6 @@
 		#linkTo(text="Joe's Profile", route="userProfile", userName="joe")#
 		-> <a href="/user/joe">Joe's Profile</a> (given that a "userProfile" route has been configured in "config/routes.cfm".)
 
-		#linkTo(href="http://www.google.com", text="Google")#
-		-> <a href="http://www.google.com">Google</a>
-
-		#linkTo(href="http://www.google.com")#
-		-> <a href="http://www.google.com">http://www.google.com</a> (When leaving out the text argument Wheels will use the link as the text as well.)
-
 		RELATED:
 		 * [LinkingPages Linking Pages] (chapter)
 		 * [buttonTo buttonTo()] (function)

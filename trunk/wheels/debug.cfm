@@ -9,23 +9,15 @@
 	</tr>
 	<tr>
 		<td valign="top"><strong>Framework:</strong></td>
-		<td>Wheels #application.wheels.version#</td>
+		<td>Wheels #application.wheels.version# (#application.settings.environment# mode)</td>
 	</tr>
 	<tr>
-		<td valign="top"><strong>Environment:</strong></td>
-		<td>#UCase(Left(application.settings.environment, 1))##LCase(Right(application.settings.environment, Len(application.settings.environment)-1))#</td>
-	</tr>
-	<tr>
-		<td valign="top"><strong>Engine:</strong></td>
-		<td><cfif IsDefined("server.coldfusion.productname") AND server.coldfusion.productname IS "ColdFusion Server">ColdFusion Server #server.coldfusion.productversion#<cfelse>Railo</cfif></td>
+		<td valign="top"><strong>CFML Engine:</strong></td>
+		<td>#application.wheels.serverName# #application.wheels.serverVersion#</td>
 	</tr>
 	<tr>
 		<td valign="top"><strong>Database:</strong></td>
 		<td>#application.wheels.databaseProductName# #application.wheels.databaseVersion#</td>
-	</tr>
-	<tr>
-		<td valign="top"><strong>Data Source:</strong></td>
-		<td>#application.wheels.dataSource#</td>
 	</tr>
 	<tr>
 		<td valign="top"><strong>URL Rewriting:</strong></td>
