@@ -121,7 +121,7 @@
 			if (StructKeyExists(variables.wheels.class.properties, application.settings.defaultSoftDeleteColumn))
 			{
 				variables.wheels.class.softDeletion = true;
-				variables.wheels.class.softDeleteColumn = application.settings.defaultSoftDeleteColumn;
+				variables.wheels.class.softDeleteColumn = variables.wheels.class.properties[application.settings.defaultSoftDeleteColumn].column;
 			}
 			else
 			{
