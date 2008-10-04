@@ -13,50 +13,6 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="SetSoftDeleteColumn" returntype="void" access="public" output="false" hint="Init, Sets a column to use for soft deletion">
-	<cfargument name="name" type="any" required="true" hint="Name of column">
-	<cfscript>
-		variables.wheels.class.softDeletion = true;
-		variables.wheels.class.softDeleteColumn = arguments.column;
-	</cfscript>
-</cffunction>
-
-<cffunction name="disableSoftDeletion" returntype="void" access="public" output="false" hint="Init, Disables soft deletion completely (overriding database introspection that may have turned on soft deletion)">
-	<cfscript>
-		variables.wheels.class.softDeletion = false;
-		if (StructKeyExists(variables.wheels.class, "softDeleteColumn"))
-			StructDelete(variables.wheels.class, "softDeleteColumn");
-	</cfscript>
-</cffunction>
-
-<cffunction name="SetTimeStampColumns" returntype="void" access="public" output="false" hint="Init, Sets column(s) to use for time stamping records">
-	<cfargument name="create" type="string" required="false" default="" hint="Column to use for time stamping on creating new records">
-	<cfargument name="update" type="string" required="false" default="" hint="Column to use for time stamping on updating existing records">
-	<cfscript>
-		if (Len(arguments.create) IS NOT 0)
-		{
-			variables.wheels.class.timeStampingOnCreate = true;
-			variables.wheels.class.timeStampOnCreateColumn = arguments.create;
-		}
-		if (Len(arguments.update) IS NOT 0)
-		{
-			variables.wheels.class.timeStampingOnUpdate = true;
-			variables.wheels.class.timeStampOnUpdateColumn = arguments.update;
-		}
-	</cfscript>
-</cffunction>
-
-<cffunction name="disableTimeStamping" returntype="void" access="public" output="false" hint="Init, Disables timestamping completely (overriding database introspection that may have turned on timestamping)">
-	<cfscript>
-		variables.wheels.class.timeStampingOnCreate = true;
-		variables.wheels.class.timeStampingOnUpdate = true;
-		if (StructKeyExists(variables.wheels.class, "timeStampOnCreateColumn"))
-			StructDelete(variables.wheels.class, "timeStampOnCreateColumn");
-		if (StructKeyExists(variables.wheels.class, "timeStampOnUpdateColumn"))
-			StructDelete(variables.wheels.class, "timeStampOnCreateColumn");
-	</cfscript>
-</cffunction>
-
 <cffunction name="$initClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
@@ -115,45 +71,34 @@
 			variables.wheels.class.columnList = ListAppend(variables.wheels.class.columnList, variables.wheels.class.properties[loc.property].column);
 		}
 
-		// setup soft deletion info unless set manually by the developer
-		if (!StructKeyExists(variables.wheels.class, "softDeletion"))
+		if (Len(application.settings.softDeleteProperty) && StructKeyExists(variables.wheels.class.properties, application.settings.softDeleteProperty))
 		{
-			if (StructKeyExists(variables.wheels.class.properties, application.settings.defaultSoftDeleteColumn))
-			{
-				variables.wheels.class.softDeletion = true;
-				variables.wheels.class.softDeleteColumn = variables.wheels.class.properties[application.settings.defaultSoftDeleteColumn].column;
-			}
-			else
-			{
-				variables.wheels.class.softDeletion = false;
-			}
+			variables.wheels.class.softDeletion = true;
+			variables.wheels.class.softDeleteColumn = variables.wheels.class.properties[application.settings.softDeleteProperty].column;
+		}
+		else
+		{
+			variables.wheels.class.softDeletion = false;
 		}
 
-		// setup time stamping info unless set manually by the developer
-		if (!StructKeyExists(variables.wheels.class, "timeStampingOnCreate"))
+		if (Len(application.settings.timeStampOnCreateProperty) && StructKeyExists(variables.wheels.class.properties, application.settings.timeStampOnCreateProperty))
 		{
-			if (StructKeyExists(variables.wheels.class.properties, application.settings.defaultTimeStampOnCreateColumn))
-			{
-				variables.wheels.class.timeStampingOnCreate = true;
-				variables.wheels.class.timeStampOnCreateColumn = application.settings.defaultTimeStampOnCreateColumn;
-			}
-			else
-			{
-				variables.wheels.class.timeStampingOnCreate = false;
-			}
-
+			variables.wheels.class.timeStampingOnCreate = true;
+			variables.wheels.class.timeStampOnCreateColumn = variables.wheels.class.properties[application.settings.timeStampOnCreateProperty].column;
 		}
-		if (!StructKeyExists(variables.wheels.class, "timeStampingOnUpdate"))
+		else
 		{
-			if (StructKeyExists(variables.wheels.class.properties, application.settings.defaultTimeStampOnUpdateColumn))
-			{
-				variables.wheels.class.timeStampingOnUpdate = true;
-				variables.wheels.class.timeStampOnUpdateColumn = application.settings.defaultTimeStampOnUpdateColumn;
-			}
-			else
-			{
-				variables.wheels.class.timeStampingOnUpdate = false;
-			}
+			variables.wheels.class.timeStampingOnCreate = false;
+		}
+
+		if (Len(application.settings.timeStampOnUpdateProperty) && StructKeyExists(variables.wheels.class.properties, application.settings.timeStampOnUpdateProperty))
+		{
+			variables.wheels.class.timeStampingOnUpdate = true;
+			variables.wheels.class.timeStampOnUpdateColumn = variables.wheels.class.properties[application.settings.timeStampOnUpdateProperty].column;
+		}
+		else
+		{
+			variables.wheels.class.timeStampingOnUpdate = false;
 		}
 	</cfscript>
 	<cfreturn this>
