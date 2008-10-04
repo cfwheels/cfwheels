@@ -2,9 +2,9 @@
 <cfset application.settings.tableNamePrefix = "">
 <cfset application.settings.obfuscateURLs = false>
 <cfset application.settings.reloadPassword = "">
-<cfset application.settings.defaultSoftDeleteColumn = "deletedAt">
-<cfset application.settings.defaultTimeStampOnCreateColumn = "createdAt">
-<cfset application.settings.defaultTimeStampOnUpdateColumn = "updatedAt">
+<cfset application.settings.softDeleteProperty = "deletedAt">
+<cfset application.settings.timeStampOnCreateProperty = "createdAt">
+<cfset application.settings.timeStampOnUpdateProperty = "updatedAt">
 <cfset application.settings.ipExceptions = "">
 
 <!--- default for functions --->
