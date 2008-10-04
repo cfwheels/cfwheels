@@ -89,7 +89,7 @@
 		}
 
 		// introspect the database
-		loc.columns = $dbinfo(datasource=application.settings.database.datasource, type="columns", table=variables.wheels.class.tableName);
+		loc.columns = $dbinfo(datasource=application.settings.database.datasource, username=application.settings.database.username, password=application.settings.database.password, type="columns", table=variables.wheels.class.tableName);
 		variables.wheels.class.keys = "";
 		variables.wheels.class.propertyList = "";
 		variables.wheels.class.columnList = "";
