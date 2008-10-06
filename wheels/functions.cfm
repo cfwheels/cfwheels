@@ -3,25 +3,32 @@
 <cfset this.mappings["/wheels"] = this.rootDir & "wheels">
 <cfset this.sessionManagement = true>
 
-<cfif IsDefined("server.coldfusion.productname") AND server.coldfusion.productname IS "ColdFusion Server">
-	<cfinclude template="wheels/base/internal.cfm">
-	<cfinclude template="wheels/base/public.cfm">
-<cfelse>
+<cfif StructKeyExists(server, "railo")>
 	<cfinclude template="base/internal.cfm">
 	<cfinclude template="base/public.cfm">
+<cfelse>
+	<cfinclude template="wheels/base/internal.cfm">
+	<cfinclude template="wheels/base/public.cfm">
 </cfif>
 
 <cffunction name="onApplicationStart" output="false">
 	<cfset var loc = {}>
 	<cfset application.wheels = StructNew()>
-	<cfif IsDefined("server.coldfusion.productname") AND server.coldfusion.productname IS "ColdFusion Server">
+	<cfif StructKeyExists(server, "railo")>
+		<cfset application.wheels.serverName = "Railo">
+		<cfset application.wheels.serverVersion = server.railo.version>
+	<cfelse>
 		<cfset application.wheels.serverName = "Adobe ColdFusion">
 		<cfset application.wheels.serverVersion = server.coldfusion.productversion>
-	<cfelse>
-		<cfset application.wheels.serverName = "Railo">
-		<cfset application.wheels.serverVersion = "">
 	</cfif>
 	<cfset application.wheels.version = "1.0 RC 1">
+	<cfif cgi.script_name IS "/rewrite.cfm">
+		<cfset application.wheels.URLRewriting = "On">
+	<cfelseif cgi.path_info IS NOT "">
+		<cfset application.wheels.URLRewriting = "Partial">
+	<cfelse>
+		<cfset application.wheels.URLRewriting = "Off">	
+	</cfif>
 	<cfset application.wheels.controllers = StructNew()>
 	<cfset application.wheels.models = StructNew()>
 	<cfset application.wheels.routes = ArrayNew(1)>

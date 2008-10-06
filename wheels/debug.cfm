@@ -21,7 +21,7 @@
 	</tr>
 	<tr>
 		<td valign="top"><strong>URL Rewriting:</strong></td>
-		<td><cfif cgi.script_name Contains "rewrite.cfm">On<cfelse>Off</cfif></td>
+		<td>#application.wheels.URLRewriting#</td>
 	</tr>
 	<tr>
 		<td valign="top"><strong>URL Obfuscation:</strong></td>

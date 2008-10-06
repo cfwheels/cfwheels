@@ -33,43 +33,69 @@
 				$throw(type="Wheels.IncorrectArguments", message="Can't use the 'host' or 'protocol' arguments when 'onlyPath' is 'true'.", extendedInfo="Set 'onlyPath' to 'false' so that linkTo will create absolute URLs and thus allowing you to set the 'host' and 'protocol' on the link.");
 		}
 		// build the link
-		loc.returnValue = application.wheels.webPath & ListLast(cgi.script_name, "/");
+		loc.returnValue = application.wheels.webPath & ListLast(cgi.script_name, "/") & "?";
 		if (Len(arguments.route))
 		{
 			// link for a named route
 			loc.route = application.wheels.routes[application.wheels.namedRoutePositions[arguments.route]];
-			loc.iEnd = ListLen(loc.route.pattern, "/");
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			if (application.wheels.URLRewriting == "Off")
 			{
-				loc.property = ListGetAt(loc.route.pattern, loc.i, "/");
-				if (loc.property Contains "[")
-					loc.returnValue = loc.returnValue & "/" & arguments[Mid(loc.property, 2, Len(loc.property)-2)]; // get param from arguments
-				else
-					loc.returnValue = loc.returnValue & "/" & loc.property; // add hard coded param from route
-			}		
+				loc.returnValue = loc.returnValue & "controller=" & loc.route.controller;
+				loc.returnValue = loc.returnValue & "&amp;action=" & loc.route.action;
+				loc.iEnd = ListLen(loc.route.variables);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					loc.property = ListGetAt(loc.route.variables, loc.i);
+					loc.returnValue = loc.returnValue & "&amp;" & loc.property & "=" & URLEncodedFormat(arguments[loc.property]);
+				}		
+			}
+			else
+			{
+				loc.iEnd = ListLen(loc.route.pattern, "/");
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					loc.property = ListGetAt(loc.route.pattern, loc.i, "/");
+					if (loc.property Contains "[")
+						loc.returnValue = loc.returnValue & "/" & URLEncodedFormat(arguments[Mid(loc.property, 2, Len(loc.property)-2)]); // get param from arguments
+					else
+						loc.returnValue = loc.returnValue & "/" & loc.property; // add hard coded param from route
+				}		
+			}
 		}
 		else
 		{
 			// link based on controller/action/key
 			if (Len(arguments.controller))
-				loc.returnValue = loc.returnValue & "/" & arguments.controller; // add controller from arguments
+				loc.returnValue = loc.returnValue & "controller=" & arguments.controller; // add controller from arguments
 			else
-				loc.returnValue = loc.returnValue & "/" & variables.params.controller; // keep the controller name from the current request
+				loc.returnValue = loc.returnValue & "controller=" & variables.params.controller; // keep the controller name from the current request
 			if (Len(arguments.action))
-				loc.returnValue = loc.returnValue & "/" & arguments.action;
+				loc.returnValue = loc.returnValue & "&amp;action=" & arguments.action;
 			if (Len(arguments.key))
 			{
 				if (application.settings.obfuscateURLs)
-					loc.returnValue = loc.returnValue & "/" & obfuscateParam(arguments.key);
+					loc.returnValue = loc.returnValue & "&amp;key=" & obfuscateParam(URLEncodedFormat(arguments.key));
 				else
-					loc.returnValue = loc.returnValue & "/" & arguments.key;
+					loc.returnValue = loc.returnValue & "&amp;key=" & URLEncodedFormat(arguments.key);
 			}
 		}
+
+		if (application.wheels.URLRewriting != "Off")
+		{
+			loc.returnValue = Replace(loc.returnValue, "?controller=", "/");
+			loc.returnValue = Replace(loc.returnValue, "&amp;action=", "/");
+			loc.returnValue = Replace(loc.returnValue, "&amp;key=", "/");
+		}
+		if (application.wheels.URLRewriting == "On")
+		{
+			loc.returnValue = Replace(loc.returnValue, "rewrite.cfm/", "");
+		}
+
 		if (Len(arguments.params))
 			loc.returnValue = loc.returnValue & $constructParams(arguments.params);
 		if (Len(arguments.anchor))
 			loc.returnValue = loc.returnValue & "##" & arguments.anchor;
-		loc.returnValue = Replace(loc.returnValue, "rewrite.cfm/", ""); // fix when url rewriting is in use
+				
 		if (!arguments.onlyPath)
 		{
 			if (arguments.port != 0)

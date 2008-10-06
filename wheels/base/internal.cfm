@@ -209,7 +209,12 @@
 <cffunction name="$dbinfo" returntype="any" access="private" output="false">
 	<cfset var loc = StructNew()>
 	<cfset arguments.name = "loc.returnValue">
-	<cfdbinfo attributeCollection="#arguments#">
+	<!--- we have to use this cfif here to get around a bug with railo --->
+	<cfif StructKeyExists(arguments, "table")>
+		<cfdbinfo datasource="#arguments.datasource#" name="#arguments.name#" type="#arguments.type#" username="#arguments.username#" password="#arguments.password#" table="#arguments.table#">
+	<cfelse>
+		<cfdbinfo datasource="#arguments.datasource#" name="#arguments.name#" type="#arguments.type#" username="#arguments.username#" password="#arguments.password#">
+	</cfif>
 	<cfreturn loc.returnValue>
 </cffunction>
 
