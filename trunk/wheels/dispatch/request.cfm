@@ -2,7 +2,7 @@
 	<cfset var loc = {}>
 
 	<cfif application.settings.showDebugInformation>
-		<cfset request.wheels.execution.components.setup = getTickCount()>
+		<cfset request.wheels.execution.components.setup = GetTickCount()>
 	</cfif>
 
 	<!--- find the matching route --->
@@ -11,7 +11,7 @@
 	<cfelse>
 		<cfset loc.route = Right(cgi.path_info, Len(cgi.path_info)-1)>
 	</cfif>
-	<cfloop from="1" to="#arrayLen(application.wheels.routes)#" index="loc.i">
+	<cfloop from="1" to="#ArrayLen(application.wheels.routes)#" index="loc.i">
 		<cfset loc.currentRoute = application.wheels.routes[loc.i].pattern>
 		<cfif loc.route IS "" AND loc.currentRoute IS "">
 			<cfset loc.foundRoute = application.wheels.routes[loc.i]>
@@ -36,7 +36,7 @@
 		</cfif>
 	</cfloop>
 	<cfif NOT StructKeyExists(loc, "foundRoute")>
-		<cfthrow type="Wheels.RouteNotFound" message="Route Not Found" extendedInfo="Make sure there is a route setup in your <tt>config/routes.cfm</tt> file that matches the <tt>#loc.route#</tt>request">
+		<cfthrow type="Wheels.RouteNotFound" message="Wheels couldn't find a route that matched this request." extendedInfo="Make sure there is a route setup in your 'config/routes.cfm' file that matches the '#loc.route#' request.">
 	</cfif>
 
 	<!--- create the params struct and add any values that should be retrieved from the URL --->
@@ -172,11 +172,11 @@
 	<cftry>
 		<cfset loc.controller = $controller(loc.params.controller).$createControllerObject(loc.params)>
 	<cfcatch>
-		<cfif fileExists(expandPath("#application.wheels.controllerPath#/#capitalize(loc.params.controller)#.cfc"))>
+		<cfif FileExists(ExpandPath("#application.wheels.controllerPath#/#capitalize(loc.params.controller)#.cfc"))>
 			<cfrethrow>
 		<cfelse>
 			<cfif application.settings.showErrorInformation>
-				<cfthrow type="Wheels.ControllerNotFound" message="Could not find the <tt>#loc.params.controller#</tt> controller" extendedInfo="Create a file named <tt>#capitalize(loc.params.controller)#.cfc</tt> in the <tt>controllers</tt> directory containing this code: <pre><code>#htmlEditFormat('<cfcomponent extends="Controller"></cfcomponent>')#</code></pre>">
+				<cfthrow type="Wheels.ControllerNotFound" message="Could not find the <tt>#loc.params.controller#</tt> controller" extendedInfo="Create a file named <tt>#capitalize(loc.params.controller)#.cfc</tt> in the <tt>controllers</tt> directory containing this code: <pre><code>#HTMLEditFormat('<cfcomponent extends="Controller">#Chr(10)#</cfcomponent>')#</code></pre>">
 			<cfelse>
 				<cfinclude template="../../#application.wheels.eventPath#/onmissingtemplate.cfm">
 				<cfabort>
@@ -186,8 +186,8 @@
 	</cftry>
 
 	<cfif application.settings.showDebugInformation>
-		<cfset request.wheels.execution.components.setup = getTickCount() - request.wheels.execution.components.setup>
-		<cfset request.wheels.execution.components.beforeFilters = getTickCount()>
+		<cfset request.wheels.execution.components.setup = GetTickCount() - request.wheels.execution.components.setup>
+		<cfset request.wheels.execution.components.beforeFilters = GetTickCount()>
 	</cfif>
 
 	<!--- confirm verifications on controller if they exist --->
@@ -251,8 +251,8 @@
 	</cfif>
 
 	<cfif application.settings.showDebugInformation>
-		<cfset request.wheels.execution.components.beforeFilters = getTickCount() - request.wheels.execution.components.beforeFilters>
-		<cfset request.wheels.execution.components.action = getTickCount()>
+		<cfset request.wheels.execution.components.beforeFilters = GetTickCount() - request.wheels.execution.components.beforeFilters>
+		<cfset request.wheels.execution.components.action = GetTickCount()>
 	</cfif>
 
 	<!--- Call action on controller if it exists --->
@@ -288,11 +288,11 @@
 	</cfif>
 
 	<cfif application.settings.showDebugInformation>
-		<cfset request.wheels.execution.components.action = getTickCount() - request.wheels.execution.components.action>
+		<cfset request.wheels.execution.components.action = GetTickCount() - request.wheels.execution.components.action>
 		<cfif StructKeyExists(request.wheels.execution.components, "view")>
 			<cfset request.wheels.execution.components.action = request.wheels.execution.components.action - request.wheels.execution.components.view>
 		</cfif>
-		<cfset request.wheels.execution.components.afterFilters = getTickCount()>
+		<cfset request.wheels.execution.components.afterFilters = GetTickCount()>
 	</cfif>
 
 	<cfset loc.afterFilters = loc.controller.$getAfterFilters()>
@@ -305,7 +305,7 @@
 	</cfif>
 
 	<cfif application.settings.showDebugInformation>
-		<cfset request.wheels.execution.components.afterFilters = getTickCount() - request.wheels.execution.components.afterFilters>
+		<cfset request.wheels.execution.components.afterFilters = GetTickCount() - request.wheels.execution.components.afterFilters>
 	</cfif>
 
 	<!--- Clear the flash (note that this is not done for redirectTo since the processing does not get here) --->
@@ -327,11 +327,11 @@
 		<cftry>
 			<cfset arguments.controller.renderPage()>
 		<cfcatch>
-			<cfif fileExists(expandPath("#application.wheels.viewPath#/#LCase(arguments.controllerName)#/#LCase(arguments.actionName)#.cfm"))>
+			<cfif FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(arguments.controllerName)#/#LCase(arguments.actionName)#.cfm"))>
 				<cfrethrow>
 			<cfelse>
 				<cfif application.settings.showErrorInformation>
-					<cfthrow type="Wheels.ViewNotFound" message="Could not find the view page for the <tt>#arguments.actionName#</tt> action in the <tt>#arguments.controllerName#</tt> controller" extendedInfo="Create a file named <tt>#LCase(arguments.actionName)#.cfm</tt> in the <tt>views/#LCase(arguments.controllerName)#</tt> directory (create the directory as well if necessary).">
+					<cfthrow type="Wheels.ViewNotFound" message="Could not find the view page for the <tt>#arguments.actionName#</tt> action in the <tt>#arguments.controllerName#</tt> controller." extendedInfo="Create a file named <tt>#LCase(arguments.actionName)#.cfm</tt> in the <tt>views/#LCase(arguments.controllerName)#</tt> directory (create the directory as well if it doesn't already exist).">
 				<cfelse>
 					<cfinclude template="../../#application.wheels.eventPath#/onmissingtemplate.cfm">
 					<cfabort>

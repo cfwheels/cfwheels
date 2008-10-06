@@ -1,11 +1,11 @@
 <cffunction name="$controller" returntype="any" access="private" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfset var loc = {}>
-	<cfset arguments.name = capitalize(arguments.name)>
 	<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
    	<cflock name="controllerLock" type="exclusive" timeout="30">
 			<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
 				<cfset loc.rootObject = "controllerClass">
+				<cfset loc.fileName = capitalize(arguments.name)>
 				<cfinclude template="../../root.cfm">
 				<cfset application.wheels.controllers[arguments.name] = loc.rootObject>
 			</cfif>
@@ -359,10 +359,10 @@
 	<cfargument name="name" type="string" required="true">
 	<cfset var loc = {}>
 	<cfset arguments.name = capitalize(arguments.name)>
-	<cfif fileExists(expandPath("#application.wheels.modelPath#/#arguments.name#.cfc"))>
-		<cfset arguments.fileName = arguments.name>
+	<cfif FileExists(ExpandPath("#application.wheels.modelPath#/#arguments.name#.cfc"))>
+		<cfset loc.fileName = arguments.name>
 	<cfelse>
-		<cfset arguments.fileName = "Model">
+		<cfset loc.fileName = "Model">
 	</cfif>
 	<cfset loc.rootObject = "modelClass">
 	<cfinclude template="../../root.cfm">
