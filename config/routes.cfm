@@ -1,1 +1,1 @@
-<cfset addRoute(name="home", pattern="", controller="main", action="welcomeToWheels")>
+<cfset addRoute(name="home", pattern="", controller="sampleController", action="sampleAction")>

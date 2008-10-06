@@ -227,7 +227,7 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="capitalize" returntype="string" access="public" output="false" hint="View, Helper, Returns the text with the first character converted to uppercase and the rest to lowercase.">
+<cffunction name="capitalize" returntype="string" access="public" output="false" hint="View, Helper, Returns the text with the first character converted to uppercase.">
 	<cfargument name="text" type="string" required="true" hint="Text to capitalize">
 
 	<!---
