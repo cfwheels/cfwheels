@@ -21,6 +21,10 @@
 		<cfset application.wheels.serverName = "Adobe ColdFusion">
 		<cfset application.wheels.serverVersion = server.coldfusion.productversion>
 	</cfif>
+	<cfset loc.majorVersion = Left(application.wheels.serverVersion, 1)>
+	<cfif (application.wheels.serverName IS "Railo" AND loc.majorVersion LT 3) OR (application.wheels.serverName IS "Adobe ColdFusion" AND loc.majorVersion LT 8)>
+		<cfset $throw(type="Wheels.NoSupport", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Upgrade to Adobe ColdFusion 8 or Railo 3.")>
+	</cfif>
 	<cfset application.wheels.version = "1.0 RC 1">
 	<cfif cgi.script_name IS "/rewrite.cfm">
 		<cfset application.wheels.URLRewriting = "On">
@@ -39,7 +43,7 @@
 		<cfset loc.path = "">
 		<cfset loc.componentPath = "">
 	<cfelse>
-		<cfset loc.folder = cgi.http_host>
+		<cfset loc.folder = LCase(cgi.http_host)>
 		<cfset loc.folder = ListDeleteAt(loc.folder, ListLen(loc.folder, "."), ".")>
 		<cfset loc.folder = Replace(loc.folder, "www.", "")>
 		<cfset loc.folder = Replace(loc.folder, ".co", "")>
@@ -100,7 +104,7 @@
 	<cfelseif loc.info.driver_name Contains "SQLServer">
 		<cfset loc.adapterName = "MicrosoftSQLServer">
 	<cfelse>
-		<cfset $throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, Oracle or MySQL.")>
+		<cfset $throw(type="Wheels.NoSupport", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, Oracle or MySQL.")>
 	</cfif>
 	<cfset application.wheels.adapter = CreateObject("component", "wheels.model.adapters.#loc.adapterName#")>
 	<cfset application.wheels.databaseProductName = loc.info.database_productname>
@@ -187,7 +191,7 @@
 	<cfset var loc = {}>
 	<cflock scope="application" type="readonly" timeout="30">
 		<cfif application.settings.sendEmailOnError>
-			<cfmail to="#application.settings.errorEmailAddress#" from="#application.settings.errorEmailAddress#" subject="#application.applicationname# error" type="html">
+			<cfmail to="#application.settings.errorEmailAddress#" from="#application.settings.errorEmailAddress#" subject="Error" type="html">
 				<cfinclude template="error.cfm">
 			</cfmail>
 		</cfif>
