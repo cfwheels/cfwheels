@@ -1,6 +1,6 @@
 <cfcomponent extends="Controller">
 
-	<cffunction name="welcomeToWheels">
+	<cffunction name="sampleAction">
 		<cfset version = application.wheels.version>
 	</cffunction>
 
