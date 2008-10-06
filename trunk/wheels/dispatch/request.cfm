@@ -172,11 +172,11 @@
 	<cftry>
 		<cfset loc.controller = $controller(loc.params.controller).$createControllerObject(loc.params)>
 	<cfcatch>
-		<cfif fileExists(expandPath("#application.wheels.controllerPath#/#loc.params.controller#.cfc"))>
+		<cfif fileExists(expandPath("#application.wheels.controllerPath#/#capitalize(loc.params.controller)#.cfc"))>
 			<cfrethrow>
 		<cfelse>
 			<cfif application.settings.showErrorInformation>
-				<cfthrow type="Wheels.ControllerNotFound" message="Could not find the <tt>#loc.params.controller#</tt> controller" extendedInfo="Create a file named <tt>#loc.params.controller#.cfc</tt> in the <tt>controllers</tt> directory containing this code: <pre><code>#htmlEditFormat('<cfcomponent extends="wheels.controller"></cfcomponent>')#</code></pre>">
+				<cfthrow type="Wheels.ControllerNotFound" message="Could not find the <tt>#loc.params.controller#</tt> controller" extendedInfo="Create a file named <tt>#capitalize(loc.params.controller)#.cfc</tt> in the <tt>controllers</tt> directory containing this code: <pre><code>#htmlEditFormat('<cfcomponent extends="Controller"></cfcomponent>')#</code></pre>">
 			<cfelse>
 				<cfinclude template="../../#application.wheels.eventPath#/onmissingtemplate.cfm">
 				<cfabort>
@@ -327,11 +327,11 @@
 		<cftry>
 			<cfset arguments.controller.renderPage()>
 		<cfcatch>
-			<cfif fileExists(expandPath("#application.wheels.viewPath#/#arguments.controllerName#/#arguments.actionName#.cfm"))>
+			<cfif fileExists(expandPath("#application.wheels.viewPath#/#LCase(arguments.controllerName)#/#LCase(arguments.actionName)#.cfm"))>
 				<cfrethrow>
 			<cfelse>
 				<cfif application.settings.showErrorInformation>
-					<cfthrow type="Wheels.ViewNotFound" message="Could not find the view page for the <tt>#arguments.actionName#</tt> action in the <tt>#arguments.controllerName#</tt> controller" extendedInfo="Create a file named <tt>#arguments.actionName#.cfm</tt> in the <tt>views/#arguments.controllerName#</tt> directory (create the directory as well if necessary).">
+					<cfthrow type="Wheels.ViewNotFound" message="Could not find the view page for the <tt>#arguments.actionName#</tt> action in the <tt>#arguments.controllerName#</tt> controller" extendedInfo="Create a file named <tt>#LCase(arguments.actionName)#.cfm</tt> in the <tt>views/#LCase(arguments.controllerName)#</tt> directory (create the directory as well if necessary).">
 				<cfelse>
 					<cfinclude template="../../#application.wheels.eventPath#/onmissingtemplate.cfm">
 					<cfabort>
