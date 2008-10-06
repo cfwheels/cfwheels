@@ -1,4 +1,4 @@
-<cffunction name="request" output="false">
+<cffunction name="request" returntype="string" access="public" output="false">
 	<cfset var loc = {}>
 
 	<cfif application.settings.showDebugInformation>
@@ -56,6 +56,10 @@
 	<cfif NOT StructKeyExists(loc.params, "action")>
 		<cfset loc.params.action = loc.foundRoute.action>
 	</cfif>
+
+	<!--- convert controller to upperCamelCase and action to normal camelCase --->
+	<cfset loc.params.controller = REReplace(loc.params.controller, "-([a-z])", "\u\1", "all")>
+	<cfset loc.params.action = REReplace(loc.params.action, "-([a-z])", "\u\1", "all")>
 
 	<!--- decrypt all values except controller and action --->
 	<cfif application.settings.obfuscateURLs>
