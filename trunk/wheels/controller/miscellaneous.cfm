@@ -2,7 +2,7 @@
 	<cfargument name="route" type="string" required="false" default="" hint="Name of a route that you have configured in 'config/routes.cfm'.">
 	<cfargument name="controller" type="string" required="false" default="" hint="Name of the controller to include in the URL.">
 	<cfargument name="action" type="string" required="false" default="" hint="Name of the action to include in the URL.">
-	<cfargument name="key" type="string" required="false" default="" hint="Key(s) to include in the URL.">
+	<cfargument name="key" type="any" required="false" default="" hint="Key(s) to include in the URL.">
 	<cfargument name="params" type="string" required="false" default="" hint="Any additional params to be set in the query string.">
 	<cfargument name="anchor" type="string" required="false" default="" hint="Sets an anchor name to be appended to the path.">
 	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="If true, returns only the relative URL (no protocol, host name or port).">
@@ -27,11 +27,17 @@
 		{
 			if (!Len(arguments.route) && !Len(arguments.controller) && !Len(arguments.action))
 				$throw(type="Wheels.IncorrectArguments", message="The 'route', 'controller' or 'action' argument is required.", extendedInfo="Pass in either the name of a 'route' you have configured in 'confirg/routes.cfm' or a 'controller' / 'action' / 'key' combination.");
-			if (Len(arguments.route) && (Len(arguments.controller) || Len(arguments.action) || Len(arguments.key)))
+			if (Len(arguments.route) && (Len(arguments.controller) || Len(arguments.action) || (IsObject(arguments.key) || Len(arguments.key))))
 				$throw(type="Wheels.IncorrectArguments", message="The 'route' argument is mutually exclusive with the 'controller', 'action' and 'key' arguments.", extendedInfo="Choose whether to use a pre-configured 'route' or 'controller' / 'action' / 'key' combination.");
 			if (arguments.onlyPath && (Len(arguments.host) || Len(arguments.protocol)))
 				$throw(type="Wheels.IncorrectArguments", message="Can't use the 'host' or 'protocol' arguments when 'onlyPath' is 'true'.", extendedInfo="Set 'onlyPath' to 'false' so that linkTo will create absolute URLs and thus allowing you to set the 'host' and 'protocol' on the link.");
 		}
+		// get primary key values if an object was passed in
+		if (IsObject(arguments.key))
+		{
+			arguments.key = arguments.key.key();
+		}
+		
 		// build the link
 		loc.returnValue = application.wheels.webPath & ListLast(cgi.script_name, "/") & "?";
 		if (Len(arguments.route))

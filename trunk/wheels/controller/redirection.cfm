@@ -6,7 +6,7 @@
 	<cfargument name="route" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
 	<cfargument name="controller" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
 	<cfargument name="action" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
-	<cfargument name="key" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
+	<cfargument name="key" type="any" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
 	<cfargument name="params" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
 	<cfargument name="anchor" type="string" required="false" default="" hint="Pass-through argument; see documentation for URLFor">
 	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="Pass-through argument; see documentation for URLFor">
