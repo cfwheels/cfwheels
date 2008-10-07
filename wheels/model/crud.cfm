@@ -1051,17 +1051,23 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="key" returntype="string" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = "";
+		loc.iEnd = ListLen(variables.wheels.class.keys);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.returnValue = ListAppend(loc.returnValue, this[ListGetAt(variables.wheels.class.keys, loc.i)]);
+		}		
+		</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="reload" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		loc.id = "";
-		loc.iEnd = ListLen(variables.wheels.class.keys);
-		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
-		{
-			loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
-			loc.id = ListAppend(loc.id, this[loc.property]);
-		}
-		loc.query = findById(id=loc.id, reload=true, $create=false);
+		loc.query = findById(id=key(), reload=true, $create=false);
 		loc.iEnd = ListLen(variables.wheels.class.propertyList);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
