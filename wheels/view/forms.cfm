@@ -982,10 +982,10 @@
 
 	<cfif Len(arguments.label) IS NOT 0>
 		<cfset loc.output = loc.output & arguments.prependToLabel>
-		<cfif Len(arguments.objectName) IS NOT 0>
-			<cfset loc.output = loc.output & "<label for=""#listLast(arguments.objectName,'.')#-#arguments.property#""">
-		<cfelse>
+		<cfif Len(arguments.name)>
 			<cfset loc.output = loc.output & "<label for=""#arguments.name#""">
+		<cfelse>
+			<cfset loc.output = loc.output & "<label for=""#listLast(arguments.objectName,'.')#-#arguments.property#""">
 		</cfif>
 		<cfloop collection="#arguments#" item="loc.i">
 			<cfif Left(loc.i, 5) IS "label" AND Len(loc.i) GT 5>
