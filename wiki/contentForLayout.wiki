@@ -1,20 +1,19 @@
 #summary contentForLayout()
 #labels api,0.8,view,helper
 
-*Description*:
+==Description==
 
 Used inside a layout file to output the HTML created in the view.
 
-*Return Type*:
+==Return Type==
 
-Any
+`any`
 
-*
+==Parameters==
 
-*Parameters*:
+_None._
 
-
-*Examples*:
+==Examples==
 
 {{{
 <html>
@@ -27,9 +26,10 @@ Any
 </cfoutput>
 </body>
 </html>
-
+
+
 }}}
 
-*Related*:
+==Related==
 
  * [UsingLayouts Using Layouts] (chapter)
