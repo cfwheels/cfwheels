@@ -37,7 +37,7 @@ The above code would generate this markup:
 
 ===Extreme Example===
 
-If we were to use of the parameters except for `route` and `url` (more on those later), our code may look something like this:
+If we were to use all of the parameters except for `route` and `url` (more on those later), our code may look something like this:
 
 {{{
 #linkTo(text="Wheels Rocks!", controller="wheels", action="rocks", id=55, params="rocks=yes&referral=cfwheels.com", anchor="rockin", host="www.securesite.com", protocol="https", onlyPath=false, confirm="Are you sure that Wheels rocks?")#
