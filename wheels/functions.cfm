@@ -94,7 +94,7 @@
 	<cftry>
 		<cfset loc.info = $dbinfo(datasource=application.settings.database.datasource, username=application.settings.database.username, password=application.settings.database.password, type="version")>
 	<cfcatch>
-		<cfset $throw(type="Wheels.DataSourceNotFound", message="The '#application.settings.database.datasource#' data source could not be found.", extendedInfo="You need to add a data source with this name in the #application.wheels.serverName# Administrator before running Wheels. You can specify a different name for the data source in 'config/database.cfm' if necessary. When done, issue a 'reload=true' request (or restart the #application.wheels.serverName# service) and Wheels will attempt to connect to your data source again.")>
+		<cfset $throw(type="Wheels.DataSourceNotFound", message="The '#application.settings.database.datasource#' data source could not be found.", extendedInfo="You need to add a data source with this name in the #application.wheels.serverName# Administrator before running Wheels. You can specify a different name for the data source in 'config/database.cfm' if necessary.")>
 	</cfcatch>
 	</cftry>
 	<cfif loc.info.driver_name Contains "MySQL">
