@@ -43,10 +43,15 @@
 			if (Len(application.settings.tableNamePrefix))
 				variables.wheels.class.tableName = application.settings.tableNamePrefix & "_" & variables.wheels.class.tableName;
 		}
-
 		// introspect the database
-		loc.columns = $dbinfo(datasource=application.settings.database.datasource, username=application.settings.database.username, password=application.settings.database.password, type="columns", table=variables.wheels.class.tableName);
-		//$throw(type="Wheels.TableNotFound", message="The '#variables.wheels.class.tableName#' table could not be found in the database.", extendedInfo="Add a table named '#variables.wheels.class.tableName#' to your database or if you already have a table you want to use for this model you can tell Wheels to use it with the 'table' method.");
+		try
+		{
+			loc.columns = $dbinfo(datasource=application.settings.database.datasource, username=application.settings.database.username, password=application.settings.database.password, type="columns", table=variables.wheels.class.tableName);
+		}
+		catch(Any e)
+		{
+			$throw(type="Wheels.TableNotFound", message="The '#variables.wheels.class.tableName#' table could not be found in the database.", extendedInfo="Add a table named '#variables.wheels.class.tableName#' to your database or if you already have a table you want to use for this model you can tell Wheels to use it with the 'table' method.");		
+		}
 		variables.wheels.class.keys = "";
 		variables.wheels.class.propertyList = "";
 		variables.wheels.class.columnList = "";
@@ -71,6 +76,8 @@
 			variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, loc.property);
 			variables.wheels.class.columnList = ListAppend(variables.wheels.class.columnList, variables.wheels.class.properties[loc.property].column);
 		}
+		if (!Len(variables.wheels.class.keys))
+			$throw(type="Wheels.NoPrimaryKey", message="No primary key exists on the '#variables.wheels.class.tableName#' table.", extendedInfo="Set an appropriate primary key (or multiple keys) on the '#variables.wheels.class.tableName#' table.");		
 
 		if (Len(application.settings.softDeleteProperty) && StructKeyExists(variables.wheels.class.properties, application.settings.softDeleteProperty))
 		{

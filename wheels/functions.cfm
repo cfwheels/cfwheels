@@ -14,6 +14,7 @@
 <cffunction name="onApplicationStart" output="false">
 	<cfset var loc = {}>
 	<cfset application.wheels = StructNew()>
+	<cfset application.wheels.dispatch = CreateObject("component", "wheels.Dispatch")>
 	<cfif StructKeyExists(server, "railo")>
 		<cfset application.wheels.serverName = "Railo">
 		<cfset application.wheels.serverVersion = server.railo.version>
@@ -111,7 +112,6 @@
 		<cfset application.wheels.databaseProductName = loc.info.database_productname>
 		<cfset application.wheels.databaseVersion = loc.info.database_version>
 	</cfif>
-	<cfset application.wheels.dispatch = CreateObject("component", "wheels.Dispatch")>
 	<cfinclude template="../#application.wheels.eventPath#/onapplicationstart.cfm">
 </cffunction>
 

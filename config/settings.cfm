@@ -8,8 +8,8 @@
 <cfset application.settings.ipExceptions = "">
 
 <!--- default for functions --->
-<cfset application.settings.findById.parameterize = true>
-<cfset application.settings.findById.reload = false>
+<cfset application.settings.get.parameterize = true>
+<cfset application.settings.get.reload = false>
 <cfset application.settings.findOne.parameterize = true>
 <cfset application.settings.findOne.reload = false>
 <cfset application.settings.findAll.parameterize = true>
