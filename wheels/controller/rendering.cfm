@@ -232,7 +232,7 @@
 	<cfargument name="$path" type="string" required="true">
 	<cfset var loc = {}>
 	<cfsavecontent variable="loc.result">
-		<cfinclude template="#arguments.$path#">
+		<cfinclude template="#LCase(arguments.$path)#">
 	</cfsavecontent>
 	<cfreturn trim(loc.result)>
 </cffunction>
@@ -243,10 +243,10 @@
 	<cfif (IsBoolean(arguments.layout) AND arguments.layout) OR (arguments.layout IS NOT "false")>
 		<cfif NOT IsBoolean(arguments.layout)>
 			<!--- Include a designated layout --->
-			<cfset request.wheels.response = $include("../../#application.wheels.viewPath#/layouts/#LCase(Replace(arguments.layout, ' ', '', 'all'))#.cfm")>
-		<cfelseif fileExists(expandPath("views/layouts/#LCase(variables.params.controller)#.cfm"))>
+			<cfset request.wheels.response = $include("../../#application.wheels.viewPath#/layouts/#Replace(arguments.layout, ' ', '', 'all')#.cfm")>
+		<cfelseif fileExists(expandPath("views/layouts/#variables.params.controller#.cfm"))>
 			<!--- Include the current controller's layout if one exists --->
-			<cfset request.wheels.response = $include("../../#application.wheels.viewPath#/layouts/#LCase(variables.params.controller)#.cfm")>
+			<cfset request.wheels.response = $include("../../#application.wheels.viewPath#/layouts/#variables.params.controller#.cfm")>
 		<cfelse>
 			<!--- The application wide layout --->
 			<cfset request.wheels.response = $include("../../#application.wheels.viewPath#/layouts/default.cfm")>
