@@ -5,7 +5,6 @@
    	<cflock name="controllerLock" type="exclusive" timeout="30">
 			<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
 				<cfset loc.rootObject = "controllerClass">
-				<cfset loc.fileName = capitalize(arguments.name)>
 				<cfinclude template="../../root.cfm">
 				<cfset application.wheels.controllers[arguments.name] = loc.rootObject>
 			</cfif>
@@ -358,10 +357,8 @@
 <cffunction name="$createClass" returntype="any" access="private" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfset var loc = {}>
-	<cfset arguments.name = capitalize(arguments.name)>
-	<cfif FileExists(ExpandPath("#application.wheels.modelPath#/#arguments.name#.cfc"))>
-		<cfset loc.fileName = arguments.name>
-	<cfelse>
+	<cfset loc.fileName = capitalize(arguments.name)>
+	<cfif NOT FileExists(ExpandPath("#application.wheels.modelPath#/#loc.fileName#.cfc"))>
 		<cfset loc.fileName = "Model">
 	</cfif>
 	<cfset loc.rootObject = "modelClass">

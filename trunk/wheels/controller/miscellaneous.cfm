@@ -200,13 +200,13 @@
 	<cfset var loc = {}>
 
 	<cfsavecontent variable="request.wheels.response">
-		<cfinclude template="../../#application.wheels.viewPath#/email/#ReplaceNoCase(arguments.template, '.cfm', '')#.cfm">
+		<cfinclude template="../../#application.wheels.viewPath#/email/#LCase(ReplaceNoCase(arguments.template, '.cfm', ''))#.cfm">
 	</cfsavecontent>
 
 	<cfif (IsBoolean(arguments.layout) AND arguments.layout) OR (arguments.layout IS NOT "false")>
 		<cfif NOT IsBoolean(arguments.layout)>
 			<cfsavecontent variable="request.wheels.response">
-				<cfinclude template="../../#application.wheels.viewPath#/layouts/#Replace(arguments.layout, ' ', '', 'all')#.cfm">
+				<cfinclude template="../../#application.wheels.viewPath#/layouts/#LCase(Replace(arguments.layout, ' ', '', 'all'))#.cfm">
 			</cfsavecontent>
 		<cfelse>
 			<cfsavecontent variable="request.wheels.response">

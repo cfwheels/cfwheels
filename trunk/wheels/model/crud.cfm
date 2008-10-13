@@ -934,7 +934,6 @@
 	<cfargument name="row" type="numeric" required="false" default="1">
 	<cfset var loc = {}>
 	<cfset loc.rootObject = "ModelObject">
-	<cfset loc.fileName = variables.wheels.class.name>
 	<cfinclude template="../../root.cfm">
 	<cfreturn loc.rootObject>
 </cffunction>
