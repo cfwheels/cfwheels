@@ -52,6 +52,7 @@
 				arguments.onclick = loc.str;
 		}
 		arguments.href = URLFor(argumentCollection=arguments);
+		arguments.href = Replace(arguments.href, "&", "&amp;", "all"); // make sure we return XHMTL compliant code
 		if (!Len(arguments.text))
 			arguments.text = arguments.href;
 		arguments.$namedArguments = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port";
@@ -91,6 +92,7 @@
 		var loc = {};
 
 		arguments.action = URLFor(argumentCollection=arguments);
+		arguments.action = Replace(arguments.action, "&", "&amp;", "all"); // make sure we return XHMTL compliant code
 		arguments.method = "post";
 		if (Len(arguments.confirm))
 		{

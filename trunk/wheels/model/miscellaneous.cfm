@@ -49,7 +49,7 @@
 					{
 						loc.object = arguments.missingMethodArguments[ListFirst(StructKeyList(arguments.missingMethodArguments))];
 						if (!IsObject(loc.object))
-							loc.object = get(loc.object);
+							loc.object = findByKey(loc.object);
 					}
 					$dump(loc.object);
 					loc.info = $expandedAssociations(include=loc.key);
@@ -155,7 +155,7 @@
 						{
 							case "object":
 							{
-								loc.returnValue = model(loc.info.class).get(this[loc.info.foreignKey]);
+								loc.returnValue = model(loc.info.class).findByKey(this[loc.info.foreignKey]);
 								break;
 							}
 							case "setObject":
@@ -176,7 +176,7 @@
 								{
 									loc.id = ListAppend(loc.id, this[ListGetAt(loc.info.foreignKey, loc.i)]);
 								}
-								loc.returnValue = IsObject(model(loc.info.class).get(loc.id));
+								loc.returnValue = IsObject(model(loc.info.class).findByKey(loc.id));
 								break;
 							}
 						}

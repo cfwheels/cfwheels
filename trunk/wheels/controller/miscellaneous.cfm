@@ -47,12 +47,12 @@
 			if (application.wheels.URLRewriting == "Off")
 			{
 				loc.returnValue = loc.returnValue & "controller=" & REReplace(loc.route.controller, "([A-Z])", "-\l\1", "all");
-				loc.returnValue = loc.returnValue & "&amp;action=" & REReplace(loc.route.action, "([A-Z])", "-\l\1", "all");
+				loc.returnValue = loc.returnValue & "&action=" & REReplace(loc.route.action, "([A-Z])", "-\l\1", "all");
 				loc.iEnd = ListLen(loc.route.variables);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.property = ListGetAt(loc.route.variables, loc.i);
-					loc.returnValue = loc.returnValue & "&amp;" & loc.property & "=" & URLEncodedFormat(arguments[loc.property]);
+					loc.returnValue = loc.returnValue & "&" & loc.property & "=" & URLEncodedFormat(arguments[loc.property]);
 				}		
 			}
 			else
@@ -76,21 +76,21 @@
 			else
 				loc.returnValue = loc.returnValue & "controller=" & REReplace(variables.params.controller, "([A-Z])", "-\l\1", "all"); // keep the controller name from the current request
 			if (Len(arguments.action))
-				loc.returnValue = loc.returnValue & "&amp;action=" & REReplace(arguments.action, "([A-Z])", "-\l\1", "all");
+				loc.returnValue = loc.returnValue & "&action=" & REReplace(arguments.action, "([A-Z])", "-\l\1", "all");
 			if (Len(arguments.key))
 			{
 				if (application.settings.obfuscateURLs)
-					loc.returnValue = loc.returnValue & "&amp;key=" & obfuscateParam(URLEncodedFormat(arguments.key));
+					loc.returnValue = loc.returnValue & "&key=" & obfuscateParam(URLEncodedFormat(arguments.key));
 				else
-					loc.returnValue = loc.returnValue & "&amp;key=" & URLEncodedFormat(arguments.key);
+					loc.returnValue = loc.returnValue & "&key=" & URLEncodedFormat(arguments.key);
 			}
 		}
 
 		if (application.wheels.URLRewriting != "Off")
 		{
 			loc.returnValue = Replace(loc.returnValue, "?controller=", "/");
-			loc.returnValue = Replace(loc.returnValue, "&amp;action=", "/");
-			loc.returnValue = Replace(loc.returnValue, "&amp;key=", "/");
+			loc.returnValue = Replace(loc.returnValue, "&action=", "/");
+			loc.returnValue = Replace(loc.returnValue, "&key=", "/");
 		}
 		if (application.wheels.URLRewriting == "On")
 		{
