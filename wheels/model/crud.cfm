@@ -1,6 +1,6 @@
 <!--- Class Methods --->
 
-<cffunction name="get" returntype="any" access="public" output="false" hint="Class, fetches the requested record from the database and returns it as an object">
+<cffunction name="findByKey" returntype="any" access="public" output="false" hint="Class, fetches the requested record from the database and returns it as an object">
 	<cfargument name="key" type="any" required="true" hint="Primary key value(s) of record to look for">
 	<cfargument name="select" type="string" required="false" default="" hint="Properties to select">
 	<cfargument name="cache" type="any" required="false" default="">
@@ -566,7 +566,7 @@
 		if (Len(arguments.where))
 			loc.returnValue = findOne(where=arguments.where, reload=arguments.reload, $create=false).recordCount IS 1;
 		else
-			loc.returnValue = get(key=arguments.key, reload=arguments.reload, $create=false).recordCount IS 1;
+			loc.returnValue = findByKey(key=arguments.key, reload=arguments.reload, $create=false).recordCount IS 1;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -1057,7 +1057,7 @@
 <cffunction name="reload" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		loc.query = get(id=key(), reload=true, $create=false);
+		loc.query = findByKey(key=key(), reload=true, $create=false);
 		loc.iEnd = ListLen(variables.wheels.class.propertyList);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{

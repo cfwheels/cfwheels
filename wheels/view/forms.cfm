@@ -15,7 +15,8 @@
 	<cfelse>
 		<cfset loc.url = URLFor(argumentCollection=arguments)>
 	</cfif>
-	<cfset loc.url = HTMLEditFormat(loc.url)>
+	<!--- make sure we return XHMTL compliant code --->
+	<cfset loc.url = Replace(loc.url, "&", "&amp;", "all")>
 
 	<cfif arguments.spamProtection>
 		<cfset loc.onsubmit = "this.action='#Left(loc.url, int((Len(loc.url)/2)))#'+'#Right(loc.url, ceiling((Len(loc.url)/2)))#';">

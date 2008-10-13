@@ -23,7 +23,6 @@
 					loc.returnValue = loc.returnValue & URLEncodedFormat(loc.temp[2]);
 			}
 		}
-		loc.returnValue = Replace(loc.returnValue, "&", "&amp;", "all"); // make sure we return XHMTL compliant code
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
