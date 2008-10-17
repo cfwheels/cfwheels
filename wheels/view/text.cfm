@@ -144,15 +144,15 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="highlight" returntype="string" access="public" output="false" hint="View, Helper, Highlights the phrase(s) everywhere in the text if found by wrapping it in a strong tag (by default).">
+<cffunction name="highlight" returntype="string" access="public" output="false" hint="View, Helper, Highlights the phrase(s) everywhere in the text if found by wrapping it in a span tag.">
 	<cfargument name="text" type="string" required="true">
 	<cfargument name="phrases" type="string" required="true">
-	<cfargument name="highlighter" type="string" required="false" default="<strong class=""highlight"">\1</strong>">
+	<cfargument name="class" type="string" required="false" default="highlight">
 
 	<!---
 		EXAMPLES:
 		#highlight(text="You searched for: Wheels", phrases="Wheels")#
-		-> You searched for: <strong class="highlight">Wheels</strong>
+		-> You searched for: <span class="highlight">Wheels</span>
 
 		RELATED:
 		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
@@ -172,11 +172,34 @@
 
 	<cfscript>
 		var loc = {};
-		loc.returnValue = arguments.text;
-		loc.iEnd = ListLen(arguments.phrases);
-		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+		if (!Len(arguments.text) || !Len(arguments.phrases))
 		{
-			loc.returnValue = REReplaceNoCase(loc.returnValue, "(#ListGetAt(arguments.phrases, loc.i)#)", arguments.highlighter, "all");
+			loc.returnValue = arguments.text;
+		}
+		else
+		{
+			loc.origText = arguments.text;
+			loc.iEnd = ListLen(arguments.phrases);
+			for (loc.i=1; loc.i LTE loc.iEnd; loc.i++)
+			{
+				loc.newText = "";
+				loc.phrase = Trim(ListGetAt(arguments.phrases, loc.i));
+				loc.pos = 1;
+				while (FindNoCase(loc.phrase, loc.origText, loc.pos))
+				{
+					loc.foundAt = FindNoCase(loc.phrase, loc.origText, loc.pos);
+					loc.prevText = Mid(loc.origText, loc.pos, loc.foundAt-loc.pos);
+					loc.newText = loc.newText & loc.prevText;
+					if (Find("<", loc.origText, loc.foundAt) < Find(">", loc.origText, loc.foundAt) || !Find(">", loc.origText, loc.foundAt))
+						loc.newText = loc.newText & "<span class=""" & arguments.class & """>" & Mid(loc.origText, loc.foundAt, Len(loc.phrase)) & "</span>";
+					else
+						loc.newText = loc.newText & Mid(loc.origText, loc.foundAt, Len(loc.phrase));
+					loc.pos = loc.foundAt + Len(loc.phrase);
+				}
+				loc.newText = loc.newText & Mid(loc.origText, loc.pos, Len(loc.origText) - loc.pos + 1);
+				loc.origText = loc.newText;
+			}
+			loc.returnValue = loc.newText;
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
