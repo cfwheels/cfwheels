@@ -1,0 +1,27 @@
+#summary The URL conventions in Wheels works for most situations. With routes, you have the flexibility to break this convention when needed.
+
+==The Convention for URLs==
+
+To write clear MVC applications with ColdFusion on Wheels, we recommend sticking to conventions as much as possible. As you may already know, the convention for URLs is as follows:
+
+{{{
+http://www.domain.com/news/story/5
+}}}
+
+With this convention, the URL above tells Wheels to invoke the `story` action in the `News` controller. It also passes a parameter to the action called `id`, with a value of `5`.
+
+==Creating Your Own URL Routes==
+
+Let's say that you want a simpler URL. What if you want to have a `profile` action in a controller called `User` with this URL?
+
+{{{
+http://www.domain.com/user/johndoe
+}}}
+
+Fear not, this is possible in Wheels.
+
+===Configuring a New Route===
+
+Routes are configured in the file at `config/routes.cfm`. This is where we'll add our new user profile route.
+
+Routes are added to Wheels using the [addRoute addRoute()] function.
