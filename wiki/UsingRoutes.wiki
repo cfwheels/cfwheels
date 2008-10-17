@@ -1,8 +1,9 @@
-#summary The URL conventions in Wheels works for most situations. With routes, you have the flexibility to break this convention when needed.
+#summary The convention for URLs in Wheels works for most situations and helps to promote an easy-to-maintain code base. With routes, you have the flexibility to break this convention when needed.
+#labels chapter,0.8
 
 ==The Convention for URLs==
 
-To write clear MVC applications with ColdFusion on Wheels, we recommend sticking to conventions as much as possible. As you may already know, the convention for URLs is as follows:
+To write clear MVC applications with !ColdFusion on Wheels, we recommend sticking to conventions as much as possible. As you may already know, the convention for URLs is as follows:
 
 {{{
 http://www.domain.com/news/story/5
@@ -24,4 +25,10 @@ Fear not, this is possible in Wheels.
 
 Routes are configured in the file at `config/routes.cfm`. This is where we'll add our new user profile route.
 
-Routes are added to Wheels using the [addRoute addRoute()] function.
+Routes are added to Wheels using the [addRoute addRoute()] function. Here is how we would set up our new route using `addRoute()`:
+
+{{{
+<cfset addRoute(name="userProfile", pattern="user/[username]", controller="user", action="profile")>
+}}}
+
+This call to `addRoute()`instructs Wheels to create a route named `userProfile` that passes a parameter to the `profile` action in the `User` controller called `username`.
