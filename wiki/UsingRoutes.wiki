@@ -37,7 +37,7 @@ As you can see, any new parameters that you want to introduce to a new route sho
 
 With this, you can create URL patterns with any level of complexity that you wish.
 
-====Using `action` within your route====
+====Using `action` Within Your Route====
 
 The `controller` and `action` arguments are always required in the `addRoute()` function. But you can still have some flexibility with the `action` argument.
 
