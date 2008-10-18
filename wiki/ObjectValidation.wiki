@@ -1,0 +1,82 @@
+#summary CFWheels utilizes validation setup within the Model CFCs to enforce appropriate data persistence. Validation may be performed for model save, create, and updates.
+#labels chapter,0.8
+
+== Basic Setup ==
+
+In order to establish the full cycle of validation, three elements
+need to be in place:
+
+ # Model as database's (singular) table name. Example: User.cfc
+ # Controller for creating, saving, or updating a model instance. Example: ExampleController.cfc
+ # View for displaying the original data inputs and an error list for
+validataion messages. Example: /examplecontroller/index.cfm
+
+== The Model ==
+
+Validation in the Model is always set in the init function. Within this init, Wheels functions are called to establish individually taylored validation per field.
+
+{{{
+<cfcomponent extends="Model">
+   <cffunction name="init">
+     <cfset validatesPresenceOf(property="nameFirst,nameLast",
+message="First and/or last name fields required")>
+     <cfset validatesPresenceOf(property="email", message="Email
+field required")>
+     <cfset validatesUniquenessOf(property="email", message="Email
+already in use")>
+  </cffunction>
+</cfcomponent>
+}}}
+
+The `validatesPresenceOf` ensures that the associated form field does not have a string length of `0`. This is far simpler than implementing your own if-tests within the controller, testing with multiple conditions of the field such as `Len()`, `IsDefined()`, etc.
+
+Additionally, the `validatesPresenceOf` property attribute accepts a list, thus allowing multiple fields to be valided and returned with the same message.
+
+The `validatesUniquenessOf` runs a database select with a where on the form field's name/value. If a match is found, `validatesUniquenessOf` returns an error and cancels the controller's action of save/create/update.
+
+==The Controller==
+
+The controller continues with the simplicity of validation setup, and at the most basic level requires only 5 lines of code to persist the form data or return to the original form page to display the list of errors.
+
+{{{
+<cfcomponent extends="Controller">
+ <cffunction name="apply">
+  <!---User model from form fields via params--->
+  <cfset newUser = model("User").new(params.newUser)>
+
+  <!---Persist new User--->
+  <cfif newUser.save()>
+     <cfset renderPage(action="success")>
+  <cfelse>
+     <cfset renderPage(action="index")>
+  </cfif>
+ </cffunction>
+</cfcomponent>
+}}}
+
+The first line of the action creates a new `User` based on the `User` model and the form inputs (via the `params` `struct`).
+
+Now, to persist the object to the database, the model `save()` call is placed within an `<cfif>` test. If the save succeeds, the save function will return true and the contents of the `<cfif>` will be executed. But, if any of the validations setup in the model fails, the `save()` returns `false` and the `<cfelse>` will execute.
+
+The important step here is to recognize that the `<cfelse>` renders the original form input page. The reason for this is that the now validated newUser model is in the scope of the `apply` action. If a `redirectTo()` were used, the original `index` action would be called and the validation information lost.
+
+==The View==
+
+The view need only be a simple form and associated inputs to the model's fields. The only aspect that sets this view apart from a non-validated form is the first line of Wheels code.
+
+{{{
+<cfoutput>
+#errorMessagesFor("newUser")#
+
+#startFormTag(controller="examplecontroller", action="submit")#
+   #textField(objectName="newUser", property="nameFirst",
+label="First Name", wrapLabel=false, append="<br />")#
+   #textField(objectName="newUser", property="nameLast", label="Last
+Name", wrapLabel=false, append="<br />")#
+   #textField(objectName="newUser", property="email", label="Email",
+wraplabel=false, append="<br />")#
+ #endFormTag()#
+</cfoutput>
+}}}
+
+The `errorMessagesFor()` method call hands in the name of the model instance name expected when validation catches on the processed model and returns an error message. The `errorMessagesFor()` will output a unordered list with each error message as a list item.
