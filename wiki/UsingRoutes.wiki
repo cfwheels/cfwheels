@@ -11,9 +11,9 @@ http://www.domain.com/news/story/5
 
 With this convention, the URL above tells Wheels to invoke the `story` action in the `News` controller. It also passes a parameter to the action called `id`, with a value of `5`.
 
-==Creating Your Own URL Routes==
+==Creating Your Own Routes==
 
-Let's say that you want a simpler URL. What if you want to have a `profile` action in a controller called `User` with this URL?
+Let's say that you want a simpler URL for your site's user profiles. What if you want to have a `profile` action in a controller called `User` with this URL?
 
 {{{
 http://www.domain.com/user/johndoe
@@ -34,3 +34,37 @@ Routes are added to Wheels using the [addRoute addRoute()] function. Here is how
 This call to `addRoute()`instructs Wheels to create a route named `userProfile` that passes a parameter to the `profile` action in the `User` controller called `username`. This route will be invoked by any URL that starts with a top level folder of `user`. In most cases, a pattern in a route should begin with a unique top level folder.
 
 As you can see, any new parameters that you want to introduce to a new route should be surrounded by square brackets `[]`.
+
+With this, you can create URL patterns with any level of complexity that you wish.
+
+====Using `action` within your route====
+
+The `controller` and `action` arguments are always required in the `addRoute()` function. But you can still have some flexibility with the `action` argument.
+
+Consider this line of code:
+
+{{{
+<cfset addRoute(name="adminUser", pattern="admin/user/[action]", controller="adminUser", action="index")>
+}}}
+
+With this pattern, a URL that always begins with `admin/user/` will always call the `adminUser` controller.
+
+But because we have `[action]` within the pattern, we don't always necessarily need for the route to point to `controller/AdminUser.cfc`'s `index()` method. The `action="index"` parameter instructs Wheels to call the `index` action when one is not otherwise specified in the URL.
+
+So now this route pattern will match for these URLs:
+
+|| *URL* || *Controller* || *Action* ||
+|| `http://www.domain.com/admin/user` || `adminUser` || `index` ||
+|| `http://www.domain.com/admin/user/index` || `adminUser` || `index` ||
+|| `http://www.domain.com/admin/user/add` || `adminUser` || `add` ||
+|| `http://www.domain.com/admin/user/delete` || `adminUser` || `delete` ||
+
+===Linking to Your New Route===
+
+Now if you wanted to create a link to your new user profile action, you would use Wheels's `linkTo()` function like so:
+
+{{{
+#linkTo(route="userProfile", username="johndoe")#
+}}}
+
+As you can see, `linkTo()` accepts a `route` argument, which changes the function's expectations on which other arguments are passed.
