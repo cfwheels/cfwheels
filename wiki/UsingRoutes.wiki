@@ -49,7 +49,7 @@ Consider this line of code:
 
 With this pattern, a URL that begins with `admin/user/` will always call the `adminUser` controller.
 
-But because we have `[action]` within the pattern, we don't always necessarily need for the route to point to `controller/AdminUser.cfc`'s `index()` method. The `action="index"` parameter instructs Wheels to call the `index` action when one is not otherwise specified in the URL.
+But because we have `[action]` within the pattern, we don't always necessarily need for the route to point to `controllers/AdminUser.cfc`'s `index()` method. The `action="index"` parameter instructs Wheels to call the `index` action when one is not otherwise specified in the URL.
 
 So now this route pattern will match for these URLs:
 
