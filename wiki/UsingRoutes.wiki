@@ -13,7 +13,7 @@ With this convention, the URL above tells Wheels to invoke the `story` action in
 
 ==Creating Your Own Routes==
 
-But let's say that you want a simpler URL for your site's user profiles. What if you want to have a `profile` action in a controller called `User` with this URL?
+But let's say that you wanted a simpler URL for your site's user profiles. What if you wanted to have a `profile` action in a controller called `User` with this URL?
 
 {{{
 http://www.domain.com/user/johndoe
