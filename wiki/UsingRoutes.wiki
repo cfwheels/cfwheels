@@ -67,7 +67,7 @@ Now if you wanted to create a link to your new user profile action, you would us
 #linkTo(route="userProfile", username="johndoe")#
 }}}
 
-As you can see, `linkTo()` accepts a `route` argument, which changes the function's expectations on which other arguments are passed.
+As you can see, `linkTo()` accepts a `route` argument, which changes the function's expectations on which other arguments are passed. Because our `userProfile` route expects a `username` parameter, we would need to pass that.
 
 ==Order of Precedence==
 
