@@ -82,7 +82,7 @@ Let's pretend that our `config/routes.cfm` file looks like this:
 {{{
 <cfset addRoute(name="newsAdmin", pattern="admin/news/[action]"), controller="NewsAdmin", action="index">
 <cfset addRoute(name="searchAdmin", pattern="admin/search/[action]", controller="SearchAdmin", action="index")>
-<cfset addRoute(name="adminRoot", pattern="admin/[action]", controller="admin", action="index")>
+<cfset addRoute(name="adminRoot", pattern="admin/[action]", controller="Admin", action="index")>
 }}}
 
 Wheels would make sure that the URL didn't begin with `admin/news` or `admin/search` before calling the third route listed, `adminRoot`.
