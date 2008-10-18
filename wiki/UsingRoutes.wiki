@@ -31,7 +31,7 @@ Routes are added to Wheels using the [addRoute addRoute()] function. Here is how
 <cfset addRoute(name="userProfile", pattern="user/[username]", controller="user", action="profile")>
 }}}
 
-This call to `addRoute()` instructs Wheels to create a route named `userProfile` that passes a parameter to the `profile` action in the `User` controller called `username`. This route will be invoked by any URL that starts with a top level folder of `user`. In most cases, a pattern in a route should begin with a unique top level folder.
+This call to `addRoute()` instructs Wheels to create a route named `userProfile` that passes a `username` parameter to the `profile` action in the `User` controller. This route will be invoked by any URL that starts with a top level folder of `user`. In most cases, a pattern in a route should begin with a unique top level folder.
 
 As you can see, any new parameters that you want to introduce to a new route should be surrounded by square brackets `[]`.
 
