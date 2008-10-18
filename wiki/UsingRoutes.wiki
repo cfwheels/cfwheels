@@ -47,7 +47,7 @@ Consider this line of code:
 <cfset addRoute(name="adminUser", pattern="admin/user/[action]", controller="adminUser", action="index")>
 }}}
 
-With this pattern, a URL that always begins with `admin/user/` will always call the `adminUser` controller.
+With this pattern, a URL that begins with `admin/user/` will always call the `adminUser` controller.
 
 But because we have `[action]` within the pattern, we don't always necessarily need for the route to point to `controller/AdminUser.cfc`'s `index()` method. The `action="index"` parameter instructs Wheels to call the `index` action when one is not otherwise specified in the URL.
 
