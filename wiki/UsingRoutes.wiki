@@ -13,7 +13,7 @@ With this convention, the URL above tells Wheels to invoke the `story` action in
 
 ==Creating Your Own Routes==
 
-Let's say that you want a simpler URL for your site's user profiles. What if you want to have a `profile` action in a controller called `User` with this URL?
+But let's say that you want a simpler URL for your site's user profiles. What if you want to have a `profile` action in a controller called `User` with this URL?
 
 {{{
 http://www.domain.com/user/johndoe
@@ -68,3 +68,23 @@ Now if you wanted to create a link to your new user profile action, you would us
 }}}
 
 As you can see, `linkTo()` accepts a `route` argument, which changes the function's expectations on which other arguments are passed.
+
+==Order of Precedence==
+
+With the potential of your application requiring many custom routes, you may wonder which order that Wheels considers these new routes. The answer is that Wheels gives precedence to the first listed custom route in your `config/routes.cfm` file.
+
+Wheels will look through each custom route in order to see if there is a match. If not, it defaults to the default route mentioned at the beginning of this chapter under _The Convention for URLs_.
+
+===Example of Precedence===
+
+Let's pretend that our `config/routes.cfm` file looks like this:
+
+{{{
+<cfset addRoute(name="newsAdmin", pattern="admin/news/[action]"), controller="NewsAdmin", action="index">
+<cfset addRoute(name="searchAdmin", pattern="admin/search/[action]", controller="SearchAdmin", action="index")>
+<cfset addRoute(name="adminRoot", pattern="admin/[action]", controller="admin", action="index")>
+}}}
+
+Wheels would make sure that the URL didn't begin with `admin/news` or `admin/search` before calling the third route listed, `adminRoot`.
+
+If the URL didn't begin with `admin` at all, Wheels would use the default route, matching the usual pattern of `[controller]/[action]/[id]`.
