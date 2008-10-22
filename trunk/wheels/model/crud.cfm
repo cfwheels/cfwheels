@@ -280,19 +280,16 @@
 		if (Len(arguments.where))
 		{
 			// make the where clause generic
-			arguments.where = REReplace(arguments.where, variables.wheels.class.whereRegex, "\1?\8" , "all");
+			loc.paramedWhere = REReplace(arguments.where, variables.wheels.class.whereRegex, "\1?\8" , "all");
 
 			// setup an array containing class info for current class and all the ones that should be included
 			loc.classes = [];
 			if (Len(arguments.include))
 				loc.classes = $expandedAssociations(include=arguments.include);
 			ArrayPrepend(loc.classes, variables.wheels.class);
-
 			ArrayAppend(arguments.sql, "WHERE");
 			if (arguments.$softDeleteCheck && variables.wheels.class.softDeletion)
 				ArrayAppend(arguments.sql, " (");
-			loc.regex = "((=|<>|<|>|<=|>=|!=|!<|!>| LIKE) ?)(''|'.+?'()|([0-9]|\.)+()|\([0-9]+(,[0-9]+)*\))(($|\)| (AND|OR)))";
-			loc.paramedWhere = REReplace(arguments.where, loc.regex, "\1?\8" , "all");
 			loc.params = ArrayNew(1);
 			loc.where = ReplaceList(loc.paramedWhere, "AND,OR", "#chr(7)#AND,#chr(7)#OR");
 			for (loc.i=1; loc.i LTE ListLen(loc.where, Chr(7)); loc.i=loc.i+1)
@@ -340,7 +337,7 @@
 					ArrayAppend(arguments.sql, "#PreserveSingleQuotes(loc.column)#	#loc.params[loc.i].operator#");
 					if (application.settings.environment IS NOT "production" && !StructKeyExists(loc.params[loc.i], "type"))
 							$throw(type="Wheels", message="Column Not Found", extendedInfo="Wheels looked for a column named '#loc.column#' but couldn't find it.");
-					loc.param = {property=loc.params[loc.i].property, column=loc.params[loc.i].column, type=loc.params[loc.i].type};
+					loc.param = {property=loc.params[loc.i].property, column=loc.params[loc.i].column, type=loc.params[loc.i].type, operator=loc.params[loc.i].operator};
 					ArrayAppend(arguments.sql, loc.param);
 				}
 			}
