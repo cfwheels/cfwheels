@@ -20,7 +20,7 @@
 		variables.wheels = {};
 		variables.wheels.class = {};
 		variables.wheels.class.name = arguments.name;
-		variables.wheels.class.whereRegex = "((=|<>|<|>|<=|>=|!=|!<|!>| LIKE) ?)(''|'.+?'()|([0-9]|\.)+()|\([0-9]+(,[0-9]+)*\))(($|\)| (AND|OR)))";
+		variables.wheels.class.whereRegex = "((=|<>|<|>|<=|>=|!=|!<|!>| LIKE| IN) ?)(''|'.+?'()|([0-9]|\.)+()|\([0-9]+(,[0-9]+)*\))(($|\)| (AND|OR)))";
 		variables.wheels.class.mapping = {};
 		variables.wheels.class.associations = {};
 		variables.wheels.class.callbacks = {};
