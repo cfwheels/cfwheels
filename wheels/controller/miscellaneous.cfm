@@ -46,8 +46,8 @@
 			loc.route = application.wheels.routes[application.wheels.namedRoutePositions[arguments.route]];
 			if (application.wheels.URLRewriting == "Off")
 			{
-				loc.returnValue = loc.returnValue & "?controller=" & REReplace(loc.route.controller, "([A-Z])", "-\l\1", "all");
-				loc.returnValue = loc.returnValue & "&action=" & REReplace(loc.route.action, "([A-Z])", "-\l\1", "all");
+				loc.returnValue = loc.returnValue & "?controller=" & REReplace(REReplace(loc.route.controller, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
+				loc.returnValue = loc.returnValue & "&action=" & REReplace(REReplace(loc.route.action, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
 				loc.iEnd = ListLen(loc.route.variables);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
@@ -72,11 +72,11 @@
 		{
 			// link based on controller/action/key
 			if (Len(arguments.controller))
-				loc.returnValue = loc.returnValue & "?controller=" & REReplace(arguments.controller, "([A-Z])", "-\l\1", "all"); // add controller from arguments
+				loc.returnValue = loc.returnValue & "?controller=" & REReplace(REReplace(arguments.controller, "([A-Z])", "-\l\1", "all"), "^-", "", "one"); // add controller from arguments
 			else
-				loc.returnValue = loc.returnValue & "?controller=" & REReplace(variables.params.controller, "([A-Z])", "-\l\1", "all"); // keep the controller name from the current request
+				loc.returnValue = loc.returnValue & "?controller=" & REReplace(REReplace(variables.params.controller, "([A-Z])", "-\l\1", "all"), "^-", "", "one"); // keep the controller name from the current request
 			if (Len(arguments.action))
-				loc.returnValue = loc.returnValue & "&action=" & REReplace(arguments.action, "([A-Z])", "-\l\1", "all");
+				loc.returnValue = loc.returnValue & "&action=" & REReplace(REReplace(arguments.action, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
 			if (Len(arguments.key))
 			{
 				if (application.settings.obfuscateURLs)
