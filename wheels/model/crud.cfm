@@ -571,6 +571,24 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="updateByKey" returntype="boolean" access="public" output="false" hint="Class, Gets an object by key and updates it with the supplied properties">
+        <cfargument name="key" type="any" required="true" hint="Primary key value(s) for the object">
+        <cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
+        <!---
+                DETAILS:
+                Finds the record with the supplied key and saves it (if the validation permits it) with the supplied properties or named arguments.
+                Property names and values can be passed in either using named arguments or as a struct to the properties argument.
+                Returns true if the save was successful, false otherwise.
+        --->
+        <cfscript>
+                var loc = {};
+                arguments.where = $keyWhereString(values=arguments.key);
+                StructDelete(arguments, "key");
+                loc.returnValue = updateOne(argumentCollection=arguments);
+        </cfscript>
+        <cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="updateOne" returntype="boolean" access="public" output="false" hint="Class, Gets an object based on conditions and updates it with the supplied properties">
 	<cfargument name="where" type="string" required="false" default="" hint="String to use in where clause of query">
 	<cfargument name="order" type="string" required="false" default="" hint="String to use in order by clause of query">
@@ -641,6 +659,23 @@
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="deleteByKey" returntype="boolean" access="public" output="false" hint="Class, Gets an object and deletes it">
+        <cfargument name="key" type="any" required="true" hint="Primary key value(s) for the object">
+        <!---
+                DETAILS:
+                Deletes the row corresponding to the passed in key.
+                By default it will fetch the object first and call the delete method on it, thus invoking any callbacks you have specified for the model.
+                You can change this behavior by passing in instantiate=false, then it will just delete the row from the table using a simple delete query.
+                Returns true on successful deletion of the row, false otherwise.
+        --->
+        <cfscript>
+                var loc = {};
+                loc.where = $keyWhereString(values=arguments.key);
+                loc.returnValue = deleteOne(where=loc.where);
+        </cfscript>
+        <cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="deleteOne" returntype="boolean" access="public" output="false">
@@ -735,90 +770,64 @@
 </cffunction>
 
 <cffunction name="update" returntype="boolean" access="public" output="false" hint="Object, Updates the object with the supplied properties and saves it to the database">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
-	<cfargument name="key" type="any" required="true" hint="Primary key value(s) for the object">
-	<!---
-		DETAILS:
-		Finds the record with the supplied primary key and saves it (if the validation permits it) with the supplied properties or named arguments.
-		Property names and values can be passed in either using named arguments or as a struct to the properties argument.
-		Returns true if the save was successful, false otherwise.
-		This object level method updates the properties for the object with the passed in values and tries to save it to the database.
-		Returns true if the object was saved successfully to the database and false otherwise.
-	--->
-	<cfscript>
-		var loc = {};
-		if (Len(arguments.key))
-		{
-			arguments.where = $keyWhereString(values=arguments.key);
-			StructDelete(arguments, "key");
-			loc.returnValue = updateOne(argumentCollection=arguments);
-		}
-		else
-		{
-			for (loc.key in arguments)
-				if (loc.key IS NOT "properties")
-					arguments.properties[loc.key] = arguments[loc.key];
-			for (loc.key in arguments.properties)
-				this[loc.key] = arguments.properties[loc.key];
-			loc.returnValue = save();
-		}
-	</cfscript>
-	<cfreturn loc.returnValue>
+        <cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
+        <!---
+                DETAILS:
+                This object level method updates the properties for the object with the passed in values and tries to save it to the database.
+                Returns true if the object was saved successfully to the database and false otherwise.
+        --->
+        <cfscript>
+                var loc = {};
+                for (loc.key in arguments)
+                        if (loc.key IS NOT "properties")
+                                arguments.properties[loc.key] = arguments[loc.key];
+                for (loc.key in arguments.properties)
+                        this[loc.key] = arguments.properties[loc.key];
+                loc.returnValue = save();
+        </cfscript>
+        <cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="delete" returntype="boolean" access="public" output="false" hint="Object, Deletes the object from the database">
-	<cfargument name="key" type="string" required="false" default="" hint="Primary key value(s) for the object to delete">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.delete.parameterize#">
-	<!---
-		DETAILS:
-		Returns true on successful deletion of the row, false otherwise.
-		Deletes the row corresponding to the passed in key.
-		By default it will fetch the object first and call the delete method on it, thus invoking any callbacks you have specified for the model.
-		You can change this behavior by passing in instantiate=false, then it will just delete the row from the table using a simple delete query.
-		Returns true on successful deletion of the row, false otherwise.
-	--->
-	<cfscript>
-		var loc = {};
-		if (Len(arguments.key))
-		{
-			loc.where = $keyWhereString(values=arguments.key);
-			loc.returnValue = deleteOne(where=loc.where);
-		}
-		else
-		{
-			loc.proceed = true;
-			for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.callbacks.beforeDelete); loc.i=loc.i+1)
-			{
-				loc.proceed = $invoke(method=variables.wheels.class.callbacks.beforeDelete[loc.i]);
-				if (StructKeyExists(loc, "proceed") && !loc.proceed)
-					break;
-			}
-	
-			if (loc.proceed)
-			{
-				loc.sql = [];
-				loc.sql = $addDeleteClause(sql=loc.sql);
-				loc.sql = $addKeyWhereClause(sql=loc.sql);
-				loc.del = application.wheels.adapter.query(sql=loc.sql, parameterize=arguments.parameterize);
-				loc.proceed = true;
-				for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.callbacks.afterDelete); loc.i=loc.i+1)
-				{
-					loc.proceed = $invoke(method=variables.wheels.class.callbacks.afterDelete[loc.i]);
-					if (StructKeyExists(loc, "proceed") && !loc.proceed)
-						break;
-				}
-				if (loc.proceed)
-					loc.returnValue = true;
-				else
-					loc.returnValue = false;
-			}
-			else
-			{
-				loc.returnValue = false;
-			}
-		}
-	</cfscript>
-	<cfreturn loc.returnValue>
+        <cfargument name="parameterize" type="any" required="false" default="#application.settings.delete.parameterize#">
+        <!---
+                DETAILS:
+                Returns true on successful deletion of the row, false otherwise.
+        --->
+        <cfscript>
+                var loc = {};
+                loc.proceed = true;
+                for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.callbacks.beforeDelete); loc.i=loc.i+1)
+                {
+                        loc.proceed = $invoke(method=variables.wheels.class.callbacks.beforeDelete[loc.i]);
+                        if (StructKeyExists(loc, "proceed") && !loc.proceed)
+                                break;
+                }
+
+                if (loc.proceed)
+                {
+                        loc.sql = [];
+                        loc.sql = $addDeleteClause(sql=loc.sql);
+                        loc.sql = $addKeyWhereClause(sql=loc.sql);
+                        loc.del = application.wheels.adapter.query(sql=loc.sql, parameterize=arguments.parameterize);
+                        loc.proceed = true;
+                        for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.callbacks.afterDelete); loc.i=loc.i+1)
+                        {
+                                loc.proceed = $invoke(method=variables.wheels.class.callbacks.afterDelete[loc.i]);
+                                if (StructKeyExists(loc, "proceed") && !loc.proceed)
+                                        break;
+                        }
+                        if (loc.proceed)
+                                loc.returnValue = true;
+                        else
+                                loc.returnValue = false;
+                }
+                else
+                {
+                        loc.returnValue = false;
+                }
+        </cfscript>
+        <cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="new" returntype="any" access="public" output="false" hint="Class, Creates a new object based on supplied properties and returns it">
