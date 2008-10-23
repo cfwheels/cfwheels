@@ -1,5 +1,5 @@
 #summary The convention for URLs in Wheels works for most situations and helps to promote an easy-to-maintain code base. With routes, you have the flexibility to break this convention when needed.
-#labels chapter,0.8
+#labels chapter,1.0
 
 ==The Convention for URLs==
 
@@ -9,7 +9,7 @@ To write clear MVC applications with !ColdFusion on Wheels, we recommend stickin
 http://www.domain.com/news/story/5
 }}}
 
-With this convention, the URL above tells Wheels to invoke the `story` action in the `News` controller. It also passes a parameter to the action called `id`, with a value of `5`.
+With this convention, the URL above tells Wheels to invoke the `story` action in the `News` controller. It also passes a parameter to the action called `key`, with a value of `5`.
 
 ==Creating Your Own Routes==
 
@@ -87,4 +87,4 @@ Let's pretend that our `config/routes.cfm` file looks like this:
 
 Wheels would make sure that the URL didn't begin with `admin/news` or `admin/search` before calling the third route listed, `adminRoot`.
 
-If the URL didn't begin with `admin` at all, Wheels would use the default route, matching the usual pattern of `[controller]/[action]/[id]`.
+If the URL didn't begin with `admin` at all, Wheels would use the default route, matching the usual pattern of `[controller]/[action]/[key]`.
