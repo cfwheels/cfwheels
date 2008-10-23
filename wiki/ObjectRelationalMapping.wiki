@@ -1,5 +1,5 @@
 #summary An overview of Object Relational Mapping (ORM) and how is it used in Wheels. Learn how ORM simplifies your database interaction code.
-#labels chapter,0.8
+#labels chapter,0.8.3
 
 Mapping objects in your application to records in your database tables is a key concept in Wheels. Let's take a look at exactly how this mapping is performed.
 
@@ -10,24 +10,24 @@ Unlike most other languages, there is no notion of class level (aka "static") me
 In Wheels, we create an object like this.
 
 {{{
-<cfset model("Author")>
+<cfset model("author")>
 }}}
 
 The built-in Wheels `model` function will return a reference to an `Author` object in the `application` scope (unless it's the first time you call this function, in which case it will also create and store it in the `application` scope).
 
-Once you have the `author` object, you can start calling class methods on it, like [findById findById()], for example. `findById()` returns an instance of the object with data from the database record defined by the ID value that you pass.
+Once you have the `author` object, you can start calling class methods on it, like [findByKey findByKey()], for example. `findByKey()` returns an instance of the object with data from the database record defined by the key value that you pass.
 
-Obviously, `Author` is just an example here, and you'll use the names of the `.cfc` files you have created in the `models` folder.
+Obviously, `author` is just an example here, and you'll use the names of the `.cfc` files you have created in the `models` folder.
 
 {{{
-<cfset authorClass = model("Author")>
-<cfset authorObject = authorClass.findById(1)>
+<cfset authorClass = model("author")>
+<cfset authorObject = authorClass.findByKey(1)>
 }}}
 
 For readability, this is usually combined into the following:
 
 {{{
-<cfset authorObject = model("Author").findById(1)>
+<cfset authorObject = model("author").findByKey(1)>
 }}}
 
 Now `authorObject` is an instance of the `author` class, and you can call object level methods on it, like [update update()] and [save save()].
@@ -36,13 +36,11 @@ Now `authorObject` is an instance of the `author` class, and you can call object
 <cfset authorObject.update(firstName="Joe")>
 }}}
 
-In this case, the above code updates `firstName` column of the `author` with an `id` of `1` to `Joe`.
+In this case, the above code updates the `firstName` field of the `author` record with a primary key value of `1` to `Joe`.
 
 ==Primary Keys==
 
-The convention in Wheels when it comes to primary keys is that they should be named `id`, increment automatically, and be of the `integer` data type.
-
-If needed, you can override these conventions in practically any way you want to. You can use _natural keys_ (`varchar`, for example), _composite keys_ (having multiple columns as primary keys), and you can name the key(s) whatever you want.
+Traditionally in Wheels a primary key is usually named `id`, it increments automatically and it's of the `integer` data type. However, Wheels is very flexible in this area. You can setup your primary keys in practically any way you want to. You can use _natural keys_ (`varchar`, for example), _composite keys_ (having multiple columns as primary keys), and you can name the key(s) whatever you want.
 
 You can also choose whether the database creates the key for you (using auto-incrementation, for example) or create them yourself directly in your code.
 
@@ -59,17 +57,19 @@ To create a class in your application that maps to a table in your database, all
 </cfcomponent>
 }}}
 
-After creating this file, you will have a bunch of methods available for you to use that handles reading and writing to the `Authors` table. (For the purpose of showing some examples, we will assume you have created a file named `Author.cfc`, which will then be mapped to the `authors` table in the database).
+If you don't intend to create any custom methods in your class you can actually skip this step and just call methods without having a file created, it will work just as well. As your application grows you'll probably want to have your own methods though so remember the `models` folder, that's where they'll go.  
+
+Once you have created the file (or deliberately chosen not to for now) you will have a bunch of methods available for you to use that handles reading and writing to the `authors` table. (For the purpose of showing some examples, we will assume you have created a file named `Author.cfc`, which will then be mapped to the `authors` table in the database).
 
 For example, you can write the following code to get the author with the primary key of `1`, change his first name, and save the record back to the database.
 
 {{{
-<cfset auth = model("author").findById(1)>
+<cfset auth = model("author").findByKey(1)>
 <cfset auth.firstName = "Joe">
 <cfset auth.save()>
 }}}
 
-This code makes use of the class method [findById findById()], updates the object property in memory, and then saves it back to the database using the object method [save save()]. We'll get back to all these methods and more later.
+This code makes use of the class method [findByKey findByKey()], updates the object property in memory, and then saves it back to the database using the object method [save save()]. We'll get back to all these methods and more later.
 
 ===Table and CFC Naming===
 
@@ -77,7 +77,7 @@ By default, a table name should be the plural version of the class name so if yo
 
 To change this behavior you can use the [table table()] method. This method call should be placed in the `init` method of your class file.
 
-So, for example, if you wanted for your `Author` model to map to a table in your database named `tbl_authors`, you would add the following code to the `init` method:
+So, for example, if you wanted for your `author` model to map to a table in your database named `tbl_authors`, you would add the following code to the `init` method:
 
 {{{
 <cfcomponent extends="Model">
