@@ -1,5 +1,5 @@
 #summary How to create new objects and save them to the database.
-#labels chapter,0.8
+#labels chapter,0.8.3
 
 In Wheels, one way to create objects that represent records in our table is by calling the [new new()] class-level method.
 
@@ -38,11 +38,11 @@ If you want to save your new author to the database right away, you can use the 
 <cfset model("Author").create(params.newAuthor)>
 }}}
 
-==Primary Key Conventions==
+==The Primary Key==
 
-Note that we never have to set a value for the primary key property. This is because we use the Wheels convention of having an auto-incrementing integer field named `id` as the primary key.
+Note that if we have opted to have the database create the primary key for us (which is usually done by auto-incrementing it) it will be available automatically after the object has been saved. 
 
-After saving the object to the database, the `id` property will be added to the object so you can read the value by doing something like this:
+This means you can read the value by doing something like this (this example assumes you have an auto-incrementing integer column named `id` as the primary key):
 
 {{{
 <cfset newAuthor = model("Author").new()>
@@ -52,6 +52,6 @@ After saving the object to the database, the `id` property will be added to the 
 <cfoutput>#newAuthor.id#</cfoutput>
 }}}
 
-You don't need to follow these conventions at all though. You can name your primary key something other than `id`, and you can even use composite keys, natural keys, non auto-incrementing, and so on.
+Don't forget that you can name your primary key whatever you want and you can even use composite keys, natural keys, non auto-incrementing and so on.
 
 No matter which method you prefer, Wheels will use database introspection to see how your table is structured and act accordingly.
