@@ -1,25 +1,25 @@
 #summary Returning records from your database tables as objects or queries.
-#labels chapter,0.8
+#labels chapter,0.8.3
 
-Reading records from your database typically involves using one of the 3 finder methods available in Wheels: [findById findById()], [findOne findOne()], and [findAll findAll()].
+Reading records from your database typically involves using one of the 3 finder methods available in Wheels: [findByKey findByKey()], [findOne findOne()], and [findAll findAll()].
 
-The first 2 of these, ([findById findById()] and [findOne findOne()]), returns an object to you, while the last one ([findAllfindAll()]) returns the result from a `cfquery` tag.
+The first 2 of these, ([findByKey findByKey()] and [findOne findOne()]), returns an object to you, while the last one ([findAllfindAll()]) returns the result from a `cfquery` tag.
 
-==Fetching by a Row by ID==
+==Fetching a Row by Primary Key Value==
 
-Let's start by looking at the simplest of the finder methods, [findById findById()]. This method takes one argument: the primary key (or several keys if you're using composite keys) of the record you want to get.
+Let's start by looking at the simplest of the finder methods, [findByKey findByKey()]. This method takes one argument: the primary key (or several keys if you're using composite keys) of the record you want to get.
 
 If the record exists, it is returned to you as an object. If not, Wheels will throw an error of type `Wheels.RecordNotFound`.
 
-In the following example, we assume that the `params.id` variable has been created from the URL (for example an URL such as `http://localhost/blog/viewauthor/7`)
+In the following example, we assume that the `params.key` variable has been created from the URL (for example an URL such as `http://localhost/blog/viewauthor/7`)
 
 In your controller:
 
 {{{
 <cftry>
-    <cfset author = model("Author").findById(params.id)>
+    <cfset author = model("Author").findByKey(params.key)>
     <cfcatch type="Wheels.RecordNotFound">
-        <cfset flashInsert(message="Author #params.id# was not found")>
+        <cfset flashInsert(message="Author #params.key# was not found")>
         <cfset redirectTo(back=true)>
     </cfcatch>
 </cftry>
@@ -31,7 +31,7 @@ In your view:
 <cfoutput>Hello, #author.firstName# #author.lastName#!</cfoutput>
 }}}
 
-==Fetching a Row by a Value Other Than ID==
+==Fetching a Row by a Value Other Than the Primary Key==
 
 Often, you'll find yourself wanting to get a record (or many) based on a criteria other than just the primary key value though.
 
@@ -67,7 +67,7 @@ A tip is to turn on debugging when you're learning Wheels so you can get a good 
 
 This maps to the `WHERE` clause of the SQL statement. Wheels will also convert all your input to `cfqueryparam` tags for you automatically.
 
-There are some limitations to what you can use in the `where` argument, but most "normal" SQL will work (`=`, `!=`, `<>`, `<`, `AND`, `OR`, `IN`, and so on).
+There are some limitations to what you can use in the `where` argument, but the following SQL will work: `=`, `<`, `>`, `LIKE`, `AND`, `OR`.
 
 ==`order` Argument==
 
@@ -80,7 +80,7 @@ This is a powerful feature that you can use if you have set up associations in y
 If, for example, you have specified that one `Author` has many `Articles`, then you can return all authors and articles in the same call by doing this:
 
 {{{
-<cfset bobsArticles = model("Author").findAll(where="firstName='Bob'", include="Articles")>
+<cfset bobsArticles = model("author").findAll(where="firstName='Bob'", include="articles")>
 }}}
 
 ==`maxRows` Argument==
@@ -94,7 +94,7 @@ Set these if you want to get paginated data back.
 So if you wanted records 11-20, for example, you write this code:
 
 {{{
-<cfset bobsArticles = model("Author").findAll(where="firstName='Bob'", include="Articles", page=2, perPage=10)>
+<cfset bobsArticles = model("author").findAll(where="firstName='Bob'", include="articles", page=2, perPage=10)>
 }}}
 
 ==`cache` Argument==
