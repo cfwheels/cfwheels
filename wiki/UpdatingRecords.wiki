@@ -1,5 +1,5 @@
 #summary Updating records in your database tables.
-#labels chapter,0.8
+#labels chapter,0.8.3
 
 When you have created or retrieved an object, you can save it to the database by calling its [save save()] method. This method returns `true` if the object passes all validations and the object was saved to the database. Otherwise, it returns `false`.
 
@@ -10,7 +10,7 @@ This chapter will focus on how to update records. Read the [CreatingRecords Crea
 Let's start with an example of getting a blog post from the database, updating its title, and saving it back:
 
 {{{
-<cfset post = model("Post").findById(33)>
+<cfset post = model("Post").findByKey(33)>
 <cfset post.title = "New version of Wheels just released">
 <cfset post.save()>
 }}}
@@ -18,7 +18,7 @@ Let's start with an example of getting a blog post from the database, updating i
 You can also change the values of one or more properties and save them to the database in one single call using the [update update()] method, like this:
 
 {{{
-<cfset post = model("Post").findById(33)>
+<cfset post = model("Post").findByKey(33)>
 <cfset post.update(title="New version of Wheels just released")>
 }}}
 
@@ -29,7 +29,7 @@ You can also pass in name/value pairs to [update update()] as a `struct`. The ma
 This is how it would look if you wanted to update the properties for a post based on a submitted form.
 
 {{{
-<cfset post = model("Post").findById(params.id)>
+<cfset post = model("Post").findByKey(params.key)>
 <cfset post.update(params.post)>
 }}}
 
@@ -38,32 +38,32 @@ It's also possible to combine named arguments with a `struct`, but then you need
 Example:
 
 {{{
-<cfset post = model("post").findById(params.id)>
+<cfset post = model("post").findByKey(params.key)>
 <cfset post.update(title="New version of Wheels just released", properties=params.post)>
 }}}
 
 ==Combine Reading and Updating into a Single Call==
 
-To cut down even more on lines of code, you can also combine the reading and saving of the objects by using the class-level methods [updateById updateById()] and [updateAll updateAll()].
+To cut down even more on lines of code, you can also combine the reading and saving of the objects by using the class-level methods [updateByKey updateByKey()] and [updateAll updateAll()].
 
-===The `updateById()` Method===
+===The `updateByKey()` Method===
 
-Give the [updateById updateById()] method a primary key value (or several if you use composite keys) in the `id` argument, and it will update the corresponding record in your table with the properties you give it. You can pass in the properties either as named arguments or as a `struct` to the `properties` argument.
+Give the [updateByKey updateByKey()] method a primary key value (or several if you use composite keys) in the `key` argument, and it will update the corresponding record in your table with the properties you give it. You can pass in the properties either as named arguments or as a `struct` to the `properties` argument.
 
 This method returns the object with the primary key value you specified. If the object does not pass validation, it will be returned anyway, but nothing will be saved to the database.
 
-By default, `updateById()` will fetch the object first and call the [update update()] method on it, thus invoking any callbacks and validations you have specified for the model. You can change this behavior by passing in `instantiate=false`. Then it will just update the record from the table using a simple `UPDATE` query.
+By default, `updateByKey()` will fetch the object first and call the [update update()] method on it, thus invoking any callbacks and validations you have specified for the model. You can change this behavior by passing in `instantiate=false`. Then it will just update the record from the table using a simple `UPDATE` query.
 
-An example of using `updateById()` by passing a `struct`:
+An example of using `updateByKey()` by passing a `struct`:
 
 {{{
-<cfset post = model("Post").updateById(33, params.post)>
+<cfset post = model("Post").updateByKey(33, params.post)>
 }}}
 
-And an example of using `updateById()` by passing named arguments:
+And an example of using `updateByKey()` by passing named arguments:
 
 {{{
-<cfset post = model("Post").updateById(id=33, title="New version of Wheels just released", published=1)>
+<cfset post = model("post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
 }}}
 
 Keep in mind that if you use named arguments for the property values, you also need to name all other arguments too because you can't mix named and unnamed arguments in !ColdFusion.
@@ -77,7 +77,7 @@ The `where` argument is used exactly as you specify it in the `WHERE` clause of 
 An example:
 
 {{{
-<cfset recordsReturned = model("Post").updateAll(published=1, publishedAt=Now(), where="published=0")>
+<cfset recordsReturned = model("post").updateAll(published=1, publishedAt=Now(), where="published=0")>
 }}}
 
-Unlike [updateById updateById()], the `updateAll()` method will not instantiate the objects by default. That could be really slow if you wanted to update a lot of records at once.
+Unlike [updateByKey updateByKey()], the [updateAll updateAll()] method will not instantiate the objects by default. That could be really slow if you wanted to update a lot of records at once.
