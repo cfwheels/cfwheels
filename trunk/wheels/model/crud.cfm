@@ -280,7 +280,7 @@
 		if (Len(arguments.where))
 		{
 			// make the where clause generic
-			loc.paramedWhere = REReplace(arguments.where, variables.wheels.class.whereRegex, "\1?\8" , "all");
+			arguments.where = REReplace(arguments.where, variables.wheels.class.whereRegex, "\1?\8" , "all");
 
 			// setup an array containing class info for current class and all the ones that should be included
 			loc.classes = [];
@@ -290,6 +290,8 @@
 			ArrayAppend(arguments.sql, "WHERE");
 			if (arguments.$softDeleteCheck && variables.wheels.class.softDeletion)
 				ArrayAppend(arguments.sql, " (");
+			loc.regex = "((=|<>|<|>|<=|>=|!=|!<|!>| LIKE) ?)(''|'.+?'()|([0-9]|\.)+()|\([0-9]+(,[0-9]+)*\))(($|\)| (AND|OR)))";
+			loc.paramedWhere = REReplace(arguments.where, loc.regex, "\1?\8" , "all");
 			loc.params = ArrayNew(1);
 			loc.where = ReplaceList(loc.paramedWhere, "AND,OR", "#chr(7)#AND,#chr(7)#OR");
 			for (loc.i=1; loc.i LTE ListLen(loc.where, Chr(7)); loc.i=loc.i+1)
@@ -305,21 +307,28 @@
 					loc.elementDataPart = loc.element;
 				loc.elementDataPart = Trim(ReplaceList(loc.elementDataPart, "AND,OR", ""));
 				loc.param = {};
-				loc.param.property = SpanExcluding(loc.elementDataPart, " =!><");
-				loc.param.operator = ReplaceList(loc.elementDataPart, "?,#loc.param.property#, ", ",,");
-				loc.where = Replace(loc.where, loc.element, Replace(loc.element, loc.elementDataPart, "?", "one"));
-				loc.jEnd = ArrayLen(loc.classes);
-				for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
+
+
+				loc.temp = REFind("^([^ ]*) ?(=|<>|<|>|<=|>=|!=|!<|!>| LIKE)", loc.elementDataPart, 1, true);
+				if (ArrayLen(loc.temp.len) GT 1)
 				{
-					loc.classData = loc.classes[loc.j];
-					if ((loc.param.property Contains "." && ListFirst(loc.param.property, ".") IS loc.classData.tableName || loc.param.property Does Not Contain ".") && ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
+					loc.where = Replace(loc.where, loc.element, Replace(loc.element, loc.elementDataPart, "?", "one"));
+					loc.param.property = Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]);
+					loc.jEnd = ArrayLen(loc.classes);
+					for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
 					{
-						loc.param.type = loc.classData.properties[ListLast(loc.param.property, ".")].type;
-						loc.param.column = loc.classData.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
-						break;
+						loc.classData = loc.classes[loc.j];
+						if ((loc.param.property Contains "." && ListFirst(loc.param.property, ".") IS loc.classData.tableName || loc.param.property Does Not Contain ".") && ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
+						{
+							loc.param.type = loc.classData.properties[ListLast(loc.param.property, ".")].type;
+							loc.param.column = loc.classData.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
+							break;
+						}
 					}
+					loc.temp = REFind("^[^ ]* ?(=|<>|<|>|<=|>=|!=|!<|!>| LIKE)", loc.elementDataPart, 1, true);
+					loc.param.operator = Trim(Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]));
+					ArrayAppend(loc.params, loc.param);
 				}
-				ArrayAppend(loc.params, loc.param);
 			}
 			loc.where = ReplaceList(loc.where, "#Chr(7)#AND,#Chr(7)#OR", "AND,OR");
 
@@ -337,7 +346,7 @@
 					ArrayAppend(arguments.sql, "#PreserveSingleQuotes(loc.column)#	#loc.params[loc.i].operator#");
 					if (application.settings.environment IS NOT "production" && !StructKeyExists(loc.params[loc.i], "type"))
 							$throw(type="Wheels", message="Column Not Found", extendedInfo="Wheels looked for a column named '#loc.column#' but couldn't find it.");
-					loc.param = {property=loc.params[loc.i].property, column=loc.params[loc.i].column, type=loc.params[loc.i].type, operator=loc.params[loc.i].operator};
+					loc.param = {property=loc.params[loc.i].property, column=loc.params[loc.i].column, type=loc.params[loc.i].type};
 					ArrayAppend(arguments.sql, loc.param);
 				}
 			}

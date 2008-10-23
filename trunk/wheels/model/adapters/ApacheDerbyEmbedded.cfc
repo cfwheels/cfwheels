@@ -1,11 +1,11 @@
 <cfcomponent output="false">
 
 	<cffunction name="generatedKey" returntype="string" access="public" output="false">
-		<cfreturn "generated_key">
+		<cfreturn "identitycol">
 	</cffunction>
 
 	<cffunction name="randomOrder" returntype="string" access="public" output="false">
-		<cfreturn "RAND()">
+		<cfreturn "RANDOM()">
 	</cffunction>
 
 	<cffunction name="getType" returntype="string" access="public" output="false">
@@ -15,21 +15,22 @@
 			switch(arguments.type)
 			{
 				case "bigint": {loc.returnValue = "cf_sql_bigint"; break;}
-				case "binary": {loc.returnValue = "cf_sql_binary"; break;}
-				case "bit": case "bool": {loc.returnValue = "cf_sql_bit";	break;}
-				case "blob": case "tinyblob": case "mediumblob": case "longblob": {loc.returnValue = "cf_sql_blob";	break;}
+				case "char for bit data": {loc.returnValue = "cf_sql_bit";	break;}
+				case "blob": {loc.returnValue = "cf_sql_blob";	break;}
+				case "clob": {loc.returnValue = "cf_sql_clob"; break;}
 				case "char": {loc.returnValue = "cf_sql_char"; break;}
 				case "date": {loc.returnValue = "cf_sql_date"; break;}
-				case "decimal": {loc.returnValue = "cf_sql_decimal"; break;}
-				case "double": {loc.returnValue = "cf_sql_double"; break;}
-				case "float": {loc.returnValue = "cf_sql_float"; break;}
-				case "int": case "mediumint": {loc.returnValue = "cf_sql_integer"; break;}
+				case "decimal": case "numeric": {loc.returnValue = "cf_sql_decimal"; break;}
+				case "double": case "double precision": {loc.returnValue = "cf_sql_double"; break;}
+				case "float": case "real": {loc.returnValue = "cf_sql_float"; break;}
+				case "integer": {loc.returnValue = "cf_sql_integer"; break;}
 				case "smallint": case "year": {loc.returnValue = "cf_sql_smallint"; break;}
 				case "time": {loc.returnValue = "cf_sql_time"; break;}
-				case "datetime": case "timestamp": {loc.returnValue = "cf_sql_timestamp"; break;}
+				case "timestamp": {loc.returnValue = "cf_sql_timestamp"; break;}
 				case "tinyint": {loc.returnValue = "cf_sql_tinyint"; break;}
 				case "varbinary": {loc.returnValue = "cf_sql_varbinary"; break;}
-				case "varchar": case "text": case "mediumtext": case "longtext": case "tinytext": case "enum": case "set": {loc.returnValue = "cf_sql_varchar"; break;}
+				case "varchar": {loc.returnValue = "cf_sql_varchar"; break;}
+				case "long varchar": case "xml": {loc.returnValue = "cf_sql_longvarchar"; break;}
 			}
 		</cfscript>
 		<cfreturn loc.returnValue>
