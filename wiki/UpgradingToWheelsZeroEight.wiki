@@ -32,8 +32,7 @@ The easiest way to upgrade is to setup an empty website, deploy a fresh copy of 
 
  * *0.8.3:* A model file is now optional if you don't need to associate it with other models or add any additional business logic.
  * *0.8.3:* `findById()` is now called `findByKey()`. Additionally, its `id` argument is now named `key` instead. For composite keys, this argument will accept a comma-delimited list.
- * *0.8.3:* `findByKey()` also accepts an object for the `key` argument, in which case it will automatically extract the keys from it for use in the query.
- * When using a model's `findByKey()` and `findOne()` functions, the `found` property is no longer available. Instead, we've adopted the "Rails way" of doing this, which involves the function throwing an error of type "Wheels.RecordNotFound" if the record was not found. Instead, use a `cftry`/`cfcatch` block to catch the error.
+ * When using a model's `findByKey()` function, the `found` property is no longer available. Instead, we've adopted the "Rails way" of doing this, which involves the function throwing an error of type "Wheels.RecordNotFound" if the record was not found. Instead, use a `cftry`/`cfcatch` block to catch the error.
  * A model's `errorsOn()` function now always returns an array, even if there are no errors on the field. When there are errors for the field, the array elements will contain a `struct` with `name`, `fieldName`, and `message` elements.
  * The way callbacks are created has changed. There is now a method for each callback event (`beforeValidation()`, `beforeValidationOnCreate()`, etc.) that should be called from your model's `init()` method. These methods take a single argument: the method within your model that should be invoked during the callback event. See the chapter on ObjectCallbacks for an example.
 
