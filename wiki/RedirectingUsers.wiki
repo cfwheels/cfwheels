@@ -9,15 +9,15 @@ To avoid the above problem, it is recommended to always redirect the user after 
 
 Being that `redirectTo()` is a Wheels function, it can of course accept the `controller`, `action`, and `key` arguments so that you can easily redirect to other actions in your application.
 
-==3 Ways to Redirect==
+==2 Ways to Redirect==
 
-Let's look at the 3 ways you can redirect in Wheels.
+Let's look at the 2 ways you can redirect in Wheels.
 
-===Redirecting to Another Action===
+===1. Redirecting to Another Action===
 
 You can redirect the user to another action in your application simply by passing in the `controller`, `action`, and `key` arguments. You can also pass in any other arguments that are accepted by the [URLFor URLFor()] function, like `host`, `params`, etc. (The [URLFor URLFor()] function is what Wheels uses internally to produce the URL to redirect to.)
 
-===Redirecting to the Referring URL===
+===2. Redirecting to the Referring URL===
 
 It's very common that all you want to do when a user submits a form is send them back to where they came from. (Think of a user posting a comment on a blog post and then being redirected back to view the post with their new comment visible as well.) For this, we have the `back` argument. Simply pass in `back=true` to `redirectTo()`, and the user will be redirected back to the page they came from.
 
