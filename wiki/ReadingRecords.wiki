@@ -80,7 +80,7 @@ This is a powerful feature that you can use if you have set up associations in y
 If, for example, you have specified that one `Author` has many `Articles`, then you can return all authors and articles in the same call by doing this:
 
 {{{
-<cfset bobsArticles = model("author").findAll(where="firstName='Bob'", include="articles")>
+<cfset bobsArticles = model("Author").findAll(where="firstName='Bob'", include="articles")>
 }}}
 
 ==`maxRows` Argument==
@@ -94,7 +94,7 @@ Set these if you want to get paginated data back.
 So if you wanted records 11-20, for example, you write this code:
 
 {{{
-<cfset bobsArticles = model("author").findAll(where="firstName='Bob'", include="articles", page=2, perPage=10)>
+<cfset bobsArticles = model("Author").findAll(where="firstName='Bob'", include="articles", page=2, perPage=10)>
 }}}
 
 ==`cache` Argument==
