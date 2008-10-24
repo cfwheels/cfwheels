@@ -1,5 +1,5 @@
 #summary Here are the rules of the road for contributing code to the project. Let's follow this process so that we don't duplicate effort and so the code base is easy to maintain over the long haul.
-#labels chapter,0.7
+#labels chapter,0.8.3
 
 ==Subversion Repository==
 
@@ -89,4 +89,4 @@ For example:
 
 ===Private Methods===
 
-Private methods within CFCs should be prefixed with an underscore. An example would be `_query()`.
+Private methods within CFCs should be prefixed with a dollar sign `$`. An example would be `$query()`.
