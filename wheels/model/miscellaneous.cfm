@@ -51,7 +51,6 @@
 						if (!IsObject(loc.object))
 							loc.object = findByKey(loc.object);
 					}
-					$dump(loc.object);
 					loc.info = $expandedAssociations(include=loc.key);
 					loc.info = loc.info[1];
 					if (loc.info.type IS "hasOne" || loc.info.type IS "hasMany")
