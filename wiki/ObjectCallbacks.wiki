@@ -70,7 +70,7 @@ The following 14 functions can be used to register callbacks.
 
 As you can see above, there are places (4, to be exact) where one callback or the other will be executed but not both. Which callback that will be executed depends on whether the object is being saved to the database for the first time or not. The "create" type callbacks will be executed for new objects and the "update" type callbacks for existing objects.
 
-==Special Case: `updateAll()` and `deleteAll()`==
+==Special Cases: `updateAll()` and `deleteAll()`==
 
 Please note that if you use the [updateAll updateAll()] or the [deleteAll deleteAll()] methods in Wheels, they will not instantiate objects by default, and thus any callbacks will be skipped. This is good for performance reasons because if you update 1,000 records at once, you probably don't want to run the callbacks on each object. Especially not if they involve database calls.
 
