@@ -28,6 +28,10 @@
 		<td><cfif application.settings.obfuscateURLs>On<cfelse>Off</cfif></td>
 	</tr>
 	<tr>
+		<td valign="top"><strong>Plugins:</strong></td>
+		<td><cfif StructCount(application.wheels.plugins) IS NOT 0>#StructKeyList(application.wheels.plugins)#<cfelse>None</cfif></td>
+	</tr>
+	<tr>
 		<td valign="top"><strong>Controller:</strong></td>
 		<td>#request.wheels.params.controller#</td>
 	</tr>
