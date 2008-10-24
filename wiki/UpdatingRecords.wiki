@@ -38,7 +38,7 @@ It's also possible to combine named arguments with a `struct`, but then you need
 Example:
 
 {{{
-<cfset post = model("post").findByKey(params.key)>
+<cfset post = model("Post").findByKey(params.key)>
 <cfset post.update(title="New version of Wheels just released", properties=params.post)>
 }}}
 
@@ -63,7 +63,7 @@ An example of using `updateByKey()` by passing a `struct`:
 And an example of using `updateByKey()` by passing named arguments:
 
 {{{
-<cfset post = model("post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
+<cfset post = model("Post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
 }}}
 
 Keep in mind that if you use named arguments for the property values, you also need to name all other arguments too because you can't mix named and unnamed arguments in !ColdFusion.
@@ -77,7 +77,7 @@ The `where` argument is used exactly as you specify it in the `WHERE` clause of 
 An example:
 
 {{{
-<cfset recordsReturned = model("post").updateAll(published=1, publishedAt=Now(), where="published=0")>
+<cfset recordsReturned = model("Post").updateAll(published=1, publishedAt=Now(), where="published=0")>
 }}}
 
 Unlike [updateByKey updateByKey()], the [updateAll updateAll()] method will not instantiate the objects by default. That could be really slow if you wanted to update a lot of records at once.
