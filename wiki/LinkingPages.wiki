@@ -13,7 +13,7 @@ Wheels's built-in `linkTo()` function does all of the heavy lifting involved wit
 || `route` || If the link maps to a specific route that you have configured, pass the name here. ||
 || `controller` || Name of the controller to include in the link. Only needs to be specified if different than the current controller. ||
 || `action` || Name of the action that the link needs to point to. ||
-|| `key` || If following the link points to a page with the conventional Wheels `controller/action/id` link structure, this is the value of the ID. ||
+|| `key` || If following the link points to a page with the conventional Wheels `controller/action/key` link structure, this is the value of the ID. ||
 || `params` || Any additional parameters to set in the query string. ||
 || `anchor` || Sets the anchor name that needs to be appended to the path after a pound sign (#) ||
 || `onlyPath` || If true, returns only the relative URL (no protocol, host name or port) ||
