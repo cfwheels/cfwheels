@@ -1,5 +1,5 @@
 #summary How Wheels handles an incoming request.
-#labels chapter,0.8
+#labels chapter,0.8.3
 
 Wheels is quite simple when it comes to figuring out how incoming requests map to code in your application. Let's look at a URL for an e-commerce website and dissect it a little. Before we do that though a quick introduction to URLs in Wheels is in order.
 
@@ -27,15 +27,15 @@ Let's show how the code for the `products` function could look to make it more c
 <cfcomponent extends="Controller">
 
   <cffunction name="products">
-    <cfset renderPage(controller="shop", action="products")>
+    <cfset renderPage(controller="Shop", action="products")>
   </cffunction>
 
 </cfcomponent>
 }}}
 
-The only thing this does is call a view page to render using the [renderPage renderPage()] function. The [renderPage renderPage()] function is available to you since the `shop` controller extends the main Wheels controller so don't forget to include that `extends` attribute in the `cfcomponent` tag as you build your controllers since otherwise you won't be able to do much.
+The only thing this does is call a view page to render using the [renderPage renderPage()] function. The [renderPage renderPage()] function is available to you since the `Shop` controller extends the main Wheels `Controller` so don't forget to include that `extends` attribute in the `cfcomponent` tag as you build your controllers since otherwise you won't be able to do much.
 
-So, how does [renderPage renderPage()] work? Well, it accepts the arguments `controller` and `action` among others and based on these it will try to include a view file, in our case this is the `views\shop\products.cfm` file.
+So, how does [renderPage renderPage()] work? Well, it accepts the arguments `controller` and `action` among others and based on these it will try to include a view file, in our case this is the `views/shop/products.cfm` file.
 
 You can read the chapter about [RenderingPages Rendering Pages] for more information about this function.
 
@@ -75,24 +75,26 @@ That looks rather silly, a `products` function with no code what so ever. What d
 </cfcomponent>
 }}}
 
-... if you guessed that Wheels will just assume you don't need any code for the `products` action and just want the view rendered directly, then you are correct. This is quite useful when you're just adding simple pages to a website and you don't need the controller and model to be involved at all. For example you can create a file named `about.cfm` in the `views/home` folder and access it at `http://localhost/home/about` without having to create a specific action for it in the controller.
+...If you guessed that Wheels will just assume you don't need any code for the `products` action and just want the view rendered directly, then you are correct. This is quite useful when you're just adding simple pages to a website and you don't need the controller and model to be involved at all. For example you can create a file named `about.cfm` in the `views/home` folder and access it at `http://localhost/home/about` without having to create a specific action for it in the controller.
 
 This also highlights the fact that Wheels is a very easy framework to get started in since you can basically program just as you normally would by creating simple pages like this and then gradually "Wheelsify" your code as you learn the framework.
 
-==The Params Struct==
+==The `params` Struct==
 
-Besides making sure the correct code is executed based on format of the incoming request Wheels also does something else to simplify things for you a little. It combines the URL and form scopes into one. This is something that most !ColdFusion frameworks do as well. In Wheels it is done in the `params` struct. The `params` struct is available to you in the controller and view files but not in the model files (since it's considered a best practice to not mix your request handling with your business logic). Besides the form and URL scope variables the `params` struct also contains the current controller and action name for easy reference.
+Besides making sure the correct code is executed based on format of the incoming request Wheels also does something else to simplify things for you a little. It combines the URL and form scopes into one. This is something that most !ColdFusion frameworks do as well. In Wheels it is done in the `params` struct.
 
-To make this concept easier to grasp, imagine a login form on your website that submits to `http://localhost/account/login?sendto=dashboard` with the variables `username` and `password` present in the form. Then your `params` struct will look like this:
+The `params` struct is available to you in the controller and view files but not in the model files (since it's considered a best practice to not mix your request handling with your business logic). Besides the form and URL scope variables the `params` struct also contains the current controller and action name for easy reference.
+
+To make this concept easier to grasp, imagine a login form on your website that submits to `http://localhost/account/login?sendTo=dashboard` with the variables `username` and `password` present in the form. Then your `params` struct will look like this:
 
 || *Name* || *Value* ||
 || params.controller || account ||
 || params.action || login ||
-|| params.sendto || dashboard ||
+|| params.sendTo || dashboard ||
 || params.username || joe ||
 || params.password || 1234 ||
 
-Now instead of accessing the variables as `URL.sendto`, `form.username` etc you can just use the params struct for all of them instead. This concept becomes even more useful once we start getting into creating forms specifically meant for accessing object properties but let's save the details of all that for the [FormHelpersandShowingErrors Form Helpers and Showing Errors chapter].
+Now instead of accessing the variables as `url.sendto`, `form.username`, etc., you can just use the `params` struct for all of them instead. This concept becomes even more useful once we start getting into creating forms specifically meant for accessing object properties but let's save the details of all that for the [FormHelpersandShowingErrors Form Helpers and Showing Errors] chapter.
 
 ==Routing==
 
