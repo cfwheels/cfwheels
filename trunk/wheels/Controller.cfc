@@ -15,4 +15,5 @@
 	<cfinclude template="view/miscellaneous.cfm">
 	<cfinclude template="view/text.cfm">
 	<cfinclude template="view/urls.cfm">
+	<cfinclude template="injection.cfm">
 </cfcomponent>

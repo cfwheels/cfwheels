@@ -61,6 +61,7 @@
 	<cfset application.wheels.javascriptPath = loc.path & "javascripts">
 	<cfset application.wheels.modelPath = loc.path & "models">
 	<cfset application.wheels.modelComponentPath = loc.componentPath & "models">
+	<cfset application.wheels.pluginComponentPath = loc.componentPath & "plugins">
 	<cfset application.wheels.stylesheetPath = loc.path & "stylesheets">
 	<cfset application.wheels.viewPath = loc.path & "views">
 	<!--- Set up struct for caches --->
@@ -111,6 +112,54 @@
 		<cfset application.wheels.adapter = CreateObject("component", "wheels.model.adapters.#loc.adapterName#")>
 		<cfset application.wheels.databaseProductName = loc.info.database_productname>
 		<cfset application.wheels.databaseVersion = loc.info.database_version>
+	</cfif>
+	<!--- load plugins --->
+	<cfset application.wheels.plugins = {}>
+	<cfset loc.pluginFolder = this.rootDir & "plugins">
+	<!--- get a list of plugin files and folders --->
+	<cfset loc.pluginFolders = $directory(directory=loc.pluginFolder, type="dir")>
+	<cfset loc.pluginFiles = $directory(directory=loc.pluginFolder, filter="*.zip", type="file", sort="name DESC")>
+	<!--- delete plugin folders if no corresponding plugin file exist --->
+	<cfloop query="loc.pluginFolders">
+		<cfif name IS NOT ".svn" AND ListContainsNoCase(ValueList(loc.pluginFiles.name), name & "-") IS 0>
+			<cfset loc.temp = directory & "/" & name>
+			<cfdirectory action="delete" directory="#loc.temp#" recurse="true">
+		</cfif>
+	</cfloop>
+	<!--- create directory and unzip code for the most recent version of each plugin --->
+	<cfif loc.pluginFiles.recordCount IS NOT 0>
+		<cfloop query="loc.pluginFiles">
+			<cfset loc.pluginName = ListFirst(name, "-")>
+			<cfif NOT StructKeyExists(application.wheels.plugins, loc.pluginName)>
+				<cfset loc.pluginVersion = Replace(ListLast(name, "-"), ".zip", "", "one")>
+				<cfset loc.thisPluginFile = loc.pluginFolder & "/" & name>
+				<cfset loc.thisPluginFolder = loc.pluginFolder & "/" & LCase(loc.pluginName)>
+				<cfif NOT DirectoryExists(loc.thisPluginFolder)>
+					<cfdirectory action="create" directory="#loc.thisPluginFolder#">
+					<cfzip action="unzip" destination="#loc.thisPluginFolder#" file="#loc.thisPluginFile#"></cfzip>
+				</cfif>
+				<cfset loc.fileName = LCase(loc.pluginName) & "." & loc.pluginName>
+				<cfset loc.rootObject = "pluginObject">
+				<cfinclude template="../root.cfm">
+				<cfset application.wheels.plugins[loc.pluginName] = loc.rootObject>
+				<cfif application.wheels.plugins[loc.pluginName].version IS NOT application.wheels.version>
+					<cfset $throw(type="Wheels.IncompatiblePlugin", message="#loc.pluginName# is incompatible with this version of Wheels.", extendedInfo="You're running version #application.wheels.version# of Wheels and the #loc.pluginName# plugin you have installed only supports version #application.wheels.plugins[loc.pluginName].version#. Download a new version of #loc.pluginName#, drop it in the 'plugins' folder and restart Wheels by issuing a 'reload=true' request.")>
+				</cfif>
+			</cfif>
+		</cfloop>
+		<!--- look for plugins that are incompatible with each other --->
+		<cfset loc.addedFunctions = "">
+		<cfloop list="#StructKeyList(application.wheels.plugins)#" index="loc.i">
+			<cfloop list="#StructKeyList(application.wheels.plugins[loc.i])#" index="loc.j">
+				<cfif NOT ListFindNoCase("init,version", loc.j)>
+					<cfif ListFindNoCase(loc.addedFunctions, loc.j)>
+						<cfset $throw(type="Wheels.IncompatiblePlugin", message="#loc.i# is incompatible with a previously installed plugin.", extendedInfo="make sure none of the plugins you have installed overrides the same Wheels functions.")>
+					<cfelse>
+						<cfset loc.addedFunctions = ListAppend(loc.addedFunctions, loc.j)>			
+					</cfif>
+				</cfif>
+			</cfloop>
+		</cfloop>
 	</cfif>
 	<cfinclude template="../#application.wheels.eventPath#/onapplicationstart.cfm">
 </cffunction>

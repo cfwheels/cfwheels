@@ -7,4 +7,5 @@
 	<cfinclude template="model/initialization.cfm">
 	<cfinclude template="model/miscellaneous.cfm">
 	<cfinclude template="model/validations.cfm">
+	<cfinclude template="injection.cfm">
 </cfcomponent>
