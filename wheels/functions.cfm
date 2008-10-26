@@ -36,6 +36,7 @@
 	</cfif>
 	<cfset application.wheels.controllers = StructNew()>
 	<cfset application.wheels.models = StructNew()>
+	<cfset application.wheels.existingModelFiles = "">
 	<cfset application.wheels.routes = ArrayNew(1)>
 	<cfset application.wheels.namedRoutePositions = StructNew()>
 	<!--- setup folder paths --->

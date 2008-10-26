@@ -372,7 +372,9 @@
 	<cfargument name="name" type="string" required="true">
 	<cfset var loc = {}>
 	<cfset loc.fileName = capitalize(arguments.name)>
-	<cfif NOT FileExists(ExpandPath("#application.wheels.modelPath#/#loc.fileName#.cfc"))>
+	<cfif FileExists(ExpandPath("#application.wheels.modelPath#/#loc.fileName#.cfc"))>
+		<cfset application.wheels.existingModelFiles = ListAppend(application.wheels.existingModelFiles, arguments.name)>
+	<cfelse>
 		<cfset loc.fileName = "Model">
 	</cfif>
 	<cfset loc.rootObject = "modelClass">

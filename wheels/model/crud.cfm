@@ -948,6 +948,10 @@
 	<cfargument name="persisted" type="boolean" required="true">
 	<cfargument name="row" type="numeric" required="false" default="1">
 	<cfset var loc = {}>
+	<cfset loc.fileName = capitalize(variables.wheels.class.name)>
+	<cfif NOT ListFindNoCase(application.wheels.existingModelFiles, variables.wheels.class.name)>
+		<cfset loc.fileName = "Model">
+	</cfif>
 	<cfset loc.rootObject = "ModelObject">
 	<cfinclude template="../../root.cfm">
 	<cfreturn loc.rootObject>
