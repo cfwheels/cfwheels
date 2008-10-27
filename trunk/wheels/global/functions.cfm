@@ -1,2 +1,2 @@
-<cfinclude template="/wheels/base/internal.cfm">
-<cfinclude template="/wheels/base/public.cfm">
+<cfinclude template="/wheels/global/internal.cfm">
+<cfinclude template="/wheels/global/public.cfm">
