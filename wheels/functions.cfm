@@ -104,7 +104,7 @@
 		<cfelse>
 			<cfset $throw(type="Wheels.NoSupport", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, Oracle or MySQL.")>
 		</cfif>
-		<cfset application.wheels.adapter = CreateObject("component", "wheels.model.adapters.#loc.adapterName#")>
+		<cfset application.wheels.adapter = CreateObject("component", "wheels.#loc.adapterName#")>
 		<cfset application.wheels.databaseProductName = loc.info.database_productname>
 		<cfset application.wheels.databaseVersion = loc.info.database_version>
 	</cfif>
