@@ -1,5 +1,4 @@
 <cfinclude template="/wheels/view/assets.cfm">
-<cfinclude template="/wheels/view/dates.cfm">
 <cfinclude template="/wheels/view/errors.cfm">
 <cfinclude template="/wheels/view/forms.cfm">
 <cfinclude template="/wheels/view/layout.cfm">
