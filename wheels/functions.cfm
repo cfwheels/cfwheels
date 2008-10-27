@@ -3,18 +3,12 @@
 <cfset this.mappings["/wheels"] = this.rootDir & "wheels">
 <cfset this.sessionManagement = true>
 
-<cfif StructKeyExists(server, "railo")>
-	<cfinclude template="base/internal.cfm">
-	<cfinclude template="base/public.cfm">
-<cfelse>
-	<cfinclude template="wheels/base/internal.cfm">
-	<cfinclude template="wheels/base/public.cfm">
-</cfif>
+<cfinclude template="/wheels/global/functions.cfm">
+<cfinclude template="/wheels/controller/functions.cfm">
 
 <cffunction name="onApplicationStart" output="false">
 	<cfset var loc = {}>
 	<cfset application.wheels = StructNew()>
-	<cfset application.wheels.dispatch = CreateObject("component", "wheels.Dispatch")>
 	<cfif StructKeyExists(server, "railo")>
 		<cfset application.wheels.serverName = "Railo">
 		<cfset application.wheels.serverVersion = server.railo.version>
@@ -162,6 +156,7 @@
 			</cfloop>
 		</cfloop>
 	</cfif>
+	<cfset application.wheels.dispatch = CreateObject("component", "wheels.Dispatch")>
 	<cfinclude template="../#application.wheels.eventPath#/onapplicationstart.cfm">
 </cffunction>
 
@@ -174,7 +169,7 @@
 <cffunction name="onRequestStart" output="false">
 	<cfargument name="targetPage">
 	<cfset var loc = {}>
-	<cfif Right(arguments.targetPage, 4) IS ".cfc">
+		<cfif Right(arguments.targetPage, 4) IS ".cfc">
 		<cfset StructDelete(this, "onRequest")>
 		<cfset StructDelete(variables, "onRequest")>
 	</cfif>

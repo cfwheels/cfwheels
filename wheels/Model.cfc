@@ -1,11 +1,5 @@
-<cfcomponent extends="Base" output="false">
-	<cfinclude template="model/associations.cfm">
-	<cfinclude template="model/calculations.cfm">
-	<cfinclude template="model/callbacks.cfm">
-	<cfinclude template="model/crud.cfm">
-	<cfinclude template="model/errors.cfm">
-	<cfinclude template="model/initialization.cfm">
-	<cfinclude template="model/miscellaneous.cfm">
-	<cfinclude template="model/validations.cfm">
-	<cfinclude template="injection.cfm">
+<cfcomponent output="false">
+	<cfinclude template="/wheels/global/functions.cfm">
+	<cfinclude template="/wheels/model/functions.cfm">
+	<cfinclude template="/wheels/plugins/injection.cfm">
 </cfcomponent>
