@@ -17,6 +17,10 @@
 <cffunction name="$createControllerObject" returntype="any" access="public" output="false">
 	<cfargument name="params" type="struct" required="true">
 	<cfset var loc = {}>
+	<cfset loc.fileName = capitalize(variables.wheels.name)>
+	<cfif NOT ListFindNoCase(application.wheels.existingControllerFiles, variables.wheels.name)>
+		<cfset loc.fileName = "Controller">
+	</cfif>
 	<cfset loc.rootObject = "controllerObject">
 	<cfinclude template="../../root.cfm">
 	<cfreturn loc.rootObject>

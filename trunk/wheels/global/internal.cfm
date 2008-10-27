@@ -4,6 +4,12 @@
 	<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
    	<cflock name="controllerLock" type="exclusive" timeout="30">
 			<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
+				<cfset loc.fileName = capitalize(arguments.name)>
+				<cfif FileExists(ExpandPath("#application.wheels.controllerPath#/#loc.fileName#.cfc"))>
+					<cfset application.wheels.existingControllerFiles = ListAppend(application.wheels.existingControllerFiles, arguments.name)>
+				<cfelse>
+					<cfset loc.fileName = "Controller">
+				</cfif>
 				<cfset loc.rootObject = "controllerClass">
 				<cfinclude template="../../root.cfm">
 				<cfset application.wheels.controllers[arguments.name] = loc.rootObject>
