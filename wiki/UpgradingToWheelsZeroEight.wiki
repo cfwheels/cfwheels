@@ -49,4 +49,4 @@ The easiest way to upgrade is to setup an empty website, deploy a fresh copy of 
 ===URL/Routing===
 
  * *0.8.3:* The default route for Wheels has changed from `[controller]/[action]/[id]` to `[controller]/[action]/[key]`. This is to support composite keys. The `params.id` value will now only be available as `params.key`.
- * *0.8.3:* You can now pass along composite keys in the URL bar. Delimit multiple keys with a comma. (If you want to use this feature, then you can't have a comma in the key value itself).
+ * *0.8.3:* You can now pass along composite keys in the URL. Delimit multiple keys with a comma. (If you want to use this feature, then you can't have a comma in the key value itself).
