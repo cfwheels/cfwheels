@@ -3,8 +3,8 @@
 <cfset this.mappings["/wheels"] = this.rootDir & "wheels">
 <cfset this.sessionManagement = true>
 
-<cfinclude template="/wheels/global/functions.cfm">
-<cfinclude template="/wheels/controller/functions.cfm">
+<cfinclude template="wheels/global/appfunctions.cfm">
+<cfinclude template="wheels/controller/appfunctions.cfm">
 
 <cffunction name="onApplicationStart" output="false">
 	<cfset var loc = {}>
