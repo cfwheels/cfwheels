@@ -31,6 +31,7 @@
 	<cfset application.wheels.controllers = StructNew()>
 	<cfset application.wheels.models = StructNew()>
 	<cfset application.wheels.existingModelFiles = "">
+	<cfset application.wheels.existingControllerFiles = "">
 	<cfset application.wheels.routes = ArrayNew(1)>
 	<cfset application.wheels.namedRoutePositions = StructNew()>
 	<!--- setup folder paths --->
@@ -56,6 +57,7 @@
 	<cfset application.wheels.javascriptPath = loc.path & "javascripts">
 	<cfset application.wheels.modelPath = loc.path & "models">
 	<cfset application.wheels.modelComponentPath = loc.componentPath & "models">
+	<cfset application.wheels.pluginPath = loc.path & "plugins">
 	<cfset application.wheels.pluginComponentPath = loc.componentPath & "plugins">
 	<cfset application.wheels.stylesheetPath = loc.path & "stylesheets">
 	<cfset application.wheels.viewPath = loc.path & "views">

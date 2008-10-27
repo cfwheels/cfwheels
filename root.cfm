@@ -1,7 +1,7 @@
 <cfif loc.rootObject IS "controllerClass">
-	<cfset loc.rootObject = CreateObject("component", "#application.wheels.controllerComponentPath#.#capitalize(arguments.name)#").$initControllerClass(arguments.name)>
+	<cfset loc.rootObject = CreateObject("component", "#application.wheels.controllerComponentPath#.#loc.fileName#").$initControllerClass(arguments.name)>
 <cfelseif loc.rootObject IS "controllerObject">
-	<cfset loc.rootObject = CreateObject("component", "#application.wheels.controllerComponentPath#.#capitalize(variables.wheels.name)#").$initControllerObject(variables.wheels.name, arguments.params)>
+	<cfset loc.rootObject = CreateObject("component", "#application.wheels.controllerComponentPath#.#loc.fileName#").$initControllerObject(variables.wheels.name, arguments.params)>
 <cfelseif loc.rootObject IS "modelClass">
 	<cfset loc.rootObject = CreateObject("component", "#application.wheels.modelComponentPath#.#loc.fileName#").$initClass(arguments.name)>
 <cfelseif loc.rootObject IS "modelObject">
