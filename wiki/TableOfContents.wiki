@@ -19,7 +19,7 @@
  * [FiltersandVerification Filters and Verification]
  * [EventHandlers Event Handlers]
  * [URLRewriting URL Rewriting]
- * Using Routes
+ * [UsingRoutes Using Routes]
  * [ObfuscatingURLs Obfuscating URLs]
  * [Caching Caching]
 
@@ -34,7 +34,7 @@
  * [DynamicFinders Dynamic Finders]
  * [GettingPaginatedData Getting Paginated Data]
  * Associations
- * Object Validation
+ * [ObjectValidation Object Validation]
  * [ObjectCallbacks Object Callbacks]
  * [SoftDelete Soft Delete]
  * [AutomaticTimeStamps Automatic Time Stamps]
