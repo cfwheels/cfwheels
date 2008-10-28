@@ -33,8 +33,7 @@
  * [ColumnStatistics Column Statistics]
  * [DynamicFinders Dynamic Finders]
  * [GettingPaginatedData Getting Paginated Data]
- * Setting Associations
- * Using the Associations
+ * Associations
  * Object Validation
  * [ObjectCallbacks Object Callbacks]
  * [SoftDelete Soft Delete]
@@ -58,6 +57,7 @@
 
  * [DirectoryStructure Directory Structure]
  * [SwitchingEnvironments Switching Environments]
+ * [UsingandCreatingPlugins Using and Creating Plugins]
  * Deployment
 
 ==Contributing to Wheels==
