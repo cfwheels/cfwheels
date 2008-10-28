@@ -2,7 +2,6 @@
 	<cfargument name="exception">
 	<cfargument name="eventname">
 	<cfset var loc = {}>
-	<cfheader statuscode="500" statustext="Internal Server Error">
 	<cflock scope="application" type="readonly" timeout="30">
 		<cfif application.settings.sendEmailOnError>
 			<cfmail to="#application.settings.errorEmailAddress#" from="#application.settings.errorEmailAddress#" subject="Error" type="html">
@@ -21,6 +20,7 @@
 				<cfthrow object="#arguments.exception#">
 			</cfif>
 		<cfelse>
+			<cfheader statuscode="500" statustext="Internal Server Error">
 			<cfinclude template="../../#application.wheels.eventPath#/onerror.cfm">
 		</cfif>
 	</cflock>
