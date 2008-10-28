@@ -1,6 +1,6 @@
 <cfcomponent output="false">
-	<cfinclude template="/wheels/global/functions.cfm">
-	<cfinclude template="/wheels/controller/functions.cfm">
-	<cfinclude template="/wheels/view/functions.cfm">
-	<cfinclude template="/wheels/plugins/injection.cfm">
+	<cfinclude template="global/functions.cfm">
+	<cfinclude template="controller/functions.cfm">
+	<cfinclude template="view/functions.cfm">
+	<cfinclude template="plugins/injection.cfm">
 </cfcomponent>

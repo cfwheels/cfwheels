@@ -1,8 +1,8 @@
-<cfinclude template="/wheels/model/associations.cfm">
-<cfinclude template="/wheels/model/calculations.cfm">
-<cfinclude template="/wheels/model/callbacks.cfm">
-<cfinclude template="/wheels/model/crud.cfm">
-<cfinclude template="/wheels/model/errors.cfm">
-<cfinclude template="/wheels/model/initialization.cfm">
-<cfinclude template="/wheels/model/miscellaneous.cfm">
-<cfinclude template="/wheels/model/validations.cfm">
+<cfinclude template="associations.cfm">
+<cfinclude template="calculations.cfm">
+<cfinclude template="callbacks.cfm">
+<cfinclude template="crud.cfm">
+<cfinclude template="errors.cfm">
+<cfinclude template="initialization.cfm">
+<cfinclude template="miscellaneous.cfm">
+<cfinclude template="validations.cfm">
