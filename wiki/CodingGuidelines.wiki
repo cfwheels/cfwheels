@@ -50,7 +50,7 @@ Additionally, we recommend that any applications written using the Wheels framew
 
 ===Supported CFML Engines===
 
-Until further notice, all code for Wheels should be written for use with Adobe ColdFusion 8. The Wheels community is currently discussing the possibility of supporting other CFML engines like OpenBD and Railo.
+All code for Wheels should be written for use with Adobe ColdFusion 8 and Railo 3.0.
 
 ===Naming Conventions===
 
@@ -87,6 +87,6 @@ For example:
 </cffunction>
 }}}
 
-===Private Methods===
+===Functions===
 
-Private methods within CFCs should be prefixed with a dollar sign `$`. An example would be `$query()`.
+All functions should be made public. If a function is meant for internal use only and shouldn't be included in the API then prefix it with a dollar sign `$`. An example would be `$query()`.
