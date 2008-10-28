@@ -1,4 +1,4 @@
 <cfcomponent output="false">
-	<cfinclude template="/wheels/microsoftsqlserver/functions.cfm">
-	<cfinclude template="/wheels/plugins/injection.cfm">
+	<cfinclude template="microsoftsqlserver/functions.cfm">
+	<cfinclude template="plugins/injection.cfm">
 </cfcomponent>

@@ -1,1 +1,1 @@
-<cfinclude template="/wheels/dispatch/request.cfm">
+<cfinclude template="request.cfm">

@@ -1,7 +1,7 @@
-<cfinclude template="/wheels/view/assets.cfm">
-<cfinclude template="/wheels/view/errors.cfm">
-<cfinclude template="/wheels/view/forms.cfm">
-<cfinclude template="/wheels/view/layout.cfm">
-<cfinclude template="/wheels/view/miscellaneous.cfm">
-<cfinclude template="/wheels/view/text.cfm">
-<cfinclude template="/wheels/view/urls.cfm">
+<cfinclude template="assets.cfm">
+<cfinclude template="errors.cfm">
+<cfinclude template="forms.cfm">
+<cfinclude template="layout.cfm">
+<cfinclude template="miscellaneous.cfm">
+<cfinclude template="text.cfm">
+<cfinclude template="urls.cfm">
