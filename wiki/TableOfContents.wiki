@@ -38,27 +38,20 @@
  * [ObjectCallbacks Object Callbacks]
  * [SoftDelete Soft Delete]
  * [AutomaticTimeStamps Automatic Time Stamps]
- * Advanced Properties
- * Locking Table Rows
 
 ==Displaying Views to Users==
 
- * Locating the View Files
- * Including Partials
+ * Displaying Pages and Partials
  * [LinkingPages Linking Pages]
  * [UsingLayouts Using Layouts]
  * Form Helpers and Showing Errors
  * [DisplayingLinksforPagination Displaying Links for Pagination]
- * Miscellaneous Helpers
- * Adding Your Own Helpers
- * AJAX and Javascript Effects
 
 ==Working With Wheels==
 
  * [DirectoryStructure Directory Structure]
  * [SwitchingEnvironments Switching Environments]
  * [UsingandCreatingPlugins Using and Creating Plugins]
- * Deployment
 
 ==Contributing to Wheels==
 
