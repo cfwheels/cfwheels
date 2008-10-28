@@ -323,6 +323,7 @@
 					<cfif application.settings.showErrorInformation>
 						<cfthrow type="Wheels.ViewNotFound" message="Could not find the view page for the <tt>#arguments.actionName#</tt> action in the <tt>#arguments.controllerName#</tt> controller." extendedInfo="Create a file named <tt>#LCase(arguments.actionName)#.cfm</tt> in the <tt>views/#LCase(arguments.controllerName)#</tt> directory (create the directory as well if it doesn't already exist).">
 					<cfelse>
+						<cfheader statuscode="404" statustext="Not Found">
 						<cfinclude template="../../#application.wheels.eventPath#/onmissingtemplate.cfm">
 						<cfabort>
 					</cfif>
