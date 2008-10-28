@@ -179,7 +179,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$addSelectClause" returntype="array" access="private" output="false">
+<cffunction name="$addSelectClause" returntype="array" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="select" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
@@ -244,7 +244,7 @@
 	<cfreturn arguments.sql>
 </cffunction>
 
-<cffunction name="$addFromClause" returntype="array" access="private" output="false">
+<cffunction name="$addFromClause" returntype="array" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="include" type="string" required="true">
 	<cfscript>
@@ -270,7 +270,7 @@
 	<cfreturn arguments.sql>
 </cffunction>
 
-<cffunction name="$addWhereClause" returntype="array" access="private" output="false">
+<cffunction name="$addWhereClause" returntype="array" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="where" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
@@ -367,7 +367,7 @@
 	<cfreturn arguments.sql>
 </cffunction>
 
-<cffunction name="$addWhereClauseParameters" returntype="array" access="private" output="false">
+<cffunction name="$addWhereClauseParameters" returntype="array" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="where" type="string" required="true">
 	<cfscript>
@@ -401,7 +401,7 @@
 	<cfreturn arguments.sql>
 </cffunction>
 
-<cffunction name="$addOrderByClause" returntype="array" access="private" output="false">
+<cffunction name="$addOrderByClause" returntype="array" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="order" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
@@ -457,7 +457,7 @@
 	<cfreturn arguments.sql>
 </cffunction>
 
-<cffunction name="$expandedAssociations" returntype="array" access="private" output="false">
+<cffunction name="$expandedAssociations" returntype="array" access="public" output="false">
 	<cfargument name="include" type="string" required="true">
 	<cfscript>
 		var loc = {};
@@ -877,7 +877,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$create" returntype="boolean" access="private" output="false">
+<cffunction name="$create" returntype="boolean" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		if (variables.wheels.class.timeStampingOnCreate)
@@ -914,7 +914,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$update" returntype="boolean" access="private" output="false">
+<cffunction name="$update" returntype="boolean" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		if (hasChanged())
@@ -943,7 +943,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$createInstance" returntype="any" access="private" output="false">
+<cffunction name="$createInstance" returntype="any" access="public" output="false">
 	<cfargument name="properties" type="any" required="true">
 	<cfargument name="persisted" type="boolean" required="true">
 	<cfargument name="row" type="numeric" required="false" default="1">
@@ -987,7 +987,7 @@
 	<cfreturn this>
 </cffunction>
 
-<cffunction name="$updatePersistedProperties" returntype="void" access="private" output="false">
+<cffunction name="$updatePersistedProperties" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		variables.$persistedProperties = {};
@@ -1039,7 +1039,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$isNew" returntype="boolean" access="private" output="false">
+<cffunction name="$isNew" returntype="boolean" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		// if no values have ever been saved to the database this object is new
@@ -1051,7 +1051,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$changedFrom" returntype="string" access="private" output="false">
+<cffunction name="$changedFrom" returntype="string" access="public" output="false">
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
 		var loc = {};
@@ -1086,7 +1086,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$addDeleteClause" returntype="array" access="private" output="false">
+<cffunction name="$addDeleteClause" returntype="array" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfscript>
 		var loc = {};
@@ -1104,7 +1104,7 @@
 	<cfreturn arguments.sql>
 </cffunction>
 
-<cffunction name="$addKeyWhereClause" returntype="array" access="private" output="false">
+<cffunction name="$addKeyWhereClause" returntype="array" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfscript>
 		var loc = {};
@@ -1123,7 +1123,7 @@
 	<cfreturn arguments.sql>
 </cffunction>
 
-<cffunction name="$keyWhereString" returntype="string" access="private" output="false">
+<cffunction name="$keyWhereString" returntype="string" access="public" output="false">
 	<cfargument name="properties" type="any" required="false" default="#variables.wheels.class.keys#">
 	<cfargument name="values" type="any" required="false" default="">
 	<cfargument name="keys" type="any" required="false" default="">

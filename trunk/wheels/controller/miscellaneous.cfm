@@ -1,4 +1,4 @@
-<cffunction name="URLFor" returntype="string" access="private" output="false" hint="View, Helper, Creates an internal URL based on supplied arguments.">
+<cffunction name="URLFor" returntype="string" access="public" output="false" hint="View, Helper, Creates an internal URL based on supplied arguments.">
 	<cfargument name="route" type="string" required="false" default="" hint="Name of a route that you have configured in 'config/routes.cfm'.">
 	<cfargument name="controller" type="string" required="false" default="" hint="Name of the controller to include in the URL.">
 	<cfargument name="action" type="string" required="false" default="" hint="Name of the action to include in the URL.">

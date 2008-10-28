@@ -214,7 +214,7 @@
 	<cfset $registerValidation("onUpdate", arguments.methods)>
 </cffunction>
 
-<cffunction name="$registerValidation" returntype="void" access="private" output="false">
+<cffunction name="$registerValidation" returntype="void" access="public" output="false">
 	<cfargument name="type" type="string" required="true">
 	<cfargument name="methods" type="string" required="true">
 	<cfargument name="args" type="struct" required="false" default="#StructNew()#">
@@ -232,7 +232,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validate" returntype="boolean" access="private" output="false">
+<cffunction name="$validate" returntype="boolean" access="public" output="false">
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
 		var loc = {};
@@ -257,7 +257,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$validateConfirmationOf" returntype="void" access="private" output="false">
+<cffunction name="$validateConfirmationOf" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		loc.virtualConfirmProperty = arguments.property & "Confirmation";
@@ -267,28 +267,28 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validateExclusionOf" returntype="void" access="private" output="false">
+<cffunction name="$validateExclusionOf" returntype="void" access="public" output="false">
 	<cfscript>
 		if ((!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))) || (StructKeyExists(this, arguments.property) && Len(this[arguments.property]) && ListFindNoCase(arguments.list, this[arguments.property])))
 			addError(property=arguments.property, message=arguments.message);
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validateFormatOf" returntype="void" access="private" output="false">
+<cffunction name="$validateFormatOf" returntype="void" access="public" output="false">
 	<cfscript>
 		if ((!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))) || (StructKeyExists(this, arguments.property) && Len(this[arguments.property]) && !REFindNoCase(arguments.regEx, this[arguments.property])))
 			addError(property=arguments.property, message=arguments.message);
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validateInclusionOf" returntype="void" access="private" output="false">
+<cffunction name="$validateInclusionOf" returntype="void" access="public" output="false">
 	<cfscript>
 		if ((!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))) || (StructKeyExists(this, arguments.property) && Len(this[arguments.property]) && !ListFindNoCase(arguments.list, this[arguments.property])))
 			addError(property=arguments.property, message=arguments.message);
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validateLengthOf" returntype="void" access="private" output="false">
+<cffunction name="$validateLengthOf" returntype="void" access="public" output="false">
 	<cfscript>
 		if (!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property])))
 		{
@@ -323,7 +323,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validateNumericalityOf" returntype="void" access="private" output="false">
+<cffunction name="$validateNumericalityOf" returntype="void" access="public" output="false">
 	<cfscript>
 		if (!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property])))
 		{
@@ -342,14 +342,14 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validatePresenceOf" returntype="void" access="private" output="false">
+<cffunction name="$validatePresenceOf" returntype="void" access="public" output="false">
 	<cfscript>
 		if (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))
 			addError(property=arguments.property, message=arguments.message);
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validateUniquenessOf" returntype="void" access="private" output="false">
+<cffunction name="$validateUniquenessOf" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		loc.where = arguments.property & "=";

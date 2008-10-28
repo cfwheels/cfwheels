@@ -1,4 +1,4 @@
-<cffunction name="$constructParams" returntype="string" access="private" output="false">
+<cffunction name="$constructParams" returntype="string" access="public" output="false">
 	<cfargument name="params" type="any" required="true">
 	<cfscript>
 		var loc = {};
