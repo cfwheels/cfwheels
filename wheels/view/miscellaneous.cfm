@@ -1,3 +1,25 @@
+<cffunction name="contentForLayout" returntype="string" access="public" output="false" hint="View, Helper, Used inside a layout file to output the HTML created in the view.">
+
+	<!---
+		EXAMPLES:
+		<html>
+			<head>
+				<title>My Site</title>
+			</head>
+			<body>
+				<cfoutput>
+					#contentForLayout()#
+				</cfoutput>
+			</body>
+		</html>
+
+		RELATED:
+		 * [UsingLayouts Using Layouts] (chapter)
+	--->
+
+	<cfreturn request.wheels.response>
+</cffunction>
+
 <cffunction name="paginationLinks" returntype="string" access="public" output="false" hint="View, Helper, Builds and returns a string containing links to pages based on a paginated query.">
 	<cfargument name="windowSize" type="numeric" required="false" default="2" hint="The number of page links to show around the current page">
 	<cfargument name="alwaysShowAnchors" type="boolean" required="false" default="true" hint="Whether or not links to the first and last page should always be displayed">
