@@ -90,7 +90,7 @@ If you find yourself constantly getting a list of all the red cars in your inven
 
 The Object Relational Mapping, or ORM, in Wheels is perhaps the one thing that could potentially speed up your development the most. An ORM handles mapping objects in memory to how they are stored in the database. It can replace a lot of your query writing with simple methods such as `user.save()`, `blogPost.comments(order="date")`, and so on. We'll talk a lot more about the ORM in Wheels in the chapter on models.
 
-==Wheels Exmplained==
+==Wheels Explained==
 
 So there you have it, a completely fair and unbiased introduction to Wheels. ;)
 
