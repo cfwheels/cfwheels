@@ -1,3 +1,7 @@
+<cffunction name="$primaryKey" returntype="string" access="public" output="false">
+	<cfreturn variables.wheels.class.keys>
+</cffunction>
+
 <cffunction name="$classData" returntype="struct" access="public" output="false">
 	<cfreturn variables.wheels.class>
 </cffunction>
