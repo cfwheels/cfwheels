@@ -29,7 +29,7 @@
 	</tr>
 	<tr>
 		<td valign="top"><strong>Plugins:</strong></td>
-		<td><cfif StructCount(application.wheels.plugins) IS NOT 0><cfloop collection="#application.wheels.plugins#" item="loc.i"><a href="<cfif application.wheels.URLRewriting IS 'On'>/plugins/#LCase(loc.i)#<cfelseif application.wheels.URLRewriting IS 'Partial'>/index.cfm/plugins/#LCase(loc.i)#<cfelse>/index.cfm?controller=plugins&action=#LCase(loc.i)#</cfif>">#loc.i#</a></cfloop><cfelse>None</cfif></td>
+		<td><cfif StructCount(application.wheels.plugins) IS NOT 0><cfset loc.count = 0><cfloop collection="#application.wheels.plugins#" item="loc.i"><cfset loc.count = loc.count + 1><a href="<cfif application.wheels.URLRewriting IS 'On'>/plugins/#LCase(loc.i)#<cfelseif application.wheels.URLRewriting IS 'Partial'>/index.cfm/plugins/#LCase(loc.i)#<cfelse>/index.cfm?controller=plugins&action=#LCase(loc.i)#</cfif>">#loc.i#</a><cfif StructCount(application.wheels.plugins) GT loc.count>, </cfif></cfloop><cfelse>None</cfif></td>
 	</tr>
 	<tr>
 		<td valign="top"><strong>Controller:</strong></td>
