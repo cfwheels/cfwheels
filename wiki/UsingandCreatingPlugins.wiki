@@ -1,0 +1,31 @@
+#summary One-sentence summary of this page.
+
+Installation:
+Download a plugin ZIP file and drop it in the plugins folder (no need
+to extract it).
+
+Uninstall:
+Delete the ZIP file (Wheels will clean up any left over files).
+
+Naming:
+Plugins will be named like this: URLObfuscator-0.1.zip
+0.1 in this case is the version number of the URLObfuscator plugin.
+If you drop both URLObfuscator-0.1.zip and URLObfuscator-0.2.zip
+Wheels will use the one with the highest version number and ignore the
+rest.
+
+Creating a Plugin:
+Besides being named like above there is only one requirement, it has
+to have an "init" function which returns "this" and also sets
+"this.version" to the Wheels version it is compatible with.
+
+Compatibility:
+When loading plugins Wheels will throw an error if the plugin is not
+compatible with the installed Wheels version.
+Wheels will also throw an error if two plugins are loaded and they
+both override or add the same method causing a conflict.
+
+To override a method in Wheels just create a method with the same name
+in the plugin CFC file.
+At the moment it's possible to override methods in Base, Controller
+(incl view) and Model.
