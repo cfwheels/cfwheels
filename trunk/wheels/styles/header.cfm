@@ -2,7 +2,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-	<title>Error!</title>
+	<title>ColdFusion on Wheels</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<style>
 	*
@@ -100,7 +100,7 @@
 
 	pre
 	{
-		border: 1px solid #a6a2a2;
+	  border: 1px solid #a6a2a2;
 	  overflow-x: auto;
 	  width: 646px;
 	  padding: 15px;

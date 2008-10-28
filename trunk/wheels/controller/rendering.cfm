@@ -259,5 +259,5 @@
 	<cfargument name="name" type="string" required="true">
 	<cfset request.wheels.showDebugInformation = false>
 	<cfset request.wheels.response = $include("../../#application.wheels.pluginPath#/#arguments.name#/index.cfm")>
-	<cfset $renderLayout(layout=false)>
+	<cfset request.wheels.response = $include("../styles/layout.cfm")>
 </cffunction>
