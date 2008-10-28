@@ -1,4 +1,3 @@
-<cfinclude template="assets.cfm">
 <cfinclude template="errors.cfm">
 <cfinclude template="forms.cfm">
 <cfinclude template="layout.cfm">
