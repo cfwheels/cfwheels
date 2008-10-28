@@ -1,10 +1,12 @@
-#summary One-sentence summary of this page.
+#summary Extend Wheels functionality by using plugins or create your own.
 
-Installation:
+Intro text...
+
+==Installing a Plugin==
 Download a plugin ZIP file and drop it in the plugins folder (no need
 to extract it).
 
-Uninstall:
+==How to Uninstall a Plugin==
 Delete the ZIP file (Wheels will clean up any left over files).
 
 Naming:
