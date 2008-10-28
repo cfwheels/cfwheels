@@ -171,12 +171,12 @@
 	<cfreturn $includeOrRenderPartial(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="$renderPage" returntype="void" access="private" output="false">
+<cffunction name="$renderPage" returntype="void" access="public" output="false">
 	<cfset request.wheels.response = $include("../../#application.wheels.viewPath#/#arguments.controller#/#arguments.action#.cfm")>
 	<cfset $renderLayout(layout=arguments.layout)>
 </cffunction>
 
-<cffunction name="$includeOrRenderPartial" returntype="any" access="private" output="false">
+<cffunction name="$includeOrRenderPartial" returntype="any" access="public" output="false">
 	<cfset var loc = {}>
 
 	<!--- double-checked lock --->
@@ -211,7 +211,7 @@
 
 </cffunction>
 
-<cffunction name="$includePartial" returntype="string" access="private" output="false">
+<cffunction name="$includePartial" returntype="string" access="public" output="false">
 	<cfset var loc = {}>
 
 	<cfif Left(arguments.name, 1) IS "/">
@@ -228,7 +228,7 @@
 	<cfreturn loc.result>
 </cffunction>
 
-<cffunction name="$include" returntype="string" access="private" output="false">
+<cffunction name="$include" returntype="string" access="public" output="false">
 	<cfargument name="$path" type="string" required="true">
 	<cfset var loc = {}>
 	<cfsavecontent variable="loc.result">
@@ -237,7 +237,7 @@
 	<cfreturn trim(loc.result)>
 </cffunction>
 
-<cffunction name="$renderLayout" returntype="void" access="private" output="false">
+<cffunction name="$renderLayout" returntype="void" access="public" output="false">
 	<cfargument name="layout" type="any" required="true">
 
 	<cfif (IsBoolean(arguments.layout) AND arguments.layout) OR (arguments.layout IS NOT "false")>

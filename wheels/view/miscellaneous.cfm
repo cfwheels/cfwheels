@@ -109,12 +109,12 @@
 	<cfreturn $includeOrRenderPartial(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="$trimHTML" returntype="string" access="private" output="false">
+<cffunction name="$trimHTML" returntype="string" access="public" output="false">
 	<cfargument name="str" type="string" required="true">
 	<cfreturn replaceList(trim(arguments.str), "#chr(9)#,#chr(10)#,#chr(13)#", ",,")>
 </cffunction>
 
-<cffunction name="$getAttributes" returntype="string" access="private" output="false">
+<cffunction name="$getAttributes" returntype="string" access="public" output="false">
 	<cfset var loc = {}>
 
 	<cfset loc.attributes = "">

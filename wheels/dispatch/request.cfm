@@ -300,7 +300,7 @@
 	<cfreturn request.wheels.response>
 </cffunction>
 
-<cffunction name="$callAction" returntype="void" access="private" output="false">
+<cffunction name="$callAction" returntype="void" access="public" output="false">
 	<cfargument name="controller" type="any" required="true">
 	<cfargument name="controllerName" type="string" required="true">
 	<cfargument name="actionName" type="string" required="true">

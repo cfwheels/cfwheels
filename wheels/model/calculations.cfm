@@ -130,7 +130,7 @@
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="$calculate" returntype="numeric" access="private" output="false">
+<cffunction name="$calculate" returntype="numeric" access="public" output="false">
 	<cfargument name="type" type="string" required="true">
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="where" type="string" required="false" default="">

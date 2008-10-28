@@ -1,4 +1,4 @@
-<cffunction name="$controller" returntype="any" access="private" output="false">
+<cffunction name="$controller" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfset var loc = {}>
 	<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
@@ -20,7 +20,7 @@
 	<cfreturn application.wheels.controllers[arguments.name]>
 </cffunction>
 
-<cffunction name="$flatten" returntype="string" access="private" output="false">
+<cffunction name="$flatten" returntype="string" access="public" output="false">
 	<cfargument name="values" type="struct" required="true">
 	<cfscript>
 		var loc = {};
@@ -51,12 +51,12 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$hashStruct" returntype="string" access="private" output="false">
+<cffunction name="$hashStruct" returntype="string" access="public" output="false">
 	<cfargument name="args" type="struct" required="true">
 	<cfreturn Hash(ListSort($flatten(arguments.args), "text", "asc", "&"))>
 </cffunction>
 
-<cffunction name="$addToCache" returntype="void" access="private" output="false">
+<cffunction name="$addToCache" returntype="void" access="public" output="false">
 	<cfargument name="key" type="string" required="true">
 	<cfargument name="value" type="any" required="true">
 	<cfargument name="time" type="numeric" required="true">
@@ -95,7 +95,7 @@
 
 </cffunction>
 
-<cffunction name="$getFromCache" returntype="any" access="private" output="false">
+<cffunction name="$getFromCache" returntype="any" access="public" output="false">
 	<cfargument name="key" type="string" required="true">
 	<cfargument name="category" type="string" required="false" default="main">
 	<cfargument name="type" type="string" required="false" default="external">
@@ -117,14 +117,14 @@
 
 </cffunction>
 
-<cffunction name="$removeFromCache" returntype="void" access="private" output="false">
+<cffunction name="$removeFromCache" returntype="void" access="public" output="false">
 	<cfargument name="key" type="string" required="true">
 	<cfargument name="category" type="string" required="false" default="main">
 	<cfargument name="type" type="string" required="false" default="external">
 	<cfset StructDelete(application.wheels.cache[arguments.type][arguments.category], arguments.key)>
 </cffunction>
 
-<cffunction name="$cacheCount" returntype="numeric" access="private" output="false">
+<cffunction name="$cacheCount" returntype="numeric" access="public" output="false">
 	<cfargument name="category" type="string" required="false" default="">
 	<cfargument name="type" type="string" required="false" default="external">
 	<cfset var loc = {}>
@@ -141,7 +141,7 @@
 	<cfreturn loc.result>
 </cffunction>
 
-<cffunction name="$clearCache" returntype="void" access="private" output="false">
+<cffunction name="$clearCache" returntype="void" access="public" output="false">
 	<cfargument name="category" type="string" required="false" default="">
 	<cfargument name="type" type="string" required="false" default="external">
 	<cfset var loc = {}>
@@ -156,7 +156,7 @@
 
 </cffunction>
 
-<cffunction name="$namedReadLock" returntype="any" access="private" output="false">
+<cffunction name="$namedReadLock" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="object" type="any" required="true">
 	<cfargument name="method" type="string" required="true">
@@ -168,7 +168,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$doubleCheckedLock" returntype="any" access="private" output="false">
+<cffunction name="$doubleCheckedLock" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="path" type="struct" required="true">
 	<cfargument name="key" type="string" required="true">
@@ -184,25 +184,25 @@
 	<cfreturn arguments.path[arguments.key]>
 </cffunction>
 
-<cffunction name="$directory" returntype="any" access="private" output="false">
+<cffunction name="$directory" returntype="any" access="public" output="false">
 	<cfset var loc = StructNew()>
 	<cfset arguments.name = "loc.returnValue">
 	<cfdirectory attributeCollection="#arguments#">
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$file" returntype="any" access="private" output="false">
+<cffunction name="$file" returntype="any" access="public" output="false">
 	<cfset var loc = StructNew()>
 	<cfset arguments.variable = "loc.returnValue">
 	<cffile attributeCollection="#arguments#">
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$throw" returntype="void" access="private" output="false">
+<cffunction name="$throw" returntype="void" access="public" output="false">
 	<cfthrow attributeCollection="#arguments#">
 </cffunction>
 
-<cffunction name="$invoke" returntype="any" access="private" output="false">
+<cffunction name="$invoke" returntype="any" access="public" output="false">
 	<cfset var loc = StructNew()>
 	<cfset arguments.returnVariable = "loc.returnValue">
 	<cfinvoke attributeCollection="#arguments#">
@@ -211,7 +211,7 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="$dbinfo" returntype="any" access="private" output="false">
+<cffunction name="$dbinfo" returntype="any" access="public" output="false">
 	<cfset var loc = StructNew()>
 	<cfset arguments.name = "loc.returnValue">
 	<!--- we have to use this cfif here to get around a bug with railo --->
@@ -223,7 +223,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$dump" returntype="void" access="private" output="true">
+<cffunction name="$dump" returntype="void" access="public" output="true">
 	<cfargument name="var" type="any" required="true">
 	<cfargument name="abort" type="boolean" required="false" default="true">
 	<cfdump var="#arguments.var#">
@@ -259,7 +259,7 @@
 	<cfreturn UCase(Left(arguments.text, 1)) & Mid(arguments.text, 2, Len(arguments.text)-1)>
 </cffunction>
 
-<cffunction name="$singularizeOrPluralize" returntype="string" access="private" output="false">
+<cffunction name="$singularizeOrPluralize" returntype="string" access="public" output="false">
 	<cfargument name="text" type="string" required="true">
 	<cfargument name="which" type="string" required="true">
 	<cfargument name="count" type="numeric" required="false" default="-1">
@@ -374,7 +374,7 @@
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="pluralize", count=arguments.count, returnCount=arguments.returnCount)>
 </cffunction>
 
-<cffunction name="$createClass" returntype="any" access="private" output="false">
+<cffunction name="$createClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfset var loc = {}>
 	<cfset loc.fileName = capitalize(arguments.name)>

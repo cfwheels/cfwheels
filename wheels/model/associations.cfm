@@ -31,7 +31,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$registerAssociation" returntype="void" access="private" output="false">
+<cffunction name="$registerAssociation" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		variables.wheels.class.associations[arguments.name] = {};

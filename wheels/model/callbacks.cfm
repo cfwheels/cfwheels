@@ -68,7 +68,7 @@
 	<cfset $registerCallback("afterDelete", arguments.methods)>
 </cffunction>
 
-<cffunction name="$registerCallback" returntype="void" access="private" output="false">
+<cffunction name="$registerCallback" returntype="void" access="public" output="false">
 	<cfargument name="type" type="string" required="true">
 	<cfargument name="methods" type="string" required="true">
 	<cfscript>
@@ -78,7 +78,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$callback" returntype="boolean" access="private" output="false">
+<cffunction name="$callback" returntype="boolean" access="public" output="false">
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
 		var loc = {};

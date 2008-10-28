@@ -772,7 +772,7 @@
 	<cfreturn loc.html>
 </cffunction>
 
-<cffunction name="$dateOrTimeSelect" returntype="any" access="private" output="false">
+<cffunction name="$dateOrTimeSelect" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="false" default="">
 	<cfargument name="value" type="any" required="false" default="">
 	<cfargument name="objectName" type="any" required="false" default="">
@@ -809,7 +809,7 @@
 	<cfreturn loc.html>
 </cffunction>
 
-<cffunction name="$yearMonthHourMinuteSecondSelectTag" returntype="any" access="private" output="false">
+<cffunction name="$yearMonthHourMinuteSecondSelectTag" returntype="any" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="value" type="any" required="false" default="">
 	<cfargument name="includeBlank" type="any" required="false" default="false">
@@ -866,7 +866,7 @@
 	<cfreturn loc.html>
 </cffunction>
 
-<cffunction name="$optionsForSelect" returntype="any" access="private" output="false">
+<cffunction name="$optionsForSelect" returntype="any" access="public" output="false">
 	<cfargument name="options" type="any" required="true">
 	<cfargument name="valueField" type="any" required="false" default="id">
 	<cfargument name="textField" type="any" required="false" default="name">
@@ -922,7 +922,7 @@
 	<cfreturn $trimHTML(loc.output)>
 </cffunction>
 
-<cffunction name="$formValue" returntype="any" access="private" output="false">
+<cffunction name="$formValue" returntype="any" access="public" output="false">
 	<cfargument name="objectName" type="any" required="false" default="">
 	<cfargument name="property" type="any" required="false" default="">
 	<cfargument name="name" type="any" required="false" default="">
@@ -944,7 +944,7 @@
 	<cfreturn loc.value>
 </cffunction>
 
-<cffunction name="$formHasError" returntype="any" access="private" output="false">
+<cffunction name="$formHasError" returntype="any" access="public" output="false">
 	<cfargument name="objectName" type="any" required="false" default="">
 	<cfargument name="property" type="any" required="false" default="">
 	<cfargument name="name" type="any" required="false" default="">
@@ -962,7 +962,7 @@
 	<cfreturn loc.error>
 </cffunction>
 
-<cffunction name="$formBeforeElement" returntype="any" access="private" output="false">
+<cffunction name="$formBeforeElement" returntype="any" access="public" output="false">
 	<cfargument name="objectName" type="any" required="false" default="">
 	<cfargument name="property" type="any" required="false" default="">
 	<cfargument name="name" type="any" required="false" default="">
@@ -1003,7 +1003,7 @@
 	<cfreturn loc.output>
 </cffunction>
 
-<cffunction name="$formAfterElement" returntype="any" access="private" output="false">
+<cffunction name="$formAfterElement" returntype="any" access="public" output="false">
 	<cfargument name="objectName" type="any" required="false" default="">
 	<cfargument name="property" type="any" required="false" default="">
 	<cfargument name="name" type="any" required="false" default="">
