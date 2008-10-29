@@ -87,6 +87,6 @@ For example:
 </cffunction>
 }}}
 
-===Functions===
+===CFC Methods===
 
-All functions should be made public. If a function is meant for internal use only and shouldn't be included in the API then prefix it with a dollar sign `$`. An example would be `$query()`.
+All CFC methods should be made public. If a method is meant for internal use only and shouldn't be included in the API then prefix it with a dollar sign `$`. An example would be `$query()`.
