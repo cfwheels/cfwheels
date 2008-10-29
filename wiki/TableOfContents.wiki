@@ -47,6 +47,11 @@
  * Form Helpers and Showing Errors
  * [DisplayingLinksforPagination Displaying Links for Pagination]
 
+==Sample Applications==
+
+ * Administration
+ * Authorization
+
 ==Working With Wheels==
 
  * [DirectoryStructure Directory Structure]
@@ -59,7 +64,7 @@
  * [CodingGuidelines Coding Guidelines]
  * [DocumentationGuidelines Documentation Guidelines]
 
-==Wheels API==
+==The Wheels API==
 
  * [ModelInitializationFunctions Model Initialization Functions]
  * [ModelClassFunctions Model Class Functions]
