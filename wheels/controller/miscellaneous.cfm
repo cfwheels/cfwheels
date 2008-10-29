@@ -229,11 +229,11 @@
 
 </cffunction>
 
-<cffunction name="sendFile" returntype="void" access="public" output="false">
-	<cfargument name="file" type="string" required="true">
-	<cfargument name="name" type="string" required="false" default="">
-	<cfargument name="type" type="string" required="false" default="">
-	<cfargument name="disposition" type="string" required="false" default="attachment">
+<cffunction name="sendFile" returntype="void" access="public" output="false" hint="Controller, Request, Sends a file to the user.">
+	<cfargument name="file" type="string" required="true" hint="The file to send to the user.">
+	<cfargument name="name" type="string" required="false" default="" hint="The file name to show in the browser download dialog box.">
+	<cfargument name="type" type="string" required="false" default="" hint="The HTTP content type to deliver the file as.">
+	<cfargument name="disposition" type="string" required="false" default="attachment" hint="Set to 'inline' to have the browser handle the opening of the file or set to 'attachment' to force a download dialog box.">
 	<cfset var loc = {}>
 
 	<cfset arguments.file = Replace(arguments.file, "\", "/", "all")>
