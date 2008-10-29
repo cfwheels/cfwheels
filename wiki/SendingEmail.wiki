@@ -1,0 +1,52 @@
+#summary One-sentence summary of this page.
+#labels chapter,0.8
+
+Here's a quick example of utilizing the sendEmail() function and a
+preferraable way of using application scope variables for server info.
+
+In the config/settings.cfm, four new variables are inserted as
+follows:
+
+<cfset application.settings.email.server = "_your_mail_server_here_">
+<cfset application.settings.email.username = "_email_username_here_">
+<cfset application.settings.email.password = "_email_password_here_">
+<cfset application.settings.email.from =
+"_address_@_domainname_here_.com">
+
+The sendMail() function call would then look something like this:
+
+<cfset sendEmail(
+  template="_custom_template_",
+  server="#application.settings.email.server#",
+  username="#application.settings.email.username#",
+  password="#application.settings.email.password#",
+  from="#application.settings.email.from#",
+  type="html",
+  to="_recipient_email_here",
+  subject="Test Subject from Wheels",
+  customMessage="Test Email Message Body")>
+
+The template attribute set in the above example to _custom_template_
+is a .cfm placed within the "template" folder under the controller
+executing this code. For example, if the sendEail was sent from the
+Emailer.cfc controller, then the _custom_template .cfm will be under
+views/emailer/template/_custom_template_.cfm
+
+Hopefully this helps those of you who haven't tried this tag out yet
+or hadn't yet figured out all the attributes.
+
+Something else I might have left off was an ample explanation of the
+field "customMessage".
+
+The beauty of using Wheels' sendEmail is that the main, generally
+similar email layout, content, etc, only has to be used once in the
+template. Rather than with a standard CFMail tag which you would have
+to copy and paste the same general content (header, footer, graphics,
+etc.) for each use.
+
+Any variable can be passed to the email template (that is, you have a
+#_yourvariable_# in it) via the sendMail function.
+
+In a number of uses, I utilize passing in firstName, lastName, and
+customMessage variables that are integrated into the basic project
+email template of Wheels.
