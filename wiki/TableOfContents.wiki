@@ -13,7 +13,7 @@
  * [RequestHandling Request Handling]
  * [RenderingPages Rendering Pages]
  * [RedirectingUsers Redirecting Users]
- * Sending Files
+ * [SendingFiles Sending Files]
  * [SendingEmail Sending Email]
  * [UsingtheFlash Using the Flash]
  * [FiltersandVerification Filters and Verification]
