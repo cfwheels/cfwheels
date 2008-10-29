@@ -14,7 +14,7 @@
  * [RenderingPages Rendering Pages]
  * [RedirectingUsers Redirecting Users]
  * Sending Files
- * Sending Email
+ * [SendingEmail Sending Email]
  * [UsingtheFlash Using the Flash]
  * [FiltersandVerification Filters and Verification]
  * [EventHandlers Event Handlers]
