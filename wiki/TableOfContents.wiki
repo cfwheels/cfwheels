@@ -50,6 +50,7 @@
 ==Working With Wheels==
 
  * [DirectoryStructure Directory Structure]
+ * Configuration
  * [SwitchingEnvironments Switching Environments]
  * [UsingandCreatingPlugins Using and Creating Plugins]
 
