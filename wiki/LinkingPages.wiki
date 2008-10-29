@@ -84,7 +84,7 @@ But Wheels will still correctly build the link markup:
 The same would be true if you had Wheels installed in a subfolder, thus eliminating your ability to use URL rewriting. The same `linkTo()` code above would generate this HTML if you had Wheels installed in a subfolder called `foo`:
 
 {{{
-<a href="/foo/index.cfm?controller=company&amp;action=contact&amp;id=3">This link still works</a>
+<a href="/foo/index.cfm?controller=company&amp;action=contact&amp;key=3">This link still works</a>
 }}}
 
 ==Use the `linkTo()` Function for Portability==
