@@ -1,5 +1,5 @@
 #summary Documentation for Wheels 0.8.
-#labels chapter,0.8
+#labels chapter,1.0
 
 ==Introduction==
 
@@ -46,6 +46,7 @@
  * [UsingLayouts Using Layouts]
  * Form Helpers and Showing Errors
  * [DisplayingLinksforPagination Displaying Links for Pagination]
+ * Creating Your Own View Helpers
 
 ==Sample Applications==
 
