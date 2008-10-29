@@ -1,8 +1,37 @@
-#summary Stop repeating yourself with the use of filters and verifications.
+#summary Use Wheels to send files to your users in an easier and more secure way.
 #labels chapter,0.8.3
 
-If you find the need to run a piece of code before or after several controller actions, then you can use _filters_ to accomplish this without having to explicitly call the code inside each action in question.
+Sending files?! Is that really a necessary feature of Wheels? Can't I just place the file on my web server and link to it?
 
-This is similar to using the `onRequestStart` / `onRequestEnd` functions in !ColdFusion's `Application.cfc` file, with the difference being that filters tie in better with your Wheels controller setup.
+You are correct, there is absolutely no need to use Wheels to send files. Your web server will do a fine job of sending out files to your users. However, if you want a little more control over the way the user's browser handles the download or be able to secure access to your files then you might find the [sendFile sendFile()] function useful.
 
-==An Example: Authenticating Users==
+==Sending Files With the [sendFile sendFile()] Function==
+
+The convention in Wheels is to place all files you want users to be able to download in the `files` folder. Assuming you've placed a file named `wheels_tutorial_20081028_J657D6HX.pdf` in there this is what you have to do to deliver it to a user. Let's start with creating a link to the action that will handle the sending of the file:
+
+{{{
+  #linkTo(text="Download Tutorial", action="sendTutorial")#
+}}}
+
+Now let's send the file to the user in the `sendTutorial` controller action. Just like the rendering functions in Wheels the [sendFile sendFile()] function should be placed as the very last thing you do in your action code. In this case it's the only thing we do but perhaps you want to track how many times the file is being downloaded for example in which case the tracking code has to be placed *before* the [sendFile sendFile()] function. Also remember that the [sendFile sendFile()] function replaces any rendering, i.e. you cannot send a file *and* render a page (this will be quite obvious once you try this code since you'll see that the browser will give you a dialog box and you won't actually leave the page you're viewing at the time).
+
+==Securing Access to My Files==
+
+
+The main reason to use this function to deliver files is that you can secure access to the  files. Maybe you only want a specific user to download your files or maybe
+
+When you link directly to a file, the browser decides how to open it. For instance, if you link directly to a txt file then the browser will normally open this in the browser and this makes it difficult if you want your users to download the file to their machine.
+
+To force the download dialog, you need to send a header to the browser telling it to download the file, in this case we use the content-disposition header. 
+
+
+filename - suggests a filename for the browser to use. Defaults to File.basename(path).
+:type - specifies an HTTP content type. Defaults to ‘application/octet-stream’.
+:disposition - specifies whether the file will be shown inline or downloaded. Valid values are ‘inline’ and ‘attachment’ (default).
+:stream - whether to send the file to the user agent as it is read (true) or to read the entire file before sending (false). Defaults to true.
+:buffer_size - specifies size (in bytes) of the buffer used to stream the file. Defaults to 4096.
+:status - specifies the status code to send with the response. Defaults to ‘200 OK’.
+:url_based_filename - set to true if you want the browser guess the filename from the URL, which is necessary for i18n filenames on certain browsers (setting :filename overrides this option).
+
+
+Be careful to sanitize the path parameter if it coming from a web page. send_file(params[:path]) allows a malicio
