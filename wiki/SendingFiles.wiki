@@ -35,7 +35,7 @@ By default the [sendFile sendFile()] function will try and force a download dial
 
 You can also specify what HTTP content type to use when delivering the file by using the 'type' argument. Please refer to the API for the [sendFile sendFile()] function for complete details.
 
-==Securing Access to My Files==
+==Securing Access to Files==
 
 Perhaps the main reason to use the [sendFile sendFile()] function is that it gives you an easy way to secure access to your files. Maybe the tutorial file used in the above example is something the user paid for and you only want that user to be able to download it and no one else. To accomplish this you can just add some code to authenticate the user right before the [sendFile sendFile()] call in your action.
 
@@ -49,10 +49,10 @@ If that is not an option you can also simply move the `files` folder out of the 
 
 {{{
 <cffunction name="sendTutorial">
-  <cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf")>
+  <cfset sendFile(file="../../tutorials/wheels_tutorial_20081028_J657D6HX.pdf")>
 </cffunction>
 }}}
 
-This assumes you've moved the folder one level up in your file system.
+This assumes you've moved the folder two levels up in your file system and into a folder named `tutorials`.
 
 A final note of warning; be careful to not allow just any parameters from the URL to get passed through to the [sendFile sendFile()] because then a user would be able to download any file from your server!
