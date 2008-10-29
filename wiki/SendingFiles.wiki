@@ -1,0 +1,8 @@
+#summary Stop repeating yourself with the use of filters and verifications.
+#labels chapter,0.8.3
+
+If you find the need to run a piece of code before or after several controller actions, then you can use _filters_ to accomplish this without having to explicitly call the code inside each action in question.
+
+This is similar to using the `onRequestStart` / `onRequestEnd` functions in !ColdFusion's `Application.cfc` file, with the difference being that filters tie in better with your Wheels controller setup.
+
+==An Example: Authenticating Users==
