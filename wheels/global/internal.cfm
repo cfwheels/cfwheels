@@ -211,6 +211,10 @@
 	</cfif>
 </cffunction>
 
+<cffunction name="$location" returntype="void" access="public" output="false">
+	<cflocation attributeCollection="#arguments#">
+</cffunction>
+
 <cffunction name="$dbinfo" returntype="any" access="public" output="false">
 	<cfset var loc = StructNew()>
 	<cfset arguments.name = "loc.returnValue">
