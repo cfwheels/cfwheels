@@ -239,20 +239,29 @@
 
 <cffunction name="$renderLayout" returntype="void" access="public" output="false">
 	<cfargument name="layout" type="any" required="true">
-
-	<cfif (IsBoolean(arguments.layout) AND arguments.layout) OR (arguments.layout IS NOT "false")>
-		<cfif NOT IsBoolean(arguments.layout)>
-			<!--- Include a designated layout --->
-			<cfset request.wheels.response = $include("../../#application.wheels.viewPath#/layouts/#Replace(arguments.layout, ' ', '', 'all')#.cfm")>
-		<cfelseif fileExists(expandPath("views/layouts/#variables.params.controller#.cfm"))>
-			<!--- Include the current controller's layout if one exists --->
-			<cfset request.wheels.response = $include("../../#application.wheels.viewPath#/layouts/#variables.params.controller#.cfm")>
-		<cfelse>
-			<!--- The application wide layout --->
-			<cfset request.wheels.response = $include("../../#application.wheels.viewPath#/layouts/default.cfm")>
-		</cfif>
-	</cfif>
-
+	<cfscript>
+		var loc = {};
+		if (!IsBoolean(arguments.layout) || arguments.layout)
+		{
+			loc.include = "../../" & application.wheels.viewPath & "/";
+			if (IsBoolean(arguments.layout))
+			{
+				if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.params.controller)#/layout.cfm")))
+					loc.include = loc.include & variables.params.controller & "/" & "layout.cfm";
+				else
+					loc.include = loc.include & "layout.cfm";
+			}
+			else
+			{
+				loc.file = SpanExcluding(arguments.layout, ".") & ".cfm";
+				if (arguments.layout Contains "/")
+					loc.include = loc.include & loc.file;
+				else
+					loc.include = loc.include & variables.params.controller & "/" & loc.file;
+			}
+			request.wheels.response = $include(loc.include);
+		}
+	</cfscript>
 </cffunction>
 
 <cffunction name="$renderPlugin" returntype="void" access="public" output="false">
