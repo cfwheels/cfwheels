@@ -196,33 +196,38 @@
 
 <cffunction name="sendEmail" returntype="void" access="public" output="false">
 	<cfargument name="template" type="string" required="true">
-	<cfargument name="layout" type="any" required="false" default="false">
+	<cfargument name="layout" type="any" required="false" default="#application.settings.sendEmail.layout#">
 	<cfset var loc = {}>
 
-	<cfsavecontent variable="request.wheels.response">
-		<cfinclude template="../../#application.wheels.viewPath#/email/#LCase(ReplaceNoCase(arguments.template, '.cfm', ''))#.cfm">
-	</cfsavecontent>
+	<cfset loc.defaults = StructCopy(application.settings.sendEmail)>
+	<cfset StructDelete(loc.defaults, "layout")>
+	<cfloop collection="#loc.defaults#" item="loc.i">
+		<cfif NOT ListFindNoCase("template,layout", loc.i)>
+				<cfset arguments[loc.i] = loc.defaults[loc.i]>
+			</cfif>	
+	</cfloop>
 
-	<cfif (IsBoolean(arguments.layout) AND arguments.layout) OR (arguments.layout IS NOT "false")>
-		<cfif NOT IsBoolean(arguments.layout)>
-			<cfsavecontent variable="request.wheels.response">
-				<cfinclude template="../../#application.wheels.viewPath#/layouts/#LCase(Replace(arguments.layout, ' ', '', 'all'))#.cfm">
-			</cfsavecontent>
-		<cfelse>
-			<cfsavecontent variable="request.wheels.response">
-				<cfinclude template="../../#application.wheels.viewPath#/layouts/email.cfm">
-			</cfsavecontent>
-		</cfif>
+	<cfif arguments.template Contains "/">
+		<cfset loc.controller = ListFirst(arguments.template, "/")>
+		<cfset loc.action = ListLast(arguments.template, "/")>
+	<cfelse>
+		<cfset loc.controller = variables.params.controller>
+		<cfset loc.action = arguments.template>
 	</cfif>
 
 	<cfset loc.attributes = structCopy(arguments)>
-	<cfset loc.cfmailAttributes = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext">
 	<cfloop collection="#loc.attributes#" item="loc.i">
-		<cfif ListFindNoCase(loc.cfmailAttributes, loc.i) IS 0>
+		<cfif NOT ListFindNoCase("from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext", loc.i)>
+			<cfif NOT ListFindNoCase("template,layout", loc.i)>
+				<cfset variables[loc.i] = arguments[loc.i]>
+			</cfif>
 			<cfset StructDelete(loc.attributes, loc.i)>
 		</cfif>
 	</cfloop>
-	<cfmail attributecollection="#loc.attributes#">#trim(request.wheels.response)#</cfmail>
+
+	<cfset $renderPage(controller=loc.controller, action=loc.action, layout=arguments.layout)>
+
+	<cfmail attributecollection="#loc.attributes#">#request.wheels.response#</cfmail>
 
 	<!--- delete the response so that Wheels does not think we have rendered an actual response to the browser --->
 	<cfset StructDelete(request.wheels, "response")>
