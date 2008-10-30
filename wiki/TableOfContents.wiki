@@ -1,14 +1,14 @@
 #summary Documentation for Wheels 0.8.
 #labels chapter,1.0
 
-== Introduction ==
+=Introduction=
 
  * [FrameworksandWheels Frameworks and Wheels]
  * [Requirements Requirements]
  * [Installation Installation]
  * [HelloWorld Hello World!]
 
-== Handling Requests With Controllers ==
+=Handling Requests With Controllers=
 
  * [RequestHandling Request Handling]
  * [RenderingPages Rendering Pages]
