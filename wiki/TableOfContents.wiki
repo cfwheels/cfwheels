@@ -23,7 +23,7 @@
  * [ObfuscatingURLs Obfuscating URLs]
  * [Caching Caching]
 
-==Database Interaction Through Models==
+===Database Interaction Through Models===
 
  * [ObjectRelationalMapping Object Relational Mapping]
  * [CreatingRecords Creating Records]
@@ -39,7 +39,7 @@
  * [SoftDelete Soft Delete]
  * [AutomaticTimeStamps Automatic Time Stamps]
 
-==Displaying Views to Users==
+===Displaying Views to Users===
 
  * Displaying Pages and Partials
  * [LinkingPages Linking Pages]
@@ -48,24 +48,24 @@
  * [DisplayingLinksforPagination Displaying Links for Pagination]
  * Creating Your Own View Helpers
 
-==Sample Applications==
+===Sample Applications===
 
  * Administration
  * Authorization
 
-==Working With Wheels==
+===Working With Wheels===
 
  * [DirectoryStructure Directory Structure]
  * Configuration
  * [SwitchingEnvironments Switching Environments]
  * [UsingandCreatingPlugins Using and Creating Plugins]
 
-==Contributing to Wheels==
+===Contributing to Wheels===
 
  * [CodingGuidelines Coding Guidelines]
  * [DocumentationGuidelines Documentation Guidelines]
 
-==The Wheels API==
+===The Wheels API===
 
  * [ModelInitializationFunctions Model Initialization Functions]
  * [ModelClassFunctions Model Class Functions]
