@@ -1,7 +1,7 @@
 #summary Use the standard CFML application events through the framework.
-#labels chapter,0.8
+#labels chapter,1.0
 
-Because the `Application.cfc` file in the root of your Wheels site just includes the `wheels/functions.cfm` file, which in turn includes a lot of framework specific code, you may wonder what the best way is to use CFML's `onApplicationStart`, `onRequestStart` functions...
+Because the `Application.cfc` file in the root of your Wheels site just includes the `wheels/functions.cfm` file, which in turn includes a lot of framework specific code, you may wonder what the best way is to use CFML's `onApplicationStart`, `onRequestStart` and similar functions...
 
 While it's perfectly possible to add your code directly to the `wheels/functions.cfm` file, we certainly don't recommend it. If you add code in there, you both increase the risk of accidentally modifying how the framework functions, and you also make it a lot harder to upgrade to future versions of Wheels.
 
@@ -21,8 +21,12 @@ The `onmaintenance.cfm` file is included when Wheels is set to `maintenance` mod
 
 ===On Error===
 
-You can place a generic error message in the `onerror.cfm` file to be displayed to the users whenever your site throws an error.
+You can place a generic error message in the `onerror.cfm` file to be displayed to the users whenever your site throws an error. When this page is shown a HTTP status code of 500 (Internal Server Error) will also be sent.
 
 ===On Missing Template===
 
-The `onmissingtemplate.cfm` file works in a similar way as the error file above, but it gets called when a `controller` or `action` in your application could not be found.
+The `onmissingtemplate.cfm` file works in a similar way as the error file above, but it gets called when a `controller` or `action` in your application could not be found. When this page is shown a HTTP status code of 404 (Not Found) will also be sent.
+
+==Adding Functions==
+
+Sometimes it's useful to add functions right in the `Application.cfc` file to make them available to all templates. To achieve the same thing in Wheels you can place your functions in `events/functions.cfm`.
