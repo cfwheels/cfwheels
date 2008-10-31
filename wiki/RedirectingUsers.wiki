@@ -1,5 +1,5 @@
 #summary Use redirection to keep your application user friendly.
-#labels chapter,0.8.3
+#labels chapter,1.0
 
 When a user submits a form, you do *not* want to show any content on the page that handles the form submission! Why? Because if you do, and the user hits refresh in their browser, the form handling code could be triggered again, possibly causing duplicate entries in your database, multiple emails being sent, etc.
 
@@ -9,19 +9,23 @@ To avoid the above problem, it is recommended to always redirect the user after 
 
 Being that `redirectTo()` is a Wheels function, it can of course accept the `controller`, `action`, and `key` arguments so that you can easily redirect to other actions in your application.
 
-==2 Ways to Redirect==
+==Three Ways to Redirect==
 
-Let's look at the 2 ways you can redirect in Wheels.
+Let's look at the three ways you can redirect in Wheels.
 
 ===1. Redirecting to Another Action===
 
 You can redirect the user to another action in your application simply by passing in the `controller`, `action`, and `key` arguments. You can also pass in any other arguments that are accepted by the [URLFor URLFor()] function, like `host`, `params`, etc. (The [URLFor URLFor()] function is what Wheels uses internally to produce the URL to redirect to.)
 
-===2. Redirecting to the Referring URL===
+===2. Redirection Using Routes===
 
-It's very common that all you want to do when a user submits a form is send them back to where they came from. (Think of a user posting a comment on a blog post and then being redirected back to view the post with their new comment visible as well.) For this, we have the `back` argument. Simply pass in `back=true` to `redirectTo()`, and the user will be redirected back to the page they came from.
+If you have configured any routes in `config/routes.cfm` you can of course use them when redirecting as well. Just pass in the route's name to the `route` argument together with any additional arguments needed for the route in question. You can read more about routing in the [UsingRoutes Using Routes] chapter.
 
-A word of warning: the referring URL is retrieved from the `cgi.http_referer` value. If this value is is blank or comes from a different domain than the current one, the user will be redirected to the root of the website instead.
+===3. Redirecting to the Referring URL===
+
+It's very common that all you want to do when a user submits a form is send them back to where they came from. (Think of a user posting a comment on a blog post and then being redirected back to view the post with their new comment visible as well.) For this, we have the `back` argument. Simply pass in `back=true` to [redirectTo redirectTo()], and the user will be redirected back to the page they came from.
+
+A word of warning: the referring URL is retrieved from the `cgi.http_referer` value. If this value is is blank or comes from a different domain than the current one, Wheels will throw a `RedirectBackError`.
 
 ==`addToken` and `statusCode`==
 
