@@ -1,5 +1,5 @@
 #summary Instructions for installing Wheels on your system.
-#labels chapter,0.8.3
+#labels chapter,1.0
 
 Installing Wheels is so simple that there is barely a need for a chapter devoted to it. But we figured we'd better make one anyway in case anyone is specifically looking for a chapter about installation.
 
