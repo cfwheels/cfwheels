@@ -15,11 +15,10 @@
 			case "blob": case "bfile": {loc.returnValue = "cf_sql_blob"; break;}
 			case "char": case "nchar": {loc.returnValue = "cf_sql_char"; break;}
 			case "clob": case "nclob": {loc.returnValue = "cf_sql_clob"; break;}
-			case "timestamp": {loc.returnValue = "cf_sql_date"; break;}
+			case "date": case "timestamp": {loc.returnValue = "cf_sql_timestamp"; break;}
 			case "binary_double": {loc.returnValue = "cf_sql_double"; break;}
 			case "number": case "float": case "binary_float": {loc.returnValue = "cf_sql_float"; break;}
 			case "long": {loc.returnValue = "cf_sql_longvarchar"; break;}
-			case "date": {loc.returnValue = "cf_sql_timestamp"; break;}
 			case "raw": {loc.returnValue = "cf_sql_varbinary"; break;}
 			case "varchar2": case "nvarchar2": {loc.returnValue = "cf_sql_varchar"; break;}
 		}
