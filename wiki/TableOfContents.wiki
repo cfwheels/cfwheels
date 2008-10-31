@@ -1,4 +1,4 @@
-#summary Documentation for Wheels 0.8.
+#summary Complete documentation for Wheels 1.0.
 #labels chapter,1.0
 
 ===Introduction===
