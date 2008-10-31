@@ -1,5 +1,5 @@
 #summary Use Wheels to send files to your users securely and with better control of the user experience.
-#labels chapter,0.8.3
+#labels chapter,1.0
 
 Sending files?! Is that really a necessary feature of Wheels? Can't I just place the file on my web server and link to it?
 
