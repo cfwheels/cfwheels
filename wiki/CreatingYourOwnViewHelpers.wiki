@@ -1,0 +1,14 @@
+#summary Clean up your code by moving common functionality into helper functions.
+#labels chapter,1.0
+
+As you probably know already Wheels gives you a lot of helper functions that you can use in your view pages. What you maybe didn't know yet is that you can also create your own view helper functions and have Wheels automatically make them available to you. To do this you store your UDFs (User Defined Functions) in...
+
+==The `views/helpers.cfm` File==
+
+Once a function is placed in this file it will be available for use in all your views. This, together with the use of partials, gives you a way to keep your code nice and DRY.
+
+==What Not to Use the `views/helpers.cfm` File For==
+
+==What's the Difference Between Partials and Helpers==
+
+This is a common question. 
