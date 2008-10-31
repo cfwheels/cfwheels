@@ -33,7 +33,8 @@ The only other requirement to make a plugin work is that `MyPlugin.cfc` has to c
     <cfset this.version = "1.0">
     <cfreturn this>
   </cffunction>
-</cfcomponent>}}}
+</cfcomponent>
+}}}
 
 The `index.cfm` file is the user interface for your plugin and will be viewable when browsing to `localhost/plugins/{yourPluginName}`.
 
