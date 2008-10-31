@@ -1,34 +1,46 @@
 #summary Extend Wheels functionality by using plugins or create your own.
-#labels chapter,0.8.3
+#labels chapter,1.0
 
-Intro text...
+Wheels is a fairly lightweight framework and we like to keep it that way so we won't be adding thousands of various features to Wheels just because a couple of developers find them "cool" ;)
 
-==Installing a Plugin==
-Download a plugin ZIP file and drop it in the plugins folder (no need
-to extract it).
+Our intention is to only have functionality we consider "core" inside of Wheels itself and then use plugins for everything else.
 
-==How to Uninstall a Plugin==
-Delete the ZIP file (Wheels will clean up any left over files).
+By using plugins created by the community or yourself you're able to add brand new functionality to Wheels or completely change existing features. The possibilities are endless.
 
-Naming:
-Plugins will be named like this: URLObfuscator-0.1.zip
-0.1 in this case is the version number of the URLObfuscator plugin.
-If you drop both URLObfuscator-0.1.zip and URLObfuscator-0.2.zip
-Wheels will use the one with the highest version number and ignore the
-rest.
+Plugins are also the recommended way to get new code accepted into Wheels. If you have written code that you think constitutes core functionality and should be added to Wheels, then write a plugin. After the community has used it for a while it will be a simple task for us to integrate it into Wheels itself.
 
-Creating a Plugin:
-Besides being named like above there is only one requirement, it has
-to have an "init" function which returns "this" and also sets
-"this.version" to the Wheels version it is compatible with.
+==Installing and Uninstalling Plugins==
 
-Compatibility:
-When loading plugins Wheels will throw an error if the plugin is not
-compatible with the installed Wheels version.
-Wheels will also throw an error if two plugins are loaded and they
-both override or add the same method causing a conflict.
+This couldn't be any simpler. To install a plugin, just download the plugin's `ZIP` file and drop it in the `plugins` folder (no need to extract it). If you want to remove it later simply delete the `ZIP` file (Wheels will clean up any left over folders and files).
 
-To override a method in Wheels just create a method with the same name
-in the plugin CFC file.
-At the moment it's possible to override methods in Base, Controller
-(incl view) and Model.
+Reloading Wheels is required when installing/uninstalling (issue a `reload=true` request).
+
+==Plugin Naming, Versions and Dependencies==
+
+When you download plugins you will see that they are named something like this: `ViewHelpers-0.1.zip`. 0.1 in this case is the version number of the ViewHelpers plugin. If you drop both `ViewHelpers-0.1.zip` and `ViewHelpers-0.2.zip` in the `plugins` folder Wheels will use the one with the highest version number and ignore the rest.
+
+If you try to install a plugin that is not compatible with your installed version of Wheels or not compatible with a previously installed plugin (i.e. they try to add/override the same functions) Wheels will throw an error on application start.
+
+==Creating Your Own Plugins==
+
+To create a plugin named `MyPlugin` you need to create a `MyPlugin.cfc` and a `index.cfm` file and then zip these together as `MyPlugin.cfc-x.x.zip` where `x.x` is the version number of your plugin.
+
+The only other requirement to make a plugin work is that `MyPlugin.cfc` has to contain a function named `init` which sets a variable specifying which Wheels version the plugin is meant to be used on and then returns itself, like this:
+
+{{{
+<cfcomponent output="false">
+  <cffunction name="init">
+    <cfset this.version = "1.0">
+    <cfreturn this>
+  </cffunction>
+</cfcomponent>}}}
+
+The `index.cfm` file is the user interface for your plugin and will be viewable when browsing to `localhost/plugins/{yourPluginName}`.
+
+==What Can a Plugin Do?==
+
+A plugin can add brand new functions to Wheels or override existing ones. A plugin can also have a user interface so that the users of the plugin can "do stuff".
+
+To add or override a function you simply add the function to `MyPlugin.cfc` and Wheels will inject it in the appropriate place on application start (it will figure out if you're adding controller, model or view functionality).
+
+Armed with this knowledge you can now go and add that feature you've always wanted or change that behavior you've always hated :)
