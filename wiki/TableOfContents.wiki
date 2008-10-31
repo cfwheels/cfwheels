@@ -46,7 +46,7 @@
  * [UsingLayouts Using Layouts]
  * Form Helpers and Showing Errors
  * [DisplayingLinksforPagination Displaying Links for Pagination]
- * Creating Your Own View Helpers
+ * [CreatingYourOwnViewHelpers Creating Your Own View Helpers]
 
 ===Sample Applications===
 
