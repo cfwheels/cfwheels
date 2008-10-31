@@ -9,6 +9,14 @@ Once a function is placed in this file it will be available for use in all your 
 
 ==What Not to Use the `views/helpers.cfm` File For==
 
+The `views/helpers.cfm` file is only meant to be used for views, hence the placement in the  `views` folder.
+
+If you need to share functions across controllers those should be placed in the parent controller file, i.e. `controllers/Controller.cfc`. If you need helper type functionality within a *single* controller file you can just add it as a function in that controller and make it private so that it can't be called as an action (and as a reminder to yourself as well).
+
+The same apply to models, use the parent file, `models/Model.cfc`, or private functions here as well.
+
+If you need to share a function globally across your entire site then you can place it in the `events/functions.cfm` file.
+
 ==What's the Difference Between Partials and Helpers==
 
-This is a common question. 
+Both partials and helpers are there to assist you in keeping programmatic details out of your views as much as possible. Both do the job well and which one you choose is just a matter of preference. Generally speaking though it probably makes sense to use partials when you're creating a lot of HTML and partials when you're not.
