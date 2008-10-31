@@ -1,7 +1,7 @@
 #summary Hide your primary key values from nosy users.
-#labels chapter,0.8
+#labels chapter,1.0
 
-The Wheels convention of using an auto-incrementing integer value as the primary key in your database tables will lead to a lot of URLs on your website exposing this value. Using the built-in URL obfuscation functionality in Wheels, you can hide this value from nosy users.
+The Wheels convention of using primary key values when building links (as in the `key` argument to [linkTo linkTo()] for example) will lead to them being exposed to anyone interested in the browser's URL bar. Using the built-in URL obfuscation functionality in Wheels, you can hide the real primary key values from nosy users.
 
 ==What URL Obfuscation Does==
 
