@@ -1,5 +1,5 @@
 #summary Finding your way around a Wheels application.
-#labels chapter,0.8
+#labels chapter,1.0
 
 After downloading and unzipping Wheels, here's the directory structure that you will see (plus signs indicate folders):
 
@@ -9,7 +9,9 @@ After downloading and unzipping Wheels, here's the directory structure that you 
  * + files
  * + images
  * + javascripts
+ * + miscellaneous
  * + models
+ * + plugins
  * + stylesheets
  * + views
  * + wheels
@@ -28,7 +30,9 @@ Your application code will end up in four of the folders, namely `controllers`, 
 
 Static media files should be placed in the `files`, `images`, `javascripts` and `stylesheets` folders.
 
-And the last directory? That's the framework itself. It exists in the `wheels` directory. Please go in there and have a look around. If you find anything you can improve or new features that you want to add, send us a patch!
+Place stand-alone (non framework) code in the `miscellaneous` folder and plugins in the `plugins` folder.
+
+And the last directory? That's the framework itself. It exists in the `wheels` directory. Please go in there and have a look around. If you find anything you can improve or new features that you want to add, let us know!
 
 ==Detailed Overview==
 
@@ -48,8 +52,6 @@ The setup in this directory is similar to the one for controllers, to share meth
 
 This is where you prepare the views for your users. As you work on your website, you will create one view directory for each controller.
 
-Before doing that though, you already have one directory: `layouts`. This is where you will place your layout files and/or change the `default.cfm` layout file.
-
 ===`events`===
 
 If you want code executed when !ColdFusion triggers an event, you can place it here (rather than directly in `Application.cfc`).
@@ -60,7 +62,7 @@ Make all your configuration changes here. You can set the environment, routes, a
 
 ===`files`===
 
-Any files that you intend to deliver to the user using the [sendFile sendFile()] function should be placed here. Even if you don't use that function to deliver files, this folder can still serve as storage if you like.
+Any files that you intend to deliver to the user using the [sendFile sendFile()] function should be placed here. Even if you don't use that function to deliver files, this folder can still serve as file storage if you like.
 
 ===`images`===
 
@@ -68,15 +70,19 @@ This is a good place to put your images. It's not required to have them here, bu
 
 ===`javascripts`===
 
-This is a good place to put your JavaScript files. By default, there are two there already: `application.js` and `protoculous.js`.
-
-If all you need is one file for your own Javascripts, you can use `application.js`. The only real advantage to using this is that you'll have to write slightly less code when including scripts in your HTML later on since it's part of the Wheels defaults.
-
-The `protoculous.js` file is used internally by Wheels, so leave it in there if you intend to use any Wheels functions involving AJAX and JavaScript effects.
+This is a good place to put your JavaScript files. 
 
 ===`stylesheets`===
 
-This is a good place to put your CSS files. This is set up similarly to the `javascripts` folder in that there is a default file in there already that you can use.
+This is a good place to put your CSS files.
+
+===`miscellaneous `===
+
+Use this folder for code that you need to run completely outside of the framework (there is an empty `Application.cfc` file in here which will prevent Wheels from taking part in the execution).
+
+===`plugins `===
+
+Place any plugins you have downloaded and want installed here.
 
 ===`wheels`===
 
@@ -90,7 +96,7 @@ This file is used by Apache, and you specifically need it for URL rewriting to w
 
 If you use IIS and want to use URL rewriting, you'll need this file. Otherwise, you can safely delete it.
 
-===`Application.cfc`, `index.cfm`, and `rewrite.cfm`===
+===`Application.cfc`, `index.cfm`, `root.cfm` and `rewrite.cfm`===
 
 These are all needed for the framework to run. No changes should be done to these files.
 
