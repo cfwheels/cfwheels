@@ -47,7 +47,7 @@ You can also specify what HTTP content type to use when delivering the file by u
 
 Perhaps the main reason to use the [sendFile sendFile()] function is that it gives you an easy way to secure access to your files. Maybe the tutorial file used in the above example is something the user paid for, and you only want for that user to be able to download it (and no one else). To accomplish this, you can just add some code to authenticate the user right before the [sendFile sendFile()] call in your action.
 
-However there is a security flaw here, can you figure out what it is?
+However, there is a security flaw here. Can you figure out what it is?
 
 You may have guessed that the `files` folder is placed in your web root so anyone can download files from it by going to it directly by typing `http://www.domain.com/files/wheels_tutorial_20081028_J657D6HX.pdf` in their browser. Although users would need to guess the file names to be able to access the files, we would still need something more robust as far as security goes.
 
