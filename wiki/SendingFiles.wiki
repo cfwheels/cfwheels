@@ -49,7 +49,7 @@ Perhaps the main reason to use the [sendFile sendFile()] function is that it giv
 
 However, there is a security flaw here. Can you figure out what it is?
 
-You may have guessed that the `files` folder is placed in your web root so anyone can download files from it by going to it directly by typing `http://www.domain.com/files/wheels_tutorial_20081028_J657D6HX.pdf` in their browser. Although users would need to guess the file names to be able to access the files, we would still need something more robust as far as security goes.
+You may have guessed that the `files` folder is placed in your web root so anyone can download files from it by typing `http://www.domain.com/files/wheels_tutorial_20081028_J657D6HX.pdf` in their browser. Although users would need to guess the file names to be able to access the files, we would still need something more robust as far as security goes.
 
 There are two solutions to this.
 
