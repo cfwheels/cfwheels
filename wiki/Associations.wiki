@@ -111,7 +111,7 @@ Now that we have our associations set up, let's use them to get some data into o
 
 There are a couple ways to join data via associations, which we'll go over now.
 
-==Using the `include` Argument in Your Finders==
+===Using the `include` Argument in Your Finders===
 
 To include data from related tables in our "find" calls, we simply need to use the `include` argument. Let's say that we wanted to include data about the `Author` in our `findByKey()` call for a `Post`.
 
@@ -123,7 +123,7 @@ Here's what that call would look like:
 
 It's that simple. Wheels will then join the `authors` table automatically so that you can use that data along with the data from `posts`.
 
-===Naming Collisions===
+====Handling Column Naming Collisions====
 
 There is a minor caveat to this approach. If you have a column in both associated tables with the same name, Wheels will pick just one to represent that column.
 
@@ -136,3 +136,29 @@ For example, if we had a column named `id` in both your `posts` and `authors` ta
 }}}
 
 You would need to hard-code all column names that you need in that case, which does remove some of the simplicity. There are always trade-offs!
+
+===Using Dynamic Finders===
+
+A cool feature of Wheels is the ability to use dynamic finders to get data related to your model through associations.
+
+Let's say that we used this `findByKey()` call to get an author from the database:
+
+{{{
+<cfset author = model("Author").findByKey(params.key)>
+}}}
+
+We wouldn't necessarily need to use the `include` argument to get posts written by that author. Instead, we can use a dynamic method to get the posts, like so:
+
+{{{
+<cfset posts = author.posts()>
+}}}
+
+Wheels will use this call to figure out what SQL to call to get your data. No need for you to worry about it!
+
+In this case, we need to be wary of the nature of the relationship in order to know whether or not to use a singular or plural. We have complete confidence in your ability to figure it out. :)
+
+===Performance of Dynamic Finders===
+
+You may be concerned that using a dynamic finder adds yet another database call to your application.
+
+If it makes you feel any better, all calls in your Wheels request that generate the same SQL queries will be cached for that request. No need to worry about the performance implications of making multiple calls to the same `author.posts()` call in the scenario above, for example.
