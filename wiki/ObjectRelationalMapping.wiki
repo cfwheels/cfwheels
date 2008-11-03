@@ -1,6 +1,8 @@
 #summary An overview of Object Relational Mapping (ORM) and how is it used in Wheels. Learn how ORM simplifies your database interaction code.
 #labels chapter,0.8.3
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 Mapping objects in your application to records in your database tables is a key concept in Wheels. Let's take a look at exactly how this mapping is performed.
 
 ==Class and Object Methods==
