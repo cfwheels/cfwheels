@@ -1,6 +1,8 @@
 #summary Listing of all model class functions.
 #labels chapter,0.8
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 These functions operate on the class as a whole and not on individual objects and thus need to be prefaced with `model("Name")`. You can call these functions from anywhere but it is *not* recommended to call them from view pages. When calling them from its own model file it is recommended to reference the scope explicitly with the `this` keyword.
 
 ==Examples==
