@@ -1,6 +1,8 @@
 #summary linkTo([host,text,onlyPath,route,action,controller,anchor,params,protocol,id,url,confirm])
 #labels api,0.8,view,helper
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 *Description*:
 
 Creates a link to another page in your application or externally. Pass in a route name to use your configured routes, controller/action/id to use that Wheels convention or the URL itself.
@@ -64,7 +66,8 @@ String
 {{{
 #linkTo("http://www.google.com")#
 -> <a href="http://www.google.com">http://www.google.com</a> (When leaving out the text argument Wheels will use the link as the text as well.)
-
+
+
 }}}
 
 *Related*:
