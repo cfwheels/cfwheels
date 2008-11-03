@@ -1,6 +1,8 @@
 #summary URLFor([host,action,protocol,controller,onlyPath,anchor,params,route,id])
 #labels api,0.8,view,helper
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 *Description*:
 
 Creates an URL based on supplied arguments.
@@ -36,7 +38,8 @@ String
 
 {{{
 <cfoutput>#URLFor(action="comments", anchor="comment10")#</cfoutput>
-
+
+
 }}}
 
 *Related*:
