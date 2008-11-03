@@ -1,6 +1,8 @@
 #summary Let Wheels handle time stamping of records.
 #labels chapter,0.8
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 When working with database tables, it is very common to have a column that holds the time that the record was added or last modified. If you have an e-commerce website with an orders table, you want to store the date and time the order was made; if you run a blog, you want to know when someone left a comment; and so on.
 
 As with anything that is a common task performed by many developers, it makes a good candidate for abstracting to the framework level. So that's what we did.
