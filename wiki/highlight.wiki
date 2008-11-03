@@ -1,6 +1,8 @@
 #summary highlight(text,phrases[highlighter])
 #labels api,0.8,view,helper
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 *Description*:
 
 Highlights the phrase(s) everywhere in the text if found by wrapping it in a strong tag (by default).
@@ -25,7 +27,8 @@ String
 {{{
 #highlight(text="You searched for: Wheels", phrases="Wheels")#
 -> You searched for: <strong class="highlight">Wheels</strong>
-
+
+
 }}}
 
 *Related*:
