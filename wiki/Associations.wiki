@@ -122,3 +122,17 @@ Here's what that call would look like:
 }}}
 
 It's that simple. Wheels will then join the `authors` table automatically so that you can use that data along with the data from `posts`.
+
+===Naming Collisions===
+
+There is a minor caveat to this approach. If you have a column in both associated tables with the same name, Wheels will pick just one to represent that column.
+
+In order to include both columns, you can override this behavior with the `select` argument in the finder functions.
+
+For example, if we had a column named `id` in both your `posts` and `authors` tables, then you could use the `select` argument like so:
+
+{{{
+<cfset post = model("Post").findAll(select="posts.id, posts.title, authors.id, authors.name", include="Author")>
+}}}
+
+You would need to hard-code all column names that you need in that case, which does remove some of the simplicity. There are always trade-offs!
