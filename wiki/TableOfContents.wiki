@@ -1,6 +1,5 @@
 #summary Complete documentation for Wheels 1.0.
 #labels chapter,1.0
-# sidebar 
 
 ===Introduction===
 
