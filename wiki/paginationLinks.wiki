@@ -1,6 +1,8 @@
 #summary paginationLinks([classForCurrent,prependToLink,handle,linkToCurrentPage,windowSize,params,alwaysShowAnchors,name,appendToLink])
 #labels api,0.8,view,helper
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 *Description*:
 
 Builds and returns a string containing links to pages based on a paginated query.
@@ -60,7 +62,8 @@ View code...
 <ul>
   <cfoutput>#paginationLinks(handle="authQuery", prependToLink="<li>", appendToLink="</li>")#</cfoutput>
 </ul>
-
+
+
 }}}
 
 *Related*:
