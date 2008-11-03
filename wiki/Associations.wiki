@@ -123,6 +123,8 @@ Here's what that call would look like:
 
 It's that simple. Wheels will then join the `authors` table automatically so that you can use that data along with the data from `posts`.
 
+To include several tables, simply delimit the names of the models with a comma. All models should contain related associations, or else you'll get a mountain of repeated data back.
+
 ====Handling Column Naming Collisions====
 
 There is a minor caveat to this approach. If you have a column in both associated tables with the same name, Wheels will pick just one to represent that column.
@@ -162,3 +164,74 @@ In this case, we need to be wary of the nature of the relationship in order to k
 You may be concerned that using a dynamic finder adds yet another database call to your application.
 
 If it makes you feel any better, all calls in your Wheels request that generate the same SQL queries will be cached for that request. No need to worry about the performance implications of making multiple calls to the same `author.posts()` call in the scenario above, for example.
+
+==Many-to-Many Relationships==
+
+We can use the same 3 association functions to set up many-to-many table relationships in our models. It follows the same logic as the descriptions above, so let's jump right into an example.
+
+Let's say that we wanted to set up a relationship `customers` and `publications`. A customer can be subscribed to many publications, and publications can be subscribed to by many customers. In our database, this relationship is linked together by a third table called `subscriptions`.
+
+===Setting up the Models===
+
+Here are the representative models:
+
+{{{
+<!--- Customer.cfc --->
+<cfcomponent extends="Model">
+
+    <cffunction name="init">
+        <cfset hasMany("Subscriptions")>
+    </cffunction>
+
+</cfcomponent>
+}}}
+
+{{{
+<!--- Publication.cfc --->
+<cfcomponent extends="Model">
+
+    <cffunction name="init">
+        <cfset hasMany("Subscriptions")>
+    </cffunction>
+
+</cfcomponent>
+}}}
+
+{{{
+<!--- Subscription.cfc --->
+<cfcomponent extends="Model">
+
+    <cffunction name="init">
+        <cfset belongsTo("Customer")>
+        <cfset belongsTo("Publication")>
+    </cffunction>
+
+</cfcomponent>
+}}}
+
+This assumes that there are foreign key columns in `subscriptions` called `customerId` and `publicationId`.
+
+===Using Finders with the Many-to-Many Relationship===
+
+At this point, it's still fairly easy to get data from the many-to-many association that we have set up above.
+
+====Dynamic Finders====
+
+To use a dynamic finder to obtain a list of customers subscribed to a given publication, our code would look like this:
+
+{{{
+<cfset publication = model("Publication").findByKey(params.key)>
+<cfset customers = publication.subscriptions().customers()>
+}}}
+
+As you can see, we can chain the dynamic finders together to get to the related data.
+
+====`include` Argument====
+
+We can also `include` the related tables to get the same effect.
+
+{{{
+<cfset publicationAndCustomers = model("Publication").findByKey(params.key, include="Subscriptions,Customers")>
+}}}
+
+Depending on the size of your tables, you may want to use the dynamic finder so the database doesn't have to send back repeats of the same `Publication` data for every single row containing a unique `Customer`. Test both scenarios to see which yields the better average performance.
