@@ -1,6 +1,8 @@
 #summary Using the Flash to pass data from one request to the next.
 #labels chapter,0.8
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 The Flash is actually a very simple concept. And no, it has nothing to do with Adobe's Flash Player.
 
 The Flash is just a `struct` in the `session` scope with some added functionality. It is cleared at the end of the *next* page that the user views. This means that it's a good fit for storing messages or variables from one request to the next.
