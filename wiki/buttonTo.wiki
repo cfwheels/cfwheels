@@ -1,6 +1,8 @@
 #summary buttonTo([host,text,source,route,anchor,onlyPath,params,controller,disable,action,protocol,id,url,confirm])
 #labels api,0.8,view,helper
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 *Description*:
 
 Creates a form containing a single button that submits to the URL. The URL is built the same way as the linkTo function.
@@ -35,7 +37,8 @@ String
 
 {{{
 #buttonTo(action="delete", disabled="Wait...")#
-
+
+
 }}}
 
 *Related*:
