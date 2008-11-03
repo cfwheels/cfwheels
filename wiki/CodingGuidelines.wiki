@@ -1,6 +1,8 @@
 #summary Here are the rules of the road for contributing code to the project. Let's follow this process so that we don't duplicate effort and so the code base is easy to maintain over the long haul.
 #labels chapter,0.8.3
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 ==Subversion Repository==
 
 The official Subversion repository for Wheels is located at our [http://code.google.com/p/cfwheels/ Google Code site].
