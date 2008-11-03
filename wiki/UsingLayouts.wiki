@@ -1,6 +1,8 @@
 #summary Use the concept of layouts to wrap your content.
 #labels chapter,0.8
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 Wheels allows you to create layouts so that you don't need to `<cfinclude>` header and footer code on every single view template. We'll show you how to setup default layouts, controller-specific layouts, and layouts for your emails.
 
 ==Introduction==
