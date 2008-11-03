@@ -1,6 +1,8 @@
 #summary includePartial(name[cache])
 #labels api,0.8,view,helper
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 *Description*:
 
 Includes a specified file.
@@ -29,7 +31,8 @@ Any
 {{{
 <cfoutput>#includePartial(name="shared/button", cache=15)#</cfoutput>
 -> Wheels will include the file "views/shared/_button.cfm" and cache it for 30 minutes.
-
+
+
 }}}
 
 *Related*:
