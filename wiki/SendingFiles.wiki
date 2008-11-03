@@ -1,6 +1,8 @@
 #summary Use Wheels to send files to your users securely and with better control of the user experience.
 #labels chapter,1.0
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 Sending files?! Is that really a necessary feature of Wheels? Can't I just place the file on my web server and link to it? You are correct, there is absolutely no need to use Wheels to send files. Your web server will do a fine job of sending out files to your users.
 
 However, if you want a little more control over the way the user's browser handles the download or be able to secure access to your files then you might find the [sendFile sendFile()] function useful.
