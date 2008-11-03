@@ -1,6 +1,8 @@
 #summary Updating records in your database tables.
 #labels chapter,0.8.3
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 When you have created or retrieved an object, you can save it to the database by calling its [save save()] method. This method returns `true` if the object passes all validations and the object was saved to the database. Otherwise, it returns `false`.
 
 This chapter will focus on how to update records. Read the [CreatingRecords Creating Records] chapter for more information about how to create new records.
