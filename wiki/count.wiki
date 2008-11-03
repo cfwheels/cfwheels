@@ -1,6 +1,8 @@
 #summary count([where,include])
 #labels api,0.8,model,class
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 *Description*:
 
 Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function COUNT.
@@ -31,7 +33,8 @@ Numeric
 
 {{{
 <cfset authorWithBooksOnACount = model("Author").count(include="books", where="title LIKE 'A%'")>
-
+
+
 }}}
 
 *Related*:
