@@ -1,0 +1,52 @@
+#summary Through some simple configuration, Wheels allows you to unlock some powerful functionality to use your database tables' relationships in your controller code.
+#labels chapter,0.8.3
+
+_Associations_ in Wheels allow you to define the relationships between your database tables. After configuring these relationships, doing pesky table joins becomes a trivial task. And like all other ORM functions in Wheels, this is done without writing a single line of SQL.
+
+==3 Types of Associations==
+
+In order to set up associations, you only need to remember 3 simple functions. Considering that the human brain only reliably remembers up to 7 items, we've left you with a lot of extra space. You're welcome. :)
+
+The association functions should always be called in the `init()` method of a model that relate to another model within your application.
+
+===`belongsTo` Association===
+
+If your database table contains a field that is a foreign key to another table, then this is where to use the `belongsTo()` function.
+
+If we had a `comments` table that contains a foreign key to the `posts` table called `postId`, then we should have this `init()` method within our `Comment` model:
+
+{{{
+<cfcomponent extends="Model">
+
+    <cffunction name="init">
+        <cfset belongsTo("Post")>
+    </cffunction>
+
+</cfcomponent>
+}}}
+
+===`hasOne` and `hasMany` Associations===
+
+On the other side of the relationship are the "has" functions. As you may have astutely guessed, these functions should be used according to the nature of the model relationship.
+
+At this time, you need to be a little eccentric and talk to yourself. Your association should make sense in plain English language.
+
+===An example of `hasMany()`===
+
+So let's consider the `Post`/`Comment` relationship mentioned above for `belongsTo()`. If we were to talk to ourselves, we would say, "A post _has many_ comments." And that's how you should construct your `Post` model:
+
+{{{
+<cfcomponent extends="Model">
+
+    <cffunction name="init">
+        <cfset hasMany("Comments")>
+    </cffunction>
+
+</cfcomponent>
+}}}
+
+You may be a little concerned because our model is called `Comment` and not `Comments`. No need to worry: Wheels understands the need for the plural in conjunction with the `hasMany()` function.
+
+And don't worry about those pesky words in the English language that aren't pluralized by just adding an "s" to the end. Wheels is smart enough to know that words like "deer" and "children" are the plurals of "deer" and "child," respectively.
+
+===An example of `hasOne()`===
