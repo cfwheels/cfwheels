@@ -1,6 +1,8 @@
 #summary Listing of all model object functions.
 #labels chapter,0.8
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 These functions operate on individual objects which means you first have to fetch or create an object and then call the function on that object. You can call these functions from anywhere but it is not recommended to call them from view pages. When calling them from its own model file it is recommended to reference the scope explicitly with the `this` keyword.
 
 ==Example==
