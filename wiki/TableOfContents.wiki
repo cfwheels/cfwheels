@@ -1,5 +1,6 @@
 #summary Complete documentation for Wheels 1.0.
 #labels chapter,1.0
+# sidebar 
 
 ===Introduction===
 
@@ -33,7 +34,7 @@
  * [ColumnStatistics Column Statistics]
  * [DynamicFinders Dynamic Finders]
  * [GettingPaginatedData Getting Paginated Data]
- * Associations
+ * [Associations Associations]
  * [ObjectValidation Object Validation]
  * [ObjectCallbacks Object Callbacks]
  * [SoftDelete Soft Delete]
