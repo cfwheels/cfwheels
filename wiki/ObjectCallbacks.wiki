@@ -1,6 +1,8 @@
 #summary Learn how to write code that runs every time a given object is created, updated, or deleted.
 #labels chapter,0.8.3
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 Callbacks in Wheels allow you to have code executed before and/or after certain operations on an object. This requires some further explanation, so let's go straight to an example of a real-world application: the e-commerce checkout.
 
 ==A Real-World Example of Using Callbacks==
