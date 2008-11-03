@@ -1,6 +1,8 @@
 #summary flashKeyExists(key)
 #labels api,0.8,controller,request
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 *Description*:
 
 Check if a specific key exists in the Flash.
@@ -30,7 +32,8 @@ Boolean
 <cfif flashKeyExists("error")>
   do something...
 </cfif>
-
+
+
 }}}
 
 *Related*:
