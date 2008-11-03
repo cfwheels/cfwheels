@@ -1,6 +1,8 @@
 #summary truncate(text[length,truncateString])
 #labels api,0.8,view,helper
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 *Description*:
 
 Truncates text to the specified length and replaces the last characters with the specified truncate string (defaults to '...').
@@ -30,7 +32,8 @@ String
 {{{
 #truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")#
 -> Wheels is a fra... (continued)
-
+
+
 }}}
 
 *Related*:
