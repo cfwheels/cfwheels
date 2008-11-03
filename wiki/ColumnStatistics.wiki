@@ -1,6 +1,8 @@
 #summary Use Wheels to get statistics on the values in a column, like row counts, averages, highest values, lowest values, and sums.
 #labels chapter,0.8
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 Since Wheels simplifies so much for you when you select, insert, update, and delete rows from the database, it would suck if you had to revert back to using `cfquery` and `COUNT(id) AS x` type queries when you wanted to get aggregate values, right?
 
 Well, good news. Of course, you don't need to do this; just use the built-in functions [sum sum()], [minimum minimum()], [maximum maximum()], [average average()] and [count count()].
