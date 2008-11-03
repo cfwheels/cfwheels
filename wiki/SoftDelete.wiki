@@ -1,6 +1,8 @@
 #summary An easy way to keep deleted data in your database.
 #labels chapter,0.8
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 "Soft delete" in database lingo means that you set a flag on an existing table that indicates that a record has been deleted, instead of actually deleting the record.
 
 ==How to Use Soft Deletion==
