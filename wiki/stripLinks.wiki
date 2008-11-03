@@ -1,6 +1,8 @@
 #summary stripLinks(html)
 #labels api,0.8,view,helper
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 *Description*:
 
 Removes all links from the html (leaving just the link text).
@@ -23,7 +25,8 @@ String
 {{{
 #stripLinks("Wheels is a framework for <a href='http://www.adobe.com'>ColdFusion</a>")#
 -> Wheels is a framework for ColdFusion
-
+
+
 }}}
 
 *Related*:
