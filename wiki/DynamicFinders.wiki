@@ -1,6 +1,8 @@
 #summary Make your model calls more readable by using dynamic finders.
 #labels chapter,0.8
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 With the recent introduction of `onMissingMethod` in ColdFusion 8 (Thanks, Adobe!), we have been able to port over the concept of _dynamic finders_ from Rails to Wheels.
 
 The concept is simple. Instead of using arguments to tell Wheels what you want to do, you can use a dynamically-named function.
