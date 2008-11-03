@@ -1,6 +1,8 @@
 #summary paginationTotalPages([handle])
 #labels api,0.8,view,helper
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 *Description*:
 
 Returns the total number of pages in the pagination.
@@ -30,7 +32,8 @@ This function can be used when you need more control over pagination than the pa
 <cfoutput>
   Showing page #paginationCurrentPage()# of #paginationTotalPages()# total.
 </cfoutput>
-
+
+
 }}}
 
 *Related*:
