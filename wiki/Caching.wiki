@@ -1,6 +1,8 @@
 #summary How to speed up your website by caching content.
 #labels chapter,0.8
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 If your website doesn't get a whole lot of traffic, then you can probably skip this chapter completely. Just remember that it's here, waiting for your triumphant return.
 
 On the other hand, you're probably hoping for massive amounts of traffic to reach your website very soon, an imminent sell-out to Google, and a good life drinking Margaritas in the Caribbean. Knowing a little bit about the Wheels caching concepts will prepare you for this. (Except for the Margaritas... You're on your own with those ;).)
