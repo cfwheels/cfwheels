@@ -1,6 +1,8 @@
 #summary CFWheels utilizes validation setup within the Model CFCs to enforce appropriate data persistence. Validation may be performed for model save, create, and updates.
 #labels chapter,0.8
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 == Basic Setup ==
 
 In order to establish the full cycle of validation, three elements
