@@ -96,7 +96,7 @@ Let's pretend that you have a relationship between `Author` and `Post`, but you 
 Your `Post`'s `init()` function would then need to look like this:
 
 {{{
-<cfcomponent extends="model">
+<cfcomponent extends="Model">
 
     <cffunction name="init">
         <cfset belongsTo(name="Author", foreignKey="post_id")>
