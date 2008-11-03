@@ -1,6 +1,8 @@
 #summary cycle(values[name])
 #labels api,0.8,view,helper
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 *Description*:
 
 Cycles through list values every time it is called.
@@ -23,7 +25,8 @@ String
 
 {{{
 <tr class="#cycle("even,odd")#">...</tr>
-
+
+
 }}}
 
 *Related*:
