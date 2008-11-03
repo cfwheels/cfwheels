@@ -1,6 +1,8 @@
 #summary Wheels does some magic to help you link to other actions within your app. Read on to learn why you'll rarely use an `<a>` tag for linking to application actions ever again.
 #labels chapter,0.8.3
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 ==`linkTo()`, the Function for Linking to Other Pages==
 
 Wheels's built-in `linkTo()` function does all of the heavy lifting involved with linking the different pages of your application together. You'll generally be using `linkTo()` within your view code.
