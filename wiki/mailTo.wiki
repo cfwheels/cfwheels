@@ -1,6 +1,8 @@
 #summary mailTo(emailAddress[encode,name])
 #labels api,0.8,view,helper
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 *Description*:
 
 Creates a mailto link tag to the specified email address, which is also used as the name of the link unless name is specified.
@@ -28,7 +30,8 @@ String
 
 {{{
 #mailTo(emailAddress="support@mysite.com", name="Website Support", encode=true)#
-
+
+
 }}}
 
 *Related*:
