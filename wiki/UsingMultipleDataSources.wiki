@@ -1,6 +1,8 @@
 #summary How to use more than one database in your Wheels app.
 #labels chapter,0.8
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 Sometimes you need to pull data from more than one database, whether it's by choice (for performance or security reasons, perhaps) or it's just because that's the way your infrastructure is set up.
 
 Wheels has built-in functionality for this so that you don't have to revert back to writing the queries and setting the data source manually whenever you need to use a data source other than the default one.
