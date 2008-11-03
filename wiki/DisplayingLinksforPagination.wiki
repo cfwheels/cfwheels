@@ -1,6 +1,8 @@
 #summary How to create links to other pages to your paginated data in your views.
 #labels chapter,0.8
 
+_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+
 In the chapter titled [GettingPaginatedData Getting Paginated Data], we talked about how to get pages of records from the database (records 11-20, for example). Now we'll show you how to create links to other pages in your view.
 
 ==Displaying Paginated Links with the `paginationLinks()` Function==
