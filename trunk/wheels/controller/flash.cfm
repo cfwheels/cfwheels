@@ -1,12 +1,5 @@
 <cffunction name="flashClear" returntype="void" access="public" output="false" hint="Controller, Request, Delete everything from the Flash.">
-
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		-
-
 		EXAMPLES:
 		<cfset flashClear()>
 
@@ -19,20 +12,15 @@
 		 * [flashInsert flashInsert()] (function)
 		 * [flash flash()] (function)
 	--->
-
-	<cfset session.flash = {}>
+	<cfscript>
+		var loc = {};
+		session.flash = {};
+	</cfscript>
 </cffunction>
 
 <cffunction name="flashDelete" returntype="void" access="public" output="false" hint="Controller, Request, Delete a specific key from the Flash.">
 	<cfargument name="key" type="string" required="true" hint="The key to delete">
-
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		-
-
 		EXAMPLES:
 		<cfset flashDelete(key="errorMessage")>
 
@@ -45,19 +33,14 @@
 		 * [flashInsert flashInsert()] (function)
 		 * [flash flash()] (function)
 	--->
-
-	<cfset StructDelete(session.flash, arguments.key)>
+	<cfscript>
+		var loc = {};
+		StructDelete(session.flash, arguments.key);
+	</cfscript>
 </cffunction>
 
 <cffunction name="flashIsEmpty" returntype="boolean" access="public" output="false" hint="Controller, Request, Check if the Flash is empty.">
-
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		-
-
 		EXAMPLES:
 		<cfif NOT flashIsEmpty()>
 		  <cfabort>
@@ -72,6 +55,11 @@
 		 * [flashInsert flashInsert()] (function)
 		 * [flash flash()] (function)
 	--->
+	<cfscript>
+		var loc = {};
+
+	</cfscript>
+
 
 	<cfif flashCount() IS 0>
 		<cfreturn true>

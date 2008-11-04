@@ -202,7 +202,7 @@
 	<cfset loc.defaults = StructCopy(application.settings.sendEmail)>
 	<cfset StructDelete(loc.defaults, "layout")>
 	<cfloop collection="#loc.defaults#" item="loc.i">
-		<cfif NOT ListFindNoCase("template,layout", loc.i)>
+		<cfif NOT StructKeyExists(arguments, loc.i)>
 				<cfset arguments[loc.i] = loc.defaults[loc.i]>
 			</cfif>	
 	</cfloop>
