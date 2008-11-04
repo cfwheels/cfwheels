@@ -1,8 +1,8 @@
 <cffunction name="filters" returntype="void" access="public" output="false">
 	<cfargument name="through" type="string" required="true">
+	<cfargument name="type" type="string" required="false" default="before">
 	<cfargument name="only" type="string" required="false" default="">
 	<cfargument name="except" type="string" required="false" default="">
-	<cfargument name="type" type="string" required="false" default="before">
 	<cfscript>
 		var loc = {};
 		loc.iEnd = ListLen(arguments.through);
