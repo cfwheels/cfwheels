@@ -3,18 +3,23 @@
 	<cfargument name="only" type="string" required="false" default="">
 	<cfargument name="except" type="string" required="false" default="">
 	<cfargument name="type" type="string" required="false" default="before">
-	<cfset var loc = {}>
-	<cfloop list="#arguments.through#" index="loc.i">
-		<cfset loc.thisFilter = StructNew()>
-		<cfset loc.thisFilter.through = trim(loc.i)>
-		<cfset loc.thisFilter.only = Replace(arguments.only, ", ", ",", "all")>
-		<cfset loc.thisFilter.except = Replace(arguments.except, ", ", ",", "all")>
-		<cfif arguments.type IS "before">
-			<cfset arrayAppend(variables.wheels.beforeFilters, loc.thisFilter)>
-		<cfelse>
-			<cfset arrayAppend(variables.wheels.afterFilters, loc.thisFilter)>
+	<cfscript>
+		var loc = {};
+		loc.iEnd = ListLen(arguments.through);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.item = Trim(ListGetAt(arguments.through, loc.i));
+			loc.thisFilter = {};
+			loc.thisFilter.through = loc.item;
+			loc.thisFilter.only = Replace(arguments.only, ", ", ",", "all");
+			loc.thisFilter.except = Replace(arguments.except, ", ", ",", "all");
+			if (arguments.type IS "before")
+				ArrayAppend(variables.wheels.beforeFilters, loc.thisFilter);
+			else
+				ArrayAppend(variables.wheels.afterFilters, loc.thisFilter);
 		</cfif>
-	</cfloop>
+		}	
+	</cfscript>
 </cffunction>
 
 <cffunction name="verifies" returntype="void" access="public" output="false">
