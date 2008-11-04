@@ -17,7 +17,6 @@
 				ArrayAppend(variables.wheels.beforeFilters, loc.thisFilter);
 			else
 				ArrayAppend(variables.wheels.afterFilters, loc.thisFilter);
-		</cfif>
 		}	
 	</cfscript>
 </cffunction>
