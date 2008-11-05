@@ -6,7 +6,7 @@ _*Note:* This wiki contains "bleeding edge" documentation, which may reflect a f
 _*Step 1: Establishing Mail Server and Account Information*
 
 Within the config/settings.cfm are seven new application scope variables for utilizing sendMail(). These variables are as follows:
-
+{{{
 <cfset application.settings.sendEmail.layout = false>
 <cfset application.settings.sendEmail.from = "">
 <cfset application.settings.sendEmail.to = "">
@@ -14,7 +14,7 @@ Within the config/settings.cfm are seven new application scope variables for uti
 <cfset application.settings.sendEmail.server = "">
 <cfset application.settings.sendEmail.username = "">
 <cfset application.settings.sendEmail.password = "">
-
+}}}
 All fields can be left blank and specified directly in the sendMail() function call, or the more efficient approach, to pre-define sendMail variables that will remain constant across your web application. This includes a default FROM, SERVER, USERNAME, PASSWORD, and LAYOUT.
 
 By specifcying these values within the config/settings.cfm, the attributes may be omitted from all sendMail() function calls, thus providing for cleaner, less cluttered code.
@@ -32,15 +32,15 @@ Multiple templates may be stored within this directory should there be a need.
 The content of the Template is simple, simply output the expected variables. Example:
 
 /views/membership/myemailtemplate.cfm
-
+{{{
 <cfoutput>
 #recipientName#	
 #customMessage#
 </cfoutput>
-
+}}}
 
 _*Step 3: Sending messages via sendMail()*
-
+{{{
 <cfset sendEmail(
 	to=""_Dynamic or Static Value_",",
 	template="membership/myemailtemplate",
@@ -48,18 +48,18 @@ _*Step 3: Sending messages via sendMail()*
 	recipientName="_Dynamic or Static Value_",
 	customMessage="_Dynamic or Static Value_",
 				)>
-
+}}}
 Given that config/settings.cfm is setup with default values for SERVER, USERNAME, PASSWORD,  and FROM, only the desired fields need by included as sendEmail() attributes.
 
 It is also important to note that the template path is the view's folder name and CFM file name without the extension.
 
-Lastly, sendMail() accepts all attributes of the <cfmail> tag, and thus may be included within the comma separated list of the sendEmail() call.
+Lastly, sendMail() accepts all attributes of the {{{<cfmail>}}} tag, and thus may be included within the comma separated list of the sendEmail() call.
 
 _*Step 4: Give It a Try*
 That's it. The ease of use is endless, with all attributes setup in the settings/config.cfm, use of sendMail() could be as simple as this:
-<cfset sendEmail(template="membership/success")>
-
-_*Additional Features: Differentiation of the TEMPLATE and LAYOUT attributes.*
+{{{<cfset sendEmail(template="membership/success")>}}}
+----
+_*Differentiation of the TEMPLATE and LAYOUT attributes.*
 
 Best practice is that variables (such as "recipientName" and "customMessage" in the example above) be placed as outputs in the template file.
 
@@ -69,9 +69,8 @@ A layout should be used just as the name implies--for layout/stylistic aspects o
 2) Copy of message to original sender with genericized header/footer
 
 In this case, the two uses of sendEmail() would be identical with the exception of the LAYOUT attribute, as follows:
-
+{{{
 <!---Customized Header/Footer--->
-
 <cfset sendEmail(
 	template="membership/myemailtemplate",
 	layout="emailLayoutPath/headerFooter",
@@ -80,8 +79,9 @@ In this case, the two uses of sendEmail() would be identical with the exception 
 	recipientName="_Dynamic or Static Value_",
 	customMessage="_Dynamic or Static Value_",
 				)>
+}}}
+{{{
 <!---Plain Message--->
-
 <cfset sendEmail(
 	template="membership/myemailtemplate",
 	layout="emailLayoutPath/plain",
@@ -90,3 +90,4 @@ In this case, the two uses of sendEmail() would be identical with the exception 
 	recipientName="_Dynamic or Static Value_",
 	customMessage="_Dynamic or Static Value_",
 				)>
+}}}
