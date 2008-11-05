@@ -386,14 +386,14 @@
 				}
 			}
 
-			loc.pos = 0;
+			loc.pos = ArrayLen(loc.originalValues);
 			loc.iEnd = ArrayLen(arguments.sql);
-			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+			for (loc.i=loc.iEnd; loc.i > 0; loc.i--)
 			{
-				if (IsStruct(arguments.sql[loc.i]))
+				if (IsStruct(arguments.sql[loc.i]) && loc.pos > 0)
 				{
-					loc.pos = loc.pos + 1;
 					arguments.sql[loc.i].value = loc.originalValues[loc.pos];
+					loc.pos--;
 				}
 			}
 		}
@@ -626,19 +626,22 @@
 	--->
 	<cfscript>
 		var loc = {};
+		loc.namedArgs = "where,include,properties,instantiate,parameterize,$softDeleteCheck";
+		for (loc.key in arguments)
+		{
+			if (!ListFindNoCase(loc.namedArgs, loc.key))
+				arguments.properties[loc.key] = arguments[loc.key];
+		}
 		if (arguments.instantiate)
 		{
-    	// find and instantiate each object and call its update function
-			loc.records = findAll(select=variables.wheels.class.propertyList, where=arguments.where, include=arguments.include);
-			StructDelete(arguments, "where");
-			StructDelete(arguments, "include");
-			StructDelete(arguments, "instantiate");
+    		// find and instantiate each object and call its update function
+			loc.records = findAll(select=variables.wheels.class.propertyList, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.iEnd = loc.records.recordCount;
 			loc.returnValue = 0;
 			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.object = $createInstance(properties=loc.records, row=loc.i, persisted=true);
-				if (loc.object.update(argumentCollection=arguments))
+				if (loc.object.update(properties=arguments.properties, parameterize=arguments.parameterize))
 					loc.returnValue = loc.returnValue + 1;
 			}
 		}
@@ -647,16 +650,15 @@
 			// do a regular update query
 			loc.sql = [];
 			ArrayAppend(loc.sql, "UPDATE #variables.wheels.class.tableName# SET");
-			for (loc.key in arguments)
-			{
-				if (loc.key IS NOT "where" && loc.key IS NOT "include" && loc.key IS NOT "properties" && loc.key IS NOT "instantiate")
-					arguments.properties[loc.key] = arguments[loc.key];
-			}
+			loc.pos = 0;
 			for (loc.key in arguments.properties)
 			{
+				loc.pos++;
 				ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
 				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type};
 				ArrayAppend(loc.sql, loc.param);
+				if (StructCount(arguments.properties) > loc.pos)
+					ArrayAppend(loc.sql, ",");
 			}
 			loc.sql = $addWhereClause(sql=loc.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=arguments.where);
@@ -701,7 +703,7 @@
 <cffunction name="deleteAll" returntype="numeric" access="public" output="false">
 	<cfargument name="where" type="string" required="false" default="">
 	<cfargument name="include" type="string" required="false" default="">
-  <cfargument name="instantiate" type="boolean" required="false" default="#application.settings.deleteAll.instantiate#">
+  	<cfargument name="instantiate" type="boolean" required="false" default="#application.settings.deleteAll.instantiate#">
 	<cfargument name="parameterize" type="any" required="false" default="#application.settings.deleteAll.parameterize#">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<!---
@@ -715,14 +717,14 @@
 		var loc = {};
 		if (arguments.instantiate)
 		{
-    	// find and instantiate each object and call its delete function
-			loc.records = findAll(select=variables.wheels.class.propertyList, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize);
+    		// find and instantiate each object and call its delete function
+			loc.records = findAll(select=variables.wheels.class.propertyList, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.iEnd = loc.records.recordCount;
 			loc.returnValue = 0;
 			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.object = $createInstance(properties=loc.records, row=loc.i, persisted=true);
-				if (loc.object.delete())
+				if (loc.object.delete(parameterize=arguments.parameterize))
 					loc.returnValue = loc.returnValue + 1;
 			}
 		}
@@ -776,7 +778,9 @@
 </cffunction>
 
 <cffunction name="update" returntype="boolean" access="public" output="false" hint="Object, Updates the object with the supplied properties and saves it to the database">
-        <cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
+	<cfargument name="parameterize" type="any" required="false" default="#application.settings.update.parameterize#">
+		
         <!---
                 DETAILS:
                 This object level method updates the properties for the object with the passed in values and tries to save it to the database.
@@ -789,7 +793,7 @@
                                 arguments.properties[loc.key] = arguments[loc.key];
                 for (loc.key in arguments.properties)
                         this[loc.key] = arguments.properties[loc.key];
-                loc.returnValue = save();
+                loc.returnValue = save(parameterize=arguments.parameterize);
         </cfscript>
         <cfreturn loc.returnValue>
 </cffunction>

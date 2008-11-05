@@ -20,6 +20,7 @@
 <cfset application.settings.updateAll.instantiate = false>
 <cfset application.settings.deleteAll.parameterize = true>
 <cfset application.settings.deleteAll.instantiate = false>
+<cfset application.settings.update.parameterize = true>
 <cfset application.settings.delete.parameterize = true>
 <cfset application.settings.save.parameterize = true>
 <cfset application.settings.validatesConfirmationOf.message = "[property] should match confirmation">
