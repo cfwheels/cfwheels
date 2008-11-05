@@ -3,52 +3,90 @@
 
 _*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
 
-Here's a quick example of utilizing the sendEmail() function and a
-preferraable way of using application scope variables for server info.
+_*Step 1: Establishing Mail Server and Account Information*
 
-In the config/settings.cfm, four new variables are inserted as
-follows:
+Within the config/settings.cfm are seven new application scope variables for utilizing sendMail(). These variables are as follows:
 
-<cfset application.settings.email.server = "_your_mail_server_here_">
-<cfset application.settings.email.username = "_email_username_here_">
-<cfset application.settings.email.password = "_email_password_here_">
-<cfset application.settings.email.from =
-"_address_@_domainname_here_.com">
+<cfset application.settings.sendEmail.layout = false>
+<cfset application.settings.sendEmail.from = "">
+<cfset application.settings.sendEmail.to = "">
+<cfset application.settings.sendEmail.subject = "">
+<cfset application.settings.sendEmail.server = "">
+<cfset application.settings.sendEmail.username = "">
+<cfset application.settings.sendEmail.password = "">
 
-The sendMail() function call would then look something like this:
+All fields can be left blank and specified directly in the sendMail() function call, or the more efficient approach, to pre-define sendMail variables that will remain constant across your web application. This includes a default FROM, SERVER, USERNAME, PASSWORD, and LAYOUT.
+
+By specifcying these values within the config/settings.cfm, the attributes may be omitted from all sendMail() function calls, thus providing for cleaner, less cluttered code.
+
+
+_*Step 2: Create a (Required) sendEmail Template*
+
+A sendEmail Template is required and forms the basis for the mail message content. Templates may be stored anywhere within the /views/ folder, but a strutured, logical approach is recommended. If different controllers utilize sendMail and each require a unique template, place each sendMail template within the views/controllername folder structure. For example:
+
+Controller: Membership
+sendMail Template: /views/membership/myemailtemplate.cfm
+
+Multiple templates may be stored within this directory should there be a need.
+
+The content of the Template is simple, simply output the expected variables. Example:
+
+/views/membership/myemailtemplate.cfm
+
+<cfoutput>
+#recipientName#	
+#customMessage#
+</cfoutput>
+
+
+_*Step 3: Sending messages via sendMail()*
 
 <cfset sendEmail(
-  template="_custom_template_",
-  server="#application.settings.email.server#",
-  username="#application.settings.email.username#",
-  password="#application.settings.email.password#",
-  from="#application.settings.email.from#",
-  type="html",
-  to="_recipient_email_here",
-  subject="Test Subject from Wheels",
-  customMessage="Test Email Message Body")>
+	to=""_Dynamic or Static Value_",",
+	template="membership/myemailtemplate",
+	subject="#message.subject#",
+	recipientName="_Dynamic or Static Value_",
+	customMessage="_Dynamic or Static Value_",
+				)>
 
-The template attribute set in the above example to _custom_template_
-is a .cfm placed within the "template" folder under the controller
-executing this code. For example, if the sendEail was sent from the
-Emailer.cfc controller, then the _custom_template .cfm will be under
-views/emailer/template/_custom_template_.cfm
+Given that config/settings.cfm is setup with default values for SERVER, USERNAME, PASSWORD,  and FROM, only the desired fields need by included as sendEmail() attributes.
 
-Hopefully this helps those of you who haven't tried this tag out yet
-or hadn't yet figured out all the attributes.
+It is also important to note that the template path is the view's folder name and CFM file name without the extension.
 
-Something else I might have left off was an ample explanation of the
-field "customMessage".
+Lastly, sendMail() accepts all attributes of the <cfmail> tag, and thus may be included within the comma separated list of the sendEmail() call.
 
-The beauty of using Wheels' sendEmail is that the main, generally
-similar email layout, content, etc, only has to be used once in the
-template. Rather than with a standard CFMail tag which you would have
-to copy and paste the same general content (header, footer, graphics,
-etc.) for each use.
+_*Step 4: Give It a Try*
+That's it. The ease of use is endless, with all attributes setup in the settings/config.cfm, use of sendMail() could be as simple as this:
+<cfset sendEmail(template="membership/success")>
 
-Any variable can be passed to the email template (that is, you have a
-#_yourvariable_# in it) via the sendMail function.
+_*Additional Features: Differentiation of the TEMPLATE and LAYOUT attributes.*
 
-In a number of uses, I utilize passing in firstName, lastName, and
-customMessage variables that are integrated into the basic project
-email template of Wheels.
+Best practice is that variables (such as "recipientName" and "customMessage" in the example above) be placed as outputs in the template file.
+
+A layout should be used just as the name implies--for layout/stylistic aspects of the email body. Based on the example given above, assume the same email content needs to be sent under two conditions:
+
+1) Message to intended recipient with a header/footer and URL link specific to recipient.
+2) Copy of message to original sender with genericized header/footer
+
+In this case, the two uses of sendEmail() would be identical with the exception of the LAYOUT attribute, as follows:
+
+<!---Customized Header/Footer--->
+
+<cfset sendEmail(
+	template="membership/myemailtemplate",
+	layout="emailLayoutPath/headerFooter",
+	to=""_Dynamic or Static Value_",",
+	subject="#message.subject#",
+	recipientName="_Dynamic or Static Value_",
+	customMessage="_Dynamic or Static Value_",
+				)>
+<!---Plain Message--->
+
+<cfset sendEmail(
+	template="membership/myemailtemplate",
+	layout="emailLayoutPath/plain",
+	to=""_Dynamic or Static Value_",",
+	subject="#message.subject#",
+	recipientName="_Dynamic or Static Value_",
+	customMessage="_Dynamic or Static Value_",
+				)>
