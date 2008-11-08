@@ -215,7 +215,7 @@ Here are the representative models:
 
 This assumes that there are foreign key columns in `subscriptions` called `customerId` and `publicationId`.
 
-===Using Finders with the Many-to-Many Relationship===
+===Using Finders with a Many-to-Many Relationship===
 
 At this point, it's still fairly easy to get data from the many-to-many association that we have set up above.
 
@@ -224,5 +224,3 @@ We can `include` the related tables to get the same effect:
 {{{
 <cfset publicationAndCustomers = model("Publication").findByKey(params.key, include="Subscriptions,Customers")>
 }}}
-
-Depending on the size of your tables, you may want to use the dynamic finder so the database doesn't have to send back repeats of the same `Publication` data for every single row containing a unique `Customer`. Test both scenarios to see which yields the better average performance.
