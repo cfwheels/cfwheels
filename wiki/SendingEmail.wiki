@@ -34,31 +34,28 @@ Consider this example scenario:
 
 Multiple templates may be stored within this directory, should there be a need.
 
-The content of the template is simple: simply output the expected content variables.
+The content of the template is simple: simply output the content and any expected variables.
 
-Here's an example for `myemailtemplate.cfm`:
+Here's an example for `myemailtemplate.cfm`, which will contain HTML content. Note that you can also set up a plain-text email as well.
 
 {{{
 <cfoutput>
-Hi #recipientName#,
-
-We wanted to take a moment to thank you for joining our service and to confirm your start date.
-
-Our records indicate that your membership will begin on #DateFormat(startDate, 'dddd, mmmm, d, yyyy')#.
-
-Thank you,
-The Service Team
+<p>Hi, #recipientName#,</p>
+<p>We wanted to take a moment to thank you for joining our service and to confirm your start date.</p>
+<p>Our records indicate that your membership will begin on <strong>#DateFormat(startDate, 'dddd, mmmm, d, yyyy')#</strong>.</p>
+<p>If you feel that this is in error, please contact us by email at <a href="mailto:#application.settings.sendEmail.from#">application.settings.sendEmail.from</a>.</p>
 </cfoutput>
 }}}
 
 ==Step 3: Sending the Message via `sendEmail()`==
 
-`sendEmail()` accepts all attributes of CFML's `<cfmail>` tag as arguments.
+`sendEmail()` accepts all attribute of CFML's `<cfmail>` tag as arguments.
 
 {{{
 <cfset member = model("Member").findByKey(newMember.id)>
 <cfset
     sendEmail(
+        type="html",
         to=member.email,
         template="membership/myemailtemplate",
         subject="Thank You for Becoming a Member",
@@ -80,36 +77,46 @@ That's it. With all attributes setup in the `settings/config.cfm`, use of `sendE
 <cfset sendEmail(template="membership/success")>
 }}}
 
-----
-_*Differentiation of the TEMPLATE and LAYOUT attributes.*
+==Bonus Step: Email Layouts==
 
-Best practice is that variables (such as "recipientName" and "customMessage" in the example above) be placed as outputs in the template file.
+Much like layouts outlined in the UsingLayouts chapter, you can also create layouts for your emails.
 
-A layout should be used just as the name implies--for layout/stylistic aspects of the email body. Based on the example given above, assume the same email content needs to be sent under two conditions:
+A layout should be used just as the name implies, for layout/stylistic aspects of the email body. Based on the example given above, assume the same email content needs to be sent twice:
 
-1) Message to intended recipient with a header/footer and URL link specific to recipient.
-2) Copy of message to original sender with genericized header/footer
+ # Message is sent to a new member with a stylized header and footer.
+ # A copy of message is sent to an admin at your company with a generic header and footer.
 
-In this case, the two uses of sendEmail() would be identical with the exception of the LAYOUT attribute, as follows:
+Best practice is that variables (such as `recipientName` and `startDate`, in the example above) be placed as outputs in the template file.
+
+In this case, the 2 calls to `sendEmail()` would be identical, with the exception of the `layout` attribute.
+
 {{{
-<!---Customized Header/Footer--->
-<cfset sendEmail(
-	template="membership/myemailtemplate",
-	layout="emailLayoutPath/headerFooter",
-	to=""_Dynamic or Static Value_",",
-	subject="#message.subject#",
-	recipientName="_Dynamic or Static Value_",
-	customMessage="_Dynamic or Static Value_",
-				)>
-}}}
-{{{
-<!---Plain Message--->
-<cfset sendEmail(
-	template="membership/myemailtemplate",
-	layout="emailLayoutPath/plain",
-	to=""_Dynamic or Static Value_",",
-	subject="#message.subject#",
-	recipientName="_Dynamic or Static Value_",
-	customMessage="_Dynamic or Static Value_",
-				)>
+<!--- Get new member --->
+<cfset member = model("Member").findByKey(newMember.id)>
+
+<!--- Customer email with customized header/footer --->
+<cfset
+    sendEmail(
+        type="html",
+        template="membership/myemailtemplate",
+        layout="email/customer",
+        to=member.email,
+        subject="Thank You for Becoming a Member",
+        recipientName=member.name,
+        startDate=member.startDate
+    )
+>
+
+<!--- Plain Message with "admin" layout --->
+<cfset
+    sendEmail(
+        type="html",
+        template="membership/myemailtemplate",
+        layout="email/admin",
+        to="admin@domain.com",
+        subject="Membership Verification: #member.name#",
+        recipientName=member.name,
+        startDate=member.startDate
+    )
+>
 }}}
