@@ -48,7 +48,7 @@ Here's an example for `myemailtemplate.cfm`, which will contain HTML content. No
 
 ==Step 3: Sending the Message via `sendEmail()`==
 
-`sendEmail()` accepts all attribute of CFML's `<cfmail>` tag as arguments.
+`sendEmail()` accepts all attribute of CFML's `<cfmail>` tag as arguments, plus any variables that you need to pass to the email template.
 
 {{{
 <cfset member = model("Member").findByKey(newMember.id)>
@@ -66,7 +66,7 @@ Here's an example for `myemailtemplate.cfm`, which will contain HTML content. No
 
 Given that `config/settings.cfm` is setup with default values for `server`, `username`, `password`, and `from`, only the desired fields need by included as `sendEmail()` arguments.
 
-It is also important to note that the `template` argument should be the path to the view's folder name and CFM file name without the extension.
+It is also important to note that the `template` argument should be the path to the view's folder name and CFM file name without the extension. If the template is in the current controller, then you don't need to specify a folder path to the template file. In that case, just be sure to store the template file in the folder with the rest of the views for that controller.
 
 ==Step 4: Give It a Try Yourself==
 
