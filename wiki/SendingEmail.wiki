@@ -43,7 +43,6 @@ Here's an example for `myemailtemplate.cfm`, which will contain HTML content. No
 <p>Hi, #recipientName#,</p>
 <p>We wanted to take a moment to thank you for joining our service and to confirm your start date.</p>
 <p>Our records indicate that your membership will begin on <strong>#DateFormat(startDate, 'dddd, mmmm, d, yyyy')#</strong>.</p>
-<p>If you feel that this is in error, please contact us by email at <a href="mailto:#application.settings.sendEmail.from#">application.settings.sendEmail.from</a>.</p>
 </cfoutput>
 }}}
 
