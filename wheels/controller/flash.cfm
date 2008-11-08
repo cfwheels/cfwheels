@@ -1,4 +1,4 @@
-<cffunction name="flashClear" returntype="void" access="public" output="false" hint="Controller, Request, Delete everything from the Flash.">
+<cffunction name="flashClear" returntype="void" access="public" output="false" hint="Controller, Request, Deletes everything from the Flash.">
 	<!---
 		EXAMPLES:
 		<cfset flashClear()>
@@ -13,12 +13,11 @@
 		 * [flash flash()] (function)
 	--->
 	<cfscript>
-		var loc = {};
 		session.flash = {};
 	</cfscript>
 </cffunction>
 
-<cffunction name="flashDelete" returntype="void" access="public" output="false" hint="Controller, Request, Delete a specific key from the Flash.">
+<cffunction name="flashDelete" returntype="boolean" access="public" output="false" hint="Controller, Request, Deletes a specific key from the Flash.">
 	<cfargument name="key" type="string" required="true" hint="The key to delete">
 	<!---
 		EXAMPLES:
@@ -33,17 +32,14 @@
 		 * [flashInsert flashInsert()] (function)
 		 * [flash flash()] (function)
 	--->
-	<cfscript>
-		var loc = {};
-		StructDelete(session.flash, arguments.key);
-	</cfscript>
+	<cfreturn StructDelete(session.flash, arguments.key, true)>
 </cffunction>
 
-<cffunction name="flashIsEmpty" returntype="boolean" access="public" output="false" hint="Controller, Request, Check if the Flash is empty.">
+<cffunction name="flashIsEmpty" returntype="boolean" access="public" output="false" hint="Controller, Request, Checks if the Flash is empty.">
 	<!---
 		EXAMPLES:
-		<cfif NOT flashIsEmpty()>
-		  <cfabort>
+		<cfif flashIsEmpty()>
+		  do something...
 		</cfif>
 
 		RELATED:
@@ -55,31 +51,14 @@
 		 * [flashInsert flashInsert()] (function)
 		 * [flash flash()] (function)
 	--->
-	<cfscript>
-		var loc = {};
-
-	</cfscript>
-
-
-	<cfif flashCount() IS 0>
-		<cfreturn true>
-	<cfelse>
-		<cfreturn false>
-	</cfif>
+	<cfreturn NOT flashCount()>
 </cffunction>
 
-<cffunction name="flashCount" returntype="numeric" access="public" output="false" hint="Controller, Request, Check how many keys exist in the Flash.">
-
+<cffunction name="flashCount" returntype="numeric" access="public" output="false" hint="Controller, Request, Checks how many keys exist in the Flash.">
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		-
-
 		EXAMPLES:
-		<cfif NOT flashIsEmpty()>
-		  <cfabort>
+		<cfif flashCount() IS 2>
+		  do something...
 		</cfif>
 
 		RELATED:
@@ -91,20 +70,12 @@
 		 * [flashInsert flashInsert()] (function)
 		 * [flash flash()] (function)
 	--->
-
 	<cfreturn StructCount(session.flash)>
 </cffunction>
 
-<cffunction name="flashKeyExists" returntype="boolean" access="public" output="false" hint="Controller, Request, Check if a specific key exists in the Flash.">
+<cffunction name="flashKeyExists" returntype="boolean" access="public" output="false" hint="Controller, Request, Checks if a specific key exists in the Flash.">
 	<cfargument name="key" type="string" required="true" hint="The key to check if it exists">
-
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		-
-
 		EXAMPLES:
 		<cfif flashKeyExists("error")>
 		  do something...
@@ -119,23 +90,11 @@
 		 * [flashInsert flashInsert()] (function)
 		 * [flash flash()] (function)
 	--->
-
-	<cfif StructKeyExists(session.flash, arguments.key)>
-		<cfreturn true>
-	<cfelse>
-		<cfreturn false>
-	</cfif>
+	<cfreturn StructKeyExists(session.flash, arguments.key)>
 </cffunction>
 
-<cffunction name="flashInsert" returntype="void" access="public" output="false" hint="Controller, Request, Insert a new key/value to the Flash.">
-
+<cffunction name="flashInsert" returntype="void" access="public" output="false" hint="Controller, Request, Inserts a new key/value to the Flash.">
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		Use a named argument to set a key/value in the Flash.
-
 		EXAMPLES:
 		<cfset flashInsert(msg="It Worked!")>
 
@@ -148,20 +107,14 @@
 		 * [flashKeyExists flashKeyExists()] (function)
 		 * [flash flash()] (function)
 	--->
-
-	<cfset session.flash[StructKeyList(arguments)] = arguments[1]>
+	<cfscript>
+		session.flash[StructKeyList(arguments)] = arguments[1];
+	</cfscript>
 </cffunction>
 
-<cffunction name="flash" returntype="string" access="public" output="false" hint="Controller, Request, Get the value of a specific key in the Flash.">
+<cffunction name="flash" returntype="string" access="public" output="false" hint="Controller, Request, Gets the value of a specific key in the Flash.">
 	<cfargument name="key" type="string" required="true" hint="The key to get the value for">
-
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		-
-
 		EXAMPLES:
 		<p><cfoutput>#flash("message")#</cfoutput></p>
 
@@ -174,10 +127,10 @@
 		 * [flashKeyExists flashKeyExists()] (function)
 		 * [flashInsert flashInsert()] (function)
 	--->
-
-	<cfif flashKeyExists(arguments.key)>
-		<cfreturn session.flash[arguments.key]>
-	<cfelse>
-		<cfreturn "">
-	</cfif>
+	<cfscript>
+		var returnValue = "";
+		if (flashKeyExists(arguments.key))
+			returnValue = session.flash[arguments.key];
+	</cfscript>
+	<cfreturn returnValue>
 </cffunction>
