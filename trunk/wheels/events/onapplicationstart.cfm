@@ -141,7 +141,7 @@
 			<cfset loc.adapterName = "MySQL">
 		<cfelseif loc.info.driver_name Contains "Oracle">
 			<cfset loc.adapterName = "Oracle">
-		<cfelseif loc.info.driver_name Contains "SQLServer">
+		<cfelseif loc.info.driver_name Contains "SQLServer" OR loc.info.driver_name Contains "Microsoft SQL Server">
 			<cfset loc.adapterName = "MicrosoftSQLServer">
 		<cfelse>
 			<cfset $throw(type="Wheels.NoSupport", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, Oracle or MySQL.")>
