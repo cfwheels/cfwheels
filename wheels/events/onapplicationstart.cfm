@@ -12,7 +12,7 @@
 	<cfif (application.wheels.serverName IS "Railo" AND loc.majorVersion LT 3) OR (application.wheels.serverName IS "Adobe ColdFusion" AND loc.majorVersion LT 8)>
 		<cfset $throw(type="Wheels.NoSupport", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Upgrade to Adobe ColdFusion 8 or Railo 3.")>
 	</cfif>
-	<cfset application.wheels.version = "0.8.3">
+	<cfset application.wheels.version = "0.9">
 	<cfif cgi.script_name IS "/rewrite.cfm">
 		<cfset application.wheels.URLRewriting = "On">
 	<cfelseif cgi.path_info IS NOT "">
