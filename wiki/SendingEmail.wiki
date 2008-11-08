@@ -56,7 +56,7 @@ Here's an example for `myemailtemplate.cfm`, which will contain HTML content. No
     sendEmail(
         type="html",
         to=member.email,
-        template="membership/myemailtemplate",
+        template="myemailtemplate",
         subject="Thank You for Becoming a Member",
 	recipientName=member.name,
 	startDate=member.startDate
@@ -73,7 +73,7 @@ It is also important to note that the `template` argument should be the path to 
 That's it. With all attributes setup in the `settings/config.cfm`, use of `sendEmail()` could be as simple as this:
 
 {{{
-<cfset sendEmail(template="membership/success")>
+<cfset sendEmail(template="myemailtemplate")>
 }}}
 
 ==Bonus Step: Email Layouts==
@@ -97,7 +97,7 @@ In this case, the 2 calls to `sendEmail()` would be identical, with the exceptio
 <cfset
     sendEmail(
         type="html",
-        template="membership/myemailtemplate",
+        template="myemailtemplate",
         layout="email/customer",
         to=member.email,
         subject="Thank You for Becoming a Member",
@@ -110,7 +110,7 @@ In this case, the 2 calls to `sendEmail()` would be identical, with the exceptio
 <cfset
     sendEmail(
         type="html",
-        template="membership/myemailtemplate",
+        template="myemailtemplate",
         layout="email/admin",
         to="admin@domain.com",
         subject="Membership Verification: #member.name#",
