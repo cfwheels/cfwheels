@@ -113,17 +113,19 @@ Now that we have our associations set up, let's use them to get some data into o
 
 There are a couple ways to join data via associations, which we'll go over now.
 
-===Using the `include` Argument in Your Finders===
+===Using the `include` Argument in `findAll()`===
 
-To include data from related tables in our "find" calls, we simply need to use the `include` argument. Let's say that we wanted to include data about the `Author` in our `findByKey()` call for a `Post`.
+To join data from related tables in our `findAll()` calls, we simply need to use the `include` argument. Let's say that we wanted to include data about the `Author` in our `findAll()` call for `Post`s.
 
 Here's what that call would look like:
 
 {{{
-<cfset post = model("Post").findByKey(key=params.key, include="Author")>
+<cfset post = model("Post").findAll(include="Author")>
 }}}
 
 It's that simple. Wheels will then join the `authors` table automatically so that you can use that data along with the data from `posts`.
+
+Note that if the relationship between `Post` and `Author` were a `hasMany` instead of `hasOne`, then you would need to call the pluralized version of the model, `findAll(include="Authors")`.
 
 To include several tables, simply delimit the names of the models with a comma. All models should contain related associations, or else you'll get a mountain of repeated data back.
 
@@ -217,20 +219,7 @@ This assumes that there are foreign key columns in `subscriptions` called `custo
 
 At this point, it's still fairly easy to get data from the many-to-many association that we have set up above.
 
-====Dynamic Finders====
-
-To use a dynamic finder to obtain a list of customers subscribed to a given publication, our code would look like this:
-
-{{{
-<cfset publication = model("Publication").findByKey(params.key)>
-<cfset customers = publication.subscriptions().customers()>
-}}}
-
-As you can see, we can chain the dynamic finders together to get to the related data.
-
-====`include` Argument====
-
-We can also `include` the related tables to get the same effect.
+We can `include` the related tables to get the same effect:
 
 {{{
 <cfset publicationAndCustomers = model("Publication").findByKey(params.key, include="Subscriptions,Customers")>
