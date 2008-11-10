@@ -9,7 +9,6 @@
 	<cfargument name="host" type="string" required="false" default="" hint="Set this to override the current host.">
 	<cfargument name="protocol" type="string" required="false" default="" hint="Set this to override the current protocol.">
 	<cfargument name="port" type="numeric" required="false" default="0" hint="Set this to override the current port number.">
-
 	<!---
 		EXAMPLES:
 		#URLFor(text="Log Out", controller="account", action="logOut")#
@@ -20,7 +19,6 @@
 		 * [buttonTo buttonTo()] (function)
 		 * [linkTo linkTo()] (function)
 	--->
-
 	<cfscript>
 		var loc = {};
 		if (application.settings.environment != "production")
@@ -123,14 +121,7 @@
 </cffunction>
 
 <cffunction name="isGet" returntype="boolean" access="public" output="false" hint="Controller, Request, Returns whether the request was a normal (GET) request or not.">
-
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		-
-
 		EXAMPLES:
 		<cfset requestIsGet = isGet()>
 
@@ -138,23 +129,18 @@
 		 * [isPost isPost()] (function)
 		 * [isAjax isAjax()] (function)
 	--->
-
-	<cfif cgi.request_method IS "get">
-		<cfreturn true>
-	<cfelse>
-		<cfreturn false>
-	</cfif>
+	<cfscript>
+		var returnValue = "";
+		if (cgi.request_method == "get")
+			returnValue = true;
+		else
+			returnValue = false;
+	</cfscript>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="isPost" returntype="boolean" access="public" output="false" hint="Controller, Request, Returns whether the request came from a form submission or not.">
-
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		-
-
 		EXAMPLES:
 		<cfset requestIsPost = isPost()>
 
@@ -162,23 +148,18 @@
 		 * [isGet isGet()] (function)
 		 * [isAjax isAjax()] (function)
 	--->
-
-	<cfif cgi.request_method IS "post">
-		<cfreturn true>
-	<cfelse>
-		<cfreturn false>
-	</cfif>
+	<cfscript>
+		var returnValue = "";
+		if (cgi.request_method == "post")
+			returnValue = true;
+		else
+			returnValue = false;
+	</cfscript>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="isAjax" returntype="boolean" access="public" output="false" hint="Controller, Request, Returns whether the page was called from JavaScript or not.">
-
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		-
-
 		EXAMPLES:
 		<cfset requestIsAjax = isAjax()>
 
@@ -186,12 +167,14 @@
 		 * [isGet isGet()] (function)
 		 * [isPost isPost()] (function)
 	--->
-
-	<cfif cgi.http_x_requested_with IS "XMLHTTPRequest">
-		<cfreturn true>
-	<cfelse>
-		<cfreturn false>
-	</cfif>
+	<cfscript>
+		var returnValue = "";
+		if (cgi.http_x_requested_with IS "XMLHTTPRequest")
+			returnValue = true;
+		else
+			returnValue = false;
+	</cfscript>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="sendEmail" returntype="void" access="public" output="false">

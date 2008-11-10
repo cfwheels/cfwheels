@@ -24,6 +24,9 @@
 	<cfset application.wheels.models = StructNew()>
 	<cfset application.wheels.existingModelFiles = "">
 	<cfset application.wheels.existingControllerFiles = "">
+	<cfset application.wheels.nonExistingControllerFiles = "">
+	<cfset application.wheels.existingLayoutFiles = "">
+	<cfset application.wheels.nonExistingLayoutFiles = "">
 	<cfset application.wheels.routes = ArrayNew(1)>
 	<cfset application.wheels.namedRoutePositions = StructNew()>
 	<!--- setup folder paths --->

@@ -1,27 +1,26 @@
 <cffunction name="$initControllerClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
-
-	<cfset variables.wheels.name = arguments.name>
-	<cfset variables.wheels.verifications = ArrayNew(1)>
-	<cfset variables.wheels.beforeFilters = ArrayNew(1)>
-	<cfset variables.wheels.afterFilters = ArrayNew(1)>
-	<cfset variables.wheels.cachableActions = ArrayNew(1)>
-
-	<cfif StructKeyExists(variables, "init")>
-		<cfset init()>
-	</cfif>
-
+	<cfscript>
+		variables.wheels.name = arguments.name;
+		variables.wheels.verifications = [];
+		variables.wheels.beforeFilters = [];
+		variables.wheels.afterFilters = [];
+		variables.wheels.cachableActions = [];
+		if (StructKeyExists(variables, "init"))
+			init();
+	</cfscript>
 	<cfreturn this>
 </cffunction>
 
 <cffunction name="$createControllerObject" returntype="any" access="public" output="false">
 	<cfargument name="params" type="struct" required="true">
-	<cfset var loc = {}>
-	<cfset loc.fileName = capitalize(variables.wheels.name)>
-	<cfif NOT ListFindNoCase(application.wheels.existingControllerFiles, variables.wheels.name)>
-		<cfset loc.fileName = "Controller">
-	</cfif>
-	<cfset loc.rootObject = "controllerObject">
+	<cfscript>
+		var loc = {};
+		loc.fileName = capitalize(variables.wheels.name);
+		if (!ListFindNoCase(application.wheels.existingControllerFiles, variables.wheels.name))
+			loc.fileName = "Controller";
+		loc.rootObject = "controllerObject";
+	</cfscript>
 	<cfinclude template="../../root.cfm">
 	<cfreturn loc.rootObject>
 </cffunction>
