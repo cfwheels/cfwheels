@@ -1,4 +1,5 @@
 <cfset application.settings.cacheDatabaseSchema = true>
+<cfset application.settings.cacheFileChecking = true>
 <cfset application.settings.cacheImages = true>
 <cfset application.settings.cacheModelInitialization = true>
 <cfset application.settings.cacheControllerInitialization = true>
