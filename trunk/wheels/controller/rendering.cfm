@@ -1,18 +1,10 @@
 <cffunction name="renderPageToString" returntype="string" access="public" output="false" hint="Controller, Request, Includes the view page for the specified controller and action and returns it as a string.">
-	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Pass-through argument; see documentation for renderPage">
-	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Pass-through argument; see documentation for renderPage">
-	<cfargument name="layout" type="any" required="false" default="true" hint="Pass-through argument; see documentation for renderPage">
-	<cfargument name="cache" type="any" required="false" default="" hint="Pass-through argument; see documentation for renderPage">
+	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="See documentation for renderPage">
+	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for renderPage">
+	<cfargument name="layout" type="any" required="false" default="true" hint="See documentation for renderPage">
+	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for renderPage">
 	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.settings.showDebugInformation#">
-	<cfset var loc = {}>
-
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		-
-
 		EXAMPLES:
 		<cfset response = renderPageToString(layout=false)>
 
@@ -23,12 +15,13 @@
 		 * [renderText renderText()] (function)
 		 * [renderPartial renderPartial()] (function)
 	--->
-
-	<cfset renderPage(argumentCollection=arguments)>
-	<cfset loc.result = request.wheels.response>
-	<cfset request.wheels.response = "">
-
-	<cfreturn loc.result>
+	<cfscript>
+		var returnValue = "";
+		renderPage(argumentCollection=arguments);
+		returnValue = request.wheels.response;
+		request.wheels.response = "";
+	</cfscript>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="renderPage" returntype="void" access="public" output="false" hint="Controller, Request, Renders content to the browser by including the view page for the specified controller and action.">
@@ -37,15 +30,7 @@
 	<cfargument name="layout" type="any" required="false" default="true" hint="The layout to wrap the content in">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for">
 	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.settings.showDebugInformation#">
-	<cfset var loc = {}>
-
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		This form of rendering (including a view file based on the controller and action) is the most commonly used and is the one used by Wheels as the default when nothing is explicitly rendered.
-
 		EXAMPLES:
 		<cfset renderPage(action="someOtherAction")>
 
@@ -58,7 +43,7 @@
 		 * [renderText renderText()] (function)
 		 * [renderPartial renderPartial()] (function)
 	--->
-
+	<cfset var loc = {}>
 	<cfif application.settings.showDebugInformation>
 		<cfset request.wheels.execution.components.view = GetTickCount()>
 	</cfif>
@@ -179,6 +164,7 @@
 <cffunction name="$includeOrRenderPartial" returntype="any" access="public" output="false">
 	<cfset var loc = {}>
 
+	<cfset arguments.type = "partial">
 	<!--- double-checked lock --->
 	<cfif application.settings.cachePartials AND (isNumeric(arguments.cache) OR (IsBoolean(arguments.cache) AND arguments.cache))>
 		<cfset loc.category = "partial">
@@ -191,7 +177,7 @@
 	   	<cflock name="#loc.lockName#" type="exclusive" timeout="30">
 				<cfset loc.result = $getFromCache(loc.key, loc.category)>
 				<cfif IsBoolean(loc.result) AND NOT loc.result>
-					<cfset loc.result = $includePartial(argumentCollection=arguments)>
+					<cfset loc.result = $includeFile(argumentCollection=arguments)>
 					<cfif NOT isNumeric(arguments.cache)>
 						<cfset arguments.cache = application.settings.defaultCacheTime>
 					</cfif>
@@ -200,7 +186,7 @@
 			</cflock>
 		</cfif>
 	<cfelse>
-		<cfset loc.result = $includePartial(argumentCollection=arguments)>
+		<cfset loc.result = $includeFile(argumentCollection=arguments)>
 	</cfif>
 
 	<cfif arguments.$type IS "include">
@@ -211,30 +197,25 @@
 
 </cffunction>
 
-<cffunction name="$includePartial" returntype="string" access="public" output="false">
-	<cfset var loc = {}>
-
-	<cfif Left(arguments.name, 1) IS "/">
-		<!--- Include a file in a sub folder to view --->
-		<cfset loc.result = $include("../../#application.wheels.viewPath##Reverse(ListRest(Reverse(arguments.name), '/'))#/_#Reverse(ListFirst(Reverse(arguments.name), '/'))#.cfm")>
-	<cfelseif arguments.name  Contains "/">
-		<!--- Include a file in a sub folder of the curent controller --->
-		<cfset loc.result = $include("../../#application.wheels.viewPath#/#variables.params.controller#/#Reverse(ListRest(Reverse(arguments.name), '/'))#/_#Reverse(listFirst(Reverse(arguments.name), '/'))#.cfm")>
-	<cfelse>
-		<!--- Include a file in the current controller's view folder --->
-		<cfset loc.result = $include("../../#application.wheels.viewPath#/#variables.params.controller#/_#arguments.name#.cfm")>
-	</cfif>
-
-	<cfreturn loc.result>
-</cffunction>
-
-<cffunction name="$include" returntype="string" access="public" output="false">
-	<cfargument name="$path" type="string" required="true">
-	<cfset var loc = {}>
-	<cfsavecontent variable="loc.result">
-		<cfinclude template="#LCase(arguments.$path)#">
-	</cfsavecontent>
-	<cfreturn trim(loc.result)>
+<cffunction name="$includeFile" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="type" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.include = "../../" & application.wheels.viewPath;
+		loc.fileName = Spanexcluding(Reverse(ListFirst(Reverse(arguments.name), "/")), ".") & ".cfm"; // extracts the file part of the path and replace ending ".cfm"
+		if (type == "partial")
+			loc.fileName = Replace("_" & loc.fileName, "__", "_", "one"); // replaces leading "_" when the file is a partial
+		loc.folderName = Reverse(ListRest(Reverse(arguments.name), "/"));
+		if (Left(arguments.name, 1) IS "/")
+			loc.include = loc.include & loc.folderName & "/" & loc.fileName; // Include a file in a sub folder to views
+		else if (arguments.name  Contains "/")
+			loc.include = loc.include & "/" & variables.params.controller & "/" & loc.folderName & "/" & loc.fileName; // Include a file in a sub folder of the current controller
+		else
+			loc.include = loc.include & "/" & variables.params.controller & "/" & loc.fileName; // Include a file in the current controller's view folder
+		loc.returnValue = $include(loc.include);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$renderLayout" returntype="void" access="public" output="false">
@@ -243,30 +224,36 @@
 		var loc = {};
 		if (!IsBoolean(arguments.layout) || arguments.layout)
 		{
-			loc.include = "../../" & application.wheels.viewPath & "/";
+			loc.include = "../../" & application.wheels.viewPath;
 			if (IsBoolean(arguments.layout))
 			{
-				if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.params.controller)#/layout.cfm")))
-					loc.include = loc.include & variables.params.controller & "/" & "layout.cfm";
+				if (!application.settings.cacheFileChecking || (!ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) && !ListFindNoCase(application.wheels.nonExistingLayoutFiles, variables.params.controller)))
+				{
+					if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.params.controller)#/layout.cfm")))
+						application.wheels.existingLayoutFiles = ListAppend(application.wheels.existingLayoutFiles, variables.params.controller);
+					else
+						application.wheels.nonExistingLayoutFiles = ListAppend(application.wheels.existingLayoutFiles, variables.params.controller);
+				}
+				if (ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller))
+					loc.include = loc.include & "/" & variables.params.controller & "/" & "layout.cfm";
 				else
-					loc.include = loc.include & "layout.cfm";
+					loc.include = loc.include & "/" & "layout.cfm";
+				loc.response = $include(loc.include);
 			}
 			else
 			{
-				loc.file = SpanExcluding(arguments.layout, ".") & ".cfm";
-				if (arguments.layout Contains "/")
-					loc.include = loc.include & loc.file;
-				else
-					loc.include = loc.include & variables.params.controller & "/" & loc.file;
+				loc.response = $includeFile(name=arguments.layout, type="layout");
 			}
-			request.wheels.response = $include(loc.include);
+			request.wheels.response = loc.response;
 		}
 	</cfscript>
 </cffunction>
 
 <cffunction name="$renderPlugin" returntype="void" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
-	<cfset request.wheels.showDebugInformation = false>
-	<cfset request.wheels.response = $include("../../#application.wheels.pluginPath#/#arguments.name#/index.cfm")>
-	<cfset request.wheels.response = $include("../styles/layout.cfm")>
+	<cfscript>
+		request.wheels.showDebugInformation = false;
+		request.wheels.response = $include("../../#application.wheels.pluginPath#/#arguments.name#/index.cfm");
+		request.wheels.response = $include("../styles/layout.cfm");
+	</cfscript>
 </cffunction>

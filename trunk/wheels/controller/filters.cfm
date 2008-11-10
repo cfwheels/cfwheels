@@ -31,7 +31,9 @@
 	<cfargument name="session" type="any" required="false" default="">
 	<cfargument name="params" type="any" required="false" default="">
 	<cfargument name="handler" type="any" required="false" default="false">
-	<cfset arrayAppend(variables.wheels.verifications, StructCopy(arguments))>
+	<cfscript>
+		ArrayAppend(variables.wheels.verifications, StructCopy(arguments));
+	</cfscript>
 </cffunction>
 
 <cffunction name="$getBeforeFilters" returntype="array" access="public" output="false">
