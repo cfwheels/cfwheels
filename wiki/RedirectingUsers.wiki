@@ -35,5 +35,6 @@ Common for all three methods above is that you can also pass in the `addToken` a
 
 ==Related Reading==
 
+ * [UsingRoutes Using Routes (chapter)]
  * [redirectTo redirectTo (function)]
  * [URLFor URLFor (function)]
