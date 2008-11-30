@@ -35,5 +35,5 @@ Common for all three methods above is that you can also pass in the `addToken` a
 
 ==Related Reading==
 
-[redirectTo redirectTo (function)]
-[URLFor URLFor (function)]
+ * [redirectTo redirectTo (function)]
+ * [URLFor URLFor (function)]
