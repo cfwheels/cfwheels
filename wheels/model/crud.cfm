@@ -388,9 +388,9 @@
 
 			loc.pos = ArrayLen(loc.originalValues);
 			loc.iEnd = ArrayLen(arguments.sql);
-			for (loc.i=loc.iEnd; loc.i > 0; loc.i--)
+			for (loc.i=loc.iEnd; loc.i GT 0; loc.i--)
 			{
-				if (IsStruct(arguments.sql[loc.i]) && loc.pos > 0)
+				if (IsStruct(arguments.sql[loc.i]) && loc.pos GT 0)
 				{
 					arguments.sql[loc.i].value = loc.originalValues[loc.pos];
 					loc.pos--;
@@ -657,7 +657,7 @@
 				ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
 				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type};
 				ArrayAppend(loc.sql, loc.param);
-				if (StructCount(arguments.properties) > loc.pos)
+				if (StructCount(arguments.properties) GT loc.pos)
 					ArrayAppend(loc.sql, ",");
 			}
 			loc.sql = $addWhereClause(sql=loc.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
