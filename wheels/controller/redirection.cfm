@@ -1,27 +1,32 @@
-<cffunction name="redirectTo" returntype="void" access="public" output="false" hint="Controller, Request, Redirects the browser to the supplied action, URL or to the referring URL.">
+<cffunction name="redirectTo" returntype="void" access="public" output="false" hint="Controller, Request, Redirects the browser to the supplied action, route or back to the referring page.">
 	<cfargument name="back" type="boolean" required="false" default="false" hint="Set to true to redirect back to the referring page">
 	<cfargument name="addToken" type="boolean" required="false" default="false" hint="See documentation for cflocation (CFML)">
 	<cfargument name="statusCode" type="numeric" required="false" default="302" hint="See documentation for cflocation (CFML)">
-	<cfargument name="route" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="action" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="key" type="any" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="params" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="See documentation for URLFor">
-	<cfargument name="host" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="protocol" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="port" type="numeric" required="false" default="0" hint="See documentation for URLFor">
+	<cfargument name="route" type="string" required="false" default="" hint="See documentation for URLFor (Wheels)">
+	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for URLFor (Wheels)">
+	<cfargument name="action" type="string" required="false" default="" hint="See documentation for URLFor (Wheels)">
+	<cfargument name="key" type="any" required="false" default="" hint="See documentation for URLFor (Wheels)">
+	<cfargument name="params" type="string" required="false" default="" hint="See documentation for URLFor (Wheels)">
+	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for URLFor (Wheels)">
+	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="See documentation for URLFor (Wheels)">
+	<cfargument name="host" type="string" required="false" default="" hint="See documentation for URLFor (Wheels)">
+	<cfargument name="protocol" type="string" required="false" default="" hint="See documentation for URLFor (Wheels)">
+	<cfargument name="port" type="numeric" required="false" default="0" hint="See documentation for URLFor (Wheels)">
 	<!---
 		EXAMPLES:
 		<cfif user.save()>
 		  <cfset redirectTo(action="saveSuccessful")>
 		</cfif>
 
+	  <cfset redirectTo(controller="checkout", action="start", params="type=express", protocol="https")>
+
+		<cfset redirectTo(route="profile", screenName="Joe")>
+
 		<cfset redirectTo(back=true)>
 
 		RELATED:
 		 * RedirectingUsers (chapter)
+		 * UsingRoutes (chapter)
 	--->
 	<cfscript>
 		var loc = {};

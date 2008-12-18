@@ -1,8 +1,8 @@
 <cffunction name="renderPageToString" returntype="string" access="public" output="false" hint="Controller, Request, Includes the view page for the specified controller and action and returns it as a string.">
-	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="See documentation for renderPage">
-	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for renderPage">
-	<cfargument name="layout" type="any" required="false" default="true" hint="See documentation for renderPage">
-	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for renderPage">
+	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="See documentation for renderPage (Wheels)">
+	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for renderPage (Wheels)">
+	<cfargument name="layout" type="any" required="false" default="true" hint="See documentation for renderPage (Wheels)">
+	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for renderPage (Wheels)">
 	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.settings.showDebugInformation#">
 	<!---
 		EXAMPLES:
@@ -24,6 +24,19 @@
 	<cfreturn returnValue>
 </cffunction>
 
+<cffunction name="$renderPageAndAddToCache" returntype="string" access="public" output="false">
+	<cfset $renderPage(argumentCollection=arguments)>
+	<cfif NOT IsNumeric(arguments.cache)>
+		<cfset arguments.cache = application.settings.defaultCacheTime>
+	</cfif>
+	<cfset $addToCache(arguments.key, request.wheels.response, arguments.cache, arguments.category)>
+	<cfreturn request.wheels.response>
+</cffunction>
+
+<cffunction name="$pageIsInCache" returntype="any" access="public" output="false">
+	<cfreturn $getFromCache(arguments.key, arguments.category)>
+</cffunction>
+
 <cffunction name="renderPage" returntype="void" access="public" output="false" hint="Controller, Request, Renders content to the browser by including the view page for the specified controller and action.">
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Controller to include the view page for">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Action to include the view page for">
@@ -43,55 +56,37 @@
 		 * [renderText renderText()] (function)
 		 * [renderPartial renderPartial()] (function)
 	--->
-	<cfset var loc = {}>
-	<cfif application.settings.showDebugInformation>
-		<cfset request.wheels.execution.components.view = GetTickCount()>
-	</cfif>
-
-	<!--- if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request --->
-	<cfif (NOT IsBoolean(arguments.layout) OR arguments.layout) AND arguments.$showDebugInformation>
-		<cfset request.wheels.showDebugInformation = true>
-	</cfif>
-
-	<!--- double-checked lock --->
-	<cfif application.settings.cachePages AND (IsNumeric(arguments.cache) OR (IsBoolean(arguments.cache) AND arguments.cache))>
-		<cfset loc.category = "action">
-		<cfset loc.key = "#arguments.action##$hashStruct(variables.params)##$hashStruct(arguments)#">
-		<cfset loc.lockName = loc.category & loc.key>
-		<cflock name="#loc.lockName#" type="readonly" timeout="30">
-			<cfset request.wheels.response = $getFromCache(loc.key, loc.category)>
-		</cflock>
-		<cfif IsBoolean(request.wheels.response) AND NOT request.wheels.response>
-	   	<cflock name="#loc.lockName#" type="exclusive" timeout="30">
-				<cfset request.wheels.response = $getFromCache(loc.key, loc.category)>
-				<cfif IsBoolean(request.wheels.response) AND NOT request.wheels.response>
-					<cfset $renderPage(argumentCollection=arguments)>
-					<cfif NOT IsNumeric(arguments.cache)>
-						<cfset arguments.cache = application.settings.defaultCacheTime>
-					</cfif>
-					<cfset $addToCache(loc.key, request.wheels.response, arguments.cache, loc.category)>
-				</cfif>
-			</cflock>
-		</cfif>
-	<cfelse>
-		<cfset $renderPage(argumentCollection=arguments)>
-	</cfif>
-
-	<cfif application.settings.showDebugInformation>
-		<cfset request.wheels.execution.components.view = GetTickCount() - request.wheels.execution.components.view>
-	</cfif>
-
+	<cfscript>
+		var loc = {};
+		if (application.settings.showDebugInformation)
+			$debugPoint("view");
+		// if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
+		if ((!IsBoolean(arguments.layout) || arguments.layout) && arguments.$showDebugInformation)
+			request.wheels.showDebugInformation = true;
+		if (application.settings.cachePages && (IsNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
+		{
+			loc.category = "action";
+			loc.key = "#arguments.action##$hashStruct(variables.params)##$hashStruct(arguments)#";
+			loc.lockName = loc.category & loc.key;
+			loc.conditionArgs = {};
+			loc.conditionArgs.category = loc.category;
+			loc.conditionArgs.key = loc.key;
+			loc.executeArgs = arguments;
+			loc.executeArgs.category = loc.category;
+			loc.executeArgs.key = loc.key;
+			request.wheels.response = $doubleCheckLock(name=loc.lockName, condition="$pageIsInCache", execute="$renderPageAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+		}
+		else
+		{
+			$renderPage(argumentCollection=arguments);
+		}
+		if (application.settings.showDebugInformation)
+			$debugPoint("view");
+	</cfscript>
 </cffunction>
 
 <cffunction name="renderNothing" returntype="void" access="public" output="false" hint="Controller, Request, Renders a blank string to the browser.">
-
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		This is very similar to just doing a <cfabort> with the advantage that any after filters you have set on the action will still be run.
-
 		EXAMPLES:
 		<cfset renderNothing()>
 
@@ -102,20 +97,14 @@
 		 * [renderText renderText()] (function)
 		 * [renderPartial renderPartial()] (function)
 	--->
-
-	<cfset request.wheels.response = "">
+	<cfscript>
+		request.wheels.response = "";
+	</cfscript>
 </cffunction>
 
 <cffunction name="renderText" returntype="void" access="public" output="false" hint="Controller, Request, Renders the specified text to the browser.">
 	<cfargument name="text" type="any" required="true" hint="The text to be rendered">
-
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		-
-
 		EXAMPLES:
 		<cfset renderText("Done!")>
 
@@ -126,22 +115,16 @@
 		 * [renderNothing renderNothing()] (function)
 		 * [renderPartial renderPartial()] (function)
 	--->
-
-	<cfset request.wheels.response = arguments.text>
+	<cfscript>
+		request.wheels.response = arguments.text;
+	</cfscript>
 </cffunction>
 
 <cffunction name="renderPartial" returntype="void" access="public" output="false" hint="Controller, Request, Renders content to the browser by including a partial.">
 	<cfargument name="name" type="string" required="true" hint="Name of partial to include">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for">
 	<cfargument name="$type" type="string" required="false" default="render">
-
 	<!---
-		HISTORY:
-		-
-
-		USAGE:
-		-
-
 		EXAMPLES:
 		<cfset renderPartial("comment")>
 
@@ -152,13 +135,14 @@
 		 * [renderNothing renderNothing()] (function)
 		 * [renderText renderText()] (function)
 	--->
-
 	<cfreturn $includeOrRenderPartial(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$renderPage" returntype="void" access="public" output="false">
-	<cfset request.wheels.response = $include("../../#application.wheels.viewPath#/#arguments.controller#/#arguments.action#.cfm")>
-	<cfset $renderLayout(layout=arguments.layout)>
+	<cfscript>
+		request.wheels.response = $includeAndReturnOutput("#application.wheels.viewPath#/#arguments.controller#/#arguments.action#.cfm");
+		$renderLayout(layout=arguments.layout);
+	</cfscript>
 </cffunction>
 
 <cffunction name="$includeOrRenderPartial" returntype="any" access="public" output="false">
@@ -202,7 +186,7 @@
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.include = "../../" & application.wheels.viewPath;
+		loc.include = application.wheels.viewPath;
 		loc.fileName = Spanexcluding(Reverse(ListFirst(Reverse(arguments.name), "/")), ".") & ".cfm"; // extracts the file part of the path and replace ending ".cfm"
 		if (type == "partial")
 			loc.fileName = Replace("_" & loc.fileName, "__", "_", "one"); // replaces leading "_" when the file is a partial
@@ -213,7 +197,7 @@
 			loc.include = loc.include & "/" & variables.params.controller & "/" & loc.folderName & "/" & loc.fileName; // Include a file in a sub folder of the current controller
 		else
 			loc.include = loc.include & "/" & variables.params.controller & "/" & loc.fileName; // Include a file in the current controller's view folder
-		loc.returnValue = $include(loc.include);
+		loc.returnValue = $includeAndReturnOutput(loc.include);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -224,7 +208,7 @@
 		var loc = {};
 		if (!IsBoolean(arguments.layout) || arguments.layout)
 		{
-			loc.include = "../../" & application.wheels.viewPath;
+			loc.include = application.wheels.viewPath;
 			if (IsBoolean(arguments.layout))
 			{
 				if (!application.settings.cacheFileChecking || (!ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) && !ListFindNoCase(application.wheels.nonExistingLayoutFiles, variables.params.controller)))
@@ -238,7 +222,7 @@
 					loc.include = loc.include & "/" & variables.params.controller & "/" & "layout.cfm";
 				else
 					loc.include = loc.include & "/" & "layout.cfm";
-				loc.response = $include(loc.include);
+				loc.response = $includeAndReturnOutput(loc.include);
 			}
 			else
 			{
@@ -253,7 +237,7 @@
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
 		request.wheels.showDebugInformation = false;
-		request.wheels.response = $include("../../#application.wheels.pluginPath#/#arguments.name#/index.cfm");
-		request.wheels.response = $include("../styles/layout.cfm");
+		request.wheels.response = $includeAndReturnOutput("#application.wheels.pluginPath#/#arguments.name#/index.cfm");
+		request.wheels.response = $includeAndReturnOutput("wheels/styles/layout.cfm");
 	</cfscript>
 </cffunction>

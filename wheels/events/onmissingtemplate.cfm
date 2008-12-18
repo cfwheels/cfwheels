@@ -1,7 +1,15 @@
-<cffunction name="onMissingTemplate" output="true">
-	<cfargument name="targetpage">	
-	<cflock scope="application" type="readonly" timeout="30">
-		<cfheader statuscode="404" statustext="Not Found">
-		<cfinclude template="../../#application.wheels.eventPath#/onmissingtemplate.cfm">
-	</cflock>
+<cffunction name="onMissingTemplate" returntype="void" access="public" output="true">
+	<cfargument name="targetpage" type="any" required="true">
+	<cfscript>
+		$simpleLock(execute="runOnMissingTemplate", scope="application", type="readOnly");
+	</cfscript>
+</cffunction>
+
+<cffunction name="runOnMissingTemplate" returntype="void" access="public" output="true">
+	<cfargument name="targetpage" type="any" required="true">
+	<cfscript>
+		var loc = {};
+		$header(statusCode=404, statustext="Not Found");
+		$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
+	</cfscript>
 </cffunction>

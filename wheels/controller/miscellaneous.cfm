@@ -180,41 +180,41 @@
 <cffunction name="sendEmail" returntype="void" access="public" output="false">
 	<cfargument name="template" type="string" required="true">
 	<cfargument name="layout" type="any" required="false" default="#application.settings.sendEmail.layout#">
-	<cfset var loc = {}>
-
-	<cfset loc.defaults = StructCopy(application.settings.sendEmail)>
-	<cfset StructDelete(loc.defaults, "layout")>
-	<cfloop collection="#loc.defaults#" item="loc.i">
-		<cfif NOT StructKeyExists(arguments, loc.i)>
-				<cfset arguments[loc.i] = loc.defaults[loc.i]>
-			</cfif>	
-	</cfloop>
-
-	<cfif arguments.template Contains "/">
-		<cfset loc.controller = ListFirst(arguments.template, "/")>
-		<cfset loc.action = ListLast(arguments.template, "/")>
-	<cfelse>
-		<cfset loc.controller = variables.params.controller>
-		<cfset loc.action = arguments.template>
-	</cfif>
-
-	<cfset loc.attributes = structCopy(arguments)>
-	<cfloop collection="#loc.attributes#" item="loc.i">
-		<cfif NOT ListFindNoCase("from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext", loc.i)>
-			<cfif NOT ListFindNoCase("template,layout", loc.i)>
-				<cfset variables[loc.i] = arguments[loc.i]>
-			</cfif>
-			<cfset StructDelete(loc.attributes, loc.i)>
-		</cfif>
-	</cfloop>
-
-	<cfset $renderPage(controller=loc.controller, action=loc.action, layout=arguments.layout)>
-
-	<cfmail attributecollection="#loc.attributes#">#request.wheels.response#</cfmail>
-
-	<!--- delete the response so that Wheels does not think we have rendered an actual response to the browser --->
-	<cfset StructDelete(request.wheels, "response")>
-
+	<cfscript>
+		var loc = {};
+		loc.defaults = StructCopy(application.settings.sendEmail);
+		StructDelete(loc.defaults, "layout");
+		for (loc.key in loc.defaults)
+		{
+			if (!StructKeyExists(arguments, loc.key))
+				arguments[loc.key] = loc.defaults[loc.key];
+		}
+		if (arguments.template Contains "/")
+		{
+			loc.controller = ListFirst(arguments.template, "/");
+			loc.action = ListLast(arguments.template, "/");
+		}
+		else
+		{
+			loc.controller = variables.params.controller;
+			loc.action = arguments.template;
+		}
+		loc.attributes = structCopy(arguments);
+		for (loc.key in loc.attributes)
+		{
+			if (!ListFindNoCase("from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext", loc.key))
+			{
+				if (!ListFindNoCase("template,layout", loc.key))
+					variables[loc.key] = arguments[loc.key];
+				StructDelete(loc.attributes, loc.key);
+			}
+		}
+		$renderPage(controller=loc.controller, action=loc.action, layout=arguments.layout);
+		loc.attributes.body = request.wheels.response;
+		$mail(loc.attributes);
+		// delete the response so that Wheels does not think we have rendered an actual response to the browser
+		StructDelete(request.wheels, "response");
+	</cfscript>
 </cffunction>
 
 <cffunction name="sendFile" returntype="void" access="public" output="false" hint="Controller, Request, Sends a file to the user.">
@@ -222,63 +222,65 @@
 	<cfargument name="name" type="string" required="false" default="" hint="The file name to show in the browser download dialog box.">
 	<cfargument name="type" type="string" required="false" default="" hint="The HTTP content type to deliver the file as.">
 	<cfargument name="disposition" type="string" required="false" default="attachment" hint="Set to 'inline' to have the browser handle the opening of the file or set to 'attachment' to force a download dialog box.">
-	<cfset var loc = {}>
+	<!---
+		EXAMPLES:
+		<cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf")>
+		
+		<cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf", name="Tutorial.pdf")>
 
-	<cfset arguments.file = Replace(arguments.file, "\", "/", "all")>
-	<cfset loc.path = Reverse(ListRest(Reverse(arguments.file), "/"))>
-	<cfset loc.folder = application.wheels.filePath>
-	<cfif Len(loc.path) IS NOT 0>
-		<cfset loc.folder = loc.folder & "/" & loc.path>
-		<cfset loc.file = Replace(arguments.file, loc.path, "")>
-		<cfset loc.file = Right(loc.file, Len(loc.file)-1)>
-	<cfelse>
-		<cfset loc.file = arguments.file>
-	</cfif>
-	<cfset loc.folder = ExpandPath(loc.folder)>
-	<cfif NOT FileExists(loc.folder & "/" & loc.file)>
-		<cfdirectory action="list" directory="#loc.folder#" name="loc.match" filter="#loc.file#.*">
-		<cfif loc.match.recordcount IS 0>
-			<cfthrow type="Wheels.FileNotFound" message="File Not Found" extendedInfo="Make sure a file with the name <tt>#loc.file#</tt> exists in the <tt>#loc.folder#</tt> folder.">
-		</cfif>
-		<cfset loc.file = loc.file & "." & ListLast(loc.match.name, ".")>
-	</cfif>
+		<cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf", disposition="inline")>
 
-	<cfset loc.fullPath = loc.folder & "/" & loc.file>
+		<cfset sendFile(file="../../tutorials/wheels_tutorial_20081028_J657D6HX.pdf")>
 
-	<cfif Len(arguments.name) IS NOT 0>
-		<cfset loc.name = arguments.name>
-	<cfelse>
-		<cfset loc.name = loc.file>
-	</cfif>
-
-	<cfset loc.extension = listLast(loc.file, ".")>
-	<cfif loc.extension IS "txt">
-		<cfset loc.type = "text/plain">
-	<cfelseif loc.extension IS "gif">
-		<cfset loc.type = "image/gif">
-	<cfelseif loc.extension IS "jpg">
-		<cfset loc.type = "image/jpg">
-	<cfelseif loc.extension IS "png">
-		<cfset loc.type = "image/png">
-	<cfelseif loc.extension IS "wav">
-		<cfset loc.type = "audio/wav">
-	<cfelseif loc.extension IS "mp3">
-		<cfset loc.type = "audio/mpeg3">
-	<cfelseif loc.extension IS "pdf">
-		<cfset loc.type = "application/pdf">
-	<cfelseif loc.extension IS "zip">
-		<cfset loc.type = "application/zip">
-	<cfelseif loc.extension IS "ppt">
-		<cfset loc.type = "application/powerpoint">
-	<cfelseif loc.extension IS "doc">
-		<cfset loc.type = "application/word">
-	<cfelseif loc.extension IS "xls">
-		<cfset loc.type = "application/excel">
-	<cfelse>
-		<cfset loc.type = "application/octet-stream">
-	</cfif>
-
-	<cfheader name="content-disposition" value="#arguments.disposition#; filename=""#loc.name#""">
-	<cfcontent type="#loc.type#" file="#loc.fullPath#">
-
+		RELATED:
+		 * SendingFiles (chapter)
+	--->
+	<cfscript>
+		var loc = {};
+		arguments.file = Replace(arguments.file, "\", "/", "all");
+		loc.path = Reverse(ListRest(Reverse(arguments.file), "/"));
+		loc.folder = application.wheels.filePath;
+		if (Len(loc.path))
+		{
+			loc.folder = loc.folder & "/" & loc.path;
+			loc.file = Replace(arguments.file, loc.path, "");
+			loc.file = Right(loc.file, Len(loc.file)-1);		
+		}
+		else
+		{
+			loc.file = arguments.file;
+		}
+		loc.folder = ExpandPath(loc.folder);
+		if (!FileExists(loc.folder & "/" & loc.file))
+		{
+			loc.match = $directory(action="list", directory=loc.folder, filter="#loc.file#.*");
+			if (loc.match.recordCount)
+				loc.file = loc.file & "." & ListLast(loc.match.name, ".");
+			else
+				$throw(type="Wheels.FileNotFound", message="File Not Found", extendedInfo="Make sure a file with the name '#loc.file#' exists in the '#loc.folder#' folder.");	
+		}
+		loc.fullPath = loc.folder & "/" & loc.file;
+		if (Len(arguments.name))
+			loc.name = arguments.name;
+		else
+			loc.name = loc.file;
+		loc.extension = ListLast(loc.file, ".");
+		switch(loc.extension)
+		{
+			case "txt": {loc.type = "text/plain"; break;}
+			case "gif": {loc.type = "image/gif"; break;}
+			case "jpg": {loc.type = "image/jpg"; break;}
+			case "png": {loc.type = "image/png"; break;}
+			case "wav": {loc.type = "audio/wav"; break;}
+			case "mp3": {loc.type = "audio/mpeg3"; break;}
+			case "pdf": {loc.type = "application/pdf"; break;}
+			case "zip": {loc.type = "application/zip"; break;}
+			case "ppt": {loc.type = "application/powerpoint"; break;}
+			case "doc": {loc.type = "application/word"; break;}
+			case "xls": {loc.type = "application/excel"; break;}
+			default: {loc.type = "application/octet-stream"; break;}
+		}
+		$header(name="content-disposition", value="#arguments.disposition#; filename=""#loc.name#""");
+		$content(type=loc.type, file=loc.fullPath);
+	</cfscript>
 </cffunction>

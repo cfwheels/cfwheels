@@ -1,3 +1,28 @@
+<cffunction name="$createObjectFromRoot" returntype="any" access="public" output="false">
+	<cfargument name="objectType" type="string" required="true">
+	<cfargument name="fileName" type="string" required="true">
+	<cfset var loc = {}>
+	<cfinclude template="../../root.cfm">
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$debugPoint" returntype="void" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfscript>
+		if (!StructKeyExists(request.wheels, "execution"))
+			request.wheels.execution = {};
+		loc.iEnd = ListLen(arguments.name);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(arguments.name, loc.i);
+			if (StructKeyExists(request.wheels.execution, loc.item))
+				request.wheels.execution[loc.item] = GetTickCount() - request.wheels.execution[loc.item];
+			else
+				request.wheels.execution[loc.item] = GetTickCount();
+		}
+	</cfscript>
+</cffunction>
+
 <cffunction name="$controller" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfset var loc = {}>

@@ -1,8 +1,84 @@
+<cffunction name="$doubleCheckLock" returntype="any" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="condition" type="string" required="true">
+	<cfargument name="execute" type="string" required="true">
+	<cfargument name="conditionArgs" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="executeArgs" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="timeout" type="numeric" required="false" default="30">
+	<cfset var loc = StructNew()>
+	<cfinvoke method="#arguments.condition#" argumentcollection="#arguments.conditionArgs#" returnvariable="loc.returnValue">
+	<cfif IsBoolean(loc.returnValue) AND NOT loc.returnValue>
+		<cflock name="#arguments.name#" timeout="#arguments.timeout#">
+		<cfinvoke method="#arguments.condition#" argumentcollection="#arguments.conditionArgs#" returnvariable="loc.returnValue">
+			<cfif IsBoolean(loc.returnValue) AND NOT loc.returnValue>
+				<cfinvoke method="#arguments.execute#" argumentcollection="#arguments.executeArgs#" returnvariable="loc.returnValue">	
+			</cfif>
+		</cflock>
+	</cfif>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$mail" returntype="void" access="public" output="false">
+	<cfargument name="body" type="string" required="true">
+	<cfmail attributecollection="#arguments#">#arguments.body#</cfmail>
+</cffunction>
+
+<cffunction name="$zip" returntype="any" access="public" output="false">
+	<cfzip attributeCollection="#arguments#">
+	</cfzip>
+</cffunction>
+
+<cffunction name="$content" returntype="any" access="public" output="false">
+	<cfcontent attributeCollection="#arguments#">
+</cffunction>
+
+<cffunction name="$rethrow" returntype="any" access="public" output="false">
+ 	<cftry>
+		<cfcatch>
+			<cfrethrow>
+		</cfcatch>
+	</cftry>
+</cffunction>
+
+<cffunction name="$simpleLock" returntype="any" access="public" output="false">
+	<cfargument name="execute" type="string" required="true">
+	<cfargument name="executeArgs" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="timeout" type="numeric" required="false" default="30">
+	<cfset var loc = StructNew()>
+	<cfset lockArgs = duplicate(arguments)>
+	<cfset StructDelete(lockArgs, "execute")>
+	<cfset StructDelete(lockArgs, "executeArgs")>
+	<cflock attributeCollection="#lockArgs#">
+		<cfinvoke method="#arguments.execute#" argumentcollection="#arguments.executeArgs#" returnvariable="loc.returnValue">
+	</cflock>
+	<cfif StructKeyExists(loc, "returnValue")>
+		<cfreturn loc.returnValue>
+	</cfif>
+</cffunction>
+
+<cffunction name="$header" returntype="void" access="public" output="false">
+	<cfheader attributeCollection="#arguments#">
+</cffunction>
+
+<cffunction name="$abort" returntype="void" access="public" output="false">
+	<cfabort attributeCollection="#arguments#">
+</cffunction>
+
 <cffunction name="$include" returntype="string" access="public" output="false">
-	<cfargument name="$path" type="string" required="true">
+	<cfargument name="template" type="string" required="true">
+	<cfinclude template="../../#LCase(arguments.template)#">
+</cffunction>
+
+<cffunction name="$includeAndOutput" returntype="string" access="public" output="true">
+	<cfargument name="template" type="string" required="true">
+	<cfinclude template="../../#LCase(arguments.template)#">
+</cffunction>
+
+<cffunction name="$includeAndReturnOutput" returntype="string" access="public" output="false">
+	<cfargument name="template" type="string" required="true">
 	<cfset var returnValue = "">
 	<cfsavecontent variable="returnValue">
-		<cfinclude template="#LCase(arguments.$path)#">
+		<cfinclude template="../../#LCase(arguments.template)#">
 	</cfsavecontent>
 	<cfreturn Trim(returnValue)>
 </cffunction>
