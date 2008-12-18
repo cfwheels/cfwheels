@@ -1,1 +1,1 @@
-<cfoutput>#application.wheels.dispatch.request()#</cfoutput>
+<cfoutput>#application.wheels.dispatch.$request()#</cfoutput>

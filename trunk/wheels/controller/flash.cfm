@@ -112,8 +112,8 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="flash" returntype="string" access="public" output="false" hint="Controller, Request, Gets the value of a specific key in the Flash.">
-	<cfargument name="key" type="string" required="true" hint="The key to get the value for">
+<cffunction name="flash" returntype="any" access="public" output="false" hint="Controller, Request, Gets the value of a specific key in the Flash (or the entire flash as a struct if no key is passed in).">
+	<cfargument name="key" type="string" required="false" default="" hint="The key to get the value for">
 	<!---
 		EXAMPLES:
 		<p><cfoutput>#flash("message")#</cfoutput></p>
@@ -128,9 +128,18 @@
 		 * [flashInsert flashInsert()] (function)
 	--->
 	<cfscript>
-		var returnValue = "";
-		if (flashKeyExists(arguments.key))
-			returnValue = session.flash[arguments.key];
+		var loc = {};
+		loc.returnValue = false;
+		if (Len(arguments.key))
+		{
+			if (flashKeyExists(arguments.key))
+				loc.returnValue = session.flash[arguments.key];
+		}
+		else
+		{
+			if (!flashIsEmpty())
+				loc.returnValue = session.flash;
+		}
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>

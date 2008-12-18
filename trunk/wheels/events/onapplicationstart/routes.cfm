@@ -1,13 +1,15 @@
-<cfset loc.route = {pattern="[controller]/[action]/[key]"}>
-<cfset arrayAppend(application.wheels.routes, loc.route)>
-<cfset loc.route = {pattern="[controller]/[action]"}>
-<cfset arrayAppend(application.wheels.routes, loc.route)>
-<cfset loc.route = {pattern="[controller]", action="index"}>
-<cfset arrayAppend(application.wheels.routes, loc.route)>
-<cfset loc.pos = 0>
-<cfloop array="#application.wheels.routes#" index="loc.i">
-	<cfset loc.pos = loc.pos + 1>
-	<cfif StructKeyExists(loc.i, "name")>
-		<cfset application.wheels.namedRoutePositions[loc.i.name] = loc.pos>
-	</cfif>
-</cfloop>
+<cfscript>
+	loc.route = {pattern="[controller]/[action]/[key]"};
+	ArrayAppend(application.wheels.routes, loc.route);
+	loc.route = {pattern="[controller]/[action]"};
+	ArrayAppend(application.wheels.routes, loc.route);
+	loc.route = {pattern="[controller]", action="index"};
+	ArrayAppend(application.wheels.routes, loc.route);
+	loc.iEnd = ArrayLen(application.wheels.routes);
+	for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+	{
+		loc.route = application.wheels.routes[loc.i];
+		if (StructKeyExists(loc.route, "name"))
+			application.wheels.namedRoutePositions[loc.route.name] = loc.i;
+	}
+</cfscript>

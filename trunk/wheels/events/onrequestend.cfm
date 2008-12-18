@@ -1,14 +1,20 @@
-<cffunction name="onRequestEnd" output="true">
-	<cfargument name="targetpage">
-	<cfset var loc = {}>
-	<cflock scope="application" type="readonly" timeout="30">
-		<cfif application.settings.showDebugInformation>
-			<cfset request.wheels.execution.components.requestEnd = getTickCount()>
-		</cfif>
-		<cfinclude template="../../#application.wheels.eventPath#/onrequestend.cfm">
-		<cfif application.settings.showDebugInformation>
-			<cfset request.wheels.execution.components.requestEnd = GetTickCount() - request.wheels.execution.components.requestEnd>
-		</cfif>
-		<cfinclude template="onrequestend/debug.cfm">
-	</cflock>
+<cffunction name="onRequestEnd" returntype="void" access="public" output="true">
+	<cfargument name="targetpage" type="any" required="true">
+	<cfscript>
+		$simpleLock(execute="runOnRequestEnd", executeArgs=arguments, scope="application", type="readOnly");
+		if (application.settings.showDebugInformation && StructKeyExists(request.wheels, "showDebugInformation") && request.wheels.showDebugInformation)
+			$includeAndOutput(template="wheels/events/onrequestend/debug.cfm");
+	</cfscript>
+</cffunction>
+
+<cffunction name="runOnRequestEnd" returntype="void" access="public" output="false">
+	<cfargument name="targetpage" type="any" required="true">
+	<cfscript>
+		var loc = {};
+		if (application.settings.showDebugInformation)
+			$debugPoint("requestEnd");
+		$include(template="#application.wheels.eventPath#/onrequestend.cfm");
+		if (application.settings.showDebugInformation)
+			$debugPoint("requestEnd,total");
+	</cfscript>
 </cffunction>

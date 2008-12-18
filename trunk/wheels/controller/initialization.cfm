@@ -19,19 +19,27 @@
 		loc.fileName = capitalize(variables.wheels.name);
 		if (!ListFindNoCase(application.wheels.existingControllerFiles, variables.wheels.name))
 			loc.fileName = "Controller";
-		loc.rootObject = "controllerObject";
+		loc.returnValue = $createObjectFromRoot(objectType="controllerObject", fileName=loc.fileName, params=arguments.params);
 	</cfscript>
-	<cfinclude template="../../root.cfm">
-	<cfreturn loc.rootObject>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$setControllerClassData" returntype="void" access="public" output="false">
+	<cfscript>
+		variables.wheels = application.wheels.controllers[arguments.name].$getControllerClassData();
+	</cfscript>
 </cffunction>
 
 <cffunction name="$initControllerObject" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="params" type="struct" required="true">
-	<cflock name="controllerLock" type="readonly" timeout="30">
-		<cfset variables.wheels = application.wheels.controllers[arguments.name].$getControllerClassData()>
-	</cflock>
-	<cfset variables.params = arguments.params>
+	<cfscript>
+		var loc = {};
+		executeArgs = {};
+		executeArgs.name = arguments.name;
+		$simpleLock(name="controllerLock", type="readonly", execute="$setControllerClassData", executeArgs=executeArgs);
+		variables.params = arguments.params;
+	</cfscript>
 	<cfreturn this>
 </cffunction>
 
