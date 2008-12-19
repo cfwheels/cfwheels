@@ -32,14 +32,6 @@
 	<cfcontent attributeCollection="#arguments#">
 </cffunction>
 
-<cffunction name="$rethrow" returntype="any" access="public" output="false">
- 	<cftry>
-		<cfcatch>
-			<cfrethrow>
-		</cfcatch>
-	</cftry>
-</cffunction>
-
 <cffunction name="$simpleLock" returntype="any" access="public" output="false">
 	<cfargument name="execute" type="string" required="true">
 	<cfargument name="executeArgs" type="struct" required="false" default="#StructNew()#">
@@ -64,12 +56,12 @@
 	<cfabort attributeCollection="#arguments#">
 </cffunction>
 
-<cffunction name="$include" returntype="string" access="public" output="false">
+<cffunction name="$include" returntype="void" access="public" output="false">
 	<cfargument name="template" type="string" required="true">
 	<cfinclude template="../../#LCase(arguments.template)#">
 </cffunction>
 
-<cffunction name="$includeAndOutput" returntype="string" access="public" output="true">
+<cffunction name="$includeAndOutput" returntype="void" access="public" output="true">
 	<cfargument name="template" type="string" required="true">
 	<cfinclude template="../../#LCase(arguments.template)#">
 </cffunction>
@@ -77,10 +69,8 @@
 <cffunction name="$includeAndReturnOutput" returntype="string" access="public" output="false">
 	<cfargument name="template" type="string" required="true">
 	<cfset var returnValue = "">
-	<cfsavecontent variable="returnValue">
-		<cfinclude template="../../#LCase(arguments.template)#">
-	</cfsavecontent>
-	<cfreturn Trim(returnValue)>
+	<cfsavecontent variable="returnValue"><cfinclude template="../../#LCase(arguments.template)#"></cfsavecontent>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="$directory" returntype="any" access="public" output="false">

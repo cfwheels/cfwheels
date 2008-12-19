@@ -19,7 +19,7 @@
 		var returnValue = "";
 		renderPage(argumentCollection=arguments);
 		returnValue = request.wheels.response;
-		request.wheels.response = "";
+		StructDelete(request.wheels, "response");
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
@@ -74,7 +74,7 @@
 			loc.executeArgs = arguments;
 			loc.executeArgs.category = loc.category;
 			loc.executeArgs.key = loc.key;
-			request.wheels.response = $doubleCheckLock(name=loc.lockName, condition="$pageIsInCache", execute="$renderPageAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			$doubleCheckLock(name=loc.lockName, condition="$pageIsInCache", execute="$renderPageAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 		}
 		else
 		{
