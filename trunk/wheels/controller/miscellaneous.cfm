@@ -47,7 +47,7 @@
 				loc.returnValue = loc.returnValue & "?controller=" & REReplace(REReplace(loc.route.controller, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
 				loc.returnValue = loc.returnValue & "&action=" & REReplace(REReplace(loc.route.action, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
 				loc.iEnd = ListLen(loc.route.variables);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 				{
 					loc.property = ListGetAt(loc.route.variables, loc.i);
 					loc.returnValue = loc.returnValue & "&" & loc.property & "=" & URLEncodedFormat(arguments[loc.property]);
@@ -56,7 +56,7 @@
 			else
 			{
 				loc.iEnd = ListLen(loc.route.pattern, "/");
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 				{
 					loc.property = ListGetAt(loc.route.pattern, loc.i, "/");
 					if (loc.property Contains "[")
