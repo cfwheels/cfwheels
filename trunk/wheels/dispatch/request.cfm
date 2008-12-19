@@ -16,7 +16,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$runVerifications" returntype="string" access="public" output="false">
+<cffunction name="$runVerifications" returntype="void" access="public" output="false">
 	<cfargument name="controller" type="any" required="true">
 	<cfscript>
 		var loc = {};
@@ -63,13 +63,11 @@
 				}
 				else
 				{
-					request.wheels.response = "";
-					loc.returnValue = request.wheels.response;
+					$abort();
 				}			
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$getRouteFromRequest" returntype="string" access="public" output="false">
@@ -318,7 +316,7 @@
 			loc.executeArgs.key = loc.key;
 			loc.executeArgs.time = loc.timeToCache;
 			loc.executeArgs.category = loc.category;
-			request.wheels.response = $doubleCheckLock(name=loc.lockName, condition="$actionIsInCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			$doubleCheckLock(name=loc.lockName, condition="$actionIsInCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 		}
 		else
 		{
@@ -367,7 +365,7 @@
 			{
 				if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(arguments.controllerName)#/#LCase(arguments.actionName)#.cfm")))
 				{
-					$rethrow();
+					$throw(object=e);
 				}
 				else
 				{
@@ -380,12 +378,12 @@
 					{
 						if (application.settings.showErrorInformation)
 						{
-							$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the <tt>#arguments.actionName#</tt> action in the <tt>#arguments.controllerName#</tt> controller.", extendedInfo="Create a file named <tt>#LCase(arguments.actionName)#.cfm</tt> in the <tt>views/#LCase(arguments.controllerName)#</tt> directory (create the directory as well if it doesn't already exist).");
+							$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the '#arguments.actionName#' action in the '#arguments.controllerName#' controller.", extendedInfo="Create a file named '#LCase(arguments.actionName)#.cfm' in the 'views/#LCase(arguments.controllerName)#' directory (create the directory as well if it doesn't already exist).");
 						}
 						else
 						{
 							$header(statusCode="404", statusText="Not Found");
-							$includeAndReturnOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
+							$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
 							$abort();
 						}
 					}
