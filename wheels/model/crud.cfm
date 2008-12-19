@@ -653,7 +653,7 @@
 			loc.pos = 0;
 			for (loc.key in arguments.properties)
 			{
-				loc.pos++;
+				loc.pos = loc.pos + 1;
 				ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
 				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type};
 				ArrayAppend(loc.sql, loc.param);
@@ -1069,7 +1069,7 @@
 		var loc = {};
 		loc.returnValue = "";
 		loc.iEnd = ListLen(variables.wheels.class.keys);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.returnValue = ListAppend(loc.returnValue, this[ListGetAt(variables.wheels.class.keys, loc.i)]);
 		}		

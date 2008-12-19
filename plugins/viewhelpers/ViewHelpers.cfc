@@ -196,7 +196,7 @@
 				loc.js = "document.write('#Trim(loc.returnValue)#');";
 				loc.encoded = "";
 				loc.iEnd = Len(loc.js);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 				{
 					loc.encoded = loc.encoded & "%" & Right("0" & FormatBaseN(Asc(Mid(loc.js,loc.i,1)),16),2);
 				}
@@ -388,7 +388,7 @@
 			{
 				loc.origText = arguments.text;
 				loc.iEnd = ListLen(arguments.phrases);
-				for (loc.i=1; loc.i LTE loc.iEnd; loc.i++)
+				for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 				{
 					loc.newText = "";
 					loc.phrase = Trim(ListGetAt(arguments.phrases, loc.i));

@@ -6,7 +6,7 @@
 <cfset loc.path = getDirectoryFromPath(getBaseTemplatePath())>
 <cfset loc.errorPos = 0>
 <cfloop array="#arguments.exception.cause.tagContext#" index="loc.i">
-	<cfset loc.errorPos++>
+	<cfset loc.errorPos = loc.errorPos + 1>
 	<cfif loc.i.template Does Not Contain loc.path & "wheels" AND loc.i.template IS NOT loc.path & "root.cfm" AND loc.i.template IS NOT loc.path & "index.cfm" AND loc.i.template IS NOT loc.path & "rewrite.cfm" AND loc.i.template IS NOT loc.path & "Application.cfc">
 		<h2>Error location</h2>
 		<p>Line #arguments.exception.cause.tagContext[loc.errorPos].line# in #Replace(arguments.exception.cause.tagContext[loc.errorPos].template, loc.path, "")#</p>

@@ -4,7 +4,7 @@
 	<cfscript>
 		var loc = {};
 		loc.iEnd = ListLen(arguments.actions);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.item = Trim(ListGetAt(arguments.actions, loc.i));
 			loc.thisAction = {};
