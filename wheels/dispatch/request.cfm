@@ -145,112 +145,112 @@
 				loc.returnValue[ReplaceList(loc.item, "[,]", ",")] = ListGetAt(arguments.route, loc.i, "/");
 		}
 
-	// add controller and action unless they already exist
-	if (!StructKeyExists(loc.returnValue, "controller"))
-		loc.returnValue.controller = loc.foundRoute.controller;
-	if (!StructKeyExists(loc.returnValue, "action"))
-		loc.returnValue.action = loc.foundRoute.action;
+		// add controller and action unless they already exist
+		if (!StructKeyExists(loc.returnValue, "controller"))
+			loc.returnValue.controller = arguments.foundRoute.controller;
+		if (!StructKeyExists(loc.returnValue, "action"))
+			loc.returnValue.action = arguments.foundRoute.action;
+		
+		// convert controller to upperCamelCase and action to normal camelCase
+		loc.returnValue.controller = REReplace(loc.returnValue.controller, "-([a-z])", "\u\1", "all");
+		loc.returnValue.action = REReplace(loc.returnValue.action, "-([a-z])", "\u\1", "all");
 	
-	// convert controller to upperCamelCase and action to normal camelCase
-	loc.returnValue.controller = REReplace(loc.returnValue.controller, "-([a-z])", "\u\1", "all");
-	loc.returnValue.action = REReplace(loc.returnValue.action, "-([a-z])", "\u\1", "all");
-
-	// decrypt all values except controller and action
-	if (application.settings.obfuscateURLs)
-	{
-		for (loc.key in loc.returnValue)
+		// decrypt all values except controller and action
+		if (application.settings.obfuscateURLs)
 		{
-			if (loc.key != "controller" && loc.key != "action")
+			for (loc.key in loc.returnValue)
 			{
+				if (loc.key != "controller" && loc.key != "action")
+				{
+					try
+					{
+						loc.returnValue[loc.key] = deobfuscateParam(loc.returnValue[loc.key]);
+					}
+					catch(Any e) {}
+				}
+			}
+		}
+	
+		if (StructCount(arguments.formScope))
+		{
+			// loop through form variables, merge any date variables into one, fix checkbox submissions
+			loc.dates = {};
+			for (loc.key in arguments.formScope)
+			{
+				if (FindNoCase("($checkbox)", loc.key))
+				{
+					// if no other form parameter exists with this name it means that the checkbox was left blank and therefore we force the value to 0 (to get around the problem that unchecked checkboxes don't post at all)
+					loc.formParamName = ReplaceNoCase(loc.key, "($checkbox)", "");
+					if (!StructKeyExists(arguments.formScope, loc.formParamName))
+						arguments.formScope[loc.formParamName] = 0;
+					StructDelete(arguments.formScope, loc.key);
+				}
+				else if (REFindNoCase(".*\((\$year|\$month|\$day|\$hour|\$minute|\$second)\)$", loc.key))
+				{
+					loc.temp = ListToArray(loc.key, "(");
+					loc.firstKey = loc.temp[1];
+					loc.secondKey = SpanExcluding(loc.temp[2], ")");
+					if (!StructKeyExists(loc.dates, loc.firstKey))
+						loc.dates[loc.firstKey] = {};
+					loc.dates[loc.firstKey][ReplaceNoCase(loc.secondKey, "$", "")] = arguments.formScope[loc.key];
+				}
+			}
+			for (loc.key in loc.dates)
+			{
+				if (!StructKeyExists(loc.dates[loc.key], "year"))
+					loc.dates[loc.key].year = 1899;
+				if (!StructKeyExists(loc.dates[loc.key], "month"))
+					loc.dates[loc.key].month = 12;
+				if (!StructKeyExists(loc.dates[loc.key], "day"))
+					loc.dates[loc.key].day = 30;
+				if (!StructKeyExists(loc.dates[loc.key], "hour"))
+					loc.dates[loc.key].hour = 0;
+				if (!StructKeyExists(loc.dates[loc.key], "minute"))
+					loc.dates[loc.key].minute = 0;
+				if (!StructKeyExists(loc.dates[loc.key], "second"))
+					loc.dates[loc.key].second = 0;
 				try
 				{
-					loc.returnValue[loc.key] = deobfuscateParam(loc.returnValue[loc.key]);
+					arguments.formScope[loc.key] = CreateDateTime(loc.dates[loc.key].year, loc.dates[loc.key].month, loc.dates[loc.key].day, loc.dates[loc.key].hour, loc.dates[loc.key].minute, loc.dates[loc.key].second);
 				}
-				catch(Any e) {}
+				catch(Any e)
+				{
+					arguments.formScope[loc.key] = "";
+				} 
+				if (StructKeyExists(arguments.formScope, "#loc.key#($year)"))
+					StructDelete(arguments.formScope, "#loc.key#($year)");
+				if (StructKeyExists(arguments.formScope, "#loc.key#($month)"))
+					StructDelete(arguments.formScope, "#loc.key#($month)");
+				if (StructKeyExists(arguments.formScope, "#loc.key#($day)"))
+					StructDelete(arguments.formScope, "#loc.key#($day)");
+				if (StructKeyExists(arguments.formScope, "#loc.key#($hour)"))
+					StructDelete(arguments.formScope, "#loc.key#($hour)");
+				if (StructKeyExists(arguments.formScope, "#loc.key#($minute)"))
+					StructDelete(arguments.formScope, "#loc.key#($minute)");
+				if (StructKeyExists(arguments.formScope, "#loc.key#($second)"))
+					StructDelete(arguments.formScope, "#loc.key#($second)");
+			}
+		
+			// add form variables to the params struct
+			for (loc.key in arguments.formScope)
+			{
+				loc.match = REFindNoCase("(.*?)\[(.*?)\]", loc.key, 1, true);
+				if (ArrayLen(loc.match.pos) IS 3)
+				{
+					// model object form field, build a struct to hold the data, named after the model object
+					loc.objectName = LCase(Mid(loc.key, loc.match.pos[2], loc.match.len[2]));
+					loc.fieldName = LCase(Mid(loc.key, loc.match.pos[3], loc.match.len[3]));
+					if (!StructKeyExists(loc.returnValue, loc.objectName))
+						loc.returnValue[loc.objectName] = {};
+					loc.returnValue[loc.objectName][loc.fieldName] = arguments.formScope[loc.key];
+				}
+				else
+				{
+					// normal form field
+					loc.returnValue[loc.key] = arguments.formScope[loc.key];
+				}
 			}
 		}
-	}
-
-	if (StructCount(arguments.formScope))
-	{
-		// loop through form variables, merge any date variables into one, fix checkbox submissions
-		loc.dates = {};
-		for (loc.key in arguments.formScope)
-		{
-			if (FindNoCase("($checkbox)", loc.key))
-			{
-				// if no other form parameter exists with this name it means that the checkbox was left blank and therefore we force the value to 0 (to get around the problem that unchecked checkboxes don't post at all)
-				loc.formParamName = ReplaceNoCase(loc.key, "($checkbox)", "");
-				if (!StructKeyExists(arguments.formScope, loc.formParamName))
-					arguments.formScope[loc.formParamName] = 0;
-				StructDelete(arguments.formScope, loc.key);
-			}
-			else if (REFindNoCase(".*\((\$year|\$month|\$day|\$hour|\$minute|\$second)\)$", loc.key))
-			{
-				loc.temp = ListToArray(loc.key, "(");
-				loc.firstKey = loc.temp[1];
-				loc.secondKey = SpanExcluding(loc.temp[2], ")");
-				if (!StructKeyExists(loc.dates, loc.firstKey))
-					loc.dates[loc.firstKey] = {};
-				loc.dates[loc.firstKey][ReplaceNoCase(loc.secondKey, "$", "")] = arguments.formScope[loc.key];
-			}
-		}
-		for (loc.key in loc.dates)
-		{
-			if (!StructKeyExists(loc.dates[loc.key], "year"))
-				loc.dates[loc.key].year = 1899;
-			if (!StructKeyExists(loc.dates[loc.key], "month"))
-				loc.dates[loc.key].month = 12;
-			if (!StructKeyExists(loc.dates[loc.key], "day"))
-				loc.dates[loc.key].day = 30;
-			if (!StructKeyExists(loc.dates[loc.key], "hour"))
-				loc.dates[loc.key].hour = 0;
-			if (!StructKeyExists(loc.dates[loc.key], "minute"))
-				loc.dates[loc.key].minute = 0;
-			if (!StructKeyExists(loc.dates[loc.key], "second"))
-				loc.dates[loc.key].second = 0;
-			try
-			{
-				arguments.formScope[loc.key] = CreateDateTime(loc.dates[loc.key].year, loc.dates[loc.key].month, loc.dates[loc.key].day, loc.dates[loc.key].hour, loc.dates[loc.key].minute, loc.dates[loc.key].second);
-			}
-			catch(Any e)
-			{
-				arguments.formScope[loc.key] = "";
-			} 
-			if (StructKeyExists(arguments.formScope, "#loc.key#($year)"))
-				StructDelete(arguments.formScope, "#loc.key#($year)");
-			if (StructKeyExists(arguments.formScope, "#loc.key#($month)"))
-				StructDelete(arguments.formScope, "#loc.key#($month)");
-			if (StructKeyExists(arguments.formScope, "#loc.key#($day)"))
-				StructDelete(arguments.formScope, "#loc.key#($day)");
-			if (StructKeyExists(arguments.formScope, "#loc.key#($hour)"))
-				StructDelete(arguments.formScope, "#loc.key#($hour)");
-			if (StructKeyExists(arguments.formScope, "#loc.key#($minute)"))
-				StructDelete(arguments.formScope, "#loc.key#($minute)");
-			if (StructKeyExists(arguments.formScope, "#loc.key#($second)"))
-				StructDelete(arguments.formScope, "#loc.key#($second)");
-		}
-	
-		// add form variables to the params struct
-		for (loc.key in arguments.formScope)
-		{
-			loc.match = REFindNoCase("(.*?)\[(.*?)\]", loc.key, 1, true);
-			if (ArrayLen(loc.match.pos) IS 3)
-			{
-				// model object form field, build a struct to hold the data, named after the model object
-				loc.objectName = LCase(Mid(loc.key, loc.match.pos[2], loc.match.len[2]));
-				loc.fieldName = LCase(Mid(loc.key, loc.match.pos[3], loc.match.len[3]));
-				if (!StructKeyExists(loc.returnValue, loc.objectName))
-					loc.returnValue[loc.objectName] = {};
-				loc.returnValue[loc.objectName][loc.fieldName] = arguments.formScope[loc.key];
-			}
-			else
-			{
-				// normal form field
-				loc.returnValue[loc.key] = arguments.formScope[loc.key];
-			}
-		}
-	}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
