@@ -24,19 +24,6 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="$renderPageAndAddToCache" returntype="string" access="public" output="false">
-	<cfset $renderPage(argumentCollection=arguments)>
-	<cfif NOT IsNumeric(arguments.cache)>
-		<cfset arguments.cache = application.settings.defaultCacheTime>
-	</cfif>
-	<cfset $addToCache(arguments.key, request.wheels.response, arguments.cache, arguments.category)>
-	<cfreturn request.wheels.response>
-</cffunction>
-
-<cffunction name="$pageIsInCache" returntype="any" access="public" output="false">
-	<cfreturn $getFromCache(arguments.key, arguments.category)>
-</cffunction>
-
 <cffunction name="renderPage" returntype="void" access="public" output="false" hint="Controller, Request, Renders content to the browser by including the view page for the specified controller and action.">
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Controller to include the view page for">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Action to include the view page for">
@@ -74,14 +61,17 @@
 			loc.executeArgs = arguments;
 			loc.executeArgs.category = loc.category;
 			loc.executeArgs.key = loc.key;
-			$doubleCheckLock(name=loc.lockName, condition="$pageIsInCache", execute="$renderPageAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			loc.page = $doubleCheckLock(name=loc.lockName, condition="$getFromCache", execute="$renderPageAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 		}
 		else
 		{
-			$renderPage(argumentCollection=arguments);
+			loc.page = $renderPage(argumentCollection=arguments);
 		}
 		if (application.settings.showDebugInformation)
 			$debugPoint("view");
+		
+		// we put the response in the request scope here so that the developer does not have to specifically return anything from the controller code
+		request.wheels.response = loc.page;
 	</cfscript>
 </cffunction>
 
@@ -135,50 +125,68 @@
 		 * [renderNothing renderNothing()] (function)
 		 * [renderText renderText()] (function)
 	--->
-	<cfreturn $includeOrRenderPartial(argumentCollection=arguments)>
+	<cfset $includeOrRenderPartial(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="$renderPage" returntype="void" access="public" output="false">
+<cffunction name="$renderPageAndAddToCache" returntype="string" access="public" output="false">
 	<cfscript>
-		request.wheels.response = $includeAndReturnOutput("#application.wheels.viewPath#/#arguments.controller#/#arguments.action#.cfm");
-		$renderLayout(layout=arguments.layout);
+		var returnValue = "";
+		returnValue = $renderPage(argumentCollection=arguments);
+		if (!IsNumeric(arguments.cache))
+			arguments.cache = application.settings.defaultCacheTime;
+		$addToCache(arguments.key, returnValue, arguments.cache, arguments.category);
 	</cfscript>
+	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="$includeOrRenderPartial" returntype="any" access="public" output="false">
-	<cfset var loc = {}>
+<cffunction name="$renderPage" returntype="string" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.content = $includeAndReturnOutput("#application.wheels.viewPath#/#arguments.controller#/#arguments.action#.cfm");
+		loc.returnValue = $renderLayout(content=loc.content, layout=arguments.layout);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
 
-	<cfset arguments.type = "partial">
-	<!--- double-checked lock --->
-	<cfif application.settings.cachePartials AND (isNumeric(arguments.cache) OR (IsBoolean(arguments.cache) AND arguments.cache))>
-		<cfset loc.category = "partial">
-		<cfset loc.key = "#arguments.name##$hashStruct(variables.params)##$hashStruct(arguments)#">
-		<cfset loc.lockName = loc.category & loc.key>
-		<cflock name="#loc.lockName#" type="readonly" timeout="30">
-			<cfset loc.result = $getFromCache(loc.key, loc.category)>
-		</cflock>
-		<cfif IsBoolean(loc.result) AND NOT loc.result>
-	   	<cflock name="#loc.lockName#" type="exclusive" timeout="30">
-				<cfset loc.result = $getFromCache(loc.key, loc.category)>
-				<cfif IsBoolean(loc.result) AND NOT loc.result>
-					<cfset loc.result = $includeFile(argumentCollection=arguments)>
-					<cfif NOT isNumeric(arguments.cache)>
-						<cfset arguments.cache = application.settings.defaultCacheTime>
-					</cfif>
-					<cfset $addToCache(loc.key, loc.result, arguments.cache, loc.category)>
-				</cfif>
-			</cflock>
-		</cfif>
-	<cfelse>
-		<cfset loc.result = $includeFile(argumentCollection=arguments)>
-	</cfif>
+<cffunction name="$renderPartialAndAddToCache" returntype="string" access="public" output="false">
+	<cfscript>
+		var returnValue = "";
+		returnValue = $includeFile(argumentCollection=arguments);
+		if (!IsNumeric(arguments.cache))
+			arguments.cache = application.settings.defaultCacheTime;
+		$addToCache(arguments.key, returnValue, arguments.cache, arguments.category);
+	</cfscript>
+	<cfreturn returnValue>
+</cffunction>
 
-	<cfif arguments.$type IS "include">
-		<cfreturn loc.result>
-	<cfelseif arguments.$type IS "render">
-		<cfset request.wheels.response = loc.result>
-	</cfif>
-
+<cffunction name="$includeOrRenderPartial" returntype="string" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = "";
+		arguments.type = "partial";
+		if (application.settings.cachePartials && (isNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
+		{
+			loc.category = "partial";
+			loc.key = "#arguments.name##$hashStruct(variables.params)##$hashStruct(arguments)#";
+			loc.lockName = loc.category & loc.key;
+			loc.conditionArgs = {};
+			loc.conditionArgs.category = loc.category;
+			loc.conditionArgs.key = loc.key;
+			loc.executeArgs = arguments;
+			loc.executeArgs.category = loc.category;
+			loc.executeArgs.key = loc.key;
+			loc.partial = $doubleCheckLock(name=loc.lockName, condition="$getFromCache", execute="$renderPartialAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+		}
+		else
+		{
+			loc.partial = $includeFile(argumentCollection=arguments);
+		}
+		if (arguments.$type == "include")
+			loc.returnValue = loc.partial;
+		else if (arguments.$type == "render")
+			request.wheels.response = loc.partial;
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$includeFile" returntype="string" access="public" output="false">
@@ -202,12 +210,14 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$renderLayout" returntype="void" access="public" output="false">
+<cffunction name="$renderLayout" returntype="string" access="public" output="false">
+	<cfargument name="content" type="string" required="true">
 	<cfargument name="layout" type="any" required="true">
 	<cfscript>
 		var loc = {};
 		if (!IsBoolean(arguments.layout) || arguments.layout)
 		{
+			request.wheels.contentForLayout = arguments.content; // store the content in a variable in the request scope so it can be accessed by the contentForLayout function that the developer uses in layout files (this is done so we avoid passing data to/from it since it would complicate things for the developer)
 			loc.include = application.wheels.viewPath;
 			if (IsBoolean(arguments.layout))
 			{
@@ -219,25 +229,33 @@
 						application.wheels.nonExistingLayoutFiles = ListAppend(application.wheels.existingLayoutFiles, variables.params.controller);
 				}
 				if (ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller))
+				{
 					loc.include = loc.include & "/" & variables.params.controller & "/" & "layout.cfm";
+				}
 				else
+				{
 					loc.include = loc.include & "/" & "layout.cfm";
-				loc.response = $includeAndReturnOutput(loc.include);
+				}
+				loc.returnValue = $includeAndReturnOutput(loc.include);
 			}
 			else
 			{
-				loc.response = $includeFile(name=arguments.layout, type="layout");
+				loc.returnValue = $includeFile(name=arguments.layout, type="layout");
 			}
-			request.wheels.response = loc.response;
+		}
+		else
+		{
+			loc.returnValue = arguments.content;
 		}
 	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$renderPlugin" returntype="void" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
 		request.wheels.showDebugInformation = false;
-		request.wheels.response = $includeAndReturnOutput("#application.wheels.pluginPath#/#arguments.name#/index.cfm");
+		request.wheels.contentForLayout = $includeAndReturnOutput("#application.wheels.pluginPath#/#arguments.name#/index.cfm");
 		request.wheels.response = $includeAndReturnOutput("wheels/styles/layout.cfm");
 	</cfscript>
 </cffunction>
