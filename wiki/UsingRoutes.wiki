@@ -1,5 +1,5 @@
 #summary The convention for URLs in Wheels works for most situations and helps to promote an easy-to-maintain code base. With routes, you have the flexibility to break this convention when needed.
-#labels chapter,0.8.3
+#labels chapter,1.0
 
 _*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
 
@@ -11,11 +11,11 @@ To write clear MVC applications with !ColdFusion on Wheels, we recommend stickin
 http://www.domain.com/news/story/5
 }}}
 
-With this convention, the URL above tells Wheels to invoke the `story` action in the `News` controller. It also passes a parameter to the action called `key`, with a value of `5`.
+With this convention, the URL above tells Wheels to invoke the `story` action in the `news` controller. It also passes a parameter to the action called `key`, with a value of `5`.
 
 ==Creating Your Own Routes==
 
-But let's say that you wanted a simpler URL for your site's user profiles. What if you wanted to have a `profile` action in a controller called `User` with this URL?
+But let's say that you wanted a simpler URL for your site's user profiles. What if you wanted to have a `profile` action in a controller called `user` with this URL?
 
 {{{
 http://www.domain.com/user/johndoe
@@ -25,23 +25,25 @@ Fear not, this is possible in Wheels.
 
 ===Adding a New Route===
 
-Routes are configured in the file at `config/routes.cfm`. This is where we'll add our new user profile route.
+Routes are configured in the `config/routes.cfm` file. This is where we'll add our new user profile route.
 
-Routes are added to Wheels using the [addRoute addRoute()] function. Here is how we would set up our new route using `addRoute()`:
+Routes are added to Wheels using the [addRoute addRoute()] function. Here is how we would set up our new route using this function:
 
 {{{
 <cfset addRoute(name="userProfile", pattern="user/[username]", controller="user", action="profile")>
 }}}
 
-This call to `addRoute()` instructs Wheels to create a route named `userProfile` that passes a `username` parameter to the `profile` action in the `User` controller. This route will be invoked by any URL that starts with a top level folder of `user`. In most cases, a pattern in a route should begin with a unique top level folder.
+This call to [addRoute addRoute()] instructs Wheels to create a route named `userProfile` that passes a `username` parameter to the `profile` action in the `user` controller. This route will be invoked by any URL that starts with a top level folder of `user`. In most cases, a pattern in a route should begin with a unique top level folder.
 
 As you can see, any new parameters that you want to introduce to a new route should be surrounded by square brackets `[]`.
 
 With this, you can create URL patterns with any level of complexity that you wish.
 
-====Using `action` Within Your Route====
+====Using `controller`, `action` and `key` Within Your Route====
 
-The `controller` and `action` arguments are always required in the `addRoute()` function. But you can still have some flexibility with the `action` argument.
+As you saw above we specifically told Wheels which controller and action that the `userProfile` route should call. Instead of doing this though you also have the option of making them dynamic by including them in the pattern (this is actually how Wheels sets up the default routes internally).
+
+You still have to pass in the `controller` and `action` arguments to the [addRoute addRoute()] function though but if `[controller]` and `[action]` also exist in the pattern these arguments will only serve to tell Wheels what the default controller and action should be when they are not passed in through the URL.
 
 Consider this line of code:
 
@@ -49,9 +51,7 @@ Consider this line of code:
 <cfset addRoute(name="adminUser", pattern="admin/user/[action]", controller="adminUser", action="index")>
 }}}
 
-With this pattern, a URL that begins with `admin/user/` will always call the `adminUser` controller.
-
-But because we have `[action]` within the pattern, we don't always necessarily need for the route to point to `controllers/AdminUser.cfc`'s `index()` method. The `action="index"` parameter instructs Wheels to call the `index` action when one is not otherwise specified in the URL.
+With this pattern, a URL that begins with `admin/user/` will always call the `adminUser` controller but what function to call in that controller is determined dynamically by the URL.
 
 So now this route pattern will match for these URLs:
 
@@ -63,19 +63,19 @@ So now this route pattern will match for these URLs:
 
 ===Linking to Your New Route===
 
-Now if you wanted to create a link to your new user profile action, you would use Wheels's `linkTo()` function like so:
+Now if you wanted to create a link to that user profile action we discussed earlier in the chapter, you would use Wheels's [linkTo linkTo()] function like so:
 
 {{{
 #linkTo(route="userProfile", username="johndoe")#
 }}}
 
-As you can see, `linkTo()` accepts a `route` argument, which changes the function's expectations on which other arguments are passed. Because our `userProfile` route expects a `username` parameter, we would need to pass that.
+As you can see, [linkTo linkTo()] accepts a `route` argument, which changes the function's expectations on which other arguments are passed. Because our `userProfile` route expects a `username` parameter, we would need to pass that.
 
 ==Order of Precedence==
 
 With the potential of your application requiring many custom routes, you may wonder which order that Wheels considers these new routes. The answer is that Wheels gives precedence to the first listed custom route in your `config/routes.cfm` file.
 
-Wheels will look through each custom route in order to see if there is a match. If not, it defaults to the default route mentioned at the beginning of this chapter under _The Convention for URLs_.
+Wheels will look through each custom route in order to see if there is a match. If not, it defaults to the default route mentioned at the beginning of this chapter under "The Convention for URLs".
 
 ===Example of Precedence===
 
@@ -89,4 +89,4 @@ Let's pretend that our `config/routes.cfm` file looks like this:
 
 Wheels would make sure that the URL didn't begin with `admin/news` or `admin/search` before calling the third route listed, `adminRoot`.
 
-If the URL didn't begin with `admin` at all, Wheels would use the default route, matching the usual pattern of `[controller]/[action]/[key]`.
+If the URL didn't begin with `admin` at all, Wheels would use its internal default route, matching the usual pattern of `[controller]/[action]/[key]`.
