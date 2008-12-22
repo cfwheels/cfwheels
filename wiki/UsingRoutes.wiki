@@ -114,10 +114,8 @@ route (remember the order of precedence explained above).
 You'll end up with a `config/routes.cfm` file looking something like this:
 
 {{{
-<cfset addRoute(name="main", pattern="main/[action]",
-controller="main")>
-<cfset addRoute(name="admin", pattern="admin/[action]",
-controller="admin")>
+<cfset addRoute(name="main", pattern="main/[action]", controller="main")>
+<cfset addRoute(name="admin", pattern="admin/[action]", controller="admin")>
 <cfset addRoute(name="catchAll", pattern="[title]", controller="page", action="index")>
 <cfset addRoute(name="home", pattern="", controller="main", action="index")>
 }}}
