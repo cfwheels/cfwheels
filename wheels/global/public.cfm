@@ -55,21 +55,28 @@
 <cffunction name="addRoute" returntype="void" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="pattern" type="string" required="true">
-	<cfargument name="controller" type="string" required="true">
-	<cfargument name="action" type="string" required="true">
-	<cfset var loc = {}>
-
-	<cfset loc.thisRoute = StructCopy(arguments)>
-
-	<cfset loc.thisRoute.variables = "">
-	<cfloop list="#arguments.pattern#" index="loc.i" delimiters="/">
-		<cfif loc.i Contains "[">
-			<cfset loc.thisRoute.variables = ListAppend(loc.thisRoute.variables, ReplaceList(loc.i, "[,]", ","))>
-		</cfif>
-	</cfloop>
-
-	<cfset ArrayAppend(application.wheels.routes, loc.thisRoute)>
-
+	<cfargument name="controller" type="string" required="false" default="">
+	<cfargument name="action" type="string" required="false" default="">
+	<cfscript>
+		var loc = {};
+		
+		// throw errors when controller or action is not passed in as arguments and not included in the pattern
+		if (!Len(arguments.controller) && arguments.pattern Does Not Contain "[controller]")
+			$throw(type="Wheels.IncorrectArguments", message="The 'controller' argument is not passed in or included in the pattern.", extendedInfo="Either pass in the 'controller' argument to specifically tell Wheels which controller to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
+		if (!Len(arguments.action) && arguments.pattern Does Not Contain "[action]")
+			$throw(type="Wheels.IncorrectArguments", message="The 'action' argument is not passed in or included in the pattern.", extendedInfo="Either pass in the 'action' argument to specifically tell Wheels which action to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
+		
+		loc.thisRoute = StructCopy(arguments);
+		loc.thisRoute.variables = "";
+		loc.iEnd = ListLen(arguments.pattern, "/");
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(arguments.pattern, loc.i, "/");
+			if (loc.i Contains "[")
+				loc.thisRoute.variables = ListAppend(loc.thisRoute.variables, ReplaceList(loc.item, "[,]", ","));
+		}
+		ArrayAppend(application.wheels.routes, loc.thisRoute);
+	</cfscript>
 </cffunction>
 
 <cffunction name="model" returntype="any" access="public" output="false">
