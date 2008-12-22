@@ -316,7 +316,7 @@
 			loc.executeArgs.key = loc.key;
 			loc.executeArgs.time = loc.timeToCache;
 			loc.executeArgs.category = loc.category;
-			$doubleCheckLock(name=loc.lockName, condition="$actionIsInCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			$doubleCheckLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 		}
 		else
 		{
@@ -340,10 +340,6 @@
 		$addToCache(key=arguments.key, value=request.wheels.response, time=arguments.time, category=arguments.category);
 	</cfscript>
 	<cfreturn request.wheels.response>
-</cffunction>
-
-<cffunction name="$actionIsInCache" returntype="any" access="public" output="false">
-	<cfreturn $getFromCache(key=arguments.key, category=arguments.category)>
 </cffunction>
 
 <cffunction name="$callAction" returntype="void" access="public" output="false">

@@ -17,7 +17,7 @@
 		 * [UsingLayouts Using Layouts] (chapter)
 	--->
 
-	<cfreturn request.wheels.response>
+	<cfreturn request.wheels.contentForLayout>
 </cffunction>
 
 <cffunction name="paginationLinks" returntype="string" access="public" output="false" hint="View, Helper, Builds and returns a string containing links to pages based on a paginated query.">
