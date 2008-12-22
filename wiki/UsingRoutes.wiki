@@ -41,23 +41,20 @@ With this, you can create URL patterns with any level of complexity that you wis
 
 ====Using `controller`, `action` and `key` Within Your Route====
 
-As you saw above we specifically told Wheels which controller and action that the `userProfile` route should call. Instead of doing this though you also have the option of making them dynamic by including them in the pattern (this is actually how Wheels sets up the default routes internally).
-
-You still have to pass in the `controller` and `action` arguments to the [addRoute addRoute()] function though but if `[controller]` and `[action]` also exist in the pattern these arguments will only serve to tell Wheels what the default controller and action should be when they are not passed in through the URL.
+As you saw above we specifically told Wheels which controller and action that the `userProfile` route should call. Instead of doing this though you also have the option of making them dynamic by including them in the pattern instead (this is actually how Wheels sets up the default routes internally).
 
 Consider this line of code:
 
 {{{
-<cfset addRoute(name="adminUser", pattern="admin/user/[action]", controller="adminUser", action="index")>
+<cfset addRoute(name="adminUser", pattern="admin/user/[action]", controller="adminUser")>
 }}}
 
-With this pattern, a URL that begins with `admin/user/` will always call the `adminUser` controller but what function to call in that controller is determined dynamically by the URL.
+With this pattern, a URL that begins with `admin/user/` will always call the `adminUser` controller but what action to call on that controller is determined dynamically by the URL.
 
-So now this route pattern will match for these URLs:
+So now this route pattern will, for example, match for these URLs:
 
 || *URL* || *Controller* || *Action* ||
-|| `http://www.domain.com/admin/user` || `adminUser` || `index` ||
-|| `http://www.domain.com/admin/user/index` || `adminUser` || `index` ||
+|| `http://www.domain.com/admin/user/edit` || `adminUser` || `edit` ||
 || `http://www.domain.com/admin/user/add` || `adminUser` || `add` ||
 || `http://www.domain.com/admin/user/delete` || `adminUser` || `delete` ||
 
@@ -70,6 +67,8 @@ Now if you wanted to create a link to that user profile action we discussed earl
 }}}
 
 As you can see, [linkTo linkTo()] accepts a `route` argument, which changes the function's expectations on which other arguments are passed. Because our `userProfile` route expects a `username` parameter, we would need to pass that.
+
+You can read more about creating links in the chapter called [linkingPages Linking Pages]
 
 ==Order of Precedence==
 
