@@ -39,7 +39,7 @@ As you can see, any new parameters that you want to introduce to a new route sho
 
 With this, you can create URL patterns with any level of complexity that you wish.
 
-====Using `controller`, `action` and `key` Within Your Route====
+====Using `controller` and `action` Within Your Route====
 
 As you saw above we specifically told Wheels which controller and action that the `userProfile` route should call. Instead of doing this though you also have the option of making them dynamic by including them in the pattern instead (this is actually how Wheels sets up the default routes internally).
 
@@ -58,6 +58,8 @@ So now this route pattern will, for example, match for these URLs:
 || `http://www.domain.com/admin/user/add` || `adminUser` || `add` ||
 || `http://www.domain.com/admin/user/delete` || `adminUser` || `delete` ||
 
+Although probably less useful the same concept can be applied to the controller variable as well.
+
 ===Linking to Your New Route===
 
 Now if you wanted to create a link to that user profile action we discussed earlier in the chapter, you would use Wheels's [linkTo linkTo()] function like so:
@@ -68,7 +70,7 @@ Now if you wanted to create a link to that user profile action we discussed earl
 
 As you can see, [linkTo linkTo()] accepts a `route` argument, which changes the function's expectations on which other arguments are passed. Because our `userProfile` route expects a `username` parameter, we would need to pass that.
 
-You can read more about creating links in the chapter called [linkingPages Linking Pages]
+You can read more about creating links in the chapter called [LinkingPages Linking Pages]
 
 ==Order of Precedence==
 
@@ -89,3 +91,41 @@ Let's pretend that our `config/routes.cfm` file looks like this:
 Wheels would make sure that the URL didn't begin with `admin/news` or `admin/search` before calling the third route listed, `adminRoot`.
 
 If the URL didn't begin with `admin` at all, Wheels would use its internal default route, matching the usual pattern of `[controller]/[action]/[key]`.
+
+==Making a Catch-All Route==
+
+Sometimes you need a catch-all route in Wheels to support highly dynamic websites like a content management system for example where all requests that are not matched by an existing route get passed to a controller/action who can deal with it.
+
+Let's say you want to have the following pages handled by the same controller and action:
+
+http://localhost/welcome-to-the-site
+http://localhost/terms-of-use
+
+Here's what you can do to achieve this:
+
+First, add a new route to `config/routes.cfm` that catches all pages like this:
+
+{{{
+<cfset addRoute(name="catchAll", pattern="[title]", controller="page", action="index")>
+}}}
+
+Now when you type in `http://localhost/welcome-to-the-site` this route will be
+triggered and the `index` action will be called on the `page` controller with `params.title` set to `welcome-to-the-site`.
+
+The problem with this is that this will break any of your normal
+controllers though so you'll have to add them specifically *before* this
+route (remember the order of precedence explained above).
+
+You'll end up with a `config/routes.cfm` file looking something like this:
+
+{{{
+<cfset addRoute(name="main", pattern="main/[action]",
+controller="main")>
+<cfset addRoute(name="admin", pattern="admin/[action]",
+controller="admin")>
+<cfset addRoute(name="catchAll", pattern="[title]", controller="page", action="index")>
+<cfset addRoute(name="home", pattern="", controller="main", action="index")>
+}}}
+
+"main" and "admin" are your normal controllers and by adding them to
+the top of the routes file Wheels looks for them first.
