@@ -1,9 +1,9 @@
 #summary Showing content to the user.
-#labels chapter,0.8
+#labels chapter,1.0
 
 _*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
 
-A big part of a controller's task is to respond to the user. In Wheels you can respond to the user in three different 
+A big part of a controller's task is to respond to the user. In Wheels you can respond to the user in three different ways:
 
  * Displaying content
  * Redirecting to another URL
@@ -38,6 +38,8 @@ Normally when you call any of the rendering functions the result is stored insid
 ==Caching the Response==
 
 Two of the functions listed above are capable of caching the content for you; [renderPage renderPage()] and [renderPartial renderPartial()]. Just pass in `cache=true` (to use the default cache time set in `config/settings.cfm`) or `cache=x` where `x` is the number of minutes you want to cache the content for. Keep in mind that this caching respects the global setting set for it in your configuration files so normally no pages will be cached when in design or development mode.
+
+We cover caching in greater detail in the [Caching Caching] chapter.
 
 ==Using a Layout==
 
