@@ -1,4 +1,4 @@
-<cffunction name="redirectTo" returntype="void" access="public" output="false" hint="Controller, Request, Redirects the browser to the supplied action, route or back to the referring page.">
+<cffunction name="redirectTo" returntype="void" access="public" output="false" hint="Controller, Request, Redirects the browser to the supplied controller/action/key, route or back to the referring page. Internally It uses the URLFor function to build the link and the cflocation tag to perform the redirect.">
 	<cfargument name="back" type="boolean" required="false" default="false" hint="Set to true to redirect back to the referring page">
 	<cfargument name="addToken" type="boolean" required="false" default="false" hint="See documentation for cflocation (CFML)">
 	<cfargument name="statusCode" type="numeric" required="false" default="302" hint="See documentation for cflocation (CFML)">
@@ -18,7 +18,7 @@
 		  <cfset redirectTo(action="saveSuccessful")>
 		</cfif>
 
-	  <cfset redirectTo(controller="checkout", action="start", params="type=express", protocol="https")>
+		<cfset redirectTo(controller="checkout", action="start", params="type=express", protocol="https")>
 
 		<cfset redirectTo(route="profile", screenName="Joe")>
 
