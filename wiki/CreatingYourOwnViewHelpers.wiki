@@ -21,4 +21,4 @@ If you need to share a function globally across your entire site then you can pl
 
 ==What's the Difference Between Partials and Helpers==
 
-Both partials and helpers are there to assist you in keeping programmatic details out of your views as much as possible. Both do the job well and which one you choose is just a matter of preference. Generally speaking though it probably makes sense to use partials when you're creating a lot of HTML and partials when you're not.
+Both partials and helpers are there to assist you in keeping programmatic details out of your views as much as possible. Both do the job well and which one you choose is just a matter of preference. Generally speaking though it probably makes sense to use partials when you're creating a lot of HTML and helpers when you're not.
