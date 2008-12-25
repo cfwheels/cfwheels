@@ -200,7 +200,7 @@
 				{
 					loc.encoded = loc.encoded & "%" & Right("0" & FormatBaseN(Asc(Mid(loc.js,loc.i,1)),16),2);
 				}
-				loc.returnValue = "<script type=""text/javascript"" language=""javascript"">eval(unescape('#loc.encoded#'))</script>";
+				loc.returnValue = "<script type=""text/javascript"">eval(unescape('#loc.encoded#'))</script>";
 			}
 		</cfscript>
 		<cfreturn loc.returnValue>
