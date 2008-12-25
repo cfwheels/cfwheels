@@ -44,6 +44,6 @@ The `index.cfm` file is the user interface for your plugin and will be viewable 
 
 A plugin can add brand new functions to Wheels or override existing ones. A plugin can also have a user interface so that the users of the plugin can "do stuff".
 
-To add or override a function you simply add the function to `MyPlugin.cfc` and Wheels will inject it in the appropriate place on application start (it will figure out if you're adding controller, model or view functionality).
+To add or override a function you simply add the function to `MyPlugin.cfc` and Wheels will inject it to Wheels on application start. Please note that all functions in your plugin have to be public (`access="public"`). If you have functions that should only be called from the plugin itself we recommend starting the function name with the `$` character (this is how a lot of internal Wheels functions are named as well actually) to avoid any name clashes.
 
-Armed with this knowledge you can now go and add that feature you've always wanted or change that behavior you've always hated :)
+Armed with this knowledge about plugins you can now go and add that feature you've always wanted or change that behavior you've always hated :)
