@@ -524,22 +524,22 @@
 			if (loc.classAssociations[loc.name].type IS "belongsTo")
 			{
 				loc.classAssociations[loc.name].join = "INNER JOIN #loc.classAssociations[loc.name].tableName# ON ";
-				loc.iEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
+				loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
 				loc.toAppend = "";
-				for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+				for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
 				{
-					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.i)].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[ListGetAt(loc.associatedClass.$classData().keys, loc.i)].column#");
+					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.j)].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[ListGetAt(loc.associatedClass.$classData().keys, loc.j)].column#");
 				}
 				loc.classAssociations[loc.name].join = loc.classAssociations[loc.name].join & Replace(loc.toAppend, ",", " AND ", "all");
 			}
 			else
 			{
 				loc.classAssociations[loc.name].join = "LEFT OUTER JOIN #loc.classAssociations[loc.name].tableName# ON ";
-				loc.iEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
+				loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
 				loc.toAppend = "";
-				for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+				for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
 				{
-					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[ListGetAt(loc.class.$classData().keys, loc.i)].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.i)].column#");
+					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[ListGetAt(loc.class.$classData().keys, loc.j)].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.j)].column#");
 				}
 				loc.classAssociations[loc.name].join = loc.classAssociations[loc.name].join & Replace(loc.toAppend, ",", " AND ", "all");
 			}
