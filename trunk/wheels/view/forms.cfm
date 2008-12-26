@@ -32,7 +32,6 @@
 	<cfreturn $trimHTML(loc.output)>
 </cffunction>
 
-
 <cffunction name="endFormTag" returntype="any" access="public" output="false">
 	<cfif StructKeyExists(request.wheels, "currentFormMethod")>
 		<cfset StructDelete(request.wheels, "currentFormMethod")>
