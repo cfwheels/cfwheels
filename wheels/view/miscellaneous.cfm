@@ -87,9 +87,9 @@
 					</cfif>
 					<cfset loc.linkToArguments.text = loc.i>
 					<cfif Len(arguments.classForCurrent) IS NOT 0 AND loc.currentPage IS loc.i>
-						<cfset loc.linkToArguments.attributes = "class=#arguments.classForCurrent#">
-					<cfelse>
-						<cfset loc.linkToArguments.attributes = "">
+						<cfset loc.linkToArguments.class = arguments.classForCurrent>
+					<cfelseif StructKeyExists(loc.linkToArguments, "class")>
+						<cfset StructDelete(loc.linkToArguments, "class")>
 					</cfif>
 					<cfif Len(arguments.prependToLink) IS NOT 0>#arguments.prependToLink#</cfif><cfif loc.currentPage IS NOT loc.i OR arguments.linkToCurrentPage>#linkTo(argumentCollection=loc.linkToArguments)#<cfelse><cfif Len(arguments.classForCurrent) IS NOT 0><span class="#arguments.classForCurrent#">#loc.i#</span><cfelse>#loc.i#</cfif></cfif><cfif Len(arguments.appendToLink) IS NOT 0>#arguments.appendToLink#</cfif>
 				</cfif>
