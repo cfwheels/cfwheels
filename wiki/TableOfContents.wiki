@@ -1,7 +1,7 @@
 #summary Complete documentation for Wheels 1.0.
 #labels chapter,1.0
 
-<font size="1" color="red"><b>This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. Go <a href="http://www.cfwheels.com/docs">here</a> for the official documentation.</b></font>
+<font size="1" color="red"><b>This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit <a href="http://www.cfwheels.com/docs">cfwheels.com/docs</a>.</b></font>
 
 ===Introduction===
 
