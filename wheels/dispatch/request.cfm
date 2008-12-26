@@ -365,23 +365,15 @@
 				}
 				else
 				{
-					// if a plugin view page was requested, show it, otherwise show error instead
-					if (arguments.controllerName IS "plugins")
+					if (application.settings.showErrorInformation)
 					{
-						arguments.controller.$renderPlugin(arguments.actionName);
+						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the '#arguments.actionName#' action in the '#arguments.controllerName#' controller.", extendedInfo="Create a file named '#LCase(arguments.actionName)#.cfm' in the 'views/#LCase(arguments.controllerName)#' directory (create the directory as well if it doesn't already exist).");
 					}
 					else
 					{
-						if (application.settings.showErrorInformation)
-						{
-							$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the '#arguments.actionName#' action in the '#arguments.controllerName#' controller.", extendedInfo="Create a file named '#LCase(arguments.actionName)#.cfm' in the 'views/#LCase(arguments.controllerName)#' directory (create the directory as well if it doesn't already exist).");
-						}
-						else
-						{
-							$header(statusCode="404", statusText="Not Found");
-							$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
-							$abort();
-						}
+						$header(statusCode="404", statusText="Not Found");
+						$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
+						$abort();
 					}
 				}
 			}
