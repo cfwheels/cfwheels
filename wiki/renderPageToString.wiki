@@ -1,7 +1,9 @@
-#summary renderPageToString([action,layout,cache,controller])
-#labels api,0.8,controller,request
+#summary renderPageToString([controller,action,layout,cache])
+#labels api,1.0,controller,request
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+*Description*:
+
+[ControllerRequestFunctions Controller Request Functions]
 
 *Description*:
 
@@ -11,8 +13,6 @@ Includes the view page for the specified controller and action and returns it as
 
 String
 
-*
-
 *History*:
 
 -
@@ -20,21 +20,15 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *action* || string || false || #variables.params.action# || Pass-through argument; see documentation for renderPage ||
-|| *layout* || any || false || true || Pass-through argument; see documentation for renderPage ||
-|| *cache* || any || false ||  || Pass-through argument; see documentation for renderPage ||
-|| *controller* || string || false || #variables.params.controller# || Pass-through argument; see documentation for renderPage ||
-
-*Usage*:
-
--
+|| *controller* || string || false || Currently executing controller || See documentation for [renderPage renderPage()] ||
+|| *action* || string || false || Currently executing action || See documentation for [renderPage renderPage()] ||
+|| *layout* || any || false || true || See documentation for [renderPage renderPage()] ||
+|| *cache* || any || false ||   || See documentation for [renderPage renderPage()] ||
 
 *Examples*:
 
 {{{
 <cfset response = renderPageToString(layout=false)>
-
-
 }}}
 
 *Related*:
