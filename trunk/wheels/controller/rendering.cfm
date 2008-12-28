@@ -1,20 +1,9 @@
-<cffunction name="renderPageToString" returntype="string" access="public" output="false" hint="Controller, Request, Includes the view page for the specified controller and action and returns it as a string.">
-	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="See documentation for renderPage (Wheels)">
-	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for renderPage (Wheels)">
-	<cfargument name="layout" type="any" required="false" default="true" hint="See documentation for renderPage (Wheels)">
-	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for renderPage (Wheels)">
+<cffunction name="renderPageToString" returntype="string" access="public" output="false" hint="Includes the view page for the specified controller and action and returns it as a string.">
+	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="See documentation for renderPage">
+	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for renderPage">
+	<cfargument name="layout" type="any" required="false" default="true" hint="See documentation for renderPage">
+	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for renderPage">
 	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.settings.showDebugInformation#">
-	<!---
-		EXAMPLES:
-		<cfset response = renderPageToString(layout=false)>
-
-		RELATED:
-		 * RenderingPages (chapter)
-		 * [renderPage renderPage()] (function)
-		 * [renderNothing renderNothing()] (function)
-		 * [renderText renderText()] (function)
-		 * [renderPartial renderPartial()] (function)
-	--->
 	<cfscript>
 		var returnValue = "";
 		renderPage(argumentCollection=arguments);
@@ -24,25 +13,12 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="renderPage" returntype="void" access="public" output="false" hint="Controller, Request, Renders content to the browser by including the view page for the specified controller and action.">
+<cffunction name="renderPage" returntype="void" access="public" output="false" hint="Renders content to the browser by including the view page for the specified controller and action.">
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Controller to include the view page for">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Action to include the view page for">
 	<cfargument name="layout" type="any" required="false" default="true" hint="The layout to wrap the content in">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for">
 	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.settings.showDebugInformation#">
-	<!---
-		EXAMPLES:
-		<cfset renderPage(action="someOtherAction")>
-
-		<cfset renderPage(layout=false, cache=60)>
-
-		RELATED:
-		 * RenderingPages (chapter)
-		 * [renderPageToString renderPageToString()] (function)
-		 * [renderNothing renderNothing()] (function)
-		 * [renderText renderText()] (function)
-		 * [renderPartial renderPartial()] (function)
-	--->
 	<cfscript>
 		var loc = {};
 		if (application.settings.showDebugInformation)
@@ -75,56 +51,23 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="renderNothing" returntype="void" access="public" output="false" hint="Controller, Request, Renders a blank string to the browser.">
-	<!---
-		EXAMPLES:
-		<cfset renderNothing()>
-
-		RELATED:
-		 * RenderingPages (chapter)
-		 * [renderPageToString renderPageToString()] (function)
-		 * [renderPage renderPage()] (function)
-		 * [renderText renderText()] (function)
-		 * [renderPartial renderPartial()] (function)
-	--->
+<cffunction name="renderNothing" returntype="void" access="public" output="false" hint="Renders a blank string to the browser. This is very similar to calling 'cfabort' with the advantage that any after filters you have set on the action will still be run.">
 	<cfscript>
 		request.wheels.response = "";
 	</cfscript>
 </cffunction>
 
-<cffunction name="renderText" returntype="void" access="public" output="false" hint="Controller, Request, Renders the specified text to the browser.">
+<cffunction name="renderText" returntype="void" access="public" output="false" hint="Renders the specified text to the browser.">
 	<cfargument name="text" type="any" required="true" hint="The text to be rendered">
-	<!---
-		EXAMPLES:
-		<cfset renderText("Done!")>
-
-		RELATED:
-		 * RenderingPages (chapter)
-		 * [renderPageToString renderPageToString()] (function)
-		 * [renderPage renderPage()] (function)
-		 * [renderNothing renderNothing()] (function)
-		 * [renderPartial renderPartial()] (function)
-	--->
 	<cfscript>
 		request.wheels.response = arguments.text;
 	</cfscript>
 </cffunction>
 
-<cffunction name="renderPartial" returntype="void" access="public" output="false" hint="Controller, Request, Renders content to the browser by including a partial.">
+<cffunction name="renderPartial" returntype="void" access="public" output="false" hint="Renders content to the browser by including a partial.">
 	<cfargument name="name" type="string" required="true" hint="Name of partial to include">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for">
 	<cfargument name="$type" type="string" required="false" default="render">
-	<!---
-		EXAMPLES:
-		<cfset renderPartial("comment")>
-
-		RELATED:
-		 * RenderingPages (chapter)
-		 * [renderPageToString renderPageToString()] (function)
-		 * [renderPage renderPage()] (function)
-		 * [renderNothing renderNothing()] (function)
-		 * [renderText renderText()] (function)
-	--->
 	<cfset $includeOrRenderPartial(argumentCollection=arguments)>
 </cffunction>
 
