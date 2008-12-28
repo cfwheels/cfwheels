@@ -1,9 +1,9 @@
-#summary Use `sendEmail()` to simplify the task of setting up automated emails in your application. Learn about its configuration and templating features.
+#summary Use Wheels to simplify the task of setting up automated emails in your application. Learn about email configuration and templating features.
 #labels chapter,1.0
 
 ==Step 1: Establishing Mail Server and Account Information==
 
-Within `config/settings.cfm` are seven new application scope variables for utilizing `sendEmail()`. These variables are as follows:
+Within `config/settings.cfm` are seven new application scope variables for utilizing [sendEmail sendEmail()]. These variables are as follows:
 
 {{{
 <cfset application.settings.sendEmail.layout = false>
@@ -15,15 +15,15 @@ Within `config/settings.cfm` are seven new application scope variables for utili
 <cfset application.settings.sendEmail.password = "">
 }}}
 
-All fields can be left blank and specified directly in the `sendEmail()` function call. Or you can use the more efficient approach, to pre-define the `sendEmail()` values that will remain constant across your application. This includes a default `from`, `server`, `username`, `password`, and `layout`.
+All fields can be left blank and specified directly in the [sendEmail sendEmail()] function call. Or you can use the more efficient approach, to pre-define the [sendEmail sendEmail()] values that will remain constant across your application. This includes a default `from`, `server`, `username`, `password`, and `layout`.
 
-By specifcying these values within `config/settings.cfm`, these arguments can be omitted from all `sendEmail()` function calls, thus providing cleaner, less cluttered code.
+By specifcying these values within `config/settings.cfm`, these arguments can be omitted from all [sendEmail sendEmail()] function calls, thus providing cleaner, less cluttered code.
 
 ==Step 2: Create an Email Template==
 
 An email template is required and forms the basis for the mail message content. Think of an email template as the content of your email.
 
-Templates may be stored anywhere within the `/views/` folder, but we recommend a structured, logical approach. If different controllers utilize `sendEmail()` and each require a unique template, place each email template within the `views/controllername` folder structure.
+Templates may be stored anywhere within the `/views/` folder, but we recommend a structured, logical approach. If different controllers utilize [sendEmail sendEmail()] and each require a unique template, place each email template within the `views/controllername` folder structure.
 
 Consider this example scenario:
 
@@ -46,7 +46,7 @@ Here's an example for `myemailtemplate.cfm`, which will contain HTML content. No
 
 ==Step 3: Sending the Message via `sendEmail()`==
 
-`sendEmail()` accepts all attribute of CFML's `<cfmail>` tag as arguments, plus any variables that you need to pass to the email template.
+[sendEmail sendEmail()] accepts all attribute of CFML's `<cfmail>` tag as arguments, plus any variables that you need to pass to the email template.
 
 {{{
 <cfset member = model("member").findByKey(newMember.id)>
@@ -62,13 +62,13 @@ Here's an example for `myemailtemplate.cfm`, which will contain HTML content. No
 >
 }}}
 
-Given that `config/settings.cfm` is setup with default values for `server`, `username`, `password`, and `from`, only the desired fields need by included as `sendEmail()` arguments.
+Given that `config/settings.cfm` is setup with default values for `server`, `username`, `password`, and `from`, only the desired fields need by included as [sendEmail sendEmail()] arguments.
 
 It is also important to note that the `template` argument should be the path to the view's folder name and CFM file name without the extension. If the template is in the current controller, then you don't need to specify a folder path to the template file. In that case, just be sure to store the template file in the folder with the rest of the views for that controller.
 
 ==Step 4: Give It a Try Yourself==
 
-That's it. With all attributes setup in the `settings/config.cfm`, use of `sendEmail()` could be as simple as this:
+That's it. With all attributes setup in the `settings/config.cfm`, use of [sendEmail sendEmail()] could be as simple as this:
 
 {{{
 <cfset sendEmail("myemailtemplate")>
@@ -76,7 +76,7 @@ That's it. With all attributes setup in the `settings/config.cfm`, use of `sendE
 
 ==Bonus Step: Email Layouts==
 
-Much like layouts outlined in the UsingLayouts chapter, you can also create layouts for your emails.
+Much like layouts outlined in the [UsingLayouts Using Layouts] chapter, you can also create layouts for your emails.
 
 A layout should be used just as the name implies, for layout/stylistic aspects of the email body. Based on the example given above, assume the same email content needs to be sent twice:
 
@@ -85,7 +85,7 @@ A layout should be used just as the name implies, for layout/stylistic aspects o
 
 Best practice is that variables (such as `recipientName` and `startDate`, in the example above) be placed as outputs in the template file.
 
-In this case, the 2 calls to `sendEmail()` would be identical, with the exception of the `layout` attribute.
+In this case, the 2 calls to [sendEmail sendEmail()] would be identical, with the exception of the `layout` attribute.
 
 {{{
 <!--- Get new member --->
