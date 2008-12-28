@@ -1,6 +1,10 @@
 #summary redirectTo([back,addToken,statusCode,route,controller,action,key,params,anchor,onlyPath,host,protocol,port])
 #labels api,1.0,controller,request
 
+*Category*:
+
+[ControllerRequestFunctions Controller Request Functions]
+
 *Description*:
 
 Redirects the browser to the supplied controller/action/key, route or back to the referring page. Internally It uses the [URLFor URLFor()] function to build the link and the `cflocation` tag to perform the redirect.
