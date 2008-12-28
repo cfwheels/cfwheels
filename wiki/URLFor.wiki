@@ -3,7 +3,7 @@
 
 *Category*:
 
-[ControllerRequestFunctions  Controller Request Functions]
+[GlobalFunctions  Global Functions]
 
 *Description*:
 
