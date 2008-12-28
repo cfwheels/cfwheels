@@ -1,0 +1,50 @@
+#summary sendEmail(template[layout])
+#labels api,1.0
+
+Category*:
+
+[ControllerRequestFunctions Controller Request Functions]
+
+*Description*:
+
+Sends an email using a template and an optional layout to wrap it in.
+
+*Return Type*:
+
+Void
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *template* || string || true || - || Path to email body ||
+|| *layout* || any || false || #application.settings.sendEmail.layout# || Layout to wrap body in ||
+
+*Examples*:
+
+{{{
+<cfset sendEmail("myemailtemplate")>
+}}}
+		
+{{{
+<cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf", name="Tutorial.pdf")>
+}}}
+
+{{{
+<cfset member = model("member").findByKey(newMember.id)>
+<cfset
+  sendEmail(
+    type="html",
+    to=member.email,
+    template="myemailtemplate",
+    subject="Thank You for Becoming a Member",
+    recipientName=member.name,
+    startDate=member.startDate
+  )
+>
+}}}
+
+ * SendingEmail (chapter)
