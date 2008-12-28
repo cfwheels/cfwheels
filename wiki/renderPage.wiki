@@ -1,5 +1,9 @@
 #summary renderPage([controller,action,layout,cache])
-#labels api,0.8
+#labels api,1.0
+
+*Category*:
+
+[ControllerRequestFunctions Controller Request Functions]
 
 *Description*:
 
@@ -18,14 +22,10 @@ Void
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *action* || string || false || #variables.params.action# || Action to include the view page for ||
+|| *controller* || string || false || Currently executing controller || Controller to include the view page for ||
+|| *action* || string || false || Currently executing action || Action to include the view page for ||
 || *layout* || any || false || true || The layout to wrap the content in ||
-|| *cache* || any || false ||  || Minutes to cache the content for ||
-|| *controller* || string || false || #variables.params.controller# || Controller to include the view page for ||
-
-*Usage*:
-
-This form of rendering (including a view file based on the controller and action) is the most commonly used and is the one used by Wheels as the default when nothing is explicitly rendered.
+|| *cache* || any || false ||   || Minutes to cache the content for ||
 
 *Examples*:
 
@@ -35,8 +35,6 @@ This form of rendering (including a view file based on the controller and action
 
 {{{
 <cfset renderPage(layout=false, cache=60)>
-
-
 }}}
 
 *Related*:
