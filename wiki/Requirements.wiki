@@ -1,8 +1,6 @@
 #summary What you need to know and have installed before you start programming in Wheels.
 #labels chapter,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
 We can identify 3 different types of requirements that you should be aware of:
 
  # *Project Requirements.* Is Wheels a good fit for your project?
