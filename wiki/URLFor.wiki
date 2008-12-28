@@ -1,5 +1,9 @@
-#summary URLFor([host,action,protocol,controller,onlyPath,anchor,params,route,id])
+#summary URLFor([route,controller,action,key,params,anchor,onlyPath,host,protocol,port])
 #labels api,1.0
+
+*Category*:
+
+[ControllerRequestFunctions  Controller Request Functions]
 
 *Description*:
 
