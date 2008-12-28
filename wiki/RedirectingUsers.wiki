@@ -32,9 +32,3 @@ A word of warning: the referring URL is retrieved from the `cgi.http_referer` va
 ==`addToken` and `statusCode`==
 
 Common for all three methods above is that you can also pass in the `addToken` and `statusCode` arguments, which will be directly passed along to CFML's `cflocation` tag.
-
-==Related Reading==
-
- * [UsingRoutes Using Routes (chapter)]
- * [redirectTo redirectTo (function)]
- * [URLFor URLFor (function)]
