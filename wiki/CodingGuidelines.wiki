@@ -1,7 +1,5 @@
 #summary Here are the rules of the road for contributing code to the project. Let's follow this process so that we don't duplicate effort and so the code base is easy to maintain over the long haul.
-#labels chapter,0.8.3
-
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+#labels chapter,1.0
 
 ==Subversion Repository==
 
@@ -36,9 +34,8 @@ Here's the process that we'd like for you to follow. This process is in place ma
   # A member of the core team will review your submission and leave feedback if necessary.
   # Once the core team member is satisfied with the scope of the issue, they will schedule it for a release and mark your issue as "Approved." This is your green light to start working. Get to coding, grasshopper!
   # Need help or running across any issues while coding? Run it by the Google Group. They all have opinions and love to let you know all about them. :)
-  # Once we have a unit testing methodology in place, all code will need to have unit tests that validate common and boundary scenarios. Let's run without one until it is announced.
   # When you have implemented your enhancement or change, use your Subversion utility to create a patch with your changes. Attach the patch to your Google Code issue.
-  # A core team will review unit tests and post any necessary feedback in the Google Code issue.
+  # A core team will review it and post any necessary feedback in the Google Code issue.
   # Once everything is resolved, the issue will be marked as "Fixed." A core team member will then commit your patch to the SVN trunk.
     * The core team member should annotate the SVN commit with the issue number as `issue 55` if the code issue is `55`. This causes Google code to auto-link the revision to the code site issue.
     * The core team member should also annotate the code issue with a comment indicating the revision number as `r123` if the revision number was `123`. This causes Google to auto-link the issue to the SVN issue.
@@ -71,7 +68,7 @@ To stay true to our ColdFusion and Java roots, all names must be camelCase. In s
 
 ===Local Variables===
 
-Everyone doing OOP with ColdFusion loves all of the the room for error that the `var` keyword allows! To help eliminate confusion, define a local struct at the top of CFC methods called `loc`. Any variable whose value should _not_ persist for the life of the CFC instance should be stored in the `loc` struct.
+Everyone doing OOP with ColdFusion loves all of the the room for error that the `var` keyword allows! To help eliminate confusion, define a local struct at the top of CFC methods called `loc`. Any variable whose value should _not_ persist for the life of the CFC instance should be stored in the `loc` struct. The only exception to this rule is when a function only uses one variable in which case that variable alone can be declared with the `var` keyword.
 
 For example:
 
