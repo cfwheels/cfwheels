@@ -33,3 +33,4 @@ These functions are called from actions in your controller files.
  * [renderText renderText()]
  * [sendEmail sendEmail()]
  * [sendFile sendFile()]
+ * [URLFor URLFor()]
