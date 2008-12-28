@@ -75,4 +75,4 @@
  * [ViewHelperFunctions View Helper Functions]
  * [ControllerInitializationFunctions Controller Initialization Functions]
  * [ControllerRequestFunctions Controller Request Functions]
- * [GlobalHelperFunctions Global Helper Functions]
+ * [GlobalFunctions Global Functions]
