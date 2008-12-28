@@ -1,7 +1,7 @@
 #summary renderPageToString([controller,action,layout,cache])
-#labels api,1.0,controller,request
+#labels api,1.0
 
-*Description*:
+*Category*:
 
 [ControllerRequestFunctions Controller Request Functions]
 
