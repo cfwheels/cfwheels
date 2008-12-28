@@ -100,7 +100,7 @@
 	</cffunction>
 	
 	<cffunction name="javascriptIncludeTag" returntype="any" access="public" output="false">
-		<cfargument name="sources" type="any" required="false" default="application,protoculous">
+		<cfargument name="sources" type="any" required="false" default="application">
 		<cfset var loc = {}>
 		<cfset arguments.$namedArguments = "sources">
 		<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
