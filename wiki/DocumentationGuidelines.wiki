@@ -1,7 +1,5 @@
 #summary We know what volunteering is like, so we want to make it as efficient for everyone as possible. Here are the rules of the road for contributing documentation to the project.
-#labels chapter,0.7
-
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+#labels chapter,1.0
 
 The Docs are as important as the code itself. How is anyone going to use Wheels if they can't learn how to? And the great docs by Allaire/Macromedia/Adobe are a big reason why you've always loved ColdFusion, right?
 
@@ -36,7 +34,7 @@ Here's a description of the different types of documentation and general expecta
 
 ===Chapters in the Reference Guide===
 
-The [http://www.cfwheels.com/docs reference guide] contains narrative chapters about using the framework. It should contain a wealth of code samples and screenshots and should be written in clear, concise language.
+The [http://www.cfwheels.com/docs reference guide] contains narrative chapters about using the framework. It should contain a wealth of code samples and should be written in clear, concise language.
 
 ===Video Tutorials===
 
@@ -67,10 +65,6 @@ Most descriptions of Wheels' functions should follow this general format, inspir
  History of how function behavior changes from version to version of Wheels.
  
  Of course, there will be exceptions to these rules, and we can trust that you'll use sound judgment before breaking them.
-
- ====CFML Engines Supported====
- 
- List of tested and supported versions of ColdFusion, Railo, OpenBD, etc.
  
  ====Parameters====
  
