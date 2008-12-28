@@ -1,17 +1,13 @@
-#summary redirectTo([url,protocol,onlyPath,addToken,anchor,params,controller,back,action,host,route,id,statusCode])
-#labels api,0.8,controller,request
-
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+#summary redirectTo([back,addToken,statusCode,route,controller,action,key,params,anchor,onlyPath,host,protocol,port])
+#labels api,1.0,controller,request
 
 *Description*:
 
-Redirects the browser to the supplied action, URL or to the referring URL.
+Redirects the browser to the supplied controller/action/key, route or back to the referring page. Internally It uses the [URLFor URLFor()] function to build the link and the `cflocation` tag to perform the redirect.
 
 *Return Type*:
 
 Void
-
-*
 
 *History*:
 
@@ -20,25 +16,19 @@ Void
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *url* || string || false ||  || Address to redirect to ||
-|| *protocol* || string || false ||  || Pass-through argument; see documentation for URLFor ||
-|| *onlyPath* || boolean || false || true || Pass-through argument; see documentation for URLFor ||
-|| *addToken* || boolean || false || false || Pass-through argument; see documentation for cflocation ||
-|| *anchor* || string || false ||  || Pass-through argument; see documentation for URLFor ||
-|| *params* || string || false ||  || Pass-through argument; see documentation for URLFor ||
-|| *controller* || string || false ||  || Pass-through argument; see documentation for URLFor ||
-|| *back* || boolean || false || false || Whether or not to redirect back to the referring address ||
-|| *action* || string || false ||  || Pass-through argument; see documentation for URLFor ||
-|| *host* || string || false ||  || Pass-through argument; see documentation for URLFor ||
-|| *route* || string || false ||  || Pass-through argument; see documentation for URLFor ||
-|| *id* || numeric || false || 0 || Pass-through argument; see documentation for URLFor ||
-|| *statusCode* || numeric || false || 302 || Pass-through argument; see documentation for cflocation ||
-
-*Usage*:
-
-This function uses the cflocation tag to redirect the browser.
-You can redirect to a controller/action/id in your application, a specific URL or back to the referring URL.
-Internally it uses URLFor (when a controller/action/id is supplied) to build the URL to redirect to so it can also accept all arguments of URLFor.
+|| *back* || boolean || false || false || Set to true to redirect back to the referring page ||
+|| *addToken* || boolean || false || false || See documentation for `cflocation` ||
+|| *statusCode* || numeric || false || 302 || See documentation for `cflocation` ||
+|| *route* || string || false ||   || See documentation for [URLFor URLFor()] ||
+|| *controller* || string || false ||   || See documentation for [URLFor URLFor()] ||
+|| *action* || string || false ||   || See documentation for [URLFor URLFor()] ||
+|| *key* || any || false ||   || See documentation for [URLFor URLFor()] ||
+|| *params* || string || false ||   || See documentation for [URLFor URLFor()] ||
+|| *anchor* || string  || false ||   || See documentation for [URLFor URLFor()] ||
+|| *onlyPath* || boolean || false || true || See documentation for [URLFor URLFor()] ||
+|| *host* || string || false ||   || See documentation for [URLFor URLFor()] ||
+|| *protocol* || string || false ||   || See documentation for [URLFor URLFor()] ||
+|| *port* || numeric || false || 0 || See documentation for [URLFor URLFor()] ||
 
 *Examples*:
 
@@ -49,15 +39,18 @@ Internally it uses URLFor (when a controller/action/id is supplied) to build the
 }}}
 
 {{{
-<cfset redirectTo(url="http://www.cfwheels.com")>
+<cfset redirectTo(controller="checkout", action="start", params="type=express", protocol="https")>
+}}}
+
+{{{
+<cfset redirectTo(route="profile", screenName="Joe")>
 }}}
 
 {{{
 <cfset redirectTo(back=true)>
-
-
 }}}
 
 *Related*:
 
  * RedirectingUsers (chapter)
+ * UsingRoutes (chapter)
