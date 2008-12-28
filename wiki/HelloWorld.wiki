@@ -1,8 +1,6 @@
 #summary In this tutorial, we'll be writing a simple application to make sure we have Wheels installed properly and that everything is working properly.
 #labels chapter,0.8
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
 In this tutorial, we'll be writing a simple application to make sure we have Wheels installed properly and that everything is working properly. Along the way, you'll get to know some basics about how applications built on top of Wheels work.
 
 ==Testing Your Install==
