@@ -1,0 +1,15 @@
+#summary Listing of all global functions.
+#labels chapter,1.0
+
+These functions are general purpose functions and can be called from anywhere.
+
+==Example==
+
+{{{
+<cfoutput>#URLFor(action="anAction")#</cfoutput>
+}}}
+
+==Functions==
+
+ * [model model()]
+ * [URLFor URLFor()]
