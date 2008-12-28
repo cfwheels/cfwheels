@@ -1,8 +1,6 @@
 #summary The convention for URLs in Wheels works for most situations and helps to promote an easy-to-maintain code base. With routes, you have the flexibility to break this convention when needed.
 #labels chapter,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
 ==The Convention for URLs==
 
 To write clear MVC applications with !ColdFusion on Wheels, we recommend sticking to conventions as much as possible. As you may already know, the convention for URLs is as follows:
