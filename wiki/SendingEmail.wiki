@@ -1,8 +1,6 @@
 #summary Use `sendEmail()` to simplify the task of setting up automated emails in your application. Learn about its configuration and templating features.
 #labels chapter,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
 ==Step 1: Establishing Mail Server and Account Information==
 
 Within `config/settings.cfm` are seven new application scope variables for utilizing `sendEmail()`. These variables are as follows:
@@ -17,7 +15,7 @@ Within `config/settings.cfm` are seven new application scope variables for utili
 <cfset application.settings.sendEmail.password = "">
 }}}
 
-All fields can be left blank and specified directly in the `sendEmail()` function call. Or you can use the more efficient approach, to pre-define `sendEmail()` value that will remain constant across your application. This includes a default `from`, `server`, `username`, `password`, and `layout`.
+All fields can be left blank and specified directly in the `sendEmail()` function call. Or you can use the more efficient approach, to pre-define the `sendEmail()` values that will remain constant across your application. This includes a default `from`, `server`, `username`, `password`, and `layout`.
 
 By specifcying these values within `config/settings.cfm`, these arguments can be omitted from all `sendEmail()` function calls, thus providing cleaner, less cluttered code.
 
@@ -51,16 +49,16 @@ Here's an example for `myemailtemplate.cfm`, which will contain HTML content. No
 `sendEmail()` accepts all attribute of CFML's `<cfmail>` tag as arguments, plus any variables that you need to pass to the email template.
 
 {{{
-<cfset member = model("Member").findByKey(newMember.id)>
+<cfset member = model("member").findByKey(newMember.id)>
 <cfset
-    sendEmail(
-        type="html",
-        to=member.email,
-        template="myemailtemplate",
-        subject="Thank You for Becoming a Member",
-	recipientName=member.name,
-	startDate=member.startDate
-    )
+  sendEmail(
+    type="html",
+    to=member.email,
+    template="myemailtemplate",
+    subject="Thank You for Becoming a Member",
+    recipientName=member.name,
+    startDate=member.startDate
+  )
 >
 }}}
 
@@ -73,7 +71,7 @@ It is also important to note that the `template` argument should be the path to 
 That's it. With all attributes setup in the `settings/config.cfm`, use of `sendEmail()` could be as simple as this:
 
 {{{
-<cfset sendEmail(template="myemailtemplate")>
+<cfset sendEmail("myemailtemplate")>
 }}}
 
 ==Bonus Step: Email Layouts==
@@ -95,27 +93,27 @@ In this case, the 2 calls to `sendEmail()` would be identical, with the exceptio
 
 <!--- Customer email with customized header/footer --->
 <cfset
-    sendEmail(
-        type="html",
-        template="myemailtemplate",
-        layout="email/customer",
-        to=member.email,
-        subject="Thank You for Becoming a Member",
-        recipientName=member.name,
-        startDate=member.startDate
-    )
+  sendEmail(
+    type="html",
+    template="myemailtemplate",
+    layout="email/customer",
+    to=member.email,
+    subject="Thank You for Becoming a Member",
+    recipientName=member.name,
+    startDate=member.startDate
+  )
 >
 
 <!--- Plain Message with "admin" layout --->
 <cfset
-    sendEmail(
-        type="html",
-        template="myemailtemplate",
-        layout="email/admin",
-        to="admin@domain.com",
-        subject="Membership Verification: #member.name#",
-        recipientName=member.name,
-        startDate=member.startDate
-    )
+  sendEmail(
+    type="html",
+    template="myemailtemplate",
+    layout="email/admin",
+    to="admin@domain.com",
+    subject="Membership Verification: #member.name#",
+    recipientName=member.name,
+    startDate=member.startDate
+  )
 >
 }}}
