@@ -1,7 +1,5 @@
 #summary Listing of all controller request functions.
-#labels chapter,0.8
-
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+#labels chapter,1.0
 
 These functions are called from actions in your controller files.
 
@@ -10,8 +8,8 @@ These functions are called from actions in your controller files.
 `controllers/Blog.cfc`:
 
 {{{
-<cffunction name="sendToWheels">
-  <cfset redirectTo(url="http://www.cfwheels.com")>
+<cffunction name="sendSomewhere">
+  <cfset redirectTo(action="somewhere")>
 </cffunction>
 }}}
 
