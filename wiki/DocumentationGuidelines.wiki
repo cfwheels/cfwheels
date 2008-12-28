@@ -73,6 +73,6 @@ Most descriptions of Wheels' functions should follow this general format, inspir
  || `argument2` || string || Yes || N/A || A description of `argument2`. ||
  || `optionalArgument` || boolean || No || Default Value || A description of `optionalArgument`, including default value if applicable. ||
  
- ====Usage====
+ ====Examples====
  
- Narrative of common use cases for the function, with plenty of examples.
+ Example code for common use cases.
