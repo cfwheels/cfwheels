@@ -1,33 +1,30 @@
 #summary renderNothing()
-#labels api,0.8,controller,request
+#labels api,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+*Category*:
+
+[ControllerRequestFunctions Controller Request Functions]
 
 *Description*:
 
-Renders a blank string to the browser.
+Renders a blank string to the browser. This is very similar to calling 'cfabort' with the advantage that any after filters you have set on the action will still be run.
 
 *Return Type*:
 
 Void
-
-*
 
 *History*:
 
 -
 
 *Parameters*:
-*Usage*:
 
-This is very similar to just doing a <cfabort> with the advantage that any after filters you have set on the action will still be run.
+-
 
 *Examples*:
 
 {{{
 <cfset renderNothing()>
-
-
 }}}
 
 *Related*:
