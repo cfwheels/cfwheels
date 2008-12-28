@@ -1,7 +1,9 @@
 #summary renderPartial(name[cache])
-#labels api,0.8,controller,request
+#labels api,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+Category*:
+
+[ControllerRequestFunctions Controller Request Functions]
 
 *Description*:
 
@@ -11,8 +13,6 @@ Renders content to the browser by including a partial.
 
 Void
 
-*
-
 *History*:
 
 -
@@ -20,19 +20,13 @@ Void
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *name* || string || true ||  || Name of partial to include ||
-|| *cache* || any || false ||  || Minutes to cache the content for ||
-
-*Usage*:
-
--
+|| *name* || string || true || - || Name of partial to include ||
+|| *cache* || any || false ||   || Minutes to cache the content for ||
 
 *Examples*:
 
 {{{
 <cfset renderPartial("comment")>
-
-
 }}}
 
 *Related*:
