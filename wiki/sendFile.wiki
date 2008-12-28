@@ -1,0 +1,48 @@
+#summary sendFile(file[name,type,disposition])
+#labels api,1.0
+
+Category*:
+
+[ControllerRequestFunctions Controller Request Functions]
+
+*Description*:
+
+Sends a file to the user.
+
+*Return Type*:
+
+Void
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *file* || string || true || - || The file to send to the user ||
+|| *name* || string || false ||   || The file name to show in the browser download dialog box ||
+|| *type* || string || false ||   || The HTTP content type to deliver the file as ||
+|| *disposition* || string || false || attachment || Set to 'inline' to have the browser handle the opening of the file or set to 'attachment' to force a download dialog box ||
+
+*Examples*:
+
+{{{
+<cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf")>
+}}}
+		
+{{{
+<cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf", name="Tutorial.pdf")>
+}}}
+
+{{{
+<cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf", disposition="inline")>
+}}}
+
+{{{
+<cfset sendFile(file="../../tutorials/wheels_tutorial_20081028_J657D6HX.pdf")>
+}}}
+
+*Related*:
+
+ * SendingFiles (chapter)
