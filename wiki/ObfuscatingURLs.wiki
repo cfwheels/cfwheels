@@ -1,8 +1,6 @@
 #summary Hide your primary key values from nosy users.
 #labels chapter,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
 The Wheels convention of using primary key values when building links (as in the `key` argument to [linkTo linkTo()] for example) will lead to them being exposed to anyone interested in the browser's URL bar. Using the built-in URL obfuscation functionality in Wheels, you can hide the real primary key values from nosy users.
 
 ==What URL Obfuscation Does==
