@@ -7,7 +7,7 @@
 
 *Description*:
 
-XXX.
+Tells Wheels to verify that some specific criterias are met before running an action.
 
 *Return Type*:
 
@@ -20,15 +20,15 @@ Void
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *only* || string || false ||   || XXX ||
-|| *except* || string || false ||   || XXX ||
-|| *post* || string || false ||   || XXX ||
-|| *get* || string || false ||   || XXX ||
-|| *ajax* || string || false ||   || XXX ||
-|| *cookie* || string || false ||   || XXX ||
-|| *session* || string || false ||   || XXX ||
-|| *params* || string || false ||   || XXX ||
-|| *handler* || string || false ||   || XXX ||
+|| *only* || string || false ||   || Pass in a list of action names (or one action name) to tell Wheels that the verifications should only be run on these actions ||
+|| *except* || string || false ||   || Pass in a list of action names (or one action name) to tell Wheels that the filter function(s) should be run on all actions except the specified ones ||
+|| *post* || any || false ||   || Set to true to verify that this is a post request ||
+|| *get* || any || false ||   || Set to true to verify that this is a get request ||
+|| *ajax* || any || false ||   || Set to true to verify that this is an AJAX request ||
+|| *cookie* || any || false ||   || Verify that the passed in variable name exists in the cookie ||
+|| *session* || any || false ||   || Verify that the passed in variable name exists in the session ||
+|| *params* || any || false ||   || Verify that the passed in variable name exists in the params ||
+|| *handler* || any || false || false || Pass in the name of a function that should handle failed verifications (default is to just abort the request when a verification fails) ||
 
 *Examples*:
 
