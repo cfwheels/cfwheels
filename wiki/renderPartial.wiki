@@ -19,7 +19,7 @@ Void
 
 *Parameters*:
 
-||   || *Type* || *Required* || *Default* || *Description* ||
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
 || *name* || string || true || - || Name of partial to include ||
 || *cache* || any || false ||   || Minutes to cache the content for ||
 
