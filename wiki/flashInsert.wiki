@@ -20,7 +20,7 @@ Void
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *[*_any..._*]* || string || true || - || The value to insert ||
+|| _Any_ || string || true || - || The key/value to insert ||
 
 *Examples*:
 
