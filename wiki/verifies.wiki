@@ -1,0 +1,42 @@
+#summary verifies([only,except,post,get,ajax,cookie,session,params,handler])
+#labels api,1.0
+
+*Category*:
+
+[ControllerInitializationFunctions Controller Initialization Functions]
+
+*Description*:
+
+XXX.
+
+*Return Type*:
+
+Void
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *only* || string || false ||   || XXX ||
+|| *except* || string || false ||   || XXX ||
+|| *post* || string || false ||   || XXX ||
+|| *get* || string || false ||   || XXX ||
+|| *ajax* || string || false ||   || XXX ||
+|| *cookie* || string || false ||   || XXX ||
+|| *session* || string || false ||   || XXX ||
+|| *params* || string || false ||   || XXX ||
+|| *handler* || string || false ||   || XXX ||
+
+*Examples*:
+
+{{{
+<cfset verifies(only="handleForm", post=true)>
+}}}
+
+*Related*:
+
+ * FiltersandVerification (chapter)
+ * [filters filters()] (function)
