@@ -1,3 +1,33 @@
+#summary model(name)
 #labels api,1.0
+
+*Category*:
+
+[GlobalFunctions Global Functions]
+
+*Description*:
+
 Returns a reference to the requested model so that class level methods can be called on it.
 
+*Return Type*:
+
+Any
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *name* || string || true || Name of the model (class name) to get a reference to ||
+
+*Examples*:
+
+{{{
+<cfset authorObject = model("author").findByKey(1)>
+}}}
+
+*Related*:
+
+ * ObjectRelationalMapping (chapter)
