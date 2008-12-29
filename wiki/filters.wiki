@@ -1,14 +1,41 @@
-#summary One-sentence summary of this page.
+#summary filters(through[type,only,except])
 #labels api,1.0
 
-= Introduction =
+*Category*:
 
-Add your content here.
+[ControllerInitializationFunctions Controller Initialization Functions]
 
+*Description*:
 
-= Details =
+XXX.
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+*Return Type*:
+
+Void
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *through* || string || true || - || XXX ||
+|| *type* || string || false || before || XXX ||
+|| *only* || string || false ||   || XXX ||
+|| *except* || string || false ||   || XXX ||
+
+*Examples*:
+
+{{{
+<cfset filters("restrictAccess")>
+}}}
+
+{{{
+<cfset filters(through="isLoggedIn,checkIPAddress", except="home,login")>
+}}}
+
+*Related*:
+
+ * FiltersandVerification (chapter)
+ * [verifies verifies()] (function)
