@@ -19,7 +19,7 @@ Void
 
 *Parameters*:
 
-||   || *Type* || *Required* || *Default* || *Description* ||
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
 || *back* || boolean || false || false || Set to true to redirect back to the referring page ||
 || *addToken* || boolean || false || false || See documentation for `cflocation` ||
 || *statusCode* || numeric || false || 302 || See documentation for `cflocation` ||
