@@ -20,7 +20,7 @@ String
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *param* || any || true || Value to obfuscate ||
+|| *param* || any || true || - || Value to obfuscate ||
 
 *Examples*:
 
