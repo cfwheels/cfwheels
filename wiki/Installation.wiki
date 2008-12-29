@@ -28,9 +28,9 @@ If you want to run a Wheels powered application from a subfolder in an existing 
 
 ==3. Setup the Database==
 
-Create a new database in SQL Server, Oracle or MySQL and add a new data source for it in the !ColdFusion / Railo Administrator, just as you'd normally do. Now open up `config/database.cfm` and set the `application.settings.database.datasource` variable to the name you chose for the data source. 
+Create a new database in SQL Server, Oracle, or MySQL and add a new data source for it in the !ColdFusion/Railo Administrator, just as you'd normally do. Now open up `config/database.cfm` and set the `application.settings.database.datasource` variable to the name you chose for the data source. 
 
-If you don't want to be bothered by opening up a Wheels configuration file at all there is a nice convention you can follow for the naming. Just name your data source with the same name as the folder you are running your website from (`mysite` in the example above) and Wheels will use that when the `application.settings.database.datasource` variable has been left blank.
+If you don't want to be bothered by opening up a Wheels configuration file at all, there is a nice convention you can follow for the naming. Just name your data source with the same name as the folder you are running your website from (`mysite` in the example above), and Wheels will use that when the `application.settings.database.datasource` variable has been left blank.
 
 This is all that you need to do before Wheels can connect to your database and start working its magic.
 
