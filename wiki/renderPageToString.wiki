@@ -19,7 +19,7 @@ String
 
 *Parameters*:
 
-||   || *Type* || *Required* || *Default* || *Description* ||
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
 || *controller* || string || false || Currently executing controller || See documentation for [renderPage renderPage()] ||
 || *action* || string || false || Currently executing action || See documentation for [renderPage renderPage()] ||
 || *layout* || any || false || true || See documentation for [renderPage renderPage()] ||
