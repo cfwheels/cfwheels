@@ -19,7 +19,7 @@ Void
 
 *Parameters*:
 
-||   || *Type* || *Required* || *Default* || *Description* ||
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
 || *file* || string || true || - || The file to send to the user ||
 || *name* || string || false ||   || The file name to show in the browser download dialog box ||
 || *type* || string || false ||   || The HTTP content type to deliver the file as ||
