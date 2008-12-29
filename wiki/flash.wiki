@@ -19,7 +19,7 @@ Any
 
 *Parameters*:
 
-||   || *Type* || *Required* || *Default* || *Description* ||
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
 || *key* || string || false ||   || The key to get the value for ||
 
 *Examples*:
