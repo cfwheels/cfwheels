@@ -1,7 +1,5 @@
 #summary Stop repeating yourself with the use of filters and verifications.
-#labels chapter,0.8
-
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+#labels chapter,1.0
 
 If you find the need to run a piece of code before or after several controller actions, then you can use _filters_ to accomplish this without having to explicitly call the code inside each action in question.
 
