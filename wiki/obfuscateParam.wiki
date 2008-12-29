@@ -1,14 +1,36 @@
-#summary One-sentence summary of this page.
+#summary obfuscateParam(param)
 #labels api,1.0
 
-= Introduction =
+*Category*:
 
-Add your content here.
+[GlobalFunctions Global Functions]
 
+*Description*:
 
-= Details =
+Obfuscates a value.
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+*Return Type*:
+
+String
+
+*
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *param* || any || true || Value to obfuscate ||
+
+*Examples*:
+
+{{{
+<cfset obfuscateParam(99)>
+}}}
+
+*Related*:
+
+ * ObfuscatingURLs (chapter)
+ * [deObfuscateParam deObfuscateParam()] (function)
