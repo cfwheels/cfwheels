@@ -20,7 +20,7 @@ Any
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *name* || string || true || Name of the model (class name) to get a reference to ||
+|| *name* || string || true || - || Name of the model (class name) to get a reference to ||
 
 *Examples*:
 
