@@ -1,8 +1,6 @@
 #summary Showing content to the user.
 #labels chapter,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
 A big part of a controller's task is to respond to the user. In Wheels you can respond to the user in three different ways:
 
  * Displaying content
