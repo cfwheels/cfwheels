@@ -191,8 +191,8 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="model" returntype="any" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
+<cffunction name="model" returntype="any" access="public" output="false" hint="Returns a reference to the requested model so that class level methods can be called on it.">
+	<cfargument name="name" type="string" required="true" hint="Name of the model (class name) to get a reference to">
 	<cfscript>
 		$doubleCheckedLock(name="modelLock", path=application.wheels.models, key=arguments.name, method="$createClass", args=arguments);
 	</cfscript>
