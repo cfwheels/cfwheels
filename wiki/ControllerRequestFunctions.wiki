@@ -15,7 +15,6 @@ These functions are called from actions in your controller files.
 
 ==Functions==
 
- * [deObfuscateParam deObfuscateParam()]
  * [flash flash()]
  * [flashClear flashClear()]
  * [flashCount flashCount()]
@@ -26,7 +25,6 @@ These functions are called from actions in your controller files.
  * [isAjax isAjax()]
  * [isGet isGet()]
  * [isPost isPost()]
- * [obfuscateParam obfuscateParam()]
  * [redirectTo redirectTo()]
  * [renderNothing renderNothing()]
  * [renderPage renderPage()]
