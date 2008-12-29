@@ -1,7 +1,5 @@
 #summary Making URLs prettier using URL rewriting.
-#labels chapter,0.8
-
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+#labels chapter,1.0
 
 URL rewriting is a completely optional feature of Wheels, and all it does is get rid of the `index.cfm` part of the URL.
 
