@@ -1,8 +1,6 @@
 #summary Extend Wheels functionality by using plugins or create your own.
 #labels chapter,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
 Wheels is a fairly lightweight framework and we like to keep it that way so we won't be adding thousands of various features to Wheels just because a couple of developers find them "cool" ;)
 
 Our intention is to only have functionality we consider "core" inside of Wheels itself and then use plugins for everything else.
