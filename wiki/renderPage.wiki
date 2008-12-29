@@ -21,7 +21,7 @@ Void
 
 *Parameters*:
 
-||   || *Type* || *Required* || *Default* || *Description* ||
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
 || *controller* || string || false || Currently executing controller || Controller to include the view page for ||
 || *action* || string || false || Currently executing action || Action to include the view page for ||
 || *layout* || any || false || true || The layout to wrap the content in ||
