@@ -1,5 +1,5 @@
 #summary redirectTo([back,addToken,statusCode,route,controller,action,key,params,anchor,onlyPath,host,protocol,port])
-#labels api,1.0,controller,request
+#labels api,1.0
 
 *Category*:
 
