@@ -43,22 +43,23 @@
 
 ===Displaying Views to Users===
 
- * Displaying Pages and Partials
+ * [DisplayingPagesandPartials Displaying Pages and Partials]
  * [LinkingPages Linking Pages]
  * [UsingLayouts Using Layouts]
- * Form Helpers and Showing Errors
+ * [DisplayingFlashContent Displaying Flash Content]
  * [DisplayingLinksforPagination Displaying Links for Pagination]
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors]
  * [CreatingYourOwnViewHelpers Creating Your Own View Helpers]
 
 ===Sample Applications===
 
- * Administration
- * Authorization
+ * [Administration Administration]
+ * [Authorization Authorization]
 
 ===Working With Wheels===
 
  * [DirectoryStructure Directory Structure]
- * Configuration
+ * [Configuration Configuration]
  * [SwitchingEnvironments Switching Environments]
  * [UsingandCreatingPlugins Using and Creating Plugins]
 
