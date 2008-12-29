@@ -46,9 +46,8 @@
  * [DisplayingPagesandPartials Displaying Pages and Partials]
  * [LinkingPages Linking Pages]
  * [UsingLayouts Using Layouts]
- * [DisplayingFlashContent Displaying Flash Content]
- * [DisplayingLinksforPagination Displaying Links for Pagination]
  * [FormHelpersandShowingErrors Form Helpers and Showing Errors]
+ * [DisplayingLinksforPagination Displaying Links for Pagination]
  * [CreatingYourOwnViewHelpers Creating Your Own View Helpers]
 
 ===Sample Applications===
