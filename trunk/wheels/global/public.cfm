@@ -110,11 +110,11 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="obfuscateParam" returntype="string" access="public" output="false">
-	<cfargument name="param" type="any" required="true">
+<cffunction name="obfuscateParam" returntype="string" access="public" output="false" hint="Obfuscates a value.">
+	<cfargument name="param" type="any" required="true" hint="Value to obfuscate">
 	<cfscript>
 		var loc = {};
-		if (isValid("integer", arguments.param) AND IsNumeric(arguments.param))
+		if (isValid("integer", arguments.param) && IsNumeric(arguments.param))
 		{
 			loc.length = Len(arguments.param);
 			loc.a = (10^loc.length) + Reverse(arguments.param);
@@ -131,8 +131,8 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="deobfuscateParam" returntype="string" access="public" output="false">
-	<cfargument name="param" type="string" required="true">
+<cffunction name="deobfuscateParam" returntype="string" access="public" output="false" hint="Deobfuscates a value.">
+	<cfargument name="param" type="string" required="true" hint="Value to deobfuscate">
 	<cfscript>
 		var loc = {};
 		if (Val(arguments.param) IS NOT arguments.param)
@@ -148,7 +148,7 @@
 				loc.checksumtest = "0";
 				for (loc.i=1; loc.i LTE Len(loc.returnValue); loc.i=loc.i+1)
 					loc.checksumtest = (loc.checksumtest + Left(Right(loc.returnValue, loc.i),1));
-				if (Left(ToString(FormatBaseN((loc.checksumtest+154),10)),2) IS NOT Left(InputBasen(loc.checksum, 16),2))
+				if (Left(ToString(FormatBaseN((loc.checksumtest+154),10)),2) != Left(InputBasen(loc.checksum, 16),2))
 					loc.returnValue = arguments.param;
 			}
 			catch(Any e)
@@ -164,11 +164,11 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="addRoute" returntype="void" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="pattern" type="string" required="true">
-	<cfargument name="controller" type="string" required="false" default="">
-	<cfargument name="action" type="string" required="false" default="">
+<cffunction name="addRoute" returntype="void" access="public" output="false" hint="Adds a new route to your application.">
+	<cfargument name="name" type="string" required="true" hint="Name for the route">
+	<cfargument name="pattern" type="string" required="true" hint="The URL pattern for the route">
+	<cfargument name="controller" type="string" required="false" default="" hint="Controller to call when route matches (unless the controller name exists in the pattern)">
+	<cfargument name="action" type="string" required="false" default="" hint="Action to call when route matches (unless the action name exists in the pattern)">
 	<cfscript>
 		var loc = {};
 		
