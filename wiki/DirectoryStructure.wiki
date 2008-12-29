@@ -1,8 +1,6 @@
 #summary Finding your way around a Wheels application.
 #labels chapter,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
 After downloading and unzipping Wheels, here's the directory structure that you will see (plus signs indicate folders):
 
  * + config
@@ -98,7 +96,7 @@ This file is used by Apache, and you specifically need it for URL rewriting to w
 
 If you use IIS and want to use URL rewriting, you'll need this file. Otherwise, you can safely delete it.
 
-===`Application.cfc`, `index.cfm`, `root.cfm` and `rewrite.cfm`===
+===`Application.cfc`, `index.cfm`, `rewrite.cfm` and `root.cfm`===
 
 These are all needed for the framework to run. No changes should be done to these files.
 
