@@ -1,26 +1,26 @@
-#summary One-sentence summary of this page.
+#summary Sample application for a simple administrative interface.
 #labels chapter
 
-Here is a sample application that covers how to setup validation rules
-on a model, make a form for it, save to the database and so on.
-The code is full of comments so it's a good way to learn Wheels if
-you're one of those people who prefer playing around with code rather
-than reading more abstract tutorials.
+All sample applications comes full of comments so it's a good way to learn Wheels if
+you're one of those people who prefer playing around with code rather than reading more abstract tutorials.
 
-Instructions:
+This sample application covers how to setup validation rules on a model, make a form for it, save to the database and so on.
 
-Create a new database with a table named "users" containing the
-following columns:
-id (int, primary key, not nullable, auto-incrementing)
-firstname (varchar 100, not nullable)
-lastname (varchar 100, not nullable)
-email (varchar 100, not nullable)
-password (varchar 20, not nullable)
+==Instructions==
 
-Add a data source in the ColdFusion Administrator named
-"cfwheelsUserAdministration" pointing to your new database.
+Create a new database with a table named `users` containing the following columns:
+
+|| *Name* || *Type* || *Nullable* || *Primary Key* ||
+|| id || int, auto-increment || No || Yes ||
+|| firstname || varchar(100) || No || No ||
+|| lastname || varchar(100) || No || No ||
+|| email || varchar(100) || No || No ||
+|| password || varchar(20) || No || No ||
+
+Add a data source in the !ColdFusion or Railo Administrator named "cfwheelsUserAdministration" pointing to your new database.
 
 Once that's all done just download, unzip and run the app (it comes
-with Wheels 0.8.1 included).
+with !ColdFusion on Wheels 0.9 included).
 
-Enjoy :)
+==Download==
+Click here to download (insert link when app is done)
