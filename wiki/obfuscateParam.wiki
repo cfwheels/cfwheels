@@ -13,8 +13,6 @@ Obfuscates a value.
 
 String
 
-*
-
 *History*:
 
 -
