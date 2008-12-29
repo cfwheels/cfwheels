@@ -11,13 +11,13 @@ This sample application covers how to setup validation rules on a model, make a 
 Create a new database with a table named `users` containing the following columns:
 
 || *Name* || *Type* || *Nullable* || *Primary Key* ||
-|| id || int, auto-increment || No || Yes ||
+|| id || int, identity || No || Yes ||
 || firstname || varchar(100) || No || No ||
 || lastname || varchar(100) || No || No ||
 || email || varchar(100) || No || No ||
 || password || varchar(20) || No || No ||
 
-Add a data source in the !ColdFusion or Railo Administrator named "cfwheelsUserAdministration" pointing to your new database.
+Add a data source in the !ColdFusion or Railo Administrator named `cfwheelsUserAdministration` pointing to your new database.
 
 Once that's all done just download, unzip and run the app (it comes
 with !ColdFusion on Wheels 0.9 included).
