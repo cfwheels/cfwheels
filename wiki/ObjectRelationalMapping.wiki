@@ -13,21 +13,21 @@ In Wheels, we create an object like this.
 <cfset model("author")>
 }}}
 
-The built-in Wheels [model model()] function will return a reference to an `Author` object in the `application` scope (unless it's the first time you call this function, in which case it will also create and store it in the `application` scope).
+The built-in Wheels [model model()] function will return a reference to an `author` object in the `application` scope (unless it's the first time you call this function, in which case it will also create and store it in the `application` scope).
 
-Once you have the `author` object, you can start calling class methods on it, like [findByKey findByKey()], for example. `findByKey()` returns an instance of the object with data from the database record defined by the key value that you pass.
+Once you have the `author` object, you can start calling class methods on it, like [findByKey findByKey()], for example. [findByKey findByKey()] returns an instance of the object with data from the database record defined by the key value that you pass.
 
 Obviously, `author` is just an example here, and you'll use the names of the `.cfc` files you have created in the `models` folder.
 
 {{{
-<cfset authorClass = model("Author")>
+<cfset authorClass = model("author")>
 <cfset authorObject = authorClass.findByKey(1)>
 }}}
 
 For readability, this is usually combined into the following:
 
 {{{
-<cfset authorObject = model("Author").findByKey(1)>
+<cfset authorObject = model("author").findByKey(1)>
 }}}
 
 Now `authorObject` is an instance of the `author` class, and you can call object level methods on it, like [update update()] and [save save()].
@@ -64,7 +64,7 @@ Once you have created the file (or deliberately chosen not to for now) you will 
 For example, you can write the following code to get the author with the primary key of `1`, change his first name, and save the record back to the database.
 
 {{{
-<cfset auth = model("Author").findByKey(1)>
+<cfset auth = model("author").findByKey(1)>
 <cfset auth.firstName = "Joe">
 <cfset auth.save()>
 }}}
