@@ -1,0 +1,3 @@
+#labels api,1.0
+Returns a reference to the requested model so that class level methods can be called on it.
+
