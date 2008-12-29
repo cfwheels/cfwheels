@@ -1,39 +1,59 @@
 #summary How Wheels handles an incoming request.
 #labels chapter,1.0
 
-Wheels is quite simple when it comes to figuring out how incoming requests map to code in your application. Let's look at a URL for an e-commerce website and dissect it a little. Before we do that though a quick introduction to URLs in Wheels is in order.
+Wheels is quite simple when it comes to figuring out how incoming requests map to code in your application. Let's look at a URL for an e-commerce website and dissect it a little. 
+
+But before we do that, a quick introduction to URLs in Wheels is in order.
 
 ==A Wheels URL==
 
-URLs in Wheels generally look something like this: `http://localhost/index.cfm/shop/products`. It's also possible that the URLs will look like this in your application: `http://localhost/index.cfm?controller=shop&action=products`. This happens when your web server does not support the `cgi.path_info` variable. Regardless of your specific setup Wheels will figure out how to handle the URLs. In the example URL used above `shop` is the name of the controller to call and `products` is the name of the action to call on that controller.
+URLs in Wheels generally look something like this:
 
-Unless you're familiar with the Model-View-Controller pattern you're probably wondering what controllers and actions are.
+{{{
+http://localhost/index.cfm/shop/products
+}}}
 
-Put very simply a controller takes an incoming request and based on the parameters in the URL, decides what (if any) data to get from the model (which in most cases means your database) and which view (which in most cases means a CFML file producing HTML output) to display to the user.
+It's also possible that the URLs will look like this in your application: 
 
-An action is the entire process of executing code in the controller, including a view file and rendering the result to the browser. As you will see in the example below an action usually maps directly to one specific function with the same name in the controller file.
+{{{
+http://localhost/index.cfm?controller=shop&action=products
+}}}
 
-Mapping an incoming URL to code is only one side of the equation, you will also need a way to create these URLs (unless you want to hard-code them). This is done through a variety of different functions like [linkTo linkTo()] (for creating links), [startFormTag startFormTag()] (for creating forms) and [redirectTo redirectTo()] (for redirecting users) to name a few. Internally all of these functions use the same code to create the URL though, namely the [URLFor URLFor()] function. The [URLFor URLFor()] function accepts a `controller` and an `action` argument which are what you will use most of the time. It has a lot of other arguments though and does some neat stuff (like defaulting to the current controller when you don't specifically pass one in) so check out the [URLFor API] for this function for all the details.
+This happens when your web server does not support the `cgi.path_info` variable. 
 
-By the way, by making clever use of URL rewriting in Apache or IIS you can completely get rid of the `index.cfm` part of the URL so that `http://localhost/index.cfm/shop/products` becomes `http://localhost/shop/products`. You can read more about this in the [URLRewriting URL Rewriting chapter]. For the remainder of this chapter we'll type out the URLs in this shorter and prettier way.
+Regardless of your specific setup, Wheels will figure out how to handle the URLs. In the example URLs used above, `shop` is the name of the controller to call, and `products` is the name of the action to call on that controller.
+
+Unless you're familiar with the Model-View-Controller pattern, you're probably wondering what controllers and actions are.
+
+Put very simply, a _controller_ takes an incoming request and, based on the parameters in the URL, decides what (if any) data to get from the model (which in most cases means your database) and which view (which in most cases means a CFML file producing HTML output) to display to the user.
+
+An _action_ is the entire process of executing code in the controller, including a view file and rendering the result to the browser. As you will see in the example below, an action usually maps directly to one specific function with the same name in the controller file.
+
+Mapping an incoming URL to code is only one side of the equation. You will also need a way to create these URLs. This is done through a variety of different functions like [linkTo linkTo()] (for creating links), [startFormTag startFormTag()] (for creating forms), and [redirectTo redirectTo()] (for redirecting users), to name a few.
+
+Internally, all of these functions use the same code to create the URL, namely the [URLFor URLFor()] function. The [URLFor URLFor()] function accepts a `controller` and an `action` argument, which are what you will use most of the time. It has a lot of other arguments and does some neat stuff (like defaulting to the current controller when you don't specifically pass one in). So check out the [URLFor API] for this function for all the details.
+
+By the way, by using URL rewriting in Apache or IIS, you can completely get rid of the `index.cfm` part of the URL so that `http://localhost/index.cfm/shop/products` becomes `http://localhost/shop/products`. You can read more about this in the [URLRewriting URL Rewriting chapter].
+
+For the remainder of this chapter, we'll type out the URLs in this shorter and prettier way.
 
 ==A Wheels Page==
 
-Let's look a little closer at what happens when Wheels receives this incoming request now. First, it will create an instance of the `shop` controller (`controllers/Shop.cfc`) and call the function inside it named `products`.
+Let's look a little closer at what happens when Wheels receives this example incoming request. First, it will create an instance of the `shop` controller (`controllers/Shop.cfc`) and call the function inside it named `products`.
 
 Let's show how the code for the `products` function could look to make it more clear what goes on:
 
 {{{
 <cfcomponent extends="Controller">
 
-  <cffunction name="products">
-    <cfset renderPage(controller="shop", action="products")>
-  </cffunction>
+    <cffunction name="products">
+        <cfset renderPage(controller="shop", action="products")>
+    </cffunction>
 
 </cfcomponent>
 }}}
 
-The only thing this does is call a view page to render using the [renderPage renderPage()] function. The [renderPage renderPage()] function is available to you since the `Shop` controller extends the main Wheels `Controller` so don't forget to include that `extends` attribute in the `cfcomponent` tag as you build your controllers since otherwise you won't be able to do much.
+The only thing this does is call a view page to render using the [renderPage renderPage()] function. The [renderPage renderPage()] function is available to you because the `shop` controller extends the main Wheels `Controller` component. Don't forget to include that `extends` attribute in your `<cfcomponent>` tags as you build your controllers!
 
 So, how does [renderPage renderPage()] work? Well, it accepts the arguments `controller` and `action` among others and based on these it will try to include a view file, in our case this is the `views/shop/products.cfm` file.
 
