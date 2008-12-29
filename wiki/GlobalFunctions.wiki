@@ -11,6 +11,7 @@ These functions are general purpose functions and can be called from anywhere.
 
 ==Functions==
 
+ * [addRoute addRoute()]
  * [deObfuscateParam deObfuscateParam()]
  * [model model()]
  * [obfuscateParam obfuscateParam()]
