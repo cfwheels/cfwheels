@@ -1,7 +1,5 @@
 #summary An overview of Object Relational Mapping (ORM) and how is it used in Wheels. Learn how ORM simplifies your database interaction code.
-#labels chapter,0.8.3
-
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+#labels chapter,1.0
 
 Mapping objects in your application to records in your database tables is a key concept in Wheels. Let's take a look at exactly how this mapping is performed.
 
@@ -12,10 +10,10 @@ Unlike most other languages, there is no notion of class level (aka "static") me
 In Wheels, we create an object like this.
 
 {{{
-<cfset model("Author")>
+<cfset model("author")>
 }}}
 
-The built-in Wheels `model` function will return a reference to an `Author` object in the `application` scope (unless it's the first time you call this function, in which case it will also create and store it in the `application` scope).
+The built-in Wheels [model model()] function will return a reference to an `Author` object in the `application` scope (unless it's the first time you call this function, in which case it will also create and store it in the `application` scope).
 
 Once you have the `author` object, you can start calling class methods on it, like [findByKey findByKey()], for example. `findByKey()` returns an instance of the object with data from the database record defined by the key value that you pass.
 
