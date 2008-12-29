@@ -1,17 +1,17 @@
-#summary flash(key)
-#labels api,0.8,controller,request
+#summary flash([key])
+#labels api,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+*Category*:
+
+[ControllerRequestFunctions Controller Request Functions]
 
 *Description*:
 
-Get the value of a specific key in the Flash.
+Gets the value of a specific key in the Flash (or the entire flash as a struct if no key is passed in).
 
 *Return Type*:
 
-String
-
-*
+Any
 
 *History*:
 
@@ -20,18 +20,12 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *key* || string || true ||  || The key to get the value for ||
-
-*Usage*:
-
--
+|| *key* || string || false ||   || The key to get the value for ||
 
 *Examples*:
 
 {{{
 <p><cfoutput>#flash("message")#</cfoutput></p>
-
-
 }}}
 
 *Related*:
