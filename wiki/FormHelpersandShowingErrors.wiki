@@ -1,8 +1,6 @@
 #summary Wheels ties your application's forms together with your model layer elegantly. With Wheels form conventions, you'll find yourself spending less time writing repetitive markup to display forms and error messages.
 #labels chapter
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
 ==Simple Example: The Old Way==
 
 Let's take a look at a simple form for editing a user profile. Normally, you would code your web form similarly to this:
