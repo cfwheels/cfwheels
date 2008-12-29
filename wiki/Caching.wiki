@@ -54,9 +54,10 @@ Here are the values you can change in there:
 
 {{{
 <cfset application.settings.cacheDatabaseSchema = false>
+<cfset application.settings.cacheFileChecking = false>
+<cfset application.settings.cacheImages = false>
 <cfset application.settings.cacheModelInitialization = false>
 <cfset application.settings.cacheControllerInitialization = false>
-<cfset application.settings.cacheImages = false>
 <cfset application.settings.cacheRoutes = false>
 <cfset application.settings.cacheActions = false>
 <cfset application.settings.cachePages = false>
@@ -107,7 +108,7 @@ So what happens when users request the `browseByUser` page?
 
 When Wheels receives the first request for this page, it will handle everything as it normally would, with the exception that it also adds a copy of the resulting HTML to the cache before ending the processing.
 
-Wheels creates an internal key for use in the cache as well. This key is created from the `controller`, `action`, `id`, and `params` variables. This means, for example, that paginated pages are all stored individually in the cache (because the URL variable for the page to display would be different on each request).
+Wheels creates an internal key for use in the cache as well. This key is created from the `controller`, `action`, `key`, and `params` variables. This means, for example, that paginated pages are all stored individually in the cache (because the URL variable for the page to display would be different on each request).
 
 When the second user requests the same page, Wheels will serve the HTML directly from the cache. Note that any filters set for the action are being run as normal. This means that if you do authentication in the filter (which is a common technique for sites with content where you have to login first to see it), you can still cache those pages safely using the [caches caches()] function.
 
@@ -121,7 +122,7 @@ Here is some code that shows this technique with using the Flash to expire the c
 
 {{{
 <cfset flashInsert(message="Your comment was added")>
-<cfset redirectTo(action="showArticle", id=params.id)>
+<cfset redirectTo(action="showArticle", key=params.key)>
 }}}
 
 ===Page Caching===
@@ -175,4 +176,4 @@ So there you have it: 4 easy ways to speed up your website!
 
 When working with objects in Wheels, you'll likely find yourself using all of the convenient association functions Wheels makes available to you.
 
-For example, if you have set up a `belongsTo` association from `Article` to `Author`, then you will likely write a lot of `article.author().name()` calls. In this case, Wheels is smart enough to only call the database once per request if the queries are identical. So don't worry about adding performance hits when making multiple calls like that in your code.
+For example, if you have set up a `belongsTo` association from `article` to `author`, then you will likely write a lot of `article.author().name()` calls. In this case, Wheels is smart enough to only call the database once per request if the queries are identical. So don't worry about adding performance hits when making multiple calls like that in your code.
