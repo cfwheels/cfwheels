@@ -7,7 +7,7 @@
 
 *Description*:
 
-XXX.
+Tells Wheels to run a function before an action is run or after an action has been run. You can also specify multiple functions and actions.
 
 *Return Type*:
 
@@ -20,10 +20,10 @@ Void
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *through* || string || true || - || XXX ||
-|| *type* || string || false || before || XXX ||
-|| *only* || string || false ||   || XXX ||
-|| *except* || string || false ||   || XXX ||
+|| *through* || string || true || - || Function(s) to execute before or after the action(s) ||
+|| *type* || string || false || before || Whether to run the function(s) before or after the action(s) ||
+|| *only* || string || false ||   || Pass in a list of action names (or one action name) to tell Wheels that the filter function(s) should only be run on these actions ||
+|| *except* || string || false ||   || Pass in a list of action names (or one action name) to tell Wheels that the filter function(s) should be run on all actions except the specified ones ||
 
 *Examples*:
 
