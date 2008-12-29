@@ -19,7 +19,7 @@ Void
 
 *Parameters*:
 
-||   || *Type* || *Required* || *Default* || *Description* ||
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
 || *template* || string || true || - || Path to email body ||
 || *layout* || any || false || #application.settings.sendEmail.layout# || Layout to wrap body in ||
 
