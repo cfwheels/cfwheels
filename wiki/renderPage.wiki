@@ -13,8 +13,6 @@ Renders content to the browser by including the view page for the specified cont
 
 Void
 
-*
-
 *History*:
 
 -
