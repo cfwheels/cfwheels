@@ -1,0 +1,26 @@
+#summary One-sentence summary of this page.
+#labels chapter
+
+Here is a sample application that covers how to setup validation rules
+on a model, make a form for it, save to the database and so on.
+The code is full of comments so it's a good way to learn Wheels if
+you're one of those people who prefer playing around with code rather
+than reading more abstract tutorials.
+
+Instructions:
+
+Create a new database with a table named "users" containing the
+following columns:
+id (int, primary key, not nullable, auto-incrementing)
+firstname (varchar 100, not nullable)
+lastname (varchar 100, not nullable)
+email (varchar 100, not nullable)
+password (varchar 20, not nullable)
+
+Add a data source in the ColdFusion Administrator named
+"cfwheelsUserAdministration" pointing to your new database.
+
+Once that's all done just download, unzip and run the app (it comes
+with Wheels 0.8.1 included).
+
+Enjoy :)
