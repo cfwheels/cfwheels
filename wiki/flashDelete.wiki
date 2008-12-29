@@ -19,7 +19,7 @@ Boolean
 
 *Parameters*:
 
-||   || *Type* || *Required* || *Default* || *Description* ||
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
 || *key* || string || true || - || The key to delete ||
 
 *Examples*:
