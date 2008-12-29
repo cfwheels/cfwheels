@@ -1,8 +1,6 @@
 #summary Use the standard CFML application events through the framework.
 #labels chapter,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
 Because the `Application.cfc` file in the root of your Wheels site just includes the `wheels/functions.cfm` file, which in turn includes a lot of framework specific code, you may wonder what the best way is to use CFML's `onApplicationStart`, `onRequestStart` and similar functions...
 
 While it's perfectly possible to add your code directly to the `wheels/functions.cfm` file, we certainly don't recommend it. If you add code in there, you both increase the risk of accidentally modifying how the framework functions, and you also make it a lot harder to upgrade to future versions of Wheels.
