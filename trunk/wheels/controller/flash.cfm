@@ -45,5 +45,3 @@
 	<cfargument name="key" type="string" required="true" hint="The key to check if it exists">
 	<cfreturn StructKeyExists(session.flash, arguments.key)>
 </cffunction>
-
-
