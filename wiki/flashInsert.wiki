@@ -19,6 +19,9 @@ Void
 
 *Parameters*:
 
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| _Any_ || string || true || - || The value to insert ||
+
 *Examples*:
 
 {{{
