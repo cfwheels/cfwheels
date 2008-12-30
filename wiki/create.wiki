@@ -1,14 +1,43 @@
-#summary One-sentence summary of this page.
+#summary create([properties])
 #labels api,1.0
 
-= Introduction =
+*Category*:
 
-Add your content here.
+[ModelClassFunctions Model Class Functions]
 
+*Description*:
 
-= Details =
+This is a class level method that creates a new object, saves it to the database (if the validation permits it) and returns it.	If the validation fails, the unsaved object (with errors added to it) is still returned. Property names and values can be passed in either using named arguments or as a struct to the properties argument.
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+*Return Type*:
+
+Any
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *properties* || struct || false ||   || Properties for the object ||
+|| _Any_ || string || false ||   || Property name and value ||
+
+*Examples*:
+
+{{{
+<cfset newAuthor = model("author").create(params.author)>
+}}}
+
+{{{
+<cfset newAuthor = model("author").create(firstName="John", lastName="Doe")>
+}}}
+
+{{{
+<cfset newAuthor = model("author").create(active=1, properties=params.author)>
+}}}
+
+*Related*:
+
+ * CreatingRecords (chapter)
+ * [new new()] (function)
