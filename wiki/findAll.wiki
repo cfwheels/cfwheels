@@ -1,4 +1,4 @@
-#summary findOne([where,order,select,include,maxRows,page,perPage,count,handle,cache,reload,parameterize])
+#summary findAll([where,order,select,include,maxRows,page,perPage,count,handle,cache,reload,parameterize])
 #labels api,1.0
 
 *Category*:
