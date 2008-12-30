@@ -1,0 +1,41 @@
+#summary model(name)
+#labels api,1.0
+
+*Category*:
+
+[GlobalFunctions Global Functions]
+
+*Description*:
+
+Creates a new object based on supplied properties and returns it. The object is not saved to the database, it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the properties argument.
+
+*Return Type*:
+
+Any
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *properties* || struct || false ||   || Properties for the object ||
+
+*Examples*:
+
+{{{
+<cfset newAuthor = model("author").new()>
+}}}
+
+{{{
+<cfset newAuthor = model("author").new(params.authorStruct)>
+}}}
+
+{{{
+<cfset newAuthor = model("author").new(firstName="John", lastName="Doe")>
+}}}
+
+*Related*:
+
+ * CreatingRecords (chapter)
