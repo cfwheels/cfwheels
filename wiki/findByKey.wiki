@@ -7,7 +7,7 @@
 
 *Description*:
 
-Fetches the requested record from the database and returns it as an object. Throws an error if no record is found.
+Fetches the requested record and returns it as an object. Throws an error if no record is found.
 
 *Return Type*:
 
@@ -20,11 +20,11 @@ Object
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *key* || string or numeric || true || - || Primary key value(s) of record to fetch ||
-|| *select* || string || false || - || Properties to select ||
-|| *cache* || boolean or numeric || false || - || Minutes to cache the query for ||
-|| *reload* || boolean || false || #application.settings.get.reload# || Set to `true` to force Wheels to fetch a new object from the database even though an identical query has been run in the same request ||
-|| *parameterize* || any || false || #application.settings.get.parameterize# || Set to `true` to use `cfqueryparam` on all columns or pass in a list of property names to use `cfqueryparam` on those only ||
+|| *key* || string or numeric || true || - || Primary key value(s) of record to fetch. Separate with comma if passing in multiple primary key values. ||
+|| *select* || string || false ||   || See documentation for `findAll` ||
+|| *cache* || boolean or numeric || false ||   || See documentation for `findAll` ||
+|| *reload* || boolean || false || #application.settings.get.reload# || See documentation for `findAll` ||
+|| *parameterize* || any || false || #application.settings.get.parameterize# || See documentation for `findAll` ||
 
 *Examples*:
 
