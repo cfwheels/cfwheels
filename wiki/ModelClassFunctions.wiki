@@ -27,7 +27,7 @@ These functions operate on the class as a whole and not on individual objects an
  * [deleteOne deleteOne()]
  * [exists exists()]
  * [findAll findAll()]
- * [findById findById()]
+ * [findByKey findByKey()]
  * [findOne findOne()]
  * [maximum maximum()]
  * [minimum minimum()]
