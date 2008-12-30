@@ -23,16 +23,16 @@ Void
 || *back* || boolean || false || false || Set to true to redirect back to the referring page ||
 || *addToken* || boolean || false || false || See documentation for `cflocation` ||
 || *statusCode* || numeric || false || 302 || See documentation for `cflocation` ||
-|| *route* || string || false ||   || See documentation for [URLFor URLFor()] ||
-|| *controller* || string || false ||   || See documentation for [URLFor URLFor()] ||
-|| *action* || string || false ||   || See documentation for [URLFor URLFor()] ||
-|| *key* || any || false ||   || See documentation for [URLFor URLFor()] ||
-|| *params* || string || false ||   || See documentation for [URLFor URLFor()] ||
-|| *anchor* || string  || false ||   || See documentation for [URLFor URLFor()] ||
-|| *onlyPath* || boolean || false || true || See documentation for [URLFor URLFor()] ||
-|| *host* || string || false ||   || See documentation for [URLFor URLFor()] ||
-|| *protocol* || string || false ||   || See documentation for [URLFor URLFor()] ||
-|| *port* || numeric || false || 0 || See documentation for [URLFor URLFor()] ||
+|| *route* || string || false ||   || See documentation for `URLFor` ||
+|| *controller* || string || false ||   || See documentation for `URLFor` ||
+|| *action* || string || false ||   || See documentation for `URLFor` ||
+|| *key* || any || false ||   || See documentation for `URLFor` ||
+|| *params* || string || false ||   || See documentation for `URLFor` ||
+|| *anchor* || string  || false ||   || See documentation for `URLFor` ||
+|| *onlyPath* || boolean || false || true || See documentation for `URLFor` ||
+|| *host* || string || false ||   || See documentation for `URLFor` ||
+|| *protocol* || string || false ||   || See documentation for `URLFor` ||
+|| *port* || numeric || false || 0 || See documentation for `URLFor` ||
 
 *Examples*:
 
