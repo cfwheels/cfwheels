@@ -1,11 +1,9 @@
 #summary Returning records from your database tables as objects or queries.
 #labels chapter,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
 Reading records from your database typically involves using one of the 3 finder methods available in Wheels: [findByKey findByKey()], [findOne findOne()], and [findAll findAll()].
 
-The first 2 of these, ([findByKey findByKey()] and [findOne findOne()]), returns an object to you, while the last one ([findAllfindAll()]) returns the result from a `cfquery` tag.
+The first 2 of these, ([findByKey findByKey()] and [findOne findOne()]), returns an object to you, while the last one ([findAll findAll()]) returns the result from a `cfquery` tag.
 
 ==Fetching a Row by Primary Key Value==
 
@@ -19,11 +17,11 @@ In your controller:
 
 {{{
 <cftry>
-    <cfset author = model("author").findByKey(params.key)>
-    <cfcatch type="Wheels.RecordNotFound">
-        <cfset flashInsert(message="Author #params.key# was not found")>
-        <cfset redirectTo(back=true)>
-    </cfcatch>
+  <cfset author = model("author").findByKey(params.key)>
+  <cfcatch type="Wheels.RecordNotFound">
+    <cfset flashInsert(message="Author #params.key# was not found")>
+    <cfset redirectTo(back=true)>
+  </cfcatch>
 </cftry>
 }}}
 
@@ -69,7 +67,7 @@ A tip is to turn on debugging when you're learning Wheels so you can get a good 
 
 This maps to the `WHERE` clause of the SQL statement. Wheels will also convert all your input to `cfqueryparam` tags for you automatically.
 
-There are some limitations to what you can use in the `where` argument, but the following SQL will work: `=`, `<>`, `<`, `<=`, `>`, `>=`, `IN`, `LIKE`, `AND`, `OR`. In addition to this you can also use parentheses to group conditional SQL statements together.
+There are some limitations to what you can use in the `where` argument, but the following SQL will work: `=`, `<>`, `<`, `<=`, `>`, `>=`, `LIKE`, `AND`, `OR`. In addition to this you can also use parentheses to group conditional SQL statements together.
 
 ==`order` Argument==
 
