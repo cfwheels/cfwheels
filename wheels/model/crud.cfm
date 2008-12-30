@@ -742,39 +742,26 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="save" returntype="boolean" access="public" output="false" hint="Object, Saves the object if it passes validation and callbacks">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.save.parameterize#">
-	<!---
-		EXAMPLES:
-		<cfset user.save()>
-
-		<cfif user.save()>
-		  <cfset FlashInsert(notice="The user was saved!")>
-		  <cfset redirectTo(action="userEdit")>
-		<cfelse>
-		  <cfset FlashInsert(alert="Error, please correct!")>
-		  <cfset renderPage(action="userEdit")
-		</cfif>
-	--->
+<cffunction name="save" returntype="boolean" access="public" output="false" hint="Saves the object if it passes validation and callbacks. Returns `true` if the object was saved successfully to the database.">
+	<cfargument name="parameterize" type="any" required="false" default="#application.settings.save.parameterize#" hint="Set to `true` to use `cfqueryparam` on all columns when saving or pass in a list of property names to use `cfqueryparam` on those only">
 	<cfscript>
-		var loc = {};
-		loc.returnValue = false;
+		var returnValue = false;
 		clearErrors();
 		if ($callback("beforeValidation"))
 		{
 			if ($isNew())
 			{
 				if ($callback("beforeValidationOnCreate") && $validate("onCreate") && $callback("beforeValidation") && $validate("onSave") && $callback("afterValidation") && $callback("beforeSave") && $callback("beforeCreate") && $create(parameterize=arguments.parameterize) && $callback("afterCreate") && $callback("afterSave"))
-					loc.returnValue = true;
+					returnValue = true;
 			}
 			else
 			{
 				if ($callback("beforeValidationOnUpdate") && $validate("onUpdate") && $callback("beforeValidation") && $validate("onSave") && $callback("afterValidation") && $callback("beforeSave") && $callback("beforeUpdate") && $update(parameterize=arguments.parameterize) && $callback("afterUpdate") && $callback("afterSave"))
-					loc.returnValue = true;
+					returnValue = true;
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="update" returntype="boolean" access="public" output="false" hint="Object, Updates the object with the supplied properties and saves it to the database">
@@ -840,45 +827,25 @@
         <cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="new" returntype="any" access="public" output="false" hint="Class, Creates a new object based on supplied properties and returns it">
+<cffunction name="new" returntype="any" access="public" output="false" hint="Creates a new object based on supplied properties and returns it. The object is not saved to the database, it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the properties argument.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
-	<!---
-		DETAILS:
-		The object is not saved to the database, it only exists in memory.
-		Property names and values can be passed in either using named arguments or as a struct to the properties argument.
-		EXAMPLES:
-		<cfset newAuthor = model("author").new()>
-		<cfset newAuthor = model("author").new(params.authorStruct)>
-		<cfset newAuthor = model("author").new(firstName="John", lastName="Doe")>
-	--->
 	<cfscript>
 		var loc = {};
 		for (loc.key in arguments)
-			if (loc.key IS NOT "properties")
+			if (loc.key != "properties")
 				arguments.properties[loc.key] = arguments[loc.key];
 		loc.returnValue = $createInstance(properties=arguments.properties, persisted=false);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="create" returntype="any" access="public" output="false" hint="Class, Creates a new object based on supplied properties, saves it and returns it">
+<cffunction name="create" returntype="any" access="public" output="false" hint="This is a class level method that creates a new object, saves it to the database (if the validation permits it) and returns it.	If the validation fails, the unsaved object (with errors added to it) is still returned. Property names and values can be passed in either using named arguments or as a struct to the properties argument.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
-	<!---
-		DETAILS:
-		This is a class level method that creates a new object, saves it to the database (if the validation permits it) and returns it.
-		If the validation fails, the unsaved object (with errors added to it) is still returned.
-		Property names and values can be passed in either using named arguments or as a struct to the properties argument.
-		EXAMPLES:
-		<cfset newAuthor = model("author").create(params.author)>
-		<cfset newAuthor = model("author").create(firstName="John", lastName="Doe")>
-		<cfset newAuthor = model("author").create(active=1, properties=params.author)>
-	--->
 	<cfscript>
-		var loc = {};
-		loc.returnValue = new(argumentCollection=arguments);
-		loc.returnValue.save();
+		var returnValue = new(argumentCollection=arguments);
+		returnValue.save();
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="$create" returntype="boolean" access="public" output="false">
