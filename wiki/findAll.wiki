@@ -1,0 +1,54 @@
+#summary findOne([where,order,select,include,maxRows,page,perPage,count,handle,cache,reload,parameterize])
+#labels api,1.0
+
+*Category*:
+
+[ModelClassFunctions Model Class Functions]
+
+*Description*:
+
+Returns the records matching the arguments as a query result set. If you don't specify table names in the select, where and order clause Wheels will guess what column you intended to get back and prepend the table name to your supplied column names. If you don't specify the select argument it will default to get all columns.
+
+*Return Type*:
+
+Query
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *where* || string or list || false || - || See documentation for `findOne` ||
+|| *order* || string or list || false || - || See documentation for `findOne` ||
+|| *select* || string || false || - || See documentation for `findByKey` ||
+|| *include* || string or list || false || - || Associations that should be included ||
+|| *maxRows* || numeric || false || -1 (all) || Maximum number of records to retrieve ||
+|| *page* || numeric || false || 0 (no pagination) || Page to get records for in pagination ||
+|| *perPage* || numeric || false || 10 || Records per page in pagination ||
+|| *count* || numeric || false || 0 || Total records in pagination (when not supplied Wheels will do a COUNT query to get this value) ||
+|| *handle* || string || false ||   || Handle to use for the query in pagination ||
+|| *cache* || boolean or numeric || false || - || See documentation for `findByKey` ||
+|| *reload* || boolean || false || #application.settings.get.reload# || See documentation for `findByKey` ||
+|| *parameterize* || any || false || #application.settings.get.parameterize# || See documentation for `findByKey` ||
+
+*Examples*:
+
+{{{
+<cfset articles = model("article ").findAll(where="published=1", order="createdAt DESC", include="author")>
+}}}
+
+{{{
+<cfset bobsArticles = model("author").findAll(where="firstName='Bob'", include="articles")>
+}}}
+
+{{{
+<cfset songs = model("song").findAll(include="album(artist)", page=2, perPage=10)>
+}}}
+
+*Related*:
+
+ * ReadingRecords (chapter)
+ * [findByKey findByKey()] (function)
+ * [findOne findOne()] (function)
