@@ -1,0 +1,50 @@
+#summary findOne([where,order,select,cache,reload,parameterize])
+#labels api,1.0
+
+*Category*:
+
+[ModelClassFunctions Model Class Functions]
+
+*Description*:
+
+Fetches the first record that was found based on where and order argument and returns it as an object. Throws an error if no record is found.
+
+*Return Type*:
+
+Object
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *where* || string or list || false || - || String to use in where clause of query ||
+|| *order* || string or list || false || - || String to use in order by clause of query ||
+|| *select* || string || false || - || See documentation for `findByKey` ||
+|| *cache* || boolean or numeric || false || - || See documentation for `findByKey` ||
+|| *reload* || boolean || false || #application.settings.get.reload# || See documentation for `findByKey` ||
+|| *parameterize* || any || false || #application.settings.get.parameterize# || See documentation for `findByKey` ||
+
+*Examples*:
+
+{{{
+<cfset author = model("author").findByKey(99)>
+}}}
+
+{{{
+<cftry>
+  <cfset author = model("author").findByKey(params.key)>
+  <cfcatch type="Wheels.RecordNotFound">
+    <cfset flashInsert(message="Author #params.key# was not found")>
+    <cfset redirectTo(back=true)>
+  </cfcatch>
+</cftry>
+}}}
+
+*Related*:
+
+ * ReadingRecords (chapter)
+ * [findByKey findByKey()] (function)
+ * [findAll findAll()] (function)
