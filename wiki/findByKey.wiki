@@ -20,26 +20,26 @@ Object
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *key* || string or numeric || true || - || Primary key value(s) of record to look for ||
+|| *key* || string or numeric || true || - || Primary key value(s) of record to fetch ||
 || *select* || string || false || - || Properties to select ||
 || *cache* || boolean or numeric || false || - || Minutes to cache the query for ||
-|| *reload* || boolean || false || #application.settings.get.reload# || Set to true to force Wheels to fetch a new object from the database even though an identical query has been run in the same request ||
+|| *reload* || boolean || false || #application.settings.get.reload# || Set to `true` to force Wheels to fetch a new object from the database even though an identical query has been run in the same request ||
 || *parameterize* || any || false || #application.settings.get.parameterize# || Set to `true` to use `cfqueryparam` on all columns or pass in a list of property names to use `cfqueryparam` on those only ||
 
 *Examples*:
 
 {{{
-<cfset user.save()>
+<cfset author = model("author").findByKey(99)>
 }}}
 
 {{{
-<cfif user.save(parameterize=false)>
-  <cfset FlashInsert(notice="The user was saved!")>
-  <cfset redirectTo(action="userEdit")>
-<cfelse>
-  <cfset FlashInsert(alert="Error, please correct!")>
-  <cfset renderPage(action="userEdit")
-</cfif>
+<cftry>
+  <cfset author = model("author").findByKey(params.key)>
+  <cfcatch type="Wheels.RecordNotFound">
+    <cfset flashInsert(message="Author #params.key# was not found")>
+    <cfset redirectTo(back=true)>
+  </cfcatch>
+</cftry>
 }}}
 
 *Related*:
