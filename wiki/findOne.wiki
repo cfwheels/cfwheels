@@ -30,17 +30,7 @@ Object
 *Examples*:
 
 {{{
-<cfset author = model("author").findByKey(99)>
-}}}
-
-{{{
-<cftry>
-  <cfset author = model("author").findByKey(params.key)>
-  <cfcatch type="Wheels.RecordNotFound">
-    <cfset flashInsert(message="Author #params.key# was not found")>
-    <cfset redirectTo(back=true)>
-  </cfcatch>
-</cftry>
+<cfset anOrder = model("order").findOne(order="datePurchased DESC")>
 }}}
 
 *Related*:
