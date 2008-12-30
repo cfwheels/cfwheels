@@ -1,39 +1,31 @@
 <!--- Class Methods --->
 
-<cffunction name="findByKey" returntype="any" access="public" output="false" hint="Class, fetches the requested record from the database and returns it as an object">
-	<cfargument name="key" type="any" required="true" hint="Primary key value(s) of record to look for">
-	<cfargument name="select" type="string" required="false" default="" hint="Properties to select">
-	<cfargument name="cache" type="any" required="false" default="">
-	<cfargument name="reload" type="boolean" required="false" default="#application.settings.get.reload#">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.get.parameterize#">
+<cffunction name="findByKey" returntype="any" access="public" output="false" hint="Fetches the requested record and returns it as an object. Throws an error if no record is found.">
+	<cfargument name="key" type="any" required="true" hint="Primary key value(s) of record to fetch. Separate with comma if passing in multiple primary key values.">
+	<cfargument name="select" type="string" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="reload" type="boolean" required="false" default="#application.settings.get.reload#" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="#application.settings.get.parameterize#" hint="See documentation for `findAll`">
 	<cfargument name="$create" type="boolean" required="false" default="true">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
-	<!---
-		DETAILS:
-		Returns false if no record is found.
-	--->
 	<cfscript>
-		var loc = {};
+		var returnValue = "";
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");
-		loc.returnValue = findOne(argumentCollection=arguments);
+		returnValue = findOne(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="findOne" returntype="any" access="public" output="false" hint="Class, fetches the first record that was found based on where and order argument and returns it as an object">
-	<cfargument name="where" type="string" required="false" default="" hint="String to use in where clause of query">
-	<cfargument name="order" type="string" required="false" default="" hint="String to use in order by clause of query">
-	<cfargument name="select" type="string" required="false" default="" hint="Properties to select">
-	<cfargument name="cache" type="any" required="false" default="">
-	<cfargument name="reload" type="boolean" required="false" default="#application.settings.findOne.reload#">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.findOne.parameterize#">
+<cffunction name="findOne" returntype="any" access="public" output="false" hint="Fetches the first record found based on the `WHERE` and `ORDER BY` clauses and returns it as an object. Throws an error if no record is found.">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="order" type="string" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="select" type="string" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="reload" type="boolean" required="false" default="#application.settings.findOne.reload#" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="#application.settings.findOne.parameterize#" hint="See documentation for `findAll`">
 	<cfargument name="$create" type="boolean" required="false" default="true">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
-	<!---
-		DETAILS:
-		Returns false if no record is found.
-	--->
 	<cfscript>
 		var loc = {};
 		loc.create = arguments.$create;
@@ -55,28 +47,22 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="findAll" returntype="any" access="public" output="false" hint="Class, returns the records matching the arguments as a query result set">
-	<cfargument name="where" type="string" required="false" default="" hint="String to use in where clause of query">
-	<cfargument name="order" type="string" required="false" default="" hint="String to use in order by clause of query">
-	<cfargument name="select" type="string" required="false" default="" hint="Properties to select">
+<cffunction name="findAll" returntype="any" access="public" output="false" hint="Returns the records matching the arguments as a `cfquery` result set. If you don't specify table names in the `select`, `where` and `order` arguments Wheels will guess what column you intended to get back and prepend the table name to your supplied column names. If you don't specify the `select` argument it will default to get all columns.">
+	<cfargument name="where" type="string" required="false" default="" hint="String to use in `WHERE` clause of query">
+	<cfargument name="order" type="string" required="false" default="" hint="String to use in `ORDER BY` clause of query">
+	<cfargument name="select" type="string" required="false" default="" hint="String to use in `SELECT` clause of query">
 	<cfargument name="include" type="string" required="false" default="" hint="Other classes that should be included">
 	<cfargument name="maxRows" type="numeric" required="false" default="-1" hint="Maximum number of records to retrieve">
-	<cfargument name="page" type="numeric" required="false" default=0>
-	<cfargument name="perPage" type="numeric" required="false" default=10>
-	<cfargument name="count" type="numeric" required="false" default="0">
-	<cfargument name="handle" type="string" required="false" default="query">
-	<cfargument name="cache" type="any" required="false" default="">
-	<cfargument name="reload" type="boolean" required="false" default="#application.settings.findAll.reload#">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.findAll.parameterize#">
+	<cfargument name="page" type="numeric" required="false" default=0 hint="Page to get records for in pagination">
+	<cfargument name="perPage" type="numeric" required="false" default=10 hint="Records per page in pagination">
+	<cfargument name="count" type="numeric" required="false" default=0 hint="Total records in pagination (when not supplied Wheels will do a COUNT query to get this value)">
+	<cfargument name="handle" type="string" required="false" default="query" hint="Handle to use for the query in pagination">
+	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the query for">
+	<cfargument name="reload" type="boolean" required="false" default="#application.settings.findAll.reload#" hint="Set to `true` to force Wheels to fetch a new object from the database even though an identical query has been run in the same request">
+	<cfargument name="parameterize" type="any" required="false" default="#application.settings.findAll.parameterize#" hint="Set to `true` to use `cfqueryparam` on all columns or pass in a list of property names to use `cfqueryparam` on those only">
 	<cfargument name="$limit" type="numeric" required="false" default=0>
 	<cfargument name="$offset" type="numeric" required="false" default=0>
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
-	<!---
-		DETAILS:
-		If you don't specify table names in the select, where and order clause Wheels will guess what column you intended to get back and prepend the table name to your supplied column names. If you don't specify the select argument it will default to get all columns.
-		EXAMPLES:
-		<cfset articles = model("article ").findAll(where="published=1", order="createdAt DESC", include="author")>
-	--->
 	<cfscript>
 		var loc = {};
 
@@ -743,7 +729,7 @@
 </cffunction>
 
 <cffunction name="save" returntype="boolean" access="public" output="false" hint="Saves the object if it passes validation and callbacks. Returns `true` if the object was saved successfully to the database.">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.save.parameterize#" hint="Set to `true` to use `cfqueryparam` on all columns when saving or pass in a list of property names to use `cfqueryparam` on those only">
+	<cfargument name="parameterize" type="any" required="false" default="#application.settings.save.parameterize#" hint="See documentation for `findAll`">
 	<cfscript>
 		var returnValue = false;
 		clearErrors();
@@ -839,10 +825,11 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="create" returntype="any" access="public" output="false" hint="This is a class level method that creates a new object, saves it to the database (if the validation permits it) and returns it.	If the validation fails, the unsaved object (with errors added to it) is still returned. Property names and values can be passed in either using named arguments or as a struct to the properties argument.">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
+<cffunction name="create" returntype="any" access="public" output="false" hint="Creates a new object, saves it to the database (if the validation permits it) and returns it.	If the validation fails, the unsaved object (with errors added to it) is still returned. Property names and values can be passed in either using named arguments or as a struct to the properties argument.">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
 	<cfscript>
-		var returnValue = new(argumentCollection=arguments);
+		var returnValue = "";
+		returnValue = new(argumentCollection=arguments);
 		returnValue.save();
 	</cfscript>
 	<cfreturn returnValue>
