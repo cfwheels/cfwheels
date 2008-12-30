@@ -1,4 +1,4 @@
-#summary save([parameterize])
+#summary update([properties,parameterize])
 #labels api,1.0
 
 *Category*:
@@ -7,7 +7,7 @@
 
 *Description*:
 
-Saves the object if it passes validation and callbacks. Returns `true` if the object was saved successfully to the database.
+Updates the object with the supplied properties and saves it to the database. Returns true if the object was saved successfully to the database and false otherwise.
 
 *Return Type*:
 
@@ -20,24 +20,24 @@ Boolean
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *parameterize* || any || false || #application.settings.save.parameterize# || See documentation for `findAll` ||
+|| * properties* || struct || false ||   || See documentation for `new` ||
+|| *parameterize* || boolean, string or list || false || #application.settings.update.parameterize# || See documentation for `findAll` ||
 
 *Examples*:
 
 {{{
-<cfset user.save()>
+<cfset post = model("post").findByKey(33)>
+<cfset post.update(title="New version of Wheels just released")>
 }}}
 
 {{{
-<cfif user.save(parameterize=false)>
-  <cfset FlashInsert(notice="The user was saved!")>
-  <cfset redirectTo(action="userEdit")>
-<cfelse>
-  <cfset FlashInsert(alert="Error, please correct!")>
-  <cfset renderPage(action="userEdit")
-</cfif>
+<cfset post = model("post").findByKey(params.key)>
+<cfset post.update(title="New version of Wheels just released", properties=params.post)>
 }}}
 
 *Related*:
 
- * CreatingRecords (chapter)
+ * UpdatingRecords (chapter)
+ * [updateByKey updateByKey()] (function)
+ * [updateOne updateOne()] (function)
+ * [updateAll updateAll()] (function)
