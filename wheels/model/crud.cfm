@@ -51,11 +51,11 @@
 	<cfargument name="where" type="string" required="false" default="" hint="String to use in `WHERE` clause of query">
 	<cfargument name="order" type="string" required="false" default="" hint="String to use in `ORDER BY` clause of query">
 	<cfargument name="select" type="string" required="false" default="" hint="String to use in `SELECT` clause of query">
-	<cfargument name="include" type="string" required="false" default="" hint="Other classes that should be included">
+	<cfargument name="include" type="string" required="false" default="" hint="Associations that should be included">
 	<cfargument name="maxRows" type="numeric" required="false" default="-1" hint="Maximum number of records to retrieve">
 	<cfargument name="page" type="numeric" required="false" default=0 hint="Page to get records for in pagination">
 	<cfargument name="perPage" type="numeric" required="false" default=10 hint="Records per page in pagination">
-	<cfargument name="count" type="numeric" required="false" default=0 hint="Total records in pagination (when not supplied Wheels will do a COUNT query to get this value)">
+	<cfargument name="count" type="numeric" required="false" default=0 hint="Total records in pagination (when not supplied Wheels will do a `COUNT` query to get this value)">
 	<cfargument name="handle" type="string" required="false" default="query" hint="Handle to use for the query in pagination">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the query for">
 	<cfargument name="reload" type="boolean" required="false" default="#application.settings.findAll.reload#" hint="Set to `true` to force Wheels to fetch a new object from the database even though an identical query has been run in the same request">
@@ -813,7 +813,7 @@
         <cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="new" returntype="any" access="public" output="false" hint="Creates a new object based on supplied properties and returns it. The object is not saved to the database, it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the properties argument.">
+<cffunction name="new" returntype="any" access="public" output="false" hint="Creates a new object based on supplied properties and returns it. The object is not saved to the database, it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
 	<cfscript>
 		var loc = {};
@@ -825,7 +825,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="create" returntype="any" access="public" output="false" hint="Creates a new object, saves it to the database (if the validation permits it) and returns it.	If the validation fails, the unsaved object (with errors added to it) is still returned. Property names and values can be passed in either using named arguments or as a struct to the properties argument.">
+<cffunction name="create" returntype="any" access="public" output="false" hint="Creates a new object, saves it to the database (if the validation permits it) and returns it. If the validation fails, the unsaved object (with errors added to it) is still returned. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
 	<cfscript>
 		var returnValue = "";
