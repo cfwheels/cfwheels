@@ -1,8 +1,6 @@
 #summary How to create new objects and save them to the database.
 #labels chapter,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
 In Wheels, one way to create objects that represent records in our table is by calling the [new new()] class-level method.
 
 {{{
