@@ -563,28 +563,22 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="updateByKey" returntype="boolean" access="public" output="false" hint="Class, Gets an object by key and updates it with the supplied properties">
-        <cfargument name="key" type="any" required="true" hint="Primary key value(s) for the object">
-        <cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
-        <!---
-                DETAILS:
-                Finds the record with the supplied key and saves it (if the validation permits it) with the supplied properties or named arguments.
-                Property names and values can be passed in either using named arguments or as a struct to the properties argument.
-                Returns true if the save was successful, false otherwise.
-        --->
-        <cfscript>
-                var loc = {};
-                arguments.where = $keyWhereString(values=arguments.key);
-                StructDelete(arguments, "key");
-                loc.returnValue = updateOne(argumentCollection=arguments);
-        </cfscript>
-        <cfreturn loc.returnValue>
+<cffunction name="updateByKey" returntype="boolean" access="public" output="false" hint="Finds the record with the supplied key and saves it (if the validation permits it) with the supplied properties or named arguments. Property names and values can be passed in either using named arguments or as a struct to the properties argument. Returns true if the save was successful, false otherwise.">
+	<cfargument name="key" type="any" required="true" hint="See documentation for `findByKey`">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
+	<cfscript>
+		var returnValue = "";
+		arguments.where = $keyWhereString(values=arguments.key);
+		StructDelete(arguments, "key");
+		returnValue = updateOne(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="updateOne" returntype="boolean" access="public" output="false" hint="Class, Gets an object based on conditions and updates it with the supplied properties">
-	<cfargument name="where" type="string" required="false" default="" hint="String to use in where clause of query">
-	<cfargument name="order" type="string" required="false" default="" hint="String to use in order by clause of query">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
+<cffunction name="updateOne" returntype="boolean" access="public" output="false" hint="Gets an object based on conditions and updates it with the supplied properties.">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="order" type="string" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
 	<cfscript>
 		var loc = {};
 		loc.object = findOne(where=arguments.where, order=arguments.order);
@@ -598,21 +592,16 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="updateAll" returntype="numeric" access="public" output="false" hint="Class, Update all objects matching the conditions with the supplied properties">
-	<cfargument name="where" type="string" required="false" default="" hint="String to use in where clause of query">
-	<cfargument name="include" type="string" required="false" default="" hint="Other classes that should be included">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
+<cffunction name="updateAll" returntype="numeric" access="public" output="false" hint="Updates all properties for the records that match the where argument. Property names and values can be passed in either using named arguments or as a struct to the properties argument. By default objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in instantiate=true. Returns the number of records that were updated.">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
+	<cfargument name="parameterize" type="any" required="false" default="#application.settings.updateAll.parameterize#" hint="See documentation for `findAll`">
 	<cfargument name="instantiate" type="boolean" required="false" default="#application.settings.updateAll.instantiate#" hint="Whether or not to instantiate the object(s) before the update">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.updateAll.parameterize#">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
-	<!---
-		DETAILS:
-		Updates all properties for the records that match the where argument. Property names and values can be passed in either using named arguments or as a struct to the properties argument. By default objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in instantiate=true.
-		Returns the number of records that were updated.
-	--->
 	<cfscript>
 		var loc = {};
-		loc.namedArgs = "where,include,properties,instantiate,parameterize,$softDeleteCheck";
+		loc.namedArgs = "where,include,properties,parameterize,instantiate,$softDeleteCheck";
 		for (loc.key in arguments)
 		{
 			if (!ListFindNoCase(loc.namedArgs, loc.key))
@@ -750,25 +739,19 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="update" returntype="boolean" access="public" output="false" hint="Object, Updates the object with the supplied properties and saves it to the database">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.update.parameterize#">
-		
-        <!---
-                DETAILS:
-                This object level method updates the properties for the object with the passed in values and tries to save it to the database.
-                Returns true if the object was saved successfully to the database and false otherwise.
-        --->
-        <cfscript>
-                var loc = {};
-                for (loc.key in arguments)
-                        if (loc.key IS NOT "properties")
-                                arguments.properties[loc.key] = arguments[loc.key];
-                for (loc.key in arguments.properties)
-                        this[loc.key] = arguments.properties[loc.key];
-                loc.returnValue = save(parameterize=arguments.parameterize);
-        </cfscript>
-        <cfreturn loc.returnValue>
+<cffunction name="update" returntype="boolean" access="public" output="false" hint="Updates the object with the supplied properties and saves it to the database. Returns true if the object was saved successfully to the database and false otherwise.">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
+	<cfargument name="parameterize" type="any" required="false" default="#application.settings.update.parameterize#" hint="See documentation for `findAll`">
+	<cfscript>
+		var loc = {};
+		for (loc.key in arguments)
+			if (loc.key != "properties" && loc.key != "parameterize")
+				arguments.properties[loc.key] = arguments[loc.key];
+		for (loc.key in arguments.properties)
+			this[loc.key] = arguments.properties[loc.key];
+		loc.returnValue = save(parameterize=arguments.parameterize);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="delete" returntype="boolean" access="public" output="false" hint="Object, Deletes the object from the database">
