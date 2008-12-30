@@ -1,2 +1,41 @@
+#summary updateByKey(key[properties])
 #labels api,1.0
+
+*Category*:
+
+[ModelClassFunctions Model Class Functions]
+
+*Description*:
+
 Finds the record with the supplied key and saves it (if the validation permits it) with the supplied properties or named arguments. Property names and values can be passed in either using named arguments or as a struct to the properties argument. Returns true if the save was successful, false otherwise.
+
+*Return Type*:
+
+Boolean
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *key* || numeric, string or list || true || - || See documentation for `findByKey` ||
+|| * properties* || struct || false ||   || See documentation for `new` ||
+
+*Examples*:
+
+{{{
+<cfset post = model("post").updateByKey(33, params.post)>
+}}}
+
+{{{
+<cfset post = model("post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
+}}}
+
+*Related*:
+
+ * UpdatingRecords (chapter)
+ * [update update()] (function)
+ * [updateOne updateOne()] (function)
+ * [updateAll updateAll()] (function)
