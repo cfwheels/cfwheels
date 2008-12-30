@@ -7,7 +7,7 @@
 
 *Description*:
 
-Fetches the first record that was found based on where and order argument and returns it as an object. Throws an error if no record is found.
+Fetches the first record found based on the `WHERE` and `ORDER BY` clauses and returns it as an object. Throws an error if no record is found.
 
 *Return Type*:
 
@@ -20,12 +20,12 @@ Object
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *where* || string or list || false || - || String to use in where clause of query ||
-|| *order* || string or list || false || - || String to use in order by clause of query ||
-|| *select* || string || false || - || See documentation for `findByKey` ||
-|| *cache* || boolean or numeric || false || - || See documentation for `findByKey` ||
-|| *reload* || boolean || false || #application.settings.get.reload# || See documentation for `findByKey` ||
-|| *parameterize* || any || false || #application.settings.get.parameterize# || See documentation for `findByKey` ||
+|| *where* || string or list || false || - || See documentation for `findAll` ||
+|| *order* || string or list || false || - || See documentation for `findAll` ||
+|| *select* || string || false || - || See documentation for `findAll` ||
+|| *cache* || boolean or numeric || false || - || See documentation for `findAll` ||
+|| *reload* || boolean || false || #application.settings.get.reload# || See documentation for `findAll` ||
+|| *parameterize* || any || false || #application.settings.get.parameterize# || See documentation for `findAll` ||
 
 *Examples*:
 
