@@ -1,0 +1,43 @@
+#summary save([parameterize])
+#labels api,1.0
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
+Saves the object if it passes validation and callbacks. Returns `true` if the object was saved successfully to the database.
+
+*Return Type*:
+
+Boolean
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *parameterize* || any || false || #application.settings.save.parameterize# || Set to `true` to use `cfqueryparam` on all columns when saving or pass in a list of property names to use `cfqueryparam` on those only ||
+
+*Examples*:
+
+{{{
+<cfset user.save()>
+}}}
+
+{{{
+<cfif user.save(parameterize=false)>
+  <cfset FlashInsert(notice="The user was saved!")>
+  <cfset redirectTo(action="userEdit")>
+<cfelse>
+  <cfset FlashInsert(alert="Error, please correct!")>
+  <cfset renderPage(action="userEdit")
+</cfif>
+}}}
+
+*Related*:
+
+ * CreatingRecords (chapter)
