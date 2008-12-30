@@ -20,7 +20,7 @@ Boolean
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *parameterize* || any || false || #application.settings.save.parameterize# || Set to `true` to use `cfqueryparam` on all columns when saving or pass in a list of property names to use `cfqueryparam` on those only ||
+|| *parameterize* || any || false || #application.settings.save.parameterize# || See documentation for `findAll` ||
 
 *Examples*:
 
