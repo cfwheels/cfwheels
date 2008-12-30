@@ -1,9 +1,9 @@
-#summary model(name)
+#summary new([properties])
 #labels api,1.0
 
 *Category*:
 
-[GlobalFunctions Global Functions]
+[ModelClassFunctions Model Class Functions]
 
 *Description*:
 
@@ -21,6 +21,7 @@ Any
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
 || *properties* || struct || false ||   || Properties for the object ||
+|| _Any_ || string || false ||   || Property name and value ||
 
 *Examples*:
 
@@ -39,3 +40,4 @@ Any
 *Related*:
 
  * CreatingRecords (chapter)
+ * [create create()] (function)
