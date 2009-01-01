@@ -57,13 +57,13 @@ By default, [updateByKey updateByKey()] will fetch the object first and call the
 An example of using [updateByKey updateByKey()] by passing a `struct`:
 
 {{{
-<cfset post = model("post").updateByKey(33, params.post)>
+<cfset result = model("post").updateByKey(33, params.post)>
 }}}
 
 And an example of using [updateByKey updateByKey()] by passing named arguments:
 
 {{{
-<cfset post = model("post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
+<cfset result = model("post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
 }}}
 
 Keep in mind that if you use named arguments for the property values, you also need to name all other arguments too because you can't mix named and unnamed arguments in !ColdFusion.
