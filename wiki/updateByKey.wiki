@@ -26,11 +26,11 @@ Boolean
 *Examples*:
 
 {{{
-<cfset post = model("post").updateByKey(33, params.post)>
+<cfset result = model("post").updateByKey(33, params.post)>
 }}}
 
 {{{
-<cfset post = model("post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
+<cfset result = model("post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
 }}}
 
 *Related*:
