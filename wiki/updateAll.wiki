@@ -1,4 +1,4 @@
-#summary updateByKey(key[properties])
+#summary updateAll([where,include,properties,parameterize,instantiate])
 #labels api,1.0
 
 *Category*:
@@ -20,13 +20,16 @@ Numeric
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *where* || numeric, string or list || true || - || See documentation for `findByKey` ||
-|| *properties* || struct || false ||   || See documentation for `new` ||
+|| *where* || numeric, string or list || true || - || See documentation for `findAll` ||
+|| *include* || numeric, string or list || true || - || See documentation for `findAll` ||
+|| *properties* || numeric, string or list || true || - || See documentation for `new` ||
+|| *parameterize* || numeric, string or list || true || - || See documentation for `findAll` ||
+|| *instantiate* || numeric, string or list || true || - || Whether or not to instantiate the object(s) before the update ||
 
 *Examples*:
 
 {{{
-<cfset post = model("post").updateByKey(33, params.post)>
+<cfset recordsReturned = model("post").updateAll(published=1, publishedAt=Now(), where="published=0")>
 }}}
 
 {{{
@@ -37,5 +40,5 @@ Numeric
 
  * UpdatingRecords (chapter)
  * [update update()] (function)
+ * [updateByKey updateByKey()] (function)
  * [updateOne updateOne()] (function)
- * [updateAll updateAll()] (function)
