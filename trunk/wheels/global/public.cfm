@@ -114,7 +114,7 @@
 	<cfargument name="param" type="any" required="true" hint="Value to obfuscate">
 	<cfscript>
 		var loc = {};
-		if (isValid("integer", arguments.param) && IsNumeric(arguments.param) && arguments.param != -1)
+		if (isValid("integer", arguments.param) && IsNumeric(arguments.param) && arguments.param > 0)
 		{
 			loc.length = Len(arguments.param);
 			loc.a = (10^loc.length) + Reverse(arguments.param);
