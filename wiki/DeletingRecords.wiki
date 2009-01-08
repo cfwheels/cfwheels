@@ -1,7 +1,5 @@
 #summary Deleting records from your database tables.
-#labels chapter,0.8.3
-
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+#labels chapter,1.0
 
 Deleting records in Wheels is simple. If you have fetched an object, you can just call its [delete delete()] method. If you don't have any callbacks specified for the class, all that will happen is that the record will be deleted from the table and `true` will be returned.
 
@@ -11,9 +9,9 @@ If you have callbacks, however, this is what happens.
 
 First, all methods registered to be run before a delete happens (these are registered using a [beforeDelete beforeDelete()] call from the `init` function) will be executed, if any exist.
 
-If these return `true`, Wheels will proceed and delete the record from the table. If `false` is returned from the callback code, processing will return to your code without the record being deleted. (`false` is returned to you in this case.)
+If these return `true`, Wheels will proceed and delete the record from the table. If `false` is returned from the callback code, processing will return to your code without the record being deleted (`false` is returned to you in this case.)
 
-If the record was deleted, the [afterDelete afterDelete()] callback code is executed, and whatever that code returns will be returned to you. (You should make all your callbacks return `true` or `false`.)
+If the record was deleted, the [afterDelete afterDelete()] callback code is executed, and whatever that code returns will be returned to you (you should make all your callbacks return `true` or `false`.)
 
 If you're unfamiliar with the concept of callbacks, you can read about them in the [ObjectCallbacks Object Callbacks] chapter.
 
@@ -22,7 +20,7 @@ If you're unfamiliar with the concept of callbacks, you can read about them in t
 Here's a simple example of fetching a record from the database and then deleting it.
 
 {{{
-<cfset aPost = model("Post").findByKey(33)>
+<cfset aPost = model("post").findByKey(33)>
 <cfset aPost.delete()>
 }}}
 
