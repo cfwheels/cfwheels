@@ -754,46 +754,41 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="delete" returntype="boolean" access="public" output="false" hint="Object, Deletes the object from the database">
-        <cfargument name="parameterize" type="any" required="false" default="#application.settings.delete.parameterize#">
-        <!---
-                DETAILS:
-                Returns true on successful deletion of the row, false otherwise.
-        --->
-        <cfscript>
-                var loc = {};
-                loc.proceed = true;
-                for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.callbacks.beforeDelete); loc.i=loc.i+1)
-                {
-                        loc.proceed = $invoke(method=variables.wheels.class.callbacks.beforeDelete[loc.i]);
-                        if (StructKeyExists(loc, "proceed") && !loc.proceed)
-                                break;
-                }
-
-                if (loc.proceed)
-                {
-                        loc.sql = [];
-                        loc.sql = $addDeleteClause(sql=loc.sql);
-                        loc.sql = $addKeyWhereClause(sql=loc.sql);
-                        loc.del = application.wheels.adapter.query(sql=loc.sql, parameterize=arguments.parameterize);
-                        loc.proceed = true;
-                        for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.callbacks.afterDelete); loc.i=loc.i+1)
-                        {
-                                loc.proceed = $invoke(method=variables.wheels.class.callbacks.afterDelete[loc.i]);
-                                if (StructKeyExists(loc, "proceed") && !loc.proceed)
-                                        break;
-                        }
-                        if (loc.proceed)
-                                loc.returnValue = true;
-                        else
-                                loc.returnValue = false;
-                }
-                else
-                {
-                        loc.returnValue = false;
-                }
-        </cfscript>
-        <cfreturn loc.returnValue>
+<cffunction name="delete" returntype="boolean" access="public" output="false" hint="Deletes the object which means the row is deleted from the database (unless prevented by a `beforeDelete` callback). Returns true on successful deletion of the row, false otherwise.">
+	<cfargument name="parameterize" type="any" required="false" default="#application.settings.delete.parameterize#" hint="See documentation for `findAll`">
+	<cfscript>
+		var loc = {};
+		loc.proceed = true;
+		for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.callbacks.beforeDelete); loc.i=loc.i+1)
+       	{
+        	loc.proceed = $invoke(method=variables.wheels.class.callbacks.beforeDelete[loc.i]);
+            if (StructKeyExists(loc, "proceed") && !loc.proceed)
+            	break;
+		}
+		if (loc.proceed)
+		{
+        	loc.sql = [];
+        	loc.sql = $addDeleteClause(sql=loc.sql);
+            loc.sql = $addKeyWhereClause(sql=loc.sql);
+            loc.del = application.wheels.adapter.query(sql=loc.sql, parameterize=arguments.parameterize);
+            loc.proceed = true;
+			for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.callbacks.afterDelete); loc.i=loc.i+1)
+            {
+            	loc.proceed = $invoke(method=variables.wheels.class.callbacks.afterDelete[loc.i]);
+                if (StructKeyExists(loc, "proceed") && !loc.proceed)
+                	break;
+			}
+ 			if (loc.proceed)
+            	loc.returnValue = true;
+			else
+            	loc.returnValue = false;
+		}
+        else
+        {
+        	loc.returnValue = false;
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="new" returntype="any" access="public" output="false" hint="Creates a new object based on supplied properties and returns it. The object is not saved to the database, it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.">
