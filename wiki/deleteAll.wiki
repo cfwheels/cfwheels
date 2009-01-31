@@ -1,0 +1,44 @@
+#summary updateAll([where,include,properties,parameterize,instantiate])
+#labels api,1.0
+
+*Category*:
+
+[ModelClassFunctions Model Class Functions]
+
+*Description*:
+
+Updates all properties for the records that match the where argument. Property names and values can be passed in either using named arguments or as a struct to the properties argument. By default objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in instantiate=true. Returns the number of records that were updated.
+
+*Return Type*:
+
+Numeric
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *where* || numeric, string or list || true || - || See documentation for `findAll` ||
+|| *include* || numeric, string or list || true || - || See documentation for `findAll` ||
+|| *properties* || numeric, string or list || true || - || See documentation for `new` ||
+|| *parameterize* || numeric, string or list || true || - || See documentation for `findAll` ||
+|| *instantiate* || numeric, string or list || true || - || Whether or not to instantiate the object(s) before the update ||
+
+*Examples*:
+
+{{{
+<cfset recordsReturned = model("post").updateAll(published=1, publishedAt=Now(), where="published=0")>
+}}}
+
+{{{
+<cfset post = model("post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
+}}}
+
+*Related*:
+
+ * UpdatingRecords (chapter)
+ * [update update()] (function)
+ * [updateByKey updateByKey()] (function)
+ * [updateOne updateOne()] (function)
