@@ -20,7 +20,7 @@ Boolean
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *key* || numeric, string or list || true || - || See documentation for `findByKey` ||
+|| *key* || string or numeric || true || - || See documentation for `findByKey` ||
 
 *Examples*:
 
