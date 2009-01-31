@@ -20,8 +20,8 @@ Query
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *where* || string or list || false ||   || String to use in `WHERE` clause of query ||
-|| *order* || string or list || false ||   || String to use in `ORDER BY` clause of query ||
+|| *where* || string || false ||   || String to use in `WHERE` clause of query ||
+|| *order* || string || false ||   || String to use in `ORDER BY` clause of query ||
 || *select* || string || false ||   || String to use in `SELECT` clause of query ||
 || *include* || string or list || false ||   || Associations that should be included ||
 || *maxRows* || numeric || false || -1 (all) || Maximum number of records to retrieve ||
