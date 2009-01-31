@@ -544,21 +544,20 @@
 		<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="exists" returntype="boolean" access="public" output="false">
-	<cfargument name="key" type="any" required="false" default="">
-	<cfargument name="where" type="string" required="false" default="">
-	<cfargument name="reload" type="boolean" required="false" default="#application.settings.exists.reload#">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.exists.parameterize#">
+<cffunction name="exists" returntype="boolean" access="public" output="false" hint="Checks if a record exists in the table. You can pass in a primary key value or a string to the `WHERE` clause.">
+	<cfargument name="key" type="any" required="false" default="" hint="See documentation for `findByKey`">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="reload" type="boolean" required="false" default="#application.settings.exists.reload#" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="#application.settings.exists.parameterize#" hint="See documentation for `findAll`">
 	<cfscript>
 		var loc = {};
-		if (application.settings.environment IS NOT "production")
+		if (application.settings.environment != "production")
 			if (!Len(arguments.key) && !Len(arguments.where))
 				$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You have to pass in either 'key' or 'where'.");
-
 		if (Len(arguments.where))
-			loc.returnValue = findOne(where=arguments.where, reload=arguments.reload, $create=false).recordCount IS 1;
+			loc.returnValue = findOne(where=arguments.where, reload=arguments.reload, $create=false).recordCount == 1;
 		else
-			loc.returnValue = findByKey(key=arguments.key, reload=arguments.reload, $create=false).recordCount IS 1;
+			loc.returnValue = findByKey(key=arguments.key, reload=arguments.reload, $create=false).recordCount == 1;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -644,26 +643,19 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="deleteByKey" returntype="boolean" access="public" output="false" hint="Class, Gets an object and deletes it">
-        <cfargument name="key" type="any" required="true" hint="Primary key value(s) for the object">
-        <!---
-                DETAILS:
-                Deletes the row corresponding to the passed in key.
-                By default it will fetch the object first and call the delete method on it, thus invoking any callbacks you have specified for the model.
-                You can change this behavior by passing in instantiate=false, then it will just delete the row from the table using a simple delete query.
-                Returns true on successful deletion of the row, false otherwise.
-        --->
-        <cfscript>
-                var loc = {};
-                loc.where = $keyWhereString(values=arguments.key);
-                loc.returnValue = deleteOne(where=loc.where);
-        </cfscript>
-        <cfreturn loc.returnValue>
+<cffunction name="deleteByKey" returntype="boolean" access="public" output="false" hint="Finds the record with the supplied key and deletes it. Returns true on successful deletion of the row, false otherwise.">
+	<cfargument name="key" type="any" required="true" hint="See documentation for `findByKey`">
+	<cfscript>
+		var loc = {};
+		loc.where = $keyWhereString(values=arguments.key);
+		loc.returnValue = deleteOne(where=loc.where);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="deleteOne" returntype="boolean" access="public" output="false">
-	<cfargument name="where" type="string" required="false" default="">
-	<cfargument name="order" type="string" required="false" default="">
+<cffunction name="deleteOne" returntype="boolean" access="public" output="false" hint="Gets an object based on conditions and deletes it.">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="order" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfscript>
 		var loc = {};
 		loc.object = findOne(where=arguments.where, order=arguments.order);
@@ -675,19 +667,12 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="deleteAll" returntype="numeric" access="public" output="false">
-	<cfargument name="where" type="string" required="false" default="">
-	<cfargument name="include" type="string" required="false" default="">
-  	<cfargument name="instantiate" type="boolean" required="false" default="#application.settings.deleteAll.instantiate#">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.deleteAll.parameterize#">
+<cffunction name="deleteAll" returntype="numeric" access="public" output="false" hint="Deletes all records that match the where argument. By default objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in instantiate=true. Returns the number of records that were deleted.">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="#application.settings.deleteAll.parameterize#" hint="See documentation for `findAll`">
+	<cfargument name="instantiate" type="boolean" required="false" default="#application.settings.deleteAll.instantiate#" hint="Whether or not to instantiate the object(s) before deletion">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
-	<!---
-		DETAILS:
-		Deletes all records that match the where argument.
-		By default objects will not be instantiated and therefore callbacks and validations are not invoked.
-		You can change this behavior by passing in instantiate=true.
-		Returns the number of records deleted.
-	--->
 	<cfscript>
 		var loc = {};
 		if (arguments.instantiate)
