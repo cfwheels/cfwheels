@@ -1,0 +1,36 @@
+#summary exists([key,where,reload,parameterize])
+#labels api,1.0
+
+*Category*:
+
+[ModelClassFunctions Model Class Functions]
+
+*Description*:
+
+Checks if a record exists in the table. You can pass in a primary key value or a string to the `WHERE` clause.
+
+*Return Type*:
+
+Boolean
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *key* || string or numeric || false ||   || See documentation for `findByKey` ||
+|| *where* || string || false ||   || See documentation for `findAll` ||
+|| *reload* || boolean || false ||   || See documentation for `findAll` ||
+|| *parameterize* || string || false ||   || See documentation for `findAll` ||
+
+*Examples*:
+
+{{{
+<cfset result = model("user").exists(where="handle='Joe'")>
+}}}
+
+*Related*:
+
+ * ReadingRecords (chapter)
