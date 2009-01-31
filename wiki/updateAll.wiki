@@ -32,10 +32,6 @@ Numeric
 <cfset recordsReturned = model("post").updateAll(published=1, publishedAt=Now(), where="published=0")>
 }}}
 
-{{{
-<cfset post = model("post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
-}}}
-
 *Related*:
 
  * UpdatingRecords (chapter)
