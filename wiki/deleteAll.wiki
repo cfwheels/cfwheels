@@ -28,7 +28,7 @@ Numeric
 *Examples*:
 
 {{{
-<cfset recordsDeleted = model("users").deleteAll(where="inactive=1", instantiate=false)>
+<cfset recordsDeleted = model("user").deleteAll(where="inactive=1", instantiate=false)>
 }}}
 
 *Related*:
