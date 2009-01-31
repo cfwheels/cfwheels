@@ -1,0 +1,37 @@
+#summary deleteOne([where,order])
+#labels api,1.0
+
+*Category*:
+
+[ModelClassFunctions Model Class Functions]
+
+*Description*:
+
+Gets an object based on conditions and deletes it.
+
+*Return Type*:
+
+Boolean
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *where* || string || false ||   || See documentation for `findAll` ||
+|| *order* || string || false ||   || See documentation for `findAll` ||
+
+*Examples*:
+
+{{{
+<cfset result = model("user").deleteOne(order="signupDate DESC")>
+}}}
+
+*Related*:
+
+ * DeletingRecords (chapter)
+ * [delete delete()] (function)
+ * [deleteAll deleteAll()] (function)
+ * [deleteByKey deleteByKey()] (function)
