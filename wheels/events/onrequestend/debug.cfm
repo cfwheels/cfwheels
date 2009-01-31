@@ -15,7 +15,7 @@
 </tr>
 <tr>
 	<td valign="top"><strong>Database:</strong></td>
-	<td>#application.wheels.databaseProductName# #application.wheels.databaseVersion#</td>
+	<td>#application.wheels.databaseName#</td>
 </tr>
 <tr>
 	<td valign="top"><strong>URL Rewriting:</strong></td>
