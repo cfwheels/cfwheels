@@ -1,7 +1,9 @@
 #summary count([where,include])
-#labels api,0.8,model,class
+#labels api,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+*Category*:
+
+[ModelClassFunctions Model Class Functions]
 
 *Description*:
 
@@ -11,30 +13,28 @@ Returns the number of rows that match the arguments (or all rows if no arguments
 
 Numeric
 
-*
+*History*:
+
+-
 
 *Parameters*:
 
-||   || *Type* || *Required* || *Default* || *Description* ||
-|| *where* || string || false ||  || A SQL fragment such as admin=1 for example. ||
-|| *include* || string || false ||  || Any associations that needs to be included in the query. ||
-
-
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *where* || string || false ||   || A SQL fragment such as admin=1 for example ||
+|| *include* || string || false ||   || Any associations that needs to be included in the query ||
 
 *Examples*:
 
 {{{
-<cfset authorCount = model("Author").count()>
+<cfset authorCount = model("author").count()>
 }}}
 
 {{{
-<cfset authorOnACount = model("Author").count(where="lastName LIKE 'A%'")>
+<cfset authorOnACount = model("author").count(where="lastName LIKE 'A%'")>
 }}}
 
 {{{
-<cfset authorWithBooksOnACount = model("Author").count(include="books", where="title LIKE 'A%'")>
-
-
+<cfset authorWithBooksOnACount = model("author").count(include="books", where="title LIKE 'A%'")>
 }}}
 
 *Related*:
