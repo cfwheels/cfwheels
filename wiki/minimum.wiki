@@ -1,33 +1,33 @@
 #summary minimum(property[where,include])
-#labels api,0.8,model,class
+#labels api,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+*Category*:
+
+[ModelClassFunctions Model Class Functions]
 
 *Description*:
 
-Calculates the maximum value for a given property. Uses the SQL function MIN.
+Class, Calculates the maximum value for a given property. Uses the SQL function MIN.
 
 *Return Type*:
 
 Numeric
 
-*
+*History*:
+
+-
 
 *Parameters*:
 
-||   || *Type* || *Required* || *Default* || *Description* ||
-|| *property* || string || true ||  || Name of the property to get the lowest value for (has to be a property of a numeric data type). ||
-|| *where* || string || false ||  || A SQL fragment such as lastName LIKE 'A%' for example. ||
-|| *include* || string || false ||  || Any associations that needs to be included in the query. ||
-
-
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *property* || string || true || - || Name of the property to get the lowest value for (has to be a property of a numeric data type) ||
+|| *where* || string || false ||   || A SQL fragment such as lastName LIKE 'A%' for example ||
+|| *include* || string || false ||   || Any associations that needs to be included in the query ||
 
 *Examples*:
 
 {{{
-<cfset lowestSalary = model("Employee").minimum("salary")>
-
-
+<cfset lowestSalary = model("employee").minimum("salary")>
 }}}
 
 *Related*:
