@@ -1,7 +1,9 @@
-#summary sum(property[distinct,where,include])
-#labels api,0.8,model,class
+#summary sum(property[where,include,distinct])
+#labels api,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+*Category*:
+
+[ModelClassFunctions Model Class Functions]
 
 *Description*:
 
@@ -11,28 +13,26 @@ Calculates the sum of values for a given property. Uses the SQL function SUM.
 
 Numeric
 
-*
+*History*:
+
+-
 
 *Parameters*:
 
-||   || *Type* || *Required* || *Default* || *Description* ||
-|| *property* || string || true ||  || Name of the property to get the sum for (has to be a property of a numeric data type). ||
-|| *distinct* || boolean || false || false || When true, SUM returns the sum of unique values only. ||
-|| *where* || string || false ||  || A SQL fragment such as lastName LIKE 'A%' for example. ||
-|| *include* || string || false ||  || Any associations that needs to be included in the query. ||
-
-
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *property* || string || true || - || Name of the property to get the sum for ||
+|| *where* || string || false ||   || A SQL fragment such as lastName LIKE 'A%' for example ||
+|| *include* || string || false ||   || Any associations that needs to be included in the query ||
+|| *distinct* || boolean || false || false || When true, SUM returns the sum of unique values only ||
 
 *Examples*:
 
 {{{
-<cfset allSalaries = model("Employee").sum(property="salary")>
+<cfset allSalaries = model("employee").sum(property="salary")>
 }}}
 
 {{{
-<cfset allAustralianSalaries = model("Employee").sum(property="salary", include="country", where="name='Australia'")>
-
-
+<cfset allAustralianSalaries = model("employee").sum(property="salary", include="country", where="name='Australia'")>
 }}}
 
 *Related*:
