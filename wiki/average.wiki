@@ -1,7 +1,9 @@
-#summary average(property[distinct,where,include])
-#labels api,0.8,model,class
+#summary average(property[where,include,distinct])
+#labels api,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+*Category*:
+
+[ModelClassFunctions Model Class Functions]
 
 *Description*:
 
@@ -11,24 +13,22 @@ Calculates the average value for a given property. Uses the SQL function AVG.
 
 Numeric
 
-*
+*History*:
+
+-
 
 *Parameters*:
 
-||   || *Type* || *Required* || *Default* || *Description* ||
-|| *property* || string || true ||  || Name of the property to calculate the average for. ||
-|| *distinct* || boolean || false || false || When true, AVG will be performed only on each unique instance of a value, regardless of how many times the value occurs. ||
-|| *where* || string || false ||  || A SQL fragment such as lastName LIKE 'A%' for example. ||
-|| *include* || string || false ||  || Any associations that needs to be included in the query. ||
-
-
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *property* || string || true || - || Name of the property to calculate the average for ||
+|| *where* || string || false ||   || A SQL fragment such as lastName LIKE 'A%' for example ||
+|| *include* || string || false ||   || Any associations that needs to be included in the query ||
+|| *distinct* || boolean || false || false || When true, AVG will be performed only on each unique instance of a value, regardless of how many times the value occurs ||
 
 *Examples*:
 
 {{{
-<cfset avgSalary = model("Employee").average("salary")>
-
-
+<cfset avgSalary = model("employee").average("salary")>
 }}}
 
 *Related*:
