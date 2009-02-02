@@ -1,7 +1,9 @@
 #summary maximum(property[where,include])
-#labels api,0.8,model,class
+#labels api,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+*Category*:
+
+[ModelClassFunctions Model Class Functions]
 
 *Description*:
 
@@ -11,23 +13,21 @@ Calculates the maximum value for a given property. Uses the SQL function MAX.
 
 Numeric
 
-*
+*History*:
+
+-
 
 *Parameters*:
 
-||   || *Type* || *Required* || *Default* || *Description* ||
-|| *property* || string || true ||  || Name of the property to get the highest value for (has to be a property of a numeric data type). ||
-|| *where* || string || false ||  || A SQL fragment such as categoryId=4 for example. ||
-|| *include* || string || false ||  || Any associations that needs to be included in the query. ||
-
-
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *property* || string || true || - || Name of the property to get the highest value for (has to be a property of a numeric data type) ||
+|| *where* || string || false ||   || A SQL fragment such as categoryId=4 for example ||
+|| *include* || string || false ||   || Any associations that needs to be included in the query ||
 
 *Examples*:
 
 {{{
-<cfset highestSalary = model("Employee").maximum("salary")>
-
-
+<cfset highestSalary = model("employee").maximum("salary")>
 }}}
 
 *Related*:
