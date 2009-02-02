@@ -1,47 +1,17 @@
-<cffunction name="average" returntype="numeric" access="public" output="false" hint="Model, Class, Calculates the average value for a given property. Uses the SQL function AVG.">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to calculate the average for.">
-	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as lastName LIKE 'A%' for example.">
-	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query.">
-	<cfargument name="distinct" type="boolean" required="false" default="false" hint="When true, AVG will be performed only on each unique instance of a value, regardless of how many times the value occurs.">
-
-	<!---
-		EXAMPLES:
-		<cfset avgSalary = model("Employee").average("salary")>
-
-		RELATED:
-		 * ColumnStatistics (chapter)
-		 * [count count()] (function)
-		 * [maximum maximum()] (function)
-		 * [minimum minimum()] (function)
-		 * [sum sum()] (function)
-	--->
-
+<cffunction name="average" returntype="numeric" access="public" output="false" hint="Calculates the average value for a given property. Uses the SQL function AVG.">
+	<cfargument name="property" type="string" required="true" hint="Name of the property to calculate the average for">
+	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as lastName LIKE 'A%' for example">
+	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query">
+	<cfargument name="distinct" type="boolean" required="false" default="false" hint="When true, AVG will be performed only on each unique instance of a value, regardless of how many times the value occurs">
 	<cfscript>
 		arguments.type = "AVG";
 	</cfscript>
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="count" returntype="numeric" access="public" output="false" hint="Model, Class, Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function COUNT.">
-	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as admin=1 for example.">
-	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query.">
-
-	<!---
-		EXAMPLES:
-		<cfset authorCount = model("Author").count()>
-
-		<cfset authorOnACount = model("Author").count(where="lastName LIKE 'A%'")>
-
-		<cfset authorWithBooksOnACount = model("Author").count(include="books", where="title LIKE 'A%'")>
-
-		RELATED:
-		 * ColumnStatistics (chapter)
-		 * [average average()] (function)
-		 * [maximum maximum()] (function)
-		 * [minimum minimum()] (function)
-		 * [sum sum()] (function)
-	--->
-
+<cffunction name="count" returntype="numeric" access="public" output="false" hint="Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function COUNT.">
+	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as admin=1 for example">
+	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query">
 	<cfscript>
 		if (Len(arguments.include))
 		{
