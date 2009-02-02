@@ -1,7 +1,5 @@
 #summary Make your model calls more readable by using dynamic finders.
-#labels chapter,0.8
-
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+#labels chapter,1.0
 
 With the recent introduction of `onMissingMethod` in ColdFusion 8 (Thanks, Adobe!), we have been able to port over the concept of _dynamic finders_ from Rails to Wheels.
 
@@ -10,13 +8,13 @@ The concept is simple. Instead of using arguments to tell Wheels what you want t
 For example, the following code:
 
 {{{
-<cfset me = model("User").findOne(where="email='my@myself.com'")>
+<cfset me = model("user").findOne(where="email='my@myself.com'")>
 }}}
 
 Can also be written as:
 
 {{{
-<cfset me = model("User").findOneByEmail("my@myself.com")>
+<cfset me = model("user").findOneByEmail("my@myself.com")>
 }}}
 
 Through the power of `onMissingMethod`, Wheels will parse the function name and figure out that the value supplied is supposed to be matched against the `email` column.
@@ -24,10 +22,10 @@ Through the power of `onMissingMethod`, Wheels will parse the function name and 
 You can take this one step further by using code such as:
 
 {{{
-<cfset me = model("User").findOneByUserNameAndPassword("perd,pass")>
+<cfset me = model("user").findOneByUserNameAndPassword("perd,pass")>
 }}}
 
-In this case, Wheels will split the function name on the `And` part and determine that you want to find the record where the `username` column is `"perd"` and the `password` column is `"pass"`.
+In this case, Wheels will split the function name on the `And` part and determine that you want to find the record where the `username` column is "perd" and the `password` column is "pass".
 
 In the examples above, we've used the [findOne findOne()] function, but you can use the same approach on a [findAll findAll()] function as well.
 
