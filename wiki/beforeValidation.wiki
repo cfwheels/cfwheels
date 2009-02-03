@@ -31,4 +31,17 @@ Void
 *Related*:
 
  * ObjectCallbacks (chapter)
+ * [beforeValidation beforeValidation()] (function)
  * [beforeValidationOnCreate beforeValidationOnCreate()] (function)
+ * [beforeValidationOnUpdate beforeValidationOnUpdate()] (function)
+ * [afterValidation afterValidation()] (function)
+ * [afterValidationOnCreate afterValidationOnCreate()] (function)
+ * [afterValidationOnUpdate afterValidationOnUpdate()] (function)
+ * [beforeSave beforeSave()] (function)
+ * [beforeCreate beforeCreate()] (function)
+ * [beforeUpdate beforeUpdate()] (function)
+ * [afterCreate afterCreate()] (function)
+ * [afterUpdate afterUpdate()] (function)
+ * [afterSave afterSave()] (function)
+ * [beforeDelete beforeDelete()] (function)
+ * [afterDelete after Delete()] (function)
