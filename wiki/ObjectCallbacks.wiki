@@ -1,7 +1,5 @@
 #summary Learn how to write code that runs every time a given object is created, updated, or deleted.
-#labels chapter,0.8.3
-
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+#labels chapter,1.0
 
 Callbacks in Wheels allow you to have code executed before and/or after certain operations on an object. This requires some further explanation, so let's go straight to an example of a real-world application: the e-commerce checkout.
 
@@ -9,8 +7,8 @@ Callbacks in Wheels allow you to have code executed before and/or after certain 
 
 Let's look at a possible scenario for what happens when a visitor to your imaginary e-commerce website submits her credit card details to finalize an order:
 
- * You create a new `Order` object using the [new new()] method based on the incoming form parameters.
- * You call the [save save()] method on the `Order` object, which will cause Wheels to first validate the object and then store it in the database if it passes validation.
+ * You create a new `order` object using the [new new()] method based on the incoming form parameters.
+ * You call the [save save()] method on the `order` object, which will cause Wheels to first validate the object and then store it in the database if it passes validation.
  * The next day, you call the [update update()] method on the object because the user decided to change the shipping method for the order.
  * Another day passes, and you call the [delete delete()] method on the object because the visitor called in to cancel the order.
 
@@ -59,16 +57,16 @@ The above code registers 3 methods to be run at specific points in the life cycl
 
 The following 14 functions can be used to register callbacks.
 
- * `beforeValidation()`
- * `beforeValidationOnCreate()` or `beforeValidationOnUpdate()`
- * `afterValidation()`
- * `afterValidationOnCreate()` or `afterValidationOnUpdate()`
- * `beforeSave()`
- * `beforeCreate()` or `beforeUpdate()`
- * `afterCreate()` or `afterUpdate()`
- * `afterSave()`
- * `beforeDelete()`
- * `afterDelete()`
+ * [beforeValidation beforeValidation()]
+ * [beforeValidationOnCreate beforeValidationOnCreate()] or [beforeValidationOnUpdate beforeValidationOnUpdate()]
+ * [afterValidation afterValidation()]
+ * [afterValidationOnCreate afterValidationOnCreate()] or [afterValidationOnUpdate afterValidationOnUpdate()]
+ * [beforeSave beforeSave()]
+ * [beforeCreate beforeCreate()] or [beforeUpdate beforeUpdate()]
+ * [afterCreate afterCreate()] or [afterUpdate afterUpdate()]
+ * [afterSave afterSave()]
+ * [beforeDelete beforeDelete()]
+ * [afterDelete afterDelete()]
 
 As you can see above, there are places (4, to be exact) where one callback or the other will be executed but not both. Which callback that will be executed depends on whether the object is being saved to the database for the first time or not. The "create" type callbacks will be executed for new objects and the "update" type callbacks for existing objects.
 
@@ -80,4 +78,4 @@ However, if you want to execute all callbacks in those methods as well, all you 
 
 ==Breaking a Callback Chain==
 
-If you want to completely break the save/delete operation chain for an object, you can do so by returning `false` from your callback method. (Otherwise, always return `true` or nothing at all.) By breaking the chain, we mean that if you, for example, have called the [save save()] method on a new object and the method you've registered with a `beforeCreate()` call returns `false`, the method will exit early, returning `false` and no record will be inserted in the database.
+If you want to completely break the save/delete operation chain for an object, you can do so by returning `false` from your callback method. (Otherwise, always return `true` or nothing at all.) By breaking the chain, we mean that if you, for example, have called the [save save()] method on a new object and the method you've registered with a [beforeCreate beforeCreate()] call returns `false`, the method will exit early, returning `false` and no record will be inserted in the database.
