@@ -22,12 +22,12 @@ Void
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
 || *name* || string || true || - || Name of the association ||
 || *class* || string || false ||   || Name of associated class ||
-|| * foreignKey* || string || false ||   || AForeign key property name ||
+|| * foreignKey* || string || false ||   || Foreign key property name ||
 
 *Examples*:
 
 {{{
-<cfset hasOne("author")>
+<cfset hasOne("profile")>
 }}}
 
 *Related*:
