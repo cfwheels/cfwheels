@@ -31,7 +31,6 @@ Void
 *Related*:
 
  * ObjectCallbacks (chapter)
- * [beforeValidation beforeValidation()] (function)
  * [beforeValidationOnCreate beforeValidationOnCreate()] (function)
  * [beforeValidationOnUpdate beforeValidationOnUpdate()] (function)
  * [afterValidation afterValidation()] (function)
