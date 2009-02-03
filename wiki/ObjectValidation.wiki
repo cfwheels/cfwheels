@@ -8,7 +8,7 @@ need to be in place:
 
  # a *model* file named as the database's (singular) table name. Example: `models/User.cfc`
  # a *controller* file for creating, saving or updating a model instance. Example:´controllers/ExampleController.cfc`
- # a *view* page for displaying the original data inputs and an error list for
+ # a *view* file for displaying the original data inputs and an error list for
 validation messages. Example: `views/examplecontroller/index.cfm`
 
 Note: saving, creating and updating model objects can of course also be done from the model file itself (or even from the view if you want to) but to keep things simple all examples in this chapter will revolve around code in the controller files.
@@ -61,27 +61,24 @@ The controller continues with the simplicity of validation setup, and at the mos
 
 The first line of the action creates a new `user` based on the `user` model and the form inputs (via the `params` `struct`).
 
-Now, to persist the object to the database, the model [save save()] call is placed within an `<cfif>` test. If the save succeeds, the save function will return true and the contents of the `<cfif>` will be executed. But, if any of the validations setup in the model fails, the `save()` returns `false` and the `<cfelse>` will execute.
+Now, to persist the object to the database, the model [save save()] call is placed within a `<cfif>` test. If the saving succeeds, the [save save()] method will return true and the contents of the `<cfif>` will be executed. But, if any of the validations setup in the model fails, the [save save()] method returns `false` and the `<cfelse>` will execute.
 
-The important step here is to recognize that the `<cfelse>` renders the original form input page. The reason for this is that the now validated newUser model is in the scope of the `apply` action. If a `redirectTo()` were used, the original `index` action would be called and the validation information lost.
+The important step here is to recognize that the `<cfelse>` renders the original form input page. The reason for this is that the now validated `newUser` model is in the scope of the `apply` action. If a [redirectTo() redirectTo()] were used, the original `index` action would be called and the validation information lost.
 
 ==The View==
 
-The view need only be a simple form and associated inputs to the model's fields. The only aspect that sets this view apart from a non-validated form is the first line of Wheels code.
+The view needs only be a simple form and associated inputs to the model's fields. The only aspect that sets this view apart from a non-validated form is the first line of Wheels code.
 
 {{{
 <cfoutput>
 #errorMessagesFor("newUser")#
 
 #startFormTag(controller="examplecontroller", action="submit")#
-   #textField(objectName="newUser", property="nameFirst",
-label="First Name", wrapLabel=false, append="<br />")#
-   #textField(objectName="newUser", property="nameLast", label="Last
-Name", wrapLabel=false, append="<br />")#
-   #textField(objectName="newUser", property="email", label="Email",
-wraplabel=false, append="<br />")#
- #endFormTag()#
+  #textField(objectName="newUser", property="nameFirst", label="First Name", wrapLabel=false, append="<br />")#
+  #textField(objectName="newUser", property="nameLast", label="Last Name", wrapLabel=false, append="<br />")#
+  #textField(objectName="newUser", property="email", label="Email", wraplabel=false, append="<br />")#
+#endFormTag()#
 </cfoutput>
 }}}
 
-The `errorMessagesFor()` method call hands in the name of the model instance name expected when validation catches on the processed model and returns an error message. The `errorMessagesFor()` will output a unordered list with each error message as a list item.
+The [errorMessagesFor errorMessagesFor()] method call hands in the name of the model instance name expected when validation catches on the processed model and returns an error message. The [errorMessagesFor errorMessagesFor()] will output a unordered list with each error message as a list item.
