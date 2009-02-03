@@ -1,27 +1,25 @@
-#summary Through some simple configuration, Wheels allows you to unlock some powerful functionality to use your database tables' relationships in your controller code.
-#labels chapter,0.8.3
-
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+#summary Through some simple configuration, Wheels allows you to unlock some powerful functionality to use your database tables' relationships in your code.
+#labels chapter,1.0
 
 _Associations_ in Wheels allow you to define the relationships between your database tables. After configuring these relationships, doing pesky table joins becomes a trivial task. And like all other ORM functions in Wheels, this is done without writing a single line of SQL.
 
 ==3 Types of Associations==
 
-In order to set up associations, you only need to remember 3 simple functions. Considering that the human brain only reliably remembers up to 7 items, we've left you with a lot of extra space. You're welcome. :)
+In order to set up associations, you only need to remember 3 simple methods. Considering that the human brain only reliably remembers up to 7 items, we've left you with a lot of extra space. You're welcome :)
 
-The association functions should always be called in the `init()` method of a model that relate to another model within your application.
+The association methods should always be called in the `init()` method of a model (a.k.a. class) that relate to another model within your application.
 
 ===`belongsTo` Association===
 
 If your database table contains a field that is a foreign key to another table, then this is where to use the `belongsTo()` function.
 
-If we had a `comments` table that contains a foreign key to the `posts` table called `postId`, then we should have this `init()` method within our `Comment` model:
+If we had a `comments` table that contains a foreign key to the `posts` table called `postid`, then we should have this `init()` method within our `comment` model:
 
 {{{
 <cfcomponent extends="Model">
 
     <cffunction name="init">
-        <cfset belongsTo("Post")>
+        <cfset belongsTo("post")>
     </cffunction>
 
 </cfcomponent>
@@ -35,73 +33,71 @@ At this time, you need to be a little eccentric and talk to yourself. Your assoc
 
 ===An example of `hasMany()`===
 
-So let's consider the `Post`/`Comment` relationship mentioned above for `belongsTo()`. If we were to talk to ourselves, we would say, "A post _has many_ comments." And that's how you should construct your `Post` model:
+So let's consider the `post`/`comment` relationship mentioned above for `belongsTo()`. If we were to talk to ourselves, we would say, "A post _has many_ comments." And that's how you should construct your `post` model:
 
 {{{
 <cfcomponent extends="Model">
 
     <cffunction name="init">
-        <cfset hasMany("Comments")>
+        <cfset hasMany("comments")>
     </cffunction>
 
 </cfcomponent>
 }}}
 
-You may be a little concerned because our model is called `Comment` and not `Comments`. No need to worry: Wheels understands the need for the plural in conjunction with the `hasMany()` function.
+You may be a little concerned because our model is called `comment` and not `comments`. No need to worry: Wheels understands the need for the plural in conjunction with the `hasMany()` method.
 
-And don't worry about those pesky words in the English language that aren't pluralized by just adding an "s" to the end. Wheels is smart enough to know that words like "deer" and "children" are the plurals of "deer" and "child," respectively.
+And don't worry about those pesky words in the English language that aren't pluralized by just adding an "s" to the end. Wheels is smart enough to know that words like "deer" and "children" are the plurals of "deer" and "child", respectively.
 
 ===An example of `hasOne()`===
 
-If we continue our pattern of talking to ourselves, then we could easily figure out to use `hasOne()` to set up a similar relationship.
+The `hasOne` association is not used as often as the `hasMany` association but it has its use cases. The most common use case is when you have a large table that you have broken down into two or more smaller tables (a.k.a. denormalization) for performance reasons or otherwise. Let's take the example of the association between `user` and `profile`. A lot of websites allow you to enter required info such as name, email but also add optional information such as age, salary etc. These can of course be stored in the same table but given the fact that so much information is optional it would make more sense to have the required info in a `users` table and the optional info in a `profiles` table. This gives us a `hasOne` relationship between these two models; "A user _has one_ profile".
 
-Let's use the relationship between post and author as an example. So we'd say, "A post _has one_ author." That is, if that really is your business rule. Seems reasonable.
-
-If our `Author` model looked like this:
+In this case our `profile` model would look like this:
 
 {{{
 <cfcomponent extends="Model">
 
     <cffunction name="init">
-        <cfset belongsTo("Post")>
+        <cfset belongsTo("user")>
     </cffunction>
 
 </cfcomponent>
 }}}
 
-Then our `Post` model would look like this:
+And our `user` model would look like this:
 
 {{{
 <cfcomponent extends="Model">
 
     <cffunction name="init">
-        <cfset hasOne("Author")>
+        <cfset hasOne("profile")>
     </cffunction>
 
 </cfcomponent>
 }}}
 
-As you can see, you do not pluralize "author" in this case because there is only one author.
+As you can see, you do not pluralize "profile" in this case because there is only one profile.
 
 ==Database Table Setup==
 
 Like everything else in Wheels, we strongly recommend a default naming convention for foreign key columns in your database tables.
 
-In this case, the convention is to use the singular name of the related table with `Id` appended to the end. So to link up our table to the `employees` table, the foreign key column should be named `employeeId`.
+In this case, the convention is to use the singular name of the related table with `id` appended to the end. So to link up our table to the `employees` table, the foreign key column should be named `employeeid`.
 
 ===Breaking the convention===
 
 Wheels offers a way to configure your models to break this naming convention, however. This is done by using the `foreignKey` argument in your model's `belongsTo()` calls.
 
-Let's pretend that you have a relationship between `Author` and `Post`, but you didn't use the naming convention and instead called the column `post_id`. (You just can't seem to let go of the underscores, can you?)
+Let's pretend that you have a relationship between `author` and `post`, but you didn't use the naming convention and instead called the column `post_id`. (You just can't seem to let go of the underscores, can you?)
 
-Your `Post`'s `init()` function would then need to look like this:
+Your `post`'s `init()` function would then need to look like this:
 
 {{{
 <cfcomponent extends="Model">
 
     <cffunction name="init">
-        <cfset belongsTo(name="Author", foreignKey="post_id")>
+        <cfset belongsTo(name="author", foreignKey="post_id")>
     </cffunction>
 
 </cfcomponent>
@@ -115,19 +111,37 @@ There are a couple ways to join data via associations, which we'll go over now.
 
 ===Using the `include` Argument in `findAll()`===
 
-To join data from related tables in our `findAll()` calls, we simply need to use the `include` argument. Let's say that we wanted to include data about the `Author` in our `findAll()` call for `Post`s.
+To join data from related tables in our `findAll()` calls, we simply need to use the `include` argument. Let's say that we wanted to include data about the `author` in our `findAll()` call for `post`s.
 
 Here's what that call would look like:
 
 {{{
-<cfset post = model("Post").findAll(include="Author")>
+<cfset posts = model("post").findAll(include="author")>
 }}}
 
 It's that simple. Wheels will then join the `authors` table automatically so that you can use that data along with the data from `posts`.
 
-Note that if the relationship between `Post` and `Author` were a `hasMany` instead of `hasOne`, then you would need to call the pluralized version of the model, `findAll(include="Authors")`.
+Note that if you switch the above statement around like this:
+
+{{{
+<cfset authors = model("author").findAll(include="posts")>
+}}}
+
+You would then have to specify "post" in its plural form; "posts". If you're thinking about when to use the singular form and when to use the plural form just use the one that seems most natural. If you look at the two examples above you'll see that in example #1 you're asking for all posts including each posts *author* (hence the singular "author") and in example #2 you're asking for all authors and all of the *posts* (hence the plural "posts") written by each author.
+
+You're not limited to specifying just one association in the `include` argument. You can for example return data for authors, posts and comments in one call like this:
+
+{{{
+<cfset authorsPostsAndComments = model("author").findAll(include="posts,comments")>
+}}}
 
 To include several tables, simply delimit the names of the models with a comma. All models should contain related associations, or else you'll get a mountain of repeated data back.
+
+When going up in the association structure (i.e. from a model that belongs to another mode) you use parenthesis to indicate this. Here's an example of the statement above but switched around to start from the `comment` model instead:
+
+{{{
+<cfset commentsPostsAndAuthors = model("comment").findAll(include="post(comment)")>
+}}}
 
 ====Handling Column Naming Collisions====
 
@@ -135,10 +149,10 @@ There is a minor caveat to this approach. If you have a column in both associate
 
 In order to include both columns, you can override this behavior with the `select` argument in the finder functions.
 
-For example, if we had a column named `id` in both your `posts` and `authors` tables, then you could use the `select` argument like so:
+For example, if we had a column named `name` in both your `posts` and `authors` tables, then you could use the `select` argument like so:
 
 {{{
-<cfset post = model("Post").findAll(select="posts.id, posts.title, authors.id, authors.name", include="Author")>
+<cfset post = model("post").findAll(select="posts.name, authors.id, authors.post_id, authors.name AS author_name", include="author")>
 }}}
 
 You would need to hard-code all column names that you need in that case, which does remove some of the simplicity. There are always trade-offs!
@@ -150,7 +164,7 @@ A cool feature of Wheels is the ability to use dynamic finders to get data relat
 Let's say that we used this `findByKey()` call to get an author from the database:
 
 {{{
-<cfset author = model("Author").findByKey(params.key)>
+<cfset author = model("author").findByKey(params.key)>
 }}}
 
 We wouldn't necessarily need to use the `include` argument to get posts written by that author. Instead, we can use a dynamic method to get the posts, like so:
@@ -184,7 +198,7 @@ Here are the representative models:
 <cfcomponent extends="Model">
 
     <cffunction name="init">
-        <cfset hasMany("Subscriptions")>
+        <cfset hasMany("subscriptions")>
     </cffunction>
 
 </cfcomponent>
@@ -195,7 +209,7 @@ Here are the representative models:
 <cfcomponent extends="Model">
 
     <cffunction name="init">
-        <cfset hasMany("Subscriptions")>
+        <cfset hasMany("subscriptions")>
     </cffunction>
 
 </cfcomponent>
@@ -206,14 +220,14 @@ Here are the representative models:
 <cfcomponent extends="Model">
 
     <cffunction name="init">
-        <cfset belongsTo("Customer")>
-        <cfset belongsTo("Publication")>
+        <cfset belongsTo("customer")>
+        <cfset belongsTo("publication")>
     </cffunction>
 
 </cfcomponent>
 }}}
 
-This assumes that there are foreign key columns in `subscriptions` called `customerId` and `publicationId`.
+This assumes that there are foreign key columns in `subscriptions` called `customerid` and `publicationid`.
 
 ===Using Finders with a Many-to-Many Relationship===
 
@@ -222,5 +236,5 @@ At this point, it's still fairly easy to get data from the many-to-many associat
 We can `include` the related tables to get the same effect:
 
 {{{
-<cfset publicationAndCustomers = model("Publication").findByKey(params.key, include="Subscriptions,Customers")>
+<cfset data = model("subscription").findAll(include="customer,publication")>
 }}}
