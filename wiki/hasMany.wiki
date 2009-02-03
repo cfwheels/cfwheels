@@ -32,6 +32,6 @@ Void
 
 *Related*:
 
- * Associations (chapter)
+ * [Associations Associations] (chapter)
  * [hasOne hasOne()] (function)
  * [belongsTo belongsTo()] (function)
