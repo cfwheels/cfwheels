@@ -1,0 +1,34 @@
+#summary beforeValidation(methods)
+#labels api,1.0
+
+*Category*:
+
+[ModelInitializationFunctions Model Initialization Functions]
+
+*Description*:
+
+Register method(s) that should be called before an object is validated.
+
+*Return Type*:
+
+Void
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *methods* || string || true || - || Method name or list of method names ||
+
+*Examples*:
+
+{{{
+<cfset beforeValidation("fixCreditCard")>
+}}}
+
+*Related*:
+
+ * ObjectCallbacks (chapter)
+ * [beforeValidationOnCreate beforeValidationOnCreate()] (function)
