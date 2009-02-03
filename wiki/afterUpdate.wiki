@@ -1,4 +1,4 @@
-#summary beforeValidation(methods)
+#summary afterUpdate(methods)
 #labels api,1.0
 
 *Category*:
@@ -7,7 +7,7 @@
 
 *Description*:
 
-Register method(s) that should be called before an object is validated.
+Register method(s) that should be called after an existing object is updated.
 
 *Return Type*:
 
@@ -25,7 +25,7 @@ Void
 *Examples*:
 
 {{{
-<cfset beforeValidation("fixCreditCard")>
+<cfset afterUpdate("fixCreditCard")>
 }}}
 
 *Related*:
@@ -41,7 +41,6 @@ Void
  * [beforeCreate beforeCreate()] (function)
  * [beforeUpdate beforeUpdate()] (function)
  * [afterCreate afterCreate()] (function)
- * [afterUpdate afterUpdate()] (function)
  * [afterSave afterSave()] (function)
  * [beforeDelete beforeDelete()] (function)
- * [afterDelete after Delete()] (function)
+ * [afterDelete afterDelete()] (function)
