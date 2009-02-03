@@ -1,7 +1,5 @@
 #summary Let Wheels handle time stamping of records.
-#labels chapter,0.8
-
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+#labels chapter,1.0
 
 When working with database tables, it is very common to have a column that holds the time that the record was added or last modified. If you have an e-commerce website with an orders table, you want to store the date and time the order was made; if you run a blog, you want to know when someone left a comment; and so on.
 
@@ -17,7 +15,7 @@ Wheels will use a `createdAt` column automatically to store the current date and
 
 ===`updatedAt`===
 
-If Wheels sees an `updatedAt` column, it will use it to store the current date and time automatically when an `UPDATE` operation is made (which could happen through a `save()` or `update()` operation, for example).
+If Wheels sees an `updatedAt` column, it will use it to store the current date and time automatically when an `UPDATE` operation is made (which could happen through a [save save()] or [update update()] operation, for example).
 
 ==Data Type of Columns==
 
