@@ -44,4 +44,4 @@ Void
  * [afterUpdate afterUpdate()] (function)
  * [afterSave afterSave()] (function)
  * [beforeDelete beforeDelete()] (function)
- * [afterDelete after Delete()] (function)
+ * [afterDelete afterDelete()] (function)
