@@ -214,6 +214,20 @@
 	<cfset $registerValidation("onUpdate", arguments.methods)>
 </cffunction>
 
+<cffunction name="valid" returntype="boolean" access="public" output="false" hint="Object, Runs the validation on the object and returns 'true' if it passes it">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = false;
+		if ($isNew())
+			if ($validate("onCreate") && $validate("onSave"))
+				loc.returnValue = true;
+		else
+			if ($validate("onUpdate") && $validate("onSave"))
+				loc.returnValue = true;
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$registerValidation" returntype="void" access="public" output="false">
 	<cfargument name="type" type="string" required="true">
 	<cfargument name="methods" type="string" required="true">
@@ -239,20 +253,6 @@
 		for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.validations[arguments.type]); loc.i=loc.i+1)
 			$invoke(method=variables.wheels.class.validations[arguments.type][loc.i].method, argumentCollection=variables.wheels.class.validations[arguments.type][loc.i].args);
 		loc.returnValue = !hasErrors();
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="valid" returntype="boolean" access="public" output="false" hint="Object, Runs the validation on the object and returns 'true' if it passes it">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = false;
-		if ($isNew())
-			if ($validate("onCreate") && $validate("onSave"))
-				loc.returnValue = true;
-		else
-			if ($validate("onUpdate") && $validate("onSave"))
-				loc.returnValue = true;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

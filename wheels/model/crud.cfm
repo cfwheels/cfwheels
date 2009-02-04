@@ -459,7 +459,20 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="key" returntype="string" access="public" output="false">
+<cffunction name="reload" returntype="void" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.query = findByKey(key=$primaryKeyValues(), reload=true, $create=false);
+		loc.iEnd = ListLen(variables.wheels.class.propertyList);
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+		{
+			loc.property = ListGetAt(variables.wheels.class.propertyList, loc.i);
+			this[loc.property] = loc.query[loc.property][1];
+		}
+	</cfscript>
+</cffunction>
+
+<cffunction name="$primaryKeyValues" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
@@ -470,19 +483,6 @@
 		}		
 		</cfscript>
 	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="reload" returntype="void" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.query = findByKey(key=key(), reload=true, $create=false);
-		loc.iEnd = ListLen(variables.wheels.class.propertyList);
-		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
-		{
-			loc.property = ListGetAt(variables.wheels.class.propertyList, loc.i);
-			this[loc.property] = loc.query[loc.property][1];
-		}
-	</cfscript>
 </cffunction>
 
 <cffunction name="$addSelectClause" returntype="array" access="public" output="false">
