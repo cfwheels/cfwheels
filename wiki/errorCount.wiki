@@ -1,0 +1,33 @@
+#summary errorCount()
+#labels api,1.0
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
+Returns the number of errors this object has associated with it.
+
+*Return Type*:
+
+Numeric
+
+*History*:
+
+-
+
+*Parameters*:
+
+-
+
+*Related*:
+
+ * ObjectValidation (chapter)
+ * [addError addError()] (function)
+ * [addErrorToBase addErrorToBase()] (function)
+ * [hasErrors hasErrors()] (function)
+ * [clearErrors clearErrors()] (function)
+ * [errorsOn errorsOn()] (function)
+ * [errorsOnBase errorsOnBase()] (function)
+ * [allErrors allErrors()] (function)
