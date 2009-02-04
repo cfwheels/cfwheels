@@ -1,0 +1,33 @@
+#summary clearErrors()
+#labels api,1.0
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
+Clear out all errors for the object.
+
+*Return Type*:
+
+Void
+
+*History*:
+
+-
+
+*Parameters*:
+
+-
+
+*Related*:
+
+ * ObjectValidation (chapter)
+ * [addError addError()] (function)
+ * [addErrorToBase addErrorToBase()] (function)
+ * [hasErrors hasErrors()] (function)
+ * [errorCount errorCount()] (function)
+ * [errorsOn errorsOn()] (function)
+ * [errorsOnBase errorsOnBase()] (function)
+ * [allErrors allErrors()] (function)
