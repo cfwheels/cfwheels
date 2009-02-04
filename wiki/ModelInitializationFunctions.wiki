@@ -1,9 +1,7 @@
-#summary Listing of all model initialization functions.
+#summary Listing of all model initialization methods.
 #labels chapter,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
-These functions are called from the `init` function of your model files.
+These methods are called from the `init` function of your model files.
 
 ==Example==
 
@@ -46,4 +44,4 @@ These functions are called from the `init` function of your model files.
  * [validatesLengthOf validatesLengthOf()]
  * [validatesNumericalityOf validatesNumericalityOf()]
  * [validatesPresenceOf validatesPresenceOf()]
- * [validatesUniquenessOf validatesUniquenessOf()] 
+ * [validatesUniquenessOf validatesUniquenessOf()]
