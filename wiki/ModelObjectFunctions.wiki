@@ -1,11 +1,11 @@
 #summary Listing of all model object functions.
 #labels chapter,1.0
 
-These functions operate on individual objects which means you first have to fetch or create an object and then call the function on that object. You can call these functions from anywhere but it is not recommended to call them from view pages. When calling them from its own model file it is recommended to reference the scope explicitly with the `this` keyword.
+These functions operate on individual methods which means you first have to fetch or create an object and then call the method on that object. You can call these methods from anywhere but it is not recommended to call them from view pages. When calling them from its own model file it is recommended to reference the scope explicitly with the `this` keyword.
 
 ==Example==
 
-`controllers/Blog.cfc`:
+`models/Author.cfc`:
 
 {{{
 <cfset anAuthor = model("author").findByKey(1)>
@@ -30,8 +30,3 @@ These functions operate on individual objects which means you first have to fetc
  * [save save()]
  * [update update()]
  * [valid valid()]
- 
- 
- 
- 
- 
