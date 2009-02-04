@@ -1,18 +1,3 @@
-<cffunction name="table" returntype="void" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfscript>
-	variables.wheels.class.tableName = arguments.name;
-	</cfscript>
-</cffunction>
-
-<cffunction name="property" returntype="void" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="column" type="string" required="true">
-	<cfscript>
-	variables.wheels.class.mapping[arguments.column] = arguments.name;
-	</cfscript>
-</cffunction>
-
 <cffunction name="$initClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
@@ -110,4 +95,8 @@
 		}
 	</cfscript>
 	<cfreturn this>
+</cffunction>
+
+<cffunction name="$classData" returntype="struct" access="public" output="false">
+	<cfreturn variables.wheels.class>
 </cffunction>
