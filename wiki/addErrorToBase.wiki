@@ -1,0 +1,35 @@
+#summary addErrorToBase(message[name])
+#labels api,1.0
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
+Adds an error on the object as a whole (not related to any specific property).
+
+*Return Type*:
+
+Void
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *message* || string || true || - || Message relating to the error ||
+|| *name* || string || false || - || Name to identify the error by ||
+
+*Related*:
+
+ * ObjectValidation (chapter)
+ * [addError addError()] (function)
+ * [hasErrors hasErrors()] (function)
+ * [clearErrors clearErrors()] (function)
+ * [errorCount errorCount()] (function)
+ * [errorsOn errorsOn()] (function)
+ * [errorsOnBase errorsOnBase()] (function)
+ * [allErrors allErrors()] (function)
