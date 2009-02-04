@@ -1,13 +1,13 @@
-<cffunction name="addError" returntype="void" access="public" output="false" hint="Object, Adds an error on the specific property">
+<cffunction name="addError" returntype="void" access="public" output="false" hint="Adds an error on the specific property.">
 	<cfargument name="property" type="string" required="true" hint="Name of property">
 	<cfargument name="message" type="string" required="true" hint="Message relating to the error">
 	<cfargument name="name" type="string" required="false" default="" hint="Name to identify the error by">
 	<cfscript>
-		arrayAppend(variables.wheels.errors, arguments);
+		ArrayAppend(variables.wheels.errors, arguments);
 	</cfscript>
 </cffunction>
 
-<cffunction name="addErrorToBase" returntype="void" access="public" output="false" hint="Object, Adds an error on the object as a whole (not related to any specific property)">
+<cffunction name="addErrorToBase" returntype="void" access="public" output="false" hint="Adds an error on the object as a whole (not related to any specific property).">
 	<cfargument name="message" type="string" required="true" hint="Message relating to the error">
 	<cfargument name="name" type="string" required="false" default="" hint="Name to identify the error by">
 	<cfscript>
@@ -16,7 +16,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="hasErrors" returntype="boolean" access="public" output="false" hint="Object, Returns 'true' if the object has any errors">
+<cffunction name="hasErrors" returntype="boolean" access="public" output="false" hint="Returns 'true' if the object has any errors.">
 	<cfscript>
 		var loc = {};
 		if (errorCount() GT 0)
@@ -27,13 +27,13 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="clearErrors" returntype="void" access="public" output="false" hint="Object, Clear out all errors for the object">
+<cffunction name="clearErrors" returntype="void" access="public" output="false" hint="Clear out all errors for the object.">
 	<cfscript>
 		ArrayClear(variables.wheels.errors);
 	</cfscript>
 </cffunction>
 
-<cffunction name="errorCount" returntype="numeric" access="public" output="false" hint="Object, Returns the number of errors this object has associated with it">
+<cffunction name="errorCount" returntype="numeric" access="public" output="false" hint="Returns the number of errors this object has associated with it.">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = ArrayLen(variables.wheels.errors);
@@ -41,7 +41,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="errorsOn" returntype="array" access="public" output="false" hint="Object, Returns an array of all errors associated with the supplied property (and name when passed in)">
+<cffunction name="errorsOn" returntype="array" access="public" output="false" hint="Returns an array of all errors associated with the supplied property (and name when passed in).">
 	<cfargument name="property" type="string" required="true" hint="Name of property">
 	<cfargument name="name" type="string" required="false" default="" hint="Given name for the error">
 	<cfscript>
@@ -54,7 +54,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="errorsOnBase" returntype="array" access="public" output="false" hint="Object, Returns an array of all errors associated with the object as a whole (not related to any specific property)">
+<cffunction name="errorsOnBase" returntype="array" access="public" output="false" hint="Returns an array of all errors associated with the object as a whole (not related to any specific property).">
 	<cfargument name="name" type="string" required="false" default="" hint="Given name for the error">
 	<cfscript>
 		var loc = {};
@@ -64,7 +64,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="allErrors" returntype="array" access="public" output="false" hint="Object, Returns an array of all errors on the object">
+<cffunction name="allErrors" returntype="array" access="public" output="false" hint="Returns an array of all errors on the object.">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = variables.wheels.errors;
