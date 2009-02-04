@@ -1,5 +1,5 @@
 #summary Listing of all model initialization functions.
-#labels chapter,0.8
+#labels chapter,1.0
 
 _*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
 
@@ -32,13 +32,9 @@ These functions are called from the `init` function of your model files.
  * [beforeValidationOnCreate beforeValidationOnCreate()]
  * [beforeValidationOnUpdate beforeValidationOnUpdate()]
  * [belongsTo belongsTo()]
- * [disableSoftDeletion disableSoftDeletion()]
- * [disableTimeStamping disableTimeStamping()]
  * [hasMany hasMany()]
  * [hasOne hasOne()]
  * [property property()]
- * [SetSoftDeleteColumn SetSoftDeleteColumn()]
- * [SetTimeStampColumns SetTimeStampColumns()]
  * [table table()]
  * [validate validate()]
  * [validateOnCreate validateOnCreate()]
