@@ -1,0 +1,35 @@
+#summary errorsOn(property[name])
+#labels api,1.0
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
+Returns an array of all errors associated with the supplied property (and name when passed in).
+
+*Return Type*:
+
+Array
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *property* || string || true || - || Name of property ||
+|| *name* || string || false || - || Given name for the error ||
+
+*Related*:
+
+ * ObjectValidation (chapter)
+ * [addError addError()] (function)
+ * [addErrorToBase addErrorToBase()] (function)
+ * [hasErrors hasErrors()] (function)
+ * [clearErrors clearErrors()] (function)
+ * [errorCount errorCount()] (function)
+ * [errorsOnBase errorsOnBase()] (function)
+ * [allErrors allErrors()] (function)
