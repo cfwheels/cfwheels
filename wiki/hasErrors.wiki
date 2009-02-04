@@ -11,7 +11,7 @@ Returns 'true' if the object has any errors.
 
 *Return Type*:
 
-Void
+Boolean
 
 *History*:
 
