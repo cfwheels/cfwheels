@@ -119,7 +119,7 @@
 
 			// get info from cache when available, otherwise create the generic select, from, where and order by clause
 			loc.queryShellKey = variables.wheels.class.name & $hashStruct(arguments);
-			loc.sql = $getFromCache(loc.queryShellKey);
+			loc.sql = $getFromCache(loc.queryShellKey, "sql", "internal");
 			if (!IsArray(loc.sql))
 			{
 				loc.sql = [];
@@ -127,7 +127,7 @@
 				loc.sql = $addFromClause(sql=loc.sql, include=arguments.include);
 				loc.sql = $addWhereClause(sql=loc.sql, where=loc.originalWhere, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 				loc.sql = $addOrderByClause(sql=loc.sql, order=arguments.order, include=arguments.include);
-				$addToCache(loc.queryShellKey, loc.sql, 86400);
+				$addToCache(loc.queryShellKey, loc.sql, 86400, "sql", "internal");
 			}
 
 			// add where clause parameters to the generic sql info
