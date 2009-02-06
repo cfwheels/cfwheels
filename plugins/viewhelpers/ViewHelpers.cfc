@@ -527,8 +527,10 @@
 			 * [titleize titleize()] (function)
 			 * [truncate truncate()] (function)
 		--->
-	
-		<cfreturn REReplaceNoCase(arguments.html, "<[a-z].*?>(.*?)</[a-z]>", "\1" , "all")>
+		<cfset var returnValue = arguments.html>
+		<cfset returnValue = REReplaceNoCase(returnValue,"<\ *[a-z].*?>", "", "all")>
+		<cfset returnValue = REReplaceNoCase(returnValue,"<\ */\ *[a-z].*?>", "", "all")>
+		<cfreturn returnValue>
 	</cffunction>
 	
 	<cffunction name="titleize" returntype="string" access="public" output="false" hint="View, Helper, Capitalizes all words in the text to create a nicer looking title.">
