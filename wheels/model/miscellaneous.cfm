@@ -194,6 +194,8 @@
 				}
 			}
 		}
+		if (!StructKeyExists(loc, "returnValue"))
+			$throw(type="Wheels.MethodNotFound", message="The method #arguments.missingMethodName# was not found in this model.", extendedInfo="Check your spelling or add the method to the model CFC file.");
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
