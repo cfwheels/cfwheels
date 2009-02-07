@@ -328,7 +328,7 @@
 		clearErrors();
 		if ($callback("beforeValidation"))
 		{
-			if ($isNew())
+			if (isNew())
 			{
 				if ($callback("beforeValidationOnCreate") && $validate("onCreate") && $callback("beforeValidation") && $validate("onSave") && $callback("afterValidation") && $callback("beforeSave") && $callback("beforeCreate") && $create(parameterize=arguments.parameterize) && $callback("afterCreate") && $callback("afterSave"))
 					returnValue = true;
@@ -435,12 +435,16 @@
 		if (hasChanged())
 		{
 			loc.changedProperties = changedProperties();
-			for (loc.i=1; loc.i LTE ListLen(loc.changedProperties); loc.i=loc.i+1)
+			loc.iEnd = ListLen(loc.changedProperties);
+			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.item = ListGetAt(loc.changedProperties, loc.i);
 				loc.returnValue[loc.item] = {};
-				loc.returnValue[loc.item].changedFrom = $changedFrom(loc.item);
-				loc.returnValue[loc.item].changedTo = this[loc.item];
+				loc.returnValue[loc.item].changedFrom = changedFrom(loc.item);
+				if (StructKeyExists(this, loc.item))
+					loc.returnValue[loc.item].changedTo = this[loc.item];
+				else
+					loc.returnValue[loc.item].changedTo = "";
 			}
 		}
 	</cfscript>
@@ -453,8 +457,30 @@
 		var loc = {};
 		loc.returnValue = false;
 		for (loc.key in variables.wheels.class.properties)
-			if (!StructKeyExists(this, loc.key) || !StructKeyExists(variables.$persistedProperties, loc.key) || this[loc.key] IS NOT variables.$persistedProperties[loc.key] && (Len(arguments.property) IS 0 || loc.key IS arguments.property))
+			if (!StructKeyExists(this, loc.key) || !StructKeyExists(variables, "$persistedProperties") || !StructKeyExists(variables.$persistedProperties, loc.key) || this[loc.key] IS NOT variables.$persistedProperties[loc.key] && (Len(arguments.property) IS 0 || loc.key IS arguments.property))
 				loc.returnValue = true;
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="changedFrom" returntype="string" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfscript>
+		var returnValue = "";
+		if (StructKeyExists(variables, "$persistedProperties") && StructKeyExists(variables.$persistedProperties, arguments.property))
+			returnValue = variables.$persistedProperties[arguments.property];
+	</cfscript>
+	<cfreturn returnValue>
+</cffunction>
+
+<cffunction name="isNew" returntype="boolean" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		// if no values have ever been saved to the database this object is new
+		if (!StructKeyExists(variables, "$persistedProperties"))
+			loc.returnValue = true;
+		else
+			loc.returnValue = false;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -982,27 +1008,6 @@
 			if (StructKeyExists(this, loc.key))
 				variables.$persistedProperties[loc.key] = this[loc.key];
 	</cfscript>
-</cffunction>
-
-<cffunction name="$isNew" returntype="boolean" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		// if no values have ever been saved to the database this object is new
-		if (!StructKeyExists(variables, "$persistedProperties"))
-			loc.returnValue = true;
-		else
-			loc.returnValue = false;
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="$changedFrom" returntype="string" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = variables.$persistedProperties[arguments.property];
-	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$addDeleteClause" returntype="array" access="public" output="false">

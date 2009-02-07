@@ -218,7 +218,7 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = false;
-		if ($isNew())
+		if (isNew())
 			if ($validate("onCreate") && $validate("onSave"))
 				loc.returnValue = true;
 		else
