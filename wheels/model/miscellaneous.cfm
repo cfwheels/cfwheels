@@ -21,7 +21,7 @@
 		if (Right(arguments.missingMethodName, 10) IS "hasChanged")
 			loc.returnValue = hasChanged(property=ReplaceNoCase(arguments.missingMethodName, "hasChanged", ""));
 		else if (Right(arguments.missingMethodName, 11) IS "changedFrom")
-			loc.returnValue = $changedFrom(property=ReplaceNoCase(arguments.missingMethodName, "changedFrom", ""));
+			loc.returnValue = changedFrom(property=ReplaceNoCase(arguments.missingMethodName, "changedFrom", ""));
 		else if (Left(arguments.missingMethodName, 9) IS "findOneBy" || Left(arguments.missingMethodName, 9) IS "findAllBy")
 		{
 			loc.finderProperties = ListToArray(ReplaceNoCase(ReplaceNoCase(Replace(arguments.missingMethodName, "And", "|"), "findAllBy", ""), "findOneBy", ""), "|");
