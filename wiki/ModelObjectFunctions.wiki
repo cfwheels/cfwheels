@@ -32,3 +32,5 @@ These methods operate on individual methods which means you first have to fetch 
  * [save save()]
  * [update update()]
  * [valid valid()]
+ * [xxxHasChanged xxxHasChanged()]
+ * [xxxChangedFrom xxxChangedFrom()]
