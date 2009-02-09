@@ -1,5 +1,5 @@
-<cffunction name="errorMessagesFor" returntype="string" access="public" output="false" hint="View, Helper, Returns a list (UL tag with a class of 'error-messages') containing all the error messages that exists on the object.">
-	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to display error messages for.">
+<cffunction name="errorMessagesFor" returntype="string" access="public" output="false" hint="Returns a list (UL tag with a class of 'error-messages') containing all the error messages that exists on the object.">
+	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to display error messages for">
 
 	<!---
 		EXAMPLES:
@@ -21,7 +21,7 @@
 	<cfset loc.errors = loc.object.allErrors()>
 	<cfset loc.output = "">
 
-	<cfif isArray(loc.errors)>
+	<cfif NOT ArrayIsEmpty(loc.errors)>
 		<cfsavecontent variable="loc.output">
 			<cfoutput>
 				<ul#loc.attributes#>
