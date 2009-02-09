@@ -13,9 +13,9 @@ Dynamic shortcut method, see [new new()] for more info. Replace `X` with the nam
 
 {{{
 <cfset aCustomer = model("customer").findByKey(params.customerId)>
-<cfset aCustomer.newOrder(shipping=params.shipping)>
+<cfset anOrder = aCustomer.newOrder(shipping=params.shipping)>
 =
-<cfset model("order").new(customerId=params.customerId, shipping=params.shipping)>
+<cfset anOrder = model("order").new(customerId=params.customerId, shipping=params.shipping)>
 }}}
 
  * CreatingRecords (chapter)
