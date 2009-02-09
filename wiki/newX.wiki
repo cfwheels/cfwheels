@@ -12,7 +12,7 @@ Dynamic shortcut method, see [new new()] for more info. Replace `X` with the nam
 *Examples*:
 
 {{{
-<cfset aCustomer = model("customer").findByKey(1)>
+<cfset aCustomer = model("customer").findByKey(params.customerId)>
 <cfset aCustomer.newOrder(shipping=params.shipping)>
 =
 <cfset model("order").new(customerId=params.customerId, shipping=params.shipping)>
