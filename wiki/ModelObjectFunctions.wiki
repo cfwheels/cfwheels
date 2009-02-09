@@ -1,7 +1,7 @@
 #summary Listing of all model object methods.
 #labels chapter,1.0
 
-These methods operate on individual methods which means you first have to fetch or create an object and then call the method on that object. You can call these methods from anywhere but it is not recommended to call them from view pages. When calling them from its own model file it is recommended to reference the scope explicitly with the `this` keyword.
+These methods operate on individual objects which means you first have to fetch or create an object and then call the method on that object. You can call these methods from anywhere but it is not recommended to call them from view pages. When calling them from its own model file it is recommended to reference the scope explicitly with the `this` keyword.
 
 ==Example==
 
