@@ -7,29 +7,16 @@
 
 *Description*:
 
-Dynamic shortcut method for [findAll findAll()]. Replace `X` with a property name. 
+Dynamic shortcut method, see [findAll findAll()] for more info. Replace `X` with a property name.
 
-*Return Type*:
+*Examples*:
 
-Array
+{{{
+<cfset books = model("book").findAllByReleaseYear(params.year)>
+=
+<cfset books = model("book").findAll(where="releaseYear=#params.year#")>
+}}}
 
-*History*:
-
--
-
-*Parameters*:
-
-|| *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *property* || string || true || - || Name of property ||
-|| *name* || string || false || - || Given name for the error ||
-
-*Related*:
-
- * ObjectValidation (chapter)
- * [addError addError()] (function)
- * [addErrorToBase addErrorToBase()] (function)
- * [hasErrors hasErrors()] (function)
- * [clearErrors clearErrors()] (function)
- * [errorCount errorCount()] (function)
- * [errorsOnBase errorsOnBase()] (function)
- * [allErrors allErrors()] (function)
+ * DynamicFinders (chapter)
+ * [findAll findAll()] (function)
+ * [findAllByXAndX findAllByXAndX()] (function)
