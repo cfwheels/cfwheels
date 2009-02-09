@@ -16,7 +16,7 @@ These methods operate on individual methods which means you first have to fetch 
 
  * [addError addError()]
  * [addErrorToBase addErrorToBase()]
- * [addX addX()]
+ * *[addX addX()]
  * [allChanges allChanges()]
  * [allErrors allErrors()]
  * [changedFrom changedFrom()]
