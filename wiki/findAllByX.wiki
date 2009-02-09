@@ -1,0 +1,35 @@
+#summary findAllByX(...)
+#labels api,1.0
+
+*Category*:
+
+[ModelClassFunctions Model Class Functions]
+
+*Description*:
+
+Dynamic shortcut method for [findAll findAll()]. Replace `X` with a property name. 
+
+*Return Type*:
+
+Array
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *property* || string || true || - || Name of property ||
+|| *name* || string || false || - || Given name for the error ||
+
+*Related*:
+
+ * ObjectValidation (chapter)
+ * [addError addError()] (function)
+ * [addErrorToBase addErrorToBase()] (function)
+ * [hasErrors hasErrors()] (function)
+ * [clearErrors clearErrors()] (function)
+ * [errorCount errorCount()] (function)
+ * [errorsOnBase errorsOnBase()] (function)
+ * [allErrors allErrors()] (function)
