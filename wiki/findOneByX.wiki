@@ -1,0 +1,22 @@
+#summary findOneByX(...)
+#labels api,1.0
+
+*Category*:
+
+[ModelClassFunctions Model Class Functions]
+
+*Description*:
+
+Dynamic shortcut method, see [findOne findOne()] for more info. Replace `X` with a property name.
+
+*Examples*:
+
+{{{
+<cfset books = model("book").findOneByReleaseYear(params.year)>
+=
+<cfset books = model("book").findOne(where="releaseYear=#params.year#")>
+}}}
+
+ * DynamicFinders (chapter)
+ * [findOne findOne()] (function)
+ * [findOneByXAndX findOneByXAndX()] (function)
