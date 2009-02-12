@@ -1,0 +1,30 @@
+#summary XXX(...)
+#labels api,1.0
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
+Dynamic shortcut method, see [findByKey findByKey()] for more info. Replace `XXX` with the name of an association you have set up through [belongsTo belongsTo()] [hasOne hasOne()].
+
+*Examples*:
+
+{{{
+<cfset aComment = model("comment").findByKey(params.commentId)>
+<cfset aPost = aComment.post()>
+=
+<cfset aPost = model("post").findByKey(aComment.postId)>
+}}}
+
+{{{
+<cfset aUser = model("user").findByKey(params.userId)>
+<cfset aProfile = aUser.profile()>
+=
+<cfset aProfile = model("profile").findOne(where="userId=#aUser.id#")>
+}}}
+
+ * ReadingRecords (chapter)
+ * [findByKey findByKey()] (function)
+ * [findOne findOne()] (function)
