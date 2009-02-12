@@ -1,4 +1,4 @@
-#summary newX(...)
+#summary newXXX(...)
 #labels api,1.0
 
 *Category*:
@@ -7,16 +7,21 @@
 
 *Description*:
 
-Dynamic shortcut method, see [new new()] for more info. Replace `X` with the name of an association you have set up either through [belongsTo belongsTo()], [hasMany hasMany()] or [hasOne hasOne()].
+Dynamic shortcut method, see [new new()] for more info. Replace `XXX` with the name of an association you have set up either through [hasOne hasOne()] or [hasMany hasMany()].
 
 *Examples*:
 
 {{{
+<!--- a "hasOne" or "hasMany" association from "customer" to "order" is required --->
 <cfset aCustomer = model("customer").findByKey(params.customerId)>
+
 <cfset anOrder = aCustomer.newOrder(shipping=params.shipping)>
 =
 <cfset anOrder = model("order").new(customerId=params.customerId, shipping=params.shipping)>
 }}}
 
- * CreatingRecords (chapter)
+ * [Associations Associations] (chapter)
+ * [CreatingRecords CreatingRecords](chapter)
+ * [hasOne hasOne()] (function)
+ * [hasMany hasMany()] (function)
  * [new new()] (function)
