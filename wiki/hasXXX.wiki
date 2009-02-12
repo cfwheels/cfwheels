@@ -1,0 +1,36 @@
+#summary XXX(...)
+#labels api,1.0
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
+Dynamic shortcut method, see [exists exists()] for more info. Replace `XXX` with the name of an association you have set up through [hasOne hasOne()] or [belongsTo belongsTo()].
+
+*Examples*:
+
+{{{
+<!--- a "belongsTo" association from "comment" to "post" is required --->
+<cfset aComment = model("comment").findByKey(params.commentId)>
+
+<cfset commentHasAPost = aComment.hasPost()>
+=
+<cfset commentHasAPost = model("post").exists(aComment.postId)>
+}}}
+
+{{{
+<!--- a "hasOne" association from "user" to "profile" is required --->
+<cfset aUser = model("user").findByKey(params.userId)>
+
+<cfset userHasProfile = aUser.hasProfile()>
+=
+<cfset userHasProfile = model("profile").exists(where="userId=#aUser.id#")>
+}}}
+
+ * [Associations Associations] (chapter)
+ * [ReadingRecords ReadingRecords](chapter)
+ * [belongsTo belongsTo()] (function)
+ * [hasOne hasOne()] (function)
+ * [exists exists()] (function)
