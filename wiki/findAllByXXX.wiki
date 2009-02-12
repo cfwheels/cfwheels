@@ -12,9 +12,9 @@ Dynamic shortcut method, see [findAll findAll()] for more info. Replace `XXX` wi
 *Examples*:
 
 {{{
-<cfset book = model("book").findOneByReleaseYear(params.year)>
+<cfset books = model("book").findOneByReleaseYear(params.year)>
 =
-<cfset book = model("book").findOne(where="releaseYear=#params.year#")>
+<cfset books = model("book").findOne(where="releaseYear=#params.year#")>
 }}}
 
  * [DynamicFinders DynamicFinders] (chapter)
