@@ -1,0 +1,27 @@
+#summary setXXX(...)
+#labels api,1.0
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
+Dynamic shortcut method, see [update update()] for more info. Replace `XXX` with the name of an association you have set up through [hasOne hasOne()].
+
+*Examples*:
+
+{{{
+<!--- a "hasOne" association from "author" to "bio" is required --->
+<cfset anAuthor = model("author").findByKey(params.authorId)>
+<cfset aBio = model("bio").findByKey(params.bioId)>
+
+<cfset anAuthor.setBio(aBio)>
+=
+<cfset model("bio").update(authorId=params.authorId)>
+}}}
+
+ * [Associations Associations] (chapter)
+ * [updatingRecords updating Records](chapter)
+ * [hasOne hasOne()] (function)
+ * [update update()] (function)
