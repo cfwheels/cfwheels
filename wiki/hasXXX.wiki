@@ -30,7 +30,7 @@ Dynamic shortcut method, see [exists exists()] for more info. Replace `XXX` with
 }}}
 
 {{{
-<!--- a "hasMany" association from "post" to "comments" is required --->
+<!--- a "hasMany" association from "post" to "comment" is required --->
 <cfset aPost = model("post").findByKey(params.postId)>
 
 <cfset postHasComments = aPost.hasComments()>
