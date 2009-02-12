@@ -21,6 +21,6 @@ Dynamic shortcut method, see [count count()] for more info. Replace `XXX` with t
 }}}
 
  * [Associations Associations] (chapter)
- * [Calculations Calculations](chapter)
+ * [ColumnStatistics ColumnStatistics](chapter)
  * [hasMany hasMany()] (function)
  * [count count()] (function)
