@@ -14,6 +14,7 @@ Dynamic shortcut method, see [findByKey findByKey()] for more info. Replace `XXX
 {{{
 <!--- a "belongsTo" association from "comment" to "post" is required --->
 <cfset aComment = model("comment").findByKey(params.commentId)>
+
 <cfset aPost = aComment.post()>
 =
 <cfset aPost = model("post").findByKey(aComment.postId)>
@@ -22,6 +23,7 @@ Dynamic shortcut method, see [findByKey findByKey()] for more info. Replace `XXX
 {{{
 <!--- a "hasOne" association from "user" to "profile" is required --->
 <cfset aUser = model("user").findByKey(params.userId)>
+
 <cfset aProfile = aUser.profile()>
 =
 <cfset aProfile = model("profile").findOne(where="userId=#aUser.id#")>
