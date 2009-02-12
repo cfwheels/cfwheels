@@ -149,7 +149,7 @@
 							case "hasObject":
 							case "hasObjects":
 							{
-								loc.returnValue = model(loc.info.class).count(where=loc.simpleWhere) IS NOT 0;
+								loc.returnValue = model(loc.info.class).exists(where=loc.simpleWhere);
 								break;
 							}
 							case "objectCount":
@@ -186,7 +186,7 @@
 								{
 									loc.id = ListAppend(loc.id, this[ListGetAt(loc.info.foreignKey, loc.i)]);
 								}
-								loc.returnValue = IsObject(model(loc.info.class).findByKey(loc.id));
+								loc.returnValue = model(loc.info.class).exists(loc.id);
 								break;
 							}
 						}
