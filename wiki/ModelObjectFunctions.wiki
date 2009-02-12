@@ -38,7 +38,7 @@ These methods operate on individual objects which means you first have to fetch 
  * [newXXX newXXX()]
  * [reload reload()]
  * [save save()]
- * [SetXXX SetXXX()]
+ * [setXXX setXXX()]
  * [update update()]
  * [valid valid()]
  * [XXX XXX()]
