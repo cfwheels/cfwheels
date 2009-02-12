@@ -7,7 +7,7 @@
 
 *Description*:
 
-Dynamic shortcut method, see [findByKey findByKey()] for more info. Replace `XXX` with the name of an association you have set up through [belongsTo belongsTo()] or [hasOne hasOne()].
+Dynamic shortcut method, see [findByKey findByKey()] and [findOne findOne()] for more info. Replace `XXX` with the name of an association you have set up through [hasOne hasOne()] or [belongsTo belongsTo()].
 
 *Examples*:
 
