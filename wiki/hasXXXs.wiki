@@ -1,4 +1,4 @@
-#summary XXX(...)
+#summary hasXXXs(...)
 #labels api,1.0
 
 *Category*:
