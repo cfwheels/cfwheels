@@ -29,6 +29,9 @@ Dynamic shortcut method, see [findByKey findByKey()] and [findOne findOne()] for
 <cfset aProfile = model("profile").findOne(where="userId=#aUser.id#")>
 }}}
 
- * ReadingRecords (chapter)
+ * [Associations Associations] (chapter)
+ * [ReadingRecords ReadingRecords](chapter)
+ * [belongsTo belongsTo()] (function)
+ * [hasOne hasOne()] (function)
  * [findByKey findByKey()] (function)
  * [findOne findOne()] (function)
