@@ -22,6 +22,6 @@ Dynamic shortcut method, see [update update()] for more info. Replace `XXX` with
 }}}
 
  * [Associations Associations] (chapter)
- * [updatingRecords updating Records](chapter)
+ * [UpdatingRecords UpdatingRecords](chapter)
  * [hasOne hasOne()] (function)
  * [update update()] (function)
