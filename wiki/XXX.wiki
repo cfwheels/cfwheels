@@ -7,7 +7,7 @@
 
 *Description*:
 
-Dynamic shortcut method, see [findByKey findByKey()] and [findOne findOne()] for more info. Replace `XXX` with the name of an association you have set up through [hasOne hasOne()] or [belongsTo belongsTo()].
+Dynamic shortcut method, see [findByKey findByKey()], [findOne findOne()] and [findAll findAll()] for more info. Replace `XXX` with the name of an association you have set up through [belongsTo belongsTo()], [hasOne hasOne()] or [hasMany hasMany()].
 
 *Examples*:
 
@@ -29,9 +29,20 @@ Dynamic shortcut method, see [findByKey findByKey()] and [findOne findOne()] for
 <cfset aProfile = model("profile").findOne(where="userId=#aUser.id#")>
 }}}
 
+{{{
+<!--- a "hasMany" association from "post" to "comment" is required --->
+<cfset aPost = model("post").findByKey(params.postId)>
+
+<cfset comments = aPost.comments()>
+=
+<cfset comments = model("comment").findAll(where="postId=#aPost.id#")>
+}}}
+
  * [Associations Associations] (chapter)
  * [ReadingRecords ReadingRecords](chapter)
  * [belongsTo belongsTo()] (function)
  * [hasOne hasOne()] (function)
+ * [hasMany hasMany()] (function)
  * [findByKey findByKey()] (function)
  * [findOne findOne()] (function)
+ * [findAll findAll()] (function)
