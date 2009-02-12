@@ -7,7 +7,7 @@
 
 *Description*:
 
-Dynamic shortcut method, see [exists exists()] for more info. Replace `XXX` with the name of an association you have set up through [hasMany hasMany()].
+Dynamic shortcut method, see [exists exists()] for more info. Replace `XXXs` with the name of an association you have set up through [hasMany hasMany()].
 
 *Examples*:
 
