@@ -10,7 +10,8 @@
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		switch(arguments.type)
+		loc.type = Replace(arguments.type, "()", "");
+		switch(loc.type)
 		{
 			case "bigint": {loc.returnValue = "cf_sql_bigint"; break;}
 			case "char for bit data": {loc.returnValue = "cf_sql_bit";	break;}
