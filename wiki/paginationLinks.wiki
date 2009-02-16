@@ -32,32 +32,30 @@ String
 *Examples*:
 
 {{{
-Controller code...
+<!--- controller code --->
 <cfparam name="params.page" default="1">
-<cfset allAuthors = model("Author").findAll(page=params.page, perPage=25)>
-View code...
+<cfset allAuthors = model("author").findAll(page=params.page, perPage=25)>
+<!--- view code --->
 <ul>
   <cfoutput query="allAuthors">
     <li>#firstName# #lastName#</li>
   </cfoutput>
 </ul>
-<cfoutput>#paginationLinks()#</cfoutput>
+<cfoutput>#paginationLinks(action="listAuthors")#</cfoutput>
 }}}
 
 {{{
-View code...
-<cfoutput>#paginationLinks(windowSize=5)#</cfoutput>
+<!--- view code --->
+<cfoutput>#paginationLinks(action="listAuthors", windowSize=5)#</cfoutput>
 }}}
 
 {{{
-Controller code...
-<cfset allAuthors = model("Author").findAll(handle="authQuery", page=5)>
-View code...
+<!--- controller code --->
+<cfset allAuthors = model("author").findAll(handle="authQuery", page=5)>
+<!--- view code --->
 <ul>
-  <cfoutput>#paginationLinks(handle="authQuery", prependToLink="<li>", appendToLink="</li>")#</cfoutput>
+  <cfoutput>#paginationLinks(action="listAuthors", handle="authQuery", prependToLink="<li>", appendToLink="</li>")#</cfoutput>
 </ul>
-
-
 }}}
 
  * [GettingPaginatedData GettingPaginatedData] (chapter)
