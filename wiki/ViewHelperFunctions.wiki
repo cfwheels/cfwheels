@@ -1,9 +1,7 @@
 #summary Listing of all view helper functions.
-#labels chapter,0.8
+#labels chapter,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
-These functions can be called from the controller and the view but are mostly used in the view to create output for use in a HTML page.
+These functions can be called from both the controller and the view but are mostly used in the view to create output for use in a HTML page.
 
 ==Example==
 
@@ -11,7 +9,7 @@ These functions can be called from the controller and the view but are mostly us
 
 {{{
 <cfoutput>
-  #paginationLinks(windowSize=5)#
+  #paginationLinks(action="listArticles", windowSize=5)#
 </cfoutput>
 }}}
 
@@ -52,12 +50,7 @@ These functions can be called from the controller and the view but are mostly us
  * [minuteSelectTag minuteSelectTag()]
  * [monthSelectTag monthSelectTag()]
  * [obfuscateParam obfuscateParam()]
- * [paginationCurrentPage paginationCurrentPage()]
- * [paginationHasNext paginationHasNext()]
- * [paginationHasPrevious paginationHasPrevious()]
  * [paginationLinks paginationLinks()]
- * [paginationTotalPages paginationTotalPages()]
- * [paginationTotalRecords paginationTotalRecords()]
  * [passwordField passwordField()]
  * [passwordFieldTag passwordFieldTag()]
  * [radioButton radioButton()]
