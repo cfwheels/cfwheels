@@ -3,7 +3,7 @@
 
 *Category*:
 
-[ViewHelperFunctions ViewHelper Functions]
+[ViewHelperFunctions View Helper Functions]
 
 *Description*:
 
