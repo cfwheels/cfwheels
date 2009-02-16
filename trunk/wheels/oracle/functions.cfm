@@ -10,7 +10,8 @@
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		switch(arguments.type)
+		loc.type = Replace(arguments.type, "()", "");
+		switch(loc.type)
 		{
 			case "blob": case "bfile": {loc.returnValue = "cf_sql_blob"; break;}
 			case "char": case "nchar": {loc.returnValue = "cf_sql_char"; break;}
