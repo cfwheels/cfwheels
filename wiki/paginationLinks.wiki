@@ -22,6 +22,7 @@ String
 ||   || *Type* || *Required* || *Default* || *Description* ||
 || *windowSize* || numeric || false || 2 || The number of page links to show around the current page ||
 || *alwaysShowAnchors* || boolean || false || true || Whether or not links to the first and last page should always be displayed ||
+|| *anchorDivider* || string || false ||  ...  || String to place next to the anchors on either side of the list ||
 || *linkToCurrentPage* || boolean || false || false || Whether or not the current page should be linked to ||
 || *prependToLink* || string || false ||  || String to be prepended before all links ||
 || *appendToLink* || string || false ||  || String to be appended after all links ||
