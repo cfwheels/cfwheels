@@ -1,5 +1,6 @@
 <cffunction name="$runFilters" returntype="void" access="public" output="false">
 	<cfargument name="controller" type="any" required="true">
+	<cfargument name="actionName" type="string" required="true">
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
 		var loc = {};
@@ -10,7 +11,7 @@
 		loc.iEnd = ArrayLen(loc.filters);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
-			if ((!Len(loc.filters[loc.i].only) && !Len(loc.filters[loc.i].except)) || (Len(loc.filters[loc.i].only) && ListFindNoCase(loc.filters[loc.i].only, loc.params.action)) || (Len(loc.filters[loc.i].except) && !ListFindNoCase(loc.filters[loc.i].except, loc.params.action)))
+			if ((!Len(loc.filters[loc.i].only) && !Len(loc.filters[loc.i].except)) || (Len(loc.filters[loc.i].only) && ListFindNoCase(loc.filters[loc.i].only, arguments.actionName)) || (Len(loc.filters[loc.i].except) && !ListFindNoCase(loc.filters[loc.i].except, arguments.actionName)))
 				$invoke(component=arguments.controller, method=loc.filters[loc.i].through);
 		}
 	</cfscript>
@@ -18,6 +19,7 @@
 
 <cffunction name="$runVerifications" returntype="void" access="public" output="false">
 	<cfargument name="controller" type="any" required="true">
+	<cfargument name="actionName" type="string" required="true">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
@@ -27,7 +29,7 @@
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.verification = loc.verifications[loc.i];
-			if ((!Len(loc.verification.only) && !Len(loc.verification.except)) || (Len(loc.verification.only) && ListFindNoCase(loc.verification.only, loc.params.action)) || (Len(loc.verification.except) && !ListFindNoCase(loc.verification.except, loc.params.action)))
+			if ((!Len(loc.verification.only) && !Len(loc.verification.except)) || (Len(loc.verification.only) && ListFindNoCase(loc.verification.only, arguments.actionName)) || (Len(loc.verification.except) && !ListFindNoCase(loc.verification.except, arguments.actionName)))
 			{
 				if (IsBoolean(loc.verification.post) && ((loc.verification.post && cgi.request_method != "post") || (!loc.verification.post && cgi.request_method == "post")))
 					loc.abort = true;
@@ -280,8 +282,8 @@
 			$debugPoint("setup,beforeFilters");
 		
 		// run verifications and before filters if they exist on the controller
-		$runVerifications(loc.controller);
-		$runFilters(controller=loc.controller, type="before");
+		$runVerifications(controller=loc.controller, actionName=loc.params.action);
+		$runFilters(controller=loc.controller, type="before", actionName=loc.params.action);
 		
 		if (application.settings.showDebugInformation)
 			$debugPoint("beforeFilters,action");
@@ -320,11 +322,11 @@
 		}
 		else
 		{
-			$callAction(loc.controller, loc.params.controller, loc.params.action);
+			$callAction(controller=loc.controller, controllerName=loc.params.controller, actionName=loc.params.action);
 		}
 		if (application.settings.showDebugInformation)
 			$debugPoint("action,afterFilters");
-		$runFilters(controller=loc.controller, type="after");
+		$runFilters(controller=loc.controller, type="after", actionName=loc.params.action);
 		if (application.settings.showDebugInformation)
 			$debugPoint("afterFilters");
 		
