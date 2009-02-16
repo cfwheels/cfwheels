@@ -83,11 +83,18 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = true;
-		for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.callbacks[arguments.type]); loc.i=loc.i+1)
+		loc.iEnd = ArrayLen(variables.wheels.class.callbacks[arguments.type]);
+		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
 		{
 			loc.returnValue = $invoke(method=variables.wheels.class.callbacks[arguments.type][loc.i]);
-			if (StructKeyExists(loc, "returnValue") && !loc.returnValue)
+			if (!StructKeyExists(loc, "returnValue"))
+			{
+				loc.returnValue = true;
+			}
+			else if (!loc.returnValue)
+			{
 				break;
+			}
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>

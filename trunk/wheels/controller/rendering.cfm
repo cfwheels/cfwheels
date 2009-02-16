@@ -164,12 +164,12 @@
 			loc.include = application.wheels.viewPath;
 			if (IsBoolean(arguments.layout))
 			{
-				if (!application.settings.cacheFileChecking || (!ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) && !ListFindNoCase(application.wheels.nonExistingLayoutFiles, variables.params.controller)))
+				if (!ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) && !ListFindNoCase(application.wheels.nonExistingLayoutFiles, variables.params.controller))
 				{
 					if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.params.controller)#/layout.cfm")))
 						application.wheels.existingLayoutFiles = ListAppend(application.wheels.existingLayoutFiles, variables.params.controller);
 					else
-						application.wheels.nonExistingLayoutFiles = ListAppend(application.wheels.existingLayoutFiles, variables.params.controller);
+						application.wheels.nonExistingLayoutFiles = ListAppend(application.wheels.nonExistingLayoutFiles, variables.params.controller);
 				}
 				if (ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller))
 				{
