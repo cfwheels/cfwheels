@@ -1,4 +1,4 @@
-#summary paginationLinks([windowSize,alwaysShowAnchors,linkToCurrentPage,prependToLink,appendToLink,classForCurrent,handle,name])
+#summary paginationLinks([windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prependToLink,appendToLink,classForCurrent,handle,name])
 #labels api,1.0
 
 *Category*:
