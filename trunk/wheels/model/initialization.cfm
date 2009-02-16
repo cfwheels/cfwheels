@@ -2,6 +2,8 @@
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
 		var loc = {};
+		if (!StructKeyExists(application.wheels, "adapter"))
+			$throw(type="Wheels.DataSourceNotFound", message="The '#application.settings.database.datasource#' data source could not be found.", extendedInfo="You need to add a data source with this name in the #application.wheels.serverName# Administrator before running Wheels. You can specify a different name for the data source in 'config/database.cfm' if necessary. After making this change you need to restart Wheels by issuing a 'reload=true' request.");
 		variables.wheels = {};
 		variables.wheels.class = {};
 		variables.wheels.class.name = arguments.name;

@@ -15,7 +15,7 @@
 </tr>
 <tr>
 	<td valign="top"><strong>Database:</strong></td>
-	<td>#application.wheels.databaseName#</td>
+	<td><cfif StructKeyExists(application.wheels, "databaseName")>#application.wheels.databaseName#<cfelse>None</cfif></td>
 </tr>
 <tr>
 	<td valign="top"><strong>URL Rewriting:</strong></td>
