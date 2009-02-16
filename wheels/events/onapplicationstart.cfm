@@ -160,22 +160,22 @@
 			{
 				loc.info = $dbinfo(datasource=application.settings.database.datasource, username=application.settings.database.username, password=application.settings.database.password, type="version");
 			}
-			catch(Any e)
+			catch(Any e) {}
+			if (StructKeyExists(loc, "info"))
 			{
-				$throw(type="Wheels.DataSourceNotFound", message="The '#application.settings.database.datasource#' data source could not be found.", extendedInfo="You need to add a data source with this name in the #application.wheels.serverName# Administrator before running Wheels. You can specify a different name for the data source in 'config/database.cfm' if necessary.");
+				if (loc.info.driver_name Contains "MySQL")
+					loc.adapterName = "MySQL";
+				else if (loc.info.driver_name Contains "Oracle")
+					loc.adapterName = "Oracle";
+				else if (loc.info.driver_name Contains "SQLServer" || loc.info.driver_name Contains "Microsoft SQL Server")
+					loc.adapterName = "MicrosoftSQLServer";
+				else
+					$throw(type="Wheels.NoSupport", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, Oracle or MySQL.");			
+				application.wheels.adapter = CreateObject("component", "wheels.#loc.adapterName#");
+				application.wheels.databaseName = loc.info.database_version;
+				if (application.wheels.databaseName Does Not Contain loc.info.database_productname)
+					application.wheels.databaseName = loc.info.database_productname & " " & application.wheels.databaseName;		
 			}
-			if (loc.info.driver_name Contains "MySQL")
-				loc.adapterName = "MySQL";
-			else if (loc.info.driver_name Contains "Oracle")
-				loc.adapterName = "Oracle";
-			else if (loc.info.driver_name Contains "SQLServer" || loc.info.driver_name Contains "Microsoft SQL Server")
-				loc.adapterName = "MicrosoftSQLServer";
-			else
-				$throw(type="Wheels.NoSupport", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, Oracle or MySQL.");			
-			application.wheels.adapter = CreateObject("component", "wheels.#loc.adapterName#");
-			application.wheels.databaseName = loc.info.database_version;
-			if (application.wheels.databaseName Does Not Contain loc.info.database_productname)
-				application.wheels.databaseName = loc.info.database_productname & " " & application.wheels.databaseName;
 		}
 		application.wheels.dispatch = CreateObject("component", "wheels.Dispatch");
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
