@@ -31,7 +31,7 @@
 			<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
 				<cfscript>
 					loc.fileName = capitalize(arguments.name);
-					if (!application.settings.cacheFileChecking || (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingControllerFiles, arguments.name)))
+					if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingControllerFiles, arguments.name))
 					{
 						if (FileExists(ExpandPath("#application.wheels.controllerPath#/#loc.fileName#.cfc")))
 							application.wheels.existingControllerFiles = ListAppend(application.wheels.existingControllerFiles, arguments.name);
@@ -50,6 +50,17 @@
 
 	<cfreturn application.wheels.controllers[arguments.name]>
 </cffunction>
+					if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.params.controller)#/layout.cfm")))
+					{
+						application.wheels.existingLayoutFiles = ListAppend(application.wheels.existingLayoutFiles, variables.params.controller);
+					}
+					else
+					{
+						application.wheels.nonExistingLayoutFiles = ListAppend(application.wheels.nonExistingLayoutFiles, variables.params.controller);
+						loc.pos = ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller);
+						if (loc.pos)
+							application.wheels.existingLayoutFiles = ListDeleteAt(application.wheels.existingLayoutFiles, loc.pos);
+					}
 
 <cffunction name="$flatten" returntype="string" access="public" output="false">
 	<cfargument name="values" type="struct" required="true">
