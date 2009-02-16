@@ -36,6 +36,7 @@ String
 <!--- controller code --->
 <cfparam name="params.page" default="1">
 <cfset allAuthors = model("author").findAll(page=params.page, perPage=25)>
+
 <!--- view code --->
 <ul>
   <cfoutput query="allAuthors">
@@ -53,9 +54,25 @@ String
 {{{
 <!--- controller code --->
 <cfset allAuthors = model("author").findAll(handle="authQuery", page=5)>
+
 <!--- view code --->
 <ul>
   <cfoutput>#paginationLinks(action="listAuthors", handle="authQuery", prependToLink="<li>", appendToLink="</li>")#</cfoutput>
+</ul>
+}}}
+
+{{{
+<!--- route setup --->
+<cfset addRoute(name="paginatedCommentListing", pattern="blog/[year]/[month]/[day]/[page]", controller="theBlog", action="stats")>
+<cfset addRoute(name="commentListing", pattern="blog/[year]/[month]/[day]",  controller="theBlog", action="stats")>
+
+<!--- controller code --->
+<cfparam name="params.page" default="1">
+<cfset comments = model("comment").findAll(page=params.page)>
+
+<!--- view code --->
+<ul>
+  <cfoutput>#paginationLinks(route="paginatedCommentListing", year=2009, month="feb", day=10)#</cfoutput>
 </ul>
 }}}
 
