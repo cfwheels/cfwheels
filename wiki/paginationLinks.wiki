@@ -60,4 +60,5 @@ String
 
  * [GettingPaginatedData GettingPaginatedData] (chapter)
  * [DisplayingLinksforPagination DisplayingLinksforPagination] (chapter)
+ * [linkTo linkTo()] (function)
  * [findAll findAll()] (function)
