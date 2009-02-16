@@ -1,15 +1,17 @@
 #summary paginationLinks([windowSize,alwaysShowAnchors,linkToCurrentPage,prependToLink,appendToLink,classForCurrent,handle,name])
 #labels api,1.0
 
+*Category*:
+
+[ViewHelperFunctions ViewHelper Functions]
+
 *Description*:
 
-Builds and returns a string containing links to pages based on a paginated query.
+Builds and returns a string containing links to pages based on a paginated query. If you have paginated more than one query in the controller you can use the handle argument to reference them (don't forget to pass in a handle to the findAll function in your controller first though).
 
 *Return Type*:
 
 String
-
-*
 
 *History*:
 
@@ -18,20 +20,14 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *classForCurrent* || string || false ||  || Class name for the link to the current page ||
-|| *prependToLink* || string || false ||  || String to be prepended before all links ||
-|| *handle* || string || false || query || The handle given to the query that the pagination links should be displayed for ||
-|| *linkToCurrentPage* || boolean || false || false || Whether or not the current page should be linked to ||
 || *windowSize* || numeric || false || 2 || The number of page links to show around the current page ||
-|| *params* || string || false ||  || Any additional parameters that should be appended to the links ||
 || *alwaysShowAnchors* || boolean || false || true || Whether or not links to the first and last page should always be displayed ||
-|| *name* || string || false || page || The name of the param that holds the current page number ||
+|| *linkToCurrentPage* || boolean || false || false || Whether or not the current page should be linked to ||
+|| *prependToLink* || string || false ||  || String to be prepended before all links ||
 || *appendToLink* || string || false ||  || String to be appended after all links ||
-
-*Usage*:
-
-If you have paginated more than one query in the controller you can use the handle argument to reference them (don't forget to pass in a handle to the findAll function in your controller first though).
-All other arguments are used to customize the output.
+|| *classForCurrent* || string || false ||  || Class name for the link to the current page ||
+|| *handle* || string || false || query || The handle given to the query that the pagination links should be displayed for ||
+|| *name* || string || false || page || The name of the param that holds the current page number ||
 
 *Examples*:
 
@@ -64,12 +60,6 @@ View code...
 
 }}}
 
-*Related*:
-
- * GettingPaginatedData (chapter)
- * DisplayingLinksforPagination (chapter)
- * [paginationHasPrevious paginationHasPrevious()] (function)
- * [paginationHasNext paginationHasNext()] (function)
- * [paginationTotalPages paginationTotalPages()] (function)
- * [paginationTotalRecords paginationTotalRecords()] (function)
- * [paginationCurrentPage paginationCurrentPage()] (function)
+ * [GettingPaginatedData GettingPaginatedData] (chapter)
+ * [DisplayingLinksforPagination DisplayingLinksforPagination] (chapter)
+ * [findAll findAll()] (function)
