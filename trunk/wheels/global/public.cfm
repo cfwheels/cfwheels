@@ -23,7 +23,7 @@
 		// get primary key values if an object was passed in
 		if (IsObject(arguments.key))
 		{
-			arguments.key = arguments.key.$primaryKeyValues();
+			arguments.key = arguments.key.id();
 		}
 		
 		// build the link
