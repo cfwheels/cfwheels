@@ -1,14 +1,32 @@
-#summary One-sentence summary of this page.
+#summary primaryKey()
 #labels api,1.0
 
-= Introduction =
+*Category*:
 
-Add your content here.
+[ModelClassFunctions Model Class Functions]
 
+*Description*:
 
-= Details =
+Returns the name of the primary key for this model's table. This is determined through database introspection. If composite primary keys have been used they will both be returned in a list.
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+-
+
+*Examples*:
+
+{{{
+<cfset theKeyName = model("employee").primaryKey()>
+}}}
+
+*Related*:
+
+ * ObjectRelationalMapping (chapter)
