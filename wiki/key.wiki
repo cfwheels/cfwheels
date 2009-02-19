@@ -1,0 +1,33 @@
+#summary key()
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
+Returns the value of the primary key for this object. If you have a single primary named 
+
+This is determined through database introspection. If composite primary keys have been used they will both be returned in a list.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+-
+
+*Examples*:
+
+{{{
+<cfset theKeyName = model("employee").primaryKey()>
+}}}
+
+*Related*:
+
+ * ObjectRelationalMapping (chapter)
