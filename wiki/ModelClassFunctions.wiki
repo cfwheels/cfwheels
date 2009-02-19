@@ -36,6 +36,7 @@ These methods operate on the class as a whole and not on individual objects and 
  * [maximum maximum()]
  * [minimum minimum()]
  * [new new()]
+ * [primaryKey primaryKey()]
  * [sum sum()]
  * [updateAll updateAll()]
  * [updateByKey updateByKey()]
