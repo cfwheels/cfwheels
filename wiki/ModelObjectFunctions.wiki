@@ -35,6 +35,7 @@ These methods operate on individual objects which means you first have to fetch 
  * [hasErrors hasErrors()]
  * [hasXXX hasXXX()]
  * [isNew isNew()]
+ * [key key()]
  * [newXXX newXXX()]
  * [reload reload()]
  * [save save()]
