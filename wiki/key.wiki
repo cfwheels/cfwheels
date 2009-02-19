@@ -1,4 +1,5 @@
 #summary key()
+#labels api,1.0
 
 *Category*:
 
@@ -6,9 +7,7 @@
 
 *Description*:
 
-Returns the value of the primary key for this object. If you have a single primary named 
-
-This is determined through database introspection. If composite primary keys have been used they will both be returned in a list.
+Returns the value of the primary key for the object. If you have a single primary key named `id` then `someObject.key()` is functionally equivalent to `someObject.id`. This method is more useful when you do more dynamic programming and don't know the name of the primary key or when you use composite keys (in which case it's convenient to use this method to get a list of both key values returned). 
 
 *Return Type*:
 
@@ -25,7 +24,8 @@ String
 *Examples*:
 
 {{{
-<cfset theKeyName = model("employee").primaryKey()>
+<cfset anEmployee = model("employee").findByKey(params.key)>
+<cfset val = anEmployee.key()>
 }}}
 
 *Related*:
