@@ -1,4 +1,4 @@
-#summary table()
+#summary table(name)
 #labels api,1.0
 
 *Category*:
@@ -7,7 +7,7 @@
 
 *Description*:
 
-Use this method to tell Wheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard Wheels conventions of a singular object name mapping to a plural table name (i.e. `User.cfc` mapping to the table `users`).
+Use this method to tell Wheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard Wheels conventions of a singular object name mapping to a plural table name (i.e. `User.cfc` mapping to the table `users` for example).
 
 *Return Type*:
 
