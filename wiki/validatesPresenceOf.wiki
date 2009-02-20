@@ -1,0 +1,38 @@
+#summary validatesPresenceOf(property[message,when])
+#labels api,1.0
+
+*Category*:
+
+[ModelInitializationFunctions Model Initialization Functions]
+
+*Description*:
+
+Validates that the specified property exists and is not blank.
+
+*Return Type*:
+
+Void
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *property* || string || true || - || Name of the property to validate ||
+|| *message* || string || false ||   || Supply a custom error message here to override the built-in one ||
+|| *when* || string || false || onSave || Pass in `onCreate` or `onUpdate` to limit when this validation occurs (by default validation it will occur on both create and update, i.e. `onSave`) ||
+
+*Examples*:
+
+{{{
+<!--- in models/User.cfc --->
+<cffunction name="init">
+  <cfset validatesPresenceOf("emailAddress")>
+</cffunction>
+}}}
+
+*Related*:
+
+ * ObjectValidation (chapter)
