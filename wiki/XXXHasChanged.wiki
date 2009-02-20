@@ -20,6 +20,8 @@ Dynamic shortcut method, see [hasChanged hasChanged()] for more info. Replace `X
 <cfif member.hasChanged(property="email")>
 }}}
 
+*Related*:
+
  * [hasChanged hasChanged()] (function)
  * [changedFrom changedFrom()] (function)
  * [XXXChangedFrom XXXChangedFrom()] (function)
