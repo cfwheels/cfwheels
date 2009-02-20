@@ -1,2 +1,39 @@
+#summary allChanges()
 #labels api,1.0
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
 Returns a struct detailing all changes that have been made on the object but not yet saved to the database.
+
+*Return Type*:
+
+Struct
+
+*History*:
+
+-
+
+*Parameters*:
+
+-
+
+*Examples*:
+
+{{{
+<cfset member = model("member").findByKey(params.memberId)>
+<cfset member.firstName = params.newFirstName>
+<cfset member.email = params.newEmail>
+<cfset allChangesAsStruct = member.allChanges()>
+}}}
+
+*Related*:
+
+ * [hasChanged hasChanged()] (function)
+ * [XXXHasChanged XXXHasChanged()] (function)
+ * [changedFrom changedFrom()] (function)
+ * [XXXChangedFrom XXXChangedFrom()] (function)
+ * [changedProperties changedProperties()] (function)
