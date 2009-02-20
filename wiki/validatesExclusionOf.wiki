@@ -1,0 +1,47 @@
+#summary validatesExclusionOf(property,list[message,when,allowBlank])
+#labels api,1.0
+
+*Category*:
+
+[ModelInitializationFunctions Model Initialization Functions]
+
+*Description*:
+
+Validates that the value of the specified property does not exist in the supplied list.
+
+*Return Type*:
+
+Void
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *property* || string || true || - || Name of the property to validate ||
+|| *list* || string || true || - || List of values that should not be allowed ||
+|| *message* || string || false ||   || Supply a custom error message here to override the built-in one ||
+|| *when* || string || false || onSave || Pass in `onCreate` or `onUpdate` to limit when this validation occurs (by default validation it will occur on both create and update, i.e. `onSave`) ||
+|| *allowBlank* || boolean || false || false || If set to `true`, validation will be skipped if the value of the property is blank. ||
+
+*Examples*:
+
+{{{
+<!--- in models/User.cfc --->
+<cffunction name="init">
+  <cfset validatesExclusionOf(property="coolLanguage", list="php,fortran", message="Haha, you can't be serious, try again please.")>
+</cffunction>
+}}}
+
+*Related*:
+
+ * ObjectValidation (chapter)
+ * [validatesConfirmationOf validatesConfirmationOf()] (function)
+ * [validatesFormatOf validatesFormatOf()] (function)
+ * [validatesInclusionOf validatesInclusionOf()] (function)
+ * [validatesLengthOf validatesLengthOf()] (function)
+ * [validatesNumericalityOf validatesNumericalityOf()] (function)
+ * [validatesPresenceOf validatesPresenceOf()] (function)
+ * [validatesUniquenessOf validatesUniquenessOf()] (function)
