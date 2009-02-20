@@ -27,7 +27,6 @@ Boolean
 {{{
 <cfset member = model("member").findByKey(params.memberId)>
 <cfset member.email = params.newEmail>
-
 <cfif member.hasChanged(property="email")>
 }}}
 
