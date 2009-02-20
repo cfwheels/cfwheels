@@ -24,7 +24,6 @@ String
 
 *Related*:
 
- * ObjectCallbacks (chapter)
  * [hasChanged hasChanged()] (function)
  * [XXXHasChanged XXXHasChanged()] (function)
  * [XXXChangedFrom XXXChangedFrom()] (function)
