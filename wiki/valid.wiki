@@ -1,0 +1,26 @@
+#summary valid()
+#labels api,1.0
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
+Runs the validation on the object and returns `true` if it passes it.
+
+*Return Type*:
+
+Boolean
+
+*History*:
+
+-
+
+*Parameters*:
+
+-
+
+*Related*:
+
+ * ObjectValidation (chapter)
