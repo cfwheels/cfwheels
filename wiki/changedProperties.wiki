@@ -1,0 +1,39 @@
+#summary allChanges()
+#labels api,1.0
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
+Returns a list of the object properties that have been changed but not yet saved to the database.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+-
+
+*Examples*:
+
+{{{
+<cfset member = model("member").findByKey(params.memberId)>
+<cfset member.firstName = params.newFirstName>
+<cfset member.email = params.newEmail>
+<cfset changes = member.changedProperties()>
+}}}
+
+*Related*:
+
+ * [hasChanged hasChanged()] (function)
+ * [XXXHasChanged XXXHasChanged()] (function)
+ * [changedFrom changedFrom()] (function)
+ * [XXXChangedFrom XXXChangedFrom()] (function)
+ * [allChanges allChanges()] (function)
