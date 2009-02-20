@@ -1,4 +1,4 @@
-#summary property(name,column)
+#summary validate(methods)
 #labels api,1.0
 
 *Category*:
