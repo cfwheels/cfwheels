@@ -1,0 +1,32 @@
+#summary hasChanged([property])
+#labels api,1.0
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
+Returns `true` if the specified object property (or any if none was passed in) have been changed but not yet saved to the database. Will also return `true` if the object is new and no record for it exists in the database.
+
+*Return Type*:
+
+Boolean
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *property* || string || false ||   || Name of property to check for change ||
+
+*Related*:
+
+ * ObjectCallbacks (chapter)
+ * [XXXHasChanged XXXHasChanged()] (function)
+ * [changedFrom changedFrom()] (function)
+ * [XXXChangedFrom XXXChangedFrom()] (function)
+ * [changedProperties changedProperties()] (function)
+ * [allChanges allChanges()] (function)
