@@ -1,0 +1,32 @@
+#summary changedFrom([property])
+#labels api,1.0
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
+Returns the previous value of a property that has changed. Returns an empty string if no previous value exists.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *property* || string || false ||   || Name of property to get the previous value for ||
+
+*Related*:
+
+ * ObjectCallbacks (chapter)
+ * [hasChanged hasChanged()] (function)
+ * [XXXHasChanged XXXHasChanged()] (function)
+ * [XXXChangedFrom XXXChangedFrom()] (function)
+ * [changedProperties changedProperties()] (function)
+ * [allChanges allChanges()] (function)
