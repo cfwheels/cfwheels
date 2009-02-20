@@ -7,7 +7,7 @@
 
 *Description*:
 
-Validates that the specified property exists and is not blank.
+Validates that the specified property exists and that its value is not blank.
 
 *Return Type*:
 
@@ -20,19 +20,26 @@ Void
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *property* || string || true || - || Name of the property to validate ||
-|| *message* || string || false ||   || Supply a custom error message here to override the built-in one ||
-|| *when* || string || false || onSave || Pass in `onCreate` or `onUpdate` to limit when this validation occurs (by default validation it will occur on both create and update, i.e. `onSave`) ||
+|| *property* || string || true || - || See documentation for `validatesExclusionOf` ||
+|| *message* || string || false ||   || See documentation for `validatesExclusionOf` ||
+|| *when* || string || false || onSave || See documentation for `validatesExclusionOf` ||
 
 *Examples*:
 
 {{{
 <!--- in models/User.cfc --->
 <cffunction name="init">
-  <cfset validatesPresenceOf("emailAddress")>
+  <cfset validatesPresenceOf(property="emailAddress", message="You forgot to enter your email address!")>
 </cffunction>
 }}}
 
 *Related*:
 
  * ObjectValidation (chapter)
+ * [validatesConfirmationOf validatesConfirmationOf()] (function)
+ * [validatesExclusionOf validatesExclusionOf()] (function)
+ * [validatesFormatOf validatesFormatOf()] (function)
+ * [validatesInclusionOf validatesInclusionOf()] (function)
+ * [validatesLengthOf validatesLengthOf()] (function)
+ * [validatesNumericalityOf validatesNumericalityOf()] (function)
+ * [validatesUniquenessOf validatesUniquenessOf()] (function)
