@@ -1,0 +1,50 @@
+#summary validatesLengthOf(property[message,when,allowBlank,exactly,maximum,minimum,within])
+#labels api,1.0
+
+*Category*:
+
+[ModelInitializationFunctions Model Initialization Functions]
+
+*Description*:
+
+Validates that the value of the specified property matches the length requirements supplied. Only one of the `exactly`, `maximum`, `minimum` and `within` arguments can be used at a time.
+
+*Return Type*:
+
+Void
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *property* || string || true || - || See documentation for `validatesExclusionOf` ||
+|| *message* || string || false ||   || See documentation for `validatesExclusionOf` ||
+|| *when* || string || false || onSave || See documentation for `validatesExclusionOf` ||
+|| *allowBlank* || boolean || false || false || See documentation for `validatesExclusionOf` ||
+|| *exactly* || numeric || false || 0 || The exact length that the property value has to be ||
+|| *maximum* || numeric || false || 0 || The maximum length that the property value has to be ||
+|| *minimum* || snumeric || false || 0 || The minimum length that the property value has to be ||
+|| *within* || string || false ||   || A list of two values (minimum and maximum) that the length of the property value has to fall within ||
+
+*Examples*:
+
+{{{
+<!--- in models/User.cfc --->
+<cffunction name="init">
+  <cfset validatesLengthOf(property="username", maximum=50, message="Please limit your username to 50 characters please.")>
+</cffunction>
+}}}
+
+*Related*:
+
+ * ObjectValidation (chapter)
+ * [validatesConfirmationOf validatesConfirmationOf()] (function)
+ * [validatesExclusionOf validatesExclusionOf()] (function)
+ * [validatesFormatOf validatesFormatOf()] (function)
+ * [validatesInclusionOf validatesInclusionOf()] (function)
+ * [validatesNumericalityOf validatesNumericalityOf()] (function)
+ * [validatesPresenceOf validatesPresenceOf()] (function)
+ * [validatesUniquenessOf validatesUniquenessOf()] (function)
