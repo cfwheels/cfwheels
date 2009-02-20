@@ -32,7 +32,6 @@ Boolean
 
 *Related*:
 
- * ObjectCallbacks (chapter)
  * [XXXHasChanged XXXHasChanged()] (function)
  * [changedFrom changedFrom()] (function)
  * [XXXChangedFrom XXXChangedFrom()] (function)
