@@ -1,0 +1,41 @@
+#summary property(name,column)
+#labels api,1.0
+
+*Category*:
+
+[ModelInitializationFunctions Model Initialization Functions]
+
+*Description*:
+
+Register method(s) that should be called to validate objects before they are saved.
+
+*Return Type*:
+
+Void
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *methods* || string || true || - || Method name or list of method names ||
+
+*Examples*:
+
+{{{
+<!--- in models/User.cfc --->
+<cffunction name="init">
+  <cfset validate("check")>
+</cffunction>
+
+<cffunction name="check">
+</cffunction>
+}}}
+
+*Related*:
+
+ * ObjectValidation (chapter)
+ * [validateOnCreate validateOnCreate()](function)
+ * [validateOnUpdate validateOnUpdate()](function)
