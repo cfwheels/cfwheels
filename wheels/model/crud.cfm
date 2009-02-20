@@ -451,7 +451,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="hasChanged" returntype="boolean" access="public" output="false" hint="Returns 'true' if the specified object property (or any if none was passed in) have been changed but not yet saved to the database.">
+<cffunction name="hasChanged" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified object property (or any if none was passed in) have been changed but not yet saved to the database. Will also return `true` if the object is new and no record for it exists in the database.">
 	<cfargument name="property" type="string" required="false" default="" hint="Name of property to check for change">
 	<cfscript>
 		var loc = {};
@@ -463,8 +463,8 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="changedFrom" returntype="string" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
+<cffunction name="changedFrom" returntype="string" access="public" output="false" hint="Returns the previous value of a property that has changed. Returns an empty string if no previous value exists.">
+	<cfargument name="property" type="string" required="true" hint="Name of property to get the previous value for">
 	<cfscript>
 		var returnValue = "";
 		if (StructKeyExists(variables, "$persistedProperties") && StructKeyExists(variables.$persistedProperties, arguments.property))
@@ -473,7 +473,7 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="isNew" returntype="boolean" access="public" output="false">
+<cffunction name="isNew" returntype="boolean" access="public" output="false" hint="Returns `true` if this object hasn‘t been saved yet (in other words no record exists in the database yet). Returns `false` if a record exists.">
 	<cfscript>
 		var loc = {};
 		// if no values have ever been saved to the database this object is new
@@ -485,7 +485,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="reload" returntype="void" access="public" output="false">
+<cffunction name="reload" returntype="void" access="public" output="false" hint="Reloads the property values of this object from the database.">
 	<cfscript>
 		var loc = {};
 		loc.query = findByKey(key=id(), reload=true, $create=false);
@@ -498,7 +498,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="key" returntype="string" access="public" output="false">
+<cffunction name="key" returntype="string" access="public" output="false" hint="Returns the value of the primary key for the object. If you have a single primary key named `id` then `someObject.key()` is functionally equivalent to `someObject.id`. This method is more useful when you do dynamic programming and don't know the name of the primary key or when you use composite keys (in which case it's convenient to use this method to get a list of both key values returned).">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
@@ -511,7 +511,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="primaryKey" returntype="string" access="public" output="false">
+<cffunction name="primaryKey" returntype="string" access="public" output="false" hint="Returns the name of the primary key for this model's table. This is determined through database introspection. If composite primary keys have been used they will both be returned in a list.">
 	<cfreturn variables.wheels.class.keys>
 </cffunction>
 

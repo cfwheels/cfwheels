@@ -1,7 +1,7 @@
-<cffunction name="validatesConfirmationOf" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="message" type="string" required="false" default="">
-	<cfargument name="when" type="string" required="false" default="onSave">
+<cffunction name="validatesConfirmationOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property also has an identical confirmation value (common when having a user type in their email address, choosing a password etc). The confirmation value only exists temporarily and never gets saved to the database.">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="message" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -19,12 +19,12 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="validatesExclusionOf" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="list" type="string" required="true">
-	<cfargument name="message" type="string" required="false" default="">
-	<cfargument name="when" type="string" required="false" default="onSave">
-	<cfargument name="allowBlank" type="boolean" required="false" default="false">
+<cffunction name="validatesExclusionOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property does not exist in the supplied list.">
+	<cfargument name="property" type="string" required="true" hint="Name of the property to validate">
+	<cfargument name="list" type="string" required="true" hint="List of values that should not be allowed">
+	<cfargument name="message" type="string" required="false" default="" hint="Supply a custom error message here to override the built-in one">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="Pass in `onCreate` or `onUpdate` to limit when this validation occurs (by default validation it will occur on both create and update, i.e. `onSave`)">
+	<cfargument name="allowBlank" type="boolean" required="false" default="false" hint="If set to `true`, validation will be skipped if the value of the property is blank.">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -45,12 +45,12 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="validatesFormatOf" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="regEx" type="string" required="true">
-	<cfargument name="message" type="string" required="false" default="">
-	<cfargument name="when" type="string" required="false" default="onSave">
-	<cfargument name="allowBlank" type="boolean" required="false" default="false">
+<cffunction name="validatesFormatOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property is formatted correctly by matching it against the regular expression provided.">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="regEx" type="string" required="true" hint="Regular expression to verify against">
+	<cfargument name="message" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="allowBlank" type="boolean" required="false" default="false" hint="See documentation for `validatesExclusionOf`">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -70,12 +70,12 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="validatesInclusionOf" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="list" type="string" required="true">
-	<cfargument name="message" type="string" required="false" default="">
-	<cfargument name="when" type="string" required="false" default="onSave">
-	<cfargument name="allowBlank" type="boolean" required="false" default="false">
+<cffunction name="validatesInclusionOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property exists in the supplied list.">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="list" type="string" required="true" hint="List of allowed values">
+	<cfargument name="message" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="allowBlank" type="boolean" required="false" default="false" hint="See documentation for `validatesExclusionOf`">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -96,15 +96,15 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="validatesLengthOf" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="exactly" type="numeric" required="false" default=0>
-	<cfargument name="maximum" type="numeric" required="false" default=0>
-	<cfargument name="minimum" type="numeric" required="false" default=0>
-	<cfargument name="within" type="string" required="false" default="">
-	<cfargument name="message" type="string" required="false" default="">
-	<cfargument name="when" type="string" required="false" default="onSave">
-	<cfargument name="allowBlank" type="boolean" required="false" default="false">
+<cffunction name="validatesLengthOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property matches the length requirements supplied. Only one of the `exactly`, `maximum`, `minimum` and `within` arguments can be used at a time.">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="message" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="allowBlank" type="boolean" required="false" default="false" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="exactly" type="numeric" required="false" default=0 hint="The exact length that the property value has to be">
+	<cfargument name="maximum" type="numeric" required="false" default=0 hint="The maximum length that the property value has to be">
+	<cfargument name="minimum" type="numeric" required="false" default=0 hint="The minimum length that the property value has to be">
+	<cfargument name="within" type="string" required="false" default="" hint="A list of two values (minimum and maximum) that the length of the property value has to fall within">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -129,12 +129,12 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="validatesNumericalityOf" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="false" default="">
-	<cfargument name="onlyInteger" type="boolean" required="false" default="false">
-	<cfargument name="message" type="string" required="false" default="">
-	<cfargument name="when" type="string" required="false" default="onSave">
-	<cfargument name="allowBlank" type="boolean" required="false" default="false">
+<cffunction name="validatesNumericalityOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property is numeric.">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="message" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="allowBlank" type="boolean" required="false" default="false" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="onlyInteger" type="boolean" required="false" default="false" hint="Specifies whether the property value has to be an integer">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -154,10 +154,10 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="validatesPresenceOf" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="false" default="">
-	<cfargument name="message" type="string" required="false" default="">
-	<cfargument name="when" type="string" required="false" default="onSave">
+<cffunction name="validatesPresenceOf" returntype="void" access="public" output="false" hint="Validates that the specified property exists and that its value is not blank.">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="message" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -175,11 +175,11 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="validatesUniquenessOf" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="false" default="">
-	<cfargument name="scope" type="string" required="false" default="">
-	<cfargument name="message" type="string" required="false" default="">
-	<cfargument name="when" type="string" required="false" default="onSave">
+<cffunction name="validatesUniquenessOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property is unique in the database table. Useful for ensuring that two users can't sign up to a website with identical screen names for example. When a new record is created a check is made to make sure that no record already exists in the database with the given value for the specified property. When the record is updated the same check is made but disregarding the record itself.">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="message" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="scope" type="string" required="false" default="" hint="One or more properties by which to limit the scope of the uniqueness constraint">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -199,22 +199,22 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="validate" returntype="void" access="public" output="false" hint="Init, Register method(s) that should be called to validate objects before they are saved">
+<cffunction name="validate" returntype="void" access="public" output="false" hint="Register method(s) that should be called to validate objects before they are saved.">
 	<cfargument name="methods" type="string" required="true" hint="Method name or list of method names">
 	<cfset $registerValidation("onSave", arguments.methods)>
 </cffunction>
 
-<cffunction name="validateOnCreate" returntype="void" access="public" output="false" hint="Init, Register method(s) that should be called to validate new objects before they are inserted">
+<cffunction name="validateOnCreate" returntype="void" access="public" output="false" hint="Register method(s) that should be called to validate new objects before they are inserted.">
 	<cfargument name="methods" type="string" required="true" hint="Method name or list of method names">
 	<cfset $registerValidation("onCreate", arguments.methods)>
 </cffunction>
 
-<cffunction name="validateOnUpdate" returntype="void" access="public" output="false" hint="Init, Register method(s) that should be called to validate existing objects before they are updated">
+<cffunction name="validateOnUpdate" returntype="void" access="public" output="false" hint="Register method(s) that should be called to validate existing objects before they are updated.">
 	<cfargument name="methods" type="string" required="true" hint="Method name or list of method names">
 	<cfset $registerValidation("onUpdate", arguments.methods)>
 </cffunction>
 
-<cffunction name="valid" returntype="boolean" access="public" output="false" hint="Object, Runs the validation on the object and returns 'true' if it passes it">
+<cffunction name="valid" returntype="boolean" access="public" output="false" hint="Runs the validation on the object and returns `true` if it passes it. Wheels will run the validation process automatically whenever an object is saved to the database but sometimes it's useful to be able to run this method to see if the object is valid without saving it to the database.">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = false;

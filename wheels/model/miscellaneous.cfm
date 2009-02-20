@@ -1,13 +1,13 @@
-<cffunction name="table" returntype="void" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
+<cffunction name="table" returntype="void" access="public" output="false" hint="Use this method to tell Wheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard Wheels conventions of a singular object name mapping to a plural table name (i.e. `User.cfc` mapping to the table `users` for example).">
+	<cfargument name="name" type="string" required="true" hint="Name of the table to map this model to">
 	<cfscript>
 	variables.wheels.class.tableName = arguments.name;
 	</cfscript>
 </cffunction>
 
-<cffunction name="property" returntype="void" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="column" type="string" required="true">
+<cffunction name="property" returntype="void" access="public" output="false" hint="Use this method to map an object property in your application to a table column in your database. You only need to use this method when you want to override the mapping that Wheels performs (i.e. `user.firstName` mapping to `users.firstname` for example).">
+	<cfargument name="name" type="string" required="true" hint="Name of the property">
+	<cfargument name="column" type="string" required="true" hint="Name of the column to map the property to">
 	<cfscript>
 	variables.wheels.class.mapping[arguments.column] = arguments.name;
 	</cfscript>
