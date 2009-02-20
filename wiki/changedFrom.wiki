@@ -20,7 +20,15 @@ String
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| *property* || string || false ||   || Name of property to get the previous value for ||
+|| *property* || string || true || - || Name of property to get the previous value for ||
+
+*Examples*:
+
+{{{
+<cfset member = model("member").findByKey(params.memberId)>
+<cfset member.email = params.newEmail>
+<cfset oldValue = member.changedFrom(property="email")>
+}}}
 
 *Related*:
 
