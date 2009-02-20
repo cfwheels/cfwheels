@@ -1,0 +1,35 @@
+#summary reload()
+#labels api,1.0
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
+Reloads the property values of this object from the database.
+
+*Return Type*:
+
+Void
+
+*History*:
+
+-
+
+*Parameters*:
+
+-
+
+*Examples*:
+
+{{{
+<cfset anEmployee = model("employee").findByKey(params.key)>
+<cfset someStupidCallThatChangesValuesInTheDatabase()>
+<!--- better reload... --->
+<cfset anEmployee.reload()>
+}}}
+
+*Related*:
+
+ * ReadingRecords (chapter)
