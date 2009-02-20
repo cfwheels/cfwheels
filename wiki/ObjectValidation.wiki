@@ -63,7 +63,7 @@ The first line of the action creates a new `user` based on the `user` model and 
 
 Now, to persist the object to the database, the model [save save()] call is placed within a `<cfif>` test. If the saving succeeds, the [save save()] method will return true and the contents of the `<cfif>` will be executed. But, if any of the validations setup in the model fails, the [save save()] method returns `false` and the `<cfelse>` will execute.
 
-The important step here is to recognize that the `<cfelse>` renders the original form input page. The reason for this is that the now validated `newUser` model is in the scope of the `apply` action. If a [redirectTo() redirectTo()] were used, the original `index` action would be called and the validation information lost.
+The important step here is to recognize that the `<cfelse>` renders the original form input page. The reason for this is that the now validated `newUser` model is in the scope of the `apply` action. If a [redirectTo redirectTo()] were used, the original `index` action would be called and the validation information lost.
 
 ==The View==
 
