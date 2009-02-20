@@ -1,0 +1,37 @@
+#summary property()
+#labels api,1.0
+
+*Category*:
+
+[ModelInitializationFunctions Model Initialization Functions]
+
+*Description*:
+
+Use this method to map an object property in your application to a table column in your database. You only need to use this method when you want to override the mapping that Wheels performs (i.e. `user.firstName` mapping to `users.firstname` for example).
+
+*Return Type*:
+
+Void
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *name* || string || true || - || Name of the property ||
+|| *column* || string || true || - || Name of the column to map the property to ||
+
+*Examples*:
+
+{{{
+<!--- in models/User.cfc --->
+<cffunction name="init">
+  <cfset property(name="firstName", column="STR_USERS_FNAME")>
+</cffunction>
+}}}
+
+*Related*:
+
+ * ObjectRelationalMapping (chapter)
