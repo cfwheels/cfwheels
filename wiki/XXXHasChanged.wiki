@@ -1,0 +1,27 @@
+#summary XXXHasChanged(...)
+#labels api,1.0
+
+*Category*:
+
+[ModelObjectFunctions Model Object Functions]
+
+*Description*:
+
+Dynamic shortcut method, see [hasChanged hasChanged()] for more info. Replace `XXX` with the name of a property.
+
+*Examples*:
+
+{{{
+<cfset member = model("member").findByKey(params.memberId)>
+<cfset member.email = params.newEmail>
+
+<cfif member.emailHasChanged()>
+=
+<cfif member.hasChanged(property="email")>
+}}}
+
+ * [hasChanged hasChanged()] (function)
+ * [changedFrom changedFrom()] (function)
+ * [XXXChangedFrom XXXChangedFrom()] (function)
+ * [changedProperties changedProperties()] (function)
+ * [allChanges allChanges()] (function)
