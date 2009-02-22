@@ -11,7 +11,7 @@ The association methods should always be called in the `init()` method of a mode
 
 ===`belongsTo` Association===
 
-If your database table contains a field that is a foreign key to another table, then this is where to use the [belongsTo() belongsTo] function.
+If your database table contains a field that is a foreign key to another table, then this is where to use the [belongsTo belongsTo()] function.
 
 If we had a `comments` table that contains a foreign key to the `posts` table called `postid`, then we should have this `init()` method within our `comment` model:
 
@@ -33,7 +33,7 @@ At this time, you need to be a little eccentric and talk to yourself. Your assoc
 
 ===An example of `hasMany()`===
 
-So let's consider the `post`/`comment` relationship mentioned above for `belongsTo()`. If we were to talk to ourselves, we would say, "A post _has many_ comments." And that's how you should construct your `post` model:
+So let's consider the `post` / `comment` relationship mentioned above for `belongsTo`. If we were to talk to ourselves, we would say, "A post _has many_ comments." And that's how you should construct your `post` model:
 
 {{{
 <cfcomponent extends="Model">
@@ -45,7 +45,7 @@ So let's consider the `post`/`comment` relationship mentioned above for `belongs
 </cfcomponent>
 }}}
 
-You may be a little concerned because our model is called `comment` and not `comments`. No need to worry: Wheels understands the need for the plural in conjunction with the `hasMany()` method.
+You may be a little concerned because our model is called `comment` and not `comments`. No need to worry: Wheels understands the need for the plural in conjunction with the [hasMany hasMany()] method.
 
 And don't worry about those pesky words in the English language that aren't pluralized by just adding an "s" to the end. Wheels is smart enough to know that words like "deer" and "children" are the plurals of "deer" and "child", respectively.
 
@@ -87,7 +87,7 @@ In this case, the convention is to use the singular name of the related table wi
 
 ===Breaking the convention===
 
-Wheels offers a way to configure your models to break this naming convention, however. This is done by using the `foreignKey` argument in your model's `belongsTo()` calls.
+Wheels offers a way to configure your models to break this naming convention, however. This is done by using the `foreignKey` argument in your model's [belongsTo belongsTo()] calls.
 
 Let's pretend that you have a relationship between `author` and `post`, but you didn't use the naming convention and instead called the column `post_id`. (You just can't seem to let go of the underscores, can you?)
 
@@ -157,27 +157,43 @@ For example, if we had a column named `name` in both your `posts` and `authors` 
 
 You would need to hard-code all column names that you need in that case, which does remove some of the simplicity. There are always trade-offs!
 
-===Using Dynamic Finders===
+===Using Dynamic Shortcut Methods===
 
-A cool feature of Wheels is the ability to use dynamic finders to get data related to your model through associations.
+A cool feature of Wheels is the ability to use _dynamic_ _shortcut_ methods to work with the models you have setup associations for. By _dynamic_ we mean that the name of the method depends on what name you have given the association when you set it up. By _shortcut_ we mean that the method usually delegates the actual processing to another Wheels method but gives you, the developer, an easier way to achieve the task (and makes your code more readable in the process). 
 
-Let's say that we used this `findByKey()` call to get an author from the database:
+As usual this will make more sense when put into the context of an example so let's do that right now...
 
-{{{
-<cfset author = model("author").findByKey(params.key)>
-}}}
+Let's say that you tell Wheels, through a [hasMany hasMany()] call, that a `post` has many `comments`. What happens then is that Wheels will enrich the `post` model by adding a bunch of useful methods related to this association. If you wanted to get all comments that have been submitted for post #1 you can now do this by calling `post.comments()` for example. In the background Wheels will delegate this to a [findAll findAll()] call with the `where` argument set to `postId=1`.
 
-We wouldn't necessarily need to use the `include` argument to get posts written by that author. Instead, we can use a dynamic method to get the posts, like so:
+Here are all the methods that are added for the three possible association types.
 
-{{{
-<cfset posts = author.posts()>
-}}}
+==Methods Added by `hasMany`==
 
-Wheels will use this call to figure out what SQL to call to get your data. No need for you to worry about it!
+Given that you have told Wheels that a `post` has many `comments` through a [hasMany hasMany()] call, here are the methods that will be made available to you on the `post` model. Replace `XXX` below with the name of the association, i.e. `comments`.
 
-In this case, we need to be wary of the nature of the relationship in order to know whether or not to use a singular or plural. We have complete confidence in your ability to figure it out. :)
+*[XXX XXX()] = `post.comments()`*
+Returns all comments with matching post id (through findAll)
 
-===Performance of Dynamic Finders===
+*[addXXX addXXX()] = `post.addComment()`*
+Returns all comments with matching post id (through findAll)
+
+
+addXXX, post.addComment(comment or id) sets foreign key on comment to the posts id (through update)
+removexxx
+deleteXXX, post.deleteComment(comment or id) sets foreign key on comment to null (through update)
+removeAllXXX
+deleteAllXXX
+XXXCount, post.commentCount()
+createXXX, post.createComment()
+newXXX, post.newComment()
+hasXXX, post.hasComments()
+findOneXXX, post.findOneComment()
+findAllXXX, post.findAllComments()
+
+
+
+
+===Performance of Dynamic Association Finders===
 
 You may be concerned that using a dynamic finder adds yet another database call to your application.
 
