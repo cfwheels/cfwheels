@@ -171,24 +171,24 @@ Here are all the methods that are added for the three possible association types
 
 Given that you have told Wheels that a `post` has many `comments` through a [hasMany hasMany()] call, here are the methods that will be made available to you on the `post` model. Replace `XXX` below with the name of the association, i.e. `comments` in the case of the example we're using here.
 
-[XXX XXX()], `post.comments()`. Returns all comments where the foreign key matches the posts primary key value. Similar to calling `model("comment").findAll(where="postId="#post.id#")`.
+[XXX XXX()], `post.comments()`. Returns all comments where the foreign key matches the posts primary key value. Similar to calling `model("comment").findAll(where="postId=#post.id#")`.
 
-[addXXX addXXX()], `post.addComment(comment object or primary key value)`. Adds a comment to the post by setting its foreign key to the posts primary key value. You can pass in either a comment object or just the primary key value of the comment you want to add to the post. Similar to calling `comment.update(postId=post.id)`.
+[addXXX addXXX()], `post.addComment(comment)`. Adds a comment to the post association by setting its foreign key to the posts primary key value. Similar to calling `comment.update(postId=post.id)`.
 
-Returns all comments with matching post id (through findAll)
+[removeXXX removeXXX()], `post.removeComment(comment)`. Removes a comment from the post association by setting its foreign key to `NULL`. Similar to calling `comment.update(postId="")`.
+
+[deleteXXX deleteXXX()], `post.deleteComment(comment)`. Deletes the associated comment from the database table. Similar to calling `comment.delete()`.
+
+[removeAllXXX removeAllXXX()], `post.removeAllComments()`. Removes all comments from the post association by setting their foreign keys to `NULL`. Similar to calling `model("comment").updateAll(postId="", where="postId=#post.id#")`.
+
+[deleteAllXXX deleteAllXXX()], `post.deleteAllComments()`. Deletes the associated comments from the database table. Similar to calling `model("comment").deleteAll(where="postId=#post.id#")`.
+
+[XXXCount XXXCount()], `post.commentCount()`. Returns the number of associated comments. Similar to calling `model("comment").count(where="postId=#post.id#")`.
 
 
-addXXX, post.addComment(comment or id) sets foreign key on comment to the posts id (through update)
-removexxx
-deleteXXX, post.deleteComment(comment or id) sets foreign key on comment to null (through update)
-removeAllXXX
-deleteAllXXX
-XXXCount, post.commentCount()
-createXXX, post.createComment()
-newXXX, post.newComment()
-hasXXX, post.hasComments()
-findOneXXX, post.findOneComment()
-findAllXXX, post.findAllComments()
+Note: for performance reasons [addXXX addXXX()] also accept a primary key value instead of the actual object.
+
+
 
 
 
