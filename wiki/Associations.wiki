@@ -171,10 +171,12 @@ Here are all the methods that are added for the three possible association types
 
 Given that you have told Wheels that a `post` has many `comments` through a [hasMany hasMany()] call, here are the methods that will be made available to you on the `post` model. Replace `XXX` below with the name of the association, i.e. `comments`.
 
-*[XXX XXX()] = `post.comments()`*
-Returns all comments with matching post id (through findAll)
+[XXX XXX()] = `post.comments()`
+Returns all comments where the foreign key matches the posts primary key value. Similar to calling `model("comment").findAll(where="postId="#post.id#")`.
 
-*[addXXX addXXX()] = `post.addComment()`*
+[addXXX addXXX()] = `post.addComment(comment object or primary key value)`
+Adds a comment to the post by setting its foreign key to the posts primary key value. You can pass in either a comment object or just the primary key value of the comment you want to add to the post. Similar to calling `comment.update(postId=post.id)`.
+
 Returns all comments with matching post id (through findAll)
 
 
