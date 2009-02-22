@@ -11,7 +11,7 @@ The association methods should always be called in the `init()` method of a mode
 
 ===`belongsTo` Association===
 
-If your database table contains a field that is a foreign key to another table, then this is where to use the `belongsTo()` function.
+If your database table contains a field that is a foreign key to another table, then this is where to use the [belongsTo() belongsTo] function.
 
 If we had a `comments` table that contains a foreign key to the `posts` table called `postid`, then we should have this `init()` method within our `comment` model:
 
