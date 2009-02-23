@@ -15,16 +15,12 @@ These methods are called from the `init` function of your model files.
 
 ==Functions==
 
-General:
- * [property property()]
- * [table table()]
-
-Associations:
+*Associations:*
  * [belongsTo belongsTo()]
  * [hasMany hasMany()]
  * [hasOne hasOne()]
 
-Callbacks:
+*Callbacks:*
  * [afterCreate afterCreate()]
  * [afterDelete afterDelete()]
  * [afterSave afterSave()]
@@ -40,7 +36,11 @@ Callbacks:
  * [beforeValidationOnCreate beforeValidationOnCreate()]
  * [beforeValidationOnUpdate beforeValidationOnUpdate()]
 
-Validation:
+*General:*
+ * [property property()]
+ * [table table()]
+
+*Validation:*
  * [validate validate()]
  * [validateOnCreate validateOnCreate()]
  * [validateOnUpdate validateOnUpdate()]
