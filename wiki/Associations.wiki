@@ -215,7 +215,17 @@ The [hasOne hasOne()] association adds a few methods as well, most of them are v
 
 [createXXX createXXX()], `author.createProfile()`. Creates a new profile object and saves it to the database. Similar to calling `model("profile").create(authorId=author.id)`.
 
+[hasXXX hasXXX()], `author.hasProfile()`. Returns `true` if the author has an associated profile. Similar to calling `model("profile").exists(where="authorId=#author.id#")`.
 
+*Methods Added by `belongsTo`*
+
+The [belongsTo belongsTo()] association adds three methods to your model. Given that you have told Wheels that a `comment` belongs to a `post` through a [belongsTo belongsTo()] call, here are the methods that will be made available to you on the `comment` model.
+
+[XXX XXX()], `comment.post()`. Returns the post where the primary key matches the comment's foreign key value. Similar to calling `model("post").findByKey(comment.postId)`.
+
+[setXXX setXXX()], `comment.setPost()`. Sets the comment to be associated with the post by setting its foreign key to the post's primary key value. Similar to calling `comment.update(postId=post.id)`.
+
+[hasXXX hasXXX()], `comment.hasPost()`. Returns `true` if the comment has a post associated with it. Similar to calling `model("post").exists(comment.postId)`.
 
 ===Performance of Dynamic Association Finders===
 
