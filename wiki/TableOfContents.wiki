@@ -43,7 +43,7 @@
 
 ===Displaying Views to Users===
 
- * [DisplayingPagesandPartials Displaying Pages and Partials]
+ * [PagesandPartials Pages and Partials]
  * [LinkingPages Linking Pages]
  * [UsingLayouts Using Layouts]
  * [FormHelpersandShowingErrors Form Helpers and Showing Errors]
