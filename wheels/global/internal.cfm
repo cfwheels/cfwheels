@@ -226,17 +226,13 @@
 	<cfreturn arguments.path[arguments.key]>
 </cffunction>
 
-<cffunction name="humanize" returntype="string" access="public" output="false" hint="View, Helper, Returns readable text by capitalizing, converting camel casing to multiple words and removing the trailing 'Id' or 'ID' if one exists.">
+<cffunction name="humanize" returntype="string" access="public" output="false" hint="View, Helper, Returns readable text by capitalizing, converting camel casing to multiple words.">
 	<cfargument name="text" type="string" required="true" hint="Text to humanize">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = REReplace(arguments.text, "([[:upper:]])", " \1", "all"); // adds a space before every capitalized word
 		loc.returnValue = REReplace(loc.returnValue, "([[:upper:]]) ([[:upper:]]) ", "\1\2", "all"); // fixes abbreviations so they form a word again (example: aURLVariable)
 		loc.returnValue = capitalize(loc.returnValue); // capitalize the first letter 
-		if (Right(loc.returnValue, 3) == " Id")
-			loc.returnValue = Left(loc.returnValue, Len(loc.returnValue)-3); // strip out "Id" at the end if it exists
-		if (Right(loc.returnValue, 4) == " I D")
-			loc.returnValue = Left(loc.returnValue, Len(loc.returnValue)-4); // strip out "ID" at the end if it exists
 	</cfscript>	
 	<cfreturn loc.returnValue>
 </cffunction>
