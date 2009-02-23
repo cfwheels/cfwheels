@@ -33,7 +33,7 @@ At this time, you need to be a little eccentric and talk to yourself. Your assoc
 
 ===An example of `hasMany`===
 
-So let's consider the `post` / `comment` relationship mentioned above for `belongsTo`. If we were to talk to ourselves, we would say, "A post _has many_ comments." And that's how you should construct your `post` model:
+So let's consider the `post` / `comment` relationship mentioned above for [belongsTo belongsTo()]. If we were to talk to ourselves, we would say, "A post _has many_ comments." And that's how you should construct your `post` model:
 
 {{{
 <cfcomponent extends="Model">
@@ -111,9 +111,9 @@ Now that we have our associations set up, let's use them to get some data into o
 
 There are a couple ways to join data via associations, which we'll go over now.
 
-===Using the `include` Argument in `findAll()`===
+===Using the `include` Argument in `findAll`===
 
-To join data from related tables in our `findAll()` calls, we simply need to use the `include` argument. Let's say that we wanted to include data about the `author` in our `findAll()` call for `post`s.
+To join data from related tables in our [findAll findAll()] calls, we simply need to use the `include` argument. Let's say that we wanted to include data about the `author` in our [findAll findAll()] call for `post`s.
 
 Here's what that call would look like:
 
@@ -129,7 +129,7 @@ Note that if you switch the above statement around like this:
 <cfset authors = model("author").findAll(include="posts")>
 }}}
 
-You would then have to specify "post" in its plural form; "posts". If you're thinking about when to use the singular form and when to use the plural form just use the one that seems most natural. If you look at the two examples above you'll see that in example #1 you're asking for all posts including each posts *author* (hence the singular "author") and in example #2 you're asking for all authors and all of the *posts* (hence the plural "posts") written by each author.
+You would then have to specify "post" in its plural form; "posts". If you're thinking about when to use the singular form and when to use the plural form just use the one that seems most natural. If you look at the two examples above you'll see that in example #1 you're asking for all posts including each post's *author* (hence the singular "author") and in example #2 you're asking for all authors and all of the *posts* (hence the plural "posts") written by each author.
 
 You're not limited to specifying just one association in the `include` argument. You can for example return data for authors, posts and comments in one call like this:
 
