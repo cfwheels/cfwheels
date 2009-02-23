@@ -370,7 +370,8 @@
 			if (!IsNumeric(this[loc.property]))
 				loc.where = loc.where & "'";
 		}
-		if (exists(where=loc.where, reload=true))
+		loc.existingObject = findOne(where=loc.where, reload=true);
+		if (IsObject(loc.existingObject) && loc.existingObject.key() != key())
 			addError(property=arguments.property, message=arguments.message);
 	</cfscript>
 </cffunction>
