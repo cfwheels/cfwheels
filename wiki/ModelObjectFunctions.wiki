@@ -14,35 +14,44 @@ These methods operate on individual objects which means you first have to fetch 
 
 ==Functions==
 
- * [addError addError()]
- * [addErrorToBase addErrorToBase()]
+*Associations:*
  * [addXXX addXXX()]
- * [allChanges allChanges()]
- * [allErrors allErrors()]
- * [changedFrom changedFrom()]
- * [changedProperties changedProperties()]
- * [clearErrors clearErrors()]
  * [clearXXX clearXXX()]
  * [createXXX createXXX()]
- * [delete delete()]
  * [deleteXXX deleteXXX()]
+ * [findAllXXX findAllXXX()]
+ * [findOneXXX findOneXXX()]
+ * [hasXXX hasXXX()]
+ * [newXXX newXXX()]
+ * [setXXX setXXX()]
+ * [XXX XXX()]
+ * [XXXCount XXXCount()]
+
+*Changes:*
+ * [allChanges allChanges()]
+ * [changedFrom changedFrom()]
+ * [changedProperties changedProperties()]
+ * [hasChanged hasChanged()]
+ * [XXXHasChanged XXXHasChanged()]
+ * [XXXChangedFrom XXXChangedFrom()]
+
+*CRUD:*
+ * [delete delete()]
+ * [save save()]
+ * [update update()]
+
+*Errors:*
+ * [addError addError()]
+ * [addErrorToBase addErrorToBase()]
+ * [allErrors allErrors()]
+ * [clearErrors clearErrors()]
  * [errorCount errorCount()]
  * [errorsOn errorsOn()]
  * [errorsOnBase errorsOnBase()]
- * [findAllXXX findAllXXX()]
- * [findOneXXX findOneXXX()]
- * [hasChanged hasChanged()]
  * [hasErrors hasErrors()]
- * [hasXXX hasXXX()]
+ * [valid valid()]
+
+*Miscellaneous:*
  * [isNew isNew()]
  * [key key()]
- * [newXXX newXXX()]
  * [reload reload()]
- * [save save()]
- * [setXXX setXXX()]
- * [update update()]
- * [valid valid()]
- * [XXX XXX()]
- * [XXXHasChanged XXXHasChanged()]
- * [XXXChangedFrom XXXChangedFrom()]
- * [XXXCount XXXCount()]
