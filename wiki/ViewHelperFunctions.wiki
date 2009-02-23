@@ -15,16 +15,19 @@ These functions can be called from both the controller and the view but are most
 
 ==Functions==
 
+TO BE DOCUMENTED:
+ * [checkBox checkBox()]
+ * [contentForLayout contentForLayout()]
+ * [dateSelect dateSelect()]
+ * [dateTimeSelect dateTimeSelect()]
+
+LEAVE THESE FOR NOW:
  * [autoLink autoLink()]
  * [buttonTo buttonTo()]
  * [capitalize capitalize()]
- * [checkBox checkBox()]
  * [checkBoxTag checkBoxTag()]
- * [contentForLayout contentForLayout()]
  * [cycle cycle()]
- * [dateSelect dateSelect()]
  * [dateSelectTag dateSelectTag()]
- * [dateTimeSelect dateTimeSelect()]
  * [dateTimeSelectTag dateTimeSelectTag()]
  * [daySelectTag daySelectTag()]
  * [deobfuscateParam deobfuscateParam()]
