@@ -11,6 +11,8 @@
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");
 		returnValue = findOne(argumentCollection=arguments);
+		if (IsBoolean(returnValue) && !returnValue)
+			$throw(type="Wheels.RecordNotFound", message="The requested record could not be found in the database.", extendedInfo="Make sure that the record exists in the database or catch this error in your code.");
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
@@ -35,7 +37,7 @@
 			if (loc.query.recordCount IS NOT 0)
 				loc.returnValue = $createInstance(properties=loc.query, persisted=true);
 			else
-				$throw(type="Wheels.RecordNotFound", message="The requested record could not be found in the database.", extendedInfo="Make sure that the record exists in the database or catch this error in your code.");
+				loc.returnValue = false;
 		}
 		else
 		{
@@ -505,8 +507,10 @@
 		loc.iEnd = ListLen(variables.wheels.class.keys);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
-			loc.returnValue = ListAppend(loc.returnValue, this[ListGetAt(variables.wheels.class.keys, loc.i)]);
-		}		
+			loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
+			if (StructKeyExists(this, loc.property))
+				loc.returnValue = ListAppend(loc.returnValue, this[loc.property]);
+		}
 		</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
