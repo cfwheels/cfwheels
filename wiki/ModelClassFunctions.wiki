@@ -19,13 +19,20 @@ These methods operate on the class as a whole and not on individual objects and 
 
 ==Functions==
 
- * [average average()]
- * [count count()]
+*Create:*
  * [create create()]
+ * [new new()]
+
+*Delete:*
  * [deleteAll deleteAll()]
  * [deleteByKey deleteByKey()]
  * [deleteOne deleteOne()]
+
+*Miscellaneous:*
  * [exists exists()]
+ * [primaryKey primaryKey()]
+
+*Read:*
  * [findAll findAll()]
  * [findByKey findByKey()]
  * [findAllByXXX findAllByXXX()]
@@ -33,11 +40,15 @@ These methods operate on the class as a whole and not on individual objects and 
  * [findOne findOne()]
  * [findOneByXXX findOneByXXX()]
  * [findOneByXXXAndXXX findOneByXXXAndXXX()]
+
+*Statistics:*
+ * [average average()]
+ * [count count()]
  * [maximum maximum()]
  * [minimum minimum()]
- * [new new()]
- * [primaryKey primaryKey()]
  * [sum sum()]
+
+*Update:*
  * [updateAll updateAll()]
  * [updateByKey updateByKey()]
  * [updateOne updateOne()]
