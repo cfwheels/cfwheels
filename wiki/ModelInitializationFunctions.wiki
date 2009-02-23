@@ -15,9 +15,12 @@ These methods are called from the `init` function of your model files.
 
 ==Functions==
 
+Callbacks:
  * [afterCreate afterCreate()]
  * [afterDelete afterDelete()]
  * [afterSave afterSave()]
+
+Test:
  * [afterUpdate afterUpdate()] 
  * [afterValidation afterValidation()]
  * [afterValidationOnCreate afterValidationOnCreate()]
