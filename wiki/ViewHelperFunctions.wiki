@@ -1,7 +1,7 @@
 #summary Listing of all view helper functions.
 #labels chapter,1.0
 
-These functions can be called from both the controller and the view but are mostly used in the view to create output for use in a HTML page.
+These functions can be called from the views to create output for use in a HTML page.
 
 ==Example==
 
