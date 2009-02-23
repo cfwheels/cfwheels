@@ -9,7 +9,7 @@ In order to set up associations, you only need to remember 3 simple methods. Con
 
 The association methods should always be called in the `init()` method of a model (a.k.a. class) that relate to another model within your application.
 
-===`belongsTo` Association===
+===The `belongsTo` Association===
 
 If your database table contains a field that is a foreign key to another table, then this is where to use the [belongsTo belongsTo()] function.
 
@@ -25,13 +25,13 @@ If we had a `comments` table that contains a foreign key to the `posts` table ca
 </cfcomponent>
 }}}
 
-===`hasOne` and `hasMany` Associations===
+===The `hasOne` and `hasMany` Associations===
 
 On the other side of the relationship are the "has" functions. As you may have astutely guessed, these functions should be used according to the nature of the model relationship.
 
 At this time, you need to be a little eccentric and talk to yourself. Your association should make sense in plain English language.
 
-===An example of `hasMany()`===
+===An example of `hasMany`===
 
 So let's consider the `post` / `comment` relationship mentioned above for `belongsTo`. If we were to talk to ourselves, we would say, "A post _has many_ comments." And that's how you should construct your `post` model:
 
@@ -49,9 +49,9 @@ You may be a little concerned because our model is called `comment` and not `com
 
 And don't worry about those pesky words in the English language that aren't pluralized by just adding an "s" to the end. Wheels is smart enough to know that words like "deer" and "children" are the plurals of "deer" and "child", respectively.
 
-===An example of `hasOne()`===
+===An example of `hasOne`===
 
-The `hasOne` association is not used as often as the `hasMany` association but it has its use cases. The most common use case is when you have a large table that you have broken down into two or more smaller tables (a.k.a. denormalization) for performance reasons or otherwise. Let's take the example of the association between `user` and `profile`. A lot of websites allow you to enter required info such as name, email but also add optional information such as age, salary etc. These can of course be stored in the same table but given the fact that so much information is optional it would make more sense to have the required info in a `users` table and the optional info in a `profiles` table. This gives us a `hasOne` relationship between these two models; "A user _has one_ profile".
+The [hasOne hasOne()] association is not used as often as the [hasMany hasMany()] association but it has its use cases. The most common use case is when you have a large table that you have broken down into two or more smaller tables (a.k.a. denormalization) for performance reasons or otherwise. Let's take the example of the association between `user` and `profile`. A lot of websites allow you to enter required info such as name, email but also add optional information such as age, salary etc. These can of course be stored in the same table but given the fact that so much information is optional it would make more sense to have the required info in a `users` table and the optional info in a `profiles` table. This gives us a [hasOne hasOne()] relationship between these two models; "A user _has one_ profile".
 
 In this case our `profile` model would look like this:
 
@@ -78,6 +78,8 @@ And our `user` model would look like this:
 }}}
 
 As you can see, you do not pluralize "profile" in this case because there is only one profile.
+
+By the way, as you can see above the association goes both ways, i.e. a `user` [hasOne hasOne()] `profile` and a `profile` [belongsTo belongsTo()] a `user`. Generally speaking all associations should be setup this way. This will give you the fullest API to work with in terms of the methods and arguments that Wheels makes available to you. However, it's not a definite requirement. Wheels associations are completely independent of one another so it's perfectly OK to setup a [hasMany hasMany()] association without specifying the related [belongsTo belongsTo()] association.
 
 ==Database Table Setup==
 
@@ -167,7 +169,7 @@ Let's say that you tell Wheels, through a [hasMany hasMany()] call, that a `post
 
 Here are all the methods that are added for the three possible association types.
 
-*Methods Added by `hasMany()`*
+*Methods Added by `hasMany`*
 
 Given that you have told Wheels that a `post` has many `comments` through a [hasMany hasMany()] call, here are the methods that will be made available to you on the `post` model. Replace `XXX` below with the name of the association, i.e. `comments` in the case of the example we're using here.
 
@@ -185,10 +187,33 @@ Given that you have told Wheels that a `post` has many `comments` through a [has
 
 [XXXCount XXXCount()], `post.commentCount()`. Returns the number of associated comments. Similar to calling `model("comment").count(where="postId=#post.id#")`.
 
+[newXXX newXXX()], `post.newComment()`. Creates a new comment object. Similar to calling `model("comment").new(postId=post.id)`.
+
+[createXXX createXXX()], `post.createComment()`. Creates a new comment object and saves it to the database. Similar to calling `model("comment").create(postId=post.id)`.
+
+[hasXXX hasXXX()], `post.hasComments()`. Returns `true` if the post has any comments associated with it. Similar to calling `model("comment").exists(where="postId=#post.id#")`.
+
+[findOneXXX findOneXXX()], `post.findOneComment()`. Returns one of the associated comments (useful when doing scoped searches). Similar to calling `model("comment").findOne(where="postId=#post.id#")`.
+
+[findAllXXX findAllXXX()], `post.findAllComments()`. Returns all of the associated comments. Similar to calling `model("comment").findAll(where="postId=#post.id#")`.
+
 Note: [addXXX addXXX()], [removeXXX removeXXX()], [deleteXXX deleteXXX()], [setXXX setXXX()] also accept a primary key value instead of the actual object. This enables Wheels to reduce the database calls to a minimum.
 
+*Methods Added by `hasOne`*
 
+The [hasOne hasOne()] association adds a few methods as well, most of them are very similar to the ones added by [hasMany hasMany()]. Given that you have told Wheels that an `author` has one `profile` through a [hasOne hasOne()] call, here are the methods that will be made available to you on the `author` model.
 
+[XXX XXX()], `author.profile()`. Returns the profile where the foreign key matches the author's primary key value. Similar to calling `model("profile").findOne(where="authorId=#author.id#")`.
+
+[setXXX setXXX()], `author.setProfile(profile)`. Sets the profile to be associated with the author by setting its foreign key to the author's primary key value. Similar to calling `profile.update(authorId=author.id)`.
+
+[removeXXX removeXXX()], `author.removeProfile()`. Removes the profile from the author association by setting its foreign key to `NULL`. Similar to calling `profile.update(authorId="")`.
+
+[deleteXXX deleteXXX()], `author.deleteProfile()`. Deletes the associated profile from the database table. Similar to calling `model("profile").deleteOne(where="authorId=#author.id#")`.
+
+[newXXX newXXX()], `author.newProfile()`. Creates a new profile object. Similar to calling `model("profile").new(authorId=author.id)`.
+
+[createXXX createXXX()], `author.createProfile()`. Creates a new profile object and saves it to the database. Similar to calling `model("profile").create(authorId=author.id)`.
 
 
 
