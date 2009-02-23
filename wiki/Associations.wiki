@@ -163,7 +163,7 @@ A cool feature of Wheels is the ability to use _dynamic_ _shortcut_ methods to w
 
 As usual this will make more sense when put into the context of an example so let's do that right now...
 
-Let's say that you tell Wheels, through a [hasMany hasMany()] call, that a `post` has many `comments`. What happens then is that Wheels will enrich the `post` model by adding a bunch of useful methods related to this association. If you wanted to get all comments that have been submitted for post #1 you can now do this by calling `post.comments()` for example. In the background Wheels will delegate this to a [findAll findAll()] call with the `where` argument set to `postId=1`.
+Let's say that you tell Wheels, through a [hasMany hasMany()] call, that a `post` has many `comments`. What happens then is that Wheels will enrich the `post` model by adding a bunch of useful methods related to this association. If you wanted to get all comments that have been submitted for a post you can now do this by calling `post.comments()` for example. In the background Wheels will delegate this to a [findAll findAll()] call with the `where` argument set to `postId=#post.id#`.
 
 Here are all the methods that are added for the three possible association types.
 
@@ -177,7 +177,7 @@ Given that you have told Wheels that a `post` has many `comments` through a [has
 
 [removeXXX removeXXX()], `post.removeComment(comment)`. Removes a comment from the post association by setting its foreign key to `NULL`. Similar to calling `comment.update(postId="")`.
 
-[deleteXXX deleteXXX()], `post.deleteComment(comment)`. Deletes the associated comment from the database table. Similar to calling `comment.delete()`.
+[deleteXXX deleteXXX()], `post.deleteComment(comment)`. Deletes the associated comment from the database table. Similar to calling `model("comment").deleteOne(where="postId=#post.id#")`.
 
 [removeAllXXX removeAllXXX()], `post.removeAllComments()`. Removes all comments from the post association by setting their foreign keys to `NULL`. Similar to calling `model("comment").updateAll(postId="", where="postId=#post.id#")`.
 
@@ -185,8 +185,7 @@ Given that you have told Wheels that a `post` has many `comments` through a [has
 
 [XXXCount XXXCount()], `post.commentCount()`. Returns the number of associated comments. Similar to calling `model("comment").count(where="postId=#post.id#")`.
 
-
-Note: for performance reasons [addXXX addXXX()] also accept a primary key value instead of the actual object.
+Note: [addXXX addXXX()], [removeXXX removeXXX()], [deleteXXX deleteXXX()], [setXXX setXXX()] also accept a primary key value instead of the actual object. This enables Wheels to reduce the database calls to a minimum.
 
 
 
