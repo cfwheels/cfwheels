@@ -1,4 +1,4 @@
-#summary checkBox([objectName, property, checkedValue, uncheckedValue, label, wrapLabel, prepend, append, prependToLabel, appendToLabel, errorElement])
+#summary checkBox(objectName, property [checkedValue, uncheckedValue, label, wrapLabel, prepend, append, prependToLabel, appendToLabel, errorElement])
 #labels api,1.0
 
 *Category*:
