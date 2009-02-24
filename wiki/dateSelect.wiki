@@ -1,0 +1,36 @@
+#summary dateSelect(objectName, property [order, separator])
+#labels api,1.0
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Builds and returns a string containing a three (3) select form controls based on the supplied property and objectName. Wheels will generate the appropriate name convention for the form control.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *objectName* || string || true ||  || The name of the object (model name) to wrap the property around ||
+|| * property* || string || true || || The name of the property (database column) to use in the checkbox ||
+|| * order* || string || false || month,day,year || A list specifying in which order to include the `day`, `month` and `year` select controls ||
+|| * separator* || string || false ||  || Text to include between the three (3) select form controls ||
+
+*Examples*:
+
+{{{
+<!--- view controller code --->
+<cfoutput>
+  <p><label>Date Of Birth</label> <br />
+          #dateSelect(objectName='user', property='dateOfBirth')#</p>	
+</cfoutput>
+}}}
