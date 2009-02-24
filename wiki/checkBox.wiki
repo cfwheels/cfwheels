@@ -1,5 +1,5 @@
+#summary checkBox([objectName, property, checkedValue, uncheckedValue, label, wrapLabel, prepend, append, prependToLabel, appendToLabel, errorElement])
 #labels api,1.0
-checkBox([objectName, property, checkedValue, uncheckedValue, label, wrapLabel, prepend, append, prependToLabel, appendToLabel, errorElement])
 
 *Category*:
 
@@ -30,8 +30,7 @@ String
 || * append* || string || false || || Value to append to the checkbox control, useful to wrap the control around HTML tags ||
 || * prependToLabel* || string || false || || Value to prepend to the checkbox's label, useful to wrap the control around HTML tags ||
 || * appendToLabel* || string || false || || Value to append to the checkbox's label, useful to wrap the control around HTML tags ||
-
-	<cfargument name="errorElement" type="any" required="false" default="div">
+|| * errorElement* || string || false || div || Name of the HTML tag to wrap the checkbox control when [ObjectValidation, validation] has failed ||
 
 *Examples*:
 
