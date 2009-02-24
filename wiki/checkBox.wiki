@@ -1,0 +1,44 @@
+#labels api,1.0
+checkBox([objectName, property, checkedValue, uncheckedValue, label, wrapLabel, prepend, append, prependToLabel, appendToLabel, errorElement])
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Builds and returns a string containing a checkbox form control based on the supplied property and objectName. Wheels will generate the appropriate name convention for the form control.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *objectName* || string || true ||  || The name of the object (model name) to wrap the property around ||
+|| * property* || string || true || || The name of the property (database column) to use in the checkbox ||
+|| * checkedValue* || any || false || 1 || The value of the checkbox when is on the state `checked` ||
+|| * uncheckedValue* || any || false || 0 || The value of the checkbox when is on the state `unchecked` ||
+|| * label* || string || false || || The label to prepend to the checkbox control ||
+|| * wrapLabel* || boolean || false || true || Sets whenever to wrap or not the checkbox control inside the label HTML tag ||
+|| * prepend* || string || false || || Value to prepend to the checkbox control, useful to wrap the control around HTML tags ||
+|| * append* || string || false || || Value to append to the checkbox control, useful to wrap the control around HTML tags ||
+|| * prependToLabel* || string || false || || Value to prepend to the checkbox's label, useful to wrap the control around HTML tags ||
+|| * appendToLabel* || string || false || || Value to append to the checkbox's label, useful to wrap the control around HTML tags ||
+
+	<cfargument name="errorElement" type="any" required="false" default="div">
+
+*Examples*:
+
+{{{
+<!--- view controller code --->
+<cfoutput>
+  <p><label>Is public?</label> <br />
+  #checkBox(objectName='photo', property='isPublic')#</p>
+</cfoutput>
+}}}
