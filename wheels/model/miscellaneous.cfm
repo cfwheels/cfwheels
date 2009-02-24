@@ -56,15 +56,55 @@
 				{
 					// set name from "posts" to "objects", for example, so we can use it in the switch below --->
 					loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, pluralize(loc.key), "objects"), singularize(loc.key), "object");
-					if (loc.name IS "setObject" || loc.name IS "addObject" || loc.name IS "deleteObject")
+					/* if (loc.name IS "setObject" || loc.name IS "addObject" || loc.name IS "removeObject" || loc.name IS "deleteObject")
 					{
 						loc.object = arguments.missingMethodArguments[ListFirst(StructKeyList(arguments.missingMethodArguments))];
 						if (!IsObject(loc.object))
 							loc.object = findByKey(loc.object);
-					}
+					} */
 					loc.info = $expandedAssociations(include=loc.key);
 					loc.info = loc.info[1];
-					if (loc.info.type IS "hasOne" || loc.info.type IS "hasMany")
+					if (loc.info.type == "hasOne" || loc.info.type == "hasMany")
+					{
+						loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=variables.wheels.class.keys);
+						if (StructKeyExists(arguments.missingMethodArguments, "where"))
+							loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
+						if (loc.name == "object" || loc.name == "hasObject" || loc.name == "removeObject" || loc.name == "deleteObject")
+							arguments.missingMethodArguments.where = loc.where;
+						if (loc.name == "newObject" || loc.name == "createObject" || loc.name == "setObject")
+							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
+						if (loc.name == "setObject")
+							loc.object = arguments.missingMethodArguments[ListFirst(StructKeyList(arguments.missingMethodArguments))];
+						if (loc.name == "removeObject")
+							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey, setToNull=true);
+						if (loc.name == "object")
+							loc.method = "findOne";
+						else if (loc.name == "hasObject")
+							loc.method = "exists";
+						else if (loc.name == "newObject")
+							loc.method = "new";
+						else if (loc.name == "createObject")
+							loc.method = "create";
+						else if (loc.name == "removeObject")
+							loc.method = "updateOne";
+						else if (loc.name == "deleteObject")
+							loc.method = "deleteOne";
+						else if (loc.name == "setObject")
+							loc.method = "update";
+						if (StructKeyExists(loc, "object"))
+						{
+							StructDelete(arguments.missingMethodArguments, ListFirst(StructKeyList(arguments.missingMethodArguments)));
+							if (!IsObject(loc.object))
+								loc.object = model(loc.info.class).findByKey(loc.object);
+							loc.component = loc.object;
+						}
+						else
+						{
+							loc.component = model(loc.info.class);
+						}
+						loc.returnValue = $invoke(component=loc.component, method=loc.method, argumentCollection=arguments.missingMethodArguments);
+					}
+					else if (loc.info.type IS "hasMany")
 					{
 						loc.simpleWhere = $keyWhereString(properties=loc.info.foreignKey, keys=variables.wheels.class.keys);
 						loc.fullWhere = loc.simpleWhere;
@@ -72,17 +112,6 @@
 							loc.fullWhere = "(#loc.fullWhere#) AND (#arguments.missingMethodArguments.where#)";
 						switch(loc.name)
 						{
-							case "object":
-							{
-								loc.returnValue = model(loc.info.class).findOne(where=loc.simpleWhere);
-								break;
-							}
-							case "objects":
-							{
-								loc.returnValue = model(loc.info.class).findAll(where=loc.simpleWhere);
-								break;
-							}
-							case "setObject":
 							case "addObject":
 							{
 								loc.iEnd = ListLen(loc.info.foreignKey);
@@ -103,6 +132,16 @@
 								loc.returnValue = loc.object.update(properties=loc.properties);
 								break;
 							}
+							case "removeObject":
+							{
+								loc.iEnd = ListLen(loc.info.foreignKey);
+								for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+								{
+									loc.properties[ListGetAt(loc.info.foreignKey, loc.i)] = "";
+								}
+								loc.returnValue = loc.object.update(properties=loc.properties);
+								break;
+							}
 							case "clearObjects":
 							{
 								arguments.missingMethodArguments.where = loc.fullWhere;
@@ -112,26 +151,6 @@
 									arguments.missingMethodArguments.properties[ListGetAt(loc.info.foreignKey, loc.i)] = "";
 								}
 								loc.returnValue = model(loc.info.class).updateAll(argumentCollection=arguments.missingMethodArguments);
-								break;
-							}
-							case "newObject":
-							{
-								loc.iEnd = ListLen(loc.info.foreignKey);
-								for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
-								{
-									arguments.missingMethodArguments[ListGetAt(loc.info.foreignKey, loc.i)] = this[ListGetAt(variables.wheels.class.keys, loc.i)];
-								}
-								loc.returnValue = model(loc.info.class).new(argumentCollection=arguments.missingMethodArguments);
-								break;
-							}
-							case "createObject":
-							{
-								loc.iEnd = ListLen(loc.info.foreignKey);
-								for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
-								{
-									arguments.missingMethodArguments[ListGetAt(loc.info.foreignKey, loc.i)] = this[ListGetAt(variables.wheels.class.keys, loc.i)];
-								}
-								loc.returnValue = model(loc.info.class).create(argumentCollection=arguments.missingMethodArguments);
 								break;
 							}
 							case "findOneObject":
@@ -146,15 +165,9 @@
 								loc.returnValue = model(loc.info.class).findAll(argumentCollection=arguments.missingMethodArguments);
 								break;
 							}
-							case "hasObject":
 							case "hasObjects":
 							{
 								loc.returnValue = model(loc.info.class).exists(where=loc.simpleWhere);
-								break;
-							}
-							case "objectCount":
-							{
-								loc.returnValue = model(loc.info.class).count(where=loc.simpleWhere);
 								break;
 							}
 						}
@@ -199,3 +212,22 @@
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
+
+<cffunction name="$foreignKeyValues" returntype="struct" access="public" output="false">
+	<cfargument name="keys" type="string" required="true">
+	<cfargument name="setToNull" type="boolean" required="false" default="false">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = {};
+		loc.iEnd = ListLen(arguments.keys);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			if (arguments.setToNull)
+				loc.returnValue[ListGetAt(arguments.keys, loc.i)] = "";
+			else
+				loc.returnValue[ListGetAt(arguments.keys, loc.i)] = this[ListGetAt(variables.wheels.class.keys, loc.i)];	
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
