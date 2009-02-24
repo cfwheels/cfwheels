@@ -38,7 +38,7 @@ String
 {{{
 <!--- view controller code --->
 <cfoutput>
-  <p><label>Is public?</label> <br />
-  #checkBox(objectName='photo', property='isPublic')#</p>
+  <p>
+  #checkBox(objectName="photo", property="isPublic", label="Is public?")#</p>
 </cfoutput>
 }}}
