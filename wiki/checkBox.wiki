@@ -30,7 +30,7 @@ String
 || * append* || string || false || || Value to append to the checkbox control, useful to wrap the control around HTML tags ||
 || * prependToLabel* || string || false || || Value to prepend to the checkbox's label, useful to wrap the control around HTML tags ||
 || * appendToLabel* || string || false || || Value to append to the checkbox's label, useful to wrap the control around HTML tags ||
-|| * errorElement* || string || false || div || Name of the HTML tag to wrap the checkbox control when [ObjectValidation, validation] has failed ||
+|| * errorElement* || string || false || div || Name of the HTML tag to wrap the checkbox control when the [ObjectValidation object validation] fails ||
 
 *Examples*:
 
