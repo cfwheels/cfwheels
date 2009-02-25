@@ -35,7 +35,7 @@ To change `page` to something else, you use the `name` argument like so:
 <cfoutput>#paginationLinks(name="pgnum")#</cfoutput>
 }}}
 
-By the way, perhaps you noticed how Wheels chose to use that hideous question mark in the URL despite the fact that you have URL rewriting turned on? Since [paginationLinks paginationLinks()] uses [linkTo linkTo()] in the background you can easily get rid of it by creating a custom route for it.
+By the way, perhaps you noticed how Wheels chose to use that hideous question mark in the URL despite the fact that you have URL rewriting turned on? Since [paginationLinks paginationLinks()] uses [linkTo linkTo()] in the background you can easily get rid of it by creating a custom route. You can read more about this in the [UsingRoutes Using Routes] chapter.
 
 ===The `windowSize` Argument===
 
