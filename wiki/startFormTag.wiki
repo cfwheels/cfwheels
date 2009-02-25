@@ -1,0 +1,38 @@
+#summary startFormTag([link, method, multipart, spamProtection])
+#labels api,1.0
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Builds and returns a string containing the opening form tag. 
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *link* || any || false ||  || For more information about this parameter refer to the [linkTo linkTo] documentation ||
+|| *method* || string || false || post  || The type of method to use in the form tag. Options are `get` and `post` ||
+|| *multipart* || boolean || false || false || Whenever or not the form should be multipart ||
+|| *spamProtection* || boolean || false || false || Whenever or not the form should be spam protected ||
+
+*Examples*:
+
+{{{
+<!--- view code --->
+<cfoutput>
+  #startFormTag(action="create")#
+     <!--- your form controls --->
+  #endFormTag()#
+</cfoutput>
+}}}
+
