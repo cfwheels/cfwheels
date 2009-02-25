@@ -9,6 +9,7 @@
  * [Requirements Requirements]
  * [Installation Installation]
  * [HelloWorld Hello World!]
+ * [HelloDatabase Hello Database]
 
 ===Handling Requests With Controllers===
 
