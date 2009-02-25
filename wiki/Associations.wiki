@@ -205,9 +205,9 @@ The [hasOne hasOne()] association adds a few methods as well, most of them are v
 
 [XXX XXX()], `author.profile()`. Returns the profile where the foreign key matches the author's primary key value. Similar to calling `model("profile").findOne(where="authorId=#author.id#")`.
 
-[setXXX setXXX()], `author.setProfile(profile)`. Sets the profile to be associated with the author by setting its foreign key to the author's primary key value. Similar to calling `profile.update(authorId=author.id)`.
+[setXXX setXXX()], `author.setProfile(profile)`. Sets the profile to be associated with the author by setting its foreign key to the author's primary key value. You can pass in either a `profile` object or the primary key value of a `profile` object to this method. Similar to calling `model("profile").updateByKey(key=profile.id, authorId=author.id)`.
 
-[removeXXX removeXXX()], `author.removeProfile()`. Removes the profile from the author association by setting its foreign key to `NULL`. Similar to calling `profile.update(authorId="")`.
+[removeXXX removeXXX()], `author.removeProfile()`. Removes the profile from the author association by setting its foreign key to `NULL`. Similar to calling `model("profile").updateOne(where="authorId=#author.id#", authorId="")`.
 
 [deleteXXX deleteXXX()], `author.deleteProfile()`. Deletes the associated profile from the database table. Similar to calling `model("profile").deleteOne(where="authorId=#author.id#")`.
 
