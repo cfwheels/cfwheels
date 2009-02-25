@@ -1,0 +1,39 @@
+#summary dateTimeSelect(objectName, property [dateOrder, timeOrder, dateSeparator, timeSeparator, separator])
+#labels api,1.0
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Builds and returns a string containing six (6) select form controls (three for date selection and the remaining three for time selection) based on the supplied property and objectName. Wheels will generate the appropriate name convention for the form controls.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *objectName* || string || true ||  || The name of the object (model name) to wrap the property around ||
+|| * property* || string || true || || The name of the property (database column) to use in the checkbox ||
+|| * dateOrder* || string || false || month,day,year || A list specifying in which order to include (or exclude) the `day`, `month` and `year` select controls ||
+|| * timeOrder* || string || false || hour,minute,second || A list specifying in which order to include (or exclude) the `hour`, `minute` and `second` select controls ||
+|| * dateSeparator* || string || false ||  || Text to include between the three (3) date select form controls ||
+|| * timeSeparator* || string || false || : || Text to include between the three (3) time select form controls ||
+|| * separator* || string || false || - || Text to include between the first and second set of select form controls ||
+
+*Examples*:
+
+{{{
+<!--- view code --->
+<cfoutput>
+  <p><label>Created at</label> <br />
+          #dateTimeSelect(objectName='article', property='createdAt')#</p>	
+</cfoutput>
+}}}
