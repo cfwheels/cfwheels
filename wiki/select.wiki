@@ -1,0 +1,50 @@
+#summary select(objectName, property, options [includeBlank, multiple, valueField, textField, label, wrapLabel, prepend, append, prependToLabel, appendToLabel, errorElement])
+#labels api,1.0
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Builds and returns a string containing a checkbox form control based on the supplied property and objectName. Wheels will generate the appropriate name convention for the form control.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *objectName* || string || true ||  || The name of the object (model name) to wrap the property around ||
+|| * property* || string || true || || The name of the property (database column) to use in the form control ||
+|| * options* || query || true || || The name of the collection to populate the select form control ||
+|| * includeBlank* || boolean || false || false || Whenever or not to include a blank option in the select form control ||
+|| * multiple* || boolean || false || false || Whenever or not to allow multiple selection of options in the select form control ||
+|| * multiple* || boolean || false || false || Whenever or not to allow multiple selection of options in the select form control ||
+|| * valueField* || any || false || id || Query column to use for the value of each list element. Used with the `options` attribute. ||
+|| * textField* || any || false || name || Query column to use for the value of each list element that the end user will see. Used with the `options` attribute.||
+|| * label* || string || false || || The label to prepend to the form control ||
+|| * wrapLabel* || boolean || false || true || Sets whenever to wrap or not the form control inside the label HTML tag ||
+|| * prepend* || string || false || || Value to prepend to the form control. Useful to wrap the control around HTML tags ||
+|| * append* || string || false || || Value to append to the form control. Useful to wrap the control around HTML tags ||
+|| * prependToLabel* || string || false || || Value to prepend to the form control's label. Useful to wrap the control around HTML tags ||
+|| * appendToLabel* || string || false || || Value to append to the form control's label. Useful to wrap the control around HTML tags ||
+|| * errorElement* || string || false || div || Name of the HTML tag to wrap the form control when the [ObjectValidation object validation] fails ||
+
+
+*Examples*:
+
+{{{
+<!--- controller code --->
+<cfset authors = model("Author").findAll()>
+
+<!--- view code --->
+<cfoutput>
+  <p>#select(objectName="book", property="authorid", options=authors)#</p>
+</cfoutput>
+}}}
