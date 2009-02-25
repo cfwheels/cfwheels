@@ -21,21 +21,21 @@ String
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
 || *objectName* || string || true ||  || The name of the object (model name) to wrap the property around ||
-|| * property* || string || true || || The name of the property (database column) to use in the checkbox ||
+|| * property* || string || true || || The name of the property (database column) to use in the form control ||
 || * checkedValue* || any || false || 1 || The value of the checkbox when is on the state `checked` ||
 || * uncheckedValue* || any || false || 0 || The value of the checkbox when is on the state `unchecked` ||
-|| * label* || string || false || || The label to prepend to the checkbox control ||
-|| * wrapLabel* || boolean || false || true || Sets whenever to wrap or not the checkbox control inside the label HTML tag ||
-|| * prepend* || string || false || || Value to prepend to the checkbox control, useful to wrap the control around HTML tags ||
-|| * append* || string || false || || Value to append to the checkbox control, useful to wrap the control around HTML tags ||
-|| * prependToLabel* || string || false || || Value to prepend to the checkbox's label, useful to wrap the control around HTML tags ||
-|| * appendToLabel* || string || false || || Value to append to the checkbox's label, useful to wrap the control around HTML tags ||
-|| * errorElement* || string || false || div || Name of the HTML tag to wrap the checkbox control when the [ObjectValidation object validation] fails ||
+|| * label* || string || false || || The label to prepend to the form control ||
+|| * wrapLabel* || boolean || false || true || Sets whenever to wrap or not the form control inside the label HTML tag ||
+|| * prepend* || string || false || || Value to prepend to the form control. Useful to wrap the control around HTML tags ||
+|| * append* || string || false || || Value to append to the form control. Useful to wrap the control around HTML tags ||
+|| * prependToLabel* || string || false || || Value to prepend to the form control's label. Useful to wrap the control around HTML tags ||
+|| * appendToLabel* || string || false || || Value to append to the form control's label. Useful to wrap the control around HTML tags ||
+|| * errorElement* || string || false || div || Name of the HTML tag to wrap the form control when the [ObjectValidation object validation] fails ||
 
 *Examples*:
 
 {{{
-<!--- view controller code --->
+<!--- view code --->
 <cfoutput>
   <p>#checkBox(objectName="photo", property="isPublic", label="Is public?")#</p>
 </cfoutput>
