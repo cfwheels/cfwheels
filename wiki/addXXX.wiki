@@ -18,5 +18,11 @@ Dynamic shortcut method, see the [Associations Associations] chapter for more in
 <cfset anOwner.addCar(aCar)>
 }}}
 
+{{{
+<!--- a "hasMany" association from "owner" to "car" is required --->
+<cfset anOwner = model("owner").findByKey(params.ownerId)>
+<cfset anOwner.addCar(1)>
+}}}
+
  * [Associations Associations] (chapter)
  * [hasMany hasMany()] (function)
