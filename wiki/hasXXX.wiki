@@ -7,40 +7,29 @@
 
 *Description*:
 
-Dynamic shortcut method, see [exists exists()] for more info. Replace `XXX` with the name of an association you have set up through [hasOne hasOne()], [hasMany hasMany()] or [belongsTo belongsTo()].
+Dynamic shortcut method, replace `XXX` with the name of an association you have set up through [hasOne hasOne()], [hasMany hasMany()] or [belongsTo belongsTo()].
 
 *Examples*:
 
 {{{
 <!--- a "belongsTo" association from "comment" to "post" is required --->
 <cfset aComment = model("comment").findByKey(params.commentId)>
-
 <cfset commentHasAPost = aComment.hasPost()>
-=
-<cfset commentHasAPost = model("post").exists(aComment.postId)>
 }}}
 
 {{{
 <!--- a "hasOne" association from "user" to "profile" is required --->
 <cfset aUser = model("user").findByKey(params.userId)>
-
 <cfset userHasProfile = aUser.hasProfile()>
-=
-<cfset userHasProfile = model("profile").exists(where="userId=#aUser.id#")>
 }}}
 
 {{{
 <!--- a "hasMany" association from "post" to "comment" is required --->
 <cfset aPost = model("post").findByKey(params.postId)>
-
 <cfset postHasComments = aPost.hasComments()>
-=
-<cfset postHasComments = model("comment").exists(where="postId=#aPost.id#")>
 }}}
 
  * [Associations Associations] (chapter)
- * [ReadingRecords ReadingRecords](chapter)
  * [belongsTo belongsTo()] (function)
  * [hasOne hasOne()] (function)
  * [hasMany hasMany()] (function)
- * [exists exists()] (function)
