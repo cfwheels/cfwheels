@@ -7,7 +7,7 @@
 
 *Description*
 
-Builds and returns a string containing a three (3) select form controls based on the supplied property and objectName. Wheels will generate the appropriate name convention for the form control.
+Builds and returns a string containing three (3) select form controls based on the supplied property and objectName. Wheels will generate the appropriate name convention for the form control.
 
 *Return Type*:
 
@@ -28,7 +28,7 @@ String
 *Examples*:
 
 {{{
-<!--- view controller code --->
+<!--- view code --->
 <cfoutput>
   <p><label>Date Of Birth</label> <br />
           #dateSelect(objectName='user', property='dateOfBirth')#</p>	
