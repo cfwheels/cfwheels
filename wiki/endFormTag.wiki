@@ -1,0 +1,29 @@
+#summary endFormTag()
+#labels api,1.0
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Builds and returns a string containing the closing form tag. This function takes no parameters.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Examples*:
+
+{{{
+<!--- view code --->
+<cfoutput>
+  #startFormTag(action="create")#
+     <!--- your form controls --->
+  #endFormTag()#
+</cfoutput>
+}}}
