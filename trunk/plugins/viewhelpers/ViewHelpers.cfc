@@ -166,19 +166,15 @@
 		<cfreturn loc.result>
 	</cffunction>
 
-	<cffunction name="mailTo" returntype="string" access="public" output="false" hint="View, Helper, Creates a mailto link tag to the specified email address, which is also used as the name of the link unless name is specified.">
-		<cfargument name="emailAddress" type="string" required="true" hint="The email address to link to.">
+	<cffunction name="mailTo" returntype="string" access="public" output="false" hint="Creates a mailto link tag to the specified email address, which is also used as the name of the link unless name is specified.">
+		<cfargument name="emailAddress" type="string" required="true" hint="The email address to link to">
 		<cfargument name="name" type="string" required="false" default="" hint="A string to use as the link text ('Joe' or 'Support Department' for example)">
-		<cfargument name="encode" type="boolean" required="false" default="false" hint="Pass true here to encode the email address, making it harder for bots to harvest it.">
+		<cfargument name="encode" type="boolean" required="false" default="false" hint="Pass true here to encode the email address, making it harder for bots to harvest it">
 	
 		<!---
-			EXAMPLES:
 			#mailTo("support@mysite.com")#
 	
 			#mailTo(emailAddress="support@mysite.com", name="Website Support", encode=true)#
-	
-			RELATED:
-			 * [linkTo linkTo()] (function)
 		--->
 	
 		<cfscript>
@@ -206,32 +202,16 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 
-	<cffunction name="autoLink" returntype="string" access="public" output="false" hint="View, Helper, Turns all URLs and e-mail addresses into clickable links.">
-		<cfargument name="text" type="string" required="true" hint="The text to create links in.">
-		<cfargument name="link" type="string" required="false" default="all" hint="Whether to link URLs, email addresses or both. Possible values are: 'all' (default), 'URLs' and 'emailAddresses'.">
+	<cffunction name="autoLink" returntype="string" access="public" output="false" hint="Turns all URLs and e-mail addresses into clickable links.">
+		<cfargument name="text" type="string" required="true" hint="The text to create links in">
+		<cfargument name="link" type="string" required="false" default="all" hint="Whether to link URLs, email addresses or both. Possible values are: 'all' (default), 'URLs' and 'emailAddresses'">
 	
 		<!---
-			EXAMPLES:
 			#autoLink("Download Wheels from http://www.cfwheels.com/download")#
 			-> Download Wheels from <a href="http://www.cfwheels.com/download">http://www.cfwheels.com/download</a>
 	
 			#autoLink("Email us at info@cfwheels.com")#
 			-> Email us at <a href="mailto:info@cfwheels.com">info@cfwheels.com</a>
-	
-			RELATED:
-			 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
-			 * [capitalize capitalize()] (function)
-			 * [cycle cycle()] (function)
-			 * [excerpt excerpt()] (function)
-			 * [highlight highlight()] (function)
-			 * [pluralize pluralize()] (function)
-			 * [resetCycle resetCycle()] (function)
-			 * [simpleFormat simpleFormat()] (function)
-			 * [singularize singularize()] (function)
-			 * [stripLinks stripLinks()] (function)
-			 * [stripTags stripTags()] (function)
-			 * [titleize titleize()] (function)
-			 * [truncate truncate()] (function)
 		--->
 	
 		<cfscript>
@@ -247,28 +227,12 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 	
-	<cffunction name="cycle" returntype="string" access="public" output="false" hint="View, Helper, Cycles through list values every time it is called.">
-		<cfargument name="values" type="string" required="true" hint="List of values to cycle through.">
-		<cfargument name="name" type="string" required="false" default="default" hint="Name to give the cycle, useful when you use multiple cycles on a page.">
+	<cffunction name="cycle" returntype="string" access="public" output="false" hint="Cycles through list values every time it is called.">
+		<cfargument name="values" type="string" required="true" hint="List of values to cycle through">
+		<cfargument name="name" type="string" required="false" default="default" hint="Name to give the cycle, useful when you use multiple cycles on a page">
 	
 		<!---
-			EXAMPLES:
 			<tr class="#cycle("even,odd")#">...</tr>
-	
-			RELATED:
-			 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
-			 * [autoLink autoLink()] (function)
-			 * [capitalize capitalize()] (function)
-			 * [excerpt excerpt()] (function)
-			 * [highlight highlight()] (function)
-			 * [pluralize pluralize()] (function)
-			 * [resetCycle resetCycle()] (function)
-			 * [simpleFormat simpleFormat()] (function)
-			 * [singularize singularize()] (function)
-			 * [stripLinks stripLinks()] (function)
-			 * [stripTags stripTags()] (function)
-			 * [titleize titleize()] (function)
-			 * [truncate truncate()] (function)
 		--->
 	
 		<cfscript>
@@ -290,31 +254,15 @@
 		<cfreturn request.wheels.cycle[arguments.name]>
 	</cffunction>
 	
-	<cffunction name="excerpt" returntype="string" access="public" output="false" hint="View, Helper, Extracts an excerpt from text that matches the first instance of phrase.">
-		<cfargument name="text" type="string" required="true" hint="The text to extract an excerpt from.">
-		<cfargument name="phrase" type="string" required="true" hint="The phrase to extract.">
-		<cfargument name="radius" type="numeric" required="false" default="100" hint="Number of characters to extract surronding the phrase.">
-		<cfargument name="excerptString" type="string" required="false" default="..." hint="String to replace first and/or last characters with.">
+	<cffunction name="excerpt" returntype="string" access="public" output="false" hint="Extracts an excerpt from text that matches the first instance of phrase.">
+		<cfargument name="text" type="string" required="true" hint="The text to extract an excerpt from">
+		<cfargument name="phrase" type="string" required="true" hint="The phrase to extract">
+		<cfargument name="radius" type="numeric" required="false" default="100" hint="Number of characters to extract surronding the phrase">
+		<cfargument name="excerptString" type="string" required="false" default="..." hint="String to replace first and/or last characters with">
 	
 		<!---
-			EXAMPLES:
 			#excerpt(text="Wheels is a framework for ColdFusion", phrase="framework", radius=5)#
 			-> ...is a framework for ...
-	
-			RELATED:
-			 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
-			 * [autoLink autoLink()] (function)
-			 * [capitalize capitalize()] (function)
-			 * [cycle cycle()] (function)
-			 * [highlight highlight()] (function)
-			 * [pluralize pluralize()] (function)
-			 * [resetCycle resetCycle()] (function)
-			 * [simpleFormat simpleFormat()] (function)
-			 * [singularize singularize()] (function)
-			 * [stripLinks stripLinks()] (function)
-			 * [stripTags stripTags()] (function)
-			 * [titleize titleize()] (function)
-			 * [truncate truncate()] (function)
 		--->
 	
 		<cfscript>
@@ -352,30 +300,14 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 	
-	<cffunction name="highlight" returntype="string" access="public" output="false" hint="View, Helper, Highlights the phrase(s) everywhere in the text if found by wrapping it in a span tag.">
+	<cffunction name="highlight" returntype="string" access="public" output="false" hint="Highlights the phrase(s) everywhere in the text if found by wrapping it in a span tag.">
 		<cfargument name="text" type="string" required="true">
 		<cfargument name="phrases" type="string" required="true">
 		<cfargument name="class" type="string" required="false" default="highlight">
 	
 		<!---
-			EXAMPLES:
 			#highlight(text="You searched for: Wheels", phrases="Wheels")#
 			-> You searched for: <span class="highlight">Wheels</span>
-	
-			RELATED:
-			 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
-			 * [autoLink autoLink()] (function)
-			 * [capitalize capitalize()] (function)
-			 * [cycle cycle()] (function)
-			 * [excerpt excerpt()] (function)
-			 * [pluralize pluralize()] (function)
-			 * [resetCycle resetCycle()] (function)
-			 * [simpleFormat simpleFormat()] (function)
-			 * [singularize singularize()] (function)
-			 * [stripLinks stripLinks()] (function)
-			 * [stripTags stripTags()] (function)
-			 * [titleize titleize()] (function)
-			 * [truncate truncate()] (function)
 		--->
 	
 		<cfscript>
@@ -413,27 +345,11 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 	
-	<cffunction name="resetCycle" returntype="void" access="public" output="false" hint="View, Helper, Resets a cycle so that it starts from the first list value the next time it is called.">
-		<cfargument name="name" type="string" required="true" hint="The name of the cycle to reset.">
+	<cffunction name="resetCycle" returntype="void" access="public" output="false" hint="Resets a cycle so that it starts from the first list value the next time it is called.">
+		<cfargument name="name" type="string" required="true" hint="The name of the cycle to reset">
 	
 		<!---
-			EXAMPLES:
 			<cfset resetCycle("tableRows")>
-	
-			RELATED:
-			 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
-			 * [autoLink autoLink()] (function)
-			 * [capitalize capitalize()] (function)
-			 * [cycle cycle()] (function)
-			 * [excerpt excerpt()] (function)
-			 * [highlight highlight()] (function)
-			 * [pluralize pluralize()] (function)
-			 * [simpleFormat simpleFormat()] (function)
-			 * [singularize singularize()] (function)
-			 * [stripLinks stripLinks()] (function)
-			 * [stripTags stripTags()] (function)
-			 * [titleize titleize()] (function)
-			 * [truncate truncate()] (function)
 		--->
 	
 		<cfscript>
@@ -443,27 +359,11 @@
 		</cfscript>
 	</cffunction>
 	
-	<cffunction name="simpleFormat" returntype="string" access="public" output="false" hint="View, Helper, Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards).">
-		<cfargument name="text" type="string" required="true" hint="The text to format.">
+	<cffunction name="simpleFormat" returntype="string" access="public" output="false" hint="Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards).">
+		<cfargument name="text" type="string" required="true" hint="The text to format">
 	
 		<!---
-			EXAMPLES:
 			#simpleFormat(params.content)#
-	
-			RELATED:
-			 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
-			 * [autoLink autoLink()] (function)
-			 * [capitalize capitalize()] (function)
-			 * [cycle cycle()] (function)
-			 * [excerpt excerpt()] (function)
-			 * [highlight highlight()] (function)
-			 * [pluralize pluralize()] (function)
-			 * [resetCycle resetCycle()] (function)
-			 * [singularize singularize()] (function)
-			 * [stripLinks stripLinks()] (function)
-			 * [stripTags stripTags()] (function)
-			 * [titleize titleize()] (function)
-			 * [truncate truncate()] (function)
 		--->
 	
 		<cfscript>
@@ -477,84 +377,37 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 	
-	<cffunction name="stripLinks" returntype="string" access="public" output="false" hint="View, Helper, Removes all links from the html (leaving just the link text).">
-		<cfargument name="html" type="string" required="true" hint="The html to remove links from.">
+	<cffunction name="stripLinks" returntype="string" access="public" output="false" hint="Removes all links from the html (leaving just the link text).">
+		<cfargument name="html" type="string" required="true" hint="The html to remove links from">
 	
 		<!---
-			EXAMPLES:
 			#stripLinks("Wheels is a framework for <a href='http://www.adobe.com'>ColdFusion</a>")#
 			-> Wheels is a framework for ColdFusion
-	
-			RELATED:
-			 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
-			 * [autoLink autoLink()] (function)
-			 * [capitalize capitalize()] (function)
-			 * [cycle cycle()] (function)
-			 * [excerpt excerpt()] (function)
-			 * [highlight highlight()] (function)
-			 * [pluralize pluralize()] (function)
-			 * [resetCycle resetCycle()] (function)
-			 * [simpleFormat simpleFormat()] (function)
-			 * [singularize singularize()] (function)
-			 * [stripTags stripTags()] (function)
-			 * [titleize titleize()] (function)
-			 * [truncate truncate()] (function)
 		--->
 	
 		<cfreturn REReplaceNoCase(arguments.html, "<a.*?>(.*?)</a>", "\1" , "all")>
 	</cffunction>
 	
-	<cffunction name="stripTags" returntype="string" access="public" output="false" hint="View, Helper, Removes all tags from the html.">
-		<cfargument name="html" type="string" required="true" hint="The html to remove links from.">
+	<cffunction name="stripTags" returntype="string" access="public" output="false" hint="Removes all tags from the html.">
+		<cfargument name="html" type="string" required="true" hint="The html to remove links from">
 	
 		<!---
-			EXAMPLES:
 			#stripTags("Wheels is a <b>framework</b> for <a href='http://www.adobe.com'>ColdFusion</a>")#
 			-> Wheels is a framework for ColdFusion
-	
-			RELATED:
-			 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
-			 * [autoLink autoLink()] (function)
-			 * [capitalize capitalize()] (function)
-			 * [cycle cycle()] (function)
-			 * [excerpt excerpt()] (function)
-			 * [highlight highlight()] (function)
-			 * [pluralize pluralize()] (function)
-			 * [resetCycle resetCycle()] (function)
-			 * [simpleFormat simpleFormat()] (function)
-			 * [singularize singularize()] (function)
-			 * [stripLinks stripLinks()] (function)
-			 * [titleize titleize()] (function)
-			 * [truncate truncate()] (function)
 		--->
+
 		<cfset var returnValue = arguments.html>
 		<cfset returnValue = REReplaceNoCase(returnValue,"<\ *[a-z].*?>", "", "all")>
 		<cfset returnValue = REReplaceNoCase(returnValue,"<\ */\ *[a-z].*?>", "", "all")>
 		<cfreturn returnValue>
 	</cffunction>
 	
-	<cffunction name="titleize" returntype="string" access="public" output="false" hint="View, Helper, Capitalizes all words in the text to create a nicer looking title.">
-		<cfargument name="word" type="string" required="true" hint="The text to turn into a title.">
+	<cffunction name="titleize" returntype="string" access="public" output="false" hint="Capitalizes all words in the text to create a nicer looking title.">
+		<cfargument name="word" type="string" required="true" hint="The text to turn into a title">
 	
 		<!---
-			EXAMPLES:
 			#titleize("Wheels is a framework for ColdFusion")#
 			-> Wheels Is A Framework For ColdFusion
-	
-			RELATED:
-			 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
-			 * [autoLink autoLink()] (function)
-			 * [capitalize capitalize()] (function)
-			 * [cycle cycle()] (function)
-			 * [excerpt excerpt()] (function)
-			 * [highlight highlight()] (function)
-			 * [pluralize pluralize()] (function)
-			 * [resetCycle resetCycle()] (function)
-			 * [simpleFormat simpleFormat()] (function)
-			 * [singularize singularize()] (function)
-			 * [stripLinks stripLinks()] (function)
-			 * [stripTags stripTags()] (function)
-			 * [truncate truncate()] (function)
 		--->
 	
 		<cfscript>
@@ -569,33 +422,17 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 	
-	<cffunction name="truncate" returntype="string" access="public" output="false" hint="View, Helper, Truncates text to the specified length and replaces the last characters with the specified truncate string (defaults to '...').">
-		<cfargument name="text" type="string" required="true" hint="The text to truncate.">
-		<cfargument name="length" type="numeric" required="false" default="30" hint="Length to truncate the text to.">
-		<cfargument name="truncateString" type="string" required="false" default="..." hint="String to replace the last characters with.">
+	<cffunction name="truncate" returntype="string" access="public" output="false" hint="Truncates text to the specified length and replaces the last characters with the specified truncate string (defaults to '...').">
+		<cfargument name="text" type="string" required="true" hint="The text to truncate">
+		<cfargument name="length" type="numeric" required="false" default="30" hint="Length to truncate the text to">
+		<cfargument name="truncateString" type="string" required="false" default="..." hint="String to replace the last characters with">
 	
 		<!---
-			EXAMPLES:
 			#truncate(text="Wheels is a framework for ColdFusion", length=20)#
 			-> Wheels is a frame...
 	
 			#truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")#
 			-> Wheels is a fra... (continued)
-	
-			RELATED:
-			 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
-			 * [autoLink autoLink()] (function)
-			 * [capitalize capitalize()] (function)
-			 * [cycle cycle()] (function)
-			 * [excerpt excerpt()] (function)
-			 * [highlight highlight()] (function)
-			 * [pluralize pluralize()] (function)
-			 * [resetCycle resetCycle()] (function)
-			 * [simpleFormat simpleFormat()] (function)
-			 * [singularize singularize()] (function)
-			 * [stripLinks stripLinks()] (function)
-			 * [stripTags stripTags()] (function)
-			 * [titleize titleize()] (function)
 		--->
 	
 		<cfscript>
@@ -608,78 +445,6 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 	
-	<cffunction name="formRemoteTag" returntype="any" access="public" output="false">
-		<cfargument name="link" type="any" required="false" default="">
-		<cfargument name="method" type="any" required="false" default="post">
-		<cfargument name="spamProtection" type="any" required="false" default="false">
-		<cfargument name="update" type="any" required="false" default="">
-		<cfargument name="insertion" type="any" required="false" default="">
-		<cfargument name="serialize" type="any" required="false" default="false">
-		<cfargument name="onLoading" type="any" required="false" default="">
-		<cfargument name="onComplete" type="any" required="false" default="">
-		<cfargument name="onSuccess" type="any" required="false" default="">
-		<cfargument name="onFailure" type="any" required="false" default="">
-		<!--- Accepts URLFor arguments --->
-		<cfset var loc = {}>
-		<cfset arguments.$namedArguments = "link,method,spamProtection,update,insertion,serialize,onLoading,onComplete,onSuccess,onFailure,controller,action,key,anchor,onlyPath,host,protocol,params">
-		<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
-	
-		<cfif Len(arguments.link) IS NOT 0>
-			<cfset loc.url = arguments.link>
-		<cfelse>
-			<cfset loc.url = URLFor(argumentCollection=arguments)>
-		</cfif>
-	
-		<cfset loc.ajaxCall = "new Ajax.">
-	
-		<!--- Figure out the parameters for the Ajax call --->
-		<cfif Len(arguments.update) IS NOT 0>
-			<cfset loc.ajaxCall = loc.ajaxCall & "Updater('#arguments.update#',">
-		<cfelse>
-			<cfset loc.ajaxCall = loc.ajaxCall & "Request(">
-		</cfif>
-	
-		<cfset loc.ajaxCall = loc.ajaxCall & "'#loc.url#', { asynchronous:true">
-	
-		<cfif Len(arguments.insertion) IS NOT 0>
-			<cfset loc.ajaxCall = loc.ajaxCall & ",insertion:Insertion.#arguments.insertion#">
-		</cfif>
-	
-		<cfif arguments.serialize>
-			<cfset loc.ajaxCall = loc.ajaxCall & ",parameters:Form.serialize(this)">
-		</cfif>
-	
-		<cfif Len(arguments.onLoading) IS NOT 0>
-			<cfset loc.ajaxCall = loc.ajaxCall & ",onLoading:#arguments.onLoading#">
-		</cfif>
-	
-		<cfif Len(arguments.onComplete) IS NOT 0>
-			<cfset loc.ajaxCall = loc.ajaxCall & ",onComplete:#arguments.onComplete#">
-		</cfif>
-	
-		<cfif Len(arguments.onSuccess) IS NOT 0>
-			<cfset loc.ajaxCall = loc.ajaxCall & ",onSuccess:#arguments.onSuccess#">
-		</cfif>
-	
-		<cfif Len(arguments.onFailure) IS NOT 0>
-			<cfset loc.ajaxCall = loc.ajaxCall & ",onFailure:#arguments.onFailure#">
-		</cfif>
-	
-		<cfset loc.ajaxCall = loc.ajaxCall & "});">
-	
-		<cfif arguments.spamProtection>
-			<cfset loc.url = "">
-		</cfif>
-	
-		<cfsavecontent variable="loc.output">
-			<cfoutput>
-				<form action="#loc.url#" method="#arguments.method#" onsubmit="#loc.ajaxCall# return false;"#loc.attributes#>
-			</cfoutput>
-		</cfsavecontent>
-	
-		<cfreturn $trimHTML(loc.output)>
-	</cffunction>
-
 	<cffunction name="textFieldTag" returntype="any" access="public" output="false">
 		<cfargument name="name" type="any" required="true">
 		<cfargument name="value" type="any" required="false" default="">
