@@ -7,21 +7,16 @@
 
 *Description*:
 
-Dynamic shortcut method, see [create create()] for more info. Replace `XXX` with the name of an association you have set up either through [hasOne hasOne()] or [hasMany hasMany()].
+Dynamic shortcut method, replace `XXX` with the name of an association you have set up either through [hasOne hasOne()] or [hasMany hasMany()].
 
 *Examples*:
 
 {{{
 <!--- a "hasOne" or "hasMany" association from "customer" to "order" is required --->
 <cfset aCustomer = model("customer").findByKey(params.customerId)>
-
 <cfset anOrder = aCustomer.createOrder(shipping=params.shipping)>
-=
-<cfset anOrder = model("order").create(customerId=params.customerId, shipping=params.shipping)>
 }}}
 
  * [Associations Associations] (chapter)
- * [CreatingRecords CreatingRecords](chapter)
  * [hasOne hasOne()] (function)
  * [hasMany hasMany()] (function)
- * [create create()] (function)
