@@ -250,7 +250,7 @@
 			{
 				loc.pos = loc.pos + 1;
 				ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
-				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type};
+				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, null=arguments.properties[loc.key] IS ""};
 				ArrayAppend(loc.sql, loc.param);
 				if (StructCount(arguments.properties) GT loc.pos)
 					ArrayAppend(loc.sql, ",");
@@ -661,6 +661,7 @@
 						if ((loc.param.property Contains "." && ListFirst(loc.param.property, ".") IS loc.classData.tableName || loc.param.property Does Not Contain ".") && ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
 						{
 							loc.param.type = loc.classData.properties[ListLast(loc.param.property, ".")].type;
+							loc.param.scale = loc.classData.properties[ListLast(loc.param.property, ".")].scale;
 							loc.param.column = loc.classData.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
 							break;
 						}
@@ -686,7 +687,7 @@
 					ArrayAppend(arguments.sql, "#PreserveSingleQuotes(loc.column)#	#loc.params[loc.i].operator#");
 					if (application.settings.environment IS NOT "production" && !StructKeyExists(loc.params[loc.i], "type"))
 							$throw(type="Wheels", message="Column Not Found", extendedInfo="Wheels looked for a column named '#loc.column#' but couldn't find it.");
-					loc.param = {property=loc.params[loc.i].property, column=loc.params[loc.i].column, type=loc.params[loc.i].type};
+					loc.param = {type=loc.params[loc.i].type, scale=loc.params[loc.i].scale}; // removed: property=loc.params[loc.i].property, column=loc.params[loc.i].column
 					ArrayAppend(arguments.sql, loc.param);
 				}
 			}
@@ -733,6 +734,8 @@
 				if (IsStruct(arguments.sql[loc.i]) && loc.pos GT 0)
 				{
 					arguments.sql[loc.i].value = loc.originalValues[loc.pos];
+					if (loc.originalValues[loc.pos] == "")
+						arguments.sql[loc.i].null = true;
 					loc.pos--;
 				}
 			}
@@ -1025,7 +1028,7 @@
 		if (variables.wheels.class.softDeletion)
 		{
 			ArrayAppend(arguments.sql, "UPDATE #variables.wheels.class.tableName# SET #variables.wheels.class.softDeleteColumn# = ");
-			loc.param = {value=Now(), type="cf_sql_timestamp", list=false, null=false};
+			loc.param = {value=Now(), type="cf_sql_timestamp"};
 			ArrayAppend(arguments.sql, loc.param);
 		}
 		else
@@ -1044,9 +1047,9 @@
 		loc.iEnd = ListLen(variables.wheels.class.keys);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
-			loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
-			ArrayAppend(arguments.sql, "#variables.wheels.class.properties[loc.property].column# = ");
-			loc.param = {value=this[loc.property], type=variables.wheels.class.properties[loc.property].type, scale=variables.wheels.class.properties[loc.property].scale};
+			loc.key = ListGetAt(variables.wheels.class.keys, loc.i);
+			ArrayAppend(arguments.sql, "#variables.wheels.class.properties[loc.key].column# = ");
+			loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, null=this[loc.key] IS ""};
 			ArrayAppend(arguments.sql, loc.param);
 			if (loc.i LT loc.iEnd)
 				ArrayAppend(arguments.sql, " AND ");
@@ -1065,12 +1068,12 @@
 		loc.iEnd = ListLen(arguments.properties);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
-			loc.property = Trim(ListGetAt(arguments.properties, loc.i));
+			loc.key = Trim(ListGetAt(arguments.properties, loc.i));
 			if (Len(arguments.values))
 				loc.value = Trim(ListGetAt(arguments.values, loc.i));
 			else if (Len(arguments.keys))
 				loc.value = this[ListGetAt(arguments.keys, loc.i)];
-			loc.toAppend = loc.property & "=";
+			loc.toAppend = loc.key & "=";
 			if (!IsNumeric(loc.value))
 				loc.toAppend = loc.toAppend & "'";
 			loc.toAppend = loc.toAppend & loc.value;
