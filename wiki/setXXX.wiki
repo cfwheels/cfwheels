@@ -7,7 +7,7 @@
 
 *Description*:
 
-Dynamic shortcut method, see [update update()] for more info. Replace `XXX` with the name of an association you have set up through [hasOne hasOne()].
+Dynamic shortcut method, replace `XXX` with the name of an association you have set up through [hasOne hasOne()].
 
 *Examples*:
 
@@ -15,13 +15,8 @@ Dynamic shortcut method, see [update update()] for more info. Replace `XXX` with
 <!--- a "hasOne" association from "author" to "bio" is required --->
 <cfset anAuthor = model("author").findByKey(params.authorId)>
 <cfset aBio = model("bio").findByKey(params.bioId)>
-
 <cfset anAuthor.setBio(aBio)>
-=
-<cfset model("bio").update(authorId=params.authorId)>
 }}}
 
  * [Associations Associations] (chapter)
- * [UpdatingRecords UpdatingRecords](chapter)
  * [hasOne hasOne()] (function)
- * [update update()] (function)
