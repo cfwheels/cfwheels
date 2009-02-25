@@ -1,0 +1,34 @@
+#summary submitTag([value, image, disable])
+#labels api,1.0
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Builds and returns a string containing a submit button form control.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *value* || string || false || Save changes || Message to display in the button form control ||
+|| *image* || string || false ||  || File name of the image file to use in the button form control ||
+|| *disable* || boolean || false ||  || Whenever or not to initially disable the button form control ||
+
+*Examples*:
+
+{{{
+<!--- view code --->
+<cfoutput>
+  <p>#submitTag()#</p>
+</cfoutput>
+}}}
