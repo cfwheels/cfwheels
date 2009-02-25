@@ -175,11 +175,11 @@ Given that you have told Wheels that a `post` has many `comments` through a [has
 
 [XXX XXX()], `post.comments()`. Returns all comments where the foreign key matches the posts primary key value. Similar to calling `model("comment").findAll(where="postId=#post.id#")`.
 
-[addXXX addXXX()], `post.addComment(comment)`. Adds a comment to the post association by setting its foreign key to the posts primary key value. Similar to calling `comment.update(postId=post.id)`.
+[addXXX addXXX()], `post.addComment(comment)`. Adds a comment to the post association by setting its foreign key to the posts primary key value. Similar to calling `comment.updateByKey(key=comment.id, postId=post.id)`.
 
-[removeXXX removeXXX()], `post.removeComment(comment)`. Removes a comment from the post association by setting its foreign key to `NULL`. You can pass in either a `comment` object or the primary key value of a `comment` object to this method. Similar to calling `comment.update(postId="")`.
+[removeXXX removeXXX()], `post.removeComment(comment)`. Removes a comment from the post association by setting its foreign key to `NULL`. Similar to calling `comment.updateByKey(key=comment.id, postId="")`.
 
-[deleteXXX deleteXXX()], `post.deleteComment(comment)`. Deletes the associated comment from the database table. You can pass in either a `comment` object or the primary key value of a `comment` object to this method. Similar to calling `model("comment").deleteOne(where="postId=#post.id#")`.
+[deleteXXX deleteXXX()], `post.deleteComment(comment)`. Deletes the associated comment from the database table. Similar to calling `model("comment").deleteByKey(key=comment.id)`.
 
 [removeAllXXX removeAllXXX()], `post.removeAllComments()`. Removes all comments from the post association by setting their foreign keys to `NULL`. Similar to calling `model("comment").updateAll(postId="", where="postId=#post.id#")`.
 
@@ -193,11 +193,7 @@ Given that you have told Wheels that a `post` has many `comments` through a [has
 
 [hasXXX hasXXX()], `post.hasComments()`. Returns `true` if the post has any comments associated with it. Similar to calling `model("comment").exists(where="postId=#post.id#")`.
 
-[findOneXXX findOneXXX()], `post.findOneComment()`. Returns one of the associated comments (useful when doing scoped searches). Similar to calling `model("comment").findOne(where="postId=#post.id#")`.
-
-[findAllXXX findAllXXX()], `post.findAllComments()`. Returns all of the associated comments. Similar to calling `model("comment").findAll(where="postId=#post.id#")`.
-
-Note: [addXXX addXXX()], [removeXXX removeXXX()], [deleteXXX deleteXXX()], [setXXX setXXX()] also accept a primary key value instead of the actual object. This enables Wheels to reduce the database calls to a minimum.
+[findOneXXX findOneXXX()], `post.findOneComment()`. Returns one of the associated comments. Similar to calling `model("comment").findOne(where="postId=#post.id#")`.
 
 *Methods Added by `hasOne`*
 
@@ -219,11 +215,9 @@ The [hasOne hasOne()] association adds a few methods as well, most of them are v
 
 *Methods Added by `belongsTo`*
 
-The [belongsTo belongsTo()] association adds three methods to your model. Given that you have told Wheels that a `comment` belongs to a `post` through a [belongsTo belongsTo()] call, here are the methods that will be made available to you on the `comment` model.
+The [belongsTo belongsTo()] association adds a couple of methods to your model as well. Given that you have told Wheels that a `comment` belongs to a `post` through a [belongsTo belongsTo()] call, here are the methods that will be made available to you on the `comment` model.
 
 [XXX XXX()], `comment.post()`. Returns the post where the primary key matches the comment's foreign key value. Similar to calling `model("post").findByKey(comment.postId)`.
-
-[setXXX setXXX()], `comment.setPost()`. Sets the comment to be associated with the post by setting its foreign key to the post's primary key value. Similar to calling `comment.update(postId=post.id)`.
 
 [hasXXX hasXXX()], `comment.hasPost()`. Returns `true` if the comment has a post associated with it. Similar to calling `model("post").exists(comment.postId)`.
 
