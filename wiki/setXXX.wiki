@@ -18,5 +18,11 @@ Dynamic shortcut method, replace `XXX` with the name of an association you have 
 <cfset anAuthor.setBio(aBio)>
 }}}
 
+{{{
+<!--- a "hasOne" association from "author" to "bio" is required --->
+<cfset anAuthor = model("author").findByKey(params.authorId)>
+<cfset anAuthor.setBio(1)>
+}}}
+
  * [Associations Associations] (chapter)
  * [hasOne hasOne()] (function)
