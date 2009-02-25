@@ -7,42 +7,29 @@
 
 *Description*:
 
-Dynamic shortcut method, see [findByKey findByKey()], [findOne findOne()] and [findAll findAll()] for more info. Replace `XXX` with the name of an association you have set up through [belongsTo belongsTo()], [hasOne hasOne()] or [hasMany hasMany()].
+Dynamic shortcut method, replace `XXX` with the name of an association you have set up through [belongsTo belongsTo()], [hasOne hasOne()] or [hasMany hasMany()].
 
 *Examples*:
 
 {{{
 <!--- a "belongsTo" association from "comment" to "post" is required --->
 <cfset aComment = model("comment").findByKey(params.commentId)>
-
 <cfset aPost = aComment.post()>
-=
-<cfset aPost = model("post").findByKey(aComment.postId)>
 }}}
 
 {{{
 <!--- a "hasOne" association from "user" to "profile" is required --->
 <cfset aUser = model("user").findByKey(params.userId)>
-
 <cfset aProfile = aUser.profile()>
-=
-<cfset aProfile = model("profile").findOne(where="userId=#aUser.id#")>
 }}}
 
 {{{
 <!--- a "hasMany" association from "post" to "comment" is required --->
 <cfset aPost = model("post").findByKey(params.postId)>
-
 <cfset comments = aPost.comments()>
-=
-<cfset comments = model("comment").findAll(where="postId=#aPost.id#")>
 }}}
 
  * [Associations Associations] (chapter)
- * [ReadingRecords ReadingRecords](chapter)
  * [belongsTo belongsTo()] (function)
  * [hasOne hasOne()] (function)
  * [hasMany hasMany()] (function)
- * [findByKey findByKey()] (function)
- * [findOne findOne()] (function)
- * [findAll findAll()] (function)
