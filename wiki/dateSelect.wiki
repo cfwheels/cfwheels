@@ -21,8 +21,8 @@ String
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
 || *objectName* || string || true ||  || The name of the object (model name) to wrap the property around ||
-|| * property* || string || true || || The name of the property (database column) to use in the checkbox ||
-|| * order* || string || false || month,day,year || A list specifying in which order to include the `day`, `month` and `year` select controls ||
+|| * property* || string || true || || The name of the property (database column) to use in the form control ||
+|| * order* || string || false || month,day,year || A list specifying in which order to include (or exclude) the `day`, `month` and `year` select controls ||
 || * separator* || string || false ||  || Text to include between the three (3) select form controls ||
 
 *Examples*:
