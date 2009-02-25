@@ -22,7 +22,6 @@
 	<li>stripTags</li>
 	<li>titleize</li>
 	<li>truncate</li>
-	<li>formRemoteTag</li>
 	<li>textFieldTag</li>
 	<li>radioButtonTag</li>
 	<li>checkBoxTag</li>
