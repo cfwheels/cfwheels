@@ -16,13 +16,14 @@ These methods operate on individual objects which means you first have to fetch 
 
 *Associations:*
  * [addXXX addXXX()]
- * [clearXXX clearXXX()]
  * [createXXX createXXX()]
+ * [deleteAllXXX deleteAllXXX()]
  * [deleteXXX deleteXXX()]
- * [findAllXXX findAllXXX()]
  * [findOneXXX findOneXXX()]
  * [hasXXX hasXXX()]
  * [newXXX newXXX()]
+ * [removeAllXXX removeAllXXX()]
+ * [removeXXX removeXXX()]
  * [setXXX setXXX()]
  * [XXX XXX()]
  * [XXXCount XXXCount()]
