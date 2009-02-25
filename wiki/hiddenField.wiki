@@ -1,0 +1,33 @@
+#summary hiddenField(objectName, property)
+#labels api,1.0
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Builds and returns a string containing a hidden field form control based on the supplied property and objectName. Wheels will generate the appropriate name convention for the form control.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *objectName* || string || true ||  || The name of the object (model name) to wrap the property around ||
+|| * property* || string || true || || The name of the property (database column) to use in the form control ||
+
+*Examples*:
+
+{{{
+<!--- view code --->
+<cfoutput>
+  <p>#hiddenField(objectName="user", property="id")#</p>
+</cfoutput>
+}}}
