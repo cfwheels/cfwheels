@@ -1,8 +1,6 @@
 #summary Clean up your code by moving common functionality into helper functions.
 #labels chapter,1.0
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
 As you probably know already Wheels gives you a lot of helper functions that you can use in your view pages. What you maybe didn't know yet is that you can also create your own view helper functions and have Wheels automatically make them available to you. To do this you store your UDFs (User Defined Functions) in...
 
 ==The `views/helpers.cfm` File==
