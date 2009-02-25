@@ -29,7 +29,7 @@ Any
 }}}
 
 {{{
-<cfoutput>#includePartial(name="shared/button", cache=15)#</cfoutput>
+<cfoutput>#includePartial(name="shared/button", cache=30)#</cfoutput>
 -> Wheels will include the file "views/shared/_button.cfm" and cache it for 30 minutes.
 
 
