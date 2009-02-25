@@ -15,23 +15,30 @@ These functions can be called from the views to create output for use in a HTML 
 
 ==Functions==
 
- * [buttonTo buttonTo()]
- * [checkBox checkBox()]
+*Content:*
  * [contentForLayout contentForLayout()]
+ * [includePartial includePartial()]
+
+*Errors:*
+ * [errorMessageOn errorMessageOn()]
+ * [errorMessagesFor errorMessagesFor()]
+
+*Forms:*
+ * [checkBox checkBox()]
  * [dateSelect dateSelect()]
  * [dateTimeSelect dateTimeSelect()]
  * [endFormTag endFormTag()]
- * [errorMessageOn errorMessageOn()]
- * [errorMessagesFor errorMessagesFor()]
  * [fileField fileField()]
  * [hiddenField hiddenField()]
- * [includePartial includePartial()]
- * [linkTo linkTo()]
- * [paginationLinks paginationLinks()]
  * [passwordField passwordField()]
  * [radioButton radioButton()]
  * [select select()]
  * [submitTag submitTag()]
+ * [timeSelect timeSelect()]
  * [textArea textArea()]
  * [textField textField()]
- * [timeSelect timeSelect()]
+
+*Links:*
+ * [buttonTo buttonTo()]
+ * [linkTo linkTo()]
+ * [paginationLinks paginationLinks()]
