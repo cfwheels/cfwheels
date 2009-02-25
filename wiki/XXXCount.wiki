@@ -7,20 +7,15 @@
 
 *Description*:
 
-Dynamic shortcut method, see [count count()] for more info. Replace `XXX` with the name of an association you have set up through [hasMany hasMany()].
+Dynamic shortcut method, replace `XXX` with the name of an association you have set up through [hasMany hasMany()].
 
 *Examples*:
 
 {{{
 <!--- a "hasMany" association from "post" to "comment" is required --->
 <cfset aPost = model("post").findByKey(params.postId)>
-
 <cfset amount = aPost.commentCount()>
-=
-<cfset amount = model("comment").count(where="postId=#params.postId#")>
 }}}
 
  * [Associations Associations] (chapter)
- * [ColumnStatistics ColumnStatistics](chapter)
  * [hasMany hasMany()] (function)
- * [count count()] (function)
