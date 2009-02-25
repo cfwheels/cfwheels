@@ -160,10 +160,6 @@ Lastly, if your view needs to return XML code or other data for JavaScript calls
 
 ==Email Layouts==
 
-The built-in Wheels [sendEmail sendEmail()] function also adds some layout conventions to make your life easier.
-
-===The Default Email Layout===
-
 When sending emails you use the exact same layout conventions that we've already gone through earlier in this chapter. The only difference is that layouts are turned off by default for emails so if you want to use a layout you have to set `layout` to `true` (or a string) when using [sendEmail sendEmail()]. 
 
 For example:
