@@ -7,7 +7,7 @@
 
 *Description*:
 
-Dynamic shortcut method, see the [Associations Associations] chapter for more info. Replace `XXX` with the name of an association you have set up through [hasMany hasMany()].
+Dynamic shortcut method, replace `XXX` with the name of an association you have set up through [hasMany hasMany()].
 
 *Examples*:
 
