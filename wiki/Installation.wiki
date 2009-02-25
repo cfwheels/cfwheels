@@ -24,9 +24,9 @@ In case you're not sure, here are the instructions for setting up an empty Wheel
  * Create a new folder under your web root (usually `C:\Inetpub\wwwroot`) named `mysite` and unzip the Wheels `.zip` file into the root of it.
  * Create a new website using IIS called `My Site` with `localhost` as the host header name and `C:\Inetpub\wwwroot\mysite` as the path to your home directory.
 
-If you want to run a Wheels powered application from a subfolder in an existing website, this is entirely possible, but you'll have to live with the fact that you can never turn on URL rewriting and get those pretty URLs. (Read more about this in the [URLRewriting URL Rewriting chapter].)
+If you want to run a Wheels powered application from a subfolder in an existing website, this is entirely possible, but you'll have to be a little creative with your URL rewrite rules if you want to get pretty URLs - it won't work out of the box (read more about this in the [URLRewriting URL Rewriting chapter]).
 
-==3. Setup the Database==
+==3. Setup the Database (optional)==
 
 Create a new database in SQL Server, Oracle, or MySQL and add a new data source for it in the !ColdFusion/Railo Administrator, just as you'd normally do. Now open up `config/database.cfm` and set the `application.settings.database.datasource` variable to the name you chose for the data source. 
 
@@ -36,6 +36,6 @@ This is all that you need to do before Wheels can connect to your database and s
 
 ==4. Test It==
 
-When you've configured the web server and database, you can test your installation by typing `http://localhost` (or whatever you set as the host header name) in your web browser. You should get a page saying "Congratulations!"
+When you've followed the steps above you can now test your installation by typing `http://localhost` (or whatever you set as the host header name) in your web browser. You should get a page saying "Congratulations!"
 
 That's it. You're done. This is where the fun begins!
