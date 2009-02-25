@@ -177,9 +177,9 @@ Given that you have told Wheels that a `post` has many `comments` through a [has
 
 [addXXX addXXX()], `post.addComment(comment)`. Adds a comment to the post association by setting its foreign key to the posts primary key value. Similar to calling `comment.update(postId=post.id)`.
 
-[removeXXX removeXXX()], `post.removeComment(comment)`. Removes a comment from the post association by setting its foreign key to `NULL`. Similar to calling `comment.update(postId="")`.
+[removeXXX removeXXX()], `post.removeComment(comment)`. Removes a comment from the post association by setting its foreign key to `NULL`. You can pass in either a `comment` object or the primary key value of a `comment` object to this method. Similar to calling `comment.update(postId="")`.
 
-[deleteXXX deleteXXX()], `post.deleteComment(comment)`. Deletes the associated comment from the database table. Similar to calling `model("comment").deleteOne(where="postId=#post.id#")`.
+[deleteXXX deleteXXX()], `post.deleteComment(comment)`. Deletes the associated comment from the database table. You can pass in either a `comment` object or the primary key value of a `comment` object to this method. Similar to calling `model("comment").deleteOne(where="postId=#post.id#")`.
 
 [removeAllXXX removeAllXXX()], `post.removeAllComments()`. Removes all comments from the post association by setting their foreign keys to `NULL`. Similar to calling `model("comment").updateAll(postId="", where="postId=#post.id#")`.
 
@@ -226,6 +226,10 @@ The [belongsTo belongsTo()] association adds three methods to your model. Given 
 [setXXX setXXX()], `comment.setPost()`. Sets the comment to be associated with the post by setting its foreign key to the post's primary key value. Similar to calling `comment.update(postId=post.id)`.
 
 [hasXXX hasXXX()], `comment.hasPost()`. Returns `true` if the comment has a post associated with it. Similar to calling `model("post").exists(comment.postId)`.
+
+One general rule for all of the methods above is that you can always supply any argument that is accepted by the method that the processing is delegated to and it will be passed through. This means that you can for example call `post.comments(order="createdAt DESC")` and the `order` argument will be passed along to [findAll findAll()].
+
+Another rule is that whenever a method accepts an object as its first argument you also have the option of supplying the primary key value instead. This means that `author.setProfile(profile)` will perform the same task as `author.setProfile(1)` for example (we're assuming that the `profile` object in this example has a primary key value of `1` of course).
 
 ===Performance of Dynamic Association Finders===
 
