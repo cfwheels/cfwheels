@@ -7,7 +7,7 @@
 
 *Description*
 
-Builds and returns a string containing the closing form tag. This function takes no parameters.
+Builds and returns a string containing the closing `form` tag.
 
 *Return Type*:
 
@@ -17,13 +17,21 @@ String
 
 -
 
+*Parameters:*:
+
+-
+
 *Examples*:
 
 {{{
 <!--- view code --->
 <cfoutput>
   #startFormTag(action="create")#
-     <!--- your form controls --->
+    <!--- your form controls --->
   #endFormTag()#
 </cfoutput>
 }}}
+
+*Related*:
+
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
