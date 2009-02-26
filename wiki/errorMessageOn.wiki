@@ -34,3 +34,7 @@ String
   #errorMessageOn(objectName="photo", property="isPublic")#</p>
 </cfoutput>
 }}}
+
+*Related*:
+
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
