@@ -1,26 +1,8 @@
-<cffunction name="contentForLayout" returntype="string" access="public" output="false" hint="View, Helper, Used inside a layout file to output the HTML created in the view.">
-
-	<!---
-		EXAMPLES:
-		<html>
-			<head>
-				<title>My Site</title>
-			</head>
-			<body>
-				<cfoutput>
-					#contentForLayout()#
-				</cfoutput>
-			</body>
-		</html>
-
-		RELATED:
-		 * [UsingLayouts Using Layouts] (chapter)
-	--->
-
+<cffunction name="contentForLayout" returntype="string" access="public" output="false" hint="Used inside a layout file to output the HTML created in the view.">
 	<cfreturn request.wheels.contentForLayout>
 </cffunction>
 
-<cffunction name="paginationLinks" returntype="string" access="public" output="false" hint="Builds and returns a string containing links to pages based on a paginated query. Uses linkTo() internally to build the link so you need to pass in a route name, controller or action. All other linkTo() arguments can of course be supplied as well in which case they are passed through directly to linkTo(). If you have paginated more than one query in the controller you can use the handle argument to reference them (don't forget to pass in a handle to the findAll() function in your controller first though).">
+<cffunction name="paginationLinks" returntype="string" access="public" output="false" hint="Builds and returns a string containing links to pages based on a paginated query. Uses `linkTo` internally to build the link so you need to pass in a route name, controller or action. All other `linkTo` arguments can of course be supplied as well in which case they are passed through directly to `linkTo`. If you have paginated more than one query in the controller you can use the `handle` argument to reference them (don't forget to pass in a `handle` to the `findAll` function in your controller first though).">
 	<cfargument name="windowSize" type="numeric" required="false" default="2" hint="The number of page links to show around the current page">
 	<cfargument name="alwaysShowAnchors" type="boolean" required="false" default="true" hint="Whether or not links to the first and last page should always be displayed">
 	<cfargument name="anchorDivider" type="string" required="false" default=" ... " hint="String to place next to the anchors on either side of the list">
@@ -125,24 +107,10 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="includePartial" returntype="any" access="public" output="false" hint="View, Helper, Includes a specified file.">
-	<cfargument name="name" type="any" required="true" hint="The name to the file to be included (starting with an optional path and with the underscore excluded). When only the name is supplied Wheels will look for the file in the current controller's view folder. When passing in a path it should be relative to the views folder. All partials should be saved with a leading underscore but the underscore should not be passed in to this function.">
-	<cfargument name="cache" type="any" required="false" default="" hint="Number of minutes to cache the partial for.">
-	<cfargument name="$type" type="any" required="false" default="include">
-
-	<!---
-		EXAMPLES:
-		<cfoutput>#includePartial("login")#</cfoutput>
-		-> If we're in the "Admin" controller Wheels will include the file "views/admin/_login.cfm".
-
-		<cfoutput>#includePartial(name="shared/button", cache=15)#</cfoutput>
-		-> Wheels will include the file "views/shared/_button.cfm" and cache it for 30 minutes.
-
-		RELATED:
-		 * [IncludingPartials Including Partials] (chapter)
-		 * [renderPartial renderPartial()] (function)
-	--->
-
+<cffunction name="includePartial" returntype="string" access="public" output="false" hint="Includes a specified file. Similar to using `cfinclude` but with the ability to cache the result and using Wheels specific file look-up. By default Wheels will look for the file in the current controller's view folder. To include a file relative from the `views` folder you can start the path supplied to `name` with a forward slash.">
+	<cfargument name="name" type="string" required="true" hint="The name of the file to be included (starting with an optional path and with the underscore and file extension excluded)">
+	<cfargument name="cache" type="any" required="false" default="" hint="Number of minutes to cache the partial for">
+	<cfargument name="$type" type="string" required="false" default="include">
 	<cfreturn $includeOrRenderPartial(argumentCollection=arguments)>
 </cffunction>
 
