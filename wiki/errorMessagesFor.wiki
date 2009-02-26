@@ -7,7 +7,7 @@
 
 *Description*
 
-Builds and returns a list (UL tag with a class of 'error-messages') containing all the error messages for all the properties of the object if any of the [ObjectValidation object validation] fails.
+Builds and returns a list (`ul` tag with a class of `error-messages`) containing all the error messages for all the properties of the object.
 
 *Return Type*:
 
@@ -18,13 +18,19 @@ String
 -
 
 *Parameters*:
-|| *objectName* || string || true ||  || The name of the object (model name) to display the error messages for ||
+
+|| *objectName* || string || true || - || The variable name of the object to display error messages for ||
 
 *Examples*:
 
 {{{
 <!--- view code --->
 <cfoutput>
-     #errorMessageFor(objectName="user")#
+  #errorMessageFor(objectName="user")#
 </cfoutput>
 }}}
+
+*Related*:
+
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
+ * [errorMessageOn errorMessageOn()] (function)
