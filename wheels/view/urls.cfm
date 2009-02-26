@@ -38,32 +38,21 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="buttonTo" returntype="string" access="public" output="false" hint="Creates a form containing a single button that submits to the URL. The URL is built the same way as the linkTo function.">
-	<cfargument name="text" type="string" required="false" default="" hint="The text content of the link.">
-	<cfargument name="confirm" type="string" required="false" default="" hint="Pass a message here to cause a JavaScript confirmation dialogue box to pop up containing the message.">
-	<cfargument name="disable" type="any" required="false" default="" hint="Pass in true if you want the button to be disabled when clicked (can help prevent multiple clicks). Pass in a string if you want the button disabled and the text on the button updated (to 'please wait...' for example).">
-	<cfargument name="source" type="string" required="false" default="" hint="If you want to use an image for the button pass in the link to it here (relative from the /images/ folder).">
-	<cfargument name="route" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="action" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="key" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="params" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="See documentation for URLFor">
-	<cfargument name="host" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="protocol" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="port" type="numeric" required="false" default="0" hint="See documentation for URLFor">
-
-	<!---
-		EXAMPLES:
-		#buttonTo(text="Delete Account", action="perFormDelete", disabled="Wait...")#
-
-		RELATED:
-		 * [LinkingPages Linking Pages] (chapter)
-		 * [linkTo linkTo()] (function)
-		 * [URLFor URLFor()] (function)
-	--->
-
+<cffunction name="buttonTo" returntype="string" access="public" output="false" hint="Creates a form containing a single button that submits to the URL. The URL is built the same way as the `linkTo` function.">
+	<cfargument name="disable" type="any" required="false" default="" hint="Pass in `true` if you want the button to be disabled when clicked (can help prevent multiple clicks) or pass in a string if you want the button disabled and the text on the button updated (to 'please wait...' for example)">
+	<cfargument name="source" type="string" required="false" default="" hint="If you want to use an image for the button pass in the link to it here (relative from the `images` folder)">
+	<cfargument name="text" type="string" required="false" default="" hint="See documentation for `linkTo`">
+	<cfargument name="confirm" type="string" required="false" default="" hint="See documentation for `linkTo`">
+	<cfargument name="route" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="action" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="key" type="any" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="params" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="See documentation for `URLFor`">
+	<cfargument name="host" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="protocol" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="port" type="numeric" required="false" default="0" hint="See documentation for `URLFor`">
 	<cfscript>
 		var loc = {};
 
