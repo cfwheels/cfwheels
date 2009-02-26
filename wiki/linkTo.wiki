@@ -1,17 +1,13 @@
 #summary linkTo([host,text,onlyPath,route,action,controller,anchor,params,protocol,id,url,confirm])
-#labels api,0.8,view,helper
-
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
+#labels api,1.0
 
 *Description*:
 
-Creates a link to another page in your application or externally. Pass in a route name to use your configured routes, controller/action/id to use that Wheels convention or the URL itself.
+Creates a link to another page in your application or externally. Pass in a route name to use your configured routes or a controller/action/key combination to use that Wheels convention.
 
 *Return Type*:
 
 String
-
-*
 
 *Parameters*:
 
@@ -28,8 +24,6 @@ String
 || *id* || numeric || false || 0 || See documentation for URLFor ||
 || *url* || string || false ||  || If linking to a direct URL, pass in that URL here. This is especially useful for external links or links to non-Wheels application pages. The URL can be absolute, document relative, or site root relative. ||
 || *confirm* || string || false ||  || Pass a message here to cause a JavaScript confirmation dialogue box to pop up containing the message. ||
-
-
 
 *Examples*:
 
