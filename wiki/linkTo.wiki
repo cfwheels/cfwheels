@@ -1,4 +1,4 @@
-#summary linkTo([host,text,onlyPath,route,action,controller,anchor,params,protocol,id,url,confirm])
+#summary linkTo([text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port])
 #labels api,1.0
 
 *Category*:
