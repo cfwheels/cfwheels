@@ -32,17 +32,17 @@
 	<cfreturn $trimHTML(loc.output)>
 </cffunction>
 
-<cffunction name="endFormTag" returntype="any" access="public" output="false">
+<cffunction name="endFormTag" returntype="any" access="public" output="false" hint="Builds and returns a string containing the closing `form` tag.">
 	<cfif StructKeyExists(request.wheels, "currentFormMethod")>
 		<cfset StructDelete(request.wheels, "currentFormMethod")>
 	</cfif>
 	<cfreturn "</form>">
 </cffunction>
 
-<cffunction name="submitTag" returntype="any" access="public" output="false">
-	<cfargument name="value" type="any" required="false" default="Save changes">
-	<cfargument name="image" type="string" required="false" default="">
-	<cfargument name="disable" type="any" required="false" default="">
+<cffunction name="submitTag" returntype="any" access="public" output="false" hint="Builds and returns a string containing a submit button `form` control.">
+	<cfargument name="value" type="string" required="false" default="Save changes" hint="Message to display in the button form control">
+	<cfargument name="image" type="string" required="false" default="" hint="File name of the image file to use in the button form control">
+	<cfargument name="disable" type="any" required="false" default="" hint="Whether to disable the button upon clicking (prevents double-clicking)">
 	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "value,image,disable">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
