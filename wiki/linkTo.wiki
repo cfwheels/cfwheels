@@ -1,13 +1,21 @@
 #summary linkTo([host,text,onlyPath,route,action,controller,anchor,params,protocol,id,url,confirm])
 #labels api,1.0
 
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
 *Description*:
 
-Creates a link to another page in your application or externally. Pass in a route name to use your configured routes or a controller/action/key combination to use that Wheels convention.
+Creates a link to another page in your application. Pass in a route name to use your configured routes or a controller/action/key combination.
 
 *Return Type*:
 
 String
+
+*History*:
+
+-
 
 *Parameters*:
 
@@ -52,20 +60,8 @@ String
 -> <a href="/user/joe">Joe's Profile</a> (given that a "userProfile" route has been configured in "config/routes.cfm".)
 }}}
 
-{{{
-#linkTo(url="http://www.google.com", text="Google")#
--> <a href="http://www.google.com">Google</a>
-}}}
-
-{{{
-#linkTo("http://www.google.com")#
--> <a href="http://www.google.com">http://www.google.com</a> (When leaving out the text argument Wheels will use the link as the text as well.)
-
-
-}}}
-
 *Related*:
 
- * [linkingPages] (chapter)
+ * [LinkingPages LinkingPages] (chapter)
  * [buttonTo buttonTo()] (function)
  * [URLFor URLFor()] (function)
