@@ -1,6 +1,10 @@
 #summary includePartial(name[cache])
 #labels api,1.0
 
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
 *Description*:
 
 Includes a specified file. Similar to using `cfinclude` but with the ability to cache the result and using Wheels specific file look-up. By default Wheels will look for the file in the current controller's view folder. To include a file relative from the `views` folder you can start the path supplied to `name` with a forward slash.
