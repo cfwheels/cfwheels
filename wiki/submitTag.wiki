@@ -1,4 +1,4 @@
-#summary submitTag([value, image, disable])
+#summary submitTag([value,image,disable])
 #labels api,1.0
 
 *Category*:
@@ -7,7 +7,7 @@
 
 *Description*
 
-Builds and returns a string containing a submit button form control.
+Builds and returns a string containing a submit button `form` control.
 
 *Return Type*:
 
@@ -21,14 +21,21 @@ String
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
 || *value* || string || false || Save changes || Message to display in the button form control ||
-|| *image* || string || false ||  || File name of the image file to use in the button form control ||
-|| *disable* || boolean || false ||  || Whenever or not to initially disable the button form control ||
+|| *image* || string || false ||   || File name of the image file to use in the button form control ||
+|| *disable* || boolean or string || false ||   || Whether to disable the button upon clicking (prevents double-clicking) ||
 
 *Examples*:
 
 {{{
 <!--- view code --->
 <cfoutput>
-  <p>#submitTag()#</p>
+  #startFormTag(action="something")#  
+    <!--- form controls goes here --->
+    #submitTag()#
+  #endFormTag()#  
 </cfoutput>
 }}}
+
+*Related*:
+
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
