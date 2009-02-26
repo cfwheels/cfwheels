@@ -7,7 +7,7 @@
 
 *Description*:
 
-Builds and returns a string containing links to pages based on a paginated query. Uses [linkTo linkTo()] internally to build the link so you need to pass in a route name, controller or action. All other [linkTo linkTo()] arguments can be supplied as well in which case they are passed through directly. If you have paginated more than one query in the controller you can use the `handle` argument to reference them (don't forget to set the `handle` using the [findAll findAll()] method in your controller first though).
+Builds and returns a string containing links to pages based on a paginated query. Uses `linkTo` internally to build the link so you need to pass in a route name, controller or action. All other `linkTo` arguments can of course be supplied as well in which case they are passed through directly to `linkTo`. If you have paginated more than one query in the controller you can use the `handle` argument to reference them (don't forget to pass in a `handle` to the `findAll` function in your controller first though).
 
 *Return Type*:
 
