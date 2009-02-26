@@ -1,0 +1,35 @@
+#summary errorMessageOn(objectName, property [prependText, appendText, wrapperElement])
+#labels api,1.0
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Builds and returns a string containing the error message if the [ObjectValidation object validation] fails.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+|| *objectName* || string || true ||  || The name of the object (model name) to display the error message for ||
+|| * property* || string || true || || The name of the property (database column) to display the error message for ||
+|| * prependText* || string || false || || Value to prepend to the error message ||
+|| * appendText* || string || false || || Value to append to the error message ||
+|| * wrapperElement* || string || false || div || Name of the HTML tag to wrap the error message in ||
+
+*Examples*:
+
+{{{
+<!--- view code --->
+<cfoutput>
+  <p>#checkBox(objectName="photo", property="isPublic", label="Is public?")# <br />
+     #errorMessageOn(objectName="photo", property="isPublic")#</p>
+</cfoutput>
+}}}
