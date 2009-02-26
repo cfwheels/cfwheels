@@ -5,35 +5,37 @@
 
 [ViewHelperFunctions View Helper Functions]
 
-==Description==
+*Description*:
 
 Used inside a layout file to output the HTML created in the view.
 
-==Return Type==
+*Return Type*:
 
-`any`
+String
 
-==Parameters==
+*History*:
 
-_None._
+-
 
-==Examples==
+*Parameters*:
+
+-
+
+*Examples*:
 
 {{{
 <html>
-<head>
-<title>My Site</title>
-</head>
-<body>
-<cfoutput>
-#contentForLayout()#
-</cfoutput>
-</body>
+  <head>
+    <title>My Site</title>
+  </head>
+  <body>
+  <cfoutput>
+    #contentForLayout()#
+  </cfoutput>
+  </body>
 </html>
-
-
 }}}
 
-==Related==
+*Related*:
 
- * [UsingLayouts Using Layouts] (chapter)
+ * [UsingLayouts UsingLayouts] (chapter)
