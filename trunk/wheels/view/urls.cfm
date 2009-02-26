@@ -1,40 +1,16 @@
-<cffunction name="linkTo" returntype="string" access="public" output="false" hint="View, Helper, Creates a link to another page in your application. Pass in a route name to use your configured routes or a controller/action/key combination.">
-	<cfargument name="text" type="string" required="false" default="" hint="The text content of the link.">
-	<cfargument name="confirm" type="string" required="false" default="" hint="Pass a message here to cause a JavaScript confirmation dialogue box to pop up containing the message.">
-	<cfargument name="route" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="action" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="key" type="any" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="params" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="See documentation for URLFor">
-	<cfargument name="host" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="protocol" type="string" required="false" default="" hint="See documentation for URLFor">
-	<cfargument name="port" type="numeric" required="false" default="0" hint="See documentation for URLFor">
-
-	<!---
-		EXAMPLES:
-		#linkTo(text="Log Out", controller="account", action="logOut")#
-		-> <a href="/account/logout">Log Out</a>
-
-		#linkTo(text="Log Out", action="logOut")#
-		-> <a href="/account/logout">Log Out</a> (if you're already in the "account" controller Wheels will assume that's where you want the link to go.)
-
-		#linkTo(text="View Post", controller="blog" action="post", key=99)#
-		-> <a href="/blog/post/99">View Post</a>
-
-		#linkTo(text="View Settings", action="settings", params="show=all&sort=asc")#
-		-> <a href="/account/settings?show=all&sort=asc">View Settings</a>
-
-		#linkTo(text="Joe's Profile", route="userProfile", userName="joe")#
-		-> <a href="/user/joe">Joe's Profile</a> (given that a "userProfile" route has been configured in "config/routes.cfm".)
-
-		RELATED:
-		 * [LinkingPages Linking Pages] (chapter)
-		 * [buttonTo buttonTo()] (function)
-		 * [URLFor URLFor()] (function)
-	--->
-
+<cffunction name="linkTo" returntype="string" access="public" output="false" hint="Creates a link to another page in your application. Pass in a route name to use your configured routes or a controller/action/key combination.">
+	<cfargument name="text" type="string" required="false" default="" hint="The text content of the link">
+	<cfargument name="confirm" type="string" required="false" default="" hint="Pass a message here to cause a JavaScript confirmation dialog box to pop up containing the message">
+	<cfargument name="route" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="action" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="key" type="any" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="params" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="See documentation for `URLFor`">
+	<cfargument name="host" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="protocol" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="port" type="numeric" required="false" default="0" hint="See documentation for `URLFor`">
 	<cfscript>
 		var loc = {};
 		if (application.settings.environment != "production")
@@ -62,7 +38,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="buttonTo" returntype="string" access="public" output="false" hint="View, Helper, Creates a form containing a single button that submits to the URL. The URL is built the same way as the linkTo function.">
+<cffunction name="buttonTo" returntype="string" access="public" output="false" hint="Creates a form containing a single button that submits to the URL. The URL is built the same way as the linkTo function.">
 	<cfargument name="text" type="string" required="false" default="" hint="The text content of the link.">
 	<cfargument name="confirm" type="string" required="false" default="" hint="Pass a message here to cause a JavaScript confirmation dialogue box to pop up containing the message.">
 	<cfargument name="disable" type="any" required="false" default="" hint="Pass in true if you want the button to be disabled when clicked (can help prevent multiple clicks). Pass in a string if you want the button disabled and the text on the button updated (to 'please wait...' for example).">
