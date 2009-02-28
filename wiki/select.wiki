@@ -45,6 +45,10 @@ String
 
 <!--- view code --->
 <cfoutput>
-  <p>#select(objectName="book", property="authorid", options=authors)#</p>
+  <p>#select(objectName="book", property="authorId", options=authors)#</p>
 </cfoutput>
 }}}
+
+*Related*:
+
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
