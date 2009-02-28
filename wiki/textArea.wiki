@@ -1,4 +1,4 @@
-#summary textArea(objectName, property [label, wrapLabel, prepend, append, prependToLabel, appendToLabel, errorElement])
+#summary textArea(objectName,property[label,wrapLabel,prepend,append,prependToLabel,appendToLabel, errorElement])
 #labels api,1.0
 
 *Category*:
@@ -7,7 +7,7 @@
 
 *Description*
 
-Builds and returns a string containing a textarea form control based on the supplied property and objectName. Wheels will generate the appropriate name convention for the form control.
+Builds and returns a string containing a text area form control based on the supplied `objectName` and `property`.
 
 *Return Type*:
 
@@ -20,15 +20,15 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *objectName* || string || true ||  || The name of the object (model name) to wrap the property around ||
-|| * property* || string || true || || The name of the property (database column) to use in the form control ||
-|| * label* || string || false || || The label to prepend to the form control ||
-|| * wrapLabel* || boolean || false || true || Sets whenever to wrap or not the form control inside the label HTML tag ||
-|| * prepend* || string || false || || Value to prepend to the form control. Useful to wrap the control around HTML tags ||
-|| * append* || string || false || || Value to append to the form control. Useful to wrap the control around HTML tags ||
-|| * prependToLabel* || string || false || || Value to prepend to the form control's label. Useful to wrap the control around HTML tags ||
-|| * appendToLabel* || string || false || || Value to append to the form control's label. Useful to wrap the control around HTML tags ||
-|| * errorElement* || string || false || div || Name of the HTML tag to wrap the form control when the [ObjectValidation object validation] fails ||
+|| *objectName* || string || true || - || See documentation for `textField` ||
+|| *property* || string || true || - || See documentation for `textField` ||
+|| *label* || string || false ||   || See documentation for `textField` ||
+|| *wrapLabel* || boolean || false || true || See documentation for `textField` ||
+|| *prepend* || string || false ||   || See documentation for `textField` ||
+|| *append* || string || false ||   || See documentation for `textField` ||
+|| *prependToLabel* || string || false ||   || See documentation for `textField` ||
+|| *appendToLabel* || string || false ||   || See documentation for `textField` ||
+|| *errorElement* || string || false || div || See documentation for `textField` ||
 
 *Examples*:
 
@@ -38,3 +38,7 @@ String
   <p>#textArea(objectName="article", property="overview")#</p>
 </cfoutput>
 }}}
+
+*Related*:
+
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
