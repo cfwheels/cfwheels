@@ -7,7 +7,7 @@
 
 *Description*
 
-BBuilds and returns a string containing a hidden field form control based on the supplied `objectName` and `property`.
+Builds and returns a string containing a hidden field form control based on the supplied `objectName` and `property`.
 
 *Return Type*:
 
