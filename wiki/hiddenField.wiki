@@ -31,3 +31,7 @@ String
   <p>#hiddenField(objectName="user", property="id")#</p>
 </cfoutput>
 }}}
+
+*Related*:
+
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
