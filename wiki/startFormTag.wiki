@@ -1,4 +1,4 @@
-#summary startFormTag([link, method, multipart, spamProtection])
+#summary startFormTag([method,multipart,spamProtection])
 #labels api,1.0
 
 *Category*:
@@ -7,7 +7,7 @@
 
 *Description*
 
-Builds and returns a string containing the opening form tag. 
+Builds and returns a string containing the opening form tag. The form's action will be built according to the same rules as linkTo.
 
 *Return Type*:
 
@@ -20,10 +20,9 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *link* || any || false ||  || For more information about this parameter refer to the [linkTo linkTo] documentation ||
-|| *method* || string || false || post  || The type of method to use in the form tag. Options are `get` and `post` ||
-|| *multipart* || boolean || false || false || Whenever or not the form should be multipart ||
-|| *spamProtection* || boolean || false || false || Whenever or not the form should be spam protected ||
+|| *method* || string || false || post || The type of method to use in the form tag, `get` and `post` are the options ||
+|| *multipart* || boolean || false || false || Set to `true` if the form should be able to upload files ||
+|| *spamProtection* || boolean || false || false || Set to `true` to protect the form against spammers (done with Javascript) ||
 
 *Examples*:
 
@@ -35,4 +34,3 @@ String
   #endFormTag()#
 </cfoutput>
 }}}
-
