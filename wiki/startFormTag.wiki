@@ -1,4 +1,4 @@
-#summary startFormTag([method,multipart,spamProtection])
+#summary startFormTag([method,multipart,spamProtection,route,controller,action,key,params,anchor,onlyPath,host,protocol,port])
 #labels api,1.0
 
 *Category*:
@@ -7,7 +7,7 @@
 
 *Description*
 
-Builds and returns a string containing the opening form tag. The form's action will be built according to the same rules as linkTo.
+Builds and returns a string containing the opening form tag. The form's action will be built according to the same rules as `URLFor`.
 
 *Return Type*:
 
@@ -23,13 +23,23 @@ String
 || *method* || string || false || post || The type of method to use in the form tag, `get` and `post` are the options ||
 || *multipart* || boolean || false || false || Set to `true` if the form should be able to upload files ||
 || *spamProtection* || boolean || false || false || Set to `true` to protect the form against spammers (done with Javascript) ||
+|| *route* || string || false ||   || See documentation for `URLFor` ||
+|| *controller* || string || false ||   || See documentation for `URLFor` ||
+|| *action* || string || false ||   || See documentation for `URLFor` ||
+|| *key* || string, list or number || false ||   || See documentation for `URLFor` ||
+|| *params* || string || false ||   || See documentation for `URLFor` ||
+|| *anchor* || string || false ||   || See documentation for `URLFor` ||
+|| *onlyPath* || boolean || false || true || See documentation for `URLFor` ||
+|| *host* || string || false ||   || See documentation for `URLFor` ||
+|| *protocol* || string || false ||   || See documentation for `URLFor` ||
+|| *port* || number || false ||   || See documentation for `URLFor` ||
 
 *Examples*:
 
 {{{
 <!--- view code --->
 <cfoutput>
-  #startFormTag(action="create")#
+  #startFormTag(action="create", spamProtection=true)#
      <!--- your form controls --->
   #endFormTag()#
 </cfoutput>
@@ -38,3 +48,4 @@ String
 *Related*:
 
  * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
+ * [URLFor URLFor()] (function)
