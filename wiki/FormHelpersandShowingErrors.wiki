@@ -85,7 +85,7 @@ If you really want to secure a form you have to do it server side, sure you can 
 
 Don't worry, securing the integrity of your Web app in Wheels is very easy, and assuming you have read by now the chapter on [ObjectValidation Object Validation] you can rest assure that your Web app is a lot safer now. But what about letting your users know about the error in the data they submitted to your application via your forms? fear not, there are [ViewHelperFunctions Helper Functions] just for that as well.
 
-Lets take the previous form example and add some visual indication to the user about what he did wrong and where. 
+Lets take the previous form example and add some visual indication to the user about what he did wrong and where, by simply adding the following code on your form page. 
 
 {{{
 <cfoutput>
@@ -93,4 +93,27 @@ Lets take the previous form example and add some visual indication to the user a
 </cfoutput>
 }}}
 
-How about that? With just that line of ColdFusion (and the desired validations on your Object Model) Wheels will generate a list of all errors with a HTML class name of `error-messages` on your profile Model and wrap each of the  failed fields with a surrounding `<div class="field-with-errors">` HTML tag for you to enrich with your ninja CSS skills.
+How about that? With just that line of code (and the desired validations on your Object Model) Wheels will generate an HTML unordered list with a HTML class name of `error-messages`, display all the error messages on your profile Model and wrap each of the  failed fields with a surrounding `<div class="field-with-errors">` HTML tag for you to enrich with your ninja CSS skills.
+
+But, lets say you don't want a list at all, and you need the error messages to appear just below (or anywhere else for that matter) the failed fields? Wheels can still help you all that it takes is a simple line of code for each form field you want some feedback to be displayed. Lets create some error messages for the `firstName` and `lastName` fields in the Wheels form example provided just a few paragraphs ago.
+
+{{{
+<cfoutput>
+
+#startFormTag(action="save")#
+
+    #textField(label="First Name", objectName="profile", property="firstName", prepend="<div>", append="</div>")#
+    #errorMessageOn(objectName="profile", property="firstName")#
+    
+    #textField(label="Last Name", objectName="profile", property="lastName", prepend="<div>", append="</div>")#
+    #errorMessageOn(objectName="profile", property="lastName")#
+    
+    #selectTag(label="Department", objectName="department", prepend="<div>", append="</div>")#
+    #submitTag(prepend="<div>", append="</div>")#
+
+#endFormTag()#
+
+</cfoutput>
+}}}
+
+Noticed the [errorMessageOn errorMessageOn] function added below the `firstName` and `lastName` fields? that's all it takes to display the corresponding error message of each form control anywhere you wish on your form.
