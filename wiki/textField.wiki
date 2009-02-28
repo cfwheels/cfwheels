@@ -22,13 +22,13 @@ String
 ||   || *Type* || *Required* || *Default* || *Description* ||
 || *objectName* || string || true ||  || The variable name of the object to build the form control for ||
 || * property* || string || true || || The name of the property (database column) to use in the form control ||
-|| * label* || string || false || || The label text to use the form control ||
+|| * label* || string || false || || The label text to use in the form control ||
 || * wrapLabel* || boolean || false || true || Whether or not to wrap the label around the form control ||
 || * prepend* || string || false || || String to prepend to the form control. Useful to wrap the form control around HTML tags ||
 || * append* || string || false || || String to append to the form control. Useful to wrap the form control around HTML tags ||
 || * prependToLabel* || string || false || || String to prepend to the form control's label. Useful to wrap the form control around HTML tags ||
 || * appendToLabel* || string || false || || String to append to the form control's label. Useful to wrap the form control around HTML tags ||
-|| * errorElement* || string || false || div || Name of the HTML tag to wrap the form control when the object contains errors ||
+|| * errorElement* || string || false || div || HTML tag to wrap the form control with when the object contains errors ||
 
 *Examples*:
 
