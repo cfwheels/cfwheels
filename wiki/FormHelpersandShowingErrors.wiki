@@ -1,6 +1,12 @@
 #summary Wheels ties your application's forms together with your model layer elegantly. With Wheels form conventions, you'll find yourself spending less time writing repetitive markup to display forms and error messages.
 #labels chapter
 
+=Form Helpers=
+
+Coding is not all about backend, there is a great deal of work to perform on the frontend on any Web application. Hopefully Wheels is here to take you to greener pastures with its [ViewHelperFunctions Helper Functions]. 
+
+Lets get visual, code examples:
+
 ==Simple Example: The Old Way==
 
 Let's take a look at a simple form for editing a user profile. Normally, you would code your web form similarly to this:
@@ -9,26 +15,31 @@ Let's take a look at a simple form for editing a user profile. Normally, you wou
 <cfoutput>
 
 <form action="/profile/save" method="post">
-    <div>
-        <label for="firstName">First Name
-        <input id="firstName" name="firstName" value="#profile.firstName#" /></label>
+    
+    <label for="firstName">First Name</label>
+    <div>        
+        <input id="firstName" name="firstName" value="#profile.firstName#" />
     </div>
-    <div>
-        <label for="lastName">Last Name
-        <input id="lastName" name="lastName" value="#profile.lastName#" /></label>
+    
+    <label for="lastName">Last Name</label>
+    <div>       
+        <input id="lastName" name="lastName" value="#profile.lastName#" />
     </div>
-    <div>
-        <label for="email">Email
-        <input id="email" name="email" value="#profle.email#" /></label>
+    
+    <label for="email">Email</label>
+    <div>      
+        <input id="email" name="email" value="#profle.email#" />
     </div>
+        
+    <label for="department">Department</label>
     <div>
-        <label for="department">Department
         <select id="department" name="departmentId">
             <cfloop query="departments">
                 <option value="#departments.id#">#departments.name#</option>
             </cfloop>
-        </select></label>
+        </select>
     </div>
+    
     <div>
         <input type="submit" value="Save Changes" />
     </div>
@@ -63,3 +74,11 @@ Let's rewrite and then explain.
 
 </cfoutput>
 }}}
+
+I know what you are thinking, 6 lines of code can't replace all that work right? they do, the HTML output will be exactly the same as the previous example. By using Wheels conventions you are saving yourself a lot of key strokes and a great deal of time. Lets examine the code a bit further to understand what happens under the hood of Wheels.
+
+Just like HTML, you need to open a form tag, insert some form controls and end the previous opened form tag. All of this is done via Wheels special [ViewHelperFunctions View Helper Functions], each of these functions will generate the corresponding  HTML markup in pure perfection.
+
+Still not impressed? Lets jump to something a bit more complicated, input validation.
+
+=Form Validation=
