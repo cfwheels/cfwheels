@@ -1,8 +1,6 @@
 #summary Wheels ties your application's forms together with your model layer elegantly. With Wheels form conventions, you'll find yourself spending less time writing repetitive markup to display forms and error messages.
 #labels chapter
 
-=Form Helpers=
-
 Coding is not all about backend, there is a great deal of work to perform on the frontend on any Web application. Hopefully Wheels is here to take you to greener pastures with its [ViewHelperFunctions Helper Functions]. 
 
 Lets get visual, code examples:
@@ -81,4 +79,4 @@ Just like HTML, you need to open a form tag, insert some form controls and end t
 
 Still not impressed? Lets jump to something a bit more complicated, input validation.
 
-=Form Validation=
+==Form Validation==
