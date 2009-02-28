@@ -1,20 +1,25 @@
-<cffunction name="startFormTag" returntype="any" access="public" output="false">
-	<cfargument name="link" type="any" required="false" default="">
-	<cfargument name="method" type="any" required="false" default="post">
-	<cfargument name="multipart" type="any" required="false" default="false">
-	<cfargument name="spamProtection" type="any" required="false" default="false">
-	<!--- Accepts URLFor arguments --->
+<cffunction name="startFormTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing the opening form tag. The form's action will be built according to the same rules as `URLFor`.">
+	<cfargument name="method" type="string" required="false" default="post" hint="The type of method to use in the form tag, `get` and `post` are the options">
+	<cfargument name="multipart" type="boolean" required="false" default="false" hint="Set to `true` if the form should be able to upload files">
+	<cfargument name="spamProtection" type="boolean" required="false" default="false" hint="Set to `true` to protect the form against spammers (done with Javascript)">
+	<cfargument name="route" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="action" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="key" type="any" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="params" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="See documentation for `URLFor`">
+	<cfargument name="host" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="protocol" type="string" required="false" default="" hint="See documentation for `URLFor`">
+	<cfargument name="port" type="numeric" required="false" default="0" hint="See documentation for `URLFor`">
 	<cfset var loc = {}>
-	<cfset arguments.$namedArguments = "link,method,multipart,spamProtection,controller,action,key,anchor,onlyPath,host,protocol,params">
+	<cfset arguments.$namedArguments = "method,multipart,spamProtection,route,controller,action,key,params,anchor,onlyPath,host,protocol,port">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
 	<cfset request.wheels.currentFormMethod = arguments.method>
 
-	<cfif Len(arguments.link) IS NOT 0>
-		<cfset loc.url = arguments.link>
-	<cfelse>
-		<cfset loc.url = URLFor(argumentCollection=arguments)>
-	</cfif>
+	<cfset loc.url = URLFor(argumentCollection=arguments)>
+
 	<!--- make sure we return XHMTL compliant code --->
 	<cfset loc.url = Replace(loc.url, "&", "&amp;", "all")>
 
@@ -32,14 +37,14 @@
 	<cfreturn $trimHTML(loc.output)>
 </cffunction>
 
-<cffunction name="endFormTag" returntype="any" access="public" output="false" hint="Builds and returns a string containing the closing `form` tag.">
+<cffunction name="endFormTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing the closing `form` tag.">
 	<cfif StructKeyExists(request.wheels, "currentFormMethod")>
 		<cfset StructDelete(request.wheels, "currentFormMethod")>
 	</cfif>
 	<cfreturn "</form>">
 </cffunction>
 
-<cffunction name="submitTag" returntype="any" access="public" output="false" hint="Builds and returns a string containing a submit button `form` control.">
+<cffunction name="submitTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a submit button `form` control.">
 	<cfargument name="value" type="string" required="false" default="Save changes" hint="Message to display in the button form control">
 	<cfargument name="image" type="string" required="false" default="" hint="File name of the image file to use in the button form control">
 	<cfargument name="disable" type="any" required="false" default="" hint="Whether to disable the button upon clicking (prevents double-clicking)">
@@ -68,16 +73,16 @@
 	<cfreturn $trimHTML(loc.output)>
 </cffunction>
 
-<cffunction name="textField" returntype="any" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="any" required="true">
-	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrapLabel" type="any" required="false" default="true">
-	<cfargument name="prepend" type="any" required="false" default="">
-	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prependToLabel" type="any" required="false" default="">
-	<cfargument name="appendToLabel" type="any" required="false" default="">
-	<cfargument name="errorElement" type="any" required="false" default="div">
+<cffunction name="textField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a text field form control based on the supplied `objectName` and `property`.">
+	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to build the form control for">
+	<cfargument name="property" type="string" required="true" hint="The name of the property (database column) to use in the form control">
+	<cfargument name="label" type="string" required="false" default="" hint="The label text to use in the form control">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="true" hint="Whether or not to wrap the label around the form control">
+	<cfargument name="prepend" type="string" required="false" default="" hint="String to prepend to the form control. Useful to wrap the form control around HTML tags">
+	<cfargument name="append" type="string" required="false" default="" hint="String to append to the form control. Useful to wrap the form control around HTML tags">
+	<cfargument name="prependToLabel" type="string" required="false" default="" hint="String to prepend to the form control's label. Useful to wrap the form control around HTML tags">
+	<cfargument name="appendToLabel" type="string" required="false" default="" hint="String to append to the form control's label. Useful to wrap the form control around HTML tags">
+	<cfargument name="errorElement" type="string" required="false" default="div" hint="HTML tag to wrap the form control with when the object contains errors">
 	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
@@ -93,17 +98,17 @@
 	<cfreturn $trimHTML(loc.output)>
 </cffunction>
 
-<cffunction name="radioButton" returntype="any" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="any" required="true">
-	<cfargument name="tagValue" type="any" required="true">
-	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrapLabel" type="any" required="false" default="true">
-	<cfargument name="prepend" type="any" required="false" default="">
-	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prependToLabel" type="any" required="false" default="">
-	<cfargument name="appendToLabel" type="any" required="false" default="">
-	<cfargument name="errorElement" type="any" required="false" default="div">
+<cffunction name="radioButton" returntype="string" access="public" output="false" hint="Builds and returns a string containing a radio button form control based on the supplied `objectName` and `property`.">
+	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="tagValue" type="string" required="true" hint="The value of the radio button when `selected`">
+	<cfargument name="label" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="true" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="div" hint="See documentation for `textField`">
 	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property,tagValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
@@ -123,18 +128,18 @@
 	<cfreturn $trimHTML(loc.output)>
 </cffunction>
 
-<cffunction name="checkBox" returntype="any" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="any" required="true">
-	<cfargument name="checkedValue" type="any" required="false" default="1">
-	<cfargument name="uncheckedValue" type="any" required="false" default="0">
-	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrapLabel" type="any" required="false" default="true">
-	<cfargument name="prepend" type="any" required="false" default="">
-	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prependToLabel" type="any" required="false" default="">
-	<cfargument name="appendToLabel" type="any" required="false" default="">
-	<cfargument name="errorElement" type="any" required="false" default="div">
+<cffunction name="checkBox" returntype="string" access="public" output="false" hint="Builds and returns a string containing a check box form control based on the supplied `objectName` and `property`.">
+	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="label" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="true" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="div" hint="See documentation for `textField`">
+	<cfargument name="checkedValue" type="string" required="false" default="1" hint="The value of the check box when its on the `checked` state">
+	<cfargument name="uncheckedValue" type="string" required="false" default="0" hint="The value of the check box when its on the `unchecked` state">
 	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property,checkedValue,uncheckedValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
@@ -158,16 +163,16 @@
 	<cfreturn $trimHTML(loc.output)>
 </cffunction>
 
-<cffunction name="passwordField" returntype="any" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="any" required="true">
-	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrapLabel" type="any" required="false" default="true">
-	<cfargument name="prepend" type="any" required="false" default="">
-	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prependToLabel" type="any" required="false" default="">
-	<cfargument name="appendToLabel" type="any" required="false" default="">
-	<cfargument name="errorElement" type="any" required="false" default="div">
+<cffunction name="passwordField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a password field form control based on the supplied `objectName` and `property`.">
+	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="label" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="true" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="div" hint="See documentation for `textField`">
 	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
@@ -183,9 +188,9 @@
 	<cfreturn $trimHTML(loc.output)>
 </cffunction>
 
-<cffunction name="hiddenField" returntype="any" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="any" required="true">
+<cffunction name="hiddenField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a hidden field form control based on the supplied `objectName` and `property`.">
+	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
@@ -204,16 +209,16 @@
 	<cfreturn $trimHTML(loc.output)>
 </cffunction>
 
-<cffunction name="textArea" returntype="any" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="any" required="true">
-	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrapLabel" type="any" required="false" default="true">
-	<cfargument name="prepend" type="any" required="false" default="">
-	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prependToLabel" type="any" required="false" default="">
-	<cfargument name="appendToLabel" type="any" required="false" default="">
-	<cfargument name="errorElement" type="any" required="false" default="div">
+<cffunction name="textArea" returntype="string" access="public" output="false" hint="Builds and returns a string containing a password field form control based on the supplied `objectName` and `property`.">
+	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="label" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="true" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="div" hint="See documentation for `textField`">
 	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
@@ -228,16 +233,16 @@
 	<cfreturn loc.output>
 </cffunction>
 
-<cffunction name="fileField" returntype="any" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="any" required="true">
-	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrapLabel" type="any" required="false" default="true">
-	<cfargument name="prepend" type="any" required="false" default="">
-	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prependToLabel" type="any" required="false" default="">
-	<cfargument name="appendToLabel" type="any" required="false" default="">
-	<cfargument name="errorElement" type="any" required="false" default="div">
+<cffunction name="fileField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a file field form control based on the supplied `objectName` and `property`.">
+	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="label" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="true" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="div" hint="See documentation for `textField`">
 	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
@@ -253,21 +258,21 @@
 	<cfreturn $trimHTML(loc.output)>
 </cffunction>
 
-<cffunction name="select" returntype="any" access="public" output="false">
-	<cfargument name="objectName" type="any" required="true">
-	<cfargument name="property" type="any" required="true">
+<cffunction name="select" returntype="string" access="public" output="false">
+	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="options" type="any" required="true">
+	<cfargument name="label" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="true" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="div" hint="See documentation for `textField`">
 	<cfargument name="includeBlank" type="any" required="false" default="false">
 	<cfargument name="multiple" type="any" required="false" default="false">
 	<cfargument name="valueField" type="any" required="false" default="id">
 	<cfargument name="textField" type="any" required="false" default="name">
-	<cfargument name="label" type="any" required="false" default="">
-	<cfargument name="wrapLabel" type="any" required="false" default="true">
-	<cfargument name="prepend" type="any" required="false" default="">
-	<cfargument name="append" type="any" required="false" default="">
-	<cfargument name="prependToLabel" type="any" required="false" default="">
-	<cfargument name="appendToLabel" type="any" required="false" default="">
-	<cfargument name="errorElement" type="any" required="false" default="div">
 	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property,options,includeBlank,multiple,valueField,textField,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
@@ -294,26 +299,26 @@
 	<cfreturn loc.output>
 </cffunction>
 
-<cffunction name="dateTimeSelect" returntype="any" access="public" output="false">
+<cffunction name="dateTimeSelect" returntype="string" access="public" output="false">
 	<cfset arguments.$functionName = "dateTimeSelect">
 	<cfreturn $dateTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="dateSelect" returntype="any" access="public" output="false">
+<cffunction name="dateSelect" returntype="string" access="public" output="false">
 	<cfargument name="order" type="any" required="false" default="month,day,year">
 	<cfargument name="separator" type="any" required="false" default=" ">
 	<cfset arguments.$functionName = "dateSelect">
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="timeSelect" returntype="any" access="public" output="false">
+<cffunction name="timeSelect" returntype="string" access="public" output="false">
 	<cfargument name="order" type="any" required="false" default="hour,minute,second">
 	<cfargument name="separator" type="any" required="false" default=":">
 	<cfset arguments.$functionName = "timeSelect">
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="$yearSelectTag" returntype="any" access="public" output="false">
+<cffunction name="$yearSelectTag" returntype="string" access="public" output="false">
 	<cfargument name="startYear" type="any" required="false" default="#year(now())-5#">
 	<cfargument name="endYear" type="any" required="false" default="#year(now())+5#">
 	<cfset arguments.$loopFrom = arguments.startYear>
@@ -325,7 +330,7 @@
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="$monthSelectTag" returntype="any" access="public" output="false">
+<cffunction name="$monthSelectTag" returntype="string" access="public" output="false">
 	<cfargument name="monthDisplay" type="any" required="false" default="names">
 	<cfset arguments.$loopFrom = 1>
 	<cfset arguments.$loopTo = 12>
@@ -340,7 +345,7 @@
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="$daySelectTag" returntype="any" access="public" output="false">
+<cffunction name="$daySelectTag" returntype="string" access="public" output="false">
 	<cfset arguments.$loopFrom = 1>
 	<cfset arguments.$loopTo = 31>
 	<cfset arguments.$type = "day">
@@ -348,7 +353,7 @@
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="$hourSelectTag" returntype="any" access="public" output="false">
+<cffunction name="$hourSelectTag" returntype="string" access="public" output="false">
 	<cfset arguments.$loopFrom = 0>
 	<cfset arguments.$loopTo = 23>
 	<cfset arguments.$type = "hour">
@@ -356,7 +361,7 @@
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="$minuteSelectTag" returntype="any" access="public" output="false">
+<cffunction name="$minuteSelectTag" returntype="string" access="public" output="false">
 	<cfargument name="minuteStep" type="any" required="false" default="1">
 	<cfset arguments.$loopFrom = 0>
 	<cfset arguments.$loopTo = 59>
@@ -366,7 +371,7 @@
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="$secondSelectTag" returntype="any" access="public" output="false">
+<cffunction name="$secondSelectTag" returntype="string" access="public" output="false">
 	<cfset arguments.$loopFrom = 0>
 	<cfset arguments.$loopTo = 59>
 	<cfset arguments.$type = "second">
@@ -374,7 +379,7 @@
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="$dateTimeSelect" returntype="any" access="public" output="false">
+<cffunction name="$dateTimeSelect" returntype="string" access="public" output="false">
 	<cfargument name="dateOrder" type="any" required="false" default="month,day,year" hint="Use to change the order of or exclude date select tags">
 	<cfargument name="timeOrder" type="any" required="false" default="hour,minute,second" hint="Use to change the order of or exclude time select tags ">
 	<cfargument name="dateSeparator" type="any" required="false" default=" " hint="Use to change the character that is displayed between the date select tags ">
@@ -405,7 +410,7 @@
 	<cfreturn loc.html>
 </cffunction>
 
-<cffunction name="$dateOrTimeSelect" returntype="any" access="public" output="false">
+<cffunction name="$dateOrTimeSelect" returntype="string" access="public" output="false">
 	<cfargument name="name" type="any" required="false" default="">
 	<cfargument name="value" type="any" required="false" default="">
 	<cfargument name="objectName" type="any" required="false" default="">
@@ -442,7 +447,7 @@
 	<cfreturn loc.html>
 </cffunction>
 
-<cffunction name="$yearMonthHourMinuteSecondSelectTag" returntype="any" access="public" output="false">
+<cffunction name="$yearMonthHourMinuteSecondSelectTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="any" required="true">
 	<cfargument name="value" type="any" required="false" default="">
 	<cfargument name="includeBlank" type="any" required="false" default="false">
@@ -499,7 +504,7 @@
 	<cfreturn loc.html>
 </cffunction>
 
-<cffunction name="$optionsForSelect" returntype="any" access="public" output="false">
+<cffunction name="$optionsForSelect" returntype="string" access="public" output="false">
 	<cfargument name="options" type="any" required="true">
 	<cfargument name="valueField" type="any" required="false" default="id">
 	<cfargument name="textField" type="any" required="false" default="name">
@@ -555,7 +560,7 @@
 	<cfreturn $trimHTML(loc.output)>
 </cffunction>
 
-<cffunction name="$formValue" returntype="any" access="public" output="false">
+<cffunction name="$formValue" returntype="string" access="public" output="false">
 	<cfargument name="objectName" type="any" required="false" default="">
 	<cfargument name="property" type="any" required="false" default="">
 	<cfargument name="name" type="any" required="false" default="">
@@ -577,25 +582,25 @@
 	<cfreturn loc.value>
 </cffunction>
 
-<cffunction name="$formHasError" returntype="any" access="public" output="false">
+<cffunction name="$formHasError" returntype="boolean" access="public" output="false">
 	<cfargument name="objectName" type="any" required="false" default="">
 	<cfargument name="property" type="any" required="false" default="">
 	<cfargument name="name" type="any" required="false" default="">
 	<cfargument name="value" type="any" required="false" default="">
 	<cfset var loc = {}>
 
-	<cfif Len(arguments.objectName) IS NOT 0>
-		<!--- this is a form field for a model object --->
-		<cfset loc.object = evaluate(arguments.objectName)>
-		<cfset loc.error = ArrayLen(loc.object.errorsOn(arguments.property))>
-	<cfelse>
-		<cfset loc.error = false>
+	<cfset loc.error = false>
+	<cfif Len(arguments.objectName)>
+		<cfset loc.object = Evaluate(arguments.objectName)>
+		<cfif ArrayLen(loc.object.errorsOn(arguments.property))>
+			<cfset loc.error = true>	
+		</cfif>
 	</cfif>
 
 	<cfreturn loc.error>
 </cffunction>
 
-<cffunction name="$formBeforeElement" returntype="any" access="public" output="false">
+<cffunction name="$formBeforeElement" returntype="string" access="public" output="false">
 	<cfargument name="objectName" type="any" required="false" default="">
 	<cfargument name="property" type="any" required="false" default="">
 	<cfargument name="name" type="any" required="false" default="">
@@ -636,7 +641,7 @@
 	<cfreturn loc.output>
 </cffunction>
 
-<cffunction name="$formAfterElement" returntype="any" access="public" output="false">
+<cffunction name="$formAfterElement" returntype="string" access="public" output="false">
 	<cfargument name="objectName" type="any" required="false" default="">
 	<cfargument name="property" type="any" required="false" default="">
 	<cfargument name="name" type="any" required="false" default="">
