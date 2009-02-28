@@ -77,6 +77,20 @@ I know what you are thinking, 6 lines of code can't replace all that work right?
 
 Just like HTML, you need to open a form tag, insert some form controls and end the previous opened form tag. All of this is done via Wheels special [ViewHelperFunctions View Helper Functions], each of these functions will generate the corresponding  HTML markup in pure perfection.
 
-Still not impressed? Lets jump to something a bit more complicated, input validation.
+Still not impressed? Lets jump to something a bit more complicated, giving feedback to your users on input validation.
 
-==Form Validation==
+==Form feedback==
+
+If you really want to secure a form you have to do it server side, sure you can add javascript here and there to validate your Web form. Unfortunately disabling javascript is only a couple of clicks away on any respected Web browser out there. 
+
+Don't worry, securing the integrity of your Web app in Wheels is very easy, and assuming you have read by now the chapter on [ObjectValidation Object Validation] you can rest assure that your Web app is a lot safer now. But what about letting your users know about the error in the data they submitted to your application via your forms? fear not, there are [ViewHelperFunctions Helper Functions] just for that as well.
+
+Lets take the previous form example and add some visual indication to the user about what he did wrong and where. 
+
+{{{
+<cfoutput>
+  #errorMessagesFor("profile")#
+</cfoutput>
+}}}
+
+How about that? With just that line of ColdFusion (and the desired validations on your Object Model) Wheels will generate a list of all errors with a HTML class name of `error-messages` on your profile Model and wrap each of the  failed fields with a surrounding `<div class="field-with-errors">` HTML tag for you to enrich with your ninja CSS skills.
