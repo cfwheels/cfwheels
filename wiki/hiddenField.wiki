@@ -7,7 +7,7 @@
 
 *Description*
 
-Builds and returns a string containing a hidden field form control based on the supplied property and objectName. Wheels will generate the appropriate name convention for the form control.
+Builds and returns a string containing a hidden field form control based on the supplied `property` and `objectName`. Wheels will generate the appropriate name convention for the form control.
 
 *Return Type*:
 
