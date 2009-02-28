@@ -20,8 +20,8 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *objectName* || string || true ||  || The variable name of the object to build the form control for ||
-|| * property* || string || true || || The name of the property (database column) to use in the form control ||
+|| *objectName* || string || true ||  || See documentation for `textField` ||
+|| * property* || string || true || || See documentation for `textField` ||
 
 *Examples*:
 
