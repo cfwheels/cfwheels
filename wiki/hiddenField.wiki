@@ -1,4 +1,4 @@
-#summary hiddenField(objectName, property)
+#summary hiddenField(objectName,property)
 #labels api,1.0
 
 *Category*:
@@ -7,7 +7,7 @@
 
 *Description*
 
-Builds and returns a string containing a hidden field form control based on the supplied `property` and `objectName`. Wheels will generate the appropriate name convention for the form control.
+BBuilds and returns a string containing a hidden field form control based on the supplied `objectName` and `property`.
 
 *Return Type*:
 
@@ -20,7 +20,7 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *objectName* || string || true ||  || The name of the object (model name) to wrap the property around ||
+|| *objectName* || string || true ||  || The variable name of the object to build the form control for ||
 || * property* || string || true || || The name of the property (database column) to use in the form control ||
 
 *Examples*:
