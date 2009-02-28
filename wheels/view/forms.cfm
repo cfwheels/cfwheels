@@ -258,10 +258,10 @@
 	<cfreturn $trimHTML(loc.output)>
 </cffunction>
 
-<cffunction name="select" returntype="string" access="public" output="false">
+<cffunction name="select" returntype="string" access="public" output="false" hint="Builds and returns a string containing a select form control based on the supplied `objectName` and `property`.">
 	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
-	<cfargument name="options" type="any" required="true">
+	<cfargument name="options" type="any" required="true" hint="A collection to populate the select form control with">
 	<cfargument name="label" type="string" required="false" default="" hint="See documentation for `textField`">
 	<cfargument name="wrapLabel" type="boolean" required="false" default="true" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="" hint="See documentation for `textField`">
@@ -269,10 +269,10 @@
 	<cfargument name="prependToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="div" hint="See documentation for `textField`">
-	<cfargument name="includeBlank" type="any" required="false" default="false">
-	<cfargument name="multiple" type="any" required="false" default="false">
-	<cfargument name="valueField" type="any" required="false" default="id">
-	<cfargument name="textField" type="any" required="false" default="name">
+	<cfargument name="includeBlank" type="boolean" required="false" default="false" hint="Whether to include a blank option in the select form control">
+	<cfargument name="multiple" type="boolean" required="false" default="false" hint="Whether to allow multiple selection of options in the select form control">
+	<cfargument name="valueField" type="string" required="false" default="id" hint="The column to use for the value of each list element, used only when a query has been supplied in the `options` argument">
+	<cfargument name="textField" type="string" required="false" default="name" hint="The column to use for the value of each list element that the end user will see, used only when a query has been supplied in the `options` argument">
 	<cfset var loc = {}>
 	<cfset arguments.$namedArguments = "objectName,property,options,includeBlank,multiple,valueField,textField,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
