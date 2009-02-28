@@ -20,7 +20,7 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *name* || any || true ||  || The name of the file to be included (starting with an optional path and with the underscore and file extension excluded) ||
+|| *name* || string || true ||  || The name of the file to be included (starting with an optional path and with the underscore and file extension excluded) ||
 || *cache* || boolean or number || false ||  || Number of minutes to cache the partial for ||
 
 *Examples*:
