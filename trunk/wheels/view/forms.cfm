@@ -299,21 +299,32 @@
 	<cfreturn loc.output>
 </cffunction>
 
-<cffunction name="dateTimeSelect" returntype="string" access="public" output="false">
+<cffunction name="dateTimeSelect" returntype="string" access="public" output="false" hint="Builds and returns a string containing six select form controls (three for date selection and the remaining three for time selection) based on the supplied `objectName` and `property`.">
+	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="dateOrder" type="string" required="false" default="month,day,year" hint="See documentation for `dateSelect`">
+	<cfargument name="timeOrder" type="string" required="false" default="hour,minute,second" hint="See documentation for `timeSelect`">
+	<cfargument name="dateSeparator" type="string" required="false" default=" " hint="See documentation for `dateSelect`">
+	<cfargument name="timeSeparator" type="string" required="false" default=":" hint="See documentation for `timeSelect`">
+	<cfargument name="separator" type="string" required="false" default=" - " hint="Use to change the character that is displayed between the first and second set of select tags">
 	<cfset arguments.$functionName = "dateTimeSelect">
 	<cfreturn $dateTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="dateSelect" returntype="string" access="public" output="false">
-	<cfargument name="order" type="any" required="false" default="month,day,year">
-	<cfargument name="separator" type="any" required="false" default=" ">
+<cffunction name="dateSelect" returntype="string" access="public" output="false" hint="Builds and returns a string containing three select form controls for a date based on the supplied `objectName` and `property`.">
+	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="order" type="string" required="false" default="month,day,year" hint="Use to change the order of or exclude date select tags">
+	<cfargument name="separator" type="string" required="false" default=" " hint="Use to change the character that is displayed between the date select tags">
 	<cfset arguments.$functionName = "dateSelect">
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="timeSelect" returntype="string" access="public" output="false">
-	<cfargument name="order" type="any" required="false" default="hour,minute,second">
-	<cfargument name="separator" type="any" required="false" default=":">
+<cffunction name="timeSelect" returntype="string" access="public" output="false" hint="Builds and returns a string containing three select form controls for a time based on the supplied `objectName` and `property`.">
+	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="order" type="any" required="false" default="hour,minute,second" hint="Use to change the order of or exclude time select tags">
+	<cfargument name="separator" type="any" required="false" default=":" hint="Use to change the character that is displayed between the time select tags">
 	<cfset arguments.$functionName = "timeSelect">
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
@@ -380,12 +391,6 @@
 </cffunction>
 
 <cffunction name="$dateTimeSelect" returntype="string" access="public" output="false">
-	<cfargument name="dateOrder" type="any" required="false" default="month,day,year" hint="Use to change the order of or exclude date select tags">
-	<cfargument name="timeOrder" type="any" required="false" default="hour,minute,second" hint="Use to change the order of or exclude time select tags ">
-	<cfargument name="dateSeparator" type="any" required="false" default=" " hint="Use to change the character that is displayed between the date select tags ">
-	<cfargument name="timeSeparator" type="any" required="false" default=":" hint="Use to change the character that is displayed between the time select tags ">
-	<cfargument name="separator" type="any" required="false" default=" - " hint="Use to change the character that is displayed between the first and second set of select tags ">
-	<cfargument name="$functionName" type="any" required="true">
 	<cfset var loc = {}>
 
 	<cfset loc.html = "">
@@ -396,7 +401,7 @@
 	<cfif arguments.$functionName IS "dateTimeSelect">
 		<cfset loc.html = loc.html & dateSelect(argumentCollection=arguments)>
 	<cfelseif arguments.$functionName IS "dateTimeSelectTag">
-		<cfset loc.html = loc.html & dateSelectTag(argumentCollection=arguments)>
+		<cfset loc.html = loc.html & $dateSelectTag(argumentCollection=arguments)>
 	</cfif>
 	<cfset loc.html = loc.html & loc.separator>
 	<cfset arguments.order = arguments.timeOrder>
@@ -404,10 +409,24 @@
 	<cfif arguments.$functionName IS "dateTimeSelect">
 		<cfset loc.html = loc.html & timeSelect(argumentCollection=arguments)>
 	<cfelseif arguments.$functionName IS "dateTimeSelectTag">
-		<cfset loc.html = loc.html & timeSelectTag(argumentCollection=arguments)>
+		<cfset loc.html = loc.html & $timeSelectTag(argumentCollection=arguments)>
 	</cfif>
 
 	<cfreturn loc.html>
+</cffunction>
+
+<cffunction name="$dateSelectTag" returntype="any" access="public" output="false">
+	<cfargument name="order" type="any" required="false" default="month,day,year">
+	<cfargument name="separator" type="any" required="false" default=" ">
+	<cfset arguments.$functionName = "dateSelectTag">
+	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
+</cffunction>
+
+<cffunction name="$timeSelectTag" returntype="any" access="public" output="false">
+	<cfargument name="order" type="any" required="false" default="hour,minute,second">
+	<cfargument name="separator" type="any" required="false" default=":">
+	<cfset arguments.$functionName = "timeSelectTag">
+	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$dateOrTimeSelect" returntype="string" access="public" output="false">
