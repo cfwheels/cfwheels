@@ -1,0 +1,39 @@
+#summary javaScriptIncludeTag(sources[type])
+#labels api,1.0
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Returns a `script` tag based on the supplied arguments.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *sources* || string || true ||   || The name of a JavaScript file in the `javascripts` folder ||
+|| *type* || string || false || text/javascript || The `type` attribute for the `script` tag ||
+
+*Examples*:
+
+{{{
+<!--- view code --->
+<head>
+  #javaScriptIncludeTag("main")#
+</head>
+}}}
+
+*Related*:
+
+ * [MiscellaneousHelpers MiscellaneousHelpers] (chapter)
+ * [styleSheetLinkTag styleSheetLinkTag()] (function)
+ * [imageTag imageTag()] (function)
