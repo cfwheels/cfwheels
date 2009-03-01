@@ -1,4 +1,4 @@
-#summary dateTimeSelect(objectName,property[dateOrder,timeOrder,dateSeparator,timeSeparator,separator])
+#summary dateTimeSelect(objectName,property[dateOrder,dateSeparator,startYear,endYear,monthDisplay,timeOrder,timeSeparator,minuteStep,separator])
 #labels api,1.0
 
 *Category*:
@@ -29,6 +29,7 @@ String
 || *monthDisplay* || string || false || names || See documentation for `dateSelect` ||
 || *timeOrder* || string || false || hour,minute,second || See documentation for `timeSelect` ||
 || *timeSeparator* || string || false || : || See documentation for `timeSelect` ||
+|| *minuteStep* || numeric || false || 1 || See documentation for `timeSelect` ||
 || *separator* || string || false || - || Use to change the character that is displayed between the first and second set of select tags ||
 
 *Examples*:
