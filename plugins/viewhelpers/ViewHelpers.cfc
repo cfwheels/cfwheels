@@ -678,8 +678,7 @@
 			EXAMPLES:
 			#dateSelectTag(order="year,month,day")#
 		--->
-		<cfset arguments.$functionName = "dateSelectTag">
-		<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
+		<cfreturn $dateSelectTag(argumentCollection=arguments)>
 	</cffunction>
 
 	<cffunction name="timeSelectTag" returntype="any" access="public" output="false" hint="Returns HTML select tags for choosing hour, minute and second">
@@ -693,8 +692,7 @@
 			EXAMPLES:
 			#timeSelectTag(order="hour,minute", separator=" - ")#
 		--->
-		<cfset arguments.$functionName = "timeSelectTag">
-		<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
+		<cfreturn $timeSelectTag(argumentCollection=arguments)>
 	</cffunction>
 
 	<cffunction name="yearSelectTag" returntype="any" access="public" output="false" hint="Returns a HTML select tag with years as options">
