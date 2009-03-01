@@ -114,6 +114,108 @@
 	<cfreturn $includeOrRenderPartial(argumentCollection=arguments)>
 </cffunction>
 
+<cffunction name="styleSheetLinkTag" returntype="string" access="public" output="false" hint="Returns a `link` tag based on the supplied arguments.">
+	<cfargument name="sources" type="any" required="true" hint="The name of a CSS file in the `stylesheets` folder">
+	<cfargument name="type" type="string" required="false" default="text/css" hint="The `type` attribute for the `link` tag">
+	<cfargument name="media" type="string" required="false" default="all" hint="The `media` attribute for the `link` tag">
+	<cfset var loc = {}>
+	<cfset arguments.$namedArguments = "sources">
+	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
+
+	<cfif application.settings.environment IS NOT "production">
+		<cfif StructKeyExists(arguments, "href")>
+			<cfset $throw(type="Wheels.IncorrectArguments", message="The 'href' argument is not allowed.", extendedInfo="You can't pass in the 'href' argument since it will be determined by Wheels.")>
+		<cfelseif StructKeyExists(arguments, "rel")>
+			<cfset $throw(type="Wheels.IncorrectArguments", message="The 'rel' argument is not allowed.", extendedInfo="You can't pass in the 'rel' argument since it will be determined by Wheels.")>
+		</cfif>
+	</cfif>
+
+	<cfset loc.result = "">
+	<cfloop list="#arguments.sources#" index="loc.i">
+		<cfset loc.href = "#application.wheels.webPath##application.wheels.stylesheetPath#/#Trim(loc.i)#">
+		<cfif loc.i Does Not Contain ".">
+			<cfset loc.href = loc.href & ".css">
+		</cfif>
+		<cfset loc.result = loc.result & '<link rel="stylesheet" href="#loc.href#"#loc.attributes# />'>
+	</cfloop>
+
+	<cfreturn loc.result>
+</cffunction>
+
+<cffunction name="javaScriptIncludeTag" returntype="string" access="public" output="false" hint="Returns a `script` tag based on the supplied arguments.">
+	<cfargument name="sources" type="string" required="true" hint="The name of a JavaScript file in the `javascripts` folder">
+	<cfargument name="type" type="string" required="false" default="text/javascript" hint="The `type` attribute for the `script` tag">
+	<cfset var loc = {}>
+	<cfset arguments.$namedArguments = "sources">
+	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
+
+	<cfif application.settings.environment IS NOT "production">
+		<cfif StructKeyExists(arguments, "src")>
+			<cfset $throw(type="Wheels.IncorrectArguments", message="The 'src' argument is not allowed.", extendedInfo="You can't pass in the 'src' argument since it will be determined by Wheels.")>
+		</cfif>
+	</cfif>
+
+	<cfset loc.result = "">
+	<cfloop list="#arguments.sources#" index="loc.i">
+		<cfset loc.src = "#application.wheels.webPath##application.wheels.javascriptPath#/#Trim(loc.i)#">
+		<cfif loc.i Does Not Contain ".">
+			<cfset loc.src = loc.src & ".js">
+		</cfif>
+		<cfset loc.result = loc.result & '<script src="#loc.src#"#loc.attributes#></script>'>
+	</cfloop>
+
+	<cfreturn loc.result>
+</cffunction>
+
+<cffunction name="imageTag" returntype="string" access="public" output="false" hint="">
+	<cfargument name="source" type="string" required="true" hint="">
+	<cfset var loc = {}>
+	<cfif application.settings.environment IS NOT "production">
+		<cfif Left(arguments.source, 7) IS NOT "http://" AND NOT FileExists(ExpandPath("#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#"))>
+			<cfset $throw(type="Wheels.ImageFileNotFound", message="Wheels could not find '#expandPath('#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#')#' on the local file system.", extendedInfo="Pass in a correct relative path from '#expandPath('#application.wheels.webPath##application.wheels.imagePath#\')#' to an image.")>
+		<cfelseif Left(arguments.source, 7) IS NOT "http://" AND arguments.source Does Not Contain ".jpg" AND arguments.source Does Not Contain ".gif" AND arguments.source Does Not Contain ".png">
+			<cfset $throw(type="Wheels.ImageFormatNotSupported", message="Wheels can't read image files with that format.", extendedInfo="Use a GIF, JPG or PNG image instead.")>
+		</cfif>
+	</cfif>
+
+	<cfset loc.category = "image">
+	<cfset loc.key = $hashStruct(arguments)>
+	<cfset loc.lockName = loc.category & loc.key>
+	<!--- double-checked lock --->
+	<cflock name="#loc.lockName#" type="readonly" timeout="30">
+		<cfset loc.result = $getFromCache(loc.key, loc.category, "internal")>
+	</cflock>
+	<cfif IsBoolean(loc.result) AND NOT loc.result>
+   	<cflock name="#loc.lockName#" type="exclusive" timeout="30">
+			<cfset loc.result = $getFromCache(loc.key, loc.category, "internal")>
+			<cfif IsBoolean(loc.result) AND NOT loc.result>
+				<cfset arguments.$namedArguments = "source">
+				<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
+				<cfif Left(arguments.source, 7) IS "http://">
+					<cfset loc.src = arguments.source>
+				<cfelse>
+					<cfset loc.src = "#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#">
+					<cfif NOT StructKeyExists(arguments, "width") OR NOT StructKeyExists(arguments, "height")>
+						<cfimage action="info" source="#expandPath(loc.src)#" structname="loc.image">
+						<cfif loc.image.width GT 0 AND loc.image.height GT 0>
+							<cfset loc.attributes = loc.attributes & " width=""#loc.image.width#"" height=""#loc.image.height#""">
+						</cfif>
+					</cfif>
+				</cfif>
+				<cfif NOT StructKeyExists(arguments, "alt")>
+					<cfset loc.attributes = loc.attributes & " alt=""#titleize(replaceList(spanExcluding(Reverse(spanExcluding(Reverse(loc.src), "/")), "."), "-,_", " , "))#""">
+				</cfif>
+				<cfset loc.result = "<img src=""#loc.src#""#loc.attributes# />">
+				<cfif application.settings.cacheImages>
+					<cfset $addToCache(loc.key, loc.result, 86400, loc.category, "internal")>
+				</cfif>
+			</cfif>
+		</cflock>
+	</cfif>
+
+	<cfreturn loc.result>
+</cffunction>
+
 <cffunction name="$trimHTML" returntype="string" access="public" output="false">
 	<cfargument name="str" type="string" required="true">
 	<cfreturn replaceList(trim(arguments.str), "#chr(9)#,#chr(10)#,#chr(13)#", ",,")>
