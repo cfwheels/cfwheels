@@ -34,6 +34,6 @@ String
 
 *Related*:
 
- * [MiscellaneousHelpers MiscellaneousHelpers] (chapter)
+ * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
  * [styleSheetLinkTag styleSheetLinkTag()] (function)
  * [imageTag imageTag()] (function)
