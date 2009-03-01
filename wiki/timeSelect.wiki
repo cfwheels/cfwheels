@@ -1,4 +1,4 @@
-#summary timeSelect(objectName, property [order, separator])
+#summary timeSelect(objectName,property[order,separator])
 #labels api,1.0
 
 *Category*:
@@ -7,7 +7,7 @@
 
 *Description*
 
-Builds and returns a string containing three (3) select form controls based on the supplied property and objectName. Wheels will generate the appropriate name convention for the form control.
+Builds and returns a string containing three select form controls for a time based on the supplied `objectName` and `property`.
 
 *Return Type*:
 
@@ -20,17 +20,20 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *objectName* || string || true ||  || The name of the object (model name) to wrap the property around ||
-|| * property* || string || true || || The name of the property (database column) to use in the form control ||
-|| * order* || string || false || hour,minute,second || A list specifying in which order to include (or exclude) the `hour`, `minute` and `second` select controls ||
-|| * separator* || string || false || : || Text to include between the three (3) select form controls ||
+|| *objectName* || string || true || - || See documentation for `textField` ||
+|| *property* || string || true || - || See documentation for `textField` ||
+|| *order* || string || false || month,day,year || Use to change the order of or exclude time select tags ||
+|| *separator* || string || false ||   || Use to change the character that is displayed between the time select tags ||
 
 *Examples*:
 
 {{{
 <!--- view code --->
 <cfoutput>
-  <p><label>Open until</label> <br />
-          #timeSelect(objectName='business', property='openUntil')#</p>	
+  <p>#timeSelect(objectName="business", property="openUntil")#</p>	
 </cfoutput>
 }}}
+
+*Related*:
+
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
