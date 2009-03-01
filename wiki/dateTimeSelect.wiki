@@ -1,4 +1,4 @@
-#summary dateTimeSelect(objectName, property [dateOrder, timeOrder, dateSeparator, timeSeparator, separator])
+#summary dateTimeSelect(objectName,property[dateOrder,timeOrder,dateSeparator,timeSeparator,separator])
 #labels api,1.0
 
 *Category*:
@@ -22,10 +22,10 @@ String
 ||   || *Type* || *Required* || *Default* || *Description* ||
 || *objectName* || string || true || - || See documentation for `textField` ||
 || *property* || string || true || - || See documentation for `textField` ||
-|| *dateOrder* || string || false || month,day,year || Use to change the order of or exclude date select tags ||
-|| *timeOrder* || string || false || hour,minute,second || Use to change the order of or exclude time select tags ||
-|| *dateSeparator* || string || false ||   || Use to change the character that is displayed between the date select tags ||
-|| *timeSeparator* || string || false || : || Use to change the character that is displayed between the time select tags ||
+|| *dateOrder* || string || false || month,day,year || See documentation for `dateSelect` ||
+|| *timeOrder* || string || false || hour,minute,second || See documentation for `timeSelect` ||
+|| *dateSeparator* || string || false ||   || See documentation for `dateSelect` ||
+|| *timeSeparator* || string || false || : || See documentation for `timeSelect` ||
 || *separator* || string || false || - || Use to change the character that is displayed between the first and second set of select tags ||
 
 *Examples*:
