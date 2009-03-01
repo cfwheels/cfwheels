@@ -7,7 +7,7 @@
 
 *Description*
 
-Builds and returns a string containing six (6) select form controls (three for date selection and the remaining three for time selection) based on the supplied property and objectName. Wheels will generate the appropriate name convention for the form controls.
+Builds and returns a string containing six select form controls (three for date selection and the remaining three for time selection) based on the supplied `objectName` and `property`.
 
 *Return Type*:
 
@@ -20,20 +20,23 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *objectName* || string || true ||  || The name of the object (model name) to wrap the property around ||
-|| * property* || string || true || || The name of the property (database column) to use in the checkbox ||
-|| * dateOrder* || string || false || month,day,year || A list specifying in which order to include (or exclude) the `day`, `month` and `year` select controls ||
-|| * timeOrder* || string || false || hour,minute,second || A list specifying in which order to include (or exclude) the `hour`, `minute` and `second` select controls ||
-|| * dateSeparator* || string || false ||  || Text to include between the three (3) date select form controls ||
-|| * timeSeparator* || string || false || : || Text to include between the three (3) time select form controls ||
-|| * separator* || string || false || - || Text to include between the first and second set of select form controls ||
+|| *objectName* || string || true || - || See documentation for `textField` ||
+|| *property* || string || true || - || See documentation for `textField` ||
+|| *dateOrder* || string || false || month,day,year || Use to change the order of or exclude date select tags ||
+|| *timeOrder* || string || false || hour,minute,second || Use to change the order of or exclude time select tags ||
+|| *dateSeparator* || string || false ||   || Use to change the character that is displayed between the date select tags ||
+|| *timeSeparator* || string || false || : || Use to change the character that is displayed between the time select tags ||
+|| *separator* || string || false || - || Use to change the character that is displayed between the first and second set of select tags ||
 
 *Examples*:
 
 {{{
 <!--- view code --->
 <cfoutput>
-  <p><label>Created at</label> <br />
-          #dateTimeSelect(objectName='article', property='createdAt')#</p>	
+  <p>#dateTimeSelect(objectName="article", property="publishedAt")#</p>	
 </cfoutput>
 }}}
+
+*Related*:
+
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
