@@ -323,8 +323,8 @@
 <cffunction name="timeSelect" returntype="string" access="public" output="false" hint="Builds and returns a string containing three select form controls for a time based on the supplied `objectName` and `property`.">
 	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
-	<cfargument name="order" type="any" required="false" default="hour,minute,second" hint="Use to change the order of or exclude time select tags">
-	<cfargument name="separator" type="any" required="false" default=":" hint="Use to change the character that is displayed between the time select tags">
+	<cfargument name="order" type="string" required="false" default="hour,minute,second" hint="Use to change the order of or exclude time select tags">
+	<cfargument name="separator" type="string" required="false" default=":" hint="Use to change the character that is displayed between the time select tags">
 	<cfset arguments.$functionName = "timeSelect">
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
