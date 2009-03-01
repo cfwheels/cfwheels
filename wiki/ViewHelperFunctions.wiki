@@ -15,11 +15,6 @@ These functions can be called from the views to create output for use in a HTML 
 
 ==Functions==
 
-*Media:*
- * [imageTag imageTag()]
- * [javaScriptIncludeTag javaScriptIncludeTag()]
- * [styleSheetLinkTag styleSheetLinkTag()]
-
 *Content:*
  * [contentForLayout contentForLayout()]
  * [includePartial includePartial()]
@@ -48,3 +43,8 @@ These functions can be called from the views to create output for use in a HTML 
  * [buttonTo buttonTo()]
  * [linkTo linkTo()]
  * [paginationLinks paginationLinks()]
+
+*Media:*
+ * [imageTag imageTag()]
+ * [javaScriptIncludeTag javaScriptIncludeTag()]
+ * [styleSheetLinkTag styleSheetLinkTag()]
