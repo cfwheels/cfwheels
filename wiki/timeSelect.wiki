@@ -1,4 +1,4 @@
-#summary timeSelect(objectName,property[order,separator])
+#summary timeSelect(objectName,property[order,separator,minuteStep])
 #labels api,1.0
 
 *Category*:
@@ -24,6 +24,7 @@ String
 || *property* || string || true || - || See documentation for `textField` ||
 || *order* || string || false || month,day,year || Use to change the order of or exclude time select tags ||
 || *separator* || string || false ||   || Use to change the character that is displayed between the time select tags ||
+|| *minuteStep* || numeric || false || 1 || Pass in `10` to only show minute 10, 20,30 etc ||
 
 *Examples*:
 
