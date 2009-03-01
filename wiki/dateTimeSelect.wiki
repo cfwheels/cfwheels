@@ -23,8 +23,11 @@ String
 || *objectName* || string || true || - || See documentation for `textField` ||
 || *property* || string || true || - || See documentation for `textField` ||
 || *dateOrder* || string || false || month,day,year || See documentation for `dateSelect` ||
-|| *timeOrder* || string || false || hour,minute,second || See documentation for `timeSelect` ||
 || *dateSeparator* || string || false ||   || See documentation for `dateSelect` ||
+|| *startYear* || numeric || false || #Year(Now())-5# || See documentation for `dateSelect` ||
+|| *endYear* || numeric || false || #Year(Now())+5# || See documentation for `dateSelect` ||
+|| *monthDisplay* || string || false || names || See documentation for `dateSelect` ||
+|| *timeOrder* || string || false || hour,minute,second || See documentation for `timeSelect` ||
 || *timeSeparator* || string || false || : || See documentation for `timeSelect` ||
 || *separator* || string || false || - || Use to change the character that is displayed between the first and second set of select tags ||
 
