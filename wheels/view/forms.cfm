@@ -322,7 +322,7 @@
 	<cfargument name="separator" type="string" required="false" default=" " hint="Use to change the character that is displayed between the date select tags">
 	<cfargument name="startYear" type="numeric" required="false" default="#Year(Now())-5#" hint="First year in select list">
 	<cfargument name="endYear" type="numeric" required="false" default="#Year(Now())+5#" hint="Last year in select list">
-	<cfargument name="monthDisplay" type="string" required="false" default="names" hint="pass in `names`, `numbers` or `abbreviations` to control display">
+	<cfargument name="monthDisplay" type="string" required="false" default="names" hint="Pass in `names`, `numbers` or `abbreviations` to control display">
 	<cfset arguments.$functionName = "dateSelect">
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
