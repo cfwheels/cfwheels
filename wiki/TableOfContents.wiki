@@ -50,6 +50,7 @@
  * [UsingLayouts Using Layouts]
  * [FormHelpersandShowingErrors Form Helpers and Showing Errors]
  * [DisplayingLinksforPagination Displaying Links for Pagination]
+ * [MiscellaneousHelpers MiscellaneousHelpers]
  * [CreatingYourOwnViewHelpers Creating Your Own View Helpers]
 
 ===Sample Applications===
