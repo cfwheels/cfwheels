@@ -1,4 +1,4 @@
-#summary select(objectName, property, options[label, wrapLabel, prepend, append, prependToLabel, appendToLabel, errorElement, includeBlank, multiple, valueField, textField])
+#summary select(objectName,property,options[label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement,includeBlank,multiple,valueField,textField])
 #labels api,1.0
 
 *Category*:
