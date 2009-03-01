@@ -35,6 +35,6 @@ String
 
 *Related*:
 
- * [MiscellaneousHelpers MiscellaneousHelpers] (chapter)
+ * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
  * [javaScriptIncludeTag javaScriptIncludeTag()] (function)
  * [imageTag imageTag()] (function)
