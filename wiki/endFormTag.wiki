@@ -35,3 +35,16 @@ String
 *Related*:
 
  * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
+ * [startFormTag startFormTag()] (function)
+ * [submitTag submitTag()] (function)
+ * [textField textField()] (function)
+ * [radioButton radioButton()] (function)
+ * [checkBox checkBox()] (function)
+ * [passwordField passwordField()] (function)
+ * [hiddenField hiddenField()] (function)
+ * [textArea textArea()] (function)
+ * [fileField fileField()] (function)
+ * [select select()] (function)
+ * [dateTimeSelect dateTimeSelect()] (function)
+ * [dateSelect dateSelect()] (function)
+ * [timeSelect timeSelect()] (function)
