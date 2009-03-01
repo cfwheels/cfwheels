@@ -303,9 +303,13 @@
 	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="dateOrder" type="string" required="false" default="month,day,year" hint="See documentation for `dateSelect`">
-	<cfargument name="timeOrder" type="string" required="false" default="hour,minute,second" hint="See documentation for `timeSelect`">
 	<cfargument name="dateSeparator" type="string" required="false" default=" " hint="See documentation for `dateSelect`">
+	<cfargument name="startYear" type="numeric" required="false" default="#Year(Now())-5#" hint="See documentation for `dateSelect`">
+	<cfargument name="endYear" type="numeric" required="false" default="#Year(Now())+5#" hint="See documentation for `dateSelect`">
+	<cfargument name="monthDisplay" type="string" required="false" default="names" hint="See documentation for `dateSelect`">
+	<cfargument name="timeOrder" type="string" required="false" default="hour,minute,second" hint="See documentation for `timeSelect`">
 	<cfargument name="timeSeparator" type="string" required="false" default=":" hint="See documentation for `timeSelect`">
+	<cfargument name="minuteStep" type="numeric" required="false" default="1" hint="See documentation for `timeSelect`">
 	<cfargument name="separator" type="string" required="false" default=" - " hint="Use to change the character that is displayed between the first and second set of select tags">
 	<cfset arguments.$functionName = "dateTimeSelect">
 	<cfreturn $dateTimeSelect(argumentCollection=arguments)>
@@ -316,6 +320,9 @@
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="order" type="string" required="false" default="month,day,year" hint="Use to change the order of or exclude date select tags">
 	<cfargument name="separator" type="string" required="false" default=" " hint="Use to change the character that is displayed between the date select tags">
+	<cfargument name="startYear" type="numeric" required="false" default="#Year(Now())-5#" hint="First year in select list">
+	<cfargument name="endYear" type="numeric" required="false" default="#Year(Now())+5#" hint="Last year in select list">
+	<cfargument name="monthDisplay" type="string" required="false" default="names" hint="pass in `names`, `numbers` or `abbreviations` to control display">
 	<cfset arguments.$functionName = "dateSelect">
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
@@ -325,6 +332,7 @@
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="order" type="string" required="false" default="hour,minute,second" hint="Use to change the order of or exclude time select tags">
 	<cfargument name="separator" type="string" required="false" default=":" hint="Use to change the character that is displayed between the time select tags">
+	<cfargument name="minuteStep" type="numeric" required="false" default="1" hint="Pass in `10` to only show minute 10, 20,30 etc">
 	<cfset arguments.$functionName = "timeSelect">
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
