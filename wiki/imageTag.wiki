@@ -1,0 +1,35 @@
+#summary imageTag(source)
+#labels api,1.0
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Returns an image tag and will (if the image is stored in the local `images` folder) set the `width`, `height` and `alt` attributes automatically for you.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *source* || string || true || - || Image file name if local or full URL if remote ||
+
+*Examples*:
+
+{{{
+#imageTag("logo.png")#
+}}}
+
+*Related*:
+
+ * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
+ * [javaScriptIncludeTag javaScriptIncludeTag()] (function)
+ * [styleSheetLinkTag styleSheetLinkTag()] (function)
