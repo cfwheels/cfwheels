@@ -167,8 +167,8 @@
 	<cfreturn loc.result>
 </cffunction>
 
-<cffunction name="imageTag" returntype="string" access="public" output="false" hint="">
-	<cfargument name="source" type="string" required="true" hint="">
+<cffunction name="imageTag" returntype="string" access="public" output="false" hint="Returns an image tag and will (if the image is stored in the local `images` folder) set the `width`, `height` and `alt` attributes automatically for you.">
+	<cfargument name="source" type="string" required="true" hint="Image file name if local or full URL if remote">
 	<cfset var loc = {}>
 	<cfif application.settings.environment IS NOT "production">
 		<cfif Left(arguments.source, 7) IS NOT "http://" AND NOT FileExists(ExpandPath("#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#"))>
