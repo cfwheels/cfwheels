@@ -7,7 +7,7 @@
 
 *Description*:
 
-Fetches the first record found based on the `WHERE` and `ORDER BY` clauses and returns it as an object. Throws an error if no record is found.
+Fetches the first record found based on the `WHERE` and `ORDER BY` clauses and returns it as an object. Returns `false` if no record is found.
 
 *Return Type*:
 
