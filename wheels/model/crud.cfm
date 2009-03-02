@@ -490,7 +490,7 @@
 <cffunction name="reload" returntype="void" access="public" output="false" hint="Reloads the property values of this object from the database.">
 	<cfscript>
 		var loc = {};
-		loc.query = findByKey(key=id(), reload=true, $create=false);
+		loc.query = findByKey(key=key(), reload=true, $create=false);
 		loc.iEnd = ListLen(variables.wheels.class.propertyList);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
