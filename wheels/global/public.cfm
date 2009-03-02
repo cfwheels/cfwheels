@@ -32,7 +32,7 @@
 		{
 			// link for a named route
 			loc.route = application.wheels.routes[application.wheels.namedRoutePositions[arguments.route]];
-			if (application.wheels.URLRewriting == "Off")
+			if (application.settings.URLRewriting == "Off")
 			{
 				loc.returnValue = loc.returnValue & "?controller=" & REReplace(REReplace(loc.route.controller, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
 				loc.returnValue = loc.returnValue & "&action=" & REReplace(REReplace(loc.route.action, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
@@ -74,13 +74,13 @@
 			}
 		}
 
-		if (application.wheels.URLRewriting != "Off")
+		if (application.settings.URLRewriting != "Off")
 		{
 			loc.returnValue = Replace(loc.returnValue, "?controller=", "/");
 			loc.returnValue = Replace(loc.returnValue, "&action=", "/");
 			loc.returnValue = Replace(loc.returnValue, "&key=", "/");
 		}
-		if (application.wheels.URLRewriting == "On")
+		if (application.settings.URLRewriting == "On")
 		{
 			loc.returnValue = Replace(loc.returnValue, "rewrite.cfm/", "");
 		}

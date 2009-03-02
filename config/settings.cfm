@@ -1,4 +1,5 @@
-<!--- miscellaneous --->
+<!--- Miscellaneous --->
+<cfset application.settings.URLRewriting = ""> 
 <cfset application.settings.tableNamePrefix = "">
 <cfset application.settings.obfuscateURLs = false>
 <cfset application.settings.reloadPassword = "">
@@ -7,7 +8,15 @@
 <cfset application.settings.timeStampOnUpdateProperty = "updatedAt">
 <cfset application.settings.ipExceptions = "">
 
-<!--- default for functions --->
+<!---
+	The URLRewriting setting can bet set to "On", "Partial" or "Off".
+	When left blank Wheels will try to determine the URL rewrite capabilities automatically.
+	To run with "Partial" rewriting the "cgi.path_info" variable needs to be supported by the web server.
+	To run with rewriting "On" you need to apply the necessary rewrite rules on the web server first.
+--->
+<cfset application.settings.URLRewriting = ""> 
+
+<!--- Default for functions --->
 <cfset application.settings.get.parameterize = true>
 <cfset application.settings.get.reload = false>
 <cfset application.settings.findOne.parameterize = true>
@@ -32,12 +41,13 @@
 <cfset application.settings.validatesPresenceOf.message = "[property] can't be empty">
 <cfset application.settings.validatesUniquenessOf.message = "[property] has already been taken">
 
+<!--- Email delivery settings --->
 <cfset application.settings.sendEmail.layout = false>
 <cfset application.settings.sendEmail.from = "">
 <cfset application.settings.sendEmail.to = "">
 <cfset application.settings.sendEmail.subject = "">
 
-<!--- caching --->
+<!--- Caching --->
 <cfset application.settings.maximumItemsToCache = 1000>
 <cfset application.settings.cacheCullPercentage = 10>
 <cfset application.settings.cacheCullInterval = 5>

@@ -17,12 +17,6 @@
 		if ((application.wheels.serverName == "Railo" && loc.majorVersion < 3) || (application.wheels.serverName == "Adobe ColdFusion" && loc.majorVersion < 8))
 			$throw(type="Wheels.NoSupport", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Upgrade to Adobe ColdFusion 8 or Railo 3.");
 		application.wheels.version = "0.9";
-		if (Right(cgi.script_name, 12) IS "/rewrite.cfm")
-			application.wheels.URLRewriting = "On";
-		else if (Len(cgi.path_info))
-			application.wheels.URLRewriting = "Partial";
-		else
-			application.wheels.URLRewriting = "Off";
 		application.wheels.controllers = {};
 		application.wheels.models = {};
 		application.wheels.existingModelFiles = "";
@@ -84,6 +78,17 @@
 			$include(template="#application.wheels.configPath#/environment.cfm");
 		$include(template="#application.wheels.configPath#/settings.cfm");
 		$include(template="#application.wheels.configPath#/environments/#application.settings.environment#.cfm");
+		
+		// try to determine url rewrite capabilites unless set manually by the developer
+		if (!Len(application.settings.URLRewriting))
+		{
+			if (Right(cgi.script_name, 12) == "/rewrite.cfm")
+				application.settings.URLRewriting = "On";
+			else if (Len(cgi.path_info))
+				application.settings.URLRewriting = "Partial";
+			else
+				application.settings.URLRewriting = "Off";
+		}
 		
 		// load developer routes and add wheels default ones
 		$include(template="#application.wheels.configPath#/routes.cfm");
