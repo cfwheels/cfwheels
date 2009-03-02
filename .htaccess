@@ -1,3 +1,3 @@
-# RewriteEngine on
-# RewriteCond %{REQUEST_URI} !^/(flex2gateway|jrunscripts|cfide|cfformgateway|railo-context|files|images|javascripts|miscellaneous|stylesheets|rewrite.cfm|index.cfm) [NC]
-# RewriteRule ^(.*)$ /rewrite.cfm/$1
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !^/(flex2gateway|jrunscripts|cfide|cfformgateway|railo-context|files|images|javascripts|miscellaneous|stylesheets|rewrite.cfm|index.cfm) [NC]
+RewriteRule ^(.*)$ /rewrite.cfm/$1
