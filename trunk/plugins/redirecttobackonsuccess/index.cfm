@@ -9,6 +9,6 @@
 </ul>
 
 <h2>Uninstallation</h2>
-<p>To uninstall this plugin simply delete the <tt>/plugins/RedirectToBackOnSuccess-0.1.zip</tt> file.</p>
+<p>To uninstall this plugin simply delete the <tt>/plugins/RedirectToBackOnSuccess-0.9.zip</tt> file.</p>
 
 <a href="<cfoutput>#cgi.http_referer#</cfoutput>"><<< Go Back</a>
