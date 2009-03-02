@@ -16,13 +16,11 @@ In the following example, we assume that the `params.key` variable has been crea
 In your controller:
 
 {{{
-<cftry>
-  <cfset author = model("author").findByKey(params.key)>
-  <cfif NOT IsObject(author)>  
-    <cfset flashInsert(message="Author #params.key# was not found")>
-    <cfset redirectTo(back=true)>
-  </cfcatch>
-</cftry>
+<cfset author = model("author").findByKey(params.key)>
+<cfif NOT IsObject(author)>  
+  <cfset flashInsert(message="Author #params.key# was not found")>
+  <cfset redirectTo(back=true)>
+</cfif>
 }}}
 
 In your view:
