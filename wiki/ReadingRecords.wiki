@@ -9,7 +9,7 @@ The first 2 of these, ([findByKey findByKey()] and [findOne findOne()]), returns
 
 Let's start by looking at the simplest of the finder methods, [findByKey findByKey()]. This method takes one argument: the primary key (or several keys if you're using composite keys) of the record you want to get.
 
-If the record exists, it is returned to you as an object. If not, Wheels will throw an error of type `Wheels.RecordNotFound`.
+If the record exists, it is returned to you as an object. If not, Wheels will return the boolean value `false`.
 
 In the following example, we assume that the `params.key` variable has been created from the URL (for example an URL such as `http://localhost/blog/viewauthor/7`)
 
@@ -18,7 +18,7 @@ In your controller:
 {{{
 <cftry>
   <cfset author = model("author").findByKey(params.key)>
-  <cfcatch type="Wheels.RecordNotFound">
+  <cfif NOT IsObject(author)>  
     <cfset flashInsert(message="Author #params.key# was not found")>
     <cfset redirectTo(back=true)>
   </cfcatch>
