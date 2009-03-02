@@ -5,7 +5,7 @@
 <p>Here is a listing of the methods that are added by this plugin.</p>
 
 <ul>
-	<li>back()</li>
+	<li>back</li>
 </ul>
 
 <h2>Uninstallation</h2>

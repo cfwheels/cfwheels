@@ -12,7 +12,6 @@
 	
 		<!---
 			#mailTo("support@mysite.com")#
-	
 			#mailTo(emailAddress="support@mysite.com", name="Website Support", encode=true)#
 		--->
 	
