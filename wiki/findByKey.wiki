@@ -7,7 +7,7 @@
 
 *Description*:
 
-Fetches the requested record and returns it as an object. Throws an error if no record is found.
+Fetches the requested record and returns it as an object. Returns `false` if no record is found.
 
 *Return Type*:
 
