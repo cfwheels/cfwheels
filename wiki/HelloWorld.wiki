@@ -65,7 +65,7 @@ To continue with Programming Tutorial Tradition, we'll create the ubiquitous _He
 
 Let's create a controller from scratch to illustrate how easy it is to set up a controller and plug it into the Wheels framework.
 
-First, create a file called `say.cfc` in the `controller` directory and add the code below to the file.
+First, create a file called `Say.cfc` in the `controllers` directory and add the code below to the file.
 
 {{{
 <cfcomponent extends="Controller">
@@ -75,7 +75,7 @@ First, create a file called `say.cfc` in the `controller` directory and add the 
 
 Congratulations, you just created your first Wheels controller! What does this controller do, you might ask? Well, to be honest, not much. It has no functions defined so it doesn't add any new functionality to our Wheels application. But because it extends the base `controller` component, it inherits quite a bit of powerful functionality and is now tied into our Wheels application.
 
-So what happens if we try to call our new controller right now? Lets take a look! Open your browser and point your browser to the new controller. Because my server is installed on port 80, my URL is `http://localhost/say`. You may need to enter a different URL, depending on how your web server is configured.
+So what happens if we try to call our new controller right now? Lets take a look! Open your browser and point your browser to the new controller. Because I am using the built in Web server from ColdFusion 8 my URL is `http://localhost:8500/say`. You may need to enter a different URL, depending on how your web server is configured.
 
 If you did everything right, you will get the Wheels error shown below in _Figure 2_. (Ironic that getting an error is doing something right, huh? Don't get used to it, buddy!)
 
@@ -83,7 +83,7 @@ http://cfwheels.googlecode.com/files/wheels-0.9-no-view-error-screen.jpg
 
 _Figure 2: Wheels error after setting up your blank `say` controller._
 
-The error says "There is no action named 'index'." Where did "index" come from? The URL we typed in only specified a controller name but no action. When an action is not specified in the URL, Wheels assumes that we want the _default action_. Out of the box, the default action in Wheels is set to `index`. So in our example, Wheels tried to find the `index` action within the say controller, and it threw an error because it couldn't find it.
+The error says "Could not find the view page for the 'index' action in the 'say' controller." Where did "index" come from? The URL we typed in only specified a controller name but no action. When an action is not specified in the URL, Wheels assumes that we want the _default action_. Out of the box, the default action in Wheels is set to `index`. So in our example, Wheels tried to find the `index` action within the `say` controller, and it threw an error because it couldn't find its `view` page.
 
 ===Setting up an Action===
 
@@ -103,18 +103,18 @@ As you can see, we created an empty method named `hello`.
 Now let's call our new action in the browser and see what we get. To call the `hello` action we simply add `/hello` to the end of the previous URL that we used to call our `say` controller:
 
 {{{
-http://localhost/say/hello
+http://localhost:8500/say/hello
 }}}
 
-Once again, we get a ColdFusion error. Although we have created the controller and added the `hello` action to it, we haven't created the _view_.
+Once again, we get the same ColdFusion error. Although we have created the controller and added the `hello` action to it, we haven't created the _view_.
 
 ===Setting up the View===
 
 By default, when an action is called, Wheels will look for a view file with the same name as the action. It then hands off the processing to the view to display the user interface. In our case, Wheels tried to find a view file for our `say/hello` action and couldn't find one.
 
-Let's remedy the situation and create a view file. View files are simple CFML pages that handle the output of our application. In most cases, views will return HTML code to the brower. By default, the view files will have the same name as our controller actions and will be grouped into a directory under the `view` directory. This new directory will have the same name as our controller.
+Let's remedy the situation and create a view file. View files are simple CFML pages that handle the output of our application. In most cases, views will return HTML code to the brower. By default, the view files will have the same name as our controller actions and will be grouped into a directory under the `views` directory. This new directory will have the same name as our controller.
 
-Find the `view` directory in the root of your Wheels installation. There will be a few directories in there already. For now, we need to create a new directory in the `view` directory called `say`. This is the same name as the controller that we created above.
+Find the `views` directory in the root of your Wheels installation. There will be a few directories in there already. For now, we need to create a new directory in the `views` directory called `say`. This is the same name as the controller that we created above.
 
 Now inside the `say` directory, create a file called `hello.cfm`. In the `hello.cfm` file, add the following line of code:
 
@@ -184,7 +184,7 @@ First, modify the the `say` controller file so that it looks like the code block
 </cfcomponent>
 }}}
 
-Now go to the `view/say` directory and create a `goodbye.cfm` page.
+Now go to the `views/say` directory and create a `goodbye.cfm` page.
 
 Add the following code to the `goodbye.cfm` page and save it.
 
