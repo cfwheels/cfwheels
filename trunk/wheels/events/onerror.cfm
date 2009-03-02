@@ -22,7 +22,7 @@
 		
 		if (application.settings.showErrorInformation)
 		{
-			if (Left(arguments.exception.cause.rootCause.type, 6) == "Wheels")
+			if (StructKeyExists(arguments.exception.cause, "rootCause") && Left(arguments.exception.cause.rootCause.type, 6) == "Wheels")
 			{
 				loc.returnValue = $includeAndReturnOutput(template="wheels/styles/header.cfm");
 				loc.returnValue = loc.returnValue & $includeAndReturnOutput(template="wheels/events/onerror/wheelserror.cfm", exception=arguments.exception);
