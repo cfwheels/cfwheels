@@ -33,13 +33,11 @@ Object
 }}}
 
 {{{
-<cftry>
-  <cfset author = model("author").findByKey(params.key)>
-  <cfcatch type="Wheels.RecordNotFound">
-    <cfset flashInsert(message="Author #params.key# was not found")>
-    <cfset redirectTo(back=true)>
-  </cfcatch>
-</cftry>
+<cfset author = model("author").findByKey(params.key)>
+<cfif NOT IsObject(author)>
+  <cfset flashInsert(message="Author #params.key# was not found")>
+  <cfset redirectTo(back=true)>
+</cfif>
 }}}
 
 *Related*:
