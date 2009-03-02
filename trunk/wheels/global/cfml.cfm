@@ -74,17 +74,17 @@
 </cffunction>
 
 <cffunction name="$directory" returntype="any" access="public" output="false">
-	<cfset var loc = StructNew()>
-	<cfset arguments.name = "loc.returnValue">
+	<cfset var returnValue = "">
+	<cfset arguments.name = "returnValue">
 	<cfdirectory attributeCollection="#arguments#">
-	<cfreturn loc.returnValue>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="$file" returntype="any" access="public" output="false">
-	<cfset var loc = StructNew()>
-	<cfset arguments.variable = "loc.returnValue">
+	<cfset var returnValue = "">
+	<cfset arguments.variable = "returnValue">
 	<cffile attributeCollection="#arguments#">
-	<cfreturn loc.returnValue>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="$throw" returntype="void" access="public" output="false">
