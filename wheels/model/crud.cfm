@@ -1,4 +1,4 @@
-<cffunction name="findByKey" returntype="any" access="public" output="false" hint="Fetches the requested record and returns it as an object. Throws an error if no record is found.">
+<cffunction name="findByKey" returntype="any" access="public" output="false" hint="Fetches the requested record and returns it as an object. Returns `false` if no record is found.">
 	<cfargument name="key" type="any" required="true" hint="Primary key value(s) of record to fetch. Separate with comma if passing in multiple primary key values.">
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for `findAll`">
@@ -11,13 +11,11 @@
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");
 		returnValue = findOne(argumentCollection=arguments);
-		if (IsBoolean(returnValue) && !returnValue)
-			$throw(type="Wheels.RecordNotFound", message="The requested record could not be found in the database.", extendedInfo="Make sure that the record exists in the database or catch this error in your code.");
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="findOne" returntype="any" access="public" output="false" hint="Fetches the first record found based on the `WHERE` and `ORDER BY` clauses and returns it as an object. Throws an error if no record is found.">
+<cffunction name="findOne" returntype="any" access="public" output="false" hint="Fetches the first record found based on the `WHERE` and `ORDER BY` clauses and returns it as an object. Returns `false` if no record is found.">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for `findAll`">
