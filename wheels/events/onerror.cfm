@@ -2,9 +2,10 @@
 	<cfargument name="exception" type="any" required="true">
 	<cfargument name="eventname" type="any" required="true">
 	<cfscript>
-		loc.returnValue = $simpleLock(execute="$runOnError", executeArgs=arguments, scope="application", type="readOnly");
+		var returnValue = "";
+		returnValue = $simpleLock(execute="$runOnError", executeArgs=arguments, scope="application", type="readOnly");
 	</cfscript>
-	#loc.returnValue#
+	#returnValue#
 </cffunction>
 
 <cffunction name="$runOnError" returntype="string" access="public" output="false">
@@ -23,9 +24,13 @@
 		if (application.settings.showErrorInformation)
 		{
 			if (StructKeyExists(arguments.exception.cause, "rootCause") && Left(arguments.exception.cause.rootCause.type, 6) == "Wheels")
+				loc.wheelsError = arguments.exception.cause.rootCause;
+			else if (StructKeyExists(arguments.exception, "rootCause") && Left(arguments.exception.rootCause.type, 6) == "Wheels")
+				loc.wheelsError = arguments.exception.rootCause;
+			if (StructKeyExists(loc, "wheelsError"))
 			{
 				loc.returnValue = $includeAndReturnOutput(template="wheels/styles/header.cfm");
-				loc.returnValue = loc.returnValue & $includeAndReturnOutput(template="wheels/events/onerror/wheelserror.cfm", exception=arguments.exception);
+				loc.returnValue = loc.returnValue & $includeAndReturnOutput(template="wheels/events/onerror/wheelserror.cfm", wheelsError=loc.wheelsError);
 				loc.returnValue = loc.returnValue & $includeAndReturnOutput(template="wheels/styles/footer.cfm");
 			}
 			else
