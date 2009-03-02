@@ -21,7 +21,9 @@ http://localhost/index.cfm?controller=shop&action=products
 
 This happens when your web server does not support the `cgi.path_info` variable. 
 
-Regardless of your specific setup, Wheels will figure out how to handle the URLs. In the example URLs used above, `shop` is the name of the controller to call, and `products` is the name of the action to call on that controller.
+Regardless of your specific setup, Wheels will try to figure out how to handle the URLs. If Wheels fails to do this properly (i.e. you _know_ that your web server supports `cgi.path_info` but Wheels insists on creating the URLs with the query string format for example) you can override it by setting `application.settings.URLRewriting` to either `On`, `Partial` or `Off`. "Partial URL Rewriting" is what we call that first URL up there with the `/index.cfm/` format.
+
+In the example URLs used above, `shop` is the name of the controller to call, and `products` is the name of the action to call on that controller.
 
 Unless you're familiar with the Model-View-Controller pattern, you're probably wondering what controllers and actions are.
 
