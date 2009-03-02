@@ -103,7 +103,7 @@
 		{
 			loc.name = loc.pluginFolders["name"][loc.i];
 			loc.directory = loc.pluginFolders["directory"][loc.i];
-			if (loc.name != ".svn" && !ListContainsNoCase(ValueList(loc.pluginFiles.name), loc.name & "-"))
+			if (Left(loc.name, 1) != "." && !ListContainsNoCase(ValueList(loc.pluginFiles.name), loc.name & "-"))
 			{
 				loc.directory = loc.directory & "/" & loc.name;
 				$directory(action="delete", directory=loc.directory, recurse=true);
