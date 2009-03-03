@@ -1,5 +1,5 @@
 #summary Sample application for a simple administrative interface.
-#labels chapter
+#labels chapter,1.0
 
 All sample applications comes full of comments so it's a good way to learn Wheels if
 you're one of those people who prefer playing around with code rather than reading more abstract tutorials.
@@ -23,4 +23,4 @@ Once that's all done just download, unzip and run the app (it comes
 with !ColdFusion on Wheels 0.9 included).
 
 ==Download==
-Click here to download (insert link when app is done)
+[http://cfwheels.googlecode.com/files/administration.0.9.zip Click here to download.]
