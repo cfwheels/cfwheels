@@ -82,7 +82,7 @@ http://cfwheels.googlecode.com/files/wheels-0.9-no-view-error-screen.jpg
 
 _Figure 2: Wheels error after setting up your blank `say` controller._
 
-The error says "Could not find the view page for the 'index' action in the 'say' controller." Where did "index" come from? The URL we typed in only specified a controller name but no action. When an action is not specified in the URL, Wheels assumes that we want the _default action_. Out of the box, the default action in Wheels is set to `index`. So in our example, Wheels tried to find the `index` action within the `say` controller, and it threw an error because it couldn't find its `view` page.
+The error says "Could not find the view page for the 'index' action in the 'say' controller." Where did "index" come from? The URL we typed in only specified a controller name but no action. When an action is not specified in the URL, Wheels assumes that we want the _default action_. Out of the box, the default action in Wheels is set to `index`. So in our example, Wheels tried to find the `index` action within the `say` controller, and it threw an error because it couldn't find its view page.
 
 ===Setting up an Action===
 
@@ -97,12 +97,12 @@ But let's jump ahead. Now that we have the controller created, let's add an acti
 </cfcomponent>
 }}}
 
-As you can see, we created an empty method named `hello`.
+As you can see, we created an empty function named `hello`.
 
 Now let's call our new action in the browser and see what we get. To call the `hello` action we simply add `/hello` to the end of the previous URL that we used to call our `say` controller:
 
 {{{
-http://localhost:8500/say/hello
+http://localhost/say/hello
 }}}
 
 Once again, we get the same ColdFusion error. Although we have created the controller and added the `hello` action to it, we haven't created the _view_.
@@ -113,7 +113,7 @@ By default, when an action is called, Wheels will look for a view file with the 
 
 Let's remedy the situation and create a view file. View files are simple CFML pages that handle the output of our application. In most cases, views will return HTML code to the brower. By default, the view files will have the same name as our controller actions and will be grouped into a directory under the `views` directory. This new directory will have the same name as our controller.
 
-Find the `views` directory in the root of your Wheels installation. There will be a few directories in there already. For now, we need to create a new directory in the `views` directory called `say`. This is the same name as the controller that we created above.
+Find the `views` directory in the root of your Wheels installation. There will be a few directories and files in there already. For now, we need to create a new directory in the `views` directory called `say`. This is the same name as the controller that we created above.
 
 Now inside the `say` directory, create a file called `hello.cfm`. In the `hello.cfm` file, add the following line of code:
 
@@ -128,6 +128,8 @@ http://cfwheels.googlecode.com/files/wheels-0.9-hello-world-screen.jpg
 _Figure 3: Your first working Wheels action._
 
 You have just created your first functional Wheels page, albeit it is a very simple one. Pat yourself on the back, go grab a snack, and when you're ready, let's go on and extend the functionality of our _Hello World!_ application a little more.
+
+Oh, and by the way, if you think this was a lot of work just for creating one page then you should know that you can actually delete the entire `Say.cfc` file and it will still work (as long as the `say/hello.cfm` file is still there Wheels will find it and display it for you regardless of whether you have a corresponding controller file or not).
 
 ==Adding Dynamic Content to Your View==
 
@@ -149,7 +151,7 @@ Why not just set up this value directly in the view? If you think about it, mayb
 
 ===Displaying the Dynamic Content===
 
-Next, we will modify our `say/hello.cfm` view file so that it looks like the code block bellow. When we do this, the value will be displayed in the browser.
+Next, we will modify our `say/hello.cfm` view file so that it looks like the code block below. When we do this, the value will be displayed in the browser.
 
 {{{
 <h1>Hello!</h1>
@@ -217,7 +219,7 @@ Open the `say/hello.cfm` view file. We are going to add a line of code to the en
 <p>Time to say <cfoutput>#linkTo(text="goodbye", action="goodbye")#?</cfoutput></p>
 }}}
 
-The `linkTo()` function is a built-in Wheels function. In this case, we are passing 2 named parameters to it. The first parameter, `text`, is the text that will be displayed in the hyperlink. The second parameter, `action`, defines the action to point the link to. By using this built-in function, your application's main URL may change, and even controllers and actions may get shifted around, but you won't suffer from the dreaded dead link. Wheels will always create a valid link for you as long as you configure it correctly when you make infrastructure changes to your application.
+The [linkTo linkTo()] function is a built-in Wheels function. In this case, we are passing 2 named parameters to it. The first parameter, `text`, is the text that will be displayed in the hyperlink. The second parameter, `action`, defines the action to point the link to. By using this built-in function, your application's main URL may change, and even controllers and actions may get shifted around, but you won't suffer from the dreaded dead link. Wheels will always create a valid link for you as long as you configure it correctly when you make infrastructure changes to your application.
 
 Once you have added the additional line of code to the end of the `say/hello.cfm` view file, save your file and call the `say/hello` action from your browser. Your browser should look like _Figure 6_ below.
 
