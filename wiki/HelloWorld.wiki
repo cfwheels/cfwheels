@@ -1,13 +1,13 @@
-#summary In this tutorial, we'll be writing a simple application to make sure we have Wheels installed properly and that everything is working properly.
-#labels chapter,0.8
+#summary This is the obligatory Hello World tutorial.
+#labels chapter,1.0
 
-In this tutorial, we'll be writing a simple application to make sure we have Wheels installed properly and that everything is working properly. Along the way, you'll get to know some basics about how applications built on top of Wheels work.
+In this tutorial, we'll be writing a simple application to make sure we have Wheels installed properly and that everything is working as it should. Along the way, you'll get to know some basics about how applications built on top of Wheels work.
 
 ==Testing Your Install==
 
 Let's make sure we're all on the same page. I'm going to assume that you've already [http://www.cfwheels.com/download downloaded the latest version of Wheels] and have it installed on your system. If you haven't done that, stop and read the [Installation Installation] chapter and get everything setup. It's okay, this web page will wait for you.
 
-Okay, so you have Wheels installed and can see the Wheels congratulations page as shown in _Figure 1_ below. That wasn't that hard now, was it?
+Okay, so you have Wheels installed and can see the Wheels "Congratulations!" page as shown in _Figure 1_ below. That wasn't that hard now, was it?
 
 http://cfwheels.googlecode.com/files/wheels-0.9-congratulations-screen.jpg
 
@@ -19,7 +19,7 @@ Imagine a football team where everyone tries to be quarterback. Things would get
 
 Wheels helps clean up this mess by using a design pattern called _Model-View-Controller (MVC)_. Let's take a brief look at MVC and see how it helps organize your Wheels applications.
 
-At a basic level, a MVC framework like Wheels breaks your application into 3 distinct pieces, each having a well-defined role and responsibility. The 3 pieces are called models, views, and controllers. Pretty intuitive so far, eh?
+At a basic level, a MVC framework like Wheels breaks your application into 3 distinct pieces, each having a well-defined role and responsibility. The 3 pieces are called models, views and controllers. Pretty intuitive so far, eh?
 
 ===Model Layer===
 
@@ -37,7 +37,7 @@ Others have written entire volumes describing the MVC pattern and its pros and c
 
 ==URLs in Wheels==
 
-The built-in URL-rewriting functionality of Wheels helps you create friendly, search engine safe URLs. No more are the days of URLs polluted with question marks, ampersands, and equals signs!
+The built-in URL rewriting functionality of Wheels helps you create friendly, search engine safe URLs. No more are the days of URLs polluted with question marks, ampersands, and equals signs!
 
 Consider the URL below:
 
@@ -59,7 +59,7 @@ Our example URL defines which components and methods within the application get 
 
 Okay, let's get to some example code. We know that you've been dying to get your hands on some code!
 
-To continue with Programming Tutorial Tradition, we'll create the ubiquitous _Hello World!_ application. But to keep things interesting, let's add a little Wheels magic along the way.
+To continue with programming tutorial tradition, we'll create the ubiquitous _Hello World!_ application. But to keep things interesting, let's add a little Wheels magic along the way.
 
 ===Setting up the Controller===
 
@@ -69,13 +69,12 @@ First, create a file called `Say.cfc` in the `controllers` directory and add the
 
 {{{
 <cfcomponent extends="Controller">
-	
 </cfcomponent>
 }}}
 
 Congratulations, you just created your first Wheels controller! What does this controller do, you might ask? Well, to be honest, not much. It has no functions defined so it doesn't add any new functionality to our Wheels application. But because it extends the base `controller` component, it inherits quite a bit of powerful functionality and is now tied into our Wheels application.
 
-So what happens if we try to call our new controller right now? Lets take a look! Open your browser and point your browser to the new controller. Because I am using the built in Web server from ColdFusion 8 my URL is `http://localhost:8500/say`. You may need to enter a different URL, depending on how your web server is configured.
+So what happens if we try to call our new controller right now? Lets take a look! Open your browser and point your browser to the new controller. Do this by simply entering `http://localhost/say` in your browser of choice (the URL you have to type may differ a little depending on your specific web server configuration).
 
 If you did everything right, you will get the Wheels error shown below in _Figure 2_. (Ironic that getting an error is doing something right, huh? Don't get used to it, buddy!)
 
