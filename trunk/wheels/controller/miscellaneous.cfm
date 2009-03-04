@@ -63,11 +63,8 @@
 				StructDelete(loc.attributes, loc.key);
 			}
 		}
-		$renderPage(controller=loc.controller, action=loc.action, layout=arguments.layout);
-		loc.attributes.body = request.wheels.response;
-		$mail(loc.attributes);
-		// delete the response so that Wheels does not think we have rendered an actual response to the browser
-		StructDelete(request.wheels, "response");
+		loc.attributes.body = $renderPage(controller=loc.controller, action=loc.action, layout=arguments.layout);;
+		$mail(argumentCollection=loc.attributes);
 	</cfscript>
 </cffunction>
 
