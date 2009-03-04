@@ -23,6 +23,7 @@ At this time, the core team consists of these developers:
   * Chris Peters
   * Peter Amiri
   * Tony Petruzzi
+  * Raul Riera
 
 This does not restrict you from being able to contribute. See "Process for Implementing Changes to the Code" below for instructions on volunteering. With enough dedication, you can earn a seat on the core team as well!
 
