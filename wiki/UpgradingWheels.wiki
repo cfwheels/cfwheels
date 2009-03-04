@@ -15,7 +15,7 @@ The easiest way to upgrade is to setup an empty website, deploy a fresh copy of 
  * The `controller` folder has been changed to `controllers`.
  * The `model` folder has been changed to `models`.
  * The `view` folder has been changed to `views`.
- * Rename all of your CFCs in `models` and `controllers` to UpperCamelCase. So `controller.cfc` will become `Controller.cfc`, `adminUser.cfc` will become `AdminUser.cfc`, and so on.
+ * Rename all of your CFCs in `models` and `controllers` to !UpperCamelCase. So `controller.cfc` will become `Controller.cfc`, `adminUser.cfc` will become `AdminUser.cfc`, and so on.
  * All images must now be stored in the `images` folder, files in the `files` folder, JavaScript files in the `javascripts` folder, and CSS files in the `stylesheets` folder off of the root. (In 0.7, you were able to specify the paths yourself.)
 
 ==Database Structure Changes==
