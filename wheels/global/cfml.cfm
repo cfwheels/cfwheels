@@ -19,8 +19,9 @@
 </cffunction>
 
 <cffunction name="$mail" returntype="void" access="public" output="false">
-	<cfargument name="body" type="string" required="true">
-	<cfmail attributecollection="#arguments#">#arguments.body#</cfmail>
+	<cfset var content = arguments.body>
+	<cfset StructDelete(arguments, "body")>
+	<cfmail attributeCollection="#arguments#">#content#</cfmail>
 </cffunction>
 
 <cffunction name="$zip" returntype="any" access="public" output="false">
