@@ -1,5 +1,5 @@
 #summary addRoute(name,pattern[controller,action])
-#labels api,1.0
+#labels api,0.9
 
 *Category*:
 

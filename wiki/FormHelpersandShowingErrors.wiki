@@ -1,5 +1,5 @@
 #summary Wheels ties your application's forms together with your model layer elegantly. With Wheels form conventions, you'll find yourself spending less time writing repetitive markup to display forms and error messages.
-#labels chapter
+#labels chapter,svn
 
 Coding is not all about backend, there is a great deal of work to perform on the frontend on any Web application. Hopefully Wheels is here to take you to greener pastures with its [ViewHelperFunctions Helper Functions]. 
 

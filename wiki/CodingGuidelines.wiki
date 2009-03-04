@@ -1,5 +1,5 @@
 #summary Here are the rules of the road for contributing code to the project. Let's follow this process so that we don't duplicate effort and so the code base is easy to maintain over the long haul.
-#labels chapter,1.0
+#labels chapter,0.9
 
 ==Subversion Repository==
 

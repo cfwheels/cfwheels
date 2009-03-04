@@ -1,5 +1,5 @@
 #summary Listing of all view helper functions.
-#labels chapter,1.0
+#labels chapter,0.9
 
 These functions can be called from the views to create output for use in a HTML page.
 

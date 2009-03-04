@@ -1,5 +1,5 @@
 #summary belongsTo(name[class,foreignKey])
-#labels api,1.0
+#labels api,0.9
 
 *Category*:
 

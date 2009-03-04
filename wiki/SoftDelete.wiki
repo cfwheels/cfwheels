@@ -1,5 +1,5 @@
 #summary An easy way to keep deleted data in your database.
-#labels chapter,1.0
+#labels chapter,0.9
 
 "Soft delete" in database lingo means that you set a flag on an existing table that indicates that a record has been deleted, instead of actually deleting the record.
 

@@ -1,5 +1,5 @@
 #summary dateTimeSelect(objectName,property[dateOrder,dateSeparator,startYear,endYear,monthDisplay,timeOrder,timeSeparator,minuteStep,separator])
-#labels api,1.0
+#labels api,0.9
 
 *Category*:
 

@@ -1,5 +1,5 @@
 #summary deleteAll([where,include,parameterize,instantiate])
-#labels api,1.0
+#labels api,0.9
 
 *Category*:
 

@@ -1,5 +1,5 @@
 #summary URLFor([route,controller,action,key,params,anchor,onlyPath,host,protocol,port])
-#labels api,1.0
+#labels api,0.9
 
 *Category*:
 

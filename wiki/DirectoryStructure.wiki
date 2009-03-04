@@ -1,5 +1,5 @@
 #summary Finding your way around a Wheels application.
-#labels chapter,1.0
+#labels chapter,0.9
 
 After downloading and unzipping Wheels, here's the directory structure that you will see (plus signs indicate folders):
 

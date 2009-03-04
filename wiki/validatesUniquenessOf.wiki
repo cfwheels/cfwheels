@@ -1,5 +1,5 @@
 #summary validatesUniquenessOf(property[message,when,scope])
-#labels api,1.0
+#labels api,0.9
 
 *Category*:
 

@@ -1,5 +1,5 @@
 #summary How to speed up your website by caching content.
-#labels chapter,1.0
+#labels chapter,0.9
 
 If your website doesn't get a whole lot of traffic, then you can probably skip this chapter completely. Just remember that it's here, waiting for your triumphant return.
 

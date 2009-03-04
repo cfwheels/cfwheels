@@ -1,5 +1,5 @@
 #summary Showing content to the user.
-#labels chapter,1.0
+#labels chapter,0.9
 
 A big part of a controller's task is to respond to the user. In Wheels you can respond to the user in three different ways:
 

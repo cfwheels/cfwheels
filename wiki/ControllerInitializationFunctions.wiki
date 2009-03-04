@@ -1,5 +1,5 @@
 #summary Listing of all controller initialization functions.
-#labels chapter,1.0
+#labels chapter,0.9
 
 These functions are called from the `init` function of your controller files.
 

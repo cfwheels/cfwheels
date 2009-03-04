@@ -1,5 +1,5 @@
 #summary Use Wheels to simplify the task of setting up automated emails in your application. Learn about email configuration and templating features.
-#labels chapter,1.0
+#labels chapter,0.9
 
 ==Step 1: Establishing Mail Server and Account Information==
 

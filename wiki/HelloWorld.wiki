@@ -1,5 +1,5 @@
 #summary This is the obligatory Hello World tutorial.
-#labels chapter,1.0
+#labels chapter,0.9
 
 In this tutorial, we'll be writing a simple application to make sure we have Wheels installed properly and that everything is working as it should. Along the way, you'll get to know some basics about how applications built on top of Wheels work.
 

@@ -1,5 +1,5 @@
 #summary Listing of all model initialization methods.
-#labels chapter,1.0
+#labels chapter,0.9
 
 These methods are called from the `init` function of your model files.
 

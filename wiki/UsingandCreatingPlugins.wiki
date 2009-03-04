@@ -1,5 +1,5 @@
 #summary Extend Wheels functionality by using plugins or create your own.
-#labels chapter,1.0
+#labels chapter,0.9
 
 Wheels is a fairly lightweight framework and we like to keep it that way so we won't be adding thousands of various features to Wheels just because a couple of developers find them "cool" ;)
 
@@ -30,7 +30,7 @@ The only other requirement to make a plugin work is that `MyPlugin.cfc` has to c
 {{{
 <cfcomponent output="false">
   <cffunction name="init">
-    <cfset this.version = "1.0">
+    <cfset this.version = "0.9">
     <cfreturn this>
   </cffunction>
 </cfcomponent>

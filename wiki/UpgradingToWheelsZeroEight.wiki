@@ -1,8 +1,6 @@
 #summary Our listing of steps to take while upgrading your Wheels application from 0.7 to 0.8.
 #labels 0.8.3,chapter
 
-_*Note:* This wiki contains "bleeding edge" documentation, which may reflect a future version of Wheels. Entries in the wiki may also be incomplete and unedited. For the "official" documentation, please visit [http://www.cfwheels.com/docs Official ColdFusion on Wheels Documentation]._
-
 The easiest way to upgrade is to setup an empty website, deploy a fresh copy of Wheels 0.8, and then transfer your application code to it. When transferring, please make note of the following changes and make the appropriate changes to your code.
 
 *Note:* To accompany the newest 0.8.3 release, we've highlighted the changes that are affected by that release.

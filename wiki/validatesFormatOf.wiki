@@ -1,5 +1,5 @@
 #summary validatesFormatOf(property,regEx[message,when,allowBlank])
-#labels api,1.0
+#labels api,0.9
 
 *Category*:
 

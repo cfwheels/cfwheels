@@ -1,5 +1,5 @@
 #summary Environments that match your development stages.
-#labels chapter,1.0
+#labels chapter,0.9
 
 Wheels allows you to set up different _environments_ that match stages in your development cycle. That way you can configure different values that match what services to call and how your app behaves based on where you are in your development.
 

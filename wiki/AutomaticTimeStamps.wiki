@@ -1,5 +1,5 @@
 #summary Let Wheels handle time stamping of records.
-#labels chapter,1.0
+#labels chapter,0.9
 
 When working with database tables, it is very common to have a column that holds the time that the record was added or last modified. If you have an e-commerce website with an orders table, you want to store the date and time the order was made; if you run a blog, you want to know when someone left a comment; and so on.
 

@@ -1,5 +1,5 @@
 #summary Use the concept of layouts to wrap your content.
-#labels chapter,1.0
+#labels chapter,0.9
 
 Wheels allows you to create layouts so that you don't need to `<cfinclude>` header and footer code on every single view template. We'll show you how to setup default layouts, controller-specific layouts, and layouts for your emails.
 

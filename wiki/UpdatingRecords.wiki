@@ -1,5 +1,5 @@
 #summary Updating records in your database tables.
-#labels chapter,1.0
+#labels chapter,0.9
 
 When you have created or retrieved an object, you can save it to the database by calling its [save save()] method. This method returns `true` if the object passes all validations and the object was saved to the database. Otherwise, it returns `false`.
 

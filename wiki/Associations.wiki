@@ -1,5 +1,5 @@
 #summary Through some simple configuration, Wheels allows you to unlock some powerful functionality to use your database tables' relationships in your code.
-#labels chapter,1.0
+#labels chapter,svn
 
 _Associations_ in Wheels allow you to define the relationships between your database tables. After configuring these relationships, doing pesky table joins becomes a trivial task. And like all other ORM functions in Wheels, this is done without writing a single line of SQL.
 

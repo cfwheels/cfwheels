@@ -1,5 +1,5 @@
 #summary Listing of all global functions.
-#labels chapter,1.0
+#labels chapter,0.9
 
 These functions are general purpose functions and can be called from anywhere.
 

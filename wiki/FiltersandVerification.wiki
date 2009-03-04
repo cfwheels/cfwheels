@@ -1,5 +1,5 @@
 #summary Stop repeating yourself with the use of filters and verifications.
-#labels chapter,1.0
+#labels chapter,0.9
 
 If you find the need to run a piece of code before or after several controller actions, then you can use _filters_ to accomplish this without having to explicitly call the code inside each action in question.
 

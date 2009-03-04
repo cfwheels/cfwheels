@@ -1,5 +1,5 @@
 #summary filters(through[type,only,except])
-#labels api,1.0
+#labels api,0.9
 
 *Category*:
 

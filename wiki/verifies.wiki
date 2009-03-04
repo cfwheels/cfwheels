@@ -1,5 +1,5 @@
 #summary verifies([only,except,post,get,ajax,cookie,session,params,handler])
-#labels api,1.0
+#labels api,0.9
 
 *Category*:
 

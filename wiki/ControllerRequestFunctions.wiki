@@ -1,5 +1,5 @@
 #summary Listing of all controller request functions.
-#labels chapter,1.0
+#labels chapter,0.9
 
 These functions are called from actions in your controller files.
 
