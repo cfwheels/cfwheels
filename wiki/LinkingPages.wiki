@@ -12,7 +12,7 @@ Let's go right to an example...
 If we wanted to link to the page that is the `authors` action in the `blog` controller, this is the code that we would write:
 
 {{{
-#linkTo(text="List of Authors", controller="blog", action="authors")#
+#linkTo(text="List All Authors", controller="blog", action="authors")#
 }}}
 
 The above code would generate this markup:
