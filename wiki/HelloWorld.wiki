@@ -72,7 +72,7 @@ First, create a file called `Say.cfc` in the `controllers` directory and add the
 </cfcomponent>
 }}}
 
-Congratulations, you just created your first Wheels controller! What does this controller do, you might ask? Well, to be honest, not much. It has no functions defined so it doesn't add any new functionality to our Wheels application. But because it extends the base `controller` component, it inherits quite a bit of powerful functionality and is now tied into our Wheels application.
+Congratulations, you just created your first Wheels controller! What does this controller do, you might ask? Well, to be honest, not much. It has no functions defined so it doesn't add any new functionality to our Wheels application. But because it extends the base `Controller` component, it inherits quite a bit of powerful functionality and is now tied into our Wheels application.
 
 So what happens if we try to call our new controller right now? Lets take a look! Open your browser and point your browser to the new controller. Do this by simply entering `http://localhost/say` in your browser of choice (the URL you have to type may differ a little depending on your specific web server configuration).
 
