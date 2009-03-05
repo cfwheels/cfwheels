@@ -135,6 +135,8 @@ Oh, and by the way, if you think this was a lot of work just for creating one pa
 
 We will add some simple dynamic content to our `hello` action and add a second action to the application. We'll then use some Wheels code to tie the 2 actions together. Let's get get to it!
 
+===The Dynamic Content===
+
 {{{
 <cfcomponent extends="Controller">
 	
