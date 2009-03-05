@@ -49,7 +49,7 @@ Like all URLs that you're familiar with, the `http://www.example.com/` portion o
 
 The next portion is where the magic happens.
 
-In other ColdFusion frameworks, we're used to seeing variables separated by `?` and `&`. With Fusebox, for example, we'd probably see a URL like `http://www.example.com/index.cfm?fuseaction=say.hello`. Yuck.
+In other !ColdFusion frameworks, we're used to seeing variables separated by `?` and `&`. With Fusebox, for example, we'd probably see a URL like `http://www.example.com/index.cfm?fuseaction=say.hello`. Yuck.
 
 Wheels, on the other hand, uses _URL rewriting_. Instead of specifying variables by separating them with `?` and `&`, the different variables are passed to the application as folder names.
 
@@ -105,7 +105,7 @@ Now let's call our new action in the browser and see what we get. To call the `h
 http://localhost/say/hello
 }}}
 
-Once again, we get the same ColdFusion error. Although we have created the controller and added the `hello` action to it, we haven't created the _view_.
+Once again, we get the same !ColdFusion error. Although we have created the controller and added the `hello` action to it, we haven't created the _view_.
 
 ===Setting up the View===
 
@@ -149,7 +149,7 @@ The first thing we are going to do is to add some dynamic content to our `say/he
 </cfcomponent>
 }}}
 
-All we are doing here is creating a variable called `time` and setting its value to the current server time using the basic ColdFusion `Now()` function. When we do this, the variable becomes immediately available to our view code.
+All we are doing here is creating a variable called `time` and setting its value to the current server time using the basic !ColdFusion `Now()` function. When we do this, the variable becomes immediately available to our view code.
 
 Why not just set up this value directly in the view? If you think about it, maybe the logic behind the value of `time` may eventually change. What if eventually we want to display its value based on the user's time zone? What if later we decide to pull it from a web service instead? Remember, the controller is supposed to coordinate all of the data and business logic, not the view.
 
@@ -254,6 +254,6 @@ _Figure 7: Your `say/goodbye` action with a link to the `hello` action._
 
 ==Much More to Learn==
 
-You now know enough to be dangerous with ColdFusion on Wheels. Look out! But there are many more powerful features to cover. You may have noticed that we haven't even talked about the M in MVC.
+You now know enough to be dangerous with !ColdFusion on Wheels. Look out! But there are many more powerful features to cover. You may have noticed that we haven't even talked about the M in MVC.
 
 No worries. We will get there. And we think you will enjoy it.
