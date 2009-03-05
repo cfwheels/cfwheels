@@ -137,6 +137,8 @@ We will add some simple dynamic content to our `hello` action and add a second a
 
 ===The Dynamic Content===
 
+The first thing we are going to do is to add some dynamic content to our `say/hello` action. Modify your say controller so it looks like the code block below:
+
 {{{
 <cfcomponent extends="Controller">
 	
