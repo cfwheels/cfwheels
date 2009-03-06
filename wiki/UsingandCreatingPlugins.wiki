@@ -1,5 +1,5 @@
 #summary Extend Wheels functionality by using plugins or create your own.
-#labels chapter,0.9
+#labels chapter,0.9.1
 
 Wheels is a fairly lightweight framework and we like to keep it that way so we won't be adding thousands of various features to Wheels just because a couple of developers find them "cool" ;)
 
