@@ -35,6 +35,11 @@
 	<cfargument name="params" type="struct" required="true">
 	<cfscript>
 		var loc = {};
+		
+		// include controller specific helper files if they exist
+		if (ListFindNoCase(application.wheels.existingHelperFiles, arguments.params.controller))
+			$include(template="#application.wheels.viewPath#/#arguments.params.controller#/helpers.cfm");
+		
 		executeArgs = {};
 		executeArgs.name = arguments.name;
 		$simpleLock(name="controllerLock", type="readonly", execute="$setControllerClassData", executeArgs=executeArgs);
