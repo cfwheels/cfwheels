@@ -3,7 +3,7 @@
 
 Wheels is a fairly lightweight framework, and we like to keep it that way. We won't be adding thousands of various features to Wheels just because a couple of developers find them "cool." ;)
 
-Our intention is to only have functionality we consider "core" inside of Wheels itself and then use _plugins_ for everything else.
+Our intention is to only have functionality we consider "core" inside of Wheels itself and then encourage the use of _plugins_ for everything else.
 
 By using plugins created by the community or yourself, you're able to add brand new functionality to Wheels or completely change existing features. The possibilities are endless.
 
