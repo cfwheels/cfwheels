@@ -40,8 +40,20 @@ The `index.cfm` file is the user interface for your plugin and will be viewable 
 
 ==What Can a Plugin Do?==
 
-A plugin can add brand new functions to Wheels or override existing ones. A plugin can also have a user interface so that the users of the plugin can "do stuff".
+A plugin can add brand new functions to Wheels or override existing ones. A plugin can also have a simple one page user interface so that the users of the plugin can ask for any input, display content, etc.
 
 To add or override a function you simply add the function to `MyPlugin.cfc` and Wheels will inject it to Wheels on application start. Please note that all functions in your plugin have to be public (`access="public"`). If you have functions that should only be called from the plugin itself we recommend starting the function name with the `$` character (this is how a lot of internal Wheels functions are named as well actually) to avoid any name clashes.
+
+It is also important to note, that although you can overwrite functions, they are still available for you to leverage with the use of `core.functionName()`, for example:
+
+{{{
+<cffunction name="timeAgoInWords" returntype="string" access="public" output="false">
+  <cfargument name="fromTime" type="date" required="true">
+  <cfargument name="includeSeconds" type="boolean" required="false" default="false">
+  <cfargument name="appendMessage" type="string" required="false" default="">
+  <cfset arguments.toTime = Now()>
+  <cfreturn core.timeAgoInWords(argumentCollection=arguments) & " " & arguments.appendMessage>
+</cffunction>
+}}} 
 
 Armed with this knowledge about plugins you can now go and add that feature you've always wanted or change that behavior you've always hated :)
