@@ -61,6 +61,7 @@
 ===Working With Wheels===
 
  * [Conventions Conventions]
+ * [ConfigurationandDefaults Configuration and Defaults]
  * [DirectoryStructure Directory Structure]
  * [SwitchingEnvironments Switching Environments]
  * [UsingandCreatingPlugins Using and Creating Plugins]
