@@ -32,7 +32,7 @@
 </cffunction>
 
 <cffunction name="sendEmail" returntype="void" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in.">
-	<cfargument name="template" type="string" required="false" default="#application.settings.sendEmail.template#" hint="Path to email body">
+	<cfargument name="template" type="string" required="false" default="#application.settings.sendEmail.template#" hint="The path to the email template or two paths if you want to send a multipart email (the template for the text version has to be the first one in the list in that case)">
 	<cfargument name="from" type="string" required="false" default="#application.settings.sendEmail.from#" hint="Email address to send from">
 	<cfargument name="to" type="string" required="false" default="#application.settings.sendEmail.to#" hint="Email address to send to">
 	<cfargument name="subject" type="string" required="false" default="#application.settings.sendEmail.subject#" hint="The subject line of the email">
@@ -44,18 +44,6 @@
 		arguments.functionName = "sendEmail";
 		arguments = $insertApplicationDefaults(argumentCollection=arguments);
 
-		// set controller / action so we can render the email template accordign to the same rules as renderPage
-		if (arguments.template Contains "/")
-		{
-			loc.controller = ListFirst(arguments.template, "/");
-			loc.action = ListLast(arguments.template, "/");
-		}
-		else
-		{
-			loc.controller = variables.params.controller;
-			loc.action = arguments.template;
-		}
-	
 		// set the variables that should be available to the email view template
 		for (loc.key in arguments)
 		{
@@ -66,9 +54,29 @@
 			}
 		}
 
-		// include the email template and return it
-		arguments.body = $renderPage(controller=loc.controller, action=loc.action, layout=arguments.layout);
-		
+		arguments.body = [];
+		loc.iEnd = ListLen(arguments.template);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.template = ListGetAt(arguments.template, loc.i);
+			loc.template = ReplaceNoCase(loc.template, ".cfm", "");
+
+			// set controller / action so we can render the email template according to the same rules as renderPage
+			if (loc.template Contains "/")
+			{
+				loc.controller = ListFirst(loc.template, "/");
+				loc.action = ListLast(loc.template, "/");
+			}
+			else
+			{
+				loc.controller = variables.params.controller;
+				loc.action = loc.template;
+			}
+
+			// include the email template and return it
+			ArrayAppend(arguments.body, $renderPage(controller=loc.controller, action=loc.action, layout=arguments.layout));
+		}
+
 		// delete arguments that we don't need to pass on to cfmail and send the email
 		StructDelete(arguments, "template");
 		StructDelete(arguments, "layout");
