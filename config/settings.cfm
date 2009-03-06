@@ -41,12 +41,6 @@
 <cfset application.settings.validatesPresenceOf.message = "[property] can't be empty">
 <cfset application.settings.validatesUniquenessOf.message = "[property] has already been taken">
 
-<!--- Email delivery settings --->
-<cfset application.settings.sendEmail.layout = false>
-<cfset application.settings.sendEmail.from = "">
-<cfset application.settings.sendEmail.to = "">
-<cfset application.settings.sendEmail.subject = "">
-
 <!--- Caching --->
 <cfset application.settings.maximumItemsToCache = 1000>
 <cfset application.settings.cacheCullPercentage = 10>

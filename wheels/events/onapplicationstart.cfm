@@ -2,6 +2,7 @@
 	<cfscript>
 		var loc = {};
 		application.wheels = {};
+		application.settings = {};
 		
 		if (StructKeyExists(server, "railo"))
 		{
@@ -71,12 +72,53 @@
 		application.wheels.cache.external.query = {};
 		application.wheels.cacheLastCulledAt = Now();
 		
-		// load environment settings
+		// load settings
 		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && (!Len(application.settings.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.settings.reloadPassword)))
 			application.settings.environment = URL.reload;
 		else
 			$include(template="#application.wheels.configPath#/environment.cfm");
 		$include(template="#application.wheels.configPath#/settings.cfm");
+
+		// load defaults for functions
+
+
+
+
+
+
+
+
+		/*loc.defaultsFolder = this.rootDir & "config/defaults";
+		loc.defaultsFiles = $directory(directory=loc.defaultsFolder, type="file");
+		$dump(loc.defaultsFiles);
+		// delete plugin folders if no corresponding plugin file exist
+		loc.iEnd = loc.pluginFolders.recordCount;
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+		{
+			loc.name = loc.pluginFolders["name"][loc.i];
+			loc.directory = loc.pluginFolders["directory"][loc.i];
+			if (Left(loc.name, 1) != "." && !ListContainsNoCase(ValueList(loc.pluginFiles.name), loc.name & "-"))
+			{
+				loc.directory = loc.directory & "/" & loc.name;
+				$directory(action="delete", directory=loc.directory, recurse=true);
+			}
+		}*/
+
+
+
+
+
+
+
+
+		loc.functionsWithDefaultsSet = "sendEmail";
+		loc.iEnd = ListLen(loc.functionsWithDefaultsSet);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			$include(template="#application.wheels.configPath#/defaults/#LCase(ListGetAt(loc.functionsWithDefaultsSet, loc.i))#.cfm");
+		}
+
+		//override any settings and defaults with environment specific ones
 		$include(template="#application.wheels.configPath#/environments/#application.settings.environment#.cfm");
 		
 		// try to determine url rewrite capabilites unless set manually by the developer

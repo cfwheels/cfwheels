@@ -32,17 +32,19 @@
 </cffunction>
 
 <cffunction name="sendEmail" returntype="void" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in.">
-	<cfargument name="template" type="string" required="true" hint="Path to email body">
+	<cfargument name="template" type="string" required="false" default="#application.settings.sendEmail.template#" hint="Path to email body">
+	<cfargument name="from" type="string" required="false" default="#application.settings.sendEmail.from#" hint="Email address to send from">
+	<cfargument name="to" type="string" required="false" default="#application.settings.sendEmail.to#" hint="Email address to send to">
+	<cfargument name="subject" type="string" required="false" default="#application.settings.sendEmail.subject#" hint="The subject line of the email">
 	<cfargument name="layout" type="any" required="false" default="#application.settings.sendEmail.layout#" hint="Layout to wrap body in">
 	<cfscript>
 		var loc = {};
-		loc.defaults = StructCopy(application.settings.sendEmail);
-		StructDelete(loc.defaults, "layout");
-		for (loc.key in loc.defaults)
-		{
-			if (!StructKeyExists(arguments, loc.key))
-				arguments[loc.key] = loc.defaults[loc.key];
-		}
+		
+		// insert the wheels and developer set defaults to the arguments struct
+		arguments.functionName = "sendEmail";
+		arguments = $insertApplicationDefaults(argumentCollection=arguments);
+
+		// set controller / action so we can render the email template accordign to the same rules as renderPage
 		if (arguments.template Contains "/")
 		{
 			loc.controller = ListFirst(arguments.template, "/");
@@ -53,18 +55,24 @@
 			loc.controller = variables.params.controller;
 			loc.action = arguments.template;
 		}
-		loc.attributes = structCopy(arguments);
-		for (loc.key in loc.attributes)
+	
+		// set the variables that should be available to the email view template
+		for (loc.key in arguments)
 		{
-			if (!ListFindNoCase("from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext", loc.key))
+			if (!ListFindNoCase("template,layout", loc.key) && !ListFindNoCase("from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext", loc.key))
 			{
-				if (!ListFindNoCase("template,layout", loc.key))
-					variables[loc.key] = arguments[loc.key];
-				StructDelete(loc.attributes, loc.key);
+				variables[loc.key] = arguments[loc.key];
+				StructDelete(arguments, loc.key);
 			}
 		}
-		loc.attributes.body = $renderPage(controller=loc.controller, action=loc.action, layout=arguments.layout);;
-		$mail(argumentCollection=loc.attributes);
+
+		// include the email template and return it
+		arguments.body = $renderPage(controller=loc.controller, action=loc.action, layout=arguments.layout);
+		
+		// delete arguments that we don't need to pass on to cfmail and send the email
+		StructDelete(arguments, "template");
+		StructDelete(arguments, "layout");
+		$mail(argumentCollection=arguments);
 	</cfscript>
 </cffunction>
 
