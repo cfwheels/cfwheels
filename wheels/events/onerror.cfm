@@ -29,8 +29,7 @@
 			}
 			else if (IsDefined("arguments.exception.cause.rootCause.resolvedName") && IsDefined("arguments.exception.cause.rootCause.element") && arguments.exception.cause.rootCause.resolvedName == "application" && Left(arguments.exception.cause.rootCause.element, 8) == "settings")
 			{
-				loc.element = arguments.exception.cause.rootCause.element;
-				loc.element = ReplaceNoCase(loc.element, "settings.", "");
+				loc.element = ReplaceNoCase(arguments.exception.cause.rootCause.element, "settings.", "");
 				loc.functionName = LCase(ListFirst(loc.element, "."));
 				loc.argumentName = LCase(ListLast(loc.element, "."));
 				loc.wheelsError.type = "Wheels.RequiredArgumentMissing";
