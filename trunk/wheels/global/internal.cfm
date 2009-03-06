@@ -241,41 +241,8 @@
 	<cfreturn arguments.path[arguments.key]>
 </cffunction>
 
-<cffunction name="humanize" returntype="string" access="public" output="false" hint="View, Helper, Returns readable text by capitalizing, converting camel casing to multiple words.">
-	<cfargument name="text" type="string" required="true" hint="Text to humanize">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = REReplace(arguments.text, "([[:upper:]])", " \1", "all"); // adds a space before every capitalized word
-		loc.returnValue = REReplace(loc.returnValue, "([[:upper:]]) ([[:upper:]]) ", "\1\2", "all"); // fixes abbreviations so they form a word again (example: aURLVariable)
-		loc.returnValue = $capitalize(loc.returnValue); // capitalize the first letter 
-	</cfscript>	
-	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="$capitalize" returntype="string" access="public" output="false" hint="View, Helper, Returns the text with the first character converted to uppercase.">
-	<cfargument name="text" type="string" required="true" hint="Text to capitalize">
-
-	<!---
-		EXAMPLES:
-		#capitalize("wheels is a framework")#
-		-> Wheels is a framework
-
-		RELATED:
-		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
-		 * [autoLink autoLink()] (function)
-		 * [cycle cycle()] (function)
-		 * [excerpt excerpt()] (function)
-		 * [highlight highlight()] (function)
-		 * [pluralize pluralize()] (function)
-		 * [resetCycle resetCycle()] (function)
-		 * [simpleFormat simpleFormat()] (function)
-		 * [singularize singularize()] (function)
-		 * [stripLinks stripLinks()] (function)
-		 * [stripTags stripTags()] (function)
-		 * [titleize titleize()] (function)
-		 * [truncate truncate()] (function)
-	--->
-
+<cffunction name="$capitalize" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="true">
 	<cfreturn UCase(Left(arguments.text, 1)) & Mid(arguments.text, 2, Len(arguments.text)-1)>
 </cffunction>
 
@@ -336,61 +303,15 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$singularize" returntype="string" access="public" output="false" hint="View, Helper, Returns the singular form of the passed in word.">
-	<cfargument name="word" type="string" required="true" hint="String to singularize.">
-
-	<!---
-		EXAMPLES:
-		#singularize("languages")#
-		-> language
-
-		RELATED:
-		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
-		 * [autoLink autoLink()] (function)
-		 * [capitalize capitalize()] (function)
-		 * [cycle cycle()] (function)
-		 * [excerpt excerpt()] (function)
-		 * [highlight highlight()] (function)
-		 * [pluralize pluralize()] (function)
-		 * [resetCycle resetCycle()] (function)
-		 * [simpleFormat simpleFormat()] (function)
-		 * [stripLinks stripLinks()] (function)
-		 * [stripTags stripTags()] (function)
-		 * [titleize titleize()] (function)
-		 * [truncate truncate()] (function)
-	--->
-
+<cffunction name="$singularize" returntype="string" access="public" output="false">
+	<cfargument name="word" type="string" required="true">
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="singularize")>
 </cffunction>
 
-<cffunction name="$pluralize" returntype="string" access="public" output="false" hint="View, Helper, Returns the plural form of the passed in word.">
-	<cfargument name="word" type="string" required="true" hint="The word to pluralize.">
-	<cfargument name="count" type="numeric" required="false" default="-1" hint="Pluralization will occur when this value is not 1.">
-	<cfargument name="returnCount" type="boolean" required="false" default="true" hint="Will return the count prepended to the pluralization when true and count is not -1.">
-
-	<!---
-		EXAMPLES:
-		#pluralize("person")#
-		-> people
-
-		Your search returned #pluralize(word="person", count=users.recordCount)#.
-
-		RELATED:
-		 * [MiscellaneousHelpers Miscellaneous Helpers] (chapter)
-		 * [autoLink autoLink()] (function)
-		 * [capitalize capitalize()] (function)
-		 * [cycle cycle()] (function)
-		 * [excerpt excerpt()] (function)
-		 * [highlight highlight()] (function)
-		 * [resetCycle resetCycle()] (function)
-		 * [simpleFormat simpleFormat()] (function)
-		 * [singularize singularize()] (function)
-		 * [stripLinks stripLinks()] (function)
-		 * [stripTags stripTags()] (function)
-		 * [titleize titleize()] (function)
-		 * [truncate truncate()] (function)
-	--->
-
+<cffunction name="$pluralize" returntype="string" access="public" output="false">
+	<cfargument name="word" type="string" required="true">
+	<cfargument name="count" type="numeric" required="false" default="-1">
+	<cfargument name="returnCount" type="boolean" required="false" default="true">
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="pluralize", count=arguments.count, returnCount=arguments.returnCount)>
 </cffunction>
 

@@ -6,11 +6,15 @@
 
 <ul>
 	<li>autoLink</li>
+	<li>capitalize</li>
 	<li>cycle</li>
 	<li>excerpt</li>
 	<li>highlight</li>
+	<li>humanize</li>
+	<li>pluralize</li>
 	<li>resetCycle</li>
 	<li>simpleFormat</li>
+	<li>singularize</li>
 	<li>stripLinks</li>
 	<li>stripTags</li>
 	<li>titleize</li>
