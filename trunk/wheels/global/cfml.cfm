@@ -19,9 +19,10 @@
 </cffunction>
 
 <cffunction name="$mail" returntype="void" access="public" output="false">
-	<cfset var content = arguments.body>
+	<cfset var loc = {}>
+	<cfset loc.content = arguments.body>
 	<cfset StructDelete(arguments, "body")>
-	<cfmail attributeCollection="#arguments#">#content#</cfmail>
+	<cfmail attributeCollection="#arguments#"><cfif ArrayLen(loc.content) GT 1><cfmailpart type="text">#loc.content[1]#</cfmailpart><cfmailpart type="html">#loc.content[2]#</cfmailpart><cfelse>#loc.content[1]#</cfif></cfmail>
 </cffunction>
 
 <cffunction name="$zip" returntype="any" access="public" output="false">
