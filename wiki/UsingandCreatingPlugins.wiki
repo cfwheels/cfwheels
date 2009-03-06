@@ -48,12 +48,8 @@ It is also important to note, that although you can overwrite functions, they ar
 
 {{{
 <cffunction name="timeAgoInWords" returntype="string" access="public" output="false">
-  <cfargument name="fromTime" type="date" required="true">
-  <cfargument name="includeSeconds" type="boolean" required="false" default="false">
-  <cfargument name="appendMessage" type="string" required="false" default="">
-  <cfset arguments.toTime = Now()>
-  <cfreturn core.timeAgoInWords(argumentCollection=arguments) & " " & arguments.appendMessage>
+  <cfreturn core.timeAgoInWords(argumentCollection=arguments) & " (approximately)">
 </cffunction>
-}}} 
+}}}
 
 Armed with this knowledge about plugins you can now go and add that feature you've always wanted or change that behavior you've always hated :)
