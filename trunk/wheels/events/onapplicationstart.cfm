@@ -80,42 +80,12 @@
 		$include(template="#application.wheels.configPath#/settings.cfm");
 
 		// load defaults for functions
-
-
-
-
-
-
-
-
-		/*loc.defaultsFolder = this.rootDir & "config/defaults";
-		loc.defaultsFiles = $directory(directory=loc.defaultsFolder, type="file");
-		$dump(loc.defaultsFiles);
-		// delete plugin folders if no corresponding plugin file exist
-		loc.iEnd = loc.pluginFolders.recordCount;
-		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
-		{
-			loc.name = loc.pluginFolders["name"][loc.i];
-			loc.directory = loc.pluginFolders["directory"][loc.i];
-			if (Left(loc.name, 1) != "." && !ListContainsNoCase(ValueList(loc.pluginFiles.name), loc.name & "-"))
-			{
-				loc.directory = loc.directory & "/" & loc.name;
-				$directory(action="delete", directory=loc.directory, recurse=true);
-			}
-		}*/
-
-
-
-
-
-
-
-
-		loc.functionsWithDefaultsSet = "sendEmail";
-		loc.iEnd = ListLen(loc.functionsWithDefaultsSet);
+		loc.defaultFiles = $directory(directory=this.rootDir & "config/defaults", type="file");
+		loc.iEnd = loc.defaultFiles.recordCount;
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			$include(template="#application.wheels.configPath#/defaults/#LCase(ListGetAt(loc.functionsWithDefaultsSet, loc.i))#.cfm");
+			loc.name = loc.defaultFiles["name"][loc.i];
+			$include(template="#application.wheels.configPath#/defaults/#LCase(loc.name)#");
 		}
 
 		//override any settings and defaults with environment specific ones
