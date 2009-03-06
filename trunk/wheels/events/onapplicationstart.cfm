@@ -25,6 +25,8 @@
 		application.wheels.nonExistingControllerFiles = "";
 		application.wheels.existingLayoutFiles = "";
 		application.wheels.nonExistingLayoutFiles = "";
+		application.wheels.existingHelperFiles = "";
+		application.wheels.nonExistingHelperFiles = "";
 		application.wheels.routes = [];
 		application.wheels.namedRoutePositions = {};
 		
