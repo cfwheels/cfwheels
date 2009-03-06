@@ -44,7 +44,7 @@
 	   	<cflock name="controllerLock" type="exclusive" timeout="30">
 			<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
 				<cfscript>
-					loc.fileName = capitalize(arguments.name);
+					loc.fileName = $capitalize(arguments.name);
 					
 					// check if the controller file exists and store the results for performance reasons
 					if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingControllerFiles, arguments.name))
@@ -247,12 +247,12 @@
 		var loc = {};
 		loc.returnValue = REReplace(arguments.text, "([[:upper:]])", " \1", "all"); // adds a space before every capitalized word
 		loc.returnValue = REReplace(loc.returnValue, "([[:upper:]]) ([[:upper:]]) ", "\1\2", "all"); // fixes abbreviations so they form a word again (example: aURLVariable)
-		loc.returnValue = capitalize(loc.returnValue); // capitalize the first letter 
+		loc.returnValue = $capitalize(loc.returnValue); // capitalize the first letter 
 	</cfscript>	
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="capitalize" returntype="string" access="public" output="false" hint="View, Helper, Returns the text with the first character converted to uppercase.">
+<cffunction name="$capitalize" returntype="string" access="public" output="false" hint="View, Helper, Returns the text with the first character converted to uppercase.">
 	<cfargument name="text" type="string" required="true" hint="Text to capitalize">
 
 	<!---
@@ -336,7 +336,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="singularize" returntype="string" access="public" output="false" hint="View, Helper, Returns the singular form of the passed in word.">
+<cffunction name="$singularize" returntype="string" access="public" output="false" hint="View, Helper, Returns the singular form of the passed in word.">
 	<cfargument name="word" type="string" required="true" hint="String to singularize.">
 
 	<!---
@@ -363,7 +363,7 @@
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="singularize")>
 </cffunction>
 
-<cffunction name="pluralize" returntype="string" access="public" output="false" hint="View, Helper, Returns the plural form of the passed in word.">
+<cffunction name="$pluralize" returntype="string" access="public" output="false" hint="View, Helper, Returns the plural form of the passed in word.">
 	<cfargument name="word" type="string" required="true" hint="The word to pluralize.">
 	<cfargument name="count" type="numeric" required="false" default="-1" hint="Pluralization will occur when this value is not 1.">
 	<cfargument name="returnCount" type="boolean" required="false" default="true" hint="Will return the count prepended to the pluralization when true and count is not -1.">
