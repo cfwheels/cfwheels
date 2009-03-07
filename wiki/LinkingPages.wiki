@@ -3,7 +3,9 @@
 
 ==`linkTo`, the Function for Linking to Other Pages==
 
-Wheels's built-in [linkTo linkTo()] function does all of the heavy lifting involved with linking the different pages of your application together. You'll generally be using [linkTo linkTo()] within your view code. As you'll soon realize the [linkTo linkTo()] function accepts a whole bunch of arguments. We won't go over all of them here so don't forget to have a look at the documentation for [linkTo linkTo()] for the complete details.
+Wheels's built-in [linkTo linkTo()] function does all of the heavy lifting involved with linking the different pages of your application together. You'll generally be using [linkTo linkTo()] within your view code.
+
+As you'll soon realize, the [linkTo linkTo()] function accepts a whole bunch of arguments. We won't go over all of them here so don't forget to have a look at the documentation for [linkTo linkTo()] for the complete details.
 
 Let's go right to an example...
 
@@ -78,7 +80,7 @@ The same would be true if you had Wheels installed in a subfolder, thus eliminat
 
 An `<a>` tag is easy enough, isn't it? Why would we need to use a function to do this mundane task? It turns out that there are some advantages. Here's the deal.
 
-Wheels gives you a good amount of structure for your applications. With this, instead of thinking of URLs in the "old way" we think in terms of what route, controller, and/or action we're sending the user to next.
+Wheels gives you a good amount of structure for your applications. With this, instead of thinking of URLs in the "old way," we think in terms of what route, controller, and/or action we're sending the user to next.
 
 What's more, Wheels is smart enough to build URLs for you. And it'll do this for you based on your situation with URL rewriting. Are you using URL rewriting in your app? Great. Wheels will build your URLs accordingly. Not fortunate enough to have URL rewriting capabilities in your development or production environments? That's fine too because Wheels will handle that automatically. Are you using Wheels in a subfolder on your site? Wheels handles that for you too.
 
