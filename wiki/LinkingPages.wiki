@@ -86,4 +86,4 @@ What's more, Wheels is smart enough to build URLs for you. And it'll do this for
 
 If you see the pattern, this gives your application a good deal of portability. For example, you could later enable URL rewriting or move your application to a different subfolder. As long as you're using [linkTo linkTo()] to build your links, you won't need to change anything extra to your code in order to accommodate this change.
 
-Oh, and another reason is that it's just plain cool too ;)
+Oh, and another reason is that it's just plain cool too. ;)
