@@ -11,7 +11,9 @@ Plugins are also the recommended way to get new code accepted into Wheels. If yo
 
 ==Installing and Uninstalling Plugins==
 
-This couldn't be any simpler. To install a plugin, just download the plugin's `zip` file and drop it in the `plugins` folder. (Wheels will clean up any leftover folders and files.)
+This couldn't be any simpler. To install a plugin, just download the plugin's `zip` file and drop it in the `plugins` folder.
+
+If you want to remove it later simply delete the `zip` file. (Wheels will clean up any leftover folders and files.)
 
 Reloading Wheels is required when installing/uninstalling. (Issue a `reload=true` request.)
 
