@@ -65,7 +65,7 @@ The only thing this does is call a view page to render using the [renderPage ren
 
 The [renderPage renderPage()] function is available to you because the `shop` controller extends the main Wheels `Controller` component. Don't forget to include that `extends` attribute in your `<cfcomponent>` tags as you build your controllers!
 
-So, how does [renderPage renderPage()] work? Well, it accepts the arguments `controller` and `action` (among others), and, based on these, it will try to include a view file. In our case, the view file is stored at `views/shop/products.cfm` file.
+So, how does [renderPage renderPage()] work? Well, it accepts the arguments `controller` and `action` (among others), and, based on these, it will try to include a view file. In our case, the view file is stored at `views/shop/products.cfm`.
 
 You can read the chapter about [RenderingPages Rendering Pages] for more information about the `renderPage()` function.
 
@@ -119,7 +119,7 @@ This also highlights the fact that Wheels is a very easy framework to get starte
 
 ==The `params` Struct==
 
-Besides making sure the correct code is executed, Wheels also does something else to simplify request handling for you. It combines the URL and form scopes into one. This is something that most !ColdFusion frameworks do as well. In Wheels, it is done in the `params` struct.
+Besides making sure the correct code is executed, Wheels also does something else to simplify request handling for you. It combines the `url` and `form` scopes into one. This is something that most !ColdFusion frameworks do as well. In Wheels, it is done in the `params` struct.
 
 The `params` struct is available to you in the controller and view files but not in the model files. (It's considered a best practice to not mix your request handling with your business logic.) Besides the form and URL scope variables, the `params` struct also contains the current controller and action name for easy reference.
 
@@ -138,4 +138,4 @@ This concept becomes even more useful once we start getting into creating forms 
 
 ==Routing==
 
-For more advanced URL-to-code mappings, you can use a concept called "routing". It allows for you to fully customize every URL in your application. You can read more about this in the chapter called [UsingRoutes Using Routes].
+For more advanced URL-to-code mappings, you can use a concept called _routing_. It allows for you to fully customize every URL in your application. You can read more about this in the chapter called [UsingRoutes Using Routes].
