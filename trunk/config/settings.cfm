@@ -1,5 +1,4 @@
 <!--- Miscellaneous --->
-<cfset application.settings.URLRewriting = ""> 
 <cfset application.settings.tableNamePrefix = "">
 <cfset application.settings.obfuscateURLs = false>
 <cfset application.settings.reloadPassword = "">
@@ -10,9 +9,9 @@
 
 <!---
 	The URLRewriting setting can bet set to "On", "Partial" or "Off".
-	When left blank Wheels will try to determine the URL rewrite capabilities automatically.
-	To run with "Partial" rewriting the "cgi.path_info" variable needs to be supported by the web server.
-	To run with rewriting "On" you need to apply the necessary rewrite rules on the web server first.
+	When left blank, Wheels will try to determine the URL rewrite capabilities automatically.
+	To run with "Partial" rewriting, the "cgi.path_info" variable needs to be supported by the web server.
+	To run with rewriting "On", you need to apply the necessary rewrite rules on the web server first.
 --->
 <cfset application.settings.URLRewriting = ""> 
 
