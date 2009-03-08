@@ -66,10 +66,8 @@
 
 					if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name))
 						loc.fileName = "Controller";
-					loc.rootObject = "controllerClass";
+					application.wheels.controllers[arguments.name] = $createObjectFromRoot(objectType="controllerClass", fileName=loc.fileName, name=arguments.name);
 				</cfscript>
-				<cfinclude template="../../root.cfm">
-				<cfset application.wheels.controllers[arguments.name] = loc.rootObject>
 			</cfif>
 		</cflock>
 	</cfif>
@@ -317,14 +315,14 @@
 
 <cffunction name="$createClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
-	<cfset var loc = {}>
-	<cfset loc.fileName = capitalize(arguments.name)>
-	<cfif FileExists(ExpandPath("#application.wheels.modelPath#/#loc.fileName#.cfc"))>
-		<cfset application.wheels.existingModelFiles = ListAppend(application.wheels.existingModelFiles, arguments.name)>
-	<cfelse>
-		<cfset loc.fileName = "Model">
-	</cfif>
-	<cfset loc.rootObject = "modelClass">
-	<cfinclude template="../../root.cfm">
-	<cfreturn loc.rootObject>
+	<cfscript>
+		var loc = {};
+		loc.fileName = $capitalize(arguments.name);
+		if (FileExists(ExpandPath("#application.wheels.modelPath#/#loc.fileName#.cfc")))
+			application.wheels.existingModelFiles = ListAppend(application.wheels.existingModelFiles, arguments.name);
+		else
+			loc.fileName = "Model";
+		loc.returnValue = $createObjectFromRoot(objectType="modelClass", fileName=loc.fileName, name=arguments.name);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>

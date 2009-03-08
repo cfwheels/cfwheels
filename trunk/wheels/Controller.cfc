@@ -3,5 +3,5 @@
 	<cfinclude template="controller/functions.cfm">
 	<cfinclude template="view/functions.cfm">
 	<cfinclude template="plugins/injection.cfm">
-	<cfinclude template="../views/helpers.cfm">
+	<cfinclude template="../#application.wheels.viewPath#/helpers.cfm">
 </cfcomponent>

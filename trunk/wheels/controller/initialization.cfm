@@ -19,7 +19,7 @@
 		loc.fileName = $capitalize(variables.wheels.name);
 		if (!ListFindNoCase(application.wheels.existingControllerFiles, variables.wheels.name))
 			loc.fileName = "Controller";
-		loc.returnValue = $createObjectFromRoot(objectType="controllerObject", fileName=loc.fileName, params=arguments.params);
+		loc.returnValue = $createObjectFromRoot(objectType="controllerObject", fileName=loc.fileName, name=variables.wheels.name, params=arguments.params);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

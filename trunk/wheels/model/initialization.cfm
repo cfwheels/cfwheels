@@ -1,4 +1,4 @@
-<cffunction name="$initClass" returntype="any" access="public" output="false">
+<cffunction name="$initModelClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
 		var loc = {};
