@@ -1,0 +1,33 @@
+#summary propertyNames()
+#labels api,0.9.1
+
+*Category*:
+
+[ModelClassFunctions Model Class Functions]
+
+*Description*:
+
+Returns a list of property names (ordered by their respective column's position in the database table).
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+-
+
+*Examples*:
+
+{{{
+<cfset properties = model("author").propertyNames()>
+}}}
+
+*Related*:
+
+ * [ObjectRelationalMapping Object Relational Mapping] (chapter)
+ * [columnNames columnNames()] (function)
