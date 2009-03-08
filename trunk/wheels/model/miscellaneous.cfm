@@ -185,6 +185,14 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="columnNames" returntype="string" access="public" output="false" hint="Returns a list of column names (ordered by their position in the database table).">
+	<cfreturn variables.wheels.class.columnList>
+</cffunction>
+
+<cffunction name="propertyNames" returntype="string" access="public" output="false" hint="Returns a list of property names (ordered by their respective column's position in the database table).">
+	<cfreturn variables.wheels.class.propertyList>
+</cffunction>
+
 <cffunction name="$objectOrNumberToKey" returntype="struct" access="public" output="false">
 	<cfargument name="missingMethodArguments" type="struct" required="true">
 	<cfscript>
