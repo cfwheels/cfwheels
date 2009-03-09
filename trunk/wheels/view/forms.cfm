@@ -76,14 +76,15 @@
 <cffunction name="textField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a text field form control based on the supplied `objectName` and `property`.">
 	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to build the form control for">
 	<cfargument name="property" type="string" required="true" hint="The name of the property (database column) to use in the form control">
-	<cfargument name="label" type="string" required="false" default="" hint="The label text to use in the form control">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="true" hint="Whether or not to wrap the label around the form control">
-	<cfargument name="prepend" type="string" required="false" default="" hint="String to prepend to the form control. Useful to wrap the form control around HTML tags">
-	<cfargument name="append" type="string" required="false" default="" hint="String to append to the form control. Useful to wrap the form control around HTML tags">
-	<cfargument name="prependToLabel" type="string" required="false" default="" hint="String to prepend to the form control's label. Useful to wrap the form control around HTML tags">
-	<cfargument name="appendToLabel" type="string" required="false" default="" hint="String to append to the form control's label. Useful to wrap the form control around HTML tags">
-	<cfargument name="errorElement" type="string" required="false" default="div" hint="HTML tag to wrap the form control with when the object contains errors">
+	<cfargument name="label" type="string" required="false" default="#application.settings.textField.label#" hint="The label text to use in the form control">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.settings.textField.wrapLabel#" hint="Whether or not to wrap the label around the form control">
+	<cfargument name="prepend" type="string" required="false" default="#application.settings.textField.prepend#" hint="String to prepend to the form control. Useful to wrap the form control around HTML tags">
+	<cfargument name="append" type="string" required="false" default="#application.settings.textField.append#" hint="String to append to the form control. Useful to wrap the form control around HTML tags">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.settings.textField.prependToLabel#" hint="String to prepend to the form control's label. Useful to wrap the form control around HTML tags">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.settings.textField.appendToLabel#" hint="String to append to the form control's label. Useful to wrap the form control around HTML tags">
+	<cfargument name="errorElement" type="string" required="false" default="#application.settings.textField.errorElement#" hint="HTML tag to wrap the form control with when the object contains errors">
 	<cfset var loc = {}>
+	<cfset StructAppend(arguments, application.settings.textField, false)>
 	<cfset arguments.$namedArguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -166,14 +167,15 @@
 <cffunction name="passwordField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a password field form control based on the supplied `objectName` and `property`.">
 	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
-	<cfargument name="label" type="string" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="true" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="errorElement" type="string" required="false" default="div" hint="See documentation for `textField`">
+	<cfargument name="label" type="string" required="false" default="#application.settings.passwordField.label#" hint="See documentation for `textField`">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.settings.passwordField.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.settings.passwordField.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.settings.passwordField.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.settings.passwordField.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.settings.passwordField.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="#application.settings.passwordField.errorElement#" hint="See documentation for `textField`">
 	<cfset var loc = {}>
+	<cfset StructAppend(arguments, application.settings.passwordField, false)>
 	<cfset arguments.$namedArguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
 	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 
@@ -212,25 +214,26 @@
 <cffunction name="textArea" returntype="string" access="public" output="false" hint="Builds and returns a string containing a password field form control based on the supplied `objectName` and `property`.">
 	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
-	<cfargument name="label" type="string" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="true" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="errorElement" type="string" required="false" default="div" hint="See documentation for `textField`">
-	<cfset var loc = {}>
-	<cfset arguments.$namedArguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement">
-	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
-
-	<cfset loc.output = "">
-	<cfset loc.output = loc.output & $formBeforeElement(argumentCollection=arguments)>
-	<cfset loc.output = loc.output & "<textarea name=""#listLast(arguments.objectName, '.')#[#arguments.property#]"" id=""#listLast(arguments.objectName, '.')#-#arguments.property#""#loc.attributes#>">
-	<cfset loc.output = loc.output & $formValue(argumentCollection=arguments)>
-	<cfset loc.output = loc.output & "</textarea>">
-	<cfset loc.output = loc.output & $formAfterElement(argumentCollection=arguments)>
-
-	<cfreturn loc.output>
+	<cfargument name="label" type="string" required="false" default="#application.settings.textArea.label#" hint="See documentation for `textField`">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.settings.textArea.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.settings.textArea.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.settings.textArea.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.settings.textArea.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.settings.textArea.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="#application.settings.textArea.errorElement#" hint="See documentation for `textField`">
+	<cfscript>
+		var loc = {};
+		StructAppend(arguments, application.settings.passwordField, false);
+		arguments.$namedArguments = "objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement";
+		loc.attributes = $getAttributes(argumentCollection=arguments);
+		loc.returnValue = "";
+		loc.returnValue = loc.returnValue & $formBeforeElement(argumentCollection=arguments);
+		loc.returnValue = loc.returnValue & "<textarea name=""#ListLast(arguments.objectName, '.')#[#arguments.property#]"" id=""#ListLast(arguments.objectName, '.')#-#arguments.property#""#loc.attributes#>";
+		loc.returnValue = loc.returnValue & $formValue(argumentCollection=arguments);
+		loc.returnValue = loc.returnValue & "</textarea>";
+		loc.returnValue = loc.returnValue & $formAfterElement(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="fileField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a file field form control based on the supplied `objectName` and `property`.">
