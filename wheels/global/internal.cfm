@@ -1,17 +1,3 @@
-<cffunction name="$insertApplicationDefaults" returntype="struct" access="public" output="false">
-	<cfscript>	
-		var loc = {};
-		loc.defaults = application.settings[arguments.functionName];
-		for (loc.key in loc.defaults)
-		{
-			if (!StructKeyExists(arguments, loc.key))
-				arguments[loc.key] = loc.defaults[loc.key];
-		}
-		StructDelete(arguments, "functionName");
-	</cfscript>
-	<cfreturn arguments>
-</cffunction>
-
 <cffunction name="$createObjectFromRoot" returntype="any" access="public" output="false">
 	<cfargument name="objectType" type="string" required="true">
 	<cfargument name="fileName" type="string" required="true">

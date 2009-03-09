@@ -41,8 +41,7 @@
 		var loc = {};
 		
 		// insert the wheels and developer set defaults to the arguments struct
-		arguments.functionName = "sendEmail";
-		arguments = $insertApplicationDefaults(argumentCollection=arguments);
+		StructAppend(arguments, application.settings.sendEmail, false);
 
 		// set the variables that should be available to the email view template
 		for (loc.key in arguments)
