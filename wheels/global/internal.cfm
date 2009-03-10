@@ -1,3 +1,28 @@
+<cffunction name="$insertDefaults" returntype="struct" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="input" type="struct" required="true">
+	<cfargument name="reserved" type="string" required="false" default="">
+	<cfscript>
+		var loc = {};
+		if (application.settings.environment != "production")
+		{
+			if (ListLen(arguments.reserved))
+			{
+				loc.iEnd = ListLen(arguments.reserved);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					loc.item = ListGetAt(arguments.reserved, loc.i);
+					if (StructKeyExists(arguments.input, loc.item))
+						$throw(type="Wheels.IncorrectArguments", message="The '#loc.item#' argument is not allowed.", extendedInfo="Do not pass in the '#loc.item#' argument. It will be set automatically by Wheels.");
+				}
+			}			
+		}
+		StructAppend(arguments.input, application.settings[arguments.name], false);
+		loc.returnValue = arguments.input;
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$createObjectFromRoot" returntype="any" access="public" output="false">
 	<cfargument name="objectType" type="string" required="true">
 	<cfargument name="fileName" type="string" required="true">

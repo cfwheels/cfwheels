@@ -1,7 +1,7 @@
 <cffunction name="startFormTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing the opening form tag. The form's action will be built according to the same rules as `URLFor`.">
-	<cfargument name="method" type="string" required="false" default="post" hint="The type of method to use in the form tag, `get` and `post` are the options">
-	<cfargument name="multipart" type="boolean" required="false" default="false" hint="Set to `true` if the form should be able to upload files">
-	<cfargument name="spamProtection" type="boolean" required="false" default="false" hint="Set to `true` to protect the form against spammers (done with Javascript)">
+	<cfargument name="method" type="string" required="false" default="#application.settings.startFormTag.method#" hint="The type of method to use in the form tag, `get` and `post` are the options">
+	<cfargument name="multipart" type="boolean" required="false" default="#application.settings.startFormTag.multipart#" hint="Set to `true` if the form should be able to upload files">
+	<cfargument name="spamProtection" type="boolean" required="false" default="#application.settings.startFormTag.spamProtection#" hint="Set to `true` to protect the form against spammers (done with Javascript)">
 	<cfargument name="route" type="string" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="action" type="string" required="false" default="" hint="See documentation for `URLFor`">
@@ -12,29 +12,46 @@
 	<cfargument name="host" type="string" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="protocol" type="string" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="port" type="numeric" required="false" default="0" hint="See documentation for `URLFor`">
-	<cfset var loc = {}>
-	<cfset arguments.$namedArguments = "method,multipart,spamProtection,route,controller,action,key,params,anchor,onlyPath,host,protocol,port">
-	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
-
-	<cfset request.wheels.currentFormMethod = arguments.method>
-
-	<cfset loc.url = URLFor(argumentCollection=arguments)>
-
-	<!--- make sure we return XHMTL compliant code --->
-	<cfset loc.url = Replace(loc.url, "&", "&amp;", "all")>
-
-	<cfif arguments.spamProtection>
-		<cfset loc.onsubmit = "this.action='#Left(loc.url, int((Len(loc.url)/2)))#'+'#Right(loc.url, ceiling((Len(loc.url)/2)))#';">
-		<cfset loc.url = "">
-	</cfif>
-
-	<cfsavecontent variable="loc.output">
-		<cfoutput>
-			<form action="#loc.url#" method="#arguments.method#"<cfif arguments.multipart> enctype="multipart/form-data"</cfif><cfif StructKeyExists(loc, "onsubmit")> onsubmit="#loc.onsubmit#"</cfif>#loc.attributes#>
-		</cfoutput>
-	</cfsavecontent>
-
-	<cfreturn $trimHTML(loc.output)>
+	<cfscript>
+		var loc = {};
+	
+		// adds developer defaults to the arguments struct
+		arguments = $insertDefaults(name="startFormTag", input=arguments);
+	
+		// sets a flag to indicate whether we use get or post on this form, used when obfuscating params
+		request.wheels.currentFormMethod = arguments.method;
+	
+		// set the form's action attribute to the URL that we want to send to
+		arguments.action = URLFor(argumentCollection=arguments);
+		
+		// make sure we return XHMTL compliant code
+		arguments.action = Replace(arguments.action, "&", "&amp;", "all"); 
+	
+		// deletes the action attribute and instead adds some tricky javascript spam protection to the onsubmit attribute
+		if (arguments.spamProtection)
+		{
+			loc.addToOnSubmit = "this.action='#Left(arguments.action, int((Len(arguments.action)/2)))#'+'#Right(arguments.action, ceiling((Len(arguments.action)/2)))#';";
+			if (StructKeyExists(arguments, "onsubmit"))
+			{
+				if (Right(arguments.onsubmit, 1) != ";")
+					arguments.onsubmit = arguments.onsubmit & ";";
+				arguments.onsubmit = arguments.onsubmit & loc.addToOnSubmit;
+			}
+			else
+			{
+				arguments.onsubmit = loc.addToOnSubmit;
+			}
+			StructDelete(arguments, "action");
+		}
+	
+		// set the form to be able to handle file uploads
+		if (!StructKeyExists(arguments, "enctype") && arguments.multipart)
+			arguments.enctype = "multipart/form-data";
+		
+		// create the HTML tag
+		loc.returnValue = $tag(name="form", skip="multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port", attributes=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="endFormTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing the closing `form` tag.">
