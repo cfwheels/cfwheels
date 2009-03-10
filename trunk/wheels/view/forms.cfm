@@ -14,8 +14,6 @@
 	<cfargument name="port" type="numeric" required="false" default="0" hint="See documentation for `URLFor`">
 	<cfscript>
 		var loc = {};
-	
-		// adds developer defaults to the arguments struct
 		arguments = $insertDefaults(name="startFormTag", input=arguments);
 	
 		// sets a flag to indicate whether we use get or post on this form, used when obfuscating params
@@ -48,46 +46,45 @@
 		if (!StructKeyExists(arguments, "enctype") && arguments.multipart)
 			arguments.enctype = "multipart/form-data";
 		
-		// create the HTML tag
 		loc.returnValue = $tag(name="form", skip="multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port", attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="endFormTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing the closing `form` tag.">
-	<cfif StructKeyExists(request.wheels, "currentFormMethod")>
-		<cfset StructDelete(request.wheels, "currentFormMethod")>
-	</cfif>
+	<cfscript>
+		if (StructKeyExists(request.wheels, "currentFormMethod"))
+			StructDelete(request.wheels, "currentFormMethod");
+	</cfscript>
 	<cfreturn "</form>">
 </cffunction>
 
 <cffunction name="submitTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a submit button `form` control.">
-	<cfargument name="value" type="string" required="false" default="Save changes" hint="Message to display in the button form control">
-	<cfargument name="image" type="string" required="false" default="" hint="File name of the image file to use in the button form control">
-	<cfargument name="disable" type="any" required="false" default="" hint="Whether to disable the button upon clicking (prevents double-clicking)">
-	<cfset var loc = {}>
-	<cfset arguments.$namedArguments = "value,image,disable">
-	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
-
-	<cfif Len(arguments.disable) IS NOT 0>
-		<cfset loc.onclick = "this.disabled=true;">
-		<cfif Len(arguments.image) IS 0 AND NOT IsBoolean(arguments.disable)>
-			<cfset loc.onclick = loc.onclick & "this.value='#arguments.disable#';">
-		</cfif>
-		<cfset loc.onclick = loc.onclick & "this.form.submit();">
-	</cfif>
-
-	<cfif Len(arguments.image) IS NOT 0>
-		<cfset loc.source = "#application.wheels.webPath##application.wheels.imagePath#/#arguments.image#">
-	</cfif>
-
-	<cfsavecontent variable="loc.output">
-		<cfoutput>
-			<input value="#arguments.value#"<cfif Len(arguments.image) IS 0> type="submit"<cfelse> type="image" src="#loc.source#"</cfif><cfif Len(arguments.disable) IS NOT 0> onclick="#loc.onclick#"</cfif>#loc.attributes# />
-		</cfoutput>
-	</cfsavecontent>
-
-	<cfreturn $trimHTML(loc.output)>
+	<cfargument name="value" type="string" required="false" default="#application.settings.submitTag.value#" hint="Message to display in the button form control">
+	<cfargument name="image" type="string" required="false" default="#application.settings.submitTag.image#" hint="File name of the image file to use in the button form control">
+	<cfargument name="disable" type="any" required="false" default="#application.settings.submitTag.disable#" hint="Whether to disable the button upon clicking (prevents double-clicking)">
+	<cfscript>
+		var loc = {};
+		arguments = $insertDefaults(name="submitTag", reserved="type,src", input=arguments);
+		if (Len(arguments.disable))
+		{
+			arguments.onclick = "this.disabled=true;";
+			if (!Len(arguments.image) && !IsBoolean(arguments.disable))
+				arguments.onclick = arguments.onclick & "this.value='#arguments.disable#';";
+			arguments.onclick = arguments.onclick & "this.form.submit();";
+		}
+		if (Len(arguments.image))
+		{
+			arguments.type = "image";
+			arguments.src = application.wheels.webPath & application.wheels.imagePath & "/" & arguments.image;
+		}
+		else
+		{
+			arguments.type = "submit";
+		}
+		loc.returnValue = $tag(name="input", close=true, skip="image,disable", attributes=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="textField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a text field form control based on the supplied `objectName` and `property`.">
