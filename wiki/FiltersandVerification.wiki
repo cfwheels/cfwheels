@@ -126,7 +126,7 @@ So far, we've only been dealing with one controller. Unless you're building a ve
 
 The question then becomes, "Where do I place the `restrictAccess()` function so I can call it from any one of my controllers?" The answer is that because all controllers extend `Controller.cfc`, you should probably put it there. The `init()` method itself with the call to [filters filters()] should remain inside your individual controllers though.
 
-If you actually want to set the same filters to be run for all controllers, you can go ahead and move it to the `Controller.cfc` file's `init()` method as well. Keep in mind that if you want to run the `init()` method in the individual controller *and* in `Controller.cfc` you will have to call `super.init()` from the `init()` method of your individual controller.
+If you actually want to set the same filters to be run for all controllers, you can go ahead and move it to the `Controller.cfc` file's `init()` method as well. Keep in mind that if you want to run the `init()` method in the individual controller *and* in `Controller.cfc`, you will need to call `super.init()` from the `init()` method of your individual controller.
 
 ==2 Types of Filters==
 
