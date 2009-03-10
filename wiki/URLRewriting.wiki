@@ -35,4 +35,4 @@ Unfortunately, there is no built-in URL rewriting mechanism in IIS, so getting W
  # To enable the rewrite filter in IIS, click on `Properties` for your website, then go to the `ISAPI Filters` tab and click the `Add...` button.
  # Type in anything you want as the `Filter Name` and point the `Executable` to the `IsapiRewrite4.dll` file.
 
-Now restart your web server and enjoy those fancy new URLs :)
+Now restart your web server and enjoy those fancy new URLs. :)
