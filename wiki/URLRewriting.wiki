@@ -15,9 +15,9 @@ After turning on URL rewriting, it would look like this:
 http://localhost/blog/new
 }}}
 
-Combine this with the routing functionality of Wheels, and you get the capablility of creating some really human-friendly (easier to remember, say over the phone, etc.) and search engine friendly URLs (easier to crawl, higher !PageRank etc.).
+Combine this with the routing functionality of Wheels, and you get the capablility of creating some really human-friendly (easier to remember, say over the phone, etc.) and search engine friendly URLs (easier to crawl, higher !PageRank, etc.).
 
-Unfortunately, if you're running your Wheels powered site in a sub folder of another site you will not be able to turn on URL rewriting (at least not without making some custom changes to your rewrite rules) so we recommend running the Wheels site as a stand-alone site whenever possible. If you've met this one requirement and want the shortest and prettiest URLs possible, then just follow the instructions below.
+Unfortunately, if you're running your Wheels powered site in a sub folder of another site you will not be able to turn on URL rewriting (at least not without making some custom changes to your rewrite rules), so we recommend running the Wheels site as a stand-alone site whenever possible. If you've met this one requirement and want the shortest and prettiest URLs possible, then just follow the instructions below.
 
 ==Instructions for Apache==
 
