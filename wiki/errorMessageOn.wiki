@@ -1,5 +1,5 @@
-#summary errorMessageOn(objectName,property[prependText,appendText,wrapperElement])
-#labels api,0.9
+#summary errorMessageOn(objectName,property[prependText,appendText,wrapperElement,class])
+#labels api,0.9.1
 
 *Category*:
 
@@ -7,7 +7,7 @@
 
 *Description*
 
-Returns the error message, if one exists, on the object's property.
+Returns the error message, if one exists, on the object's property. If multiple error messages exists, the first one is returned.
 
 *Return Type*:
 
@@ -20,10 +20,11 @@ String
 *Parameters*:
 
 || *objectName* || string || true || - || The variable name of the object to display the error message for ||
-|| * property* || string || true || - || The name of the property (database column) to display the error message for ||
-|| * prependText* || string || false ||   || String to prepend to the error message ||
-|| * appendText* || string || false ||   || String to append to the error message ||
-|| * wrapperElement* || string || false || div || HTML element to wrap the error message in ||
+|| *property* || string || true || - || The name of the property (database column) to display the error message for ||
+|| *prependText* || string || false ||   || String to prepend to the error message ||
+|| *appendText* || string || false ||   || String to append to the error message ||
+|| *wrapperElement* || string || false || span || HTML element to wrap the error message in ||
+|| *class* || string || false || error-message || CSS class to set on the wrapper element ||
 
 *Examples*:
 
