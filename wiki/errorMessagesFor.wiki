@@ -1,5 +1,5 @@
-#summary errorMessagesFor(objectName)
-#labels api,0.9
+#summary errorMessagesFor(objectName[class])
+#labels api,0.9.1
 
 *Category*:
 
@@ -20,6 +20,7 @@ String
 *Parameters*:
 
 || *objectName* || string || true || - || The variable name of the object to display error messages for ||
+|| *class* || string || false || error-messages || CSS class to set on the `ul` element ||
 
 *Examples*:
 
