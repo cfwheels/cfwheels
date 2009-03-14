@@ -1,7 +1,7 @@
 <cfcomponent output="false">
 
 	<cffunction name="init">
-		<cfset this.version = "0.9">
+		<cfset this.version = "0.9.1">
 		<cfreturn this>
 	</cffunction>
 
@@ -9,8 +9,8 @@
 		<cfargument name="key" type="any" required="true">
 		<cfargument name="select" type="string" required="false" default="">
 		<cfargument name="cache" type="any" required="false" default="">
-		<cfargument name="reload" type="boolean" required="false" default="#application.settings.get.reload#">
-		<cfargument name="parameterize" type="any" required="false" default="#application.settings.get.parameterize#">
+		<cfargument name="reload" type="boolean" required="false" default="false">
+		<cfargument name="parameterize" type="any" required="false" default="true">
 		<cfargument name="$create" type="boolean" required="false" default="true">
 		<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 		<cfscript>
