@@ -1,2 +1,6 @@
+<!--- Place HTML here that should be displayed when the application is running in "maintenance" mode. --->
 <h1>Maintenance!</h1>
-<p>Sorry, maintenance work is currently being performed on this server.<br />Please check back later.</p>
+<p>
+	Sorry, maintenance work is being performed.<br />
+	Please try again later.
+</p>
