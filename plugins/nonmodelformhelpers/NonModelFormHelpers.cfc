@@ -1,7 +1,7 @@
 <cfcomponent output="false">
 
 	<cffunction name="init">
-		<cfset this.version = "0.9">
+		<cfset this.version = "0.9.1">
 		<cfreturn this>
 	</cffunction>
 
@@ -115,7 +115,7 @@
 		<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 	
 		<cfset loc.value = $formValue(argumentCollection=arguments)>
-		<cfif application.settings.obfuscateURLs AND StructKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
+		<cfif application.wheels.obfuscateURLs AND StructKeyExists(request.wheels, "currentFormMethod") AND request.wheels.currentFormMethod IS "get">
 			<cfset loc.value = obfuscateParam(loc.value)>
 		</cfif>
 	
