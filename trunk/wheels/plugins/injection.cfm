@@ -1,10 +1,20 @@
-<cfloop list="#StructKeyList(application.wheels.plugins)#" index="loc.i">
-	<cfloop list="#StructKeyList(application.wheels.plugins[loc.i])#" index="loc.j">
-		<cfif NOT ListFindNoCase("init,version", loc.j)>
-			<cfif StructKeyExists(variables, loc.j)>
-				<cfset variables.core[loc.j] = variables[loc.j]>
-			</cfif>	
-			<cfset variables[loc.j] = application.wheels.plugins[loc.i][loc.j]>	
-		</cfif>
-	</cfloop>
-</cfloop>
+<cfscript>
+	loc.iList = StructKeyList(application.wheels.plugins);
+	loc.iEnd = ListLen(loc.iList);
+	for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+	{
+		loc.iItem = ListGetAt(loc.iList, loc.i);
+		loc.jList = StructKeyList(application.wheels.plugins[loc.iItem]);
+		loc.jEnd = ListLen(loc.jList);
+		for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+		{
+			loc.jItem = ListGetAt(loc.jList, loc.j);
+			if (!ListFindNoCase("init,version", loc.jItem))
+			{
+				variables[loc.jItem] = application.wheels.plugins[loc.iItem][loc.jItem];
+				if (StructKeyExists(variables, loc.jItem))
+					variables.core[loc.jItem] = variables[loc.jItem];
+			}
+		}
+	}
+</cfscript>

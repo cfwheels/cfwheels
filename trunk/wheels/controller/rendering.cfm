@@ -3,7 +3,7 @@
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for renderPage">
 	<cfargument name="layout" type="any" required="false" default="true" hint="See documentation for renderPage">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for renderPage">
-	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.settings.showDebugInformation#">
+	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#">
 	<cfscript>
 		var returnValue = "";
 		renderPage(argumentCollection=arguments);
@@ -18,15 +18,15 @@
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Action to include the view page for">
 	<cfargument name="layout" type="any" required="false" default="true" hint="The layout to wrap the content in">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for">
-	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.settings.showDebugInformation#">
+	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#">
 	<cfscript>
 		var loc = {};
-		if (application.settings.showDebugInformation)
+		if (application.wheels.showDebugInformation)
 			$debugPoint("view");
 		// if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
 		if ((!IsBoolean(arguments.layout) || arguments.layout) && arguments.$showDebugInformation)
 			request.wheels.showDebugInformation = true;
-		if (application.settings.cachePages && (IsNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
+		if (application.wheels.cachePages && (IsNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
 		{
 			loc.category = "action";
 			loc.key = "#arguments.action##$hashStruct(variables.params)##$hashStruct(arguments)#";
@@ -43,7 +43,7 @@
 		{
 			loc.page = $renderPage(argumentCollection=arguments);
 		}
-		if (application.settings.showDebugInformation)
+		if (application.wheels.showDebugInformation)
 			$debugPoint("view");
 		
 		// we put the response in the request scope here so that the developer does not have to specifically return anything from the controller code
@@ -76,8 +76,8 @@
 		var returnValue = "";
 		returnValue = $renderPage(argumentCollection=arguments);
 		if (!IsNumeric(arguments.cache))
-			arguments.cache = application.settings.defaultCacheTime;
-		$addToCache(arguments.key, returnValue, arguments.cache, arguments.category);
+			arguments.cache = application.wheels.defaultCacheTime;
+		$addToCache(key=arguments.key, value=returnValue, time=arguments.cache, category=arguments.category);
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
@@ -96,8 +96,8 @@
 		var returnValue = "";
 		returnValue = $includeFile(argumentCollection=arguments);
 		if (!IsNumeric(arguments.cache))
-			arguments.cache = application.settings.defaultCacheTime;
-		$addToCache(arguments.key, returnValue, arguments.cache, arguments.category);
+			arguments.cache = application.wheels.defaultCacheTime;
+		$addToCache(key=arguments.key, value=returnValue, time=arguments.cache, category=arguments.category);
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
@@ -107,7 +107,7 @@
 		var loc = {};
 		loc.returnValue = "";
 		arguments.type = "partial";
-		if (application.settings.cachePartials && (isNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
+		if (application.wheels.cachePartials && (isNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
 		{
 			loc.category = "partial";
 			loc.key = "#arguments.name##$hashStruct(variables.params)##$hashStruct(arguments)#";

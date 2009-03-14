@@ -3,7 +3,7 @@
 	<cfscript>
 		var loc = {};
 		if (!StructKeyExists(application.wheels, "adapter"))
-			$throw(type="Wheels.DataSourceNotFound", message="The '#application.settings.database.datasource#' data source could not be found.", extendedInfo="You need to add a data source with this name in the #application.wheels.serverName# Administrator before running Wheels. You can specify a different name for the data source in 'config/database.cfm' if necessary. After making this change you need to restart Wheels by issuing a 'reload=true' request.");
+			$throw(type="Wheels.DataSourceNotFound", message="The '#application.wheels.dataSourceName#' data source could not be found.", extendedInfo="You need to add a data source with this name in the #application.wheels.serverName# Administrator before running Wheels. You can specify a different name for the data source in 'config/settings.cfm' if necessary. After making this change you need to restart Wheels by issuing a 'reload=true' request.");
 		variables.wheels = {};
 		variables.wheels.class = {};
 		variables.wheels.class.name = arguments.name;
@@ -27,13 +27,13 @@
 		if (!StructKeyExists(variables.wheels.class, "tableName"))
 		{
 			variables.wheels.class.tableName = LCase($pluralize(variables.wheels.class.name));
-			if (Len(application.settings.tableNamePrefix))
-				variables.wheels.class.tableName = application.settings.tableNamePrefix & "_" & variables.wheels.class.tableName;
+			if (Len(application.wheels.tableNamePrefix))
+				variables.wheels.class.tableName = application.wheels.tableNamePrefix & "_" & variables.wheels.class.tableName;
 		}
 		// introspect the database
 		try
 		{
-			loc.columns = $dbinfo(datasource=application.settings.database.datasource, username=application.settings.database.username, password=application.settings.database.password, type="columns", table=variables.wheels.class.tableName);
+			loc.columns = $dbinfo(datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword, type="columns", table=variables.wheels.class.tableName);
 		}
 		catch(Any e)
 		{
@@ -63,30 +63,30 @@
 		if (!Len(variables.wheels.class.keys))
 			$throw(type="Wheels.NoPrimaryKey", message="No primary key exists on the '#variables.wheels.class.tableName#' table.", extendedInfo="Set an appropriate primary key (or multiple keys) on the '#variables.wheels.class.tableName#' table.");		
 
-		if (Len(application.settings.softDeleteProperty) && StructKeyExists(variables.wheels.class.properties, application.settings.softDeleteProperty))
+		if (Len(application.wheels.softDeleteProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.softDeleteProperty))
 		{
 			variables.wheels.class.softDeletion = true;
-			variables.wheels.class.softDeleteColumn = variables.wheels.class.properties[application.settings.softDeleteProperty].column;
+			variables.wheels.class.softDeleteColumn = variables.wheels.class.properties[application.wheels.softDeleteProperty].column;
 		}
 		else
 		{
 			variables.wheels.class.softDeletion = false;
 		}
 
-		if (Len(application.settings.timeStampOnCreateProperty) && StructKeyExists(variables.wheels.class.properties, application.settings.timeStampOnCreateProperty))
+		if (Len(application.wheels.timeStampOnCreateProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.timeStampOnCreateProperty))
 		{
 			variables.wheels.class.timeStampingOnCreate = true;
-			variables.wheels.class.timeStampOnCreateColumn = variables.wheels.class.properties[application.settings.timeStampOnCreateProperty].column;
+			variables.wheels.class.timeStampOnCreateColumn = variables.wheels.class.properties[application.wheels.timeStampOnCreateProperty].column;
 		}
 		else
 		{
 			variables.wheels.class.timeStampingOnCreate = false;
 		}
 
-		if (Len(application.settings.timeStampOnUpdateProperty) && StructKeyExists(variables.wheels.class.properties, application.settings.timeStampOnUpdateProperty))
+		if (Len(application.wheels.timeStampOnUpdateProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.timeStampOnUpdateProperty))
 		{
 			variables.wheels.class.timeStampingOnUpdate = true;
-			variables.wheels.class.timeStampOnUpdateColumn = variables.wheels.class.properties[application.settings.timeStampOnUpdateProperty].column;
+			variables.wheels.class.timeStampOnUpdateColumn = variables.wheels.class.properties[application.wheels.timeStampOnUpdateProperty].column;
 		}
 		else
 		{

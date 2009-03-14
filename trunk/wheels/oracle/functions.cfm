@@ -31,33 +31,35 @@
 	<cfargument name="limit" type="numeric" required="false" default=0>
 	<cfargument name="offset" type="numeric" required="false" default=0>
 	<cfargument name="parameterize" type="boolean" required="true">
-	<cfset var loc = StructNew()>
-	<cfset var query = StructNew()>
-
-	<cfif arguments.limit GT 0>
-		<cfset loc.beforeWhere = "SELECT * FROM (SELECT a.*, rownum rnum FROM (">
-		<cfset loc.afterWhere = ") a WHERE rownum <=" & arguments.limit+arguments.offset & ")" & " WHERE rnum >" & arguments.offset>
-		<cfset ArrayPrepend(arguments.sql, loc.beforeWhere)>
-		<cfset ArrayAppend(arguments.sql, loc.afterWhere)>
-	</cfif>
-
-	<cfset arguments.name = "query.name">
-	<cfset arguments.result = "loc.result">
-	<cfset arguments.datasource = application.settings.database.datasource>
-	<cfset arguments.username = application.settings.database.username>
-	<cfset arguments.password = application.settings.database.password>
-	<cfset loc.sql = arguments.sql>
-	<cfset loc.limit = arguments.limit>
-	<cfset loc.offset = arguments.offset>
-	<cfset loc.parameterize = arguments.parameterize>
-	<cfset StructDelete(arguments, "sql")>
-	<cfset StructDelete(arguments, "limit")>
-	<cfset StructDelete(arguments, "offset")>
-	<cfset StructDelete(arguments, "parameterize")>
+	<cfscript>
+		var loc = {};
+		var query = {};
+		if (arguments.limit > 0)
+		{
+			loc.beforeWhere = "SELECT * FROM (SELECT a.*, rownum rnum FROM (";
+			loc.afterWhere = ") a WHERE rownum <=" & arguments.limit+arguments.offset & ")" & " WHERE rnum >" & arguments.offset;
+			ArrayPrepend(arguments.sql, loc.beforeWhere);
+			ArrayAppend(arguments.sql, loc.afterWhere);
+		}
+		arguments.name = "query.name";
+		arguments.result = "loc.result";
+		arguments.datasource = application.wheels.dataSourceName;
+		arguments.username = application.wheels.dataSourceUserName;
+		arguments.password = application.wheels.dataSourcePassword;
+		loc.sql = arguments.sql;
+		loc.limit = arguments.limit;
+		loc.offset = arguments.offset;
+		loc.parameterize = arguments.parameterize;
+		StructDelete(arguments, "sql");
+		StructDelete(arguments, "limit");
+		StructDelete(arguments, "offset");
+		StructDelete(arguments, "parameterize");
+	</cfscript>
 	<cfquery attributeCollection="#arguments#"><cfloop array="#loc.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfif IsBoolean(loc.parameterize) AND loc.parameterize><cfset loc.queryParamAttributes = StructNew()><cfset loc.queryParamAttributes.cfsqltype = loc.i.type><cfset loc.queryParamAttributes.value = loc.i.value><cfif StructKeyExists(loc.i, "null")><cfset loc.queryParamAttributes.null = loc.i.null></cfif><cfif StructKeyExists(loc.i, "scale") AND loc.i.scale GT 0><cfset loc.queryParamAttributes.scale = loc.i.scale></cfif><cfqueryparam attributeCollection="#loc.queryParamAttributes#"><cfelse>'#loc.i.value#'</cfif><cfelse>#preserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop></cfquery>
-	<cfset loc.returnValue.result = loc.result>
-	<cfif StructKeyExists(query, "name")>
-		<cfset loc.returnValue.query = query.name>
-	</cfif>
+	<cfscript>
+		loc.returnValue.result = loc.result;
+		if (StructKeyExists(query, "name"))
+			loc.returnValue.query = query.name;
+	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

@@ -158,7 +158,7 @@
 		loc.returnValue.action = REReplace(loc.returnValue.action, "-([a-z])", "\u\1", "all");
 	
 		// decrypt all values except controller and action
-		if (application.settings.obfuscateURLs)
+		if (application.wheels.obfuscateUrls)
 		{
 			for (loc.key in loc.returnValue)
 			{
@@ -260,7 +260,7 @@
 <cffunction name="$request" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		if (application.settings.showDebugInformation)
+		if (application.wheels.showDebugInformation)
 			$debugPoint("setup");
 		
 		// set route from incoming url, find a matching one and create the params struct
@@ -278,19 +278,19 @@
 		// create the requested controller
 		loc.controller = $controller(loc.params.controller).$createControllerObject(loc.params);
 		
-		if (application.settings.showDebugInformation)
+		if (application.wheels.showDebugInformation)
 			$debugPoint("setup,beforeFilters");
 		
 		// run verifications and before filters if they exist on the controller
 		$runVerifications(controller=loc.controller, actionName=loc.params.action);
 		$runFilters(controller=loc.controller, type="before", actionName=loc.params.action);
 		
-		if (application.settings.showDebugInformation)
+		if (application.wheels.showDebugInformation)
 			$debugPoint("beforeFilters,action");
 			
 		// call action on controller if it exists
 		loc.actionIsCachable = false;
-		if (application.settings.cacheActions && StructIsEmpty(session.flash) && StructIsEmpty(form))
+		if (application.wheels.cacheActions && StructIsEmpty(session.flash) && StructIsEmpty(form))
 		{
 			loc.cachableActions = loc.controller.$getCachableActions();
 			loc.iEnd = ArrayLen(loc.cachableActions);
@@ -324,10 +324,10 @@
 		{
 			$callAction(controller=loc.controller, controllerName=loc.params.controller, actionName=loc.params.action);
 		}
-		if (application.settings.showDebugInformation)
+		if (application.wheels.showDebugInformation)
 			$debugPoint("action,afterFilters");
 		$runFilters(controller=loc.controller, type="after", actionName=loc.params.action);
-		if (application.settings.showDebugInformation)
+		if (application.wheels.showDebugInformation)
 			$debugPoint("afterFilters");
 		
 		// clear the flash (note that this is not done for redirectTo since the processing does not get here)
@@ -367,7 +367,7 @@
 				}
 				else
 				{
-					if (application.settings.showErrorInformation)
+					if (application.wheels.showErrorInformation)
 					{
 						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the '#arguments.actionName#' action in the '#arguments.controllerName#' controller.", extendedInfo="Create a file named '#LCase(arguments.actionName)#.cfm' in the 'views/#LCase(arguments.controllerName)#' directory (create the directory as well if it doesn't already exist).");
 					}

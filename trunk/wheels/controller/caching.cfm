@@ -1,6 +1,6 @@
 <cffunction name="caches" returntype="void" access="public" output="false" hint="Tells Wheels to cache one or more actions.">
 	<cfargument name="actions" type="string" required="false" default="" hint="Action(s) to cache">
-	<cfargument name="time" type="numeric" required="false" default="#application.settings.defaultCacheTime#" hint="Minutes to cache the action(s) for">
+	<cfargument name="time" type="numeric" required="false" default="#application.wheels.defaultCacheTime#" hint="Minutes to cache the action(s) for">
 	<cfscript>
 		var loc = {};
 		loc.iEnd = ListLen(arguments.actions);

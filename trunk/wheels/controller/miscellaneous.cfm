@@ -32,16 +32,15 @@
 </cffunction>
 
 <cffunction name="sendEmail" returntype="void" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in.">
-	<cfargument name="template" type="string" required="false" default="#application.settings.sendEmail.template#" hint="The path to the email template or two paths if you want to send a multipart email (the template for the text version has to be the first one in the list in that case)">
-	<cfargument name="from" type="string" required="false" default="#application.settings.sendEmail.from#" hint="Email address to send from">
-	<cfargument name="to" type="string" required="false" default="#application.settings.sendEmail.to#" hint="Email address to send to">
-	<cfargument name="subject" type="string" required="false" default="#application.settings.sendEmail.subject#" hint="The subject line of the email">
-	<cfargument name="layout" type="any" required="false" default="#application.settings.sendEmail.layout#" hint="Layout to wrap body in">
+	<cfargument name="template" type="string" required="true" hint="The path to the email template or two paths if you want to send a multipart email (the template for the text version has to be the first one in the list in that case)">
+	<cfargument name="from" type="string" required="true" hint="Email address to send from">
+	<cfargument name="to" type="string" required="true" hint="Email address to send to">
+	<cfargument name="subject" type="string" required="true" hint="The subject line of the email">
+	<cfargument name="layout" type="any" required="false" default="#application.wheels.sendEmail.layout#" hint="Layout to wrap body in">
 	<cfscript>
 		var loc = {};
 		
-		// insert the wheels and developer set defaults to the arguments struct
-		StructAppend(arguments, application.settings.sendEmail, false);
+		arguments = $insertDefaults(name="sendEmail", input=arguments);
 
 		// set the variables that should be available to the email view template
 		for (loc.key in arguments)
