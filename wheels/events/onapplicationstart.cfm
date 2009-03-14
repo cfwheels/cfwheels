@@ -1,8 +1,13 @@
 <cffunction name="onApplicationStart" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
+		
+		// set or reset all settings but make sure to pass along the reload password between forced reloads with "reload=x"
+		if (StructKeyExists(application, "wheels"))
+			loc.oldReloadPassword = application.wheels.reloadPassword;
 		application.wheels = {};
-		application.settings = {};
+		if (StructKeyExists(loc, "oldReloadPassword"))
+			application.wheels.reloadPassword = loc.oldReloadPassword;
 		
 		if (StructKeyExists(server, "railo"))
 		{
@@ -17,7 +22,7 @@
 		loc.majorVersion = Left(application.wheels.serverVersion, 1);
 		if ((application.wheels.serverName == "Railo" && loc.majorVersion < 3) || (application.wheels.serverName == "Adobe ColdFusion" && loc.majorVersion < 8))
 			$throw(type="Wheels.NoSupport", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Upgrade to Adobe ColdFusion 8 or Railo 3.");
-		application.wheels.version = "0.9";
+		application.wheels.version = "0.9.1";
 		application.wheels.controllers = {};
 		application.wheels.models = {};
 		application.wheels.existingModelFiles = "";
@@ -63,46 +68,29 @@
 		
 		// set up struct for caches
 		application.wheels.cache = {};
-		application.wheels.cache.internal = {};
-		application.wheels.cache.internal.sql = {};
-		application.wheels.cache.internal.image = {};
-		application.wheels.cache.external = {};
-		application.wheels.cache.external.main = {};
-		application.wheels.cache.external.action = {};
-		application.wheels.cache.external.page = {};
-		application.wheels.cache.external.partial = {};
-		application.wheels.cache.external.query = {};
+		application.wheels.cache.sql = {};
+		application.wheels.cache.image = {};
+		application.wheels.cache.main = {};
+		application.wheels.cache.action = {};
+		application.wheels.cache.page = {};
+		application.wheels.cache.partial = {};
+		application.wheels.cache.query = {};
 		application.wheels.cacheLastCulledAt = Now();
 		
-		// load settings
-		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && (!Len(application.settings.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.settings.reloadPassword)))
-			application.settings.environment = URL.reload;
+		// set environment
+		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && (!Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
+			application.wheels.environment = URL.reload;
 		else
 			$include(template="#application.wheels.configPath#/environment.cfm");
+		
+		// load wheels settings
+		$include(template="wheels/events/onapplicationstart/settings.cfm");
+		
+		// load developer settings
 		$include(template="#application.wheels.configPath#/settings.cfm");
 
-		// load defaults for functions
-		loc.defaultFiles = $directory(directory=this.rootDir & "config/defaults", type="file");
-		loc.iEnd = loc.defaultFiles.recordCount;
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			loc.name = loc.defaultFiles["name"][loc.i];
-			$include(template="#application.wheels.configPath#/defaults/#LCase(loc.name)#");
-		}
-
-		//override any settings and defaults with environment specific ones
-		$include(template="#application.wheels.configPath#/environments/#application.settings.environment#.cfm");
-		
-		// try to determine url rewrite capabilites unless set manually by the developer
-		if (!Len(application.settings.URLRewriting))
-		{
-			if (Right(cgi.script_name, 12) == "/rewrite.cfm")
-				application.settings.URLRewriting = "On";
-			else if (Len(cgi.path_info))
-				application.settings.URLRewriting = "Partial";
-			else
-				application.settings.URLRewriting = "Off";
-		}
+		//override settings with environment specific ones
+		$include(template="#application.wheels.configPath#/#application.wheels.environment#/settings.cfm");
 		
 		// load developer routes and add wheels default ones
 		$include(template="#application.wheels.configPath#/routes.cfm");
@@ -147,7 +135,7 @@
 						$zip(action="unzip", destination=loc.thisPluginFolder, file=loc.thisPluginFile);
 					}
 					loc.fileName = LCase(loc.pluginName) & "." & loc.pluginName;
-					application.wheels.plugins[loc.pluginName] = $createObjectFromRoot(objectType="pluginObject", fileName=loc.fileName);
+					application.wheels.plugins[loc.pluginName] = $createObjectFromRoot(path=application.wheels.pluginComponentPath, fileName=loc.fileName, method="init");
 					if (application.wheels.plugins[loc.pluginName].version != application.wheels.version)
 						$throw(type="Wheels.IncompatiblePlugin", message="#loc.pluginName# is incompatible with this version of Wheels.", extendedInfo="You're running version #application.wheels.version# of Wheels and the #loc.pluginName# plugin you have installed only supports version #application.wheels.plugins[loc.pluginName].version#. Download a new version of #loc.pluginName#, drop it in the 'plugins' folder and restart Wheels by issuing a 'reload=true' request.");
 				}
@@ -170,14 +158,11 @@
 		}
 
 		// determine and set database brand unless we're running in maintenance mode
-		if (application.settings.environment != "maintenance")
+		if (application.wheels.environment != "maintenance")
 		{
-			$include(template="#application.wheels.configPath#/database.cfm");
-			if (!Len(application.settings.database.datasource))
-				application.settings.database.datasource = LCase(ListLast(this.rootDir, Right(this.rootDir, 1)));
 			try
 			{
-				loc.info = $dbinfo(datasource=application.settings.database.datasource, username=application.settings.database.username, password=application.settings.database.password, type="version");
+				loc.info = $dbinfo(datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword, type="version");
 			}
 			catch(Any e) {}
 			if (StructKeyExists(loc, "info"))

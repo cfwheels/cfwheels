@@ -1,4 +1,4 @@
-<cffunction name="onError" returntype="void" access="public" output="true">
+<cffunction name="onErsror" returntype="void" access="public" output="true">
 	<cfargument name="exception" type="any" required="true">
 	<cfargument name="eventname" type="any" required="true">
 	<cfscript>
@@ -18,29 +18,15 @@
 		if (!StructKeyExists(arguments.exception, "cause"))
 			arguments.exception.cause = arguments.exception; 
         
-		if (application.settings.sendEmailOnError)
-			$mail(to=application.settings.errorEmailAddress, from=application.settings.errorEmailAddress, subject="Error", type="html", body=$includeAndReturnOutput(template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception));
+		if (application.wheels.sendEmailOnError)
+			$mail(to=application.wheels.errorEmailAddress, from=application.wheels.errorEmailAddress, subject="Error", type="html", body=$includeAndReturnOutput(template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception));
 
-		if (application.settings.showErrorInformation)
+		if (application.wheels.showErrorInformation)
 		{
 			if (StructKeyExists(arguments.exception.cause, "rootCause") && Left(arguments.exception.cause.rootCause.type, 6) == "Wheels")
 			{
-				loc.wheelsError = arguments.exception.cause.rootCause;
-			}
-			else if (IsDefined("arguments.exception.cause.rootCause.resolvedName") && IsDefined("arguments.exception.cause.rootCause.element") && arguments.exception.cause.rootCause.resolvedName == "application" && Left(arguments.exception.cause.rootCause.element, 8) == "settings")
-			{
-				loc.element = ReplaceNoCase(arguments.exception.cause.rootCause.element, "settings.", "");
-				loc.functionName = LCase(ListFirst(loc.element, "."));
-				loc.argumentName = LCase(ListLast(loc.element, "."));
-				loc.wheelsError.type = "Wheels.RequiredArgumentMissing";
-				loc.wheelsError.message = "The '#loc.argumentName#' argument to the '#loc.functionName#' function is required but was not passed in.";
-				loc.wheelsError.extendedInfo = "Either pass in the '#loc.argumentName#' argument directly to the '#loc.functionName#' function or set a global default for it in 'config/defaults/#loc.functionName#.cfm'.";
-				loc.wheelsError.tagContext = arguments.exception.cause.rootCause.tagContext;
-			}
-			if (StructKeyExists(loc, "wheelsError"))
-			{
 				loc.returnValue = $includeAndReturnOutput(template="wheels/styles/header.cfm");
-				loc.returnValue = loc.returnValue & $includeAndReturnOutput(template="wheels/events/onerror/wheelserror.cfm", wheelsError=loc.wheelsError);
+				loc.returnValue = loc.returnValue & $includeAndReturnOutput(template="wheels/events/onerror/wheelserror.cfm", wheelsError=arguments.exception.cause.rootCause);
 				loc.returnValue = loc.returnValue & $includeAndReturnOutput(template="wheels/styles/footer.cfm");
 			}
 			else

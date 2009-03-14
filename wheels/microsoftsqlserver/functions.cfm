@@ -39,55 +39,61 @@
 	<cfargument name="limit" type="numeric" required="false" default=0>
 	<cfargument name="offset" type="numeric" required="false" default=0>
 	<cfargument name="parameterize" type="boolean" required="true">
-	<cfset var loc = StructNew()>
-	<cfset var query = StructNew()>
-
-	<cfif arguments.limit GT 0>
-		<cfset loc.select = ReplaceNoCase(arguments.sql[1], "SELECT ", "")>
-		<cfset loc.qualifiedOrder = ReplaceNoCase(arguments.sql[ArrayLen(arguments.sql)], "ORDER BY ", "")>
-		<cfloop list="#loc.select#" index="loc.i">
-			<cfif ListContainsNoCase(loc.qualifiedOrder, loc.i) IS 0>
-				<cfset loc.qualifiedOrder = ListAppend(loc.qualifiedOrder, "#loc.i# ASC")>
-			</cfif>
-		</cfloop>
-		<cfset loc.simpleOrder = "">
-		<cfloop list="#loc.qualifiedOrder#" index="loc.i">
-			<cfset loc.simpleOrder = ListAppend(loc.simpleOrder, ListLast(loc.i, "."))>
-		</cfloop>
-		<cfset loc.simpleOrderReversed = ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(loc.simpleOrder, "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all")>
-		<cfset loc.qualifiedOrderReversed = ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(loc.qualifiedOrder, "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all")>
-		<cfset loc.simpleSelect = ReplaceNoCase(ReplaceNoCase(loc.simpleOrder, " DESC", "", "all"), " ASC", "", "all")>
-		<cfset loc.qualifiedSelect = ReplaceNoCase(ReplaceNoCase(loc.qualifiedOrder, " DESC", "", "all"), " ASC", "", "all")>
-		<cfset loc.beforeWhere = "SELECT " & loc.simpleSelect & " FROM (SELECT TOP " & arguments.limit & " " & loc.simpleSelect & " FROM (SELECT ">
-		<cfif ListLast(arguments.sql[2], " ") Contains " ">
-			<cfset loc.beforeWhere = loc.beforeWhere & "DISTINCT ">
-		</cfif>
-		<cfset loc.beforeWhere = loc.beforeWhere & "TOP " & arguments.limit+arguments.offset & " " & loc.qualifiedSelect & " " & arguments.sql[2]>
-		<cfset loc.afterWhere = "ORDER BY " & loc.qualifiedOrder & ") AS tmp1 ORDER BY " & loc.simpleOrderReversed & ") AS tmp2 ORDER BY " & loc.simpleOrder>
-		<cfset ArrayDeleteAt(arguments.sql, 1)>
-		<cfset ArrayDeleteAt(arguments.sql, 1)>
-		<cfset ArrayDeleteAt(arguments.sql, ArrayLen(arguments.sql))>
-		<cfset ArrayPrepend(arguments.sql, loc.beforeWhere)>
-		<cfset ArrayAppend(arguments.sql, loc.afterWhere)>
-	</cfif>
-
-	<cfset arguments.name = "query.name">
-	<cfset arguments.result = "loc.result">
-	<cfset arguments.datasource = application.settings.database.datasource>
-	<cfset arguments.username = application.settings.database.username>
-	<cfset arguments.password = application.settings.database.password>
-	<cfset loc.sql = arguments.sql>
-	<cfset loc.limit = arguments.limit>
-	<cfset loc.offset = arguments.offset>
-	<cfset loc.parameterize = arguments.parameterize>
-	<cfset StructDelete(arguments, "sql")>
-	<cfset StructDelete(arguments, "limit")>
-	<cfset StructDelete(arguments, "offset")>
-	<cfset StructDelete(arguments, "parameterize")>
+	<cfscript>
+		var loc = {};
+		var query = {};
+		if (arguments.limit > 0)
+		{
+			loc.select = ReplaceNoCase(arguments.sql[1], "SELECT ", "");
+			loc.qualifiedOrder = ReplaceNoCase(arguments.sql[ArrayLen(arguments.sql)], "ORDER BY ", "");
+			loc.iEnd = ListLen(loc.select);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.item = ListGetAt(loc.select, loc.i);
+				if (!ListContainsNoCase(loc.qualifiedOrder, loc.item))
+					loc.qualifiedOrder = ListAppend(loc.qualifiedOrder, "#loc.i# ASC");
+			}
+			loc.simpleOrder = "";
+			loc.iEnd = ListLen(loc.qualifiedOrder);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.item = ListGetAt(loc.qualifiedOrder, loc.i);
+				loc.simpleOrder = ListAppend(loc.simpleOrder, ListLast(loc.item, "."));
+			}
+			loc.simpleOrderReversed = ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(loc.simpleOrder, "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all");
+			loc.qualifiedOrderReversed = ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(loc.qualifiedOrder, "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all");
+			loc.simpleSelect = ReplaceNoCase(ReplaceNoCase(loc.simpleOrder, " DESC", "", "all"), " ASC", "", "all");
+			loc.qualifiedSelect = ReplaceNoCase(ReplaceNoCase(loc.qualifiedOrder, " DESC", "", "all"), " ASC", "", "all");
+			loc.beforeWhere = "SELECT " & loc.simpleSelect & " FROM (SELECT TOP " & arguments.limit & " " & loc.simpleSelect & " FROM (SELECT ";
+			if (ListLast(arguments.sql[2], " ") Contains " ")
+				loc.beforeWhere = loc.beforeWhere & "DISTINCT ";
+			loc.beforeWhere = loc.beforeWhere & "TOP " & arguments.limit+arguments.offset & " " & loc.qualifiedSelect & " " & arguments.sql[2];
+			loc.afterWhere = "ORDER BY " & loc.qualifiedOrder & ") AS tmp1 ORDER BY " & loc.simpleOrderReversed & ") AS tmp2 ORDER BY " & loc.simpleOrder;
+			ArrayDeleteAt(arguments.sql, 1);
+			ArrayDeleteAt(arguments.sql, 1);
+			ArrayDeleteAt(arguments.sql, ArrayLen(arguments.sql));
+			ArrayPrepend(arguments.sql, loc.beforeWhere);
+			ArrayAppend(arguments.sql, loc.afterWhere);
+		}
+		arguments.name = "query.name";
+		arguments.result = "loc.result";
+		arguments.datasource = application.wheels.dataSourceName;
+		arguments.username = application.wheels.dataSourceUserName;
+		arguments.password = application.wheels.dataSourcePassword;
+		loc.sql = arguments.sql;
+		loc.limit = arguments.limit;
+		loc.offset = arguments.offset;
+		loc.parameterize = arguments.parameterize;
+		StructDelete(arguments, "sql");
+		StructDelete(arguments, "limit");
+		StructDelete(arguments, "offset");
+		StructDelete(arguments, "parameterize");
+	</cfscript>
 	<cfquery attributeCollection="#arguments#"><cfloop array="#loc.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfif IsBoolean(loc.parameterize) AND loc.parameterize><cfset loc.queryParamAttributes = StructNew()><cfset loc.queryParamAttributes.cfsqltype = loc.i.type><cfset loc.queryParamAttributes.value = loc.i.value><cfif StructKeyExists(loc.i, "null")><cfset loc.queryParamAttributes.null = loc.i.null></cfif><cfif StructKeyExists(loc.i, "scale") AND loc.i.scale GT 0><cfset loc.queryParamAttributes.scale = loc.i.scale></cfif><cfqueryparam attributeCollection="#loc.queryParamAttributes#"><cfelse>'#loc.i.value#'</cfif><cfelse>#preserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop></cfquery>
-	<cfset loc.returnValue.result = loc.result>
-	<cfif StructKeyExists(query, "name")>
-		<cfset loc.returnValue.query = query.name>
-	</cfif>
+	<cfscript>
+		loc.returnValue.result = loc.result;
+		if (StructKeyExists(query, "name"))
+			loc.returnValue.query = query.name;
+	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

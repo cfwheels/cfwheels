@@ -22,7 +22,7 @@
 <cffunction name="$element" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="attributes" type="struct" required="false" default="#StructNew()#">
-	<cfargument name="content" type="string" required="true">
+	<cfargument name="content" type="string" required="false" default="">
 	<cfargument name="skip" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
@@ -31,6 +31,18 @@
 		loc.returnValue = loc.returnValue & "</" & arguments.name & ">";
 	</cfscript>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$tagId" returntype="string" access="public" output="false">
+	<cfargument name="objectName" type="string" required="true">
+	<cfargument name="property" type="string" required="true">
+	<cfreturn ListLast(arguments.objectName, ".") & "-" & arguments.property>
+</cffunction>
+
+<cffunction name="$tagName" returntype="string" access="public" output="false">
+	<cfargument name="objectName" type="string" required="true">
+	<cfargument name="property" type="string" required="true">
+	<cfreturn ListLast(arguments.objectName, ".") & "[" & arguments.property & "]">
 </cffunction>
 
 <cffunction name="$objectFromString" returntype="any" access="public" output="false">

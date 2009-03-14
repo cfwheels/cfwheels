@@ -8,7 +8,7 @@
 		if (Len(arguments.message))
 			loc.genericMessage = arguments.message;
 		else
-			loc.genericMessage = application.settings.validatesConfirmationOf.message;
+			loc.genericMessage = application.wheels.validatesConfirmationOf.message;
 		loc.iEnd = ListLen(arguments.property);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
@@ -32,7 +32,7 @@
 		if (Len(arguments.message))
 			loc.genericMessage = arguments.message;
 		else
-			loc.genericMessage = application.settings.validatesExclusionOf.message;
+			loc.genericMessage = application.wheels.validatesExclusionOf.message;
 		loc.iEnd = ListLen(arguments.property);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
@@ -57,7 +57,7 @@
 		if (Len(arguments.message))
 			loc.genericMessage = arguments.message;
 		else
-			loc.genericMessage = application.settings.validatesFormatOf.message;
+			loc.genericMessage = application.wheels.validatesFormatOf.message;
 		loc.iEnd = ListLen(arguments.property);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
@@ -83,7 +83,7 @@
 		if (Len(arguments.message))
 			loc.genericMessage = arguments.message;
 		else
-			loc.genericMessage = application.settings.validatesInclusionOf.message;
+			loc.genericMessage = application.wheels.validatesInclusionOf.message;
 		loc.iEnd = ListLen(arguments.property);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
@@ -111,7 +111,7 @@
 		if (Len(arguments.message))
 			loc.genericMessage = arguments.message;
 		else
-			loc.genericMessage = application.settings.validatesLengthOf.message;
+			loc.genericMessage = application.wheels.validatesLengthOf.message;
 		loc.iEnd = ListLen(arguments.property);
 		if (Len(arguments.within))
 			arguments.within = ListToArray(Replace(arguments.within, ", ", ",", "all"));
@@ -141,7 +141,7 @@
 		if (Len(arguments.message))
 			loc.genericMessage = arguments.message;
 		else
-			loc.genericMessage = application.settings.validatesNumericalityOf.message;
+			loc.genericMessage = application.wheels.validatesNumericalityOf.message;
 		loc.iEnd = ListLen(arguments.property);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
@@ -164,7 +164,7 @@
 		if (Len(arguments.message))
 			loc.genericMessage = arguments.message;
 		else
-			loc.genericMessage = application.settings.validatesPresenceOf.message;
+			loc.genericMessage = application.wheels.validatesPresenceOf.message;
 		loc.iEnd = ListLen(arguments.property);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
@@ -186,7 +186,7 @@
 		if (Len(arguments.message))
 			loc.genericMessage = arguments.message;
 		else
-			loc.genericMessage = application.settings.validatesUniquenessOf.message;
+			loc.genericMessage = application.wheels.validatesUniquenessOf.message;
 		arguments.scope = Replace(arguments.scope, ", ", ",", "all");
 		loc.iEnd = ListLen(arguments.property);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)

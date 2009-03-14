@@ -2,8 +2,8 @@
 	<cfargument name="key" type="any" required="true" hint="Primary key value(s) of record to fetch. Separate with comma if passing in multiple primary key values.">
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="reload" type="boolean" required="false" default="#application.settings.get.reload#" hint="See documentation for `findAll`">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.get.parameterize#" hint="See documentation for `findAll`">
+	<cfargument name="reload" type="boolean" required="false" default="false" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
 	<cfargument name="$create" type="boolean" required="false" default="true">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
@@ -20,8 +20,8 @@
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="reload" type="boolean" required="false" default="#application.settings.findOne.reload#" hint="See documentation for `findAll`">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.findOne.parameterize#" hint="See documentation for `findAll`">
+	<cfargument name="reload" type="boolean" required="false" default="false" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
 	<cfargument name="$create" type="boolean" required="false" default="true">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
@@ -56,8 +56,8 @@
 	<cfargument name="count" type="numeric" required="false" default=0 hint="Total records in pagination (when not supplied Wheels will do a `COUNT` query to get this value)">
 	<cfargument name="handle" type="string" required="false" default="query" hint="Handle to use for the query in pagination">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the query for">
-	<cfargument name="reload" type="boolean" required="false" default="#application.settings.findAll.reload#" hint="Set to `true` to force Wheels to fetch a new object from the database even though an identical query has been run in the same request">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.findAll.parameterize#" hint="Set to `true` to use `cfqueryparam` on all columns or pass in a list of property names to use `cfqueryparam` on those only">
+	<cfargument name="reload" type="boolean" required="false" default="false" hint="Set to `true` to force Wheels to fetch a new object from the database even though an identical query has been run in the same request">
+	<cfargument name="parameterize" type="any" required="false" default="true" hint="Set to `true` to use `cfqueryparam` on all columns or pass in a list of property names to use `cfqueryparam` on those only">
 	<cfargument name="$limit" type="numeric" required="false" default=0>
 	<cfargument name="$offset" type="numeric" required="false" default=0>
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
@@ -119,7 +119,7 @@
 
 			// get info from cache when available, otherwise create the generic select, from, where and order by clause
 			loc.queryShellKey = variables.wheels.class.name & $hashStruct(arguments);
-			loc.sql = $getFromCache(loc.queryShellKey, "sql", "internal");
+			loc.sql = $getFromCache(loc.queryShellKey, "sql");
 			if (!IsArray(loc.sql))
 			{
 				loc.sql = [];
@@ -127,7 +127,7 @@
 				loc.sql = $addFromClause(sql=loc.sql, include=arguments.include);
 				loc.sql = $addWhereClause(sql=loc.sql, where=loc.originalWhere, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 				loc.sql = $addOrderByClause(sql=loc.sql, order=arguments.order, include=arguments.include);
-				$addToCache(loc.queryShellKey, loc.sql, 86400, "sql", "internal");
+				$addToCache(key=loc.queryShellKey, value=loc.sql, category="sql");
 			}
 
 			// add where clause parameters to the generic sql info
@@ -147,10 +147,10 @@
 				loc.finderArgs.parameterize = arguments.parameterize;
 				loc.finderArgs.limit = arguments.$limit;
 				loc.finderArgs.offset = arguments.$offset;
-				if (Len(arguments.cache) && application.settings.environment IS "production")
+				if (Len(arguments.cache) && application.wheels.environment == "production")
 				{
 					if (IsBoolean(arguments.cache) && arguments.cache)
-						loc.finderArgs.cachedWithin = CreateTimeSpan(0,0,application.settings.defaultCacheTime,0);
+						loc.finderArgs.cachedWithin = CreateTimeSpan(0,0,application.wheels.defaultCacheTime,0);
 					else if (IsNumeric(arguments.cache))
 						loc.finderArgs.cachedWithin = CreateTimeSpan(0,0,arguments.cache,0);
 				}
@@ -166,11 +166,11 @@
 <cffunction name="exists" returntype="boolean" access="public" output="false" hint="Checks if a record exists in the table. You can pass in a primary key value or a string to the `WHERE` clause.">
 	<cfargument name="key" type="any" required="false" default="" hint="See documentation for `findByKey`">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="reload" type="boolean" required="false" default="#application.settings.exists.reload#" hint="See documentation for `findAll`">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.exists.parameterize#" hint="See documentation for `findAll`">
+	<cfargument name="reload" type="boolean" required="false" default="false" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
 	<cfscript>
 		var loc = {};
-		if (application.settings.environment != "production")
+		if (application.wheels.environment != "production")
 			if (!Len(arguments.key) && !Len(arguments.where))
 				$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You have to pass in either 'key' or 'where'.");
 		if (Len(arguments.where))
@@ -214,8 +214,8 @@
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.updateAll.parameterize#" hint="See documentation for `findAll`">
-	<cfargument name="instantiate" type="boolean" required="false" default="#application.settings.updateAll.instantiate#" hint="Whether or not to instantiate the object(s) before the update">
+	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
+	<cfargument name="instantiate" type="boolean" required="false" default="false" hint="Whether or not to instantiate the object(s) before the update">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
@@ -289,8 +289,8 @@
 <cffunction name="deleteAll" returntype="numeric" access="public" output="false" hint="Deletes all records that match the where argument. By default objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in instantiate=true. Returns the number of records that were deleted.">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.deleteAll.parameterize#" hint="See documentation for `findAll`">
-	<cfargument name="instantiate" type="boolean" required="false" default="#application.settings.deleteAll.instantiate#" hint="Whether or not to instantiate the object(s) before deletion">
+	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
+	<cfargument name="instantiate" type="boolean" required="false" default="false" hint="Whether or not to instantiate the object(s) before deletion">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
@@ -322,7 +322,7 @@
 </cffunction>
 
 <cffunction name="save" returntype="boolean" access="public" output="false" hint="Saves the object if it passes validation and callbacks. Returns `true` if the object was saved successfully to the database.">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.save.parameterize#" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
 	<cfscript>
 		var returnValue = false;
 		clearErrors();
@@ -345,7 +345,7 @@
 
 <cffunction name="update" returntype="boolean" access="public" output="false" hint="Updates the object with the supplied properties and saves it to the database. Returns true if the object was saved successfully to the database and false otherwise.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.update.parameterize#" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
 	<cfscript>
 		var loc = {};
 		for (loc.key in arguments)
@@ -359,7 +359,7 @@
 </cffunction>
 
 <cffunction name="delete" returntype="boolean" access="public" output="false" hint="Deletes the object which means the row is deleted from the database (unless prevented by a `beforeDelete` callback). Returns true on successful deletion of the row, false otherwise.">
-	<cfargument name="parameterize" type="any" required="false" default="#application.settings.delete.parameterize#" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
 	<cfscript>
 		var loc = {};
 		loc.proceed = true;
@@ -683,7 +683,7 @@
 				{
 					loc.column = loc.params[loc.i].column;
 					ArrayAppend(arguments.sql, "#PreserveSingleQuotes(loc.column)#	#loc.params[loc.i].operator#");
-					if (application.settings.environment IS NOT "production" && !StructKeyExists(loc.params[loc.i], "type"))
+					if (application.wheels.environment != "production" && !StructKeyExists(loc.params[loc.i], "type"))
 							$throw(type="Wheels", message="Column Not Found", extendedInfo="Wheels looked for a column named '#loc.column#' but couldn't find it.");
 					loc.param = {type=loc.params[loc.i].type, scale=loc.params[loc.i].scale}; // removed: property=loc.params[loc.i].property, column=loc.params[loc.i].column
 					ArrayAppend(arguments.sql, loc.param);
@@ -974,7 +974,7 @@
 		loc.fileName = $capitalize(variables.wheels.class.name);
 		if (!ListFindNoCase(application.wheels.existingModelFiles, variables.wheels.class.name))
 			loc.fileName = "Model";
-		loc.returnValue = $createObjectFromRoot(objectType="ModelObject", fileName=loc.fileName, name=variables.wheels.class.name, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row);
+		loc.returnValue = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.name, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

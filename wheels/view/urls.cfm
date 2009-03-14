@@ -13,7 +13,7 @@
 	<cfargument name="port" type="numeric" required="false" default="0" hint="See documentation for `URLFor`">
 	<cfscript>
 		var loc = {};
-		if (application.settings.environment != "production")
+		if (application.wheels.environment != "production")
 		{
 			if (StructKeyExists(arguments, "href"))
 				$throw(type="Wheels.IncorrectArguments", message="The 'href' argument is not allowed.", extendedInfo="You can't pass in the 'href' argument since Wheels will determine what to place in the 'href' attribute based on a 'route' or a 'controller' / 'action' / 'key' combination.");

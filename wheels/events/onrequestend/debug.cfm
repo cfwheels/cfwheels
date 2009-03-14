@@ -7,7 +7,7 @@
 </tr>
 <tr>
 	<td valign="top"><strong>Framework:</strong></td>
-	<td>Wheels #application.wheels.version# (#application.settings.environment# mode)</td>
+	<td>Wheels #application.wheels.version# (#application.wheels.environment# mode)</td>
 </tr>
 <tr>
 	<td valign="top"><strong>CFML Engine:</strong></td>
@@ -19,11 +19,11 @@
 </tr>
 <tr>
 	<td valign="top"><strong>URL Rewriting:</strong></td>
-	<td>#application.settings.URLRewriting#</td>
+	<td>#application.wheels.URLRewriting#</td>
 </tr>
 <tr>
 	<td valign="top"><strong>URL Obfuscation:</strong></td>
-	<td><cfif application.settings.obfuscateURLs>On<cfelse>Off</cfif></td>
+	<td><cfif application.wheels.obfuscateUrls>On<cfelse>Off</cfif></td>
 </tr>
 <tr>
 	<td valign="top"><strong>Plugins:</strong></td>

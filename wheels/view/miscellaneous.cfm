@@ -116,104 +116,113 @@
 
 <cffunction name="styleSheetLinkTag" returntype="string" access="public" output="false" hint="Returns a `link` tag based on the supplied arguments.">
 	<cfargument name="sources" type="any" required="true" hint="The name of a CSS file in the `stylesheets` folder">
-	<cfargument name="type" type="string" required="false" default="text/css" hint="The `type` attribute for the `link` tag">
-	<cfargument name="media" type="string" required="false" default="all" hint="The `media` attribute for the `link` tag">
-	<cfset var loc = {}>
-	<cfset arguments.$namedArguments = "sources">
-	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
-
-	<cfif application.settings.environment IS NOT "production">
-		<cfif StructKeyExists(arguments, "href")>
-			<cfset $throw(type="Wheels.IncorrectArguments", message="The 'href' argument is not allowed.", extendedInfo="You can't pass in the 'href' argument since it will be determined by Wheels.")>
-		<cfelseif StructKeyExists(arguments, "rel")>
-			<cfset $throw(type="Wheels.IncorrectArguments", message="The 'rel' argument is not allowed.", extendedInfo="You can't pass in the 'rel' argument since it will be determined by Wheels.")>
-		</cfif>
-	</cfif>
-
-	<cfset loc.result = "">
-	<cfloop list="#arguments.sources#" index="loc.i">
-		<cfset loc.href = "#application.wheels.webPath##application.wheels.stylesheetPath#/#Trim(loc.i)#">
-		<cfif loc.i Does Not Contain ".">
-			<cfset loc.href = loc.href & ".css">
-		</cfif>
-		<cfset loc.result = loc.result & '<link rel="stylesheet" href="#loc.href#"#loc.attributes# />'>
-	</cfloop>
-
-	<cfreturn loc.result>
+	<cfargument name="type" type="string" required="false" default="#application.wheels.styleSheetLinkTag.type#" hint="The `type` attribute for the `link` tag">
+	<cfargument name="media" type="string" required="false" default="#application.wheels.styleSheetLinkTag.media#" hint="The `media` attribute for the `link` tag">
+	<cfscript>
+		var loc = {};
+		arguments = $insertDefaults(name="styleSheetLinkTag", reserved="href,rel", input=arguments);
+		arguments.rel = "stylesheet";
+		loc.returnValue = "";
+		loc.iEnd = ListLen(arguments.sources);
+		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(arguments.sources, loc.i);
+			arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & Trim(loc.item);
+			if (loc.item Does Not Contain ".")
+				arguments.href = arguments.href & ".css";
+			loc.returnValue = loc.returnValue & $tag(name="link", skip="sources", close=true, attributes=arguments);
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="javaScriptIncludeTag" returntype="string" access="public" output="false" hint="Returns a `script` tag based on the supplied arguments.">
 	<cfargument name="sources" type="string" required="true" hint="The name of a JavaScript file in the `javascripts` folder">
-	<cfargument name="type" type="string" required="false" default="text/javascript" hint="The `type` attribute for the `script` tag">
-	<cfset var loc = {}>
-	<cfset arguments.$namedArguments = "sources">
-	<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
-
-	<cfif application.settings.environment IS NOT "production">
-		<cfif StructKeyExists(arguments, "src")>
-			<cfset $throw(type="Wheels.IncorrectArguments", message="The 'src' argument is not allowed.", extendedInfo="You can't pass in the 'src' argument since it will be determined by Wheels.")>
-		</cfif>
-	</cfif>
-
-	<cfset loc.result = "">
-	<cfloop list="#arguments.sources#" index="loc.i">
-		<cfset loc.src = "#application.wheels.webPath##application.wheels.javascriptPath#/#Trim(loc.i)#">
-		<cfif loc.i Does Not Contain ".">
-			<cfset loc.src = loc.src & ".js">
-		</cfif>
-		<cfset loc.result = loc.result & '<script src="#loc.src#"#loc.attributes#></script>'>
-	</cfloop>
-
-	<cfreturn loc.result>
+	<cfargument name="type" type="string" required="false" default="#application.wheels.javaScriptIncludeTag.type#" hint="The `type` attribute for the `script` tag">
+	<cfscript>
+		var loc = {};
+		arguments = $insertDefaults(name="javaScriptIncludeTag", reserved="src", input=arguments);
+		loc.returnValue = "";
+		loc.iEnd = ListLen(arguments.sources);
+		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(arguments.sources, loc.i);
+			arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & Trim(loc.item);
+			if (loc.item Does Not Contain ".")
+				arguments.src = arguments.src & ".js";
+			loc.returnValue = loc.returnValue & $element(name="script", skip="sources", attributes=arguments);
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="imageTag" returntype="string" access="public" output="false" hint="Returns an image tag and will (if the image is stored in the local `images` folder) set the `width`, `height` and `alt` attributes automatically for you.">
 	<cfargument name="source" type="string" required="true" hint="Image file name if local or full URL if remote">
-	<cfset var loc = {}>
-	<cfif application.settings.environment IS NOT "production">
-		<cfif Left(arguments.source, 7) IS NOT "http://" AND NOT FileExists(ExpandPath("#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#"))>
-			<cfset $throw(type="Wheels.ImageFileNotFound", message="Wheels could not find '#expandPath('#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#')#' on the local file system.", extendedInfo="Pass in a correct relative path from '#expandPath('#application.wheels.webPath##application.wheels.imagePath#\')#' to an image.")>
-		<cfelseif Left(arguments.source, 7) IS NOT "http://" AND arguments.source Does Not Contain ".jpg" AND arguments.source Does Not Contain ".gif" AND arguments.source Does Not Contain ".png">
-			<cfset $throw(type="Wheels.ImageFormatNotSupported", message="Wheels can't read image files with that format.", extendedInfo="Use a GIF, JPG or PNG image instead.")>
-		</cfif>
-	</cfif>
+	<cfscript>
+		var loc = {};
+		arguments = $insertDefaults(name="imageTag", reserved="src", input=arguments);
+		if (application.wheels.cacheImages)
+		{
+			loc.category = "image";
+			loc.key = $hashStruct(arguments);
+			loc.lockName = loc.category & loc.key;
+			loc.conditionArgs = {};
+			loc.conditionArgs.category = loc.category;
+			loc.conditionArgs.key = loc.key;
+			loc.executeArgs = arguments;
+			loc.executeArgs.category = loc.category;
+			loc.executeArgs.key = loc.key;
+			loc.returnValue = $doubleCheckLock(name=loc.lockName, condition="$getFromCache", execute="$addImageTagToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+		}
+		else
+		{
+			loc.returnValue = $imageTag(argumentCollection=arguments);
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
 
-	<cfset loc.category = "image">
-	<cfset loc.key = $hashStruct(arguments)>
-	<cfset loc.lockName = loc.category & loc.key>
-	<!--- double-checked lock --->
-	<cflock name="#loc.lockName#" type="readonly" timeout="30">
-		<cfset loc.result = $getFromCache(loc.key, loc.category, "internal")>
-	</cflock>
-	<cfif IsBoolean(loc.result) AND NOT loc.result>
-   	<cflock name="#loc.lockName#" type="exclusive" timeout="30">
-			<cfset loc.result = $getFromCache(loc.key, loc.category, "internal")>
-			<cfif IsBoolean(loc.result) AND NOT loc.result>
-				<cfset arguments.$namedArguments = "source">
-				<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
-				<cfif Left(arguments.source, 7) IS "http://">
-					<cfset loc.src = arguments.source>
-				<cfelse>
-					<cfset loc.src = "#application.wheels.webPath##application.wheels.imagePath#/#arguments.source#">
-					<cfif NOT StructKeyExists(arguments, "width") OR NOT StructKeyExists(arguments, "height")>
-						<cfimage action="info" source="#expandPath(loc.src)#" structname="loc.image">
-						<cfif loc.image.width GT 0 AND loc.image.height GT 0>
-							<cfset loc.attributes = loc.attributes & " width=""#loc.image.width#"" height=""#loc.image.height#""">
-						</cfif>
-					</cfif>
-				</cfif>
-				<cfif NOT StructKeyExists(arguments, "alt")>
-					<cfset loc.attributes = loc.attributes & " alt=""#titleize(replaceList(spanExcluding(Reverse(spanExcluding(Reverse(loc.src), "/")), "."), "-,_", " , "))#""">
-				</cfif>
-				<cfset loc.result = "<img src=""#loc.src#""#loc.attributes# />">
-				<cfif application.settings.cacheImages>
-					<cfset $addToCache(loc.key, loc.result, 86400, loc.category, "internal")>
-				</cfif>
-			</cfif>
-		</cflock>
-	</cfif>
+<cffunction name="$addImageTagToCache" returntype="string" access="public" output="false">
+	<cfscript>
+		var returnValue = "";
+		returnValue = $imageTag(argumentCollection=arguments);
+		$addToCache(key=arguments.key, value=returnValue, category=arguments.category);
+	</cfscript>
+	<cfreturn returnValue>
+</cffunction>
 
-	<cfreturn loc.result>
+<cffunction name="$imageTag" returntype="string" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		if (Left(arguments.source, 7) == "http://")
+		{
+			arguments.src = arguments.source;
+		}
+		else
+		{
+			arguments.src = application.wheels.webPath & application.wheels.imagePath & "/" & arguments.source;
+			if (application.wheels.environment != "production")
+			{
+				if (Left(arguments.source, 7) != "http://" && !FileExists(ExpandPath(arguments.src)))
+					$throw(type="Wheels.ImageFileNotFound", message="Wheels could not find '#expandPath('#arguments.src#')#' on the local file system.", extendedInfo="Pass in a correct relative path from the 'images' folder to an image.");
+				else if (Left(arguments.source, 7) != "http://" && arguments.source Does Not Contain ".jpg" && arguments.source Does Not Contain ".gif" && arguments.source Does Not Contain ".png")
+					$throw(type="Wheels.ImageFormatNotSupported", message="Wheels can't read image files with that format.", extendedInfo="Use a GIF, JPG or PNG image instead.");
+			}
+			if (!StructKeyExists(arguments, "width") || !StructKeyExists(arguments, "height"))
+			{
+				loc.image = $image(action="info", source=expandPath(arguments.src));
+				if (loc.image.width > 0 && loc.image.height > 0)
+				{
+					arguments.width = loc.image.width;
+					arguments.height = loc.image.height;
+				}
+			}
+		}
+		if (!StructKeyExists(arguments, "alt"))
+			arguments.alt = $capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
+		loc.returnValue = $tag(name="img", skip="source", close=true, attributes=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$trimHTML" returntype="string" access="public" output="false">
