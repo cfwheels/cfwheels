@@ -9,9 +9,9 @@ If you have callbacks, however, this is what happens.
 
 First, all methods registered to be run before a delete happens (these are registered using a [beforeDelete beforeDelete()] call from the `init` function) will be executed, if any exist.
 
-If these return `true`, Wheels will proceed and delete the record from the table. If `false` is returned from the callback code, processing will return to your code without the record being deleted (`false` is returned to you in this case.)
+If these return `true`, Wheels will proceed and delete the record from the table. If `false` is returned from the callback code, processing will return to your code without the record being deleted. (`false` is returned to you in this case.)
 
-If the record was deleted, the [afterDelete afterDelete()] callback code is executed, and whatever that code returns will be returned to you (you should make all your callbacks return `true` or `false`.)
+If the record was deleted, the [afterDelete afterDelete()] callback code is executed, and whatever that code returns will be returned to you. (You should make all your callbacks return `true` or `false`.)
 
 If you're unfamiliar with the concept of callbacks, you can read about them in the [ObjectCallbacks Object Callbacks] chapter.
 
