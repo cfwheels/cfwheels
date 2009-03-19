@@ -78,7 +78,7 @@ This is a good place to put your CSS files.
 
 ===`miscellaneous `===
 
-Use this folder for code that you need to run completely outside of the framework (there is an empty `Application.cfc` file in here which will prevent Wheels from taking part in the execution).
+Use this folder for code that you need to run completely outside of the framework. (There is an empty `Application.cfc` file in here, which will prevent Wheels from taking part in the execution.)
 
 ===`plugins `===
 
