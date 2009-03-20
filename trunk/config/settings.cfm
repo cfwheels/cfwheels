@@ -10,5 +10,5 @@
 	The URLRewriting setting can bet set to "On", "Partial" or "Off".
 	To run with "Partial" rewriting, the "cgi.path_info" variable needs to be supported by the web server.
 	To run with rewriting "On", you need to apply the necessary rewrite rules on the web server first.
-	<cfset set(URLRewriting="Partial")> 
+	<cfset set(URLRewriting="Partial")>
 --->
