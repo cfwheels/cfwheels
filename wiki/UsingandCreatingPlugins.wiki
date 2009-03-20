@@ -29,7 +29,7 @@ Here is a listing of all the available plugins at the time of this writing. Clic
 
 || *Name* || *Description* || *Version* || *Compatible With* ||
 || *[http://code.google.com Localizer]* || Use different languages || 0.1 || Wheels 0.9.1 ||
-|| *http://code.google.com Scaffold* || Build code || 0.2 || Wheels 0.9.1 ||
+|| *[http://code.google.com Scaffold]* || Build code || 0.2 || Wheels 0.9.1 ||
 
 ==Creating Your Own Plugins==
 
