@@ -6,14 +6,14 @@
 	<cfscript>
 		var loc = {};
 		loc.iEnd = ListLen(arguments.through);
-		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = Trim(ListGetAt(arguments.through, loc.i));
 			loc.thisFilter = {};
 			loc.thisFilter.through = loc.item;
 			loc.thisFilter.only = Replace(arguments.only, ", ", ",", "all");
 			loc.thisFilter.except = Replace(arguments.except, ", ", ",", "all");
-			if (arguments.type IS "before")
+			if (arguments.type == "before")
 				ArrayAppend(variables.wheels.beforeFilters, loc.thisFilter);
 			else
 				ArrayAppend(variables.wheels.afterFilters, loc.thisFilter);
@@ -30,7 +30,7 @@
 	<cfargument name="cookie" type="any" required="false" default="" hint="Verify that the passed in variable name exists in the cookie">
 	<cfargument name="session" type="any" required="false" default="" hint="Verify that the passed in variable name exists in the session">
 	<cfargument name="params" type="any" required="false" default="" hint="Verify that the passed in variable name exists in the params">
-	<cfargument name="handler" type="any" required="false" default="false" hint="Pass in the name of a function that should handle failed verifications (default is to just abort the request when a verification fails)">
+	<cfargument name="handler" type="any" required="false" default="#application.wheels.verifies.handler#" hint="Pass in the name of a function that should handle failed verifications (default is to just abort the request when a verification fails)">
 	<cfscript>
 		ArrayAppend(variables.wheels.verifications, StructCopy(arguments));
 	</cfscript>

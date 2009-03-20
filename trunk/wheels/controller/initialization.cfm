@@ -40,9 +40,9 @@
 		if (ListFindNoCase(application.wheels.existingHelperFiles, arguments.params.controller))
 			$include(template="#application.wheels.viewPath#/#arguments.params.controller#/helpers.cfm");
 		
-		executeArgs = {};
-		executeArgs.name = arguments.name;
-		$simpleLock(name="controllerLock", type="readonly", execute="$setControllerClassData", executeArgs=executeArgs);
+		loc.executeArgs = {};
+		loc.executeArgs.name = arguments.name;
+		$simpleLock(name="controllerLock", type="readonly", execute="$setControllerClassData", executeArgs=loc.executeArgs);
 		variables.params = arguments.params;
 	</cfscript>
 	<cfreturn this>
