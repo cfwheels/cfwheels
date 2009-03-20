@@ -74,6 +74,7 @@
 
 ===The Wheels API===
 
+ * [WheelsConfigurationFunctions Wheels Configuration Functions]
  * [ModelInitializationFunctions Model Initialization Functions]
  * [ModelClassFunctions Model Class Functions]
  * [ModelObjectFunctions Model Object Functions]
