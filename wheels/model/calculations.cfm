@@ -2,7 +2,7 @@
 	<cfargument name="property" type="string" required="true" hint="Name of the property to calculate the average for">
 	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as lastName LIKE 'A%' for example">
 	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query">
-	<cfargument name="distinct" type="boolean" required="false" default="false" hint="When true, AVG will be performed only on each unique instance of a value, regardless of how many times the value occurs">
+	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.average.distinct#" hint="When true, AVG will be performed only on each unique instance of a value, regardless of how many times the value occurs">
 	<cfscript>
 		arguments.type = "AVG";
 	</cfscript>
@@ -52,7 +52,7 @@
 	<cfargument name="property" type="string" required="true" hint="Name of the property to get the sum for (has to be a property of a numeric data type)">
 	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as lastName LIKE 'A%' for example">
 	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query">
-	<cfargument name="distinct" type="boolean" required="false" default="false" hint="When true, SUM returns the sum of unique values only">
+	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.sum.distinct#" hint="When true, SUM returns the sum of unique values only">
 	<cfscript>
 		arguments.type = "SUM";
 	</cfscript>
