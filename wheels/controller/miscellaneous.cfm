@@ -23,7 +23,7 @@
 <cffunction name="isAjax" returntype="boolean" access="public" output="false" hint="Returns whether the page was called from JavaScript or not.">
 	<cfscript>
 		var returnValue = "";
-		if (cgi.http_x_requested_with IS "XMLHTTPRequest")
+		if (cgi.http_x_requested_with == "XMLHTTPRequest")
 			returnValue = true;
 		else
 			returnValue = false;
@@ -86,7 +86,7 @@
 	<cfargument name="file" type="string" required="true" hint="The file to send to the user">
 	<cfargument name="name" type="string" required="false" default="" hint="The file name to show in the browser download dialog box">
 	<cfargument name="type" type="string" required="false" default="" hint="The HTTP content type to deliver the file as">
-	<cfargument name="disposition" type="string" required="false" default="attachment" hint="Set to 'inline' to have the browser handle the opening of the file or set to 'attachment' to force a download dialog box">
+	<cfargument name="disposition" type="string" required="false" default="#application.wheels.sendFile.disposition#" hint="Set to 'inline' to have the browser handle the opening of the file or set to 'attachment' to force a download dialog box">
 	<cfscript>
 		var loc = {};
 		arguments.file = Replace(arguments.file, "\", "/", "all");

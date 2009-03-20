@@ -1,7 +1,7 @@
 <cffunction name="renderPageToString" returntype="string" access="public" output="false" hint="Includes the view page for the specified controller and action and returns it as a string.">
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="See documentation for renderPage">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for renderPage">
-	<cfargument name="layout" type="any" required="false" default="true" hint="See documentation for renderPage">
+	<cfargument name="layout" type="any" required="false" default="#application.wheels.renderPageToString.layout#" hint="See documentation for renderPage">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for renderPage">
 	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#">
 	<cfscript>
@@ -16,7 +16,7 @@
 <cffunction name="renderPage" returntype="void" access="public" output="false" hint="Renders content to the browser by including the view page for the specified controller and action.">
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Controller to include the view page for">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Action to include the view page for">
-	<cfargument name="layout" type="any" required="false" default="true" hint="The layout to wrap the content in">
+	<cfargument name="layout" type="any" required="false" default="#application.wheels.renderPage.layout#" hint="The layout to wrap the content in">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for">
 	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#">
 	<cfscript>
@@ -37,7 +37,7 @@
 			loc.executeArgs = arguments;
 			loc.executeArgs.category = loc.category;
 			loc.executeArgs.key = loc.key;
-			loc.page = $doubleCheckLock(name=loc.lockName, condition="$getFromCache", execute="$renderPageAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			loc.page = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$renderPageAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 		}
 		else
 		{
@@ -68,7 +68,9 @@
 	<cfargument name="name" type="string" required="true" hint="Name of partial to include">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for">
 	<cfargument name="$type" type="string" required="false" default="render">
-	<cfset $includeOrRenderPartial(argumentCollection=arguments)>
+	<cfscript>
+		$includeOrRenderPartial(argumentCollection=arguments);
+	</cfscript>
 </cffunction>
 
 <cffunction name="$renderPageAndAddToCache" returntype="string" access="public" output="false">
@@ -118,7 +120,7 @@
 			loc.executeArgs = arguments;
 			loc.executeArgs.category = loc.category;
 			loc.executeArgs.key = loc.key;
-			loc.partial = $doubleCheckLock(name=loc.lockName, condition="$getFromCache", execute="$renderPartialAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			loc.partial = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$renderPartialAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 		}
 		else
 		{

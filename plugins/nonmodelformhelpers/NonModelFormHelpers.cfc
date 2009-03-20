@@ -26,7 +26,7 @@
 			</cfoutput>
 		</cfsavecontent>
 	
-		<cfreturn $trimHTML(loc.output)>
+		<cfreturn loc.output>
 	</cffunction>
 	
 	<cffunction name="radioButtonTag" returntype="any" access="public" output="false">
@@ -55,7 +55,7 @@
 			</cfoutput>
 		</cfsavecontent>
 	
-		<cfreturn $trimHTML(loc.output)>
+		<cfreturn loc.output>
 	</cffunction>
 	
 	<cffunction name="checkBoxTag" returntype="any" access="public" output="false">
@@ -80,7 +80,7 @@
 			</cfoutput>
 		</cfsavecontent>
 	
-		<cfreturn $trimHTML(loc.output)>
+		<cfreturn loc.output>
 	</cffunction>
 	
 	<cffunction name="passwordFieldTag" returntype="any" access="public" output="false">
@@ -104,7 +104,7 @@
 			</cfoutput>
 		</cfsavecontent>
 	
-		<cfreturn $trimHTML(loc.output)>
+		<cfreturn loc.output>
 	</cffunction>
 	
 	<cffunction name="hiddenFieldTag" returntype="any" access="public" output="false">
@@ -125,7 +125,7 @@
 			</cfoutput>
 		</cfsavecontent>
 	
-		<cfreturn $trimHTML(loc.output)>
+		<cfreturn loc.output>
 	</cffunction>
 	
 	<cffunction name="textAreaTag" returntype="any" access="public" output="false">
@@ -172,7 +172,7 @@
 			</cfoutput>
 		</cfsavecontent>
 	
-		<cfreturn $trimHTML(loc.output)>
+		<cfreturn loc.output>
 	</cffunction>
 	
 	<cffunction name="selectTag" returntype="any" access="public" output="false">
@@ -211,7 +211,7 @@
 			</cfoutput>
 		</cfsavecontent>
 	
-		<cfreturn $trimHTML(loc.output)>
+		<cfreturn loc.output>
 	</cffunction>
 
 	<cffunction name="dateTimeSelectTag" returntype="any" access="public" output="false" hint="Returns HTML select tags for choosing year, month, day, hour, minute and second.">
