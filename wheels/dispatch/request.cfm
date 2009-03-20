@@ -318,7 +318,7 @@
 			loc.executeArgs.key = loc.key;
 			loc.executeArgs.time = loc.timeToCache;
 			loc.executeArgs.category = loc.category;
-			$doubleCheckLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			$doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 		}
 		else
 		{
