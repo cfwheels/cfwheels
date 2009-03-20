@@ -4,7 +4,7 @@
 	<cfscript>
 		var loc = {};
 		arguments = $insertDefaults(name="errorMessagesFor", input=arguments);
-		loc.object = $objectFromString(arguments.objectName);
+		loc.object = Evaluate(arguments.objectName);
 		loc.errors = loc.object.allErrors();
 		loc.returnValue = "";
 		if (!ArrayIsEmpty(loc.errors))
@@ -31,7 +31,7 @@
 	<cfscript>
 		var loc = {};
 		arguments = $insertDefaults(name="errorMessageOn", input=arguments);
-		loc.object = $objectFromString(arguments.objectName);
+		loc.object = Evaluate(arguments.objectName);
 		loc.error = loc.object.errorsOn(arguments.property);
 		loc.returnValue = "";
 		if (!ArrayIsEmpty(loc.error))

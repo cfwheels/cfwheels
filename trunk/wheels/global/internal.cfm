@@ -1,3 +1,42 @@
+<cffunction name="$cachedModelClassExists" returntype="any" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfscript>
+		var returnValue = false;
+		if (StructKeyExists(application.wheels.models, arguments.name))
+			returnValue = application.wheels.models[arguments.name];
+	</cfscript>
+	<cfreturn returnValue>
+</cffunction>
+
+<cffunction name="$constructParams" returntype="string" access="public" output="false">
+	<cfargument name="params" type="any" required="true">
+	<cfscript>
+		var loc = {};
+		arguments.params = Replace(arguments.params, "&amp;", "&", "all"); // change to using ampersand so we can use it as a list delim below and so we don't "double replace" the ampersand below
+		// when rewriting is off we will already have "?controller=" etc in the url so we have to continue with an ampersand
+		if (application.wheels.URLRewriting == "Off")
+			loc.delim = "&";
+		else
+			loc.delim = "?";		
+		loc.returnValue = "";
+		loc.iEnd = ListLen(arguments.params, "&");
+		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+		{
+			loc.temp = listToArray(ListGetAt(arguments.params, loc.i, "&"), "=");
+			loc.returnValue = loc.returnValue & loc.delim & loc.temp[1] & "=";
+			loc.delim = "&";
+			if (ArrayLen(loc.temp) IS 2)
+			{
+				if (application.wheels.obfuscateUrls)
+					loc.returnValue = loc.returnValue & obfuscateParam(URLEncodedFormat(loc.temp[2]));
+				else
+					loc.returnValue = loc.returnValue & URLEncodedFormat(loc.temp[2]);
+			}
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$insertDefaults" returntype="struct" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="input" type="struct" required="true">
@@ -57,42 +96,56 @@
 	</cfscript>
 </cffunction>
 
+<cffunction name="$cachedControllerClassExists" returntype="any" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfscript>
+		var returnValue = false;
+		if (StructKeyExists(application.wheels.controllers, arguments.name))
+			returnValue = application.wheels.controllers[arguments.name];
+	</cfscript>
+	<cfreturn returnValue>
+</cffunction>
+
+<cffunction name="$createControllerClass" returntype="any" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.fileName = $capitalize(arguments.name);
+		
+		// check if the controller file exists and store the results for performance reasons
+		if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingControllerFiles, arguments.name))
+		{
+			if (FileExists(ExpandPath("#application.wheels.controllerPath#/#loc.fileName#.cfc")))
+				application.wheels.existingControllerFiles = ListAppend(application.wheels.existingControllerFiles, arguments.name);
+			else
+				application.wheels.nonExistingControllerFiles = ListAppend(application.wheels.nonExistingControllerFiles, arguments.name);
+		}
+	
+		// check if the controller's view helper file exists and store the results for performance reasons
+		if (!ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingHelperFiles, arguments.name))
+		{
+			if (FileExists(ExpandPath("#application.wheels.viewPath#/#arguments.name#/helpers.cfm")))
+				application.wheels.existingHelperFiles = ListAppend(application.wheels.existingHelperFiles, arguments.name);
+			else
+				application.wheels.nonExistingHelperFiles = ListAppend(application.wheels.nonExistingHelperFiles, arguments.name);
+		}
+	
+		if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name))
+			loc.fileName = "Controller";
+		application.wheels.controllers[arguments.name] = $createObjectFromRoot(path=application.wheels.controllerComponentPath, fileName=loc.fileName, method="$initControllerClass", name=arguments.name);
+		loc.returnValue = application.wheels.controllers[arguments.name];
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$controller" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
-	<cfset var loc = {}>
-	<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
-	   	<cflock name="controllerLock" type="exclusive" timeout="30">
-			<cfif NOT StructKeyExists(application.wheels.controllers, arguments.name)>
-				<cfscript>
-					loc.fileName = $capitalize(arguments.name);
-					
-					// check if the controller file exists and store the results for performance reasons
-					if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingControllerFiles, arguments.name))
-					{
-						if (FileExists(ExpandPath("#application.wheels.controllerPath#/#loc.fileName#.cfc")))
-							application.wheels.existingControllerFiles = ListAppend(application.wheels.existingControllerFiles, arguments.name);
-						else
-							application.wheels.nonExistingControllerFiles = ListAppend(application.wheels.nonExistingControllerFiles, arguments.name);
-					}
-
-					// check if the controller's view helper file exists and store the results for performance reasons
-					if (!ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingHelperFiles, arguments.name))
-					{
-						if (FileExists(ExpandPath("#application.wheels.viewPath#/#arguments.name#/helpers.cfm")))
-							application.wheels.existingHelperFiles = ListAppend(application.wheels.existingHelperFiles, arguments.name);
-						else
-							application.wheels.nonExistingHelperFiles = ListAppend(application.wheels.nonExistingHelperFiles, arguments.name);
-					}
-
-					if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name))
-						loc.fileName = "Controller";
-					application.wheels.controllers[arguments.name] = $createObjectFromRoot(path=application.wheels.controllerComponentPath, fileName=loc.fileName, method="$initControllerClass", name=arguments.name);
-				</cfscript>
-			</cfif>
-		</cflock>
-	</cfif>
-
-	<cfreturn application.wheels.controllers[arguments.name]>
+	<cfscript>
+		var loc = {};
+		loc.args.name = arguments.name;
+		loc.returnValue = $doubleCheckedLock(name="controllerLock", condition="$cachedControllerClassExists", execute="$createControllerClass", conditionArgs=loc.args, executeArgs=loc.args);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$flatten" returntype="string" access="public" output="false">
@@ -310,7 +363,7 @@
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="pluralize", count=arguments.count, returnCount=arguments.returnCount)>
 </cffunction>
 
-<cffunction name="$createClass" returntype="any" access="public" output="false">
+<cffunction name="$createModelClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
 		var loc = {};
@@ -319,7 +372,8 @@
 			application.wheels.existingModelFiles = ListAppend(application.wheels.existingModelFiles, arguments.name);
 		else
 			loc.fileName = "Model";
-		loc.returnValue = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelClass", name=arguments.name);
+		application.wheels.models[arguments.name] = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelClass", name=arguments.name);
+		loc.returnValue = application.wheels.models[arguments.name];
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

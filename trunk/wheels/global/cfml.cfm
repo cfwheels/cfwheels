@@ -3,31 +3,15 @@
 	<cfargument name="object" type="any" required="true">
 	<cfargument name="method" type="string" required="true">
 	<cfargument name="args" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="timeout" type="numeric" required="false" default="30">
 	<cfset var loc = StructNew()>
-	<cflock name="#arguments.name#" type="readonly" timeout="30">
+	<cflock name="#arguments.name#" type="readonly" timeout="#arguments.timeout#">
 		<cfset loc.returnValue = $invoke(component=arguments.object, method=arguments.method, argumentCollection=arguments.args)>
 	</cflock>
 	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$doubleCheckedLock" returntype="any" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="path" type="struct" required="true">
-	<cfargument name="key" type="string" required="true">
-	<cfargument name="method" type="string" required="true">
-	<cfargument name="args" type="struct" required="false" default="#StructNew()#">
-	<cfargument name="timeout" type="numeric" required="false" default="30">
-	<cfif NOT StructKeyExists(arguments.path, arguments.key)>
-   		<cflock name="#arguments.name#" timeout="#arguments.timeout#">
-			<cfif NOT StructKeyExists(arguments.path, arguments.key)>
-				<cfset arguments.path[arguments.key] = $invoke(method=arguments.method, argumentCollection=arguments.args)>
-			</cfif>
-		</cflock>
-	</cfif>
-	<cfreturn arguments.path[arguments.key]>
-</cffunction>
-
-<cffunction name="$doubleCheckLock" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="condition" type="string" required="true">
 	<cfargument name="execute" type="string" required="true">
@@ -45,6 +29,22 @@
 		</cflock>
 	</cfif>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$simpleLock" returntype="any" access="public" output="false">
+	<cfargument name="execute" type="string" required="true">
+	<cfargument name="executeArgs" type="struct" required="false" default="#StructNew()#">
+	<cfargument name="timeout" type="numeric" required="false" default="30">
+	<cfset var loc = StructNew()>
+	<cfset loc.lockArgs = Duplicate(arguments)>
+	<cfset StructDelete(loc.lockArgs, "execute")>
+	<cfset StructDelete(loc.lockArgs, "executeArgs")>
+	<cflock attributeCollection="#loc.lockArgs#">
+		<cfinvoke method="#arguments.execute#" argumentcollection="#arguments.executeArgs#" returnvariable="loc.returnValue">
+	</cflock>
+	<cfif StructKeyExists(loc, "returnValue")>
+		<cfreturn loc.returnValue>
+	</cfif>
 </cffunction>
 
 <cffunction name="$image" returntype="struct" access="public" output="false">
@@ -68,22 +68,6 @@
 
 <cffunction name="$content" returntype="any" access="public" output="false">
 	<cfcontent attributeCollection="#arguments#">
-</cffunction>
-
-<cffunction name="$simpleLock" returntype="any" access="public" output="false">
-	<cfargument name="execute" type="string" required="true">
-	<cfargument name="executeArgs" type="struct" required="false" default="#StructNew()#">
-	<cfargument name="timeout" type="numeric" required="false" default="30">
-	<cfset var loc = StructNew()>
-	<cfset loc.lockArgs = Duplicate(arguments)>
-	<cfset StructDelete(loc.lockArgs, "execute")>
-	<cfset StructDelete(loc.lockArgs, "executeArgs")>
-	<cflock attributeCollection="#loc.lockArgs#">
-		<cfinvoke method="#arguments.execute#" argumentcollection="#arguments.executeArgs#" returnvariable="loc.returnValue">
-	</cflock>
-	<cfif StructKeyExists(loc, "returnValue")>
-		<cfreturn loc.returnValue>
-	</cfif>
 </cffunction>
 
 <cffunction name="$header" returntype="void" access="public" output="false">

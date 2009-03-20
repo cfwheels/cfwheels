@@ -2,8 +2,8 @@
 	<cfargument name="key" type="any" required="true" hint="Primary key value(s) of record to fetch. Separate with comma if passing in multiple primary key values.">
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="reload" type="boolean" required="false" default="false" hint="See documentation for `findAll`">
-	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
+	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.findByKey.reload#" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.findByKey.parameterize#" hint="See documentation for `findAll`">
 	<cfargument name="$create" type="boolean" required="false" default="true">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
@@ -20,8 +20,8 @@
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="reload" type="boolean" required="false" default="false" hint="See documentation for `findAll`">
-	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
+	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.findOne.reload#" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.findOne.parameterize#" hint="See documentation for `findAll`">
 	<cfargument name="$create" type="boolean" required="false" default="true">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
@@ -47,17 +47,17 @@
 
 <cffunction name="findAll" returntype="any" access="public" output="false" hint="Returns the records matching the arguments as a `cfquery` result set. If you don't specify table names in the `select`, `where` and `order` arguments Wheels will guess what column you intended to get back and prepend the table name to your supplied column names. If you don't specify the `select` argument it will default to get all columns.">
 	<cfargument name="where" type="string" required="false" default="" hint="String to use in `WHERE` clause of query">
-	<cfargument name="order" type="string" required="false" default="" hint="String to use in `ORDER BY` clause of query">
+	<cfargument name="order" type="string" required="false" default="#application.wheels.findAll.order#" hint="String to use in `ORDER BY` clause of query">
 	<cfargument name="select" type="string" required="false" default="" hint="String to use in `SELECT` clause of query">
 	<cfargument name="include" type="string" required="false" default="" hint="Associations that should be included">
 	<cfargument name="maxRows" type="numeric" required="false" default="-1" hint="Maximum number of records to retrieve">
 	<cfargument name="page" type="numeric" required="false" default=0 hint="Page to get records for in pagination">
-	<cfargument name="perPage" type="numeric" required="false" default=10 hint="Records per page in pagination">
+	<cfargument name="perPage" type="numeric" required="false" default="#application.wheels.findAll.perPage#" hint="Records per page in pagination">
 	<cfargument name="count" type="numeric" required="false" default=0 hint="Total records in pagination (when not supplied Wheels will do a `COUNT` query to get this value)">
 	<cfargument name="handle" type="string" required="false" default="query" hint="Handle to use for the query in pagination">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the query for">
-	<cfargument name="reload" type="boolean" required="false" default="false" hint="Set to `true` to force Wheels to fetch a new object from the database even though an identical query has been run in the same request">
-	<cfargument name="parameterize" type="any" required="false" default="true" hint="Set to `true` to use `cfqueryparam` on all columns or pass in a list of property names to use `cfqueryparam` on those only">
+	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.findAll.reload#" hint="Set to `true` to force Wheels to fetch a new object from the database even though an identical query has been run in the same request">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.findAll.parameterize#" hint="Set to `true` to use `cfqueryparam` on all columns or pass in a list of property names to use `cfqueryparam` on those only">
 	<cfargument name="$limit" type="numeric" required="false" default=0>
 	<cfargument name="$offset" type="numeric" required="false" default=0>
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
@@ -166,8 +166,8 @@
 <cffunction name="exists" returntype="boolean" access="public" output="false" hint="Checks if a record exists in the table. You can pass in a primary key value or a string to the `WHERE` clause.">
 	<cfargument name="key" type="any" required="false" default="" hint="See documentation for `findByKey`">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="reload" type="boolean" required="false" default="false" hint="See documentation for `findAll`">
-	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
+	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.exists.reload#" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.exists.parameterize#" hint="See documentation for `findAll`">
 	<cfscript>
 		var loc = {};
 		if (application.wheels.environment != "production")
@@ -214,8 +214,8 @@
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
-	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
-	<cfargument name="instantiate" type="boolean" required="false" default="false" hint="Whether or not to instantiate the object(s) before the update">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.updateAll.parameterize#" hint="See documentation for `findAll`">
+	<cfargument name="instantiate" type="boolean" required="false" default="#application.wheels.updateAll.instantiate#" hint="Whether or not to instantiate the object(s) before the update">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
@@ -289,8 +289,8 @@
 <cffunction name="deleteAll" returntype="numeric" access="public" output="false" hint="Deletes all records that match the where argument. By default objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in instantiate=true. Returns the number of records that were deleted.">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
-	<cfargument name="instantiate" type="boolean" required="false" default="false" hint="Whether or not to instantiate the object(s) before deletion">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.deleteAll.parameterize#" hint="See documentation for `findAll`">
+	<cfargument name="instantiate" type="boolean" required="false" default="#application.wheels.deleteAll.instantiate#" hint="Whether or not to instantiate the object(s) before deletion">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
@@ -322,7 +322,7 @@
 </cffunction>
 
 <cffunction name="save" returntype="boolean" access="public" output="false" hint="Saves the object if it passes validation and callbacks. Returns `true` if the object was saved successfully to the database.">
-	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.save.parameterize#" hint="See documentation for `findAll`">
 	<cfscript>
 		var returnValue = false;
 		clearErrors();
@@ -345,7 +345,7 @@
 
 <cffunction name="update" returntype="boolean" access="public" output="false" hint="Updates the object with the supplied properties and saves it to the database. Returns true if the object was saved successfully to the database and false otherwise.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
-	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.update.parameterize#" hint="See documentation for `findAll`">
 	<cfscript>
 		var loc = {};
 		for (loc.key in arguments)
@@ -359,7 +359,7 @@
 </cffunction>
 
 <cffunction name="delete" returntype="boolean" access="public" output="false" hint="Deletes the object which means the row is deleted from the database (unless prevented by a `beforeDelete` callback). Returns true on successful deletion of the row, false otherwise.">
-	<cfargument name="parameterize" type="any" required="false" default="true" hint="See documentation for `findAll`">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.delete.parameterize#" hint="See documentation for `findAll`">
 	<cfscript>
 		var loc = {};
 		loc.proceed = true;

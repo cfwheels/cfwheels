@@ -37,10 +37,10 @@
 	<cfargument name="key" type="any" required="false" default="" hint="Key(s) to include in the URL">
 	<cfargument name="params" type="string" required="false" default="" hint="Any additional params to be set in the query string">
 	<cfargument name="anchor" type="string" required="false" default="" hint="Sets an anchor name to be appended to the path">
-	<cfargument name="onlyPath" type="boolean" required="false" default="true" hint="If true, returns only the relative URL (no protocol, host name or port)">
-	<cfargument name="host" type="string" required="false" default="" hint="Set this to override the current host">
-	<cfargument name="protocol" type="string" required="false" default="" hint="Set this to override the current protocol">
-	<cfargument name="port" type="numeric" required="false" default="0" hint="Set this to override the current port number">
+	<cfargument name="onlyPath" type="boolean" required="false" default="#application.wheels.URLFor.onlyPath#" hint="If true, returns only the relative URL (no protocol, host name or port)">
+	<cfargument name="host" type="string" required="false" default="#application.wheels.URLFor.host#" hint="Set this to override the current host">
+	<cfargument name="protocol" type="string" required="false" default="#application.wheels.URLFor.protocol#" hint="Set this to override the current protocol">
+	<cfargument name="port" type="numeric" required="false" default="#application.wheels.URLFor.port#" hint="Set this to override the current port number">
 	<cfscript>
 		var loc = {};
 		if (application.wheels.environment != "production")
@@ -226,7 +226,8 @@
 <cffunction name="model" returntype="any" access="public" output="false" hint="Returns a reference to the requested model so that class level methods can be called on it.">
 	<cfargument name="name" type="string" required="true" hint="Name of the model (class name) to get a reference to">
 	<cfscript>
-		$doubleCheckedLock(name="modelLock", path=application.wheels.models, key=arguments.name, method="$createClass", args=arguments);
+		loc.args.name = arguments.name;
+		loc.returnValue = $doubleCheckedLock(name="modelLock", condition="$cachedModelClassExists", execute="$createModelClass", conditionArgs=loc.args, executeArgs=loc.args);
 	</cfscript>
-	<cfreturn application.wheels.models[arguments.name]>
+	<cfreturn loc.returnValue>
 </cffunction>
