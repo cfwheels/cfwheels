@@ -68,12 +68,10 @@
 	<cfargument name="method" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.path = arguments.path;
-		loc.fileName = arguments.fileName;
-		loc.method = arguments.method;
+		arguments.returnVariable = "loc.returnValue";
+		arguments.component = arguments.path & "." & arguments.fileName;
 		StructDelete(arguments, "path");
 		StructDelete(arguments, "fileName");
-		StructDelete(arguments, "method");
 	</cfscript>
 	<cfinclude template="../../root.cfm">
 	<cfreturn loc.returnValue>
