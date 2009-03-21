@@ -1,1 +1,1 @@
-<cfset loc.returnValue = $invoke(component="#loc.path#.#loc.fileName#", method=loc.method, argumentCollection=arguments)>
+<cfinvoke attributeCollection="#arguments#">
