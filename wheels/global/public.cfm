@@ -114,7 +114,8 @@
 		}
 		if (application.wheels.URLRewriting == "On")
 		{
-			loc.returnValue = Replace(loc.returnValue, "rewrite.cfm/", "");
+			loc.returnValue = Replace(loc.returnValue, "rewrite.cfm", "");
+			loc.returnValue = Replace(loc.returnValue, "//", "");
 		}
 
 		if (Len(arguments.params))
