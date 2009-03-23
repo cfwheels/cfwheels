@@ -157,30 +157,6 @@
 			}
 		}
 
-		// determine and set database brand unless we're running in maintenance mode
-		if (application.wheels.environment != "maintenance")
-		{
-			try
-			{
-				loc.info = $dbinfo(datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword, type="version");
-			}
-			catch(Any e) {}
-			if (StructKeyExists(loc, "info"))
-			{
-				if (loc.info.driver_name Contains "MySQL")
-					loc.adapterName = "MySQL";
-				else if (loc.info.driver_name Contains "Oracle")
-					loc.adapterName = "Oracle";
-				else if (loc.info.driver_name Contains "SQLServer" || loc.info.driver_name Contains "Microsoft SQL Server")
-					loc.adapterName = "MicrosoftSQLServer";
-				else
-					$throw(type="Wheels.NoSupport", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, Oracle or MySQL.");			
-				application.wheels.adapter = CreateObject("component", "wheels.#loc.adapterName#");
-				application.wheels.databaseName = loc.info.database_version;
-				if (application.wheels.databaseName Does Not Contain loc.info.database_productname)
-					application.wheels.databaseName = loc.info.database_productname & " " & application.wheels.databaseName;		
-			}
-		}
 		application.wheels.dispatch = CreateObject("component", "wheels.Dispatch");
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
 	</cfscript>
