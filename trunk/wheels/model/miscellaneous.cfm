@@ -238,3 +238,12 @@
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
+
+<cffunction name="connection" returntype="void" access="public" output="false" hint="Use this method to override the datasource connection information for a particular model">
+	<cfargument name="datasource" required="true" type="string" hint="the datasource to connect to">
+	<cfargument name="username" required="true" type="string" hint="the username for the connection">
+	<cfargument name="password" required="true" type="string" hint="the password for the connection">
+	<cfscript>
+	structappend(variables.wheels.class.connection, arguments, true);
+	</cfscript>
+</cffunction>

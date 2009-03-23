@@ -14,10 +14,6 @@
 	<td>#application.wheels.serverName# #application.wheels.serverVersion#</td>
 </tr>
 <tr>
-	<td valign="top"><strong>Database:</strong></td>
-	<td><cfif StructKeyExists(application.wheels, "databaseName")>#application.wheels.databaseName#<cfelse>None</cfif></td>
-</tr>
-<tr>
 	<td valign="top"><strong>URL Rewriting:</strong></td>
 	<td>#application.wheels.URLRewriting#</td>
 </tr>

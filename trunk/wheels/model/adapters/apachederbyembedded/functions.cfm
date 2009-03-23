@@ -44,9 +44,9 @@
 		var query = {};
 		arguments.name = "query.name";
 		arguments.result = "loc.result";
-		arguments.datasource = application.wheels.dataSourceName;
-		arguments.username = application.wheels.dataSourceUserName;
-		arguments.password = application.wheels.dataSourcePassword;
+		arguments.datasource = variables.instance.connection.datasource;
+		arguments.username = variables.instance.connection.username;
+		arguments.password = variables.instance.connection.password;
 		loc.sql = arguments.sql;
 		loc.limit = arguments.limit;
 		loc.offset = arguments.offset;
