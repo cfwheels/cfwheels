@@ -232,3 +232,7 @@
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
+
+<cffunction name="pluginNames" returntype="string" access="public" output="false" hint="Returns a list of all installed plugins.">
+	<cfreturn StructKeyList(application.wheels.plugins)>
+</cffunction>
