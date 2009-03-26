@@ -1,4 +1,4 @@
-<cffunction name="onErsror" returntype="void" access="public" output="true">
+<cffunction name="onError" returntype="void" access="public" output="true">
 	<cfargument name="exception" type="any" required="true">
 	<cfargument name="eventname" type="any" required="true">
 	<cfscript>
