@@ -1,6 +1,12 @@
 <cfoutput>
 <div style="clear:both;margin-top:100px;text-align:left;background:##ececec;padding:10px;border-top:2px solid ##808080;border-bottom:2px solid ##808080;">
 <table cellspacing="0">
+<cfif Len(application.wheels.incompatiblePlugins)>
+	<tr>
+		<td valign="top"><strong><span style="color:red;">Warnings:</span></strong></td>
+		<td><span style="color:red;"><cfloop list="#application.wheels.incompatiblePlugins#" index="loc.i">The #loc.i# plugin is incompatible with this version of Wheels<br /></cfloop></span></td>
+	</tr>
+</cfif>
 <tr>
 	<td valign="top"><strong>Application Name:</strong></td>
 	<td>#application.applicationName#</td>
@@ -12,6 +18,10 @@
 <tr>
 	<td valign="top"><strong>CFML Engine:</strong></td>
 	<td>#application.wheels.serverName# #application.wheels.serverVersion#</td>
+</tr>
+<tr>
+	<td valign="top"><strong>Database:</strong></td>
+	<td><cfif StructKeyExists(application.wheels, "databaseName")>#application.wheels.databaseName#<cfelse>None</cfif></td>
 </tr>
 <tr>
 	<td valign="top"><strong>URL Rewriting:</strong></td>

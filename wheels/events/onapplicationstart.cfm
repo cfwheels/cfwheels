@@ -100,6 +100,7 @@
 		
 		// load plugins
 		application.wheels.plugins = {};
+		application.wheels.incompatiblePlugins = "";
 		loc.pluginFolder = this.rootDir & "plugins";
 		// get a list of plugin files and folders
 		loc.pluginFolders = $directory(directory=loc.pluginFolder, type="dir");
@@ -130,14 +131,14 @@
 					loc.thisPluginFile = loc.pluginFolder & "/" & loc.name;
 					loc.thisPluginFolder = loc.pluginFolder & "/" & LCase(loc.pluginName);
 					if (!DirectoryExists(loc.thisPluginFolder))
-					{
 						$directory(action="create", directory=loc.thisPluginFolder);
-						$zip(action="unzip", destination=loc.thisPluginFolder, file=loc.thisPluginFile);
-					}
+					$zip(action="unzip", destination=loc.thisPluginFolder, file=loc.thisPluginFile, overwrite=true);
 					loc.fileName = LCase(loc.pluginName) & "." & loc.pluginName;
-					application.wheels.plugins[loc.pluginName] = $createObjectFromRoot(path=application.wheels.pluginComponentPath, fileName=loc.fileName, method="init");
-					if (application.wheels.plugins[loc.pluginName].version != application.wheels.version)
-						$throw(type="Wheels.IncompatiblePlugin", message="#loc.pluginName# is incompatible with this version of Wheels.", extendedInfo="You're running version #application.wheels.version# of Wheels and the #loc.pluginName# plugin you have installed only supports version #application.wheels.plugins[loc.pluginName].version#. Download a new version of #loc.pluginName#, drop it in the 'plugins' folder and restart Wheels by issuing a 'reload=true' request.");
+					loc.plugin = $createObjectFromRoot(path=application.wheels.pluginComponentPath, fileName=loc.fileName, method="init");
+					if (!StructKeyExists(loc.plugin, "version") || loc.plugin.version == application.wheels.version)
+						application.wheels.plugins[loc.pluginName] = loc.plugin;
+					else
+						application.wheels.incompatiblePlugins = ListAppend(application.wheels.incompatiblePlugins, loc.pluginName);
 				}
 			}
 			// look for plugins that are incompatible with each other
@@ -157,6 +158,30 @@
 			}
 		}
 
+		// determine and set database brand unless we're running in maintenance mode
+		if (application.wheels.environment != "maintenance")
+		{
+			try
+			{
+				loc.info = $dbinfo(datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword, type="version");
+			}
+			catch(Any e) {}
+			if (StructKeyExists(loc, "info"))
+			{
+				if (loc.info.driver_name Contains "MySQL")
+					loc.adapterName = "MySQL";
+				else if (loc.info.driver_name Contains "Oracle")
+					loc.adapterName = "Oracle";
+				else if (loc.info.driver_name Contains "SQLServer" || loc.info.driver_name Contains "Microsoft SQL Server")
+					loc.adapterName = "MicrosoftSQLServer";
+				else
+					$throw(type="Wheels.NoSupport", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, Oracle or MySQL.");			
+				application.wheels.adapter = CreateObject("component", "wheels.#loc.adapterName#");
+				application.wheels.databaseName = loc.info.database_version;
+				if (application.wheels.databaseName Does Not Contain loc.info.database_productname)
+					application.wheels.databaseName = loc.info.database_productname & " " & application.wheels.databaseName;		
+			}
+		}
 		application.wheels.dispatch = CreateObject("component", "wheels.Dispatch");
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
 	</cfscript>
