@@ -3,7 +3,7 @@
 		var loc = {};
 		
 		// set or reset all settings but make sure to pass along the reload password between forced reloads with "reload=x"
-		if (StructKeyExists(application, "wheels"))
+		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "reloadPassword"))
 			loc.oldReloadPassword = application.wheels.reloadPassword;
 		application.wheels = {};
 		if (StructKeyExists(loc, "oldReloadPassword"))
