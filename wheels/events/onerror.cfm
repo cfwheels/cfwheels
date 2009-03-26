@@ -14,10 +14,6 @@
 	<cfscript>
 		var loc = {};
 		
-		// make railo cfml and adobe cfml behave the same way
-		if (!StructKeyExists(arguments.exception, "cause"))
-			arguments.exception.cause = arguments.exception; 
-        
 		if (application.wheels.sendEmailOnError)
 		{
 			loc.mailArgs = {};
@@ -33,10 +29,14 @@
 
 		if (application.wheels.showErrorInformation)
 		{
-			if (StructKeyExists(arguments.exception.cause, "rootCause") && Left(arguments.exception.cause.rootCause.type, 6) == "Wheels")
+			if (StructKeyExists(arguments.exception, "rootCause") && Left(arguments.exception.rootCause.type, 6) == "Wheels")
+				loc.wheelsError = arguments.exception.rootCause;
+			else if (StructKeyExists(arguments.exception, "cause") && StructKeyExists(arguments.exception.cause, "rootCause") && Left(arguments.exception.cause.rootCause.type, 6) == "Wheels") 
+				loc.wheelsError = arguments.exception.cause.rootCause;
+			if (StructKeyExists(loc, "wheelsError"))
 			{
 				loc.returnValue = $includeAndReturnOutput(template="wheels/styles/header.cfm");
-				loc.returnValue = loc.returnValue & $includeAndReturnOutput(template="wheels/events/onerror/wheelserror.cfm", wheelsError=arguments.exception.cause.rootCause);
+				loc.returnValue = loc.returnValue & $includeAndReturnOutput(template="wheels/events/onerror/wheelserror.cfm", wheelsError=loc.wheelsError);
 				loc.returnValue = loc.returnValue & $includeAndReturnOutput(template="wheels/styles/footer.cfm");
 			}
 			else
