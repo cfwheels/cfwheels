@@ -19,7 +19,17 @@
 			arguments.exception.cause = arguments.exception; 
         
 		if (application.wheels.sendEmailOnError)
-			$mail(to=application.wheels.errorEmailAddress, from=application.wheels.errorEmailAddress, subject="Error", type="html", body=$includeAndReturnOutput(template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception));
+		{
+			loc.mailArgs = {};
+			loc.mailArgs.from = application.wheels.errorEmailAddress;
+			loc.mailArgs.to = application.wheels.errorEmailAddress;
+			loc.mailArgs.subject = "Error";
+			loc.mailArgs.type = "html";
+			loc.mailArgs.body = [$includeAndReturnOutput(template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception)];
+			if (StructKeyExists(application.wheels, "errorEmailServer"))
+				loc.mailArgs.server = application.wheels.errorEmailServer;
+			$mail(argumentCollection=loc.mailArgs);
+		}
 
 		if (application.wheels.showErrorInformation)
 		{
