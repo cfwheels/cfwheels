@@ -1,14 +1,14 @@
 <cffunction name="$initModelClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
-		var loc = {};
-		variables.wheels = {};
-		variables.wheels.class = {};
+		var loc = StructNew();
+		variables.wheels = StructNew();
+		variables.wheels.class = StructNew();
 		variables.wheels.class.name = arguments.name;
 		variables.wheels.class.whereRegex = "((=|<>|<|>|<=|>=|!=|!<|!>| LIKE) ?)(''|'.+?'()|([0-9]|\.)+()|\([0-9]+(,[0-9]+)*\))(($|\)| (AND|OR)))";
-		variables.wheels.class.mapping = {};
-		variables.wheels.class.associations = {};
-		variables.wheels.class.callbacks = {};
+		variables.wheels.class.mapping = StructNew();
+		variables.wheels.class.associations = StructNew();
+		variables.wheels.class.callbacks = StructNew();
 		variables.wheels.class.connection = {datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword};
 		loc.callbacks = "beforeDelete,afterDelete,beforeSave,afterSave,beforeCreate,afterCreate,beforeUpdate,afterUpdate,beforeValidation,afterValidation,beforeValidationOnCreate,afterValidationOnCreate,beforeValidationOnUpdate,afterValidationOnUpdate";
 		for (loc.i=1; loc.i LTE ListLen(loc.callbacks); loc.i=loc.i+1)
@@ -25,7 +25,7 @@
 		variables.wheels.class.adapter = $assignAdpater();
 
 		// set the table name unless set manually by the developer
-		if (!StructKeyExists(variables.wheels.class, "tableName"))
+		if (not(StructKeyExists(variables.wheels.class, "tableName")))
 		{
 			variables.wheels.class.tableName = LCase($pluralize(variables.wheels.class.name));
 			if (Len(application.wheels.tableNamePrefix))
@@ -50,7 +50,7 @@
 			else
 				loc.property = loc.columns["column_name"][loc.i];
 			loc.type = SpanExcluding(loc.columns["type_name"][loc.i], "( ");
-			variables.wheels.class.properties[loc.property] = {};
+			variables.wheels.class.properties[loc.property] = StructNew();
 			variables.wheels.class.properties[loc.property].type = variables.wheels.class.adapter.getType(loc.type);
 			variables.wheels.class.properties[loc.property].column = loc.columns["column_name"][loc.i];
 			variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];
@@ -61,10 +61,10 @@
 			variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, loc.property);
 			variables.wheels.class.columnList = ListAppend(variables.wheels.class.columnList, variables.wheels.class.properties[loc.property].column);
 		}
-		if (!Len(variables.wheels.class.keys))
+		if (not(Len(variables.wheels.class.keys)))
 			$throw(type="Wheels.NoPrimaryKey", message="No primary key exists on the '#variables.wheels.class.tableName#' table.", extendedInfo="Set an appropriate primary key (or multiple keys) on the '#variables.wheels.class.tableName#' table.");
 
-		if (Len(application.wheels.softDeleteProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.softDeleteProperty))
+		if (Len(application.wheels.softDeleteProperty) and StructKeyExists(variables.wheels.class.properties, application.wheels.softDeleteProperty))
 		{
 			variables.wheels.class.softDeletion = true;
 			variables.wheels.class.softDeleteColumn = variables.wheels.class.properties[application.wheels.softDeleteProperty].column;
@@ -74,7 +74,7 @@
 			variables.wheels.class.softDeletion = false;
 		}
 
-		if (Len(application.wheels.timeStampOnCreateProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.timeStampOnCreateProperty))
+		if (Len(application.wheels.timeStampOnCreateProperty) and StructKeyExists(variables.wheels.class.properties, application.wheels.timeStampOnCreateProperty))
 		{
 			variables.wheels.class.timeStampingOnCreate = true;
 			variables.wheels.class.timeStampOnCreateColumn = variables.wheels.class.properties[application.wheels.timeStampOnCreateProperty].column;
@@ -84,7 +84,7 @@
 			variables.wheels.class.timeStampingOnCreate = false;
 		}
 
-		if (Len(application.wheels.timeStampOnUpdateProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.timeStampOnUpdateProperty))
+		if (Len(application.wheels.timeStampOnUpdateProperty) and StructKeyExists(variables.wheels.class.properties, application.wheels.timeStampOnUpdateProperty))
 		{
 			variables.wheels.class.timeStampingOnUpdate = true;
 			variables.wheels.class.timeStampOnUpdateColumn = variables.wheels.class.properties[application.wheels.timeStampOnUpdateProperty].column;
@@ -114,7 +114,7 @@ if (StructKeyExists(loc, "info"))
 		loc.adapterName = "MySQL";
 	else if (loc.info.driver_name Contains "Oracle")
 		loc.adapterName = "Oracle";
-	else if (loc.info.driver_name Contains "SQLServer" || loc.info.driver_name Contains "Microsoft SQL Server")
+	else if (loc.info.driver_name Contains "SQLServer" or loc.info.driver_name Contains "Microsoft SQL Server")
 		loc.adapterName = "MicrosoftSQLServer";
 	else
 		$throw(type="Wheels.NoSupport", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, Oracle or MySQL.");

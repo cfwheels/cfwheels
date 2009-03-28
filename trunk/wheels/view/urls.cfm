@@ -12,7 +12,7 @@
 	<cfargument name="protocol" type="string" required="false" default="#application.wheels.linkTo.protocol#" hint="See documentation for `URLFor`">
 	<cfargument name="port" type="numeric" required="false" default="#application.wheels.linkTo.port#" hint="See documentation for `URLFor`">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="linkTo", reserved="href", input=arguments);
 		if (Len(arguments.confirm))
 		{
@@ -21,7 +21,7 @@
 		}
 		arguments.href = URLFor(argumentCollection=arguments);
 		arguments.href = Replace(arguments.href, "&", "&amp;", "all"); // make sure we return XHMTL compliant code
-		if (!Len(arguments.text))
+		if (not(Len(arguments.text)))
 			arguments.text = arguments.href;
 		loc.returnValue = $element(name="a", skip="text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port", content=arguments.text, attributes=arguments);
 	</cfscript>
@@ -44,7 +44,7 @@
 	<cfargument name="protocol" type="string" required="false" default="#application.wheels.buttonTo.protocol#" hint="See documentation for `URLFor`">
 	<cfargument name="port" type="numeric" required="false" default="#application.wheels.buttonTo.port#" hint="See documentation for `URLFor`">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="buttonTo", reserved="method", input=arguments);
 		arguments.action = URLFor(argumentCollection=arguments);
 		arguments.action = Replace(arguments.action, "&", "&amp;", "all"); // make sure we return XHMTL compliant code

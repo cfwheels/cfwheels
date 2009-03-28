@@ -66,7 +66,7 @@
 	<cfargument name="include" type="string" required="false" default="">
 	<cfargument name="distinct" type="boolean" required="false" default="false">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments.select = "#arguments.type#(";
 		if (arguments.distinct)
 			arguments.select = arguments.select & "DISTINCT ";

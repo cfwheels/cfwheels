@@ -10,7 +10,7 @@
 		<cfargument name="toTime" type="date" required="true" hint="Date to compare to">
 		<cfargument name="includeSeconds" type="boolean" required="false" default="false" hint="Set to true for detailed description when the difference is less than one minute">
 
-		<cfset var loc = {}>
+		<cfset var loc = StructNew()>
 	
 		<cfset loc.minuteDiff = DateDiff("n", arguments.fromTime, arguments.toTime)>
 		<cfset loc.secondDiff = DateDiff("s", arguments.fromTime, arguments.toTime)>

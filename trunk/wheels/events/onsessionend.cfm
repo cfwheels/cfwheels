@@ -10,7 +10,7 @@
 	<cfargument name="sessionscope" type="any" required="true">
   <cfargument name="applicationscope" type="any" required="true">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		$include(template="#application.wheels.eventPath#/onsessionend.cfm");
 	</cfscript>
 </cffunction>

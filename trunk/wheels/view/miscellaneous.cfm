@@ -13,13 +13,13 @@
 	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
 	<cfargument name="name" type="string" required="false" default="#application.wheels.paginationLinks.name#" hint="The name of the param that holds the current page number">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="paginationLinks", input=arguments);
 		loc.returnValue = ""; 
 		loc.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prependToLink,appendToLink,classForCurrent,handle,name";
 		loc.linkToArguments = StructCopy(arguments);
 		loc.iEnd = ListLen(loc.skipArgs);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			StructDelete(loc.linkToArguments, ListGetAt(loc.skipArgs, loc.i));
 		}
@@ -27,7 +27,7 @@
 		loc.totalPages = request.wheels[arguments.handle].totalPages;
 		if (arguments.alwaysShowAnchors)
 		{
-			if ((loc.currentPage - arguments.windowSize) > 1)
+			if ((loc.currentPage - arguments.windowSize) gt 1)
 			{
 				loc.pageNumber = 1;
 				if (StructKeyExists(arguments, "route"))
@@ -46,9 +46,9 @@
 				loc.returnValue = loc.returnValue & linkTo(argumentCollection=loc.linkToArguments) & arguments.anchorDivider;
 			}
 		}
-		for (loc.i=1; loc.i<=loc.totalPages; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
-			if ((loc.i >= (loc.currentPage - arguments.windowSize) && loc.i <= loc.currentPage) || (loc.i <= (loc.currentPage + arguments.windowSize) && loc.i >= loc.currentPage))
+			if ((loc.i gte (loc.currentPage - arguments.windowSize) and loc.i lte loc.currentPage) or (loc.i lte (loc.currentPage + arguments.windowSize) and loc.i gte loc.currentPage))
 			{
 				if (StructKeyExists(arguments, "route"))
 				{
@@ -63,13 +63,13 @@
 						loc.linkToArguments.params = loc.toAdd;
 				}
 				loc.linkToArguments.text = loc.i;
-				if (Len(arguments.classForCurrent) && loc.currentPage == loc.i)
+				if (Len(arguments.classForCurrent) and loc.currentPage eq loc.i)
 					loc.linkToArguments.class = arguments.classForCurrent;
 				else
 					StructDelete(loc.linkToArguments, "class");
 				if (Len(arguments.prependToLink))
 					loc.returnValue = loc.returnValue & arguments.prependToLink;
-				if (loc.currentPage != loc.i || arguments.linkToCurrentPage)
+				if (loc.currentPage neq loc.i or arguments.linkToCurrentPage)
 				{
 					loc.returnValue = loc.returnValue & linkTo(argumentCollection=loc.linkToArguments);
 				}
@@ -86,7 +86,7 @@
 		}
 		if (arguments.alwaysShowAnchors)
 		{
-			if (loc.totalPages > (loc.currentPage + arguments.windowSize))
+			if (loc.totalPages gt (loc.currentPage + arguments.windowSize))
 			{
 				if (StructKeyExists(arguments, "route"))
 				{
@@ -121,12 +121,12 @@
 	<cfargument name="type" type="string" required="false" default="#application.wheels.styleSheetLinkTag.type#" hint="The `type` attribute for the `link` tag">
 	<cfargument name="media" type="string" required="false" default="#application.wheels.styleSheetLinkTag.media#" hint="The `media` attribute for the `link` tag">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="styleSheetLinkTag", reserved="href,rel", input=arguments);
 		arguments.rel = "stylesheet";
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.sources);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.item = ListGetAt(arguments.sources, loc.i);
 			arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & Trim(loc.item);
@@ -143,11 +143,11 @@
 	<cfargument name="sources" type="string" required="false" default="#arguments.source#" hint="See `source`">
 	<cfargument name="type" type="string" required="false" default="#application.wheels.javaScriptIncludeTag.type#" hint="The `type` attribute for the `script` tag">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="javaScriptIncludeTag", reserved="src", input=arguments);
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.sources);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.item = ListGetAt(arguments.sources, loc.i);
 			arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & Trim(loc.item);
@@ -162,14 +162,14 @@
 <cffunction name="imageTag" returntype="string" access="public" output="false" hint="Returns an image tag and will (if the image is stored in the local `images` folder) set the `width`, `height` and `alt` attributes automatically for you.">
 	<cfargument name="source" type="string" required="true" hint="Image file name if local or full URL if remote">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="imageTag", reserved="src", input=arguments);
 		if (application.wheels.cacheImages)
 		{
 			loc.category = "image";
 			loc.key = $hashStruct(arguments);
 			loc.lockName = loc.category & loc.key;
-			loc.conditionArgs = {};
+			loc.conditionArgs = StructNew();
 			loc.conditionArgs.category = loc.category;
 			loc.conditionArgs.key = loc.key;
 			loc.executeArgs = arguments;
@@ -196,32 +196,32 @@
 
 <cffunction name="$imageTag" returntype="string" access="public" output="false">
 	<cfscript>
-		var loc = {};
-		if (Left(arguments.source, 7) == "http://")
+		var loc = StructNew();
+		if (Left(arguments.source, 7) eq "http://")
 		{
 			arguments.src = arguments.source;
 		}
 		else
 		{
 			arguments.src = application.wheels.webPath & application.wheels.imagePath & "/" & arguments.source;
-			if (application.wheels.environment != "production")
+			if (application.wheels.environment neq "production")
 			{
-				if (Left(arguments.source, 7) != "http://" && !FileExists(ExpandPath(arguments.src)))
+				if (Left(arguments.source, 7) neq "http://" and not(FileExists(ExpandPath(arguments.src))))
 					$throw(type="Wheels.ImageFileNotFound", message="Wheels could not find '#expandPath('#arguments.src#')#' on the local file system.", extendedInfo="Pass in a correct relative path from the 'images' folder to an image.");
-				else if (Left(arguments.source, 7) != "http://" && arguments.source Does Not Contain ".jpg" && arguments.source Does Not Contain ".gif" && arguments.source Does Not Contain ".png")
+				else if (Left(arguments.source, 7) neq "http://" and arguments.source Does Not Contain ".jpg" and arguments.source Does Not Contain ".gif" and arguments.source Does Not Contain ".png")
 					$throw(type="Wheels.ImageFormatNotSupported", message="Wheels can't read image files with that format.", extendedInfo="Use a GIF, JPG or PNG image instead.");
 			}
-			if (!StructKeyExists(arguments, "width") || !StructKeyExists(arguments, "height"))
+			if (not(StructKeyExists(arguments, "width")) or not(StructKeyExists(arguments, "height")))
 			{
 				loc.image = $image(action="info", source=ExpandPath(arguments.src));
-				if (loc.image.width > 0 && loc.image.height > 0)
+				if (loc.image.width gt 0 and loc.image.height gt 0)
 				{
 					arguments.width = loc.image.width;
 					arguments.height = loc.image.height;
 				}
 			}
 		}
-		if (!StructKeyExists(arguments, "alt"))
+		if (not(StructKeyExists(arguments, "alt")))
 			arguments.alt = $capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
 		loc.returnValue = $tag(name="img", skip="source", close=true, attributes=arguments);
 	</cfscript>
@@ -235,19 +235,19 @@
 	<cfargument name="skip" type="string" required="false" default="">
 	<cfargument name="skipStartingWith" type="string" required="false" default="">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.returnValue = "<" & arguments.name;
-		if (StructCount(arguments) > 5)
+		if (StructCount(arguments) gt 5)
 		{
 			for (loc.key in arguments)
 			{
-				if (!ListFindNoCase("name,attributes,close,skip,skipStartingWith", loc.key))
+				if (not(ListFindNoCase("name,attributes,close,skip,skipStartingWith", loc.key)))
 					arguments.attributes[loc.key] = arguments[loc.key];	
 			}
 		}
 		for (loc.key in arguments.attributes)
 		{
-			if (!ListFindNoCase(arguments.skip, loc.key) && Left(loc.key, 5) != arguments.skipStartingWith && Left(loc.key, 1) != "$")
+			if (not(ListFindNoCase(arguments.skip, loc.key)) and Left(loc.key, 5) neq arguments.skipStartingWith and Left(loc.key, 1) neq "$")
 				loc.returnValue = loc.returnValue & " " & LCase(loc.key) & "=""" & arguments.attributes[loc.key] & """";	
 		}
 		if (arguments.close)
@@ -290,11 +290,11 @@
 	<cfargument name="content" type="string" required="true">
 	<cfargument name="attributes" type="struct" required="true">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		if (StructKeyExists(arguments.attributes, arguments.name))
 		{
 			loc.returnValue = arguments.attributes[arguments.name];
-			if (Right(loc.returnValue, 1) != ";")
+			if (Right(loc.returnValue, 1) neq ";")
 				loc.returnValue = loc.returnValue & ";";
 			loc.returnValue = loc.returnValue & arguments.content;
 		}

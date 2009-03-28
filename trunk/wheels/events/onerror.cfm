@@ -12,11 +12,11 @@
 	<cfargument name="exception" type="any" required="true">
 	<cfargument name="eventname" type="any" required="true">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		
 		if (application.wheels.sendEmailOnError)
 		{
-			loc.mailArgs = {};
+			loc.mailArgs = StructNew();
 			loc.mailArgs.from = application.wheels.errorEmailAddress;
 			loc.mailArgs.to = application.wheels.errorEmailAddress;
 			loc.mailArgs.subject = "Error";
@@ -29,9 +29,9 @@
 
 		if (application.wheels.showErrorInformation)
 		{
-			if (StructKeyExists(arguments.exception, "rootCause") && Left(arguments.exception.rootCause.type, 6) == "Wheels")
+			if (StructKeyExists(arguments.exception, "rootCause") and Left(arguments.exception.rootCause.type, 6) eq "Wheels")
 				loc.wheelsError = arguments.exception.rootCause;
-			else if (StructKeyExists(arguments.exception, "cause") && StructKeyExists(arguments.exception.cause, "rootCause") && Left(arguments.exception.cause.rootCause.type, 6) == "Wheels") 
+			else if (StructKeyExists(arguments.exception, "cause") and StructKeyExists(arguments.exception.cause, "rootCause") and Left(arguments.exception.cause.rootCause.type, 6) eq "Wheels") 
 				loc.wheelsError = arguments.exception.cause.rootCause;
 			if (StructKeyExists(loc, "wheelsError"))
 			{
