@@ -18,7 +18,7 @@
 		--->
 	
 		<cfscript>
-			var loc = {};
+			var loc = StructNew();
 			loc.urlRegex = "(?ix)([^(url=)|(href=)'""])(((https?)://([^:]+\:[^@]*@)?)([\d\w\-]+\.)?[\w\d\-\.]+\.(com|net|org|info|biz|tv|co\.uk|de|ro|it)(( / [\w\d\.\-@%\\\/:]* )+)?(\?[\w\d\?%,\.\/\##!@:=\+~_\-&amp;]*(?<![\.]))?)";
 			loc.mailRegex = "(([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,}))";
 			loc.returnValue = arguments.text;
@@ -39,10 +39,10 @@
 		--->
 	
 		<cfscript>
-			var loc = {};
-			if (!StructKeyExists(request.wheels, "cycle"))
-				request.wheels.cycle = {};
-			if (!StructKeyExists(request.wheels.cycle, arguments.name))
+			var loc = StructNew();
+			if (not(StructKeyExists(request.wheels, "cycle")))
+				request.wheels.cycle = StructNew();
+			if (not(StructKeyExists(request.wheels.cycle, arguments.name)))
 			{
 				request.wheels.cycle[arguments.name] = ListGetAt(arguments.values, 1);
 			}
@@ -69,9 +69,9 @@
 		--->
 	
 		<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.pos = FindNoCase(arguments.phrase, arguments.text, 1);
-		if (loc.pos != 0)
+		if (loc.pos neq 0)
 		{
 			if ((loc.pos-arguments.radius) LT 1)
 			{
@@ -114,8 +114,8 @@
 		--->
 	
 		<cfscript>
-			var loc = {};
-			if (!Len(arguments.text) || !Len(arguments.phrases))
+			var loc = StructNew();
+			if (not(Len(arguments.text)) or not(Len(arguments.phrases)))
 			{
 				loc.returnValue = arguments.text;
 			}
@@ -133,7 +133,7 @@
 						loc.foundAt = FindNoCase(loc.phrase, loc.origText, loc.pos);
 						loc.prevText = Mid(loc.origText, loc.pos, loc.foundAt-loc.pos);
 						loc.newText = loc.newText & loc.prevText;
-						if (Find("<", loc.origText, loc.foundAt) < Find(">", loc.origText, loc.foundAt) || !Find(">", loc.origText, loc.foundAt))
+						if (Find("<", loc.origText, loc.foundAt) lt Find(">", loc.origText, loc.foundAt) or !Find(">", loc.origText, loc.foundAt))
 							loc.newText = loc.newText & "<span class=""" & arguments.class & """>" & Mid(loc.origText, loc.foundAt, Len(loc.phrase)) & "</span>";
 						else
 							loc.newText = loc.newText & Mid(loc.origText, loc.foundAt, Len(loc.phrase));
@@ -156,7 +156,7 @@
 		--->
 	
 		<cfscript>
-			var loc = {};
+			var loc = StructNew();
 			if (StructKeyExists(request.wheels, "cycle") AND StructKeyExists(request.wheels.cycle, arguments.name))
 				StructDelete(request.wheels.cycle, arguments.name);
 		</cfscript>
@@ -170,11 +170,11 @@
 		--->
 	
 		<cfscript>
-			var loc = {};
+			var loc = StructNew();
 			loc.returnValue = Trim(arguments.text);
 			loc.returnValue = Replace(loc.returnValue, "#Chr(10)##Chr(10)#", "</p><p>", "all");
 			loc.returnValue = Replace(loc.returnValue, "#Chr(10)#", "<br />", "all");
-			if (loc.returnValue != "")
+			if (loc.returnValue neq "")
 				loc.returnValue = "<p>" & loc.returnValue & "</p>";
 		</cfscript>
 		<cfreturn loc.returnValue>
@@ -214,7 +214,7 @@
 		--->
 	
 		<cfscript>
-			var loc = {};
+			var loc = StructNew();
 			loc.returnValue = "";
 			loc.iEnd = ListLen(arguments.word, " ");
 			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
@@ -239,7 +239,7 @@
 		--->
 	
 		<cfscript>
-			var loc = {};
+			var loc = StructNew();
 			if (Len(arguments.text) GT arguments.length)
 				loc.returnValue = Left(arguments.text, arguments.length-Len(arguments.truncateString)) & arguments.truncateString;
 			else
@@ -288,7 +288,7 @@
 	<cffunction name="humanize" returntype="string" access="public" output="false" hint="Returns readable text by capitalizing, converting camel casing to multiple words.">
 		<cfargument name="text" type="string" required="true" hint="Text to humanize">
 		<cfscript>
-			var loc = {};
+			var loc = StructNew();
 			loc.returnValue = REReplace(arguments.text, "([[:upper:]])", " \1", "all"); // adds a space before every capitalized word
 			loc.returnValue = REReplace(loc.returnValue, "([[:upper:]]) ([[:upper:]]) ", "\1\2", "all"); // fixes abbreviations so they form a word again (example: aURLVariable)
 			loc.returnValue = capitalize(loc.returnValue); // capitalize the first letter 

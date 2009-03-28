@@ -9,7 +9,7 @@
 <cffunction name="getType" returntype="string" access="public" output="false">
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		switch(arguments.type)
 		{
 			case "bigint": {loc.returnValue = "cf_sql_bigint"; break;}
@@ -40,22 +40,22 @@
 	<cfargument name="offset" type="numeric" required="false" default=0>
 	<cfargument name="parameterize" type="boolean" required="true">
 	<cfscript>
-		var loc = {};
-		var query = {};
-		if (arguments.limit > 0)
+		var loc = StructNew();
+		var query = StructNew();
+		if (arguments.limit gt 0)
 		{
 			loc.select = ReplaceNoCase(arguments.sql[1], "SELECT ", "");
 			loc.qualifiedOrder = ReplaceNoCase(arguments.sql[ArrayLen(arguments.sql)], "ORDER BY ", "");
 			loc.iEnd = ListLen(loc.select);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.item = ListGetAt(loc.select, loc.i);
-				if (!ListContainsNoCase(loc.qualifiedOrder, loc.item))
+				if (not(ListContainsNoCase(loc.qualifiedOrder, loc.item)))
 					loc.qualifiedOrder = ListAppend(loc.qualifiedOrder, "#loc.i# ASC");
 			}
 			loc.simpleOrder = "";
 			loc.iEnd = ListLen(loc.qualifiedOrder);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.item = ListGetAt(loc.qualifiedOrder, loc.i);
 				loc.simpleOrder = ListAppend(loc.simpleOrder, ListLast(loc.item, "."));

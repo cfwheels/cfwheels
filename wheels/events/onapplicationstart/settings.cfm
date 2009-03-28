@@ -1,6 +1,6 @@
 <cfscript>
 	// rewrite settings based on web server rewrite capabilites
-	if (Right(cgi.script_name, 12) == "/rewrite.cfm")
+	if (Right(cgi.script_name, 12) eq "/rewrite.cfm")
 		application.wheels.URLRewriting = "On";
 	else if (Len(cgi.path_info))
 		application.wheels.URLRewriting = "Partial";
@@ -29,7 +29,7 @@
 	application.wheels.errorEmailAddress = "";
 
 	// override settings for specific environments
-	if (application.wheels.environment != "design")
+	if (application.wheels.environment neq "design")
 	{
 		application.wheels.cacheDatabaseSchema = true;
 		application.wheels.cacheFileChecking = true;
@@ -38,7 +38,7 @@
 		application.wheels.cacheControllerInitialization = true;
 		application.wheels.cacheRoutes = true;
 	}
-	if (application.wheels.environment != "design" && application.wheels.environment != "development")
+	if (application.wheels.environment neq "design" and application.wheels.environment neq "development")
 	{
 		application.wheels.cacheActions = true;
 		application.wheels.cachePages = true;
@@ -46,7 +46,7 @@
 		application.wheels.cacheQueries = true;
 		application.wheels.showDebugInformation = false;
 	}
-	if (application.wheels.environment == "production")
+	if (application.wheels.environment eq "production")
 	{
 		application.wheels.showErrorInformation = false;
 		if (cgi.server_name Contains ".")
@@ -87,8 +87,8 @@
 	application.wheels.findAll = {reload=false, parameterize=true, perPage=10, order=""};
 	application.wheels.findByKey = {reload=false, parameterize=true};
 	application.wheels.findOne = {reload=false, parameterize=true};
-	application.wheels.hiddenField = {};
-	application.wheels.imageTag = {};
+	application.wheels.hiddenField = StructNew();
+	application.wheels.imageTag = StructNew();
 	application.wheels.javaScriptIncludeTag = {type="text/javascript"};
 	application.wheels.linkTo = {onlyPath=true, host="", protocol="", port=0};
 	application.wheels.paginationLinks = {windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prependToLink="", appendToLink="", classForCurrent="", name="page"};

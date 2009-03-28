@@ -4,10 +4,10 @@
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
 	<cfscript>
-		var loc = {};
-		loc.args = {};
+		var loc = StructNew();
+		loc.args = StructNew();
 		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
@@ -24,11 +24,11 @@
 	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.validatesExclusionOf.allowBlank#" hint="If set to `true`, validation will be skipped if the value of the property is blank.">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
 	<cfscript>
-		var loc = {};
-		loc.args = {};
+		var loc = StructNew();
+		loc.args = StructNew();
 		arguments.list = Replace(arguments.list, ", ", ",", "all");
 		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
@@ -47,10 +47,10 @@
 	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.validatesFormatOf.allowBlank#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
 	<cfscript>
-		var loc = {};
-		loc.args = {};
+		var loc = StructNew();
+		loc.args = StructNew();
 		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
@@ -69,11 +69,11 @@
 	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.validatesInclusionOf.allowBlank#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
 	<cfscript>
-		var loc = {};
-		loc.args = {};
+		var loc = StructNew();
+		loc.args = StructNew();
 		arguments.list = Replace(arguments.list, ", ", ",", "all");
 		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
@@ -95,12 +95,12 @@
 	<cfargument name="within" type="string" required="false" default="#application.wheels.validatesLengthOf.within#" hint="A list of two values (minimum and maximum) that the length of the property value has to fall within">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
 	<cfscript>
-		var loc = {};
-		loc.args = {};
+		var loc = StructNew();
+		loc.args = StructNew();
 		loc.iEnd = ListLen(arguments.property);
 		if (Len(arguments.within))
 			arguments.within = ListToArray(Replace(arguments.within, ", ", ",", "all"));
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
@@ -122,10 +122,10 @@
 	<cfargument name="onlyInteger" type="boolean" required="false" default="#application.wheels.validatesNumericalityOf.onlyInteger#" hint="Specifies whether the property value has to be an integer">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
 	<cfscript>
-		var loc = {};
-		loc.args = {};
+		var loc = StructNew();
+		loc.args = StructNew();
 		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
@@ -142,10 +142,10 @@
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
 	<cfscript>
-		var loc = {};
-		loc.args = {};
+		var loc = StructNew();
+		loc.args = StructNew();
 		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
@@ -161,11 +161,11 @@
 	<cfargument name="scope" type="string" required="false" default="" hint="One or more properties by which to limit the scope of the uniqueness constraint">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
 	<cfscript>
-		var loc = {};
-		loc.args = {};
+		var loc = StructNew();
+		loc.args = StructNew();
 		arguments.scope = Replace(arguments.scope, ", ", ",", "all");
 		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
@@ -195,13 +195,13 @@
 
 <cffunction name="valid" returntype="boolean" access="public" output="false" hint="Runs the validation on the object and returns `true` if it passes it. Wheels will run the validation process automatically whenever an object is saved to the database but sometimes it's useful to be able to run this method to see if the object is valid without saving it to the database.">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.returnValue = false;
 		if (isNew())
-			if ($validate("onCreate") && $validate("onSave"))
+			if ($validate("onCreate") and $validate("onSave"))
 				loc.returnValue = true;
 		else
-			if ($validate("onUpdate") && $validate("onSave"))
+			if ($validate("onUpdate") and $validate("onSave"))
 				loc.returnValue = true;
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -212,12 +212,12 @@
 	<cfargument name="methods" type="string" required="true">
 	<cfargument name="args" type="struct" required="false" default="#StructNew()#">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.iEnd = ListLen(arguments.methods);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.iItem = Trim(ListGetAt(arguments.methods, loc.i));
-			loc.validation = {};
+			loc.validation = StructNew();
 			loc.validation.method = loc.iItem;
 			loc.validation.args = arguments.args;
 			ArrayAppend(variables.wheels.class.validations[arguments.type], loc.validation);
@@ -228,17 +228,17 @@
 <cffunction name="$validate" returntype="boolean" access="public" output="false">
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.validations[arguments.type]); loc.i=loc.i+1)
 			$invoke(method=variables.wheels.class.validations[arguments.type][loc.i].method, argumentCollection=variables.wheels.class.validations[arguments.type][loc.i].args);
-		loc.returnValue = !hasErrors();
+		loc.returnValue = not(hasErrors());
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$validateConfirmationOf" returntype="void" access="public" output="false">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.virtualConfirmProperty = arguments.property & "Confirmation";
 		if (StructKeyExists(this, loc.virtualConfirmProperty))
 			if (this[arguments.property] IS NOT this[loc.virtualConfirmProperty])
@@ -248,34 +248,34 @@
 
 <cffunction name="$validateExclusionOf" returntype="void" access="public" output="false">
 	<cfscript>
-		if ((!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))) || (StructKeyExists(this, arguments.property) && Len(this[arguments.property]) && ListFindNoCase(arguments.list, this[arguments.property])))
+		if ((not(arguments.allowBlank) and (not(StructKeyExists(this, arguments.property)) or not(Len(this[arguments.property])))) or (StructKeyExists(this, arguments.property) and Len(this[arguments.property]) and ListFindNoCase(arguments.list, this[arguments.property])))
 			addError(property=arguments.property, message=arguments.message);
 	</cfscript>
 </cffunction>
 
 <cffunction name="$validateFormatOf" returntype="void" access="public" output="false">
 	<cfscript>
-		if ((!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))) || (StructKeyExists(this, arguments.property) && Len(this[arguments.property]) && !REFindNoCase(arguments.regEx, this[arguments.property])))
+		if ((not(arguments.allowBlank) and (not(StructKeyExists(this, arguments.property)) or not(Len(this[arguments.property])))) or (StructKeyExists(this, arguments.property) and Len(this[arguments.property]) and not(REFindNoCase(arguments.regEx, this[arguments.property]))))
 			addError(property=arguments.property, message=arguments.message);
 	</cfscript>
 </cffunction>
 
 <cffunction name="$validateInclusionOf" returntype="void" access="public" output="false">
 	<cfscript>
-		if ((!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))) || (StructKeyExists(this, arguments.property) && Len(this[arguments.property]) && !ListFindNoCase(arguments.list, this[arguments.property])))
+		if ((not(arguments.allowBlank) and (not(StructKeyExists(this, arguments.property)) or not(Len(this[arguments.property])))) or (StructKeyExists(this, arguments.property) and Len(this[arguments.property]) and not(ListFindNoCase(arguments.list, this[arguments.property]))))
 			addError(property=arguments.property, message=arguments.message);
 	</cfscript>
 </cffunction>
 
 <cffunction name="$validateLengthOf" returntype="void" access="public" output="false">
 	<cfscript>
-		if (!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property])))
+		if (not(arguments.allowBlank) and (not(StructKeyExists(this, arguments.property)) or not(Len(this[arguments.property]))))
 		{
 			addError(property=arguments.property, message=arguments.message);
 		}
 		else
 		{
-			if (StructKeyExists(this, arguments.property) && Len(this[arguments.property]))
+			if (StructKeyExists(this, arguments.property) and Len(this[arguments.property]))
 			{
 				if (arguments.maximum)
 				{
@@ -292,9 +292,9 @@
 					if (Len(this[arguments.property]) IS NOT arguments.exactly)
 						addError(property=arguments.property, message=arguments.message);
 				}
-				else if (IsArray(arguments.within) && ArrayLen(arguments.within))
+				else if (IsArray(arguments.within) and ArrayLen(arguments.within))
 				{
-					if (Len(this[arguments.property]) LT arguments.within[1] || Len(this[arguments.property]) GT arguments.within[2])
+					if (Len(this[arguments.property]) LT arguments.within[1] or Len(this[arguments.property]) GT arguments.within[2])
 						addError(property=arguments.property, message=arguments.message);
 				}
 			}
@@ -304,17 +304,17 @@
 
 <cffunction name="$validateNumericalityOf" returntype="void" access="public" output="false">
 	<cfscript>
-		if (!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property])))
+		if (not(arguments.allowBlank) and (not(StructKeyExists(this, arguments.property)) or not(Len(this[arguments.property]))))
 		{
 			addError(property=arguments.property, message=arguments.message);
 		}
 		else
 		{
-			if (StructKeyExists(this, arguments.property) && Len(this[arguments.property]))
+			if (StructKeyExists(this, arguments.property) and Len(this[arguments.property]))
 			{
-				if (!IsNumeric(this[arguments.property]))
+				if (not(IsNumeric(this[arguments.property])))
 					addError(property=arguments.property, message=arguments.message);
-				else if (arguments.onlyInteger && Round(this[arguments.property]) IS NOT this[arguments.property])
+				else if (arguments.onlyInteger and Round(this[arguments.property]) IS NOT this[arguments.property])
 					addError(property=arguments.property, message=arguments.message);
 			}
 		}
@@ -323,34 +323,34 @@
 
 <cffunction name="$validatePresenceOf" returntype="void" access="public" output="false">
 	<cfscript>
-		if (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))
+		if (not(StructKeyExists(this, arguments.property)) or not(Len(this[arguments.property])))
 			addError(property=arguments.property, message=arguments.message);
 	</cfscript>
 </cffunction>
 
 <cffunction name="$validateUniquenessOf" returntype="void" access="public" output="false">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.where = arguments.property & "=";
-		if (!IsNumeric(this[arguments.property]))
+		if (not(IsNumeric(this[arguments.property])))
 			loc.where = loc.where & "'";
 		loc.where = loc.where & this[arguments.property];
-		if (!IsNumeric(this[arguments.property]))
+		if (not(IsNumeric(this[arguments.property])))
 			loc.where = loc.where & "'";
 		loc.iEnd = ListLen(arguments.scope);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.where = loc.where & " AND ";
 			loc.property = Trim(ListGetAt(arguments.scope, loc.i));
 			loc.where = loc.where & loc.property & "=";
-			if (!IsNumeric(this[loc.property]))
+			if (not(IsNumeric(this[loc.property])))
 				loc.where = loc.where & "'";
 			loc.where = loc.where & this[loc.property];
-			if (!IsNumeric(this[loc.property]))
+			if (not(IsNumeric(this[loc.property])))
 				loc.where = loc.where & "'";
 		}
 		loc.existingObject = findOne(where=loc.where, reload=true);
-		if (IsObject(loc.existingObject) && loc.existingObject.key() != key())
+		if (IsObject(loc.existingObject) and loc.existingObject.key() neq key())
 			addError(property=arguments.property, message=arguments.message);
 	</cfscript>
 </cffunction>

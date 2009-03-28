@@ -1,7 +1,7 @@
 <cffunction name="onRequestStart" returntype="void" access="public" output="false">
 	<cfargument name="targetPage" type="any" required="true">
 	<cfscript>
-		if (StructKeyExists(URL, "reload") && (!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword") || !Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
+		if (StructKeyExists(URL, "reload") and (not(StructKeyExists(application, "wheels")) or not(StructKeyExists(application.wheels, "reloadPassword")) or not(Len(application.wheels.reloadPassword)) or (StructKeyExists(URL, "password") and URL.password eq application.wheels.reloadPassword)))
 			$simpleLock(execute="onApplicationStart", scope="application", type="exclusive");
 		$simpleLock(execute="runOnRequestStart", executeArgs=arguments, scope="application", type="readOnly");
 	</cfscript>
@@ -10,40 +10,40 @@
 <cffunction name="runOnRequestStart" returntype="void" access="public" output="false">
 	<cfargument name="targetPage" type="any" required="true">
 	<cfscript>
-		var loc = {};
-		if (application.wheels.environment == "maintenance")
+		var loc = StructNew();
+		if (application.wheels.environment eq "maintenance")
 		{
 			if (StructKeyExists(URL, "except"))
 				application.wheels.ipExceptions = URL.except;
-			if (!Len(application.wheels.ipExceptions) || !ListFind(application.wheels.ipExceptions, cgi.remote_addr))
+			if (not(Len(application.wheels.ipExceptions)) or not(ListFind(application.wheels.ipExceptions, cgi.remote_addr)))
 			{
 				$includeAndOutput(template="#application.wheels.eventPath#/onmaintenance.cfm");
 				$abort();
 			}
 		}
-		if (Right(arguments.targetPage, 4) == ".cfc")
+		if (Right(arguments.targetPage, 4) eq ".cfc")
 		{
 			StructDelete(this, "onRequest");
 			StructDelete(variables, "onRequest");
 		}
-		request.wheels = {};
-		request.wheels.params = {};
-		request.wheels.cache = {};
+		request.wheels = StructNew();
+		request.wheels.params = StructNew();
+		request.wheels.cache = StructNew();
 		if (application.wheels.showDebugInformation)
 			$debugPoint("total,requestStart");
-		if (!application.wheels.cacheModelInitialization)
+		if (not(application.wheels.cacheModelInitialization))
 			StructClear(application.wheels.models);
-		if (!application.wheels.cacheControllerInitialization)
+		if (not(application.wheels.cacheControllerInitialization))
 			StructClear(application.wheels.controllers);
-		if (!application.wheels.cacheRoutes)
+		if (not(application.wheels.cacheRoutes))
 		{
 			ArrayClear(application.wheels.routes);
 			$include(template="#application.wheels.configPath#/routes.cfm");
 			$include(template="wheels/events/onapplicationstart/routes.cfm");
 		}
-		if (!application.wheels.cacheDatabaseSchema)
+		if (not(application.wheels.cacheDatabaseSchema))
 			$clearCache("sql");
-		if (!application.wheels.cacheFileChecking)
+		if (not(application.wheels.cacheFileChecking))
 		{
 			application.wheels.existingControllerFiles = "";
 			application.wheels.nonExistingControllerFiles = "";

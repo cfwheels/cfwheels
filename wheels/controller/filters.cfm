@@ -4,16 +4,16 @@
 	<cfargument name="only" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell Wheels that the filter function(s) should only be run on these actions">
 	<cfargument name="except" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell Wheels that the filter function(s) should be run on all actions except the specified ones">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.iEnd = ListLen(arguments.through);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.item = Trim(ListGetAt(arguments.through, loc.i));
-			loc.thisFilter = {};
+			loc.thisFilter = StructNew();
 			loc.thisFilter.through = loc.item;
 			loc.thisFilter.only = Replace(arguments.only, ", ", ",", "all");
 			loc.thisFilter.except = Replace(arguments.except, ", ", ",", "all");
-			if (arguments.type == "before")
+			if (arguments.type eq "before")
 				ArrayAppend(variables.wheels.beforeFilters, loc.thisFilter);
 			else
 				ArrayAppend(variables.wheels.afterFilters, loc.thisFilter);

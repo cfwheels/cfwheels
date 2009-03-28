@@ -16,7 +16,7 @@
 		--->
 	
 		<cfscript>
-			var loc = {};
+			var loc = StructNew();
 			arguments.href = "mailto:#arguments.emailAddress#";
 			if (Len(arguments.name))
 				loc.text = arguments.name;

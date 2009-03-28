@@ -18,7 +18,7 @@
 
 <cffunction name="hasErrors" returntype="boolean" access="public" output="false" hint="Returns 'true' if the object has any errors.">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		if (errorCount() GT 0)
 			loc.returnValue = true;
 		else
@@ -35,7 +35,7 @@
 
 <cffunction name="errorCount" returntype="numeric" access="public" output="false" hint="Returns the number of errors this object has associated with it.">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.returnValue = ArrayLen(variables.wheels.errors);
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -45,10 +45,10 @@
 	<cfargument name="property" type="string" required="true" hint="Name of property">
 	<cfargument name="name" type="string" required="false" default="" hint="Given name for the error">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.returnValue = [];
 		for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.errors); loc.i=loc.i+1)
-			if (variables.wheels.errors[loc.i].property IS arguments.property && (variables.wheels.errors[loc.i].name IS arguments.name))
+			if (variables.wheels.errors[loc.i].property IS arguments.property and (variables.wheels.errors[loc.i].name IS arguments.name))
 				ArrayAppend(loc.returnValue, variables.wheels.errors[loc.i]);
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -57,7 +57,7 @@
 <cffunction name="errorsOnBase" returntype="array" access="public" output="false" hint="Returns an array of all errors associated with the object as a whole (not related to any specific property).">
 	<cfargument name="name" type="string" required="false" default="" hint="Given name for the error">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments.property = "";
 		loc.returnValue = errorsOn(argumentCollection=arguments);
 	</cfscript>
@@ -66,7 +66,7 @@
 
 <cffunction name="allErrors" returntype="array" access="public" output="false" hint="Returns an array of all errors on the object.">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.returnValue = variables.wheels.errors;
 	</cfscript>
 	<cfreturn loc.returnValue>

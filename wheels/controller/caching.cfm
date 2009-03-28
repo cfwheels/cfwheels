@@ -3,9 +3,9 @@
 	<cfargument name="actions" type="string" required="false" default="#arguments.action#" hint="See `action`">
 	<cfargument name="time" type="numeric" required="false" default="#application.wheels.caches.time#" hint="Minutes to cache the action(s) for">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.iEnd = ListLen(arguments.actions);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.item = Trim(ListGetAt(arguments.actions, loc.i));
 			loc.thisAction = {action=loc.item, time=arguments.time};

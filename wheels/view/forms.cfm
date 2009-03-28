@@ -13,7 +13,7 @@
 	<cfargument name="protocol" type="string" required="false" default="#application.wheels.startFormTag.protocol#" hint="See documentation for `URLFor`">
 	<cfargument name="port" type="numeric" required="false" default="#application.wheels.startFormTag.port#" hint="See documentation for `URLFor`">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="startFormTag", input=arguments);
 	
 		// sets a flag to indicate whether we use get or post on this form, used when obfuscating params
@@ -34,7 +34,7 @@
 		}
 	
 		// set the form to be able to handle file uploads
-		if (!StructKeyExists(arguments, "enctype") && arguments.multipart)
+		if (not(StructKeyExists(arguments, "enctype") and arguments.multipart))
 			arguments.enctype = "multipart/form-data";
 		
 		loc.returnValue = $tag(name="form", skip="multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port", attributes=arguments);
@@ -55,12 +55,12 @@
 	<cfargument name="image" type="string" required="false" default="#application.wheels.submitTag.image#" hint="File name of the image file to use in the button form control">
 	<cfargument name="disable" type="any" required="false" default="#application.wheels.submitTag.disable#" hint="Whether to disable the button upon clicking (prevents double-clicking)">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="submitTag", reserved="type,src", input=arguments);
 		if (Len(arguments.disable))
 		{
 			loc.onclick = "this.disabled=true;";
-			if (!Len(arguments.image) && !IsBoolean(arguments.disable))
+			if (not(Len(arguments.image)) and not(IsBoolean(arguments.disable)))
 				loc.onclick = loc.onclick & "this.value='#arguments.disable#';";
 			loc.onclick = loc.onclick & "this.form.submit();";
 			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
@@ -96,7 +96,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.textField.appendToLabel#" hint="String to append to the form control's label. Useful to wrap the form control around HTML tags">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.textField.errorElement#" hint="HTML tag to wrap the form control with when the object contains errors">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="textField", reserved="type,name,id,value", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
@@ -121,7 +121,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.radioButton.appendToLabel#" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.radioButton.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="radioButton", reserved="type,name,id,value,checked", input=arguments);
 		loc.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.tagValue, "[^a-z0-9 ]", "", "all"), " ", "-", "all"));
 		arguments.$appendToFor = loc.valueToAppend;
@@ -131,7 +131,7 @@
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.id = $tagId(arguments.objectName, arguments.property) & "-" & loc.valueToAppend;
 		arguments.value = arguments.tagValue;
-		if (arguments.tagValue == $formValue(argumentCollection=arguments))
+		if (arguments.tagValue eq $formValue(argumentCollection=arguments))
 			arguments.checked = "checked";
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,tagValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
@@ -151,7 +151,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.checkBox.appendToLabel#" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.checkBox.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="checkBox", reserved="type,name,id,value,checked", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
@@ -160,10 +160,10 @@
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = arguments.checkedValue;
 		loc.value = $formValue(argumentCollection=arguments);
-		if ((IsBoolean(loc.value) && loc.value) || (isNumeric(loc.value) && loc.value >= 1))
+		if ((IsBoolean(loc.value) and loc.value) or (isNumeric(loc.value) and loc.value gte 1))
 			arguments.checked = "checked";
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,checkedValue,uncheckedValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments);
-		loc.hiddenAttributes = {};
+		loc.hiddenAttributes = StructNew();
 		loc.hiddenAttributes.type = "hidden";
 		loc.hiddenAttributes.name = arguments.name & "($checkbox)";
 		loc.hiddenAttributes.value = arguments.uncheckedValue;
@@ -183,7 +183,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.passwordField.appendToLabel#" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.passwordField.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="passwordField", reserved="type,name,id,value", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
@@ -200,13 +200,13 @@
 	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="hiddenField", reserved="type,name,id,value", input=arguments);
 		arguments.type = "hidden";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = $formValue(argumentCollection=arguments);
-		if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod IS "get")
+		if (application.wheels.obfuscateUrls and StructKeyExists(request.wheels, "currentFormMethod") and request.wheels.currentFormMethod IS "get")
 			arguments.value = obfuscateParam(arguments.value);
 		arguments.value = HTMLEditFormat(arguments.value);
 		loc.returnValue = $tag(name="input", close=true, skip="objectName,property", attributes=arguments);
@@ -225,7 +225,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.textArea.appendToLabel#" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.textArea.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="textArea", reserved="name,id", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
@@ -248,7 +248,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.passwordField.appendToLabel#" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.passwordField.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="fileField", reserved="type,name,id", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
@@ -276,7 +276,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.select.appendToLabel#" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.select.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="select", reserved="name,id", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
@@ -287,9 +287,9 @@
 		else
 			StructDelete(arguments, "multiple");		
 		loc.content = $optionsForSelect(argumentCollection=arguments);
-		if (!IsBoolean(arguments.includeBlank) || arguments.includeBlank)
+		if (not(IsBoolean(arguments.includeBlank)) or arguments.includeBlank)
 		{
-			if (!IsBoolean(arguments.includeBlank))
+			if (not(IsBoolean(arguments.includeBlank)))
 				loc.blankOptionText = arguments.includeBlank;
 			else
 				loc.blankOptionText = "";
@@ -322,7 +322,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateTimeSelect.appendToLabel#" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.dateTimeSelect.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="dateTimeSelect", reserved="name,id", input=arguments);
 		arguments.$functionName = "dateTimeSelect";
 	</cfscript>
@@ -346,7 +346,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateSelect.appendToLabel#" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.dateSelect.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="dateSelect", reserved="name,id", input=arguments);
 		arguments.$functionName = "dateSelect";
 	</cfscript>
@@ -368,7 +368,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.timeSelect.appendToLabel#" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.timeSelect.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="timeSelect", reserved="name,id", input=arguments);
 		arguments.$functionName = "timeSelect";
 	</cfscript>
@@ -396,9 +396,9 @@
 		arguments.$loopTo = 12;
 		arguments.$type = "month";
 		arguments.$step = 1;
-		if (arguments.monthDisplay == "abbreviations")
+		if (arguments.monthDisplay eq "abbreviations")
 			arguments.$optionNames = "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec";
-		else if (arguments.monthDisplay == "names")
+		else if (arguments.monthDisplay eq "names")
 			arguments.$optionNames = "January,February,March,April,May,June,July,August,September,October,November,December";
 		StructDelete(arguments, "monthDisplay");
 	</cfscript>
@@ -449,21 +449,21 @@
 
 <cffunction name="$dateTimeSelect" returntype="string" access="public" output="false">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.returnValue = "";
 		loc.separator = arguments.separator;
 		arguments.order = arguments.dateOrder;
 		arguments.separator = arguments.dateSeparator;
-		if (arguments.$functionName == "dateTimeSelect")
+		if (arguments.$functionName eq "dateTimeSelect")
 			loc.returnValue = loc.returnValue & dateSelect(argumentCollection=arguments);
-		else if (arguments.$functionName == "dateTimeSelectTag")
+		else if (arguments.$functionName eq "dateTimeSelectTag")
 			loc.returnValue = loc.returnValue & $dateSelectTag(argumentCollection=arguments);
 		loc.returnValue = loc.returnValue & loc.separator;
 		arguments.order = arguments.timeOrder;
 		arguments.separator = arguments.timeSeparator;
-		if (arguments.$functionName == "dateTimeSelect")
+		if (arguments.$functionName eq "dateTimeSelect")
 			loc.returnValue = loc.returnValue & timeSelect(argumentCollection=arguments);
-		else if (arguments.$functionName == "dateTimeSelectTag")
+		else if (arguments.$functionName eq "dateTimeSelectTag")
 			loc.returnValue = loc.returnValue & $timeSelectTag(argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -488,14 +488,14 @@
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="$functionName" type="string" required="true">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.name = $tagName(arguments.objectName, arguments.property);
 		arguments.$id = $tagId(arguments.objectName, arguments.property);
 		loc.value = $formValue(argumentCollection=arguments);
 		loc.returnValue = "";
 		loc.firstDone = false;
 		loc.iEnd = ListLen(arguments.order);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.item = ListGetAt(arguments.order, loc.i);
 			arguments.name = loc.name & "($" & loc.item & ")";
@@ -530,34 +530,34 @@
 	<cfargument name="$step" type="numeric" required="true">
 	<cfargument name="$optionNames" type="string" required="false" default="">
 	<cfscript>
-		var loc = {};
-		if (!Len(arguments.value) && (!IsBoolean(arguments.includeBlank) || !arguments.includeBlank))
+		var loc = StructNew();
+		if (not(Len(arguments.value)) and (not(IsBoolean(arguments.includeBlank)) or not(arguments.includeBlank)))
 			arguments.value = Evaluate("#arguments.$type#(Now())");
 		arguments.$appendToFor = arguments.$type;
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		loc.content = "";
-		if (!IsBoolean(arguments.includeBlank) || arguments.includeBlank)
+		if (not(IsBoolean(arguments.includeBlank)) or arguments.includeBlank)
 		{
-			loc.args = {};
+			loc.args = StructNew();
 			loc.args.value = "";
-			if (!IsBoolean(arguments.includeBlank))
+			if (not(IsBoolean(arguments.includeBlank)))
 				loc.optionContent = arguments.includeBlank;
 			else
 				loc.optionContent = "";
 			loc.content = loc.content & $element(name="option", content=loc.optionContent, attributes=loc.args);
 		}
-		for (loc.i=arguments.$loopFrom; loc.i<=arguments.$loopTo; loc.i=loc.i+arguments.$step)
+		for (loc.i=arguments.$loopFrom; loc.i lte arguments.$loopTo; loc.i=loc.i+arguments.$step)
 		{
-			loc.args = {};
+			loc.args = StructNew();
 			loc.args.value = loc.i;
-			if (arguments.value == loc.i)
+			if (arguments.value eq loc.i)
 				loc.args.selected = "selected";
 			if (Len(arguments.$optionNames))
 				loc.optionContent = ListGetAt(arguments.$optionNames, loc.i);
 			else
 				loc.optionContent = loc.i;
-			if (arguments.$type == "minute" || arguments.$type == "second")
+			if (arguments.$type eq "minute" or arguments.$type eq "second")
 				loc.optionContent = NumberFormat(loc.optionContent, "09");
 			loc.content = loc.content & $element(name="option", content=loc.optionContent, attributes=loc.args);
 		}
@@ -572,28 +572,28 @@
 	<cfargument name="valueField" type="string" required="true">
 	<cfargument name="textField" type="string" required="true">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.value = $formValue(argumentCollection=arguments);
 		loc.returnValue = "";
 		if (IsQuery(arguments.options))
 		{
 			loc.iEnd = arguments.options.RecordCount;
 			// if no value or text field has been passed in we take the first numeric field in the query as the value field and the first non numeric as the text field
-			if (!Len(arguments.valueField) || !Len(arguments.textField))
+			if (not(Len(arguments.valueField)) or not(Len(arguments.textField)))
 			{
-				for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+				for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 				{
 					loc.jEnd = ListLen(arguments.options.columnList);
-					for (loc.j=1; loc.j<=loc.jEnd; loc.j++)
+					for (loc.j=1; loc.j lte loc.jEnd; loc.j=loc.j+1)
 					{
-						if (!Len(arguments.valueField) && IsNumeric(arguments.options[ListGetAt(arguments.options.columnList, loc.j)][loc.i]))
+						if (not(Len(arguments.valueField)) and IsNumeric(arguments.options[ListGetAt(arguments.options.columnList, loc.j)][loc.i]))
 							arguments.valueField = ListGetAt(arguments.options.columnList, loc.j);
-						if (!Len(arguments.textField) && !IsNumeric(arguments.options[ListGetAt(arguments.options.columnList, loc.j)][loc.i]))
+						if (not(Len(arguments.textField)) and not(IsNumeric(arguments.options[ListGetAt(arguments.options.columnList, loc.j)][loc.i])))
 							arguments.textField = ListGetAt(arguments.options.columnList, loc.j);
 					}
 				}
 			}
-			for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=arguments.options[arguments.valueField][loc.i], optionText=arguments.options[arguments.textField][loc.i]);
 			}
@@ -608,7 +608,7 @@
 		else if (IsArray(arguments.options))
 		{
 			loc.iEnd = ArrayLen(arguments.options);
-			for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=loc.i, optionText=arguments.options[loc.i]);
 			}
@@ -616,7 +616,7 @@
 		else
 		{
 			loc.iEnd = ListLen(arguments.options);
-			for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=loc.i, optionText=ListGetAt(arguments.options, loc.i));
 			}
@@ -630,11 +630,11 @@
 	<cfargument name="optionValue" type="string" required="true">
 	<cfargument name="optionText" type="string" required="true">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.optionAttributes = {value=arguments.optionValue};
-		if (arguments.optionValue == arguments.objectValue)
+		if (arguments.optionValue eq arguments.objectValue)
 			loc.optionAttributes.selected = "selected";
-		if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod IS "get")
+		if (application.wheels.obfuscateUrls and StructKeyExists(request.wheels, "currentFormMethod") and request.wheels.currentFormMethod IS "get")
 			loc.optionAttributes.value = obfuscateParam(loc.optionAttributes.value);
 		loc.returnValue = $element(name="option", content=arguments.optionText, attributes=loc.optionAttributes);
 	</cfscript>
@@ -645,7 +645,7 @@
 	<cfargument name="objectName" type="string" required="true">
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.object = Evaluate(arguments.objectName);
 		if (StructKeyExists(loc.object, arguments.property))
 			loc.returnValue = loc.object[arguments.property];
@@ -659,7 +659,7 @@
 	<cfargument name="objectName" type="string" required="true">
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.returnValue = false;
 		loc.object = Evaluate(arguments.objectName);
 		if (ArrayLen(loc.object.errorsOn(arguments.property)))
@@ -680,17 +680,17 @@
 	<cfargument name="errorElement" type="string" required="true">
 	<cfargument name="$appendToFor" type="string" required="false" default="">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.returnValue = "";
 		if ($formHasError(argumentCollection=arguments))
 			loc.returnValue = loc.returnValue & $tag(name=arguments.errorElement, class="field-with-errors");
 		if (Len(arguments.label))
 		{
 			loc.returnValue = loc.returnValue & arguments.prependToLabel;
-			loc.attributes = {};
+			loc.attributes = StructNew();
 			for (loc.key in arguments)
 			{
-			 if (Left(loc.key, 5) == "label" && Len(loc.key) > 5)
+			 if (Left(loc.key, 5) eq "label" and Len(loc.key) gt 5)
 				loc.attributes[Replace(loc.key, "label", "")] = arguments[loc.key];
 			}
 			loc.attributes.for = $tagId(arguments.objectName, arguments.property);
@@ -698,7 +698,7 @@
 				loc.attributes.for = loc.attributes.for & "-" & arguments.$appendToFor;
 			loc.returnValue = loc.returnValue & $tag(name="label", attributes=loc.attributes);
 			loc.returnValue = loc.returnValue & arguments.label;
-			if (!arguments.wrapLabel)
+			if (not(arguments.wrapLabel))
 				loc.returnValue = loc.returnValue & "</label>" & arguments.appendToLabel;
 		}
 		loc.returnValue = loc.returnValue & arguments.prepend;
@@ -717,9 +717,9 @@
 	<cfargument name="appendToLabel" type="string" required="true">
 	<cfargument name="errorElement" type="string" required="true">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		loc.returnValue = arguments.append;
-		if (Len(arguments.label) && arguments.wrapLabel)
+		if (Len(arguments.label) and arguments.wrapLabel)
 		{
 			loc.returnValue = loc.returnValue & "</label>";
 			loc.returnValue = loc.returnValue & arguments.appendToLabel;

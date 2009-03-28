@@ -16,7 +16,7 @@
 		<cfscript>
 			var returnValue = "";
 			returnValue = core.findByKey(arguments.key, arguments.select, arguments.cache, arguments.reload, arguments.parameterize, arguments.$create, arguments.$softDeleteCheck);
-			if (!IsObject(returnValue))
+			if (not(IsObject(returnValue)))
 				$throw(type="Wheels.RecordNotFound", message="The requested record could not be found in the database.", extendedInfo="Make sure that the record exists in the database or catch this error in your code.");
 		</cfscript>
 		<cfreturn returnValue>

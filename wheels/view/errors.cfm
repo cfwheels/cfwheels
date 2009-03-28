@@ -2,16 +2,16 @@
 	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to display error messages for">
 	<cfargument name="class" type="string" required="false" default="#application.wheels.errorMessagesFor.class#" hint="CSS class to set on the `ul` element">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="errorMessagesFor", input=arguments);
 		loc.object = Evaluate(arguments.objectName);
 		loc.errors = loc.object.allErrors();
 		loc.returnValue = "";
-		if (!ArrayIsEmpty(loc.errors))
+		if (not(ArrayIsEmpty(loc.errors)))
 		{
 			loc.listItems = "";
 			loc.iEnd = ArrayLen(loc.errors);
-			for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.listItems = loc.listItems & $element(name="li", content=loc.errors[loc.i].message);			
 			}
@@ -29,12 +29,12 @@
 	<cfargument name="wrapperElement" type="string" required="false" default="#application.wheels.errorMessageOn.wrapperElement#" hint="HTML element to wrap the error message in">
 	<cfargument name="class" type="string" required="false" default="#application.wheels.errorMessageOn.class#" hint="CSS class to set on the wrapper element">
 	<cfscript>
-		var loc = {};
+		var loc = StructNew();
 		arguments = $insertDefaults(name="errorMessageOn", input=arguments);
 		loc.object = Evaluate(arguments.objectName);
 		loc.error = loc.object.errorsOn(arguments.property);
 		loc.returnValue = "";
-		if (!ArrayIsEmpty(loc.error))
+		if (not(ArrayIsEmpty(loc.error)))
 		{
 			loc.content = arguments.prependText & loc.error[1].message & arguments.appendText;
 			loc.returnValue = $element(name=arguments.wrapperElement, skip="objectName,property,prependText,appendText,wrapperElement", content=loc.content, attributes=arguments);
