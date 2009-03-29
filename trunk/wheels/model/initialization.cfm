@@ -22,7 +22,7 @@
 			init();
 		}
 
-		variables.wheels.class.adapter = $assignAdpater();
+		variables.wheels.class.adapter = $assignAdapter();
 
 		// set the table name unless set manually by the developer
 		if (not(StructKeyExists(variables.wheels.class, "tableName")))
@@ -101,15 +101,10 @@
 	<cfreturn variables.wheels.class>
 </cffunction>
 
-<cffunction name="$assignAdpater" returntype="Any" access="public" output="false">
-<cfscript>
-try
-{
+<cffunction name="$assignAdapter" returntype="any" access="public" output="false">
+	<cfscript>
+	var loc = StructNew();
 	loc.info = $dbinfo(datasource=variables.wheels.class.connection.datasource, username=variables.wheels.class.connection.username, password=variables.wheels.class.connection.password, type="version");
-}
-catch(Any e) {}
-if (StructKeyExists(loc, "info"))
-{
 	if (loc.info.driver_name Contains "MySQL")
 		loc.adapterName = "MySQL";
 	else if (loc.info.driver_name Contains "Oracle")
@@ -118,7 +113,7 @@ if (StructKeyExists(loc, "info"))
 		loc.adapterName = "MicrosoftSQLServer";
 	else
 		$throw(type="Wheels.NoSupport", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, Oracle or MySQL.");
-	return CreateObject("component", "adapters.#loc.adapterName#").init(argumentCollection=variables.wheels.class.connection);
-}
-</cfscript>
+	loc.returnValue = CreateObject("component", "adapters.#loc.adapterName#").init(argumentCollection=variables.wheels.class.connection);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
