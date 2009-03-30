@@ -7,11 +7,8 @@
 
 <cfoutput>
 	<cfloop array="#$getAvailablePlugins()#" index="plugin">
-		<h2>#plugin.name# (#plugin.version#<cfif plugin.version LT 1> beta</cfif>)</h2>
+		<h2>#plugin.name# (#plugin.version#<cfif Left(plugin.version, 1) IS 0> beta</cfif>)</h2>
 		<p>#plugin.description#</p>
 		<ul><li><strong><cfif ListFindNoCase(pluginNames(), plugin.name)><span style="color:green;">This plugin is installed.</span><cfelse><a href="#cgi.script_name#?#cgi.query_string#&plugin=#plugin.name#-#plugin.version#">Download and install</a></cfif></strong></li></ul>
 	</cfloop>
 </cfoutput>
-
-
-				
