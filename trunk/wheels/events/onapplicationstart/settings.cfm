@@ -64,6 +64,7 @@
 	application.wheels.timeStampOnCreateProperty = "createdAt";
 	application.wheels.timeStampOnUpdateProperty = "updatedAt";
 	application.wheels.ipExceptions = "";
+	application.wheels.overwritePlugins = true;
 	
 	// caching settings
 	application.wheels.maximumItemsToCache = 5000;

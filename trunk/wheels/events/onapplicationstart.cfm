@@ -132,7 +132,7 @@
 					loc.thisPluginFolder = loc.pluginFolder & "/" & LCase(loc.pluginName);
 					if (not(DirectoryExists(loc.thisPluginFolder)))
 						$directory(action="create", directory=loc.thisPluginFolder);
-					$zip(action="unzip", destination=loc.thisPluginFolder, file=loc.thisPluginFile, overwrite=true);
+					$zip(action="unzip", destination=loc.thisPluginFolder, file=loc.thisPluginFile, overwrite=application.wheels.overwritePlugins);
 					loc.fileName = LCase(loc.pluginName) & "." & loc.pluginName;
 					loc.plugin = $createObjectFromRoot(path=application.wheels.pluginComponentPath, fileName=loc.fileName, method="init");
 					if (not(StructKeyExists(loc.plugin, "version")) or loc.plugin.version eq application.wheels.version)
