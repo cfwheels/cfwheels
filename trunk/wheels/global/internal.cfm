@@ -1,4 +1,4 @@
-<cffunction name="$cachedModelClassExists" returntype="any" access="public" output="false">
+﻿<cffunction name="$cachedModelClassExists" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
 		var returnValue = false;
@@ -359,6 +359,17 @@
 	<cfargument name="count" type="numeric" required="false" default="-1">
 	<cfargument name="returnCount" type="boolean" required="false" default="true">
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="pluralize", count=arguments.count, returnCount=arguments.returnCount)>
+</cffunction>
+
+<cffunction name="$humanize" returntype="string" access="public" output="false">
+	<cfargument name="text" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = REReplace(arguments.text, "([[:upper:]])", " \1", "all"); // adds a space before every capitalized word
+		loc.returnValue = REReplace(loc.returnValue, "([[:upper:]]) ([[:upper:]]) ", "\1\2", "all"); // fixes abbreviations so they form a word again (example: aURLVariable)
+		loc.returnValue = $capitalize(loc.returnValue); // capitalize the first letter 
+	</cfscript>	
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$createModelClass" returntype="any" access="public" output="false">
