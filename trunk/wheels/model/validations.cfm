@@ -10,7 +10,7 @@
 		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
-			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
+			loc.args.message = Replace(arguments.message, "[property]", $humanize(loc.args.property));
 			$registerValidation(arguments.when, "$validateConfirmationOf", Duplicate(loc.args));
 		}
 	</cfscript>
@@ -31,7 +31,7 @@
 		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
-			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
+			loc.args.message = Replace(arguments.message, "[property]", $humanize(loc.args.property));
 			loc.args.allowBlank = arguments.allowBlank;
 			loc.args.list = arguments.list;
 			$registerValidation(arguments.when, "$validateExclusionOf", Duplicate(loc.args));
@@ -53,7 +53,7 @@
 		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
-			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
+			loc.args.message = Replace(arguments.message, "[property]", $humanize(loc.args.property));
 			loc.args.allowBlank = arguments.allowBlank;
 			loc.args.regEx = arguments.regEx;
 			$registerValidation(arguments.when, "$validateFormatOf", Duplicate(loc.args));
@@ -76,7 +76,7 @@
 		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
-			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
+			loc.args.message = Replace(arguments.message, "[property]", $humanize(loc.args.property));
 			loc.args.allowBlank = arguments.allowBlank;
 			loc.args.list = arguments.list;
 			$registerValidation(arguments.when, "$validateInclusionOf", Duplicate(loc.args));
@@ -103,7 +103,7 @@
 		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
-			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
+			loc.args.message = Replace(arguments.message, "[property]", $humanize(loc.args.property));
 			loc.args.allowBlank = arguments.allowBlank;
 			loc.args.exactly = arguments.exactly;
 			loc.args.maximum = arguments.maximum;
@@ -128,7 +128,7 @@
 		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
-			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
+			loc.args.message = Replace(arguments.message, "[property]", $humanize(loc.args.property));
 			loc.args.allowBlank = arguments.allowBlank;
 			loc.args.onlyInteger = arguments.onlyInteger;
 			$registerValidation(arguments.when, "$validateNumericalityOf", Duplicate(loc.args));
@@ -148,7 +148,7 @@
 		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
-			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
+			loc.args.message = Replace(arguments.message, "[property]", $humanize(loc.args.property));
 			$registerValidation(arguments.when, "$validatePresenceOf", Duplicate(loc.args));
 		}
 	</cfscript>
@@ -168,7 +168,7 @@
 		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
-			loc.args.message = Replace(arguments.message, "[property]", loc.args.property);
+			loc.args.message = Replace(arguments.message, "[property]", $humanize(loc.args.property));
 			loc.args.scope = arguments.scope;
 			$registerValidation(arguments.when, "$validateUniquenessOf", Duplicate(loc.args));
 		}
