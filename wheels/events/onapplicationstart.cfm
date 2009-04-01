@@ -1,11 +1,11 @@
 <cffunction name="onApplicationStart" returntype="void" access="public" output="false">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		
 		// set or reset all settings but make sure to pass along the reload password between forced reloads with "reload=x"
-		if (StructKeyExists(application, "wheels") and StructKeyExists(application.wheels, "reloadPassword"))
+		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "reloadPassword"))
 			loc.oldReloadPassword = application.wheels.reloadPassword;
-		application.wheels = StructNew();
+		application.wheels = {};
 		if (StructKeyExists(loc, "oldReloadPassword"))
 			application.wheels.reloadPassword = loc.oldReloadPassword;
 		
@@ -20,11 +20,11 @@
 			application.wheels.serverVersion = server.coldfusion.productversion;		
 		}
 		loc.majorVersion = Left(application.wheels.serverVersion, 1);
-		if ((application.wheels.serverName eq "Railo" and loc.majorVersion lt 3) or (application.wheels.serverName eq "Adobe ColdFusion" and loc.majorVersion lt 8))
+		if ((application.wheels.serverName == "Railo" && loc.majorVersion < 3) || (application.wheels.serverName == "Adobe ColdFusion" && loc.majorVersion < 8))
 			$throw(type="Wheels.NoSupport", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Upgrade to Adobe ColdFusion 8 or Railo 3.");
 		application.wheels.version = "0.9.1";
-		application.wheels.controllers = StructNew();
-		application.wheels.models = StructNew();
+		application.wheels.controllers = {};
+		application.wheels.models = {};
 		application.wheels.existingModelFiles = "";
 		application.wheels.existingControllerFiles = "";
 		application.wheels.nonExistingControllerFiles = "";
@@ -33,7 +33,7 @@
 		application.wheels.existingHelperFiles = "";
 		application.wheels.nonExistingHelperFiles = "";
 		application.wheels.routes = [];
-		application.wheels.namedRoutePositions = StructNew();
+		application.wheels.namedRoutePositions = {};
 		
 		// set up paths based on if user is running one app or multiple apps in sub folders
 		if (DirectoryExists(this.rootDir & "config"))
@@ -67,18 +67,18 @@
 		application.wheels.viewPath = loc.path & "views";
 		
 		// set up struct for caches
-		application.wheels.cache = StructNew();
-		application.wheels.cache.sql = StructNew();
-		application.wheels.cache.image = StructNew();
-		application.wheels.cache.main = StructNew();
-		application.wheels.cache.action = StructNew();
-		application.wheels.cache.page = StructNew();
-		application.wheels.cache.partial = StructNew();
-		application.wheels.cache.query = StructNew();
+		application.wheels.cache = {};
+		application.wheels.cache.sql = {};
+		application.wheels.cache.image = {};
+		application.wheels.cache.main = {};
+		application.wheels.cache.action = {};
+		application.wheels.cache.page = {};
+		application.wheels.cache.partial = {};
+		application.wheels.cache.query = {};
 		application.wheels.cacheLastCulledAt = Now();
 		
 		// set environment
-		if (StructKeyExists(URL, "reload") and not(IsBoolean(URL.reload)) and Len(url.reload) and (not(Len(application.wheels.reloadPassword)) or (StructKeyExists(URL, "password") and URL.password eq application.wheels.reloadPassword)))
+		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && (!Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
 			application.wheels.environment = URL.reload;
 		else
 			$include(template="#application.wheels.configPath#/environment.cfm");
@@ -99,7 +99,7 @@
 		application.wheels.webPath = Replace(cgi.script_name, Reverse(spanExcluding(Reverse(cgi.script_name), "/")), "");
 		
 		// load plugins
-		application.wheels.plugins = StructNew();
+		application.wheels.plugins = {};
 		application.wheels.incompatiblePlugins = "";
 		loc.pluginFolder = this.rootDir & "plugins";
 		// get a list of plugin files and folders
@@ -107,11 +107,11 @@
 		loc.pluginFiles = $directory(directory=loc.pluginFolder, filter="*.zip", type="file", sort="name DESC");
 		// delete plugin folders if no corresponding plugin file exist
 		loc.iEnd = loc.pluginFolders.recordCount;
-		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i=++)
 		{
 			loc.name = loc.pluginFolders["name"][loc.i];
 			loc.directory = loc.pluginFolders["directory"][loc.i];
-			if (Left(loc.name, 1) neq "." and not(ListContainsNoCase(ValueList(loc.pluginFiles.name), loc.name & "-")))
+			if (Left(loc.name, 1) != "." && !ListContainsNoCase(ValueList(loc.pluginFiles.name), loc.name & "-"))
 			{
 				loc.directory = loc.directory & "/" & loc.name;
 				$directory(action="delete", directory=loc.directory, recurse=true);
@@ -121,21 +121,21 @@
 		if (loc.pluginFiles.recordCount)
 		{
 			loc.iEnd = loc.pluginFiles.recordCount;
-			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.name = loc.pluginFiles["name"][loc.i];
 				loc.pluginName = ListFirst(loc.name, "-");
-				if (not(StructKeyExists(application.wheels.plugins, loc.pluginName)))
+				if (!StructKeyExists(application.wheels.plugins, loc.pluginName))
 				{
 					loc.pluginVersion = Replace(ListLast(loc.name, "-"), ".zip", "", "one");
 					loc.thisPluginFile = loc.pluginFolder & "/" & loc.name;
 					loc.thisPluginFolder = loc.pluginFolder & "/" & LCase(loc.pluginName);
-					if (not(DirectoryExists(loc.thisPluginFolder)))
+					if (!DirectoryExists(loc.thisPluginFolder))
 						$directory(action="create", directory=loc.thisPluginFolder);
 					$zip(action="unzip", destination=loc.thisPluginFolder, file=loc.thisPluginFile, overwrite=application.wheels.overwritePlugins);
 					loc.fileName = LCase(loc.pluginName) & "." & loc.pluginName;
 					loc.plugin = $createObjectFromRoot(path=application.wheels.pluginComponentPath, fileName=loc.fileName, method="init");
-					if (not(StructKeyExists(loc.plugin, "version")) or loc.plugin.version eq application.wheels.version)
+					if (!StructKeyExists(loc.plugin, "version") || loc.plugin.version == application.wheels.version)
 						application.wheels.plugins[loc.pluginName] = loc.plugin;
 					else
 						application.wheels.incompatiblePlugins = ListAppend(application.wheels.incompatiblePlugins, loc.pluginName);
@@ -147,7 +147,7 @@
 			{
 				for (loc.keyTwo in application.wheels.plugins[loc.key])
 				{
-					if (not(ListFindNoCase("init,version", loc.keyTwo)))
+					if (!ListFindNoCase("init,version", loc.keyTwo))
 					{
 						if (ListFindNoCase(loc.addedFunctions, loc.keyTwo))
 							$throw(type="Wheels.IncompatiblePlugin", message="#loc.key# is incompatible with a previously installed plugin.", extendedInfo="make sure none of the plugins you have installed overrides the same Wheels functions.");

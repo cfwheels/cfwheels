@@ -86,7 +86,7 @@
 	<cfargument name="type" type="string" required="true">
 	<cfargument name="methods" type="string" required="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		for (loc.i=1; loc.i LTE ListLen(arguments.methods); loc.i=loc.i+1)
 			ArrayAppend(variables.wheels.class.callbacks[arguments.type], ListGetAt(arguments.methods, loc.i));
 	</cfscript>
@@ -95,17 +95,17 @@
 <cffunction name="$callback" returntype="boolean" access="public" output="false">
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.returnValue = true;
 		loc.iEnd = ArrayLen(variables.wheels.class.callbacks[arguments.type]);
-		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
+		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
 		{
 			loc.returnValue = $invoke(method=variables.wheels.class.callbacks[arguments.type][loc.i]);
-			if (not(StructKeyExists(loc, "returnValue")))
+			if (!StructKeyExists(loc, "returnValue"))
 			{
 				loc.returnValue = true;
 			}
-			else if (not(loc.returnValue))
+			else if (!loc.returnValue)
 			{
 				break;
 			}

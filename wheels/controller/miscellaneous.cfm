@@ -1,7 +1,7 @@
 <cffunction name="isGet" returntype="boolean" access="public" output="false" hint="Returns whether the request was a normal (GET) request or not.">
 	<cfscript>
 		var returnValue = "";
-		if (cgi.request_method eq "get")
+		if (cgi.request_method == "get")
 			returnValue = true;
 		else
 			returnValue = false;
@@ -12,7 +12,7 @@
 <cffunction name="isPost" returntype="boolean" access="public" output="false" hint="Returns whether the request came from a form submission or not.">
 	<cfscript>
 		var returnValue = "";
-		if (cgi.request_method eq "post")
+		if (cgi.request_method == "post")
 			returnValue = true;
 		else
 			returnValue = false;
@@ -23,7 +23,7 @@
 <cffunction name="isAjax" returntype="boolean" access="public" output="false" hint="Returns whether the page was called from JavaScript or not.">
 	<cfscript>
 		var returnValue = "";
-		if (cgi.http_x_requested_with eq "XMLHTTPRequest")
+		if (cgi.http_x_requested_with == "XMLHTTPRequest")
 			returnValue = true;
 		else
 			returnValue = false;
@@ -38,14 +38,14 @@
 	<cfargument name="subject" type="string" required="true" hint="The subject line of the email">
 	<cfargument name="layout" type="any" required="false" default="#application.wheels.sendEmail.layout#" hint="Layout to wrap body in">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		
 		arguments = $insertDefaults(name="sendEmail", input=arguments);
 
 		// set the variables that should be available to the email view template
 		for (loc.key in arguments)
 		{
-			if (not(ListFindNoCase("template,layout", loc.key)) and not(ListFindNoCase("from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext", loc.key)))
+			if (!ListFindNoCase("template,layout", loc.key) && !ListFindNoCase("from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext", loc.key))
 			{
 				variables[loc.key] = arguments[loc.key];
 				StructDelete(arguments, loc.key);
@@ -54,7 +54,7 @@
 
 		arguments.body = [];
 		loc.iEnd = ListLen(arguments.template);
-		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.template = ListGetAt(arguments.template, loc.i);
 			loc.template = ReplaceNoCase(loc.template, ".cfm", "");
@@ -88,7 +88,7 @@
 	<cfargument name="type" type="string" required="false" default="" hint="The HTTP content type to deliver the file as">
 	<cfargument name="disposition" type="string" required="false" default="#application.wheels.sendFile.disposition#" hint="Set to 'inline' to have the browser handle the opening of the file or set to 'attachment' to force a download dialog box">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		arguments.file = Replace(arguments.file, "\", "/", "all");
 		loc.path = Reverse(ListRest(Reverse(arguments.file), "/"));
 		loc.folder = application.wheels.filePath;
@@ -103,7 +103,7 @@
 			loc.file = arguments.file;
 		}
 		loc.folder = ExpandPath(loc.folder);
-		if (not(FileExists(loc.folder & "/" & loc.file)))
+		if (!FileExists(loc.folder & "/" & loc.file))
 		{
 			loc.match = $directory(action="list", directory=loc.folder, filter="#loc.file#.*");
 			if (loc.match.recordCount)

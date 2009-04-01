@@ -9,7 +9,7 @@
 		}
 		else
 		{
-			if (not(flashIsEmpty()))
+			if (!flashIsEmpty())
 				returnValue = session.flash;
 		}
 	</cfscript>
@@ -18,7 +18,7 @@
 
 <cffunction name="flashClear" returntype="void" access="public" output="false" hint="Deletes everything from the Flash.">
 	<cfscript>
-		session.flash = StructNew();
+		session.flash = {};
 	</cfscript>
 </cffunction>
 

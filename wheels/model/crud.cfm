@@ -25,7 +25,7 @@
 	<cfargument name="$create" type="boolean" required="false" default="true">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.create = arguments.$create;
 		arguments.maxRows = 1;
 		StructDelete(arguments, "$create");
@@ -62,12 +62,12 @@
 	<cfargument name="$offset" type="numeric" required="false" default=0>
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 
 		// count records and get primary keys for pagination
 		if (arguments.page)
 		{
-			if (not(Len(arguments.order)))
+			if (!Len(arguments.order))
 				$throw(type="Wheels.InvalidPagination", message="Cannot use pagination without order.", extendedInfo="Specify what property to order by using the 'order' argument to 'findAll'.");
 			if (Len(arguments.include))
 				loc.distinct = true;
@@ -87,7 +87,7 @@
 			if ((loc.limit + loc.offset) GT loc.totalRecords)
 				loc.limit = loc.totalRecords - loc.offset;
 			loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache);
-			if (not(loc.values.recordCount))
+			if (!loc.values.recordCount)
 			{
 				loc.returnValue = QueryNew("");
 			}
@@ -105,13 +105,13 @@
 				arguments.$softDeleteCheck = false;
 			}
 			// store pagination info in the request scope so all pagination methods can access it
-			request.wheels[arguments.handle] = StructNew();
+			request.wheels[arguments.handle] = {};
 			request.wheels[arguments.handle].currentPage = loc.currentPage;
 			request.wheels[arguments.handle].totalPages = loc.totalPages;
 			request.wheels[arguments.handle].totalRecords = loc.totalRecords;
 		}
 
-		if (not(StructKeyExists(loc, "returnValue")))
+		if (!StructKeyExists(loc, "returnValue"))
 		{
 			// make the where clause generic for use in caching
 			loc.originalWhere = arguments.where;
@@ -120,7 +120,7 @@
 			// get info from cache when available, otherwise create the generic select, from, where and order by clause
 			loc.queryShellKey = variables.wheels.class.name & $hashStruct(arguments);
 			loc.sql = $getFromCache(loc.queryShellKey, "sql");
-			if (not(IsArray(loc.sql)))
+			if (!IsArray(loc.sql))
 			{
 				loc.sql = [];
 				loc.sql = $addSelectClause(sql=loc.sql, select=arguments.select, include=arguments.include);
@@ -135,21 +135,21 @@
 
 			// return existing query result if it has been run already in current request, otherwise pass off the sql array to the query
 			loc.queryKey = "wheels" & variables.wheels.class.name & $hashStruct(arguments) & loc.originalWhere;
-			if (not(arguments.reload) and StructKeyExists(request, loc.queryKey))
+			if (!arguments.reload && StructKeyExists(request, loc.queryKey))
 			{
 				loc.findAll = request[loc.queryKey];
 			}
 			else
 			{
-				loc.finderArgs = StructNew();
+				loc.finderArgs = {};
 				loc.finderArgs.sql = loc.sql;
 				loc.finderArgs.maxRows = arguments.maxRows;
 				loc.finderArgs.parameterize = arguments.parameterize;
 				loc.finderArgs.limit = arguments.$limit;
 				loc.finderArgs.offset = arguments.$offset;
-				if (Len(arguments.cache) and application.wheels.environment eq "production")
+				if (Len(arguments.cache) && application.wheels.environment == "production")
 				{
-					if (IsBoolean(arguments.cache) and arguments.cache)
+					if (IsBoolean(arguments.cache) && arguments.cache)
 						loc.finderArgs.cachedWithin = CreateTimeSpan(0,0,application.wheels.defaultCacheTime,0);
 					else if (IsNumeric(arguments.cache))
 						loc.finderArgs.cachedWithin = CreateTimeSpan(0,0,arguments.cache,0);
@@ -169,14 +169,14 @@
 	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.exists.reload#" hint="See documentation for `findAll`">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.exists.parameterize#" hint="See documentation for `findAll`">
 	<cfscript>
-		var loc = StructNew();
-		if (application.wheels.environment neq "production")
-			if (not(Len(arguments.key)) and not(Len(arguments.where)))
+		var loc = {};
+		if (application.wheels.environment != "production")
+			if (!Len(arguments.key) && !Len(arguments.where))
 				$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You have to pass in either 'key' or 'where'.");
 		if (Len(arguments.where))
-			loc.returnValue = findOne(where=arguments.where, reload=arguments.reload, $create=false).recordCount eq 1;
+			loc.returnValue = findOne(where=arguments.where, reload=arguments.reload, $create=false).recordCount == 1;
 		else
-			loc.returnValue = findByKey(key=arguments.key, reload=arguments.reload, $create=false).recordCount eq 1;
+			loc.returnValue = findByKey(key=arguments.key, reload=arguments.reload, $create=false).recordCount == 1;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -198,7 +198,7 @@
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.object = findOne(where=arguments.where, order=arguments.order);
 		StructDelete(arguments, "where");
 		StructDelete(arguments, "order");
@@ -218,11 +218,11 @@
 	<cfargument name="instantiate" type="boolean" required="false" default="#application.wheels.updateAll.instantiate#" hint="Whether or not to instantiate the object(s) before the update">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.namedArgs = "where,include,properties,parameterize,instantiate,$softDeleteCheck";
 		for (loc.key in arguments)
 		{
-			if (not(ListFindNoCase(loc.namedArgs, loc.key)))
+			if (!ListFindNoCase(loc.namedArgs, loc.key))
 				arguments.properties[loc.key] = arguments[loc.key];
 		}
 		if (arguments.instantiate)
@@ -265,7 +265,7 @@
 <cffunction name="deleteByKey" returntype="boolean" access="public" output="false" hint="Finds the record with the supplied key and deletes it. Returns true on successful deletion of the row, false otherwise.">
 	<cfargument name="key" type="any" required="true" hint="See documentation for `findByKey`">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.where = $keyWhereString(values=arguments.key);
 		loc.returnValue = deleteOne(where=loc.where);
 	</cfscript>
@@ -276,7 +276,7 @@
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.object = findOne(where=arguments.where, order=arguments.order);
 		if (IsObject(loc.object))
 			loc.returnValue = loc.object.delete();
@@ -293,7 +293,7 @@
 	<cfargument name="instantiate" type="boolean" required="false" default="#application.wheels.deleteAll.instantiate#" hint="Whether or not to instantiate the object(s) before deletion">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		if (arguments.instantiate)
 		{
     		// find and instantiate each object and call its delete function
@@ -330,12 +330,12 @@
 		{
 			if (isNew())
 			{
-				if ($callback("beforeValidationOnCreate") and $validate("onCreate") and $callback("beforeValidation") and $validate("onSave") and $callback("afterValidation") and $callback("beforeSave") and $callback("beforeCreate") and $create(parameterize=arguments.parameterize) and $callback("afterCreate") and $callback("afterSave"))
+				if ($callback("beforeValidationOnCreate") && $validate("onCreate") && $callback("beforeValidation") && $validate("onSave") && $callback("afterValidation") && $callback("beforeSave") && $callback("beforeCreate") && $create(parameterize=arguments.parameterize) && $callback("afterCreate") && $callback("afterSave"))
 					returnValue = true;
 			}
 			else
 			{
-				if ($callback("beforeValidationOnUpdate") and $validate("onUpdate") and $callback("beforeValidation") and $validate("onSave") and $callback("afterValidation") and $callback("beforeSave") and $callback("beforeUpdate") and $update(parameterize=arguments.parameterize) and $callback("afterUpdate") and $callback("afterSave"))
+				if ($callback("beforeValidationOnUpdate") && $validate("onUpdate") && $callback("beforeValidation") && $validate("onSave") && $callback("afterValidation") && $callback("beforeSave") && $callback("beforeUpdate") && $update(parameterize=arguments.parameterize) && $callback("afterUpdate") && $callback("afterSave"))
 					returnValue = true;
 			}
 		}
@@ -347,9 +347,9 @@
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.update.parameterize#" hint="See documentation for `findAll`">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		for (loc.key in arguments)
-			if (loc.key neq "properties" and loc.key neq "parameterize")
+			if (loc.key != "properties" && loc.key != "parameterize")
 				arguments.properties[loc.key] = arguments[loc.key];
 		for (loc.key in arguments.properties)
 			this[loc.key] = arguments.properties[loc.key];
@@ -361,12 +361,12 @@
 <cffunction name="delete" returntype="boolean" access="public" output="false" hint="Deletes the object which means the row is deleted from the database (unless prevented by a `beforeDelete` callback). Returns true on successful deletion of the row, false otherwise.">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.delete.parameterize#" hint="See documentation for `findAll`">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.proceed = true;
 		for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.callbacks.beforeDelete); loc.i=loc.i+1)
        	{
         	loc.proceed = $invoke(method=variables.wheels.class.callbacks.beforeDelete[loc.i]);
-            if (StructKeyExists(loc, "proceed") and not(loc.proceed))
+            if (StructKeyExists(loc, "proceed") && !loc.proceed)
             	break;
 		}
 		if (loc.proceed)
@@ -379,7 +379,7 @@
 			for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.callbacks.afterDelete); loc.i=loc.i+1)
             {
             	loc.proceed = $invoke(method=variables.wheels.class.callbacks.afterDelete[loc.i]);
-                if (StructKeyExists(loc, "proceed") and not(loc.proceed))
+                if (StructKeyExists(loc, "proceed") && !loc.proceed)
                 	break;
 			}
  			if (loc.proceed)
@@ -398,9 +398,9 @@
 <cffunction name="new" returntype="any" access="public" output="false" hint="Creates a new object based on supplied properties and returns it. The object is not saved to the database, it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		for (loc.key in arguments)
-			if (loc.key neq "properties")
+			if (loc.key != "properties")
 				arguments.properties[loc.key] = arguments[loc.key];
 		loc.returnValue = $createInstance(properties=arguments.properties, persisted=false);
 	</cfscript>
@@ -419,7 +419,7 @@
 
 <cffunction name="changedProperties" returntype="string" access="public" output="false" hint="Returns a list of the object properties that have been changed but not yet saved to the database.">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.returnValue = "";
 		for (loc.key in variables.wheels.class.properties)
 			if (hasChanged(loc.key))
@@ -430,8 +430,8 @@
 
 <cffunction name="allChanges" returntype="struct" access="public" output="false" hint="Returns a struct detailing all changes that have been made on the object but not yet saved to the database.">
 	<cfscript>
-		var loc = StructNew();
-		loc.returnValue = StructNew();
+		var loc = {};
+		loc.returnValue = {};
 		if (hasChanged())
 		{
 			loc.changedProperties = changedProperties();
@@ -439,7 +439,7 @@
 			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.item = ListGetAt(loc.changedProperties, loc.i);
-				loc.returnValue[loc.item] = StructNew();
+				loc.returnValue[loc.item] = {};
 				loc.returnValue[loc.item].changedFrom = changedFrom(loc.item);
 				if (StructKeyExists(this, loc.item))
 					loc.returnValue[loc.item].changedTo = this[loc.item];
@@ -454,10 +454,10 @@
 <cffunction name="hasChanged" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified object property (or any if none was passed in) have been changed but not yet saved to the database. Will also return `true` if the object is new and no record for it exists in the database.">
 	<cfargument name="property" type="string" required="false" default="" hint="Name of property to check for change">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.returnValue = false;
 		for (loc.key in variables.wheels.class.properties)
-			if (not(StructKeyExists(this, loc.key)) or note(StructKeyExists(variables, "$persistedProperties")) or not(StructKeyExists(variables.$persistedProperties, loc.key)) or this[loc.key] IS NOT variables.$persistedProperties[loc.key] and (Len(arguments.property) IS 0 or loc.key IS arguments.property))
+			if (!StructKeyExists(this, loc.key) || !StructKeyExists(variables, "$persistedProperties") || !StructKeyExists(variables.$persistedProperties, loc.key) || this[loc.key] IS NOT variables.$persistedProperties[loc.key] && (Len(arguments.property) IS 0 || loc.key IS arguments.property))
 				loc.returnValue = true;
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -467,17 +467,17 @@
 	<cfargument name="property" type="string" required="true" hint="Name of property to get the previous value for">
 	<cfscript>
 		var returnValue = "";
-		if (StructKeyExists(variables, "$persistedProperties") and StructKeyExists(variables.$persistedProperties, arguments.property))
+		if (StructKeyExists(variables, "$persistedProperties") && StructKeyExists(variables.$persistedProperties, arguments.property))
 			returnValue = variables.$persistedProperties[arguments.property];
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="isNew" returntype="boolean" access="public" output="false" hint="Returns `true` if this object hasnï¿½t been saved yet (in other words no record exists in the database yet). Returns `false` if a record exists.">
+<cffunction name="isNew" returntype="boolean" access="public" output="false" hint="Returns `true` if this object hasn‘t been saved yet (in other words no record exists in the database yet). Returns `false` if a record exists.">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		// if no values have ever been saved to the database this object is new
-		if (not(StructKeyExists(variables, "$persistedProperties")))
+		if (!StructKeyExists(variables, "$persistedProperties"))
 			loc.returnValue = true;
 		else
 			loc.returnValue = false;
@@ -487,7 +487,7 @@
 
 <cffunction name="reload" returntype="void" access="public" output="false" hint="Reloads the property values of this object from the database.">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.query = findByKey(key=key(), reload=true, $create=false);
 		loc.iEnd = ListLen(variables.wheels.class.propertyList);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
@@ -500,7 +500,7 @@
 
 <cffunction name="key" returntype="string" access="public" output="false" hint="Returns the value of the primary key for the object. If you have a single primary key named `id` then `someObject.key()` is functionally equivalent to `someObject.id`. This method is more useful when you do dynamic programming and don't know the name of the primary key or when you use composite keys (in which case it's convenient to use this method to get a list of both key values returned).">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.returnValue = "";
 		loc.iEnd = ListLen(variables.wheels.class.keys);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
@@ -522,7 +522,7 @@
 	<cfargument name="select" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 
 		// setup an array containing class info for current class and all the ones that should be included
 		loc.classes = [];
@@ -531,7 +531,7 @@
 		ArrayPrepend(loc.classes, variables.wheels.class);
 
 		// add properties to select if the developer did not specify any
-		if (not(Len(arguments.select)))
+		if (!Len(arguments.select))
 		{
 			loc.iEnd = ArrayLen(loc.classes);
 			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
@@ -541,7 +541,7 @@
 				for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
 				{
 					loc.jItem = Trim(ListGetAt(loc.classData.propertyList, loc.j));
-					if (not(ListFind(arguments.select, loc.jItem)))
+					if (!ListFind(arguments.select, loc.jItem))
 						arguments.select = ListAppend(arguments.select, loc.jItem);
 				}
 			}
@@ -553,7 +553,7 @@
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 		{
 			loc.iItem = Trim(ListGetAt(arguments.select, loc.i));
-			if (loc.iItem Does Not Contain "." and loc.iItem Does Not Contain " AS ")
+			if (loc.iItem Does Not Contain "." && loc.iItem Does Not Contain " AS ")
 			{
 				loc.jEnd = ArrayLen(loc.classes);
 				for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
@@ -586,7 +586,7 @@
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="include" type="string" required="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.from = "FROM " & variables.wheels.class.tableName;
 		if (Len(arguments.include))
 		{
@@ -614,7 +614,7 @@
 	<cfargument name="include" type="string" required="true">
 	<cfargument name="$softDeleteCheck" type="boolean" required="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		if (Len(arguments.where))
 		{
 			// make the where clause generic
@@ -626,7 +626,7 @@
 				loc.classes = $expandedAssociations(include=arguments.include);
 			ArrayPrepend(loc.classes, variables.wheels.class);
 			ArrayAppend(arguments.sql, "WHERE");
-			if (arguments.$softDeleteCheck and variables.wheels.class.softDeletion)
+			if (arguments.$softDeleteCheck && variables.wheels.class.softDeletion)
 				ArrayAppend(arguments.sql, " (");
 			loc.regex = "((=|<>|<|>|<=|>=|!=|!<|!>| LIKE) ?)(''|'.+?'()|([0-9]|\.)+()|\([0-9]+(,[0-9]+)*\))(($|\)| (AND|OR)))";
 			loc.paramedWhere = REReplace(arguments.where, loc.regex, "\1?\8" , "all");
@@ -635,7 +635,7 @@
 			for (loc.i=1; loc.i LTE ListLen(loc.where, Chr(7)); loc.i=loc.i+1)
 			{
 				loc.element = Replace(ListGetAt(loc.where, loc.i, Chr(7)), Chr(7), "", "one");
-				if (Find("(", loc.element) and Find(")", loc.element))
+				if (Find("(", loc.element) && Find(")", loc.element))
 					loc.elementDataPart = SpanExcluding(Reverse(SpanExcluding(Reverse(loc.element), "(")), ")");
 				else if (Find("(", loc.element))
 					loc.elementDataPart = Reverse(SpanExcluding(Reverse(loc.element), "("));
@@ -644,7 +644,7 @@
 				else
 					loc.elementDataPart = loc.element;
 				loc.elementDataPart = Trim(ReplaceList(loc.elementDataPart, "AND,OR", ""));
-				loc.param = StructNew();
+				loc.param = {};
 
 
 				loc.temp = REFind("^([^ ]*) ?(=|<>|<|>|<=|>=|!=|!<|!>| LIKE)", loc.elementDataPart, 1, true);
@@ -656,7 +656,7 @@
 					for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
 					{
 						loc.classData = loc.classes[loc.j];
-						if ((loc.param.property Contains "." and ListFirst(loc.param.property, ".") IS loc.classData.tableName or loc.param.property Does Not Contain ".") and ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
+						if ((loc.param.property Contains "." && ListFirst(loc.param.property, ".") IS loc.classData.tableName || loc.param.property Does Not Contain ".") && ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
 						{
 							loc.param.type = loc.classData.properties[ListLast(loc.param.property, ".")].type;
 							loc.param.scale = loc.classData.properties[ListLast(loc.param.property, ".")].scale;
@@ -683,7 +683,7 @@
 				{
 					loc.column = loc.params[loc.i].column;
 					ArrayAppend(arguments.sql, "#PreserveSingleQuotes(loc.column)#	#loc.params[loc.i].operator#");
-					if (application.wheels.environment neq "production" and not(StructKeyExists(loc.params[loc.i], "type")))
+					if (application.wheels.environment != "production" && !StructKeyExists(loc.params[loc.i], "type"))
 							$throw(type="Wheels", message="Column Not Found", extendedInfo="Wheels looked for a column named '#loc.column#' but couldn't find it.");
 					loc.param = {type=loc.params[loc.i].type, scale=loc.params[loc.i].scale}; // removed: property=loc.params[loc.i].property, column=loc.params[loc.i].column
 					ArrayAppend(arguments.sql, loc.param);
@@ -692,7 +692,7 @@
 		}
 
 		/// add soft delete sql
-		if (arguments.$softDeleteCheck and variables.wheels.class.softDeletion)
+		if (arguments.$softDeleteCheck && variables.wheels.class.softDeletion)
 		{
 			if (Len(arguments.where))
 				ArrayAppend(arguments.sql, ") AND (");
@@ -710,12 +710,12 @@
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="where" type="string" required="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		if (Len(arguments.where))
 		{
 			loc.start = 1;
 			loc.originalValues = [];
-			while (not(StructKeyExists(loc, "temp")) or ArrayLen(loc.temp.len) GT 1)
+			while (!StructKeyExists(loc, "temp") || ArrayLen(loc.temp.len) GT 1)
 			{
 				loc.temp = REFind(variables.wheels.class.whereRegex, arguments.where, loc.start, true);
 				if (ArrayLen(loc.temp.len) GT 1)
@@ -729,10 +729,10 @@
 			loc.iEnd = ArrayLen(arguments.sql);
 			for (loc.i=loc.iEnd; loc.i GT 0; loc.i--)
 			{
-				if (IsStruct(arguments.sql[loc.i]) and loc.pos GT 0)
+				if (IsStruct(arguments.sql[loc.i]) && loc.pos GT 0)
 				{
 					arguments.sql[loc.i].value = loc.originalValues[loc.pos];
-					if (loc.originalValues[loc.pos] eq "")
+					if (loc.originalValues[loc.pos] == "")
 						arguments.sql[loc.i].null = true;
 					loc.pos--;
 				}
@@ -747,7 +747,7 @@
 	<cfargument name="order" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		if (Len(arguments.order))
 		{
 			if (arguments.order IS "random")
@@ -767,7 +767,7 @@
 				for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 				{
 					loc.iItem = Trim(ListGetAt(arguments.order, loc.i));
-					if (loc.iItem Does Not Contain " ASC" and loc.iItem Does Not Contain " DESC")
+					if (loc.iItem Does Not Contain " ASC" && loc.iItem Does Not Contain " DESC")
 						loc.iItem = loc.iItem & " ASC";
 					if (loc.iItem Contains ".")
 					{
@@ -782,7 +782,7 @@
 						{
 							loc.classData = loc.classes[loc.j];
 							loc.toAdd = loc.classData.tableName & "." & loc.iItem;
-							if (ListFindNoCase(loc.classData.propertyList, loc.property) and not(ListContainsNoCase(loc.order, SpanExcluding(loc.toAdd, " "))))
+							if (ListFindNoCase(loc.classData.propertyList, loc.property) && !ListContainsNoCase(loc.order, SpanExcluding(loc.toAdd, " ")))
 							{
 								loc.order = ListAppend(loc.order, loc.toAdd);
 								break;
@@ -801,7 +801,7 @@
 <cffunction name="$expandedAssociations" returntype="array" access="public" output="false">
 	<cfargument name="include" type="string" required="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.returnValue = [];
 
 		// add the current class name so that the levels list start at the lowest level
@@ -829,7 +829,7 @@
 			loc.classAssociations = loc.class.$classData().associations;
 
 			// infer class name and foreign key from association name unless developer specified it already
-			if (not(Len(loc.classAssociations[loc.name].class)))
+			if (!Len(loc.classAssociations[loc.name].class))
 			{
 				if (loc.classAssociations[loc.name].type IS "belongsTo")
 				{
@@ -844,7 +844,7 @@
 			// create a reference to the associated class
 			loc.associatedClass = model(loc.classAssociations[loc.name].class);
 
-			if (not(Len(loc.classAssociations[loc.name].foreignKey)))
+			if (!Len(loc.classAssociations[loc.name].foreignKey))
 			{
 				if (loc.classAssociations[loc.name].type IS "belongsTo")
 				{
@@ -901,7 +901,7 @@
 
 <cffunction name="$create" returntype="boolean" access="public" output="false">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		if (variables.wheels.class.timeStampingOnCreate)
 			this[variables.wheels.class.timeStampOnCreateColumn] = Now();
 		loc.sql = [];
@@ -938,7 +938,7 @@
 
 <cffunction name="$update" returntype="boolean" access="public" output="false">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		if (hasChanged())
 		{
 			if (variables.wheels.class.timeStampingOnUpdate)
@@ -947,7 +947,7 @@
 			ArrayAppend(loc.sql, "UPDATE #variables.wheels.class.tableName# SET ");
 			for (loc.key in variables.wheels.class.properties)
 			{
-				if (StructKeyExists(this, loc.key) and (not(StructKeyExists(variables.$persistedProperties, loc.key)) or this[loc.key] IS NOT variables.$persistedProperties[loc.key]))
+				if (StructKeyExists(this, loc.key) && (!StructKeyExists(variables.$persistedProperties, loc.key) || this[loc.key] IS NOT variables.$persistedProperties[loc.key]))
 				{
 					ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
 					loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, null=this[loc.key] IS ""};
@@ -970,9 +970,9 @@
 	<cfargument name="persisted" type="boolean" required="true">
 	<cfargument name="row" type="numeric" required="false" default="1">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.fileName = $capitalize(variables.wheels.class.name);
-		if (not(ListFindNoCase(application.wheels.existingModelFiles, variables.wheels.class.name)))
+		if (!ListFindNoCase(application.wheels.existingModelFiles, variables.wheels.class.name))
 			loc.fileName = "Model";
 		loc.returnValue = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.name, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row);
 	</cfscript>
@@ -985,20 +985,20 @@
 	<cfargument name="persisted" type="boolean" required="true">
 	<cfargument name="row" type="numeric" required="false" default="1">
 	<cfscript>
-		var loc = StructNew();
-		variables.wheels = StructNew();
+		var loc = {};
+		variables.wheels = {};
 		variables.wheels.errors = [];
 		// copy class variables from the object in the application scope
 		variables.wheels.class = $namedReadLock(name="classLock", object=application.wheels.models[arguments.name], method="$classData");
 		// setup object properties in the this scope
-		if (IsQuery(arguments.properties) and arguments.properties.recordCount IS NOT 0)
+		if (IsQuery(arguments.properties) && arguments.properties.recordCount IS NOT 0)
 		{
 			for (loc.i=1; loc.i LTE ListLen(arguments.properties.columnList); loc.i=loc.i+1)
 			{
 				this[ListGetAt(arguments.properties.columnList, loc.i)] = arguments.properties[ListGetAt(arguments.properties.columnList, loc.i)][arguments.row];
 			}
 		}
-		else if (IsStruct(arguments.properties) and not(StructIsEmpty(arguments.properties)))
+		else if (IsStruct(arguments.properties) && !StructIsEmpty(arguments.properties))
 		{
 			for (loc.key in arguments.properties)
 				this[loc.key] = arguments.properties[loc.key];
@@ -1011,8 +1011,8 @@
 
 <cffunction name="$updatePersistedProperties" returntype="void" access="public" output="false">
 	<cfscript>
-		var loc = StructNew();
-		variables.$persistedProperties = StructNew();
+		var loc = {};
+		variables.$persistedProperties = {};
 		for (loc.key in variables.wheels.class.properties)
 			if (StructKeyExists(this, loc.key))
 				variables.$persistedProperties[loc.key] = this[loc.key];
@@ -1022,7 +1022,7 @@
 <cffunction name="$addDeleteClause" returntype="array" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		if (variables.wheels.class.softDeletion)
 		{
 			ArrayAppend(arguments.sql, "UPDATE #variables.wheels.class.tableName# SET #variables.wheels.class.softDeleteColumn# = ");
@@ -1040,7 +1040,7 @@
 <cffunction name="$addKeyWhereClause" returntype="array" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		ArrayAppend(arguments.sql, " WHERE ");
 		loc.iEnd = ListLen(variables.wheels.class.keys);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
@@ -1061,7 +1061,7 @@
 	<cfargument name="values" type="any" required="false" default="">
 	<cfargument name="keys" type="any" required="false" default="">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.properties);
 		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
@@ -1072,10 +1072,10 @@
 			else if (Len(arguments.keys))
 				loc.value = this[ListGetAt(arguments.keys, loc.i)];
 			loc.toAppend = loc.key & "=";
-			if (not(IsNumeric(loc.value)))
+			if (!IsNumeric(loc.value))
 				loc.toAppend = loc.toAppend & "'";
 			loc.toAppend = loc.toAppend & loc.value;
-			if (not(IsNumeric(loc.value)))
+			if (!IsNumeric(loc.value))
 				loc.toAppend = loc.toAppend & "'";
 			loc.returnValue = ListAppend(loc.returnValue, loc.toAppend, " ");
 			if (loc.i LT loc.iEnd)
