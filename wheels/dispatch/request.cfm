@@ -9,7 +9,7 @@
 		else
 			loc.filters = arguments.controller.$getAfterFilters();
 		loc.iEnd = ArrayLen(loc.filters);
-		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			if ((!Len(loc.filters[loc.i].only) && !Len(loc.filters[loc.i].except)) || (Len(loc.filters[loc.i].only) && ListFindNoCase(loc.filters[loc.i].only, arguments.actionName)) || (Len(loc.filters[loc.i].except) && !ListFindNoCase(loc.filters[loc.i].except, arguments.actionName)))
 				$invoke(component=arguments.controller, method=loc.filters[loc.i].through);
@@ -26,7 +26,7 @@
 		loc.verifications = arguments.controller.$getVerifications();
 		loc.abort = false;
 		loc.iEnd = ArrayLen(loc.verifications);
-		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.verification = loc.verifications[loc.i];
 			if ((!Len(loc.verification.only) && !Len(loc.verification.except)) || (Len(loc.verification.only) && ListFindNoCase(loc.verification.only, arguments.actionName)) || (Len(loc.verification.except) && !ListFindNoCase(loc.verification.except, arguments.actionName)))
@@ -38,19 +38,19 @@
 				if (IsBoolean(loc.verification.ajax) && ((loc.verification.ajax && cgi.http_x_requested_with != "XMLHTTPRequest") || (!loc.verification.ajax && cgi.http_x_requested_with == "XMLHTTPRequest")))
 					loc.abort = true;
 				loc.jEnd = ListLen(loc.verification.params);
-				for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
 					if (!StructKeyExists(loc.params, ListGetAt(loc.verification.params, loc.j)))
 						loc.abort = true;
 				}
 				loc.jEnd = ListLen(loc.verification.session);
-				for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
 					if (!StructKeyExists(session, ListGetAt(loc.verification.session, loc.j)))
 						loc.abort = true;
 				}
 				loc.jEnd = ListLen(loc.verification.cookie);
-				for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
 					if (!StructKeyExists(cookie, ListGetAt(loc.verification.cookie, loc.j)))
 						loc.abort = true;
@@ -91,7 +91,7 @@
 	<cfscript>
 		var loc = {};
 		loc.iEnd = ArrayLen(arguments.routes);
-		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.currentRoute = arguments.routes[loc.i].pattern;
 			if (arguments.route == "" && loc.currentRoute == "")
@@ -101,11 +101,11 @@
 			}
 			else
 			{
-				if (ListLen(arguments.route, "/") GTE ListLen(loc.currentRoute, "/") && loc.currentRoute != "")
+				if (ListLen(arguments.route, "/") >= ListLen(loc.currentRoute, "/") && loc.currentRoute != "")
 				{
 					loc.match = true;
 					loc.jEnd = ListLen(loc.currentRoute, "/");
-					for (loc.j=1; loc.j LTE loc.jEnd; loc.j=loc.j+1)
+					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 					{
 						loc.item = ListGetAt(loc.currentRoute, loc.j, "/");
 						loc.thisRoute = ReplaceList(loc.item, "[,]", ",");
@@ -140,7 +140,7 @@
 		
 		// go through the matching route pattern and add URL variables from the route to the struct
 		loc.iEnd = ListLen(arguments.foundRoute.pattern, "/");
-		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(arguments.foundRoute.pattern, loc.i, "/");
 			if (Left(loc.item, 1) == "[")
@@ -237,7 +237,7 @@
 			for (loc.key in arguments.formScope)
 			{
 				loc.match = REFindNoCase("(.*?)\[(.*?)\]", loc.key, 1, true);
-				if (ArrayLen(loc.match.pos) IS 3)
+				if (ArrayLen(loc.match.pos) == 3)
 				{
 					// model object form field, build a struct to hold the data, named after the model object
 					loc.objectName = LCase(Mid(loc.key, loc.match.pos[2], loc.match.len[2]));
@@ -294,7 +294,7 @@
 		{
 			loc.cachableActions = loc.controller.$getCachableActions();
 			loc.iEnd = ArrayLen(loc.cachableActions);
-			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				if (loc.cachableActions[loc.i].action == loc.params.action)
 				{

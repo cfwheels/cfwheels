@@ -229,7 +229,8 @@
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.class.validations[arguments.type]); loc.i=loc.i+1)
+		loc.iEnd = ArrayLen(variables.wheels.class.validations[arguments.type]);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			$invoke(method=variables.wheels.class.validations[arguments.type][loc.i].method, argumentCollection=variables.wheels.class.validations[arguments.type][loc.i].args);
 		loc.returnValue = !hasErrors();
 	</cfscript>
@@ -241,7 +242,7 @@
 		var loc = {};
 		loc.virtualConfirmProperty = arguments.property & "Confirmation";
 		if (StructKeyExists(this, loc.virtualConfirmProperty))
-			if (this[arguments.property] IS NOT this[loc.virtualConfirmProperty])
+			if (this[arguments.property] != this[loc.virtualConfirmProperty])
 				addError(property=loc.virtualConfirmProperty, message=arguments.message);
 	</cfscript>
 </cffunction>
@@ -279,22 +280,22 @@
 			{
 				if (arguments.maximum)
 				{
-					if (Len(this[arguments.property]) GT arguments.maximum)
+					if (Len(this[arguments.property]) > arguments.maximum)
 						addError(property=arguments.property, message=arguments.message);
 				}
 				else if (arguments.minimum)
 				{
-					if (Len(this[arguments.property]) LT arguments.minimum)
+					if (Len(this[arguments.property]) < arguments.minimum)
 						addError(property=arguments.property, message=arguments.message);
 				}
 				else if (arguments.exactly)
 				{
-					if (Len(this[arguments.property]) IS NOT arguments.exactly)
+					if (Len(this[arguments.property]) != arguments.exactly)
 						addError(property=arguments.property, message=arguments.message);
 				}
 				else if (IsArray(arguments.within) && ArrayLen(arguments.within))
 				{
-					if (Len(this[arguments.property]) LT arguments.within[1] || Len(this[arguments.property]) GT arguments.within[2])
+					if (Len(this[arguments.property]) < arguments.within[1] || Len(this[arguments.property]) > arguments.within[2])
 						addError(property=arguments.property, message=arguments.message);
 				}
 			}
@@ -314,7 +315,7 @@
 			{
 				if (!IsNumeric(this[arguments.property]))
 					addError(property=arguments.property, message=arguments.message);
-				else if (arguments.onlyInteger && Round(this[arguments.property]) IS NOT this[arguments.property])
+				else if (arguments.onlyInteger && Round(this[arguments.property]) != this[arguments.property])
 					addError(property=arguments.property, message=arguments.message);
 			}
 		}

@@ -19,7 +19,7 @@
 <cffunction name="hasErrors" returntype="boolean" access="public" output="false" hint="Returns 'true' if the object has any errors.">
 	<cfscript>
 		var loc = {};
-		if (errorCount() GT 0)
+		if (errorCount() > 0)
 			loc.returnValue = true;
 		else
 			loc.returnValue = false;
@@ -47,8 +47,9 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = [];
-		for (loc.i=1; loc.i LTE ArrayLen(variables.wheels.errors); loc.i=loc.i+1)
-			if (variables.wheels.errors[loc.i].property IS arguments.property && (variables.wheels.errors[loc.i].name IS arguments.name))
+		loc.iEnd = ArrayLen(variables.wheels.errors);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			if (variables.wheels.errors[loc.i].property == arguments.property && (variables.wheels.errors[loc.i].name == arguments.name))
 				ArrayAppend(loc.returnValue, variables.wheels.errors[loc.i]);
 	</cfscript>
 	<cfreturn loc.returnValue>

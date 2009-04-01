@@ -18,16 +18,16 @@
 	<cfargument name="missingMethodArguments" type="struct" required="true">
 	<cfscript>
 		var loc = {};
-		if (Right(arguments.missingMethodName, 10) IS "hasChanged")
+		if (Right(arguments.missingMethodName, 10) == "hasChanged")
 			loc.returnValue = hasChanged(property=ReplaceNoCase(arguments.missingMethodName, "hasChanged", ""));
-		else if (Right(arguments.missingMethodName, 11) IS "changedFrom")
+		else if (Right(arguments.missingMethodName, 11) == "changedFrom")
 			loc.returnValue = changedFrom(property=ReplaceNoCase(arguments.missingMethodName, "changedFrom", ""));
-		else if (Left(arguments.missingMethodName, 9) IS "findOneBy" || Left(arguments.missingMethodName, 9) IS "findAllBy")
+		else if (Left(arguments.missingMethodName, 9) == "findOneBy" || Left(arguments.missingMethodName, 9) == "findAllBy")
 		{
 			loc.finderProperties = ListToArray(ReplaceNoCase(ReplaceNoCase(Replace(arguments.missingMethodName, "And", "|"), "findAllBy", ""), "findOneBy", ""), "|");
 			loc.firstProperty = loc.finderProperties[1];
-			loc.secondProperty = IIf(ArrayLen(loc.finderProperties) IS 2, "loc.finderProperties[2]", "");
-			if (StructCount(arguments.missingMethodArguments) IS 1)
+			loc.secondProperty = IIf(ArrayLen(loc.finderProperties) == 2, "loc.finderProperties[2]", "");
+			if (StructCount(arguments.missingMethodArguments) == 1)
 				loc.firstValue = Trim(ListFirst(arguments.missingMethodArguments[1]));
 			else if (StructKeyExists(arguments.missingMethodArguments, "value"))
 				loc.firstValue = arguments.missingMethodArguments.value;
@@ -36,7 +36,7 @@
 			loc.addToWhere = "#loc.firstProperty# = '#loc.firstValue#'";
 			if (Len(loc.secondProperty))
 			{
-				if (StructCount(arguments.missingMethodArguments) IS 1)
+				if (StructCount(arguments.missingMethodArguments) == 1)
 					loc.secondValue = Trim(ListLast(arguments.missingMethodArguments[1]));
 				else if (StructKeyExists(arguments.missingMethodArguments, "values"))
 					loc.secondValue = Trim(ListLast(arguments.missingMethodArguments.values));
@@ -46,7 +46,7 @@
 			StructDelete(arguments.missingMethodArguments, "1");
 			StructDelete(arguments.missingMethodArguments, "value");
 			StructDelete(arguments.missingMethodArguments, "values");
-			loc.returnValue = IIf(Left(arguments.missingMethodName, 9) IS "findOneBy", "findOne(argumentCollection=arguments.missingMethodArguments)", "findAll(argumentCollection=arguments.missingMethodArguments)");
+			loc.returnValue = IIf(Left(arguments.missingMethodName, 9) == "findOneBy", "findOne(argumentCollection=arguments.missingMethodArguments)", "findAll(argumentCollection=arguments.missingMethodArguments)");
 		}
 		else
 		{
@@ -101,7 +101,7 @@
 							arguments.missingMethodArguments = $objectOrNumberToKey(arguments.missingMethodArguments);
 						}
 					}
-					else if (loc.info.type IS "hasMany")
+					else if (loc.info.type == "hasMany")
 					{
 						if (loc.name == "objects")
 						{
@@ -162,7 +162,7 @@
 							arguments.missingMethodArguments.where = loc.where;
 						}
 					}
-					else if (loc.info.type IS "belongsTo")
+					else if (loc.info.type == "belongsTo")
 					{
 						if (loc.name == "object")
 						{

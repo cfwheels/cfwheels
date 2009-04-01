@@ -19,7 +19,7 @@
 		loc.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prependToLink,appendToLink,classForCurrent,handle,name";
 		loc.linkToArguments = StructCopy(arguments);
 		loc.iEnd = ListLen(loc.skipArgs);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			StructDelete(loc.linkToArguments, ListGetAt(loc.skipArgs, loc.i));
 		}
@@ -46,7 +46,7 @@
 				loc.returnValue = loc.returnValue & linkTo(argumentCollection=loc.linkToArguments) & arguments.anchorDivider;
 			}
 		}
-		for (loc.i=1; loc.i<=loc.totalPages; loc.i++)
+		for (loc.i=1; loc.i <= loc.totalPages; loc.i++)
 		{
 			if ((loc.i >= (loc.currentPage - arguments.windowSize) && loc.i <= loc.currentPage) || (loc.i <= (loc.currentPage + arguments.windowSize) && loc.i >= loc.currentPage))
 			{
@@ -126,7 +126,7 @@
 		arguments.rel = "stylesheet";
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.sources);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(arguments.sources, loc.i);
 			arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & Trim(loc.item);
@@ -147,7 +147,7 @@
 		arguments = $insertDefaults(name="javaScriptIncludeTag", reserved="src", input=arguments);
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.sources);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(arguments.sources, loc.i);
 			arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & Trim(loc.item);

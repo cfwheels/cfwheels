@@ -11,10 +11,12 @@
 		variables.wheels.class.callbacks = {};
 		variables.wheels.class.connection = {datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword};
 		loc.callbacks = "beforeDelete,afterDelete,beforeSave,afterSave,beforeCreate,afterCreate,beforeUpdate,afterUpdate,beforeValidation,afterValidation,beforeValidationOnCreate,afterValidationOnCreate,beforeValidationOnUpdate,afterValidationOnUpdate";
-		for (loc.i=1; loc.i LTE ListLen(loc.callbacks); loc.i=loc.i+1)
+		loc.iEnd = ListLen(loc.callbacks);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			variables.wheels.class.callbacks[ListGetAt(loc.callbacks, loc.i)] = ArrayNew(1);
 		loc.validations = "onSave,onCreate,onUpdate";
-		for (loc.i=1; loc.i LTE ListLen(loc.validations); loc.i=loc.i+1)
+		loc.iEnd = ListLen(loc.validations);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			variables.wheels.class.validations[ListGetAt(loc.validations, loc.i)] = ArrayNew(1);
 		// run developer's init method
 		if (StructKeyExists(variables, "init"))
@@ -43,7 +45,8 @@
 		variables.wheels.class.keys = "";
 		variables.wheels.class.propertyList = "";
 		variables.wheels.class.columnList = "";
-		for (loc.i=1; loc.i LTE loc.columns.recordCount; loc.i=loc.i+1)
+		loc.iEnd = loc.columns.recordCount;
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			if (StructKeyExists(variables.wheels.class.mapping, loc.columns["column_name"][loc.i]))
 				loc.property = variables.wheels.class.mapping[loc.columns["column_name"][loc.i]];

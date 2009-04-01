@@ -149,10 +149,10 @@
 		var loc = {};
 		if (IsValid("integer", arguments.param) && IsNumeric(arguments.param) && arguments.param > 0)
 		{
-			loc.length = Len(arguments.param);
-			loc.a = (10^loc.length) + Reverse(arguments.param);
+			loc.iEnd = Len(arguments.param);
+			loc.a = (10^loc.iEnd) + Reverse(arguments.param);
 			loc.b = "0";
-			for (loc.i=1; loc.i <= loc.length; loc.i++)
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				loc.b = (loc.b + Left(Right(arguments.param, loc.i), 1));
 			loc.returnValue = FormatBaseN((loc.b+154),16) & FormatBaseN(BitXor(loc.a,461),16);
 		}
@@ -176,10 +176,12 @@
 				loc.returnValue = Right(arguments.param, (Len(arguments.param)-2));
 				loc.z = BitXor(InputBasen(loc.returnValue,16),461);
 				loc.returnValue = "";
-				for (loc.i=1; loc.i <= Len(loc.z)-1; loc.i++)
+				loc.iEnd = Len(loc.z)-1;
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					loc.returnValue = loc.returnValue & Left(Right(loc.z, loc.i),1);
 				loc.checksumtest = "0";
-				for (loc.i=1; loc.i <= Len(loc.returnValue); loc.i++)
+				loc.iEnd = Len(loc.returnValue);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					loc.checksumtest = (loc.checksumtest + Left(Right(loc.returnValue, loc.i),1));
 				if (Left(ToString(FormatBaseN((loc.checksumtest+154),10)),2) != Left(InputBasen(loc.checksum, 16),2))
 					loc.returnValue = arguments.param;

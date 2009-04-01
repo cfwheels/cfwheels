@@ -87,7 +87,8 @@
 	<cfargument name="methods" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		for (loc.i=1; loc.i LTE ListLen(arguments.methods); loc.i=loc.i+1)
+		loc.iEnd = ListLen(arguments.methods);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			ArrayAppend(variables.wheels.class.callbacks[arguments.type], ListGetAt(arguments.methods, loc.i));
 	</cfscript>
 </cffunction>
@@ -98,7 +99,7 @@
 		var loc = {};
 		loc.returnValue = true;
 		loc.iEnd = ArrayLen(variables.wheels.class.callbacks[arguments.type]);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.returnValue = $invoke(method=variables.wheels.class.callbacks[arguments.type][loc.i]);
 			if (!StructKeyExists(loc, "returnValue"))

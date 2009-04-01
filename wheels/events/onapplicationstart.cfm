@@ -107,7 +107,7 @@
 		loc.pluginFiles = $directory(directory=loc.pluginFolder, filter="*.zip", type="file", sort="name DESC");
 		// delete plugin folders if no corresponding plugin file exist
 		loc.iEnd = loc.pluginFolders.recordCount;
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i=++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.name = loc.pluginFolders["name"][loc.i];
 			loc.directory = loc.pluginFolders["directory"][loc.i];
