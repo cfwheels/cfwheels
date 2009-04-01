@@ -9,7 +9,7 @@
 <cffunction name="getType" returntype="string" access="public" output="false">
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		switch(arguments.type)
 		{
 			case "blob": case "bfile": {loc.returnValue = "cf_sql_blob"; break;}
@@ -32,9 +32,9 @@
 	<cfargument name="offset" type="numeric" required="false" default=0>
 	<cfargument name="parameterize" type="boolean" required="true">
 	<cfscript>
-		var loc = StructNew();
-		var query = StructNew();
-		if (arguments.limit gt 0)
+		var loc = {};
+		var query = {};
+		if (arguments.limit > 0)
 		{
 			loc.beforeWhere = "SELECT * FROM (SELECT a.*, rownum rnum FROM (";
 			loc.afterWhere = ") a WHERE rownum <=" & arguments.limit+arguments.offset & ")" & " WHERE rnum >" & arguments.offset;

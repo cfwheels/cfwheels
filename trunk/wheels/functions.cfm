@@ -15,19 +15,6 @@
 	<cfinclude template="events/onmissingtemplate.cfm">
 	<cfinclude template="events/onerror.cfm">
 	<cfinclude template="../events/functions.cfm">
-<cfelseif StructKeyExists(server, "bluedragon")>
-	<cfinclude template="global/appfunctions.cfm">
-	<cfinclude template="controller/appfunctions.cfm">
-	<cfinclude template="events/onapplicationstart.cfm">
-	<cfinclude template="events/onsessionstart.cfm">
-	<cfinclude template="events/onrequeststart.cfm">
-	<cfinclude template="events/onrequest.cfm">
-	<cfinclude template="events/onrequestend.cfm">
-	<cfinclude template="events/onsessionend.cfm">
-	<cfinclude template="events/onapplicationend.cfm">
-	<cfinclude template="events/onmissingtemplate.cfm">
-	<cfinclude template="events/onerror.cfm">
-	<cfinclude template="../events/functions.cfm">
 <cfelse>
 	<cfinclude template="wheels/global/appfunctions.cfm">
 	<cfinclude template="wheels/controller/appfunctions.cfm">

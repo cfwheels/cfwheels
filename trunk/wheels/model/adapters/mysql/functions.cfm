@@ -9,7 +9,7 @@
 <cffunction name="getType" returntype="string" access="public" output="false">
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		switch(arguments.type)
 		{
 			case "bigint": {loc.returnValue = "cf_sql_bigint"; break;}
@@ -39,8 +39,8 @@
 	<cfargument name="offset" type="numeric" required="false" default=0>
 	<cfargument name="parameterize" type="boolean" required="true">
 	<cfscript>
-		var loc = StructNew();
-		var query = StructNew();
+		var loc = {};
+		var query = {};
 		arguments.name = "query.name";
 		arguments.result = "loc.result";
 		arguments.datasource = variables.instance.connection.datasource;

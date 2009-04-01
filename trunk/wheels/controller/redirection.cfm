@@ -13,10 +13,10 @@
 	<cfargument name="protocol" type="string" required="false" default="#application.wheels.redirectTo.protocol#" hint="See documentation for URLFor">
 	<cfargument name="port" type="numeric" required="false" default="#application.wheels.redirectTo.port#" hint="See documentation for URLFor">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		if (arguments.back)
 		{
-			if (not(Len(cgi.http_referer)))
+			if (!Len(cgi.http_referer))
 				$throw(type="Wheels.RedirectBackError", message="Can't redirect back to the referring URL because it is blank.", extendedInfo="Catch this error in your code to handle it gracefully.");
 			else if (cgi.http_referer Does Not Contain cgi.server_name)
 				$throw(type="Wheels.RedirectBackError", message="Can't redirect back to the referring URL because it is not on the same domain.", extendedInfo="Catch this error in your code to handle it gracefully.");

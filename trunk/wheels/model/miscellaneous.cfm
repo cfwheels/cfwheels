@@ -17,12 +17,12 @@
 	<cfargument name="missingMethodName" type="string" required="true">
 	<cfargument name="missingMethodArguments" type="struct" required="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		if (Right(arguments.missingMethodName, 10) IS "hasChanged")
 			loc.returnValue = hasChanged(property=ReplaceNoCase(arguments.missingMethodName, "hasChanged", ""));
 		else if (Right(arguments.missingMethodName, 11) IS "changedFrom")
 			loc.returnValue = changedFrom(property=ReplaceNoCase(arguments.missingMethodName, "changedFrom", ""));
-		else if (Left(arguments.missingMethodName, 9) IS "findOneBy" or Left(arguments.missingMethodName, 9) IS "findAllBy")
+		else if (Left(arguments.missingMethodName, 9) IS "findOneBy" || Left(arguments.missingMethodName, 9) IS "findAllBy")
 		{
 			loc.finderProperties = ListToArray(ReplaceNoCase(ReplaceNoCase(Replace(arguments.missingMethodName, "And", "|"), "findAllBy", ""), "findOneBy", ""), "|");
 			loc.firstProperty = loc.finderProperties[1];
@@ -61,40 +61,40 @@
 					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=variables.wheels.class.keys);
 					if (StructKeyExists(arguments.missingMethodArguments, "where"))
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
-					if (loc.info.type eq "hasOne")
+					if (loc.info.type == "hasOne")
 					{
-						if (loc.name eq "object")
+						if (loc.name == "object")
 						{
 							loc.method = "findOne";
 							arguments.missingMethodArguments.where = loc.where;
 						}
-						else if (loc.name eq "hasObject")
+						else if (loc.name == "hasObject")
 						{
 							loc.method = "exists";
 							arguments.missingMethodArguments.where = loc.where;
 						}
-						else if (loc.name eq "newObject")
+						else if (loc.name == "newObject")
 						{
 							loc.method = "new";
 							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
 						}
-						else if (loc.name eq "createObject")
+						else if (loc.name == "createObject")
 						{
 							loc.method = "create";
 							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
 						}
-						else if (loc.name eq "removeObject")
+						else if (loc.name == "removeObject")
 						{
 							loc.method = "updateOne";
 							arguments.missingMethodArguments.where = loc.where;
 							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey, setToNull=true);
 						}
-						else if (loc.name eq "deleteObject")
+						else if (loc.name == "deleteObject")
 						{
 							loc.method = "deleteOne";
 							arguments.missingMethodArguments.where = loc.where;
 						}
-						else if (loc.name eq "setObject")
+						else if (loc.name == "setObject")
 						{
 							loc.method = "updateByKey";
 							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
@@ -103,60 +103,60 @@
 					}
 					else if (loc.info.type IS "hasMany")
 					{
-						if (loc.name eq "objects")
+						if (loc.name == "objects")
 						{
 							loc.method = "findAll";
 							arguments.missingMethodArguments.where = loc.where;
 						}
-						else if (loc.name eq "addObject")
+						else if (loc.name == "addObject")
 						{
 							loc.method = "updateByKey";
 							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
 							arguments.missingMethodArguments = $objectOrNumberToKey(arguments.missingMethodArguments);
 						}
-						else if (loc.name eq "removeObject")
+						else if (loc.name == "removeObject")
 						{
 							loc.method = "updateByKey";
 							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey, setToNull=true);
 							arguments.missingMethodArguments = $objectOrNumberToKey(arguments.missingMethodArguments);
 						}
-						else if (loc.name eq "deleteObject")
+						else if (loc.name == "deleteObject")
 						{
 							loc.method = "deleteByKey";
 							arguments.missingMethodArguments = $objectOrNumberToKey(arguments.missingMethodArguments);
 						}
-						else if (loc.name eq "hasObjects")
+						else if (loc.name == "hasObjects")
 						{
 							loc.method = "exists";
 							arguments.missingMethodArguments.where = loc.where;
 						}
-						else if (loc.name eq "newObject")
+						else if (loc.name == "newObject")
 						{
 							loc.method = "new";
 							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
 						}
-						else if (loc.name eq "createObject")
+						else if (loc.name == "createObject")
 						{
 							loc.method = "create";
 							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
 						}
-						else if (loc.name eq "objectCount")
+						else if (loc.name == "objectCount")
 						{
 							loc.method = "count";
 							arguments.missingMethodArguments.where = loc.where;
 						}
-						else if (loc.name eq "findOneObject")
+						else if (loc.name == "findOneObject")
 						{
 							loc.method = "findOne";
 							arguments.missingMethodArguments.where = loc.where;
 						}
-						else if (loc.name eq "removeAllObjects")
+						else if (loc.name == "removeAllObjects")
 						{
 							loc.method = "updateAll";
 							arguments.missingMethodArguments.where = loc.where;
 							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey, setToNull=true);
 						}
-						else if (loc.name eq "deleteAllObjects")
+						else if (loc.name == "deleteAllObjects")
 						{
 							loc.method = "deleteAll";
 							arguments.missingMethodArguments.where = loc.where;
@@ -164,12 +164,12 @@
 					}
 					else if (loc.info.type IS "belongsTo")
 					{
-						if (loc.name eq "object")
+						if (loc.name == "object")
 						{
 							loc.method = "findByKey";
 							arguments.missingMethodArguments.key = $propertyValue(name=loc.info.foreignKey);
 						}
-						else if (loc.name eq "hasObject")
+						else if (loc.name == "hasObject")
 						{
 							loc.method = "exists";
 							arguments.missingMethodArguments.key = $propertyValue(name=loc.info.foreignKey);
@@ -179,7 +179,7 @@
 				}
 			}
 		}
-		if (not(StructKeyExists(loc, "returnValue")))
+		if (!StructKeyExists(loc, "returnValue"))
 			$throw(type="Wheels.MethodNotFound", message="The method #arguments.missingMethodName# was not found in this model.", extendedInfo="Check your spelling or add the method to the model CFC file.");
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -196,7 +196,7 @@
 <cffunction name="$objectOrNumberToKey" returntype="struct" access="public" output="false">
 	<cfargument name="missingMethodArguments" type="struct" required="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.keyOrObject = arguments.missingMethodArguments[ListFirst(StructKeyList(arguments.missingMethodArguments))];
 		StructDelete(arguments.missingMethodArguments, ListFirst(StructKeyList(arguments.missingMethodArguments)));
 		if (IsObject(loc.keyOrObject))
@@ -210,10 +210,10 @@
 <cffunction name="$propertyValue" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.name);
-		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.returnValue = ListAppend(loc.returnValue, this[ListGetAt(arguments.name, loc.i)]);
 		}
@@ -225,10 +225,10 @@
 	<cfargument name="keys" type="string" required="true">
 	<cfargument name="setToNull" type="boolean" required="false" default="false">
 	<cfscript>
-		var loc = StructNew();
-		loc.returnValue = StructNew();
+		var loc = {};
+		loc.returnValue = {};
 		loc.iEnd = ListLen(arguments.keys);
-		for (loc.i=1; loc.i lte loc.iEnd; loc.i=loc.i+1)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			if (arguments.setToNull)
 				loc.returnValue[ListGetAt(arguments.keys, loc.i)] = "";

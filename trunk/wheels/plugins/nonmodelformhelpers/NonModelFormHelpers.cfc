@@ -14,7 +14,7 @@
 		<cfargument name="append" type="any" required="false" default="">
 		<cfargument name="prependToLabel" type="any" required="false" default="">
 		<cfargument name="appendToLabel" type="any" required="false" default="">
-		<cfset var loc = StructNew()>
+		<cfset var loc = {}>
 		<cfset arguments.$namedArguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 		<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 	
@@ -39,7 +39,7 @@
 		<cfargument name="append" type="any" required="false" default="">
 		<cfargument name="prependToLabel" type="any" required="false" default="">
 		<cfargument name="appendToLabel" type="any" required="false" default="">
-		<cfset var loc = StructNew()>
+		<cfset var loc = {}>
 		<cfset arguments.$namedArguments = "name,value,checked,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 		<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 	
@@ -68,7 +68,7 @@
 		<cfargument name="append" type="any" required="false" default="">
 		<cfargument name="prependToLabel" type="any" required="false" default="">
 		<cfargument name="appendToLabel" type="any" required="false" default="">
-		<cfset var loc = StructNew()>
+		<cfset var loc = {}>
 		<cfset arguments.$namedArguments = "name,value,checked,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 		<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 	
@@ -92,7 +92,7 @@
 		<cfargument name="append" type="any" required="false" default="">
 		<cfargument name="prependToLabel" type="any" required="false" default="">
 		<cfargument name="appendToLabel" type="any" required="false" default="">
-		<cfset var loc = StructNew()>
+		<cfset var loc = {}>
 		<cfset arguments.$namedArguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 		<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 	
@@ -110,7 +110,7 @@
 	<cffunction name="hiddenFieldTag" returntype="any" access="public" output="false">
 		<cfargument name="name" type="any" required="true">
 		<cfargument name="value" type="any" required="false" default="">
-		<cfset var loc = StructNew()>
+		<cfset var loc = {}>
 		<cfset arguments.$namedArguments = "name,value">
 		<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 	
@@ -137,7 +137,7 @@
 		<cfargument name="append" type="any" required="false" default="">
 		<cfargument name="prependToLabel" type="any" required="false" default="">
 		<cfargument name="appendToLabel" type="any" required="false" default="">
-		<cfset var loc = StructNew()>
+		<cfset var loc = {}>
 		<cfset arguments.$namedArguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 		<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 	
@@ -160,7 +160,7 @@
 		<cfargument name="append" type="any" required="false" default="">
 		<cfargument name="prependToLabel" type="any" required="false" default="">
 		<cfargument name="appendToLabel" type="any" required="false" default="">
-		<cfset var loc = StructNew()>
+		<cfset var loc = {}>
 		<cfset arguments.$namedArguments = "name,value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 		<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 	
@@ -189,7 +189,7 @@
 		<cfargument name="append" type="any" required="false" default="">
 		<cfargument name="prependToLabel" type="any" required="false" default="">
 		<cfargument name="appendToLabel" type="any" required="false" default="">
-		<cfset var loc = StructNew()>
+		<cfset var loc = {}>
 		<cfset arguments.$namedArguments = "name,value,options,includeBlank,multiple,valueField,textField,label,wrapLabel,prepend,append,prependToLabel,appendToLabel">
 		<cfset loc.attributes = $getAttributes(argumentCollection=arguments)>
 	

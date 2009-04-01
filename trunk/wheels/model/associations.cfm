@@ -33,8 +33,8 @@
 
 <cffunction name="$registerAssociation" returntype="void" access="public" output="false">
 	<cfscript>
-		var loc = StructNew();
-		variables.wheels.class.associations[arguments.name] = StructNew();
+		var loc = {};
+		variables.wheels.class.associations[arguments.name] = {};
 		for (loc.key in arguments)
 			if (loc.key IS NOT "name")
 				variables.wheels.class.associations[arguments.name][loc.key] = arguments[loc.key];

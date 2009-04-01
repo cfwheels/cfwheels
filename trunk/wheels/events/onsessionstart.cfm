@@ -6,7 +6,7 @@
 
 <cffunction name="runOnSessionStart" returntype="void" access="public" output="false">
 	<cfscript>
-		var loc = StructNew();
+		var loc = {};
 		$include(template="#application.wheels.eventPath#/onsessionstart.cfm");
 	</cfscript>
 </cffunction>
