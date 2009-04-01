@@ -70,7 +70,7 @@
 		arguments.select = "#arguments.type#(";
 		if (arguments.distinct)
 			arguments.select = arguments.select & "DISTINCT ";
-		if (arguments.property IS "*")
+		if (arguments.property == "*")
 		{
 			arguments.select = arguments.select & arguments.property;
 		}
@@ -78,7 +78,7 @@
 		{
 			loc.properties = "";
 			loc.iEnd = ListLen(arguments.property);
-			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.iItem = Trim(ListGetAt(arguments.property, loc.i));
 				loc.properties = ListAppend(loc.properties, variables.wheels.class.tableName & "." & variables.wheels.class.properties[loc.iItem].column);

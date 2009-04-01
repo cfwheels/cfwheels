@@ -11,7 +11,7 @@
 		{
 			loc.listItems = "";
 			loc.iEnd = ArrayLen(loc.errors);
-			for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.listItems = loc.listItems & $element(name="li", content=loc.errors[loc.i].message);			
 			}

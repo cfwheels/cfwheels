@@ -206,7 +206,7 @@
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = $formValue(argumentCollection=arguments);
-		if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod IS "get")
+		if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get")
 			arguments.value = obfuscateParam(arguments.value);
 		arguments.value = HTMLEditFormat(arguments.value);
 		loc.returnValue = $tag(name="input", close=true, skip="objectName,property", attributes=arguments);
@@ -495,7 +495,7 @@
 		loc.returnValue = "";
 		loc.firstDone = false;
 		loc.iEnd = ListLen(arguments.order);
-		for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(arguments.order, loc.i);
 			arguments.name = loc.name & "($" & loc.item & ")";
@@ -547,7 +547,7 @@
 				loc.optionContent = "";
 			loc.content = loc.content & $element(name="option", content=loc.optionContent, attributes=loc.args);
 		}
-		for (loc.i=arguments.$loopFrom; loc.i<=arguments.$loopTo; loc.i=loc.i+arguments.$step)
+		for (loc.i=arguments.$loopFrom; loc.i <= arguments.$loopTo; loc.i=loc.i+arguments.$step)
 		{
 			loc.args = {};
 			loc.args.value = loc.i;
@@ -581,10 +581,10 @@
 			// if no value or text field has been passed in we take the first numeric field in the query as the value field and the first non numeric as the text field
 			if (!Len(arguments.valueField) || !Len(arguments.textField))
 			{
-				for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.jEnd = ListLen(arguments.options.columnList);
-					for (loc.j=1; loc.j<=loc.jEnd; loc.j++)
+					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 					{
 						if (!Len(arguments.valueField) && IsNumeric(arguments.options[ListGetAt(arguments.options.columnList, loc.j)][loc.i]))
 							arguments.valueField = ListGetAt(arguments.options.columnList, loc.j);
@@ -593,7 +593,7 @@
 					}
 				}
 			}
-			for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=arguments.options[arguments.valueField][loc.i], optionText=arguments.options[arguments.textField][loc.i]);
 			}
@@ -608,7 +608,7 @@
 		else if (IsArray(arguments.options))
 		{
 			loc.iEnd = ArrayLen(arguments.options);
-			for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=loc.i, optionText=arguments.options[loc.i]);
 			}
@@ -616,7 +616,7 @@
 		else
 		{
 			loc.iEnd = ListLen(arguments.options);
-			for (loc.i=1; loc.i<=loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=loc.i, optionText=ListGetAt(arguments.options, loc.i));
 			}
@@ -634,7 +634,7 @@
 		loc.optionAttributes = {value=arguments.optionValue};
 		if (arguments.optionValue == arguments.objectValue)
 			loc.optionAttributes.selected = "selected";
-		if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod IS "get")
+		if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get")
 			loc.optionAttributes.value = obfuscateParam(loc.optionAttributes.value);
 		loc.returnValue = $element(name="option", content=arguments.optionText, attributes=loc.optionAttributes);
 	</cfscript>

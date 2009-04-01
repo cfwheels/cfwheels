@@ -144,7 +144,7 @@
 		if (type == "partial")
 			loc.fileName = Replace("_" & loc.fileName, "__", "_", "one"); // replaces leading "_" when the file is a partial
 		loc.folderName = Reverse(ListRest(Reverse(arguments.name), "/"));
-		if (Left(arguments.name, 1) IS "/")
+		if (Left(arguments.name, 1) == "/")
 			loc.include = loc.include & loc.folderName & "/" & loc.fileName; // Include a file in a sub folder to views
 		else if (arguments.name  Contains "/")
 			loc.include = loc.include & "/" & variables.params.controller & "/" & loc.folderName & "/" & loc.fileName; // Include a file in a sub folder of the current controller

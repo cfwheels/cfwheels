@@ -20,12 +20,12 @@
 			loc.delim = "?";		
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.params, "&");
-		for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.temp = listToArray(ListGetAt(arguments.params, loc.i, "&"), "=");
 			loc.returnValue = loc.returnValue & loc.delim & loc.temp[1] & "=";
 			loc.delim = "&";
-			if (ArrayLen(loc.temp) IS 2)
+			if (ArrayLen(loc.temp) == 2)
 			{
 				if (application.wheels.obfuscateUrls)
 					loc.returnValue = loc.returnValue & obfuscateParam(URLEncodedFormat(loc.temp[2]));

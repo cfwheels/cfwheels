@@ -39,8 +39,8 @@
 	<cfset loc.lockArgs = Duplicate(arguments)>
 	<cfset StructDelete(loc.lockArgs, "execute")>
 	<cfset StructDelete(loc.lockArgs, "executeArgs")>
-	<cflock attributeCollection="#loc.lockArgs#" timeout="#arguments.timeout#">
-		<cfinvoke method="#arguments.execute#" argumentcollection="#arguments.executeArgs#" returnvariable="loc.returnValue">
+	<cflock attributeCollection="#loc.lockArgs#">
+		<cfinvoke method="#arguments.execute#" argumentCollection="#arguments.executeArgs#" returnvariable="loc.returnValue">
 	</cflock>
 	<cfif StructKeyExists(loc, "returnValue")>
 		<cfreturn loc.returnValue>
@@ -48,14 +48,14 @@
 </cffunction>
 
 <cffunction name="$image" returntype="struct" access="public" output="false">
-	<cfset var returnValue = StructNew()>
+	<cfset var returnValue = {}>
 	<cfset arguments.structName = "returnValue">
 	<cfimage attributeCollection="#arguments#">
 	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="$mail" returntype="void" access="public" output="false">
-	<cfset var loc = StructNew()>
+	<cfset var loc = {}>
 	<cfset loc.content = arguments.body>
 	<cfset StructDelete(arguments, "body")>
 	<cfmail attributeCollection="#arguments#"><cfif ArrayLen(loc.content) GT 1><cfmailpart type="text">#loc.content[1]#</cfmailpart><cfmailpart type="html">#loc.content[2]#</cfmailpart><cfelse>#loc.content[1]#</cfif></cfmail>
