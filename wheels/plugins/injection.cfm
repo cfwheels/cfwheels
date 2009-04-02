@@ -11,9 +11,9 @@
 			loc.jItem = ListGetAt(loc.jList, loc.j);
 			if (!ListFindNoCase("init,version", loc.jItem))
 			{
-				variables[loc.jItem] = application.wheels.plugins[loc.iItem][loc.jItem];
 				if (StructKeyExists(variables, loc.jItem))
 					variables.core[loc.jItem] = variables[loc.jItem];
+				variables[loc.jItem] = application.wheels.plugins[loc.iItem][loc.jItem];
 			}
 		}
 	}
