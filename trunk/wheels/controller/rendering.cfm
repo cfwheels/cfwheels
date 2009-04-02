@@ -89,7 +89,6 @@
 		var loc = {};
 		loc.content = $includeAndReturnOutput("#application.wheels.viewPath#/#arguments.controller#/#arguments.action#.cfm");
 		loc.returnValue = $renderLayout(content=loc.content, layout=arguments.layout);
-		loc.returnValue = Trim(loc.returnValue);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -127,7 +126,6 @@
 		{
 			loc.partial = $includeFile(argumentCollection=arguments);
 		}
-		loc.partial = Trim(loc.partial);
 		if (arguments.$type == "include")
 			loc.returnValue = loc.partial;
 		else if (arguments.$type == "render")
@@ -194,7 +192,6 @@
 		{
 			loc.returnValue = arguments.content;
 		}
-		loc.returnValue = Trim(loc.returnValue);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
