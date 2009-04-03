@@ -13,23 +13,23 @@
 </tr>
 <tr>
 	<td valign="top"><strong>Framework:</strong></td>
-	<td>Wheels #application.wheels.version# (#application.wheels.environment# mode)</td>
+	<td>Wheels #get("version")# (#get("environment")# mode)</td>
 </tr>
 <tr>
 	<td valign="top"><strong>CFML Engine:</strong></td>
-	<td>#application.wheels.serverName# #application.wheels.serverVersion#</td>
+	<td>#get("serverName")# #get("serverVersion")#</td>
 </tr>
 <tr>
 	<td valign="top"><strong>URL Rewriting:</strong></td>
-	<td>#application.wheels.URLRewriting#</td>
+	<td>#get("URLRewriting")#</td>
 </tr>
 <tr>
 	<td valign="top"><strong>URL Obfuscation:</strong></td>
-	<td><cfif application.wheels.obfuscateUrls>On<cfelse>Off</cfif></td>
+	<td><cfif get("obfuscateUrls")>On<cfelse>Off</cfif></td>
 </tr>
 <tr>
 	<td valign="top"><strong>Plugins:</strong></td>
-	<td><cfif StructCount(application.wheels.plugins) IS NOT 0><cfset loc.count = 0><cfloop collection="#application.wheels.plugins#" item="loc.i"><cfset loc.count = loc.count + 1><a href="#application.wheels.webPath##ListLast(cgi.script_name, "/")#?controller=wheels&action=plugins&name=#LCase(loc.i)#">#loc.i#</a><cfif StructCount(application.wheels.plugins) GT loc.count><br /></cfif></cfloop><cfelse>None</cfif></td>
+	<td><cfif StructCount(get("plugins")) IS NOT 0><cfset loc.count = 0><cfloop collection="#get('plugins')#" item="loc.i"><cfset loc.count = loc.count + 1><a href="#get("webPath")##ListLast(cgi.script_name, "/")#?controller=wheels&action=plugins&name=#LCase(loc.i)#">#loc.i#</a><cfif StructCount(get("plugins")) GT loc.count><br /></cfif></cfloop><cfelse>None</cfif></td>
 </tr>
 <tr>
 	<td valign="top"><strong>Controller:</strong></td>
