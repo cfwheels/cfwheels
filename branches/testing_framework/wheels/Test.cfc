@@ -108,7 +108,7 @@
 							request scope, defaults to "test"
 		@returns			true if no failures or errors detected.
 	--->
-	<cffunction returntype="boolean" name="runTestPackage" output="false">
+	<cffunction returntype="boolean" name="runTestPackage" output="true">
 		<cfargument name="testPackage" type="string" required="true">
 		<cfargument name="resultKey" type="string" required="false" default="test">
 
@@ -122,11 +122,13 @@
 			any components we find and call their run() method.
 		--->
 		<cfset packageDir = "/" & replace(testpackage, ".", "/", "ALL")>
+		
 		<cfdirectory action="list"  directory="#expandPath(packageDir)#" name="qPackage">
 
 		<cfloop query="qPackage">
 			<cfif listLast(qPackage.name, ".") eq "cfc">
-				<cfset instance = createObject("component", testPackage & "." & listFirst(qPackage.name, "."))>
+				<cfdump var="#testPackage & "." & listFirst(qPackage.name, '.')#">
+ 				<cfset instance = createObject("component", testPackage & "." & listFirst(qPackage.name, "."))>
 				<cfset result = result + instance.runTest(resultKey)>
 			</cfif>
 		</cfloop>
@@ -423,7 +425,7 @@
 
 			<cfsavecontent variable="result">
 			<cfoutput>
-			<table cellpadding="5" cellspacing="0">
+			<table cellpadding="5" cellspacing="5">
 				<cfif not request[resultkey].ok>
 					<tr><th align="left"><span style="color:red;font-weight:bold">Status</span></th><td><span style="color:red;font-weight:bold">Failed</span></td></tr>
 				<cfelse>
@@ -448,7 +450,7 @@
 				</cfif>
 			</table>
 			<br>
-			<table border="0" cellpadding="5" cellspacing="0">
+			<table border="0" cellpadding="5" cellspacing="5">
 			<tr align="left"><th>Test Case</th><th>Tests</th><th>Failures</th><th>Errors</th></tr>
 			<cfloop from="1" to=#arrayLen(request[resultkey].summary)# index="testIndex">
 				<tr valign="top">
@@ -468,7 +470,7 @@
 			</cfloop>
 			</table>
 			<br>
-			<table border="0" cellpadding="5" cellspacing="0">
+			<table border="0" cellpadding="5" cellspacing="5">
 			<tr align="left"><th>Test Case</th><th>Test Name</th><th>Time</th><th>Status</th><th>Message</th></tr>
 			<cfloop from="1" to=#arrayLen(request[resultkey].results)# index="testIndex">
 				<tr valign="top">
@@ -492,6 +494,67 @@
 
 		<cfreturn REReplace(result, "[	 " & newline & "]{2,}", " ", "ALL")>
 
+	</cffunction>
+	
+	
+	
+	
+	<!--- WheelsRunner --->
+	<cffunction name="WheelsRunner" access="public" output="false" returntype="string">
+		<cfargument name="options" type="struct" required="false" default="#structnew()#">
+		<cfset var loc = {}>
+		<cfset var q = "">
+		<cfset loc.s = {}>
+		<cfset loc.s.testPackage = "">
+		<cfset loc.s.resultKey = "WheelsTests">
+		
+		<cfset loc.packages = "">
+		<cfset loc.type = "core">
+		
+		<cfif structkeyexists(arguments.options, "packages")>
+			<cfset loc.packages = arguments.options.packages>
+		</cfif>
+		
+		<cfif structkeyexists(arguments.options, "type")>
+			<cfset loc.type = arguments.options.type>
+		</cfif>
+		
+		<cfset loc.componentpath = listappend(application.wheels.rootcomponentPath, "#application.wheels.pluginComponentPath#.#loc.type#", ".")>
+
+		<!--- core test --->
+		<cfif loc.type eq "core">
+			<cfset loc.componentpath = listappend(application.wheels.wheelsComponentPath, "tests", ".")>
+		<cfelseif loc.type eq "app">
+			<cfset loc.componentpath = listappend(application.wheels.rootcomponentPath, "tests", ".")>
+		</cfif>
+			
+		<!--- clean up componentpath --->
+		<cfset loc.componentpath = listchangedelims(loc.componentpath, ".", ".")>
+		<!--- convert to regular path --->
+		<cfset loc.path = expandPath("/" & listchangedelims(loc.componentpath, "/", "."))>
+
+		<cfdirectory directory="#loc.path#" action="list" recurse="true" name="q" />
+
+		<!--- remove any files from this directory --->
+		<cfquery name="q" dbtype="query">
+		select *
+		from q
+		where
+			name <> '#loc.path#'
+			and type = 'Dir'
+			<cfif not listfindnocase("core,app", loc.type)>
+			and name = 'tests'
+			</cfif>
+		</cfquery>
+
+		<!--- run tests --->
+		<cfloop query="q">
+			<cfset loc.s.testPackage = "#loc.componentpath#.#name#">
+			<cfset runTestPackage(argumentcollection=loc.s)>
+		</cfloop>
+		
+		<cfreturn HTMLFormatTestResults(loc.s.resultKey)>
+	
 	</cffunction>
 
 </cfcomponent>

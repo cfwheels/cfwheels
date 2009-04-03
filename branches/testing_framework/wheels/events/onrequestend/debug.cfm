@@ -28,8 +28,28 @@
 	<td><cfif application.wheels.obfuscateUrls>On<cfelse>Off</cfif></td>
 </tr>
 <tr>
+	<td valign="top"><strong>Run Tests:</strong></td>
+	<td>
+		<a href="?controller=wheels&action=tests&type=core">Core</a>
+		<br/><a href="?controller=wheels&action=tests&type=app">App</a>
+	</td>
+</tr>
+<tr>
 	<td valign="top"><strong>Plugins:</strong></td>
-	<td><cfif StructCount(application.wheels.plugins) IS NOT 0><cfset loc.count = 0><cfloop collection="#application.wheels.plugins#" item="loc.i"><cfset loc.count = loc.count + 1><a href="#application.wheels.webPath##ListLast(cgi.script_name, "/")#?controller=wheels&action=plugins&name=#LCase(loc.i)#">#loc.i#</a><cfif StructCount(application.wheels.plugins) GT loc.count><br /></cfif></cfloop><cfelse>None</cfif></td>
+	<td>
+		<cfif StructCount(application.wheels.plugins) IS NOT 0>
+			<cfset loc.count = 0>
+			<cfloop collection="#application.wheels.plugins#" item="loc.i">
+				<cfset loc.count = loc.count + 1>
+				<a href="?controller=wheels&action=plugins&name=#LCase(loc.i)#">#loc.i#</a>&nbsp;&nbsp;&nbsp;<a href="?controller=wheels&action=tests&type=#LCase(loc.i)#">Test</a>
+				<cfif StructCount(application.wheels.plugins) GT loc.count>
+					<br />
+				</cfif>
+			</cfloop>
+		<cfelse>
+			None
+		</cfif>
+	</td>
 </tr>
 <tr>
 	<td valign="top"><strong>Controller:</strong></td>

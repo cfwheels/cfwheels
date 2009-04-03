@@ -52,6 +52,12 @@
 			loc.path = loc.folder & "/";
 			loc.componentPath = loc.folder & ".";
 		}
+
+		application.wheels.webPath = Replace(cgi.script_name, Reverse(spanExcluding(Reverse(cgi.script_name), "/")), "");
+
+		application.wheels.rootPath = "/" & ListChangeDelims(application.wheels.webPath, "/", "/");
+		application.wheels.rootcomponentPath = ListChangeDelims(application.wheels.webPath, ".", "/");
+
 		application.wheels.configPath = loc.path & "config";
 		application.wheels.controllerPath = loc.path & "controllers";
 		application.wheels.controllerComponentPath = loc.componentPath & "controllers";
@@ -65,6 +71,9 @@
 		application.wheels.pluginComponentPath = loc.componentPath & "plugins";
 		application.wheels.stylesheetPath = loc.path & "stylesheets";
 		application.wheels.viewPath = loc.path & "views";
+
+		application.wheels.wheelsPath = listappend(application.wheels.rootPath, "wheels", "/");
+		application.wheels.wheelsComponentPath = listappend(application.wheels.rootcomponentPath, "wheels", ".");
 		
 		// set up struct for caches
 		application.wheels.cache = {};
