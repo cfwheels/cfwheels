@@ -274,15 +274,29 @@
 </cffunction>
 
 <cffunction name="$tagId" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="string" required="true">
+	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">
-	<cfreturn ListLast(arguments.objectName, ".") & "-" & arguments.property>
+	<cfscript>
+		var returnValue = "";
+		if (IsStruct(arguments.objectName))
+			returnValue = arguments.property;
+		else
+			returnValue = ListLast(arguments.objectName, ".") & "-" & arguments.property;
+	</cfscript>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="$tagName" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="string" required="true">
+	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">
-	<cfreturn ListLast(arguments.objectName, ".") & "[" & arguments.property & "]">
+	<cfscript>
+		var returnValue = "";
+		if (IsStruct(arguments.objectName))
+			returnValue = arguments.property;
+		else
+			returnValue = ListLast(arguments.objectName, ".") & "[" & arguments.property & "]";
+	</cfscript>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="$addToJavaScriptAttribute" returntype="string" access="public" output="false">
