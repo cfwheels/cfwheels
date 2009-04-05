@@ -86,7 +86,7 @@
 </cffunction>
 
 <cffunction name="textField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a text field form control based on the supplied `objectName` and `property`.">
-	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to build the form control for">
+	<cfargument name="objectName" type="any" required="true" hint="The variable name of the object to build the form control for">
 	<cfargument name="property" type="string" required="true" hint="The name of the property (database column) to use in the form control">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.textField.label#" hint="The label text to use in the form control">
 	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.textField.wrapLabel#" hint="Whether or not to wrap the label around the form control">
@@ -110,7 +110,7 @@
 </cffunction>
 
 <cffunction name="radioButton" returntype="string" access="public" output="false" hint="Builds and returns a string containing a radio button form control based on the supplied `objectName` and `property`.">
-	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="tagValue" type="string" required="true" hint="The value of the radio button when `selected`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.radioButton.label#" hint="See documentation for `textField`">
@@ -139,7 +139,7 @@
 </cffunction>
 
 <cffunction name="checkBox" returntype="string" access="public" output="false" hint="Builds and returns a string containing a check box form control based on the supplied `objectName` and `property`.">
-	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="checkedValue" type="string" required="false" default="#application.wheels.checkBox.checkedValue#" hint="The value of the check box when its on the `checked` state">
 	<cfargument name="uncheckedValue" type="string" required="false" default="#application.wheels.checkBox.uncheckedValue#" hint="The value of the check box when its on the `unchecked` state">
@@ -173,7 +173,7 @@
 </cffunction>
 
 <cffunction name="passwordField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a password field form control based on the supplied `objectName` and `property`.">
-	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.passwordField.label#" hint="See documentation for `textField`">
 	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.passwordField.wrapLabel#" hint="See documentation for `textField`">
@@ -197,7 +197,7 @@
 </cffunction>
 
 <cffunction name="hiddenField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a hidden field form control based on the supplied `objectName` and `property`.">
-	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
@@ -215,7 +215,7 @@
 </cffunction>
 
 <cffunction name="textArea" returntype="string" access="public" output="false" hint="Builds and returns a string containing a password field form control based on the supplied `objectName` and `property`.">
-	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.textArea.label#" hint="See documentation for `textField`">
 	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.textArea.wrapLabel#" hint="See documentation for `textField`">
@@ -238,7 +238,7 @@
 </cffunction>
 
 <cffunction name="fileField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a file field form control based on the supplied `objectName` and `property`.">
-	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.passwordField.label#" hint="See documentation for `textField`">
 	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.passwordField.wrapLabel#" hint="See documentation for `textField`">
@@ -261,7 +261,7 @@
 </cffunction>
 
 <cffunction name="select" returntype="string" access="public" output="false" hint="Builds and returns a string containing a select form control based on the supplied `objectName` and `property`.">
-	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="options" type="any" required="true" hint="A collection to populate the select form control with">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.select.includeBlank#" hint="Whether to include a blank option in the select form control">
@@ -373,6 +373,105 @@
 		arguments.$functionName = "timeSelect";
 	</cfscript>
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
+</cffunction>
+
+<cffunction name="textFieldTag" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="value" type="string" required="false" default="">
+	<cfscript>
+		var loc = {};
+		arguments.property = arguments.name;
+		arguments.objectName = {};
+		arguments.objectName[arguments.name] = arguments.value;
+		StructDelete(arguments, "name");
+		StructDelete(arguments, "value");
+		loc.returnValue = textField(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="passwordFieldTag" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="value" type="string" required="false" default="">
+	<cfscript>
+		var loc = {};
+		arguments.property = arguments.name;
+		arguments.objectName = {};
+		arguments.objectName[arguments.name] = arguments.value;
+		StructDelete(arguments, "name");
+		StructDelete(arguments, "value");
+		loc.returnValue = passwordField(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="hiddenFieldTag" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="value" type="string" required="false" default="">
+	<cfscript>
+		var loc = {};
+		arguments.property = arguments.name;
+		arguments.objectName = {};
+		arguments.objectName[arguments.name] = arguments.value;
+		StructDelete(arguments, "name");
+		StructDelete(arguments, "value");
+		loc.returnValue = hiddenField(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="textAreaTag" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="value" type="string" required="false" default="">
+	<cfscript>
+		var loc = {};
+		arguments.property = arguments.name;
+		arguments.objectName = {};
+		arguments.objectName[arguments.name] = arguments.value;
+		StructDelete(arguments, "name");
+		StructDelete(arguments, "value");
+		loc.returnValue = textArea(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="fileFieldTag" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		arguments.property = arguments.name;
+		arguments.objectName = {};
+		arguments.objectName[arguments.name] = "";
+		StructDelete(arguments, "name");
+		loc.returnValue = fileField(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="radioButtonTag" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="value" type="string" required="false" default="">
+	<cfargument name="checked" type="boolean" required="false" default="false">
+	<cfscript>
+		var loc = {};
+		arguments.property = arguments.name;
+		arguments.objectName = {};
+		if (arguments.checked)
+		{
+			arguments.objectName[arguments.name] = arguments.value;
+			arguments.tagValue = arguments.value;
+		}
+		else
+		{
+			arguments.objectName[arguments.name] = "";
+			arguments.tagValue = arguments.value;
+		}
+		StructDelete(arguments, "name");
+		StructDelete(arguments, "value");
+		StructDelete(arguments, "checked");
+		loc.returnValue = radioButton(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$yearSelectTag" returntype="string" access="public" output="false">
@@ -642,34 +741,44 @@
 </cffunction>
 
 <cffunction name="$formValue" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="string" required="true">
+	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.object = Evaluate(arguments.objectName);
-		if (StructKeyExists(loc.object, arguments.property))
-			loc.returnValue = loc.object[arguments.property];
+		if (IsStruct(arguments.objectName))
+		{
+			loc.returnValue = arguments.objectName[arguments.property];
+		}
 		else
-			loc.returnValue = "";
+		{
+			loc.object = Evaluate(arguments.objectName);
+			if (StructKeyExists(loc.object, arguments.property))
+				loc.returnValue = loc.object[arguments.property];
+			else
+				loc.returnValue = "";
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$formHasError" returntype="boolean" access="public" output="false">
-	<cfargument name="objectName" type="string" required="true">
+	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = false;
-		loc.object = Evaluate(arguments.objectName);
-		if (ArrayLen(loc.object.errorsOn(arguments.property)))
-			loc.returnValue = true;
+		if (!IsStruct(arguments.objectName))
+		{
+			loc.object = Evaluate(arguments.objectName);
+			if (ArrayLen(loc.object.errorsOn(arguments.property)))
+				loc.returnValue = true;
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$formBeforeElement" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="string" required="true">
+	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="label" type="string" required="true">
 	<cfargument name="wrapLabel" type="boolean" required="true">
@@ -707,7 +816,7 @@
 </cffunction>
 
 <cffunction name="$formAfterElement" returntype="string" access="public" output="false">
-	<cfargument name="objectName" type="string" required="true">
+	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="label" type="string" required="true">
 	<cfargument name="wrapLabel" type="boolean" required="true">
