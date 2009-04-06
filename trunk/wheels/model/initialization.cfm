@@ -29,7 +29,7 @@
 		// set the table name unless set manually by the developer
 		if (!StructKeyExists(variables.wheels.class, "tableName"))
 		{
-			variables.wheels.class.tableName = LCase($pluralize(variables.wheels.class.name));
+			variables.wheels.class.tableName = LCase(pluralize(variables.wheels.class.name));
 			if (Len(application.wheels.tableNamePrefix))
 				variables.wheels.class.tableName = application.wheels.tableNamePrefix & "_" & variables.wheels.class.tableName;
 		}

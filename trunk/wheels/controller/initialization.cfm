@@ -16,7 +16,7 @@
 	<cfargument name="params" type="struct" required="true">
 	<cfscript>
 		var loc = {};
-		loc.fileName = $capitalize(variables.wheels.name);
+		loc.fileName = capitalize(variables.wheels.name);
 		if (!ListFindNoCase(application.wheels.existingControllerFiles, variables.wheels.name))
 			loc.fileName = "Controller";
 		loc.returnValue = $createObjectFromRoot(path=application.wheels.controllerComponentPath, fileName=loc.fileName, method="$initControllerObject", name=variables.wheels.name, params=arguments.params);
