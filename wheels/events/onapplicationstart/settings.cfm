@@ -78,9 +78,12 @@
 	application.wheels.caches = {time=60};
 	application.wheels.checkBox = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", checkedValue=1, unCheckedValue=0};
 	application.wheels.dateSelect = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names"};
+	application.wheels.dateSelectTags = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names"};
 	application.wheels.dateTimeSelect = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, separator=" - "};
+	application.wheels.dateTimeSelectTags = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, separator=" - "};
 	application.wheels.delete = {parameterize=true};
 	application.wheels.deleteAll = {parameterize=true, instantiate=false};
+	application.wheels.distanceOfTimeInWords = {includeSeconds=false};
 	application.wheels.errorMessageOn = {prependText="", appendText="", wrapperElement="span", class="error-message"};
 	application.wheels.errorMessagesFor = {class="error-messages"};
 	application.wheels.exists = {reload=false, parameterize=true};
@@ -92,6 +95,7 @@
 	application.wheels.imageTag = {};
 	application.wheels.javaScriptIncludeTag = {type="text/javascript"};
 	application.wheels.linkTo = {onlyPath=true, host="", protocol="", port=0};
+	application.wheels.mailTo = {encode=false};
 	application.wheels.paginationLinks = {windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prependToLink="", appendToLink="", classForCurrent="", name="page"};
 	application.wheels.passwordField = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span"};
 	application.wheels.radioButton = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span"};
@@ -108,7 +112,10 @@
 	application.wheels.sum = {distinct=false};
 	application.wheels.textArea = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span"};
 	application.wheels.textField = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span"};
+	application.wheels.timeAgoInWords = {includeSeconds=false};
 	application.wheels.timeSelect = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1};
+	application.wheels.timeSelectTags = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1};
+	application.wheels.timeUntilInWords = {includeSeconds=false};
 	application.wheels.update = {parameterize=true};
 	application.wheels.updateAll = {parameterize=true, instantiate=false};
 	application.wheels.URLFor = {onlyPath=true, host="", protocol="", port=0};
