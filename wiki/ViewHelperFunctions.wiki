@@ -64,6 +64,7 @@ These functions can be called from the views to create output for use in a HTML 
  * [yearSelectTag yearSelectTag()]
 
 *Links:*
+ * [autoLink autoLink()]
  * [buttonTo buttonTo()]
  * [linkTo linkTo()]
  * [mailTo mailTo()]
@@ -74,15 +75,16 @@ These functions can be called from the views to create output for use in a HTML 
  * [javaScriptIncludeTag javaScriptIncludeTag()]
  * [styleSheetLinkTag styleSheetLinkTag()]
 
-*Text:*
- * [autoLink autoLink()]
- * [capitalize capitalize()]
+*Miscellaneous:*
  * [cycle cycle()]
+ * [resetCycle resetCycle()]
+
+*Text:*
+ * [capitalize capitalize()]
  * [excerpt excerpt()]
  * [highlight highlight()]
  * [humanize humanize()]
  * [pluralize pluralize()]
- * [resetCycle resetCycle()]
  * [simpleFormat simpleFormat()]
  * [singularize singularize()]
  * [stripLinks stripLinks()]
