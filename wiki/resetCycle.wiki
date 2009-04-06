@@ -1,0 +1,4 @@
+#summary draft...
+#labels api,0.9.1
+
+<cfset resetCycle("tableRows")>
