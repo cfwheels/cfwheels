@@ -23,7 +23,7 @@ These functions can be called from the views to create output for use in a HTML 
  * [errorMessageOn errorMessageOn()]
  * [errorMessagesFor errorMessagesFor()]
 
-*Forms (for object properties):*
+*Forms (object properties):*
  * [checkBox checkBox()]
  * [dateSelect dateSelect()]
  * [dateTimeSelect dateTimeSelect()]
