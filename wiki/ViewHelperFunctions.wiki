@@ -19,6 +19,11 @@ These functions can be called from the views to create output for use in a HTML 
  * [contentForLayout contentForLayout()]
  * [includePartial includePartial()]
 
+*Dates:*
+ * [distanceOfTimeInWords distanceOfTimeInWords()]
+ * [timeAgoInWords timeAgoInWords()]
+ * [timeUntilInWords timeUntilInWords()]
+
 *Errors:*
  * [errorMessageOn errorMessageOn()]
  * [errorMessagesFor errorMessagesFor()]
