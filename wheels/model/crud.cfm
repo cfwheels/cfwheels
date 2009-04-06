@@ -839,7 +839,7 @@
 				}
 				else
 				{
-					loc.classAssociations[loc.name].class = $singularize(loc.name);
+					loc.classAssociations[loc.name].class = singularize(loc.name);
 				}
 			}
 
@@ -973,7 +973,7 @@
 	<cfargument name="row" type="numeric" required="false" default="1">
 	<cfscript>
 		var loc = {};
-		loc.fileName = $capitalize(variables.wheels.class.name);
+		loc.fileName = capitalize(variables.wheels.class.name);
 		if (!ListFindNoCase(application.wheels.existingModelFiles, variables.wheels.class.name))
 			loc.fileName = "Model";
 		loc.returnValue = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.name, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row);
