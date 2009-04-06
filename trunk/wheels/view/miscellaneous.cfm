@@ -108,6 +108,35 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="mailTo" returntype="string" access="public" output="false" hint="Creates a mailto link tag to the specified email address, which is also used as the name of the link unless name is specified.">
+	<cfargument name="emailAddress" type="string" required="true" hint="The email address to link to">
+	<cfargument name="name" type="string" required="false" default="" hint="A string to use as the link text ('Joe' or 'Support Department' for example)">
+	<cfargument name="encode" type="boolean" required="false" default="#application.wheels.mailTo.encode#" hint="Pass true here to encode the email address, making it harder for bots to harvest it">
+	<cfscript>
+		var loc = {};
+		arguments = $insertDefaults(name="mailTo", reserved="href", input=arguments);
+		arguments.href = "mailto:#arguments.emailAddress#";
+		if (Len(arguments.name))
+			loc.content = arguments.name;
+		else
+			loc.content = arguments.emailAddress;
+		loc.returnValue = $element(name="a", skip="emailAddress,name,encode", content=loc.content, attributes=arguments);
+		if (arguments.encode)
+		{
+			loc.js = "document.write('#Trim(loc.returnValue)#');";
+			loc.encoded = "";
+			loc.iEnd = Len(loc.js);
+			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
+			{
+				loc.encoded = loc.encoded & "%" & Right("0" & FormatBaseN(Asc(Mid(loc.js,loc.i,1)),16),2);
+			}
+			loc.content = "eval(unescape('#loc.encoded#'))";
+			loc.returnValue = $element(name="script", content=loc.content, type="text/javascript");
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="includePartial" returntype="string" access="public" output="false" hint="Includes a specified file. Similar to using `cfinclude` but with the ability to cache the result and using Wheels specific file look-up. By default Wheels will look for the file in the current controller's view folder. To include a file relative from the `views` folder you can start the path supplied to `name` with a forward slash.">
 	<cfargument name="name" type="string" required="true" hint="The name of the file to be included (starting with an optional path and with the underscore and file extension excluded)">
 	<cfargument name="cache" type="any" required="false" default="" hint="Number of minutes to cache the partial for">
