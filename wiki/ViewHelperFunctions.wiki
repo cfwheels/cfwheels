@@ -61,6 +61,7 @@ These functions can be called from the views to create output for use in a HTML 
 *Links:*
  * [buttonTo buttonTo()]
  * [linkTo linkTo()]
+ * [mailTo mailTo()]
  * [paginationLinks paginationLinks()]
 
 *Media:*
