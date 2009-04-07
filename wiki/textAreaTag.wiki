@@ -1,0 +1,56 @@
+#summary textAreaTag(name[value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel])
+#labels chapter,0.9.1
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Builds and returns a string containing a text area form control based on the supplied `name`.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *name* || string || true || - || See documentation for `textField` ||
+|| *value* || string || true || - || See documentation for `textField` ||
+|| *label* || string || false ||   || See documentation for `textField` ||
+|| *wrapLabel* || boolean || false || true || See documentation for `textField` ||
+|| *prepend* || string || false ||   || See documentation for `textField` ||
+|| *append* || string || false ||   || See documentation for `textField` ||
+|| *prependToLabel* || string || false ||   || See documentation for `textField` ||
+|| *appendToLabel* || string || false ||   || See documentation for `textField` ||
+
+*Examples*:
+
+{{{
+<!--- view code --->
+<cfoutput>
+  <p>#textAreaTag(name="articleDescription")#</p>
+</cfoutput>
+}}}
+
+*Related*:
+
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
+ * [startFormTag startFormTag()] (function)
+ * [endFormTag endFormTag()] (function)
+ * [submitTag submitTag()] (function)
+ * [radioButtonTag radioButtonTag()] (function)
+ * [checkBoxTag checkBoxTag()] (function)
+ * [passwordFieldTag passwordFieldTag()] (function)
+ * [hiddenFieldTag hiddenFieldTag()] (function)
+ * [textField textField()] (function)
+ * [fileFieldTag fileFieldTag()] (function)
+ * [selectTag selectTag()] (function)
+ * [dateTimeSelectTag dateTimeSelectTag()] (function)
+ * [dateSelectTag dateSelectTag()] (function)
+ * [timeSelectTag timeSelectTag()] (function)
