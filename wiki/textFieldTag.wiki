@@ -1,0 +1,56 @@
+#summary textFieldTag(name[value,label,wrapLabel,prepend,append,prependToLabel,appendToLabel])
+#labels chapter,0.9.1
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Builds and returns a string containing a text field form control based on the supplied `name`.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *name* || string || true ||  || The name of the form control to build ||
+|| *value* || string || false || || The initial value of the form control to build ||
+|| *label* || string || false || || The label text to use in the form control ||
+|| *wrapLabel* || boolean || false || true || Whether or not to wrap the label around the form control ||
+|| *prepend* || string || false || || String to prepend to the form control. Useful to wrap the form control around HTML tags ||
+|| *append* || string || false || || String to append to the form control. Useful to wrap the form control around HTML tags ||
+|| *prependToLabel* || string || false || || String to prepend to the form control's label. Useful to wrap the form control around HTML tags ||
+|| *appendToLabel* || string || false || || String to append to the form control's label. Useful to wrap the form control around HTML tags ||
+
+*Examples*:
+
+{{{
+<!--- view code --->
+<cfoutput>
+  <p>#textFieldTag(name="someName")#</p>
+</cfoutput>
+}}}
+
+*Related*:
+
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
+ * [startFormTag startFormTag()] (function)
+ * [endFormTag endFormTag()] (function)
+ * [submitTag submitTag()] (function)
+ * [radioButtonTag radioButtonTag()] (function)
+ * [checkBoxTag checkBoxTag()] (function)
+ * [passwordFieldTag passwordFieldTag()] (function)
+ * [hiddenFieldTag hiddenFieldTag()] (function)
+ * [textAreaTag textAreaTag()] (function)
+ * [fileFieldTag fileFieldTag()] (function)
+ * [selectTag selectTag()] (function)
+ * [dateTimeSelectTag dateTimeSelectTag()] (function)
+ * [dateSelectTag dateSelectTag()] (function)
+ * [timeSelectTag timeSelectTag()] (function)
