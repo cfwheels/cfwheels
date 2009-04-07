@@ -1,0 +1,39 @@
+#summary distanceOfTimeInWords(fromTime,toTime[includeSeconds])
+#labels chapter,0.9.1
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*:
+
+Pass in two dates to this method and it will return a string describing the approximate time difference between them.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| * fromTime* || date || true ||  || The date to compare from ||
+|| * toTime* || date || true ||  || The date to compare to ||
+|| *includeSeconds* || boolean || false || false || Set to true for detailed description when the difference is less than one minute ||
+
+*Examples*:
+
+{{{
+<cfset aWhileAgo = Now() - 30>
+<cfset rightNow = Now()>
+<cfoutput>#distanceOfTimeInWords(aWhileAgo, rightNow)#</cfoutput>
+}}}
+
+
+
+*Related*:
+ * [timeAgoInWords timeAgoInWords()]
+ * [timeUntilInWords timeUntilInWords()]
