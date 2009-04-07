@@ -1,0 +1,112 @@
+<cffunction name="styleSheetLinkTag" returntype="string" access="public" output="false" hint="Returns a `link` tag based on the supplied arguments.">
+	<cfargument name="source" type="string" required="false" default="#arguments.sources#" hint="The name of one or many CSS files in the `stylesheets` folder">
+	<cfargument name="sources" type="string" required="false" default="#arguments.source#" hint="See `source`">
+	<cfargument name="type" type="string" required="false" default="#application.wheels.styleSheetLinkTag.type#" hint="The `type` attribute for the `link` tag">
+	<cfargument name="media" type="string" required="false" default="#application.wheels.styleSheetLinkTag.media#" hint="The `media` attribute for the `link` tag">
+	<cfscript>
+		var loc = {};
+		arguments = $insertDefaults(name="styleSheetLinkTag", reserved="href,rel", input=arguments);
+		arguments.rel = "stylesheet";
+		loc.returnValue = "";
+		loc.iEnd = ListLen(arguments.sources);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(arguments.sources, loc.i);
+			arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & Trim(loc.item);
+			if (loc.item Does Not Contain ".")
+				arguments.href = arguments.href & ".css";
+			loc.returnValue = loc.returnValue & $tag(name="link", skip="sources", close=true, attributes=arguments);
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="javaScriptIncludeTag" returntype="string" access="public" output="false" hint="Returns a `script` tag based on the supplied arguments.">
+	<cfargument name="source" type="string" required="false" default="#arguments.sources#" hint="The name of one or many JavaScript files in the `javascripts` folder">
+	<cfargument name="sources" type="string" required="false" default="#arguments.source#" hint="See `source`">
+	<cfargument name="type" type="string" required="false" default="#application.wheels.javaScriptIncludeTag.type#" hint="The `type` attribute for the `script` tag">
+	<cfscript>
+		var loc = {};
+		arguments = $insertDefaults(name="javaScriptIncludeTag", reserved="src", input=arguments);
+		loc.returnValue = "";
+		loc.iEnd = ListLen(arguments.sources);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(arguments.sources, loc.i);
+			arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & Trim(loc.item);
+			if (loc.item Does Not Contain ".")
+				arguments.src = arguments.src & ".js";
+			loc.returnValue = loc.returnValue & $element(name="script", skip="sources", attributes=arguments);
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="imageTag" returntype="string" access="public" output="false" hint="Returns an image tag and will (if the image is stored in the local `images` folder) set the `width`, `height` and `alt` attributes automatically for you.">
+	<cfargument name="source" type="string" required="true" hint="Image file name if local or full URL if remote">
+	<cfscript>
+		var loc = {};
+		arguments = $insertDefaults(name="imageTag", reserved="src", input=arguments);
+		if (application.wheels.cacheImages)
+		{
+			loc.category = "image";
+			loc.key = $hashStruct(arguments);
+			loc.lockName = loc.category & loc.key;
+			loc.conditionArgs = {};
+			loc.conditionArgs.category = loc.category;
+			loc.conditionArgs.key = loc.key;
+			loc.executeArgs = arguments;
+			loc.executeArgs.category = loc.category;
+			loc.executeArgs.key = loc.key;
+			loc.returnValue = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$addImageTagToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+		}
+		else
+		{
+			loc.returnValue = $imageTag(argumentCollection=arguments);
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$addImageTagToCache" returntype="string" access="public" output="false">
+	<cfscript>
+		var returnValue = "";
+		returnValue = $imageTag(argumentCollection=arguments);
+		$addToCache(key=arguments.key, value=returnValue, category=arguments.category);
+	</cfscript>
+	<cfreturn returnValue>
+</cffunction>
+
+<cffunction name="$imageTag" returntype="string" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		if (Left(arguments.source, 7) == "http://")
+		{
+			arguments.src = arguments.source;
+		}
+		else
+		{
+			arguments.src = application.wheels.webPath & application.wheels.imagePath & "/" & arguments.source;
+			if (application.wheels.environment != "production")
+			{
+				if (Left(arguments.source, 7) != "http://" && !FileExists(ExpandPath(arguments.src)))
+					$throw(type="Wheels.ImageFileNotFound", message="Wheels could not find '#expandPath('#arguments.src#')#' on the local file system.", extendedInfo="Pass in a correct relative path from the 'images' folder to an image.");
+				else if (Left(arguments.source, 7) != "http://" && arguments.source Does Not Contain ".jpg" && arguments.source Does Not Contain ".gif" && arguments.source Does Not Contain ".png")
+					$throw(type="Wheels.ImageFormatNotSupported", message="Wheels can't read image files with that format.", extendedInfo="Use a GIF, JPG or PNG image instead.");
+			}
+			if (!StructKeyExists(arguments, "width") || !StructKeyExists(arguments, "height"))
+			{
+				loc.image = $image(action="info", source=ExpandPath(arguments.src));
+				if (loc.image.width > 0 && loc.image.height > 0)
+				{
+					arguments.width = loc.image.width;
+					arguments.height = loc.image.height;
+				}
+			}
+		}
+		if (!StructKeyExists(arguments, "alt"))
+			arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
+		loc.returnValue = $tag(name="img", skip="source", close=true, attributes=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
