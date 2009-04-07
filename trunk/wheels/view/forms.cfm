@@ -163,11 +163,15 @@
 		if ((IsBoolean(loc.value) && loc.value) || (isNumeric(loc.value) && loc.value >= 1))
 			arguments.checked = "checked";
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,checkedValue,uncheckedValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments);
-		loc.hiddenAttributes = {};
-		loc.hiddenAttributes.type = "hidden";
-		loc.hiddenAttributes.name = arguments.name & "($checkbox)";
-		loc.hiddenAttributes.value = arguments.uncheckedValue;
-		loc.returnValue = loc.returnValue & $tag(name="input", close=true, attributes=loc.hiddenAttributes) & loc.after;
+		if (!IsStruct(arguments.objectName))
+		{
+			loc.hiddenAttributes = {};
+			loc.hiddenAttributes.type = "hidden";
+			loc.hiddenAttributes.name = arguments.name & "($checkbox)";
+			loc.hiddenAttributes.value = arguments.uncheckedValue;
+			loc.returnValue = loc.returnValue & $tag(name="input", close=true, attributes=loc.hiddenAttributes);
+		}
+		loc.returnValue = loc.returnValue & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -486,6 +490,43 @@
 		StructDelete(arguments, "value");
 		StructDelete(arguments, "checked");
 		loc.returnValue = radioButton(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="checkBoxTag" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="value" type="string" required="false" default="1">
+	<cfargument name="checked" type="boolean" required="false" default="false">
+	<cfscript>
+		var loc = {};
+		arguments.checkedValue = arguments.value;
+		arguments.property = arguments.name;
+		arguments.objectName = {};
+		if (arguments.checked)
+			arguments.objectName[arguments.name] = arguments.value;
+		else
+			arguments.objectName[arguments.name] = "";
+		StructDelete(arguments, "name");
+		StructDelete(arguments, "value");
+		StructDelete(arguments, "checked");
+		loc.returnValue = checkBox(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="selectTag" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="options" type="any" required="true" default="">
+	<cfargument name="value" type="string" required="false" default="">
+	<cfscript>
+		var loc = {};
+		arguments.property = arguments.name;
+		arguments.objectName = {};
+		arguments.objectName[arguments.name] = arguments.value;
+		StructDelete(arguments, "name");
+		StructDelete(arguments, "value");
+		loc.returnValue = select(argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
