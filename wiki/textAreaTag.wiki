@@ -20,21 +20,21 @@ String
 *Parameters*:
 
 ||   || *Type* || *Required* || *Default* || *Description* ||
-|| *name* || string || true || - || See documentation for `textField` ||
-|| *value* || string || true || - || See documentation for `textField` ||
-|| *label* || string || false ||   || See documentation for `textField` ||
-|| *wrapLabel* || boolean || false || true || See documentation for `textField` ||
-|| *prepend* || string || false ||   || See documentation for `textField` ||
-|| *append* || string || false ||   || See documentation for `textField` ||
-|| *prependToLabel* || string || false ||   || See documentation for `textField` ||
-|| *appendToLabel* || string || false ||   || See documentation for `textField` ||
+|| *name* || string || true || - || See documentation for `textFieldTag ` ||
+|| *value* || string || true || - || See documentation for `textFieldTag ` ||
+|| *label* || string || false ||   || See documentation for `textFieldTag ` ||
+|| *wrapLabel* || boolean || false || true || See documentation for `textFieldTag ` ||
+|| *prepend* || string || false ||   || See documentation for `textFieldTag ` ||
+|| *append* || string || false ||   || See documentation for `textFieldTag ` ||
+|| *prependToLabel* || string || false ||   || See documentation for `textFieldTag ` ||
+|| *appendToLabel* || string || false ||   || See documentation for `textFieldTag ` ||
 
 *Examples*:
 
 {{{
 <!--- view code --->
 <cfoutput>
-  <p>#textAreaTag(name="articleDescription")#</p>
+  <p>#textAreaTag(name="description")#</p>
 </cfoutput>
 }}}
 
