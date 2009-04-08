@@ -1,0 +1,50 @@
+#summary hiddenFieldTag(name[value])
+#labels chapter,0.9.1
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Builds and returns a string containing a hidden field form control based on the supplied `name`.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *name* || string || true ||  || See documentation for `textFieldTag` ||
+|| *value* || string || false || || See documentation for `textFieldTag ` ||
+
+*Examples*:
+
+{{{
+<!--- view code --->
+<cfoutput>
+  <p>#hiddenFieldTag(name="userId", value=user.id)#</p>
+</cfoutput>
+}}}
+
+*Related*:
+
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
+ * [startFormTag startFormTag()] (function)
+ * [endFormTag endFormTag()] (function)
+ * [submitTag submitTag()] (function)
+ * [radioButtonTag radioButtonTag()] (function)
+ * [checkBoxTag checkBoxTag()] (function)
+ * [textFieldTag textFieldTag()] (function)
+ * [passwordFieldTag passwordFieldTag()] (function)
+ * [textAreaTag textAreaTag()] (function)
+ * [fileFieldTag fileFieldTag()] (function)
+ * [selectTag selectTag()] (function)
+ * [dateTimeSelectTag dateTimeSelectTag()] (function)
+ * [dateSelectTag dateSelectTag()] (function)
+ * [timeSelectTag timeSelectTag()] (function)
