@@ -1,0 +1,57 @@
+#summary checkBoxTag(name,value,checked[label,wrapLabel,prepend,append,prependToLabel,appendToLabel])
+#labels chapter,0.9.1
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Builds and returns a string containing a check box form control based on the supplied `name`.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *name* || string || true || - || See documentation for `textField` ||
+|| *value* || string || true || - || See documentation for `textField` ||
+|| *checked* || string || true || false || Whether or not this is check box is initially selected ||
+|| *label* || string || false ||   || See documentation for `textField` ||
+|| *wrapLabel* || boolean || false || true || See documentation for `textField` ||
+|| *prepend* || string || false ||   || See documentation for `textField` ||
+|| *append* || string || false ||   || See documentation for `textField` ||
+|| *prependToLabel* || string || false ||   || See documentation for `textField` ||
+|| *appendToLabel* || string || false ||   || See documentation for `textField` |||
+
+*Examples*:
+
+{{{
+<!--- view code --->
+<cfoutput>
+  <p>#checkBoxTag(name="suscribe", value="true", label="Suscribe to our newsletter", checked=false)#</p>
+</cfoutput>
+}}}
+
+*Related*:
+
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
+ * [startFormTag startFormTag()] (function)
+ * [endFormTag endFormTag()] (function)
+ * [textFieldTag textFieldTag()] (function)
+ * [submitTag submitTag()] (function)
+ * [radioButtonTag()] (function)
+ * [passwordFieldTag passwordFieldTag()] (function)
+ * [hiddenFieldTag hiddenFieldTag()] (function)
+ * [textAreaTag textAreaTag()] (function)
+ * [fileFieldTag fileFieldTag()] (function)
+ * [selectTag selectTag()] (function)
+ * [dateTimeSelectTag dateTimeSelectTag()] (function)
+ * [dateSelectTag dateSelectTag()] (function)
+ * [timeSelectTag timeSelectTag()] (function)
