@@ -104,7 +104,7 @@
 	application.wheels.renderPageToString = {layout=true};
 	application.wheels.save = {parameterize=true};
 	application.wheels.select = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, multiple=false, valueField="", textField=""};
-	application.wheels.sendEmail = {layout=false};
+	application.wheels.sendEmail = {layout=false, detectMultipart=true};
 	application.wheels.sendFile = {disposition="attachment"};
 	application.wheels.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, spamProtection=false};
 	application.wheels.styleSheetLinkTag = {type="text/css", media="all"};

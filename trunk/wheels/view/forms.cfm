@@ -518,14 +518,14 @@
 <cffunction name="selectTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="options" type="any" required="true" default="">
-	<cfargument name="value" type="string" required="false" default="">
+	<cfargument name="selected" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		arguments.property = arguments.name;
 		arguments.objectName = {};
-		arguments.objectName[arguments.name] = arguments.value;
+		arguments.objectName[arguments.name] = arguments.selected;
 		StructDelete(arguments, "name");
-		StructDelete(arguments, "value");
+		StructDelete(arguments, "selected");
 		loc.returnValue = select(argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>

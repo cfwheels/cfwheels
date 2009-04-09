@@ -32,11 +32,13 @@
 </cffunction>
 
 <cffunction name="sendEmail" returntype="void" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in.">
-	<cfargument name="template" type="string" required="true" hint="The path to the email template or two paths if you want to send a multipart email (the template for the text version has to be the first one in the list in that case)">
+	<cfargument name="template" type="string" required="false" default="#arguments.templates#" hint="The path to the email template or two paths if you want to send a multipart email (if the `detectMultipart` argument is `false` the template for the text version should be the first one in the list).">
+	<cfargument name="templates" type="string" required="false" default="#arguments.template#" hint="See `template`">
 	<cfargument name="from" type="string" required="true" hint="Email address to send from">
 	<cfargument name="to" type="string" required="true" hint="Email address to send to">
 	<cfargument name="subject" type="string" required="true" hint="The subject line of the email">
 	<cfargument name="layout" type="any" required="false" default="#application.wheels.sendEmail.layout#" hint="Layout to wrap body in">
+	<cfargument name="detectMultipart" type="boolean" required="false" default="#application.wheels.sendEmail.detectMultipart#" hint="When set to `true` Wheels will detect which of the templates is text and which one is html (by counting the `<` characters)">
 	<cfscript>
 		var loc = {};
 		
@@ -45,7 +47,7 @@
 		// set the variables that should be available to the email view template
 		for (loc.key in arguments)
 		{
-			if (!ListFindNoCase("template,layout", loc.key) && !ListFindNoCase("from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext", loc.key))
+			if (!ListFindNoCase("template,templates,layout,detectMultipart", loc.key) && !ListFindNoCase("from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext", loc.key))
 			{
 				variables[loc.key] = arguments[loc.key];
 				StructDelete(arguments, loc.key);
@@ -53,10 +55,10 @@
 		}
 
 		arguments.body = [];
-		loc.iEnd = ListLen(arguments.template);
+		loc.iEnd = ListLen(arguments.templates);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.template = ListGetAt(arguments.template, loc.i);
+			loc.template = ListGetAt(arguments.templates, loc.i);
 			loc.template = ReplaceNoCase(loc.template, ".cfm", "");
 
 			// set controller / action so we can render the email template according to the same rules as renderPage
@@ -72,12 +74,36 @@
 			}
 
 			// include the email template and return it
-			ArrayAppend(arguments.body, $renderPage(controller=loc.controller, action=loc.action, layout=arguments.layout));
+			loc.content = $renderPage(controller=loc.controller, action=loc.action, layout=arguments.layout);
+			if (ArrayIsEmpty(arguments.body))
+			{
+				ArrayAppend(arguments.body, loc.content);
+			}
+			else
+			{
+				if (arguments.detectMultipart)
+				{
+					// make sure the text version is the first one in the array
+					loc.existingContentCount = ListLen(arguments.body[1], "<");
+					loc.newContentCount = ListLen(loc.content, "<");
+					if (loc.newContentCount < loc.existingContentCount)
+						ArrayPrepend(arguments.body, loc.content);
+					else
+						ArrayAppend(arguments.body, loc.content);
+					
+				}
+				else
+				{
+					ArrayAppend(arguments.body, loc.content);
+				}
+			}
 		}
 
 		// delete arguments that we don't need to pass on to cfmail and send the email
 		StructDelete(arguments, "template");
+		StructDelete(arguments, "templates");
 		StructDelete(arguments, "layout");
+		StructDelete(arguments, "detectMultipart");
 		$mail(argumentCollection=arguments);
 	</cfscript>
 </cffunction>
