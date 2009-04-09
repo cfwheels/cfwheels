@@ -65,3 +65,4 @@ String
  * [LinkingPages LinkingPages] (chapter)
  * [buttonTo buttonTo()] (function)
  * [URLFor URLFor()] (function)
+ * [mailTo mailTo()] (function)
