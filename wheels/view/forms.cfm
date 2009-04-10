@@ -626,17 +626,17 @@
 		loc.separator = arguments.separator;
 		arguments.order = arguments.dateOrder;
 		arguments.separator = arguments.dateSeparator;
-		if (!StructKeyExists(arguments, "$functionName") || arguments.$functionName == "dateTimeSelect")
+		if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect")
 			loc.returnValue = loc.returnValue & dateSelect(argumentCollection=arguments);
-		else if (arguments.$functionName == "dateTimeSelectTag")
+		else
 			loc.returnValue = loc.returnValue & dateSelectTags(argumentCollection=arguments);
 		loc.returnValue = loc.returnValue & loc.separator;
 		arguments.order = arguments.timeOrder;
 		arguments.separator = arguments.timeSeparator;
-		if (!StructKeyExists(arguments, "$functionName") || arguments.$functionName == "dateTimeSelect")
+		if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect")
 			loc.returnValue = loc.returnValue & timeSelect(argumentCollection=arguments);
-		else if (arguments.$functionName == "dateTimeSelectTag")
-			loc.returnValue = loc.returnValue & $timeSelectTag(argumentCollection=arguments);
+		else
+			loc.returnValue = loc.returnValue & timeSelectTags(argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -659,9 +659,9 @@
 		{
 			arguments.property = arguments.name;
 			arguments.objectName = {};
-			arguments.objectName[arguments.name] = arguments.value;
+			arguments.objectName[arguments.name] = arguments.selected;
 			StructDelete(arguments, "name");
-			StructDelete(arguments, "value");
+			StructDelete(arguments, "selected");
 		}
 		arguments.$functionName = "dateSelectTag";
 	</cfscript>
@@ -684,9 +684,9 @@
 		{
 			arguments.property = arguments.name;
 			arguments.objectName = {};
-			arguments.objectName[arguments.name] = arguments.value;
+			arguments.objectName[arguments.name] = arguments.selected;
 			StructDelete(arguments, "name");
-			StructDelete(arguments, "value");
+			StructDelete(arguments, "selected");
 		}
 		arguments.$functionName = "timeSelectTag";
 	</cfscript>
