@@ -43,8 +43,8 @@ These functions can be called from the views to create output for use in a HTML 
 
 *Forms (plain tags):*
  * [checkBoxTag checkBoxTag()]
- * [dateSelectTag dateSelectTag()]
- * [dateTimeSelectTag dateTimeSelectTag()]
+ * [dateSelectTags dateSelectTags()]
+ * [dateTimeSelectTags dateTimeSelectTags()]
  * [daySelectTag daySelectTag()]
  * [endFormTag endFormTag()]
  * [fileFieldTag fileFieldTag()]
