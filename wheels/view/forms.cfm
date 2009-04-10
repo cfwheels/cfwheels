@@ -305,96 +305,6 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="dateTimeSelect" returntype="string" access="public" output="false" hint="Builds and returns a string containing six select form controls (three for date selection and the remaining three for time selection) based on the supplied `objectName` and `property`.">
-	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
-	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
-	<cfargument name="dateOrder" type="string" required="false" default="#application.wheels.dateTimeSelect.dateOrder#" hint="See documentation for `dateSelect`">
-	<cfargument name="dateSeparator" type="string" required="false" default="#application.wheels.dateTimeSelect.dateSeparator#" hint="See documentation for `dateSelect`">
-	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.dateTimeSelect.startYear#" hint="See documentation for `dateSelect`">
-	<cfargument name="endYear" type="numeric" required="false" default="#application.wheels.dateTimeSelect.endYear#" hint="See documentation for `dateSelect`">
-	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.dateTimeSelect.monthDisplay#" hint="See documentation for `dateSelect`">
-	<cfargument name="timeOrder" type="string" required="false" default="#application.wheels.dateTimeSelect.timeOrder#" hint="See documentation for `timeSelect`">
-	<cfargument name="timeSeparator" type="string" required="false" default="#application.wheels.dateTimeSelect.timeSeparator#" hint="See documentation for `timeSelect`">
-	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.dateTimeSelect.minuteStep#" hint="See documentation for `timeSelect`">
-	<cfargument name="separator" type="string" required="false" default="#application.wheels.dateTimeSelect.separator#" hint="Use to change the character that is displayed between the first and second set of select tags">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.dateTimeSelect.includeBlank#" hint="See documentation for `select`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.dateTimeSelect.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.dateTimeSelect.wrapLabel#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.dateTimeSelect.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.dateTimeSelect.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.dateTimeSelect.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateTimeSelect.appendToLabel#" hint="See documentation for `textField`">
-	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.dateTimeSelect.errorElement#" hint="See documentation for `textField`">
-	<cfscript>
-		var loc = {};
-		arguments = $insertDefaults(name="dateTimeSelect", reserved="name,id", input=arguments);
-		arguments.$functionName = "dateTimeSelect";
-	</cfscript>
-	<cfreturn dateTimeSelectTags(argumentCollection=arguments)>
-</cffunction>
-
-<cffunction name="dateSelect" returntype="string" access="public" output="false" hint="Builds and returns a string containing three select form controls for a date based on the supplied `objectName` and `property`.">
-	<cfargument name="objectName" type="any" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="property" type="string" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="order" type="string" required="false" default="#application.wheels.dateSelect.order#" hint="Use to change the order of or exclude date select tags">
-	<cfargument name="separator" type="string" required="false" default="#application.wheels.dateSelect.separator#" hint="Use to change the character that is displayed between the date select tags">
-	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.dateSelect.startYear#" hint="First year in select list">
-	<cfargument name="endYear" type="numeric" required="false" default="#application.wheels.dateSelect.endYear#" hint="Last year in select list">
-	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.dateSelect.monthDisplay#" hint="Pass in `names`, `numbers` or `abbreviations` to control display">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.dateSelect.includeBlank#" hint="See documentation for `select`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.dateSelect.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.dateSelect.wrapLabel#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.dateSelect.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.dateSelect.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.dateSelect.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateSelect.appendToLabel#" hint="See documentation for `textField`">
-	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.dateSelect.errorElement#" hint="See documentation for `textField`">
-	<cfscript>
-		var loc = {};
-		if (StructKeyExists(arguments, "name"))
-		{
-			arguments.property = arguments.name;
-			arguments.objectName = {};
-			arguments.objectName[arguments.name] = arguments.value;
-			StructDelete(arguments, "name");
-			StructDelete(arguments, "value");
-		}
-		arguments = $insertDefaults(name="dateSelect", reserved="id", input=arguments);
-		arguments.$functionName = "dateSelect";
-	</cfscript>
-	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
-</cffunction>
-
-<cffunction name="timeSelect" returntype="string" access="public" output="false" hint="Builds and returns a string containing three select form controls for a time based on the supplied `objectName` and `property`.">
-	<cfargument name="objectName" type="any" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="property" type="string" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="order" type="string" required="false" default="#application.wheels.timeSelect.order#" hint="Use to change the order of or exclude time select tags">
-	<cfargument name="separator" type="string" required="false" default="#application.wheels.timeSelect.separator#" hint="Use to change the character that is displayed between the time select tags">
-	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.timeSelect.minuteStep#" hint="Pass in `10` to only show minute 10, 20,30 etc">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.timeSelect.includeBlank#" hint="See documentation for `select`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.timeSelect.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.timeSelect.wrapLabel#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.timeSelect.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.timeSelect.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.timeSelect.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.timeSelect.appendToLabel#" hint="See documentation for `textField`">
-	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.timeSelect.errorElement#" hint="See documentation for `textField`">
-	<cfscript>
-		var loc = {};
-		if (StructKeyExists(arguments, "name"))
-		{
-			arguments.property = arguments.name;
-			arguments.objectName = {};
-			arguments.objectName[arguments.name] = arguments.value;
-			StructDelete(arguments, "name");
-			StructDelete(arguments, "value");
-		}
-		arguments = $insertDefaults(name="timeSelect", reserved="id", input=arguments);
-		arguments.$functionName = "timeSelect";
-	</cfscript>
-	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
-</cffunction>
-
 <cffunction name="textFieldTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="value" type="string" required="false" default="">
@@ -531,76 +441,78 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$yearSelectTag" returntype="string" access="public" output="false">
-	<cfargument name="startYear" type="numeric" required="true">
-	<cfargument name="endYear" type="numeric" required="true">
+<cffunction name="dateTimeSelect" returntype="string" access="public" output="false" hint="Builds and returns a string containing six select form controls (three for date selection and the remaining three for time selection) based on the supplied `objectName` and `property`.">
+	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
+	<cfargument name="dateOrder" type="string" required="false" default="#application.wheels.dateTimeSelect.dateOrder#" hint="See documentation for `dateSelect`">
+	<cfargument name="dateSeparator" type="string" required="false" default="#application.wheels.dateTimeSelect.dateSeparator#" hint="See documentation for `dateSelect`">
+	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.dateTimeSelect.startYear#" hint="See documentation for `dateSelect`">
+	<cfargument name="endYear" type="numeric" required="false" default="#application.wheels.dateTimeSelect.endYear#" hint="See documentation for `dateSelect`">
+	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.dateTimeSelect.monthDisplay#" hint="See documentation for `dateSelect`">
+	<cfargument name="timeOrder" type="string" required="false" default="#application.wheels.dateTimeSelect.timeOrder#" hint="See documentation for `timeSelect`">
+	<cfargument name="timeSeparator" type="string" required="false" default="#application.wheels.dateTimeSelect.timeSeparator#" hint="See documentation for `timeSelect`">
+	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.dateTimeSelect.minuteStep#" hint="See documentation for `timeSelect`">
+	<cfargument name="separator" type="string" required="false" default="#application.wheels.dateTimeSelect.separator#" hint="Use to change the character that is displayed between the first and second set of select tags">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.dateTimeSelect.includeBlank#" hint="See documentation for `select`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.dateTimeSelect.label#" hint="See documentation for `textField`">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.dateTimeSelect.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.dateTimeSelect.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.dateTimeSelect.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.dateTimeSelect.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateTimeSelect.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.dateTimeSelect.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
-		arguments.$loopFrom = arguments.startYear;
-		arguments.$loopTo = arguments.endYear;
-		arguments.$type = "year";
-		arguments.$step = 1;
-		StructDelete(arguments, "startYear");
-		StructDelete(arguments, "endYear");
+		var loc = {};
+		arguments = $insertDefaults(name="dateTimeSelect", reserved="name,id", input=arguments);
+		arguments.$functionName = "dateTimeSelect";
 	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
+	<cfreturn dateTimeSelectTags(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="$monthSelectTag" returntype="string" access="public" output="false">
-	<cfargument name="monthDisplay" type="string" required="true">
+<cffunction name="dateSelect" returntype="string" access="public" output="false" hint="Builds and returns a string containing three select form controls for a date based on the supplied `objectName` and `property`.">
+	<cfargument name="objectName" type="any" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="property" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="order" type="string" required="false" default="#application.wheels.dateSelect.order#" hint="Use to change the order of or exclude date select tags">
+	<cfargument name="separator" type="string" required="false" default="#application.wheels.dateSelect.separator#" hint="Use to change the character that is displayed between the date select tags">
+	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.dateSelect.startYear#" hint="First year in select list">
+	<cfargument name="endYear" type="numeric" required="false" default="#application.wheels.dateSelect.endYear#" hint="Last year in select list">
+	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.dateSelect.monthDisplay#" hint="Pass in `names`, `numbers` or `abbreviations` to control display">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.dateSelect.includeBlank#" hint="See documentation for `select`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.dateSelect.label#" hint="See documentation for `textField`">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.dateSelect.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.dateSelect.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.dateSelect.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.dateSelect.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateSelect.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.dateSelect.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
-		arguments.$loopFrom = 1;
-		arguments.$loopTo = 12;
-		arguments.$type = "month";
-		arguments.$step = 1;
-		if (arguments.monthDisplay == "abbreviations")
-			arguments.$optionNames = "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec";
-		else if (arguments.monthDisplay == "names")
-			arguments.$optionNames = "January,February,March,April,May,June,July,August,September,October,November,December";
-		StructDelete(arguments, "monthDisplay");
+		var loc = {};
+		arguments = $insertDefaults(name="dateSelect", reserved="id", input=arguments);
+		arguments.$functionName = "dateSelect";
 	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
+	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="$daySelectTag" returntype="string" access="public" output="false">
+<cffunction name="timeSelect" returntype="string" access="public" output="false" hint="Builds and returns a string containing three select form controls for a time based on the supplied `objectName` and `property`.">
+	<cfargument name="objectName" type="any" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="property" type="string" required="false" default="" hint="See documentation for `textField`">
+	<cfargument name="order" type="string" required="false" default="#application.wheels.timeSelect.order#" hint="Use to change the order of or exclude time select tags">
+	<cfargument name="separator" type="string" required="false" default="#application.wheels.timeSelect.separator#" hint="Use to change the character that is displayed between the time select tags">
+	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.timeSelect.minuteStep#" hint="Pass in `10` to only show minute 10, 20,30 etc">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.timeSelect.includeBlank#" hint="See documentation for `select`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.timeSelect.label#" hint="See documentation for `textField`">
+	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.timeSelect.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.timeSelect.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.timeSelect.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.timeSelect.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.timeSelect.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.timeSelect.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
-		arguments.$loopFrom = 1;
-		arguments.$loopTo = 31;
-		arguments.$type = "day";
-		arguments.$step = 1;
+		var loc = {};
+		arguments = $insertDefaults(name="timeSelect", reserved="id", input=arguments);
+		arguments.$functionName = "timeSelect";
 	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
-</cffunction>
-
-<cffunction name="$hourSelectTag" returntype="string" access="public" output="false">
-	<cfscript>
-		arguments.$loopFrom = 0;
-		arguments.$loopTo = 23;
-		arguments.$type = "hour";
-		arguments.$step = 1;
-	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
-</cffunction>
-
-<cffunction name="$minuteSelectTag" returntype="string" access="public" output="false">
-	<cfargument name="minuteStep" type="numeric" required="true">
-	<cfscript>
-		arguments.$loopFrom = 0;
-		arguments.$loopTo = 59;
-		arguments.$type = "minute";
-		arguments.$step = arguments.minuteStep;
-		StructDelete(arguments, "minuteStep");
-	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
-</cffunction>
-
-<cffunction name="$secondSelectTag" returntype="string" access="public" output="false">
-	<cfscript>
-		arguments.$loopFrom = 0;
-		arguments.$loopTo = 59;
-		arguments.$type = "second";
-		arguments.$step = 1;
-	</cfscript>
-	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
+	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="dateTimeSelectTags" returntype="string" access="public" output="false">
@@ -642,6 +554,8 @@
 </cffunction>
 
 <cffunction name="dateSelectTags" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true" hint="See documentation for `textFieldTag`">
+	<cfargument name="selected" type="date" required="false" default="#Now()#" hint="See documentation for `dateTimeSelectTags`">
 	<cfargument name="order" type="string" required="false" default="#application.wheels.dateSelectTags.order#" hint="See documentation for `dateSelect`">
 	<cfargument name="separator" type="string" required="false" default="#application.wheels.dateSelectTags.separator#" hint="See documentation for `dateSelect`">
 	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.dateSelectTags.startYear#" hint="See documentation for `dateSelect`">
@@ -655,20 +569,19 @@
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.dateSelectTags.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateSelectTags.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
-		if (StructKeyExists(arguments, "name"))
-		{
-			arguments.property = arguments.name;
-			arguments.objectName = {};
-			arguments.objectName[arguments.name] = arguments.selected;
-			StructDelete(arguments, "name");
-			StructDelete(arguments, "selected");
-		}
+		arguments.property = arguments.name;
+		arguments.objectName = {};
+		arguments.objectName[arguments.name] = arguments.selected;
+		StructDelete(arguments, "name");
+		StructDelete(arguments, "selected");
 		arguments.$functionName = "dateSelectTag";
 	</cfscript>
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="timeSelectTags" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true" hint="See documentation for `textFieldTag`">
+	<cfargument name="selected" type="date" required="false" default="#Now()#" hint="See documentation for `dateTimeSelectTags`">
 	<cfargument name="order" type="string" required="false" default="#application.wheels.timeSelectTags.order#" hint="See documentation for `timeSelect`">
 	<cfargument name="separator" type="string" required="false" default="#application.wheels.timeSelectTags.separator#" hint="See documentation for `timeSelect`">
 	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.timeSelectTags.minuteStep#" hint="See documentation for `timeSelect`">
@@ -680,17 +593,86 @@
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.timeSelectTags.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.timeSelectTags.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
-		if (StructKeyExists(arguments, "name"))
-		{
-			arguments.property = arguments.name;
-			arguments.objectName = {};
-			arguments.objectName[arguments.name] = arguments.selected;
-			StructDelete(arguments, "name");
-			StructDelete(arguments, "selected");
-		}
+		arguments.property = arguments.name;
+		arguments.objectName = {};
+		arguments.objectName[arguments.name] = arguments.selected;
+		StructDelete(arguments, "name");
+		StructDelete(arguments, "selected");
 		arguments.$functionName = "timeSelectTag";
 	</cfscript>
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
+</cffunction>
+
+<cffunction name="yearSelectTag" returntype="string" access="public" output="false">
+	<cfargument name="startYear" type="numeric" required="true">
+	<cfargument name="endYear" type="numeric" required="true">
+	<cfscript>
+		arguments.$loopFrom = arguments.startYear;
+		arguments.$loopTo = arguments.endYear;
+		arguments.$type = "year";
+		arguments.$step = 1;
+		StructDelete(arguments, "startYear");
+		StructDelete(arguments, "endYear");
+	</cfscript>
+	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
+</cffunction>
+
+<cffunction name="monthSelectTag" returntype="string" access="public" output="false">
+	<cfargument name="monthDisplay" type="string" required="true">
+	<cfscript>
+		arguments.$loopFrom = 1;
+		arguments.$loopTo = 12;
+		arguments.$type = "month";
+		arguments.$step = 1;
+		if (arguments.monthDisplay == "abbreviations")
+			arguments.$optionNames = "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec";
+		else if (arguments.monthDisplay == "names")
+			arguments.$optionNames = "January,February,March,April,May,June,July,August,September,October,November,December";
+		StructDelete(arguments, "monthDisplay");
+	</cfscript>
+	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
+</cffunction>
+
+<cffunction name="daySelectTag" returntype="string" access="public" output="false">
+	<cfscript>
+		arguments.$loopFrom = 1;
+		arguments.$loopTo = 31;
+		arguments.$type = "day";
+		arguments.$step = 1;
+	</cfscript>
+	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
+</cffunction>
+
+<cffunction name="hourSelectTag" returntype="string" access="public" output="false">
+	<cfscript>
+		arguments.$loopFrom = 0;
+		arguments.$loopTo = 23;
+		arguments.$type = "hour";
+		arguments.$step = 1;
+	</cfscript>
+	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
+</cffunction>
+
+<cffunction name="minuteSelectTag" returntype="string" access="public" output="false">
+	<cfargument name="minuteStep" type="numeric" required="true">
+	<cfscript>
+		arguments.$loopFrom = 0;
+		arguments.$loopTo = 59;
+		arguments.$type = "minute";
+		arguments.$step = arguments.minuteStep;
+		StructDelete(arguments, "minuteStep");
+	</cfscript>
+	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
+</cffunction>
+
+<cffunction name="secondSelectTag" returntype="string" access="public" output="false">
+	<cfscript>
+		arguments.$loopFrom = 0;
+		arguments.$loopTo = 59;
+		arguments.$type = "second";
+		arguments.$step = 1;
+	</cfscript>
+	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$dateOrTimeSelect" returntype="string" access="public" output="false">
@@ -715,7 +697,7 @@
 				arguments.value = "";
 			if (loc.firstDone)
 				loc.returnValue = loc.returnValue & arguments.separator;
-			loc.returnValue = loc.returnValue & Evaluate("$#loc.item#SelectTag(argumentCollection=arguments)");
+			loc.returnValue = loc.returnValue & Evaluate("#loc.item#SelectTag(argumentCollection=arguments)");
 			loc.firstDone = true;
 		}
 	</cfscript>
