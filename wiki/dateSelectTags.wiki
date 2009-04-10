@@ -28,7 +28,7 @@ String
 {{{
 <!--- view code --->
 <cfoutput>
-  <p>#dateSelectTag()#</p>	
+  <p>#dateSelectTags()#</p>	
 </cfoutput>
 }}}
 
