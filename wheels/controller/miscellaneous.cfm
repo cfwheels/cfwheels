@@ -147,16 +147,16 @@
 		{
 			case "txt": {loc.type = "text/plain"; break;}
 			case "gif": {loc.type = "image/gif"; break;}
-			case "jpg": {loc.type = "image/jpg"; break;}
+			case "jpg": case "jpeg": {loc.type = "image/jpg"; break;}
 			case "png": {loc.type = "image/png"; break;}
 			case "wav": {loc.type = "audio/wav"; break;}
 			case "mp3": {loc.type = "audio/mpeg3"; break;}
 			case "pdf": {loc.type = "application/pdf"; break;}
 			case "zip": {loc.type = "application/zip"; break;}
-			case "ppt": {loc.type = "application/powerpoint"; break;}
-			case "doc": {loc.type = "application/word"; break;}
-			case "xls": {loc.type = "application/excel"; break;}
-			default: {loc.type = "application/octet-stream"; break;}
+			case "ppt": case "pptx": {loc.type = "application/powerpoint"; break;}
+			case "doc": case "docx": {loc.type = "application/word"; break;}
+			case "xls": case "xlsx": {loc.type = "application/excel"; break;}
+ 			default: {loc.type = "application/octet-stream"; break;}
 		}
 		$header(name="content-disposition", value="#arguments.disposition#; filename=""#loc.name#""");
 		$content(type=loc.type, file=loc.fullPath);
