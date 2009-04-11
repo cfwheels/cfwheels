@@ -1,0 +1,59 @@
+#summary timeSelectTags(name[selected,order,separator,minuteStep,includeBlank,label,wrapLabel,prepend,append,prependToLabel,appendToLabel])
+#labels chapter,0.9.1
+
+*Category*:
+
+[ViewHelperFunctions View Helper Functions]
+
+*Description*
+
+Builds and returns a string containing three select form controls for a time based on the supplied `objectName` and `property`.
+
+*Return Type*:
+
+String
+
+*History*:
+
+-
+
+*Parameters*:
+
+||   || *Type* || *Required* || *Default* || *Description* ||
+|| *name* || string || true ||  || See documentation for `textFieldTag` ||
+|| *selected* || string || false || #Now()# || The time that should be selected initially ||
+|| *order* || string || true ||  || See documentation for `timeSelect` ||
+|| *separator* || string || true ||  || See documentation for `timeSelect ` ||
+|| *minuteStep* || string || true ||  || See documentation for `timeSelect ` ||
+|| *includeBlank* || boolean || false || false || See documentation for `selectTag` ||
+|| *label* || string || false || || See documentation for `textFieldTag ` ||
+|| *wrapLabel* || boolean || false || true || See documentation for `textFieldTag ` ||
+|| *prepend* || string || false || || See documentation for `textFieldTag ` ||
+|| *append* || string || false || || See documentation for `textFieldTag ` ||
+|| *prependToLabel* || string || false || || See documentation for `textFieldTag ` ||
+|| *appendToLabel* || string || false || || See documentation for `textFieldTag ` ||
+
+*Examples*:
+
+{{{
+<!--- view code --->
+<cfoutput>
+  <p>#timeSelectTags(name="timeOfMeeting")#</p>
+</cfoutput>
+}}}
+
+*Related*:
+
+ * [FormHelpersandShowingErrors Form Helpers and Showing Errors] (chapter)
+ * [startFormTag startFormTag()] (function)
+ * [endFormTag endFormTag()] (function)
+ * [textFieldTag textFieldTag()] (function)
+ * [submitTag submitTag()] (function)
+ * [radioButtonTag()] (function)
+ * [passwordFieldTag passwordFieldTag()] (function)
+ * [hiddenFieldTag hiddenFieldTag()] (function)
+ * [textAreaTag textAreaTag()] (function)
+ * [fileFieldTag fileFieldTag()] (function)
+ * [checkBoxTag checkBoxTag()] (function)
+ * [dateTimeSelectTag dateTimeSelectTag()] (function)
+ * [dateSelectTags dateSelectTags()] (function)
