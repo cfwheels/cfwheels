@@ -7,7 +7,7 @@
 
 *Description*
 
-Builds and returns a string containing one select form control for the minutes of the day based on the supplied `name`.
+Builds and returns a string containing one select form control for the minutes of an hour based on the supplied `name`.
 
 *Return Type*:
 
