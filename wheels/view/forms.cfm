@@ -688,7 +688,7 @@
 
 <cffunction name="daySelectTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true" hint="See documentation for `textFieldTag`">
-	<cfargument name="selected" type="date" required="false" default="#Month(Now())#" hint="The day that should be selected initially">
+	<cfargument name="selected" type="date" required="false" default="#Day(Now())#" hint="The day that should be selected initially">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.daySelectTag.includeBlank#" hint="See documentation for `select`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.daySelectTag.label#" hint="See documentation for `textField`">
 	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.daySelectTag.wrapLabel#" hint="See documentation for `textField`">
