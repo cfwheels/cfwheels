@@ -1,4 +1,4 @@
-#summary minuteSelectTag(name[selected.minuteStep,includeBlank,label,wrapLabel,prepend,append,prependToLabel,appendToLabel])
+#summary minuteSelectTag(name[selected,minuteStep,includeBlank,label,wrapLabel,prepend,append,prependToLabel,appendToLabel])
 #labels chapter,0.9.1
 
 *Category*:
