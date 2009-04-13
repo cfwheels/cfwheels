@@ -147,7 +147,7 @@
 		{
 			case "txt": {loc.type = "text/plain"; break;}
 			case "gif": {loc.type = "image/gif"; break;}
-			case "jpg": case "jpeg": {loc.type = "image/jpg"; break;}
+			case "jpg": case "jpeg": case "pjpeg": {loc.type = "image/jpg"; break;}
 			case "png": {loc.type = "image/png"; break;}
 			case "wav": {loc.type = "audio/wav"; break;}
 			case "mp3": {loc.type = "audio/mpeg3"; break;}
