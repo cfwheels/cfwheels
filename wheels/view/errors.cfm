@@ -1,6 +1,7 @@
 <cffunction name="errorMessagesFor" returntype="string" access="public" output="false" hint="Builds and returns a list (`ul` tag with a class of `error-messages`) containing all the error messages for all the properties of the object.">
 	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to display error messages for">
 	<cfargument name="class" type="string" required="false" default="#application.wheels.errorMessagesFor.class#" hint="CSS class to set on the `ul` element">
+	<cfargument name="showDuplicates" type="boolean" required="false" default="#application.wheels.errorMessagesFor.showDuplicates#" hint="Whether to show duplicate error messages">
 	<cfscript>
 		var loc = {};
 		arguments = $insertDefaults(name="errorMessagesFor", input=arguments);
@@ -9,13 +10,26 @@
 		loc.returnValue = "";
 		if (!ArrayIsEmpty(loc.errors))
 		{
+			loc.used = "";
 			loc.listItems = "";
 			loc.iEnd = ArrayLen(loc.errors);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.listItems = loc.listItems & $element(name="li", content=loc.errors[loc.i].message);			
+				loc.msg = loc.errors[loc.i].message;
+				if(arguments.showDuplicates)
+				{
+					loc.listItems = loc.listItems & $element(name="li", content=loc.msg);
+				}
+				else
+				{
+					if(!ListFind(loc.used, loc.msg, Chr(7)))
+					{
+						loc.listItems = loc.listItems & $element(name="li", content=loc.msg);
+						loc.used = ListAppend(loc.used, loc.msg, Chr(7));
+					}
+				}		
 			}
-			loc.returnValue = $element(name="ul", skip="objectName", content=loc.listItems, attributes=arguments);			
+			loc.returnValue = $element(name="ul", skip="objectName,showDuplicates", content=loc.listItems, attributes=arguments);			
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>

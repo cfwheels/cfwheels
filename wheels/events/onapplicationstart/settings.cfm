@@ -87,7 +87,7 @@
 	application.wheels.deleteAll = {parameterize=true, instantiate=false};
 	application.wheels.distanceOfTimeInWords = {includeSeconds=false};
 	application.wheels.errorMessageOn = {prependText="", appendText="", wrapperElement="span", class="error-message"};
-	application.wheels.errorMessagesFor = {class="error-messages"};
+	application.wheels.errorMessagesFor = {class="error-messages", showDuplicates=true};
 	application.wheels.exists = {reload=false, parameterize=true};
 	application.wheels.fileField = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span"};
 	application.wheels.fileFieldTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel=""};
