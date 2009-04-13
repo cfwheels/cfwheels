@@ -22,7 +22,7 @@
 </cffunction>
 
 <cffunction name="resetCycle" returntype="void" access="public" output="false" hint="Resets a cycle so that it starts from the first list value the next time it is called.">
-	<cfargument name="name" type="string" required="true" hint="The name of the cycle to reset">
+	<cfargument name="name" type="string" required="false" default="default" hint="The name of the cycle to reset">
 	<cfscript>
 		var loc = {};
 		if (StructKeyExists(request.wheels, "cycle") && StructKeyExists(request.wheels.cycle, arguments.name))
