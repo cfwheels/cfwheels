@@ -11,6 +11,4 @@ This sample application covers how to setup authorization business rules on your
 Download, unzip and run the app (it comes with !ColdFusion on Wheels 0.9 included).
 
 ==Download==
-[http://cfwheels.googlecode.com/files/authorization.0.9.zip Click here to download.]
-
-Will upload the app in a few mins
+[http://cfwheels.googlecode.com/files/authorization-0.9.zip Click here to download.]
