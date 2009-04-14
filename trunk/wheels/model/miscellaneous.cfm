@@ -193,6 +193,15 @@
 	<cfreturn variables.wheels.class.propertyList>
 </cffunction>
 
+<cffunction name="dataSource" returntype="void" access="public" output="false" hint="Use this method to override the data source connection information for a particular model.">
+	<cfargument name="name" type="string" required="true" hint="the data source name to connect to">
+	<cfargument name="username" type="string" required="true" hint="the username for the data source">
+	<cfargument name="password" type="string" required="true" hint="the password for the data source">
+	<cfscript>
+	StructAppend(variables.wheels.class.connection, arguments, true);
+	</cfscript>
+</cffunction>
+
 <cffunction name="$objectOrNumberToKey" returntype="struct" access="public" output="false">
 	<cfargument name="missingMethodArguments" type="struct" required="true">
 	<cfscript>
@@ -237,13 +246,4 @@
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="connection" returntype="void" access="public" output="false" hint="Use this method to override the datasource connection information for a particular model">
-	<cfargument name="datasource" required="true" type="string" hint="the datasource to connect to">
-	<cfargument name="username" required="true" type="string" hint="the username for the connection">
-	<cfargument name="password" required="true" type="string" hint="the password for the connection">
-	<cfscript>
-	structappend(variables.wheels.class.connection, arguments, true);
-	</cfscript>
 </cffunction>
