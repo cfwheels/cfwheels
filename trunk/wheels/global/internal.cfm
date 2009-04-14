@@ -140,8 +140,7 @@
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.args.name = arguments.name;
-		loc.returnValue = $doubleCheckedLock(name="controllerLock", condition="$cachedControllerClassExists", execute="$createControllerClass", conditionArgs=loc.args, executeArgs=loc.args);
+		loc.returnValue = $doubleCheckedLock(name="controllerLock", condition="$cachedControllerClassExists", execute="$createControllerClass", conditionArgs=arguments, executeArgs=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -283,93 +282,6 @@
 			StructClear(application.wheels.cache);
 		}
 	</cfscript>
-</cffunction>
-
-<cffunction name="capitalize" returntype="string" access="public" output="false" hint="Returns the text with the first character converted to uppercase.">
-	<cfargument name="text" type="string" required="true" hint="Text to capitalize">
-	<cfreturn UCase(Left(arguments.text, 1)) & Mid(arguments.text, 2, Len(arguments.text)-1)>
-</cffunction>
-
-<cffunction name="$singularizeOrPluralize" returntype="string" access="public" output="false">
-	<cfargument name="text" type="string" required="true">
-	<cfargument name="which" type="string" required="true">
-	<cfargument name="count" type="numeric" required="false" default="-1">
-	<cfargument name="returnCount" type="boolean" required="false" default="true">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = arguments.text;
-		if (arguments.count != 1)
-		{
-			loc.uncountables = "advice,air,blood,deer,equipment,fish,food,furniture,garbage,graffiti,grass,homework,housework,information,knowledge,luggage,mathematics,meat,milk,money,music,pollution,research,rice,sand,series,sheep,soap,software,species,sugar,traffic,transportation,travel,trash,water";
-			loc.irregulars = "child,children,foot,feet,man,men,move,moves,person,people,sex,sexes,tooth,teeth,woman,women";
-			if (ListFindNoCase(loc.uncountables, arguments.text))
-			{
-				loc.returnValue = arguments.text;
-			}
-			else if (ListFindNoCase(loc.irregulars, arguments.text))
-			{
-				loc.pos = ListFindNoCase(loc.irregulars, arguments.text);
-				if (arguments.which == "singularize" && loc.pos MOD 2 == 0)
-					loc.returnValue = ListGetAt(loc.irregulars, loc.pos-1);
-				else if (arguments.which == "pluralize" && loc.pos MOD 2 != 0)
-					loc.returnValue = ListGetAt(loc.irregulars, loc.pos+1);
-				else
-					loc.returnValue = arguments.text;
-			}
-			else
-			{
-				if (arguments.which == "pluralize")
-					loc.ruleList = "(quiz)$,\1zes,^(ox)$,\1en,([m|l])ouse$,\1ice,(matr|vert|ind)ix|ex$,\1ices,(x|ch|ss|sh)$,\1es,([^aeiouy]|qu)ies$,\1y,([^aeiouy]|qu)y$,\1ies,(hive)$,\1s,(?:([^f])fe|([lr])f)$,\1\2ves,sis$,ses,([ti])um$,\1a,(buffal|tomat|potat|volcan|her)o$,\1oes,(bu)s$,\1ses,(alias|status),\1es,(octop|vir)us$,\1i,(ax|test)is$,\1es,s$,s,$,s";
-				else if (arguments.which == "singularize")
-					loc.ruleList = "(quiz)zes$,\1,(matr)ices$,\1ix,(vert|ind)ices$,\1ex,^(ox)en,\1,(alias|status)es$,\1,([octop|vir])i$,\1us,(cris|ax|test)es$,\1is,(shoe)s$,\1,(o)es$,\1,(bus)es$,\1,([m|l])ice$,\1ouse,(x|ch|ss|sh)es$,\1,(m)ovies$,\1ovie,(s)eries$,\1eries,([^aeiouy]|qu)ies$,\1y,([lr])ves$,\1f,(tive)s$,\1,(hive)s$,\1,([^f])ves$,\1fe,(^analy)ses$,\1sis,((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$,\1\2sis,([ti])a$,\1um,(n)ews$,\1ews,s$,¤";
-				loc.rules = ArrayNew(2);
-				loc.count = 1;
-				loc.iEnd = ListLen(loc.ruleList);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i=loc.i+2)
-				{
-					loc.rules[loc.count][1] = ListGetAt(loc.ruleList, loc.i);
-					loc.rules[loc.count][2] = ListGetAt(loc.ruleList, loc.i+1);
-					loc.count = loc.count + 1;
-				}
-				loc.iEnd = ArrayLen(loc.rules);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-				{
-					if(REFindNoCase(loc.rules[loc.i][1], arguments.text))
-					{
-						loc.returnValue = REReplaceNoCase(arguments.text, loc.rules[loc.i][1], loc.rules[loc.i][2]);
-						break;
-					}
-				}
-				loc.returnValue = Replace(loc.returnValue, "¤", "", "all");
-			}
-		}
-		if (arguments.returnCount && arguments.count != -1)
-			loc.returnValue = arguments.count & " " & loc.returnValue;
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="singularize" returntype="string" access="public" output="false" hint="Returns the singular form of the passed in word.">
-	<cfargument name="word" type="string" required="true" hint="String to singularize">
-	<cfreturn $singularizeOrPluralize(text=arguments.word, which="singularize")>
-</cffunction>
-
-<cffunction name="pluralize" returntype="string" access="public" output="false" hint="Returns the plural form of the passed in word.">
-	<cfargument name="word" type="string" required="true" hint="The word to pluralize">
-	<cfargument name="count" type="numeric" required="false" default="-1" hint="Pluralization will occur when this value is not 1">
-	<cfargument name="returnCount" type="boolean" required="false" default="true" hint="Will return the count prepended to the pluralization when true and count is not -1">
-	<cfreturn $singularizeOrPluralize(text=arguments.word, which="pluralize", count=arguments.count, returnCount=arguments.returnCount)>
-</cffunction>
-
-<cffunction name="humanize" returntype="string" access="public" output="false" hint="Returns readable text by capitalizing, converting camel casing to multiple words.">
-	<cfargument name="text" type="string" required="true" hint="Text to humanize">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = REReplace(arguments.text, "([[:upper:]])", " \1", "all"); // adds a space before every capitalized word
-		loc.returnValue = REReplace(loc.returnValue, "([[:upper:]]) ([[:upper:]]) ", "\1\2", "all"); // fixes abbreviations so they form a word again (example: aURLVariable)
-		loc.returnValue = capitalize(loc.returnValue); // capitalize the first letter
-	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$createModelClass" returntype="any" access="public" output="false">
