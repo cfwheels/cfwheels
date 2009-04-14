@@ -3,11 +3,11 @@
 	<cfscript>
 		if (StructKeyExists(URL, "reload") && (!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword") || !Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
 			$simpleLock(execute="onApplicationStart", scope="application", type="exclusive");
-		$simpleLock(execute="runOnRequestStart", executeArgs=arguments, scope="application", type="readOnly");
+		$simpleLock(execute="$runOnRequestStart", executeArgs=arguments, scope="application", type="readOnly");
 	</cfscript>
 </cffunction>
 
-<cffunction name="runOnRequestStart" returntype="void" access="public" output="false">
+<cffunction name="$runOnRequestStart" returntype="void" access="public" output="false">
 	<cfargument name="targetPage" type="any" required="true">
 	<cfscript>
 		var loc = {};
