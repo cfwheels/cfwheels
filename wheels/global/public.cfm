@@ -47,8 +47,6 @@
 		{
 			if (!Len(arguments.route) && !Len(arguments.controller) && !Len(arguments.action))
 				$throw(type="Wheels.IncorrectArguments", message="The 'route', 'controller' or 'action' argument is required.", extendedInfo="Pass in either the name of a 'route' you have configured in 'confirg/routes.cfm' or a 'controller' / 'action' / 'key' combination.");
-			if (Len(arguments.route) && (Len(arguments.controller) || Len(arguments.action) || (IsObject(arguments.key) || Len(arguments.key))))
-				$throw(type="Wheels.IncorrectArguments", message="The 'route' argument is mutually exclusive with the 'controller', 'action' and 'key' arguments.", extendedInfo="Choose whether to use a pre-configured 'route' or 'controller' / 'action' / 'key' combination.");
 			if (arguments.onlyPath && (Len(arguments.host) || Len(arguments.protocol)))
 				$throw(type="Wheels.IncorrectArguments", message="Can't use the 'host' or 'protocol' arguments when 'onlyPath' is 'true'.", extendedInfo="Set 'onlyPath' to 'false' so that linkTo will create absolute URLs and thus allowing you to set the 'host' and 'protocol' on the link.");
 		}
