@@ -5,6 +5,10 @@
 	</cfscript>
 </cffunction>
 
+<cffunction name="tableName" returntype="string" access="public" output="false" hint="Returns the name of the database table that this model is mapped to.">
+	<cfreturn variables.wheels.class.tableName>
+</cffunction>
+
 <cffunction name="property" returntype="void" access="public" output="false" hint="Use this method to map an object property in your application to a table column in your database. You only need to use this method when you want to override the mapping that Wheels performs (i.e. `user.firstName` mapping to `users.firstname` for example).">
 	<cfargument name="name" type="string" required="true" hint="Name of the property">
 	<cfargument name="column" type="string" required="true" hint="Name of the column to map the property to">
