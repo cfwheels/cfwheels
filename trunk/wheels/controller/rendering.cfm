@@ -1,6 +1,7 @@
 <cffunction name="renderPageToString" returntype="string" access="public" output="false" hint="Includes the view page for the specified controller and action and returns it as a string.">
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="See documentation for renderPage">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for renderPage">
+	<cfargument name="template" type="string" required="false" default="" hint="See documentation for renderPage">
 	<cfargument name="layout" type="any" required="false" default="#application.wheels.renderPageToString.layout#" hint="See documentation for renderPage">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for renderPage">
 	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#">
@@ -16,6 +17,7 @@
 <cffunction name="renderPage" returntype="void" access="public" output="false" hint="Renders content to the browser by including the view page for the specified controller and action.">
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Controller to include the view page for">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Action to include the view page for">
+	<cfargument name="template" type="string" required="false" default="" hint="A specific template to render">
 	<cfargument name="layout" type="any" required="false" default="#application.wheels.renderPage.layout#" hint="The layout to wrap the content in">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for">
 	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#">
@@ -87,7 +89,9 @@
 <cffunction name="$renderPage" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		loc.content = $includeAndReturnOutput("#application.wheels.viewPath#/#arguments.controller#/#arguments.action#.cfm");
+		if (!Len(arguments.template))
+			arguments.template = "/" & arguments.controller & "/" & arguments.action;
+		loc.content = $includeFile(name=arguments.template, type="page");
 		loc.returnValue = $renderLayout(content=loc.content, layout=arguments.layout);
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -194,13 +198,4 @@
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="$renderPlugin" returntype="void" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfscript>
-		request.wheels.showDebugInformation = false;
-		request.wheels.contentForLayout = $includeAndReturnOutput("#application.wheels.pluginPath#/#arguments.name#/index.cfm");
-		request.wheels.response = $includeAndReturnOutput("wheels/styles/layout.cfm");
-	</cfscript>
 </cffunction>
