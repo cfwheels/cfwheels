@@ -80,10 +80,10 @@
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
 		var returnValue = "";
-		if (IsStruct(arguments.objectName))
-			returnValue = arguments.property;
-		else
+		if (IsSimpleValue(arguments.objectName))
 			returnValue = ListLast(arguments.objectName, ".") & "-" & arguments.property;
+		else
+			returnValue = arguments.property;
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
@@ -93,10 +93,10 @@
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
 		var returnValue = "";
-		if (IsStruct(arguments.objectName))
-			returnValue = arguments.property;
-		else
+		if (IsSimpleValue(arguments.objectName))
 			returnValue = ListLast(arguments.objectName, ".") & "[" & arguments.property & "]";
+		else
+			returnValue = arguments.property;
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
