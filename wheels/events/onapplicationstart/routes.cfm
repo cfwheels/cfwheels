@@ -10,6 +10,10 @@
 	{
 		loc.route = application.wheels.routes[loc.i];
 		if (StructKeyExists(loc.route, "name"))
-			application.wheels.namedRoutePositions[loc.route.name] = loc.i;
+		{
+			if (!StructKeyExists(application.wheels.namedRoutePositions, loc.route.name))
+				application.wheels.namedRoutePositions[loc.route.name] = "";
+			application.wheels.namedRoutePositions[loc.route.name] = ListAppend(application.wheels.namedRoutePositions[loc.route.name], loc.i);
+		}
 	}
 </cfscript>
