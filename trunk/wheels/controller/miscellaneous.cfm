@@ -58,23 +58,8 @@
 		loc.iEnd = ListLen(arguments.templates);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.template = ListGetAt(arguments.templates, loc.i);
-			loc.template = ReplaceNoCase(loc.template, ".cfm", "");
-
-			// set controller / action so we can render the email template according to the same rules as renderPage
-			if (loc.template Contains "/")
-			{
-				loc.controller = ListFirst(loc.template, "/");
-				loc.action = ListLast(loc.template, "/");
-			}
-			else
-			{
-				loc.controller = variables.params.controller;
-				loc.action = loc.template;
-			}
-
 			// include the email template and return it
-			loc.content = $renderPage(controller=loc.controller, action=loc.action, layout=arguments.layout);
+			loc.content = $renderPage(template=ListGetAt(arguments.templates, loc.i), layout=arguments.layout);
 			if (ArrayIsEmpty(arguments.body))
 			{
 				ArrayAppend(arguments.body, loc.content);
@@ -90,7 +75,6 @@
 						ArrayPrepend(arguments.body, loc.content);
 					else
 						ArrayAppend(arguments.body, loc.content);
-					
 				}
 				else
 				{
