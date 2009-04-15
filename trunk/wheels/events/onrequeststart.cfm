@@ -38,6 +38,7 @@
 		if (!application.wheels.cacheRoutes)
 		{
 			ArrayClear(application.wheels.routes);
+			StructClear(application.wheels.namedRoutePositions);
 			$include(template="#application.wheels.configPath#/routes.cfm");
 			$include(template="wheels/events/onapplicationstart/routes.cfm");
 		}
