@@ -15,19 +15,21 @@ That said, here's a quick look at a couple table structures that you'll need in 
 
 ===Table: `users`===
 || *Column Name* || *Data Type* || *Extra* ||
-|| id || `int` || identity/auto increment ||
+|| id || `int` || auto increment, primary key ||
 || firstName || `varchar(50)` || ||
 || lastName || `varchar(50)` || ||
 || email || `varchar(255)` || ||
 || password || `varchar(15)` || ||
-|| createdAt || `datetime` || ||
-|| updatedAt || `datetime` || ||
-|| deletedAt || `datetime` || ||
+
 
 ===Table: `groups`===
 || *Column Name* || *Data Type* || *Extra* ||
-|| id || `int` || identity/auto increment ||
+|| id || `int` || auto increment, primary key ||
 || name || `varchar(50)` || ||
-|| createdAt || `datetime` || ||
-|| updatedAt || `datetime` || ||
-|| deletedAt || `datetime` || ||
+
+
+Note a few things about these tables:
+ # The table names are plural.
+ # Each table has an auto-incrementing primary key named `id`.
+
+These are database _conventions_ used by Wheels. There are ways of going outside of these conventions in Wheels, but let's learn the conventional way first, cowboy. Sometimes you need to learn the rules before you know how to break them!
