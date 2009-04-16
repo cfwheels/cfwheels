@@ -11,7 +11,7 @@ Let's learn by doing. This tutorial will teach you the basics of interacting wit
 
 Wheels supports MySQL, SQL Server, and Oracle. It doesn't matter which DBMS you use. We will all be writing the same CFML code to interact with the database.
 
-That said, here's a quick look at the data that you'll need in your database:
+That said, here's a quick look at a couple table structures that you'll need in your database:
 
 ===Table: `users`===
 || *Column Name* || *Data Type* || *Extra* ||
@@ -19,7 +19,7 @@ That said, here's a quick look at the data that you'll need in your database:
 || firstName || `varchar(50)` || ||
 || lastName || `varchar(50)` || ||
 || email || `varchar(255)` || ||
-|| password || `varchar(15) || ||
+|| password || `varchar(15)` || ||
 || createdAt || `datetime` || ||
 || updatedAt || `datetime` || ||
 || deletedAt || `datetime` || ||
