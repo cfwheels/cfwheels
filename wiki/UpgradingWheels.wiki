@@ -27,7 +27,7 @@ The easiest way to upgrade is to setup an empty website, deploy a fresh copy of 
 ===Config Code===
 
  * *0.9.1:* The way configuration settings are done has changed quite a bit. To change a Wheels application setting, use the new `set()` function with the name of the Wheels property to change. (For example, `<cfset set(dataSourceName="mydatasource")>`.) To see a list of available Wheels settings, refer to the [Configuration] chapter.
- * *0.9.1:* For your own custom application settings outside of Wheels settings, we recommend using the `application` scope. Please do not use `application.wheels` because that's reserved for Wheels settings.
+ * *0.9.1:* For your own custom application settings outside of Wheels settings, we recommend using the `application` scope. Please do not use `application.wheels` because that's reserved for Wheels internal settings.
 
 ===Model Code===
 
