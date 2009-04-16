@@ -1,5 +1,5 @@
 #summary Hide your primary key values from nosy users.
-#labels chapter,0.9
+#labels chapter,0.9.1
 
 The Wheels convention of using primary key values when building links (as in the `key` argument to [linkTo linkTo()] for example) will lead to them being exposed to anyone interested in the browser's URL bar. Using the built-in URL obfuscation functionality in Wheels, you can hide the real primary key values from nosy users.
 
@@ -23,7 +23,7 @@ The value `99` has now been obfuscated by Wheels to `b7ab9a50`. This makes it ha
 
 ==How to Use It==
 
-To turn on URL obfuscation, all you have to do is set `application.settings.obfuscateURLs` to `true` in the `config/settings.cfm` file.
+To turn on URL obfuscation, all you have to do is call `set(obfuscateURLs=true)` in the `config/settings.cfm` file.
 
 Once you do that, Wheels will handle everything else. Obviously, the main things Wheels does is obfuscate the primary key value when using the [linkTo linkTo()] function and deobfuscate it on the receiving end. Wheels will also obfuscate all other params sent in to [linkTo linkTo()] as well as any value in a form sent using a `get` request.
 
