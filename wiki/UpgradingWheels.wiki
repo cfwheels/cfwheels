@@ -40,7 +40,7 @@ The easiest way to upgrade is to setup an empty website, deploy a fresh copy of 
 
 ===View Code===
 
- * *0.9.1:* There is now an included `wheels` view folder in `views`. Be sure to copy that into your existing Wheels app.
+ * *0.9.1:* There is now an included `wheels` folder in `views`. Be sure to copy that into your existing Wheels app if you're upgrading.
  * The location of the default layout has changed. It is now stored at `/views/layout.cfm`. Now controller-specific layouts are stored in their respective view folder as `layout.cfm`. For example, a custom layout for `www.domain.com/about` would be stored at `/views/about/layout.cfm`.
  * In `linkTo()`, the `id` argument is now called `key`. It now accepts a comma-delimited list in the case of composite keys.
  * The `linkTo()` function also accepts an object for the `key` argument, in which case it will automatically extract the keys from it for use in the hyperlink.
