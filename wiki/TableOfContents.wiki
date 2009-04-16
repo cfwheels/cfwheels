@@ -76,10 +76,10 @@
 ===The Wheels API===
 
  * [WheelsConfigurationFunctions Wheels Configuration Functions]
+ * [GlobalFunctions Global Functions]
+ * [ControllerInitializationFunctions Controller Initialization Functions]
+ * [ControllerRequestFunctions Controller Request Functions]
  * [ModelInitializationFunctions Model Initialization Functions]
  * [ModelClassFunctions Model Class Functions]
  * [ModelObjectFunctions Model Object Functions]
  * [ViewHelperFunctions View Helper Functions]
- * [ControllerInitializationFunctions Controller Initialization Functions]
- * [ControllerRequestFunctions Controller Request Functions]
- * [GlobalFunctions Global Functions]
