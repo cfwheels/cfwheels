@@ -1,4 +1,5 @@
 #summary A quick tutorial that demonstrates how quickly you can get database connectivity up and running with Wheels.
+#labels chapter
 
 Wheels's built in model provides your application with some simple and powerful functionality for interacting with databases. To get started, you make some simple configurations, call some functions within your controllers, and that's it. Best yet, you will rarely ever need to write SQL code to get those redundant CRUD tasks out of the way.
 
@@ -9,3 +10,24 @@ Let's learn by doing. This tutorial will teach you the basics of interacting wit
 ===Our Sample Data Structure===
 
 Wheels supports MySQL, SQL Server, and Oracle. It doesn't matter which DBMS you use. We will all be writing the same CFML code to interact with the database.
+
+That said, here's a quick look at the data that you'll need in your database:
+
+===Table: `users`===
+|| *Column Name* || *Data Type* || *Extra* ||
+|| id || `int` || identity/auto increment ||
+|| firstName || `varchar(50)` || ||
+|| lastName || `varchar(50)` || ||
+|| email || `varchar(255)` || ||
+|| password || `varchar(15) || ||
+|| createdAt || `datetime` || ||
+|| updatedAt || `datetime` || ||
+|| deletedAt || `datetime` || ||
+
+===Table: `groups`===
+|| *Column Name* || *Data Type* || *Extra* ||
+|| id || `int` || identity/auto increment ||
+|| name || `varchar(50)` || ||
+|| createdAt || `datetime` || ||
+|| updatedAt || `datetime` || ||
+|| deletedAt || `datetime` || ||
