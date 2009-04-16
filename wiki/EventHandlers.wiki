@@ -1,5 +1,5 @@
 #summary Use the standard CFML application events through the framework.
-#labels chapter,0.9
+#labels chapter,0.9.1
 
 Because the `Application.cfc` file in the root of your Wheels site just includes the `wheels/functions.cfm` file, which in turn includes a lot of framework specific code, you may wonder what the best way is to use CFML's `onApplicationStart`, `onRequestStart` and similar functions...
 
