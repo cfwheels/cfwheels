@@ -57,7 +57,7 @@ MVC is how Wheels structures your code for you. As you start working with Wheels
 
 Apologies to everyone still running on older versions of Adobe !ColdFusion... You're going to need to upgrade to *Adobe !ColdFusion 8*. The good news is that not only will you be able to run Wheels, you will also benefit from the tons of performance enhancements and cool new features that have been added to !ColdFusion 8. It really is worth the upgrade!
 
-If you prefer a free version of !ColdFusion, you can also run Wheels on *Railo 3.0*.
+If you prefer a free version of !ColdFusion, you can also run Wheels on the open source version of [http://www.getrailo.org/ Railo].
 
 ===Operating Systems===
 
@@ -65,9 +65,9 @@ Your setup with Wheels can then can be installed on *Windows*, *Macintosh*, *Uni
 
 ===Web Servers===
 
-You also need a web server. Wheels runs on all popular web servers including *Apache*, Microsoft *IIS*, *Jetty*, and the *JRun* web server that ships with Adobe !ColdFusion 8. Some web servers support URL rewriting out of the box, some support the `cgi.path_info` variable which is used to achieve partial rewriting, and some don't have support for either.
+You also need a web server. Wheels runs on all popular web servers including *Apache*, Microsoft *IIS*, *Jetty*, and the *JRun* web server that ships with [http://www.adobe.com/products/coldfusion/ Adobe ColdFusion 8]. Some web servers support URL rewriting out of the box, some support the `cgi.path_info` variable which is used to achieve partial rewriting, and some don't have support for either.
 
-Don't worry though. Wheels will adopt to your setup and run just fine regardless, but the URLs that it creates might differ a bit. You can read more about this in the [URLRewriting URL Rewriting] chapter.
+Don't worry though. Wheels will adapt to your setup and run just fine regardless, but the URLs that it creates might differ a bit. You can read more about this in the [URLRewriting URL Rewriting] chapter.
 
 ===Database Engines===
 
