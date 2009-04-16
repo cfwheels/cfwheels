@@ -5,7 +5,7 @@ In this tutorial, we'll be writing a simple application to make sure we have Whe
 
 ==Testing Your Install==
 
-Let's make sure we're all on the same page. I'm going to assume that you've already [http://www.cfwheels.com/download downloaded the latest version of Wheels] and have it installed on your system. If you haven't done that, stop and read the [Installation Installation] chapter and get everything setup. It's okay, this web page will wait for you.
+Let's make sure we're all on the same page. I'm going to assume that you've already [http://cfwheels.org/download downloaded the latest version of Wheels] and have it installed on your system. If you haven't done that, stop and read the [Installation Installation] chapter and get everything setup. It's okay, this web page will wait for you.
 
 Okay, so you have Wheels installed and can see the Wheels "Congratulations!" page as shown in _Figure 1_ below. That wasn't that hard now, was it?
 
