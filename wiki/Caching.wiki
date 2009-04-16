@@ -1,5 +1,5 @@
 #summary How to speed up your website by caching content.
-#labels chapter,0.9
+#labels chapter,0.9.1
 
 If your website doesn't get a whole lot of traffic, then you can probably skip this chapter completely. Just remember that it's here, waiting for your triumphant return.
 
@@ -11,17 +11,15 @@ All this takes time and resources on your web and database servers. Let's assume
 
 ==Configuring the Cache==
 
-In `config/settings.cfm` and the environment specific settings files (`config/environments/design.cfm`, `config/environments/development.cfm`, etc), there are entire sections devoted to cache configuration. You don't really need to change anything in here though.
+Wheels will configure all caching parameters behind the scenes for you based on what environment mode you are currently in. If you leave everything to these defaults setup by Wheels on application start-up, caching will be optimized for the different environment modes (and set to have reasonable settings for cache size and culling). This means that all caching is off when working in Design mode but on when in Production mode for example.
 
-If you leave everything to the defaults, caching will be optimized for the different environment modes (and set to have reasonable settings for cache size and culling). This means that all caching is off when working in Design mode but on when in Production mode.
-
-Here are the values you can change and a description of what they do (starting with the `config/settings.cfm` file):
+Here are the more general caching values you can set, their default values and a description of what they do. Since these are not meant to be set differently based on the environment mode you would usually set these in the `config/settings.cfm` file:
 
 {{{
-<cfset application.settings.maximumItemsToCache = 1000>
-<cfset application.settings.cacheCullPercentage = 10>
-<cfset application.settings.cacheCullIntervalMinutes = 5>
-<cfset application.settings.defaultCacheTime = 15>
+<cfset set(maximumItemsToCache=5000)>
+<cfset set(cacheCullPercentage=10)>
+<cfset set(cacheCullIntervalMinutes=5)>
+<cfset set(defaultCacheTime=60)>
 }}}
 
 ===`maximumItemsToCache` Setting===
@@ -48,30 +46,26 @@ The number of minutes an item should be cached when it has not been specifically
 
 ==Environment-Level Caching==
 
-The cache-related settings in the environment-specific config files controls exactly what gets cached, so refer to those if you want to see what's cached or change any of the defaults set there.
-
-Here are the values you can change in there:
+The following cache variables are usually set per environment mode:
 
 {{{
-<cfset application.settings.cacheDatabaseSchema = false>
-<cfset application.settings.cacheFileChecking = false>
-<cfset application.settings.cacheImages = false>
-<cfset application.settings.cacheModelInitialization = false>
-<cfset application.settings.cacheControllerInitialization = false>
-<cfset application.settings.cacheRoutes = false>
-<cfset application.settings.cacheActions = false>
-<cfset application.settings.cachePages = false>
-<cfset application.settings.cachePartials = false>
-<cfset application.settings.cacheQueries = false>
+<cfset set(cacheDatabaseSchema=false)>
+<cfset set(cacheFileChecking=false)>
+<cfset set(cacheImages=false)>
+<cfset set(cacheModelInitialization=false)>
+<cfset set(cacheControllerInitialization=false)>
+<cfset set(cacheRoutes=false)>
+<cfset set(cacheActions=false)>
+<cfset set(cachePages=false)>
+<cfset set(cachePartials=false)>
+<cfset set(cacheQueries=false)>
 }}}
 
-The settings above are taken from the `config/environments/design.cfm` file. As you can see, when running in that mode, nothing is cached. This makes it possible to do database changes without having to issue a `reload=true` request or restart the !ColdFusion server, for example. The downside is of course that it makes for slightly slower development because the pages will not load as fast in this environment.
+The settings shown above are what's in use in the Design mode. As you can see, when running in that mode, nothing is cached. This makes it possible to do database changes without having to issue a `reload=true` request or restart the !ColdFusion server, for example. The downside is of course that it makes for slightly slower development because the pages will not load as fast in this environment.
 
 The variables themselves are fairly self-explanatory. When `cacheDatabaseSchema` is set to `false`, you can add a field to the database, and Wheels will pick that up right away. When `cacheModelInitialization` is `false`, any changes you make to the `init()` function in the model file will be picked up. And so on.
 
-Keep in mind that even though some of the variables above have been set in the global config file (`config/settings.cfm`)--and some in the individual environment files--you can place them wherever you want. Wheels has just set it up this way by default for you.
-
-This means that if you prefer to have all cache settings on a global basis instead, you can just move everything to the `config/settings.cfm` file.
+Please refer to the [ConfigurationandDefaults Configuration and Defaults] chapter for a complete listing of all the variables you can set and their default values..
 
 ==4 Ways to Cache==
 
