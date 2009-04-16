@@ -65,7 +65,7 @@ The settings shown above are what's in use in the Design mode. As you can see, w
 
 The variables themselves are fairly self-explanatory. When `cacheDatabaseSchema` is set to `false`, you can add a field to the database, and Wheels will pick that up right away. When `cacheModelInitialization` is `false`, any changes you make to the `init()` function in the model file will be picked up. And so on.
 
-Please refer to the [ConfigurationandDefaults Configuration and Defaults] chapter for a complete listing of all the variables you can set and their default values..
+Please refer to the [ConfigurationandDefaults Configuration and Defaults] chapter for a complete listing of all the variables you can set and their default values.
 
 ==4 Ways to Cache==
 
@@ -161,7 +161,7 @@ You can cache result sets returned by your queries too. As a !ColdFusion develop
 You can use query caching on all finder methods, and it looks like this:
 
 {{{
-<cfset users = findAll(where="name LIKE 'a%'", cache=10)>
+<cfset users = model("user").findAll(where="name LIKE 'a%'", cache=10)>
 }}}
 
 So there you have it: 4 easy ways to speed up your website!
