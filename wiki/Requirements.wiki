@@ -1,5 +1,5 @@
 #summary What you need to know and have installed before you start programming in Wheels.
-#labels chapter,0.9
+#labels chapter,0.9.1
 
 We can identify 3 different types of requirements that you should be aware of:
 
