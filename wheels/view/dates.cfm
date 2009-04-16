@@ -13,11 +13,11 @@
 		{
 			if (arguments.includeSeconds)
 			{
-				if (loc.secondDiff <= 5)
+				if (loc.secondDiff < 5)
 					loc.returnValue = "less than 5 seconds";
-				else if (loc.secondDiff <= 10)
+				else if (loc.secondDiff < 10)
 					loc.returnValue = "less than 10 seconds";
-				else if (loc.secondDiff <= 20)
+				else if (loc.secondDiff < 20)
 					loc.returnValue = "less than 20 seconds";
 				else if (loc.secondDiff <= 40)
 					loc.returnValue = "half a minute";
@@ -41,36 +41,36 @@
 		{
 			loc.returnValue = "about 1 hour";
 		}
-		else if (loc.minuteDiff <= 1440)
+		else if (loc.minuteDiff < 1440)
 		{
 			loc.hours = Ceiling(loc.minuteDiff/60);
 			loc.returnValue = "about " & loc.hours & " hours";
 		}
-		else if (loc.minuteDiff <= 2880)
+		else if (loc.minuteDiff < 2880)
 		{
 			loc.returnValue = "1 day";
 		}
-		else if (loc.minuteDiff <= 43200)
+		else if (loc.minuteDiff < 43200)
 		{
 			loc.days = Int(loc.minuteDiff/1440);
 			loc.returnValue = loc.days & " days";
 		}
-		else if (loc.minuteDiff <= 86400)
+		else if (loc.minuteDiff < 86400)
 		{
 			loc.returnValue = "about 1 month";
 		}
-		else if (loc.minuteDiff <= 525960)
+		else if (loc.minuteDiff < 525600)
 		{
 			loc.months = Int(loc.minuteDiff/43200);
 			loc.returnValue = loc.months & " months";
 		}
-		else if (loc.minuteDiff <= 1051920)
+		else if (loc.minuteDiff < 1051920)
 		{
 			loc.returnValue = "about 1 year";
 		}
-		else if (loc.minuteDiff <= 525960)
+		else
 		{
-			loc.years = Int(loc.minuteDiff/525960);
+			loc.years = Int(loc.minuteDiff/525600);
 			loc.returnValue = "over " & loc.years & " years";
 		}
 	</cfscript>
