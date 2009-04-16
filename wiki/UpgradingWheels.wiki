@@ -1,9 +1,9 @@
-#summary Our listing of steps to take while upgrading your Wheels application from earlier versions to 0.9.
-#labels 0.9,chapter
+#summary Our listing of steps to take while upgrading your Wheels application from earlier versions to 0.9.1.
+#labels 0.9.1,chapter
 
-The easiest way to upgrade is to setup an empty website, deploy a fresh copy of Wheels 0.9, and then transfer your application code to it. When transferring, please make note of the following changes and make the appropriate changes to your code.
+The easiest way to upgrade is to setup an empty website, deploy a fresh copy of Wheels 0.9.1, and then transfer your application code to it. When transferring, please make note of the following changes and make the appropriate changes to your code.
 
-*Note:* To accompany the newest 0.9 release, we've highlighted the changes that are affected by that release.
+*Note:* To accompany the newest 0.9.1 release, we've highlighted the changes that are affected by that release.
 
 ==Supported System Changes==
 
@@ -26,19 +26,22 @@ The easiest way to upgrade is to setup an empty website, deploy a fresh copy of 
 
 ===Config Code===
 
- * There have been a few lines added to and removed from the files stored in the `config` folder. We recommend copying any unique settings that you have from your old copy to the new Wheels config files.
+ * *0.9.1:* The way configuration settings are done has changed quite a bit. To change a Wheels application setting, use the new `set()` function with the name of the Wheels property to change. (For example, `<cfset set(dataSourceName="mydatasource")>`.) To see a list of available Wheels settings, refer to the [Configuration] chapter.
+ * *0.9.1:* For your own custom application settings outside of Wheels settings, we recommend using the `application` scope. Please do not use `application.wheels` because that's reserved for Wheels settings.
 
 ===Model Code===
 
+ * *0.9.1:* You can now change a given model's data source by calling the `dataSource()` function from the model's `init()` method with arguments for `name`, `username` (optional), and `password` (optional).
  * A model file is now optional if you don't need to associate it with other models or add any additional business logic.
  * `findById()` is now called `findByKey()`. Additionally, its `id` argument is now named `key` instead. For composite keys, this argument will accept a comma-delimited list.
- * *0.9:* When using a model's `findByKey()` or `findOne()` functions, the `found` property is no longer available. Instead, the functions return `false` if the record was not found.
+ * When using a model's `findByKey()` or `findOne()` functions, the `found` property is no longer available. Instead, the functions return `false` if the record was not found.
  * A model's `errorsOn()` function now always returns an array, even if there are no errors on the field. When there are errors for the field, the array elements will contain a `struct` with `name`, `fieldName`, and `message` elements.
  * The way callbacks are created has changed. There is now a method for each callback event (`beforeValidation()`, `beforeValidationOnCreate()`, etc.) that should be called from your model's `init()` method. These methods take a single argument: the method within your model that should be invoked during the callback event. See the chapter on ObjectCallbacks for an example.
 
 ===View Code===
 
- * *0.9:* The location of the default layout has changed. It is now stored at `/views/layout.cfm`. Now controller-specific layouts are stored in their respective view folder as `layout.cfm`. For example, a custom layout for `www.domain.com/about` would be stored at `/views/about/layout.cfm`.
+ * *0.9.1:* There is now an included `wheels` view folder in `views`. Be sure to copy that into your existing Wheels app.
+ * The location of the default layout has changed. It is now stored at `/views/layout.cfm`. Now controller-specific layouts are stored in their respective view folder as `layout.cfm`. For example, a custom layout for `www.domain.com/about` would be stored at `/views/about/layout.cfm`.
  * In `linkTo()`, the `id` argument is now called `key`. It now accepts a comma-delimited list in the case of composite keys.
  * The `linkTo()` function also accepts an object for the `key` argument, in which case it will automatically extract the keys from it for use in the hyperlink.
  * The `linkTo()` function can be used only for controller-, action-, and route-driven links now. The `url` argument has been removed, so now all static links should be coded using a standard `<a>` tag. At least one of the following arguments is required: `controller`, `action`, or `route`.
