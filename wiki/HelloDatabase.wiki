@@ -32,4 +32,6 @@ Note a few things about these tables:
  # The table names are plural.
  # Each table has an auto-incrementing primary key named `id`.
 
-These are database _conventions_ used by Wheels. There are ways of going outside of these conventions in Wheels, but let's learn the conventional way first, cowboy. Sometimes you need to learn the rules before you know how to break them!
+These are database _conventions_ used by Wheels. This framework strongly encourages that everyone follow convention over configuration. That way everyone's doing things the same way, leading to less maintenance headaches down the road.
+
+Fortunately, there are ways of going outside of these conventions. But let's learn the conventional way first, cowboy. Sometimes you need to learn the rules before you can know how to break them.
