@@ -199,8 +199,8 @@
 
 <cffunction name="dataSource" returntype="void" access="public" output="false" hint="Use this method to override the data source connection information for a particular model.">
 	<cfargument name="name" type="string" required="true" hint="the data source name to connect to">
-	<cfargument name="username" type="string" required="true" hint="the username for the data source">
-	<cfargument name="password" type="string" required="true" hint="the password for the data source">
+	<cfargument name="username" type="string" required="false" default="" hint="the username for the data source">
+	<cfargument name="password" type="string" required="false" default="" hint="the password for the data source">
 	<cfscript>
 	StructAppend(variables.wheels.class.connection, arguments, true);
 	</cfscript>
