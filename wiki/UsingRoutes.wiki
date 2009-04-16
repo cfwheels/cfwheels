@@ -1,5 +1,5 @@
 #summary The convention for URLs in Wheels works for most situations and helps to promote an easy-to-maintain code base. With routes, you have the flexibility to break this convention when needed.
-#labels chapter,0.9
+#labels chapter,0.9.1
 
 ==The Convention for URLs==
 
@@ -81,9 +81,9 @@ Wheels will look through each custom route in order to see if there is a match. 
 Let's pretend that our `config/routes.cfm` file looks like this:
 
 {{{
-<cfset addRoute(name="newsAdmin", pattern="admin/news/[action]"), controller="NewsAdmin", action="index">
-<cfset addRoute(name="searchAdmin", pattern="admin/search/[action]", controller="SearchAdmin", action="index")>
-<cfset addRoute(name="adminRoot", pattern="admin/[action]", controller="Admin", action="index")>
+<cfset addRoute(name="newsAdmin", pattern="admin/news/[action]"), controller="NewsAdmin">
+<cfset addRoute(name="searchAdmin", pattern="admin/search/[action]", controller="SearchAdmin")>
+<cfset addRoute(name="adminRoot", pattern="admin/[action]", controller="Admin")>
 }}}
 
 Wheels would make sure that the URL didn't begin with `admin/news` or `admin/search` before calling the third route listed, `adminRoot`.
