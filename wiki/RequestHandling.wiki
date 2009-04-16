@@ -1,5 +1,5 @@
 #summary How Wheels handles an incoming request.
-#labels chapter,0.9
+#labels chapter,0.9.1
 
 Wheels is quite simple when it comes to figuring out how incoming requests map to code in your application. Let's look at a URL for an e-commerce website and dissect it a little. 
 
@@ -119,9 +119,11 @@ This also highlights the fact that Wheels is a very easy framework to get starte
 
 ==The `params` Struct==
 
-Besides making sure the correct code is executed, Wheels also does something else to simplify request handling for you. It combines the `url` and `form` scopes into one. This is something that most !ColdFusion frameworks do as well. In Wheels, it is done in the `params` struct.
+Besides making sure the correct code is executed, Wheels also does something else to simplify request handling for you. It combines the `URL` and `form` scopes into one. This is something that most !ColdFusion frameworks do as well. In Wheels, it is done in the `params` struct.
 
 The `params` struct is available to you in the controller and view files but not in the model files. (It's considered a best practice to not mix your request handling with your business logic.) Besides the form and URL scope variables, the `params` struct also contains the current controller and action name for easy reference.
+
+If the same variable exists in both the URL and the form scope, the one in the form scope will take precedence.
 
 To make this concept easier to grasp, imagine a login form on your website that submits to `http://localhost/account/login?sendTo=dashboard` with the variables `username` and `password` present in the form. Your `params` struct would look like this:
 
