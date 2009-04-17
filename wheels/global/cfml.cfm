@@ -4,7 +4,7 @@
 	<cfargument name="method" type="string" required="true">
 	<cfargument name="args" type="struct" required="false" default="#StructNew()#">
 	<cfargument name="timeout" type="numeric" required="false" default="30">
-	<cfset var loc = StructNew()>
+	<cfset var loc = {}>
 	<cflock name="#arguments.name#" type="readonly" timeout="#arguments.timeout#">
 		<cfset loc.returnValue = $invoke(component=arguments.object, method=arguments.method, argumentCollection=arguments.args)>
 	</cflock>
@@ -18,7 +18,7 @@
 	<cfargument name="conditionArgs" type="struct" required="false" default="#StructNew()#">
 	<cfargument name="executeArgs" type="struct" required="false" default="#StructNew()#">
 	<cfargument name="timeout" type="numeric" required="false" default="30">
-	<cfset var loc = StructNew()>
+	<cfset var loc = {}>
 	<cfset loc.returnValue = $invoke(method=arguments.condition, argumentCollection=arguments.conditionArgs)>
 	<cfif IsBoolean(loc.returnValue) AND NOT loc.returnValue>
 		<cflock name="#arguments.name#" timeout="#arguments.timeout#">
@@ -35,7 +35,7 @@
 	<cfargument name="execute" type="string" required="true">
 	<cfargument name="executeArgs" type="struct" required="false" default="#StructNew()#">
 	<cfargument name="timeout" type="numeric" required="false" default="30">
-	<cfset var loc = StructNew()>
+	<cfset var loc = {}>
 	<cfset loc.lockArgs = Duplicate(arguments)>
 	<cfset StructDelete(loc.lockArgs, "execute")>
 	<cfset StructDelete(loc.lockArgs, "executeArgs")>
@@ -80,19 +80,22 @@
 
 <cffunction name="$include" returntype="void" access="public" output="false">
 	<cfargument name="template" type="string" required="true">
+	<cfset var loc = {}>
 	<cfinclude template="../../#LCase(arguments.template)#">
 </cffunction>
 
 <cffunction name="$includeAndOutput" returntype="void" access="public" output="true">
 	<cfargument name="template" type="string" required="true">
+	<cfset var loc = {}>
 	<cfinclude template="../../#LCase(arguments.template)#">
 </cffunction>
 
 <cffunction name="$includeAndReturnOutput" returntype="string" access="public" output="false">
 	<cfargument name="template" type="string" required="true">
-	<cfset var returnValue = "">
-	<cfsavecontent variable="returnValue"><cfinclude template="../../#LCase(arguments.template)#"></cfsavecontent>
-	<cfreturn returnValue>
+	<cfset var loc = {}>
+	<!--- we prefix returnValue with $ here to make sure the variable does not get overwritten in the included template --->
+	<cfsavecontent variable="loc.$returnValue"><cfinclude template="../../#LCase(arguments.template)#"></cfsavecontent>
+	<cfreturn loc.$returnValue>
 </cffunction>
 
 <cffunction name="$directory" returntype="any" access="public" output="false">
@@ -114,7 +117,7 @@
 </cffunction>
 
 <cffunction name="$invoke" returntype="any" access="public" output="false">
-	<cfset var loc = StructNew()>
+	<cfset var loc = {}>
 	<cfset arguments.returnVariable = "loc.returnValue">
 	<cfinvoke attributeCollection="#arguments#">
 	<cfif StructKeyExists(loc, "returnValue")>
@@ -127,7 +130,7 @@
 </cffunction>
 
 <cffunction name="$dbinfo" returntype="any" access="public" output="false">
-	<cfset var loc = StructNew()>
+	<cfset var loc = {}>
 	<cfset arguments.name = "loc.returnValue">
 	<!--- we have to use this cfif here to get around a bug with railo --->
 	<cfif StructKeyExists(arguments, "table")>
