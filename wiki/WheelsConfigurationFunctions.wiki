@@ -1,18 +1,16 @@
-#summary Listing of all global functions.
+#summary Listing of all configuration functions.
 #labels chapter,0.9.1
 
-These functions are general purpose functions and can be called from anywhere.
+These functions should be called from files in the `config` folder.
 
 ==Example==
 
 {{{
-<cfoutput>#URLFor(action="anAction")#</cfoutput>
+<cfset set(dataSourceName="myDB")>
 }}}
 
 ==Functions==
 
  * [addRoute addRoute()]
- * [deObfuscateParam deObfuscateParam()]
- * [model model()]
- * [obfuscateParam obfuscateParam()]
- * [URLFor URLFor()]
+ * [get get()]
+ * [set set()]
