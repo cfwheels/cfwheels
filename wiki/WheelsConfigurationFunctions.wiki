@@ -1,0 +1,18 @@
+#summary Listing of all global functions.
+#labels chapter,0.9.1
+
+These functions are general purpose functions and can be called from anywhere.
+
+==Example==
+
+{{{
+<cfoutput>#URLFor(action="anAction")#</cfoutput>
+}}}
+
+==Functions==
+
+ * [addRoute addRoute()]
+ * [deObfuscateParam deObfuscateParam()]
+ * [model model()]
+ * [obfuscateParam obfuscateParam()]
+ * [URLFor URLFor()]
