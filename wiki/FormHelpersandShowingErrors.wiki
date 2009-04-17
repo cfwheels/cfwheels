@@ -1,5 +1,5 @@
 #summary Wheels ties your application's forms together with your model layer elegantly. With Wheels form conventions, you'll find yourself spending less time writing repetitive markup to display forms and error messages.
-#labels chapter,svn
+#labels chapter,0.9.1
 
 Coding is not all about backend, there is a great deal of work to perform on the frontend on any Web application. Hopefully Wheels is here to take you to greener pastures with its [ViewHelperFunctions Helper Functions]. 
 
@@ -73,7 +73,9 @@ Let's rewrite and then explain.
 </cfoutput>
 }}}
 
-I know what you are thinking, 6 lines of code can't replace all that work right? they do, the HTML output will be exactly the same as the previous example. By using Wheels conventions you are saving yourself a lot of key strokes and a great deal of time. Lets examine the code a bit further to understand what happens under the hood of Wheels.
+I know what you are thinking, 6 lines of code can't replace all that work right? they do, the HTML output will be exactly the same as the previous example. By using Wheels conventions you are saving yourself a lot of key strokes and a great deal of time. In fact, by setting up global defaults (as explained in the [ConfigurationandDefaults Configuration and Defaults] chapter) in your application for `prepend` and `append` you can make the code ever shorter.
+
+Lets examine the code a bit further to understand what happens under the hood of Wheels.
 
 Just like HTML, you need to open a form tag, insert some form controls and end the previous opened form tag. All of this is done via Wheels special [ViewHelperFunctions View Helper Functions], each of these functions will generate the corresponding  HTML markup in pure perfection.
 
