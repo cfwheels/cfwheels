@@ -1,5 +1,5 @@
 #summary Finding your way around a Wheels application.
-#labels chapter,0.9
+#labels chapter,0.9.1
 
 After downloading and unzipping Wheels, here's the directory structure that you will see (plus signs indicate folders):
 
@@ -11,6 +11,7 @@ After downloading and unzipping Wheels, here's the directory structure that you 
  * + javascripts
  * + miscellaneous
  * + models
+ * + lib
  * + plugins
  * + stylesheets
  * + views
@@ -80,7 +81,11 @@ This is a good place to put your CSS files.
 
 Use this folder for code that you need to run completely outside of the framework. (There is an empty `Application.cfc` file in here, which will prevent Wheels from taking part in the execution.)
 
-===`plugins `===
+===`lib`===
+
+This folder has no functionality at the moment.
+
+===`plugins`===
 
 Place any plugins you have downloaded and want installed here.
 
