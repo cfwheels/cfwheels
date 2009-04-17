@@ -1,11 +1,11 @@
 #summary An overview of Object Relational Mapping (ORM) and how is it used in Wheels. Learn how ORM simplifies your database interaction code.
-#labels chapter,0.9
+#labels chapter,0.9.1
 
 Mapping objects in your application to records in your database tables is a key concept in Wheels. Let's take a look at exactly how this mapping is performed.
 
 ==Class and Object Methods==
 
-Unlike most other languages, there is no notion of class level (aka "static") methods in !ColdFusion. This means that even if you call a method that does not need to use any instance data, you still have to create an object first.
+Unlike most other languages, there is no notion of class level (a.k.a. "static") methods in !ColdFusion. This means that even if you call a method that does not need to use any instance data, you still have to create an object first.
 
 In Wheels, we create an object like this.
 
