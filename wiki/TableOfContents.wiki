@@ -75,7 +75,7 @@
 
 ===The Wheels API===
 
- * [WheelsConfigurationFunctions Wheels Configuration Functions]
+ * [ConfigurationFunctions Configuration Functions]
  * [GlobalFunctions Global Functions]
  * [ControllerInitializationFunctions Controller Initialization Functions]
  * [ControllerRequestFunctions Controller Request Functions]
