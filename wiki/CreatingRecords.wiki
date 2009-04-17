@@ -1,5 +1,5 @@
 #summary How to create new objects and save them to the database.
-#labels chapter,0.9
+#labels chapter,0.9.1
 
 In Wheels, one way to create objects that represent records in our table is by calling the [new new()] class-level method.
 
@@ -32,7 +32,7 @@ Given that `params.newAuthor` is a `struct` containing the `firstName` and `last
 
 ==Saving Straight to the Database==
 
-If you want to save your new author to the database right away, you can use the [create create()] method instead.
+If you want to save a new author to the database right away, you can use the [create create()] method instead.
 
 {{{
 <cfset model("author").create(params.newAuthor)>
