@@ -1,5 +1,5 @@
 #summary Environments that match your development stages.
-#labels chapter,0.9
+#labels chapter,0.9.1
 
 Wheels allows you to set up different _environments_ that match stages in your development cycle. That way you can configure different values that match what services to call and how your app behaves based on where you are in your development.
 
@@ -41,7 +41,7 @@ Besides the 2 environments mentioned above, there are 3 more. Let's go through t
 
 ===Maintenance===
 
- * Shows your custom maintenance page unless the requesting IP address is in the exception list (set in the `application.settings.ipExceptions` variable in `config/settings.cfm` or passed along in the URL as `except=127.0.0.1,127.0.0.1`).
+ * Shows your custom maintenance page unless the requesting IP address is in the exception list (set by calling `set(ipExceptions="127.0.0.1")` in `config/settings.cfm` or passed along in the URL as `except=127.0.0.1`).
 
 This environment mode comes in handy when you want to briefly take your website offline to upload changes or modify databases on production servers.
 
