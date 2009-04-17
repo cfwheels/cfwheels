@@ -12,7 +12,6 @@
 <cffunction name="$runOnRequestEnd" returntype="void" access="public" output="false">
 	<cfargument name="targetpage" type="any" required="true">
 	<cfscript>
-		var loc = {};
 		if (application.wheels.showDebugInformation)
 			$debugPoint("requestEnd");
 		$include(template="#application.wheels.eventPath#/onrequestend.cfm");
