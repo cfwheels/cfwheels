@@ -249,8 +249,8 @@
 <cffunction name="model" returntype="any" access="public" output="false" hint="Returns a reference to the requested model so that class level methods can be called on it.">
 	<cfargument name="name" type="string" required="true" hint="Name of the model (class name) to get a reference to">
 	<cfscript>
-		loc.args.name = arguments.name;
-		loc.returnValue = $doubleCheckedLock(name="modelLock", condition="$cachedModelClassExists", execute="$createModelClass", conditionArgs=loc.args, executeArgs=loc.args);
+		var loc = {};
+		loc.returnValue = $doubleCheckedLock(name="modelLock", condition="$cachedModelClassExists", execute="$createModelClass", conditionArgs=arguments, executeArgs=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

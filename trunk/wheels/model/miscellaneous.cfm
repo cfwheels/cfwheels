@@ -1,7 +1,7 @@
 <cffunction name="table" returntype="void" access="public" output="false" hint="Use this method to tell Wheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard Wheels conventions of a singular object name mapping to a plural table name (i.e. `User.cfc` mapping to the table `users` for example).">
 	<cfargument name="name" type="string" required="true" hint="Name of the table to map this model to">
 	<cfscript>
-	variables.wheels.class.tableName = arguments.name;
+		variables.wheels.class.tableName = arguments.name;
 	</cfscript>
 </cffunction>
 
@@ -13,7 +13,7 @@
 	<cfargument name="name" type="string" required="true" hint="Name of the property">
 	<cfargument name="column" type="string" required="true" hint="Name of the column to map the property to">
 	<cfscript>
-	variables.wheels.class.mapping[arguments.column] = arguments.name;
+		variables.wheels.class.mapping[arguments.column] = arguments.name;
 	</cfscript>
 </cffunction>
 
@@ -202,7 +202,7 @@
 	<cfargument name="username" type="string" required="false" default="" hint="the username for the data source">
 	<cfargument name="password" type="string" required="false" default="" hint="the password for the data source">
 	<cfscript>
-	StructAppend(variables.wheels.class.connection, arguments, true);
+		StructAppend(variables.wheels.class.connection, arguments, true);
 	</cfscript>
 </cffunction>
 

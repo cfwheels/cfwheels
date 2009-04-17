@@ -80,6 +80,7 @@
 <cffunction name="$debugPoint" returntype="void" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
+		var loc = {};
 		if (!StructKeyExists(request.wheels, "execution"))
 			request.wheels.execution = {};
 		loc.iEnd = ListLen(arguments.name);

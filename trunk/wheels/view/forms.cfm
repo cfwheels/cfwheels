@@ -504,7 +504,6 @@
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateSelect.appendToLabel#" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.dateSelect.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
-		var loc = {};
 		arguments = $insertDefaults(name="dateSelect", reserved="id", input=arguments);
 		arguments.$functionName = "dateSelect";
 	</cfscript>
@@ -552,7 +551,6 @@
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.timeSelect.appendToLabel#" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.timeSelect.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
-		var loc = {};
 		arguments = $insertDefaults(name="timeSelect", reserved="id", input=arguments);
 		arguments.$functionName = "timeSelect";
 	</cfscript>
@@ -604,7 +602,6 @@
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateTimeSelect.appendToLabel#" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.dateTimeSelect.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
-		var loc = {};
 		arguments = $insertDefaults(name="dateTimeSelect", reserved="name,id", input=arguments);
 		arguments.$functionName = "dateTimeSelect";
 	</cfscript>
