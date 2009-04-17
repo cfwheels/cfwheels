@@ -44,7 +44,7 @@
 		}
 		else
 		{
-			loc.folder = LCase(cgi.http_host);
+			loc.folder = LCase(cgi.server_name);
 			loc.folder = ListDeleteAt(loc.folder, ListLen(loc.folder, "."), ".");
 			loc.folder = Replace(loc.folder, "www.", "");
 			loc.folder = Replace(loc.folder, ".co", "");
