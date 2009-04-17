@@ -141,4 +141,7 @@
 	application.wheels.validatesUniquenessOf = {message="[property] has already been taken"};
 	application.wheels.verifies = {handler=false};
 	application.wheels.yearSelectTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, startYear=Year(Now())-5, endYear=Year(Now())+5};
+
+	// set a flag to indicate that all settings have been loaded
+	application.wheels.initialized = true;
 </cfscript>

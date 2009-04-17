@@ -1,5 +1,5 @@
 <cfset this.rootDir = GetDirectoryFromPath(GetBaseTemplatePath())>
-<cfset this.name = Hash(this.rootDir & cgi.http_host)>
+<cfset this.name = Hash(this.rootDir)>
 <cfset this.mappings["/wheels"] = this.rootDir & "wheels">
 <cfset this.sessionManagement = true>
 <cfif StructKeyExists(server, "railo")>
