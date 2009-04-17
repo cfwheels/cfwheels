@@ -1,5 +1,5 @@
 #summary How to create links to other pages to your paginated data in your views.
-#labels chapter,0.9
+#labels chapter,0.9.1
 
 In the chapter titled [GettingPaginatedData Getting Paginated Data], we talked about how to get pages of records from the database (records 11-20, for example). Now we'll show you how to create links to other pages in your view.
 
@@ -55,8 +55,8 @@ Here is an example of using handles:
 
 In the controller...
 {{{
-<cfset users = model("User").findAll(handle="userQuery", page=params.page, perPage=25)>
-<cfset blogs = model("Blog").findAll(handle="blogQuery", page=params.page, perPage=25)>
+<cfset users = model("user").findAll(handle="userQuery", page=params.page, perPage=25)>
+<cfset blogs = model("blog").findAll(handle="blogQuery", page=params.page, perPage=25)>
 }}}
 
 In the view...
