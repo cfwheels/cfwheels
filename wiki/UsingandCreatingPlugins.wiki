@@ -19,17 +19,13 @@ Reloading Wheels is required when installing/uninstalling. (Issue a `reload=true
 
 ==Plugin Naming, Versioning, and Dependencies==
 
-When you download plugins, you will see that they are named something like this: `ViewHelpers-0.1.zip`. In this case, `0.1` is the version number of the `ViewHelpers` plugin. If you drop both `ViewHelpers-0.1.zip` and `ViewHelpers-0.2.zip` in the `plugins` folder, Wheels will use the one with the highest version number and ignore any others.
+When you download plugins, you will see that they are named something like this: `Scaffold-0.1.zip`. In this case, `0.1` is the version number of the `Scaffold` plugin. If you drop both `Scaffold-0.1.zip` and `Scaffold-0.2.zip` in the `plugins` folder, Wheels will use the one with the highest version number and ignore any others.
 
 If you try to install a plugin that is not compatible with your installed version of Wheels or not compatible with a previously installed plugin (i.e., they try to add/override the same functions), Wheels will throw an error on application start.
 
 ==Available Plugins==
 
-Here is a listing of all the available plugins at the time of this writing. Click the name of the plugin to download it.
-
-|| *Name* || *Description* || *Version* || *Compatible With* ||
-|| *[http://code.google.com Localizer]* || Use different languages || 0.1 || Wheels 0.9.1 ||
-|| *[http://code.google.com Scaffold]* || Build code || 0.2 || Wheels 0.9.1 ||
+To view all official plugins that are available for Wheels you can use the `PluginManager`. It is a plugin itself and is the only one that comes pre-installed with Wheels. Look for the link in the debug area of your application to locate the `PluginManager`
 
 ==Creating Your Own Plugins==
 
@@ -50,7 +46,7 @@ Here's an example:
 </cfcomponent>
 }}}
 
-The `index.cfm` file is the user interface for your plugin and will be viewable when browsing to `localhost/plugins/{yourPluginName}`.
+The `index.cfm` file is the user interface for your plugin and will be viewable when clicking through to it from the debug area of your application.
 
 ==Using a Plugin to Add or Alter Capabilities==
 
