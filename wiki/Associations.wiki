@@ -131,19 +131,21 @@ Note that if you switch the above statement around like this:
 
 You would then have to specify "post" in its plural form; "posts". If you're thinking about when to use the singular form and when to use the plural form just use the one that seems most natural. If you look at the two examples above you'll see that in example #1 you're asking for all posts including each post's *author* (hence the singular "author") and in example #2 you're asking for all authors and all of the *posts* (hence the plural "posts") written by each author.
 
-You're not limited to specifying just one association in the `include` argument. You can for example return data for authors, posts and comments in one call like this:
+You're not limited to specifying just one association in the `include` argument. You can for example return data for authors, posts and bios in one call like this:
 
 {{{
-<cfset authorsPostsAndComments = model("author").findAll(include="posts,comments")>
+<cfset authorsPostsAndComments = model("author").findAll(include="posts,bio")>
 }}}
 
 To include several tables, simply delimit the names of the models with a comma. All models should contain related associations, or else you'll get a mountain of repeated data back.
 
-When going up in the association structure (i.e. from a model that belongs to another mode) you use parenthesis to indicate this. Here's an example of the statement above but switched around to start from the `comment` model instead:
+When you want to include tables more than one step away you need to start using parenthesis. Look at the following example:
 
 {{{
-<cfset commentsPostsAndAuthors = model("comment").findAll(include="post(comment)")>
+<cfset commentsPostsAndAuthors = model("comment").findAll(include="post(author)")>
 }}}
+
+The use of parentheses above tells Wheels to look for an association named `author` on the `post` model instead of on the `comment` model, which is the default behavior.
 
 ====Handling Column Naming Collisions====
 
