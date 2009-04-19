@@ -93,9 +93,9 @@
 <cffunction name="$includeAndReturnOutput" returntype="string" access="public" output="false">
 	<cfargument name="template" type="string" required="true">
 	<cfset var loc = {}>
-	<!--- we prefix returnValue with $ here to make sure the variable does not get overwritten in the included template --->
-	<cfsavecontent variable="loc.$returnValue"><cfinclude template="../../#LCase(arguments.template)#"></cfsavecontent>
-	<cfreturn loc.$returnValue>
+	<!--- we prefix returnValue with "wheels" here to make sure the variable does not get overwritten in the included template --->
+	<cfsavecontent variable="loc.wheelsReturnValue"><cfinclude template="../../#LCase(arguments.template)#"></cfsavecontent>
+	<cfreturn loc.wheelsReturnValue>
 </cffunction>
 
 <cffunction name="$directory" returntype="any" access="public" output="false">
