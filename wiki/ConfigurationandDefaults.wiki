@@ -26,17 +26,25 @@ Sometimes is useful for our applications to "force" URL rewriting, by default Wh
   <cfset set("URLRewriting", "Off")>
 }}}
 
-The code above will tell Wheels to skip its automatic detection of the URL Rewriting capabilities and just set it as "Off",
+The code above will tell Wheels to skip its automatic detection of the URL Rewriting capabilities and just set it as "Off".
 
 ===Datasource settings===
 
-Probably the biggest configuration of them all. What is an application without a database to back all of it's precious data? The datasource configuration is what tells Wheels which database to use for all of its models (this can be overwritten per Model bases, but that will be covered later) To set this up in Wheels is just as easy as the previous example:
+Probably the biggest configuration of them all. What is an application without a database to back all of it's precious data? The datasource configuration is what tells Wheels which database to use for all of its models (this can be overwritten per Model basis, but that will be covered later) To set this up in Wheels is just as easy as the previous example:
 
 {{{
   <cfset set(dataSourceName="yourDataSourceName")>
   <cfset set(dataSourceUserName="yourDataSourceUsername")>
   <cfset set(dataSourcePassword="yourDataSourcePassword")> 
 }}}
+
+===Environment settings===
+
+=== Caching settings===
+
+=== Function settings===
+
+=== Miscellaneous settings===
 
 ==Related==
 [ConfigurationFunctions Configuration Functions]
