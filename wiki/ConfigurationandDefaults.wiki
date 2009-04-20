@@ -1,0 +1,42 @@
+#summary An overview of Wheels configuration and how is it used in your applications. Learn how to overwrite Wheels convention to make it your own.
+#labels chapter,0.9.1
+
+We all love the "Convention over Configuration" motto of Wheels, but what about those two cases that pops into everyone's head. What if I want to develop in my own way? or, what about an existing application that I need to port into Wheels?. Gladly, that's what the Configuration and Defaults are here for. Let's take a look at exactly how is this performed.
+
+All of this is possible by a s ingle function in Wheels, the [set set()] function, with it you can perform all sorts of tweaks into the Framework. 
+
+==Types of Configuration options available==
+
+Just like you guessed by now, there are several types of configurations that you can perform in Wheels to overwrite all those default behaviors. In Wheels you can find all these configuration options:
+
+ * URL Rewrite settings 
+ * Datasource settings
+ * Environment settings
+ * Caching settings
+ * Function settings
+ * Miscellaneous settings
+
+Let's take a closer look at each of these options.
+
+===URL Rewrite settings===
+
+Sometimes is useful for our applications to "force" URL rewriting, by default Wheels will try to determinate what types of URL rewriting to perform and set it for you, but you can force in or out this setting by using the example below:
+
+{{{
+  <cfset set("URLRewriting", "Off")>
+}}}
+
+The code above will tell Wheels to skip its automatic detection of the URL Rewriting capabilities and just set it as "Off",
+
+===Datasource settings===
+
+Probably the biggest configuration of them all. What is an application without a database to back all of it's precious data? The datasource configuration is what tells Wheels which database to use for all of its models (this can be overwritten per Model bases, but that will be covered later) To set this up in Wheels is just as easy as the previous example:
+
+{{{
+  <cfset set(dataSourceName="yourDataSourceName")>
+  <cfset set(dataSourceUserName="yourDataSourceUsername")>
+  <cfset set(dataSourcePassword="yourDataSourcePassword")> 
+}}}
+
+==Related==
+[ConfigurationFunctions Configuration Functions]
