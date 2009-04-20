@@ -1,6 +1,7 @@
 <cffunction name="onSessionStart" returntype="void" access="public" output="false">
 	<cfscript>
-		$simpleLock(execute="$runOnSessionStart", scope="application", type="readOnly");
+		$include(template="#application.wheels.eventPath#/beforeonsessionstart.cfm");
+		$simpleLock(execute="$runOnSessionStart", name="wheels", type="readOnly");
 	</cfscript>
 </cffunction>
 

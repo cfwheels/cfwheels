@@ -1,3 +1,9 @@
+<cffunction name="reloadApplication" returntype="void" access="public" output="false" hint="Call this to reload the entire application (including Wheels itself).">
+	<cfscript>
+		$simpleLock(execute="onApplicationStart", name="wheels", type="exclusive");
+	</cfscript>
+</cffunction>
+
 <cffunction name="set" returntype="void" access="public" output="false" hint="Use to configure a global setting.">
 	<cfscript>
 		var loc = {};
