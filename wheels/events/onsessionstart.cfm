@@ -1,8 +1,6 @@
 <cffunction name="onSessionStart" returntype="void" access="public" output="false">
 	<cfscript>
-		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "eventPath"))
-			$include(template="#application.wheels.eventPath#/beforeonsessionstart.cfm");
-		$simpleLock(execute="$runOnSessionStart", name="wheels", type="readOnly");
+		$simpleLock(execute="$runOnSessionStart", name="wheelsReloadLock", type="readOnly");
 	</cfscript>
 </cffunction>
 

@@ -1,7 +1,7 @@
 <cffunction name="onRequestEnd" returntype="void" access="public" output="true">
 	<cfargument name="targetpage" type="any" required="true">
 	<cfscript>
-		$simpleLock(execute="$runOnRequestEnd", executeArgs=arguments, name="wheels", type="readOnly");
+		$simpleLock(execute="$runOnRequestEnd", executeArgs=arguments, name="wheelsReloadLock", type="readOnly");
 		if (application.wheels.showDebugInformation && StructKeyExists(request.wheels, "showDebugInformation") && request.wheels.showDebugInformation)
 		{
 			$includeAndOutput(template="wheels/events/onrequestend/debug.cfm");
