@@ -1,11 +1,9 @@
 <cffunction name="onRequestStart" returntype="void" access="public" output="false">
 	<cfargument name="targetPage" type="any" required="true">
 	<cfscript>
-		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "eventPath"))
-			$include(template="#application.wheels.eventPath#/beforeonrequeststart.cfm");
 		if (StructKeyExists(URL, "reload") && (!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword") || !Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
-			reloadApplication();
-		$simpleLock(execute="$runOnRequestStart", executeArgs=arguments, name="wheels", type="readOnly");
+			$simpleLock(execute="onApplicationStart", name="wheelsReloadLock", type="exclusive");
+		$simpleLock(execute="$runOnRequestStart", executeArgs=arguments, name="wheelsReloadLock", type="readOnly");
 	</cfscript>
 </cffunction>
 

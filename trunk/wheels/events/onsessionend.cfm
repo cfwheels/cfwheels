@@ -2,7 +2,7 @@
 	<cfargument name="sessionscope" type="any" required="true">
   <cfargument name="applicationscope" type="any" required="true">
 	<cfscript>
-		$simpleLock(execute="$runOnSessionEnd", executeArgs=arguments, name="wheels", type="readOnly");
+		$simpleLock(execute="$runOnSessionEnd", executeArgs=arguments, name="wheelsReloadLock", type="readOnly");
 	</cfscript>
 </cffunction>
 

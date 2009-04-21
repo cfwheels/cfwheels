@@ -1,7 +1,7 @@
 <cffunction name="onMissingTemplate" returntype="void" access="public" output="true">
 	<cfargument name="targetpage" type="any" required="true">
 	<cfscript>
-		$simpleLock(execute="$runOnMissingTemplate", executeArgs=arguments, name="wheels", type="readOnly");
+		$simpleLock(execute="$runOnMissingTemplate", executeArgs=arguments, name="wheelsReloadLock", type="readOnly");
 	</cfscript>
 </cffunction>
 
