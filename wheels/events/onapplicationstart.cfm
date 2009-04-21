@@ -1,36 +1,10 @@
 <cffunction name="onApplicationStart" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
-
+		
 		// set or reset all settings but make sure to pass along the reload password between forced reloads with "reload=x"
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "reloadPassword"))
 			loc.oldReloadPassword = application.wheels.reloadPassword;
-		
-		// delete the wheels struct
-		StructDelete(application, "wheels");
-
-		// set up paths based on if user is running one app or multiple apps in sub folders
-		if (DirectoryExists(this.rootDir & "config"))
-		{
-			loc.root = this.rootDir;
-			loc.path = "";
-			loc.componentPath = "";
-		}
-		else
-		{
-			loc.folder = LCase(cgi.server_name);
-			loc.folder = ListDeleteAt(loc.folder, ListLen(loc.folder, "."), ".");
-			loc.folder = Replace(loc.folder, "www.", "");
-			loc.root = this.rootDir & loc.folder & "/";
-			loc.path = loc.folder & "/";
-			loc.componentPath = loc.folder & ".";
-		}
-
-		// include developer code that should be run before the framework gets involved with anything
-		loc.eventPath = loc.path & "events";
-		$include(template="#loc.eventPath#/beforeonapplicationstart.cfm");
-
-		// set up the wheels struct here and the reload password that was carried over from the old application
 		application.wheels = {};
 		if (StructKeyExists(loc, "oldReloadPassword"))
 			application.wheels.reloadPassword = loc.oldReloadPassword;
@@ -61,7 +35,23 @@
 		application.wheels.routes = [];
 		application.wheels.namedRoutePositions = {};
 		
-		// set up paths
+		// set up paths based on if user is running one app or multiple apps in sub folders
+		if (DirectoryExists(this.rootDir & "config"))
+		{
+			loc.root = this.rootDir;
+			loc.path = "";
+			loc.componentPath = "";
+		}
+		else
+		{
+			loc.folder = LCase(cgi.server_name);
+			loc.folder = ListDeleteAt(loc.folder, ListLen(loc.folder, "."), ".");
+			loc.folder = Replace(loc.folder, "www.", "");
+			loc.folder = Replace(loc.folder, ".co", "");
+			loc.root = this.rootDir & loc.folder & "/";
+			loc.path = loc.folder & "/";
+			loc.componentPath = loc.folder & ".";
+		}
 		application.wheels.configPath = loc.path & "config";
 		application.wheels.controllerPath = loc.path & "controllers";
 		application.wheels.controllerComponentPath = loc.componentPath & "controllers";
