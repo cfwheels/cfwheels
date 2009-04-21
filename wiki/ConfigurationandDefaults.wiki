@@ -40,6 +40,13 @@ Probably the biggest configuration of them all. What is an application without a
 
 ===Environment settings===
 
+Not only the environments are useful for separating your production app from your "under development" app, but it is also a place for your to overwrite settings that will only take effect on the specified environment. Let's take for example that I want to enable debug information on my "production" app (although not a good idea, it will do for this example)
+
+{{{
+  <!--- /config/production/settings.cfm --->
+  <cfset set(showDebugInformation=true)>
+}}}
+
 === Caching settings===
 
 === Function settings===
