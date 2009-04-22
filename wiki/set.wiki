@@ -1,14 +1,39 @@
-#summary One-sentence summary of this page.
+#summary set(any[functionName])
 #labels api,0.9.1
 
-= Introduction =
+*Category*:
 
-Add your content here.
+[ConfigurationFunctions Configuration Functions]
 
+*Description*:
 
-= Details =
+Use to configure a global setting.
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+*Return Type*:
+
+Void
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| *any* || string || true || - || Name/value to set ||
+|| *functionName* || string || true || - || The name of the function when setting a default value for an argument ||
+
+*Examples*:
+
+{{{
+<cfset set(URLRewriting="Partial")>
+}}}
+
+{{{
+<cfset set(functionName="linkTo", onlyPath=false)>
+}}}
+
+*Related*:
+
+ * [ConfigurationandDefaults ConfigurationandDefaults] (chapter)
+ * [get get()] (function)
