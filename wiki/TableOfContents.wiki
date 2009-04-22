@@ -63,8 +63,6 @@
 
  * [ConfigurationandDefaults Configuration and Defaults]
  * [DirectoryStructure Directory Structure]
- * [Conventions Conventions]
- * [Terminology Terminology]
  * [SwitchingEnvironments Switching Environments]
  * [UsingandCreatingPlugins Using and Creating Plugins]
 
