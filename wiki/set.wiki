@@ -26,11 +26,14 @@ Void
 *Examples*:
 
 {{{
-<cfset set(URLRewriting="Partial")>
+<cfset set(URLRewriting="Partial")> <!--- can be set to "On", "Off" or "Partial" --->
+<cfset set(dataSourceName="")>
+<cfset set(dataSourceUserName="")>
 }}}
 
 {{{
-<cfset set(functionName="linkTo", onlyPath=false)>
+<cfset set(functionName="average", distinct=false)>
+<cfset set(functionName="buttonTo", onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable="")>
 }}}
 
 *Related*:
