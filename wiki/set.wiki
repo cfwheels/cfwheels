@@ -29,11 +29,114 @@ Void
 <cfset set(URLRewriting="Partial")> <!--- can be set to "On", "Off" or "Partial" --->
 <cfset set(dataSourceName="")>
 <cfset set(dataSourceUserName="")>
+<cfset set(dataSourcePassword ="")>
 }}}
 
 {{{
-<cfset set(functionName="average", distinct=false)>
-<cfset set(functionName="buttonTo", onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable="")>
+<!--- environment settings --->
+<cfset set(cacheDatabaseSchema = false)>
+<cfset set(cacheFileChecking = false)>
+<cfset set(cacheImages = false)>
+<cfset set(cacheModelInitialization = false)>
+<cfset set(cacheControllerInitialization = false)>
+<cfset set(cacheRoutes = false)>
+<cfset set(cacheActions = false)>
+<cfset set(cachePages = false)>
+<cfset set(cachePartials = false)>
+<cfset set(cacheQueries = false)>
+<cfset set(showDebugInformation = true)>
+<cfset set(showErrorInformation = true)>
+<cfset set(sendEmailOnError = false)>
+<cfset set(errorEmailAddress = "")>      
+}}}
+
+{{{
+<!--- miscellaneous settings --->
+<cfset set(tableNamePrefix = "")>
+<cfset set(obfuscateURLs = false)>
+<cfset set(reloadPassword = "")>
+<cfset set(softDeleteProperty = "deletedAt")>
+<cfset set(timeStampOnCreateProperty = "createdAt")>
+<cfset set(timeStampOnUpdateProperty = "updatedAt")>
+<cfset set(ipExceptions = "")>
+<cfset set(overwritePlugins = true)>
+        
+<!--- caching settings --->
+<cfset set(maximumItemsToCache = 5000)>
+<cfset set(cacheCullPercentage = 10)>
+<cfset set(cacheCullInterval = 5)>
+<cfset set(defaultCacheTime = 60)>
+}}}
+
+{{{
+<cfset set(functionName=average, distinct=false)>
+<cfset set(functionName=buttonTo, onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable="")>
+<cfset set(functionName=caches, time=60)>
+<cfset set(functionName=checkBox, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", checkedValue=1, unCheckedValue=0)>
+<cfset set(functionName=checkBoxTag, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", value=1)>
+<cfset set(functionName=dateSelect, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names")>
+<cfset set(functionName=dateSelectTags, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names")>
+<cfset set(functionName=dateTimeSelect, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, separator=" - ")>
+<cfset set(functionName=dateTimeSelectTags, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, separator=" - ")>
+<cfset set(functionName=daySelectTag, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false)>
+<cfset set(functionName=delete, parameterize=true)>
+<cfset set(functionName=deleteAll, parameterize=true, instantiate=false)>
+<cfset set(functionName=distanceOfTimeInWords, includeSeconds=false)>
+<cfset set(functionName=errorMessageOn, prependText="", appendText="", wrapperElement="span", class="error-message")>
+<cfset set(functionName=errorMessagesFor, class="error-messages", showDuplicates=true)>
+<cfset set(functionName=exists, reload=false, parameterize=true)>
+<cfset set(functionName=fileField, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span")>
+<cfset set(functionName=fileFieldTag, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="")>
+<cfset set(functionName=findAll, reload=false, parameterize=true, perPage=10, order="")>
+<cfset set(functionName=findByKey, reload=false, parameterize=true)>
+<cfset set(functionName=findOne, reload=false, parameterize=true)>
+<cfset set(functionName=hiddenField, )>
+<cfset set(functionName=hourSelectTag, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false)>
+<cfset set(functionName=imageTag, )>
+<cfset set(functionName=javaScriptIncludeTag, type="text/javascript")>
+<cfset set(functionName=linkTo, onlyPath=true, host="", protocol="", port=0)>
+<cfset set(functionName=mailTo, encode=false)>
+<cfset set(functionName=minuteSelectTag, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, minuteStep=1)>
+<cfset set(functionName=monthSelectTag, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, monthDisplay="names")>
+<cfset set(functionName=paginationLinks, windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prependToLink="", appendToLink="", classForCurrent="", name="page")>
+<cfset set(functionName=passwordField, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span")>
+<cfset set(functionName=passwordFieldTag, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="")>
+<cfset set(functionName=radioButton, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span")>
+<cfset set(functionName=radioButtonTag, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="")>
+<cfset set(functionName=redirectTo, onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302)>
+<cfset set(functionName=renderPage, layout=true)>
+<cfset set(functionName=renderPageToString, layout=true)>
+<cfset set(functionName=save, parameterize=true)>
+<cfset set(functionName=secondSelectTag, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false)>
+<cfset set(functionName=select, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, multiple=false, valueField="", textField="")>
+<cfset set(functionName=selectTag, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, multiple=false, valueField="", textField="")>
+<cfset set(functionName=sendEmail, layout=false, detectMultipart=true)>
+<cfset set(functionName=sendFile, disposition="attachment")>
+<cfset set(functionName=startFormTag, onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, spamProtection=false)>
+<cfset set(functionName=styleSheetLinkTag, type="text/css", media="all")>
+<cfset set(functionName=submitTag, value="Save changes", image="", disable="")>
+<cfset set(functionName=sum, distinct=false)>
+<cfset set(functionName=textArea, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span")>
+<cfset set(functionName=textAreaTag, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="")>
+<cfset set(functionName=textField, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span")>
+<cfset set(functionName=textFieldTag, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="")>
+<cfset set(functionName=timeAgoInWords, includeSeconds=false)>
+<cfset set(functionName=timeSelect, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1)>
+<cfset set(functionName=timeSelectTags, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1)>
+<cfset set(functionName=timeUntilInWords, includeSeconds=false)>
+<cfset set(functionName=update, parameterize=true)>
+<cfset set(functionName=updateAll, parameterize=true, instantiate=false)>
+<cfset set(functionName=URLFor, onlyPath=true, host="", protocol="", port=0)>
+<cfset set(functionName=validatesConfirmationOf, message="[property] should match confirmation")>
+<cfset set(functionName=validatesExclusionOf, message="[property] is reserved", allowBlank=false)>
+<cfset set(functionName=validatesFormatOf, message="[property] is invalid", allowBlank=false)>
+<cfset set(functionName=validatesInclusionOf, message="[property] is not included in the list", allowBlank=false)>
+<cfset set(functionName=validatesLengthOf, message="[property] is the wrong length", allowBlank=false, exactly=0, maximum=0, minimum=0, within="")>
+<cfset set(functionName=validatesNumericalityOf, message="[property] is not a number", allowBlank=false, onlyInteger=false)>
+<cfset set(functionName=validatesPresenceOf, message="[property] can't be empty")>
+<cfset set(functionName=validatesUniquenessOf, message="[property] has already been taken")>
+<cfset set(functionName=verifies, handler=false)>
+<cfset set(functionName=yearSelectTag, label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, startYear=Year(Now())-5, endYear=Year(Now())+5)>
 }}}
 
 *Related*:
