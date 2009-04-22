@@ -69,6 +69,7 @@ Void
 }}}
 
 {{{
+<!--- function settings --->
 <cfset set(functionName=average, distinct=false)>
 <cfset set(functionName=buttonTo, onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable="")>
 <cfset set(functionName=caches, time=60)>
