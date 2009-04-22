@@ -1,11 +1,11 @@
 #summary An overview of Wheels configuration and how is it used in your applications. Learn how to overwrite Wheels convention to make it your own.
 #labels chapter,0.9.1
 
-We all love the "Convention over Configuration" motto of Wheels, but what about those two cases that pops into everyone's head. What if I want to develop in my own way? or, what about an existing application that I need to port into Wheels?. Gladly, that's what the Configuration and Defaults are here for. Let's take a look at exactly how is this performed.
+We all love the "Convention over Configuration" motto of Wheels, but what about those two cases that pops into everyone's head. What if I want to develop in my own way? or, what about an existing application that I need to port into Wheels?. Gladly, that's what the Configuration and Defaults are there for. Let's take a look at exactly how is this performed.
 
-All of this is possible by a s ingle function in Wheels, the [set set()] function, with it you can perform all sorts of tweaks into the Framework. 
+All of this is possible by a single function in Wheels, the [set set()] function, with it you can perform all sorts of tweaks into the Framework. 
 
-==Types of Configuration options available==
+==Types of configurations available==
 
 Just like you guessed by now, there are several types of configurations that you can perform in Wheels to overwrite all those default behaviors. In Wheels you can find all these configuration options:
 
@@ -59,7 +59,31 @@ Let's say your application generates dynamic routes and you need it to check the
 
 === Function settings===
 
+Ok, here it's where the fun begins. Wheels comes with a lot of functions baked in to make your development life easier. A lot of those functions have default argument values to minimize the amount of code that you need to write to get a function up and running. And yes, you guessed it, Wheels lets you overwrite those default argument values application wide.
+
+Let's look at a little of example:
+
+{{{
+  <cfset set(functionName="findAll", perPage=20)>
+}}}
+
+That little line of code will make all calls to the findAll method in Wheels return a maximun number of 20 record per page (if pagination is enable for that findAll call). How great is that? you don't need to set that variable for every single call to findAll if you want to return a different page size than the default value of 10 records.
+
 === Miscellaneous settings===
+
+What about those variables that doesn't fit on those previous 5 categories?. Well, they all fall right into this miscellaneous section.
+
+Let's say you don't like the convention name for the soft delete feature of Wheels, changing it will be as easy as:
+
+{{{
+  <cfset set(softDeleteProperty = "trashedAt")>
+}}}
+
+This will enable soft delete on all models that contains the `trashedAt` property instead of the default `deletedAt`.
+
+=== Wrapping it up ===
+
+There are literally hundreds (and growing) configurations options in Wheels for you to play around with. So go ahead, and sink your teeth into Wheels configuration and defaults.
 
 ==Related==
 [ConfigurationFunctions Configuration Functions]
