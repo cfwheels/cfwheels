@@ -23,7 +23,7 @@ Let's take a closer look at each of these options.
 Sometimes is useful for our applications to "force" URL rewriting, by default Wheels will try to determinate what types of URL rewriting to perform and set it for you, but you can force in or out this setting by using the example below:
 
 {{{
-  <cfset set("URLRewriting", "Off")>
+  <cfset set(URLRewriting = "Off")>
 }}}
 
 The code above will tell Wheels to skip its automatic detection of the URL Rewriting capabilities and just set it as "Off".
@@ -48,6 +48,14 @@ Not only the environments are useful for separating your production app from you
 }}}
 
 === Caching settings===
+
+Wheels does a pretty good job at caching the framework and its output to speed up your application, but personalization is key, here is where caching settings comes into play. Control just how you want the framework to cache which parts of your application to get the most out of wheels.
+
+Let's say your application generates dynamic routes and you need it to check the routes on each request. This task will be as simple as this line of code:
+
+{{{
+  <cfset set(cacheRoutes = false)>
+}}}
 
 === Function settings===
 
