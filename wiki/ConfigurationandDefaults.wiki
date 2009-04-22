@@ -20,7 +20,7 @@ Let's take a closer look at each of these options.
 
 ===URL Rewrite settings===
 
-Sometimes is useful for our applications to "force" URL rewriting, by default Wheels will try to determinate what types of URL rewriting to perform and set it for you, but you can force in or out this setting by using the example below:
+Sometimes is useful for our applications to "force" URL rewriting, by default Wheels will try to determinate what type of URL rewriting to perform and set it up for you, but you can force in or out this setting by using the example below:
 
 {{{
   <cfset set(URLRewriting="Off")>
@@ -40,7 +40,7 @@ Probably the biggest configuration of them all. What is an application without a
 
 ===Environment settings===
 
-Not only the environments are useful for separating your production app from your "under development" app, but it is also a place for your to overwrite settings that will only take effect on the specified environment. Let's take for example that I want to enable debug information on my "production" app (although not a good idea, it will do for this example)
+Not only the environments are useful for separating your production app from your "under development" app, but it is also a place for you to overwrite settings that will only take effect on the specified environment. Let's take for example that I want to enable debug information on my "production" app (although not a good idea, it will do for this example)
 
 {{{
   <!--- /config/production/settings.cfm --->
@@ -49,7 +49,7 @@ Not only the environments are useful for separating your production app from you
 
 === Caching settings===
 
-Wheels does a pretty good job at caching the framework and its output to speed up your application, but personalization is key, here is where caching settings comes into play. Control just how you want the framework to cache which parts of your application to get the most out of wheels.
+Wheels does a pretty good job at caching the framework and its output to speed up your application, but personalization is key, here is where caching settings comes into play. Control just how you want the framework to cache which parts of your application to get the most out of Wheels.
 
 Let's say your application generates dynamic routes and you need it to check the routes on each request. This task will be as simple as this line of code:
 
@@ -71,7 +71,7 @@ That little line of code will make all calls to the findAll method in Wheels ret
 
 === Miscellaneous settings===
 
-What about those variables that doesn't fit on those previous 5 categories?. Well, they all fall right into this miscellaneous section.
+What about those situations that doesn't fit on those previous 5 categories?. Well, they all fall right into this miscellaneous section.
 
 Let's say you don't like the convention name for the soft delete feature of Wheels, changing it will be as easy as:
 
