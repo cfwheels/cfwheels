@@ -3,13 +3,30 @@
 
 Wheels's built in model provides your application with some simple and powerful functionality for interacting with databases. To get started, you make some simple configurations, call some functions within your controllers, and that's it. Best yet, you will rarely ever need to write SQL code to get those redundant CRUD tasks out of the way.
 
-==Setting up the Data Source==
-
-Description here.
-
 ==Our Sample Application: User Management and Authentication==
 
 We'll learn by building part of a sample authentication and user management application. This tutorial will teach you the basics of interacting with Wheels's ORM (which is short for object relational mapping).
+
+==Setting up the Data Source==
+
+By default, Wheels will connect to a data source that has the same name as the folder containing your Wheels application. So if your Wheels application is in a folder called `C:\websites\mysite\blog\`, then it will connect to a data source named `blog`.
+
+To change this default behavior, open the file at `config/settings.cfm`. In a fresh install of Wheels, you'll see some commented-out lines of code that read as such:
+
+{{{
+<!---
+	If you leave these settings commented out, Wheels will set the data source name to the same name as the folder the application resides in.
+	<cfset set(dataSourceName="")>
+	<cfset set(dataSourceUserName="")>
+	<cfset set(dataSourcePassword="")> 
+--->
+}}}
+
+Uncomment the lines that you need to tell Wheels what it needs to know about the data source and provide the appropriate values, which may include `dataSourceName`, `dataSourceUserName`, and `dataSourcePassword`.
+
+{{{
+<cfset set(dataSourceName="myblogapp")>
+}}}
 
 ===Our Sample Data Structure===
 
