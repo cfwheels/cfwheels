@@ -330,13 +330,27 @@
 		{
 			if (isNew())
 			{
-				if ($callback("beforeValidationOnCreate") && $validate("onCreate") && $callback("beforeValidation") && $validate("onSave") && $callback("afterValidation") && $callback("beforeSave") && $callback("beforeCreate") && $create(parameterize=arguments.parameterize) && $callback("afterCreate") && $callback("afterSave"))
-					returnValue = true;
+				if ($callback("beforeValidationOnCreate") && $validate("onCreate") && $callback("beforeValidation") && $validate("onSave") && $callback("afterValidation") && $callback("beforeSave") && $callback("beforeCreate"))
+				{
+					returnValue = $create(parameterize=arguments.parameterize);
+					if (returnValue)
+					{
+						$callback("afterCreate");
+						$callback("afterSave");
+					}
+				}
 			}
 			else
 			{
-				if ($callback("beforeValidationOnUpdate") && $validate("onUpdate") && $callback("beforeValidation") && $validate("onSave") && $callback("afterValidation") && $callback("beforeSave") && $callback("beforeUpdate") && $update(parameterize=arguments.parameterize) && $callback("afterUpdate") && $callback("afterSave"))
-					returnValue = true;
+				if ($callback("beforeValidationOnUpdate") && $validate("onUpdate") && $callback("beforeValidation") && $validate("onSave") && $callback("afterValidation") && $callback("beforeSave") && $callback("beforeUpdate"))
+				{
+					returnValue = $update(parameterize=arguments.parameterize);
+					if (returnValue)
+					{
+						$callback("afterUpdate");
+						$callback("afterSave");
+					}
+				}
 			}
 		}
 	</cfscript>
@@ -362,36 +376,18 @@
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.delete.parameterize#" hint="See documentation for `findAll`">
 	<cfscript>
 		var loc = {};
-		loc.proceed = true;
-		loc.iEnd = ArrayLen(variables.wheels.class.callbacks.beforeDelete);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-       	{
-        	loc.proceed = $invoke(method=variables.wheels.class.callbacks.beforeDelete[loc.i]);
-            if (StructKeyExists(loc, "proceed") && !loc.proceed)
-            	break;
-		}
-		if (loc.proceed)
+		loc.returnValue = false;
+		if ($callback("beforeDelete"))
 		{
         	loc.sql = [];
         	loc.sql = $addDeleteClause(sql=loc.sql);
             loc.sql = $addKeyWhereClause(sql=loc.sql);
             loc.del = variables.wheels.class.adapter.query(sql=loc.sql, parameterize=arguments.parameterize);
-            loc.proceed = true;
-            loc.iEnd = ArrayLen(variables.wheels.class.callbacks.afterDelete);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+            if (loc.del.result.recordCount == 1)
             {
-            	loc.proceed = $invoke(method=variables.wheels.class.callbacks.afterDelete[loc.i]);
-                if (StructKeyExists(loc, "proceed") && !loc.proceed)
-                	break;
-			}
- 			if (loc.proceed)
             	loc.returnValue = true;
-			else
-            	loc.returnValue = false;
-		}
-        else
-        {
-        	loc.returnValue = false;
+            	$callback("afterDelete");
+            }
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
