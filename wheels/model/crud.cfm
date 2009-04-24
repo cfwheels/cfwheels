@@ -497,6 +497,7 @@
 </cffunction>
 
 <cffunction name="key" returntype="string" access="public" output="false" hint="Returns the value of the primary key for the object. If you have a single primary key named `id` then `someObject.key()` is functionally equivalent to `someObject.id`. This method is more useful when you do dynamic programming and don't know the name of the primary key or when you use composite keys (in which case it's convenient to use this method to get a list of both key values returned).">
+	<cfargument name="$persisted" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
@@ -505,7 +506,12 @@
 		{
 			loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
 			if (StructKeyExists(this, loc.property))
-				loc.returnValue = ListAppend(loc.returnValue, this[loc.property]);
+			{
+				if ($persisted && hasChanged(loc.property))
+					loc.returnValue = ListAppend(loc.returnValue, changedFrom(loc.property));
+				else
+					loc.returnValue = ListAppend(loc.returnValue, this[loc.property]);
+			}
 		}
 		</cfscript>
 	<cfreturn loc.returnValue>
@@ -1046,7 +1052,15 @@
 		{
 			loc.key = ListGetAt(variables.wheels.class.keys, loc.i);
 			ArrayAppend(arguments.sql, "#variables.wheels.class.properties[loc.key].column# = ");
-			loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, null=this[loc.key] == ""};
+			if (hasChanged(loc.key))
+				loc.value = changedFrom(loc.key);
+			else
+				loc.value = this[loc.key];
+			if (Len(loc.value))
+				loc.null = false;
+			else
+				loc.null = true;
+			loc.param = {value=loc.value, type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, null=loc.null};
 			ArrayAppend(arguments.sql, loc.param);
 			if (loc.i < loc.iEnd)
 				ArrayAppend(arguments.sql, " AND ");
