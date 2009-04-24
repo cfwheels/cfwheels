@@ -351,7 +351,7 @@
 				loc.where = loc.where & "'";
 		}
 		loc.existingObject = findOne(where=loc.where, reload=true);
-		if (IsObject(loc.existingObject) && loc.existingObject.key() != key())
+		if (IsObject(loc.existingObject) && (isNew() || loc.existingObject.key() != key($persisted=true)))
 			addError(property=arguments.property, message=arguments.message);
 	</cfscript>
 </cffunction>
