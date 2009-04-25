@@ -20,7 +20,7 @@ Void
 *Parameters*:
 
 || *Name* || *Type* || *Required* || *Default* || *Description* ||
-|| _any_ || string || true || - || Name/value to set ||
+|| _any_ || string || true || - || Name/value to get ||
 || *functionName* || string || false ||   || The name of the function when getting a default value for an argument ||
 
 *Examples*:
