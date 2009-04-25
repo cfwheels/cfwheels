@@ -283,7 +283,7 @@ This assumes that there are foreign key columns in `subscriptions` called `custo
 
 At this point, it's still fairly easy to get data from the many-to-many association that we have set up above.
 
-We can `include` the related tables to get the same effect:
+We can `include` the related tables from the `subscription` bridge entity to get the same effect:
 
 {{{
 <cfset data = model("subscription").findAll(include="customer,publication")>
