@@ -47,9 +47,9 @@ So let's consider the `post` / `comment` relationship mentioned above for [belon
 
 You may be a little concerned because our model is called `comment` and not `comments`. No need to worry: Wheels understands the need for the plural in conjunction with the [hasMany hasMany()] method.
 
-And don't worry about those pesky words in the English language that aren't pluralized by just adding an "s" to the end. Wheels is smart enough to know that words like "deer" and "children" are the plurals of "deer" and "child", respectively.
+And don't worry about those pesky words in the English language that aren't pluralized by just adding an "s" to the end. Wheels is smart enough to know that words like "deer" and "children" are the plurals of "deer" and "child," respectively.
 
-===An example of `hasOne`===
+===An Example of `hasOne`===
 
 The [hasOne hasOne()] association is not used as often as the [hasMany hasMany()] association but it has its use cases. The most common use case is when you have a large table that you have broken down into two or more smaller tables (a.k.a. denormalization) for performance reasons or otherwise. Let's take the example of the association between `user` and `profile`. A lot of websites allow you to enter required info such as name, email but also add optional information such as age, salary etc. These can of course be stored in the same table but given the fact that so much information is optional it would make more sense to have the required info in a `users` table and the optional info in a `profiles` table. This gives us a [hasOne hasOne()] relationship between these two models; "A user _has one_ profile".
 
