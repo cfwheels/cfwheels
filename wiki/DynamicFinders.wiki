@@ -1,5 +1,5 @@
 #summary Make your model calls more readable by using dynamic finders.
-#labels chapter,0.9.1
+#labels chapter,0.9.1,published-dev
 
 With the recent introduction of `onMissingMethod` in ColdFusion 8 (Thanks, Adobe!), we have been able to port over the concept of _dynamic finders_ from Rails to Wheels.
 
@@ -29,12 +29,14 @@ In this case, Wheels will split the method name on the `And` part and determine 
 
 When you are passing in two values, make special note of the fact that they should be passed in as a list to *one* argument and not as two separate arguments.
 
-In the examples above, we've used the [findOne findOne()] method, but you can use the same approach on a [findAll findAll()] method as well. In the background these dynamically-named methods just pass along execution to [findOne findOne()] or [findAll findAll()]. This means that you can also pass in any arguments that are accepted by those two methods. The below code, for example, is perfectly valid:
+In the examples above, we've used the [findOne findOne()] method, but you can use the same approach on a [findAll findAll()] method as well. In the background, these dynamically-named methods just pass along execution to [findOne findOne()] or [findAll findAll()]. This means that you can also pass in any arguments that are accepted by those two methods.
+
+The below code, for example, is perfectly valid:
 
 {{{
 <cfset users = model("user").findAllByState(value="NY", order="name", page=3)>
 }}}
 
-When passing in multiple arguments like above it is a good idea to start naming them instead of relying on the order of the arguments. When doing so you need to name the argument `value` or `values` (preferably using `values` when calling an "And" type dynamic finder).
+When passing in multiple arguments like above, it is a good idea to start naming them instead of relying on the order of the arguments. When doing so, you need to name the argument `value` or `values` (preferably using `values` when calling an "And" type dynamic finder).
 
-Keep in mind that this dynamic method calling will break down completely if you ever name a column `firstAndLastName` or something similar because Wheels will then split the method name incorrectly. So, avoid using "And" in the column name if you plan on taking advantage of dynamically-named methods.
+Keep in mind that this dynamic method calling will break down completely if you ever name a column `firstAndLastName` or something similar because Wheels will then split the method name incorrectly. So, avoid using "And" in the column name if you plan on taking advantage of dynamically-named finder methods.
