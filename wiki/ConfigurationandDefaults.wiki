@@ -1,16 +1,16 @@
-#summary An overview of Wheels configuration and how is it used in your applications. Learn how to overwrite Wheels convention to make it your own.
-#labels chapter,0.9.1
+#summary An overview of Wheels configuration and how is it used in your applications. Learn how to override a Wheels convention to make it your own.
+#labels chapter,0.9.1,published-dev
 
-We all love the "Convention over Configuration" motto of Wheels, but what about those two cases that pops into everyone's head. What if I want to develop in my own way? or, what about an existing application that I need to port into Wheels?. Gladly, that's what the Configuration and Defaults are there for. Let's take a look at exactly how is this performed.
+We all love the "Convention over Configuration" motto of Wheels, but what about those two cases that pop into everyone's head? _What if I want to develop in my own way?_ Or, _What about an existing application that I need to port into Wheels?_ Gladly, that's what configuration and defaults are there for. Let's take a look at exactly how is this performed.
 
-All of this is possible by a single function in Wheels, the [set set()] function, with it you can perform all sorts of tweaks into the Framework. 
+All of this is possible by a single function in Wheels, the [set set()] function. With it, you can perform all sorts of tweaks into the framework. 
 
-==Types of configurations available==
+==Types of Configurations Available==
 
-Just like you guessed by now, there are several types of configurations that you can perform in Wheels to overwrite all those default behaviors. In Wheels you can find all these configuration options:
+There are several types of configurations that you can perform in Wheels to override all those default behaviors. In Wheels, you can find all these configuration options:
 
- * URL Rewrite settings 
- * Datasource settings
+ * URL rewrite settings 
+ * Data source settings
  * Environment settings
  * Caching settings
  * Function settings
@@ -18,72 +18,76 @@ Just like you guessed by now, there are several types of configurations that you
 
 Let's take a closer look at each of these options.
 
-===URL Rewrite settings===
+===URL Rewrite Settings===
 
-Sometimes is useful for our applications to "force" URL rewriting, by default Wheels will try to determinate what type of URL rewriting to perform and set it up for you, but you can force in or out this setting by using the example below:
+Sometimes it is useful for our applications to "force" URL rewriting. By default, Wheels will try to determinate what type of URL rewriting to perform and set it up for you. But you can force in or out this setting by using the example below:
 
 {{{
-  <cfset set(URLRewriting="Off")>
+<cfset set(urlRewriting="Off")>
 }}}
 
 The code above will tell Wheels to skip its automatic detection of the URL Rewriting capabilities and just set it as "Off".
 
-===Datasource settings===
+===Data Source Settings===
 
-Probably the biggest configuration of them all. What is an application without a database to back all of it's precious data? The datasource configuration is what tells Wheels which database to use for all of its models (this can be overwritten per Model basis, but that will be covered later) To set this up in Wheels is just as easy as the previous example:
+Probably the most important configuration of them all. What is an application without a database to store all of its precious data?
 
-{{{
-  <cfset set(dataSourceName="yourDataSourceName")>
-  <cfset set(dataSourceUserName="yourDataSourceUsername")>
-  <cfset set(dataSourcePassword="yourDataSourcePassword")> 
-}}}
-
-===Environment settings===
-
-Not only the environments are useful for separating your production app from your "under development" app, but it is also a place for you to overwrite settings that will only take effect on the specified environment. Let's take for example that I want to enable debug information on my "production" app (although not a good idea, it will do for this example)
+The data source configuration is what tells Wheels which database to use for all of its models. (This can be overridden on a per model basis, but that will be covered later.) To set this up in Wheels, it's just as easy as the previous example:
 
 {{{
-  <!--- /config/production/settings.cfm --->
-  <cfset set(showDebugInformation=true)>
+<cfset set(dataSourceName="yourDataSourceName")>
+<cfset set(dataSourceUserName="yourDataSourceUsername")>
+<cfset set(dataSourcePassword="yourDataSourcePassword")> 
 }}}
 
-=== Caching settings===
+===Environment Settings===
 
-Wheels does a pretty good job at caching the framework and its output to speed up your application, but personalization is key, here is where caching settings comes into play. Control just how you want the framework to cache which parts of your application to get the most out of Wheels.
+Not only are the environments useful for separating your production settings from your "under development" settings, but they are also opportunities for you to override settings that will only take effect in a specified environment.
+
+For example, let's say that we want to enable debugging information in our "production" environment (although not a good idea, it will do for this example):
+
+{{{
+<!--- /config/production/settings.cfm --->
+<cfset set(showDebugInformation=true)>
+}}}
+
+===Caching Settings===
+
+Wheels does a pretty good job at caching the framework and its output to speed up your application. But if personalization is key in your application, finer control over caching settings will become more important.
 
 Let's say your application generates dynamic routes and you need it to check the routes on each request. This task will be as simple as this line of code:
 
 {{{
-  <cfset set(cacheRoutes=false)>
+<cfset set(cacheRoutes=false)>
 }}}
 
-=== Function settings===
+===Function Settings===
 
-Ok, here it's where the fun begins. Wheels comes with a lot of functions baked in to make your development life easier. A lot of those functions have default argument values to minimize the amount of code that you need to write to get a function up and running. And yes, you guessed it, Wheels lets you overwrite those default argument values application wide.
+OK here it's where the fun begins! Wheels includes a lot of functions to make your life as a CFML developer easier. A lot of those functions have sensible default argument values to minimize the amount of code that you need to write. And yes, you guessed it, Wheels lets you override those default argument values application-wide.
 
 Let's look at a little of example:
 
 {{{
-  <cfset set(functionName="findAll", perPage=20)>
+<cfset set(functionName="findAll", perPage=20)>
 }}}
 
-That little line of code will make all calls to the findAll method in Wheels return a maximun number of 20 record per page (if pagination is enable for that findAll call). How great is that? you don't need to set that variable for every single call to findAll if you want to return a different page size than the default value of 10 records.
+That little line of code will make all calls to the `findAll` method in Wheels return a maximun number of 20 record per page (if pagination is enabled for that `findAll` call). How great is that? You don't need to set the `perPage` value for every single call to `findAll` if you have a different requirement than the Wheels default of 10 records.
 
-=== Miscellaneous settings===
+===Miscellaneous Settings===
 
-What about those situations that doesn't fit on those previous 5 categories?. Well, they all fall right into this miscellaneous section.
+How about situations that don't fit into those previous 5 categories? Well, they all fall right into this miscellaneous section.
 
-Let's say you don't like the convention name for the soft delete feature of Wheels, changing it will be as easy as:
+Let's say you don't like the convention name for the soft delete feature of Wheels. Changing it is as easy as this:
 
 {{{
   <cfset set(softDeleteProperty="trashedAt")>
 }}}
 
-This will enable soft delete on all models that contains the `trashedAt` property instead of the default `deletedAt`.
+This will enable soft delete on all models that contains the `trashedAt` property instead of the Wheels default, `deletedAt`.
 
-=== Wrapping it up ===
+===Wrapping It Up===
 
-There are literally hundreds (and growing) configurations options in Wheels for you to play around with. So go ahead, and sink your teeth into Wheels configuration and defaults.
+There are literally hundreds of configurations options in Wheels for you to play around with. So go ahead and sink your teeth into Wheels configuration and defaults.
 
 ==Related==
 [ConfigurationFunctions Configuration Functions]
