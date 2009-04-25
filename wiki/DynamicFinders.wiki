@@ -31,6 +31,8 @@ In this case, Wheels will split the method name on the `And` part and determine 
 
 When you are passing in two values, make special note of the fact that they should be passed in as a list to *one* argument and not as two separate arguments.
 
+==Works with `findAll()` too==
+
 In the examples above, we've used the [findOne findOne()] method, but you can use the same approach on a [findAll findAll()] method as well.
 
 ==Passing in Other Finder Parameters==
