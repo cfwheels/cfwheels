@@ -19,6 +19,8 @@ Can also be written as:
 
 Through the power of `onMissingMethod`, Wheels will parse the method name and figure out that the value supplied is supposed to be matched against the `email` column.
 
+==Dynamic Finders Involving More than One Column==
+
 You can take this one step further by using code such as:
 
 {{{
@@ -29,7 +31,11 @@ In this case, Wheels will split the method name on the `And` part and determine 
 
 When you are passing in two values, make special note of the fact that they should be passed in as a list to *one* argument and not as two separate arguments.
 
-In the examples above, we've used the [findOne findOne()] method, but you can use the same approach on a [findAll findAll()] method as well. In the background, these dynamically-named methods just pass along execution to [findOne findOne()] or [findAll findAll()]. This means that you can also pass in any arguments that are accepted by those two methods.
+In the examples above, we've used the [findOne findOne()] method, but you can use the same approach on a [findAll findAll()] method as well.
+
+==Passing Other Finder Parameters==
+
+In the background, these dynamically-named methods just pass along execution to [findOne findOne()] or [findAll findAll()]. This means that you can also pass in any arguments that are accepted by those two methods.
 
 The below code, for example, is perfectly valid:
 
@@ -38,5 +44,7 @@ The below code, for example, is perfectly valid:
 }}}
 
 When passing in multiple arguments like above, it is a good idea to start naming them instead of relying on the order of the arguments. When doing so, you need to name the argument `value` or `values` (preferably using `values` when calling an "And" type dynamic finder).
+
+==Avoid the Word "and" in Database Column Names==
 
 Keep in mind that this dynamic method calling will break down completely if you ever name a column `firstAndLastName` or something similar because Wheels will then split the method name incorrectly. So, avoid using "And" in the column name if you plan on taking advantage of dynamically-named finder methods.
