@@ -11,7 +11,7 @@ Use to retrieve the value of a global setting.
 
 *Return Type*:
 
-Void
+Any
 
 *History*:
 
@@ -32,8 +32,7 @@ Void
 </cfquery>
 }}}
 
-
 *Related*:
 
  * [ConfigurationandDefaults ConfigurationandDefaults] (chapter)
- * [get get()] (function)
+ * [set set()] (function)
