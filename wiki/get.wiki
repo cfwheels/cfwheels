@@ -1,0 +1,39 @@
+#summary get(any[functionName])
+#labels api,0.9.1
+
+*Category*:
+
+[ConfigurationFunctions Configuration Functions]
+
+*Description*:
+
+Use to retrieve the value of a global setting.
+
+*Return Type*:
+
+Void
+
+*History*:
+
+-
+
+*Parameters*:
+
+|| *Name* || *Type* || *Required* || *Default* || *Description* ||
+|| _any_ || string || true || - || Name/value to set ||
+|| *functionName* || string || false ||   || The name of the function when getting a default value for an argument ||
+
+*Examples*:
+
+{{{
+<!--- custom find method --->
+<cfquery name="yourQueryName" datasource="#get('dataSourceName')#">
+  YOUR SQL
+</cfquery>
+}}}
+
+
+*Related*:
+
+ * [ConfigurationandDefaults ConfigurationandDefaults] (chapter)
+ * [get get()] (function)
