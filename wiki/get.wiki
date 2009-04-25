@@ -28,7 +28,7 @@ Void
 {{{
 <!--- custom find method --->
 <cfquery name="yourQueryName" datasource="#get('dataSourceName')#">
-  YOUR SQL
+  <!--- YOUR SQL CODE --->
 </cfquery>
 }}}
 
