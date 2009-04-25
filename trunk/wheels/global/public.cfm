@@ -1,14 +1,13 @@
 <cffunction name="set" returntype="void" access="public" output="false" hint="Use to configure a global setting.">
 	<cfscript>
 		var loc = {};
-		if (ArrayLen(arguments) == 2)
+		if (ArrayLen(arguments) > 1)
 		{
 			for (loc.key in arguments)
 			{
 				if (loc.key != "functionName")
-					loc.insKey = loc.key;
+					application.wheels[arguments.functionName][loc.key] = arguments[loc.key];
 			}
-			application.wheels[arguments.functionName][loc.insKey] = arguments[loc.insKey];
 		}	
 		else
 		{
