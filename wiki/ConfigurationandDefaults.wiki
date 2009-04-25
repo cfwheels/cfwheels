@@ -3,7 +3,7 @@
 
 We all love the "Convention over Configuration" motto of Wheels, but what about those two cases that pop into everyone's head? _What if I want to develop in my own way?_ Or, _What about an existing application that I need to port into Wheels?_ Gladly, that's what configuration and defaults are there for. Let's take a look at exactly how is this performed.
 
-All of this is possible by a single function in Wheels, the [set set()] function. With it, you can perform all sorts of tweaks into the framework. 
+All of this is possible by a single function in Wheels, the [set set()] function. With it, you can perform all sorts of tweaks to the framework's default behaviors. 
 
 ==Types of Configurations Available==
 
@@ -63,7 +63,7 @@ Let's say your application generates dynamic routes and you need it to check the
 
 ===Function Settings===
 
-OK here it's where the fun begins! Wheels includes a lot of functions to make your life as a CFML developer easier. A lot of those functions have sensible default argument values to minimize the amount of code that you need to write. And yes, you guessed it, Wheels lets you override those default argument values application-wide.
+OK, here it's where the fun begins! Wheels includes a lot of functions to make your life as a CFML developer easier. A lot of those functions have sensible default argument values to minimize the amount of code that you need to write. And yes, you guessed it, Wheels lets you override those default argument values application-wide.
 
 Let's look at a little of example:
 
