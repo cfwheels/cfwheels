@@ -206,7 +206,7 @@ Replace `XXX` below with the name of the associated model (i.e. `comments` in th
 || *[hasXXX hasXXX()]* || `post.hasComments()` || Returns `true` if the post has any comments associated with it. Similar to calling `model("comment").exists(where="postid=#post.id#")`. ||
 || *[findOneXXX findOneXXX()]* || `post.findOneComment()` || Returns one of the associated comments. Similar to calling `model("comment").findOne(where="postid=#post.id#")`. ||
 
-=====Methods Added by `hasOne`=====
+*Methods Added by `hasOne`*
 
 The [hasOne hasOne()] association adds a few methods as well. Most of them are very similar to the ones added by [hasMany hasMany()].
 
@@ -231,11 +231,11 @@ Given that you have told Wheels that a `comment` belongs to a `post` through a [
 || *[XXX XXX()]* || `comment.post()` || Returns the post where the primary key matches the comment's foreign key value. Similar to calling `model("post").findByKey(comment.postId)`. ||
 || *[hasXXX hasXXX()]* || `comment.hasPost()` || Returns `true` if the comment has a post associated with it. Similar to calling `model("post").exists(comment.postId)`. ||
 
-One general rule for all of the methods above is that you can always supply any argument that is accepted by the method that the processing is delegated to and it will be passed through. This means that you can for example call `post.comments(order="createdAt DESC")` and the `order` argument will be passed along to [findAll findAll()].
+One general rule for all of the methods above is that you can always supply any argument that is accepted by the method that the processing is delegated to. This means that you can, for example, call `post.comments(order="createdAt DESC")`, and the `order` argument will be passed along to [findAll findAll()].
 
-Another rule is that whenever a method accepts an object as its first argument you also have the option of supplying the primary key value instead. This means that `author.setProfile(profile)` will perform the same task as `author.setProfile(1)` for example (we're assuming that the `profile` object in this example has a primary key value of `1` of course).
+Another rule is that whenever a method accepts an object as its first argument, you also have the option of supplying the primary key value instead. This means that `author.setProfile(profile)` will perform the same task as `author.setProfile(1)`. (Of course, we're assuming that the `profile` object in this example has a primary key value of `1`.)
 
-===Performance of Dynamic Association Finders===
+====Performance of Dynamic Association Finders====
 
 You may be concerned that using a dynamic finder adds yet another database call to your application.
 
@@ -243,9 +243,9 @@ If it makes you feel any better, all calls in your Wheels request that generate 
 
 ==Many-to-Many Relationships==
 
-We can use the same 3 association functions to set up many-to-many table relationships in our models. It follows the same logic as the descriptions above, so let's jump right into an example.
+We can use the same 3 association functions to set up many-to-many table relationships in our models. It follows the same logic as the descriptions mentioned earlier in this chapter, so let's jump right into an example.
 
-Let's say that we wanted to set up a relationship `customers` and `publications`. A customer can be subscribed to many publications, and publications can be subscribed to by many customers. In our database, this relationship is linked together by a third table called `subscriptions`.
+Let's say that we wanted to set up a relationship between `customers` and `publications`. A customer can be subscribed to many publications, and publications can be subscribed to by many customers. In our database, this relationship is linked together by a third table called `subscriptions` (sometimes called a _bridge entity_ by ERD snobs).
 
 ===Setting up the Models===
 
@@ -296,3 +296,7 @@ We can `include` the related tables from the `subscription` bridge entity to get
 {{{
 <cfset data = model("subscription").findAll(include="customer,publication")>
 }}}
+
+==Are You Still with Us==
+
+As you just read, Wheels offers a ton of functionality to make your life easier in working with relational databases. Be sure to give some of these techniques a try in your next Wheels application, and you'll be amazed at how little code that you'll need to write to interact with your database.
