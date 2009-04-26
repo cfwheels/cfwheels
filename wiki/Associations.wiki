@@ -135,7 +135,7 @@ Note that if you switch the above statement around like this:
 <cfset authors = model("author").findAll(include="posts")>
 }}}
 
-Then you would need to specify "post" in its plural form, "posts". If you're thinking about when to use the singular form and when to use the plural form, just use the one that seems most natural.
+Then you would need to specify "post" in its plural form, "posts." If you're thinking about when to use the singular form and when to use the plural form, just use the one that seems most natural.
 
 If you look at the two examples above, you'll see that in example #1, you're asking for all posts including each post's *author* (hence the singular "author"). In example #2, you're asking for all authors and all of the *posts* written by each author (hence the plural "posts").
 
