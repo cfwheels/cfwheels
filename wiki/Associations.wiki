@@ -53,7 +53,7 @@ And don't worry about those pesky words in the English language that aren't plur
 
 The [hasOne hasOne()] association is not used as often as the [hasMany hasMany()] association, but it has its use cases. The most common use case is when you have a large table that you have broken down into two or more smaller tables (a.k.a. denormalization) for performance reasons or otherwise.
 
-Let's consider an association between `user` and `profile`. A lot of websites allow you to enter required info such as name and email but also allow you to add optional information such as age, salary, and so on. These can of course be stored in the same table. But given the fact that so much information is optional, it would make sense to have the required info in a `users` table and the optional info in a `profiles` table. This gives us a [hasOne hasOne()] relationship between these two models: "A user _has one_ profile".
+Let's consider an association between `user` and `profile`. A lot of websites allow you to enter required info such as name and email but also allow you to add optional information such as age, salary, and so on. These can of course be stored in the same table. But given the fact that so much information is optional, it would make sense to have the required info in a `users` table and the optional info in a `profiles` table. This gives us a [hasOne hasOne()] relationship between these two models: "A user _has one_ profile."
 
 In this case, our `profile` model would look like this:
 
