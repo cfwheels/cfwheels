@@ -97,7 +97,7 @@ Wheels offers a way to configure your models to break this naming convention, ho
 
 Let's pretend that you have a relationship between `author` and `post`, but you didn't use the naming convention and instead called the column `post_id`. (You just can't seem to let go of the underscores, can you?)
 
-Your `post`'s `init()` function would then need to look like this:
+Your `post`'s `init()` method would then need to look like this:
 
 {{{
 <cfcomponent extends="Model">
