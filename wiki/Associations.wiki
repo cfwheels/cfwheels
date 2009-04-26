@@ -187,59 +187,49 @@ If you wanted to get all comments that have been submitted for a post, you can n
 
 Here are all the methods that are added for the three possible association types.
 
-=====Methods Added by `hasMany`=====
+*Methods Added by `hasMany`*
 
 Given that you have told Wheels that a `post` _has many_ `comments` through a [hasMany hasMany()] call, here are the methods that will be made available to you on the `post` model.
 
 Replace `XXX` below with the name of the associated model (i.e. `comments` in the case of the example that we're using here).
 
-*[XXX XXX()], `post.comments()`* - Returns all comments where the foreign key matches the post's primary key value. Similar to calling `model("comment").findAll(where="postid=#post.id#")`.
-
-*[addXXX addXXX()], `post.addComment(comment)`* - Adds a comment to the post association by setting its foreign key to the post's primary key value. Similar to calling `comment.updateByKey(key=comment.id, postid=post.id)`.
-
-*[removeXXX removeXXX()], `post.removeComment(comment)`* - Removes a comment from the post association by setting its foreign key value to `NULL`. Similar to calling `comment.updateByKey(key=comment.id, postid="")`.
-
-*[deleteXXX deleteXXX()], `post.deleteComment(comment)`* - Deletes the associated comment from the database table. Similar to calling `model("comment").deleteByKey(key=comment.id)`.
-
-*[removeAllXXX removeAllXXX()], `post.removeAllComments()`* - Removes all comments from the post association by setting their foreign key values to `NULL`. Similar to calling `model("comment").updateAll(postid="", where="postid=#post.id#")`.
-
-*[deleteAllXXX deleteAllXXX()], `post.deleteAllComments()`* - Deletes the associated comments from the database table. Similar to calling `model("comment").deleteAll(where="postid=#post.id#")`.
-
-*[XXXCount XXXCount()], `post.commentCount()`* - Returns the number of associated comments. Similar to calling `model("comment").count(where="postid=#post.id#")`.
-
-*[newXXX newXXX()], `post.newComment()`* - Creates a new comment object. Similar to calling `model("comment").new(postid=post.id)`.
-
-*[createXXX createXXX()], `post.createComment()`* - Creates a new comment object and saves it to the database. Similar to calling `model("comment").create(postid=post.id)`.
-
-*[hasXXX hasXXX()], `post.hasComments()`* - Returns `true` if the post has any comments associated with it. Similar to calling `model("comment").exists(where="postid=#post.id#")`.
-
-*[findOneXXX findOneXXX()], `post.findOneComment()`* - Returns one of the associated comments. Similar to calling `model("comment").findOne(where="postid=#post.id#")`.
+|| *Method* || *Example* || *Description* ||
+|| *[XXX XXX()]* || `post.comments()` || Returns all comments where the foreign key matches the post's primary key value. Similar to calling `model("comment").findAll(where="postid=#post.id#")`||
+|| *[addXXX addXXX()]* || `post.addComment(comment)` || Adds a comment to the post association by setting its foreign key to the post's primary key value. Similar to calling `comment.updateByKey(key=comment.id, postid=post.id)`. ||
+|| *[removeXXX removeXXX()]* || `post.removeComment(comment)` || Removes a comment from the post association by setting its foreign key value to `NULL`. Similar to calling `comment.updateByKey(key=comment.id, postid="")`. ||
+|| *[deleteXXX deleteXXX()]* || `post.deleteComment(comment)` || Deletes the associated comment from the database table. Similar to calling `model("comment").deleteByKey(key=comment.id)`. ||
+|| *[removeAllXXX removeAllXXX()]* || `post.removeAllComments()` || Removes all comments from the post association by setting their foreign key values to `NULL`. Similar to calling `model("comment").updateAll(postid="", where="postid=#post.id#")`. ||
+|| *[deleteAllXXX deleteAllXXX()]* || `post.deleteAllComments()` || Deletes the associated comments from the database table. Similar to calling `model("comment").deleteAll(where="postid=#post.id#")`. ||
+|| *[XXXCount XXXCount()]* || `post.commentCount()` || Returns the number of associated comments. Similar to calling `model("comment").count(where="postid=#post.id#")`. ||
+|| *[newXXX newXXX()]* || *`post.newComment()`* || Creates a new comment object. Similar to calling `model("comment").new(postid=post.id)`. ||
+|| *[createXXX createXXX()]* || `post.createComment()` || Creates a new comment object and saves it to the database. Similar to calling `model("comment").create(postid=post.id)`. ||
+|| *[hasXXX hasXXX()]* || `post.hasComments()` || Returns `true` if the post has any comments associated with it. Similar to calling `model("comment").exists(where="postid=#post.id#")`. ||
+|| *[findOneXXX findOneXXX()]* || `post.findOneComment()` || Returns one of the associated comments. Similar to calling `model("comment").findOne(where="postid=#post.id#")`. ||
 
 =====Methods Added by `hasOne`=====
 
-The [hasOne hasOne()] association adds a few methods as well, most of them are very similar to the ones added by [hasMany hasMany()]. Given that you have told Wheels that an `author` has one `profile` through a [hasOne hasOne()] call, here are the methods that will be made available to you on the `author` model.
+The [hasOne hasOne()] association adds a few methods as well. Most of them are very similar to the ones added by [hasMany hasMany()].
 
-[XXX XXX()], `author.profile()`. Returns the profile where the foreign key matches the author's primary key value. Similar to calling `model("profile").findOne(where="authorId=#author.id#")`.
+Given that you have told Wheels that an `author` has one `profile` through a [hasOne hasOne()] call, here are the methods that will be made available to you on the `author` model.
 
-[setXXX setXXX()], `author.setProfile(profile)`. Sets the profile to be associated with the author by setting its foreign key to the author's primary key value. You can pass in either a `profile` object or the primary key value of a `profile` object to this method. Similar to calling `model("profile").updateByKey(key=profile.id, authorId=author.id)`.
-
-[removeXXX removeXXX()], `author.removeProfile()`. Removes the profile from the author association by setting its foreign key to `NULL`. Similar to calling `model("profile").updateOne(where="authorId=#author.id#", authorId="")`.
-
-[deleteXXX deleteXXX()], `author.deleteProfile()`. Deletes the associated profile from the database table. Similar to calling `model("profile").deleteOne(where="authorId=#author.id#")`.
-
-[newXXX newXXX()], `author.newProfile()`. Creates a new profile object. Similar to calling `model("profile").new(authorId=author.id)`.
-
-[createXXX createXXX()], `author.createProfile()`. Creates a new profile object and saves it to the database. Similar to calling `model("profile").create(authorId=author.id)`.
-
-[hasXXX hasXXX()], `author.hasProfile()`. Returns `true` if the author has an associated profile. Similar to calling `model("profile").exists(where="authorId=#author.id#")`.
+|| *Method* || *Example* || *Description* ||
+|| *[XXX XXX()]* || `author.profile()` || Returns the profile where the foreign key matches the author's primary key value. Similar to calling `model("profile").findOne(where="authorId=#author.id#")`. ||
+|| *[setXXX setXXX()]* || `author.setProfile(profile)` || Sets the profile to be associated with the author by setting its foreign key to the author's primary key value. You can pass in either a `profile` object or the primary key value of a `profile` object to this method. Similar to calling `model("profile").updateByKey(key=profile.id, authorId=author.id)`. ||
+|| *[removeXXX removeXXX()]* || `author.removeProfile()` || Removes the profile from the author association by setting its foreign key to `NULL`. Similar to calling `model("profile").updateOne(where="authorId=#author.id#", authorId="")`. ||
+|| *[deleteXXX deleteXXX()]* || `author.deleteProfile()` || Deletes the associated profile from the database table. Similar to calling `model("profile").deleteOne(where="authorId=#author.id#")`. ||
+|| *[newXXX newXXX()]* || `author.newProfile()` || Creates a new profile object. Similar to calling `model("profile").new(authorId=author.id)`. ||
+|| *[createXXX createXXX()]* || `author.createProfile()` || Creates a new profile object and saves it to the database. Similar to calling `model("profile").create(authorId=author.id)`. ||
+|| *[hasXXX hasXXX()]* || `author.hasProfile()` || Returns `true` if the author has an associated profile. Similar to calling `model("profile").exists(where="authorId=#author.id#")`. ||
 
 *Methods Added by `belongsTo`*
 
-The [belongsTo belongsTo()] association adds a couple of methods to your model as well. Given that you have told Wheels that a `comment` belongs to a `post` through a [belongsTo belongsTo()] call, here are the methods that will be made available to you on the `comment` model.
+The [belongsTo belongsTo()] association adds a couple of methods to your model as well.
 
-[XXX XXX()], `comment.post()`. Returns the post where the primary key matches the comment's foreign key value. Similar to calling `model("post").findByKey(comment.postId)`.
+Given that you have told Wheels that a `comment` belongs to a `post` through a [belongsTo belongsTo()] call, here are the methods that will be made available to you on the `comment` model.
 
-[hasXXX hasXXX()], `comment.hasPost()`. Returns `true` if the comment has a post associated with it. Similar to calling `model("post").exists(comment.postId)`.
+|| *Method* || *Example* || *Description* ||
+|| *[XXX XXX()]* || `comment.post()` || Returns the post where the primary key matches the comment's foreign key value. Similar to calling `model("post").findByKey(comment.postId)`. ||
+|| *[hasXXX hasXXX()]* || `comment.hasPost()` || Returns `true` if the comment has a post associated with it. Similar to calling `model("post").exists(comment.postId)`. ||
 
 One general rule for all of the methods above is that you can always supply any argument that is accepted by the method that the processing is delegated to and it will be passed through. This means that you can for example call `post.comments(order="createdAt DESC")` and the `order` argument will be passed along to [findAll findAll()].
 
