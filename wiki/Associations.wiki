@@ -93,7 +93,7 @@ In this case, the convention is to use the singular name of the related table wi
 
 ===Breaking the Convention===
 
-Wheels offers a way to configure your models to break this naming convention, however. This is done by using the `foreignKey` argument in your model's [belongsTo belongsTo()] call.
+Wheels offers a way to configure your models to break this naming convention, however. This is done by using the `foreignKey` argument in your models' [belongsTo belongsTo()] calls.
 
 Let's pretend that you have a relationship between `author` and `post`, but you didn't use the naming convention and instead called the column `post_id`. (You just can't seem to let go of the underscores, can you?)
 
