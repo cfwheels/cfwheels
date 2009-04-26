@@ -5,7 +5,7 @@ _Associations_ in Wheels allow you to define the relationships between your data
 
 ==3 Types of Associations==
 
-In order to set up associations, you only need to remember 3 simple methods. Considering that the human brain only reliably remembers up to 7 items, we've left you with a lot of extra space. You're welcome :)
+In order to set up associations, you only need to remember 3 simple methods. Considering that the human brain only reliably remembers up to 7 items, we've left you with a lot of extra space. You're welcome. :)
 
 The association methods should always be called in the `init()` method of a model that relates to another model within your application.
 
