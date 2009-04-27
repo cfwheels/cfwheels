@@ -47,7 +47,8 @@ Void
 <cfset set(showDebugInformation = true)>
 <cfset set(showErrorInformation = true)>
 <cfset set(sendEmailOnError = false)>
-<cfset set(errorEmailAddress = "")>      
+<cfset set(errorEmailAddress = "")>
+<cfset set(errorEmailServer = "")> <!--- only required if the mail server hasn't been set in the ColdFusion Administrator --->
 }}}
 
 {{{
