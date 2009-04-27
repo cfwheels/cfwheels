@@ -1,4 +1,4 @@
-#summary Wheels goes a long way for you to help you develop your applications faster and better, but there are still some helper functions that just won't fit into a certain category. Therefore, here are the miscellaneous helper functions.
+#summary Wheels goes a long way to help you develop your applications faster and better, but there are still some helper functions that just won't fit into a certain category. Therefore, here are the miscellaneous helper functions.
 #labels chapter,0.9.1
 
 These functions, can help you out in those tricky little tasks that needs to be perform in the front-end of your web applicaitons. Although they are called miscellaneous, they are in fact categorized into four (4) simple categories:
