@@ -1,5 +1,5 @@
 #summary Our listing of steps to take while upgrading your Wheels application from earlier versions to 0.9.1.
-#labels 0.9.1,chapter
+#labels 0.9.1,chapter,published_prod
 
 The easiest way to upgrade is to setup an empty website, deploy a fresh copy of Wheels 0.9.1, and then transfer your application code to it. When transferring, please make note of the following changes and make the appropriate changes to your code.
 
