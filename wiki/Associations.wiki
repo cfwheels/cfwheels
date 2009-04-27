@@ -297,6 +297,6 @@ We can `include` the related tables from the `subscription` bridge entity to get
 <cfset data = model("subscription").findAll(include="customer,publication")>
 }}}
 
-==Are You Still with Us==
+==Are You Still with Us?==
 
 As you just read, Wheels offers a ton of functionality to make your life easier in working with relational databases. Be sure to give some of these techniques a try in your next Wheels application, and you'll be amazed at how little code that you'll need to write to interact with your database.
