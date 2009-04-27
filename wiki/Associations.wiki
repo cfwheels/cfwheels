@@ -155,7 +155,7 @@ When you need to include tables more than one step away in a chain of joins, you
 <cfset commentsPostsAndAuthors = model("comment").findAll(include="post(author)")>
 }}}
 
-The use of parentheses above tells Wheels to look for an association named `author` on the `post` model instead of on the `comment` model, the latter being the default behavior.
+The use of parentheses above tells Wheels to look for an association named `author` on the `post` model instead of on the `comment` model. (Looking at the `comment` model is the default behavior when not using parenthesis.)
 
 ====Handling Column Naming Collisions====
 
