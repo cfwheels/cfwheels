@@ -201,7 +201,7 @@ Replace `XXX` below with the name of the associated model (i.e. `comments` in th
 || *[removeAllXXX removeAllXXX()]* || `post.removeAllComments()` || Removes all comments from the post association by setting their foreign key values to `NULL`. Similar to calling `model("comment").updateAll(postid="", where="postid=#post.id#")`. ||
 || *[deleteAllXXX deleteAllXXX()]* || `post.deleteAllComments()` || Deletes the associated comments from the database table. Similar to calling `model("comment").deleteAll(where="postid=#post.id#")`. ||
 || *[XXXCount XXXCount()]* || `post.commentCount()` || Returns the number of associated comments. Similar to calling `model("comment").count(where="postid=#post.id#")`. ||
-|| *[newXXX newXXX()]* || *`post.newComment()`* || Creates a new comment object. Similar to calling `model("comment").new(postid=post.id)`. ||
+|| *[newXXX newXXX()]* || `post.newComment()` || Creates a new comment object. Similar to calling `model("comment").new(postid=post.id)`. ||
 || *[createXXX createXXX()]* || `post.createComment()` || Creates a new comment object and saves it to the database. Similar to calling `model("comment").create(postid=post.id)`. ||
 || *[hasXXX hasXXX()]* || `post.hasComments()` || Returns `true` if the post has any comments associated with it. Similar to calling `model("comment").exists(where="postid=#post.id#")`. ||
 || *[findOneXXX findOneXXX()]* || `post.findOneComment()` || Returns one of the associated comments. Similar to calling `model("comment").findOne(where="postid=#post.id#")`. ||
