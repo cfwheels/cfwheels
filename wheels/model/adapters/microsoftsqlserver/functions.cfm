@@ -95,5 +95,11 @@
 		if (StructKeyExists(query, "name"))
 			loc.returnValue.query = query.name;
 	</cfscript>
+	<cfif StructKeyExists(server, "railo") AND StructKeyExists(loc.result, "sql") AND Left(loc.result.sql, 11) IS "INSERT INTO">
+		<cfquery attributeCollection="#arguments#">
+		SELECT @@identity AS lastId
+		</cfquery>
+		<cfset loc.returnValue.result.identitycol = query.name.lastId>
+	</cfif>
 	<cfreturn loc.returnValue>
 </cffunction>
