@@ -1,5 +1,5 @@
 #summary Wheels does some magic to help you link to other actions within your app. Read on to learn why you'll rarely use an `<a>` tag for linking to application actions ever again.
-#labels chapter,0.9.1
+#labels chapter,0.9.1,published_production
 
 ==`linkTo`, the Function for Linking to Other Pages==
 
