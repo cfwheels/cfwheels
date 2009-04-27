@@ -40,8 +40,8 @@ textFieldTag, hiddenFieldTag
 
 ==Media Helpers==
 
-javascriptIncludeTag stylesheetIncludeTag
+imageTag, stylesheetIncludeTag
 
 ==Text Helpers==
 
-Humanize Hightlight
+pluralize, hightlight
