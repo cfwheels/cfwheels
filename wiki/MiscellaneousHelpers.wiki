@@ -1,4 +1,47 @@
-#summary Summary.
+#summary Wheels goes a long way for you to help you develop your applications faster and better, but there are still some helper functions that just won't fit into a certain category. Therefore, here are the miscellaneous helper functions.
 #labels chapter,0.9.1
 
-Text.
+These functions, can help you out in those tricky little tasks that needs to be perform in the front-end of your web applicaitons. Although they are called miscellaneous, they are in fact categorized into four (4) simple categories:
+
+ * Date Helpers
+ * Non Model Form Helpers
+ * Media Helpers
+ * Text Helpers
+
+Let's learn more about these categories 
+
+==Date Helpers==
+
+I don't know about you, but date handling have always been a tedious task for me, thankfully Wheels does a pretty good job at simplifying this not so fun task and makes it a lot simpler for you.
+
+Let's say that you have a comment section in your application, which shows the title, comment and time of its publication. In the old days your code will look something like this:
+
+{{{
+<cfoutput query="comments">
+  <div class="comment-header">#title# - #DateFormat(createdAt)#</div>
+  <div class="comment">#comment#</div>
+</cfoutput>
+}}}
+
+That works, but it's not that appealing. The date will be formated in a way that it's not that meaningful to the end-user. Instead of `4/27/2009` it would be better to display `a few minutes ago` or `2 hours ago`, something of that nature. This can be accomplished with Wheels with the little help of, you guessed it, a date helper function.
+
+{{{
+<cfoutput query="comments">
+  <div class="comment-header">#title# - #timeAgoInWords(createdAt)#</div>
+  <div class="comment">#comment#</div>
+</cfoutput>
+}}}
+
+With that minimal change, you have a prettier presentation for your end-users, and most important of all, it didn't required you to do anything fancy in your code.
+
+==Non Model Form Helpers==
+
+textFieldTag, hiddenFieldTag
+
+==Media Helpers==
+
+javascriptIncludeTag stylesheetIncludeTag
+
+==Text Helpers==
+
+Humanize Hightlight
