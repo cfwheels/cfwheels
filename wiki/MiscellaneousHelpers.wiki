@@ -8,7 +8,7 @@ These functions, can help you out in those tricky little tasks that needs to be 
  * Media Helpers
  * Text Helpers
 
-Let's learn more about these categories 
+Let's learn more about these categories:
 
 ==Date Helpers==
 
