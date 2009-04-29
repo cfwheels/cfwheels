@@ -36,7 +36,21 @@ With that minimal change, you have a prettier presentation for your end-users, a
 
 ==Non Model Form Helpers==
 
-textFieldTag, hiddenFieldTag
+You have heard of the [FormHelpersandShowingErrors Form Helpers] by now, and how they are useful at data entry in your application. But you haven't met the whole gang yet, for each model form helper there is a non model form helper to back you up while you are coding those tedious form views.
+These form helpers are useful in those tasks where model form helpers come short. To illustrate this, let's jump right into some examples:
+
+{{{
+<cfoutput>
+  #startFormTag(action="sendFeedback")#
+    #textFieldTag(label="First Name", name="profile", prepend="<div>", append="</div>")#
+    #textFieldTag(label="Last Name", name="profile", prepend="<div>", append="</div>")#
+    #textAreaTag(label="Comment", name="department", prepend="<div>", append="</div>")#
+    #submitTag(prepend="<div>", append="</div>")#
+  #endFormTag()#
+</cfoutput>
+}}}
+
+The previous example is a basic feedback form in an hypothetical `public` controller. It's most likely that this form won't have a model (database table) to back up the data, so non model helpers are a great approach to accomplish this.  
 
 ==Media Helpers==
 
