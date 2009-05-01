@@ -68,7 +68,9 @@ Do you see what we did there? No more struggling to remember what was that line 
 But how about the other folders? Well you can do this with the `images` and `javascript` folders as well. Let's jump into some more code to see an example on how to include an image into your application.
 
 {{{
-#imageTag(source="logo.png")#
+<cfoutput>
+  #imageTag(source="logo.png")#
+</cfoutput>
 }}}
 
 How about that? not only this is less typing, but by calling this function Wheels will set the `width`, `height` and `alt` attributes automatically for you and cache the image for later use in your application.
@@ -78,7 +80,9 @@ How about that? not only this is less typing, but by calling this function Wheel
 We have covered by now a little bit of ground, but we are still missing one of the categories, let's not forget about text helpers as well. To illustrate this, let's see a piece of code that include two (2) of the Text Helpers in a little search result page.
 
 {{{
-#highlight(text="You searched for: Wheels", phrases="Wheels")# returned #pluralize(word="record", count=searchResults.recordCount)#.
+<cfoutput>
+  #highlight(text="You searched for: Wheels", phrases="Wheels")# returned #pluralize(word="record", count=searchResults.recordCount)#.
+</cfoutput>
 }}}
 
 That piece of code will highlight all occurances of "Wheels" and will pluralize the word "record" to "records" if the result set is greater than 1. How about them apples? no if statements, no extra lines, no nothing.
