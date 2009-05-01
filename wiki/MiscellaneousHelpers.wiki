@@ -54,7 +54,24 @@ The previous example is a basic feedback form in an hypothetical `public` contro
 
 ==Media Helpers==
 
-imageTag, stylesheetIncludeTag
+Working with media is also a walk in the park with Wheels. Let's jump into two (2) quick examples:
+
+{{{
+<!--- layout.cfm --->
+<cfoutput>
+  #stylesheetIncludeTag(source="main", media="all")#
+</cfoutput>
+}}}
+
+Do you see what we did there? No more struggling to remember what was that line of HTML that includes CSS files into your page, a single function in Wheels will look into the `stylesheets` folders and include the CSS file for you.
+
+But how about the other folders? Well you can do this with the `images` and `javascript` folders as well. Let's jump into some more code to see an example on how to include an image into your application.
+
+{{{
+#imageTag(source="logo.png")#
+}}}
+
+How about that? not only this is less typing, but by calling this function Wheels will set the `width`, `height` and `alt` attributes automatically for you and cache the image for later use in your application.
 
 ==Text Helpers==
 
