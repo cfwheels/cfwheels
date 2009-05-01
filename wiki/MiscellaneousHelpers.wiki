@@ -81,7 +81,7 @@ We have covered by now a little bit of ground, but we are still missing one of t
 
 {{{
 <cfoutput>
-  #highlight(text="You searched for: Wheels", phrases="Wheels")# returned #pluralize(word="record", count=searchResults.recordCount)#.
+  #highlight(text="You searched for: Wheels", phrases="Wheels")# returned #searchResults.recordCount# #pluralize(word="record", count=searchResults.recordCount)#.
 </cfoutput>
 }}}
 
