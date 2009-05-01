@@ -75,4 +75,10 @@ How about that? not only this is less typing, but by calling this function Wheel
 
 ==Text Helpers==
 
-pluralize, hightlight
+We have covered by now a little bit of ground, but we are still missing one of the categories, let's not forget about text helpers as well. To illustrate this, let's see a piece of code that include two (2) of the Text Helpers in a little search result page.
+
+{{{
+#highlight(text="You searched for: Wheels", phrases="Wheels")# returned #pluralize(word="record", count=searchResults.recordCount)#.
+}}}
+
+That piece of code will highlight all occurances of "Wheels" and will pluralize the word "record" to "records" if the result set is greater than 1. How about them apples? no if statements, no extra lines, no nothing.
