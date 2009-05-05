@@ -23,7 +23,14 @@
 		arguments.href = Replace(arguments.href, "&", "&amp;", "all"); // make sure we return XHMTL compliant code
 		if (!Len(arguments.text))
 			arguments.text = arguments.href;
-		loc.returnValue = $element(name="a", skip="text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port", content=arguments.text, attributes=arguments);
+		loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port";
+		if (Len(arguments.route))
+		{
+			// variables passed in as route arguments should not be added to the link tag
+			loc.route = $findRoute(argumentCollection=arguments);
+			loc.skip = ListAppend(loc.skip, loc.route.variables);
+		}
+		loc.returnValue = $element(name="a", skip=loc.skip, content=arguments.text, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
