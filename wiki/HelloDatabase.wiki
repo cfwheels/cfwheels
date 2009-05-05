@@ -63,6 +63,8 @@ Next, add these lines of code to the new file:
 {{{
 <cfoutput>
 
+<h1>Create a New User</h1>
+
 #startFormTag(action="create")#
 
     <div>#textField(objectName="user", property="name", label="Name")#</div>
@@ -144,3 +146,60 @@ So far we have a fairly well-formed, accessible form, without writing a bunch of
 ===Handling the Form Submission===
 
 Next, we'll code the `create` action in the controller to handle the form submission and save the new user to the database.
+
+A basic way of doing this is using the model object's [create create()] method:
+
+{{{
+<cffunction name="create">
+
+    <cfset model("user").create(params.user)>
+    <cfset flashInsert(success="User #params.user.name# created successfully.")>
+    <cfset redirectTo(action="index")>
+
+</cffunction>
+}}}
+
+Because we used the `objectName` argument in the fields of our form, we can access the data as a struct in the `params` struct.
+
+There are more things that we can do in the `create` action to handle validation, but let's keep it simple in this chapter.
+
+==Listing Users==
+
+Notice that our `create` action above redirects the user to the `index` action. We'll use this action to list all `users` in the system with "Edit" links. We'll also provide a link to the create form that we just coded.
+
+First, let's get the data that the listing needs. Create an action named `index` in the `users` controller like so:
+
+{{{
+<cffunction name="index">
+
+    <cfset users = model("user").findAll(order="name")>
+
+</cffunction>
+}}}
+
+This call to the model's [findAll findAll()] method will return a query object of all `users` in the system. By using the method's `order` argument, we're also telling the database to order the records by `name`.
+
+In the view at `views/users/index.cfm`, it's as simple as looping through the query and outputting the data.
+
+{{{
+<h1>Users</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <cfloop query="users">
+            <tr>
+                <td>#users.name#</td>
+                <td>#users.email#</td>
+                <td>#linkTo(text="Edit", action="user", key=users.id)</td>
+            </tr>
+        </cfloop>
+    </tbody>
+</table>
+}}}
