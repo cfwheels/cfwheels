@@ -1,3 +1,33 @@
+<cffunction name="$findRoute" returntype="struct" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.routePos = application.wheels.namedRoutePositions[arguments.route];
+		if (loc.routePos Contains ",")
+		{
+			// there are several routes with this name so we need to figure out which one to use by checking the passed in arguments
+			loc.iEnd = ListLen(loc.routePos);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.returnValue = application.wheels.routes[ListGetAt(loc.routePos, loc.i)];
+				loc.foundRoute = true;
+				loc.jEnd = ListLen(loc.returnValue.variables);
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				{
+					if (!StructKeyExists(arguments, ListGetAt(loc.returnValue.variables, loc.j)))
+						loc.foundRoute = false;
+				}
+				if (loc.foundRoute)
+					break;
+			}
+		}
+		else
+		{
+			loc.returnValue = application.wheels.routes[loc.routePos];
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$cachedModelClassExists" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfscript>

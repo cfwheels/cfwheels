@@ -60,29 +60,7 @@
 		if (Len(arguments.route))
 		{
 			// link for a named route
-			loc.routePos = application.wheels.namedRoutePositions[arguments.route];
-			if (loc.routePos Contains ",")
-			{
-				// there are several routes with this name so we need to figure out which one to use by checking the passed in arguments
-				loc.iEnd = ListLen(loc.routePos);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-				{
-					loc.route = application.wheels.routes[ListGetAt(loc.routePos, loc.i)];
-					loc.foundRoute = true;
-					loc.jEnd = ListLen(loc.route.variables);
-					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-					{
-						if (!StructKeyExists(arguments, ListGetAt(loc.route.variables, loc.j)))
-							loc.foundRoute = false;
-					}
-					if (loc.foundRoute)
-						break;
-				}
-			}
-			else
-			{
-				loc.route = application.wheels.routes[loc.routePos];
-			}
+			loc.route = $findRoute(argumentCollection=arguments);
 			if (application.wheels.URLRewriting == "Off")
 			{
 				loc.returnValue = loc.returnValue & "?controller=" & REReplace(REReplace(loc.route.controller, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
