@@ -25,11 +25,7 @@
 			arguments.text = arguments.href;
 		loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port";
 		if (Len(arguments.route))
-		{
-			// variables passed in as route arguments should not be added to the link tag
-			loc.route = $findRoute(argumentCollection=arguments);
-			loc.skip = ListAppend(loc.skip, loc.route.variables);
-		}
+			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
 		loc.returnValue = $element(name="a", skip=loc.skip, content=arguments.text, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -62,7 +58,10 @@
 			arguments.onsubmit = $addToJavaScriptAttribute(name="onsubmit", content=loc.onsubmit, attributes=arguments);
 		}
 		loc.content = submitTag(value=arguments.text, image=arguments.image, disable=arguments.disable);
-		loc.returnValue = $element(name="form", skip="disable,image,text,confirm,route,controller,key,params,anchor,onlyPath,host,protocol,port", content=loc.content, attributes=arguments);
+		loc.skip = "disable,image,text,confirm,route,controller,key,params,anchor,onlyPath,host,protocol,port";
+		if (Len(arguments.route))
+			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
+		loc.returnValue = $element(name="form", skip=loc.skip, content=loc.content, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

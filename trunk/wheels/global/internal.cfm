@@ -1,3 +1,12 @@
+<cffunction name="$routeVariables" returntype="string" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.route = $findRoute(argumentCollection=arguments);
+		loc.returnValue = loc.route.variables;
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$findRoute" returntype="struct" access="public" output="false">
 	<cfscript>
 		var loc = {};
