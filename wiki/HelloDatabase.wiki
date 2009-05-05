@@ -182,6 +182,8 @@ This call to the model's [findAll findAll()] method will return a query object o
 In the view at `views/users/index.cfm`, it's as simple as looping through the query and outputting the data.
 
 {{{
+<cfoutput>
+
 <h1>Users</h1>
 <p>#linkTo(text="+ Add New User", action="user")#</p>
 
@@ -203,4 +205,6 @@ In the view at `views/users/index.cfm`, it's as simple as looping through the qu
         </cfloop>
     </tbody>
 </table>
+
+</cfoutput>
 }}}
