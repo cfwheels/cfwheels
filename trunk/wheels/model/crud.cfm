@@ -455,7 +455,7 @@
 		var loc = {};
 		loc.returnValue = false;
 		for (loc.key in variables.wheels.class.properties)
-			if (!StructKeyExists(this, loc.key) || !StructKeyExists(variables, "$persistedProperties") || !StructKeyExists(variables.$persistedProperties, loc.key) || this[loc.key] != variables.$persistedProperties[loc.key] && (Len(arguments.property) == 0 || loc.key == arguments.property))
+			if (!StructKeyExists(this, loc.key) || !StructKeyExists(variables, "$persistedProperties") || !StructKeyExists(variables.$persistedProperties, loc.key) || Compare(this[loc.key], variables.$persistedProperties[loc.key]) && (!Len(arguments.property) || loc.key == arguments.property))
 				loc.returnValue = true;
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -951,7 +951,7 @@
 			ArrayAppend(loc.sql, "UPDATE #variables.wheels.class.tableName# SET ");
 			for (loc.key in variables.wheels.class.properties)
 			{
-				if (StructKeyExists(this, loc.key) && (!StructKeyExists(variables.$persistedProperties, loc.key) || this[loc.key] != variables.$persistedProperties[loc.key]))
+				if (StructKeyExists(this, loc.key) && (!StructKeyExists(variables.$persistedProperties, loc.key) || Compare(this[loc.key], variables.$persistedProperties[loc.key])))
 				{
 					ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
 					loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, null=this[loc.key] == ""};
