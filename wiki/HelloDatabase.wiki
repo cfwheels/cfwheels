@@ -187,7 +187,7 @@ In the view at `views/users/index.cfm`, it's as simple as looping through the qu
 <h1>Users</h1>
 
 <cfif flashKeyExists("success")>
-    <p>#flash("success")#</p>
+    <p class="success">#flash("success")#</p>
 </cfif>
 
 <p>#linkTo(text="+ Add New User", action="user")#</p>
