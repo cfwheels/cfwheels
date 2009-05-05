@@ -183,6 +183,7 @@ In the view at `views/users/index.cfm`, it's as simple as looping through the qu
 
 {{{
 <h1>Users</h1>
+<p>#linkTo(text="+ Add New User", action="user")#</p>
 
 <table>
     <thead>
@@ -197,7 +198,7 @@ In the view at `views/users/index.cfm`, it's as simple as looping through the qu
             <tr>
                 <td>#users.name#</td>
                 <td>#users.email#</td>
-                <td>#linkTo(text="Edit", action="user", key=users.id)</td>
+                <td>#linkTo(text="Edit", action="user", key=users.id, title="Edit #users.name#")</td>
             </tr>
         </cfloop>
     </tbody>
