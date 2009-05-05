@@ -37,7 +37,11 @@
 		if (!StructKeyExists(arguments, "enctype") && arguments.multipart)
 			arguments.enctype = "multipart/form-data";
 		
-		loc.returnValue = $tag(name="form", skip="multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port", attributes=arguments);
+		loc.skip = "multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port";
+		if (Len(arguments.route))
+			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
+
+		loc.returnValue = $tag(name="form", skip=loc.skip, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
