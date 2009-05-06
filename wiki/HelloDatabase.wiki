@@ -71,7 +71,7 @@ Next, add these lines of code to the new file:
 
     <div>#textField(objectName="user", property="email", label="Email")#</div>
 
-    <div>#passwordField(objectName="user", property="password", "label="Password")#</div>
+    <div>#passwordField(objectName="user", property="password", label="Password")#</div>
 
     <div>#submitTag()#</div>
 
