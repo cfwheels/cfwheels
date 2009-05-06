@@ -58,7 +58,11 @@
 			loc.executeArgs = arguments;
 			loc.executeArgs.category = loc.category;
 			loc.executeArgs.key = loc.key;
+			if (StructKeyExists(arguments, "id"))
+				loc.executeArgs.wheelsId = arguments.id; // ugly fix due to the fact that id can't be passed along to cfinvoke
 			loc.returnValue = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$addImageTagToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			if (StructKeyExists(arguments, "id"))
+				loc.returnValue = ReplaceNoCase(loc.returnValue, "wheelsId", "id"); // ugly fix, see above
 		}
 		else
 		{
@@ -106,7 +110,7 @@
 		}
 		if (!StructKeyExists(arguments, "alt"))
 			arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
-		loc.returnValue = $tag(name="img", skip="source", close=true, attributes=arguments);
+		loc.returnValue = $tag(name="img", skip="source,key,category", close=true, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
