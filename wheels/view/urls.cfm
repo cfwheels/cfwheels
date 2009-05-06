@@ -126,7 +126,7 @@
 		arguments = $insertDefaults(name="paginationLinks", input=arguments);
 		loc.returnValue = ""; 
 		loc.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prependToLink,appendToLink,classForCurrent,handle,name";
-		loc.linkToArguments = StructCopy(arguments);
+		loc.linkToArguments = Duplicate(arguments);
 		loc.iEnd = ListLen(loc.skipArgs);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
@@ -145,11 +145,9 @@
 				}
 				else
 				{
-					loc.toAdd = arguments.name & "=" & loc.pageNumber;
+					loc.linkToArguments.params = arguments.name & "=" & loc.pageNumber;
 					if (StructKeyExists(arguments, "params"))
-						loc.linkToArguments.params = loc.linkToArguments.params & "&" & loc.toAdd;
-					else
-						loc.linkToArguments.params = loc.toAdd;
+						loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
 				}
 				loc.linkToArguments.text = loc.pageNumber;
 				loc.returnValue = loc.returnValue & linkTo(argumentCollection=loc.linkToArguments) & arguments.anchorDivider;
@@ -165,11 +163,9 @@
 				}
 				else
 				{
-					loc.toAdd = arguments.name & "=" & loc.i;
+					loc.linkToArguments.params = arguments.name & "=" & loc.i;
 					if (StructKeyExists(arguments, "params"))
-						loc.linkToArguments.params = loc.linkToArguments.params & "&" & loc.toAdd;
-					else
-						loc.linkToArguments.params = loc.toAdd;
+						loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
 				}
 				loc.linkToArguments.text = loc.i;
 				if (Len(arguments.classForCurrent) && loc.currentPage == loc.i)
@@ -203,11 +199,9 @@
 				}
 				else
 				{
-					loc.toAdd = arguments.name & "=" & loc.totalPages;
+					loc.linkToArguments.params = arguments.name & "=" & loc.totalPages;
 					if (StructKeyExists(arguments, "params"))
-						loc.linkToArguments.params = loc.linkToArguments.params & "&" & loc.toAdd;
-					else
-						loc.linkToArguments.params = loc.toAdd;
+						loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
 				}
 				loc.linkToArguments.text = loc.totalPages;
 				loc.returnValue = loc.returnValue & arguments.anchorDivider & linkTo(argumentCollection=loc.linkToArguments);
