@@ -32,7 +32,7 @@
 	<cfargument name="params" type="any" required="false" default="" hint="Verify that the passed in variable name exists in the params">
 	<cfargument name="handler" type="any" required="false" default="#application.wheels.verifies.handler#" hint="Pass in the name of a function that should handle failed verifications (default is to just abort the request when a verification fails)">
 	<cfscript>
-		ArrayAppend(variables.wheels.verifications, StructCopy(arguments));
+		ArrayAppend(variables.wheels.verifications, Duplicate(arguments));
 	</cfscript>
 </cffunction>
 

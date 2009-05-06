@@ -210,7 +210,7 @@
 		if (!Len(arguments.action) && arguments.pattern Does Not Contain "[action]")
 			$throw(type="Wheels.IncorrectArguments", message="The 'action' argument is not passed in or included in the pattern.", extendedInfo="Either pass in the 'action' argument to specifically tell Wheels which action to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
 		
-		loc.thisRoute = StructCopy(arguments);
+		loc.thisRoute = Duplicate(arguments);
 		loc.thisRoute.variables = "";
 		loc.iEnd = ListLen(arguments.pattern, "/");
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
