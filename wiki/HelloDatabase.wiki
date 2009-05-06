@@ -101,25 +101,12 @@ As it turns out, our controller needs to provide the view with a blank `user` ob
 To get a blank set of properties in the model, we'll also call the generated model's `new()` method.
 
 {{{
-<cfcomponent extends="Controller">
-
-    <cffunction name="add">
-        <cfset userClass = model("user")>
-        <cfset user = userClass.new()>
-    </cffunction>
-
-</cfcomponent>
-}}}
-
-Keep in mind that a more shorthand way of creating a model object instance and calling `new()` is to do it all on the same line, like so:
-
-{{{
 <cfset user = model("user").new()>
 }}}
 
 *Note:* Wheels will automatically know that we're talking about the `users` database table when we instantiate a `user` model. The convention: database tables are plural and their corresponding Wheels models are singular.
 
-Why is our model name singular instead of plural? When we're talking about a single record in the `users` database, we represent that with a model object. So the `users` table contains many `user` objects. It just works better in conversation. :)
+Why is our model name singular instead of plural? When we're talking about a single record in the `users` database, we represent that with a model object. So the `users` table contains many `user` objects. It just works better in conversation.
 
 ===The Generated Form===
 
