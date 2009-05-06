@@ -104,8 +104,8 @@ To get a blank set of properties in the model, we'll also call the generated mod
 <cfcomponent extends="Controller">
 
     <cffunction name="add">
-        <cfset user = model("user")>
-        <cfset user.new()>
+        <cfset userClass = model("user")>
+        <cfset user = userClass.new()>
     </cffunction>
 
 </cfcomponent>
