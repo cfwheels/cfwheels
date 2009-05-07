@@ -51,7 +51,7 @@
 			{
 				loc.item = ListGetAt(loc.select, loc.i);
 				if (!ListContainsNoCase(loc.qualifiedOrder, loc.item))
-					loc.qualifiedOrder = ListAppend(loc.qualifiedOrder, "#loc.i# ASC");
+					loc.qualifiedOrder = ListAppend(loc.qualifiedOrder, "#loc.item# ASC");
 			}
 			loc.simpleOrder = "";
 			loc.iEnd = ListLen(loc.qualifiedOrder);
