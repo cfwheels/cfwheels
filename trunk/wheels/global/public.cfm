@@ -69,7 +69,7 @@
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.property = ListGetAt(loc.route.variables, loc.i);
-					loc.returnValue = loc.returnValue & "&" & loc.property & "=" & URLEncodedFormat(arguments[loc.property]);
+					loc.returnValue = loc.returnValue & "&" & loc.property & "=" & $URLEncode(arguments[loc.property]);
 				}		
 			}
 			else
@@ -79,7 +79,7 @@
 				{
 					loc.property = ListGetAt(loc.route.pattern, loc.i, "/");
 					if (loc.property Contains "[")
-						loc.returnValue = loc.returnValue & "/" & URLEncodedFormat(arguments[Mid(loc.property, 2, Len(loc.property)-2)]); // get param from arguments
+						loc.returnValue = loc.returnValue & "/" & $URLEncode(arguments[Mid(loc.property, 2, Len(loc.property)-2)]); // get param from arguments
 					else
 						loc.returnValue = loc.returnValue & "/" & loc.property; // add hard coded param from route
 				}		
@@ -96,10 +96,10 @@
 				loc.returnValue = loc.returnValue & "&action=" & REReplace(REReplace(arguments.action, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
 			if (Len(arguments.key))
 			{
+				loc.param = $URLEncode(arguments.key);
 				if (application.wheels.obfuscateUrls)
-					loc.returnValue = loc.returnValue & "&key=" & obfuscateParam(URLEncodedFormat(arguments.key));
-				else
-					loc.returnValue = loc.returnValue & "&key=" & URLEncodedFormat(arguments.key);
+					loc.param = obfuscateParam(loc.param);
+				loc.returnValue = loc.returnValue & "&key=" & loc.param;
 			}
 		}
 

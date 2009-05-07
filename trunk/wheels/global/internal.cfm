@@ -1,3 +1,13 @@
+<cffunction name="$URLEncode" returntype="string" access="public" output="false">
+	<cfargument name="param" type="string" required="true">
+	<cfscript>
+		var returnValue = "";
+		returnValue = URLEncodedFormat(arguments.param);
+		returnValue = ReplaceList(returnValue, "%24,%2D,%5F,%2E,%2B,%21,%2A,%27,%28,%29", "$,-,_,.,+,!,*,',(,)"); // these characters are safe so set them back to their original values.
+	</cfscript>
+	<cfreturn returnValue>
+</cffunction>
+
 <cffunction name="$routeVariables" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
@@ -66,10 +76,10 @@
 			loc.delim = "&";
 			if (ArrayLen(loc.temp) == 2)
 			{
+				loc.param = $URLEncode(loc.temp[2]);
 				if (application.wheels.obfuscateUrls)
-					loc.returnValue = loc.returnValue & obfuscateParam(URLEncodedFormat(loc.temp[2]));
-				else
-					loc.returnValue = loc.returnValue & URLEncodedFormat(loc.temp[2]);
+					loc.param = obfuscateParam(loc.param);
+				loc.returnValue = loc.returnValue & loc.param;
 			}
 		}
 	</cfscript>
