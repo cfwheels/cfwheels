@@ -123,9 +123,9 @@
 		if (!arguments.onlyPath)
 		{
 			if (arguments.port != 0)
-				loc.returnValue = ":" & arguments.port & loc.returnValue;
-			else if (cgi.server_port != 80)
-				loc.returnValue = ":" & cgi.server_port & loc.returnValue;
+				loc.returnValue = ":" & arguments.port & loc.returnValue; // use the port that was passed in by the developer
+			else if (cgi.server_port != 80 && cgi.server_port != 443)
+				loc.returnValue = ":" & cgi.server_port & loc.returnValue; // if the port currently in use is not 80 or 443 we set it explicitly in the URL
 			if (Len(arguments.host))
 				loc.returnValue = arguments.host & loc.returnValue;
 			else
