@@ -1,0 +1,11 @@
+This is the unit testing framework for wheels. Currently it only meant for testing out the core
+wheels framework. The framework is based directly off RocketUnit (http://rocketunit.riaforge.com)
+
+Packages for each component of the wheels framework is located under the wheels/test directory. 
+In each package their contains a tests directory where test should be placed for processing. The 
+main package directory can be used to place components and files to be included or called within
+the tests. Only components placed in the package's tests directory will be run.
+
+To start the test just call http://<your domain>/wheels/tests/index.cfm
+
+NOTE: you must provide the trailing index.cfm is URL rewriting is turned on.
