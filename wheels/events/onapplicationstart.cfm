@@ -22,7 +22,7 @@
 		loc.majorVersion = Left(application.wheels.serverVersion, 1);
 		if ((application.wheels.serverName == "Railo" && loc.majorVersion < 3) || (application.wheels.serverName == "Adobe ColdFusion" && loc.majorVersion < 8))
 			$throw(type="Wheels.NoSupport", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Upgrade to Adobe ColdFusion 8 or Railo 3.");
-		application.wheels.version = "0.9.1";
+		application.wheels.version = "0.9.2";
 		application.wheels.controllers = {};
 		application.wheels.models = {};
 		application.wheels.existingModelFiles = "";
