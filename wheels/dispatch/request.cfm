@@ -157,6 +157,10 @@
 		loc.returnValue.controller = REReplace(loc.returnValue.controller, "-([a-z])", "\u\1", "all");
 		loc.returnValue.action = REReplace(loc.returnValue.action, "-([a-z])", "\u\1", "all");
 	
+		// add name of route to params if a named route is running
+		if (StructKeyExists(arguments.foundRoute, "name") && Len(arguments.foundRoute.name) && !StructKeyExists(loc.returnValue, "route"))
+			loc.returnValue.route = arguments.foundRoute.name;
+	
 		// decrypt all values except controller and action
 		if (application.wheels.obfuscateUrls)
 		{

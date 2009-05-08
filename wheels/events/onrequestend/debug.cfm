@@ -31,6 +31,12 @@
 	<td valign="top"><strong>Plugins:</strong></td>
 	<td><cfif StructCount(get("plugins")) IS NOT 0><cfset loc.count = 0><cfloop collection="#get('plugins')#" item="loc.i"><cfset loc.count = loc.count + 1><a href="#get("webPath")##ListLast(cgi.script_name, "/")#?controller=wheels&action=plugins&name=#LCase(loc.i)#">#loc.i#</a><cfif StructCount(get("plugins")) GT loc.count><br /></cfif></cfloop><cfelse>None</cfif></td>
 </tr>
+<cfif StructKeyExists(request.wheels.params, "route")>
+	<tr>
+		<td valign="top"><strong>Route:</strong></td>
+		<td>#request.wheels.params.route#</td>
+	</tr>
+</cfif>
 <tr>
 	<td valign="top"><strong>Controller:</strong></td>
 	<td>#request.wheels.params.controller#</td>
@@ -45,24 +51,27 @@
 		<td>#request.wheels.params.key#</td>
 	</tr>
 </cfif>
-<cfif StructCount(request.wheels.params) GT 3 OR (StructCount(request.wheels.params) GT 2 AND NOT StructKeyExists(request.wheels.params, "key"))>
-	<tr>
-		<td valign="top"><strong>Additional Params:</strong></td>
-		<td>
-		<cfloop collection="#request.wheels.params#" item="loc.i">
-			<cfif loc.i IS NOT "fieldnames" AND loc.i IS NOT "controller" AND loc.i IS NOT "action" AND loc.i IS NOT "key">
-				<cfif isStruct(request.wheels.params[loc.i])>
-					<cfloop collection="#request.wheels.params[loc.i]#" item="loc.j">
-						#lCase(loc.i)#.#lCase(loc.j)# = #request.wheels.params[loc.i][loc.j]#<br />
-					</cfloop>
-				<cfelse>
-					#lCase(loc.i)# = #request.wheels.params[loc.i]#<br />
-				</cfif>
+<tr>
+	<td valign="top"><strong>Additional Params:</strong></td>
+	<td>
+	<cfset loc.additionalParamsExists = false>
+	<cfloop collection="#request.wheels.params#" item="loc.i">
+		<cfif loc.i IS NOT "fieldnames" AND loc.i IS NOT "route" AND loc.i IS NOT "controller" AND loc.i IS NOT "action" AND loc.i IS NOT "key">
+			<cfset loc.additionalParamsExists = true>
+			<cfif isStruct(request.wheels.params[loc.i])>
+				<cfloop collection="#request.wheels.params[loc.i]#" item="loc.j">
+					#lCase(loc.i)#.#lCase(loc.j)# = #request.wheels.params[loc.i][loc.j]#<br />
+				</cfloop>
+			<cfelse>
+				#lCase(loc.i)# = #request.wheels.params[loc.i]#<br />
 			</cfif>
-		</cfloop>
-		</td>
-	</tr>
-</cfif>
+		</cfif>
+	</cfloop>
+	<cfif NOT loc.additionalParamsExists>
+		None
+	</cfif>
+	</td>
+</tr>
 <tr>
 	<td valign="top"><strong>Execution Time:</strong></td>
 	<td>#request.wheels.execution.total#ms</td>
