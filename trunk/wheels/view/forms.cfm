@@ -945,6 +945,7 @@
 					}
 				}
 			}
+			loc.iEnd = arguments.options.RecordCount;
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=arguments.options[arguments.valueField][loc.i], optionText=arguments.options[arguments.textField][loc.i]);
