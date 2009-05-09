@@ -204,7 +204,7 @@ In the view at `views/users/index.cfm`, it's as simple as looping through the qu
 
 ==Deleting a User==
 
-Notice in our listing above that we have a `delete` action. Our `linkTo()` call has an argument named `confirm`, which will pop up a box asking the end user to confirm the deletion before running the `delete` action.
+Notice in our listing above that we have a `delete` action. Our `linkTo()` call has an argument named `confirm`, which will include some simple JavaScript to pop up a box asking the end user to confirm the deletion before running the `delete` action.
 
 As another simple example, here's what our `delete` action would look like:
 
