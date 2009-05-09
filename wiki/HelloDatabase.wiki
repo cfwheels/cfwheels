@@ -201,3 +201,20 @@ In the view at `views/users/index.cfm`, it's as simple as looping through the qu
 
 </cfoutput>
 }}}
+
+==Deleting a User==
+
+Notice in our listing above that we have a `delete` action. Our `linkTo()` call has an argument named `confirm`, which will pop up a box asking the end user to confirm the deletion before running the `delete` action.
+
+As another simple example, here's what our `delete` action would look like:
+
+{{{
+<cffunction name="delete">
+
+    <cfset user = model("user").findByKey(params.key)>
+    <cfset user.delete()>
+    <cfset flashInsert(success="#user.name# was successfully deleted.")>
+    <cfset redirectTo(action="index")>
+
+</cffunction>
+}}}
