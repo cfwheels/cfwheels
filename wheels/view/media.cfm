@@ -84,7 +84,12 @@
 <cffunction name="$imageTag" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		if (Left(arguments.source, 7) == "http://")
+		loc.localFile = true;
+
+		if(Left(arguments.source, 7) == "http://" || Left(arguments.source, 8) == "https://")
+			loc.localFile = false;
+
+		if (!loc.localFile)
 		{
 			arguments.src = arguments.source;
 		}
@@ -93,9 +98,9 @@
 			arguments.src = application.wheels.webPath & application.wheels.imagePath & "/" & arguments.source;
 			if (application.wheels.environment != "production")
 			{
-				if (Left(arguments.source, 7) != "http://" && !FileExists(ExpandPath(arguments.src)))
+				if (loc.localFile && !FileExists(ExpandPath(arguments.src)))
 					$throw(type="Wheels.ImageFileNotFound", message="Wheels could not find '#expandPath('#arguments.src#')#' on the local file system.", extendedInfo="Pass in a correct relative path from the 'images' folder to an image.");
-				else if (Left(arguments.source, 7) != "http://" && arguments.source Does Not Contain ".jpg" && arguments.source Does Not Contain ".gif" && arguments.source Does Not Contain ".png")
+				else if (loc.localFile && arguments.source Does Not Contain ".jpg" && arguments.source Does Not Contain ".gif" && arguments.source Does Not Contain ".png")
 					$throw(type="Wheels.ImageFormatNotSupported", message="Wheels can't read image files with that format.", extendedInfo="Use a GIF, JPG or PNG image instead.");
 			}
 			if (!StructKeyExists(arguments, "width") || !StructKeyExists(arguments, "height"))
