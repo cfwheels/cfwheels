@@ -15,7 +15,7 @@
 			arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & Trim(loc.item);
 			if (loc.item Does Not Contain ".")
 				arguments.href = arguments.href & ".css";
-			loc.returnValue = loc.returnValue & $tag(name="link", skip="sources", close=true, attributes=arguments);
+			loc.returnValue = loc.returnValue & $tag(name="link", skip="source,sources", close=true, attributes=arguments);
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -36,7 +36,7 @@
 			arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & Trim(loc.item);
 			if (loc.item Does Not Contain ".")
 				arguments.src = arguments.src & ".js";
-			loc.returnValue = loc.returnValue & $element(name="script", skip="sources", attributes=arguments);
+			loc.returnValue = loc.returnValue & $element(name="script", skip="source,sources", attributes=arguments);
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
