@@ -218,3 +218,7 @@ As another simple example, here's what our `delete` action would look like:
 
 </cffunction>
 }}}
+
+We simply load the user using the model's `findByKey()` method and then call the object's `delete()` method. That's all there is to it.
+
+==Editing a User==
