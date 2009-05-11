@@ -320,6 +320,6 @@ We simply load the user using the model's [findByKey findByKey()] method and the
 
 ==Database Says Hello==
 
-We've shown you quite a few of the basics in getting a simple user database up and running. We hope that this has whet your appetite to see some of the power packed into the ColdFusion on Wheels framework. There's plenty more.
+We've shown you quite a few of the basics in getting a simple user database up and running. We hope that this has whet your appetite to see some of the power packed into the !ColdFusion on Wheels framework. There's plenty more.
 
 Be sure to read on to some of the related chapters listed below to learn more about working with Wheels's ORM.
