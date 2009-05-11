@@ -210,9 +210,9 @@ In the view at `views/users/index.cfm`, it's as simple as looping through the qu
 
 We'll now show another cool aspect of form helpers by creating a screen for editing users.
 
-===Creating the Edit Form===
+===Coding the Edit Form===
 
-You probably noticed in the _Listing Users_ code example that we'll have an action for editing users called `edit`. This action expects a `key` as well which is passed in the URL by default.
+You probably noticed in the code listed above that we'll have an action for editing users called `edit`. This action expects a `key` as well which is passed in the URL by default.
 
 Given the provided `key`, we'll have the action load the appropriate `user` object to pass on to the view:
 
@@ -265,7 +265,7 @@ With the `user` model populated, we'll end up seeing code similar to this:
 
     <div><label for="user-name">Name<input id="user-name" type="text" value="Homer Simpson" name="user[name]" /></label></div>
 
-    <div><label for="user-email">Email<input id="user-email" type="text" value="homerj@nuclear.com" name="user[email]" /></label></div>
+    <div><label for="user-email">Email<input id="user-email" type="text" value="homerj@nuclearpower.com" name="user[email]" /></label></div>
 
     <div><label for="user-password">Password<input id="user-password" type="password" value="donuts.mmm" name="user[password]" /></label></div>
 
