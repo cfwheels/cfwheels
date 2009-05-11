@@ -301,7 +301,7 @@ After the update, we'll add a success message to the Flash and send the user bac
 
 ==Deleting Users==
 
-Notice in our listing above that we have a `delete` action. Our [linkTo linkTo()] call has an argument named `confirm`, which will include some simple JavaScript to pop up a box asking the end user to confirm the deletion before running the `delete` action.
+Notice in our listing above that we have a `delete` action. Our [linkTo linkTo()] call has an argument named `confirm`, which will include some simple !JavaScript to pop up a box asking the end user to confirm the deletion before running the `delete` action.
 
 Here's what our `delete` action would look like:
 
