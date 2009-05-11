@@ -206,26 +206,7 @@ In the view at `views/users/index.cfm`, it's as simple as looping through the qu
 </cfoutput>
 }}}
 
-==Deleting a User==
-
-Notice in our listing above that we have a `delete` action. Our [linkTo linkTo()] call has an argument named `confirm`, which will include some simple JavaScript to pop up a box asking the end user to confirm the deletion before running the `delete` action.
-
-Here's what our `delete` action would look like:
-
-{{{
-<cffunction name="delete">
-
-    <cfset user = model("user").findByKey(params.key)>
-    <cfset user.delete()>
-    <cfset flashInsert(success="#user.name# was successfully deleted.")>
-    <cfset redirectTo(action="index")>
-
-</cffunction>
-}}}
-
-We simply load the user using the model's [findByKey findByKey()] method and then call the object's [[delete delete()] method. That's all there is to it.
-
-==Editing a User==
+==Editing Users==
 
 We'll now show another cool aspect of form helpers by creating a screen for editing users.
 
@@ -317,6 +298,25 @@ The last action that we'll create in this mock action will be the `update` actio
 To update the user, simply call its [update update()] method with the `user` struct passed from the form via `params`. It's that simple.
 
 After the update, we'll add a success message to the Flash and send the user back to the edit form in case they want to make more changes.
+
+==Deleting Users==
+
+Notice in our listing above that we have a `delete` action. Our [linkTo linkTo()] call has an argument named `confirm`, which will include some simple JavaScript to pop up a box asking the end user to confirm the deletion before running the `delete` action.
+
+Here's what our `delete` action would look like:
+
+{{{
+<cffunction name="delete">
+
+    <cfset user = model("user").findByKey(params.key)>
+    <cfset user.delete()>
+    <cfset flashInsert(success="#user.name# was successfully deleted.")>
+    <cfset redirectTo(action="index")>
+
+</cffunction>
+}}}
+
+We simply load the user using the model's [findByKey findByKey()] method and then call the object's [[delete delete()] method. That's all there is to it.
 
 ==Database Says Hello==
 
