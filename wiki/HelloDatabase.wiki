@@ -316,7 +316,7 @@ Here's what our `delete` action would look like:
 </cffunction>
 }}}
 
-We simply load the user using the model's [findByKey findByKey()] method and then call the object's [[delete delete()] method. That's all there is to it.
+We simply load the user using the model's [findByKey findByKey()] method and then call the object's [delete delete()] method. That's all there is to it.
 
 ==Database Says Hello==
 
