@@ -325,4 +325,5 @@ We've shown you quite a few of the basics in getting a simple user database up a
 Be sure to read on to some of the related chapters listed below to learn more about working with Wheels's ORM.
 
 ==Related Chapters==
+ * [HelloWorld Hello World!]
  * [UsingtheFlash Using the Flash]
