@@ -282,7 +282,7 @@ There's a lot of repetition in the `add` and `edit` forms. You'd imagine that we
 
 ===Handing the Edit Form Submission===
 
-The last action that we'll create in this mock action will be the `update` action. This will be similar to the `create` action, except it will be updating the `user` object:
+Now we'll create the `update` action. This will be similar to the `create` action, except it will be updating the `user` object:
 
 {{{
 <cffunction name="update">
