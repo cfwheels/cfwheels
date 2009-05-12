@@ -1,5 +1,5 @@
 #summary A quick tutorial that demonstrates how quickly you can get database connectivity up and running with Wheels.
-#labels chapter,published_production
+#labels chapter,published_prod
 
 Wheels's built in model provides your application with some simple and powerful functionality for interacting with databases. To get started, you make some simple configurations, call some functions within your controllers, and that's it. Best yet, you will rarely ever need to write SQL code to get those redundant CRUD tasks out of the way.
 
