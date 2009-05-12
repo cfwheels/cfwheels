@@ -98,7 +98,7 @@ One thing you'll notice is the [textField textField()] and [passwordField passwo
 
 We need to supply our view code with an object called `user`. Because the controller is responsible for providing the views with data, we'll set it there.
 
-As it turns out, our controller needs to provide the view with a blank `user` object (whose instance variable will also called `user` in this case). In our `add` action, we will use the [model model()] function to generate a new instance of the `user` model.
+As it turns out, our controller needs to provide the view with a blank `user` object (whose instance variable will also be called `user` in this case). In our `add` action, we will use the [model model()] function to generate a new instance of the `user` model.
 
 To get a blank set of properties in the model, we'll also call the generated model's [new new()] method.
 
