@@ -297,7 +297,7 @@ Now we'll create the `update` action. This will be similar to the `create` actio
 
 To update the user, simply call its [update update()] method with the `user` struct passed from the form via `params`. It's that simple.
 
-After the update, we'll add a success message to the Flash and send the user back to the edit form in case they want to make more changes.
+After the update, we'll add a success message [UsingtheFlash using the Flash] and send the end user back to the edit form in case they want to make more changes.
 
 ==Deleting Users==
 
