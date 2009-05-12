@@ -1,5 +1,5 @@
 #summary Updating records in your database tables.
-#labels chapter,0.9.1
+#labels chapter,0.9.1,published_dev
 
 When you have created or retrieved an object, you can save it to the database by calling its [save save()] method. This method returns `true` if the object passes all validations and the object was saved to the database. Otherwise, it returns `false`.
 
@@ -22,9 +22,9 @@ You can also change the values of one or more properties and save them to the da
 <cfset post.update(title="New version of Wheels just released")>
 }}}
 
-==Updating Via `struct` Values==
+==Updating Via struct Values==
 
-You can also pass in name/value pairs to [update update()] as a `struct`. The main reason this method accepts a `struct` is to allow you to easily use it with forms.
+You can also pass in name/value pairs to [update update()] as a struct. The main reason this method accepts a struct is to allow you to easily use it with forms.
 
 This is how it would look if you wanted to update the properties for a post based on a submitted form.
 
@@ -33,7 +33,7 @@ This is how it would look if you wanted to update the properties for a post base
 <cfset post.update(params.post)>
 }}}
 
-It's also possible to combine named arguments with a `struct`, but then you need to name the `struct` argument as `properties`.
+It's also possible to combine named arguments with a struct, but then you need to name the struct argument as `properties`.
 
 Example:
 
@@ -48,13 +48,13 @@ To cut down even more on lines of code, you can also combine the reading and sav
 
 ===The `updateByKey()` Method===
 
-Give the [updateByKey updateByKey()] method a primary key value (or several if you use composite keys) in the `key` argument, and it will update the corresponding record in your table with the properties you give it. You can pass in the properties either as named arguments or as a `struct` to the `properties` argument.
+Give the [updateByKey updateByKey()] method a primary key value (or several if you use composite keys) in the `key` argument, and it will update the corresponding record in your table with the properties you give it. You can pass in the properties either as named arguments or as a struct to the `properties` argument.
 
 This method returns the object with the primary key value you specified. If the object does not pass validation, it will be returned anyway, but nothing will be saved to the database.
 
 By default, [updateByKey updateByKey()] will fetch the object first and call the [update update()] method on it, thus invoking any callbacks and validations you have specified for the model. You can change this behavior by passing in `instantiate=false`. Then it will just update the record from the table using a simple `UPDATE` query.
 
-An example of using [updateByKey updateByKey()] by passing a `struct`:
+An example of using [updateByKey updateByKey()] by passing a struct:
 
 {{{
 <cfset result = model("post").updateByKey(33, params.post)>
