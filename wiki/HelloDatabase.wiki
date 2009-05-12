@@ -196,8 +196,8 @@ In the view at `views/users/index.cfm`, it's as simple as looping through the qu
             <tr>
                 <td>#users.name#</td>
                 <td>#users.email#</td>
-                <td>#linkTo(text="Edit", action="edit", key=users.id, title="Edit #users.name#")</td>
-                <td>#linkTo(text="Delete", action="delete", key=users.id, title="Delete #users.name#", confirm="Are you sure that you want to delete #users.name#?")</td>
+                <td>#linkTo(text="Edit", action="edit", key=users.id, title="Edit #users.name#")#</td>
+                <td>#linkTo(text="Delete", action="delete", key=users.id, title="Delete #users.name#", confirm="Are you sure that you want to delete #users.name#?")#</td>
             </tr>
         </cfloop>
     </tbody>
