@@ -44,9 +44,9 @@ That said, here's a quick look at a table that you'll need in your database:
 || password || `varchar(15)` || ||
 
 
-Note a couple things about this tables:
- # The table names are plural.
- # Each table has an auto-incrementing primary key named `id`.
+Note a couple things about this table:
+ # The table name is plural.
+ # The table has an auto-incrementing primary key named `id`.
 
 These are database _conventions_ used by Wheels. This framework strongly encourages that everyone follow convention over configuration. That way everyone is doing things mostly the same way, leading to less maintenance and training headaches down the road.
 
