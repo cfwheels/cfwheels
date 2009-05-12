@@ -44,7 +44,7 @@ That said, here's a quick look at a table that you'll need in your database:
 || password || `varchar(15)` || ||
 
 
-Note a few things about these tables:
+Note a couple things about this tables:
  # The table names are plural.
  # Each table has an auto-incrementing primary key named `id`.
 
