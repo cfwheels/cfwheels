@@ -133,11 +133,16 @@
 	<cfset var loc = {}>
 	<cfset arguments.name = "loc.returnValue">
 	<!--- we have to use this cfif here to get around a bug with railo --->
-	<cfif StructKeyExists(arguments, "table")>
-		<cfdbinfo datasource="#arguments.datasource#" name="#arguments.name#" type="#arguments.type#" username="#arguments.username#" password="#arguments.password#" table="#arguments.table#">
-	<cfelse>
-		<cfdbinfo datasource="#arguments.datasource#" name="#arguments.name#" type="#arguments.type#" username="#arguments.username#" password="#arguments.password#">
-	</cfif>
+	<cftry>
+		<cfif StructKeyExists(arguments, "table")>
+			<cfdbinfo datasource="#arguments.datasource#" name="#arguments.name#" type="#arguments.type#" username="#arguments.username#" password="#arguments.password#" table="#arguments.table#">
+		<cfelse>
+			<cfdbinfo datasource="#arguments.datasource#" name="#arguments.name#" type="#arguments.type#" username="#arguments.username#" password="#arguments.password#">
+		</cfif>
+		<cfcatch type="any">
+			<cfset $throw(type="Wheels.DataBaseInspectionError", message="Could not perform database inspection", extendedInfo="This error is likely caused when Wheels cannot find the table your Model is referencing. It can also be caused by invalid connection information to your database, such as: and invalid datasource, name, or password arduments.")>
+		</cfcatch>
+	</cftry>
 	<cfreturn loc.returnValue>
 </cffunction>
 
