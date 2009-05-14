@@ -66,7 +66,7 @@
 		if (application.wheels.URLRewriting == "Off")
 			loc.delim = "&";
 		else
-			loc.delim = "?";
+			loc.delim = "?";		
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.params, "&");
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -103,7 +103,7 @@
 					if (StructKeyExists(arguments.input, loc.item))
 						$throw(type="Wheels.IncorrectArguments", message="The '#loc.item#' argument is not allowed.", extendedInfo="Do not pass in the '#loc.item#' argument. It will be set automatically by Wheels.");
 				}
-			}
+			}			
 		}
 		StructAppend(arguments.input, application.wheels[arguments.name], false);
 		loc.returnValue = arguments.input;
@@ -159,7 +159,7 @@
 	<cfscript>
 		var loc = {};
 		loc.fileName = capitalize(arguments.name);
-
+		
 		// check if the controller file exists and store the results for performance reasons
 		if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingControllerFiles, arguments.name))
 		{
@@ -168,7 +168,7 @@
 			else
 				application.wheels.nonExistingControllerFiles = ListAppend(application.wheels.nonExistingControllerFiles, arguments.name);
 		}
-
+	
 		// check if the controller's view helper file exists and store the results for performance reasons
 		if (!ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingHelperFiles, arguments.name))
 		{
@@ -177,7 +177,7 @@
 			else
 				application.wheels.nonExistingHelperFiles = ListAppend(application.wheels.nonExistingHelperFiles, arguments.name);
 		}
-
+	
 		if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name))
 			loc.fileName = "Controller";
 		application.wheels.controllers[arguments.name] = $createObjectFromRoot(path=application.wheels.controllerComponentPath, fileName=loc.fileName, method="$initControllerClass", name=arguments.name);
@@ -281,7 +281,7 @@
 		{
 			if (Now() > application.wheels.cache[arguments.category][arguments.key].expiresAt)
 			{
-				$removeFromCache(key=arguments.key, category=arguments.category);
+				$removeFromCache(key=arguments.key, category=arguments.category);		
 			}
 			else
 			{
@@ -342,7 +342,7 @@
 		if (FileExists(ExpandPath("#application.wheels.modelPath#/#loc.fileName#.cfc")))
 			application.wheels.existingModelFiles = ListAppend(application.wheels.existingModelFiles, arguments.name);
 		else
-			$throw(type="Wheels.ModelNotFound", message="Model Not Found", extendedInfo="Make sure a model with the name '#arguments.name#' exists in the 'models' folder.");
+			loc.fileName = "Model";
 		application.wheels.models[arguments.name] = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelClass", name=arguments.name);
 		loc.returnValue = application.wheels.models[arguments.name];
 	</cfscript>
