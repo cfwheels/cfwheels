@@ -69,7 +69,7 @@ For example, let's say that we want to disable debugging information in our `dev
 || `showDebugInformation` || `boolean` || Enabled in `design` and `development` || Whether or not to show debugging information at the footers of your pages. ||
 || `showErrorInformation` || `boolean` || Enabled in `design`, `development`, `maintenance`, `testing`, and `production` || Whether or not to display Wheels and CFML errors to the end user. When set to `false`, Wheels will run and display code stored at `events/onerror.cfm`. ||
 || `sendEmailOnError` || `boolean` || Enabled in `production` environments that have a TLD like `.com`, `.org`, etc. || Whether or not to send an email to administrators whenever Wheels throws an error. ||
-|| `errorEmailAddress` || `string` ||  || Comma-delimited list of email address to send error notifications to. Only applies if the setting for `sendEmailOnError` is set to `true`. ||
+|| `errorEmailAddress` || `string` || `[empty string]` || Comma-delimited list of email address to send error notifications to. Only applies if the setting for `sendEmailOnError` is set to `true`. ||
 
 For more information, refer to the chapter about [SwitchingEnvironments Switching Environments].
 
