@@ -38,6 +38,8 @@ Sometimes it is useful for our applications to "force" URL rewriting. By default
 
 The code above will tell Wheels to skip its automatic detection of the URL Rewriting capabilities and just set it as "Off".
 
+You can also set it to "Partial" if you believe that your web server is capable of rewriting the URL as folders after `index.cfm`.
+
 ===Data Source Settings===
 
 Probably the most important configuration of them all. What is an application without a database to store all of its precious data?
@@ -60,6 +62,17 @@ For example, let's say that we want to disable debugging information in our `dev
 <!--- /config/development/settings.cfm --->
 <cfset set(showDebugInformation=false)>
 }}}
+
+====Full Listing of Environment Settings====
+
+|| *Name* || *Type* || *Default* || Description ||
+|| `cacheDatabaseSchema` || `boolean` || Enabled in `development`, `maintenance`, `testing` and `production` || Whether or not Wheels is to cache the table and column names in your database. ||
+|| `cacheFileChecking` || `boolean` || Enabled in `development`, `maintenance`, `testing`, and `production` || ||
+|| `cacheImages` || `boolean` || Enabled in `development`, `maintenance`, `testing`, and `production` || Whether or not to cache general image information used in [imageTag imageTag()] like width and height. ||
+|| `cacheModelInitialization` || `boolean` || Enabled in `development`, `maintenance`, `testing` and `production` || Whether or not to cache general model objects after first instantiation. ||
+|| `cacheControllerInitialization` || `boolean` || Enabled in `development`, `maintenace`, `testing`, and `production` || Whether or not to cache controller names across all pageviews. ||
+|| `cacheRoutes` || `boolean` || Enabled in `development`, `maintenance`, `testing`, and `production` || Whether or not to cache routes across all pageviews. ||
+|| `cacheActions` || `boolean` || Enabled in `maintenance`, `testing`, and `production` || Whether or not to cache logic contained in actions across all pageviews. ||
 
 ===Caching Settings===
 
