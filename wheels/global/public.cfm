@@ -79,9 +79,16 @@
 				{
 					loc.property = ListGetAt(loc.route.pattern, loc.i, "/");
 					if (loc.property Contains "[")
-						loc.returnValue = loc.returnValue & "/" & $URLEncode(arguments[Mid(loc.property, 2, Len(loc.property)-2)]); // get param from arguments
+					{
+						loc.param = $URLEncode(arguments[Mid(loc.property, 2, Len(loc.property)-2)]);
+						if (application.wheels.obfuscateUrls)
+							loc.param = obfuscateParam(loc.param);
+						loc.returnValue = loc.returnValue & "/" & loc.param; // get param from arguments
+					}
 					else
+					{
 						loc.returnValue = loc.returnValue & "/" & loc.property; // add hard coded param from route
+					}
 				}		
 			}
 		}
