@@ -40,6 +40,8 @@ The code above will tell Wheels to skip its automatic detection of the URL Rewri
 
 You can also set it to "Partial" if you believe that your web server is capable of rewriting the URL as folders after `index.cfm`.
 
+For more information, read the chapter about [URLRewriting URL Rewriting].
+
 ===Data Source Settings===
 
 Probably the most important configuration of them all. What is an application without a database to store all of its precious data?
