@@ -550,108 +550,113 @@
 			}
 		}
 
-		// now let's go through the properties and map them to the database
-		loc.select = "";
-		loc.addedProperties = {};
-		loc.iEnd = ListLen(arguments.select);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		// go through the properties and map them to the database unless the developer passed in a table name or an alias in which case we assume they know what they're doing and leave the select clause as is
+		if (arguments.select Does Not Contain "." AND arguments.select Does Not Contain " AS ")
 		{
-			loc.iItem = Trim(ListGetAt(arguments.select, loc.i));
-			// if the developer does not specify a table name or a column alias we'll take control here and map it to the database
-			if (loc.iItem Does Not Contain "." && loc.iItem Does Not Contain " AS ")
+			loc.select = "";
+			loc.addedProperties = "";
+			loc.addedPropertiesByModel = {};
+			loc.iEnd = ListLen(arguments.select);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
+				loc.iItem = Trim(ListGetAt(arguments.select, loc.i));
+	
+				// look for duplicates
+				loc.duplicateCount = ListValueCount(loc.addedProperties, loc.iItem);
+				loc.addedProperties = ListAppend(loc.addedProperties, loc.iItem);
+	
 				// loop through all classes (current and all included ones)
 				loc.jEnd = ArrayLen(loc.classes);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
 					loc.classData = loc.classes[loc.j];
+	
 					// get the class name (the variable it is stored in differs depending on if it's taken from the current class or the association info)
 					if (StructKeyExists(loc.classData, "class"))
-						loc.className = loc.classData.class;
+						loc.modelName = loc.classData.class;
 					else if (StructKeyExists(loc.classData, "name"))
-						loc.className = loc.classData.name;
-					if (!StructKeyExists(loc.addedProperties, loc.className))
-						loc.addedProperties[loc.className] = "";
-					// if we find the property in this class and it's not already added we go ahead and add it to the select clause
-					if (ListFindNoCase(loc.classData.propertyList, loc.iItem) && !ListFind(loc.addedProperties[loc.className], loc.iItem))
+						loc.modelName = loc.classData.name;
+	
+					// create a struct for this model unless it already exists
+					if (!StructKeyExists(loc.addedPropertiesByModel, loc.modelName))
+						loc.addedPropertiesByModel[loc.modelName] = "";
+	
+					// if we find the property in this model and it's not already added we go ahead and add it to the select clause
+					if (ListFindNoCase(loc.classData.propertyList, loc.iItem) && !ListFind(loc.addedPropertiesByModel[loc.modelName], loc.iItem))
 					{
-						loc.addedProperties[loc.className] = ListAppend(loc.addedProperties[loc.className], loc.iItem);
-						loc.toAppend = loc.classData.tableName & ".";
+						if (loc.duplicateCount)
+							loc.toAppend = "X" & loc.j & loc.classData.tableName & ".";
+						else
+							loc.toAppend = loc.classData.tableName & ".";
 						if (ListFind(loc.classData.columnList, loc.iItem))
 							loc.toAppend = loc.toAppend & loc.iItem;
 						else
 							loc.toAppend = loc.toAppend & loc.classData.properties[loc.iItem].column & " AS " & loc.iItem;
+						loc.addedPropertiesByModel[loc.modelName] = ListAppend(loc.addedPropertiesByModel[loc.modelName], loc.iItem);
 						break;
 					}
 				}
 				loc.select = ListAppend(loc.select, loc.toAppend);
 			}
-			else
+			
+			// let's replace eventual duplicates in the clause by prepending the class name		
+			if (Len(arguments.include))
 			{
-				// just add whatever the developer passed in
-				loc.select = ListAppend(loc.select, loc.iItem);
-			}
-		}
-		
-		if (Len(arguments.include))
-		{
-			// let's replace eventual duplicates in the clause by prepending the class name
-			loc.newSelect = "";
-			loc.compareSelect = "";
-			loc.iEnd = ListLen(loc.select);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				loc.iItem = ListGetAt(loc.select, loc.i);
-				// get the property, done by taking everytyhing from the end of the string to a . or a space (which would be found when using " AS ")
-				loc.property = Reverse(SpanExcluding(Reverse(loc.iItem), ". "));
-
-				// count the number of duplicates before this one in the list which will equal the number of classes to skip
-				loc.duplicateCount = 0; 
-				loc.jEnd = ListLen(loc.newSelect);
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				loc.newSelect = "";
+				loc.addedProperties = "";
+				loc.iEnd = ListLen(loc.select);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
-					loc.jItem = ListGetAt(loc.newSelect, loc.j);
-					if ((loc.jItem Does Not Contain " " && loc.jItem Contains "." & loc.property) || loc.jItem Contains " AS " & loc.property)
-						loc.duplicateCount++; 
-				}
+					loc.iItem = ListGetAt(loc.select, loc.i);
 
-				// if a duplicate was found we prepend the class name or remove completely if it already exists in the clause
-				if (loc.duplicateCount > 0)
-				{
-					loc.jEnd = ArrayLen(loc.classes);
-					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+					// get the property part, done by taking everytyhing from the end of the string to a . or a space (which would be found when using " AS ")
+					loc.property = Reverse(SpanExcluding(Reverse(loc.iItem), ". "));
+					
+					// check if this one has been flagged as a duplicate, we get the number of classes to skip and also remove the flagged info from the item
+					loc.duplicateCount = 0;
+					if (Left(loc.iItem, 1) == "X")
 					{
-						if (loc.j > loc.duplicateCount)
-						{
-							loc.classData = loc.classes[loc.j];
-							if (StructKeyExists(loc.classData, "class"))
-								loc.className = loc.classData.class;
-							else if (StructKeyExists(loc.classData, "name"))
-								loc.className = loc.classData.name;
-							loc.as = loc.className & loc.property;
-							if (ListFind(loc.compareSelect, loc.as))
-							{
-								loc.iItem = "";
-							}
-							else
-							{
-								if (loc.iItem Contains " AS ")
-									loc.iItem = ReplaceNoCase(loc.iItem, " AS " & loc.property, " AS " & loc.as);
-								else
-									loc.iItem = loc.iItem & " AS " & loc.as;
-							}
-						}
+						loc.duplicateCount = Mid(loc.iItem, 2, 1);
+						loc.iItem = Mid(loc.iItem, 3, Len(loc.iItem)-2);
+					}
+					
+					if (!loc.duplicateCount)
+					{
+						// this is not a duplicate so we can just insert it as is
+						loc.newItem = loc.iItem;
+						loc.newProperty = loc.property;
+					}
+					else
+					{
+						// this is a duplicate so we prepend the class name and then insert it unless a property with the resulting name already exist
+						loc.classData = loc.classes[loc.duplicateCount];
+						if (StructKeyExists(loc.classData, "class"))
+							loc.modelName = loc.classData.class;
+						else if (StructKeyExists(loc.classData, "name"))
+							loc.modelName = loc.classData.name;
+
+						// prepend class name to the property
+						loc.newProperty = loc.modelName & loc.property;
+
+						if (loc.iItem Contains " AS ")
+							loc.newItem = ReplaceNoCase(loc.iItem, " AS " & loc.property, " AS " & loc.newProperty);
+						else
+							loc.newItem = loc.iItem & " AS " & loc.newProperty;
+					}
+					if (!ListFind(loc.addedProperties, loc.newProperty))
+					{
+						loc.newSelect = ListAppend(loc.newSelect, loc.newItem);
+						loc.addedProperties = ListAppend(loc.addedProperties, loc.newProperty);
 					}
 				}
-				if (Len(loc.iItem))
-				{
-					loc.newSelect = ListAppend(loc.newSelect, loc.iItem);
-					loc.compareSelect = ListAppend(loc.compareSelect, Reverse(SpanExcluding(Reverse(loc.iItem), ". ")));
-				}
+				loc.select = loc.newSelect;
 			}
-			loc.select = loc.newSelect;
+			loc.select = "SELECT " & loc.select;
 		}
-		loc.select = "SELECT " & loc.select;
+		else
+		{
+			loc.select = "SELECT " & arguments.select;
+		}
 		ArrayAppend(arguments.sql, loc.select);
 	</cfscript>
 	<cfreturn arguments.sql>
