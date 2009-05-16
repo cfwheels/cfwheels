@@ -131,5 +131,7 @@ This will enable soft delete on all models that contains the `trashedAt` propert
 
 There are literally hundreds of configurations options in Wheels for you to play around with. So go ahead and sink your teeth into Wheels configuration and defaults.
 
-==Related==
-[ConfigurationFunctions Configuration Functions]
+==Related Chapters==
+ * [ConfigurationFunctions Configuration Functions]
+ * [Caching]
+ * [SwitchingEnvironments Switching Environments]
