@@ -3,7 +3,17 @@
 
 We all love the "Convention over Configuration" motto of Wheels, but what about those two cases that pop into everyone's head? _What if I want to develop in my own way?_ Or, _What about an existing application that I need to port into Wheels?_ Gladly, that's what configuration and defaults are there for. Let's take a look at exactly how is this performed.
 
-All of this is possible by a single function in Wheels, the [set set()] function. With it, you can perform all sorts of tweaks to the framework's default behaviors. 
+==Where Configurations Happen==
+
+You will find configuration files in the `config` folder of your Wheels application. In general, most of your settings will go in `config/settings.cfm`.
+
+You can also set values based on what environment you have set. For example, you can have different values for your settings depending on whether you're in `design` mode or `production` mode. See the chapter on [SwitchingEnvironments Switching Environments] for more details.
+
+==How to Set Configurations==
+
+To change a Wheels application default, you generally use the [set set()] function. With it, you can perform all sorts of tweaks to the framework's default behaviors.
+
+If you would like to do your own application configurations outside of general Wheels behavior, we recommend setting those values in the files in the `config` folder as well. Just set them in the `application` scope, and you'll be able to access them anywhere in your app (though we generally recommend keeping that in the controllers).
 
 ==Types of Configurations Available==
 
@@ -44,11 +54,11 @@ The data source configuration is what tells Wheels which database to use for all
 
 Not only are the environments useful for separating your production settings from your "under development" settings, but they are also opportunities for you to override settings that will only take effect in a specified environment.
 
-For example, let's say that we want to enable debugging information in our "production" environment (although not a good idea, it will do for this example):
+For example, let's say that we want to disable debugging information in our `development` environment temporarily:
 
 {{{
-<!--- /config/production/settings.cfm --->
-<cfset set(showDebugInformation=true)>
+<!--- /config/development/settings.cfm --->
+<cfset set(showDebugInformation=false)>
 }}}
 
 ===Caching Settings===
