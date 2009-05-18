@@ -79,12 +79,14 @@
 
 <cffunction name="simpleFormat" returntype="string" access="public" output="false" hint="Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards).">
 	<cfargument name="text" type="string" required="true" hint="The text to format">
+	<cfargument name="wrap" type="boolean" required="false" default="true" hint="Set to true to wrap the result in a paragraph">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = Trim(arguments.text);
+		loc.returnValue = Replace(loc.returnValue, "#Chr(13)##Chr(10)#", Chr(10), "all");
 		loc.returnValue = Replace(loc.returnValue, "#Chr(10)##Chr(10)#", "</p><p>", "all");
 		loc.returnValue = Replace(loc.returnValue, "#Chr(10)#", "<br />", "all");
-		if (Len(loc.returnValue))
+		if (arguments.wrap)
 			loc.returnValue = "<p>" & loc.returnValue & "</p>";
 	</cfscript>
 	<cfreturn loc.returnValue>
