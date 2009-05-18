@@ -1,6 +1,10 @@
 <cffunction name="onRequestStart" returntype="void" access="public" output="false">
 	<cfargument name="targetPage" type="any" required="true">
 	<cfscript>
+		// abort if called from incorrect file
+		$abortInvalidRequest();
+
+		// reload application by calling onApplicationStart if requested
 		if (StructKeyExists(URL, "reload") && (!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword") || !Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
 			$simpleLock(execute="onApplicationStart", name="wheelsReloadLock", type="exclusive");
 		$simpleLock(execute="$runOnRequestStart", executeArgs=arguments, name="wheelsReloadLock", type="readOnly");

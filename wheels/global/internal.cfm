@@ -1,3 +1,12 @@
+<cffunction name="$abortInvalidRequest" returntype="void" access="public" output="false">
+	<cfscript>
+		var applicationPath = Replace(GetCurrentTemplatePath(), "\", "/", "all");
+		var callingPath = Replace(GetBaseTemplatePath(), "\", "/", "all");
+		if (ListLen(callingPath, "/") GT ListLen(applicationPath, "/") || GetFileFromPath(callingPath) == "root.cfm")
+			$abort();
+	</cfscript>
+</cffunction>
+
 <cffunction name="$URLEncode" returntype="string" access="public" output="false">
 	<cfargument name="param" type="string" required="true">
 	<cfscript>
