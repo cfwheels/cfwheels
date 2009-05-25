@@ -40,6 +40,8 @@
 		loc.skip = "multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port";
 		if (Len(arguments.route))
 			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
+		if (ListFind(loc.skip, "action"))
+			loc.skip = ListDeleteAt(loc.skip, ListFind(loc.skip, "action")); // need to re-add action here even if it was removed due to being a route variable above
 
 		loc.returnValue = $tag(name="form", skip=loc.skip, attributes=arguments);
 	</cfscript>
