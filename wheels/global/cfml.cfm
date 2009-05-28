@@ -6,7 +6,7 @@
 	<cfargument name="timeout" type="numeric" required="false" default="30">
 	<cfset var loc = {}>
 	<cflock name="#arguments.name#" type="readonly" timeout="#arguments.timeout#">
-		<cfset loc.returnValue = $invoke(component=arguments.object, method=arguments.method, argumentCollection=arguments.args)>
+		<cfset loc.returnValue = $invoke(componentReference=arguments.object, method=arguments.method, argumentCollection=arguments.args)>
 	</cflock>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -119,6 +119,10 @@
 <cffunction name="$invoke" returntype="any" access="public" output="false">
 	<cfset var loc = {}>
 	<cfset arguments.returnVariable = "loc.returnValue">
+	<cfif StructKeyExists(arguments, "componentReference")>
+		<cfset arguments.component = arguments.componentReference>
+	</cfif>
+	<cfset StructDelete(arguments, "componentReference")>
 	<cfinvoke attributeCollection="#arguments#">
 	<cfif StructKeyExists(loc, "returnValue")>
 		<cfreturn loc.returnValue>

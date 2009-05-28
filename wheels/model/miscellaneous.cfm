@@ -182,7 +182,7 @@
 							arguments.missingMethodArguments.key = $propertyValue(name=loc.info.foreignKey);
 						}
 					}
-					loc.returnValue = $invoke(component=model(loc.info.class), method=loc.method, argumentCollection=arguments.missingMethodArguments);					
+					loc.returnValue = $invoke(componentReference=model(loc.info.class), method=loc.method, argumentCollection=arguments.missingMethodArguments);					
 				}
 			}
 		}
