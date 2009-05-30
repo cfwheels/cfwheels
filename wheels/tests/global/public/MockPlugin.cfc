@@ -8,4 +8,8 @@
 		<cfreturn "I'm loaded!!!">
 	</cffunction>
 
+	<cffunction name="mockControllerFunction">
+		<cfreturn "OVERRIDE:" & core.mockControllerFunction()>
+	</cffunction>
+
 </cfcomponent>

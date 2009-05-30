@@ -340,12 +340,12 @@
 		{
 			// copy an otherwise overwritten original element to a core container so the
 			// original element can be accessed.
-			if(structkeyexists(variables, loc.element) and isCustomFunction(loc.element))
+			if(structkeyexists(variables, loc.element))
 			{
 				core[loc.element] = variables[loc.element];
 			}
 			// mixin the element
-			variables[loc.element] = application.wheels.plugins[arguments.plugin][loc.element];
+			this[loc.element] = application.wheels.plugins[arguments.plugin][loc.element];
 		}
 	}
 	</cfscript>
