@@ -79,7 +79,7 @@
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
 		var returnValue = "";
-		if (IsSimpleValue(arguments.objectName))
+		if(IsSimpleValue(arguments.objectName))
 			returnValue = ListLast(arguments.objectName, ".") & "-" & arguments.property;
 		else
 			returnValue = arguments.property;

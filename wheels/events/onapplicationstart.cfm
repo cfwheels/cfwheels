@@ -1,7 +1,7 @@
 <cffunction name="onApplicationStart" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		
+
 		// abort if called from incorrect file
 		$abortInvalidRequest();
 
@@ -11,7 +11,7 @@
 		application.wheels = {};
 		if (StructKeyExists(loc, "oldReloadPassword"))
 			application.wheels.reloadPassword = loc.oldReloadPassword;
-		
+
 		if (StructKeyExists(server, "railo"))
 		{
 			application.wheels.serverName = "Railo";
@@ -20,7 +20,7 @@
 		else
 		{
 			application.wheels.serverName = "Adobe ColdFusion";
-			application.wheels.serverVersion = server.coldfusion.productversion;		
+			application.wheels.serverVersion = server.coldfusion.productversion;
 		}
 		loc.majorVersion = Left(application.wheels.serverVersion, 1);
 		if ((application.wheels.serverName == "Railo" && loc.majorVersion < 3) || (application.wheels.serverName == "Adobe ColdFusion" && loc.majorVersion < 8))
@@ -37,7 +37,7 @@
 		application.wheels.nonExistingHelperFiles = "";
 		application.wheels.routes = [];
 		application.wheels.namedRoutePositions = {};
-		
+
 		// set up paths based on if user is running one app or multiple apps in sub folders
 		if (DirectoryExists(this.rootDir & "config"))
 		{
@@ -55,6 +55,11 @@
 			loc.path = loc.folder & "/";
 			loc.componentPath = loc.folder & ".";
 		}
+
+		application.wheels.webPath = Replace(cgi.script_name, Reverse(spanExcluding(Reverse(cgi.script_name), "/")), "");
+		application.wheels.rootPath = "/" & ListChangeDelims(application.wheels.webPath, "/", "/");
+		application.wheels.rootcomponentPath = ListChangeDelims(application.wheels.webPath, ".", "/");
+
 		application.wheels.configPath = loc.path & "config";
 		application.wheels.controllerPath = loc.path & "controllers";
 		application.wheels.controllerComponentPath = loc.componentPath & "controllers";
@@ -68,7 +73,10 @@
 		application.wheels.pluginComponentPath = loc.componentPath & "plugins";
 		application.wheels.stylesheetPath = loc.path & "stylesheets";
 		application.wheels.viewPath = loc.path & "views";
-		
+
+		application.wheels.wheelsPath = listappend(application.wheels.rootPath, "wheels", "/");
+		application.wheels.wheelsComponentPath = listappend(application.wheels.rootcomponentPath, "wheels", ".");
+
 		// set up struct for caches
 		application.wheels.cache = {};
 		application.wheels.cache.sql = {};
@@ -79,28 +87,26 @@
 		application.wheels.cache.partial = {};
 		application.wheels.cache.query = {};
 		application.wheels.cacheLastCulledAt = Now();
-		
+
 		// set environment
 		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && (!Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
 			application.wheels.environment = URL.reload;
 		else
 			$include(template="#application.wheels.configPath#/environment.cfm");
-		
+
 		// load wheels settings
 		$include(template="wheels/events/onapplicationstart/settings.cfm");
-		
+
 		// load developer settings
 		$include(template="#application.wheels.configPath#/settings.cfm");
 
 		//override settings with environment specific ones
 		$include(template="#application.wheels.configPath#/#application.wheels.environment#/settings.cfm");
-		
+
 		// load developer routes and add wheels default ones
 		$include(template="#application.wheels.configPath#/routes.cfm");
 		$include(template="wheels/events/onapplicationstart/routes.cfm");
-		
-		application.wheels.webPath = Replace(cgi.script_name, Reverse(spanExcluding(Reverse(cgi.script_name), "/")), "");
-		
+
 		// load plugins
 		application.wheels.plugins = {};
 		application.wheels.incompatiblePlugins = "";

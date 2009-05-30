@@ -30,7 +30,7 @@
 		{
 			if (StructKeyExists(server, "railo"))
 				loc.finderProperties = ListToArray(LCase(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, "And", "|"), "findAllBy", ""), "findOneBy", "")), "|"); // since Railo passes in the method name in all upper case we have to do this here
-			else		
+			else
 				loc.finderProperties = ListToArray(ReplaceNoCase(ReplaceNoCase(Replace(arguments.missingMethodName, "And", "|"), "findAllBy", ""), "findOneBy", ""), "|");
 			loc.firstProperty = loc.finderProperties[1];
 			loc.secondProperty = IIf(ArrayLen(loc.finderProperties) == 2, "loc.finderProperties[2]", "");
@@ -182,7 +182,7 @@
 							arguments.missingMethodArguments.key = $propertyValue(name=loc.info.foreignKey);
 						}
 					}
-					loc.returnValue = $invoke(componentReference=model(loc.info.class), method=loc.method, argumentCollection=arguments.missingMethodArguments);					
+					loc.returnValue = $invoke(componentReference=model(loc.info.class), method=loc.method, argumentCollection=arguments.missingMethodArguments);
 				}
 			}
 		}
@@ -249,7 +249,7 @@
 			if (arguments.setToNull)
 				loc.returnValue[ListGetAt(arguments.keys, loc.i)] = "";
 			else
-				loc.returnValue[ListGetAt(arguments.keys, loc.i)] = this[ListGetAt(variables.wheels.class.keys, loc.i)];	
+				loc.returnValue[ListGetAt(arguments.keys, loc.i)] = this[ListGetAt(variables.wheels.class.keys, loc.i)];
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>

@@ -32,7 +32,7 @@
 	}
 	else
 	{
-		loc.returnValue = "";
+	        loc.returnValue = "";
 	}
 	</cfscript>
 	<cfreturn loc.returnValue>
