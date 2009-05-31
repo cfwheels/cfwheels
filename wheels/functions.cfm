@@ -14,7 +14,6 @@
 	<cfinclude template="events/onapplicationend.cfm">
 	<cfinclude template="events/onmissingtemplate.cfm">
 	<cfinclude template="events/onerror.cfm">
-	<cfinclude template="../events/functions.cfm">
 <cfelse>
 	<cfinclude template="wheels/global/appfunctions.cfm">
 	<cfinclude template="wheels/controller/appfunctions.cfm">
@@ -27,5 +26,4 @@
 	<cfinclude template="wheels/events/onapplicationend.cfm">
 	<cfinclude template="wheels/events/onmissingtemplate.cfm">
 	<cfinclude template="wheels/events/onerror.cfm">
-	<cfinclude template="events/functions.cfm">
 </cfif>

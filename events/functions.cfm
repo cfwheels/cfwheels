@@ -1,1 +1,1 @@
-<!--- Place functions here that should be globally available in your application. ---> 
+<!--- Place functions here that should be globally available in your application. --->
