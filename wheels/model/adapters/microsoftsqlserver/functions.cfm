@@ -1,12 +1,12 @@
-<cffunction name="generatedKey" returntype="string" access="public" output="false">
+<cffunction name="$generatedKey" returntype="string" access="public" output="false">
 	<cfreturn "identitycol">
 </cffunction>
 
-<cffunction name="randomOrder" returntype="string" access="public" output="false">
+<cffunction name="$randomOrder" returntype="string" access="public" output="false">
 	<cfreturn "NEWID()">
 </cffunction>
 
-<cffunction name="getType" returntype="string" access="public" output="false">
+<cffunction name="$getType" returntype="string" access="public" output="false">
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
 		var loc = {};
@@ -34,7 +34,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="query" returntype="struct" access="public" output="false">
+<cffunction name="$query" returntype="struct" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="limit" type="numeric" required="false" default=0>
 	<cfargument name="offset" type="numeric" required="false" default=0>

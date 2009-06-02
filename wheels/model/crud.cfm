@@ -154,7 +154,7 @@
 					else if (IsNumeric(arguments.cache))
 						loc.finderArgs.cachedWithin = CreateTimeSpan(0,0,arguments.cache,0);
 				}
-				loc.findAll = variables.wheels.class.adapter.query(argumentCollection=loc.finderArgs);
+				loc.findAll = variables.wheels.class.adapter.$query(argumentCollection=loc.finderArgs);
 				request[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
 			loc.returnValue = loc.findAll.query;
@@ -255,7 +255,7 @@
 			}
 			loc.sql = $addWhereClause(sql=loc.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=arguments.where);
-			loc.upd = variables.wheels.class.adapter.query(sql=loc.sql, parameterize=arguments.parameterize);
+			loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
 			loc.returnValue = loc.upd.result.recordCount;
 		}
 	</cfscript>
@@ -314,7 +314,7 @@
 			loc.sql = $addDeleteClause(sql=loc.sql);
 			loc.sql = $addWhereClause(sql=loc.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=arguments.where);
-			loc.del = variables.wheels.class.adapter.query(sql=loc.sql, parameterize=arguments.parameterize);
+			loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
 			loc.returnValue = loc.del.result.recordCount;
 		}
 	</cfscript>
@@ -382,7 +382,7 @@
         	loc.sql = [];
         	loc.sql = $addDeleteClause(sql=loc.sql);
             loc.sql = $addKeyWhereClause(sql=loc.sql);
-            loc.del = variables.wheels.class.adapter.query(sql=loc.sql, parameterize=arguments.parameterize);
+            loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
             if (loc.del.result.recordCount == 1)
             {
             	loc.returnValue = true;
@@ -832,7 +832,7 @@
 		{
 			if (arguments.order == "random")
 			{
-				loc.order = variables.wheels.class.adapter.randomOrder();
+				loc.order = variables.wheels.class.adapter.$randomOrder();
 			}
 			else
 			{
@@ -1006,8 +1006,8 @@
 		loc.iEnd = ArrayLen(loc.sql);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			ArrayAppend(loc.sql, loc.sql2[loc.i]);
-		loc.ins = variables.wheels.class.adapter.query(sql=loc.sql, parameterize=arguments.parameterize);
-		loc.generatedKey = variables.wheels.class.adapter.generatedKey();
+		loc.ins = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
+		loc.generatedKey = variables.wheels.class.adapter.$generatedKey();
 		if (StructKeyExists(loc.ins.result, loc.generatedKey))
 			this[ListGetAt(variables.wheels.class.keys, 1)] = loc.ins.result[loc.generatedKey];
 		$updatePersistedProperties();
@@ -1037,7 +1037,7 @@
 			}
 			ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
 			loc.sql = $addKeyWhereClause(sql=loc.sql);
-			loc.upd = variables.wheels.class.adapter.query(sql=loc.sql, parameterize=arguments.parameterize);
+			loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
 			$updatePersistedProperties();
 		}
 		loc.returnValue = true;
