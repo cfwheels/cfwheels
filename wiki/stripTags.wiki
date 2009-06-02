@@ -1,4 +1,0 @@
-#summary One-sentence summary of this page.
-#labels api,0.9.1
-
-#stripTags("Wheels is a {{{<strong>}}}framework{{{</strong>}}} for {{{<a href='http://www.adobe.com'>}}}ColdFusion{{{</a>}}}")# -> Wheels is a framework for ColdFusion

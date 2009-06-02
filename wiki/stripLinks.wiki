@@ -1,4 +1,0 @@
-#summary draft...
-#labels api,0.9.1
-
-#stripLinks("Wheels is a framework for {{{<a href='http://www.adobe.com'>}}}ColdFusion{{{</a>}}}")# -> Wheels is a framework for ColdFusion

@@ -1,6 +1,0 @@
-#summary draft...
-#labels api,0.9.1
-
-#autoLink("Download Wheels from http://www.cfwheels.com/download")# -> Download Wheels from <a href="http://www.cfwheels.com/download">http://www.cfwheels.com/download</a>
-	
-#autoLink("Email us at info@cfwheels.com")# -> Email us at <a href="mailto:info@cfwheels.com">info@cfwheels.com</a>

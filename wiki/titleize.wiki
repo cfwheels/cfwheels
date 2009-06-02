@@ -1,4 +1,0 @@
-#summary draft.
-#labels api,0.9.1
-
-#titleize("Wheels is a framework for ColdFusion")# -> Wheels Is A Framework For ColdFusion

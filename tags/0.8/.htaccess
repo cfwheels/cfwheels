@@ -1,3 +1,0 @@
-# RewriteEngine on
-# RewriteCond %{REQUEST_URI} !^/(cfide|railo-context|files|images|javascripts|miscellaneous|stylesheets|rewrite.cfm|index.cfm) [NC]
-# RewriteRule ^(.*)$ /rewrite.cfm/$1

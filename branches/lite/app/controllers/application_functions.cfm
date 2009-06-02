@@ -1,1 +1,0 @@
-<!--- Include actions here that you want available to every controller in this application --->
