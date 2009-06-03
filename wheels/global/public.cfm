@@ -8,11 +8,11 @@
 				if (loc.key != "functionName")
 					application.wheels[arguments.functionName][loc.key] = arguments[loc.key];
 			}
-		}
+		}	
 		else
 		{
 			application.wheels[StructKeyList(arguments)] = arguments[1];
-		}
+		}	
 	</cfscript>
 </cffunction>
 
@@ -26,7 +26,7 @@
 		else
 			loc.returnValue = application.wheels[arguments.name];
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.returnValue>	
 </cffunction>
 
 <cffunction name="URLFor" returntype="string" access="public" output="false" hint="Creates an internal URL based on supplied arguments.">
@@ -54,7 +54,7 @@
 		{
 			arguments.key = arguments.key.key();
 		}
-
+		
 		// build the link
 		loc.returnValue = application.wheels.webPath & ListLast(cgi.script_name, "/");
 		if (Len(arguments.route))
@@ -70,7 +70,7 @@
 				{
 					loc.property = ListGetAt(loc.route.variables, loc.i);
 					loc.returnValue = loc.returnValue & "&" & loc.property & "=" & $URLEncode(arguments[loc.property]);
-				}
+				}		
 			}
 			else
 			{
@@ -89,7 +89,7 @@
 					{
 						loc.returnValue = loc.returnValue & "/" & loc.property; // add hard coded param from route
 					}
-				}
+				}		
 			}
 		}
 		else
@@ -126,7 +126,7 @@
 			loc.returnValue = loc.returnValue & $constructParams(arguments.params);
 		if (Len(arguments.anchor))
 			loc.returnValue = loc.returnValue & "##" & arguments.anchor;
-
+				
 		if (!arguments.onlyPath)
 		{
 			if (arguments.port != 0)
@@ -210,13 +210,13 @@
 	<cfargument name="action" type="string" required="false" default="" hint="Action to call when route matches (unless the action name exists in the pattern)">
 	<cfscript>
 		var loc = {};
-
+		
 		// throw errors when controller or action is not passed in as arguments and not included in the pattern
 		if (!Len(arguments.controller) && arguments.pattern Does Not Contain "[controller]")
 			$throw(type="Wheels.IncorrectArguments", message="The 'controller' argument is not passed in or included in the pattern.", extendedInfo="Either pass in the 'controller' argument to specifically tell Wheels which controller to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
 		if (!Len(arguments.action) && arguments.pattern Does Not Contain "[action]")
 			$throw(type="Wheels.IncorrectArguments", message="The 'action' argument is not passed in or included in the pattern.", extendedInfo="Either pass in the 'action' argument to specifically tell Wheels which action to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
-
+		
 		loc.thisRoute = Duplicate(arguments);
 		loc.thisRoute.variables = "";
 		loc.iEnd = ListLen(arguments.pattern, "/");
@@ -329,24 +329,3 @@
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
-
-<cffunction name="includePlugin" returntype="void" access="public" output="false" hint="loads a plugin into the component. call from the constructor of the component. can take an optional namespace if desired">
-	<cfargument name="plugin" type="string" required="true">
-	<cfscript>
-	var loc = {};
-	for(loc.element in application.wheels.plugins[arguments.plugin])
-	{// mixin remaining elements
-		if(!listfindnocase("init,version", loc.element))
-		{
-			// copy an otherwise overwritten original element to a core container so the
-			// original element can be accessed.
-			if(structkeyexists(variables, loc.element))
-			{
-				core[loc.element] = variables[loc.element];
-			}
-			// mixin the element
-			this[loc.element] = application.wheels.plugins[arguments.plugin][loc.element];
-		}
-	}
-	</cfscript>
- </cffunction>
