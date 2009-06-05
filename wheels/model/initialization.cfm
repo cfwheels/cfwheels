@@ -108,14 +108,16 @@
 	<cfscript>
 		var loc = {};
 		loc.info = $dbinfo(datasource=variables.wheels.class.connection.datasource, username=variables.wheels.class.connection.username, password=variables.wheels.class.connection.password, type="version");
-		if (loc.info.driver_name Contains "MySQL")
+		if (loc.info.driver_name Contains "SQLServer" || loc.info.driver_name Contains "Microsoft SQL Server")
+			loc.adapterName = "MicrosoftSQLServer";
+		else if (loc.info.driver_name Contains "MySQL")
 			loc.adapterName = "MySQL";
 		else if (loc.info.driver_name Contains "Oracle")
 			loc.adapterName = "Oracle";
-		else if (loc.info.driver_name Contains "SQLServer" || loc.info.driver_name Contains "Microsoft SQL Server")
-			loc.adapterName = "MicrosoftSQLServer";
+		else if (loc.info.driver_name Contains "PostgreSQL")
+			loc.adapterName = "PostgreSQL";
 		else
-			$throw(type="Wheels.NoSupport", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, Oracle or MySQL.");
+			$throw(type="Wheels.NoSupport", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, Oracle, PostgreSQL or MySQL.");
 		loc.returnValue = CreateObject("component", "adapters.#loc.adapterName#").init(argumentCollection=variables.wheels.class.connection);
 	</cfscript>
 	<cfreturn loc.returnValue>
