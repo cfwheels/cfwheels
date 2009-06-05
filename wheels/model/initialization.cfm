@@ -117,7 +117,7 @@
 		else if (loc.info.driver_name Contains "PostgreSQL")
 			loc.adapterName = "PostgreSQL";
 		else
-			$throw(type="Wheels.NoSupport", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, Oracle, PostgreSQL or MySQL.");
+			$throw(type="Wheels.NoSupport", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, MySQL, Oracle or PostgreSQL.");
 		loc.returnValue = CreateObject("component", "adapters.#loc.adapterName#").init(argumentCollection=variables.wheels.class.connection);
 	</cfscript>
 	<cfreturn loc.returnValue>

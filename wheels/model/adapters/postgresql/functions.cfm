@@ -1,5 +1,5 @@
 <cffunction name="$generatedKey" returntype="string" access="public" output="false">
-	<cfreturn "">
+	<cfreturn "lastId">
 </cffunction>
 
 <cffunction name="$randomOrder" returntype="string" access="public" output="false">
@@ -39,13 +39,6 @@
 	<cfscript>
 		var loc = {};
 		var query = {};
-		if (arguments.limit > 0)
-		{
-			loc.beforeWhere = "SELECT * FROM (SELECT a.*, rownum rnum FROM (";
-			loc.afterWhere = ") a WHERE rownum <=" & arguments.limit+arguments.offset & ")" & " WHERE rnum >" & arguments.offset;
-			ArrayPrepend(arguments.sql, loc.beforeWhere);
-			ArrayAppend(arguments.sql, loc.afterWhere);
-		}
 		arguments.name = "query.name";
 		arguments.result = "loc.result";
 		arguments.datasource = variables.instance.connection.datasource;
@@ -62,17 +55,17 @@
 		StructDelete(arguments, "parameterize");
 		StructDelete(arguments, "$primaryKey");
 	</cfscript>
-	<cfquery attributeCollection="#arguments#"><cfloop array="#loc.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfif IsBoolean(loc.parameterize) AND loc.parameterize><cfset loc.queryParamAttributes = StructNew()><cfset loc.queryParamAttributes.cfsqltype = loc.i.type><cfset loc.queryParamAttributes.value = loc.i.value><cfif StructKeyExists(loc.i, "null")><cfset loc.queryParamAttributes.null = loc.i.null></cfif><cfif StructKeyExists(loc.i, "scale") AND loc.i.scale GT 0><cfset loc.queryParamAttributes.scale = loc.i.scale></cfif><cfqueryparam attributeCollection="#loc.queryParamAttributes#"><cfelse>'#loc.i.value#'</cfif><cfelse>#preserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop></cfquery>
+	<cfquery attributeCollection="#arguments#"><cfloop array="#loc.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfif IsBoolean(loc.parameterize) AND loc.parameterize><cfset loc.queryParamAttributes = StructNew()><cfset loc.queryParamAttributes.cfsqltype = loc.i.type><cfset loc.queryParamAttributes.value = loc.i.value><cfif StructKeyExists(loc.i, "null")><cfset loc.queryParamAttributes.null = loc.i.null></cfif><cfif StructKeyExists(loc.i, "scale") AND loc.i.scale GT 0><cfset loc.queryParamAttributes.scale = loc.i.scale></cfif><cfqueryparam attributeCollection="#loc.queryParamAttributes#"><cfelse>'#loc.i.value#'</cfif><cfelse>#preserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif loc.limit>LIMIT #loc.limit#<cfif loc.offset>#chr(13)##chr(10)#OFFSET #loc.offset#</cfif></cfif></cfquery>
 	<cfscript>
 		loc.returnValue.result = loc.result;
 		if (StructKeyExists(query, "name"))
 			loc.returnValue.query = query.name;
 	</cfscript>
 	<cfif StructKeyExists(loc.result, "sql") AND Left(loc.result.sql, 12) IS "INSERT INTO ">
-		<!--- the rowid value returned by ColdFusion is not the actual primary key value (unlike the way it works for sql server and mysql) so on insert statements we need to get that value out of the database using the rowid reference --->
+		<!--- ColdFusion doesn't support PostgreSQL natively when it comes to returning the primary key value of the last inserted record so we have to do it manually by using the sequence --->
 		<cfset loc.tbl = SpanExcluding(Right(loc.result.sql, Len(loc.result.sql)-12), " ")>
-		<cfquery attributeCollection="#arguments#">SELECT #loc.primaryKey# FROM #loc.tbl# WHERE ROWID = '#loc.result.rowid#'</cfquery>
-		<cfset loc.returnValue.result.rowid = query.name[loc.primaryKey]>
+		<cfquery attributeCollection="#arguments#">SELECT currval(pg_get_serial_sequence('wu.#loc.tbl#', '#loc.primaryKey#')) AS lastId</cfquery>
+		<cfset loc.returnValue.result.lastId = query.name.lastId>
 	</cfif>
 	<cfreturn loc.returnValue>
 </cffunction>
