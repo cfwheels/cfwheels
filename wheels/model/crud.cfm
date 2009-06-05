@@ -1006,7 +1006,7 @@
 		loc.iEnd = ArrayLen(loc.sql);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			ArrayAppend(loc.sql, loc.sql2[loc.i]);
-		loc.ins = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
+		loc.ins = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize, $primaryKey=variables.wheels.class.keys);
 		loc.generatedKey = variables.wheels.class.adapter.$generatedKey();
 		if (StructKeyExists(loc.ins.result, loc.generatedKey))
 			this[ListGetAt(variables.wheels.class.keys, 1)] = loc.ins.result[loc.generatedKey];

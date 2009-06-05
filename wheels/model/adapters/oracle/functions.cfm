@@ -31,6 +31,7 @@
 	<cfargument name="limit" type="numeric" required="false" default=0>
 	<cfargument name="offset" type="numeric" required="false" default=0>
 	<cfargument name="parameterize" type="boolean" required="true">
+	<cfargument name="$primaryKey" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		var query = {};
@@ -50,10 +51,12 @@
 		loc.limit = arguments.limit;
 		loc.offset = arguments.offset;
 		loc.parameterize = arguments.parameterize;
+		loc.primaryKey = arguments.$primaryKey;
 		StructDelete(arguments, "sql");
 		StructDelete(arguments, "limit");
 		StructDelete(arguments, "offset");
 		StructDelete(arguments, "parameterize");
+		StructDelete(arguments, "$primaryKey");
 	</cfscript>
 	<cfquery attributeCollection="#arguments#"><cfloop array="#loc.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfif IsBoolean(loc.parameterize) AND loc.parameterize><cfset loc.queryParamAttributes = StructNew()><cfset loc.queryParamAttributes.cfsqltype = loc.i.type><cfset loc.queryParamAttributes.value = loc.i.value><cfif StructKeyExists(loc.i, "null")><cfset loc.queryParamAttributes.null = loc.i.null></cfif><cfif StructKeyExists(loc.i, "scale") AND loc.i.scale GT 0><cfset loc.queryParamAttributes.scale = loc.i.scale></cfif><cfqueryparam attributeCollection="#loc.queryParamAttributes#"><cfelse>'#loc.i.value#'</cfif><cfelse>#preserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop></cfquery>
 	<cfscript>
@@ -61,5 +64,11 @@
 		if (StructKeyExists(query, "name"))
 			loc.returnValue.query = query.name;
 	</cfscript>
+	<cfif StructKeyExists(loc.result, "sql") AND Left(loc.result.sql, 12) IS "INSERT INTO ">
+		<!--- the rowid value returned by ColdFusion is not the actual primary key value (unlike the way it works for sql server and mysql) so on insert statements we need to get that value out of the database using the rowid reference --->
+		<cfset loc.tbl = SpanExcluding(Right(loc.result.sql, Len(loc.result.sql)-12), " ")>
+		<cfquery attributeCollection="#arguments#">SELECT #loc.primaryKey# FROM #loc.tbl# WHERE ROWID = '#loc.result.rowid#'</cfquery>
+		<cfset loc.returnValue.result.rowid = query.name[loc.primaryKey]>
+	</cfif>
 	<cfreturn loc.returnValue>
 </cffunction>
