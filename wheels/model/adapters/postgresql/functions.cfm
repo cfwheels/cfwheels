@@ -64,7 +64,7 @@
 	<cfif StructKeyExists(loc.result, "sql") AND Left(loc.result.sql, 12) IS "INSERT INTO ">
 		<!--- ColdFusion doesn't support PostgreSQL natively when it comes to returning the primary key value of the last inserted record so we have to do it manually by using the sequence --->
 		<cfset loc.tbl = SpanExcluding(Right(loc.result.sql, Len(loc.result.sql)-12), " ")>
-		<cfquery attributeCollection="#arguments#">SELECT currval(pg_get_serial_sequence('wu.#loc.tbl#', '#loc.primaryKey#')) AS lastId</cfquery>
+		<cfquery attributeCollection="#arguments#">SELECT currval(pg_get_serial_sequence('#loc.tbl#', '#loc.primaryKey#')) AS lastId</cfquery>
 		<cfset loc.returnValue.result.lastId = query.name.lastId>
 	</cfif>
 	<cfreturn loc.returnValue>
