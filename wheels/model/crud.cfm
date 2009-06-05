@@ -856,16 +856,18 @@
 					else
 					{
 						loc.property = ListLast(SpanExcluding(loc.iItem, " "), ".");
-						loc.toAdd = variables.wheels.class.tableName & "." & loc.iItem;
 						loc.jEnd = ArrayLen(loc.classes);
 						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 						{
 							loc.classData = loc.classes[loc.j];
-							loc.toAdd = loc.classData.tableName & "." & loc.iItem;
-							if (ListFindNoCase(loc.classData.propertyList, loc.property) && !ListContainsNoCase(loc.order, SpanExcluding(loc.toAdd, " ")))
+							if (StructKeyExists(loc.classData.properties, loc.property))
 							{
-								loc.order = ListAppend(loc.order, loc.toAdd);
-								break;
+								loc.toAdd = loc.classData.tableName & "." & loc.classData.properties[loc.property].column & " " & ListLast(loc.iItem, " ");
+								if (!ListContainsNoCase(loc.order, SpanExcluding(loc.toAdd, " ")))
+								{
+									loc.order = ListAppend(loc.order, loc.toAdd);
+									break;
+								}
 							}
 						}
 					}
