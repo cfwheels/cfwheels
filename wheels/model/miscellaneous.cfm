@@ -1,3 +1,78 @@
+<cffunction name="defaultValue" returntype="any" access="public" output="false" hint="Returns the default value for a property as specificed in the database table. If the property argument is not specified this function returns the defaults for all properties in a struct.">
+	<cfargument name="property" type="string" required="false" default="" hint="Name of the property to get the default value for">
+	<cfscript>
+		var loc = {};
+		if (Len(arguments.property))
+		{
+			loc.returnValue = variables.wheels.class.properties[arguments.property].defaultValue;
+		}
+		else
+		{
+			loc.returnValue = {};			
+			for (loc.key in variables.wheels.class.properties)
+			{
+				loc.returnValue[loc.key] = variables.wheels.class.properties[loc.key].defaultValue;
+			}
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="defaultValues" returntype="void" access="public" output="false" hint="Alias for defaultValue.">
+	<cfreturn defaultValue(argumentCollection=arguments)>
+</cffunction>
+
+<cffunction name="setDefaultValue" returntype="any" access="public" output="false" hint="Sets a default value on the object (i.e. it sets it unless a value already exists). If the value argument is specificed the value is taken from there, otherwise it is taken from the database table settings.">
+	<cfargument name="properties" type="any" required="false" default="" hint="Properties and default values to set (you can also use named arguments instead)">
+	<cfscript>
+		var loc = {};
+		loc.properties = {};
+
+		if (!IsStruct(arguments.properties))
+		{
+			// developer supplied a list of property names to set defaults on
+			loc.iEnd = ListLen(arguments.properties);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.properties[ListGetAt(arguments.properties, loc.i)] = "";
+			}
+		}
+		
+		// add any named arguments passed in
+		for (loc.key in arguments)
+			if (loc.key != "properties")
+				loc.properties[loc.key] = arguments[loc.key];
+
+		// if nothing was passed in we set defaults on all properties
+		if (!StructCount(loc.properties))
+		{
+			loc.iEnd = ListLen(variables.wheels.class.propertyList);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.properties[ListGetAt(variables.wheels.class.propertyList, loc.i)] = "";
+			}
+		}
+
+		// go through properties as decided above and set defaults
+		for (loc.key in loc.properties)
+		{
+			if (Len(loc.properties[loc.key]))
+				loc.defaultValue = loc.properties[loc.key]; // a value was passed in so use that as the default
+			else
+				loc.defaultValue = defaultValue(loc.key); // use the default value set by the database
+			if (Len(loc.defaultValue) && (!StructKeyExists(this, loc.key) || !Len(loc.key)))
+			{
+				// set the default value unless it is blank or a value already exists for that property on the object
+				this[loc.key] = loc.defaultValue;
+			}
+		}
+	</cfscript>
+</cffunction>
+
+<cffunction name="setDefaultValues" returntype="any" access="public" output="false" hint="Alias for setDefaultValue.">
+	<cfreturn setDefaultValue(argumentCollection=arguments)>
+</cffunction>
+
 <cffunction name="table" returntype="void" access="public" output="false" hint="Use this method to tell Wheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard Wheels conventions of a singular object name mapping to a plural table name (i.e. `User.cfc` mapping to the table `users` for example).">
 	<cfargument name="name" type="string" required="true" hint="Name of the table to map this model to">
 	<cfscript>

@@ -57,6 +57,10 @@
 			variables.wheels.class.properties[loc.property].type = variables.wheels.class.adapter.$getType(loc.type);
 			variables.wheels.class.properties[loc.property].column = loc.columns["column_name"][loc.i];
 			variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];
+			loc.defaultValue = loc.columns["column_default_value"][loc.i];
+			if ((Left(loc.defaultValue,2) == "((" && Right(loc.defaultValue,2) == "))") || (Left(loc.defaultValue,2) == "('" && Right(loc.defaultValue,2) == "')"))
+				loc.defaultValue = Mid(loc.defaultValue, 3, Len(loc.defaultValue)-4);
+			variables.wheels.class.properties[loc.property].defaultValue = loc.defaultValue;
 			if (loc.columns["is_primarykey"][loc.i])
 			{
 				variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.property);
