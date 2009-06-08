@@ -1,3 +1,21 @@
+<cffunction name="afterNew" returntype="void" access="public" output="false" hint="Register method(s) that should be called after a new object has been initialized (usually done with the new method).">
+	<cfargument name="method" type="string" required="false" default="#arguments.methods#" hint="Method name or list of method names">
+	<cfargument name="methods" type="string" required="false" default="#arguments.method#" hint="See `method`">
+	<cfset $registerCallback("afterNew", arguments.methods)>
+</cffunction>
+
+<cffunction name="afterFind" returntype="void" access="public" output="false" hint="Register method(s) that should be called after an existing object has been initialized (usually done with the findByKey or findOne method).">
+	<cfargument name="method" type="string" required="false" default="#arguments.methods#" hint="Method name or list of method names">
+	<cfargument name="methods" type="string" required="false" default="#arguments.method#" hint="See `method`">
+	<cfset $registerCallback("afterFind", arguments.methods)>
+</cffunction>
+
+<cffunction name="afterInitialization" returntype="void" access="public" output="false" hint="Register method(s) that should be called after an object has been initialized.">
+	<cfargument name="method" type="string" required="false" default="#arguments.methods#" hint="Method name or list of method names">
+	<cfargument name="methods" type="string" required="false" default="#arguments.method#" hint="See `method`">
+	<cfset $registerCallback("afterInitialization", arguments.methods)>
+</cffunction>
+
 <cffunction name="beforeValidation" returntype="void" access="public" output="false" hint="Register method(s) that should be called before an object is validated.">
 	<cfargument name="method" type="string" required="false" default="#arguments.methods#" hint="Method name or list of method names">
 	<cfargument name="methods" type="string" required="false" default="#arguments.method#" hint="See `method`">
