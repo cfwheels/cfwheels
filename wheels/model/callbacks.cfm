@@ -113,13 +113,44 @@
 
 <cffunction name="$callback" returntype="boolean" access="public" output="false">
 	<cfargument name="type" type="string" required="true">
+	<cfargument name="collection" type="any" required="false" default="">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = true;
 		loc.iEnd = ArrayLen(variables.wheels.class.callbacks[arguments.type]);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.returnValue = $invoke(method=variables.wheels.class.callbacks[arguments.type][loc.i]);
+			if (arguments.type == "afterFind" && IsQuery(arguments.collection))
+			{
+				loc.jEnd = arguments.collection.recordCount;
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				{
+					loc.args = {};
+					loc.kEnd = ListLen(arguments.collection.columnList);
+					for (loc.k=1; loc.k <= loc.kEnd; loc.k++)
+					{
+						loc.kItem = ListGetAt(arguments.collection.columnList, loc.k);
+						loc.args.record[loc.kItem] = arguments.collection[loc.kItem][loc.j];
+					}
+					loc.returnValue = $invoke(method=variables.wheels.class.callbacks[arguments.type][loc.i], argumentCollection=loc.args);
+					if (IsStruct(loc.returnValue))
+					{
+						for (loc.key in loc.returnValue)
+						{
+							if (!ListFindNoCase(arguments.collection.columnList, loc.key))
+								QueryAddColumn(arguments.collection, loc.key, ArrayNew(1));
+							arguments.collection[loc.key][loc.j] = loc.returnValue[loc.key];
+						}
+						loc.returnValue = true;
+					}
+					if (StructKeyExists(loc, "returnValue") && !loc.returnValue)
+						break;
+				}
+			}
+			else
+			{
+				loc.returnValue = $invoke(method=variables.wheels.class.callbacks[arguments.type][loc.i]);
+			}
 			if (!StructKeyExists(loc, "returnValue"))
 			{
 				loc.returnValue = true;

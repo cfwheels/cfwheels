@@ -158,6 +158,7 @@
 				request[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
 			loc.returnValue = loc.findAll.query;
+			$callback("afterFind", loc.returnValue);
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
