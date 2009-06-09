@@ -8,7 +8,7 @@
 		}
 		else
 		{
-			loc.returnValue = {};			
+			loc.returnValue = {};
 			for (loc.key in variables.wheels.class.properties)
 			{
 				loc.returnValue[loc.key] = variables.wheels.class.properties[loc.key].defaultValue;
@@ -37,7 +37,7 @@
 				loc.properties[ListGetAt(arguments.properties, loc.i)] = "";
 			}
 		}
-		
+
 		// add any named arguments passed in
 		for (loc.key in arguments)
 			if (loc.key != "properties")
@@ -328,4 +328,43 @@
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="properties" returntype="any" access="public" output="false">
+	<cfargument name="values" type="any" required="false" default="">
+	<cfscript>
+	var loc = {};
+
+	// when a structure is passed in, set the properties of the object to values within the structure
+	if(isStruct(arguments.values))
+	{
+		for(loc.key in arguments.values)
+		{
+			if(ListFindNoCase(variables.wheels.class.propertyList, loc.key))
+			{
+				this[loc.key] = arguments.values[loc.key];
+			}
+		}
+		return;
+	}
+
+	// by default we will return a structure containing the properties and their current values
+	loc.returnvalue = {};
+	loc.properties = ListToArray(variables.wheels.class.propertyList);
+	loc.iEnd = ArrayLen(loc.properties);
+	for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+	{
+		loc.property = loc.properties[loc.i];
+		loc.returnvalue[loc.property] = "";
+		if(structkeyexists(this, loc.property))
+		{
+			loc.returnvalue[loc.property] = this[loc.property];
+		}
+		else
+		{
+			loc.returnvalue[loc.property] = variables.wheels.class.properties[loc.property].defaultValue;
+		}
+	}
+	return loc.returnvalue;
+	</cfscript>
 </cffunction>
