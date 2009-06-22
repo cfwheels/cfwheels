@@ -324,6 +324,7 @@
 
 <cffunction name="save" returntype="boolean" access="public" output="false" hint="Saves the object if it passes validation and callbacks. Returns `true` if the object was saved successfully to the database.">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.save.parameterize#" hint="See documentation for `findAll`">
+	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.save.defaults#" hint="Whether or not to set default values for properties">
 	<cfscript>
 		var returnValue = false;
 		clearErrors();
@@ -333,24 +334,25 @@
 			{
 				if ($callback("beforeValidationOnCreate") && $validate("onCreate") && $callback("beforeValidation") && $validate("onSave") && $callback("afterValidation") && $callback("beforeSave") && $callback("beforeCreate"))
 				{
-					returnValue = $create(parameterize=arguments.parameterize);
-					if (returnValue)
-					{
-						$callback("afterCreate");
-						$callback("afterSave");
-					}
+					$create(parameterize=arguments.parameterize);
+					if (arguments.defaults)
+						$setDefaultValues();
+					$updatePersistedProperties();
+					if ($callback("afterCreate"))
+						returnValue = $callback("afterSave");
 				}
 			}
 			else
 			{
 				if ($callback("beforeValidationOnUpdate") && $validate("onUpdate") && $callback("beforeValidation") && $validate("onSave") && $callback("afterValidation") && $callback("beforeSave") && $callback("beforeUpdate"))
 				{
-					returnValue = $update(parameterize=arguments.parameterize);
-					if (returnValue)
+					if (hasChanged())
 					{
-						$callback("afterUpdate");
-						$callback("afterSave");
+						$update(parameterize=arguments.parameterize);
+						$updatePersistedProperties();
 					}
+					if ($callback("afterUpdate"))
+						returnValue = $callback("afterSave");
 				}
 			}
 		}
@@ -396,24 +398,31 @@
 
 <cffunction name="new" returntype="any" access="public" output="false" hint="Creates a new object based on supplied properties and returns it. The object is not saved to the database, it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
+	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.new.defaults#" hint="See documentation for `save`">
 	<cfscript>
 		var loc = {};
 		for (loc.key in arguments)
-			if (loc.key != "properties")
+			if (loc.key != "properties" && loc.key != "defaults")
 				arguments.properties[loc.key] = arguments[loc.key];
 		loc.returnValue = $createInstance(properties=arguments.properties, persisted=false);
+		if (arguments.defaults)
+			loc.returnValue.$setDefaultValues();
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="create" returntype="any" access="public" output="false" hint="Creates a new object, saves it to the database (if the validation permits it) and returns it. If the validation fails, the unsaved object (with errors added to it) is still returned. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
+	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.create.defaults#" hint="See documentation for `save`">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.create.parameterize#" hint="See documentation for `save`">
 	<cfscript>
-		var returnValue = "";
-		returnValue = new(argumentCollection=arguments);
-		returnValue.save();
+		var loc = {};
+		loc.parameterize = arguments.parameterize;
+		StructDelete(arguments, "parameterize");
+		loc.returnValue = new(argumentCollection=arguments);
+		loc.returnValue.save(parameterize=loc.parameterize, defaults=arguments.defaults);
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="changedProperties" returntype="string" access="public" output="false" hint="Returns a list of the object properties that have been changed but not yet saved to the database.">
@@ -983,6 +992,7 @@
 </cffunction>
 
 <cffunction name="$create" returntype="boolean" access="public" output="false">
+	<cfargument name="parameterize" type="any" required="true">
 	<cfscript>
 		var loc = {};
 		if (variables.wheels.class.timeStampingOnCreate)
@@ -1013,39 +1023,33 @@
 		loc.generatedKey = variables.wheels.class.adapter.$generatedKey();
 		if (StructKeyExists(loc.ins.result, loc.generatedKey))
 			this[ListGetAt(variables.wheels.class.keys, 1)] = loc.ins.result[loc.generatedKey];
-		$updatePersistedProperties();
-		loc.returnValue = true;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn true>
 </cffunction>
 
 <cffunction name="$update" returntype="boolean" access="public" output="false">
+	<cfargument name="parameterize" type="any" required="true">
 	<cfscript>
 		var loc = {};
-		if (hasChanged())
+		if (variables.wheels.class.timeStampingOnUpdate)
+			this[variables.wheels.class.timeStampOnUpdateColumn] = Now();
+		loc.sql = [];
+		ArrayAppend(loc.sql, "UPDATE #variables.wheels.class.tableName# SET ");
+		for (loc.key in variables.wheels.class.properties)
 		{
-			if (variables.wheels.class.timeStampingOnUpdate)
-				this[variables.wheels.class.timeStampOnUpdateColumn] = Now();
-			loc.sql = [];
-			ArrayAppend(loc.sql, "UPDATE #variables.wheels.class.tableName# SET ");
-			for (loc.key in variables.wheels.class.properties)
+			if (StructKeyExists(this, loc.key) && (!StructKeyExists(variables.$persistedProperties, loc.key) || Compare(this[loc.key], variables.$persistedProperties[loc.key])))
 			{
-				if (StructKeyExists(this, loc.key) && (!StructKeyExists(variables.$persistedProperties, loc.key) || Compare(this[loc.key], variables.$persistedProperties[loc.key])))
-				{
-					ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
-					loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, null=this[loc.key] == ""};
-					ArrayAppend(loc.sql, loc.param);
-					ArrayAppend(loc.sql, ",");
-				}
+				ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
+				loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, null=this[loc.key] == ""};
+				ArrayAppend(loc.sql, loc.param);
+				ArrayAppend(loc.sql, ",");
 			}
-			ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
-			loc.sql = $addKeyWhereClause(sql=loc.sql);
-			loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
-			$updatePersistedProperties();
 		}
-		loc.returnValue = true;
+		ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
+		loc.sql = $addKeyWhereClause(sql=loc.sql);
+		loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn true>
 </cffunction>
 
 <cffunction name="$createInstance" returntype="any" access="public" output="false">

@@ -78,6 +78,7 @@
 	application.wheels.caches = {time=60};
 	application.wheels.checkBox = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", checkedValue=1, unCheckedValue=0};
 	application.wheels.checkBoxTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", value=1};
+	application.wheels.create = {parameterize=true, defaults=true};
 	application.wheels.dateSelect = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names"};
 	application.wheels.dateSelectTags = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names"};
 	application.wheels.dateTimeSelect = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, separator=" - "};
@@ -102,6 +103,7 @@
 	application.wheels.mailTo = {encode=false};
 	application.wheels.minuteSelectTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, minuteStep=1};
 	application.wheels.monthSelectTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, monthDisplay="names"};
+	application.wheels.new = {defaults=false};
 	application.wheels.paginationLinks = {windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prependToLink="", appendToLink="", classForCurrent="", name="page"};
 	application.wheels.passwordField = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span"};
 	application.wheels.passwordFieldTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel=""};
@@ -110,7 +112,7 @@
 	application.wheels.redirectTo = {onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302};
 	application.wheels.renderPage = {layout=true};
 	application.wheels.renderPageToString = {layout=true};
-	application.wheels.save = {parameterize=true};
+	application.wheels.save = {parameterize=true, defaults=true};
 	application.wheels.secondSelectTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
 	application.wheels.select = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, multiple=false, valueField="", textField=""};
 	application.wheels.selectTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, multiple=false, valueField="", textField=""};
