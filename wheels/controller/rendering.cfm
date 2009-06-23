@@ -69,7 +69,7 @@
 <cffunction name="renderPartial" returntype="void" access="public" output="false" hint="Renders content to the browser by including a partial.">
 	<cfargument name="name" type="string" required="true" hint="Name of partial to include">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for">
-	<cfargument name="$type" type="string" required="false" default="render">
+	<cfargument name="$partialType" type="string" required="false" default="render">
 	<cfscript>
 		$includeOrRenderPartial(argumentCollection=arguments);
 	</cfscript>
@@ -91,7 +91,7 @@
 		var loc = {};
 		if (!Len(arguments.template))
 			arguments.template = "/" & arguments.controller & "/" & arguments.action;
-		loc.content = $includeFile(name=arguments.template, type="page");
+		loc.content = $includeFile(name=arguments.template, $type="page");
 		loc.returnValue = $renderLayout(content=loc.content, layout=arguments.layout);
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -112,7 +112,7 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
-		arguments.type = "partial";
+		arguments.$type = "partial";
 		if (application.wheels.cachePartials && (isNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
 		{
 			loc.category = "partial";
@@ -130,9 +130,9 @@
 		{
 			loc.partial = $includeFile(argumentCollection=arguments);
 		}
-		if (arguments.$type == "include")
+		if (arguments.$partialType == "include")
 			loc.returnValue = loc.partial;
-		else if (arguments.$type == "render")
+		else if (arguments.$partialType == "render")
 			request.wheels.response = loc.partial;
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -140,12 +140,12 @@
 
 <cffunction name="$includeFile" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
-	<cfargument name="type" type="string" required="true">
+	<cfargument name="$type" type="string" required="true">
 	<cfscript>
 		var loc = {};
 		loc.include = application.wheels.viewPath;
 		loc.fileName = Spanexcluding(Reverse(ListFirst(Reverse(arguments.name), "/")), ".") & ".cfm"; // extracts the file part of the path and replace ending ".cfm"
-		if (type == "partial")
+		if (arguments.$type == "partial")
 			loc.fileName = Replace("_" & loc.fileName, "__", "_", "one"); // replaces leading "_" when the file is a partial
 		loc.folderName = Reverse(ListRest(Reverse(arguments.name), "/"));
 		if (Left(arguments.name, 1) == "/")
@@ -154,7 +154,8 @@
 			loc.include = loc.include & "/" & variables.params.controller & "/" & loc.folderName & "/" & loc.fileName; // Include a file in a sub folder of the current controller
 		else
 			loc.include = loc.include & "/" & variables.params.controller & "/" & loc.fileName; // Include a file in the current controller's view folder
-		loc.returnValue = $includeAndReturnOutput(loc.include);
+		arguments.$template = loc.include;
+		loc.returnValue = $includeAndReturnOutput(argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -185,11 +186,11 @@
 				{
 					loc.include = loc.include & "/" & "layout.cfm";
 				}
-				loc.returnValue = $includeAndReturnOutput(loc.include);
+				loc.returnValue = $includeAndReturnOutput($template=loc.include);
 			}
 			else
 			{
-				loc.returnValue = $includeFile(name=arguments.layout, type="layout");
+				loc.returnValue = $includeFile(name=arguments.layout, $type="layout");
 			}
 		}
 		else

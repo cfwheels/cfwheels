@@ -91,10 +91,10 @@
 </cffunction>
 
 <cffunction name="$includeAndReturnOutput" returntype="string" access="public" output="false">
-	<cfargument name="template" type="string" required="true">
+	<cfargument name="$template" type="string" required="true">
 	<cfset var loc = {}>
 	<!--- we prefix returnValue with "wheels" here to make sure the variable does not get overwritten in the included template --->
-	<cfsavecontent variable="loc.wheelsReturnValue"><cfoutput><cfinclude template="../../#LCase(arguments.template)#"></cfoutput></cfsavecontent>
+	<cfsavecontent variable="loc.wheelsReturnValue"><cfoutput><cfinclude template="../../#LCase(arguments.$template)#"></cfoutput></cfsavecontent>
 	<cfreturn loc.wheelsReturnValue>
 </cffunction>
 

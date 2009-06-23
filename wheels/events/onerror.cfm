@@ -25,7 +25,7 @@
 				loc.mailArgs.to = application.wheels.errorEmailAddress;
 				loc.mailArgs.subject = "Error";
 				loc.mailArgs.type = "html";
-				loc.mailArgs.body = [$includeAndReturnOutput(template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception)];
+				loc.mailArgs.body = [$includeAndReturnOutput($template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception)];
 				if (StructKeyExists(application.wheels, "errorEmailServer"))
 					loc.mailArgs.server = application.wheels.errorEmailServer;
 				$mail(argumentCollection=loc.mailArgs);
@@ -39,9 +39,9 @@
 					loc.wheelsError = arguments.exception.cause.rootCause;
 				if (StructKeyExists(loc, "wheelsError"))
 				{
-					loc.returnValue = $includeAndReturnOutput(template="wheels/styles/header.cfm");
-					loc.returnValue = loc.returnValue & $includeAndReturnOutput(template="wheels/events/onerror/wheelserror.cfm", wheelsError=loc.wheelsError);
-					loc.returnValue = loc.returnValue & $includeAndReturnOutput(template="wheels/styles/footer.cfm");
+					loc.returnValue = $includeAndReturnOutput($template="wheels/styles/header.cfm");
+					loc.returnValue = loc.returnValue & $includeAndReturnOutput($template="wheels/events/onerror/wheelserror.cfm", wheelsError=loc.wheelsError);
+					loc.returnValue = loc.returnValue & $includeAndReturnOutput($template="wheels/styles/footer.cfm");
 				}
 				else
 				{
@@ -51,7 +51,7 @@
 			else
 			{
 				$header(statusCode=500, statusText="Internal Server Error");
-				loc.returnValue = $includeAndReturnOutput(template="#application.wheels.eventPath#/onerror.cfm");
+				loc.returnValue = $includeAndReturnOutput($template="#application.wheels.eventPath#/onerror.cfm");
 			}
 		}
 		else
