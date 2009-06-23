@@ -27,10 +27,10 @@
 	<cfargument name="post" type="any" required="false" default="" hint="Set to true to verify that this is a post request">
 	<cfargument name="get" type="any" required="false" default="" hint="Set to true to verify that this is a get request">
 	<cfargument name="ajax" type="any" required="false" default="" hint="Set to true to verify that this is an AJAX request">
-	<cfargument name="cookie" type="any" required="false" default="" hint="Verify that the passed in variable name exists in the cookie">
-	<cfargument name="session" type="any" required="false" default="" hint="Verify that the passed in variable name exists in the session">
-	<cfargument name="params" type="any" required="false" default="" hint="Verify that the passed in variable name exists in the params">
-	<cfargument name="handler" type="any" required="false" default="#application.wheels.verifies.handler#" hint="Pass in the name of a function that should handle failed verifications (default is to just abort the request when a verification fails)">
+	<cfargument name="cookie" type="string" required="false" default="" hint="Verify that the passed in variable name exists in the cookie">
+	<cfargument name="session" type="string" required="false" default="" hint="Verify that the passed in variable name exists in the session">
+	<cfargument name="params" type="string" required="false" default="" hint="Verify that the passed in variable name exists in the params">
+	<cfargument name="handler" type="string" required="false" default="#application.wheels.verifies.handler#" hint="Pass in the name of a function that should handle failed verifications (default is to just abort the request when a verification fails)">
 	<cfscript>
 		ArrayAppend(variables.wheels.verifications, Duplicate(arguments));
 	</cfscript>

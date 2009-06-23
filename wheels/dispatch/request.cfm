@@ -20,6 +20,7 @@
 <cffunction name="$runVerifications" returntype="void" access="public" output="false">
 	<cfargument name="controller" type="any" required="true">
 	<cfargument name="actionName" type="string" required="true">
+	<cfargument name="params" type="struct" required="true">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
@@ -40,7 +41,7 @@
 				loc.jEnd = ListLen(loc.verification.params);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
-					if (!StructKeyExists(loc.params, ListGetAt(loc.verification.params, loc.j)))
+					if (!StructKeyExists(arguments.params, ListGetAt(loc.verification.params, loc.j)))
 						loc.abort = true;
 				}
 				loc.jEnd = ListLen(loc.verification.session);
@@ -286,7 +287,7 @@
 			$debugPoint("setup,beforeFilters");
 		
 		// run verifications and before filters if they exist on the controller
-		$runVerifications(controller=loc.controller, actionName=loc.params.action);
+		$runVerifications(controller=loc.controller, actionName=loc.params.action, params=loc.params);
 		$runFilters(controller=loc.controller, type="before", actionName=loc.params.action);
 		
 		if (application.wheels.showDebugInformation)

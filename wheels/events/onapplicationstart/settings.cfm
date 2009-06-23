@@ -141,7 +141,7 @@
 	application.wheels.validatesNumericalityOf = {message="[property] is not a number", allowBlank=false, onlyInteger=false};
 	application.wheels.validatesPresenceOf = {message="[property] can't be empty"};
 	application.wheels.validatesUniquenessOf = {message="[property] has already been taken"};
-	application.wheels.verifies = {handler=false};
+	application.wheels.verifies = {handler=""};
 	application.wheels.yearSelectTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, startYear=Year(Now())-5, endYear=Year(Now())+5};
 
 	// set a flag to indicate that all settings have been loaded
