@@ -94,7 +94,7 @@
 	<cfargument name="template" type="string" required="true">
 	<cfset var loc = {}>
 	<!--- we prefix returnValue with "wheels" here to make sure the variable does not get overwritten in the included template --->
-	<cfsavecontent variable="loc.wheelsReturnValue"><cfinclude template="../../#LCase(arguments.template)#"></cfsavecontent>
+	<cfsavecontent variable="loc.wheelsReturnValue"><cfoutput><cfinclude template="../../#LCase(arguments.template)#"></cfoutput></cfsavecontent>
 	<cfreturn loc.wheelsReturnValue>
 </cffunction>
 

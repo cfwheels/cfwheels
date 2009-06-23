@@ -5,7 +5,9 @@
 		var returnValue = "";
 		returnValue = $simpleLock(execute="$runOnError", executeArgs=arguments, name="wheelsReloadLock", type="readOnly");
 	</cfscript>
-	#returnValue#
+	<cfoutput>
+		#returnValue#
+	</cfoutput>
 </cffunction>
 
 <cffunction name="$runOnError" returntype="string" access="public" output="false">
