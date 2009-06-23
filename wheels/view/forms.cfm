@@ -109,7 +109,7 @@
 		arguments.type = "text";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.id = $tagId(arguments.objectName, arguments.property);
-		arguments.value = HTMLEditFormat($formValue(argumentCollection=arguments));
+		arguments.value = $formValue(argumentCollection=arguments);
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -154,7 +154,7 @@
 		arguments.type = "password";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.id = $tagId(arguments.objectName, arguments.property);
-		arguments.value = HTMLEditFormat($formValue(argumentCollection=arguments));
+		arguments.value = $formValue(argumentCollection=arguments);
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -193,7 +193,6 @@
 		arguments.value = $formValue(argumentCollection=arguments);
 		if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get")
 			arguments.value = obfuscateParam(arguments.value);
-		arguments.value = HTMLEditFormat(arguments.value);
 		loc.returnValue = $tag(name="input", close=true, skip="objectName,property", attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -1014,7 +1013,7 @@
 				loc.returnValue = "";
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn HTMLEditFormat(loc.returnValue)>
 </cffunction>
 
 <cffunction name="$formHasError" returntype="boolean" access="public" output="false">
