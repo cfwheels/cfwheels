@@ -23,11 +23,11 @@
 </cfif>
 <tr>
 	<td valign="top"><strong>Application Name:</strong></td>
-	<td>#application.applicationName#</td>
+	<td>#application.applicationName#&nbsp;&nbsp;&nbsp;[<a href="?controller=wheels&action=tests&type=app&reload=true">Run Tests</a>]</td>
 </tr>
 <tr>
 	<td valign="top"><strong>Framework:</strong></td>
-	<td>Wheels #get("version")# (#get("environment")# mode)</td>
+	<td>Wheels #get("version")# (#get("environment")# mode)&nbsp;&nbsp;&nbsp;[<a href="?controller=wheels&action=tests&type=core&reload=true">Run Tests</a>]</td>
 </tr>
 <tr>
 	<td valign="top"><strong>CFML Engine:</strong></td>
@@ -42,20 +42,13 @@
 	<td><cfif get("obfuscateUrls")>On<cfelse>Off</cfif></td>
 </tr>
 <tr>
-	<td valign="top"><strong>Run Tests:</strong></td>
-	<td>
-		<a href="?controller=wheels&action=tests&type=core">Core</a>
-		<br/><a href="?controller=wheels&action=tests&type=app">App</a>
-	</td>
-</tr>
-<tr>
 	<td valign="top"><strong>Plugins:</strong></td>
 	<td>
 		<cfif StructCount(application.wheels.plugins) IS NOT 0>
 			<cfset loc.count = 0>
 			<cfloop collection="#application.wheels.plugins#" item="loc.i">
 				<cfset loc.count = loc.count + 1>
-				<a href="?controller=wheels&action=plugins&name=#LCase(loc.i)#">#loc.i#</a>&nbsp;&nbsp;&nbsp;<a href="?controller=wheels&action=tests&type=#LCase(loc.i)#">Test</a>
+				<a href="?controller=wheels&action=plugins&name=#LCase(loc.i)#">#loc.i#</a>&nbsp;&nbsp;&nbsp;[<a href="?controller=wheels&action=tests&type=#LCase(loc.i)#">Run Tests</a>]
 				<cfif StructCount(application.wheels.plugins) GT loc.count>
 					<br />
 				</cfif>
