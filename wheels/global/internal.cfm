@@ -364,13 +364,33 @@ DOES NOT work in production mode.
 
 To use call $deprecated() from within the method you want to deprecate. You may pass an optional
 custom message if desired. The method will return a structure containing the message and information
-about where	the deprecation occurrs like the called method, line number, template name and shows the
-code that called the deprcated method.  
+about where the deprecation occurrs like the called method, line number, template name and shows the
+code that called the deprcated method.
+
+Example:
+
+Original foo()
+<cffunction name="foo" returntype="any" access="public" output="false">
+	<cfargument name="baz" type="numeric" required="true">
+	<cfreturn baz++>
+</cffunction>
+
+Should now call bar() instead and marking foo() as deprecated
+<cffunction name="foo" returntype="any" access="public" output="false">
+	<cfargument name="baz" type="numeric" required="true">
+	<cfset $deprecated("Calling foo is now deprecated, use bar() instead.")>
+	<cfreturn bar(argumentscollection=arguments)>
+</cffunction>
+
+<cffunction name="bar" returntype="any" access="public" output="false">
+	<cfargument name="baz" type="numeric" required="true">
+	<cfreturn ++baz>
+</cffunction>
  --->
 <cffunction name="$deprecated" returntype="struct" access="public" output="false">
 	<!--- a message to display instead of the default one. --->
 	<cfargument name="message" type="string" required="false" default="You are using deprecated behavior which will be removed from the next major or minor release.">
-	<!--- should you annouce the deprecation. good for testing. --->
+	<!--- should you announce the deprecation. only used when writing tests. --->
 	<cfargument name="announce" type="boolean" required="false" default="true">
 	<cfset var loc = {}>
 	<cfset loc.ret = {}>
@@ -387,44 +407,40 @@ code that called the deprcated method.
 	<cfset loc.tagcontext = loc.exception.tagcontext>
 	<!--- 
 	TagContext is an array. The first element of the array will always be the context for this
-	method annoucing the deprecation. The second element will be the deprecated function that is
-	being called. We need to look at the third element of the array to get the method that is calling
-	the method marked for deprecation.
+	method announcing the deprecation. The second element will be the deprecated function that
+	is being called. We need to look at the third element of the array to get the method that
+	is calling the method marked for deprecation.
 	 --->
-	<cfif isArray(loc.tagcontext) and arraylen(loc.tagcontext) gte 3 and isStruct(loc.tagcontext[2])>
+	<cfif isArray(loc.tagcontext) and arraylen(loc.tagcontext) gte 3 and isStruct(loc.tagcontext[3])>
 		<!--- grab and parse the information from the tagcontext. --->
 		<cfset loc.context = loc.tagcontext[3]>
 		<!--- the line number --->
-		<cfset loc.line = loc.context.line>
-		<cfset loc.ret.line = loc.line>
-		<!--- what method --->
-		<cfset loc.method = rereplacenocase(loc.context.raw_trace, ".*\$func([^\.]*)\..*", "\1")>
-		<cfset loc.ret.method = loc.method>
-		<!--- what file --->
-		<cfset loc.template = loc.context.template>		
+		<cfset loc.ret.line = loc.context.line>
+		<!--- the deprecated method that was called --->
+		<cfset loc.ret.method = rereplacenocase(loc.context.raw_trace, ".*\$func([^\.]*)\..*", "\1")>
+		<!--- the user template where the method called occurred --->
+		<cfset loc.ret.template = loc.context.template>		
 		<!--- try to get the code --->
- 		<cfif len(loc.template) and FileExists(loc.template)>
-			<!--- we want to grab a one line radius from where the deprecation occurred. --->
-			<cfset loc.startAt = loc.line - 1>
+ 		<cfif len(loc.ret.template) and FileExists(loc.ret.template)>
+			<!--- grab a one line radius from where the deprecation occurred. --->
+			<cfset loc.startAt = loc.ret.line - 1>
 			<cfif loc.startAt lte 0>
-				<cfset loc.startAt = loc.line>
+				<cfset loc.startAt = loc.ret.line>
 			</cfif>
-			<cfset loc.stopAt = loc.line + 1>
-			<cfset loc.data = []>
+			<cfset loc.stopAt = loc.ret.line + 1>
 			<cfset loc.counter = 1>
-			<cfloop file="#loc.template#" index="loc.i">
+			<cfloop file="#loc.ret.template#" index="loc.i">
 				<cfif loc.counter gte loc.startAt and loc.counter lte loc.stopAt>
-					<cfset arrayappend(loc.data, loc.i)>
+					<cfset arrayappend(loc.ret.data, loc.i)>
 				</cfif>
 				<cfif loc.counter gt loc.stopAt>
 					<cfbreak>
 				</cfif>
 				<cfset loc.counter++>
 			</cfloop>
-			<cfset loc.ret.data = loc.data>
 		</cfif>
-		<cfset loc.template = listfirst(listchangedelims(removechars(loc.template, 1, len(expandpath(application.wheels.webpath))), "/", "\"), ".")>
-		<cfset loc.ret.template = loc.template>
+		<!--- change template name from full to relative path. --->
+		<cfset loc.ret.template = listchangedelims(removechars(loc.ret.template, 1, len(expandpath(application.wheels.webpath))), "/", "\/")>
 	</cfif>
 	<!--- append --->
 	<cfif arguments.announce>
