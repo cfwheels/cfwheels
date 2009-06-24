@@ -357,3 +357,78 @@
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
+
+<!--- 
+Used to announce to the developer that a feature they are using will be removed at some point.
+DOES NOT work in production mode.
+
+To use call $deprecated() from within the method you want to deprecate. You may pass an optional
+custom message if desired. The method will return a structure containing the message and information
+about where	the deprecation occurrs like the called method, line number, template name and shows the
+code that called the deprcated method.  
+ --->
+<cffunction name="$deprecated" returntype="struct" access="public" output="false">
+	<!--- a message to display instead of the default one. --->
+	<cfargument name="message" type="string" required="false" default="You are using deprecated behavior which will be removed from the next major or minor release.">
+	<!--- should you annouce the deprecation. good for testing. --->
+	<cfargument name="announce" type="boolean" required="false" default="true">
+	<cfset var loc = {}>
+	<cfset loc.ret = {}>
+	<cfif get("environment") eq "production">
+		<cfreturn loc.ret>
+	</cfif>
+	<!--- set return value --->
+	<cfset loc.ret = {message=arguments.message, line="", method="", template="", data=[]}>
+	<!--- 	
+	create an exception so we can get the TagContext and display what file and line number the
+	deprecated method is being called in
+	 --->
+	<cfset loc.exception = createObject("java","java.lang.Exception").init()>
+	<cfset loc.tagcontext = loc.exception.tagcontext>
+	<!--- 
+	TagContext is an array. The first element of the array will always be the context for this
+	method annoucing the deprecation. The second element will be the deprecated function that is
+	being called. We need to look at the third element of the array to get the method that is calling
+	the method marked for deprecation.
+	 --->
+	<cfif isArray(loc.tagcontext) and arraylen(loc.tagcontext) gte 3 and isStruct(loc.tagcontext[2])>
+		<!--- grab and parse the information from the tagcontext. --->
+		<cfset loc.context = loc.tagcontext[3]>
+		<!--- the line number --->
+		<cfset loc.line = loc.context.line>
+		<cfset loc.ret.line = loc.line>
+		<!--- what method --->
+		<cfset loc.method = rereplacenocase(loc.context.raw_trace, ".*\$func([^\.]*)\..*", "\1")>
+		<cfset loc.ret.method = loc.method>
+		<!--- what file --->
+		<cfset loc.template = loc.context.template>		
+		<!--- try to get the code --->
+ 		<cfif len(loc.template) and FileExists(loc.template)>
+			<!--- we want to grab a one line radius from where the deprecation occurred. --->
+			<cfset loc.startAt = loc.line - 1>
+			<cfif loc.startAt lte 0>
+				<cfset loc.startAt = loc.line>
+			</cfif>
+			<cfset loc.stopAt = loc.line + 1>
+			<cfset loc.data = []>
+			<cfset loc.counter = 1>
+			<cfloop file="#loc.template#" index="loc.i">
+				<cfif loc.counter gte loc.startAt and loc.counter lte loc.stopAt>
+					<cfset arrayappend(loc.data, loc.i)>
+				</cfif>
+				<cfif loc.counter gt loc.stopAt>
+					<cfbreak>
+				</cfif>
+				<cfset loc.counter++>
+			</cfloop>
+			<cfset loc.ret.data = loc.data>
+		</cfif>
+		<cfset loc.template = listfirst(listchangedelims(removechars(loc.template, 1, len(expandpath(application.wheels.webpath))), "/", "\"), ".")>
+		<cfset loc.ret.template = loc.template>
+	</cfif>
+	<!--- append --->
+	<cfif arguments.announce>
+		<cfset arrayappend(request.wheels.deprecation, loc.ret)>
+	</cfif>
+	<cfreturn loc.ret>
+</cffunction>

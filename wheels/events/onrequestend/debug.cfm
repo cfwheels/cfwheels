@@ -7,6 +7,20 @@
 		<td><span style="color:red;"><cfloop list="#application.wheels.incompatiblePlugins#" index="loc.i">The #loc.i# plugin is incompatible with this version of Wheels<br /></cfloop></span></td>
 	</tr>
 </cfif>
+<cfif get("environment") neq "production" and not arrayisempty(request.wheels.deprecation)>
+	<tr>
+		<td valign="top"><strong><span style="color:red;">Deprecation Messages:</span></strong></td>
+		<td><span style="color:red;">
+		<cfloop array="#request.wheels.deprecation#" index="i">
+		<dl>
+			<dt>#i.message#<br/>From <strong>#i.method#</strong> at line <strong>#i.line#</strong> in <strong>#i.template#</strong></dt>
+			<cfloop array="#i.data#" index="a"><dd>#HTMLEditFormat(a)#</dd></cfloop>
+		</dl>
+		</cfloop>
+		<cfloop list="#application.wheels.incompatiblePlugins#" index="loc.i">The #loc.i# plugin is incompatible with this version of Wheels<br /></cfloop>
+		</span></td>
+	</tr>
+</cfif>
 <tr>
 	<td valign="top"><strong>Application Name:</strong></td>
 	<td>#application.applicationName#</td>

@@ -32,6 +32,8 @@
 		request.wheels = {};
 		request.wheels.params = {};
 		request.wheels.cache = {};
+		if(get("environment") neq "production")
+			request.wheels.deprecation = [];
 		if (application.wheels.showDebugInformation)
 			$debugPoint("total,requestStart");
 		if (!application.wheels.cacheModelInitialization)
