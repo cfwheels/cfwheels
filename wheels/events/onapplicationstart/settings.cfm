@@ -114,7 +114,7 @@
 	application.wheels.renderPageToString = {layout=true};
 	application.wheels.save = {parameterize=true, defaults=true};
 	application.wheels.secondSelectTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
-	application.wheels.select = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, multiple=false, valueField="", textField=""};
+	application.wheels.select = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, valueField="", textField=""};
 	application.wheels.selectTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, multiple=false, valueField="", textField=""};
 	application.wheels.sendEmail = {layout=false, detectMultipart=true};
 	application.wheels.sendFile = {disposition="attachment"};

@@ -430,7 +430,6 @@
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="options" type="any" required="true" hint="A collection to populate the select form control with">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.select.includeBlank#" hint="Whether to include a blank option in the select form control">
-	<cfargument name="multiple" type="boolean" required="false" default="#application.wheels.select.multiple#" hint="Whether to allow multiple selection of options in the select form control">
 	<cfargument name="valueField" type="string" required="false" default="#application.wheels.select.valueField#" hint="The column to use for the value of each list element, used only when a query has been supplied in the `options` argument">
 	<cfargument name="textField" type="string" required="false" default="#application.wheels.select.textField#" hint="The column to use for the value of each list element that the end user will see, used only when a query has been supplied in the `options` argument">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.select.label#" hint="See documentation for `textField`">
@@ -447,10 +446,13 @@
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.id = $tagId(arguments.objectName, arguments.property);
-		if (arguments.multiple)
-			arguments.multiple = "multiple";
-		else
-			StructDelete(arguments, "multiple");		
+		if (StructKeyExists(arguments, "multiple"))
+		{
+			if (arguments.multiple)
+				arguments.multiple = "multiple";
+			else
+				StructDelete(arguments, "multiple");
+		}
 		loc.content = $optionsForSelect(argumentCollection=arguments);
 		if (!IsBoolean(arguments.includeBlank) || arguments.includeBlank)
 		{
@@ -471,7 +473,7 @@
 	<cfargument name="options" type="any" required="true">
 	<cfargument name="selected" type="string" required="false" default="">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.selectTag.includeBlank#" hint="See documentation for `select`">
-	<cfargument name="multiple" type="boolean" required="false" default="#application.wheels.selectTag.multiple#" hint="See documentation for `select`">
+	<cfargument name="multiple" type="boolean" required="false" default="#application.wheels.selectTag.multiple#" hint="Whether to allow multiple selection of options in the select form control">
 	<cfargument name="valueField" type="string" required="false" default="#application.wheels.selectTag.valueField#" hint="See documentation for `select`">
 	<cfargument name="textField" type="string" required="false" default="#application.wheels.selectTag.textField#" hint="See documentation for `select`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.selectTag.label#" hint="See documentation for `textField`">
@@ -931,7 +933,6 @@
 				loc.columns = "";
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					loc.columns = ListAppend(loc.columns, loc.info[loc.i].name);
-
 				// take the first numeric field in the query as the value field and the first non numeric as the text field
 				loc.iEnd = arguments.options.RecordCount;
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -945,6 +946,12 @@
 							arguments.textField = ListGetAt(loc.columns, loc.j);
 					}
 				}
+				if (!Len(arguments.valueField) || !Len(arguments.textField))
+				{
+					// the query does not contain both a numeric and a text column so we'll just use the first and second column instead
+					arguments.valueField = ListGetAt(loc.columns, 1);
+					arguments.textField = ListGetAt(loc.columns, 2);
+				}
 			}
 			loc.iEnd = arguments.options.RecordCount;
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -956,7 +963,7 @@
 		{
 			for (loc.key in arguments.options)
 			{
-				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=loc.key, optionText=arguments.options[loc.key]);
+				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=LCase(loc.key), optionText=arguments.options[loc.key]);
 			}
 		}
 		else if (IsArray(arguments.options))
@@ -964,7 +971,7 @@
 			loc.iEnd = ArrayLen(arguments.options);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=loc.i, optionText=arguments.options[loc.i]);
+				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=arguments.options[loc.i], optionText=arguments.options[loc.i]);
 			}
 		}
 		else
@@ -972,7 +979,7 @@
 			loc.iEnd = ListLen(arguments.options);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=loc.i, optionText=ListGetAt(arguments.options, loc.i));
+				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=ListGetAt(arguments.options, loc.i), optionText=ListGetAt(arguments.options, loc.i));
 			}
 		}
 	</cfscript>
@@ -986,7 +993,7 @@
 	<cfscript>
 		var loc = {};
 		loc.optionAttributes = {value=arguments.optionValue};
-		if (arguments.optionValue == arguments.objectValue)
+		if (arguments.optionValue == arguments.objectValue || ListFindNoCase(arguments.objectValue, arguments.optionValue))
 			loc.optionAttributes.selected = "selected";
 		if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get")
 			loc.optionAttributes.value = obfuscateParam(loc.optionAttributes.value);
