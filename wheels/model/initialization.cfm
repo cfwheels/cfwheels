@@ -84,7 +84,7 @@
 		if (Len(application.wheels.timeStampOnCreateProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.timeStampOnCreateProperty))
 		{
 			variables.wheels.class.timeStampingOnCreate = true;
-			variables.wheels.class.timeStampOnCreateColumn = variables.wheels.class.properties[application.wheels.timeStampOnCreateProperty].column;
+			variables.wheels.class.timeStampOnCreateProperty = application.wheels.timeStampOnCreateProperty;
 		}
 		else
 		{
@@ -94,7 +94,7 @@
 		if (Len(application.wheels.timeStampOnUpdateProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.timeStampOnUpdateProperty))
 		{
 			variables.wheels.class.timeStampingOnUpdate = true;
-			variables.wheels.class.timeStampOnUpdateColumn = variables.wheels.class.properties[application.wheels.timeStampOnUpdateProperty].column;
+			variables.wheels.class.timeStampOnUpdateProperty = application.wheels.timeStampOnUpdateProperty;
 		}
 		else
 		{

@@ -996,7 +996,7 @@
 	<cfscript>
 		var loc = {};
 		if (variables.wheels.class.timeStampingOnCreate)
-			this[variables.wheels.class.timeStampOnCreateColumn] = Now();
+			this[variables.wheels.class.timeStampOnCreateProperty] = Now();
 		loc.sql = [];
 		loc.sql2 = [];
 		ArrayAppend(loc.sql, "INSERT INTO #variables.wheels.class.tableName# (");
@@ -1032,7 +1032,7 @@
 	<cfscript>
 		var loc = {};
 		if (variables.wheels.class.timeStampingOnUpdate)
-			this[variables.wheels.class.timeStampOnUpdateColumn] = Now();
+			this[variables.wheels.class.timeStampOnUpdateProperty] = Now();
 		loc.sql = [];
 		ArrayAppend(loc.sql, "UPDATE #variables.wheels.class.tableName# SET ");
 		for (loc.key in variables.wheels.class.properties)
