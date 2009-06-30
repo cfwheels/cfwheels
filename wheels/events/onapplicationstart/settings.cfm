@@ -96,8 +96,8 @@
 	application.wheels.findAll = {reload=false, parameterize=true, perPage=10, order=""};
 	application.wheels.findByKey = {reload=false, parameterize=true};
 	application.wheels.findOne = {reload=false, parameterize=true};
-	application.wheels.hasMany = {dependent=false, instantiate=false};
-	application.wheels.hasOne = {dependent=false, instantiate=true};
+	application.wheels.hasMany = {dependent=false};
+	application.wheels.hasOne = {dependent=false};
 	application.wheels.hiddenField = {};
 	application.wheels.hourSelectTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
 	application.wheels.imageTag = {};

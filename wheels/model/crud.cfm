@@ -392,8 +392,26 @@
             if (loc.del.result.recordCount == 1)
             {
             	loc.returnValue = true;
+            	// loop through all has many and has one associations and delete any dependant objects
+				for (loc.key in variables.wheels.class.associations)
+				{
+					loc.association = variables.wheels.class.associations[loc.key];
+					if (loc.association.type != "belongsTo" && ((IsBoolean(loc.association.dependent) && loc.association.dependent) || (!IsBoolean(loc.association.dependent) && loc.association.dependent != "join")))
+					{
+						if (IsBoolean(loc.association.dependent))
+							loc.association.dependent = "delete";
+						loc.args = {};
+						if (loc.association.dependent == "delete" || loc.association.dependent == "remove")
+						{
+							loc.association.dependent = loc.association.dependent & "All";
+							loc.args.instantiate = true;
+						}
+						loc.method = loc.association.dependent & loc.key;
+						$invoke(component=this, method=loc.method, argumentCollection=loc.args);
+					}	
+				}
             	$callback("afterDelete");
-            }
+			}
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -957,7 +975,7 @@
 			loc.classAssociations[loc.name].properties = loc.associatedClass.$classData().properties;
 
 			// create the join string
-			if (loc.classAssociations[loc.name].dependent)
+			if (!IsBoolean(loc.classAssociations[loc.name].dependent) || loc.classAssociations[loc.name].dependent)
 				loc.joinType = "inner";
 			else
 				loc.joinType = "left outer";
