@@ -957,28 +957,28 @@
 			loc.classAssociations[loc.name].properties = loc.associatedClass.$classData().properties;
 
 			// create the join string
-			if (loc.classAssociations[loc.name].type == "belongsTo")
-			{
-				loc.classAssociations[loc.name].join = "INNER JOIN #loc.classAssociations[loc.name].tableName# ON ";
-				loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
-				loc.toAppend = "";
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-				{
-					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.j)].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[ListGetAt(loc.associatedClass.$classData().keys, loc.j)].column#");
-				}
-				loc.classAssociations[loc.name].join = loc.classAssociations[loc.name].join & Replace(loc.toAppend, ",", " AND ", "all");
-			}
+			if (loc.classAssociations[loc.name].dependent)
+				loc.joinType = "inner";
 			else
+				loc.joinType = "left outer";
+			loc.classAssociations[loc.name].join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# ON ";
+			loc.toAppend = "";
+			loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
+			for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 			{
-				loc.classAssociations[loc.name].join = "LEFT OUTER JOIN #loc.classAssociations[loc.name].tableName# ON ";
-				loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
-				loc.toAppend = "";
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				if (loc.classAssociations[loc.name].type == "belongsTo")
 				{
-					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[ListGetAt(loc.class.$classData().keys, loc.j)].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.j)].column#");
+					loc.first = loc.classAssociations[loc.name].foreignKey;
+					loc.second = loc.associatedClass.$classData().keys;
 				}
-				loc.classAssociations[loc.name].join = loc.classAssociations[loc.name].join & Replace(loc.toAppend, ",", " AND ", "all");
+				else
+				{
+					loc.first = loc.class.$classData().keys;
+					loc.second = loc.classAssociations[loc.name].foreignKey;
+				}
+				loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[ListGetAt(loc.first, loc.j)].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[ListGetAt(loc.second, loc.j)].column#");
 			}
+			loc.classAssociations[loc.name].join = loc.classAssociations[loc.name].join & Replace(loc.toAppend, ",", " AND ", "all");
 
 			// go up or down one level in the association tree
 			if (loc.delimChar == "(")
@@ -988,7 +988,6 @@
 
 			// add info to the array that we will return
 			ArrayAppend(loc.returnValue, loc.classAssociations[loc.name]);
-
 		}
 		</cfscript>
 		<cfreturn loc.returnValue>
