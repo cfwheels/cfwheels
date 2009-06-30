@@ -104,7 +104,7 @@
 	application.wheels.minuteSelectTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, minuteStep=1};
 	application.wheels.monthSelectTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, monthDisplay="names"};
 	application.wheels.new = {defaults=false};
-	application.wheels.paginationLinks = {windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prependToLink="", appendToLink="", classForCurrent="", name="page"};
+	application.wheels.paginationLinks = {windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prepend="", append="", prependToPage="", prependOnFirst=true, appendToPage="", appendOnLast=true, classForCurrent="", name="page", showSinglePage=false};
 	application.wheels.passwordField = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span"};
 	application.wheels.passwordFieldTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel=""};
 	application.wheels.radioButton = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span"};

@@ -111,102 +111,143 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="pagination" returntype="struct" access="public" output="false" hint="Returns a struct with information about the specificed paginated query. The available variables are `currentPage`, `totalPages` and `totalRecords`.">
+	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query to return pagination information for">
+	<cfreturn request.wheels[arguments.handle]>
+</cffunction>
+
 <cffunction name="paginationLinks" returntype="string" access="public" output="false" hint="Builds and returns a string containing links to pages based on a paginated query. Uses `linkTo` internally to build the link so you need to pass in a route name, controller or action. All other `linkTo` arguments can of course be supplied as well in which case they are passed through directly to `linkTo`. If you have paginated more than one query in the controller you can use the `handle` argument to reference them (don't forget to pass in a `handle` to the `findAll` function in your controller first though).">
 	<cfargument name="windowSize" type="numeric" required="false" default="#application.wheels.paginationLinks.windowSize#" hint="The number of page links to show around the current page">
 	<cfargument name="alwaysShowAnchors" type="boolean" required="false" default="#application.wheels.paginationLinks.alwaysShowAnchors#" hint="Whether or not links to the first and last page should always be displayed">
 	<cfargument name="anchorDivider" type="string" required="false" default="#application.wheels.paginationLinks.anchorDivider#" hint="String to place next to the anchors on either side of the list">
 	<cfargument name="linkToCurrentPage" type="boolean" required="false" default="#application.wheels.paginationLinks.linkToCurrentPage#" hint="Whether or not the current page should be linked to">
-	<cfargument name="prependToLink" type="string" required="false" default="#application.wheels.paginationLinks.prependToLink#" hint="String to be prepended before all links">
-	<cfargument name="appendToLink" type="string" required="false" default="#application.wheels.paginationLinks.appendToLink#" hint="String to be appended after all links">
-	<cfargument name="classForCurrent" type="string" required="false" default="#application.wheels.paginationLinks.classForCurrent#" hint="Class name for the link to the current page">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.paginationLinks.prepend#" hint="String or HTML to be prepended before result">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.paginationLinks.append#" hint="String or HTML to be appended after result">
+	<cfargument name="prependToPage" type="string" required="false" default="#application.wheels.paginationLinks.prependToPage#" hint="String or HTML to be prepended before each page number">
+	<cfargument name="prependOnFirst" type="boolean" required="false" default="#application.wheels.paginationLinks.prependOnFirst#" hint="Whether or not to prepend the `prependToPage` string on the first page in the list">
+	<cfargument name="appendToPage" type="string" required="false" default="#application.wheels.paginationLinks.appendToPage#" hint="String or HTML to be appended after each page number">
+	<cfargument name="appendOnLast" type="boolean" required="false" default="#application.wheels.paginationLinks.appendOnLast#" hint="Whether or not to append the `appendToPage` string on the last page in the list">
+	<cfargument name="classForCurrent" type="string" required="false" default="#application.wheels.paginationLinks.classForCurrent#" hint="Class name for the current page number (if `linkToCurrentPage` is `true` the class name will go on the `a` element, if not, a `span` element will be used)">
 	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
 	<cfargument name="name" type="string" required="false" default="#application.wheels.paginationLinks.name#" hint="The name of the param that holds the current page number">
+	<cfargument name="showSinglePage" type="boolean" required="false" default="#application.wheels.paginationLinks.showSinglePage#" hint="Will show a single page when set to `true` (the default behavior is to return an empty string when there is only one page in the pagination)">
+	
 	<cfscript>
 		var loc = {};
+
+		// deprecating because the name of the arguments are not appropriate since the prepend/append can sometimes go on elements that are not links 
+		if (StructKeyExists(arguments, "prependToLink"))
+		{
+			$deprecated("The `prependToLink` argument to `paginationLinks` will be deprecated in a future version of Wheels, please use `prependToPage` instead.");
+			arguments.prependToPage = arguments.prependToLink;
+			StructDelete(arguments, "prependToLink");
+		}
+		if (StructKeyExists(arguments, "appendToLink"))
+		{
+			$deprecated("The `appendToLink` argument to `paginationLinks` will be deprecated in a future version of Wheels, please use `appendToPage` instead.");
+			arguments.appendToPage = arguments.appendToLink;
+			StructDelete(arguments, "appendToLink");
+		}
+
 		arguments = $insertDefaults(name="paginationLinks", input=arguments);
-		loc.returnValue = ""; 
-		loc.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prependToLink,appendToLink,classForCurrent,handle,name";
+		loc.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prepend,append,prependToPage,prependOnFirst,appendToPage,appendOnLast,classForCurrent,handle,name,showSinglePage";
 		loc.linkToArguments = Duplicate(arguments);
 		loc.iEnd = ListLen(loc.skipArgs);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			StructDelete(loc.linkToArguments, ListGetAt(loc.skipArgs, loc.i));
 		}
-		loc.currentPage = request.wheels[arguments.handle].currentPage;
-		loc.totalPages = request.wheels[arguments.handle].totalPages;
-		if (arguments.alwaysShowAnchors)
+		loc.currentPage = pagination(arguments.handle).currentPage;
+		loc.totalPages = pagination(arguments.handle).totalPages;
+		loc.start = "";
+		loc.middle = "";
+		loc.end = "";
+		if (arguments.showSinglePage || loc.totalPages > 1)
 		{
-			if ((loc.currentPage - arguments.windowSize) > 1)
+			if (Len(arguments.prepend))
+				loc.start = loc.start & arguments.prepend;
+			if (arguments.alwaysShowAnchors)
 			{
-				loc.pageNumber = 1;
-				if (StructKeyExists(arguments, "route"))
+				if ((loc.currentPage - arguments.windowSize) > 1)
 				{
-					loc.linkToArguments[arguments.name] = loc.pageNumber;
-				}
-				else
-				{
-					loc.linkToArguments.params = arguments.name & "=" & loc.pageNumber;
-					if (StructKeyExists(arguments, "params"))
-						loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
-				}
-				loc.linkToArguments.text = loc.pageNumber;
-				loc.returnValue = loc.returnValue & linkTo(argumentCollection=loc.linkToArguments) & arguments.anchorDivider;
-			}
-		}
-		for (loc.i=1; loc.i <= loc.totalPages; loc.i++)
-		{
-			if ((loc.i >= (loc.currentPage - arguments.windowSize) && loc.i <= loc.currentPage) || (loc.i <= (loc.currentPage + arguments.windowSize) && loc.i >= loc.currentPage))
-			{
-				if (StructKeyExists(arguments, "route"))
-				{
-					loc.linkToArguments[arguments.name] = loc.i;
-				}
-				else
-				{
-					loc.linkToArguments.params = arguments.name & "=" & loc.i;
-					if (StructKeyExists(arguments, "params"))
-						loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
-				}
-				loc.linkToArguments.text = loc.i;
-				if (Len(arguments.classForCurrent) && loc.currentPage == loc.i)
-					loc.linkToArguments.class = arguments.classForCurrent;
-				else
-					StructDelete(loc.linkToArguments, "class");
-				if (Len(arguments.prependToLink))
-					loc.returnValue = loc.returnValue & arguments.prependToLink;
-				if (loc.currentPage != loc.i || arguments.linkToCurrentPage)
-				{
-					loc.returnValue = loc.returnValue & linkTo(argumentCollection=loc.linkToArguments);
-				}
-				else
-				{
-					if (Len(arguments.classForCurrent))
-						loc.returnValue = loc.returnValue & $element(name="span", content=loc.i, class=arguments.classForCurrent);
+					loc.pageNumber = 1;
+					if (StructKeyExists(arguments, "route"))
+					{
+						loc.linkToArguments[arguments.name] = loc.pageNumber;
+					}
 					else
-						loc.returnValue = loc.returnValue & loc.i;
+					{
+						loc.linkToArguments.params = arguments.name & "=" & loc.pageNumber;
+						if (StructKeyExists(arguments, "params"))
+							loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
+					}
+					loc.linkToArguments.text = loc.pageNumber;
+					loc.start = loc.start & linkTo(argumentCollection=loc.linkToArguments) & arguments.anchorDivider;
 				}
-				if (Len(arguments.appendToLink))
-					loc.returnValue = loc.returnValue & arguments.appendToLink;
 			}
-		}
-		if (arguments.alwaysShowAnchors)
-		{
-			if (loc.totalPages > (loc.currentPage + arguments.windowSize))
+			loc.middle = "";
+			for (loc.i=1; loc.i <= loc.totalPages; loc.i++)
 			{
-				if (StructKeyExists(arguments, "route"))
+				if ((loc.i >= (loc.currentPage - arguments.windowSize) && loc.i <= loc.currentPage) || (loc.i <= (loc.currentPage + arguments.windowSize) && loc.i >= loc.currentPage))
 				{
-					loc.linkToArguments[arguments.name] = loc.totalPages;
+					if (StructKeyExists(arguments, "route"))
+					{
+						loc.linkToArguments[arguments.name] = loc.i;
+					}
+					else
+					{
+						loc.linkToArguments.params = arguments.name & "=" & loc.i;
+						if (StructKeyExists(arguments, "params"))
+							loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
+					}
+					loc.linkToArguments.text = loc.i;
+					if (Len(arguments.classForCurrent) && loc.currentPage == loc.i)
+						loc.linkToArguments.class = arguments.classForCurrent;
+					else
+						StructDelete(loc.linkToArguments, "class");
+					if (Len(arguments.prependToPage))
+						loc.middle = loc.middle & arguments.prependToPage;
+					if (loc.currentPage != loc.i || arguments.linkToCurrentPage)
+					{
+						loc.middle = loc.middle & linkTo(argumentCollection=loc.linkToArguments);
+					}
+					else
+					{
+						if (Len(arguments.classForCurrent))
+							loc.middle = loc.middle & $element(name="span", content=loc.i, class=arguments.classForCurrent);
+						else
+							loc.middle = loc.middle & loc.i;
+					}
+					if (Len(arguments.appendToPage))
+						loc.middle = loc.middle & arguments.appendToPage;
 				}
-				else
-				{
-					loc.linkToArguments.params = arguments.name & "=" & loc.totalPages;
-					if (StructKeyExists(arguments, "params"))
-						loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
-				}
-				loc.linkToArguments.text = loc.totalPages;
-				loc.returnValue = loc.returnValue & arguments.anchorDivider & linkTo(argumentCollection=loc.linkToArguments);
 			}
+			if (arguments.alwaysShowAnchors)
+			{
+				if (loc.totalPages > (loc.currentPage + arguments.windowSize))
+				{
+					if (StructKeyExists(arguments, "route"))
+					{
+						loc.linkToArguments[arguments.name] = loc.totalPages;
+					}
+					else
+					{
+						loc.linkToArguments.params = arguments.name & "=" & loc.totalPages;
+						if (StructKeyExists(arguments, "params"))
+							loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
+					}
+					loc.linkToArguments.text = loc.totalPages;
+					loc.end = loc.end & arguments.anchorDivider & linkTo(argumentCollection=loc.linkToArguments);
+				}
+			}
+			if (Len(arguments.append))
+				loc.end = loc.end & arguments.append;
 		}
+		if (Len(arguments.prependToPage) && !arguments.prependOnFirst)
+			loc.middle = Mid(loc.middle, Len(arguments.prependToPage)+1, Len(loc.middle)-Len(arguments.prependToPage)) ;
+		if (Len(arguments.appendToPage) && !arguments.appendOnLast)
+			loc.middle = Mid(loc.middle, 1, Len(loc.middle)-Len(arguments.appendToPage)) ;
+		loc.returnValue = loc.start & loc.middle & loc.end;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

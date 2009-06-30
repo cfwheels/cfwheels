@@ -68,7 +68,10 @@
 		if (arguments.page)
 		{
 			if (!Len(arguments.order))
-				$throw(type="Wheels.InvalidPagination", message="Cannot use pagination without order.", extendedInfo="Specify what property to order by using the 'order' argument to 'findAll'.");
+			{
+				// we can't paginate without any order so we default to ascending ordering by the primary key column(s)
+				arguments.order = primaryKey();
+			}
 			if (Len(arguments.include))
 				loc.distinct = true;
 			else
