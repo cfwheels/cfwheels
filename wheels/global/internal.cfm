@@ -398,7 +398,8 @@ Should now call bar() instead and marking foo() as deprecated
 		<cfreturn loc.ret>
 	</cfif>
 	<!--- set return value --->
-	<cfset loc.ret = {message=arguments.message, line="", method="", template="", data=[]}>
+	<cfset loc.data = []>
+	<cfset loc.ret = {message=arguments.message, line="", method="", template="", data=loc.data}>
 	<!--- 	
 	create an exception so we can get the TagContext and display what file and line number the
 	deprecated method is being called in
