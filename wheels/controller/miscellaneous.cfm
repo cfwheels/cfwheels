@@ -59,7 +59,7 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			// include the email template and return it
-			loc.content = $renderPage(template=ListGetAt(arguments.templates, loc.i), layout=arguments.layout);
+			loc.content = $renderPage($template=ListGetAt(arguments.templates, loc.i), $layout=arguments.layout);
 			if (ArrayIsEmpty(arguments.body))
 			{
 				ArrayAppend(arguments.body, loc.content);

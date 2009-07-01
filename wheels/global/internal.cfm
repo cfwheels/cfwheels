@@ -1,3 +1,19 @@
+<cffunction name="$dollarify" returntype="struct" access="public" output="false">
+	<cfargument name="input" type="struct" required="true">
+	<cfscript>
+		var loc = {};
+		for (loc.key in arguments.input)
+		{
+			if (Left(loc.key, 1) != "$")
+			{
+				arguments.input["$"&loc.key] = arguments.input[loc.key];
+				StructDelete(arguments.input, loc.key);
+			}
+		}
+	</cfscript>
+	<cfreturn arguments.input>
+</cffunction>
+
 <cffunction name="$abortInvalidRequest" returntype="void" access="public" output="false">
 	<cfscript>
 		var applicationPath = Replace(GetCurrentTemplatePath(), "\", "/", "all");

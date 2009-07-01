@@ -8,5 +8,5 @@
 	<cfargument name="layout" type="string" required="false" default="#application.wheels.includePartial.layout#" hint="See documentation for `renderPartial`">
 	<cfargument name="spacer" type="string" required="false" default="" hint="HTML or string to place between partials when called using a query">
 	<cfargument name="$partialType" type="string" required="false" default="include">
-	<cfreturn $includeOrRenderPartial(argumentCollection=arguments)>
+	<cfreturn $includeOrRenderPartial(argumentCollection=$dollarify(arguments))>
 </cffunction>

@@ -23,15 +23,16 @@
 	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#">
 	<cfscript>
 		var loc = {};
+		arguments = $dollarify(arguments);
 		if (application.wheels.showDebugInformation)
 			$debugPoint("view");
 		// if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
-		if ((!IsBoolean(arguments.layout) || arguments.layout) && arguments.$showDebugInformation)
+		if ((!IsBoolean(arguments.$layout) || arguments.$layout) && arguments.$showDebugInformation)
 			request.wheels.showDebugInformation = true;
-		if (application.wheels.cachePages && (IsNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
+		if (application.wheels.cachePages && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
 			loc.category = "action";
-			loc.key = "#arguments.action##$hashStruct(variables.params)##$hashStruct(arguments)#";
+			loc.key = "#arguments.$action##$hashStruct(variables.params)##$hashStruct(arguments)#";
 			loc.lockName = loc.category & loc.key;
 			loc.conditionArgs = {};
 			loc.conditionArgs.category = loc.category;
@@ -72,7 +73,7 @@
 	<cfargument name="layout" type="string" required="false" default="#application.wheels.renderPartial.layout#" hint="See documentation for `renderPage`">
 	<cfargument name="$partialType" type="string" required="false" default="render">
 	<cfscript>
-		$includeOrRenderPartial(argumentCollection=arguments);
+		$includeOrRenderPartial(argumentCollection=$dollarify(arguments));
 	</cfscript>
 </cffunction>
 
@@ -80,9 +81,9 @@
 	<cfscript>
 		var returnValue = "";
 		returnValue = $renderPage(argumentCollection=arguments);
-		if (!IsNumeric(arguments.cache))
-			arguments.cache = application.wheels.defaultCacheTime;
-		$addToCache(key=arguments.key, value=returnValue, time=arguments.cache, category=arguments.category);
+		if (!IsNumeric(arguments.$cache))
+			arguments.$cache = application.wheels.defaultCacheTime;
+		$addToCache(key=arguments.key, value=returnValue, time=arguments.$cache, category=arguments.category);
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
@@ -90,10 +91,10 @@
 <cffunction name="$renderPage" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		if (!Len(arguments.template))
-			arguments.template = "/" & arguments.controller & "/" & arguments.action;
-		loc.content = $includeFile(name=arguments.template, $type="page");
-		loc.returnValue = $renderLayout(content=loc.content, layout=arguments.layout);
+		if (!Len(arguments.$template))
+			arguments.$template = "/" & arguments.$controller & "/" & arguments.$action;
+		loc.content = $includeFile($name=arguments.$template, $type="page");
+		loc.returnValue = $renderLayout($content=loc.content, $layout=arguments.$layout);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -102,9 +103,9 @@
 	<cfscript>
 		var returnValue = "";
 		returnValue = $renderPartial(argumentCollection=arguments);
-		if (!IsNumeric(arguments.cache))
-			arguments.cache = application.wheels.defaultCacheTime;
-		$addToCache(key=arguments.key, value=returnValue, time=arguments.cache, category=arguments.category);
+		if (!IsNumeric(arguments.$cache))
+			arguments.$cache = application.wheels.defaultCacheTime;
+		$addToCache(key=arguments.key, value=returnValue, time=arguments.$cache, category=arguments.category);
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
@@ -112,23 +113,23 @@
 <cffunction name="$renderPartial" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		if (IsQuery(arguments.name))
+		if (IsQuery(arguments.$name))
 		{
-			loc.name = request.wheels[Hash(GetMetaData(arguments.name).toString())];
-			arguments[loc.name] = arguments.name;
-			arguments.name = singularize(loc.name);
+			loc.name = request.wheels[Hash(GetMetaData(arguments.$name).toString())];
+			arguments[loc.name] = arguments.$name;
+			arguments.$name = singularize(loc.name);
 		}
-		else if (IsObject(arguments.name))
+		else if (IsObject(arguments.$name))
 		{
-			loc.name = arguments.name.$classData().name;
-			arguments[loc.name] = arguments.name;
-			arguments.name = loc.name;
+			loc.name = arguments.$name.$classData().name;
+			arguments[loc.name] = arguments.$name;
+			arguments.$name = loc.name;
 		}
-		if (Len(arguments.layout))
-			arguments.layout = Replace("_" & arguments.layout, "__", "_", "one");
+		if (Len(arguments.$layout))
+			arguments.$layout = Replace("_" & arguments.$layout, "__", "_", "one");
 		arguments.$type = "partial";
 		loc.content = $includeFile(argumentCollection=arguments);
-		loc.returnValue = $renderLayout(content=loc.content, layout=arguments.layout);
+		loc.returnValue = $renderLayout($content=loc.content, $layout=arguments.$layout);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -137,10 +138,10 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
-		if (application.wheels.cachePartials && (isNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
+		if (application.wheels.cachePartials && (isNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
 			loc.category = "partial";
-			loc.key = "#arguments.name##$hashStruct(variables.params)##$hashStruct(arguments)#";
+			loc.key = "#arguments.$name##$hashStruct(variables.params)##$hashStruct(arguments)#";
 			loc.lockName = loc.category & loc.key;
 			loc.conditionArgs = {};
 			loc.conditionArgs.category = loc.category;
@@ -163,25 +164,25 @@
 </cffunction>
 
 <cffunction name="$includeFile" returntype="string" access="public" output="false">
-	<cfargument name="name" type="any" required="true">
+	<cfargument name="$name" type="any" required="true">
 	<cfargument name="$type" type="string" required="true">
 	<cfscript>
 		var loc = {};
 		loc.include = application.wheels.viewPath;
-		loc.fileName = Spanexcluding(Reverse(ListFirst(Reverse(arguments.name), "/")), ".") & ".cfm"; // extracts the file part of the path and replace ending ".cfm"
+		loc.fileName = Spanexcluding(Reverse(ListFirst(Reverse(arguments.$name), "/")), ".") & ".cfm"; // extracts the file part of the path and replace ending ".cfm"
 		if (arguments.$type == "partial")
 			loc.fileName = Replace("_" & loc.fileName, "__", "_", "one"); // replaces leading "_" when the file is a partial
-		loc.folderName = Reverse(ListRest(Reverse(arguments.name), "/"));
-		if (Left(arguments.name, 1) == "/")
+		loc.folderName = Reverse(ListRest(Reverse(arguments.$name), "/"));
+		if (Left(arguments.$name, 1) == "/")
 			loc.include = loc.include & loc.folderName & "/" & loc.fileName; // Include a file in a sub folder to views
-		else if (arguments.name  Contains "/")
+		else if (arguments.$name Contains "/")
 			loc.include = loc.include & "/" & variables.params.controller & "/" & loc.folderName & "/" & loc.fileName; // Include a file in a sub folder of the current controller
 		else
 			loc.include = loc.include & "/" & variables.params.controller & "/" & loc.fileName; // Include a file in the current controller's view folder
 		arguments.$template = loc.include;
 		if (arguments.$type == "partial")
 		{
-			loc.pluralizedName = pluralize(arguments.name);
+			loc.pluralizedName = pluralize(arguments.$name);
 			if (StructKeyExists(arguments, loc.pluralizedName) && IsQuery(arguments[loc.pluralizedName]))
 			{
 				loc.query = arguments[loc.pluralizedName];
@@ -190,9 +191,27 @@
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					arguments.currentRow = loc.i;
+					loc.jEnd = ListLen(loc.query.columnList);
+					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+					{
+						loc.property = ListGetAt(loc.query.columnList, loc.j);
+						arguments[loc.property] = loc.query[loc.property][loc.i];
+					}
 					loc.returnValue = loc.returnValue & $includeAndReturnOutput(argumentCollection=arguments);
-					if (StructKeyExists(arguments, "spacer") && loc.i < loc.iEnd)
-						loc.returnValue = loc.returnValue & arguments.spacer;
+					if (StructKeyExists(arguments, "$spacer") && loc.i < loc.iEnd)
+						loc.returnValue = loc.returnValue & arguments.$spacer;
+				}
+			}
+			else if (StructKeyExists(arguments, arguments.$name) && IsObject(arguments[arguments.$name]))
+			{
+				loc.object = arguments[arguments.$name];
+				loc.properties = loc.object.$classData().propertyList;
+				loc.iEnd = ListLen(loc.properties);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					loc.property = ListGetAt(loc.properties, loc.i);
+					if (StructKeyExists(loc.object, loc.property) && IsSimpleValue(loc.object[loc.property]))
+						arguments[loc.property] = loc.object[loc.property];
 				}
 			}
 		}
@@ -203,15 +222,15 @@
 </cffunction>
 
 <cffunction name="$renderLayout" returntype="string" access="public" output="false">
-	<cfargument name="content" type="string" required="true">
-	<cfargument name="layout" type="any" required="true">
+	<cfargument name="$content" type="string" required="true">
+	<cfargument name="$layout" type="any" required="true">
 	<cfscript>
 		var loc = {};
-		if ((IsBoolean(arguments.layout) && arguments.layout) || (!IsBoolean(arguments.layout) && Len(arguments.layout)))
+		if ((IsBoolean(arguments.$layout) && arguments.$layout) || (!IsBoolean(arguments.$layout) && Len(arguments.$layout)))
 		{
-			request.wheels.contentForLayout = arguments.content; // store the content in a variable in the request scope so it can be accessed by the contentForLayout function that the developer uses in layout files (this is done so we avoid passing data to/from it since it would complicate things for the developer)
+			request.wheels.contentForLayout = arguments.$content; // store the content in a variable in the request scope so it can be accessed by the contentForLayout function that the developer uses in layout files (this is done so we avoid passing data to/from it since it would complicate things for the developer)
 			loc.include = application.wheels.viewPath;
-			if (IsBoolean(arguments.layout))
+			if (IsBoolean(arguments.$layout))
 			{
 				if (!ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) && !ListFindNoCase(application.wheels.nonExistingLayoutFiles, variables.params.controller))
 				{
@@ -232,12 +251,12 @@
 			}
 			else
 			{
-				loc.returnValue = $includeFile(name=arguments.layout, $type="layout");
+				loc.returnValue = $includeFile($name=arguments.$layout, $type="layout");
 			}
 		}
 		else
 		{
-			loc.returnValue = arguments.content;
+			loc.returnValue = arguments.$content;
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
