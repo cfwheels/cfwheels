@@ -12,3 +12,28 @@ Welcome to the wonderful world of Wheels, we hope you will enjoy it!</p>
 </ul>
 
 <p><strong>Good Luck!</strong></p>
+
+<!--- <cfset a = model("artist").findOne()> --->
+<cfset a = model("artist").findAll()>
+
+<cfoutput>#includePartial(name=a, spacer="|")#</cfoutput>
+<hr>
+
+includePartial(products) query
+includePartial(product) object
+
+any variable:
+includePartial(name="comment", color="red")
+access as comment.color (by putting comment in the arguments struct we scope it locally)
+
+object
+includePartial(name="comment", object=comment)
+or shorthand
+includePartial(comment)
+
+query
+includePartial(name="comment", query=comments)
+or
+includePartial(comments)
+will iterate over query and include partial in each loop (passing in record as a struct to a comment variable?)
+will set a commentCounter

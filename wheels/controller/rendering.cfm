@@ -100,7 +100,7 @@
 <cffunction name="$renderPartialAndAddToCache" returntype="string" access="public" output="false">
 	<cfscript>
 		var returnValue = "";
-		returnValue = $includeFile(argumentCollection=arguments);
+		returnValue = $renderPartial(argumentCollection=arguments);
 		if (!IsNumeric(arguments.cache))
 			arguments.cache = application.wheels.defaultCacheTime;
 		$addToCache(key=arguments.key, value=returnValue, time=arguments.cache, category=arguments.category);
@@ -108,11 +108,20 @@
 	<cfreturn returnValue>
 </cffunction>
 
+<cffunction name="$renderPartial" returntype="string" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		arguments.$type = "partial";
+		loc.content = $includeFile(argumentCollection=arguments);
+		loc.returnValue = $renderLayout(content=loc.content, layout=arguments.layout);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$includeOrRenderPartial" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
-		arguments.$type = "partial";
 		if (application.wheels.cachePartials && (isNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
 		{
 			loc.category = "partial";
@@ -128,7 +137,7 @@
 		}
 		else
 		{
-			loc.partial = $includeFile(argumentCollection=arguments);
+			loc.partial = $renderPartial(argumentCollection=arguments);
 		}
 		if (arguments.$partialType == "include")
 			loc.returnValue = loc.partial;
@@ -139,10 +148,25 @@
 </cffunction>
 
 <cffunction name="$includeFile" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
+	<cfargument name="name" type="any" required="true">
 	<cfargument name="$type" type="string" required="true">
 	<cfscript>
 		var loc = {};
+		if (arguments.$type == "partial")
+		{
+			if (IsQuery(arguments.name))
+			{
+				loc.name = "artists";
+				arguments[loc.name] = arguments.name;
+				arguments.name = singularize(loc.name);
+			}
+			else if (IsObject(arguments.name))
+			{
+				loc.name = arguments.name.$classData().name;
+				arguments[loc.name] = arguments.name;
+				arguments.name = loc.name;
+			}
+		}
 		loc.include = application.wheels.viewPath;
 		loc.fileName = Spanexcluding(Reverse(ListFirst(Reverse(arguments.name), "/")), ".") & ".cfm"; // extracts the file part of the path and replace ending ".cfm"
 		if (arguments.$type == "partial")
@@ -155,7 +179,25 @@
 		else
 			loc.include = loc.include & "/" & variables.params.controller & "/" & loc.fileName; // Include a file in the current controller's view folder
 		arguments.$template = loc.include;
-		loc.returnValue = $includeAndReturnOutput(argumentCollection=arguments);
+		if (arguments.$type == "partial")
+		{
+			loc.pluralizedName = pluralize(arguments.name);
+			if (StructKeyExists(arguments, loc.pluralizedName) && IsQuery(arguments[loc.pluralizedName]))
+			{
+				loc.query = arguments[loc.pluralizedName];
+				loc.returnValue = "";
+				loc.iEnd = loc.query.recordCount;
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					arguments.currentRow = loc.i;
+					loc.returnValue = loc.returnValue & $includeAndReturnOutput(argumentCollection=arguments);
+					if (StructKeyExists(arguments, "spacer") && loc.i < loc.iEnd)
+						loc.returnValue = loc.returnValue & arguments.spacer;
+				}
+			}
+		}
+		if (!StructKeyExists(loc, "returnValue"))
+			loc.returnValue = $includeAndReturnOutput(argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
