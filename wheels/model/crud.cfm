@@ -160,6 +160,7 @@
 				loc.findAll = variables.wheels.class.adapter.$query(argumentCollection=loc.finderArgs);
 				request[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
+			request.wheels[Hash(GetMetaData(loc.findAll.query).toString())] = pluralize(variables.wheels.class.name); // place an identifer in request scope so we can reference this query when passed in to view functions 
 			loc.returnValue = loc.findAll.query;
 			$callback("afterFind", loc.returnValue);
 		}

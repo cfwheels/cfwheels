@@ -114,7 +114,7 @@
 		var loc = {};
 		if (IsQuery(arguments.name))
 		{
-			loc.name = "artists";
+			loc.name = request.wheels[Hash(GetMetaData(arguments.name).toString())];
 			arguments[loc.name] = arguments.name;
 			arguments.name = singularize(loc.name);
 		}
