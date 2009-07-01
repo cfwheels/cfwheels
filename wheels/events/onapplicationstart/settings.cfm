@@ -101,6 +101,7 @@
 	application.wheels.hiddenField = {};
 	application.wheels.hourSelectTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
 	application.wheels.imageTag = {};
+	application.wheels.includePartial = {layout=""};
 	application.wheels.javaScriptIncludeTag = {type="text/javascript"};
 	application.wheels.linkTo = {onlyPath=true, host="", protocol="", port=0};
 	application.wheels.mailTo = {encode=false};
@@ -115,6 +116,7 @@
 	application.wheels.redirectTo = {onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302};
 	application.wheels.renderPage = {layout=true};
 	application.wheels.renderPageToString = {layout=true};
+	application.wheels.renderPartial = {layout=""};
 	application.wheels.save = {parameterize=true, defaults=true};
 	application.wheels.secondSelectTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
 	application.wheels.select = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, valueField="", textField=""};

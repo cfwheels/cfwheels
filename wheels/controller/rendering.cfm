@@ -67,8 +67,9 @@
 </cffunction>
 
 <cffunction name="renderPartial" returntype="void" access="public" output="false" hint="Renders content to the browser by including a partial.">
-	<cfargument name="name" type="string" required="true" hint="Name of partial to include">
-	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for">
+	<cfargument name="name" type="string" required="true" hint="The name of the file to be used (starting with an optional path and with the underscore and file extension excluded)">
+	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for `renderPage`">
+	<cfargument name="layout" type="string" required="false" default="#application.wheels.renderPartial.layout#" hint="See documentation for `renderPage`">
 	<cfargument name="$partialType" type="string" required="false" default="render">
 	<cfscript>
 		$includeOrRenderPartial(argumentCollection=arguments);
@@ -111,6 +112,20 @@
 <cffunction name="$renderPartial" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
+		if (IsQuery(arguments.name))
+		{
+			loc.name = "artists";
+			arguments[loc.name] = arguments.name;
+			arguments.name = singularize(loc.name);
+		}
+		else if (IsObject(arguments.name))
+		{
+			loc.name = arguments.name.$classData().name;
+			arguments[loc.name] = arguments.name;
+			arguments.name = loc.name;
+		}
+		if (Len(arguments.layout))
+			arguments.layout = Replace("_" & arguments.layout, "__", "_", "one");
 		arguments.$type = "partial";
 		loc.content = $includeFile(argumentCollection=arguments);
 		loc.returnValue = $renderLayout(content=loc.content, layout=arguments.layout);
@@ -152,21 +167,6 @@
 	<cfargument name="$type" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		if (arguments.$type == "partial")
-		{
-			if (IsQuery(arguments.name))
-			{
-				loc.name = "artists";
-				arguments[loc.name] = arguments.name;
-				arguments.name = singularize(loc.name);
-			}
-			else if (IsObject(arguments.name))
-			{
-				loc.name = arguments.name.$classData().name;
-				arguments[loc.name] = arguments.name;
-				arguments.name = loc.name;
-			}
-		}
 		loc.include = application.wheels.viewPath;
 		loc.fileName = Spanexcluding(Reverse(ListFirst(Reverse(arguments.name), "/")), ".") & ".cfm"; // extracts the file part of the path and replace ending ".cfm"
 		if (arguments.$type == "partial")
@@ -207,7 +207,7 @@
 	<cfargument name="layout" type="any" required="true">
 	<cfscript>
 		var loc = {};
-		if (!IsBoolean(arguments.layout) || arguments.layout)
+		if ((IsBoolean(arguments.layout) && arguments.layout) || (!IsBoolean(arguments.layout) && Len(arguments.layout)))
 		{
 			request.wheels.contentForLayout = arguments.content; // store the content in a variable in the request scope so it can be accessed by the contentForLayout function that the developer uses in layout files (this is done so we avoid passing data to/from it since it would complicate things for the developer)
 			loc.include = application.wheels.viewPath;
