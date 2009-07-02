@@ -138,13 +138,13 @@
 		// deprecating because the name of the arguments are not appropriate since the prepend/append can sometimes go on elements that are not links 
 		if (StructKeyExists(arguments, "prependToLink"))
 		{
-			$deprecated("The `prependToLink` argument to `paginationLinks` will be deprecated in a future version of Wheels, please use `prependToPage` instead.");
+			$deprecated("The `prependToLink` argument to `paginationLinks` will be deprecated in a future version of Wheels, please use `prependToPage` instead");
 			arguments.prependToPage = arguments.prependToLink;
 			StructDelete(arguments, "prependToLink");
 		}
 		if (StructKeyExists(arguments, "appendToLink"))
 		{
-			$deprecated("The `appendToLink` argument to `paginationLinks` will be deprecated in a future version of Wheels, please use `appendToPage` instead.");
+			$deprecated("The `appendToLink` argument to `paginationLinks` will be deprecated in a future version of Wheels, please use `appendToPage` instead");
 			arguments.appendToPage = arguments.appendToLink;
 			StructDelete(arguments, "appendToLink");
 		}
