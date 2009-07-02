@@ -61,7 +61,7 @@
 		
 			<cfset loc.pos = loc.endPos>
 
-			<cfif application.wheels.version IS loc.compatible>
+			<cfif SpanExcluding(application.wheels.version, " ") GTE loc.compatible>
 				<!--- add plugin info to array if it's compatible with the installed wheels version --->
 				<cfset loc.plugin = StructNew()>
 				<cfset loc.plugin.name = loc.name>
