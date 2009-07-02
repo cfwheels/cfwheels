@@ -144,7 +144,7 @@
 					$zip(action="unzip", destination=loc.thisPluginFolder, file=loc.thisPluginFile, overwrite=application.wheels.overwritePlugins);
 					loc.fileName = LCase(loc.pluginName) & "." & loc.pluginName;
 					loc.plugin = $createObjectFromRoot(path=application.wheels.pluginComponentPath, fileName=loc.fileName, method="init");
-					if (!StructKeyExists(loc.plugin, "version") || loc.plugin.version == application.wheels.version)
+					if (!StructKeyExists(loc.plugin, "version") || loc.plugin.version == SpanExcluding(application.wheels.version, " "))
 						application.wheels.plugins[loc.pluginName] = loc.plugin;
 					else
 						application.wheels.incompatiblePlugins = ListAppend(application.wheels.incompatiblePlugins, loc.pluginName);
