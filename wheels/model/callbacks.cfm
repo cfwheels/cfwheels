@@ -130,7 +130,7 @@
 					for (loc.k=1; loc.k <= loc.kEnd; loc.k++)
 					{
 						loc.kItem = ListGetAt(arguments.collection.columnList, loc.k);
-						loc.args[loc.kItem] = arguments.collection[loc.kItem][loc.j];
+						loc.args.record[loc.kItem] = arguments.collection[loc.kItem][loc.j];
 					}
 					loc.returnValue = $invoke(method=variables.wheels.class.callbacks[arguments.type][loc.i], argumentCollection=loc.args);
 					if (IsStruct(loc.returnValue))

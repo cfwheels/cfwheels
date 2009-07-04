@@ -98,6 +98,7 @@
 --->
 
 <cfcomponent>
+	<cfinclude template="plugins/injection.cfm">
 
 	<cfset variables.WHEELS_TESTS_BASE_COMPONENT_PATH = "">
 	<cfset variables.WHEELS_TESTS_BASE_ROOT_PATH = "">

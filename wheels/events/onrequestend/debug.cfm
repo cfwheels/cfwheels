@@ -38,13 +38,15 @@
 	<td><cfif get("obfuscateUrls")>On<cfelse>Off</cfif></td>
 </tr>
 <tr>
-	<td valign="top"><strong>Plugins:</strong></td>
+	<td valign="top"><strong><a href="?controller=wheels&action=plugins&reload=true">Plugins:</a></strong></td>
 	<td>
 		<cfif StructCount(application.wheels.plugins) IS NOT 0>
 			<cfset loc.count = 0>
 			<cfloop collection="#application.wheels.plugins#" item="loc.i">
 				<cfset loc.count = loc.count + 1>
-				<a href="?controller=wheels&action=plugins&name=#LCase(loc.i)#">#loc.i#</a>&nbsp;&nbsp;&nbsp;[<a href="?controller=wheels&action=tests&type=#LCase(loc.i)#">Run Tests</a>]
+				<a href="?controller=wheels&action=pluginsDetails&reload=true&name=#LCase(loc.i)#">#loc.i#</a>
+				&nbsp;&nbsp;&nbsp;[<a href="?controller=wheels&action=pluginsUninstall&name=#LCase(loc.i)#" onclick="if(confirm('Are you sure you want to uninstall this plugin?')){return true;}else{return false;}">Uninstall</a>]
+				&nbsp;&nbsp;&nbsp;[<a href="?controller=wheels&action=tests&type=#LCase(loc.i)#">Run Tests</a>]
 				<cfif StructCount(application.wheels.plugins) GT loc.count>
 					<br />
 				</cfif>

@@ -57,8 +57,7 @@
 				loc.jEnd = ListLen(loc.returnValue.variables);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
-					loc.variable = ListGetAt(loc.returnValue.variables, loc.j);
-					if (!StructKeyExists(arguments, loc.variable) || !Len(arguments[loc.variable]))
+					if (!StructKeyExists(arguments, ListGetAt(loc.returnValue.variables, loc.j)))
 						loc.foundRoute = false;
 				}
 				if (loc.foundRoute)
