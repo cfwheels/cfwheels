@@ -408,7 +408,7 @@
 							loc.args.instantiate = true;
 						}
 						loc.method = loc.association.dependent & loc.key;
-						$invoke(component=this, method=loc.method, argumentCollection=loc.args);
+						$invoke(componentReference=this, method=loc.method, argumentCollection=loc.args);
 					}	
 				}
             	$callback("afterDelete");
