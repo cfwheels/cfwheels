@@ -103,10 +103,6 @@
 		//override settings with environment specific ones
 		$include(template="#application.wheels.configPath#/#application.wheels.environment#/settings.cfm");
 
-		// load developer routes and add wheels default ones
-		$include(template="#application.wheels.configPath#/routes.cfm");
-		$include(template="wheels/events/onapplicationstart/routes.cfm");
-
 		// load plugins
 		application.wheels.plugins = {};
 		application.wheels.incompatiblePlugins = "";
@@ -117,6 +113,10 @@
 		loc.pluginObj.$uninstallPlugin("pluginmanager");
 		// load all plugins
 		loc.pluginObj.$loadAllPlugins();
+
+		// load developer routes and add wheels default ones
+		$include(template="#application.wheels.configPath#/routes.cfm");
+		$include(template="wheels/events/onapplicationstart/routes.cfm");
 
 		application.wheels.dispatch = CreateObject("component", "wheels.Dispatch");
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
