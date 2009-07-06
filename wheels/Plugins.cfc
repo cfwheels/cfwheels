@@ -155,8 +155,11 @@
 	<cffunction name="$loadPlugin" mixin="none" returntype="void">
 		<cfargument name="name" type="string" required="true">
 		<cfset var loc = {}>
+		<cfif left(name, 1) eq ".">
+			<cfreturn>
+		</cfif>
 		<cfset loc.pluginComponentPath = [application.wheels.rootcomponentPath, "plugins", arguments.name, arguments.name]>
-		<cfset loc.pluginComponentPath = arraytolist(loc.pluginComponentPath, ".")>
+		<cfset loc.pluginComponentPath = listchangedelims(arraytolist(loc.pluginComponentPath, "."), ".", ".")>
 		<cfset loc.plugin = createobject("component", loc.pluginComponentPath).init()>
 		<cfset $canLoad(loc.plugin)>
 		<cfif
