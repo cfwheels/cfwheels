@@ -1,42 +1,40 @@
-<cfset $wheels.klass = getmetadata(this).name>
-<cfloop collection="#application.wheels.plugins#" item="$wheels.plugin">
-	<!--- grab meta data of the plugin --->
-	<cfset $wheels.pluginMeta = getmetadata(application.wheels.plugins[$wheels.plugin])>
-	<!--- by default and for backwards compatability, we inject all methods into all objects --->
-	<cfset $wheels.pluginMixins = "global">
-	<!--- if the component has a default mixin value, assign that value --->
-	<cfif structkeyexists($wheels.pluginMeta, "mixin")>
-		<cfset $wheels.pluginMixins = $wheels.pluginMeta["mixin"]>
-	</cfif>
-	<!--- if a plugin is marked as "none" then it is a standalone app and doesn't get mixedin --->
-	<cfif $wheels.pluginMixins neq "none">
+<cfset $pluginInjection()>
+<cffunction name="$pluginInjection">
+	<cfset var loc = {}>
+	<cfset loc.klass = getmetadata(this).name>
+	<cfloop collection="#application.wheels.plugins#" item="loc.plugin">
+		<!--- grab meta data of the plugin --->
+		<cfset loc.pluginMeta = getmetadata(application.wheels.plugins[loc.plugin])>
+		<!--- by default and for backwards compatability, we inject all methods into all objects --->
+		<cfset loc.pluginMixins = "global">
+		<!--- if the component has a default mixin value, assign that value --->
+		<cfif structkeyexists(loc.pluginMeta, "mixin")>
+			<cfset loc.pluginMixins = loc.pluginMeta["mixin"]>
+		</cfif>
 		<!--- loop through each method in the plugin --->
-		<cfloop collection="#application.wheels.plugins[$wheels.plugin]#" item="$wheels.method">
+		<cfloop collection="#application.wheels.plugins[loc.plugin]#" item="loc.method">
 			<!--- only inspect methods and make sure we exclude the init method --->
-			<cfif isCustomFunction(application.wheels.plugins[$wheels.plugin][$wheels.method]) and $wheels.method neq "init" and $wheels.method neq "$init">
-				<cfset $wheels.methodMeta = getmetadata(application.wheels.plugins[$wheels.plugin][$wheels.method])>
-				<cfset $wheels.methodMixins = $wheels.pluginMixins>
-				<cfif structkeyexists($wheels.methodMeta, "mixin")>
-					<cfset $wheels.methodMixins = $wheels.methodMeta["mixin"]>
+			<cfif isCustomFunction(application.wheels.plugins[loc.plugin][loc.method]) and loc.method neq "init" and loc.method neq "$init">
+				<cfset loc.methodMeta = getmetadata(application.wheels.plugins[loc.plugin][loc.method])>
+				<cfset loc.methodMixins = loc.pluginMixins>
+				<cfif structkeyexists(loc.methodMeta, "mixin")>
+					<cfset loc.methodMixins = loc.methodMeta["mixin"]>
 				</cfif>
 				<!--- methods marked as none do not get mixed in --->
-				<cfif $wheels.methodMixins neq "none">
-					<cfif $wheels.klass eq "wheels.test">
-						<cfdump var="#$wheels.methodMixins#|#$wheels.klass#"><cfabort>
-					</cfif>
-					<cfloop list="#$wheels.methodMixins#" index="$wheels.methodMixin">
+				<cfif loc.methodMixins neq "none">
+					<cfloop list="#loc.methodMixins#" index="loc.methodMixin">
 						<cfif
-							$wheels.methodMixin eq "global"
-							OR reverse(left(reverse($wheels.klass), len($wheels.methodMixin))) eq $wheels.methodMixin
-							OR (structkeyexists($wheels.methodMeta, "extends") and structfindvalue($wheels.methodMeta.extends, $wheels.methodMixin))>
-							<cfif structkeyexists(variables, $wheels.method)>
-								<cfset variables.core[$wheels.method] = variables[$wheels.method]>
+							loc.methodMixin eq "global"
+							OR reverse(left(reverse(loc.klass), len(loc.methodMixin))) eq loc.methodMixin>
+							<cfif structkeyexists(variables, loc.method)>
+								<cfset variables.core[loc.method] = variables[loc.method]>
 							</cfif>
-							<cfset variables[$wheels.method] = application.wheels.plugins[$wheels.plugin][$wheels.method]>
+							<cfset this[loc.method] = application.wheels.plugins[loc.plugin][loc.method]>
+							<cfset variables[loc.method] = this[loc.method]>
 						</cfif>
 					</cfloop>
 				</cfif>
 			</cfif>
 		</cfloop>
-	</cfif>
-</cfloop>
+	</cfloop>
+</cffunction>

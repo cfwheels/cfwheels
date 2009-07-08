@@ -1,8 +1,9 @@
 <cfcomponent extends="wheels.test">
 
 	<cfinclude template="testhelper.cfm">
-
-	<cffunction name="setup">
+	
+	<cffunction name="_setup">
+		<cfset global.plugins.$unloadAllPlugins()>
 		<cfset global.plugins.$uninstallPlugin("TestAssignMixins")>
 		<cfset global.plugins.$uninstallPlugin("TestDefaultAssignMixins")>
 		<cfset global.plugins.$uninstallPlugin("TestGlobalMixins")>
@@ -15,10 +16,11 @@
 		<cfset global.dispatch = createobject("component", "wheels.dispatch")>
 		<cfset global.test = createobject("component", "wheels.test")>
 		<cfset loc.wheelscontroller = [application.wheels.rootcomponentPath, "controllers", "wheels"]>
-		<cfset global.wheelscontroller = createobject("component", arraytolist(loc.wheelscontroller, "."))>
+		<cfset global.wheelscontroller = createobject("component", listchangedelims(arraytolist(loc.wheelscontroller, "."), ".", "."))>
+		<cfset global.wheelscontroller.$pluginInjection()>
 	</cffunction>
-
-	<cffunction name="teardown">
+	
+	<cffunction name="_teardown">
 		<cfset global.plugins.$uninstallPlugin("TestAssignMixins")>
 		<cfset global.plugins.$uninstallPlugin("TestDefaultAssignMixins")>
 		<cfset global.plugins.$uninstallPlugin("TestGlobalMixins")>
@@ -26,7 +28,6 @@
 
 	<cffunction name="test_controller_object_mixins">
 		<cfset loc = {}>
-		<cfset halt(false, "structkeylist(global.controller)")>
 		<cfset assert("structkeyexists(global.controller, '$GobalTestMixin')")>
 		<cfset assert("structkeyexists(global.controller, '$DefaultMixin1')")>
 		<cfset assert("structkeyexists(global.controller, '$DefaultMixin2')")>
@@ -83,6 +84,18 @@
 		<cfset assert("not structkeyexists(global.wheelscontroller, '$MixinForModels')")>
 		<cfset assert("not structkeyexists(global.wheelscontroller, '$MixinForDispatch')")>
 		<cfset assert("not structkeyexists(global.wheelscontroller, '$MixinForTest')")>
+	</cffunction>
+	
+	<cffunction name="test_mixins_marked_as_app_should_be_mixed_into_wheels_controller_only">
+		<cfset loc = {}>
+		<cfset assert("structkeyexists(global.wheelscontroller, '$MixinForWheelsControllerOnly')")>
+		<cfset assert("not structkeyexists(global.test, '$MixinForWheelsControllerOnly')")>
+		<cfset assert("not structkeyexists(global.dispatch, '$MixinForWheelsControllerOnly')")>
+		<cfset assert("not structkeyexists(global.model, '$MixinForWheelsControllerOnly')")>
+	</cffunction>
+	
+	<cffunction name="test_overwritten_methods_move_to_core">
+		<cfset assert("global.wheelscontroller.congratulations() eq true")>
 	</cffunction>
 
 </cfcomponent>

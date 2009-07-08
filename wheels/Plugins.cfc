@@ -137,18 +137,7 @@
 			<cfdirectory action="delete" directory="#loc.installedPluginDir#" recurse="true">
 		</cfif>
 
-		<!--- removes the plugin from memory and run cleanup method before --->
-		<cfif structkeyexists(application.wheels.plugins, arguments.name)>
-
-			<!--- run clean up method before removing from memory --->
-			<cfif structkeyexists(application.wheels.plugins[arguments.name], "cleanup")>
-				<cfset application.wheels.plugins[arguments.name].cleanup()>
-			</cfif>
-
-			<!--- remove from memory --->
-			<cfset structdelete(application.wheels.plugins, arguments.name)>
-
-		</cfif>
+		<cfset $unloadPlugin(arguments.name)>
 	</cffunction>
 
 	<!--- load plugin into memory --->
@@ -183,6 +172,31 @@
 		<cfdirectory action="list" directory="#variables.$instance.pluginsPath#" name="loc.dir" type="dir">
 		<cfloop query="loc.dir">
 			<cfset $loadPlugin(name)>
+		</cfloop>
+	</cffunction>
+	
+	<!--- unload a plugin from memory --->
+	<cffunction name="$unloadPlugin" mixin="none" returntype="void">
+		<cfargument name="name" type="string" required="true">
+		<!--- removes the plugin from memory and run cleanup method before --->
+		<cfif structkeyexists(application.wheels.plugins, arguments.name)>
+
+			<!--- run clean up method before removing from memory --->
+			<cfif structkeyexists(application.wheels.plugins[arguments.name], "cleanup")>
+				<cfset application.wheels.plugins[arguments.name].cleanup()>
+			</cfif>
+
+			<!--- remove from memory --->
+			<cfset structdelete(application.wheels.plugins, arguments.name)>
+
+		</cfif>
+	</cffunction>
+	
+	<!--- unload all plugins from memory --->
+	<cffunction name="$unloadAllPlugins" mixin="none" returntype="void">
+		<cfset var loc = {}>
+		<cfloop collection="#application.wheels.plugins#" item="loc.plugin">
+			<cfset $unloadPlugin(loc.plugin)>
 		</cfloop>
 	</cffunction>
 

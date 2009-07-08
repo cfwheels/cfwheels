@@ -19,5 +19,12 @@
 
 	<cffunction name="$MixinForTest" mixin="wheels.Test" returntype="void">
 	</cffunction>
+	
+	<cffunction name="$MixinForWheelsControllerOnly" mixin="controllers.wheels" returntype="void">
+	</cffunction>
+	
+	<cffunction name="congratulations" mixin="controllers.Wheels">
+		<cfreturn structkeyexists(core, "congratulations")>
+	</cffunction>
 
 </cfcomponent>
