@@ -207,6 +207,8 @@
 		if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name))
 			loc.fileName = "Controller";
 		application.wheels.controllers[arguments.name] = $createObjectFromRoot(path=application.wheels.controllerComponentPath, fileName=loc.fileName, method="$initControllerClass", name=arguments.name);
+		// inject plugins
+		application.wheels.controllers[arguments.name].$pluginInjection();
 		loc.returnValue = application.wheels.controllers[arguments.name];
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -370,6 +372,8 @@
 		else
 			loc.fileName = "Model";
 		application.wheels.models[arguments.name] = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelClass", name=arguments.name);
+		// inject plugins
+		application.wheels.models[arguments.name].$pluginInjection();
 		loc.returnValue = application.wheels.models[arguments.name];
 	</cfscript>
 	<cfreturn loc.returnValue>
