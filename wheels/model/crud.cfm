@@ -176,12 +176,14 @@
 	<cfscript>
 		var loc = {};
 		if (application.wheels.environment != "production")
-			if (!Len(arguments.key) && !Len(arguments.where))
-				$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You have to pass in either 'key' or 'where'.");
+			if (Len(arguments.key) && Len(arguments.where))
+				$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot pass in both 'key' and 'where'.");
 		if (Len(arguments.where))
 			loc.returnValue = findOne(where=arguments.where, reload=arguments.reload, $create=false).recordCount == 1;
-		else
+		else if (Len(arguments.key))
 			loc.returnValue = findByKey(key=arguments.key, reload=arguments.reload, $create=false).recordCount == 1;
+		else
+			loc.returnValue = false;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
