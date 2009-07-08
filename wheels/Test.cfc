@@ -186,6 +186,10 @@
 			and teardown() if provided.
 		--->
 		<cfset keyList = listSort(structKeyList(this), "textnocase", "asc")>
+		
+		<cfif structKeyExists(this, "_setup")>
+			<cfset _setup()>
+		</cfif>
 
 		<cfloop list="#keyList#" index="key">
 
@@ -258,6 +262,10 @@
 			</cfif>
 
 		</cfloop>
+		
+		<cfif structKeyExists(this, "_teardown")>
+			<cfset _teardown()>
+		</cfif>
 
 		<cfset result = structNew()>
 		<cfset result.testCase = testCase>
