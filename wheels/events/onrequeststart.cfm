@@ -32,10 +32,11 @@
 		request.wheels = {};
 		request.wheels.params = {};
 		request.wheels.cache = {};
-		if(get("environment") neq "production")
-			request.wheels.deprecation = [];
 		if (application.wheels.showDebugInformation)
+		{
 			$debugPoint("total,requestStart");
+			request.wheels.deprecation = [];
+		}
 		if (!application.wheels.cacheModelInitialization)
 			StructClear(application.wheels.models);
 		if (!application.wheels.cacheControllerInitialization)
