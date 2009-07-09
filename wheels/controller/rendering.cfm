@@ -23,7 +23,7 @@
 	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#">
 	<cfscript>
 		var loc = {};
-		arguments = $dollarify(arguments);
+		arguments = $dollarify(arguments, "controller,action,template,layout,cache");
 		if (application.wheels.showDebugInformation)
 			$debugPoint("view");
 		// if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
@@ -73,7 +73,7 @@
 	<cfargument name="layout" type="string" required="false" default="#application.wheels.renderPartial.layout#" hint="See documentation for `renderPage`">
 	<cfargument name="$partialType" type="string" required="false" default="render">
 	<cfscript>
-		$includeOrRenderPartial(argumentCollection=$dollarify(arguments));
+		$includeOrRenderPartial(argumentCollection=$dollarify(arguments, "name,cache,layout"));
 	</cfscript>
 </cffunction>
 

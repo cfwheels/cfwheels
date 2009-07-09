@@ -1,10 +1,11 @@
 <cffunction name="$dollarify" returntype="struct" access="public" output="false">
 	<cfargument name="input" type="struct" required="true">
+	<cfargument name="on" type="string" required="true">
 	<cfscript>
 		var loc = {};
 		for (loc.key in arguments.input)
 		{
-			if (Left(loc.key, 1) != "$")
+			if (ListFindNoCase(arguments.on, loc.key))
 			{
 				arguments.input["$"&loc.key] = arguments.input[loc.key];
 				StructDelete(arguments.input, loc.key);
