@@ -111,6 +111,8 @@
 		loc.pluginObj = createobject("component", "wheels.plugins").$init();
 		// make sure the old pluginmanager is uninstalled, so errors are not thrown
 		loc.pluginObj.$uninstallPlugin("pluginmanager");
+		// unpack any plugins that need unpacking
+		loc.pluginObj.$unpackAllPlugins();
 		// load all plugins
 		loc.pluginObj.$loadAllPlugins();
 

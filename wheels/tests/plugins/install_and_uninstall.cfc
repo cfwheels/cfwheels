@@ -35,4 +35,21 @@
 		<cfset assert("global.plugins.$isInstalledPlugin('TestScaffold', loc.e) eq false")>
 	</cffunction>
 
+	<cffunction name="test_unpack_and_load_manually_added_plugins">
+		<cfset loc = {}>
+		<!--- first download the plugins --->
+		<cfset loc.plugin = global.plugins.$selectPlugin("TestScaffold")>
+		<cfset global.plugins.$downloadPlugin(loc.plugin.fullname, loc.plugin.link)>
+		<cfset loc.plugin = global.plugins.$selectPlugin("TestModelValidators")>
+		<cfset global.plugins.$downloadPlugin(loc.plugin.fullname, loc.plugin.link)>
+		<!--- now unpack all of them --->
+		<cfset global.plugins.$unpackAllPlugins()>
+		<!--- make sure they are installed --->
+		<cfset assert("global.plugins.$isInstalledPlugin('TestScaffold') eq true")>
+		<cfset assert("global.plugins.$isInstalledPlugin('TestModelValidators') eq true")>
+		<!--- uninstall them --->
+		<cfset global.plugins.$uninstallPlugin('TestScaffold')>
+		<cfset global.plugins.$uninstallPlugin('TestModelValidators')>
+	</cffunction>
+
 </cfcomponent>

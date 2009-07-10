@@ -13,6 +13,9 @@
 			,parser="$GoogleCode"
 			,autoParse="false"
 		)>
+		
+	<!--- make sure that plugin directory exists --->
+	<cfset $createPluginDir()>
 
 	<cffunction name="$init" mixin="none">
 		<cfargument name="autoParse" type="boolean" required="false" default="false">
@@ -59,6 +62,24 @@
 		</cfif>
 		<cfset arrayappend(variables.$instance.repos[arguments.repo]["plugins"][arguments.name], arguments)>
 	</cffunction>
+	
+	<!--- downloads the plugin from a repo --->
+	<cffunction name="$downloadPlugin" mixin="none" returntype="void">
+		<cfargument name="fileName" type="string" required="true">
+		<cfargument name="link" type="string" required="true">
+		<cfset var loc = StructNew()>
+		
+		<cfset loc.installPluginFullPath = "#variables.$instance.pluginsPath##arguments.fileName#">
+		<!--- no need to install the plugin again if they already have it. --->
+		<cfif not FileExists(loc.installPluginFullPath)>
+
+			<!--- download and install --->
+			<cfhttp url="#arguments.link#" result="loc.fileData" method="GET" getAsBinary="yes">
+			<cfset loc.data = loc.fileData.FileContent>
+			<cffile action="write" file="#loc.installPluginFullPath#" output="#loc.data#" mode="777">
+
+		</cfif>
+	</cffunction>
 
 	<!--- installs the plugin from the repository --->
 	<cffunction name="$installPlugin" mixin="none" returntype="struct">
@@ -71,34 +92,56 @@
 
 		<cfif not structisempty(loc.version)>
 
-			<!--- if the plugin directory doens't exists, create it --->
-			<cfif not directoryExists(variables.$instance.pluginsPath)>
-				<cfdirectory action="create" directory="#variables.$instance.pluginsPath#" mode="777">
-			</cfif>
-
-			<cfset loc.installPluginFullPath = "#variables.$instance.pluginsPath&loc.version.fullname#">
-			<!--- no need to install the plugin again if they already have it. --->
-			<cfif not FileExists(loc.installPluginFullPath)>
-
-				<!--- download and install --->
-				<cfhttp url="#loc.version.link#" result="loc.fileData" method="GET" getAsBinary="yes">
-				<cfset loc.data = loc.fileData.FileContent>
-				<cffile action="write" file="#loc.installPluginFullPath#" output="#loc.data#" mode="777">
-
-			</cfif>
-
-			<cfset loc.installedPluginDir = "#variables.$instance.pluginsPath##arguments.name#">
-			<!--- unpack the plugin --->
-			<cfif not DirectoryExists(loc.installedPluginDir)>
-				<cfdirectory action="create" directory="#loc.installedPluginDir#" mode="777">
-			</cfif>
-			<cfzip action="unzip" destination="#loc.installedPluginDir#" file="#loc.installPluginFullPath#" overwrite="#application.wheels.overwritePlugins#">
+			<cfset $downloadPlugin(
+					fileName="#loc.version.fullname#"
+					,link="#loc.version.link#"
+				)>
+			
+			<cfset $unpackPlugin(
+					zipFile="#loc.version.fullname#"
+					,name="#loc.version.name#"
+				)>
 
 		</cfif>
 
 		<cfreturn loc.version>
 	</cffunction>
-
+	
+	<!--- unpacks a plugin --->
+	<cffunction name="$unpackPlugin" mixin="none" returntype="void">
+		<cfargument name="zipFile" type="string" required="true">
+		<cfargument name="name" type="string" required="false" default="">
+		<cfset var loc = {}>
+				
+		<!---
+		if the name attribute wasn't passed then assume the first part of the 
+		zipFile is the name.
+		
+		zipfile: ModelValidators-0.3.zip
+		name: ModelValidators
+		 ---> 
+		<cfif not len(arguments.name)>
+			<cfset arguments.name = listfirst(arguments.zipFile, "-")>
+		</cfif>
+		
+		<cfset loc.installPluginFullPath = "#variables.$instance.pluginsPath##arguments.zipFile#">
+		<cfset loc.installedPluginDir = "#variables.$instance.pluginsPath##arguments.name#">
+		<!--- unpack the plugin --->
+		<cfif not DirectoryExists(loc.installedPluginDir)>
+			<cfdirectory action="create" directory="#loc.installedPluginDir#" mode="777">
+		</cfif>
+		<cfzip action="unzip" destination="#loc.installedPluginDir#" file="#loc.installPluginFullPath#" overwrite="#application.wheels.overwritePlugins#">		
+	</cffunction>
+	
+	<!--- unpacks all plugins --->
+	<cffunction name="$unpackAllPlugins" mixin="none" returntype="void">
+		<cfset var loc = {}>
+		<cfdirectory action="list" directory="#variables.$instance.pluginsPath#" name="loc.dir" type="file" filter="*.zip">
+		<cfloop query="loc.dir">
+			<cfset $unpackPlugin(name)>
+		</cfloop>
+	</cffunction>	
+	
 	<!--- uninstall the plugin --->
 	<cffunction name="$uninstallPlugin" mixin="none" returntype="void">
 		<cfargument name="name" type="string" required="true">
@@ -408,6 +451,13 @@
 				</cfif>
 			</cfif>
 		</cfloop>
+	</cffunction>
+	
+	<cffunction name="$createPluginDir" mixin="none" returntype="void">
+		<!--- if the plugin directory doens't exists, create it --->
+		<cfif not directoryExists(variables.$instance.pluginsPath)>
+			<cfdirectory action="create" directory="#variables.$instance.pluginsPath#" mode="777">
+		</cfif>
 	</cffunction>
 
 </cfcomponent>
