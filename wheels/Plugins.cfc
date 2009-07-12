@@ -348,7 +348,9 @@
 		<cfargument name="location" type="string" required="true" hint="the url where the repository is located">
 		<cfargument name="parser" type="string" required="false" default="" hint="the name of the parser to use to parse repo location">
 		<cfargument name="autoParse" type="boolean" default="true" hint="should we populate the repo after registering it.">
-		<cfset variables.$instance.repos[arguments.repo] = {settings=arguments, plugins={}}>
+		<cfset var loc = {}>
+		<cfset loc.plugins = {}>
+		<cfset variables.$instance.repos[arguments.repo] = {settings=arguments, plugins=loc.plugins}>
 		<cfif arguments.autoParse>
 			<cfset $parseRepo(arguments.repo)>
 		</cfif>
