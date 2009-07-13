@@ -1,5 +1,5 @@
 <h1>Congratulations!</h1>
-<p><strong>You have successfully installed version <cfoutput>#version#</cfoutput> of Wheels.</strong><br />
+<p><strong>You have successfully installed version <cfoutput>#application.wheels.version#</cfoutput> of Wheels.</strong><br />
 Welcome to the wonderful world of Wheels, we hope you will enjoy it!</p>
 
 <h2>Now What?</h2>
