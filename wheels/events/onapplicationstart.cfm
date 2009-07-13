@@ -152,6 +152,51 @@
 					}
 				}
 			}
+			
+			// store plugin injection information in application scope so we don't have to run this code on each injection
+			application.wheels.mixableComponents = "dispatch,controller,model,microsoftsqlserver,mysql,oracle,postgresql";
+			application.wheels.mixins = {};
+			loc.iEnd = ListLen(application.wheels.mixableComponents);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				application.wheels.mixins[ListGetAt(application.wheels.mixableComponents, loc.i)] = "";
+			}
+			loc.iList = StructKeyList(application.wheels.plugins);
+			loc.iEnd = ListLen(loc.iList);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.iItem = ListGetAt(loc.iList, loc.i);
+				loc.pluginMeta = GetMetaData(application.wheels.plugins[loc.iItem]); // grab meta data of the plugin
+				loc.pluginMixins = "global"; // by default and for backwards compatibility, we inject all methods into all objects
+				if (StructKeyExists(loc.pluginMeta, "mixin"))
+					loc.pluginMixins = loc.pluginMeta["mixin"]; // if the component has a default mixin value, assign that value
+				// loop through all plugin methods and enter injection info accordingly (based on the mixin value on the method or the default one set on the entire component)
+				loc.jList = StructKeyList(application.wheels.plugins[loc.iItem]);
+				loc.jEnd = ListLen(loc.jList);
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				{
+					loc.jItem = ListGetAt(loc.jList, loc.j);
+					if (IsCustomFunction(application.wheels.plugins[loc.iItem][loc.jItem]) && loc.jItem != "init")
+					{
+						loc.methodMeta = GetMetaData(application.wheels.plugins[loc.iItem][loc.jItem]);
+						loc.methodMixins = loc.pluginMixins;
+						if (StructKeyExists(loc.methodMeta, "mixin"))
+							loc.methodMixins = loc.methodMeta["mixin"];
+						// mixin all methods except those marked as none
+						if (loc.methodMixins != "none")
+						{
+							loc.kEnd = ListLen(application.wheels.mixableComponents);
+							for (loc.k=1; loc.k <= loc.kEnd; loc.k++)
+							{
+								loc.kItem = ListGetAt(application.wheels.mixableComponents, loc.k);
+								if (loc.methodMixins == "global" || ListFindNoCase(loc.methodMixins, loc.kItem))
+									application.wheels.mixins[loc.kItem] = ListAppend(application.wheels.mixins[loc.kItem], loc.iItem  & "." & loc.jItem);
+							}
+						}
+					}
+				}
+			}
+			
 			// look for plugins that are incompatible with each other
 			loc.addedFunctions = "";
 			for (loc.key in application.wheels.plugins)
