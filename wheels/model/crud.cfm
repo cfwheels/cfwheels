@@ -56,13 +56,17 @@
 	<cfargument name="count" type="numeric" required="false" default=0 hint="Total records in pagination (when not supplied Wheels will do a `COUNT` query to get this value)">
 	<cfargument name="handle" type="string" required="false" default="query" hint="Handle to use for the query in pagination">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the query for">
-	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.findAll.reload#" hint="Set to `true` to force Wheels to fetch a new object from the database even though an identical query has been run in the same request">
+	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.findAll.reload#" hint="Set to `true` to force Wheels to query the database even though an identical query has been run in the same request">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.findAll.parameterize#" hint="Set to `true` to use `cfqueryparam` on all columns or pass in a list of property names to use `cfqueryparam` on those only">
+	<cfargument name="returnAs" type="string" required="false" default="#application.wheels.findAll.returnAs#" hint="Set to `objects` to return an array of objects instead of a query">
 	<cfargument name="$limit" type="numeric" required="false" default=0>
 	<cfargument name="$offset" type="numeric" required="false" default=0>
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
+
+		if (application.wheels.environment != "production" && Len(arguments.include) && arguments.returnAs == "objects")
+			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot include associations when returning an array of objects.");
 
 		// count records and get primary keys for pagination
 		if (arguments.page)
@@ -161,8 +165,18 @@
 				request[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
 			request.wheels[Hash(GetMetaData(loc.findAll.query).toString())] = pluralize(variables.wheels.class.name); // place an identifer in request scope so we can reference this query when passed in to view functions 
-			loc.returnValue = loc.findAll.query;
-			$callback("afterFind", loc.returnValue);
+			if (arguments.returnAs == "query")
+			{
+				loc.returnValue = loc.findAll.query;
+				$callback("afterFind", loc.returnValue);
+			}
+			else if (arguments.returnAs == "objects")
+			{
+				loc.returnValue = [];
+				loc.iEnd = loc.findAll.query.recordCount;
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					ArrayAppend(loc.returnValue, $createInstance(properties=loc.findAll.query, persisted=true, row=loc.i));
+			}
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -1085,7 +1099,7 @@
 		if (!ListFindNoCase(application.wheels.existingModelFiles, variables.wheels.class.name))
 			loc.fileName = "Model";
 		loc.returnValue = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.name, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row);
-		// if this method is called with a struct we're creating a new object and then we call the afterNew callback. If called with a query we call the afterFind callback instead. If the called method does not retun false we proceed and run the afterInitialize callback.
+		// if this method is called with a struct we're creating a new object and then we call the afterNew callback. If called with a query we call the afterFind callback instead. If the called method does not return false we proceed and run the afterInitialize callback.
 		if ((IsQuery(arguments.properties) && loc.returnValue.$callback("afterFind")) || (IsStruct(arguments.properties) && loc.returnValue.$callback("afterNew")))
 			loc.returnValue.$callback("afterInitialization");
 	</cfscript>
