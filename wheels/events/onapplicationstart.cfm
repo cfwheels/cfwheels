@@ -103,23 +103,71 @@
 		//override settings with environment specific ones
 		$include(template="#application.wheels.configPath#/#application.wheels.environment#/settings.cfm");
 
-		// load plugins
-		application.wheels.plugins = {};
-		application.wheels.incompatiblePlugins = "";
-
-		// handle plugins
-		loc.pluginObj = createobject("component", "wheels.plugins").$init();
-		// make sure the old pluginmanager is uninstalled, so errors are not thrown
-		loc.pluginObj.$uninstallPlugin("pluginmanager");
-		// unpack any plugins that need unpacking
-		loc.pluginObj.$unpackAllPlugins();
-		// load all plugins
-		loc.pluginObj.$loadAllPlugins();
-
 		// load developer routes and add wheels default ones
 		$include(template="#application.wheels.configPath#/routes.cfm");
 		$include(template="wheels/events/onapplicationstart/routes.cfm");
 
+		// load plugins
+		application.wheels.plugins = {};
+		application.wheels.incompatiblePlugins = "";
+		loc.pluginFolder = this.rootDir & "plugins";
+		// get a list of plugin files and folders
+		loc.pluginFolders = $directory(directory=loc.pluginFolder, type="dir");
+		loc.pluginFiles = $directory(directory=loc.pluginFolder, filter="*.zip", type="file", sort="name DESC");
+		// delete plugin folders if no corresponding plugin file exist
+		loc.iEnd = loc.pluginFolders.recordCount;
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.name = loc.pluginFolders["name"][loc.i];
+			loc.directory = loc.pluginFolders["directory"][loc.i];
+			if (Left(loc.name, 1) != "." && !ListContainsNoCase(ValueList(loc.pluginFiles.name), loc.name & "-"))
+			{
+				loc.directory = loc.directory & "/" & loc.name;
+				$directory(action="delete", directory=loc.directory, recurse=true);
+			}
+		}
+		// create directory and unzip code for the most recent version of each plugin
+		if (loc.pluginFiles.recordCount)
+		{
+			loc.iEnd = loc.pluginFiles.recordCount;
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.name = loc.pluginFiles["name"][loc.i];
+				loc.pluginName = ListFirst(loc.name, "-");
+				if (!StructKeyExists(application.wheels.plugins, loc.pluginName))
+				{
+					loc.pluginVersion = Replace(ListLast(loc.name, "-"), ".zip", "", "one");
+					loc.thisPluginFile = loc.pluginFolder & "/" & loc.name;
+					loc.thisPluginFolder = loc.pluginFolder & "/" & LCase(loc.pluginName);
+					if (!DirectoryExists(loc.thisPluginFolder))
+						$directory(action="create", directory=loc.thisPluginFolder);
+					$zip(action="unzip", destination=loc.thisPluginFolder, file=loc.thisPluginFile, overwrite=application.wheels.overwritePlugins);
+					loc.fileName = LCase(loc.pluginName) & "." & loc.pluginName;
+					loc.plugin = $createObjectFromRoot(path=application.wheels.pluginComponentPath, fileName=loc.fileName, method="init");
+					if (!StructKeyExists(loc.plugin, "version") || loc.plugin.version == SpanExcluding(application.wheels.version, " ") || application.wheels.loadIncompatiblePlugins)
+					{
+						application.wheels.plugins[loc.pluginName] = loc.plugin;
+						if (StructKeyExists(loc.plugin, "version") && loc.plugin.version != SpanExcluding(application.wheels.version, " "))
+							application.wheels.incompatiblePlugins = ListAppend(application.wheels.incompatiblePlugins, loc.pluginName);
+					}
+				}
+			}
+			// look for plugins that are incompatible with each other
+			loc.addedFunctions = "";
+			for (loc.key in application.wheels.plugins)
+			{
+				for (loc.keyTwo in application.wheels.plugins[loc.key])
+				{
+					if (!ListFindNoCase("init,version", loc.keyTwo))
+					{
+						if (ListFindNoCase(loc.addedFunctions, loc.keyTwo))
+							$throw(type="Wheels.IncompatiblePlugin", message="#loc.key# is incompatible with a previously installed plugin.", extendedInfo="make sure none of the plugins you have installed overrides the same Wheels functions.");
+						else
+							loc.addedFunctions = ListAppend(loc.addedFunctions, loc.keyTwo);
+					}
+				}
+			}
+		}
 		application.wheels.dispatch = CreateObject("component", "wheels.Dispatch");
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
 	</cfscript>
