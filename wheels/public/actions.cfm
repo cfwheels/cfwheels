@@ -11,3 +11,7 @@
 	<cfset variables[params.name] = application.wheels.plugins[params.name]>
 	<cfset renderPage(template="wheels")>
 </cffunction>
+
+<cffunction name="tests">
+	<cfset renderPage(template="wheels")>
+</cffunction>
