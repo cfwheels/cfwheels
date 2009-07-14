@@ -113,6 +113,15 @@
 
 <cffunction name="pagination" returntype="struct" access="public" output="false" hint="Returns a struct with information about the specificed paginated query. The available variables are `currentPage`, `totalPages` and `totalRecords`.">
 	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query to return pagination information for">
+	<cfscript>
+		if (application.wheels.environment != "production")
+		{
+			if (!StructKeyExists(request.wheels, arguments.handle))
+			{
+				$throw(type="Wheels.QueryHandleNotFound", message="Wheels couldn't find a query with the handle of `#arguments.handle#`.", extendedInfo="Make sure your findAll() has the `page` argument specified and matching handle arguments if specified.");
+			}
+		}
+	</cfscript>
 	<cfreturn request.wheels[arguments.handle]>
 </cffunction>
 
