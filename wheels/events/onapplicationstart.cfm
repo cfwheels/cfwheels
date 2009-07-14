@@ -167,30 +167,33 @@
 			{
 				loc.iItem = ListGetAt(loc.iList, loc.i);
 				loc.pluginMeta = GetMetaData(application.wheels.plugins[loc.iItem]); // grab meta data of the plugin
-				loc.pluginMixins = "global"; // by default and for backwards compatibility, we inject all methods into all objects
-				if (StructKeyExists(loc.pluginMeta, "mixin"))
-					loc.pluginMixins = loc.pluginMeta["mixin"]; // if the component has a default mixin value, assign that value
-				// loop through all plugin methods and enter injection info accordingly (based on the mixin value on the method or the default one set on the entire component)
-				loc.jList = StructKeyList(application.wheels.plugins[loc.iItem]);
-				loc.jEnd = ListLen(loc.jList);
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				if (!StructKeyExists(loc.pluginMeta, "environment") || ListFindNoCase(loc.pluginMeta.environment, application.wheels.environment))
 				{
-					loc.jItem = ListGetAt(loc.jList, loc.j);
-					if (IsCustomFunction(application.wheels.plugins[loc.iItem][loc.jItem]) && loc.jItem != "init")
+					loc.pluginMixins = "global"; // by default and for backwards compatibility, we inject all methods into all objects
+					if (StructKeyExists(loc.pluginMeta, "mixin"))
+						loc.pluginMixins = loc.pluginMeta["mixin"]; // if the component has a default mixin value, assign that value
+					// loop through all plugin methods and enter injection info accordingly (based on the mixin value on the method or the default one set on the entire component)
+					loc.jList = StructKeyList(application.wheels.plugins[loc.iItem]);
+					loc.jEnd = ListLen(loc.jList);
+					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 					{
-						loc.methodMeta = GetMetaData(application.wheels.plugins[loc.iItem][loc.jItem]);
-						loc.methodMixins = loc.pluginMixins;
-						if (StructKeyExists(loc.methodMeta, "mixin"))
-							loc.methodMixins = loc.methodMeta["mixin"];
-						// mixin all methods except those marked as none
-						if (loc.methodMixins != "none")
+						loc.jItem = ListGetAt(loc.jList, loc.j);
+						if (IsCustomFunction(application.wheels.plugins[loc.iItem][loc.jItem]) && loc.jItem != "init")
 						{
-							loc.kEnd = ListLen(application.wheels.mixableComponents);
-							for (loc.k=1; loc.k <= loc.kEnd; loc.k++)
+							loc.methodMeta = GetMetaData(application.wheels.plugins[loc.iItem][loc.jItem]);
+							loc.methodMixins = loc.pluginMixins;
+							if (StructKeyExists(loc.methodMeta, "mixin"))
+								loc.methodMixins = loc.methodMeta["mixin"];
+							// mixin all methods except those marked as none
+							if (loc.methodMixins != "none")
 							{
-								loc.kItem = ListGetAt(application.wheels.mixableComponents, loc.k);
-								if (loc.methodMixins == "global" || ListFindNoCase(loc.methodMixins, loc.kItem))
-									application.wheels.mixins[loc.kItem] = ListAppend(application.wheels.mixins[loc.kItem], loc.iItem  & "." & loc.jItem);
+								loc.kEnd = ListLen(application.wheels.mixableComponents);
+								for (loc.k=1; loc.k <= loc.kEnd; loc.k++)
+								{
+									loc.kItem = ListGetAt(application.wheels.mixableComponents, loc.k);
+									if (loc.methodMixins == "global" || ListFindNoCase(loc.methodMixins, loc.kItem))
+										application.wheels.mixins[loc.kItem] = ListAppend(application.wheels.mixins[loc.kItem], loc.iItem  & "." & loc.jItem);
+								}
 							}
 						}
 					}
@@ -212,6 +215,24 @@
 					}
 				}
 			}
+
+			// look for plugins that depend on other plugins that are not installed
+			application.wheels.dependantPlugins = "";
+			for (loc.key in application.wheels.plugins)
+			{
+				loc.pluginInfo = GetMetaData(application.wheels.plugins[loc.key]);
+				if (StructKeyExists(loc.pluginInfo, "dependency"))
+				{
+					loc.iEnd = ListLen(loc.pluginInfo.dependency);
+					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					{
+						loc.iItem = ListGetAt(loc.pluginInfo.dependency, loc.i);
+						if (!StructKeyExists(application.wheels.plugins, loc.iItem))
+							application.wheels.dependantPlugins = ListAppend(application.wheels.dependantPlugins, Reverse(SpanExcluding(Reverse(loc.pluginInfo.name), ".")) & "|" & loc.iItem);
+					}
+				}
+			}
+
 		}
 		application.wheels.dispatch = CreateObject("component", "wheels.Dispatch");
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");

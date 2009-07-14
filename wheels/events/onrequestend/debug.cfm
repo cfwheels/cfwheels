@@ -1,7 +1,7 @@
 <cfoutput>
 <div style="clear:both;margin-top:100px;text-align:left;background:##ececec;padding:10px;border-top:2px solid ##808080;border-bottom:2px solid ##808080;">
 <table cellspacing="0">
-<cfif Len(application.wheels.incompatiblePlugins) OR NOT ArrayIsEmpty(request.wheels.deprecation)>
+<cfif Len(application.wheels.incompatiblePlugins) OR Len(application.wheels.dependantPlugins) OR NOT ArrayIsEmpty(request.wheels.deprecation)>
 	<tr>
 		<td valign="top"><strong><span style="color:red;">Warnings:</span></strong></td>
 		<td>
@@ -9,9 +9,11 @@
 				<cfif Len(application.wheels.incompatiblePlugins)>
 					<cfloop list="#application.wheels.incompatiblePlugins#" index="loc.i">The #loc.i# plugin may be incompatible with this version of Wheels, please look for a compatible version of the plugin<br /></cfloop>
 				</cfif>
+				<cfif Len(application.wheels.dependantPlugins)>
+					<cfloop list="#application.wheels.dependantPlugins#" index="loc.i"><cfset needs = ListLast(loc.i, "|")>The #ListFirst(loc.i, "|")# plugin needs the following plugin<cfif ListLen(needs) GT 1>s</cfif> to work properly: #needs#<br /></cfloop>
+				</cfif>
 				<cfif NOT ArrayIsEmpty(request.wheels.deprecation)>
 					<cfloop array="#request.wheels.deprecation#" index="i">#i.message# (line #i.line# in #i.template#)<br /></cfloop>
-					<!--- this is the old output, it's a little ugly, we'll have to improve later <cfloop array="#request.wheels.deprecation#" index="i"><dl><dt>#i.message#<br/>From <strong>#i.method#</strong> at line <strong>#i.line#</strong> in <strong>#i.template#</strong></dt><cfloop array="#i.data#" index="a"><dd>#HTMLEditFormat(a)#</dd></cfloop></dl></cfloop> --->
 				</cfif>
 			</span>
 		</td>
