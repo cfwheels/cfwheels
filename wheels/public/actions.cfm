@@ -13,5 +13,6 @@
 </cffunction>
 
 <cffunction name="tests">
+	<cfset testresults = $createObjectFromRoot(path=application.wheels.wheelsComponentPath, fileName="test", method="WheelsRunner", options=params)>
 	<cfset renderPage(template="wheels")>
 </cffunction>
