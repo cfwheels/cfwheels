@@ -4,7 +4,7 @@
 		<cfreturn this>
 	</cffunction>
 	
-	<cffunction name="$installPlugin" returntype="void">
+	<cffunction name="installPlugin" returntype="void">
 		<cfargument name="pluginFile" type="string" required="true">
 		<cfset var loc = StructNew()>
 		<cfset loc.pluginURL = "http://cfwheels.googlecode.com/files/" & arguments.pluginFile & ".zip">
@@ -15,7 +15,7 @@
 		<cflocation url="?reload=true" addToken="false">
 	</cffunction>
 	
-	<cffunction name="$getAvailablePlugins" returntype="array">
+	<cffunction name="getAvailablePlugins" returntype="array">
 		<cfset var loc = StructNew()>
 		
 		<!--- store all plugins in an array --->
