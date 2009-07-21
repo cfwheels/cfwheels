@@ -2,7 +2,7 @@
 
 	<cffunction name="_setup">
 		<cfset global = {}>
-		<cfset global.controller = createobject("component", "wheels.tests.ControllerBlank")>
+		<cfset global.controller = createobject("component", "wheels.Controller")>
 		<cfset global.f = global.controller.distanceOfTimeInWords>
 		<cfset global.args = {}>
 		<cfset global.args.fromTime = now()>

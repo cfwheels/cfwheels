@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.test">
+<cfcomponent>
 
 	<cfinclude template="testhelper.cfm">
 

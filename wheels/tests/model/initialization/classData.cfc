@@ -10,5 +10,4 @@
 		<cfset halt(false, "modelusers.$classData()")>
 	</cffunction>
 
-
 </cfcomponent>
