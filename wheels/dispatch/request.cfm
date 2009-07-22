@@ -186,10 +186,10 @@
 			{
 				if (FindNoCase("($checkbox)", loc.key))
 				{
-					// if no other form parameter exists with this name it means that the checkbox was left blank and therefore we force the value to 0 (to get around the problem that unchecked checkboxes don't post at all)
+					// if no other form parameter exists with this name it means that the checkbox was left blank and therefore we force the value to the unchecked values for the checkbox (to get around the problem that unchecked checkboxes don't post at all)
 					loc.formParamName = ReplaceNoCase(loc.key, "($checkbox)", "");
 					if (!StructKeyExists(arguments.formScope, loc.formParamName))
-						arguments.formScope[loc.formParamName] = 0;
+						arguments.formScope[loc.formParamName] = arguments.formScope[loc.key];
 					StructDelete(arguments.formScope, loc.key);
 				}
 				else if (REFindNoCase(".*\((\$year|\$month|\$day|\$hour|\$minute|\$second)\)$", loc.key))
