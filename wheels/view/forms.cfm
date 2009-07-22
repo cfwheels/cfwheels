@@ -382,7 +382,7 @@
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = arguments.checkedValue;
 		loc.value = $formValue(argumentCollection=arguments);
-		if ((IsBoolean(loc.value) && loc.value) || (isNumeric(loc.value) && loc.value >= 1))
+		if (loc.value eq arguments.value || isnumeric(loc.value) && loc.value eq 1 || not isnumeric(loc.value) && IsBoolean(loc.value) && loc.value)
 			arguments.checked = "checked";
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,checkedValue,uncheckedValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments);
 		if (!IsStruct(arguments.objectName))
