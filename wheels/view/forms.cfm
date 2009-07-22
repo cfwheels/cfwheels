@@ -15,16 +15,16 @@
 	<cfscript>
 		var loc = {};
 		arguments = $insertDefaults(name="startFormTag", input=arguments);
-	
+
 		// sets a flag to indicate whether we use get or post on this form, used when obfuscating params
 		request.wheels.currentFormMethod = arguments.method;
-	
+
 		// set the form's action attribute to the URL that we want to send to
 		arguments.action = URLFor(argumentCollection=arguments);
-		
+
 		// make sure we return XHMTL compliant code
-		arguments.action = Replace(arguments.action, "&", "&amp;", "all"); 
-	
+		arguments.action = Replace(arguments.action, "&", "&amp;", "all");
+
 		// deletes the action attribute and instead adds some tricky javascript spam protection to the onsubmit attribute
 		if (arguments.spamProtection)
 		{
@@ -32,11 +32,11 @@
 			arguments.onsubmit = $addToJavaScriptAttribute(name="onsubmit", content=loc.onsubmit, attributes=arguments);
 			StructDelete(arguments, "action");
 		}
-	
+
 		// set the form to be able to handle file uploads
 		if (!StructKeyExists(arguments, "enctype") && arguments.multipart)
 			arguments.enctype = "multipart/form-data";
-		
+
 		loc.skip = "multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port";
 		if (Len(arguments.route))
 			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
@@ -461,7 +461,7 @@
 			else
 				loc.blankOptionText = "";
 			loc.blankOptionAttributes = {value=""};
-			loc.content = $element(name="option", content=loc.blankOptionText, attributes=loc.blankOptionAttributes) & loc.content; 
+			loc.content = $element(name="option", content=loc.blankOptionText, attributes=loc.blankOptionAttributes) & loc.content;
 		}
 		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,options,includeBlank,valueField,textField,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
@@ -763,6 +763,10 @@
 	<cfargument name="startYear" type="numeric" required="true">
 	<cfargument name="endYear" type="numeric" required="true">
 	<cfscript>
+		if (structkeyexists(arguments, "value") && val(arguments.value) gt 0 && arguments.value lt arguments.startYear)
+		{
+			arguments.startYear = arguments.value;
+		}
 		arguments.$loopFrom = arguments.startYear;
 		arguments.$loopTo = arguments.endYear;
 		arguments.$type = "year";
@@ -848,7 +852,10 @@
 			loc.item = ListGetAt(arguments.order, loc.i);
 			arguments.name = loc.name & "($" & loc.item & ")";
 			if (Len(loc.value))
-				arguments.value = Evaluate("#loc.item#(loc.value)");
+				if (isdate(loc.value))
+					arguments.value = Evaluate("#loc.item#(loc.value)");
+				else
+					arguments.value = loc.value;
 			else
 				arguments.value = "";
 			if (loc.firstDone)

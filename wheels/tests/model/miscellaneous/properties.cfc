@@ -9,7 +9,7 @@
 		<cfset loc = {}>
 
 		<cfset loc.properties = modelusers.properties()>
-		<cfset assert("listlen(structkeylist(loc.properties)) eq 11")>
+		<cfset assert("listlen(structkeylist(loc.properties)) eq 14")>
 
 		<cfset loc.args = {}>
 		<cfset loc.args.Address = "1313 mockingbird lane">
@@ -23,6 +23,9 @@
 		<cfset loc.args.UserName = "tonypetruzzi">
 		<cfset loc.args.ZipCode = "33441">
 		<cfset loc.args.Id = "">
+		<cfset loc.args.birthday = "11/01/1975">
+		<cfset loc.args.birthdaymonth = "11">
+		<cfset loc.args.birthdayyear = "1975">
 
 		<cfset modelusers.properties(loc.args)>
 
