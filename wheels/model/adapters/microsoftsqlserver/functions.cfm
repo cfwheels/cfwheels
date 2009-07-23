@@ -47,22 +47,27 @@
 		{
 			loc.select = ReplaceNoCase(arguments.sql[1], "SELECT ", "");
 			loc.qualifiedOrder = ReplaceNoCase(arguments.sql[ArrayLen(arguments.sql)], "ORDER BY ", "");
+			
+			// the primary keys listed in the select clause needs to be added to the order clause as well for the query to work properly
 			loc.iEnd = ListLen(loc.select);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.item = ListGetAt(loc.select, loc.i);
-				if (!ListContainsNoCase(loc.qualifiedOrder, loc.item))
-					loc.qualifiedOrder = ListAppend(loc.qualifiedOrder, "#loc.item# ASC");
+				loc.iItem = ListGetAt(loc.select, loc.i);
+				if (!ListContainsNoCase(loc.qualifiedOrder, loc.iItem))
+					loc.qualifiedOrder = ListAppend(loc.qualifiedOrder, "#loc.iItem# ASC");
 			}
+			
+			// create the simple order clause (used in the two outer queries) by revoming the table names from the qualified select
 			loc.simpleOrder = "";
 			loc.iEnd = ListLen(loc.qualifiedOrder);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				loc.item = ListGetAt(loc.qualifiedOrder, loc.i);
-				loc.simpleOrder = ListAppend(loc.simpleOrder, ListLast(loc.item, "."));
-			}
+				loc.simpleOrder = ListAppend(loc.simpleOrder, ListLast(ListGetAt(loc.qualifiedOrder, loc.i), "."));
+			
+			// the select clauses are just a variation of the order by clause since we have to select what we order by anyway for the sub queries to work
 			loc.simpleSelect = ReplaceNoCase(ReplaceNoCase(loc.simpleOrder, " DESC", "", "all"), " ASC", "", "all");
 			loc.qualifiedSelect = ReplaceNoCase(ReplaceNoCase(loc.qualifiedOrder, " DESC", "", "all"), " ASC", "", "all");
+			
+			// remove any " AS " aliased columns from the order by clauses
 			loc.newSimpleOrder = "";
 			loc.iEnd = ListLen(loc.simpleOrder);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -81,6 +86,8 @@
 					loc.newQualifiedOrder = ListAppend(loc.newQualifiedOrder, loc.iItem);
 			}
 			loc.qualifiedOrder = loc.newQualifiedOrder;
+
+			// create the outer most select clause, add the " AS " aliased columns first and then the others unless they already exist
 			loc.firstSelect = "";
 			loc.iEnd = ListLen(loc.simpleSelect);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -96,24 +103,30 @@
 				if (!Find(" AS ", loc.iItem) && !ListContainsNoCase(loc.firstSelect, loc.iItem & " AS "))
 					loc.firstSelect = ListAppend(loc.firstSelect, loc.iItem);
 			}
+
+			// create the middle and inner most select clauses
 			loc.secondSelect = "";
 			loc.iEnd = ListLen(loc.simpleSelect);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.iItem = ListGetAt(loc.simpleSelect, loc.i);
-				if (!Find(" AS ", loc.iItem))
+				loc.iItem = SpanExcluding(ListGetAt(loc.simpleSelect, loc.i), " ");
+				if (!ListFindNoCase(loc.secondSelect, loc.iItem))
 					loc.secondSelect = ListAppend(loc.secondSelect, loc.iItem);
 			}
 			loc.thirdSelect = "";
 			loc.iEnd = ListLen(loc.qualifiedSelect);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.iItem = ListGetAt(loc.qualifiedSelect, loc.i);
-				if (!Find(" AS ", loc.iItem))
+				loc.iItem = SpanExcluding(ListGetAt(loc.qualifiedSelect, loc.i), " ");
+				if (!ListFindNoCase(loc.thirdSelect, loc.iItem))
 					loc.thirdSelect = ListAppend(loc.thirdSelect, loc.iItem);
 			}
+
+			// reverse ordering for use in sub queries
 			loc.simpleOrderReversed = ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(loc.simpleOrder, "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all");
 			loc.qualifiedOrderReversed = ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(loc.qualifiedOrder, "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all");
+
+			// create the entire sql statement and replace the old one passed in
 			loc.beforeWhere = "SELECT " & loc.firstSelect & " FROM (SELECT TOP " & arguments.limit & " " & loc.secondSelect & " FROM (SELECT ";
 			if (ListLast(arguments.sql[2], " ") Contains " ")
 				loc.beforeWhere = loc.beforeWhere & "DISTINCT ";
