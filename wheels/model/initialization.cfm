@@ -18,12 +18,12 @@
 		loc.iEnd = ListLen(loc.validations);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			variables.wheels.class.validations[ListGetAt(loc.validations, loc.i)] = ArrayNew(1);
-		// run developer's init method
+		
+		// run developer's init method if it exists
 		if (StructKeyExists(variables, "init"))
-		{
 			init();
-		}
 
+		// load the database adapter
 		variables.wheels.class.adapter = $assignAdapter();
 
 		// set the table name unless set manually by the developer
@@ -33,6 +33,7 @@
 			if (Len(application.wheels.tableNamePrefix))
 				variables.wheels.class.tableName = application.wheels.tableNamePrefix & "_" & variables.wheels.class.tableName;
 		}
+
 		// introspect the database
 		try
 		{
@@ -48,10 +49,17 @@
 		loc.iEnd = loc.columns.recordCount;
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			if (StructKeyExists(variables.wheels.class.mapping, loc.columns["column_name"][loc.i]))
-				loc.property = variables.wheels.class.mapping[loc.columns["column_name"][loc.i]];
-			else
-				loc.property = loc.columns["column_name"][loc.i];
+			// set up properties and column mapping
+			loc.property = loc.columns["column_name"][loc.i]; // default the column to map to a property with the same name 
+			for (loc.key in variables.wheels.class.mapping)
+			{
+				if (variables.wheels.class.mapping[loc.key].type == "column" && variables.wheels.class.mapping[loc.key].value == loc.property)
+				{
+					// developer has chosen to map this column to a property with a different name so set that here
+					loc.property = loc.key;
+					break;
+				}
+			}
 			loc.type = SpanExcluding(loc.columns["type_name"][loc.i], "( ");
 			variables.wheels.class.properties[loc.property] = {};
 			variables.wheels.class.properties[loc.property].type = variables.wheels.class.adapter.$getType(loc.type);
@@ -71,6 +79,7 @@
 		if (!Len(variables.wheels.class.keys))
 			$throw(type="Wheels.NoPrimaryKey", message="No primary key exists on the '#variables.wheels.class.tableName#' table.", extendedInfo="Set an appropriate primary key (or multiple keys) on the '#variables.wheels.class.tableName#' table.");
 
+		// set up soft deletion and time stamping if the necessary columns in the table exist
 		if (Len(application.wheels.softDeleteProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.softDeleteProperty))
 		{
 			variables.wheels.class.softDeletion = true;

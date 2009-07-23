@@ -25,11 +25,28 @@
 	<cfreturn variables.wheels.class.tableName>
 </cffunction>
 
-<cffunction name="property" returntype="void" access="public" output="false" hint="Use this method to map an object property in your application to a table column in your database. You only need to use this method when you want to override the mapping that Wheels performs (i.e. `user.firstName` mapping to `users.firstname` for example).">
+<cffunction name="property" returntype="void" access="public" output="false" hint="Use this method to map an object property to either a table column with a different name than the property, to a specific SQL calculation or to a ColdFusion method. You only need to use this method when you want to override the default mapping that Wheels performs (i.e. `user.firstName` mapping to `users.firstname` for example).">
 	<cfargument name="name" type="string" required="true" hint="Name of the property">
-	<cfargument name="column" type="string" required="true" hint="Name of the column to map the property to">
+	<cfargument name="column" type="string" required="false" default="" hint="Name of the column to map the property to">
+	<cfargument name="sql" type="string" required="false" default="" hint="SQL to use to calculate property value">
+	<cfargument name="method" type="string" required="false" default="" hint="Method to call to calculate property value">
 	<cfscript>
-		variables.wheels.class.mapping[arguments.column] = arguments.name;
+		variables.wheels.class.mapping[arguments.name] = {};
+		if (Len(arguments.column))
+		{
+			variables.wheels.class.mapping[arguments.name].type = "column";
+			variables.wheels.class.mapping[arguments.name].value = arguments.column;
+		}
+		else if (Len(arguments.sql))
+		{
+			variables.wheels.class.mapping[arguments.name].type = "sql";
+			variables.wheels.class.mapping[arguments.name].value = arguments.sql;
+		}
+		else if (Len(arguments.method))
+		{
+			variables.wheels.class.mapping[arguments.name].type = "method";
+			variables.wheels.class.mapping[arguments.name].value = arguments.method;
+		}
 	</cfscript>
 </cffunction>
 
