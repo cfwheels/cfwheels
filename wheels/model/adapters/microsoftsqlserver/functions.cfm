@@ -61,14 +61,63 @@
 				loc.item = ListGetAt(loc.qualifiedOrder, loc.i);
 				loc.simpleOrder = ListAppend(loc.simpleOrder, ListLast(loc.item, "."));
 			}
-			loc.simpleOrderReversed = ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(loc.simpleOrder, "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all");
-			loc.qualifiedOrderReversed = ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(loc.qualifiedOrder, "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all");
 			loc.simpleSelect = ReplaceNoCase(ReplaceNoCase(loc.simpleOrder, " DESC", "", "all"), " ASC", "", "all");
 			loc.qualifiedSelect = ReplaceNoCase(ReplaceNoCase(loc.qualifiedOrder, " DESC", "", "all"), " ASC", "", "all");
-			loc.beforeWhere = "SELECT " & loc.simpleSelect & " FROM (SELECT TOP " & arguments.limit & " " & loc.simpleSelect & " FROM (SELECT ";
+			loc.newSimpleOrder = "";
+			loc.iEnd = ListLen(loc.simpleOrder);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.iItem = ListGetAt(loc.simpleOrder, loc.i);
+				if (!Find(" AS ", loc.iItem))
+					loc.newSimpleOrder = ListAppend(loc.newSimpleOrder, loc.iItem);
+			}
+			loc.simpleOrder = loc.newSimpleOrder;
+			loc.newQualifiedOrder = "";
+			loc.iEnd = ListLen(loc.qualifiedOrder);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.iItem = ListGetAt(loc.qualifiedOrder, loc.i);
+				if (!Find(" AS ", loc.iItem))
+					loc.newQualifiedOrder = ListAppend(loc.newQualifiedOrder, loc.iItem);
+			}
+			loc.qualifiedOrder = loc.newQualifiedOrder;
+			loc.firstSelect = "";
+			loc.iEnd = ListLen(loc.simpleSelect);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.iItem = ListGetAt(loc.simpleSelect, loc.i);
+				if (Find(" AS ", loc.iItem))
+					loc.firstSelect = ListAppend(loc.firstSelect, loc.iItem);
+			}
+			loc.iEnd = ListLen(loc.simpleSelect);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.iItem = ListGetAt(loc.simpleSelect, loc.i);
+				if (!Find(" AS ", loc.iItem) && !ListContainsNoCase(loc.firstSelect, loc.iItem & " AS "))
+					loc.firstSelect = ListAppend(loc.firstSelect, loc.iItem);
+			}
+			loc.secondSelect = "";
+			loc.iEnd = ListLen(loc.simpleSelect);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.iItem = ListGetAt(loc.simpleSelect, loc.i);
+				if (!Find(" AS ", loc.iItem))
+					loc.secondSelect = ListAppend(loc.secondSelect, loc.iItem);
+			}
+			loc.thirdSelect = "";
+			loc.iEnd = ListLen(loc.qualifiedSelect);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.iItem = ListGetAt(loc.qualifiedSelect, loc.i);
+				if (!Find(" AS ", loc.iItem))
+					loc.thirdSelect = ListAppend(loc.thirdSelect, loc.iItem);
+			}
+			loc.simpleOrderReversed = ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(loc.simpleOrder, "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all");
+			loc.qualifiedOrderReversed = ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(loc.qualifiedOrder, "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all");
+			loc.beforeWhere = "SELECT " & loc.firstSelect & " FROM (SELECT TOP " & arguments.limit & " " & loc.secondSelect & " FROM (SELECT ";
 			if (ListLast(arguments.sql[2], " ") Contains " ")
 				loc.beforeWhere = loc.beforeWhere & "DISTINCT ";
-			loc.beforeWhere = loc.beforeWhere & "TOP " & arguments.limit+arguments.offset & " " & loc.qualifiedSelect & " " & arguments.sql[2];
+			loc.beforeWhere = loc.beforeWhere & "TOP " & arguments.limit+arguments.offset & " " & loc.thirdSelect & " " & arguments.sql[2];
 			loc.afterWhere = "ORDER BY " & loc.qualifiedOrder & ") AS tmp1 ORDER BY " & loc.simpleOrderReversed & ") AS tmp2 ORDER BY " & loc.simpleOrder;
 			ArrayDeleteAt(arguments.sql, 1);
 			ArrayDeleteAt(arguments.sql, 1);
