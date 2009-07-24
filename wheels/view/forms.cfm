@@ -363,8 +363,8 @@
 <cffunction name="checkBox" returntype="string" access="public" output="false" hint="Builds and returns a string containing a check box form control based on the supplied `objectName` and `property`.">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
-	<cfargument name="checkedValue" type="string" required="false" default="#application.wheels.checkBox.checkedValue#" hint="The value of the check box when its on the `checked` state">
-	<cfargument name="uncheckedValue" type="string" required="false" default="#application.wheels.checkBox.uncheckedValue#" hint="The value of the check box when its on the `unchecked` state">
+	<cfargument name="checkedValue" type="string" required="false" default="#application.wheels.checkBox.checkedValue#" hint="The value of the check box when it's on the `checked` state">
+	<cfargument name="uncheckedValue" type="string" required="false" default="#application.wheels.checkBox.uncheckedValue#" hint="The value of the check box when it's on the `unchecked` state">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.checkBox.label#" hint="See documentation for `textField`">
 	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.checkBox.wrapLabel#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.checkBox.prepend#" hint="See documentation for `textField`">
@@ -382,7 +382,7 @@
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = arguments.checkedValue;
 		loc.value = $formValue(argumentCollection=arguments);
-		if (loc.value eq arguments.value || isnumeric(loc.value) && loc.value eq 1 || not isnumeric(loc.value) && IsBoolean(loc.value) && loc.value)
+		if (loc.value == arguments.value || IsNumeric(loc.value) && loc.value == 1 || !IsNumeric(loc.value) && IsBoolean(loc.value) && loc.value)
 			arguments.checked = "checked";
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,checkedValue,uncheckedValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments);
 		if (!IsStruct(arguments.objectName))
