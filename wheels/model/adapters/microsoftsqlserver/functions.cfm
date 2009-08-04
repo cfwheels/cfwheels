@@ -34,12 +34,6 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$dump" returntype="struct" access="public" output="false">
-	<cfargument name="var" type="any" required="true">
-	<cfdump var="#arguments.var#">
-	<cfabort>
-</cffunction>
-
 <cffunction name="$query" returntype="struct" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="limit" type="numeric" required="false" default=0>
