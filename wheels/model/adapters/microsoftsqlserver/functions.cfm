@@ -34,6 +34,12 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="$dump" returntype="struct" access="public" output="false">
+	<cfargument name="var" type="any" required="true">
+	<cfdump var="#arguments.var#">
+	<cfabort>
+</cffunction>
+
 <cffunction name="$query" returntype="struct" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="limit" type="numeric" required="false" default=0>
@@ -45,98 +51,51 @@
 		var query = {};
 		if (arguments.limit > 0)
 		{
-			loc.select = ReplaceNoCase(arguments.sql[1], "SELECT ", "");
-			loc.qualifiedOrder = ReplaceNoCase(arguments.sql[ArrayLen(arguments.sql)], "ORDER BY ", "");
-			
-			// the primary keys listed in the select clause needs to be added to the order clause as well for the query to work properly
-			loc.iEnd = ListLen(loc.select);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				loc.iItem = ListGetAt(loc.select, loc.i);
-				if (!ListContainsNoCase(loc.qualifiedOrder, loc.iItem))
-					loc.qualifiedOrder = ListAppend(loc.qualifiedOrder, "#loc.iItem# ASC");
-			}
-			
-			// create the simple order clause (used in the two outer queries) by revoming the table names from the qualified select
-			loc.simpleOrder = "";
-			loc.iEnd = ListLen(loc.qualifiedOrder);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-				loc.simpleOrder = ListAppend(loc.simpleOrder, ListLast(ListGetAt(loc.qualifiedOrder, loc.i), "."));
-			
-			// the select clauses are just a variation of the order by clause since we have to select what we order by anyway for the sub queries to work
-			loc.simpleSelect = ReplaceNoCase(ReplaceNoCase(loc.simpleOrder, " DESC", "", "all"), " ASC", "", "all");
-			loc.qualifiedSelect = ReplaceNoCase(ReplaceNoCase(loc.qualifiedOrder, " DESC", "", "all"), " ASC", "", "all");
-			
-			// remove any " AS " aliased columns from the order by clauses
-			loc.newSimpleOrder = "";
-			loc.iEnd = ListLen(loc.simpleOrder);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				loc.iItem = ListGetAt(loc.simpleOrder, loc.i);
-				if (!Find(" AS ", loc.iItem))
-					loc.newSimpleOrder = ListAppend(loc.newSimpleOrder, loc.iItem);
-			}
-			loc.simpleOrder = loc.newSimpleOrder;
-			loc.newQualifiedOrder = "";
-			loc.iEnd = ListLen(loc.qualifiedOrder);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				loc.iItem = ListGetAt(loc.qualifiedOrder, loc.i);
-				if (!Find(" AS ", loc.iItem))
-					loc.newQualifiedOrder = ListAppend(loc.newQualifiedOrder, loc.iItem);
-			}
-			loc.qualifiedOrder = loc.newQualifiedOrder;
+			// select clause always comes first in the array, the order by clause last, remove the leading keywords leaving only the columns and set to the ones used in the inner most sub query
+			loc.thirdSelect = ReplaceNoCase(arguments.sql[1], "SELECT ", "");
+			loc.thirdOrder = ReplaceNoCase(arguments.sql[ArrayLen(arguments.sql)], "ORDER BY ", "");
+	
+			// the first select is the outer most in the query and need to contain columns without table names and using aliases when they exist
+			loc.firstSelect = $columnAlias(list=$tableName(list=loc.thirdSelect, action="remove"), action="keep");
 
-			// create the outer most select clause, add the " AS " aliased columns first and then the others unless they already exist
-			loc.firstSelect = "";
-			loc.iEnd = ListLen(loc.simpleSelect);
+			// we need to add columns from the inner order clause to the select clauses in the inner two queries
+			loc.iEnd = ListLen(loc.thirdOrder);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.iItem = ListGetAt(loc.simpleSelect, loc.i);
-				if (Find(" AS ", loc.iItem))
-					loc.firstSelect = ListAppend(loc.firstSelect, loc.iItem);
-			}
-			loc.iEnd = ListLen(loc.simpleSelect);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				loc.iItem = ListGetAt(loc.simpleSelect, loc.i);
-				if (!Find(" AS ", loc.iItem) && !ListContainsNoCase(loc.firstSelect, loc.iItem & " AS "))
-					loc.firstSelect = ListAppend(loc.firstSelect, loc.iItem);
-			}
-
-			// create the middle and inner most select clauses
-			loc.secondSelect = "";
-			loc.iEnd = ListLen(loc.simpleSelect);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				loc.iItem = SpanExcluding(ListGetAt(loc.simpleSelect, loc.i), " ");
-				if (!ListFindNoCase(loc.secondSelect, loc.iItem))
-					loc.secondSelect = ListAppend(loc.secondSelect, loc.iItem);
-			}
-			loc.thirdSelect = "";
-			loc.iEnd = ListLen(loc.qualifiedSelect);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				loc.iItem = SpanExcluding(ListGetAt(loc.qualifiedSelect, loc.i), " ");
+				loc.iItem = ReplaceNoCase(ReplaceNoCase(ListGetAt(loc.thirdOrder, loc.i), " ASC", ""), " DESC", "");
 				if (!ListFindNoCase(loc.thirdSelect, loc.iItem))
 					loc.thirdSelect = ListAppend(loc.thirdSelect, loc.iItem);
 			}
 
-			// reverse ordering for use in sub queries
-			loc.simpleOrderReversed = ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(loc.simpleOrder, "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all");
-			loc.qualifiedOrderReversed = ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(loc.qualifiedOrder, "DESC", chr(7), "all"), "ASC", "DESC", "all"), chr(7), "ASC", "all");
+			// the second select also needs to contain columns without table names and using aliases when they exist (but now including the columns added above)
+			loc.secondSelect = $columnAlias(list=$tableName(list=loc.thirdSelect, action="remove"), action="keep");
 
-			// create the entire sql statement and replace the old one passed in
+			// first order also needs the table names removed, the column aliases can be kept since they are removed before running the query anyway
+			loc.firstOrder = $tableName(list=loc.thirdOrder, action="remove");
+
+			// second order clause is the same as the first but with the ordering reversed
+			loc.secondOrder = Replace(Replace(Replace(loc.firstOrder, " DESC", chr(7), "all"), " ASC", " DESC", "all"), chr(7), " ASC", "all");
+
+			// fix column aliases from order by clauses
+			loc.thirdOrder = $columnAlias(list=loc.thirdOrder, action="remove");
+			loc.secondOrder = $columnAlias(list=loc.secondOrder, action="keep");
+			loc.firstOrder = $columnAlias(list=loc.firstOrder, action="keep");
+
+			// build new sql string and replace the old one with it
 			loc.beforeWhere = "SELECT " & loc.firstSelect & " FROM (SELECT TOP " & arguments.limit & " " & loc.secondSelect & " FROM (SELECT ";
-			if (ListLast(arguments.sql[2], " ") Contains " ")
+			if (ListRest(arguments.sql[2], " ") Contains " ")
 				loc.beforeWhere = loc.beforeWhere & "DISTINCT ";
 			loc.beforeWhere = loc.beforeWhere & "TOP " & arguments.limit+arguments.offset & " " & loc.thirdSelect & " " & arguments.sql[2];
-			loc.afterWhere = "ORDER BY " & loc.qualifiedOrder & ") AS tmp1 ORDER BY " & loc.simpleOrderReversed & ") AS tmp2 ORDER BY " & loc.simpleOrder;
+			loc.afterWhere = "ORDER BY " & loc.thirdOrder & ") AS tmp1 ORDER BY " & loc.secondOrder & ") AS tmp2 ORDER BY " & loc.firstOrder;
 			ArrayDeleteAt(arguments.sql, 1);
 			ArrayDeleteAt(arguments.sql, 1);
 			ArrayDeleteAt(arguments.sql, ArrayLen(arguments.sql));
 			ArrayPrepend(arguments.sql, loc.beforeWhere);
 			ArrayAppend(arguments.sql, loc.afterWhere);
+		}
+		else
+		{
+			arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
 		}
 		arguments.name = "query.name";
 		arguments.result = "loc.result";

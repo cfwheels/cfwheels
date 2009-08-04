@@ -39,6 +39,7 @@
 	<cfscript>
 		var loc = {};
 		var query = {};
+		arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
 		arguments.name = "query.name";
 		arguments.result = "loc.result";
 		arguments.datasource = variables.instance.connection.datasource;

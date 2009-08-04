@@ -71,7 +71,19 @@
 		// count records and get primary keys for pagination
 		if (arguments.page)
 		{
-			if (!Len(arguments.order))
+			if (Len(arguments.order))
+			{
+				// insert primary keys to order clause unless they are already there, this guarantees that the ordering is unique which is required to make pagination work properly
+				loc.compareList = Replace(ReplaceNoCase(ReplaceNoCase(arguments.order, "ASC", "", "all"), "DESC", "", "all"), ", ", ",", "all");
+				loc.iEnd = ListLen(variables.wheels.class.keys);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					loc.iItem = ListGetAt(variables.wheels.class.keys, loc.i);
+					if (!ListFindNoCase(loc.compareList, loc.iItem))
+						arguments.order = ListAppend(arguments.order, loc.iItem);
+				}
+			}
+			else
 			{
 				// we can't paginate without any order so we default to ascending ordering by the primary key column(s)
 				arguments.order = primaryKey();
@@ -589,12 +601,9 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.classData = loc.classes[loc.i];
-				loc.jEnd = ListLen(loc.classData.propertyList);
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-				{
-					loc.jItem = Trim(ListGetAt(loc.classData.propertyList, loc.j));
-					arguments.select = ListAppend(arguments.select, loc.jItem);
-				}
+				arguments.select = ListAppend(arguments.select, loc.classData.propertyList);
+				if (Len(loc.classData.calculatedPropertyList))
+					arguments.select = ListAppend(arguments.select, loc.classData.calculatedPropertyList);
 			}
 		}
 
@@ -608,15 +617,16 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.iItem = Trim(ListGetAt(arguments.select, loc.i));
-	
+				
 				// look for duplicates
-				loc.duplicateCount = ListValueCount(loc.addedProperties, loc.iItem);
+				loc.duplicateCount = ListValueCountNoCase(loc.addedProperties, loc.iItem);
 				loc.addedProperties = ListAppend(loc.addedProperties, loc.iItem);
 	
 				// loop through all classes (current and all included ones)
 				loc.jEnd = ArrayLen(loc.classes);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
+					loc.toAppend = "";
 					loc.classData = loc.classes[loc.j];
 	
 					// get the class name (the variable it is stored in differs depending on if it's taken from the current class or the association info)
@@ -630,23 +640,32 @@
 						loc.addedPropertiesByModel[loc.modelName] = "";
 	
 					// if we find the property in this model and it's not already added we go ahead and add it to the select clause
-					if (ListFindNoCase(loc.classData.propertyList, loc.iItem) && !ListFind(loc.addedPropertiesByModel[loc.modelName], loc.iItem))
+					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.modelName], loc.iItem))
 					{
 						if (loc.duplicateCount)
-							loc.toAppend = "X" & loc.j & loc.classData.tableName & ".";
-						else
-							loc.toAppend = loc.classData.tableName & ".";
-						if (ListFind(loc.classData.columnList, loc.iItem))
-							loc.toAppend = loc.toAppend & loc.iItem;
-						else
-							loc.toAppend = loc.toAppend & loc.classData.properties[loc.iItem].column & " AS " & loc.iItem;
+							loc.toAppend = loc.toAppend & "[[duplicate]]" & loc.j;
+						if (ListFindNoCase(loc.classData.propertyList, loc.iItem))
+						{
+							loc.toAppend = loc.toAppend & loc.classData.tableName & ".";
+							if (ListFindNoCase(loc.classData.columnList, loc.iItem))
+								loc.toAppend = loc.toAppend & loc.iItem;
+							else
+								loc.toAppend = loc.toAppend & loc.classData.properties[loc.iItem].column & " AS " & loc.iItem;
+						}
+						else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem))
+						{
+							loc.toAppend = loc.toAppend & "(" & Replace(loc.classData.calculatedProperties[loc.iItem].sql, ",", "[[comma]]", "all") & ") AS " & loc.iItem;
+						}
 						loc.addedPropertiesByModel[loc.modelName] = ListAppend(loc.addedPropertiesByModel[loc.modelName], loc.iItem);
 						break;
 					}
 				}
-				loc.select = ListAppend(loc.select, loc.toAppend);
+				if (Len(loc.toAppend))
+					loc.select = ListAppend(loc.select, loc.toAppend);
+				else if (application.wheels.environment != "production")
+					$throw(type="Wheels", message="Column Not Found", extendedInfo="Wheels looked for a column named '#loc.iItem#' but couldn't find it.");
 			}
-			
+
 			// let's replace eventual duplicates in the clause by prepending the class name		
 			if (Len(arguments.include))
 			{
@@ -662,10 +681,10 @@
 					
 					// check if this one has been flagged as a duplicate, we get the number of classes to skip and also remove the flagged info from the item
 					loc.duplicateCount = 0;
-					if (Left(loc.iItem, 1) == "X")
+					if (Left(loc.iItem, 13) == "[[duplicate]]")
 					{
-						loc.duplicateCount = Mid(loc.iItem, 2, 1);
-						loc.iItem = Mid(loc.iItem, 3, Len(loc.iItem)-2);
+						loc.duplicateCount = Mid(loc.iItem, 14, 1);
+						loc.iItem = Mid(loc.iItem, 15, Len(loc.iItem)-14);
 					}
 					
 					if (!loc.duplicateCount)
@@ -691,7 +710,7 @@
 						else
 							loc.newItem = loc.iItem & " AS " & loc.newProperty;
 					}
-					if (!ListFind(loc.addedProperties, loc.newProperty))
+					if (!ListFindNoCase(loc.addedProperties, loc.newProperty))
 					{
 						loc.newSelect = ListAppend(loc.newSelect, loc.newItem);
 						loc.addedProperties = ListAppend(loc.addedProperties, loc.newProperty);
@@ -762,6 +781,7 @@
 			loc.where = ReplaceList(loc.paramedWhere, "AND,OR", "#chr(7)#AND,#chr(7)#OR");
 			for (loc.i=1; loc.i <= ListLen(loc.where, Chr(7)); loc.i++)
 			{
+				loc.param = {};
 				loc.element = Replace(ListGetAt(loc.where, loc.i, Chr(7)), Chr(7), "", "one");
 				if (Find("(", loc.element) && Find(")", loc.element))
 					loc.elementDataPart = SpanExcluding(Reverse(SpanExcluding(Reverse(loc.element), "(")), ")");
@@ -772,9 +792,6 @@
 				else
 					loc.elementDataPart = loc.element;
 				loc.elementDataPart = Trim(ReplaceList(loc.elementDataPart, "AND,OR", ""));
-				loc.param = {};
-
-
 				loc.temp = REFind("^([^ ]*) ?(=|<>|<|>|<=|>=|!=|!<|!>| LIKE)", loc.elementDataPart, 1, true);
 				if (ArrayLen(loc.temp.len) > 1)
 				{
@@ -784,14 +801,26 @@
 					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 					{
 						loc.classData = loc.classes[loc.j];
-						if ((loc.param.property Contains "." && ListFirst(loc.param.property, ".") == loc.classData.tableName || loc.param.property Does Not Contain ".") && ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
+						if (loc.param.property Does Not Contain "." || ListFirst(loc.param.property, ".") == loc.classData.tableName)
 						{
-							loc.param.type = loc.classData.properties[ListLast(loc.param.property, ".")].type;
-							loc.param.scale = loc.classData.properties[ListLast(loc.param.property, ".")].scale;
-							loc.param.column = loc.classData.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
-							break;
+							if (ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
+							{
+								loc.param.type = loc.classData.properties[ListLast(loc.param.property, ".")].type;
+								loc.param.scale = loc.classData.properties[ListLast(loc.param.property, ".")].scale;
+								loc.param.column = loc.classData.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
+								break;
+							}
+							else if (ListFindNoCase(loc.classData.calculatedPropertyList, ListLast(loc.param.property, ".")))
+							{
+								loc.param.type = "CF_SQL_CHAR";
+								loc.param.scale = 0;
+								loc.param.column = loc.classData.calculatedProperties[ListLast(loc.param.property, ".")].sql;
+								break;
+							}
 						}
 					}
+					if (application.wheels.environment != "production" && !StructKeyExists(loc.param, "column"))
+						$throw(type="Wheels", message="Column Not Found", extendedInfo="Wheels looked for a column named '#loc.param.property#' but couldn't find it.");
 					loc.temp = REFind("^[^ ]* ?(=|<>|<|>|<=|>=|!=|!<|!>| LIKE)", loc.elementDataPart, 1, true);
 					loc.param.operator = Trim(Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]));
 					ArrayAppend(loc.params, loc.param);
@@ -811,9 +840,7 @@
 				{
 					loc.column = loc.params[loc.i].column;
 					ArrayAppend(arguments.sql, "#PreserveSingleQuotes(loc.column)#	#loc.params[loc.i].operator#");
-					if (application.wheels.environment != "production" && !StructKeyExists(loc.params[loc.i], "type"))
-							$throw(type="Wheels", message="Column Not Found", extendedInfo="Wheels looked for a column named '#loc.column#' but couldn't find it.");
-					loc.param = {type=loc.params[loc.i].type, scale=loc.params[loc.i].scale}; // removed: property=loc.params[loc.i].property, column=loc.params[loc.i].column
+					loc.param = {type=loc.params[loc.i].type, scale=loc.params[loc.i].scale};
 					ArrayAppend(arguments.sql, loc.param);
 				}
 			}
@@ -895,7 +922,7 @@
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.iItem = Trim(ListGetAt(arguments.order, loc.i));
-					if (loc.iItem Does Not Contain " ASC" && loc.iItem Does Not Contain " DESC")
+					if (!FindNoCase(" ASC", loc.iItem) && !FindNoCase(" DESC", loc.iItem))
 						loc.iItem = loc.iItem & " ASC";
 					if (loc.iItem Contains ".")
 					{
@@ -907,11 +934,18 @@
 						loc.jEnd = ArrayLen(loc.classes);
 						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 						{
+							loc.toAdd = "";
 							loc.classData = loc.classes[loc.j];
-							if (StructKeyExists(loc.classData.properties, loc.property))
+							if (ListFindNoCase(loc.classData.propertyList, loc.property))
+								loc.toAdd = loc.classData.tableName & "." & loc.classData.properties[loc.property].column;
+							else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.property))
+								loc.toAdd = Replace(loc.classData.calculatedProperties[loc.property].sql, ",", "[[comma]]", "all");
+							if (!ListFindNoCase(loc.classData.columnList, loc.property))
+								loc.toAdd = loc.toAdd & " AS " & loc.property;
+							if (Len(loc.toAdd))
 							{
-								loc.toAdd = loc.classData.tableName & "." & loc.classData.properties[loc.property].column & " " & ListLast(loc.iItem, " ");
-								if (!ListContainsNoCase(loc.order, SpanExcluding(loc.toAdd, " ")))
+								loc.toAdd = loc.toAdd & " " & UCase(ListLast(loc.iItem, " "));
+								if (!ListFindNoCase(loc.order, loc.toAdd))
 								{
 									loc.order = ListAppend(loc.order, loc.toAdd);
 									break;
@@ -987,9 +1021,11 @@
 			}
 
 			loc.classAssociations[loc.name].tableName = loc.associatedClass.$classData().tableName;
-			loc.classAssociations[loc.name].propertyList = loc.associatedClass.$classData().propertyList;
 			loc.classAssociations[loc.name].columnList = loc.associatedClass.$classData().columnList;
 			loc.classAssociations[loc.name].properties = loc.associatedClass.$classData().properties;
+			loc.classAssociations[loc.name].propertyList = loc.associatedClass.$classData().propertyList;
+			loc.classAssociations[loc.name].calculatedProperties = loc.associatedClass.$classData().calculatedProperties;
+			loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClass.$classData().calculatedPropertyList;
 
 			// create the join string
 			if (!IsBoolean(loc.classAssociations[loc.name].dependent) || loc.classAssociations[loc.name].dependent)

@@ -7,6 +7,8 @@
 		variables.wheels.class.name = arguments.name;
 		variables.wheels.class.whereRegex = "((=|<>|<|>|<=|>=|!=|!<|!>| LIKE) ?)(''|'.+?'()|([0-9]|\.)+()|\([0-9]+(,[0-9]+)*\))(($|\)| (AND|OR)))";
 		variables.wheels.class.mapping = {};
+		variables.wheels.class.properties = {};
+		variables.wheels.class.calculatedProperties = {};
 		variables.wheels.class.associations = {};
 		variables.wheels.class.callbacks = {};
 		variables.wheels.class.connection = {datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword};
@@ -78,6 +80,18 @@
 		}
 		if (!Len(variables.wheels.class.keys))
 			$throw(type="Wheels.NoPrimaryKey", message="No primary key exists on the '#variables.wheels.class.tableName#' table.", extendedInfo="Set an appropriate primary key (or multiple keys) on the '#variables.wheels.class.tableName#' table.");
+
+		// add calculated properties
+		variables.wheels.class.calculatedPropertyList = "";
+		for (loc.key in variables.wheels.class.mapping)
+		{
+			if (variables.wheels.class.mapping[loc.key].type != "column")
+			{
+				variables.wheels.class.calculatedPropertyList = ListAppend(variables.wheels.class.calculatedPropertyList, loc.key);
+				variables.wheels.class.calculatedProperties[loc.key] = {};
+				variables.wheels.class.calculatedProperties[loc.key][variables.wheels.class.mapping[loc.key].type] = variables.wheels.class.mapping[loc.key].value;
+			}
+		}
 
 		// set up soft deletion and time stamping if the necessary columns in the table exist
 		if (Len(application.wheels.softDeleteProperty) && StructKeyExists(variables.wheels.class.properties, application.wheels.softDeleteProperty))

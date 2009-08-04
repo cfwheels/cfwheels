@@ -81,7 +81,10 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.iItem = Trim(ListGetAt(arguments.property, loc.i));
-				loc.properties = ListAppend(loc.properties, variables.wheels.class.tableName & "." & variables.wheels.class.properties[loc.iItem].column);
+				if (ListFindNoCase(variables.wheels.class.propertyList, loc.iItem))
+					loc.properties = ListAppend(loc.properties, variables.wheels.class.tableName & "." & variables.wheels.class.properties[loc.iItem].column);
+				else if (ListFindNoCase(variables.wheels.class.calculatedPropertyList, loc.iItem))
+					loc.properties = ListAppend(loc.properties, variables.wheels.class.calculatedProperties[loc.iItem].sql);
 			}
 			arguments.select = arguments.select & loc.properties;
 		}

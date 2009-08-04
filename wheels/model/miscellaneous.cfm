@@ -29,7 +29,6 @@
 	<cfargument name="name" type="string" required="true" hint="Name of the property">
 	<cfargument name="column" type="string" required="false" default="" hint="Name of the column to map the property to">
 	<cfargument name="sql" type="string" required="false" default="" hint="SQL to use to calculate property value">
-	<cfargument name="method" type="string" required="false" default="" hint="Method to call to calculate property value">
 	<cfscript>
 		variables.wheels.class.mapping[arguments.name] = {};
 		if (Len(arguments.column))
@@ -41,11 +40,6 @@
 		{
 			variables.wheels.class.mapping[arguments.name].type = "sql";
 			variables.wheels.class.mapping[arguments.name].value = arguments.sql;
-		}
-		else if (Len(arguments.method))
-		{
-			variables.wheels.class.mapping[arguments.name].type = "method";
-			variables.wheels.class.mapping[arguments.name].value = arguments.method;
 		}
 	</cfscript>
 </cffunction>

@@ -35,6 +35,7 @@
 	<cfscript>
 		var loc = {};
 		var query = {};
+		arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
 		if (arguments.limit > 0)
 		{
 			loc.beforeWhere = "SELECT * FROM (SELECT a.*, rownum rnum FROM (";
