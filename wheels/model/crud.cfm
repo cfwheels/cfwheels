@@ -29,6 +29,7 @@
 		loc.create = arguments.$create;
 		arguments.maxRows = 1;
 		StructDelete(arguments, "$create");
+		StructDelete(arguments, "returnAs"); // returnAs gets passed through in dynamic methods sometimes but needs to be reset to the default
 		loc.query = findAll(argumentCollection=arguments);
 		if (loc.create)
 		{
@@ -65,8 +66,9 @@
 	<cfscript>
 		var loc = {};
 
-		if (application.wheels.environment != "production" && Len(arguments.include) && arguments.returnAs == "objects")
-			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot include associations when returning an array of objects.");
+		// we only allow one association to be loaded when returning objects
+		if (application.wheels.environment != "production" && arguments.returnAs == "objects" && (Find(",", arguments.include) || Find("(", arguments.include)))
+			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot include more than one association when returning an array of objects.");
 
 		// count records and get primary keys for pagination
 		if (arguments.page)
@@ -185,9 +187,19 @@
 			else if (arguments.returnAs == "objects")
 			{
 				loc.returnValue = [];
+				loc.doneObjects = "";
 				loc.iEnd = loc.findAll.query.recordCount;
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-					ArrayAppend(loc.returnValue, $createInstance(properties=loc.findAll.query, persisted=true, row=loc.i));
+				{
+					loc.object = $createInstance(properties=loc.findAll.query, persisted=true, row=loc.i);
+					if (!ListFind(loc.doneObjects, loc.object.key(), Chr(7)))
+					{
+						if (Len(arguments.include))
+							loc.object[arguments.include] = $invoke(componentReference=loc.object, method=arguments.include, returnAs=arguments.returnAs);
+						ArrayAppend(loc.returnValue, loc.object);
+						loc.doneObjects = ListAppend(loc.doneObjects, loc.object.key(), Chr(7));
+					}
+				}
 			}
 		}
 	</cfscript>
@@ -1156,10 +1168,15 @@
 		// setup object properties in the this scope
 		if (IsQuery(arguments.properties) && arguments.properties.recordCount != 0)
 		{
-			loc.iEnd = ListLen(arguments.properties.columnList);
+			loc.allProperties = ListAppend(variables.wheels.class.propertyList, variables.wheels.class.calculatedPropertyList);
+			loc.iEnd = ListLen(loc.allProperties);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				this[ListGetAt(arguments.properties.columnList, loc.i)] = arguments.properties[ListGetAt(arguments.properties.columnList, loc.i)][arguments.row];
+				loc.iItem = ListGetAt(loc.allProperties, loc.i);
+				if (ListFindNoCase(arguments.properties.columnList, arguments.name & loc.iItem))
+					this[loc.iItem] = arguments.properties[arguments.name & loc.iItem][arguments.row];
+				else if (ListFindNoCase(arguments.properties.columnList, loc.iItem))
+					this[loc.iItem] = arguments.properties[loc.iItem][arguments.row];
 			}
 		}
 		else if (IsStruct(arguments.properties) && !StructIsEmpty(arguments.properties))
