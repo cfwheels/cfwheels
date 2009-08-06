@@ -323,7 +323,7 @@
 			loc.executeArgs.key = loc.key;
 			loc.executeArgs.time = loc.timeToCache;
 			loc.executeArgs.category = loc.category;
-			$doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			request.wheels.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 		}
 		else
 		{
