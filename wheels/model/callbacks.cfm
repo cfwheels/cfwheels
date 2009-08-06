@@ -133,18 +133,21 @@
 						loc.args[loc.kItem] = arguments.collection[loc.kItem][loc.j];
 					}
 					loc.returnValue = $invoke(method=variables.wheels.class.callbacks[arguments.type][loc.i], argumentCollection=loc.args);
-					if (IsStruct(loc.returnValue))
+					if (StructKeyExists(loc, "returnValue"))
 					{
-						for (loc.key in loc.returnValue)
+						if (IsStruct(loc.returnValue))
 						{
-							if (!ListFindNoCase(arguments.collection.columnList, loc.key))
-								QueryAddColumn(arguments.collection, loc.key, ArrayNew(1));
-							arguments.collection[loc.key][loc.j] = loc.returnValue[loc.key];
+							for (loc.key in loc.returnValue)
+							{
+								if (!ListFindNoCase(arguments.collection.columnList, loc.key))
+									QueryAddColumn(arguments.collection, loc.key, ArrayNew(1));
+								arguments.collection[loc.key][loc.j] = loc.returnValue[loc.key];
+							}
+							loc.returnValue = true;
 						}
-						loc.returnValue = true;
+						if (!loc.returnValue)
+							break;
 					}
-					if (StructKeyExists(loc, "returnValue") && !loc.returnValue)
-						break;
 				}
 			}
 			else
