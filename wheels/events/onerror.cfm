@@ -51,7 +51,7 @@
 			else
 			{
 				$header(statusCode=500, statusText="Internal Server Error");
-				loc.returnValue = $includeAndReturnOutput($template="#application.wheels.eventPath#/onerror.cfm");
+				loc.returnValue = $includeAndReturnOutput($template="#application.wheels.eventPath#/onerror.cfm", exception=arguments.exception);
 			}
 		}
 		else
