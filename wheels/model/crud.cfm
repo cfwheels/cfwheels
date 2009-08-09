@@ -136,7 +136,7 @@
 		{
 			// make the where clause generic for use in caching
 			loc.originalWhere = arguments.where;
-			arguments.where = REReplace(arguments.where, variables.wheels.class.whereRegex, "\1?\8" , "all");
+			arguments.where = REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all");
 
 			// get info from cache when available, otherwise create the generic select, from, where and order by clause
 			loc.queryShellKey = variables.wheels.class.name & $hashStruct(arguments);
@@ -777,9 +777,6 @@
 		var loc = {};
 		if (Len(arguments.where))
 		{
-			// make the where clause generic
-			arguments.where = REReplace(arguments.where, variables.wheels.class.whereRegex, "\1?\8" , "all");
-
 			// setup an array containing class info for current class and all the ones that should be included
 			loc.classes = [];
 			if (Len(arguments.include))
@@ -788,10 +785,8 @@
 			ArrayAppend(arguments.sql, "WHERE");
 			if (arguments.$softDeleteCheck && variables.wheels.class.softDeletion)
 				ArrayAppend(arguments.sql, " (");
-			loc.regex = "((=|<>|<|>|<=|>=|!=|!<|!>| LIKE) ?)(''|'.+?'()|([0-9]|\.)+()|\([0-9]+(,[0-9]+)*\))(($|\)| (AND|OR)))";
-			loc.paramedWhere = REReplace(arguments.where, loc.regex, "\1?\8" , "all");
 			loc.params = ArrayNew(1);
-			loc.where = ReplaceList(loc.paramedWhere, "AND,OR", "#chr(7)#AND,#chr(7)#OR");
+			loc.where = ReplaceList(REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all"), "AND,OR", "#chr(7)#AND,#chr(7)#OR");
 			for (loc.i=1; loc.i <= ListLen(loc.where, Chr(7)); loc.i++)
 			{
 				loc.param = {};
@@ -805,7 +800,7 @@
 				else
 					loc.elementDataPart = loc.element;
 				loc.elementDataPart = Trim(ReplaceList(loc.elementDataPart, "AND,OR", ""));
-				loc.temp = REFind("^([^ ]*) ?(=|<>|<|>|<=|>=|!=|!<|!>| LIKE)", loc.elementDataPart, 1, true);
+				loc.temp = REFind("^([a-zA-Z0-9-_\.]*) ?#variables.wheels.class.RESQLOperators#", loc.elementDataPart, 1, true);
 				if (ArrayLen(loc.temp.len) > 1)
 				{
 					loc.where = Replace(loc.where, loc.element, Replace(loc.element, loc.elementDataPart, "?", "one"));
@@ -834,7 +829,7 @@
 					}
 					if (application.wheels.environment != "production" && !StructKeyExists(loc.param, "column"))
 						$throw(type="Wheels", message="Column Not Found", extendedInfo="Wheels looked for a column named '#loc.param.property#' but couldn't find it.");
-					loc.temp = REFind("^[^ ]* ?(=|<>|<|>|<=|>=|!=|!<|!>| LIKE)", loc.elementDataPart, 1, true);
+					loc.temp = REFind("^[a-zA-Z0-9-_\.]* ?#variables.wheels.class.RESQLOperators#", loc.elementDataPart, 1, true);
 					loc.param.operator = Trim(Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]));
 					ArrayAppend(loc.params, loc.param);
 				}
@@ -885,7 +880,7 @@
 			loc.originalValues = [];
 			while (!StructKeyExists(loc, "temp") || ArrayLen(loc.temp.len) > 1)
 			{
-				loc.temp = REFind(variables.wheels.class.whereRegex, arguments.where, loc.start, true);
+				loc.temp = REFind(variables.wheels.class.RESQLWhere, arguments.where, loc.start, true);
 				if (ArrayLen(loc.temp.len) > 1)
 				{
 					loc.start = loc.temp.pos[4] + loc.temp.len[4];
