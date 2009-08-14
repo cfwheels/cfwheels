@@ -60,6 +60,7 @@
 	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.findAll.reload#" hint="Set to `true` to force Wheels to query the database even though an identical query has been run in the same request">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.findAll.parameterize#" hint="Set to `true` to use `cfqueryparam` on all columns or pass in a list of property names to use `cfqueryparam` on those only">
 	<cfargument name="returnAs" type="string" required="false" default="#application.wheels.findAll.returnAs#" hint="Set to `objects` to return an array of objects instead of a query">
+	<cfargument name="returnIncluded" type="boolean" required="false" default="#application.wheels.findAll.returnIncluded#" hint="When `returnAs` is set to `objects` you can set this argument to `false` to prevent returning objects fetched from associations specified in include (useful when you only need to include associations for use in the `WHERE` clause and want to avoid the performance hit that comes with object creation)">
 	<cfargument name="$limit" type="numeric" required="false" default=0>
 	<cfargument name="$offset" type="numeric" required="false" default=0>
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
@@ -189,14 +190,26 @@
 			{
 				loc.returnValue = [];
 				loc.doneObjects = "";
-				loc.iEnd = loc.findAll.query.recordCount;
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				for (loc.i=1; loc.i <= loc.findAll.query.recordCount; loc.i++)
 				{
 					loc.object = $createInstance(properties=loc.findAll.query, persisted=true, row=loc.i);
 					if (!ListFind(loc.doneObjects, loc.object.key(), Chr(7)))
 					{
-						if (Len(arguments.include))
-							loc.object[arguments.include] = $invoke(componentReference=loc.object, method=arguments.include, returnAs=arguments.returnAs);
+						if (Len(arguments.include) && arguments.returnIncluded)
+						{
+							if (ListFindNoCase("hasMany,manyToMany", variables.wheels.class.associations[arguments.include].type))
+							{
+								loc.object[arguments.include] = [];
+								for (loc.j=1; loc.j <= loc.findAll.query.recordCount; loc.j++)
+								{
+									ArrayAppend(loc.object[arguments.include], model(variables.wheels.class.associations[arguments.include].class).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.j));
+								}
+							}
+							else if (ListFindNoCase("hasOne,belongsTo", variables.wheels.class.associations[arguments.include].type))
+							{
+								loc.object[arguments.include] = model(variables.wheels.class.associations[arguments.include].class).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.i);
+							}
+						}
 						ArrayAppend(loc.returnValue, loc.object);
 						loc.doneObjects = ListAppend(loc.doneObjects, loc.object.key(), Chr(7));
 					}

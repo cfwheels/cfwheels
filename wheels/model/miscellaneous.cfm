@@ -88,125 +88,146 @@
 			{
 				if (ListFindNoCase(variables.wheels.class.associations[loc.key].methods, arguments.missingMethodName))
 				{
-					// set name from "posts" to "objects", for example, so we can use it in the switch below --->
-					loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, pluralize(loc.key), "objects"), singularize(loc.key), "object");
-					loc.info = $expandedAssociations(include=loc.key);
-					loc.info = loc.info[1];
-					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=variables.wheels.class.keys);
-					if (StructKeyExists(arguments.missingMethodArguments, "where"))
-						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
-					if (loc.info.type == "hasOne")
+					loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, pluralize(loc.key), "objects"), singularize(loc.key), "object"); // set name from "posts" to "objects", for example, so we can use it in the switch below
+					if (variables.wheels.class.associations[loc.key].type == "manyToMany")
 					{
-						if (loc.name == "object")
-						{
-							loc.method = "findOne";
-							arguments.missingMethodArguments.where = loc.where;
-						}
-						else if (loc.name == "hasObject")
-						{
-							loc.method = "exists";
-							arguments.missingMethodArguments.where = loc.where;
-						}
-						else if (loc.name == "newObject")
-						{
-							loc.method = "new";
-							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
-						}
-						else if (loc.name == "createObject")
-						{
-							loc.method = "create";
-							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
-						}
-						else if (loc.name == "removeObject")
-						{
-							loc.method = "updateOne";
-							arguments.missingMethodArguments.where = loc.where;
-							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey, setToNull=true);
-						}
-						else if (loc.name == "deleteObject")
-						{
-							loc.method = "deleteOne";
-							arguments.missingMethodArguments.where = loc.where;
-						}
-						else if (loc.name == "setObject")
-						{
-							loc.method = "updateByKey";
-							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
-							arguments.missingMethodArguments = $objectOrNumberToKey(arguments.missingMethodArguments);
-						}
+						//special handling for manyToMany here since it uses existing associations through several models rather than just the current one
+						loc.method = "findAll";
+						loc.joinAssociation = $expandedAssociations(include=variables.wheels.class.associations[loc.key].hasMany);
+						loc.joinAssociation = loc.joinAssociation[1];
+						loc.joinClass = loc.joinAssociation.class;
+						loc.info = model(loc.joinClass).$expandedAssociations(include=variables.wheels.class.associations[loc.key].belongsTo);
+						loc.info = loc.info[1];
+						loc.include = variables.wheels.class.associations[loc.key].hasMany;
+						if (StructKeyExists(arguments.missingMethodArguments, "include"))
+							loc.include = "#loc.include#(#arguments.missingMethodArguments.include#)";
+						arguments.missingMethodArguments.include = loc.include;
+						loc.where = $keyWhereString(properties=loc.joinAssociation.foreignKey, keys=variables.wheels.class.keys);
+						if (StructKeyExists(arguments.missingMethodArguments, "where"))
+							loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
+						arguments.missingMethodArguments.where = loc.where;
+						arguments.missingMethodArguments.returnIncluded = false;
 					}
-					else if (loc.info.type == "hasMany")
+					else
 					{
-						if (loc.name == "objects")
+						loc.info = $expandedAssociations(include=loc.key);
+						loc.info = loc.info[1];
+						loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=variables.wheels.class.keys);
+						if (StructKeyExists(arguments.missingMethodArguments, "where"))
+							loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
+						if (loc.info.type == "hasOne")
 						{
-							loc.method = "findAll";
-							arguments.missingMethodArguments.where = loc.where;
+							if (loc.name == "object")
+							{
+								loc.method = "findOne";
+								arguments.missingMethodArguments.where = loc.where;
+							}
+							else if (loc.name == "hasObject")
+							{
+								loc.method = "exists";
+								arguments.missingMethodArguments.where = loc.where;
+							}
+							else if (loc.name == "newObject")
+							{
+								loc.method = "new";
+								arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
+							}
+							else if (loc.name == "createObject")
+							{
+								loc.method = "create";
+								arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
+							}
+							else if (loc.name == "removeObject")
+							{
+								loc.method = "updateOne";
+								arguments.missingMethodArguments.where = loc.where;
+								arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey, setToNull=true);
+							}
+							else if (loc.name == "deleteObject")
+							{
+								loc.method = "deleteOne";
+								arguments.missingMethodArguments.where = loc.where;
+							}
+							else if (loc.name == "setObject")
+							{
+								loc.method = "updateByKey";
+								arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
+								arguments.missingMethodArguments = $objectOrNumberToKey(arguments.missingMethodArguments);
+							}
 						}
-						else if (loc.name == "addObject")
+						else if (loc.info.type == "hasMany")
 						{
-							loc.method = "updateByKey";
-							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
-							arguments.missingMethodArguments = $objectOrNumberToKey(arguments.missingMethodArguments);
+							if (loc.name == "objects")
+							{
+								loc.method = "findAll";
+								arguments.missingMethodArguments.where = loc.where;
+							}
+							else if (loc.name == "addObject")
+							{
+								loc.method = "updateByKey";
+								arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
+								arguments.missingMethodArguments = $objectOrNumberToKey(arguments.missingMethodArguments);
+							}
+							else if (loc.name == "removeObject")
+							{
+								loc.method = "updateByKey";
+								arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey, setToNull=true);
+								arguments.missingMethodArguments = $objectOrNumberToKey(arguments.missingMethodArguments);
+							}
+							else if (loc.name == "deleteObject")
+							{
+								loc.method = "deleteByKey";
+								arguments.missingMethodArguments = $objectOrNumberToKey(arguments.missingMethodArguments);
+							}
+							else if (loc.name == "hasObjects")
+							{
+								loc.method = "exists";
+								arguments.missingMethodArguments.where = loc.where;
+							}
+							else if (loc.name == "newObject")
+							{
+								loc.method = "new";
+								arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
+							}
+							else if (loc.name == "createObject")
+							{
+								loc.method = "create";
+								arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
+							}
+							else if (loc.name == "objectCount")
+							{
+								loc.method = "count";
+								arguments.missingMethodArguments.where = loc.where;
+							}
+							else if (loc.name == "findOneObject")
+							{
+								loc.method = "findOne";
+								arguments.missingMethodArguments.where = loc.where;
+							}
+							else if (loc.name == "removeAllObjects")
+							{
+								loc.method = "updateAll";
+								arguments.missingMethodArguments.where = loc.where;
+								arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey, setToNull=true);
+							}
+							else if (loc.name == "deleteAllObjects")
+							{
+								loc.method = "deleteAll";
+								arguments.missingMethodArguments.where = loc.where;
+							}
 						}
-						else if (loc.name == "removeObject")
+						else if (loc.info.type == "belongsTo")
 						{
-							loc.method = "updateByKey";
-							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey, setToNull=true);
-							arguments.missingMethodArguments = $objectOrNumberToKey(arguments.missingMethodArguments);
-						}
-						else if (loc.name == "deleteObject")
-						{
-							loc.method = "deleteByKey";
-							arguments.missingMethodArguments = $objectOrNumberToKey(arguments.missingMethodArguments);
-						}
-						else if (loc.name == "hasObjects")
-						{
-							loc.method = "exists";
-							arguments.missingMethodArguments.where = loc.where;
-						}
-						else if (loc.name == "newObject")
-						{
-							loc.method = "new";
-							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
-						}
-						else if (loc.name == "createObject")
-						{
-							loc.method = "create";
-							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey);
-						}
-						else if (loc.name == "objectCount")
-						{
-							loc.method = "count";
-							arguments.missingMethodArguments.where = loc.where;
-						}
-						else if (loc.name == "findOneObject")
-						{
-							loc.method = "findOne";
-							arguments.missingMethodArguments.where = loc.where;
-						}
-						else if (loc.name == "removeAllObjects")
-						{
-							loc.method = "updateAll";
-							arguments.missingMethodArguments.where = loc.where;
-							arguments.missingMethodArguments.properties = $foreignKeyValues(keys=loc.info.foreignKey, setToNull=true);
-						}
-						else if (loc.name == "deleteAllObjects")
-						{
-							loc.method = "deleteAll";
-							arguments.missingMethodArguments.where = loc.where;
-						}
-					}
-					else if (loc.info.type == "belongsTo")
-					{
-						if (loc.name == "object")
-						{
-							loc.method = "findByKey";
-							arguments.missingMethodArguments.key = $propertyValue(name=loc.info.foreignKey);
-						}
-						else if (loc.name == "hasObject")
-						{
-							loc.method = "exists";
-							arguments.missingMethodArguments.key = $propertyValue(name=loc.info.foreignKey);
+							if (loc.name == "object")
+							{
+								loc.method = "findByKey";
+								arguments.missingMethodArguments.key = $propertyValue(name=loc.info.foreignKey);
+							}
+							else if (loc.name == "hasObject")
+							{
+								loc.method = "exists";
+								arguments.missingMethodArguments.key = $propertyValue(name=loc.info.foreignKey);
+							}
 						}
 					}
 					loc.returnValue = $invoke(componentReference=model(loc.info.class), method=loc.method, argumentCollection=arguments.missingMethodArguments);

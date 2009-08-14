@@ -34,6 +34,17 @@
 	</cfscript>
 </cffunction>
 
+<cffunction name="manyToMany" returntype="void" access="public" output="false" hint="Sets up a many to many association from this model to another using existing associations.">
+	<cfargument name="name" type="string" required="true" hint="See documentation for `hasMany`">
+	<cfargument name="hasMany" type="string" required="false" default="" hint="Name of existing `hasMany` association on current model to go through">
+	<cfargument name="belongsTo" type="string" required="false" default="" hint="Name of existing `belongsTo` association on the join model to go through">
+	<cfscript>
+		arguments.type = "manyToMany";
+		arguments.methods = arguments.name;
+		$registerAssociation(argumentCollection=arguments);
+	</cfscript>
+</cffunction>
+
 <cffunction name="$registerAssociation" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
