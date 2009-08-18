@@ -1,29 +1,22 @@
-<cffunction name="renderPageToString" returntype="string" access="public" output="false" hint="Includes the view page for the specified controller and action and returns it as a string.">
-	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="See documentation for renderPage">
-	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for renderPage">
-	<cfargument name="template" type="string" required="false" default="" hint="See documentation for renderPage">
-	<cfargument name="layout" type="any" required="false" default="#application.wheels.renderPageToString.layout#" hint="See documentation for renderPage">
-	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for renderPage">
-	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#">
+<cffunction name="renderPageToString" returntype="string" access="public" output="false">
 	<cfscript>
-		var returnValue = "";
-		renderPage(argumentCollection=arguments);
-		returnValue = request.wheels.response;
-		StructDelete(request.wheels, "response");
+		$deprecated("The `renderPageToString` function will be deprecated in a future version of Wheels, please use `renderPage(returnAs='string')` instead");
+		arguments.returnAs = "string";
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn renderPage(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="renderPage" returntype="void" access="public" output="false" hint="Renders content to the browser by including the view page for the specified controller and action.">
+<cffunction name="renderPage" returntype="any" access="public" output="false" hint="Renders content to the browser by including the view page for the specified controller and action.">
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Controller to include the view page for">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Action to include the view page for">
 	<cfargument name="template" type="string" required="false" default="" hint="A specific template to render">
 	<cfargument name="layout" type="any" required="false" default="#application.wheels.renderPage.layout#" hint="The layout to wrap the content in">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for">
+	<cfargument name="returnAs" type="string" required="false" default="" hint="Set to `string` to return the result to the controller instead of sending it to the browser immediately">
 	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#">
 	<cfscript>
 		var loc = {};
-		arguments = $dollarify(arguments, "controller,action,template,layout,cache");
+		arguments = $dollarify(arguments, "controller,action,template,layout,cache,returnAs");
 		if (application.wheels.showDebugInformation)
 			$debugPoint("view");
 		// if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
@@ -46,12 +39,16 @@
 		{
 			loc.page = $renderPage(argumentCollection=arguments);
 		}
+		if (arguments.$returnAs == "string")
+			loc.returnValue = loc.page;
+		else
+			request.wheels.response = loc.page;
 		if (application.wheels.showDebugInformation)
 			$debugPoint("view");
-		
-		// we put the response in the request scope here so that the developer does not have to specifically return anything from the controller code
-		request.wheels.response = loc.page;
 	</cfscript>
+	<cfif StructKeyExists(loc, "returnValue")>
+		<cfreturn loc.returnValue>
+	</cfif>
 </cffunction>
 
 <cffunction name="renderNothing" returntype="void" access="public" output="false" hint="Renders a blank string to the browser. This is very similar to calling 'cfabort' with the advantage that any after filters you have set on the action will still be run.">
@@ -67,14 +64,29 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="renderPartial" returntype="void" access="public" output="false" hint="Renders content to the browser by including a partial.">
-	<cfargument name="name" type="string" required="true" hint="The name of the file to be used (starting with an optional path and with the underscore and file extension excluded)">
+<cffunction name="renderPartial" returntype="any" access="public" output="false" hint="Renders content to the browser by including a partial.">
+	<cfargument name="partial" type="string" required="true" hint="The name of the file to be used (starting with an optional path and with the underscore and file extension excluded)">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for `renderPage`">
 	<cfargument name="layout" type="string" required="false" default="#application.wheels.renderPartial.layout#" hint="See documentation for `renderPage`">
-	<cfargument name="$partialType" type="string" required="false" default="render">
+	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for `renderPage`">
 	<cfscript>
-		$includeOrRenderPartial(argumentCollection=$dollarify(arguments, "name,cache,layout"));
+		var loc = {};
 	</cfscript>
+	<cfif StructKeyExists(arguments, "name")>
+		<cfset $deprecated("The `name` argument will be deprecated in a future version of Wheels, please use the `partial` argument instead")>
+		<cfset arguments.partial = arguments.name>
+		<cfset StructDelete(arguments, "name")>
+	</cfif>
+	<cfscript>
+		loc.partial = $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,cache,layout,returnAs"));
+		if (arguments.$returnAs == "string")
+			loc.returnValue = loc.partial;
+		else
+			request.wheels.response = loc.partial;
+	</cfscript>
+	<cfif StructKeyExists(loc, "returnValue")>
+		<cfreturn loc.returnValue>
+	</cfif>
 </cffunction>
 
 <cffunction name="$renderPageAndAddToCache" returntype="string" access="public" output="false">
@@ -113,17 +125,21 @@
 <cffunction name="$renderPartial" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		if (IsQuery(arguments.$name))
+		if (IsQuery(arguments.$partial))
 		{
-			loc.name = request.wheels[Hash(GetMetaData(arguments.$name).toString())];
-			arguments[loc.name] = arguments.$name;
+			loc.name = request.wheels[Hash(GetMetaData(arguments.$partial).toString())];
+			arguments[loc.name] = arguments.$partial;
 			arguments.$name = singularize(loc.name);
 		}
-		else if (IsObject(arguments.$name))
+		else if (IsObject(arguments.$partial))
 		{
-			loc.name = arguments.$name.$classData().name;
-			arguments[loc.name] = arguments.$name;
+			loc.name = arguments.$partial.$classData().name;
+			arguments[loc.name] = arguments.$partial;
 			arguments.$name = loc.name;
+		}
+		else
+		{
+			arguments.$name = arguments.$partial;	
 		}
 		if (Len(arguments.$layout))
 			arguments.$layout = Replace("_" & arguments.$layout, "__", "_", "one");
@@ -137,11 +153,10 @@
 <cffunction name="$includeOrRenderPartial" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = "";
 		if (application.wheels.cachePartials && (isNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
 			loc.category = "partial";
-			loc.key = "#arguments.$name##$hashStruct(variables.params)##$hashStruct(arguments)#";
+			loc.key = "#arguments.$partial##$hashStruct(variables.params)##$hashStruct(arguments)#";
 			loc.lockName = loc.category & loc.key;
 			loc.conditionArgs = {};
 			loc.conditionArgs.category = loc.category;
@@ -149,16 +164,12 @@
 			loc.executeArgs = arguments;
 			loc.executeArgs.category = loc.category;
 			loc.executeArgs.key = loc.key;
-			loc.partial = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$renderPartialAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			loc.returnValue = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$renderPartialAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 		}
 		else
 		{
-			loc.partial = $renderPartial(argumentCollection=arguments);
+			loc.returnValue = $renderPartial(argumentCollection=arguments);
 		}
-		if (arguments.$partialType == "include")
-			loc.returnValue = loc.partial;
-		else if (arguments.$partialType == "render")
-			request.wheels.response = loc.partial;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
