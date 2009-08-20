@@ -3,6 +3,8 @@
 	<cfargument name="class" type="string" required="false" default="" hint="Name of associated class">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="Foreign key property name">
 	<cfargument name="dependent" type="any" required="false" default="#application.wheels.hasMany.dependent#" hint="Use to set the join type (inner or left outer) of this association and whether or not to delete associated object(s) when the parent object is deleted">
+	<cfargument name="shortcut" type="string" required="false" default="" hint="">
+	<cfargument name="through" type="string" required="false" default="#singularize(arguments.shortcut)#,#arguments.name#" hint="">
 	<cfscript>
 		arguments.type = "hasMany";
 		arguments.methods = "#arguments.name#,#capitalize(singularize(arguments.name))#Count,add#capitalize(singularize(arguments.name))#,create#capitalize(singularize(arguments.name))#,delete#capitalize(singularize(arguments.name))#,deleteAll#capitalize(arguments.name)#,findOne#capitalize(singularize(arguments.name))#,has#capitalize(arguments.name)#,new#capitalize(singularize(arguments.name))#,remove#capitalize(singularize(arguments.name))#,removeAll#capitalize(arguments.name)#";
@@ -30,17 +32,6 @@
 	<cfscript>
 		arguments.type = "belongsTo";
 		arguments.methods = "#arguments.name#,has#capitalize(arguments.name)#";
-		$registerAssociation(argumentCollection=arguments);
-	</cfscript>
-</cffunction>
-
-<cffunction name="manyToMany" returntype="void" access="public" output="false" hint="Sets up a many to many association from this model to another using existing associations.">
-	<cfargument name="name" type="string" required="true" hint="See documentation for `hasMany`">
-	<cfargument name="hasMany" type="string" required="false" default="" hint="Name of existing `hasMany` association on current model to go through">
-	<cfargument name="belongsTo" type="string" required="false" default="" hint="Name of existing `belongsTo` association on the join model to go through">
-	<cfscript>
-		arguments.type = "manyToMany";
-		arguments.methods = arguments.name;
 		$registerAssociation(argumentCollection=arguments);
 	</cfscript>
 </cffunction>

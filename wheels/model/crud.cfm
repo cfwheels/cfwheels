@@ -204,7 +204,7 @@
 					{
 						if (Len(arguments.include) && arguments.returnIncluded)
 						{
-							if (ListFindNoCase("hasMany,manyToMany", variables.wheels.class.associations[arguments.include].type))
+							if (variables.wheels.class.associations[arguments.include].type == "hasMany")
 							{
 								loc.object[arguments.include] = [];
 								for (loc.j=1; loc.j <= loc.findAll.query.recordCount; loc.j++)
@@ -220,7 +220,7 @@
 										ArrayAppend(loc.object[arguments.include], model(variables.wheels.class.associations[arguments.include].class).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.j));
 								}
 							}
-							else if (ListFindNoCase("hasOne,belongsTo", variables.wheels.class.associations[arguments.include].type))
+							else
 							{
 								loc.object[arguments.include] = model(variables.wheels.class.associations[arguments.include].class).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.i);
 							}
