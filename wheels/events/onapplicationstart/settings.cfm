@@ -95,8 +95,8 @@
 	application.wheels.fileField = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span"};
 	application.wheels.fileFieldTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel=""};
 	application.wheels.findAll = {reload=false, parameterize=true, perPage=10, order="", returnAs="query", returnIncluded=true};
-	application.wheels.findByKey = {reload=false, parameterize=true};
-	application.wheels.findOne = {reload=false, parameterize=true};
+	application.wheels.findByKey = {reload=false, parameterize=true, returnAs="object"};
+	application.wheels.findOne = {reload=false, parameterize=true, returnAs="object"};
 	application.wheels.hasMany = {dependent=false};
 	application.wheels.hasOne = {dependent=false};
 	application.wheels.hiddenField = {};

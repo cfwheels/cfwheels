@@ -1,13 +1,15 @@
 <cffunction name="findByKey" returntype="any" access="public" output="false" hint="Fetches the requested record and returns it as an object. Returns `false` if no record is found.">
 	<cfargument name="key" type="any" required="true" hint="Primary key value(s) of record to fetch. Separate with comma if passing in multiple primary key values.">
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.findByKey.reload#" hint="See documentation for `findAll`">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.findByKey.parameterize#" hint="See documentation for `findAll`">
-	<cfargument name="$create" type="boolean" required="false" default="true">
+	<cfargument name="returnAs" type="string" required="false" default="#application.wheels.findByKey.returnAs#" hint="See documentation for `findAll`">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
 		var returnValue = "";
+		// convert primary key column name(s) / value(s) to a WHERE clause that is then used in the findOne call
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");
 		returnValue = findOne(argumentCollection=arguments);
@@ -19,31 +21,36 @@
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for `findAll`">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.findOne.reload#" hint="See documentation for `findAll`">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.findOne.parameterize#" hint="See documentation for `findAll`">
-	<cfargument name="$create" type="boolean" required="false" default="true">
+	<cfargument name="returnAs" type="string" required="false" default="#application.wheels.findOne.returnAs#" hint="See documentation for `findAll`">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
-		var loc = {};
-		loc.create = arguments.$create;
-		arguments.maxRows = 1;
-		StructDelete(arguments, "$create");
-		StructDelete(arguments, "returnAs"); // returnAs gets passed through in dynamic methods sometimes but needs to be reset to the default
-		loc.query = findAll(argumentCollection=arguments);
-		if (loc.create)
+		var returnValue = "";
+		if (Len(arguments.include))
 		{
-			if (loc.query.recordCount != 0)
-				loc.returnValue = $createInstance(properties=loc.query, persisted=true);
-			else
-				loc.returnValue = false;
+			// since we're joining with associated tables we could potentially get duplicate records for one object and we work around this by using the pagination code which has this functionality built in
+			arguments.page = 1;
+			arguments.perPage = 1;
+			arguments.count = 1;
 		}
 		else
 		{
-			loc.returnValue = loc.query;
+			// no joins will be done so we can safely get just one record from the database
+			arguments.maxRows = 1;
+		}
+		returnValue = findAll(argumentCollection=arguments);
+		if (IsArray(returnValue))
+		{
+			if (ArrayLen(returnValue))
+				returnValue = returnValue[1];
+			else
+				returnValue = false;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="findAll" returntype="any" access="public" output="false" hint="Returns the records matching the arguments as a `cfquery` result set. If you don't specify table names in the `select`, `where` and `order` arguments Wheels will guess what column you intended to get back and prepend the table name to your supplied column names. If you don't specify the `select` argument it will default to get all columns.">
@@ -68,7 +75,7 @@
 		var loc = {};
 
 		// we only allow one association to be loaded when returning objects
-		if (application.wheels.environment != "production" && arguments.returnAs == "objects" && (Find(",", arguments.include) || Find("(", arguments.include)))
+		if (application.wheels.environment != "production" && Len(arguments.returnAs) && arguments.returnAs != "query" && (Find(",", arguments.include) || Find("(", arguments.include)))
 			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot include more than one association when returning an array of objects.");
 
 		// count records and get primary keys for pagination
@@ -186,7 +193,7 @@
 				if (loc.findAll.query.recordCount > 1)
 					$callback("afterFind", loc.returnValue); // run afterFind callback here unless called from findOne / findByKey (since those callbacks are called when the resulting object is created)
 			}
-			else if (arguments.returnAs == "objects")
+			else if (Len(arguments.returnAs))
 			{
 				loc.returnValue = [];
 				loc.doneObjects = "";
@@ -202,7 +209,15 @@
 								loc.object[arguments.include] = [];
 								for (loc.j=1; loc.j <= loc.findAll.query.recordCount; loc.j++)
 								{
-									ArrayAppend(loc.object[arguments.include], model(variables.wheels.class.associations[arguments.include].class).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.j));
+									// create object instance from values in current query row if it belongs to the current object
+									loc.primaryKeyColumnValues = "";
+									loc.kEnd = ListLen(variables.wheels.class.keys);
+									for (loc.k=1; loc.k <= loc.kEnd; loc.k++)
+									{
+										loc.primaryKeyColumnValues = ListAppend(loc.primaryKeyColumnValues, loc.findAll.query[ListGetAt(variables.wheels.class.keys, loc.k)][loc.j]);
+									}
+									if (loc.object.key() == loc.primaryKeyColumnValues)
+										ArrayAppend(loc.object[arguments.include], model(variables.wheels.class.associations[arguments.include].class).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.j));
 								}
 							}
 							else if (ListFindNoCase("hasOne,belongsTo", variables.wheels.class.associations[arguments.include].type))
@@ -231,9 +246,9 @@
 			if (Len(arguments.key) && Len(arguments.where))
 				$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot pass in both 'key' and 'where'.");
 		if (Len(arguments.where))
-			loc.returnValue = findOne(where=arguments.where, reload=arguments.reload, $create=false).recordCount == 1;
+			loc.returnValue = findOne(where=arguments.where, reload=arguments.reload, returnAs="query").recordCount == 1;
 		else if (Len(arguments.key))
-			loc.returnValue = findByKey(key=arguments.key, reload=arguments.reload, $create=false).recordCount == 1;
+			loc.returnValue = findByKey(key=arguments.key, reload=arguments.reload, returnAs="query").recordCount == 1;
 		else
 			loc.returnValue = false;
 	</cfscript>
@@ -572,7 +587,7 @@
 <cffunction name="reload" returntype="void" access="public" output="false" hint="Reloads the property values of this object from the database.">
 	<cfscript>
 		var loc = {};
-		loc.query = findByKey(key=key(), reload=true, $create=false);
+		loc.query = findByKey(key=key(), reload=true, returnAs="query");
 		loc.iEnd = ListLen(variables.wheels.class.propertyList);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
