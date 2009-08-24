@@ -234,6 +234,7 @@
 			}
 
 		}
+		application.wheels.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application.wheels.controllerComponentPath, fileName="Controller", method="$initControllerClass"));
 		application.wheels.dispatch = CreateObject("component", "wheels.Dispatch");
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
 	</cfscript>

@@ -1,5 +1,5 @@
 <cffunction name="$initControllerClass" returntype="any" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
+	<cfargument name="name" type="string" required="false" default="">
 	<cfscript>
 		variables.wheels.name = arguments.name;
 		variables.wheels.verifications = [];
