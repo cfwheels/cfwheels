@@ -78,26 +78,53 @@
 	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
-		var returnValue = "";
+		var loc = {};
 		if (IsSimpleValue(arguments.objectName))
-			returnValue = ListLast(arguments.objectName, ".") & "-" & arguments.property;
+		{
+			// form element for object(s)
+			loc.returnValue = ListLast(arguments.objectName, ".");
+			if (Find("[", loc.returnValue))
+			{
+				// this is a form element for an array of objects so we replace the array position with the primary key value of the object (unless the object is new and has no primary key set)
+				loc.key = Evaluate(arguments.objectName).key();
+				if (Len(loc.key))
+					loc.returnValue = ListFirst(loc.returnValue, "[") & "-" & Evaluate(arguments.objectName).key();
+				else
+					loc.returnValue = ReplaceList(loc.returnValue, "[,]", "-,");
+			}
+			loc.returnValue = loc.returnValue & "-" & arguments.property;
+		}
 		else
-			returnValue = arguments.property;
+		{
+			// this is a non object form element
+			loc.returnValue = ReplaceList(arguments.property, "[,]", "-,");
+		}
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$tagName" returntype="string" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
-		var returnValue = "";
+		var loc = {};
 		if (IsSimpleValue(arguments.objectName))
-			returnValue = ListLast(arguments.objectName, ".") & "[" & arguments.property & "]";
+		{
+			loc.returnValue = ListLast(arguments.objectName, ".");
+			if (Find("[", loc.returnValue))
+			{
+				loc.key = Evaluate(arguments.objectName).key();
+				if (Len(loc.key))
+					loc.returnValue = ListFirst(loc.returnValue, "[") & "[" & loc.key & "]";
+			}
+			loc.returnValue = loc.returnValue & "[" & arguments.property & "]";
+		}
 		else
-			returnValue = arguments.property;
+		{
+			loc.returnValue = arguments.property;
+		}
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$addToJavaScriptAttribute" returntype="string" access="public" output="false">

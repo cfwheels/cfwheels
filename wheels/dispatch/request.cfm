@@ -241,20 +241,34 @@
 			// add form variables to the params struct
 			for (loc.key in arguments.formScope)
 			{
-				loc.match = REFindNoCase("(.*?)\[(.*?)\]", loc.key, 1, true);
-				if (ArrayLen(loc.match.pos) == 3)
+				if (loc.key != "fieldnames")
 				{
-					// model object form field, build a struct to hold the data, named after the model object
-					loc.objectName = LCase(Mid(loc.key, loc.match.pos[2], loc.match.len[2]));
-					loc.fieldName = LCase(Mid(loc.key, loc.match.pos[3], loc.match.len[3]));
-					if (!StructKeyExists(loc.returnValue, loc.objectName))
-						loc.returnValue[loc.objectName] = {};
-					loc.returnValue[loc.objectName][loc.fieldName] = arguments.formScope[loc.key];
-				}
-				else
-				{
-					// normal form field
-					loc.returnValue[loc.key] = arguments.formScope[loc.key];
+					if (Find("[", loc.key) && Right(loc.key, 1) == "]")
+					{
+						// object form field
+						loc.name = SpanExcluding(loc.key, "[");
+						loc.property = SpanExcluding(Reverse(SpanExcluding(Reverse(loc.key), "[")), "]");
+						if (!StructKeyExists(loc.returnValue, loc.name))
+							loc.returnValue[loc.name] = {};
+						if (Find("][", loc.key))
+						{
+							// a collection of objects was passed in
+							loc.primaryKeyValue = Replace(SpanExcluding(loc.key, "]"), loc.name & "[", "", "one");
+							if (!StructKeyExists(loc.returnValue[loc.name], loc.primaryKeyValue))
+								loc.returnValue[loc.name][loc.primaryKeyValue] = {};
+							loc.returnValue[loc.name][loc.primaryKeyValue][loc.property] = arguments.formScope[loc.key];
+						}
+						else
+						{
+							// just one object was passed in
+							loc.returnValue[loc.name][loc.property] = arguments.formScope[loc.key];
+						}
+					}
+					else
+					{
+						// normal form field
+						loc.returnValue[loc.key] = arguments.formScope[loc.key];
+					}
 				}
 			}
 		}
