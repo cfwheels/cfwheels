@@ -462,24 +462,6 @@
             if (loc.del.result.recordCount == 1)
             {
             	loc.returnValue = true;
-            	// loop through all has many and has one associations and delete any dependant objects
-				for (loc.key in variables.wheels.class.associations)
-				{
-					loc.association = variables.wheels.class.associations[loc.key];
-					if (loc.association.type != "belongsTo" && ((IsBoolean(loc.association.dependent) && loc.association.dependent) || (!IsBoolean(loc.association.dependent) && loc.association.dependent != "join")))
-					{
-						if (IsBoolean(loc.association.dependent))
-							loc.association.dependent = "delete";
-						loc.args = {};
-						if (loc.association.dependent == "delete" || loc.association.dependent == "remove")
-						{
-							loc.association.dependent = loc.association.dependent & "All";
-							loc.args.instantiate = true;
-						}
-						loc.method = loc.association.dependent & loc.key;
-						$invoke(componentReference=this, method=loc.method, argumentCollection=loc.args);
-					}	
-				}
             	$callback("afterDelete");
 			}
 		}
@@ -1064,10 +1046,7 @@
 			loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClass.$classData().calculatedPropertyList;
 
 			// create the join string
-			if (!IsBoolean(loc.classAssociations[loc.name].dependent) || loc.classAssociations[loc.name].dependent)
-				loc.joinType = "inner";
-			else
-				loc.joinType = "left outer";
+			loc.joinType = ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one");
 			loc.classAssociations[loc.name].join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# ON ";
 			loc.toAppend = "";
 			loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);

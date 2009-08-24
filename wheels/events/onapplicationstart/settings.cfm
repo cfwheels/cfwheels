@@ -75,7 +75,7 @@
 
 	// function defaults
 	application.wheels.average = {distinct=false};
-	application.wheels.belongsTo = {dependent=true};
+	application.wheels.belongsTo = {joinType="inner"};
 	application.wheels.buttonTo = {onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable=""};
 	application.wheels.caches = {time=60};
 	application.wheels.checkBox = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", checkedValue=1, unCheckedValue=0};
@@ -97,8 +97,8 @@
 	application.wheels.findAll = {reload=false, parameterize=true, perPage=10, order="", returnAs="query", returnIncluded=true};
 	application.wheels.findByKey = {reload=false, parameterize=true, returnAs="object"};
 	application.wheels.findOne = {reload=false, parameterize=true, returnAs="object"};
-	application.wheels.hasMany = {dependent=false};
-	application.wheels.hasOne = {dependent=false};
+	application.wheels.hasMany = {joinType="outer"};
+	application.wheels.hasOne = {joinType="outer"};
 	application.wheels.hiddenField = {};
 	application.wheels.hourSelectTag = {label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
 	application.wheels.imageTag = {};

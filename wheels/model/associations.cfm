@@ -2,7 +2,7 @@
 	<cfargument name="name" type="string" required="true" hint="Name of the association">
 	<cfargument name="class" type="string" required="false" default="" hint="Name of associated class">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="Foreign key property name">
-	<cfargument name="dependent" type="any" required="false" default="#application.wheels.hasMany.dependent#" hint="Use to set the join type (inner or left outer) of this association and whether or not to delete associated object(s) when the parent object is deleted">
+	<cfargument name="joinType" type="string" required="false" default="#application.wheels.hasMany.joinType#" hint="Use to set the join type when joining associated tables, possible values are `inner` and `outer`">
 	<cfargument name="shortcut" type="string" required="false" default="" hint="">
 	<cfargument name="through" type="string" required="false" default="#singularize(arguments.shortcut)#,#arguments.name#" hint="">
 	<cfscript>
@@ -16,7 +16,7 @@
 	<cfargument name="name" type="string" required="true" hint="See documentation for `hasMany`">
 	<cfargument name="class" type="string" required="false" default="" hint="See documentation for `hasMany`">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for `hasMany`">
-	<cfargument name="dependent" type="any" required="false" default="#application.wheels.hasOne.dependent#" hint="See documentation for `hasMany`">
+	<cfargument name="joinType" type="string" required="false" default="#application.wheels.hasOne.joinType#" hint="See documentation for `hasMany`">
 	<cfscript>
 		arguments.type = "hasOne";
 		arguments.methods = "#arguments.name#,create#capitalize(arguments.name)#,delete#capitalize(arguments.name)#,has#capitalize(arguments.name)#,new#capitalize(arguments.name)#,remove#capitalize(arguments.name)#,set#capitalize(arguments.name)#";
@@ -28,7 +28,7 @@
 	<cfargument name="name" type="string" required="true" hint="See documentation for `hasMany`">
 	<cfargument name="class" type="string" required="false" default="" hint="See documentation for `hasMany`">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for `hasMany`">
-	<cfargument name="dependent" type="any" required="false" default="#application.wheels.belongsTo.dependent#" hint="Use to set the join type (inner or left outer) of this association">
+	<cfargument name="joinType" type="string" required="false" default="#application.wheels.belongsTo.joinType#" hint="See documentation for `hasMany`">
 	<cfscript>
 		arguments.type = "belongsTo";
 		arguments.methods = "#arguments.name#,has#capitalize(arguments.name)#";
