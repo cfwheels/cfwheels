@@ -127,15 +127,18 @@
 		var loc = {};
 		if (IsQuery(arguments.$partial))
 		{
-			loc.name = request.wheels[Hash(GetMetaData(arguments.$partial).toString())];
-			arguments[loc.name] = arguments.$partial;
-			arguments.$name = singularize(loc.name);
+			arguments.$name = request.wheels[Hash(GetMetaData(arguments.$partial).toString())];
+			arguments[pluralize(arguments.$name)] = arguments.$partial;
 		}
 		else if (IsObject(arguments.$partial))
 		{
-			loc.name = arguments.$partial.$classData().name;
-			arguments[loc.name] = arguments.$partial;
-			arguments.$name = loc.name;
+			arguments.$name = arguments.$partial.$classData().name;
+			arguments[arguments.$name] = arguments.$partial;
+		}
+		else if (IsArray(arguments.$partial))
+		{
+			arguments.$name = arguments.$partial[1].$classData().name;
+			arguments[pluralize(arguments.$name)] = arguments.$partial;
 		}
 		else
 		{
@@ -201,7 +204,7 @@
 				loc.iEnd = loc.query.recordCount;
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
-					arguments.currentRow = loc.i;
+					arguments.current = loc.i;
 					loc.jEnd = ListLen(loc.query.columnList);
 					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 					{
@@ -223,6 +226,28 @@
 					loc.property = ListGetAt(loc.properties, loc.i);
 					if (StructKeyExists(loc.object, loc.property) && IsSimpleValue(loc.object[loc.property]))
 						arguments[loc.property] = loc.object[loc.property];
+				}
+			}
+			else if (StructKeyExists(arguments, loc.pluralizedName) && IsArray(arguments[loc.pluralizedName]))
+			{
+				loc.array = arguments[loc.pluralizedName];
+				loc.returnValue = "";
+				loc.properties = loc.array[1].$classData().propertyList;
+				loc.jEnd = ListLen(loc.properties);
+				loc.iEnd = ArrayLen(loc.array);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					arguments.current = loc.i;
+					loc.object = loc.array[loc.i];
+					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+					{
+						loc.property = ListGetAt(loc.properties, loc.j);
+						if (StructKeyExists(loc.object, loc.property) && IsSimpleValue(loc.object[loc.property]))
+							arguments[loc.property] = loc.object[loc.property];
+					}
+					loc.returnValue = loc.returnValue & $includeAndReturnOutput(argumentCollection=arguments);
+					if (StructKeyExists(arguments, "$spacer") && loc.i < loc.iEnd)
+						loc.returnValue = loc.returnValue & arguments.$spacer;
 				}
 			}
 		}
