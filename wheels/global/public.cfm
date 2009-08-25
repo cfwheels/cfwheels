@@ -44,11 +44,19 @@
 		var loc = {};
 		if (application.wheels.environment != "production")
 		{
-			if (!Len(arguments.route) && !Len(arguments.controller) && !Len(arguments.action))
-				$throw(type="Wheels.IncorrectArguments", message="The 'route', 'controller' or 'action' argument is required.", extendedInfo="Pass in either the name of a 'route' you have configured in 'confirg/routes.cfm' or a 'controller' / 'action' / 'key' combination.");
 			if (arguments.onlyPath && (Len(arguments.host) || Len(arguments.protocol)))
 				$throw(type="Wheels.IncorrectArguments", message="Can't use the 'host' or 'protocol' arguments when 'onlyPath' is 'true'.", extendedInfo="Set 'onlyPath' to 'false' so that linkTo will create absolute URLs and thus allowing you to set the 'host' and 'protocol' on the link.");
 		}
+
+		// if no route, controller or action was passed in we default to the current controller and action
+		if (StructKeyExists(variables, "params") && !Len(arguments.route) && !Len(arguments.controller) && !Len(arguments.action))
+		{
+			if (StructKeyExists(variables.params, "controller"))
+				arguments.controller = variables.params.controller;
+			if (StructKeyExists(variables.params, "action"))
+				arguments.action = variables.params.action;
+		}
+
 		// get primary key values if an object was passed in
 		if (IsObject(arguments.key))
 		{
