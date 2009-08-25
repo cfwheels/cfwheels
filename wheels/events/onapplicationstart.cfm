@@ -234,7 +234,19 @@
 			}
 
 		}
-		application.wheels.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application.wheels.controllerComponentPath, fileName="Controller", method="$initControllerClass"));
+
+		// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the URL
+		loc.allowedGlobalMethods = "get,set,addroute";
+		loc.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application.wheels.controllerComponentPath, fileName="Controller", method="$initControllerClass"));
+		application.wheels.protectedControllerMethods = "";
+		loc.iEnd = ListLen(loc.protectedControllerMethods);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.method = ListGetAt(loc.protectedControllerMethods, loc.i);
+			if (Left(loc.method, 1) != "$" && !ListFindNoCase(loc.allowedGlobalMethods, loc.method))
+				application.wheels.protectedControllerMethods = ListAppend(application.wheels.protectedControllerMethods, loc.method);
+		}
+
 		application.wheels.dispatch = CreateObject("component", "wheels.Dispatch");
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
 	</cfscript>

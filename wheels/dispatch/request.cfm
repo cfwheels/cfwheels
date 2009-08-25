@@ -370,7 +370,7 @@
 	<cfscript>
 		var loc = {};
 		
-		if (ListFindNoCase(application.wheels.protectedControllerMethods, arguments.actionName))
+		if (Left(arguments.actionName, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.actionName))
 			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the '#arguments.actionName#' method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels methods.");
 
 		if (StructKeyExists(arguments.controller, arguments.actionName))
