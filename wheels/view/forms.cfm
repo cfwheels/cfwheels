@@ -95,7 +95,7 @@
 	<cfargument name="objectName" type="any" required="true" hint="The variable name of the object to build the form control for">
 	<cfargument name="property" type="string" required="true" hint="The name of the property (database column) to use in the form control">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.textField.label#" hint="The label text to use in the form control">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.textField.wrapLabel#" hint="Whether or not to wrap the label around the form control">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.textField.labelPlacement#" hint="Whether to place the label before, after or wrapped around the form control">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.textField.prepend#" hint="String to prepend to the form control. Useful to wrap the form control around HTML tags">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.textField.append#" hint="String to append to the form control. Useful to wrap the form control around HTML tags">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.textField.prependToLabel#" hint="String to prepend to the form control's label. Useful to wrap the form control around HTML tags">
@@ -103,6 +103,17 @@
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.textField.errorElement#" hint="HTML tag to wrap the form control with when the object contains errors">
 	<cfscript>
 		var loc = {};
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+		
 		arguments = $insertDefaults(name="textField", reserved="type,name,id,value", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
@@ -110,7 +121,7 @@
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = $formValue(argumentCollection=arguments);
-		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
+		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -119,13 +130,24 @@
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="value" type="string" required="false" default="">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.textFieldTag.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.textFieldTag.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.textFieldTag.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.textFieldTag.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.textFieldTag.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.textFieldTag.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.textFieldTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.value;
@@ -140,7 +162,7 @@
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.passwordField.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.passwordField.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.passwordField.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.passwordField.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.passwordField.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.passwordField.prependToLabel#" hint="See documentation for `textField`">
@@ -148,6 +170,17 @@
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.passwordField.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments = $insertDefaults(name="passwordField", reserved="type,name,id,value", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
@@ -155,7 +188,7 @@
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = $formValue(argumentCollection=arguments);
-		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
+		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -164,13 +197,24 @@
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="value" type="string" required="false" default="">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.passwordFieldTag.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.passwordFieldTag.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.passwordFieldTag.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.passwordFieldTag.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.passwordFieldTag.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.passwordFieldTag.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.passwordFieldTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.value;
@@ -217,7 +261,7 @@
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.fileField.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.fileField.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.fileField.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.fileField.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.fileField.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.fileField.prependToLabel#" hint="See documentation for `textField`">
@@ -225,13 +269,24 @@
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.fileField.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments = $insertDefaults(name="fileField", reserved="type,name,id", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "file";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.id = $tagId(arguments.objectName, arguments.property);
-		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
+		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -239,13 +294,24 @@
 <cffunction name="fileFieldTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.fileFieldTag.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.fileFieldTag.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.fileFieldTag.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.fileFieldTag.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.fileFieldTag.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.fileFieldTag.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.fileFieldTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = "";
@@ -259,7 +325,7 @@
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.textArea.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.textArea.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.textArea.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.textArea.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.textArea.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.textArea.prependToLabel#" hint="See documentation for `textField`">
@@ -267,13 +333,24 @@
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.textArea.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments = $insertDefaults(name="textArea", reserved="name,id", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.content = $formValue(argumentCollection=arguments);
-		loc.returnValue = loc.before & $element(name="textarea", skip="objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
+		loc.returnValue = loc.before & $element(name="textarea", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -282,13 +359,24 @@
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="content" type="string" required="false" default="">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.textAreaTag.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.textAreaTag.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.textAreaTag.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.textAreaTag.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.textAreaTag.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.textAreaTag.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.textAreaTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.content;
@@ -304,7 +392,7 @@
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="tagValue" type="string" required="true" hint="The value of the radio button when `selected`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.radioButton.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.radioButton.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.radioButton.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.radioButton.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.radioButton.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.radioButton.prependToLabel#" hint="See documentation for `textField`">
@@ -312,6 +400,17 @@
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.radioButton.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments = $insertDefaults(name="radioButton", reserved="type,name,id,value,checked", input=arguments);
 		loc.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.tagValue, "[^a-z0-9 ]", "", "all"), " ", "-", "all"));
 		arguments.$appendToFor = loc.valueToAppend;
@@ -323,7 +422,7 @@
 		arguments.value = arguments.tagValue;
 		if (arguments.tagValue == $formValue(argumentCollection=arguments))
 			arguments.checked = "checked";
-		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,tagValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
+		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -333,13 +432,24 @@
 	<cfargument name="value" type="string" required="true">
 	<cfargument name="checked" type="boolean" required="false" default="false">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.radioButtonTag.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.radioButtonTag.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.radioButtonTag.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.radioButtonTag.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.radioButtonTag.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.radioButtonTag.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.radioButtonTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		if (arguments.checked)
@@ -366,7 +476,7 @@
 	<cfargument name="checkedValue" type="string" required="false" default="#application.wheels.checkBox.checkedValue#" hint="The value of the check box when it's on the `checked` state">
 	<cfargument name="uncheckedValue" type="string" required="false" default="#application.wheels.checkBox.uncheckedValue#" hint="The value of the check box when it's on the `unchecked` state">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.checkBox.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.checkBox.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.checkBox.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.checkBox.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.checkBox.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.checkBox.prependToLabel#" hint="See documentation for `textField`">
@@ -374,6 +484,17 @@
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.checkBox.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments = $insertDefaults(name="checkBox", reserved="type,name,id,value,checked", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
@@ -384,7 +505,7 @@
 		loc.value = $formValue(argumentCollection=arguments);
 		if (loc.value == arguments.value || IsNumeric(loc.value) && loc.value == 1 || !IsNumeric(loc.value) && IsBoolean(loc.value) && loc.value)
 			arguments.checked = "checked";
-		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,checkedValue,uncheckedValue,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments);
+		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments);
 		if (!IsStruct(arguments.objectName))
 		{
 			loc.hiddenAttributes = {};
@@ -403,13 +524,24 @@
 	<cfargument name="checked" type="boolean" required="false" default="false">
 	<cfargument name="value" type="string" required="false" default="#application.wheels.checkBoxTag.value#">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.checkBoxTag.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.checkBoxTag.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.checkBoxTag.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.checkBoxTag.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.checkBoxTag.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.checkBoxTag.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.checkBoxTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments.checkedValue = arguments.value;
 		arguments.property = arguments.name;
 		arguments.objectName = {};
@@ -433,7 +565,7 @@
 	<cfargument name="valueField" type="string" required="false" default="#application.wheels.select.valueField#" hint="The column to use for the value of each list element, used only when a query has been supplied in the `options` argument">
 	<cfargument name="textField" type="string" required="false" default="#application.wheels.select.textField#" hint="The column to use for the value of each list element that the end user will see, used only when a query has been supplied in the `options` argument">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.select.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.select.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.select.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.select.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.select.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.select.prependToLabel#" hint="See documentation for `textField`">
@@ -441,6 +573,17 @@
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.select.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments = $insertDefaults(name="select", reserved="name,id", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
@@ -463,7 +606,7 @@
 			loc.blankOptionAttributes = {value=""};
 			loc.content = $element(name="option", content=loc.blankOptionText, attributes=loc.blankOptionAttributes) & loc.content;
 		}
-		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,options,includeBlank,valueField,textField,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
+		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,options,includeBlank,valueField,textField,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -477,13 +620,24 @@
 	<cfargument name="valueField" type="string" required="false" default="#application.wheels.selectTag.valueField#" hint="See documentation for `select`">
 	<cfargument name="textField" type="string" required="false" default="#application.wheels.selectTag.textField#" hint="See documentation for `select`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.selectTag.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.selectTag.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.selectTag.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.selectTag.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.selectTag.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.selectTag.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.selectTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.selected;
@@ -504,13 +658,24 @@
 	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.dateSelect.monthDisplay#" hint="Pass in `names`, `numbers` or `abbreviations` to control display">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.dateSelect.includeBlank#" hint="See documentation for `select`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.dateSelect.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.dateSelect.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.dateSelect.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.dateSelect.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.dateSelect.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.dateSelect.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateSelect.appendToLabel#" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.dateSelect.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments = $insertDefaults(name="dateSelect", reserved="id", input=arguments);
 		arguments.$functionName = "dateSelect";
 	</cfscript>
@@ -527,12 +692,23 @@
 	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.dateSelectTags.monthDisplay#" hint="See documentation for `dateSelect`">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.dateSelectTags.includeBlank#" hint="See documentation for `dateSelect`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.dateSelectTags.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.dateSelectTags.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.dateSelectTags.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.dateSelectTags.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.dateSelectTags.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.dateSelectTags.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateSelectTags.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.selected;
@@ -551,13 +727,24 @@
 	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.timeSelect.minuteStep#" hint="Pass in `10` to only show minute 10, 20,30 etc">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.timeSelect.includeBlank#" hint="See documentation for `select`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.timeSelect.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.timeSelect.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.timeSelect.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.timeSelect.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.timeSelect.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.timeSelect.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.timeSelect.appendToLabel#" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.timeSelect.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments = $insertDefaults(name="timeSelect", reserved="id", input=arguments);
 		arguments.$functionName = "timeSelect";
 	</cfscript>
@@ -572,12 +759,23 @@
 	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.timeSelectTags.minuteStep#" hint="See documentation for `timeSelect`">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.timeSelectTags.includeBlank#" hint="See documentation for `timeSelect`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.timeSelectTags.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.timeSelectTags.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.timeSelectTags.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.timeSelectTags.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.timeSelectTags.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.timeSelectTags.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.timeSelectTags.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.selected;
@@ -602,13 +800,24 @@
 	<cfargument name="separator" type="string" required="false" default="#application.wheels.dateTimeSelect.separator#" hint="Use to change the character that is displayed between the first and second set of select tags">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.dateTimeSelect.includeBlank#" hint="See documentation for `select`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.dateTimeSelect.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.dateTimeSelect.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.dateTimeSelect.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.dateTimeSelect.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.dateTimeSelect.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.dateTimeSelect.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateTimeSelect.appendToLabel#" hint="See documentation for `textField`">
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.dateTimeSelect.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments = $insertDefaults(name="dateTimeSelect", reserved="name,id", input=arguments);
 		arguments.$functionName = "dateTimeSelect";
 	</cfscript>
@@ -627,13 +836,24 @@
 	<cfargument name="separator" type="string" required="false" default="#application.wheels.dateTimeSelectTags.separator#" hint="See documentation for `dateTimeSelect`">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.dateTimeSelectTags.includeBlank#" hint="See documentation for `select`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.dateTimeSelectTags.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.dateTimeSelectTags.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.dateTimeSelectTags.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.dateTimeSelectTags.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.dateTimeSelectTags.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.dateTimeSelectTags.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateTimeSelectTags.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		loc.returnValue = "";
 		loc.separator = arguments.separator;
 		arguments.order = arguments.dateOrder;
@@ -660,12 +880,23 @@
 	<cfargument name="endYear" type="numeric" required="false" default="#application.wheels.yearSelectTag.endYear#" hint="See documentation for `dateSelect`">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.yearSelectTag.includeBlank#" hint="See documentation for `select`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.yearSelectTag.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.yearSelectTag.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.yearSelectTag.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.yearSelectTag.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.yearSelectTag.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.yearSelectTag.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.yearSelectTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments.selected = createDate(arguments.selected, Month(Now()), Day(Now()));
 		arguments.order = "year";
 	</cfscript>
@@ -678,12 +909,23 @@
 	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.monthSelectTag.monthDisplay#" hint="See documentation for `dateSelect`">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.monthSelectTag.includeBlank#" hint="See documentation for `select`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.monthSelectTag.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.monthSelectTag.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.monthSelectTag.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.monthSelectTag.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.monthSelectTag.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.monthSelectTag.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.monthSelectTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments.selected = createDate(Year(Now()), arguments.selected, Day(Now()));
 		arguments.order = "month";
 	</cfscript>
@@ -695,12 +937,23 @@
 	<cfargument name="selected" type="date" required="false" default="#Day(Now())#" hint="The day that should be selected initially">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.daySelectTag.includeBlank#" hint="See documentation for `select`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.daySelectTag.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.daySelectTag.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.daySelectTag.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.daySelectTag.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.daySelectTag.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.daySelectTag.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.daySelectTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments.selected = createDate(Year(Now()), Month(Now()), arguments.selected);
 		arguments.order = "day";
 	</cfscript>
@@ -712,12 +965,23 @@
 	<cfargument name="selected" type="date" required="false" default="#Hour(Now())#" hint="The hour that should be selected initially">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.hourSelectTag.includeBlank#" hint="See documentation for `select`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.hourSelectTag.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.hourSelectTag.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.hourSelectTag.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.hourSelectTag.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.hourSelectTag.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.hourSelectTag.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.hourSelectTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments.selected = createTime(arguments.selected, Minute(Now()), Second(Now()));
 		arguments.order = "hour";
 	</cfscript>
@@ -730,12 +994,23 @@
 	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.minuteSelectTag.minuteStep#" hint="See documentation for `timeSelect`">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.minuteSelectTag.includeBlank#" hint="See documentation for `select`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.minuteSelectTag.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.minuteSelectTag.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.minuteSelectTag.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.minuteSelectTag.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.minuteSelectTag.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.minuteSelectTag.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.minuteSelectTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments.selected = createTime(Hour(Now()), arguments.selected, Second(Now()));
 		arguments.order = "minute";
 	</cfscript>
@@ -747,12 +1022,23 @@
 	<cfargument name="selected" type="date" required="false" default="#Second(Now())#" hint="The second that should be selected initially">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.secondSelectTag.includeBlank#" hint="See documentation for `select`">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.secondSelectTag.label#" hint="See documentation for `textField`">
-	<cfargument name="wrapLabel" type="boolean" required="false" default="#application.wheels.secondSelectTag.wrapLabel#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.secondSelectTag.labelPlacement#" hint="See documentation for `textField`">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.secondSelectTag.prepend#" hint="See documentation for `textField`">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.secondSelectTag.append#" hint="See documentation for `textField`">
 	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.secondSelectTag.prependToLabel#" hint="See documentation for `textField`">
 	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.secondSelectTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
+
+		// START DEPRECATING WRAPLABEL CODE
+		if (StructKeyExists(arguments, "wrapLabel"))
+		{
+			$deprecated("The `wrapLabel` argument will be deprecated in a future version of Wheels, please use the `labelPlacement` argument instead");
+			if (!arguments.wrapLabel)
+				arguments.labelPlacement = "before";
+			StructDelete(arguments, "wrapLabel");
+		}
+		// END DEPRECATING WRAPLABEL CODE
+
 		arguments.selected = createTime(Hour(Now()), Minute(Now()), arguments.selected);
 		arguments.order = "second";
 	</cfscript>
@@ -872,7 +1158,7 @@
 	<cfargument name="value" type="string" required="true">
 	<cfargument name="includeBlank" type="any" required="true">
 	<cfargument name="label" type="string" required="true">
-	<cfargument name="wrapLabel" type="boolean" required="true">
+	<cfargument name="labelPlacement" type="string" required="true">
 	<cfargument name="prepend" type="string" required="true">
 	<cfargument name="append" type="string" required="true">
 	<cfargument name="prependToLabel" type="string" required="true">
@@ -917,7 +1203,7 @@
 			loc.content = loc.content & $element(name="option", content=loc.optionContent, attributes=loc.args);
 		}
 		arguments.id = arguments.$id & "-" & arguments.$type;
-		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,label,wrapLabel,prepend,append,prependToLabel,appendToLabel,errorElement,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
+		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -1046,11 +1332,36 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="$createLabel" returntype="string" access="public" output="false">
+	<cfargument name="objectName" type="any" required="true">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="label" type="string" required="true">
+	<cfargument name="prependToLabel" type="string" required="true">
+	<cfargument name="$appendToFor" type="string" required="false" default="">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = arguments.prependToLabel;
+		loc.attributes = {};
+		for (loc.key in arguments)
+		{
+		 if (Left(loc.key, 5) == "label" && Len(loc.key) > 5 && loc.key != "labelPlacement")
+			loc.attributes[Replace(loc.key, "label", "")] = arguments[loc.key];
+		}
+		loc.attributes.for = $tagId(arguments.objectName, arguments.property);
+		if (Len(arguments.$appendToFor))
+			loc.attributes.for = loc.attributes.for & "-" & arguments.$appendToFor;
+		loc.returnValue = loc.returnValue & $tag(name="label", attributes=loc.attributes);
+		loc.returnValue = loc.returnValue & arguments.label;
+		loc.returnValue = loc.returnValue & "</label>";
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$formBeforeElement" returntype="string" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="label" type="string" required="true">
-	<cfargument name="wrapLabel" type="boolean" required="true">
+	<cfargument name="labelPlacement" type="string" required="true">
 	<cfargument name="prepend" type="string" required="true">
 	<cfargument name="append" type="string" required="true">
 	<cfargument name="prependToLabel" type="string" required="true">
@@ -1062,22 +1373,14 @@
 		loc.returnValue = "";
 		if ($formHasError(argumentCollection=arguments))
 			loc.returnValue = loc.returnValue & $tag(name=arguments.errorElement, class="field-with-errors");
-		if (Len(arguments.label))
+		if (Len(arguments.label) && arguments.labelPlacement != "after")
 		{
-			loc.returnValue = loc.returnValue & arguments.prependToLabel;
-			loc.attributes = {};
-			for (loc.key in arguments)
-			{
-			 if (Left(loc.key, 5) == "label" && Len(loc.key) > 5)
-				loc.attributes[Replace(loc.key, "label", "")] = arguments[loc.key];
-			}
-			loc.attributes.for = $tagId(arguments.objectName, arguments.property);
-			if (Len(arguments.$appendToFor))
-				loc.attributes.for = loc.attributes.for & "-" & arguments.$appendToFor;
-			loc.returnValue = loc.returnValue & $tag(name="label", attributes=loc.attributes);
-			loc.returnValue = loc.returnValue & arguments.label;
-			if (!arguments.wrapLabel)
-				loc.returnValue = loc.returnValue & "</label>" & arguments.appendToLabel;
+			loc.returnValue = loc.returnValue & $createLabel(argumentCollection=arguments);
+			if (arguments.labelPlacement == "around")
+				loc.returnValue = Replace(loc.returnValue, "</label>", "");
+			else
+				loc.returnValue = loc.returnValue & arguments.appendToLabel;
+			
 		}
 		loc.returnValue = loc.returnValue & arguments.prepend;
 	</cfscript>
@@ -1088,7 +1391,7 @@
 	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="label" type="string" required="true">
-	<cfargument name="wrapLabel" type="boolean" required="true">
+	<cfargument name="labelPlacement" type="string" required="true">
 	<cfargument name="prepend" type="string" required="true">
 	<cfargument name="append" type="string" required="true">
 	<cfargument name="prependToLabel" type="string" required="true">
@@ -1097,9 +1400,12 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = arguments.append;
-		if (Len(arguments.label) && arguments.wrapLabel)
+		if (Len(arguments.label) && arguments.labelPlacement != "before")
 		{
-			loc.returnValue = loc.returnValue & "</label>";
+			if (arguments.labelPlacement == "after")
+				loc.returnValue = loc.returnValue & $createLabel(argumentCollection=arguments);
+			else if (arguments.labelPlacement == "around")
+				loc.returnValue = loc.returnValue & "</label>";
 			loc.returnValue = loc.returnValue & arguments.appendToLabel;
 		}
 		if ($formHasError(argumentCollection=arguments))
