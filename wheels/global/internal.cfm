@@ -132,7 +132,7 @@
 				}
 			}			
 		}
-		StructAppend(arguments.input, application.wheels[arguments.name], false);
+		StructAppend(arguments.input, application.wheels.functions[arguments.name], false);
 		loc.returnValue = arguments.input;
 	</cfscript>
 	<cfreturn loc.returnValue>
