@@ -405,7 +405,7 @@
 		{
 			if (isNew())
 			{
-				if ($callback("beforeValidationOnCreate") && $validate("onCreate") && $callback("beforeValidation") && $validate("onSave") && $callback("afterValidation") && $callback("beforeSave") && $callback("beforeCreate"))
+				if ($callback("beforeValidationOnCreate") && $validate("onCreate") && $callback("afterValidationOnCreate") && $validate("onSave") && $callback("afterValidation") && $callback("beforeSave") && $callback("beforeCreate"))
 				{
 					$create(parameterize=arguments.parameterize);
 					if (arguments.defaults)
@@ -417,7 +417,7 @@
 			}
 			else
 			{
-				if ($callback("beforeValidationOnUpdate") && $validate("onUpdate") && $callback("beforeValidation") && $validate("onSave") && $callback("afterValidation") && $callback("beforeSave") && $callback("beforeUpdate"))
+				if ($callback("beforeValidationOnUpdate") && $validate("onUpdate") && $callback("afterValidationOnUpdate") && $validate("onSave") && $callback("afterValidation") && $callback("beforeSave") && $callback("beforeUpdate"))
 				{
 					if (hasChanged())
 					{
