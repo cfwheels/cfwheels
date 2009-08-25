@@ -10,7 +10,7 @@
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Controller to include the view page for">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Action to include the view page for">
 	<cfargument name="template" type="string" required="false" default="" hint="A specific template to render">
-	<cfargument name="layout" type="any" required="false" default="#application.wheels.renderPage.layout#" hint="The layout to wrap the content in">
+	<cfargument name="layout" type="any" required="false" default="#application.wheels.functions.renderPage.layout#" hint="The layout to wrap the content in">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for">
 	<cfargument name="returnAs" type="string" required="false" default="" hint="Set to `string` to return the result to the controller instead of sending it to the browser immediately">
 	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#">
@@ -67,7 +67,7 @@
 <cffunction name="renderPartial" returntype="any" access="public" output="false" hint="Renders content to the browser by including a partial.">
 	<cfargument name="partial" type="string" required="true" hint="The name of the file to be used (starting with an optional path and with the underscore and file extension excluded)">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for `renderPage`">
-	<cfargument name="layout" type="string" required="false" default="#application.wheels.renderPartial.layout#" hint="See documentation for `renderPage`">
+	<cfargument name="layout" type="string" required="false" default="#application.wheels.functions.renderPartial.layout#" hint="See documentation for `renderPage`">
 	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for `renderPage`">
 	<cfscript>
 		var loc = {};

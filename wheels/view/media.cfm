@@ -1,8 +1,8 @@
 <cffunction name="styleSheetLinkTag" returntype="string" access="public" output="false" hint="Returns a `link` tag based on the supplied arguments.">
 	<cfargument name="source" type="string" required="false" default="#arguments.sources#" hint="The name of one or many CSS files in the `stylesheets` folder">
 	<cfargument name="sources" type="string" required="false" default="#arguments.source#" hint="See `source`">
-	<cfargument name="type" type="string" required="false" default="#application.wheels.styleSheetLinkTag.type#" hint="The `type` attribute for the `link` tag">
-	<cfargument name="media" type="string" required="false" default="#application.wheels.styleSheetLinkTag.media#" hint="The `media` attribute for the `link` tag">
+	<cfargument name="type" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.type#" hint="The `type` attribute for the `link` tag">
+	<cfargument name="media" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.media#" hint="The `media` attribute for the `link` tag">
 	<cfscript>
 		var loc = {};
 		arguments = $insertDefaults(name="styleSheetLinkTag", reserved="href,rel", input=arguments);
@@ -24,7 +24,7 @@
 <cffunction name="javaScriptIncludeTag" returntype="string" access="public" output="false" hint="Returns a `script` tag based on the supplied arguments.">
 	<cfargument name="source" type="string" required="false" default="#arguments.sources#" hint="The name of one or many JavaScript files in the `javascripts` folder">
 	<cfargument name="sources" type="string" required="false" default="#arguments.source#" hint="See `source`">
-	<cfargument name="type" type="string" required="false" default="#application.wheels.javaScriptIncludeTag.type#" hint="The `type` attribute for the `script` tag">
+	<cfargument name="type" type="string" required="false" default="#application.wheels.functions.javaScriptIncludeTag.type#" hint="The `type` attribute for the `script` tag">
 	<cfscript>
 		var loc = {};
 		arguments = $insertDefaults(name="javaScriptIncludeTag", reserved="src", input=arguments);

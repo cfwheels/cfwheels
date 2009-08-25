@@ -1,6 +1,6 @@
 <cffunction name="validatesConfirmationOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property also has an identical confirmation value (common when having a user type in their email address, choosing a password etc). The confirmation value only exists temporarily and never gets saved to the database.">
 	<cfargument name="property" type="string" required="false" default="#arguments.properties#" hint="See documentation for `validatesExclusionOf`">
-	<cfargument name="message" type="string" required="false" default="#application.wheels.validatesConfirmationOf.message#" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="message" type="string" required="false" default="#application.wheels.functions.validatesConfirmationOf.message#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
 	<cfscript>
@@ -19,9 +19,9 @@
 <cffunction name="validatesExclusionOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property does not exist in the supplied list.">
 	<cfargument name="property" type="string" required="false" default="#arguments.properties#" hint="Name of property or list of properties to validate">
 	<cfargument name="list" type="string" required="true" hint="List of values that should not be allowed">
-	<cfargument name="message" type="string" required="false" default="#application.wheels.validatesExclusionOf.message#" hint="Supply a custom error message here to override the built-in one">
+	<cfargument name="message" type="string" required="false" default="#application.wheels.functions.validatesExclusionOf.message#" hint="Supply a custom error message here to override the built-in one">
 	<cfargument name="when" type="string" required="false" default="onSave" hint="Pass in `onCreate` or `onUpdate` to limit when this validation occurs (by default validation it will occur on both create and update, i.e. `onSave`)">
-	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.validatesExclusionOf.allowBlank#" hint="If set to `true`, validation will be skipped if the value of the property is blank.">
+	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.functions.validatesExclusionOf.allowBlank#" hint="If set to `true`, validation will be skipped if the value of the property is blank.">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
 	<cfscript>
 		var loc = {};
@@ -42,9 +42,9 @@
 <cffunction name="validatesFormatOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property is formatted correctly by matching it against the regular expression provided.">
 	<cfargument name="property" type="string" required="false" default="#arguments.properties#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="regEx" type="string" required="true" hint="Regular expression to verify against">
-	<cfargument name="message" type="string" required="false" default="#application.wheels.validatesFormatOf.message#" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="message" type="string" required="false" default="#application.wheels.functions.validatesFormatOf.message#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
-	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.validatesFormatOf.allowBlank#" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.functions.validatesFormatOf.allowBlank#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
 	<cfscript>
 		var loc = {};
@@ -64,9 +64,9 @@
 <cffunction name="validatesInclusionOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property exists in the supplied list.">
 	<cfargument name="property" type="string" required="false" default="#arguments.properties#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="list" type="string" required="true" hint="List of allowed values">
-	<cfargument name="message" type="string" required="false" default="#application.wheels.validatesInclusionOf.message#" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="message" type="string" required="false" default="#application.wheels.functions.validatesInclusionOf.message#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
-	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.validatesInclusionOf.allowBlank#" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.functions.validatesInclusionOf.allowBlank#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
 	<cfscript>
 		var loc = {};
@@ -86,13 +86,13 @@
 
 <cffunction name="validatesLengthOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property matches the length requirements supplied. Only one of the `exactly`, `maximum`, `minimum` and `within` arguments can be used at a time.">
 	<cfargument name="property" type="string" required="false" default="#arguments.properties#" hint="See documentation for `validatesExclusionOf`">
-	<cfargument name="message" type="string" required="false" default="#application.wheels.validatesLengthOf.message#" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="message" type="string" required="false" default="#application.wheels.functions.validatesLengthOf.message#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
-	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.validatesLengthOf.allowBlank#" hint="See documentation for `validatesExclusionOf`">
-	<cfargument name="exactly" type="numeric" required="false" default="#application.wheels.validatesLengthOf.exactly#" hint="The exact length that the property value has to be">
-	<cfargument name="maximum" type="numeric" required="false" default="#application.wheels.validatesLengthOf.maximum#" hint="The maximum length that the property value has to be">
-	<cfargument name="minimum" type="numeric" required="false" default="#application.wheels.validatesLengthOf.minimum#" hint="The minimum length that the property value has to be">
-	<cfargument name="within" type="string" required="false" default="#application.wheels.validatesLengthOf.within#" hint="A list of two values (minimum and maximum) that the length of the property value has to fall within">
+	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.functions.validatesLengthOf.allowBlank#" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="exactly" type="numeric" required="false" default="#application.wheels.functions.validatesLengthOf.exactly#" hint="The exact length that the property value has to be">
+	<cfargument name="maximum" type="numeric" required="false" default="#application.wheels.functions.validatesLengthOf.maximum#" hint="The maximum length that the property value has to be">
+	<cfargument name="minimum" type="numeric" required="false" default="#application.wheels.functions.validatesLengthOf.minimum#" hint="The minimum length that the property value has to be">
+	<cfargument name="within" type="string" required="false" default="#application.wheels.functions.validatesLengthOf.within#" hint="A list of two values (minimum and maximum) that the length of the property value has to fall within">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
 	<cfscript>
 		var loc = {};
@@ -116,10 +116,10 @@
 
 <cffunction name="validatesNumericalityOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property is numeric.">
 	<cfargument name="property" type="string" required="false" default="#arguments.properties#" hint="See documentation for `validatesExclusionOf`">
-	<cfargument name="message" type="string" required="false" default="#application.wheels.validatesNumericalityOf.message#" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="message" type="string" required="false" default="#application.wheels.functions.validatesNumericalityOf.message#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
-	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.validatesNumericalityOf.allowBlank#" hint="See documentation for `validatesExclusionOf`">
-	<cfargument name="onlyInteger" type="boolean" required="false" default="#application.wheels.validatesNumericalityOf.onlyInteger#" hint="Specifies whether the property value has to be an integer">
+	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.functions.validatesNumericalityOf.allowBlank#" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="onlyInteger" type="boolean" required="false" default="#application.wheels.functions.validatesNumericalityOf.onlyInteger#" hint="Specifies whether the property value has to be an integer">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
 	<cfscript>
 		var loc = {};
@@ -138,7 +138,7 @@
 
 <cffunction name="validatesPresenceOf" returntype="void" access="public" output="false" hint="Validates that the specified property exists and that its value is not blank.">
 	<cfargument name="property" type="string" required="false" default="#arguments.properties#" hint="See documentation for `validatesExclusionOf`">
-	<cfargument name="message" type="string" required="false" default="#application.wheels.validatesPresenceOf.message#" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="message" type="string" required="false" default="#application.wheels.functions.validatesPresenceOf.message#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
 	<cfscript>
@@ -156,7 +156,7 @@
 
 <cffunction name="validatesUniquenessOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property is unique in the database table. Useful for ensuring that two users can't sign up to a website with identical screen names for example. When a new record is created a check is made to make sure that no record already exists in the database with the given value for the specified property. When the record is updated the same check is made but disregarding the record itself.">
 	<cfargument name="property" type="string" required="false" default="#arguments.properties#" hint="See documentation for `validatesExclusionOf`">
-	<cfargument name="message" type="string" required="false" default="#application.wheels.validatesUniquenessOf.message#" hint="See documentation for `validatesExclusionOf`">
+	<cfargument name="message" type="string" required="false" default="#application.wheels.functions.validatesUniquenessOf.message#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="scope" type="string" required="false" default="" hint="One or more properties by which to limit the scope of the uniqueness constraint">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">

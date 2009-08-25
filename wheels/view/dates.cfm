@@ -1,7 +1,7 @@
 <cffunction name="distanceOfTimeInWords" returntype="string" access="public" output="false" hint="Pass in two dates to this method and it will return a string describing the difference between them. If the difference between the two dates you pass in is 2 hours, 13 minutes and 10 seconds it will return 'about 2 hours' for example. This method is useful when you want to describe the time that has passed since a certain event (example: 'Comment added by Joe about 3 weeks ago') or the time left until a certain event (example: 'Next chat session starts in about 5 hours') instead of just writing out the date itself.">
 	<cfargument name="fromTime" type="date" required="true" hint="Date to compare from">
 	<cfargument name="toTime" type="date" required="true" hint="Date to compare to">
-	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.distanceOfTimeInWords.includeSeconds#" hint="Set to true for detailed description when the difference is less than one minute">
+	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.functions.distanceOfTimeInWords.includeSeconds#" hint="Set to true for detailed description when the difference is less than one minute">
 	<cfscript>
 		var loc = {};
 		loc.minuteDiff = DateDiff("n", arguments.fromTime, arguments.toTime);
@@ -76,14 +76,14 @@
 
 <cffunction name="timeAgoInWords" returntype="string" access="public" output="false">
 	<cfargument name="fromTime" type="date" required="true">
-	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.timeAgoInWords.includeSeconds#">
+	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.functions.timeAgoInWords.includeSeconds#">
 	<cfset arguments.toTime = Now()>
 	<cfreturn distanceOfTimeInWords(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="timeUntilInWords" returntype="string" access="public" output="false">
 	<cfargument name="toTime" type="date" required="true">
-	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.timeUntilInWords.includeSeconds#">
+	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.functions.timeUntilInWords.includeSeconds#">
 	<cfset arguments.fromTime = Now()>
 	<cfreturn distanceOfTimeInWords(argumentCollection=arguments)>
 </cffunction>

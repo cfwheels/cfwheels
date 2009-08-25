@@ -6,7 +6,7 @@
 			for (loc.key in arguments)
 			{
 				if (loc.key != "functionName")
-					application.wheels[arguments.functionName][loc.key] = arguments[loc.key];
+					application.wheels.functions[arguments.functionName][loc.key] = arguments[loc.key];
 			}
 		}	
 		else
@@ -22,7 +22,7 @@
 	<cfscript>
 		var loc = {};
 		if (Len(arguments.functionName))
-			loc.returnValue = application.wheels[arguments.functionName][arguments.name];
+			loc.returnValue = application.wheels.functions[arguments.functionName][arguments.name];
 		else
 			loc.returnValue = application.wheels[arguments.name];
 	</cfscript>
@@ -36,10 +36,10 @@
 	<cfargument name="key" type="any" required="false" default="" hint="Key(s) to include in the URL">
 	<cfargument name="params" type="string" required="false" default="" hint="Any additional params to be set in the query string">
 	<cfargument name="anchor" type="string" required="false" default="" hint="Sets an anchor name to be appended to the path">
-	<cfargument name="onlyPath" type="boolean" required="false" default="#application.wheels.URLFor.onlyPath#" hint="If true, returns only the relative URL (no protocol, host name or port)">
-	<cfargument name="host" type="string" required="false" default="#application.wheels.URLFor.host#" hint="Set this to override the current host">
-	<cfargument name="protocol" type="string" required="false" default="#application.wheels.URLFor.protocol#" hint="Set this to override the current protocol">
-	<cfargument name="port" type="numeric" required="false" default="#application.wheels.URLFor.port#" hint="Set this to override the current port number">
+	<cfargument name="onlyPath" type="boolean" required="false" default="#application.wheels.functions.functions.URLFor.onlyPath#" hint="If true, returns only the relative URL (no protocol, host name or port)">
+	<cfargument name="host" type="string" required="false" default="#application.wheels.functions.functions.URLFor.host#" hint="Set this to override the current host">
+	<cfargument name="protocol" type="string" required="false" default="#application.wheels.functions.functions.URLFor.protocol#" hint="Set this to override the current protocol">
+	<cfargument name="port" type="numeric" required="false" default="#application.wheels.functions.functions.URLFor.port#" hint="Set this to override the current port number">
 	<cfscript>
 		var loc = {};
 		if (application.wheels.environment != "production")

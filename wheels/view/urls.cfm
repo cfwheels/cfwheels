@@ -7,10 +7,10 @@
 	<cfargument name="key" type="any" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="params" type="string" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for `URLFor`">
-	<cfargument name="onlyPath" type="boolean" required="false" default="#application.wheels.linkTo.onlyPath#" hint="See documentation for `URLFor`">
-	<cfargument name="host" type="string" required="false" default="#application.wheels.linkTo.host#" hint="See documentation for `URLFor`">
-	<cfargument name="protocol" type="string" required="false" default="#application.wheels.linkTo.protocol#" hint="See documentation for `URLFor`">
-	<cfargument name="port" type="numeric" required="false" default="#application.wheels.linkTo.port#" hint="See documentation for `URLFor`">
+	<cfargument name="onlyPath" type="boolean" required="false" default="#application.wheels.functions.linkTo.onlyPath#" hint="See documentation for `URLFor`">
+	<cfargument name="host" type="string" required="false" default="#application.wheels.functions.linkTo.host#" hint="See documentation for `URLFor`">
+	<cfargument name="protocol" type="string" required="false" default="#application.wheels.functions.linkTo.protocol#" hint="See documentation for `URLFor`">
+	<cfargument name="port" type="numeric" required="false" default="#application.wheels.functions.linkTo.port#" hint="See documentation for `URLFor`">
 	<cfscript>
 		var loc = {};
 		arguments = $insertDefaults(name="linkTo", reserved="href", input=arguments);
@@ -32,20 +32,20 @@
 </cffunction>
 
 <cffunction name="buttonTo" returntype="string" access="public" output="false" hint="Creates a form containing a single button that submits to the URL. The URL is built the same way as the `linkTo` function.">
-	<cfargument name="text" type="string" required="false" default="#application.wheels.buttonTo.text#" hint="See documentation for `linkTo`">
-	<cfargument name="confirm" type="string" required="false" default="#application.wheels.buttonTo.confirm#" hint="See documentation for `linkTo`">
-	<cfargument name="image" type="string" required="false" default="#application.wheels.buttonTo.image#" hint="If you want to use an image for the button pass in the link to it here (relative from the `images` folder)">
-	<cfargument name="disable" type="any" required="false" default="#application.wheels.buttonTo.disable#" hint="Pass in `true` if you want the button to be disabled when clicked (can help prevent multiple clicks) or pass in a string if you want the button disabled and the text on the button updated (to 'please wait...' for example)">
+	<cfargument name="text" type="string" required="false" default="#application.wheels.functions.buttonTo.text#" hint="See documentation for `linkTo`">
+	<cfargument name="confirm" type="string" required="false" default="#application.wheels.functions.buttonTo.confirm#" hint="See documentation for `linkTo`">
+	<cfargument name="image" type="string" required="false" default="#application.wheels.functions.buttonTo.image#" hint="If you want to use an image for the button pass in the link to it here (relative from the `images` folder)">
+	<cfargument name="disable" type="any" required="false" default="#application.wheels.functions.buttonTo.disable#" hint="Pass in `true` if you want the button to be disabled when clicked (can help prevent multiple clicks) or pass in a string if you want the button disabled and the text on the button updated (to 'please wait...' for example)">
 	<cfargument name="route" type="string" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="action" type="string" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="key" type="any" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="params" type="string" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for `URLFor`">
-	<cfargument name="onlyPath" type="boolean" required="false" default="#application.wheels.buttonTo.onlyPath#" hint="See documentation for `URLFor`">
-	<cfargument name="host" type="string" required="false" default="#application.wheels.buttonTo.host#" hint="See documentation for `URLFor`">
-	<cfargument name="protocol" type="string" required="false" default="#application.wheels.buttonTo.protocol#" hint="See documentation for `URLFor`">
-	<cfargument name="port" type="numeric" required="false" default="#application.wheels.buttonTo.port#" hint="See documentation for `URLFor`">
+	<cfargument name="onlyPath" type="boolean" required="false" default="#application.wheels.functions.buttonTo.onlyPath#" hint="See documentation for `URLFor`">
+	<cfargument name="host" type="string" required="false" default="#application.wheels.functions.buttonTo.host#" hint="See documentation for `URLFor`">
+	<cfargument name="protocol" type="string" required="false" default="#application.wheels.functions.buttonTo.protocol#" hint="See documentation for `URLFor`">
+	<cfargument name="port" type="numeric" required="false" default="#application.wheels.functions.buttonTo.port#" hint="See documentation for `URLFor`">
 	<cfscript>
 		var loc = {};
 		arguments = $insertDefaults(name="buttonTo", reserved="method", input=arguments);
@@ -69,7 +69,7 @@
 <cffunction name="mailTo" returntype="string" access="public" output="false" hint="Creates a mailto link tag to the specified email address, which is also used as the name of the link unless name is specified.">
 	<cfargument name="emailAddress" type="string" required="true" hint="The email address to link to">
 	<cfargument name="name" type="string" required="false" default="" hint="A string to use as the link text ('Joe' or 'Support Department' for example)">
-	<cfargument name="encode" type="boolean" required="false" default="#application.wheels.mailTo.encode#" hint="Pass true here to encode the email address, making it harder for bots to harvest it">
+	<cfargument name="encode" type="boolean" required="false" default="#application.wheels.functions.mailTo.encode#" hint="Pass true here to encode the email address, making it harder for bots to harvest it">
 	<cfscript>
 		var loc = {};
 		arguments = $insertDefaults(name="mailTo", reserved="href", input=arguments);
@@ -126,20 +126,20 @@
 </cffunction>
 
 <cffunction name="paginationLinks" returntype="string" access="public" output="false" hint="Builds and returns a string containing links to pages based on a paginated query. Uses `linkTo` internally to build the link so you need to pass in a route name, controller or action. All other `linkTo` arguments can of course be supplied as well in which case they are passed through directly to `linkTo`. If you have paginated more than one query in the controller you can use the `handle` argument to reference them (don't forget to pass in a `handle` to the `findAll` function in your controller first though).">
-	<cfargument name="windowSize" type="numeric" required="false" default="#application.wheels.paginationLinks.windowSize#" hint="The number of page links to show around the current page">
-	<cfargument name="alwaysShowAnchors" type="boolean" required="false" default="#application.wheels.paginationLinks.alwaysShowAnchors#" hint="Whether or not links to the first and last page should always be displayed">
-	<cfargument name="anchorDivider" type="string" required="false" default="#application.wheels.paginationLinks.anchorDivider#" hint="String to place next to the anchors on either side of the list">
-	<cfargument name="linkToCurrentPage" type="boolean" required="false" default="#application.wheels.paginationLinks.linkToCurrentPage#" hint="Whether or not the current page should be linked to">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.paginationLinks.prepend#" hint="String or HTML to be prepended before result">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.paginationLinks.append#" hint="String or HTML to be appended after result">
-	<cfargument name="prependToPage" type="string" required="false" default="#application.wheels.paginationLinks.prependToPage#" hint="String or HTML to be prepended before each page number">
-	<cfargument name="prependOnFirst" type="boolean" required="false" default="#application.wheels.paginationLinks.prependOnFirst#" hint="Whether or not to prepend the `prependToPage` string on the first page in the list">
-	<cfargument name="appendToPage" type="string" required="false" default="#application.wheels.paginationLinks.appendToPage#" hint="String or HTML to be appended after each page number">
-	<cfargument name="appendOnLast" type="boolean" required="false" default="#application.wheels.paginationLinks.appendOnLast#" hint="Whether or not to append the `appendToPage` string on the last page in the list">
-	<cfargument name="classForCurrent" type="string" required="false" default="#application.wheels.paginationLinks.classForCurrent#" hint="Class name for the current page number (if `linkToCurrentPage` is `true` the class name will go on the `a` element, if not, a `span` element will be used)">
+	<cfargument name="windowSize" type="numeric" required="false" default="#application.wheels.functions.paginationLinks.windowSize#" hint="The number of page links to show around the current page">
+	<cfargument name="alwaysShowAnchors" type="boolean" required="false" default="#application.wheels.functions.paginationLinks.alwaysShowAnchors#" hint="Whether or not links to the first and last page should always be displayed">
+	<cfargument name="anchorDivider" type="string" required="false" default="#application.wheels.functions.paginationLinks.anchorDivider#" hint="String to place next to the anchors on either side of the list">
+	<cfargument name="linkToCurrentPage" type="boolean" required="false" default="#application.wheels.functions.paginationLinks.linkToCurrentPage#" hint="Whether or not the current page should be linked to">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.paginationLinks.prepend#" hint="String or HTML to be prepended before result">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.paginationLinks.append#" hint="String or HTML to be appended after result">
+	<cfargument name="prependToPage" type="string" required="false" default="#application.wheels.functions.paginationLinks.prependToPage#" hint="String or HTML to be prepended before each page number">
+	<cfargument name="prependOnFirst" type="boolean" required="false" default="#application.wheels.functions.paginationLinks.prependOnFirst#" hint="Whether or not to prepend the `prependToPage` string on the first page in the list">
+	<cfargument name="appendToPage" type="string" required="false" default="#application.wheels.functions.paginationLinks.appendToPage#" hint="String or HTML to be appended after each page number">
+	<cfargument name="appendOnLast" type="boolean" required="false" default="#application.wheels.functions.paginationLinks.appendOnLast#" hint="Whether or not to append the `appendToPage` string on the last page in the list">
+	<cfargument name="classForCurrent" type="string" required="false" default="#application.wheels.functions.paginationLinks.classForCurrent#" hint="Class name for the current page number (if `linkToCurrentPage` is `true` the class name will go on the `a` element, if not, a `span` element will be used)">
 	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
-	<cfargument name="name" type="string" required="false" default="#application.wheels.paginationLinks.name#" hint="The name of the param that holds the current page number">
-	<cfargument name="showSinglePage" type="boolean" required="false" default="#application.wheels.paginationLinks.showSinglePage#" hint="Will show a single page when set to `true` (the default behavior is to return an empty string when there is only one page in the pagination)">
+	<cfargument name="name" type="string" required="false" default="#application.wheels.functions.paginationLinks.name#" hint="The name of the param that holds the current page number">
+	<cfargument name="showSinglePage" type="boolean" required="false" default="#application.wheels.functions.paginationLinks.showSinglePage#" hint="Will show a single page when set to `true` (the default behavior is to return an empty string when there is only one page in the pagination)">
 	
 	<cfscript>
 		var loc = {};

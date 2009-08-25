@@ -1,17 +1,17 @@
 <cffunction name="startFormTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing the opening form tag. The form's action will be built according to the same rules as `URLFor`.">
-	<cfargument name="method" type="string" required="false" default="#application.wheels.startFormTag.method#" hint="The type of method to use in the form tag, `get` and `post` are the options">
-	<cfargument name="multipart" type="boolean" required="false" default="#application.wheels.startFormTag.multipart#" hint="Set to `true` if the form should be able to upload files">
-	<cfargument name="spamProtection" type="boolean" required="false" default="#application.wheels.startFormTag.spamProtection#" hint="Set to `true` to protect the form against spammers (done with Javascript)">
+	<cfargument name="method" type="string" required="false" default="#application.wheels.functions.startFormTag.method#" hint="The type of method to use in the form tag, `get` and `post` are the options">
+	<cfargument name="multipart" type="boolean" required="false" default="#application.wheels.functions.startFormTag.multipart#" hint="Set to `true` if the form should be able to upload files">
+	<cfargument name="spamProtection" type="boolean" required="false" default="#application.wheels.functions.startFormTag.spamProtection#" hint="Set to `true` to protect the form against spammers (done with Javascript)">
 	<cfargument name="route" type="string" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="action" type="string" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="key" type="any" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="params" type="string" required="false" default="" hint="See documentation for `URLFor`">
 	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for `URLFor`">
-	<cfargument name="onlyPath" type="boolean" required="false" default="#application.wheels.startFormTag.onlyPath#" hint="See documentation for `URLFor`">
-	<cfargument name="host" type="string" required="false" default="#application.wheels.startFormTag.host#" hint="See documentation for `URLFor`">
-	<cfargument name="protocol" type="string" required="false" default="#application.wheels.startFormTag.protocol#" hint="See documentation for `URLFor`">
-	<cfargument name="port" type="numeric" required="false" default="#application.wheels.startFormTag.port#" hint="See documentation for `URLFor`">
+	<cfargument name="onlyPath" type="boolean" required="false" default="#application.wheels.functions.startFormTag.onlyPath#" hint="See documentation for `URLFor`">
+	<cfargument name="host" type="string" required="false" default="#application.wheels.functions.startFormTag.host#" hint="See documentation for `URLFor`">
+	<cfargument name="protocol" type="string" required="false" default="#application.wheels.functions.startFormTag.protocol#" hint="See documentation for `URLFor`">
+	<cfargument name="port" type="numeric" required="false" default="#application.wheels.functions.startFormTag.port#" hint="See documentation for `URLFor`">
 	<cfscript>
 		var loc = {};
 		arguments = $insertDefaults(name="startFormTag", input=arguments);
@@ -57,9 +57,9 @@
 </cffunction>
 
 <cffunction name="submitTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a submit button `form` control.">
-	<cfargument name="value" type="string" required="false" default="#application.wheels.submitTag.value#" hint="Message to display in the button form control">
-	<cfargument name="image" type="string" required="false" default="#application.wheels.submitTag.image#" hint="File name of the image file to use in the button form control">
-	<cfargument name="disable" type="any" required="false" default="#application.wheels.submitTag.disable#" hint="Whether to disable the button upon clicking (prevents double-clicking)">
+	<cfargument name="value" type="string" required="false" default="#application.wheels.functions.submitTag.value#" hint="Message to display in the button form control">
+	<cfargument name="image" type="string" required="false" default="#application.wheels.functions.submitTag.image#" hint="File name of the image file to use in the button form control">
+	<cfargument name="disable" type="any" required="false" default="#application.wheels.functions.submitTag.disable#" hint="Whether to disable the button upon clicking (prevents double-clicking)">
 	<cfscript>
 		var loc = {};
 		arguments = $insertDefaults(name="submitTag", reserved="type,src", input=arguments);
@@ -94,13 +94,13 @@
 <cffunction name="textField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a text field form control based on the supplied `objectName` and `property`.">
 	<cfargument name="objectName" type="any" required="true" hint="The variable name of the object to build the form control for">
 	<cfargument name="property" type="string" required="true" hint="The name of the property (database column) to use in the form control">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.textField.label#" hint="The label text to use in the form control">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.textField.labelPlacement#" hint="Whether to place the label before, after or wrapped around the form control">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.textField.prepend#" hint="String to prepend to the form control. Useful to wrap the form control around HTML tags">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.textField.append#" hint="String to append to the form control. Useful to wrap the form control around HTML tags">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.textField.prependToLabel#" hint="String to prepend to the form control's label. Useful to wrap the form control around HTML tags">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.textField.appendToLabel#" hint="String to append to the form control's label. Useful to wrap the form control around HTML tags">
-	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.textField.errorElement#" hint="HTML tag to wrap the form control with when the object contains errors">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.textField.label#" hint="The label text to use in the form control">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.textField.labelPlacement#" hint="Whether to place the label before, after or wrapped around the form control">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.textField.prepend#" hint="String to prepend to the form control. Useful to wrap the form control around HTML tags">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.textField.append#" hint="String to append to the form control. Useful to wrap the form control around HTML tags">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.textField.prependToLabel#" hint="String to prepend to the form control's label. Useful to wrap the form control around HTML tags">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.textField.appendToLabel#" hint="String to append to the form control's label. Useful to wrap the form control around HTML tags">
+	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.functions.textField.errorElement#" hint="HTML tag to wrap the form control with when the object contains errors">
 	<cfscript>
 		var loc = {};
 
@@ -129,12 +129,12 @@
 <cffunction name="textFieldTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="value" type="string" required="false" default="">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.textFieldTag.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.textFieldTag.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.textFieldTag.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.textFieldTag.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.textFieldTag.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.textFieldTag.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.textFieldTag.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.textFieldTag.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.textFieldTag.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.textFieldTag.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.textFieldTag.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.textFieldTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
 
@@ -161,13 +161,13 @@
 <cffunction name="passwordField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a password field form control based on the supplied `objectName` and `property`.">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.passwordField.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.passwordField.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.passwordField.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.passwordField.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.passwordField.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.passwordField.appendToLabel#" hint="See documentation for `textField`">
-	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.passwordField.errorElement#" hint="See documentation for `textField`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.passwordField.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.passwordField.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.passwordField.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.passwordField.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.passwordField.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.passwordField.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.functions.passwordField.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
 
@@ -196,12 +196,12 @@
 <cffunction name="passwordFieldTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="value" type="string" required="false" default="">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.passwordFieldTag.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.passwordFieldTag.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.passwordFieldTag.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.passwordFieldTag.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.passwordFieldTag.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.passwordFieldTag.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.passwordFieldTag.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.passwordFieldTag.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.passwordFieldTag.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.passwordFieldTag.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.passwordFieldTag.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.passwordFieldTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
 
@@ -260,13 +260,13 @@
 <cffunction name="fileField" returntype="string" access="public" output="false" hint="Builds and returns a string containing a file field form control based on the supplied `objectName` and `property`.">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.fileField.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.fileField.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.fileField.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.fileField.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.fileField.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.fileField.appendToLabel#" hint="See documentation for `textField`">
-	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.fileField.errorElement#" hint="See documentation for `textField`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.fileField.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.fileField.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.fileField.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.fileField.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.fileField.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.fileField.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.functions.fileField.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
 
@@ -293,12 +293,12 @@
 
 <cffunction name="fileFieldTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.fileFieldTag.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.fileFieldTag.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.fileFieldTag.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.fileFieldTag.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.fileFieldTag.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.fileFieldTag.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.fileFieldTag.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.fileFieldTag.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.fileFieldTag.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.fileFieldTag.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.fileFieldTag.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.fileFieldTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
 
@@ -324,13 +324,13 @@
 <cffunction name="textArea" returntype="string" access="public" output="false" hint="Builds and returns a string containing a password field form control based on the supplied `objectName` and `property`.">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.textArea.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.textArea.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.textArea.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.textArea.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.textArea.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.textArea.appendToLabel#" hint="See documentation for `textField`">
-	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.textArea.errorElement#" hint="See documentation for `textField`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.textArea.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.textArea.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.textArea.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.textArea.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.textArea.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.textArea.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.functions.textArea.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
 
@@ -358,12 +358,12 @@
 <cffunction name="textAreaTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="content" type="string" required="false" default="">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.textAreaTag.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.textAreaTag.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.textAreaTag.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.textAreaTag.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.textAreaTag.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.textAreaTag.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.textAreaTag.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.textAreaTag.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.textAreaTag.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.textAreaTag.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.textAreaTag.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.textAreaTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
 
@@ -391,13 +391,13 @@
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="tagValue" type="string" required="true" hint="The value of the radio button when `selected`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.radioButton.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.radioButton.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.radioButton.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.radioButton.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.radioButton.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.radioButton.appendToLabel#" hint="See documentation for `textField`">
-	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.radioButton.errorElement#" hint="See documentation for `textField`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.radioButton.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.radioButton.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.radioButton.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.radioButton.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.radioButton.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.radioButton.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.functions.radioButton.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
 
@@ -431,12 +431,12 @@
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="value" type="string" required="true">
 	<cfargument name="checked" type="boolean" required="false" default="false">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.radioButtonTag.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.radioButtonTag.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.radioButtonTag.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.radioButtonTag.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.radioButtonTag.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.radioButtonTag.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.radioButtonTag.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.radioButtonTag.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.radioButtonTag.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.radioButtonTag.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.radioButtonTag.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.radioButtonTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
 
@@ -473,15 +473,15 @@
 <cffunction name="checkBox" returntype="string" access="public" output="false" hint="Builds and returns a string containing a check box form control based on the supplied `objectName` and `property`.">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
-	<cfargument name="checkedValue" type="string" required="false" default="#application.wheels.checkBox.checkedValue#" hint="The value of the check box when it's on the `checked` state">
-	<cfargument name="uncheckedValue" type="string" required="false" default="#application.wheels.checkBox.uncheckedValue#" hint="The value of the check box when it's on the `unchecked` state">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.checkBox.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.checkBox.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.checkBox.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.checkBox.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.checkBox.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.checkBox.appendToLabel#" hint="See documentation for `textField`">
-	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.checkBox.errorElement#" hint="See documentation for `textField`">
+	<cfargument name="checkedValue" type="string" required="false" default="#application.wheels.functions.checkBox.checkedValue#" hint="The value of the check box when it's on the `checked` state">
+	<cfargument name="uncheckedValue" type="string" required="false" default="#application.wheels.functions.checkBox.uncheckedValue#" hint="The value of the check box when it's on the `unchecked` state">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.checkBox.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.checkBox.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.checkBox.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.checkBox.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.checkBox.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.checkBox.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.functions.checkBox.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
 
@@ -522,13 +522,13 @@
 <cffunction name="checkBoxTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="checked" type="boolean" required="false" default="false">
-	<cfargument name="value" type="string" required="false" default="#application.wheels.checkBoxTag.value#">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.checkBoxTag.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.checkBoxTag.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.checkBoxTag.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.checkBoxTag.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.checkBoxTag.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.checkBoxTag.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="value" type="string" required="false" default="#application.wheels.functions.checkBoxTag.value#">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.checkBoxTag.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.checkBoxTag.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.checkBoxTag.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.checkBoxTag.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.checkBoxTag.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.checkBoxTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
 
@@ -561,16 +561,16 @@
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="options" type="any" required="true" hint="A collection to populate the select form control with">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.select.includeBlank#" hint="Whether to include a blank option in the select form control">
-	<cfargument name="valueField" type="string" required="false" default="#application.wheels.select.valueField#" hint="The column to use for the value of each list element, used only when a query has been supplied in the `options` argument">
-	<cfargument name="textField" type="string" required="false" default="#application.wheels.select.textField#" hint="The column to use for the value of each list element that the end user will see, used only when a query has been supplied in the `options` argument">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.select.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.select.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.select.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.select.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.select.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.select.appendToLabel#" hint="See documentation for `textField`">
-	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.select.errorElement#" hint="See documentation for `textField`">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.select.includeBlank#" hint="Whether to include a blank option in the select form control">
+	<cfargument name="valueField" type="string" required="false" default="#application.wheels.functions.select.valueField#" hint="The column to use for the value of each list element, used only when a query has been supplied in the `options` argument">
+	<cfargument name="textField" type="string" required="false" default="#application.wheels.functions.select.textField#" hint="The column to use for the value of each list element that the end user will see, used only when a query has been supplied in the `options` argument">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.select.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.select.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.select.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.select.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.select.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.select.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.functions.select.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
 
@@ -615,16 +615,16 @@
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="options" type="any" required="true">
 	<cfargument name="selected" type="string" required="false" default="">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.selectTag.includeBlank#" hint="See documentation for `select`">
-	<cfargument name="multiple" type="boolean" required="false" default="#application.wheels.selectTag.multiple#" hint="Whether to allow multiple selection of options in the select form control">
-	<cfargument name="valueField" type="string" required="false" default="#application.wheels.selectTag.valueField#" hint="See documentation for `select`">
-	<cfargument name="textField" type="string" required="false" default="#application.wheels.selectTag.textField#" hint="See documentation for `select`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.selectTag.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.selectTag.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.selectTag.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.selectTag.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.selectTag.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.selectTag.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.selectTag.includeBlank#" hint="See documentation for `select`">
+	<cfargument name="multiple" type="boolean" required="false" default="#application.wheels.functions.selectTag.multiple#" hint="Whether to allow multiple selection of options in the select form control">
+	<cfargument name="valueField" type="string" required="false" default="#application.wheels.functions.selectTag.valueField#" hint="See documentation for `select`">
+	<cfargument name="textField" type="string" required="false" default="#application.wheels.functions.selectTag.textField#" hint="See documentation for `select`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.selectTag.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.selectTag.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.selectTag.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.selectTag.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.selectTag.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.selectTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
 
@@ -651,19 +651,19 @@
 <cffunction name="dateSelect" returntype="string" access="public" output="false" hint="Builds and returns a string containing three select form controls for a date based on the supplied `objectName` and `property`.">
 	<cfargument name="objectName" type="any" required="false" default="" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="order" type="string" required="false" default="#application.wheels.dateSelect.order#" hint="Use to change the order of or exclude date select tags">
-	<cfargument name="separator" type="string" required="false" default="#application.wheels.dateSelect.separator#" hint="Use to change the character that is displayed between the date select tags">
-	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.dateSelect.startYear#" hint="First year in select list">
-	<cfargument name="endYear" type="numeric" required="false" default="#application.wheels.dateSelect.endYear#" hint="Last year in select list">
-	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.dateSelect.monthDisplay#" hint="Pass in `names`, `numbers` or `abbreviations` to control display">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.dateSelect.includeBlank#" hint="See documentation for `select`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.dateSelect.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.dateSelect.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.dateSelect.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.dateSelect.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.dateSelect.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateSelect.appendToLabel#" hint="See documentation for `textField`">
-	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.dateSelect.errorElement#" hint="See documentation for `textField`">
+	<cfargument name="order" type="string" required="false" default="#application.wheels.functions.dateSelect.order#" hint="Use to change the order of or exclude date select tags">
+	<cfargument name="separator" type="string" required="false" default="#application.wheels.functions.dateSelect.separator#" hint="Use to change the character that is displayed between the date select tags">
+	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.functions.dateSelect.startYear#" hint="First year in select list">
+	<cfargument name="endYear" type="numeric" required="false" default="#application.wheels.functions.dateSelect.endYear#" hint="Last year in select list">
+	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.functions.dateSelect.monthDisplay#" hint="Pass in `names`, `numbers` or `abbreviations` to control display">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.dateSelect.includeBlank#" hint="See documentation for `select`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.dateSelect.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.dateSelect.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.dateSelect.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.dateSelect.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.dateSelect.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.dateSelect.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.functions.dateSelect.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
 
 		// START DEPRECATING WRAPLABEL CODE
@@ -685,18 +685,18 @@
 <cffunction name="dateSelectTags" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true" hint="See documentation for `textFieldTag`">
 	<cfargument name="selected" type="date" required="false" default="#Now()#" hint="See documentation for `selectTag`">
-	<cfargument name="order" type="string" required="false" default="#application.wheels.dateSelectTags.order#" hint="See documentation for `dateSelect`">
-	<cfargument name="separator" type="string" required="false" default="#application.wheels.dateSelectTags.separator#" hint="See documentation for `dateSelect`">
-	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.dateSelectTags.startYear#" hint="See documentation for `dateSelect`">
-	<cfargument name="endYear" type="numeric" required="false" default="#application.wheels.dateSelectTags.endYear#" hint="See documentation for `dateSelect`">
-	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.dateSelectTags.monthDisplay#" hint="See documentation for `dateSelect`">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.dateSelectTags.includeBlank#" hint="See documentation for `dateSelect`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.dateSelectTags.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.dateSelectTags.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.dateSelectTags.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.dateSelectTags.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.dateSelectTags.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateSelectTags.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="order" type="string" required="false" default="#application.wheels.functions.dateSelectTags.order#" hint="See documentation for `dateSelect`">
+	<cfargument name="separator" type="string" required="false" default="#application.wheels.functions.dateSelectTags.separator#" hint="See documentation for `dateSelect`">
+	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.functions.dateSelectTags.startYear#" hint="See documentation for `dateSelect`">
+	<cfargument name="endYear" type="numeric" required="false" default="#application.wheels.functions.dateSelectTags.endYear#" hint="See documentation for `dateSelect`">
+	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.functions.dateSelectTags.monthDisplay#" hint="See documentation for `dateSelect`">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.dateSelectTags.includeBlank#" hint="See documentation for `dateSelect`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.dateSelectTags.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.dateSelectTags.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.dateSelectTags.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.dateSelectTags.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.dateSelectTags.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.dateSelectTags.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 
 		// START DEPRECATING WRAPLABEL CODE
@@ -722,17 +722,17 @@
 <cffunction name="timeSelect" returntype="string" access="public" output="false" hint="Builds and returns a string containing three select form controls for a time based on the supplied `objectName` and `property`.">
 	<cfargument name="objectName" type="any" required="false" default="" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="false" default="" hint="See documentation for `textField`">
-	<cfargument name="order" type="string" required="false" default="#application.wheels.timeSelect.order#" hint="Use to change the order of or exclude time select tags">
-	<cfargument name="separator" type="string" required="false" default="#application.wheels.timeSelect.separator#" hint="Use to change the character that is displayed between the time select tags">
-	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.timeSelect.minuteStep#" hint="Pass in `10` to only show minute 10, 20,30 etc">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.timeSelect.includeBlank#" hint="See documentation for `select`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.timeSelect.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.timeSelect.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.timeSelect.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.timeSelect.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.timeSelect.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.timeSelect.appendToLabel#" hint="See documentation for `textField`">
-	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.timeSelect.errorElement#" hint="See documentation for `textField`">
+	<cfargument name="order" type="string" required="false" default="#application.wheels.functions.timeSelect.order#" hint="Use to change the order of or exclude time select tags">
+	<cfargument name="separator" type="string" required="false" default="#application.wheels.functions.timeSelect.separator#" hint="Use to change the character that is displayed between the time select tags">
+	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.functions.timeSelect.minuteStep#" hint="Pass in `10` to only show minute 10, 20,30 etc">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.timeSelect.includeBlank#" hint="See documentation for `select`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.timeSelect.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.timeSelect.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.timeSelect.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.timeSelect.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.timeSelect.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.timeSelect.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.functions.timeSelect.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
 
 		// START DEPRECATING WRAPLABEL CODE
@@ -754,16 +754,16 @@
 <cffunction name="timeSelectTags" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true" hint="See documentation for `textFieldTag`">
 	<cfargument name="selected" type="date" required="false" default="#Now()#" hint="See documentation for `selectTag`">
-	<cfargument name="order" type="string" required="false" default="#application.wheels.timeSelectTags.order#" hint="See documentation for `timeSelect`">
-	<cfargument name="separator" type="string" required="false" default="#application.wheels.timeSelectTags.separator#" hint="See documentation for `timeSelect`">
-	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.timeSelectTags.minuteStep#" hint="See documentation for `timeSelect`">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.timeSelectTags.includeBlank#" hint="See documentation for `timeSelect`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.timeSelectTags.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.timeSelectTags.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.timeSelectTags.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.timeSelectTags.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.timeSelectTags.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.timeSelectTags.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="order" type="string" required="false" default="#application.wheels.functions.timeSelectTags.order#" hint="See documentation for `timeSelect`">
+	<cfargument name="separator" type="string" required="false" default="#application.wheels.functions.timeSelectTags.separator#" hint="See documentation for `timeSelect`">
+	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.functions.timeSelectTags.minuteStep#" hint="See documentation for `timeSelect`">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.timeSelectTags.includeBlank#" hint="See documentation for `timeSelect`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.timeSelectTags.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.timeSelectTags.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.timeSelectTags.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.timeSelectTags.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.timeSelectTags.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.timeSelectTags.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 
 		// START DEPRECATING WRAPLABEL CODE
@@ -789,23 +789,23 @@
 <cffunction name="dateTimeSelect" returntype="string" access="public" output="false" hint="Builds and returns a string containing six select form controls (three for date selection and the remaining three for time selection) based on the supplied `objectName` and `property`.">
 	<cfargument name="objectName" type="string" required="true" hint="See documentation for `textField`">
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
-	<cfargument name="dateOrder" type="string" required="false" default="#application.wheels.dateTimeSelect.dateOrder#" hint="See documentation for `dateSelect`">
-	<cfargument name="dateSeparator" type="string" required="false" default="#application.wheels.dateTimeSelect.dateSeparator#" hint="See documentation for `dateSelect`">
-	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.dateTimeSelect.startYear#" hint="See documentation for `dateSelect`">
-	<cfargument name="endYear" type="numeric" required="false" default="#application.wheels.dateTimeSelect.endYear#" hint="See documentation for `dateSelect`">
-	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.dateTimeSelect.monthDisplay#" hint="See documentation for `dateSelect`">
-	<cfargument name="timeOrder" type="string" required="false" default="#application.wheels.dateTimeSelect.timeOrder#" hint="See documentation for `timeSelect`">
-	<cfargument name="timeSeparator" type="string" required="false" default="#application.wheels.dateTimeSelect.timeSeparator#" hint="See documentation for `timeSelect`">
-	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.dateTimeSelect.minuteStep#" hint="See documentation for `timeSelect`">
-	<cfargument name="separator" type="string" required="false" default="#application.wheels.dateTimeSelect.separator#" hint="Use to change the character that is displayed between the first and second set of select tags">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.dateTimeSelect.includeBlank#" hint="See documentation for `select`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.dateTimeSelect.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.dateTimeSelect.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.dateTimeSelect.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.dateTimeSelect.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.dateTimeSelect.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateTimeSelect.appendToLabel#" hint="See documentation for `textField`">
-	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.dateTimeSelect.errorElement#" hint="See documentation for `textField`">
+	<cfargument name="dateOrder" type="string" required="false" default="#application.wheels.functions.dateTimeSelect.dateOrder#" hint="See documentation for `dateSelect`">
+	<cfargument name="dateSeparator" type="string" required="false" default="#application.wheels.functions.dateTimeSelect.dateSeparator#" hint="See documentation for `dateSelect`">
+	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.functions.dateTimeSelect.startYear#" hint="See documentation for `dateSelect`">
+	<cfargument name="endYear" type="numeric" required="false" default="#application.wheels.functions.dateTimeSelect.endYear#" hint="See documentation for `dateSelect`">
+	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.functions.dateTimeSelect.monthDisplay#" hint="See documentation for `dateSelect`">
+	<cfargument name="timeOrder" type="string" required="false" default="#application.wheels.functions.dateTimeSelect.timeOrder#" hint="See documentation for `timeSelect`">
+	<cfargument name="timeSeparator" type="string" required="false" default="#application.wheels.functions.dateTimeSelect.timeSeparator#" hint="See documentation for `timeSelect`">
+	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.functions.dateTimeSelect.minuteStep#" hint="See documentation for `timeSelect`">
+	<cfargument name="separator" type="string" required="false" default="#application.wheels.functions.dateTimeSelect.separator#" hint="Use to change the character that is displayed between the first and second set of select tags">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.dateTimeSelect.includeBlank#" hint="See documentation for `select`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.dateTimeSelect.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.dateTimeSelect.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.dateTimeSelect.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.dateTimeSelect.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.dateTimeSelect.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.dateTimeSelect.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.functions.dateTimeSelect.errorElement#" hint="See documentation for `textField`">
 	<cfscript>
 
 		// START DEPRECATING WRAPLABEL CODE
@@ -825,22 +825,22 @@
 </cffunction>
 
 <cffunction name="dateTimeSelectTags" returntype="string" access="public" output="false">
-	<cfargument name="dateOrder" type="string" required="false" default="#application.wheels.dateTimeSelectTags.dateOrder#" hint="See documentation for `dateTimeSelect`">
-	<cfargument name="dateSeparator" type="string" required="false" default="#application.wheels.dateTimeSelectTags.dateSeparator#" hint="See documentation for `dateTimeSelect`">
-	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.dateTimeSelectTags.startYear#" hint="See documentation for `dateTimeSelect`">
-	<cfargument name="endYear" type="numeric" required="false" default="#application.wheels.dateTimeSelectTags.endYear#" hint="See documentation for `dateTimeSelect`">
-	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.dateTimeSelectTags.monthDisplay#" hint="See documentation for `dateTimeSelect`">
-	<cfargument name="timeOrder" type="string" required="false" default="#application.wheels.dateTimeSelectTags.timeOrder#" hint="See documentation for `dateTimeSelect`">
-	<cfargument name="timeSeparator" type="string" required="false" default="#application.wheels.dateTimeSelectTags.timeSeparator#" hint="See documentation for `dateTimeSelect`">
-	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.dateTimeSelectTags.minuteStep#" hint="See documentation for `dateTimeSelect`">
-	<cfargument name="separator" type="string" required="false" default="#application.wheels.dateTimeSelectTags.separator#" hint="See documentation for `dateTimeSelect`">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.dateTimeSelectTags.includeBlank#" hint="See documentation for `select`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.dateTimeSelectTags.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.dateTimeSelectTags.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.dateTimeSelectTags.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.dateTimeSelectTags.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.dateTimeSelectTags.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.dateTimeSelectTags.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="dateOrder" type="string" required="false" default="#application.wheels.functions.dateTimeSelectTags.dateOrder#" hint="See documentation for `dateTimeSelect`">
+	<cfargument name="dateSeparator" type="string" required="false" default="#application.wheels.functions.dateTimeSelectTags.dateSeparator#" hint="See documentation for `dateTimeSelect`">
+	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.functions.dateTimeSelectTags.startYear#" hint="See documentation for `dateTimeSelect`">
+	<cfargument name="endYear" type="numeric" required="false" default="#application.wheels.functions.dateTimeSelectTags.endYear#" hint="See documentation for `dateTimeSelect`">
+	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.functions.dateTimeSelectTags.monthDisplay#" hint="See documentation for `dateTimeSelect`">
+	<cfargument name="timeOrder" type="string" required="false" default="#application.wheels.functions.dateTimeSelectTags.timeOrder#" hint="See documentation for `dateTimeSelect`">
+	<cfargument name="timeSeparator" type="string" required="false" default="#application.wheels.functions.dateTimeSelectTags.timeSeparator#" hint="See documentation for `dateTimeSelect`">
+	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.functions.dateTimeSelectTags.minuteStep#" hint="See documentation for `dateTimeSelect`">
+	<cfargument name="separator" type="string" required="false" default="#application.wheels.functions.dateTimeSelectTags.separator#" hint="See documentation for `dateTimeSelect`">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.dateTimeSelectTags.includeBlank#" hint="See documentation for `select`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.dateTimeSelectTags.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.dateTimeSelectTags.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.dateTimeSelectTags.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.dateTimeSelectTags.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.dateTimeSelectTags.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.dateTimeSelectTags.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
 
@@ -876,15 +876,15 @@
 <cffunction name="yearSelectTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true" hint="See documentation for `textFieldTag`">
 	<cfargument name="selected" type="date" required="false" default="#Year(Now())#" hint="The year that should be selected initially">
-	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.yearSelectTag.startYear#" hint="See documentation for `dateSelect`">
-	<cfargument name="endYear" type="numeric" required="false" default="#application.wheels.yearSelectTag.endYear#" hint="See documentation for `dateSelect`">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.yearSelectTag.includeBlank#" hint="See documentation for `select`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.yearSelectTag.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.yearSelectTag.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.yearSelectTag.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.yearSelectTag.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.yearSelectTag.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.yearSelectTag.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.functions.yearSelectTag.startYear#" hint="See documentation for `dateSelect`">
+	<cfargument name="endYear" type="numeric" required="false" default="#application.wheels.functions.yearSelectTag.endYear#" hint="See documentation for `dateSelect`">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.yearSelectTag.includeBlank#" hint="See documentation for `select`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.yearSelectTag.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.yearSelectTag.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.yearSelectTag.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.yearSelectTag.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.yearSelectTag.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.yearSelectTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 
 		// START DEPRECATING WRAPLABEL CODE
@@ -906,14 +906,14 @@
 <cffunction name="monthSelectTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true" hint="See documentation for `textFieldTag`">
 	<cfargument name="selected" type="date" required="false" default="#Month(Now())#" hint="The month that should be selected initially">
-	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.monthSelectTag.monthDisplay#" hint="See documentation for `dateSelect`">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.monthSelectTag.includeBlank#" hint="See documentation for `select`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.monthSelectTag.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.monthSelectTag.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.monthSelectTag.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.monthSelectTag.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.monthSelectTag.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.monthSelectTag.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.functions.monthSelectTag.monthDisplay#" hint="See documentation for `dateSelect`">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.monthSelectTag.includeBlank#" hint="See documentation for `select`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.monthSelectTag.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.monthSelectTag.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.monthSelectTag.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.monthSelectTag.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.monthSelectTag.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.monthSelectTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 
 		// START DEPRECATING WRAPLABEL CODE
@@ -935,13 +935,13 @@
 <cffunction name="daySelectTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true" hint="See documentation for `textFieldTag`">
 	<cfargument name="selected" type="date" required="false" default="#Day(Now())#" hint="The day that should be selected initially">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.daySelectTag.includeBlank#" hint="See documentation for `select`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.daySelectTag.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.daySelectTag.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.daySelectTag.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.daySelectTag.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.daySelectTag.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.daySelectTag.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.daySelectTag.includeBlank#" hint="See documentation for `select`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.daySelectTag.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.daySelectTag.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.daySelectTag.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.daySelectTag.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.daySelectTag.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.daySelectTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 
 		// START DEPRECATING WRAPLABEL CODE
@@ -963,13 +963,13 @@
 <cffunction name="hourSelectTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true" hint="See documentation for `textFieldTag`">
 	<cfargument name="selected" type="date" required="false" default="#Hour(Now())#" hint="The hour that should be selected initially">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.hourSelectTag.includeBlank#" hint="See documentation for `select`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.hourSelectTag.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.hourSelectTag.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.hourSelectTag.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.hourSelectTag.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.hourSelectTag.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.hourSelectTag.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.hourSelectTag.includeBlank#" hint="See documentation for `select`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.hourSelectTag.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.hourSelectTag.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.hourSelectTag.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.hourSelectTag.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.hourSelectTag.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.hourSelectTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 
 		// START DEPRECATING WRAPLABEL CODE
@@ -991,14 +991,14 @@
 <cffunction name="minuteSelectTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true" hint="See documentation for `textFieldTag`">
 	<cfargument name="selected" type="date" required="false" default="#Minute(Now())#" hint="The minute that should be selected initially">
-	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.minuteSelectTag.minuteStep#" hint="See documentation for `timeSelect`">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.minuteSelectTag.includeBlank#" hint="See documentation for `select`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.minuteSelectTag.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.minuteSelectTag.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.minuteSelectTag.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.minuteSelectTag.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.minuteSelectTag.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.minuteSelectTag.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.functions.minuteSelectTag.minuteStep#" hint="See documentation for `timeSelect`">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.minuteSelectTag.includeBlank#" hint="See documentation for `select`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.minuteSelectTag.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.minuteSelectTag.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.minuteSelectTag.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.minuteSelectTag.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.minuteSelectTag.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.minuteSelectTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 
 		// START DEPRECATING WRAPLABEL CODE
@@ -1020,13 +1020,13 @@
 <cffunction name="secondSelectTag" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true" hint="See documentation for `textFieldTag`">
 	<cfargument name="selected" type="date" required="false" default="#Second(Now())#" hint="The second that should be selected initially">
-	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.secondSelectTag.includeBlank#" hint="See documentation for `select`">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.secondSelectTag.label#" hint="See documentation for `textField`">
-	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.secondSelectTag.labelPlacement#" hint="See documentation for `textField`">
-	<cfargument name="prepend" type="string" required="false" default="#application.wheels.secondSelectTag.prepend#" hint="See documentation for `textField`">
-	<cfargument name="append" type="string" required="false" default="#application.wheels.secondSelectTag.append#" hint="See documentation for `textField`">
-	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.secondSelectTag.prependToLabel#" hint="See documentation for `textField`">
-	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.secondSelectTag.appendToLabel#" hint="See documentation for `textField`">
+	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.secondSelectTag.includeBlank#" hint="See documentation for `select`">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.secondSelectTag.label#" hint="See documentation for `textField`">
+	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.secondSelectTag.labelPlacement#" hint="See documentation for `textField`">
+	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.secondSelectTag.prepend#" hint="See documentation for `textField`">
+	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.secondSelectTag.append#" hint="See documentation for `textField`">
+	<cfargument name="prependToLabel" type="string" required="false" default="#application.wheels.functions.secondSelectTag.prependToLabel#" hint="See documentation for `textField`">
+	<cfargument name="appendToLabel" type="string" required="false" default="#application.wheels.functions.secondSelectTag.appendToLabel#" hint="See documentation for `textField`">
 	<cfscript>
 
 		// START DEPRECATING WRAPLABEL CODE
