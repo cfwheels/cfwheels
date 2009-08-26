@@ -48,15 +48,6 @@
 				$throw(type="Wheels.IncorrectArguments", message="Can't use the 'host' or 'protocol' arguments when 'onlyPath' is 'true'.", extendedInfo="Set 'onlyPath' to 'false' so that linkTo will create absolute URLs and thus allowing you to set the 'host' and 'protocol' on the link.");
 		}
 
-		// if no route, controller or action was passed in we default to the current controller and action
-		if (StructKeyExists(variables, "params") && !Len(arguments.route) && !Len(arguments.controller) && !Len(arguments.action))
-		{
-			if (StructKeyExists(variables.params, "controller"))
-				arguments.controller = variables.params.controller;
-			if (StructKeyExists(variables.params, "action"))
-				arguments.action = variables.params.action;
-		}
-
 		// get primary key values if an object was passed in
 		if (IsObject(arguments.key))
 		{
@@ -103,10 +94,11 @@
 		else
 		{
 			// link based on controller/action/key
-			if (Len(arguments.controller))
-				loc.returnValue = loc.returnValue & "?controller=" & REReplace(REReplace(arguments.controller, "([A-Z])", "-\l\1", "all"), "^-", "", "one"); // add controller from arguments
-			else
-				loc.returnValue = loc.returnValue & "?controller=" & REReplace(REReplace(variables.params.controller, "([A-Z])", "-\l\1", "all"), "^-", "", "one"); // keep the controller name from the current request
+			if (!Len(arguments.controller) && !Len(arguments.action))
+				arguments.action = variables.params.action; // when no controller or action was passed in we link to the current page (controller/action only, not query string etc) by default
+			if (!Len(arguments.controller))
+				arguments.controller = variables.params.controller; // use the current controller as the default when none was passed in by the developer
+			loc.returnValue = loc.returnValue & "?controller=" & REReplace(REReplace(arguments.controller, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
 			if (Len(arguments.action))
 				loc.returnValue = loc.returnValue & "&action=" & REReplace(REReplace(arguments.action, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
 			if (Len(arguments.key))
