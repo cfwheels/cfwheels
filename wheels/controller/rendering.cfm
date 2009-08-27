@@ -202,18 +202,69 @@
 				loc.query = arguments[loc.pluralizedName];
 				loc.returnValue = "";
 				loc.iEnd = loc.query.recordCount;
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				if (Len(arguments.$group))
 				{
-					arguments.current = loc.i;
-					loc.jEnd = ListLen(loc.query.columnList);
-					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+					// we want to group based on a column so loop through the rows until we find, this will break if the query is not ordered by the grouped column
+					loc.tempSpacer = "}|{";
+					loc.groupValue = "";
+					loc.groupQueryCount = 1;
+					arguments.group = QueryNew(loc.query.columnList);
+					if (application.wheels.environment != "production" && !ListFindNoCase(loc.query.columnList, arguments.$group))
+						$throw(type="Wheels.GroupColumnNotFound", message="Wheels couldn't find a query column with the name of `#arguments.$group#`.", extendedInfo="Make sure your findAll() has the column `#arguments.$group#` specified in the select argument. If the column does not exists, create it.");
+					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					{
-						loc.property = ListGetAt(loc.query.columnList, loc.j);
-						arguments[loc.property] = loc.query[loc.property][loc.i];
+						if (loc.i == 1)
+						{
+							loc.groupValue = loc.query[arguments.$group][loc.i];
+						}
+						else if (loc.groupValue != loc.query[arguments.$group][loc.i])
+						{
+							// we have a different group for this row so output what we have
+							loc.returnValue = loc.returnValue & $includeAndReturnOutput(argumentCollection=arguments);
+							if (StructKeyExists(arguments, "$spacer"))
+								loc.returnValue = loc.returnValue & loc.tempSpacer;
+							loc.groupValue = loc.query[arguments.$group][loc.i];
+							arguments.group = QueryNew(loc.query.columnList);
+							loc.groupQueryCount = 1;
+						}
+						loc.dump = QueryAddRow(arguments.group);
+						loc.jEnd = ListLen(loc.query.columnList);
+						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+						{
+							loc.property = ListGetAt(loc.query.columnList, loc.j);
+							arguments[loc.property] = loc.query[loc.property][loc.i];
+							loc.dump = QuerySetCell(arguments.group, loc.property, loc.query[loc.property][loc.i], loc.groupQueryCount);
+						}
+						arguments.current = (loc.i+1) - arguments.group.recordCount;
+						loc.groupQueryCount++;
 					}
-					loc.returnValue = loc.returnValue & $includeAndReturnOutput(argumentCollection=arguments);
-					if (StructKeyExists(arguments, "$spacer") && loc.i < loc.iEnd)
-						loc.returnValue = loc.returnValue & arguments.$spacer;
+					// if we have anything left at the end we need to render it too
+					if (arguments.group.RecordCount > 0)
+					{
+						loc.returnValue = loc.returnValue & $includeAndReturnOutput(argumentCollection=arguments);
+						if (StructKeyExists(arguments, "$spacer") && loc.i < loc.iEnd)
+							loc.returnValue = loc.returnValue & loc.tempSpacer;				
+					}
+					// now remove the last temp spacer and replace the $tempSpacer with $spacer
+					if (Right(loc.returnValue, 3) eq loc.tempSpacer)
+						loc.returnValue = Left(loc.returnValue, Len(loc.returnValue) - 3);
+					loc.returnValue = Replace(loc.returnValue, loc.tempSpacer, arguments.$spacer, "all");
+				}
+				else
+				{
+					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					{
+						arguments.current = loc.i;
+						loc.jEnd = ListLen(loc.query.columnList);
+						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+						{
+							loc.property = ListGetAt(loc.query.columnList, loc.j);
+							arguments[loc.property] = loc.query[loc.property][loc.i];
+						}
+						loc.returnValue = loc.returnValue & $includeAndReturnOutput(argumentCollection=arguments);
+						if (StructKeyExists(arguments, "$spacer") && loc.i < loc.iEnd)
+							loc.returnValue = loc.returnValue & arguments.$spacer;
+					}
 				}
 			}
 			else if (StructKeyExists(arguments, arguments.$name) && IsObject(arguments[arguments.$name]))
