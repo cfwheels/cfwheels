@@ -24,7 +24,7 @@
 			case "real": {loc.returnValue = "cf_sql_real"; break;}
 			case "smallint": {loc.returnValue = "cf_sql_smallint"; break;}
 			case "text": {loc.returnValue = "cf_sql_longvarchar"; break;}
-			case "varchar": case "character": case "varying": {loc.returnValue = "cf_sql_varchar"; break;}
+			case "varchar": case "varying": {loc.returnValue = "cf_sql_varchar"; break;}
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
