@@ -84,7 +84,7 @@
 			if (Len(arguments.order))
 			{
 				// insert primary keys to order clause unless they are already there, this guarantees that the ordering is unique which is required to make pagination work properly
-				loc.compareList = Replace(ReplaceNoCase(ReplaceNoCase(arguments.order, "ASC", "", "all"), "DESC", "", "all"), ", ", ",", "all");
+				loc.compareList = Replace(ReplaceNoCase(ReplaceNoCase(arguments.order, " ASC", "", "all"), " DESC", "", "all"), ", ", ",", "all");
 				loc.iEnd = ListLen(variables.wheels.class.keys);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
