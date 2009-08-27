@@ -210,7 +210,7 @@
 					loc.groupQueryCount = 1;
 					arguments.group = QueryNew(loc.query.columnList);
 					if (application.wheels.environment != "production" && !ListFindNoCase(loc.query.columnList, arguments.$group))
-						$throw(type="Wheels.GroupColumnNotFound", message="Wheels couldn't find a query column with the name of `#arguments.$group#`.", extendedInfo="Make sure your findAll() has the column `#arguments.$group#` specified in the select argument. If the column does not exists, create it.");
+						$throw(type="Wheels.GroupColumnNotFound", message="Wheels couldn't find a query column with the name of `#arguments.$group#`.", extendedInfo="Make sure your finder method has the column `#arguments.$group#` specified in the `select` argument. If the column does not exist, create it.");
 					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					{
 						if (loc.i == 1)
@@ -245,8 +245,8 @@
 						if (StructKeyExists(arguments, "$spacer") && loc.i < loc.iEnd)
 							loc.returnValue = loc.returnValue & loc.tempSpacer;				
 					}
-					// now remove the last temp spacer and replace the $tempSpacer with $spacer
-					if (Right(loc.returnValue, 3) eq loc.tempSpacer)
+					// now remove the last temp spacer and replace the tempSpacer with $spacer
+					if (Right(loc.returnValue, 3) == loc.tempSpacer)
 						loc.returnValue = Left(loc.returnValue, Len(loc.returnValue) - 3);
 					loc.returnValue = Replace(loc.returnValue, loc.tempSpacer, arguments.$spacer, "all");
 				}
