@@ -110,6 +110,9 @@
 		// load plugins
 		application.wheels.plugins = {};
 		application.wheels.incompatiblePlugins = "";
+		application.wheels.mixableComponents = "dispatch,controller,model,microsoftsqlserver,mysql,oracle,postgresql";
+		application.wheels.mixins = {};
+		application.wheels.dependantPlugins = "";
 		loc.pluginFolder = this.rootDir & "plugins";
 		// get a list of plugin files and folders
 		loc.pluginFolders = $directory(directory=loc.pluginFolder, type="dir");
@@ -154,8 +157,6 @@
 			}
 			
 			// store plugin injection information in application scope so we don't have to run this code on each injection
-			application.wheels.mixableComponents = "dispatch,controller,model,microsoftsqlserver,mysql,oracle,postgresql";
-			application.wheels.mixins = {};
 			loc.iEnd = ListLen(application.wheels.mixableComponents);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
@@ -217,7 +218,6 @@
 			}
 
 			// look for plugins that depend on other plugins that are not installed
-			application.wheels.dependantPlugins = "";
 			for (loc.key in application.wheels.plugins)
 			{
 				loc.pluginInfo = GetMetaData(application.wheels.plugins[loc.key]);
