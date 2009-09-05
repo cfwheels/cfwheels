@@ -22,7 +22,7 @@
 
 	<cffunction name="test_no_controller_or_action_or_route_should_point_to_current_page">
 		<cfset structdelete(loc.a, "controller")>
-		<cfset loc.r = '<form method="post">'>
+		<cfset loc.r = '<form action="#global.mypath#" method="post">'>
 		<cfset loc.e = global.controller.startFormTag(argumentcollection=loc.a)>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
