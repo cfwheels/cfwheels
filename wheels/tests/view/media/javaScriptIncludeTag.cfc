@@ -4,7 +4,6 @@
 		<cfset global = {}>
 		<cfset global.controller = createobject("component", "wheels.Controller")>
 		<cfset global.args = {}>
-		<cfset structappend(global.args, application.wheels.javaScriptIncludeTag)>
 		<cfset global.args.source = "test.js,test1.js">
 		<cfset global.result = '<script src="#application.wheels.webpath#javascripts/test.js" type="text/javascript"></script><script src="#application.wheels.webpath#javascripts/test1.js" type="text/javascript"></script>'>
 	</cffunction>
