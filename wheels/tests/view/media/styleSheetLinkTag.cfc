@@ -14,16 +14,14 @@
 	</cffunction>
 
 	<cffunction name="test_both_templates_have_extensions">
-		<cfset loc.r = global.result>
 		<cfset loc.e = global.controller.styleSheetLinkTag(argumentcollection=loc.a)>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset assert("loc.e eq global.result")>
 	</cffunction>
 
 	<cffunction name="test_one_template_does_not_have_an_extension">
 		<cfset loc.a.source = "test,test1.css">
-		<cfset loc.r = global.result>
 		<cfset loc.e = global.controller.styleSheetLinkTag(argumentcollection=loc.a)>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset assert("loc.e eq global.result")>
 	</cffunction>
 
 </cfcomponent>
