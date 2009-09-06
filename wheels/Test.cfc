@@ -101,7 +101,6 @@
 	<cfinclude template="plugins/injection.cfm">
 
 	<cfset variables.WHEELS_TESTS_BASE_COMPONENT_PATH = "">
-	<cfset variables.WHEELS_TESTS_BASE_ROOT_PATH = "">
 
 	<!---
 		Instanciate all components in specified package and call their runTest()
@@ -186,7 +185,7 @@
 			and teardown() if provided.
 		--->
 		<cfset keyList = listSort(structKeyList(this), "textnocase", "asc")>
-		
+
 		<cfif structKeyExists(this, "_setup")>
 			<cfset _setup()>
 		</cfif>
@@ -262,7 +261,7 @@
 			</cfif>
 
 		</cfloop>
-		
+
 		<cfif structKeyExists(this, "_teardown")>
 			<cfset _teardown()>
 		</cfif>
@@ -497,73 +496,89 @@
 		<cfargument name="options" type="struct" required="false" default="#structnew()#">
 		<cfset var loc = {}>
 		<cfset var q = "">
-		<cfset loc.s = {}>
-		<cfset loc.s.testPackage = "">
-		<cfset loc.s.resultKey = "WheelsTests">
-		<cfset loc.loadenv = false>
+
+		<!--- the key in the request scope that will contain the test results --->
+		<cfset loc.resultKey = "WheelsTests">
+
+		<!--- struct to save the original environment when overloaded --->
 		<cfset loc.savedenv = {}>
 
+		<!--- by default we run all tests, however they can specify to run a specific oset of tests --->
 		<cfset loc.package = "">
+
+		<!--- default test type --->
 		<cfset loc.type = "core">
 
+		<!--- if they specified a package we should only run that --->
 		<cfif structkeyexists(arguments.options, "package")>
-			<cfset loc.packages = arguments.options.package>
+			<cfset loc.package = arguments.options.package>
 		</cfif>
 
+		<!--- overwrite the default test type if passed --->
 		<cfif structkeyexists(arguments.options, "type")>
 			<cfset loc.type = arguments.options.type>
 		</cfif>
 
-		<cfset loc.componentpath = "#application.wheels.rootComponentPath#.#application.wheels.pluginComponentPath#.#loc.type#">
-
-		<!--- core test --->
+		<!--- which tests to run --->
 		<cfif loc.type eq "core">
-			<cfset loc.componentpath = application.wheels.wheelsComponentPath>
+			<!--- core tests --->
+			<cfset loc.root_test_path = application.wheels.wheelsComponentPath>
 		<cfelseif loc.type eq "app">
-			<cfset loc.componentpath = application.wheels.rootComponentPath>
+			<!--- app tests --->
+			<cfset loc.root_test_path = application.wheels.rootComponentPath>
+		<cfelse>
+			<!--- specific plugin tests --->
+			<cfset loc.root_test_path = "#application.wheels.rootComponentPath#.#application.wheels.pluginComponentPath#.#loc.type#">
 		</cfif>
 
-		<cfset loc.componentpath = listappend("#loc.componentpath#.tests", loc.package, ".")>
+		<cfset loc.root_test_path = loc.root_test_path & ".tests">
 
-		<!--- clean up componentpath --->
-		<cfset loc.componentpath = listchangedelims(loc.componentpath, ".", ".")>
+		<!--- add the package if specified --->
+		<cfset loc.test_path = listappend("#loc.root_test_path#", loc.package, ".")>
+
+		<!--- clean up testpath --->
+		<cfset loc.test_path = listchangedelims(loc.test_path, ".", ".")>
+
 		<!--- convert to regular path --->
-		<cfset loc.path = "/" & listchangedelims(loc.componentpath, "/", ".")>
-		<cfset loc.epath = expandPath(loc.path)>
+		<cfset loc.relative_root_test_path = "/" & listchangedelims(loc.root_test_path, "/", ".")>
+		<cfset loc.full_root_test_path = expandpath(loc.relative_root_test_path)>
+		<cfset loc.releative_test_path = "/" & listchangedelims(loc.test_path, "/", ".")>
+		<cfset loc.full_test_path = expandPath(loc.releative_test_path)>
 
 		<!---
 		if env.cfm files exists, call to override enviroment settings so tests can run.
 		when overriding, save the original env so we can put it back later.
 		 --->
-		<cfif FileExists(loc.epath & "/env.cfm")>
-			<cfset loc.loadenv = true>
+		<cfif FileExists(loc.full_test_path & "/env.cfm")>
 			<cfset loc.savedenv = duplicate(application)>
-			<cfinclude template="#loc.path & '/env.cfm'#">
+			<cfinclude template="#loc.releative_test_path & '/env.cfm'#">
+		<cfelseif FileExists(loc.full_root_test_path & "/env.cfm")>
+			<cfset loc.savedenv = duplicate(application)>
+			<cfinclude template="#loc.relative_root_test_path & '/env.cfm'#">
 		</cfif>
 
-		<!---  --->
-		<cfset variables.WHEELS_TESTS_BASE_COMPONENT_PATH = loc.componentpath>
-		<cfset variables.WHEELS_TESTS_BASE_ROOT_PATH = loc.epath>
+		<!--- for test results display --->
+		<cfset variables.WHEELS_TESTS_BASE_COMPONENT_PATH = loc.test_path>
 
-		<cfdirectory directory="#loc.epath#" action="list" recurse="true" name="q" filter="*.cfc" />
+		<cfdirectory directory="#loc.full_test_path#" action="list" recurse="true" name="q" filter="*.cfc" />
 
 		<!--- run tests --->
 		<cfloop query="q">
-			<cfset loc.testname = listchangedelims(removechars(directory, 1, len(variables.WHEELS_TESTS_BASE_ROOT_PATH)), ".", "\/")>
-			<cfset loc.testname = listprepend(loc.testname, variables.WHEELS_TESTS_BASE_COMPONENT_PATH, ".")>
+			<cfset loc.testname = listchangedelims(removechars(directory, 1, len(loc.full_test_path)), ".", "\/")>
+			<cfset loc.testname = listprepend(loc.testname, loc.test_path, ".")>
 			<cfset loc.testname = listappend(loc.testname, listfirst(name, "."), ".")>
 			<cfif isValidTest(loc.testname)>
 				<cfset loc.instance = createObject("component", loc.testname)>
-				<cfset loc.instance.runTest(loc.s.resultKey)>
+				<cfset loc.instance.runTest(loc.resultKey)>
 			</cfif>
 		</cfloop>
 
 		<!--- swap back the enviroment if overwritten --->
-		<cfif loc.loadenv>
+		<cfif not structisempty(loc.savedenv)>
 			<cfset application = duplicate(loc.savedenv)>
 		</cfif>
 
-		<cfreturn HTMLFormatTestResults(loc.s.resultKey)>
+		<cfreturn HTMLFormatTestResults(loc.resultKey)>
 
 	</cffunction>
 
