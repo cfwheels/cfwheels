@@ -113,7 +113,7 @@
 			StructDelete(arguments, "wrapLabel");
 		}
 		// END DEPRECATING WRAPLABEL CODE
-		
+
 		arguments = $insertDefaults(name="textField", reserved="type,name,id,value", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
@@ -1259,20 +1259,35 @@
 				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=LCase(loc.key), optionText=arguments.options[loc.key]);
 			}
 		}
-		else if (IsArray(arguments.options))
+		else
 		{
+			// convert the options to an array so we don't duplicate logic
+			if (IsSimpleValue(arguments.options))
+			{
+				arguments.options = ListToArray(arguments.options);
+			}
+
+			// loop through the array
 			loc.iEnd = ArrayLen(arguments.options);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=arguments.options[loc.i], optionText=arguments.options[loc.i]);
-			}
-		}
-		else
-		{
-			loc.iEnd = ListLen(arguments.options);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=ListGetAt(arguments.options, loc.i), optionText=ListGetAt(arguments.options, loc.i));
+				loc.optionValue = "";
+				loc.optionText = "";
+				// see if the value in the array cell is an array, which
+				// means the programmer is using multidimensional arrays.
+				// if it is, use the first dimension for the key and the second
+				// for the value if it exists
+				if(IsSimpleValue(arguments.options[loc.i]))
+				{
+					loc.optionValue = arguments.options[loc.i];
+					loc.optionText = arguments.options[loc.i];
+				}
+				else if(IsArray(arguments.options[loc.i]) && ArrayLen(arguments.options[loc.i]) gte 2)
+				{
+					loc.optionValue = arguments.options[loc.i][1];
+					loc.optionText = arguments.options[loc.i][2];
+				}
+				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=loc.optionValue, optionText=loc.optionText);
 			}
 		}
 	</cfscript>
@@ -1380,7 +1395,7 @@
 				loc.returnValue = Replace(loc.returnValue, "</label>", "");
 			else
 				loc.returnValue = loc.returnValue & arguments.appendToLabel;
-			
+
 		}
 		loc.returnValue = loc.returnValue & arguments.prepend;
 	</cfscript>
