@@ -3,6 +3,7 @@
 	<cfscript>
 		var loc = {};
 		variables.wheels = {};
+		variables.wheels.errors = [];
 		variables.wheels.class = {};
 		variables.wheels.class.name = arguments.name;
 		variables.wheels.class.RESQLOperators = "((?: LIKE)|(?:<>)|(?:<=)|(?:>=)|(?:!=)|(?:!<)|(?:!>)|=|<|>)";
