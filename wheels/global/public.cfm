@@ -43,8 +43,8 @@
 	<cfscript>
 		var loc = {};
 		loc.params = {};
-		if (structkeyexists(variables, "params"))
-			structappend(loc.params, variables.params, true);
+		if (StructKeyExists(variables, "params"))
+			StructAppend(loc.params, variables.params, true);
 		if (application.wheels.environment != "production")
 		{
 			if (arguments.onlyPath && (Len(arguments.host) || Len(arguments.protocol)))
@@ -97,9 +97,9 @@
 		else
 		{
 			// link based on controller/action/key
-			if (!Len(arguments.controller) && !Len(arguments.action) && structkeyexists(loc.params, "action"))
+			if (!Len(arguments.controller) && !Len(arguments.action) && StructKeyExists(loc.params, "action"))
 				arguments.action = loc.params.action; // when no controller or action was passed in we link to the current page (controller/action only, not query string etc) by default
-			if (!Len(arguments.controller) && structkeyexists(loc.params, "controller"))
+			if (!Len(arguments.controller) && StructKeyExists(loc.params, "controller"))
 				arguments.controller = loc.params.controller; // use the current controller as the default when none was passed in by the developer
 			loc.returnValue = loc.returnValue & "?controller=" & REReplace(REReplace(arguments.controller, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
 			if (Len(arguments.action))
