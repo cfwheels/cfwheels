@@ -3,7 +3,8 @@
 	<cfargument name="message" type="string" required="false" default="#application.wheels.functions.validatesConfirmationOf.message#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
-	<cfargument name="condition" type="string" required="false" default="">
+	<cfargument name="if" type="string" required="false" default="">
+	<cfargument name="unless" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -12,7 +13,8 @@
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(arguments.message, "[property]", humanize(loc.args.property));
-			loc.args.condition = arguments.condition;
+			loc.args.if = arguments.if;
+			loc.args.unless = arguments.unless;
 			$registerValidation(arguments.when, "$validateConfirmationOf", Duplicate(loc.args));
 		}
 	</cfscript>
@@ -25,7 +27,8 @@
 	<cfargument name="when" type="string" required="false" default="onSave" hint="Pass in `onCreate` or `onUpdate` to limit when this validation occurs (by default validation it will occur on both create and update, i.e. `onSave`)">
 	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.functions.validatesExclusionOf.allowBlank#" hint="If set to `true`, validation will be skipped if the value of the property is blank.">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
-	<cfargument name="condition" type="string" required="false" default="">
+	<cfargument name="if" type="string" required="false" default="">
+	<cfargument name="unless" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -37,7 +40,8 @@
 			loc.args.message = Replace(arguments.message, "[property]", humanize(loc.args.property));
 			loc.args.allowBlank = arguments.allowBlank;
 			loc.args.list = arguments.list;
-			loc.args.condition = arguments.condition;
+			loc.args.if = arguments.if;
+			loc.args.unless = arguments.unless;
 			$registerValidation(arguments.when, "$validateExclusionOf", Duplicate(loc.args));
 		}
 	</cfscript>
@@ -50,7 +54,8 @@
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.functions.validatesFormatOf.allowBlank#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
-	<cfargument name="condition" type="string" required="false" default="">
+	<cfargument name="if" type="string" required="false" default="">
+	<cfargument name="unless" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -61,7 +66,8 @@
 			loc.args.message = Replace(arguments.message, "[property]", humanize(loc.args.property));
 			loc.args.allowBlank = arguments.allowBlank;
 			loc.args.regEx = arguments.regEx;
-			loc.args.condition = arguments.condition;
+			loc.args.if = arguments.if;
+			loc.args.unless = arguments.unless;
 			$registerValidation(arguments.when, "$validateFormatOf", Duplicate(loc.args));
 		}
 	</cfscript>
@@ -74,7 +80,8 @@
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.functions.validatesInclusionOf.allowBlank#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
-	<cfargument name="condition" type="string" required="false" default="">
+	<cfargument name="if" type="string" required="false" default="">
+	<cfargument name="unless" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -86,7 +93,8 @@
 			loc.args.message = Replace(arguments.message, "[property]", humanize(loc.args.property));
 			loc.args.allowBlank = arguments.allowBlank;
 			loc.args.list = arguments.list;
-			loc.args.condition = arguments.condition;
+			loc.args.if = arguments.if;
+			loc.args.unless = arguments.unless;
 			$registerValidation(arguments.when, "$validateInclusionOf", Duplicate(loc.args));
 		}
 	</cfscript>
@@ -102,7 +110,8 @@
 	<cfargument name="minimum" type="numeric" required="false" default="#application.wheels.functions.validatesLengthOf.minimum#" hint="The minimum length that the property value has to be">
 	<cfargument name="within" type="string" required="false" default="#application.wheels.functions.validatesLengthOf.within#" hint="A list of two values (minimum and maximum) that the length of the property value has to fall within">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
-	<cfargument name="condition" type="string" required="false" default="">
+	<cfargument name="if" type="string" required="false" default="">
+	<cfargument name="unless" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -118,7 +127,8 @@
 			loc.args.maximum = arguments.maximum;
 			loc.args.minimum = arguments.minimum;
 			loc.args.within = arguments.within;
-			loc.args.condition = arguments.condition;
+			loc.args.if = arguments.if;
+			loc.args.unless = arguments.unless;
 			$registerValidation(arguments.when, "$validateLengthOf", Duplicate(loc.args));
 		}
 	</cfscript>
@@ -131,7 +141,8 @@
 	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.functions.validatesNumericalityOf.allowBlank#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="onlyInteger" type="boolean" required="false" default="#application.wheels.functions.validatesNumericalityOf.onlyInteger#" hint="Specifies whether the property value has to be an integer">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
-	<cfargument name="condition" type="string" required="false" default="">
+	<cfargument name="if" type="string" required="false" default="">
+	<cfargument name="unless" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -142,7 +153,8 @@
 			loc.args.message = Replace(arguments.message, "[property]", humanize(loc.args.property));
 			loc.args.allowBlank = arguments.allowBlank;
 			loc.args.onlyInteger = arguments.onlyInteger;
-			loc.args.condition = arguments.condition;
+			loc.args.if = arguments.if;
+			loc.args.unless = arguments.unless;
 			$registerValidation(arguments.when, "$validateNumericalityOf", Duplicate(loc.args));
 		}
 	</cfscript>
@@ -153,7 +165,8 @@
 	<cfargument name="message" type="string" required="false" default="#application.wheels.functions.validatesPresenceOf.message#" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
-	<cfargument name="condition" type="string" required="false" default="">
+	<cfargument name="if" type="string" required="false" default="">
+	<cfargument name="unless" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -162,7 +175,8 @@
 		{
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(arguments.message, "[property]", humanize(loc.args.property));
-			loc.args.condition = arguments.condition;
+			loc.args.if = arguments.if;
+			loc.args.unless = arguments.unless;
 			$registerValidation(arguments.when, "$validatePresenceOf", Duplicate(loc.args));
 		}
 	</cfscript>
@@ -174,7 +188,8 @@
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="scope" type="string" required="false" default="" hint="One or more properties by which to limit the scope of the uniqueness constraint">
 	<cfargument name="properties" type="string" required="false" default="#arguments.property#" hint="See `property`">
-	<cfargument name="condition" type="string" required="false" default="">
+	<cfargument name="if" type="string" required="false" default="">
+	<cfargument name="unless" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
@@ -185,7 +200,8 @@
 			loc.args.property = Trim(ListGetAt(arguments.property, loc.i));
 			loc.args.message = Replace(arguments.message, "[property]", humanize(loc.args.property));
 			loc.args.scope = arguments.scope;
-			loc.args.condition = arguments.condition;
+			loc.args.if = arguments.if;
+			loc.args.unless = arguments.unless;
 			$registerValidation(arguments.when, "$validateUniquenessOf", Duplicate(loc.args));
 		}
 	</cfscript>
@@ -392,8 +408,11 @@
 evaluates the condition to determine if the validation should be executed
  --->
 <cffunction name="$evaluateValidationCondition">
-	<cfif structkeyexists(arguments, "condition") and len(arguments.condition)>
-		<cfreturn evaluate(arguments.condition)>
+	<cfif structkeyexists(arguments, "if") and len(arguments.if)>
+		<cfreturn evaluate(arguments.if)>
 	</cfif>
+	<cfif structkeyexists(arguments, "unless") and len(arguments.unless)>
+		<cfreturn not evaluate(arguments.unless)>
+	</cfif>	
 	<cfreturn true>
 </cffunction>
