@@ -1263,9 +1263,7 @@
 		{
 			// convert the options to an array so we don't duplicate logic
 			if (IsSimpleValue(arguments.options))
-			{
 				arguments.options = ListToArray(arguments.options);
-			}
 
 			// loop through the array
 			loc.iEnd = ArrayLen(arguments.options);
@@ -1273,16 +1271,13 @@
 			{
 				loc.optionValue = "";
 				loc.optionText = "";
-				// see if the value in the array cell is an array, which
-				// means the programmer is using multidimensional arrays.
-				// if it is, use the first dimension for the key and the second
-				// for the value if it exists
-				if(IsSimpleValue(arguments.options[loc.i]))
+				// see if the value in the array cell is an array, which means the programmer is using multidimensional arrays. if it is, use the first dimension for the key and the second for the value if it exists.
+				if (IsSimpleValue(arguments.options[loc.i]))
 				{
 					loc.optionValue = arguments.options[loc.i];
 					loc.optionText = arguments.options[loc.i];
 				}
-				else if(IsArray(arguments.options[loc.i]) && ArrayLen(arguments.options[loc.i]) gte 2)
+				else if (IsArray(arguments.options[loc.i]) && ArrayLen(arguments.options[loc.i]) >= 2)
 				{
 					loc.optionValue = arguments.options[loc.i][1];
 					loc.optionText = arguments.options[loc.i][2];
