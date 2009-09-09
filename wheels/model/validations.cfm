@@ -409,26 +409,12 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = true;
-		loc.methodNameCondition = "^(not |!)?[A-Za-z0-9_\$]+$";
-		loc.methodNameExtract = "[A-Za-z0-9_\$]+$";
 		if (StructKeyExists(arguments, "if") && Len(arguments.if))
 		{
-			if (REFindNoCase(loc.methodNameCondition, arguments.if))
-			{
-				loc.methodname = REMatchNoCase(loc.methodNameExtract, arguments.if);
-				if (StructKeyExists(variables, loc.methodname[1]) && isCustomFunction(variables[loc.methodname[1]]))
-					arguments.if = arguments.if & "()";
-			}
 			loc.returnValue = Evaluate(arguments.if);
 		}
 		if (StructKeyExists(arguments, "unless") && Len(arguments.unless))
 		{
-			if (REFindNoCase(loc.methodNameCondition, arguments.unless))
-			{
-				loc.methodname = REMatchNoCase(loc.methodNameExtract, arguments.unless);
-				if (StructKeyExists(variables, loc.methodname[1]) && isCustomFunction(variables[loc.methodname[1]]))
-					arguments.unless = arguments.unless & "()";
-			}
 			loc.returnValue = !Evaluate(arguments.unless);
 		}
 	</cfscript>
