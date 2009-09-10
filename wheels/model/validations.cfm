@@ -275,7 +275,7 @@
 		if ($evaluateValidationCondition(argumentCollection=arguments))
 		{
 			loc.virtualConfirmProperty = arguments.property & "Confirmation";
-			if (StructKeyExists(this, loc.virtualConfirmProperty) && this[arguments.property] != this[loc.virtualConfirmProperty])
+			if (!StructKeyExists(this, arguments.property) || !StructKeyExists(this, loc.virtualConfirmProperty) || this[arguments.property] != this[loc.virtualConfirmProperty])
 				addError(property=loc.virtualConfirmProperty, message=arguments.message);
 		}
 	</cfscript>
@@ -285,7 +285,7 @@
 	<cfscript>
 		if ($evaluateValidationCondition(argumentCollection=arguments))
 		{
-			if ((!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))) || (StructKeyExists(this, arguments.property) && Len(this[arguments.property]) && ListFindNoCase(arguments.list, this[arguments.property])))
+			if (!StructKeyExists(this, arguments.property) || (!arguments.allowBlank && !Len(this[arguments.property])) || ListFindNoCase(arguments.list, this[arguments.property]))
 				addError(property=arguments.property, message=arguments.message);
 		}
 	</cfscript>
@@ -295,7 +295,7 @@
 	<cfscript>
 		if ($evaluateValidationCondition(argumentCollection=arguments))
 		{
-			if ((!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))) || (StructKeyExists(this, arguments.property) && Len(this[arguments.property]) && !REFindNoCase(arguments.regEx, this[arguments.property])))
+			if (!StructKeyExists(this, arguments.property) || (!arguments.allowBlank && !Len(this[arguments.property])) || (Len(trim(this[arguments.property])) && !REFindNoCase(arguments.regEx, this[arguments.property])))
 				addError(property=arguments.property, message=arguments.message);
 		}
 	</cfscript>
@@ -305,7 +305,7 @@
 	<cfscript>
 		if ($evaluateValidationCondition(argumentCollection=arguments))
 		{
-			if ((!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))) || (StructKeyExists(this, arguments.property) && Len(this[arguments.property]) && !ListFindNoCase(arguments.list, this[arguments.property])))
+			if (!StructKeyExists(this, arguments.property) || (!arguments.allowBlank && !Len(this[arguments.property])) || !ListFindNoCase(arguments.list, this[arguments.property]))
 				addError(property=arguments.property, message=arguments.message);
 		}
 	</cfscript>
@@ -315,33 +315,8 @@
 	<cfscript>
 		if ($evaluateValidationCondition(argumentCollection=arguments))
 		{
-			if (!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property])))
-			{
-				addError(property=arguments.property, message=arguments.message);
-			}
-			else if (StructKeyExists(this, arguments.property) && Len(this[arguments.property]))
-			{
-				if (arguments.maximum)
-				{
-					if (Len(this[arguments.property]) > arguments.maximum)
-						addError(property=arguments.property, message=arguments.message);
-				}
-				else if (arguments.minimum)
-				{
-					if (Len(this[arguments.property]) < arguments.minimum)
-						addError(property=arguments.property, message=arguments.message);
-				}
-				else if (arguments.exactly)
-				{
-					if (Len(this[arguments.property]) != arguments.exactly)
-						addError(property=arguments.property, message=arguments.message);
-				}
-				else if (IsArray(arguments.within) && ArrayLen(arguments.within))
-				{
-					if (Len(this[arguments.property]) < arguments.within[1] || Len(this[arguments.property]) > arguments.within[2])
-						addError(property=arguments.property, message=arguments.message);
-				}
-			}
+			if (!StructKeyExists(this, arguments.property) || (!arguments.allowBlank && !Len(this[arguments.property])) || (Len(trim(this[arguments.property])) && ((arguments.maximum && (Len(this[arguments.property]) > arguments.maximum)) || (arguments.minimum && (Len(this[arguments.property]) < arguments.minimum)) || (arguments.exactly && (Len(this[arguments.property]) != arguments.exactly)) || ((IsArray(arguments.within) && ArrayLen(arguments.within)) && (Len(this[arguments.property]) < arguments.within[1] || Len(this[arguments.property]) > arguments.within[2])))))
+					addError(property=arguments.property, message=arguments.message);
 		}
 	</cfscript>
 </cffunction>
@@ -350,17 +325,8 @@
 	<cfscript>
 		if ($evaluateValidationCondition(argumentCollection=arguments))
 		{
-			if (!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property])))
-			{
+			if (!StructKeyExists(this, arguments.property) || (!arguments.allowBlank && !Len(this[arguments.property])) || (Len(this[arguments.property]) && (!IsNumeric(this[arguments.property]) || (arguments.onlyInteger && Round(this[arguments.property]) != this[arguments.property]))))
 				addError(property=arguments.property, message=arguments.message);
-			}
-			else if (StructKeyExists(this, arguments.property) && Len(this[arguments.property]))
-			{
-				if (!IsNumeric(this[arguments.property]))
-					addError(property=arguments.property, message=arguments.message);
-				else if (arguments.onlyInteger && Round(this[arguments.property]) != this[arguments.property])
-					addError(property=arguments.property, message=arguments.message);
-			}
 		}
 	</cfscript>
 </cffunction>
