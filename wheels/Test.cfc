@@ -537,7 +537,7 @@
 		<cfset loc.test_path = listappend("#loc.root_test_path#", loc.package, ".")>
 
 		<!--- clean up testpath --->
-		<cfset loc.test_path = listchangedelims(loc.test_path, ".", ".")>
+		<cfset loc.test_path = listchangedelims(loc.test_path, ".", "./\")>
 
 		<!--- convert to regular path --->
 		<cfset loc.relative_root_test_path = "/" & listchangedelims(loc.root_test_path, "/", ".")>
