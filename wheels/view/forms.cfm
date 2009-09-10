@@ -114,12 +114,13 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="textField", reserved="type,name,id,value", input=arguments);
+		arguments = $insertDefaults(name="textField", reserved="type,name,value", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "text";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		arguments.id = $tagId(arguments.objectName, arguments.property);
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = $formValue(argumentCollection=arguments);
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
@@ -181,12 +182,13 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="passwordField", reserved="type,name,id,value", input=arguments);
+		arguments = $insertDefaults(name="passwordField", reserved="type,name,value", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "password";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		arguments.id = $tagId(arguments.objectName, arguments.property);
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = $formValue(argumentCollection=arguments);
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
@@ -230,10 +232,11 @@
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
-		arguments = $insertDefaults(name="hiddenField", reserved="type,name,id,value", input=arguments);
+		arguments = $insertDefaults(name="hiddenField", reserved="type,name,value", input=arguments);
 		arguments.type = "hidden";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		arguments.id = $tagId(arguments.objectName, arguments.property);
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = $formValue(argumentCollection=arguments);
 		if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get")
 			arguments.value = obfuscateParam(arguments.value);
@@ -280,12 +283,13 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="fileField", reserved="type,name,id", input=arguments);
+		arguments = $insertDefaults(name="fileField", reserved="type,name", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "file";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		arguments.id = $tagId(arguments.objectName, arguments.property);
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -344,11 +348,12 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="textArea", reserved="name,id", input=arguments);
+		arguments = $insertDefaults(name="textArea", reserved="name", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		arguments.id = $tagId(arguments.objectName, arguments.property);
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.content = $formValue(argumentCollection=arguments);
 		loc.returnValue = loc.before & $element(name="textarea", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
@@ -411,14 +416,15 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="radioButton", reserved="type,name,id,value,checked", input=arguments);
+		arguments = $insertDefaults(name="radioButton", reserved="type,name,value,checked", input=arguments);
 		loc.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.tagValue, "[^a-z0-9 ]", "", "all"), " ", "-", "all"));
 		arguments.$appendToFor = loc.valueToAppend;
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "radio";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		arguments.id = $tagId(arguments.objectName, arguments.property) & "-" & loc.valueToAppend;
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = $tagId(arguments.objectName, arguments.property) & "-" & loc.valueToAppend;
 		arguments.value = arguments.tagValue;
 		if (arguments.tagValue == $formValue(argumentCollection=arguments))
 			arguments.checked = "checked";
@@ -495,12 +501,13 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="checkBox", reserved="type,name,id,value,checked", input=arguments);
+		arguments = $insertDefaults(name="checkBox", reserved="type,name,value,checked", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "checkbox";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		arguments.id = $tagId(arguments.objectName, arguments.property);
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = arguments.checkedValue;
 		loc.value = $formValue(argumentCollection=arguments);
 		if (loc.value == arguments.value || IsNumeric(loc.value) && loc.value == 1 || !IsNumeric(loc.value) && IsBoolean(loc.value) && loc.value)
@@ -584,11 +591,12 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="select", reserved="name,id", input=arguments);
+		arguments = $insertDefaults(name="select", reserved="name", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		arguments.id = $tagId(arguments.objectName, arguments.property);
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = $tagId(arguments.objectName, arguments.property);
 		if (StructKeyExists(arguments, "multiple"))
 		{
 			if (arguments.multiple)
@@ -676,7 +684,7 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="dateSelect", reserved="id", input=arguments);
+		arguments = $insertDefaults(name="dateSelect", input=arguments);
 		arguments.$functionName = "dateSelect";
 	</cfscript>
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
@@ -745,7 +753,7 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="timeSelect", reserved="id", input=arguments);
+		arguments = $insertDefaults(name="timeSelect", input=arguments);
 		arguments.$functionName = "timeSelect";
 	</cfscript>
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
@@ -818,7 +826,7 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="dateTimeSelect", reserved="name,id", input=arguments);
+		arguments = $insertDefaults(name="dateTimeSelect", reserved="name", input=arguments);
 		arguments.$functionName = "dateTimeSelect";
 	</cfscript>
 	<cfreturn dateTimeSelectTags(argumentCollection=arguments)>
@@ -1202,7 +1210,8 @@
 				loc.optionContent = NumberFormat(loc.optionContent, "09");
 			loc.content = loc.content & $element(name="option", content=loc.optionContent, attributes=loc.args);
 		}
-		arguments.id = arguments.$id & "-" & arguments.$type;
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = arguments.$id & "-" & arguments.$type;
 		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
