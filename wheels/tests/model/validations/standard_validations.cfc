@@ -24,6 +24,18 @@
 		<cfset loc.user.validatesConfirmationOf(property="password")>
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
+	
+	<cffunction name="test_validatesConfirmationOf_missing_property_invalid">
+		<cfset loc.user.passwordConfirmation = "hamsterjellysucks">
+		<cfset loc.user.validatesConfirmationOf(property="password")>
+		<cfset assert_test(loc.user, false)>
+	</cffunction>
+	
+	<cffunction name="test_validatesConfirmationOf_missing_property_confirmation_invalid">
+		<cfset loc.user.password = "hamsterjelly">
+		<cfset loc.user.validatesConfirmationOf(property="password")>
+		<cfset assert_test(loc.user, false)>
+	</cffunction>
 
 
 	<!--- validatesExclusionOf --->
@@ -35,6 +47,11 @@
 
 	<cffunction name="test_validatesExclusionOf_invalid">
 		<cfset loc.user.firstname = "tony">
+		<cfset loc.user.validatesExclusionOf(property="firstname", list="per, raul, chris, tony")>
+		<cfset assert_test(loc.user, false)>
+	</cffunction>
+	
+	<cffunction name="test_validatesExclusionOf_missing_property_invalid">
 		<cfset loc.user.validatesExclusionOf(property="firstname", list="per, raul, chris, tony")>
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
@@ -64,6 +81,11 @@
 		<cfset loc.user.validatesFormatOf(property="phone", regex="(\d{3,3}-){2,2}\d{4,4}")>
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
+	
+	<cffunction name="test_validatesFormatOf_missing_property_invalid">
+		<cfset loc.user.validatesFormatOf(property="phone", regex="(\d{3,3}-){2,2}\d{4,4}")>
+		<cfset assert_test(loc.user, false)>
+	</cffunction>
 
 	<cffunction name="test_validatesFormatOf_allowblank_valid">
 		<cfset loc.user.phone = "">
@@ -90,6 +112,11 @@
 		<cfset loc.user.validatesExclusionOf(property="firstname", list="per, raul, chris, tony")>
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
+	
+	<cffunction name="test_validatesInclusionOf_missing_property_invalid">
+		<cfset loc.user.validatesExclusionOf(property="firstname", list="per, raul, chris, tony")>
+		<cfset assert_test(loc.user, false)>
+	</cffunction>
 
 	<cffunction name="test_validatesInclusionOf_allowblank_valid">
 		<cfset loc.user.firstname = "">
@@ -113,6 +140,11 @@
 
 	<cffunction name="test_validatesLengthOf_maximum_invalid">
 		<cfset loc.user.firstname = "thisisatestagain">
+		<cfset loc.user.validatesLengthOf(property="firstname", maximum="15")>
+		<cfset assert_test(loc.user, false)>
+	</cffunction>
+	
+	<cffunction name="test_validatesLengthOf_missing_property_invalid">
 		<cfset loc.user.validatesLengthOf(property="firstname", maximum="15")>
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
