@@ -216,18 +216,6 @@
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
 	
-	<cffunction name="test_validatesPresenceOf_allowBlank_valid">
-		<cfset loc.user.firstname = "tony">
-		<cfset loc.user.validatesPresenceOf(property="firstname", allowBlank="true")>
-		<cfset assert_test(loc.user, true)>
-	</cffunction>
-	
-	<cffunction name="test_validatesPresenceOf_allowBlank_invalid">
-		<cfset loc.user.firstname = "">
-		<cfset loc.user.validatesPresenceOf(property="firstname", allowBlank="false")>
-		<cfset assert_test(loc.user, false)>
-	</cffunction>
-	
 
 	<cffunction name="assert_test">
 		<cfargument name="obj" type="any" required="true">
