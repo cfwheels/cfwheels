@@ -25,16 +25,16 @@
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
 	
-	<cffunction name="test_validatesConfirmationOf_missing_property_invalid">
+	<cffunction name="test_validatesConfirmationOf_missing_property_valid">
 		<cfset loc.user.passwordConfirmation = "hamsterjellysucks">
 		<cfset loc.user.validatesConfirmationOf(property="password")>
-		<cfset assert_test(loc.user, false)>
+		<cfset assert_test(loc.user, true)>
 	</cffunction>
 	
-	<cffunction name="test_validatesConfirmationOf_missing_property_confirmation_invalid">
+	<cffunction name="test_validatesConfirmationOf_missing_property_confirmation_valid">
 		<cfset loc.user.password = "hamsterjelly">
 		<cfset loc.user.validatesConfirmationOf(property="password")>
-		<cfset assert_test(loc.user, false)>
+		<cfset assert_test(loc.user, true)>
 	</cffunction>
 
 

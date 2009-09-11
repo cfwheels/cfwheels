@@ -275,7 +275,7 @@
 		if ($evaluateValidationCondition(argumentCollection=arguments))
 		{
 			loc.virtualConfirmProperty = arguments.property & "Confirmation";
-			if (!StructKeyExists(this, arguments.property) || !StructKeyExists(this, loc.virtualConfirmProperty) || this[arguments.property] != this[loc.virtualConfirmProperty])
+			if (StructKeyExists(this, arguments.property) && StructKeyExists(this, loc.virtualConfirmProperty) && this[arguments.property] != this[loc.virtualConfirmProperty])
 				addError(property=loc.virtualConfirmProperty, message=arguments.message);
 		}
 	</cfscript>
