@@ -87,7 +87,7 @@
 			for (loc.key in variables.wheels.class.associations)
 			{
 				loc.method = "";
-				if (arguments.missingMethodName == variables.wheels.class.associations[loc.key].shortcut)
+				if (StructKeyExists(variables.wheels.class.associations[loc.key], "shortcut") && arguments.missingMethodName == variables.wheels.class.associations[loc.key].shortcut)
 				{
 					loc.method = "findAll";
 					loc.joinAssociation = $expandedAssociations(include=loc.key);
