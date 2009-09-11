@@ -55,9 +55,9 @@
 
 	<cffunction name="test_with_spamProtection">
 		<cfset loc.a.spamProtection = "true">
-		<cfset loc.actionpath = removechars(global.mypath, len(global.mypath), 1)>
+		<cfset loc.a.action = "myaction">
 		<cfset loc.e = global.controller.startFormTag(argumentcollection=loc.a)>
-		<cfset loc.r = '<form onsubmit="this.action=''#loc.actionpath#''+''/#loc.a.controller#'';" method="post">'>
+		<cfset loc.r = '<form onsubmit="this.action=''/test/m''+''yaction'';" method="post">'>
 		<cfset assert("loc.e eq loc.r")>
 		<cfset loc.a.spamProtection = "false">
 	</cffunction>
