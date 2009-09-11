@@ -500,8 +500,8 @@
 		<!--- the key in the request scope that will contain the test results --->
 		<cfset loc.resultKey = "WheelsTests">
 
-		<!--- struct to save the original environment when overloaded --->
-		<cfset loc.savedenv = {}>
+		<!--- save the original environment for overloaded --->
+		<cfset loc.savedenv = duplicate(application)>
 
 		<!--- by default we run all tests, however they can specify to run a specific oset of tests --->
 		<cfset loc.package = "">
@@ -549,11 +549,7 @@
 		if env.cfm files exists, call to override enviroment settings so tests can run.
 		when overriding, save the original env so we can put it back later.
 		 --->
-		<cfif FileExists(loc.full_test_path & "/env.cfm")>
-			<cfset loc.savedenv = duplicate(application)>
-			<cfinclude template="#loc.releative_test_path & '/env.cfm'#">
-		<cfelseif FileExists(loc.full_root_test_path & "/env.cfm")>
-			<cfset loc.savedenv = duplicate(application)>
+		<cfif FileExists(loc.full_root_test_path & "/env.cfm")>
 			<cfinclude template="#loc.relative_root_test_path & '/env.cfm'#">
 		</cfif>
 
@@ -573,10 +569,8 @@
 			</cfif>
 		</cfloop>
 
-		<!--- swap back the enviroment if overwritten --->
-		<cfif not structisempty(loc.savedenv)>
-			<cfset application = duplicate(loc.savedenv)>
-		</cfif>
+		<!--- swap back the enviroment --->
+		<cfset application = loc.savedenv>
 
 		<cfreturn HTMLFormatTestResults(loc.resultKey)>
 
