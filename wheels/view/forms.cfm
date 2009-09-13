@@ -1146,7 +1146,7 @@
 			loc.item = ListGetAt(arguments.order, loc.i);
 			arguments.name = loc.name & "($" & loc.item & ")";
 			if (Len(loc.value))
-				if (isdate(loc.value))
+				if (Isdate(loc.value))
 					arguments.value = Evaluate("#loc.item#(loc.value)");
 				else
 					arguments.value = loc.value;
@@ -1183,6 +1183,8 @@
 		if (!Len(arguments.value) && (!IsBoolean(arguments.includeBlank) || !arguments.includeBlank))
 			arguments.value = Evaluate("#arguments.$type#(Now())");
 		arguments.$appendToFor = arguments.$type;
+		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1 && ListLen(arguments.label) > 1)
+			arguments.label = ListGetAt(arguments.label, ListFindNoCase(arguments.order, arguments.$type));
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		loc.content = "";
