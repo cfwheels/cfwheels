@@ -57,6 +57,7 @@
 	<cfargument name="where" type="string" required="false" default="" hint="String to use in `WHERE` clause of query">
 	<cfargument name="order" type="string" required="false" default="#application.wheels.functions.findAll.order#" hint="String to use in `ORDER BY` clause of query">
 	<cfargument name="select" type="string" required="false" default="" hint="String to use in `SELECT` clause of query">
+	<cfargument name="distinct" type="boolean" required="false" default="false" hint="Boolean value to decide whether to add the `DISTINCT` keyword to your select clause">
 	<cfargument name="include" type="string" required="false" default="" hint="Associations that should be included">
 	<cfargument name="maxRows" type="numeric" required="false" default="-1" hint="Maximum number of records to retrieve">
 	<cfargument name="page" type="numeric" required="false" default=0 hint="Page to get records for in pagination">
@@ -152,7 +153,7 @@
 			if (!IsArray(loc.sql))
 			{
 				loc.sql = [];
-				loc.sql = $addSelectClause(sql=loc.sql, select=arguments.select, include=arguments.include);
+				loc.sql = $addSelectClause(sql=loc.sql, select=arguments.select, include=arguments.include, distinct=arguments.distinct);
 				loc.sql = $addFromClause(sql=loc.sql, include=arguments.include);
 				loc.sql = $addWhereClause(sql=loc.sql, where=loc.originalWhere, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 				loc.sql = $addOrderByClause(sql=loc.sql, order=arguments.order, include=arguments.include);
@@ -554,7 +555,7 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="isNew" returntype="boolean" access="public" output="false" hint="Returns `true` if this object hasn‘t been saved yet (in other words no record exists in the database yet). Returns `false` if a record exists.">
+<cffunction name="isNew" returntype="boolean" access="public" output="false" hint="Returns `true` if this object hasnï¿½t been saved yet (in other words no record exists in the database yet). Returns `false` if a record exists.">
 	<cfscript>
 		var loc = {};
 		// if no values have ever been saved to the database this object is new
@@ -608,9 +609,10 @@
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="select" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
+	<cfargument name="distinct" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
-
+		
 		// setup an array containing class info for current class and all the ones that should be included
 		loc.classes = [];
 		if (Len(arguments.include))
@@ -741,12 +743,14 @@
 				}
 				loc.select = loc.newSelect;
 			}
-			loc.select = "SELECT " & loc.select;
 		}
 		else
 		{
-			loc.select = "SELECT " & arguments.select;
+			loc.select = arguments.select;
 		}
+		if (arguments.distinct)
+			loc.select = "DISTINCT " & loc.select;		
+		loc.select = "SELECT " & loc.select;		
 		ArrayAppend(arguments.sql, loc.select);
 	</cfscript>
 	<cfreturn arguments.sql>
