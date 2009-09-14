@@ -1,18 +1,10 @@
 <cfcomponent extends="wheels.test">
 
-	<cffunction name="_setup">
-		<cfset global = {}>
-		<cfset global.user = createobject("component", "wheels.model").$initModelClass("Users")>
-		<cfset global.user.username = "TheLongestNameInTheWorld">
-	</cffunction>
-
-	<cffunction name="setup">
-		<cfset loc = {}>
-		<cfset loc.user = duplicate(global.user)>
-		<cfset loc.args = {}>
-		<cfset loc.args.property = "username">
-		<cfset loc.args.maximum = "5">
-	</cffunction>
+	<cfset global.user = createobject("component", "wheels.model").$initModelClass("Users")>
+	<cfset global.user.username = "TheLongestNameInTheWorld">
+	<cfset global.args = {}>
+	<cfset global.args.property = "username">
+	<cfset global.args.maximum = "5">
 
 	<cffunction name="test_unless_validation_using_expression_valid">
 		<cfset loc.args.unless="1 eq 1">

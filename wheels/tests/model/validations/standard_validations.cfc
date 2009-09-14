@@ -1,14 +1,6 @@
 <cfcomponent extends="wheels.test">
 
-	<cffunction name="_setup">
-		<cfset global = {}>
-		<cfset global.user = createobject("component", "wheels.model").$initModelClass("Users")>
-	</cffunction>
-
-	<cffunction name="setup">
-		<cfset loc = {}>
-		<cfset loc.user = duplicate(global.user)>
-	</cffunction>
+	<cfset global.user = createobject("component", "wheels.model").$initModelClass("Users")>
 
 	<!--- validatesConfirmationOf --->
 	<cffunction name="test_validatesConfirmationOf_valid">
