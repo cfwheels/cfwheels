@@ -106,7 +106,7 @@
 			if (arguments.count > 0)
 				loc.totalRecords = arguments.count;
 			else
-				loc.totalRecords = this.count(distinct=loc.distinct, where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache);
+				loc.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct);
 			loc.currentPage = arguments.page;
 			if (loc.totalRecords == 0)
 				loc.totalPages = 0;
@@ -116,7 +116,7 @@
 			loc.offset = (arguments.perPage * arguments.page) - arguments.perPage;
 			if ((loc.limit + loc.offset) > loc.totalRecords)
 				loc.limit = loc.totalRecords - loc.offset;
-			loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache);
+			loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct);
 			if (!loc.values.recordCount)
 			{
 				loc.returnValue = QueryNew("");

@@ -47,7 +47,7 @@
 		if (arguments.limit > 0)
 		{
 			// select clause always comes first in the array, the order by clause last, remove the leading keywords leaving only the columns and set to the ones used in the inner most sub query
-			loc.thirdSelect = ReplaceNoCase(ReplaceNoCase(arguments.sql[1], "SELECT ", ""), "DISTINCT ", "");
+			loc.thirdSelect = ReplaceNoCase(ReplaceNoCase(arguments.sql[1], "SELECT DISTINCT ", ""), "SELECT ", "");
 			loc.thirdOrder = ReplaceNoCase(arguments.sql[ArrayLen(arguments.sql)], "ORDER BY ", "");
 	
 			// the first select is the outer most in the query and need to contain columns without table names and using aliases when they exist

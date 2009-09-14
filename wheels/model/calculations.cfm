@@ -91,6 +91,7 @@
 		arguments.select = arguments.select & ") AS result";
 		StructDelete(arguments, "type");
 		StructDelete(arguments, "property");
+		StructDelete(arguments, "distinct");
 		loc.query = findAll(argumentCollection=arguments);
 		if (Len(loc.query.result))
 			loc.returnValue = loc.query.result;
