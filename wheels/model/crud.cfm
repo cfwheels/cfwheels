@@ -1,4 +1,4 @@
-<cffunction name="findByKey" returntype="any" access="public" output="false" hint="Fetches the requested record and returns it as an object. Returns `false` if no record is found.">
+﻿<cffunction name="findByKey" returntype="any" access="public" output="false" hint="Fetches the requested record and returns it as an object. Returns `false` if no record is found.">
 	<cfargument name="key" type="any" required="true" hint="Primary key value(s) of record to fetch. Separate with comma if passing in multiple primary key values.">
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for `findAll`">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for `findAll`">
@@ -555,7 +555,7 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="isNew" returntype="boolean" access="public" output="false" hint="Returns `true` if this object hasn�t been saved yet (in other words no record exists in the database yet). Returns `false` if a record exists.">
+<cffunction name="isNew" returntype="boolean" access="public" output="false" hint="Returns `true` if this object hasn't been saved yet (in other words no record exists in the database yet). Returns `false` if a record exists.">
 	<cfscript>
 		var loc = {};
 		// if no values have ever been saved to the database this object is new
