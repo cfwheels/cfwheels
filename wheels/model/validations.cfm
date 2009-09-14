@@ -371,18 +371,11 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$evaluateValidationCondition" returntype="boolean" access="public" output="false" hint="Evaluates the condition (which can be the name of a method or a string) to determine if the validation should be executed.">
+<cffunction name="$evaluateValidationCondition" returntype="boolean" access="public" output="false" hint="Evaluates the condition to determine if the validation should be executed.">
 	<cfscript>
-		var loc = {};
-		loc.returnValue = true;
-		if (StructKeyExists(arguments, "if") && Len(arguments.if))
-		{
-			loc.returnValue = Evaluate(arguments.if);
-		}
-		if (StructKeyExists(arguments, "unless") && Len(arguments.unless))
-		{
-			loc.returnValue = !Evaluate(arguments.unless);
-		}
+		var returnValue = false;
+		if ((!StructKeyExists(arguments, "if") || !Len(arguments.if) || Evaluate(arguments.if)) && (!StructKeyExists(arguments, "unless") || !Len(arguments.unless) || !Evaluate(arguments.unless)))
+			returnValue = true;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn returnValue>
 </cffunction>
