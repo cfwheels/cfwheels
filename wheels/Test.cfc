@@ -98,9 +98,9 @@
 --->
 
 <cfcomponent>
-	<cfinclude template="plugins/injection.cfm">
 
 	<cfset variables.WHEELS_TESTS_BASE_COMPONENT_PATH = "">
+	<cfset global = {}>
 
 	<!---
 		Instanciate all components in specified package and call their runTest()
@@ -195,6 +195,8 @@
 			<cfif left(key, 4) eq "test" and isCustomFunction(this[key])>
 
 				<cftry>
+				
+					<cfset loc = duplicate(global)>
 
 					<cfset time = getTickCount()>
 
@@ -621,4 +623,5 @@
 		<cfreturn "">
 	</cffunction>
 
+	<cfinclude template="plugins/injection.cfm">
 </cfcomponent>
