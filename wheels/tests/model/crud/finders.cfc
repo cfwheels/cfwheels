@@ -1,0 +1,29 @@
+<cfcomponent extends="wheels.test">
+
+	<cffunction name="_setup">
+		<cfset global = {}>
+		<cfset global.user = createobject("component", "wheels.model").$initModelClass("Users")>
+	</cffunction>
+
+	<cffunction name="setup">
+		<cfset loc = {}>
+		<cfset loc.user = duplicate(global.user)>
+	</cffunction>
+
+	<cffunction name="test_select_distinct_addresses">
+		<cfset loc.q = loc.user.findAll(select="address", distinct="true", order="address")>
+		<cfset assert('loc.q.recordcount eq 4')>
+		<cfset loc.e = "123 Petruzzi St.|456 Peters Dr.|789 Djurner Ave.|987 Riera Blvd.">
+		<cfset loc.r = valuelist(loc.q.address, "|")>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+
+	<cffunction name="test_select_users_groupby_address">
+		<cfset loc.q = loc.user.findAll(select="address", group="address", order="address", result="loc.result")>
+		<cfset assert('loc.q.recordcount eq 4')>
+		<cfset loc.e = "123 Petruzzi St.|456 Peters Dr.|789 Djurner Ave.|987 Riera Blvd.">
+		<cfset loc.r = valuelist(loc.q.address, "|")>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+
+</cfcomponent>
