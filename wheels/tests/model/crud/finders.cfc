@@ -1,14 +1,6 @@
 <cfcomponent extends="wheels.test">
 
-	<cffunction name="_setup">
-		<cfset global = {}>
-		<cfset global.user = createobject("component", "wheels.model").$initModelClass("Users")>
-	</cffunction>
-
-	<cffunction name="setup">
-		<cfset loc = {}>
-		<cfset loc.user = duplicate(global.user)>
-	</cffunction>
+	<cfset global.user = createobject("component", "wheels.model").$initModelClass("Users")>
 
 	<cffunction name="test_select_distinct_addresses">
 		<cfset loc.q = loc.user.findAll(select="address", distinct="true", order="address")>
