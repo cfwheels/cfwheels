@@ -38,3 +38,6 @@ insert into Users (username, password, firstname, lastname, address, city, state
 
 insert into Users (username, password, firstname, lastname, address, city, state, zipcode, phone, fax, birthday, birthdaymonth, birthdayyear) values
 ('raulr', 'raulr23', 'Raul', 'Riera', '987 Riera Blvd.', 'SomeWhere4', 'WI', '55555', '1235558989', '4565558989', '06/14/1981', 6, 1981)
+
+insert into Users (username, password, firstname, lastname, address, city, state, zipcode, phone, fax, birthday, birthdaymonth, birthdayyear) values
+('joeb', 'joeb', 'Joe', 'Blow', '123 Petruzzi St.', 'SomeWhere4', 'CA', '22222', '1235551212', '4565554545', '11/12/1973', 11, 1973)
