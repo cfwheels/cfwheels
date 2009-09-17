@@ -1,1 +1,1 @@
-<cfinclude template="../../plugins/#params.name#/index.cfm">
+<cfinclude template="../../plugins/#LCase(params.name)#/index.cfm">
