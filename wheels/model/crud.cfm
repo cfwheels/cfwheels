@@ -109,30 +109,35 @@
 				loc.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct);
 			loc.currentPage = arguments.page;
 			if (loc.totalRecords == 0)
-				loc.totalPages = 0;
-			else
-				loc.totalPages = Ceiling(loc.totalRecords/arguments.perPage);
-			loc.limit = arguments.perPage;
-			loc.offset = (arguments.perPage * arguments.page) - arguments.perPage;
-			if ((loc.limit + loc.offset) > loc.totalRecords)
-				loc.limit = loc.totalRecords - loc.offset;
-			loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct);
-			if (!loc.values.recordCount)
 			{
+				loc.totalPages = 0;
 				loc.returnValue = QueryNew("");
 			}
 			else
 			{
-				arguments.where = "";
-				loc.iEnd = ListLen(variables.wheels.class.keys);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				loc.totalPages = Ceiling(loc.totalRecords/arguments.perPage);
+				loc.limit = arguments.perPage;
+				loc.offset = (arguments.perPage * arguments.page) - arguments.perPage;
+				if ((loc.limit + loc.offset) > loc.totalRecords)
+					loc.limit = loc.totalRecords - loc.offset;
+				loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct);
+				if (!loc.values.recordCount)
 				{
-					loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
-					loc.list = Evaluate("QuotedValueList(loc.values.#loc.property#)");
-					arguments.where = ListAppend(arguments.where, "#variables.wheels.class.tableName#.#variables.wheels.class.properties[loc.property].column# IN (#loc.list#)", Chr(7));
+					loc.returnValue = QueryNew("");
 				}
-				arguments.where = Replace(arguments.where, Chr(7), " AND ", "all");
-				arguments.$softDeleteCheck = false;
+				else
+				{
+					arguments.where = "";
+					loc.iEnd = ListLen(variables.wheels.class.keys);
+					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					{
+						loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
+						loc.list = Evaluate("QuotedValueList(loc.values.#loc.property#)");
+						arguments.where = ListAppend(arguments.where, "#variables.wheels.class.tableName#.#variables.wheels.class.properties[loc.property].column# IN (#loc.list#)", Chr(7));
+					}
+					arguments.where = Replace(arguments.where, Chr(7), " AND ", "all");
+					arguments.$softDeleteCheck = false;
+				}
 			}
 			// store pagination info in the request scope so all pagination methods can access it
 			request.wheels[arguments.handle] = {};
