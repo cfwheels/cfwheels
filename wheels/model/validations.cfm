@@ -277,152 +277,152 @@
 </cffunction>
 
 <cffunction name="$validateConfirmationOf" returntype="void" access="public" output="false">
-        <cfscript>
-                var loc = {};
-				if ($evaluateValidationCondition(argumentCollection=arguments))
-				{
-	                loc.virtualConfirmProperty = arguments.property & "Confirmation";
-					if (StructKeyExists(this, arguments.property) && StructKeyExists(this, loc.virtualConfirmProperty) && this[arguments.property] != this[loc.virtualConfirmProperty])
-						addError(property=loc.virtualConfirmProperty, message=arguments.message);
-				}
-        </cfscript>
+	<cfscript>
+		var loc = {};
+		if ($evaluateValidationCondition(argumentCollection=arguments))
+		{
+			loc.virtualConfirmProperty = arguments.property & "Confirmation";
+			if (StructKeyExists(this, arguments.property) && StructKeyExists(this, loc.virtualConfirmProperty) && this[arguments.property] != this[loc.virtualConfirmProperty])
+				addError(property=loc.virtualConfirmProperty, message=arguments.message);
+		}
+	</cfscript>
 </cffunction>
 
 <cffunction name="$validateExclusionOf" returntype="void" access="public" output="false">
-        <cfscript>
-                if ($evaluateValidationCondition(argumentCollection=arguments))
-				{
-	                if ((!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))) || (StructKeyExists(this, arguments.property) && Len(this[arguments.property]) && ListFindNoCase(arguments.list, this[arguments.property])))
-	                        addError(property=arguments.property, message=arguments.message);
-				}
-        </cfscript>
+	<cfscript>
+		if ($evaluateValidationCondition(argumentCollection=arguments))
+		{
+			if ((!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))) || (StructKeyExists(this, arguments.property) && Len(this[arguments.property]) && ListFindNoCase(arguments.list, this[arguments.property])))
+				addError(property=arguments.property, message=arguments.message);
+		}
+	</cfscript>
 </cffunction>
 
 <cffunction name="$validateFormatOf" returntype="void" access="public" output="false">
-        <cfscript>
-                if ($evaluateValidationCondition(argumentCollection=arguments))
-				{
-	                if ((!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))) || (StructKeyExists(this, arguments.property) && Len(this[arguments.property]) && !REFindNoCase(arguments.regEx, this[arguments.property])))
-	                        addError(property=arguments.property, message=arguments.message);
-				}
-        </cfscript>
+	<cfscript>
+		if ($evaluateValidationCondition(argumentCollection=arguments))
+		{
+			if ((!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))) || (StructKeyExists(this, arguments.property) && Len(this[arguments.property]) && !REFindNoCase(arguments.regEx, this[arguments.property])))
+				addError(property=arguments.property, message=arguments.message);
+		}
+	</cfscript>
 </cffunction>
 
 <cffunction name="$validateInclusionOf" returntype="void" access="public" output="false">
-        <cfscript>
-                if ($evaluateValidationCondition(argumentCollection=arguments))
-				{
-	                if ((!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))) || (StructKeyExists(this, arguments.property) && Len(this[arguments.property]) && !ListFindNoCase(arguments.list, this[arguments.property])))
-	                        addError(property=arguments.property, message=arguments.message);
-				}
-        </cfscript>
+	<cfscript>
+		if ($evaluateValidationCondition(argumentCollection=arguments))
+		{
+			if ((!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))) || (StructKeyExists(this, arguments.property) && Len(this[arguments.property]) && !ListFindNoCase(arguments.list, this[arguments.property])))
+				addError(property=arguments.property, message=arguments.message);
+		}
+	</cfscript>
 </cffunction>
 
 <cffunction name="$validateLengthOf" returntype="void" access="public" output="false">
-        <cfscript>
-                if ($evaluateValidationCondition(argumentCollection=arguments))
+	<cfscript>
+		if ($evaluateValidationCondition(argumentCollection=arguments))
+		{
+			if (!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property])))
+			{
+				addError(property=arguments.property, message=arguments.message);
+			}
+			else
+			{
+				if (StructKeyExists(this, arguments.property) && Len(this[arguments.property]))
 				{
-	                if (!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property])))
-	                {
-	                        addError(property=arguments.property, message=arguments.message);
-	                }
-	                else
-	                {
-	                        if (StructKeyExists(this, arguments.property) && Len(this[arguments.property]))
-	                        {
-	                                if (arguments.maximum)
-	                                {
-	                                        if (Len(this[arguments.property]) > arguments.maximum)
-	                                                addError(property=arguments.property, message=arguments.message);
-	                                }
-	                                else if (arguments.minimum)
-	                                {
-	                                        if (Len(this[arguments.property]) < arguments.minimum)
-	                                                addError(property=arguments.property, message=arguments.message);
-	                                }
-	                                else if (arguments.exactly)
-	                                {
-	                                        if (Len(this[arguments.property]) != arguments.exactly)
-	                                                addError(property=arguments.property, message=arguments.message);
-	                                }
-	                                else if (IsArray(arguments.within) && ArrayLen(arguments.within))
-	                                {
-	                                        if (Len(this[arguments.property]) < arguments.within[1] || Len(this[arguments.property]) > arguments.within[2])
-	                                                addError(property=arguments.property, message=arguments.message);
-	                                }
-	                        }
-	                }
+					if (arguments.maximum)
+					{
+						if (Len(this[arguments.property]) > arguments.maximum)
+							addError(property=arguments.property, message=arguments.message);
+					}
+					else if (arguments.minimum)
+					{
+						if (Len(this[arguments.property]) < arguments.minimum)
+							addError(property=arguments.property, message=arguments.message);
+					}
+					else if (arguments.exactly)
+					{
+						if (Len(this[arguments.property]) != arguments.exactly)
+							addError(property=arguments.property, message=arguments.message);
+					}
+					else if (IsArray(arguments.within) && ArrayLen(arguments.within))
+					{
+						if (Len(this[arguments.property]) < arguments.within[1] || Len(this[arguments.property]) > arguments.within[2])
+							addError(property=arguments.property, message=arguments.message);
+					}
 				}
-        </cfscript>
+			}
+		}
+	</cfscript>
 </cffunction>
 
 <cffunction name="$validateNumericalityOf" returntype="void" access="public" output="false">
-        <cfscript>
-                if ($evaluateValidationCondition(argumentCollection=arguments))
+	<cfscript>
+		if ($evaluateValidationCondition(argumentCollection=arguments))
+		{
+			if (!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property])))
+			{
+				addError(property=arguments.property, message=arguments.message);
+			}
+			else
+			{
+				if (StructKeyExists(this, arguments.property) && Len(this[arguments.property]))
 				{
-	                if (!arguments.allowBlank && (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property])))
-	                {
-	                        addError(property=arguments.property, message=arguments.message);
-	                }
-	                else
-	                {
-	                        if (StructKeyExists(this, arguments.property) && Len(this[arguments.property]))
-	                        {
-	                                if (!IsNumeric(this[arguments.property]))
-	                                        addError(property=arguments.property, message=arguments.message);
-	                                else if (arguments.onlyInteger && Round(this[arguments.property]) != this[arguments.property])
-	                                        addError(property=arguments.property, message=arguments.message);
-	                        }
-	                }
+					if (!IsNumeric(this[arguments.property]))
+						addError(property=arguments.property, message=arguments.message);
+					else if (arguments.onlyInteger && Round(this[arguments.property]) != this[arguments.property])
+						addError(property=arguments.property, message=arguments.message);
 				}
-        </cfscript>
+			}
+		}
+	</cfscript>
 </cffunction>
 
 <cffunction name="$validatePresenceOf" returntype="void" access="public" output="false">
-        <cfscript>
-                if ($evaluateValidationCondition(argumentCollection=arguments))
-				{
-	                if (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))
-	                        addError(property=arguments.property, message=arguments.message);
-				}
-        </cfscript>
+	<cfscript>
+		if ($evaluateValidationCondition(argumentCollection=arguments))
+		{
+			if (!StructKeyExists(this, arguments.property) || !Len(this[arguments.property]))
+				addError(property=arguments.property, message=arguments.message);
+		}
+	</cfscript>
 </cffunction>
 
 <cffunction name="$validateUniquenessOf" returntype="void" access="public" output="false">
-        <cfscript>
-                var loc = {};
-                if ($evaluateValidationCondition(argumentCollection=arguments))
-				{
-					loc.where = arguments.property & "=";
-	                if (!IsNumeric(this[arguments.property]))
-	                        loc.where = loc.where & "'";
-	                loc.where = loc.where & this[arguments.property];
-	                if (!IsNumeric(this[arguments.property]))
-	                        loc.where = loc.where & "'";
-	                loc.iEnd = ListLen(arguments.scope);
-	                for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-	                {
-	                        loc.where = loc.where & " AND ";
-	                        loc.property = Trim(ListGetAt(arguments.scope, loc.i));
-	                        loc.where = loc.where & loc.property & "=";
-	                        if (!IsNumeric(this[loc.property]))
-	                                loc.where = loc.where & "'";
-	                        loc.where = loc.where & this[loc.property];
-	                        if (!IsNumeric(this[loc.property]))
-	                                loc.where = loc.where & "'";
-	                }
-	                loc.existingObject = findOne(where=loc.where, reload=true);
-	                if (IsObject(loc.existingObject) && (isNew() || loc.existingObject.key() != key($persisted=true)))
-	                        addError(property=arguments.property, message=arguments.message);
-				}
-        </cfscript>
+	<cfscript>
+		var loc = {};
+		if ($evaluateValidationCondition(argumentCollection=arguments))
+		{
+			loc.where = arguments.property & "=";
+			if (!IsNumeric(this[arguments.property]))
+				loc.where = loc.where & "'";
+			loc.where = loc.where & this[arguments.property];
+			if (!IsNumeric(this[arguments.property]))
+				loc.where = loc.where & "'";
+			loc.iEnd = ListLen(arguments.scope);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.where = loc.where & " AND ";
+				loc.property = Trim(ListGetAt(arguments.scope, loc.i));
+				loc.where = loc.where & loc.property & "=";
+				if (!IsNumeric(this[loc.property]))
+					loc.where = loc.where & "'";
+				loc.where = loc.where & this[loc.property];
+				if (!IsNumeric(this[loc.property]))
+					loc.where = loc.where & "'";
+			}
+			loc.existingObject = findOne(where=loc.where, reload=true);
+			if (IsObject(loc.existingObject) && (isNew() || loc.existingObject.key() != key($persisted=true)))
+				addError(property=arguments.property, message=arguments.message);
+		}
+	</cfscript>
 </cffunction>
 
 <cffunction name="$evaluateValidationCondition" returntype="boolean" access="public" output="false" hint="Evaluates the condition to determine if the validation should be executed.">
-        <cfscript>
-                var returnValue = false;
-                if ((!StructKeyExists(arguments, "if") || !Len(arguments.if) || Evaluate(arguments.if)) && (!StructKeyExists(arguments, "unless") || !Len(arguments.unless) || !Evaluate(arguments.unless)))
-                        returnValue = true;
-        </cfscript>
-        <cfreturn returnValue>
+	<cfscript>
+		var returnValue = false;
+		if ((!StructKeyExists(arguments, "if") || !Len(arguments.if) || Evaluate(arguments.if)) && (!StructKeyExists(arguments, "unless") || !Len(arguments.unless) || !Evaluate(arguments.unless)))
+			returnValue = true;
+	</cfscript>
+	<cfreturn returnValue>
 </cffunction>
