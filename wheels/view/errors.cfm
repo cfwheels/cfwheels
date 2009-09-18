@@ -4,7 +4,7 @@
 	<cfargument name="showDuplicates" type="boolean" required="false" default="#application.wheels.functions.errorMessagesFor.showDuplicates#" hint="Whether to show duplicate error messages">
 	<cfscript>
 		var loc = {};
-		arguments = $insertDefaults(name="errorMessagesFor", input=arguments);
+		$insertDefaults(name="errorMessagesFor", input=arguments);
 		loc.object = Evaluate(arguments.objectName);
 		loc.errors = loc.object.allErrors();
 		loc.returnValue = "";
@@ -44,7 +44,7 @@
 	<cfargument name="class" type="string" required="false" default="#application.wheels.functions.errorMessageOn.class#" hint="CSS class to set on the wrapper element">
 	<cfscript>
 		var loc = {};
-		arguments = $insertDefaults(name="errorMessageOn", input=arguments);
+		$insertDefaults(name="errorMessageOn", input=arguments);
 		loc.object = Evaluate(arguments.objectName);
 		loc.error = loc.object.errorsOn(arguments.property);
 		loc.returnValue = "";

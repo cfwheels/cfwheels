@@ -26,7 +26,7 @@
 				loc.mailArgs.subject = "Error";
 				loc.mailArgs.type = "html";
 				loc.mailArgs.body = [$includeAndReturnOutput($template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception)];
-				loc.mailArgs = $insertDefaults(name="sendEmail", input=loc.mailArgs);
+				$insertDefaults(name="sendEmail", input=loc.mailArgs);
 				$mail(argumentCollection=loc.mailArgs);
 			}
 	

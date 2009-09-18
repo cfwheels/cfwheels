@@ -14,7 +14,7 @@
 	<cfargument name="port" type="numeric" required="false" default="#application.wheels.functions.startFormTag.port#" hint="See documentation for `URLFor`">
 	<cfscript>
 		var loc = {};
-		arguments = $insertDefaults(name="startFormTag", input=arguments);
+		$insertDefaults(name="startFormTag", input=arguments);
 
 		// sets a flag to indicate whether we use get or post on this form, used when obfuscating params
 		request.wheels.currentFormMethod = arguments.method;
@@ -62,7 +62,7 @@
 	<cfargument name="disable" type="any" required="false" default="#application.wheels.functions.submitTag.disable#" hint="Whether to disable the button upon clicking (prevents double-clicking)">
 	<cfscript>
 		var loc = {};
-		arguments = $insertDefaults(name="submitTag", reserved="type,src", input=arguments);
+		$insertDefaults(name="submitTag", reserved="type,src", input=arguments);
 		if (Len(arguments.disable))
 		{
 			loc.onclick = "this.disabled=true;";
@@ -114,7 +114,7 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="textField", reserved="type,name,value", input=arguments);
+		$insertDefaults(name="textField", reserved="type,name,value", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "text";
@@ -182,7 +182,7 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="passwordField", reserved="type,name,value", input=arguments);
+		$insertDefaults(name="passwordField", reserved="type,name,value", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "password";
@@ -232,7 +232,7 @@
 	<cfargument name="property" type="string" required="true" hint="See documentation for `textField`">
 	<cfscript>
 		var loc = {};
-		arguments = $insertDefaults(name="hiddenField", reserved="type,name,value", input=arguments);
+		$insertDefaults(name="hiddenField", reserved="type,name,value", input=arguments);
 		arguments.type = "hidden";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		if (!StructKeyExists(arguments, "id"))
@@ -283,7 +283,7 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="fileField", reserved="type,name", input=arguments);
+		$insertDefaults(name="fileField", reserved="type,name", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "file";
@@ -348,7 +348,7 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="textArea", reserved="name", input=arguments);
+		$insertDefaults(name="textArea", reserved="name", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
@@ -416,7 +416,7 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="radioButton", reserved="type,name,value,checked", input=arguments);
+		$insertDefaults(name="radioButton", reserved="type,name,value,checked", input=arguments);
 		loc.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.tagValue, "[^a-z0-9 ]", "", "all"), " ", "-", "all"));
 		arguments.$appendToFor = loc.valueToAppend;
 		loc.before = $formBeforeElement(argumentCollection=arguments);
@@ -501,7 +501,7 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="checkBox", reserved="type,name,value,checked", input=arguments);
+		$insertDefaults(name="checkBox", reserved="type,name,value,checked", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "checkbox";
@@ -591,7 +591,7 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="select", reserved="name", input=arguments);
+		$insertDefaults(name="select", reserved="name", input=arguments);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
@@ -684,7 +684,7 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="dateSelect", input=arguments);
+		$insertDefaults(name="dateSelect", input=arguments);
 		arguments.$functionName = "dateSelect";
 	</cfscript>
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
@@ -753,7 +753,7 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="timeSelect", input=arguments);
+		$insertDefaults(name="timeSelect", input=arguments);
 		arguments.$functionName = "timeSelect";
 	</cfscript>
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
@@ -826,7 +826,7 @@
 		}
 		// END DEPRECATING WRAPLABEL CODE
 
-		arguments = $insertDefaults(name="dateTimeSelect", reserved="name", input=arguments);
+		$insertDefaults(name="dateTimeSelect", reserved="name", input=arguments);
 		arguments.$functionName = "dateTimeSelect";
 	</cfscript>
 	<cfreturn dateTimeSelectTags(argumentCollection=arguments)>

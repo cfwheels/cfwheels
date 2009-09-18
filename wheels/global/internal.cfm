@@ -113,7 +113,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$insertDefaults" returntype="struct" access="public" output="false">
+<cffunction name="$insertDefaults" returntype="void" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="input" type="struct" required="true">
 	<cfargument name="reserved" type="string" required="false" default="">
@@ -133,9 +133,7 @@
 			}			
 		}
 		StructAppend(arguments.input, application.wheels.functions[arguments.name], false);
-		loc.returnValue = arguments.input;
 	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$createObjectFromRoot" returntype="any" access="public" output="false">

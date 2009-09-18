@@ -6,7 +6,7 @@
 		var loc = {};
 		if (StructKeyExists(arguments, "source") && !Len(arguments.sources))
 			arguments.sources = arguments.source;
-		arguments = $insertDefaults(name="styleSheetLinkTag", reserved="href,rel", input=arguments);
+		$insertDefaults(name="styleSheetLinkTag", reserved="href,rel", input=arguments);
 		arguments.rel = "stylesheet";
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.sources);
@@ -29,7 +29,7 @@
 		var loc = {};
 		if (StructKeyExists(arguments, "source") && !Len(arguments.sources))
 			arguments.sources = arguments.source;
-		arguments = $insertDefaults(name="javaScriptIncludeTag", reserved="src", input=arguments);
+		$insertDefaults(name="javaScriptIncludeTag", reserved="src", input=arguments);
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.sources);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -48,7 +48,7 @@
 	<cfargument name="source" type="string" required="true" hint="Image file name if local or full URL if remote">
 	<cfscript>
 		var loc = {};
-		arguments = $insertDefaults(name="imageTag", reserved="src", input=arguments);
+		$insertDefaults(name="imageTag", reserved="src", input=arguments);
 		if (application.wheels.cacheImages)
 		{
 			loc.category = "image";

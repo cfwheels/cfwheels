@@ -43,7 +43,7 @@
 
 		if (StructKeyExists(arguments, "template") && !Len(arguments.templates))
 			arguments.templates = arguments.template;
-		arguments = $insertDefaults(name="sendEmail", input=arguments);
+		$insertDefaults(name="sendEmail", input=arguments);
 
 		// set the variables that should be available to the email view template
 		for (loc.key in arguments)

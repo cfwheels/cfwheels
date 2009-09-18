@@ -13,7 +13,7 @@
 	<cfargument name="port" type="numeric" required="false" default="#application.wheels.functions.linkTo.port#" hint="See documentation for `URLFor`">
 	<cfscript>
 		var loc = {};
-		arguments = $insertDefaults(name="linkTo", reserved="href", input=arguments);
+		$insertDefaults(name="linkTo", reserved="href", input=arguments);
 		if (Len(arguments.confirm))
 		{
 			loc.onclick = "return confirm('#arguments.confirm#');";
@@ -48,7 +48,7 @@
 	<cfargument name="port" type="numeric" required="false" default="#application.wheels.functions.buttonTo.port#" hint="See documentation for `URLFor`">
 	<cfscript>
 		var loc = {};
-		arguments = $insertDefaults(name="buttonTo", reserved="method", input=arguments);
+		$insertDefaults(name="buttonTo", reserved="method", input=arguments);
 		arguments.action = URLFor(argumentCollection=arguments);
 		arguments.action = Replace(arguments.action, "&", "&amp;", "all"); // make sure we return XHMTL compliant code
 		arguments.method = "post";
@@ -72,7 +72,7 @@
 	<cfargument name="encode" type="boolean" required="false" default="#application.wheels.functions.mailTo.encode#" hint="Pass true here to encode the email address, making it harder for bots to harvest it">
 	<cfscript>
 		var loc = {};
-		arguments = $insertDefaults(name="mailTo", reserved="href", input=arguments);
+		$insertDefaults(name="mailTo", reserved="href", input=arguments);
 		arguments.href = "mailto:#arguments.emailAddress#";
 		if (Len(arguments.name))
 			loc.content = arguments.name;
@@ -158,7 +158,7 @@
 			StructDelete(arguments, "appendToLink");
 		}
 
-		arguments = $insertDefaults(name="paginationLinks", input=arguments);
+		$insertDefaults(name="paginationLinks", input=arguments);
 		loc.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prepend,append,prependToPage,prependOnFirst,appendToPage,appendOnLast,classForCurrent,handle,name,showSinglePage";
 		loc.linkToArguments = Duplicate(arguments);
 		loc.iEnd = ListLen(loc.skipArgs);
