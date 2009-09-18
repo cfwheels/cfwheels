@@ -32,8 +32,7 @@
 </cffunction>
 
 <cffunction name="sendEmail" returntype="void" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in.">
-	<cfargument name="template" type="string" required="false" default="#arguments.templates#" hint="The path to the email template or two paths if you want to send a multipart email (if the `detectMultipart` argument is `false` the template for the text version should be the first one in the list).">
-	<cfargument name="templates" type="string" required="false" default="#arguments.template#" hint="See `template`">
+	<cfargument name="templates" type="string" required="false" default="" hint="The path to the email template or two paths if you want to send a multipart email. if the `detectMultipart` argument is `false` the template for the text version should be the first one in the list (can also be called with the `template` argument).">
 	<cfargument name="from" type="string" required="true" hint="Email address to send from">
 	<cfargument name="to" type="string" required="true" hint="Email address to send to">
 	<cfargument name="subject" type="string" required="true" hint="The subject line of the email">
@@ -41,7 +40,9 @@
 	<cfargument name="detectMultipart" type="boolean" required="false" default="#application.wheels.functions.sendEmail.detectMultipart#" hint="When set to `true` Wheels will detect which of the templates is text and which one is html (by counting the `<` characters)">
 	<cfscript>
 		var loc = {};
-		
+
+		if (StructKeyExists(arguments, "template") && !Len(arguments.templates))
+			arguments.templates = arguments.template;
 		arguments = $insertDefaults(name="sendEmail", input=arguments);
 
 		// set the variables that should be available to the email view template

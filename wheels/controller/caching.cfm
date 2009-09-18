@@ -4,7 +4,7 @@
 	<cfscript>
 		var loc = {};
 		if (StructKeyExists(arguments, "action") && !Len(arguments.actions))
-			arguments.actions = argument.action;
+			arguments.actions = arguments.action;
 		loc.iEnd = ListLen(arguments.actions);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{

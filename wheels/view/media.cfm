@@ -1,10 +1,11 @@
 <cffunction name="styleSheetLinkTag" returntype="string" access="public" output="false" hint="Returns a `link` tag based on the supplied arguments.">
-	<cfargument name="source" type="string" required="false" default="#arguments.sources#" hint="The name of one or many CSS files in the `stylesheets` folder">
-	<cfargument name="sources" type="string" required="false" default="#arguments.source#" hint="See `source`">
+	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many CSS files in the `stylesheets` folder (can also be called with the `source` argument)">
 	<cfargument name="type" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.type#" hint="The `type` attribute for the `link` tag">
 	<cfargument name="media" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.media#" hint="The `media` attribute for the `link` tag">
 	<cfscript>
 		var loc = {};
+		if (StructKeyExists(arguments, "source") && !Len(arguments.sources))
+			arguments.sources = arguments.source;
 		arguments = $insertDefaults(name="styleSheetLinkTag", reserved="href,rel", input=arguments);
 		arguments.rel = "stylesheet";
 		loc.returnValue = "";
@@ -22,11 +23,12 @@
 </cffunction>
 
 <cffunction name="javaScriptIncludeTag" returntype="string" access="public" output="false" hint="Returns a `script` tag based on the supplied arguments.">
-	<cfargument name="source" type="string" required="false" default="#arguments.sources#" hint="The name of one or many JavaScript files in the `javascripts` folder">
-	<cfargument name="sources" type="string" required="false" default="#arguments.source#" hint="See `source`">
+	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many JavaScript files in the `javascripts` folder (can also be called with the `source` argument)">
 	<cfargument name="type" type="string" required="false" default="#application.wheels.functions.javaScriptIncludeTag.type#" hint="The `type` attribute for the `script` tag">
 	<cfscript>
 		var loc = {};
+		if (StructKeyExists(arguments, "source") && !Len(arguments.sources))
+			arguments.sources = arguments.source;
 		arguments = $insertDefaults(name="javaScriptIncludeTag", reserved="src", input=arguments);
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.sources);
