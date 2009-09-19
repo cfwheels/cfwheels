@@ -93,7 +93,6 @@
 		loc.iEnd = ListLen(arguments.methods);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			ArrayAppend(variables.wheels.class.callbacks[arguments.type], ListGetAt(arguments.methods, loc.i));
-		$dump(variables.wheels.class.callbacks);
 	</cfscript>
 </cffunction>
 
