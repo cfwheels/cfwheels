@@ -1,11 +1,10 @@
 <cfcomponent extends="wheels.test">
 
-	<cfset global.controller = createobject("component", "wheels.tests.ControllerWithModel")>
-	<cfset global.modelusers = global.controller.model("ModelUsers")>
+	<cfset global.user = createobject("component", "wheels.model").$initModelClass("Users")>
 
 	<cffunction name="test_setting_and_getting_properties">
 
-		<cfset loc.properties = loc.modelusers.properties()>
+		<cfset loc.properties = loc.user.properties()>
 		<cfset assert("listlen(structkeylist(loc.properties)) eq 14")>
 
 		<cfset loc.args = {}>
@@ -24,9 +23,9 @@
 		<cfset loc.args.birthdaymonth = "11">
 		<cfset loc.args.birthdayyear = "1975">
 
-		<cfset loc.modelusers.properties(loc.args)>
+		<cfset loc.user.properties(loc.args)>
 
-		<cfset loc.properties = loc.modelusers.properties()>
+		<cfset loc.properties = loc.user.properties()>
 
 		<cfset halt(false, "loc.properties")>
 		<cfloop collection="#loc.properties#" item="loc.i">
