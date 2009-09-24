@@ -36,19 +36,24 @@
 	<cfargument name="from" type="string" required="true" hint="Email address to send from">
 	<cfargument name="to" type="string" required="true" hint="Email address to send to">
 	<cfargument name="subject" type="string" required="true" hint="The subject line of the email">
-	<cfargument name="layout" type="any" required="false" default="#application.wheels.functions.sendEmail.layout#" hint="Layout to wrap body in">
+	<cfargument name="layouts" type="any" required="false" default="#application.wheels.functions.sendEmail.layouts#" hint="Layout(s) to wrap body in">
 	<cfargument name="detectMultipart" type="boolean" required="false" default="#application.wheels.functions.sendEmail.detectMultipart#" hint="When set to `true` Wheels will detect which of the templates is text and which one is html (by counting the `<` characters)">
 	<cfscript>
 		var loc = {};
 
 		if (StructKeyExists(arguments, "template") && !Len(arguments.templates))
 			arguments.templates = arguments.template;
+		if (StructKeyExists(arguments, "layout"))
+			arguments.layouts = arguments.layout;
 		$insertDefaults(name="sendEmail", input=arguments);
+
+		if (ListLen(arguments.templates) > 1 && ListLen(arguments.layouts) == 1)
+			arguments.layouts = ListAppend(arguments.layouts, false);
 
 		// set the variables that should be available to the email view template
 		for (loc.key in arguments)
 		{
-			if (!ListFindNoCase("template,templates,layout,detectMultipart", loc.key) && !ListFindNoCase("from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext", loc.key))
+			if (!ListFindNoCase("template,templates,layout,layouts,detectMultipart", loc.key) && !ListFindNoCase("from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext", loc.key))
 			{
 				variables[loc.key] = arguments[loc.key];
 				StructDelete(arguments, loc.key);
@@ -60,7 +65,7 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			// include the email template and return it
-			loc.content = $renderPage($template=ListGetAt(arguments.templates, loc.i), $layout=arguments.layout);
+			loc.content = $renderPage($template=ListGetAt(arguments.templates, loc.i), $layout=ListGetAt(arguments.layouts, loc.i));
 			if (ArrayIsEmpty(arguments.body))
 			{
 				ArrayAppend(arguments.body, loc.content);
@@ -88,6 +93,7 @@
 		StructDelete(arguments, "template");
 		StructDelete(arguments, "templates");
 		StructDelete(arguments, "layout");
+		StructDelete(arguments, "layouts");
 		StructDelete(arguments, "detectMultipart");
 		$mail(argumentCollection=arguments);
 	</cfscript>
