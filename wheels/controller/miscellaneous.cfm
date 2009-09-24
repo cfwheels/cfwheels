@@ -41,7 +41,7 @@
 	<cfscript>
 		var loc = {};
 
-		if (StructKeyExists(arguments, "template") && !Len(arguments.templates))
+		if (StructKeyExists(arguments, "template"))
 			arguments.templates = arguments.template;
 		if (StructKeyExists(arguments, "layout"))
 			arguments.layouts = arguments.layout;

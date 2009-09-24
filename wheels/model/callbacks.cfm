@@ -88,7 +88,7 @@
 	<cfargument name="methods" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(arguments, "method") && !Len(arguments.methods))
+		if (StructKeyExists(arguments, "method"))
 			arguments.methods = arguments.method;
 		loc.iEnd = ListLen(arguments.methods);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)

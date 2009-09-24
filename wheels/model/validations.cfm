@@ -6,7 +6,7 @@
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(arguments, "property") && !Len(arguments.properties))
+		if (StructKeyExists(arguments, "property"))
 			arguments.properties = arguments.property;
 		loc.args = {};
 		loc.iEnd = ListLen(arguments.properties);
@@ -31,7 +31,7 @@
 	<cfargument name="unless" type="string" required="false" default="" hint="Name of a method or a string to be evaluated that decides if validation will be run (if string/method returns `false` validation will run)">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(arguments, "property") && !Len(arguments.properties))
+		if (StructKeyExists(arguments, "property"))
 			arguments.properties = arguments.property;
 		loc.args = {};
 		arguments.list = Replace(arguments.list, ", ", ",", "all");
@@ -59,7 +59,7 @@
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(arguments, "property") && !Len(arguments.properties))
+		if (StructKeyExists(arguments, "property"))
 			arguments.properties = arguments.property;
 		loc.args = {};
 		loc.iEnd = ListLen(arguments.properties);
@@ -86,7 +86,7 @@
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(arguments, "property") && !Len(arguments.properties))
+		if (StructKeyExists(arguments, "property"))
 			arguments.properties = arguments.property;
 		loc.args = {};
 		arguments.list = Replace(arguments.list, ", ", ",", "all");
@@ -117,7 +117,7 @@
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(arguments, "property") && !Len(arguments.properties))
+		if (StructKeyExists(arguments, "property"))
 			arguments.properties = arguments.property;
 		loc.args = {};
 		loc.iEnd = ListLen(arguments.properties);
@@ -149,7 +149,7 @@
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(arguments, "property") && !Len(arguments.properties))
+		if (StructKeyExists(arguments, "property"))
 			arguments.properties = arguments.property;
 		loc.args = {};
 		loc.iEnd = ListLen(arguments.properties);
@@ -174,7 +174,7 @@
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(arguments, "property") && !Len(arguments.properties))
+		if (StructKeyExists(arguments, "property"))
 			arguments.properties = arguments.property;
 		loc.args = {};
 		loc.iEnd = ListLen(arguments.properties);
@@ -198,7 +198,7 @@
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(arguments, "property") && !Len(arguments.properties))
+		if (StructKeyExists(arguments, "property"))
 			arguments.properties = arguments.property;
 		loc.args = {};
 		arguments.scope = Replace(arguments.scope, ", ", ",", "all");
@@ -250,7 +250,7 @@
 	<cfargument name="args" type="struct" required="false" default="#StructNew()#">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(arguments, "method") && !Len(arguments.methods))
+		if (StructKeyExists(arguments, "method"))
 			arguments.methods = arguments.method;
 		loc.iEnd = ListLen(arguments.methods);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)

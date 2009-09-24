@@ -4,7 +4,7 @@
 	<cfargument name="media" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.media#" hint="The `media` attribute for the `link` tag">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(arguments, "source") && !Len(arguments.sources))
+		if (StructKeyExists(arguments, "source"))
 			arguments.sources = arguments.source;
 		$insertDefaults(name="styleSheetLinkTag", reserved="href,rel", input=arguments);
 		arguments.rel = "stylesheet";
@@ -27,7 +27,7 @@
 	<cfargument name="type" type="string" required="false" default="#application.wheels.functions.javaScriptIncludeTag.type#" hint="The `type` attribute for the `script` tag">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(arguments, "source") && !Len(arguments.sources))
+		if (StructKeyExists(arguments, "source"))
 			arguments.sources = arguments.source;
 		$insertDefaults(name="javaScriptIncludeTag", reserved="src", input=arguments);
 		loc.returnValue = "";

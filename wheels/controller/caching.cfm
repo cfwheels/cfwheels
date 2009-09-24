@@ -3,7 +3,7 @@
 	<cfargument name="time" type="numeric" required="false" default="#application.wheels.functions.caches.time#" hint="Minutes to cache the action(s) for">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(arguments, "action") && !Len(arguments.actions))
+		if (StructKeyExists(arguments, "action"))
 			arguments.actions = arguments.action;
 		loc.iEnd = ListLen(arguments.actions);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
