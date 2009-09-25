@@ -4,9 +4,17 @@
 		// abort if called from incorrect file
 		$abortInvalidRequest();
 
+		// need to setup the wheels struct here since it's used to store debugging info below if this is a reload request
+		request.wheels = {};
+
 		// reload application by calling onApplicationStart if requested
 		if (StructKeyExists(URL, "reload") && (!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword") || !Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
+		{
+			$debugPoint("total,reload");
 			$simpleLock(execute="onApplicationStart", name="wheelsReloadLock", type="exclusive");
+		}
+
+		// run the rest of the request start code
 		$simpleLock(execute="$runOnRequestStart", executeArgs=arguments, name="wheelsReloadLock", type="readOnly");
 	</cfscript>
 </cffunction>
@@ -14,6 +22,16 @@
 <cffunction name="$runOnRequestStart" returntype="void" access="public" output="false">
 	<cfargument name="targetPage" type="any" required="true">
 	<cfscript>
+		if (application.wheels.showDebugInformation)
+		{
+			// if the first debug point has not already been set in a reload request we set it here
+			if (StructKeyExists(request.wheels, "execution"))
+				$debugPoint("reload");
+			else
+				$debugPoint("total");
+			$debugPoint("requestStart");
+			request.wheels.deprecation = [];
+		}
 		if (application.wheels.environment == "maintenance")
 		{
 			if (StructKeyExists(URL, "except"))
@@ -29,14 +47,8 @@
 			StructDelete(this, "onRequest");
 			StructDelete(variables, "onRequest");
 		}
-		request.wheels = {};
 		request.wheels.params = {};
 		request.wheels.cache = {};
-		if (application.wheels.showDebugInformation)
-		{
-			$debugPoint("total,requestStart");
-			request.wheels.deprecation = [];
-		}
 		if (!application.wheels.cacheModelInitialization)
 			StructClear(application.wheels.models);
 		if (!application.wheels.cacheControllerInitialization)
