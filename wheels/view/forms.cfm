@@ -1286,7 +1286,7 @@
 				if (IsSimpleValue(arguments.options[loc.i]))
 				{
 					loc.optionValue = arguments.options[loc.i];
-					loc.optionText = arguments.options[loc.i];
+					loc.optionText = humanize(arguments.options[loc.i]);
 				}
 				else if (IsArray(arguments.options[loc.i]) && ArrayLen(arguments.options[loc.i]) >= 2)
 				{
