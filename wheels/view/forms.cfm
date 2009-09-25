@@ -417,7 +417,7 @@
 		// END DEPRECATING WRAPLABEL CODE
 
 		$insertDefaults(name="radioButton", reserved="type,name,value,checked", input=arguments);
-		loc.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.tagValue, "[^a-z0-9 ]", "", "all"), " ", "-", "all"));
+		loc.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.tagValue, "[^a-z0-9- ]", "", "all"), " ", "-", "all"));
 		arguments.$appendToFor = loc.valueToAppend;
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
