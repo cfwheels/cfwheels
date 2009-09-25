@@ -47,8 +47,14 @@
 			arguments.layouts = arguments.layout;
 		$insertDefaults(name="sendEmail", input=arguments);
 
+		if (application.wheels.environment != "production")
+		{
+			if (!StructKeyExists(arguments, "template") && !Len(arguments.templates))
+				$throw(type="Wheels.IncorrectArguments", message="The 'template(s)' argument is required.", extendedInfo="Pass in either the 'template' or 'templates' argument.");
+		}
+
 		if (ListLen(arguments.templates) > 1 && ListLen(arguments.layouts) == 1)
-			arguments.layouts = ListAppend(arguments.layouts, false);
+			arguments.layouts = ListAppend(arguments.layouts, arguments.layouts);
 
 		// set the variables that should be available to the email view template
 		for (loc.key in arguments)
