@@ -147,7 +147,7 @@
 	application.wheels.functions.validatesLengthOf = {message="[property] is the wrong length", allowBlank=false, exactly=0, maximum=0, minimum=0, within=""};
 	application.wheels.functions.validatesNumericalityOf = {message="[property] is not a number", allowBlank=false, onlyInteger=false};
 	application.wheels.functions.validatesPresenceOf = {message="[property] can't be empty"};
-	application.wheels.functions.validatesUniquenessOf = {message="[property] has already been taken"};
+	application.wheels.functions.validatesUniquenessOf = {message="[property] has already been taken", allowBlank=false};
 	application.wheels.functions.verifies = {handler=""};
 	application.wheels.functions.yearSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, startYear=Year(Now())-5, endYear=Year(Now())+5};
 
