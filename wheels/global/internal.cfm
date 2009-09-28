@@ -119,7 +119,7 @@
 	<cfargument name="reserved" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
-		if (application.wheels.environment != "production")
+		if (application.wheels.showErrorInformation)
 		{
 			if (ListLen(arguments.reserved))
 			{
@@ -410,7 +410,7 @@ Should now call bar() instead and marking foo() as deprecated
 	<cfargument name="announce" type="boolean" required="false" default="true">
 	<cfset var loc = {}>
 	<cfset loc.ret = {}>
-	<cfif get("environment") eq "production">
+	<cfif not application.wheels.showErrorInformation>
 		<cfreturn loc.ret>
 	</cfif>
 	<!--- set return value --->

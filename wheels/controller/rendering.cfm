@@ -209,7 +209,7 @@
 					loc.groupValue = "";
 					loc.groupQueryCount = 1;
 					arguments.group = QueryNew(loc.query.columnList);
-					if (application.wheels.environment != "production" && !ListFindNoCase(loc.query.columnList, arguments.$group))
+					if (application.wheels.showErrorInformation && !ListFindNoCase(loc.query.columnList, arguments.$group))
 						$throw(type="Wheels.GroupColumnNotFound", message="Wheels couldn't find a query column with the name of `#arguments.$group#`.", extendedInfo="Make sure your finder method has the column `#arguments.$group#` specified in the `select` argument. If the column does not exist, create it.");
 					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					{

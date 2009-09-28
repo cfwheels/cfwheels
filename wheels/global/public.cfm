@@ -45,7 +45,7 @@
 		loc.params = {};
 		if (StructKeyExists(variables, "params"))
 			StructAppend(loc.params, variables.params, true);
-		if (application.wheels.environment != "production")
+		if (application.wheels.showErrorInformation)
 		{
 			if (arguments.onlyPath && (Len(arguments.host) || Len(arguments.protocol)))
 				$throw(type="Wheels.IncorrectArguments", message="Can't use the 'host' or 'protocol' arguments when 'onlyPath' is 'true'.", extendedInfo="Set 'onlyPath' to 'false' so that linkTo will create absolute URLs and thus allowing you to set the 'host' and 'protocol' on the link.");

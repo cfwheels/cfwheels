@@ -31,7 +31,7 @@
 	<cfargument name="if" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for `validatesExclusionOf`">
 	<cfscript>
-		if (application.wheels.environment != "production")
+		if (application.wheels.showErrorInformation)
 		{
 			if (Len(arguments.type) && !ListFindNoCase("creditcard,date,email,eurodate,guid,social_security_number,ssn,telephone,time,URL,USdate,UUID,zipcode", arguments.type))
 				$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="The `#arguments.type#` type is not supported. Supported types are: creditcard, date, email, eurodate, guid, social_security_number, ssn, telephone, time, URL, USdate, UUID, zipcode");
@@ -159,7 +159,7 @@
 			arguments.properties = arguments.property;
 			StructDelete(arguments, "property");
 		}
-		if (application.wheels.environment != "production")
+		if (application.wheels.showErrorInformation)
 		{
 			if (StructKeyExists(arguments, "properties"))
 			{
@@ -201,7 +201,7 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.thisValidation = variables.wheels.class.validations[arguments.type][loc.i];
-			if (application.wheels.environment != "production")
+			if (application.wheels.showErrorInformation)
 			{
 				if (StructKeyExists(loc.thisValidation.args, "property"))
 				{

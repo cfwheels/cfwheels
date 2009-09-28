@@ -76,7 +76,7 @@
 		var loc = {};
 
 		// we only allow one association to be loaded when returning objects
-		if (application.wheels.environment != "production" && Len(arguments.returnAs) && arguments.returnAs != "query" && (Find(",", arguments.include) || Find("(", arguments.include)))
+		if (application.wheels.showErrorInformation && Len(arguments.returnAs) && arguments.returnAs != "query" && (Find(",", arguments.include) || Find("(", arguments.include)))
 			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot include more than one association when returning an array of objects.");
 
 		// count records and get primary keys for pagination
@@ -182,7 +182,7 @@
 				loc.finderArgs.parameterize = arguments.parameterize;
 				loc.finderArgs.limit = arguments.$limit;
 				loc.finderArgs.offset = arguments.$offset;
-				if (Len(arguments.cache) && application.wheels.environment == "production")
+				if (Len(arguments.cache) && application.wheels.showErrorInformation)
 				{
 					if (IsBoolean(arguments.cache) && arguments.cache)
 						loc.finderArgs.cachedWithin = CreateTimeSpan(0,0,application.wheels.defaultCacheTime,0);
@@ -248,7 +248,7 @@
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.exists.parameterize#" hint="See documentation for `findAll`">
 	<cfscript>
 		var loc = {};
-		if (application.wheels.environment != "production")
+		if (application.wheels.showErrorInformation)
 			if (Len(arguments.key) && Len(arguments.where))
 				$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot pass in both 'key' and 'where'.");
 		if (Len(arguments.where))
@@ -692,7 +692,7 @@
 				}
 				if (Len(loc.toAppend))
 					loc.select = ListAppend(loc.select, loc.toAppend);
-				else if (application.wheels.environment != "production")
+				else if (application.wheels.showErrorInformation)
 					$throw(type="Wheels", message="Column Not Found", extendedInfo="Wheels looked for a column named '#loc.iItem#' but couldn't find it.");
 			}
 
@@ -846,7 +846,7 @@
 							}
 						}
 					}
-					if (application.wheels.environment != "production" && !StructKeyExists(loc.param, "column"))
+					if (application.wheels.showErrorInformation && !StructKeyExists(loc.param, "column"))
 						$throw(type="Wheels", message="Column Not Found", extendedInfo="Wheels looked for a column named '#loc.param.property#' but couldn't find it.");
 					loc.temp = REFind("^[a-zA-Z0-9-_\.]* ?#variables.wheels.class.RESQLOperators#", loc.elementDataPart, 1, true);
 					loc.param.operator = Trim(Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]));

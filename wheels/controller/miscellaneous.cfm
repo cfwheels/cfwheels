@@ -47,7 +47,7 @@
 			arguments.layouts = arguments.layout;
 		$insertDefaults(name="sendEmail", input=arguments);
 
-		if (application.wheels.environment != "production")
+		if (application.wheels.showErrorInformation)
 		{
 			if (!StructKeyExists(arguments, "template") && !Len(arguments.templates))
 				$throw(type="Wheels.IncorrectArguments", message="The 'template(s)' argument is required.", extendedInfo="Pass in either the 'template' or 'templates' argument.");
