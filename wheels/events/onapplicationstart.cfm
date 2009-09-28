@@ -247,7 +247,7 @@
 				application.wheels.protectedControllerMethods = ListAppend(application.wheels.protectedControllerMethods, loc.method);
 		}
 
-		application.wheels.dispatch = CreateObject("component", "wheels.Dispatch");
+		application.wheels.dispatch = CreateObject("component", "#application.wheels.wheelsComponentPath#.Dispatch");
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
 	</cfscript>
 </cffunction>
