@@ -182,7 +182,7 @@
 				loc.finderArgs.parameterize = arguments.parameterize;
 				loc.finderArgs.limit = arguments.$limit;
 				loc.finderArgs.offset = arguments.$offset;
-				if (Len(arguments.cache) && application.wheels.showErrorInformation)
+				if (application.wheels.cacheQueries && Len(arguments.cache))
 				{
 					if (IsBoolean(arguments.cache) && arguments.cache)
 						loc.finderArgs.cachedWithin = CreateTimeSpan(0,0,application.wheels.defaultCacheTime,0);
