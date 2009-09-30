@@ -122,6 +122,5 @@
 	</style>
 </head>
 <body>
-
-<div id="wrapper">
-<div id="content">
+	<div id="wrapper">
+		<div id="content">
