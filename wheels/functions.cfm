@@ -1,6 +1,9 @@
 <cfset this.rootDir = GetDirectoryFromPath(GetBaseTemplatePath())>
 <cfset this.name = Hash(this.rootDir)>
-<cfset this.mappings["/wheels"] = this.rootDir & "wheels">
+<!--- TODO: remove once railo performance bug is fixed --->
+<cfif expandpath("/") neq this.rootDir>
+	<cfset this.mappings["/wheels"] = this.rootDir & "wheels">
+</cfif>
 <cfset this.sessionManagement = true>
 <cfif StructKeyExists(server, "railo")>
 	<cfinclude template="global/appfunctions.cfm">
