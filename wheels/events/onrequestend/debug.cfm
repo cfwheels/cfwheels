@@ -21,11 +21,11 @@
 </cfif>
 <tr>
 	<td valign="top"><strong>Application Name:</strong></td>
-	<td>#application.applicationName# [<a href="#get('webPath')##ListLast(cgi.script_name, '/')#?controller=wheels&action=tests&type=app&reload=true">Run Tests</a>]</td>
+	<td>#application.applicationName#<cfif application.wheels.enableTests> [<a href="#get('webPath')##ListLast(cgi.script_name, '/')#?controller=wheels&action=tests&type=app&reload=true">Run Tests</a>]</cfif></td>
 </tr>
 <tr>
 	<td valign="top"><strong>Framework:</strong></td>
-	<td>Wheels #get("version")# (#get("environment")# mode) [<a href="#get('webPath')##ListLast(cgi.script_name, '/')#?controller=wheels&action=tests&type=core&reload=true">Run Tests</a>]</td>
+	<td>Wheels #get("version")# (#get("environment")# mode)<cfif application.wheels.enableTests> [<a href="#get('webPath')##ListLast(cgi.script_name, '/')#?controller=wheels&action=tests&type=core&reload=true">Run Tests</a>]</cfif></td>
 </tr>
 <tr>
 	<td valign="top"><strong>CFML Engine:</strong></td>
