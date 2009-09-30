@@ -3,5 +3,5 @@
 	You can add functions to this file to make them globally available in all your controllers.
 	Do not delete this file.
 --->
-<cfcomponent extends="WheelsController">
+<cfcomponent extends="Wheels">
 </cfcomponent>
