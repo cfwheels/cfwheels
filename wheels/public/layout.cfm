@@ -122,12 +122,13 @@
 	</style>
 </head>
 <body>
-	<div id="wrapper">
-		<div id="content">
-			<cfoutput>#contentForLayout()#</cfoutput>
-		</div>
-	</div>
-	<div id="footer">
-	</div>
+
+<div id="wrapper">
+<div id="content">
+<cfoutput>#contentForLayout()#</cfoutput>
+</div>
+</div>
+<div id="footer">
+</div>
 </body>
 </html>
