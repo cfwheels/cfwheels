@@ -1,6 +1,6 @@
-<cfcomponent extends="wheels.test">
+<cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheels.tests.ControllerWithModelErrors")>
+	<cfset global.controller = createobject("component", "wheelsMapping.tests.ControllerWithModelErrors")>
 	<cfset global.args = {}>
 	<cfset global.args.objectName = "ModelUsers">
 	<cfset global.args.class = "errors-found">

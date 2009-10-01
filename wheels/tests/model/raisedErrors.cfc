@@ -1,6 +1,6 @@
-<cfcomponent extends="wheels.test">
+<cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheels.Controller")>
+	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
 
 	<cffunction name="test_table_not_found">
 		<cfset loc.e = raised("loc.controller.model('InvalidModel')")>

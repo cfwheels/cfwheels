@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.model">
+<cfcomponent extends="wheelsMapping.model">
 
 	<cffunction name="init">
 		<cfset table("users")>

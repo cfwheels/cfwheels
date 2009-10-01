@@ -1,6 +1,6 @@
-<cfcomponent extends="wheels.test">
+<cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheels.Controller")>
+	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
 	<cfset global.args = {}>
 	<cfset global.args.values = "1,2,3,4,5,6">
 	<cfset global.args.name = "cycle_test_2">

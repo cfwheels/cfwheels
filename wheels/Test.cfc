@@ -591,7 +591,7 @@
 
 	<cffunction name="isValidTest" returntype="boolean" output="false">
 		<cfargument name="component" type="string" required="true" hint="path to the component you want to check as a valid test">
-		<cfargument name="shouldExtend" type="string" required="false" default="wheels.test" hint="if the component should extend a base component to be a valid test">
+		<cfargument name="shouldExtend" type="string" required="false" default="Test" hint="if the component should extend a base component to be a valid test">
 		<cfset var loc = {}>
 		<cfif len(arguments.shouldExtend)>
 			<cfset loc.metadata = GetComponentMetaData(arguments.component)>

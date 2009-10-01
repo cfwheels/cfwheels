@@ -1,6 +1,6 @@
-<cfcomponent extends="wheels.test">
+<cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheels.Controller")>
+	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
 	<cfset global.args = {}>
 	<cfset global.args.name = "textarea">
 	<cfset global.args.attributes = {}>

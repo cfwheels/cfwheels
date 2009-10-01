@@ -1,6 +1,6 @@
-<cfcomponent extends="wheels.test">
+<cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.user = createobject("component", "wheels.model").$initModelClass("Users")>
+	<cfset global.user = createobject("component", "wheelsMapping.model").$initModelClass("Users")>
 
 	<cffunction name="test_select_distinct_addresses">
 		<cfset loc.q = loc.user.findAll(select="address", distinct="true", order="address")>

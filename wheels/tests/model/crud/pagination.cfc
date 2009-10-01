@@ -1,6 +1,6 @@
-<cfcomponent extends="wheels.test">
+<cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.user = createobject("component", "wheels.model").$initModelClass("Users")>
+	<cfset global.user = createobject("component", "wheelsMapping.model").$initModelClass("Users")>
 
 	<cffunction name="test_exist_early_if_no_records_match_where_clause">
 		<cfset loc.e = global.user.findAll(where="firstname = 'somemoron'", perpage="2", page="1", handle="pagination_test_1", order="id")>

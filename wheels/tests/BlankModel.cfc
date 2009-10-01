@@ -1,2 +1,2 @@
-<cfcomponent extends="wheels.model">
+<cfcomponent extends="wheelsMapping.model">
 </cfcomponent>

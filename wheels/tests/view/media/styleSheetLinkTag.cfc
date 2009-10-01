@@ -1,6 +1,6 @@
-<cfcomponent extends="wheels.test">
+<cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheels.Controller")>
+	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
 	<cfset global.args = {}>
 	<cfset global.args.source = "test.css,test1.css">
 	<cfset global.result = '<link media="all" type="text/css" href="#application.wheels.webpath#stylesheets/test.css" rel="stylesheet" /><link media="all" type="text/css" href="#application.wheels.webpath#stylesheets/test1.css" rel="stylesheet" />'>

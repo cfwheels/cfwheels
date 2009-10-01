@@ -1,7 +1,7 @@
-<cfcomponent extends="wheels.test">
+<cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheels.tests.ControllerWithModel")>
-	<cfset global.model = createobject("component", "wheels.tests.ModelUsers")>
+	<cfset global.controller = createobject("component", "wheelsMapping.tests.ControllerWithModel")>
+	<cfset global.model = createobject("component", "wheelsMapping.tests.ModelUsers")>
 	<cfset global.args= {}>
 	<cfset global.args.objectName = "ModelUsers1">
 	

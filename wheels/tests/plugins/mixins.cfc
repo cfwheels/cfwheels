@@ -11,10 +11,10 @@
 		<cfset global.plugins.$installPlugin("TestDefaultAssignMixins")>
 		<cfset global.plugins.$installPlugin("TestGlobalMixins")>
 		<cfset global.plugins.$loadAllPlugins()>
-		<cfset global.controller = createobject("component", "wheels.controller")>
-		<cfset global.model = createobject("component", "wheels.model")>
-		<cfset global.dispatch = createobject("component", "wheels.dispatch")>
-		<cfset global.test = createobject("component", "wheels.test")>
+		<cfset global.controller = createobject("component", "wheelsMapping.controller")>
+		<cfset global.model = createobject("component", "wheelsMapping.model")>
+		<cfset global.dispatch = createobject("component", "wheelsMapping.dispatch")>
+		<cfset global.test = createobject("component", "wheelsMapping.test")>
 		<cfset loc.wheelscontroller = [application.wheels.rootcomponentPath, "controllers", "wheels"]>
 		<cfset global.wheelscontroller = createobject("component", listchangedelims(arraytolist(loc.wheelscontroller, "."), ".", "."))>
 		<cfset global.wheelscontroller.$pluginInjection()>
