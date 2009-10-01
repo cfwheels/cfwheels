@@ -212,48 +212,48 @@
 
 	<!--- validatesNumericalityOf --->
 	<cffunction name="test_validatesNumericalityOf_valid">
-		<cfset loc.user.price = "1000.00">
-		<cfset loc.user.validatesNumericalityOf(property="price")>
+		<cfset loc.user.birthdaymonth = "10">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth")>
 		<cfset assert_test(loc.user, true)>
 	</cffunction>
 
 	<cffunction name="test_validatesNumericalityOf_invalid">
-		<cfset loc.user.price = "1,000.00">
-		<cfset loc.user.validatesNumericalityOf(property="price")>
+		<cfset loc.user.birthdaymonth = "1,000.00">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth")>
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
 
 	<cffunction name="test_validatesNumericalityOf_missing_property_invalid">
-		<cfset loc.user.validatesNumericalityOf(property="price", onlyInteger="true")>
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", onlyInteger="true")>
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
 
 	<cffunction name="test_validatesNumericalityOf_missing_property_valid">
-		<cfset loc.user.validatesNumericalityOf(property="price", onlyInteger="true", allowblank="true")>
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", onlyInteger="true", allowblank="true")>
 		<cfset assert_test(loc.user, true)>
 	</cffunction>
 
 	<cffunction name="test_validatesNumericalityOf_onlyInteger_valid">
-		<cfset loc.user.price = "1000">
-		<cfset loc.user.validatesNumericalityOf(property="price", onlyInteger="true")>
+		<cfset loc.user.birthdaymonth = "1000">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", onlyInteger="true")>
 		<cfset assert_test(loc.user, true)>
 	</cffunction>
 
 	<cffunction name="test_validatesNumericalityOf_onlyInteger_invalid">
-		<cfset loc.user.price = "1000.25">
-		<cfset loc.user.validatesNumericalityOf(property="price", onlyInteger="true")>
+		<cfset loc.user.birthdaymonth = "1000.25">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", onlyInteger="true")>
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
 
 	<cffunction name="test_validatesNumericalityOf_allowBlank_valid">
-		<cfset loc.user.price = "">
-		<cfset loc.user.validatesNumericalityOf(property="price", allowBlank="true")>
+		<cfset loc.user.birthdaymonth = "">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", allowBlank="true")>
 		<cfset assert_test(loc.user, true)>
 	</cffunction>
 
 	<cffunction name="test_validatesNumericalityOf_allowBlank_invalid">
-		<cfset loc.user.price = "">
-		<cfset loc.user.validatesNumericalityOf(property="price", allowBlank="false")>
+		<cfset loc.user.birthdaymonth = "">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", allowBlank="false")>
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
 
