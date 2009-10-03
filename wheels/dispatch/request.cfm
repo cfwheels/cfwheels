@@ -1,3 +1,7 @@
+<cffunction name="$returnDispatcher" returntype="any" access="public" output="false">
+	<cfreturn this>
+</cffunction>
+
 <cffunction name="$runFilters" returntype="void" access="public" output="false">
 	<cfargument name="controller" type="any" required="true">
 	<cfargument name="actionName" type="string" required="true">

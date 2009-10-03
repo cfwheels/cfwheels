@@ -229,7 +229,7 @@
 		}
 
 		// create the dispatcher that will handle all incoming requests
-		application.wheels.dispatch = CreateObject("component", "#application.wheels.wheelsComponentPath#.Dispatch");
+		application.wheels.dispatch = $createObjectFromRoot(path=application.wheels.wheelsComponentPath, fileName="Dispatch", method="$returnDispatcher");
 		
 		// run the developer's on application start code
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
