@@ -41,7 +41,7 @@
 </tr>
 <tr>
 	<td valign="top"><strong>Plugins:</strong></td>
-	<td><cfif StructCount(get("plugins")) IS NOT 0><cfset loc.count = 0><cfloop collection="#get('plugins')#" item="loc.i"><cfset loc.count = loc.count + 1><a href="#get('webPath')##ListLast(cgi.script_name, '/')#?controller=wheels&action=plugins&name=#LCase(loc.i)#">#loc.i#</a><cfif StructCount(get("plugins")) GT loc.count><br /></cfif></cfloop><cfelse>None</cfif></td>
+	<td><cfif StructCount(get("plugins")) IS NOT 0><cfset loc.count = 0><cfloop collection="#get('plugins')#" item="loc.i"><cfset loc.count = loc.count + 1><a href="#get('webPath')##ListLast(cgi.script_name, '/')#?controller=wheels&action=wheels&view=plugins&name=#LCase(loc.i)#">#loc.i#</a><cfif StructCount(get("plugins")) GT loc.count><br /></cfif></cfloop><cfelse>None</cfif></td>
 </tr>
 <cfif StructKeyExists(request.wheels.params, "route")>
 	<tr>
