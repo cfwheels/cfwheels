@@ -111,7 +111,7 @@
 			if (loc.totalRecords == 0)
 			{
 				loc.totalPages = 0;
-				loc.returnValue = QueryNew("");
+				loc.returnValue = "";
 			}
 			else
 			{
@@ -123,7 +123,7 @@
 				loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct);
 				if (!loc.values.recordCount)
 				{
-					loc.returnValue = QueryNew("");
+					loc.returnValue = "";
 				}
 				else
 				{
@@ -150,7 +150,16 @@
 			request.wheels[arguments.handle].totalRecords = loc.totalRecords;
 		}
 
-		if (!StructKeyExists(loc, "returnValue"))
+		if (StructKeyExists(loc, "returnValue") && !Len(loc.returnValue))
+		{
+			if (arguments.returnAs == "query")
+				loc.returnValue = QueryNew("");
+			else if (arguments.returnAs == "object")
+				loc.returnValue = false;
+			else if (arguments.returnAs == "objects")
+				loc.returnValue = ArrayNew(1);
+		}
+		else if (!StructKeyExists(loc, "returnValue"))
 		{
 			// make the where clause generic for use in caching
 			loc.originalWhere = arguments.where;
