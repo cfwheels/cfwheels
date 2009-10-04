@@ -127,7 +127,6 @@
 				}
 				else
 				{
-					arguments.where = "";
 					loc.iEnd = ListLen(variables.wheels.class.keys);
 					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					{
