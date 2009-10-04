@@ -356,7 +356,7 @@
 		// clear the flash (note that this is not done for redirectTo since the processing does not get here)
 		StructClear(session.flash);
 	</cfscript>
-	<cfreturn request.wheels.response>
+	<cfreturn Trim(request.wheels.response)>
 </cffunction>
 
 <cffunction name="$callActionAndAddToCache" returntype="string" access="public" output="false">
