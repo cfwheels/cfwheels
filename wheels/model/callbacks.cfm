@@ -105,6 +105,7 @@
 		loc.iEnd = ArrayLen(variables.wheels.class.callbacks[arguments.type]);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
+			loc.method = variables.wheels.class.callbacks[arguments.type][loc.i];
 			if (arguments.type == "afterFind" && IsQuery(arguments.collection))
 			{
 				loc.jEnd = arguments.collection.recordCount;
@@ -117,7 +118,10 @@
 						loc.kItem = ListGetAt(arguments.collection.columnList, loc.k);
 						loc.args[loc.kItem] = arguments.collection[loc.kItem][loc.j];
 					}
-					loc.returnValue = $invoke(method=variables.wheels.class.callbacks[arguments.type][loc.i], argumentCollection=loc.args);
+					if (StructKeyExists(variables, loc.method) && IsCustomFunction(variables[loc.method]))
+						loc.returnValue = $invoke(method=loc.method, argumentCollection=loc.args);
+					else
+						loc.returnValue = $invoke(componentReference=this, method=loc.method, argumentCollection=loc.args);
 					if (StructKeyExists(loc, "returnValue"))
 					{
 						if (IsStruct(loc.returnValue))
@@ -137,7 +141,10 @@
 			}
 			else
 			{
-				loc.returnValue = $invoke(method=variables.wheels.class.callbacks[arguments.type][loc.i]);
+				if (StructKeyExists(variables, loc.method) && IsCustomFunction(variables[loc.method]))
+					loc.returnValue = $invoke(method=loc.method);
+				else
+					loc.returnValue = $invoke(componentReference=this, method=loc.method);
 			}
 			if (!StructKeyExists(loc, "returnValue"))
 			{
