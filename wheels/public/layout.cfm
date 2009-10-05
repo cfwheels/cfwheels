@@ -4,6 +4,7 @@
 <head>
 	<title>ColdFusion on Wheels</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex,nofollow" />
 	<style>
 	*
 	{
