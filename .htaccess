@@ -6,7 +6,7 @@ Options +FollowSymLinks
 RewriteEngine On
 
 # folders that should be excluded from URL rewriting (you can add your own folders to this list)
-RewriteCond %{REQUEST_URI} !^.*/(flex2gateway|jrunscripts|cfide|cfformgateway|railo-context|files|images|javascripts|miscellaneous|stylesheets)/.*$ [NC]
+RewriteCond %{REQUEST_URI} !^.*/(flex2gateway|jrunscripts|cfide|cfformgateway|railo-context|files|images|javascripts|miscellaneous|stylesheets)($|/.*$) [NC]
 
 # files that should be excluded from URL rewriting (you can add your own files to this list)
 RewriteCond %{REQUEST_URI} !^.*/(robots.txt|sitemap.xml)$ [NC]
