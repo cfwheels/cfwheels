@@ -1,4 +1,4 @@
-<cfcomponent extends="wheels.test">
+<cfcomponent extends="wheelsMapping.test">
 	
 	<cffunction name="test_textAreaTag_valid">
 		<cfset fail()>

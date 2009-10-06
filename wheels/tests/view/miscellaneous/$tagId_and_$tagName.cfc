@@ -15,7 +15,7 @@
 	</cffunction>
 
 	<cffunction name="test_with_string">
-		<cfset loc.args.objectname = "wheels.test.view.miscellaneous">
+		<cfset loc.args.objectname = "wheelsMapping.test.view.miscellaneous">
 		<cfset loc.args.property = "lastname">
 
 		<cfset loc.e = loc.controller.$tagid(argumentcollection=loc.args)>

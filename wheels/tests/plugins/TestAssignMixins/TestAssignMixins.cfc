@@ -5,19 +5,19 @@
 		<cfreturn this>
 	</cffunction>
 
-	<cffunction name="$MixinForControllers" mixin="wheels.Controller" returntype="void">
+	<cffunction name="$MixinForControllers" mixin="wheelsMapping.controller" returntype="void">
 	</cffunction>
 
-	<cffunction name="$MixinForModels" mixin="wheels.Model" returntype="void">
+	<cffunction name="$MixinForModels" mixin="wheelsMapping.model" returntype="void">
 	</cffunction>
 
-	<cffunction name="$MixinForModelsAndContollers" mixin="wheels.Model,wheels.Controller" returntype="void">
+	<cffunction name="$MixinForModelsAndContollers" mixin="wheelsMapping.model,wheelsMapping.controller" returntype="void">
 	</cffunction>
 
 	<cffunction name="$MixinForDispatch" mixin="wheels.Dispatch" returntype="void">
 	</cffunction>
 
-	<cffunction name="$MixinForTest" mixin="wheels.Test" returntype="void">
+	<cffunction name="$MixinForTest" mixin="wheelsMapping.test" returntype="void">
 	</cffunction>
 	
 	<cffunction name="$MixinForWheelsControllerOnly" mixin="controllers.wheels" returntype="void">

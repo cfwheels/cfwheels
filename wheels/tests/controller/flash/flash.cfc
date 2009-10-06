@@ -1,6 +1,6 @@
-<cfcomponent extends="wheels.test">
+<cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheels.controller") />
+	<cfset global.controller = createobject("component", "wheelsMapping.controller") />
 	
 	<cffunction name="test_flash_get_struct_key_valid">
 		<cfset session.flash = {} />
@@ -20,7 +20,7 @@
 	<cffunction name="test_flash_get_empty_struct_valid">
 		<cfset session.flash = {} />
 		<cfset loc.flash = loc.controller.flash() />
-		<cfset assert("IsStruct(loc.flash) eq 'YES'") />
+		<cfset assert("IsStruct(loc.flash)") />
 	</cffunction>
 	
 </cfcomponent>
