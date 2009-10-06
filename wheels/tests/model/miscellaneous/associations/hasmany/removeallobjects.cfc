@@ -1,6 +1,6 @@
 <cfcomponent extends="wheels.test">
  
- 	<cffunction name="test_table_valid">
+ 	<cffunction name="test_removeAllObjects_valid">
 		<cfset assert('1 eq 0')>
 	</cffunction>
 
