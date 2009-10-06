@@ -195,7 +195,7 @@
 			<cfif left(key, 4) eq "test" and isCustomFunction(this[key])>
 
 				<cftry>
-				
+
 					<cfset loc = duplicate(global)>
 
 					<cfset time = getTickCount()>
@@ -291,7 +291,7 @@
 		@param message	Message to record in test results against failure.
 	--->
 	<cffunction returntype="void" name="fail">
-		<cfargument type="string" name="message" required=true>
+		<cfargument type="string" name="message" required="false" default="">
 
 		<!---
 			run() interprets exception with this errorcode as a "Failure".
