@@ -3,7 +3,7 @@
 	<cfset global.controller = createobject("component", "wheels.controller") />
 	
 	<cffunction name="test_capitalize_valid">
-		<cfset assert("1 eq 0") />
+		<cfset fail()>
 	</cffunction>
 	
 </cfcomponent>

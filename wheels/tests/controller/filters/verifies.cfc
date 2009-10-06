@@ -1,9 +1,9 @@
 <cfcomponent extends="wheels.test">
 
 	<cfset global.controller = createobject("component", "wheels.controller") />
-	
+
 	<cffunction name="test_verifies_valid">
-		<cfset assert("1 eq 0") />
+		<cfset fail()>
 	</cffunction>
-	
+
 </cfcomponent>
