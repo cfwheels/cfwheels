@@ -71,9 +71,9 @@
 		<cfset halt(false, 'loc.q')>
 		<cfset assert('isboolean(loc.q) and loc.q eq false')>
 		
-		<cfset loc.q = loc.user.findOne(where="id = 0", returnas="objects")>
+		<cfset loc.q = loc.user.findOne(where="id = 0", returnas="query")>
 		<cfset halt(false, 'loc.q')>
-		<cfset assert('isarray(loc.q) and arrayisempty(loc.q)')>
+		<cfset assert('isquery(loc.q) and loc.q.recordcount eq 0')>
 	</cffunction>
 	
 	<cffunction name="test_findAll_norecords_returns_correct_type">
