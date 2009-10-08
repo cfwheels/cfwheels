@@ -132,10 +132,11 @@
 					$zip(action="unzip", destination=loc.thisPluginFolder, file=loc.thisPluginFile, overwrite=application.wheels.overwritePlugins);
 					loc.fileName = LCase(loc.pluginName) & "." & loc.pluginName;
 					loc.plugin = $createObjectFromRoot(path=application.wheels.pluginComponentPath, fileName=loc.fileName, method="init");
-					if (!StructKeyExists(loc.plugin, "version") || loc.plugin.version == SpanExcluding(application.wheels.version, " ") || application.wheels.loadIncompatiblePlugins)
+					loc.plugin.pluginVersion = loc.pluginVersion;
+					if (!StructKeyExists(loc.plugin, "version") || ListFind(loc.plugin.version, SpanExcluding(application.wheels.version, " ")) || application.wheels.loadIncompatiblePlugins)
 					{
 						application.wheels.plugins[loc.pluginName] = loc.plugin;
-						if (StructKeyExists(loc.plugin, "version") && loc.plugin.version != SpanExcluding(application.wheels.version, " "))
+						if (StructKeyExists(loc.plugin, "version") && !ListFind(loc.plugin.version, SpanExcluding(application.wheels.version, " ")))
 							application.wheels.incompatiblePlugins = ListAppend(application.wheels.incompatiblePlugins, loc.pluginName);
 					}
 				}
@@ -190,7 +191,7 @@
 			{
 				for (loc.keyTwo in application.wheels.plugins[loc.key])
 				{
-					if (!ListFindNoCase("init,version", loc.keyTwo))
+					if (!ListFindNoCase("init,version,pluginVersion", loc.keyTwo))
 					{
 						if (ListFindNoCase(loc.addedFunctions, loc.keyTwo))
 							$throw(type="Wheels.IncompatiblePlugin", message="#loc.key# is incompatible with a previously installed plugin.", extendedInfo="make sure none of the plugins you have installed overrides the same Wheels functions.");
