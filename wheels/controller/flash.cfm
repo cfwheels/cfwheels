@@ -9,8 +9,9 @@
 		}
 		else
 		{
-			if (!flashIsEmpty())
-				returnValue = session.flash;
+			// we can just return session.flash since it is created at the beginning of the request
+			// this way we always return what is expected - a struct
+			returnValue = session.flash;
 		}
 	</cfscript>
 	<cfreturn returnValue>
