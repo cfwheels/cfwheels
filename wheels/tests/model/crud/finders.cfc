@@ -41,11 +41,15 @@
 	<cffunction name="test_findOneByXXX">
 		<cfset loc.q = loc.user.findOneByFirstname('per')>
 		<cfset assert('loc.q.id eq 3')>
+		<cfset loc.q = loc.user.findOneByZipcode(value="22222", order="id")>
+		<cfset assert('loc.q.id eq 2')>
 	</cffunction>
 	
 	<cffunction name="test_findAllByXXX">
 		<cfset loc.q = loc.user.findAllByZipcode(value="22222", order="id")>
 		<cfset assert('valuelist(loc.q.id) eq "2,5"')>
+		<cfset loc.q = loc.user.findAllByZipcode(value="11111", order="id")>
+		<cfset assert('valuelist(loc.q.id) eq "1"')>
 	</cffunction>
 	
 	<cffunction name="test_findByKey_norecords_returns_correct_type">
@@ -53,13 +57,18 @@
 		<cfset halt(false, 'loc.q')>
 		<cfset assert('isboolean(loc.q) and loc.q eq false')>
 		
+		<cfset loc.q = loc.user.findByKey(key="0", returnas="query")>
+		<cfset halt(false, 'loc.q')>
+		<cfset assert('isquery(loc.q) and loc.q.recordcount eq 0')>
+		
 		<cfset loc.q = loc.user.findByKey(key="0", returnas="object")>
 		<cfset halt(false, 'loc.q')>
 		<cfset assert('isboolean(loc.q) and loc.q eq false')>
 		
-		<cfset loc.q = loc.user.findByKey(key="0", returnas="objects")>
+		<cfset loc.q = raised('loc.user.findByKey(key="0", returnas="objects")')>
+		<cfset loc.r = "Wheels.IncorrectArgumentValue">
 		<cfset halt(false, 'loc.q')>
-		<cfset assert('isarray(loc.q) and arrayisempty(loc.q)')>
+		<cfset assert('loc.q eq loc.r')>
 	</cffunction>
 	
 	<cffunction name="test_findOne_norecords_returns_correct_type">
@@ -67,13 +76,18 @@
 		<cfset halt(false, 'loc.q')>
 		<cfset assert('isboolean(loc.q) and loc.q eq false')>
 		
+		<cfset loc.q = loc.user.findOne(where="id = 0", returnas="query")>
+		<cfset halt(false, 'loc.q')>
+		<cfset assert('isquery(loc.q) and loc.q.recordcount eq 0')>
+		
 		<cfset loc.q = loc.user.findOne(where="id = 0", returnas="object")>
 		<cfset halt(false, 'loc.q')>
 		<cfset assert('isboolean(loc.q) and loc.q eq false')>
 		
-		<cfset loc.q = loc.user.findOne(where="id = 0", returnas="query")>
+		<cfset loc.q = raised('loc.user.findOne(where="id = 0", returnas="objects")')>
+		<cfset loc.r = "Wheels.IncorrectArgumentValue">
 		<cfset halt(false, 'loc.q')>
-		<cfset assert('isquery(loc.q) and loc.q.recordcount eq 0')>
+		<cfset assert('loc.q eq loc.r')>
 	</cffunction>
 	
 	<cffunction name="test_findAll_norecords_returns_correct_type">
@@ -81,9 +95,14 @@
 		<cfset halt(false, 'loc.q')>
 		<cfset assert('isquery(loc.q) and loc.q.recordcount eq 0')>
 		
-		<cfset loc.q = loc.user.findAll(where="id = 0", returnas="object")>
+		<cfset loc.q = loc.user.findAll(where="id = 0", returnas="query")>
 		<cfset halt(false, 'loc.q')>
-		<cfset assert('isboolean(loc.q) and loc.q eq false')>
+		<cfset assert('isquery(loc.q) and loc.q.recordcount eq 0')>
+		
+		<cfset loc.q = raised('loc.user.findAll(where="id = 0", returnas="object")')>
+		<cfset loc.r = "Wheels.IncorrectArgumentValue">
+		<cfset halt(false, 'loc.q')>
+		<cfset assert('loc.q eq loc.r')>
 		
 		<cfset loc.q = loc.user.findAll(where="id = 0", returnas="objects")>
 		<cfset halt(false, 'loc.q')>
