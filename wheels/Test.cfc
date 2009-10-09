@@ -563,11 +563,15 @@
 		<!--- run tests --->
 		<cfloop query="q">
 			<cfset loc.testname = listchangedelims(removechars(directory, 1, len(loc.full_test_path)), ".", "\/")>
-			<cfset loc.testname = listprepend(loc.testname, loc.test_path, ".")>
-			<cfset loc.testname = listappend(loc.testname, listfirst(name, "."), ".")>
-			<cfif isValidTest(loc.testname)>
-				<cfset loc.instance = createObject("component", loc.testname)>
-				<cfset loc.instance.runTest(loc.resultKey)>
+			<!--- directories that begin with an underscore are ignored --->
+			<cfif not refindnocase("(^|\.)_", loc.testname)>
+				<cfset loc.testname = listprepend(loc.testname, loc.test_path, ".")>
+				<cfset loc.testname = listappend(loc.testname, listfirst(name, "."), ".")>
+				<!--- ignore invalid tests and test that begin with underscores --->
+				<cfif left(name, 1) neq "_" and isValidTest(loc.testname)>
+					<cfset loc.instance = createObject("component", loc.testname)>
+					<cfset loc.instance.runTest(loc.resultKey)>
+				</cfif>
 			</cfif>
 		</cfloop>
 
