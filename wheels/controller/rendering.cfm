@@ -125,6 +125,18 @@
 <cffunction name="$renderPartial" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
+		if (Len(arguments.$layout))
+			arguments.$layout = Replace("_" & arguments.$layout, "__", "_", "one");
+		arguments.$type = "partial";
+		loc.content = $includeFile(argumentCollection=arguments);
+		loc.returnValue = $renderLayout($content=loc.content, $layout=arguments.$layout);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$includeOrRenderPartial" returntype="string" access="public" output="false">
+	<cfscript>
+		var loc = {};
 		if (IsQuery(arguments.$partial))
 		{
 			arguments.$name = request.wheels[Hash(GetMetaData(arguments.$partial).toString())];
@@ -144,22 +156,11 @@
 		{
 			arguments.$name = arguments.$partial;	
 		}
-		if (Len(arguments.$layout))
-			arguments.$layout = Replace("_" & arguments.$layout, "__", "_", "one");
-		arguments.$type = "partial";
-		loc.content = $includeFile(argumentCollection=arguments);
-		loc.returnValue = $renderLayout($content=loc.content, $layout=arguments.$layout);
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="$includeOrRenderPartial" returntype="string" access="public" output="false">
-	<cfscript>
-		var loc = {};
+		
 		if (application.wheels.cachePartials && (isNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
 			loc.category = "partial";
-			loc.key = "#arguments.$partial##$hashStruct(variables.params)##$hashStruct(arguments)#";
+			loc.key = "#arguments.$name##$hashStruct(variables.params)##$hashStruct(arguments)#";
 			loc.lockName = loc.category & loc.key;
 			loc.conditionArgs = {};
 			loc.conditionArgs.category = loc.category;

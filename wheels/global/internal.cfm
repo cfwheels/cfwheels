@@ -221,7 +221,7 @@
 </cffunction>
 
 <cffunction name="$flatten" returntype="string" access="public" output="false">
-	<cfargument name="values" type="struct" required="true">
+	<cfargument name="values" type="any" required="true">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
@@ -246,7 +246,8 @@
 					loc.returnValue = loc.returnValue & "&" & $flatten(arguments.values[loc.i]);
 			}
 		}
-		loc.returnValue = Right(loc.returnValue, Len(loc.returnValue)-1);
+		if (Len(loc.returnValue))
+			loc.returnValue = Right(loc.returnValue, Len(loc.returnValue)-1);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
