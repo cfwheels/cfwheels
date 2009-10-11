@@ -2,7 +2,7 @@
 
 	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
 	<cfset global.args = {}>
-	<cfset global.args.source = "../wheels/tests/wheelslogo.jpg">
+	<cfset global.args.source = "../wheels/tests/_assets/files/wheelslogo.jpg">
 	<cfset global.args.alt = "wheelstestlogo">
 	<cfset global.args.class = "wheelstestlogoclass">
 	<cfset global.args.id = "wheelstestlogoid">
