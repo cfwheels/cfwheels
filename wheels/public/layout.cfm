@@ -120,11 +120,52 @@
 		font-size: 12px;
 		color: #666;
 	}
+	#logo
+	{
+		float: right;
+		font-weight: bold;
+		margin: 0 0 20px 20px;
+		text-transform: uppercase;
+		width: 75px;
+	}
+	
+	#logo a
+	{
+		color: #fff;
+		display: block;
+		text-decoration: none;
+	}
+	
+	#logo #cf a:first-letter,
+	#logo #wheels a:first-letter
+	{
+		font-size: 125%;
+	}
+	
+	#logo #cf a
+	{
+		background: #900;
+		font-size: 35px;
+		line-height: 35px;
+		padding: 18px 0 16px 0;
+		text-align: center;
+	}
+	
+	#logo #wheels a
+	{
+		background: #333;
+		padding: 3px 0;
+		text-align: center;
+	}
 	</style>
 </head>
 <body>
 	<div id="wrapper">
 		<div id="content">
+			<div id="logo">
+				<div id="cf"><a href="http://cfwheels.org/">CF</a></div>
+				<div id="wheels"><a href="http://cfwheels.org/">Wheels</a></div>
+			</div>
 			<cfoutput>#contentForLayout()#</cfoutput>
 		</div>
 	</div>
