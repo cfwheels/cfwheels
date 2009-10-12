@@ -76,12 +76,6 @@
 	<cfscript>
 		var loc = {};
 
-		// findOne does not allow "objects" and findAll does not allow "object" to be set for the returnAs value.
-		if((arguments.maxRows eq 1 and arguments.returnAs == "objects") || (arguments.maxRows neq 1 and arguments.returnAs == "object"))
-		{
-			$throw(type="Wheels.IncorrectArgumentValue", message="The returnAs value is invalid for the finder.", extendedInfo="findByKey and findOne do not support 'objects' as an returnAs value, use 'object' instead. findAll does not support 'object' as an returnAs value, use 'objects' instead");
-		}
-
 		// we only allow one association to be loaded when returning objects
 		if (application.wheels.showErrorInformation && Len(arguments.returnAs) && arguments.returnAs != "query" && (Find(",", arguments.include) || Find("(", arguments.include)))
 			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot include more than one association when returning an array of objects.");
