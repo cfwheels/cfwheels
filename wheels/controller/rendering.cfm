@@ -125,7 +125,7 @@
 <cffunction name="$renderPartial" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		if (IsQuery(arguments.$partial))
+		if (IsQuery(arguments.$partial) && arguments.$partial.recordCount)
 		{
 			arguments.$name = request.wheels[Hash(GetMetaData(arguments.$partial).toString())];
 			arguments[pluralize(arguments.$name)] = arguments.$partial;
@@ -135,20 +135,28 @@
 			arguments.$name = arguments.$partial.$classData().name;
 			arguments[arguments.$name] = arguments.$partial;
 		}
-		else if (IsArray(arguments.$partial))
+		else if (IsArray(arguments.$partial) && ArrayLen(arguments.$partial))
 		{
 			arguments.$name = arguments.$partial[1].$classData().name;
 			arguments[pluralize(arguments.$name)] = arguments.$partial;
 		}
-		else
+		else if (IsSimpleValue(arguments.$partial))
 		{
 			arguments.$name = arguments.$partial;	
 		}
-		if (Len(arguments.$layout))
-			arguments.$layout = Replace("_" & arguments.$layout, "__", "_", "one");
-		arguments.$type = "partial";
-		loc.content = $includeFile(argumentCollection=arguments);
-		loc.returnValue = $renderLayout($content=loc.content, $layout=arguments.$layout);
+		if (StructKeyExists(arguments, "$name"))
+		{
+			if (Len(arguments.$layout))
+				arguments.$layout = Replace("_" & arguments.$layout, "__", "_", "one");
+			arguments.$type = "partial";
+			loc.content = $includeFile(argumentCollection=arguments);
+			loc.returnValue = $renderLayout($content=loc.content, $layout=arguments.$layout);
+		}
+		else
+		{
+			// when $name has not been set (which means that it's either an empty array or query) we just return an empty string
+			loc.returnValue = "";
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
