@@ -246,8 +246,20 @@
 					loc.returnValue = loc.returnValue & "&" & $flatten(arguments.values[loc.i]);
 			}
 		}
-		if (Len(loc.returnValue))
-			loc.returnValue = Right(loc.returnValue, Len(loc.returnValue)-1);
+		else if (IsQuery(arguments.values))
+		{
+			loc.iEnd = arguments.values.recordCount;
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.jEnd = ListLen(arguments.values.columnList);
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				{
+					loc.jItem = ListGetAt(arguments.values.columnList, loc.j);
+					loc.returnValue = loc.returnValue & "&" & loc.jItem & loc.i & "=""" & arguments.values[loc.jItem][loc.i] & """";
+				}
+			}
+		}
+		loc.returnValue = Right(loc.returnValue, Len(loc.returnValue)-1);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
