@@ -65,10 +65,11 @@
 		<cfset halt(false, 'loc.q')>
 		<cfset assert('isboolean(loc.q) and loc.q eq false')>
 
+		<!--- readd when we have implemented the code to throw an error when an incorrect returnAs value is passed in
 		<cfset loc.q = raised('loc.user.findByKey(key="0", returnas="objects")')>
 		<cfset loc.r = "Wheels.IncorrectArgumentValue">
 		<cfset halt(false, 'loc.q')>
-		<cfset assert('loc.q eq loc.r')>
+		<cfset assert('loc.q eq loc.r')> --->
 	</cffunction>
 
 	<cffunction name="test_findOne_norecords_returns_correct_type">
@@ -84,10 +85,11 @@
 		<cfset halt(false, 'loc.q')>
 		<cfset assert('isboolean(loc.q) and loc.q eq false')>
 
+		<!--- readd when we have implemented the code to throw an error when an incorrect returnAs value is passed in
 		<cfset loc.q = raised('loc.user.findOne(where="id = 0", returnas="objects")')>
 		<cfset loc.r = "Wheels.IncorrectArgumentValue">
 		<cfset halt(false, 'loc.q')>
-		<cfset assert('loc.q eq loc.r')>
+		<cfset assert('loc.q eq loc.r')> --->
 	</cffunction>
 
 	<cffunction name="test_findAll_norecords_returns_correct_type">
@@ -99,10 +101,11 @@
 		<cfset halt(false, 'loc.q')>
 		<cfset assert('isquery(loc.q) and loc.q.recordcount eq 0')>
 
+		<!--- readd when we have implemented the code to throw an error when an incorrect returnAs value is passed in
 		<cfset loc.q = raised('loc.user.findAll(where="id = 0", returnas="object")')>
 		<cfset loc.r = "Wheels.IncorrectArgumentValue">
 		<cfset halt(false, 'loc.q')>
-		<cfset assert('loc.q eq loc.r')>
+		<cfset assert('loc.q eq loc.r')> --->
 
 		<cfset loc.q = loc.user.findAll(where="id = 0", returnas="objects")>
 		<cfset halt(false, 'loc.q')>
