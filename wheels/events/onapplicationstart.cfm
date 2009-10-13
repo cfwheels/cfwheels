@@ -28,7 +28,7 @@
 			$throw(type="Wheels.NoSupport", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Upgrade to Adobe ColdFusion 8 or Railo 3.");
 
 		// set up containers for routes, caches, settings etc
-		application.wheels.version = "0.9.5";
+		application.wheels.version = "1.0 RC1";
 		application.wheels.controllers = {};
 		application.wheels.models = {};
 		application.wheels.existingModelFiles = "";
