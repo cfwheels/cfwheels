@@ -195,10 +195,10 @@
 			<cfif left(key, 4) eq "test" and isCustomFunction(this[key])>
 
 				<cftry>
+				
+					<cfset time = getTickCount()>
 
 					<cfset loc = duplicate(global)>
-
-					<cfset time = getTickCount()>
 
 					<cfif structKeyExists(this, "setup")>
 						<cfset setup()>
