@@ -57,6 +57,7 @@
 		{
 			ArrayClear(application.wheels.routes);
 			StructClear(application.wheels.namedRoutePositions);
+			$include(template="wheels/plugins/injection.cfm");
 			$include(template="#application.wheels.configPath#/routes.cfm");
 			$include(template="wheels/events/onapplicationstart/routes.cfm");
 		}

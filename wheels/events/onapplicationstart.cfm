@@ -88,14 +88,10 @@
 		$include(template="#application.wheels.configPath#/settings.cfm");
 		$include(template="#application.wheels.configPath#/#application.wheels.environment#/settings.cfm");
 
-		// load developer routes and add wheels default ones at the end
-		$include(template="#application.wheels.configPath#/routes.cfm");
-		$include(template="wheels/events/onapplicationstart/routes.cfm");
-
 		// load plugins
 		application.wheels.plugins = {};
 		application.wheels.incompatiblePlugins = "";
-		application.wheels.mixableComponents = "dispatch,controller,model,microsoftsqlserver,mysql,oracle,postgresql";
+		application.wheels.mixableComponents = "application,dispatch,controller,model,microsoftsqlserver,mysql,oracle,postgresql";
 		application.wheels.mixins = {};
 		application.wheels.dependantPlugins = "";
 		loc.pluginFolder = this.rootDir & "plugins";
@@ -216,6 +212,13 @@
 				}
 			}
 		}
+		
+		// allow developers to inject plugins into the application variables scope
+		$include(template="wheels/plugins/injection.cfm");
+
+		// load developer routes and add wheels default ones at the end
+		$include(template="#application.wheels.configPath#/routes.cfm");
+		$include(template="wheels/events/onapplicationstart/routes.cfm");
 
 		// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
 		loc.allowedGlobalMethods = "get,set,addroute";
