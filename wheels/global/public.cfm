@@ -58,7 +58,7 @@
 		}
 
 		// build the link
-		loc.returnValue = application.wheels.webPath & ListLast(cgi.script_name, "/");
+		loc.returnValue = application.wheels.webPath & ListLast(request.cgi.script_name, "/");
 		if (Len(arguments.route))
 		{
 			// link for a named route
@@ -134,16 +134,16 @@
 		{
 			if (arguments.port != 0)
 				loc.returnValue = ":" & arguments.port & loc.returnValue; // use the port that was passed in by the developer
-			else if (cgi.server_port != 80 && cgi.server_port != 443)
-				loc.returnValue = ":" & cgi.server_port & loc.returnValue; // if the port currently in use is not 80 or 443 we set it explicitly in the URL
+			else if (request.cgi.server_port != 80 && request.cgi.server_port != 443)
+				loc.returnValue = ":" & request.cgi.server_port & loc.returnValue; // if the port currently in use is not 80 or 443 we set it explicitly in the URL
 			if (Len(arguments.host))
 				loc.returnValue = arguments.host & loc.returnValue;
 			else
-				loc.returnValue = cgi.server_name & loc.returnValue;
+				loc.returnValue = request.cgi.server_name & loc.returnValue;
 			if (Len(arguments.protocol))
 				loc.returnValue = arguments.protocol & "://" & loc.returnValue;
 			else
-				loc.returnValue = SpanExcluding(cgi.server_protocol, "/") & "://" & loc.returnValue;
+				loc.returnValue = SpanExcluding(request.cgi.server_protocol, "/") & "://" & loc.returnValue;
 		}
 		loc.returnValue = LCase(loc.returnValue);
 	</cfscript>

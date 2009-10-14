@@ -36,7 +36,7 @@
 		{
 			if (StructKeyExists(URL, "except"))
 				application.wheels.ipExceptions = URL.except;
-			if (!Len(application.wheels.ipExceptions) || !ListFind(application.wheels.ipExceptions, cgi.remote_addr))
+			if (!Len(application.wheels.ipExceptions) || !ListFind(application.wheels.ipExceptions, request.cgi.remote_addr))
 			{
 				$includeAndOutput(template="#application.wheels.eventPath#/onmaintenance.cfm");
 				$abort();

@@ -51,7 +51,7 @@
 		application.wheels.cacheLastCulledAt = Now();
 
 		// set up paths to various folders in the framework
-		application.wheels.webPath = Replace(cgi.script_name, Reverse(spanExcluding(Reverse(cgi.script_name), "/")), "");
+		application.wheels.webPath = Replace(request.cgi.script_name, Reverse(spanExcluding(Reverse(request.cgi.script_name), "/")), "");
 		application.wheels.rootPath = "/" & ListChangeDelims(application.wheels.webPath, "/", "/");
 		application.wheels.rootcomponentPath = ListChangeDelims(application.wheels.webPath, ".", "/");
 		application.wheels.wheelsComponentPath = ListAppend(application.wheels.rootcomponentPath, "wheels", ".");

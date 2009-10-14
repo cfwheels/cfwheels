@@ -1,8 +1,8 @@
 <cfscript>
 	// rewrite settings based on web server rewrite capabilites
-	if (Right(cgi.script_name, 12) == "/rewrite.cfm")
+	if (Right(request.cgi.script_name, 12) == "/rewrite.cfm")
 		application.wheels.URLRewriting = "On";
-	else if (Len(cgi.path_info))
+	else if (Len(request.cgi.path_info))
 		application.wheels.URLRewriting = "Partial";
 	else
 		application.wheels.URLRewriting = "Off";
@@ -49,10 +49,10 @@
 	if (application.wheels.environment == "production")
 	{
 		application.wheels.showErrorInformation = false;
-		if (cgi.server_name Contains ".")
+		if (request.cgi.server_name Contains ".")
 		{
 			application.wheels.sendEmailOnError = true;
-			application.wheels.errorEmailAddress = "webmaster@" & Reverse(ListGetAt(Reverse(cgi.server_name), 2,".")) & "." & Reverse(ListGetAt(Reverse(cgi.server_name), 1, "."));
+			application.wheels.errorEmailAddress = "webmaster@" & Reverse(ListGetAt(Reverse(request.cgi.server_name), 2,".")) & "." & Reverse(ListGetAt(Reverse(request.cgi.server_name), 1, "."));
 		}
 	}
 

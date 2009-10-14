@@ -1,7 +1,7 @@
 <cffunction name="isGet" returntype="boolean" access="public" output="false" hint="Returns whether the request was a normal (GET) request or not.">
 	<cfscript>
 		var returnValue = "";
-		if (cgi.request_method == "get")
+		if (request.cgi.request_method == "get")
 			returnValue = true;
 		else
 			returnValue = false;
@@ -12,7 +12,7 @@
 <cffunction name="isPost" returntype="boolean" access="public" output="false" hint="Returns whether the request came from a form submission or not.">
 	<cfscript>
 		var returnValue = "";
-		if (cgi.request_method == "post")
+		if (request.cgi.request_method == "post")
 			returnValue = true;
 		else
 			returnValue = false;
@@ -23,7 +23,7 @@
 <cffunction name="isAjax" returntype="boolean" access="public" output="false" hint="Returns whether the page was called from JavaScript or not.">
 	<cfscript>
 		var returnValue = "";
-		if (cgi.http_x_requested_with == "XMLHTTPRequest")
+		if (request.cgi.http_x_requested_with == "XMLHTTPRequest")
 			returnValue = true;
 		else
 			returnValue = false;
