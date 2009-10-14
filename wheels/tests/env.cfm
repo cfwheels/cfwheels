@@ -6,6 +6,3 @@
 <!--- unload all plugins before running core tests --->
 <cfset application.wheels.plugins = {}>
 <cfset application.wheels.mixins = {}>
-<!--- <cfdump var="#application.wheels.modelPath#">
-<cfdump var="#application.wheels.modelComponentPath#">
-<cfabort> --->
