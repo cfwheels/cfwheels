@@ -1,6 +1,6 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.user = createobject("component", "wheelsMapping.model").$initModelClass("Users")>
+	<cfinclude template="/wheelsmapping/tests/_assets/testhelpers/single_model.cfm">
 
 	<cffunction name="test_exist_early_if_no_records_match_where_clause">
 		<cfset loc.e = global.user.findAll(where="firstname = 'somemoron'", perpage="2", page="1", handle="pagination_test_1", order="id")>
@@ -35,6 +35,38 @@
 		<cfset assert('request.wheels.pagination_test_4.TOTALRECORDS eq 5')>
 		<cfset assert("loc.e.recordcount eq 1")>
 		<cfset assert('valuelist(loc.e.id) eq "5"')>
+	</cffunction>
+
+	<cffunction name="test_specify_where_on_joined_table">
+		<!--- 10 records, 2 perpage, 5 pages --->
+		<cfset loc.args = {
+				perpage="2"
+				,page="1"
+				,handle="pagination_test"
+				,order="photogalleryphotoid"
+				,include="photogalleries"
+				,where="photogalleryid = 2"
+		}>
+		
+		<!--- page 1 --->	
+		<cfset loc.q = global.photogalleryphotos.findAll(argumentCollection=loc.args)>
+		<cfset loc.r = valuelist(loc.q.photogalleryphotoid)>
+		<cfset loc.e = "11,12">
+		<cfset assert('loc.e eq loc.r')>
+		
+		<!--- page 3 --->
+		<cfset loc.args.page = "3">
+		<cfset loc.q = global.photogalleryphotos.findAll(argumentCollection=loc.args)>
+		<cfset loc.r = valuelist(loc.q.photogalleryphotoid)>
+		<cfset loc.e = "15,16">
+		<cfset assert('loc.e eq loc.r')>
+		
+		<!--- page 5 --->
+		<cfset loc.args.page = "5">
+		<cfset loc.q = global.photogalleryphotos.findAll(argumentCollection=loc.args)>
+		<cfset loc.r = valuelist(loc.q.photogalleryphotoid)>
+		<cfset loc.e = "19,20">
+		<cfset assert('loc.e eq loc.r')>		
 	</cffunction>
 
 </cfcomponent>
