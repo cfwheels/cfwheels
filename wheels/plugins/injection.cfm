@@ -1,6 +1,10 @@
 <cfscript>
 	// we use $wheels here since these variables get placed in the variables scope of all objects and we need to make sure they don't clash with other wheels variables or any variables the develoepr may set
-	$wheels.className = Reverse(SpanExcluding(Reverse(GetMetaData(this).name), "."));
+	$wheels.metaData = GetMetaData(this);
+	if (StructKeyExists($wheels.metaData, "displayName"))
+		$wheels.className = $wheels.metaData.displayName;
+	else
+		$wheels.className = Reverse(SpanExcluding(Reverse(GetMetaData(this).name), "."));
 	if (StructKeyExists(application.wheels.mixins, $wheels.className))
 	{
 		$wheels.iList = application.wheels.mixins[$wheels.className];
