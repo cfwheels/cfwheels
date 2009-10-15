@@ -77,13 +77,13 @@
 <cffunction name="timeAgoInWords" returntype="string" access="public" output="false">
 	<cfargument name="fromTime" type="date" required="true">
 	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.functions.timeAgoInWords.includeSeconds#">
-	<cfset arguments.toTime = Now()>
+	<cfargument name="toTime" type="date" required="false" default="#now()#">
 	<cfreturn distanceOfTimeInWords(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="timeUntilInWords" returntype="string" access="public" output="false">
 	<cfargument name="toTime" type="date" required="true">
 	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.functions.timeUntilInWords.includeSeconds#">
-	<cfset arguments.fromTime = Now()>
+	<cfargument name="fromTime" type="date" required="false" default="#now()#">
 	<cfreturn distanceOfTimeInWords(argumentCollection=arguments)>
 </cffunction>
