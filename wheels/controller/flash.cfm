@@ -1,8 +1,8 @@
 <cffunction name="flash" returntype="any" access="public" output="false" hint="Gets the value of a specific key in the Flash (or the entire flash as a struct if no key is passed in).">
-	<cfargument name="key" type="string" required="false" default="" hint="The key to get the value for">
+	<cfargument name="key" type="string" required="false" hint="The key to get the value for">
 	<cfscript>
 		var returnValue = "";
-		if (Len(arguments.key))
+		if (structkeyexists(arguments, "key"))
 		{
 			if (flashKeyExists(arguments.key))
 				returnValue = session.flash[arguments.key];
