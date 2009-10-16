@@ -38,6 +38,7 @@
 	<cfargument name="limit" type="numeric" required="false" default=0>
 	<cfargument name="offset" type="numeric" required="false" default=0>
 	<cfargument name="parameterize" type="boolean" required="true">
+	<cfargument name="psq" type="boolean" required="false" default="false">
 	<cfargument name="$primaryKey" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
