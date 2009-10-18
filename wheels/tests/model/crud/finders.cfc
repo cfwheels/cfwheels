@@ -112,8 +112,29 @@
 		<cfset assert('isarray(loc.q) and arrayisempty(loc.q)')>
 	</cffunction>
 
-	<cffunction name="test_exists_valid">
-		<cfset fail()>
+	<cffunction name="test_exists_by_key_valid">
+		<cfset loc.r = loc.user.exists(3)>
+		<cfset assert('loc.r eq true')>
+	</cffunction>
+
+	<cffunction name="test_exists_by_key_invalid">
+		<cfset loc.r = loc.user.exists(0)>
+		<cfset assert('loc.r eq false')>
+	</cffunction>
+
+	<cffunction name="test_exists_by_where_one_record_valid">
+		<cfset loc.r = loc.user.exists(where="lastname = 'petruzzi'")>
+		<cfset assert('loc.r eq true')>
+	</cffunction>
+
+	<cffunction name="test_exists_by_where_one_record_invalid">
+		<cfset loc.r = loc.user.exists(where="lastname = 'someoneelse'")>
+		<cfset assert('loc.r eq false')>
+	</cffunction>
+
+	<cffunction name="test_exists_by_where_two_records_valid">
+		<cfset loc.r = loc.user.exists(where="zipcode = '22222'")>
+		<cfset assert('loc.r eq true')>
 	</cffunction>
 
 </cfcomponent>
