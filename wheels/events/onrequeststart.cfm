@@ -34,6 +34,11 @@
 			$debugPoint("requestStart");
 			request.wheels.deprecation = [];
 		}
+
+		// copy over the cgi variables we need to the request scope unless it's already been done on application start
+		if (!StructKeyExists(request, "cgi"))
+			request.cgi = $cgiScope();
+
 		if (application.wheels.environment == "maintenance")
 		{
 			if (StructKeyExists(URL, "except"))
@@ -51,13 +56,6 @@
 		}
 		request.wheels.params = {};
 		request.wheels.cache = {};
-		
-		if (!StructKeyExists(request, "cgi"))
-			request.cgi = Duplicate(cgi);
-	
-		loc.iEnd = ArrayLen(application.wheels.cgi);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			request.cgi[application.wheels.cgi[loc.i]] = cgi[application.wheels.cgi[loc.i]];
 
 		if (!application.wheels.cacheModelInitialization)
 			StructClear(application.wheels.models);

@@ -27,12 +27,8 @@
 		if ((application.wheels.serverName == "Railo" && loc.majorVersion < 3) || (application.wheels.serverName == "Adobe ColdFusion" && loc.majorVersion < 8))
 			$throw(type="Wheels.NoSupport", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Upgrade to Adobe ColdFusion 8 or Railo 3.");
 
-		// setup the request cgi variables
-		application.wheels.cgi = ["http_x_requested_with"];
-		
-		// copy over the scope for the first time
-		// this will not copy over other cgi variables needed for the application
-		request.cgi = Duplicate(cgi);
+		// copy over the cgi variables we need to the request scope (since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example)
+		request.cgi = $cgiScope();
 		
 		// set up containers for routes, caches, settings etc
 		application.wheels.version = "1.0 RC1";
