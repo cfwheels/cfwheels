@@ -49,11 +49,16 @@
 				$abort();
 			}
 		}
+
 		if (Right(arguments.targetPage, 4) == ".cfc")
 		{
 			StructDelete(this, "onRequest");
 			StructDelete(variables, "onRequest");
 		}
+
+		// inject methods from plugins directly to Application.cfc
+		$include(template="wheels/plugins/injection.cfm");
+
 		request.wheels.params = {};
 		request.wheels.cache = {};
 
@@ -65,7 +70,6 @@
 		{
 			ArrayClear(application.wheels.routes);
 			StructClear(application.wheels.namedRoutePositions);
-			$include(template="wheels/plugins/injection.cfm");
 			$include(template="#application.wheels.configPath#/routes.cfm");
 			$include(template="wheels/events/onapplicationstart/routes.cfm");
 		}
