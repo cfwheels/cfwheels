@@ -22,6 +22,8 @@
 <cffunction name="$runOnRequestStart" returntype="void" access="public" output="false">
 	<cfargument name="targetPage" type="any" required="true">
 	<cfscript>
+		var loc = {};
+	
 		if (application.wheels.showDebugInformation)
 		{
 			// if the first debug point has not already been set in a reload request we set it here
@@ -49,6 +51,12 @@
 		}
 		request.wheels.params = {};
 		request.wheels.cache = {};
+		
+		if (!StructKeyExists(request, "cgi")) {
+			loc.iEnd = ArrayLen(application.wheels.cgi);
+			for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
+				request.cgi[application.wheels.cgi[loc.i]] = cgi[application.wheels.cgi[loc.i]];
+		}
 		if (!application.wheels.cacheModelInitialization)
 			StructClear(application.wheels.models);
 		if (!application.wheels.cacheControllerInitialization)
