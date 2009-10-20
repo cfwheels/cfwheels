@@ -16,10 +16,12 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="hasErrors" returntype="boolean" access="public" output="false" hint="Returns 'true' if the object has any errors.">
+<cffunction name="hasErrors" returntype="boolean" access="public" output="false" hint="Returns 'true' if the object, property or name has any errors.">
+	<cfargument name="property" type="string" required="false" default="" hint="Name of property">
+	<cfargument name="name" type="string" required="false" default="" hint="Given name for the error">
 	<cfscript>
 		var loc = {};
-		if (errorCount() > 0)
+		if (errorCount(argumentCollection=arguments) > 0)
 			loc.returnValue = true;
 		else
 			loc.returnValue = false;
@@ -27,16 +29,32 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="clearErrors" returntype="void" access="public" output="false" hint="Clear out all errors for the object.">
+<cffunction name="clearErrors" returntype="void" access="public" output="false" hint="Clear out all errors for the object, property or name">
+	<cfargument name="property" type="string" required="false" default="" hint="Name of property">
+	<cfargument name="name" type="string" required="false" default="" hint="Given name for the error">
 	<cfscript>
-		ArrayClear(variables.wheels.errors);
+		var loc = {};
+		if(!len(arguments.property) && !len(arguments.name))
+			ArrayClear(variables.wheels.errors);
+		else
+		{
+			loc.iEnd = ArrayLen(variables.wheels.errors);
+			for (loc.i=loc.iEnd; loc.i >= 1; loc.i--)
+				if (variables.wheels.errors[loc.i].property == arguments.property && (variables.wheels.errors[loc.i].name == arguments.name))
+					ArrayDeleteAt(variables.wheels.errors, loc.i);
+		}
 	</cfscript>
 </cffunction>
 
-<cffunction name="errorCount" returntype="numeric" access="public" output="false" hint="Returns the number of errors this object has associated with it.">
+<cffunction name="errorCount" returntype="numeric" access="public" output="false" hint="Returns the number of errors this object, property or name has associated with it.">
+	<cfargument name="property" type="string" required="false" default="" hint="Name of property">
+	<cfargument name="name" type="string" required="false" default="" hint="Given name for the error">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = ArrayLen(variables.wheels.errors);
+		if(!len(arguments.property) && !len(arguments.name))
+			loc.returnValue = ArrayLen(variables.wheels.errors);
+		else
+			loc.returnValue = ArrayLen(errorsOn(argumentCollection=arguments));
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

@@ -108,7 +108,6 @@
 				}
 				else if (ListFindNoCase(variables.wheels.class.associations[loc.key].methods, arguments.missingMethodName))
 				{
-					loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, pluralize(loc.key), "objects"), singularize(loc.key), "object"); // set name from "posts" to "objects", for example, so we can use it in the switch below
 					loc.info = $expandedAssociations(include=loc.key);
 					loc.info = loc.info[1];
 					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=variables.wheels.class.keys);
@@ -116,6 +115,7 @@
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					if (loc.info.type == "hasOne")
 					{
+						loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasProfile" becomes "hasObject")
 						if (loc.name == "object")
 						{
 							loc.method = "findOne";
@@ -156,6 +156,7 @@
 					}
 					else if (loc.info.type == "hasMany")
 					{
+						loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, loc.key, "objects"), singularize(loc.key), "object"); // create a generic method name (example: "hasComments" becomes "hasObjects")
 						if (loc.name == "objects")
 						{
 							loc.method = "findAll";
@@ -217,6 +218,7 @@
 					}
 					else if (loc.info.type == "belongsTo")
 					{
+						loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasAuthor" becomes "hasObject")
 						if (loc.name == "object")
 						{
 							loc.method = "findByKey";

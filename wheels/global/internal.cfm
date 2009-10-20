@@ -1,3 +1,15 @@
+<cffunction name="$cgiScope" returntype="struct" access="public" output="false" hint="This copies all the variables Wheels needs from the CGI scope to the request scope.">
+	<cfargument name="keys" type="string" required="false" default="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_protocol">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = {};
+		loc.iEnd = ListLen(arguments.keys);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			loc.returnValue[ListGetAt(arguments.keys, loc.i)] = cgi[ListGetAt(arguments.keys, loc.i)];
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$dollarify" returntype="struct" access="public" output="false">
 	<cfargument name="input" type="struct" required="true">
 	<cfargument name="on" type="string" required="true">

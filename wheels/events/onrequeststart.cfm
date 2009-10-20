@@ -22,6 +22,8 @@
 <cffunction name="$runOnRequestStart" returntype="void" access="public" output="false">
 	<cfargument name="targetPage" type="any" required="true">
 	<cfscript>
+		var loc = {};
+	
 		if (application.wheels.showDebugInformation)
 		{
 			// if the first debug point has not already been set in a reload request we set it here
@@ -32,6 +34,11 @@
 			$debugPoint("requestStart");
 			request.wheels.deprecation = [];
 		}
+
+		// copy over the cgi variables we need to the request scope unless it's already been done on application start
+		if (!StructKeyExists(request, "cgi"))
+			request.cgi = $cgiScope();
+
 		if (application.wheels.environment == "maintenance")
 		{
 			if (StructKeyExists(URL, "except"))
@@ -42,13 +49,19 @@
 				$abort();
 			}
 		}
+
 		if (Right(arguments.targetPage, 4) == ".cfc")
 		{
 			StructDelete(this, "onRequest");
 			StructDelete(variables, "onRequest");
 		}
+
+		// inject methods from plugins directly to Application.cfc
+		$include(template="wheels/plugins/injection.cfm");
+
 		request.wheels.params = {};
 		request.wheels.cache = {};
+
 		if (!application.wheels.cacheModelInitialization)
 			StructClear(application.wheels.models);
 		if (!application.wheels.cacheControllerInitialization)
@@ -57,7 +70,6 @@
 		{
 			ArrayClear(application.wheels.routes);
 			StructClear(application.wheels.namedRoutePositions);
-			$include(template="wheels/plugins/injection.cfm");
 			$include(template="#application.wheels.configPath#/routes.cfm");
 			$include(template="wheels/events/onapplicationstart/routes.cfm");
 		}
