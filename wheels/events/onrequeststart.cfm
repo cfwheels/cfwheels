@@ -52,11 +52,13 @@
 		request.wheels.params = {};
 		request.wheels.cache = {};
 		
-		if (!StructKeyExists(request, "cgi")) {
-			loc.iEnd = ArrayLen(application.wheels.cgi);
-			for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
-				request.cgi[application.wheels.cgi[loc.i]] = cgi[application.wheels.cgi[loc.i]];
-		}
+		if (!StructKeyExists(request, "cgi"))
+			request.cgi = Duplicate(cgi);
+	
+		loc.iEnd = ArrayLen(application.wheels.cgi);
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
+			request.cgi[application.wheels.cgi[loc.i]] = cgi[application.wheels.cgi[loc.i]];
+
 		if (!application.wheels.cacheModelInitialization)
 			StructClear(application.wheels.models);
 		if (!application.wheels.cacheControllerInitialization)
