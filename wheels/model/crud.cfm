@@ -1054,14 +1054,9 @@
 			// infer class name and foreign key from association name unless developer specified it already
 			if (!Len(loc.classAssociations[loc.name].class))
 			{
-				if (loc.classAssociations[loc.name].type == "belongsTo")
-				{
-					loc.classAssociations[loc.name].class = loc.name;
-				}
-				else
-				{
-					loc.classAssociations[loc.name].class = singularize(loc.name);
-				}
+				loc.classAssociations[loc.name].class = loc.name;
+				if (loc.classAssociations[loc.name].type == "hasMany")
+					loc.classAssociations[loc.name].class = singularize(loc.classAssociations[loc.name].class);
 			}
 
 			// create a reference to the associated class
