@@ -1,4 +1,3 @@
-<cfset request.wheelsFunctions = GetTickCount() />
 <cfset this.rootDir = GetDirectoryFromPath(GetBaseTemplatePath())>
 <cfset this.name = Hash(this.rootDir)>
 <cfset this.mappings["/wheelsMapping"] = this.rootDir & "wheels">
