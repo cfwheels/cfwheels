@@ -56,7 +56,7 @@
 			request.cgi = Duplicate(cgi);
 	
 		loc.iEnd = ArrayLen(application.wheels.cgi);
-		for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			request.cgi[application.wheels.cgi[loc.i]] = cgi[application.wheels.cgi[loc.i]];
 
 		if (!application.wheels.cacheModelInitialization)

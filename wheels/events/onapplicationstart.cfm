@@ -31,7 +31,7 @@
 		application.wheels.cgi = ["http_x_requested_with"];
 		
 		// copy over the scope for the first time
-		// this will not copy over other cgi variables needed for the appliction
+		// this will not copy over other cgi variables needed for the application
 		request.cgi = Duplicate(cgi);
 		
 		// set up containers for routes, caches, settings etc
