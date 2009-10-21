@@ -217,7 +217,8 @@
 		}
 		
 		// allow developers to inject plugins into the application variables scope
-		$include(template="wheels/plugins/injection.cfm");
+		if (!StructIsEmpty(application.wheels.mixins))
+			$include(template="wheels/plugins/injection.cfm");
 
 		// load developer routes and add wheels default ones at the end
 		$include(template="#application.wheels.configPath#/routes.cfm");

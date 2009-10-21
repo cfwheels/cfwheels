@@ -57,7 +57,8 @@
 		}
 
 		// inject methods from plugins directly to Application.cfc
-		$include(template="wheels/plugins/injection.cfm");
+		if (!StructIsEmpty(application.wheels.mixins))
+			$include(template="wheels/plugins/injection.cfm");
 
 		request.wheels.params = {};
 		request.wheels.cache = {};
