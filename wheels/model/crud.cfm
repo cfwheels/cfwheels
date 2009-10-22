@@ -54,43 +54,45 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="findAll" returntype="any" access="public" output="false" hint="Returns records from the database table mapped to this model, either as a 'cfquery' result set or an array of objects.">
-	<cfargument name="where" type="string" required="false" default="" hint="This argument maps to the 'WHERE' clause of the query. The following operators are supported: =, <>, <, <=, >, >=, LIKE, AND, and OR (note that the key words have to be written in upper case). You can also use parentheses to group statements. You do not have to specify the table name(s), Wheels will do that for you.">
-	<cfargument name="order" type="string" required="false" default="#application.wheels.functions.findAll.order#" hint="This argument maps to the 'ORDER BY' clause of the query. You do not have to specify the table name(s), Wheels will do that for you.">
-	<cfargument name="select" type="string" required="false" default="" hint="This argument determines how the 'SELECT' clause for the query used to return data will look.	You can pass in a list of the properties (which maps to columns) that you want returned from your table(s). If you don't set this argument at all, Wheels will select all properties from your table(s). If you specify a table name (i.e. 'users.email') or alias a column (i.e. 'fn AS firstName') in the list then the entire list will be passed through unchanged and used in the 'SELECT' clause of the query. If not, Wheels will prepend the table name and resolve any naming collisions (which could happen when using the 'include' argument) automatically for you. The naming collisions are resolved by prepending the model name to the property name so 'users.firstName' could become 'userFirstName' for example.">
-	<cfargument name="distinct" type="boolean" required="false" default="false" hint="Boolean value to decide whether to add the 'DISTINCT' keyword to your 'SELECT' clause.">
-	<cfargument name="include" type="string" required="false" default="" hint="Associations that should be included using 'INNER' or 'LEFT OUTER' joins depending on how the association has been set up. If all associations are set on the current model you can specify them in a list, e.g. 'department,addresses,emails'. You can build more complex 'include' strings by using parentheses when the association is set on an included model, like 'album(artist(genre))' for example.">
-	<cfargument name="maxRows" type="numeric" required="false" default="-1" hint="Maximum number of records to retrieve.">
-	<cfargument name="page" type="numeric" required="false" default=0 hint="If you want to paginate records (i.e. get records 11-20 for example) you can do so by specifying a page number here.">
-	<cfargument name="perPage" type="numeric" required="false" default="#application.wheels.functions.findAll.perPage#" hint="When using pagination you can specify how many records you want to fetch per page here. This argument is only used when the 'page' argument has been passed in.">
-	<cfargument name="count" type="numeric" required="false" default=0 hint="When using pagination and you know in advance how many records you want to paginate through you can pass in that value here. Doing so will prevent Wheels from running a 'COUNT' query to get this value. This argument is only used when the 'page' argument has been passed in.">
-	<cfargument name="handle" type="string" required="false" default="query" hint="Handle to use for the query in pagination. This is useful when you're paginating multiple queries and need to reference them in the 'paginationLinks()' function for example.  This argument is only used when the 'page' argument has been passed in.">
-	<cfargument name="cache" type="any" required="false" default="" hint="Accepts a boolean value or a string. If you want to cache the query you can do so by specifying the number of minutes you want to cache the query for here. If you set it to 'true' the default cache time will be used.">
-	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.functions.findAll.reload#" hint="Set to 'true' to force Wheels to query the database even though an identical query has been run in the same request (the default in Wheels is to get the second query from the cache).">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.findAll.parameterize#" hint="Accepts a boolean value or a string. Set to 'true' to use 'cfqueryparam' on all columns or pass in a list of property names to use 'cfqueryparam' on those only.">
-	<cfargument name="returnAs" type="string" required="false" default="#application.wheels.functions.findAll.returnAs#" hint="Set this to 'objects' to return an array of objects instead of a query result set which is the default return type.">
-	<cfargument name="returnIncluded" type="boolean" required="false" default="#application.wheels.functions.findAll.returnIncluded#" hint="When 'returnAs' is set to 'objects' you can set this argument to 'false' to prevent returning objects fetched from associations specified in the 'include' argument. This is useful when you only need to include associations for use in the `WHERE` clause and want to avoid the performance hit that comes with object creation.">
+<cffunction name="findAll" returntype="any" access="public" output="false"
+	hint="Returns records from the database table mapped to this model, either as a `cfquery` result set or an array of objects (depending on what the `returnAs` argument is set to)."
+	examples='
+		{{{
+		<!--- Getting only 5 users and ordering them randomly --->
+		<cfset fiveRandomUsers = model("user").findAll(maxRows=5, order="random")>
+		}}}
+		{{{
+		<!--- Including an association (which in this case has to be setup as a `belongsTo` association to `author` on the `article` model first)  --->
+		<cfset articles = model("article").findAll(where="published=1", order="createdAt DESC", include="author")>
+		}}}
+		{{{
+		<!--- Similar to the above but using the association in the opposite direction (has to be setup as a `hasMany` association to `article` on the `author` model) --->
+		<cfset bobsArticles = model("author").findAll(where="firstName=''Bob''", include="articles")>
+		}}}
+		{{{
+		<!--- Using pagination (getting records 26-50 in this case) and a more complex way to include associations (a song `belongsTo` an album which in turn `belongsTo` an artist) --->
+		<cfset songs = model("song").findAll(include="album(artist)", page=2, perPage=25)>
+		}}}'
+	categories="model-class" chapters="reading-records" functions="findByKey,findOne"
+>
+	<cfargument name="where" type="string" required="false" default="" hint="This argument maps to the `WHERE` clause of the query. The following operators are supported: `=`, `<>`, `<`, `<=`, `>`, `>=`, `LIKE`, `AND`, and `OR` (note that the key words have to be written in upper case). You can also use parentheses to group statements. You do not have to specify the table name(s), Wheels will do that for you.">
+	<cfargument name="order" type="string" required="false" default="#application.wheels.functions.findAll.order#" hint="This argument maps to the `ORDER BY` clause of the query. You do not have to specify the table name(s), Wheels will do that for you.">
+	<cfargument name="select" type="string" required="false" default="" hint="This argument determines how the `SELECT` clause for the query used to return data will look.	You can pass in a list of the properties (which maps to columns) that you want returned from your table(s). If you don't set this argument at all, Wheels will select all properties from your table(s). If you specify a table name (e.g. `users.email`) or alias a column (e.g. `fn AS firstName`) in the list then the entire list will be passed through unchanged and used in the `SELECT` clause of the query. If not, Wheels will prepend the table name and resolve any naming collisions (which could happen when using the `include` argument) automatically for you. The naming collisions are resolved by prepending the model name to the property name so `users.firstName` could become `userFirstName` for example.">
+	<cfargument name="distinct" type="boolean" required="false" default="false" hint="Boolean value to decide whether to add the `DISTINCT` keyword to your `SELECT` clause. Wheels will, when necessary, add this automatically (when using pagination and a `hasMany` association is used in the `include` argument to name one example).">
+	<cfargument name="include" type="string" required="false" default="" hint="Associations that should be included in the query using `INNER` or `LEFT OUTER` joins (which join type that is used depends on how the association has been set up in your model). If all included associations are set on the current model you can specify them in a list, e.g. `department,addresses,emails`. You can build more complex `include` strings by using parentheses when the association is set on an included model, like `album(artist(genre))` for example.">
+	<cfargument name="maxRows" type="numeric" required="false" default="-1" hint="Maximum number of records to retrieve. Passed on to the `maxRows` `cfquery` attribute. The default `-1` means that all records will be retrieved.">
+	<cfargument name="page" type="numeric" required="false" default=0 hint="If you want to paginate records (i.e. get records 11-20 for example) you can do so by specifying a page number here. For example, getting records 11-20 would be page number 2 when `perPage` is kept at the default setting (10 records per page).">
+	<cfargument name="perPage" type="numeric" required="false" default="#application.wheels.functions.findAll.perPage#" hint="When using pagination you can specify how many records you want to fetch per page here. This argument is only used when the `page` argument has been passed in.">
+	<cfargument name="count" type="numeric" required="false" default=0 hint="When using pagination and you know in advance how many records you want to paginate through you can pass in that value here. Doing so will prevent Wheels from running a `COUNT` query to get this value. This argument is only used when the `page` argument has been passed in.">
+	<cfargument name="handle" type="string" required="false" default="query" hint="Handle to use for the query in pagination. This is useful when you're paginating multiple queries and need to reference them in the @paginationLinks function for example. This argument is only used when the `page` argument has been passed in.">
+	<cfargument name="cache" type="any" required="false" default="" hint="Accepts a boolean value or a string. If you want to cache the query you can do so by specifying the number of minutes you want to cache the query for here. If you set it to `true` the default cache time will be used (60 minutes).">
+	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.functions.findAll.reload#" hint="Set to `true` to force Wheels to query the database even though an identical query has been run in the same request (the default in Wheels is to get the second query from the cache).">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.findAll.parameterize#" hint="Accepts a boolean value or a string. Set to `true` to use `cfqueryparam` on all columns or pass in a list of property names to use `cfqueryparam` on those only.">
+	<cfargument name="returnAs" type="string" required="false" default="#application.wheels.functions.findAll.returnAs#" hint="Set this to `objects` to return an array of objects instead of a query result set which is the default return type.">
+	<cfargument name="returnIncluded" type="boolean" required="false" default="#application.wheels.functions.findAll.returnIncluded#" hint="When `returnAs` is set to `objects` you can set this argument to `false` to prevent returning objects fetched from associations specified in the `include` argument. This is useful when you only need to include associations for use in the `WHERE` clause only and want to avoid the performance hit that comes with object creation.">
 	<cfargument name="$limit" type="numeric" required="false" default=0>
 	<cfargument name="$offset" type="numeric" required="false" default=0>
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
-	<!---
-	Category:
-	Model Class Functions
-
-	Returns:
-	A 'cfquery' result set or an array of objects (depending on what the 'returnAs' argument is set to).	
-	
-	Examples:
-	<cfset fiveRandomUsers = model("user").findAll(maxRows=5, order="random")>
-	<cfset articles = model("article").findAll(where="published=1", order="createdAt DESC", include="author")>
-	<cfset bobsArticles = model("author").findAll(where="firstName='Bob'", include="articles")>
-	<cfset songs = model("song").findAll(include="album(artist)", page=2, perPage=25)>
-	
-	Related:
-	findByKey
-	findOne
-	Reading Records (chapter)
-	--->
 	<cfscript>
 		var loc = {};
 
