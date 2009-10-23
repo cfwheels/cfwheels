@@ -292,11 +292,23 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="exists" returntype="boolean" access="public" output="false" hint="Checks if a record exists in the table. You can pass in a primary key value or a string to the `WHERE` clause.">
-	<cfargument name="key" type="any" required="false" default="" hint="See documentation for `findByKey`">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.functions.exists.reload#" hint="See documentation for `findAll`">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.exists.parameterize#" hint="See documentation for `findAll`">
+<cffunction name="exists" returntype="boolean" access="public" output="false"
+	hint="Checks if a record exists in the table. You can pass in either a primary key value to the `key` argument or a string to the `where` argument."
+	examples=
+	'
+		<!--- Checking if Joe exists in the database --->
+		<cfset result = model("user").exists(where="firstName=''Joe''")>
+
+		<!--- Checking if a specific user exists based on a primary key valued passed in through the URL/form in an if statement --->
+		<cfif model("user").exists(keyparams.key)>
+			<!--- Do something... --->
+		</cfif>
+	'
+	categories="model-class" chapters="reading-records" functions="">
+	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @findByKey.">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.functions.exists.reload#" hint="See documentation for @findAll.">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.exists.parameterize#" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
 		if (application.wheels.showErrorInformation)
