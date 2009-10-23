@@ -8,7 +8,7 @@
 		<!--- Getting an author based on a form/URL value and then checking if it was found --->
 		<cfset auth = model("author").findByKey(params.key)>
 		<cfif NOT IsObject(auth)>
-			<cfset flashInsert(message="Author #params.key# was not found")>
+			<cfset flashInsert(message="Author ##params.key## was not found")>
 			<cfset redirectTo(back=true)>
 		</cfif>
 	'
