@@ -324,9 +324,19 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="updateByKey" returntype="boolean" access="public" output="false" hint="Finds the record with the supplied key and saves it (if the validation permits it) with the supplied properties or named arguments. Property names and values can be passed in either using named arguments or as a struct to the properties argument. Returns true if the save was successful, false otherwise.">
-	<cfargument name="key" type="any" required="true" hint="See documentation for `findByKey`">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
+<cffunction name="updateByKey" returntype="boolean" access="public" output="false"
+	hint="Finds the object with the supplied key and saves it (if validation permits it) with the supplied properties and/or named arguments. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument. Returns `true` if the object was found and updated successfully, `false` otherwise."
+	examples=
+	'
+		<!--- Updates the object with `33` as the primary key value with values passed in through the URL/form --->
+		<cfset result = model("post").updateByKey(33, params.post)>
+
+		<!--- Updates the object with `33` using named arguments --->
+		<cfset result = model("post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
+	'
+	categories="model-class" chapters="updating-records" functions="update,updateOne,updateAll">
+	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfscript>
 		var returnValue = "";
 		arguments.where = $keyWhereString(values=arguments.key);
@@ -336,10 +346,17 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="updateOne" returntype="boolean" access="public" output="false" hint="Gets an object based on conditions and updates it with the supplied properties.">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="order" type="string" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
+<cffunction name="updateOne" returntype="boolean" access="public" output="false"
+	hint="Gets an object based on the arguments used and updates it with the supplied properties. Returns `true` if an object was found and updated successfully, `false` otherwise."
+	examples=
+	'
+		<!--- Sets the `new` property to `1` on the most recently released product --->
+		<cfset result = model("product").updateOne(order="releaseDate DESC", new=1)>
+	'
+	categories="model-class" chapters="updating-records" functions="update,updateByKey,updateAll">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfscript>
 		var loc = {};
 		loc.object = findOne(where=arguments.where, order=arguments.order);
