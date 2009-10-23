@@ -7,7 +7,7 @@
 	<cfset var loc = {}>
 	
 	<cfif !len(arguments.models)>
-		<cfdirectory action="list" directory="#expandpath('/wheelsMapping/tests/_assets/models')#" name="loc.models" filter="*.cfc" type="file">
+		<cfdirectory action="list" directory="#expandpath(application.wheels.modelPath)#" name="loc.models" filter="*.cfc" type="file">
 		<cfset arguments.models = valuelist(loc.models.name)>
 	</cfif>
 	
