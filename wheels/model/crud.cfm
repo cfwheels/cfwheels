@@ -370,12 +370,19 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="updateAll" returntype="numeric" access="public" output="false" hint="Updates all properties for the records that match the where argument. Property names and values can be passed in either using named arguments or as a struct to the properties argument. By default objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in instantiate=true. Returns the number of records that were updated.">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.updateAll.parameterize#" hint="See documentation for `findAll`">
-	<cfargument name="instantiate" type="boolean" required="false" default="#application.wheels.functions.updateAll.instantiate#" hint="Whether or not to instantiate the object(s) before the update">
+<cffunction name="updateAll" returntype="numeric" access="public" output="false"
+	hint="Updates all properties for the records that match the where argument. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument. By default objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in `instantiate=true`. This method returns the number of records that were updated."
+	examples=
+	'
+		<!--- Update the `published` and `publishedAt` properties for all records that have `published=0` --->
+		<cfset recordsUpdated = model("post").updateAll(published=1, publishedAt=Now(), where="published=0")>
+	'
+	categories="model-class" chapters="updating-records" functions="update,updateByKey,updateOne">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.updateAll.parameterize#" hint="See documentation for @findAll.">
+	<cfargument name="instantiate" type="boolean" required="false" default="#application.wheels.functions.updateAll.instantiate#" hint="Whether or not to instantiate the object(s) first. When objects are not instantiated any callbacks and validations set on them will be skipped.">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
@@ -422,8 +429,15 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="deleteByKey" returntype="boolean" access="public" output="false" hint="Finds the record with the supplied key and deletes it. Returns true on successful deletion of the row, false otherwise.">
-	<cfargument name="key" type="any" required="true" hint="See documentation for `findByKey`">
+<cffunction name="deleteByKey" returntype="boolean" access="public" output="false"
+	hint="Finds the record with the supplied key and deletes it. Returns `true` on successful deletion of the row, `false` otherwise."
+	examples=
+	'
+		<!--- Delete the user with the primary key value of `1` --->
+		<cfset result = model("user").deleteByKey(1)>
+	'
+	categories="model-class" chapters="deleting-records" functions="delete,deleteOne,deleteAll">
+	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
 	<cfscript>
 		var loc = {};
 		loc.where = $keyWhereString(values=arguments.key);
@@ -432,9 +446,16 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="deleteOne" returntype="boolean" access="public" output="false" hint="Gets an object based on conditions and deletes it.">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="order" type="string" required="false" default="" hint="See documentation for `findAll`">
+<cffunction name="deleteOne" returntype="boolean" access="public" output="false"
+	hint="Gets an object based on conditions and deletes it."
+	examples=
+	'
+		<!--- Delete the user that signed up last --->
+		<cfset result = model("user").deleteOne(order="signupDate DESC")>
+	'
+	categories="model-class" chapters="deleting-records" functions="delete,deleteOne,deleteAll">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
 		loc.object = findOne(where=arguments.where, order=arguments.order);
@@ -446,11 +467,18 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="deleteAll" returntype="numeric" access="public" output="false" hint="Deletes all records that match the where argument. By default objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in instantiate=true. Returns the number of records that were deleted.">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for `findAll`">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.deleteAll.parameterize#" hint="See documentation for `findAll`">
-	<cfargument name="instantiate" type="boolean" required="false" default="#application.wheels.functions.deleteAll.instantiate#" hint="Whether or not to instantiate the object(s) before deletion">
+<cffunction name="deleteAll" returntype="numeric" access="public" output="false"
+	hint="Deletes all records that match the where argument. By default objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in `instantiate=true`. Returns the number of records that were deleted."
+	examples=
+	'
+		<!--- Delete all inactive users without instantiating them (will skip validation and callbacks) --->
+		<cfset recordsDeleted = model("user").deleteAll(where="inactive=1", instantiate=false)>
+	'
+	categories="model-class" chapters="deleting-records" functions="delete,deleteByKey,deleteOne">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.deleteAll.parameterize#" hint="See documentation for @findAll.">
+	<cfargument name="instantiate" type="boolean" required="false" default="#application.wheels.functions.deleteAll.instantiate#" hint="See documentation for @updateAll.">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
@@ -481,9 +509,25 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="save" returntype="boolean" access="public" output="false" hint="Saves the object if it passes validation and callbacks. Returns `true` if the object was saved successfully to the database.">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.save.parameterize#" hint="See documentation for `findAll`">
-	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.save.defaults#" hint="Whether or not to set default values for properties">
+<cffunction name="save" returntype="boolean" access="public" output="false"
+	hint="Saves the object if it passes validation and callbacks. Returns `true` if the object was saved successfully to the database, `false` if not."
+	examples=
+	'
+		<!--- Save the user object to the database (will automatically do an `INSERT` or `UPDATE` statement depending on if the record is new or already exists --->
+		<cfset user.save()>
+
+		<!--- Save the user object directly in an if statement without using `cfqueryparam` and take appropriate action based on the result --->
+		<cfif user.save(parameterize=false)>
+			<cfset flashInsert(notice="The user was saved!")>
+			<cfset redirectTo(action="userEdit")>
+		<cfelse>
+			<cfset flashInsert(alert="Error, please correct!")>
+			<cfset renderPage(action="userEdit")
+		</cfif>
+	'
+	categories="model-object" chapters="creating-records" functions="">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.save.parameterize#" hint="See documentation for @findAll.">
+	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.save.defaults#" hint="Whether or not to set default values for properties.">
 	<cfscript>
 		var returnValue = false;
 		clearErrors();
@@ -519,9 +563,21 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="update" returntype="boolean" access="public" output="false" hint="Updates the object with the supplied properties and saves it to the database. Returns true if the object was saved successfully to the database and false otherwise.">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.update.parameterize#" hint="See documentation for `findAll`">
+<cffunction name="update" returntype="boolean" access="public" output="false"
+	hint="Updates the object with the supplied properties and saves it to the database. Returns `true` if the object was saved successfully to the database and `false` otherwise."
+	examples=
+	'
+		<!--- Get a post object and then update its title in the database --->
+		<cfset post = model("post").findByKey(33)>
+		<cfset post.update(title="New version of Wheels just released")>
+
+		<!--- Get a post object and then update its title and other properties as decided by what is pased in from the URL/form --->
+		<cfset post = model("post").findByKey(params.key)>
+		<cfset post.update(title="New version of Wheels just released", properties=params.post)>
+	'
+	categories="model-object" chapters="updating-records" functions="updateByKey,updateOne,updateAll">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.update.parameterize#" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
 		for (loc.key in arguments)
@@ -534,8 +590,16 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="delete" returntype="boolean" access="public" output="false" hint="Deletes the object which means the row is deleted from the database (unless prevented by a `beforeDelete` callback). Returns true on successful deletion of the row, false otherwise.">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.delete.parameterize#" hint="See documentation for `findAll`">
+<cffunction name="delete" returntype="boolean" access="public" output="false"
+	hint="Deletes the object, which means the row is deleted from the database (unless prevented by a `beforeDelete` callback). Returns `true` on successful deletion of the row, `false` otherwise."
+	examples=
+	'
+		<!--- Get a post object and then delete it from the database --->
+		<cfset aPost = model("post").findByKey(33)>
+		<cfset aPost.delete()>
+	'
+	categories="model-object" chapters="deleting-records" functions="deleteByKey,deleteOne,deleteAll">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.delete.parameterize#" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = false;
@@ -555,9 +619,22 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="new" returntype="any" access="public" output="false" hint="Creates a new object based on supplied properties and returns it. The object is not saved to the database, it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Properties for the object">
-	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.new.defaults#" hint="See documentation for `save`">
+<cffunction name="new" returntype="any" access="public" output="false"
+	hint="Creates a new object based on supplied properties and returns it. The object is not saved to the database, it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument."
+	examples=
+	'
+		<!--- Create a new author in memory (not saved to the database) --->
+		<cfset newAuthor = model("author").new()>
+
+		<!--- Create a new author based on properties in a struct --->
+		<cfset newAuthor = model("author").new(params.authorStruct)>
+
+		<!--- Create a new author by passing in named arguments --->
+		<cfset newAuthor = model("author").new(firstName="John", lastName="Doe")>
+	'
+	categories="model-class" chapters="creating-records" functions="create">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="The properties you want to set on the object (can also be passed in as named arguments instead).">
+	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.new.defaults#" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
 		for (loc.key in arguments)
@@ -570,10 +647,23 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="create" returntype="any" access="public" output="false" hint="Creates a new object, saves it to the database (if the validation permits it) and returns it. If the validation fails, the unsaved object (with errors added to it) is still returned. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for `new`">
-	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.create.defaults#" hint="See documentation for `save`">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.create.parameterize#" hint="See documentation for `save`">
+<cffunction name="create" returntype="any" access="public" output="false"
+	hint="Creates a new object, saves it to the database (if the validation permits it) and returns it. If the validation fails, the unsaved object (with errors added to it) is still returned. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument."
+	examples=
+	'
+		<!--- Create a new author and save it to the database --->
+		<cfset newAuthor = model("author").create(params.author)>
+		
+		<!--- Same as above using named arguments --->
+		<cfset newAuthor = model("author").create(firstName="John", lastName="Doe")>	
+			
+		<!--- Same as above using both named arguments and a struct --->
+		<cfset newAuthor = model("author").create(active=1, properties=params.author)>
+	'
+	categories="model-class" chapters="creating-records" functions="new">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
+	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.create.defaults#" hint="See documentation for @save.">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.create.parameterize#" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
 		loc.parameterize = arguments.parameterize;
