@@ -29,15 +29,19 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$tag" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="attributes" type="struct" required="false" default="#StructNew()#">
-	<cfargument name="close" type="boolean" required="false" default="false">
-	<cfargument name="skip" type="string" required="false" default="">
-	<cfargument name="skipStartingWith" type="string" required="false" default="">
+<cffunction name="$tag" returntype="string" access="public" output="false" hint="Creates a HTML tag with attributes.">
+	<cfargument name="name" type="string" required="true" hint="The name of the HTML tag.">
+	<cfargument name="attributes" type="struct" required="false" default="#StructNew()#" hint="The attributes and their values">
+	<cfargument name="close" type="boolean" required="false" default="false" hint="Whether or not to close the tag (self-close) or just end it with a bracket.">
+	<cfargument name="skip" type="string" required="false" default="" hint="List of attributes that should not be placed in the HTML tag.">
+	<cfargument name="skipStartingWith" type="string" required="false" default="" hint="If you want to skip attributes that start with a specific string you can specify it here.">
 	<cfscript>
 		var loc = {};
+		
+		// start the HTML tag and give it its name
 		loc.returnValue = "<" & arguments.name;
+		
+		// if named arguments are passed in we add these to the attributes argument instead so we can handle them all in the same code below
 		if (StructCount(arguments) > 5)
 		{
 			for (loc.key in arguments)
@@ -46,11 +50,20 @@
 					arguments.attributes[loc.key] = arguments[loc.key];	
 			}
 		}
-		for (loc.key in arguments.attributes)
+		
+		// add the names of the attributes and their values to the output string with a space in between (class="something" name="somethingelse" etc)
+		// since the order of a struct can differ we sort the attributes in alphabetical order before placing them in the HTML tag (we could just place them in random order in the HTML but that would complicate testing for example)
+		loc.sortedKeys = ListSort(StructKeyList(arguments.attributes), "textnocase");
+		loc.iEnd = ListLen(loc.sortedKeys);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
+			loc.key = ListGetAt(loc.sortedKeys, loc.i);
+			// place the attribute name and value in the string unless it should be skipped according to the arguments or if it's an internal argument (starting with a "$" sign)
 			if (!ListFindNoCase(arguments.skip, loc.key) && (!Len(arguments.skipStartingWith) || Left(loc.key, Len(arguments.skipStartingWith)) != arguments.skipStartingWith) && Left(loc.key, 1) != "$")
 				loc.returnValue = loc.returnValue & " " & LCase(loc.key) & "=""" & arguments.attributes[loc.key] & """";	
 		}
+
+		// close the tag (usually done on self-closing tags like "img" for example) or just end it (for tags like "div" for example)
 		if (arguments.close)
 			loc.returnValue = loc.returnValue & " />";
 		else

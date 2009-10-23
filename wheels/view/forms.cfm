@@ -1265,8 +1265,11 @@
 		}
 		else if (IsStruct(arguments.options))
 		{
-			for (loc.key in arguments.options)
+			loc.sortedKeys = ListSort(StructKeyList(arguments.options), "textnocase"); // sort struct keys alphabetically
+			loc.iEnd = ListLen(loc.sortedKeys);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
+				loc.key = ListGetAt(loc.sortedKeys, loc.i);
 				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=LCase(loc.key), optionText=arguments.options[loc.key]);
 			}
 		}
