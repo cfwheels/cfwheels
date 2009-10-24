@@ -772,7 +772,7 @@
 	hint="Returns `true` if this object hasn't been saved yet (in other words no record exists in the database yet). Returns `false` if a record exists."
 	examples=
 	'
-		<!--- Create a new object and then check if it's new (yes, this example is ridiculous. It makes more sense in the context of callbacks for example) --->
+		<!--- Create a new object and then check if it is new (yes, this example is ridiculous. It makes more sense in the context of callbacks for example) --->
 		<cfset anEmployee = model("employee").new()>
 		<cfif anEmployee.isNew()>
 			<!--- Do something... --->
