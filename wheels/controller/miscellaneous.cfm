@@ -1,4 +1,10 @@
-<cffunction name="isGet" returntype="boolean" access="public" output="false" hint="Returns whether the request was a normal (GET) request or not.">
+<cffunction name="isGet" returntype="boolean" access="public" output="false"
+	hint="Returns whether the request was a normal (GET) request or not."
+	examples=
+	'
+		<cfset requestIsGet = isGet()>
+	'
+	categories="controller-request" chapters="" functions="isAjax,isPost">
 	<cfscript>
 		var returnValue = "";
 		if (request.cgi.request_method == "get")
@@ -9,7 +15,13 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="isPost" returntype="boolean" access="public" output="false" hint="Returns whether the request came from a form submission or not.">
+<cffunction name="isPost" returntype="boolean" access="public" output="false"
+	hint="Returns whether the request came from a form submission or not."
+	examples=
+	'
+		<cfset requestIsPost = isPost()>
+	'
+	categories="controller-request" chapters="" functions="isAjax,isGet">
 	<cfscript>
 		var returnValue = "";
 		if (request.cgi.request_method == "post")
@@ -20,7 +32,13 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="isAjax" returntype="boolean" access="public" output="false" hint="Returns whether the page was called from JavaScript or not.">
+<cffunction name="isAjax" returntype="boolean" access="public" output="false"
+	hint="Returns whether the page was called from JavaScript or not."
+	examples=
+	'
+		<cfset requestIsAjax = isAjax()>
+	'
+	categories="controller-request" chapters="" functions="isGet,isPost">
 	<cfscript>
 		var returnValue = "";
 		if (request.cgi.http_x_requested_with == "XMLHTTPRequest")
@@ -31,7 +49,16 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="sendEmail" returntype="void" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in.">
+<cffunction name="sendEmail" returntype="void" access="public" output="false"
+	hint="Sends an email using a template and an optional layout to wrap it in."
+	examples=
+	'
+		<cfset sendEmail("myemailtemplate")>
+
+		<cfset member = model("member").findByKey(newMember.id)>
+		<cfset sendEmail(to=member.email, template="myemailtemplate", subject="Thank You for Becoming a Member", recipientName=member.name, startDate=member.startDate)>
+	'
+	categories="controller-request" chapters="sending-email" functions="">
 	<cfargument name="templates" type="string" required="false" default="" hint="The path to the email template or two paths if you want to send a multipart email. if the `detectMultipart` argument is `false` the template for the text version should be the first one in the list (can also be called with the `template` argument).">
 	<cfargument name="from" type="string" required="true" hint="Email address to send from">
 	<cfargument name="to" type="string" required="true" hint="Email address to send to">
@@ -105,7 +132,19 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="sendFile" returntype="void" access="public" output="false" hint="Sends a file to the user.">
+<cffunction name="sendFile" returntype="void" access="public" output="false"
+	hint="Sends a file to the user."
+	examples=
+	'
+		<cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf")>
+
+		<cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf", name="Tutorial.pdf")>
+
+		<cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf", disposition="inline")>
+
+		<cfset sendFile(file="../../tutorials/wheels_tutorial_20081028_J657D6HX.pdf")>
+	'
+	categories="controller-request" chapters="sending-files" functions="">
 	<cfargument name="file" type="string" required="true" hint="The file to send to the user">
 	<cfargument name="name" type="string" required="false" default="" hint="The file name to show in the browser download dialog box">
 	<cfargument name="type" type="string" required="false" default="" hint="The HTTP content type to deliver the file as">
@@ -119,7 +158,7 @@
 		{
 			loc.folder = loc.folder & "/" & loc.path;
 			loc.file = Replace(arguments.file, loc.path, "");
-			loc.file = Right(loc.file, Len(loc.file)-1);		
+			loc.file = Right(loc.file, Len(loc.file)-1);
 		}
 		else
 		{
@@ -132,7 +171,7 @@
 			if (loc.match.recordCount)
 				loc.file = loc.file & "." & ListLast(loc.match.name, ".");
 			else
-				$throw(type="Wheels.FileNotFound", message="File Not Found", extendedInfo="Make sure a file with the name '#loc.file#' exists in the '#loc.folder#' folder.");	
+				$throw(type="Wheels.FileNotFound", message="File Not Found", extendedInfo="Make sure a file with the name '#loc.file#' exists in the '#loc.folder#' folder.");
 		}
 		loc.fullPath = loc.folder & "/" & loc.file;
 		if (Len(arguments.name))
