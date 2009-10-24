@@ -1,4 +1,13 @@
-<cffunction name="errorMessagesFor" returntype="string" access="public" output="false" hint="Builds and returns a list (`ul` tag with a class of `error-messages`) containing all the error messages for all the properties of the object.">
+<cffunction name="errorMessagesFor" returntype="string" access="public" output="false"
+	hint="Builds and returns a list (`ul` tag with a class of `error-messages`) containing all the error messages for all the properties of the object, if any. Returns an empty string otherwise."
+	examples=
+	'
+		<!--- view code --->
+		<cfoutput>
+		    ##errorMessageFor(objectName="user")##
+		</cfoutput>
+	'
+	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="errorMessagesOn">
 	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to display error messages for">
 	<cfargument name="class" type="string" required="false" default="#application.wheels.functions.errorMessagesFor.class#" hint="CSS class to set on the `ul` element">
 	<cfargument name="showDuplicates" type="boolean" required="false" default="#application.wheels.functions.errorMessagesFor.showDuplicates#" hint="Whether to show duplicate error messages">
@@ -35,7 +44,16 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="errorMessageOn" returntype="string" access="public" output="false" hint="Returns the error message, if one exists, on the object's property. If multiple error messages exists, the first one is returned.">
+<cffunction name="errorMessageOn" returntype="string" access="public" output="false"
+	hint="Returns the error message, if one exists, on the object's property. If multiple error messages exists, the first one is returned."
+	examples=
+	'
+	<!--- view code --->
+	<cfoutput>
+	    ##errorMessageFor(objectName="user", property="email")##
+	</cfoutput>
+	'
+	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="errorMessagesOn">
 	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to display the error message for">
 	<cfargument name="property" type="string" required="true" hint="The name of the property (database column) to display the error message for">
 	<cfargument name="prependText" type="string" required="false" default="#application.wheels.functions.errorMessageOn.prependText#" hint="String to prepend to the error message">
