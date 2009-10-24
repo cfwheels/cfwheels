@@ -768,7 +768,17 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="isNew" returntype="boolean" access="public" output="false" hint="Returns `true` if this object hasn't been saved yet (in other words no record exists in the database yet). Returns `false` if a record exists.">
+<cffunction name="isNew" returntype="boolean" access="public" output="false"
+	hint="Returns `true` if this object hasn't been saved yet (in other words no record exists in the database yet). Returns `false` if a record exists."
+	examples=
+	'
+		<!--- Create a new object and then check if it's new (yes, this example is ridiculous. It makes more sense in the context of callbacks for example) --->
+		<cfset anEmployee = model("employee").new()>
+		<cfif anEmployee.isNew()>
+			<!--- Do something... --->
+		</cfif>
+	'
+	categories="model-object" chapters="" functions="">
 	<cfscript>
 		var loc = {};
 		// if no values have ever been saved to the database this object is new
@@ -780,7 +790,16 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="reload" returntype="void" access="public" output="false" hint="Reloads the property values of this object from the database.">
+<cffunction name="reload" returntype="void" access="public" output="false"
+	hint="Reloads the property values of this object from the database."
+	examples=
+	'
+		<!--- Get an object, call a method on it that could potentially change values and then reload the values from the database --->
+		<cfset anEmployee = model("employee").findByKey(params.key)>
+		<cfset anEmployee.someCallThatChangesValuesInTheDatabase()>
+		<cfset anEmployee.reload()>
+	'
+	categories="model-object" chapters="reading-records" functions="">
 	<cfscript>
 		var loc = {};
 		loc.query = findByKey(key=key(), reload=true, returnAs="query");
@@ -793,7 +812,15 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="key" returntype="string" access="public" output="false" hint="Returns the value of the primary key for the object. If you have a single primary key named `id` then `someObject.key()` is functionally equivalent to `someObject.id`. This method is more useful when you do dynamic programming and don't know the name of the primary key or when you use composite keys (in which case it's convenient to use this method to get a list of both key values returned).">
+<cffunction name="key" returntype="string" access="public" output="false"
+	hint="Returns the value of the primary key for the object. If you have a single primary key named `id` then `someObject.key()` is functionally equivalent to `someObject.id`. This method is more useful when you do dynamic programming and don't know the name of the primary key or when you use composite keys (in which case it's convenient to use this method to get a list of both key values returned)."
+	examples=
+	'
+		<!--- Get an object and then get the primary key value(s) --->
+		<cfset anEmployee = model("employee").findByKey(params.key)>
+		<cfset val = anEmployee.key()>
+	'
+	categories="model-object" chapters="object-relational-mapping" functions="">
 	<cfargument name="$persisted" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
@@ -814,7 +841,14 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="primaryKey" returntype="string" access="public" output="false" hint="Returns the name of the primary key for this model's table. This is determined through database introspection. If composite primary keys have been used they will both be returned in a list.">
+<cffunction name="primaryKey" returntype="string" access="public" output="false"
+	hint="Returns the name of the primary key for this model's table. This is determined through database introspection. If composite primary keys have been used they will both be returned in a list."
+	examples=
+	'
+		<!--- Get the name of the primary key of the table mapped to the `employee` model (the `employees` table by default) --->
+		<cfset theKeyName = model("employee").primaryKey()>
+	'
+	categories="model-object" chapters="object-relational-mapping" functions="">
 	<cfreturn variables.wheels.class.keys>
 </cffunction>
 
