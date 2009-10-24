@@ -1,17 +1,37 @@
-<cffunction name="average" returntype="numeric" access="public" output="false" hint="Calculates the average value for a given property. Uses the SQL function AVG.">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to calculate the average for">
-	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as lastName LIKE 'A%' for example">
-	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query">
-	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.functions.average.distinct#" hint="When true, AVG will be performed only on each unique instance of a value, regardless of how many times the value occurs">
+<cffunction name="average" returntype="numeric" access="public" output="false"
+	hint="Calculates the average value for a given property. Uses the SQL function `AVG`."
+	examples=
+	'
+		<!--- Get the average salary for all employees --->
+		<cfset avgSalary = model("employee").average("salary")>
+	'
+	categories="model-class" chapters="column-statistics" functions="count,maximum,minimum,sum">
+	<cfargument name="property" type="string" required="true" hint="Name of the property to calculate the average for.">
+	<cfargument name="where" type="string" required="false" default="" hint="An SQL fragment such as `lastName LIKE 'A%'` for example.">
+	<cfargument name="include" type="string" required="false" default="" hint="Any associations that need to be included in the query.">
+	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.functions.average.distinct#" hint="When `true`, `AVG` will be performed only on each unique instance of a value, regardless of how many times the value occurs.">
 	<cfscript>
 		arguments.type = "AVG";
 	</cfscript>
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="count" returntype="numeric" access="public" output="false" hint="Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function COUNT.">
-	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as admin=1 for example">
-	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query">
+<cffunction name="count" returntype="numeric" access="public" output="false"
+	hint="Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function `COUNT`."
+	examples=
+	'
+		<!--- Count how many authors there are in the table --->
+		<cfset authorCount = model("author").count()>
+
+		<!--- Count how many authors whose last name starts with "A" there are --->
+		<cfset authorOnACount = model("author").count(where="lastName LIKE ''A%''")>
+
+		<!--- Count how many authors that have written books starting on "A" --->
+		<cfset authorWithBooksOnACount = model("author").count(include="books", where="title LIKE ''A%''")>
+	'
+	categories="model-class" chapters="column-statistics" functions="average,maximum,minimum,sum">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfscript>
 		if (Len(arguments.include))
 		{
@@ -28,31 +48,55 @@
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="maximum" returntype="numeric" access="public" output="false" hint="Calculates the maximum value for a given property. Uses the SQL function MAX.">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to get the highest value for (has to be a property of a numeric data type)">
-	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as categoryId=4 for example">
-	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query">
+<cffunction name="maximum" returntype="numeric" access="public" output="false"
+	hint="Calculates the maximum value for a given property. Uses the SQL function `MAX`."
+	examples=
+	'
+		<!--- Get the amount of the highest salary for all employees --->
+		<cfset highestSalary = model("employee").maximum("salary")>
+	'
+	categories="model-class" chapters="column-statistics" functions="average,count,minimum,sum">
+	<cfargument name="property" type="string" required="true" hint="Name of the property to get the highest value for (has to be a property of a numeric data type).">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfscript>
 		arguments.type = "MAX";
 	</cfscript>
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="minimum" returntype="numeric" access="public" output="false" hint="Calculates the maximum value for a given property. Uses the SQL function MIN.">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to get the lowest value for (has to be a property of a numeric data type)">
-	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as lastName LIKE 'A%' for example">
-	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query">
+<cffunction name="minimum" returntype="numeric" access="public" output="false"
+	hint="Calculates the minimum value for a given property. Uses the SQL function `MIN`."
+	examples=
+	'
+		<!--- Get the amount of the lowest salary for all employees --->
+		<cfset lowestSalary = model("employee").minimum("salary")>
+	'
+	categories="model-class" chapters="column-statistics" functions="average,count,maximum,sum">
+	<cfargument name="property" type="string" required="true" hint="Name of the property to get the lowest value for (has to be a property of a numeric data type).">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfscript>
 		arguments.type = "MIN";
 	</cfscript>
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="sum" returntype="numeric" access="public" output="false" hint="Calculates the sum of values for a given property. Uses the SQL function SUM.">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to get the sum for (has to be a property of a numeric data type)">
-	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as lastName LIKE 'A%' for example">
-	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query">
-	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.functions.sum.distinct#" hint="When true, SUM returns the sum of unique values only">
+<cffunction name="sum" returntype="numeric" access="public" output="false"
+	hint="Calculates the sum of values for a given property. Uses the SQL function `SUM`."
+	examples=
+	'
+		<!--- Get the sum of all salaries --->
+		<cfset allSalaries = model("employee").sum(property="salary")>
+
+		<!--- Get the sum of all salaries for employees in Australia --->
+		<cfset allAustralianSalaries = model("employee").sum(property="salary", include="country", where="name=''Australia''")>
+	'
+	categories="model-class" chapters="column-statistics" functions="average,count,maximum,minimum">
+	<cfargument name="property" type="string" required="true" hint="Name of the property to get the sum for (has to be a property of a numeric data type).">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.functions.sum.distinct#" hint="When `true`, `SUM` returns the sum of unique values only.">
 	<cfscript>
 		arguments.type = "SUM";
 	</cfscript>
