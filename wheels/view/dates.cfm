@@ -1,4 +1,11 @@
-<cffunction name="distanceOfTimeInWords" returntype="string" access="public" output="false" hint="Pass in two dates to this method and it will return a string describing the difference between them. If the difference between the two dates you pass in is 2 hours, 13 minutes and 10 seconds it will return 'about 2 hours' for example. This method is useful when you want to describe the time that has passed since a certain event (example: 'Comment added by Joe about 3 weeks ago') or the time left until a certain event (example: 'Next chat session starts in about 5 hours') instead of just writing out the date itself.">
+<cffunction name="distanceOfTimeInWords" returntype="string" access="public" output="false"
+	hint="Pass in two dates to this method, and it will return a string describing the difference between them."
+	examples='
+	<cfset aWhileAgo = Now() - 30>
+	<cfset rightNow = Now()>
+	<cfoutput>##distanceOfTimeInWords(aWhileAgo, rightNow)##</cfoutput>
+	'
+	categories="view-helper" functions="timeAgoInWords,timeUntilInWords">
 	<cfargument name="fromTime" type="date" required="true" hint="Date to compare from">
 	<cfargument name="toTime" type="date" required="true" hint="Date to compare to">
 	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.functions.distanceOfTimeInWords.includeSeconds#" hint="Set to true for detailed description when the difference is less than one minute">
@@ -74,14 +81,26 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="timeAgoInWords" returntype="string" access="public" output="false">
+<cffunction name="timeAgoInWords" returntype="string" access="public" output="false"
+	hint="Pass in a date to this method, and it will return a string describing the approximate time difference between that date and the current date. "
+	examples='
+		<cfset aWhileAgo = Now() - 30>
+		<cfoutput>##timeAgoInWords(aWhileAgo)##</cfoutput>
+	'
+	categories="view-helper" functions="distanceOfTimeInWords,timeUntilInWords">
 	<cfargument name="fromTime" type="date" required="true">
 	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.functions.timeAgoInWords.includeSeconds#">
 	<cfargument name="toTime" type="date" required="false" default="#now()#">
 	<cfreturn distanceOfTimeInWords(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="timeUntilInWords" returntype="string" access="public" output="false">
+<cffunction name="timeUntilInWords" returntype="string" access="public" output="false"
+	hint="Pass in a date to this method, and it will return a string describing the approximate time difference between the current date and that date."
+	examples='
+		<cfset aLittleAhead = Now() + 30>
+		<cfoutput>##timeUntilInWords(aLittleAhead)##</cfoutput>
+	'
+	categories="view-helper" functions="timeAgoInWords,distanceOfTimeInWords">
 	<cfargument name="toTime" type="date" required="true">
 	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.functions.timeUntilInWords.includeSeconds#">
 	<cfargument name="fromTime" type="date" required="false" default="#now()#">
