@@ -32,11 +32,17 @@
 </cffunction>
 
 <cffunction name="findOne" returntype="any" access="public" output="false"
-	hint="Fetches the first record found based on the `WHERE` and `ORDER BY` clauses. With the default settings (i.e. the `returnAs` argument set to `object`) a model object will be returned if the record is found and the boolean value `false` if not."
+	hint="Fetches the first record found based on the `WHERE` and `ORDER BY` clauses. With the default settings (i.e. the `returnAs` argument set to `object`) a model object will be returned if the record is found and the boolean value `false` if not. Instead of using the `where` argument you can create cleaner code by making use of a concept called dynamic finders."
 	examples=
 	'
 		<!--- Getting the most recent order as an object from the database --->
 		<cfset anOrder = model("order").findOne(order="datePurchased DESC")>
+
+		<!--- Using a dynamic finder to get the first person with the last name `Smith`. Same as calling model("user").findOne(where"lastName=''Smith''") --->
+		<cfset person = model("user").findOneByLastName("Smith")>
+
+		<!--- Getting a specific user using a dynamic finder. Same as calling model("user").findOne(where"email=''someone@somewhere.com'' AND password=''mypass''") --->
+		<cfset user = model("user").findOneByEmailAndPassword("someone@somewhere.com,mypass")>
 	'
 	categories="model-class" chapters="reading-records" functions="findAll,findByKey">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
@@ -76,7 +82,7 @@
 </cffunction>
 
 <cffunction name="findAll" returntype="any" access="public" output="false"
-	hint="Returns records from the database table mapped to this model according to the arguments passed in (use the `where` argument to decide which records to get, use the `order` argument to set in what order those records should be returned and so on). The records will be returned as either a `cfquery` result set or an array of objects (depending on what the `returnAs` argument is set to)."
+	hint="Returns records from the database table mapped to this model according to the arguments passed in (use the `where` argument to decide which records to get, use the `order` argument to set in what order those records should be returned and so on). The records will be returned as either a `cfquery` result set or an array of objects (depending on what the `returnAs` argument is set to). Instead of using the `where` argument you can create cleaner code by making use of a concept called dynamic finders."
 	examples=
 	'
 		<!--- Getting only 5 users and ordering them randomly --->
@@ -90,6 +96,12 @@
 
 		<!--- Using pagination (getting records 26-50 in this case) and a more complex way to include associations (a song `belongsTo` an album which in turn `belongsTo` an artist) --->
 		<cfset songs = model("song").findAll(include="album(artist)", page=2, perPage=25)>
+
+		<!--- Using a dynamic finder to get all books released a certain year. Same as calling model("book").findOne(where="releaseYear=##params.year##") --->
+		<cfset books = model("book").findOneByReleaseYear(params.year)>
+
+		<!--- Getting all books of a certain type from a specific year by using a dynamic finder. Same as calling model("book").findAll(where="releaseYear=##params.year## AND type=''##params.type##''") --->
+		<cfset books = model("book").findAllByReleaseYearAndType("##params.year##,##params.type##")>
 	'
 	categories="model-class" chapters="reading-records" functions="findByKey,findOne">
 	<cfargument name="where" type="string" required="false" default="" hint="This argument maps to the `WHERE` clause of the query. The following operators are supported: `=`, `<>`, `<`, `<=`, `>`, `>=`, `LIKE`, `AND`, and `OR` (note that the key words have to be written in upper case). You can also use parentheses to group statements. You do not have to specify the table name(s), Wheels will do that for you.">
