@@ -12,7 +12,7 @@
 			<cfset redirectTo(back=true)>
 		</cfif>
 	'
-	categories="model-class" chapters="reading-records" functions="findOne,findAll">
+	categories="model-class" chapters="reading-records" functions="findAll,findOne">
 	<cfargument name="key" type="any" required="true" hint="Primary key value(s) of the record to fetch. Separate with comma if passing in multiple primary key values. Accepts a string, list or a numeric value.">
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
@@ -38,7 +38,7 @@
 		<!--- Getting the most recent order as an object from the database --->
 		<cfset anOrder = model("order").findOne(order="datePurchased DESC")>
 	'
-	categories="model-class" chapters="reading-records" functions="findByKey,findAll">
+	categories="model-class" chapters="reading-records" functions="findAll,findByKey">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for @findAll.">
@@ -334,7 +334,7 @@
 		<!--- Updates the object with `33` using named arguments --->
 		<cfset result = model("post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
 	'
-	categories="model-class" chapters="updating-records" functions="update,updateOne,updateAll">
+	categories="model-class" chapters="updating-records" functions="update,updateAll,updateOne">
 	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfscript>
@@ -353,7 +353,7 @@
 		<!--- Sets the `new` property to `1` on the most recently released product --->
 		<cfset result = model("product").updateOne(order="releaseDate DESC", new=1)>
 	'
-	categories="model-class" chapters="updating-records" functions="update,updateByKey,updateAll">
+	categories="model-class" chapters="updating-records" functions="update,updateAll,updateByKey">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
@@ -436,7 +436,7 @@
 		<!--- Delete the user with the primary key value of `1` --->
 		<cfset result = model("user").deleteByKey(1)>
 	'
-	categories="model-class" chapters="deleting-records" functions="delete,deleteOne,deleteAll">
+	categories="model-class" chapters="deleting-records" functions="delete,deleteAll,deleteOne">
 	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
 	<cfscript>
 		var loc = {};
@@ -453,7 +453,7 @@
 		<!--- Delete the user that signed up last --->
 		<cfset result = model("user").deleteOne(order="signupDate DESC")>
 	'
-	categories="model-class" chapters="deleting-records" functions="delete,deleteOne,deleteAll">
+	categories="model-class" chapters="deleting-records" functions="delete,deleteAll,deleteOne">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfscript>
@@ -575,7 +575,7 @@
 		<cfset post = model("post").findByKey(params.key)>
 		<cfset post.update(title="New version of Wheels just released", properties=params.post)>
 	'
-	categories="model-object" chapters="updating-records" functions="updateByKey,updateOne,updateAll">
+	categories="model-object" chapters="updating-records" functions="updateAll,updateByKey,updateOne">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.update.parameterize#" hint="See documentation for @findAll.">
 	<cfscript>
@@ -598,7 +598,7 @@
 		<cfset aPost = model("post").findByKey(33)>
 		<cfset aPost.delete()>
 	'
-	categories="model-object" chapters="deleting-records" functions="deleteByKey,deleteOne,deleteAll">
+	categories="model-object" chapters="deleting-records" functions="deleteAll,deleteByKey,deleteOne">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.delete.parameterize#" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
@@ -674,7 +674,17 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="changedProperties" returntype="string" access="public" output="false" hint="Returns a list of the object properties that have been changed but not yet saved to the database.">
+<cffunction name="changedProperties" returntype="string" access="public" output="false"
+	hint="Returns a list of the object properties that have been changed but not yet saved to the database."
+	examples=
+	'
+		<!--- Get an object, change it and then ask for its changes (will return a list of the property names that have changed, not the values themselves) --->
+		<cfset member = model("member").findByKey(params.memberId)>
+		<cfset member.firstName = params.newFirstName>
+		<cfset member.email = params.newEmail>
+		<cfset changes = member.changedProperties()>
+	'
+	categories="model-object" chapters="" functions="allChanges,changedFrom,hasChanged">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
@@ -685,7 +695,17 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="allChanges" returntype="struct" access="public" output="false" hint="Returns a struct detailing all changes that have been made on the object but not yet saved to the database.">
+<cffunction name="allChanges" returntype="struct" access="public" output="false"
+	hint="Returns a struct detailing all changes that have been made on the object but not yet saved to the database."
+	examples=
+	'
+		<!--- Get an object, change it and then ask for its changes (will return a struct containing the changes, both property names and their values) --->
+		<cfset member = model("member").findByKey(params.memberId)>
+		<cfset member.firstName = params.newFirstName>
+		<cfset member.email = params.newEmail>
+		<cfset allChangesAsStruct = member.allChanges()>
+	'
+	categories="model-object" chapters="" functions="changedFrom,changedProperties,hasChanged">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
@@ -708,8 +728,17 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="hasChanged" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified object property (or any if none was passed in) have been changed but not yet saved to the database. Will also return `true` if the object is new and no record for it exists in the database.">
-	<cfargument name="property" type="string" required="false" default="" hint="Name of property to check for change">
+<cffunction name="hasChanged" returntype="boolean" access="public" output="false"
+	hint="Returns `true` if the specified object property (or any if none was passed in) have been changed but not yet saved to the database. Will also return `true` if the object is new and no record for it exists in the database."
+	examples=
+	'
+		<!--- Get an object, change it and then check if the `email` property has been changed --->
+		<cfset member = model("member").findByKey(params.memberId)>
+		<cfset member.email = params.newEmail>
+		<cfif member.hasChanged(property="email")>
+	'
+	categories="model-object" chapters="" functions="allChanges,changedFrom,changedProperties">
+	<cfargument name="property" type="string" required="false" default="" hint="Name of property to check for change.">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = false;
@@ -720,8 +749,17 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="changedFrom" returntype="string" access="public" output="false" hint="Returns the previous value of a property that has changed. Returns an empty string if no previous value exists.">
-	<cfargument name="property" type="string" required="true" hint="Name of property to get the previous value for">
+<cffunction name="changedFrom" returntype="string" access="public" output="false"
+	hint="Returns the previous value of a property that has changed. Returns an empty string if no previous value exists."
+	examples=
+	'
+		<!--- Get an object, change the `email` value on it and then ask for the previous value --->
+		<cfset member = model("member").findByKey(params.memberId)>
+		<cfset member.email = params.newEmail>
+		<cfset oldValue = member.changedFrom(property="email")>
+	'
+	categories="model-object" chapters="" functions="allChanges,changedProperties,hasChanged">
+	<cfargument name="property" type="string" required="true" hint="Name of property to get the previous value for.">
 	<cfscript>
 		var returnValue = "";
 		if (StructKeyExists(variables, "$persistedProperties") && StructKeyExists(variables.$persistedProperties, arguments.property))
