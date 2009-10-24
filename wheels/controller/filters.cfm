@@ -8,7 +8,7 @@
 		<!--- Always execute isLoggedIn and checkIPAddress (in that order) before all actions in this controller except the home and login action --->
 		<cfset filters(through="isLoggedIn,checkIPAddress", except="home,login")>
 	'
-	categories="controller-request" chapters="filters-and-verification" functions="verifies">
+	categories="controller-initialization" chapters="filters-and-verification" functions="verifies">
 	<cfargument name="through" type="string" required="true" hint="Function(s) to execute before or after the action(s)">
 	<cfargument name="type" type="string" required="false" default="before" hint="Whether to run the function(s) before or after the action(s)">
 	<cfargument name="only" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell Wheels that the filter function(s) should only be run on these actions">
@@ -37,7 +37,7 @@
 	'
 		<cfset verifies(only="handleForm", post=true)>
 	'
-	categories="controller-request" chapters="filters-and-verification" functions="filters">
+	categories="controller-initialization" chapters="filters-and-verification" functions="filters">
 	<cfargument name="only" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell Wheels that the verifications should only be run on these actions">
 	<cfargument name="except" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell Wheels that the filter function(s) should be run on all actions except the specified ones">
 	<cfargument name="post" type="any" required="false" default="" hint="Set to true to verify that this is a post request">
