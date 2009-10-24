@@ -10,7 +10,7 @@
 		<body>
 		
 		<cfoutput>
-		#contentForLayout()#
+		##contentForLayout()##
 		</cfoutput>
 		
 		</body>
