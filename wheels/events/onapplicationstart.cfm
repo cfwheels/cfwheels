@@ -31,7 +31,7 @@
 		request.cgi = $cgiScope();
 		
 		// set up containers for routes, caches, settings etc
-		application.wheels.version = "1.0 RC1";
+		application.wheels.version = "1.0 RC2";
 		application.wheels.controllers = {};
 		application.wheels.models = {};
 		application.wheels.existingModelFiles = "";
