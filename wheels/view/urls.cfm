@@ -4,17 +4,17 @@
 	'
 		##linkTo(text="Log Out", controller="account", action="logout")##
 		-> <a href="/account/logout">Log Out</a>
-		
+
 		<!--- if you''re already in the "account" controller, Wheels will assume that''s where you want the link to go. --->
 		##linkTo(text="Log Out", action="logout")##
 		-> <a href="/account/logout">Log Out</a>
-		
-		##linkTo(text="View Post", controller="blog" action="post", key=99)##
+
+		##linkTo(text="View Post", controller="blog", action="post", key=99)##
 		-> <a href="/blog/post/99">View Post</a>
-		
+
 		##linkTo(text="View Settings", action="settings", params="show=all&sort=asc")##
 		-> <a href="/account/settings?show=all&amp;sort=asc">View Settings</a>
-		
+
 		<!--- given that a userProfile route has been configured in config/routes.cfm --->
 		##linkTo(text="Joe''s Profile", route="userProfile", userName="joe")##
 		-> <a href="/user/joe">Joe''s Profile</a>
@@ -135,7 +135,7 @@
 	'
 		##autoLink("Download Wheels from http://cfwheels.org/download")##
 		-> Download Wheels from <a href="http://cfwheels.org/download">http://cfwheels.org/download</a>
-		
+
 		##autoLink("Email us at info@cfwheels.org")##
 		-> Email us at <a href="mailto:info@cfwheels.org">info@cfwheels.org</a>
 	'
@@ -157,7 +157,12 @@
 
 <cffunction name="pagination" returntype="struct" access="public" output="false"
 	hint="Returns a struct with information about the specificed paginated query. The available variables are `currentPage`, `totalPages` and `totalRecords`."
-	examples=''
+	examples=
+	'
+		<cfparam name="params.page" default="1">
+		<cfset allAuthors = model("author").findAll(page=params.page, perPage=25, order="lastName", handle="authors_data")>
+		<cfset pageination_data = pagination("authors_data")>
+	'
 	categories="view-helper">
 	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query to return pagination information for">
 	<cfscript>
@@ -179,36 +184,36 @@
 		<!--- controller code --->
 		<cfparam name="params.page" default="1">
 		<cfset allAuthors = model("author").findAll(page=params.page, perPage=25, order="lastName")>
-		
+
 		<!--- view code --->
 		<ul>
-		    <cfoutput query="all-authors">
+		    <cfoutput query="allAuthors">
 		        <li>##firstName## ##lastName##</li>
 		    </cfoutput>
 		</ul>
 		<cfoutput>##paginationLinks(action="listAuthors")##</cfoutput>
-		
+
 		<!--- view code --->
 		<cfoutput>##paginationLinks(action="listAuthors", windowSize=5)##</cfoutput>
-		
-		
+
+
 		<!--- controller code --->
 		<cfset allAuthors = model("author").findAll(handle="authQuery", page=5, order="id")>
-		
+
 		<!--- view code --->
 		<ul>
 		    <cfoutput>##paginationLinks(action="listAuthors", handle="authQuery", prependToLink="<li>", appendToLink="</li>")##</cfoutput>
 		</ul>
-		
-		
+
+
 		<!--- route setup in config/routes.cfm --->
 		<cfset addRoute(name="paginatedCommentListing", pattern="blog/[year]/[month]/[day]/[page]", controller="theBlog", action="stats")>
 		<cfset addRoute(name="commentListing", pattern="blog/[year]/[month]/[day]",  controller="theBlog", action="stats")>
-		
+
 		<!--- controller code --->
 		<cfparam name="params.page" default="1">
 		<cfset comments = model("comment").findAll(page=params.page, order="createdAt")>
-		
+
 		<!--- view code --->
 		<ul>
 		    <cfoutput>##paginationLinks(route="paginatedCommentListing", year=2009, month="feb", day=10)##</cfoutput>
@@ -229,11 +234,11 @@
 	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
 	<cfargument name="name" type="string" required="false" default="#application.wheels.functions.paginationLinks.name#" hint="The name of the param that holds the current page number">
 	<cfargument name="showSinglePage" type="boolean" required="false" default="#application.wheels.functions.paginationLinks.showSinglePage#" hint="Will show a single page when set to `true`. (The default behavior is to return an empty string when there is only one page in the pagination)">
-	
+
 	<cfscript>
 		var loc = {};
 
-		// deprecating because the name of the arguments are not appropriate since the prepend/append can sometimes go on elements that are not links 
+		// deprecating because the name of the arguments are not appropriate since the prepend/append can sometimes go on elements that are not links
 		if (StructKeyExists(arguments, "prependToLink"))
 		{
 			$deprecated("The `prependToLink` argument to `paginationLinks` will be deprecated in a future version of Wheels, please use `prependToPage` instead");
