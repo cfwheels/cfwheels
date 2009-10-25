@@ -8,11 +8,11 @@
 		    <title>My Site</title>
 		</head>
 		<body>
-		
+
 		<cfoutput>
 		##contentForLayout()##
 		</cfoutput>
-		
+
 		</body>
 		</html>
 	'
@@ -26,11 +26,11 @@
 	'
 		<cfoutput>##includePartial("login")##</cfoutput>
 		-> If we''re in the "admin" controller, Wheels will include the file "views/admin/_login.cfm".
-		
-		<cfoutput>##includePartial(name="misc/doc", cache=30)##</cfoutput>
+
+		<cfoutput>##includePartial(partial="misc/doc", cache=30)##</cfoutput>
 		-> If we''re in the "admin" controller, Wheels will include the file "views/admin/misc/_doc.cfm" and cache it for 30 minutes.
-		
-		<cfoutput>##includePartial(name="/shared/button")##</cfoutput>
+
+		<cfoutput>##includePartial(partial="/shared/button")##</cfoutput>
 		-> Wheels will include the file "views/shared/_button.cfm".
 	'
 	categories="view-helper" chapters="pages,partials" functions="renderPartial">
