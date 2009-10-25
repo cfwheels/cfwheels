@@ -2,7 +2,7 @@
 	hint="Extracts an excerpt from text that matches the first instance of phrase."
 	examples=
 	'
-		#excerpt(text="ColdFusion Wheels is a Rails-like MVC framework for Adobe ColdFusion and Railo", phrase="framework", radius=5)#
+		##excerpt(text="ColdFusion Wheels is a Rails-like MVC framework for Adobe ColdFusion and Railo", phrase="framework", radius=5)##
 		-> ... MVC framework for ...
 	'
 	categories="view-helper" functions="highlight,simpleFormat,stripLinks,stripTags,titleize,truncate">
@@ -49,10 +49,10 @@
 	hint="Highlights the phrase(s) everywhere in the text if found by wrapping it in a span tag."
 	examples=
 	'
-		#highlight(text="You searched for: Wheels", phrases="Wheels")#
+		##highlight(text="You searched for: Wheels", phrases="Wheels")##
 		-> You searched for: <span class="highlight">Wheels</span>
 	'
-	categories="view-helper" functions="excerpt,simpleFormat,stripLinks,stripTags,titleize,truncate>
+	categories="view-helper" functions="excerpt,simpleFormat,stripLinks,stripTags,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="Text to search">
 	<cfargument name="phrases" type="string" required="true" hint="List of phrases to highlight">
 	<cfargument name="class" type="string" required="false" default="highlight" hint="Class to use in `span` tags surrounding highlighted phrase(s)">
@@ -96,12 +96,12 @@
 	examples=
 	'
 		<!--- how most of your calls will look --->
-		#simpleFormat(post.comments)#
-		
+		##simpleFormat(post.comments)##
+
 		<!--- demonstrates what output looks like with specific data --->
 		<cfsavecontent variable="comment">
 			I love this post!
-			
+
 			Here''s why:
 			* Short
 			* Succinct
@@ -185,9 +185,9 @@
 	'
 		##truncate(text="Wheels is a framework for ColdFusion", length=20)##
 		-> Wheels is a frame...
-		
+
 		##truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")##
-		-> Wheels is a framework f (more) 
+		-> Wheels is a framework f (more)
 	'
 	categories="view-helper" functions="excerpt,highlight,simpleFormat,stripLinks,stripTags,titleize">
 	<cfargument name="text" type="string" required="true" hint="The text to truncate">
