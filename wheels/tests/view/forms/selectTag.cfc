@@ -30,7 +30,10 @@
 
 	<cffunction name="test_two_dimensional_array_for_option_values">
 		<cfset loc.args.name = "testselect">
-		<cfset loc.args.options = [[1, "first"],[2, "second"], [3, "third"]]>
+		<cfset loc.first = [1, "first"]>
+		<cfset loc.second = [2, "second"]>
+		<cfset loc.third = [3, "third"]>
+		<cfset loc.args.options = [loc.first, loc.second, loc.third]>
 		<cfset halt(false, "loc.controller.selectTag(argumentcollection=loc.args)")>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
 		<cfset assert('loc.options.complexvalues eq loc.r')>
@@ -38,7 +41,10 @@
 
 	<cffunction name="test_three_dimensional_array_for_option_values">
 		<cfset loc.args.name = "testselect">
-		<cfset loc.args.options = [[1, "first", "a"],[2, "second", "b"], [3, "third", "c"]]>
+		<cfset loc.first = [1, "first", "a"]>
+		<cfset loc.second = [2, "second", "b"]>
+		<cfset loc.third = [3, "third", "c"]>
+		<cfset loc.args.options = [loc.first, loc.second, loc.third]>
 		<cfset halt(false, "loc.controller.selectTag(argumentcollection=loc.args)")>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
 		<cfset assert('loc.options.complexvalues eq loc.r')>
