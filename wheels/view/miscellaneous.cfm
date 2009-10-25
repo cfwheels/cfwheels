@@ -1,6 +1,37 @@
-<cffunction name="cycle" returntype="string" access="public" output="false" hint="Cycles through list values every time it is called.">
+<cffunction name="cycle" returntype="string" access="public" output="false"
+	hint="Cycles through list values every time it is called."
+	examples=
+	'
+		<!--- alternating table row colors --->
+		<table>
+			<tr>
+				<th>Name</th>
+				<th>Phone</th>
+			</tr>
+			<cfoutput query="employees">
+				<tr class="##cycle("even,odd")##">
+					<td>##employees.name##</td>
+					<td>##employees.phone##</td>
+				</tr>
+			</cfoutput>
+		</table>
+		
+		<!--- alternating row colors and shrinking emphasis --->
+		<cfoutput query="employees" group="departmentId">
+			<div class="##cycle(values="even,odd", name="row")##">
+				<ul>
+					<cfoutput>
+						<cfset rank = cycle(values="president,vice-president,director,manager,specialist,intern", name="position")>
+						<li class="##rank##">##categories.categoryName##</li>
+						<cfset resetCycle("emphasis")>
+					</cfoutput>
+				</ul>
+			</div>
+		</cfoutput>
+	'
+	categories="view-helper" functions="resetCycle">
 	<cfargument name="values" type="string" required="true" hint="List of values to cycle through">
-	<cfargument name="name" type="string" required="false" default="default" hint="Name to give the cycle, useful when you use multiple cycles on a page">
+	<cfargument name="name" type="string" required="false" default="default" hint="Name to give the cycle. Useful when you use multiple cycles on a page">
 	<cfscript>
 		var loc = {};
 		if (!StructKeyExists(request.wheels, "cycle"))
@@ -21,7 +52,25 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="resetCycle" returntype="void" access="public" output="false" hint="Resets a cycle so that it starts from the first list value the next time it is called.">
+<cffunction name="resetCycle" returntype="void" access="public" output="false"
+	hint="Resets a cycle so that it starts from the first list value the next time it is called."
+	examples=
+	'
+		<!--- alternating row colors and shrinking emphasis --->
+		<cfoutput query="employees" group="departmentId">
+			<div class="##cycle(values="even,odd", name="row")##">
+				<ul>
+					<cfoutput>
+						<cfset rank = cycle(values="president,vice-president,director,manager,specialist,intern", name="position")>
+						<li class="##rank##">##categories.categoryName##</li>
+						<cfset resetCycle("emphasis")>
+					</cfoutput>
+				</ul>
+			</div>
+		</cfoutput>
+	'
+	categories="view-helper" functions="cycle"
+	>
 	<cfargument name="name" type="string" required="false" default="default" hint="The name of the cycle to reset">
 	<cfscript>
 		if (StructKeyExists(request.wheels, "cycle") && StructKeyExists(request.wheels.cycle, arguments.name))
