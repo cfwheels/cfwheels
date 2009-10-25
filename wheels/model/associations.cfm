@@ -2,7 +2,7 @@
 	hint="Sets up a `belongsTo` association between this model and the specified one."
 	examples=
 	'
-		<!--- Specify that instances of this model belonggs to an authour (the table for this model should have a foreign key set on it, typically named `authorid`) --->
+		<!--- Specify that instances of this model belongs to an author (the table for this model should have a foreign key set on it, typically named `authorid`) --->
 		<cfset belongsTo("author")>
 	'
 	categories="model-initialization" chapters="associations" functions="hasOne,hasMany">
