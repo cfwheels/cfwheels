@@ -31,7 +31,6 @@
 	<cfargument name="limit" type="numeric" required="false" default=0>
 	<cfargument name="offset" type="numeric" required="false" default=0>
 	<cfargument name="parameterize" type="boolean" required="true">
-	<cfargument name="psq" type="boolean" required="false" default="false">
 	<cfargument name="$primaryKey" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
@@ -49,6 +48,8 @@
 		arguments.datasource = variables.instance.connection.datasource;
 		arguments.username = variables.instance.connection.username;
 		arguments.password = variables.instance.connection.password;
+		if (application.wheels.serverName == "Railo")
+			arguments.psq = false; // set queries in Railo to not preserve single quotes on the entire cfquery block (we'll handle this individually in the SQL statement instead)  
 		loc.sql = arguments.sql;
 		loc.limit = arguments.limit;
 		loc.offset = arguments.offset;
