@@ -1,11 +1,3 @@
-<cffunction name="renderPageToString" returntype="string" access="public" output="false">
-	<cfscript>
-		$deprecated("The `renderPageToString` function will be deprecated in a future version of Wheels, please use `renderPage(returnAs='string')` instead");
-		arguments.returnAs = "string";
-	</cfscript>
-	<cfreturn renderPage(argumentCollection=arguments)>
-</cffunction>
-
 <cffunction name="renderPage" returntype="any" access="public" output="false" hint="Renders content to the browser by including the view page for the specified controller and action.">
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Controller to include the view page for">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Action to include the view page for">
@@ -71,13 +63,6 @@
 	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for `renderPage`">
 	<cfscript>
 		var loc = {};
-	</cfscript>
-	<cfif StructKeyExists(arguments, "name")>
-		<cfset $deprecated("The `name` argument will be deprecated in a future version of Wheels, please use the `partial` argument instead")>
-		<cfset arguments.partial = arguments.name>
-		<cfset StructDelete(arguments, "name")>
-	</cfif>
-	<cfscript>
 		loc.partial = $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,cache,layout,returnAs"));
 		if (arguments.$returnAs == "string")
 			loc.returnValue = loc.partial;

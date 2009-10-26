@@ -237,29 +237,12 @@
 
 	<cfscript>
 		var loc = {};
-
-		// deprecating because the name of the arguments are not appropriate since the prepend/append can sometimes go on elements that are not links
-		if (StructKeyExists(arguments, "prependToLink"))
-		{
-			$deprecated("The `prependToLink` argument to `paginationLinks` will be deprecated in a future version of Wheels, please use `prependToPage` instead");
-			arguments.prependToPage = arguments.prependToLink;
-			StructDelete(arguments, "prependToLink");
-		}
-		if (StructKeyExists(arguments, "appendToLink"))
-		{
-			$deprecated("The `appendToLink` argument to `paginationLinks` will be deprecated in a future version of Wheels, please use `appendToPage` instead");
-			arguments.appendToPage = arguments.appendToLink;
-			StructDelete(arguments, "appendToLink");
-		}
-
 		$insertDefaults(name="paginationLinks", input=arguments);
 		loc.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prepend,append,prependToPage,prependOnFirst,appendToPage,appendOnLast,classForCurrent,handle,name,showSinglePage";
 		loc.linkToArguments = Duplicate(arguments);
 		loc.iEnd = ListLen(loc.skipArgs);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
 			StructDelete(loc.linkToArguments, ListGetAt(loc.skipArgs, loc.i));
-		}
 		loc.currentPage = pagination(arguments.handle).currentPage;
 		loc.totalPages = pagination(arguments.handle).totalPages;
 		loc.start = "";

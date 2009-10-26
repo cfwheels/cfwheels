@@ -39,10 +39,5 @@
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for `renderPartial`">
 	<cfargument name="layout" type="string" required="false" default="#application.wheels.functions.includePartial.layout#" hint="See documentation for `renderPartial`">
 	<cfargument name="spacer" type="string" required="false" default="" hint="HTML or string to place between partials when called using a query">
-	<cfif StructKeyExists(arguments, "name")>
-		<cfset $deprecated("The `name` argument will be deprecated in a future version of Wheels, please use the `partial` argument instead")>
-		<cfset arguments.partial = arguments.name>
-		<cfset StructDelete(arguments, "name")>
-	</cfif>
 	<cfreturn $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,group,cache,layout,spacer"))>
 </cffunction>
