@@ -186,28 +186,76 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="validate" returntype="void" access="public" output="false" hint="Register method(s) that should be called to validate objects before they are saved.">
-	<cfargument name="methods" type="string" required="false" default="" hint="Method name or list of method names (can also be called with the `method` argument)">
+<cffunction name="validate" returntype="void" access="public" output="false"
+	hint="Register method(s) that should be called to validate objects before they are saved."
+	examples=
+	'
+		<!--- In models/User.cfc --->
+		<cffunction name="init">
+			<!--- Register the `check` method below to be called to validate objects before they are saved --->
+			<cfset validate("check")>
+		</cffunction>
+		
+		<cffunction name="check">
+		</cffunction>
+	'
+	categories="model-initialization" chapters="object-validation" functions="validateOnCreate,validateOnUpdate">
+	<cfargument name="methods" type="string" required="false" default="" hint="Method name or list of method names to call (can also be called with the `method` argument).">
 	<cfargument name="if" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfset $registerValidation(when="onSave", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="validateOnCreate" returntype="void" access="public" output="false" hint="Register method(s) that should be called to validate new objects before they are inserted.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See `validate`">
+<cffunction name="validateOnCreate" returntype="void" access="public" output="false"
+	hint="Register method(s) that should be called to validate new objects before they are inserted."
+	examples=
+	'
+		<!--- In models/User.cfc --->
+		<cffunction name="init">
+			<!--- Register the `check` method below to be called to validate new objects before they are inserted --->
+			<cfset validateOnCreate("check")>
+		</cffunction>
+		
+		<cffunction name="check">
+		</cffunction>
+	'
+	categories="model-initialization" chapters="object-validation" functions="validate,validateOnUpdate">
+	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @validate.">
 	<cfargument name="if" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfset $registerValidation(when="onCreate", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="validateOnUpdate" returntype="void" access="public" output="false" hint="Register method(s) that should be called to validate existing objects before they are updated.">
-	<cfargument name="methods" type="string" required="false" default="" hint="See `validate`">
+<cffunction name="validateOnUpdate" returntype="void" access="public" output="false"
+	hint="Register method(s) that should be called to validate existing objects before they are updated."
+	examples=
+	'
+		<!--- In models/User.cfc --->
+		<cffunction name="init">
+			<!--- Register the `check` method below to be called to validate existing objects before they are updated --->
+			<cfset validateOnUpdate("check")>
+		</cffunction>
+		
+		<cffunction name="check">
+		</cffunction>
+	'
+	categories="model-initialization" chapters="object-validation" functions="validate,validateOnCreate">
+	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @validate.">
 	<cfargument name="if" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfset $registerValidation(when="onUpdate", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="valid" returntype="boolean" access="public" output="false" hint="Runs the validation on the object and returns `true` if it passes it. Wheels will run the validation process automatically whenever an object is saved to the database but sometimes it's useful to be able to run this method to see if the object is valid without saving it to the database.">
+<cffunction name="valid" returntype="boolean" access="public" output="false"
+	hint="Runs the validation on the object and returns `true` if it passes it. Wheels will run the validation process automatically whenever an object is saved to the database but sometimes it's useful to be able to run this method to see if the object is valid without saving it to the database."
+	examples=
+	'
+		<!--- Check if a user is valid before proceeding with execution of something --->
+		<cfif user.isValid()>
+			<!--- Do something here --->
+		</cfif>
+	'
+	categories="model-object" chapters="object-validation" functions="">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = false;
