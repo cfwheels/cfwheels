@@ -138,4 +138,9 @@
 		<cfset assert('loc.r eq true')>
 	</cffunction>
 
+	<cffunction name="test_allow_negative_values_in_where_clause">
+		<cfset loc.r = loc.user.exists(where="id = -1")>
+		<cfset assert('loc.r eq false')>
+	</cffunction>
+
 </cfcomponent>
