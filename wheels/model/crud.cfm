@@ -44,11 +44,11 @@
 		<!--- Getting a specific user using a dynamic finder. Same as calling model("user").findOne(where"email=''someone@somewhere.com'' AND password=''mypass''") --->
 		<cfset user = model("user").findOneByEmailAndPassword("someone@somewhere.com,mypass")>
 
-		<!--- If you have a `hasMany` association setup from `post` to `comment` you can use a scoped finder call like this --->
+		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call like this --->
 		<cfset aPost = model("post").findByKey(params.postId)>
 		<cfset aComment = aPost.findOneComment(where="text=''I Love Wheels!''")>
 	'
-	categories="model-class" chapters="reading-records,associations" functions="findAll,findByKey">
+	categories="model-class" chapters="reading-records,associations" functions="belongsTo,findAll,findByKey,hasMany,hasOne">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for @findAll.">
@@ -319,8 +319,20 @@
 		<cfif model("user").exists(keyparams.key)>
 			<!--- Do something... --->
 		</cfif>
+
+		<!--- If you have a `belongsTo` association setup from `comment` to `post` you can do a scoped call like this --->
+		<cfset aComment = model("comment").findByKey(params.commentId)>
+		<cfset commentHasAPost = aComment.hasPost()>
+
+		<!--- If you have a `hasOne` association setup from `user` to `profile` you can do a scoped call like this --->
+		<cfset aUser = model("user").findByKey(params.userId)>
+		<cfset userHasProfile = aUser.hasProfile()>
+
+		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call like this --->
+		<cfset aPost = model("post").findByKey(params.postId)>
+		<cfset postHasComments = aPost.hasComments()>
 	'
-	categories="model-class" chapters="reading-records" functions="">
+	categories="model-class" chapters="reading-records,associations" functions="belongsTo,hasMany,hasOne">
 	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @findByKey.">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.functions.exists.reload#" hint="See documentation for @findAll.">
