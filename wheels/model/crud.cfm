@@ -744,10 +744,19 @@
 	hint="Returns `true` if the specified object property (or any if none was passed in) have been changed but not yet saved to the database. Will also return `true` if the object is new and no record for it exists in the database."
 	examples=
 	'
-		<!--- Get an object, change it and then check if the `email` property has been changed --->
+		<!--- Get a member object and change the `email` property on it --->
 		<cfset member = model("member").findByKey(params.memberId)>
 		<cfset member.email = params.newEmail>
+
+		<!--- Check if the `email` property has changed --->
 		<cfif member.hasChanged(property="email")>
+			<!--- Do something... --->
+		</cfif>
+
+		<!--- The above can also be done using a dynamic function like this --->
+		<cfif member.emailHasChanged()>
+			<!--- Do something... --->
+		</cfif>
 	'
 	categories="model-object" chapters="" functions="allChanges,changedFrom,changedProperties">
 	<cfargument name="property" type="string" required="false" default="" hint="Name of property to check for change.">
@@ -762,13 +771,18 @@
 </cffunction>
 
 <cffunction name="changedFrom" returntype="string" access="public" output="false"
-	hint="Returns the previous value of a property that has changed. Returns an empty string if no previous value exists."
+	hint="Returns the previous value of a property that has changed. Returns an empty string if no previous value exists. Wheels will keep a note of the previous property value until the object is saved to the database."
 	examples=
 	'
-		<!--- Get an object, change the `email` value on it and then ask for the previous value --->
+		<!--- Get a member object and change the `email` property on it --->
 		<cfset member = model("member").findByKey(params.memberId)>
 		<cfset member.email = params.newEmail>
+
+		<!---Get the previous value (what the `email` property was before it was changed)--->
 		<cfset oldValue = member.changedFrom(property="email")>
+
+		<!--- The above can also be done using a dynamic function like this --->
+		<cfset oldValue = member.emailChangedFrom()>
 	'
 	categories="model-object" chapters="" functions="allChanges,changedProperties,hasChanged">
 	<cfargument name="property" type="string" required="true" hint="Name of property to get the previous value for.">
