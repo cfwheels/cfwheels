@@ -43,8 +43,12 @@
 
 		<!--- Getting a specific user using a dynamic finder. Same as calling model("user").findOne(where"email=''someone@somewhere.com'' AND password=''mypass''") --->
 		<cfset user = model("user").findOneByEmailAndPassword("someone@somewhere.com,mypass")>
+
+		<!--- If you have a `hasMany` association setup from `post` to `comment` you can use a scoped finder call like this --->
+		<cfset aPost = model("post").findByKey(params.postId)>
+		<cfset aComment = aPost.findOneComment(where="text=''I Love Wheels!''")>
 	'
-	categories="model-class" chapters="reading-records" functions="findAll,findByKey">
+	categories="model-class" chapters="reading-records,associations" functions="findAll,findByKey">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for @findAll.">
