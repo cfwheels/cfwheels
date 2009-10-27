@@ -1,4 +1,116 @@
-<cffunction name="set" returntype="void" access="public" output="false" hint="Use to configure a global setting.">
+<cffunction name="set" returntype="void" access="public" output="false"
+	hint="Use to configure a global setting."
+	examples=
+	'
+		<cfset set(URLRewriting="Partial")> <!--- can be set to "On", "Off" or "Partial" --->
+		<cfset set(dataSourceName="")>
+		<cfset set(dataSourceUserName="")>
+		<cfset set(dataSourcePassword ="")>
+
+		<!--- environment settings --->
+		<cfset set(cacheDatabaseSchema = false)>
+		<cfset set(cacheFileChecking = false)>
+		<cfset set(cacheImages = false)>
+		<cfset set(cacheModelInitialization = false)>
+		<cfset set(cacheControllerInitialization = false)>
+		<cfset set(cacheRoutes = false)>
+		<cfset set(cacheActions = false)>
+		<cfset set(cachePages = false)>
+		<cfset set(cachePartials = false)>
+		<cfset set(cacheQueries = false)>
+		<cfset set(showDebugInformation = true)>
+		<cfset set(showErrorInformation = true)>
+		<cfset set(sendEmailOnError = false)>
+		<cfset set(errorEmailAddress = "")>
+		<cfset set(errorEmailServer = "")> <!--- only required if the mail server hasn''t been set in the ColdFusion Administrator --->
+
+		<!--- miscellaneous settings --->
+		<cfset set(tableNamePrefix = "")>
+		<cfset set(obfuscateURLs = false)>
+		<cfset set(reloadPassword = "")>
+		<cfset set(softDeleteProperty = "deletedAt")>
+		<cfset set(timeStampOnCreateProperty = "createdAt")>
+		<cfset set(timeStampOnUpdateProperty = "updatedAt")>
+		<cfset set(ipExceptions = "")>
+		<cfset set(overwritePlugins = true)>
+
+		<!--- caching settings --->
+		<cfset set(maximumItemsToCache = 5000)>
+		<cfset set(cacheCullPercentage = 10)>
+		<cfset set(cacheCullInterval = 5)>
+		<cfset set(defaultCacheTime = 60)>
+
+		<!--- function settings --->
+		<cfset set(functionName="average", distinct=false)>
+		<cfset set(functionName="buttonTo", onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable="")>
+		<cfset set(functionName="caches", time=60)>
+		<cfset set(functionName="checkBox", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", checkedValue=1, unCheckedValue=0)>
+		<cfset set(functionName="checkBoxTag", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", value=1)>
+		<cfset set(functionName="dateSelect", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names")>
+		<cfset set(functionName="dateSelectTags", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names")>
+		<cfset set(functionName="dateTimeSelect", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, separator=" - ")>
+		<cfset set(functionName="dateTimeSelectTags", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, separator=" - ")>
+		<cfset set(functionName="daySelectTag", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false)>
+		<cfset set(functionName="delete", parameterize=true)>
+		<cfset set(functionName="deleteAll", parameterize=true, instantiate=false)>
+		<cfset set(functionName="distanceOfTimeInWords", includeSeconds=false)>
+		<cfset set(functionName="errorMessageOn", prependText="", appendText="", wrapperElement="span", class="error-message")>
+		<cfset set(functionName="errorMessagesFor", class="error-messages", showDuplicates=true)>
+		<cfset set(functionName="exists", reload=false, parameterize=true)>
+		<cfset set(functionName="fileField", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span")>
+		<cfset set(functionName="fileFieldTag", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="")>
+		<cfset set(functionName="findAll", reload=false, parameterize=true, perPage=10, order="")>
+		<cfset set(functionName="findByKey", reload=false, parameterize=true)>
+		<cfset set(functionName="findOne", reload=false, parameterize=true)>
+		<cfset set(functionName="hiddenField", )>
+		<cfset set(functionName="hourSelectTag", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false)>
+		<cfset set(functionName="imageTag", )>
+		<cfset set(functionName="javaScriptIncludeTag", type="text/javascript")>
+		<cfset set(functionName="linkTo", onlyPath=true, host="", protocol="", port=0)>
+		<cfset set(functionName="mailTo", encode=false)>
+		<cfset set(functionName="minuteSelectTag", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, minuteStep=1)>
+		<cfset set(functionName="monthSelectTag", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, monthDisplay="names")>
+		<cfset set(functionName="paginationLinks", windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prependToLink="", appendToLink="", classForCurrent="", name="page")>
+		<cfset set(functionName="passwordField", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span")>
+		<cfset set(functionName="passwordFieldTag", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="")>
+		<cfset set(functionName="radioButton", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span")>
+		<cfset set(functionName="radioButtonTag", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="")>
+		<cfset set(functionName="redirectTo", onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302)>
+		<cfset set(functionName="renderPage", layout=true)>
+		<cfset set(functionName="renderPageToString", layout=true)>
+		<cfset set(functionName="save", parameterize=true)>
+		<cfset set(functionName="secondSelectTag", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false)>
+		<cfset set(functionName="select", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, multiple=false, valueField="", textField="")>
+		<cfset set(functionName="selectTag", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, multiple=false, valueField="", textField="")>
+		<cfset set(functionName="sendEmail", layout=false, detectMultipart=true)>
+		<cfset set(functionName="sendFile", disposition="attachment")>
+		<cfset set(functionName="startFormTag", onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, spamProtection=false)>
+		<cfset set(functionName="styleSheetLinkTag", type="text/css", media="all")>
+		<cfset set(functionName="submitTag", value="Save changes", image="", disable="")>
+		<cfset set(functionName="sum", distinct=false)>
+		<cfset set(functionName="textArea", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span")>
+		<cfset set(functionName="textAreaTag", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="")>
+		<cfset set(functionName="textField", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span")>
+		<cfset set(functionName="textFieldTag", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="")>
+		<cfset set(functionName="timeAgoInWords", includeSeconds=false)>
+		<cfset set(functionName="timeSelect", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1)>
+		<cfset set(functionName="timeSelectTags", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1)>
+		<cfset set(functionName="timeUntilInWords", includeSeconds=false)>
+		<cfset set(functionName="update", parameterize=true)>
+		<cfset set(functionName="updateAll", parameterize=true, instantiate=false)>
+		<cfset set(functionName="URLFor", onlyPath=true, host="", protocol="", port=0)>
+		<cfset set(functionName="validatesConfirmationOf", message="[property] should match confirmation")>
+		<cfset set(functionName="validatesExclusionOf", message="[property] is reserved", allowBlank=false)>
+		<cfset set(functionName="validatesFormatOf", message="[property] is invalid", allowBlank=false)>
+		<cfset set(functionName="validatesInclusionOf", message="[property] is not included in the list", allowBlank=false)>
+		<cfset set(functionName="validatesLengthOf", message="[property] is the wrong length", allowBlank=false, exactly=0, maximum=0, minimum=0, within="")>
+		<cfset set(functionName="validatesNumericalityOf", message="[property] is not a number", allowBlank=false, onlyInteger=false)>
+		<cfset set(functionName="validatesPresenceOf", message="[property] can''t be empty")>
+		<cfset set(functionName="validatesUniquenessOf", message="[property] has already been taken")>
+		<cfset set(functionName="verifies", handler=false)>
+		<cfset set(functionName="yearSelectTag", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, startYear=Year(Now())-5, endYear=Year(Now())+5)>
+	'
+	categories="configuration" chapters="configurationand-defaults" functions="get">
 	<cfscript>
 		var loc = {};
 		if (ArrayLen(arguments) > 1)
@@ -16,7 +128,16 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="get" returntype="any" access="public" output="false" hint="Returns the current setting for the supplied variable name.">
+<cffunction name="get" returntype="any" access="public" output="false"
+	hint="Returns the current setting for the supplied variable name."
+	examples=
+	'
+		<!--- custom find method --->
+		<cfquery name="yourQueryName" datasource="##get(''dataSourceName'')##">
+		  <!--- YOUR SQL CODE --->
+		</cfquery>
+	'
+	categories="configuration" chapters="configurationand-defaults" functions="set">
 	<cfargument name="name" type="string" required="true" hint="Variable name to get setting for">
 	<cfargument name="functionName" type="string" required="false" default="" hint="Function name to get setting for">
 	<cfscript>
@@ -29,7 +150,15 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="URLFor" returntype="string" access="public" output="false" hint="Creates an internal URL based on supplied arguments.">
+<cffunction name="URLFor" returntype="string" access="public" output="false"
+	hint="Creates an internal URL based on supplied arguments."
+	examples=
+	'
+		##URLFor(controller="account", action="logOut")##
+
+		##URLFor(action="comments", anchor="comment10")##
+	'
+	categories="global" chapters="request-handling,linking-pages" functions="redirectTo,linkTo,startFormTag">
 	<cfargument name="route" type="string" required="false" default="" hint="Name of a route that you have configured in 'config/routes.cfm'">
 	<cfargument name="controller" type="string" required="false" default="" hint="Name of the controller to include in the URL">
 	<cfargument name="action" type="string" required="false" default="" hint="Name of the action to include in the URL">
@@ -150,7 +279,13 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="obfuscateParam" returntype="string" access="public" output="false" hint="Obfuscates a value.">
+<cffunction name="obfuscateParam" returntype="string" access="public" output="false"
+	hint="Obfuscates a value."
+	examples=
+	'
+		<cfset obfuscateParam(99)>
+	'
+	categories="global" chapters="obfuscating-urls" functions="deobfuscateParam">
 	<cfargument name="param" type="any" required="true" hint="Value to obfuscate">
 	<cfscript>
 		var loc = {};
@@ -171,7 +306,13 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="deobfuscateParam" returntype="string" access="public" output="false" hint="Deobfuscates a value.">
+<cffunction name="deobfuscateParam" returntype="string" access="public" output="false"
+	hint="Deobfuscates a value."
+	examples=
+	'
+		<cfset deobfuscateParam("b7ab9a50")>
+	'
+	categories="global" chapters="obfuscating-urls" functions="obfuscateParam">
 	<cfargument name="param" type="string" required="true" hint="Value to deobfuscate">
 	<cfscript>
 		var loc = {};
@@ -206,7 +347,13 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="addRoute" returntype="void" access="public" output="false" hint="Adds a new route to your application.">
+<cffunction name="addRoute" returntype="void" access="public" output="false"
+	hint="Adds a new route to your application."
+	examples=
+	'
+		<cfset addRoute(name="userProfile", pattern="user/[username]", controller="user", action="profile")>
+	'
+	categories="global" chapters="using-routes" functions="">
 	<cfargument name="name" type="string" required="true" hint="Name for the route">
 	<cfargument name="pattern" type="string" required="true" hint="The URL pattern for the route">
 	<cfargument name="controller" type="string" required="false" default="" hint="Controller to call when route matches (unless the controller name exists in the pattern)">
@@ -233,7 +380,13 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="model" returntype="any" access="public" output="false" hint="Returns a reference to the requested model so that class level methods can be called on it.">
+<cffunction name="model" returntype="any" access="public" output="false"
+	hint="Returns a reference to the requested model so that class level methods can be called on it."
+	examples=
+	'
+		<cfset authorObject = model("author").findByKey(1)>
+	'
+	categories="global" chapters="object-relational-mapping" functions="">
 	<cfargument name="name" type="string" required="true" hint="Name of the model (class name) to get a reference to">
 	<cfscript>
 		var loc = {};
@@ -242,16 +395,38 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="pluginNames" returntype="string" access="public" output="false" hint="Returns a list of all installed plugins.">
+<cffunction name="pluginNames" returntype="string" access="public" output="false"
+	hint="Returns a list of all installed plugins."
+	examples=
+	'
+		<cfif ListFindNoCase("scaffold", pluginNames())>
+			<!--- do something cool --->
+		</cfif>
+	'
+	categories="global" chapters="global-functions" functions="">
 	<cfreturn StructKeyList(application.wheels.plugins)>
 </cffunction>
 
-<cffunction name="capitalize" returntype="string" access="public" output="false" hint="Returns the text with the first character converted to uppercase.">
+<cffunction name="capitalize" returntype="string" access="public" output="false"
+	hint="Returns the text with the first character converted to uppercase."
+	examples=
+	'
+		##capitalize("wheels is a framework")##
+		-> Wheels is a framework
+	'
+	categories="global" chapters="global-functions" functions="humanize,pluralize,singularize">
 	<cfargument name="text" type="string" required="true" hint="Text to capitalize">
 	<cfreturn UCase(Left(arguments.text, 1)) & Mid(arguments.text, 2, Len(arguments.text)-1)>
 </cffunction>
 
-<cffunction name="humanize" returntype="string" access="public" output="false" hint="Returns readable text by capitalizing, converting camel casing to multiple words.">
+<cffunction name="humanize" returntype="string" access="public" output="false"
+	hint="Returns readable text by capitalizing, converting camel casing to multiple words."
+	examples=
+	'
+		##humanize("wheelsIsAFramework")##
+		-> Wheels Is A Framework
+	'
+	categories="global" chapters="global-functions" functions="capitalize,pluralize,singularize">
 	<cfargument name="text" type="string" required="true" hint="Text to humanize">
 	<cfscript>
 		var loc = {};
@@ -262,12 +437,28 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="singularize" returntype="string" access="public" output="false" hint="Returns the singular form of the passed in word.">
+<cffunction name="singularize" returntype="string" access="public" output="false"
+	hint="Returns the singular form of the passed in word."
+	examples=
+	'
+		##singularize("languages")##
+		-> language
+	'
+	categories="global" chapters="global-functions" functions="capitalize,humanize,pluralize">
 	<cfargument name="word" type="string" required="true" hint="String to singularize">
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="singularize")>
 </cffunction>
 
-<cffunction name="pluralize" returntype="string" access="public" output="false" hint="Returns the plural form of the passed in word.">
+<cffunction name="pluralize" returntype="string" access="public" output="false"
+	hint="Returns the plural form of the passed in word."
+	examples=
+	'
+		##pluralize("person")##
+		-> people
+
+		Your search returned ##pluralize(word="person", count=users.recordCount)##.
+	'
+	categories="global" chapters="global-functions" functions="capitalize,humanize,singularize">
 	<cfargument name="word" type="string" required="true" hint="The word to pluralize">
 	<cfargument name="count" type="numeric" required="false" default="-1" hint="Pluralization will occur when this value is not 1">
 	<cfargument name="returnCount" type="boolean" required="false" default="true" hint="Will return the count prepended to the pluralization when true and count is not -1">
