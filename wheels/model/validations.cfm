@@ -271,7 +271,7 @@
 
 <!--- PRIVATE MODEL INITIALIZATION METHODS --->
 
-<cffunction name="$registerValidation" returntype="void" access="public" output="false">
+<cffunction name="$registerValidation" returntype="void" access="public" output="false" hint="Called from the high level validation helpers to register the validation in the class struct of the model.">
 	<cfargument name="when" type="string" required="true">
 	<cfscript>
 		var loc = {};
@@ -380,7 +380,7 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="$validateConfirmationOf" returntype="void" access="public" output="false">
+<cffunction name="$validateConfirmationOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesConfirmationOf method.">
 	<cfscript>
 		var loc = {};
 		loc.virtualConfirmProperty = arguments.property & "Confirmation";
@@ -389,28 +389,28 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validateExclusionOf" returntype="void" access="public" output="false">
+<cffunction name="$validateExclusionOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesExclusionOf method.">
 	<cfscript>
 		if (ListFindNoCase(arguments.list, this[arguments.property]))
 			addError(property=arguments.property, message=arguments.message);
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validateFormatOf" returntype="void" access="public" output="false">
+<cffunction name="$validateFormatOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesFormatOf method.">
 	<cfscript>
 		if ((Len(arguments.regEx) && !REFindNoCase(arguments.regEx, this[arguments.property])) || (Len(arguments.type) && !IsValid(arguments.type, this[arguments.property])))
 			addError(property=arguments.property, message=arguments.message);
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validateInclusionOf" returntype="void" access="public" output="false">
+<cffunction name="$validateInclusionOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesInclusionOf method.">
 	<cfscript>
 		if (!ListFindNoCase(arguments.list, this[arguments.property]))
 			addError(property=arguments.property, message=arguments.message);
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validateLengthOf" returntype="void" access="public" output="false">
+<cffunction name="$validateLengthOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesLengthOf method.">
 	<cfscript>
 		if (arguments.maximum)
 		{
@@ -435,7 +435,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validateNumericalityOf" returntype="void" access="public" output="false">
+<cffunction name="$validateNumericalityOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesNumericalityOf method.">
 	<cfscript>
 		if (!IsNumeric(this[arguments.property]))
 			addError(property=arguments.property, message=arguments.message);
@@ -444,7 +444,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validateUniquenessOf" returntype="void" access="public" output="false">
+<cffunction name="$validateUniquenessOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesUniquenessOf method.">
 	<cfscript>
 		var loc = {};
 		loc.where = arguments.property & "=";
