@@ -84,10 +84,10 @@
 	'
 		!--- view code --->
 		<cfoutput>
-		    ##startFormTag(action="something")##  
+		    ##startFormTag(action="something")##
 		        <!--- form controls go here --->
 		        ##submitTag()##
-		    ##endFormTag()##  
+		    ##endFormTag()##
 		</cfoutput>
 	'
 	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
@@ -604,7 +604,7 @@
 	'
 		<!--- controller code --->
 		<cfset authors = model("author").findAll()>
-		
+
 		<!--- view code --->
 		<cfoutput>
 		    <p>##select(objectName="book", property="authorId", options=authors)##</p>
@@ -660,7 +660,7 @@
 	'
 		<!--- controller code --->
 		<cfset cities = model("city").findAll()>
-		
+
 		<!--- view code --->
 		<cfoutput>
 		    <p>##selectTag(name="cityId", options=cities)##</p>
@@ -698,7 +698,7 @@
 	'
 		<!--- view code --->
 		<cfoutput>
-		  <p>##dateSelect(objectName="user", property="dateOfBirth")##</p>        
+		  <p>##dateSelect(objectName="user", property="dateOfBirth")##</p>
 		</cfoutput>
 	'
 	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textField,submitTag,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,timeSelect">
@@ -730,7 +730,7 @@
 	'
 		<!--- view code --->
 		<cfoutput>
-		    <p>##dateSelectTags()##</p>     
+		    <p>##dateSelectTags()##</p>
 		</cfoutput>
 	'
 	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textFieldTag,submitTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,timeSelectTags">
@@ -765,7 +765,7 @@
 	'
 		<!--- view code --->
 		<cfoutput>
-		    <p>##timeSelect(objectName="business", property="openUntil")##</p>      
+		    <p>##timeSelect(objectName="business", property="openUntil")##</p>
 		</cfoutput>
 	'
 	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect">
@@ -828,7 +828,7 @@
 	'
 		<!--- view code --->
 		<cfoutput>
-		    <p>##dateTimeSelect(objectName="article", property="publishedAt")##</p> 
+		    <p>##dateTimeSelect(objectName="article", property="publishedAt")##</p>
 		</cfoutput>
 	'
 	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateSelect,timeSelect">
@@ -864,7 +864,7 @@
 	'
 		<!--- view code --->
 		<cfoutput>
-		    <p>##dateTimeSelectTags()##</p> 
+		    <p>##dateTimeSelectTags()##</p>
 		</cfoutput>
 	'
 	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateSelectTags,timeSelectTags">
@@ -1249,24 +1249,32 @@
 				loc.columns = "";
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					loc.columns = ListAppend(loc.columns, loc.info[loc.i].name);
-				// take the first numeric field in the query as the value field and the first non numeric as the text field
-				loc.iEnd = arguments.options.RecordCount;
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				if(ListLen(loc.columns) eq 1)
 				{
-					loc.jEnd = ListLen(loc.columns);
-					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-					{
-						if (!Len(arguments.valueField) && IsNumeric(arguments.options[ListGetAt(loc.columns, loc.j)][loc.i]))
-							arguments.valueField = ListGetAt(loc.columns, loc.j);
-						if (!Len(arguments.textField) && !IsNumeric(arguments.options[ListGetAt(loc.columns, loc.j)][loc.i]))
-							arguments.textField = ListGetAt(loc.columns, loc.j);
-					}
-				}
-				if (!Len(arguments.valueField) || !Len(arguments.textField))
-				{
-					// the query does not contain both a numeric and a text column so we'll just use the first and second column instead
 					arguments.valueField = ListGetAt(loc.columns, 1);
-					arguments.textField = ListGetAt(loc.columns, 2);
+					arguments.textField = ListGetAt(loc.columns, 1);
+				}
+				else
+				{
+					// take the first numeric field in the query as the value field and the first non numeric as the text field
+					loc.iEnd = arguments.options.RecordCount;
+					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					{
+						loc.jEnd = ListLen(loc.columns);
+						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+						{
+							if (!Len(arguments.valueField) && IsNumeric(arguments.options[ListGetAt(loc.columns, loc.j)][loc.i]))
+								arguments.valueField = ListGetAt(loc.columns, loc.j);
+							if (!Len(arguments.textField) && !IsNumeric(arguments.options[ListGetAt(loc.columns, loc.j)][loc.i]))
+								arguments.textField = ListGetAt(loc.columns, loc.j);
+						}
+					}
+					if (!Len(arguments.valueField) || !Len(arguments.textField))
+					{
+						// the query does not contain both a numeric and a text column so we'll just use the first and second column instead
+						arguments.valueField = ListGetAt(loc.columns, 1);
+						arguments.textField = ListGetAt(loc.columns, 2);
+					}
 				}
 			}
 			loc.iEnd = arguments.options.RecordCount;
