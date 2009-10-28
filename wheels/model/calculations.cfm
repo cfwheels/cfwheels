@@ -29,11 +29,11 @@
 		<!--- Count how many authors that have written books starting on "A" --->
 		<cfset authorWithBooksOnACount = model("author").count(include="books", where="title LIKE ''A%''")>
 
-		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call like this --->
+		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call (the `commentCount` method below will call `model("comment").count(where="postId=##post.id##")` internally) --->
 		<cfset aPost = model("post").findByKey(params.postId)>
 		<cfset amount = aPost.commentCount()>
 	'
-	categories="model-class" chapters="column-statistics,associations" functions="average,belongsTo,hasMany,hasOne,maximum,minimum,sum">
+	categories="model-class" chapters="column-statistics,associations" functions="average,hasMany,maximum,minimum,sum">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfscript>

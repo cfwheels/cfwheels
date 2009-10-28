@@ -11,8 +11,12 @@
 			<cfset flashInsert(message="Author ##params.key## was not found")>
 			<cfset redirectTo(back=true)>
 		</cfif>
+
+		<!--- If you have a `belongsTo` association setup from `comment` to `post` you can do a scoped call (the `post` method below will call `model("post").findByKey(comment.postId)` internally) --->
+		<cfset aComment = model("comment").findByKey(params.commentId)>
+		<cfset aPost = aComment.post()>
 	'
-	categories="model-class" chapters="reading-records" functions="findAll,findOne">
+	categories="model-class" chapters="reading-records,associations" functions="belongsTo,findAll,findOne">
 	<cfargument name="key" type="any" required="true" hint="Primary key value(s) of the record to fetch. Separate with comma if passing in multiple primary key values. Accepts a string, list or a numeric value.">
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
@@ -44,11 +48,15 @@
 		<!--- Getting a specific user using a dynamic finder. Same as calling model("user").findOne(where"email=''someone@somewhere.com'' AND password=''mypass''") --->
 		<cfset user = model("user").findOneByEmailAndPassword("someone@somewhere.com,mypass")>
 
-		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call like this --->
+		<!--- If you have a `hasOne` association setup from `user` to `profile` you can do a scoped call (the `profile` method below will call `model("profile").findOne(where="userId=##user.id##")` internally) --->
+		<cfset aUser = model("user").findByKey(params.userId)>
+		<cfset aProfile = aUser.profile()>
+
+		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call (the `findOneComment` method below will call `model("comment").findOne(where="postId=##post.id##")` internally) --->
 		<cfset aPost = model("post").findByKey(params.postId)>
 		<cfset aComment = aPost.findOneComment(where="text=''I Love Wheels!''")>
 	'
-	categories="model-class" chapters="reading-records,associations" functions="belongsTo,findAll,findByKey,hasMany,hasOne">
+	categories="model-class" chapters="reading-records,associations" functions="findAll,findByKey,hasMany,hasOne">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for @findAll.">
@@ -106,8 +114,12 @@
 
 		<!--- Getting all books of a certain type from a specific year by using a dynamic finder. Same as calling model("book").findAll(where="releaseYear=##params.year## AND type=''##params.type##''") --->
 		<cfset books = model("book").findAllByReleaseYearAndType("##params.year##,##params.type##")>
+
+		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call (the `comments` method below will call `model("comment").findAll(where="postId=##post.id##")` internally) --->
+		<cfset aPost = model("post").findByKey(params.postId)>
+		<cfset comments = aPost.comments()>
 	'
-	categories="model-class" chapters="reading-records" functions="findByKey,findOne">
+	categories="model-class" chapters="reading-records,associations" functions="findByKey,findOne,hasMany">
 	<cfargument name="where" type="string" required="false" default="" hint="This argument maps to the `WHERE` clause of the query. The following operators are supported: `=`, `<>`, `<`, `<=`, `>`, `>=`, `LIKE`, `AND`, and `OR` (note that the key words have to be written in upper case). You can also use parentheses to group statements. You do not have to specify the table name(s), Wheels will do that for you.">
 	<cfargument name="order" type="string" required="false" default="#application.wheels.functions.findAll.order#" hint="This argument maps to the `ORDER BY` clause of the query. You do not have to specify the table name(s), Wheels will do that for you.">
 	<cfargument name="select" type="string" required="false" default="" hint="This argument determines how the `SELECT` clause for the query used to return data will look.	You can pass in a list of the properties (which maps to columns) that you want returned from your table(s). If you don't set this argument at all, Wheels will select all properties from your table(s). If you specify a table name (e.g. `users.email`) or alias a column (e.g. `fn AS firstName`) in the list then the entire list will be passed through unchanged and used in the `SELECT` clause of the query. If not, Wheels will prepend the table name and resolve any naming collisions (which could happen when using the `include` argument) automatically for you. The naming collisions are resolved by prepending the model name to the property name so `users.firstName` could become `userFirstName` for example.">
@@ -320,15 +332,15 @@
 			<!--- Do something... --->
 		</cfif>
 
-		<!--- If you have a `belongsTo` association setup from `comment` to `post` you can do a scoped call like this --->
+		<!--- If you have a `belongsTo` association setup from `comment` to `post` you can do a scoped call (the `hasPost` method below will call `model("post").exists(comment.postId)` internally) --->
 		<cfset aComment = model("comment").findByKey(params.commentId)>
 		<cfset commentHasAPost = aComment.hasPost()>
 
-		<!--- If you have a `hasOne` association setup from `user` to `profile` you can do a scoped call like this --->
+		<!--- If you have a `hasOne` association setup from `user` to `profile` you can do a scoped call (the `hasProfile` method below will call `model("profile").exists(where="userId=##user.id##")` internally) --->
 		<cfset aUser = model("user").findByKey(params.userId)>
 		<cfset userHasProfile = aUser.hasProfile()>
 
-		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call like this --->
+		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call (the `hasComments` method below will call `model("comment").exists(where="postid=##post.id##")` internally) --->
 		<cfset aPost = model("post").findByKey(params.postId)>
 		<cfset postHasComments = aPost.hasComments()>
 	'
@@ -404,8 +416,12 @@
 	'
 		<!--- Update the `published` and `publishedAt` properties for all records that have `published=0` --->
 		<cfset recordsUpdated = model("post").updateAll(published=1, publishedAt=Now(), where="published=0")>
+
+		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call (the `removeAllComments` method below will call `model("comment").updateAll(postid="", where="postId=##post.id##")` internally) --->
+		<cfset aPost = model("post").findByKey(params.postId)>
+		<cfset removedSuccessfully = aPost.removeAllComments()>
 	'
-	categories="model-class" chapters="updating-records" functions="update,updateByKey,updateOne">
+	categories="model-class" chapters="updating-records,associations" functions="hasMany,update,updateByKey,updateOne">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
@@ -501,8 +517,12 @@
 	'
 		<!--- Delete all inactive users without instantiating them (will skip validation and callbacks) --->
 		<cfset recordsDeleted = model("user").deleteAll(where="inactive=1", instantiate=false)>
+
+		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call (the `deleteAllComments` method below will call `model("comment").deleteAll(where="postId=##post.id##")` internally) --->
+		<cfset aPost = model("post").findByKey(params.postId)>
+		<cfset howManyDeleted = aPost.deleteAllComments()>
 	'
-	categories="model-class" chapters="deleting-records" functions="delete,deleteByKey,deleteOne">
+	categories="model-class" chapters="deleting-records,associations" functions="delete,deleteByKey,deleteOne,hasMany">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.deleteAll.parameterize#" hint="See documentation for @findAll.">
