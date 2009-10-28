@@ -105,7 +105,7 @@
 		if (application.wheels.URLRewriting == "Off")
 			loc.delim = "&";
 		else
-			loc.delim = "?";		
+			loc.delim = "?";
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.params, "&");
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -142,7 +142,7 @@
 					if (StructKeyExists(arguments.input, loc.item))
 						$throw(type="Wheels.IncorrectArguments", message="The '#loc.item#' argument is not allowed.", extendedInfo="Do not pass in the '#loc.item#' argument. It will be set automatically by Wheels.");
 				}
-			}			
+			}
 		}
 		StructAppend(arguments.input, application.wheels.functions[arguments.name], false);
 	</cfscript>
@@ -196,7 +196,7 @@
 	<cfscript>
 		var loc = {};
 		loc.fileName = capitalize(arguments.name);
-		
+
 		// check if the controller file exists and store the results for performance reasons
 		if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingControllerFiles, arguments.name))
 		{
@@ -205,7 +205,7 @@
 			else
 				application.wheels.nonExistingControllerFiles = ListAppend(application.wheels.nonExistingControllerFiles, arguments.name);
 		}
-	
+
 		// check if the controller's view helper file exists and store the results for performance reasons
 		if (!ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingHelperFiles, arguments.name))
 		{
@@ -214,7 +214,7 @@
 			else
 				application.wheels.nonExistingHelperFiles = ListAppend(application.wheels.nonExistingHelperFiles, arguments.name);
 		}
-	
+
 		if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name))
 			loc.fileName = "Controller";
 		application.wheels.controllers[arguments.name] = $createObjectFromRoot(path=application.wheels.controllerComponentPath, fileName=loc.fileName, method="$initControllerClass", name=arguments.name);
@@ -234,51 +234,13 @@
 
 <cffunction name="$flatten" returntype="string" access="public" output="false">
 	<cfargument name="values" type="any" required="true">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = "";
-		if (IsStruct(arguments.values))
-		{
-			for (loc.key in arguments.values)
-			{
-				if (IsSimpleValue(arguments.values[loc.key]))
-					loc.returnValue = loc.returnValue & "&" & loc.key & "=""" & arguments.values[loc.key] & """";
-				else
-					loc.returnValue = loc.returnValue & "&" & $flatten(arguments.values[loc.key]);
-			}
-		}
-		else if (IsArray(arguments.values))
-		{
-			loc.iEnd = ArrayLen(arguments.values);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				if (IsSimpleValue(arguments.values[loc.i]))
-					loc.returnValue = loc.returnValue & "&" & loc.i & "=""" & arguments.values[loc.i] & """";
-				else
-					loc.returnValue = loc.returnValue & "&" & $flatten(arguments.values[loc.i]);
-			}
-		}
-		else if (IsQuery(arguments.values))
-		{
-			loc.iEnd = arguments.values.recordCount;
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				loc.jEnd = ListLen(arguments.values.columnList);
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-				{
-					loc.jItem = ListGetAt(arguments.values.columnList, loc.j);
-					loc.returnValue = loc.returnValue & "&" & loc.jItem & loc.i & "=""" & arguments.values[loc.jItem][loc.i] & """";
-				}
-			}
-		}
-		loc.returnValue = Right(loc.returnValue, Len(loc.returnValue)-1);
-	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfset $deprecated("$flatten() is marked for deprecation and will be removed in a future version of wheels. Consider using the serializeJSON() method instead")>
+	<cfreturn serializejson(arguments.values)>
 </cffunction>
 
 <cffunction name="$hashStruct" returntype="string" access="public" output="false">
 	<cfargument name="args" type="struct" required="true">
-	<cfreturn Hash(ListSort($flatten(arguments.args), "text", "asc", "&"))>
+	<cfreturn Hash(serializejson(arguments.args))>
 </cffunction>
 
 <cffunction name="$addToCache" returntype="void" access="public" output="false">
@@ -331,7 +293,7 @@
 		{
 			if (Now() > application.wheels.cache[arguments.category][arguments.key].expiresAt)
 			{
-				$removeFromCache(key=arguments.key, category=arguments.category);		
+				$removeFromCache(key=arguments.key, category=arguments.category);
 			}
 			else
 			{
@@ -399,7 +361,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<!--- 
+<!---
 Used to announce to the developer that a feature they are using will be removed at some point.
 DOES NOT work in production mode.
 
@@ -441,13 +403,13 @@ Should now call bar() instead and marking foo() as deprecated
 	<!--- set return value --->
 	<cfset loc.data = []>
 	<cfset loc.ret = {message=arguments.message, line="", method="", template="", data=loc.data}>
-	<!--- 	
+	<!---
 	create an exception so we can get the TagContext and display what file and line number the
 	deprecated method is being called in
 	 --->
 	<cfset loc.exception = createObject("java","java.lang.Exception").init()>
 	<cfset loc.tagcontext = loc.exception.tagcontext>
-	<!--- 
+	<!---
 	TagContext is an array. The first element of the array will always be the context for this
 	method announcing the deprecation. The second element will be the deprecated function that
 	is being called. We need to look at the third element of the array to get the method that
@@ -461,7 +423,7 @@ Should now call bar() instead and marking foo() as deprecated
 		<!--- the deprecated method that was called --->
 		<cfset loc.ret.method = rereplacenocase(loc.context.raw_trace, ".*\$func([^\.]*)\..*", "\1")>
 		<!--- the user template where the method called occurred --->
-		<cfset loc.ret.template = loc.context.template>		
+		<cfset loc.ret.template = loc.context.template>
 		<!--- try to get the code --->
  		<cfif len(loc.ret.template) and FileExists(loc.ret.template)>
 			<!--- grab a one line radius from where the deprecation occurred. --->
