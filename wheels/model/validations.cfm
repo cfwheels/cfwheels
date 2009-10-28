@@ -5,36 +5,30 @@
 <cffunction name="validatesConfirmationOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property also has an identical confirmation value (common when having a user type in their email address, choosing a password etc). The confirmation value only exists temporarily and never gets saved to the database. By convention the confirmation property has to be named the same as the property with ""Confirmation"" appended at the end. Using the password example, to confirm our `password` property we would create a property called `passwordConfirmation`."
 	examples=
 	'
-		<!--- In models/User.cfc --->
-		<cffunction name="init">
-			<!--- Make sure that the user has to confirm their password correctly (usually done by typing it again in a second form field) --->
-  			<cfset validatesConfirmationOf(property="password", message="Please confirm your chosen password properly!")>
-		</cffunction>
+		<!--- Make sure that the user has to confirm their password correctly the first time they register (usually done by typing it again in a second form field) --->
+		<cfset validatesConfirmationOf(property="password", when="onCreate", message="Please confirm your chosen password properly!")>
 	'
 	categories="model-initialization,validation" chapters="object-validation" functions="validatesExclusionOf,validatesFormatOf,validatesInclusionOf,validatesLengthOf,validatesNumericalityOf,validatesPresenceOf,validatesUniquenessOf">
-	<cfargument name="properties" type="string" required="false" default="" hint="Name of property or list of properties to validate (can also be called with the `property` argument)">
-	<cfargument name="message" type="string" required="false" default="#application.wheels.functions.validatesConfirmationOf.message#" hint="Supply a custom error message here to override the built-in one">
-	<cfargument name="when" type="string" required="false" default="onSave" hint="Pass in `onCreate` or `onUpdate` to limit when this validation occurs (by default validation it will occur on both create and update, i.e. `onSave`)">
-	<cfargument name="if" type="string" required="false" default="" hint="Name of a method or a string to be evaluated that decides if validation will be run (if string/method returns `true` validation will run)">
-	<cfargument name="unless" type="string" required="false" default="" hint="Name of a method or a string to be evaluated that decides if validation will be run (if string/method returns `false` validation will run)">
+	<cfargument name="properties" type="string" required="false" default="" hint="Name of property or list of property names to validate against (can also be called with the `property` argument).">
+	<cfargument name="message" type="string" required="false" default="#application.wheels.functions.validatesConfirmationOf.message#" hint="Supply a custom error message here to override the built-in one.">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="Pass in `onCreate` or `onUpdate` to limit when this validation occurs (by default validation will occur on both create and update, i.e. `onSave`).">
+	<cfargument name="if" type="string" required="false" default="" hint="String expression to be evaluated that decides if validation will be run (if the expression returns `true` validation will run).">
+	<cfargument name="unless" type="string" required="false" default="" hint="String expression to be evaluated that decides if validation will be run (if the expression returns `false` validation will run).">
 	<cfset $registerValidation(methods="$validateConfirmationOf", argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="validatesExclusionOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property does not exist in the supplied list."
 	examples=
 	'
-		<!--- In models/User.cfc --->
-		<cffunction name="init">
-			<!--- Do not allow "PHP" or "Fortran" to be saved to the database as a cool language --->
-  			<cfset validatesExclusionOf(properties="coolLanguage", list="php,fortran", message="Haha, you can not be serious, try again please.")>
-		</cffunction>
+		<!--- Do not allow "PHP" or "Fortran" to be saved to the database as a cool language --->
+		<cfset validatesExclusionOf(property="coolLanguage", list="php,fortran", message="Haha, you can not be serious, try again please.")>
 	'
 	categories="model-initialization,validation" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesFormatOf,validatesInclusionOf,validatesLengthOf,validatesNumericalityOf,validatesPresenceOf,validatesUniquenessOf">
 	<cfargument name="properties" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="list" type="string" required="true" hint="List of values that should not be allowed.">
+	<cfargument name="list" type="string" required="true" hint="Single value or list of values that should not be allowed.">
 	<cfargument name="message" type="string" required="false" default="#application.wheels.functions.validatesExclusionOf.message#" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.functions.validatesExclusionOf.allowBlank#" hint="If set to `true`, validation will be skipped if the value of the property is blank.">
+	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.functions.validatesExclusionOf.allowBlank#" hint="If set to `true`, validation will be skipped if the property value is an empty string or doesn't exist at all.">
 	<cfargument name="if" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfscript>
@@ -43,19 +37,19 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="validatesFormatOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property is formatted correctly by matching it against the regular expression provided."
+<cffunction name="validatesFormatOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property is formatted correctly by matching it against a regular expression using the `regEx` argument and/or against a built-in CFML validation type (`creditcard`, `date`, `email` etc) using the `type` argument."
 	examples=
 	'
-		<!--- In models/User.cfc --->
-		<cffunction name="init">
-			<!--- Make sure that the user has entered a correct email address --->
-  			<cfset validatesFormatOf(property="email", regEx="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$", message="Sorry, your email address is not in a correct format, try again!")>
-		</cffunction>
+		<!--- Make sure that the user has entered a correct credit card --->
+		<cfset validatesFormatOf(property="cc", type="creditcard")>
+
+		<!--- Make sure that the user has entered an email address ending with the `.se` domain when the `ipCheck` methods returns `true` and it''s not Sunday, also supply a custom error message that overrides the Wheels default one --->
+		<cfset validatesFormatOf(property="email", regEx="^.*@.*\.se$", if="ipCheck()", unless="DayOfWeek() IS 1" message="Sorry, you must have a Swedish email address to use this website")>
 	'
 	categories="model-initialization,validation" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesInclusionOf,validatesLengthOf,validatesNumericalityOf,validatesPresenceOf,validatesUniquenessOf">
 	<cfargument name="properties" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="regEx" type="string" required="false" default="" hint="Regular expression to verify against.">
-	<cfargument name="type" type="string" required="false" default="" hint="One of the following types to test against: creditcard, date, email, eurodate, guid, social_security_number, ssn, telephone, time, URL, USdate, UUID, zipcode (will be passed through to CFML's `isValid` function).">
+	<cfargument name="type" type="string" required="false" default="" hint="One of the following types to verify against: `creditcard`, `date`, `email`, `eurodate`, `guid`, `social_security_number`, `ssn`, `telephone`, `time`, `URL`, `USdate`, `UUID`, `zipcode` (will be passed through to CFML's `isValid` function).">
 	<cfargument name="message" type="string" required="false" default="#application.wheels.functions.validatesFormatOf.message#" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="allowBlank" type="boolean" required="false" default="#application.wheels.functions.validatesFormatOf.allowBlank#" hint="See documentation for @validatesExclusionOf.">
@@ -74,11 +68,8 @@
 <cffunction name="validatesInclusionOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property exists in the supplied list."
 	examples=
 	'
-		<!--- In models/User.cfc --->
-		<cffunction name="init">
-			<!--- Make sure that the user selects either "Wheels" or "Rails" as their framework --->
-  			<cfset validatesInclusionOf(property="frameworkOfChoice", list="wheels,rails", message="Please try again and this time select a decent framework.")>
-		</cffunction>
+		<!--- Make sure that the user selects either "Wheels" or "Rails" as their framework --->
+		<cfset validatesInclusionOf(property="frameworkOfChoice", list="wheels,rails", message="Please try again and this time select a decent framework.")>
 	'
 	categories="model-initialization,validation" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesFormatOf,validatesLengthOf,validatesNumericalityOf,validatesPresenceOf,validatesUniquenessOf">
 	<cfargument name="properties" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
@@ -94,14 +85,14 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="validatesLengthOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property matches the length requirements supplied. Only one of the `exactly`, `maximum`, `minimum` and `within` arguments can be used at a time."
+<cffunction name="validatesLengthOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property matches the length requirements supplied. Use the `exactly`, `maximum`, `minimum` and `within` arguments to specify the length requirements."
 	examples=
 	'
-		<!--- In models/User.cfc --->
-		<cffunction name="init">
-			<!--- Make sure that the username chosen is not more than 50 characters --->
-  			<cfset validatesLengthOf(property="username", maximum=50, message="Please limit your username to 50 characters please.")>
-		</cffunction>
+		<!--- Make sure that the `firstname` and `lastName` properties are not more than 50 characters and use square brackets to dynamically insert the property name when the error message is displayed to the user (the `firstName` property will be displayed as "first name") --->
+		<cfset validatesLengthOf(properties="firstName,lastName", maximum=50, message="Please shorten your [property] please, 50 characters is the maximum length allowed.")>
+
+		<!--- Make sure that the `password` property is between 4 and 15 characters --->
+		<cfset validatesLengthOf(property="password", within="4,20", message="The password length has to be between 4 and 20 characters.")>
 	'
 	categories="model-initialization,validation" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesFormatOf,validatesInclusionOf,validatesNumericalityOf,validatesPresenceOf,validatesUniquenessOf">
 	<cfargument name="properties" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
@@ -124,11 +115,8 @@
 <cffunction name="validatesNumericalityOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property is numeric."
 	examples=
 	'
-		<!--- In models/User.cfc --->
-		<cffunction name="init">
-			<!--- Make sure that the score entered is a number with no decimals --->
-  			<cfset validatesNumericalityOf(property="score", onlyInteger=true, message="Please enter a correct score.")>
-		</cffunction>
+		<!--- Make sure that the score is a number with no decimals but only when a score is supplied (setting `allowBlank` to `true` means that objects are allowed to be saved without scores, typically resulting in `NULL` values being inserted in the database table) --->
+		<cfset validatesNumericalityOf(property="score", onlyInteger=true, allowBlank=true, message="Please enter a correct score.")>
 	'
 	categories="model-initialization,validation" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesFormatOf,validatesInclusionOf,validatesLengthOf,validatesPresenceOf,validatesUniquenessOf">
 	<cfargument name="properties" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
@@ -144,11 +132,8 @@
 <cffunction name="validatesPresenceOf" returntype="void" access="public" output="false" hint="Validates that the specified property exists and that its value is not blank."
 	examples=
 	'
-		<!--- In models/User.cfc --->
-		<cffunction name="init">
-			<!--- Make sure that the user data can not be saved to the database without the `emailAddress` property --->
-  			<cfset validatesPresenceOf(property="emailAddress", message="You forgot to enter your email address!")>
-		</cffunction>
+		<!--- Make sure that the user data can not be saved to the database without the `emailAddress` property (it has to exist and not be an empty string) --->
+		<cfset validatesPresenceOf("emailAddress")>
 	'
 	categories="model-initialization,validation" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesFormatOf,validatesInclusionOf,validatesLengthOf,validatesNumericalityOf,validatesUniquenessOf">
 	<cfargument name="properties" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
@@ -162,11 +147,11 @@
 <cffunction name="validatesUniquenessOf" returntype="void" access="public" output="false" hint="Validates that the value of the specified property is unique in the database table. Useful for ensuring that two users can't sign up to a website with identical screen names for example. When a new record is created a check is made to make sure that no record already exists in the database with the given value for the specified property. When the record is updated the same check is made but disregarding the record itself."
 	examples=
 	'
-		<!--- In models/User.cfc --->
-		<cffunction name="init">
-			<!--- Make sure that two users with the same screen name won''t ever exist in the database (although to be 100% safe you should consider using database locking as well) --->
-  			<cfset validatesUniquenessOf(property="username", message="Sorry, that username is already taken.")>
-		</cffunction>
+		<!--- Make sure that two users with the same screen name won''t ever exist in the database (although to be 100% safe you should consider using database locking as well) --->
+		<cfset validatesUniquenessOf(property="username", message="Sorry, that username is already taken.")>
+
+		<!--- Same as above but allow identical user names as long as they belong to a different account --->
+		<cfset validatesUniquenessOf(property="username", scope="accountId")>
 	'
 	categories="model-initialization,validation" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesFormatOf,validatesInclusionOf,validatesLengthOf,validatesNumericalityOf,validatesPresenceOf">
 	<cfargument name="properties" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
@@ -187,7 +172,6 @@
 <cffunction name="validate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called to validate objects before they are saved."
 	examples=
 	'
-		<!--- In models/User.cfc --->
 		<cffunction name="init">
 			<!--- Register the `check` method below to be called to validate objects before they are saved --->
 			<cfset validate("check")>
@@ -206,7 +190,6 @@
 <cffunction name="validateOnCreate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called to validate new objects before they are inserted."
 	examples=
 	'
-		<!--- In models/User.cfc --->
 		<cffunction name="init">
 			<!--- Register the `check` method below to be called to validate new objects before they are inserted --->
 			<cfset validateOnCreate("check")>
@@ -225,7 +208,6 @@
 <cffunction name="validateOnUpdate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called to validate existing objects before they are updated."
 	examples=
 	'
-		<!--- In models/User.cfc --->
 		<cffunction name="init">
 			<!--- Register the `check` method below to be called to validate existing objects before they are updated --->
 			<cfset validateOnUpdate("check")>
@@ -246,7 +228,7 @@
 <cffunction name="valid" returntype="boolean" access="public" output="false" hint="Runs the validation on the object and returns `true` if it passes it. Wheels will run the validation process automatically whenever an object is saved to the database but sometimes it's useful to be able to run this method to see if the object is valid without saving it to the database."
 	examples=
 	'
-		<!--- Check if a user is valid before proceeding with execution of something --->
+		<!--- Check if a user is valid before proceeding with execution --->
 		<cfif user.isValid()>
 			<!--- Do something here --->
 		</cfif>
@@ -257,11 +239,13 @@
 		loc.returnValue = false;
 		if (isNew())
 		{
+			// if this is a brand new object that has not been saved to the database we validate the `onCreate` methods (`onSave` methods are always called)
 			if ($validate("onCreate") && $validate("onSave"))
 				loc.returnValue = true;
 		}
 		else
 		{
+			// if this record already exists in the database we validate the `onUpdate` methods
 			if ($validate("onUpdate") && $validate("onSave"))
 				loc.returnValue = true;
 		}
@@ -275,6 +259,8 @@
 	<cfargument name="when" type="string" required="true">
 	<cfscript>
 		var loc = {};
+		
+		// combine `method`/`methods` and `property`/`properties` into one variables for easier processing below
 		if (StructKeyExists(arguments, "method"))
 		{
 			arguments.methods = arguments.method;
@@ -285,21 +271,26 @@
 			arguments.properties = arguments.property;
 			StructDelete(arguments, "property");
 		}
+
+		// when using the core validations the developer needs to pass in specific properties, throw an error if they haven't
 		if (application.wheels.showErrorInformation)
 		{
 			if (StructKeyExists(arguments, "properties"))
 			{
-				// when using the core validations the developer needs to pass in specific properties
 				if (!Len(arguments.properties))
 					$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="Please pass in the names of the properties you want to validate. Use either the `property` argument (for a single property) or the `properties` argument (for a list of properties) to do this.");
 			}
 		}
+
+		// loop through all methods and properties and add info for each to the `class` struct
 		loc.iEnd = ListLen(arguments.methods);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.jEnd = 1; // only loop once by default (will be used on the lower level validation helpers that do not take arguments: validate, validateOnCreate and validateOnUpdate)
+			// only loop once by default (will be used on the lower level validation helpers that do not take arguments: `validate`, `validateOnCreate` and `validateOnUpdate`)
+			loc.jEnd = 1; 
 			if (StructKeyExists(arguments, "properties"))
 				loc.jEnd = ListLen(arguments.properties);
+
 			for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 			{
 				loc.validation = {};
@@ -324,9 +315,13 @@
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
 		var returnValue = "";
-		returnValue = Replace(arguments.message, "[property]", LCase(humanize(arguments.property)), "all"); // turn variable names into words
+		
+		// turn property names into lower cased words
+		returnValue = Replace(arguments.message, "[property]", LCase(humanize(arguments.property)), "all"); 
+		
+		// capitalize the first word in the property name if it comes first in the sentence
 		if (Left(arguments.message, 10) == "[property]")
-			returnValue = capitalize(returnValue); // capitalize the first variable name word if it comes first in the sentence
+			returnValue = capitalize(returnValue); 
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
@@ -337,6 +332,8 @@
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
 		var loc = {};
+		
+		// loop through all validations for passed in type (`onSave`, `onCreate` etc) that has been set on this model object
 		loc.iEnd = ArrayLen(variables.wheels.class.validations[arguments.type]);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
@@ -354,11 +351,13 @@
 			{
 				if (loc.thisValidation.method == "$validatePresenceOf")
 				{
+					// if the property does not exist or if it's blank we add an error on the object (for all other validation types we call corresponding methods below instead)
 					if (!StructKeyExists(this, loc.thisValidation.args.property) || !Len(this[loc.thisValidation.args.property]))
 						addError(property=loc.thisValidation.args.property, message=loc.thisValidation.args.message);
 				}
 				else
 				{
+					// if the validation set does not allow blank values we can set an error right away, otherwise we call a method to run the actual check 
 					if (StructKeyExists(loc.thisValidation.args, "property") && StructKeyExists(loc.thisValidation.args, "allowBlank") && !loc.thisValidation.args.allowBlank && (!StructKeyExists(this, loc.thisValidation.args.property) || !Len(this[loc.thisValidation.args.property])))
 						addError(property=loc.thisValidation.args.property, message=loc.thisValidation.args.message);
 					else if (!StructKeyExists(loc.thisValidation.args, "property") || (StructKeyExists(this, loc.thisValidation.args.property) && Len(this[loc.thisValidation.args.property])))
@@ -366,6 +365,8 @@
 				}
 			}
 		}
+		
+		// now that we have run all the validation checks we can return `true` if no errors exist on the object, `false` otherwise
 		loc.returnValue = !hasErrors();
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -374,6 +375,8 @@
 <cffunction name="$evaluateValidationCondition" returntype="boolean" access="public" output="false" hint="Evaluates the condition to determine if the validation should be executed.">
 	<cfscript>
 		var returnValue = false;
+		// proceed with validation when `if` has been supplied and it evaluates to `true` or when `unless` has been supplied and it evaluates to `false`
+		// if both `if` and `unless` have been supplied though, they both need to be evaluated correctly (`true`/`false` that is) for validation to proceed
 		if ((!StructKeyExists(arguments, "if") || !Len(arguments.if) || Evaluate(arguments.if)) && (!StructKeyExists(arguments, "unless") || !Len(arguments.unless) || !Evaluate(arguments.unless)))
 			returnValue = true;
 	</cfscript>
@@ -447,25 +450,39 @@
 <cffunction name="$validateUniquenessOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesUniquenessOf method.">
 	<cfscript>
 		var loc = {};
+		
+		// create the WHERE clause to be used in the query that checks if an identical value already exists
+		// wrap value in single quotes unless it's numeric
+		// example: "userName='Joe'"
 		loc.where = arguments.property & "=";
 		if (!IsNumeric(this[arguments.property]))
 			loc.where = loc.where & "'";
 		loc.where = loc.where & this[arguments.property];
 		if (!IsNumeric(this[arguments.property]))
 			loc.where = loc.where & "'";
-		loc.iEnd = ListLen(arguments.scope);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		
+		// add scopes to the WHERE clause if passed in, this means that checks for other properties are done in the WHERE clause as well
+		// example: "userName='Joe'" becomes "userName='Joe' AND account=1" if scope is "account" for example
+		if (Len(arguments.scope))
 		{
-			loc.where = loc.where & " AND ";
-			loc.property = Trim(ListGetAt(arguments.scope, loc.i));
-			loc.where = loc.where & loc.property & "=";
-			if (!IsNumeric(this[loc.property]))
-				loc.where = loc.where & "'";
-			loc.where = loc.where & this[loc.property];
-			if (!IsNumeric(this[loc.property]))
-				loc.where = loc.where & "'";
+			loc.iEnd = ListLen(arguments.scope);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.where = loc.where & " AND ";
+				loc.property = Trim(ListGetAt(arguments.scope, loc.i));
+				loc.where = loc.where & loc.property & "=";
+				if (!IsNumeric(this[loc.property]))
+					loc.where = loc.where & "'";
+				loc.where = loc.where & this[loc.property];
+				if (!IsNumeric(this[loc.property]))
+					loc.where = loc.where & "'";
+			}
 		}
+		
+		// try to fetch existing object from the database
 		loc.existingObject = findOne(where=loc.where, reload=true);
+
+		// we add an error if an object was found in the database and the current object is either not saved yet or not the same as the one in the database
 		if (IsObject(loc.existingObject) && (isNew() || loc.existingObject.key() != key($persisted=true)))
 			addError(property=arguments.property, message=arguments.message);
 	</cfscript>
