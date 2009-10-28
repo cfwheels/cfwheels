@@ -373,24 +373,6 @@
 
 		<!--- Updates the object with `33` using named arguments --->
 		<cfset result = model("post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
-
-		<!--- If you have a `hasOne` association setup from `author` to `bio` you can do a scoped call (the `setBio` method below will call `model("bio").updateByKey(key=aBio.id, authorId=anAuthor.id)` internally) --->
-		<cfset anAuthor = model("author").findByKey(params.authorId)>
-		<cfset aBio = model("bio").findByKey(params.bioId)>
-		<cfset anAuthor.setBio(aBio)>
-
-		<!--- Another example with a `hasOne` association but this time we just pass in the primary key value --->
-		<cfset anAuthor = model("author").findByKey(params.authorId)>
-		<cfset anAuthor.setBio(1)>
-
-		<!--- If you have a `hasMany` association setup from `owner` to `car` you can do a scoped call (the `addCar` method below will call `model("car").updateByKey(key=aCar.id, ownerId=anOwner.id)` internally) --->
-		<cfset anOwner = model("owner").findByKey(params.ownerId)>
-		<cfset aCar = model("car").findByKey(params.carId)>
-		<cfset anOwner.addCar(aCar)>
-
-		<!--- Another example with a `hasMany` association --->
-		<cfset anOwner = model("owner").findByKey(params.ownerId)>
-		<cfset anOwner.addCar(1)>
 	'
 	categories="model-class" chapters="updating-records,associations" functions="hasOne,hasMany,update,updateAll,updateOne">
 	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
@@ -410,8 +392,12 @@
 	'
 		<!--- Sets the `new` property to `1` on the most recently released product --->
 		<cfset result = model("product").updateOne(order="releaseDate DESC", new=1)>
+
+		<!--- If you have a `hasOne` association setup from `user` to `profile` you can do a scoped call (the `removeProfile` method below will call `model("profile").updateOne(where="userId=##aUser.id##", userId="")` internally) --->
+		<cfset aUser = model("user").findByKey(params.userId)>
+		<cfset aUser.removeProfile()>
 	'
-	categories="model-class" chapters="updating-records" functions="update,updateAll,updateByKey">
+	categories="model-class" chapters="updating-records,associations" functions="hasOne,update,updateAll,updateByKey">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
@@ -514,8 +500,12 @@
 	'
 		<!--- Delete the user that signed up last --->
 		<cfset result = model("user").deleteOne(order="signupDate DESC")>
+
+		<!--- If you have a `hasOne` association setup from `user` to `profile` you can do a scoped call (the `deleteProfile` method below will call `model("profile").deleteOne(where="userId=##aUser.id##")` internally) --->
+		<cfset aUser = model("user").findByKey(params.userId)>
+		<cfset aUser.deleteProfile()>
 	'
-	categories="model-class" chapters="deleting-records" functions="delete,deleteAll,deleteOne">
+	categories="model-class" chapters="deleting-records,associations" functions="delete,deleteAll,deleteOne,hasOne">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfscript>
@@ -640,8 +630,23 @@
 		<!--- Get a post object and then update its title and other properties as decided by what is pased in from the URL/form --->
 		<cfset post = model("post").findByKey(params.key)>
 		<cfset post.update(title="New version of Wheels just released", properties=params.post)>
+
+		<!--- If you have a `hasOne` association setup from `author` to `bio` you can do a scoped call (the `setBio` method below will call `aBio.update(authorId=anAuthor.id)` internally) --->
+		<cfset anAuthor = model("author").findByKey(params.authorId)>
+		<cfset aBio = model("bio").findByKey(params.bioId)>
+		<cfset anAuthor.setBio(aBio)>
+
+		<!--- If you have a `hasMany` association setup from `owner` to `car` you can do a scoped call (the `addCar` method below will call `aCar.update(ownerId=anOwner.id)` internally) --->
+		<cfset anOwner = model("owner").findByKey(params.ownerId)>
+		<cfset aCar = model("car").findByKey(params.carId)>
+		<cfset anOwner.addCar(aCar)>
+
+		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call (the `removeComment` method below will call `aComment.update(postId="")` internally) --->
+		<cfset aPost = model("post").findByKey(params.postId)>
+		<cfset aComment = model("comment").findByKey(params.commentId)>
+		<cfset aPost.removeComment(aComment)>
 	'
-	categories="model-object" chapters="updating-records" functions="updateAll,updateByKey,updateOne">
+	categories="model-object" chapters="updating-records,associations" functions="hasMany,hasOne,updateAll,updateByKey,updateOne">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.update.parameterize#" hint="See documentation for @findAll.">
 	<cfscript>
@@ -663,8 +668,13 @@
 		<!--- Get a post object and then delete it from the database --->
 		<cfset aPost = model("post").findByKey(33)>
 		<cfset aPost.delete()>
+
+		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call (the `deleteComment` method below will call `aComment.delete()` internally) --->
+		<cfset aPost = model("post").findByKey(params.postId)>
+		<cfset aComment = model("comment").findByKey(params.commentId)>
+		<cfset aPost.deleteComment(aComment)>
 	'
-	categories="model-object" chapters="deleting-records" functions="deleteAll,deleteByKey,deleteOne">
+	categories="model-object" chapters="deleting-recordsm,associations" functions="deleteAll,deleteByKey,deleteOne,hasMany">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.delete.parameterize#" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
