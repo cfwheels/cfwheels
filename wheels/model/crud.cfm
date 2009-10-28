@@ -373,8 +373,26 @@
 
 		<!--- Updates the object with `33` using named arguments --->
 		<cfset result = model("post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
+
+		<!--- If you have a `hasOne` association setup from `author` to `bio` you can do a scoped call (the `setBio` method below will call `model("bio").updateByKey(key=aBio.id, authorId=anAuthor.id)` internally) --->
+		<cfset anAuthor = model("author").findByKey(params.authorId)>
+		<cfset aBio = model("bio").findByKey(params.bioId)>
+		<cfset anAuthor.setBio(aBio)>
+
+		<!--- Another example with a `hasOne` association but this time we just pass in the primary key value --->
+		<cfset anAuthor = model("author").findByKey(params.authorId)>
+		<cfset anAuthor.setBio(1)>
+
+		<!--- If you have a `hasMany` association setup from `owner` to `car` you can do a scoped call (the `addCar` method below will call `model("car").updateByKey(key=aCar.id, ownerId=anOwner.id)` internally) --->
+		<cfset anOwner = model("owner").findByKey(params.ownerId)>
+		<cfset aCar = model("car").findByKey(params.carId)>
+		<cfset anOwner.addCar(aCar)>
+
+		<!--- Another example with a `hasMany` association --->
+		<cfset anOwner = model("owner").findByKey(params.ownerId)>
+		<cfset anOwner.addCar(1)>
 	'
-	categories="model-class" chapters="updating-records" functions="update,updateAll,updateOne">
+	categories="model-class" chapters="updating-records,associations" functions="hasOne,hasMany,update,updateAll,updateOne">
 	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfscript>
@@ -679,8 +697,12 @@
 
 		<!--- Create a new author by passing in named arguments --->
 		<cfset newAuthor = model("author").new(firstName="John", lastName="Doe")>
+
+		<!--- If you have a `hasOne` or `hasMany` association setup from `customer` to `order` you can do a scoped call (the `newOrder` method below will call `model("order").new(customerId=aCustomer.id)` internally) --->
+		<cfset aCustomer = model("customer").findByKey(params.customerId)>
+		<cfset anOrder = aCustomer.newOrder(shipping=params.shipping)>
 	'
-	categories="model-class" chapters="creating-records" functions="create">
+	categories="model-class" chapters="creating-records,associations" functions="create,hasMany,hasOne">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="The properties you want to set on the object (can also be passed in as named arguments instead).">
 	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.new.defaults#" hint="See documentation for @save.">
 	<cfscript>
@@ -707,8 +729,12 @@
 			
 		<!--- Same as above using both named arguments and a struct --->
 		<cfset newAuthor = model("author").create(active=1, properties=params.author)>
+
+		<!--- If you have a `hasOne` or `hasMany` association setup from `customer` to `order` you can do a scoped call (the `createOrder` method below will call `model("order").create(customerId=aCustomer.id, shipping=params.shipping)` internally) --->
+		<cfset aCustomer = model("customer").findByKey(params.customerId)>
+		<cfset anOrder = aCustomer.createOrder(shipping=params.shipping)>
 	'
-	categories="model-class" chapters="creating-records" functions="new">
+	categories="model-class" chapters="creating-records,associations" functions="hasOne,hasMany,new">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.create.defaults#" hint="See documentation for @save.">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.create.parameterize#" hint="See documentation for @save.">
