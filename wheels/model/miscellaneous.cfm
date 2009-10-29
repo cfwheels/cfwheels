@@ -37,16 +37,17 @@
 		<cfset user.setProperties(params)>
 	'	
 	categories="model-object" chapters="" functions="properties">
-	<cfargument name="properties" type="struct" required="false">
+	<cfargument name="properties" type="struct" required="false" default="#structnew()#">
 	<cfscript>
 	var loc = {};
-	if (!structkeyexists(arguments, "properties"))
-		arguments.properties = arguments;
-	for (loc.key in arguments.properties)
+	loc.properties = duplicate(arguments.properties);
+	structdelete(arguments, "properties", false);
+	structappend(loc.properties, arguments, true);
+	for (loc.key in loc.properties)
 	{
 		if (ListFindNoCase(variables.wheels.class.propertyList, loc.key))
 		{
-			this[loc.key] = arguments.properties[loc.key];
+			this[loc.key] = loc.properties[loc.key];
 		}
 	}
 	</cfscript>
