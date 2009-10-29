@@ -1,11 +1,15 @@
-<cffunction name="belongsTo" returntype="void" access="public" output="false"
-	hint="Sets up a `belongsTo` association between this model and the specified one."
+<!--- PUBLIC MODEL INITIALIZATION METHODS --->
+
+<cffunction name="belongsTo" returntype="void" access="public" output="false" hint="Sets up a `belongsTo` association between this model and the specified one."
 	examples=
 	'
 		<!--- Specify that instances of this model belongs to an author (the table for this model should have a foreign key set on it, typically named `authorid`) --->
 		<cfset belongsTo("author")>
+
+		<!--- Same as above but since we give the association a different name we have to set `class` and `foreignKey` since Wheels won''t be able to figure it out based on the association name anymore --->
+		<cfset belongsTo(name="bookWriter", class="author", foreignKey="authorId")>
 	'
-	categories="model-initialization" chapters="associations" functions="hasOne,hasMany">
+	categories="model-initialization,associations" chapters="associations" functions="hasOne,hasMany">
 	<cfargument name="name" type="string" required="true" hint="Gives the association a name that you refer to when working with the association (in the `include` argument to @findAll to name one example).">
 	<cfargument name="class" type="string" required="false" default="" hint="Name of associated class (usually not needed if you follow the Wheels conventions since the model name will be deduced from the `name` argument).">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="Foreign key property name (usually not needed if you follow the Wheels conventions since the foreign key name will be deduced from the `name` argument).">
@@ -17,14 +21,16 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="hasMany" returntype="void" access="public" output="false"
-	hint="Sets up a `hasMany` association between this model and the specified one."
+<cffunction name="hasMany" returntype="void" access="public" output="false" hint="Sets up a `hasMany` association between this model and the specified one."
 	examples=
 	'
 		<!--- Specify that instances of this model has many comments (the table for the associated model, not the current, should have the foreign key set on it) --->
 		<cfset hasMany("comments")>
+
+		<!--- Specify that this model (let''s call it `reader` in this case) has many subscriptions and setup a shortcut to the `magazine` model (useful when dealing with many to many relationships) --->
+		<cfset hasMany(name="subscriptions", shortcut="magazines")>
 	'
-	categories="model-initialization" chapters="associations" functions="belongsTo,hasOne">
+	categories="model-initialization,associations" chapters="associations" functions="belongsTo,hasOne">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @belongsTo.">
 	<cfargument name="class" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
@@ -38,14 +44,16 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="hasOne" returntype="void" access="public" output="false"
-	hint="Sets up a `hasOne` association between this model and the specified one."
+<cffunction name="hasOne" returntype="void" access="public" output="false" hint="Sets up a `hasOne` association between this model and the specified one."
 	examples=
 	'
 		<!--- Specify that instances of this model has one profile (the table for the associated model, not the current, should have the foreign key set on it) --->
 		<cfset hasOne("profile")>
+
+		<!--- Same as above but setting the `joinType` to `inner` which basically means this model should always have a record in the `profiles` table --->
+		<cfset hasOne(name="profile", joinType="inner")>
 	'
-	categories="model-initialization" chapters="associations" functions="belongsTo,hasMany">
+	categories="model-initialization,associations" chapters="associations" functions="belongsTo,hasMany">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @belongsTo.">
 	<cfargument name="class" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
@@ -57,12 +65,14 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$registerAssociation" returntype="void" access="public" output="false">
+<!--- PRIVATE MODEL INITIALIZATION METHODS --->
+
+<cffunction name="$registerAssociation" returntype="void" access="public" output="false" hint="Called from the association methods above to save the data to the `class` struct of the model.">
 	<cfscript>
-		var loc = {};
+		var key = "";
 		variables.wheels.class.associations[arguments.name] = {};
-		for (loc.key in arguments)
-			if (loc.key != "name")
-				variables.wheels.class.associations[arguments.name][loc.key] = arguments[loc.key];
+		for (key in arguments)
+			if (key != "name")
+				variables.wheels.class.associations[arguments.name][key] = arguments[key];
 	</cfscript>
 </cffunction>
