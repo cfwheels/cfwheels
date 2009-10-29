@@ -1,3 +1,11 @@
 *EDGE*
 
-* updated model error functions to take and perform actions with properties and name - r3231 [Tony Petruzzi]
+* Support passing in a single column query to select() and selectTag() - #300 [Tony Petruzzi]
+
+* Turned off URL rewriting rules by default. - [Per Djurner]
+
+* Allow negative values in where clause - [Don]
+
+* Added "xml" data type to SQL Server adapter - #295 [Per Djurner]
+
+* Updated model error functions to take and perform actions with properties and name - [Tony Petruzzi]
