@@ -33,36 +33,37 @@
 	examples=
 	'
 		<!--- update the properties of the model with the params struct containing the values of a form post --->
-		<cfset user = model("user").setProperties(params)>
+		<cfset user = model("user").new(params)>
+		<cfset user.setProperties(params)>
 	'	
 	categories="model-object" chapters="" functions="properties">
-	<cfargument name="values" type="struct" required="true">
+	<cfargument name="properties" type="struct" required="false">
 	<cfscript>
 	var loc = {};
-	for (loc.key in arguments.values)
+	if (!structkeyexists(arguments, "properties"))
+		arguments.properties = arguments;
+	for (loc.key in arguments.properties)
 	{
 		if (ListFindNoCase(variables.wheels.class.propertyList, loc.key))
 		{
-			this[loc.key] = arguments.values[loc.key];
+			this[loc.key] = arguments.properties[loc.key];
 		}
 	}
 	</cfscript>
 </cffunction>
-
-
 
 <cffunction name="properties" returntype="struct" access="public" output="false"
 	hint="Returns a structure of all the properties with their names as keys and the values of the property as values."
 	example=
 	'
 		<!--- Get a structure of all the properties for a given model --->
-		<cfset allProperties = model("user").properties()>
+		<cfset user = model("user").new()>
+		<cfset user.properties()>
 		
 	'		
 	categories="model-object" chapters="" functions="setProperties">	
 	<cfscript>
 	var loc = {};
-	// by default we will return a structure containing the properties and their current values
 	loc.returnvalue = {};
 	loc.properties = ListToArray(variables.wheels.class.propertyList);
 	loc.iEnd = ArrayLen(loc.properties);
@@ -73,10 +74,6 @@
 		if(structkeyexists(this, loc.property))
 		{
 			loc.returnvalue[loc.property] = this[loc.property];
-		}
-		else
-		{
-			loc.returnvalue[loc.property] = variables.wheels.class.properties[loc.property].defaultValue;
 		}
 	}
 	return loc.returnvalue;

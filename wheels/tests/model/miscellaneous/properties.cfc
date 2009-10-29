@@ -27,7 +27,16 @@
 
 		<cfset loc.properties = loc.user.properties()>
 
-		<cfset halt(false, "loc.properties")>
+		<cfloop collection="#loc.properties#" item="loc.i">
+			<cfset assert("loc.properties[loc.i] eq loc.args[loc.i]")>
+		</cfloop>
+
+		<cfset loc.args.FirstName = "per">
+		<cfset loc.args.LastName = "djurner">
+
+		<cfset loc.user.setproperties(firstname="per", lastname="djurner")>
+		<cfset loc.properties = loc.user.properties()>
+
 		<cfloop collection="#loc.properties#" item="loc.i">
 			<cfset assert("loc.properties[loc.i] eq loc.args[loc.i]")>
 		</cfloop>
