@@ -232,15 +232,9 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$flatten" returntype="string" access="public" output="false">
-	<cfargument name="values" type="any" required="true">
-	<cfset $deprecated("$flatten() is marked for deprecation and will be removed in a future version of wheels. Consider using the serializeJSON() method instead")>
-	<cfreturn serializejson(arguments.values)>
-</cffunction>
-
 <cffunction name="$hashStruct" returntype="string" access="public" output="false">
 	<cfargument name="args" type="struct" required="true">
-	<cfreturn Hash(serializejson(arguments.args))>
+	<cfreturn Hash(SerializeJSON(arguments.args))>
 </cffunction>
 
 <cffunction name="$addToCache" returntype="void" access="public" output="false">
