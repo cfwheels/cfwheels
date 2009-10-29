@@ -70,4 +70,4 @@ Fixed Issues
 
 * Removed unnecessary singularization for hasOne associations - Groups [Per Djurner]
 
-* Allowing negative values in where clause - Groups [Don, Tony Petruzzi]
+* Allowing negative values in where clause - Groups [Don Humphreys, Tony Petruzzi]
