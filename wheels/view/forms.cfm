@@ -1249,7 +1249,7 @@
 				loc.columns = "";
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					loc.columns = ListAppend(loc.columns, loc.info[loc.i].name);
-				if(ListLen(loc.columns) eq 1)
+				if (ListLen(loc.columns) == 1)
 				{
 					arguments.valueField = ListGetAt(loc.columns, 1);
 					arguments.textField = ListGetAt(loc.columns, 1);
