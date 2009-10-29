@@ -1,11 +1,73 @@
-*EDGE*
+1.0
 
-* Support passing in a single column query to select() and selectTag() - #300 [Tony Petruzzi]
+Changes
+=======
 
-* Turned off URL rewriting rules by default. - [Per Djurner]
+* Support for if/unless in validate, validateOnCreate, validateOnUpdate - [Per Djurner]
 
-* Allow negative values in where clause - [Don]
+* Support for built-in CFML types in validatesFormatOf - [Per Djurner]
 
-* Added "xml" data type to SQL Server adapter - #295 [Per Djurner]
+* Allow passing along the original where clause when paginating with a criteria on the joined table - [Per Djurner]
 
-* Updated model error functions to take and perform actions with properties and name - [Tony Petruzzi]
+* Allow dynamic methods to be called through callbacks - [Per Djurner]
+
+* Plugin developer can specify a list of supported Wheels version instead of just one version - [Per Djurner]
+
+* Railo specific cfquery attribute called "psq" - [Per Djurner]
+
+* Rewrite Rules for IIS7 - [Per Djruner]
+
+* Rewrite support in sub folders in Apache - [Per Djurner]
+
+Fixed Issues
+============
+
+* styleSheetLinkTag: Element SOURCES is undefined in ARGUMENTS - #201 [Per Djurner]
+
+* Caches: Minor issue with arguments - #264 [William Fisk, Per Djurner]
+
+* $insertDefaults: Another minor issue - #265 [William Fisk, Per Djurner]
+
+* Refactor validations - #266 [Per Djurner]
+
+* $optionsForSelect() with humanize() for array text - #267 [James Gibson, Per Djurner]
+
+* Railo slowness - #268 [Per Djurner]
+
+* sendEmail() layout on mutlipart emails - #269 [Chris Peters, Per Djurner]
+
+* AllowBlank argument on validatesUniquenessOf - #271 [Per Djurner]
+
+* Flash variables not showing - #273 [Per Djurner]
+
+* RadioButton ids do not work properly when radio button has negative number value - #274 [Elezotte, Per Djurner]
+
+* All production checks should be changed to showErrorInformation - #276 [Tony Petruzzi]
+
+* copy cgi scope to request scope - #277 [Tony Petruzzi, James Gibson, Per Djurner]
+
+* Turn off rewriting for /robots.txt - #278 [Chris Peters, Per Djurner]
+
+* Trim final output's white space - #279 [Chris Peters, Per Djurner]
+
+* Still some presence of /rewrite.cfm - #280 [Raul Riera, Per Djurner]
+
+* includePartial() error with caching - #285 [James Gibson, Per Djurner]
+
+* includePartial() / renderPartial() passing an empty array error - #287 [James Gibson, Per Djurner]
+
+* inject plugins into application scope - #288 [James Gibson]
+
+* Can't load null error - #289 [Guptasameer84, Per Djurner]
+
+* Invalid web.config XML file in SVN - #290 [Guptasameer84, Per Djurner]
+
+* new request.cgi scope does not get the http_x_requested_with variable copied over - #294 [James Gibson]
+
+* Add xml datatype for SQL Server 2005/2008 #295 [Andybellenie, Per Djurner]
+
+* Support passing in a single column query to select() and selectTag() - #300 [Tony Petruzi]
+
+* Removed unnecessary singularization for hasOne associations - Groups [Per Djurner]
+
+* Allowing negative values in where clause - Groups [Don, Tony Petruzzi]
