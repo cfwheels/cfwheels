@@ -23,7 +23,7 @@
 		<cfset loc.args.birthdaymonth = "11">
 		<cfset loc.args.birthdayyear = "1975">
 
-		<cfset loc.user.properties(loc.args)>
+		<cfset loc.user.setproperties(loc.args)>
 
 		<cfset loc.properties = loc.user.properties()>
 
@@ -31,7 +31,6 @@
 		<cfloop collection="#loc.properties#" item="loc.i">
 			<cfset assert("loc.properties[loc.i] eq loc.args[loc.i]")>
 		</cfloop>
-
 	</cffunction>
 
 </cfcomponent>

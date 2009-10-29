@@ -28,24 +28,40 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="properties" returntype="any" access="public" output="false">
-	<cfargument name="values" type="any" required="false" default="">
+<cffunction name="setProperties" returntype="void" access="public" output="false"
+	hint="Allows you to set all the properties at once by passing in a structure with keys matching the property names."
+	examples=
+	'
+		<!--- update the properties of the model with the params struct containing the values of a form post --->
+		<cfset user = model("user").setProperties(params)>
+	'	
+	categories="model-object" chapters="" functions="properties">
+	<cfargument name="values" type="struct" required="true">
 	<cfscript>
 	var loc = {};
-
-	// when a structure is passed in, set the properties of the object to values within the structure
-	if(isStruct(arguments.values))
+	for (loc.key in arguments.values)
 	{
-		for(loc.key in arguments.values)
+		if (ListFindNoCase(variables.wheels.class.propertyList, loc.key))
 		{
-			if(ListFindNoCase(variables.wheels.class.propertyList, loc.key))
-			{
-				this[loc.key] = arguments.values[loc.key];
-			}
+			this[loc.key] = arguments.values[loc.key];
 		}
-		return;
 	}
+	</cfscript>
+</cffunction>
 
+
+
+<cffunction name="properties" returntype="struct" access="public" output="false"
+	hint="Returns a structure of all the properties with their names as keys and the values of the property as values."
+	example=
+	'
+		<!--- Get a structure of all the properties for a given model --->
+		<cfset allProperties = model("user").properties()>
+		
+	'		
+	categories="model-object" chapters="" functions="setProperties">	
+	<cfscript>
+	var loc = {};
 	// by default we will return a structure containing the properties and their current values
 	loc.returnvalue = {};
 	loc.properties = ListToArray(variables.wheels.class.propertyList);
