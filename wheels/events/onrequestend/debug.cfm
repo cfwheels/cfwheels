@@ -33,8 +33,14 @@
 }
 </style>
 
-<cfset loc.baseReloadURL = ReplaceNoCase(ReplaceNoCase(cgi.script_name, "/", ""), "rewrite.cfm", "") & cgi.path_info & IIf(Len(cgi.query_string), "'?'&cgi.query_string", "")> 
-<cfset loc.baseReloadURL = Replace(loc.baseReloadURL, "index.cfm/index.cfm", "index.cfm")>
+<cfset loc.baseReloadURL = cgi.script_name> 
+<cfif cgi.path_info IS NOT cgi.script_name>
+	<cfset loc.baseReloadURL = loc.baseReloadURL & cgi.path_info> 
+</cfif>
+<cfif Len(cgi.query_string)>
+	<cfset loc.baseReloadURL = loc.baseReloadURL & "?" & cgi.query_string> 
+</cfif>
+<cfset loc.baseReloadURL = ReplaceNoCase(loc.baseReloadURL, "/rewrite.cfm", "")> 
 <cfloop list="design,development,testing,maintenance,production,true" index="loc.i">
 	<cfset loc.baseReloadURL = ReplaceNoCase(ReplaceNoCase(loc.baseReloadURL, "?reload=" & loc.i, ""), "&reload=" & loc.i, "")>
 </cfloop>
