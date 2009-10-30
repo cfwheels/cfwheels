@@ -47,7 +47,7 @@
 
 <cfoutput>
 <div id="wheels-debug-area">
-	<table cellspacing="0">
+	<table cellspacing="0" cellpadding="0">
 		<cfif Len(application.wheels.incompatiblePlugins) OR Len(application.wheels.dependantPlugins) OR NOT ArrayIsEmpty(request.wheels.deprecation)>
 			<tr>
 				<td valign="top"><strong><span style="color:red;">Warnings:</span></strong></td>
@@ -67,7 +67,7 @@
 			</tr>
 		</cfif>
 		<tr>
-			<td valign="top"><strong>Application:</strong></td>
+			<td valign="top" style="width:125px;"><strong>Application:</strong></td>
 			<td>#application.applicationName#<cfif NOT Len(get("reloadPassword")) OR get("enableTests")> [<cfif NOT Len(get("reloadPassword"))><a href="#loc.baseReloadURL#true">Reload</a></cfif><cfif NOT Len(get("reloadPassword")) AND get("enableTests")>, </cfif><cfif get("enableTests")><a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=app&reload=true">Run Tests</a></cfif>]</cfif></td>
 		</tr>
 		<tr>
@@ -141,19 +141,7 @@
 		</tr>
 		<tr>
 			<td valign="top"><strong>Execution Time:</strong></td>
-			<td>#request.wheels.execution.total#ms</td>
-		</tr>
-		<tr>
-			<td valign="top"><strong>Execution Time Details:&nbsp;</strong></td>
-			<td>
-			<cfset loc.keys = StructSort(request.wheels.execution, "numeric", "desc")>
-			<cfloop from="1" to="#arrayLen(loc.keys)#" index="loc.i">
-				<cfset loc.key = loc.keys[loc.i]>
-				<cfif loc.key IS NOT "total">
-					~#request.wheels.execution[loc.key]#ms - #lCase(loc.key)#<br />
-				</cfif>
-			</cfloop>
-		</td>
+			<td>#request.wheels.execution.total#ms<cfif request.wheels.execution.total GT 0> (<cfset loc.keys = StructSort(request.wheels.execution, "numeric", "desc")><cfset loc.firstDone = false><cfloop from="1" to="#arrayLen(loc.keys)#" index="loc.i"><cfset loc.key = loc.keys[loc.i]><cfif loc.key IS NOT "total" AND request.wheels.execution[loc.key] GT 0><cfif loc.firstDone>, </cfif>#LCase(loc.key)# ~#request.wheels.execution[loc.key]#ms<cfset loc.firstDone = true></cfif></cfloop>)</cfif></td>
 		</tr>
 	</table>
 </div>
