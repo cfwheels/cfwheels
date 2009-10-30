@@ -39,12 +39,6 @@
 		padding: 15px;
 	}
 
-	#footer p
-	{
-		font-family: Arial;
-		font-size: 10px;
-	}
-
 	h1
 	{
 		font-size: 24px;
@@ -136,8 +130,7 @@
 		text-decoration: none;
 	}
 	
-	#logo #cf a:first-letter,
-	#logo #wheels a:first-letter
+	#logo #cf a:first-letter, #logo #wheels a:first-letter
 	{
 		font-size: 125%;
 	}
