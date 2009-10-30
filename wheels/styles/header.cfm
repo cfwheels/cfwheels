@@ -97,7 +97,7 @@
 	{
 	  border: 1px solid #a6a2a2;
 	  overflow-x: auto;
-	  width: 646px;
+	  width: 638px;
 	  padding: 15px;
 	  margin-bottom: 15px;
 	  background: #ffffe0;
