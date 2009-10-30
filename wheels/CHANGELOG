@@ -3,71 +3,45 @@
 Changes
 =======
 
-* Support for if/unless in validate, validateOnCreate, validateOnUpdate - [Per Djurner]
-
-* Support for built-in CFML types in validatesFormatOf - [Per Djurner]
-
-* Allow passing along the original where clause when paginating with a criteria on the joined table - [Per Djurner]
-
-* Allow dynamic methods to be called through callbacks - [Per Djurner]
-
-* Plugin developer can specify a list of supported Wheels version instead of just one version - [Per Djurner]
-
-* Railo specific cfquery attribute called "psq" - [Per Djurner]
-
-* Rewrite Rules for IIS7 - [Per Djruner]
-
-* Rewrite support in sub folders in Apache - [Per Djurner]
-
-Fixed Issues
-============
-
-* styleSheetLinkTag: Element SOURCES is undefined in ARGUMENTS - #201 [Per Djurner]
-
-* Caches: Minor issue with arguments - #264 [William Fisk, Per Djurner]
-
-* $insertDefaults: Another minor issue - #265 [William Fisk, Per Djurner]
-
-* Refactor validations - #266 [Per Djurner]
-
-* $optionsForSelect() with humanize() for array text - #267 [James Gibson, Per Djurner]
-
-* Railo slowness - #268 [Per Djurner]
-
-* sendEmail() layout on mutlipart emails - #269 [Chris Peters, Per Djurner]
-
-* AllowBlank argument on validatesUniquenessOf - #271 [Per Djurner]
-
-* Flash variables not showing - #273 [Per Djurner]
-
-* RadioButton ids do not work properly when radio button has negative number value - #274 [Elezotte, Per Djurner]
-
-* All production checks should be changed to showErrorInformation - #276 [Tony Petruzzi]
-
-* copy cgi scope to request scope - #277 [Tony Petruzzi, James Gibson, Per Djurner]
-
-* Turn off rewriting for /robots.txt - #278 [Chris Peters, Per Djurner]
-
+* Support for "if"/"unless" in validate(), validateOnCreate() and validateOnUpdate() - [Per Djurner]
+* Support for built-in CFML types in validatesFormatOf() - [Raul Riera, Per Djurner]
+* Allow plugin developer to specify a list of supported Wheels versions instead of just one - [Chris Peters, Per Djurner]
+* Rewrite Rules for IIS7 - [Sameer Gupta, Mike Rampton, Per Djurner]
+* Rewrite support in sub folders in Apache - [Peter Amiri]
+* Added "allowBlank" argument on validatesUniquenessOf() - #271 [Per Djurner]
+* Methods from plugins can now be injected to "Application.cfc" - #288 [James Gibson, Per Djurner]
+* Consistent style and reload links added to debug area - [Per Djurner]
+* Added "xml" datatype for SQL Server 2005/2008 - #295 [Andy Bellenie, Per Djurner]
+* Turned off rewriting for "robots.txt" file - #278 [Chris Peters, Per Djurner]
 * Trim final output's white space - #279 [Chris Peters, Per Djurner]
+* Humanized list / array items in $optionsForSelect() - #267 [James Gibson]
+* Updated model error functions to take and perform actions with properties and name errors - [Tony Petruzzi]
 
-* Still some presence of /rewrite.cfm - #280 [Raul Riera, Per Djurner]
-
-* includePartial() error with caching - #285 [James Gibson, Per Djurner]
-
-* includePartial() / renderPartial() passing an empty array error - #287 [James Gibson, Per Djurner]
-
-* inject plugins into application scope - #288 [James Gibson]
-
-* Can't load null error - #289 [Guptasameer84, Per Djurner]
-
-* Invalid web.config XML file in SVN - #290 [Guptasameer84, Per Djurner]
-
-* new request.cgi scope does not get the http_x_requested_with variable copied over - #294 [James Gibson]
-
-* Add xml datatype for SQL Server 2005/2008 #295 [Andybellenie, Per Djurner]
-
-* Support passing in a single column query to select() and selectTag() - #300 [Tony Petruzi]
-
-* Removed unnecessary singularization for hasOne associations - Groups [Per Djurner]
-
+Fixes
+============
+* Allow dynamic methods to be called through callbacks - [James Gibson, Per Djurner]
+* Fixed so you can pass in the "properties" argument to dynamic methods (it was overridden previously) - [Per Djurner]
+* Added the Railo specific cfquery attribute called "psq" - [Raul Riera, Per Djurner]
+* Allow passing along the original where clause when paginating with a criteria on a joined table - Groups [Don Humphreys, Per Djurner]
+* Removed unnecessary singularization for associations - Groups [Don Humphreys, Per Djurner]
+* Fixed so validations respect the "allowBlank" setting - Groups [Raul Riera, Per Djurner]
+* Corrected execution time report when reloading application - [Tony Petruzzi, Per Djurner]
 * Allowing negative values in where clause - Groups [Don Humphreys, Tony Petruzzi]
+* Work-around for a Railo mapping bug that was causing slowness - #268 [Tony Petruzzi, Per Djurner]
+* Fixed an includePartial() error with caching that occured in production mode - #285 [James Gibson, Per Djurner]
+* Support passing in a single column query to select() and selectTag() - #300 [Tony Petruzzi]
+* Fixed radio button ids to work properly with negative number values - #274 [Elezotte, Per Djurner]
+* Removed display of "rewrite.cfm" in error emails - #280 [Raul Riera, Per Djurner]
+* Fix for layout handling in sendEmail() on multipart emails - #269 [Chris Peters, Per Djurner]
+* Throw Wheels errors based on the "showErrorInformation" setting instead of production mode - #276 [Tony Petruzzi, Per Djurner]
+* Fixed so includePartial() / renderPartial() returns a blank string when passed an empty array instead of an error - #287 [James Gibson, Per Djurner]
+* Fixed a problem with file naming and case on Linux / Unix when using helpers and plugins - [Chris Peters, Per Djurner]
+* Fixed so pagination aborts early when no records exist in the table instead of causing an error - Groups [Per Djurner, James Gibson]
+* Fixed so return type is correct when no records are found on using findOne() with returnAs="object" - [Raul Riera, Per Djurner]
+* Fixed Railo bug caused by argument defaults on a number of functions - #201, #264 [William Fisk, Tony Petruzzi, Per Djurner]
+
+Other
+=====
+* Refactored validations code - #266 [Per Djurner]
+* Copied cgi scope to request scope - #277 [Tony Petruzzi, James Gibson, Per Djurner]
+* Fixed a minor issue with unnecessary variable assignment - #265 [William Fisk, Per Djurner]
