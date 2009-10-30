@@ -166,6 +166,26 @@
 				loc.finderProperties = ListToArray(ReplaceNoCase(ReplaceNoCase(Replace(arguments.missingMethodName, "And", "|"), "findAllBy", ""), "findOneBy", ""), "|");
 			loc.firstProperty = loc.finderProperties[1];
 			loc.secondProperty = IIf(ArrayLen(loc.finderProperties) == 2, "loc.finderProperties[2]", "");
+
+			// throw an error when more than one argument is passed in but not `value` (for single property) or `values` (for multiple properties)
+			// this means that model("artist").findOneByName("U2") will still work but not model("artist").findOneByName(values="U2", returnAs="query"), need to pass in just `value` there instead.
+			if (application.wheels.showDebugInformation)
+			{
+				if (StructCount(arguments.missingMethodArguments) > 1)
+				{
+					if (Len(loc.secondProperty))
+					{
+						if (!StructKeyExists(arguments.missingMethodArguments, "values"))
+							$throw(type="Wheels.IncorrectArguments", message="The 'values' argument is required.", extendedInfo="Pass in a list of values to the dynamic finder in the 'values' argument.");
+					}
+					else
+					{
+						if (!StructKeyExists(arguments.missingMethodArguments, "value"))
+							$throw(type="Wheels.IncorrectArguments", message="The 'value' argument is required.", extendedInfo="Pass in a value to the dynamic finder in the 'value' argument.");
+					}
+				}
+			}
+
 			if (StructCount(arguments.missingMethodArguments) == 1)
 				loc.firstValue = Trim(ListFirst(arguments.missingMethodArguments[1]));
 			else if (StructKeyExists(arguments.missingMethodArguments, "value"))
