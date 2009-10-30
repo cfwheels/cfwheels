@@ -68,7 +68,7 @@
 	{
 		color: #922c2c;
 		text-decoration: underline;
-		padding: 1px;
+		padding: 0 1px;
 	}
 
 	#content a:hover

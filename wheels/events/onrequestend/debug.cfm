@@ -20,15 +20,15 @@
 
 #wheels-debug-area a
 {
-	color: #922c2c;
+	color: #333;
 	text-decoration: underline;
-	padding: 1px;
+	padding: 0 1px;
 }
 
 #wheels-debug-area a:hover
 {
 	color: #fff;
-	background: #922c2c;
+	background: #333;
 	text-decoration: none;
 }
 </style>
