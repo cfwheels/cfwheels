@@ -1033,7 +1033,7 @@
 				if (Len(loc.toAppend))
 					loc.select = ListAppend(loc.select, loc.toAppend);
 				else if (application.wheels.showErrorInformation)
-					$throw(type="Wheels.ColumnNotFound", message="Wheels looked for a column named `#loc.iItem#` but couldn't find it.");
+					$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.iItem#` property but couldn't find it in the database table.", extendedInfo="Verify the `select` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is setup correctly. If you have made changes to the database table you can force Wheels to pick up these changes by issuing a `reload=true` request.");
 			}
 
 			// let's replace eventual duplicates in the clause by prepending the class name		
@@ -1187,7 +1187,7 @@
 						}
 					}
 					if (application.wheels.showErrorInformation && !StructKeyExists(loc.param, "column"))
-						$throw(type="Wheels.ColumnNotFound", message="Wheels looked for a column named `#loc.param.property#` but couldn't find it.");
+						$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.param.property#` property but couldn't find it in the database table.", extendedInfo="Verify the `where` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is setup correctly. If you have made changes to the database table you can force Wheels to pick up these changes by issuing a `reload=true` request.");
 					loc.temp = REFind("^[a-zA-Z0-9-_\.]* ?#variables.wheels.class.RESQLOperators#", loc.elementDataPart, 1, true);
 					loc.param.operator = Trim(Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]));
 					ArrayAppend(loc.params, loc.param);

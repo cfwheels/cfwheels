@@ -45,7 +45,7 @@
 		}
 		catch(Any e)
 		{
-			$throw(type="Wheels.TableNotFound", message="The `#variables.wheels.class.tableName#` table could not be found in the database.", extendedInfo="Add a table named `#variables.wheels.class.tableName#` to your database or if you already have a table you want to use for this model you can tell Wheels to use it with the `table` method.");
+			$throw(type="Wheels.TableNotFound", message="The `#variables.wheels.class.tableName#` table could not be found in the database.", extendedInfo="Add a table named `#variables.wheels.class.tableName#` to your database or tell Wheels to use a different table for this model. For example you can tell a `user` model to use a table called `tbl_users` by creating a `User.cfc` file in the `models` folder, creating an `init` method inside it and then calling `table(""tbl_users"")` from within it.");
 		}
 		variables.wheels.class.keys = "";
 		variables.wheels.class.propertyList = "";
