@@ -58,6 +58,10 @@
 <cffunction name="$findRoute" returntype="struct" access="public" output="false">
 	<cfscript>
 		var loc = {};
+		if (application.wheels.showErrorInformation && not StructKeyExists(application.wheels.namedRoutePositions, arguments.route))
+		{
+			$throw(type="Wheels.RouteNotFound", message="Could not find the route '#arguments.route#'.", extendedInfo="Create a new route in routes.cfm with the name '#arguments.route#'.");
+		}		
 		loc.routePos = application.wheels.namedRoutePositions[arguments.route];
 		if (loc.routePos Contains ",")
 		{
