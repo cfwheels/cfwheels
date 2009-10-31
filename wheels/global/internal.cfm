@@ -60,7 +60,7 @@
 		var loc = {};
 		if (application.wheels.showErrorInformation && not StructKeyExists(application.wheels.namedRoutePositions, arguments.route))
 		{
-			$throw(type="Wheels.RouteNotFound", message="Could not find the route '#arguments.route#'.", extendedInfo="Create a new route in routes.cfm with the name '#arguments.route#'.");
+			$throw(type="Wheels.RouteNotFound", message="Could not find the `#arguments.route#` route.", extendedInfo="Create a new route in `config/routes.cfm` with the name `#arguments.route#`.");
 		}		
 		loc.routePos = application.wheels.namedRoutePositions[arguments.route];
 		if (loc.routePos Contains ",")
@@ -144,7 +144,7 @@
 				{
 					loc.item = ListGetAt(arguments.reserved, loc.i);
 					if (StructKeyExists(arguments.input, loc.item))
-						$throw(type="Wheels.IncorrectArguments", message="The '#loc.item#' argument is not allowed.", extendedInfo="Do not pass in the '#loc.item#' argument. It will be set automatically by Wheels.");
+						$throw(type="Wheels.IncorrectArguments", message="The `#loc.item#` argument is not allowed.", extendedInfo="Do not pass in the `#loc.item#` argument, it will be set automatically by Wheels.");
 				}
 			}
 		}

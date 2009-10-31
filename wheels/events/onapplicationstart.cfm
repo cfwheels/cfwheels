@@ -25,7 +25,7 @@
 		}
 		loc.majorVersion = Left(application.wheels.serverVersion, 1);
 		if ((application.wheels.serverName == "Railo" && loc.majorVersion < 3) || (application.wheels.serverName == "Adobe ColdFusion" && loc.majorVersion < 8))
-			$throw(type="Wheels.NoSupport", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Upgrade to Adobe ColdFusion 8 or Railo 3.");
+			$throw(type="Wheels.EngineNotSupported", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Upgrade to Adobe ColdFusion 8 (or higher) or Railo 3.0 (or higher).");
 
 		// copy over the cgi variables we need to the request scope (since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example)
 		request.cgi = $cgiScope();
@@ -193,7 +193,7 @@
 					if (!ListFindNoCase("init,version,pluginVersion", loc.keyTwo))
 					{
 						if (ListFindNoCase(loc.addedFunctions, loc.keyTwo))
-							$throw(type="Wheels.IncompatiblePlugin", message="#loc.key# is incompatible with a previously installed plugin.", extendedInfo="make sure none of the plugins you have installed overrides the same Wheels functions.");
+							$throw(type="Wheels.IncompatiblePlugin", message="#loc.key# is incompatible with a previously installed plugin.", extendedInfo="Make sure none of the plugins you have installed override the same Wheels functions.");
 						else
 							loc.addedFunctions = ListAppend(loc.addedFunctions, loc.keyTwo);
 					}

@@ -125,7 +125,7 @@
 			if (application.wheels.showErrorInformation)
 			{
 				if (loc.localFile && !FileExists(ExpandPath(arguments.src)))
-					$throw(type="Wheels.ImageFileNotFound", message="Wheels could not find '#expandPath('#arguments.src#')#' on the local file system.", extendedInfo="Pass in a correct relative path from the 'images' folder to an image.");
+					$throw(type="Wheels.ImageFileNotFound", message="Wheels could not find `#expandPath('#arguments.src#')#` on the local file system.", extendedInfo="Pass in a correct relative path from the `images` folder to an image.");
 				else if (loc.localFile && arguments.source Does Not Contain ".jpg" && arguments.source Does Not Contain ".gif" && arguments.source Does Not Contain ".png")
 					$throw(type="Wheels.ImageFormatNotSupported", message="Wheels can't read image files with that format.", extendedInfo="Use a GIF, JPG or PNG image instead.");
 			}

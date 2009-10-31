@@ -143,7 +143,7 @@
 
 		// we only allow one association to be loaded when returning objects
 		if (application.wheels.showErrorInformation && Len(arguments.returnAs) && arguments.returnAs != "query" && (Find(",", arguments.include) || Find("(", arguments.include)))
-			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot include more than one association when returning an array of objects.");
+			$throw(type="Wheels.IncorrectArguments", message="You cannot specify more than one association in the `include` argument when returning an array of objects.", extendedInfo="Limit yourself to just one association or set `returnAs` to `query` instead.");
 
 		// count records and get primary keys for pagination
 		if (arguments.page)
@@ -353,7 +353,7 @@
 		var loc = {};
 		if (application.wheels.showErrorInformation)
 			if (Len(arguments.key) && Len(arguments.where))
-				$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot pass in both 'key' and 'where'.");
+				$throw(type="Wheels.IncorrectArguments", message="You cannot pass in both `key` and `where`.");
 		if (Len(arguments.where))
 			loc.returnValue = findOne(where=arguments.where, reload=arguments.reload, returnAs="query").recordCount == 1;
 		else if (Len(arguments.key))
@@ -1033,7 +1033,7 @@
 				if (Len(loc.toAppend))
 					loc.select = ListAppend(loc.select, loc.toAppend);
 				else if (application.wheels.showErrorInformation)
-					$throw(type="Wheels", message="Column Not Found", extendedInfo="Wheels looked for a column named '#loc.iItem#' but couldn't find it.");
+					$throw(type="Wheels.ColumnNotFound", message="Wheels looked for a column named `#loc.iItem#` but couldn't find it.");
 			}
 
 			// let's replace eventual duplicates in the clause by prepending the class name		
@@ -1187,7 +1187,7 @@
 						}
 					}
 					if (application.wheels.showErrorInformation && !StructKeyExists(loc.param, "column"))
-						$throw(type="Wheels", message="Column Not Found", extendedInfo="Wheels looked for a column named '#loc.param.property#' but couldn't find it.");
+						$throw(type="Wheels.ColumnNotFound", message="Wheels looked for a column named `#loc.param.property#` but couldn't find it.");
 					loc.temp = REFind("^[a-zA-Z0-9-_\.]* ?#variables.wheels.class.RESQLOperators#", loc.elementDataPart, 1, true);
 					loc.param.operator = Trim(Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]));
 					ArrayAppend(loc.params, loc.param);

@@ -59,7 +59,7 @@
 		if (application.wheels.showErrorInformation)
 		{
 			if (Len(arguments.type) && !ListFindNoCase("creditcard,date,email,eurodate,guid,social_security_number,ssn,telephone,time,URL,USdate,UUID,zipcode", arguments.type))
-				$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="The `#arguments.type#` type is not supported. Supported types are: creditcard, date, email, eurodate, guid, social_security_number, ssn, telephone, time, URL, USdate, UUID, zipcode");
+				$throw(type="Wheels.IncorrectArguments", message="The `#arguments.type#` type is not supported.", extendedInfo="Use one of the supported types: `creditcard`, `date`, `email`, `eurodate`, `guid`, `social_security_number`, `ssn`, `telephone`, `time`, `URL`, `USdate`, `UUID`, `zipcode`");
 		}
 		$registerValidation(methods="$validateFormatOf", argumentCollection=arguments);
 	</cfscript>
@@ -278,7 +278,7 @@
 			if (StructKeyExists(arguments, "properties"))
 			{
 				if (!Len(arguments.properties))
-					$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="Please pass in the names of the properties you want to validate. Use either the `property` argument (for a single property) or the `properties` argument (for a list of properties) to do this.");
+					$throw(type="Wheels.IncorrectArguments", message="The `property` or `properties` argument is required but was not passed in.", extendedInfo="Please pass in the names of the properties you want to validate. Use either the `property` argument (for a single property) or the `properties` argument (for a list of properties) to do this.");
 			}
 		}
 

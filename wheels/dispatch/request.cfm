@@ -127,7 +127,7 @@
 			}
 		}
 		if (!StructKeyExists(loc, "returnValue"))
-			$throw(type="Wheels.RouteNotFound", message="Wheels couldn't find a route that matched this request.", extendedInfo="Make sure there is a route setup in your 'config/routes.cfm' file that matches the '#arguments.route#' request.");
+			$throw(type="Wheels.RouteNotFound", message="Wheels couldn't find a route that matched this request.", extendedInfo="Make sure there is a route setup in your `config/routes.cfm` file that matches the `#arguments.route#` request.");
 		</cfscript>
 		<cfreturn loc.returnValue>
 </cffunction>
@@ -375,7 +375,7 @@
 		var loc = {};
 		
 		if (Left(arguments.actionName, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.actionName))
-			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the '#arguments.actionName#' method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels methods.");
+			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.actionName#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels functions.");
 
 		if (StructKeyExists(arguments.controller, arguments.actionName))
 			$invoke(componentReference=arguments.controller, method=arguments.actionName);
@@ -396,7 +396,7 @@
 				{
 					if (application.wheels.showErrorInformation)
 					{
-						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the '#arguments.actionName#' action in the '#arguments.controllerName#' controller.", extendedInfo="Create a file named '#LCase(arguments.actionName)#.cfm' in the 'views/#LCase(arguments.controllerName)#' directory (create the directory as well if it doesn't already exist).");
+						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.actionName#` action in the `#arguments.controllerName#` controller.", extendedInfo="Create a file named `#LCase(arguments.actionName)#.cfm` in the `views/#LCase(arguments.controllerName)#` directory (create the directory as well if it doesn't already exist).");
 					}
 					else
 					{

@@ -1,8 +1,10 @@
 <cfoutput>
 <h1>#arguments.wheelsError.type#</h1>
 <p><strong>#arguments.wheelsError.message#</strong></p>
-<h2>Suggested action</h2>
-<p>#arguments.wheelsError.extendedInfo#</p>
+<cfif StructKeyExists(arguments.wheelsError, "extendedInfo") AND Len(arguments.wheelsError.extendedInfo)>
+	<h2>Suggested action</h2>
+	<p>#arguments.wheelsError.extendedInfo#</p>
+</cfif>
 <cfset loc.path = GetDirectoryFromPath(GetBaseTemplatePath())>
 <cfset loc.errorPos = 0>
 <cfloop array="#arguments.wheelsError.tagContext#" index="loc.i">

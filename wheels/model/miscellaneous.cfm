@@ -176,12 +176,12 @@
 					if (Len(loc.secondProperty))
 					{
 						if (!StructKeyExists(arguments.missingMethodArguments, "values"))
-							$throw(type="Wheels.IncorrectArguments", message="The 'values' argument is required.", extendedInfo="Pass in a list of values to the dynamic finder in the 'values' argument.");
+							$throw(type="Wheels.IncorrectArguments", message="The `values` argument is required but was not passed in.", extendedInfo="Pass in a list of values to the dynamic finder in the `values` argument.");
 					}
 					else
 					{
 						if (!StructKeyExists(arguments.missingMethodArguments, "value"))
-							$throw(type="Wheels.IncorrectArguments", message="The 'value' argument is required.", extendedInfo="Pass in a value to the dynamic finder in the 'value' argument.");
+							$throw(type="Wheels.IncorrectArguments", message="The `value` argument is required but was not passed in.", extendedInfo="Pass in a value to the dynamic finder in the `value` argument.");
 					}
 				}
 			}
@@ -361,7 +361,7 @@
 			}
 		}
 		if (!StructKeyExists(loc, "returnValue"))
-			$throw(type="Wheels.MethodNotFound", message="The method #arguments.missingMethodName# was not found in this model.", extendedInfo="Check your spelling or add the method to the model CFC file.");
+			$throw(type="Wheels.MethodNotFound", message="The method `#arguments.missingMethodName#` was not found in this model.", extendedInfo="Check your spelling or add the method to the model's CFC file.");
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

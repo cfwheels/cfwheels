@@ -77,7 +77,7 @@
 		if (application.wheels.showErrorInformation)
 		{
 			if (!StructKeyExists(arguments, "template") && !Len(arguments.templates))
-				$throw(type="Wheels.IncorrectArguments", message="The 'template(s)' argument is required.", extendedInfo="Pass in either the 'template' or 'templates' argument.");
+				$throw(type="Wheels.IncorrectArguments", message="The `template` or `templates` argument is required but was not passed in.");
 		}
 
 		if (ListLen(arguments.templates) > 1 && ListLen(arguments.layouts) == 1)
@@ -171,7 +171,7 @@
 			if (loc.match.recordCount)
 				loc.file = loc.file & "." & ListLast(loc.match.name, ".");
 			else
-				$throw(type="Wheels.FileNotFound", message="File Not Found", extendedInfo="Make sure a file with the name '#loc.file#' exists in the '#loc.folder#' folder.");
+				$throw(type="Wheels.FileNotFound", message="A file could not be found.", extendedInfo="Make sure a file with the name `#loc.file#` exists in the `#loc.folder#` folder.");
 		}
 		loc.fullPath = loc.folder & "/" & loc.file;
 		if (Len(arguments.name))

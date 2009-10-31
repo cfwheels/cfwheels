@@ -11,6 +11,13 @@
 		var loc = {};
 		if (StructKeyExists(arguments, "action"))
 			arguments.actions = arguments.action;
+
+		if (application.wheels.showErrorInformation)
+		{
+			if (!StructKeyExists(arguments, "action") && !Len(arguments.actions))
+				$throw(type="Wheels.IncorrectArguments", message="The `action` or `actions` argument is required but was not passed in.");
+		}
+
 		loc.iEnd = ListLen(arguments.actions);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
