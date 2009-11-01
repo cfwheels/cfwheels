@@ -141,20 +141,11 @@
 	<cfset var loc = {}>
 	<cfset arguments.name = "loc.returnValue">
 	<!--- we have to use this cfif here to get around a bug with railo --->
-	<cftry>
-		<cfif StructKeyExists(arguments, "table")>
-			<cfdbinfo datasource="#arguments.datasource#" name="#arguments.name#" type="#arguments.type#" username="#arguments.username#" password="#arguments.password#" table="#arguments.table#">
-		<cfelse>
-			<cfdbinfo datasource="#arguments.datasource#" name="#arguments.name#" type="#arguments.type#" username="#arguments.username#" password="#arguments.password#">
-		</cfif>
-		<cfcatch type="any">
-			<cfif application.wheels.showErrorInformation>
-				<cfset $throw(type="Wheels.#cfcatch.Type#Error", message=cfcatch.message) />
-			<cfelse>
-				<cfrethrow />
-			</cfif>
-		</cfcatch>
-	</cftry>
+	<cfif StructKeyExists(arguments, "table")>
+		<cfdbinfo datasource="#arguments.datasource#" name="#arguments.name#" type="#arguments.type#" username="#arguments.username#" password="#arguments.password#" table="#arguments.table#">
+	<cfelse>
+		<cfdbinfo datasource="#arguments.datasource#" name="#arguments.name#" type="#arguments.type#" username="#arguments.username#" password="#arguments.password#">
+	</cfif>
 	<cfreturn loc.returnValue>
 </cffunction>
 

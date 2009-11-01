@@ -136,7 +136,15 @@
 <cffunction name="$assignAdapter" returntype="any" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		loc.info = $dbinfo(datasource=variables.wheels.class.connection.datasource, username=variables.wheels.class.connection.username, password=variables.wheels.class.connection.password, type="version");
+		if (application.wheels.showErrorInformation) {
+			try {
+				loc.info = $dbinfo(datasource=variables.wheels.class.connection.datasource, username=variables.wheels.class.connection.username, password=variables.wheels.class.connection.password, type="version");
+			} catch (Any exception) {
+				$throw(type="Wheels.#exception.type#Error", message=exception.message, extendedInfo="The database could not be reached. Please make sure your database server and datasource are setup correctly.");
+			}
+		} else {
+			loc.info = $dbinfo(datasource=variables.wheels.class.connection.datasource, username=variables.wheels.class.connection.username, password=variables.wheels.class.connection.password, type="version");
+		}
 		if (loc.info.driver_name Contains "SQLServer" || loc.info.driver_name Contains "Microsoft SQL Server")
 			loc.adapterName = "MicrosoftSQLServer";
 		else if (loc.info.driver_name Contains "MySQL")
