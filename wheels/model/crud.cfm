@@ -184,15 +184,20 @@
 				loc.totalPages = Ceiling(loc.totalRecords/arguments.perPage);
 				loc.limit = arguments.perPage;
 				loc.offset = (arguments.perPage * arguments.page) - arguments.perPage;
+				
+				// if the full range of records is not requested we correct the limit to get the exact amount instead
+				// for example if totalRecords is 57, limit is 10 and offset 50 (i.e. requesting records 51-60) we change the limit to 7
 				if ((loc.limit + loc.offset) > loc.totalRecords)
 					loc.limit = loc.totalRecords - loc.offset;
-				loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct);
-				if (!loc.values.recordCount)
+				
+				if (loc.limit < 1)
 				{
+					// if limit is 0 or less it means that a page that has no records was asked for so we return an empty query
 					loc.returnValue = "";
 				}
 				else
 				{
+					loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct);
 					loc.paginationWhere = "";
 					loc.iEnd = ListLen(variables.wheels.class.keys);
 					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
