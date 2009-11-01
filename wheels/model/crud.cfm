@@ -69,7 +69,7 @@
 	<cfscript>
 		var returnValue = "";
 
-		if (Len(arguments.include))
+		if (Len(arguments.include) && variables.wheels.class.associations[arguments.include].joinType != "inner")
 		{
 			// since we're joining with associated tables we could potentially get duplicate records for one object and we work around this by using the pagination code which has this functionality built in
 			arguments.page = 1;
