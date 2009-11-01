@@ -1312,10 +1312,10 @@
 								loc.toAdd = loc.classData.tableName & "." & loc.classData.properties[loc.property].column;
 							else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.property))
 								loc.toAdd = Replace(loc.classData.calculatedProperties[loc.property].sql, ",", "[[comma]]", "all");
-							if (!ListFindNoCase(loc.classData.columnList, loc.property))
-								loc.toAdd = loc.toAdd & " AS " & loc.property;
 							if (Len(loc.toAdd))
 							{
+								if (!ListFindNoCase(loc.classData.columnList, loc.property))
+									loc.toAdd = loc.toAdd & " AS " & loc.property;
 								loc.toAdd = loc.toAdd & " " & UCase(ListLast(loc.iItem, " "));
 								if (!ListFindNoCase(loc.order, loc.toAdd))
 								{
