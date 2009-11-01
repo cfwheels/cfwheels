@@ -69,7 +69,7 @@
 	<cfscript>
 		var returnValue = "";
 
-		if (Len(arguments.include) && variables.wheels.class.associations[arguments.include].joinType != "inner")
+		if (Len(arguments.include) && StructKeyExists(variables.wheels.class.associations, arguments.include) && variables.wheels.class.associations[arguments.include].joinType != "inner")
 		{
 			// since we're joining with associated tables we could potentially get duplicate records for one object and we work around this by using the pagination code which has this functionality built in
 			arguments.page = 1;
@@ -1363,6 +1363,10 @@
 			// create a reference to current class in include string and get its association info
 			loc.class = model(ListLast(loc.levels));
 			loc.classAssociations = loc.class.$classData().associations;
+
+			// throw an error if the association was not found
+			if (application.wheels.showErrorInformation && !StructKeyExists(loc.classAssociations, loc.name))
+				$throw(type="Wheels.AssociationNotFound", message="An association named `#loc.name#` could not be found on the `#ListLast(loc.levels)#` model.", extendedInfo="Setup an association in the `init` method of the `models/#capitalize(ListLast(loc.levels))#.cfc` file and name it `#loc.name#`. You can use the `belongsTo`, `hasOne` or `hasMany` method to set it up.");
 
 			// infer class name and foreign key from association name unless developer specified it already
 			if (!Len(loc.classAssociations[loc.name].class))
