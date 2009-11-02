@@ -158,7 +158,7 @@
 
 		##URLFor(action="comments", anchor="comment10")##
 	'
-	categories="global" chapters="request-handling,linking-pages" functions="redirectTo,linkTo,startFormTag">
+	categories="global-helper" chapters="request-handling,linking-pages" functions="redirectTo,linkTo,startFormTag">
 	<cfargument name="route" type="string" required="false" default="" hint="Name of a route that you have configured in 'config/routes.cfm'">
 	<cfargument name="controller" type="string" required="false" default="" hint="Name of the controller to include in the URL">
 	<cfargument name="action" type="string" required="false" default="" hint="Name of the action to include in the URL">
@@ -353,7 +353,7 @@
 	'
 		<cfset addRoute(name="userProfile", pattern="user/[username]", controller="user", action="profile")>
 	'
-	categories="global" chapters="using-routes" functions="">
+	categories="global-helper" chapters="using-routes" functions="">
 	<cfargument name="name" type="string" required="true" hint="Name for the route">
 	<cfargument name="pattern" type="string" required="true" hint="The URL pattern for the route">
 	<cfargument name="controller" type="string" required="false" default="" hint="Controller to call when route matches (unless the controller name exists in the pattern)">
@@ -386,7 +386,7 @@
 	'
 		<cfset authorObject = model("author").findByKey(1)>
 	'
-	categories="global" chapters="object-relational-mapping" functions="">
+	categories="global-helper" chapters="object-relational-mapping" functions="">
 	<cfargument name="name" type="string" required="true" hint="Name of the model (class name) to get a reference to">
 	<cfscript>
 		var loc = {};
@@ -403,7 +403,7 @@
 			<!--- do something cool --->
 		</cfif>
 	'
-	categories="global" chapters="global-functions" functions="">
+	categories="global-helper" chapters="global-functions" functions="">
 	<cfreturn StructKeyList(application.wheels.plugins)>
 </cffunction>
 
@@ -414,7 +414,7 @@
 		##capitalize("wheels is a framework")##
 		-> Wheels is a framework
 	'
-	categories="global" chapters="global-functions" functions="humanize,pluralize,singularize">
+	categories="global-helper" chapters="global-functions" functions="humanize,pluralize,singularize">
 	<cfargument name="text" type="string" required="true" hint="Text to capitalize">
 	<cfreturn UCase(Left(arguments.text, 1)) & Mid(arguments.text, 2, Len(arguments.text)-1)>
 </cffunction>
@@ -426,7 +426,7 @@
 		##humanize("wheelsIsAFramework")##
 		-> Wheels Is A Framework
 	'
-	categories="global" chapters="global-functions" functions="capitalize,pluralize,singularize">
+	categories="global-helper" chapters="global-functions" functions="capitalize,pluralize,singularize">
 	<cfargument name="text" type="string" required="true" hint="Text to humanize">
 	<cfscript>
 		var loc = {};
@@ -444,7 +444,7 @@
 		##singularize("languages")##
 		-> language
 	'
-	categories="global" chapters="global-functions" functions="capitalize,humanize,pluralize">
+	categories="global-helper" chapters="global-functions" functions="capitalize,humanize,pluralize">
 	<cfargument name="word" type="string" required="true" hint="String to singularize">
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="singularize")>
 </cffunction>
@@ -458,7 +458,7 @@
 
 		Your search returned ##pluralize(word="person", count=users.recordCount)##.
 	'
-	categories="global" chapters="global-functions" functions="capitalize,humanize,singularize">
+	categories="global-helper" chapters="global-functions" functions="capitalize,humanize,singularize">
 	<cfargument name="word" type="string" required="true" hint="The word to pluralize">
 	<cfargument name="count" type="numeric" required="false" default="-1" hint="Pluralization will occur when this value is not 1">
 	<cfargument name="returnCount" type="boolean" required="false" default="true" hint="Will return the count prepended to the pluralization when true and count is not -1">
