@@ -112,7 +112,7 @@
 	tt
 	{
 		font-family: Courier;
-		font-size: 11px;
+		font-size: 12px;
 		color: #666;
 		background: #f7f7f7;
 		padding: 1px 3px;
