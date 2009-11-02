@@ -1,9 +1,9 @@
 <cfoutput>
 <h1>#arguments.wheelsError.type#</h1>
-<p><strong>#arguments.wheelsError.message#</strong></p>
+<p><strong>#REReplace(arguments.wheelsError.message, "`([^`]*)`", "<tt>\1</tt>", "all")#</strong></p>
 <cfif StructKeyExists(arguments.wheelsError, "extendedInfo") AND Len(arguments.wheelsError.extendedInfo)>
 	<h2>Suggested action</h2>
-	<p>#arguments.wheelsError.extendedInfo#</p>
+	<p>#REReplace(arguments.wheelsError.extendedInfo, "`([^`]*)`", "<tt>\1</tt>", "all")#</p>
 </cfif>
 <cfset loc.path = GetDirectoryFromPath(GetBaseTemplatePath())>
 <cfset loc.errorPos = 0>

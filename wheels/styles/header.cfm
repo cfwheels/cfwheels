@@ -111,8 +111,12 @@
 
 	tt
 	{
-		font-size: 12px;
+		font-family: Courier;
+		font-size: 11px;
 		color: #666;
+		background: #f7f7f7;
+		padding: 1px 3px;
+		border: 1px solid #ededed;
 	}
 	#logo
 	{
