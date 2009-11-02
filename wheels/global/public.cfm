@@ -285,7 +285,7 @@
 	'
 		<cfset obfuscateParam(99)>
 	'
-	categories="global" chapters="obfuscating-urls" functions="deobfuscateParam">
+	categories="global-helper" chapters="obfuscating-urls" functions="deobfuscateParam">
 	<cfargument name="param" type="any" required="true" hint="Value to obfuscate">
 	<cfscript>
 		var loc = {};
@@ -312,7 +312,7 @@
 	'
 		<cfset deobfuscateParam("b7ab9a50")>
 	'
-	categories="global" chapters="obfuscating-urls" functions="obfuscateParam">
+	categories="global-helper" chapters="obfuscating-urls" functions="obfuscateParam">
 	<cfargument name="param" type="string" required="true" hint="Value to deobfuscate">
 	<cfscript>
 		var loc = {};
