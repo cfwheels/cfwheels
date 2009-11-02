@@ -170,7 +170,7 @@
 	'
 	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="Name to populate in tag's `name` attribute">
-	<cfargument name="value" type="string" required="false" default="Value to populate in tag's `value` attribute">
+	<cfargument name="value" type="string" required="false" default="" hint="Value to populate in tag's `value` attribute">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.textFieldTag.label#" hint="See documentation for @textField">
 	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.textFieldTag.labelPlacement#" hint="See documentation for @textField">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.textFieldTag.prepend#" hint="See documentation for @textField">
