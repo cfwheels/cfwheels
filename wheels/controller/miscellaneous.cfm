@@ -1,5 +1,6 @@
-<cffunction name="isGet" returntype="boolean" access="public" output="false"
-	hint="Returns whether the request was a normal (GET) request or not."
+<!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
+
+<cffunction name="isGet" returntype="boolean" access="public" output="false" hint="Returns whether the request was a normal (GET) request or not."
 	examples=
 	'
 		<cfset requestIsGet = isGet()>
@@ -15,8 +16,7 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="isPost" returntype="boolean" access="public" output="false"
-	hint="Returns whether the request came from a form submission or not."
+<cffunction name="isPost" returntype="boolean" access="public" output="false" hint="Returns whether the request came from a form submission or not."
 	examples=
 	'
 		<cfset requestIsPost = isPost()>
@@ -32,8 +32,7 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="isAjax" returntype="boolean" access="public" output="false"
-	hint="Returns whether the page was called from JavaScript or not."
+<cffunction name="isAjax" returntype="boolean" access="public" output="false" hint="Returns whether the page was called from JavaScript or not."
 	examples=
 	'
 		<cfset requestIsAjax = isAjax()>
@@ -49,22 +48,20 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="sendEmail" returntype="void" access="public" output="false"
-	hint="Sends an email using a template and an optional layout to wrap it in."
+<cffunction name="sendEmail" returntype="void" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in."
 	examples=
 	'
-		<cfset sendEmail("myemailtemplate")>
-
+		<!--- Get a member and send a welcome email passing in a few custom variables to the template --->
 		<cfset member = model("member").findByKey(newMember.id)>
 		<cfset sendEmail(to=member.email, template="myemailtemplate", subject="Thank You for Becoming a Member", recipientName=member.name, startDate=member.startDate)>
 	'
 	categories="controller-request" chapters="sending-email" functions="">
 	<cfargument name="templates" type="string" required="false" default="" hint="The path to the email template or two paths if you want to send a multipart email. if the `detectMultipart` argument is `false` the template for the text version should be the first one in the list (can also be called with the `template` argument).">
-	<cfargument name="from" type="string" required="true" hint="Email address to send from">
-	<cfargument name="to" type="string" required="true" hint="Email address to send to">
-	<cfargument name="subject" type="string" required="true" hint="The subject line of the email">
-	<cfargument name="layouts" type="any" required="false" default="#application.wheels.functions.sendEmail.layouts#" hint="Layout(s) to wrap body in">
-	<cfargument name="detectMultipart" type="boolean" required="false" default="#application.wheels.functions.sendEmail.detectMultipart#" hint="When set to `true` Wheels will detect which of the templates is text and which one is html (by counting the `<` characters)">
+	<cfargument name="from" type="string" required="true" hint="Email address to send from.">
+	<cfargument name="to" type="string" required="true" hint="Email address to send to.">
+	<cfargument name="subject" type="string" required="true" hint="The subject line of the email.">
+	<cfargument name="layouts" type="any" required="false" default="#application.wheels.functions.sendEmail.layouts#" hint="Layout(s) to wrap body in.">
+	<cfargument name="detectMultipart" type="boolean" required="false" default="#application.wheels.functions.sendEmail.detectMultipart#" hint="When set to `true` Wheels will detect which of the templates is text and which one is html (by counting the `<` characters).">
 	<cfscript>
 		var loc = {};
 
@@ -132,16 +129,16 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="sendFile" returntype="void" access="public" output="false"
-	hint="Sends a file to the user."
+<cffunction name="sendFile" returntype="void" access="public" output="false" hint="Sends a file to the user (from the `files` folder by default)."
 	examples=
 	'
+		<!--- Send a PDF file to the user --->
 		<cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf")>
 
+		<!--- Send the same file but give the user a different name in the browser dialog window --->
 		<cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf", name="Tutorial.pdf")>
 
-		<cfset sendFile(file="wheels_tutorial_20081028_J657D6HX.pdf", disposition="inline")>
-
+		<!--- Send a file that is located outside of the web root --->
 		<cfset sendFile(file="../../tutorials/wheels_tutorial_20081028_J657D6HX.pdf")>
 	'
 	categories="controller-request" chapters="sending-files" functions="">

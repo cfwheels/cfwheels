@@ -1,12 +1,13 @@
-<cffunction name="caches" returntype="void" access="public" output="false"
-	hint="Tells Wheels to cache one or more actions."
+<!--- PUBLIC CONTROLLER INITIALIZATION FUNCTIONS --->
+
+<cffunction name="caches" returntype="void" access="public" output="false" hint="Tells Wheels to cache one or more actions."
 	examples=
 	'
 		<cfset caches(actions="browseByUser,browseByTitle", time=30)>
 	'
 	categories="controller-initialization" chapters="caching" functions="">
-	<cfargument name="actions" type="string" required="false" default="" hint="Action(s) to cache (can also be called with the `action` argument)">
-	<cfargument name="time" type="numeric" required="false" default="#application.wheels.functions.caches.time#" hint="Minutes to cache the action(s) for">
+	<cfargument name="actions" type="string" required="false" default="" hint="Action(s) to cache (can also be called with the `action` argument).">
+	<cfargument name="time" type="numeric" required="false" default="#application.wheels.functions.caches.time#" hint="Minutes to cache the action(s) for.">
 	<cfscript>
 		var loc = {};
 		if (StructKeyExists(arguments, "action"))
@@ -27,6 +28,8 @@
 		}
 	</cfscript>
 </cffunction>
+
+<!--- PRIVATE CONTROLLER FUNCTIONS --->
 
 <cffunction name="$getCachableActions" returntype="array" access="public" output="false">
 	<cfreturn variables.wheels.cachableActions>
