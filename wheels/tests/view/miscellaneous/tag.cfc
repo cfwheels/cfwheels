@@ -21,7 +21,7 @@
 
 	<cffunction name="test_with_all_options">
 		<cfset loc.e = loc.controller.$tag(argumentCollection=loc.args)>
-		<cfset loc.r = '<input size="30" onmouseover="function(this){this.focus();}" type="text" class="wheelstest" id="inputtest" maxlength="50" name="inputtest" />'>
+		<cfset loc.r = '<input class="wheelstest" id="inputtest" maxlength="50" name="inputtest" onmouseover="function(this){this.focus();}" size="30" type="text" />'>
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 

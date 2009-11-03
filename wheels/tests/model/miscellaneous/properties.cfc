@@ -23,15 +23,38 @@
 		<cfset loc.args.birthdaymonth = "11">
 		<cfset loc.args.birthdayyear = "1975">
 
-		<cfset loc.user.properties(loc.args)>
+		<cfset loc.user.setproperties(loc.args)>
 
 		<cfset loc.properties = loc.user.properties()>
 
-		<cfset halt(false, "loc.properties")>
 		<cfloop collection="#loc.properties#" item="loc.i">
 			<cfset assert("loc.properties[loc.i] eq loc.args[loc.i]")>
 		</cfloop>
 
-	</cffunction>
+		<cfset loc.args.FirstName = "per">
+		<cfset loc.args.LastName = "djurner">
+		
+		<cfset loc.user.setproperties(firstname="per", lastname="djurner")>
+		<cfset loc.properties = loc.user.properties()>
 
+		<cfloop collection="#loc.properties#" item="loc.i">
+			<cfset assert("loc.properties[loc.i] eq loc.args[loc.i]")>
+		</cfloop>
+				
+		<cfset loc.args.FirstName = "chris">
+		<cfset loc.args.LastName = "peters">
+		<cfset loc.args.ZipCode = "33333">
+		
+		<cfset loc.params = {}>
+		<cfset loc.params.lastname = "peters">
+		<cfset loc.params.zipcode = "33333">		
+		
+		<cfset loc.user.setproperties(firstname="chris", properties=loc.params)>
+		<cfset loc.properties = loc.user.properties()>
+		
+		<cfloop collection="#loc.properties#" item="loc.i">
+			<cfset assert("loc.properties[loc.i] eq loc.args[loc.i]")>
+		</cfloop>
+	</cffunction>
+	
 </cfcomponent>

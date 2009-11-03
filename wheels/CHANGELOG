@@ -1,3 +1,51 @@
-*EDGE*
+1.0
 
-* updated model error functions to take and perform actions with properties and name - r3231 [Tony Petruzzi]
+Changes
+=======
+
+* Support for "if"/"unless" in validate(), validateOnCreate() and validateOnUpdate() - [Per Djurner]
+* Support for built-in CFML types in validatesFormatOf() - [Raul Riera, Per Djurner]
+* Allow plugin developer to specify a list of supported Wheels versions instead of just one - [Chris Peters, Per Djurner]
+* Rewrite Rules for IIS7 - [Sameer Gupta, Mike Rampton, Per Djurner]
+* Rewrite support in sub folders in Apache - [Peter Amiri]
+* Added "allowBlank" argument on validatesUniquenessOf() - #271 [Per Djurner]
+* Methods from plugins can now be injected to "Application.cfc" - #288 [James Gibson, Per Djurner]
+* Consistent style and reload links added to debug area - [Per Djurner]
+* Added "xml" datatype for SQL Server 2005/2008 - #295 [Andy Bellenie, Per Djurner]
+* Turned off rewriting for "robots.txt" file - #278 [Chris Peters, Per Djurner]
+* Trimmed final output's white space - #279 [Chris Peters, Per Djurner]
+* Humanized list / array items in $optionsForSelect() - #267 [James Gibson]
+* Updated model error functions to take and perform actions with properties and name errors - [Tony Petruzzi]
+* Removed a query in findAll that didn't need to run when the join type was set to inner - [Mike Henke, Per Djurner]
+* Added the Railo specific cfquery attribute called "psq" to make Wheels run on a default installation of Railo - [Raul Riera, Per Djurner]
+
+Bug Fixes
+============
+* Allow dynamic methods to be called through callbacks - [James Gibson, Per Djurner]
+* Fixed so you can pass in the "properties" argument to dynamic methods (it was overridden previously) - [Per Djurner]
+* Allow passing along the original where clause when paginating with a criteria on a joined table - Groups [Don Humphreys, Per Djurner]
+* Removed unnecessary singularization for associations - Groups [Don Humphreys, Per Djurner]
+* Fixed so validations respect the "allowBlank" setting - Groups [Raul Riera, Per Djurner]
+* Corrected execution time report when reloading application - [Tony Petruzzi, Per Djurner]
+* Allowing negative values in where clause - Groups [Don Humphreys, Tony Petruzzi]
+* Work-around for a Railo mapping bug that was causing slowness - #268 [Tony Petruzzi, Per Djurner]
+* Fixed an includePartial() error with caching that occured in production mode - #285 [James Gibson, Per Djurner]
+* Support passing in a single column query to select() and selectTag() - #300 [Tony Petruzzi]
+* Fixed radio button ids to work properly with negative number values - #274 [Elezotte, Per Djurner]
+* Removed display of "rewrite.cfm" in error emails - #280 [Raul Riera, Per Djurner]
+* Fix for layout handling in sendEmail() on multipart emails - #269 [Chris Peters, Per Djurner]
+* Throw Wheels errors based on the "showErrorInformation" setting instead of production mode - #276 [Tony Petruzzi, Per Djurner]
+* Fixed so includePartial() / renderPartial() returns a blank string when passed an empty array instead of an error - #287 [James Gibson, Per Djurner]
+* Fixed a problem with file naming and case on Linux / Unix when using helpers and plugins - [Chris Peters, Per Djurner]
+* Fixed so pagination aborts early when no records exist in the table instead of causing an error - Groups [Per Djurner, James Gibson]
+* Fixed so return type is correct when no records are found on using findOne() with returnAs="object" - [Raul Riera, Per Djurner]
+* Fixed Railo bug caused by argument defaults on a number of functions - #201, #264 [William Fisk, Tony Petruzzi, Per Djurner]
+* Fixed so you can order on included tables in finders without speciyfing table name - [Per Djurner]
+* Fixed so pagination returns an empty query instead of the full record set when specifying a page out of range - [Per Djurner]
+
+Other
+=====
+* Refactored validations code - #266 [Per Djurner]
+* Copied cgi scope to request scope - #277 [Tony Petruzzi, James Gibson, Per Djurner]
+* Removed an unnecessary variable assignment - #265 [William Fisk, Per Djurner]
+* Added informative error messages for common Wheels mistakes - [James Gibson, Per Djurner]

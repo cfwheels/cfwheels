@@ -1,17 +1,44 @@
-<cffunction name="average" returntype="numeric" access="public" output="false" hint="Calculates the average value for a given property. Uses the SQL function AVG.">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to calculate the average for">
-	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as lastName LIKE 'A%' for example">
-	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query">
-	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.functions.average.distinct#" hint="When true, AVG will be performed only on each unique instance of a value, regardless of how many times the value occurs">
+<!--- PUBLIC MODEL CLASS METHODS --->
+
+<cffunction name="average" returntype="numeric" access="public" output="false"
+	hint="Calculates the average value for a given property. Uses the SQL function `AVG`."
+	examples=
+	'
+		<!--- Get the average salary for all employees --->
+		<cfset avgSalary = model("employee").average("salary")>
+	'
+	categories="model-class,statistics" chapters="column-statistics" functions="count,maximum,minimum,sum">
+	<cfargument name="property" type="string" required="true" hint="Name of the property to calculate the average for.">
+	<cfargument name="where" type="string" required="false" default="" hint="An SQL fragment such as `lastName LIKE 'A%'` for example.">
+	<cfargument name="include" type="string" required="false" default="" hint="Any associations that need to be included in the query.">
+	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.functions.average.distinct#" hint="When `true`, `AVG` will be performed only on each unique instance of a value, regardless of how many times the value occurs.">
 	<cfscript>
 		arguments.type = "AVG";
 	</cfscript>
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="count" returntype="numeric" access="public" output="false" hint="Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function COUNT.">
-	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as admin=1 for example">
-	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query">
+<cffunction name="count" returntype="numeric" access="public" output="false"
+	hint="Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function `COUNT`."
+	examples=
+	'
+		<!--- Count how many authors there are in the table --->
+		<cfset authorCount = model("author").count()>
+
+		<!--- Count how many authors whose last name starts with "A" there are --->
+		<cfset authorOnACount = model("author").count(where="lastName LIKE ''A%''")>
+
+		<!--- Count how many authors that have written books starting on "A" --->
+		<cfset authorWithBooksOnACount = model("author").count(include="books", where="title LIKE ''A%''")>
+
+		<!--- Count the number of comments on a specific post (a `hasMany` association from `post` to `comment` is required) --->
+		<!--- The `commentCount` method below will call `model("comment").count(where="postId=##post.id##")` internally --->
+		<cfset aPost = model("post").findByKey(params.postId)>
+		<cfset amount = aPost.commentCount()>
+	'
+	categories="model-class,statistics" chapters="column-statistics,associations" functions="average,hasMany,maximum,minimum,sum">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfscript>
 		if (Len(arguments.include))
 		{
@@ -28,38 +55,64 @@
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="maximum" returntype="numeric" access="public" output="false" hint="Calculates the maximum value for a given property. Uses the SQL function MAX.">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to get the highest value for (has to be a property of a numeric data type)">
-	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as categoryId=4 for example">
-	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query">
+<cffunction name="maximum" returntype="numeric" access="public" output="false"
+	hint="Calculates the maximum value for a given property. Uses the SQL function `MAX`."
+	examples=
+	'
+		<!--- Get the amount of the highest salary for all employees --->
+		<cfset highestSalary = model("employee").maximum("salary")>
+	'
+	categories="model-class,statistics" chapters="column-statistics" functions="average,count,minimum,sum">
+	<cfargument name="property" type="string" required="true" hint="Name of the property to get the highest value for (has to be a property of a numeric data type).">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfscript>
 		arguments.type = "MAX";
 	</cfscript>
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="minimum" returntype="numeric" access="public" output="false" hint="Calculates the maximum value for a given property. Uses the SQL function MIN.">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to get the lowest value for (has to be a property of a numeric data type)">
-	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as lastName LIKE 'A%' for example">
-	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query">
+<cffunction name="minimum" returntype="numeric" access="public" output="false"
+	hint="Calculates the minimum value for a given property. Uses the SQL function `MIN`."
+	examples=
+	'
+		<!--- Get the amount of the lowest salary for all employees --->
+		<cfset lowestSalary = model("employee").minimum("salary")>
+	'
+	categories="model-class,statistics" chapters="column-statistics" functions="average,count,maximum,sum">
+	<cfargument name="property" type="string" required="true" hint="Name of the property to get the lowest value for (has to be a property of a numeric data type).">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfscript>
 		arguments.type = "MIN";
 	</cfscript>
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="sum" returntype="numeric" access="public" output="false" hint="Calculates the sum of values for a given property. Uses the SQL function SUM.">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to get the sum for (has to be a property of a numeric data type)">
-	<cfargument name="where" type="string" required="false" default="" hint="A SQL fragment such as lastName LIKE 'A%' for example">
-	<cfargument name="include" type="string" required="false" default="" hint="Any associations that needs to be included in the query">
-	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.functions.sum.distinct#" hint="When true, SUM returns the sum of unique values only">
+<cffunction name="sum" returntype="numeric" access="public" output="false"
+	hint="Calculates the sum of values for a given property. Uses the SQL function `SUM`."
+	examples=
+	'
+		<!--- Get the sum of all salaries --->
+		<cfset allSalaries = model("employee").sum(property="salary")>
+
+		<!--- Get the sum of all salaries for employees in Australia --->
+		<cfset allAustralianSalaries = model("employee").sum(property="salary", include="country", where="name=''Australia''")>
+	'
+	categories="model-class,statistics" chapters="column-statistics" functions="average,count,maximum,minimum">
+	<cfargument name="property" type="string" required="true" hint="Name of the property to get the sum for (has to be a property of a numeric data type).">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.functions.sum.distinct#" hint="When `true`, `SUM` returns the sum of unique values only.">
 	<cfscript>
 		arguments.type = "SUM";
 	</cfscript>
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="$calculate" returntype="numeric" access="public" output="false">
+<!--- PRIVATE MODEL CLASS METHODS --->
+
+<cffunction name="$calculate" returntype="numeric" access="public" output="false" hint="Creates the query that needs to be run for all of the above methods.">
 	<cfargument name="type" type="string" required="true">
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="where" type="string" required="false" default="">
@@ -67,9 +120,15 @@
 	<cfargument name="distinct" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
+
+		// start the select string with the type (`SUM`, `COUNT` etc)
 		arguments.select = "#arguments.type#(";
+		
+		// add the DISTINCT keyword if necessary (generally used for `COUNT` operations when associated tables are joined in the query, means we'll only count the unique primary keys on the current model)
 		if (arguments.distinct)
 			arguments.select = arguments.select & "DISTINCT ";
+
+		// create a list of columns for the `SELECT` clause (unless just `*` was passed in) either from regular properties on the model or calculated ones
 		if (arguments.property == "*")
 		{
 			arguments.select = arguments.select & arguments.property;
@@ -88,11 +147,17 @@
 			}
 			arguments.select = arguments.select & loc.properties;
 		}
+		
+		// alias the result with `AS`, this means that Wheels will not try and change the string (which is why we have to add the table name above since it won't be done automatically) 
 		arguments.select = arguments.select & ") AS result";
+		
+		// call `findAll` with `select`, `where` and `include` but delete all other arguments
 		StructDelete(arguments, "type");
 		StructDelete(arguments, "property");
 		StructDelete(arguments, "distinct");
 		loc.query = findAll(argumentCollection=arguments);
+		
+		// we return the result from the query but if it's a blank string we convert it to `0` first
 		if (Len(loc.query.result))
 			loc.returnValue = loc.query.result;
 		else

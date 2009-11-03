@@ -7,7 +7,7 @@
 		variables.wheels.class = {};
 		variables.wheels.class.name = arguments.name;
 		variables.wheels.class.RESQLOperators = "((?: LIKE)|(?:<>)|(?:<=)|(?:>=)|(?:!=)|(?:!<)|(?:!>)|=|<|>)";
-		variables.wheels.class.RESQLWhere = "(#variables.wheels.class.RESQLOperators# ?)(''|'.+?'()|([0-9]|\.)+()|\([0-9]+(,[0-9]+)*\))(($|\)| (AND|OR)))";
+		variables.wheels.class.RESQLWhere = "(#variables.wheels.class.RESQLOperators# ?)(''|'.+?'()|(-?[0-9]|\.)+()|\(-?[0-9]+(,-?[0-9]+)*\))(($|\)| (AND|OR)))";  
 		variables.wheels.class.mapping = {};
 		variables.wheels.class.properties = {};
 		variables.wheels.class.calculatedProperties = {};
@@ -39,14 +39,28 @@
 		}
 
 		// introspect the database
-		try
+		loc.args = {};
+		loc.args.datasource = variables.wheels.class.connection.datasource;
+		loc.args.username = variables.wheels.class.connection.username;
+		loc.args.password = variables.wheels.class.connection.password;
+		loc.args.table = variables.wheels.class.tableName;
+		loc.args.type = "columns";
+		if (application.wheels.showErrorInformation)
 		{
-			loc.columns = $dbinfo(datasource=variables.wheels.class.connection.datasource, username=variables.wheels.class.connection.username, password=variables.wheels.class.connection.password, type="columns", table=variables.wheels.class.tableName);
+			try
+			{
+				loc.columns = $dbinfo(argumentCollection=loc.args);
+			}
+			catch (Any e)
+			{
+				$throw(type="Wheels.TableNotFound", message="The `#variables.wheels.class.tableName#` table could not be found in the database.", extendedInfo="Add a table named `#variables.wheels.class.tableName#` to your database or tell Wheels to use a different table for this model. For example you can tell a `user` model to use a table called `tbl_users` by creating a `User.cfc` file in the `models` folder, creating an `init` method inside it and then calling `table(""tbl_users"")` from within it.");
+			}
 		}
-		catch(Any e)
+		else
 		{
-			$throw(type="Wheels.TableNotFound", message="The '#variables.wheels.class.tableName#' table could not be found in the database.", extendedInfo="Add a table named '#variables.wheels.class.tableName#' to your database or if you already have a table you want to use for this model you can tell Wheels to use it with the 'table' method.");
+			loc.columns = $dbinfo(argumentCollection=loc.args);
 		}
+
 		variables.wheels.class.keys = "";
 		variables.wheels.class.propertyList = "";
 		variables.wheels.class.columnList = "";
@@ -81,7 +95,7 @@
 			variables.wheels.class.columnList = ListAppend(variables.wheels.class.columnList, variables.wheels.class.properties[loc.property].column);
 		}
 		if (!Len(variables.wheels.class.keys))
-			$throw(type="Wheels.NoPrimaryKey", message="No primary key exists on the '#variables.wheels.class.tableName#' table.", extendedInfo="Set an appropriate primary key (or multiple keys) on the '#variables.wheels.class.tableName#' table.");
+			$throw(type="Wheels.NoPrimaryKey", message="No primary key exists on the `#variables.wheels.class.tableName#` table.", extendedInfo="Set an appropriate primary key on the `#variables.wheels.class.tableName#` table.");
 
 		// add calculated properties
 		variables.wheels.class.calculatedPropertyList = "";
@@ -136,7 +150,28 @@
 <cffunction name="$assignAdapter" returntype="any" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		loc.info = $dbinfo(datasource=variables.wheels.class.connection.datasource, username=variables.wheels.class.connection.username, password=variables.wheels.class.connection.password, type="version");
+
+		loc.args = {};
+		loc.args.datasource = variables.wheels.class.connection.datasource;
+		loc.args.username = variables.wheels.class.connection.username;
+		loc.args.password = variables.wheels.class.connection.password;
+		loc.args.type = "version";
+		if (application.wheels.showErrorInformation)
+		{
+			try
+			{
+				loc.info = $dbinfo(argumentCollection=loc.args);
+			}
+			catch (Any e)
+			{
+				$throw(type="Wheels.DataSourceNotFound", message="The data source could not be reached.", extendedInfo="Make sure your database is reachable and that your data source settings are correct. You either need to setup a data source with the name `#loc.args.datasource#` in the CFML Administrator or tell Wheels to use a different data source in `config/settings.cfm`.");
+			}
+		}
+		else
+		{
+			loc.info = $dbinfo(argumentCollection=loc.args);
+		}
+
 		if (loc.info.driver_name Contains "SQLServer" || loc.info.driver_name Contains "Microsoft SQL Server")
 			loc.adapterName = "MicrosoftSQLServer";
 		else if (loc.info.driver_name Contains "MySQL")
@@ -146,7 +181,7 @@
 		else if (loc.info.driver_name Contains "PostgreSQL")
 			loc.adapterName = "PostgreSQL";
 		else
-			$throw(type="Wheels.NoSupport", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, MySQL, Oracle or PostgreSQL.");
+			$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, MySQL, Oracle or PostgreSQL.");
 		loc.returnValue = CreateObject("component", "adapters.#loc.adapterName#").init(argumentCollection=variables.wheels.class.connection);
 	</cfscript>
 	<cfreturn loc.returnValue>

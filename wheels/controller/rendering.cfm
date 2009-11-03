@@ -1,19 +1,19 @@
-<cffunction name="renderPageToString" returntype="string" access="public" output="false">
-	<cfscript>
-		$deprecated("The `renderPageToString` function will be deprecated in a future version of Wheels, please use `renderPage(returnAs='string')` instead");
-		arguments.returnAs = "string";
-	</cfscript>
-	<cfreturn renderPage(argumentCollection=arguments)>
-</cffunction>
+<cffunction name="renderPage" returntype="any" access="public" output="false"
+	hint="Renders content to the browser by including the view page for the specified controller and action."
+	examples=
+	'
+		<cfset renderPage(action="someOtherAction")>
 
-<cffunction name="renderPage" returntype="any" access="public" output="false" hint="Renders content to the browser by including the view page for the specified controller and action.">
+		<cfset renderPage(layout=false, cache=60)>
+	'
+	categories="controller-request" chapters="rendering-pages" functions="renderPageToString,renderNothing,renderText,renderPartial">
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Controller to include the view page for">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Action to include the view page for">
 	<cfargument name="template" type="string" required="false" default="" hint="A specific template to render">
 	<cfargument name="layout" type="any" required="false" default="#application.wheels.functions.renderPage.layout#" hint="The layout to wrap the content in">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for">
 	<cfargument name="returnAs" type="string" required="false" default="" hint="Set to `string` to return the result to the controller instead of sending it to the browser immediately">
-	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#">
+	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#" hint="Whether or not to show debug information at the end of the output. This is useful to override as `false` when you're testing XML output in an environment where the value for `showDebugInformation` is set to `true`">
 	<cfscript>
 		var loc = {};
 		arguments = $dollarify(arguments, "controller,action,template,layout,cache,returnAs");
@@ -51,33 +51,44 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="renderNothing" returntype="void" access="public" output="false" hint="Renders a blank string to the browser. This is very similar to calling 'cfabort' with the advantage that any after filters you have set on the action will still be run.">
+<cffunction name="renderNothing" returntype="void" access="public" output="false"
+	hint="Renders a blank string to the browser. This is very similar to calling 'cfabort' with the advantage that any after filters you have set on the action will still be run."
+	examples=
+	'
+		<cfset renderNothing()>
+	'
+	categories="controller-request" chapters="rendering-pages" functions="renderPage,renderPageToString,renderText,renderPartial">
 	<cfscript>
 		request.wheels.response = "";
 	</cfscript>
 </cffunction>
 
-<cffunction name="renderText" returntype="void" access="public" output="false" hint="Renders the specified text to the browser.">
+<cffunction name="renderText" returntype="void" access="public" output="false"
+	hint="Renders the specified text to the browser."
+	examples=
+	'
+		<cfset renderText("Done!")>
+	'
+	categories="controller-request" chapters="rendering-pages" functions="renderPage,renderPageToString,renderNothing,renderPartial">
 	<cfargument name="text" type="any" required="true" hint="The text to be rendered">
 	<cfscript>
 		request.wheels.response = arguments.text;
 	</cfscript>
 </cffunction>
 
-<cffunction name="renderPartial" returntype="any" access="public" output="false" hint="Renders content to the browser by including a partial.">
+<cffunction name="renderPartial" returntype="any" access="public" output="false"
+	hint="Renders content to the browser by including a partial."
+	examples=
+	'
+		<cfset renderPartial("comment")>
+	'
+	categories="controller-request" chapters="rendering-pages" functions="renderPage,renderPageToString,renderNothing,renderText">
 	<cfargument name="partial" type="string" required="true" hint="The name of the file to be used (starting with an optional path and with the underscore and file extension excluded)">
-	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for `renderPage`">
-	<cfargument name="layout" type="string" required="false" default="#application.wheels.functions.renderPartial.layout#" hint="See documentation for `renderPage`">
-	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for `renderPage`">
+	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPage">
+	<cfargument name="layout" type="string" required="false" default="#application.wheels.functions.renderPartial.layout#" hint="See documentation for @renderPage">
+	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for @renderPage">
 	<cfscript>
 		var loc = {};
-	</cfscript>
-	<cfif StructKeyExists(arguments, "name")>
-		<cfset $deprecated("The `name` argument will be deprecated in a future version of Wheels, please use the `partial` argument instead")>
-		<cfset arguments.partial = arguments.name>
-		<cfset StructDelete(arguments, "name")>
-	</cfif>
-	<cfscript>
 		loc.partial = $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,cache,layout,returnAs"));
 		if (arguments.$returnAs == "string")
 			loc.returnValue = loc.partial;
@@ -142,7 +153,7 @@
 		}
 		else if (IsSimpleValue(arguments.$partial))
 		{
-			arguments.$name = arguments.$partial;	
+			arguments.$name = arguments.$partial;
 		}
 		if (StructKeyExists(arguments, "$name"))
 		{
@@ -251,7 +262,7 @@
 					{
 						loc.returnValue = loc.returnValue & $includeAndReturnOutput(argumentCollection=arguments);
 						if (StructKeyExists(arguments, "$spacer") && loc.i < loc.iEnd)
-							loc.returnValue = loc.returnValue & loc.tempSpacer;				
+							loc.returnValue = loc.returnValue & loc.tempSpacer;
 					}
 					// now remove the last temp spacer and replace the tempSpacer with $spacer
 					if (Right(loc.returnValue, 3) == loc.tempSpacer)

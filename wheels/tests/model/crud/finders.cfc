@@ -1,6 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsmapping/tests/_assets/testhelpers/single_model.cfm">
+	<cfinclude template="/wheelsmapping/tests/_assets/testhelpers/load_models.cfm">
+	<cfset load_Models("users")>
 
 	<cffunction name="test_select_distinct_addresses">
 		<cfset loc.q = loc.user.findAll(select="address", distinct="true", order="address")>
@@ -135,6 +136,11 @@
 	<cffunction name="test_exists_by_where_two_records_valid">
 		<cfset loc.r = loc.user.exists(where="zipcode = '22222'")>
 		<cfset assert('loc.r eq true')>
+	</cffunction>
+
+	<cffunction name="test_allow_negative_values_in_where_clause">
+		<cfset loc.r = loc.user.exists(where="id = -1")>
+		<cfset assert('loc.r eq false')>
 	</cffunction>
 
 </cfcomponent>

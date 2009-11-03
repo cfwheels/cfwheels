@@ -9,12 +9,12 @@
 		<cfset loc.args.property = "birthdaymonth">
 		<cfset loc.args.checkedvalue = "11">
 		<cfset halt(false, "loc.controller.checkBox(argumentcollection=loc.args)")>
-		<cfset loc.e = '<input type="checkbox" value="11" id="ModelUsers1-birthdaymonth" name="ModelUsers1[birthdaymonth]" checked="checked" /><input value="0" type="hidden" name="ModelUsers1[birthdaymonth]($checkbox)" />'>
+		<cfset loc.e = '<input checked="checked" id="ModelUsers1-birthdaymonth" name="ModelUsers1[birthdaymonth]" type="checkbox" value="11" /><input name="ModelUsers1[birthdaymonth]($checkbox)" type="hidden" value="0" />'>
 		<cfset loc.r = loc.controller.checkBox(argumentcollection=loc.args)>
 		<cfset assert("loc.e eq loc.r")>
 		<cfset loc.args.checkedvalue = "12">
 		<cfset halt(false, "loc.controller.checkBox(argumentcollection=loc.args)")>
-		<cfset loc.e = '<input type="checkbox" value="12" id="ModelUsers1-birthdaymonth" name="ModelUsers1[birthdaymonth]" /><input value="0" type="hidden" name="ModelUsers1[birthdaymonth]($checkbox)" />'>
+		<cfset loc.e = '<input id="ModelUsers1-birthdaymonth" name="ModelUsers1[birthdaymonth]" type="checkbox" value="12" /><input name="ModelUsers1[birthdaymonth]($checkbox)" type="hidden" value="0" />'>
 		<cfset loc.r = loc.controller.checkBox(argumentcollection=loc.args)>
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>

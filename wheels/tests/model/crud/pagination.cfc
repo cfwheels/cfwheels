@@ -1,6 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsmapping/tests/_assets/testhelpers/single_model.cfm">
+	<cfinclude template="/wheelsmapping/tests/_assets/testhelpers/load_models.cfm">
+	<cfset load_Models("users,photogalleryphotos")>
 
 	<cffunction name="test_exist_early_if_no_records_match_where_clause">
 		<cfset loc.e = global.user.findAll(where="firstname = 'somemoron'", perpage="2", page="1", handle="pagination_test_1", order="id")>
@@ -49,21 +50,21 @@
 		}>
 		
 		<!--- page 1 --->	
-		<cfset loc.q = global.photogalleryphotos.findAll(argumentCollection=loc.args)>
+		<cfset loc.q = global.photogalleryphoto.findAll(argumentCollection=loc.args)>
 		<cfset loc.r = valuelist(loc.q.photogalleryphotoid)>
 		<cfset loc.e = "11,12">
 		<cfset assert('loc.e eq loc.r')>
 		
 		<!--- page 3 --->
 		<cfset loc.args.page = "3">
-		<cfset loc.q = global.photogalleryphotos.findAll(argumentCollection=loc.args)>
+		<cfset loc.q = global.photogalleryphoto.findAll(argumentCollection=loc.args)>
 		<cfset loc.r = valuelist(loc.q.photogalleryphotoid)>
 		<cfset loc.e = "15,16">
 		<cfset assert('loc.e eq loc.r')>
 		
 		<!--- page 5 --->
 		<cfset loc.args.page = "5">
-		<cfset loc.q = global.photogalleryphotos.findAll(argumentCollection=loc.args)>
+		<cfset loc.q = global.photogalleryphoto.findAll(argumentCollection=loc.args)>
 		<cfset loc.r = valuelist(loc.q.photogalleryphotoid)>
 		<cfset loc.e = "19,20">
 		<cfset assert('loc.e eq loc.r')>		

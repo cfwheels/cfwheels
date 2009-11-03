@@ -12,7 +12,7 @@
 		<cfset structdelete(loc.args, "alt")>
 		<cfset structdelete(loc.args, "class")>
 		<cfset structdelete(loc.args, "id")>
-		<cfset loc.r = '<img src="#loc.imagePath#/#loc.args.source#" alt="Wheelslogo" width="123" height="90" />'>
+		<cfset loc.r = '<img alt="Wheelslogo" height="90" src="#loc.imagePath#/#loc.args.source#" width="123" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
@@ -20,13 +20,13 @@
 	<cffunction name="test_supplying_an_alt">
 		<cfset structdelete(loc.args, "class")>
 		<cfset structdelete(loc.args, "id")>
-		<cfset loc.r = '<img src="#loc.imagePath#/#loc.args.source#" alt="#loc.args.alt#" width="123" height="90" />'>
+		<cfset loc.r = '<img alt="#loc.args.alt#" height="90" src="#loc.imagePath#/#loc.args.source#" width="123" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
 	<cffunction name="test_supplying_class_and_id">
-		<cfset loc.r = '<img id="#loc.args.id#" src="#loc.imagePath#/#loc.args.source#" alt="#loc.args.alt#" width="123" height="90" class="#loc.args.class#" />'>
+		<cfset loc.r = '<img alt="#loc.args.alt#" class="#loc.args.class#" height="90" id="#loc.args.id#" src="#loc.imagePath#/#loc.args.source#" width="123" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
@@ -36,7 +36,7 @@
 		<cfset structdelete(loc.args, "class")>
 		<cfset structdelete(loc.args, "id")>
 		<cfset loc.args.source = "http://www.cfwheels.org/images/logo.jpg">
-		<cfset loc.r = '<img src="#loc.args.source#" alt="Logo" />'>
+		<cfset loc.r = '<img alt="Logo" src="#loc.args.source#" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
@@ -46,7 +46,7 @@
 		<cfset structdelete(loc.args, "class")>
 		<cfset structdelete(loc.args, "id")>
 		<cfset loc.args.source = "https://www.cfwheels.org/images/logo.jpg">
-		<cfset loc.r = '<img src="#loc.args.source#" alt="Logo" />'>
+		<cfset loc.r = '<img alt="Logo" src="#loc.args.source#" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>

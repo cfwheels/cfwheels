@@ -1,7 +1,14 @@
-<cffunction name="excerpt" returntype="string" access="public" output="false" hint="Extracts an excerpt from text that matches the first instance of phrase.">
+<cffunction name="excerpt" returntype="string" access="public" output="false"
+	hint="Extracts an excerpt from text that matches the first instance of phrase."
+	examples=
+	'
+		##excerpt(text="ColdFusion Wheels is a Rails-like MVC framework for Adobe ColdFusion and Railo", phrase="framework", radius=5)##
+		-> ... MVC framework for ...
+	'
+	categories="view-helper" functions="highlight,simpleFormat,stripLinks,stripTags,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="The text to extract an excerpt from">
 	<cfargument name="phrase" type="string" required="true" hint="The phrase to extract">
-	<cfargument name="radius" type="numeric" required="false" default="100" hint="Number of characters to extract surronding the phrase">
+	<cfargument name="radius" type="numeric" required="false" default="100" hint="Number of characters to extract surrounding the phrase">
 	<cfargument name="excerptString" type="string" required="false" default="..." hint="String to replace first and/or last characters with">
 	<cfscript>
 	var loc = {};
@@ -38,10 +45,17 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="highlight" returntype="string" access="public" output="false" hint="Highlights the phrase(s) everywhere in the text if found by wrapping it in a span tag.">
-	<cfargument name="text" type="string" required="true">
-	<cfargument name="phrases" type="string" required="true">
-	<cfargument name="class" type="string" required="false" default="highlight">
+<cffunction name="highlight" returntype="string" access="public" output="false"
+	hint="Highlights the phrase(s) everywhere in the text if found by wrapping it in a span tag."
+	examples=
+	'
+		##highlight(text="You searched for: Wheels", phrases="Wheels")##
+		-> You searched for: <span class="highlight">Wheels</span>
+	'
+	categories="view-helper" functions="excerpt,simpleFormat,stripLinks,stripTags,titleize,truncate">
+	<cfargument name="text" type="string" required="true" hint="Text to search">
+	<cfargument name="phrases" type="string" required="true" hint="List of phrases to highlight">
+	<cfargument name="class" type="string" required="false" default="highlight" hint="Class to use in `span` tags surrounding highlighted phrase(s)">
 	<cfscript>
 		var loc = {};
 		if (!Len(arguments.text) || !Len(arguments.phrases))
@@ -77,7 +91,32 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="simpleFormat" returntype="string" access="public" output="false" hint="Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards).">
+<cffunction name="simpleFormat" returntype="string" access="public" output="false"
+	hint="Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards)."
+	examples=
+	'
+		<!--- how most of your calls will look --->
+		##simpleFormat(post.comments)##
+
+		<!--- demonstrates what output looks like with specific data --->
+		<cfsavecontent variable="comment">
+			I love this post!
+
+			Here''s why:
+			* Short
+			* Succinct
+			* Awesome
+		</cfsavecontent>
+		##simpleFormat(comment)##
+		-> <p>I love this post!</p>
+		   <p>
+		       Here''s why:<br />
+			   * Short<br />
+			   * Succinct<br />
+			   * Awesome
+		   </p>
+	'
+	categories="view-helper" functions="excerpt,highlight,stripLinks,stripTags,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="The text to format">
 	<cfargument name="wrap" type="boolean" required="false" default="true" hint="Set to true to wrap the result in a paragraph">
 	<cfscript>
@@ -92,20 +131,41 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="stripLinks" returntype="string" access="public" output="false" hint="Removes all links from the html (leaving just the link text).">
+<cffunction name="stripLinks" returntype="string" access="public" output="false"
+	hint="Removes all links from an HTML string, leaving just the link text."
+	examples=
+	'
+		##stripLinks("<strong>Wheels</strong> is a framework for <a href="http://www.adobe.com/products/coldfusion/">ColdFusion</a>.")##
+		-> <strong>Wheels</strong> is a framework for ColdFusion.
+	'
+	categories="view-helper" functions="excerpt,highlight,simpleFormat,stripTags,titleize,truncate">
 	<cfargument name="html" type="string" required="true" hint="The html to remove links from">
 	<cfreturn REReplaceNoCase(arguments.html, "<a.*?>(.*?)</a>", "\1" , "all")>
 </cffunction>
 
-<cffunction name="stripTags" returntype="string" access="public" output="false" hint="Removes all tags from the html.">
-	<cfargument name="html" type="string" required="true" hint="The html to remove links from">
+<cffunction name="stripTags" returntype="string" access="public" output="false"
+	hint="Removes all HTML tags from a string."
+	examples=
+	'
+		##stripTags("<strong>Wheels</strong> is a framework for <a href="http://www.adobe.com/products/coldfusion/">ColdFusion</a>.")##
+		-> Wheels is a framework for ColdFusion.
+	'
+	categories="view-helper" functions="excerpt,highlight,simpleFormat,stripLinks,titleize,truncate">
+	<cfargument name="html" type="string" required="true" hint="The HTML to remove links from">
 	<cfset var returnValue = "">
 	<cfset returnValue = REReplaceNoCase(arguments.html, "<\ *[a-z].*?>", "", "all")>
 	<cfset returnValue = REReplaceNoCase(returnValue, "<\ */\ *[a-z].*?>", "", "all")>
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="titleize" returntype="string" access="public" output="false" hint="Capitalizes all words in the text to create a nicer looking title.">
+<cffunction name="titleize" returntype="string" access="public" output="false"
+	hint="Capitalizes all words in the text to create a nicer looking title."
+	examples=
+	'
+		##titleize("Wheels is a framework for ColdFusion")##
+		-> Wheels Is A Framework For ColdFusion
+	'
+	categories="view-helper" functions="excerpt,highlight,simpleFormat,stripLinks,stripTags,truncate">
 	<cfargument name="word" type="string" required="true" hint="The text to turn into a title">
 	<cfscript>
 		var loc = {};
@@ -119,7 +179,17 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="truncate" returntype="string" access="public" output="false" hint="Truncates text to the specified length and replaces the last characters with the specified truncate string (defaults to '...').">
+<cffunction name="truncate" returntype="string" access="public" output="false"
+	hint="Truncates text to the specified length and replaces the last characters with the specified truncate string. (Defaults to '...')"
+	examples=
+	'
+		##truncate(text="Wheels is a framework for ColdFusion", length=20)##
+		-> Wheels is a frame...
+
+		##truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")##
+		-> Wheels is a framework f (more)
+	'
+	categories="view-helper" functions="excerpt,highlight,simpleFormat,stripLinks,stripTags,titleize">
 	<cfargument name="text" type="string" required="true" hint="The text to truncate">
 	<cfargument name="length" type="numeric" required="false" default="30" hint="Length to truncate the text to">
 	<cfargument name="truncateString" type="string" required="false" default="..." hint="String to replace the last characters with">

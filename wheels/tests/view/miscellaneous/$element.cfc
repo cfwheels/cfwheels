@@ -11,7 +11,7 @@
 
 	<cffunction name="test_with_all_options">
 		<cfset loc.e = loc.controller.$element(argumentcollection=loc.args)>
-		<cfset loc.r = '<textarea cols="40" rows="10" name="textareatest">this is a test to see if textarea renders</textarea>'>
+		<cfset loc.r = '<textarea cols="40" name="textareatest" rows="10">this is a test to see if textarea renders</textarea>'>
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
