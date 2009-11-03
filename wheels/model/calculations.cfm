@@ -1,7 +1,6 @@
 <!--- PUBLIC MODEL CLASS METHODS --->
 
-<cffunction name="average" returntype="numeric" access="public" output="false"
-	hint="Calculates the average value for a given property. Uses the SQL function `AVG`."
+<cffunction name="average" returntype="numeric" access="public" output="false" hint="Calculates the average value for a given property. Uses the SQL function `AVG`."
 	examples=
 	'
 		<!--- Get the average salary for all employees --->
@@ -18,8 +17,7 @@
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="count" returntype="numeric" access="public" output="false"
-	hint="Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function `COUNT`."
+<cffunction name="count" returntype="numeric" access="public" output="false" hint="Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function `COUNT`."
 	examples=
 	'
 		<!--- Count how many authors there are in the table --->
@@ -32,7 +30,7 @@
 		<cfset authorWithBooksOnACount = model("author").count(include="books", where="title LIKE ''A%''")>
 
 		<!--- Count the number of comments on a specific post (a `hasMany` association from `post` to `comment` is required) --->
-		<!--- The `commentCount` method below will call `model("comment").count(where="postId=##post.id##")` internally --->
+		<!--- The `commentCount` method will call `model("comment").count(where="postId=##post.id##")` internally --->
 		<cfset aPost = model("post").findByKey(params.postId)>
 		<cfset amount = aPost.commentCount()>
 	'
@@ -55,8 +53,7 @@
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="maximum" returntype="numeric" access="public" output="false"
-	hint="Calculates the maximum value for a given property. Uses the SQL function `MAX`."
+<cffunction name="maximum" returntype="numeric" access="public" output="false" hint="Calculates the maximum value for a given property. Uses the SQL function `MAX`."
 	examples=
 	'
 		<!--- Get the amount of the highest salary for all employees --->
@@ -72,8 +69,7 @@
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="minimum" returntype="numeric" access="public" output="false"
-	hint="Calculates the minimum value for a given property. Uses the SQL function `MIN`."
+<cffunction name="minimum" returntype="numeric" access="public" output="false" hint="Calculates the minimum value for a given property. Uses the SQL function `MIN`."
 	examples=
 	'
 		<!--- Get the amount of the lowest salary for all employees --->
@@ -89,8 +85,7 @@
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="sum" returntype="numeric" access="public" output="false"
-	hint="Calculates the sum of values for a given property. Uses the SQL function `SUM`."
+<cffunction name="sum" returntype="numeric" access="public" output="false" hint="Calculates the sum of values for a given property. Uses the SQL function `SUM`."
 	examples=
 	'
 		<!--- Get the sum of all salaries --->

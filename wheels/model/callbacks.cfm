@@ -1,28 +1,39 @@
 <!--- PUBLIC MODEL INITIALIZATION METHODS --->
 
-<cffunction name="afterNew" returntype="void" access="public" output="false" hint="Register method(s) that should be called after a new object has been initialized (usually done with the @new method)."
+<cffunction name="afterNew" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after a new object has been initialized (usually done with the @new method)."
 	examples=
 	'
 		<!--- Instruct Wheels to call the `fixObj` method --->
 		<cfset afterNew("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="Method name or list of method names (can also be called with the `method` argument).">
+	<cfargument name="methods" type="string" required="false" default="" hint="Method name or list of method names that should be called when this callback event occurs in an object's life cycle (can also be called with the `method` argument).">
 	<cfset $registerCallback(type="afterNew", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="afterFind" returntype="void" access="public" output="false" hint="Register method(s) that should be called after an existing object has been initialized (usually done with the findByKey or findOne method)."
+<cffunction name="afterFind" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an existing object has been initialized (usually done with the @findByKey or @findOne method)."
 	examples=
 	'
-		<!--- Instruct Wheels to call the `fixObj` method --->
-		<cfset afterFind("fixObj")>
+		<!--- Instruct Wheels to call the `setTime` method after getting objects or records with one of the finder methods --->
+		<cffunction name="init">
+			<cfset afterFind("setTime")>
+		</cffunction>
+
+		<cffunction name="setTime">
+			<cfif StructIsEmpty(arguments)>
+				<cfset this.fetchedAt = Now()>
+			<cfelse>
+				<cfset arguments.fetchedAt = Now()>
+				<cfreturn arguments>
+			</cfif>
+		</cffunction>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
 	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
 	<cfset $registerCallback(type="afterFind", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="afterInitialization" returntype="void" access="public" output="false" hint="Register method(s) that should be called after an object has been initialized."
+<cffunction name="afterInitialization" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an object has been initialized."
 	examples=
 	'
 		<!--- Instruct Wheels to call the `fixObj` method --->
@@ -33,7 +44,7 @@
 	<cfset $registerCallback(type="afterInitialization", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="beforeValidation" returntype="void" access="public" output="false" hint="Register method(s) that should be called before an object is validated."
+<cffunction name="beforeValidation" returntype="void" access="public" output="false" hint="Registers method(s) that should be called before an object is validated."
 	examples=
 	'
 		<!--- Instruct Wheels to call the `fixObj` method --->

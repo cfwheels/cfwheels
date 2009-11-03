@@ -72,7 +72,9 @@
 		var key = "";
 		variables.wheels.class.associations[arguments.name] = {};
 		for (key in arguments)
+		{
 			if (key != "name")
 				variables.wheels.class.associations[arguments.name][key] = arguments[key];
+		}
 	</cfscript>
 </cffunction>
