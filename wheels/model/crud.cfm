@@ -633,16 +633,6 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="primaryKey" returntype="string" access="public" output="false" hint="Returns the name of the primary key for this model's table. This is determined through database introspection. If composite primary keys have been used they will both be returned in a list."
-	examples=
-	'
-		<!--- Get the name of the primary key of the table mapped to the `employee` model (the `employees` table by default) --->
-		<cfset theKeyName = model("employee").primaryKey()>
-	'
-	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="">
-	<cfreturn variables.wheels.class.keys>
-</cffunction>
-
 <!--- PUBLIC MODEL OBJECT METHODS --->
 
 <!--- crud --->
