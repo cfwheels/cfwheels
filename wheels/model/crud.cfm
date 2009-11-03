@@ -296,7 +296,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-﻿<cffunction name="findByKey" returntype="any" access="public" output="false" hint="Fetches the requested record and returns it as an object. Returns `false` if no record is found. You can override this behavior to return a `cfquery` result set instead, similar to what's described in the documentation for @findOne."
+<cffunction name="findByKey" returntype="any" access="public" output="false" hint="Fetches the requested record and returns it as an object. Returns `false` if no record is found. You can override this behavior to return a `cfquery` result set instead, similar to what's described in the documentation for @findOne."
 	examples=
 	'
 		<!--- Getting the author with the primary key vale 99 as an object --->
