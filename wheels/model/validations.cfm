@@ -237,17 +237,16 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = false;
+		clearErrors();
 		if ($callback("beforeValidation"))
 		{
 			if (isNew())
 			{
-				// if this is a brand new object that has not been saved to the database we validate the `onCreate` methods (`onSave` methods are always called)
 				if ($callback("beforeValidationOnCreate") && $validate("onSave") && $validate("onCreate") && $callback("afterValidation") && $callback("afterValidationOnCreate"))
 					loc.returnValue = true;
 			}
 			else
 			{
-				// if this record already exists in the database we validate the `onUpdate` methods
 				if ($callback("beforeValidationOnUpdate") && $validate("onSave") && $validate("onUpdate") && $callback("afterValidation") && $callback("afterValidationOnUpdate"))
 					loc.returnValue = true;
 			}
