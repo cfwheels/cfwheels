@@ -795,112 +795,6 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<!--- changes --->
-
-<cffunction name="allChanges" returntype="struct" access="public" output="false" hint="Returns a struct detailing all changes that have been made on the object but not yet saved to the database."
-	examples=
-	'
-		<!--- Get an object, change it and then ask for its changes (will return a struct containing the changes, both property names and their values) --->
-		<cfset member = model("member").findByKey(params.memberId)>
-		<cfset member.firstName = params.newFirstName>
-		<cfset member.email = params.newEmail>
-		<cfset allChangesAsStruct = member.allChanges()>
-	'
-	categories="model-object,changes" chapters="" functions="changedFrom,changedProperties,hasChanged">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = {};
-		if (hasChanged())
-		{
-			loc.changedProperties = changedProperties();
-			loc.iEnd = ListLen(loc.changedProperties);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				loc.item = ListGetAt(loc.changedProperties, loc.i);
-				loc.returnValue[loc.item] = {};
-				loc.returnValue[loc.item].changedFrom = changedFrom(loc.item);
-				if (StructKeyExists(this, loc.item))
-					loc.returnValue[loc.item].changedTo = this[loc.item];
-				else
-					loc.returnValue[loc.item].changedTo = "";
-			}
-		}
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="changedFrom" returntype="string" access="public" output="false" hint="Returns the previous value of a property that has changed. Returns an empty string if no previous value exists. Wheels will keep a note of the previous property value until the object is saved to the database."
-	examples=
-	'
-		<!--- Get a member object and change the `email` property on it --->
-		<cfset member = model("member").findByKey(params.memberId)>
-		<cfset member.email = params.newEmail>
-
-		<!---Get the previous value (what the `email` property was before it was changed)--->
-		<cfset oldValue = member.changedFrom(property="email")>
-
-		<!--- The above can also be done using a dynamic function like this --->
-		<cfset oldValue = member.emailChangedFrom()>
-	'
-	categories="model-object,changes" chapters="" functions="allChanges,changedProperties,hasChanged">
-	<cfargument name="property" type="string" required="true" hint="Name of property to get the previous value for.">
-	<cfscript>
-		var returnValue = "";
-		if (StructKeyExists(variables, "$persistedProperties") && StructKeyExists(variables.$persistedProperties, arguments.property))
-			returnValue = variables.$persistedProperties[arguments.property];
-	</cfscript>
-	<cfreturn returnValue>
-</cffunction>
-
-<cffunction name="changedProperties" returntype="string" access="public" output="false" hint="Returns a list of the object properties that have been changed but not yet saved to the database."
-	examples=
-	'
-		<!--- Get an object, change it and then ask for its changes (will return a list of the property names that have changed, not the values themselves) --->
-		<cfset member = model("member").findByKey(params.memberId)>
-		<cfset member.firstName = params.newFirstName>
-		<cfset member.email = params.newEmail>
-		<cfset changes = member.changedProperties()>
-	'
-	categories="model-object,changes" chapters="" functions="allChanges,changedFrom,hasChanged">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = "";
-		for (loc.key in variables.wheels.class.properties)
-			if (hasChanged(loc.key))
-				loc.returnValue = ListAppend(loc.returnValue, loc.key);
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="hasChanged" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified object property (or any if none was passed in) have been changed but not yet saved to the database. Will also return `true` if the object is new and no record for it exists in the database."
-	examples=
-	'
-		<!--- Get a member object and change the `email` property on it --->
-		<cfset member = model("member").findByKey(params.memberId)>
-		<cfset member.email = params.newEmail>
-
-		<!--- Check if the `email` property has changed --->
-		<cfif member.hasChanged(property="email")>
-			<!--- Do something... --->
-		</cfif>
-
-		<!--- The above can also be done using a dynamic function like this --->
-		<cfif member.emailHasChanged()>
-			<!--- Do something... --->
-		</cfif>
-	'
-	categories="model-object,changes" chapters="" functions="allChanges,changedFrom,changedProperties">
-	<cfargument name="property" type="string" required="false" default="" hint="Name of property to check for change.">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = false;
-		for (loc.key in variables.wheels.class.properties)
-			if (!StructKeyExists(this, loc.key) || !StructKeyExists(variables, "$persistedProperties") || !StructKeyExists(variables.$persistedProperties, loc.key) || Compare(this[loc.key], variables.$persistedProperties[loc.key]) && (!Len(arguments.property) || loc.key == arguments.property))
-				loc.returnValue = true;
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
 <!--- other --->
 
 <cffunction name="isNew" returntype="boolean" access="public" output="false" hint="Returns `true` if this object hasn't been saved yet (in other words no record exists in the database yet). Returns `false` if a record exists."
@@ -1600,16 +1494,6 @@
 			$updatePersistedProperties();
 	</cfscript>
 	<cfreturn this>
-</cffunction>
-
-<cffunction name="$updatePersistedProperties" returntype="void" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		variables.$persistedProperties = {};
-		for (loc.key in variables.wheels.class.properties)
-			if (StructKeyExists(this, loc.key))
-				variables.$persistedProperties[loc.key] = this[loc.key];
-	</cfscript>
 </cffunction>
 
 <cffunction name="$keyWhereString" returntype="string" access="public" output="false">

@@ -28,99 +28,6 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="setProperties" returntype="void" access="public" output="false"
-	hint="Allows you to set all the properties at once by passing in a structure with keys matching the property names."
-	examples=
-	'
-		<!--- update the properties of the model with the params struct containing the values of a form post --->
-		<cfset user = model("user").new(params)>
-		<cfset user.setProperties(params)>
-	'	
-	categories="model-object" chapters="" functions="properties">
-	<cfargument name="properties" type="struct" required="false" default="#structnew()#">
-	<cfscript>
-	var loc = {};
-	loc.properties = duplicate(arguments.properties);
-	structdelete(arguments, "properties", false);
-	structappend(loc.properties, arguments, true);
-	for (loc.key in loc.properties)
-	{
-		if (ListFindNoCase(variables.wheels.class.propertyList, loc.key))
-		{
-			this[loc.key] = loc.properties[loc.key];
-		}
-	}
-	</cfscript>
-</cffunction>
-
-<cffunction name="properties" returntype="struct" access="public" output="false"
-	hint="Returns a structure of all the properties with their names as keys and the values of the property as values."
-	example=
-	'
-		<!--- Get a structure of all the properties for a given model --->
-		<cfset user = model("user").new()>
-		<cfset user.properties()>
-		
-	'		
-	categories="model-object" chapters="" functions="setProperties">	
-	<cfscript>
-	var loc = {};
-	loc.returnvalue = {};
-	loc.properties = ListToArray(variables.wheels.class.propertyList);
-	loc.iEnd = ArrayLen(loc.properties);
-	for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-	{
-		loc.property = loc.properties[loc.i];
-		loc.returnvalue[loc.property] = "";
-		if(structkeyexists(this, loc.property))
-		{
-			loc.returnvalue[loc.property] = this[loc.property];
-		}
-	}
-	return loc.returnvalue;
-	</cfscript>
-</cffunction>
-
-<cffunction name="property" returntype="void" access="public" output="false"
-	hint="Use this method to map an object property to either a table column with a different name than the property or to a specific SQL function. You only need to use this method when you want to override the default mapping that Wheels performs."
-	examples=
-	'
-		<!--- In models/User.cfc --->
-		<cffunction name="init">
-			<!--- Tell Wheels that when we are referring to `firstName` in the CFML code it should translate to the `STR_USERS_FNAME` column when interacting with the database instead of the default (which would be the `firstname` column) --->
-  			<cfset property(name="firstName", column="STR_USERS_FNAME")>
-		</cffunction>
-	'
-	categories="model-initialization" chapters="object-relational-mapping" functions="columnNames,dataSource,propertyNames,table,tableName">
-	<cfargument name="name" type="string" required="true" hint="The name that you want to use for the column or SQL function result in the CFML code.">
-	<cfargument name="column" type="string" required="false" default="" hint="The name of the column in the database table to map the property to.">
-	<cfargument name="sql" type="string" required="false" default="" hint="An SQL function to use to calculate the property value.">
-	<cfscript>
-		variables.wheels.class.mapping[arguments.name] = {};
-		if (Len(arguments.column))
-		{
-			variables.wheels.class.mapping[arguments.name].type = "column";
-			variables.wheels.class.mapping[arguments.name].value = arguments.column;
-		}
-		else if (Len(arguments.sql))
-		{
-			variables.wheels.class.mapping[arguments.name].type = "sql";
-			variables.wheels.class.mapping[arguments.name].value = arguments.sql;
-		}
-	</cfscript>
-</cffunction>
-
-<cffunction name="propertyNames" returntype="string" access="public" output="false"
-	hint="Returns a list of property names (ordered by their respective column's ordinal position in the database table)."
-	examples=
-	'
-		<!--- Get a list of the property names in use in the user model --->
-  		<cfset propNames = model("user").propertyNames()>
-	'
-	categories="model-class" chapters="object-relational-mapping" functions="columnNames,dataSource,property,table,tableName">
-	<cfreturn variables.wheels.class.propertyList>
-</cffunction>
-
 <cffunction name="table" returntype="void" access="public" output="false"
 	hint="Use this method to tell Wheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard Wheels convention of a singular object name mapping to a plural table name."
 	examples=
@@ -364,36 +271,6 @@
 			$throw(type="Wheels.MethodNotFound", message="The method `#arguments.missingMethodName#` was not found in this model.", extendedInfo="Check your spelling or add the method to the model's CFC file.");
 	</cfscript>
 	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="$propertyValue" returntype="string" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = "";
-		loc.iEnd = ListLen(arguments.name);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			loc.returnValue = ListAppend(loc.returnValue, this[ListGetAt(arguments.name, loc.i)]);
-		}
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="$setDefaultValues" returntype="any" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.iEnd = ListLen(variables.wheels.class.propertyList);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			loc.iItem = ListGetAt(variables.wheels.class.propertyList, loc.i);
-			if (Len(variables.wheels.class.properties[loc.iItem].defaultValue) && (!StructKeyExists(this, loc.iItem) || !Len(this[loc.iItem])))
-			{
-				// set the default value unless it is blank or a value already exists for that property on the object
-				this[loc.iItem] = variables.wheels.class.properties[loc.iItem].defaultValue;
-			}
-		}
-	</cfscript>
 </cffunction>
 
 <cffunction name="$setForeignKeyValues" returntype="void" access="public" output="false">
