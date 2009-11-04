@@ -1461,17 +1461,11 @@
 		variables.wheels.errors = [];
 		// copy class variables from the object in the application scope
 		variables.wheels.class = $namedReadLock(name="classLock", object=application.wheels.models[arguments.name], method="$classData");
-		loc.allProperties = ListAppend(variables.wheels.class.propertyList, variables.wheels.class.calculatedPropertyList);
-		loc.iEnd = ListLen(loc.allProperties);
-		// set the properties to a blank string for initalization
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			loc.iItem = ListGetAt(loc.allProperties, loc.i);
-			this[loc.iItem] = "";
-		}
 		// setup object properties in the this scope
 		if (IsQuery(arguments.properties) && arguments.properties.recordCount != 0)
 		{
+			loc.allProperties = ListAppend(variables.wheels.class.propertyList, variables.wheels.class.calculatedPropertyList);
+			loc.iEnd = ListLen(loc.allProperties);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.iItem = ListGetAt(loc.allProperties, loc.i);
@@ -1479,7 +1473,7 @@
 					this[loc.iItem] = arguments.properties[arguments.name & loc.iItem][arguments.row];
 				else if (ListFindNoCase(arguments.properties.columnList, loc.iItem))
 					this[loc.iItem] = arguments.properties[loc.iItem][arguments.row];
-				}
+			}
 		}
 		else if (IsStruct(arguments.properties) && !StructIsEmpty(arguments.properties))
 		{
