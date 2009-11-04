@@ -1,5 +1,4 @@
-<cffunction name="cycle" returntype="string" access="public" output="false"
-	hint="Cycles through list values every time it is called."
+<cffunction name="cycle" returntype="string" access="public" output="false" hint="Cycles through list values every time it is called."
 	examples=
 	'
 		<!--- alternating table row colors --->
@@ -30,8 +29,8 @@
 		</cfoutput>
 	'
 	categories="view-helper" functions="resetCycle">
-	<cfargument name="values" type="string" required="true" hint="List of values to cycle through">
-	<cfargument name="name" type="string" required="false" default="default" hint="Name to give the cycle. Useful when you use multiple cycles on a page">
+	<cfargument name="values" type="string" required="true" hint="List of values to cycle through.">
+	<cfargument name="name" type="string" required="false" default="default" hint="Name to give the cycle. Useful when you use multiple cycles on a page.">
 	<cfscript>
 		var loc = {};
 		if (!StructKeyExists(request.wheels, "cycle"))
@@ -52,8 +51,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="resetCycle" returntype="void" access="public" output="false"
-	hint="Resets a cycle so that it starts from the first list value the next time it is called."
+<cffunction name="resetCycle" returntype="void" access="public" output="false" hint="Resets a cycle so that it starts from the first list value the next time it is called."
 	examples=
 	'
 		<!--- alternating row colors and shrinking emphasis --->
@@ -71,7 +69,7 @@
 	'
 	categories="view-helper" functions="cycle"
 	>
-	<cfargument name="name" type="string" required="false" default="default" hint="The name of the cycle to reset">
+	<cfargument name="name" type="string" required="false" default="default" hint="The name of the cycle to reset.">
 	<cfscript>
 		if (StructKeyExists(request.wheels, "cycle") && StructKeyExists(request.wheels.cycle, arguments.name))
 			StructDelete(request.wheels.cycle, arguments.name);

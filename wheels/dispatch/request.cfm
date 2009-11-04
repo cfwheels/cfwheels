@@ -1,135 +1,52 @@
-<cffunction name="$returnDispatcher" returntype="any" access="public" output="false">
-	<cfreturn this>
-</cffunction>
-
-<cffunction name="$runFilters" returntype="void" access="public" output="false">
+<cffunction name="$callAction" returntype="void" access="public" output="false">
 	<cfargument name="controller" type="any" required="true">
+	<cfargument name="controllerName" type="string" required="true">
 	<cfargument name="actionName" type="string" required="true">
-	<cfargument name="type" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		if (arguments.type == "before")
-			loc.filters = arguments.controller.$getBeforeFilters();
-		else
-			loc.filters = arguments.controller.$getAfterFilters();
-		loc.iEnd = ArrayLen(loc.filters);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			if ((!Len(loc.filters[loc.i].only) && !Len(loc.filters[loc.i].except)) || (Len(loc.filters[loc.i].only) && ListFindNoCase(loc.filters[loc.i].only, arguments.actionName)) || (Len(loc.filters[loc.i].except) && !ListFindNoCase(loc.filters[loc.i].except, arguments.actionName)))
-				$invoke(componentReference=arguments.controller, method=loc.filters[loc.i].through);
-		}
-	</cfscript>
-</cffunction>
+		
+		if (Left(arguments.actionName, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.actionName))
+			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.actionName#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels functions.");
 
-<cffunction name="$runVerifications" returntype="void" access="public" output="false">
-	<cfargument name="controller" type="any" required="true">
-	<cfargument name="actionName" type="string" required="true">
-	<cfargument name="params" type="struct" required="true">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = "";
-		loc.verifications = arguments.controller.$getVerifications();
-		loc.abort = false;
-		loc.iEnd = ArrayLen(loc.verifications);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		if (StructKeyExists(arguments.controller, arguments.actionName))
+			$invoke(componentReference=arguments.controller, method=arguments.actionName);
+		if (!StructKeyExists(request.wheels, "response"))
 		{
-			loc.verification = loc.verifications[loc.i];
-			if ((!Len(loc.verification.only) && !Len(loc.verification.except)) || (Len(loc.verification.only) && ListFindNoCase(loc.verification.only, arguments.actionName)) || (Len(loc.verification.except) && !ListFindNoCase(loc.verification.except, arguments.actionName)))
+			// a render function has not been called yet so call it here
+			try
 			{
-				if (IsBoolean(loc.verification.post) && ((loc.verification.post && request.cgi.request_method != "post") || (!loc.verification.post && request.cgi.request_method == "post")))
-					loc.abort = true;
-				if (IsBoolean(loc.verification.get) && ((loc.verification.get && request.cgi.request_method != "get") || (!loc.verification.get && request.cgi.request_method == "get")))
-					loc.abort = true;
-				if (IsBoolean(loc.verification.ajax) && ((loc.verification.ajax && request.cgi.http_x_requested_with != "XMLHTTPRequest") || (!loc.verification.ajax && request.cgi.http_x_requested_with == "XMLHTTPRequest")))
-					loc.abort = true;
-				loc.jEnd = ListLen(loc.verification.params);
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-				{
-					if (!StructKeyExists(arguments.params, ListGetAt(loc.verification.params, loc.j)))
-						loc.abort = true;
-				}
-				loc.jEnd = ListLen(loc.verification.session);
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-				{
-					if (!StructKeyExists(session, ListGetAt(loc.verification.session, loc.j)))
-						loc.abort = true;
-				}
-				loc.jEnd = ListLen(loc.verification.cookie);
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-				{
-					if (!StructKeyExists(cookie, ListGetAt(loc.verification.cookie, loc.j)))
-						loc.abort = true;
-				}
+				arguments.controller.renderPage();
 			}
-			if (loc.abort)
+			catch(Any e)
 			{
-				if (Len(loc.verification.handler))
+				if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(arguments.controllerName)#/#LCase(arguments.actionName)#.cfm")))
 				{
-					$invoke(componentReference=arguments.controller, method=loc.verification.handler);
-					$location(url=request.cgi.http_referer, addToken=false);
+					$throw(object=e);
 				}
 				else
 				{
-					$abort();
-				}			
-			}
-		}
-	</cfscript>
-</cffunction>
-
-<cffunction name="$getRouteFromRequest" returntype="string" access="public" output="false">
-	<cfargument name="pathInfo" type="string" required="false" default="#request.cgi.path_info#">
-	<cfargument name="scriptName" type="string" required="false" default="#request.cgi.script_name#">
-	<cfscript>
-		var returnValue = "";
-		if (arguments.pathInfo == arguments.scriptName || arguments.pathInfo == "/" || arguments.pathInfo == "")
-			returnValue = "";
-		else
-			returnValue = Right(arguments.pathInfo, Len(arguments.pathInfo)-1);
-	</cfscript>
-	<cfreturn returnValue>
-</cffunction>
-
-<cffunction name="$findMatchingRoute" returntype="struct" access="public" output="false">
-	<cfargument name="route" type="string" required="true">
-	<cfargument name="routes" type="array" required="false" default="#application.wheels.routes#">
-	<cfscript>
-		var loc = {};
-		loc.iEnd = ArrayLen(arguments.routes);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			loc.currentRoute = arguments.routes[loc.i].pattern;
-			if (arguments.route == "" && loc.currentRoute == "")
-			{
-				loc.returnValue = arguments.routes[loc.i];
-				break;
-			}
-			else
-			{
-				if (ListLen(arguments.route, "/") >= ListLen(loc.currentRoute, "/") && loc.currentRoute != "")
-				{
-					loc.match = true;
-					loc.jEnd = ListLen(loc.currentRoute, "/");
-					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+					if (application.wheels.showErrorInformation)
 					{
-						loc.item = ListGetAt(loc.currentRoute, loc.j, "/");
-						loc.thisRoute = ReplaceList(loc.item, "[,]", ",");
-						loc.thisURL = ListGetAt(arguments.route, loc.j, "/");
-						if (Left(loc.item, 1) != "[" && loc.thisRoute != loc.thisURL)
-							loc.match = false;
+						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.actionName#` action in the `#arguments.controllerName#` controller.", extendedInfo="Create a file named `#LCase(arguments.actionName)#.cfm` in the `views/#LCase(arguments.controllerName)#` directory (create the directory as well if it doesn't already exist).");
 					}
-					if (loc.match)
+					else
 					{
-						loc.returnValue = arguments.routes[loc.i];
-						break;
+						$header(statusCode="404", statusText="Not Found");
+						$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
+						$abort();
 					}
 				}
 			}
 		}
-		if (!StructKeyExists(loc, "returnValue"))
-			$throw(type="Wheels.RouteNotFound", message="Wheels couldn't find a route that matched this request.", extendedInfo="Make sure there is a route setup in your `config/routes.cfm` file that matches the `#arguments.route#` request.");
-		</cfscript>
-		<cfreturn loc.returnValue>
+	</cfscript>
+</cffunction>
+
+<cffunction name="$callActionAndAddToCache" returntype="string" access="public" output="false">
+	<cfscript>
+		$callAction(controller=arguments.controller, controllerName=arguments.controllerName, actionName=arguments.actionName);
+		$addToCache(key=arguments.key, value=request.wheels.response, time=arguments.time, category=arguments.category);
+	</cfscript>
+	<cfreturn request.wheels.response>
 </cffunction>
 
 <cffunction name="$createParams" returntype="struct" access="public" output="false">
@@ -280,6 +197,61 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="$findMatchingRoute" returntype="struct" access="public" output="false">
+	<cfargument name="route" type="string" required="true">
+	<cfargument name="routes" type="array" required="false" default="#application.wheels.routes#">
+	<cfscript>
+		var loc = {};
+		loc.iEnd = ArrayLen(arguments.routes);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.currentRoute = arguments.routes[loc.i].pattern;
+			if (arguments.route == "" && loc.currentRoute == "")
+			{
+				loc.returnValue = arguments.routes[loc.i];
+				break;
+			}
+			else
+			{
+				if (ListLen(arguments.route, "/") >= ListLen(loc.currentRoute, "/") && loc.currentRoute != "")
+				{
+					loc.match = true;
+					loc.jEnd = ListLen(loc.currentRoute, "/");
+					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+					{
+						loc.item = ListGetAt(loc.currentRoute, loc.j, "/");
+						loc.thisRoute = ReplaceList(loc.item, "[,]", ",");
+						loc.thisURL = ListGetAt(arguments.route, loc.j, "/");
+						if (Left(loc.item, 1) != "[" && loc.thisRoute != loc.thisURL)
+							loc.match = false;
+					}
+					if (loc.match)
+					{
+						loc.returnValue = arguments.routes[loc.i];
+						break;
+					}
+				}
+			}
+		}
+		if (!StructKeyExists(loc, "returnValue"))
+			$throw(type="Wheels.RouteNotFound", message="Wheels couldn't find a route that matched this request.", extendedInfo="Make sure there is a route setup in your `config/routes.cfm` file that matches the `#arguments.route#` request.");
+		</cfscript>
+		<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$getRouteFromRequest" returntype="string" access="public" output="false">
+	<cfargument name="pathInfo" type="string" required="false" default="#request.cgi.path_info#">
+	<cfargument name="scriptName" type="string" required="false" default="#request.cgi.script_name#">
+	<cfscript>
+		var returnValue = "";
+		if (arguments.pathInfo == arguments.scriptName || arguments.pathInfo == "/" || arguments.pathInfo == "")
+			returnValue = "";
+		else
+			returnValue = Right(arguments.pathInfo, Len(arguments.pathInfo)-1);
+	</cfscript>
+	<cfreturn returnValue>
+</cffunction>
+
 <cffunction name="$request" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
@@ -359,52 +331,80 @@
 	<cfreturn Trim(request.wheels.response)>
 </cffunction>
 
-<cffunction name="$callActionAndAddToCache" returntype="string" access="public" output="false">
-	<cfscript>
-		$callAction(controller=arguments.controller, controllerName=arguments.controllerName, actionName=arguments.actionName);
-		$addToCache(key=arguments.key, value=request.wheels.response, time=arguments.time, category=arguments.category);
-	</cfscript>
-	<cfreturn request.wheels.response>
+<cffunction name="$returnDispatcher" returntype="any" access="public" output="false">
+	<cfreturn this>
 </cffunction>
 
-<cffunction name="$callAction" returntype="void" access="public" output="false">
+<cffunction name="$runFilters" returntype="void" access="public" output="false">
 	<cfargument name="controller" type="any" required="true">
-	<cfargument name="controllerName" type="string" required="true">
 	<cfargument name="actionName" type="string" required="true">
+	<cfargument name="type" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		
-		if (Left(arguments.actionName, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.actionName))
-			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.actionName#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels functions.");
-
-		if (StructKeyExists(arguments.controller, arguments.actionName))
-			$invoke(componentReference=arguments.controller, method=arguments.actionName);
-		if (!StructKeyExists(request.wheels, "response"))
+		if (arguments.type == "before")
+			loc.filters = arguments.controller.$getBeforeFilters();
+		else
+			loc.filters = arguments.controller.$getAfterFilters();
+		loc.iEnd = ArrayLen(loc.filters);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			// a render function has not been called yet so call it here
-			try
+			if ((!Len(loc.filters[loc.i].only) && !Len(loc.filters[loc.i].except)) || (Len(loc.filters[loc.i].only) && ListFindNoCase(loc.filters[loc.i].only, arguments.actionName)) || (Len(loc.filters[loc.i].except) && !ListFindNoCase(loc.filters[loc.i].except, arguments.actionName)))
+				$invoke(componentReference=arguments.controller, method=loc.filters[loc.i].through);
+		}
+	</cfscript>
+</cffunction>
+
+<cffunction name="$runVerifications" returntype="void" access="public" output="false">
+	<cfargument name="controller" type="any" required="true">
+	<cfargument name="actionName" type="string" required="true">
+	<cfargument name="params" type="struct" required="true">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = "";
+		loc.verifications = arguments.controller.$getVerifications();
+		loc.abort = false;
+		loc.iEnd = ArrayLen(loc.verifications);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.verification = loc.verifications[loc.i];
+			if ((!Len(loc.verification.only) && !Len(loc.verification.except)) || (Len(loc.verification.only) && ListFindNoCase(loc.verification.only, arguments.actionName)) || (Len(loc.verification.except) && !ListFindNoCase(loc.verification.except, arguments.actionName)))
 			{
-				arguments.controller.renderPage();
-			}
-			catch(Any e)
-			{
-				if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(arguments.controllerName)#/#LCase(arguments.actionName)#.cfm")))
+				if (IsBoolean(loc.verification.post) && ((loc.verification.post && request.cgi.request_method != "post") || (!loc.verification.post && request.cgi.request_method == "post")))
+					loc.abort = true;
+				if (IsBoolean(loc.verification.get) && ((loc.verification.get && request.cgi.request_method != "get") || (!loc.verification.get && request.cgi.request_method == "get")))
+					loc.abort = true;
+				if (IsBoolean(loc.verification.ajax) && ((loc.verification.ajax && request.cgi.http_x_requested_with != "XMLHTTPRequest") || (!loc.verification.ajax && request.cgi.http_x_requested_with == "XMLHTTPRequest")))
+					loc.abort = true;
+				loc.jEnd = ListLen(loc.verification.params);
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
-					$throw(object=e);
+					if (!StructKeyExists(arguments.params, ListGetAt(loc.verification.params, loc.j)))
+						loc.abort = true;
+				}
+				loc.jEnd = ListLen(loc.verification.session);
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				{
+					if (!StructKeyExists(session, ListGetAt(loc.verification.session, loc.j)))
+						loc.abort = true;
+				}
+				loc.jEnd = ListLen(loc.verification.cookie);
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				{
+					if (!StructKeyExists(cookie, ListGetAt(loc.verification.cookie, loc.j)))
+						loc.abort = true;
+				}
+			}
+			if (loc.abort)
+			{
+				if (Len(loc.verification.handler))
+				{
+					$invoke(componentReference=arguments.controller, method=loc.verification.handler);
+					$location(url=request.cgi.http_referer, addToken=false);
 				}
 				else
 				{
-					if (application.wheels.showErrorInformation)
-					{
-						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.actionName#` action in the `#arguments.controllerName#` controller.", extendedInfo="Create a file named `#LCase(arguments.actionName)#.cfm` in the `views/#LCase(arguments.controllerName)#` directory (create the directory as well if it doesn't already exist).");
-					}
-					else
-					{
-						$header(statusCode="404", statusText="Not Found");
-						$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
-						$abort();
-					}
-				}
+					$abort();
+				}			
 			}
 		}
 	</cfscript>

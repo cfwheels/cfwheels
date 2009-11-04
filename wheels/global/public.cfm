@@ -1,13 +1,50 @@
-<cffunction name="set" returntype="void" access="public" output="false"
-	hint="Use to configure a global setting."
+<!--- PUBLIC CONFIGURATION METHODS --->
+
+<cffunction name="addRoute" returntype="void" access="public" output="false" hint="Adds a new route to your application."
 	examples=
 	'
-		<cfset set(URLRewriting="Partial")> <!--- can be set to "On", "Off" or "Partial" --->
+		<!--- Adds a route which will invoke the `profile` action on the `user` controller with `params.userName` set when the URL matches the `pattern` argument --->
+		<cfset addRoute(name="userProfile", pattern="user/[username]", controller="user", action="profile")>
+	'
+	categories="configuration" chapters="using-routes" functions="">
+	<cfargument name="name" type="string" required="true" hint="Name for the route.">
+	<cfargument name="pattern" type="string" required="true" hint="The URL pattern for the route.">
+	<cfargument name="controller" type="string" required="false" default="" hint="Controller to call when route matches (unless the controller name exists in the pattern).">
+	<cfargument name="action" type="string" required="false" default="" hint="Action to call when route matches (unless the action name exists in the pattern).">
+	<cfscript>
+		var loc = {};
+
+		// throw errors when controller or action is not passed in as arguments and not included in the pattern
+		if (!Len(arguments.controller) && arguments.pattern Does Not Contain "[controller]")
+			$throw(type="Wheels.IncorrectArguments", message="The `controller` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `controller` argument to specifically tell Wheels which controller to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
+		if (!Len(arguments.action) && arguments.pattern Does Not Contain "[action]")
+			$throw(type="Wheels.IncorrectArguments", message="The `action` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `action` argument to specifically tell Wheels which action to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
+
+		loc.thisRoute = Duplicate(arguments);
+		loc.thisRoute.variables = "";
+		loc.iEnd = ListLen(arguments.pattern, "/");
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(arguments.pattern, loc.i, "/");
+			if (loc.item Contains "[")
+				loc.thisRoute.variables = ListAppend(loc.thisRoute.variables, ReplaceList(loc.item, "[,]", ","));
+		}
+		ArrayAppend(application.wheels.routes, loc.thisRoute);
+	</cfscript>
+</cffunction>
+
+<cffunction name="set" returntype="void" access="public" output="false" hint="Use to configure a global setting or set a default for a function."
+	examples=
+	'
+		<!--- URL rewriting setting (determined and set automatically by Wheels, override it by setting it to "On", "Off" or "Partial") --->
+		<cfset set(URLRewriting="Partial")>
+
+		<!--- Database settings (set automatically by Wheels to the same name as the folder the application resides, override it by setting `dataSourceName`) --->
 		<cfset set(dataSourceName="")>
 		<cfset set(dataSourceUserName="")>
 		<cfset set(dataSourcePassword ="")>
 
-		<!--- environment settings --->
+		<!--- Caching settings --->
 		<cfset set(cacheDatabaseSchema = false)>
 		<cfset set(cacheFileChecking = false)>
 		<cfset set(cacheImages = false)>
@@ -18,29 +55,29 @@
 		<cfset set(cachePages = false)>
 		<cfset set(cachePartials = false)>
 		<cfset set(cacheQueries = false)>
-		<cfset set(showDebugInformation = true)>
-		<cfset set(showErrorInformation = true)>
-		<cfset set(sendEmailOnError = false)>
-		<cfset set(errorEmailAddress = "")>
-		<cfset set(errorEmailServer = "")> <!--- only required if the mail server hasn''t been set in the ColdFusion Administrator --->
-
-		<!--- miscellaneous settings --->
-		<cfset set(tableNamePrefix = "")>
-		<cfset set(obfuscateURLs = false)>
-		<cfset set(reloadPassword = "")>
-		<cfset set(softDeleteProperty = "deletedAt")>
-		<cfset set(timeStampOnCreateProperty = "createdAt")>
-		<cfset set(timeStampOnUpdateProperty = "updatedAt")>
-		<cfset set(ipExceptions = "")>
-		<cfset set(overwritePlugins = true)>
-
-		<!--- caching settings --->
 		<cfset set(maximumItemsToCache = 5000)>
 		<cfset set(cacheCullPercentage = 10)>
 		<cfset set(cacheCullInterval = 5)>
 		<cfset set(defaultCacheTime = 60)>
 
-		<!--- function settings --->
+		<!--- Error and debugging settings --->
+		<cfset set(showDebugInformation = true)>
+		<cfset set(showErrorInformation = true)>
+		<cfset set(sendEmailOnError = false)>
+		<cfset set(errorEmailAddress = "")>
+		<cfset set(errorEmailServer = "")>
+
+		<!--- Miscellaneous settings --->
+		<cfset set(tableNamePrefix = "")>
+		<cfset set(obfuscateURLs = false)>
+		<cfset set(reloadPassword = "")>
+		<cfset set(ipExceptions = "")>
+		<cfset set(softDeleteProperty = "deletedAt")>
+		<cfset set(timeStampOnCreateProperty = "createdAt")>
+		<cfset set(timeStampOnUpdateProperty = "updatedAt")>
+		<cfset set(overwritePlugins = true)>
+
+		<!--- Function defaults --->
 		<cfset set(functionName="average", distinct=false)>
 		<cfset set(functionName="buttonTo", onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable="")>
 		<cfset set(functionName="caches", time=60)>
@@ -110,7 +147,7 @@
 		<cfset set(functionName="verifies", handler=false)>
 		<cfset set(functionName="yearSelectTag", label="", wrapLabel=true, prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, startYear=Year(Now())-5, endYear=Year(Now())+5)>
 	'
-	categories="configuration" chapters="configurationand-defaults" functions="get">
+	categories="configuration" chapters="configuration-and-defaults" functions="get">
 	<cfscript>
 		var loc = {};
 		if (ArrayLen(arguments) > 1)
@@ -128,18 +165,63 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="get" returntype="any" access="public" output="false"
-	hint="Returns the current setting for the supplied variable name."
+<!--- PUBLIC GLOBAL METHODS --->
+
+<!--- miscellaneous --->
+
+<cffunction name="deobfuscateParam" returntype="string" access="public" output="false" hint="Deobfuscates a value."
 	examples=
 	'
-		<!--- custom find method --->
-		<cfquery name="yourQueryName" datasource="##get(''dataSourceName'')##">
-		  <!--- YOUR SQL CODE --->
-		</cfquery>
+		<!--- Get the original value from an obfuscated one --->
+		<cfset originalValue = deobfuscateParam("b7ab9a50")>
 	'
-	categories="configuration" chapters="configurationand-defaults" functions="set">
-	<cfargument name="name" type="string" required="true" hint="Variable name to get setting for">
-	<cfargument name="functionName" type="string" required="false" default="" hint="Function name to get setting for">
+	categories="global" chapters="obfuscating-urls" functions="obfuscateParam">
+	<cfargument name="param" type="string" required="true" hint="Value to deobfuscate.">
+	<cfscript>
+		var loc = {};
+		if (Val(arguments.param) != arguments.param)
+		{
+			try
+			{
+				loc.checksum = Left(arguments.param, 2);
+				loc.returnValue = Right(arguments.param, (Len(arguments.param)-2));
+				loc.z = BitXor(InputBasen(loc.returnValue,16),461);
+				loc.returnValue = "";
+				loc.iEnd = Len(loc.z)-1;
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					loc.returnValue = loc.returnValue & Left(Right(loc.z, loc.i),1);
+				loc.checksumtest = "0";
+				loc.iEnd = Len(loc.returnValue);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					loc.checksumtest = (loc.checksumtest + Left(Right(loc.returnValue, loc.i),1));
+				if (Left(ToString(FormatBaseN((loc.checksumtest+154),10)),2) != Left(InputBasen(loc.checksum, 16),2))
+					loc.returnValue = arguments.param;
+			}
+			catch(Any e)
+			{
+	    	loc.returnValue = arguments.param;
+			}
+		}
+		else
+		{
+    	loc.returnValue = arguments.param;
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="get" returntype="any" access="public" output="false" hint="Returns the current setting for the supplied variable name."
+	examples=
+	'
+		<!--- Get the current setting for the `tableNamePrefix` variable --->
+		<cfset setting = get("tableNamePrefix")>
+		
+		<!--- Get the default for the `message` argument on the `validatesConfirmationOf` method  --->
+		<cfset setting = get(functionName"validatesConfirmationOf", name="message")>
+	'
+	categories="global" chapters="configuration-and-defaults" functions="set">
+	<cfargument name="name" type="string" required="true" hint="Variable name to get setting for.">
+	<cfargument name="functionName" type="string" required="false" default="" hint="Function name to get setting for.">
 	<cfscript>
 		var loc = {};
 		if (Len(arguments.functionName))
@@ -150,25 +232,76 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="URLFor" returntype="string" access="public" output="false"
-	hint="Creates an internal URL based on supplied arguments."
+<cffunction name="model" returntype="any" access="public" output="false" hint="Returns a reference to the requested model so that class level methods can be called on it."
 	examples=
 	'
+		<!--- The `model("author")` part of the code below gets a reference to the class in the application scope and then `findByKey` is called on it --->
+		<cfset authorObject = model("author").findByKey(1)>
+	'
+	categories="global" chapters="object-relational-mapping" functions="">
+	<cfargument name="name" type="string" required="true" hint="Name of the model (class name) to get a reference to.">
+	<cfreturn $doubleCheckedLock(name="modelLock", condition="$cachedModelClassExists", execute="$createModelClass", conditionArgs=arguments, executeArgs=arguments)>
+</cffunction>
+
+<cffunction name="obfuscateParam" returntype="string" access="public" output="false" hint="Obfuscates a value, typically used for hiding primary key values when passed along in the URL."
+	examples=
+	'
+		<!--- Obfuscate the primary key value `99` --->
+		<cfset newValue = obfuscateParam(99)>
+	'
+	categories="global" chapters="obfuscating-urls" functions="deobfuscateParam">
+	<cfargument name="param" type="any" required="true" hint="Value to obfuscate.">
+	<cfscript>
+		var loc = {};
+		if (IsValid("integer", arguments.param) && IsNumeric(arguments.param) && arguments.param > 0)
+		{
+			loc.iEnd = Len(arguments.param);
+			loc.a = (10^loc.iEnd) + Reverse(arguments.param);
+			loc.b = "0";
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				loc.b = (loc.b + Left(Right(arguments.param, loc.i), 1));
+			loc.returnValue = FormatBaseN((loc.b+154),16) & FormatBaseN(BitXor(loc.a,461),16);
+		}
+		else
+		{
+			loc.returnValue = arguments.param;
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="pluginNames" returntype="string" access="public" output="false" hint="Returns a list of all installed plugins."
+	examples=
+	'
+		<!--- Check if the Scaffold plugin is installed --->
+		<cfif ListFindNoCase("scaffold", pluginNames())>
+			<!--- do something cool --->
+		</cfif>
+	'
+	categories="global" chapters="using-and-creating-plugins" functions="">
+	<cfreturn StructKeyList(application.wheels.plugins)>
+</cffunction>
+
+<cffunction name="URLFor" returntype="string" access="public" output="false" hint="Creates an internal URL based on supplied arguments."
+	examples=
+	'
+		<!--- Create the URL for the `logOut` action on the `account` controller, typically resulting in `/account/logout` --->
 		##URLFor(controller="account", action="logOut")##
 
+		<!--- Create a URL with an anchor set on it --->
 		##URLFor(action="comments", anchor="comment10")##
 	'
-	categories="global-helper" chapters="request-handling,linking-pages" functions="redirectTo,linkTo,startFormTag">
-	<cfargument name="route" type="string" required="false" default="" hint="Name of a route that you have configured in 'config/routes.cfm'">
-	<cfargument name="controller" type="string" required="false" default="" hint="Name of the controller to include in the URL">
-	<cfargument name="action" type="string" required="false" default="" hint="Name of the action to include in the URL">
-	<cfargument name="key" type="any" required="false" default="" hint="Key(s) to include in the URL">
-	<cfargument name="params" type="string" required="false" default="" hint="Any additional params to be set in the query string">
-	<cfargument name="anchor" type="string" required="false" default="" hint="Sets an anchor name to be appended to the path">
-	<cfargument name="onlyPath" type="boolean" required="false" default="#application.wheels.functions.URLFor.onlyPath#" hint="If true, returns only the relative URL (no protocol, host name or port)">
-	<cfargument name="host" type="string" required="false" default="#application.wheels.functions.URLFor.host#" hint="Set this to override the current host">
-	<cfargument name="protocol" type="string" required="false" default="#application.wheels.functions.URLFor.protocol#" hint="Set this to override the current protocol">
-	<cfargument name="port" type="numeric" required="false" default="#application.wheels.functions.URLFor.port#" hint="Set this to override the current port number">
+	categories="global" chapters="request-handling,linking-pages" functions="redirectTo,linkTo,startFormTag">
+	<cfargument name="route" type="string" required="false" default="" hint="Name of a route that you have configured in `config/routes.cfm`.">
+	<cfargument name="controller" type="string" required="false" default="" hint="Name of the controller to include in the URL.">
+	<cfargument name="action" type="string" required="false" default="" hint="Name of the action to include in the URL.">
+	<cfargument name="key" type="any" required="false" default="" hint="Key(s) to include in the URL.">
+	<cfargument name="params" type="string" required="false" default="" hint="Any additional params to be set in the query string.">
+	<cfargument name="anchor" type="string" required="false" default="" hint="Sets an anchor name to be appended to the path.">
+	<cfargument name="onlyPath" type="boolean" required="false" default="#application.wheels.functions.URLFor.onlyPath#" hint="If `true`, returns only the relative URL (no protocol, host name or port).">
+	<cfargument name="host" type="string" required="false" default="#application.wheels.functions.URLFor.host#" hint="Set this to override the current host.">
+	<cfargument name="protocol" type="string" required="false" default="#application.wheels.functions.URLFor.protocol#" hint="Set this to override the current protocol.">
+	<cfargument name="port" type="numeric" required="false" default="#application.wheels.functions.URLFor.port#" hint="Set this to override the current port number.">
 	<cfscript>
 		var loc = {};
 		loc.params = {};
@@ -279,155 +412,27 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="obfuscateParam" returntype="string" access="public" output="false"
-	hint="Obfuscates a value."
+<!--- string helpers --->
+
+<cffunction name="capitalize" returntype="string" access="public" output="false" hint="Returns the text with the first character converted to uppercase."
 	examples=
 	'
-		<cfset obfuscateParam(99)>
-	'
-	categories="global-helper" chapters="obfuscating-urls" functions="deobfuscateParam">
-	<cfargument name="param" type="any" required="true" hint="Value to obfuscate">
-	<cfscript>
-		var loc = {};
-		if (IsValid("integer", arguments.param) && IsNumeric(arguments.param) && arguments.param > 0)
-		{
-			loc.iEnd = Len(arguments.param);
-			loc.a = (10^loc.iEnd) + Reverse(arguments.param);
-			loc.b = "0";
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-				loc.b = (loc.b + Left(Right(arguments.param, loc.i), 1));
-			loc.returnValue = FormatBaseN((loc.b+154),16) & FormatBaseN(BitXor(loc.a,461),16);
-		}
-		else
-		{
-			loc.returnValue = arguments.param;
-		}
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="deobfuscateParam" returntype="string" access="public" output="false"
-	hint="Deobfuscates a value."
-	examples=
-	'
-		<cfset deobfuscateParam("b7ab9a50")>
-	'
-	categories="global-helper" chapters="obfuscating-urls" functions="obfuscateParam">
-	<cfargument name="param" type="string" required="true" hint="Value to deobfuscate">
-	<cfscript>
-		var loc = {};
-		if (Val(arguments.param) != arguments.param)
-		{
-			try
-			{
-				loc.checksum = Left(arguments.param, 2);
-				loc.returnValue = Right(arguments.param, (Len(arguments.param)-2));
-				loc.z = BitXor(InputBasen(loc.returnValue,16),461);
-				loc.returnValue = "";
-				loc.iEnd = Len(loc.z)-1;
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-					loc.returnValue = loc.returnValue & Left(Right(loc.z, loc.i),1);
-				loc.checksumtest = "0";
-				loc.iEnd = Len(loc.returnValue);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-					loc.checksumtest = (loc.checksumtest + Left(Right(loc.returnValue, loc.i),1));
-				if (Left(ToString(FormatBaseN((loc.checksumtest+154),10)),2) != Left(InputBasen(loc.checksum, 16),2))
-					loc.returnValue = arguments.param;
-			}
-			catch(Any e)
-			{
-	    	loc.returnValue = arguments.param;
-			}
-		}
-		else
-		{
-    	loc.returnValue = arguments.param;
-		}
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="addRoute" returntype="void" access="public" output="false"
-	hint="Adds a new route to your application."
-	examples=
-	'
-		<cfset addRoute(name="userProfile", pattern="user/[username]", controller="user", action="profile")>
-	'
-	categories="global-helper" chapters="using-routes" functions="">
-	<cfargument name="name" type="string" required="true" hint="Name for the route">
-	<cfargument name="pattern" type="string" required="true" hint="The URL pattern for the route">
-	<cfargument name="controller" type="string" required="false" default="" hint="Controller to call when route matches (unless the controller name exists in the pattern)">
-	<cfargument name="action" type="string" required="false" default="" hint="Action to call when route matches (unless the action name exists in the pattern)">
-	<cfscript>
-		var loc = {};
-
-		// throw errors when controller or action is not passed in as arguments and not included in the pattern
-		if (!Len(arguments.controller) && arguments.pattern Does Not Contain "[controller]")
-			$throw(type="Wheels.IncorrectArguments", message="The `controller` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `controller` argument to specifically tell Wheels which controller to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
-		if (!Len(arguments.action) && arguments.pattern Does Not Contain "[action]")
-			$throw(type="Wheels.IncorrectArguments", message="The `action` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `action` argument to specifically tell Wheels which action to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
-
-		loc.thisRoute = Duplicate(arguments);
-		loc.thisRoute.variables = "";
-		loc.iEnd = ListLen(arguments.pattern, "/");
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			loc.item = ListGetAt(arguments.pattern, loc.i, "/");
-			if (loc.item Contains "[")
-				loc.thisRoute.variables = ListAppend(loc.thisRoute.variables, ReplaceList(loc.item, "[,]", ","));
-		}
-		ArrayAppend(application.wheels.routes, loc.thisRoute);
-	</cfscript>
-</cffunction>
-
-<cffunction name="model" returntype="any" access="public" output="false"
-	hint="Returns a reference to the requested model so that class level methods can be called on it."
-	examples=
-	'
-		<cfset authorObject = model("author").findByKey(1)>
-	'
-	categories="global-helper" chapters="object-relational-mapping" functions="">
-	<cfargument name="name" type="string" required="true" hint="Name of the model (class name) to get a reference to">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = $doubleCheckedLock(name="modelLock", condition="$cachedModelClassExists", execute="$createModelClass", conditionArgs=arguments, executeArgs=arguments);
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="pluginNames" returntype="string" access="public" output="false"
-	hint="Returns a list of all installed plugins."
-	examples=
-	'
-		<cfif ListFindNoCase("scaffold", pluginNames())>
-			<!--- do something cool --->
-		</cfif>
-	'
-	categories="global-helper" chapters="global-functions" functions="">
-	<cfreturn StructKeyList(application.wheels.plugins)>
-</cffunction>
-
-<cffunction name="capitalize" returntype="string" access="public" output="false"
-	hint="Returns the text with the first character converted to uppercase."
-	examples=
-	'
+		<!--- Capitalize a sentence, will result in "Wheels is a framework" --->
 		##capitalize("wheels is a framework")##
-		-> Wheels is a framework
 	'
-	categories="global-helper" chapters="global-functions" functions="humanize,pluralize,singularize">
-	<cfargument name="text" type="string" required="true" hint="Text to capitalize">
+	categories="global" chapters="miscellaneous-helpers" functions="humanize,pluralize,singularize">
+	<cfargument name="text" type="string" required="true" hint="Text to capitalize.">
 	<cfreturn UCase(Left(arguments.text, 1)) & Mid(arguments.text, 2, Len(arguments.text)-1)>
 </cffunction>
 
-<cffunction name="humanize" returntype="string" access="public" output="false"
-	hint="Returns readable text by capitalizing, converting camel casing to multiple words."
+<cffunction name="humanize" returntype="string" access="public" output="false" hint="Returns readable text by capitalizing, converting camel casing to multiple words."
 	examples=
 	'
+		<!--- Humanize a string, will result in "Wheels Is A Framework" --->
 		##humanize("wheelsIsAFramework")##
-		-> Wheels Is A Framework
 	'
-	categories="global-helper" chapters="global-functions" functions="capitalize,pluralize,singularize">
-	<cfargument name="text" type="string" required="true" hint="Text to humanize">
+	categories="global" chapters="miscellaneous-helpers" functions="capitalize,pluralize,singularize">
+	<cfargument name="text" type="string" required="true" hint="Text to humanize.">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = REReplace(arguments.text, "([[:upper:]])", " \1", "all"); // adds a space before every capitalized word
@@ -437,33 +442,34 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="singularize" returntype="string" access="public" output="false"
-	hint="Returns the singular form of the passed in word."
+<cffunction name="pluralize" returntype="string" access="public" output="false" hint="Returns the plural form of the passed in word."
 	examples=
 	'
-		##singularize("languages")##
-		-> language
+		<!--- Pluralize a word, will result in "people" --->
+		##pluralize("person")##
+
+		<!--- Pluralize based on the count passed in --->
+		Your search returned ##pluralize(word="person", count=users.recordCount)##
 	'
-	categories="global-helper" chapters="global-functions" functions="capitalize,humanize,pluralize">
-	<cfargument name="word" type="string" required="true" hint="String to singularize">
+	categories="global" chapters="miscellaneous-helpers" functions="capitalize,humanize,singularize">
+	<cfargument name="word" type="string" required="true" hint="The word to pluralize.">
+	<cfargument name="count" type="numeric" required="false" default="-1" hint="Pluralization will occur when this value is not `1`.">
+	<cfargument name="returnCount" type="boolean" required="false" default="true" hint="Will return `count` prepended to the pluralization when `true` and `count` is not `-1`.">
+	<cfreturn $singularizeOrPluralize(text=arguments.word, which="pluralize", count=arguments.count, returnCount=arguments.returnCount)>
+</cffunction>
+
+<cffunction name="singularize" returntype="string" access="public" output="false" hint="Returns the singular form of the passed in word."
+	examples=
+	'
+		<!--- Singularize a word, will result in "language" --->
+		##singularize("languages")##
+	'
+	categories="global" chapters="miscellaneous-helpers" functions="capitalize,humanize,pluralize">
+	<cfargument name="word" type="string" required="true" hint="String to singularize.">
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="singularize")>
 </cffunction>
 
-<cffunction name="pluralize" returntype="string" access="public" output="false"
-	hint="Returns the plural form of the passed in word."
-	examples=
-	'
-		##pluralize("person")##
-		-> people
-
-		Your search returned ##pluralize(word="person", count=users.recordCount)##.
-	'
-	categories="global-helper" chapters="global-functions" functions="capitalize,humanize,singularize">
-	<cfargument name="word" type="string" required="true" hint="The word to pluralize">
-	<cfargument name="count" type="numeric" required="false" default="-1" hint="Pluralization will occur when this value is not 1">
-	<cfargument name="returnCount" type="boolean" required="false" default="true" hint="Will return the count prepended to the pluralization when true and count is not -1">
-	<cfreturn $singularizeOrPluralize(text=arguments.word, which="pluralize", count=arguments.count, returnCount=arguments.returnCount)>
-</cffunction>
+<!--- PRIVATE GLOBAL METHODS --->
 
 <cffunction name="$singularizeOrPluralize" returntype="string" access="public" output="false">
 	<cfargument name="text" type="string" required="true">

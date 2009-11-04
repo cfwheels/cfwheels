@@ -1,5 +1,4 @@
-<cffunction name="styleSheetLinkTag" returntype="string" access="public" output="false"
-	hint="Returns a `link` tag based on the supplied arguments."
+<cffunction name="styleSheetLinkTag" returntype="string" access="public" output="false" hint="Returns a `link` tag for a stylesheet (or several) based on the supplied arguments."
 	examples=
 	'
 		<!--- view code --->
@@ -8,9 +7,9 @@
 		</head>
 	'
 	categories="view-helper" chapters="miscellaneous-helpers" functions="javaScriptIncludeTag,imageTag">
-	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many CSS files in the `stylesheets` folder, minus the `.css` extension. (Can also be called with the `source` argument)">
-	<cfargument name="type" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.type#" hint="The `type` attribute for the `link` tag">
-	<cfargument name="media" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.media#" hint="The `media` attribute for the `link` tag">
+	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many CSS files in the `stylesheets` folder, minus the `.css` extension. (Can also be called with the `source` argument).">
+	<cfargument name="type" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.type#" hint="The `type` attribute for the `link` tag.">
+	<cfargument name="media" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.media#" hint="The `media` attribute for the `link` tag.">
 	<cfscript>
 		var loc = {};
 		if (StructKeyExists(arguments, "source"))
@@ -31,8 +30,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="javaScriptIncludeTag" returntype="string" access="public" output="false"
-	hint="Returns a `script` tag based on the supplied arguments."
+<cffunction name="javaScriptIncludeTag" returntype="string" access="public" output="false" hint="Returns a `script` tag for a Javascript file (or several) tag based on the supplied arguments."
 	examples=
 	'
 		<!--- view code --->
@@ -41,8 +39,8 @@
 		</head>
 	'
 	categories="view-helper" chapters="miscellaneous-helpers" functions="styleSheetLinkTag,imageTag">
-	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many JavaScript files in the `javascripts` folder, minus the `.js` extension. (Can also be called with the `source` argument)">
-	<cfargument name="type" type="string" required="false" default="#application.wheels.functions.javaScriptIncludeTag.type#" hint="The `type` attribute for the `script` tag">
+	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many JavaScript files in the `javascripts` folder, minus the `.js` extension. (Can also be called with the `source` argument).">
+	<cfargument name="type" type="string" required="false" default="#application.wheels.functions.javaScriptIncludeTag.type#" hint="The `type` attribute for the `script` tag.">
 	<cfscript>
 		var loc = {};
 		if (StructKeyExists(arguments, "source"))
@@ -62,14 +60,13 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="imageTag" returntype="string" access="public" output="false"
-	hint="Returns an image tag and will (if the image is stored in the local `images` folder) set the `width`, `height`, and `alt` attributes automatically for you."
+<cffunction name="imageTag" returntype="string" access="public" output="false" hint="Returns an `img` tag and will (if the image is stored in the local `images` folder) set the `width`, `height`, and `alt` attributes automatically for you."
 	examples=
 	'
 		##imageTag("logo.png")##
 	'
 	categories="view-helper" chapters="miscellaneous-helpers" functions="javaScriptIncludeTag,styleSheetLinkTag">
-	<cfargument name="source" type="string" required="true" hint="Image file name if local or full URL if remote">
+	<cfargument name="source" type="string" required="true" hint="Image file name if local or full URL if remote.">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="imageTag", reserved="src", input=arguments);
