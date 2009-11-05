@@ -682,10 +682,11 @@
 	<cfscript>
 		var loc = {};
 		loc.query = findByKey(key=key(), reload=true, returnAs="query");
-		loc.iEnd = ListLen(variables.wheels.class.propertyList);
+		loc.properties = propertyNames();
+		loc.iEnd = ListLen(loc.properties);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.property = ListGetAt(variables.wheels.class.propertyList, loc.i);
+			loc.property = ListGetAt(loc.properties, loc.i);
 			this[loc.property] = loc.query[loc.property][1];
 		}
 	</cfscript>

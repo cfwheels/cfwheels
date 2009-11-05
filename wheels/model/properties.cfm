@@ -27,14 +27,20 @@
 
 <!--- PUBLIC MODEL CLASS METHODS --->
 
-<cffunction name="propertyNames" returntype="string" access="public" output="false" hint="Returns a list of property names ordered by their respective column's ordinal position in the database table."
+<cffunction name="propertyNames" returntype="string" access="public" output="false" hint="Returns a list of property names ordered by their respective column's ordinal position in the database table and with eventual calculated properties at the end."
 	examples=
 	'
 		<!--- Get a list of the property names in use in the user model --->
   		<cfset propNames = model("user").propertyNames()>
 	'
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,table,tableName">
-	<cfreturn variables.wheels.class.propertyList>
+	<cfscript>
+		var loc = {};
+		loc.returnValue = variables.wheels.class.propertyList;
+		if (ListLen(variables.wheels.class.calculatedPropertyList))
+			loc.returnValue = ListAppend(loc.returnValue, variables.wheels.class.calculatedPropertyList);
+		</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <!--- PUBLIC MODEL OBJECT METHODS --->
