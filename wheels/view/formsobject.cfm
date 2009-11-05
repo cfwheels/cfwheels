@@ -6,7 +6,7 @@
 		    <p>##textField(label="First Name", objectName="user", property="firstName")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
+	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="The variable name of the object to build the form control for.">
 	<cfargument name="property" type="string" required="true" hint="The name of the property to use in the form control.">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.textField.label#" hint="The label text to use in the form control.">
@@ -39,7 +39,7 @@
 		    <p>##passwordField(objectName="user", property="pass")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapter="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
+	categories="view-helper,forms-object" chapter="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.passwordField.label#" hint="See documentation for textField">
@@ -72,7 +72,7 @@
 		    <p>##hiddenField(objectName="user", property="id")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
+	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
 	<cfscript>
@@ -98,7 +98,7 @@
 		    <p>##fileField(objectName="photo", property="imageFile")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,select,dateTimeSelect,dateSelect,timeSelect">
+	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.fileField.label#" hint="See documentation for @textField.">
@@ -130,7 +130,7 @@
 		  <p>##textArea(objectName="article", property="overview")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,fileField,select,dateTimeSelect,dateSelect,timeSelect">
+	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.textArea.label#" hint="See documentation for @textField.">
@@ -165,7 +165,7 @@
 			</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textField,submitTag,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
+	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textField,submitTag,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
 	<cfargument name="tagValue" type="string" required="true" hint="The value of the radio button when `selected`.">
@@ -203,7 +203,7 @@
 		    <p>##checkBox(objectName="photo", property="isPublic", label="Display this photo publicly.")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
+	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
 	<cfargument name="checkedValue" type="string" required="false" default="#application.wheels.functions.checkBox.checkedValue#" hint="The value of the check box when it's on the `checked` state.">
@@ -253,7 +253,7 @@
 		    <p>##select(objectName="book", property="authorId", options=authors)##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,dateTimeSelect,dateSelect,timeSelect">
+	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
 	<cfargument name="options" type="any" required="true" hint="A collection to populate the select form control with. Can be a query recordset or an array of objects.">

@@ -6,7 +6,7 @@
 		    ##errorMessageFor(objectName="user")##
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="errorMessagesOn">
+	categories="view-helper,errors" chapters="form-helpers-and-showing-errors" functions="errorMessagesOn">
 	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to display error messages for.">
 	<cfargument name="class" type="string" required="false" default="#application.wheels.functions.errorMessagesFor.class#" hint="CSS class to set on the `ul` element.">
 	<cfargument name="showDuplicates" type="boolean" required="false" default="#application.wheels.functions.errorMessagesFor.showDuplicates#" hint="Whether to show duplicate error messages.">
@@ -51,7 +51,7 @@
 	    ##errorMessageFor(objectName="user", property="email")##
 	</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="errorMessagesOn">
+	categories="view-helper,errors" chapters="form-helpers-and-showing-errors" functions="errorMessagesOn">
 	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to display the error message for.">
 	<cfargument name="property" type="string" required="true" hint="The name of the property to display the error message for.">
 	<cfargument name="prependText" type="string" required="false" default="#application.wheels.functions.errorMessageOn.prependText#" hint="String to prepend to the error message.">

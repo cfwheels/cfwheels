@@ -18,7 +18,7 @@
 		##linkTo(text="Joe''s Profile", route="userProfile", userName="joe")##
 		-> <a href="/user/joe">Joe''s Profile</a>
 	'
-	categories="view-helper" chapters="linking-pages" functions="URLFor,buttonTo,mailTo">
+	categories="view-helper,links" chapters="linking-pages" functions="URLFor,buttonTo,mailTo">
 	<cfargument name="text" type="string" required="false" default="" hint="The text content of the link.">
 	<cfargument name="confirm" type="string" required="false" default="" hint="Pass a message here to cause a JavaScript confirmation dialog box to pop up containing the message.">
 	<cfargument name="route" type="string" required="false" default="" hint="See documentation for @URLFor.">
@@ -56,7 +56,7 @@
 	'
 		##buttonTo(text="Delete Account", action="perFormDelete", disabled="Wait...")##
 	'
-	categories="view-helper" functions="URLFor,linkTo,mailTo">
+	categories="view-helper,links" functions="URLFor,linkTo,mailTo">
 	<cfargument name="text" type="string" required="false" default="#application.wheels.functions.buttonTo.text#" hint="The text content of the button.">
 	<cfargument name="confirm" type="string" required="false" default="#application.wheels.functions.buttonTo.confirm#" hint="See documentation for @linkTo.">
 	<cfargument name="image" type="string" required="false" default="#application.wheels.functions.buttonTo.image#" hint="If you want to use an image for the button pass in the link to it here (relative from the `images` folder).">
@@ -97,7 +97,7 @@
 		##mailTo(emailAddress="webmaster@yourdomain.com", name="Contact our Webmaster")##
 		-> <a href="mailto:webmaster@yourdomain.com">Contact our Webmaster</a>
 	'
-	categories="view-helper" functions="URLFor,linkTo,buttonTo">
+	categories="view-helper,links" functions="URLFor,linkTo,buttonTo">
 	<cfargument name="emailAddress" type="string" required="true" hint="The email address to link to.">
 	<cfargument name="name" type="string" required="false" default="" hint="A string to use as the link text (""Joe"" or ""Support Department"", for example).">
 	<cfargument name="encode" type="boolean" required="false" default="#application.wheels.functions.mailTo.encode#" hint="Pass `true` here to encode the email address, making it harder for bots to harvest it for example.">
@@ -135,7 +135,7 @@
 		##autoLink("Email us at info@cfwheels.org")##
 		-> Email us at <a href="mailto:info@cfwheels.org">info@cfwheels.org</a>
 	'
-	categories="view-helper">
+	categories="view-helper,links">
 	<cfargument name="text" type="string" required="true" hint="The text to create links in.">
 	<cfargument name="link" type="string" required="false" default="all" hint="Whether to link URLs, email addresses or both. Possible values are: `all` (default), `URLs` and `emailAddresses`.">
 	<cfscript>
@@ -149,27 +149,6 @@
 			loc.returnValue = REReplaceNoCase(loc.returnValue, loc.mailRegex, "<a href=""mailto:\1"">\1</a>", "all");
 	</cfscript>
 	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="pagination" returntype="struct" access="public" output="false" hint="Returns a struct with information about the specificed paginated query. The available variables are `currentPage`, `totalPages` and `totalRecords`."
-	examples=
-	'
-		<cfparam name="params.page" default="1">
-		<cfset allAuthors = model("author").findAll(page=params.page, perPage=25, order="lastName", handle="authorsData")>
-		<cfset paginationData = pagination("authorsData")>
-	'
-	categories="view-helper">
-	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query to return pagination information for.">
-	<cfscript>
-		if (application.wheels.showErrorInformation)
-		{
-			if (!StructKeyExists(request.wheels, arguments.handle))
-			{
-				$throw(type="Wheels.QueryHandleNotFound", message="Wheels couldn't find a query with the handle of `#arguments.handle#`.", extendedInfo="Make sure your `findAll` call has the `page` argument specified and matching `handle` argument if specified.");
-			}
-		}
-	</cfscript>
-	<cfreturn request.wheels[arguments.handle]>
 </cffunction>
 
 <cffunction name="paginationLinks" returntype="string" access="public" output="false" hint="Builds and returns a string containing links to pages based on a paginated query. Uses @linkTo internally to build the link, so you need to pass in a `route` name or a `controller`/`action`/`key` combination. All other @linkTo arguments can be supplied as well, in which case they are passed through directly to @linkTo. If you have paginated more than one query in the controller, you can use the `handle` argument to reference them. (Don't forget to pass in a `handle` to the @findAll function in your controller first)."
@@ -213,7 +192,7 @@
 		    <cfoutput>##paginationLinks(route="paginatedCommentListing", year=2009, month="feb", day=10)##</cfoutput>
 		</ul>
 	'
-	categories="view-helper" chapters="getting-paginated-data,displaying-links-for-pagination" functions="linkTo,findAll,URLFor">
+	categories="view-helper,links" chapters="getting-paginated-data,displaying-links-for-pagination" functions="pagination,linkTo,findAll,URLFor">
 	<cfargument name="windowSize" type="numeric" required="false" default="#application.wheels.functions.paginationLinks.windowSize#" hint="The number of page links to show around the current page.">
 	<cfargument name="alwaysShowAnchors" type="boolean" required="false" default="#application.wheels.functions.paginationLinks.alwaysShowAnchors#" hint="Whether or not links to the first and last page should always be displayed.">
 	<cfargument name="anchorDivider" type="string" required="false" default="#application.wheels.functions.paginationLinks.anchorDivider#" hint="String to place next to the anchors on either side of the list.">

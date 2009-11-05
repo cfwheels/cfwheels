@@ -1,4 +1,4 @@
-<!--- PRIVATE CONTROLLER FUNCTIONS --->
+<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$initControllerClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="false" default="">

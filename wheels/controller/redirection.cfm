@@ -17,7 +17,7 @@
 		<!--- Redirect back to the page the user came from --->
 		<cfset redirectTo(back=true)>
 	'
-	categories="controller-request" chapters="redirecting-users,using-routes" functions="">
+	categories="controller-request,miscellaneous" chapters="redirecting-users,using-routes" functions="">
 	<cfargument name="back" type="boolean" required="false" default="false" hint="Set to `true` to redirect back to the referring page.">
 	<cfargument name="addToken" type="boolean" required="false" default="#application.wheels.functions.redirectTo.addToken#" hint="See documentation for `cflocation`.">
 	<cfargument name="statusCode" type="numeric" required="false" default="#application.wheels.functions.redirectTo.statusCode#" hint="See documentation for `cflocation`.">

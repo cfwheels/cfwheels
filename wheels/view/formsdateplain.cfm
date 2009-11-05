@@ -6,7 +6,7 @@
 		    <p>##dateSelectTags()##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textFieldTag,submitTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,timeSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textFieldTag,submitTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="selected" type="date" required="false" default="#Now()#" hint="See documentation for @selectTag.">
 	<cfargument name="order" type="string" required="false" default="#application.wheels.functions.dateSelectTags.order#" hint="See documentation for @dateSelect.">
@@ -40,7 +40,7 @@
 		    <p>##timeSelectTags(name="timeOfMeeting")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="selected" type="date" required="false" default="#Now()#" hint="See documentation for @selectTag.">
 	<cfargument name="order" type="string" required="false" default="#application.wheels.functions.timeSelectTags.order#" hint="See documentation for @timeSelect.">
@@ -72,7 +72,7 @@
 		    <p>##dateTimeSelectTags()##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateSelectTags,timeSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateSelectTags,timeSelectTags">
 	<cfargument name="dateOrder" type="string" required="false" default="#application.wheels.functions.dateTimeSelectTags.dateOrder#" hint="See documentation for @dateTimeSelect.">
 	<cfargument name="dateSeparator" type="string" required="false" default="#application.wheels.functions.dateTimeSelectTags.dateSeparator#" hint="See documentation for @dateTimeSelect.">
 	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.functions.dateTimeSelectTags.startYear#" hint="See documentation for @dateTimeSelect.">
@@ -118,7 +118,7 @@
 		    <p>##yearSelectTag(name="yearOfBirthday")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="selected" type="date" required="false" default="#Year(Now())#" hint="The year that should be selected initially.">
 	<cfargument name="startYear" type="numeric" required="false" default="#application.wheels.functions.yearSelectTag.startYear#" hint="See documentation for @dateSelect.">
@@ -145,7 +145,7 @@
 		    <p>##monthSelectTag(name="monthOfBirthday")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="selected" type="date" required="false" default="#Month(Now())#" hint="The month that should be selected initially.">
 	<cfargument name="monthDisplay" type="string" required="false" default="#application.wheels.functions.monthSelectTag.monthDisplay#" hint="See documentation for @dateSelect.">
@@ -171,7 +171,7 @@
 		    <p>##daySelectTag(name="dayOfWeek")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="selected" type="date" required="false" default="#Day(Now())#" hint="The day that should be selected initially.">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.daySelectTag.includeBlank#" hint="See documentation for @select.">
@@ -196,7 +196,7 @@
 		    <p>##hourSelectTag(name="hourOfMeeting")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="selected" type="date" required="false" default="#Hour(Now())#" hint="The hour that should be selected initially.">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.hourSelectTag.includeBlank#" hint="See documentation for @select.">
@@ -221,7 +221,7 @@
 		    <p>##minuteSelectTag(name="minuteOfMeeting")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="selected" type="date" required="false" default="#Minute(Now())#" hint="The minute that should be selected initially.">
 	<cfargument name="minuteStep" type="numeric" required="false" default="#application.wheels.functions.minuteSelectTag.minuteStep#" hint="See documentation for @timeSelect.">
@@ -247,7 +247,7 @@
 		    <p>##secondSelectTag(name="secondsToLaunch")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="selected" type="date" required="false" default="#Second(Now())#" hint="The second that should be selected initially.">
 	<cfargument name="includeBlank" type="any" required="false" default="#application.wheels.functions.secondSelectTag.includeBlank#" hint="See documentation for @select.">

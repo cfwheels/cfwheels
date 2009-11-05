@@ -4,7 +4,7 @@
 		##excerpt(text="ColdFusion Wheels is a Rails-like MVC framework for Adobe ColdFusion and Railo", phrase="framework", radius=5)##
 		-> ... MVC framework for ...
 	'
-	categories="view-helper" functions="highlight,simpleFormat,stripLinks,stripTags,titleize,truncate">
+	categories="view-helper,text" functions="highlight,simpleFormat,stripLinks,stripTags,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="The text to extract an excerpt from.">
 	<cfargument name="phrase" type="string" required="true" hint="The phrase to extract.">
 	<cfargument name="radius" type="numeric" required="false" default="100" hint="Number of characters to extract surrounding the phrase.">
@@ -50,7 +50,7 @@
 		##highlight(text="You searched for: Wheels", phrases="Wheels")##
 		-> You searched for: <span class="highlight">Wheels</span>
 	'
-	categories="view-helper" functions="excerpt,simpleFormat,stripLinks,stripTags,titleize,truncate">
+	categories="view-helper,text" functions="excerpt,simpleFormat,stripLinks,stripTags,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="Text to search.">
 	<cfargument name="phrases" type="string" required="true" hint="List of phrases to highlight.">
 	<cfargument name="class" type="string" required="false" default="highlight" hint="Class to use in `span` tags surrounding highlighted phrase(s).">
@@ -113,7 +113,7 @@
 			   * Awesome
 		   </p>
 	'
-	categories="view-helper" functions="excerpt,highlight,stripLinks,stripTags,titleize,truncate">
+	categories="view-helper,text" functions="excerpt,highlight,stripLinks,stripTags,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="The text to format.">
 	<cfargument name="wrap" type="boolean" required="false" default="true" hint="Set to `true` to wrap the result in a paragraph.">
 	<cfscript>
@@ -134,7 +134,7 @@
 		##stripLinks("<strong>Wheels</strong> is a framework for <a href="http://www.adobe.com/products/coldfusion/">ColdFusion</a>.")##
 		-> <strong>Wheels</strong> is a framework for ColdFusion.
 	'
-	categories="view-helper" functions="excerpt,highlight,simpleFormat,stripTags,titleize,truncate">
+	categories="view-helper,text" functions="excerpt,highlight,simpleFormat,stripTags,titleize,truncate">
 	<cfargument name="html" type="string" required="true" hint="The html to remove links from.">
 	<cfreturn REReplaceNoCase(arguments.html, "<a.*?>(.*?)</a>", "\1" , "all")>
 </cffunction>
@@ -145,7 +145,7 @@
 		##stripTags("<strong>Wheels</strong> is a framework for <a href="http://www.adobe.com/products/coldfusion/">ColdFusion</a>.")##
 		-> Wheels is a framework for ColdFusion.
 	'
-	categories="view-helper" functions="excerpt,highlight,simpleFormat,stripLinks,titleize,truncate">
+	categories="view-helper,text" functions="excerpt,highlight,simpleFormat,stripLinks,titleize,truncate">
 	<cfargument name="html" type="string" required="true" hint="The HTML to remove links from.">
 	<cfset var returnValue = "">
 	<cfset returnValue = REReplaceNoCase(arguments.html, "<\ *[a-z].*?>", "", "all")>
@@ -159,7 +159,7 @@
 		##titleize("Wheels is a framework for ColdFusion")##
 		-> Wheels Is A Framework For ColdFusion
 	'
-	categories="view-helper" functions="excerpt,highlight,simpleFormat,stripLinks,stripTags,truncate">
+	categories="view-helper,text" functions="excerpt,highlight,simpleFormat,stripLinks,stripTags,truncate">
 	<cfargument name="word" type="string" required="true" hint="The text to turn into a title.">
 	<cfscript>
 		var loc = {};
@@ -182,7 +182,7 @@
 		##truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")##
 		-> Wheels is a framework f (more)
 	'
-	categories="view-helper" functions="excerpt,highlight,simpleFormat,stripLinks,stripTags,titleize">
+	categories="view-helper,text" functions="excerpt,highlight,simpleFormat,stripLinks,stripTags,titleize">
 	<cfargument name="text" type="string" required="true" hint="The text to truncate.">
 	<cfargument name="length" type="numeric" required="false" default="30" hint="Length to truncate the text to.">
 	<cfargument name="truncateString" type="string" required="false" default="..." hint="String to replace the last characters with.">

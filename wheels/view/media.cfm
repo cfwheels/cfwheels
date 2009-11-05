@@ -6,7 +6,7 @@
 		    ##styleSheetLinkTag("styles")##
 		</head>
 	'
-	categories="view-helper" chapters="miscellaneous-helpers" functions="javaScriptIncludeTag,imageTag">
+	categories="view-helper,media" chapters="miscellaneous-helpers" functions="javaScriptIncludeTag,imageTag">
 	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many CSS files in the `stylesheets` folder, minus the `.css` extension. (Can also be called with the `source` argument).">
 	<cfargument name="type" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.type#" hint="The `type` attribute for the `link` tag.">
 	<cfargument name="media" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.media#" hint="The `media` attribute for the `link` tag.">
@@ -38,7 +38,7 @@
 		    ##javaScriptIncludeTag("main")##
 		</head>
 	'
-	categories="view-helper" chapters="miscellaneous-helpers" functions="styleSheetLinkTag,imageTag">
+	categories="view-helper,media" chapters="miscellaneous-helpers" functions="styleSheetLinkTag,imageTag">
 	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many JavaScript files in the `javascripts` folder, minus the `.js` extension. (Can also be called with the `source` argument).">
 	<cfargument name="type" type="string" required="false" default="#application.wheels.functions.javaScriptIncludeTag.type#" hint="The `type` attribute for the `script` tag.">
 	<cfscript>
@@ -65,7 +65,7 @@
 	'
 		##imageTag("logo.png")##
 	'
-	categories="view-helper" chapters="miscellaneous-helpers" functions="javaScriptIncludeTag,styleSheetLinkTag">
+	categories="view-helper,media" chapters="miscellaneous-helpers" functions="javaScriptIncludeTag,styleSheetLinkTag">
 	<cfargument name="source" type="string" required="true" hint="Image file name if local or full URL if remote.">
 	<cfscript>
 		var loc = {};

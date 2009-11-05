@@ -233,7 +233,7 @@
 			<!--- Do something here --->
 		</cfif>
 	'
-	categories="model-object" chapters="object-validation" functions="">
+	categories="model-object,errors" chapters="object-validation" functions="">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = false;

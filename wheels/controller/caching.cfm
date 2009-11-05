@@ -29,7 +29,7 @@
 	</cfscript>
 </cffunction>
 
-<!--- PRIVATE CONTROLLER FUNCTIONS --->
+<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$getCachableActions" returntype="array" access="public" output="false">
 	<cfreturn variables.wheels.cachableActions>

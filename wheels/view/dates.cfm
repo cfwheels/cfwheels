@@ -4,7 +4,7 @@
 	<cfset rightNow = Now()>
 	<cfoutput>##distanceOfTimeInWords(aWhileAgo, rightNow)##</cfoutput>
 	'
-	categories="view-helper" chapters="miscellaneous-helpers" functions="timeAgoInWords,timeUntilInWords">
+	categories="view-helper,dates" chapters="miscellaneous-helpers" functions="timeAgoInWords,timeUntilInWords">
 	<cfargument name="fromTime" type="date" required="true" hint="Date to compare from.">
 	<cfargument name="toTime" type="date" required="true" hint="Date to compare to.">
 	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.functions.distanceOfTimeInWords.includeSeconds#" hint="Whether or not to include the number of seconds in the returned string.">
@@ -85,7 +85,7 @@
 		<cfset aWhileAgo = Now() - 30>
 		<cfoutput>##timeAgoInWords(aWhileAgo)##</cfoutput>
 	'
-	categories="view-helper" chapters="miscellaneous-helpers" functions="distanceOfTimeInWords,timeUntilInWords">
+	categories="view-helper,dates" chapters="miscellaneous-helpers" functions="distanceOfTimeInWords,timeUntilInWords">
 	<cfargument name="fromTime" type="date" required="true" hint="See documentation for @distanceOfTimeInWords.">
 	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.functions.timeAgoInWords.includeSeconds#" hint="See documentation for @distanceOfTimeInWords.">
 	<cfargument name="toTime" type="date" required="false" default="#now()#" hint="See documentation for @distanceOfTimeInWords.">
@@ -97,7 +97,7 @@
 		<cfset aLittleAhead = Now() + 30>
 		<cfoutput>##timeUntilInWords(aLittleAhead)##</cfoutput>
 	'
-	categories="view-helper" chapters="miscellaneous-helpers" functions="timeAgoInWords,distanceOfTimeInWords.">
+	categories="view-helper,dates" chapters="miscellaneous-helpers" functions="timeAgoInWords,distanceOfTimeInWords.">
 	<cfargument name="toTime" type="date" required="true" hint="See documentation for @distanceOfTimeInWords.">
 	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.functions.timeUntilInWords.includeSeconds#" hint="See documentation for @distanceOfTimeInWords.">
 	<cfargument name="fromTime" type="date" required="false" default="#now()#" hint="See documentation for @distanceOfTimeInWords.">

@@ -28,7 +28,7 @@
 			</div>
 		</cfoutput>
 	'
-	categories="view-helper" functions="resetCycle">
+	categories="view-helper,miscellaneous" functions="resetCycle">
 	<cfargument name="values" type="string" required="true" hint="List of values to cycle through.">
 	<cfargument name="name" type="string" required="false" default="default" hint="Name to give the cycle. Useful when you use multiple cycles on a page.">
 	<cfscript>
@@ -67,7 +67,7 @@
 			</div>
 		</cfoutput>
 	'
-	categories="view-helper" functions="cycle"
+	categories="view-helper,miscellaneous" functions="cycle"
 	>
 	<cfargument name="name" type="string" required="false" default="default" hint="The name of the cycle to reset.">
 	<cfscript>

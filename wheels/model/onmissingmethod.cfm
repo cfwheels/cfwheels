@@ -215,6 +215,18 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="$propertyValue" returntype="string" access="public" output="false" hint="Returns the object's value of the passed in property name. If you pass in a list of property names you will get the values back in a list as well.">
+	<cfargument name="name" type="string" required="true" hint="Name of property to get value for.">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = "";
+		loc.iEnd = ListLen(arguments.name);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			loc.returnValue = ListAppend(loc.returnValue, this[ListGetAt(arguments.name, loc.i)]);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$setForeignKeyValues" returntype="void" access="public" output="false">
 	<cfargument name="missingMethodArguments" type="struct" required="true">
 	<cfargument name="keys" type="string" required="true">

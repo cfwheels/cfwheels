@@ -6,7 +6,7 @@
 		  <p>##dateSelect(objectName="user", property="dateOfBirth")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textField,submitTag,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,timeSelect">
+	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textField,submitTag,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="false" default="" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="false" default="" hint="See documentation for @textField.">
 	<cfargument name="order" type="string" required="false" default="#application.wheels.functions.dateSelect.order#" hint="Use to change the order of or exclude date select tags.">
@@ -37,7 +37,7 @@
 		    <p>##timeSelect(objectName="business", property="openUntil")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect">
+	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect">
 	<cfargument name="objectName" type="any" required="false" default="" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="false" default="" hint="See documentation for @textField.">
 	<cfargument name="order" type="string" required="false" default="#application.wheels.functions.timeSelect.order#" hint="Use to change the order of or exclude time select tags.">
@@ -66,7 +66,7 @@
 		    <p>##dateTimeSelect(objectName="article", property="publishedAt")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateSelect,timeSelect">
+	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateSelect,timeSelect">
 	<cfargument name="objectName" type="string" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
 	<cfargument name="dateOrder" type="string" required="false" default="#application.wheels.functions.dateTimeSelect.dateOrder#" hint="See documentation for @dateSelect.">

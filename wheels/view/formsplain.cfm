@@ -6,7 +6,7 @@
 		    <p>##textFieldTag(name="someName")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="Name to populate in tag's `name` attribute.">
 	<cfargument name="value" type="string" required="false" default="" hint="Value to populate in tag's `value` attribute.">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.textFieldTag.label#" hint="See documentation for @textField.">
@@ -35,7 +35,7 @@
 		    <p>##passwordFieldTag(name="password")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="value" type="string" required="false" default="" hint="See documentation for @textFieldTag.">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.passwordFieldTag.label#" hint="See documentation for @textField.">
@@ -64,7 +64,7 @@
 		    <p>##hiddenFieldTag(name="userId", value=user.id)##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="value" type="string" required="false" default="" hint="See documentation for @textFieldTag.">
 	<cfscript>
@@ -87,7 +87,7 @@
 		    <p>##fileFieldTag(name="photo")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.fileFieldTag.label#" hint="See documentation for @textField.">
 	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.fileFieldTag.labelPlacement#" hint="See documentation for @textField.">
@@ -114,7 +114,7 @@
 		  <p>##textAreaTag(name="description")##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="content" type="string" required="false" default="" hint="Content to display in `textarea` by default.">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.textAreaTag.label#" hint="See documentation for @textField.">
@@ -146,7 +146,7 @@
 			</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="value" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="checked" type="boolean" required="false" default="false" hint="Whether or not to check the radio button by default.">
@@ -186,7 +186,7 @@
 		    <p>##checkBoxTag(name="suscribe", value="true", label="Suscribe to our newsletter", checked=false)##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTag,dateSelectTag,timeSelectTag">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTag,dateSelectTag,timeSelectTag">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="checked" type="boolean" required="false" default="false" hint="Whether or not the check box should be checked by default.">
 	<cfargument name="value" type="string" required="false" default="#application.wheels.functions.checkBoxTag.value#" hint="Value of check box in its `checked` state.">
@@ -224,7 +224,7 @@
 		    <p>##selectTag(name="cityId", options=cities)##</p>
 		</cfoutput>
 	'
-	categories="view-helper" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="options" type="any" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="selected" type="string" required="false" default="" hint="Value of option that should be selected by default.">

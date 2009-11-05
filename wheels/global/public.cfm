@@ -1,4 +1,4 @@
-<!--- PUBLIC CONFIGURATION METHODS --->
+<!--- PUBLIC CONFIGURATION FUNCTIONS --->
 
 <cffunction name="addRoute" returntype="void" access="public" output="false" hint="Adds a new route to your application."
 	examples=
@@ -165,7 +165,7 @@
 	</cfscript>
 </cffunction>
 
-<!--- PUBLIC GLOBAL METHODS --->
+<!--- PUBLIC GLOBAL FUNCTIONS --->
 
 <!--- miscellaneous --->
 
@@ -175,7 +175,7 @@
 		<!--- Get the original value from an obfuscated one --->
 		<cfset originalValue = deobfuscateParam("b7ab9a50")>
 	'
-	categories="global" chapters="obfuscating-urls" functions="obfuscateParam">
+	categories="global,miscellaneous" chapters="obfuscating-urls" functions="obfuscateParam">
 	<cfargument name="param" type="string" required="true" hint="Value to deobfuscate.">
 	<cfscript>
 		var loc = {};
@@ -219,7 +219,7 @@
 		<!--- Get the default for the `message` argument on the `validatesConfirmationOf` method  --->
 		<cfset setting = get(functionName"validatesConfirmationOf", name="message")>
 	'
-	categories="global" chapters="configuration-and-defaults" functions="set">
+	categories="global,miscellaneous" chapters="configuration-and-defaults" functions="set">
 	<cfargument name="name" type="string" required="true" hint="Variable name to get setting for.">
 	<cfargument name="functionName" type="string" required="false" default="" hint="Function name to get setting for.">
 	<cfscript>
@@ -238,7 +238,7 @@
 		<!--- The `model("author")` part of the code below gets a reference to the class in the application scope and then `findByKey` is called on it --->
 		<cfset authorObject = model("author").findByKey(1)>
 	'
-	categories="global" chapters="object-relational-mapping" functions="">
+	categories="global,miscellaneous" chapters="object-relational-mapping" functions="">
 	<cfargument name="name" type="string" required="true" hint="Name of the model (class name) to get a reference to.">
 	<cfreturn $doubleCheckedLock(name="modelLock", condition="$cachedModelClassExists", execute="$createModelClass", conditionArgs=arguments, executeArgs=arguments)>
 </cffunction>
@@ -249,7 +249,7 @@
 		<!--- Obfuscate the primary key value `99` --->
 		<cfset newValue = obfuscateParam(99)>
 	'
-	categories="global" chapters="obfuscating-urls" functions="deobfuscateParam">
+	categories="global,miscellaneous" chapters="obfuscating-urls" functions="deobfuscateParam">
 	<cfargument name="param" type="any" required="true" hint="Value to obfuscate.">
 	<cfscript>
 		var loc = {};
@@ -278,7 +278,7 @@
 			<!--- do something cool --->
 		</cfif>
 	'
-	categories="global" chapters="using-and-creating-plugins" functions="">
+	categories="global,miscellaneous" chapters="using-and-creating-plugins" functions="">
 	<cfreturn StructKeyList(application.wheels.plugins)>
 </cffunction>
 
@@ -291,7 +291,7 @@
 		<!--- Create a URL with an anchor set on it --->
 		##URLFor(action="comments", anchor="comment10")##
 	'
-	categories="global" chapters="request-handling,linking-pages" functions="redirectTo,linkTo,startFormTag">
+	categories="global,miscellaneous" chapters="request-handling,linking-pages" functions="redirectTo,linkTo,startFormTag">
 	<cfargument name="route" type="string" required="false" default="" hint="Name of a route that you have configured in `config/routes.cfm`.">
 	<cfargument name="controller" type="string" required="false" default="" hint="Name of the controller to include in the URL.">
 	<cfargument name="action" type="string" required="false" default="" hint="Name of the action to include in the URL.">
@@ -420,7 +420,7 @@
 		<!--- Capitalize a sentence, will result in "Wheels is a framework" --->
 		##capitalize("wheels is a framework")##
 	'
-	categories="global" chapters="miscellaneous-helpers" functions="humanize,pluralize,singularize">
+	categories="global,string" chapters="miscellaneous-helpers" functions="humanize,pluralize,singularize">
 	<cfargument name="text" type="string" required="true" hint="Text to capitalize.">
 	<cfreturn UCase(Left(arguments.text, 1)) & Mid(arguments.text, 2, Len(arguments.text)-1)>
 </cffunction>
@@ -431,7 +431,7 @@
 		<!--- Humanize a string, will result in "Wheels Is A Framework" --->
 		##humanize("wheelsIsAFramework")##
 	'
-	categories="global" chapters="miscellaneous-helpers" functions="capitalize,pluralize,singularize">
+	categories="global,string" chapters="miscellaneous-helpers" functions="capitalize,pluralize,singularize">
 	<cfargument name="text" type="string" required="true" hint="Text to humanize.">
 	<cfscript>
 		var loc = {};
@@ -451,7 +451,7 @@
 		<!--- Pluralize based on the count passed in --->
 		Your search returned ##pluralize(word="person", count=users.recordCount)##
 	'
-	categories="global" chapters="miscellaneous-helpers" functions="capitalize,humanize,singularize">
+	categories="global,string" chapters="miscellaneous-helpers" functions="capitalize,humanize,singularize">
 	<cfargument name="word" type="string" required="true" hint="The word to pluralize.">
 	<cfargument name="count" type="numeric" required="false" default="-1" hint="Pluralization will occur when this value is not `1`.">
 	<cfargument name="returnCount" type="boolean" required="false" default="true" hint="Will return `count` prepended to the pluralization when `true` and `count` is not `-1`.">
@@ -464,14 +464,14 @@
 		<!--- Singularize a word, will result in "language" --->
 		##singularize("languages")##
 	'
-	categories="global" chapters="miscellaneous-helpers" functions="capitalize,humanize,pluralize">
+	categories="global,string" chapters="miscellaneous-helpers" functions="capitalize,humanize,pluralize">
 	<cfargument name="word" type="string" required="true" hint="String to singularize.">
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="singularize")>
 </cffunction>
 
-<!--- PRIVATE GLOBAL METHODS --->
+<!--- PRIVATE FUNCTIONS --->
 
-<cffunction name="$singularizeOrPluralize" returntype="string" access="public" output="false">
+<cffunction name="$singularizeOrPluralize" returntype="string" access="public" output="false" hint="Called by singularize and pluralize to perform the conversion.">
 	<cfargument name="text" type="string" required="true">
 	<cfargument name="which" type="string" required="true">
 	<cfargument name="count" type="numeric" required="false" default="-1">

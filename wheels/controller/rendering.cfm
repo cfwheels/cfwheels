@@ -9,7 +9,7 @@
 		<!--- Render the view page for the current action but without a layout and cache it for 60 minutes --->
 		<cfset renderPage(layout=false, cache=60)>
 	'
-	categories="controller-request" chapters="rendering-pages" functions="renderPageToString,renderNothing,renderText,renderPartial">
+	categories="controller-request,rendering" chapters="rendering-pages" functions="renderNothing,renderText,renderPartial">
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Controller to include the view page for.">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Action to include the view page for.">
 	<cfargument name="template" type="string" required="false" default="" hint="A specific template to render.">
@@ -60,7 +60,7 @@
 		<!--- Render a blank white page to the browser --->
 		<cfset renderNothing()>
 	'
-	categories="controller-request" chapters="rendering-pages" functions="renderPage,renderPageToString,renderText,renderPartial">
+	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderText,renderPartial">
 	<cfscript>
 		request.wheels.response = "";
 	</cfscript>
@@ -72,7 +72,7 @@
 		<!--- Render just the text "Done!" to the browser --->
 		<cfset renderText("Done!")>
 	'
-	categories="controller-request" chapters="rendering-pages" functions="renderPage,renderPageToString,renderNothing,renderPartial">
+	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderNothing,renderPartial">
 	<cfargument name="text" type="any" required="true" hint="The text to be rendered.">
 	<cfscript>
 		request.wheels.response = arguments.text;
@@ -85,7 +85,7 @@
 		<!--- Render the partial `_comment.cfm` located in the current controller''s view folder --->
 		<cfset renderPartial("comment")>
 	'
-	categories="controller-request" chapters="rendering-pages" functions="renderPage,renderPageToString,renderNothing,renderText">
+	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderNothing,renderText">
 	<cfargument name="partial" type="string" required="true" hint="The name of the file to be used (starting with an optional path and with the underscore and file extension excluded).">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPage.">
 	<cfargument name="layout" type="string" required="false" default="#application.wheels.functions.renderPartial.layout#" hint="See documentation for @renderPage.">
@@ -103,7 +103,7 @@
 	</cfif>
 </cffunction>
 
-<!--- PRIVATE CONTROLLER REQUEST FUNCTIONS --->
+<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$renderPageAndAddToCache" returntype="string" access="public" output="false">
 	<cfscript>

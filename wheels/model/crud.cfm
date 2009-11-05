@@ -49,7 +49,7 @@
 		<cfset anOrder = aCustomer.newOrder(shipping=params.shipping)>
 	'
 	categories="model-class,create" chapters="creating-records,associations" functions="create,hasMany,hasOne">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="The properties you want to set on the object (can also be passed in as named arguments instead).">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="The properties you want to set on the object (can also be passed in as named arguments).">
 	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.new.defaults#" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
@@ -401,7 +401,7 @@
 		<cfset aPost = model("post").findByKey(params.postId)>
 		<cfset removedSuccessfully = aPost.removeAllComments()>
 	'
-	categories="model-class,read" chapters="updating-records,associations" functions="hasMany,update,updateByKey,updateOne">
+	categories="model-class,update" chapters="updating-records,associations" functions="hasMany,update,updateByKey,updateOne">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
@@ -805,34 +805,6 @@
 		else
 			loc.returnValue = false;
 	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="key" returntype="string" access="public" output="false" hint="Returns the value of the primary key for the object. If you have a single primary key named `id` then `someObject.key()` is functionally equivalent to `someObject.id`. This method is more useful when you do dynamic programming and don't know the name of the primary key or when you use composite keys (in which case it's convenient to use this method to get a list of both key values returned)."
-	examples=
-	'
-		<!--- Get an object and then get the primary key value(s) --->
-		<cfset anEmployee = model("employee").findByKey(params.key)>
-		<cfset val = anEmployee.key()>
-	'
-	categories="model-object,miscellaneous" chapters="object-relational-mapping" functions="">
-	<cfargument name="$persisted" type="boolean" required="false" default="false">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = "";
-		loc.iEnd = ListLen(variables.wheels.class.keys);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
-			if (StructKeyExists(this, loc.property))
-			{
-				if ($persisted && hasChanged(loc.property))
-					loc.returnValue = ListAppend(loc.returnValue, changedFrom(loc.property));
-				else
-					loc.returnValue = ListAppend(loc.returnValue, this[loc.property]);
-			}
-		}
-		</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 

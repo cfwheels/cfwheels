@@ -9,7 +9,7 @@
   			<cfset dataSource("users_source")>
 		</cffunction>
 	'
-	categories="model-initialization,general" chapters="object-relational-mapping" functions="columnNames,property,propertyNames,table,tableName">
+	categories="model-initialization,miscellaneous" chapters="using-multiple-data-sources" functions="">
 	<cfargument name="datasource" type="string" required="true" hint="The data source name to connect to.">
 	<cfargument name="username" type="string" required="false" default="" hint="The username for the data source.">
 	<cfargument name="password" type="string" required="false" default="" hint="The password for the data source.">
@@ -27,7 +27,7 @@
 			<cfset table("tbl_USERS")>
 		</cffunction>
 	'
-	categories="model-initialization,general" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,tableName">
+	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,tableName">
 	<cfargument name="name" type="string" required="true" hint="Name of the table to map this model to.">
 	<cfscript>
 		variables.wheels.class.tableName = arguments.name;

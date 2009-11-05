@@ -53,7 +53,7 @@
 	</cfscript>
 </cffunction>
 
-<!--- PRIVATE CONTROLLER FUNCTIONS --->
+<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$getBeforeFilters" returntype="array" access="public" output="false">
 	<cfreturn variables.wheels.beforeFilters>
