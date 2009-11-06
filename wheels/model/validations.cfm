@@ -332,8 +332,13 @@
 
 <cffunction name="$validate" returntype="boolean" access="public" output="false" hint="Runs all the validation methods setup on the object and adds errors as it finds them. Returns `true` if no errors were added, `false` otherwise.">
 	<cfargument name="type" type="string" required="true">
+	<cfargument name="execute" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
+
+		// don't run any validations when we want to skip
+		if (!arguments.execute)
+			return true;
 
 		// loop through all validations for passed in type (`onSave`, `onCreate` etc) that has been set on this model object
 		loc.iEnd = ArrayLen(variables.wheels.class.validations[arguments.type]);

@@ -710,6 +710,7 @@
 	categories="model-object,crud" chapters="creating-records" functions="">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.save.parameterize#" hint="See documentation for @findAll.">
 	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.save.defaults#" hint="Whether or not to set default values for properties.">
+	<cfargument name="validate" type="boolean" required="false" default="true" hint="Whether or not to run validations when saving">
 	<cfscript>
 		var returnValue = false;
 		clearErrors();
@@ -717,7 +718,7 @@
 		{
 			if (isNew())
 			{
-				if ($callback("beforeValidationOnCreate") && $validate("onSave") && $validate("onCreate") && $callback("afterValidation") && $callback("afterValidationOnCreate") && $callback("beforeSave") && $callback("beforeCreate"))
+				if ($callback("beforeValidationOnCreate") && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation") && $callback("afterValidationOnCreate") && $callback("beforeSave") && $callback("beforeCreate"))
 				{
 					$create(parameterize=arguments.parameterize);
 					if (arguments.defaults)
@@ -729,7 +730,7 @@
 			}
 			else
 			{
-				if ($callback("beforeValidationOnUpdate") && $validate("onSave") && $validate("onUpdate") && $callback("afterValidation") && $callback("afterValidationOnUpdate") && $callback("beforeSave") && $callback("beforeUpdate"))
+				if ($callback("beforeValidationOnUpdate") && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation") && $callback("afterValidationOnUpdate") && $callback("beforeSave") && $callback("beforeUpdate"))
 				{
 					if (hasChanged())
 					{
