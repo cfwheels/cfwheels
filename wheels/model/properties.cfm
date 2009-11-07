@@ -86,14 +86,20 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
-		loc.properties = ListToArray(variables.wheels.class.propertyList);
-		loc.iEnd = ArrayLen(loc.properties);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		
+		// loop through all properties and functions in the this scope
+		for (loc.key in this)
 		{
-			loc.property = loc.properties[loc.i];
-			loc.returnValue[loc.property] = "";
-			if (StructKeyExists(this, loc.property))
-				loc.returnValue[loc.property] = this[loc.property];
+			// we return anything that is not a function
+			if (!IsCustomFunction(this[loc.key]))
+			{
+				// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
+				if (ListFindNoCase(propertyNames(), loc.key))
+					loc.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), loc.key));
+
+				// set property from the this scope in the struct that we will return
+				loc.returnValue[loc.key] = this[loc.key];
+			}
 		}
 	</cfscript>
 	<cfreturn loc.returnValue> 
@@ -116,7 +122,7 @@
 			if (loc.key != "properties")
 				arguments.properties[loc.key] = arguments[loc.key];
 
-		// set passed in values to the "this" scope of this object
+		// set passed in values to the this scope of this object
 		for (loc.key in arguments.properties)
 			this[loc.key] = arguments.properties[loc.key];
 	</cfscript>
