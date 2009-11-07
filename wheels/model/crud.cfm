@@ -419,7 +419,7 @@
 		if (arguments.instantiate)
 		{
     		// find and instantiate each object and call its update function
-			loc.records = findAll(select=variables.wheels.class.propertyList, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
+			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.iEnd = loc.records.recordCount;
 			loc.returnValue = 0;
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -524,14 +524,14 @@
 		if (arguments.instantiate)
 		{
     		// find and instantiate each object and call its delete function
-			loc.records = findAll(select=variables.wheels.class.propertyList, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
+			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.iEnd = loc.records.recordCount;
 			loc.returnValue = 0;
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.object = $createInstance(properties=loc.records, row=loc.i, persisted=true);
 				if (loc.object.delete(parameterize=arguments.parameterize))
-					loc.returnValue = loc.returnValue + 1;
+					loc.returnValue++;
 			}
 		}
 		else

@@ -110,14 +110,15 @@
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfscript>
 		var loc = {};
-		loc.properties = Duplicate(arguments.properties);
-		StructDelete(arguments, "properties", false);
-		StructAppend(loc.properties, arguments, true);
-		for (loc.key in loc.properties)
-		{
-			if (ListFindNoCase(variables.wheels.class.propertyList, loc.key))
-				this[loc.key] = loc.properties[loc.key];
-		}
+		
+		// add eventual named arguments to properties struct (named arguments will take precedence) 
+		for (loc.key in arguments)
+			if (loc.key != "properties")
+				arguments.properties[loc.key] = arguments[loc.key];
+
+		// set passed in values to the "this" scope of this object
+		for (loc.key in arguments.properties)
+			this[loc.key] = arguments.properties[loc.key];
 	</cfscript>
 </cffunction>
 
