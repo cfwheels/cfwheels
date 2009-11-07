@@ -76,7 +76,7 @@
 </cffunction>
 
 <cffunction name="properties" returntype="struct" access="public" output="false" hint="Returns a structure of all the properties with their names as keys and the values of the property as values."
-	example=
+	examples=
 	'
 		<!--- Get a structure of all the properties for an object --->
 		<cfset user = model("user").findByKey(1)>
