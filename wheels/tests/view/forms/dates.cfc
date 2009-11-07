@@ -65,4 +65,24 @@
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
+	<cffunction name="test_dateSelectTag_startyear_is_greater_than_endyear">
+		<cfset loc.args.name = "today">
+		<cfset loc.args.startyear = "2000">
+		<cfset loc.args.endyear = "1990">
+		<cfset loc.args.order="year">
+		<cfset loc.e = '<select id="today-year" name="today($year)"><option value="2000">2000</option><option value="1999">1999</option><option value="1998">1998</option><option value="1997">1997</option><option value="1996">1996</option><option value="1995">1995</option><option value="1994">1994</option><option value="1993">1993</option><option value="1992">1992</option><option value="1991">1991</option><option value="1990">1990</option></select>'>
+		<cfset loc.r = loc.controller.dateSelectTags(argumentcollection=loc.args)>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
+	<cffunction name="test_dateSelectTag_endyear_is_greater_than_startyear">
+		<cfset loc.args.name = "today">
+		<cfset loc.args.startyear = "1990">
+		<cfset loc.args.endyear = "2000">
+		<cfset loc.args.order="year">
+		<cfset loc.e = '<select id="today-year" name="today($year)"><option value="1990">1990</option><option value="1991">1991</option><option value="1992">1992</option><option value="1993">1993</option><option value="1994">1994</option><option value="1995">1995</option><option value="1996">1996</option><option value="1997">1997</option><option value="1998">1998</option><option value="1999">1999</option><option value="2000">2000</option></select>'>
+		<cfset loc.r = loc.controller.dateSelectTags(argumentcollection=loc.args)>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
 </cfcomponent>
