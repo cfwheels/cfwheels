@@ -294,32 +294,25 @@
 			else if (StructKeyExists(arguments, arguments.$name) && IsObject(arguments[arguments.$name]))
 			{
 				loc.object = arguments[arguments.$name];
-				loc.properties = loc.object.$classData().propertyList;
-				loc.iEnd = ListLen(loc.properties);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-				{
-					loc.property = ListGetAt(loc.properties, loc.i);
-					if (StructKeyExists(loc.object, loc.property) && IsSimpleValue(loc.object[loc.property]))
-						arguments[loc.property] = loc.object[loc.property];
-				}
+				StructAppend(arguments, loc.object.properties(), false);
 			}
 			else if (StructKeyExists(arguments, loc.pluralizedName) && IsArray(arguments[loc.pluralizedName]))
 			{
+				loc.originalArguments = Duplicate(arguments);
 				loc.array = arguments[loc.pluralizedName];
 				loc.returnValue = "";
-				loc.properties = loc.array[1].$classData().propertyList;
-				loc.jEnd = ListLen(loc.properties);
 				loc.iEnd = ArrayLen(loc.array);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					arguments.current = loc.i;
-					loc.object = loc.array[loc.i];
-					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-					{
-						loc.property = ListGetAt(loc.properties, loc.j);
-						if (StructKeyExists(loc.object, loc.property) && IsSimpleValue(loc.object[loc.property]))
-							arguments[loc.property] = loc.object[loc.property];
-					}
+					loc.properties = loc.array[loc.i].properties();
+					
+					// we have to overwrite the values in each loop but first we remove the ones that are in the original arguments since they take precedence
+					for (loc.key in loc.originalArguments)
+						if (StructKeyExists(loc.properties, loc.key))
+							StructDelete(loc.properties, loc.key);
+					StructAppend(arguments, loc.properties, true);
+					
 					loc.returnValue = loc.returnValue & $includeAndReturnOutput(argumentCollection=arguments);
 					if (StructKeyExists(arguments, "$spacer") && loc.i < loc.iEnd)
 						loc.returnValue = loc.returnValue & arguments.$spacer;
