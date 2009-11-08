@@ -65,7 +65,7 @@
 			loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
 			if (StructKeyExists(this, loc.property))
 			{
-				if ($persisted && hasChanged(loc.property))
+				if (arguments.$persisted && hasChanged(loc.property))
 					loc.returnValue = ListAppend(loc.returnValue, changedFrom(loc.property));
 				else
 					loc.returnValue = ListAppend(loc.returnValue, this[loc.property]);
