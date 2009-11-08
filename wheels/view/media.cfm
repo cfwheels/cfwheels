@@ -22,7 +22,7 @@
 		{
 			loc.item = ListGetAt(arguments.sources, loc.i);
 			arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & Trim(loc.item);
-			if (loc.item Does Not Contain ".")
+			if (listlast(loc.item, ".") != "css")
 				arguments.href = arguments.href & ".css";
 			loc.returnValue = loc.returnValue & $tag(name="link", skip="source,sources", close=true, attributes=arguments);
 		}
@@ -52,7 +52,7 @@
 		{
 			loc.item = ListGetAt(arguments.sources, loc.i);
 			arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & Trim(loc.item);
-			if (loc.item Does Not Contain ".")
+			if (listlast(loc.item, ".") != "js")
 				arguments.src = arguments.src & ".js";
 			loc.returnValue = loc.returnValue & $element(name="script", skip="source,sources", attributes=arguments);
 		}
