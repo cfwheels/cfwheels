@@ -42,7 +42,7 @@
 	categories="view-helper,forms-object" chapter="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.passwordField.label#" hint="See documentation for textField">
+	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.passwordField.label#" hint="See documentation for @textField">
 	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.passwordField.labelPlacement#" hint="See documentation for @textField.">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.passwordField.prepend#" hint="See documentation for @textField.">
 	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.passwordField.append#" hint="See documentation for @textField.">
