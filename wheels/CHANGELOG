@@ -14,7 +14,7 @@ Changes
 Bug Fixes
 =========
 
-* Include js or css files with multiple dot (.) does not work - #312 [Don Humphreys, Tony Petruzzi]
+* Include js or css files with multiple dot (.) does not work - #312 [Mike Henke, Tony Petruzzi]
 
 Other
 =====
