@@ -1,3 +1,26 @@
+Edge
+
+Changes
+=======
+
+* propertyNames() and reload() return calculated properties as well - [Per Djurner]
+* ability to skip validation when saving - [Tony Petruzzi]
+* ability for years to display in decending order in date select form tags - [Tony Petruzzi]
+* setProperties to allows any passed in variable to be set on the object - [Per Djurner]
+* properties() so that it returns anything in the this scope that is not a function - [Per Djurner]
+* includePartial / renderPartial pass in calculated properties to the partial file - [Per Djurner]
+* default day to 1 and month to 1 when submitting forms - [Tony Petruzzi]
+
+Bug Fixes
+=========
+
+* Include js or css files with multiple dot (.) does not work - #312 [Tony Petruzzi]
+
+Other
+=====
+
+
+
 1.0
 
 Changes
