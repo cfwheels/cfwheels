@@ -4,7 +4,7 @@
 	<cfargument name="actionName" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		
+
 		if (Left(arguments.actionName, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.actionName))
 			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.actionName#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels functions.");
 
@@ -56,10 +56,10 @@
 	<cfargument name="urlScope" type="struct" required="false" default="#url#">
 	<cfscript>
 		var loc = {};
-		
+
 		// add all normal URL variables to struct (i.e. ?x=1&y=2 etc)
-		loc.returnValue = arguments.urlScope; 
-		
+		loc.returnValue = arguments.urlScope;
+
 		// go through the matching route pattern and add URL variables from the route to the struct
 		loc.iEnd = ListLen(arguments.foundRoute.pattern, "/");
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -74,15 +74,15 @@
 			loc.returnValue.controller = arguments.foundRoute.controller;
 		if (!StructKeyExists(loc.returnValue, "action"))
 			loc.returnValue.action = arguments.foundRoute.action;
-		
+
 		// convert controller to upperCamelCase and action to normal camelCase
 		loc.returnValue.controller = REReplace(loc.returnValue.controller, "-([a-z])", "\u\1", "all");
 		loc.returnValue.action = REReplace(loc.returnValue.action, "-([a-z])", "\u\1", "all");
-	
+
 		// add name of route to params if a named route is running
 		if (StructKeyExists(arguments.foundRoute, "name") && Len(arguments.foundRoute.name) && !StructKeyExists(loc.returnValue, "route"))
 			loc.returnValue.route = arguments.foundRoute.name;
-	
+
 		// decrypt all values except controller and action
 		if (application.wheels.obfuscateUrls)
 		{
@@ -98,7 +98,7 @@
 				}
 			}
 		}
-	
+
 		if (StructCount(arguments.formScope))
 		{
 			// loop through form variables, merge any date variables into one, fix checkbox submissions
@@ -128,9 +128,9 @@
 				if (!StructKeyExists(loc.dates[loc.key], "year"))
 					loc.dates[loc.key].year = 1899;
 				if (!StructKeyExists(loc.dates[loc.key], "month"))
-					loc.dates[loc.key].month = 12;
+					loc.dates[loc.key].month = 1;
 				if (!StructKeyExists(loc.dates[loc.key], "day"))
-					loc.dates[loc.key].day = 30;
+					loc.dates[loc.key].day = 1;
 				if (!StructKeyExists(loc.dates[loc.key], "hour"))
 					loc.dates[loc.key].hour = 0;
 				if (!StructKeyExists(loc.dates[loc.key], "minute"))
@@ -144,7 +144,7 @@
 				catch(Any e)
 				{
 					arguments.formScope[loc.key] = "";
-				} 
+				}
 				if (StructKeyExists(arguments.formScope, "#loc.key#($year)"))
 					StructDelete(arguments.formScope, "#loc.key#($year)");
 				if (StructKeyExists(arguments.formScope, "#loc.key#($month)"))
@@ -158,7 +158,7 @@
 				if (StructKeyExists(arguments.formScope, "#loc.key#($second)"))
 					StructDelete(arguments.formScope, "#loc.key#($second)");
 			}
-		
+
 			// add form variables to the params struct
 			for (loc.key in arguments.formScope)
 			{
@@ -257,32 +257,32 @@
 		var loc = {};
 		if (application.wheels.showDebugInformation)
 			$debugPoint("setup");
-		
+
 		// set route from incoming url, find a matching one and create the params struct
 		loc.route = $getRouteFromRequest();
 		loc.foundRoute = $findMatchingRoute(route=loc.route);
 		loc.params = $createParams(route=loc.route, foundRoute=loc.foundRoute);
-		
+
 		// set params in the request scope as well so we can display it in the debug info outside of the controller context
 		request.wheels.params = loc.params;
-		
+
 		// create an empty flash unless it already exists
 		if (!StructKeyExists(session, "flash"))
 			session.flash = {};
-		
+
 		// create the requested controller
 		loc.controller = $controller(loc.params.controller).$createControllerObject(loc.params);
-		
+
 		if (application.wheels.showDebugInformation)
 			$debugPoint("setup,beforeFilters");
-		
+
 		// run verifications and before filters if they exist on the controller
 		$runVerifications(controller=loc.controller, actionName=loc.params.action, params=loc.params);
 		$runFilters(controller=loc.controller, type="before", actionName=loc.params.action);
-		
+
 		if (application.wheels.showDebugInformation)
 			$debugPoint("beforeFilters,action");
-			
+
 		// call action on controller if it exists
 		loc.actionIsCachable = false;
 		if (application.wheels.cacheActions && StructIsEmpty(session.flash) && StructIsEmpty(form))
@@ -324,7 +324,7 @@
 		$runFilters(controller=loc.controller, type="after", actionName=loc.params.action);
 		if (application.wheels.showDebugInformation)
 			$debugPoint("afterFilters");
-		
+
 		// clear the flash (note that this is not done for redirectTo since the processing does not get here)
 		StructClear(session.flash);
 	</cfscript>
@@ -404,7 +404,7 @@
 				else
 				{
 					$abort();
-				}			
+				}
 			}
 		}
 	</cfscript>
