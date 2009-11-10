@@ -2,7 +2,7 @@
 
 	<cfset global.controller = createobject("component", "wheelsMapping.tests._assets.controllers.ControllerWithModelErrors")>
 	<cfset global.args = {}>
-	<cfset global.args.objectName = "ModelUsers">
+	<cfset global.args.objectName = "user">
 	<cfset global.args.class = "errors-found">
 
 	<cffunction name="test_show_duplicate_errors">

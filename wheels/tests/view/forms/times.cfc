@@ -3,7 +3,7 @@
 	<cfset global.controller = createobject("component", "wheelsMapping.tests._assets.controllers.ControllerWithModel")>
 
 	<cffunction name="test_x_timeSelect_valid">
-		<cfset global.controller.timeSelect(objectName="ModelUsers1", property="birthday")>
+		<cfset global.controller.timeSelect(objectName="user", property="birthday")>
 	</cffunction>
 
 	<cffunction name="test_x_timeSelectTags_valid">

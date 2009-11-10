@@ -1,6 +1,6 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset loadModels("users")>
+	<cfset loadModels("user")>
 	<cfset global.args = {username="myusername", password="mypassword", firstname="myfirstname", lastname="mylastname"}>
 	
 	<cffunction name="test_can_create_new_record_validation_execute">

@@ -3,7 +3,7 @@
 	<cfset global.controller = createobject("component", "wheelsMapping.tests._assets.controllers.ControllerWithModel")>
 
 	<cffunction name="test_x_textArea_valid">
-		<cfset global.controller.textArea(objectName="ModelUsers1", property="firstname")>
+		<cfset global.controller.textArea(objectName="user", property="firstname")>
 	</cffunction>
 
 </cfcomponent>

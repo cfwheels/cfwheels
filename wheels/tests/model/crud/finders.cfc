@@ -1,6 +1,6 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset loadModels("users")>
+	<cfset loadModels("user")>
 
 	<cffunction name="test_select_distinct_addresses">
 		<cfset loc.q = loc.user.findAll(select="address", distinct="true", order="address")>

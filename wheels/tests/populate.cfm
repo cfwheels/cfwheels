@@ -1,7 +1,7 @@
 <cfinclude template="/wheelsMapping/global/functions.cfm">
 
 <!--- reset all tables --->
-<cfloop list="users,photogalleries,photogalleryphotos,author,posts" index="loc.i">
+<cfloop list="user,photogallery,photogalleryphoto,author,post" index="loc.i">
 	<cfset model(loc.i).deleteAll(instantiate=false)>
 </cfloop>
 
