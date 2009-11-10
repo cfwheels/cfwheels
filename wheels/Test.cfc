@@ -555,8 +555,8 @@
 			<cfinclude template="#loc.relative_root_test_path & '/env.cfm'#">
 		</cfif>
 
-		<!--- populate the test database --->
-		<cfif FileExists(loc.full_root_test_path & "/populate.cfm")>
+		<!--- populate the test database only on reload --->
+		<cfif structkeyexists(arguments.options, "reload") && arguments.options.reload eq true && FileExists(loc.full_root_test_path & "/populate.cfm")>
 			<cfinclude template="#loc.relative_root_test_path & '/populate.cfm'#">
 		</cfif>
 
