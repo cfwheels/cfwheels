@@ -5,7 +5,7 @@
 	'
 		<p><cfoutput>##flash("message")##</cfoutput></p>
 	'
-	categories="controller-request" chapters="using-the-flash" functions="flashClear,flashDelete,flashIsEmpty,flashCount,flashKeyExists,flashInsert">
+	categories="controller-request,flash" chapters="using-the-flash" functions="flashClear,flashDelete,flashIsEmpty,flashCount,flashKeyExists,flashInsert">
 	<cfargument name="key" type="string" required="false" hint="The key to get the value for.">
 	<cfscript>
 		var returnValue = "";
@@ -29,7 +29,7 @@
 	'
 		<cfset flashClear()>
 	'
-	categories="controller-request" chapters="using-the-flash" functions="flash,flashDelete,flashIsEmpty,flashCount,flashKeyExists,flashInsert">
+	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashDelete,flashIsEmpty,flashCount,flashKeyExists,flashInsert">
 	<cfscript>
 		session.flash = {};
 	</cfscript>
@@ -42,7 +42,7 @@
 		  do something...
 		</cfif>
 	'
-	categories="controller-request" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashIsEmpty,flashKeyExists,flashInsert">
+	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashIsEmpty,flashKeyExists,flashInsert">
 	<cfreturn StructCount(session.flash)>
 </cffunction>
 
@@ -51,7 +51,7 @@
 	'
 		<cfset flashDelete(key="errorMessage")>
 	'
-	categories="controller-request" chapters="using-the-flash" functions="flash,flashClear,flashIsEmpty,flashCount,flashKeyExists,flashInsert">
+	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashIsEmpty,flashCount,flashKeyExists,flashInsert">
 	<cfargument name="key" type="string" required="true" hint="The key to delete.">
 	<cfreturn StructDelete(session.flash, arguments.key, true)>
 </cffunction>
@@ -61,7 +61,7 @@
 	'
 		<cfset flashInsert(msg="It Worked!")>
 	'
-	categories="controller-request" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashIsEmpty,flashCount,flashKeyExists">
+	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashIsEmpty,flashCount,flashKeyExists">
 	<cfscript>
 		session.flash[StructKeyList(arguments)] = arguments[1];
 	</cfscript>
@@ -74,7 +74,7 @@
 		  <cfabort>
 		</cfif>
 	'
-	categories="controller-request" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashCount,flashKeyExists,flashInsert">
+	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashCount,flashKeyExists,flashInsert">
 	<cfreturn NOT flashCount()>
 </cffunction>
 
@@ -85,7 +85,7 @@
 		  do something...
 		</cfif>
 	'
-	categories="controller-request" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashIsEmpty,flashCount,flashInsert">
+	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashIsEmpty,flashCount,flashInsert">
 	<cfargument name="key" type="string" required="true" hint="The key to check if it exists.">
 	<cfreturn StructKeyExists(session.flash, arguments.key)>
 </cffunction>
