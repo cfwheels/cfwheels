@@ -7,7 +7,7 @@
 <cfinclude template="formsdateplain.cfm">
 <cfinclude template="formsobject.cfm">
 <cfinclude template="formsplain.cfm">
+<cfinclude template="links.cfm">
 <cfinclude template="miscellaneous.cfm">
 <cfinclude template="sanitize.cfm">
 <cfinclude template="text.cfm">
-<cfinclude template="urls.cfm">
