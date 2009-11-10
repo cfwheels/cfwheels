@@ -22,13 +22,14 @@
  --->
 
  	<cffunction name="test_findByKey">
-		<cfset loc.q = loc.user.findByKey(1)>
-		<cfset assert('loc.q.id eq 1')>
+		<cfset loc.e = loc.user.findOne(where="lastname = 'petruzzi'")>
+		<cfset loc.q = loc.user.findByKey(loc.e.id)>
+		<cfset assert('loc.q.id eq loc.e.id')>
 	</cffunction>
 
  	<cffunction name="test_findOne">
-		<cfset loc.q = loc.user.findOne(order="id DESC")>
-		<cfset assert('loc.q.id eq 5')>
+		<cfset loc.e = loc.user.findOne(where="lastname = 'petruzzi'")>
+		<cfset assert('isobject(loc.e)')>
 	</cffunction>
 
  	<cffunction name="test_findAll">
@@ -41,16 +42,16 @@
 
 	<cffunction name="test_findOneByXXX">
 		<cfset loc.q = loc.user.findOneByFirstname('per')>
-		<cfset assert('loc.q.id eq 3')>
+		<cfset assert('isobject(loc.q)')>
 		<cfset loc.q = loc.user.findOneByZipcode(value="22222", order="id")>
-		<cfset assert('loc.q.id eq 2')>
+		<cfset assert('isobject(loc.q)')>
 	</cffunction>
 
 	<cffunction name="test_findAllByXXX">
 		<cfset loc.q = loc.user.findAllByZipcode(value="22222", order="id")>
-		<cfset assert('valuelist(loc.q.id) eq "2,5"')>
+		<cfset assert('loc.q.recordcount eq 2')>
 		<cfset loc.q = loc.user.findAllByZipcode(value="11111", order="id")>
-		<cfset assert('valuelist(loc.q.id) eq "1"')>
+		<cfset assert('loc.q.recordcount eq 1')>
 	</cffunction>
 
 	<cffunction name="test_findByKey_norecords_returns_correct_type">
@@ -114,7 +115,8 @@
 	</cffunction>
 
 	<cffunction name="test_exists_by_key_valid">
-		<cfset loc.r = loc.user.exists(3)>
+		<cfset loc.e = loc.user.findOne(where="lastname = 'petruzzi'")>
+		<cfset loc.r = loc.user.exists(loc.e.id)>
 		<cfset assert('loc.r eq true')>
 	</cffunction>
 
