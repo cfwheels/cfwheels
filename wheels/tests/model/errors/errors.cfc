@@ -1,7 +1,6 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsmapping/tests/_assets/testhelpers/load_models.cfm">
-	<cfset load_Models("users")>
+	<cfset loadModels("users")>
 
 	<cfset global.user.addErrorToBase(message="base error1")>
 	<cfset global.user.addErrorToBase(message="base name error1", name="base_errors")>

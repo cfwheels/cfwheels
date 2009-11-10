@@ -1,7 +1,6 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsmapping/tests/_assets/testhelpers/load_models.cfm">
-	<cfset load_Models("users")>
+	<cfset loadModels("users")>
 	<cfset global.args = {username="myusername", password="mypassword", firstname="myfirstname", lastname="mylastname"}>
 	
 	<cffunction name="test_can_create_new_record_validation_execute">
