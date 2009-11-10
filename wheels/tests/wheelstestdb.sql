@@ -1,15 +1,26 @@
 USE [wheelstestdb]
-GO
+go
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Users]') AND type in (N'U'))
+DROP TABLE [dbo].[Users]
+go
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PhotoGalleries]') AND type in (N'U'))
+DROP TABLE [dbo].[PhotoGalleries]
+go
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PhotoGalleryPhotos]') AND type in (N'U'))
+DROP TABLE [dbo].[PhotoGalleryPhotos]
+go
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Posts]') AND type in (N'U'))
+DROP TABLE [dbo].[Posts]
+go
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Authors]') AND type in (N'U'))
+DROP TABLE [dbo].[Authors]
+go
 
 /***********************************************
 		building tables
 ***********************************************/
-
 --Users
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Users]') AND type in (N'U'))
-DROP TABLE [dbo].[Users]
-GO
-
 CREATE TABLE [dbo].[Users](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[UserName] [varchar](50) NOT NULL,
@@ -30,13 +41,8 @@ CREATE TABLE [dbo].[Users](
 	[Id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-GO
-
--- PhotoGalleries
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PhotoGalleries]') AND type in (N'U'))
-DROP TABLE [dbo].[PhotoGalleries]
 go
-
+-- PhotoGalleries
 CREATE TABLE [dbo].[PhotoGalleries](
 	[photogalleryid] [int] IDENTITY(1,1) NOT NULL,
 	[userid] [int] NOT NULL,
@@ -50,10 +56,6 @@ CREATE TABLE [dbo].[PhotoGalleries](
 go
 
 -- PhotoGalleryPhotos
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PhotoGalleryPhotos]') AND type in (N'U'))
-DROP TABLE [dbo].[PhotoGalleryPhotos]
-go
-
 CREATE TABLE [dbo].[PhotoGalleryPhotos](
 	[photogalleryphotoid] [int] IDENTITY(1,1) NOT NULL,
 	[photogalleryid] [int] NOT NULL,
@@ -64,6 +66,34 @@ CREATE TABLE [dbo].[PhotoGalleryPhotos](
 	[photogalleryphotoid] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+go
+
+-- Posts
+CREATE TABLE [dbo].[Posts](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[authorid] [int] NOT NULL,
+	[title] [varchar](250) NOT NULL,
+	[body] [text] NOT NULL,
+	[createdat] [datetime] NOT NULL,
+	[updatedat] [datetime] NULL,
+ CONSTRAINT [PK_Posts] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+go
+
+-- Authors
+CREATE TABLE [dbo].[Authors](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[firstname] [varchar](100) NOT NULL,
+	[lastname] [varchar](100) NOT NULL,
+ CONSTRAINT [PK_Authors] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+END
 go
 
 
@@ -152,3 +182,5 @@ while @@fetch_status = 0
 
 close photos
 deallocate photos
+
+
