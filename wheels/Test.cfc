@@ -556,7 +556,9 @@
 		</cfif>
 
 		<!--- populate the test database --->
-		<cfinclude template="#loc.relative_root_test_path & '/populate.cfm'#">
+		<cfif FileExists(loc.full_root_test_path & "/populate.cfm")>
+			<cfinclude template="#loc.relative_root_test_path & '/populate.cfm'#">
+		</cfif>
 
 		<!--- for test results display --->
 		<cfset variables.WHEELS_TESTS_BASE_COMPONENT_PATH = loc.test_path>
