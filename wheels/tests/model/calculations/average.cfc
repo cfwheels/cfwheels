@@ -9,7 +9,7 @@
 
 	<cffunction name="test_average_all_with_float">
 		<cfset loc.result = loc.post.average(property="averageRating")>
-		<cfset assert("loc.result IS 3.4")>
+		<cfset assert("javacast('float', loc.result) eq javacast('float', 3.4)")>
 	</cffunction>
-	
+
 </cfcomponent>
