@@ -12,9 +12,36 @@
 	<cfargument name="include" type="string" required="false" default="" hint="Any associations that need to be included in the query.">
 	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.functions.average.distinct#" hint="When `true`, `AVG` will be performed only on each unique instance of a value, regardless of how many times the value occurs.">
 	<cfscript>
-		arguments.type = "AVG";
+		var loc = {};
+		if (ListFindNoCase("cf_sql_integer,cf_sql_bigint,cf_sql_smallint,cf_sql_tinyint", variables.wheels.class.properties[arguments.property].type))
+		{
+			// this is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it		
+			loc.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include);
+			loc.totalRecords = 0;
+			loc.total = 0;
+			loc.done = "";
+			for (loc.i=1; loc.i <= loc.values.recordCount; loc.i++)
+			{
+				if (!arguments.distinct || !ListFind(loc.done, loc.value))
+				{
+					loc.totalRecords++;
+					loc.value = loc.values[arguments.property][loc.i];
+					if (!Len(loc.value))
+						loc.value = 0;
+					loc.total = loc.total + loc.value;
+					loc.done = ListAppend(loc.done, loc.value);
+				}
+			}
+			loc.returnValue = loc.total / loc.totalRecords;
+		}
+		else
+		{
+			// if the column's type is a float or similar we can run an AVG type query since it will always return a value of the same type as the column
+			arguments.type = "AVG";
+			loc.returnValue = $calculate(argumentCollection=arguments);
+		}
 	</cfscript>
-	<cfreturn $calculate(argumentCollection=arguments)>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="count" returntype="numeric" access="public" output="false" hint="Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function `COUNT`."

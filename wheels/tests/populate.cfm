@@ -87,11 +87,11 @@
 )>
 
 <cfset loc.per = model("author").create(firstName="Per", lastName="Djurner")>
-<cfset loc.per.createPost(title="Title for first test post", body="Text for first test post")>
-<cfset loc.per.createPost(title="Title for second test post", body="Text for second test post")>
-<cfset loc.per.createPost(title="Title for third test post", body="Text for third test post")>
+<cfset loc.per.createPost(title="Title for first test post", body="Text for first test post", views=5)>
+<cfset loc.per.createPost(title="Title for second test post", body="Text for second test post", views=5)>
+<cfset loc.per.createPost(title="Title for third test post", body="Text for third test post", averageRating="3.2")>
 <cfset loc.tony = model("author").create(firstName="Tony", lastName="Petruzzi")>
-<cfset loc.tony.createPost(title="Title for fourth test post", body="Text for fourth test post")>
+<cfset loc.tony.createPost(title="Title for fourth test post", body="Text for fourth test post", views=3, averageRating="3.6")>
 <cfset loc.chris = model("author").create(firstName="Chris", lastName="Peters")>
 <cfset loc.peter = model("author").create(firstName="Peter", lastName="Amiri")>
 <cfset loc.james = model("author").create(firstName="James", lastName="Gibson")>

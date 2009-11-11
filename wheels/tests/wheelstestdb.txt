@@ -22,6 +22,8 @@ id (int, identity, not null, primary key)
 authorid (int, not null)
 title (varchar(250), not null)
 body (text, not null)
+views (int, not null, 0)
+averagerating (float)
 createdat (datetime, not null)
 updatedat (datetime)
 
