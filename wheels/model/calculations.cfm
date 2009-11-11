@@ -25,9 +25,7 @@
 				if (!arguments.distinct || !ListFind(loc.done, loc.value))
 				{
 					loc.totalRecords++;
-					loc.value = loc.values[arguments.property][loc.i];
-					if (!Len(loc.value))
-						loc.value = 0;
+					loc.value = val(loc.values[arguments.property][loc.i]);
 					loc.total = loc.total + loc.value;
 					loc.done = ListAppend(loc.done, loc.value);
 				}
