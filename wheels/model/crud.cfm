@@ -174,7 +174,7 @@
 					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					{
 						loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
-						loc.list = Evaluate("QuotedValueList(loc.values.#loc.property#)");
+						loc.list = ListQualify(ArrayToList(loc.values[loc.property]), "'");
 						loc.paginationWhere = ListAppend(loc.paginationWhere, "#variables.wheels.class.tableName#.#variables.wheels.class.properties[loc.property].column# IN (#loc.list#)", Chr(7));
 					}
 					loc.paginationWhere = Replace(loc.paginationWhere, Chr(7), " AND ", "all");
