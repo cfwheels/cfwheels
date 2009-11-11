@@ -10,10 +10,13 @@
 	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many CSS files in the `stylesheets` folder, minus the `.css` extension. (Can also be called with the `source` argument).">
 	<cfargument name="type" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.type#" hint="The `type` attribute for the `link` tag.">
 	<cfargument name="media" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.media#" hint="The `media` attribute for the `link` tag.">
+	<cfargument name="head" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.head#" hint="Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior which is to place the output where the function is called from.">
 	<cfscript>
 		var loc = {};
 		if (StructKeyExists(arguments, "source"))
 			arguments.sources = arguments.source;
+		if (application.wheels.showErrorInformation && !Len(arguments.sources))
+			$throw(type="Wheels.IncorrectArguments", message="The `source` or `sources` argument is required but was not passed in.");
 		$insertDefaults(name="styleSheetLinkTag", reserved="href,rel", input=arguments);
 		arguments.rel = "stylesheet";
 		loc.returnValue = "";
@@ -22,9 +25,14 @@
 		{
 			loc.item = ListGetAt(arguments.sources, loc.i);
 			arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & Trim(loc.item);
-			if (listlast(loc.item, ".") != "css")
+			if (ListLast(loc.item, ".") != "css")
 				arguments.href = arguments.href & ".css";
-			loc.returnValue = loc.returnValue & $tag(name="link", skip="source,sources", close=true, attributes=arguments);
+			loc.returnValue = loc.returnValue & $tag(name="link", skip="source,sources,head", close=true, attributes=arguments);
+		}
+		if (arguments.head)
+		{
+			$htmlhead(text=loc.returnValue);
+			loc.returnValue = "";
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -41,10 +49,13 @@
 	categories="view-helper,assets" chapters="miscellaneous-helpers" functions="styleSheetLinkTag,imageTag">
 	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many JavaScript files in the `javascripts` folder, minus the `.js` extension. (Can also be called with the `source` argument).">
 	<cfargument name="type" type="string" required="false" default="#application.wheels.functions.javaScriptIncludeTag.type#" hint="The `type` attribute for the `script` tag.">
+	<cfargument name="head" type="string" required="false" default="#application.wheels.functions.javaScriptIncludeTag.head#" hint="See documentation for @styleSheetLinkTag.">
 	<cfscript>
 		var loc = {};
 		if (StructKeyExists(arguments, "source"))
 			arguments.sources = arguments.source;
+		if (application.wheels.showErrorInformation && !Len(arguments.sources))
+			$throw(type="Wheels.IncorrectArguments", message="The `source` or `sources` argument is required but was not passed in.");
 		$insertDefaults(name="javaScriptIncludeTag", reserved="src", input=arguments);
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.sources);
@@ -52,9 +63,14 @@
 		{
 			loc.item = ListGetAt(arguments.sources, loc.i);
 			arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & Trim(loc.item);
-			if (listlast(loc.item, ".") != "js")
+			if (ListLast(loc.item, ".") != "js")
 				arguments.src = arguments.src & ".js";
-			loc.returnValue = loc.returnValue & $element(name="script", skip="source,sources", attributes=arguments);
+			loc.returnValue = loc.returnValue & $element(name="script", skip="source,sources,head", attributes=arguments);
+		}
+		if (arguments.head)
+		{
+			$htmlhead(text=loc.returnValue);
+			loc.returnValue = "";
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -66,7 +82,7 @@
 		##imageTag("logo.png")##
 	'
 	categories="view-helper,assets" chapters="miscellaneous-helpers" functions="javaScriptIncludeTag,styleSheetLinkTag">
-	<cfargument name="source" type="string" required="true" hint="Image file name if local or full URL if remote.">
+	<cfargument name="source" type="string" required="true" hint="The file name of the image if it's availabe in the local file system (i.e. ColdFusion will be able to access it). Provide the full URL if the image is on a remote server.">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="imageTag", reserved="src", input=arguments);

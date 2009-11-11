@@ -104,7 +104,7 @@
 	application.wheels.functions.hourSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
 	application.wheels.functions.imageTag = {};
 	application.wheels.functions.includePartial = {layout=""};
-	application.wheels.functions.javaScriptIncludeTag = {type="text/javascript"};
+	application.wheels.functions.javaScriptIncludeTag = {type="text/javascript", head=false};
 	application.wheels.functions.linkTo = {onlyPath=true, host="", protocol="", port=0};
 	application.wheels.functions.mailTo = {encode=false};
 	application.wheels.functions.minuteSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, minuteStep=1};
@@ -126,7 +126,7 @@
 	application.wheels.functions.sendEmail = {layouts=false, detectMultipart=true};
 	application.wheels.functions.sendFile = {disposition="attachment"};
 	application.wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, spamProtection=false};
-	application.wheels.functions.styleSheetLinkTag = {type="text/css", media="all"};
+	application.wheels.functions.styleSheetLinkTag = {type="text/css", media="all", head=false};
 	application.wheels.functions.submitTag = {value="Save changes", image="", disable=""};
 	application.wheels.functions.sum = {distinct=false};
 	application.wheels.functions.textArea = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span"};

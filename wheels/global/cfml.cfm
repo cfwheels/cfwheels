@@ -137,6 +137,10 @@
 	<cflocation attributeCollection="#arguments#">
 </cffunction>
 
+<cffunction name="$htmlhead" returntype="void" access="public" output="false">
+	<cfhtmlhead attributeCollection="#arguments#">
+</cffunction>
+
 <cffunction name="$dbinfo" returntype="any" access="public" output="false">
 	<cfset var loc = {}>
 	<cfset arguments.name = "loc.returnValue">
