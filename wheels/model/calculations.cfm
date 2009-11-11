@@ -39,6 +39,8 @@
 			// if the column's type is a float or similar we can run an AVG type query since it will always return a value of the same type as the column
 			arguments.type = "AVG";
 			loc.returnValue = $calculate(argumentCollection=arguments);
+			// we convert the result to a string so that it is the same as what would happen if you calculate an average in ColdFusion code (like we do for integers in this function for example)
+			loc.returnValue = JavaCast("string", loc.returnValue);
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
