@@ -13,22 +13,26 @@
 	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.functions.average.distinct#" hint="When `true`, `AVG` will be performed only on each unique instance of a value, regardless of how many times the value occurs.">
 	<cfscript>
 		var loc = {};
+		loc.returnValue = "";
 		if (ListFindNoCase("cf_sql_integer,cf_sql_bigint,cf_sql_smallint,cf_sql_tinyint", variables.wheels.class.properties[arguments.property].type))
 		{
 			// this is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it
 			loc.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include);
 			loc.values = ListToArray(ArrayToList(loc.values[arguments.property]));
-			if(arguments.distinct)
+			if(!ArrayIsEmpty(loc.values))
 			{
-				loc.a = ArrayLen(loc.values);
-				loc.s = {};
-				for (loc.i=1; loc.i <= loc.a; loc.i++)
+				if(arguments.distinct)
 				{
-					structinsert(loc.s, loc.values[loc.i], loc.values[loc.i], true);
+					loc.a = ArrayLen(loc.values);
+					loc.s = {};
+					for (loc.i=1; loc.i <= loc.a; loc.i++)
+					{
+						StructInsert(loc.s, loc.values[loc.i], loc.values[loc.i], true);
+					}
+					loc.values = ListToArray(StructKeyList(loc.s));
 				}
-				loc.values = ListToArray(structkeylist(loc.s));
+				loc.returnValue = ArrayAvg(loc.values);
 			}
-			loc.returnValue = ArrayAvg(loc.values);
 		}
 		else
 		{
