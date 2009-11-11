@@ -3,6 +3,20 @@ id (int, identity, not null, primary key)
 firstname (varchar(100), not null)
 lastname (varchar(100), not null)
 
+CLASSIFICATIONS
+id (int, identity, not null, primary key)
+postid (int, not null)
+tagid (int, not null)
+
+COMMENTS
+id (int, identity, not null, primary key)
+postid (int, not null)
+body (text, not null)
+name (varchar(100), not null)
+url (varchar(100))
+email (varchar(100))
+createdat (datetime, not null)
+
 POSTS
 id (int, identity, not null, primary key)
 authorid (int, not null)
@@ -10,3 +24,13 @@ title (varchar(250), not null)
 body (text, not null)
 createdat (datetime, not null)
 updatedat (datetime)
+
+PROFILES
+id (int, identity, not null, primary key)
+authorid (int, not null)
+dateofbirth (datetime, not null)
+bio (text)
+
+TAGS
+id (int, identity, not null, primary key)
+name (varchar(50), not null)
