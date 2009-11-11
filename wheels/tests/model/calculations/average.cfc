@@ -7,8 +7,18 @@
 		<cfset assert("loc.result IS 3.25")>
 	</cffunction>
 
+	<cffunction name="test_average_with_integer_with_distinct">
+		<cfset loc.result = model("post").average(property="views", distinct="true")>
+		<cfset assert("DecimalFormat(loc.result) IS DecimalFormat(2.66666666667)")>
+	</cffunction>
+
 	<cffunction name="test_average_with_float">
 		<cfset loc.result = model("post").average(property="averageRating")>
+		<cfset assert("DecimalFormat(loc.result) IS DecimalFormat(3.47)")>
+	</cffunction>
+
+	<cffunction name="test_average_with_float_with_distinct">
+		<cfset loc.result = model("post").average(property="averageRating", distinct="true")>
 		<cfset assert("DecimalFormat(loc.result) IS DecimalFormat(3.4)")>
 	</cffunction>
 

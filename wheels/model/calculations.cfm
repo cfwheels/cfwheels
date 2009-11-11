@@ -22,10 +22,10 @@
 			loc.done = "";
 			for (loc.i=1; loc.i <= loc.values.recordCount; loc.i++)
 			{
+				loc.value = val(loc.values[arguments.property][loc.i]);
 				if (!arguments.distinct || !ListFind(loc.done, loc.value))
 				{
 					loc.totalRecords++;
-					loc.value = val(loc.values[arguments.property][loc.i]);
 					loc.total = loc.total + loc.value;
 					loc.done = ListAppend(loc.done, loc.value);
 				}
