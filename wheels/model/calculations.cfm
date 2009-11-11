@@ -19,17 +19,15 @@
 			// this is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it
 			loc.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include);
 			loc.values = ListToArray(ArrayToList(loc.values[arguments.property]));
-			if(!ArrayIsEmpty(loc.values))
+			if (!ArrayIsEmpty(loc.values))
 			{
-				if(arguments.distinct)
+				if (arguments.distinct)
 				{
-					loc.a = ArrayLen(loc.values);
-					loc.s = {};
-					for (loc.i=1; loc.i <= loc.a; loc.i++)
-					{
-						StructInsert(loc.s, loc.values[loc.i], loc.values[loc.i], true);
-					}
-					loc.values = ListToArray(StructKeyList(loc.s));
+					loc.tempValues = {};
+					loc.iEnd = ArrayLen(loc.values);
+					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+						StructInsert(loc.tempValues, loc.values[loc.i], loc.values[loc.i], true);
+					loc.values = ListToArray(StructKeyList(loc.tempValues));
 				}
 				loc.returnValue = ArrayAvg(loc.values);
 			}
@@ -129,11 +127,9 @@
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.functions.sum.distinct#" hint="When `true`, `SUM` returns the sum of unique values only.">
 	<cfscript>
-		var returnValue = "";
 		arguments.type = "SUM";
-		returnValue = $calculate(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
 <!--- PRIVATE MODEL CLASS METHODS --->
@@ -181,8 +177,7 @@
 		StructDelete(arguments, "type");
 		StructDelete(arguments, "property");
 		StructDelete(arguments, "distinct");
-		loc.query = findAll(argumentCollection=arguments);
-		loc.returnValue = loc.query.result;
+		loc.returnValue = findAll(argumentCollection=arguments).result;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
