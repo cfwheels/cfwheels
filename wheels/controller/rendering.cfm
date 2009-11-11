@@ -19,11 +19,11 @@
 	<cfargument name="showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#" hint="Whether or not to show debug information at the end of the output. This is useful to override as `false` when you're testing XML output in an environment where the value for `showDebugInformation` is set to `true`.">
 	<cfscript>
 		var loc = {};
-		arguments = $dollarify(arguments, "controller,action,template,layout,cache,returnAs");
+		$dollarify(arguments, "controller,action,template,layout,cache,returnAs,showDebugInformation");
 		if (application.wheels.showDebugInformation)
 			$debugPoint("view");
 		// if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
-		if ((!IsBoolean(arguments.$layout) || arguments.$layout) && arguments.showDebugInformation)
+		if ((!IsBoolean(arguments.$layout) || arguments.$layout) && arguments.$showDebugInformation)
 			request.wheels.showDebugInformation = true;
 		if (application.wheels.cachePages && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
