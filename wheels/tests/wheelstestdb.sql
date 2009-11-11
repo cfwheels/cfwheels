@@ -16,6 +16,21 @@ go
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Authors]') AND type in (N'U'))
 DROP TABLE [dbo].[Authors]
 go
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Classifications]') AND type in (N'U'))
+DROP TABLE [dbo].[Classifications]
+GO
+/****** Object:  Table [dbo].[Comments]    Script Date: 11/11/2009 08:49:46 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Comments]') AND type in (N'U'))
+DROP TABLE [dbo].[Comments]
+GO
+/****** Object:  Table [dbo].[Profiles]    Script Date: 11/11/2009 08:49:49 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Profiles]') AND type in (N'U'))
+DROP TABLE [dbo].[Profiles]
+GO
+/****** Object:  Table [dbo].[Tags]    Script Date: 11/11/2009 08:49:51 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Tags]') AND type in (N'U'))
+DROP TABLE [dbo].[Tags]
+GO
 
 /***********************************************
 		building tables
@@ -76,6 +91,8 @@ CREATE TABLE [dbo].[Posts](
 	[body] [text] NOT NULL,
 	[createdat] [datetime] NOT NULL,
 	[updatedat] [datetime] NULL,
+	[views] [int] NOT NULL CONSTRAINT [DF_Posts_views]  DEFAULT ((0)),
+	[averagerating] [float] NULL,
  CONSTRAINT [PK_Posts] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -93,5 +110,56 @@ CREATE TABLE [dbo].[Authors](
 	[id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-END
+go
+
+-- Classifications
+CREATE TABLE [dbo].[Classifications](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[postid] [int] NOT NULL,
+	[tagid] [int] NOT NULL,
+ CONSTRAINT [PK_Classifications] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+go
+
+-- Comments
+CREATE TABLE [dbo].[Comments](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[postid] [int] NOT NULL,
+	[body] [text] NOT NULL,
+	[name] [varchar](100) NOT NULL,
+	[url] [varchar](100) NULL,
+	[email] [varchar](100) NULL,
+	[createdat] [datetime] NOT NULL,
+ CONSTRAINT [PK_Comments] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+go
+
+-- Profiles
+CREATE TABLE [dbo].[Profiles](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[authorid] [int] NOT NULL,
+	[dateofbirth] [datetime] NOT NULL,
+	[bio] [text] NULL,
+ CONSTRAINT [PK_profiles] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+go
+
+-- Tags
+CREATE TABLE [dbo].[Tags](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[name] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_Tags] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
 go
