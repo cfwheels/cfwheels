@@ -15,12 +15,12 @@
 
 	<cffunction name="test_sum_with_non_matching_where">
 		<cfset loc.result = model("post").sum(property="views", where="id=0")>
-		<cfset assert("loc.result IS 0")>
+		<cfset assert("loc.result IS ''")>
 	</cffunction>
 
 	<cffunction name="test_sum_with_distinct">
 		<cfset loc.result = model("post").sum(property="views", distinct=true)>
 		<cfset assert("loc.result IS 8")>
 	</cffunction>
-	
+
 </cfcomponent>

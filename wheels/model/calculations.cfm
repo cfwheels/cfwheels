@@ -15,7 +15,7 @@
 		var loc = {};
 		if (ListFindNoCase("cf_sql_integer,cf_sql_bigint,cf_sql_smallint,cf_sql_tinyint", variables.wheels.class.properties[arguments.property].type))
 		{
-			// this is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it		
+			// this is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it
 			loc.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include);
 			loc.totalRecords = 0;
 			loc.total = 0;
@@ -114,7 +114,7 @@
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="sum" returntype="numeric" access="public" output="false" hint="Calculates the sum of values for a given property. Uses the SQL function `SUM`. If no records can be found to perform the calculation on, `0` is returned."
+<cffunction name="sum" returntype="any" access="public" output="false" hint="Calculates the sum of values for a given property. Uses the SQL function `SUM`. If no records can be found to perform the calculation on, `0` is returned."
 	examples=
 	'
 		<!--- Get the sum of all salaries --->
@@ -132,9 +132,6 @@
 		var returnValue = "";
 		arguments.type = "SUM";
 		returnValue = $calculate(argumentCollection=arguments);
-		// we return the result from the query but if it's a blank string we convert it to `0` first
-		if (!Len(returnValue))
-			returnValue = 0;
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
@@ -152,7 +149,7 @@
 
 		// start the select string with the type (`SUM`, `COUNT` etc)
 		arguments.select = "#arguments.type#(";
-		
+
 		// add the DISTINCT keyword if necessary (generally used for `COUNT` operations when associated tables are joined in the query, means we'll only count the unique primary keys on the current model)
 		if (arguments.distinct)
 			arguments.select = arguments.select & "DISTINCT ";
@@ -176,10 +173,10 @@
 			}
 			arguments.select = arguments.select & loc.properties;
 		}
-		
-		// alias the result with `AS`, this means that Wheels will not try and change the string (which is why we have to add the table name above since it won't be done automatically) 
+
+		// alias the result with `AS`, this means that Wheels will not try and change the string (which is why we have to add the table name above since it won't be done automatically)
 		arguments.select = arguments.select & ") AS result";
-		
+
 		// call `findAll` with `select`, `where` and `include` but delete all other arguments
 		StructDelete(arguments, "type");
 		StructDelete(arguments, "property");
