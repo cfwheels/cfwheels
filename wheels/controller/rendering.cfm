@@ -16,14 +16,14 @@
 	<cfargument name="layout" type="any" required="false" default="#application.wheels.functions.renderPage.layout#" hint="The layout to wrap the content in.">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for.">
 	<cfargument name="returnAs" type="string" required="false" default="" hint="Set to `string` to return the result to the controller instead of sending it to the browser immediately.">
-	<cfargument name="$showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#" hint="Whether or not to show debug information at the end of the output. This is useful to override as `false` when you're testing XML output in an environment where the value for `showDebugInformation` is set to `true`.">
+	<cfargument name="showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#" hint="Whether or not to show debug information at the end of the output. This is useful to override as `false` when you're testing XML output in an environment where the value for `showDebugInformation` is set to `true`.">
 	<cfscript>
 		var loc = {};
 		arguments = $dollarify(arguments, "controller,action,template,layout,cache,returnAs");
 		if (application.wheels.showDebugInformation)
 			$debugPoint("view");
 		// if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
-		if ((!IsBoolean(arguments.$layout) || arguments.$layout) && arguments.$showDebugInformation)
+		if ((!IsBoolean(arguments.$layout) || arguments.$layout) && arguments.showDebugInformation)
 			request.wheels.showDebugInformation = true;
 		if (application.wheels.cachePages && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
