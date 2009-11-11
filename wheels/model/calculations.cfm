@@ -17,20 +17,18 @@
 		{
 			// this is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it
 			loc.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include);
-			loc.totalRecords = 0;
-			loc.total = 0;
-			loc.done = "";
-			for (loc.i=1; loc.i <= loc.values.recordCount; loc.i++)
+			loc.values = ListToArray(ArrayToList(loc.values[arguments.property]));
+			if(arguments.distinct)
 			{
-				loc.value = val(loc.values[arguments.property][loc.i]);
-				if (!arguments.distinct || !ListFind(loc.done, loc.value))
+				loc.a = ArrayLen(loc.values);
+				loc.s = {};
+				for (loc.i=1; loc.i <= loc.a; loc.i++)
 				{
-					loc.totalRecords++;
-					loc.total = loc.total + loc.value;
-					loc.done = ListAppend(loc.done, loc.value);
+					structinsert(loc.s, loc.values[loc.i], loc.values[loc.i], true);
 				}
+				loc.values = ListToArray(structkeylist(loc.s));
 			}
-			loc.returnValue = loc.total / loc.totalRecords;
+			loc.returnValue = ArrayAvg(loc.values);
 		}
 		else
 		{
