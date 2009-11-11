@@ -9,7 +9,7 @@
 
 	<cffunction name="test_average_with_float">
 		<cfset loc.result = model("post").average(property="averageRating")>
-		<cfset assert("loc.result IS 3.4")>
+		<cfset assert("DecimalFormat(loc.result) IS DecimalFormat(3.4)")>
 	</cffunction>
 
 	<cffunction name="test_average_with_non_matching_where">
