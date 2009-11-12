@@ -110,7 +110,7 @@
 		if (application.wheels.URLRewriting == "Off")
 			loc.delim = "&";
 		else
-			loc.delim = "?";
+			loc.delim = "?";		
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.params, "&");
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -121,7 +121,7 @@
 			if (ArrayLen(loc.temp) == 2)
 			{
 				loc.param = $URLEncode(loc.temp[2]);
-				if (application.wheels.obfuscateUrls)
+				if (application.wheels.obfuscateUrls and not ListFindNoCase("cfid,cftoken", loc.temp[1]))
 					loc.param = obfuscateParam(loc.param);
 				loc.returnValue = loc.returnValue & loc.param;
 			}
