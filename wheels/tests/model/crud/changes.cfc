@@ -2,16 +2,6 @@
 
 	<cfinclude template="/wheelsMapping/global/functions.cfm">
 
-	<cffunction name="test_properties_and_setProperties">
-		<cfset loc.author = model("author").findOne()>
-		<cfset loc.author.setProperties(firstName="a", lastName="b")>
-		<cfset loc.result = loc.author.properties()>
-		<cfset loc.compareWith.id = loc.author.key()>
-		<cfset loc.compareWith.firstName = "a">
-		<cfset loc.compareWith.lastName = "b">
-		<cfset assert("loc.result.toString() IS loc.compareWith.toString()")>
-	</cffunction>
-
 	<cffunction name="test_allChanges">
 		<cfset loc.author = model("author").findOne()>
 		<cfset loc.author.firstName = "a">
@@ -47,18 +37,6 @@
 		<cfset loc.author.firstName = loc.author.oldFirstName>
 		<cfset loc.result = loc.author.changedProperties()>
 		<cfset assert("loc.result IS ''")>
-	</cffunction>
-
-	<cffunction name="test_key">
-		<cfset loc.author = model("author").findOne()>
-		<cfset loc.result = loc.author.key()>
-		<cfset assert("loc.result IS loc.author.id")>
-	</cffunction>
-
-	<cffunction name="test_key_with_new">
-		<cfset loc.author = model("author").new(id=1, firstName="Per", lastName="Djurner")>
-		<cfset loc.result = loc.author.key()>
-		<cfset assert("loc.result IS 1")>
 	</cffunction>
 
 	<cffunction name="test_isNew">
