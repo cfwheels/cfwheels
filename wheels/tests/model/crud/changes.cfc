@@ -11,7 +11,7 @@
 		<cfset loc.compareWith.lastName.changedFrom = "Djurner">
 		<cfset loc.compareWith.lastName.changedTo = "b">
 		<cfset loc.result = loc.author.allChanges()>
-		<cfset assert("loc.result.toString() IS loc.compareWith.toString()")>
+		<cfset assert("SerializeJSON(loc.result) IS SerializeJSON(loc.compareWith)")>
 	</cffunction>
 
 	<cffunction name="test_changedProperties">
