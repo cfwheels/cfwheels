@@ -75,7 +75,7 @@
 		<cfset loc.compareWith.id = loc.author.key()>
 		<cfset loc.compareWith.firstName = "a">
 		<cfset loc.compareWith.lastName = "b">
-		<cfset assert("SerializeJSON(loc.result) IS SerializeJSON(loc.compareWith)")>
+		<cfset assert("loc.result.toString() IS loc.compareWith.toString()")>
 	</cffunction>
 
 </cfcomponent>
