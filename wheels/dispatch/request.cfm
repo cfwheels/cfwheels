@@ -282,6 +282,10 @@
 
 		if (application.wheels.showDebugInformation)
 			$debugPoint("beforeFilters,action");
+		
+		// if anything has been rendered from the before filter, stop processing
+		if (StructKeyExists(request.wheels, "response") and Len(request.wheels.response))
+			return request.wheels.response;
 
 		// call action on controller if it exists
 		loc.actionIsCachable = false;
