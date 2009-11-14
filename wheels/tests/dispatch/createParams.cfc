@@ -46,13 +46,13 @@
 	</cffunction>
 
 	<cffunction name="test_url_overrides_form">
-		<cfset structinsert(loc.args.urlScope, "user[email]", "per.drurner@gmail.com", true)>
+		<cfset structinsert(loc.args.urlScope, "user[email]", "per.djurner@gmail.com", true)>
 		<cfset structinsert(loc.args.formScope, "user[email]", "tpetruzzi@gmail.com", true)>
 		<cfset structinsert(loc.args.formScope, "user[name]", "tony petruzzi", true)>
 		<cfset structinsert(loc.args.formScope, "user[password]", "secret", true)>
 		<cfset loc.params = loc.dispatch.$createParams(argumentCollection=loc.args)>
 		<cfset loc.e = {}>
-		<cfset loc.e.email = "per.drurner@gmail.com">
+		<cfset loc.e.email = "per.djurner@gmail.com">
 		<cfset loc.e.name = "tony petruzzi">
 		<cfset loc.e.password = "secret">
 		<cfloop collection="#loc.params.user#" item="loc.i">

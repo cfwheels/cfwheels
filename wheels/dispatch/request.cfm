@@ -60,6 +60,7 @@
 		// combine the form and url scopes into one scope.
 		// url variables take precedence.
 		loc.returnValue = arguments.formScope;
+		structDelete(loc.returnValue, "fieldnames", false);
 		structAppend(loc.returnValue, arguments.urlScope, true);
 
 		// go through the matching route pattern and add URL variables from the route to the struct
@@ -164,35 +165,32 @@
 			// add form variables to the params struct
 			for (loc.key in loc.returnValue)
 			{
-				if (loc.key != "fieldnames")
+				if (Find("[", loc.key) && Right(loc.key, 1) == "]")
 				{
-					if (Find("[", loc.key) && Right(loc.key, 1) == "]")
+					// object form field
+					loc.name = SpanExcluding(loc.key, "[");
+					loc.property = SpanExcluding(Reverse(SpanExcluding(Reverse(loc.key), "[")), "]");
+					if (!StructKeyExists(loc.returnValue, loc.name))
+						loc.returnValue[loc.name] = {};
+					if (Find("][", loc.key))
 					{
-						// object form field
-						loc.name = SpanExcluding(loc.key, "[");
-						loc.property = SpanExcluding(Reverse(SpanExcluding(Reverse(loc.key), "[")), "]");
-						if (!StructKeyExists(loc.returnValue, loc.name))
-							loc.returnValue[loc.name] = {};
-						if (Find("][", loc.key))
-						{
-							// a collection of objects was passed in
-							loc.primaryKeyValue = Replace(SpanExcluding(loc.key, "]"), loc.name & "[", "", "one");
-							if (!StructKeyExists(loc.returnValue[loc.name], loc.primaryKeyValue))
-								loc.returnValue[loc.name][loc.primaryKeyValue] = {};
-							loc.returnValue[loc.name][loc.primaryKeyValue][loc.property] = loc.returnValue[loc.key];
-						}
-						else
-						{
-							// just one object was passed in
-							loc.returnValue[loc.name][loc.property] = loc.returnValue[loc.key];
-						}
-						structDelete(loc.returnValue, loc.key, false);
+						// a collection of objects was passed in
+						loc.primaryKeyValue = Replace(SpanExcluding(loc.key, "]"), loc.name & "[", "", "one");
+						if (!StructKeyExists(loc.returnValue[loc.name], loc.primaryKeyValue))
+							loc.returnValue[loc.name][loc.primaryKeyValue] = {};
+						loc.returnValue[loc.name][loc.primaryKeyValue][loc.property] = loc.returnValue[loc.key];
 					}
 					else
 					{
-						// normal form field
-						loc.returnValue[loc.key] = loc.returnValue[loc.key];
+						// just one object was passed in
+						loc.returnValue[loc.name][loc.property] = loc.returnValue[loc.key];
 					}
+					structDelete(loc.returnValue, loc.key, false);
+				}
+				else
+				{
+					// normal form field
+					loc.returnValue[loc.key] = loc.returnValue[loc.key];
 				}
 			}
 		}
