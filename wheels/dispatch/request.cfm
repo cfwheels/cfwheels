@@ -57,8 +57,10 @@
 	<cfscript>
 		var loc = {};
 
-		// add all normal URL variables to struct (i.e. ?x=1&y=2 etc)
-		loc.returnValue = arguments.urlScope;
+		// combine the form and url scopes into one scope.
+		// url variables take precedence.
+		loc.returnValue = arguments.formScope;
+		structAppend(loc.returnValue, arguments.urlScope, true);
 
 		// go through the matching route pattern and add URL variables from the route to the struct
 		loc.iEnd = ListLen(arguments.foundRoute.pattern, "/");
@@ -99,19 +101,19 @@
 			}
 		}
 
-		if (StructCount(arguments.formScope))
+		if (StructCount(loc.returnValue))
 		{
 			// loop through form variables, merge any date variables into one, fix checkbox submissions
 			loc.dates = {};
-			for (loc.key in arguments.formScope)
+			for (loc.key in loc.returnValue)
 			{
 				if (FindNoCase("($checkbox)", loc.key))
 				{
 					// if no other form parameter exists with this name it means that the checkbox was left blank and therefore we force the value to the unchecked values for the checkbox (to get around the problem that unchecked checkboxes don't post at all)
 					loc.formParamName = ReplaceNoCase(loc.key, "($checkbox)", "");
-					if (!StructKeyExists(arguments.formScope, loc.formParamName))
-						arguments.formScope[loc.formParamName] = arguments.formScope[loc.key];
-					StructDelete(arguments.formScope, loc.key);
+					if (!StructKeyExists(loc.returnValue, loc.formParamName))
+						loc.returnValue[loc.formParamName] = loc.returnValue[loc.key];
+					StructDelete(loc.returnValue, loc.key);
 				}
 				else if (REFindNoCase(".*\((\$year|\$month|\$day|\$hour|\$minute|\$second)\)$", loc.key))
 				{
@@ -120,7 +122,7 @@
 					loc.secondKey = SpanExcluding(loc.temp[2], ")");
 					if (!StructKeyExists(loc.dates, loc.firstKey))
 						loc.dates[loc.firstKey] = {};
-					loc.dates[loc.firstKey][ReplaceNoCase(loc.secondKey, "$", "")] = arguments.formScope[loc.key];
+					loc.dates[loc.firstKey][ReplaceNoCase(loc.secondKey, "$", "")] = loc.returnValue[loc.key];
 				}
 			}
 			for (loc.key in loc.dates)
@@ -139,28 +141,28 @@
 					loc.dates[loc.key].second = 0;
 				try
 				{
-					arguments.formScope[loc.key] = CreateDateTime(loc.dates[loc.key].year, loc.dates[loc.key].month, loc.dates[loc.key].day, loc.dates[loc.key].hour, loc.dates[loc.key].minute, loc.dates[loc.key].second);
+					loc.returnValue[loc.key] = CreateDateTime(loc.dates[loc.key].year, loc.dates[loc.key].month, loc.dates[loc.key].day, loc.dates[loc.key].hour, loc.dates[loc.key].minute, loc.dates[loc.key].second);
 				}
 				catch(Any e)
 				{
-					arguments.formScope[loc.key] = "";
+					loc.returnValue[loc.key] = "";
 				}
-				if (StructKeyExists(arguments.formScope, "#loc.key#($year)"))
-					StructDelete(arguments.formScope, "#loc.key#($year)");
-				if (StructKeyExists(arguments.formScope, "#loc.key#($month)"))
-					StructDelete(arguments.formScope, "#loc.key#($month)");
-				if (StructKeyExists(arguments.formScope, "#loc.key#($day)"))
-					StructDelete(arguments.formScope, "#loc.key#($day)");
-				if (StructKeyExists(arguments.formScope, "#loc.key#($hour)"))
-					StructDelete(arguments.formScope, "#loc.key#($hour)");
-				if (StructKeyExists(arguments.formScope, "#loc.key#($minute)"))
-					StructDelete(arguments.formScope, "#loc.key#($minute)");
-				if (StructKeyExists(arguments.formScope, "#loc.key#($second)"))
-					StructDelete(arguments.formScope, "#loc.key#($second)");
+				if (StructKeyExists(loc.returnValue, "#loc.key#($year)"))
+					StructDelete(loc.returnValue, "#loc.key#($year)");
+				if (StructKeyExists(loc.returnValue, "#loc.key#($month)"))
+					StructDelete(loc.returnValue, "#loc.key#($month)");
+				if (StructKeyExists(loc.returnValue, "#loc.key#($day)"))
+					StructDelete(loc.returnValue, "#loc.key#($day)");
+				if (StructKeyExists(loc.returnValue, "#loc.key#($hour)"))
+					StructDelete(loc.returnValue, "#loc.key#($hour)");
+				if (StructKeyExists(loc.returnValue, "#loc.key#($minute)"))
+					StructDelete(loc.returnValue, "#loc.key#($minute)");
+				if (StructKeyExists(loc.returnValue, "#loc.key#($second)"))
+					StructDelete(loc.returnValue, "#loc.key#($second)");
 			}
 
 			// add form variables to the params struct
-			for (loc.key in arguments.formScope)
+			for (loc.key in loc.returnValue)
 			{
 				if (loc.key != "fieldnames")
 				{
@@ -177,18 +179,19 @@
 							loc.primaryKeyValue = Replace(SpanExcluding(loc.key, "]"), loc.name & "[", "", "one");
 							if (!StructKeyExists(loc.returnValue[loc.name], loc.primaryKeyValue))
 								loc.returnValue[loc.name][loc.primaryKeyValue] = {};
-							loc.returnValue[loc.name][loc.primaryKeyValue][loc.property] = arguments.formScope[loc.key];
+							loc.returnValue[loc.name][loc.primaryKeyValue][loc.property] = loc.returnValue[loc.key];
 						}
 						else
 						{
 							// just one object was passed in
-							loc.returnValue[loc.name][loc.property] = arguments.formScope[loc.key];
+							loc.returnValue[loc.name][loc.property] = loc.returnValue[loc.key];
 						}
+						structDelete(loc.returnValue, loc.key, false);
 					}
 					else
 					{
 						// normal form field
-						loc.returnValue[loc.key] = arguments.formScope[loc.key];
+						loc.returnValue[loc.key] = loc.returnValue[loc.key];
 					}
 				}
 			}
@@ -282,7 +285,7 @@
 
 		if (application.wheels.showDebugInformation)
 			$debugPoint("beforeFilters,action");
-		
+
 		// if anything has been rendered from the before filter, stop processing
 		if (StructKeyExists(request.wheels, "response") and Len(request.wheels.response))
 			return request.wheels.response;
