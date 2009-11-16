@@ -220,9 +220,11 @@
 		if (!StructIsEmpty(application.wheels.mixins))
 			$include(template="wheels/plugins/injection.cfm");
 
-		// load developer routes and add wheels default ones at the end
+		// load developer routes
 		$include(template="#application.wheels.configPath#/routes.cfm");
-		$include(template="wheels/events/onapplicationstart/routes.cfm");
+		// add wheels default routes at the end if requested
+		if (application.wheels.loadDefaultRoutes)
+			$include(template="wheels/events/onapplicationstart/routes.cfm");
 
 		// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
 		loc.allowedGlobalMethods = "get,set,addroute";
