@@ -7,7 +7,7 @@
 		<cfset addRoute(name="userProfile", pattern="user/[username]", controller="user", action="profile")>
 	'
 	categories="configuration" chapters="using-routes" functions="">
-	<cfargument name="name" type="string" required="true" hint="Name for the route.">
+	<cfargument name="name" type="string" required="false" default="" hint="Name for the route.">
 	<cfargument name="pattern" type="string" required="true" hint="The URL pattern for the route.">
 	<cfargument name="controller" type="string" required="false" default="" hint="Controller to call when route matches (unless the controller name exists in the pattern).">
 	<cfargument name="action" type="string" required="false" default="" hint="Action to call when route matches (unless the action name exists in the pattern).">

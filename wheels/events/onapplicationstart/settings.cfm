@@ -66,6 +66,7 @@
 	application.wheels.ipExceptions = "";
 	application.wheels.overwritePlugins = true;
 	application.wheels.loadIncompatiblePlugins = true;
+	application.wheels.loadDefaultRoutes = true;
 	
 	// caching settings
 	application.wheels.maximumItemsToCache = 5000;
