@@ -72,7 +72,9 @@
 			ArrayClear(application.wheels.routes);
 			StructClear(application.wheels.namedRoutePositions);
 			$include(template="#application.wheels.configPath#/routes.cfm");
-			$include(template="wheels/events/onapplicationstart/routes.cfm");
+			if (application.wheels.loadDefaultRoutes)
+				$include(template="wheels/events/onapplicationstart/routes.cfm");
+			$namedRoutePositions();
 		}
 		if (!application.wheels.cacheDatabaseSchema)
 			$clearCache("sql");
