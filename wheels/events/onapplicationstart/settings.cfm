@@ -8,7 +8,7 @@
 		application.wheels.URLRewriting = "Off";
 	
 	// set datasource name to same as the folder the app resides in
-	application.wheels.dataSourceName = LCase(ListLast(this.rootDir, Right(this.rootDir, 1)));
+	application.wheels.dataSourceName = LCase(ListLast(GetDirectoryFromPath(GetBaseTemplatePath()), Right(GetDirectoryFromPath(GetBaseTemplatePath()), 1)));
 	application.wheels.dataSourceUserName = "";
 	application.wheels.dataSourcePassword = "";
 

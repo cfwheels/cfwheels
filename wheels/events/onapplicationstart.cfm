@@ -82,7 +82,7 @@
 		$include(template="wheels/events/onapplicationstart/settings.cfm");
 
 		// set a default (can be overridden in developer settings below) for whether or not to show the links in the debug area to run tests
-		if (DirectoryExists(this.rootDir & "wheels/tests"))
+		if (DirectoryExists(GetDirectoryFromPath(GetBaseTemplatePath()) & "wheels/tests"))
 			application.wheels.enableTests = true;
 		else
 			application.wheels.enableTests = false; // the tests folder has been removed (as it will be for official Wheels releases until we support application tests) so we default to not show the links
@@ -97,7 +97,7 @@
 		application.wheels.mixableComponents = "application,dispatch,controller,model,microsoftsqlserver,mysql,oracle,postgresql";
 		application.wheels.mixins = {};
 		application.wheels.dependantPlugins = "";
-		loc.pluginFolder = this.rootDir & "plugins";
+		loc.pluginFolder = GetDirectoryFromPath(GetBaseTemplatePath()) & "plugins";
 		// get a list of plugin files and folders
 		loc.pluginFolders = $directory(directory=loc.pluginFolder, type="dir");
 		loc.pluginFiles = $directory(directory=loc.pluginFolder, filter="*.zip", type="file", sort="name DESC");
