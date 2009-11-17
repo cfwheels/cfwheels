@@ -1,4 +1,4 @@
-Edge
+Edge - 3751
 
 Changes
 =======
@@ -10,15 +10,24 @@ Changes
 * properties() so that it returns anything in the this scope that is not a function - [Per Djurner]
 * includePartial / renderPartial pass in calculated properties to the partial file - [Per Djurner]
 * default day to 1 and month to 1 when submitting forms - [Tony Petruzzi]
+* Added "head" argument to styleSheetLinkTag and javaScriptIncludeTag. Also added informative error when "source" or "sources" is not supplied - [Per Djurner]
+* Changed avg() so that it is able to calculate the average for integer columns as well - [Per Djurner, Tony Petruzzi] 
+* Corrected behavior for calculation functions. sum() and count() now returns 0 when no records are found and the other returns a blank string - [Per Djurner]
 
 Bug Fixes
 =========
 
 * Include js or css files with multiple dot (.) does not work - #312 [Mike Henke, Tony Petruzzi]
+* Differences in params structure between startFormTag with method post versus get - #232 [Mike Henke, Tony Petruzzi]
+* Ability to name the cfwheels application - #315 [jay.mcentire, Per Djurner]
 
 Other
 =====
 
+* Made the showDebugInformation argument on renderPage part of the API - [Per Djurner]
+* do not obfuscate the cfid and cftoken parameters since coldfusion uses these before the request kicks off wheels - [James Gibson]
+* updated the request processing to top stop if a before filter renders anything  - [James Gibson]
+* Refactor to avoid polluting the Application.cfc's this scope with the rootDit variable - [Per Djurner]
 
 
 1.0
