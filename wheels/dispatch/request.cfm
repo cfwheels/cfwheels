@@ -60,8 +60,8 @@
 		// combine the form and url scopes into one scope.
 		// url variables take precedence.
 		loc.returnValue = arguments.formScope;
-		structDelete(loc.returnValue, "fieldnames", false);
-		structAppend(loc.returnValue, arguments.urlScope, true);
+		StructDelete(loc.returnValue, "fieldnames", false);
+		StructAppend(loc.returnValue, arguments.urlScope, true);
 
 		// go through the matching route pattern and add URL variables from the route to the struct
 		loc.iEnd = ListLen(arguments.foundRoute.pattern, "/");
@@ -185,7 +185,7 @@
 						// just one object was passed in
 						loc.returnValue[loc.name][loc.property] = loc.returnValue[loc.key];
 					}
-					structDelete(loc.returnValue, loc.key, false);
+					StructDelete(loc.returnValue, loc.key, false);
 				}
 				else
 				{
@@ -284,45 +284,45 @@
 		if (application.wheels.showDebugInformation)
 			$debugPoint("beforeFilters,action");
 
-		// if anything has been rendered from the before filter, stop processing
-		if (StructKeyExists(request.wheels, "response") and Len(request.wheels.response))
-			return request.wheels.response;
-
-		// call action on controller if it exists
-		loc.actionIsCachable = false;
-		if (application.wheels.cacheActions && StructIsEmpty(session.flash) && StructIsEmpty(form))
+		// only proceed to call the action if the before filter has not already rendered content
+		if (!StructKeyExists(request.wheels, "response") || !Len(request.wheels.response))
 		{
-			loc.cachableActions = loc.controller.$getCachableActions();
-			loc.iEnd = ArrayLen(loc.cachableActions);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			// call action on controller if it exists
+			loc.actionIsCachable = false;
+			if (application.wheels.cacheActions && StructIsEmpty(session.flash) && StructIsEmpty(form))
 			{
-				if (loc.cachableActions[loc.i].action == loc.params.action)
+				loc.cachableActions = loc.controller.$getCachableActions();
+				loc.iEnd = ArrayLen(loc.cachableActions);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
-					loc.actionIsCachable = true;
-					loc.timeToCache = loc.cachableActions[loc.i].time;
+					if (loc.cachableActions[loc.i].action == loc.params.action)
+					{
+						loc.actionIsCachable = true;
+						loc.timeToCache = loc.cachableActions[loc.i].time;
+					}
 				}
 			}
-		}
-		if (loc.actionIsCachable)
-		{
-			loc.category = "action";
-			loc.key = "#request.cgi.script_name##request.cgi.path_info##request.cgi.query_string#";
-			loc.lockName = loc.category & loc.key;
-			loc.conditionArgs = {};
-			loc.conditionArgs.key = loc.key;
-			loc.conditionArgs.category = loc.category;
-			loc.executeArgs = {};
-			loc.executeArgs.controller = loc.controller;
-			loc.executeArgs.controllerName = loc.params.controller;
-			loc.executeArgs.actionName = loc.params.action;
-			loc.executeArgs.key = loc.key;
-			loc.executeArgs.time = loc.timeToCache;
-			loc.executeArgs.category = loc.category;
-			request.wheels.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
-		}
-		else
-		{
-			$callAction(controller=loc.controller, controllerName=loc.params.controller, actionName=loc.params.action);
+			if (loc.actionIsCachable)
+			{
+				loc.category = "action";
+				loc.key = "#request.cgi.script_name##request.cgi.path_info##request.cgi.query_string#";
+				loc.lockName = loc.category & loc.key;
+				loc.conditionArgs = {};
+				loc.conditionArgs.key = loc.key;
+				loc.conditionArgs.category = loc.category;
+				loc.executeArgs = {};
+				loc.executeArgs.controller = loc.controller;
+				loc.executeArgs.controllerName = loc.params.controller;
+				loc.executeArgs.actionName = loc.params.action;
+				loc.executeArgs.key = loc.key;
+				loc.executeArgs.time = loc.timeToCache;
+				loc.executeArgs.category = loc.category;
+				request.wheels.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			}
+			else
+			{
+				$callAction(controller=loc.controller, controllerName=loc.params.controller, actionName=loc.params.action);
+			}
 		}
 		if (application.wheels.showDebugInformation)
 			$debugPoint("action,afterFilters");
