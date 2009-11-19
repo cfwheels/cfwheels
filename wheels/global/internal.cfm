@@ -121,7 +121,7 @@
 			if (ArrayLen(loc.temp) == 2)
 			{
 				loc.param = $URLEncode(loc.temp[2]);
-				if (application.wheels.obfuscateUrls and not ListFindNoCase("cfid,cftoken", loc.temp[1]))
+				if (application.wheels.obfuscateUrls && !ListFindNoCase("cfid,cftoken", loc.temp[1]))
 					loc.param = obfuscateParam(loc.param);
 				loc.returnValue = loc.returnValue & loc.param;
 			}

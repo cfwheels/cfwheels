@@ -2,10 +2,8 @@
 	<cfargument name="startYear" type="numeric" required="true">
 	<cfargument name="endYear" type="numeric" required="true">
 	<cfscript>
-		if (structkeyexists(arguments, "value") && val(arguments.value) gt 0 && arguments.value lt arguments.startYear)
-		{
+		if (Structkeyexists(arguments, "value") && Val(arguments.value) && arguments.value < arguments.startYear)
 			arguments.startYear = arguments.value;
-		}
 		arguments.$loopFrom = arguments.startYear;
 		arguments.$loopTo = arguments.endYear;
 		arguments.$type = "year";
@@ -147,7 +145,7 @@
 		{
 			for (loc.i=arguments.$loopFrom; loc.i <= arguments.$loopTo; loc.i=loc.i+arguments.$step)
 			{
-				loc.args = duplicate(arguments);
+				loc.args = Duplicate(arguments);
 				loc.args.counter = loc.i;
 				loc.args.optionContent = loc.optionContent;
 				loc.content = loc.content & $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=loc.args);
@@ -157,7 +155,7 @@
 		{
 			for (loc.i=arguments.$loopFrom; loc.i >= arguments.$loopTo; loc.i=loc.i-arguments.$step)
 			{
-				loc.args = duplicate(arguments);
+				loc.args = Duplicate(arguments);
 				loc.args.counter = loc.i;
 				loc.args.optionContent = loc.optionContent;
 				loc.content = loc.content & $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=loc.args);
@@ -184,6 +182,6 @@
 			arguments.optionContent = arguments.counter;
 		if (arguments.$type == "minute" || arguments.$type == "second")
 			arguments.optionContent = NumberFormat(arguments.optionContent, "09");
-		return $element(name="option", content=arguments.optionContent, attributes=loc.args);
 	</cfscript>
+	<cfreturn $element(name="option", content=arguments.optionContent, attributes=loc.args)>
 </cffunction>
