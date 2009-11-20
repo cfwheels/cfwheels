@@ -1,8 +1,11 @@
-1.0
+WHEELS VERSION 1.0
 
 Changes
 =======
-
+* Changed setProperties() to allow any passed in variable to be set on the object - [Per Djurner]
+* Changed properties() so that it returns anything in the this scope that is not a function - [Per Djurner]
+* Support for setting Application.cfc this scoped variables through config/app.cfm - #315 [Jay McEntire, Per Djurner]
+* Modified so SUM, AVG, MIN, MAX returns blank string and COUNT returns 0 when no records are found - [Tony Petruzzi, Per Djurner]
 * Support for "if"/"unless" in validate(), validateOnCreate() and validateOnUpdate() - [Per Djurner]
 * Support for built-in CFML types in validatesFormatOf() - [Raul Riera, Per Djurner]
 * Allow plugin developer to specify a list of supported Wheels versions instead of just one - [Chris Peters, Per Djurner]
@@ -21,6 +24,10 @@ Changes
 
 Bug Fixes
 ============
+* Fixed AVG SQL calculation when dealing with integer values - [Tony Petruzzi, Per Djurner]
+* Fixed so that CFID and CFTOKEN values do not get obfuscated when passed in the URL - [James Gibson]
+* Fixed so javaScriptIncludeTag and styleSheetLinkTag can work with files with multiple dots in them - #312 [Mike Henke, Tony Petruzzi]
+* Included calculated properties in the propertyNames(), reload(), updateAll(), deleteAll(), includePartial() and renderPartial() methods - [Per Djurner]
 * Allow dynamic methods to be called through callbacks - [James Gibson, Per Djurner]
 * Fixed so you can pass in the "properties" argument to dynamic methods (it was overridden previously) - [Per Djurner]
 * Allow passing along the original where clause when paginating with a criteria on a joined table - Groups [Don Humphreys, Per Djurner]
