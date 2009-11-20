@@ -448,7 +448,7 @@
 		if (arguments.instantiate)
 		{
     		// find and instantiate each object and call its update function
-			loc.records = findAll(select=variables.wheels.class.propertyList, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
+			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.iEnd = loc.records.recordCount;
 			loc.returnValue = 0;
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -546,7 +546,7 @@
 		if (arguments.instantiate)
 		{
     		// find and instantiate each object and call its delete function
-			loc.records = findAll(select=variables.wheels.class.propertyList, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
+			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.iEnd = loc.records.recordCount;
 			loc.returnValue = 0;
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -906,10 +906,11 @@
 	<cfscript>
 		var loc = {};
 		loc.query = findByKey(key=key(), reload=true, returnAs="query");
-		loc.iEnd = ListLen(variables.wheels.class.propertyList);
+		loc.properties = propertyNames();		
+		loc.iEnd = ListLen(loc.properties);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.property = ListGetAt(variables.wheels.class.propertyList, loc.i);
+			loc.property = ListGetAt(loc.properties, loc.i);
 			this[loc.property] = loc.query[loc.property][1];
 		}
 	</cfscript>
@@ -934,7 +935,7 @@
 			loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
 			if (StructKeyExists(this, loc.property))
 			{
-				if ($persisted && hasChanged(loc.property))
+				if (arguments.$persisted && hasChanged(loc.property))
 					loc.returnValue = ListAppend(loc.returnValue, changedFrom(loc.property));
 				else
 					loc.returnValue = ListAppend(loc.returnValue, this[loc.property]);

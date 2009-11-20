@@ -1,7 +1,6 @@
 <!--- PUBLIC MODEL CLASS METHODS --->
 
-<cffunction name="average" returntype="numeric" access="public" output="false"
-	hint="Calculates the average value for a given property. Uses the SQL function `AVG`."
+<cffunction name="average" returntype="any" access="public" output="false" hint="Calculates the average value for a given property. Uses the SQL function `AVG`. If no records can be found to perform the calculation on, a blank string is returned."
 	examples=
 	'
 		<!--- Get the average salary for all employees --->
@@ -13,13 +12,39 @@
 	<cfargument name="include" type="string" required="false" default="" hint="Any associations that need to be included in the query.">
 	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.functions.average.distinct#" hint="When `true`, `AVG` will be performed only on each unique instance of a value, regardless of how many times the value occurs.">
 	<cfscript>
-		arguments.type = "AVG";
+		var loc = {};
+		loc.returnValue = "";
+		if (ListFindNoCase("cf_sql_integer,cf_sql_bigint,cf_sql_smallint,cf_sql_tinyint", variables.wheels.class.properties[arguments.property].type))
+		{
+			// this is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it
+			loc.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include);
+			loc.values = ListToArray(ArrayToList(loc.values[arguments.property]));
+			if (!ArrayIsEmpty(loc.values))
+			{
+				if (arguments.distinct)
+				{
+					loc.tempValues = {};
+					loc.iEnd = ArrayLen(loc.values);
+					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+						StructInsert(loc.tempValues, loc.values[loc.i], loc.values[loc.i], true);
+					loc.values = ListToArray(StructKeyList(loc.tempValues));
+				}
+				loc.returnValue = ArrayAvg(loc.values);
+			}
+		}
+		else
+		{
+			// if the column's type is a float or similar we can run an AVG type query since it will always return a value of the same type as the column
+			arguments.type = "AVG";
+			loc.returnValue = $calculate(argumentCollection=arguments);
+			// we convert the result to a string so that it is the same as what would happen if you calculate an average in ColdFusion code (like we do for integers in this function for example)
+			loc.returnValue = JavaCast("string", loc.returnValue);
+		}
 	</cfscript>
-	<cfreturn $calculate(argumentCollection=arguments)>
+	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="count" returntype="numeric" access="public" output="false"
-	hint="Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function `COUNT`."
+<cffunction name="count" returntype="numeric" access="public" output="false" hint="Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function `COUNT`. If no records can be found to perform the calculation on, `0` is returned."
 	examples=
 	'
 		<!--- Count how many authors there are in the table --->
@@ -32,7 +57,7 @@
 		<cfset authorWithBooksOnACount = model("author").count(include="books", where="title LIKE ''A%''")>
 
 		<!--- Count the number of comments on a specific post (a `hasMany` association from `post` to `comment` is required) --->
-		<!--- The `commentCount` method below will call `model("comment").count(where="postId=##post.id##")` internally --->
+		<!--- The `commentCount` method will call `model("comment").count(where="postId=##post.id##")` internally --->
 		<cfset aPost = model("post").findByKey(params.postId)>
 		<cfset amount = aPost.commentCount()>
 	'
@@ -55,8 +80,7 @@
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="maximum" returntype="numeric" access="public" output="false"
-	hint="Calculates the maximum value for a given property. Uses the SQL function `MAX`."
+<cffunction name="maximum" returntype="any" access="public" output="false" hint="Calculates the maximum value for a given property. Uses the SQL function `MAX`. If no records can be found to perform the calculation on, a blank string is returned."
 	examples=
 	'
 		<!--- Get the amount of the highest salary for all employees --->
@@ -72,8 +96,7 @@
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="minimum" returntype="numeric" access="public" output="false"
-	hint="Calculates the minimum value for a given property. Uses the SQL function `MIN`."
+<cffunction name="minimum" returntype="any" access="public" output="false" hint="Calculates the minimum value for a given property. Uses the SQL function `MIN`. If no records can be found to perform the calculation on, a blank string is returned."
 	examples=
 	'
 		<!--- Get the amount of the lowest salary for all employees --->
@@ -89,8 +112,7 @@
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="sum" returntype="numeric" access="public" output="false"
-	hint="Calculates the sum of values for a given property. Uses the SQL function `SUM`."
+<cffunction name="sum" returntype="any" access="public" output="false" hint="Calculates the sum of values for a given property. Uses the SQL function `SUM`. If no records can be found to perform the calculation on, `0` is returned."
 	examples=
 	'
 		<!--- Get the sum of all salaries --->
@@ -112,7 +134,7 @@
 
 <!--- PRIVATE MODEL CLASS METHODS --->
 
-<cffunction name="$calculate" returntype="numeric" access="public" output="false" hint="Creates the query that needs to be run for all of the above methods.">
+<cffunction name="$calculate" returntype="any" access="public" output="false" hint="Creates the query that needs to be run for all of the above methods.">
 	<cfargument name="type" type="string" required="true">
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="where" type="string" required="false" default="">
@@ -123,7 +145,7 @@
 
 		// start the select string with the type (`SUM`, `COUNT` etc)
 		arguments.select = "#arguments.type#(";
-		
+
 		// add the DISTINCT keyword if necessary (generally used for `COUNT` operations when associated tables are joined in the query, means we'll only count the unique primary keys on the current model)
 		if (arguments.distinct)
 			arguments.select = arguments.select & "DISTINCT ";
@@ -147,21 +169,15 @@
 			}
 			arguments.select = arguments.select & loc.properties;
 		}
-		
-		// alias the result with `AS`, this means that Wheels will not try and change the string (which is why we have to add the table name above since it won't be done automatically) 
+
+		// alias the result with `AS`, this means that Wheels will not try and change the string (which is why we have to add the table name above since it won't be done automatically)
 		arguments.select = arguments.select & ") AS result";
-		
+
 		// call `findAll` with `select`, `where` and `include` but delete all other arguments
 		StructDelete(arguments, "type");
 		StructDelete(arguments, "property");
 		StructDelete(arguments, "distinct");
-		loc.query = findAll(argumentCollection=arguments);
-		
-		// we return the result from the query but if it's a blank string we convert it to `0` first
-		if (Len(loc.query.result))
-			loc.returnValue = loc.query.result;
-		else
-			loc.returnValue = 0;
+		loc.returnValue = findAll(argumentCollection=arguments).result;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

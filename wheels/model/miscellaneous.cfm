@@ -39,17 +39,12 @@
 	categories="model-object" chapters="" functions="properties">
 	<cfargument name="properties" type="struct" required="false" default="#structnew()#">
 	<cfscript>
-	var loc = {};
-	loc.properties = duplicate(arguments.properties);
-	structdelete(arguments, "properties", false);
-	structappend(loc.properties, arguments, true);
-	for (loc.key in loc.properties)
-	{
-		if (ListFindNoCase(variables.wheels.class.propertyList, loc.key))
-		{
-			this[loc.key] = loc.properties[loc.key];
-		}
-	}
+		var loc = {};
+		for (loc.key in arguments)
+			if (loc.key != "properties")
+				arguments.properties[loc.key] = arguments[loc.key];
+		for (loc.key in arguments.properties)
+			this[loc.key] = arguments.properties[loc.key];
 	</cfscript>
 </cffunction>
 
@@ -64,21 +59,25 @@
 	'		
 	categories="model-object" chapters="" functions="setProperties">	
 	<cfscript>
-	var loc = {};
-	loc.returnvalue = {};
-	loc.properties = ListToArray(variables.wheels.class.propertyList);
-	loc.iEnd = ArrayLen(loc.properties);
-	for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-	{
-		loc.property = loc.properties[loc.i];
-		loc.returnvalue[loc.property] = "";
-		if(structkeyexists(this, loc.property))
+		var loc = {};
+		loc.returnValue = {};
+		
+		// loop through all properties and functions in the this scope
+		for (loc.key in this)
 		{
-			loc.returnvalue[loc.property] = this[loc.property];
+			// we return anything that is not a function
+			if (!IsCustomFunction(this[loc.key]))
+			{
+				// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
+				if (ListFindNoCase(propertyNames(), loc.key))
+					loc.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), loc.key));
+
+				// set property from the this scope in the struct that we will return
+				loc.returnValue[loc.key] = this[loc.key];
+			}
 		}
-	}
-	return loc.returnvalue;
 	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="property" returntype="void" access="public" output="false"
@@ -118,7 +117,13 @@
   		<cfset propNames = model("user").propertyNames()>
 	'
 	categories="model-class" chapters="object-relational-mapping" functions="columnNames,dataSource,property,table,tableName">
-	<cfreturn variables.wheels.class.propertyList>
+	<cfscript>
+		var loc = {};
+		loc.returnValue = variables.wheels.class.propertyList;
+		if (ListLen(variables.wheels.class.calculatedPropertyList))
+			loc.returnValue = ListAppend(loc.returnValue, variables.wheels.class.calculatedPropertyList);
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="table" returntype="void" access="public" output="false"
