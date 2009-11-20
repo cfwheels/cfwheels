@@ -4,9 +4,6 @@
 
 	<cffunction name="test_setting_and_getting_properties">
 
-		<cfset loc.properties = loc.user.properties()>
-		<cfset assert("listlen(structkeylist(loc.properties)) eq 14")>
-
 		<cfset loc.args = {}>
 		<cfset loc.args.Address = "1313 mockingbird lane">
 		<cfset loc.args.City = "deerfield beach">
