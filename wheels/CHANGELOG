@@ -1,40 +1,31 @@
-Edge - 3751
+WHEELS BLEEDING EDGE (3848)
 
 Changes
 =======
-
-* propertyNames() and reload() return calculated properties as well - [Per Djurner]
-* ability to skip validation when saving - [Tony Petruzzi]
-* ability for years to display in decending order in date select form tags - [Tony Petruzzi]
-* setProperties to allows any passed in variable to be set on the object - [Per Djurner]
-* properties() so that it returns anything in the this scope that is not a function - [Per Djurner]
-* includePartial / renderPartial pass in calculated properties to the partial file - [Per Djurner]
-* Added "head" argument to styleSheetLinkTag and javaScriptIncludeTag. Also added informative error when "source" or "sources" is not supplied - [Per Djurner]
-* updated the request processing to top stop if a before filter renders anything  - [James Gibson]
-* Ability to name the cfwheels application - #315 [jay.mcentire, Per Djurner]
-* Differences in params structure between startFormTag with method post versus get - #232 [Mike Henke, Tony Petruzzi]
-* Made the showDebugInformation argument on renderPage part of the API - [Per Djurner]
+* Ability to skip validation when saving - [Tony Petruzzi]
+* Ability for years to display in descending order in date select form tags - [Tony Petruzzi]
+* Added "head" argument to styleSheetLinkTag and javaScriptIncludeTag - [Per Djurner]
+* Updated the request processing to not call the action if a before filter has rendered content - [James Gibson]
+* Removed differences in params structure for form / URL variables - #232 [Mike Henke, Tony Petruzzi]
+* Made the showDebugInformation argument on renderPage() part of the API - [Per Djurner]
 
 Bug Fixes
 =========
-
-* Include js or css files with multiple dot (.) does not work - #312 [Mike Henke, Tony Petruzzi]
-* do not obfuscate the cfid and cftoken parameters since coldfusion uses these before the request kicks off wheels - [James Gibson]
-* Changed avg() so that it is able to calculate the average for integer columns as well - [Per Djurner, Tony Petruzzi] 
-* Corrected behavior for calculation functions. sum() and count() now returns 0 when no records are found and the other returns a blank string - [Per Djurner]
-* default day to 1 and month to 1 when submitting forms - [Tony Petruzzi]
+* Defaulted day to 1 and month to 1 when submitting forms - [Tony Petruzzi]
 
 Other
 =====
+* Refactor to avoid polluting the Application.cfc's this scope with the rootDir variable - [Per Djurner]
 
-* Refactor to avoid polluting the Application.cfc's this scope with the rootDit variable - [Per Djurner]
 
-
-1.0 RC 1
+WHEELS VERSION 1.0
 
 Changes
 =======
-
+* Changed setProperties() to allow any passed in variable to be set on the object - [Per Djurner]
+* Changed properties() so that it returns anything in the this scope that is not a function - [Per Djurner]
+* Support for setting Application.cfc this scoped variables through config/app.cfm - #315 [Jay McEntire, Per Djurner]
+* Modified so SUM, AVG, MIN, MAX returns blank string and COUNT returns 0 when no records are found - [Tony Petruzzi, Per Djurner]
 * Support for "if"/"unless" in validate(), validateOnCreate() and validateOnUpdate() - [Per Djurner]
 * Support for built-in CFML types in validatesFormatOf() - [Raul Riera, Per Djurner]
 * Allow plugin developer to specify a list of supported Wheels versions instead of just one - [Chris Peters, Per Djurner]
@@ -53,6 +44,10 @@ Changes
 
 Bug Fixes
 ============
+* Fixed AVG SQL calculation when dealing with integer values - [Tony Petruzzi, Per Djurner]
+* Fixed so that CFID and CFTOKEN values do not get obfuscated when passed in the URL - [James Gibson]
+* Fixed so javaScriptIncludeTag and styleSheetLinkTag can work with files with multiple dots in them - #312 [Mike Henke, Tony Petruzzi]
+* Included calculated properties in the propertyNames(), reload(), updateAll(), deleteAll(), includePartial() and renderPartial() methods - [Per Djurner]
 * Allow dynamic methods to be called through callbacks - [James Gibson, Per Djurner]
 * Fixed so you can pass in the "properties" argument to dynamic methods (it was overridden previously) - [Per Djurner]
 * Allow passing along the original where clause when paginating with a criteria on a joined table - Groups [Don Humphreys, Per Djurner]
