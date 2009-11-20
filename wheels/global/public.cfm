@@ -217,7 +217,7 @@
 		<cfset setting = get("tableNamePrefix")>
 		
 		<!--- Get the default for the `message` argument on the `validatesConfirmationOf` method  --->
-		<cfset setting = get(functionName"validatesConfirmationOf", name="message")>
+		<cfset setting = get(functionName="validatesConfirmationOf", name="message")>
 	'
 	categories="global,miscellaneous" chapters="configuration-and-defaults" functions="set">
 	<cfargument name="name" type="string" required="true" hint="Variable name to get setting for.">
