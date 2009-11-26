@@ -7,10 +7,10 @@
 	'
 		<!--- Create a new author and save it to the database --->
 		<cfset newAuthor = model("author").create(params.author)>
-		
+
 		<!--- Same as above using named arguments --->
-		<cfset newAuthor = model("author").create(firstName="John", lastName="Doe")>	
-			
+		<cfset newAuthor = model("author").create(firstName="John", lastName="Doe")>
+
 		<!--- Same as above using both named arguments and a struct --->
 		<cfset newAuthor = model("author").create(active=1, properties=params.author)>
 
@@ -155,12 +155,12 @@
 				loc.totalPages = Ceiling(loc.totalRecords/arguments.perPage);
 				loc.limit = arguments.perPage;
 				loc.offset = (arguments.perPage * arguments.page) - arguments.perPage;
-				
+
 				// if the full range of records is not requested we correct the limit to get the exact amount instead
 				// for example if totalRecords is 57, limit is 10 and offset 50 (i.e. requesting records 51-60) we change the limit to 7
 				if ((loc.limit + loc.offset) > loc.totalRecords)
 					loc.limit = loc.totalRecords - loc.offset;
-				
+
 				if (loc.limit < 1)
 				{
 					// if limit is 0 or less it means that a page that has no records was asked for so we return an empty query
@@ -247,7 +247,7 @@
 				loc.findAll = variables.wheels.class.adapter.$query(argumentCollection=loc.finderArgs);
 				request[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
-			request.wheels[Hash(GetMetaData(loc.findAll.query).toString())] = variables.wheels.class.name; // place an identifer in request scope so we can reference this query when passed in to view functions 
+			request.wheels[Hash(GetMetaData(loc.findAll.query).toString())] = variables.wheels.class.name; // place an identifer in request scope so we can reference this query when passed in to view functions
 			if (arguments.returnAs == "query")
 			{
 				loc.returnValue = loc.findAll.query;
@@ -959,7 +959,7 @@
 	<cfargument name="distinct" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
-		
+
 		// setup an array containing class info for current class and all the ones that should be included
 		loc.classes = [];
 		if (Len(arguments.include))
@@ -989,28 +989,28 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.iItem = Trim(ListGetAt(arguments.select, loc.i));
-				
+
 				// look for duplicates
 				loc.duplicateCount = ListValueCountNoCase(loc.addedProperties, loc.iItem);
 				loc.addedProperties = ListAppend(loc.addedProperties, loc.iItem);
-	
+
 				// loop through all classes (current and all included ones)
 				loc.jEnd = ArrayLen(loc.classes);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
 					loc.toAppend = "";
 					loc.classData = loc.classes[loc.j];
-	
+
 					// get the class name (the variable it is stored in differs depending on if it's taken from the current class or the association info)
 					if (StructKeyExists(loc.classData, "class"))
 						loc.modelName = loc.classData.class;
 					else if (StructKeyExists(loc.classData, "name"))
 						loc.modelName = loc.classData.name;
-	
+
 					// create a struct for this model unless it already exists
 					if (!StructKeyExists(loc.addedPropertiesByModel, loc.modelName))
 						loc.addedPropertiesByModel[loc.modelName] = "";
-	
+
 					// if we find the property in this model and it's not already added we go ahead and add it to the select clause
 					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.modelName], loc.iItem))
 					{
@@ -1038,7 +1038,7 @@
 					$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.iItem#` property but couldn't find it in the database table.", extendedInfo="Verify the `select` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
 			}
 
-			// let's replace eventual duplicates in the clause by prepending the class name		
+			// let's replace eventual duplicates in the clause by prepending the class name
 			if (Len(arguments.include))
 			{
 				loc.newSelect = "";
@@ -1050,7 +1050,7 @@
 
 					// get the property part, done by taking everytyhing from the end of the string to a . or a space (which would be found when using " AS ")
 					loc.property = Reverse(SpanExcluding(Reverse(loc.iItem), ". "));
-					
+
 					// check if this one has been flagged as a duplicate, we get the number of classes to skip and also remove the flagged info from the item
 					loc.duplicateCount = 0;
 					if (Left(loc.iItem, 13) == "[[duplicate]]")
@@ -1058,7 +1058,7 @@
 						loc.duplicateCount = Mid(loc.iItem, 14, 1);
 						loc.iItem = Mid(loc.iItem, 15, Len(loc.iItem)-14);
 					}
-					
+
 					if (!loc.duplicateCount)
 					{
 						// this is not a duplicate so we can just insert it as is
@@ -1096,8 +1096,8 @@
 			loc.select = arguments.select;
 		}
 		if (arguments.distinct)
-			loc.select = "DISTINCT " & loc.select;		
-		loc.select = "SELECT " & loc.select;		
+			loc.select = "DISTINCT " & loc.select;
+		loc.select = "SELECT " & loc.select;
 		ArrayAppend(arguments.sql, loc.select);
 	</cfscript>
 	<cfreturn arguments.sql>
@@ -1274,14 +1274,6 @@
 			if (application.wheels.showErrorInformation && !StructKeyExists(loc.classAssociations, loc.name))
 				$throw(type="Wheels.AssociationNotFound", message="An association named `#loc.name#` could not be found on the `#ListLast(loc.levels)#` model.", extendedInfo="Setup an association in the `init` method of the `models/#capitalize(ListLast(loc.levels))#.cfc` file and name it `#loc.name#`. You can use the `belongsTo`, `hasOne` or `hasMany` method to set it up.");
 
-			// infer class name and foreign key from association name unless developer specified it already
-			if (!Len(loc.classAssociations[loc.name].class))
-			{
-				loc.classAssociations[loc.name].class = loc.name;
-				if (loc.classAssociations[loc.name].type == "hasMany")
-					loc.classAssociations[loc.name].class = singularize(loc.classAssociations[loc.name].class);
-			}
-
 			// create a reference to the associated class
 			loc.associatedClass = model(loc.classAssociations[loc.name].class);
 
@@ -1311,17 +1303,31 @@
 			loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
 			for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 			{
+				loc.key1 = ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.j);
 				if (loc.classAssociations[loc.name].type == "belongsTo")
 				{
-					loc.first = loc.classAssociations[loc.name].foreignKey;
-					loc.second = loc.associatedClass.$classData().keys;
+					loc.key2 = ListFindNoCase(loc.associatedClass.$classData().keys, loc.key1);
+					if (loc.key2)
+						loc.key2 = ListGetAt(loc.associatedClass.$classData().keys, loc.key2);
+					else
+						loc.key2 = ListGetAt(loc.associatedClass.$classData().keys, loc.j);
+
+					loc.first = loc.key1;
+					loc.second = loc.key2;
 				}
 				else
 				{
-					loc.first = loc.class.$classData().keys;
-					loc.second = loc.classAssociations[loc.name].foreignKey;
+					loc.key2 = ListFindNoCase(loc.class.$classData().keys, loc.key1);
+					if (loc.key2)
+						loc.key2 = ListGetAt(loc.class.$classData().keys, loc.key2);
+					else
+						loc.key2 = ListGetAt(loc.class.$classData().keys, loc.j);
+
+					loc.first = loc.key2;
+					loc.second = loc.key1;
 				}
-				loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[ListGetAt(loc.first, loc.j)].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[ListGetAt(loc.second, loc.j)].column#");
+
+				loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[loc.first].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[loc.second].column#");
 			}
 			loc.classAssociations[loc.name].join = loc.classAssociations[loc.name].join & Replace(loc.toAppend, ",", " AND ", "all");
 

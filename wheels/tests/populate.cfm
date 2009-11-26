@@ -1,7 +1,7 @@
 <cfinclude template="/wheelsMapping/global/functions.cfm">
 
 <!--- reset all tables --->
-<cfloop list="user,photogallery,photogalleryphoto,author,post" index="loc.i">
+<cfloop list="user,photogallery,photogalleryphoto,author,post,city,shop" index="loc.i">
 	<cfset model(loc.i).deleteAll(instantiate=false)>
 </cfloop>
 
@@ -115,4 +115,19 @@
 			)>
 		</cfloop>
 	</cfloop>
+</cfloop>
+
+<!--- cities and shops --->
+<cfloop from="1" to="5" index="loc.i">
+	<cfset model("city").create(
+		countyid="3"
+		,citycode="#loc.i#"
+		,name="county #loc.i#"
+	)>
+
+	<cfset model("shop").create(
+		shopid="shop#loc.i#"
+		,citycode="#loc.i#"
+		,name="shop #loc.i#"
+	)>
 </cfloop>

@@ -76,5 +76,11 @@
 			if (key != "name")
 				variables.wheels.class.associations[arguments.name][key] = arguments[key];
 		}
+
+		// infer class name and foreign key from association name unless developer specified it already
+		if (!Len(variables.wheels.class.associations[arguments.name].class))
+		{
+			variables.wheels.class.associations[arguments.name].class = singularize(arguments.name);
+		}
 	</cfscript>
 </cffunction>

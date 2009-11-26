@@ -19,17 +19,20 @@ go
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Classifications]') AND type in (N'U'))
 DROP TABLE [dbo].[Classifications]
 GO
-/****** Object:  Table [dbo].[Comments]    Script Date: 11/11/2009 08:49:46 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Comments]') AND type in (N'U'))
 DROP TABLE [dbo].[Comments]
 GO
-/****** Object:  Table [dbo].[Profiles]    Script Date: 11/11/2009 08:49:49 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Profiles]') AND type in (N'U'))
 DROP TABLE [dbo].[Profiles]
 GO
-/****** Object:  Table [dbo].[Tags]    Script Date: 11/11/2009 08:49:51 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Tags]') AND type in (N'U'))
 DROP TABLE [dbo].[Tags]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Cities]') AND type in (N'U'))
+DROP TABLE [dbo].[Cities]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Shops]') AND type in (N'U'))
+DROP TABLE [dbo].[Shops]
 GO
 
 /***********************************************
@@ -160,6 +163,31 @@ CREATE TABLE [dbo].[Tags](
  CONSTRAINT [PK_Tags] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+go
+
+-- Cities
+CREATE TABLE [dbo].[Cities](
+	[CountyId] [char](4) NOT NULL,
+	[CityCode] [tinyint] NOT NULL,
+	[Name] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_Cities] PRIMARY KEY CLUSTERED 
+(
+	[CountyId] ASC,
+	[CityCode] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+go
+
+-- Shops
+CREATE TABLE [dbo].[Shops](
+	[ShopId] [char](9) NOT NULL,
+	[CityCode] [tinyint] NULL,
+	[Name] [varchar](80) NOT NULL,
+ CONSTRAINT [PK_Shops] PRIMARY KEY NONCLUSTERED 
+(
+	[ShopId] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 go
