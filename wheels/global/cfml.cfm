@@ -125,8 +125,11 @@
 	<cfset arguments.returnVariable = "loc.returnValue">
 	<cfif StructKeyExists(arguments, "componentReference")>
 		<cfset arguments.component = arguments.componentReference>
+		<cfset StructDelete(arguments, "componentReference")>
+	<cfelseif NOT StructKeyExists(variables, arguments.method)>
+		<!--- this is done so that we can call dynamic methods via "onMissingMethod" on the object (we need to pass in the object for this so it can call methods on the "this" scope instead) --->
+		<cfset arguments.component = this>
 	</cfif>
-	<cfset StructDelete(arguments, "componentReference")>
 	<cfinvoke attributeCollection="#arguments#">
 	<cfif StructKeyExists(loc, "returnValue")>
 		<cfreturn loc.returnValue>

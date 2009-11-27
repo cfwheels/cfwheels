@@ -237,10 +237,7 @@
 						loc.kItem = ListGetAt(arguments.collection.columnList, loc.k);
 						loc.args[loc.kItem] = arguments.collection[loc.kItem][loc.j];
 					}
-					if (StructKeyExists(variables, loc.method) && IsCustomFunction(variables[loc.method]))
-						loc.returnValue = $invoke(method=loc.method, argumentCollection=loc.args);
-					else
-						loc.returnValue = $invoke(componentReference=this, method=loc.method, argumentCollection=loc.args);
+					loc.returnValue = $invoke(method=loc.method, argumentCollection=loc.args);
 					if (StructKeyExists(loc, "returnValue"))
 					{
 						if (IsStruct(loc.returnValue))
@@ -260,10 +257,7 @@
 			}
 			else
 			{
-				if (StructKeyExists(variables, loc.method) && IsCustomFunction(variables[loc.method]))
-					loc.returnValue = $invoke(method=loc.method);
-				else
-					loc.returnValue = $invoke(componentReference=this, method=loc.method);
+				loc.returnValue = $invoke(method=loc.method);
 			}
 			if (!StructKeyExists(loc, "returnValue"))
 			{
