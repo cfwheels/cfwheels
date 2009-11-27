@@ -208,7 +208,7 @@
 			arguments.where = REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all");
 
 			// get info from cache when available, otherwise create the generic select, from, where and order by clause
-			loc.queryShellKey = variables.wheels.class.name & $hashStruct(arguments);
+			loc.queryShellKey = variables.wheels.class.modelName & $hashStruct(arguments);
 			loc.sql = $getFromCache(loc.queryShellKey, "sql");
 			if (!IsArray(loc.sql))
 			{
@@ -224,7 +224,7 @@
 			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=loc.originalWhere);
 
 			// return existing query result if it has been run already in current request, otherwise pass off the sql array to the query
-			loc.queryKey = "wheels" & variables.wheels.class.name & $hashStruct(arguments) & loc.originalWhere;
+			loc.queryKey = "wheels" & variables.wheels.class.modelName & $hashStruct(arguments) & loc.originalWhere;
 			if (!arguments.reload && StructKeyExists(request, loc.queryKey))
 			{
 				loc.findAll = request[loc.queryKey];
@@ -247,7 +247,7 @@
 				loc.findAll = variables.wheels.class.adapter.$query(argumentCollection=loc.finderArgs);
 				request[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
-			request.wheels[Hash(GetMetaData(loc.findAll.query).toString())] = variables.wheels.class.name; // place an identifer in request scope so we can reference this query when passed in to view functions
+			request.wheels[Hash(GetMetaData(loc.findAll.query).toString())] = variables.wheels.class.modelName; // place an identifer in request scope so we can reference this query when passed in to view functions
 			if (arguments.returnAs == "query")
 			{
 				loc.returnValue = loc.findAll.query;
@@ -278,12 +278,12 @@
 										loc.primaryKeyColumnValues = ListAppend(loc.primaryKeyColumnValues, loc.findAll.query[ListGetAt(variables.wheels.class.keys, loc.k)][loc.j]);
 									}
 									if (loc.object.key() == loc.primaryKeyColumnValues)
-										ArrayAppend(loc.object[arguments.include], model(variables.wheels.class.associations[arguments.include].class).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.j));
+										ArrayAppend(loc.object[arguments.include], model(variables.wheels.class.associations[arguments.include].modelName).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.j));
 								}
 							}
 							else
 							{
-								loc.object[arguments.include] = model(variables.wheels.class.associations[arguments.include].class).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.i);
+								loc.object[arguments.include] = model(variables.wheels.class.associations[arguments.include].modelName).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.i);
 							}
 						}
 						ArrayAppend(loc.returnValue, loc.object);
@@ -1001,18 +1001,12 @@
 					loc.toAppend = "";
 					loc.classData = loc.classes[loc.j];
 
-					// get the class name (the variable it is stored in differs depending on if it's taken from the current class or the association info)
-					if (StructKeyExists(loc.classData, "class"))
-						loc.modelName = loc.classData.class;
-					else if (StructKeyExists(loc.classData, "name"))
-						loc.modelName = loc.classData.name;
-
 					// create a struct for this model unless it already exists
-					if (!StructKeyExists(loc.addedPropertiesByModel, loc.modelName))
-						loc.addedPropertiesByModel[loc.modelName] = "";
+					if (!StructKeyExists(loc.addedPropertiesByModel, loc.classData.modelName))
+						loc.addedPropertiesByModel[loc.classData.modelName] = "";
 
 					// if we find the property in this model and it's not already added we go ahead and add it to the select clause
-					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.modelName], loc.iItem))
+					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem))
 					{
 						if (loc.duplicateCount)
 							loc.toAppend = loc.toAppend & "[[duplicate]]" & loc.j;
@@ -1028,7 +1022,7 @@
 						{
 							loc.toAppend = loc.toAppend & "(" & Replace(loc.classData.calculatedProperties[loc.iItem].sql, ",", "[[comma]]", "all") & ") AS " & loc.iItem;
 						}
-						loc.addedPropertiesByModel[loc.modelName] = ListAppend(loc.addedPropertiesByModel[loc.modelName], loc.iItem);
+						loc.addedPropertiesByModel[loc.classData.modelName] = ListAppend(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem);
 						break;
 					}
 				}
@@ -1069,13 +1063,9 @@
 					{
 						// this is a duplicate so we prepend the class name and then insert it unless a property with the resulting name already exist
 						loc.classData = loc.classes[loc.duplicateCount];
-						if (StructKeyExists(loc.classData, "class"))
-							loc.modelName = loc.classData.class;
-						else if (StructKeyExists(loc.classData, "name"))
-							loc.modelName = loc.classData.name;
 
 						// prepend class name to the property
-						loc.newProperty = loc.modelName & loc.property;
+						loc.newProperty = loc.classData.modelName & loc.property;
 
 						if (loc.iItem Contains " AS ")
 							loc.newItem = ReplaceNoCase(loc.iItem, " AS " & loc.property, " AS " & loc.newProperty);
@@ -1247,7 +1237,7 @@
 		loc.returnValue = [];
 
 		// add the current class name so that the levels list start at the lowest level
-		loc.levels = variables.wheels.class.name;
+		loc.levels = variables.wheels.class.modelName;
 
 		// count the included associations
 		loc.iEnd = ListLen(Replace(arguments.include, "(", ",", "all"));
@@ -1275,17 +1265,17 @@
 				$throw(type="Wheels.AssociationNotFound", message="An association named `#loc.name#` could not be found on the `#ListLast(loc.levels)#` model.", extendedInfo="Setup an association in the `init` method of the `models/#capitalize(ListLast(loc.levels))#.cfc` file and name it `#loc.name#`. You can use the `belongsTo`, `hasOne` or `hasMany` method to set it up.");
 
 			// create a reference to the associated class
-			loc.associatedClass = model(loc.classAssociations[loc.name].class);
+			loc.associatedClass = model(loc.classAssociations[loc.name].modelName);
 
 			if (!Len(loc.classAssociations[loc.name].foreignKey))
 			{
 				if (loc.classAssociations[loc.name].type == "belongsTo")
 				{
-					loc.classAssociations[loc.name].foreignKey = loc.associatedClass.$classData().name & Replace(loc.associatedClass.$classData().keys, ",", ",#loc.associatedClass.$classData().name#", "all");
+					loc.classAssociations[loc.name].foreignKey = loc.associatedClass.$classData().modelName & Replace(loc.associatedClass.$classData().keys, ",", ",#loc.associatedClass.$classData().modelName#", "all");
 				}
 				else
 				{
-					loc.classAssociations[loc.name].foreignKey = loc.class.$classData().name & Replace(loc.class.$classData().keys, ",", ",#loc.class.$classData().name#", "all");
+					loc.classAssociations[loc.name].foreignKey = loc.class.$classData().modelName & Replace(loc.class.$classData().keys, ",", ",#loc.class.$classData().modelName#", "all");
 				}
 			}
 
@@ -1333,7 +1323,7 @@
 
 			// go up or down one level in the association tree
 			if (loc.delimChar == "(")
-				loc.levels = ListAppend(loc.levels, loc.classAssociations[loc.name].class);
+				loc.levels = ListAppend(loc.levels, loc.classAssociations[loc.name].modelName);
 			else if (loc.delimChar == ")")
 				loc.levels = ListDeleteAt(loc.levels, ListLen(loc.levels));
 
@@ -1352,10 +1342,10 @@
 	<cfargument name="row" type="numeric" required="false" default="1">
 	<cfscript>
 		var loc = {};
-		loc.fileName = capitalize(variables.wheels.class.name);
-		if (!ListFindNoCase(application.wheels.existingModelFiles, variables.wheels.class.name))
+		loc.fileName = capitalize(variables.wheels.class.modelName);
+		if (!ListFindNoCase(application.wheels.existingModelFiles, variables.wheels.class.modelName))
 			loc.fileName = "Model";
-		loc.returnValue = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.name, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row);
+		loc.returnValue = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.modelName, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row);
 		// if this method is called with a struct we're creating a new object and then we call the afterNew callback. If called with a query we call the afterFind callback instead. If the called method does not return false we proceed and run the afterInitialize callback.
 		if ((IsQuery(arguments.properties) && loc.returnValue.$callback("afterFind")) || (IsStruct(arguments.properties) && loc.returnValue.$callback("afterNew")))
 			loc.returnValue.$callback("afterInitialization");

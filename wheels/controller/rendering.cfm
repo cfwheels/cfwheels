@@ -148,12 +148,12 @@
 		}
 		else if (IsObject(arguments.$partial))
 		{
-			arguments.$name = arguments.$partial.$classData().name;
+			arguments.$name = arguments.$partial.$classData().modelName;
 			arguments[arguments.$name] = arguments.$partial;
 		}
 		else if (IsArray(arguments.$partial) && ArrayLen(arguments.$partial))
 		{
-			arguments.$name = arguments.$partial[1].$classData().name;
+			arguments.$name = arguments.$partial[1].$classData().modelName;
 			arguments[pluralize(arguments.$name)] = arguments.$partial;
 		}
 		else if (IsSimpleValue(arguments.$partial))

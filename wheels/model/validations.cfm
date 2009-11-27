@@ -351,7 +351,7 @@
 				{
 					// when using the core validations the developer needs to pass in specific properties
 					if (!ListFindNoCase(StructKeyList(variables.wheels.class.properties), loc.thisValidation.args.property) && !ListFindNoCase(StructKeyList(variables.wheels.class.calculatedProperties), loc.thisValidation.args.property))
-						$throw(type="Wheels.PropertyNotFound", message="Property Not Found", extendedInfo="The `#loc.thisValidation.args.property#` property does not exist in the `#capitalize(variables.wheels.class.name)#` model so validation can not be performed against it.");
+						$throw(type="Wheels.PropertyNotFound", message="Property Not Found", extendedInfo="The `#loc.thisValidation.args.property#` property does not exist in the `#capitalize(variables.wheels.class.modelName)#` model so validation can not be performed against it.");
 				}
 			}
 			if ($evaluateValidationCondition(argumentCollection=loc.thisValidation.args))

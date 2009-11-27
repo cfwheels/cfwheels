@@ -235,11 +235,11 @@
 <cffunction name="model" returntype="any" access="public" output="false" hint="Returns a reference to the requested model so that class level methods can be called on it."
 	examples=
 	'
-		<!--- The `model("author")` part of the code below gets a reference to the class in the application scope and then `findByKey` is called on it --->
+		<!--- The `model("author")` part of the code below gets a reference to the model in the application scope and then `findByKey` is called on it --->
 		<cfset authorObject = model("author").findByKey(1)>
 	'
 	categories="global,miscellaneous" chapters="object-relational-mapping" functions="">
-	<cfargument name="name" type="string" required="true" hint="Name of the model (class name) to get a reference to.">
+	<cfargument name="name" type="string" required="true" hint="Name of the model to get a reference to.">
 	<cfreturn $doubleCheckedLock(name="modelLock", condition="$cachedModelClassExists", execute="$createModelClass", conditionArgs=arguments, executeArgs=arguments)>
 </cffunction>
 

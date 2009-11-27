@@ -5,7 +5,7 @@
 		variables.wheels = {};
 		variables.wheels.errors = [];
 		variables.wheels.class = {};
-		variables.wheels.class.name = arguments.name;
+		variables.wheels.class.modelName = arguments.name;
 		variables.wheels.class.RESQLOperators = "((?: LIKE)|(?:<>)|(?:<=)|(?:>=)|(?:!=)|(?:!<)|(?:!>)|=|<|>)";
 		variables.wheels.class.RESQLWhere = "(#variables.wheels.class.RESQLOperators# ?)(''|'.+?'()|(-?[0-9]|\.)+()|\(-?[0-9]+(,-?[0-9]+)*\))(($|\)| (AND|OR)))";
 		variables.wheels.class.mapping = {};
@@ -33,7 +33,7 @@
 		// set the table name unless set manually by the developer
 		if (!StructKeyExists(variables.wheels.class, "tableName"))
 		{
-			variables.wheels.class.tableName = LCase(pluralize(variables.wheels.class.name));
+			variables.wheels.class.tableName = LCase(pluralize(variables.wheels.class.modelName));
 			if (Len(application.wheels.tableNamePrefix))
 				variables.wheels.class.tableName = application.wheels.tableNamePrefix & "_" & variables.wheels.class.tableName;
 		}

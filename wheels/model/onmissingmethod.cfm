@@ -66,7 +66,7 @@
 					loc.method = "findAll";
 					loc.joinAssociation = $expandedAssociations(include=loc.key);
 					loc.joinAssociation = loc.joinAssociation[1];
-					loc.joinClass = loc.joinAssociation.class;
+					loc.joinClass = loc.joinAssociation.modelName;
 					loc.info = model(loc.joinClass).$expandedAssociations(include=ListFirst(variables.wheels.class.associations[loc.key].through));
 					loc.info = loc.info[1];
 					loc.include = ListLast(variables.wheels.class.associations[loc.key].through);
@@ -206,7 +206,7 @@
 					}
 				}
 				if (Len(loc.method))
-					loc.returnValue = $invoke(componentReference=model(loc.info.class), method=loc.method, argumentCollection=arguments.missingMethodArguments);
+					loc.returnValue = $invoke(componentReference=model(loc.info.modelName), method=loc.method, argumentCollection=arguments.missingMethodArguments);
 			}
 		}
 		if (!StructKeyExists(loc, "returnValue"))
