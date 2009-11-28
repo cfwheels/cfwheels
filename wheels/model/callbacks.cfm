@@ -213,6 +213,13 @@
 	</cfscript>
 </cffunction>
 
+<cffunction name="$clearCallbacks" returntype="void" access="public" output="false" hint="Removes all callbacks for passed in type set on the model.">
+	<cfargument name="type" type="string" required="true">
+	<cfscript>
+		ArrayClear(variables.wheels.class.callbacks[arguments.type]);
+	</cfscript>
+</cffunction>
+
 <!--- PRIVATE MODEL OBJECT METHODS --->
 
 <cffunction name="$callback" returntype="boolean" access="public" output="false">
@@ -259,14 +266,12 @@
 			{
 				loc.returnValue = $invoke(method=loc.method);
 			}
+			// break on the first callback executed that returns false
+			// if a callback returns nothing we return true
 			if (!StructKeyExists(loc, "returnValue"))
-			{
 				loc.returnValue = true;
-			}
-			else if (!loc.returnValue)
-			{
+			else if (IsBoolean(loc.returnValue) && !loc.returnValue)
 				break;
-			}
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>

@@ -132,6 +132,10 @@
 	)>
 </cfloop>
 
+<cfquery name="del" datasource="wheelstestdb">
+DELETE
+FROM tags
+</cfquery>
 <cfquery name="ins" datasource="wheelstestdb">
 INSERT INTO tags (name)
 VALUES ("releases")
