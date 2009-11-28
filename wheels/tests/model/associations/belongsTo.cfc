@@ -13,7 +13,7 @@
 		<cfset loc.obj = model("post").findOne(order="id")>
 		<cfset loc.associationResult = loc.obj.author(select="lastName", returnAs="query")>
 		<cfset loc.finderResult = model("author").findByKey(key=loc.obj.authorId, select="lastName", returnAs="query")>
-		<cfset assert("IsQuery(loc.associationResult) AND ListLen(loc.associationResult.columnList) IS 1 AND IsQuery(loc.finderResult) AND loc.associationResult.lastName IS loc.finderResult.lastName")>
+		<cfset assert("IsQuery(loc.associationResult) AND ListLen(loc.associationResult.columnList) IS 1 AND IsQuery(loc.finderResult) AND ListLen(loc.finderResult.columnList) IS 1 AND loc.associationResult.lastName IS loc.finderResult.lastName")>
 	</cffunction>
 
 	<cffunction name="test_checking_if_parent_exists">
