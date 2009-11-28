@@ -131,3 +131,8 @@
 		,name="shop #loc.i#"
 	)>
 </cfloop>
+
+<cfquery name="ins" datasource="wheelstestdb">
+INSERT INTO tags (name)
+VALUES ("releases")
+</cfquery>
