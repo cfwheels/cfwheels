@@ -1,38 +1,3 @@
-<style type="text/css">
-#wheels-debug-area
-{
-	clear: both;
-	margin-top: 100px;
-	text-align: left;
-	background: #ececec;
-	padding: 10px;
-	border-top: 3px solid #999;
-	border-bottom: 3px solid #999;
-}
-
-#wheels-debug-area td
-{
-	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-	line-height: 1.5em;
-	font-size: 12px;
-	color: #333;	
-}
-
-#wheels-debug-area a
-{
-	color: #333;
-	text-decoration: underline;
-	padding: 0 1px;
-}
-
-#wheels-debug-area a:hover
-{
-	color: #fff;
-	background: #333;
-	text-decoration: none;
-}
-</style>
-
 <cfset loc.baseReloadURL = cgi.script_name> 
 <cfif cgi.path_info IS NOT cgi.script_name>
 	<cfset loc.baseReloadURL = loc.baseReloadURL & cgi.path_info> 
@@ -52,6 +17,42 @@
 <cfset loc.baseReloadURL = loc.baseReloadURL & "reload=">
 
 <cfoutput>
+
+<style type="text/css">
+##wheels-debug-area
+{
+	clear: both;
+	margin-top: 100px;
+	text-align: left;
+	background: ##ececec;
+	padding: 10px;
+	border-top: 3px solid ##999;
+	border-bottom: 3px solid ##999;
+}
+
+##wheels-debug-area td
+{
+	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	line-height: 1.5em;
+	font-size: 12px;
+	color: ##333;	
+}
+
+##wheels-debug-area a
+{
+	color: ##333;
+	text-decoration: underline;
+	padding: 0 1px;
+}
+
+##wheels-debug-area a:hover
+{
+	color: ##fff;
+	background: ##333;
+	text-decoration: none;
+}
+</style>
+
 <div id="wheels-debug-area">
 	<table cellspacing="0" cellpadding="0">
 		<cfif Len(application.wheels.incompatiblePlugins) OR Len(application.wheels.dependantPlugins) OR NOT ArrayIsEmpty(request.wheels.deprecation)>
@@ -151,4 +152,5 @@
 		</tr>
 	</table>
 </div>
+
 </cfoutput>
