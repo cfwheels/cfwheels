@@ -251,8 +251,7 @@
 			if (arguments.returnAs == "query")
 			{
 				loc.returnValue = loc.findAll.query;
-				if (loc.findAll.query.recordCount > 1)
-					$callback("afterFind", loc.returnValue); // run afterFind callback here unless called from findOne / findByKey (since those callbacks are called when the resulting object is created)
+				$callback("afterFind", loc.returnValue);
 			}
 			else if (Len(arguments.returnAs))
 			{
