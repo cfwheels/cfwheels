@@ -1,6 +1,7 @@
 <cfcomponent extends="wheelsMapping.Model">
 
 	<cffunction name="init">
+		<cfset beforeSave("callbackThatReturnsTrue")>
 	</cffunction>
 
 	<cffunction name="callbackThatReturnsFalse">
