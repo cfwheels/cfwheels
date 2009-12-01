@@ -4,6 +4,13 @@
 		<cfset beforeSave("callbackThatReturnsTrue")>
 	</cffunction>
 
+	<cffunction name="callbackThatIncreasesVariable">
+		<cfif NOT StructKeyExists(this, "callbackCount")>
+			<cfset this.callbackCount = 0>
+		</cfif>
+		<cfset this.callbackCount++>
+	</cffunction>
+
 	<cffunction name="callbackThatReturnsFalse">
 		<cfreturn false>
 	</cffunction>
