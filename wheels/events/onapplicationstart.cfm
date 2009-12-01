@@ -220,16 +220,11 @@
 		if (!StructIsEmpty(application.wheels.mixins))
 			$include(template="wheels/plugins/injection.cfm");
 
-		// load developer routes
-		$include(template="#application.wheels.configPath#/routes.cfm");
-		// add wheels default routes at the end if requested
-		if (application.wheels.loadDefaultRoutes)
-			$include(template="wheels/events/onapplicationstart/routes.cfm");
-		// process named routes
-		$namedRoutePositions();
+		// load routes
+		$loadRoutes();
 
 		// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
-		loc.allowedGlobalMethods = "get,set,addroute";
+		loc.allowedGlobalMethods = "get,set,addroute,addDefaultRoutes";
 		loc.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application.wheels.controllerComponentPath, fileName="Controller", method="$initControllerClass"));
 		application.wheels.protectedControllerMethods = "";
 		loc.iEnd = ListLen(loc.protectedControllerMethods);

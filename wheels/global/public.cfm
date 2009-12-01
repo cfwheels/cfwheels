@@ -33,6 +33,20 @@
 	</cfscript>
 </cffunction>
 
+<cffunction name="addDefaultRoutes" returntype="void" access="public" output="false" hint="Adds the default Wheels routes to your application. Only use this method if you have set `loadDefaultRoutes` to `false` and want to control exactly where in the route order you want to place the default routes."
+	examples=
+	'
+		<!--- Adds the default routes to your application (done in "routes.cfm") --->
+		<cfset addDefaultRoutes()>
+	'
+	categories="configuration" chapters="using-routes" functions="">
+	<cfscript>
+		addRoute(pattern="[controller]/[action]/[key]");
+		addRoute(pattern="[controller]/[action]");
+		addRoute(pattern="[controller]", action="index");
+	</cfscript>
+</cffunction>
+
 <cffunction name="set" returntype="void" access="public" output="false" hint="Use to configure a global setting or set a default for a function."
 	examples=
 	'
