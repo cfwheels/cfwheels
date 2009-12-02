@@ -570,7 +570,29 @@
 		<cfset loc.full_root_test_path = expandpath(loc.relative_root_test_path)>
 		<cfset loc.releative_test_path = "/" & listchangedelims(loc.test_path, "/", ".")>
 		<cfset loc.full_test_path = expandPath(loc.releative_test_path)>
-
+		<cfset loc.test_filter = "*">
+		
+		<cfif not DirectoryExists(loc.full_test_path)>
+			<cfif FileExists(loc.full_test_path & ".cfc")>
+				<cfset loc.test_filter = reverse(listfirst(reverse(loc.test_path), "."))>
+				<cfset loc.test_path = reverse(listrest(reverse(loc.test_path), "."))>
+				<cfset loc.releative_test_path = "/" & listchangedelims(loc.test_path, "/", ".")>
+				<cfset loc.full_test_path = expandPath(loc.releative_test_path)>
+			<cfelse>
+				<!--- swap back the enviroment --->
+				<cfset application = loc.savedenv>
+				<cfthrow
+					type="Wheels.Testing"
+					message="Cannot find test package or single test"
+					detail="In order to run test you must supply a valid test package or single test file to run">
+			</cfif>
+		</cfif>
+		
+		<cfdirectory directory="#loc.full_test_path#" action="list" recurse="true" name="q" filter="#loc.test_filter#.cfc" />
+		
+		<!--- for test results display --->
+		<cfset variables.WHEELS_TESTS_BASE_COMPONENT_PATH = loc.test_path>
+		
 		<!---
 		if env.cfm files exists, call to override enviroment settings so tests can run.
 		when overriding, save the original env so we can put it back later.
@@ -583,11 +605,6 @@
 		<cfif structkeyexists(arguments.options, "reload") && arguments.options.reload eq true && FileExists(loc.full_root_test_path & "/populate.cfm")>
 			<cfinclude template="#loc.relative_root_test_path & '/populate.cfm'#">
 		</cfif>
-
-		<!--- for test results display --->
-		<cfset variables.WHEELS_TESTS_BASE_COMPONENT_PATH = loc.test_path>
-
-		<cfdirectory directory="#loc.full_test_path#" action="list" recurse="true" name="q" filter="*.cfc" />
 
 		<!--- run tests --->
 		<cfloop query="q">
