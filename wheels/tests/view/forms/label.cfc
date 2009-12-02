@@ -18,14 +18,14 @@
 	<cffunction name="test_for_attribute_on_object_helper">
 		<cfset tag = model("tag").findOne()>
 		<cfset loc.result = textField(objectName="tag", property="name", label="The Label:")>
-		<cfset loc.compare = '<label for="tag-name">The Label:<input id="tag-name" name="tag[name]" type="text" value="releases" /></label>'>
+		<cfset loc.compare = '<label for="tag-name">The Label:<input id="tag-name" maxlength="50" name="tag[name]" type="text" value="releases" /></label>'>
 		<cfset assert('loc.result IS loc.compare')>
 	</cffunction>
 
 	<cffunction name="test_for_attribute_on_object_helper_and_overriding_id">
 		<cfset tag = model("tag").findOne()>
 		<cfset loc.result = textField(objectName="tag", property="name", label="The Label:", id="the-id")>
-		<cfset loc.compare = '<label for="the-id">The Label:<input id="the-id" name="tag[name]" type="text" value="releases" /></label>'>
+		<cfset loc.compare = '<label for="the-id">The Label:<input id="the-id" maxlength="50" name="tag[name]" type="text" value="releases" /></label>'>
 		<cfset assert('loc.result IS loc.compare')>
 	</cffunction>
 
