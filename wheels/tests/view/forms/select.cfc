@@ -5,7 +5,7 @@
 
 	<cffunction name="test_x_select_valid">
 		<cfset loc.users = loc.user.findAll()>
-	    <cfset global.controller.select(objectName="user", property="firstname", options=loc.users)>
+	    <cfset loc.controller.select(objectName="user", property="firstname", options=loc.users)>
 	</cffunction>
 
 </cfcomponent>

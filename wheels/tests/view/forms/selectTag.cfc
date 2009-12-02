@@ -72,7 +72,7 @@
 		<cfset loc.args.options = loc.q>
 		<cfset halt(false, "loc.controller.selectTag(argumentcollection=loc.args)")>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
-		<cfset assert('global.options.single_column_query eq loc.r')>
+		<cfset assert('loc.options.single_column_query eq loc.r')>
 	</cffunction>
 
 </cfcomponent>

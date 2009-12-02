@@ -3,7 +3,7 @@
 	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
 
 	<cffunction name="test_x_endFormTag_valid">
-		<cfset global.controller.endFormTag()>
+		<cfset loc.controller.endFormTag()>
 	</cffunction>
 
 </cfcomponent>

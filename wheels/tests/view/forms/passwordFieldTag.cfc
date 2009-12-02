@@ -3,7 +3,7 @@
 	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
 
 	<cffunction name="test_x_passwordFieldTag_valid">
-		<cfset global.controller.passwordFieldTag(name="password")>
+		<cfset loc.controller.passwordFieldTag(name="password")>
 	</cffunction>
 
 </cfcomponent>
