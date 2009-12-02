@@ -174,7 +174,10 @@
 		 if (Left(loc.key, 5) == "label" && Len(loc.key) > 5 && loc.key != "labelPlacement")
 			loc.attributes[Replace(loc.key, "label", "")] = arguments[loc.key];
 		}
-		loc.attributes.for = $tagId(arguments.objectName, arguments.property);
+		if (StructKeyExists(arguments, "id"))
+			loc.attributes.for = arguments.id;
+		else
+			loc.attributes.for = $tagId(arguments.objectName, arguments.property);
 		if (Len(arguments.$appendToFor))
 			loc.attributes.for = loc.attributes.for & "-" & arguments.$appendToFor;
 		loc.returnValue = loc.returnValue & $tag(name="label", attributes=loc.attributes);
