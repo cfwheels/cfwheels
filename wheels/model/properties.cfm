@@ -261,3 +261,13 @@
 		}
 	</cfscript>
 </cffunction>
+
+<cffunction name="$propertyInfo" returntype="struct" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfscript>
+		var returnValue = {};
+		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
+			returnValue = variables.wheels.class.properties[arguments.property];
+	</cfscript>
+	<cfreturn returnValue />
+</cffunction>

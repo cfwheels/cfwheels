@@ -6,3 +6,6 @@
 <!--- unload all plugins before running core tests --->
 <cfset application.wheels.plugins = {}>
 <cfset application.wheels.mixins = {}>
+
+<!--- turn off default validations for testing --->
+<cfset application.wheels.setDefaultValidations = false />

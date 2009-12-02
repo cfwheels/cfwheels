@@ -145,6 +145,35 @@
 	<cfreturn HTMLEditFormat(loc.returnValue)>
 </cffunction>
 
+<cffunction name="$maxLength" returntype="any" access="public">
+	<cfargument name="objectName" type="any" required="true">
+	<cfargument name="property" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		
+		// if the developer passed in a maxlength value, use it
+		if (StructKeyExists(arguments, "maxlength"))
+			return arguments.maxlength;
+		
+		// explicity return void so the property does not get set	
+		if (IsStruct(arguments.objectName))
+			return;
+			
+		loc.object = Evaluate(arguments.objectName);
+		
+		// if objectName does not represent an object, explicity return void so the property does not get set
+		if (not IsObject(loc.object))
+			return;
+			
+		if (StructKeyExists(loc.object, arguments.property)) {
+			loc.propertyInfo = loc.object.$propertyInfo(arguments.property);
+			if (ListFindNoCase("cf_sql_char,cf_sql_varchar", loc.propertyInfo.type))
+				return loc.propertyInfo.size;
+		}
+	</cfscript>
+	<cfreturn />
+</cffunction>
+
 <cffunction name="$formHasError" returntype="boolean" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">

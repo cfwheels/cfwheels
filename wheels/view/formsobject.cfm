@@ -23,6 +23,7 @@
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "text";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
+		arguments.maxlength = $maxLength(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = $formValue(argumentCollection=arguments);
@@ -56,6 +57,7 @@
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "password";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
+		arguments.maxlength = $maxLength(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = $formValue(argumentCollection=arguments);

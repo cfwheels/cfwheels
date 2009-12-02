@@ -70,6 +70,7 @@
 	application.wheels.overwritePlugins = true;
 	application.wheels.loadIncompatiblePlugins = true;
 	application.wheels.loadDefaultRoutes = true;
+	application.wheels.setDefaultValidations = true;
 	
 	// caching settings
 	application.wheels.maximumItemsToCache = 5000;

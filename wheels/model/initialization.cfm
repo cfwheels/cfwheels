@@ -14,6 +14,13 @@
 		variables.wheels.class.associations = {};
 		variables.wheels.class.callbacks = {};
 		variables.wheels.class.connection = {datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword};
+		
+		// set some type settings to help in the model since everything is translated to coldfusion types
+		variables.wheels.class.types = {};
+		variables.wheels.class.types["numeric"] = "cf_sql_tinyint,cf_sql_smallint,cf_sql_integer,cf_sql_bigint,cf_sql_real,cf_sql_numeric,cf_sql_float,cf_sql_decimal,cf_sql_double";
+		variables.wheels.class.types["integer"] = "cf_sql_tinyint,cf_sql_smallint,cf_sql_integer,cf_sql_bigint";
+		variables.wheels.class.types["string"] = "cf_sql_char,cf_sql_varchar";
+		
 		loc.callbacks = "afterNew,afterFind,afterInitialization,beforeDelete,afterDelete,beforeSave,afterSave,beforeCreate,afterCreate,beforeUpdate,afterUpdate,beforeValidation,afterValidation,beforeValidationOnCreate,afterValidationOnCreate,beforeValidationOnUpdate,afterValidationOnUpdate";
 		loc.iEnd = ListLen(loc.callbacks);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -40,7 +47,7 @@
 
 		// get columns for the table
 		loc.columns = variables.wheels.class.adapter.$getColumns(variables.wheels.class.tableName);
-
+		
 		variables.wheels.class.keys = "";
 		variables.wheels.class.propertyList = "";
 		variables.wheels.class.columnList = "";
@@ -59,21 +66,46 @@
 				}
 			}
 			loc.type = SpanExcluding(loc.columns["type_name"][loc.i], "( ");
+			
+			// set the info we need for each property
 			variables.wheels.class.properties[loc.property] = {};
 			variables.wheels.class.properties[loc.property].type = variables.wheels.class.adapter.$getType(loc.type);
 			variables.wheels.class.properties[loc.property].column = loc.columns["column_name"][loc.i];
 			variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];
+			variables.wheels.class.properties[loc.property].nullable = loc.columns["is_nullable"][loc.i];
+			variables.wheels.class.properties[loc.property].size = loc.columns["column_size"][loc.i];
+			
+			// set the default value
 			loc.defaultValue = loc.columns["column_default_value"][loc.i];
 			if ((Left(loc.defaultValue,2) == "((" && Right(loc.defaultValue,2) == "))") || (Left(loc.defaultValue,2) == "('" && Right(loc.defaultValue,2) == "')"))
 				loc.defaultValue = Mid(loc.defaultValue, 3, Len(loc.defaultValue)-4);
 			variables.wheels.class.properties[loc.property].defaultValue = loc.defaultValue;
+			
 			if (loc.columns["is_primarykey"][loc.i])
 			{
 				variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.property);
 			}
+			else
+			{
+				if (application.wheels.setDefaultValidations) {
+					// set nullable validations if the developer has not
+					if (!variables.wheels.class.properties[loc.property].nullable and !Len(variables.wheels.class.properties[loc.property].defaultValue) and !$validationExists(property=loc.property, validation="validatesPresenceOf"))
+						validatesPresenceOf(properties=loc.property);
+					
+					// set length validations if the developer has not
+					if (ListFindNoCase(variables.wheels.class.types["string"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesLengthOf"))
+						validatesLengthOf(properties=loc.property, allowBlank=variables.wheels.class.properties[loc.property].nullable, maximum=variables.wheels.class.properties[loc.property].size);
+					
+					// set numericality validations if the developer has not
+					if (ListFindNoCase(variables.wheels.class.types["numeric"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesNumericalityOf"))
+						validatesNumericalityOf(properties=loc.property, allowBlank=variables.wheels.class.properties[loc.property].nullable, onlyInteger=ListFindNoCase(variables.wheels.class.types["integer"], variables.wheels.class.properties[loc.property].type));
+				}
+			}
+			
 			variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, loc.property);
 			variables.wheels.class.columnList = ListAppend(variables.wheels.class.columnList, variables.wheels.class.properties[loc.property].column);
 		}
+		
 		if (!Len(variables.wheels.class.keys))
 			$throw(type="Wheels.NoPrimaryKey", message="No primary key exists on the `#variables.wheels.class.tableName#` table.", extendedInfo="Set an appropriate primary key on the `#variables.wheels.class.tableName#` table.");
 

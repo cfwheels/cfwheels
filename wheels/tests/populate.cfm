@@ -138,5 +138,5 @@ FROM tags
 </cfquery>
 <cfquery name="ins" datasource="wheelstestdb">
 INSERT INTO tags (name)
-VALUES ("releases")
+VALUES ('releases')
 </cfquery>
