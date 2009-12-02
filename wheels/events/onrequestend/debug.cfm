@@ -103,7 +103,7 @@
 		</tr>
 		<tr>
 			<td valign="top"><strong>Plugins:</strong></td>
-			<td><cfif StructCount(get("plugins")) IS NOT 0><cfset loc.count = 0><cfloop collection="#get('plugins')#" item="loc.i"><cfset loc.count = loc.count + 1><a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=plugins&name=#LCase(loc.i)#">#loc.i#</a><cfif StructCount(get("plugins")) GT loc.count><br /></cfif></cfloop><cfelse>None</cfif></td>
+			<td><cfif StructCount(get("plugins")) IS NOT 0><cfset loc.count = 0><cfloop collection="#get('plugins')#" item="loc.i"><cfset loc.count = loc.count + 1><a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=plugins&name=#LCase(loc.i)#">#loc.i#</a><cfif StructCount(get("plugins")) GT loc.count>, </cfif></cfloop><cfelse>None</cfif></td>
 		</tr>
 		<cfif StructKeyExists(request.wheels.params, "route")>
 			<tr>
@@ -136,7 +136,11 @@
 						<cfloop collection="#request.wheels.params[loc.i]#" item="loc.j">
 							#lCase(loc.i)#.#lCase(loc.j)# = #request.wheels.params[loc.i][loc.j]#<br />
 						</cfloop>
-					<cfelse>
+					<cfelseif IsArray(request.wheels.params[loc.i])>
+						<cfloop array="#request.wheels.params[loc.i]#" index="loc.x">
+							#lCase(loc.i)#[#lCase(loc.x)#].#LCase(loc.y)# = #request.wheels.params[loc.i][loc.x][loc.y]#<br />
+						</cfloop>
+					<cfelseif IsSimpleValue(request.wheels.params[loc.i])>
 						#lCase(loc.i)# = #request.wheels.params[loc.i]#<br />
 					</cfif>
 				</cfif>
