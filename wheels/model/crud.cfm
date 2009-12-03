@@ -140,7 +140,7 @@
 				loc.distinct = true;
 			else
 				loc.distinct = false;
-			if (arguments.count > 0)
+			if (arguments.count gt 0)
 				loc.totalRecords = arguments.count;
 			else
 				loc.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct);
@@ -158,7 +158,7 @@
 
 				// if the full range of records is not requested we correct the limit to get the exact amount instead
 				// for example if totalRecords is 57, limit is 10 and offset 50 (i.e. requesting records 51-60) we change the limit to 7
-				if ((loc.limit + loc.offset) > loc.totalRecords)
+				if ((loc.limit + loc.offset) gt loc.totalRecords)
 					loc.limit = loc.totalRecords - loc.offset;
 
 				if (loc.limit < 1)

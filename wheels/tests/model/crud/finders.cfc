@@ -31,6 +31,21 @@
 		<cfset assert('isobject(loc.e)')>
 	</cffunction>
 
+ 	<cffunction name="test_findOne_returns_false_when_record_not_found">
+		<cfset loc.e = loc.user.findOne(where="lastname = 'somenamenotfound'")>
+		<cfset assert('loc.e eq false')>
+	</cffunction>
+	
+	<cffunction name="test_findOne_returns_false_when_record_not_found_with_inner_join_include">
+		<cfset loc.e = loc.user.findOne(where="lastname= = 'somenamenotfound'", include="photogalleries") />
+		<cfset assert('loc.e eq false')>
+	</cffunction>
+	
+	<cffunction name="test_findOne_returns_false_when_record_not_found_with_outer_join_include">
+		<cfset loc.e = loc.user.findOne(where="lastname= = 'somenamenotfound'", include="outerjoinphotogalleries") />
+		<cfset assert('loc.e eq false')>
+	</cffunction>
+
  	<cffunction name="test_findAll">
 		<cfset loc.q = loc.user.findAll()>
 		<cfset assert('loc.q.recordcount eq 5')>
