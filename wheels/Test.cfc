@@ -573,7 +573,6 @@
 				<cfset loc.testname = listprepend(loc.testname, loc.test_path, ".")>
 				<cfset loc.testname = listappend(loc.testname, listfirst(name, "."), ".")>
 				<!--- ignore invalid tests and test that begin with underscores --->
-				<cfdump var="#loc.testname#">
 				<cfif left(name, 1) neq "_" and $isValidTest(loc.testname)>
 					<cfset loc.instance = createObject("component", loc.testname)>
 					<cfset loc.instance.$runTest(loc.resultKey, loc.test)>
