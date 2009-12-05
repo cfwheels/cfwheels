@@ -18,7 +18,7 @@
 		<cfset loc.author = model("author").findOne()>
 		<cfset loc.author.firstName = "a">
 		<cfset loc.author.lastName = "b">
-		<cfset loc.result = loc.author.changedProperties()>
+		<cfset loc.result = listSort(loc.author.changedProperties(), "textnocase")>
 		<cfset assert("loc.result IS 'firstName,lastName'")>
 	</cffunction>
 
@@ -98,7 +98,7 @@
 		<cfset loc.result = loc.author.changedFrom(property="lastName")>
 		<cfset assert("loc.result IS 'Djurner'")>
 	</cffunction>
- 
+
 	<cffunction name="test_XXXChangedFrom">
 		<cfset loc.author = model("author").findOne(where="lastName = 'Djurner'")>
 		<cfset loc.author.lastName = "Petruzzi">

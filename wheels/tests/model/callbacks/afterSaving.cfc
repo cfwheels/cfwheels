@@ -13,7 +13,7 @@
 		<cfset loc.obj.name = "somethingElse">
 		<cftransaction>
 			<cfset loc.obj.save()>
-			<cftransaction action="rollback">
+			<cftransaction action="rollback"/>
 		</cftransaction>
 		<cfset model("tag").$clearCallbacks(type="afterValidation")>
 		<cfset model("tag").$clearCallbacks(type="afterValidationOnCreate")>
