@@ -45,7 +45,7 @@
 	<cffunction name="test_with_spamProtection">
 		<cfset loc.args.spamProtection = "true">
 		<cfset loc.args.action = "myaction">
-		<cfset loc.argsction = loc.controller.urlfor(argumentCollection=loc.args)>
+		<cfset loc.argsction = Replace(loc.controller.urlfor(argumentCollection=loc.args), "&", "&amp;", "all")>
 		<cfset loc.e = '<form method="post" onsubmit="this.action=''#Left(loc.argsction, int((Len(loc.argsction)/2)))#''+''#Right(loc.argsction, ceiling((Len(loc.argsction)/2)))#'';">'>
 		<cfset loc.r = loc.controller.startFormTag(argumentcollection=loc.args)>
 		<cfset assert("loc.e eq loc.r")>
@@ -53,7 +53,7 @@
 
 	<cffunction name="test_with_home_route">
 		<cfset loc.args.route = "home">
-		<cfset loc.argsction = loc.controller.urlfor(argumentCollection=loc.args)>
+		<cfset loc.argsction = Replace(loc.controller.urlfor(argumentCollection=loc.args), "&", "&amp;", "all")>
 		<cfset loc.e = '<form action="#loc.argsction#" method="post">'>
 		<cfset loc.r = loc.controller.startFormTag(argumentcollection=loc.args)>
 		<cfset assert("loc.e eq loc.r")>
