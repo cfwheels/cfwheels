@@ -69,7 +69,7 @@
 	<cfreturn request.wheels[arguments.handle]>
 </cffunction>
 
-<cffunction name="sendEmail" returntype="void" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in."
+<cffunction name="sendEmail" returntype="void" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in. Besides the Wheels specific arguments you can also pass in any argument that is accepted by the `cfmail` tag."
 	examples=
 	'
 		<!--- Get a member and send a welcome email passing in a few custom variables to the template --->
