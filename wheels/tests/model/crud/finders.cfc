@@ -26,6 +26,16 @@
 		<cfset assert('loc.q.id eq loc.e.id')>
 	</cffunction>
 
+ 	<cffunction name="test_findByKey_returns_false_when_record_not_found">
+		<cfset loc.q = loc.user.findByKey(999999999)>
+		<cfset assert('loc.q eq false')>
+	</cffunction>
+
+ 	<cffunction name="test_findByKey_returns_empty_query_when_record_not_found_with_return_as_equal_query">
+		<cfset loc.q = loc.user.findByKey(key=999999999, returnAs="query")>
+		<cfset assert('loc.q.RecordCount eq false')>
+	</cffunction>
+
  	<cffunction name="test_findOne">
 		<cfset loc.e = loc.user.findOne(where="lastname = 'petruzzi'")>
 		<cfset assert('isobject(loc.e)')>
@@ -34,6 +44,11 @@
  	<cffunction name="test_findOne_returns_false_when_record_not_found">
 		<cfset loc.e = loc.user.findOne(where="lastname = 'somenamenotfound'")>
 		<cfset assert('loc.e eq false')>
+	</cffunction>
+
+ 	<cffunction name="test_findOne_returns_empty_query_when_record_not_found_with_return_as_equal_query">
+		<cfset loc.e = loc.user.findOne(where="lastname = 'somenamenotfound'", returnAs="query")>
+		<cfset assert('loc.e.RecordCount eq false')>
 	</cffunction>
 	
 	<cffunction name="test_findOne_returns_false_when_record_not_found_with_inner_join_include">

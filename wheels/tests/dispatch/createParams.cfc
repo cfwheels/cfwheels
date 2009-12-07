@@ -61,4 +61,27 @@
 		</cfloop>
 	</cffunction>
 
+	<cffunction name="test_form_scope_not_overwritten">
+		<cfset loc.args.formScope["obj[published]($month)"] = 2>
+		<cfset loc.params = loc.dispatch.$createParams(argumentCollection=loc.args)>
+		<cfset loc.exists = StructKeyExists(loc.args.formScope, "obj[published]($month)") />
+		<cfset assert('loc.exists eq true')>
+	</cffunction>
+
+	<cffunction name="test_url_scope_not_overwritten">
+		<cfset StructInsert(loc.args.urlScope, "user[email]", "tpetruzzi@gmail.com", true)>
+		<cfset loc.params = loc.dispatch.$createParams(argumentCollection=loc.args)>
+		<cfset loc.exists = StructKeyExists(loc.args.urlScope, "user[email]") />
+		<cfset assert('loc.exists eq true')>
+	</cffunction>
+
+	<cffunction name="test_multiple_objects_with_checkbox">
+		<cfset StructInsert(loc.args.urlScope, "user[1][isActive]($checkbox)", "0", true)>
+		<cfset StructInsert(loc.args.urlScope, "user[1][isActive]", "1", true)>
+		<cfset StructInsert(loc.args.urlScope, "user[2][isActive]($checkbox)", "0", true)>
+		<cfset loc.params = loc.dispatch.$createParams(argumentCollection=loc.args)>
+		<cfset assert('loc.params.user["1"].isActive eq 1') />
+		<cfset assert('loc.params.user["2"].isActive eq 0') />
+	</cffunction>
+
 </cfcomponent>

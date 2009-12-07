@@ -59,7 +59,7 @@
 
 		// combine the form and url scopes into one scope.
 		// url variables take precedence.
-		loc.returnValue = arguments.formScope;
+		loc.returnValue = Duplicate(arguments.formScope);
 		StructDelete(loc.returnValue, "fieldnames", false);
 		StructAppend(loc.returnValue, arguments.urlScope, true);
 
