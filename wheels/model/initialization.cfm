@@ -35,7 +35,7 @@
 			init();
 
 		// load the database adapter
-		variables.wheels.class.adapter = createobject("component", "wheelsMapping.connection").init(argumentCollection=variables.wheels.class.connection);
+		variables.wheels.class.adapter = createobject("component", "wheelsMapping.Connection").init(argumentCollection=variables.wheels.class.connection);
 
 		// set the table name unless set manually by the developer
 		if (!StructKeyExists(variables.wheels.class, "tableName"))
