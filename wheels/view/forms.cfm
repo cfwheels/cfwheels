@@ -165,11 +165,9 @@
 		if (not IsObject(loc.object))
 			return;
 			
-		if (StructKeyExists(loc.object, arguments.property)) {
-			loc.propertyInfo = loc.object.$propertyInfo(arguments.property);
-			if (ListFindNoCase("cf_sql_char,cf_sql_varchar", loc.propertyInfo.type))
-				return loc.propertyInfo.size;
-		}
+		loc.propertyInfo = loc.object.$propertyInfo(arguments.property);	
+		if (StructCount(loc.propertyInfo) and ListFindNoCase("cf_sql_char,cf_sql_varchar", loc.propertyInfo.type))
+			return loc.propertyInfo.size;
 	</cfscript>
 	<cfreturn />
 </cffunction>
