@@ -89,7 +89,7 @@ go
 -- Posts
 CREATE TABLE [dbo].[Posts](
 	[id] [int] IDENTITY(1,1) NOT NULL,
-	[authorid] [int] NOT NULL,
+	[authorid] [int] NULL,
 	[title] [varchar](250) NOT NULL,
 	[body] [text] NOT NULL,
 	[createdat] [datetime] NOT NULL,
@@ -146,7 +146,7 @@ go
 -- Profiles
 CREATE TABLE [dbo].[Profiles](
 	[id] [int] IDENTITY(1,1) NOT NULL,
-	[authorid] [int] NOT NULL,
+	[authorid] [int] NULL,
 	[dateofbirth] [datetime] NOT NULL,
 	[bio] [text] NULL,
  CONSTRAINT [PK_profiles] PRIMARY KEY CLUSTERED 

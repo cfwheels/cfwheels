@@ -1,7 +1,7 @@
 <cfinclude template="/wheelsMapping/global/functions.cfm">
 
 <!--- reset all tables --->
-<cfloop list="user,photogallery,photogalleryphoto,author,post,city,shop" index="loc.i">
+<cfloop list="user,photogallery,photogalleryphoto,author,post,city,shop,profile" index="loc.i">
 	<cfset model(loc.i).deleteAll(instantiate=false)>
 </cfloop>
 
@@ -87,6 +87,7 @@
 )>
 
 <cfset loc.per = model("author").create(firstName="Per", lastName="Djurner")>
+<cfset loc.per.createProfile(dateOfBirth="20/02/1975", bio="ColdFusion Developer")>
 <cfset loc.per.createPost(title="Title for first test post", body="Text for first test post", views=5)>
 <cfset loc.per.createPost(title="Title for second test post", body="Text for second test post", views=5, averageRating="3.6")>
 <cfset loc.per.createPost(title="Title for third test post", body="Text for third test post", averageRating="3.2")>

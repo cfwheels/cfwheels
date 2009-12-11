@@ -58,162 +58,211 @@
 		}
 		else
 		{
-			for (loc.key in variables.wheels.class.associations)
-			{
-				loc.method = "";
-				if (StructKeyExists(variables.wheels.class.associations[loc.key], "shortcut") && arguments.missingMethodName == variables.wheels.class.associations[loc.key].shortcut)
-				{
-					loc.method = "findAll";
-					loc.joinAssociation = $expandedAssociations(include=loc.key);
-					loc.joinAssociation = loc.joinAssociation[1];
-					loc.joinClass = loc.joinAssociation.modelName;
-					loc.info = model(loc.joinClass).$expandedAssociations(include=ListFirst(variables.wheels.class.associations[loc.key].through));
-					loc.info = loc.info[1];
-					loc.include = ListLast(variables.wheels.class.associations[loc.key].through);
-					if (StructKeyExists(arguments.missingMethodArguments, "include"))
-						loc.include = "#loc.include#(#arguments.missingMethodArguments.include#)";
-					arguments.missingMethodArguments.include = loc.include;
-					loc.where = $keyWhereString(properties=loc.joinAssociation.foreignKey, keys=variables.wheels.class.keys);
-					if (StructKeyExists(arguments.missingMethodArguments, "where"))
-						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
-					arguments.missingMethodArguments.where = loc.where;
-					if (!StructKeyExists(arguments.missingMethodArguments, "returnIncluded"))
-						arguments.missingMethodArguments.returnIncluded = false;
-				}
-				else if (ListFindNoCase(variables.wheels.class.associations[loc.key].methods, arguments.missingMethodName))
-				{
-					loc.info = $expandedAssociations(include=loc.key);
-					loc.info = loc.info[1];
-					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=variables.wheels.class.keys);
-					if (StructKeyExists(arguments.missingMethodArguments, "where"))
-						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
-					if (loc.info.type == "hasOne")
-					{
-						loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasProfile" becomes "hasObject")
-						if (loc.name == "object")
-						{
-							loc.method = "findOne";
-							arguments.missingMethodArguments.where = loc.where;
-						}
-						else if (loc.name == "hasObject")
-						{
-							loc.method = "exists";
-							arguments.missingMethodArguments.where = loc.where;
-						}
-						else if (loc.name == "newObject")
-						{
-							loc.method = "new";
-							$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
-						}
-						else if (loc.name == "createObject")
-						{
-							loc.method = "create";
-							$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
-						}
-						else if (loc.name == "removeObject")
-						{
-							loc.method = "updateOne";
-							arguments.missingMethodArguments.where = loc.where;
-							$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey, setToNull=true);
-						}
-						else if (loc.name == "deleteObject")
-						{
-							loc.method = "deleteOne";
-							arguments.missingMethodArguments.where = loc.where;
-						}
-						else if (loc.name == "setObject")
-						{
-							loc.method = "updateByKey";
-							$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
-							$setObjectOrNumberToKey(arguments.missingMethodArguments);
-						}
-					}
-					else if (loc.info.type == "hasMany")
-					{
-						loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, loc.key, "objects"), singularize(loc.key), "object"); // create a generic method name (example: "hasComments" becomes "hasObjects")
-						if (loc.name == "objects")
-						{
-							loc.method = "findAll";
-							arguments.missingMethodArguments.where = loc.where;
-						}
-						else if (loc.name == "addObject")
-						{
-							loc.method = "updateByKey";
-							$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
-							$setObjectOrNumberToKey(arguments.missingMethodArguments);
-						}
-						else if (loc.name == "removeObject")
-						{
-							loc.method = "updateByKey";
-							$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey, setToNull=true);
-							$setObjectOrNumberToKey(arguments.missingMethodArguments);
-						}
-						else if (loc.name == "deleteObject")
-						{
-							loc.method = "deleteByKey";
-							$setObjectOrNumberToKey(arguments.missingMethodArguments);
-						}
-						else if (loc.name == "hasObjects")
-						{
-							loc.method = "exists";
-							arguments.missingMethodArguments.where = loc.where;
-						}
-						else if (loc.name == "newObject")
-						{
-							loc.method = "new";
-							$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
-						}
-						else if (loc.name == "createObject")
-						{
-							loc.method = "create";
-							$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
-						}
-						else if (loc.name == "objectCount")
-						{
-							loc.method = "count";
-							arguments.missingMethodArguments.where = loc.where;
-						}
-						else if (loc.name == "findOneObject")
-						{
-							loc.method = "findOne";
-							arguments.missingMethodArguments.where = loc.where;
-						}
-						else if (loc.name == "removeAllObjects")
-						{
-							loc.method = "updateAll";
-							arguments.missingMethodArguments.where = loc.where;
-							$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey, setToNull=true);
-						}
-						else if (loc.name == "deleteAllObjects")
-						{
-							loc.method = "deleteAll";
-							arguments.missingMethodArguments.where = loc.where;
-						}
-					}
-					else if (loc.info.type == "belongsTo")
-					{
-						loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasAuthor" becomes "hasObject")
-						if (loc.name == "object")
-						{
-							loc.method = "findByKey";
-							arguments.missingMethodArguments.key = $propertyValue(name=loc.info.foreignKey);
-						}
-						else if (loc.name == "hasObject")
-						{
-							loc.method = "exists";
-							arguments.missingMethodArguments.key = $propertyValue(name=loc.info.foreignKey);
-						}
-					}
-				}
-				if (Len(loc.method))
-					loc.returnValue = $invoke(componentReference=model(loc.info.modelName), method=loc.method, argumentCollection=arguments.missingMethodArguments);
-			}
+			loc.returnValue = $associationMethod(argumentCollection=arguments);
 		}
 		if (!StructKeyExists(loc, "returnValue"))
 			$throw(type="Wheels.MethodNotFound", message="The method `#arguments.missingMethodName#` was not found in this model.", extendedInfo="Check your spelling or add the method to the model's CFC file.");
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
+
+<cffunction name="$associationMethod" returntype="any" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		for (loc.key in variables.wheels.class.associations)
+		{
+			loc.method = "";
+			if (StructKeyExists(variables.wheels.class.associations[loc.key], "shortcut") && arguments.missingMethodName == variables.wheels.class.associations[loc.key].shortcut)
+			{
+				loc.method = "findAll";
+				loc.joinAssociation = $expandedAssociations(include=loc.key);
+				loc.joinAssociation = loc.joinAssociation[1];
+				loc.joinClass = loc.joinAssociation.modelName;
+				loc.info = model(loc.joinClass).$expandedAssociations(include=ListFirst(variables.wheels.class.associations[loc.key].through));
+				loc.info = loc.info[1];
+				loc.include = ListLast(variables.wheels.class.associations[loc.key].through);
+				if (StructKeyExists(arguments.missingMethodArguments, "include"))
+					loc.include = "#loc.include#(#arguments.missingMethodArguments.include#)";
+				arguments.missingMethodArguments.include = loc.include;
+				loc.where = $keyWhereString(properties=loc.joinAssociation.foreignKey, keys=variables.wheels.class.keys);
+				if (StructKeyExists(arguments.missingMethodArguments, "where"))
+					loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
+				arguments.missingMethodArguments.where = loc.where;
+				if (!StructKeyExists(arguments.missingMethodArguments, "returnIncluded"))
+					arguments.missingMethodArguments.returnIncluded = false;
+			}
+			else if (ListFindNoCase(variables.wheels.class.associations[loc.key].methods, arguments.missingMethodName))
+			{
+				loc.info = $expandedAssociations(include=loc.key);
+				loc.info = loc.info[1];
+				loc.componentReference = model(loc.info.modelName);
+				loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=variables.wheels.class.keys);
+				if (StructKeyExists(arguments.missingMethodArguments, "where"))
+					loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
+				if (loc.info.type == "hasOne")
+				{
+					loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasProfile" becomes "hasObject")
+					if (loc.name == "object")
+					{
+						loc.method = "findOne";
+						arguments.missingMethodArguments.where = loc.where;
+					}
+					else if (loc.name == "hasObject")
+					{
+						loc.method = "exists";
+						arguments.missingMethodArguments.where = loc.where;
+					}
+					else if (loc.name == "newObject")
+					{
+						loc.method = "new";
+						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
+					}
+					else if (loc.name == "createObject")
+					{
+						loc.method = "create";
+						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
+					}
+					else if (loc.name == "removeObject")
+					{
+						loc.method = "updateOne";
+						arguments.missingMethodArguments.where = loc.where;
+						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey, setToNull=true);
+					}
+					else if (loc.name == "deleteObject")
+					{
+						loc.method = "deleteOne";
+						arguments.missingMethodArguments.where = loc.where;
+					}
+					else if (loc.name == "setObject")
+					{
+						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
+						if (IsObject(arguments.missingMethodArguments[1]))
+						{
+							loc.componentReference = arguments.missingMethodArguments[1];
+							loc.method = "update";
+							StructDelete(arguments.missingMethodArguments, "1");
+						}
+						else
+						{
+							loc.method = "updateByKey";
+							$setObjectOrNumberToKey(arguments.missingMethodArguments);
+						}
+					}
+				}
+				else if (loc.info.type == "hasMany")
+				{
+					loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, loc.key, "objects"), singularize(loc.key), "object"); // create a generic method name (example: "hasComments" becomes "hasObjects")
+					if (loc.name == "objects")
+					{
+						loc.method = "findAll";
+						arguments.missingMethodArguments.where = loc.where;
+					}
+					else if (loc.name == "addObject")
+					{
+						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
+						if (IsObject(arguments.missingMethodArguments[1]))
+						{
+							loc.componentReference = arguments.missingMethodArguments[1];
+							loc.method = "update";
+							StructDelete(arguments.missingMethodArguments, "1");
+						}
+						else
+						{
+							loc.method = "updateByKey";
+							$setObjectOrNumberToKey(arguments.missingMethodArguments);
+						}
+					}
+					else if (loc.name == "removeObject")
+					{
+						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey, setToNull=true);
+						if (IsObject(arguments.missingMethodArguments[1]))
+						{
+							loc.componentReference = arguments.missingMethodArguments[1];
+							loc.method = "update";
+							StructDelete(arguments.missingMethodArguments, "1");
+						}
+						else
+						{
+							loc.method = "updateByKey";
+							$setObjectOrNumberToKey(arguments.missingMethodArguments);
+						}
+					}
+					else if (loc.name == "deleteObject")
+					{
+						if (IsObject(arguments.missingMethodArguments[1]))
+						{
+							loc.componentReference = arguments.missingMethodArguments[1];
+							loc.method = "delete";
+							StructDelete(arguments.missingMethodArguments, "1");
+						}
+						else
+						{
+							loc.method = "deleteByKey";
+							$setObjectOrNumberToKey(arguments.missingMethodArguments);
+						}
+					}
+					else if (loc.name == "hasObjects")
+					{
+						loc.method = "exists";
+						arguments.missingMethodArguments.where = loc.where;
+					}
+					else if (loc.name == "newObject")
+					{
+						loc.method = "new";
+						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
+					}
+					else if (loc.name == "createObject")
+					{
+						loc.method = "create";
+						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
+					}
+					else if (loc.name == "objectCount")
+					{
+						loc.method = "count";
+						arguments.missingMethodArguments.where = loc.where;
+					}
+					else if (loc.name == "findOneObject")
+					{
+						loc.method = "findOne";
+						arguments.missingMethodArguments.where = loc.where;
+					}
+					else if (loc.name == "removeAllObjects")
+					{
+						loc.method = "updateAll";
+						arguments.missingMethodArguments.where = loc.where;
+						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey, setToNull=true);
+					}
+					else if (loc.name == "deleteAllObjects")
+					{
+						loc.method = "deleteAll";
+						arguments.missingMethodArguments.where = loc.where;
+					}
+				}
+				else if (loc.info.type == "belongsTo")
+				{
+					loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasAuthor" becomes "hasObject")
+					if (loc.name == "object")
+					{
+						loc.method = "findByKey";
+						arguments.missingMethodArguments.key = $propertyValue(name=loc.info.foreignKey);
+					}
+					else if (loc.name == "hasObject")
+					{
+						loc.method = "exists";
+						arguments.missingMethodArguments.key = $propertyValue(name=loc.info.foreignKey);
+					}
+				}
+			}
+			if (Len(loc.method))
+				loc.returnValue = $invoke(componentReference=loc.componentReference, method=loc.method, argumentCollection=arguments.missingMethodArguments);
+		}
+	</cfscript>
+	<cfif StructKeyExists(loc, "returnValue")>
+		<cfreturn loc.returnValue>
+	</cfif>
+</cffunction>
+
+
 
 <cffunction name="$propertyValue" returntype="string" access="public" output="false" hint="Returns the object's value of the passed in property name. If you pass in a list of property names you will get the values back in a list as well.">
 	<cfargument name="name" type="string" required="true" hint="Name of property to get value for.">

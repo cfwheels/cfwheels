@@ -2,6 +2,7 @@
 
 	<cffunction name="init">
 		<cfset hasMany("posts")>
+		<cfset hasOne("profile")>
 		<cfset beforeSave("callbackThatReturnsTrue")>
 		<cfset beforeDelete("callbackThatReturnsTrue")>
 	</cffunction>

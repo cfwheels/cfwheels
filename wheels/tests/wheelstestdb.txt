@@ -19,7 +19,7 @@ createdat (datetime, not null)
 
 POSTS
 id (int, identity, not null, primary key)
-authorid (int, not null)
+authorid (int)
 title (varchar(250), not null)
 body (text, not null)
 views (int, not null, 0)
@@ -29,7 +29,7 @@ updatedat (datetime)
 
 PROFILES
 id (int, identity, not null, primary key)
-authorid (int, not null)
+authorid (int)
 dateofbirth (datetime, not null)
 bio (text)
 
