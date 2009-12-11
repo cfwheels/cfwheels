@@ -239,7 +239,7 @@
 
 <cffunction name="$hashStruct" returntype="string" access="public" output="false">
 	<cfargument name="args" type="struct" required="true">
-	<cfreturn Hash(SerializeJSON(arguments.args))>
+	<cfreturn Hash(ListSort(ReplaceList(SerializeJSON(arguments.args), "{,}", ","), "text", "asc", ","))>
 </cffunction>
 
 <cffunction name="$addToCache" returntype="void" access="public" output="false">
