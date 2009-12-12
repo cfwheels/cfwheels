@@ -25,8 +25,9 @@
 		{
 			loc.item = ListGetAt(arguments.sources, loc.i);
 			arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & Trim(loc.item);
-			if (ListLast(loc.item, ".") != "css")
+			if (ListLast(loc.item, ".") != "css") 
 				arguments.href = arguments.href & ".css";
+			arguments.href = arguments.href & $appendQueryString();
 			loc.returnValue = loc.returnValue & $tag(name="link", skip="source,sources,head", close=true, attributes=arguments);
 		}
 		if (arguments.head)
@@ -65,6 +66,7 @@
 			arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & Trim(loc.item);
 			if (ListLast(loc.item, ".") != "js")
 				arguments.src = arguments.src & ".js";
+			arguments.src = arguments.src & $appendQueryString();
 			loc.returnValue = loc.returnValue & $element(name="script", skip="source,sources,head", attributes=arguments);
 		}
 		if (arguments.head)
@@ -151,10 +153,27 @@
 					arguments.height = loc.image.height;
 				}
 			}
+			// only append a query string if the file is local
+			arguments.src = arguments.src & $appendQueryString();
 		}
 		if (!StructKeyExists(arguments, "alt"))
 			arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
 		loc.returnValue = $tag(name="img", skip="source,key,category", close=true, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$appendQueryString" returntype="string" access="public" output="false">
+	<cfscript>
+		var returnValue = "";
+		// if assetQueryString is a boolean value, it means we just reloaded, so create a new query string based off of now
+		// the only problem with this is if the app doesn't get used a lot and the application is left alone for a period longer than the application scope is allowed to exist
+		if (IsBoolean(application.wheels.assetQueryString) and YesNoFormat(application.wheels.assetQueryString) == "no")
+			return returnValue;
+		
+		if (!IsNumeric(application.wheels.assetQueryString) and IsBoolean(application.wheels.assetQueryString))
+			application.wheels.assetQueryString = DateFormat(Now(), "yyyymmdd") & TimeFormat(Now(), "HHmmss");
+		returnValue = returnValue & "?" & application.wheels.assetQueryString;
+	</cfscript>
+	<cfreturn returnValue />
 </cffunction>

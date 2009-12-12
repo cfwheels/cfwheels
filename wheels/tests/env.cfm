@@ -9,3 +9,4 @@
 
 <!--- turn off default validations for testing --->
 <cfset application.wheels.setDefaultValidations = false />
+<cfset application.wheels.assetQueryString = false />

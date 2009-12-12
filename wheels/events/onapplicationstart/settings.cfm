@@ -30,6 +30,7 @@
 	application.wheels.showErrorInformation = true;
 	application.wheels.sendEmailOnError = false;
 	application.wheels.errorEmailAddress = "";
+	application.wheels.assetQueryString = false;
 
 	// override settings for specific environments
 	if (application.wheels.environment != "design")
@@ -48,6 +49,7 @@
 		application.wheels.cachePartials = true;
 		application.wheels.cacheQueries = true;
 		application.wheels.showDebugInformation = false;
+		application.wheels.assetQueryString = true;
 	}
 	if (application.wheels.environment == "production")
 	{
