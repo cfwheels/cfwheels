@@ -5,7 +5,7 @@
 <cfif !isStruct(testresults)>
 	<cfoutput><p>No tests found.</p></cfoutput>
 <cfelse>
-<cfset linkParams = "view=tests&type=#params.type#">
+<cfset linkParams = "?controller=wheels&action=wheels&view=tests&type=#params.type#">
 <style type="text/css">
 #content a {text-decoration:none; font-weight:bold;}
 .failed {color:red;font-weight:bold}
@@ -15,7 +15,7 @@ table.testing td, table.testing th {padding:2px 20px 2px 2px;text-align:left;ver
 table.testing td.n {text-align:right;}
 </style>
 <cfoutput>
-<p>#linkTo(params=linkParams, text="Run All Tests")#</p>
+<p><a href="#linkParams#">Run All Tests</a> | <a href="#linkParams#&reload=true">Reload Test Data</a></p>
 <table class="testing">
 	<tr><th class="<cfif testresults.ok>success<cfelse>failed</cfif>">Status</th><td class="numeric<cfif testresults.ok> success<cfelse> failed</cfif>"><cfif testresults.ok>Passed<cfelse>Failed</cfif></td></tr>
 	<tr><th>Path</th><td class="n">#listChangeDelims(testresults.path, "/", ".")#</td></tr>
@@ -33,7 +33,7 @@ table.testing td.n {text-align:right;}
 			<cfset a = ListToArray(testresults.summary[testIndex].packageName, ".")>
 			<cfset b = createObject("java", "java.util.ArrayList").Init(a)>
 			<cfset c = arraylen(a)>
-			<cfloop from="1" to="#c#" index="i">#linkTo(params=linkParams & "&package=#ArrayToList(b.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#", text="#a[i]#")#<cfif i neq c>.</cfif></cfloop>
+			<cfloop from="1" to="#c#" index="i"><a href="#linkParams#&package=#ArrayToList(b.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#">#a[i]#</a><cfif i neq c>.</cfif></cfloop>
 		</td>
 		<td class="n">#testresults.summary[testIndex].numTests#</td>
 		<td class="n<cfif testresults.summary[testIndex].numFailures neq 0> failed</cfif>">#testresults.summary[testIndex].numFailures#</td>
@@ -45,8 +45,8 @@ table.testing td.n {text-align:right;}
 <tr><th>Package</th><th>Test Name</th><th>Time</th><th>Status</th></tr>
 <cfloop from="1" to="#arrayLen(testresults.results)#" index="testIndex">
 	<tr>
-		<td>#linkTo(params=linkParams & "&package=#testresults.results[testIndex].packageName#", text="#testresults.results[testIndex].cleanTestCase#")#</td>
-		<td>#linkTo(params=linkParams & "&package=#testresults.results[testIndex].packageName#&test=#testresults.results[testIndex].testName#", text="#testresults.results[testIndex].cleanTestName#")#</td>
+		<td><a href="#linkParams#&package=#testresults.results[testIndex].packageName#">#testresults.results[testIndex].cleanTestCase#</a></td>
+		<td><a href="#linkParams#&package=#testresults.results[testIndex].packageName#&test=#testresults.results[testIndex].testName#">#testresults.results[testIndex].cleanTestName#</a></td>
 		<td class="n">#testresults.results[testIndex].time#</td>
 		<td class="<cfif testresults.results[testIndex].status eq 'Success'>success<cfelse>failed</cfif>">#testresults.results[testIndex].status#</td>
 	</tr>
