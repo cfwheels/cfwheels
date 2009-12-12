@@ -501,15 +501,15 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = false;
-		
+
 		for (loc.when in variables.wheels.class.validations) {
-		
+
 			if (StructKeyExists(variables.wheels.class.validations, loc.when)) {
-			
+
 				loc.eventArray = variables.wheels.class.validations[loc.when];
 				loc.iEnd = ArrayLen(loc.eventArray);
 				for (loc.i = 1; loc.i lte loc.iEnd; loc.i++) {
-				
+
 					if (loc.eventArray[loc.i].args.property == arguments.property and loc.eventArray[loc.i].method == "$#arguments.validation#") {
 						loc.returnValue = true;
 						break;
@@ -519,4 +519,9 @@
 		}
 	</cfscript>
 	<cfreturn loc.returnValue />
+</cffunction>
+
+<cffunction name="setDefaultValidations" returntype="void" access="public" output="false" hint="whether to turn default validations on or off for this model.">
+	<cfargument name="value" type="boolean" required="true">
+	<cfset variables.wheels.class.setDefaultValidations = arguments.value>
 </cffunction>

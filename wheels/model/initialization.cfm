@@ -14,6 +14,7 @@
 		variables.wheels.class.associations = {};
 		variables.wheels.class.callbacks = {};
 		variables.wheels.class.connection = {datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword};
+		variables.wheels.class.setDefaultValidations = application.wheels.setDefaultValidations;
 
 		// set some type settings to help in the model since everything is translated to coldfusion types
 		variables.wheels.class.types = {};
@@ -87,7 +88,7 @@
 			}
 			else
 			{
-				if (application.wheels.setDefaultValidations) {
+				if (variables.wheels.class.setDefaultValidations) {
 					// set nullable validations if the developer has not
 					if (!variables.wheels.class.properties[loc.property].nullable and !Len(variables.wheels.class.properties[loc.property].defaultValue) and !$validationExists(property=loc.property, validation="validatesPresenceOf"))
 						validatesPresenceOf(properties=loc.property);
