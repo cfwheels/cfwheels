@@ -1,11 +1,27 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
+<cffunction name="isSecure" returntype="boolean" access="public" output="false" hint="Returns whether wheels is communicating over a secure port."
+	examples=
+	'
+		<cfset requestIsSecure = isSecure()>
+	'
+	categories="controller-request,miscellaneous" chapters="" functions="isGet,isPost,isAjax">
+	<cfscript>
+		var returnValue = "";
+		if (request.cgi.server_port_secure == true)
+			returnValue = true;
+		else
+			returnValue = false;
+	</cfscript>
+	<cfreturn returnValue>
+</cffunction>
+
 <cffunction name="isAjax" returntype="boolean" access="public" output="false" hint="Returns whether the page was called from JavaScript or not."
 	examples=
 	'
 		<cfset requestIsAjax = isAjax()>
 	'
-	categories="controller-request,miscellaneous" chapters="" functions="isGet,isPost">
+	categories="controller-request,miscellaneous" chapters="" functions="isGet,isPost,isSecure">
 	<cfscript>
 		var returnValue = "";
 		if (request.cgi.http_x_requested_with == "XMLHTTPRequest")
@@ -21,7 +37,7 @@
 	'
 		<cfset requestIsGet = isGet()>
 	'
-	categories="controller-request,miscellaneous" chapters="" functions="isAjax,isPost">
+	categories="controller-request,miscellaneous" chapters="" functions="isAjax,isPost,isSecure">
 	<cfscript>
 		var returnValue = "";
 		if (request.cgi.request_method == "get")
@@ -37,7 +53,7 @@
 	'
 		<cfset requestIsPost = isPost()>
 	'
-	categories="controller-request,miscellaneous" chapters="" functions="isAjax,isGet">
+	categories="controller-request,miscellaneous" chapters="" functions="isAjax,isGet,isSecure">
 	<cfscript>
 		var returnValue = "";
 		if (request.cgi.request_method == "post")

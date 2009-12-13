@@ -27,7 +27,7 @@
 			arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & Trim(loc.item);
 			if (ListLast(loc.item, ".") != "css") 
 				arguments.href = arguments.href & ".css";
-			arguments.href = arguments.href & $appendQueryString();
+			arguments.href = $assetDomain(arguments.href) & $appendQueryString();
 			loc.returnValue = loc.returnValue & $tag(name="link", skip="source,sources,head", close=true, attributes=arguments);
 		}
 		if (arguments.head)
@@ -66,7 +66,7 @@
 			arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & Trim(loc.item);
 			if (ListLast(loc.item, ".") != "js")
 				arguments.src = arguments.src & ".js";
-			arguments.src = arguments.src & $appendQueryString();
+			arguments.src = $assetDomain(arguments.src) & $appendQueryString();
 			loc.returnValue = loc.returnValue & $element(name="script", skip="source,sources,head", attributes=arguments);
 		}
 		if (arguments.head)
@@ -154,7 +154,7 @@
 				}
 			}
 			// only append a query string if the file is local
-			arguments.src = arguments.src & $appendQueryString();
+			arguments.src = $assetDomain(arguments.src) & $appendQueryString();
 		}
 		if (!StructKeyExists(arguments, "alt"))
 			arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
@@ -176,4 +176,55 @@
 		returnValue = returnValue & "?" & application.wheels.assetQueryString;
 	</cfscript>
 	<cfreturn returnValue />
+</cffunction>
+
+<cffunction name="$assetDomain" returntype="string" access="public" output="false">
+	<cfargument name="pathToAsset" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = arguments.pathToAsset;
+		if (application.wheels.showErrorInformation)
+		{
+			if (!IsStruct(application.wheels.assetPaths) && !IsBoolean(application.wheels.assetPaths))
+				$throw(type="Wheels.IncorrectConfiguration", message="The setting `assetsPaths` must be false or a struct.");
+			if (IsStruct(application.wheels.assetPaths) && !ListFindNoCase(StructKeyList(application.wheels.assetPaths), "http"))
+				$throw(type="Wheels.IncorrectConfiguration", message="The `assetPaths` setting struct must contain the key `http`");
+		}
+		
+		// return nothing if assetPaths is not a struct
+		if (!IsStruct(application.wheels.assetPaths))
+			return loc.returnValue;
+		
+		loc.protocol = "http://";
+		loc.domainList = application.wheels.assetPaths.http;
+		
+		if (isSecure()) 
+		{
+			loc.protocol = "https://";
+			if (StructKeyExists(application.wheels.assetPaths, "https"))
+				loc.domainList = application.wheels.assetPaths.https;	
+		}
+			
+		loc.domainLen = ListLen(loc.domainList);
+		
+		if (loc.domainLen gt 1) 
+		{
+			// now comes the interesting part, lets take the pathToAsset argument, hash it and create a number from it
+			// so that we can do mod based off the length of the domain list
+			// this is an easy way to apply the same sub-domain to each asset, so we do not create more work for the server
+			// at the same time we are getting a very random hash value to rotate the domains over the assets evenly 
+			loc.pathNumber = Right(REReplace(Hash(arguments.pathToAsset), "[A-Za-z]", "", "all"), 5);
+			
+			if (loc.domainLen == 2)
+				loc.position = Max(1, loc.pathNumber mod loc.domainLen);
+			else
+				loc.position = (loc.pathNumber mod (loc.domainLen - 1)) + 1;
+		} 
+		else 
+		{
+			loc.position = loc.domainLen;
+		}
+		loc.returnValue = loc.protocol & Trim(ListGetAt(loc.domainList, loc.position)) & arguments.pathToAsset;
+	</cfscript>
+	<cfreturn loc.returnValue />
 </cffunction>
