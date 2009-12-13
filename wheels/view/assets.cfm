@@ -215,10 +215,7 @@
 			// at the same time we are getting a very random hash value to rotate the domains over the assets evenly 
 			loc.pathNumber = Right(REReplace(Hash(arguments.pathToAsset), "[A-Za-z]", "", "all"), 5);
 			
-			if (loc.domainLen == 2)
-				loc.position = Max(1, loc.pathNumber mod loc.domainLen);
-			else
-				loc.position = (loc.pathNumber mod (loc.domainLen - 1)) + 1;
+			loc.position = (loc.pathNumber mod (loc.domainLen)) + 1;
 		} 
 		else 
 		{
