@@ -18,7 +18,7 @@
 		<cfscript>
 			loc.assetPath = "/javascripts/path/to/my/asset.js";
 			loc.e = loc.controller.$assetDomain(loc.assetPath);
-			assert('FindNoCase("http://", loc.e)');
+			assert('FindNoCase("http://", loc.e) or FindNoCase("https://", loc.e)');
 		</cfscript>
 	</cffunction>
 	

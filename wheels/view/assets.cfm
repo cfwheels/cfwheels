@@ -172,7 +172,7 @@
 			return returnValue;
 		
 		if (!IsNumeric(application.wheels.assetQueryString) and IsBoolean(application.wheels.assetQueryString))
-			application.wheels.assetQueryString = DateFormat(Now(), "yyyymmdd") & TimeFormat(Now(), "HHmmss");
+			application.wheels.assetQueryString = Hash(DateFormat(Now(), "yyyymmdd") & TimeFormat(Now(), "HHmmss"));
 		returnValue = returnValue & "?" & application.wheels.assetQueryString;
 	</cfscript>
 	<cfreturn returnValue />
