@@ -2,8 +2,13 @@
 	<cfargument name="startYear" type="numeric" required="true">
 	<cfargument name="endYear" type="numeric" required="true">
 	<cfscript>
-		if (Structkeyexists(arguments, "value") && Val(arguments.value) && arguments.value < arguments.startYear)
-			arguments.startYear = arguments.value;
+		if (Structkeyexists(arguments, "value") && Val(arguments.value))
+		{
+			if (arguments.value < arguments.startYear && arguments.endYear > arguments.startYear)
+				arguments.startYear = arguments.value;
+			else if(arguments.value < arguments.endYear && arguments.endYear < arguments.startYear)
+				arguments.endYear = arguments.value;
+		}
 		arguments.$loopFrom = arguments.startYear;
 		arguments.$loopTo = arguments.endYear;
 		arguments.$type = "year";
