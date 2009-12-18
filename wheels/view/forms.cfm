@@ -133,7 +133,7 @@
 		}
 		else
 		{
-			loc.object = Evaluate(arguments.objectName);
+			loc.object = $getObject(arguments.objectName);
 			if (application.wheels.showErrorInformation && !IsObject(loc.object))
 				$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 			if (StructKeyExists(loc.object, arguments.property))
@@ -159,7 +159,7 @@
 		if (IsStruct(arguments.objectName))
 			return;
 			
-		loc.object = Evaluate(arguments.objectName);
+		loc.object = $getObject(arguments.objectName);
 		
 		// if objectName does not represent an object, explicity return void so the property does not get set
 		if (not IsObject(loc.object))
@@ -180,7 +180,7 @@
 		loc.returnValue = false;
 		if (!IsStruct(arguments.objectName))
 		{
-			loc.object = Evaluate(arguments.objectName);
+			loc.object = $getObject(arguments.objectName);
 			if (application.wheels.showErrorInformation && !IsObject(loc.object))
 				$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 			if (ArrayLen(loc.object.errorsOn(arguments.property)))
