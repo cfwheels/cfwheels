@@ -341,8 +341,8 @@
 			loc.route = $findRoute(argumentCollection=arguments);
 			if (application.wheels.URLRewriting == "Off")
 			{
-				loc.returnValue = loc.returnValue & "?controller=" & REReplace(REReplace(loc.route.controller, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
-				loc.returnValue = loc.returnValue & "&action=" & REReplace(REReplace(loc.route.action, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
+				loc.returnValue = loc.returnValue & "?controller=" & $hyphenize(loc.route.controller);
+				loc.returnValue = loc.returnValue & "&action=" & $hyphenize(loc.route.action);
 				loc.iEnd = ListLen(loc.route.variables);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
@@ -377,9 +377,9 @@
 				arguments.action = loc.params.action; // when no controller or action was passed in we link to the current page (controller/action only, not query string etc) by default
 			if (!Len(arguments.controller) && StructKeyExists(loc.params, "controller"))
 				arguments.controller = loc.params.controller; // use the current controller as the default when none was passed in by the developer
-			loc.returnValue = loc.returnValue & "?controller=" & REReplace(REReplace(arguments.controller, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
+			loc.returnValue = loc.returnValue & "?controller=" & $hyphenize(arguments.controller);
 			if (Len(arguments.action))
-				loc.returnValue = loc.returnValue & "&action=" & REReplace(REReplace(arguments.action, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
+				loc.returnValue = loc.returnValue & "&action=" & $hyphenize(arguments.action);
 			if (Len(arguments.key))
 			{
 				loc.param = $URLEncode(arguments.key);
