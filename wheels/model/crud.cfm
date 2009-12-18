@@ -1109,8 +1109,7 @@
 				loc.classes = $expandedAssociations(include=arguments.include);
 			ArrayPrepend(loc.classes, variables.wheels.class);
 			ArrayAppend(arguments.sql, "WHERE");
-			if (arguments.$softDeleteCheck && variables.wheels.class.softDeletion)
-				ArrayAppend(arguments.sql, " (");
+			loc.wherePos = ArrayLen(arguments.sql) + 1;
 			loc.params = ArrayNew(1);
 			loc.where = ReplaceList(REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all"), "AND,OR", "#chr(7)#AND,#chr(7)#OR");
 			for (loc.i=1; loc.i <= ListLen(loc.where, Chr(7)); loc.i++)
@@ -1180,17 +1179,42 @@
 			}
 		}
 
-		/// add soft delete sql
-		if (arguments.$softDeleteCheck && variables.wheels.class.softDeletion)
+		if (arguments.$softDeleteCheck)
 		{
-			if (Len(arguments.where))
-				ArrayAppend(arguments.sql, ") AND (");
-			else
-				ArrayAppend(arguments.sql, "WHERE ");
-			ArrayAppend(arguments.sql, "#variables.wheels.class.tableName#.#variables.wheels.class.softDeleteColumn# IS NULL");
-			if (Len(arguments.where))
-				ArrayAppend(arguments.sql, ")");
-		}
+			/// add soft delete sql
+			loc.classes = [];
+			if (Len(arguments.include))
+				loc.classes = $expandedAssociations(include=arguments.include);
+			ArrayPrepend(loc.classes, variables.wheels.class);
+			loc.models = "";
+			loc.iEnd = ArrayLen(loc.classes);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				loc.models = ListAppend(loc.models, loc.classes[loc.i].modelName);
+			loc.addToWhere = "";
+			loc.iEnd = ListLen(loc.models);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.model = ListGetAt(loc.models, loc.i);
+				if (model(loc.model).softDeletion())
+					loc.addToWhere = ListAppend(loc.addToWhere, model(loc.model).tableName() & "." & model(loc.model).softDeleteColumn() & " IS NULL");
+			}
+			loc.addToWhere = Replace(loc.addToWhere, ",", " AND ", "all");
+			if (Len(loc.addToWhere))
+			{
+				if (Len(arguments.where))
+				{
+					ArrayInsertAt(arguments.sql, loc.wherePos, " (");
+					ArrayAppend(arguments.sql, ") AND (");
+					ArrayAppend(arguments.sql, loc.addToWhere);
+					ArrayAppend(arguments.sql, ")");
+				}
+				else
+				{
+					ArrayAppend(arguments.sql, "WHERE ");
+					ArrayAppend(arguments.sql, loc.addToWhere);
+				}
+			}
+		}		
 	</cfscript>
 	<cfreturn arguments.sql>
 </cffunction>
