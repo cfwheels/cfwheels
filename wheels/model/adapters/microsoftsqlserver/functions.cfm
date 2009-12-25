@@ -46,6 +46,29 @@
 		var query = {};
 		if (arguments.limit > 0)
 		{
+			if (arguments.sql[ArrayLen(arguments.sql)] Contains ",")
+			{
+				// fix for pagination issue when ordering multiple columns with same name
+				loc.order = arguments.sql[ArrayLen(arguments.sql)];
+				loc.newOrder = "";
+				loc.doneColumns = "";
+				loc.done = 0;
+				loc.iEnd = ListLen(loc.order);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					loc.item = ListGetAt(loc.order, loc.i);
+					loc.column = SpanExcluding(Reverse(SpanExcluding(Reverse(loc.item), ".")), " ");
+					if (ListFind(loc.doneColumns, loc.column))
+					{
+						loc.done++;
+						loc.item = loc.item & " AS tmp" & loc.done; 
+					}
+					loc.doneColumns = ListAppend(loc.doneColumns, loc.column);
+					loc.newOrder = ListAppend(loc.newOrder, loc.item);
+				}
+				arguments.sql[ArrayLen(arguments.sql)] = loc.newOrder;
+			}
+
 			// select clause always comes first in the array, the order by clause last, remove the leading keywords leaving only the columns and set to the ones used in the inner most sub query
 			loc.thirdSelect = ReplaceNoCase(ReplaceNoCase(arguments.sql[1], "SELECT DISTINCT ", ""), "SELECT ", "");
 			loc.thirdOrder = ReplaceNoCase(arguments.sql[ArrayLen(arguments.sql)], "ORDER BY ", "");

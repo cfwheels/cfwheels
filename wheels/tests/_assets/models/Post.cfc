@@ -2,6 +2,7 @@
 
 	<cffunction name="init">
 		<cfset belongsTo("author")>
+		<cfset hasMany("comments")>
 	</cffunction>
 
 	<cffunction name="afterFindCallback">
