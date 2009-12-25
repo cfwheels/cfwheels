@@ -216,7 +216,7 @@
 			{
 				loc.sql = [];
 				loc.sql = $addSelectClause(sql=loc.sql, select=arguments.select, include=arguments.include, distinct=arguments.distinct);
-				loc.sql = $addFromClause(sql=loc.sql, include=arguments.include);
+				ArrayAppend(loc.sql, $fromClause(include=arguments.include));
 				loc.sql = $addWhereClause(sql=loc.sql, where=loc.originalWhere, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 				loc.sql = $addOrderByClause(sql=loc.sql, order=arguments.order, include=arguments.include);
 				$addToCache(key=loc.queryShellKey, value=loc.sql, category="sql");
@@ -833,30 +833,27 @@
 	<cfreturn arguments.sql>
 </cffunction>
 
-<cffunction name="$addFromClause" returntype="array" access="public" output="false">
-	<cfargument name="sql" type="array" required="true">
-	<cfargument name="include" type="string" required="true">
+<cffunction name="$fromClause" returntype="string" access="public" output="false">
+	<cfargument name="include" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
-		loc.from = "FROM " & variables.wheels.class.tableName;
+		
+		// start the from statement with the SQL keyword and the table name for the current model
+		loc.returnValue = "FROM " & tableName();
+		
+		// add join statements if associations have been specified through the include argument
 		if (Len(arguments.include))
 		{
-			// setup an array containing class info for current class and all the ones that should be included
-			loc.classes = [];
-			if (Len(arguments.include))
-				loc.classes = $expandedAssociations(include=arguments.include);
-			ArrayPrepend(loc.classes, variables.wheels.class);
-			loc.iEnd = ArrayLen(loc.classes);
+			// get info for all associations
+			loc.associations = $expandedAssociations(include=arguments.include);
+
+			// add join statement for each include separated by space
+			loc.iEnd = ArrayLen(loc.associations);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				loc.classData = loc.classes[loc.i];
-				if (StructKeyExists(loc.classData, "join"))
-					loc.from = ListAppend(loc.from, loc.classData.join, " ");
-			}
+				loc.returnValue = ListAppend(loc.returnValue, loc.associations[loc.i].join, " ");
 		}
-		ArrayAppend(arguments.sql, loc.from);
 	</cfscript>
-	<cfreturn arguments.sql>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$addKeyWhereClause" returntype="array" access="public" output="false">
