@@ -12,6 +12,8 @@ Changes
 Bug Fixes
 =========
 * Defaulted day to 1 and month to 1 when submitting forms - [Tony Petruzzi]
+* Made the "objectName" argument check for the object in the "variables" scope by default instead of unscoped - #365 [John C. Bland II, Per Djurner]
+* Fixed so the this.dataSource setting is picked up by Wheels when used - #333 [Chris Peters, Per Djurner]
 
 Other
 =====
@@ -27,15 +29,12 @@ Bug Fixes
 =======
 * Fixed bug in MS SQL adapter when paginating and ordering on identically named columns from two tables - #355 [Don Bellamy, Per Djurner]
 * Fixed bug where soft deleted rows were returned when using the include argument - #344 [Andy Bellenie, Per Djurner]
+* Fixed bug where humanize() would add a space at the beginning of the string if it started with an upper case character - #359 [Per Djurner]
 * To fix bugs with change tracking Wheels will now only check for changes to properties that exist on the model object - #353 [James Gibson, Per Djurner]
 * Fixed so the keys we use for caching always return identical results so they do not break the cache unnecessarily - [Andy Bellenie, Per Djurner]
-* Fixed so average() with integer values and pagination with composite keys work in Railo - #331 [Raul Riera, James Gibson, Per Djurner]
+* Fixed so average() with integer values work in Railo - #331 [Raul Riera, James Gibson, Per Djurner]
 * Fixed so the "for" attribute on form helpers always matches the "id" attribute when it's passed in by the developer - #340 [Chris Peters, Per Djurner]
 * Fixed so findAll() afterFind callbacks run when one record is returned - #327 [Ryan Hoppitt, Per Djurner]
-
-* Fixed bug where humanize() would add a space at the beginning of the string if it started with an upper case character - #359 [Per Djurner]
-* Fixed so the this.dataSource setting is picked up by Wheels when used - #333 [Chris Peters, Per Djurner]
-* Made the "objectName" argument check for the object in the "variables" scope by default instead of unscoped - #365 [John C. Bland II, Per Djurner]
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
