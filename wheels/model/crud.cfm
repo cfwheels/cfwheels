@@ -127,7 +127,7 @@
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.iItem = ListGetAt(variables.wheels.class.keys, loc.i);
-					if (!ListFindNoCase(loc.compareList, loc.iItem))
+					if (!ListFindNoCase(loc.compareList, loc.iItem) && !ListFindNoCase(loc.compareList, tableName() & "." & loc.iItem))
 						arguments.order = ListAppend(arguments.order, loc.iItem);
 				}
 			}
