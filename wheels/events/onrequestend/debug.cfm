@@ -1,38 +1,3 @@
-<style type="text/css">
-#wheels-debug-area
-{
-	clear: both;
-	margin-top: 100px;
-	text-align: left;
-	background: #ececec;
-	padding: 10px;
-	border-top: 3px solid #999;
-	border-bottom: 3px solid #999;
-}
-
-#wheels-debug-area td
-{
-	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-	line-height: 1.5em;
-	font-size: 12px;
-	color: #333;	
-}
-
-#wheels-debug-area a
-{
-	color: #333;
-	text-decoration: underline;
-	padding: 0 1px;
-}
-
-#wheels-debug-area a:hover
-{
-	color: #fff;
-	background: #333;
-	text-decoration: none;
-}
-</style>
-
 <cfset loc.baseReloadURL = cgi.script_name> 
 <cfif cgi.path_info IS NOT cgi.script_name>
 	<cfset loc.baseReloadURL = loc.baseReloadURL & cgi.path_info> 
@@ -52,6 +17,42 @@
 <cfset loc.baseReloadURL = loc.baseReloadURL & "reload=">
 
 <cfoutput>
+
+<style type="text/css">
+##wheels-debug-area
+{
+	clear: both;
+	margin-top: 100px;
+	text-align: left;
+	background: ##ececec;
+	padding: 10px;
+	border-top: 3px solid ##999;
+	border-bottom: 3px solid ##999;
+}
+
+##wheels-debug-area td
+{
+	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	line-height: 1.5em;
+	font-size: 12px;
+	color: ##333;	
+}
+
+##wheels-debug-area a
+{
+	color: ##333;
+	text-decoration: underline;
+	padding: 0 1px;
+}
+
+##wheels-debug-area a:hover
+{
+	color: ##fff;
+	background: ##333;
+	text-decoration: none;
+}
+</style>
+
 <div id="wheels-debug-area">
 	<table cellspacing="0" cellpadding="0">
 		<cfif Len(application.wheels.incompatiblePlugins) OR Len(application.wheels.dependantPlugins) OR NOT ArrayIsEmpty(request.wheels.deprecation)>
@@ -102,7 +103,7 @@
 		</tr>
 		<tr>
 			<td valign="top"><strong>Plugins:</strong></td>
-			<td><cfif StructCount(get("plugins")) IS NOT 0><cfset loc.count = 0><cfloop collection="#get('plugins')#" item="loc.i"><cfset loc.count = loc.count + 1><a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=plugins&name=#LCase(loc.i)#">#loc.i#</a><cfif StructCount(get("plugins")) GT loc.count><br /></cfif></cfloop><cfelse>None</cfif></td>
+			<td><cfif StructCount(get("plugins")) IS NOT 0><cfset loc.count = 0><cfloop collection="#get('plugins')#" item="loc.i"><cfset loc.count = loc.count + 1><a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=plugins&name=#LCase(loc.i)#">#loc.i#</a><cfif StructCount(get("plugins")) GT loc.count>, </cfif></cfloop><cfelse>None</cfif></td>
 		</tr>
 		<cfif StructKeyExists(request.wheels.params, "route")>
 			<tr>
@@ -135,7 +136,11 @@
 						<cfloop collection="#request.wheels.params[loc.i]#" item="loc.j">
 							#lCase(loc.i)#.#lCase(loc.j)# = #request.wheels.params[loc.i][loc.j]#<br />
 						</cfloop>
-					<cfelse>
+					<cfelseif IsArray(request.wheels.params[loc.i])>
+						<cfloop array="#request.wheels.params[loc.i]#" index="loc.x">
+							#lCase(loc.i)#[#lCase(loc.x)#].#LCase(loc.y)# = #request.wheels.params[loc.i][loc.x][loc.y]#<br />
+						</cfloop>
+					<cfelseif IsSimpleValue(request.wheels.params[loc.i])>
 						#lCase(loc.i)# = #request.wheels.params[loc.i]#<br />
 					</cfif>
 				</cfif>
@@ -151,4 +156,5 @@
 		</tr>
 	</table>
 </div>
+
 </cfoutput>

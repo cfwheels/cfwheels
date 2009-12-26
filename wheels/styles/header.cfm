@@ -43,7 +43,7 @@
 	{
 		font-size: 24px;
 		font-weight: bold;
-		color: #902c2c;
+		color: #B00701;
 		margin: 10px 0 5px 0;
 	}
 
@@ -51,7 +51,7 @@
 	{
 		font-size: 16px;
 		font-weight: bold;
-		color: #902c2c;
+		color: #B00701;
 	}
 
 	p
@@ -66,7 +66,7 @@
 
 	#content a
 	{
-		color: #922c2c;
+		color: #B00701;
 		text-decoration: underline;
 		padding: 0 1px;
 	}
@@ -74,7 +74,7 @@
 	#content a:hover
 	{
 		color: #fff;
-		background: #922c2c;
+		background: #B00701;
 		text-decoration: none;
 	}
 
