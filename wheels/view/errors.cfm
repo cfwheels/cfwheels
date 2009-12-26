@@ -15,6 +15,8 @@
 		var loc = {};
 		$insertDefaults(name="errorMessagesFor", input=arguments);
 		loc.object = Evaluate(arguments.objectName);
+		if (application.wheels.showErrorInformation && !IsObject(loc.object))
+			$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 		loc.errors = loc.object.allErrors();
 		loc.returnValue = "";
 		if (!ArrayIsEmpty(loc.errors))
@@ -64,6 +66,8 @@
 		var loc = {};
 		$insertDefaults(name="errorMessageOn", input=arguments);
 		loc.object = Evaluate(arguments.objectName);
+		if (application.wheels.showErrorInformation && !IsObject(loc.object))
+			$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 		loc.error = loc.object.errorsOn(arguments.property);
 		loc.returnValue = "";
 		if (!ArrayIsEmpty(loc.error))

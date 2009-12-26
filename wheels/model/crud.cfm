@@ -198,20 +198,23 @@
 				else
 				{
 					loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct);
-					loc.paginationWhere = "";
-					loc.iEnd = ListLen(variables.wheels.class.keys);
-					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					if (loc.values.recordCount)
 					{
-						loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
-						loc.list = Evaluate("QuotedValueList(loc.values.#loc.property#)");
-						loc.paginationWhere = ListAppend(loc.paginationWhere, "#variables.wheels.class.tableName#.#variables.wheels.class.properties[loc.property].column# IN (#loc.list#)", Chr(7));
+						loc.paginationWhere = "";
+						loc.iEnd = ListLen(variables.wheels.class.keys);
+						for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+						{
+							loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
+							loc.list = Evaluate("QuotedValueList(loc.values.#loc.property#)");
+							loc.paginationWhere = ListAppend(loc.paginationWhere, "#variables.wheels.class.tableName#.#variables.wheels.class.properties[loc.property].column# IN (#loc.list#)", Chr(7));
+						}
+						loc.paginationWhere = Replace(loc.paginationWhere, Chr(7), " AND ", "all");
+						if (Len(arguments.where) && Len(arguments.include)) // this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
+							arguments.where = "(" & arguments.where & ")" & " AND " & loc.paginationWhere;
+						else
+							arguments.where = loc.paginationWhere;
+						arguments.$softDeleteCheck = false;
 					}
-					loc.paginationWhere = Replace(loc.paginationWhere, Chr(7), " AND ", "all");
-					if (Len(arguments.where) && Len(arguments.include)) // this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
-						arguments.where = "(" & arguments.where & ")" & " AND " & loc.paginationWhere;
-					else
-						arguments.where = loc.paginationWhere;
-					arguments.$softDeleteCheck = false;
 				}
 			}
 			// store pagination info in the request scope so all pagination methods can access it
