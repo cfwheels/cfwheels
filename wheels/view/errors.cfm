@@ -14,7 +14,7 @@
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="errorMessagesFor", input=arguments);
-		loc.object = Evaluate(arguments.objectName);
+		loc.object = $getObject(arguments.objectName);
 		if (application.wheels.showErrorInformation && !IsObject(loc.object))
 			$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 		loc.errors = loc.object.allErrors();
@@ -65,7 +65,7 @@
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="errorMessageOn", input=arguments);
-		loc.object = Evaluate(arguments.objectName);
+		loc.object = $getObject(arguments.objectName);
 		if (application.wheels.showErrorInformation && !IsObject(loc.object))
 			$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 		loc.error = loc.object.errorsOn(arguments.property);

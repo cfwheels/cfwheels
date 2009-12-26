@@ -148,9 +148,9 @@
 			if (Find("[", loc.returnValue))
 			{
 				// this is a form element for an array of objects so we replace the array position with the primary key value of the object (unless the object is new and has no primary key set)
-				loc.key = Evaluate(arguments.objectName).key();
+				loc.key = $getObject(arguments.objectName).key();
 				if (Len(loc.key))
-					loc.returnValue = ListFirst(loc.returnValue, "[") & "-" & Evaluate(arguments.objectName).key();
+					loc.returnValue = ListFirst(loc.returnValue, "[") & "-" & $getObject(arguments.objectName).key();
 				else
 					loc.returnValue = ReplaceList(loc.returnValue, "[,]", "-,");
 			}
@@ -175,7 +175,7 @@
 			loc.returnValue = ListLast(arguments.objectName, ".");
 			if (Find("[", loc.returnValue))
 			{
-				loc.key = Evaluate(arguments.objectName).key();
+				loc.key = $getObject(arguments.objectName).key();
 				if (Len(loc.key))
 					loc.returnValue = ListFirst(loc.returnValue, "[") & "[" & loc.key & "]";
 			}
@@ -208,4 +208,16 @@
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$getObject" returntype="any" access="public" output="false" hint="Returns the object referenced by the variable name passed in. If the scope is included it gets it from there, otherwise it gets it from the variables scope.">
+	<cfargument name="objectName" type="string" required="true">
+	<cfscript>
+		var returnValue = "";
+		if (Find(".", arguments.objectName))
+			returnValue = Evaluate(arguments.objectName);
+		else
+			returnValue = variables[arguments.objectName];
+	</cfscript>
+	<cfreturn returnValue>
 </cffunction>
