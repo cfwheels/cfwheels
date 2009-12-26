@@ -13,8 +13,6 @@ Changes
 Bug Fixes
 =========
 * Defaulted day to 1 and month to 1 when submitting forms - [Tony Petruzzi]
-* Made the "objectName" argument check for the object in the "variables" scope by default instead of unscoped - #365 [John C. Bland II, Per Djurner]
-* Fixed so the this.dataSource setting is picked up by Wheels when used - #333 [Chris Peters, Per Djurner]
 
 Other
 =====
@@ -38,6 +36,8 @@ Bug Fixes
 * Fixed so findAll() afterFind callbacks run when one record is returned - #327 [Ryan Hoppitt, Per Djurner]
 * Wrapped debug output completely in "cfoutput" tags so that it works when "enableCFOutputOnly" has been set to true - [William Fisk, Per Djurner]
 * Fixed a bug with pagination with outer joins that was creating SQL errors when no records were returned from the pagination query - [James Gibson]
+* Made the "objectName" argument check for the object in the "variables" scope by default instead of unscoped - #365 [John C. Bland II, Per Djurner]
+* Fixed so the this.dataSource setting is picked up by Wheels when used - #333 [Chris Peters, Per Djurner]
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
