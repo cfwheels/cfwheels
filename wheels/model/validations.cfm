@@ -274,7 +274,6 @@
 			StructDelete(arguments, "property");
 		}
 
-		// when using the core validations the developer needs to pass in specific properties, throw an error if they haven't
 		if (application.wheels.showErrorInformation)
 		{
 			if (StructKeyExists(arguments, "properties"))

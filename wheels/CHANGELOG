@@ -38,6 +38,7 @@ Bug Fixes
 * Fixed a bug with pagination with outer joins that was creating SQL errors when no records were returned from the pagination query - [James Gibson]
 * Made the "objectName" argument check for the object in the "variables" scope by default instead of unscoped - #365 [John C. Bland II, Per Djurner]
 * Fixed so the this.dataSource setting is picked up by Wheels when used - #333 [Chris Peters, Per Djurner]
+* Fixed so you can use the built-in validation methods for properties that does not exist in the database table - #362 [Andy Bellenie, Per Djurner]
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
