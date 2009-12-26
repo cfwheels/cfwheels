@@ -1230,7 +1230,12 @@
 			loc.models = "";
 			loc.iEnd = ArrayLen(loc.classes);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-				loc.models = ListAppend(loc.models, loc.classes[loc.i].modelName);
+			{
+				if (StructKeyExists(loc.classes[loc.i], "modelName"))
+					loc.models = ListAppend(loc.models, loc.classes[loc.i].modelName);
+				else
+					loc.models = ListAppend(loc.models, loc.classes[loc.i].name);
+			}
 			loc.addToWhere = "";
 			loc.iEnd = ListLen(loc.models);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
