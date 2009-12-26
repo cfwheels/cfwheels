@@ -8,6 +8,7 @@ Changes
 * Updated the request processing to not call the action if a before filter has rendered content - [James Gibson]
 * Removed differences in params structure for form / URL variables - #232 [Mike Henke, Tony Petruzzi]
 * Made the showDebugInformation argument on renderPage() part of the API - [Per Djurner]
+* Added "variableName" to validatesFormatOf() options - #337 [Raul Riera, Per Djurner]
 
 Bug Fixes
 =========
@@ -36,6 +37,7 @@ Bug Fixes
 * Fixed so the "for" attribute on form helpers always matches the "id" attribute when it's passed in by the developer - #340 [Chris Peters, Per Djurner]
 * Fixed so findAll() afterFind callbacks run when one record is returned - #327 [Ryan Hoppitt, Per Djurner]
 * Wrapped debug output completely in "cfoutput" tags so that it works when "enableCFOutputOnly" has been set to true - [William Fisk, Per Djurner]
+* Fixed a bug with pagination with outer joins that was creating SQL errors when no records were returned from the pagination query - [James Gibson]
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
