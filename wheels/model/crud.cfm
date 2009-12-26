@@ -1192,8 +1192,8 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.model = ListGetAt(loc.models, loc.i);
-				if (model(loc.model).softDeletion())
-					loc.addToWhere = ListAppend(loc.addToWhere, model(loc.model).tableName() & "." & model(loc.model).softDeleteColumn() & " IS NULL");
+				if (model(loc.model).$softDeletion())
+					loc.addToWhere = ListAppend(loc.addToWhere, model(loc.model).tableName() & "." & model(loc.model).$softDeleteColumn() & " IS NULL");
 			}
 			loc.addToWhere = Replace(loc.addToWhere, ",", " AND ", "all");
 			if (Len(loc.addToWhere))

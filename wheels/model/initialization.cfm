@@ -160,10 +160,10 @@
 	<cfreturn variables.wheels.class>
 </cffunction>
 
-<cffunction name="softDeletion" returntype="boolean" access="public" output="false">
+<cffunction name="$softDeletion" returntype="boolean" access="public" output="false">
 	<cfreturn variables.wheels.class.softDeletion>
 </cffunction>
 
-<cffunction name="softDeleteColumn" returntype="string" access="public" output="false">
+<cffunction name="$softDeleteColumn" returntype="string" access="public" output="false">
 	<cfreturn variables.wheels.class.softDeleteColumn>
 </cffunction>
