@@ -35,7 +35,7 @@ Bug Fixes
 * Fixed so average() with integer values work in Railo - #331 [Raul Riera, James Gibson, Per Djurner]
 * Fixed so the "for" attribute on form helpers always matches the "id" attribute when it's passed in by the developer - #340 [Chris Peters, Per Djurner]
 * Fixed so findAll() afterFind callbacks run when one record is returned - #327 [Ryan Hoppitt, Per Djurner]
-
+* Wrapped debug output completely in "cfoutput" tags so that it works when "enableCFOutputOnly" has been set to true - [William Fisk, Per Djurner]
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
