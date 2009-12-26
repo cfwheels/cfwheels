@@ -18,7 +18,7 @@
 		{
 			// this is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it
 			loc.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include);
-			loc.values = ListToArray(ArrayToList(loc.values[arguments.property]));
+			loc.values = ListToArray(Evaluate("ValueList(loc.values.#arguments.property#)"));
 			if (!ArrayIsEmpty(loc.values))
 			{
 				if (arguments.distinct)
