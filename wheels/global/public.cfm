@@ -432,7 +432,7 @@
 		var loc = {};
 		loc.returnValue = REReplace(arguments.text, "([[:upper:]])", " \1", "all"); // adds a space before every capitalized word
 		loc.returnValue = REReplace(loc.returnValue, "([[:upper:]]) ([[:upper:]]) ", "\1\2", "all"); // fixes abbreviations so they form a word again (example: aURLVariable)
-		loc.returnValue = capitalize(loc.returnValue); // capitalize the first letter
+		loc.returnValue = Trim(capitalize(loc.returnValue)); // capitalize the first letter and trim final result (which removes the leading space that happens if the string starts with an upper case character)
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
