@@ -2,6 +2,55 @@
 
 	<cfinclude template="/wheelsMapping/global/functions.cfm">
 
+	<cffunction name="test_singularize">
+		<cfset loc.result = singularize("statuses")>
+		<cfset assert("NOT Compare(loc.result, 'status')")>
+	</cffunction>
+
+	<cffunction name="test_singularize_starting_with_upper_case">
+		<cfset loc.result = singularize("Instances")>
+		<cfset assert("NOT Compare(loc.result, 'Instance')")>
+	</cffunction>
+
+	<cffunction name="test_singularize_two_words">
+		<cfset loc.result = singularize("statusUpdates")>
+		<cfset assert("NOT Compare(loc.result, 'statusUpdate')")>
+	</cffunction>
+
+	<cffunction name="test_singularize_multiple_words">
+		<cfset loc.result = singularize("fancyChristmasTrees")>
+		<cfset assert("NOT Compare(loc.result, 'fancyChristmasTree')")>
+	</cffunction>
+
+	<cffunction name="test_pluralize">
+		<cfset loc.result = pluralize("status")>
+		<cfset assert("NOT Compare(loc.result, 'statuses')")>
+	</cffunction>
+
+	<cffunction name="test_pluralize_with_count">
+		<cfset loc.result = pluralize("statusUpdate", 0)>
+		<cfset assert("NOT Compare(loc.result, '0 statusUpdates')")>
+		<cfset loc.result = pluralize("statusUpdate", 1)>
+		<cfset assert("NOT Compare(loc.result, '1 statusUpdate')")>
+		<cfset loc.result = pluralize("statusUpdate", 2)>
+		<cfset assert("NOT Compare(loc.result, '2 statusUpdates')")>
+	</cffunction>
+
+	<cffunction name="test_pluralize_starting_with_upper_case">
+		<cfset loc.result = pluralize("Instance")>
+		<cfset assert("NOT Compare(loc.result, 'Instances')")>
+	</cffunction>
+
+	<cffunction name="test_pluralize_two_words">
+		<cfset loc.result = pluralize("statusUpdate")>
+		<cfset assert("NOT Compare(loc.result, 'statusUpdates')")>
+	</cffunction>
+
+	<cffunction name="test_pluralize_multiple_words">
+		<cfset loc.result = pluralize("fancyChristmasTree")>
+		<cfset assert("NOT Compare(loc.result, 'fancyChristmasTrees')")>
+	</cffunction>
+
 	<cffunction name="test_hyphenize_normal_variable">
 		<cfset loc.result = $hyphenize("wheelsIsAFramework")>
 		<cfset assert("NOT Compare(loc.result, 'wheels-is-a-framework')")>

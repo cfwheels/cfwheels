@@ -492,24 +492,31 @@
 	<cfargument name="returnCount" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = arguments.text;
+		
+		loc.text = arguments.text;
+		if (REFind("[A-Z]", loc.text) > 1)
+		{
+			loc.upperCasePos = REFind("[A-Z]", Reverse(loc.text));
+			loc.prepend = Mid(loc.text, 1, Len(loc.text)-loc.upperCasePos);
+			loc.text = Reverse(Mid(Reverse(loc.text), 1, loc.upperCasePos));
+		}
+		
+		loc.returnValue = loc.text;
 		if (arguments.count != 1)
 		{
 			loc.uncountables = "advice,air,blood,deer,equipment,fish,food,furniture,garbage,graffiti,grass,homework,housework,information,knowledge,luggage,mathematics,meat,milk,money,music,pollution,research,rice,sand,series,sheep,soap,software,species,sugar,traffic,transportation,travel,trash,water";
 			loc.irregulars = "child,children,foot,feet,man,men,move,moves,person,people,sex,sexes,tooth,teeth,woman,women";
-			if (ListFindNoCase(loc.uncountables, arguments.text))
+			if (ListFindNoCase(loc.uncountables, loc.text))
+				loc.returnValue = loc.text;
+			else if (ListFindNoCase(loc.irregulars, loc.text))
 			{
-				loc.returnValue = arguments.text;
-			}
-			else if (ListFindNoCase(loc.irregulars, arguments.text))
-			{
-				loc.pos = ListFindNoCase(loc.irregulars, arguments.text);
+				loc.pos = ListFindNoCase(loc.irregulars, loc.text);
 				if (arguments.which == "singularize" && loc.pos MOD 2 == 0)
 					loc.returnValue = ListGetAt(loc.irregulars, loc.pos-1);
 				else if (arguments.which == "pluralize" && loc.pos MOD 2 != 0)
 					loc.returnValue = ListGetAt(loc.irregulars, loc.pos+1);
 				else
-					loc.returnValue = arguments.text;
+					loc.returnValue = loc.text;
 			}
 			else
 			{
@@ -529,15 +536,17 @@
 				loc.iEnd = ArrayLen(loc.rules);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
-					if(REFindNoCase(loc.rules[loc.i][1], arguments.text))
+					if(REFindNoCase(loc.rules[loc.i][1], loc.text))
 					{
-						loc.returnValue = REReplaceNoCase(arguments.text, loc.rules[loc.i][1], loc.rules[loc.i][2]);
+						loc.returnValue = REReplaceNoCase(loc.text, loc.rules[loc.i][1], loc.rules[loc.i][2]);
 						break;
 					}
 				}
 				loc.returnValue = Replace(loc.returnValue, Chr(7), "", "all");
 			}
 		}
+		if (StructKeyExists(loc, "prepend"))
+			loc.returnValue = loc.prepend & loc.returnValue;
 		if (arguments.returnCount && arguments.count != -1)
 			loc.returnValue = arguments.count & " " & loc.returnValue;
 	</cfscript>
