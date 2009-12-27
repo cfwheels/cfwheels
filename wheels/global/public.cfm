@@ -493,15 +493,21 @@
 	<cfscript>
 		var loc = {};
 		
+		// by default we pluralize/singularize the entire string
 		loc.text = arguments.text;
-		if (REFind("[A-Z]", loc.text) > 1)
+		
+		if (REFind("[A-Z]", loc.text))
 		{
+			// only pluralize/singularize the last part of a camelCased variable (e.g. in "websiteStatusUpdate" we only change the "update" part)
+			// also set a variable with the unchanged part of the string (to be prepended before returning final result)
 			loc.upperCasePos = REFind("[A-Z]", Reverse(loc.text));
 			loc.prepend = Mid(loc.text, 1, Len(loc.text)-loc.upperCasePos);
 			loc.text = Reverse(Mid(Reverse(loc.text), 1, loc.upperCasePos));
 		}
 		
+		// when count is 1 we don't need to pluralize at all so just set the return value to the input string
 		loc.returnValue = loc.text;
+		
 		if (arguments.count != 1)
 		{
 			loc.uncountables = "advice,air,blood,deer,equipment,fish,food,furniture,garbage,graffiti,grass,homework,housework,information,knowledge,luggage,mathematics,meat,milk,money,music,pollution,research,rice,sand,series,sheep,soap,software,species,sugar,traffic,transportation,travel,trash,water";
@@ -545,8 +551,12 @@
 				loc.returnValue = Replace(loc.returnValue, Chr(7), "", "all");
 			}
 		}
+
+		// this was a camelCased string and we need to prepend the unchanged part to the result
 		if (StructKeyExists(loc, "prepend"))
 			loc.returnValue = loc.prepend & loc.returnValue;
+
+		// return the count number in the string (e.g. "5 sites" instead of just "sites")
 		if (arguments.returnCount && arguments.count != -1)
 			loc.returnValue = arguments.count & " " & loc.returnValue;
 	</cfscript>
