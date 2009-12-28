@@ -1231,9 +1231,9 @@
 			loc.iEnd = ArrayLen(loc.classes);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				if (StructKeyExists(loc.classes[loc.i], "modelName"))
-					loc.models = ListAppend(loc.models, loc.classes[loc.i].modelName);
-				else
+				if (StructKeyExists(loc.classes[loc.i], "class"))
+					loc.models = ListAppend(loc.models, loc.classes[loc.i].class);
+				else if (StructKeyExists(loc.classes[loc.i], "name"))
 					loc.models = ListAppend(loc.models, loc.classes[loc.i].name);
 			}
 			loc.addToWhere = "";
