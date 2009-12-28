@@ -40,6 +40,8 @@ Bug Fixes
 * Fixed so the this.dataSource setting is picked up by Wheels when used - #333 [Chris Peters, Per Djurner]
 * Fixed so you can use the built-in validation methods for properties that does not exist in the database table - #362 [Andy Bellenie, Per Djurner]
 * Fixed so primary key column is not added to order clause when paginating if it has already been specified with tableName.columnName syntax - [Per Djurner]
+* Fixed so pluralization/singularization works with camelCased variable names - [Chris Peters, Per Djurner]
+
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
