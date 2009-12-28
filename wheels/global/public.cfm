@@ -465,31 +465,44 @@
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="pluralize", count=arguments.count, returnCount=arguments.returnCount)>
 </cffunction>
 
-<cffunction name="$singularizeOrPluralize" returntype="string" access="public" output="false">
+<cffunction name="$singularizeOrPluralize" returntype="string" access="public" output="false" hint="Called by singularize and pluralize to perform the conversion.">
 	<cfargument name="text" type="string" required="true">
 	<cfargument name="which" type="string" required="true">
 	<cfargument name="count" type="numeric" required="false" default="-1">
 	<cfargument name="returnCount" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = arguments.text;
+		
+		// by default we pluralize/singularize the entire string
+		loc.text = arguments.text;
+		
+		if (REFind("[A-Z]", loc.text))
+		{
+			// only pluralize/singularize the last part of a camelCased variable (e.g. in "websiteStatusUpdate" we only change the "update" part)
+			// also set a variable with the unchanged part of the string (to be prepended before returning final result)
+			loc.upperCasePos = REFind("[A-Z]", Reverse(loc.text));
+			loc.prepend = Mid(loc.text, 1, Len(loc.text)-loc.upperCasePos);
+			loc.text = Reverse(Mid(Reverse(loc.text), 1, loc.upperCasePos));
+		}
+		
+		// when count is 1 we don't need to pluralize at all so just set the return value to the input string
+		loc.returnValue = loc.text;
+		
 		if (arguments.count != 1)
 		{
 			loc.uncountables = "advice,air,blood,deer,equipment,fish,food,furniture,garbage,graffiti,grass,homework,housework,information,knowledge,luggage,mathematics,meat,milk,money,music,pollution,research,rice,sand,series,sheep,soap,software,species,sugar,traffic,transportation,travel,trash,water";
 			loc.irregulars = "child,children,foot,feet,man,men,move,moves,person,people,sex,sexes,tooth,teeth,woman,women";
-			if (ListFindNoCase(loc.uncountables, arguments.text))
+			if (ListFindNoCase(loc.uncountables, loc.text))
+				loc.returnValue = loc.text;
+			else if (ListFindNoCase(loc.irregulars, loc.text))
 			{
-				loc.returnValue = arguments.text;
-			}
-			else if (ListFindNoCase(loc.irregulars, arguments.text))
-			{
-				loc.pos = ListFindNoCase(loc.irregulars, arguments.text);
+				loc.pos = ListFindNoCase(loc.irregulars, loc.text);
 				if (arguments.which == "singularize" && loc.pos MOD 2 == 0)
 					loc.returnValue = ListGetAt(loc.irregulars, loc.pos-1);
 				else if (arguments.which == "pluralize" && loc.pos MOD 2 != 0)
 					loc.returnValue = ListGetAt(loc.irregulars, loc.pos+1);
 				else
-					loc.returnValue = arguments.text;
+					loc.returnValue = loc.text;
 			}
 			else
 			{
@@ -509,15 +522,21 @@
 				loc.iEnd = ArrayLen(loc.rules);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
-					if(REFindNoCase(loc.rules[loc.i][1], arguments.text))
+					if(REFindNoCase(loc.rules[loc.i][1], loc.text))
 					{
-						loc.returnValue = REReplaceNoCase(arguments.text, loc.rules[loc.i][1], loc.rules[loc.i][2]);
+						loc.returnValue = REReplaceNoCase(loc.text, loc.rules[loc.i][1], loc.rules[loc.i][2]);
 						break;
 					}
 				}
 				loc.returnValue = Replace(loc.returnValue, Chr(7), "", "all");
 			}
 		}
+
+		// this was a camelCased string and we need to prepend the unchanged part to the result
+		if (StructKeyExists(loc, "prepend"))
+			loc.returnValue = loc.prepend & loc.returnValue;
+
+		// return the count number in the string (e.g. "5 sites" instead of just "sites")
 		if (arguments.returnCount && arguments.count != -1)
 			loc.returnValue = arguments.count & " " & loc.returnValue;
 	</cfscript>
