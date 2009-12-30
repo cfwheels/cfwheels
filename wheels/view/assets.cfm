@@ -28,7 +28,7 @@
 			if (ListLast(loc.item, ".") != "css") 
 				arguments.href = arguments.href & ".css";
 			arguments.href = $assetDomain(arguments.href) & $appendQueryString();
-			loc.returnValue = loc.returnValue & $tag(name="link", skip="source,sources,head", close=true, attributes=arguments);
+			loc.returnValue = loc.returnValue & $tag(name="link", skip="source,sources,head", close=true, attributes=arguments) & chr(10);
 		}
 		if (arguments.head)
 		{
@@ -67,7 +67,7 @@
 			if (ListLast(loc.item, ".") != "js")
 				arguments.src = arguments.src & ".js";
 			arguments.src = $assetDomain(arguments.src) & $appendQueryString();
-			loc.returnValue = loc.returnValue & $element(name="script", skip="source,sources,head", attributes=arguments);
+			loc.returnValue = loc.returnValue & $element(name="script", skip="source,sources,head", attributes=arguments) & chr(10);
 		}
 		if (arguments.head)
 		{
