@@ -202,14 +202,21 @@
 	<cffunction name="halt" returntype="Any" output="false" hint="used to dump an expression and halt testing. Useful when you want to see what an expression will output first so you can write tests for it.">
 		<cfargument name="halt" type="boolean" required="true" hint="should we halt. true will halt and dump output. false will just return so tests can continue">
 		<cfargument name="expression" type="string" required="true" hint="the expression you want to see output for">
+		<cfset var attributeArgs = {}>
 
 		<cfif not arguments.halt>
 			<cfreturn>
 		</cfif>
 
-		<cfdump var="#evaluate(arguments.expression)#"><cfabort>
+		<cfset attributeArgs["var"] = "#evaluate(arguments.expression)#">
+
+		<cfset structdelete(arguments, "halt")>
+		<cfset structdelete(arguments, "expression")>
+		<cfset structappend(attributeArgs, arguments, true)>
+
+		<cfdump attributeCollection="#attributeArgs#"><cfabort>
 	</cffunction>
-	
+
 	<cffunction name="raised" returntype="string" output="false" hint="catches an raised error and returns the error type. great if you want to test that a certain exception will be raised.">
 		<cfargument type="string" name="expression" required="true">
 		<cftry>
@@ -224,16 +231,16 @@
 	<cffunction name="loadModels" hint="allows you to load all or specific models into the test case">
 		<cfargument name="models" type="string" required="false" default="" hint="a comma delimited list of the model you want to load. leave blank to load all models.">
 		<cfset var loc = {}>
-		
+
 		<cfif not structkeyexists(variables, "model")>
 			<cfinclude template="/wheelsMapping/global/functions.cfm">
 		</cfif>
-		
+
 		<cfif !len(arguments.models)>
 			<cfdirectory action="list" directory="#expandpath(application.wheels.modelPath)#" name="loc.models" filter="*.cfc" type="file">
 			<cfset arguments.models = valuelist(loc.models.name)>
 		</cfif>
-		
+
 		<cfloop list="#arguments.models#" index="loc.model">
 			<cfset global[singularize(listfirst(loc.model, "."))] = model(listfirst(loc.model, "."))>
 		</cfloop>
@@ -331,7 +338,7 @@
 			<cfif (left(key, 4) eq "test" and isCustomFunction(this[key])) and (!len(arguments.testname) or (len(arguments.testname) and arguments.testname eq key))>
 
 				<cftry>
-				
+
 					<cfset time = getTickCount()>
 
 					<cfset loc = duplicate(global)>
@@ -484,7 +491,7 @@
 
 		<!--- by default we run all packages, however they can specify to run a specific package of tests --->
 		<cfset loc.package = "">
-		
+
 		<!--- not only can we specify the package, but also the test we want to run --->
 		<cfset loc.test = "">
 
@@ -530,7 +537,7 @@
 		<cfset loc.releative_test_path = "/" & listchangedelims(loc.test_path, "/", ".")>
 		<cfset loc.full_test_path = expandPath(loc.releative_test_path)>
 		<cfset loc.test_filter = "*">
-		
+
 		<cfif not DirectoryExists(loc.full_test_path)>
 			<cfif FileExists(loc.full_test_path & ".cfc")>
 				<cfset loc.test_filter = reverse(listfirst(reverse(loc.test_path), "."))>
@@ -546,12 +553,12 @@
 					detail="In order to run test you must supply a valid test package or single test file to run">
 			</cfif>
 		</cfif>
-		
+
 		<cfdirectory directory="#loc.full_test_path#" action="list" recurse="true" name="q" filter="#loc.test_filter#.cfc" />
-		
+
 		<!--- for test results display --->
 		<cfset variables.WHEELS_TESTS_BASE_COMPONENT_PATH = loc.test_path>
-		
+
 		<!---
 		if env.cfm files exists, call to override enviroment settings so tests can run.
 		when overriding, save the original env so we can put it back later.
@@ -610,7 +617,7 @@
 		<cfargument name="str" type="string" required="true" hint="test name to clean up">
 		<cfreturn trim(rereplacenocase(removechars(arguments.str, 1, 4), "_|-", " ", "all"))>
 	</cffunction>
-	
+
 	<cffunction name="$cleanTestPath" returntype="string" output="false" hint="cleans up the test name so they are more readable">
 		<cfargument name="str" type="string" required="true" hint="test name to clean up">
 		<cfreturn listchangedelims(replace(arguments.str, variables.ROOT_TEST_PATH, ""), ".", ".")>
