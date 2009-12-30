@@ -41,6 +41,8 @@ Bug Fixes
 * Fixed so you can use the built-in validation methods for properties that does not exist in the database table - #362 [Andy Bellenie, Per Djurner]
 * Fixed so primary key column is not added to order clause when paginating if it has already been specified with tableName.columnName syntax - [Per Djurner]
 * Fixed so pluralization/singularization works with camelCased variable names - [Chris Peters, Per Djurner]
+* Default formatting for stylesheetLinkTag and javaScriptIncludeTag, etc - #372 [Tony Petruzzi]
+* Select() / selectTag() fail with empty query objects as options - #374 [Tony Petruzzi]
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
