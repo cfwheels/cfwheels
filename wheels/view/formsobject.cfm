@@ -192,7 +192,11 @@
 		arguments.type = "radio";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		if (!StructKeyExists(arguments, "id"))
-			arguments.id = $tagId(arguments.objectName, arguments.property) & "-" & loc.valueToAppend;
+		{
+			arguments.id = $tagId(arguments.objectName, arguments.property);
+			if (len(loc.valueToAppend))
+				arguments.id = arguments.id & "-" & loc.valueToAppend;
+		}
 		arguments.value = arguments.tagValue;
 		if (arguments.tagValue == $formValue(argumentCollection=arguments))
 			arguments.checked = "checked";
