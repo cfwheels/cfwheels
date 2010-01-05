@@ -623,5 +623,41 @@
 		<cfreturn listchangedelims(replace(arguments.str, variables.ROOT_TEST_PATH, ""), ".", ".")>
 	</cffunction>
 
+	<cffunction name="httpRequest" access="public">
+		<cfargument name="url" type="string" required="true">
+		<cfset var loc = {}>
+		<cfset loc.params = []>
+		
+		<!--- if they specified a relative url, then we need to determine the protocol and hostname for them --->
+		<cfif left(arguments.url, 1) eq "/">
+			<cfset arguments.url = "http://#cgi.HTTP_HOST##arguments.url#">
+			<cfif cgi.https eq "on">
+				<cfset arguments.url = insert("s", arguments.url, 4)>
+			</cfif>
+		</cfif>
+	
+		<!--- 
+		check to see if there is a params argument and it is an array
+		these will be used to create cfhttpparam tags
+		 --->
+		<cfif structKeyExists(arguments, "params") and IsArray(arguments.params)>
+			<cfset loc.params = duplicate(arguments.params)>
+			<cfset structdelete(arguments, "params", false)>
+		</cfif>
+		
+		<!--- override their result argument with our internal one --->
+		<cfset arguments.result = "loc.ret">
+		
+		<!--- do the request --->
+		<cfhttp attributeCollection="#arguments#">
+			<cfloop array="#loc.params#" index="loc.i">
+				<cfhttpparam attributeCollection="#loc.i#">
+			</cfloop>
+		</cfhttp>
+		
+		<cfreturn loc.ret>
+	</cffunction>
+
+
 	<cfinclude template="plugins/injection.cfm">
 </cfcomponent>
