@@ -66,3 +66,10 @@
 <cffunction name="$getVerifications" returntype="array" access="public" output="false">
 	<cfreturn variables.wheels.verifications>
 </cffunction>
+
+<cffunction name="$executeFilters" access="public" returntype="void" output="false">
+	<cfargument name="meth" type="string" required="true">
+	<cfscript>
+	$invoke(method="#arguments.meth#");
+	</cfscript>
+</cffunction>

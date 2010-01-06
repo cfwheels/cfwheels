@@ -354,7 +354,11 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			if ((!Len(loc.filters[loc.i].only) && !Len(loc.filters[loc.i].except)) || (Len(loc.filters[loc.i].only) && ListFindNoCase(loc.filters[loc.i].only, arguments.actionName)) || (Len(loc.filters[loc.i].except) && !ListFindNoCase(loc.filters[loc.i].except, arguments.actionName)))
-				$invoke(componentReference=arguments.controller, method=loc.filters[loc.i].through);
+			{
+				loc.args = {};
+				loc.args.meth = loc.filters[loc.i].through;
+				$invoke(componentReference=arguments.controller, method="$executeFilters", argumentCollection=loc.args);
+			}
 		}
 	</cfscript>
 </cffunction>
