@@ -22,7 +22,7 @@
 ##wheels-debug-area
 {
 	clear: both;
-	margin-top: 100px;
+	margin: 100px 0 100px 0;
 	text-align: left;
 	background: ##ececec;
 	padding: 10px;
