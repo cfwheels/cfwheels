@@ -112,9 +112,9 @@
 	<cfscript>
 		var loc = {};
 
-		// we only allow one association to be loaded when returning objects
-		if (application.wheels.showErrorInformation && Len(arguments.returnAs) && arguments.returnAs != "query" && (Find(",", arguments.include) || Find("(", arguments.include)))
-			$throw(type="Wheels.IncorrectArguments", message="You cannot specify more than one association in the `include` argument when returning an array of objects.", extendedInfo="Limit yourself to just one association or set `returnAs` to `query` instead.");
+		// we only allow direct associations to be loaded when returning objects
+		if (application.wheels.showErrorInformation && Len(arguments.returnAs) && arguments.returnAs != "query" && Find("(", arguments.include) && arguments.returnIncluded)
+			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You may only include direct associations to this object when returning an array of objects.");
 
 		// count records and get primary keys for pagination
 		if (arguments.page)
@@ -266,25 +266,39 @@
 					{
 						if (Len(arguments.include) && arguments.returnIncluded)
 						{
-							if (variables.wheels.class.associations[arguments.include].type == "hasMany")
-							{
-								loc.object[arguments.include] = [];
-								for (loc.j=1; loc.j <= loc.findAll.query.recordCount; loc.j++)
+							loc.xEnd = ListLen(arguments.include);
+							for (loc.x = 1; loc.x lte loc.xEnd; loc.x++) {
+								loc.include = ListGetAt(arguments.include, loc.x);
+								if (variables.wheels.class.associations[loc.include].type == "hasMany")
 								{
-									// create object instance from values in current query row if it belongs to the current object
-									loc.primaryKeyColumnValues = "";
-									loc.kEnd = ListLen(variables.wheels.class.keys);
-									for (loc.k=1; loc.k <= loc.kEnd; loc.k++)
+									loc.object[loc.include] = [];
+									loc.hasManyDoneObjects = "";
+									for (loc.j=1; loc.j <= loc.findAll.query.recordCount; loc.j++)
 									{
-										loc.primaryKeyColumnValues = ListAppend(loc.primaryKeyColumnValues, loc.findAll.query[ListGetAt(variables.wheels.class.keys, loc.k)][loc.j]);
+										loc.hasManyObject = model(variables.wheels.class.associations[loc.include].modelName).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.j, base=false);
+										if (!ListFind(loc.hasManyDoneObjects, loc.hasManyObject.key(), Chr(7)))
+										{
+											// create object instance from values in current query row if it belongs to the current object
+											loc.primaryKeyColumnValues = "";
+											loc.kEnd = ListLen(variables.wheels.class.keys);
+											for (loc.k=1; loc.k <= loc.kEnd; loc.k++)
+											{
+												loc.primaryKeyColumnValues = ListAppend(loc.primaryKeyColumnValues, loc.findAll.query[ListGetAt(variables.wheels.class.keys, loc.k)][loc.j]);
+											}
+											if (Len(loc.hasManyObject.key()) && loc.object.key() == loc.primaryKeyColumnValues)
+												ArrayAppend(loc.object[loc.include], loc.hasManyObject);
+										
+											loc.hasManyDoneObjects = ListAppend(loc.hasManyDoneObjects, loc.hasManyObject.key(), Chr(7));
+										}
 									}
-									if (loc.object.key() == loc.primaryKeyColumnValues)
-										ArrayAppend(loc.object[arguments.include], model(variables.wheels.class.associations[arguments.include].modelName).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.j));
+									
+									if (ArrayIsEmpty(loc.object[loc.include]))
+										StructDelete(loc.object, loc.include, false);
 								}
-							}
-							else
-							{
-								loc.object[arguments.include] = model(variables.wheels.class.associations[arguments.include].modelName).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.i);
+								else
+								{
+									loc.object[loc.include] = model(variables.wheels.class.associations[loc.include].modelName).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.i, base=false);
+								}
 							}
 						}
 						ArrayAppend(loc.returnValue, loc.object);
