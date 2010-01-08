@@ -358,6 +358,8 @@
 					loc.property = ListGetAt(loc.route.pattern, loc.i, "/");
 					if (loc.property Contains "[")
 					{
+						if (application.wheels.showErrorInformation && !StructKeyExists(arguments, Mid(loc.property, 2, Len(loc.property)-2)))
+							$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="The route chosen by Wheels `#loc.route.name#` requires the argument `#Mid(loc.property, 2, Len(loc.property)-2)#`. Pass the argument `#Mid(loc.property, 2, Len(loc.property)-2)#` or change your routes to reflect the proper variables needed.");
 						loc.param = $URLEncode(arguments[Mid(loc.property, 2, Len(loc.property)-2)]);
 						if (application.wheels.obfuscateUrls)
 							loc.param = obfuscateParam(loc.param);
