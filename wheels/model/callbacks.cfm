@@ -309,6 +309,8 @@
 							QueryAddColumn(arguments.collection, loc.key, ArrayNew(1));
 						arguments.collection[loc.key][loc.j] = loc.result[loc.key];
 					}
+					
+					request.wheels[Hash(GetMetaData(arguments.collection).toString())] = variables.wheels.class.modelName;
 				}
 				else if (IsBoolean(loc.result) && !loc.result)
 				{
