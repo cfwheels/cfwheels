@@ -182,11 +182,12 @@
 	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for.">
 	<cfargument name="name" type="string" required="false" default="#application.wheels.functions.paginationLinks.name#" hint="The name of the param that holds the current page number.">
 	<cfargument name="showSinglePage" type="boolean" required="false" default="#application.wheels.functions.paginationLinks.showSinglePage#" hint="Will show a single page when set to `true`. (The default behavior is to return an empty string when there is only one page in the pagination).">
+	<cfargument name="pageNumberAsParam" type="boolean" required="false" default="#application.wheels.functions.paginationLinks.pageNumberAsParam#" hint="Decides whether to link the page number as a param or as part of a route. (The default behavior is `true`).">
 
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="paginationLinks", input=arguments);
-		loc.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prepend,append,prependToPage,prependOnFirst,appendToPage,appendOnLast,classForCurrent,handle,name,showSinglePage";
+		loc.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prepend,append,prependToPage,prependOnFirst,appendToPage,appendOnLast,classForCurrent,handle,name,showSinglePage,pageNumberAsParam";
 		loc.linkToArguments = Duplicate(arguments);
 		loc.iEnd = ListLen(loc.skipArgs);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -205,7 +206,7 @@
 				if ((loc.currentPage - arguments.windowSize) > 1)
 				{
 					loc.pageNumber = 1;
-					if (StructKeyExists(arguments, "route"))
+					if (!arguments.pageNumberAsParam)
 					{
 						loc.linkToArguments[arguments.name] = loc.pageNumber;
 					}
@@ -224,7 +225,7 @@
 			{
 				if ((loc.i >= (loc.currentPage - arguments.windowSize) && loc.i <= loc.currentPage) || (loc.i <= (loc.currentPage + arguments.windowSize) && loc.i >= loc.currentPage))
 				{
-					if (StructKeyExists(arguments, "route"))
+					if (!arguments.pageNumberAsParam)
 					{
 						loc.linkToArguments[arguments.name] = loc.i;
 					}
@@ -260,7 +261,7 @@
 			{
 				if (loc.totalPages > (loc.currentPage + arguments.windowSize))
 				{
-					if (StructKeyExists(arguments, "route"))
+					if (!arguments.pageNumberAsParam)
 					{
 						loc.linkToArguments[arguments.name] = loc.totalPages;
 					}
