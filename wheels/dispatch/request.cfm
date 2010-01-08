@@ -8,8 +8,15 @@
 		if (Left(arguments.actionName, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.actionName))
 			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.actionName#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels functions.");
 
-		if (StructKeyExists(arguments.controller, arguments.actionName))
+		if (StructKeyExists(arguments.controller, arguments.actionName)) 
+		{
 			$invoke(componentReference=arguments.controller, method=arguments.actionName);
+		} 
+		else if (StructKeyExists(arguments.controller, "onMissingMethod"))
+		{
+			loc.argumentCollection = { missingMethodName = arguments.actionName, missingMethodArguments = {} };
+			$invoke(componentReference=arguments.controller, method="onMissingMethod", argumentCollection=loc.argumentCollection);
+		}
 		if (!StructKeyExists(request.wheels, "response"))
 		{
 			// a render function has not been called yet so call it here
