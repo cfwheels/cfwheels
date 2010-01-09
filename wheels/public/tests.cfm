@@ -51,7 +51,7 @@ table.testing td.n {text-align:right;}
 		<td class="<cfif testresults.results[testIndex].status eq 'Success'>success<cfelse>failed</cfif>">#testresults.results[testIndex].status#</td>
 	</tr>
 	<cfif testresults.results[testIndex].status neq "Success">
-		<tr><td colspan="7" class="failed">#replace(testresults.results[testIndex].message, chr(10) & chr(13), "<br>", "ALL")#</td></tr>
+		<tr><td colspan="7" class="failed">#replace(testresults.results[testIndex].message, chr(10), "<br/>", "ALL")#</td></tr>
 	</cfif>
 </cfloop>
 </table>
