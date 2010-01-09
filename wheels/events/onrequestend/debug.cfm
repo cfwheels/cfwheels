@@ -1,11 +1,11 @@
-<cfset loc.baseReloadURL = cgi.script_name> 
+<cfset loc.baseReloadURL = cgi.script_name>
 <cfif cgi.path_info IS NOT cgi.script_name>
-	<cfset loc.baseReloadURL = loc.baseReloadURL & cgi.path_info> 
+	<cfset loc.baseReloadURL = loc.baseReloadURL & cgi.path_info>
 </cfif>
 <cfif Len(cgi.query_string)>
-	<cfset loc.baseReloadURL = loc.baseReloadURL & "?" & cgi.query_string> 
+	<cfset loc.baseReloadURL = loc.baseReloadURL & "?" & cgi.query_string>
 </cfif>
-<cfset loc.baseReloadURL = ReplaceNoCase(loc.baseReloadURL, "/rewrite.cfm", "")> 
+<cfset loc.baseReloadURL = ReplaceNoCase(loc.baseReloadURL, "/rewrite.cfm", "")>
 <cfloop list="design,development,testing,maintenance,production,true" index="loc.i">
 	<cfset loc.baseReloadURL = ReplaceNoCase(ReplaceNoCase(loc.baseReloadURL, "?reload=" & loc.i, ""), "&reload=" & loc.i, "")>
 </cfloop>
@@ -22,7 +22,7 @@
 ##wheels-debug-area
 {
 	clear: both;
-	margin: 100px 0 100px 0;
+	margin: 100px 0;
 	text-align: left;
 	background: ##ececec;
 	padding: 10px;
@@ -32,10 +32,9 @@
 
 ##wheels-debug-area td
 {
-	font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	font: 12px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	line-height: 1.5em;
-	font-size: 12px;
-	color: ##333;	
+	color: ##333;
 }
 
 ##wheels-debug-area a
