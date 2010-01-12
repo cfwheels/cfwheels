@@ -6,7 +6,7 @@
 		variables.wheels.errors = [];
 		variables.wheels.class = {};
 		variables.wheels.class.modelName = arguments.name;
-		variables.wheels.class.RESQLOperators = "[[:space:]]*((?:LIKE)|(?:IN)|(?:<>)|(?:<=)|(?:>=)|(?:!=)|(?:!<)|(?:!>)|=|<|>)";
+		variables.wheels.class.RESQLOperators = "[[:space:]]*((?:LIKE)|(?:<>)|(?:<=)|(?:>=)|(?:!=)|(?:!<)|(?:!>)|=|<|>)";
 		variables.wheels.class.RESQLWhere = "(#variables.wheels.class.RESQLOperators#[[:space:]]*)(''|'.+?'()|(-?[0-9]|\.)+()|\(-?[0-9]+(,-?[0-9]+)*\))(($|\)|[[:space:]]*(AND|OR)))";
 		variables.wheels.class.mapping = {};
 		variables.wheels.class.properties = {};
