@@ -84,4 +84,21 @@
 		<cfset assert('loc.params.user["2"].isActive eq 0') />
 	</cffunction>
 
+	<cffunction name="test_multiple_objects_in_objects">
+		<cfscript>
+			loc.args.formScope["user"]["1"]["config"]["1"]["isValid"] = true;
+			loc.args.formScope["user"]["1"]["config"]["2"]["isValid"] = false;
+			loc.params = loc.dispatch.$createParams(argumentCollection=loc.args);
+			assert('IsStruct(loc.params.user) eq true');
+			assert('IsStruct(loc.params.user[1]) eq true');
+			assert('IsStruct(loc.params.user[1].config) eq true');
+			assert('IsStruct(loc.params.user[1].config[1]) eq true');
+			assert('IsStruct(loc.params.user[1].config[2]) eq true');
+			assert('IsBoolean(loc.params.user[1].config[1].isValid) eq true');
+			assert('IsBoolean(loc.params.user[1].config[2].isValid) eq true');
+			assert('loc.params.user[1].config[1].isValid eq true');
+			assert('loc.params.user[1].config[2].isValid eq false');
+		</cfscript>
+	</cffunction>
+
 </cfcomponent>

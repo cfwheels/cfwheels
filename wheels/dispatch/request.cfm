@@ -176,27 +176,27 @@
 				{
 					// object form field
 					loc.name = SpanExcluding(loc.key, "[");
-					loc.property = SpanExcluding(Reverse(SpanExcluding(Reverse(loc.key), "[")), "]");
+					// we split the key into an array so the developer can have multiple levels of params passed in
+					loc.nested = ListToArray(ReplaceList(loc.key, loc.name & "[,]", ""), "["); 
 					if (!StructKeyExists(loc.returnValue, loc.name))
 						loc.returnValue[loc.name] = {};
-					if (Find("][", loc.key))
+					loc.struct = loc.returnValue[loc.name]; // we need a reference to the struct so we can nest other structs if needed
+					loc.iEnd = ArrayLen(loc.nested);
+					for (loc.i = 1; loc.i lte loc.iEnd; loc.i++) // looping over the array allows for infinite nesting
 					{
-						// a collection of objects was passed in
-						loc.primaryKeyValue = Replace(SpanExcluding(loc.key, "]"), loc.name & "[", "", "one");
-						if (!StructKeyExists(loc.returnValue[loc.name], loc.primaryKeyValue))
-							loc.returnValue[loc.name][loc.primaryKeyValue] = {};
-						loc.returnValue[loc.name][loc.primaryKeyValue][loc.property] = loc.returnValue[loc.key];
+						loc.item = loc.nested[loc.i];
+						if (!StructKeyExists(loc.struct, loc.item))
+							loc.struct[loc.item] = {};
+						if (loc.i != loc.iEnd)
+							loc.struct = loc.struct[loc.item]; // pass the new reference (structs pass a reference instead of a copy) to the next iteration
+						else
+							loc.struct[loc.item] = loc.returnValue[loc.key];
 					}
-					else
-					{
-						// just one object was passed in
-						loc.returnValue[loc.name][loc.property] = loc.returnValue[loc.key];
-					}
+					// delete the original key so it doesn't show up in the params
 					StructDelete(loc.returnValue, loc.key, false);
 				}
 				else
 				{
-					// normal form field
 					loc.returnValue[loc.key] = loc.returnValue[loc.key];
 				}
 			}
@@ -287,7 +287,7 @@
 		// run verifications and before filters if they exist on the controller
 		$runVerifications(controller=loc.controller, actionName=loc.params.action, params=loc.params);
 		$runFilters(controller=loc.controller, type="before", actionName=loc.params.action);
-
+		
 		if (application.wheels.showDebugInformation)
 			$debugPoint("beforeFilters,action");
 
