@@ -1,6 +1,6 @@
 <cfcomponent extends="wheelsMapping.Controller">
 
-	<cffunction name="filterTestPrivate" access="public">
+	<cffunction name="filterTestPrivate" access="private">
 		<cfset renderText("Pass")>
 	</cffunction>
 
