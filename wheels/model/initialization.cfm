@@ -156,6 +156,42 @@
 	<cfreturn this>
 </cffunction>
 
+<cffunction name="$initModelObject" returntype="any" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="properties" type="any" required="true">
+	<cfargument name="persisted" type="boolean" required="true">
+	<cfargument name="row" type="numeric" required="false" default="1">
+	<cfscript>
+		var loc = {};
+		variables.wheels = {};
+		variables.wheels.errors = [];
+		// copy class variables from the object in the application scope
+		variables.wheels.class = $namedReadLock(name="classLock", object=application.wheels.models[arguments.name], method="$classData");
+		// setup object properties in the this scope
+		if (IsQuery(arguments.properties) && arguments.properties.recordCount != 0)
+		{
+			loc.allProperties = ListAppend(variables.wheels.class.propertyList, variables.wheels.class.calculatedPropertyList);
+			loc.iEnd = ListLen(loc.allProperties);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.iItem = ListGetAt(loc.allProperties, loc.i);
+				if (ListFindNoCase(arguments.properties.columnList, arguments.name & loc.iItem))
+					this[loc.iItem] = arguments.properties[arguments.name & loc.iItem][arguments.row];
+				else if (ListFindNoCase(arguments.properties.columnList, loc.iItem))
+					this[loc.iItem] = arguments.properties[loc.iItem][arguments.row];
+			}
+		}
+		else if (IsStruct(arguments.properties) && !StructIsEmpty(arguments.properties))
+		{
+			for (loc.key in arguments.properties)
+				this[loc.key] = arguments.properties[loc.key];
+		}
+		if (arguments.persisted)
+			$updatePersistedProperties();
+	</cfscript>
+	<cfreturn this>
+</cffunction>
+
 <cffunction name="$classData" returntype="struct" access="public" output="false">
 	<cfreturn variables.wheels.class>
 </cffunction>
