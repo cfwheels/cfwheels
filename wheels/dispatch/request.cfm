@@ -14,7 +14,9 @@
 		} 
 		else if (StructKeyExists(arguments.controller, "onMissingMethod"))
 		{
-			loc.argumentCollection = { missingMethodName = arguments.actionName, missingMethodArguments = {} };
+			loc.argumentCollection = {};
+			loc.argumentCollection.missingMethodName = arguments.actionName;
+			loc.argumentCollection.missingMethodArguments = {};
 			$invoke(componentReference=arguments.controller, method="onMissingMethod", argumentCollection=loc.argumentCollection);
 		}
 		if (!StructKeyExists(request.wheels, "response"))
