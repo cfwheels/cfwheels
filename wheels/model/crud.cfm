@@ -93,6 +93,7 @@
 	categories="model-class,read" chapters="reading-records,associations" functions="findByKey,findOne,hasMany">
 	<cfargument name="where" type="string" required="false" default="" hint="This argument maps to the `WHERE` clause of the query. The following operators are supported: `=`, `<>`, `<`, `<=`, `>`, `>=`, `LIKE`, `AND`, and `OR` (note that the key words have to be written in upper case). You can also use parentheses to group statements. You do not have to specify the table name(s), Wheels will do that for you.">
 	<cfargument name="order" type="string" required="false" default="#application.wheels.functions.findAll.order#" hint="This argument maps to the `ORDER BY` clause of the query. You do not have to specify the table name(s), Wheels will do that for you.">
+	<cfargument name="group" type="string" required="false" default="#application.wheels.functions.findAll.group#" hint="This argument maps to the `GROUP BY` clause of the query. You do not have to specify the table name(s), Wheels will do that for you.">
 	<cfargument name="select" type="string" required="false" default="" hint="This argument determines how the `SELECT` clause for the query used to return data will look.	You can pass in a list of the properties (which maps to columns) that you want returned from your table(s). If you don't set this argument at all, Wheels will select all properties from your table(s). If you specify a table name (e.g. `users.email`) or alias a column (e.g. `fn AS firstName`) in the list then the entire list will be passed through unchanged and used in the `SELECT` clause of the query. If not, Wheels will prepend the table name and resolve any naming collisions (which could happen when using the `include` argument) automatically for you. The naming collisions are resolved by prepending the model name to the property name so `users.firstName` could become `userFirstName` for example.">
 	<cfargument name="distinct" type="boolean" required="false" default="false" hint="Boolean value to decide whether to add the `DISTINCT` keyword to your `SELECT` clause. Wheels will, when necessary, add this automatically (when using pagination and a `hasMany` association is used in the `include` argument to name one example).">
 	<cfargument name="include" type="string" required="false" default="" hint="Associations that should be included in the query using `INNER` or `LEFT OUTER` joins (which join type that is used depends on how the association has been set up in your model). If all included associations are set on the current model you can specify them in a list, e.g. `department,addresses,emails`. You can build more complex `include` strings by using parentheses when the association is set on an included model, like `album(artist(genre))` for example.">
@@ -215,9 +216,10 @@
 			if (!IsArray(loc.sql))
 			{
 				loc.sql = [];
-				loc.sql = $addSelectClause(sql=loc.sql, select=arguments.select, include=arguments.include, distinct=arguments.distinct);
+				loc.sql = $addSelectClause(sql=loc.sql, select=arguments.select, include=arguments.include);
 				ArrayAppend(loc.sql, $fromClause(include=arguments.include));
 				loc.sql = $addWhereClause(sql=loc.sql, where=loc.originalWhere, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
+				loc.sql = $addGroupByClause(sql=loc.sql, select=arguments.select, group=arguments.group, include=arguments.include, distinct=arguments.distinct);
 				loc.sql = $addOrderByClause(sql=loc.sql, order=arguments.order, include=arguments.include);
 				$addToCache(key=loc.queryShellKey, value=loc.sql, category="sql");
 			}
@@ -964,43 +966,86 @@
 	<cfreturn arguments.sql>
 </cffunction>
 
+<cffunction name="$addGroupByClause" returntype="array" access="public" output="false">
+	<cfargument name="sql" type="array" required="true">
+	<cfargument name="select" type="string" required="true">
+	<cfargument name="include" type="string" required="true">
+	<cfargument name="group" type="string" required="true">
+	<cfargument name="distinct" type="boolean" required="true">
+	<cfscript>
+		var loc = { group = "" };
+		// if we want a distinct statement, we can do it grouping every field in the select
+		if (arguments.distinct)
+		{
+			loc.group = $createSQLFieldList(list=arguments.select, include=arguments.include, renameFields=false, addCalculatedProperties=false);
+		}
+		else if (Len(arguments.group))
+		{
+			loc.group = $createSQLFieldList(list=arguments.group, include=arguments.include, renameFields=false, addCalculatedProperties=false);
+		}
+		if (Len(loc.group)) 
+		{
+			loc.group = "GROUP BY " & loc.group;
+			ArrayAppend(arguments.sql, loc.group);
+		}
+	</cfscript>
+	<cfreturn arguments.sql>
+</cffunction>
+
 <cffunction name="$addSelectClause" returntype="array" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="select" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
-	<cfargument name="distinct" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
+		loc.select = $createSQLFieldList(list=arguments.select, include=arguments.include);
+		loc.select = "SELECT " & loc.select;
+		ArrayAppend(arguments.sql, loc.select);
+	</cfscript>
+	<cfreturn arguments.sql>
+</cffunction>
 
+<cffunction name="$createSQLFieldList" returntype="string" access="public" output="false">
+	<cfargument name="list" type="string" required="true">
+	<cfargument name="include" type="string" required="true">
+	<cfargument name="renameFields" type="boolean" required="false" default="true">
+	<cfargument name="addCalculatedProperties" type="boolean" required="false" default="true">
+	<cfscript>
+		var loc = {};
 		// setup an array containing class info for current class and all the ones that should be included
 		loc.classes = [];
 		if (Len(arguments.include))
 			loc.classes = $expandedAssociations(include=arguments.include);
 		ArrayPrepend(loc.classes, variables.wheels.class);
+		
+		// if the develop passes in tablename.*, translate it into the list of fields for the developer
+		// this is so we don't get *'s in the group by
+		if (Find(".*", arguments.list))
+			arguments.list = $expandProperties(list=arguments.list, classes=loc.classes);
 
 		// add properties to select if the developer did not specify any
-		if (!Len(arguments.select))
+		if (!Len(arguments.list))
 		{
 			loc.iEnd = ArrayLen(loc.classes);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.classData = loc.classes[loc.i];
-				arguments.select = ListAppend(arguments.select, loc.classData.propertyList);
+				arguments.list = ListAppend(arguments.list, loc.classData.propertyList);
 				if (Len(loc.classData.calculatedPropertyList))
-					arguments.select = ListAppend(arguments.select, loc.classData.calculatedPropertyList);
+					arguments.list = ListAppend(arguments.list, loc.classData.calculatedPropertyList);
 			}
 		}
 
 		// go through the properties and map them to the database unless the developer passed in a table name or an alias in which case we assume they know what they're doing and leave the select clause as is
-		if (arguments.select Does Not Contain "." AND arguments.select Does Not Contain " AS ")
+		if (arguments.list Does Not Contain "." AND arguments.list Does Not Contain " AS ")
 		{
-			loc.select = "";
+			loc.list = "";
 			loc.addedProperties = "";
 			loc.addedPropertiesByModel = {};
-			loc.iEnd = ListLen(arguments.select);
+			loc.iEnd = ListLen(arguments.list);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.iItem = Trim(ListGetAt(arguments.select, loc.i));
+				loc.iItem = Trim(ListGetAt(arguments.list, loc.i));
 
 				// look for duplicates
 				loc.duplicateCount = ListValueCountNoCase(loc.addedProperties, loc.iItem);
@@ -1020,17 +1065,23 @@
 					// if we find the property in this model and it's not already added we go ahead and add it to the select clause
 					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem))
 					{
-						if (loc.duplicateCount)
+						if (loc.duplicateCount && arguments.renameFields)
 							loc.toAppend = loc.toAppend & "[[duplicate]]" & loc.j;
 						if (ListFindNoCase(loc.classData.propertyList, loc.iItem))
 						{
 							loc.toAppend = loc.toAppend & loc.classData.tableName & ".";
 							if (ListFindNoCase(loc.classData.columnList, loc.iItem))
+							{
 								loc.toAppend = loc.toAppend & loc.iItem;
+							}
 							else
-								loc.toAppend = loc.toAppend & loc.classData.properties[loc.iItem].column & " AS " & loc.iItem;
+							{
+								loc.toAppend = loc.toAppend & loc.classData.properties[loc.iItem].column;
+								if (arguments.renameFields)
+									loc.toAppend = loc.toAppend & " AS " & loc.iItem;
+							}
 						}
-						else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem))
+						else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem) && arguments.addCalculatedProperties)
 						{
 							loc.toAppend = loc.toAppend & "(" & Replace(loc.classData.calculatedProperties[loc.iItem].sql, ",", "[[comma]]", "all") & ") AS " & loc.iItem;
 						}
@@ -1039,20 +1090,20 @@
 					}
 				}
 				if (Len(loc.toAppend))
-					loc.select = ListAppend(loc.select, loc.toAppend);
-				else if (application.wheels.showErrorInformation)
+					loc.list = ListAppend(loc.list, loc.toAppend);
+				else if (application.wheels.showErrorInformation && (not arguments.addCalculatedProperties && not ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)))
 					$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.iItem#` property but couldn't find it in the database table.", extendedInfo="Verify the `select` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
 			}
 
 			// let's replace eventual duplicates in the clause by prepending the class name
-			if (Len(arguments.include))
+			if (Len(arguments.include) && arguments.renameFields)
 			{
 				loc.newSelect = "";
 				loc.addedProperties = "";
-				loc.iEnd = ListLen(loc.select);
+				loc.iEnd = ListLen(loc.list);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
-					loc.iItem = ListGetAt(loc.select, loc.i);
+					loc.iItem = ListGetAt(loc.list, loc.i);
 
 					// get the property part, done by taking everytyhing from the end of the string to a . or a space (which would be found when using " AS ")
 					loc.property = Reverse(SpanExcluding(Reverse(loc.iItem), ". "));
@@ -1090,19 +1141,17 @@
 						loc.addedProperties = ListAppend(loc.addedProperties, loc.newProperty);
 					}
 				}
-				loc.select = loc.newSelect;
+				loc.list = loc.newSelect;
 			}
 		}
 		else
 		{
-			loc.select = arguments.select;
-		}
-		if (arguments.distinct)
-			loc.select = "DISTINCT " & loc.select;
-		loc.select = "SELECT " & loc.select;
-		ArrayAppend(arguments.sql, loc.select);
+			loc.list = arguments.list;
+			if (!arguments.renameFields && Find(" AS ", loc.list))
+				loc.list = REReplace(loc.list, variables.wheels.class.RESQLAs, "", "all");
+		}	
 	</cfscript>
-	<cfreturn arguments.sql>
+	<cfreturn loc.list />
 </cffunction>
 
 <cffunction name="$addWhereClause" returntype="array" access="public" output="false">
@@ -1137,7 +1186,7 @@
 					loc.elementDataPart = loc.element;
 				loc.elementDataPart = Trim(ReplaceList(loc.elementDataPart, "AND,OR", ""));
 				loc.temp = REFind("^([a-zA-Z0-9-_\.]*)#variables.wheels.class.RESQLOperators#", loc.elementDataPart, 1, true);
-				if (ArrayLen(loc.temp.len) > 1)
+				if (ArrayLen(loc.temp.len) gt 1)
 				{
 					loc.where = Replace(loc.where, loc.element, Replace(loc.element, loc.elementDataPart, "?", "one"));
 					loc.param.property = Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]);
@@ -1239,10 +1288,10 @@
 		{
 			loc.start = 1;
 			loc.originalValues = [];
-			while (!StructKeyExists(loc, "temp") || ArrayLen(loc.temp.len) > 1)
+			while (!StructKeyExists(loc, "temp") || ArrayLen(loc.temp.len) gt 1)
 			{
 				loc.temp = REFind(variables.wheels.class.RESQLWhere, arguments.where, loc.start, true);
-				if (ArrayLen(loc.temp.len) > 1)
+				if (ArrayLen(loc.temp.len) gt 1)
 				{
 					loc.start = loc.temp.pos[4] + loc.temp.len[4];
 					ArrayAppend(loc.originalValues, ReplaceList(Chr(7) & Mid(arguments.where, loc.temp.pos[4], loc.temp.len[4]) & Chr(7), "#Chr(7)#(,)#Chr(7)#,#Chr(7)#','#Chr(7)#,#Chr(7)#"",""#Chr(7)#,#Chr(7)#", ",,,,,,"));
@@ -1251,9 +1300,9 @@
 
 			loc.pos = ArrayLen(loc.originalValues);
 			loc.iEnd = ArrayLen(arguments.sql);
-			for (loc.i=loc.iEnd; loc.i > 0; loc.i--)
+			for (loc.i=loc.iEnd; loc.i gt 0; loc.i--)
 			{
-				if (IsStruct(arguments.sql[loc.i]) && loc.pos > 0)
+				if (IsStruct(arguments.sql[loc.i]) && loc.pos gt 0)
 				{
 					arguments.sql[loc.i].value = loc.originalValues[loc.pos];
 					if (loc.originalValues[loc.pos] == "")
@@ -1264,6 +1313,39 @@
 		}
 	</cfscript>
 	<cfreturn arguments.sql>
+</cffunction>
+
+<cffunction name="$expandProperties" returntype="string" access="public" output="false">
+	<cfargument name="list" type="string" required="true">
+	<cfargument name="classes" type="array" required="true">
+	<cfscript>
+		var loc = {};
+		loc.matches = REMatch("[A-Za-z1-9]+\.\*", arguments.list);
+		loc.iEnd = ArrayLen(loc.matches);
+		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++) 
+		{
+			loc.match = loc.matches[loc.i];
+			loc.fields = "";
+			loc.tableName = ListGetAt(loc.match, 1, ".");
+			loc.jEnd = ArrayLen(arguments.classes);
+			for (loc.j = 1; loc.j lte loc.jEnd; loc.j++) 
+			{
+				loc.class = arguments.classes[loc.j];
+				if (loc.class.tableName == loc.tableName) 
+				{
+					for (loc.item in loc.class.properties)
+						loc.fields = ListAppend(loc.fields, "#loc.class.tableName#.#loc.item#");
+					break;
+				}
+			}
+			
+			if (Len(loc.fields))
+				arguments.list = Replace(arguments.list, loc.match, loc.fields, "all");
+			else if (application.wheels.showErrorInformation)
+				$throw(type="Wheels.ModelNotFound", message="Wheels looked for the model mapped to table name `#loc.tableName#` but couldn't find it.", extendedInfo="Verify the `select` argument and/or your model association mappings are correct.");
+		}
+	</cfscript>
+	<cfreturn arguments.list />
 </cffunction>
 
 <cffunction name="$expandedAssociations" returntype="array" access="public" output="false">

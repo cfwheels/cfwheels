@@ -42,10 +42,12 @@
 	<cfargument name="parameterize" type="boolean" required="true">
 	<cfargument name="$primaryKey" type="string" required="false" default="">
 	<cfscript>
-		var loc = {};
+		var loc = { containsGroup = false, afterWhere = "" };
 		var query = {};
-		if (arguments.limit > 0)
+		if (arguments.limit + arguments.offset gt 0)
 		{
+			if (IsSimpleValue(arguments.sql[ArrayLen(arguments.sql) - 1]) and FindNoCase("GROUP BY", arguments.sql[ArrayLen(arguments.sql) - 1]))
+				loc.containsGroup = true;
 			if (arguments.sql[ArrayLen(arguments.sql)] Contains ",")
 			{
 				// fix for pagination issue when ordering multiple columns with same name
@@ -72,6 +74,8 @@
 			// select clause always comes first in the array, the order by clause last, remove the leading keywords leaving only the columns and set to the ones used in the inner most sub query
 			loc.thirdSelect = ReplaceNoCase(ReplaceNoCase(arguments.sql[1], "SELECT DISTINCT ", ""), "SELECT ", "");
 			loc.thirdOrder = ReplaceNoCase(arguments.sql[ArrayLen(arguments.sql)], "ORDER BY ", "");
+			if (loc.containsGroup)
+				loc.thirdGroup = ReplaceNoCase(arguments.sql[ArrayLen(arguments.sql) - 1], "GROUP BY ", "");
 	
 			// the first select is the outer most in the query and need to contain columns without table names and using aliases when they exist
 			loc.firstSelect = $columnAlias(list=$tableName(list=loc.thirdSelect, action="remove"), action="keep");
@@ -83,6 +87,11 @@
 				loc.iItem = ReplaceNoCase(ReplaceNoCase(ListGetAt(loc.thirdOrder, loc.i), " ASC", ""), " DESC", "");
 				if (!ListFindNoCase(loc.thirdSelect, loc.iItem))
 					loc.thirdSelect = ListAppend(loc.thirdSelect, loc.iItem);
+				if (loc.containsGroup) {
+					loc.iItem = REReplace(loc.iItem, "[[:space:]]AS[[:space:]][A-Za-z1-9]+", "", "all");
+					if (!ListFindNoCase(loc.thirdGroup, loc.iItem))
+						loc.thirdGroup = ListAppend(loc.thirdGroup, loc.iItem);
+				}
 			}
 
 			// the second select also needs to contain columns without table names and using aliases when they exist (but now including the columns added above)
@@ -104,10 +113,14 @@
 			if (ListRest(arguments.sql[2], " ") Contains " ")
 				loc.beforeWhere = loc.beforeWhere & "DISTINCT ";
 			loc.beforeWhere = loc.beforeWhere & "TOP " & arguments.limit+arguments.offset & " " & loc.thirdSelect & " " & arguments.sql[2];
+			if (loc.containsGroup)
+				loc.afterWhere = "GROUP BY " & loc.thirdGroup & " ";
 			loc.afterWhere = "ORDER BY " & loc.thirdOrder & ") AS tmp1 ORDER BY " & loc.secondOrder & ") AS tmp2 ORDER BY " & loc.firstOrder;
 			ArrayDeleteAt(arguments.sql, 1);
 			ArrayDeleteAt(arguments.sql, 1);
 			ArrayDeleteAt(arguments.sql, ArrayLen(arguments.sql));
+			if (loc.containsGroup)
+				ArrayDeleteAt(arguments.sql, ArrayLen(arguments.sql));
 			ArrayPrepend(arguments.sql, loc.beforeWhere);
 			ArrayAppend(arguments.sql, loc.afterWhere);
 		}

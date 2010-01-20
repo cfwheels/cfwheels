@@ -105,7 +105,7 @@
 	application.wheels.functions.exists = {reload=false, parameterize=true};
 	application.wheels.functions.fileField = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span"};
 	application.wheels.functions.fileFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
-	application.wheels.functions.findAll = {reload=false, parameterize=true, perPage=10, order="", returnAs="query", returnIncluded=true};
+	application.wheels.functions.findAll = {reload=false, parameterize=true, perPage=10, order="", group="", returnAs="query", returnIncluded=true};
 	application.wheels.functions.findByKey = {reload=false, parameterize=true, returnAs="object"};
 	application.wheels.functions.findOne = {reload=false, parameterize=true, returnAs="object"};
 	application.wheels.functions.hasMany = {joinType="outer"};
