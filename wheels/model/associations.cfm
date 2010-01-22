@@ -96,16 +96,16 @@
 
 <cffunction name="$registerAssociation" returntype="void" access="public" output="false" hint="Called from the association methods above to save the data to the class struct of the model.">
 	<cfscript>
-		var key = "";
-		
+		var associationName = "";
+		// assign the name for the association
+		associationName = arguments.name;
+		// remove the name argument from the arguments struct
+		structDelete(arguments, "name", false);
 		// store all the settings for the association in the class struct (one struct per association with the name of the association as the key)
-		variables.wheels.class.associations[arguments.name] = {};
-		for (key in arguments)
-			if (key != "name")
-				variables.wheels.class.associations[arguments.name][key] = arguments[key];
-
+		variables.wheels.class.associations[associationName] = {};
+		structAppend(variables.wheels.class.associations[associationName], arguments, true);
 		// infer model name and foreign key from association name unless developer specified it already
-		if (!Len(variables.wheels.class.associations[arguments.name].modelName))
-			variables.wheels.class.associations[arguments.name].modelName = singularize(arguments.name);
+		if (!Len(variables.wheels.class.associations[associationName].modelName))
+			variables.wheels.class.associations[associationName].modelName = singularize(associationName);
 	</cfscript>
 </cffunction>
