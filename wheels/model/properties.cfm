@@ -35,12 +35,11 @@
 	'
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,table,tableName">
 	<cfscript>
-		var loc = {};
-		loc.returnValue = variables.wheels.class.propertyList;
+		var returnValue = variables.wheels.class.propertyList;
 		if (ListLen(variables.wheels.class.calculatedPropertyList))
-			loc.returnValue = ListAppend(loc.returnValue, variables.wheels.class.calculatedPropertyList);
+			returnValue = ListAppend(returnValue, variables.wheels.class.calculatedPropertyList);
 		</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn returnValue>
 </cffunction>
 
 <!--- PUBLIC MODEL OBJECT METHODS --->
@@ -81,12 +80,13 @@
 		<!--- Get a structure of all the properties for an object --->
 		<cfset user = model("user").findByKey(1)>
 		<cfset props = user.properties()>
-	'		
-	categories="model-object,miscellaneous" chapters="" functions="setProperties">	
+	'
+	categories="model-object,miscellaneous" chapters="" functions="setProperties">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
-		
+		loc.propertyNames = propertyNames();
+
 		// loop through all properties and functions in the this scope
 		for (loc.key in this)
 		{
@@ -94,15 +94,15 @@
 			if (!IsCustomFunction(this[loc.key]))
 			{
 				// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
-				if (ListFindNoCase(propertyNames(), loc.key))
-					loc.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), loc.key));
+				if (ListFindNoCase(loc.propertyNames, loc.key))
+					loc.key = ListGetAt(loc.propertyNames, ListFindNoCase(loc.propertyNames, loc.key));
 
 				// set property from the this scope in the struct that we will return
 				loc.returnValue[loc.key] = this[loc.key];
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue> 
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="setProperties" returntype="void" access="public" output="false" hint="Allows you to set all the properties of an object at once by passing in a structure with keys matching the property names."
@@ -111,20 +111,16 @@
 		<!--- update the properties of the object with the params struct containing the values of a form post --->
 		<cfset user = model("user").findByKey(1)>
 		<cfset user.setProperties(params)>
-	'	
+	'
 	categories="model-object,miscellaneous" chapters="" functions="properties">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfscript>
-		var loc = {};
-		
-		// add eventual named arguments to properties struct (named arguments will take precedence) 
-		for (loc.key in arguments)
-			if (loc.key != "properties")
-				arguments.properties[loc.key] = arguments[loc.key];
-
+		var $properties = duplicate(arguments.properties);
+		StructDelete(arguments, "properties", false);
+		// add named arguments to properties struct (named arguments will take precedence)
+		StructAppend($properties, arguments, true);
 		// set passed in values to the this scope of this object
-		for (loc.key in arguments.properties)
-			this[loc.key] = arguments.properties[loc.key];
+		StructAppend(this, $properties, true);
 	</cfscript>
 </cffunction>
 
@@ -223,11 +219,10 @@
 			{
 				loc.item = ListGetAt(loc.changedProperties, loc.i);
 				loc.returnValue[loc.item] = {};
+				loc.returnValue[loc.item].changedTo = "";
 				loc.returnValue[loc.item].changedFrom = changedFrom(loc.item);
 				if (StructKeyExists(this, loc.item))
 					loc.returnValue[loc.item].changedTo = this[loc.item];
-				else
-					loc.returnValue[loc.item].changedTo = "";
 			}
 		}
 	</cfscript>
@@ -253,11 +248,9 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.iItem = ListGetAt(variables.wheels.class.propertyList, loc.i);
+			// set the default value unless it is blank or a value already exists for that property on the object
 			if (Len(variables.wheels.class.properties[loc.iItem].defaultValue) && (!StructKeyExists(this, loc.iItem) || !Len(this[loc.iItem])))
-			{
-				// set the default value unless it is blank or a value already exists for that property on the object
 				this[loc.iItem] = variables.wheels.class.properties[loc.iItem].defaultValue;
-			}
 		}
 	</cfscript>
 </cffunction>
