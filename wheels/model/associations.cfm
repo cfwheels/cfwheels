@@ -101,11 +101,10 @@
 		associationName = arguments.name;
 		// remove the name argument from the arguments struct
 		structDelete(arguments, "name", false);
-		// store all the settings for the association in the class struct (one struct per association with the name of the association as the key)
-		variables.wheels.class.associations[associationName] = {};
-		structAppend(variables.wheels.class.associations[associationName], arguments, true);
 		// infer model name and foreign key from association name unless developer specified it already
-		if (!Len(variables.wheels.class.associations[associationName].modelName))
-			variables.wheels.class.associations[associationName].modelName = singularize(associationName);
+		if (!Len(arguments.modelName))
+			arguments.modelName = singularize(associationName);
+		// store all the settings for the association in the class struct (one struct per association with the name of the association as the key)
+		variables.wheels.class.associations[associationName] = arguments;
 	</cfscript>
 </cffunction>
