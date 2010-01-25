@@ -53,9 +53,7 @@
 	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.new.defaults#" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
-		for (loc.key in arguments)
-			if (loc.key != "properties" && loc.key != "defaults")
-				arguments.properties[loc.key] = arguments[loc.key];
+		arguments.properties = $setProperties(argumentCollection=arguments, filterList="properties,defaults", setOnModel=false);
 		loc.returnValue = $createInstance(properties=arguments.properties, persisted=false);
 		if (arguments.defaults)
 			loc.returnValue.$setDefaultValues();
@@ -382,16 +380,14 @@
 	<cfscript>
 		var returnValue = "";
 
-		if (Len(arguments.include) && StructKeyExists(variables.wheels.class.associations, arguments.include) && variables.wheels.class.associations[arguments.include].joinType != "inner")
+		if (Len(arguments.include) && arguments.returnAs == "query") // if we are returning a query, we need to do the pagination to return just one record
 		{
-			// since we're joining with associated tables we could potentially get duplicate records for one object and we work around this by using the pagination code which has this functionality built in
 			arguments.page = 1;
 			arguments.perPage = 1;
 			arguments.count = 1;
 		}
 		else
 		{
-			// no joins will be done so we can safely get just one record from the database
 			arguments.maxRows = 1;
 		}
 		returnValue = findAll(argumentCollection=arguments);
@@ -427,12 +423,7 @@
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
-		loc.namedArgs = "where,include,properties,parameterize,instantiate,$softDeleteCheck";
-		for (loc.key in arguments)
-		{
-			if (!ListFindNoCase(loc.namedArgs, loc.key))
-				arguments.properties[loc.key] = arguments[loc.key];
-		}
+		arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,parameterize,instantiate,$softDeleteCheck", setOnModel=false);
 		if (arguments.instantiate)
 		{
     		// find and instantiate each object and call its update function
@@ -792,16 +783,8 @@
 	categories="model-object,crud" chapters="updating-records,associations" functions="hasMany,hasOne,updateAll,updateByKey,updateOne">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.update.parameterize#" hint="See documentation for @findAll.">
-	<cfscript>
-		var loc = {};
-		for (loc.key in arguments)
-			if (loc.key != "properties" && loc.key != "parameterize")
-				arguments.properties[loc.key] = arguments[loc.key];
-		for (loc.key in arguments.properties)
-			this[loc.key] = arguments.properties[loc.key];
-		loc.returnValue = save(parameterize=arguments.parameterize);
-	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfset $setProperties(argumentCollection=arguments, filterList="parameterize,properties") />
+	<cfreturn save(parameterize=arguments.parameterize)>
 </cffunction>
 
 <!--- other --->
@@ -1274,7 +1257,7 @@
 					ArrayAppend(arguments.sql, loc.addToWhere);
 				}
 			}
-		}
+		}		
 	</cfscript>
 	<cfreturn arguments.sql>
 </cffunction>
@@ -1480,7 +1463,9 @@
 	<cfscript>
 		var loc = {};
 		if (variables.wheels.class.timeStampingOnCreate)
-			this[variables.wheels.class.timeStampOnCreateProperty] = Now();
+			$timestampProperty(property=variables.wheels.class.timeStampOnCreateProperty);
+		if (variables.wheels.class.timeStampingOnUpdate)
+			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 		loc.sql = [];
 		loc.sql2 = [];
 		ArrayAppend(loc.sql, "INSERT INTO #variables.wheels.class.tableName# (");
@@ -1516,7 +1501,7 @@
 	<cfscript>
 		var loc = {};
 		if (variables.wheels.class.timeStampingOnUpdate)
-			this[variables.wheels.class.timeStampOnUpdateProperty] = Now();
+			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 		loc.sql = [];
 		ArrayAppend(loc.sql, "UPDATE #variables.wheels.class.tableName# SET ");
 		for (loc.key in variables.wheels.class.properties)
@@ -1537,6 +1522,16 @@
 </cffunction>
 
 <!--- other --->
+
+<!---
+	developers can now override this method for localizing dates if they perfer.
+--->
+<cffunction name="$timestampProperty" returntype="void" access="public" output="false">
+	<cfargument name="property" type="string" required="true" />
+	<cfscript>
+		this[arguments.property] = Now();
+	</cfscript>
+</cffunction>
 
 <cffunction name="$keyWhereString" returntype="string" access="public" output="false">
 	<cfargument name="properties" type="any" required="false" default="#variables.wheels.class.keys#">

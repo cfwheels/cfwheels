@@ -11,6 +11,7 @@
 		variables.wheels.class.RESQLWhere = "(#variables.wheels.class.RESQLOperators#[[:space:]]*)(''|'.+?'()|(-?[0-9]|\.)+()|\(-?[0-9]+(,-?[0-9]+)*\))(($|\)|[[:space:]]*(AND|OR)))";
 		variables.wheels.class.mapping = {};
 		variables.wheels.class.properties = {};
+		variables.wheels.class.accessibleProperties = {};
 		variables.wheels.class.calculatedProperties = {};
 		variables.wheels.class.associations = {};
 		variables.wheels.class.callbacks = {};

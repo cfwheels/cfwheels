@@ -1,5 +1,25 @@
 <!--- PUBLIC MODEL INITIALIZATION METHODS --->
 
+<cffunction name="accessibleProperties" returntype="void" access="public" output="false" hint="Use this method to specify which properties can be set through mass assignment.">
+	<cfargument name="propertyNames" type="string" required="false" default="" />
+	<cfscript>
+		var loc = {};
+		if (StructKeyExists(arguments, "propertyName"))
+			arguments.propertyNames = arguments.propertyName;
+		variables.wheels.class.accessibleProperties.whiteList = arguments.propertyNames;
+	</cfscript>
+</cffunction>
+
+<cffunction name="protectedProperties" returntype="void" access="public" output="false" hint="Use this method to specify which properties cannot be set through mass assignment.">
+	<cfargument name="propertyNames" type="string" required="false" default="" />
+	<cfscript>
+		var loc = {};
+		if (StructKeyExists(arguments, "propertyName"))
+			arguments.propertyNames = arguments.propertyName;
+		variables.wheels.class.accessibleProperties.blackList = arguments.propertyNames;
+	</cfscript>
+</cffunction>
+
 <cffunction name="property" returntype="void" access="public" output="false" hint="Use this method to map an object property to either a table column with a different name than the property or to a specific SQL function. You only need to use this method when you want to override the default mapping that Wheels performs."
 	examples=
 	'
@@ -35,11 +55,12 @@
 	'
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,table,tableName">
 	<cfscript>
-		var returnValue = variables.wheels.class.propertyList;
+		var loc = {};
+		loc.returnValue = variables.wheels.class.propertyList;
 		if (ListLen(variables.wheels.class.calculatedPropertyList))
-			returnValue = ListAppend(returnValue, variables.wheels.class.calculatedPropertyList);
+			loc.returnValue = ListAppend(loc.returnValue, variables.wheels.class.calculatedPropertyList);
 		</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <!--- PUBLIC MODEL OBJECT METHODS --->
@@ -80,13 +101,12 @@
 		<!--- Get a structure of all the properties for an object --->
 		<cfset user = model("user").findByKey(1)>
 		<cfset props = user.properties()>
-	'
-	categories="model-object,miscellaneous" chapters="" functions="setProperties">
+	'		
+	categories="model-object,miscellaneous" chapters="" functions="setProperties">	
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
-		loc.propertyNames = propertyNames();
-
+		
 		// loop through all properties and functions in the this scope
 		for (loc.key in this)
 		{
@@ -94,15 +114,15 @@
 			if (!IsCustomFunction(this[loc.key]))
 			{
 				// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
-				if (ListFindNoCase(loc.propertyNames, loc.key))
-					loc.key = ListGetAt(loc.propertyNames, ListFindNoCase(loc.propertyNames, loc.key));
+				if (ListFindNoCase(propertyNames(), loc.key))
+					loc.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), loc.key));
 
 				// set property from the this scope in the struct that we will return
 				loc.returnValue[loc.key] = this[loc.key];
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.returnValue> 
 </cffunction>
 
 <cffunction name="setProperties" returntype="void" access="public" output="false" hint="Allows you to set all the properties of an object at once by passing in a structure with keys matching the property names."
@@ -111,17 +131,10 @@
 		<!--- update the properties of the object with the params struct containing the values of a form post --->
 		<cfset user = model("user").findByKey(1)>
 		<cfset user.setProperties(params)>
-	'
+	'	
 	categories="model-object,miscellaneous" chapters="" functions="properties">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
-	<cfscript>
-		var $properties = duplicate(arguments.properties);
-		StructDelete(arguments, "properties", false);
-		// add named arguments to properties struct (named arguments will take precedence)
-		StructAppend($properties, arguments, true);
-		// set passed in values to the this scope of this object
-		StructAppend(this, $properties, true);
-	</cfscript>
+	<cfset $setProperties(argumentCollection=arguments) />
 </cffunction>
 
 <!--- changes --->
@@ -219,10 +232,11 @@
 			{
 				loc.item = ListGetAt(loc.changedProperties, loc.i);
 				loc.returnValue[loc.item] = {};
-				loc.returnValue[loc.item].changedTo = "";
 				loc.returnValue[loc.item].changedFrom = changedFrom(loc.item);
 				if (StructKeyExists(this, loc.item))
 					loc.returnValue[loc.item].changedTo = this[loc.item];
+				else
+					loc.returnValue[loc.item].changedTo = "";
 			}
 		}
 	</cfscript>
@@ -230,6 +244,39 @@
 </cffunction>
 
 <!--- PRIVATE MODEL OBJECT METHODS --->
+
+<cffunction name="$setProperties" returntype="struct" access="public" output="false" hint="I am the behind the scenes method to turn arguments into the properties argument.">
+	<cfargument name="properties" type="struct" required="true" />
+	<cfargument name="filterList" type="string" required="false" default="" />
+	<cfargument name="setOnModel" type="boolean" required="false" default="true" />
+	<cfscript>
+		var loc = {};
+		
+		loc.allowedProperties = {};
+		
+		arguments.filterList = ListAppend(arguments.filterList, "properties,filterList,setOnModel");
+		
+		// add eventual named arguments to properties struct (named arguments will take precedence) 
+		for (loc.key in arguments)
+			if (!ListFindNoCase(arguments.filterList, loc.key))
+				arguments.properties[loc.key] = arguments[loc.key];
+		
+		// set passed in values to the scope passed in
+		for (loc.key in arguments.properties) 
+		{
+			loc.accessible = true;
+			if (StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, loc.key))
+				loc.accessible = false;
+			if (StructKeyExists(variables.wheels.class.accessibleProperties, "blackList") && ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, loc.key))
+				loc.accessible = false;
+			if (loc.accessible)
+				loc.allowedProperties[loc.key] = arguments.properties[loc.key];
+			if (loc.accessible && arguments.setOnModel)
+				this[loc.key] = arguments.properties[loc.key];
+		}
+	</cfscript>
+	<cfreturn loc.allowedProperties />
+</cffunction>
 
 <cffunction name="$updatePersistedProperties" returntype="void" access="public" output="false">
 	<cfscript>
@@ -248,9 +295,11 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.iItem = ListGetAt(variables.wheels.class.propertyList, loc.i);
-			// set the default value unless it is blank or a value already exists for that property on the object
 			if (Len(variables.wheels.class.properties[loc.iItem].defaultValue) && (!StructKeyExists(this, loc.iItem) || !Len(this[loc.iItem])))
+			{
+				// set the default value unless it is blank or a value already exists for that property on the object
 				this[loc.iItem] = variables.wheels.class.properties[loc.iItem].defaultValue;
+			}
 		}
 	</cfscript>
 </cffunction>
