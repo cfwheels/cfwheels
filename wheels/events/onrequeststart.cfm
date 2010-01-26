@@ -39,6 +39,10 @@
 		if (!StructKeyExists(request, "cgi"))
 			request.cgi = $cgiScope();
 
+		// inject methods from plugins directly to Application.cfc
+		if (!StructIsEmpty(application.wheels.mixins))
+			$include(template="wheels/plugins/injection.cfm");
+
 		if (application.wheels.environment == "maintenance")
 		{
 			if (StructKeyExists(URL, "except"))
