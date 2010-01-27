@@ -938,7 +938,7 @@
 							}
 						}
 						if (application.wheels.showErrorInformation && !Len(loc.toAdd))
-							$throw(type="Wheels.ColumnNotFound", message="33Wheels looked for the column mapped to the `#loc.property#` property but couldn't find it in the database table.", extendedInfo="Verify the `order` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
+							$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.property#` property but couldn't find it in the database table.", extendedInfo="Verify the `order` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
 					}
 				}
 			}
@@ -1075,7 +1075,7 @@
 				if (Len(loc.toAppend))
 					loc.list = ListAppend(loc.list, loc.toAppend);
 				else if (application.wheels.showErrorInformation && (not arguments.addCalculatedProperties && not ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)))
-					$throw(type="Wheels.ColumnNotFound", message="22Wheels looked for the column mapped to the `#loc.iItem#` property but couldn't find it in the database table.", extendedInfo="Verify the `select` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
+					$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.iItem#` property but couldn't find it in the database table.", extendedInfo="Verify the `select` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
 			}
 
 			// let's replace eventual duplicates in the clause by prepending the class name
@@ -1196,7 +1196,7 @@
 						}
 					}
 					if (application.wheels.showErrorInformation && !StructKeyExists(loc.param, "column"))
-						$throw(type="Wheels.ColumnNotFound", message="11Wheels looked for the column mapped to the `#loc.param.property#` property but couldn't find it in the database table.", extendedInfo="Verify the `where` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
+						$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.param.property#` property but couldn't find it in the database table.", extendedInfo="Verify the `where` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
 					loc.temp = REFind("^[a-zA-Z0-9-_\.]*#variables.wheels.class.RESQLOperators#", loc.elementDataPart, 1, true);
 					loc.param.operator = Trim(Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]));
 					ArrayAppend(loc.params, loc.param);
