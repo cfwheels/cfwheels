@@ -65,3 +65,8 @@
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,table">
 	<cfreturn variables.wheels.class.tableName>
 </cffunction>
+
+<cffunction name="setPrimaryKey" returntype="void" access="public" output="false" hint="allows you to pass in the names of the property that should be used as the primary key(s)">
+	<cfargument name="property" type="string" required="true">
+	<cfset variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, arguments.property)>
+</cffunction>

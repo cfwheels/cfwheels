@@ -938,7 +938,7 @@
 							}
 						}
 						if (application.wheels.showErrorInformation && !Len(loc.toAdd))
-							$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.property#` property but couldn't find it in the database table.", extendedInfo="Verify the `order` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
+							$throw(type="Wheels.ColumnNotFound", message="33Wheels looked for the column mapped to the `#loc.property#` property but couldn't find it in the database table.", extendedInfo="Verify the `order` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
 					}
 				}
 			}
@@ -966,7 +966,7 @@
 		{
 			loc.group = $createSQLFieldList(list=arguments.group, include=arguments.include, renameFields=false, addCalculatedProperties=false);
 		}
-		if (Len(loc.group)) 
+		if (Len(loc.group))
 		{
 			loc.group = "GROUP BY " & loc.group;
 			ArrayAppend(arguments.sql, loc.group);
@@ -1000,7 +1000,7 @@
 		if (Len(arguments.include))
 			loc.classes = $expandedAssociations(include=arguments.include);
 		ArrayPrepend(loc.classes, variables.wheels.class);
-		
+
 		// if the develop passes in tablename.*, translate it into the list of fields for the developer
 		// this is so we don't get *'s in the group by
 		if (Find(".*", arguments.list))
@@ -1075,7 +1075,7 @@
 				if (Len(loc.toAppend))
 					loc.list = ListAppend(loc.list, loc.toAppend);
 				else if (application.wheels.showErrorInformation && (not arguments.addCalculatedProperties && not ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)))
-					$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.iItem#` property but couldn't find it in the database table.", extendedInfo="Verify the `select` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
+					$throw(type="Wheels.ColumnNotFound", message="22Wheels looked for the column mapped to the `#loc.iItem#` property but couldn't find it in the database table.", extendedInfo="Verify the `select` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
 			}
 
 			// let's replace eventual duplicates in the clause by prepending the class name
@@ -1132,7 +1132,7 @@
 			loc.list = arguments.list;
 			if (!arguments.renameFields && Find(" AS ", loc.list))
 				loc.list = REReplace(loc.list, variables.wheels.class.RESQLAs, "", "all");
-		}	
+		}
 	</cfscript>
 	<cfreturn loc.list />
 </cffunction>
@@ -1196,7 +1196,7 @@
 						}
 					}
 					if (application.wheels.showErrorInformation && !StructKeyExists(loc.param, "column"))
-						$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.param.property#` property but couldn't find it in the database table.", extendedInfo="Verify the `where` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
+						$throw(type="Wheels.ColumnNotFound", message="11Wheels looked for the column mapped to the `#loc.param.property#` property but couldn't find it in the database table.", extendedInfo="Verify the `where` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
 					loc.temp = REFind("^[a-zA-Z0-9-_\.]*#variables.wheels.class.RESQLOperators#", loc.elementDataPart, 1, true);
 					loc.param.operator = Trim(Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]));
 					ArrayAppend(loc.params, loc.param);
@@ -1257,7 +1257,7 @@
 					ArrayAppend(arguments.sql, loc.addToWhere);
 				}
 			}
-		}		
+		}
 	</cfscript>
 	<cfreturn arguments.sql>
 </cffunction>
@@ -1305,23 +1305,23 @@
 		var loc = {};
 		loc.matches = REMatch("[A-Za-z1-9]+\.\*", arguments.list);
 		loc.iEnd = ArrayLen(loc.matches);
-		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++) 
+		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 		{
 			loc.match = loc.matches[loc.i];
 			loc.fields = "";
 			loc.tableName = ListGetAt(loc.match, 1, ".");
 			loc.jEnd = ArrayLen(arguments.classes);
-			for (loc.j = 1; loc.j lte loc.jEnd; loc.j++) 
+			for (loc.j = 1; loc.j lte loc.jEnd; loc.j++)
 			{
 				loc.class = arguments.classes[loc.j];
-				if (loc.class.tableName == loc.tableName) 
+				if (loc.class.tableName == loc.tableName)
 				{
 					for (loc.item in loc.class.properties)
 						loc.fields = ListAppend(loc.fields, "#loc.class.tableName#.#loc.item#");
 					break;
 				}
 			}
-			
+
 			if (Len(loc.fields))
 				arguments.list = Replace(arguments.list, loc.match, loc.fields, "all");
 			else if (application.wheels.showErrorInformation)
@@ -1392,6 +1392,7 @@
 			loc.classAssociations[loc.name].join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# ON ";
 			loc.toAppend = "";
 			loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
+
 			for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 			{
 				loc.key1 = ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.j);

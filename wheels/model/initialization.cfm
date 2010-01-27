@@ -15,6 +15,7 @@
 		variables.wheels.class.calculatedProperties = {};
 		variables.wheels.class.associations = {};
 		variables.wheels.class.callbacks = {};
+		variables.wheels.class.keys = "";
 		variables.wheels.class.connection = {datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword};
 		variables.wheels.class.setDefaultValidations = application.wheels.setDefaultValidations;
 
@@ -51,7 +52,6 @@
 		// get columns for the table
 		loc.columns = variables.wheels.class.adapter.$getColumns(variables.wheels.class.tableName);
 
-		variables.wheels.class.keys = "";
 		variables.wheels.class.propertyList = "";
 		variables.wheels.class.columnList = "";
 		loc.iEnd = loc.columns.recordCount;
@@ -86,7 +86,7 @@
 
 			if (loc.columns["is_primarykey"][loc.i])
 			{
-				variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.property);
+				setPrimaryKey(loc.property);
 			}
 			else
 			{
@@ -108,9 +108,6 @@
 			variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, loc.property);
 			variables.wheels.class.columnList = ListAppend(variables.wheels.class.columnList, variables.wheels.class.properties[loc.property].column);
 		}
-
-		if (!Len(variables.wheels.class.keys))
-			$throw(type="Wheels.NoPrimaryKey", message="No primary key exists on the `#variables.wheels.class.tableName#` table.", extendedInfo="Set an appropriate primary key on the `#variables.wheels.class.tableName#` table.");
 
 		// add calculated properties
 		variables.wheels.class.calculatedPropertyList = "";

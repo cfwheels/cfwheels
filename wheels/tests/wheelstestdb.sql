@@ -190,4 +190,22 @@ CREATE TABLE [dbo].[Shops](
 	[ShopId] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[userphotos]') AND type in (N'V'))
+DROP VIEW [dbo].[userphotos]
+go
+
+create view userphotos
+as
+select
+	u.userid as userid
+	,u.username as username
+	,u.firstname as firstname
+	,u.lastname as lastname
+	,pg.title as title
+	,pg.photogalleryid as photogalleryid
+from
+	users u
+	inner join photogalleries pg
+		on u.id = pg.userid
 go
