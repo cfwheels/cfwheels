@@ -731,9 +731,9 @@
 					$create(parameterize=arguments.parameterize);
 					if (arguments.defaults)
 						$setDefaultValues();
-					$updatePersistedProperties();
 					if ($callback("afterCreate"))
 						returnValue = $callback("afterSave");
+					$updatePersistedProperties();
 				}
 			}
 			else
@@ -743,10 +743,10 @@
 					if (hasChanged())
 					{
 						$update(parameterize=arguments.parameterize);
-						$updatePersistedProperties();
 					}
 					if ($callback("afterUpdate"))
 						returnValue = $callback("afterSave");
+					$updatePersistedProperties();
 				}
 			}
 		}
