@@ -12,6 +12,8 @@ Changes
 Bug Fixes
 =========
 * Defaulted day to 1 and month to 1 when submitting forms - [Tony Petruzzi]
+* Cannot specify a blank value for dateSelectTag - #391 [Andy Bellenie, Tony Petruzzi]
+* Callbacks shouldn't need to be pre-loaded - #388 [Andy Bellenie, Tony Petruzzi]
 
 Other
 =====
