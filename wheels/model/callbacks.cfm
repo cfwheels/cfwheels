@@ -205,6 +205,9 @@
 	<cfargument name="methods" type="string" required="true">
 	<cfscript>
 		var loc = {};
+		// create this type in the array if it doesn't already exist
+		if (not StructKeyExists(variables.wheels.class.callbacks,arguments.type))
+			variables.wheels.class.callbacks[arguments.type] = ArrayNew(1);
 		if (StructKeyExists(arguments, "method"))
 			arguments.methods = arguments.method;
 		loc.iEnd = ListLen(arguments.methods);
@@ -218,21 +221,23 @@
 	<cfscript>
 		for (loc.key in variables.wheels.class.callbacks)
 			if (!Len(arguments.type) || arguments.type == loc.key)
-				ArrayClear(variables.wheels.class.callbacks[loc.key]);			
+				ArrayClear(variables.wheels.class.callbacks[loc.key]);
 	</cfscript>
 </cffunction>
 
 <cffunction name="$callbacks" returntype="any" access="public" output="false" hint="Returns all registered callbacks for this model (as a struct). Pass in the `type` argument to only return callbacks for that specific type (as an array).">
 	<cfargument name="type" type="string" required="false" default="" hint="See documentation for @$clearCallbacks.">
 	<cfscript>
-		var returnValue = "";
 		if (Len(arguments.type))
-			returnValue = variables.wheels.class.callbacks[arguments.type];
-		else
-			returnValue = variables.wheels.class.callbacks;
+		{
+			if (StructKeyExists(variables.wheels.class.callbacks,arguments.type))
+				return variables.wheels.class.callbacks[arguments.type];
+			return ArrayNew(1);
+		}
+		return variables.wheels.class.callbacks;
 	</cfscript>
-	<cfreturn returnValue>
 </cffunction>
+
 
 <!--- PRIVATE MODEL OBJECT METHODS --->
 
@@ -276,7 +281,7 @@
 	<cfargument name="collection" type="query" required="true" hint="See documentation for @$callback.">
 	<cfscript>
 		var loc = {};
-		
+
 		// we return true by default
 		// will be overridden only if the callback method returns false on one of the iterations
 		loc.returnValue = true;
@@ -293,10 +298,10 @@
 				loc.kItem = ListGetAt(arguments.collection.columnList, loc.k);
 				loc.args[loc.kItem] = arguments.collection[loc.kItem][loc.j];
 			}
-			
+
 			// execute the callback method
 			loc.result = $invoke(method=arguments.method, argumentCollection=loc.args);
-			
+
 			if (StructKeyExists(loc, "result"))
 			{
 				if (IsStruct(loc.result))
@@ -309,7 +314,7 @@
 							QueryAddColumn(arguments.collection, loc.key, ArrayNew(1));
 						arguments.collection[loc.key][loc.j] = loc.result[loc.key];
 					}
-					
+
 					request.wheels[Hash(GetMetaData(arguments.collection).toString())] = variables.wheels.class.modelName;
 				}
 				else if (IsBoolean(loc.result) && !loc.result)
