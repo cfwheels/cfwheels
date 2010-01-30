@@ -96,9 +96,14 @@
 
 <cffunction name="$registerAssociation" returntype="void" access="public" output="false" hint="Called from the association methods above to save the data to the class struct of the model.">
 	<cfscript>
-		var associationName = "";
 		// assign the name for the association
-		associationName = arguments.name;
+		var associationName = arguments.name;
+		
+		// default our nesting to false and set other nesting properties
+		arguments.nested = {};
+		arguments.nested.allow = false;
+		arguments.nested.delete = false;
+		arguments.nested.rejectIfBlank = "";
 		// remove the name argument from the arguments struct
 		structDelete(arguments, "name", false);
 		// infer model name and foreign key from association name unless developer specified it already

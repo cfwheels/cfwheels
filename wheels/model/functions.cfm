@@ -5,6 +5,7 @@
 <cfinclude template="errors.cfm">
 <cfinclude template="initialization.cfm">
 <cfinclude template="miscellaneous.cfm">
+<cfinclude template="nestedattributes.cfm">
 <cfinclude template="onmissingmethod.cfm">
 <cfinclude template="properties.cfm">
 <cfinclude template="validations.cfm">

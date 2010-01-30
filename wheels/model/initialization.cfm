@@ -182,8 +182,7 @@
 		}
 		else if (IsStruct(arguments.properties) && !StructIsEmpty(arguments.properties))
 		{
-			for (loc.key in arguments.properties)
-				this[loc.key] = arguments.properties[loc.key];
+			$setProperties(properties=arguments.properties, setOnModel=true);
 		}
 		if (arguments.persisted)
 			$updatePersistedProperties();

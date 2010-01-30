@@ -1,22 +1,26 @@
 <!--- PUBLIC MODEL INITIALIZATION METHODS --->
 
 <cffunction name="accessibleProperties" returntype="void" access="public" output="false" hint="Use this method to specify which properties can be set through mass assignment.">
-	<cfargument name="propertyNames" type="string" required="false" default="" />
+	<cfargument name="properties" type="string" required="false" default="" />
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(arguments, "propertyName"))
-			arguments.propertyNames = arguments.propertyName;
-		variables.wheels.class.accessibleProperties.whiteList = arguments.propertyNames;
+		if (StructKeyExists(arguments, "property"))
+			arguments.properties = ListAppend(arguments.properties, arguments.property);
+		// see if any associations should be included in the white list
+		for (loc.association in variables.wheels.class.associations)
+			if (variables.wheels.class.associations[loc.association].nested.allow)
+				arguments.properties = ListAppend(arguments.properties, loc.association);
+		variables.wheels.class.accessibleProperties.whiteList = Replace(arguments.properties, ", ", ",", "all");
 	</cfscript>
 </cffunction>
 
 <cffunction name="protectedProperties" returntype="void" access="public" output="false" hint="Use this method to specify which properties cannot be set through mass assignment.">
-	<cfargument name="propertyNames" type="string" required="false" default="" />
+	<cfargument name="properties" type="string" required="false" default="" />
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(arguments, "propertyName"))
-			arguments.propertyNames = arguments.propertyName;
-		variables.wheels.class.accessibleProperties.blackList = arguments.propertyNames;
+		if (StructKeyExists(arguments, "property"))
+			arguments.properties = ListAppend(arguments.properties, arguments.property);
+		variables.wheels.class.accessibleProperties.blackList = Replace(arguments.properties, ", ", ",", "all");
 	</cfscript>
 </cffunction>
 
@@ -245,7 +249,7 @@
 
 <!--- PRIVATE MODEL OBJECT METHODS --->
 
-<cffunction name="$setProperties" returntype="struct" access="public" output="false" hint="I am the behind the scenes method to turn arguments into the properties argument.">
+<cffunction name="$setProperties" returntype="any" access="public" output="false" hint="I am the behind the scenes method to turn arguments into the properties argument.">
 	<cfargument name="properties" type="struct" required="true" />
 	<cfargument name="filterList" type="string" required="false" default="" />
 	<cfargument name="setOnModel" type="boolean" required="false" default="true" />
@@ -261,8 +265,7 @@
 			if (!ListFindNoCase(arguments.filterList, loc.key))
 				arguments.properties[loc.key] = arguments[loc.key];
 		
-		// set passed in values to the scope passed in
-		for (loc.key in arguments.properties) 
+		for (loc.key in arguments.properties) // loop throug the properties and see if they can be set based off of the accessible properties lists
 		{
 			loc.accessible = true;
 			if (StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, loc.key))
@@ -272,10 +275,27 @@
 			if (loc.accessible)
 				loc.allowedProperties[loc.key] = arguments.properties[loc.key];
 			if (loc.accessible && arguments.setOnModel)
-				this[loc.key] = arguments.properties[loc.key];
+				$setProperty(property=loc.key, value=loc.allowedProperties[loc.key]);
 		}
+		
+		if (arguments.setOnModel)
+			return;
 	</cfscript>
 	<cfreturn loc.allowedProperties />
+</cffunction>
+
+<cffunction name="$setProperty" returntype="void" access="public" output="false">
+	<cfargument name="property" type="string" required="true" />
+	<cfargument name="value" type="any" required="true" />
+	<cfscript>
+		if (IsStruct(arguments.value) and StructKeyExists(variables.wheels.class.associations, arguments.property) and variables.wheels.class.associations[arguments.property].nested.allow)
+			$setOneToOneAssociationProperty(property=arguments.property, value=arguments.value, association=variables.wheels.class.associations[arguments.property]);
+		else if (IsArray(arguments.value) and StructKeyExists(variables.wheels.class.associations, arguments.property) and variables.wheels.class.associations[arguments.property].nested.allow)
+			$setCollectionAssociationProperty(property=arguments.property, value=arguments.value, association=variables.wheels.class.associations[arguments.property]);
+		else
+			this[arguments.property] = arguments.value;
+	</cfscript>
+	<cfreturn />
 </cffunction>
 
 <cffunction name="$updatePersistedProperties" returntype="void" access="public" output="false">
