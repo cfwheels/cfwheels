@@ -1,3 +1,22 @@
+<cffunction name="$structKeysExist" returntype="boolean" access="public" output="false" hint="Check to see if all keys in the list exist for the structure and have length.">
+	<cfargument name="struct" type="struct" required="true" />
+	<cfargument name="keys" type="string" required="false" default="" />
+	<cfscript>
+		var loc = {};
+		loc.returnValue = true;
+		loc.iEnd = ListLen(arguments.keys);
+		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+		{
+			if (!StructKeyExists(arguments.struct, ListGetAt(arguments.keys, loc.i)) || (IsSimpleValue(arguments.struct[ListGetAt(arguments.keys, loc.i)]) && !Len(arguments.struct[ListGetAt(arguments.keys, loc.i)])))
+			{
+				loc.returnValue = false;
+				break;
+			}
+		}
+	</cfscript>
+	<cfreturn loc.returnValue />
+</cffunction>
+
 <cffunction name="$hyphenize" returntype="string" access="public" output="false" hint="Converts camelcase strings to lowercase strings with hyphens instead. Example: `myVariable` becomes `my-variable`.">
 	<cfargument name="string" type="string" required="true" hint="The string to hyphenize.">
 	<cfreturn LCase(REReplace(REReplace(arguments.string, "([A-Z])", "-\l\1", "all"), "^-", "", "one"))>
