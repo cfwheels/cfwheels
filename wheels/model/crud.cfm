@@ -386,7 +386,7 @@
 			arguments.perPage = 1;
 			arguments.count = 1;
 		}
-		else
+		else if (arguments.returnAs == "query")
 		{
 			arguments.maxRows = 1;
 		}
