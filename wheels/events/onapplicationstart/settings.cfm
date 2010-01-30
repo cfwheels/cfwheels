@@ -147,6 +147,7 @@
 	application.wheels.functions.timeSelect = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1};
 	application.wheels.functions.timeSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1};
 	application.wheels.functions.timeUntilInWords = {includeSeconds=false};
+	application.wheels.functions.truncate = {length=30, truncateString="..."};
 	application.wheels.functions.update = {parameterize=true};
 	application.wheels.functions.updateAll = {parameterize=true, instantiate=false};
 	application.wheels.functions.URLFor = {onlyPath=true, host="", protocol="", port=0};
@@ -159,6 +160,7 @@
 	application.wheels.functions.validatesPresenceOf = {message="[property] can't be empty"};
 	application.wheels.functions.validatesUniquenessOf = {message="[property] has already been taken", allowBlank=false};
 	application.wheels.functions.verifies = {handler=""};
+	application.wheels.functions.wordTruncate = {length=5, truncateString="..."};
 	application.wheels.functions.yearSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, startYear=Year(Now())-5, endYear=Year(Now())+5};
 
 	// set a flag to indicate that all settings have been loaded

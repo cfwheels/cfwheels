@@ -190,14 +190,47 @@
 	'
 	categories="view-helper,text" functions="autoLink,excerpt,highlight,simpleFormat,titleize">
 	<cfargument name="text" type="string" required="true" hint="The text to truncate.">
-	<cfargument name="length" type="numeric" required="false" default="30" hint="Length to truncate the text to.">
-	<cfargument name="truncateString" type="string" required="false" default="..." hint="String to replace the last characters with.">
+	<cfargument name="length" type="numeric" required="false" default="#application.wheels.functions.truncate.length#" hint="Length to truncate the text to.">
+	<cfargument name="truncateString" type="string" required="false" default="#application.wheels.functions.truncate.truncateString#" hint="String to replace the last characters with.">
 	<cfscript>
 		var loc = {};
-		if (Len(arguments.text) > arguments.length)
+		if (Len(arguments.text) gt arguments.length)
 			loc.returnValue = Left(arguments.text, arguments.length-Len(arguments.truncateString)) & arguments.truncateString;
 		else
 			loc.returnValue = arguments.text;
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="wordTruncate" returntype="string" access="public" output="false" hint="Truncates text to the specified length of words and replaces the remaining characters with the specified truncate string. (Defaults to ""..."")."
+	examples=
+	'
+		##wordTruncate(text="Wheels is a framework for ColdFusion", length=4)##
+		-> Wheels is a frame...
+
+		##truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")##
+		-> Wheels is a framework for (more)
+	'
+	categories="view-helper,text" functions="autoLink,excerpt,highlight,simpleFormat,titleize">
+	<cfargument name="text" type="string" required="true" hint="The text to truncate.">
+	<cfargument name="length" type="numeric" required="false" default="5" hint="Length to truncate the text to.">
+	<cfargument name="truncateString" type="string" required="false" default="..." hint="String to replace the last characters with.">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = "";
+		loc.wordArray = ListToArray(arguments.text, " ", false);
+		loc.wordLen = ArrayLen(loc.wordArray);
+		
+		if (loc.wordLen gt arguments.length)
+		{
+			for (loc.i = 1; loc.i lte arguments.length; loc.i++)
+				loc.returnValue = ListAppend(loc.returnValue, loc.wordArray[loc.i], " ");
+			loc.returnValue = loc.returnValue & arguments.truncateString;
+		}
+		else
+		{
+			loc.returnValue = arguments.text;
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
