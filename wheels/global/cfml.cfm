@@ -164,3 +164,19 @@
 		<cfabort>
 	</cfif>
 </cffunction>
+
+<cffunction name="$listClean" returntype="any" access="public" output="false" hint="removes whitespace between list elements. optional argument to return the list as an array.">
+	<cfargument name="list" type="string" required="true">
+	<cfargument name="delim" type="string" required="false" default=",">
+	<cfargument name="returnAs" type="string" required="false" default="string">
+	<cfset var loc = {}>
+	<cfset loc.list = ListToArray(arguments.list, arguments.delim)>
+	<cfset loc.iEnd = ArrayLen(loc.list)>
+	<cfloop from="1" to="#loc.iEnd#" index="loc.i">
+		<cfset loc.list[loc.i] = trim(loc.list[loc.i])>
+	</cfloop>
+	<cfif arguments.returnAs eq "array">
+		<cfreturn loc.list>
+	</cfif>
+	<cfreturn ArrayToList(loc.list, arguments.delim)>
+</cffunction>

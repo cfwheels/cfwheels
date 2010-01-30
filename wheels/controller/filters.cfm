@@ -22,8 +22,8 @@
 			loc.item = Trim(ListGetAt(arguments.through, loc.i));
 			loc.thisFilter = {};
 			loc.thisFilter.through = loc.item;
-			loc.thisFilter.only = Replace(arguments.only, ", ", ",", "all");
-			loc.thisFilter.except = Replace(arguments.except, ", ", ",", "all");
+			loc.thisFilter.only = $listClean(arguments.only);
+			loc.thisFilter.except = $listClean(arguments.except);
 			if (arguments.type == "before")
 				ArrayAppend(variables.wheels.beforeFilters, loc.thisFilter);
 			else

@@ -32,7 +32,7 @@
 	<cfargument name="if" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfscript>
-		arguments.list = Replace(arguments.list, ", ", ",", "all");
+		arguments.list = $listClean(arguments.list);
 		$registerValidation(methods="$validateExclusionOf", argumentCollection=arguments);
 	</cfscript>
 </cffunction>
@@ -80,7 +80,7 @@
 	<cfargument name="if" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfscript>
-		arguments.list = Replace(arguments.list, ", ", ",", "all");
+		arguments.list = $listClean(arguments.list);
 		$registerValidation(methods="$validateInclusionOf", argumentCollection=arguments);
 	</cfscript>
 </cffunction>
@@ -107,7 +107,7 @@
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfscript>
 		if (Len(arguments.within))
-			arguments.within = ListToArray(Replace(arguments.within, ", ", ",", "all"));
+			arguments.within = $listClean(list=arguments.within, returnAs="array");
 		$registerValidation(methods="$validateLengthOf", argumentCollection=arguments);
 	</cfscript>
 </cffunction>
@@ -162,7 +162,7 @@
 	<cfargument name="if" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfscript>
-		arguments.scope = Replace(arguments.scope, ", ", ",", "all");
+		arguments.scope = $listClean(arguments.scope);
 		$registerValidation(methods="$validateUniquenessOf", argumentCollection=arguments);
 	</cfscript>
 </cffunction>

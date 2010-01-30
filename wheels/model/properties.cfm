@@ -10,7 +10,7 @@
 		for (loc.association in variables.wheels.class.associations)
 			if (variables.wheels.class.associations[loc.association].nested.allow)
 				arguments.properties = ListAppend(arguments.properties, loc.association);
-		variables.wheels.class.accessibleProperties.whiteList = Replace(arguments.properties, ", ", ",", "all");
+		variables.wheels.class.accessibleProperties.whiteList = $listClean(arguments.properties);
 	</cfscript>
 </cffunction>
 
@@ -20,7 +20,7 @@
 		var loc = {};
 		if (StructKeyExists(arguments, "property"))
 			arguments.properties = ListAppend(arguments.properties, arguments.property);
-		variables.wheels.class.accessibleProperties.blackList = Replace(arguments.properties, ", ", ",", "all");
+		variables.wheels.class.accessibleProperties.blackList = $listClean(arguments.properties);
 	</cfscript>
 </cffunction>
 
@@ -105,12 +105,12 @@
 		<!--- Get a structure of all the properties for an object --->
 		<cfset user = model("user").findByKey(1)>
 		<cfset props = user.properties()>
-	'		
-	categories="model-object,miscellaneous" chapters="" functions="setProperties">	
+	'
+	categories="model-object,miscellaneous" chapters="" functions="setProperties">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
-		
+
 		// loop through all properties and functions in the this scope
 		for (loc.key in this)
 		{
@@ -126,7 +126,7 @@
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue> 
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="setProperties" returntype="void" access="public" output="false" hint="Allows you to set all the properties of an object at once by passing in a structure with keys matching the property names."
@@ -135,7 +135,7 @@
 		<!--- update the properties of the object with the params struct containing the values of a form post --->
 		<cfset user = model("user").findByKey(1)>
 		<cfset user.setProperties(params)>
-	'	
+	'
 	categories="model-object,miscellaneous" chapters="" functions="properties">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfset $setProperties(argumentCollection=arguments) />
@@ -255,16 +255,16 @@
 	<cfargument name="setOnModel" type="boolean" required="false" default="true" />
 	<cfscript>
 		var loc = {};
-		
+
 		loc.allowedProperties = {};
-		
+
 		arguments.filterList = ListAppend(arguments.filterList, "properties,filterList,setOnModel");
-		
-		// add eventual named arguments to properties struct (named arguments will take precedence) 
+
+		// add eventual named arguments to properties struct (named arguments will take precedence)
 		for (loc.key in arguments)
 			if (!ListFindNoCase(arguments.filterList, loc.key))
 				arguments.properties[loc.key] = arguments[loc.key];
-		
+
 		for (loc.key in arguments.properties) // loop throug the properties and see if they can be set based off of the accessible properties lists
 		{
 			loc.accessible = true;
@@ -277,7 +277,7 @@
 			if (loc.accessible && arguments.setOnModel)
 				$setProperty(property=loc.key, value=loc.allowedProperties[loc.key]);
 		}
-		
+
 		if (arguments.setOnModel)
 			return;
 	</cfscript>

@@ -5,10 +5,10 @@
 	<cfargument name="rejectIfBlank" type="string" required="false" default="" hint="A list of properties that should not be blank, if anyone of the properties are blank, the submission will be rejected." />
 	<cfscript>
 		var loc = {};
-		
+
 		if (StructKeyExists(arguments, "association"))
-			arguments.associations = ListAppend(Replace(arguments.associations, ", ", ",", "all"), arguments.association);
-			
+			arguments.associations = ListAppend($listClean(arguments.associations), arguments.association);
+
 		loc.iEnd = ListLen(arguments.associations);
 		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 		{
@@ -17,7 +17,7 @@
 			{
 				variables.wheels.class.associations[loc.association].nested.allow = true;
 				variables.wheels.class.associations[loc.association].nested.delete = arguments.allowDelete;
-				variables.wheels.class.associations[loc.association].nested.rejectIfBlank = Replace(arguments.rejectIfBlank, ", ", ",", "all");
+				variables.wheels.class.associations[loc.association].nested.rejectIfBlank = $listClean(arguments.rejectIfBlank);
 				// add to the white list if it exists
 				if (StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList"))
 					variables.wheels.class.accessibleProperties.whiteList = ListAppend(variables.wheels.class.accessibleProperties.whiteList, loc.association, ",");
@@ -27,7 +27,7 @@
 				$throw(type="Wheels.AssociationNotFound", message="The assocation `#loc.association#` was not found on the #variables.wheels.class.modelName# model.", extendedInfo="Make sure your have call `hasMany()`, `hasOne()`, or `belongsTo()` before calling the `nestedAttributesFor()` method.");
 			}
 		}
-		
+
 		afterCreate(method="$saveAssociations"); // we need an after create so that we have the top objects id for setting foreign key values
 		beforeUpdate(method="$saveAssociations");
 	</cfscript>
@@ -44,16 +44,16 @@
 				if (StructKeyExists(this, loc.association))
 				{
 					loc.array = this[loc.association];
-					
+
 					if (IsObject(this[loc.association]))
 						loc.array = [ this[loc.association] ];
-				
+
 					if (IsArray(loc.array))
 					{
 						// get our expanded information for this association
 						loc.info = $expandedAssociations(include=loc.association);
 						loc.info = loc.info[1];
-					
+
 						loc.iEnd = ArrayLen(loc.array);
 						for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 						{
@@ -77,7 +77,7 @@
 	<cfargument name="association" type="struct" required="true" />
 	<cfscript>
 		this[arguments.property] = $getAssociationObject(argumentCollection=arguments);
-	
+
 		if (IsObject(this[arguments.property]))
 			this[arguments.property].setProperties(properties=arguments.value);
 		else
@@ -94,12 +94,12 @@
 		var loc = {};
 
 		this[arguments.property] = [];
-		
+
 		loc.iEnd = ArrayLen(arguments.value);
 		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 		{
 			ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association));
-			
+
 			loc.position = ArrayLen(this[arguments.property]);
 			if (IsObject(this[arguments.property][loc.position]))
 				this[arguments.property][loc.position].setProperties(properties=arguments.value[loc.i]);
@@ -121,16 +121,16 @@
 		loc.arguments = {};
 		loc.returnValue = false;
 		loc.model = model(arguments.association.modelName);
-		
+
 		// check to see if the struct has all of the keys we need from rejectIfBlank
 		if ($structKeysExist(struct=arguments.value, properties=arguments.association.nested.rejectIfBlank))
 		{
 			// get our primary keys, if they don't exist, then we create a new object
 			loc.arguments.key = $createPrimaryKeyList(params=arguments.value, keys=loc.model.primaryKey());
-			
+
 			if (Len(loc.arguments.key))
 				loc.object = loc.model.findByKey(argumentCollection=loc.arguments);
-			
+
 			if (!IsObject(loc.object) && (!StructKeyExists(arguments.value, "_delete") || (IsBoolean(arguments.value["_delete"]) && !arguments.value["_delete"])))
 			{
 				loc.method = "new";
@@ -144,10 +144,10 @@
 			{
 				loc.method = "deleteByKey";
 			}
-			
+
 			if (Len(loc.method))
 				loc.returnValue = $invoke(componentReference=loc.model, method=loc.method, argumentCollection=loc.arguments);
-		}	
+		}
 	</cfscript>
 	<cfreturn loc.returnValue />
 </cffunction>
@@ -158,14 +158,14 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
-		
+
 		loc.iEnd = ListLen(arguments.keys);
 		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 		{
 			loc.key = ListGetAt(arguments.keys, loc.i);
 			if (!StructKeyExists(arguments.params, loc.key))
 				return "";
-			loc.returnValue = ListAppend(loc.returnValue, arguments.params[loc.key]);	
+			loc.returnValue = ListAppend(loc.returnValue, arguments.params[loc.key]);
 		}
 	</cfscript>
 	<cfreturn loc.returnValue />
