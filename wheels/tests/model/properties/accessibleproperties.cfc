@@ -12,7 +12,7 @@
 
 	<cffunction name="test_all_other_properties_cannot_be_set_except_accessible_properties">
 		<cfset loc.model = model("post") />
-		<cfset loc.model.accessibleProperties(propertyName="views") />
+		<cfset loc.model.accessibleProperties(properties="views") />
 		<cfset loc.properties = { views = "2000", averageRating = 4.9, body = "This is the body", title = "this is the title" } />
 		<cfset loc.model = loc.model.new(properties=loc.properties) />
 		<cfset assert('StructKeyExists(loc.model, "averageRating") eq false') />
