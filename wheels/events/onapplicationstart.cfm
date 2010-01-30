@@ -130,14 +130,7 @@
 						$directory(action="create", directory=loc.thisPluginFolder);
 					$zip(action="unzip", destination=loc.thisPluginFolder, file=loc.thisPluginFile, overwrite=application.wheels.overwritePlugins);
 					loc.fileName = LCase(loc.pluginName) & "." & loc.pluginName;
-					try
-					{
-						loc.plugin = $createObjectFromRoot(path=application.wheels.pluginComponentPath, fileName=loc.fileName, method="init");
-					}
-					catch(Any e)
-					{
-						$throw(type="Wheels.ErrorLoadingPlugin", message="The #loc.pluginName# plugin could not be loaded.", extendedInfo="Verify that `plugins/#Replace(loc.fileName, '.', '/')#.cfc` has an `init` method that returns `this`.");
-					}
+					loc.plugin = $createObjectFromRoot(path=application.wheels.pluginComponentPath, fileName=loc.fileName, method="init");
 					loc.plugin.pluginVersion = loc.pluginVersion;
 					if (!StructKeyExists(loc.plugin, "version") || ListFind(loc.plugin.version, SpanExcluding(application.wheels.version, " ")) || application.wheels.loadIncompatiblePlugins)
 					{
