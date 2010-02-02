@@ -230,7 +230,7 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
-		if ($formHasError(argumentCollection=arguments))
+		if ($formHasError(argumentCollection=arguments) and Len(arguments.errorElement))
 			loc.returnValue = loc.returnValue & $tag(name=arguments.errorElement, class="field-with-errors");
 		if (Len(arguments.label) && arguments.labelPlacement != "after")
 		{
@@ -267,7 +267,7 @@
 				loc.returnValue = loc.returnValue & "</label>";
 			loc.returnValue = loc.returnValue & arguments.appendToLabel;
 		}
-		if ($formHasError(argumentCollection=arguments))
+		if ($formHasError(argumentCollection=arguments) and Len(arguments.errorElement))
 			loc.returnValue = loc.returnValue & "</" & arguments.errorElement & ">";
 	</cfscript>
 	<cfreturn loc.returnValue>
