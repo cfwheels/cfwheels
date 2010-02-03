@@ -198,7 +198,7 @@ go
 create view userphotos
 as
 select
-	u.userid as userid
+	u.id as userid
 	,u.username as username
 	,u.firstname as firstname
 	,u.lastname as lastname
