@@ -214,7 +214,7 @@
 	<cfargument name="objectName" type="string" required="true">
 	<cfscript>
 		var returnValue = "";
-		if (Find(".", arguments.objectName))
+		if (Find(".", arguments.objectName) or Find("[", arguments.objectName))
 			returnValue = Evaluate(arguments.objectName);
 		else
 			returnValue = variables[arguments.objectName];
