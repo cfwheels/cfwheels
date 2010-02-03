@@ -485,6 +485,12 @@
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="singularize")>
 </cffunction>
 
+<cffunction name="toXHTML" returntype="string" access="public" output="false" hint="returns an XHTML compliant string">
+	<cfargument name="str" type="string" required="true" hint="string to make XHTML compliant">
+	<cfset arguments.str = Replace(arguments.str, "&", "&amp;", "all")>
+	<cfreturn arguments.str>
+</cffunction>
+
 <!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$singularizeOrPluralize" returntype="string" access="public" output="false" hint="Called by singularize and pluralize to perform the conversion.">
