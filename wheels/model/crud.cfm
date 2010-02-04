@@ -1455,7 +1455,7 @@
 		var loc = {};
 		if (variables.wheels.class.timeStampingOnCreate)
 			$timestampProperty(property=variables.wheels.class.timeStampOnCreateProperty);
-		if (variables.wheels.class.timeStampingOnUpdate)
+		if (application.wheels.setUpdatedAtOnCreate && variables.wheels.class.timeStampingOnUpdate)
 			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 		loc.sql = [];
 		loc.sql2 = [];
