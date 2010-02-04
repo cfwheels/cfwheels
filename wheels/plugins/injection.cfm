@@ -19,8 +19,8 @@
 				if (!StructKeyExists(variables, "core"))
 					variables.core = {};
 				if (StructKeyExists(variables, $wheels.methodName) && !StructKeyExists(variables.core, $wheels.methodName))
-					variables.core[$wheels.methodName] = Duplicate(variables[$wheels.methodName]);
-				variables[$wheels.methodName] = Duplicate(application.wheels.plugins[$wheels.pluginName][$wheels.methodName]);
+					variables.core[$wheels.methodName] = variables[$wheels.methodName];
+				variables[$wheels.methodName] = application.wheels.plugins[$wheels.pluginName][$wheels.methodName];
 			}
 		}
 	}
