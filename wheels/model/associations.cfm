@@ -103,6 +103,8 @@
 		arguments.nested = {};
 		arguments.nested.allow = false;
 		arguments.nested.delete = false;
+		arguments.nested.autosave = false;
+		arguments.nested.sortProperty = "";
 		arguments.nested.rejectIfBlank = "";
 		// remove the name argument from the arguments struct
 		structDelete(arguments, "name", false);
@@ -113,3 +115,6 @@
 		variables.wheels.class.associations[associationName] = arguments;
 	</cfscript>
 </cffunction>
+
+
+
