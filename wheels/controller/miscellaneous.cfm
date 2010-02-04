@@ -1,4 +1,7 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
+<cffunction name="controllerName" returntype="string" access="public" output="false" hint="Returns the name of the controller.">
+	<cfreturn variables.wheels.name />
+</cffunction>
 
 <cffunction name="isSecure" returntype="boolean" access="public" output="false" hint="Returns whether wheels is communicating over a secure port."
 	examples=
