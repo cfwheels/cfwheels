@@ -19,6 +19,8 @@
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="textField", reserved="type,name,value", input=arguments);
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "text";
@@ -26,8 +28,6 @@
 		loc.maxlength = $maxLength(argumentCollection=arguments);
 		if (StructKeyExists(loc, "maxlength"))
 			arguments.maxlength = loc.maxlength;
-		if (!StructKeyExists(arguments, "id"))
-			arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = $formValue(argumentCollection=arguments);
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
@@ -55,6 +55,8 @@
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="passwordField", reserved="type,name,value", input=arguments);
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "password";
@@ -62,8 +64,6 @@
 		loc.maxlength = $maxLength(argumentCollection=arguments);
 		if (StructKeyExists(loc, "maxlength"))
 			arguments.maxlength = loc.maxlength;
-		if (!StructKeyExists(arguments, "id"))
-			arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = $formValue(argumentCollection=arguments);
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
@@ -117,12 +117,12 @@
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="fileField", reserved="type,name", input=arguments);
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "file";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		if (!StructKeyExists(arguments, "id"))
-			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -149,11 +149,11 @@
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="textArea", reserved="name", input=arguments);
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		if (!StructKeyExists(arguments, "id"))
-			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.content = $formValue(argumentCollection=arguments);
 		loc.returnValue = loc.before & $element(name="textarea", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
@@ -187,16 +187,16 @@
 		$insertDefaults(name="radioButton", reserved="type,name,value,checked", input=arguments);
 		loc.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.tagValue, "[^a-z0-9- ]", "", "all"), " ", "-", "all"));
 		arguments.$appendToFor = loc.valueToAppend;
-		loc.before = $formBeforeElement(argumentCollection=arguments);
-		loc.after = $formAfterElement(argumentCollection=arguments);
-		arguments.type = "radio";
-		arguments.name = $tagName(arguments.objectName, arguments.property);
 		if (!StructKeyExists(arguments, "id"))
 		{
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 			if (len(loc.valueToAppend))
 				arguments.id = arguments.id & "-" & loc.valueToAppend;
 		}
+		loc.before = $formBeforeElement(argumentCollection=arguments);
+		loc.after = $formAfterElement(argumentCollection=arguments);
+		arguments.type = "radio";
+		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.value = arguments.tagValue;
 		if (arguments.tagValue == $formValue(argumentCollection=arguments))
 			arguments.checked = "checked";
@@ -228,12 +228,12 @@
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="checkBox", reserved="type,name,value,checked", input=arguments);
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "checkbox";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		if (!StructKeyExists(arguments, "id"))
-			arguments.id = $tagId(arguments.objectName, arguments.property);
 		arguments.value = arguments.checkedValue;
 		loc.value = $formValue(argumentCollection=arguments);
 		if (loc.value == arguments.value || IsNumeric(loc.value) && loc.value == 1 || !IsNumeric(loc.value) && IsBoolean(loc.value) && loc.value)
@@ -280,11 +280,11 @@
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="select", reserved="name", input=arguments);
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		if (!StructKeyExists(arguments, "id"))
-			arguments.id = $tagId(arguments.objectName, arguments.property);
 		if (StructKeyExists(arguments, "multiple"))
 		{
 			if (arguments.multiple)

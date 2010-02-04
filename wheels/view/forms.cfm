@@ -205,8 +205,6 @@
 				loc.attributes[Replace(loc.key, "label", "")] = arguments[loc.key];
 		if (StructKeyExists(arguments, "id"))
 			loc.attributes.for = arguments.id;
-		else
-			loc.attributes.for = $tagId(arguments.objectName, arguments.property);
 		if (Len(arguments.$appendToFor))
 			loc.attributes.for = loc.attributes.for & "-" & arguments.$appendToFor;
 		loc.returnValue = loc.returnValue & $tag(name="label", attributes=loc.attributes);
