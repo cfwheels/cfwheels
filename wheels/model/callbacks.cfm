@@ -208,11 +208,13 @@
 		// create this type in the array if it doesn't already exist
 		if (not StructKeyExists(variables.wheels.class.callbacks,arguments.type))
 			variables.wheels.class.callbacks[arguments.type] = ArrayNew(1);
+		loc.existingCallbacks = ArrayToList(variables.wheels.class.callbacks[arguments.type]);
 		if (StructKeyExists(arguments, "method"))
 			arguments.methods = arguments.method;
 		loc.iEnd = ListLen(arguments.methods);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			ArrayAppend(variables.wheels.class.callbacks[arguments.type], ListGetAt(arguments.methods, loc.i));
+			if (!ListFindNoCase(loc.existingCallbacks, ListGetAt(arguments.methods, loc.i)))
+				ArrayAppend(variables.wheels.class.callbacks[arguments.type], ListGetAt(arguments.methods, loc.i));
 	</cfscript>
 </cffunction>
 
