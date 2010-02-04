@@ -239,7 +239,7 @@
 		if (loc.value == arguments.value || IsNumeric(loc.value) && loc.value == 1 || !IsNumeric(loc.value) && IsBoolean(loc.value) && loc.value)
 			arguments.checked = "checked";
 		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments);
-		if (!IsStruct(arguments.objectName))
+		if (Len(arguments.uncheckedValue))
 		{
 			loc.hiddenAttributes = {};
 			loc.hiddenAttributes.type = "hidden";

@@ -190,6 +190,7 @@
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="checked" type="boolean" required="false" default="false" hint="Whether or not the check box should be checked by default.">
 	<cfargument name="value" type="string" required="false" default="#application.wheels.functions.checkBoxTag.value#" hint="Value of check box in its `checked` state.">
+	<cfargument name="uncheckedValue" type="string" required="false" default="" hint="The value of the check box when it's on the `unchecked` state.">
 	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.checkBoxTag.label#" hint="See documentation for @textField.">
 	<cfargument name="labelPlacement" type="string" required="false" default="#application.wheels.functions.checkBoxTag.labelPlacement#" hint="See documentation for @textField.">
 	<cfargument name="prepend" type="string" required="false" default="#application.wheels.functions.checkBoxTag.prepend#" hint="See documentation for @textField.">
