@@ -380,16 +380,6 @@
 	<cfscript>
 		var returnValue = "";
 
-		if (Len(arguments.include) && arguments.returnAs == "query") // if we are returning a query, we need to do the pagination to return just one record
-		{
-			arguments.page = 1;
-			arguments.perPage = 1;
-			arguments.count = 1;
-		}
-		else if (arguments.returnAs == "query")
-		{
-			arguments.maxRows = 1;
-		}
 		returnValue = findAll(argumentCollection=arguments);
 		if (IsArray(returnValue))
 		{
