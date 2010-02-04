@@ -1,3 +1,38 @@
+<!--- helper method to recursively map a structure to build mapping paths and retrieve its values so you can have your way with a deeply nested structure --->
+<cffunction name="$mapStruct" returntype="void" access="public" output="false" mixin="dispatch">
+	<cfargument name="map" type="struct" required="true" />
+	<cfargument name="struct" type="struct" required="true" />
+	<cfargument name="path" type="string" required="false" default="" />
+	<cfscript>
+		var loc = {};
+		for (loc.item in arguments.struct) 
+		{
+			if (IsStruct(arguments.struct[loc.item])) // go further down the rabit hole
+			{
+				$mapStruct(map=arguments.map, struct=arguments.struct[loc.item], path="#arguments.path#[#loc.item#]");
+			}
+			else // map our position and value
+			{
+				arguments.map["#arguments.path#[#loc.item#]"] = {};
+				arguments.map["#arguments.path#[#loc.item#]"].value = arguments.struct[loc.item];
+			}
+		}
+	</cfscript>
+</cffunction>
+
+<!--- convert an array to a structure --->
+<cffunction name="$arrayToStruct" returntype="struct" access="public" output="false">
+	<cfargument name="array" type="array" required="true" />
+	<cfscript>
+		var loc = {};
+		loc.struct = {};
+		loc.iEnd = ArrayLen(arguments.array);
+		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+			loc.struct[loc.i] = arguments.array[loc.i];
+	</cfscript>
+	<cfreturn loc.struct />
+</cffunction>
+
 <cffunction name="$structKeysExist" returntype="boolean" access="public" output="false" hint="Check to see if all keys in the list exist for the structure and have length.">
 	<cfargument name="struct" type="struct" required="true" />
 	<cfargument name="keys" type="string" required="false" default="" />
