@@ -134,6 +134,8 @@
 		arguments.$appendToFor = arguments.$type;
 		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1 && ListLen(arguments.label) > 1)
 			arguments.label = ListGetAt(arguments.label, ListFindNoCase(arguments.order, arguments.$type));
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = arguments.$id & "-" & arguments.$type;
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		loc.content = "";
@@ -166,9 +168,6 @@
 				loc.content = loc.content & $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=loc.args);
 			}
 		}
-
-		if (!StructKeyExists(arguments, "id"))
-			arguments.id = arguments.$id & "-" & arguments.$type;
 		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
