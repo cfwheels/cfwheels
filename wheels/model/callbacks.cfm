@@ -314,8 +314,6 @@
 							QueryAddColumn(arguments.collection, loc.key, ArrayNew(1));
 						arguments.collection[loc.key][loc.j] = loc.result[loc.key];
 					}
-
-					request.wheels[Hash(GetMetaData(arguments.collection).toString())] = variables.wheels.class.modelName;
 				}
 				else if (IsBoolean(loc.result) && !loc.result)
 				{
@@ -325,6 +323,9 @@
 				}
 			}
 		}
+		// update the request with a hash of the query if it changed so that we can find it with pagination
+		if (!StructKeyExists(request.wheels, Hash(GetMetaData(arguments.collection).toString())))
+			request.wheels[Hash(GetMetaData(arguments.collection).toString())] = variables.wheels.class.modelName;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
