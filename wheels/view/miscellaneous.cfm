@@ -186,20 +186,17 @@
 			// form element for object(s)
 			loc.returnValue = ListLast(arguments.objectName, ".");
 			if (Find("[", loc.returnValue))
-			{
-				// this is a form element for an array of objects so we replace the array position with the primary key value of the object (unless the object is new and has no primary key set)
-				loc.key = $getObject(arguments.objectName).key();
-				if (Len(loc.key))
-					loc.returnValue = ListFirst(loc.returnValue, "[") & "-" & $getObject(arguments.objectName).key();
-				else
-					loc.returnValue = ReplaceList(loc.returnValue, "[,]", "-,");
-			}
-			loc.returnValue = loc.returnValue & "-" & arguments.property;
+				loc.returnValue = $swapArrayPositionsForIds(objectName=loc.returnValue);
+			if (Find("[", arguments.property))
+				loc.returnValue = REReplace(REReplace(loc.returnValue & arguments.property, "[,\[]", "-", "all"), "[""'\]]", "", "all");
+			else
+				loc.returnValue = REReplace(REReplace(loc.returnValue & "-" & arguments.property, "[,\[]", "-", "all"), "[""'\]]", "", "all");
+			if (Find("--", loc.returnValue)) // we have a new object and we don't want to repeat ids
+				loc.returnValue = Replace(loc.returnValue, "--", "-new-" & $getNewObjectCount(loc.returnValue) & "-", "all");
 		}
 		else
 		{
-			// this is a non object form element
-			loc.returnValue = ReplaceList(arguments.property, "[,]", "-,");
+			loc.returnValue = ReplaceList(arguments.property, "[,],',""", "-,");
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -214,12 +211,11 @@
 		{
 			loc.returnValue = ListLast(arguments.objectName, ".");
 			if (Find("[", loc.returnValue))
-			{
-				loc.key = $getObject(arguments.objectName).key();
-				if (Len(loc.key))
-					loc.returnValue = ListFirst(loc.returnValue, "[") & "[" & loc.key & "]";
-			}
-			loc.returnValue = loc.returnValue & "[" & arguments.property & "]";
+				loc.returnValue = $swapArrayPositionsForIds(objectName=loc.returnValue);
+			if (Find("[", arguments.property))
+				loc.returnValue = ReplaceList(loc.returnValue & arguments.property, "',""", "");
+			else
+				loc.returnValue = ReplaceList(loc.returnValue & "[" & arguments.property & "]", "',""", "");
 		}
 		else
 		{
@@ -227,6 +223,31 @@
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$swapArrayPositionsForIds" returntype="string" access="public" output="false">
+	<cfargument name="objectName" type="any" required="true" />
+	<cfscript>
+		var loc = {};
+		loc.returnValue = arguments.objectName;
+		
+		// we could have multiple nested arrays so we need to traverse the objectName to find where we have array positions and
+		// swap all of the out for object ids
+		loc.array = ListToArray(ReplaceList(loc.returnValue, "],'", ""), "[", true);
+		loc.iEnd = ArrayLen(loc.array);
+		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+		{
+			if (REFind("\d", loc.array[loc.i])) // if we find a digit, we need to replace it with an id
+			{
+				// build our object reference
+				loc.objectReference = "";
+				for (loc.j = 1; loc.j lte loc.i; loc.j++)
+					loc.objectReference = ListAppend(loc.objectReference, ListGetAt(arguments.objectName, loc.j, "["), "[");
+				loc.returnValue = ListSetAt(loc.returnValue, loc.i, $getObject(loc.objectReference).key() & "]", "[");
+			}
+		}
+	</cfscript>
+	<cfreturn loc.returnValue />
 </cffunction>
 
 <cffunction name="$addToJavaScriptAttribute" returntype="string" access="public" output="false">
@@ -253,11 +274,37 @@
 <cffunction name="$getObject" returntype="any" access="public" output="false" hint="Returns the object referenced by the variable name passed in. If the scope is included it gets it from there, otherwise it gets it from the variables scope.">
 	<cfargument name="objectName" type="string" required="true">
 	<cfscript>
-		var returnValue = "";
+		var loc = {};
+		loc.returnValue = "";
+		
 		if (Find(".", arguments.objectName) or Find("[", arguments.objectName)) // we can't directly invoke objects in structure or arrays of objects so we must evaluate
-			returnValue = Evaluate(arguments.objectName);
+		{
+			if (ReFind("\[\]", arguments.objectName)) // we have an array object without a postion so create a new object to return
+			{
+				loc.array = ListToArray(ReplaceList(arguments.objectName, "],'", ""), "[", false);
+				loc.returnValue = $invoke(componentReference=model(singularize(loc.array[ArrayLen(loc.array)])), method="new");
+			}
+			else
+			{
+				loc.returnValue = Evaluate(arguments.objectName);
+			}
+		}
 		else
-			returnValue = variables[arguments.objectName];
+		{
+			loc.returnValue = variables[arguments.objectName];
+		}
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$getNewObjectCount" returntype="numeric" access="public" output="false">
+	<cfargument name="id" type="string" required="true" />
+	<cfscript>
+		if (!StructKeyExists(request.wheels, "counts"))
+			request.wheels.counts = {};
+		if (!StructKeyExists(request.wheels.counts, arguments.id))
+			request.wheels.counts[arguments.id] = 0;
+		request.wheels.counts[arguments.id]++;
+	</cfscript>
+	<cfreturn request.wheels.counts[arguments.id] />
 </cffunction>
