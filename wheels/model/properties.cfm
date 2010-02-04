@@ -1,6 +1,7 @@
 <!--- PUBLIC MODEL INITIALIZATION METHODS --->
 
-<cffunction name="accessibleProperties" returntype="void" access="public" output="false" hint="Use this method to specify which properties can be set through mass assignment.">
+<cffunction name="accessibleProperties" returntype="void" access="public" output="false" hint="Use this method to specify which properties can be set through mass assignment."
+	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="protectedProperties">
 	<cfargument name="properties" type="string" required="false" default="" />
 	<cfscript>
 		var loc = {};
@@ -14,7 +15,8 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="protectedProperties" returntype="void" access="public" output="false" hint="Use this method to specify which properties cannot be set through mass assignment.">
+<cffunction name="protectedProperties" returntype="void" access="public" output="false" hint="Use this method to specify which properties cannot be set through mass assignment."
+	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="accessibleProperties">
 	<cfargument name="properties" type="string" required="false" default="" />
 	<cfscript>
 		var loc = {};
@@ -287,11 +289,12 @@
 <cffunction name="$setProperty" returntype="void" access="public" output="false">
 	<cfargument name="property" type="string" required="true" />
 	<cfargument name="value" type="any" required="true" />
+	<cfargument name="associations" type="struct" required="false" default="#variables.wheels.class.associations#" />
 	<cfscript>
-		if (IsStruct(arguments.value) and StructKeyExists(variables.wheels.class.associations, arguments.property) and variables.wheels.class.associations[arguments.property].nested.allow)
-			$setOneToOneAssociationProperty(property=arguments.property, value=arguments.value, association=variables.wheels.class.associations[arguments.property]);
-		else if (IsArray(arguments.value) and StructKeyExists(variables.wheels.class.associations, arguments.property) and variables.wheels.class.associations[arguments.property].nested.allow)
-			$setCollectionAssociationProperty(property=arguments.property, value=arguments.value, association=variables.wheels.class.associations[arguments.property]);
+		if (IsStruct(arguments.value) && StructKeyExists(arguments.associations, arguments.property) && arguments.associations[arguments.property].nested.allow && ListFindNoCase("belongsTo,hasOne", arguments.associations[arguments.property].type))
+			$setOneToOneAssociationProperty(property=arguments.property, value=arguments.value, association=arguments.associations[arguments.property]);
+		else if ((IsStruct(arguments.value) || IsArray(arguments.value)) && StructKeyExists(arguments.associations, arguments.property) && arguments.associations[arguments.property].nested.allow && arguments.associations[arguments.property].type == "hasMany")
+			$setCollectionAssociationProperty(property=arguments.property, value=arguments.value, association=arguments.associations[arguments.property]);
 		else
 			this[arguments.property] = arguments.value;
 	</cfscript>
