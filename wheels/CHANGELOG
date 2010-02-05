@@ -21,6 +21,10 @@ Bug Fixes
 * Fixed bug with select() and selectTag() failing with empty collections as options - #374 [Tony Petruzzi]
 * Added missing option "variableName" to validatesFormatOf() options - #337 [Raul Riera, Per Djurner]
 * Get disallowed methods from Wheels.cfc instead to allow methods in Controller.cfc to be executed as actions - [Per Djurner]
+* Fixed so all callbacks run when the valid() method is called - #303 [Tony Petruzzi]
+* Allow private methods to be used as controller filters - #380 [Tony Petruzzi]
+* Fixed so the date form helpers can accept a blank string as the default value - #391 [Andy Bellenie]
+* Fixed so that the "for" and "id" HTML attributes match when passing an empty string in "tagValue" - #303 [Tony Petruzzi]
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
