@@ -730,10 +730,7 @@
 			{
 				if ($callback("beforeValidationOnUpdate") && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation") && $callback("afterValidationOnUpdate") && $callback("beforeSave") && $callback("beforeUpdate"))
 				{
-					if (hasChanged())
-					{
-						$update(parameterize=arguments.parameterize);
-					}
+					$update(parameterize=arguments.parameterize);
 					if ($callback("afterUpdate"))
 						returnValue = $callback("afterSave");
 					$updatePersistedProperties();
