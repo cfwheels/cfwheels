@@ -3,7 +3,7 @@
 	'
 		<!--- view code --->
 		<cfoutput>
-		    ##errorMessageFor(objectName="user")##
+		    ##errorMessagesFor(objectName="user")##
 		</cfoutput>
 	'
 	categories="view-helper,errors" chapters="form-helpers-and-showing-errors" functions="errorMessagesOn">
