@@ -3,7 +3,7 @@
 	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
 	<cfset global.args = {}>
 	<cfset global.args.source = "test.css,test1.css">
-	<cfset global.result = '<link href="#application.wheels.webpath#stylesheets/test.css" media="all" rel="stylesheet" type="text/css" /><link href="#application.wheels.webpath#stylesheets/test1.css" media="all" rel="stylesheet" type="text/css" />'>
+	<cfset global.result = '<link href="#application.wheels.webpath#stylesheets/test.css" media="all" rel="stylesheet" type="text/css" />#chr(10)#<link href="#application.wheels.webpath#stylesheets/test1.css" media="all" rel="stylesheet" type="text/css" />#chr(10)#'>
 
 	<cffunction name="test_both_templates_have_extensions">
 		<cfset loc.e = loc.controller.styleSheetLinkTag(argumentcollection=loc.args)>

@@ -3,7 +3,7 @@
 	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
 	<cfset global.args = {}>
 	<cfset global.args.source = "test.js,test1.js">
-	<cfset global.result = '<script src="#application.wheels.webpath#javascripts/test.js" type="text/javascript"></script><script src="#application.wheels.webpath#javascripts/test1.js" type="text/javascript"></script>'>
+	<cfset global.result = '<script src="#application.wheels.webpath#javascripts/test.js" type="text/javascript"></script>#chr(10)#<script src="#application.wheels.webpath#javascripts/test1.js" type="text/javascript"></script>#chr(10)#'>
 
 	<cffunction name="test_both_templates_have_extensions">
 		<cfset loc.e = loc.controller.javaScriptIncludeTag(argumentcollection=loc.args)>
