@@ -1,6 +1,6 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.user = createobject("component", "wheelsMapping.model").$initModelClass("Users")>
+	<cfset global.user = createobject("component", "wheelsMapping.model").$initModelClass("User")>
 
 	<cffunction name="test_setting_and_getting_properties">
 

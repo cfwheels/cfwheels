@@ -42,7 +42,7 @@
 
 	<cffunction name="test_specify_where_on_joined_table">
 		<cfset loc.q = model("photogallery").findOne(
-		        include="users"
+		        include="user"
 		        ,where="users.lastname = 'petruzzi'"
 		        ,orderby="photogalleryid"
 		)>
