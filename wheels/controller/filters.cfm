@@ -55,21 +55,24 @@
 
 <!--- PRIVATE FUNCTIONS --->
 
-<cffunction name="$getBeforeFilters" returntype="array" access="public" output="false">
-	<cfreturn variables.wheels.beforeFilters>
-</cffunction>
-
-<cffunction name="$getAfterFilters" returntype="array" access="public" output="false">
-	<cfreturn variables.wheels.afterFilters>
-</cffunction>
-
 <cffunction name="$getVerifications" returntype="array" access="public" output="false">
 	<cfreturn variables.wheels.verifications>
 </cffunction>
 
-<cffunction name="$executeFilters" access="public" returntype="void" output="false">
-	<cfargument name="meth" type="string" required="true">
+<cffunction name="$runFilters" returntype="void" access="public" output="false">
+	<cfargument name="type" type="string" required="true">
+	<cfargument name="action" type="string" required="true">
 	<cfscript>
-	$invoke(method="#arguments.meth#");
+		var loc = {};
+		if (arguments.type == "before")
+			loc.filters = variables.wheels.beforeFilters;
+		else
+			loc.filters = variables.wheels.afterFilters;
+		loc.iEnd = ArrayLen(loc.filters);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			if ((!Len(loc.filters[loc.i].only) && !Len(loc.filters[loc.i].except)) || (Len(loc.filters[loc.i].only) && ListFindNoCase(loc.filters[loc.i].only, arguments.action)) || (Len(loc.filters[loc.i].except) && !ListFindNoCase(loc.filters[loc.i].except, arguments.action)))
+				$invoke(method=loc.filters[loc.i].through);
+		}
 	</cfscript>
 </cffunction>

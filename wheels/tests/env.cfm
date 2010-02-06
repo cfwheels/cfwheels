@@ -1,3 +1,5 @@
+<cfset application.wheels.controllerPath = "/wheelsMapping/tests/_assets/controllers">
+<cfset application.wheels.controllerComponentPath = "wheelsMapping.tests._assets.controllers">
 <cfset application.wheels.modelPath = "/wheelsMapping/tests/_assets/models">
 <cfset application.wheels.modelComponentPath = "wheelsMapping.tests._assets.models">
 <cfset application.wheels.dataSourceName = "wheelstestdb">

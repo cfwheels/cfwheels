@@ -1,27 +1,23 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.dispatcher = createobject("component", "wheelsMapping.Dispatch") />
+	<cfinclude template="/wheelsMapping/global/functions.cfm">
 
 	<cffunction name="test_access_public_methods">
-		<cfset loc.controller = createobject("component", "wheelsMapping.tests._assets.controllers.FilterTestPublic").$initControllerClass() />
-		<cfset loc.controller.filters("filterTestPublic")>
-		<cfset assert('structkeyexists(loc.controller, "filterTestPublic")')>
-		<cfset loc.dispatcher.$runFilters(controller=loc.controller, actionname="index", type="before")>
-		<cfset loc.e = "Pass">
-		<cfset loc.r = trim(request.wheels.response)>
-		<cfset halt(false, 'request.wheels.response')>
-		<cfset assert('loc.e eq loc.r')>
+		<cfset loc.params.controller = "test">
+		<cfset loc.params.action = "s">
+		<cfset loc.controller = $controller("filterTestPublic").$createControllerObject(loc.params)>
+		<cfset loc.controller.$runFilters(type="before", action="index")>
+		<cfset assert("StructKeyExists(request, 'filterTestPublic') AND request.filterTestPublic")>
+		<cfset StructDelete(request, "filterTestPublic")>
 	</cffunction>
 
 	<cffunction name="test_access_private_methods">
-		<cfset loc.controller = createobject("component", "wheelsMapping.tests._assets.controllers.FilterTestPrivate").$initControllerClass() />
-		<cfset loc.controller.filters("filterTestPrivate")>
-		<cfset assert('not structkeyexists(loc.controller, "filterTestPrivate")')>
-		<cfset loc.dispatcher.$runFilters(controller=loc.controller, actionname="index", type="before")>
-		<cfset loc.e = "Pass">
-		<cfset loc.r = trim(request.wheels.response)>
-		<cfset halt(false, 'request.wheels.response')>
-		<cfset assert('loc.e eq loc.r')>
+		<cfset loc.params.controller = "test">
+		<cfset loc.params.action = "s">
+		<cfset loc.controller = $controller("filterTestPrivate").$createControllerObject(loc.params)>
+		<cfset loc.controller.$runFilters(type="before", action="index")>
+		<cfset assert("StructKeyExists(request, 'filterTestPrivate') AND request.filterTestPrivate")>
+		<cfset StructDelete(request, "filterTestPrivate")>
 	</cffunction>
 
 </cfcomponent>

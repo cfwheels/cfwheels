@@ -433,7 +433,7 @@
 
 		// run verifications and before filters if they exist on the controller
 		$runVerifications(controller=loc.controller, actionName=loc.params.action, params=loc.params);
-		$runFilters(controller=loc.controller, type="before", actionName=loc.params.action);
+		loc.controller.$runFilters(type="before", action=loc.params.action);
 		
 		// check to see if the controller params has changed and if so, instantiate the new controller and re-run filters and verifications
 		if (loc.params.controller != loc.controller.controllerName()) {
@@ -487,7 +487,7 @@
 		}
 		if (application.wheels.showDebugInformation)
 			$debugPoint("action,afterFilters");
-		$runFilters(controller=loc.controller, type="after", actionName=loc.params.action);
+		loc.controller.$runFilters(type="after", action=loc.params.action);
 		if (application.wheels.showDebugInformation)
 			$debugPoint("afterFilters");
 
@@ -499,29 +499,6 @@
 
 <cffunction name="$returnDispatcher" returntype="any" access="public" output="false">
 	<cfreturn this>
-</cffunction>
-
-<cffunction name="$runFilters" returntype="void" access="public" output="false">
-	<cfargument name="controller" type="any" required="true">
-	<cfargument name="actionName" type="string" required="true">
-	<cfargument name="type" type="string" required="true">
-	<cfscript>
-		var loc = {};
-		if (arguments.type == "before")
-			loc.filters = arguments.controller.$getBeforeFilters();
-		else
-			loc.filters = arguments.controller.$getAfterFilters();
-		loc.iEnd = ArrayLen(loc.filters);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			if ((!Len(loc.filters[loc.i].only) && !Len(loc.filters[loc.i].except)) || (Len(loc.filters[loc.i].only) && ListFindNoCase(loc.filters[loc.i].only, arguments.actionName)) || (Len(loc.filters[loc.i].except) && !ListFindNoCase(loc.filters[loc.i].except, arguments.actionName)))
-			{
-				loc.args = {};
-				loc.args.meth = loc.filters[loc.i].through;
-				$invoke(componentReference=arguments.controller, method="$executeFilters", argumentCollection=loc.args);
-			}
-		}
-	</cfscript>
 </cffunction>
 
 <cffunction name="$runVerifications" returntype="void" access="public" output="false">
