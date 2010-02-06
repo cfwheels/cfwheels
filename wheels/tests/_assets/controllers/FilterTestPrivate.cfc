@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Controller">
+<cfcomponent extends="Controller">
 
 	<cffunction name="init">
 		<cfset filters(through="filterTestPrivate")>

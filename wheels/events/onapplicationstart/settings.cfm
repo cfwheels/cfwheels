@@ -64,6 +64,9 @@
 		}
 	}
 
+	// paths
+	application.wheels.controllerPath = "controllers";
+
 	// miscellaneous settings
 	application.wheels.tableNamePrefix = "";
 	application.wheels.obfuscateURLs = false;

@@ -59,8 +59,6 @@
 		application.wheels.rootcomponentPath = ListChangeDelims(application.wheels.webPath, ".", "/");
 		application.wheels.wheelsComponentPath = ListAppend(application.wheels.rootcomponentPath, "wheels", ".");
 		application.wheels.configPath = "config";
-		application.wheels.controllerPath = "controllers";
-		application.wheels.controllerComponentPath = "controllers";
 		application.wheels.eventPath = "events";
 		application.wheels.filePath = "files";
 		application.wheels.imagePath = "images";
@@ -225,7 +223,7 @@
 
 		// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
 		loc.allowedGlobalMethods = "get,set,addroute,addDefaultRoutes";
-		loc.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application.wheels.controllerComponentPath, fileName="Wheels", method="$initControllerClass"));
+		loc.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application.wheels.controllerPath, fileName="Wheels", method="$initControllerClass", controllerName="Wheels", controllerPath=application.wheels.controllerPath));
 		application.wheels.protectedControllerMethods = "";
 		loc.iEnd = ListLen(loc.protectedControllerMethods);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
