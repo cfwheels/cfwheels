@@ -7,8 +7,7 @@
 		variables.wheels.name = arguments.controllerName;
 		variables.wheels.path = arguments.controllerPath;
 		variables.wheels.verifications = [];
-		variables.wheels.beforeFilters = [];
-		variables.wheels.afterFilters = [];
+		variables.wheels.filters = [];
 		variables.wheels.cachableActions = [];
 		if (StructKeyExists(variables, "init"))
 			init();

@@ -21,3 +21,16 @@
 	</cffunction>
 
 </cfcomponent>
+
+<!---to test:
+test running one pub
+same for private
+test running 2 in order
+test running 2 when one comes from parent
+test the only/except stuff
+
+implement first
+test returning false (which should be done auto on render, not necessary for redirect since it sends to other page
+test skipping a filter from parent
+test when filter is prepended instead of appended
+test with arguments--->

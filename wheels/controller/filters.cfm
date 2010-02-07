@@ -21,19 +21,17 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = Trim(ListGetAt(arguments.through, loc.i));
-			loc.thisFilter = {};
-			loc.thisFilter.through = loc.item;
-			loc.thisFilter.only = $listClean(arguments.only);
-			loc.thisFilter.except = $listClean(arguments.except);
-			loc.thisFilter.args = arguments.args;
+			loc.filter = {};
+			loc.filter.through = loc.item;
+			loc.filter.type = arguments.type;
+			loc.filter.args = arguments.args;
+			loc.filter.only = $listClean(arguments.only);
+			loc.filter.except = $listClean(arguments.except);
 			if (StructCount(arguments) > 5)
 				for (loc.key in arguments)
 					if (!ListFindNoCase("through,type,only,except,args", loc.key))
-						loc.thisFilter.args[loc.key] = arguments[loc.key];
-			if (arguments.type == "before")
-				ArrayAppend(variables.wheels.beforeFilters, loc.thisFilter);
-			else
-				ArrayAppend(variables.wheels.afterFilters, loc.thisFilter);
+						loc.filter.args[loc.key] = arguments[loc.key];
+			ArrayAppend(variables.wheels.filters, loc.filter);
 		}
 	</cfscript>
 </cffunction>
@@ -59,6 +57,13 @@
 	</cfscript>
 </cffunction>
 
+<!--- PUBLIC CONTROLLER CLASS FUNCTIONS --->
+
+<cffunction name="filterChain" returntype="array" access="public" output="false" hint="Returns an array of all the filters set on this controller in the order in which they will be executed.">
+	<cfargument name="type" type="string" required="false" default="" hint="Use this argument to return only `before` or `after` filters.">
+	<cfreturn variables.wheels.filters>
+</cffunction>
+
 <!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$getVerifications" returntype="array" access="public" output="false">
@@ -70,26 +75,18 @@
 	<cfargument name="action" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		if (arguments.type == "before")
-			loc.filters = variables.wheels.beforeFilters;
-		else
-			loc.filters = variables.wheels.afterFilters;
+		loc.filters = filterChain(arguments.type);
 		loc.iEnd = ArrayLen(loc.filters);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			if ((!Len(loc.filters[loc.i].only) && !Len(loc.filters[loc.i].except)) || (Len(loc.filters[loc.i].only) && ListFindNoCase(loc.filters[loc.i].only, arguments.action)) || (Len(loc.filters[loc.i].except) && !ListFindNoCase(loc.filters[loc.i].except, arguments.action)))
+			loc.filter = loc.filters[loc.i];
+			if ((!Len(loc.filter.only) && !Len(loc.filter.except)) || (Len(loc.filter.only) && ListFindNoCase(loc.filter.only, arguments.action)) || (Len(loc.filter.except) && !ListFindNoCase(loc.filter.except, arguments.action)))
 			{
-				loc.filterMethod = loc.filters[loc.i].through;
-				if (StructKeyExists(variables, loc.filterMethod))
-				{
-					loc.args = loc.filters[loc.i].args;
-					loc.args.method = loc.filterMethod;
-					$invoke(argumentCollection=loc.args);
-				}
-				else
-				{
-					$throw(type="Wheels.filterNotFound", message="Wheels tried to run the `#loc.filterMethod#` function as a #arguments.type# filter but could not find it.", extendedInfo="Make sure there is a function named `#loc.filterMethod#` in the `#variables.wheels.name#.cfc` file.");
-				}
+				if (!StructKeyExists(variables, loc.filter.through))
+					$throw(type="Wheels.filterNotFound", message="Wheels tried to run the `#loc.filter.through#` function as a #arguments.type# filter but could not find it.", extendedInfo="Make sure there is a function named `#loc.filter.through#` in the `#variables.wheels.name#.cfc` file.");
+				loc.args = loc.filter.args;
+				loc.args.method = loc.filter.through;
+				$invoke(argumentCollection=loc.args);
 			}
 		}
 	</cfscript>
