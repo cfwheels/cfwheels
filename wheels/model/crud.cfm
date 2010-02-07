@@ -622,7 +622,7 @@
 			if (Len(arguments.key) && Len(arguments.where))
 				$throw(type="Wheels.IncorrectArguments", message="You cannot pass in both `key` and `where`.");
 		if (Len(arguments.where))
-			loc.returnValue = findOne(where=arguments.where, reload=arguments.reload, returnAs="query").recordCount == 1;
+			loc.returnValue = findOne(where=arguments.where, reload=arguments.reload, returnAs="query").recordCount gte 1;
 		else if (Len(arguments.key))
 			loc.returnValue = findByKey(key=arguments.key, reload=arguments.reload, returnAs="query").recordCount == 1;
 		else
