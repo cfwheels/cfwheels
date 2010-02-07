@@ -23,7 +23,7 @@
 				loc.mailArgs = {};
 				loc.mailArgs.from = application.wheels.errorEmailAddress;
 				loc.mailArgs.to = application.wheels.errorEmailAddress;
-				loc.mailArgs.subject = "Error";
+				loc.mailArgs.subject = application.wheels.errorEmailSubject;
 				loc.mailArgs.type = "html";
 				loc.mailArgs.body = [$includeAndReturnOutput($template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception)];
 				$insertDefaults(name="sendEmail", input=loc.mailArgs);

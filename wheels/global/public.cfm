@@ -79,6 +79,7 @@
 		<cfset set(showErrorInformation = true)>
 		<cfset set(sendEmailOnError = false)>
 		<cfset set(errorEmailAddress = "")>
+		<cfset set(errorEmailSubject = "")>
 		<cfset set(errorEmailServer = "")>
 
 		<!--- Miscellaneous settings --->

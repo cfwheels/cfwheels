@@ -30,6 +30,7 @@
 	application.wheels.showErrorInformation = true;
 	application.wheels.sendEmailOnError = false;
 	application.wheels.errorEmailAddress = "";
+	application.wheels.errorEmailSubject = "Error";
 	application.wheels.assetQueryString = false;
 	// assetPaths can be struct with two keys,  http and https, if no https struct key, http is used for secure and non-secure 
 	// ex. {http="asset0.domain1.com,asset2.domain1.com,asset3.domain1.com", https="secure.domain1.com"}
