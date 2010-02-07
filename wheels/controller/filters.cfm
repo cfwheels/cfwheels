@@ -14,6 +14,7 @@
 	<cfargument name="type" type="string" required="false" default="before" hint="Whether to run the function(s) before or after the action(s).">
 	<cfargument name="only" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell Wheels that the filter function(s) should only be run on these actions.">
 	<cfargument name="except" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell Wheels that the filter function(s) should be run on all actions except the specified ones.">
+	<cfargument name="args" type="struct" required="false" default="#StructNew()#" hint="Pass in arguments that should be passed through to the filter function. These can also be passed in as named arguments.">
 	<cfscript>
 		var loc = {};
 		loc.iEnd = ListLen(arguments.through);
@@ -24,6 +25,11 @@
 			loc.thisFilter.through = loc.item;
 			loc.thisFilter.only = $listClean(arguments.only);
 			loc.thisFilter.except = $listClean(arguments.except);
+			loc.thisFilter.args = arguments.args;
+			if (StructCount(arguments) > 5)
+				for (loc.key in arguments)
+					if (!ListFindNoCase("through,type,only,except,args", loc.key))
+						loc.thisFilter.args[loc.key] = arguments[loc.key];
 			if (arguments.type == "before")
 				ArrayAppend(variables.wheels.beforeFilters, loc.thisFilter);
 			else
@@ -75,9 +81,15 @@
 			{
 				loc.filterMethod = loc.filters[loc.i].through;
 				if (StructKeyExists(variables, loc.filterMethod))
-					$invoke(method=loc.filterMethod);
+				{
+					loc.args = loc.filters[loc.i].args;
+					loc.args.method = loc.filterMethod;
+					$invoke(argumentCollection=loc.args);
+				}
 				else
+				{
 					$throw(type="Wheels.filterNotFound", message="Wheels tried to run the `#loc.filterMethod#` function as a #arguments.type# filter but could not find it.", extendedInfo="Make sure there is a function named `#loc.filterMethod#` in the `#variables.wheels.name#.cfc` file.");
+				}
 			}
 		}
 	</cfscript>
