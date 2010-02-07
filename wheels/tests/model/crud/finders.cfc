@@ -9,8 +9,7 @@
 		<cfset loc.r = valuelist(loc.q.address, "|")>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
-<!---
-	TODO: uncomment once james' patch for group by is integrated
+
 	<cffunction name="test_select_users_groupby_address">
 		<cfset loc.q = loc.user.findAll(select="address", group="address", order="address", result="loc.result")>
 		<cfset assert('loc.q.recordcount eq 4')>
@@ -18,7 +17,6 @@
 		<cfset loc.r = valuelist(loc.q.address, "|")>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
- --->
 
  	<cffunction name="test_findByKey">
 		<cfset loc.e = loc.user.findOne(where="lastname = 'petruzzi'")>
