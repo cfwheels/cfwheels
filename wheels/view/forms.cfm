@@ -195,7 +195,6 @@
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="label" type="string" required="true">
 	<cfargument name="prependToLabel" type="string" required="true">
-	<cfargument name="$appendToFor" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = arguments.prependToLabel;
@@ -205,8 +204,6 @@
 				loc.attributes[Replace(loc.key, "label", "")] = arguments[loc.key];
 		if (StructKeyExists(arguments, "id"))
 			loc.attributes.for = arguments.id;
-		if (Len(arguments.$appendToFor))
-			loc.attributes.for = loc.attributes.for & "-" & arguments.$appendToFor;
 		loc.returnValue = loc.returnValue & $tag(name="label", attributes=loc.attributes);
 		loc.returnValue = loc.returnValue & arguments.label;
 		loc.returnValue = loc.returnValue & "</label>";
@@ -224,7 +221,6 @@
 	<cfargument name="prependToLabel" type="string" required="true">
 	<cfargument name="appendToLabel" type="string" required="true">
 	<cfargument name="errorElement" type="string" required="true">
-	<cfargument name="$appendToFor" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";

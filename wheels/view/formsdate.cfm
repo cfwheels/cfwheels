@@ -131,7 +131,6 @@
 		loc.optionContent = "";
 		if (!Len(arguments.value) && (!IsBoolean(arguments.includeBlank) || !arguments.includeBlank))
 			arguments.value = Evaluate("#arguments.$type#(Now())");
-		arguments.$appendToFor = arguments.$type;
 		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1 && ListLen(arguments.label) > 1)
 			arguments.label = ListGetAt(arguments.label, ListFindNoCase(arguments.order, arguments.$type));
 		if (!StructKeyExists(arguments, "id"))
