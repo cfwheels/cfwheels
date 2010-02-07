@@ -72,7 +72,13 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			if ((!Len(loc.filters[loc.i].only) && !Len(loc.filters[loc.i].except)) || (Len(loc.filters[loc.i].only) && ListFindNoCase(loc.filters[loc.i].only, arguments.action)) || (Len(loc.filters[loc.i].except) && !ListFindNoCase(loc.filters[loc.i].except, arguments.action)))
-				$invoke(method=loc.filters[loc.i].through);
+			{
+				loc.filterMethod = loc.filters[loc.i].through;
+				if (StructKeyExists(variables, loc.filterMethod))
+					$invoke(method=loc.filterMethod);
+				else
+					$throw(type="Wheels.filterNotFound", message="Wheels tried to run the `#loc.filterMethod#` function as a #arguments.type# filter but could not find it.", extendedInfo="Make sure there is a function named `#loc.filterMethod#` in the `#variables.wheels.name#.cfc` file.");
+			}
 		}
 	</cfscript>
 </cffunction>
