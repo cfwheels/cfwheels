@@ -91,6 +91,7 @@
 		<cfset set(timeStampOnCreateProperty = "createdAt")>
 		<cfset set(timeStampOnUpdateProperty = "updatedAt")>
 		<cfset set(overwritePlugins = true)>
+		<cfset set(deletePluginDirectories = true)>
 
 		<!--- Function defaults --->
 		<cfset set(functionName="average", distinct=false)>

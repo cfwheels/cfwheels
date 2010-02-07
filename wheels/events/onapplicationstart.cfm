@@ -99,18 +99,23 @@
 		// get a list of plugin files and folders
 		loc.pluginFolders = $directory(directory=loc.pluginFolder, type="dir");
 		loc.pluginFiles = $directory(directory=loc.pluginFolder, filter="*.zip", type="file", sort="name DESC");
-		// delete plugin folders if no corresponding plugin file exist
-		loc.iEnd = loc.pluginFolders.recordCount;
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		
+		// delete plugin directories if no corresponding plugin zip file exists
+		if (application.wheels.deletePluginDirectories)
 		{
-			loc.name = loc.pluginFolders["name"][loc.i];
-			loc.directory = loc.pluginFolders["directory"][loc.i];
-			if (Left(loc.name, 1) != "." && !ListContainsNoCase(ValueList(loc.pluginFiles.name), loc.name & "-"))
+			loc.iEnd = loc.pluginFolders.recordCount;
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.directory = loc.directory & "/" & loc.name;
-				$directory(action="delete", directory=loc.directory, recurse=true);
+				loc.name = loc.pluginFolders["name"][loc.i];
+				loc.directory = loc.pluginFolders["directory"][loc.i];
+				if (Left(loc.name, 1) != "." && !ListContainsNoCase(ValueList(loc.pluginFiles.name), loc.name & "-"))
+				{
+					loc.directory = loc.directory & "/" & loc.name;
+					$directory(action="delete", directory=loc.directory, recurse=true);
+				}
 			}
 		}
+
 		// create directory and unzip code for the most recent version of each plugin
 		if (loc.pluginFiles.recordCount)
 		{

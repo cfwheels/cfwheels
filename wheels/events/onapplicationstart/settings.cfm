@@ -77,6 +77,7 @@
 	application.wheels.timeStampOnUpdateProperty = "updatedAt";
 	application.wheels.ipExceptions = "";
 	application.wheels.overwritePlugins = true;
+	application.wheels.deletePluginDirectories = true;
 	application.wheels.loadIncompatiblePlugins = true;
 	application.wheels.loadDefaultRoutes = true;
 	application.wheels.setDefaultValidations = true;
