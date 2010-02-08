@@ -298,7 +298,14 @@
 			for (loc.k=1; loc.k <= loc.kEnd; loc.k++)
 			{
 				loc.kItem = ListGetAt(arguments.collection.columnList, loc.k);
-				loc.args[loc.kItem] = arguments.collection[loc.kItem][loc.j];
+				try // coldfusion has a problem with empty strings in queries for bit types
+				{
+					loc.args[loc.kItem] = arguments.collection[loc.kItem][loc.j];
+				}
+				catch (Any e)
+				{
+					loc.args[loc.kItem] = ""; 
+				}
 			}
 
 			// execute the callback method

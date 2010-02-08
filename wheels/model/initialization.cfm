@@ -173,11 +173,18 @@
 			loc.iEnd = ListLen(loc.allProperties);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.iItem = ListGetAt(loc.allProperties, loc.i);
-				if (ListFindNoCase(arguments.properties.columnList, arguments.name & loc.iItem))
-					this[loc.iItem] = arguments.properties[arguments.name & loc.iItem][arguments.row];
-				else if (ListFindNoCase(arguments.properties.columnList, loc.iItem))
-					this[loc.iItem] = arguments.properties[loc.iItem][arguments.row];
+				try // coldfusion has a problem with empty strings in queries for bit types
+				{
+					loc.iItem = ListGetAt(loc.allProperties, loc.i);
+					if (ListFindNoCase(arguments.properties.columnList, arguments.name & loc.iItem))
+						this[loc.iItem] = arguments.properties[arguments.name & loc.iItem][arguments.row];
+					else if (ListFindNoCase(arguments.properties.columnList, loc.iItem))
+						this[loc.iItem] = arguments.properties[loc.iItem][arguments.row];
+				}
+				catch (Any e)
+				{
+					this[loc.iItem] = "";
+				}
 			}
 		}
 		else if (IsStruct(arguments.properties) && !StructIsEmpty(arguments.properties))
