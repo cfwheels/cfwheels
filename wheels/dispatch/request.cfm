@@ -451,7 +451,7 @@
 			$debugPoint("beforeFilters,action");
 
 		// only proceed to call the action if the before filter has not already rendered content
-		if (!StructKeyExists(request.wheels, "response") || !Len(request.wheels.response))
+		if (!StructKeyExists(request.wheels, "response"))
 		{
 			// call action on controller if it exists
 			loc.actionIsCachable = false;
