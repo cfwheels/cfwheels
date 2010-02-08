@@ -5,7 +5,7 @@
 	</cffunction>
 
 	<cffunction name="filterTestPrivate" access="private">
-		<cfset request.filterTestPrivate = true>
+		<cfset request.testPassed = true>
 	</cffunction>
 
 </cfcomponent>
