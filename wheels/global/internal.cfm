@@ -245,9 +245,14 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$cachedControllerClassExists" returntype="boolean" access="public" output="false">
+<cffunction name="$cachedControllerClassExists" returntype="any" access="public" output="false">
 	<cfargument name="controllerName" type="string" required="true">
-	<cfreturn StructKeyExists(application.wheels.controllers, arguments.controllerName)>
+		<cfscript>
+			var returnValue = false;
+			if (StructKeyExists(application.wheels.controllers, arguments.controllerName))
+				returnValue = application.wheels.controllers[arguments.controllerName];
+		</cfscript>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="$createControllerClass" returntype="any" access="public" output="false">

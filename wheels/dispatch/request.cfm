@@ -444,7 +444,7 @@
 		if (loc.params.controller != loc.controller.controllerName()) {
 			loc.controller = $controller(loc.params.controller).$createControllerObject(loc.params);
 			$runVerifications(controller=loc.controller, actionName=loc.params.action, params=loc.params);
-			$runFilters(controller=loc.controller, type="before", actionName=loc.params.action);
+			loc.controller.$runFilters(controller=loc.controller, type="before", actionName=loc.params.action);
 		}
 		
 		if (application.wheels.showDebugInformation)
