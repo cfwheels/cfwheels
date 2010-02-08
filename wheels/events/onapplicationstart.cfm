@@ -92,7 +92,7 @@
 		// load plugins
 		application.wheels.plugins = {};
 		application.wheels.incompatiblePlugins = "";
-		application.wheels.mixableComponents = "application,dispatch,controller,model,microsoftsqlserver,mysql,oracle,postgresql";
+		application.wheels.mixableComponents = "application,dispatch,controller,model,microsoftsqlserver,mysql,oracle,postgresql,sqlite";
 		application.wheels.mixins = {};
 		application.wheels.dependantPlugins = "";
 		loc.pluginFolder = GetDirectoryFromPath(GetBaseTemplatePath()) & "plugins";

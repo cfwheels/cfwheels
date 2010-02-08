@@ -39,6 +39,8 @@
 				loc.adapterName = "Oracle";
 			else if (loc.info.driver_name Contains "PostgreSQL")
 				loc.adapterName = "PostgreSQL";
+			else if (loc.info.driver_name Contains "SQLite")
+				loc.adapterName = "SQLite";
 			else
 				$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, MySQL, Oracle or PostgreSQL.");
 			loc.returnValue = CreateObject("component", "model.adapters.#loc.adapterName#").init(argumentCollection=variables.instance.connection);
