@@ -14,23 +14,32 @@
 	<cfargument name="type" type="string" required="false" default="before" hint="Whether to run the function(s) before or after the action(s).">
 	<cfargument name="only" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell Wheels that the filter function(s) should only be run on these actions.">
 	<cfargument name="except" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell Wheels that the filter function(s) should be run on all actions except the specified ones.">
-	<cfargument name="args" type="struct" required="false" default="#StructNew()#" hint="Pass in arguments that should be passed through to the filter function. These can also be passed in as named arguments.">
 	<cfscript>
 		var loc = {};
 		loc.iEnd = ListLen(arguments.through);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.item = Trim(ListGetAt(arguments.through, loc.i));
 			loc.filter = {};
-			loc.filter.through = loc.item;
+			loc.filter.through = Trim(ListGetAt(arguments.through, loc.i));
 			loc.filter.type = arguments.type;
-			loc.filter.args = arguments.args;
 			loc.filter.only = $listClean(arguments.only);
 			loc.filter.except = $listClean(arguments.except);
-			if (StructCount(arguments) > 5)
+			loc.filter.arguments = {};
+			if (StructCount(arguments) > 4)
+			{
+				loc.dynamicArgument = loc.filter.through & "Arguments";
+				if (StructKeyExists(arguments, loc.dynamicArgument))
+				{
+					loc.filter.arguments = arguments[loc.dynamicArgument];
+				}
 				for (loc.key in arguments)
-					if (!ListFindNoCase("through,type,only,except,args", loc.key))
-						loc.filter.args[loc.key] = arguments[loc.key];
+				{
+					if (!ListFindNoCase("through,type,only,except,#loc.dynamicArgument#", loc.key))
+					{
+						loc.filter.arguments[loc.key] = arguments[loc.key];
+					}
+				}
+			}
 			ArrayAppend(variables.wheels.filters, loc.filter);
 		}
 	</cfscript>
@@ -55,6 +64,11 @@
 	<cfscript>
 		ArrayAppend(variables.wheels.verifications, Duplicate(arguments));
 	</cfscript>
+</cffunction>
+
+<cffunction name="setFilterChain" returntype="void" access="public" output="false" hint="Use this function if you need a more low level way of setting the entire filter chain for a controller.">
+	<cfargument name="chain" type="array" required="true" hint="The entire filter chain that you want to use for this controller.">
+	<cfset variables.wheels.filters = arguments.chain>
 </cffunction>
 
 <!--- PUBLIC CONTROLLER CLASS FUNCTIONS --->
@@ -83,10 +97,17 @@
 			if ((!Len(loc.filter.only) && !Len(loc.filter.except)) || (Len(loc.filter.only) && ListFindNoCase(loc.filter.only, arguments.action)) || (Len(loc.filter.except) && !ListFindNoCase(loc.filter.except, arguments.action)))
 			{
 				if (!StructKeyExists(variables, loc.filter.through))
+				{
 					$throw(type="Wheels.filterNotFound", message="Wheels tried to run the `#loc.filter.through#` function as a #arguments.type# filter but could not find it.", extendedInfo="Make sure there is a function named `#loc.filter.through#` in the `#variables.wheels.name#.cfc` file.");
-				loc.args = loc.filter.args;
-				loc.args.method = loc.filter.through;
-				$invoke(argumentCollection=loc.args);
+				}
+				loc.arguments = loc.filter.arguments;
+				loc.arguments.method = loc.filter.through;
+				loc.result = $invoke(argumentCollection=loc.arguments);
+				if (StructKeyExists(loc, "result") && !loc.result)
+				{
+					// false was returned from the filter method so we skip the remaining filters in the chain
+					break;
+				}
 			}
 		}
 	</cfscript>
