@@ -67,6 +67,20 @@
 		var loc = {};
 
 		loc.returnValue = $getParameterMap(argumentCollection=arguments);
+		
+
+		// go through the matching route pattern and add URL variables from the route to the struct
+		loc.iEnd = ListLen(arguments.foundRoute.pattern, "/");
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(arguments.foundRoute.pattern, loc.i, "/");
+			if (Left(loc.item, 1) == "[")
+			{
+				loc.returnValue[ReplaceList(loc.item, "[,]", "")] = [];
+				loc.returnValue[ReplaceList(loc.item, "[,]", "")][1] = ListGetAt(arguments.route, loc.i, "/");
+			}
+		}
+		
 		// decrypt all values except controller and action
 		if (application.wheels.obfuscateUrls)
 		{
@@ -175,15 +189,6 @@
 		*	so that we don't have more logic around
 		*	params in arrays
 		************************************/
-
-		// go through the matching route pattern and add URL variables from the route to the struct
-		loc.iEnd = ListLen(arguments.foundRoute.pattern, "/");
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			loc.item = ListGetAt(arguments.foundRoute.pattern, loc.i, "/");
-			if (Left(loc.item, 1) == "[")
-				loc.returnValue[ReplaceList(loc.item, "[,]", ",")] = ListGetAt(arguments.route, loc.i, "/");
-		}
 
 		// add controller and action unless they already exist
 		if (!StructKeyExists(loc.returnValue, "controller"))
