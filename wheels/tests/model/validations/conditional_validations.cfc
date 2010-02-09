@@ -110,13 +110,6 @@
 		<cfset assert_test(loc.user, true)>
 	</cffunction>
 
-	<!--- <cffunction name="test_if_condition_not_triggered_validation_should_not_occur">
-		<cfset loc.args.if="1 eq 0">
-		<cfset loc.args.property = "invalidproperty">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, true)>
-	</cffunction> --->
-
 	<cffunction name="assert_test">
 		<cfargument name="obj" type="any" required="true">
 		<cfargument name="expect" type="boolean" required="true">
