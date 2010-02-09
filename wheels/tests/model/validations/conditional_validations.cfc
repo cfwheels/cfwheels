@@ -110,22 +110,6 @@
 		<cfset assert_test(loc.user, true)>
 	</cffunction>
 
-	<cffunction name="test_if_condition_not_triggered_validation_should_not_occur">
-		<cfset loc.args.if="1 eq 0">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset loc.e = true>
-		<cfset loc.r = loc.user.valid()>
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
-
-	<cffunction name="test_if_condition_triggered_validation_should_occur">
-		<cfset loc.args.if="1 eq 1">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset loc.e = false>
-		<cfset loc.r = loc.user.valid()>
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
-
 	<cffunction name="assert_test">
 		<cfargument name="obj" type="any" required="true">
 		<cfargument name="expect" type="boolean" required="true">
