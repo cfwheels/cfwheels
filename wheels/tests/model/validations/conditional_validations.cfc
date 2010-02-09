@@ -81,28 +81,28 @@
 		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
 		<cfset assert_test(loc.user, true)>
 	</cffunction>
-	
+
 	<cffunction name="test_both_validations_if_trigged_unless_not_trigged_valid">
 		<cfset loc.args.if="1 eq 1">
 		<cfset loc.args.unless="this.username eq 'TheLongestNameInTheWorld'">
 		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
 		<cfset assert_test(loc.user, true)>
 	</cffunction>
-	
+
 	<cffunction name="test_both_validations_if_trigged_unless_trigged_invalid">
 		<cfset loc.args.if="1 eq 1">
 		<cfset loc.args.unless="this.username eq ''">
 		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
-	
+
 	<cffunction name="test_both_validations_if_not_trigged_unless_not_trigged_valid">
 		<cfset loc.args.if="1 eq 0">
 		<cfset loc.args.unless="this.username eq 'TheLongestNameInTheWorld'">
 		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
 		<cfset assert_test(loc.user, true)>
 	</cffunction>
-	
+
 	<cffunction name="test_both_validations_if_not_trigged_unless_trigged_valid">
 		<cfset loc.args.if="1 eq 0">
 		<cfset loc.args.unless="this.username eq ''">
@@ -110,19 +110,20 @@
 		<cfset assert_test(loc.user, true)>
 	</cffunction>
 
-	<!--- <cffunction name="test_if_condition_not_triggered_validation_should_not_occur">
-		<cfset loc.args.if="1 eq 0">
-		<cfset loc.args.property = "invalidproperty">
-		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset assert_test(loc.user, true)>
-	</cffunction> --->
-
 	<cffunction name="test_if_condition_triggered_validation_should_not_occur">
-		<cfset loc.args.if="1 eq 1">
-		<cfset loc.args.property = "xxxx">
+		<cfset loc.args.if="1 eq 0">
 		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
-		<cfset loc.e = raised('loc.user.valid()')>
-		<cfset loc.r = "Wheels.PropertyNotFound">
+		<cfset loc.e = true>
+		<cfset loc.r = loc.user.valid()>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
+
+	<cffunction name="test_if_condition_triggered_validation_should_occur">
+		<cfset loc.args.if="1 eq 1">
+		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
+		<cfset loc.e = false>
+		<cfset loc.r = loc.user.valid()>
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
