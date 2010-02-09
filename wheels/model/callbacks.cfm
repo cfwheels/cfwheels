@@ -257,6 +257,9 @@
 							break;
 					}
 				}
+				// update the request with a hash of the query if it changed so that we can find it with pagination
+				if (!StructKeyExists(request.wheels, Hash(GetMetaData(arguments.collection).toString())))
+					request.wheels[Hash(GetMetaData(arguments.collection).toString())] = variables.wheels.class.name;
 			}
 			else
 			{
