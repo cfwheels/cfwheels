@@ -17,7 +17,7 @@
 			case "bit": {loc.returnValue = "cf_sql_bit"; break;}
 			case "char": case "nchar": case "uniqueidentifier": {loc.returnValue = "cf_sql_char"; break;}
 			case "date": {loc.returnValue = "cf_sql_date"; break;}
-			case "datetime": case "smalldatetime": {loc.returnValue = "cf_sql_timestamp"; break;}
+			case "datetime": case "datetime2": case "smalldatetime": {loc.returnValue = "cf_sql_timestamp"; break;}
 			case "decimal": case "money": case "smallmoney": {loc.returnValue = "cf_sql_decimal"; break;}
 			case "float": {loc.returnValue = "cf_sql_float"; break;}
 			case "int": {loc.returnValue = "cf_sql_integer"; break;}
