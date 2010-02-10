@@ -360,10 +360,13 @@
 					loc.property = ListGetAt(loc.route.pattern, loc.i, "/");
 					if (loc.property Contains "[")
 					{
-						if (application.wheels.showErrorInformation && !StructKeyExists(arguments, Mid(loc.property, 2, Len(loc.property)-2)))
-							$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="The route chosen by Wheels `#loc.route.name#` requires the argument `#Mid(loc.property, 2, Len(loc.property)-2)#`. Pass the argument `#Mid(loc.property, 2, Len(loc.property)-2)#` or change your routes to reflect the proper variables needed.");
-						loc.param = $URLEncode(arguments[Mid(loc.property, 2, Len(loc.property)-2)]);
-						if (application.wheels.obfuscateUrls)
+						loc.property = Mid(loc.property, 2, Len(loc.property)-2);
+						if (application.wheels.showErrorInformation && !StructKeyExists(arguments, loc.property))
+							$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="The route chosen by Wheels `#loc.route.name#` requires the argument `#loc.property#`. Pass the argument `#loc.property#` or change your routes to reflect the proper variables needed.");
+						loc.param = $URLEncode(arguments[loc.property]);
+						if (loc.property == "controller" || loc.property == "action")
+							loc.param = $hyphenize(loc.param);
+						else if (application.wheels.obfuscateUrls)
 							loc.param = obfuscateParam(loc.param);
 						loc.returnValue = loc.returnValue & "/" & loc.param; // get param from arguments
 					}
