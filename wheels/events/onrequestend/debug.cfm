@@ -134,11 +134,11 @@
 					<cfset loc.additionalParamsExists = true>
 					<cfif isStruct(request.wheels.params[loc.i])>
 						<cfloop collection="#request.wheels.params[loc.i]#" item="loc.j">
-							#lCase(loc.i)#.#lCase(loc.j)# = #request.wheels.params[loc.i][loc.j]#<br />
+							#lCase(loc.i)#.#lCase(loc.j)# = #SerializeJSON(request.wheels.params[loc.i][loc.j])#<br />
 						</cfloop>
 					<cfelseif IsArray(request.wheels.params[loc.i])>
 						<cfloop array="#request.wheels.params[loc.i]#" index="loc.x">
-							#lCase(loc.i)#[#lCase(loc.x)#].#LCase(loc.y)# = #request.wheels.params[loc.i][loc.x][loc.y]#<br />
+							#lCase(loc.i)#[#lCase(loc.x)#].#LCase(loc.y)# = #SerializeJSON(request.wheels.params[loc.i][loc.x][loc.y])#<br />
 						</cfloop>
 					<cfelseif IsSimpleValue(request.wheels.params[loc.i])>
 						#lCase(loc.i)# = #request.wheels.params[loc.i]#<br />
