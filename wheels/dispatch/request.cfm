@@ -53,7 +53,14 @@
 <cffunction name="$callActionAndAddToCache" returntype="string" access="public" output="false">
 	<cfscript>
 		$callAction(controller=arguments.controller, controllerName=arguments.controllerName, actionName=arguments.actionName);
-		$addToCache(key=arguments.key, value=request.wheels.response, time=arguments.time, category=arguments.category);
+		if (arguments.static)
+		{
+			$cache(cache="serverCache", timeSpan=CreateTimeSpan(0,0,arguments.time,0));
+		}
+		else
+		{
+			$addToCache(key=arguments.key, value=request.wheels.response, time=arguments.time, category=arguments.category);
+		}
 	</cfscript>
 	<cfreturn request.wheels.response>
 </cffunction>
@@ -464,7 +471,8 @@
 					if (loc.cachableActions[loc.i].action == loc.params.action)
 					{
 						loc.actionIsCachable = true;
-						loc.timeToCache = loc.cachableActions[loc.i].time;
+						loc.time = loc.cachableActions[loc.i].time;
+						loc.static = loc.cachableActions[loc.i].static;
 					}
 				}
 			}
@@ -481,7 +489,8 @@
 				loc.executeArgs.controllerName = loc.params.controller;
 				loc.executeArgs.actionName = loc.params.action;
 				loc.executeArgs.key = loc.key;
-				loc.executeArgs.time = loc.timeToCache;
+				loc.executeArgs.time = loc.time;
+				loc.executeArgs.static = loc.static;
 				loc.executeArgs.category = loc.category;
 				request.wheels.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 			}

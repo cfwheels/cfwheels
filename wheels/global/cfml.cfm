@@ -66,6 +66,10 @@
 	</cfzip>
 </cffunction>
 
+<cffunction name="$cache" returntype="any" access="public" output="false">
+	<cfcache attributeCollection="#arguments#">
+</cffunction>
+
 <cffunction name="$content" returntype="any" access="public" output="false">
 	<cfcontent attributeCollection="#arguments#">
 </cffunction>

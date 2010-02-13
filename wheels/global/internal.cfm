@@ -1,3 +1,25 @@
+<cffunction name="$combineArguments" returntype="struct" access="public" output="false">
+	<cfargument name="args" type="struct" required="true">
+	<cfargument name="combine" type="string" required="true">
+	<cfargument name="required" type="boolean" required="false" default="false">
+	<cfscript>
+		var loc = {};
+		if (StructKeyExists(arguments.args, ListGetAt(arguments.combine, 2)))
+		{
+			arguments.args[ListGetAt(arguments.combine, 1)] = arguments.args[ListGetAt(arguments.combine, 2)];
+			StructDelete(arguments.args, ListGetAt(arguments.combine, 2));
+		}
+		if (arguments.required && application.wheels.showErrorInformation)
+		{
+			if (!StructKeyExists(arguments.args, ListGetAt(arguments.combine, 2)) && !Len(arguments.args[ListGetAt(arguments.combine, 1)]))
+			{
+				$throw(type="Wheels.IncorrectArguments", message="The `#ListGetAt(arguments.combine, 2)#` or `#ListGetAt(arguments.combine, 1)#` argument is required but was not passed in.");
+			}
+		}
+	</cfscript>
+	<cfreturn arguments.args>
+</cffunction>
+
 <!--- helper method to recursively map a structure to build mapping paths and retrieve its values so you can have your way with a deeply nested structure --->
 <cffunction name="$mapStruct" returntype="void" access="public" output="false" mixin="dispatch">
 	<cfargument name="map" type="struct" required="true" />
