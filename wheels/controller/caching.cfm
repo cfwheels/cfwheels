@@ -11,7 +11,12 @@
 	<cfargument name="static" type="boolean" required="false" default="#application.wheels.functions.caches.static#" hint="Set to `true` to tell Wheels that this is a static page and that it can skip running the controller filters (before and after filters set on actions) and application events (onSessionStart, onRequestStart etc).">
 	<cfscript>
 		var loc = {};
-		arguments = $combineArguments(args=arguments, combine="actions,action", required=true);
+		arguments = $combineArguments(args=arguments, combine="actions,action", required=false);
+		if (!Len(arguments.actions))
+		{
+			// since no actions were passed in we assume that all actions should be cachable and indicate this with a *
+			arguments.actions = "*";
+		}
 		loc.iEnd = ListLen(arguments.actions);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{

@@ -487,7 +487,7 @@
 				loc.iEnd = ArrayLen(loc.cachableActions);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
-					if (loc.cachableActions[loc.i].action == loc.params.action)
+					if (loc.cachableActions[loc.i].action == loc.params.action || loc.cachableActions[loc.i].action == "*")
 					{
 						loc.actionIsCachable = true;
 						loc.time = loc.cachableActions[loc.i].time;
