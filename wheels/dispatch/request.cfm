@@ -462,7 +462,7 @@
 		{
 			// call action on controller if it exists
 			loc.actionIsCachable = false;
-			if (application.wheels.cacheActions && StructIsEmpty(session.flash) && StructIsEmpty(form))
+			if (variables.cacheActions && StructIsEmpty(session.flash) && StructIsEmpty(form))
 			{
 				loc.cachableActions = loc.controller.$getCachableActions();
 				loc.iEnd = ArrayLen(loc.cachableActions);
@@ -511,7 +511,11 @@
 	<cfreturn Trim(request.wheels.response)>
 </cffunction>
 
-<cffunction name="$returnDispatcher" returntype="any" access="public" output="false">
+<cffunction name="$initDispatcher" returntype="any" access="public" output="false">
+	<cfargument name="cacheActions" type="boolean" required="false" default="#application.wheels.cacheActions#">
+	<cfscript>
+		variables.cacheActions = arguments.cacheActions;
+	</cfscript>
 	<cfreturn this>
 </cffunction>
 
