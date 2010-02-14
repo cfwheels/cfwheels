@@ -1,3 +1,19 @@
+<cffunction name="$initDispatch" returntype="any" access="public" output="false">
+	<cfargument name="cacheActions" type="boolean" required="false" default="#application.wheels.cacheActions#">
+	<cfargument name="showDebugInformation" type="boolean" required="false" default="#application.wheels.showDebugInformation#">
+	<cfargument name="returnIt" type="boolean" required="false" default="true">
+	<cfscript>
+		var loc = {};
+		// set all arguments except "returnIt" to the variables scope
+		loc.returnIt = arguments.returnIt;
+		StructDelete(arguments, "returnIt");
+		StructAppend(variables, arguments);
+	</cfscript>
+	<cfif loc.returnIt>
+		<cfreturn this>
+	</cfif>
+</cffunction>
+
 <cffunction name="$callAction" returntype="void" access="public" output="false">
 	<cfargument name="controller" type="any" required="true">
 	<cfargument name="controllerName" type="string" required="true">
@@ -68,8 +84,8 @@
 <cffunction name="$createParams" returntype="struct" access="public" output="false">
 	<cfargument name="route" type="string" required="true">
 	<cfargument name="foundRoute" type="struct" required="true">
-	<cfargument name="formScope" type="struct" required="false" default="#form#">
-	<cfargument name="urlScope" type="struct" required="false" default="#url#">
+	<cfargument name="formScope" type="struct" required="true">
+	<cfargument name="urlScope" type="struct" required="true">
 	<cfscript>
 		var loc = {};
 
@@ -366,16 +382,15 @@
 
 <cffunction name="$findMatchingRoute" returntype="struct" access="public" output="false">
 	<cfargument name="route" type="string" required="true">
-	<cfargument name="routes" type="array" required="false" default="#application.wheels.routes#">
 	<cfscript>
 		var loc = {};
-		loc.iEnd = ArrayLen(arguments.routes);
+		loc.iEnd = ArrayLen(application.wheels.routes);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.currentRoute = arguments.routes[loc.i].pattern;
+			loc.currentRoute = application.wheels.routes[loc.i].pattern;
 			if (arguments.route == "" && loc.currentRoute == "")
 			{
-				loc.returnValue = arguments.routes[loc.i];
+				loc.returnValue = application.wheels.routes[loc.i];
 				break;
 			}
 			else
@@ -394,7 +409,7 @@
 					}
 					if (loc.match)
 					{
-						loc.returnValue = arguments.routes[loc.i];
+						loc.returnValue = application.wheels.routes[loc.i];
 						break;
 					}
 				}
@@ -407,8 +422,8 @@
 </cffunction>
 
 <cffunction name="$getRouteFromRequest" returntype="string" access="public" output="false">
-	<cfargument name="pathInfo" type="string" required="false" default="#request.cgi.path_info#">
-	<cfargument name="scriptName" type="string" required="false" default="#request.cgi.script_name#">
+	<cfargument name="pathInfo" type="string" required="true">
+	<cfargument name="scriptName" type="string" required="true">
 	<cfscript>
 		var returnValue = "";
 		if (arguments.pathInfo == arguments.scriptName || arguments.pathInfo == "/" || arguments.pathInfo == "")
@@ -420,15 +435,19 @@
 </cffunction>
 
 <cffunction name="$request" returntype="string" access="public" output="false">
+	<cfargument name="pathInfo" type="string" required="false" default="#request.cgi.path_info#">
+	<cfargument name="scriptName" type="string" required="false" default="#request.cgi.script_name#">
+	<cfargument name="formScope" type="struct" required="false" default="#form#">
+	<cfargument name="urlScope" type="struct" required="false" default="#url#">
 	<cfscript>
 		var loc = {};
-		if (application.wheels.showDebugInformation)
+		if (variables.showDebugInformation)
 			$debugPoint("setup");
 
 		// set route from incoming url, find a matching one and create the params struct
-		loc.route = $getRouteFromRequest();
+		loc.route = $getRouteFromRequest(pathInfo=arguments.pathInfo, scriptName=arguments.scriptName);
 		loc.foundRoute = $findMatchingRoute(route=loc.route);
-		loc.params = $createParams(route=loc.route, foundRoute=loc.foundRoute);
+		loc.params = $createParams(route=loc.route, foundRoute=loc.foundRoute, formScope=arguments.formScope, urlScope=arguments.urlScope);
 
 		// set params in the request scope as well so we can display it in the debug info outside of the controller context
 		request.wheels.params = loc.params;
@@ -440,7 +459,7 @@
 		// create the requested controller
 		loc.controller = $controller(loc.params.controller).$createControllerObject(loc.params);
 
-		if (application.wheels.showDebugInformation)
+		if (variables.showDebugInformation)
 			$debugPoint("setup,beforeFilters");
 
 		// run verifications and before filters if they exist on the controller
@@ -454,7 +473,7 @@
 			loc.controller.$runFilters(controller=loc.controller, type="before", actionName=loc.params.action);
 		}
 		
-		if (application.wheels.showDebugInformation)
+		if (variables.showDebugInformation)
 			$debugPoint("beforeFilters,action");
 
 		// only proceed to call the action if the before filter has not already rendered content
@@ -499,24 +518,16 @@
 				$callAction(controller=loc.controller, controllerName=loc.params.controller, actionName=loc.params.action);
 			}
 		}
-		if (application.wheels.showDebugInformation)
+		if (variables.showDebugInformation)
 			$debugPoint("action,afterFilters");
 		loc.controller.$runFilters(type="after", action=loc.params.action);
-		if (application.wheels.showDebugInformation)
+		if (variables.showDebugInformation)
 			$debugPoint("afterFilters");
 
 		// clear the flash (note that this is not done for redirectTo since the processing does not get here)
 		StructClear(session.flash);
 	</cfscript>
 	<cfreturn Trim(request.wheels.response)>
-</cffunction>
-
-<cffunction name="$initDispatcher" returntype="any" access="public" output="false">
-	<cfargument name="cacheActions" type="boolean" required="false" default="#application.wheels.cacheActions#">
-	<cfscript>
-		variables.cacheActions = arguments.cacheActions;
-	</cfscript>
-	<cfreturn this>
 </cffunction>
 
 <cffunction name="$runVerifications" returntype="void" access="public" output="false">
