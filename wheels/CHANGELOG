@@ -27,6 +27,7 @@ Bug Fixes
 * Fixed so that the "for" and "id" HTML attributes match when passing an empty string in "tagValue" - #303 [Tony Petruzzi]
 * Added the datetime2 data type to the Microsoft SQL Server adapter - #401 [Per Djurner]
 * Fixed so queries created in afterFind callbacks can be referenced from view helpers - [James Gibson]
+* Fixed so links are properly hyphenated when controller/action is part of the placeholder route values. - [William Fisk, Per Djurner]
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
