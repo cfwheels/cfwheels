@@ -216,7 +216,7 @@
 							$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="The route chosen by Wheels `#loc.route.name#` requires the argument `#loc.property#`. Pass the argument `#loc.property#` or change your routes to reflect the proper variables needed.");
 						loc.param = $URLEncode(arguments[loc.property]);
 						if (loc.property == "controller" || loc.property == "action")
-							loc.param = $hyphenize(loc.param);
+							loc.param = REReplace(REReplace(loc.param, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
 						else if (application.wheels.obfuscateUrls)
 							loc.param = obfuscateParam(loc.param);
 						loc.returnValue = loc.returnValue & "/" & loc.param; // get param from arguments
