@@ -15,7 +15,7 @@
 		<cfset $setNamedRoutePositions()>
 		<cfset loc.e = "/user/5559/survey-templates/index">
 		<cfset loc.r = urlFor(route="user_2", user_id="5559", controller="SurveyTemplates", action="index")>
-		<cfset assert('loc.e eq loc.r')>
+		<cfset assert('loc.r contains loc.e')>
 	</cffunction>
 
 </cfcomponent>
