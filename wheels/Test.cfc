@@ -337,30 +337,23 @@
 
 			<cfif (left(key, 4) eq "test" and isCustomFunction(this[key])) and (!len(arguments.testname) or (len(arguments.testname) and arguments.testname eq key))>
 
+				<cfset time = getTickCount()>
+
+				<cfset loc = duplicate(global)>
+				
+				<cfif structKeyExists(this, "setup")>
+					<cfset setup()>
+				</cfif>
+
 				<cftry>
-
-					<cfset time = getTickCount()>
-
-					<cfset loc = duplicate(global)>
-
-					<cfif structKeyExists(this, "setup")>
-						<cfset setup()>
-					</cfif>
 
 					<cfset message = "">
 					<cfinvoke method="#key#">
 					<cfset status = "Success">
 					<cfset request[resultkey].numSuccesses = request[resultkey].numSuccesses + 1>
 
-					<cfif structKeyExists(this, "teardown")>
-						<cfset teardown()>
-					</cfif>
-
-					<cfset time = getTickCount() - time>
-
 				<cfcatch type="any">
 
-					<cfset time = getTickCount() - time>
 					<cfset message = cfcatch.message>
 
 					<cfif cfcatch.ErrorCode eq "__FAIL__">
@@ -388,6 +381,12 @@
 
 				</cfcatch>
 				</cftry>
+				
+				<cfif structKeyExists(this, "teardown")>
+					<cfset teardown()>
+				</cfif>
+
+				<cfset time = getTickCount() - time>
 
 				<!---
 					Record test results
