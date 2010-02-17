@@ -1,3 +1,14 @@
+WHEELS VERSION 1.0.2
+
+Bug Fixes
+=======
+* Added work-around for CF9 / OSX related "extends" bug in MySQL adapter - #378 [Russ Johnson, Jordan Sitkin, John C. Bland II, Per Djurner]
+* Fixed call to non existing function in URLFor() - [Andy Bellenie, Per Djurner]
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 WHEELS VERSION 1.0.1
 
 Bug Fixes
