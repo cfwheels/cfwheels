@@ -183,7 +183,7 @@
 	'
 		<!--- view code --->
 		<cfoutput>
-		    <p>##checkBoxTag(name="suscribe", value="true", label="Suscribe to our newsletter", checked=false)##</p>
+		    <p>##checkBoxTag(name="subscribe", value="true", label="Subscribe to our newsletter", checked=false)##</p>
 		</cfoutput>
 	'
 	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTag,dateSelectTag,timeSelectTag">

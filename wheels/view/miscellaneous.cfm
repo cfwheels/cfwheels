@@ -179,6 +179,7 @@
 <cffunction name="$tagId" returntype="string" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">
+	<cfargument name="valueToAppend" type="string" default="">
 	<cfscript>
 		var loc = {};
 		if (IsSimpleValue(arguments.objectName))
@@ -198,6 +199,8 @@
 		{
 			loc.returnValue = ReplaceList(arguments.property, "[,],',""", "-,");
 		}
+		if (Len(arguments.valueToAppend))
+			loc.returnValue = loc.returnValue & "-" & arguments.valueToAppend;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
