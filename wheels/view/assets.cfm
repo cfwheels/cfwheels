@@ -141,17 +141,17 @@
 			{
 				if (loc.localFile && !FileExists(ExpandPath(arguments.src)))
 					$throw(type="Wheels.ImageFileNotFound", message="Wheels could not find `#expandPath('#arguments.src#')#` on the local file system.", extendedInfo="Pass in a correct relative path from the `images` folder to an image.");
-				else if (loc.localFile && arguments.source Does Not Contain ".jpg" && arguments.source Does Not Contain ".gif" && arguments.source Does Not Contain ".png")
+				else if (!ListFindNoCase("jpg,jpeg,gif,png",ListLast(arguments.source,".")))
 					$throw(type="Wheels.ImageFormatNotSupported", message="Wheels can't read image files with that format.", extendedInfo="Use a GIF, JPG or PNG image instead.");
 			}
-			if (!StructKeyExists(arguments, "width") || !StructKeyExists(arguments, "height"))
+			// height and/or width arguments are missing so use cfimage to get them
+			if (!StructKeyExists(arguments, "width") or !StructKeyExists(arguments, "height"))
 			{
 				loc.image = $image(action="info", source=ExpandPath(arguments.src));
-				if (loc.image.width > 0 && loc.image.height > 0)
-				{
+				if (!StructKeyExists(arguments, "width") and loc.image.width gt 0)
 					arguments.width = loc.image.width;
+				if (!StructKeyExists(arguments, "height") and loc.image.height gt 0)
 					arguments.height = loc.image.height;
-				}
 			}
 			// only append a query string if the file is local
 			arguments.src = $assetDomain(arguments.src) & $appendQueryString();

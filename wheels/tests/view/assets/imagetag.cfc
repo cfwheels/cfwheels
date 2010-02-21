@@ -51,4 +51,35 @@
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
+	<cffunction name="test_specifying_height_and_width">
+		<cfset structdelete(loc.args, "alt")>
+		<cfset structdelete(loc.args, "class")>
+		<cfset structdelete(loc.args, "id")>
+		<cfset loc.args.height = 25>
+		<cfset loc.args.width = 25>
+		<cfset loc.r = '<img alt="Wheelslogo" height="25" src="#loc.imagePath#/#loc.args.source#" width="25" />'>
+		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
+	<cffunction name="test_height_only">
+		<cfset structdelete(loc.args, "alt")>
+		<cfset structdelete(loc.args, "class")>
+		<cfset structdelete(loc.args, "id")>
+		<cfset loc.args.height = 25>
+		<cfset loc.r = '<img alt="Wheelslogo" height="25" src="#loc.imagePath#/#loc.args.source#" width="123" />'>
+		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
+	<cffunction name="test_width_only">
+		<cfset structdelete(loc.args, "alt")>
+		<cfset structdelete(loc.args, "class")>
+		<cfset structdelete(loc.args, "id")>
+		<cfset loc.args.width = 25>
+		<cfset loc.r = '<img alt="Wheelslogo" height="90" src="#loc.imagePath#/#loc.args.source#" width="25" />'>
+		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
 </cfcomponent>
