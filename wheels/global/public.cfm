@@ -318,6 +318,7 @@
 	<cfargument name="host" type="string" required="false" default="#application.wheels.functions.URLFor.host#" hint="Set this to override the current host.">
 	<cfargument name="protocol" type="string" required="false" default="#application.wheels.functions.URLFor.protocol#" hint="Set this to override the current protocol.">
 	<cfargument name="port" type="numeric" required="false" default="#application.wheels.functions.URLFor.port#" hint="Set this to override the current port number.">
+	<cfargument name="URLRewriting" type="string" required="false" default="#application.wheels.URLRewriting#" hint="Set this to override the default URL rewriting.">
 	<cfscript>
 		var loc = {};
 		loc.params = {};
@@ -341,7 +342,7 @@
 		{
 			// link for a named route
 			loc.route = $findRoute(argumentCollection=arguments);
-			if (application.wheels.URLRewriting == "Off")
+			if (arguments.URLRewriting == "Off")
 			{
 				loc.returnValue = loc.returnValue & "?controller=" & $hyphenize(loc.route.controller);
 				loc.returnValue = loc.returnValue & "&action=" & $hyphenize(loc.route.action);
@@ -377,13 +378,14 @@
 				}
 			}
 		}
-		else
+		else // link based on controller/action/key
 		{
-			// link based on controller/action/key
-			if (!Len(arguments.controller) && !Len(arguments.action) && StructKeyExists(loc.params, "action"))
-				arguments.action = loc.params.action; // when no controller or action was passed in we link to the current page (controller/action only, not query string etc) by default
+			
+			// when no controller or action was passed in we link to the current page (controller/action only, not query string etc) by default
 			if (!Len(arguments.controller) && StructKeyExists(loc.params, "controller"))
-				arguments.controller = loc.params.controller; // use the current controller as the default when none was passed in by the developer
+				arguments.controller = loc.params.controller; 
+			if (!Len(arguments.action) && StructKeyExists(loc.params, "action"))
+				arguments.action = loc.params.action;
 			loc.returnValue = loc.returnValue & "?controller=" & $hyphenize(arguments.controller);
 			if (Len(arguments.action))
 				loc.returnValue = loc.returnValue & "&action=" & $hyphenize(arguments.action);
@@ -396,13 +398,13 @@
 			}
 		}
 
-		if (application.wheels.URLRewriting != "Off")
+		if (arguments.URLRewriting != "Off")
 		{
 			loc.returnValue = Replace(loc.returnValue, "?controller=", "/");
 			loc.returnValue = Replace(loc.returnValue, "&action=", "/");
 			loc.returnValue = Replace(loc.returnValue, "&key=", "/");
 		}
-		if (application.wheels.URLRewriting == "On")
+		if (arguments.URLRewriting == "On")
 		{
 			loc.returnValue = Replace(loc.returnValue, "rewrite.cfm", "");
 			loc.returnValue = Replace(loc.returnValue, "//", "/");
