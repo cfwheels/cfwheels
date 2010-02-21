@@ -5,7 +5,7 @@
 
 	<cffunction name="test_for_attribute_on_plain_helper">
 		<cfset loc.result = checkBoxTag(name="the-name", label="The Label:")>
-		<cfset loc.compare = '<label for="the-name">The Label:<input id="the-name" name="the-name" type="checkbox" value="1" /></label>'>
+		<cfset loc.compare = '<label for="the-name-1">The Label:<input id="the-name-1" name="the-name" type="checkbox" value="1" /></label>'>
 		<cfset assert('loc.result IS loc.compare')>
 	</cffunction>
 
