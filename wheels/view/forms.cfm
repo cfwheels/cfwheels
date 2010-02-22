@@ -125,6 +125,7 @@
 <cffunction name="$formValue" returntype="string" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">
+	<cfargument name="applyHtmlEditFormat" type="boolean" required="false" default="true" />
 	<cfscript>
 		var loc = {};
 		if (IsStruct(arguments.objectName))
@@ -141,8 +142,10 @@
 			else
 				loc.returnValue = "";
 		}
+		if (arguments.applyHtmlEditFormat)
+			loc.returnValue = HTMLEditFormat(loc.returnValue);
 	</cfscript>
-	<cfreturn HTMLEditFormat(loc.returnValue)>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$maxLength" returntype="any" access="public">
