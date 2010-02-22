@@ -165,6 +165,7 @@
 	<cfargument name="abort" type="boolean" required="false" default="true">
 	<cfdump var="#arguments.var#">
 	<cfif arguments.abort>
+		<cfset $rollbackAllOpenTransactions()>
 		<cfabort>
 	</cfif>
 </cffunction>
