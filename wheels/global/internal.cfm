@@ -113,12 +113,16 @@
 		var applicationPath = Replace(GetCurrentTemplatePath(), "\", "/", "all");
 		var callingPath = Replace(GetBaseTemplatePath(), "\", "/", "all");
 		if (ListLen(callingPath, "/") GT ListLen(applicationPath, "/") || GetFileFromPath(callingPath) == "root.cfm")
+		{
+			$header(statusCode="404", statusText="Not Found");
+			$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
 			$abort();
+		}
 	</cfscript>
 </cffunction>
 
 <cffunction name="$URLEncode" returntype="string" access="public" output="false">
-	<cfargument name="param" type="string" required="true">
+	<cfargument name="param" type="string" required="false" default="">
 	<cfscript>
 		var returnValue = "";
 		returnValue = URLEncodedFormat(arguments.param);
