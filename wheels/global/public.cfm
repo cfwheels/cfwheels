@@ -514,7 +514,7 @@
 		<cfset commitTransaction()>
 	'
 	categories="model-object,crud" chapters="" functions="">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
+	<cfargument name="transaction" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfif arguments.transaction and not request.wheels.transactionOpen>
 		<cfset request.wheels.transactionOpen = true>
 		<cfset application.wheels.adapter.$beginTransaction()>
@@ -524,7 +524,7 @@
 </cffunction>
 
 <cffunction name="commitTransaction" returntype="void" access="public" output="false" hint="See documentation for @beginTransaction" categories="model-object,crud" chapters="" functions="">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
+	<cfargument name="transaction" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfif arguments.transaction>
 		<cfif request.wheels.transactionOpen>
 			<!--- <cftransaction action="commit" /> --->
@@ -537,7 +537,7 @@
 </cffunction>
 
 <cffunction name="rollbackTransaction" returntype="void" access="public" output="false" hint="See documentation for @beginTransaction" categories="model-object,crud" chapters="" functions="">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
+	<cfargument name="transaction" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfif arguments.transaction>
 		<cfif request.wheels.transactionOpen>
 			<!--- <cftransaction action="rollback" /> --->
