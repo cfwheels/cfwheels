@@ -19,8 +19,11 @@
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "initialized"))
 		{
 			// rollback any outstanding transactions
-			if (request.wheels.transactionOpen)
-				application.wheels.adapter.$rollbackTransaction();
+			for (key in request.wheels.transactions)
+			{
+				if (request.wheels.transactions[key] and StructKeyExists(application.wheels.adapters, key))
+					application.wheels.adapters[key].$rollbackTransaction();
+			}
 			
 			if (application.wheels.sendEmailOnError)
 			{

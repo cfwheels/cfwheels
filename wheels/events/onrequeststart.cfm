@@ -62,7 +62,9 @@
 
 		request.wheels.params = {};
 		request.wheels.cache = {};
-		request.wheels.transactionOpen = false;
+		
+		// create variables to track the transaction status for all adapters
+		request.wheels.transactions = {};
 
 		if (!application.wheels.cacheModelInitialization)
 			StructClear(application.wheels.models);

@@ -855,7 +855,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<!--- <!--- transaction methods --->
+<!--- transaction handlers --->
 
 <cffunction name="beginTransaction" returntype="void" access="public" output="false" hint="Opens a new database transaction if one does not exist, or appends to the existing transaction if it does."
 	examples=
@@ -869,39 +869,57 @@
 		<cfset commitTransaction()>
 	'
 	categories="model-object,crud" chapters="" functions="">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
-	<cfif arguments.transaction and not request.wheels.transactionOpen>
-		<cfset request.wheels.transactionOpen = true>
-		<cfset variables.wheels.class.adapter.$beginTransaction()>
-		<!--- <cftransaction action="begin" /> --->
-	</cfif>
+	<cfargument name="transaction" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfscript>
+		// create a tracer variable in request scope for the current model's datasource
+		if (!StructKeyExists(request.wheels.transactions, $hashedConnectionArgs()))
+			request.wheels.transactions[$hashedConnectionArgs()] = false;
+		// begin the transaction
+		if (arguments.transaction and !request.wheels.transactions[$hashedConnectionArgs()])
+		{
+			request.wheels.transactions[$hashedConnectionArgs()] = true;
+			variables.wheels.class.adapter.$beginTransaction();
+		}
+	</cfscript>
 </cffunction>
 
 <cffunction name="commitTransaction" returntype="void" access="public" output="false" hint="See documentation for @beginTransaction" categories="model-object,crud" chapters="" functions="">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
-	<cfif arguments.transaction>
-		<cfif request.wheels.transactionOpen>
-			<!--- <cftransaction action="commit" /> --->
-			<cfset variables.wheels.class.adapter.$commitTransaction()>
-			<cfset request.wheels.transactionOpen = false>
-		<cfelse>
-			<cfset $throw(type="Wheels.MissingTransaction", message="You cannot commit a transaction that does not exist.", extendedInfo="Ensure that beginTransaction() has been called before using commitTransaction().")>
-		</cfif>
-	</cfif>
+	<cfargument name="transaction" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfscript>
+		if (arguments.transaction) 
+		{
+			// check that the transaction exists
+			if (StructKeyExists(request.wheels.transactions, $hashedConnectionArgs()) and request.wheels.transactions[$hashedConnectionArgs()])
+			{
+				variables.wheels.class.adapter.$commitTransaction();
+				request.wheels.transactions[$hashedConnectionArgs()] = false;
+			}
+			else
+			{	
+				$throw(type="Wheels.MissingTransaction", message="You cannot commit a transaction that does not exist.", extendedInfo="Ensure that beginTransaction() has been called before using commitTransaction().");
+			}
+		}
+	</cfscript>
 </cffunction>
 
 <cffunction name="rollbackTransaction" returntype="void" access="public" output="false" hint="See documentation for @beginTransaction" categories="model-object,crud" chapters="" functions="">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
-	<cfif arguments.transaction>
-		<cfif request.wheels.transactionOpen>
-			<cfset variables.wheels.class.adapter.$rollbackTransaction()>
-			<!--- <cftransaction action="rollback" /> --->
-			<cfset request.wheels.transactionOpen = false>
-		<cfelse>
-			<cfset $throw(type="Wheels.MissingTransaction", message="You cannot rollback a transaction that does not exist.", extendedInfo="Ensure that beginTransaction() has been called before using rollbackTransaction().")>
-		</cfif>
-	</cfif>
-</cffunction> --->
+	<cfargument name="transaction" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfscript>
+		if (arguments.transaction) 
+		{
+			// check that the transaction exists
+			if (StructKeyExists(request.wheels.transactions, $hashedConnectionArgs()) and request.wheels.transactions[$hashedConnectionArgs()])
+			{
+				variables.wheels.class.adapter.$rollbackTransaction();
+				request.wheels.transactions[$hashedConnectionArgs()] = false;
+			}
+			else
+			{
+				$throw(type="Wheels.MissingTransaction", message="You cannot commit a transaction that does not exist.", extendedInfo="Ensure that beginTransaction() has been called before using commitTransaction().");
+			}
+		}
+	</cfscript>
+</cffunction>
 
 
 <!--- PRIVATE MODEL CLASS METHODS --->
@@ -1660,4 +1678,8 @@
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$hashedConnectionArgs" returntype="string" access="public" output="false">
+	<cfreturn Hash(variables.wheels.class.connection.datasource & variables.wheels.class.connection.username & variables.wheels.class.connection.password)> 
 </cffunction>

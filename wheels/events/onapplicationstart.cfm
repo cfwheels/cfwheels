@@ -43,6 +43,7 @@
 		application.wheels.nonExistingHelperFiles = "";
 		application.wheels.routes = [];
 		application.wheels.namedRoutePositions = {};
+		application.wheels.adapters = {};
 		application.wheels.cache = {};
 		application.wheels.cache.sql = {};
 		application.wheels.cache.image = {};
@@ -222,9 +223,6 @@
 		// allow developers to inject plugins into the application variables scope
 		if (!StructIsEmpty(application.wheels.mixins))
 			$include(template="wheels/plugins/injection.cfm");
-
-		// load database adapater
-		application.wheels.adapter = createobject("component", "wheelsMapping.Connection").init(datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword);
 
 		// load routes
 		$loadRoutes();
