@@ -518,8 +518,6 @@
 	<cfif arguments.transaction and not request.wheels.transactionOpen>
 		<cfset request.wheels.transactionOpen = true>
 		<cfset application.wheels.adapter.$beginTransaction()>
-		<!--- <cftransaction>
-		<cftransaction action="begin" isolation="serializable" /> --->
 	</cfif>
 </cffunction>
 
@@ -527,7 +525,6 @@
 	<cfargument name="transaction" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfif arguments.transaction>
 		<cfif request.wheels.transactionOpen>
-			<!--- <cftransaction action="commit" /> --->
 			<cfset application.wheels.adapter.$commitTransaction()>
 			<cfset request.wheels.transactionOpen = false>
 		<cfelse>
@@ -540,7 +537,6 @@
 	<cfargument name="transaction" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfif arguments.transaction>
 		<cfif request.wheels.transactionOpen>
-			<!--- <cftransaction action="rollback" /> --->
 			<cfset application.wheels.adapter.$rollbackTransaction()>
 			<cfset request.wheels.transactionOpen = false>
 		<cfelse>
