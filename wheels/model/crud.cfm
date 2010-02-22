@@ -884,6 +884,10 @@
 			{
 				loc.order = variables.wheels.class.adapter.$randomOrder();
 			}
+			else if (arguments.order Contains "(")
+			{
+				loc.order = arguments.order;
+			}
 			else
 			{
 				// setup an array containing class info for current class and all the ones that should be included
