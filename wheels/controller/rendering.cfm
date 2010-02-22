@@ -283,7 +283,14 @@
 						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 						{
 							loc.property = ListGetAt(loc.query.columnList, loc.j);
-							arguments[loc.property] = loc.query[loc.property][loc.i];
+							try
+							{
+								arguments[loc.property] = loc.query[loc.property][loc.i];
+							}
+							catch (Any e)
+							{
+								arguments[loc.property] = "";
+							}
 						}
 						loc.returnValue = loc.returnValue & $includeAndReturnOutput(argumentCollection=arguments);
 						if (StructKeyExists(arguments, "$spacer") && loc.i < loc.iEnd)
