@@ -163,9 +163,14 @@
 <cffunction name="$dump" returntype="void" access="public" output="true">
 	<cfargument name="var" type="any" required="true">
 	<cfargument name="abort" type="boolean" required="false" default="true">
+	<cfargument name="commit" type="boolean" required="false" default="false">
 	<cfdump var="#arguments.var#">
 	<cfif arguments.abort>
-		<cfset $rollbackAllOpenTransactions()>
+		<cfif arguments.commit>
+			<cfset $commitAllOpenTransactions()>
+		<cfelse>
+			<cfset $rollbackAllOpenTransactions()>
+		</cfif>
 		<cfabort>
 	</cfif>
 </cffunction>
