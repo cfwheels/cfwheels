@@ -477,7 +477,7 @@
 			$debugPoint("beforeFilters,action");
 
 		// only proceed to call the action if the before filter has not already rendered content
-		if (!StructKeyExists(request.wheels, "response"))
+		if (!StructKeyExists(request.wheels, "response") && !StructKeyExists(request.wheels, "redirect"))
 		{
 			// call action on controller if it exists
 			loc.actionIsCachable = false;
@@ -518,11 +518,18 @@
 				$callAction(controller=loc.controller, controllerName=loc.params.controller, actionName=loc.params.action);
 			}
 		}
-		if (variables.showDebugInformation)
-			$debugPoint("action,afterFilters");
-		loc.controller.$runFilters(type="after", action=loc.params.action);
-		if (variables.showDebugInformation)
-			$debugPoint("afterFilters");
+		
+		if (!StructKeyExists(request.wheels, "redirect"))
+		{
+			if (application.wheels.showDebugInformation)
+				$debugPoint("action,afterFilters");
+			loc.controller.$runFilters(type="after", action=loc.params.action);
+			if (application.wheels.showDebugInformation)
+				$debugPoint("afterFilters");
+		}
+		
+		if (StructKeyExists(request.wheels, "redirect"))
+			$location(argumentCollection=request.wheels.redirect);
 
 		// clear the flash (note that this is not done for redirectTo since the processing does not get here)
 		StructClear(session.flash);

@@ -46,6 +46,9 @@
 		{
 			loc.url = URLFor(argumentCollection=arguments);
 		}
-		$location(url=loc.url, addToken=arguments.addToken, statusCode=arguments.statusCode);
+		
+		if (StructKeyExists(request.wheels, "redirect"))
+			$throw(type="Wheels.RedirectToAlreadyCalled", message="`redirectTo()` was already called.");
+		request.wheels.redirect = { url=loc.url, addToken=arguments.addToken, statusCode=arguments.statusCode };
 	</cfscript>
 </cffunction>
