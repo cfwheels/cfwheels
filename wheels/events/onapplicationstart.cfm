@@ -223,6 +223,9 @@
 		if (!StructIsEmpty(application.wheels.mixins))
 			$include(template="wheels/plugins/injection.cfm");
 
+		// load database adapater
+		application.wheels.adapter = createobject("component", "wheelsMapping.Connection").init(datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword);
+
 		// load routes
 		$loadRoutes();
 

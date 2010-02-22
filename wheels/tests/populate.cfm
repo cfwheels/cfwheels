@@ -97,6 +97,7 @@
 <cfset loc.peter = model("author").create(firstName="Peter", lastName="Amiri")>
 <cfset loc.james = model("author").create(firstName="James", lastName="Gibson")>
 <cfset loc.raul = model("author").create(firstName="Raul", lastName="Riera")>
+<cfset loc.andy = model("author").create(firstName="Andy", lastName="Bellenie")>
 
 <cfset loc.users = model("user").findAll()>
 

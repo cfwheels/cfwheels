@@ -53,10 +53,11 @@
 		<!--- URL rewriting setting (determined and set automatically by Wheels, override it by setting it to "On", "Off" or "Partial") --->
 		<cfset set(URLRewriting="Partial")>
 
-		<!--- Database settings (set automatically by Wheels to the same name as the folder the application resides, override it by setting `dataSourceName`) --->
-		<cfset set(dataSourceName="")>
-		<cfset set(dataSourceUserName="")>
-		<cfset set(dataSourcePassword ="")>
+		<!--- Database settings --->
+		<cfset set(dataSourceName = "")> <!--- set automatically by Wheels to the same name as the folder in which the application resides, override it by setting `dataSourceName`) --->
+		<cfset set(dataSourceUserName = "")>
+		<cfset set(dataSourcePassword = "")>
+		<cfset set(useTransactions = true)>
 
 		<!--- Caching settings --->
 		<cfset set(cacheDatabaseSchema = false)>
@@ -496,6 +497,56 @@
 	<cfargument name="str" type="string" required="true" hint="string to make XHTML compliant">
 	<cfset arguments.str = Replace(arguments.str, "&", "&amp;", "all")>
 	<cfreturn arguments.str>
+</cffunction>
+
+
+<!--- transaction handlers --->
+
+<cffunction name="beginTransaction" returntype="void" access="public" output="false" hint="Opens a new database transaction if one does not exist, or appends to the existing transaction if it does."
+	examples=
+	'
+		<!--- load two bank account models, withdraw from one and deposit in the other. --->
+		<cfset accountForDavid = model("Account").findByKey(33)>
+		<cfset accountForMary = model("Account").findByKey(45)>
+		<cfset beginTransaction()>
+		<cfset accountForDavid.withdraw(100)>
+		<cfset accountForMary.deposit(100)>
+		<cfset commitTransaction()>
+	'
+	categories="model-object,crud" chapters="" functions="">
+	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
+	<cfif arguments.transaction and not request.wheels.transactionOpen>
+		<cfset request.wheels.transactionOpen = true>
+		<cfset application.wheels.adapter.$beginTransaction()>
+		<!--- <cftransaction>
+		<cftransaction action="begin" isolation="serializable" /> --->
+	</cfif>
+</cffunction>
+
+<cffunction name="commitTransaction" returntype="void" access="public" output="false" hint="See documentation for @beginTransaction" categories="model-object,crud" chapters="" functions="">
+	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
+	<cfif arguments.transaction>
+		<cfif request.wheels.transactionOpen>
+			<!--- <cftransaction action="commit" /> --->
+			<cfset application.wheels.adapter.$commitTransaction()>
+			<cfset request.wheels.transactionOpen = false>
+		<cfelse>
+			<cfset $throw(type="Wheels.MissingTransaction", message="You cannot commit a transaction that does not exist.", extendedInfo="Ensure that beginTransaction() has been called before using commitTransaction().")>
+		</cfif>
+	</cfif>
+</cffunction>
+
+<cffunction name="rollbackTransaction" returntype="void" access="public" output="false" hint="See documentation for @beginTransaction" categories="model-object,crud" chapters="" functions="">
+	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
+	<cfif arguments.transaction>
+		<cfif request.wheels.transactionOpen>
+			<!--- <cftransaction action="rollback" /> --->
+			<cfset application.wheels.adapter.$rollbackTransaction()>
+			<cfset request.wheels.transactionOpen = false>
+		<cfelse>
+			<cfset $throw(type="Wheels.MissingTransaction", message="You cannot rollback a transaction that does not exist.", extendedInfo="Ensure that beginTransaction() has been called before using rollbackTransaction().")>
+		</cfif>
+	</cfif>
 </cffunction>
 
 <!--- PRIVATE FUNCTIONS --->

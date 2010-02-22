@@ -33,6 +33,18 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="$beginTransaction">
+	<cfset $query(sql=ListToArray("START TRANSACTION"), parameterize=true)>
+</cffunction>
+
+<cffunction name="$commitTransaction">
+	<cfset $query(sql=ListToArray("COMMIT"), parameterize=true)>
+</cffunction>
+
+<cffunction name="$rollbackTransaction">
+	<cfset $query(sql=ListToArray("ROLLBACK"), parameterize=true)>
+</cffunction>
+
 <cffunction name="$query" returntype="struct" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="limit" type="numeric" required="false" default=0>

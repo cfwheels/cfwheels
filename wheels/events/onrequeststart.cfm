@@ -62,6 +62,7 @@
 
 		request.wheels.params = {};
 		request.wheels.cache = {};
+		request.wheels.transactionOpen = false;
 
 		if (!application.wheels.cacheModelInitialization)
 			StructClear(application.wheels.models);

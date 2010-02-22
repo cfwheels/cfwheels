@@ -14,6 +14,7 @@
 		application.wheels.dataSourceName = LCase(ListLast(GetDirectoryFromPath(GetBaseTemplatePath()), Right(GetDirectoryFromPath(GetBaseTemplatePath()), 1)));
 	application.wheels.dataSourceUserName = "";
 	application.wheels.dataSourcePassword = "";
+	application.wheels.enableTransactions = true;
 
 	// settings that depend on the environment
 	application.wheels.cacheDatabaseSchema = false;

@@ -136,22 +136,43 @@
 					else if (loc.name == "setObject")
 					{
 						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
-						if (IsObject(arguments.missingMethodArguments[1]))
+						// single argument, must be either the key or the object
+						if (StructCount(arguments.missingMethodArguments) eq 1)
 						{
-							loc.componentReference = arguments.missingMethodArguments[1];
-							loc.method = "update";
+							if (IsObject(arguments.missingMethodArguments[1]))
+							{
+								loc.componentReference = arguments.missingMethodArguments[1];
+								loc.method = "update";
+							}
+							else
+							{
+								arguments.missingMethodArguments.key = arguments.missingMethodArguments[1];
+								loc.method = "updateByKey";
+							}
 							StructDelete(arguments.missingMethodArguments, "1");
 						}
+						// multiple arguments so ensure that either 'key' or the association name exists (loc.key)
 						else
 						{
-							loc.method = "updateByKey";
-							$setObjectOrNumberToKey(arguments.missingMethodArguments);
+							if (StructKeyExists(arguments.missingMethodArguments, loc.key) and IsObject(arguments.missingMethodArguments[loc.key]))
+							{
+								loc.componentReference = arguments.missingMethodArguments[loc.key];
+								loc.method = "update";
+								StructDelete(arguments.missingMethodArguments, loc.key);
+							}
+							else if (StructKeyExists(arguments.missingMethodArguments, "key"))
+								loc.method = "updateByKey";
+							else
+								$throw(type="Wheels.IncorrectArguments", message="The `#loc.singularKey#` or `key` named argument is required.", extendedInfo="When using multiple arguments for #loc.name#() you must supply an object using the argument `#loc.singularKey#` or a key using the argument `key`, e.g. #loc.name#(#loc.singularKey#=post) or #loc.name#(key=post.id).");
 						}
+						arguments.missingMethodArguments.transaction = false;
+						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
 					}
 				}
 				else if (loc.info.type == "hasMany")
 				{
-					loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, loc.key, "objects"), singularize(loc.key), "object"); // create a generic method name (example: "hasComments" becomes "hasObjects")
+					loc.singularKey = singularize(loc.key);
+					loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, loc.key, "objects"), loc.singularKey, "object"); // create a generic method name (example: "hasComments" becomes "hasObjects")
 					if (loc.name == "objects")
 					{
 						loc.method = "findAll";
@@ -159,47 +180,105 @@
 					}
 					else if (loc.name == "addObject")
 					{
-						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
-						if (IsObject(arguments.missingMethodArguments[1]))
+						// single argument, must be either the key or the object
+						if (StructCount(arguments.missingMethodArguments) eq 1)
 						{
-							loc.componentReference = arguments.missingMethodArguments[1];
-							loc.method = "update";
+							if (IsObject(arguments.missingMethodArguments[1]))
+							{
+								loc.componentReference = arguments.missingMethodArguments[1];
+								loc.method = "update";
+							}
+							else
+							{
+								arguments.missingMethodArguments.key = arguments.missingMethodArguments[1];
+								loc.method = "updateByKey";
+							}
 							StructDelete(arguments.missingMethodArguments, "1");
 						}
+						// multiple arguments so ensure that either 'key' or the singularized association name exists (loc.singularKey)
 						else
 						{
-							loc.method = "updateByKey";
-							$setObjectOrNumberToKey(arguments.missingMethodArguments);
+							if (StructKeyExists(arguments.missingMethodArguments, loc.singularKey) and IsObject(arguments.missingMethodArguments[loc.singularKey]))
+							{
+								loc.componentReference = arguments.missingMethodArguments[loc.singularKey];
+								loc.method = "update";
+								StructDelete(arguments.missingMethodArguments, loc.singularKey);
+							}
+							else if (StructKeyExists(arguments.missingMethodArguments, "key"))
+								loc.method = "updateByKey";
+							else
+								$throw(type="Wheels.IncorrectArguments", message="The `#loc.singularKey#` or `key` named argument is required.", extendedInfo="When using multiple arguments for #loc.name#() you must supply an object using the argument `#loc.singularKey#` or a key using the argument `key`, e.g. #loc.name#(#loc.singularKey#=post) or #loc.name#(key=post.id).");
 						}
+						arguments.missingMethodArguments.transaction = false;
+						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
 					}
 					else if (loc.name == "removeObject")
 					{
-						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey, setToNull=true);
-						if (IsObject(arguments.missingMethodArguments[1]))
+						// single argument, must be either the key or the object
+						if (StructCount(arguments.missingMethodArguments) eq 1)
 						{
-							loc.componentReference = arguments.missingMethodArguments[1];
-							loc.method = "update";
+							if (IsObject(arguments.missingMethodArguments[1]))
+							{
+								loc.componentReference = arguments.missingMethodArguments[1];
+								loc.method = "update";
+							}
+							else
+							{
+								arguments.missingMethodArguments.key = arguments.missingMethodArguments[1];
+								loc.method = "updateByKey";
+							}
 							StructDelete(arguments.missingMethodArguments, "1");
 						}
+						// multiple arguments so ensure that either 'key' or the singularized object name exists (loc.singularKey)
 						else
 						{
-							loc.method = "updateByKey";
-							$setObjectOrNumberToKey(arguments.missingMethodArguments);
+							if (StructKeyExists(arguments.missingMethodArguments, loc.singularKey) and IsObject(arguments.missingMethodArguments[loc.singularKey]))
+							{
+								loc.componentReference = arguments.missingMethodArguments[loc.singularKey];
+								loc.method = "update";
+								StructDelete(arguments.missingMethodArguments, loc.singularKey);
+							}
+							else if (StructKeyExists(arguments.missingMethodArguments, "key"))
+								loc.method = "updateByKey";
+							else
+								$throw(type="Wheels.IncorrectArguments", message="The `#loc.singularKey#` or `key` named argument is required.", extendedInfo="When using multiple arguments for #loc.name#() you must supply an object using the argument `#loc.singularKey#` or a key using the argument `key`, e.g. #loc.name#(#loc.singularKey#=post) or #loc.name#(key=post.id).");
 						}
+						arguments.missingMethodArguments.transaction = false;
+						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey, setToNull=true);
 					}
 					else if (loc.name == "deleteObject")
 					{
-						if (IsObject(arguments.missingMethodArguments[1]))
+						// single argument, must be either the key or the object
+						if (StructCount(arguments.missingMethodArguments) eq 1)
 						{
-							loc.componentReference = arguments.missingMethodArguments[1];
-							loc.method = "delete";
+							if (IsObject(arguments.missingMethodArguments[1]))
+							{
+								loc.componentReference = arguments.missingMethodArguments[1];
+								loc.method = "delete";
+							}
+							else
+							{
+								arguments.missingMethodArguments.key = arguments.missingMethodArguments[1];
+								loc.method = "deleteByKey";
+							}
 							StructDelete(arguments.missingMethodArguments, "1");
 						}
+						// multiple arguments so ensure that either 'key' or the singularized object name exists (loc.singularKey)
 						else
 						{
-							loc.method = "deleteByKey";
-							$setObjectOrNumberToKey(arguments.missingMethodArguments);
+							if (StructKeyExists(arguments.missingMethodArguments, loc.singularKey) and IsObject(arguments.missingMethodArguments[loc.singularKey]))
+							{
+								loc.componentReference = arguments.missingMethodArguments[loc.singularKey];
+								loc.method = "delete";
+								StructDelete(arguments.missingMethodArguments, loc.singularKey);
+							}
+							else if (StructKeyExists(arguments.missingMethodArguments, "key"))
+								loc.method = "deleteByKey";
+							else
+								$throw(type="Wheels.IncorrectArguments", message="The `#loc.singularKey#` or `key` named argument is required.", extendedInfo="When using multiple arguments for #loc.name#() you must supply an object using the argument `#loc.singularKey#` or a key using the argument `key`, e.g. #loc.name#(#loc.singularKey#=post) or #loc.name#(key=post.id).");
 						}
+						arguments.missingMethodArguments.transaction = false;
+						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
 					}
 					else if (loc.name == "hasObjects")
 					{
@@ -290,18 +369,5 @@
 			else
 				arguments.missingMethodArguments[ListGetAt(arguments.keys, loc.i)] = this[ListGetAt(variables.wheels.class.keys, loc.i)];
 		}
-	</cfscript>
-</cffunction>
-
-<cffunction name="$setObjectOrNumberToKey" returntype="void" access="public" output="false">
-	<cfargument name="missingMethodArguments" type="struct" required="true">
-	<cfscript>
-		var loc = {};
-		loc.keyOrObject = arguments.missingMethodArguments[ListFirst(StructKeyList(arguments.missingMethodArguments))];
-		StructDelete(arguments.missingMethodArguments, ListFirst(StructKeyList(arguments.missingMethodArguments)));
-		if (IsObject(loc.keyOrObject))
-			arguments.missingMethodArguments.key = loc.keyOrObject.key();
-		else
-			arguments.missingMethodArguments.key = loc.keyOrObject;
 	</cfscript>
 </cffunction>

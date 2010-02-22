@@ -4,12 +4,12 @@
 
 	<cffunction name="test_count">
 		<cfset loc.result = model("author").count()>
-		<cfset assert("loc.result IS 6")>
+		<cfset assert("loc.result IS 7")>
 	</cffunction>
 
 	<cffunction name="test_count_with_include">
 		<cfset loc.result = model("author").count(include="posts")>
-		<cfset assert("loc.result IS 6")>
+		<cfset assert("loc.result IS 7")>
 	</cffunction>
 
 	<cffunction name="test_count_with_where">
