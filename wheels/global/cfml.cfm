@@ -79,6 +79,12 @@
 </cffunction>
 
 <cffunction name="$abort" returntype="void" access="public" output="false">
+	<cfargument name="commit" type="boolean" required="false" default="false">
+	<cfif arguments.commit>
+		<cfset $commitAllOpenTransactions()>
+	<cfelse>
+		<cfset $rollbackAllOpenTransactions()>
+	</cfif>
 	<cfabort attributeCollection="#arguments#">
 </cffunction>
 
