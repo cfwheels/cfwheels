@@ -187,7 +187,11 @@
 		$insertDefaults(name="radioButton", reserved="type,name,value,checked", input=arguments);
 		loc.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.tagValue, "[^a-z0-9- ]", "", "all"), " ", "-", "all"));
 		if (!StructKeyExists(arguments, "id"))
-			arguments.id = $tagId(arguments.objectName, arguments.property, loc.valueToAppend);
+		{
+			arguments.id = $tagId(arguments.objectName, arguments.property);
+			if (len(loc.valueToAppend))
+				arguments.id = arguments.id & "-" & loc.valueToAppend;
+		}
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "radio";
@@ -223,9 +227,8 @@
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="checkBox", reserved="type,name,value,checked", input=arguments);
-		loc.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.checkedValue, "[^a-z0-9- ]", "", "all"), " ", "-", "all"));
 		if (!StructKeyExists(arguments, "id"))
-			arguments.id = $tagId(arguments.objectName, arguments.property, loc.valueToAppend);
+			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "checkbox";
