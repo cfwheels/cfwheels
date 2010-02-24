@@ -743,7 +743,7 @@
 	<cfset clearErrors()>
 	<cfif $callback("beforeValidation")>
 		<cfif isNew()>
-			<cfif ListFindNoCase("commit,rollback", arguments.transaction)>
+			<cfif $useTransaction(arguments.transaction)>
 				<cftransaction action="begin">
 					<cfif $callback("beforeValidationOnCreate") && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation") && $callback("afterValidationOnCreate") && $callback("beforeSave") && $callback("beforeCreate")>
 						<cfset $create(parameterize=arguments.parameterize)>
