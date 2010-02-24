@@ -18,7 +18,6 @@
 
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "initialized"))
 		{
-			$rollbackAllOpenTransactions();
 			if (application.wheels.sendEmailOnError)
 			{
 				loc.mailArgs = {};

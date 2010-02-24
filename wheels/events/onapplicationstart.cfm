@@ -43,7 +43,6 @@
 		application.wheels.nonExistingHelperFiles = "";
 		application.wheels.routes = [];
 		application.wheels.namedRoutePositions = {};
-		application.wheels.adapters = {};
 		application.wheels.cache = {};
 		application.wheels.cache.sql = {};
 		application.wheels.cache.image = {};

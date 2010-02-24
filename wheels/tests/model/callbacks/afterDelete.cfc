@@ -6,7 +6,7 @@
 		<cfset model("tag").$registerCallback(type="afterDelete", methods="callbackThatSetsProperty")>
 		<cfset loc.obj = model("tag").findOne()>
 		<cftransaction>
-			<cfset loc.obj.delete(transaction=false)>
+			<cfset loc.obj.delete(transaction="none")>
 			<cftransaction action="rollback"/>
 		</cftransaction>
 		<cfset model("tag").$clearCallbacks(type="afterDelete")>

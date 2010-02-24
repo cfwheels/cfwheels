@@ -574,23 +574,3 @@ Should now call bar() instead and marking foo() as deprecated
 		}
 		</cfscript>
 </cffunction>
-
-<cffunction name="$commitAllOpenTransactions" returntype="void" access="public" output="false">
-	<cfscript>
-		for (key in request.wheels.transactions)
-		{
-			if (request.wheels.transactions[key] and StructKeyExists(application.wheels.adapters, key))
-				application.wheels.adapters[key].$commitTransaction();
-		}
-	</cfscript>
-</cffunction>
-
-<cffunction name="$rollbackAllOpenTransactions" returntype="void" access="public" output="false">
-	<cfscript>
-		for (key in request.wheels.transactions)
-		{
-			if (request.wheels.transactions[key] and StructKeyExists(application.wheels.adapters, key))
-				application.wheels.adapters[key].$rollbackTransaction();
-		}
-	</cfscript>
-</cffunction>

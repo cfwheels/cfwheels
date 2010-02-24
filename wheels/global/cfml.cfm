@@ -79,12 +79,6 @@
 </cffunction>
 
 <cffunction name="$abort" returntype="void" access="public" output="false">
-	<cfargument name="commit" type="boolean" required="false" default="false">
-	<cfif arguments.commit>
-		<cfset $commitAllOpenTransactions()>
-	<cfelse>
-		<cfset $rollbackAllOpenTransactions()>
-	</cfif>
 	<cfabort attributeCollection="#arguments#">
 </cffunction>
 
@@ -157,26 +151,22 @@
 <cffunction name="$dbinfo" returntype="any" access="public" output="false">
 	<cfset var loc = {}>
 	<cfset arguments.name = "loc.returnValue">
-	<!--- we have to use this cfif here to get around a bug with railo --->
-	<cfif StructKeyExists(arguments, "table")>
-		<cfdbinfo datasource="#arguments.datasource#" name="#arguments.name#" type="#arguments.type#" username="#arguments.username#" password="#arguments.password#" table="#arguments.table#">
-	<cfelse>
-		<cfdbinfo datasource="#arguments.datasource#" name="#arguments.name#" type="#arguments.type#" username="#arguments.username#" password="#arguments.password#">
+	<cfif not Len(arguments.username)>
+		<cfset StructDelete(arguments, "username")>
 	</cfif>
+	<cfif not Len(arguments.password)>
+		<cfset StructDelete(arguments, "password")>
+	</cfif>
+	<!--- note - railo requires that the `table` argument be passed into cfdbinfo --->
+	<cfdbinfo attributeCollection="#arguments#">
 	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$dump" returntype="void" access="public" output="true">
 	<cfargument name="var" type="any" required="true">
 	<cfargument name="abort" type="boolean" required="false" default="true">
-	<cfargument name="commit" type="boolean" required="false" default="false">
 	<cfdump var="#arguments.var#">
 	<cfif arguments.abort>
-		<cfif arguments.commit>
-			<cfset $commitAllOpenTransactions()>
-		<cfelse>
-			<cfset $rollbackAllOpenTransactions()>
-		</cfif>
 		<cfabort>
 	</cfif>
 </cffunction>

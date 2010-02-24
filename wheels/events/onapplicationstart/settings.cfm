@@ -14,7 +14,7 @@
 		application.wheels.dataSourceName = LCase(ListLast(GetDirectoryFromPath(GetBaseTemplatePath()), Right(GetDirectoryFromPath(GetBaseTemplatePath()), 1)));
 	application.wheels.dataSourceUserName = "";
 	application.wheels.dataSourcePassword = "";
-	application.wheels.enableTransactions = true;
+	application.wheels.transactionMode = "commit"; // use 'commit', 'rollback' or 'none' to set default transaction handling for creates, updates and deletes
 
 	// settings that depend on the environment
 	application.wheels.cacheDatabaseSchema = false;

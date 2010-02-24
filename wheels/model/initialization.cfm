@@ -38,13 +38,8 @@
 		if (StructKeyExists(variables, "init"))
 			init();
 
-		// load the database adapter into application scope so that it is available to external methods if required
-		loc.hashedConnectionArgs = Hash(variables.wheels.class.connection.datasource & variables.wheels.class.connection.username & variables.wheels.class.connection.password);
-		if (!StructKeyExists(application.wheels.adapters, loc.hashedConnectionArgs))
-			application.wheels.adapters[loc.hashedConnectionArgs] = createobject("component", "wheelsMapping.Connection").init(datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword);
-		
-		// inject the adapter into the model
-		variables.wheels.class.adapter = application.wheels.adapters[loc.hashedConnectionArgs];
+		// load the database adapter
+		variables.wheels.class.adapter = createobject("component", "wheelsMapping.Connection").init(datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword);
 
 		// set the table name unless set manually by the developer
 		if (!StructKeyExists(variables.wheels.class, "tableName"))

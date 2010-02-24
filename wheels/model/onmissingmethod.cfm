@@ -165,7 +165,6 @@
 							else
 								$throw(type="Wheels.IncorrectArguments", message="The `#loc.singularKey#` or `key` named argument is required.", extendedInfo="When using multiple arguments for #loc.name#() you must supply an object using the argument `#loc.singularKey#` or a key using the argument `key`, e.g. #loc.name#(#loc.singularKey#=post) or #loc.name#(key=post.id).");
 						}
-						arguments.missingMethodArguments.transaction = false;
 						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
 					}
 				}
@@ -209,7 +208,6 @@
 							else
 								$throw(type="Wheels.IncorrectArguments", message="The `#loc.singularKey#` or `key` named argument is required.", extendedInfo="When using multiple arguments for #loc.name#() you must supply an object using the argument `#loc.singularKey#` or a key using the argument `key`, e.g. #loc.name#(#loc.singularKey#=post) or #loc.name#(key=post.id).");
 						}
-						arguments.missingMethodArguments.transaction = false;
 						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
 					}
 					else if (loc.name == "removeObject")
@@ -243,7 +241,6 @@
 							else
 								$throw(type="Wheels.IncorrectArguments", message="The `#loc.singularKey#` or `key` named argument is required.", extendedInfo="When using multiple arguments for #loc.name#() you must supply an object using the argument `#loc.singularKey#` or a key using the argument `key`, e.g. #loc.name#(#loc.singularKey#=post) or #loc.name#(key=post.id).");
 						}
-						arguments.missingMethodArguments.transaction = false;
 						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey, setToNull=true);
 					}
 					else if (loc.name == "deleteObject")
@@ -277,7 +274,6 @@
 							else
 								$throw(type="Wheels.IncorrectArguments", message="The `#loc.singularKey#` or `key` named argument is required.", extendedInfo="When using multiple arguments for #loc.name#() you must supply an object using the argument `#loc.singularKey#` or a key using the argument `key`, e.g. #loc.name#(#loc.singularKey#=post) or #loc.name#(key=post.id).");
 						}
-						arguments.missingMethodArguments.transaction = false;
 						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
 					}
 					else if (loc.name == "hasObjects")

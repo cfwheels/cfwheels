@@ -60,7 +60,7 @@
 			<cfset loc.author = model("author").new(firstName="Per", lastName="Djurner")>
 			<cfset loc.result = loc.author.isNew()>
 			<cfset assert("loc.result IS true")>
-			<cfset loc.author.save(transaction=false)>
+			<cfset loc.author.save(transaction="none")>
 			<cfset loc.result = loc.author.isNew()>
 			<cfset assert("loc.result IS false")>
 			<cftransaction action="rollback" />
@@ -92,13 +92,13 @@
 			<cfset assert("loc.result IS true")>
 			<cfset loc.author.firstName = "Per">
 			<cfset loc.author.lastName = "Djurner">
-			<cfset loc.author.save(transaction=false)>
+			<cfset loc.author.save(transaction="none")>
 			<cfset loc.result = loc.author.hasChanged()>
 			<cfset assert("loc.result IS false")>
 			<cfset loc.author.lastName = "Petruzzi">
 			<cfset loc.result = loc.author.hasChanged()>
 			<cfset assert("loc.result IS true")>
-			<cfset loc.author.save(transaction=false)>
+			<cfset loc.author.save(transaction="none")>
 			<cfset loc.result = loc.author.hasChanged()>
 			<cfset assert("loc.result IS false")>
 			<cftransaction action="rollback" />

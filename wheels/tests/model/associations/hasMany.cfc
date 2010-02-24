@@ -34,7 +34,7 @@
 		<cfset loc.author = model("author").findOne(order="id")>
 		<cfset loc.post = model("post").findOne(order="id DESC")>
 		<cftransaction>
-			<cfset loc.author.addPost(post=loc.post, transaction=false)>
+			<cfset loc.author.addPost(post=loc.post, transaction="none")>
 			<!--- we need to test if authorId is set on the loc.post object as well and not just in the database! --->
 			<cfset loc.post.reload()>
 			<cftransaction action="rollback" />
@@ -42,14 +42,14 @@
 		<cfset assert("loc.author.id IS loc.post.authorId")>
 		<cfset loc.post.reload()>
 		<cftransaction>
-			<cfset loc.author.addPost(key=loc.post.id, transaction=false)>
+			<cfset loc.author.addPost(key=loc.post.id, transaction="none")>
 			<cfset loc.post.reload()>
 			<cftransaction action="rollback" />
 		</cftransaction>		
 		<cfset assert("loc.author.id IS loc.post.authorId")>
 		<cfset loc.post.reload()>
 		<cftransaction>
-			<cfset model("post").updateByKey(key=loc.post.id, authorId=loc.author.id, transaction=false)>
+			<cfset model("post").updateByKey(key=loc.post.id, authorId=loc.author.id, transaction="none")>
 			<cfset loc.post.reload()>
 			<cftransaction action="rollback" />
 		</cftransaction>		
@@ -60,7 +60,7 @@
 		<cfset loc.author = model("author").findOne(order="id")>
 		<cfset loc.post = model("post").findOne(order="id DESC")>
 		<cftransaction>
-			<cfset loc.author.removePost(post=loc.post, transaction=false)>
+			<cfset loc.author.removePost(post=loc.post, transaction="none")>
 			<!--- we need to test if authorId is set to blank on the loc.post object as well and not just in the database! --->
 			<cfset loc.post.reload()>
 			<cftransaction action="rollback" />
@@ -68,14 +68,14 @@
 		<cfset assert("loc.post.authorId IS ''")>
 		<cfset loc.post.reload()>
 		<cftransaction>
-			<cfset loc.author.removePost(key=loc.post.id, transaction=false)>
+			<cfset loc.author.removePost(key=loc.post.id, transaction="none")>
 			<cfset loc.post.reload()>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset assert("loc.post.authorId IS ''")>
 		<cfset loc.post.reload()>
 		<cftransaction>
-			<cfset model("post").updateByKey(key=loc.post.id, authorId="", transaction=false)>
+			<cfset model("post").updateByKey(key=loc.post.id, authorId="", transaction="none")>
 			<cfset loc.post.reload()>
 			<cftransaction action="rollback" />
 		</cftransaction>		
@@ -86,18 +86,18 @@
 		<cfset loc.author = model("author").findOne(order="id")>
 		<cfset loc.post = model("post").findOne(order="id DESC")>
 		<cftransaction>
-			<cfset loc.author.deletePost(post=loc.post, transaction=false)>
+			<cfset loc.author.deletePost(post=loc.post, transaction="none")>
 			<!--- should we also set loc.post to false here? --->
 			<cfset assert("NOT model('post').exists(loc.post.id)")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cftransaction>
-			<cfset loc.author.deletePost(key=loc.post.id, transaction=false)>
+			<cfset loc.author.deletePost(key=loc.post.id, transaction="none")>
 			<cfset assert("NOT model('post').exists(loc.post.id)")>
 			<cftransaction action="rollback" />
 		</cftransaction>		
 		<cftransaction>
-			<cfset model("post").deleteByKey(key=loc.post.id, transaction=false)>
+			<cfset model("post").deleteByKey(key=loc.post.id, transaction="none")>
 			<cfset assert("NOT model('post').exists(loc.post.id)")>
 			<cftransaction action="rollback" />
 		</cftransaction>		
@@ -106,13 +106,13 @@
 	<cffunction name="test_removing_all_children_by_nullifying_foreign_keys">
 		<cfset loc.author = model("author").findOne(order="id")>
 		<cftransaction>
-			<cfset loc.author.removeAllPosts(transaction=false)>
+			<cfset loc.author.removeAllPosts(transaction="none")>
 			<cfset loc.dynamicResult = loc.author.postCount(reload=true)>
 			<cfset loc.remainingCount = model("post").count(reload=true)>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cftransaction>
-			<cfset model("post").updateAll(authorId="", where="authorId=#loc.author.id#", transaction=false)>
+			<cfset model("post").updateAll(authorId="", where="authorId=#loc.author.id#", transaction="none")>
 			<cfset loc.coreResult = loc.author.postCount(reload=true)>
 			<cftransaction action="rollback" />
 		</cftransaction>		
@@ -122,13 +122,13 @@
 	<cffunction name="test_deleting_all_children">
 		<cfset loc.author = model("author").findOne(order="id")>
 		<cftransaction>
-			<cfset loc.author.deleteAllPosts(transaction=false)>
+			<cfset loc.author.deleteAllPosts(transaction="none")>
 			<cfset loc.dynamicResult = loc.author.postCount(reload=true)>
 			<cfset loc.remainingCount = model("post").count(reload=true)>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cftransaction>
-			<cfset model("post").deleteAll(where="authorId=#loc.author.id#", transaction=false)>
+			<cfset model("post").deleteAll(where="authorId=#loc.author.id#", transaction="none")>
 			<cfset loc.coreResult = loc.author.postCount(reload=true)>
 			<cftransaction action="rollback" />
 		</cftransaction>		
@@ -147,12 +147,12 @@
 	<cffunction name="test_creating_new_child_and_saving_it">
 		<cfset loc.author = model("author").findOne(order="id")>
 		<cftransaction>
-			<cfset loc.newPost = loc.author.createPost(title="New Title", body="New Body", transaction=false)>
+			<cfset loc.newPost = loc.author.createPost(title="New Title", body="New Body", transaction="none")>
 			<cfset loc.dynamicResult = loc.newPost.authorId>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cftransaction>
-			<cfset loc.newPost = model("post").create(authorId=loc.author.id, title="New Title", body="New Body", transaction=false)>
+			<cfset loc.newPost = model("post").create(authorId=loc.author.id, title="New Title", body="New Body", transaction="none")>
 			<cfset loc.coreResult = loc.newPost.authorId>
 			<cftransaction action="rollback" />
 		</cftransaction>

@@ -12,7 +12,7 @@
 		<cfset loc.obj = model("tag").findOne()>
 		<cfset loc.obj.name = "somethingElse">
 		<cftransaction>
-			<cfset loc.obj.save(transaction=false)>
+			<cfset loc.obj.save(transaction="none")>
 			<cftransaction action="rollback"/>
 		</cftransaction>
 		<cfset model("tag").$clearCallbacks(type="afterValidation")>
@@ -33,7 +33,7 @@
 		<cfset loc.obj.password = "xxxxxxx">
 		<cfset assert('loc.obj.hasChanged() eq true')>
 		<cftransaction>
-			<cfset loc.obj.save(transaction=false)>
+			<cfset loc.obj.save(transaction="none")>
 			<cfset assert('loc.obj.getHasObjectChanged() eq true')>
 			<cfset assert('loc.obj.hasChanged() eq false')>
 			<cftransaction action="rollback"/>

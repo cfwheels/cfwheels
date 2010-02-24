@@ -22,14 +22,13 @@
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.create.defaults#" hint="See documentation for @save.">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.create.parameterize#" hint="See documentation for @save.">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
-	<cfargument name="commit" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
 		loc.parameterize = arguments.parameterize;
 		StructDelete(arguments, "parameterize");
 		loc.returnValue = new(argumentCollection=arguments);
-		loc.returnValue.save(parameterize=loc.parameterize, defaults=arguments.defaults, transaction=arguments.transaction, commit=arguments.commit);
+		loc.returnValue.save(parameterize=loc.parameterize, defaults=arguments.defaults, transaction=arguments.transaction);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -412,33 +411,23 @@
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.updateAll.parameterize#" hint="See documentation for @findAll.">
 	<cfargument name="instantiate" type="boolean" required="false" default="#application.wheels.functions.updateAll.instantiate#" hint="Whether or not to instantiate the object(s) first. When objects are not instantiated any callbacks and validations set on them will be skipped.">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
-	<cfargument name="commit" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
-	<cfscript>
-		var loc = {};
-		arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,parameterize,instantiate,transaction,commit,$softDeleteCheck", setOnModel=false);
-		if (arguments.instantiate)
-		{
-    		// find and instantiate each object and call its update function
-			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
-			loc.iEnd = loc.records.recordCount;
+	<cfset var loc = {}>
+	<cfset arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,parameterize,instantiate,transaction,$softDeleteCheck", setOnModel=false)>
+	<cfif arguments.instantiate> <!--- find and instantiate each object and call its update function --->
+		<cfscript>
 			loc.returnValue = 0;
-			beginTransaction(arguments.transaction);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
+			for (loc.i=1; loc.i lte loc.records.recordCount; loc.i++)
 			{
 				loc.object = $createInstance(properties=loc.records, row=loc.i, persisted=true);
-				if (loc.object.update(properties=arguments.properties, parameterize=arguments.parameterize, transaction=false))
+				if (loc.object.update(properties=arguments.properties, parameterize=arguments.parameterize, transaction=arguments.transaction))
 					loc.returnValue = loc.returnValue + 1;
 			}
-			if (arguments.commit)
-				commitTransaction(arguments.transaction);
-			else
-				rollbackTransaction(arguments.transaction);
-		}
-		else
-		{
-			// do a regular update query
+		</cfscript>
+	<cfelse> <!--- do a regular update query --->
+		<cfscript>
 			loc.sql = [];
 			ArrayAppend(loc.sql, "UPDATE #variables.wheels.class.tableName# SET");
 			loc.pos = 0;
@@ -453,15 +442,18 @@
 			}
 			loc.sql = $addWhereClause(sql=loc.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=arguments.where);
-			beginTransaction(arguments.transaction);
-			loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
-			loc.returnValue = loc.upd.result.recordCount;
-			if (arguments.commit)
-				commitTransaction(arguments.transaction);
-			else
-				rollbackTransaction(arguments.transaction);
-		}
 		</cfscript>
+		<cfif $useTransaction(arguments.transaction)>
+			<cftransaction action="begin">
+				<cfset loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
+				<cfset loc.returnValue = loc.upd.result.recordCount>
+				<cftransaction action="#arguments.transaction#" />
+			</cftransaction>
+		<cfelse>
+			<cfset loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
+			<cfset loc.returnValue = loc.upd.result.recordCount>
+		</cfif>
+	</cfif>
 	<cfreturn loc.returnValue>
 </cffunction>
 
@@ -477,8 +469,7 @@
 	categories="model-class,update" chapters="updating-records,associations" functions="hasOne,hasMany,update,updateAll,updateOne">
 	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
-	<cfargument name="commit" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfscript>
 		var returnValue = "";
 		arguments.where = $keyWhereString(values=arguments.key);
@@ -502,8 +493,7 @@
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
-	<cfargument name="commit" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
 		loc.object = findOne(where=arguments.where, order=arguments.order);
@@ -534,45 +524,38 @@
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.deleteAll.parameterize#" hint="See documentation for @findAll.">
 	<cfargument name="instantiate" type="boolean" required="false" default="#application.wheels.functions.deleteAll.instantiate#" hint="See documentation for @updateAll.">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
-	<cfargument name="commit" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
-	<cfscript>
-		var loc = {};
-		if (arguments.instantiate)
-		{
-    		// find and instantiate each object and call its delete function
+	<cfset var loc = {}>
+	<cfif arguments.instantiate> <!--- find and instantiate each object and call its delete function --->
+		<cfscript>
 			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
-			loc.iEnd = loc.records.recordCount;
 			loc.returnValue = 0;
-			beginTransaction(arguments.transaction);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i lte loc.records.recordCount; loc.i++)
 			{
 				loc.object = $createInstance(properties=loc.records, row=loc.i, persisted=true);
-				if (loc.object.delete(parameterize=arguments.parameterize, transaction=false))
+				if (loc.object.delete(parameterize=arguments.parameterize, transaction=arguments.transaction))
 					loc.returnValue++;
 			}
-			if (arguments.commit)
-				commitTransaction(arguments.transaction);
-			else
-				rollbackTransaction(arguments.transaction);
-		}
-		else
-		{
-			// do a regular delete query
+		</cfscript>
+	<cfelse> <!--- do a regular delete query --->
+		<cfscript>
 			loc.sql = [];
 			loc.sql = $addDeleteClause(sql=loc.sql);
 			loc.sql = $addWhereClause(sql=loc.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=arguments.where);
-			beginTransaction(arguments.transaction);
-			loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
-			loc.returnValue = loc.del.result.recordCount;
-			if (arguments.commit)
-				commitTransaction(arguments.transaction);
-			else
-				rollbackTransaction(arguments.transaction);
-		}
-	</cfscript>
+		</cfscript>
+		<cfif $useTransaction(arguments.transaction)>
+			<cftransaction action="begin">
+				<cfset loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
+				<cfset loc.returnValue = loc.del.result.recordCount>
+				<cftransaction action="#arguments.transaction#" />
+			</cftransaction>
+		<cfelse>
+			<cfset loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
+			<cfset loc.returnValue = loc.del.result.recordCount>
+		</cfif>
+	</cfif>
 	<cfreturn loc.returnValue>
 </cffunction>
 
@@ -584,12 +567,11 @@
 	'
 	categories="model-class,delete" chapters="deleting-records" functions="delete,deleteAll,deleteOne">
 	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
-	<cfargument name="commit" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
 		loc.where = $keyWhereString(values=arguments.key);
-		loc.returnValue = deleteOne(where=loc.where, transaction=arguments.transaction, commit=arguments.commit);
+		loc.returnValue = deleteOne(where=loc.where, transaction=arguments.transaction);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -607,13 +589,12 @@
 	categories="model-class,delete" chapters="deleting-records,associations" functions="delete,deleteAll,deleteOne,hasOne">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
-	<cfargument name="commit" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
 		loc.object = findOne(where=arguments.where, order=arguments.order);
 		if (IsObject(loc.object))
-			loc.returnValue = loc.object.delete(transaction=arguments.transaction, commit=arguments.commit);
+			loc.returnValue = loc.object.delete(transaction=arguments.transaction);
 		else
 			loc.returnValue = false;
 	</cfscript>
@@ -681,31 +662,39 @@
 		<cfset aComment = model("comment").findByKey(params.commentId)>
 		<cfset aPost.deleteComment(aComment)>
 	'
-	categories="model-object,crud" chapters="deleting-recordsm,associations" functions="deleteAll,deleteByKey,deleteOne,hasMany">
+	categories="model-object,crud" chapters="deleting-records,associations" functions="deleteAll,deleteByKey,deleteOne,hasMany">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.delete.parameterize#" hint="See documentation for @findAll.">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
-	<cfargument name="commit" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfscript>
-		var loc = {};
-		beginTransaction(arguments.transaction);
-		if ($callback("beforeDelete"))
-		{
-        	loc.sql = [];
-        	loc.sql = $addDeleteClause(sql=loc.sql);
-            loc.sql = $addKeyWhereClause(sql=loc.sql);
-            loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
-            if (loc.del.result.recordCount == 1 and $callback("afterDelete"))
-            {
-				if (arguments.commit)
-					commitTransaction(arguments.transaction);
-				else 
-					rollbackTransaction(arguments.transaction);
-				return true;
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
+	<cfset var loc = {}>
+	<cfset loc.returnValue = false>
+	<cfset loc.sql = []>
+	<cfset loc.sql = $addDeleteClause(sql=loc.sql)>
+	<cfset loc.sql = $addKeyWhereClause(sql=loc.sql)>
+	<cfif $useTransaction(arguments.transaction)>
+		<cftransaction action="begin">
+			<cfif $callback("beforeDelete")>
+				<cfset loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
+				<cfif loc.del.result.recordCount eq 1 and $callback("afterDelete")>
+					<cftransaction action="#arguments.transaction#" />
+					<cfset loc.returnValue = true>
+				<cfelse>
+					<cftransaction action="rollback" />
+				</cfif>
+			<cfelse>
+				<cftransaction action="rollback" />
+			</cfif>
+		</cftransaction>
+	<cfelse>
+		<cfscript>
+			if ($callback("beforeDelete"))
+			{
+				loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
+				if (loc.del.result.recordCount eq 1 and $callback("afterDelete"))
+					loc.returnValue = true;
 			}
-		} 
-		rollbackTransaction(arguments.transaction);
-		return false;
-	</cfscript>
+		</cfscript>
+	</cfif>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="reload" returntype="void" access="public" output="false" hint="Reloads the property values of this object from the database."
@@ -749,52 +738,76 @@
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.save.parameterize#" hint="See documentation for @findAll.">
 	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.save.defaults#" hint="Whether or not to set default values for properties.">
 	<cfargument name="validate" type="boolean" required="false" default="true" hint="Whether or not to run validations when saving">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="Set to false to disable wheels automatic transaction handling.">
-	<cfargument name="commit" type="boolean" required="false" default="true" hint="Set to false to test the transaction without committing any changes to the database. This argument is ignored if transactions are disabled.">
-	<cfscript>
-		clearErrors();
-		beginTransaction(arguments.transaction);
-		if ($callback("beforeValidation"))
-		{
-			if (isNew())
-			{
-				if ($callback("beforeValidationOnCreate") && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation") && $callback("afterValidationOnCreate") && $callback("beforeSave") && $callback("beforeCreate"))
-				{
-					$create(parameterize=arguments.parameterize);
-					if (arguments.defaults)
-						$setDefaultValues();
-					if ($callback("afterCreate") and $callback("afterSave")) 
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="Use `commit` to update the database when the save has completed, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.">
+	<cfset var returnValue = false>
+	<cfset clearErrors()>
+	<cfif $callback("beforeValidation")>
+		<cfif isNew()>
+			<cfif ListFindNoCase("commit,rollback", arguments.transaction)>
+				<cftransaction action="begin">
+					<cfif $callback("beforeValidationOnCreate") && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation") && $callback("afterValidationOnCreate") && $callback("beforeSave") && $callback("beforeCreate")>
+						<cfset $create(parameterize=arguments.parameterize)>
+						<cfif arguments.defaults>
+							<cfset $setDefaultValues()>
+						</cfif>
+						<cfif $callback("afterCreate") and $callback("afterSave")>
+							<cfset $updatePersistedProperties()>
+							<cfset returnValue = true>
+							<cftransaction action="#arguments.transaction#" />
+						<cfelse>
+							<cftransaction action="rollback" />
+						</cfif>
+					<cfelse>
+						<cftransaction action="rollback" />
+					</cfif>
+				</cftransaction>
+			<cfelse>
+				<cfscript>
+					if ($callback("beforeValidationOnCreate") && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation") && $callback("afterValidationOnCreate") && $callback("beforeSave") && $callback("beforeCreate"))
 					{
-						$updatePersistedProperties();
-						if (arguments.commit)
-							commitTransaction(arguments.transaction);
-						else
-							rollbackTransaction(arguments.transaction);
-						return true;
+						$create(parameterize=arguments.parameterize);
+						if (arguments.defaults)
+							$setDefaultValues();
+						if ($callback("afterCreate") and $callback("afterSave")) 
+						{
+							$updatePersistedProperties();
+							returnValue = true;
+						}
 					}
-				}
-			}
-			else 
-			{
-				if ($callback("beforeValidationOnUpdate") && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation") && $callback("afterValidationOnUpdate") && $callback("beforeSave") && $callback("beforeUpdate"))
-				{
-					
-					$update(parameterize=arguments.parameterize);
-					if ($callback("afterUpdate") and $callback("afterSave"))
+				</cfscript>
+			</cfif>
+		<cfelse>
+			<cfif $useTransaction(arguments.transaction)>
+				<cftransaction action="begin">
+					<cfif $callback("beforeValidationOnUpdate") && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation") && $callback("afterValidationOnUpdate") && $callback("beforeSave") && $callback("beforeUpdate")>
+						<cfset $update(parameterize=arguments.parameterize)>
+						<cfif $callback("afterUpdate") and $callback("afterSave")>
+							<cfset $updatePersistedProperties()>
+							<cfset returnValue = true>
+							<cftransaction action="#arguments.transaction#" />
+						<cfelse>
+							<cftransaction action="rollback" />
+						</cfif>
+					<cfelse>
+						<cftransaction action="rollback" />
+					</cfif>
+				</cftransaction>
+			<cfelse>
+				<cfscript>
+					if ($callback("beforeValidationOnUpdate") && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation") && $callback("afterValidationOnUpdate") && $callback("beforeSave") && $callback("beforeUpdate"))
 					{
-						$updatePersistedProperties();
-						if (arguments.commit)
-							commitTransaction(arguments.transaction);
-						else
-							rollbackTransaction(arguments.transaction);
-						return true;
-					}					
-				}
-			}
-		}
-		rollbackTransaction(arguments.transaction);
-		return false;
-	</cfscript>
+						$update(parameterize=arguments.parameterize);
+						if ($callback("afterUpdate") and $callback("afterSave"))
+						{
+							$updatePersistedProperties();
+							returnValue = true;
+						}					
+					}
+				</cfscript>
+			</cfif>
+		</cfif>
+	</cfif>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="update" returntype="boolean" access="public" output="false" hint="Updates the object with the supplied properties and saves it to the database. Returns `true` if the object was saved successfully to the database and `false` otherwise."
@@ -826,10 +839,9 @@
 	categories="model-object,crud" chapters="updating-records,associations" functions="hasMany,hasOne,updateAll,updateByKey,updateOne">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.update.parameterize#" hint="See documentation for @findAll.">
-	<cfargument name="transaction" type="boolean" required="false" default="#application.wheels.enableTransactions#" hint="See documentation for @save.">
-	<cfargument name="commit" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfset $setProperties(argumentCollection=arguments, filterList="parameterize,properties,transaction,commit") />
-	<cfreturn save(parameterize=arguments.parameterize, transaction=arguments.transaction, commit=arguments.commit)>
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
+	<cfset $setProperties(argumentCollection=arguments, filterList="parameterize,properties,transaction") />
+	<cfreturn save(parameterize=arguments.parameterize, transaction=arguments.transaction)>
 </cffunction>
 
 <!--- other --->
@@ -854,73 +866,6 @@
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
-
-<!--- transaction handlers --->
-
-<cffunction name="beginTransaction" returntype="void" access="public" output="false" hint="Opens a new database transaction if one does not exist, or appends to the existing transaction if it does."
-	examples=
-	'
-		<!--- load two bank account models, withdraw from one and deposit in the other. --->
-		<cfset accountForDavid = model("Account").findByKey(33)>
-		<cfset accountForMary = model("Account").findByKey(45)>
-		<cfset beginTransaction()>
-		<cfset accountForDavid.withdraw(100)>
-		<cfset accountForMary.deposit(100)>
-		<cfset commitTransaction()>
-	'
-	categories="model-object,crud" chapters="" functions="">
-	<cfargument name="transaction" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfscript>
-		// create a tracer variable in request scope for the current model's datasource
-		if (!StructKeyExists(request.wheels.transactions, $hashedConnectionArgs()))
-			request.wheels.transactions[$hashedConnectionArgs()] = false;
-		// begin the transaction
-		if (arguments.transaction and !request.wheels.transactions[$hashedConnectionArgs()])
-		{
-			request.wheels.transactions[$hashedConnectionArgs()] = true;
-			variables.wheels.class.adapter.$beginTransaction();
-		}
-	</cfscript>
-</cffunction>
-
-<cffunction name="commitTransaction" returntype="void" access="public" output="false" hint="See documentation for @beginTransaction" categories="model-object,crud" chapters="" functions="">
-	<cfargument name="transaction" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfscript>
-		if (arguments.transaction) 
-		{
-			// check that the transaction exists
-			if (StructKeyExists(request.wheels.transactions, $hashedConnectionArgs()) and request.wheels.transactions[$hashedConnectionArgs()])
-			{
-				variables.wheels.class.adapter.$commitTransaction();
-				request.wheels.transactions[$hashedConnectionArgs()] = false;
-			}
-			else
-			{	
-				$throw(type="Wheels.MissingTransaction", message="You cannot commit a transaction that does not exist.", extendedInfo="Ensure that beginTransaction() has been called before using commitTransaction().");
-			}
-		}
-	</cfscript>
-</cffunction>
-
-<cffunction name="rollbackTransaction" returntype="void" access="public" output="false" hint="See documentation for @beginTransaction" categories="model-object,crud" chapters="" functions="">
-	<cfargument name="transaction" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfscript>
-		if (arguments.transaction) 
-		{
-			// check that the transaction exists
-			if (StructKeyExists(request.wheels.transactions, $hashedConnectionArgs()) and request.wheels.transactions[$hashedConnectionArgs()])
-			{
-				variables.wheels.class.adapter.$rollbackTransaction();
-				request.wheels.transactions[$hashedConnectionArgs()] = false;
-			}
-			else
-			{
-				$throw(type="Wheels.MissingTransaction", message="You cannot commit a transaction that does not exist.", extendedInfo="Ensure that beginTransaction() has been called before using commitTransaction().");
-			}
-		}
-	</cfscript>
-</cffunction>
-
 
 <!--- PRIVATE MODEL CLASS METHODS --->
 
@@ -1680,6 +1625,14 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$hashedConnectionArgs" returntype="string" access="public" output="false">
-	<cfreturn Hash(variables.wheels.class.connection.datasource & variables.wheels.class.connection.username & variables.wheels.class.connection.password)> 
+<cffunction name="$useTransaction" returntype="boolean" access="public" output="false" hint="I check for an existing transaction.">
+	<cfargument name="transaction" type="string" required="true" hint="See documentation for @save.">
+	<cfscript>
+		// check that the supplied transaction argument is valid
+		if (!ListFindNoCase("commit,rollback,none", arguments.transaction))
+			$throw(type="Wheels", message="Invalid transaction type", extendedInfo="The transaction type of `#arguments.transaction#` is invalid. Please use `commit`, `rollback` or `none`.");
+		if (ListFindNoCase("commit,rollback" ,arguments.transaction))
+			return true;
+		return false;
+	</cfscript>
 </cffunction>
