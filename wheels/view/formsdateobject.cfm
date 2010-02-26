@@ -88,6 +88,7 @@
 	<cfargument name="errorElement" type="string" required="false" default="#application.wheels.functions.dateTimeSelect.errorElement#" hint="See documentation for @textField.">
 	<cfscript>
 		$insertDefaults(name="dateTimeSelect", reserved="name", input=arguments);
+		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.$functionName = "dateTimeSelect";
 	</cfscript>
 	<cfreturn dateTimeSelectTags(argumentCollection=arguments)>
