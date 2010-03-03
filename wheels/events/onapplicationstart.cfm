@@ -89,14 +89,6 @@
 		$include(template="#application.wheels.configPath#/settings.cfm");
 		$include(template="#application.wheels.configPath#/#application.wheels.environment#/settings.cfm");
 
-		// rewrite settings based on web server rewrite capabilites
-		if (Right(request.cgi.script_name, 12) == "/" & application.wheels.rewriteFile)
-			application.wheels.URLRewriting = "On";
-		else if (Len(request.cgi.path_info))
-			application.wheels.URLRewriting = "Partial";
-		else
-			application.wheels.URLRewriting = "Off";
-
 		// load plugins
 		application.wheels.plugins = {};
 		application.wheels.incompatiblePlugins = "";

@@ -1,4 +1,13 @@
 <cfscript>
+	// rewrite settings based on web server rewrite capabilites
+	application.wheels.rewriteFile = "rewrite.cfm";
+	if (Right(request.cgi.script_name, 12) == "/" & application.wheels.rewriteFile)
+		application.wheels.URLRewriting = "On";
+	else if (Len(request.cgi.path_info))
+		application.wheels.URLRewriting = "Partial";
+	else
+		application.wheels.URLRewriting = "Off";
+	
 	// set datasource name to same as the folder the app resides in unless the developer has set it with the global setting already
 	if (StructKeyExists(this, "dataSource"))
 		application.wheels.dataSourceName = this.dataSource;
@@ -75,7 +84,6 @@
 	application.wheels.loadDefaultRoutes = true;
 	application.wheels.setDefaultValidations = true;
 	application.wheels.setUpdatedAtOnCreate = true;
-	application.wheels.rewriteFile = "rewrite.cfm";
 	
 	// caching settings
 	application.wheels.maximumItemsToCache = 5000;
