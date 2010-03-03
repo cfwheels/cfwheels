@@ -406,7 +406,7 @@
 		}
 		if (arguments.URLRewriting == "On")
 		{
-			loc.returnValue = Replace(loc.returnValue, "rewrite.cfm", "");
+			loc.returnValue = Replace(loc.returnValue, application.wheels.rewriteFile, "");
 			loc.returnValue = Replace(loc.returnValue, "//", "/");
 		}
 

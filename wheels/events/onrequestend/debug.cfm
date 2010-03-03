@@ -5,7 +5,7 @@
 <cfif Len(cgi.query_string)>
 	<cfset loc.baseReloadURL = loc.baseReloadURL & "?" & cgi.query_string>
 </cfif>
-<cfset loc.baseReloadURL = ReplaceNoCase(loc.baseReloadURL, "/rewrite.cfm", "")>
+<cfset loc.baseReloadURL = ReplaceNoCase(loc.baseReloadURL, "/" & application.wheels.rewriteFile, "")>
 <cfloop list="design,development,testing,maintenance,production,true" index="loc.i">
 	<cfset loc.baseReloadURL = ReplaceNoCase(ReplaceNoCase(loc.baseReloadURL, "?reload=" & loc.i, ""), "&reload=" & loc.i, "")>
 </cfloop>
