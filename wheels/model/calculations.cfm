@@ -11,13 +11,14 @@
 	<cfargument name="where" type="string" required="false" default="" hint="An SQL fragment such as `lastName LIKE 'A%'` for example.">
 	<cfargument name="include" type="string" required="false" default="" hint="Any associations that need to be included in the query.">
 	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.functions.average.distinct#" hint="When `true`, `AVG` will be performed only on each unique instance of a value, regardless of how many times the value occurs.">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.average.parameterize#" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
 		if (ListFindNoCase("cf_sql_integer,cf_sql_bigint,cf_sql_smallint,cf_sql_tinyint", variables.wheels.class.properties[arguments.property].type))
 		{
 			// this is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it
-			loc.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include);
+			loc.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize);
 			loc.values = ListToArray(Evaluate("ValueList(loc.values.#arguments.property#)"));
 			if (!ArrayIsEmpty(loc.values))
 			{
@@ -64,13 +65,19 @@
 	categories="model-class,statistics" chapters="column-statistics,associations" functions="average,hasMany,maximum,minimum,sum">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.count.parameterize#" hint="See documentation for @findAll.">
 	<cfscript>
-		arguments.type = "COUNT";
-		arguments.property = variables.wheels.class.keys;
 		if (Len(arguments.include))
+		{
 			arguments.distinct = true;
+			arguments.property = variables.wheels.class.keys;
+		}
 		else
+		{
 			arguments.distinct = false;
+			arguments.property = "*";
+		}
+		arguments.type = "COUNT";
 	</cfscript>
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
@@ -85,6 +92,7 @@
 	<cfargument name="property" type="string" required="true" hint="Name of the property to get the highest value for (has to be a property of a numeric data type).">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.maximum.parameterize#" hint="See documentation for @findAll.">
 	<cfscript>
 		arguments.type = "MAX";
 	</cfscript>
@@ -101,6 +109,7 @@
 	<cfargument name="property" type="string" required="true" hint="Name of the property to get the lowest value for (has to be a property of a numeric data type).">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.minimum.parameterize#" hint="See documentation for @findAll.">
 	<cfscript>
 		arguments.type = "MIN";
 	</cfscript>
@@ -121,6 +130,7 @@
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="distinct" type="boolean" required="false" default="#application.wheels.functions.sum.distinct#" hint="When `true`, `SUM` returns the sum of unique values only.">
+	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.sum.parameterize#" hint="See documentation for @findAll.">
 	<cfscript>
 		arguments.type = "SUM";
 	</cfscript>
@@ -132,8 +142,9 @@
 <cffunction name="$calculate" returntype="any" access="public" output="false" hint="Creates the query that needs to be run for all of the above methods.">
 	<cfargument name="type" type="string" required="true">
 	<cfargument name="property" type="string" required="true">
-	<cfargument name="where" type="string" required="false" default="">
-	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="where" type="string" required="true">
+	<cfargument name="include" type="string" required="true">
+	<cfargument name="parameterize" type="any" required="true">
 	<cfargument name="distinct" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
@@ -145,18 +156,25 @@
 		if (arguments.distinct)
 			arguments.select = arguments.select & "DISTINCT ";
 
-		// create a list of columns for the `SELECT` clause either from regular properties on the model or calculated ones
-		loc.properties = "";
-		loc.iEnd = ListLen(arguments.property);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		// create a list of columns for the `SELECT` clause (unless just `*` was passed in) either from regular properties on the model or calculated ones
+		if (arguments.property == "*")
 		{
-			loc.iItem = Trim(ListGetAt(arguments.property, loc.i));
-			if (ListFindNoCase(variables.wheels.class.propertyList, loc.iItem))
-				loc.properties = ListAppend(loc.properties, variables.wheels.class.tableName & "." & variables.wheels.class.properties[loc.iItem].column);
-			else if (ListFindNoCase(variables.wheels.class.calculatedPropertyList, loc.iItem))
-				loc.properties = ListAppend(loc.properties, variables.wheels.class.calculatedProperties[loc.iItem].sql);
+			arguments.select = arguments.select & arguments.property;
 		}
-		arguments.select = arguments.select & loc.properties;
+		else
+		{
+			loc.properties = "";
+			loc.iEnd = ListLen(arguments.property);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.iItem = Trim(ListGetAt(arguments.property, loc.i));
+				if (ListFindNoCase(variables.wheels.class.propertyList, loc.iItem))
+					loc.properties = ListAppend(loc.properties, variables.wheels.class.tableName & "." & variables.wheels.class.properties[loc.iItem].column);
+				else if (ListFindNoCase(variables.wheels.class.calculatedPropertyList, loc.iItem))
+					loc.properties = ListAppend(loc.properties, variables.wheels.class.calculatedProperties[loc.iItem].sql);
+			}
+			arguments.select = arguments.select & loc.properties;
+		}
 
 		// alias the result with `AS`, this means that Wheels will not try and change the string (which is why we have to add the table name above since it won't be done automatically)
 		arguments.select = arguments.select & ") AS result";

@@ -143,7 +143,7 @@
 			if (arguments.count gt 0)
 				loc.totalRecords = arguments.count;
 			else
-				loc.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct);
+				loc.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize);
 			loc.currentPage = arguments.page;
 			if (loc.totalRecords == 0)
 			{
@@ -168,7 +168,7 @@
 				}
 				else
 				{
-					loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct);
+					loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize);
 					if (loc.values.RecordCount) {
 						loc.paginationWhere = "";
 						loc.iEnd = ListLen(variables.wheels.class.keys);
