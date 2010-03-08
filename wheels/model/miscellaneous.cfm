@@ -243,6 +243,8 @@
 					if (loc.info.type == "hasOne")
 					{
 						loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=variables.wheels.class.keys);
+						if (StructKeyExists(arguments.missingMethodArguments, "where"))
+							loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 						loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasProfile" becomes "hasObject")
 						if (loc.name == "object")
 						{
@@ -285,6 +287,8 @@
 					else if (loc.info.type == "hasMany")
 					{
 						loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=variables.wheels.class.keys);
+						if (StructKeyExists(arguments.missingMethodArguments, "where"))
+							loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 						loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, loc.key, "objects"), singularize(loc.key), "object"); // create a generic method name (example: "hasComments" becomes "hasObjects")
 						if (loc.name == "objects")
 						{
@@ -348,6 +352,8 @@
 					else if (loc.info.type == "belongsTo")
 					{
 						loc.where = $keyWhereString(keys=loc.info.foreignKey, properties=variables.wheels.class.keys);
+						if (StructKeyExists(arguments.missingMethodArguments, "where"))
+							loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 						loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasAuthor" becomes "hasObject")
 						if (loc.name == "object")
 						{
@@ -361,9 +367,6 @@
 						}
 					}
 					
-					if (StructKeyExists(arguments.missingMethodArguments, "where"))
-						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
-
 				}
 				if (Len(loc.method))
 					loc.returnValue = $invoke(componentReference=model(loc.info.class), method=loc.method, argumentCollection=arguments.missingMethodArguments);
