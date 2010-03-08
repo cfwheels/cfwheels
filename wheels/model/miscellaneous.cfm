@@ -176,7 +176,7 @@
 			// this means that model("artist").findOneByName("U2") will still work but not model("artist").findOneByName(values="U2", returnAs="query"), need to pass in just `value` there instead.
 			if (application.wheels.showDebugInformation)
 			{
-				if (StructCount(arguments.missingMethodArguments) > 1)
+				if (StructCount(arguments.missingMethodArguments) gt 1)
 				{
 					if (Len(loc.secondProperty))
 					{
@@ -240,11 +240,9 @@
 				{
 					loc.info = $expandedAssociations(include=loc.key);
 					loc.info = loc.info[1];
-					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=variables.wheels.class.keys);
-					if (StructKeyExists(arguments.missingMethodArguments, "where"))
-						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					if (loc.info.type == "hasOne")
 					{
+						loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=variables.wheels.class.keys);
 						loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasProfile" becomes "hasObject")
 						if (loc.name == "object")
 						{
@@ -286,6 +284,7 @@
 					}
 					else if (loc.info.type == "hasMany")
 					{
+						loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=variables.wheels.class.keys);
 						loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, loc.key, "objects"), singularize(loc.key), "object"); // create a generic method name (example: "hasComments" becomes "hasObjects")
 						if (loc.name == "objects")
 						{
@@ -348,6 +347,7 @@
 					}
 					else if (loc.info.type == "belongsTo")
 					{
+						loc.where = $keyWhereString(keys=loc.info.foreignKey, properties=variables.wheels.class.keys);
 						loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasAuthor" becomes "hasObject")
 						if (loc.name == "object")
 						{
@@ -360,6 +360,10 @@
 							arguments.missingMethodArguments.key = $propertyValue(name=loc.info.foreignKey);
 						}
 					}
+					
+					if (StructKeyExists(arguments.missingMethodArguments, "where"))
+						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
+
 				}
 				if (Len(loc.method))
 					loc.returnValue = $invoke(componentReference=model(loc.info.class), method=loc.method, argumentCollection=arguments.missingMethodArguments);
