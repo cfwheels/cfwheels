@@ -19,4 +19,18 @@
 		<cfset assert("loc.dynamicResult IS loc.coreResult")>
 	</cffunction>
 
+	<cffunction name="test_getting_parent_on_new_object">
+		<cfset loc.authorByFind = model("author").findOne(order="id")>
+		<cfset loc.newPost = model("post").new(authorId=loc.authorByFind.id)>
+		<cfset loc.authorByAssociation = loc.newPost.author()>
+		<cfset assert("loc.authorByFind.key() IS loc.authorByAssociation.key()")>
+	</cffunction>
+
+	<cffunction name="test_checking_if_parent_exists_on_new_object">
+		<cfset loc.authorByFind = model("author").findOne(order="id")>
+		<cfset loc.newPost = model("post").new(authorId=loc.authorByFind.id)>
+		<cfset loc.authorExistsByAssociation = loc.newPost.hasAuthor()>
+		<cfset assert("loc.authorExistsByAssociation IS true")>
+	</cffunction>
+
 </cfcomponent>
