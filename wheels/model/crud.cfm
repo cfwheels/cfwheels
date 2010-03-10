@@ -1328,13 +1328,12 @@
 	<cfargument name="where" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		
-		// simplifies a date/time value for easier parsing
-		arguments.where = ReplaceList(arguments.where, "'{ts ','}'", "','");
-		arguments.where = ReplaceList(arguments.where, "{ts ','}", "','");
-
 		if (Len(arguments.where))
 		{
+			// simplifies a date/time value for easier parsing
+			arguments.where = ReplaceList(arguments.where, "'{ts ','}'", "','");
+			arguments.where = ReplaceList(arguments.where, "{ts ','}", "','");
+
 			loc.start = 1;
 			loc.originalValues = [];
 			while (!StructKeyExists(loc, "temp") || ArrayLen(loc.temp.len) gt 1)
