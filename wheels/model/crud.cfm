@@ -1154,10 +1154,11 @@
 
 					// check if this one has been flagged as a duplicate, we get the number of classes to skip and also remove the flagged info from the item
 					loc.duplicateCount = 0;
-					if (Left(loc.iItem, 13) == "[[duplicate]]")
+					loc.matches = REFind("^\[\[duplicate\]\](\d+)(.+)$", loc.iItem, 1, true);
+					if (loc.matches.pos[1] > 0)
 					{
-						loc.duplicateCount = Mid(loc.iItem, 14, 1);
-						loc.iItem = Mid(loc.iItem, 15, Len(loc.iItem)-14);
+						loc.duplicateCount = Mid(loc.iItem, loc.matches.pos[2], loc.matches.len[2]);
+						loc.iItem = Mid(loc.iItem, loc.matches.pos[3], loc.matches.len[3]);
 					}
 
 					if (!loc.duplicateCount)
