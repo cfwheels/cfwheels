@@ -36,7 +36,7 @@
 		$insertDefaults(name="linkTo", reserved="href", input=arguments);
 		if (Len(arguments.confirm))
 		{
-			loc.onclick = "return confirm('#arguments.confirm#');";
+			loc.onclick = "return confirm('#JSStringFormat(arguments.confirm)#');";
 			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
 		}
 		arguments.href = URLFor(argumentCollection=arguments);
