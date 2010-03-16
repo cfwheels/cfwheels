@@ -13,9 +13,9 @@
 	<cfargument name="name" type="string" required="true" hint="Gives the association a name that you refer to when working with the association (in the `include` argument to @findAll to name one example).">
 	<cfargument name="modelName" type="string" required="false" default="" hint="Name of associated model (usually not needed if you follow the Wheels conventions since the model name will be deduced from the `name` argument).">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="Foreign key property name (usually not needed if you follow the Wheels conventions since the foreign key name will be deduced from the `name` argument).">
-	<cfargument name="joinType" type="string" required="false" default="#application.wheels.functions.belongsTo.joinType#" hint="Use to set the join type when joining associated tables, possible values are `inner` (for `INNER JOIN`) and `outer` (for `LEFT OUTER JOIN`).">
+	<cfargument name="joinType" type="string" required="false" hint="Use to set the join type when joining associated tables, possible values are `inner` (for `INNER JOIN`) and `outer` (for `LEFT OUTER JOIN`).">
 	<cfscript>
-
+		$insertDefaults(name="belongsTo", input=arguments);
 		// deprecate the class argument (change of name only)
 		if (StructKeyExists(arguments, "class"))
 		{
@@ -43,11 +43,11 @@
 	<cfargument name="name" type="string" required="true" hint="See documentation for @belongsTo.">
 	<cfargument name="modelName" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
-	<cfargument name="joinType" type="string" required="false" default="#application.wheels.functions.hasMany.joinType#" hint="See documentation for @belongsTo.">
+	<cfargument name="joinType" type="string" required="false" hint="See documentation for @belongsTo.">
 	<cfargument name="shortcut" type="string" required="false" default="" hint="Set this argument to create an additional dynamic method that gets the objects for a many-to-many association.">
 	<cfargument name="through" type="string" required="false" default="#singularize(arguments.shortcut)#,#arguments.name#" hint="Set this argument if you need to override the Wheels convention when using the `shortcut` argument.">
 	<cfscript>
-
+		$insertDefaults(name="hasMany", input=arguments);
 		// deprecate the class argument (change of name only)
 		if (StructKeyExists(arguments, "class"))
 		{
@@ -75,9 +75,9 @@
 	<cfargument name="name" type="string" required="true" hint="See documentation for @belongsTo.">
 	<cfargument name="modelName" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
-	<cfargument name="joinType" type="string" required="false" default="#application.wheels.functions.hasOne.joinType#" hint="See documentation for @belongsTo.">
+	<cfargument name="joinType" type="string" required="false" hint="See documentation for @belongsTo.">
 	<cfscript>
-
+		$insertDefaults(name="hasOne", input=arguments);
 		// deprecate the class argument (change of name only)
 		if (StructKeyExists(arguments, "class"))
 		{

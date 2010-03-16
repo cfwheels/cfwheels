@@ -100,11 +100,11 @@
 	<cfargument name="from" type="string" required="true" hint="Email address to send from.">
 	<cfargument name="to" type="string" required="true" hint="Email address to send to.">
 	<cfargument name="subject" type="string" required="true" hint="The subject line of the email.">
-	<cfargument name="layouts" type="any" required="false" default="#application.wheels.functions.sendEmail.layouts#" hint="Layout(s) to wrap body in.">
-	<cfargument name="detectMultipart" type="boolean" required="false" default="#application.wheels.functions.sendEmail.detectMultipart#" hint="When set to `true` Wheels will detect which of the templates is text and which one is html (by counting the `<` characters).">
+	<cfargument name="layouts" type="any" required="false" hint="Layout(s) to wrap body in.">
+	<cfargument name="detectMultipart" type="boolean" required="false" hint="When set to `true` Wheels will detect which of the templates is text and which one is html (by counting the `<` characters).">
 	<cfscript>
 		var loc = {};
-
+		$insertDefaults(name="sendEmail", input=arguments);
 		if (StructKeyExists(arguments, "template"))
 			arguments.templates = arguments.template;
 		if (StructKeyExists(arguments, "layout"))
@@ -187,9 +187,10 @@
 	<cfargument name="file" type="string" required="true" hint="The file to send to the user">
 	<cfargument name="name" type="string" required="false" default="" hint="The file name to show in the browser download dialog box">
 	<cfargument name="type" type="string" required="false" default="" hint="The HTTP content type to deliver the file as">
-	<cfargument name="disposition" type="string" required="false" default="#application.wheels.functions.sendFile.disposition#" hint="Set to 'inline' to have the browser handle the opening of the file or set to 'attachment' to force a download dialog box">
+	<cfargument name="disposition" type="string" required="false" hint="Set to 'inline' to have the browser handle the opening of the file or set to 'attachment' to force a download dialog box">
 	<cfscript>
 		var loc = {};
+		$insertDefaults(name="sendFile", input=arguments);
 		arguments.file = Replace(arguments.file, "\", "/", "all");
 		loc.path = Reverse(ListRest(Reverse(arguments.file), "/"));
 		loc.folder = application.wheels.filePath;

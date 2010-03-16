@@ -122,7 +122,7 @@
 	application.wheels.functions.hiddenField = {};
 	application.wheels.functions.hourSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
 	application.wheels.functions.imageTag = {};
-	application.wheels.functions.includePartial = {layout=""};
+	application.wheels.functions.includePartial = {layout="", spacer=""};
 	application.wheels.functions.javaScriptIncludeTag = {type="text/javascript", head=false};
 	application.wheels.functions.linkTo = {onlyPath=true, host="", protocol="", port=0};
 	application.wheels.functions.mailTo = {encode=false};

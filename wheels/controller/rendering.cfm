@@ -13,12 +13,13 @@
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Controller to include the view page for.">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Action to include the view page for.">
 	<cfargument name="template" type="string" required="false" default="" hint="A specific template to render.">
-	<cfargument name="layout" type="any" required="false" default="#application.wheels.functions.renderPage.layout#" hint="The layout to wrap the content in.">
+	<cfargument name="layout" type="any" required="false" hint="The layout to wrap the content in.">
 	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for.">
 	<cfargument name="returnAs" type="string" required="false" default="" hint="Set to `string` to return the result to the controller instead of sending it to the browser immediately.">
 	<cfargument name="showDebugInformation" type="any" required="false" default="#application.wheels.showDebugInformation#" hint="Whether or not to show debug information at the end of the output. This is useful to override as `false` when you're testing XML output in an environment where the value for `showDebugInformation` is set to `true`.">
 	<cfscript>
 		var loc = {};
+		$insertDefaults(name="renderPage", input=arguments);
 		$dollarify(arguments, "controller,action,template,layout,cache,returnAs,showDebugInformation");
 		if (application.wheels.showDebugInformation)
 			$debugPoint("view");
@@ -88,10 +89,11 @@
 	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderNothing,renderText">
 	<cfargument name="partial" type="string" required="true" hint="The name of the file to be used (starting with an optional path and with the underscore and file extension excluded).">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPage.">
-	<cfargument name="layout" type="string" required="false" default="#application.wheels.functions.renderPartial.layout#" hint="See documentation for @renderPage.">
+	<cfargument name="layout" type="string" required="false" hint="See documentation for @renderPage.">
 	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for @renderPage.">
 	<cfscript>
 		var loc = {};
+		$insertDefaults(name="renderPartial", input=arguments);
 		loc.partial = $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,cache,layout,returnAs"));
 		if (arguments.$returnAs == "string")
 			loc.returnValue = loc.partial;

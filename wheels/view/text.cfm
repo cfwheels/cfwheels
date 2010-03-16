@@ -190,10 +190,11 @@
 	'
 	categories="view-helper,text" functions="autoLink,excerpt,highlight,simpleFormat,titleize">
 	<cfargument name="text" type="string" required="true" hint="The text to truncate.">
-	<cfargument name="length" type="numeric" required="false" default="#application.wheels.functions.truncate.length#" hint="Length to truncate the text to.">
-	<cfargument name="truncateString" type="string" required="false" default="#application.wheels.functions.truncate.truncateString#" hint="String to replace the last characters with.">
+	<cfargument name="length" type="numeric" required="false" hint="Length to truncate the text to.">
+	<cfargument name="truncateString" type="string" required="false" hint="String to replace the last characters with.">
 	<cfscript>
 		var loc = {};
+		$insertDefaults(name="truncate", input=arguments);
 		if (Len(arguments.text) gt arguments.length)
 			loc.returnValue = Left(arguments.text, arguments.length-Len(arguments.truncateString)) & arguments.truncateString;
 		else

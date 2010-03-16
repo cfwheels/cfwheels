@@ -314,13 +314,14 @@
 	<cfargument name="key" type="any" required="false" default="" hint="Key(s) to include in the URL.">
 	<cfargument name="params" type="string" required="false" default="" hint="Any additional params to be set in the query string.">
 	<cfargument name="anchor" type="string" required="false" default="" hint="Sets an anchor name to be appended to the path.">
-	<cfargument name="onlyPath" type="boolean" required="false" default="#application.wheels.functions.URLFor.onlyPath#" hint="If `true`, returns only the relative URL (no protocol, host name or port).">
-	<cfargument name="host" type="string" required="false" default="#application.wheels.functions.URLFor.host#" hint="Set this to override the current host.">
-	<cfargument name="protocol" type="string" required="false" default="#application.wheels.functions.URLFor.protocol#" hint="Set this to override the current protocol.">
-	<cfargument name="port" type="numeric" required="false" default="#application.wheels.functions.URLFor.port#" hint="Set this to override the current port number.">
+	<cfargument name="onlyPath" type="boolean" required="false" hint="If `true`, returns only the relative URL (no protocol, host name or port).">
+	<cfargument name="host" type="string" required="false" hint="Set this to override the current host.">
+	<cfargument name="protocol" type="string" required="false" hint="Set this to override the current protocol.">
+	<cfargument name="port" type="numeric" required="false" hint="Set this to override the current port number.">
 	<cfargument name="URLRewriting" type="string" required="false" default="#application.wheels.URLRewriting#" hint="Set this to override the default URL rewriting.">
 	<cfscript>
 		var loc = {};
+		$insertDefaults(name="URLFor", input=arguments);
 		loc.params = {};
 		if (StructKeyExists(variables, "params"))
 			StructAppend(loc.params, variables.params, true);

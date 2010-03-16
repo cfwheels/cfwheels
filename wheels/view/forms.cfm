@@ -27,19 +27,19 @@
 		</cfoutput>
 	'
 	categories="view-helper,forms-general" chapters="form-helpers-and-showing-errors" functions="URLFor,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="method" type="string" required="false" default="#application.wheels.functions.startFormTag.method#" hint="The type of method to use in the form tag, `get` and `post` are the options.">
-	<cfargument name="multipart" type="boolean" required="false" default="#application.wheels.functions.startFormTag.multipart#" hint="Set to `true` if the form should be able to upload files.">
-	<cfargument name="spamProtection" type="boolean" required="false" default="#application.wheels.functions.startFormTag.spamProtection#" hint="Set to `true` to protect the form against spammers (done with JavaScript).">
+	<cfargument name="method" type="string" required="false" hint="The type of method to use in the form tag, `get` and `post` are the options.">
+	<cfargument name="multipart" type="boolean" required="false" hint="Set to `true` if the form should be able to upload files.">
+	<cfargument name="spamProtection" type="boolean" required="false" hint="Set to `true` to protect the form against spammers (done with JavaScript).">
 	<cfargument name="route" type="string" required="false" default="" hint="See documentation for @URLFor.">
 	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for @URLFor.">
 	<cfargument name="action" type="string" required="false" default="" hint="See documentation for @URLFor.">
 	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @URLFor.">
 	<cfargument name="params" type="string" required="false" default="" hint="See documentation for @URLFor.">
 	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="onlyPath" type="boolean" required="false" default="#application.wheels.functions.startFormTag.onlyPath#" hint="See documentation for @URLFor.">
-	<cfargument name="host" type="string" required="false" default="#application.wheels.functions.startFormTag.host#" hint="See documentation for @URLFor.">
-	<cfargument name="protocol" type="string" required="false" default="#application.wheels.functions.startFormTag.protocol#" hint="See documentation for @URLFor.">
-	<cfargument name="port" type="numeric" required="false" default="#application.wheels.functions.startFormTag.port#" hint="See documentation for @URLFor.">
+	<cfargument name="onlyPath" type="boolean" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="startFormTag", input=arguments);
@@ -88,9 +88,9 @@
 		</cfoutput>
 	'
 	categories="view-helper,forms-general" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="value" type="string" required="false" default="#application.wheels.functions.submitTag.value#" hint="Message to display in the button form control.">
-	<cfargument name="image" type="string" required="false" default="#application.wheels.functions.submitTag.image#" hint="File name of the image file to use in the button form control.">
-	<cfargument name="disable" type="any" required="false" default="#application.wheels.functions.submitTag.disable#" hint="Whether to disable the button upon clicking (prevents double-clicking).">
+	<cfargument name="value" type="string" required="false" hint="Message to display in the button form control.">
+	<cfargument name="image" type="string" required="false" hint="File name of the image file to use in the button form control.">
+	<cfargument name="disable" type="any" required="false" hint="Whether to disable the button upon clicking (prevents double-clicking).">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="submitTag", reserved="type,src", input=arguments);

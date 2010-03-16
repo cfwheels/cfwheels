@@ -60,8 +60,9 @@
 	<cfargument name="cookie" type="string" required="false" default="" hint="Verify that the passed in variable name exists in the cookie.">
 	<cfargument name="session" type="string" required="false" default="" hint="Verify that the passed in variable name exists in the session.">
 	<cfargument name="params" type="string" required="false" default="" hint="Verify that the passed in variable name exists in the params.">
-	<cfargument name="handler" type="string" required="false" default="#application.wheels.functions.verifies.handler#" hint="Pass in the name of a function that should handle failed verifications (default is to just abort the request when a verification fails).">
+	<cfargument name="handler" type="string" required="false" hint="Pass in the name of a function that should handle failed verifications (default is to just abort the request when a verification fails).">
 	<cfscript>
+		$insertDefaults(name="verifies", input=arguments);
 		ArrayAppend(variables.wheels.verifications, Duplicate(arguments));
 	</cfscript>
 </cffunction>

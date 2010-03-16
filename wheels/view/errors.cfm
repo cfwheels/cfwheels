@@ -8,8 +8,8 @@
 	'
 	categories="view-helper,errors" chapters="form-helpers-and-showing-errors" functions="errorMessagesOn">
 	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to display error messages for.">
-	<cfargument name="class" type="string" required="false" default="#application.wheels.functions.errorMessagesFor.class#" hint="CSS class to set on the `ul` element.">
-	<cfargument name="showDuplicates" type="boolean" required="false" default="#application.wheels.functions.errorMessagesFor.showDuplicates#" hint="Whether to show duplicate error messages.">
+	<cfargument name="class" type="string" required="false" hint="CSS class to set on the `ul` element.">
+	<cfargument name="showDuplicates" type="boolean" required="false" hint="Whether to show duplicate error messages.">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="errorMessagesFor", input=arguments);
@@ -56,10 +56,10 @@
 	categories="view-helper,errors" chapters="form-helpers-and-showing-errors" functions="errorMessagesOn">
 	<cfargument name="objectName" type="string" required="true" hint="The variable name of the object to display the error message for.">
 	<cfargument name="property" type="string" required="true" hint="The name of the property to display the error message for.">
-	<cfargument name="prependText" type="string" required="false" default="#application.wheels.functions.errorMessageOn.prependText#" hint="String to prepend to the error message.">
-	<cfargument name="appendText" type="string" required="false" default="#application.wheels.functions.errorMessageOn.appendText#" hint="String to append to the error message.">
-	<cfargument name="wrapperElement" type="string" required="false" default="#application.wheels.functions.errorMessageOn.wrapperElement#" hint="HTML element to wrap the error message in.">
-	<cfargument name="class" type="string" required="false" default="#application.wheels.functions.errorMessageOn.class#" hint="CSS class to set on the wrapper element.">
+	<cfargument name="prependText" type="string" required="false" hint="String to prepend to the error message.">
+	<cfargument name="appendText" type="string" required="false" hint="String to append to the error message.">
+	<cfargument name="wrapperElement" type="string" required="false" hint="HTML element to wrap the error message in.">
+	<cfargument name="class" type="string" required="false" hint="CSS class to set on the wrapper element.">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="errorMessageOn", input=arguments);

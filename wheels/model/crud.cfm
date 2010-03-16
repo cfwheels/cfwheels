@@ -20,11 +20,12 @@
 	'
 	categories="model-class,create" chapters="creating-records,associations" functions="hasOne,hasMany,new">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
-	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.create.defaults#" hint="See documentation for @save.">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.create.parameterize#" hint="See documentation for @save.">
+	<cfargument name="defaults" type="boolean" required="false" hint="See documentation for @save.">
+	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
+		$insertDefaults(name="create", input=arguments);
 		loc.parameterize = arguments.parameterize;
 		StructDelete(arguments, "parameterize");
 		loc.returnValue = new(argumentCollection=arguments);
@@ -51,9 +52,10 @@
 	'
 	categories="model-class,create" chapters="creating-records,associations" functions="create,hasMany,hasOne">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="The properties you want to set on the object (can also be passed in as named arguments).">
-	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.new.defaults#" hint="See documentation for @save.">
+	<cfargument name="defaults" type="boolean" required="false" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
+		$insertDefaults(name="new", input=arguments);
 		arguments.properties = $setProperties(argumentCollection=arguments, filterList="properties,defaults", setOnModel=false);
 		loc.returnValue = $createInstance(properties=arguments.properties, persisted=false);
 		if (arguments.defaults)
@@ -91,27 +93,27 @@
 	'
 	categories="model-class,read" chapters="reading-records,associations" functions="findByKey,findOne,hasMany">
 	<cfargument name="where" type="string" required="false" default="" hint="This argument maps to the `WHERE` clause of the query. The following operators are supported: `=`, `<>`, `<`, `<=`, `>`, `>=`, `LIKE`, `AND`, and `OR` (note that the key words have to be written in upper case). You can also use parentheses to group statements. You do not have to specify the table name(s), Wheels will do that for you.">
-	<cfargument name="order" type="string" required="false" default="#application.wheels.functions.findAll.order#" hint="This argument maps to the `ORDER BY` clause of the query. You do not have to specify the table name(s), Wheels will do that for you.">
-	<cfargument name="group" type="string" required="false" default="#application.wheels.functions.findAll.group#" hint="This argument maps to the `GROUP BY` clause of the query. You do not have to specify the table name(s), Wheels will do that for you.">
+	<cfargument name="order" type="string" required="false" hint="This argument maps to the `ORDER BY` clause of the query. You do not have to specify the table name(s), Wheels will do that for you.">
+	<cfargument name="group" type="string" required="false" hint="This argument maps to the `GROUP BY` clause of the query. You do not have to specify the table name(s), Wheels will do that for you.">
 	<cfargument name="select" type="string" required="false" default="" hint="This argument determines how the `SELECT` clause for the query used to return data will look.	You can pass in a list of the properties (which maps to columns) that you want returned from your table(s). If you don't set this argument at all, Wheels will select all properties from your table(s). If you specify a table name (e.g. `users.email`) or alias a column (e.g. `fn AS firstName`) in the list then the entire list will be passed through unchanged and used in the `SELECT` clause of the query. If not, Wheels will prepend the table name and resolve any naming collisions (which could happen when using the `include` argument) automatically for you. The naming collisions are resolved by prepending the model name to the property name so `users.firstName` could become `userFirstName` for example.">
 	<cfargument name="distinct" type="boolean" required="false" default="false" hint="Boolean value to decide whether to add the `DISTINCT` keyword to your `SELECT` clause. Wheels will, when necessary, add this automatically (when using pagination and a `hasMany` association is used in the `include` argument to name one example).">
 	<cfargument name="include" type="string" required="false" default="" hint="Associations that should be included in the query using `INNER` or `LEFT OUTER` joins (which join type that is used depends on how the association has been set up in your model). If all included associations are set on the current model you can specify them in a list, e.g. `department,addresses,emails`. You can build more complex `include` strings by using parentheses when the association is set on an included model, like `album(artist(genre))` for example.">
 	<cfargument name="maxRows" type="numeric" required="false" default="-1" hint="Maximum number of records to retrieve. Passed on to the `maxRows` `cfquery` attribute. The default `-1` means that all records will be retrieved.">
 	<cfargument name="page" type="numeric" required="false" default=0 hint="If you want to paginate records (i.e. get records 11-20 for example) you can do so by specifying a page number here. For example, getting records 11-20 would be page number 2 when `perPage` is kept at the default setting (10 records per page). The default, `0`, means that records won't be paginated and that the `perPage`, `count` and `handle` arguments will be ignored.">
-	<cfargument name="perPage" type="numeric" required="false" default="#application.wheels.functions.findAll.perPage#" hint="When using pagination you can specify how many records you want to fetch per page here. This argument is only used when the `page` argument has been passed in.">
+	<cfargument name="perPage" type="numeric" required="false" hint="When using pagination you can specify how many records you want to fetch per page here. This argument is only used when the `page` argument has been passed in.">
 	<cfargument name="count" type="numeric" required="false" default=0 hint="When using pagination and you know in advance how many records you want to paginate through you can pass in that value here. Doing so will prevent Wheels from running a `COUNT` query to get this value. This argument is only used when the `page` argument has been passed in.">
 	<cfargument name="handle" type="string" required="false" default="query" hint="Handle to use for the query in pagination. This is useful when you're paginating multiple queries and need to reference them in the @paginationLinks function for example. This argument is only used when the `page` argument has been passed in.">
 	<cfargument name="cache" type="any" required="false" default="" hint="Accepts a boolean or numeric value. If you want to cache the query you can do so by specifying the number of minutes you want to cache the query for here. If you set it to `true` the default cache time will be used (60 minutes).">
-	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.functions.findAll.reload#" hint="Set to `true` to force Wheels to query the database even though an identical query has been run in the same request (the default in Wheels is to get the second query from the cache).">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.findAll.parameterize#" hint="Accepts a boolean value or a string. Set to `true` to use `cfqueryparam` on all columns or pass in a list of property names to use `cfqueryparam` on those only.">
-	<cfargument name="returnAs" type="string" required="false" default="#application.wheels.functions.findAll.returnAs#" hint="Set this to `objects` to return an array of objects instead of a query result set which is the default return type.">
-	<cfargument name="returnIncluded" type="boolean" required="false" default="#application.wheels.functions.findAll.returnIncluded#" hint="When `returnAs` is set to `objects` you can set this argument to `false` to prevent returning objects fetched from associations specified in the `include` argument. This is useful when you only need to include associations for use in the `WHERE` clause only and want to avoid the performance hit that comes with object creation.">
+	<cfargument name="reload" type="boolean" required="false" hint="Set to `true` to force Wheels to query the database even though an identical query has been run in the same request (the default in Wheels is to get the second query from the cache).">
+	<cfargument name="parameterize" type="any" required="false" hint="Accepts a boolean value or a string. Set to `true` to use `cfqueryparam` on all columns or pass in a list of property names to use `cfqueryparam` on those only.">
+	<cfargument name="returnAs" type="string" required="false" hint="Set this to `objects` to return an array of objects instead of a query result set which is the default return type.">
+	<cfargument name="returnIncluded" type="boolean" required="false" hint="When `returnAs` is set to `objects` you can set this argument to `false` to prevent returning objects fetched from associations specified in the `include` argument. This is useful when you only need to include associations for use in the `WHERE` clause only and want to avoid the performance hit that comes with object creation.">
 	<cfargument name="$limit" type="numeric" required="false" default=0>
 	<cfargument name="$offset" type="numeric" required="false" default=0>
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
-
+		$insertDefaults(name="findAll", input=arguments);
 		// we only allow direct associations to be loaded when returning objects
 		if (application.wheels.showErrorInformation && Len(arguments.returnAs) && arguments.returnAs != "query" && Find("(", arguments.include) && arguments.returnIncluded)
 			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You may only include direct associations to this object when returning an array of objects.");
@@ -334,12 +336,13 @@
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.functions.findByKey.reload#" hint="See documentation for @findAll.">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.findByKey.parameterize#" hint="See documentation for @findAll.">
-	<cfargument name="returnAs" type="string" required="false" default="#application.wheels.functions.findByKey.returnAs#" hint="Can be set to either `object` or `query`. See documentation for @findAll for more info.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
+	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
+	<cfargument name="returnAs" type="string" required="false" hint="Can be set to either `object` or `query`. See documentation for @findAll for more info.">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
 		var returnValue = "";
+		$insertDefaults(name="findByKey", input=arguments);
 		// convert primary key column name(s) / value(s) to a WHERE clause that is then used in the findOne call
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");
@@ -374,13 +377,13 @@
 	<cfargument name="select" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.functions.findOne.reload#" hint="See documentation for @findAll.">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.findOne.parameterize#" hint="See documentation for @findAll.">
-	<cfargument name="returnAs" type="string" required="false" default="#application.wheels.functions.findOne.returnAs#" hint="Can be set to either `object` or `query`. See documentation for @findAll for more info.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
+	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
+	<cfargument name="returnAs" type="string" required="false" hint="Can be set to either `object` or `query`. See documentation for @findAll for more info.">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
 		var returnValue = "";
-
+		$insertDefaults(name="findOne", input=arguments);
 		returnValue = findAll(argumentCollection=arguments);
 		if (IsArray(returnValue))
 		{
@@ -409,11 +412,12 @@
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.updateAll.parameterize#" hint="See documentation for @findAll.">
-	<cfargument name="instantiate" type="boolean" required="false" default="#application.wheels.functions.updateAll.instantiate#" hint="Whether or not to instantiate the object(s) first. When objects are not instantiated any callbacks and validations set on them will be skipped.">
+	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
+	<cfargument name="instantiate" type="boolean" required="false" hint="Whether or not to instantiate the object(s) first. When objects are not instantiated any callbacks and validations set on them will be skipped.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfset var loc = {}>
+	<cfset $insertDefaults(name="updateAll", input=arguments)>
 	<cfset arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,parameterize,instantiate,transaction,$softDeleteCheck", setOnModel=false)>
 	<cfif arguments.instantiate> <!--- find and instantiate each object and call its update function --->
 		<cfscript>
@@ -522,11 +526,12 @@
 	categories="model-class,delete" chapters="deleting-records,associations" functions="delete,deleteByKey,deleteOne,hasMany">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.deleteAll.parameterize#" hint="See documentation for @findAll.">
-	<cfargument name="instantiate" type="boolean" required="false" default="#application.wheels.functions.deleteAll.instantiate#" hint="See documentation for @updateAll.">
+	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
+	<cfargument name="instantiate" type="boolean" required="false" hint="See documentation for @updateAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfset var loc = {}>
+	<cfset $insertDefaults(name="deleteAll", input=arguments)>
 	<cfif arguments.instantiate> <!--- find and instantiate each object and call its delete function --->
 		<cfscript>
 			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
@@ -629,10 +634,11 @@
 	categories="model-class,miscellaneous" chapters="reading-records,associations" functions="belongsTo,hasMany,hasOne">
 	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @findByKey.">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="reload" type="boolean" required="false" default="#application.wheels.functions.exists.reload#" hint="See documentation for @findAll.">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.exists.parameterize#" hint="See documentation for @findAll.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
+	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
+		$insertDefaults(name="exists", input=arguments);
 		if (application.wheels.showErrorInformation)
 			if (Len(arguments.key) && Len(arguments.where))
 				$throw(type="Wheels.IncorrectArguments", message="You cannot pass in both `key` and `where`.");
@@ -663,9 +669,10 @@
 		<cfset aPost.deleteComment(aComment)>
 	'
 	categories="model-object,crud" chapters="deleting-records,associations" functions="deleteAll,deleteByKey,deleteOne,hasMany">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.delete.parameterize#" hint="See documentation for @findAll.">
+	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfset var loc = {}>
+	<cfset $insertDefaults(name="delete", input=arguments)>
 	<cfset loc.returnValue = false>
 	<cfset loc.sql = []>
 	<cfset loc.sql = $addDeleteClause(sql=loc.sql)>
@@ -735,11 +742,12 @@
 		</cfif>
 	'
 	categories="model-object,crud" chapters="creating-records" functions="">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.save.parameterize#" hint="See documentation for @findAll.">
-	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.save.defaults#" hint="Whether or not to set default values for properties.">
+	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
+	<cfargument name="defaults" type="boolean" required="false" hint="Whether or not to set default values for properties.">
 	<cfargument name="validate" type="boolean" required="false" default="true" hint="Whether or not to run validations when saving">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="Use `commit` to update the database when the save has completed, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.">
 	<cfset var returnValue = false>
+	<cfset $insertDefaults(name="save", input=arguments)>
 	<cfset clearErrors()>
 	<cfif $callback("beforeValidation")>
 		<cfif isNew()>
@@ -838,8 +846,9 @@
 	'
 	categories="model-object,crud" chapters="updating-records,associations" functions="hasMany,hasOne,updateAll,updateByKey,updateOne">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
-	<cfargument name="parameterize" type="any" required="false" default="#application.wheels.functions.update.parameterize#" hint="See documentation for @findAll.">
+	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
+	<cfset $insertDefaults(name="update", input=arguments)>
 	<cfset $setProperties(argumentCollection=arguments, filterList="parameterize,properties,transaction") />
 	<cfreturn save(parameterize=arguments.parameterize, transaction=arguments.transaction)>
 </cffunction>

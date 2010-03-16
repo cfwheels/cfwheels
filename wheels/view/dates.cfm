@@ -7,9 +7,10 @@
 	categories="view-helper,dates" chapters="miscellaneous-helpers" functions="timeAgoInWords,timeUntilInWords">
 	<cfargument name="fromTime" type="date" required="true" hint="Date to compare from.">
 	<cfargument name="toTime" type="date" required="true" hint="Date to compare to.">
-	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.functions.distanceOfTimeInWords.includeSeconds#" hint="Whether or not to include the number of seconds in the returned string.">
+	<cfargument name="includeSeconds" type="boolean" required="false" hint="Whether or not to include the number of seconds in the returned string.">
 	<cfscript>
 		var loc = {};
+		$insertDefaults(name="distanceOfTimeInWords", input=arguments);
 		loc.minuteDiff = DateDiff("n", arguments.fromTime, arguments.toTime);
 		loc.secondDiff = DateDiff("s", arguments.fromTime, arguments.toTime);
 		loc.hours = 0;
@@ -87,8 +88,9 @@
 	'
 	categories="view-helper,dates" chapters="miscellaneous-helpers" functions="distanceOfTimeInWords,timeUntilInWords">
 	<cfargument name="fromTime" type="date" required="true" hint="See documentation for @distanceOfTimeInWords.">
-	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.functions.timeAgoInWords.includeSeconds#" hint="See documentation for @distanceOfTimeInWords.">
+	<cfargument name="includeSeconds" type="boolean" required="false" hint="See documentation for @distanceOfTimeInWords.">
 	<cfargument name="toTime" type="date" required="false" default="#now()#" hint="See documentation for @distanceOfTimeInWords.">
+	<cfset $insertDefaults(name="timeAgoInWords", input=arguments)>
 	<cfreturn distanceOfTimeInWords(argumentCollection=arguments)>
 </cffunction>
 
@@ -99,7 +101,8 @@
 	'
 	categories="view-helper,dates" chapters="miscellaneous-helpers" functions="timeAgoInWords,distanceOfTimeInWords.">
 	<cfargument name="toTime" type="date" required="true" hint="See documentation for @distanceOfTimeInWords.">
-	<cfargument name="includeSeconds" type="boolean" required="false" default="#application.wheels.functions.timeUntilInWords.includeSeconds#" hint="See documentation for @distanceOfTimeInWords.">
+	<cfargument name="includeSeconds" type="boolean" required="false" hint="See documentation for @distanceOfTimeInWords.">
 	<cfargument name="fromTime" type="date" required="false" default="#now()#" hint="See documentation for @distanceOfTimeInWords.">
+	<cfset $insertDefaults(name="timeUntilInWords", input=arguments)>
 	<cfreturn distanceOfTimeInWords(argumentCollection=arguments)>
 </cffunction>

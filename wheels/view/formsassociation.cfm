@@ -1,14 +1,14 @@
 <cffunction name="hasManyRadioButton" returntype="string" access="public" output="false" hint="Used as a short cut to output the proper form elements for an association.">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.checkBoxTag.label#" hint="See documentation for @textField.">
 	<cfargument name="objectName" type="string" required="true" />
 	<cfargument name="association" type="string" required="true" />
 	<cfargument name="property" type="string" required="true" />
 	<cfargument name="keys" type="string" required="true" />
 	<cfargument name="tagValue" type="string" required="true" />
 	<cfargument name="checkIfBlank" type="boolean" required="false" default="false" />
+	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		
+		$insertDefaults(name="hasManyRadioButton", input=arguments);
 		loc.checked = false;
 		loc.returnValue = "";
 		loc.value = $hasManyFormValue(argumentCollection=arguments);
@@ -30,13 +30,13 @@
 </cffunction>
 
 <cffunction name="hasManyCheckBox" returntype="string" access="public" output="false" hint="Used as a short cut to output the proper form elements for an association.">
-	<cfargument name="label" type="string" required="false" default="#application.wheels.functions.checkBoxTag.label#" hint="See documentation for @textField.">
 	<cfargument name="objectName" type="string" required="true" />
 	<cfargument name="association" type="string" required="true" />
 	<cfargument name="keys" type="string" required="true" />
+	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		
+		$insertDefaults(name="hasManyCheckBox", input=arguments);
 		loc.checked = true;
 		loc.returnValue = "";
 		loc.included = includedInObject(argumentCollection=arguments);

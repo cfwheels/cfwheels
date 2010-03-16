@@ -35,8 +35,9 @@
 	<cfargument name="partial" type="any" required="true" hint="See documentation for @renderPartial.">
 	<cfargument name="group" type="string" required="false" default="" hint="Field to group the query by. A new query will be passed into the partial template for you to iterate over.">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPartial.">
-	<cfargument name="layout" type="string" required="false" default="#application.wheels.functions.includePartial.layout#" hint="See documentation for @renderPartial.">
-	<cfargument name="spacer" type="string" required="false" default="" hint="HTML or string to place between partials when called using a query.">
+	<cfargument name="layout" type="string" required="false" hint="See documentation for @renderPartial.">
+	<cfargument name="spacer" type="string" required="false" hint="HTML or string to place between partials when called using a query.">
+	<cfset $insertDefaults(name="includePartial", input=arguments)>
 	<cfreturn $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,group,cache,layout,spacer"))>
 </cffunction>
 

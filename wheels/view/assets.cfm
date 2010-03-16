@@ -8,11 +8,12 @@
 	'
 	categories="view-helper,assets" chapters="miscellaneous-helpers" functions="javaScriptIncludeTag,imageTag">
 	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many CSS files in the `stylesheets` folder, minus the `.css` extension. (Can also be called with the `source` argument).">
-	<cfargument name="type" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.type#" hint="The `type` attribute for the `link` tag.">
-	<cfargument name="media" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.media#" hint="The `media` attribute for the `link` tag.">
-	<cfargument name="head" type="string" required="false" default="#application.wheels.functions.styleSheetLinkTag.head#" hint="Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior which is to place the output where the function is called from.">
+	<cfargument name="type" type="string" required="false" hint="The `type` attribute for the `link` tag.">
+	<cfargument name="media" type="string" required="false" hint="The `media` attribute for the `link` tag.">
+	<cfargument name="head" type="string" required="false" hint="Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior which is to place the output where the function is called from.">
 	<cfscript>
 		var loc = {};
+		$insertDefaults(name="styleSheetLinkTag", input=arguments);
 		if (StructKeyExists(arguments, "source"))
 			arguments.sources = arguments.source;
 		if (application.wheels.showErrorInformation && !Len(arguments.sources))
@@ -49,10 +50,11 @@
 	'
 	categories="view-helper,assets" chapters="miscellaneous-helpers" functions="styleSheetLinkTag,imageTag">
 	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many JavaScript files in the `javascripts` folder, minus the `.js` extension. (Can also be called with the `source` argument).">
-	<cfargument name="type" type="string" required="false" default="#application.wheels.functions.javaScriptIncludeTag.type#" hint="The `type` attribute for the `script` tag.">
-	<cfargument name="head" type="string" required="false" default="#application.wheels.functions.javaScriptIncludeTag.head#" hint="See documentation for @styleSheetLinkTag.">
+	<cfargument name="type" type="string" required="false" hint="The `type` attribute for the `script` tag.">
+	<cfargument name="head" type="string" required="false" hint="See documentation for @styleSheetLinkTag.">
 	<cfscript>
 		var loc = {};
+		$insertDefaults(name="javaScriptIncludeTag", input=arguments);
 		if (StructKeyExists(arguments, "source"))
 			arguments.sources = arguments.source;
 		if (application.wheels.showErrorInformation && !Len(arguments.sources))
