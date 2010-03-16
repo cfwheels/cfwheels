@@ -79,7 +79,7 @@
 		arguments.method = "post";
 		if (Len(arguments.confirm))
 		{
-			loc.onsubmit = "return confirm('#JSStringFormat(Replace(arguments.confirm, """", '&quot;', 'all'))#');";
+			loc.onsubmit = "return confirm('#JSStringFormat(arguments.confirm)#');";
 			arguments.onsubmit = $addToJavaScriptAttribute(name="onsubmit", content=loc.onsubmit, attributes=arguments);
 		}
 		loc.content = submitTag(value=arguments.text, image=arguments.image, disable=arguments.disable);
