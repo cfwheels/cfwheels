@@ -217,7 +217,12 @@
 							loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
 					}
 					loc.linkToArguments.text = loc.pageNumber;
-					loc.start = loc.start & linkTo(argumentCollection=loc.linkToArguments) & arguments.anchorDivider;
+					if (Len(arguments.prependToPage))
+						loc.start = loc.start & arguments.prependToPage;
+					loc.start = loc.start & linkTo(argumentCollection=loc.linkToArguments);
+					if (Len(arguments.appendToPage))
+						loc.start = loc.start & arguments.appendToPage;
+					loc.start = loc.start & arguments.anchorDivider;
 				}
 			}
 			loc.middle = "";
@@ -272,7 +277,12 @@
 							loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
 					}
 					loc.linkToArguments.text = loc.totalPages;
-					loc.end = loc.end & arguments.anchorDivider & linkTo(argumentCollection=loc.linkToArguments);
+					loc.end = loc.end & arguments.anchorDivider;
+					if (Len(arguments.prependToPage))
+						loc.end = loc.end & arguments.prependToPage;
+					loc.end = loc.end & linkTo(argumentCollection=loc.linkToArguments);
+					if (Len(arguments.appendToPage))
+						loc.end = loc.end & arguments.appendToPage;
 				}
 			}
 			if (Len(arguments.append))
