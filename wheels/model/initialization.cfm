@@ -160,6 +160,7 @@
 	<cfargument name="properties" type="any" required="true">
 	<cfargument name="persisted" type="boolean" required="true">
 	<cfargument name="row" type="numeric" required="false" default="1">
+	<cfargument name="base" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		variables.wheels = {};
@@ -176,7 +177,7 @@
 				try // coldfusion has a problem with empty strings in queries for bit types
 				{
 					loc.iItem = ListGetAt(loc.allProperties, loc.i);
-					if (ListFindNoCase(arguments.properties.columnList, arguments.name & loc.iItem))
+					if (!arguments.base && ListFindNoCase(arguments.properties.columnList, arguments.name & loc.iItem))
 						this[loc.iItem] = arguments.properties[arguments.name & loc.iItem][arguments.row];
 					else if (ListFindNoCase(arguments.properties.columnList, loc.iItem))
 						this[loc.iItem] = arguments.properties[loc.iItem][arguments.row];
