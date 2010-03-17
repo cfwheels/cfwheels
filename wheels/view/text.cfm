@@ -10,15 +10,19 @@
 	categories="view-helper,text" functions="excerpt,highlight,simpleFormat,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="The text to create links in.">
 	<cfargument name="link" type="string" required="false" default="all" hint="Whether to link URLs, email addresses or both. Possible values are: `all` (default), `URLs` and `emailAddresses`.">
+	<cfargument name="domains" type="string" required="false" hint="The domains (.com, .co.uk etc) to auto link, not used with email addresses.">
 	<cfscript>
 		var loc = {};
-		loc.urlRegex = "(?ix)([^(url=)|(href=)'""])(((https?)://([^:]+\:[^@]*@)?)([\d\w\-]+\.)?[\w\d\-\.]+\.(com|net|org|info|biz|tv|co\.uk|de|ro|it)(( / [\w\d\.\-@%\\\/:]* )+)?(\?[\w\d\?%,\.\/\##!@:=\+~_\-&amp;]*(?<![\.]))?)";
+		$insertDefaults(name="autoLink", input=arguments);
+		loc.domains = Replace(ListChangeDelims(arguments.domains, "|"), ".", "\.", "all");
+		loc.urlRegex = "(?ix)([^(url=)|(href=)'""])(((https?)://([^:]+\:[^@]*@)?)([\d\w\-]+\.)?[\w\d\-\.]+\.(" & loc.domains & ")(( / [\w\d\.\-@%\\\/:]* )+)?(\?[\w\d\?%,\.\/\##!@:=\+~_\-&amp;]*(?<![\.]))?)";
 		loc.mailRegex = "(([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,}))";
-		loc.returnValue = arguments.text;
+		loc.returnValue = " " & arguments.text & " "; // spaces added because the regex assumes links are in the middle of the text
 		if (arguments.link != "emailAddresses")
 			loc.returnValue = loc.returnValue.ReplaceAll(loc.urlRegex, "$1<a href=""$2"">$2</a>");
 		if (arguments.link != "URLs")
 			loc.returnValue = REReplaceNoCase(loc.returnValue, loc.mailRegex, "<a href=""mailto:\1"">\1</a>", "all");
+		loc.returnValue = Mid(loc.returnValue, 2, Len(loc.returnValue)-2);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
