@@ -37,7 +37,7 @@
 		$insertDefaults(name="linkTo", reserved="href", input=arguments);
 		if (Len(arguments.confirm))
 		{
-			loc.onclick = "return confirm('#arguments.confirm#');";
+			loc.onclick = "return confirm('#JSStringFormat(arguments.confirm)#');";
 			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
 		}
 		arguments.href = URLFor(argumentCollection=arguments);
@@ -81,7 +81,7 @@
 		arguments.method = "post";
 		if (Len(arguments.confirm))
 		{
-			loc.onsubmit = "return confirm('#JSStringFormat(Replace(arguments.confirm, """", '&quot;', 'all'))#');";
+			loc.onsubmit = "return confirm('#JSStringFormat(arguments.confirm)#');";
 			arguments.onsubmit = $addToJavaScriptAttribute(name="onsubmit", content=loc.onsubmit, attributes=arguments);
 		}
 		loc.content = submitTag(value=arguments.text, image=arguments.image, disable=arguments.disable);
@@ -142,15 +142,18 @@
 	categories="view-helper">
 	<cfargument name="text" type="string" required="true" hint="The text to create links in">
 	<cfargument name="link" type="string" required="false" default="all" hint="Whether to link URLs, email addresses or both. Possible values are: `all` (default), `URLs` and `emailAddresses`">
+	<cfargument name="domains" type="string" required="false" default="#application.wheels.functions.autoLink.domains#" hint="The domains (.com, .co.uk etc) to auto link, not used with email addresses.">
 	<cfscript>
 		var loc = {};
-		loc.urlRegex = "(?ix)([^(url=)|(href=)'""])(((https?)://([^:]+\:[^@]*@)?)([\d\w\-]+\.)?[\w\d\-\.]+\.(com|net|org|info|biz|tv|co\.uk|de|ro|it)(( / [\w\d\.\-@%\\\/:]* )+)?(\?[\w\d\?%,\.\/\##!@:=\+~_\-&amp;]*(?<![\.]))?)";
+		loc.domains = Replace(ListChangeDelims(arguments.domains, "|"), ".", "\.", "all");
+		loc.urlRegex = "(?ix)([^(url=)|(href=)'""])(((https?)://([^:]+\:[^@]*@)?)([\d\w\-]+\.)?[\w\d\-\.]+\.(" & loc.domains & ")(( / [\w\d\.\-@%\\\/:]* )+)?(\?[\w\d\?%,\.\/\##!@:=\+~_\-&amp;]*(?<![\.]))?)";
 		loc.mailRegex = "(([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,}))";
-		loc.returnValue = arguments.text;
+		loc.returnValue = " " & arguments.text & " "; // spaces added because the regex assumes links are in the middle of the text
 		if (arguments.link != "emailAddresses")
 			loc.returnValue = loc.returnValue.ReplaceAll(loc.urlRegex, "$1<a href=""$2"">$2</a>");
 		if (arguments.link != "URLs")
 			loc.returnValue = REReplaceNoCase(loc.returnValue, loc.mailRegex, "<a href=""mailto:\1"">\1</a>", "all");
+		loc.returnValue = Mid(loc.returnValue, 2, Len(loc.returnValue)-2);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -268,7 +271,12 @@
 							loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
 					}
 					loc.linkToArguments.text = loc.pageNumber;
-					loc.start = loc.start & linkTo(argumentCollection=loc.linkToArguments) & arguments.anchorDivider;
+					if (Len(arguments.prependToPage))
+						loc.start = loc.start & arguments.prependToPage;
+					loc.start = loc.start & linkTo(argumentCollection=loc.linkToArguments);
+					if (Len(arguments.appendToPage))
+						loc.start = loc.start & arguments.appendToPage;
+					loc.start = loc.start & arguments.anchorDivider;
 				}
 			}
 			loc.middle = "";
@@ -323,7 +331,12 @@
 							loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
 					}
 					loc.linkToArguments.text = loc.totalPages;
-					loc.end = loc.end & arguments.anchorDivider & linkTo(argumentCollection=loc.linkToArguments);
+					loc.end = loc.end & arguments.anchorDivider;
+					if (Len(arguments.prependToPage))
+						loc.end = loc.end & arguments.prependToPage;
+					loc.end = loc.end & linkTo(argumentCollection=loc.linkToArguments);
+					if (Len(arguments.appendToPage))
+						loc.end = loc.end & arguments.appendToPage;
 				}
 			}
 			if (Len(arguments.append))

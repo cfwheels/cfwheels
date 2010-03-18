@@ -73,7 +73,7 @@
 		application.wheels.viewPath = "views";
 
 		// set environment either from the url or the developer's environment.cfm file
-		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && (!Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
+		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(application.wheels, "reloadPassword") && (!Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
 			application.wheels.environment = URL.reload;
 		else
 			$include(template="#application.wheels.configPath#/environment.cfm");
@@ -237,7 +237,7 @@
 		}
 
 		// create the dispatcher that will handle all incoming requests
-		application.wheels.dispatch = $createObjectFromRoot(path=application.wheels.wheelsComponentPath, fileName="Dispatch", method="$returnDispatcher");
+		application.wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$returnDispatcher");
 		
 		// run the developer's on application start code
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");

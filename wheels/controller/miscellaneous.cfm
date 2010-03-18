@@ -105,21 +105,23 @@
 			}
 			else
 			{
-				if (arguments.detectMultipart)
-				{
-					// make sure the text version is the first one in the array
-					loc.existingContentCount = ListLen(arguments.body[1], "<");
-					loc.newContentCount = ListLen(loc.content, "<");
-					if (loc.newContentCount < loc.existingContentCount)
-						ArrayPrepend(arguments.body, loc.content);
-					else
-						ArrayAppend(arguments.body, loc.content);
-				}
+				// make sure the text version is the first one in the array
+				loc.existingContentCount = ListLen(arguments.body[1], "<");
+				loc.newContentCount = ListLen(loc.content, "<");
+				if (loc.newContentCount < loc.existingContentCount)
+					ArrayPrepend(arguments.body, loc.content);
 				else
-				{
 					ArrayAppend(arguments.body, loc.content);
-				}
 			}
+		}
+
+		// figure out if the email should be sent as html or text when only one template is used and the developer did not specify the type explicitly
+		if (arguments.detectMultipart && !StructKeyExists(arguments, "type") && ArrayLen(arguments.body) == 1)
+		{
+			if (Find("<", arguments.body[1]) && Find(">", arguments.body[1]))
+				arguments.type = "html";
+			else
+				arguments.type = "text";
 		}
 
 		// delete arguments that we don't need to pass on to cfmail and send the email

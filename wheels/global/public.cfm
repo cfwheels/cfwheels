@@ -279,7 +279,6 @@
 			else
 				loc.returnValue = SpanExcluding(request.cgi.server_protocol, "/") & "://" & loc.returnValue;
 		}
-		loc.returnValue = LCase(loc.returnValue);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

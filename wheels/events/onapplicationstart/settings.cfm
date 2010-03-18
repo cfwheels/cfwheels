@@ -78,6 +78,7 @@
 
 	// function defaults
 	application.wheels.functions = {};
+	application.wheels.functions.autoLink = {domains="com,net,org,info,biz,tv,co.uk,de,ro,it,se,ly,nu"};
 	application.wheels.functions.average = {distinct=false};
 	application.wheels.functions.belongsTo = {joinType="inner"};
 	application.wheels.functions.buttonTo = {onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable=""};

@@ -309,12 +309,12 @@
 										loc.primaryKeyColumnValues = ListAppend(loc.primaryKeyColumnValues, loc.findAll.query[ListGetAt(variables.wheels.class.keys, loc.k)][loc.j]);
 									}
 									if (loc.object.key() == loc.primaryKeyColumnValues)
-										ArrayAppend(loc.object[arguments.include], model(variables.wheels.class.associations[arguments.include].class).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.j));
+										ArrayAppend(loc.object[arguments.include], model(variables.wheels.class.associations[arguments.include].class).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.j, base=false));
 								}
 							}
 							else
 							{
-								loc.object[arguments.include] = model(variables.wheels.class.associations[arguments.include].class).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.i);
+								loc.object[arguments.include] = model(variables.wheels.class.associations[arguments.include].class).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.i, base=false);
 							}
 						}
 						ArrayAppend(loc.returnValue, loc.object);
@@ -1059,12 +1059,13 @@
 					
 					// check if this one has been flagged as a duplicate, we get the number of classes to skip and also remove the flagged info from the item
 					loc.duplicateCount = 0;
-					if (Left(loc.iItem, 13) == "[[duplicate]]")
+					loc.matches = REFind("^\[\[duplicate\]\](\d+)(.+)$", loc.iItem, 1, true);
+					if (loc.matches.pos[1] > 0)
 					{
-						loc.duplicateCount = Mid(loc.iItem, 14, 1);
-						loc.iItem = Mid(loc.iItem, 15, Len(loc.iItem)-14);
+						loc.duplicateCount = Mid(loc.iItem, loc.matches.pos[2], loc.matches.len[2]);
+						loc.iItem = Mid(loc.iItem, loc.matches.pos[3], loc.matches.len[3]);
 					}
-					
+
 					if (!loc.duplicateCount)
 					{
 						// this is not a duplicate so we can just insert it as is
@@ -1531,12 +1532,13 @@
 	<cfargument name="properties" type="any" required="true">
 	<cfargument name="persisted" type="boolean" required="true">
 	<cfargument name="row" type="numeric" required="false" default="1">
+	<cfargument name="base" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		loc.fileName = capitalize(variables.wheels.class.name);
 		if (!ListFindNoCase(application.wheels.existingModelFiles, variables.wheels.class.name))
 			loc.fileName = "Model";
-		loc.returnValue = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.name, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row);
+		loc.returnValue = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.name, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row, base=arguments.base);
 		// if this method is called with a struct we're creating a new object and then we call the afterNew callback. If called with a query we call the afterFind callback instead. If the called method does not return false we proceed and run the afterInitialize callback.
 		if ((IsQuery(arguments.properties) && loc.returnValue.$callback("afterFind")) || (IsStruct(arguments.properties) && loc.returnValue.$callback("afterNew")))
 			loc.returnValue.$callback("afterInitialization");
@@ -1549,6 +1551,7 @@
 	<cfargument name="properties" type="any" required="true">
 	<cfargument name="persisted" type="boolean" required="true">
 	<cfargument name="row" type="numeric" required="false" default="1">
+	<cfargument name="base" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		variables.wheels = {};
@@ -1563,7 +1566,7 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.iItem = ListGetAt(loc.allProperties, loc.i);
-				if (ListFindNoCase(arguments.properties.columnList, arguments.name & loc.iItem))
+				if (!arguments.base && ListFindNoCase(arguments.properties.columnList, arguments.name & loc.iItem))
 					this[loc.iItem] = arguments.properties[arguments.name & loc.iItem][arguments.row];
 				else if (ListFindNoCase(arguments.properties.columnList, loc.iItem))
 					this[loc.iItem] = arguments.properties[loc.iItem][arguments.row];
