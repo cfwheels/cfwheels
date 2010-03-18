@@ -1,3 +1,22 @@
+WHEELS VERSION 1.0.3
+
+Bug Fixes
+=======
+* Added support for more domains in autoLink() and also fixed linking when the URL starts at the very beginning of the string - #424 [Per Djurner]
+* Corrected the order in which object properties are set when based on a query result - #404 & #422 [Raul Riera, Per Djurner]
+* Fixed so the "appendToPage" and "prependToPage" arguments in paginationLinks() apply to the anchor pages - #417 [Raul Riera, Per Djurner]
+* Changed so developer supplied arguments to URLFor() are not converted to lowercase - #415 [Per Djurner]
+* Made sure you can only reload based on the URL when a reload password exists (either empty or set) - #410 [John C. Bland II, Per Djurner]
+* Added escaping on strings used in JavaScript - #393 [Tony Petruzzi]
+* Changed so the dispatch object is created with a reference from the root of the Wheels application instead of the entire website - [Per Djurner]
+* Fixed so sendEmail() automatically sets the "type" argument to "text" or "html" when only one template is in use - [Per Djurner]
+* Fixed so creating SELECT clause works when there are 10 tables or more in use - #421 [Don Humphreys, Per Djurner]
+* Fixed a regression bug in the dateTimeSelect() function - #413 [Andy Bellenie]
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 WHEELS VERSION 1.0.2
 
 Bug Fixes
