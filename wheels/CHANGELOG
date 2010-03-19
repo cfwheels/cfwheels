@@ -34,9 +34,10 @@ Bug Fixes
 * Added escaping on strings used in JavaScript - #393 [Tony Petruzzi]
 * Changed so the dispatch object is created with a reference from the root of the Wheels application instead of the entire website - [Per Djurner]
 * Fixed so sendEmail() automatically sets the "type" argument to "text" or "html" when only one template is in use - [Per Djurner]
-* Fixed so creating SELECT clause works when there are 10 tables or more in use - #421 [Don Humphreys, Per Djurner]
+* Fixed so creating SELECT clause works when there are 10 tables or more in use - #421 [Don Humphreys, Tony Petruzzi]
 * Fixed a regression bug in the dateTimeSelect() function - #413 [Andy Bellenie]
 * Fixed bug in dynamic belongsTo() methods - #420 [Andy Bellenie]
+* Fixed error with a call to http://localhost/badtemplate.cfm not showing the output of the onmissingtemplate.cfm file - [Clarke Bishop, Andy Bellenie, Per Djurner]
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
