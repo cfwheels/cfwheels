@@ -10,5 +10,6 @@
 	<cfscript>
 		$header(statusCode=404, statustext="Not Found");
 		$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
+		$abort();
 	</cfscript>
 </cffunction>
