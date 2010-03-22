@@ -38,6 +38,7 @@ Bug Fixes
 * Fixed a regression bug in the dateTimeSelect() function - #413 [Andy Bellenie]
 * Fixed bug in dynamic belongsTo() methods - #420 [Andy Bellenie]
 * Fixed error with a call to http://localhost/badtemplate.cfm not showing the output of the onmissingtemplate.cfm file - [Clarke Bishop, Andy Bellenie, Per Djurner]
+* Corrected link in error email when URL rewriting is on - [Andy Bellenie]
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
