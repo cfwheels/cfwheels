@@ -12,4 +12,9 @@
 		<cfset assert("loc.result IS ''")>
 	</cffunction>
 
+	<cffunction name="test_minimum_with_ifNull">
+		<cfset loc.result = model("post").minimum(property="views", where="id=0", ifNull=0)>
+		<cfset assert("loc.result IS 0")>
+	</cffunction>
+
 </cfcomponent>

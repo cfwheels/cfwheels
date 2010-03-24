@@ -12,15 +12,16 @@
 	<cfargument name="include" type="string" required="false" default="" hint="Any associations that need to be included in the query.">
 	<cfargument name="distinct" type="boolean" required="false" hint="When `true`, `AVG` will be performed only on each unique instance of a value, regardless of how many times the value occurs.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
+	<cfargument name="ifNull" type="string" required="false" default="#application.wheels.functions.average.ifNull#" hint="The value returned if no records are found.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = "";
 		$insertDefaults(name="average", input=arguments);
 		if (ListFindNoCase("cf_sql_integer,cf_sql_bigint,cf_sql_smallint,cf_sql_tinyint", variables.wheels.class.properties[arguments.property].type))
 		{
 			// this is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it
 			loc.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize);
 			loc.values = ListToArray(Evaluate("ValueList(loc.values.#arguments.property#)"));
+			loc.returnValue = arguments.ifNull;
 			if (!ArrayIsEmpty(loc.values))
 			{
 				if (arguments.distinct)
@@ -32,7 +33,7 @@
 					loc.values = ListToArray(StructKeyList(loc.tempValues));
 				}
 				loc.returnValue = ArrayAvg(loc.values);
-			}
+			} 
 		}
 		else
 		{
@@ -90,6 +91,7 @@
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
+	<cfargument name="ifNull" type="string" required="false" default="#application.wheels.functions.average.ifNull#" hint="The value returned if no records are found.">
 	<cfscript>
 		$insertDefaults(name="maximum", input=arguments);
 		arguments.type = "MAX";
@@ -108,6 +110,7 @@
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
+	<cfargument name="ifNull" type="string" required="false" default="#application.wheels.functions.average.ifNull#" hint="The value returned if no records are found.">
 	<cfscript>
 		$insertDefaults(name="minimum", input=arguments);
 		arguments.type = "MIN";
@@ -130,6 +133,7 @@
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="distinct" type="boolean" required="false" hint="When `true`, `SUM` returns the sum of unique values only.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
+	<cfargument name="ifNull" type="string" required="false" default="#application.wheels.functions.average.ifNull#" hint="The value returned if no records are found.">
 	<cfscript>
 		$insertDefaults(name="sum", input=arguments);
 		arguments.type = "SUM";
@@ -146,6 +150,7 @@
 	<cfargument name="include" type="string" required="true">
 	<cfargument name="parameterize" type="any" required="true">
 	<cfargument name="distinct" type="boolean" required="false" default="false">
+	<cfargument name="ifNull" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 
@@ -176,7 +181,10 @@
 		StructDelete(arguments, "type");
 		StructDelete(arguments, "property");
 		StructDelete(arguments, "distinct");
+		
 		loc.returnValue = findAll(argumentCollection=arguments).result;
+		if (!Len(loc.returnValue) and Len(arguments.ifNull))
+			loc.returnValue = arguments.ifNull;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

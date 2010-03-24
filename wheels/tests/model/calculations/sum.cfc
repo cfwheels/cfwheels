@@ -22,5 +22,10 @@
 		<cfset loc.result = model("post").sum(property="views", distinct=true)>
 		<cfset assert("loc.result IS 8")>
 	</cffunction>
+	
+	<cffunction name="test_sum_with_ifNull">
+		<cfset loc.result = model("post").sum(property="views", where="id=0", ifNull=0)>
+		<cfset assert("loc.result IS 0")>
+	</cffunction>
 
 </cfcomponent>
