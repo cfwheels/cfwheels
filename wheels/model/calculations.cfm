@@ -12,7 +12,7 @@
 	<cfargument name="include" type="string" required="false" default="" hint="Any associations that need to be included in the query.">
 	<cfargument name="distinct" type="boolean" required="false" hint="When `true`, `AVG` will be performed only on each unique instance of a value, regardless of how many times the value occurs.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="ifNull" type="string" required="false" default="#application.wheels.functions.average.ifNull#" hint="The value returned if no records are found.">
+	<cfargument name="ifNull" type="any" required="false" hint="The value returned if no records are found. Common usage is to set this to `0` to make sure a numeric value is always returned instead of a blank string.">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="average", input=arguments);
@@ -91,7 +91,7 @@
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="ifNull" type="string" required="false" default="#application.wheels.functions.average.ifNull#" hint="The value returned if no records are found.">
+	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
 	<cfscript>
 		$insertDefaults(name="maximum", input=arguments);
 		arguments.type = "MAX";
@@ -110,7 +110,7 @@
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="ifNull" type="string" required="false" default="#application.wheels.functions.average.ifNull#" hint="The value returned if no records are found.">
+	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
 	<cfscript>
 		$insertDefaults(name="minimum", input=arguments);
 		arguments.type = "MIN";
@@ -133,7 +133,7 @@
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="distinct" type="boolean" required="false" hint="When `true`, `SUM` returns the sum of unique values only.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="ifNull" type="string" required="false" default="#application.wheels.functions.average.ifNull#" hint="The value returned if no records are found.">
+	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
 	<cfscript>
 		$insertDefaults(name="sum", input=arguments);
 		arguments.type = "SUM";
@@ -150,7 +150,7 @@
 	<cfargument name="include" type="string" required="true">
 	<cfargument name="parameterize" type="any" required="true">
 	<cfargument name="distinct" type="boolean" required="false" default="false">
-	<cfargument name="ifNull" type="string" required="false" default="">
+	<cfargument name="ifNull" type="any" required="false" default="">
 	<cfscript>
 		var loc = {};
 
@@ -183,7 +183,7 @@
 		StructDelete(arguments, "distinct");
 		
 		loc.returnValue = findAll(argumentCollection=arguments).result;
-		if (!Len(loc.returnValue) and Len(arguments.ifNull))
+		if (!Len(loc.returnValue) && Len(arguments.ifNull))
 			loc.returnValue = arguments.ifNull;
 	</cfscript>
 	<cfreturn loc.returnValue>
