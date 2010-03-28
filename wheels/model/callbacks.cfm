@@ -245,9 +245,13 @@
 
 <cffunction name="$callback" returntype="boolean" access="public" output="false" hint="Executes all callback methods for a specific type. Will stop execution on the first callback that returns `false`.">
 	<cfargument name="type" type="string" required="true" hint="See documentation for @$clearCallbacks.">
+	<cfargument name="execute" type="boolean" required="true" hint="A query is passed in here for `afterFind` callbacks.">
 	<cfargument name="collection" type="any" required="false" default="" hint="A query is passed in here for `afterFind` callbacks.">
 	<cfscript>
 		var loc = {};
+
+		if (!arguments.execute)
+			return true;
 
 		// get all callbacks for the type and loop through them all until the end or one of them returns false
 		loc.callbacks = $callbacks(arguments.type);

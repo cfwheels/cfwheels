@@ -20,4 +20,13 @@
 		<cfset assert("StructKeyExists(loc.obj, 'setByCallback')")>
 	</cffunction>
 
+	<cffunction name="test_existing_object_with_skipped_callback">
+		<cfset model("tag").$registerCallback(type="beforeUpdate", methods="callbackThatSetsProperty,callbackThatReturnsFalse")>
+		<cfset loc.obj = model("tag").findOne()>
+		<cfset loc.obj.name = "somethingElse">
+		<cfset loc.obj.save(callbacks=false, transaction="rollback")>
+		<cfset model("tag").$clearCallbacks(type="beforeUpdate")>
+		<cfset assert("NOT StructKeyExists(loc.obj, 'setByCallback')")>
+	</cffunction>
+
 </cfcomponent>

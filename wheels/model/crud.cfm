@@ -23,13 +23,14 @@
 	<cfargument name="defaults" type="boolean" required="false" hint="See documentation for @save.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="create", input=arguments);
 		loc.parameterize = arguments.parameterize;
 		StructDelete(arguments, "parameterize");
 		loc.returnValue = new(argumentCollection=arguments);
-		loc.returnValue.save(parameterize=loc.parameterize, defaults=arguments.defaults, transaction=arguments.transaction);
+		loc.returnValue.save(parameterize=loc.parameterize, defaults=arguments.defaults, transaction=arguments.transaction, callbacks=arguments.callbacks);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -53,11 +54,12 @@
 	categories="model-class,create" chapters="creating-records,associations" functions="create,hasMany,hasOne">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="The properties you want to set on the object (can also be passed in as named arguments).">
 	<cfargument name="defaults" type="boolean" required="false" hint="See documentation for @save.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="new", input=arguments);
-		arguments.properties = $setProperties(argumentCollection=arguments, filterList="properties,defaults", setOnModel=false);
-		loc.returnValue = $createInstance(properties=arguments.properties, persisted=false);
+		arguments.properties = $setProperties(argumentCollection=arguments, filterList="properties,defaults,transaction,callbacks", setOnModel=false);
+		loc.returnValue = $createInstance(properties=arguments.properties, persisted=false, callbacks=arguments.callbacks);
 		if (arguments.defaults)
 			loc.returnValue.$setDefaultValues();
 	</cfscript>
@@ -108,6 +110,7 @@
 	<cfargument name="parameterize" type="any" required="false" hint="Accepts a boolean value or a string. Set to `true` to use `cfqueryparam` on all columns or pass in a list of property names to use `cfqueryparam` on those only.">
 	<cfargument name="returnAs" type="string" required="false" hint="Set this to `objects` to return an array of objects instead of a query result set which is the default return type.">
 	<cfargument name="returnIncluded" type="boolean" required="false" hint="When `returnAs` is set to `objects` you can set this argument to `false` to prevent returning objects fetched from associations specified in the `include` argument. This is useful when you only need to include associations for use in the `WHERE` clause only and want to avoid the performance hit that comes with object creation.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="You can set this argument to `false` to prevent running the execution of callbacks for this method.">
 	<cfargument name="$limit" type="numeric" required="false" default=0>
 	<cfargument name="$offset" type="numeric" required="false" default=0>
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
@@ -256,7 +259,7 @@
 			if (arguments.returnAs == "query")
 			{
 				loc.returnValue = loc.findAll.query;
-				$callback("afterFind", loc.returnValue);
+				$callback("afterFind", arguments.callbacks, loc.returnValue);
 			}
 			else if (Len(arguments.returnAs))
 			{
@@ -264,7 +267,7 @@
 				loc.doneObjects = "";
 				for (loc.i=1; loc.i <= loc.findAll.query.recordCount; loc.i++)
 				{
-					loc.object = $createInstance(properties=loc.findAll.query, persisted=true, row=loc.i);
+					loc.object = $createInstance(properties=loc.findAll.query, persisted=true, row=loc.i, callbacks=arguments.callbacks);
 					if (!ListFind(loc.doneObjects, loc.object.key(), Chr(7)))
 					{
 						if (Len(arguments.include) && arguments.returnIncluded)
@@ -278,7 +281,7 @@
 									loc.hasManyDoneObjects = "";
 									for (loc.j=1; loc.j <= loc.findAll.query.recordCount; loc.j++)
 									{
-										loc.hasManyObject = model(variables.wheels.class.associations[loc.include].modelName).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.j, base=false);
+										loc.hasManyObject = model(variables.wheels.class.associations[loc.include].modelName).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.j, base=false, callbacks=arguments.callbacks);
 										if (!ListFind(loc.hasManyDoneObjects, loc.hasManyObject.key(), Chr(7)))
 										{
 											// create object instance from values in current query row if it belongs to the current object
@@ -300,7 +303,7 @@
 								}
 								else
 								{
-									loc.object[loc.include] = model(variables.wheels.class.associations[loc.include].modelName).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.i, base=false);
+									loc.object[loc.include] = model(variables.wheels.class.associations[loc.include].modelName).$createInstance(properties=loc.findAll.query, persisted=true, row=loc.i, base=false, callbacks=arguments.callbacks);
 								}
 							}
 						}
@@ -339,6 +342,7 @@
 	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="returnAs" type="string" required="false" hint="Can be set to either `object` or `query`. See documentation for @findAll for more info.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
 		var returnValue = "";
@@ -415,23 +419,26 @@
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="instantiate" type="boolean" required="false" hint="Whether or not to instantiate the object(s) first. When objects are not instantiated any callbacks and validations set on them will be skipped.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfset var loc = {}>
 	<cfset $insertDefaults(name="updateAll", input=arguments)>
-	<cfset arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,parameterize,instantiate,transaction,$softDeleteCheck", setOnModel=false)>
+	<cfset arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,parameterize,instantiate,transaction,callbacks,$softDeleteCheck", setOnModel=false)>
+	
 	<cfif arguments.instantiate> <!--- find and instantiate each object and call its update function --->
 		<cfscript>
 			loc.returnValue = 0;
-			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
+			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, callbacks=arguments.callbacks, $softDeleteCheck=arguments.$softDeleteCheck);
 			for (loc.i=1; loc.i lte loc.records.recordCount; loc.i++)
 			{
 				loc.object = $createInstance(properties=loc.records, row=loc.i, persisted=true);
-				if (loc.object.update(properties=arguments.properties, parameterize=arguments.parameterize, transaction=arguments.transaction))
+				if (loc.object.update(properties=arguments.properties, parameterize=arguments.parameterize, transaction=arguments.transaction, callbacks=arguments.callbacks))
 					loc.returnValue = loc.returnValue + 1;
 			}
 		</cfscript>
 	<cfelse> <!--- do a regular update query --->
 		<cfscript>
+			
 			loc.sql = [];
 			ArrayAppend(loc.sql, "UPDATE #variables.wheels.class.tableName# SET");
 			loc.pos = 0;
@@ -439,6 +446,7 @@
 			{
 				loc.pos = loc.pos + 1;
 				ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
+				
 				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, null=arguments.properties[loc.key] == ""};
 				ArrayAppend(loc.sql, loc.param);
 				if (StructCount(arguments.properties) gt loc.pos)
@@ -474,6 +482,7 @@
 	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
 		var returnValue = "";
 		arguments.where = $keyWhereString(values=arguments.key);
@@ -498,6 +507,7 @@
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
 		loc.object = findOne(where=arguments.where, order=arguments.order);
@@ -529,6 +539,7 @@
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="instantiate" type="boolean" required="false" hint="See documentation for @updateAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfset var loc = {}>
 	<cfset $insertDefaults(name="deleteAll", input=arguments)>
@@ -539,7 +550,7 @@
 			for (loc.i=1; loc.i lte loc.records.recordCount; loc.i++)
 			{
 				loc.object = $createInstance(properties=loc.records, row=loc.i, persisted=true);
-				if (loc.object.delete(parameterize=arguments.parameterize, transaction=arguments.transaction))
+				if (loc.object.delete(parameterize=arguments.parameterize, transaction=arguments.transaction, callbacks=arguments.callbacks))
 					loc.returnValue++;
 			}
 		</cfscript>
@@ -573,10 +584,11 @@
 	categories="model-class,delete" chapters="deleting-records" functions="delete,deleteAll,deleteOne">
 	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
 		loc.where = $keyWhereString(values=arguments.key);
-		loc.returnValue = deleteOne(where=loc.where, transaction=arguments.transaction);
+		loc.returnValue = deleteOne(where=loc.where, transaction=arguments.transaction, callbacks=arguments.callbacks);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -595,11 +607,12 @@
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
 		loc.object = findOne(where=arguments.where, order=arguments.order);
 		if (IsObject(loc.object))
-			loc.returnValue = loc.object.delete(transaction=arguments.transaction);
+			loc.returnValue = loc.object.delete(transaction=arguments.transaction, callbacks=arguments.callbacks);
 		else
 			loc.returnValue = false;
 	</cfscript>
@@ -671,6 +684,7 @@
 	categories="model-object,crud" chapters="deleting-records,associations" functions="deleteAll,deleteByKey,deleteOne,hasMany">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfset var loc = {}>
 	<cfset $insertDefaults(name="delete", input=arguments)>
 	<cfset loc.returnValue = false>
@@ -679,9 +693,9 @@
 	<cfset loc.sql = $addKeyWhereClause(sql=loc.sql)>
 	<cfif $useTransaction(arguments.transaction)>
 		<cftransaction action="begin">
-			<cfif $callback("beforeDelete")>
+			<cfif $callback("beforeDelete", arguments.callbacks)>
 				<cfset loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
-				<cfif loc.del.result.recordCount eq 1 and $callback("afterDelete")>
+				<cfif loc.del.result.recordCount eq 1 and $callback("afterDelete", arguments.callbacks)>
 					<cftransaction action="#arguments.transaction#" />
 					<cfset loc.returnValue = true>
 				<cfelse>
@@ -693,10 +707,10 @@
 		</cftransaction>
 	<cfelse>
 		<cfscript>
-			if ($callback("beforeDelete"))
+			if ($callback("beforeDelete", arguments.callbacks))
 			{
 				loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
-				if (loc.del.result.recordCount eq 1 and $callback("afterDelete"))
+				if (loc.del.result.recordCount eq 1 and $callback("afterDelete", arguments.callbacks))
 					loc.returnValue = true;
 			}
 		</cfscript>
@@ -746,19 +760,20 @@
 	<cfargument name="defaults" type="boolean" required="false" hint="Whether or not to set default values for properties.">
 	<cfargument name="validate" type="boolean" required="false" default="true" hint="Whether or not to run validations when saving">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="Use `commit` to update the database when the save has completed, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfset var returnValue = false>
 	<cfset $insertDefaults(name="save", input=arguments)>
 	<cfset clearErrors()>
-	<cfif $callback("beforeValidation")>
+	<cfif $callback("beforeValidation", arguments.callbacks)>
 		<cfif isNew()>
 			<cfif $useTransaction(arguments.transaction)>
 				<cftransaction action="begin">
-					<cfif $callback("beforeValidationOnCreate") && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation") && $callback("afterValidationOnCreate") && $callback("beforeSave") && $callback("beforeCreate")>
+					<cfif $callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks)>
 						<cfset $create(parameterize=arguments.parameterize)>
 						<cfif arguments.defaults>
 							<cfset $setDefaultValues()>
 						</cfif>
-						<cfif $callback("afterCreate") and $callback("afterSave")>
+						<cfif $callback("afterCreate", arguments.callbacks) and $callback("afterSave", arguments.callbacks)>
 							<cfset $updatePersistedProperties()>
 							<cfset returnValue = true>
 							<cftransaction action="#arguments.transaction#" />
@@ -771,12 +786,12 @@
 				</cftransaction>
 			<cfelse>
 				<cfscript>
-					if ($callback("beforeValidationOnCreate") && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation") && $callback("afterValidationOnCreate") && $callback("beforeSave") && $callback("beforeCreate"))
+					if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks))
 					{
 						$create(parameterize=arguments.parameterize);
 						if (arguments.defaults)
 							$setDefaultValues();
-						if ($callback("afterCreate") and $callback("afterSave")) 
+						if ($callback("afterCreate", arguments.callbacks) and $callback("afterSave", arguments.callbacks)) 
 						{
 							$updatePersistedProperties();
 							returnValue = true;
@@ -787,9 +802,9 @@
 		<cfelse>
 			<cfif $useTransaction(arguments.transaction)>
 				<cftransaction action="begin">
-					<cfif $callback("beforeValidationOnUpdate") && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation") && $callback("afterValidationOnUpdate") && $callback("beforeSave") && $callback("beforeUpdate")>
+					<cfif $callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks)>
 						<cfset $update(parameterize=arguments.parameterize)>
-						<cfif $callback("afterUpdate") and $callback("afterSave")>
+						<cfif $callback("afterUpdate", arguments.callbacks) and $callback("afterSave", arguments.callbacks)>
 							<cfset $updatePersistedProperties()>
 							<cfset returnValue = true>
 							<cftransaction action="#arguments.transaction#" />
@@ -802,10 +817,10 @@
 				</cftransaction>
 			<cfelse>
 				<cfscript>
-					if ($callback("beforeValidationOnUpdate") && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation") && $callback("afterValidationOnUpdate") && $callback("beforeSave") && $callback("beforeUpdate"))
+					if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks))
 					{
 						$update(parameterize=arguments.parameterize);
-						if ($callback("afterUpdate") and $callback("afterSave"))
+						if ($callback("afterUpdate", arguments.callbacks) and $callback("afterSave", arguments.callbacks))
 						{
 							$updatePersistedProperties();
 							returnValue = true;
@@ -848,8 +863,9 @@
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfset $insertDefaults(name="update", input=arguments)>
-	<cfset $setProperties(argumentCollection=arguments, filterList="parameterize,properties,transaction") />
+	<cfset $setProperties(argumentCollection=arguments, filterList="parameterize,properties,transaction,callbacks") />
 	<cfreturn save(parameterize=arguments.parameterize, transaction=arguments.transaction)>
 </cffunction>
 
@@ -1514,6 +1530,7 @@
 	<cfargument name="persisted" type="boolean" required="true">
 	<cfargument name="row" type="numeric" required="false" default="1">
 	<cfargument name="base" type="boolean" required="false" default="true">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
 		loc.fileName = capitalize(variables.wheels.class.modelName);
@@ -1521,8 +1538,8 @@
 			loc.fileName = "Model";
 		loc.returnValue = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.modelName, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row, base=arguments.base);
 		// if this method is called with a struct we're creating a new object and then we call the afterNew callback. If called with a query we call the afterFind callback instead. If the called method does not return false we proceed and run the afterInitialize callback.
-		if ((IsQuery(arguments.properties) && loc.returnValue.$callback("afterFind")) || (IsStruct(arguments.properties) && loc.returnValue.$callback("afterNew")))
-			loc.returnValue.$callback("afterInitialization");
+		if ((IsQuery(arguments.properties) && loc.returnValue.$callback("afterFind", arguments.callbacks)) || (IsStruct(arguments.properties) && loc.returnValue.$callback("afterNew", arguments.callbacks)))
+			loc.returnValue.$callback("afterInitialization", arguments.callbacks);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

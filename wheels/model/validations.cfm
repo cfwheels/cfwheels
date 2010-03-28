@@ -242,20 +242,21 @@
 		</cfif>
 	'
 	categories="model-object,errors" chapters="object-validation" functions="">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = false;
 		clearErrors();
-		if ($callback("beforeValidation"))
+		if ($callback("beforeValidation", arguments.callbacks))
 		{
 			if (isNew())
 			{
-				if ($callback("beforeValidationOnCreate") && $validate("onSave") && $validate("onCreate") && $callback("afterValidation") && $callback("afterValidationOnCreate"))
+				if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave") && $validate("onCreate") && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks))
 					loc.returnValue = true;
 			}
 			else
 			{
-				if ($callback("beforeValidationOnUpdate") && $validate("onSave") && $validate("onUpdate") && $callback("afterValidation") && $callback("afterValidationOnUpdate"))
+				if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave") && $validate("onUpdate") && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks))
 					loc.returnValue = true;
 			}
 		}

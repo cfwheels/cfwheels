@@ -37,6 +37,16 @@
 		<cfset assert("NOT loc.existBefore AND loc.existAfter")>
 	</cffunction>
 
+	<cffunction name="test_setting_property_with_skipped_callback">
+		<cfset model("tag").$registerCallback(type="beforeSave", methods="callbackThatSetsProperty")>
+		<cfset loc.obj = model("tag").findOne(order="id")>
+		<cfset loc.existBefore = StructKeyExists(loc.obj, "setByCallback")>
+		<cfset loc.obj.save(callbacks=false, transaction="rollback")>
+		<cfset loc.existAfter = StructKeyExists(loc.obj, "setByCallback")>
+		<cfset model("tag").$clearCallbacks(type="beforeSave")>
+		<cfset assert("NOT loc.existBefore AND NOT loc.existAfter")>
+	</cffunction>
+
 	<cffunction name="test_execution_order">
 		<cfset model("tag").$registerCallback(type="beforeSave", methods="firstCallback,secondCallback")>
 		<cfset loc.obj = model("tag").findOne(order="id")>
