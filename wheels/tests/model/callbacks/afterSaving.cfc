@@ -34,7 +34,7 @@
 		<cfset loc.obj = model("tag").findOne()>
 		<cfset loc.obj.name = "somethingElse">
 		<cftransaction>
-			<cfset loc.obj.save(transaction="none")>
+			<cfset loc.obj.save(transaction="none", callbacks=false)>
 			<cftransaction action="rollback"/>
 		</cftransaction>
 		<cfset model("tag").$clearCallbacks(type="afterValidation")>
@@ -43,7 +43,7 @@
 		<cfset model("tag").$clearCallbacks(type="afterSave")>
 		<cfset model("tag").$clearCallbacks(type="afterCreate")>
 		<cfset model("tag").$clearCallbacks(type="afterUpdate")>
-		<cfset assert("loc.obj.callbackCount IS 4")>
+		<cfset assert("NOT StructKeyExists(loc.obj, 'callbackCount')")>
 	</cffunction>
 
 	<cffunction name="test_have_access_to_changed_property_values_in_aftersave">
