@@ -171,7 +171,9 @@
 			for (loc.key in arguments)
 			{
 				if (loc.key != "functionName")
-					application.wheels.functions[arguments.functionName][loc.key] = arguments[loc.key];
+					for (loc.i = 1; loc.i lte listlen(arguments.functionName); loc.i = loc.i + 1) {
+						application.wheels.functions[Trim(ListGetAt(arguments.functionName, loc.i))][loc.key] = arguments[loc.key];
+					}
 			}
 		}
 		else
