@@ -31,6 +31,7 @@
 	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="$delayTillRequestEnd" type="boolean" default="false" hint="When true, the redirect will be delayed until the end of the request (required for testing).">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="redirectTo", input=arguments);
@@ -48,8 +49,15 @@
 			loc.url = URLFor(argumentCollection=arguments);
 		}
 		
-		if (StructKeyExists(request.wheels, "redirect"))
-			$throw(type="Wheels.RedirectToAlreadyCalled", message="`redirectTo()` was already called.");
-		request.wheels.redirect = { url=loc.url, addToken=arguments.addToken, statusCode=arguments.statusCode };
+		if (arguments.$delayTillRequestEnd)
+		{
+			if (StructKeyExists(request.wheels, "redirect"))
+				$throw(type="Wheels.RedirectToAlreadyCalled", message="`redirectTo()` was already called.");
+			request.wheels.redirect = { url=loc.url, addToken=arguments.addToken, statusCode=arguments.statusCode };
+		}
+		else
+		{
+			$location(url=loc.url, addToken=arguments.addToken, statusCode=arguments.statusCode);
+		}
 	</cfscript>
 </cffunction>
