@@ -56,9 +56,37 @@
 
 <cffunction name="$mail" returntype="void" access="public" output="false">
 	<cfset var loc = {}>
-	<cfset loc.content = arguments.body>
-	<cfset StructDelete(arguments, "body")>
-	<cfmail attributeCollection="#arguments#"><cfif ArrayLen(loc.content) GT 1><cfmailpart type="text">#Trim(loc.content[1])#</cfmailpart><cfmailpart type="html">#Trim(loc.content[2])#</cfmailpart><cfelse>#Trim(loc.content[1])#</cfif></cfmail>
+	<cfif StructKeyExists(arguments, "mailparts")>
+		<cfset loc.mailparts = arguments.mailparts>
+		<cfset StructDelete(arguments, "mailparts")>
+	</cfif>
+	<cfif StructKeyExists(arguments, "mailparams")>
+		<cfset loc.mailparams = arguments.mailparams>
+		<cfset StructDelete(arguments, "mailparams")>
+	</cfif>
+	<cfif StructKeyExists(arguments, "tagContent")>
+		<cfset loc.tagContent = arguments.tagContent>
+		<cfset StructDelete(arguments, "tagContent")>
+	</cfif>
+	<cfmail attributeCollection="#arguments#">
+		<cfif StructKeyExists(loc, "mailparams")>
+			<cfloop array="#loc.mailparams#" index="loc.i">
+				<cfmailparam attributeCollection="#loc.i#">
+			</cfloop>
+		</cfif>
+		<cfif StructKeyExists(loc, "mailparts")>
+			<cfloop array="#loc.mailparts#" index="loc.i">
+				<cfset loc.innerTagContent = loc.i.tagContent>
+				<cfset StructDelete(loc.i, "tagContent")>
+				<cfmailpart attributeCollection="#loc.i#">
+					#loc.innerTagContent#
+				</cfmailpart>
+			</cfloop>
+		</cfif>
+		<cfif StructKeyExists(loc, "tagContent")>
+			#loc.tagContent#
+		</cfif>
+	</cfmail>
 </cffunction>
 
 <cffunction name="$zip" returntype="any" access="public" output="false">

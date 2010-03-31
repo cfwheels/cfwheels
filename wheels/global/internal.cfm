@@ -215,6 +215,47 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="$args" returntype="void" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="args" type="struct" required="true">
+	<cfargument name="reserved" type="string" required="false" default="">
+	<cfargument name="combine" type="string" required="false" default="">
+	<cfscript>
+		var loc = {};
+		if (Len(arguments.combine))
+		{
+			loc.iEnd = ListLen(arguments.combine);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.item = ListGetAt(arguments.combine, loc.i);
+				loc.first = ListGetAt(loc.item, 1, "/");
+				loc.second = ListGetAt(loc.item, 2, "/");
+				if (StructKeyExists(arguments.args, loc.second))
+					arguments.args[loc.first] = arguments.args[loc.second];
+				if (application.wheels.showErrorInformation && ListLen(loc.item, "/") > 2)
+				{
+					if (!StructKeyExists(arguments.args, loc.second) && !Len(arguments.args[loc.first]))
+						$throw(type="Wheels.IncorrectArguments", message="The `#loc.first#` or `#loc.second#` argument is required but was not passed in.");				
+				}
+			}
+		}
+		if (application.wheels.showErrorInformation)
+		{
+			if (ListLen(arguments.reserved))
+			{
+				loc.iEnd = ListLen(arguments.reserved);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					loc.item = ListGetAt(arguments.reserved, loc.i);
+					if (StructKeyExists(arguments.args, loc.item))
+						$throw(type="Wheels.IncorrectArguments", message="The `#loc.item#` argument cannot be passed in since it will be set automatically by Wheels.");
+				}
+			}
+		}
+		StructAppend(arguments.args, application.wheels.functions[arguments.name], false);
+	</cfscript>
+</cffunction>
+
 <cffunction name="$insertDefaults" returntype="void" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="input" type="struct" required="true">
