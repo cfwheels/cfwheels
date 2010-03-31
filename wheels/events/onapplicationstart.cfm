@@ -228,7 +228,7 @@
 
 		// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
 		loc.allowedGlobalMethods = "get,set,addroute,addDefaultRoutes";
-		loc.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application.wheels.controllerPath, fileName="Wheels", method="$initControllerClass", controllerName="Wheels", controllerPath=application.wheels.controllerPath));
+		loc.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application.wheels.controllerPath, fileName="Wheels", method="$initControllerClass"));
 		application.wheels.protectedControllerMethods = "";
 		loc.iEnd = ListLen(loc.protectedControllerMethods);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)

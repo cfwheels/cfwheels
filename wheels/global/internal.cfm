@@ -313,52 +313,50 @@
 </cffunction>
 
 <cffunction name="$cachedControllerClassExists" returntype="any" access="public" output="false">
-	<cfargument name="controllerName" type="string" required="true">
+	<cfargument name="name" type="string" required="true">
 		<cfscript>
 			var returnValue = false;
-			if (StructKeyExists(application.wheels.controllers, arguments.controllerName))
-				returnValue = application.wheels.controllers[arguments.controllerName];
+			if (StructKeyExists(application.wheels.controllers, arguments.name))
+				returnValue = application.wheels.controllers[arguments.name];
 		</cfscript>
 	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="$createControllerClass" returntype="any" access="public" output="false">
-	<cfargument name="controllerName" type="string" required="true">
-	<cfargument name="controllerPath" type="string" required="true">
+	<cfargument name="name" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.fileName = capitalize(arguments.controllerName);
+		loc.fileName = capitalize(arguments.name);
 
 		// check if the controller file exists and store the results for performance reasons
-		if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.controllerName) && !ListFindNoCase(application.wheels.nonExistingControllerFiles, arguments.controllerName))
+		if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingControllerFiles, arguments.name))
 		{
-			if (FileExists(ExpandPath("#arguments.controllerPath#/#loc.fileName#.cfc")))
-				application.wheels.existingControllerFiles = ListAppend(application.wheels.existingControllerFiles, arguments.controllerName);
+			if (FileExists(ExpandPath("#application.wheels.controllerPath#/#loc.fileName#.cfc")))
+				application.wheels.existingControllerFiles = ListAppend(application.wheels.existingControllerFiles, arguments.name);
 			else
-				application.wheels.nonExistingControllerFiles = ListAppend(application.wheels.nonExistingControllerFiles, arguments.controllerName);
+				application.wheels.nonExistingControllerFiles = ListAppend(application.wheels.nonExistingControllerFiles, arguments.name);
 		}
 
 		// check if the controller's view helper file exists and store the results for performance reasons
-		if (!ListFindNoCase(application.wheels.existingHelperFiles, arguments.controllerName) && !ListFindNoCase(application.wheels.nonExistingHelperFiles, arguments.controllerName))
+		if (!ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingHelperFiles, arguments.name))
 		{
-			if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(arguments.controllerName)#/helpers.cfm")))
-				application.wheels.existingHelperFiles = ListAppend(application.wheels.existingHelperFiles, arguments.controllerName);
+			if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(arguments.name)#/helpers.cfm")))
+				application.wheels.existingHelperFiles = ListAppend(application.wheels.existingHelperFiles, arguments.name);
 			else
-				application.wheels.nonExistingHelperFiles = ListAppend(application.wheels.nonExistingHelperFiles, arguments.controllerName);
+				application.wheels.nonExistingHelperFiles = ListAppend(application.wheels.nonExistingHelperFiles, arguments.name);
 		}
 
-		if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.controllerName))
+		if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name))
 			loc.fileName = "Controller";
 
-		application.wheels.controllers[arguments.controllerName] = $createObjectFromRoot(path=arguments.controllerPath, fileName=loc.fileName, method="$initControllerClass", controllerName=arguments.controllerName, controllerPath=arguments.controllerPath);
-		loc.returnValue = application.wheels.controllers[arguments.controllerName];
+		application.wheels.controllers[arguments.name] = $createObjectFromRoot(path=application.wheels.controllerPath, fileName=loc.fileName, method="$initControllerClass", name=arguments.name);
+		loc.returnValue = application.wheels.controllers[arguments.name];
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$controller" returntype="any" access="public" output="false">
-	<cfargument name="controllerName" type="string" required="true">
-	<cfargument name="controllerPath" type="string" required="false" default="#application.wheels.controllerPath#">
+	<cfargument name="name" type="string" required="true">
 	<cfscript>
 		var returnValue = "";
 		returnValue = $doubleCheckedLock(name="controllerLock", condition="$cachedControllerClassExists", execute="$createControllerClass", conditionArgs=arguments, executeArgs=arguments);

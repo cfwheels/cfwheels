@@ -1,11 +1,9 @@
 <!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$initControllerClass" returntype="any" access="public" output="false">
-	<cfargument name="controllerName" type="string" required="true">
-	<cfargument name="controllerPath" type="string" required="true">
+	<cfargument name="name" type="string" required="false" default="">
 	<cfscript>
-		variables.wheels.name = arguments.controllerName;
-		variables.wheels.path = arguments.controllerPath;
+		variables.wheels.name = arguments.name;
 		variables.wheels.verifications = [];
 		variables.wheels.filters = [];
 		variables.wheels.cachableActions = [];
@@ -25,7 +23,7 @@
 			loc.fileName = capitalize(variables.wheels.name);
 		else
 			loc.fileName = "Controller";
-		loc.returnValue = $createObjectFromRoot(path=variables.wheels.path, fileName=loc.fileName, method="$initControllerObject", name=variables.wheels.name, params=arguments.params);
+		loc.returnValue = $createObjectFromRoot(path=application.wheels.controllerPath, fileName=loc.fileName, method="$initControllerObject", name=variables.wheels.name, params=arguments.params);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

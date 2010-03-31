@@ -6,7 +6,7 @@
 	<cfset params.action = "edit">
 	<cfset params.key = "1">
 
-	<cfset global.controller = $controller(controllerName=params.controller, controllerPath="wheels/tests/_assets/controllers").$createControllerObject(params)> 
+	<cfset global.controller = $controller(name=params.controller).$createControllerObject(params)> 
 	<cfset global.args = {}>
 	<cfset global.args.controller = "Blog">
 	<cfset global.args.action = "edit">

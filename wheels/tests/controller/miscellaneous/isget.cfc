@@ -1,16 +1,25 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.controller") />
-	<cfset request.cgi = global.controller.$cgiscope()>
-	
+	<cfinclude template="/wheelsMapping/global/functions.cfm">
+
+	<cfset controller = $controller(name="dummy").$createControllerObject({controller="dummy",action="dummy"})>
+
+	<cffunction name="setup">
+		<cfset oldCGIScope = request.cgi>
+	</cffunction>
+
 	<cffunction name="test_isGet_valid">
 		<cfset request.cgi.request_method = "get">
-		<cfset assert('loc.controller.isGet() eq true')>
+		<cfset assert("controller.isGet() eq true")>
 	</cffunction>
 	
 	<cffunction name="test_isGet_invalid">
 		<cfset request.cgi.request_method = "">
-		<cfset assert('loc.controller.isGet() eq false')>
+		<cfset assert("controller.isGet() eq false")>
 	</cffunction>
-	
+
+	<cffunction name="teardown">
+		<cfset request.cgi = oldCGIScope>
+	</cffunction>
+
 </cfcomponent>
