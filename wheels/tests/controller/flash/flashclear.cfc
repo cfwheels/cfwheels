@@ -1,13 +1,14 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.controller") />
-	
+	<cfinclude template="/wheelsMapping/global/functions.cfm">
+
+	<cfset controller = $controller(name="dummy").$createControllerObject({controller="dummy",action="dummy"})>
+
 	<cffunction name="test_flashClear_valid">
-		<cfset session.flash = {} />
-		<cfset loc.controller.flashInsert(success="congrats!") />
-		<cfset loc.controller.flashClear() />
-		<cfset loc.flashKeyList = StructKeyList(loc.controller.flash()) />
-		<cfset assert("loc.flashKeyList eq ''") />
+		<cfset controller.flashInsert(success="Congrats!")>
+		<cfset controller.flashClear()>
+		<cfset result = StructKeyList(controller.flash())>
+		<cfset assert("result IS ''")>
 	</cffunction>
 	
 </cfcomponent>

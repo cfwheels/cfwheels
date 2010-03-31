@@ -1,19 +1,19 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.controller") />
-	
+	<cfinclude template="/wheelsMapping/global/functions.cfm">
+
+	<cfset controller = $controller(name="dummy").$createControllerObject({controller="dummy",action="dummy"})>
+
 	<cffunction name="test_flashIsEmpty_valid">
-		<cfset session.flash = {} />
-		<cfset loc.e = loc.controller.flashIsEmpty() />
-		<cfset loc.r = StructIsEmpty(session.flash) />
-		<cfset assert("loc.e eq loc.r") />
+		<cfset session.flash = {}>
+		<cfset result = controller.flashIsEmpty()>
+		<cfset assert("result IS StructIsEmpty(session.flash)")>
 	</cffunction>
 	
 	<cffunction name="test_flashIsEmpty_invalid">
-		<cfset session.flash = {success="congrats!"} />
-		<cfset loc.e = loc.controller.flashIsEmpty() />
-		<cfset loc.r = StructIsEmpty(session.flash) />
-		<cfset assert("loc.e eq loc.r") />
+		<cfset session.flash = {success="congrats!"}>
+		<cfset result = controller.flashIsEmpty()>
+		<cfset assert("result IS StructIsEmpty(session.flash)")>
 	</cffunction>
 	
 </cfcomponent>

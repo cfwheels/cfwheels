@@ -1,20 +1,20 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.controller") />
-	
+	<cfinclude template="/wheelsMapping/global/functions.cfm">
+
+	<cfset controller = $controller(name="dummy").$createControllerObject({controller="dummy",action="dummy"})>
+
 	<cffunction name="test_flashDelete_invalid">
-		<cfset session.flash = {} />
-		<cfset loc.e = loc.controller.flashDelete(key='success') />
-		<cfset loc.r = "NO" />
-		<cfset assert("loc.e eq loc.r") />
+		<cfset session.flash = {}>
+		<cfset result = controller.flashDelete(key="success")>
+		<cfset assert("result IS false")>
 	</cffunction>
 	
 	<cffunction name="test_flashDelete_valid">
-		<cfset session.flash = {} />
-		<cfset loc.controller.flashInsert(success="congrats!") />
-		<cfset loc.e = loc.controller.flashDelete(key="success") />
-		<cfset loc.r = "YES" />
-		<cfset assert("loc.e eq loc.r") />
+		<cfset session.flash = {}>
+		<cfset controller.flashInsert(success="Congrats!")>
+		<cfset result = controller.flashDelete(key="success")>
+		<cfset assert("result IS true")>
 	</cffunction>
 	
 </cfcomponent>
