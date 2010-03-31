@@ -2,7 +2,8 @@
 
 	<cfinclude template="/wheelsMapping/global/functions.cfm">
 
-	<cfset controller = $controller(name="dummy").$createControllerObject({controller="dummy",action="dummy"})>
+	<cfset params = {controller="dummy", action="dummy"}>
+	<cfset controller = $controller(name="dummy").$createControllerObject(params)>
 
 	<cffunction name="setup">
 		<cfset oldCGIScope = request.cgi>

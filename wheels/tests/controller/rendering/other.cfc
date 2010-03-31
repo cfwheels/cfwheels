@@ -2,7 +2,8 @@
 
 	<cfinclude template="/wheelsMapping/global/functions.cfm">
 
-	<cfset controller = $controller(name="dummy").$createControllerObject({controller="test",action="test"})>
+	<cfset params = {controller="test", action="test"}>
+	<cfset controller = $controller(name="dummy").$createControllerObject(params)>
 
 	<cffunction name="setup">
 		<cfif StructKeyExists(request.wheels, "response")>

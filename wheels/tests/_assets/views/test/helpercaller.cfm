@@ -1,0 +1,2 @@
+<cfset globalHelperFunction()>
+<cfset controllerHelperFunction()>

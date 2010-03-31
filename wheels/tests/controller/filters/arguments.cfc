@@ -2,7 +2,8 @@
 
 	<cfinclude template="/wheelsMapping/global/functions.cfm">
 
-	<cfset controller = $controller(name="filtering").$createControllerObject({controller="filtering",action="index"})>
+	<cfset params = {controller="filtering", action="index"}>	
+	<cfset controller = $controller(name="filtering").$createControllerObject(params)>
 
 	<cffunction name="setup">
 		<cfset request.filterTests = StructNew()>
