@@ -22,6 +22,10 @@
 		<cfset assert("request.wheels.response Contains '<html>' AND request.wheels.response Contains 'this is a view template'")>
 	</cffunction>
 
+	<!---<cffunction name="test_render_and_return_as_string">
+		<cfset assert("1 IS 0")>
+	</cffunction>--->
+
 	<cffunction name="teardown">
 		<cfset application.wheels.viewPath = oldViewPath>
 	</cffunction>
