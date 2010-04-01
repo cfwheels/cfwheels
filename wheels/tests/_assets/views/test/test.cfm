@@ -1,1 +1,1 @@
-this is a view template
+this is a view template<cfif structKeyExists(variables, "variableForView")><cfoutput>#variableForView#</cfoutput></cfif>

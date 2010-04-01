@@ -23,8 +23,15 @@
 		<cfset assert("request.wheels.response Contains '<html>' AND request.wheels.response Contains 'this is a view template'")>
 	</cffunction>
 
-	<!---<cffunction name="test_render_and_return_as_string">
-		<cfset assert("1 IS 0")>
+	<cffunction name="test_render_and_return_as_string">
+		<cfset result = controller.renderPage(returnAs="string")>
+		<cfset assert("NOT StructKeyExists(request.wheels, 'response') AND result Contains 'this is a view template'")>
+	</cffunction>
+
+	<!---<cffunction name="test_setting_variable_for_view">
+		<cfset testController = $controller(name="test").$createControllerObject(params)>
+		<cfset testController.renderPage()>
+		<cfset assert("request.wheels.response Contains 'hello world!'")>
 	</cffunction>--->
 
 	<cffunction name="teardown">

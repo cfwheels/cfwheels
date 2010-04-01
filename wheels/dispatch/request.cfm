@@ -467,10 +467,11 @@
 		loc.controller.$runFilters(type="before", action=loc.params.action);
 		
 		// check to see if the controller params has changed and if so, instantiate the new controller and re-run filters and verifications
-		if (loc.params.controller != loc.controller.controllerName()) {
+		if (loc.params.controller != loc.controller.controllerName())
+		{
 			loc.controller = $controller(loc.params.controller).$createControllerObject(loc.params);
 			$runVerifications(controller=loc.controller, actionName=loc.params.action, params=loc.params);
-			loc.controller.$runFilters(controller=loc.controller, type="before", actionName=loc.params.action);
+			loc.controller.$runFilters(type="before", action=loc.params.action);
 		}
 		
 		if (variables.showDebugInformation)
