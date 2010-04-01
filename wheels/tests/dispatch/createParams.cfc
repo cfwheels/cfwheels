@@ -2,8 +2,8 @@
 
 	<cfset global.dispatch = createobject("component", "wheelsMapping.dispatch")>
 	<cfset global.args = {}>
-	<cfset global.args.route = "home">
-	<cfset global.args.foundRoute = {pattern="", controller="wheels", action="wheels"}>
+	<cfset global.args.path = "home">
+	<cfset global.args.route = {pattern="", controller="wheels", action="wheels"}>
 	<cfset global.args.formScope = {}>
 	<cfset global.args.urlScope = {}>
 
