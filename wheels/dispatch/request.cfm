@@ -14,73 +14,6 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="$callAction" returntype="void" access="public" output="false">
-	<cfargument name="controller" type="any" required="true">
-	<cfargument name="controllerName" type="string" required="true">
-	<cfargument name="actionName" type="string" required="true">
-	<cfscript>
-		var loc = {};
-
-		if (Left(arguments.actionName, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.actionName))
-			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.actionName#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels functions.");
-
-		if (StructKeyExists(arguments.controller, arguments.actionName)) 
-		{
-			$invoke(componentReference=arguments.controller, method=arguments.actionName);
-		} 
-		else if (StructKeyExists(arguments.controller, "onMissingMethod"))
-		{
-			loc.argumentCollection = {};
-			loc.argumentCollection.missingMethodName = arguments.actionName;
-			loc.argumentCollection.missingMethodArguments = {};
-			$invoke(componentReference=arguments.controller, method="onMissingMethod", argumentCollection=loc.argumentCollection);
-		}
-		if (!StructKeyExists(request.wheels, "response"))
-		{
-			// a render function has not been called yet so call it here
-			try
-			{
-				arguments.controller.renderPage();
-			}
-			catch(Any e)
-			{
-				if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(arguments.controllerName)#/#LCase(arguments.actionName)#.cfm")))
-				{
-					$throw(object=e);
-				}
-				else
-				{
-					if (application.wheels.showErrorInformation)
-					{
-						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.actionName#` action in the `#arguments.controllerName#` controller.", extendedInfo="Create a file named `#LCase(arguments.actionName)#.cfm` in the `views/#LCase(arguments.controllerName)#` directory (create the directory as well if it doesn't already exist).");
-					}
-					else
-					{
-						$header(statusCode="404", statusText="Not Found");
-						$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
-						$abort();
-					}
-				}
-			}
-		}
-	</cfscript>
-</cffunction>
-
-<cffunction name="$callActionAndAddToCache" returntype="string" access="public" output="false">
-	<cfscript>
-		$callAction(controller=arguments.controller, controllerName=arguments.controllerName, actionName=arguments.actionName);
-		if (arguments.static)
-		{
-			$cache(cache="serverCache", timeSpan=CreateTimeSpan(0,0,arguments.time,0));
-		}
-		else
-		{
-			$addToCache(key=arguments.key, value=request.wheels.response, time=arguments.time, category=arguments.category);
-		}
-	</cfscript>
-	<cfreturn request.wheels.response>
-</cffunction>
-
 <cffunction name="$createParams" returntype="struct" access="public" output="false">
 	<cfargument name="route" type="string" required="true">
 	<cfargument name="foundRoute" type="struct" required="true">
@@ -506,8 +439,7 @@
 				loc.conditionArgs.category = loc.category;
 				loc.executeArgs = {};
 				loc.executeArgs.controller = loc.controller;
-				loc.executeArgs.controllerName = loc.params.controller;
-				loc.executeArgs.actionName = loc.params.action;
+				loc.executeArgs.action = loc.params.action;
 				loc.executeArgs.key = loc.key;
 				loc.executeArgs.time = loc.time;
 				loc.executeArgs.static = loc.static;
@@ -516,24 +448,41 @@
 			}
 			else
 			{
-				$callAction(controller=loc.controller, controllerName=loc.params.controller, actionName=loc.params.action);
+				loc.controller.$callAction(action=loc.params.action);
 			}
 		}
 		
+		// run after filters with surrounding debug points (don't run the filters if a delayed redirect will occur though)
+		if (application.wheels.showDebugInformation)
+			$debugPoint("action,afterFilters");
 		if (!StructKeyExists(request.wheels, "redirect"))
-		{
-			if (application.wheels.showDebugInformation)
-				$debugPoint("action,afterFilters");
 			loc.controller.$runFilters(type="after", action=loc.params.action);
-			if (application.wheels.showDebugInformation)
-				$debugPoint("afterFilters");
-		}
+		if (application.wheels.showDebugInformation)
+			$debugPoint("afterFilters");
 		
+		// if there is a delayed redirect pending we execute it here thus halting the rest of the request
 		if (StructKeyExists(request.wheels, "redirect"))
 			$location(argumentCollection=request.wheels.redirect);
 
-		// clear the flash (note that this is not done for redirectTo since the processing does not get here)
+		// clear out the flash (note that this is not done for redirects since the processing does not get here)
 		StructClear(session.flash);
 	</cfscript>
 	<cfreturn Trim(request.wheels.response)>
+</cffunction>
+
+<cffunction name="$callActionAndAddToCache" returntype="string" access="public" output="false">
+	<cfargument name="controller" type="any" required="true">
+	<cfargument name="action" type="string" required="true">
+	<cfargument name="static" type="boolean" required="true">
+	<cfargument name="time" type="numeric" required="true">
+	<cfargument name="key" type="string" required="true">
+	<cfargument name="category" type="string" required="true">
+	<cfscript>
+		arguments.controller.$callAction(action=arguments.action);
+		if (arguments.static)
+			$cache(cache="serverCache", timeSpan=CreateTimeSpan(0,0,arguments.time,0));
+		else
+			$addToCache(key=arguments.key, value=request.wheels.response, time=arguments.time, category=arguments.category);
+	</cfscript>
+	<cfreturn request.wheels.response>
 </cffunction>

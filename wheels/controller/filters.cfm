@@ -72,6 +72,11 @@
 	<cfset variables.wheels.filters = arguments.chain>
 </cffunction>
 
+<cffunction name="setVerificationChain" returntype="void" access="public" output="false" hint="Use this function if you need a more low level way of setting the entire verification chain for a controller.">
+	<cfargument name="chain" type="array" required="true" hint="The entire verification chain that you want to use for this controller.">
+	<cfset variables.wheels.verifications = arguments.chain>
+</cffunction>
+
 <!--- PUBLIC CONTROLLER CLASS FUNCTIONS --->
 
 <cffunction name="filterChain" returntype="array" access="public" output="false" hint="Returns an array of all the filters set on this controller in the order in which they will be executed.">

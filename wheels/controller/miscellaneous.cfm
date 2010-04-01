@@ -1,4 +1,55 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
+
+<cffunction name="$callAction" returntype="void" access="public" output="false">
+	<cfargument name="action" type="string" required="true">
+	<cfscript>
+		var loc = {};
+
+		if (Left(arguments.action, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.action))
+			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.action#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels functions.");
+
+		if (StructKeyExists(this, arguments.action) && IsCustomFunction(this[arguments.action])) 
+		{
+			$invoke(method=arguments.action);
+		} 
+		else if (StructKeyExists(this, "onMissingMethod") && IsCustomFunction(this[arguments.action]))
+		{
+			loc.argumentCollection = {};
+			loc.argumentCollection.missingMethodName = arguments.action;
+			loc.argumentCollection.missingMethodArguments = {};
+			$invoke(method="onMissingMethod", argumentCollection=loc.argumentCollection);
+		}
+		if (!StructKeyExists(request.wheels, "response"))
+		{
+			// a render function has not been called yet so call it here
+			try
+			{
+				renderPage();
+			}
+			catch(Any e)
+			{
+				if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.wheels.name)#/#LCase(arguments.action)#.cfm")))
+				{
+					$throw(object=e);
+				}
+				else
+				{
+					if (application.wheels.showErrorInformation)
+					{
+						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.action#` action in the `#variables.wheels.name#` controller.", extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(variables.wheels.name)#` directory (create the directory as well if it doesn't already exist).");
+					}
+					else
+					{
+						$header(statusCode="404", statusText="Not Found");
+						$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
+						$abort();
+					}
+				}
+			}
+		}
+	</cfscript>
+</cffunction>
+
 <cffunction name="controllerName" returntype="string" access="public" output="false" hint="Returns the name of the controller.">
 	<cfreturn variables.wheels.name />
 </cffunction>
