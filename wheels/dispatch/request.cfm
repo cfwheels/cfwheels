@@ -444,6 +444,7 @@
 				loc.executeArgs.time = loc.time;
 				loc.executeArgs.static = loc.static;
 				loc.executeArgs.category = loc.category;
+				// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, caling the controller action (which in turn sets the content to the request scope)
 				request.wheels.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 			}
 			else
