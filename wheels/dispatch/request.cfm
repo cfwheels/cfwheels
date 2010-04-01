@@ -463,14 +463,14 @@
 			$debugPoint("setup,beforeFilters");
 
 		// run verifications and before filters if they exist on the controller
-		$runVerifications(controller=loc.controller, actionName=loc.params.action, params=loc.params);
+		loc.controller.$runVerifications(action=loc.params.action, params=loc.params);
 		loc.controller.$runFilters(type="before", action=loc.params.action);
 		
 		// check to see if the controller params has changed and if so, instantiate the new controller and re-run filters and verifications
 		if (loc.params.controller != loc.controller.controllerName())
 		{
 			loc.controller = $controller(loc.params.controller).$createControllerObject(loc.params);
-			$runVerifications(controller=loc.controller, actionName=loc.params.action, params=loc.params);
+			loc.controller.$runVerifications(action=loc.params.action, params=loc.params);
 			loc.controller.$runFilters(type="before", action=loc.params.action);
 		}
 		
@@ -536,60 +536,4 @@
 		StructClear(session.flash);
 	</cfscript>
 	<cfreturn Trim(request.wheels.response)>
-</cffunction>
-
-<cffunction name="$runVerifications" returntype="void" access="public" output="false">
-	<cfargument name="controller" type="any" required="true">
-	<cfargument name="actionName" type="string" required="true">
-	<cfargument name="params" type="struct" required="true">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = "";
-		loc.verifications = arguments.controller.$getVerifications();
-		loc.abort = false;
-		loc.iEnd = ArrayLen(loc.verifications);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			loc.verification = loc.verifications[loc.i];
-			if ((!Len(loc.verification.only) && !Len(loc.verification.except)) || (Len(loc.verification.only) && ListFindNoCase(loc.verification.only, arguments.actionName)) || (Len(loc.verification.except) && !ListFindNoCase(loc.verification.except, arguments.actionName)))
-			{
-				if (IsBoolean(loc.verification.post) && ((loc.verification.post && request.cgi.request_method != "post") || (!loc.verification.post && request.cgi.request_method == "post")))
-					loc.abort = true;
-				if (IsBoolean(loc.verification.get) && ((loc.verification.get && request.cgi.request_method != "get") || (!loc.verification.get && request.cgi.request_method == "get")))
-					loc.abort = true;
-				if (IsBoolean(loc.verification.ajax) && ((loc.verification.ajax && request.cgi.http_x_requested_with != "XMLHTTPRequest") || (!loc.verification.ajax && request.cgi.http_x_requested_with == "XMLHTTPRequest")))
-					loc.abort = true;
-				loc.jEnd = ListLen(loc.verification.params);
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-				{
-					if (!StructKeyExists(arguments.params, ListGetAt(loc.verification.params, loc.j)))
-						loc.abort = true;
-				}
-				loc.jEnd = ListLen(loc.verification.session);
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-				{
-					if (!StructKeyExists(session, ListGetAt(loc.verification.session, loc.j)))
-						loc.abort = true;
-				}
-				loc.jEnd = ListLen(loc.verification.cookie);
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-				{
-					if (!StructKeyExists(cookie, ListGetAt(loc.verification.cookie, loc.j)))
-						loc.abort = true;
-				}
-			}
-			if (loc.abort)
-			{
-				if (Len(loc.verification.handler))
-				{
-					$invoke(componentReference=arguments.controller, method=loc.verification.handler);
-					$location(url=request.cgi.http_referer, addToken=false);
-				}
-				else
-				{
-					$abort();
-				}
-			}
-		}
-	</cfscript>
 </cffunction>

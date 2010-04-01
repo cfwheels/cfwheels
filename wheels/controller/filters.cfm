@@ -79,11 +79,11 @@
 	<cfreturn variables.wheels.filters>
 </cffunction>
 
-<!--- PRIVATE FUNCTIONS --->
-
-<cffunction name="$getVerifications" returntype="array" access="public" output="false">
+<cffunction name="verificationChain" returntype="array" access="public" output="false" hint="Returns an array of all the verifications set on this controller in the order in which they will be executed.">
 	<cfreturn variables.wheels.verifications>
 </cffunction>
+
+<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$runFilters" returntype="void" access="public" output="false">
 	<cfargument name="type" type="string" required="true">
@@ -108,6 +108,64 @@
 				{
 					// the filter function returned false or rendered content so we skip the remaining filters in the chain
 					break;
+				}
+			}
+		}
+	</cfscript>
+</cffunction>
+
+<cffunction name="$runVerifications" returntype="void" access="public" output="false">
+	<cfargument name="action" type="string" required="true">
+	<cfargument name="params" type="struct" required="true">
+	<cfargument name="cgiScope" type="struct" required="false" default="#request.cgi#">
+	<cfargument name="sessionScope" type="struct" required="false" default="#session#">
+	<cfargument name="cookieScope" type="struct" required="false" default="#cookie#">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = "";
+		loc.verifications = verificationChain();
+		loc.abort = false;
+		loc.iEnd = ArrayLen(loc.verifications);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.verification = loc.verifications[loc.i];
+			if ((!Len(loc.verification.only) && !Len(loc.verification.except)) || (Len(loc.verification.only) && ListFindNoCase(loc.verification.only, arguments.action)) || (Len(loc.verification.except) && !ListFindNoCase(loc.verification.except, arguments.action)))
+			{
+				if (IsBoolean(loc.verification.post) && ((loc.verification.post && arguments.cgiScope.request_method != "post") || (!loc.verification.post && arguments.cgiScope.request_method == "post")))
+					loc.abort = true;
+				if (IsBoolean(loc.verification.get) && ((loc.verification.get && arguments.cgiScope.request_method != "get") || (!loc.verification.get && arguments.cgiScope.request_method == "get")))
+					loc.abort = true;
+				if (IsBoolean(loc.verification.ajax) && ((loc.verification.ajax && arguments.cgiScope.http_x_requested_with != "XMLHTTPRequest") || (!loc.verification.ajax && arguments.cgiScope.http_x_requested_with == "XMLHTTPRequest")))
+					loc.abort = true;
+				loc.jEnd = ListLen(loc.verification.params);
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				{
+					if (!StructKeyExists(arguments.params, ListGetAt(loc.verification.params, loc.j)))
+						loc.abort = true;
+				}
+				loc.jEnd = ListLen(loc.verification.session);
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				{
+					if (!StructKeyExists(arguments.sessionScope, ListGetAt(loc.verification.session, loc.j)))
+						loc.abort = true;
+				}
+				loc.jEnd = ListLen(loc.verification.cookie);
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				{
+					if (!StructKeyExists(arguments.cookieScope, ListGetAt(loc.verification.cookie, loc.j)))
+						loc.abort = true;
+				}
+			}
+			if (loc.abort)
+			{
+				if (Len(loc.verification.handler))
+				{
+					$invoke(method=loc.verification.handler);
+					$location(url=arguments.cgiScope.http_referer, addToken=false);
+				}
+				else
+				{
+					$abort();
 				}
 			}
 		}
