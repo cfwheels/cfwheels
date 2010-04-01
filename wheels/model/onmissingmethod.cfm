@@ -18,7 +18,7 @@
 
 			// throw an error when more than one argument is passed in but not `value` (for single property) or `values` (for multiple properties)
 			// this means that model("artist").findOneByName("U2") will still work but not model("artist").findOneByName(values="U2", returnAs="query"), need to pass in just `value` there instead.
-			if (application.wheels.showDebugInformation)
+			if (application.wheels.showErrorInformation)
 			{
 				if (StructCount(arguments.missingMethodArguments) gt 1)
 				{
