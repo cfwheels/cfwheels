@@ -3,7 +3,7 @@
 	<cfinclude template="/wheelsMapping/global/functions.cfm">
 
 	<cfset params = {controller="test", action="test"}>
-	<cfset controller = $controller(name="dummy").$createControllerObject(params)>
+	<cfset controller = $controller(name="test").$createControllerObject(params)>
 
 	<cffunction name="setup">
 		<cfif StructKeyExists(request.wheels, "response")>
@@ -28,11 +28,11 @@
 		<cfset assert("NOT StructKeyExists(request.wheels, 'response') AND result Contains 'this is a view template'")>
 	</cffunction>
 
-	<!---<cffunction name="test_setting_variable_for_view">
-		<cfset testController = $controller(name="test").$createControllerObject(params)>
-		<cfset testController.renderPage()>
+	<cffunction name="test_setting_variable_for_view">
+		<cfset controller.$callAction(action="test")>
+		<cfset controller.renderPage()>
 		<cfset assert("request.wheels.response Contains 'hello world!'")>
-	</cffunction>--->
+	</cffunction>
 
 	<cffunction name="teardown">
 		<cfset application.wheels.viewPath = oldViewPath>

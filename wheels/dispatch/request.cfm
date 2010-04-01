@@ -412,46 +412,7 @@
 
 		// only proceed to call the action if the before filter has not already rendered content
 		if (!StructKeyExists(request.wheels, "response") && !StructKeyExists(request.wheels, "redirect"))
-		{
-			// call action on controller if it exists
-			loc.actionIsCachable = false;
-			if (variables.cacheActions && StructIsEmpty(session.flash) && StructIsEmpty(form))
-			{
-				loc.cachableActions = loc.controller.$getCachableActions();
-				loc.iEnd = ArrayLen(loc.cachableActions);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-				{
-					if (loc.cachableActions[loc.i].action == loc.params.action || loc.cachableActions[loc.i].action == "*")
-					{
-						loc.actionIsCachable = true;
-						loc.time = loc.cachableActions[loc.i].time;
-						loc.static = loc.cachableActions[loc.i].static;
-					}
-				}
-			}
-			if (loc.actionIsCachable)
-			{
-				loc.category = "action";
-				loc.key = "#request.cgi.script_name##request.cgi.path_info##request.cgi.query_string#";
-				loc.lockName = loc.category & loc.key;
-				loc.conditionArgs = {};
-				loc.conditionArgs.key = loc.key;
-				loc.conditionArgs.category = loc.category;
-				loc.executeArgs = {};
-				loc.executeArgs.controller = loc.controller;
-				loc.executeArgs.action = loc.params.action;
-				loc.executeArgs.key = loc.key;
-				loc.executeArgs.time = loc.time;
-				loc.executeArgs.static = loc.static;
-				loc.executeArgs.category = loc.category;
-				// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, caling the controller action (which in turn sets the content to the request scope)
-				request.wheels.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
-			}
-			else
-			{
-				loc.controller.$callAction(action=loc.params.action);
-			}
-		}
+			$callAction(controller=loc.controller, action=loc.params.action);
 		
 		// run after filters with surrounding debug points (don't run the filters if a delayed redirect will occur though)
 		if (application.wheels.showDebugInformation)
@@ -471,7 +432,7 @@
 	<cfreturn Trim(request.wheels.response)>
 </cffunction>
 
-<cffunction name="$callActionAndAddToCache" returntype="string" access="public" output="false">
+<cffunction name="$callAndCacheAction" returntype="string" access="public" output="false">
 	<cfargument name="controller" type="any" required="true">
 	<cfargument name="action" type="string" required="true">
 	<cfargument name="static" type="boolean" required="true">
@@ -486,4 +447,37 @@
 			$addToCache(key=arguments.key, value=request.wheels.response, time=arguments.time, category=arguments.category);
 	</cfscript>
 	<cfreturn request.wheels.response>
+</cffunction>
+
+<cffunction name="$requestAllowsCaching" returntype="boolean" access="public" output="false">
+	<cfargument name="sessionScope" type="struct" required="false" default="#session#">
+	<cfargument name="formScope" type="struct" required="false" default="#form#">
+	<cfscript>
+		var returnValue = false;
+		if (variables.cacheActions && StructIsEmpty(arguments.sessionScope.flash) && StructIsEmpty(arguments.formScope))
+			returnValue = true;
+	</cfscript>
+	<cfreturn returnValue>
+</cffunction>
+
+<cffunction name="$callAction" returntype="string" access="public" output="false">
+	<cfargument name="controller" type="any" required="true">
+	<cfargument name="action" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.cacheSettings = arguments.controller.$cacheSettingsForAction(action=arguments.action);
+		if ($requestAllowsCaching() && IsStruct(loc.cacheSettings))
+		{
+			loc.key = "#request.cgi.script_name##request.cgi.path_info##request.cgi.query_string#";
+			loc.lockName = loc.category & loc.key;
+			loc.conditionArgs = {category="action", key=loc.key};
+			loc.executeArgs = {category="action", key=loc.key, controller=loc.controller, action=arguments.action, time=loc.cacheSettings.time, static=loc.cacheSettings.static};
+			// get content from the cache if it exists there and set it to the request scope, if not the $callAndCacheAction function will run, caling the controller action (which in turn sets the content to the request scope)
+			request.wheels.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callAndCacheAction", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+		}
+		else
+		{
+			arguments.controller.$callAction(action=arguments.action);
+		}
+	</cfscript>
 </cffunction>
