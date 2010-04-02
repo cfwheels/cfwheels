@@ -260,12 +260,21 @@
 	<cfargument name="name" type="string" required="false" default="" hint="The file name to show in the browser download dialog box">
 	<cfargument name="type" type="string" required="false" default="" hint="The HTTP content type to deliver the file as">
 	<cfargument name="disposition" type="string" required="false" hint="Set to 'inline' to have the browser handle the opening of the file or set to 'attachment' to force a download dialog box">
+	<cfargument name="directory" type="string" required="false" default="" hint="directory outside of the webroot where the file exists. must be a fully path">
+	<cfargument name="deleteFile" type="boolean" required="false" default="false" hint="should we delete the file after sending it.">
 	<cfargument name="$testingMode" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="sendFile", input=arguments);
+
+		loc.folder = arguments.directory;
+		if (!Len(loc.folder))
+		{
+			loc.folder = ExpandPath(application.wheels.filePath);
+		}
+
+		loc.folder = Replace(loc.folder, "\", "/", "all");
 		loc.file = Replace(arguments.file, "\", "/", "all");
-		loc.folder = application.wheels.filePath;
 
 		// extract the path from the file name
 		if (loc.file contains "/")
@@ -276,17 +285,17 @@
 			loc.file = Right(loc.file, Len(loc.file)-1);
 		}
 
-		loc.fullPath = ExpandPath(loc.folder & "/" & loc.file);
-		
+		loc.fullPath = loc.folder & "/" & loc.file;
+
 		// if the file is not found, try searching for it
 		if (!FileExists(loc.fullPath))
 		{
-			loc.match = $directory(action="list", directory="#ExpandPath(loc.folder)#", filter="#loc.file#.*");
+			loc.match = $directory(action="list", directory="#loc.folder#", filter="#loc.file#.*");
 			// only extract the extension if we find a single match
 			if (loc.match.recordCount == 1)
 			{
 				loc.file = loc.file & "." & ListLast(loc.match.name, ".");
-				loc.fullPath = ExpandPath(loc.folder & "/" & loc.file);
+				loc.fullPath = loc.folder & "/" & loc.file;
 			}
 			else
 			{
@@ -317,7 +326,7 @@
 		}
 
 		// prompt the user to download the file
-		$header(name="content-disposition", value="#arguments.disposition#; filename=""#loc.name#""");
-		$content(type=loc.mime, file=loc.fullPath);
+		$header(name="content-disposition", value="#arguments.disposition#; filename='#loc.name#'");
+		$content(type="#loc.mime#", file="#loc.fullPath#", deleteFile="#arguments.deleteFile#");
 	</cfscript>
 </cffunction>

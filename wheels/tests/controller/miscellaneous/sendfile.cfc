@@ -61,4 +61,13 @@
 		<cfset assert('loc.r eq "Wheels.FileNotFound"')>
 	</cffunction>
 	
+	<cffunction name="test_specifying_a_directory">
+		<cfset args.directory = expandPath("/wheelsMapping/tests/_assets")>
+		<cfset args.file = "files/wheelslogo.jpg">
+		<cfset loc.r = controller.sendFile(argumentCollection=args)>
+		<cfset assert('loc.r.file eq "wheelslogo.jpg"')>
+		<cfset assert('loc.r.mime eq "image/jpg"')>
+		<cfset assert('loc.r.name eq "wheelslogo.jpg"')>
+	</cffunction>
+	
 </cfcomponent>
