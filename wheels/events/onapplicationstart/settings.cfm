@@ -177,4 +177,24 @@
 
 	// set a flag to indicate that all settings have been loaded
 	application.wheels.initialized = true;
+
+	// mime types
+	application.wheels.mimetypes = {
+		txt="text/plain"
+		,gif="image/gif"
+		,jpg="image/jpg"
+		,jpeg="image/jpg"
+		,pjpeg="image/jpg"
+		,png="image/png"
+		,wav="audio/wav"
+		,mp3="audio/mpeg3"
+		,pdf="application/pdf"
+		,zip="application/zip"
+		,ppt="application/powerpoint"
+		,pptx="application/powerpoint"
+		,doc="application/word"
+		,docx="application/word"
+		,xls="application/excel"
+		,xlsx="application/excel"
+	};
 </cfscript>

@@ -500,6 +500,15 @@
 	<cfreturn arguments.str>
 </cffunction>
 
+<cffunction name="mimeTypes" returntype="string" access="public" output="false" hint="gets the associated mimetype from the extension">
+	<cfargument name="extension" required="true" type="string" hint="the extension to get the mimetype for">
+	<cfargument name="fallback" required="false" type="string" default="application/octet-stream" hint="the fallback mimetype to return. default to application/octet-stream">
+	<cfif StructKeyExists(application.wheels.mimetypes, arguments.extension)>
+		<cfset arguments.fallback = application.wheels.mimetypes[arguments.extension]>
+	</cfif>
+	<cfreturn arguments.fallback>
+</cffunction>
+
 <!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$singularizeOrPluralize" returntype="string" access="public" output="false" hint="Called by singularize and pluralize to perform the conversion.">

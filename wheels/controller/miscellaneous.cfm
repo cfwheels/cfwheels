@@ -243,7 +243,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="sendFile" returntype="void" access="public" output="false" hint="Sends a file to the user (from the `files` folder by default)."
+<cffunction name="sendFile" returntype="any" access="public" output="false" hint="Sends a file to the user (from the `files` folder by default)."
 	examples=
 	'
 		<!--- Send a PDF file to the user --->
@@ -260,53 +260,64 @@
 	<cfargument name="name" type="string" required="false" default="" hint="The file name to show in the browser download dialog box">
 	<cfargument name="type" type="string" required="false" default="" hint="The HTTP content type to deliver the file as">
 	<cfargument name="disposition" type="string" required="false" hint="Set to 'inline' to have the browser handle the opening of the file or set to 'attachment' to force a download dialog box">
+	<cfargument name="$testingMode" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="sendFile", input=arguments);
-		arguments.file = Replace(arguments.file, "\", "/", "all");
-		loc.path = Reverse(ListRest(Reverse(arguments.file), "/"));
+		loc.file = Replace(arguments.file, "\", "/", "all");
 		loc.folder = application.wheels.filePath;
-		if (Len(loc.path))
+
+		// extract the path from the file name
+		if (loc.file contains "/")
 		{
+			loc.path = Reverse(ListRest(Reverse(loc.file), "/"));
 			loc.folder = loc.folder & "/" & loc.path;
-			loc.file = Replace(arguments.file, loc.path, "");
+			loc.file = Replace(loc.file, loc.path, "");
 			loc.file = Right(loc.file, Len(loc.file)-1);
 		}
-		else
+
+		loc.fullPath = ExpandPath(loc.folder & "/" & loc.file);
+		
+		// if the file is not found, try searching for it
+		if (!FileExists(loc.fullPath))
 		{
-			loc.file = arguments.file;
-		}
-		loc.folder = ExpandPath(loc.folder);
-		if (!FileExists(loc.folder & "/" & loc.file))
-		{
-			loc.match = $directory(action="list", directory=loc.folder, filter="#loc.file#.*");
-			if (loc.match.recordCount)
+			loc.match = $directory(action="list", directory="#ExpandPath(loc.folder)#", filter="#loc.file#.*");
+			// only extract the extension if we find a single match
+			if (loc.match.recordCount == 1)
+			{
 				loc.file = loc.file & "." & ListLast(loc.match.name, ".");
+				loc.fullPath = ExpandPath(loc.folder & "/" & loc.file);
+			}
 			else
+			{
 				$throw(type="Wheels.FileNotFound", message="A file could not be found.", extendedInfo="Make sure a file with the name `#loc.file#` exists in the `#loc.folder#` folder.");
+			}
 		}
-		loc.fullPath = loc.folder & "/" & loc.file;
-		if (Len(arguments.name))
-			loc.name = arguments.name;
-		else
-			loc.name = loc.file;
+
+		loc.name = loc.file;
 		loc.extension = ListLast(loc.file, ".");
-		switch(loc.extension)
+
+		// replace the display name for the file if supplied
+		if (Len(arguments.name))
 		{
-			case "txt": {loc.type = "text/plain"; break;}
-			case "gif": {loc.type = "image/gif"; break;}
-			case "jpg": case "jpeg": case "pjpeg": {loc.type = "image/jpg"; break;}
-			case "png": {loc.type = "image/png"; break;}
-			case "wav": {loc.type = "audio/wav"; break;}
-			case "mp3": {loc.type = "audio/mpeg3"; break;}
-			case "pdf": {loc.type = "application/pdf"; break;}
-			case "zip": {loc.type = "application/zip"; break;}
-			case "ppt": case "pptx": {loc.type = "application/powerpoint"; break;}
-			case "doc": case "docx": {loc.type = "application/word"; break;}
-			case "xls": case "xlsx": {loc.type = "application/excel"; break;}
- 			default: {loc.type = "application/octet-stream"; break;}
+			loc.name = arguments.name;
 		}
+
+		loc.mime = arguments.type;
+		if (!Len(loc.mime))
+		{
+			loc.mime = mimeTypes(loc.extension);
+		}
+
+		// if testing, return the varaibles
+		if (arguments.$testingMode)
+		{
+			StructAppend(loc, arguments, false);
+			return loc;
+		}
+
+		// prompt the user to download the file
 		$header(name="content-disposition", value="#arguments.disposition#; filename=""#loc.name#""");
-		$content(type=loc.type, file=loc.fullPath);
+		$content(type=loc.mime, file=loc.fullPath);
 	</cfscript>
 </cffunction>
