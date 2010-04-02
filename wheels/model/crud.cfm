@@ -297,9 +297,6 @@
 											loc.hasManyDoneObjects = ListAppend(loc.hasManyDoneObjects, loc.hasManyObject.key(), Chr(7));
 										}
 									}
-
-									if (ArrayIsEmpty(loc.object[loc.include]))
-										StructDelete(loc.object, loc.include, false);
 								}
 								else
 								{
