@@ -6,7 +6,6 @@
 	<cfset controller = $controller(name="test").$createControllerObject(params)>
 
 	<cffunction name="setup">
-		<cfset application.wheels.existingLayoutFiles = "">
 		<cfif StructKeyExists(request.wheels, "response")>
 			<cfset structDelete(request.wheels, "response")>
 		</cfif>
@@ -22,8 +21,10 @@
 	<cffunction name="test_rendering_with_default_layout_in_controller_folder">
 		<cfset tempFile = Replace(Replace(GetCurrentTemplatePath(), "\", "/", "all"), "controller/rendering/layouts.cfc", "_assets/views/test/layout.cfm")>
 		<cffile action="write" output="<cfoutput>start:controllerlayout##contentForLayout()##end:controllerlayout</cfoutput>" file="#tempFile#">
+		<cfset application.wheels.existingLayoutFiles = "test">
 		<cfset controller.renderPage()>
 		<cfset assert("request.wheels.response Contains 'view template content' AND request.wheels.response Contains 'start:controllerlayout' AND request.wheels.response Contains 'end:controllerlayout'")>
+		<cfset application.wheels.existingLayoutFiles = "">
 		<cffile action="delete" file="#tempFile#">
 	</cffunction>
 
