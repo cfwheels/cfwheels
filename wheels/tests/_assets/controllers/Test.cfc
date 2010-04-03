@@ -1,7 +1,8 @@
 <cfcomponent extends="Controller">
 
 	<cffunction name="test">
-		<cfset variableForView = "hello world!">
+		<cfset variableForView = "variableForViewContent">
+		<cfset variableForLayout = "variableForLayoutContent">
 	</cffunction>
 
 	<cffunction name="testRedirect">

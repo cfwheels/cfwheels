@@ -11,10 +11,6 @@
 		<cfset application.wheels.viewPath = "wheels/tests/_assets/views">
 	</cffunction>
 
-	<!---<cffunction name="test_after_filters_should_run">
-		<cfset assert("1 IS 0")>
-	</cffunction>--->
-
 	<cffunction name="test_remaining_action_code_should_run">
 		<cfset controller.$callAction(action="testRedirect")>
 		<cfset assert("IsDefined('request.wheels.redirect.url') AND IsDefined('request.setInActionAfterRedirect')")>
