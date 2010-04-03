@@ -347,13 +347,22 @@
 			loc.route = $findRoute(argumentCollection=arguments);
 			if (arguments.URLRewriting == "Off")
 			{
-				loc.returnValue = loc.returnValue & "?controller=" & $hyphenize(loc.route.controller);
-				loc.returnValue = loc.returnValue & "&action=" & $hyphenize(loc.route.action);
+				loc.returnValue = loc.returnValue & "?controller=";
+				if (Len(arguments.controller))
+					loc.returnValue = loc.returnValue & $hyphenize(arguments.controller);
+				else
+					loc.returnValue = loc.returnValue & $hyphenize(loc.route.controller);
+				loc.returnValue = loc.returnValue & "&action=";
+				if (Len(arguments.action))
+					loc.returnValue = loc.returnValue & $hyphenize(arguments.action);
+				else
+					loc.returnValue = loc.returnValue & $hyphenize(loc.route.action);
 				loc.iEnd = ListLen(loc.route.variables);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.property = ListGetAt(loc.route.variables, loc.i);
-					loc.returnValue = loc.returnValue & "&" & loc.property & "=" & $URLEncode(arguments[loc.property]);
+					if (loc.property != "controller" && loc.property != "action")
+						loc.returnValue = loc.returnValue & "&" & loc.property & "=" & $URLEncode(arguments[loc.property]);
 				}
 			}
 			else
