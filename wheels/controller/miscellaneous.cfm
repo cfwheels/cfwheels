@@ -19,9 +19,10 @@
 			loc.argumentCollection.missingMethodArguments = {};
 			$invoke(method="onMissingMethod", argumentCollection=loc.argumentCollection);
 		}
-		if (!StructKeyExists(request.wheels, "response"))
+
+		// call renderPage unless the developer has rendered content or setup a redirection
+		if (!StructKeyExists(request.wheels, "response") && !StructKeyExists(request.wheels, "redirect"))
 		{
-			// a render function has not been called yet so call it here
 			try
 			{
 				renderPage();
