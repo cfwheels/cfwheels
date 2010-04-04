@@ -2,7 +2,7 @@
 
 	<cfinclude template="/wheelsMapping/global/functions.cfm">
 
-	<cfset params = {controller="test", action="test"}>
+	<cfset params = {controller="dummy", action="dummy"}>
 	<cfset controller = $controller(name="dummy").$createControllerObject(params)>
 
 	<cffunction name="setup">

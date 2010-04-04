@@ -64,6 +64,11 @@
 		<cfset assert("request.wheels.response Contains 'view template content' AND request.wheels.response Contains 'variableForLayoutContent' AND request.wheels.response Contains 'start:defaultlayout' AND request.wheels.response Contains 'end:defaultlayout'")>
 	</cffunction>
 
+	<cffunction name="test_rendering_partial_with_layout">
+		<cfset controller.renderPartial(partial="partialTemplate", layout="partialLayout")>
+		<cfset assert("request.wheels.response Contains 'partial template content' AND request.wheels.response Contains 'start:partiallayout' AND request.wheels.response Contains 'end:partiallayout'")>
+	</cffunction>
+
 	<cffunction name="teardown">
 		<cfset application.wheels.viewPath = oldViewPath>
 	</cffunction>
