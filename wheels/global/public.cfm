@@ -233,7 +233,7 @@
 	'
 		<!--- Get the current setting for the `tableNamePrefix` variable --->
 		<cfset setting = get("tableNamePrefix")>
-		
+
 		<!--- Get the default for the `message` argument on the `validatesConfirmationOf` method  --->
 		<cfset setting = get(functionName="validatesConfirmationOf", name="message")>
 	'
@@ -325,6 +325,7 @@
 		var loc = {};
 		$insertDefaults(name="URLFor", input=arguments);
 		loc.params = {};
+		loc.scriptName = ListLast(request.cgi.script_name, "/");
 		if (StructKeyExists(variables, "params"))
 			StructAppend(loc.params, variables.params, true);
 		if (application.wheels.showErrorInformation)
@@ -340,7 +341,7 @@
 		}
 
 		// build the link
-		loc.returnValue = application.wheels.webPath & ListLast(request.cgi.script_name, "/");
+		loc.returnValue = application.wheels.webPath & loc.scriptName;
 		if (Len(arguments.route))
 		{
 			// link for a named route
@@ -392,10 +393,10 @@
 		}
 		else // link based on controller/action/key
 		{
-			
+
 			// when no controller or action was passed in we link to the current page (controller/action only, not query string etc) by default
 			if (!Len(arguments.controller) && StructKeyExists(loc.params, "controller"))
-				arguments.controller = loc.params.controller; 
+				arguments.controller = loc.params.controller;
 			if (!Len(arguments.action) && StructKeyExists(loc.params, "action"))
 				arguments.action = loc.params.action;
 			loc.returnValue = loc.returnValue & "?controller=" & $hyphenize(arguments.controller);
@@ -419,6 +420,7 @@
 		if (arguments.URLRewriting == "On")
 		{
 			loc.returnValue = Replace(loc.returnValue, application.wheels.rewriteFile, "");
+			loc.returnValue = Replace(loc.returnValue, loc.scriptName, "");
 			loc.returnValue = Replace(loc.returnValue, "//", "/");
 		}
 
@@ -527,10 +529,10 @@
 	<cfargument name="returnCount" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
-		
+
 		// by default we pluralize/singularize the entire string
 		loc.text = arguments.text;
-		
+
 		if (REFind("[A-Z]", loc.text))
 		{
 			// only pluralize/singularize the last part of a camelCased variable (e.g. in "websiteStatusUpdate" we only change the "update" part)
@@ -539,10 +541,10 @@
 			loc.prepend = Mid(loc.text, 1, Len(loc.text)-loc.upperCasePos);
 			loc.text = Reverse(Mid(Reverse(loc.text), 1, loc.upperCasePos));
 		}
-		
+
 		// when count is 1 we don't need to pluralize at all so just set the return value to the input string
 		loc.returnValue = loc.text;
-		
+
 		if (arguments.count != 1)
 		{
 			loc.uncountables = "advice,air,blood,deer,equipment,fish,food,furniture,garbage,graffiti,grass,homework,housework,information,knowledge,luggage,mathematics,meat,milk,money,music,pollution,research,rice,sand,series,sheep,soap,software,species,sugar,traffic,transportation,travel,trash,water";
