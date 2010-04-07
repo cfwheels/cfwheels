@@ -1,3 +1,6 @@
+<!--- reload default settings --->
+<cfinclude template="/wheelsMapping/events/onapplicationstart/settings.cfm">
+
 <cfset application.wheels.controllerPath = "wheels/tests/_assets/controllers">
 <cfset application.wheels.modelPath = "/wheelsMapping/tests/_assets/models">
 <cfset application.wheels.modelComponentPath = "wheelsMapping.tests._assets.models">

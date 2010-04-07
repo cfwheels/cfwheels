@@ -140,4 +140,9 @@
 		</cftransaction>
 	</cffunction>
 
+	<cffunction name="test_nested_transaction_within_callback">
+		<cfset loc.author = model("AuthorWithDataCallbacks").create(firstname="Kermit", lastname="The Frog", transaction="rollback")>
+		<cfset assert("IsObject(loc.author)")>
+	</cffunction>
+
 </cfcomponent>

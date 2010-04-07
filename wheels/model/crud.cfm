@@ -452,12 +452,13 @@
 			loc.sql = $addWhereClause(sql=loc.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=arguments.where);
 		</cfscript>
-		<cfif $useTransaction(arguments.transaction)>
+		<cfif $openTransaction(arguments.transaction)>
 			<cftransaction action="begin">
 				<cfset loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
 				<cfset loc.returnValue = loc.upd.result.recordCount>
 				<cftransaction action="#arguments.transaction#" />
 			</cftransaction>
+			<cfset $closeTransaction()>
 		<cfelse>
 			<cfset loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
 			<cfset loc.returnValue = loc.upd.result.recordCount>
@@ -558,12 +559,13 @@
 			loc.sql = $addWhereClause(sql=loc.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=arguments.where);
 		</cfscript>
-		<cfif $useTransaction(arguments.transaction)>
+		<cfif $openTransaction(arguments.transaction)>
 			<cftransaction action="begin">
 				<cfset loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
 				<cfset loc.returnValue = loc.del.result.recordCount>
 				<cftransaction action="#arguments.transaction#" />
 			</cftransaction>
+			<cfset $closeTransaction()>
 		<cfelse>
 			<cfset loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
 			<cfset loc.returnValue = loc.del.result.recordCount>
@@ -688,7 +690,7 @@
 	<cfset loc.sql = []>
 	<cfset loc.sql = $addDeleteClause(sql=loc.sql)>
 	<cfset loc.sql = $addKeyWhereClause(sql=loc.sql)>
-	<cfif $useTransaction(arguments.transaction)>
+	<cfif $openTransaction(arguments.transaction)>
 		<cftransaction action="begin">
 			<cfif $callback("beforeDelete", arguments.callbacks)>
 				<cfset loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
@@ -702,6 +704,7 @@
 				<cftransaction action="rollback" />
 			</cfif>
 		</cftransaction>
+		<cfset $closeTransaction()>
 	<cfelse>
 		<cfscript>
 			if ($callback("beforeDelete", arguments.callbacks))
@@ -763,7 +766,7 @@
 	<cfset clearErrors()>
 	<cfif $callback("beforeValidation", arguments.callbacks)>
 		<cfif isNew()>
-			<cfif $useTransaction(arguments.transaction)>
+			<cfif $openTransaction(arguments.transaction)>
 				<cftransaction action="begin">
 					<cfif $callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks)>
 						<cfset $create(parameterize=arguments.parameterize)>
@@ -781,6 +784,7 @@
 						<cftransaction action="rollback" />
 					</cfif>
 				</cftransaction>
+				<cfset $closeTransaction()>
 			<cfelse>
 				<cfscript>
 					if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks))
@@ -797,7 +801,7 @@
 				</cfscript>
 			</cfif>
 		<cfelse>
-			<cfif $useTransaction(arguments.transaction)>
+			<cfif $openTransaction(arguments.transaction)>
 				<cftransaction action="begin">
 					<cfif $callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks)>
 						<cfset $update(parameterize=arguments.parameterize)>
@@ -812,6 +816,7 @@
 						<cftransaction action="rollback" />
 					</cfif>
 				</cftransaction>
+				<cfset $closeTransaction()>
 			<cfelse>
 				<cfscript>
 					if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks))
@@ -1650,14 +1655,32 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$useTransaction" returntype="boolean" access="public" output="false" hint="I check for an existing transaction.">
+
+<!--- transaction handling --->
+
+<cffunction name="$openTransaction" returntype="boolean" access="public" output="false" hint="I check for an existing transaction.">
 	<cfargument name="transaction" type="string" required="true" hint="See documentation for @save.">
 	<cfscript>
 		// check that the supplied transaction argument is valid
 		if (!ListFindNoCase("commit,rollback,none", arguments.transaction))
 			$throw(type="Wheels", message="Invalid transaction type", extendedInfo="The transaction type of `#arguments.transaction#` is invalid. Please use `commit`, `rollback` or `none`.");
-		if (ListFindNoCase("commit,rollback" ,arguments.transaction))
+		// create a tracer variable in request scope for the current model's datasource
+		if (!StructKeyExists(request.wheels.transactions, $hashedConnectionArgs()))
+			request.wheels.transactions[$hashedConnectionArgs()] = false;
+		// open a new transaction if the user has requested it and there isn't one already open
+		if (ListFindNoCase("commit,rollback", arguments.transaction) and !request.wheels.transactions[$hashedConnectionArgs()])
+			{
+			request.wheels.transactions[$hashedConnectionArgs()] = true;
 			return true;
+			}
 		return false;
 	</cfscript>
+</cffunction>
+
+<cffunction name="$closeTransaction" returntype="void" access="public" output="false" hint="I check for an existing transaction.">
+	<cfset request.wheels.transactions[$hashedConnectionArgs()] = false>
+</cffunction>
+
+<cffunction name="$hashedConnectionArgs" returntype="string" access="public" output="false">
+	<cfreturn Hash(variables.wheels.class.connection.datasource & variables.wheels.class.connection.username & variables.wheels.class.connection.password)> 
 </cffunction>
