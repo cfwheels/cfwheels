@@ -2,10 +2,18 @@
 
 	<cfinclude template="/wheelsMapping/global/functions.cfm">
 
-	<cfset params = {controller="dummy", action="dummy"}>	
+	<cfset params = {controller="dummy", action="dummy"}>
 	<cfset controller = $controller(name="dummy").$createControllerObject(params)>
 
-	<cffunction name="test_x">
+	<cffunction name="setup">
+		<cfif StructKeyExists(request.wheels, "response")>
+			<cfset StructDelete(request.wheels, "response")>
+		</cfif>
+	</cffunction>
+
+	<cffunction name="test_render_text">
+		<cfset controller.renderText("OMG, look what I rendered!")>
+		<cfset assert("request.wheels.response IS 'OMG, look what I rendered!'")>
 	</cffunction>
 
 </cfcomponent>

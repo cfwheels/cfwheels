@@ -10,9 +10,8 @@
 	
 	<cffunction name="test_specifying_one_action_to_cache">
 		<cfset controller.caches(action="dummy")>
-		<cfset loc.r = controller.$cachableActions()>
-		<cfset loc.e = controller.$cacheSettingsForAction("dummy")>
-		<cfset assert("ArrayLen(loc.r) IS 1 AND loc.r[1].time IS 60 AND loc.e.time IS 60")>
+		<cfset loc.r = controller.$cacheSettingsForAction("dummy")>
+		<cfset assert("loc.r.time IS 60")>
 	</cffunction>
 
 	<cffunction name="test_specifying_multiple_actions_to_cache">
