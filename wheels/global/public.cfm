@@ -320,12 +320,11 @@
 	<cfargument name="host" type="string" required="false" hint="Set this to override the current host.">
 	<cfargument name="protocol" type="string" required="false" hint="Set this to override the current protocol.">
 	<cfargument name="port" type="numeric" required="false" hint="Set this to override the current port number.">
-	<cfargument name="URLRewriting" type="string" required="false" default="#application.wheels.URLRewriting#" hint="Set this to override the default URL rewriting.">
+	<cfargument name="$URLRewriting" type="string" required="false" default="#application.wheels.URLRewriting#">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="URLFor", input=arguments);
 		loc.params = {};
-		loc.scriptName = ListLast(request.cgi.script_name, "/");
 		if (StructKeyExists(variables, "params"))
 			StructAppend(loc.params, variables.params, true);
 		if (application.wheels.showErrorInformation)
@@ -341,12 +340,12 @@
 		}
 
 		// build the link
-		loc.returnValue = application.wheels.webPath & loc.scriptName;
+		loc.returnValue = application.wheels.webPath & ListLast(request.cgi.script_name, "/");
 		if (Len(arguments.route))
 		{
 			// link for a named route
 			loc.route = $findRoute(argumentCollection=arguments);
-			if (arguments.URLRewriting == "Off")
+			if (arguments.$URLRewriting == "Off")
 			{
 				loc.returnValue = loc.returnValue & "?controller=";
 				if (Len(arguments.controller))
@@ -411,21 +410,20 @@
 			}
 		}
 
-		if (arguments.URLRewriting != "Off")
+		if (arguments.$URLRewriting != "Off")
 		{
 			loc.returnValue = Replace(loc.returnValue, "?controller=", "/");
 			loc.returnValue = Replace(loc.returnValue, "&action=", "/");
 			loc.returnValue = Replace(loc.returnValue, "&key=", "/");
 		}
-		if (arguments.URLRewriting == "On")
+		if (arguments.$URLRewriting == "On")
 		{
 			loc.returnValue = Replace(loc.returnValue, application.wheels.rewriteFile, "");
-			loc.returnValue = Replace(loc.returnValue, loc.scriptName, "");
 			loc.returnValue = Replace(loc.returnValue, "//", "/");
 		}
 
 		if (Len(arguments.params))
-			loc.returnValue = loc.returnValue & $constructParams(arguments.params);
+			loc.returnValue = loc.returnValue & $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
 		if (Len(arguments.anchor))
 			loc.returnValue = loc.returnValue & "##" & arguments.anchor;
 

@@ -3,12 +3,15 @@
 	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
 
 	<cffunction name="setup">
-		<cfset SavedConfig = duplicate(application.wheels.URLRewriting)>
+		<cfset oldURLRewriting = application.wheels.URLRewriting>
 		<cfset application.wheels.URLRewriting = "On">
+		<cfset oldScriptName = request.cgi.script_name>
+		<cfset request.cgi.script_name = "/rewrite.cfm">
 	</cffunction>
 
 	<cffunction name="teardown">
-		<cfset application.wheels.URLRewriting = SavedConfig>
+		<cfset application.wheels.URLRewriting = oldURLRewriting>
+		<cfset request.cgi.script_name = oldScriptName>
 	</cffunction>
 
 	<cffunction name="test_confirm_is_escaped">
