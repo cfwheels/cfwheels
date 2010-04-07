@@ -552,9 +552,7 @@ Should now call bar() instead and marking foo() as deprecated
 		// add the wheels default routes at the end if requested
 		if (application.wheels.loadDefaultRoutes)
 		{
-			application.wheels.Router.add(pattern="[controller]/[action]/[key]");
-			application.wheels.Router.add(pattern="[controller]/[action]");
-			application.wheels.Router.add(pattern="[controller]", action="index");
+			addDefaultRoutes();
 		}
 		</cfscript>
 </cffunction>
