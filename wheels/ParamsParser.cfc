@@ -1,7 +1,8 @@
 <cfcomponent output="false">
-	
+
 	<cfinclude template="global/cfml.cfm">
-	
+	<cfinclude template="plugins/injection.cfm">
+
 	<cffunction name="init">
 		<cfreturn this>
 	</cffunction>
@@ -14,7 +15,7 @@
 		<cfscript>
 			var loc = {};
 			loc.params = mergeScopes(argumentCollection=arguments);
-			$routeVariables(params=loc.params, pattern=arguments.route.pattern ,path=arguments.path);			
+			$routeVariables(params=loc.params, pattern=arguments.route.pattern ,path=arguments.path);
 			$decryptParams(loc.params);
 			$formCheckBoxes(loc.params);
 			$formDates(loc.params);
@@ -49,7 +50,7 @@
 		}
 
 		// get our values from the parameter map
-		// this will always contain url variables 
+		// this will always contain url variables
 		// and will contain form parameters when not a multipart form
 		for (loc.item in arguments.parameters)
 		{
@@ -81,7 +82,7 @@
 					ArrayAppend(loc.multipart[loc.param.getName()], loc.param.getStringValue());
 				}
 			}
-			
+
 			// now overwrite our parameters with the multipart values
 			StructAppend(loc.parameters, loc.multipart, true);
 		}
@@ -94,7 +95,7 @@
 		</cfscript>
 		<cfreturn loc.parameters />
 	</cffunction>
-	
+
 	<cffunction name="$decryptParams" access="public" returntype="struct" output="false">
 		<cfargument name="params" type="struct" required="true">
 		<cfscript>
@@ -115,7 +116,7 @@
 					{
 						arguments.params[loc.key][loc.i] = deobfuscateParam(arguments.params[loc.key][loc.i]);
 					}
-					catch(Any e) 
+					catch(Any e)
 					{}
 				}
 			}
@@ -123,7 +124,7 @@
 		</cfscript>
 		<cfreturn arguments.params>
 	</cffunction>
-	
+
 	<cffunction name="$routeVariables" access="public" returntype="struct" output="false">
 		<cfargument name="params" type="struct" required="true">
 		<cfargument name="pattern" type="string" required="true">
@@ -155,11 +156,11 @@
 				arguments.params.controller = arguments.route.controller;
 			if (!StructKeyExists(arguments.params, "action"))
 				arguments.params.action = arguments.route.action;
-	
+
 			// convert controller to upperCamelCase and action to normal camelCase
 			arguments.params.controller = REReplace(arguments.params.controller, "-([a-z])", "\u\1", "all");
 			arguments.params.action = REReplace(arguments.params.action, "-([a-z])", "\u\1", "all");
-	
+
 			// add name of route to params if a named route is running
 			if (StructKeyExists(arguments.route, "name") && Len(arguments.route.name) && !StructKeyExists(arguments.params, "route"))
 				arguments.params.route = arguments.route.name;
@@ -178,7 +179,7 @@
 					// object form field
 					loc.name = SpanExcluding(loc.key, "[");
 					// we split the key into an array so the developer can have multiple levels of params passed in
-					loc.nested = ListToArray(ReplaceList(loc.key, loc.name & "[,]", ""), "[", true); 
+					loc.nested = ListToArray(ReplaceList(loc.key, loc.name & "[,]", ""), "[", true);
 					if (!StructKeyExists(arguments.params, loc.name))
 						arguments.params[loc.name] = {};
 					loc.struct = arguments.params[loc.name]; // we need a reference to the struct so we can nest other structs if needed
@@ -204,11 +205,11 @@
 				}
 				else if (IsArray(arguments.params[loc.key]) && ArrayLen(arguments.params[loc.key]) == 1)
 					arguments.params[loc.key] = arguments.params[loc.key][1];
-			}	
+			}
 		</cfscript>
 		<cfreturn arguments.params />
 	</cffunction>
-	
+
 	<cffunction name="$formCheckBoxes" access="public" returntype="struct" output="false">
 		<cfargument name="params" type="struct" required="true">
 		<cfscript>
@@ -235,7 +236,7 @@
 		</cfscript>
 		<cfreturn arguments.params>
 	</cffunction>
-	
+
 	<cffunction name="$formDates" access="public" returntype="struct" output="false">
 		<cfargument name="params" type="struct" required="true">
 		<cfscript>
@@ -248,7 +249,7 @@
 				loc.temp = ListToArray(loc.key, "(");
 				loc.firstKey = loc.temp[1];
 				loc.secondKey = SpanExcluding(loc.temp[2], ")");
-				
+
 				loc.iEnd = ArrayLen(arguments.params[loc.key]);
 				for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 				{
@@ -301,19 +302,19 @@
 		<cfargument name="params" type="struct" required="true" />
 		<cfscript>
 			var loc = {};
-			
+
 			loc.newStructArray = StructFindKey(arguments.params, "new", "all");
 			loc.iEnd = ArrayLen(loc.newStructArray);
-			
+
 			for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 			{
 				loc.owner = loc.newStructArray[loc.i].owner.new;
 				loc.value = loc.newStructArray[loc.i].value;
 				loc.map = {};
 				$mapStruct(map=loc.map, struct=loc.value);
-				
+
 				StructClear(loc.value); // clear the struct now that we have our paths and values
-				
+
 				for (loc.item in loc.map) // remap our new struct
 				{
 					// move the last element to the first
@@ -329,7 +330,7 @@
 						loc.newPos = ListPrepend(loc.newPos, "[1", "]");
 					}
 					loc.map[loc.item].newPos = ListToArray(Replace(loc.newPos, "]", "", "all"), "[", false);
-					
+
 					// loop through the position array and build our new struct
 					loc.struct = loc.value;
 					loc.jEnd = ArrayLen(loc.map[loc.item].newPos);
@@ -346,7 +347,7 @@
 			}
 		</cfscript>
 	</cffunction>
-	
+
 	<!--- helper method to recursively map a structure to build mapping paths and retrieve its values so you can have your way with a deeply nested structure --->
 	<cffunction name="$mapStruct" returntype="void" access="public" output="false" mixin="dispatch">
 		<cfargument name="map" type="struct" required="true" />
@@ -354,7 +355,7 @@
 		<cfargument name="path" type="string" required="false" default="" />
 		<cfscript>
 			var loc = {};
-			for (loc.item in arguments.struct) 
+			for (loc.item in arguments.struct)
 			{
 				if (IsStruct(arguments.struct[loc.item])) // go further down the rabit hole
 				{
@@ -368,7 +369,7 @@
 			}
 		</cfscript>
 	</cffunction>
-	
+
 	<!--- convert an array to a structure --->
 	<cffunction name="$arrayToStruct" returntype="struct" access="public" output="false">
 		<cfargument name="array" type="array" required="true" />
