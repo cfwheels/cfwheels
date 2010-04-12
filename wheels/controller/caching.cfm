@@ -47,6 +47,14 @@
 	<cfreturn variables.wheels.cachableActions>
 </cffunction>
 
+<cffunction name="$hasCachableActions" returntype="boolean" access="public" output="false">
+	<cfreturn ArrayIsEmpty($cachableActions())>
+</cffunction>
+
+<cffunction name="$cacheKey" returntype="string" access="public" output="false">
+	<cfreturn hash("#request.cgi.http_host##controllerName()##SerializeJSON(params)#")>
+</cffunction>
+
 <cffunction name="$cacheSettingsForAction" returntype="any" access="public" output="false">
 	<cfargument name="action" type="string" required="true">
 	<cfscript>
@@ -58,7 +66,7 @@
 		{
 			if (loc.cachableActions[loc.i].action == arguments.action || loc.cachableActions[loc.i].action == "*")
 			{
-				loc.returnValue = {};			
+				loc.returnValue = {};
 				loc.returnValue.time = loc.cachableActions[loc.i].time;
 				loc.returnValue.static = loc.cachableActions[loc.i].static;
 			}

@@ -374,3 +374,15 @@
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
+
+<cffunction name="$performedRenderOrRedirect" returntype="boolean" access="public" output="false">
+	<cfreturn !!($performedRender() || $performedRedirect())>
+</cffunction>
+
+<cffunction name="$performedRender" returntype="boolean" access="public" output="false">
+	<cfreturn StructKeyExists(request.wheels, "response")>
+</cffunction>
+
+<cffunction name="$performedRedirect" returntype="boolean" access="public" output="false">
+	<cfreturn StructKeyExists(request.wheels, "redirect")>
+</cffunction>

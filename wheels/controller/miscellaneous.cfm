@@ -1,4 +1,70 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
+<cffunction name="$processAction" returntype="any" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.debug = application.wheels.showDebugInformation;
+		if (loc.debug)
+			$debugPoint("beforeFilters");
+		// run verifications and before filters if they exist on the controller
+		$runVerifications(action=params.action, params=params);
+		$runFilters(type="before", action=params.action);
+
+		if (loc.debug)
+			$debugPoint("beforeFilters,action");
+
+		// only proceed to call the action if the before filter has not already rendered content
+		if (!$performedRenderOrRedirect())
+		{
+			// call action on controller if it exists
+			loc.actionIsCachable = false;
+			if ($hasCachableActions() && flashIsEmpty() && StructIsEmpty(form))
+			{
+				loc.cachableActions = $cachableActions();
+				loc.iEnd = ArrayLen(loc.cachableActions);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					if (loc.cachableActions[loc.i].action == params.action || loc.cachableActions[loc.i].action == "*")
+					{
+						loc.actionIsCachable = true;
+						loc.time = loc.cachableActions[loc.i].time;
+						loc.static = loc.cachableActions[loc.i].static;
+					}
+				}
+			}
+			if (loc.actionIsCachable)
+			{
+				loc.category = "action";
+				loc.key = $cacheKey();
+				loc.lockName = loc.category & loc.key;
+				loc.conditionArgs = {};
+				loc.conditionArgs.key = loc.key;
+				loc.conditionArgs.category = loc.category;
+				loc.executeArgs = {};
+				loc.executeArgs.controller = loc.controller;
+				loc.executeArgs.action = params.action;
+				loc.executeArgs.key = loc.key;
+				loc.executeArgs.time = loc.time;
+				loc.executeArgs.static = loc.static;
+				loc.executeArgs.category = loc.category;
+				// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, caling the controller action (which in turn sets the content to the request scope)
+				request.wheels.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			}
+			else
+			{
+				$callAction(action=params.action);
+			}
+		}
+
+		// run after filters with surrounding debug points (don't run the filters if a delayed redirect will occur though)
+		if (loc.debug)
+			$debugPoint("action,afterFilters");
+		if (!$performedRedirect())
+			$runFilters(type="after", action=params.action);
+		if (loc.debug)
+			$debugPoint("afterFilters");
+	</cfscript>
+</cffunction>
+
 
 <cffunction name="$callAction" returntype="void" access="public" output="false">
 	<cfargument name="action" type="string" required="true">
@@ -8,10 +74,10 @@
 		if (Left(arguments.action, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.action))
 			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.action#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels functions.");
 
-		if (StructKeyExists(this, arguments.action) && IsCustomFunction(this[arguments.action])) 
+		if (StructKeyExists(this, arguments.action) && IsCustomFunction(this[arguments.action]))
 		{
 			$invoke(method=arguments.action);
-		} 
+		}
 		else if (StructKeyExists(this, "onMissingMethod") && IsCustomFunction(this[arguments.action]))
 		{
 			loc.argumentCollection = {};
@@ -20,8 +86,7 @@
 			$invoke(method="onMissingMethod", argumentCollection=loc.argumentCollection);
 		}
 
-		// call renderPage unless the developer has rendered content or setup a redirection
-		if (!StructKeyExists(request.wheels, "response") && !StructKeyExists(request.wheels, "redirect"))
+		if (!$performedRenderOrRedirect())
 		{
 			try
 			{
@@ -50,6 +115,24 @@
 		}
 	</cfscript>
 </cffunction>
+
+<cffunction name="$callActionAndAddToCache" returntype="string" access="public" output="false">
+	<cfargument name="action" type="string" required="true">
+	<cfargument name="static" type="boolean" required="true">
+	<cfargument name="time" type="numeric" required="true">
+	<cfargument name="key" type="string" required="true">
+	<cfargument name="category" type="string" required="true">
+	<cfscript>
+		$callAction(action=arguments.action);
+		if (arguments.static)
+			$cache(cache="serverCache", timeSpan=CreateTimeSpan(0,0,arguments.time,0));
+		else
+			$addToCache(key=arguments.key, value=request.wheels.response, time=arguments.time, category=arguments.category);
+	</cfscript>
+	<cfreturn request.wheels.response>
+</cffunction>
+
+
 
 <cffunction name="controllerName" returntype="string" access="public" output="false" hint="Returns the name of the controller.">
 	<cfreturn variables.wheels.name />
@@ -201,10 +284,10 @@
 				else
 					ArrayAppend(arguments.mailparts, loc.mailpart);
 				arguments.mailparts[1].type = "text";
-				arguments.mailparts[2].type = "html";					
+				arguments.mailparts[2].type = "html";
 			}
 		}
-		
+
 		// figure out if the email should be sent as html or text when only one template is used and the developer did not specify the type explicitly
 		if (ArrayLen(arguments.mailparts) == 1)
 		{
@@ -235,7 +318,7 @@
 		loc.iEnd = ListLen(loc.nonPassThruArgs);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			StructDelete(arguments, ListGetAt(loc.nonPassThruArgs, loc.i));
-		
+
 		// send the email using the cfmail tag
 		if (loc.deliver)
 			$mail(argumentCollection=arguments);

@@ -23,7 +23,7 @@
 				loc.returnValue[ReplaceList(loc.item, "[,]", "")][1] = ListGetAt(arguments.path, loc.i, "/");
 			}
 		}
-		
+
 		// decrypt all values except controller and action
 		if (application.wheels.obfuscateUrls)
 		{
@@ -38,13 +38,13 @@
 						{
 							loc.returnValue[loc.key][loc.i] = deobfuscateParam(loc.returnValue[loc.key][loc.i]);
 						}
-						catch(Any e) 
+						catch(Any e)
 						{}
 					}
 				}
 			}
 		}
-		
+
 		if (StructCount(loc.returnValue))
 		{
 			// loop through form variables, merge any date variables into one, fix checkbox submissions
@@ -69,7 +69,7 @@
 					loc.temp = ListToArray(loc.key, "(");
 					loc.firstKey = loc.temp[1];
 					loc.secondKey = SpanExcluding(loc.temp[2], ")");
-					
+
 					loc.iEnd = ArrayLen(loc.returnValue[loc.key]);
 					for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 					{
@@ -125,7 +125,7 @@
 			// find any new structs and convert them
 			$createNewArrayStruct(params=loc.returnValue);
 		}
-		
+
 		/************************************
 		*	We now do the routing and controller
 		*	params after we have built all other params
@@ -193,7 +193,7 @@
 					ArrayAppend(loc.multipart[loc.param.getName()], loc.param.getStringValue());
 				}
 			}
-			
+
 			// now overwrite our parameters with the multipart values
 			for (loc.item in loc.multipart)
 				loc.parameters[loc.item] = loc.multipart[loc.item];
@@ -219,7 +219,7 @@
 				// object form field
 				loc.name = SpanExcluding(loc.key, "[");
 				// we split the key into an array so the developer can have multiple levels of params passed in
-				loc.nested = ListToArray(ReplaceList(loc.key, loc.name & "[,]", ""), "[", true); 
+				loc.nested = ListToArray(ReplaceList(loc.key, loc.name & "[,]", ""), "[", true);
 				if (!StructKeyExists(arguments.params, loc.name))
 					arguments.params[loc.name] = {};
 				loc.struct = arguments.params[loc.name]; // we need a reference to the struct so we can nest other structs if needed
@@ -245,7 +245,7 @@
 			}
 			else if (IsArray(arguments.params[loc.key]) && ArrayLen(arguments.params[loc.key]) == 1)
 				arguments.params[loc.key] = arguments.params[loc.key][1];
-		}	
+		}
 	</cfscript>
 	<cfreturn arguments.params />
 </cffunction>
@@ -254,19 +254,19 @@
 	<cfargument name="params" type="struct" required="true" />
 	<cfscript>
 		var loc = {};
-		
+
 		loc.newStructArray = StructFindKey(arguments.params, "new", "all");
 		loc.iEnd = ArrayLen(loc.newStructArray);
-		
+
 		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 		{
 			loc.owner = loc.newStructArray[loc.i].owner.new;
 			loc.value = loc.newStructArray[loc.i].value;
 			loc.map = {};
 			$mapStruct(map=loc.map, struct=loc.value);
-			
+
 			StructClear(loc.value); // clear the struct now that we have our paths and values
-			
+
 			for (loc.item in loc.map) // remap our new struct
 			{
 				// move the last element to the first
@@ -282,7 +282,7 @@
 					loc.newPos = ListPrepend(loc.newPos, "[1", "]");
 				}
 				loc.map[loc.item].newPos = ListToArray(Replace(loc.newPos, "]", "", "all"), "[", false);
-				
+
 				// loop through the position array and build our new struct
 				loc.struct = loc.value;
 				loc.jEnd = ArrayLen(loc.map[loc.item].newPos);
@@ -337,41 +337,13 @@
 		if (!StructKeyExists(arguments.sessionScope, "flash"))
 			arguments.sessionScope.flash = {};
 
+		if (application.wheels.showDebugInformation)
+			$debugPoint("setup");
+
 		// create the requested controller
 		loc.controller = $controller(loc.params.controller).$createControllerObject(loc.params);
+		loc.controller.$processAction();
 
-		if (application.wheels.showDebugInformation)
-			$debugPoint("setup,beforeFilters");
-		
-		// run verifications and before filters
-		loc.controller.$runVerifications(action=loc.params.action, params=loc.params);
-		loc.controller.$runFilters(type="before", action=loc.params.action);
-		
-		// check to see if the controller params has changed and if so, instantiate the new controller and re-run filters and verifications
-		if (loc.params.controller != loc.controller.controllerName())
-		{
-			loc.controller = $controller(loc.params.controller).$createControllerObject(loc.params);
-			loc.controller.$runVerifications(action=loc.params.action, params=loc.params);
-			loc.controller.$runFilters(type="before", action=loc.params.action);
-		}
-
-		if (application.wheels.showDebugInformation)
-			$debugPoint("beforeFilters,action");
-
-		// only proceed to call the action if a before filter has not already rendered content or setup a delayed redirect
-		if (!StructKeyExists(request.wheels, "response") && !StructKeyExists(request.wheels, "redirect"))
-			$callAction(controller=loc.controller, action=loc.params.action);
-
-		if (application.wheels.showDebugInformation)
-			$debugPoint("action,afterFilters");
-
-		// run after filters unless a delayed redirect will occur
-		if (!StructKeyExists(request.wheels, "redirect"))
-			loc.controller.$runFilters(type="after", action=loc.params.action);
-
-		if (application.wheels.showDebugInformation)
-			$debugPoint("afterFilters");
-		
 		// if there is a delayed redirect pending we execute it here thus halting the rest of the request
 		if (StructKeyExists(request.wheels, "redirect"))
 			$location(argumentCollection=request.wheels.redirect);
@@ -380,57 +352,4 @@
 		StructClear(arguments.sessionScope.flash);
 	</cfscript>
 	<cfreturn Trim(request.wheels.response)>
-</cffunction>
-
-<cffunction name="$callAndCacheAction" returntype="string" access="public" output="false">
-	<cfargument name="controller" type="any" required="true">
-	<cfargument name="action" type="string" required="true">
-	<cfargument name="static" type="boolean" required="true">
-	<cfargument name="time" type="numeric" required="true">
-	<cfargument name="key" type="string" required="true">
-	<cfargument name="category" type="string" required="true">
-	<cfscript>
-		arguments.controller.$callAction(action=arguments.action);
-		if (arguments.static)
-			$cache(cache="serverCache", timeSpan=CreateTimeSpan(0,0,arguments.time,0));
-		else
-			$addToCache(key=arguments.key, value=request.wheels.response, time=arguments.time, category=arguments.category);
-	</cfscript>
-	<cfreturn request.wheels.response>
-</cffunction>
-
-<cffunction name="$requestAllowsCaching" returntype="boolean" access="public" output="false">
-	<cfargument name="sessionScope" type="struct" required="false" default="#session#">
-	<cfargument name="formScope" type="struct" required="false" default="#form#">
-	<cfscript>
-		var returnValue = false;
-		// caching is only allowed when the cacheActions setting is true (which it generally is in production mode), the flash is empty and we're not dealing with a form submission
-		if (application.wheels.cacheActions && StructIsEmpty(arguments.sessionScope.flash) && StructIsEmpty(arguments.formScope))
-			returnValue = true;
-	</cfscript>
-	<cfreturn returnValue>
-</cffunction>
-
-<cffunction name="$callAction" returntype="string" access="public" output="false">
-	<cfargument name="controller" type="any" required="true">
-	<cfargument name="action" type="string" required="true">
-	<cfscript>
-		var loc = {};
-		// get cache settings for action, will return false if the action is not cachable
-		loc.cacheSettings = arguments.controller.$cacheSettingsForAction(action=arguments.action);
-		if ($requestAllowsCaching() && IsStruct(loc.cacheSettings))
-		{
-			// go ahead and call / cache this action since we know the request allows it and the action is cachable
-			loc.key = "#request.cgi.script_name##request.cgi.path_info##request.cgi.query_string#";
-			loc.lockName = loc.category & loc.key;
-			loc.conditionArgs = {category="action", key=loc.key};
-			loc.executeArgs = {category="action", key=loc.key, controller=loc.controller, action=arguments.action, time=loc.cacheSettings.time, static=loc.cacheSettings.static};
-			// get content from the cache if it exists there and set it to the request scope, if not we will call the controller action (which in turn sets the content to the request scope)
-			request.wheels.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callAndCacheAction", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
-		}
-		else
-		{
-			arguments.controller.$callAction(action=arguments.action);
-		}
-	</cfscript>
 </cffunction>
