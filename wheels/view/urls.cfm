@@ -231,8 +231,10 @@
 	<cfargument name="append" type="string" required="false" default="#application.wheels.functions.paginationLinks.append#" hint="String or HTML to be appended after result">
 	<cfargument name="prependToPage" type="string" required="false" default="#application.wheels.functions.paginationLinks.prependToPage#" hint="String or HTML to be prepended before each page number">
 	<cfargument name="prependOnFirst" type="boolean" required="false" default="#application.wheels.functions.paginationLinks.prependOnFirst#" hint="Whether or not to prepend the `prependToPage` string on the first page in the list">
+	<cfargument name="prependOnAnchor" type="boolean" required="false" default="#application.wheels.functions.paginationLinks.prependOnAnchor#" hint="Whether or not to prepend the `prependToPage` string on the anchors.">
 	<cfargument name="appendToPage" type="string" required="false" default="#application.wheels.functions.paginationLinks.appendToPage#" hint="String or HTML to be appended after each page number">
 	<cfargument name="appendOnLast" type="boolean" required="false" default="#application.wheels.functions.paginationLinks.appendOnLast#" hint="Whether or not to append the `appendToPage` string on the last page in the list">
+	<cfargument name="appendOnAnchor" type="boolean" required="false" default="#application.wheels.functions.paginationLinks.appendOnAnchor#" hint="Whether or not to append the `appendToPage` string on the anchors.">
 	<cfargument name="classForCurrent" type="string" required="false" default="#application.wheels.functions.paginationLinks.classForCurrent#" hint="Class name for the current page number (if `linkToCurrentPage` is `true`, the class name will go on the `a` element. If not, a `span` element will be used)">
 	<cfargument name="handle" type="string" required="false" default="query" hint="The handle given to the query that the pagination links should be displayed for">
 	<cfargument name="name" type="string" required="false" default="#application.wheels.functions.paginationLinks.name#" hint="The name of the param that holds the current page number">
@@ -241,7 +243,7 @@
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="paginationLinks", input=arguments);
-		loc.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prepend,append,prependToPage,prependOnFirst,appendToPage,appendOnLast,classForCurrent,handle,name,showSinglePage";
+		loc.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prepend,append,prependToPage,prependOnFirst,prependOnAnchor,appendToPage,appendOnLast,appendOnAnchor,classForCurrent,handle,name,showSinglePage";
 		loc.linkToArguments = Duplicate(arguments);
 		loc.iEnd = ListLen(loc.skipArgs);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -271,10 +273,10 @@
 							loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
 					}
 					loc.linkToArguments.text = loc.pageNumber;
-					if (Len(arguments.prependToPage))
+					if (Len(arguments.prependToPage) && arguments.prependOnAnchor)
 						loc.start = loc.start & arguments.prependToPage;
 					loc.start = loc.start & linkTo(argumentCollection=loc.linkToArguments);
-					if (Len(arguments.appendToPage))
+					if (Len(arguments.appendToPage) && arguments.appendOnAnchor)
 						loc.start = loc.start & arguments.appendToPage;
 					loc.start = loc.start & arguments.anchorDivider;
 				}
@@ -332,10 +334,10 @@
 					}
 					loc.linkToArguments.text = loc.totalPages;
 					loc.end = loc.end & arguments.anchorDivider;
-					if (Len(arguments.prependToPage))
+					if (Len(arguments.prependToPage) && arguments.prependOnAnchor)
 						loc.end = loc.end & arguments.prependToPage;
 					loc.end = loc.end & linkTo(argumentCollection=loc.linkToArguments);
-					if (Len(arguments.appendToPage))
+					if (Len(arguments.appendToPage) && arguments.appendOnAnchor)
 						loc.end = loc.end & arguments.appendToPage;
 				}
 			}
