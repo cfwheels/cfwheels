@@ -70,6 +70,16 @@
 <cffunction name="$registerAssociation" returntype="void" access="public" output="false" hint="Called from the association methods above to save the data to the `class` struct of the model.">
 	<cfscript>
 		var key = "";
+
+		// infer model name from association name unless developer specified it already
+		if (!Len(arguments.class))
+		{
+			if (arguments.type == "hasMany")
+				arguments.class = singularize(arguments.name);
+			else
+				arguments.class = arguments.name;
+		}
+
 		variables.wheels.class.associations[arguments.name] = {};
 		for (key in arguments)
 			if (key != "name")

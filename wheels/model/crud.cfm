@@ -1403,15 +1403,6 @@
 			if (application.wheels.showErrorInformation && !StructKeyExists(loc.classAssociations, loc.name))
 				$throw(type="Wheels.AssociationNotFound", message="An association named `#loc.name#` could not be found on the `#ListLast(loc.levels)#` model.", extendedInfo="Setup an association in the `init` method of the `models/#capitalize(ListLast(loc.levels))#.cfc` file and name it `#loc.name#`. You can use the `belongsTo`, `hasOne` or `hasMany` method to set it up.");
 
-			// infer class name and foreign key from association name unless developer specified it already
-			if (!Len(loc.classAssociations[loc.name].class))
-			{
-				if (loc.classAssociations[loc.name].type == "hasMany")
-					loc.classAssociations[loc.name].class = singularize(loc.name);
-				else
-					loc.classAssociations[loc.name].class = loc.name;
-			}
-
 			// create a reference to the associated class
 			loc.associatedClass = model(loc.classAssociations[loc.name].class);
 
