@@ -54,59 +54,64 @@
 
 		variables.wheels.class.propertyList = "";
 		variables.wheels.class.columnList = "";
+		loc.processedColumns = "";
 		loc.iEnd = loc.columns.recordCount;
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			// set up properties and column mapping
-			loc.property = loc.columns["column_name"][loc.i]; // default the column to map to a property with the same name
-			for (loc.key in variables.wheels.class.mapping)
+			if (!ListFind(loc.processedColumns, loc.columns["column_name"][loc.i]))
 			{
-				if (variables.wheels.class.mapping[loc.key].type == "column" && variables.wheels.class.mapping[loc.key].value == loc.property)
+				loc.property = loc.columns["column_name"][loc.i]; // default the column to map to a property with the same name
+				for (loc.key in variables.wheels.class.mapping)
 				{
-					// developer has chosen to map this column to a property with a different name so set that here
-					loc.property = loc.key;
-					break;
+					if (variables.wheels.class.mapping[loc.key].type == "column" && variables.wheels.class.mapping[loc.key].value == loc.property)
+					{
+						// developer has chosen to map this column to a property with a different name so set that here
+						loc.property = loc.key;
+						break;
+					}
 				}
-			}
-			loc.type = SpanExcluding(loc.columns["type_name"][loc.i], "( ");
-
-			// set the info we need for each property
-			variables.wheels.class.properties[loc.property] = {};
-			variables.wheels.class.properties[loc.property].type = variables.wheels.class.adapter.$getType(loc.type);
-			variables.wheels.class.properties[loc.property].column = loc.columns["column_name"][loc.i];
-			variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];
-			variables.wheels.class.properties[loc.property].nullable = trim(loc.columns["is_nullable"][loc.i]);
-			variables.wheels.class.properties[loc.property].size = loc.columns["column_size"][loc.i];
-
-			// set the default value
-			loc.defaultValue = loc.columns["column_default_value"][loc.i];
-			if ((Left(loc.defaultValue,2) == "((" && Right(loc.defaultValue,2) == "))") || (Left(loc.defaultValue,2) == "('" && Right(loc.defaultValue,2) == "')"))
-				loc.defaultValue = Mid(loc.defaultValue, 3, Len(loc.defaultValue)-4);
-			variables.wheels.class.properties[loc.property].defaultValue = loc.defaultValue;
-
-			if (loc.columns["is_primarykey"][loc.i])
-			{
-				setPrimaryKey(loc.property);
-			}
-			else
-			{
-				if (variables.wheels.class.setDefaultValidations) {
-					// set nullable validations if the developer has not
-					if (!variables.wheels.class.properties[loc.property].nullable and !Len(variables.wheels.class.properties[loc.property].defaultValue) and !$validationExists(property=loc.property, validation="validatesPresenceOf"))
-						validatesPresenceOf(properties=loc.property);
-
-					// set length validations if the developer has not
-					if (ListFindNoCase(variables.wheels.class.types["string"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesLengthOf"))
-						validatesLengthOf(properties=loc.property, allowBlank=variables.wheels.class.properties[loc.property].nullable, maximum=variables.wheels.class.properties[loc.property].size);
-
-					// set numericality validations if the developer has not
-					if (ListFindNoCase(variables.wheels.class.types["numeric"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesNumericalityOf"))
-						validatesNumericalityOf(properties=loc.property, allowBlank=variables.wheels.class.properties[loc.property].nullable, onlyInteger=ListFindNoCase(variables.wheels.class.types["integer"], variables.wheels.class.properties[loc.property].type));
+				loc.type = SpanExcluding(loc.columns["type_name"][loc.i], "( ");
+	
+				// set the info we need for each property
+				variables.wheels.class.properties[loc.property] = {};
+				variables.wheels.class.properties[loc.property].type = variables.wheels.class.adapter.$getType(loc.type);
+				variables.wheels.class.properties[loc.property].column = loc.columns["column_name"][loc.i];
+				variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];
+				variables.wheels.class.properties[loc.property].nullable = trim(loc.columns["is_nullable"][loc.i]);
+				variables.wheels.class.properties[loc.property].size = loc.columns["column_size"][loc.i];
+	
+				// set the default value
+				loc.defaultValue = loc.columns["column_default_value"][loc.i];
+				if ((Left(loc.defaultValue,2) == "((" && Right(loc.defaultValue,2) == "))") || (Left(loc.defaultValue,2) == "('" && Right(loc.defaultValue,2) == "')"))
+					loc.defaultValue = Mid(loc.defaultValue, 3, Len(loc.defaultValue)-4);
+				variables.wheels.class.properties[loc.property].defaultValue = loc.defaultValue;
+	
+				if (loc.columns["is_primarykey"][loc.i])
+				{
+					setPrimaryKey(loc.property);
 				}
+				else
+				{
+					if (variables.wheels.class.setDefaultValidations) {
+						// set nullable validations if the developer has not
+						if (!variables.wheels.class.properties[loc.property].nullable and !Len(variables.wheels.class.properties[loc.property].defaultValue) and !$validationExists(property=loc.property, validation="validatesPresenceOf"))
+							validatesPresenceOf(properties=loc.property);
+	
+						// set length validations if the developer has not
+						if (ListFindNoCase(variables.wheels.class.types["string"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesLengthOf"))
+							validatesLengthOf(properties=loc.property, allowBlank=variables.wheels.class.properties[loc.property].nullable, maximum=variables.wheels.class.properties[loc.property].size);
+	
+						// set numericality validations if the developer has not
+						if (ListFindNoCase(variables.wheels.class.types["numeric"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesNumericalityOf"))
+							validatesNumericalityOf(properties=loc.property, allowBlank=variables.wheels.class.properties[loc.property].nullable, onlyInteger=ListFindNoCase(variables.wheels.class.types["integer"], variables.wheels.class.properties[loc.property].type));
+					}
+				}
+	
+				variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, loc.property);
+				variables.wheels.class.columnList = ListAppend(variables.wheels.class.columnList, variables.wheels.class.properties[loc.property].column);
+				loc.processedColumns = ListAppend(loc.processedColumns, loc.columns["column_name"][loc.i]);
 			}
-
-			variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, loc.property);
-			variables.wheels.class.columnList = ListAppend(variables.wheels.class.columnList, variables.wheels.class.properties[loc.property].column);
 		}
 
 		// add calculated properties
