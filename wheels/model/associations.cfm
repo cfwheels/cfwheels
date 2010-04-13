@@ -110,7 +110,12 @@
 		structDelete(arguments, "name", false);
 		// infer model name and foreign key from association name unless developer specified it already
 		if (!Len(arguments.modelName))
-			arguments.modelName = singularize(associationName);
+		{
+			if (arguments.type == "hasMany")
+				arguments.modelName = singularize(associationName);
+			else
+				arguments.modelName = associationName;
+		}
 		// store all the settings for the association in the class struct (one struct per association with the name of the association as the key)
 		variables.wheels.class.associations[associationName] = arguments;
 	</cfscript>
