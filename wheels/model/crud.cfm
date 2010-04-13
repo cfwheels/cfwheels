@@ -1476,41 +1476,40 @@
 			loc.classAssociations[loc.name].calculatedProperties = loc.associatedClass.$classData().calculatedProperties;
 			loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClass.$classData().calculatedPropertyList;
 
-			// create the join string
-			loc.joinType = ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one");
-			loc.classAssociations[loc.name].join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# ON ";
-			loc.toAppend = "";
-			loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
-
-			for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+			// create the join string if it hasn't already been done (no need to lock this code since when multiple requests process it they will end up setting the same value (no intermediate value is ever set on the join variable in the application scoped model object)
+			if (!StructKeyExists(loc.classAssociations[loc.name], "join"))
 			{
-				loc.key1 = ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.j);
-				if (loc.classAssociations[loc.name].type == "belongsTo")
+				loc.joinType = ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one");
+				loc.join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# ON ";
+				loc.toAppend = "";
+				loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
-					loc.key2 = ListFindNoCase(loc.associatedClass.$classData().keys, loc.key1);
-					if (loc.key2)
-						loc.key2 = ListGetAt(loc.associatedClass.$classData().keys, loc.key2);
+					loc.key1 = ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.j);
+					if (loc.classAssociations[loc.name].type == "belongsTo")
+					{
+						loc.key2 = ListFindNoCase(loc.associatedClass.$classData().keys, loc.key1);
+						if (loc.key2)
+							loc.key2 = ListGetAt(loc.associatedClass.$classData().keys, loc.key2);
+						else
+							loc.key2 = ListGetAt(loc.associatedClass.$classData().keys, loc.j);
+						loc.first = loc.key1;
+						loc.second = loc.key2;
+					}
 					else
-						loc.key2 = ListGetAt(loc.associatedClass.$classData().keys, loc.j);
-
-					loc.first = loc.key1;
-					loc.second = loc.key2;
+					{
+						loc.key2 = ListFindNoCase(loc.class.$classData().keys, loc.key1);
+						if (loc.key2)
+							loc.key2 = ListGetAt(loc.class.$classData().keys, loc.key2);
+						else
+							loc.key2 = ListGetAt(loc.class.$classData().keys, loc.j);
+						loc.first = loc.key2;
+						loc.second = loc.key1;
+					}
+					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[loc.first].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[loc.second].column#");
 				}
-				else
-				{
-					loc.key2 = ListFindNoCase(loc.class.$classData().keys, loc.key1);
-					if (loc.key2)
-						loc.key2 = ListGetAt(loc.class.$classData().keys, loc.key2);
-					else
-						loc.key2 = ListGetAt(loc.class.$classData().keys, loc.j);
-
-					loc.first = loc.key2;
-					loc.second = loc.key1;
-				}
-
-				loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[loc.first].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[loc.second].column#");
+				loc.classAssociations[loc.name].join = loc.join & Replace(loc.toAppend, ",", " AND ", "all");
 			}
-			loc.classAssociations[loc.name].join = loc.classAssociations[loc.name].join & Replace(loc.toAppend, ",", " AND ", "all");
 
 			// go up or down one level in the association tree
 			if (loc.delimChar == "(")
