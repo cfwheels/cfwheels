@@ -1406,9 +1406,10 @@
 			// infer class name and foreign key from association name unless developer specified it already
 			if (!Len(loc.classAssociations[loc.name].class))
 			{
-				loc.classAssociations[loc.name].class = loc.name;
 				if (loc.classAssociations[loc.name].type == "hasMany")
-					loc.classAssociations[loc.name].class = singularize(loc.classAssociations[loc.name].class);
+					loc.classAssociations[loc.name].class = singularize(loc.name);
+				else
+					loc.classAssociations[loc.name].class = loc.name;
 			}
 
 			// create a reference to the associated class
@@ -1434,25 +1435,28 @@
 			loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClass.$classData().calculatedPropertyList;
 
 			// create the join string
-			loc.joinType = ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one");
-			loc.classAssociations[loc.name].join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# ON ";
-			loc.toAppend = "";
-			loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
-			for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+			if (!StructKeyExists(loc.classAssociations[loc.name], "join"))
 			{
-				if (loc.classAssociations[loc.name].type == "belongsTo")
+				loc.joinType = ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one");
+				loc.join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# ON ";
+				loc.toAppend = "";
+				loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
-					loc.first = loc.classAssociations[loc.name].foreignKey;
-					loc.second = loc.associatedClass.$classData().keys;
+					if (loc.classAssociations[loc.name].type == "belongsTo")
+					{
+						loc.first = loc.classAssociations[loc.name].foreignKey;
+						loc.second = loc.associatedClass.$classData().keys;
+					}
+					else
+					{
+						loc.first = loc.class.$classData().keys;
+						loc.second = loc.classAssociations[loc.name].foreignKey;
+					}
+					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[ListGetAt(loc.first, loc.j)].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[ListGetAt(loc.second, loc.j)].column#");
 				}
-				else
-				{
-					loc.first = loc.class.$classData().keys;
-					loc.second = loc.classAssociations[loc.name].foreignKey;
-				}
-				loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[ListGetAt(loc.first, loc.j)].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[ListGetAt(loc.second, loc.j)].column#");
+				loc.classAssociations[loc.name].join = loc.join & Replace(loc.toAppend, ",", " AND ", "all");			
 			}
-			loc.classAssociations[loc.name].join = loc.classAssociations[loc.name].join & Replace(loc.toAppend, ",", " AND ", "all");
 
 			// go up or down one level in the association tree
 			if (loc.delimChar == "(")
