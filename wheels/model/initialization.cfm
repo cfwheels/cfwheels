@@ -64,35 +64,40 @@
 		variables.wheels.class.keys = "";
 		variables.wheels.class.propertyList = "";
 		variables.wheels.class.columnList = "";
+		loc.processedColumns = "";
 		loc.iEnd = loc.columns.recordCount;
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			// set up properties and column mapping
-			loc.property = loc.columns["column_name"][loc.i]; // default the column to map to a property with the same name 
-			for (loc.key in variables.wheels.class.mapping)
+			if (!ListFind(loc.processedColumns, loc.columns["column_name"][loc.i]))
 			{
-				if (variables.wheels.class.mapping[loc.key].type == "column" && variables.wheels.class.mapping[loc.key].value == loc.property)
+				loc.property = loc.columns["column_name"][loc.i]; // default the column to map to a property with the same name 
+				for (loc.key in variables.wheels.class.mapping)
 				{
-					// developer has chosen to map this column to a property with a different name so set that here
-					loc.property = loc.key;
-					break;
+					if (variables.wheels.class.mapping[loc.key].type == "column" && variables.wheels.class.mapping[loc.key].value == loc.property)
+					{
+						// developer has chosen to map this column to a property with a different name so set that here
+						loc.property = loc.key;
+						break;
+					}
 				}
+				loc.type = SpanExcluding(loc.columns["type_name"][loc.i], "( ");
+				variables.wheels.class.properties[loc.property] = {};
+				variables.wheels.class.properties[loc.property].type = variables.wheels.class.adapter.$getType(loc.type);
+				variables.wheels.class.properties[loc.property].column = loc.columns["column_name"][loc.i];
+				variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];
+				loc.defaultValue = loc.columns["column_default_value"][loc.i];
+				if ((Left(loc.defaultValue,2) == "((" && Right(loc.defaultValue,2) == "))") || (Left(loc.defaultValue,2) == "('" && Right(loc.defaultValue,2) == "')"))
+					loc.defaultValue = Mid(loc.defaultValue, 3, Len(loc.defaultValue)-4);
+				variables.wheels.class.properties[loc.property].defaultValue = loc.defaultValue;
+				if (loc.columns["is_primarykey"][loc.i])
+				{
+					variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.property);
+				}
+				variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, loc.property);
+				variables.wheels.class.columnList = ListAppend(variables.wheels.class.columnList, variables.wheels.class.properties[loc.property].column);
+				loc.processedColumns = ListAppend(loc.processedColumns, loc.columns["column_name"][loc.i]);
 			}
-			loc.type = SpanExcluding(loc.columns["type_name"][loc.i], "( ");
-			variables.wheels.class.properties[loc.property] = {};
-			variables.wheels.class.properties[loc.property].type = variables.wheels.class.adapter.$getType(loc.type);
-			variables.wheels.class.properties[loc.property].column = loc.columns["column_name"][loc.i];
-			variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];
-			loc.defaultValue = loc.columns["column_default_value"][loc.i];
-			if ((Left(loc.defaultValue,2) == "((" && Right(loc.defaultValue,2) == "))") || (Left(loc.defaultValue,2) == "('" && Right(loc.defaultValue,2) == "')"))
-				loc.defaultValue = Mid(loc.defaultValue, 3, Len(loc.defaultValue)-4);
-			variables.wheels.class.properties[loc.property].defaultValue = loc.defaultValue;
-			if (loc.columns["is_primarykey"][loc.i])
-			{
-				variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.property);
-			}
-			variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, loc.property);
-			variables.wheels.class.columnList = ListAppend(variables.wheels.class.columnList, variables.wheels.class.properties[loc.property].column);
 		}
 		if (!Len(variables.wheels.class.keys))
 			$throw(type="Wheels.NoPrimaryKey", message="No primary key exists on the `#variables.wheels.class.tableName#` table.", extendedInfo="Set an appropriate primary key on the `#variables.wheels.class.tableName#` table.");
