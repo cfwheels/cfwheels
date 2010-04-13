@@ -80,13 +80,20 @@
 <!--- PUBLIC CONTROLLER CLASS FUNCTIONS --->
 
 <cffunction name="filterChain" returntype="array" access="public" output="false" hint="Returns an array of all the filters set on this controller in the order in which they will be executed.">
-	<cfargument name="type" type="string" required="false" default="" hint="Use this argument to return only `before` or `after` filters.">
+	<cfargument name="type" type="string" required="false" default="all" hint="Use this argument to return only `before` or `after` filters.">
 	<cfscript>
 		var loc = {};
-		if (!Len(arguments.type)) // no type specified so return all filters
-			return variables.wheels.filters;
-		if (!ListFindNoCase("before,after", arguments.type)) // invalid type
+
+		if (!ListFindNoCase("before,after,all", arguments.type))
+		{// invalid type
 			$throw(type="Wheels.InvalidFilterType", message="The filter type of `#arguments.type#` is invalid.", extendedInfo="Please use either `before` or `after`.");
+		}
+
+		if (arguments.type eq "all")
+		{// return all filters
+			return variables.wheels.filters;
+		}
+
 		// loop over the filters and return all those that match the supplied type
 		loc.returnValue = ArrayNew(1);
 		loc.iEnd = ArrayLen(variables.wheels.filters);
