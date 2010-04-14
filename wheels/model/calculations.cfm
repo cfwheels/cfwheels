@@ -171,13 +171,13 @@
 		}
 
 		// alias the result with `AS`, this means that Wheels will not try and change the string (which is why we have to add the table name above since it won't be done automatically)
-		arguments.select = arguments.select & ") AS result";
+		arguments.select = arguments.select & ") AS wheelsqueryresult";
 
 		// call `findAll` with `select`, `where` and `include` but delete all other arguments
 		StructDelete(arguments, "type");
 		StructDelete(arguments, "property");
 		StructDelete(arguments, "distinct");
-		loc.returnValue = findAll(argumentCollection=arguments).result;
+		loc.returnValue = findAll(argumentCollection=arguments).wheelsqueryresult;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

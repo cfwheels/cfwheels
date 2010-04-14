@@ -283,7 +283,9 @@
 			if (arguments.returnAs == "query")
 			{
 				loc.returnValue = loc.findAll.query;
-				$callback("afterFind", loc.returnValue);
+				// execute callbacks unless we're currently running the count or primary key pagination queries (we only want the callback to run when we have the actual data)
+				if (loc.returnValue.columnList != "wheelsqueryresult" && !arguments.$limit && !arguments.$offset)
+					$callback("afterFind", loc.returnValue);
 			}
 			else if (Len(arguments.returnAs))
 			{
