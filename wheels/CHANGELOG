@@ -7,6 +7,9 @@ Bug Fixes
 * Fixed concurrency issue related to setting the model name on associations - #419 [John C. Bland II, Per Djurner]
 * Fix for skipping duplicate columns returned from cfdbinfo when using Oracle - #437 & #439 [Mike Henke, Per Djurner]
 * Fix for race conditions when setting the join clause in an application scoped model object - #432 [James Gibson, Per Djurner]
+* Fixed so URLFor() is not duplicating controller and action when URL rewriting is off - #433 [Per Djurner]
+
+
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
