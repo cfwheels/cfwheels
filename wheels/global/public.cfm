@@ -286,7 +286,7 @@
 			if (Len(arguments.protocol))
 				loc.returnValue = arguments.protocol & "://" & loc.returnValue;
 			else
-				loc.returnValue = SpanExcluding(request.cgi.server_protocol, "/") & "://" & loc.returnValue;
+				loc.returnValue = SpanExcluding(LCase(request.cgi.server_protocol), "/") & "://" & loc.returnValue;
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
