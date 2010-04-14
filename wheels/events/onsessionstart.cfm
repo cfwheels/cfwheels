@@ -1,6 +1,6 @@
 <cffunction name="onSessionStart" returntype="void" access="public" output="false">
 	<cfscript>
-		$simpleLock(execute="$runOnSessionStart", name="wheelsReloadLock", type="readOnly");
+		$simpleLock(execute="$runOnSessionStart", name="wheelsReloadLock", type="readOnly", timeout=180);
 	</cfscript>
 </cffunction>
 

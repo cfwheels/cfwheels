@@ -11,11 +11,11 @@
 		if (StructKeyExists(URL, "reload") && (!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword") || !Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
 		{
 			$debugPoint("total,reload");
-			$simpleLock(execute="onApplicationStart", name="wheelsReloadLock", type="exclusive");
+			$simpleLock(execute="onApplicationStart", name="wheelsReloadLock", type="exclusive", timeout=180);
 		}
 
 		// run the rest of the request start code
-		$simpleLock(execute="$runOnRequestStart", executeArgs=arguments, name="wheelsReloadLock", type="readOnly");
+		$simpleLock(execute="$runOnRequestStart", executeArgs=arguments, name="wheelsReloadLock", type="readOnly", timeout=180);
 	</cfscript>
 </cffunction>
 

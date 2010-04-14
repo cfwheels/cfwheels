@@ -3,7 +3,7 @@
 	<cfargument name="eventName" type="any" required="true">
 	<cfscript>
 		var returnValue = "";
-		returnValue = $simpleLock(execute="$runOnError", executeArgs=arguments, name="wheelsReloadLock", type="readOnly");
+		returnValue = $simpleLock(execute="$runOnError", executeArgs=arguments, name="wheelsReloadLock", type="readOnly", timeout=180);
 	</cfscript>
 	<cfoutput>
 		#returnValue#
