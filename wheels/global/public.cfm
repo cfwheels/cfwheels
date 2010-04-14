@@ -194,13 +194,22 @@
 			loc.route = $findRoute(argumentCollection=arguments);
 			if (application.wheels.URLRewriting == "Off")
 			{
-				loc.returnValue = loc.returnValue & "?controller=" & REReplace(REReplace(loc.route.controller, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
-				loc.returnValue = loc.returnValue & "&action=" & REReplace(REReplace(loc.route.action, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
+				loc.returnValue = loc.returnValue & "?controller=";
+				if (Len(arguments.controller))
+					loc.returnValue = loc.returnValue & REReplace(REReplace(arguments.controller, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
+				else
+					loc.returnValue = loc.returnValue & REReplace(REReplace(loc.route.controller, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
+				loc.returnValue = loc.returnValue & "&action=";
+				if (Len(arguments.action))
+					loc.returnValue = loc.returnValue & REReplace(REReplace(arguments.action, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
+				else
+					loc.returnValue = loc.returnValue & REReplace(REReplace(loc.route.action, "([A-Z])", "-\l\1", "all"), "^-", "", "one");
 				loc.iEnd = ListLen(loc.route.variables);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.property = ListGetAt(loc.route.variables, loc.i);
-					loc.returnValue = loc.returnValue & "&" & loc.property & "=" & $URLEncode(arguments[loc.property]);
+					if (loc.property != "controller" && loc.property != "action")
+						loc.returnValue = loc.returnValue & "&" & loc.property & "=" & $URLEncode(arguments[loc.property]);
 				}
 			}
 			else
