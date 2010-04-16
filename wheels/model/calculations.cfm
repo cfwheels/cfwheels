@@ -71,7 +71,7 @@
 	<cfscript>
 		$insertDefaults(name="count", input=arguments);
 		arguments.type = "COUNT";
-		arguments.property = variables.wheels.class.keys;
+		arguments.property = ListFirst(primaryKey());
 		if (Len(arguments.include))
 			arguments.distinct = true;
 		else
