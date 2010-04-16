@@ -290,10 +290,13 @@
 			if (Len(arguments.append))
 				loc.end = loc.end & arguments.append;
 		}
-		if (Len(arguments.prependToPage) && !arguments.prependOnFirst)
-			loc.middle = Mid(loc.middle, Len(arguments.prependToPage)+1, Len(loc.middle)-Len(arguments.prependToPage)) ;
-		if (Len(arguments.appendToPage) && !arguments.appendOnLast)
-			loc.middle = Mid(loc.middle, 1, Len(loc.middle)-Len(arguments.appendToPage)) ;
+		if (Len(loc.middle))
+		{
+			if (Len(arguments.prependToPage) && !arguments.prependOnFirst)
+				loc.middle = Mid(loc.middle, Len(arguments.prependToPage)+1, Len(loc.middle)-Len(arguments.prependToPage));
+			if (Len(arguments.appendToPage) && !arguments.appendOnLast)
+				loc.middle = Mid(loc.middle, 1, Len(loc.middle)-Len(arguments.appendToPage));
+		}
 		loc.returnValue = loc.start & loc.middle & loc.end;
 	</cfscript>
 	<cfreturn loc.returnValue>
