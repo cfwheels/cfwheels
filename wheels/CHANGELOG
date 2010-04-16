@@ -5,6 +5,8 @@ Bug Fixes
 * Added missing support for passing in array of model objects as options to select() - #411 [John C. Bland II, Tony Petruzzi]
 * Fixed so "afterFind" callback methods are only called once during pagination - #435 [Bucky Schwarz, Doug Giles, Per Djurner]
 * Added "prependOnAnchor" and "appendOnAnchor" arguments to paginationLinks() to get around an issue where the "appendToPage" string was added on anchor pages - #434 [Joshua Clingenpeel, Per Djurner]
+* Fixed bug in paginationLinks() when using "appendToPage" with single page result - [Joshua Clingenpeel, Per Djurner]
+* Fixed bug with count() when using composite primary keys - [Per Djurner]
 * Fixed concurrency issue related to setting the model name on associations - #419 [John C. Bland II, Per Djurner]
 * Fix for skipping duplicate columns returned from cfdbinfo when using Oracle - #437 & #439 [Mike Henke, Per Djurner]
 * Fix for race conditions when setting the join clause in an application scoped model object - #432 [James Gibson, Per Djurner]
