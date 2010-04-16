@@ -68,7 +68,7 @@
 		if (Len(arguments.include))
 		{
 			arguments.distinct = true;
-			arguments.property = variables.wheels.class.keys;
+			arguments.property = ListFirst(primaryKey());
 		}
 		else
 		{
