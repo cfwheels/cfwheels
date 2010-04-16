@@ -28,6 +28,7 @@ WHEELS VERSION 1.0.4
 
 Bug Fixes
 =======
+* Added missing support for passing in array of model objects as options to select() - #411 [John C. Bland II, Tony Petruzzi]
 * Fixed so "afterFind" callback methods are only called once during pagination - #435 [Bucky Schwarz, Doug Giles, Per Djurner]
 * Added "prependOnAnchor" and "appendOnAnchor" arguments to paginationLinks() to get around an issue where the "appendToPage" string was added on anchor pages - #434 [Joshua Clingenpeel, Per Djurner]
 * Fixed concurrency issue related to setting the model name on associations - #419 [John C. Bland II, Per Djurner]
