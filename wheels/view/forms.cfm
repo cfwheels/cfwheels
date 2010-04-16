@@ -1334,6 +1334,13 @@
 					loc.optionValue = arguments.options[loc.i][1];
 					loc.optionText = arguments.options[loc.i][2];
 				}
+				else if (IsObject(arguments.options[loc.i]))
+				{
+					if (StructKeyExists(arguments.options[loc.i], arguments.valueField))
+						loc.optionValue = arguments.options[loc.i][arguments.valueField];
+					if (StructKeyExists(arguments.options[loc.i], arguments.textField))
+						loc.optionText = arguments.options[loc.i][arguments.textField];
+				}
 				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=loc.optionValue, optionText=loc.optionText);
 			}
 		}
