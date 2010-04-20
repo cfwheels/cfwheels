@@ -9,6 +9,8 @@ Changes
 * Removed differences in params structure for form / URL variables - #232 [Mike Henke, Tony Petruzzi]
 * Made the showDebugInformation argument on renderPage() part of the API - [Per Djurner]
 * Added directory and deleteFile arguments to sendFile() - #323 [Tony Petruzzi]
+* Lockdown transactions between callbacks - #325 [Andy Bellenie]
+* Prepend included model properties with their class name in queries - #442 [Andy Bellenie]
 
 Bug Fixes
 =========

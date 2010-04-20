@@ -1138,7 +1138,8 @@
 					// if we find the property in this model and it's not already added we go ahead and add it to the select clause
 					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem))
 					{
-						if (loc.duplicateCount && arguments.renameFields)
+						// if expanded column aliases is enabled then mark all columns from included classes as duplicates in order to prepend them with their class name
+						if ((application.wheels.useExpandedColumnAliases and loc.j gt 1) or (loc.duplicateCount && arguments.renameFields))
 							loc.toAppend = loc.toAppend & "[[duplicate]]" & loc.j;
 						if (ListFindNoCase(loc.classData.propertyList, loc.iItem))
 						{
