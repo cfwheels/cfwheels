@@ -21,6 +21,8 @@
 			if (application.wheels.sendEmailOnError)
 			{
 				loc.mailArgs = {};
+				if (StructKeyExists(application.wheels, "errorEmailServer") && Len(application.wheels.errorEmailServer))
+					loc.mailArgs.server = application.wheels.errorEmailServer;
 				loc.mailArgs.from = application.wheels.errorEmailAddress;
 				loc.mailArgs.to = application.wheels.errorEmailAddress;
 				loc.mailArgs.subject = "Error";
