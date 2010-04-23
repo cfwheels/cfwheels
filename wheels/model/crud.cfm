@@ -1643,13 +1643,20 @@
 				loc.value = Trim(ListGetAt(arguments.values, loc.i));
 			else if (Len(arguments.keys))
 				loc.value = this[ListGetAt(arguments.keys, loc.i)];
-			loc.toAppend = loc.key & "=";
-			if (!IsNumeric(loc.value))
-				loc.toAppend = loc.toAppend & "'";
-			loc.toAppend = loc.toAppend & loc.value;
-			if (!IsNumeric(loc.value))
-				loc.toAppend = loc.toAppend & "'";
-			loc.returnValue = ListAppend(loc.returnValue, loc.toAppend, " ");
+			else if (variables.wheels.class.properties[key].nullable)
+				loc.value = "IS NULL";
+			else
+				$throw(type="Wheels.PropertyNotFound", message="The property `#loc.key#` could not be found on the current model.", extendedInfo="Ensure that the property is set before using it in a WHERE clause");
+			if (loc.value != "IS NULL")
+				{
+				loc.toAppend = loc.key & "=";
+				if (!IsNumeric(loc.value))
+					loc.toAppend = loc.toAppend & "'";
+				loc.toAppend = loc.toAppend & loc.value;
+				if (!IsNumeric(loc.value))
+					loc.toAppend = loc.toAppend & "'";
+				loc.returnValue = ListAppend(loc.returnValue, loc.toAppend, " ");
+				}
 			if (loc.i < loc.iEnd)
 				loc.returnValue = ListAppend(loc.returnValue, "AND", " ");
 		}
