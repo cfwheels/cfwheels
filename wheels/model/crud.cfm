@@ -423,7 +423,7 @@
 	<cfset var loc = {}>
 	<cfset $insertDefaults(name="updateAll", input=arguments)>
 	<cfset arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,parameterize,instantiate,transaction,callbacks,$softDeleteCheck", setOnModel=false)>
-	
+
 	<cfif arguments.instantiate> <!--- find and instantiate each object and call its update function --->
 		<cfscript>
 			loc.returnValue = 0;
@@ -437,7 +437,6 @@
 		</cfscript>
 	<cfelse> <!--- do a regular update query --->
 		<cfscript>
-			
 			loc.sql = [];
 			ArrayAppend(loc.sql, "UPDATE #variables.wheels.class.tableName# SET");
 			loc.pos = 0;
@@ -445,7 +444,7 @@
 			{
 				loc.pos = loc.pos + 1;
 				ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
-				
+
 				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, null=arguments.properties[loc.key] == ""};
 				ArrayAppend(loc.sql, loc.param);
 				if (StructCount(arguments.properties) gt loc.pos)
@@ -454,19 +453,25 @@
 			loc.sql = $addWhereClause(sql=loc.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=arguments.where);
 		</cfscript>
+		<cfset arguments.sql = loc.sql>
 		<cfif $openTransaction(arguments.transaction)>
 			<cftransaction action="begin">
-				<cfset loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
-				<cfset loc.returnValue = loc.upd.result.recordCount>
+				<cfset loc.returnValue = $updateAll(argumentCollection=arguments)>
 				<cftransaction action="#arguments.transaction#" />
 			</cftransaction>
 			<cfset $closeTransaction()>
 		<cfelse>
-			<cfset loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
-			<cfset loc.returnValue = loc.upd.result.recordCount>
+			<cfset loc.returnValue = $updateAll(argumentCollection=arguments)>
 		</cfif>
 	</cfif>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$updateAll" returntype="numeric" access="public" output="false">
+	<cfscript>
+	var upd = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
+	return upd.result.recordCount;
+	</cfscript>
 </cffunction>
 
 <cffunction name="updateByKey" returntype="boolean" access="public" output="false" hint="Finds the object with the supplied key and saves it (if validation permits it) with the supplied properties and/or named arguments. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument. Returns `true` if the object was found and updated successfully, `false` otherwise."
@@ -561,19 +566,25 @@
 			loc.sql = $addWhereClause(sql=loc.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=arguments.where);
 		</cfscript>
+		<cfset arguments.sql = loc.sql>
 		<cfif $openTransaction(arguments.transaction)>
 			<cftransaction action="begin">
-				<cfset loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
-				<cfset loc.returnValue = loc.del.result.recordCount>
+				<cfset loc.returnValue = $deleteAll(argumentCollection=arguments)>
 				<cftransaction action="#arguments.transaction#" />
 			</cftransaction>
 			<cfset $closeTransaction()>
 		<cfelse>
-			<cfset loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
-			<cfset loc.returnValue = loc.del.result.recordCount>
+			<cfset loc.returnValue = $deleteAll(argumentCollection=arguments)>
 		</cfif>
 	</cfif>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$deleteAll" returntype="numeric" access="public" output="false">
+	<cfscript>
+	var del = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
+	return del.result.recordCount;
+	</cfscript>
 </cffunction>
 
 <cffunction name="deleteByKey" returntype="boolean" access="public" output="false" hint="Finds the record with the supplied key and deletes it. Returns `true` on successful deletion of the row, `false` otherwise."
@@ -692,32 +703,34 @@
 	<cfset loc.sql = []>
 	<cfset loc.sql = $addDeleteClause(sql=loc.sql)>
 	<cfset loc.sql = $addKeyWhereClause(sql=loc.sql)>
+	<cfset arguments.sql = loc.sql>
 	<cfif $openTransaction(arguments.transaction)>
 		<cftransaction action="begin">
-			<cfif $callback("beforeDelete", arguments.callbacks)>
-				<cfset loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize)>
-				<cfif loc.del.result.recordCount eq 1 and $callback("afterDelete", arguments.callbacks)>
-					<cftransaction action="#arguments.transaction#" />
-					<cfset loc.returnValue = true>
-				<cfelse>
-					<cftransaction action="rollback" />
-				</cfif>
+			<cfset loc.returnValue = $delete(argumentCollection=arguments)>
+			<cfif loc.returnValue>
+				<cftransaction action="#arguments.transaction#" />
 			<cfelse>
 				<cftransaction action="rollback" />
 			</cfif>
 		</cftransaction>
 		<cfset $closeTransaction()>
 	<cfelse>
-		<cfscript>
-			if ($callback("beforeDelete", arguments.callbacks))
-			{
-				loc.del = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
-				if (loc.del.result.recordCount eq 1 and $callback("afterDelete", arguments.callbacks))
-					loc.returnValue = true;
-			}
-		</cfscript>
+		<cfset loc.returnValue = $delete(argumentCollection=arguments)>
 	</cfif>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$delete" returntype="boolean" access="public" output="false">
+	<cfscript>
+	var loc = {};
+	if ($callback("beforeDelete", arguments.callbacks))
+	{
+		loc.del = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
+		if (loc.del.result.recordCount eq 1 and $callback("afterDelete", arguments.callbacks))
+			return true;
+	}
+	return false;
+	</cfscript>
 </cffunction>
 
 <cffunction name="reload" returntype="void" access="public" output="false" hint="Reloads the property values of this object from the database."
@@ -770,71 +783,68 @@
 		<cfif isNew()>
 			<cfif $openTransaction(arguments.transaction)>
 				<cftransaction action="begin">
-					<cfif $callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks)>
-						<cfset $create(parameterize=arguments.parameterize)>
-						<cfif arguments.defaults>
-							<cfset $setDefaultValues()>
-						</cfif>
-						<cfif $callback("afterCreate", arguments.callbacks) and $callback("afterSave", arguments.callbacks)>
-							<cfset $updatePersistedProperties()>
-							<cfset returnValue = true>
-							<cftransaction action="#arguments.transaction#" />
-						<cfelse>
-							<cftransaction action="rollback" />
-						</cfif>
+					<cfset returnValue = $save(argumentCollection=arguments)>
+					<cfif returnValue>
+						<cftransaction action="#arguments.transaction#" />
 					<cfelse>
 						<cftransaction action="rollback" />
 					</cfif>
 				</cftransaction>
 				<cfset $closeTransaction()>
 			<cfelse>
-				<cfscript>
-					if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks))
-					{
-						$create(parameterize=arguments.parameterize);
-						if (arguments.defaults)
-							$setDefaultValues();
-						if ($callback("afterCreate", arguments.callbacks) and $callback("afterSave", arguments.callbacks)) 
-						{
-							$updatePersistedProperties();
-							returnValue = true;
-						}
-					}
-				</cfscript>
+				<cfset returnValue = $save(argumentCollection=arguments)>
 			</cfif>
 		<cfelse>
 			<cfif $openTransaction(arguments.transaction)>
 				<cftransaction action="begin">
-					<cfif $callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks)>
-						<cfset $update(parameterize=arguments.parameterize)>
-						<cfif $callback("afterUpdate", arguments.callbacks) and $callback("afterSave", arguments.callbacks)>
-							<cfset $updatePersistedProperties()>
-							<cfset returnValue = true>
-							<cftransaction action="#arguments.transaction#" />
-						<cfelse>
-							<cftransaction action="rollback" />
-						</cfif>
+					<cfset returnValue = $save(argumentCollection=arguments)>
+					<cfif returnValue>
+						<cftransaction action="#arguments.transaction#" />
 					<cfelse>
 						<cftransaction action="rollback" />
 					</cfif>
 				</cftransaction>
 				<cfset $closeTransaction()>
 			<cfelse>
-				<cfscript>
-					if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks))
-					{
-						$update(parameterize=arguments.parameterize);
-						if ($callback("afterUpdate", arguments.callbacks) and $callback("afterSave", arguments.callbacks))
-						{
-							$updatePersistedProperties();
-							returnValue = true;
-						}					
-					}
-				</cfscript>
+				<cfset returnValue = $save(argumentCollection=arguments)>
 			</cfif>
 		</cfif>
 	</cfif>
 	<cfreturn returnValue>
+</cffunction>
+
+<cffunction name="$save" returntype="boolean" access="public" output="false">
+	<cfscript>
+		if (isNew())
+		{
+			if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks))
+			{
+				$create(parameterize=arguments.parameterize);
+				if (arguments.defaults)
+				{
+					$setDefaultValues();
+				}
+				if ($callback("afterCreate", arguments.callbacks) and $callback("afterSave", arguments.callbacks))
+				{
+					$updatePersistedProperties();
+					return true;
+				}
+			}
+		}
+		else
+		{
+			if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks))
+			{
+				$update(parameterize=arguments.parameterize);
+				if ($callback("afterUpdate", arguments.callbacks) and $callback("afterSave", arguments.callbacks))
+				{
+					$updatePersistedProperties();
+					return true;
+				}
+			}
+		}
+		return false;
+	</cfscript>
 </cffunction>
 
 <cffunction name="update" returntype="boolean" access="public" output="false" hint="Updates the object with the supplied properties and saves it to the database. Returns `true` if the object was saved successfully to the database and `false` otherwise."
@@ -886,14 +896,13 @@
 	'
 	categories="model-object,miscellaneous" chapters="" functions="">
 	<cfscript>
-		var loc = {};
 		// if no values have ever been saved to the database this object is new
 		if (!StructKeyExists(variables, "$persistedProperties"))
-			loc.returnValue = true;
-		else
-			loc.returnValue = false;
+		{
+			return true;
+		}
+		return false;
 	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>
 
 <!--- PRIVATE MODEL CLASS METHODS --->
@@ -1660,34 +1669,4 @@
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
-</cffunction>
-
-
-<!--- transaction handling --->
-
-<cffunction name="$openTransaction" returntype="boolean" access="public" output="false" hint="I check for an existing transaction.">
-	<cfargument name="transaction" type="string" required="true" hint="See documentation for @save.">
-	<cfscript>
-		// check that the supplied transaction argument is valid
-		if (!ListFindNoCase("commit,rollback,none", arguments.transaction))
-			$throw(type="Wheels", message="Invalid transaction type", extendedInfo="The transaction type of `#arguments.transaction#` is invalid. Please use `commit`, `rollback` or `none`.");
-		// create a tracer variable in request scope for the current model's datasource
-		if (!StructKeyExists(request.wheels.transactions, $hashedConnectionArgs()))
-			request.wheels.transactions[$hashedConnectionArgs()] = false;
-		// open a new transaction if the user has requested it and there isn't one already open
-		if (ListFindNoCase("commit,rollback", arguments.transaction) and !request.wheels.transactions[$hashedConnectionArgs()])
-			{
-			request.wheels.transactions[$hashedConnectionArgs()] = true;
-			return true;
-			}
-		return false;
-	</cfscript>
-</cffunction>
-
-<cffunction name="$closeTransaction" returntype="void" access="public" output="false" hint="I check for an existing transaction.">
-	<cfset request.wheels.transactions[$hashedConnectionArgs()] = false>
-</cffunction>
-
-<cffunction name="$hashedConnectionArgs" returntype="string" access="public" output="false">
-	<cfreturn Hash(variables.wheels.class.connection.datasource & variables.wheels.class.connection.username & variables.wheels.class.connection.password)> 
 </cffunction>
