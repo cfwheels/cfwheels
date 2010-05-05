@@ -8,46 +8,31 @@
 	<cffunction name="setup">
 		<cfset oldCGIScope = request.cgi>
 	</cffunction>
+	
+	<cffunction name="teardown">
+		<cfset request.cgi = oldCGIScope>
+		<cfset StructDelete(request.wheels, "redirect", false)>
+	</cffunction>
 
 	<cffunction name="test_throw_error_on_double_redirect">
 		<cfset controller.redirectTo(action="dummy")>
-		<cfset errorWasThrown = false>
-		<cftry>
-			<cfset controller.redirectTo(action="dummy")>
-			<cfcatch type="Wheels.RedirectToAlreadyCalled">
-				<cfset errorWasThrown = true>
-			</cfcatch>
-		</cftry>
-		<cfset assert("errorWasThrown IS true")>
+		<cfset loc.e = "Wheels.RedirectToAlreadyCalled">
+		<cfset loc.r = raised('controller.redirectTo(action="dummy")')>
+		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
 	<cffunction name="test_throw_error_on_redirect_back_to_blank_referrer">
 		<cfset request.cgi.http_referer = "">
-		<cfset errorWasThrown = false>
-		<cftry>
-			<cfset controller.redirectTo(back=true)>
-			<cfcatch type="Wheels.RedirectBackError">
-				<cfset errorWasThrown = true>
-			</cfcatch>
-		</cftry>
-		<cfset assert("errorWasThrown IS true")>
+		<cfset loc.e = "Wheels.RedirectBackError">
+		<cfset loc.r = raised('controller.redirectTo(back=true)')>
+		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
 	<cffunction name="test_throw_error_on_redirect_back_to_other_domain">
 		<cfset request.cgi.http_referer = "http://www.dummy.com/dummy.html">
-		<cfset errorWasThrown = false>
-		<cftry>
-			<cfset controller.redirectTo(back=true)>
-			<cfcatch type="Wheels.RedirectBackError">
-				<cfset errorWasThrown = true>
-			</cfcatch>
-		</cftry>
-		<cfset assert("errorWasThrown IS true")>
-	</cffunction>
-
-	<cffunction name="teardown">
-		<cfset request.cgi = oldCGIScope>
-		<cfset StructDelete(request.wheels, "redirect")>
+		<cfset loc.e = "Wheels.RedirectBackError">
+		<cfset loc.r = raised('controller.redirectTo(back=true)')>
+		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
 </cfcomponent>
