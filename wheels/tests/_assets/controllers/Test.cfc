@@ -6,7 +6,7 @@
 	</cffunction>
 
 	<cffunction name="testRedirect">
-		<cfset redirectTo(action="dummy", delay=true)>
+		<cfset redirectTo(action="dummy")>
 		<cfset request.setInActionAfterRedirect = true>
 		<cfset renderPage(action="test")>
 	</cffunction>

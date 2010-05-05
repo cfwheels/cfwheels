@@ -10,24 +10,24 @@
 	</cffunction>
 
 	<cffunction name="test_redirect_to_action">
-		<cfset controller.redirectTo(action="dummy", delay=true)>
+		<cfset controller.redirectTo(action="dummy")>
 		<cfset assert("IsDefined('request.wheels.redirect.url')")>
 	</cffunction>
 
 	<cffunction name="test_redirect_to_back">
 		<cfset var loc = {}>
 		<cfset request.cgi.http_referer = "http://" & request.cgi.server_name & "/dummy-controller/dummy-action">
-		<cfset controller.redirectTo(back=true, delay=true)>
+		<cfset controller.redirectTo(back=true)>
 		<cfset assert("request.wheels.redirect.url Contains '/dummy-controller/dummy-action'")>
 	</cffunction>
 
 	<cffunction name="test_passing_through_to_urlfor">
-		<cfset controller.redirectTo(action="dummy", delay=true, onlyPath=false, protocol="https", params="dummy1=1&dummy2=2")>
+		<cfset controller.redirectTo(action="dummy", onlyPath=false, protocol="https", params="dummy1=1&dummy2=2")>
 		<cfset assert("request.wheels.redirect.url Contains 'https' AND request.wheels.redirect.url Contains 'dummy1=1&dummy2=2'")>
 	</cffunction>
 
 	<cffunction name="test_setting_cflocation_attributes">
-		<cfset controller.redirectTo(action="dummy", delay=true, addToken=true, statusCode="301")>
+		<cfset controller.redirectTo(action="dummy", addToken=true, statusCode="301")>
 		<cfset assert("request.wheels.redirect.addToken IS true AND request.wheels.redirect.statusCode IS 301")>
 	</cffunction>
 

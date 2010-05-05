@@ -13,3 +13,6 @@
 <cfset application.wheels.setDefaultValidations = false />
 <cfset application.wheels.assetQueryString = false />
 <cfset application.wheels.assetPaths = false />
+
+<!--- redirections should always delay when testing --->
+<cfset application.wheels.functions.redirectTo.delay = true>

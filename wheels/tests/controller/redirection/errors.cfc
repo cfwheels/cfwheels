@@ -10,10 +10,10 @@
 	</cffunction>
 
 	<cffunction name="test_throw_error_on_double_redirect">
-		<cfset controller.redirectTo(action="dummy", delay=true)>
+		<cfset controller.redirectTo(action="dummy")>
 		<cfset errorWasThrown = false>
 		<cftry>
-			<cfset controller.redirectTo(action="dummy", delay=true)>
+			<cfset controller.redirectTo(action="dummy")>
 			<cfcatch type="Wheels.RedirectToAlreadyCalled">
 				<cfset errorWasThrown = true>
 			</cfcatch>
@@ -25,7 +25,7 @@
 		<cfset request.cgi.http_referer = "">
 		<cfset errorWasThrown = false>
 		<cftry>
-			<cfset controller.redirectTo(back=true, delay=true)>
+			<cfset controller.redirectTo(back=true)>
 			<cfcatch type="Wheels.RedirectBackError">
 				<cfset errorWasThrown = true>
 			</cfcatch>
@@ -37,7 +37,7 @@
 		<cfset request.cgi.http_referer = "http://www.dummy.com/dummy.html">
 		<cfset errorWasThrown = false>
 		<cftry>
-			<cfset controller.redirectTo(back=true, delay=true)>
+			<cfset controller.redirectTo(back=true)>
 			<cfcatch type="Wheels.RedirectBackError">
 				<cfset errorWasThrown = true>
 			</cfcatch>
