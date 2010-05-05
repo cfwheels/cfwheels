@@ -45,6 +45,11 @@
 		<cfset loc.result = pluralize("statusUpdate")>
 		<cfset assert("NOT Compare(loc.result, 'statusUpdates')")>
 	</cffunction>
+	
+	<cffunction name="test_pluralize_issue_450">
+		<cfset loc.result = pluralize("statuscode")>
+		<cfset assert("NOT Compare(loc.result, 'statuscodes')")>
+	</cffunction>
 
 	<cffunction name="test_pluralize_multiple_words">
 		<cfset loc.result = pluralize("fancyChristmasTree")>

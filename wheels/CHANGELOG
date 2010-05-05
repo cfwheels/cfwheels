@@ -17,6 +17,7 @@ Bug Fixes
 * Defaulted day to 1 and month to 1 when submitting forms - [Tony Petruzzi]
 * Callbacks shouldn't need to be pre-loaded - #388 [Andy Bellenie, Tony Petruzzi]
 * Select options are empty when option are an array of model objects - #411 [John C. Bland II, Tony Petruzzi]
+* Corrected pluralize rules - #450 [Joshua Clingenpeel, Tony Petruzzi]
 
 Other
 =====
