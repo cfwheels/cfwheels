@@ -11,7 +11,26 @@
 	<cfargument name="pattern" type="string" required="true" hint="The URL pattern for the route.">
 	<cfargument name="controller" type="string" required="false" default="" hint="Controller to call when route matches (unless the controller name exists in the pattern).">
 	<cfargument name="action" type="string" required="false" default="" hint="Action to call when route matches (unless the action name exists in the pattern).">
-	<cfset application.wheels.Router.add(argumentCollection=arguments)>
+	<cfscript>
+		var loc = {};
+
+		// throw errors when controller or action is not passed in as arguments and not included in the pattern
+		if (!Len(arguments.controller) && arguments.pattern Does Not Contain "[controller]")
+			$throw(type="Wheels.IncorrectArguments", message="The `controller` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `controller` argument to specifically tell Wheels which controller to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
+		if (!Len(arguments.action) && arguments.pattern Does Not Contain "[action]")
+			$throw(type="Wheels.IncorrectArguments", message="The `action` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `action` argument to specifically tell Wheels which action to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
+
+		loc.thisRoute = Duplicate(arguments);
+		loc.thisRoute.variables = "";
+		loc.iEnd = ListLen(arguments.pattern, "/");
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(arguments.pattern, loc.i, "/");
+			if (loc.item Contains "[")
+				loc.thisRoute.variables = ListAppend(loc.thisRoute.variables, ReplaceList(loc.item, "[,]", ","));
+		}
+		ArrayAppend(application.wheels.routes, loc.thisRoute);
+	</cfscript>
 </cffunction>
 
 <cffunction name="addDefaultRoutes" returntype="void" access="public" output="false" hint="Adds the default Wheels routes to your application. Only use this method if you have set `loadDefaultRoutes` to `false` and want to control exactly where in the route order you want to place the default routes."
@@ -21,7 +40,11 @@
 		<cfset addDefaultRoutes()>
 	'
 	categories="configuration" chapters="using-routes" functions="">
-	<cfset application.wheels.Router.defaults()>
+	<cfscript>
+		addRoute(pattern="[controller]/[action]/[key]");
+		addRoute(pattern="[controller]/[action]");
+		addRoute(pattern="[controller]", action="index");
+	</cfscript>
 </cffunction>
 
 <cffunction name="set" returntype="void" access="public" output="false" hint="Use to configure a global setting or set a default for a function."
@@ -321,7 +344,7 @@
 		if (Len(arguments.route))
 		{
 			// link for a named route
-			loc.route = application.wheels.Router.searchNamed(argumentCollection=arguments);
+			loc.route = $findRoute(argumentCollection=arguments);
 			if (arguments.$URLRewriting == "Off")
 			{
 				loc.returnValue = loc.returnValue & "?controller=";

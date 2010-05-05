@@ -71,7 +71,6 @@
 		if (!application.wheels.cacheControllerInitialization)
 			StructClear(application.wheels.controllers);
 		if (!application.wheels.cacheRoutes)
-			application.wheels.Router.$reload();
 			$loadRoutes();
 		if (!application.wheels.cacheDatabaseSchema)
 			$clearCache("sql");

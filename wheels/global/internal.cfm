@@ -134,8 +134,44 @@
 <cffunction name="$routeVariables" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		loc.route = application.wheels.Router.searchNamed(argumentCollection=arguments);
+		loc.route = $findRoute(argumentCollection=arguments);
 		loc.returnValue = loc.route.variables;
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$findRoute" returntype="struct" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		
+		// throw an error if a route with this name has not been set by developer in the config/routes.cfm file
+		if (application.wheels.showErrorInformation && !StructKeyExists(application.wheels.namedRoutePositions, arguments.route))
+			$throw(type="Wheels.RouteNotFound", message="Could not find the `#arguments.route#` route.", extendedInfo="Create a new route in `config/routes.cfm` with the name `#arguments.route#`.");
+
+		loc.routePos = application.wheels.namedRoutePositions[arguments.route];
+		if (loc.routePos Contains ",")
+		{
+			// there are several routes with this name so we need to figure out which one to use by checking the passed in arguments
+			loc.iEnd = ListLen(loc.routePos);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.returnValue = application.wheels.routes[ListGetAt(loc.routePos, loc.i)];
+				loc.foundRoute = true;
+				loc.jEnd = ListLen(loc.returnValue.variables);
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				{
+					loc.variable = ListGetAt(loc.returnValue.variables, loc.j);
+					if (!StructKeyExists(arguments, loc.variable) || !Len(arguments[loc.variable]))
+						loc.foundRoute = false;
+				}
+				if (loc.foundRoute)
+					break;
+			}
+		}
+		else
+		{
+			loc.returnValue = application.wheels.routes[loc.routePos];
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -546,15 +582,35 @@ Should now call bar() instead and marking foo() as deprecated
 
 <cffunction name="$loadRoutes" returntype="void" access="public" output="false">
 	<cfscript>
+		// clear out the route info
+		ArrayClear(application.wheels.routes);
+		StructClear(application.wheels.namedRoutePositions);
+
 		// load developer routes first
 		$include(template="#application.wheels.configPath#/routes.cfm");
 
 		// add the wheels default routes at the end if requested
 		if (application.wheels.loadDefaultRoutes)
+			addDefaultRoutes();
+		
+		// set lookup info for the named routes
+		$setNamedRoutePositions();
+		</cfscript>
+</cffunction>
+
+<cffunction name="$setNamedRoutePositions" returntype="void" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.iEnd = ArrayLen(application.wheels.routes);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			application.wheels.Router.add(pattern="[controller]/[action]/[key]");
-			application.wheels.Router.add(pattern="[controller]/[action]");
-			application.wheels.Router.add(pattern="[controller]", action="index");
+			loc.route = application.wheels.routes[loc.i];
+			if (StructKeyExists(loc.route, "name") && len(loc.route.name))
+			{
+				if (!StructKeyExists(application.wheels.namedRoutePositions, loc.route.name))
+					application.wheels.namedRoutePositions[loc.route.name] = "";
+				application.wheels.namedRoutePositions[loc.route.name] = ListAppend(application.wheels.namedRoutePositions[loc.route.name], loc.i);
+			}
 		}
 		</cfscript>
 </cffunction>

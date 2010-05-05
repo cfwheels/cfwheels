@@ -300,6 +300,47 @@
 	</cfscript>
 </cffunction>
 
+<cffunction name="$findMatchingRoute" returntype="struct" access="public" output="false">
+	<cfargument name="path" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.iEnd = ArrayLen(application.wheels.routes);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.currentRoute = application.wheels.routes[loc.i].pattern;
+			if (arguments.path == "" && loc.currentRoute == "")
+			{
+				loc.returnValue = application.wheels.routes[loc.i];
+				break;
+			}
+			else
+			{
+				if (ListLen(arguments.path, "/") >= ListLen(loc.currentRoute, "/") && loc.currentRoute != "")
+				{
+					loc.match = true;
+					loc.jEnd = ListLen(loc.currentRoute, "/");
+					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+					{
+						loc.item = ListGetAt(loc.currentRoute, loc.j, "/");
+						loc.thisRoute = ReplaceList(loc.item, "[,]", ",");
+						loc.thisURL = ListGetAt(arguments.path, loc.j, "/");
+						if (Left(loc.item, 1) != "[" && loc.thisRoute != loc.thisURL)
+							loc.match = false;
+					}
+					if (loc.match)
+					{
+						loc.returnValue = application.wheels.routes[loc.i];
+						break;
+					}
+				}
+			}
+		}
+		if (!StructKeyExists(loc, "returnValue"))
+			$throw(type="Wheels.RouteNotFound", message="Wheels couldn't find a route that matched this request.", extendedInfo="Make sure there is a route setup in your `config/routes.cfm` file that matches the `#arguments.path#` request.");
+		</cfscript>
+		<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$getPathFromRequest" returntype="string" access="public" output="false">
 	<cfargument name="pathInfo" type="string" required="true">
 	<cfargument name="scriptName" type="string" required="true">
@@ -327,7 +368,7 @@
 
 		// determine the path from the url, find a matching route for it and create the params struct
 		loc.path = $getPathFromRequest(pathInfo=arguments.pathInfo, scriptName=arguments.scriptName);
-		loc.route = application.wheels.Router.search(route=loc.path);
+		loc.route = $findMatchingRoute(path=loc.path);
 		loc.params = $createParams(path=loc.path, route=loc.route, formScope=arguments.formScope, urlScope=arguments.urlScope);
 
 		// set params in the request scope as well so we can display it in the debug info outside of the dispatch / controller context

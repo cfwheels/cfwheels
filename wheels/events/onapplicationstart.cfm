@@ -41,6 +41,8 @@
 		application.wheels.nonExistingLayoutFiles = "";
 		application.wheels.existingHelperFiles = "";
 		application.wheels.nonExistingHelperFiles = "";
+		application.wheels.routes = [];
+		application.wheels.namedRoutePositions = {};
 		application.wheels.cache = {};
 		application.wheels.cache.sql = {};
 		application.wheels.cache.image = {};
@@ -221,8 +223,7 @@
 		if (!StructIsEmpty(application.wheels.mixins))
 			$include(template="wheels/plugins/injection.cfm");
 
-		// load router
-		application.wheels.Router = $createObjectFromRoot(path="wheels", fileName="Router", method="init");
+		// load routes
 		$loadRoutes();
 
 		// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
