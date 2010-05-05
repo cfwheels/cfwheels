@@ -21,11 +21,7 @@
 		<cfset addDefaultRoutes()>
 	'
 	categories="configuration" chapters="using-routes" functions="">
-	<cfscript>
-		application.wheels.Router.add(pattern="[controller]/[action]/[key]");
-		application.wheels.Router.add(pattern="[controller]/[action]");
-		application.wheels.Router.add(pattern="[controller]", action="index");
-	</cfscript>
+	<cfset application.wheels.Router.defaults()>
 </cffunction>
 
 <cffunction name="set" returntype="void" access="public" output="false" hint="Use to configure a global setting or set a default for a function."
