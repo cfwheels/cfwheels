@@ -276,7 +276,8 @@
 				}
 			}
 		}
-		StructAppend(arguments.input, application.wheels.functions[arguments.name], false);
+		if (StructKeyExists(application.wheels.functions, arguments.name))
+			StructAppend(arguments.input, application.wheels.functions[arguments.name], false);
 	</cfscript>
 </cffunction>
 
@@ -420,16 +421,23 @@
 		{
 			if (Now() > application.wheels.cache[arguments.category][arguments.key].expiresAt)
 			{
+				if (application.wheels.showDebugInformation)
+					request.wheels.cacheCounts.culls = request.wheels.cacheCounts.culls + 1;
 				$removeFromCache(key=arguments.key, category=arguments.category);
 			}
 			else
 			{
+				if (application.wheels.showDebugInformation)
+					request.wheels.cacheCounts.hits = request.wheels.cacheCounts.hits + 1;
 				if (IsSimpleValue(application.wheels.cache[arguments.category][arguments.key].value))
 					loc.returnValue = application.wheels.cache[arguments.category][arguments.key].value;
 				else
 					loc.returnValue = Duplicate(application.wheels.cache[arguments.category][arguments.key].value);
 			}
 		}
+		
+		if (application.wheels.showDebugInformation && IsBoolean(loc.returnValue) && !loc.returnValue)
+			request.wheels.cacheCounts.misses = request.wheels.cacheCounts.misses + 1;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
