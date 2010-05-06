@@ -123,7 +123,10 @@
 		var loc = {};
 		if (!Len(arguments.$template))
 			arguments.$template = "/" & arguments.$controller & "/" & arguments.$action;
-		loc.content = $includeFile($name=arguments.$template, $type="page");
+		arguments.$type = "page";
+		arguments.$name = arguments.$template;
+		arguments.$template = $generateIncludeTemplatePath(argumentCollection=arguments);
+		loc.content = $includeFile(argumentCollection=arguments);
 		loc.returnValue = $renderLayout($content=loc.content, $layout=arguments.$layout);
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -145,7 +148,7 @@
 		var loc = {};
 		if (IsQuery(arguments.$partial) && arguments.$partial.recordCount)
 		{
-			arguments.$name = request.wheels[Hash(GetMetaData(arguments.$partial).toString())];
+			arguments.$name = request.wheels[Hash(SerializeJSON(arguments.$partial))];
 			arguments[pluralize(arguments.$name)] = arguments.$partial;
 		}
 		else if (IsObject(arguments.$partial))
@@ -167,6 +170,7 @@
 			if (Len(arguments.$layout))
 				arguments.$layout = Replace("_" & arguments.$layout, "__", "_", "one");
 			arguments.$type = "partial";
+			arguments.$template = $generateIncludeTemplatePath(argumentCollection=arguments);
 			loc.content = $includeFile(argumentCollection=arguments);
 			loc.returnValue = $renderLayout($content=loc.content, $layout=arguments.$layout);
 		}
@@ -185,7 +189,7 @@
 		if (application.wheels.cachePartials && (isNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
 			loc.category = "partial";
-			loc.key = "#arguments.$partial.toString()##$hashStruct(variables.params)##$hashStruct(arguments)#";
+			loc.key = "#$hashStruct(arguments)#";
 			loc.lockName = loc.category & loc.key;
 			loc.conditionArgs = {};
 			loc.conditionArgs.category = loc.category;
@@ -203,12 +207,13 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$includeFile" returntype="string" access="public" output="false">
+<cffunction name="$generateIncludeTemplatePath" returntype="string" access="public" output="false">
 	<cfargument name="$name" type="any" required="true">
-	<cfargument name="$type" type="string" required="true">
+	<cfargument name="$type" type="any" required="true">
+	<cfargument name="$baseTemplatePath" type="string" required="false" default="#application.wheels.viewPath#" />
 	<cfscript>
 		var loc = {};
-		loc.include = application.wheels.viewPath;
+		loc.include = arguments.$baseTemplatePath;
 		loc.fileName = Spanexcluding(Reverse(ListFirst(Reverse(arguments.$name), "/")), ".") & ".cfm"; // extracts the file part of the path and replace ending ".cfm"
 		if (arguments.$type == "partial")
 			loc.fileName = Replace("_" & loc.fileName, "__", "_", "one"); // replaces leading "_" when the file is a partial
@@ -219,7 +224,16 @@
 			loc.include = loc.include & "/" & variables.params.controller & "/" & loc.folderName & "/" & loc.fileName; // Include a file in a sub folder of the current controller
 		else
 			loc.include = loc.include & "/" & variables.params.controller & "/" & loc.fileName; // Include a file in the current controller's view folder
-		arguments.$template = loc.include;
+	</cfscript>
+	<cfreturn loc.include />
+</cffunction>
+
+<cffunction name="$includeFile" returntype="string" access="public" output="false">
+	<cfargument name="$name" type="any" required="true">
+	<cfargument name="$template" type="any" required="true">
+	<cfargument name="$type" type="string" required="true">
+	<cfscript>
+		var loc = {};
 		if (arguments.$type == "partial")
 		{
 			loc.pluralizedName = pluralize(arguments.$name);
@@ -364,7 +378,10 @@
 			}
 			else
 			{
-				loc.returnValue = $includeFile($name=arguments.$layout, $type="layout");
+				arguments.$type = "layout";
+				arguments.$name = arguments.$layout;
+				arguments.$template = $generateIncludeTemplatePath(argumentCollection=arguments);
+				loc.returnValue = $includeFile(argumentCollection=arguments);
 			}
 		}
 		else
