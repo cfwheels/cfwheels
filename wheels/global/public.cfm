@@ -456,6 +456,9 @@
 	'
 	categories="global,string" chapters="miscellaneous-helpers" functions="humanize,pluralize,singularize">
 	<cfargument name="text" type="string" required="true" hint="Text to capitalize.">
+	<cfif !Len(arguments.text)>
+		<cfreturn arguments.text />
+	</cfif>
 	<cfreturn UCase(Left(arguments.text, 1)) & Mid(arguments.text, 2, Len(arguments.text)-1)>
 </cffunction>
 
