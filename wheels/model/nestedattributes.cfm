@@ -200,7 +200,7 @@
 			{
 				loc.method = "findByKey";
 			}
-			else if (Len(loc.arguments.key) && loc.delete)
+			else if (Len(loc.arguments.key) && loc.delete && arguments.association.nested.delete)
 			{
 				loc.method = "deleteByKey";
 			}
