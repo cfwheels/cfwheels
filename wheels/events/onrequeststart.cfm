@@ -66,6 +66,11 @@
 		// create a structure to track the transaction status for all adapters
 		request.wheels.transactions = {};
 
+		request.wheels.cacheCounts = {};
+		request.wheels.cacheCounts.hits = 0;
+		request.wheels.cacheCounts.misses = 0;
+		request.wheels.cacheCounts.culls = 0;
+
 		if (!application.wheels.cacheModelInitialization)
 			StructClear(application.wheels.models);
 		if (!application.wheels.cacheControllerInitialization)
