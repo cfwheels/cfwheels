@@ -34,6 +34,12 @@
 	<cfargument name="association" type="string" required="true" />
 	<cfargument name="keys" type="string" required="true" />
 	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="hasManyCheckBox", input=arguments);
@@ -49,7 +55,12 @@
 		
 		loc.tagId = "#arguments.objectName#-#arguments.association#-#Replace(arguments.keys, ",", "-", "all")#-_delete";
 		loc.tagName = "#arguments.objectName#[#arguments.association#][#arguments.keys#][_delete]";
-		loc.returnValue = checkBoxTag(name=loc.tagName, id=loc.tagId, value=0, checked=loc.checked, label=arguments.label);
+		
+		StructDelete(arguments, "keys", false);
+		StructDelete(arguments, "objectName", false);
+		StructDelete(arguments, "association", false);
+		
+		loc.returnValue = checkBoxTag(name=loc.tagName, id=loc.tagId, value=0, checked=loc.checked, argumentCollection=arguments);
 		loc.returnValue = loc.returnValue & hiddenFieldTag(name=loc.tagName & "($checkbox)", value=1);
 	</cfscript>
 	<cfreturn loc.returnValue />
