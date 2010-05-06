@@ -338,7 +338,7 @@
 		}
 		// update the request with a hash of the query if it changed so that we can find it with pagination
 		if (!StructKeyExists(request.wheels, Hash(GetMetaData(arguments.collection).toString())))
-			request.wheels[Hash(GetMetaData(arguments.collection).toString())] = variables.wheels.class.modelName;
+			request.wheels[Hash(SerializeJSON(arguments.collection))] = variables.wheels.class.modelName;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

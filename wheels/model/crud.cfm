@@ -255,7 +255,7 @@
 				loc.findAll = variables.wheels.class.adapter.$query(argumentCollection=loc.finderArgs);
 				request[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
-			request.wheels[Hash(GetMetaData(loc.findAll.query).toString())] = variables.wheels.class.modelName; // place an identifer in request scope so we can reference this query when passed in to view functions
+			request.wheels[Hash(SerializeJSON(loc.findAll.query))] = variables.wheels.class.modelName; // place an identifer in request scope so we can reference this query when passed in to view functions
 			if (arguments.returnAs == "query")
 			{
 				loc.returnValue = loc.findAll.query;
@@ -299,6 +299,9 @@
 											loc.hasManyDoneObjects = ListAppend(loc.hasManyDoneObjects, loc.hasManyObject.key(), Chr(7));
 										}
 									}
+
+									if (ArrayIsEmpty(loc.object[loc.include]))
+										StructDelete(loc.object, loc.include, false);
 								}
 								else
 								{
