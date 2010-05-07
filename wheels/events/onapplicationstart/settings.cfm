@@ -94,6 +94,7 @@
 
 	// function defaults
 	application.wheels.functions = {};
+	application.wheels.functions.$location = {delay=false};
 	application.wheels.functions.autoLink = {domains="com,net,org,info,biz,tv,co.uk,de,ro,it,se,ly,nu"};
 	application.wheels.functions.average = {distinct=false, parameterize=true, ifNull=""};
 	application.wheels.functions.belongsTo = {joinType="inner"};

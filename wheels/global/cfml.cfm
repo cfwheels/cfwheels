@@ -169,7 +169,12 @@
 </cffunction>
 
 <cffunction name="$location" returntype="void" access="public" output="false">
-	<cflocation attributeCollection="#arguments#">
+	<cfargument name="delay" type="boolean" required="false">
+	<cfset $insertDefaults(name="$location", input=arguments) />
+	<cfif !arguments.delay>
+		<cfset StructDelete(arguments, "delay", false) />
+		<cflocation attributeCollection="#arguments#">
+	</cfif>
 </cffunction>
 
 <cffunction name="$htmlhead" returntype="void" access="public" output="false">
