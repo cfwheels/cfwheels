@@ -1,3 +1,34 @@
+<cffunction name="$runTransaction" returntype="any" access="public" output="false" hint="I determine whether a transaction should be run on a specified method on of model.">
+	<cfargument name="method" type="string" required="true" hint="Model method to run.">
+	<cfargument name="transaction" type="string" required="true" hint="See documentation for @save.">
+	<cfargument name="autoRollback" type="boolean" required="false" default="true" hint="I determine whether the transaction should be rolled back automatically.">
+	<cfset var loc = {} />
+	<cfif not StructKeyExists(variables, arguments.method)>
+		<cfif application.wheels.showErrorInformation>
+			<cfthrow type="Wheels" message="Model Method not Found!" extendedInfo="The model method `#arguments.method#` does not exist in the model." />
+		</cfif>
+		<cfreturn false />
+	</cfif>
+	<cfif $openTransaction(arguments.transaction)>
+		<cftransaction action="begin">
+			<cfset loc.returnValue = $invoke(componentReference=this, argumentCollection=arguments) />
+			<cfif arguments.autoRollback>
+				<cfif loc.returnValue>
+					<cftransaction action="#arguments.transaction#" />
+				<cfelse>
+					<cftransaction action="rollback" />
+				</cfif>				
+			<cfelse>
+				<cftransaction action="#arguments.transaction#" />
+			</cfif>
+		</cftransaction>
+		<cfset $closeTransaction()>
+	<cfelse>
+		<cfset loc.returnValue = $invoke(componentReference=this, argumentCollection=arguments) />
+	</cfif>
+	<cfreturn loc.returnValue />
+</cffunction>
+
 <cffunction name="$openTransaction" returntype="boolean" access="public" output="false" hint="I check for an existing transaction.">
 	<cfargument name="transaction" type="string" required="true" hint="See documentation for @save.">
 	<cfscript>

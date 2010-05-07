@@ -423,12 +423,13 @@
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
-	<cfset var loc = {}>
-	<cfset $insertDefaults(name="updateAll", input=arguments)>
-	<cfset arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,parameterize,instantiate,transaction,callbacks,$softDeleteCheck", setOnModel=false)>
-
-	<cfif arguments.instantiate> <!--- find and instantiate each object and call its update function --->
-		<cfscript>
+	<cfscript>
+		var loc = {};
+		$insertDefaults(name="updateAll", input=arguments);
+		arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,parameterize,instantiate,transaction,callbacks,$softDeleteCheck", setOnModel=false);
+		
+		if (arguments.instantiate) // find and instantiate each object and call its update function
+		{
 			loc.returnValue = 0;
 			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, callbacks=arguments.callbacks, $softDeleteCheck=arguments.$softDeleteCheck);
 			for (loc.i=1; loc.i lte loc.records.recordCount; loc.i++)
@@ -437,44 +438,34 @@
 				if (loc.object.update(properties=arguments.properties, parameterize=arguments.parameterize, transaction=arguments.transaction, callbacks=arguments.callbacks))
 					loc.returnValue = loc.returnValue + 1;
 			}
-		</cfscript>
-	<cfelse> <!--- do a regular update query --->
-		<cfscript>
-			loc.sql = [];
-			ArrayAppend(loc.sql, "UPDATE #variables.wheels.class.tableName# SET");
+		}
+		else
+		{
+			arguments.sql = [];
+			ArrayAppend(arguments.sql, "UPDATE #variables.wheels.class.tableName# SET");
 			loc.pos = 0;
 			for (loc.key in arguments.properties)
 			{
 				loc.pos = loc.pos + 1;
-				ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
+				ArrayAppend(arguments.sql, "#variables.wheels.class.properties[loc.key].column# = ");
 
 				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, null=arguments.properties[loc.key] == ""};
-				ArrayAppend(loc.sql, loc.param);
+				ArrayAppend(arguments.sql, loc.param);
 				if (StructCount(arguments.properties) gt loc.pos)
-					ArrayAppend(loc.sql, ",");
+					ArrayAppend(arguments.sql, ",");
 			}
-			loc.sql = $addWhereClause(sql=loc.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
-			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=arguments.where);
-		</cfscript>
-		<cfset arguments.sql = loc.sql>
-		<cfif $openTransaction(arguments.transaction)>
-			<cftransaction action="begin">
-				<cfset loc.returnValue = $updateAll(argumentCollection=arguments)>
-				<cftransaction action="#arguments.transaction#" />
-			</cftransaction>
-			<cfset $closeTransaction()>
-		<cfelse>
-			<cfset loc.returnValue = $updateAll(argumentCollection=arguments)>
-		</cfif>
-	</cfif>
+			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
+			arguments.sql = $addWhereClauseParameters(sql=arguments.sql, where=arguments.where);
+			
+			loc.returnValue = $runTransaction(method="$updateAll", argumentCollection=arguments);
+		}
+	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$updateAll" returntype="numeric" access="public" output="false">
-	<cfscript>
-	var upd = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
-	return upd.result.recordCount;
-	</cfscript>
+	<cfset var update = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize)>
+	<cfreturn update.result.recordCount>
 </cffunction>
 
 <cffunction name="updateByKey" returntype="boolean" access="public" output="false" hint="Finds the object with the supplied key and saves it (if validation permits it) with the supplied properties and/or named arguments. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument. Returns `true` if the object was found and updated successfully, `false` otherwise."
@@ -549,10 +540,12 @@
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
-	<cfset var loc = {}>
-	<cfset $insertDefaults(name="deleteAll", input=arguments)>
-	<cfif arguments.instantiate> <!--- find and instantiate each object and call its delete function --->
-		<cfscript>
+	<cfscript>
+		var loc = {};
+		$insertDefaults(name="deleteAll", input=arguments);
+		
+		if (arguments.instantiate)
+		{
 			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
 			loc.returnValue = 0;
 			for (loc.i=1; loc.i lte loc.records.recordCount; loc.i++)
@@ -561,33 +554,23 @@
 				if (loc.object.delete(parameterize=arguments.parameterize, transaction=arguments.transaction, callbacks=arguments.callbacks))
 					loc.returnValue++;
 			}
-		</cfscript>
-	<cfelse> <!--- do a regular delete query --->
-		<cfscript>
-			loc.sql = [];
-			loc.sql = $addDeleteClause(sql=loc.sql);
-			loc.sql = $addWhereClause(sql=loc.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
-			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=arguments.where);
-		</cfscript>
-		<cfset arguments.sql = loc.sql>
-		<cfif $openTransaction(arguments.transaction)>
-			<cftransaction action="begin">
-				<cfset loc.returnValue = $deleteAll(argumentCollection=arguments)>
-				<cftransaction action="#arguments.transaction#" />
-			</cftransaction>
-			<cfset $closeTransaction()>
-		<cfelse>
-			<cfset loc.returnValue = $deleteAll(argumentCollection=arguments)>
-		</cfif>
-	</cfif>
+		}
+		else
+		{
+			arguments.sql = [];
+			arguments.sql = $addDeleteClause(sql=arguments.sql);
+			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
+			arguments.sql = $addWhereClauseParameters(sql=arguments.sql, where=arguments.where);
+			
+			loc.returnValue = $runTransaction(method="$deleteAll", argumentCollection=arguments);
+		}
+	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$deleteAll" returntype="numeric" access="public" output="false">
-	<cfscript>
-	var del = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
-	return del.result.recordCount;
-	</cfscript>
+	<cfset var delete = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize)>
+	<cfreturn delete.result.recordCount>
 </cffunction>
 
 <cffunction name="deleteByKey" returntype="boolean" access="public" output="false" hint="Finds the record with the supplied key and deletes it. Returns `true` on successful deletion of the row, `false` otherwise."
@@ -700,39 +683,26 @@
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfset var loc = {}>
-	<cfset $insertDefaults(name="delete", input=arguments)>
-	<cfset loc.returnValue = false>
-	<cfset loc.sql = []>
-	<cfset loc.sql = $addDeleteClause(sql=loc.sql)>
-	<cfset loc.sql = $addKeyWhereClause(sql=loc.sql)>
-	<cfset arguments.sql = loc.sql>
-	<cfif $openTransaction(arguments.transaction)>
-		<cftransaction action="begin">
-			<cfset loc.returnValue = $delete(argumentCollection=arguments)>
-			<cfif loc.returnValue>
-				<cftransaction action="#arguments.transaction#" />
-			<cfelse>
-				<cftransaction action="rollback" />
-			</cfif>
-		</cftransaction>
-		<cfset $closeTransaction()>
-	<cfelse>
-		<cfset loc.returnValue = $delete(argumentCollection=arguments)>
-	</cfif>
-	<cfreturn loc.returnValue>
+	<cfscript>
+		$insertDefaults(name="delete", input=arguments);
+		
+		arguments.sql = [];
+		arguments.sql = $addDeleteClause(sql=arguments.sql);
+		arguments.sql = $addKeyWhereClause(sql=arguments.sql);
+	</cfscript>
+	<cfreturn $runTransaction(method="$delete", argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$delete" returntype="boolean" access="public" output="false">
 	<cfscript>
-	var loc = {};
-	if ($callback("beforeDelete", arguments.callbacks))
-	{
-		loc.del = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
-		if (loc.del.result.recordCount eq 1 and $callback("afterDelete", arguments.callbacks))
-			return true;
-	}
-	return false;
+		var loc = {};
+		if ($callback("beforeDelete", arguments.callbacks))
+		{
+			loc.del = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
+			if (loc.del.result.recordCount eq 1 and $callback("afterDelete", arguments.callbacks))
+				return true;
+		}
+		return false;
 	</cfscript>
 </cffunction>
 
@@ -779,70 +749,41 @@
 	<cfargument name="validate" type="boolean" required="false" default="true" hint="Whether or not to run validations when saving">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="Use `commit` to update the database when the save has completed, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfset var returnValue = false>
 	<cfset $insertDefaults(name="save", input=arguments)>
 	<cfset clearErrors()>
-	<cfif $callback("beforeValidation", arguments.callbacks)>
-		<cfif isNew()>
-			<cfif $openTransaction(arguments.transaction)>
-				<cftransaction action="begin">
-					<cfset returnValue = $save(argumentCollection=arguments)>
-					<cfif returnValue>
-						<cftransaction action="#arguments.transaction#" />
-					<cfelse>
-						<cftransaction action="rollback" />
-					</cfif>
-				</cftransaction>
-				<cfset $closeTransaction()>
-			<cfelse>
-				<cfset returnValue = $save(argumentCollection=arguments)>
-			</cfif>
-		<cfelse>
-			<cfif $openTransaction(arguments.transaction)>
-				<cftransaction action="begin">
-					<cfset returnValue = $save(argumentCollection=arguments)>
-					<cfif returnValue>
-						<cftransaction action="#arguments.transaction#" />
-					<cfelse>
-						<cftransaction action="rollback" />
-					</cfif>
-				</cftransaction>
-				<cfset $closeTransaction()>
-			<cfelse>
-				<cfset returnValue = $save(argumentCollection=arguments)>
-			</cfif>
-		</cfif>
-	</cfif>
-	<cfreturn returnValue>
+	<cfreturn $runTransaction(method="$save", argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$save" returntype="boolean" access="public" output="false">
 	<cfscript>
-		if (isNew())
+		if ($callback("beforeValidation", arguments.callbacks))
 		{
-			if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks))
+			if (isNew())
 			{
-				$create(parameterize=arguments.parameterize);
-				if (arguments.defaults)
+				if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onCreate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks))
 				{
-					$setDefaultValues();
-				}
-				if ($callback("afterCreate", arguments.callbacks) and $callback("afterSave", arguments.callbacks))
-				{
-					$updatePersistedProperties();
-					return true;
+					$create(parameterize=arguments.parameterize);
+					if (arguments.defaults)
+					{
+						$setDefaultValues();
+					}
+					if ($callback("afterCreate", arguments.callbacks) and $callback("afterSave", arguments.callbacks))
+					{
+						$updatePersistedProperties();
+						return true;
+					}
 				}
 			}
-		}
-		else
-		{
-			if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks))
+			else
 			{
-				$update(parameterize=arguments.parameterize);
-				if ($callback("afterUpdate", arguments.callbacks) and $callback("afterSave", arguments.callbacks))
+				if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks))
 				{
-					$updatePersistedProperties();
-					return true;
+					$update(parameterize=arguments.parameterize);
+					if ($callback("afterUpdate", arguments.callbacks) and $callback("afterSave", arguments.callbacks))
+					{
+						$updatePersistedProperties();
+						return true;
+					}
 				}
 			}
 		}
