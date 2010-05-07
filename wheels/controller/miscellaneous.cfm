@@ -1,14 +1,24 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
-<cffunction name="$processAction" returntype="any" access="public" output="false">
+<cffunction name="$processAction" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		loc.debug = application.wheels.showDebugInformation;
 		if (loc.debug)
 			$debugPoint("beforeFilters");
 		// run verifications and before filters if they exist on the controller
-		$runVerifications(action=params.action, params=params);
-		$runFilters(type="before", action=params.action);
-
+		this.$runVerifications(action=params.action, params=params);
+		this.$runFilters(type="before", action=params.action);
+		
+		// check to see if the controller params has changed and if so, instantiate the new controller and re-run filters and verifications
+		if (params.controller != this.controllerName())
+		{
+			this = $controller(params.controller).$createControllerObject(params);
+			if (loc.debug)
+				$debugPoint("beforeFilters");
+			this.$processAction();
+			return;
+		}
+		
 		if (loc.debug)
 			$debugPoint("beforeFilters,action");
 
@@ -63,6 +73,7 @@
 		if (loc.debug)
 			$debugPoint("afterFilters");
 	</cfscript>
+	<cfreturn />
 </cffunction>
 
 
@@ -78,7 +89,7 @@
 		{
 			$invoke(method=arguments.action);
 		}
-		else if (StructKeyExists(this, "onMissingMethod") && IsCustomFunction(this[arguments.action]))
+		else if (StructKeyExists(this, "onMissingMethod"))
 		{
 			loc.argumentCollection = {};
 			loc.argumentCollection.missingMethodName = arguments.action;
