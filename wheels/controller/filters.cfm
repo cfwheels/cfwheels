@@ -16,14 +16,19 @@
 	<cfargument name="except" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell Wheels that the filter function(s) should be run on all actions except the specified ones.">
 	<cfscript>
 		var loc = {};
+
+		arguments.through = $listClean(arguments.through);
+		arguments.only = $listClean(arguments.only);
+		arguments.except = $listClean(arguments.except);
+
 		loc.iEnd = ListLen(arguments.through);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.filter = {};
-			loc.filter.through = Trim(ListGetAt(arguments.through, loc.i));
+			loc.filter.through = ListGetAt(arguments.through, loc.i);
 			loc.filter.type = arguments.type;
-			loc.filter.only = $listClean(arguments.only);
-			loc.filter.except = $listClean(arguments.except);
+			loc.filter.only = arguments.only;
+			loc.filter.except = arguments.except;
 			loc.filter.arguments = {};
 			if (StructCount(arguments) > 4)
 			{
