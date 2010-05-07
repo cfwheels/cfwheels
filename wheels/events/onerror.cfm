@@ -21,17 +21,16 @@
 			if (application.wheels.sendEmailOnError)
 			{
 				loc.mailArgs = {};
+				$insertDefaults(name="sendEmail", input=loc.mailArgs);
 				if (StructKeyExists(application.wheels, "errorEmailServer") && Len(application.wheels.errorEmailServer))
 					loc.mailArgs.server = application.wheels.errorEmailServer;
 				loc.mailArgs.from = application.wheels.errorEmailAddress;
 				loc.mailArgs.to = application.wheels.errorEmailAddress;
 				loc.mailArgs.subject = application.wheels.errorEmailSubject;
-				loc.mailArgs.mailparts = [ StructNew() ];
-				loc.mailArgs.mailParts[1].type = "html";
-				loc.mailArgs.mailParts[1].tagContent = $includeAndReturnOutput($template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception);
-				$insertDefaults(name="sendEmail", input=loc.mailArgs);
-				StructDelete(loc.mailArgs, "layouts");
-				StructDelete(loc.mailArgs, "detectMultiPart");
+				loc.mailArgs.type = "html";
+				loc.mailArgs.tagContent = $includeAndReturnOutput($template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception);
+				StructDelete(loc.mailArgs, "layouts", false);
+				StructDelete(loc.mailArgs, "detectMultiPart", false);
 				$mail(argumentCollection=loc.mailArgs);
 			}
 	
