@@ -1,5 +1,5 @@
 <!--- class methods --->
-<cffunction name="nestedAttributesFor" output="false" access="public" returntype="void" hint="I allow nested objects and arrays to be set from params.">
+<cffunction name="nestedProperties" output="false" access="public" returntype="void" hint="I allow nested objects and arrays to be set from params.">
 	<cfargument name="associations" type="string" required="false" default="" hint="List out the associations you want to allow to be set through the params." />
 	<cfargument name="autoSave" type="boolean" required="false" default="true" hint="Whether to save the association(s) when the parent object is saved." />
 	<cfargument name="allowDelete" type="boolean" required="false" default="false" hint="Set `allowDelete` to true to tell wheels to look for the property _delete in your model that will be evaluated to see if the model should be deleted." />
@@ -28,7 +28,7 @@
 			}
 			else if (application.wheels.showErrorInformation)
 			{
-				$throw(type="Wheels.AssociationNotFound", message="The assocation `#loc.association#` was not found on the #variables.wheels.class.modelName# model.", extendedInfo="Make sure your have call `hasMany()`, `hasOne()`, or `belongsTo()` before calling the `nestedAttributesFor()` method.");
+				$throw(type="Wheels.AssociationNotFound", message="The assocation `#loc.association#` was not found on the #variables.wheels.class.modelName# model.", extendedInfo="Make sure your have call `hasMany()`, `hasOne()`, or `belongsTo()` before calling the `nestedProperties()` method.");
 			}
 		}
 		
