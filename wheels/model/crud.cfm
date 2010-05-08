@@ -778,7 +778,8 @@
 			{
 				if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks))
 				{
-					$update(parameterize=arguments.parameterize);
+					if (hasChanged())
+						$update(parameterize=arguments.parameterize);
 					if ($callback("afterUpdate", arguments.callbacks) and $callback("afterSave", arguments.callbacks))
 					{
 						$updatePersistedProperties();
@@ -787,8 +788,8 @@
 				}
 			}
 		}
-		return false;
 	</cfscript>
+	<cfreturn false />
 </cffunction>
 
 <cffunction name="update" returntype="boolean" access="public" output="false" hint="Updates the object with the supplied properties and saves it to the database. Returns `true` if the object was saved successfully to the database and `false` otherwise."

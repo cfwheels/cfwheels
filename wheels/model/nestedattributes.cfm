@@ -32,7 +32,7 @@
 			}
 		}
 		
-		afterCreate(method="$saveAssociations"); // we need transactional support for after callbacks so this does not create an object and then the associations fail
+		afterCreate(method="$saveAssociations");
 		beforeUpdate(method="$saveAssociations");
 	</cfscript>
 </cffunction>
