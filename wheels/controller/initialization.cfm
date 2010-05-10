@@ -55,3 +55,7 @@
 <cffunction name="$getControllerClassData" returntype="struct" access="public" output="false">
 	<cfreturn variables.wheels>
 </cffunction>
+
+<cffunction name="controllerName" returntype="string" access="public" output="false" hint="Returns the name of the controller.">
+	<cfreturn variables.wheels.name />
+</cffunction>
