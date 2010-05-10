@@ -1,18 +1,9 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
+	<cfinclude template="common.cfm">
+	
 	<cfset params = {controller="dummy", action="dummy"}>
 	<cfset controller = $controller(name="dummy").$createControllerObject(params)>
-
-	<cffunction name="setup">
-		<cfset oldCGIScope = request.cgi>
-	</cffunction>
-
-	<cffunction name="teardown">
-		<cfset request.cgi = oldCGIScope>
-		<cfset StructDelete(request.wheels, "redirect", false)>
-	</cffunction>
 	
 	<cffunction name="test_redirect_was_performed">
 		<cfset controller.redirectTo(back=true)>
