@@ -219,3 +219,7 @@
 	</cfif>
 	<cfreturn ArrayToList(loc.list, arguments.delim)>
 </cffunction>
+
+<cffunction name="$objectcache" returntype="void" access="public" output="false">
+	<cfobjectcache attributeCollection="#arguments#">
+</cffunction>

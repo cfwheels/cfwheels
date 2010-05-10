@@ -7,7 +7,7 @@
 		application.wheels.URLRewriting = "Partial";
 	else
 		application.wheels.URLRewriting = "Off";
-	
+
 	// set datasource name to same as the folder the app resides in unless the developer has set it with the global setting already
 	if (StructKeyExists(this, "dataSource"))
 		application.wheels.dataSourceName = this.dataSource;
@@ -34,9 +34,9 @@
 	application.wheels.errorEmailAddress = "";
 	application.wheels.errorEmailSubject = "Error";
 	application.wheels.assetQueryString = false;
-	// assetPaths can be struct with two keys,  http and https, if no https struct key, http is used for secure and non-secure 
+	// assetPaths can be struct with two keys,  http and https, if no https struct key, http is used for secure and non-secure
 	// ex. {http="asset0.domain1.com,asset2.domain1.com,asset3.domain1.com", https="secure.domain1.com"}
-	application.wheels.assetPaths = false; 
+	application.wheels.assetPaths = false;
 
 	// override settings for specific environments
 	if (application.wheels.environment != "design")
@@ -85,12 +85,13 @@
 	application.wheels.setDefaultValidations = true;
 	application.wheels.setUpdatedAtOnCreate = true;
 	application.wheels.useExpandedColumnAliases = true;
-	
+
 	// caching settings
 	application.wheels.maximumItemsToCache = 5000;
 	application.wheels.cacheCullPercentage = 10;
 	application.wheels.cacheCullInterval = 5;
 	application.wheels.defaultCacheTime = 60;
+	application.wheels.clearQueryCacheOnReload = true;
 
 	// function defaults
 	application.wheels.functions = {};

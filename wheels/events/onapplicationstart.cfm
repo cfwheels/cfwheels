@@ -29,7 +29,7 @@
 
 		// copy over the cgi variables we need to the request scope (since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example)
 		request.cgi = $cgiScope();
-		
+
 		// set up containers for routes, caches, settings etc
 		application.wheels.version = "1.1";
 		application.wheels.controllers = {};
@@ -89,6 +89,11 @@
 		$include(template="#application.wheels.configPath#/settings.cfm");
 		$include(template="#application.wheels.configPath#/#application.wheels.environment#/settings.cfm");
 
+		if(application.wheels.clearQueryCacheOnReload)
+		{
+			$objectcache(action="clear");
+		}
+
 		// load plugins
 		application.wheels.plugins = {};
 		application.wheels.incompatiblePlugins = "";
@@ -99,7 +104,7 @@
 		// get a list of plugin files and folders
 		loc.pluginFolders = $directory(directory=loc.pluginFolder, type="dir");
 		loc.pluginFiles = $directory(directory=loc.pluginFolder, filter="*.zip", type="file", sort="name DESC");
-		
+
 		// delete plugin directories if no corresponding plugin zip file exists
 		if (application.wheels.deletePluginDirectories)
 		{
@@ -218,7 +223,7 @@
 				}
 			}
 		}
-		
+
 		// allow developers to inject plugins into the application variables scope
 		if (!StructIsEmpty(application.wheels.mixins))
 			$include(template="wheels/plugins/injection.cfm");
@@ -240,7 +245,7 @@
 
 		// create the dispatcher that will handle all incoming requests
 		application.wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
-		
+
 		// run the developer's on application start code
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
 	</cfscript>
