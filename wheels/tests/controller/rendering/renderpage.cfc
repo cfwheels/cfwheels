@@ -1,21 +1,10 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cfinclude template="/wheelsMapping/global/functions.cfm">
+	<cfinclude template="setupAndTeardown.cfm">
 
 	<cfset params = {controller="test", action="test"}>
 	<cfset controller = $controller(name="test").$createControllerObject(params)>
-
-	<cffunction name="setup">
-		<cfif StructKeyExists(request.wheels, "response")>
-			<cfset structDelete(request.wheels, "response")>
-		</cfif>
-		<cfset oldViewPath = application.wheels.viewPath>
-		<cfset application.wheels.viewPath = "wheels/tests/_assets/views">
-	</cffunction>
-
-	<cffunction name="teardown">
-		<cfset application.wheels.viewPath = oldViewPath>
-	</cffunction>
 
 	<cffunction name="test_rendering_current_action">
 		<cfset result = controller.renderPage()>
