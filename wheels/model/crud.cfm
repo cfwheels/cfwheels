@@ -778,8 +778,7 @@
 			{
 				if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks))
 				{
-					if (hasChanged())
-						$update(parameterize=arguments.parameterize);
+					$update(parameterize=arguments.parameterize);
 					if ($callback("afterUpdate", arguments.callbacks) and $callback("afterSave", arguments.callbacks))
 					{
 						$updatePersistedProperties();
@@ -1563,9 +1562,12 @@
 				ArrayAppend(loc.sql, ",");
 			}
 		}
-		ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
-		loc.sql = $addKeyWhereClause(sql=loc.sql);
-		loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
+		if (ArrayLen(loc.sql) gt 1) // only submit the update if we generated an sql set statement
+		{
+			ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
+			loc.sql = $addKeyWhereClause(sql=loc.sql);
+			loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
+		}
 	</cfscript>
 	<cfreturn true>
 </cffunction>
