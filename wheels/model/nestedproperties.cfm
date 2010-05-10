@@ -32,12 +32,23 @@
 			}
 		}
 		
+		beforeValidationOnCreate(method="$validateAssociations");
 		afterCreate(method="$saveAssociations");
 		beforeUpdate(method="$saveAssociations");
 	</cfscript>
 </cffunction>
 
+<cffunction name="$validateAssociations" returntype="boolean" access="public" output="false">
+	<cfset $traverseAssociations(method="valid") />
+	<cfreturn true />
+</cffunction>
+
 <cffunction name="$saveAssociations" returntype="boolean" access="public" output="false">
+	<cfreturn $traverseAssociations(method="save") />
+</cffunction>
+
+<cffunction name="$traverseAssociations" returntype="boolean" access="public" output="false">
+	<cfargument name="method" type="string" required="true" />
 	<cfargument name="associations" type="struct" required="false" default="#variables.wheels.class.associations#" />
 	<cfscript>
 		var loc = {};
@@ -54,15 +65,19 @@
 				if (IsArray(loc.array))
 				{
 					// get our expanded information for this association
-					loc.info = $expandedAssociations(include=loc.association);
-					loc.info = loc.info[1];
-				
+					if (arguments.method == "save")
+					{
+						loc.info = $expandedAssociations(include=loc.association);
+						loc.info = loc.info[1];
+					}
+					
 					loc.iEnd = ArrayLen(loc.array);
 					for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 					{
-						if (ListFindNoCase("hasMany,hasOne", arguments.associations[loc.association].type))
-							$setForeignKeyValues(missingMethodArguments=loc.array[loc.i], keys=loc.info.foreignKey);
-						loc.saveResult = loc.array[loc.i].save();
+						if (arguments.method == "save")
+							if (ListFindNoCase("hasMany,hasOne", arguments.associations[loc.association].type))
+								$setForeignKeyValues(missingMethodArguments=loc.array[loc.i], keys=loc.info.foreignKey);
+						loc.saveResult = $invoke(componentReference=loc.array[loc.i], method=arguments.method);
 						if (loc.returnValue) // don't change the return value if we have already received a false
 							loc.returnValue = loc.saveResult;
 					}
