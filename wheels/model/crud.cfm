@@ -767,7 +767,7 @@
 					{
 						$setDefaultValues();
 					}
-					if ($callback("afterCreate", arguments.callbacks) and $callback("afterSave", arguments.callbacks))
+					if ($callback("afterCreate", arguments.callbacks) && $callback("afterSave", arguments.callbacks))
 					{
 						$updatePersistedProperties();
 						return true;
@@ -779,7 +779,7 @@
 				if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave", arguments.validate) && $validate("onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks))
 				{
 					$update(parameterize=arguments.parameterize);
-					if ($callback("afterUpdate", arguments.callbacks) and $callback("afterSave", arguments.callbacks))
+					if ($callback("afterUpdate", arguments.callbacks) && $callback("afterSave", arguments.callbacks))
 					{
 						$updatePersistedProperties();
 						return true;
