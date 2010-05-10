@@ -1092,7 +1092,7 @@
 					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem))
 					{
 						// if expanded column aliases is enabled then mark all columns from included classes as duplicates in order to prepend them with their class name
-						if (application.wheels.useExpandedColumnAliases && loc.j gt 1 && loc.duplicateCount && arguments.renameFields)
+						if ((application.wheels.useExpandedColumnAliases && loc.j gt 1 or loc.duplicateCount) && arguments.renameFields)
 							loc.toAppend = loc.toAppend & "[[duplicate]]" & loc.j;
 						if (ListFindNoCase(loc.classData.propertyList, loc.iItem))
 						{
