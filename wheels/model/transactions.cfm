@@ -40,12 +40,12 @@
 			request.wheels.transactions[$hashedConnectionArgs()] = false;
 		// open a new transaction if the user has requested it and there isn't one already open
 		if (ListFindNoCase("commit,rollback", arguments.transaction) and !request.wheels.transactions[$hashedConnectionArgs()])
-			{
+		{
 			request.wheels.transactions[$hashedConnectionArgs()] = true;
 			return true;
-			}
-		return false;
+		}
 	</cfscript>
+	<cfreturn false />
 </cffunction>
 
 <cffunction name="$closeTransaction" returntype="void" access="public" output="false" hint="I check for an existing transaction.">
