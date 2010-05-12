@@ -60,8 +60,7 @@
 		StructDelete(arguments, "objectName", false);
 		StructDelete(arguments, "association", false);
 		
-		loc.returnValue = checkBoxTag(name=loc.tagName, id=loc.tagId, value=0, checked=loc.checked, argumentCollection=arguments);
-		loc.returnValue = loc.returnValue & hiddenFieldTag(name=loc.tagName & "($checkbox)", value=1);
+		loc.returnValue = checkBoxTag(name=loc.tagName, id=loc.tagId, value=0, checked=loc.checked, uncheckedValue=1, argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue />
 </cffunction>
