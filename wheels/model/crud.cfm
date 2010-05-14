@@ -757,7 +757,7 @@
 		{
 			if (isNew())
 			{
-				if ($callback("beforeValidationOnCreate", arguments.callbacks) && ($validate("onSave", arguments.validate) or $validate("onCreate", arguments.validate)) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks))
+				if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks))
 				{
 					$create(parameterize=arguments.parameterize);
 					if (arguments.defaults)
@@ -773,7 +773,7 @@
 			}
 			else
 			{
-				if ($callback("beforeValidationOnUpdate", arguments.callbacks) && ($validate("onSave", arguments.validate) or $validate("onUpdate", arguments.validate)) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks))
+				if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave,onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks))
 				{
 					$update(parameterize=arguments.parameterize);
 					if ($callback("afterUpdate", arguments.callbacks) && $callback("afterSave", arguments.callbacks))
