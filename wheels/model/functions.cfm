@@ -8,5 +8,6 @@
 <cfinclude template="nestedproperties.cfm">
 <cfinclude template="onmissingmethod.cfm">
 <cfinclude template="properties.cfm">
+<cfinclude template="sql.cfm">
 <cfinclude template="transactions.cfm">
 <cfinclude template="validations.cfm">
