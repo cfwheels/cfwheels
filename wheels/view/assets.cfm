@@ -26,7 +26,7 @@
 		{
 			loc.item = ListGetAt(arguments.sources, loc.i);
 			arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & Trim(loc.item);
-			if (ListLast(loc.item, ".") != "css") 
+			if (!ListFindNoCase("css,cfm", ListLast(loc.item, ".")))
 				arguments.href = arguments.href & ".css";
 			arguments.href = $assetDomain(arguments.href) & $appendQueryString();
 			loc.returnValue = loc.returnValue & $tag(name="link", skip="source,sources,head", close=true, attributes=arguments) & chr(10);
@@ -66,7 +66,7 @@
 		{
 			loc.item = ListGetAt(arguments.sources, loc.i);
 			arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & Trim(loc.item);
-			if (ListLast(loc.item, ".") != "js")
+			if (!ListFindNoCase("js,cfm", ListLast(loc.item, ".")))
 				arguments.src = arguments.src & ".js";
 			arguments.src = $assetDomain(arguments.src) & $appendQueryString();
 			loc.returnValue = loc.returnValue & $element(name="script", skip="source,sources,head", attributes=arguments) & chr(10);
@@ -172,7 +172,7 @@
 		// the only problem with this is if the app doesn't get used a lot and the application is left alone for a period longer than the application scope is allowed to exist
 		if (IsBoolean(application.wheels.assetQueryString) and YesNoFormat(application.wheels.assetQueryString) == "no")
 			return returnValue;
-		
+
 		if (!IsNumeric(application.wheels.assetQueryString) and IsBoolean(application.wheels.assetQueryString))
 			application.wheels.assetQueryString = Hash(DateFormat(Now(), "yyyymmdd") & TimeFormat(Now(), "HHmmss"));
 		returnValue = returnValue & "?" & application.wheels.assetQueryString;
@@ -192,34 +192,34 @@
 			if (IsStruct(application.wheels.assetPaths) && !ListFindNoCase(StructKeyList(application.wheels.assetPaths), "http"))
 				$throw(type="Wheels.IncorrectConfiguration", message="The `assetPaths` setting struct must contain the key `http`");
 		}
-		
+
 		// return nothing if assetPaths is not a struct
 		if (!IsStruct(application.wheels.assetPaths))
 			return loc.returnValue;
-		
+
 		loc.protocol = "http://";
 		loc.domainList = application.wheels.assetPaths.http;
-		
-		if (isSecure()) 
+
+		if (isSecure())
 		{
 			loc.protocol = "https://";
 			if (StructKeyExists(application.wheels.assetPaths, "https"))
-				loc.domainList = application.wheels.assetPaths.https;	
+				loc.domainList = application.wheels.assetPaths.https;
 		}
-			
+
 		loc.domainLen = ListLen(loc.domainList);
-		
-		if (loc.domainLen gt 1) 
+
+		if (loc.domainLen gt 1)
 		{
 			// now comes the interesting part, lets take the pathToAsset argument, hash it and create a number from it
 			// so that we can do mod based off the length of the domain list
 			// this is an easy way to apply the same sub-domain to each asset, so we do not create more work for the server
-			// at the same time we are getting a very random hash value to rotate the domains over the assets evenly 
+			// at the same time we are getting a very random hash value to rotate the domains over the assets evenly
 			loc.pathNumber = Right(REReplace(Hash(arguments.pathToAsset), "[A-Za-z]", "", "all"), 5);
-			
+
 			loc.position = (loc.pathNumber mod (loc.domainLen)) + 1;
-		} 
-		else 
+		}
+		else
 		{
 			loc.position = loc.domainLen;
 		}

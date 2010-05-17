@@ -12,4 +12,13 @@
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
+	<cffunction name="test_no_automatic_extention_when_cfm">
+		<cfset loc.args.source = "test.cfm,test.js.cfm">
+		<cfset loc.e = loc.controller.javaScriptIncludeTag(argumentcollection=loc.args)>
+		<cfset loc.r = '<script src="#application.wheels.webpath#javascripts/test.cfm" type="text/javascript"></script>#chr(10)#<script src="#application.wheels.webpath#javascripts/test.js.cfm" type="text/javascript"></script>#chr(10)#'>
+		<cfset halt(halt=false, expression='htmleditformat(loc.e)', format="text")>
+		<cfset halt(halt=false, expression='htmleditformat(loc.r)', format="text")>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
 </cfcomponent>
