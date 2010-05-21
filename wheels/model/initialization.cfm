@@ -91,21 +91,19 @@
 				{
 					setPrimaryKey(loc.property);
 				}
-				else
+				else if (variables.wheels.class.setDefaultValidations and not ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.softDeleteProperty#", loc.property)) 
 				{
-					if (variables.wheels.class.setDefaultValidations and not ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#", loc.property)) {
-						// set nullable validations if the developer has not
-						loc.defaultValidatiosnAllowBlank = false;
-						if (!variables.wheels.class.properties[loc.property].nullable and !Len(variables.wheels.class.properties[loc.property].defaultValue) and !$validationExists(property=loc.property, validation="validatesPresenceOf"))
-							validatesPresenceOf(properties=loc.property);
-							loc.defaultValidatiosnAllowBlank = true;
-						// set length validations if the developer has not
-						if (ListFindNoCase(variables.wheels.class.types["string"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesLengthOf"))
-							validatesLengthOf(properties=loc.property, allowBlank=loc.defaultValidatiosnAllowBlank, maximum=variables.wheels.class.properties[loc.property].size);
-						// set numericality validations if the developer has not
-						if (ListFindNoCase(variables.wheels.class.types["numeric"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesNumericalityOf"))
-							validatesNumericalityOf(properties=loc.property, allowBlank=loc.defaultValidatiosnAllowBlank, onlyInteger=ListFindNoCase(variables.wheels.class.types["integer"], variables.wheels.class.properties[loc.property].type));
-					}
+					// set nullable validations if the developer has not
+					loc.defaultValidationsAllowBlank = false;
+					if (!variables.wheels.class.properties[loc.property].nullable and !Len(variables.wheels.class.properties[loc.property].defaultValue) and !$validationExists(property=loc.property, validation="validatesPresenceOf"))
+						validatesPresenceOf(properties=loc.property);
+						loc.defaultValidationsAllowBlank = true;
+					// set length validations if the developer has not
+					if (ListFindNoCase(variables.wheels.class.types["string"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesLengthOf"))
+						validatesLengthOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, maximum=variables.wheels.class.properties[loc.property].size);
+					// set numericality validations if the developer has not
+					if (ListFindNoCase(variables.wheels.class.types["numeric"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesNumericalityOf"))
+						validatesNumericalityOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, onlyInteger=ListFindNoCase(variables.wheels.class.types["integer"], variables.wheels.class.properties[loc.property].type));
 				}
 	
 				variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, loc.property);
