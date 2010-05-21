@@ -91,7 +91,7 @@
 				{
 					setPrimaryKey(loc.property);
 				}
-				else if (variables.wheels.class.setDefaultValidations and not ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.softDeleteProperty#", loc.property)) 
+				else if (variables.wheels.class.setDefaultValidations and not ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#,#application.wheels.softDeleteProperty#", loc.property)) 
 				{
 					// set nullable validations if the developer has not
 					loc.defaultValidationsAllowBlank = false;
