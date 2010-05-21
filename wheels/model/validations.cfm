@@ -513,7 +513,7 @@
 				loc.iEnd = ArrayLen(loc.eventArray);
 				for (loc.i = 1; loc.i lte loc.iEnd; loc.i++) {
 
-					if (loc.eventArray[loc.i].args.property == arguments.property and loc.eventArray[loc.i].method == "$#arguments.validation#") {
+					if (StructKeyExists(loc.eventArray[loc.i].args, "property") && loc.eventArray[loc.i].args.property == arguments.property and loc.eventArray[loc.i].method == "$#arguments.validation#") {
 						loc.returnValue = true;
 						break;
 					}

@@ -93,18 +93,18 @@
 				}
 				else
 				{
-					if (variables.wheels.class.setDefaultValidations) {
+					if (variables.wheels.class.setDefaultValidations and not ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#", loc.property)) {
 						// set nullable validations if the developer has not
+						loc.defaultValidatiosnAllowBlank = false;
 						if (!variables.wheels.class.properties[loc.property].nullable and !Len(variables.wheels.class.properties[loc.property].defaultValue) and !$validationExists(property=loc.property, validation="validatesPresenceOf"))
 							validatesPresenceOf(properties=loc.property);
-	
+							loc.defaultValidatiosnAllowBlank = true;
 						// set length validations if the developer has not
 						if (ListFindNoCase(variables.wheels.class.types["string"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesLengthOf"))
-							validatesLengthOf(properties=loc.property, allowBlank=variables.wheels.class.properties[loc.property].nullable, maximum=variables.wheels.class.properties[loc.property].size);
-	
+							validatesLengthOf(properties=loc.property, allowBlank=loc.defaultValidatiosnAllowBlank, maximum=variables.wheels.class.properties[loc.property].size);
 						// set numericality validations if the developer has not
 						if (ListFindNoCase(variables.wheels.class.types["numeric"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesNumericalityOf"))
-							validatesNumericalityOf(properties=loc.property, allowBlank=variables.wheels.class.properties[loc.property].nullable, onlyInteger=ListFindNoCase(variables.wheels.class.types["integer"], variables.wheels.class.properties[loc.property].type));
+							validatesNumericalityOf(properties=loc.property, allowBlank=loc.defaultValidatiosnAllowBlank, onlyInteger=ListFindNoCase(variables.wheels.class.types["integer"], variables.wheels.class.properties[loc.property].type));
 					}
 				}
 	
