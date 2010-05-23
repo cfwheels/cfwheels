@@ -37,9 +37,9 @@
 						loc.listItems = loc.listItems & $element(name="li", content=loc.msg);
 						loc.used = ListAppend(loc.used, loc.msg, Chr(7));
 					}
-				}		
+				}
 			}
-			loc.returnValue = $element(name="ul", skip="objectName,showDuplicates", content=loc.listItems, attributes=arguments);			
+			loc.returnValue = $element(name="ul", skip="objectName,showDuplicates", content=loc.listItems, attributes=arguments);
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -50,7 +50,7 @@
 	'
 	<!--- view code --->
 	<cfoutput>
-	    ##errorMessageFor(objectName="user", property="email")##
+	    ##errorMessageOn(objectName="user", property="email")##
 	</cfoutput>
 	'
 	categories="view-helper,errors" chapters="form-helpers-and-showing-errors" functions="errorMessagesOn">
