@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_order_clause_no_sort">
 		<cfset loc.result = model("author").findOne(order="lastName")>
 		<cfset assert("loc.result.lastName IS 'Amiri'")>

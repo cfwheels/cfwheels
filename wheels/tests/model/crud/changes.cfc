@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_comparing_existing_properties_only">
 		<cfset loc.author = model("author").findOne(select="firstName")>
 		<cfset loc.result = loc.author.hasChanged()>

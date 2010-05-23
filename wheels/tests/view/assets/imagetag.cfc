@@ -1,12 +1,14 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
-	<cfset global.args = {}>
-	<cfset global.args.source = "../wheels/tests/_assets/files/wheelslogo.jpg">
-	<cfset global.args.alt = "wheelstestlogo">
-	<cfset global.args.class = "wheelstestlogoclass">
-	<cfset global.args.id = "wheelstestlogoid">
-	<cfset global.imagePath = application.wheels.webPath & application.wheels.imagePath>
+	<cffunction name="setup">
+		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.args = {}>
+		<cfset loc.args.source = "../wheels/tests/_assets/files/wheelslogo.jpg">
+		<cfset loc.args.alt = "wheelstestlogo">
+		<cfset loc.args.class = "wheelstestlogoclass">
+		<cfset loc.args.id = "wheelstestlogoid">
+		<cfset loc.imagePath = application.wheels.webPath & application.wheels.imagePath>
+	</cffunction>
 
 	<cffunction name="test_just_source">
 		<cfset structdelete(loc.args, "alt")>

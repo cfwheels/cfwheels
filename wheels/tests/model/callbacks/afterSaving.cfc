@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_chain_when_saving_existing_object">
 		<cfset model("tag").$registerCallback(type="afterValidation", methods="callbackThatIncreasesVariable")>
 		<cfset model("tag").$registerCallback(type="afterValidationOnCreate", methods="callbackThatIncreasesVariable")>

@@ -1,20 +1,17 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
-	<cfset params.controller = "Blog">
-	<cfset params.action = "edit">
-	<cfset params.key = "1">
-
-	<cfset global.controller = $controller(name=params.controller).$createControllerObject(params)>
-	<cfset global.args = {}>
-	<cfset global.args.controller = "Blog">
-	<cfset global.args.action = "edit">
-	<cfset global.args.key = "1">
-	<cfset global.args.params = "param1=foo&param2=bar">
-	<cfset global.args.$URLRewriting = "On">
-
 	<cffunction name="setup">
+		<cfset params.controller = "Blog">
+		<cfset params.action = "edit">
+		<cfset params.key = "1">
+
+		<cfset loc.controller = $controller(name=params.controller).$createControllerObject(params)>
+		<cfset loc.args = {}>
+		<cfset loc.args.controller = "Blog">
+		<cfset loc.args.action = "edit">
+		<cfset loc.args.key = "1">
+		<cfset loc.args.params = "param1=foo&param2=bar">
+		<cfset loc.args.$URLRewriting = "On">
 		<cfset oldScriptName = request.cgi.script_name>
 	</cffunction>
 

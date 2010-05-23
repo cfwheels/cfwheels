@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_existing_object">
 		<cfset loc.args.type = "myCustomCallBack">
 		<cfset model("tag").$registerCallback(type=loc.args.type, methods="methodOne")>

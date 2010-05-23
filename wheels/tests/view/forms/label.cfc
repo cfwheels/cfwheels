@@ -1,6 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
 	<cfinclude template="/wheelsMapping/view/functions.cfm">
 
 	<cffunction name="test_for_attribute_on_plain_helper">

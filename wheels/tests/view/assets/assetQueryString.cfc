@@ -1,19 +1,18 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
-
-	<cffunction name="_setup">
+	<cffunction name="setup">
 		<cfscript>
+			loc.controller = $controller(name="dummy");
 			application.wheels.assetQueryString = true;
 		</cfscript>
 	</cffunction>
 
-	<cffunction name="_teardown">
+	<cffunction name="teardown">
 		<cfscript>
 			application.wheels.assetQueryString = false;
 		</cfscript>
 	</cffunction>
-	
+
 	<cffunction name="test_returns_empty_string_when_set_false">
 		<cfscript>
 			application.wheels.assetQueryString = false;
@@ -21,14 +20,14 @@
 			assert('Len(loc.e) eq 0');
 		</cfscript>
 	</cffunction>
-	
+
 	<cffunction name="test_returns_string_when_set_true">
 		<cfscript>
 			loc.e = loc.controller.$appendQueryString();
 			assert('IsSimpleValue(loc.e) eq true');
 		</cfscript>
 	</cffunction>
-	
+
 	<cffunction name="test_returns_match_when_set_to_string">
 		<cfscript>
 			application.wheels.assetQueryString = "MySpecificBuildNumber";
@@ -36,7 +35,7 @@
 			assert('loc.e eq "?MySpecificBuildNumber"');
 		</cfscript>
 	</cffunction>
-	
+
 	<cffunction name="test_returns_same_value_without_reload">
 		<cfscript>
 			loc.iEnd = 100;

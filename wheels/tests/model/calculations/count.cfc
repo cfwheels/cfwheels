@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_count">
 		<cfset loc.result = model("author").count()>
 		<cfset assert("loc.result IS 7")>

@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_all_properties_can_be_set_by_default">
 		<cfset loc.model = model("author") />
 		<cfset loc.properties = { firstName = "James", lastName = "Gibson" } />

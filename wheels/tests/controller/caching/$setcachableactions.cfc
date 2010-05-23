@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cfset controller = $controller(name="dummy")>
 	
 	<cffunction name="test_setting_cachable_actions">

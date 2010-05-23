@@ -1,10 +1,12 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
-	<cfset global.now = now()>
-	<cfset global.args = {}>
-	<cfset global.args.includeSeconds = true>
-	<cfset global.args.toTime = global.now>
+	<cffunction name="setup">
+		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.now = now()>
+		<cfset loc.args = {}>
+		<cfset loc.args.includeSeconds = true>
+		<cfset loc.args.toTime = loc.now>
+	</cffunction>
 
 	<cffunction name="test_with_seconds_below_5_seconds">
 		<cfset loc.c = 5 - 1>

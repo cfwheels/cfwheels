@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_new_object">
 		<cfset model("tag").$registerCallback(type="beforeUpdate", methods="callbackThatSetsProperty")>
 		<cfset model("tag").$registerCallback(type="beforeCreate", methods="callbackThatReturnsFalse")>

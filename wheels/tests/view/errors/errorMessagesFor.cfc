@@ -1,9 +1,11 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.tests._assets.controllers.ControllerWithModelErrors")>
-	<cfset global.args = {}>
-	<cfset global.args.objectName = "user">
-	<cfset global.args.class = "errors-found">
+	<cffunction name="setup">
+		<cfset loc.controller = $controller(name="ControllerWithModelErrors")>
+		<cfset loc.args = {}>
+		<cfset loc.args.objectName = "user">
+		<cfset loc.args.class = "errors-found">
+	</cffunction>
 
 	<cffunction name="test_show_duplicate_errors">
 		<cfset loc.args.showDuplicates = true>

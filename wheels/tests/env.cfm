@@ -16,3 +16,6 @@
 
 <!--- redirections should always delay when testing --->
 <cfset application.wheels.functions.redirectTo.delay = true>
+
+<!--- turn off transactions by default --->
+<cfset application.wheels.transactionMode = "none">

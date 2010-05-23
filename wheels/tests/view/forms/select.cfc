@@ -1,7 +1,9 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.tests._assets.controllers.ControllerWithModel")>
-	<cfset loadModels("users")>
+	<cffunction name="setup">
+		<cfset loc.controller = $controller(name="ControllerWithModel")>
+		<cfset loc.user = model("user")>
+	</cffunction>
 
 	<cffunction name="test_x_select_valid">
 		<cfset loc.users = loc.user.findAll(returnAs="array")>

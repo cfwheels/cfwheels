@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_getting_child">
 		<cfset loc.author = model("author").findOne(order="id")>
 		<cfset loc.dynamicResult = loc.author.profile()>

@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_from_clause">
 		<cfset loc.result = model("author").$fromClause()>
 		<cfset assert("loc.result IS 'FROM authors'")>

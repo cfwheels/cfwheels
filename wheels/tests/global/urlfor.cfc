@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="setup">
 		<cfset loc.original_routes = duplicate(application.wheels.routes)>
 	</cffunction>

@@ -1,11 +1,13 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.dispatch = createobject("component", "wheelsMapping.dispatch")>
-	<cfset global.args = {}>
-	<cfset global.args.path = "home">
-	<cfset global.args.route = {pattern="", controller="wheels", action="wheels"}>
-	<cfset global.args.formScope = {}>
-	<cfset global.args.urlScope = {}>
+	<cffunction name="setup">
+		<cfset loc.dispatch = createobject("component", "wheelsMapping.dispatch")>
+		<cfset loc.args = {}>
+		<cfset loc.args.path = "home">
+		<cfset loc.args.route = {pattern="", controller="wheels", action="wheels"}>
+		<cfset loc.args.formScope = {}>
+		<cfset loc.args.urlScope = {}>
+	</cffunction>
 
 	<cffunction name="test_default_day_to_1">
 		<cfset loc.args.formScope["obj[published]($month)"] = 2>

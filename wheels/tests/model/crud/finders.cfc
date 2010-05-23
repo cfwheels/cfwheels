@@ -1,6 +1,8 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset loadModels("user")>
+	<cffunction name="setup">
+		<cfset loc.user = model("user")>
+	</cffunction>
 
 	<cffunction name="test_select_distinct_addresses">
 		<cfset loc.q = loc.user.findAll(select="address", distinct="true", order="address")>
@@ -48,12 +50,12 @@
 		<cfset loc.e = loc.user.findOne(where="lastname = 'somenamenotfound'", returnAs="query")>
 		<cfset assert('loc.e.RecordCount eq false')>
 	</cffunction>
-	
+
 	<cffunction name="test_findOne_returns_false_when_record_not_found_with_inner_join_include">
 		<cfset loc.e = loc.user.findOne(where="lastname= = 'somenamenotfound'", include="photogalleries") />
 		<cfset assert('loc.e eq false')>
 	</cffunction>
-	
+
 	<cffunction name="test_findOne_returns_false_when_record_not_found_with_outer_join_include">
 		<cfset loc.e = loc.user.findOne(where="lastname= = 'somenamenotfound'", include="outerjoinphotogalleries") />
 		<cfset assert('loc.e eq false')>

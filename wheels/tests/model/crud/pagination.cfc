@@ -1,6 +1,10 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset loadModels("user,photogalleryphoto,photogallery")>
+	<cffunction name="setup">
+		<cfset loc.user = model("user")>
+		<cfset loc.photogalleryphoto = model("photogalleryphoto")>
+		<cfset loc.photogallery = model("photogallery")>
+	</cffunction>
 
 	<cffunction name="test_exist_early_if_no_records_match_where_clause">
 		<cfset loc.e = loc.user.findAll(where="firstname = 'somemoron'", perpage="2", page="1", handle="pagination_test_1", order="id")>

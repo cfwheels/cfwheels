@@ -1,6 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
 	<cfinclude template="setupAndTeardown.cfm">
 
 	<cfset params = {controller="test", action="test"}>	

@@ -1,10 +1,12 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
-	<cfset global.args = {}>
-	<cfset global.args.text = "this is a test to see if this works or not.">
-	<cfset global.args.length = "20">
-	<cfset global.args.truncateString = "[more]">
+	<cffunction name="setup">
+		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.args = {}>
+		<cfset loc.args.text = "this is a test to see if this works or not.">
+		<cfset loc.args.length = "20">
+		<cfset loc.args.truncateString = "[more]">
+	</cffunction>
 
 	<cffunction name="test_phrase_should_truncate">
 		<cfset loc.e = loc.controller.truncate(argumentcollection=loc.args)>

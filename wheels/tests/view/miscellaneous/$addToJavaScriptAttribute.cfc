@@ -1,12 +1,14 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
-	<cfset global.args = {}>
-	<cfset global.args.name = "WheelsTesting">
-	<cfset global.args.content = "this is a test for the wheel's function $addToJavaScriptAttribute">
-	<cfset global.args.attributes = {}>
-	<cfset global.args.attributes.WheelsTesting = "testing">
-	<cfset global.args.attributes.name = "javascripttag">
+	<cffunction name="setup">
+		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.args = {}>
+		<cfset loc.args.name = "WheelsTesting">
+		<cfset loc.args.content = "this is a test for the wheel's function $addToJavaScriptAttribute">
+		<cfset loc.args.attributes = {}>
+		<cfset loc.args.attributes.WheelsTesting = "testing">
+		<cfset loc.args.attributes.name = "javascripttag">
+	</cffunction>
 
 	<cffunction name="test_has_attribute_called_name">
 		<cfset loc.e = loc.controller.$addToJavaScriptAttribute(argumentcollection=loc.args)>

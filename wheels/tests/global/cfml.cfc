@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/cfml.cfm">
-
 	<cffunction name="test_$listClean_default_delim">
 		<cfset loc.mylist = "tony,    per   ,  james    ,,, chris   , raul ,,,,  peter">
 		<cfset loc.e = "tony,per,james,chris,raul,peter">

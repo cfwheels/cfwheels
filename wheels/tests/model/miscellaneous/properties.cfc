@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_key">
 		<cfset loc.author = model("author").findOne()>
 		<cfset loc.result = loc.author.key()>

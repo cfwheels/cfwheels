@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="setup">
 		<cfif StructKeyExists(request, "test")>
 			<cfset StructDelete(request, "test")>

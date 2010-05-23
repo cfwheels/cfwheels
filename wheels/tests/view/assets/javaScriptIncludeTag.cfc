@@ -1,7 +1,9 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
-	<cfset global.args = {}>
+	<cffunction name="setup">
+		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.args = {}>
+	</cffunction>
 
 	<cffunction name="test_should_handle_extensions_nonextensions_and_multiple_extensions">
 		<cfset loc.args.source = "test,test.js,jquery.dataTables.min,jquery.dataTables.min.js">

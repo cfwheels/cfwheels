@@ -1,8 +1,9 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
-	<cfset global.args = {}>
-	<cfset global.args.text = "Lobortis, erat feugiat jus autem
+	<cffunction name="setup">
+		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.args = {}>
+		<cfset loc.args.text = "Lobortis, erat feugiat jus autem
 
 vel obruo dolor luptatum, os in interdico ex. Sit typicus
 
@@ -15,6 +16,7 @@ luptatum valetudo ne, venio vero regula letalis valde vicis.
 Utrum blandit bene refero ut eum eligo cogo duis bene aptent distineo duis quis.
 Hendrerit nostrud abigo vicis
 augue validus cui lucidus.">
+	</cffunction>
 
 	<cffunction name="test_text_should_format">
 		<cfset loc.e = loc.controller.simpleFormat(argumentcollection=loc.args)>

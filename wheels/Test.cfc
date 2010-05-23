@@ -99,9 +99,11 @@
 
 <cfcomponent>
 
+	<!--- include main wheels functions in tests by default --->
+	<cfinclude template="/wheelsMapping/global/functions.cfm">
+
 	<cfset variables.WHEELS_TESTS_BASE_COMPONENT_PATH = "">
 	<cfset variables.ROOT_TEST_PATH = "">
-	<cfset global = {}>
 
 	<!---
 		Called from a test function.  If expression evaluates to false,
@@ -228,24 +230,6 @@
 		<cfreturn "">
 	</cffunction>
 
-	<cffunction name="loadModels" hint="allows you to load all or specific models into the test case">
-		<cfargument name="models" type="string" required="false" default="" hint="a comma delimited list of the model you want to load. leave blank to load all models.">
-		<cfset var loc = {}>
-
-		<cfif not structkeyexists(variables, "model")>
-			<cfinclude template="/wheelsMapping/global/functions.cfm">
-		</cfif>
-
-		<cfif !len(arguments.models)>
-			<cfdirectory action="list" directory="#expandpath(application.wheels.modelPath)#" name="loc.models" filter="*.cfc" type="file">
-			<cfset arguments.models = valuelist(loc.models.name)>
-		</cfif>
-
-		<cfloop list="#arguments.models#" index="loc.model">
-			<cfset global[singularize(listfirst(loc.model, "."))] = model(listfirst(loc.model, "."))>
-		</cfloop>
-	</cffunction>
-
 	<!---
 		Instanciate all components in specified package and call their $runTest()
 		method.
@@ -329,18 +313,12 @@
 		--->
 		<cfset keyList = listSort(structKeyList(this), "textnocase", "asc")>
 
-		<cfif structKeyExists(this, "_setup")>
-			<cfset _setup()>
-		</cfif>
-
 		<cfloop list="#keyList#" index="key">
 
 			<cfif (left(key, 4) eq "test" and isCustomFunction(this[key])) and (!len(arguments.testname) or (len(arguments.testname) and arguments.testname eq key))>
 
 				<cfset time = getTickCount()>
 
-				<cfset loc = duplicate(global)>
-				
 				<cfif structKeyExists(this, "setup")>
 					<cfset setup()>
 				</cfif>
@@ -381,7 +359,7 @@
 
 				</cfcatch>
 				</cftry>
-				
+
 				<cfif structKeyExists(this, "teardown")>
 					<cfset teardown()>
 				</cfif>
@@ -405,10 +383,6 @@
 			</cfif>
 
 		</cfloop>
-
-		<cfif structKeyExists(this, "_teardown")>
-			<cfset _teardown()>
-		</cfif>
 
 		<cfset result = structNew()>
 		<cfset result.testCase = testCase>
@@ -621,42 +595,6 @@
 		<cfargument name="str" type="string" required="true" hint="test name to clean up">
 		<cfreturn listchangedelims(replace(arguments.str, variables.ROOT_TEST_PATH, ""), ".", ".")>
 	</cffunction>
-
-	<cffunction name="httpRequest" access="public">
-		<cfargument name="url" type="string" required="true">
-		<cfset var loc = {}>
-		<cfset loc.params = []>
-		
-		<!--- if they specified a relative url, then we need to determine the protocol and hostname for them --->
-		<cfif left(arguments.url, 1) eq "/">
-			<cfset arguments.url = "http://#cgi.HTTP_HOST##arguments.url#">
-			<cfif cgi.https eq "on">
-				<cfset arguments.url = insert("s", arguments.url, 4)>
-			</cfif>
-		</cfif>
-	
-		<!--- 
-		check to see if there is a params argument and it is an array
-		these will be used to create cfhttpparam tags
-		 --->
-		<cfif structKeyExists(arguments, "params") and IsArray(arguments.params)>
-			<cfset loc.params = duplicate(arguments.params)>
-			<cfset structdelete(arguments, "params", false)>
-		</cfif>
-		
-		<!--- override their result argument with our internal one --->
-		<cfset arguments.result = "loc.ret">
-		
-		<!--- do the request --->
-		<cfhttp attributeCollection="#arguments#">
-			<cfloop array="#loc.params#" index="loc.i">
-				<cfhttpparam attributeCollection="#loc.i#">
-			</cfloop>
-		</cfhttp>
-		
-		<cfreturn loc.ret>
-	</cffunction>
-
 
 	<cfinclude template="plugins/injection.cfm">
 </cfcomponent>

@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_singularize">
 		<cfset loc.result = singularize("statuses")>
 		<cfset assert("NOT Compare(loc.result, 'status')")>

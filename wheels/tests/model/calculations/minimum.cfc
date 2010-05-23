@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_minimum">
 		<cfset loc.result = model("post").minimum(property="views")>
 		<cfset assert("loc.result IS 0")>

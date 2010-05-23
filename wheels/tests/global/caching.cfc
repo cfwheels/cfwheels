@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_hashing_arguments_to_identical_result">
 		<cfset loc.result1 = _method(1,2,3,4,5,6,7,8,9)>
 		<cfset loc.result2 = _method(1,2,3,4,5,6,7,8,9)>

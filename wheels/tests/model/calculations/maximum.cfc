@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_maximum">
 		<cfset loc.result = model("post").maximum(property="views")>
 		<cfset assert("loc.result IS 5")>

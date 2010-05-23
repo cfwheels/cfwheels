@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_setting_one_query_record">
 		<cfset model("post").$registerCallback(type="afterFind", methods="afterFindCallback")>
 		<cfset loc.posts = model("post").findAll(maxRows=1, order="id DESC", reload=true)>

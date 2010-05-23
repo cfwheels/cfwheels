@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_property_cannot_be_set_with_mass_assignment_when_protected">
 		<cfset loc.model = model("post") />
 		<cfset loc.model.protectedProperties(properties="views") />

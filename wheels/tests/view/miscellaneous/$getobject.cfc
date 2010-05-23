@@ -1,6 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
 	<cfinclude template="/wheelsMapping/view/miscellaneous.cfm">
 
 	<cffunction name="test_getting_object_from_session_scope">

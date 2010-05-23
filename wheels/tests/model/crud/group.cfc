@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_distinct_works_with_group_by">
 		<cfset loc.r = model("post").findAll(select="views", distinct=true)>
 		<cfset assert('loc.r.recordcount eq 3')>

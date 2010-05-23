@@ -1,6 +1,4 @@
 <cfcomponent extends="wheelsMapping.test">
-
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
 	
 	<cffunction name="test_initializing_by_calling_init_function">
 	</cffunction>

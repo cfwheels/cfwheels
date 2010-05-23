@@ -1,5 +1,3 @@
-<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 <cffunction name="setup">
 	<cfset $$oldCGIScope = request.cgi>
 	<cfset $$oldViewPath = application.wheels.viewPath>

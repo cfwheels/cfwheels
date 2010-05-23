@@ -1,15 +1,17 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
-	<cfset global.args= {}>
-	<cfset global.args.host = "">
-	<cfset global.args.method = "post">
-	<cfset global.args.multipart = false>
-	<cfset global.args.onlypath = true>
-	<cfset global.args.port = 0>
-	<cfset global.args.protocol = "">
-	<cfset global.args.spamprotection = false>
-	<cfset global.args.controller = "testcontroller">
+	<cffunction name="setup">
+		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.args= {}>
+		<cfset loc.args.host = "">
+		<cfset loc.args.method = "post">
+		<cfset loc.args.multipart = false>
+		<cfset loc.args.onlypath = true>
+		<cfset loc.args.port = 0>
+		<cfset loc.args.protocol = "">
+		<cfset loc.args.spamprotection = false>
+		<cfset loc.args.controller = "testcontroller">
+	</cffunction>
 
 	<cffunction name="test_no_controller_or_action_or_route_should_point_to_current_page">
 		<cfset structdelete(loc.args, "controller")>
@@ -45,7 +47,7 @@
 	<cffunction name="test_with_spamProtection">
 		<cfset loc.args.spamProtection = "true">
 		<cfset loc.args.action = "myaction">
-		<cfset loc.argsction = global.controller.toXHTML(loc.controller.urlfor(argumentCollection=loc.args))>
+		<cfset loc.argsction = loc.controller.toXHTML(loc.controller.urlfor(argumentCollection=loc.args))>
 		<cfset loc.e = '<form method="post" onsubmit="this.action=''#Left(loc.argsction, int((Len(loc.argsction)/2)))#''+''#Right(loc.argsction, ceiling((Len(loc.argsction)/2)))#'';">'>
 		<cfset loc.r = loc.controller.startFormTag(argumentcollection=loc.args)>
 		<cfset assert("loc.e eq loc.r")>
@@ -53,7 +55,7 @@
 
 	<cffunction name="test_with_home_route">
 		<cfset loc.args.route = "home">
-		<cfset loc.argsction = global.controller.toXHTML(loc.controller.urlfor(argumentCollection=loc.args))>
+		<cfset loc.argsction = loc.controller.toXHTML(loc.controller.urlfor(argumentCollection=loc.args))>
 		<cfset loc.e = '<form action="#loc.argsction#" method="post">'>
 		<cfset loc.r = loc.controller.startFormTag(argumentcollection=loc.args)>
 		<cfset assert("loc.e eq loc.r")>

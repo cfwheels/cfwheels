@@ -1,7 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
 	<cffunction name="test_existing_object">
 		<cfset model("tag").$registerCallback(type="beforeValidationOnUpdate", methods="callbackThatSetsProperty,callbackThatReturnsFalse")>
 		<cfset loc.obj = model("tag").findOne()>
