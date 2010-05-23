@@ -39,6 +39,7 @@
 	<cffunction name="test_returns_same_value_without_reload">
 		<cfscript>
 			loc.iEnd = 100;
+			application.wheels.assetQueryString = "MySpecificBuildNumber";
 			loc.e = loc.controller.$appendQueryString();
 			for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 				assert('loc.controller.$appendQueryString() eq loc.e');

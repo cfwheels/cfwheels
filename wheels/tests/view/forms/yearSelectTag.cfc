@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="setup">
-		<cfset loc.controller = $controller(name="ControllerWithModel")>
+		<cfset loc.controller = createobject("component", "wheelsMapping.tests._assets.controllers.ControllerWithModel")>
 		<cfset loc.args= {}>
 		<cfset loc.args.objectName = "user">
 		<cfset loc.args.property = "birthday">
@@ -47,7 +47,6 @@
 		<cfset loc.e = '<select id="user-birthday-year" name="user[birthday]($year)"><option value="1990">1990</option><option value="1989">1989</option><option value="1988">1988</option><option value="1987">1987</option><option value="1986">1986</option><option value="1985">1985</option><option value="1984">1984</option><option value="1983">1983</option><option value="1982">1982</option><option value="1981">1981</option><option value="1980">1980</option></select>'>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
-
 
 	<cffunction name="changeBirthday">
 		<cfargument name="value" type="any" required="true">
