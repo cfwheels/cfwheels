@@ -56,6 +56,10 @@
 	<cfreturn variables.wheels.class.keys>
 </cffunction>
 
+<cffunction name="primaryKeys" returntype="string" access="public" output="false" hint="Alias for primaryKey()">
+	<cfreturn primaryKey()>
+</cffunction>
+
 <cffunction name="tableName" returntype="string" access="public" output="false" hint="Returns the name of the database table that this model is mapped to."
 	examples=
 	'
@@ -68,5 +72,12 @@
 
 <cffunction name="setPrimaryKey" returntype="void" access="public" output="false" hint="allows you to pass in the names of the property that should be used as the primary key(s)">
 	<cfargument name="property" type="string" required="true">
-	<cfset variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, arguments.property)>
+	<cfset var loc = {}>
+	<cfloop list="#arguments.property#" index="loc.i">
+		<cfset variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.i)>
+	</cfloop>
+</cffunction>
+
+<cffunction name="setPrimaryKeys" returntype="void" access="public" output="false" hint="Alias for setPrimaryKey()">
+	<cfset setPrimaryKey(argumentCollection=arguments)>
 </cffunction>

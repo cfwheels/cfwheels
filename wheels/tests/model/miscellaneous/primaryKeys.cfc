@@ -1,0 +1,25 @@
+<cfcomponent extends="wheelsMapping.Test">
+
+	<cffunction name="test_primarykey_returns_key">
+		<cfset loc.author = model("author")>
+		<cfset loc.e = loc.author.$classData().keys>
+		<cfset loc.r = "id">
+		<cfset assert("loc.e IS loc.r")>
+		<cfset loc.r = loc.author.primaryKey()>
+		<cfset assert("loc.e IS loc.r")>
+		<cfset loc.r = loc.author.primaryKeys()>
+		<cfset assert("loc.e IS loc.r")>
+	</cffunction>
+	
+	<cffunction name="test_setprimarykey_appends_keys">
+		<cfset loc.author = model("author")>
+		<cfset loc.e = loc.author.$classData().keys>
+		<cfset loc.r = "id">
+		<cfset assert("loc.e IS loc.r")>
+		<cfset loc.author.setprimaryKeys("id2,id3")>
+		<cfset loc.e = "id,id2,id3">
+		<cfset loc.r = loc.author.primaryKeys()>
+		<cfset assert("loc.e IS loc.r")>
+	</cffunction>
+
+</cfcomponent>
