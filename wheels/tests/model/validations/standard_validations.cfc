@@ -271,5 +271,11 @@
 		<cfset loc.user.validatesPresenceOf(property="firstname")>
 		<cfset assert('!loc.user.valid()')>
 	</cffunction>
+	
+	<cffunction name="test_validatesPresenceOf_invalid_when_blank">
+		<cfset loc.user.firstname = "   ">
+		<cfset loc.user.validatesPresenceOf(property="firstname")>
+		<cfset assert('!loc.user.valid()')>
+	</cffunction>
 
 </cfcomponent>
