@@ -230,13 +230,12 @@
 				loc.item = ListGetAt(arguments.combine, loc.i);
 				loc.first = ListGetAt(loc.item, 1, "/");
 				loc.second = ListGetAt(loc.item, 2, "/");
-				if (StructKeyExists(arguments.args, loc.second))
-					arguments.args[loc.first] = arguments.args[loc.second];
-				if (application.wheels.showErrorInformation && ListLen(loc.item, "/") > 2)
+				loc.required = false;
+				if (ListLen(loc.item, "/") > 2)
 				{
-					if (!StructKeyExists(arguments.args, loc.second) && !Len(arguments.args[loc.first]))
-						$throw(type="Wheels.IncorrectArguments", message="The `#loc.first#` or `#loc.second#` argument is required but was not passed in.");				
+					loc.required = true;
 				}
+				$combineArguments(arguments.args, "#loc.first#,#loc.second#", loc.required);
 			}
 		}
 		if (application.wheels.showErrorInformation)
