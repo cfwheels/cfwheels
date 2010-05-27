@@ -272,8 +272,8 @@
 		var loc = {};
 
 		// combine `method`/`methods` and `property`/`properties` into one variables for easier processing below
-		$combineArguments(arguments, "methods,method");
-		$combineArguments(arguments, "properties,property", true, "Please pass in the names of the properties you want to validate. Use either the `property` argument (for a single property) or the `properties` argument (for a list of properties) to do this.");
+		$combineArguments(args=arguments, combine="methods,method", required=true);
+		$combineArguments(args=arguments, combine="properties,property", required=true, extendedInfo="Please pass in the names of the properties you want to validate. Use either the `property` argument (for a single property) or the `properties` argument (for a list of properties) to do this.");
 
 		// loop through all methods and properties and add info for each to the `class` struct
 		loc.iEnd = ListLen(arguments.methods);

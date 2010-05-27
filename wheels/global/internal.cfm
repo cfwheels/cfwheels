@@ -235,7 +235,7 @@
 				{
 					loc.required = true;
 				}
-				$combineArguments(arguments.args, "#loc.first#,#loc.second#", loc.required);
+				$combineArguments(args=arguments.args, combine="#loc.first#,#loc.second#", required=loc.required);
 			}
 		}
 		if (application.wheels.showErrorInformation)

@@ -14,10 +14,7 @@
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="styleSheetLinkTag", input=arguments);
-		if (StructKeyExists(arguments, "source"))
-			arguments.sources = arguments.source;
-		if (application.wheels.showErrorInformation && !Len(arguments.sources))
-			$throw(type="Wheels.IncorrectArguments", message="The `source` or `sources` argument is required but was not passed in.");
+		$combineArguments(args=arguments, combine="sources,source", required=true);
 		$insertDefaults(name="styleSheetLinkTag", reserved="href,rel", input=arguments);
 		arguments.rel = "stylesheet";
 		loc.returnValue = "";
@@ -29,7 +26,7 @@
 			if (!ListFindNoCase("css,cfm", ListLast(loc.item, ".")))
 				arguments.href = arguments.href & ".css";
 			arguments.href = $assetDomain(arguments.href) & $appendQueryString();
-			loc.returnValue = loc.returnValue & $tag(name="link", skip="source,sources,head", close=true, attributes=arguments) & chr(10);
+			loc.returnValue = loc.returnValue & $tag(name="link", skip="sources,head", close=true, attributes=arguments) & chr(10);
 		}
 		if (arguments.head)
 		{
@@ -55,10 +52,7 @@
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="javaScriptIncludeTag", input=arguments);
-		if (StructKeyExists(arguments, "source"))
-			arguments.sources = arguments.source;
-		if (application.wheels.showErrorInformation && !Len(arguments.sources))
-			$throw(type="Wheels.IncorrectArguments", message="The `source` or `sources` argument is required but was not passed in.");
+		$combineArguments(args=arguments, combine="sources,source", required=true);
 		$insertDefaults(name="javaScriptIncludeTag", reserved="src", input=arguments);
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.sources);
@@ -69,7 +63,7 @@
 			if (!ListFindNoCase("js,cfm", ListLast(loc.item, ".")))
 				arguments.src = arguments.src & ".js";
 			arguments.src = $assetDomain(arguments.src) & $appendQueryString();
-			loc.returnValue = loc.returnValue & $element(name="script", skip="source,sources,head", attributes=arguments) & chr(10);
+			loc.returnValue = loc.returnValue & $element(name="script", skip="sources,head", attributes=arguments) & chr(10);
 		}
 		if (arguments.head)
 		{
