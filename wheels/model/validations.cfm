@@ -272,25 +272,8 @@
 		var loc = {};
 
 		// combine `method`/`methods` and `property`/`properties` into one variables for easier processing below
-		if (StructKeyExists(arguments, "method"))
-		{
-			arguments.methods = arguments.method;
-			StructDelete(arguments, "method");
-		}
-		if (StructKeyExists(arguments, "property"))
-		{
-			arguments.properties = arguments.property;
-			StructDelete(arguments, "property");
-		}
-
-		if (application.wheels.showErrorInformation)
-		{
-			if (StructKeyExists(arguments, "properties"))
-			{
-				if (!Len(arguments.properties))
-					$throw(type="Wheels.IncorrectArguments", message="The `property` or `properties` argument is required but was not passed in.", extendedInfo="Please pass in the names of the properties you want to validate. Use either the `property` argument (for a single property) or the `properties` argument (for a list of properties) to do this.");
-			}
-		}
+		$combineArguments(arguments, "methods,method");
+		$combineArguments(arguments, "properties,property", true, "Please pass in the names of the properties you want to validate. Use either the `property` argument (for a single property) or the `properties` argument (for a list of properties) to do this.");
 
 		// loop through all methods and properties and add info for each to the `class` struct
 		loc.iEnd = ListLen(arguments.methods);
