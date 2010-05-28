@@ -273,7 +273,18 @@
 
 		// combine `method`/`methods` and `property`/`properties` into one variables for easier processing below
 		$combineArguments(args=arguments, combine="methods,method", required=true);
-		$combineArguments(args=arguments, combine="properties,property", required=true, extendedInfo="Please pass in the names of the properties you want to validate. Use either the `property` argument (for a single property) or the `properties` argument (for a list of properties) to do this.");
+		// `validate`, `validateOnCreate` and `validateOnUpdate` do not take the properties argument
+		// however other validations do.
+		$combineArguments(args=arguments, combine="properties,property", required=false);
+
+		if (application.wheels.showErrorInformation)
+		{
+			if (StructKeyExists(arguments, "properties"))
+			{
+				if (!Len(arguments.properties))
+					$throw(type="Wheels.IncorrectArguments", message="The `property` or `properties` argument is required but was not passed in.", extendedInfo="Please pass in the names of the properties you want to validate. Use either the `property` argument (for a single property) or the `properties` argument (for a list of properties) to do this.");
+			}
+		}
 
 		// loop through all methods and properties and add info for each to the `class` struct
 		loc.iEnd = ListLen(arguments.methods);
