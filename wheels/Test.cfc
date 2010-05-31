@@ -493,10 +493,11 @@
 			<cfset variables.ROOT_TEST_PATH = application.wheels.rootComponentPath>
 		<cfelse>
 			<!--- specific plugin tests --->
-			<cfset variables.ROOT_TEST_PATH = "#application.wheels.rootComponentPath#.#application.wheels.pluginComponentPath#.#loc.type#">
+			<cfset variables.ROOT_TEST_PATH = application.wheels.rootComponentPath>
+			<cfset variables.ROOT_TEST_PATH = ListAppend(variables.ROOT_TEST_PATH, "#application.wheels.pluginComponentPath#.#loc.type#", ".")>
 		</cfif>
 
-		<cfset variables.ROOT_TEST_PATH = variables.ROOT_TEST_PATH & ".tests">
+		<cfset variables.ROOT_TEST_PATH = ListAppend(variables.ROOT_TEST_PATH, "tests", ".")>
 
 		<!--- add the package if specified --->
 		<cfset loc.test_path = listappend("#variables.ROOT_TEST_PATH#", loc.package, ".")>
@@ -561,7 +562,7 @@
 		</cfloop>
 
 		<!--- swap back the enviroment --->
-		<cfset application = loc.savedenv>
+		<cfset structappend(application, loc.savedenv, true)>
 
 		<!--- return the results --->
 		<cfreturn $results(loc.resultKey)>
