@@ -116,12 +116,12 @@
 		<cfset sendFile(file="../../tutorials/wheels_tutorial_20081028_J657D6HX.pdf")>
 	'
 	categories="controller-request,miscellaneous" chapters="sending-files" functions="">
-	<cfargument name="file" type="string" required="true" hint="The file to send to the user">
-	<cfargument name="name" type="string" required="false" default="" hint="The file name to show in the browser download dialog box">
-	<cfargument name="type" type="string" required="false" default="" hint="The HTTP content type to deliver the file as">
-	<cfargument name="disposition" type="string" required="false" hint="Set to 'inline' to have the browser handle the opening of the file or set to 'attachment' to force a download dialog box">
-	<cfargument name="directory" type="string" required="false" default="" hint="Directory outside of the webroot where the file exists. Must be a full path">
-	<cfargument name="deleteFile" type="boolean" required="false" default="false" hint="Pass in `true` to delete the file after sending it">
+	<cfargument name="file" type="string" required="true" hint="The file to send to the user.">
+	<cfargument name="name" type="string" required="false" default="" hint="The file name to show in the browser download dialog box.">
+	<cfargument name="type" type="string" required="false" default="" hint="The HTTP content type to deliver the file as.">
+	<cfargument name="disposition" type="string" required="false" hint="Set to 'inline' to have the browser handle the opening of the file or set to 'attachment' to force a download dialog box.">
+	<cfargument name="directory" type="string" required="false" default="" hint="Directory outside of the webroot where the file exists. Must be a full path.">
+	<cfargument name="deleteFile" type="boolean" required="false" default="false" hint="Pass in `true` to delete the file on the server after sending it.">
 	<cfargument name="$testingMode" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
