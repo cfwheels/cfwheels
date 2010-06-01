@@ -878,8 +878,8 @@
 		ArrayAppend(loc.sql, "UPDATE #variables.wheels.class.tableName# SET ");
 		for (loc.key in variables.wheels.class.properties)
 		{
-			// include all non key values in the update
-			if (StructKeyExists(this, loc.key) && !ListFindNoCase(variables.wheels.class.keys, loc.key))
+			// include all changed non-key values in the update
+			if (StructKeyExists(this, loc.key) && !ListFindNoCase(variables.wheels.class.keys, loc.key) && hasChanged(loc.key))
 			{
 				ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
 				loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, null=this[loc.key] == ""};
@@ -900,7 +900,7 @@
 <!--- other --->
 
 <!---
-	developers can now override this method for localizing dates if they perfer.
+	developers can now override this method for localizing dates if they prefer.
 --->
 <cffunction name="$timestampProperty" returntype="void" access="public" output="false">
 	<cfargument name="property" type="string" required="true" />
