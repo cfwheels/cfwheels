@@ -120,8 +120,8 @@
 	<cfargument name="name" type="string" required="false" default="" hint="The file name to show in the browser download dialog box">
 	<cfargument name="type" type="string" required="false" default="" hint="The HTTP content type to deliver the file as">
 	<cfargument name="disposition" type="string" required="false" hint="Set to 'inline' to have the browser handle the opening of the file or set to 'attachment' to force a download dialog box">
-	<cfargument name="directory" type="string" required="false" default="" hint="directory outside of the webroot where the file exists. must be a fully path">
-	<cfargument name="deleteFile" type="boolean" required="false" default="false" hint="should we delete the file after sending it.">
+	<cfargument name="directory" type="string" required="false" default="" hint="Directory outside of the webroot where the file exists. Must be a full path">
+	<cfargument name="deleteFile" type="boolean" required="false" default="false" hint="Pass in `true` to delete the file after sending it">
 	<cfargument name="$testingMode" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
