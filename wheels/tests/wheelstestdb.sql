@@ -54,6 +54,7 @@ CREATE TABLE [dbo].[Users](
 	[BirthDay] [datetime] NULL,
 	[BirthDayMonth] [int] NULL,
 	[BirthDayYear] [int] NULL,
+	[BirthTime] [time] NULL,
  CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

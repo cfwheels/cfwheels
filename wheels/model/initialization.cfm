@@ -24,6 +24,7 @@
 		variables.wheels.class.types["numeric"] = "cf_sql_tinyint,cf_sql_smallint,cf_sql_integer,cf_sql_bigint,cf_sql_real,cf_sql_numeric,cf_sql_float,cf_sql_decimal,cf_sql_double";
 		variables.wheels.class.types["integer"] = "cf_sql_tinyint,cf_sql_smallint,cf_sql_integer,cf_sql_bigint";
 		variables.wheels.class.types["string"] = "cf_sql_char,cf_sql_varchar";
+		variables.wheels.class.types["date"] = "cf_sql_date,cf_sql_timestamp,cf_sql_time";
 
 		loc.callbacks = "afterNew,afterFind,afterInitialization,beforeDelete,afterDelete,beforeSave,afterSave,beforeCreate,afterCreate,beforeUpdate,afterUpdate,beforeValidation,afterValidation,beforeValidationOnCreate,afterValidationOnCreate,beforeValidationOnUpdate,afterValidationOnUpdate";
 		loc.iEnd = ListLen(loc.callbacks);
@@ -80,7 +81,7 @@
 				variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];
 				variables.wheels.class.properties[loc.property].nullable = trim(loc.columns["is_nullable"][loc.i]);
 				variables.wheels.class.properties[loc.property].size = loc.columns["column_size"][loc.i];
-	
+								
 				// set the default value
 				loc.defaultValue = loc.columns["column_default_value"][loc.i];
 				if ((Left(loc.defaultValue,2) == "((" && Right(loc.defaultValue,2) == "))") || (Left(loc.defaultValue,2) == "('" && Right(loc.defaultValue,2) == "')"))
@@ -104,6 +105,9 @@
 					// set numericality validations if the developer has not
 					if (ListFindNoCase(variables.wheels.class.types["numeric"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesNumericalityOf"))
 						validatesNumericalityOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, onlyInteger=ListFindNoCase(variables.wheels.class.types["integer"], variables.wheels.class.properties[loc.property].type));
+					// set date validations if the developer has not (checks both dates or times as per the IsDate() function)
+					if (ListFindNoCase(variables.wheels.class.types["date"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesFormatOf"))
+						validatesFormatOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, type="date");
 				}
 	
 				variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, loc.property);
