@@ -31,23 +31,50 @@
 	'
 		<!--- Tell Wheels that when we are referring to `firstName` in the CFML code it should translate to the `STR_USERS_FNAME` column when interacting with the database instead of the default (which would be the `firstname` column) --->
 		<cfset property(name="firstName", column="STR_USERS_FNAME")>
+
+		<!--- Tell Wheels that when we are referring to `fullName` in the CFML code it should concatenate the `STR_USERS_FNAME` and `STR_USERS_LNAME` columns --->
+		<cfset property(name="fullName", sql="STR_USERS_FNAME + '' '' + STR_USERS_LNAME")>
+
+		<!--- Tell Wheels that when displaying error messages or labels for form fields, we want to use `First name(s)` as the label for the `STR_USERS_FNAME` column --->
+		<cfset property(name="firstName", label="First name(s)")>
+
+		<!--- Tell Wheels that when creating new objects we want them to be auto-populated with a `firstName` property with a value of `Dave` --->
+		<cfset property(name="firstName", defaultValue="Dave")>
 	'
 	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,propertyNames,table,tableName">
 	<cfargument name="name" type="string" required="true" hint="The name that you want to use for the column or SQL function result in the CFML code.">
 	<cfargument name="column" type="string" required="false" default="" hint="The name of the column in the database table to map the property to.">
 	<cfargument name="sql" type="string" required="false" default="" hint="An SQL function to use to calculate the property value.">
+	<cfargument name="label" type="string" required="false" default="" hint="A custom label for this property.">
+	<cfargument name="defaultValue" type="string" required="false" default="" hint="A default value for this property.">
 	<cfscript>
-		variables.wheels.class.mapping[arguments.name] = {};
+		// validate setup
+		if (Len(arguments.column) and Len(arguments.sql))
+			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot specify both a column and a sql statement when setting up the mapping for this property.");
+		if (Len(arguments.sql) and Len(arguments.defaultValue))
+			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot specify a default value for calculated properties.");
+		
+		// create the key
+		if (!StructKeyExists(variables.wheels.class.mapping, arguments.name))
+			variables.wheels.class.mapping[arguments.name] = {};
+			
 		if (Len(arguments.column))
 		{
 			variables.wheels.class.mapping[arguments.name].type = "column";
 			variables.wheels.class.mapping[arguments.name].value = arguments.column;
 		}
-		else if (Len(arguments.sql))
+		
+		if (Len(arguments.sql))
 		{
 			variables.wheels.class.mapping[arguments.name].type = "sql";
 			variables.wheels.class.mapping[arguments.name].value = arguments.sql;
 		}
+		
+		if (Len(arguments.label)) 
+			variables.wheels.class.mapping[arguments.name].label = arguments.label;
+		
+		if (Len(arguments.defaultValue)) 
+			variables.wheels.class.mapping[arguments.name].defaultValue = arguments.defaultValue;
 	</cfscript>
 </cffunction>
 
@@ -313,17 +340,15 @@
 
 <cffunction name="$setDefaultValues" returntype="any" access="public" output="false">
 	<cfscript>
-		var loc = {};
-		loc.iEnd = ListLen(variables.wheels.class.propertyList);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+	var loc = {};
+	for (loc.key in variables.wheels.class.properties)
+	{
+		if (Len(variables.wheels.class.properties[loc.key].defaultValue) && (!StructKeyExists(this, loc.key) || !Len(this[loc.key])))
 		{
-			loc.iItem = ListGetAt(variables.wheels.class.propertyList, loc.i);
-			if (Len(variables.wheels.class.properties[loc.iItem].defaultValue) && (!StructKeyExists(this, loc.iItem) || !Len(this[loc.iItem])))
-			{
-				// set the default value unless it is blank or a value already exists for that property on the object
-				this[loc.iItem] = variables.wheels.class.properties[loc.iItem].defaultValue;
-			}
+			// set the default value unless it is blank or a value already exists for that property on the object
+			this[loc.key] = variables.wheels.class.properties[loc.key].defaultValue;
 		}
+	}
 	</cfscript>
 </cffunction>
 
@@ -336,3 +361,13 @@
 	</cfscript>
 	<cfreturn returnValue />
 </cffunction>
+
+<!--- <cffunction name="$label" returntype="string" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfscript>
+		var returnValue = Humanize(arguments.property);
+		if (StructKeyExists(variables.wheels.class.labels, arguments.property))
+			returnValue = variables.wheels.class.labels[arguments.property];
+	</cfscript>
+	<cfreturn returnValue />	
+</cffunction> --->

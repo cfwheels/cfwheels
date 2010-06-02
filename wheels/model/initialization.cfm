@@ -13,6 +13,7 @@
 		variables.wheels.class.properties = {};
 		variables.wheels.class.accessibleProperties = {};
 		variables.wheels.class.calculatedProperties = {};
+		variables.wheels.class.labels = {};
 		variables.wheels.class.associations = {};
 		variables.wheels.class.callbacks = {};
 		variables.wheels.class.keys = "";
@@ -65,7 +66,7 @@
 				loc.property = loc.columns["column_name"][loc.i]; // default the column to map to a property with the same name
 				for (loc.key in variables.wheels.class.mapping)
 				{
-					if (variables.wheels.class.mapping[loc.key].type == "column" && variables.wheels.class.mapping[loc.key].value == loc.property)
+					if (StructKeyExists(variables.wheels.class.mapping[loc.key], "type") and variables.wheels.class.mapping[loc.key].type == "column" && variables.wheels.class.mapping[loc.key].value == loc.property)
 					{
 						// developer has chosen to map this column to a property with a different name so set that here
 						loc.property = loc.key;
@@ -81,12 +82,15 @@
 				variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];
 				variables.wheels.class.properties[loc.property].nullable = trim(loc.columns["is_nullable"][loc.i]);
 				variables.wheels.class.properties[loc.property].size = loc.columns["column_size"][loc.i];
-								
-				// set the default value
-				loc.defaultValue = loc.columns["column_default_value"][loc.i];
-				if ((Left(loc.defaultValue,2) == "((" && Right(loc.defaultValue,2) == "))") || (Left(loc.defaultValue,2) == "('" && Right(loc.defaultValue,2) == "')"))
-					loc.defaultValue = Mid(loc.defaultValue, 3, Len(loc.defaultValue)-4);
-				variables.wheels.class.properties[loc.property].defaultValue = loc.defaultValue;
+				variables.wheels.class.properties[loc.property].label = Humanize(loc.property);
+				variables.wheels.class.properties[loc.property].defaultValue = "";
+				
+				if (StructKeyExists(variables.wheels.class.mapping, loc.property)) {
+					if (StructKeyExists(variables.wheels.class.mapping[loc.property], "label"))
+						variables.wheels.class.properties[loc.property].label = variables.wheels.class.mapping[loc.property].label;
+					if (StructKeyExists(variables.wheels.class.mapping[loc.property], "defaultValue"))
+						variables.wheels.class.properties[loc.property].defaultValue = variables.wheels.class.mapping[loc.property].defaultValue;
+				}
 	
 				if (loc.columns["is_primarykey"][loc.i])
 				{
@@ -96,7 +100,7 @@
 				{
 					// set nullable validations if the developer has not
 					loc.defaultValidationsAllowBlank = false;
-					if (!variables.wheels.class.properties[loc.property].nullable and !Len(variables.wheels.class.properties[loc.property].defaultValue) and !$validationExists(property=loc.property, validation="validatesPresenceOf"))
+					if (!variables.wheels.class.properties[loc.property].nullable and !$validationExists(property=loc.property, validation="validatesPresenceOf"))
 						validatesPresenceOf(properties=loc.property);
 						loc.defaultValidationsAllowBlank = true;
 					// set length validations if the developer has not
@@ -120,7 +124,7 @@
 		variables.wheels.class.calculatedPropertyList = "";
 		for (loc.key in variables.wheels.class.mapping)
 		{
-			if (variables.wheels.class.mapping[loc.key].type != "column")
+			if (StructKeyExists(variables.wheels.class.mapping[loc.key], "type") and variables.wheels.class.mapping[loc.key].type != "column")
 			{
 				variables.wheels.class.calculatedPropertyList = ListAppend(variables.wheels.class.calculatedPropertyList, loc.key);
 				variables.wheels.class.calculatedProperties[loc.key] = {};
