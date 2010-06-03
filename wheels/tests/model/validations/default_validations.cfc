@@ -2,7 +2,7 @@
 
 	<cffunction name="setup">
 		<cfset application.wheels.setDefaultValidations = true>
-		<cfset loc.user = createobject("component", "wheelsMapping.model").$initModelClass("user")>
+		<cfset loc.user = model("UserBlank").new()>
 		<cfset loc.user.username = "gavin@cfwheels.org">
 		<cfset loc.user.password = "disismypassword">
 		<cfset loc.user.firstName = "Gavin">

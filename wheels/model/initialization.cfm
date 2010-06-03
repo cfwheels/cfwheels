@@ -13,19 +13,11 @@
 		variables.wheels.class.properties = {};
 		variables.wheels.class.accessibleProperties = {};
 		variables.wheels.class.calculatedProperties = {};
-		variables.wheels.class.labels = {};
 		variables.wheels.class.associations = {};
 		variables.wheels.class.callbacks = {};
 		variables.wheels.class.keys = "";
 		variables.wheels.class.connection = {datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword};
 		variables.wheels.class.setDefaultValidations = application.wheels.setDefaultValidations;
-
-		// set some type settings to help in the model since everything is translated to coldfusion types
-		variables.wheels.class.types = {};
-		variables.wheels.class.types["numeric"] = "cf_sql_tinyint,cf_sql_smallint,cf_sql_integer,cf_sql_bigint,cf_sql_real,cf_sql_numeric,cf_sql_float,cf_sql_decimal,cf_sql_double";
-		variables.wheels.class.types["integer"] = "cf_sql_tinyint,cf_sql_smallint,cf_sql_integer,cf_sql_bigint";
-		variables.wheels.class.types["string"] = "cf_sql_char,cf_sql_varchar";
-		variables.wheels.class.types["date"] = "cf_sql_date,cf_sql_timestamp,cf_sql_time";
 
 		loc.callbacks = "afterNew,afterFind,afterInitialization,beforeDelete,afterDelete,beforeSave,afterSave,beforeCreate,afterCreate,beforeUpdate,afterUpdate,beforeValidation,afterValidation,beforeValidationOnCreate,afterValidationOnCreate,beforeValidationOnUpdate,afterValidationOnUpdate";
 		loc.iEnd = ListLen(loc.callbacks);
@@ -104,13 +96,13 @@
 						validatesPresenceOf(properties=loc.property);
 						loc.defaultValidationsAllowBlank = true;
 					// set length validations if the developer has not
-					if (ListFindNoCase(variables.wheels.class.types["string"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesLengthOf"))
+					if ($isStringDataType(variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesLengthOf"))
 						validatesLengthOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, maximum=variables.wheels.class.properties[loc.property].size);
 					// set numericality validations if the developer has not
-					if (ListFindNoCase(variables.wheels.class.types["numeric"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesNumericalityOf"))
-						validatesNumericalityOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, onlyInteger=ListFindNoCase(variables.wheels.class.types["integer"], variables.wheels.class.properties[loc.property].type));
+					if ($isIntegerDataType(variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesNumericalityOf"))
+						validatesNumericalityOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, onlyInteger=$isIntegerDataType(variables.wheels.class.properties[loc.property].type));
 					// set date validations if the developer has not (checks both dates or times as per the IsDate() function)
-					if (ListFindNoCase(variables.wheels.class.types["date"], variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesFormatOf"))
+					if ($isDateTimeDataType(variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesFormatOf"))
 						validatesFormatOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, type="date");
 				}
 	
@@ -219,4 +211,24 @@
 
 <cffunction name="$softDeleteColumn" returntype="string" access="public" output="false">
 	<cfreturn variables.wheels.class.softDeleteColumn>
+</cffunction>
+
+<cffunction name="$isNumericDataType" returntype="boolean" access="public" output="false">
+	<cfargument name="cfsqltype" type="string" required="true">
+	<cfreturn ListFindNoCase("cf_sql_tinyint,cf_sql_smallint,cf_sql_integer,cf_sql_bigint,cf_sql_real,cf_sql_numeric,cf_sql_float,cf_sql_decimal,cf_sql_double", arguments.cfsqltype) gt 0>
+</cffunction>
+
+<cffunction name="$isIntegerDataType" returntype="boolean" access="public" output="false">
+	<cfargument name="cfsqltype" type="string" required="true">
+	<cfreturn ListFindNoCase("cf_sql_tinyint,cf_sql_smallint,cf_sql_integer,cf_sql_bigint", arguments.cfsqltype) gt 0>
+</cffunction>
+
+<cffunction name="$isStringDataType" returntype="boolean" access="public" output="false">
+	<cfargument name="cfsqltype" type="string" required="true">
+	<cfreturn ListFindNoCase("cf_sql_char,cf_sql_varchar", arguments.cfsqltype) gt 0>
+</cffunction>
+
+<cffunction name="$isDateTimeDataType" returntype="boolean" access="public" output="false">
+	<cfargument name="cfsqltype" type="string" required="true">
+	<cfreturn ListFindNoCase("cf_sql_date,cf_sql_timestamp,cf_sql_time", arguments.cfsqltype) gt 0>
 </cffunction>
