@@ -864,6 +864,7 @@
 		loc.generatedKey = variables.wheels.class.adapter.$generatedKey();
 		if (StructKeyExists(loc.ins.result, loc.generatedKey))
 			this[ListGetAt(variables.wheels.class.keys, 1)] = loc.ins.result[loc.generatedKey];
+		this.reload();
 	</cfscript>
 	<cfreturn true>
 </cffunction>

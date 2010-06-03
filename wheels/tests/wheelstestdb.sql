@@ -61,6 +61,10 @@ CREATE TABLE [dbo].[Users](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 go
+
+ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [DF_Users_BirthTime]  DEFAULT ('18:26:08.6900000') FOR [BirthTime]
+GO
+
 -- PhotoGalleries
 CREATE TABLE [dbo].[PhotoGalleries](
 	[photogalleryid] [int] IDENTITY(1,1) NOT NULL,

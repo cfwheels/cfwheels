@@ -10,4 +10,12 @@
 		<cfset assert('!StructKeyExists(loc.author, "firstName")')>
 	</cffunction>
 
+	<cffunction name="test_created_model_has_database_defaults">
+		<cftransaction action="begin">
+			<cfset loc.user = model("UserBlank").create(username="The Dude", password="doodle", firstName="The", lastName="Dude", defaults=false)>
+			<cftransaction action="rollback">
+		</cftransaction>
+		<cfset assert('StructKeyExists(loc.user, "birthTime") and loc.user.birthTime eq "18:26:08.6900000"')>
+	</cffunction>
+
 </cfcomponent>
