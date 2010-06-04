@@ -25,6 +25,7 @@
 							for (loc.j=1; loc.j <= arguments.query.recordCount; loc.j++)
 							{
 								// is there anything we can do here to not instantiate an object if it is not going to be use or is already created
+								// this extra instantiation is really slowing things down
 								loc.hasManyObject = model(variables.wheels.class.associations[loc.include].modelName).$createInstance(properties=arguments.query, persisted=true, row=loc.j, base=false, callbacks=arguments.callbacks);
 								if (!ListFind(loc.hasManyDoneObjects, loc.hasManyObject.key(), Chr(7)))
 								{
