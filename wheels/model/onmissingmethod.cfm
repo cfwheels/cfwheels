@@ -80,6 +80,7 @@
 				loc.joinClass = loc.joinAssociation.modelName;
 				loc.info = model(loc.joinClass).$expandedAssociations(include=ListFirst(variables.wheels.class.associations[loc.key].through));
 				loc.info = loc.info[1];
+				loc.componentReference = model(loc.info.modelName);
 				loc.include = ListLast(variables.wheels.class.associations[loc.key].through);
 				if (StructKeyExists(arguments.missingMethodArguments, "include"))
 					loc.include = "#loc.include#(#arguments.missingMethodArguments.include#)";
