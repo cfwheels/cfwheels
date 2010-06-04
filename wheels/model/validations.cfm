@@ -351,7 +351,7 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.thisValidation = variables.wheels.class.validations[loc.type][loc.i];
-				if ($evaluateValidationCondition(argumentCollection=loc.thisValidation.args))
+				if ($evaluateCondition(argumentCollection=loc.thisValidation.args))
 				{
 					if (loc.thisValidation.method == "$validatePresenceOf")
 					{
@@ -376,7 +376,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$evaluateValidationCondition" returntype="boolean" access="public" output="false" hint="Evaluates the condition to determine if the validation should be executed.">
+<cffunction name="$evaluateCondition" returntype="boolean" access="public" output="false" hint="Evaluates the condition to determine if the validation should be executed.">
 	<cfscript>
 		var returnValue = false;
 		// proceed with validation when `if` has been supplied and it evaluates to `true` or when `unless` has been supplied and it evaluates to `false`
