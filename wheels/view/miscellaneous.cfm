@@ -189,6 +189,8 @@
 			loc.returnValue = ListLast(arguments.objectName, ".");
 			if (Find("[", loc.returnValue))
 				loc.returnValue = $swapArrayPositionsForIds(objectName=loc.returnValue);
+			if (Find("($", arguments.property))
+				arguments.property = ReplaceList(arguments.property, "($,)", "-,");
 			if (Find("[", arguments.property))
 				loc.returnValue = REReplace(REReplace(loc.returnValue & arguments.property, "[,\[]", "-", "all"), "[""'\]]", "", "all");
 			else
@@ -198,7 +200,7 @@
 		}
 		else
 		{
-			loc.returnValue = ReplaceList(arguments.property, "[,],',""", "-,");
+			loc.returnValue = ReplaceList(arguments.property, "[,($,],',"",)", "-,-,");
 		}
 		if (Len(arguments.valueToAppend))
 			loc.returnValue = loc.returnValue & "-" & arguments.valueToAppend;
