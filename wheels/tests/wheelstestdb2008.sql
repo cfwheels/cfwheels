@@ -54,7 +54,7 @@ CREATE TABLE [dbo].[Users](
 	[BirthDay] [datetime] NULL,
 	[BirthDayMonth] [int] NULL,
 	[BirthDayYear] [int] NULL,
-	[BirthTime] [datetime] NULL,
+	[BirthTime] [time] NULL,
  CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -62,7 +62,7 @@ CREATE TABLE [dbo].[Users](
 ) ON [PRIMARY]
 go
 
-ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [DF_Users_BirthTime]  DEFAULT ('2000-01-01 18:26:08.690') FOR [BirthTime]
+ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [DF_Users_BirthTime]  DEFAULT ('18:26:08.6900000') FOR [BirthTime]
 GO
 
 -- PhotoGalleries
