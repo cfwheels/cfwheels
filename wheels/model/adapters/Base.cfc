@@ -99,4 +99,26 @@
 		</cfscript>
 		<cfreturn loc.columns>
 	</cffunction>
+
+	<cffunction name="$getValidationType" returntype="string" access="public" output="false">
+		<cfargument name="type" type="string" required="true">
+		<cfswitch expression="#arguments.type#">
+			<cfcase value="cf_sql_real,cf_sql_numeric,cf_sql_float,cf_sql_decimal,cf_sql_double" delimiters=",">
+				<cfreturn "float">
+			</cfcase>
+			<cfcase value="cf_sql_tinyint,cf_sql_smallint,cf_sql_integer,cf_sql_bigint" delimiters=",">
+				<cfreturn "integer">
+			</cfcase>
+			<cfcase value="cf_sql_char,cf_sql_varchar" delimiters=",">
+				<cfreturn "string">
+			</cfcase>
+			<cfcase value="cf_sql_date,cf_sql_timestamp,cf_sql_time" delimiters=",">
+				<cfreturn "datetime">
+			</cfcase>
+			<cfdefaultcase>
+				<cfreturn "">
+			</cfdefaultcase>
+		</cfswitch>
+	</cffunction>
+
 </cfcomponent>

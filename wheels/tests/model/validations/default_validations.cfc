@@ -1,19 +1,17 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="setup">
-		<cfset application.wheels.setDefaultValidations = true>
 		<cfset loc.user = model("UserBlank").new()>
 		<cfset loc.user.username = "gavin@cfwheels.org">
 		<cfset loc.user.password = "disismypassword">
 		<cfset loc.user.firstName = "Gavin">
 		<cfset loc.user.lastName = "Gavinsson">
-		<cfset application.wheels.setDefaultValidations = false>
 	</cffunction>
 
 	<cffunction name="test_validates_presence_of">
 		<cfset StructDelete(loc.user, "username")> <!--- missing key --->
 		<cfset loc.user.password = ""> <!--- zero length string --->
-		<cfset loc.user.firstName = "      "> <!--- empty string ---> 
+		<cfset loc.user.firstName = "      "> <!--- empty string --->
 		<cfset loc.user.valid()>
 		<cfset assert('ArrayLen(loc.user.allErrors()) eq 3')>
 	</cffunction>

@@ -66,7 +66,7 @@
 					}
 				}
 				loc.type = SpanExcluding(loc.columns["type_name"][loc.i], "( ");
-	
+
 				// set the info we need for each property
 				variables.wheels.class.properties[loc.property] = {};
 				variables.wheels.class.properties[loc.property].type = variables.wheels.class.adapter.$getType(loc.type);
@@ -75,20 +75,21 @@
 				variables.wheels.class.properties[loc.property].nullable = trim(loc.columns["is_nullable"][loc.i]);
 				variables.wheels.class.properties[loc.property].size = loc.columns["column_size"][loc.i];
 				variables.wheels.class.properties[loc.property].label = Humanize(loc.property);
+				variables.wheels.class.properties[loc.property].validationtype = variables.wheels.class.adapter.$getValidationType(variables.wheels.class.properties[loc.property].type);
 				variables.wheels.class.properties[loc.property].defaultValue = "";
-				
+
 				if (StructKeyExists(variables.wheels.class.mapping, loc.property)) {
 					if (StructKeyExists(variables.wheels.class.mapping[loc.property], "label"))
 						variables.wheels.class.properties[loc.property].label = variables.wheels.class.mapping[loc.property].label;
 					if (StructKeyExists(variables.wheels.class.mapping[loc.property], "defaultValue"))
 						variables.wheels.class.properties[loc.property].defaultValue = variables.wheels.class.mapping[loc.property].defaultValue;
 				}
-	
+
 				if (loc.columns["is_primarykey"][loc.i])
 				{
 					setPrimaryKey(loc.property);
 				}
-				else if (variables.wheels.class.setDefaultValidations and not ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#,#application.wheels.softDeleteProperty#", loc.property)) 
+				else if (variables.wheels.class.setDefaultValidations and not ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#,#application.wheels.softDeleteProperty#", loc.property))
 				{
 					// set nullable validations if the developer has not
 					loc.defaultValidationsAllowBlank = false;
@@ -96,16 +97,16 @@
 						validatesPresenceOf(properties=loc.property);
 						loc.defaultValidationsAllowBlank = true;
 					// set length validations if the developer has not
-					if ($isStringDataType(variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesLengthOf"))
+					if (variables.wheels.class.properties[loc.property].validationtype eq "string" and !$validationExists(property=loc.property, validation="validatesLengthOf"))
 						validatesLengthOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, maximum=variables.wheels.class.properties[loc.property].size);
 					// set numericality validations if the developer has not
-					if ($isIntegerDataType(variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesNumericalityOf"))
-						validatesNumericalityOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, onlyInteger=$isIntegerDataType(variables.wheels.class.properties[loc.property].type));
+					if (ListFindNoCase("integer,float", variables.wheels.class.properties[loc.property].validationtype) and !$validationExists(property=loc.property, validation="validatesNumericalityOf"))
+						validatesNumericalityOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, onlyInteger=!!(variables.wheels.class.properties[loc.property].validationtype eq "integer"));
 					// set date validations if the developer has not (checks both dates or times as per the IsDate() function)
-					if ($isDateTimeDataType(variables.wheels.class.properties[loc.property].type) and !$validationExists(property=loc.property, validation="validatesFormatOf"))
+					if (variables.wheels.class.properties[loc.property].validationtype eq "datetime" and !$validationExists(property=loc.property, validation="validatesFormatOf"))
 						validatesFormatOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, type="date");
 				}
-	
+
 				variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, loc.property);
 				variables.wheels.class.columnList = ListAppend(variables.wheels.class.columnList, variables.wheels.class.properties[loc.property].column);
 				loc.processedColumns = ListAppend(loc.processedColumns, loc.columns["column_name"][loc.i]);
@@ -211,24 +212,4 @@
 
 <cffunction name="$softDeleteColumn" returntype="string" access="public" output="false">
 	<cfreturn variables.wheels.class.softDeleteColumn>
-</cffunction>
-
-<cffunction name="$isNumericDataType" returntype="boolean" access="public" output="false">
-	<cfargument name="cfsqltype" type="string" required="true">
-	<cfreturn ListFindNoCase("cf_sql_tinyint,cf_sql_smallint,cf_sql_integer,cf_sql_bigint,cf_sql_real,cf_sql_numeric,cf_sql_float,cf_sql_decimal,cf_sql_double", arguments.cfsqltype) gt 0>
-</cffunction>
-
-<cffunction name="$isIntegerDataType" returntype="boolean" access="public" output="false">
-	<cfargument name="cfsqltype" type="string" required="true">
-	<cfreturn ListFindNoCase("cf_sql_tinyint,cf_sql_smallint,cf_sql_integer,cf_sql_bigint", arguments.cfsqltype) gt 0>
-</cffunction>
-
-<cffunction name="$isStringDataType" returntype="boolean" access="public" output="false">
-	<cfargument name="cfsqltype" type="string" required="true">
-	<cfreturn ListFindNoCase("cf_sql_char,cf_sql_varchar", arguments.cfsqltype) gt 0>
-</cffunction>
-
-<cffunction name="$isDateTimeDataType" returntype="boolean" access="public" output="false">
-	<cfargument name="cfsqltype" type="string" required="true">
-	<cfreturn ListFindNoCase("cf_sql_date,cf_sql_timestamp,cf_sql_time", arguments.cfsqltype) gt 0>
 </cffunction>
