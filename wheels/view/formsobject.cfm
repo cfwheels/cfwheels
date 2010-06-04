@@ -242,6 +242,7 @@
 		{
 			loc.hiddenAttributes = {};
 			loc.hiddenAttributes.type = "hidden";
+			loc.hiddenAttributes.id = arguments.id & "-checkbox";
 			loc.hiddenAttributes.name = arguments.name & "($checkbox)";
 			loc.hiddenAttributes.value = arguments.uncheckedValue;
 			loc.returnValue = loc.returnValue & $tag(name="input", close=true, attributes=loc.hiddenAttributes);
