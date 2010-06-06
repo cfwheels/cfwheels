@@ -329,13 +329,13 @@
 				{
 					arguments.current = loc.i;
 					loc.properties = loc.array[loc.i].properties();
-					
+
 					// we have to overwrite the values in each loop but first we remove the ones that are in the original arguments since they take precedence
 					for (loc.key in loc.originalArguments)
 						if (StructKeyExists(loc.properties, loc.key))
 							StructDelete(loc.properties, loc.key);
 					StructAppend(arguments, loc.properties, true);
-					
+
 					loc.returnValue = loc.returnValue & $includeAndReturnOutput(argumentCollection=arguments);
 					if (StructKeyExists(arguments, "$spacer") && loc.i < loc.iEnd)
 						loc.returnValue = loc.returnValue & arguments.$spacer;
@@ -393,7 +393,7 @@
 </cffunction>
 
 <cffunction name="$performedRenderOrRedirect" returntype="boolean" access="public" output="false">
-	<cfreturn !!($performedRender() || $performedRedirect())>
+	<cfreturn ($performedRender() || $performedRedirect())>
 </cffunction>
 
 <cffunction name="$performedRender" returntype="boolean" access="public" output="false">
