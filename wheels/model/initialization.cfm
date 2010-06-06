@@ -101,7 +101,7 @@
 						validatesLengthOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, maximum=variables.wheels.class.properties[loc.property].size);
 					// set numericality validations if the developer has not
 					if (ListFindNoCase("integer,float", variables.wheels.class.properties[loc.property].validationtype) and !$validationExists(property=loc.property, validation="validatesNumericalityOf"))
-						validatesNumericalityOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, onlyInteger=!!(variables.wheels.class.properties[loc.property].validationtype eq "integer"));
+						validatesNumericalityOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, onlyInteger=(variables.wheels.class.properties[loc.property].validationtype eq "integer"));
 					// set date validations if the developer has not (checks both dates or times as per the IsDate() function)
 					if (variables.wheels.class.properties[loc.property].validationtype eq "datetime" and !$validationExists(property=loc.property, validation="validatesFormatOf"))
 						validatesFormatOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, type="date");
