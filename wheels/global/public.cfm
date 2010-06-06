@@ -392,12 +392,11 @@
 		}
 		else // link based on controller/action/key
 		{
-
 			// when no controller or action was passed in we link to the current page (controller/action only, not query string etc) by default
+			if (!Len(arguments.controller) && !Len(arguments.action) && StructKeyExists(loc.params, "action"))
+				arguments.action = loc.params.action;
 			if (!Len(arguments.controller) && StructKeyExists(loc.params, "controller"))
 				arguments.controller = loc.params.controller;
-			if (!Len(arguments.action) && StructKeyExists(loc.params, "action"))
-				arguments.action = loc.params.action;
 			loc.returnValue = loc.returnValue & "?controller=" & $hyphenize(arguments.controller);
 			if (Len(arguments.action))
 				loc.returnValue = loc.returnValue & "&action=" & $hyphenize(arguments.action);
@@ -421,7 +420,7 @@
 			loc.returnValue = Replace(loc.returnValue, application.wheels.rewriteFile, "");
 			loc.returnValue = Replace(loc.returnValue, "//", "/");
 		}
-
+		
 		if (Len(arguments.params))
 			loc.returnValue = loc.returnValue & $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
 		if (Len(arguments.anchor))
