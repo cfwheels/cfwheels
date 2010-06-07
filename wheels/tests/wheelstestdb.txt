@@ -1,38 +1,186 @@
-AUTHORS
-id (int, identity, not null, primary key)
-firstname (varchar(100), not null)
-lastname (varchar(100), not null)
+-- phpMyAdmin SQL Dump
+-- version 3.2.5
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Jun 06, 2010 at 11:02 PM
+-- Server version: 5.1.44
+-- PHP Version: 5.2.13
 
-CLASSIFICATIONS
-id (int, identity, not null, primary key)
-postid (int, not null)
-tagid (int, not null)
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
-COMMENTS
-id (int, identity, not null, primary key)
-postid (int, not null)
-body (text, not null)
-name (varchar(100), not null)
-url (varchar(100))
-email (varchar(100))
-createdat (datetime, not null)
+--
+-- Database: `wheelstestdb`
+--
 
-POSTS
-id (int, identity, not null, primary key)
-authorid (int)
-title (varchar(250), not null)
-body (text, not null)
-views (int, not null, 0)
-averagerating (float)
-createdat (datetime, not null)
-updatedat (datetime)
+-- --------------------------------------------------------
 
-PROFILES
-id (int, identity, not null, primary key)
-authorid (int)
-dateofbirth (datetime, not null)
-bio (text)
+--
+-- Table structure for table `authors`
+--
 
-TAGS
-id (int, identity, not null, primary key)
-name (varchar(50), not null)
+CREATE TABLE `authors` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `firstname` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `lastname` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cities`
+--
+
+CREATE TABLE `cities` (
+  `countyid` char(4) COLLATE utf8_unicode_ci NOT NULL,
+  `citycode` tinyint(4) NOT NULL,
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `classifications`
+--
+
+CREATE TABLE `classifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `postid` int(11) NOT NULL,
+  `tagid` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `comments`
+--
+
+CREATE TABLE `comments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `postid` int(11) NOT NULL,
+  `body` text COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `url` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `createdat` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `photogalleries`
+--
+
+CREATE TABLE `photogalleries` (
+  `photogalleryid` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`photogalleryid`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=26 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `photogalleryphotos`
+--
+
+CREATE TABLE `photogalleryphotos` (
+  `photogalleryphotoid` int(11) NOT NULL AUTO_INCREMENT,
+  `photogalleryid` int(11) NOT NULL,
+  `filename` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`photogalleryphotoid`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=251 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `posts`
+--
+
+CREATE TABLE `posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `authorid` int(11) DEFAULT NULL,
+  `title` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
+  `body` text COLLATE utf8_unicode_ci NOT NULL,
+  `views` int(11) NOT NULL DEFAULT '0',
+  `averagerating` float DEFAULT NULL,
+  `createdat` datetime NOT NULL,
+  `updatedat` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `profiles`
+--
+
+CREATE TABLE `profiles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `authorid` int(11) DEFAULT NULL,
+  `dateofbirth` datetime NOT NULL,
+  `bio` text COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shops`
+--
+
+CREATE TABLE `shops` (
+  `shopid` char(9) COLLATE utf8_unicode_ci NOT NULL,
+  `citycode` tinyint(4) DEFAULT NULL,
+  `name` varchar(80) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tags`
+--
+
+CREATE TABLE `tags` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `userphotos`
+--
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `wheelstestdb`.`userphotos` AS select `u`.`id` AS `userid`,`u`.`username` AS `username`,`u`.`firstname` AS `firstname`,`u`.`lastname` AS `lastname`,`pg`.`title` AS `title`,`pg`.`photogalleryid` AS `photogalleryid` from (`wheelstestdb`.`users` `u` join `wheelstestdb`.`photogalleries` `pg` on((`u`.`id` = `pg`.`userid`)));
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `firstname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `lastname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `address` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `city` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `state` char(2) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `zipcode` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `fax` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `birthday` datetime DEFAULT NULL,
+  `birthdaymonth` int(11) DEFAULT NULL,
+  `birthdayyear` int(11) DEFAULT NULL,
+  `birthtime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
