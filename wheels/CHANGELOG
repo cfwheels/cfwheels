@@ -159,7 +159,6 @@ Changes
 Bug Fixes
 =========
 
-* Corrected pluralize rules - #450 [Joshua Clingenpeel, Tony Petruzzi]
 * $yearSelectTag() should take into account reverse ordering - [Tony Petruzzi]
 * correct id for radioButton() when value is blank - #373 [Tony Petruzzi]
 * match and purge whitespace in where clause - #381 [Tony Petruzzi]
@@ -170,6 +169,17 @@ Other
 =====
 * Refactor to avoid polluting the Application.cfc's this scope with the rootDir variable - [Per Djurner]
 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+WHEELS VERSION 1.0.5
+
+Bug Fixes
+=======
+* Fixed the handling for the "errorEmailServer" setting so that error emails can now be sent without having to set the server in the ColdFusion administrator - [Per Djurner]
+* Corrected pluralize rules - #450 [Joshua Clingenpeel, Tony Petruzzi]
+* Remove possible spaces in list passed in to callback registration - #448 [Raul Riera]
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
