@@ -1,9 +1,12 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
-	<cfset global.options.simplevalues = '<select id="testselect" name="testselect"><option value="first">first</option><option value="second">second</option><option value="third">third</option></select>'>
-	<cfset global.options.complexvalues = '<select id="testselect" name="testselect"><option value="1">first</option><option value="2">second</option><option value="3">third</option></select>'>
-	<cfset global.options.single_column_query = '<select id="testselect" name="testselect"><option value="first">first</option><option value="second">second</option><option value="third">third</option></select>'>
+	<cffunction name="setup">
+		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.options.simplevalues = '<select id="testselect" name="testselect"><option value="first">first</option><option value="second">second</option><option value="third">third</option></select>'>
+		<cfset loc.options.complexvalues = '<select id="testselect" name="testselect"><option value="1">first</option><option value="2">second</option><option value="3">third</option></select>'>
+		<cfset loc.options.single_column_query = '<select id="testselect" name="testselect"><option value="first">first</option><option value="second">second</option><option value="third">third</option></select>'>
+		<cfset loc.options.empty_query = '<select id="testselect" name="testselect"></select>'>
+	</cffunction>
 
 	<cffunction name="test_list_for_option_values">
 		<cfset loc.args.name = "testselect">
@@ -72,7 +75,29 @@
 		<cfset loc.args.options = loc.q>
 		<cfset halt(false, "loc.controller.selectTag(argumentcollection=loc.args)")>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
-		<cfset assert('global.options.single_column_query eq loc.r')>
+		<cfset assert('loc.options.single_column_query eq loc.r')>
+	</cffunction>
+
+	<cffunction name="test_query_with_no_records_for_option_values_">
+		<cfset loc.q = querynew("")>
+		<cfset loc.id = []>
+		<cfset loc.name = []>
+		<cfset queryaddcolumn(loc.q, "id", loc.id)>
+		<cfset queryaddcolumn(loc.q, "name", loc.name)>
+		<cfset loc.args.name = "testselect">
+		<cfset loc.args.options = loc.q>
+		<cfset halt(false, "loc.controller.selectTag(argumentcollection=loc.args)")>
+		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
+		<cfset assert('loc.options.empty_query eq loc.r')>
+	</cffunction>
+
+	<cffunction name="test_query_with_no_records_or_columns_for_option_values_">
+		<cfset loc.q = querynew("")>
+		<cfset loc.args.name = "testselect">
+		<cfset loc.args.options = loc.q>
+		<cfset halt(false, "loc.controller.selectTag(argumentcollection=loc.args)")>
+		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
+		<cfset assert('loc.options.empty_query eq loc.r')>
 	</cffunction>
 
 </cfcomponent>

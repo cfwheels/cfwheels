@@ -1,6 +1,8 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.dispatcher = createobject("component", "wheelsMapping.Dispatch") />
+	<cffunction name="setup">
+		<cfset loc.dispatcher = createobject("component", "wheelsMapping.Dispatch") />
+	</cffunction>
 
 	<cffunction name="test_access_public_methods">
 		<cfset loc.controller = createobject("component", "wheelsMapping.tests._assets.controllers.FilterTestPublic").$initControllerClass() />
@@ -11,7 +13,7 @@
 		<cfset halt(false, 'request.wheels.response')>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
-	
+
 	<cffunction name="test_access_private_methods">
 		<cfset loc.controller = createobject("component", "wheelsMapping.tests._assets.controllers.FilterTestPrivate").$initControllerClass() />
 		<cfset loc.controller.filters("filterTestPrivate")>

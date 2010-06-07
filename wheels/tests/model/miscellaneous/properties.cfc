@@ -1,8 +1,20 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.user = createobject("component", "wheelsMapping.model").$initModelClass("User")>
+	<cffunction name="test_key">
+		<cfset loc.author = model("author").findOne()>
+		<cfset loc.result = loc.author.key()>
+		<cfset assert("loc.result IS loc.author.id")>
+	</cffunction>
+
+	<cffunction name="test_key_with_new">
+		<cfset loc.author = model("author").new(id=1, firstName="Per", lastName="Djurner")>
+		<cfset loc.result = loc.author.key()>
+		<cfset assert("loc.result IS 1")>
+	</cffunction>
 
 	<cffunction name="test_setting_and_getting_properties">
+
+		<cfset loc.user = model("user").new()>
 
 		<cfset loc.args = {}>
 		<cfset loc.args.Address = "1313 mockingbird lane">
@@ -20,7 +32,7 @@
 		<cfset loc.args.birthdaymonth = "11">
 		<cfset loc.args.birthdayyear = "1975">
 
-		<cfset loc.user.setproperties(loc.args)>
+		<cfset loc.user.setProperties(loc.args)>
 
 		<cfset loc.properties = loc.user.properties()>
 
@@ -30,28 +42,38 @@
 
 		<cfset loc.args.FirstName = "per">
 		<cfset loc.args.LastName = "djurner">
-		
+
 		<cfset loc.user.setproperties(firstname="per", lastname="djurner")>
 		<cfset loc.properties = loc.user.properties()>
 
 		<cfloop collection="#loc.properties#" item="loc.i">
 			<cfset assert("loc.properties[loc.i] eq loc.args[loc.i]")>
 		</cfloop>
-				
+
 		<cfset loc.args.FirstName = "chris">
 		<cfset loc.args.LastName = "peters">
 		<cfset loc.args.ZipCode = "33333">
-		
+
 		<cfset loc.params = {}>
 		<cfset loc.params.lastname = "peters">
-		<cfset loc.params.zipcode = "33333">		
-		
+		<cfset loc.params.zipcode = "33333">
+
 		<cfset loc.user.setproperties(firstname="chris", properties=loc.params)>
 		<cfset loc.properties = loc.user.properties()>
-		
+
 		<cfloop collection="#loc.properties#" item="loc.i">
 			<cfset assert("loc.properties[loc.i] eq loc.args[loc.i]")>
 		</cfloop>
 	</cffunction>
-	
+
+	<cffunction name="test_setting_and_getting_properties_with_named_arguments">
+		<cfset loc.author = model("author").findOne()>
+		<cfset loc.author.setProperties(firstName="a", lastName="b")>
+		<cfset loc.result = loc.author.properties()>
+		<cfset loc.compareWith.id = loc.author.key()>
+		<cfset loc.compareWith.firstName = "a">
+		<cfset loc.compareWith.lastName = "b">
+		<cfset assert("loc.result.toString() IS loc.compareWith.toString()")>
+	</cffunction>
+
 </cfcomponent>

@@ -1,8 +1,10 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.tests._assets.controllers.ControllerWithModel")>
-	<cfset global.args= {}>
-	<cfset global.args.objectName = "user">
+	<cffunction name="setup">
+		<cfset loc.controller = createobject("component", "wheelsMapping.tests._assets.controllers.ControllerWithModel")>
+		<cfset loc.args= {}>
+		<cfset loc.args.objectName = "user">
+	</cffunction>
 
 	<cffunction name="test_checked_when_property_value_equals_checkedValue">
 		<cfset loc.args.property = "birthdaymonth">

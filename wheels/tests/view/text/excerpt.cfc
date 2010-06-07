@@ -1,11 +1,13 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
-	<cfset global.args = {}>
-	<cfset global.args.text = "CFWheels: testing the excerpt view helper to see if it works or not.">
-	<cfset global.args.phrase = "CFWheels: testing the excerpt">
-	<cfset global.args.radius = "0">
-	<cfset global.args.excerptString = "[more]">
+	<cffunction name="setup">
+		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.args = {}>
+		<cfset loc.args.text = "CFWheels: testing the excerpt view helper to see if it works or not.">
+		<cfset loc.args.phrase = "CFWheels: testing the excerpt">
+		<cfset loc.args.radius = "0">
+		<cfset loc.args.excerptString = "[more]">
+	</cffunction>
 
 	<cffunction name="test_phrase_at_the_beginning">
 		<cfset loc.e = loc.controller.excerpt(argumentcollection=loc.args)>

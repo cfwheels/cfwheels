@@ -1,23 +1,21 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfinclude template="/wheelsMapping/global/functions.cfm">
-
-	<cfset global.user = model("user").findOne()>
-	<cfset global.user.addErrorToBase(message="base error1")>
-	<cfset global.user.addErrorToBase(message="base name error1", name="base_errors")>
-	<cfset global.user.addErrorToBase(message="base name error2", name="base_errors")>
-
-	<cfset global.user.addError(property="firstname", message="firstname error1")>
-	<cfset global.user.addError(property="firstname", message="firstname error2")>
-	<cfset global.user.addError(property="firstname", message="firstname name error1", name="firstname_errors")>
-	<cfset global.user.addError(property="firstname", message="firstname name error2", name="firstname_errors")>
-	<cfset global.user.addError(property="firstname", message="firstname name error3", name="firstname_errors")>
-
-	<cfset global.user.addError(property="lastname", message="lastname error1")>
-	<cfset global.user.addError(property="lastname", message="lastname error2")>
-	<cfset global.user.addError(property="lastname", message="lastname error3")>
-	<cfset global.user.addError(property="lastname", message="lastname name error1", name="lastname_errors")>
-	<cfset global.user.addError(property="lastname", message="lastname name error2", name="lastname_errors")>
+	<cffunction name="setup">
+		<cfset loc.user = model("user").findOne()>
+		<cfset loc.user.addErrorToBase(message="base error1")>
+		<cfset loc.user.addErrorToBase(message="base name error1", name="base_errors")>
+		<cfset loc.user.addErrorToBase(message="base name error2", name="base_errors")>
+		<cfset loc.user.addError(property="firstname", message="firstname error1")>
+		<cfset loc.user.addError(property="firstname", message="firstname error2")>
+		<cfset loc.user.addError(property="firstname", message="firstname name error1", name="firstname_errors")>
+		<cfset loc.user.addError(property="firstname", message="firstname name error2", name="firstname_errors")>
+		<cfset loc.user.addError(property="firstname", message="firstname name error3", name="firstname_errors")>
+		<cfset loc.user.addError(property="lastname", message="lastname error1")>
+		<cfset loc.user.addError(property="lastname", message="lastname error2")>
+		<cfset loc.user.addError(property="lastname", message="lastname error3")>
+		<cfset loc.user.addError(property="lastname", message="lastname name error1", name="lastname_errors")>
+		<cfset loc.user.addError(property="lastname", message="lastname name error2", name="lastname_errors")>
+	</cffunction>
 
 	<cffunction name="test_error_information_for_lastname_property_no_name_provided">
 		<cfset loc.r = loc.user.hasErrors(property="lastname")>

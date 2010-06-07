@@ -1,8 +1,10 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
-	<cfset global.args = {}>
-	<cfset global.args.word = "this is a test to see if this works or not.">
+	<cffunction name="setup">
+		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.args = {}>
+		<cfset loc.args.word = "this is a test to see if this works or not.">
+	</cffunction>
 
 	<cffunction name="test_sentence_should_titleize">
 		<cfset loc.e = loc.controller.titleize(argumentcollection=loc.args)>

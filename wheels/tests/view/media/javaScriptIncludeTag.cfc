@@ -1,19 +1,26 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
-	<cfset global.args = {}>
-	<cfset global.args.source = "test.js,test1.js">
-	<cfset global.result = '<script src="#application.wheels.webpath#javascripts/test.js" type="text/javascript"></script>#chr(10)#<script src="#application.wheels.webpath#javascripts/test1.js" type="text/javascript"></script>#chr(10)#'>
-
-	<cffunction name="test_both_templates_have_extensions">
-		<cfset loc.e = loc.controller.javaScriptIncludeTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.result")>
+	<cffunction name="setup">
+		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.args = {}>
 	</cffunction>
 
-	<cffunction name="test_one_template_does_not_have_an_extension">
-		<cfset loc.args.source = "test,test1.js">
+	<cffunction name="test_should_handle_extensions_nonextensions_and_multiple_extensions">
+		<cfset loc.args.source = "test,test.js,jquery.dataTables.min,jquery.dataTables.min.js">
 		<cfset loc.e = loc.controller.javaScriptIncludeTag(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.result")>
+		<cfset loc.r = '<script src="#application.wheels.webpath#javascripts/test.js" type="text/javascript"></script>#chr(10)#<script src="#application.wheels.webpath#javascripts/test.js" type="text/javascript"></script>#chr(10)#<script src="#application.wheels.webpath#javascripts/jquery.dataTables.min.js" type="text/javascript"></script>#chr(10)#<script src="#application.wheels.webpath#javascripts/jquery.dataTables.min.js" type="text/javascript"></script>#chr(10)#'>
+		<cfset halt(halt=false, expression='htmleditformat(loc.e)', format="text")>
+		<cfset halt(halt=false, expression='htmleditformat(loc.r)', format="text")>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
+	<cffunction name="test_no_automatic_extention_when_cfm">
+		<cfset loc.args.source = "test.cfm,test.js.cfm">
+		<cfset loc.e = loc.controller.javaScriptIncludeTag(argumentcollection=loc.args)>
+		<cfset loc.r = '<script src="#application.wheels.webpath#javascripts/test.cfm" type="text/javascript"></script>#chr(10)#<script src="#application.wheels.webpath#javascripts/test.js.cfm" type="text/javascript"></script>#chr(10)#'>
+		<cfset halt(halt=false, expression='htmleditformat(loc.e)', format="text")>
+		<cfset halt(halt=false, expression='htmleditformat(loc.r)', format="text")>
+		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
 </cfcomponent>

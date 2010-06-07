@@ -1,6 +1,8 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
+	<cffunction name="setup">
+		<cfset loc.controller = $controller(name="dummy")>
+	</cffunction>
 
 	<cffunction name="test_table_not_found">
 		<cfset loc.e = raised("loc.controller.model('table_not_found')")>

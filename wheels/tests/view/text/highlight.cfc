@@ -1,10 +1,12 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.Controller")>
-	<cfset global.args = {}>
-	<cfset global.args.text = "CFWheels test to do see if hightlight function works or not.">
-	<cfset global.args.phrases = "hightlight function">
-	<cfset global.args.class = "cfwheels-hightlight">
+	<cffunction name="setup">
+		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.args = {}>
+		<cfset loc.args.text = "CFWheels test to do see if hightlight function works or not.">
+		<cfset loc.args.phrases = "hightlight function">
+		<cfset loc.args.class = "cfwheels-hightlight">
+	</cffunction>
 
 	<cffunction name="test_phrase_found">
 		<cfset loc.e = loc.controller.highlight(argumentcollection=loc.args)>
