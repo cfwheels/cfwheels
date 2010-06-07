@@ -201,11 +201,12 @@
 
 		if (StructKeyExists(loc, "returnValue") && !Len(loc.returnValue))
 		{
+			// TODO: looks like we do not have any tests around returning the right values
 			if (arguments.returnAs == "query")
 				loc.returnValue = QueryNew("");
-			else if (arguments.returnAs == "object")
+			else if (singularize(arguments.returnAs) == arguments.returnAs)
 				loc.returnValue = false;
-			else if (arguments.returnAs == "objects")
+			else
 				loc.returnValue = ArrayNew(1);
 		}
 		else if (!StructKeyExists(loc, "returnValue"))
@@ -262,6 +263,10 @@
 				// execute callbacks unless we're currently running the count or primary key pagination queries (we only want the callback to run when we have the actual data)
 				if (loc.returnValue.columnList != "wheelsqueryresult" && !arguments.$limit && !arguments.$offset)
 					$callback("afterFind", arguments.callbacks, loc.returnValue);
+			}
+			else if (ListFindNoCase("struct,structs", arguments.returnAs))
+			{
+				loc.returnValue = $serializeQueryToStructs(query=loc.findAll.query, argumentCollection=arguments);
 			}
 			else if (Len(arguments.returnAs))
 			{
@@ -831,14 +836,15 @@
 	<cfargument name="row" type="numeric" required="false" default="1">
 	<cfargument name="base" type="boolean" required="false" default="true">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="$runAfterFind" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		loc.fileName = capitalize(variables.wheels.class.modelName);
 		if (!ListFindNoCase(application.wheels.existingModelFiles, variables.wheels.class.modelName))
 			loc.fileName = "Model";
-		loc.returnValue = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.modelName, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row, base=arguments.base);
+		loc.returnValue = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.modelName, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row, base=arguments.base, useFilterLists=(not (IsQuery(arguments.properties) || arguments.$runAfterFind)));
 		// if this method is called with a struct we're creating a new object and then we call the afterNew callback. If called with a query we call the afterFind callback instead. If the called method does not return false we proceed and run the afterInitialize callback.
-		if ((IsQuery(arguments.properties) && loc.returnValue.$callback("afterFind", arguments.callbacks)) || (IsStruct(arguments.properties) && loc.returnValue.$callback("afterNew", arguments.callbacks)))
+		if (((IsQuery(arguments.properties) || arguments.$runAfterFind) && loc.returnValue.$callback("afterFind", arguments.callbacks)) || (IsStruct(arguments.properties) && loc.returnValue.$callback("afterNew", arguments.callbacks)))
 			loc.returnValue.$callback("afterInitialization", arguments.callbacks);
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -901,7 +907,12 @@
 			if (StructKeyExists(this, loc.key) && !ListFindNoCase(variables.wheels.class.keys, loc.key) && hasChanged(loc.key))
 			{
 				ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
-				loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, null=this[loc.key] == ""};
+				loc.param = {
+					  value = this[loc.key]
+					, type = variables.wheels.class.properties[loc.key].type
+					, scale = variables.wheels.class.properties[loc.key].scale
+					, null = this[loc.key] == ""
+				};
 				ArrayAppend(loc.sql, loc.param);
 				ArrayAppend(loc.sql, ",");
 			}

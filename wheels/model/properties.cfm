@@ -282,12 +282,13 @@
 	<cfargument name="properties" type="struct" required="true" />
 	<cfargument name="filterList" type="string" required="false" default="" />
 	<cfargument name="setOnModel" type="boolean" required="false" default="true" />
+	<cfargument name="$useFilterLists" type="boolean" required="false" default="true" />
 	<cfscript>
 		var loc = {};
 
 		loc.allowedProperties = {};
 
-		arguments.filterList = ListAppend(arguments.filterList, "properties,filterList,setOnModel");
+		arguments.filterList = ListAppend(arguments.filterList, "properties,filterList,setOnModel,$useFilterLists");
 
 		// add eventual named arguments to properties struct (named arguments will take precedence)
 		for (loc.key in arguments)
@@ -297,9 +298,9 @@
 		for (loc.key in arguments.properties) // loop throug the properties and see if they can be set based off of the accessible properties lists
 		{
 			loc.accessible = true;
-			if (StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, loc.key))
+			if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, loc.key))
 				loc.accessible = false;
-			if (StructKeyExists(variables.wheels.class.accessibleProperties, "blackList") && ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, loc.key))
+			if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "blackList") && ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, loc.key))
 				loc.accessible = false;
 			if (loc.accessible)
 				loc.allowedProperties[loc.key] = arguments.properties[loc.key];
