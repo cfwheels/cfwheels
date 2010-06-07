@@ -129,14 +129,14 @@
 				else if (!ListFindNoCase(GetReadableImageFormats(), ListLast(arguments.source,".")))
 					$throw(type="Wheels.ImageFormatNotSupported", message="Wheels can't read image files with that format.", extendedInfo="Use one of these image types instead: #GetReadableImageFormats()#.");
 			}
-			if (!StructKeyExists(arguments, "width") || !StructKeyExists(arguments, "height"))
+			// height and/or width arguments are missing so use cfimage to get them
+			if (!StructKeyExists(arguments, "width") or !StructKeyExists(arguments, "height"))
 			{
 				loc.image = $image(action="info", source=ExpandPath(arguments.src));
-				if (loc.image.width > 0 && loc.image.height > 0)
-				{
+				if (!StructKeyExists(arguments, "width") and loc.image.width gt 0)
 					arguments.width = loc.image.width;
+				if (!StructKeyExists(arguments, "height") and loc.image.height gt 0)
 					arguments.height = loc.image.height;
-				}
 			}
 		}
 		if (!StructKeyExists(arguments, "alt"))
