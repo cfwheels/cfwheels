@@ -42,6 +42,18 @@
 	<cffunction name="test_average_with_float_with_ifNull">
 		<cfset loc.result = model("post").average(property="averageRating", where="id=0", ifNull=0)>
 		<cfset assert("loc.result IS 0")>
-	</cffunction>	
+	</cffunction>
+	
+	<!--- include deleted records --->
+	
+	<cffunction name="test_average_with_include_soft_deletes">
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").findOne(where="views=0")>
+			<cfset loc.post.delete(transaction="none")>
+			<cfset loc.average = model("Post").average(property="views", includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.average eq 3.25')>
+	</cffunction>
 
 </cfcomponent>

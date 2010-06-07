@@ -13,13 +13,14 @@
 	<cfargument name="distinct" type="boolean" required="false" hint="When `true`, `AVG` will be performed only on each unique instance of a value, regardless of how many times the value occurs.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="ifNull" type="any" required="false" hint="The value returned if no records are found. Common usage is to set this to `0` to make sure a numeric value is always returned instead of a blank string.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="average", input=arguments);
 		if (ListFindNoCase("cf_sql_integer,cf_sql_bigint,cf_sql_smallint,cf_sql_tinyint", variables.wheels.class.properties[arguments.property].type))
 		{
 			// this is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it
-			loc.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize);
+			loc.values = findAll(select=arguments.property, where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
 			loc.values = ListToArray(Evaluate("ValueList(loc.values.#arguments.property#)"));
 			loc.returnValue = arguments.ifNull;
 			if (!ArrayIsEmpty(loc.values))
@@ -68,6 +69,7 @@
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		$insertDefaults(name="count", input=arguments);
 		arguments.type = "COUNT";
@@ -92,6 +94,7 @@
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		$insertDefaults(name="maximum", input=arguments);
 		arguments.type = "MAX";
@@ -111,6 +114,7 @@
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		$insertDefaults(name="minimum", input=arguments);
 		arguments.type = "MIN";
@@ -134,6 +138,7 @@
 	<cfargument name="distinct" type="boolean" required="false" hint="When `true`, `SUM` returns the sum of unique values only.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		$insertDefaults(name="sum", input=arguments);
 		arguments.type = "SUM";
@@ -151,6 +156,7 @@
 	<cfargument name="parameterize" type="any" required="true">
 	<cfargument name="distinct" type="boolean" required="false" default="false">
 	<cfargument name="ifNull" type="any" required="false" default="">
+	<cfargument name="includeSoftDeletes" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
 

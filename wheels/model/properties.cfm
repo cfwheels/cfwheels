@@ -361,13 +361,3 @@
 	</cfscript>
 	<cfreturn returnValue />
 </cffunction>
-
-<!--- <cffunction name="$label" returntype="string" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
-		var returnValue = Humanize(arguments.property);
-		if (StructKeyExists(variables.wheels.class.labels, arguments.property))
-			returnValue = variables.wheels.class.labels[arguments.property];
-	</cfscript>
-	<cfreturn returnValue />	
-</cffunction> --->

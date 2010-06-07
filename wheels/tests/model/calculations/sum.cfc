@@ -26,4 +26,13 @@
 		<cfset assert("loc.result IS 0")>
 	</cffunction>
 
+	<cffunction name="test_sum_with_include_soft_deletes">
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").deleteAll(transaction="none")>
+			<cfset loc.sum = model("Post").sum(property="views", includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.sum eq 13')>
+	</cffunction>
+
 </cfcomponent>

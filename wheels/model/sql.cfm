@@ -1,8 +1,9 @@
 <cffunction name="$addDeleteClause" returntype="array" access="public" output="false">
 	<cfargument name="sql" type="array" required="true">
+	<cfargument name="softDelete" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
-		if (variables.wheels.class.softDeletion)
+		if (variables.wheels.class.softDeletion && arguments.softDelete)
 		{
 			ArrayAppend(arguments.sql, "UPDATE #variables.wheels.class.tableName# SET #variables.wheels.class.softDeleteColumn# = ");
 			loc.param = {value=Now(), type="cf_sql_timestamp"};
@@ -331,7 +332,7 @@
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="where" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
-	<cfargument name="$softDeleteCheck" type="boolean" required="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
 		if (Len(arguments.where))
@@ -412,7 +413,7 @@
 			}
 		}
 
-		if (arguments.$softDeleteCheck)
+		if (!arguments.includeSoftDeletes)
 		{
 			/// add soft delete sql
 			loc.classes = [];

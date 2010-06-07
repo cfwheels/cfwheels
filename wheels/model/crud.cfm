@@ -111,12 +111,13 @@
 	<cfargument name="returnAs" type="string" required="false" hint="Set this to `objects` to return an array of objects instead of a query result set which is the default return type.">
 	<cfargument name="returnIncluded" type="boolean" required="false" hint="When `returnAs` is set to `objects` you can set this argument to `false` to prevent returning objects fetched from associations specified in the `include` argument. This is useful when you only need to include associations for use in the `WHERE` clause only and want to avoid the performance hit that comes with object creation.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="You can set this argument to `false` to prevent running the execution of callbacks for this method.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="You can set this argument to `true` to include soft-deleted records in the results.">
 	<cfargument name="$limit" type="numeric" required="false" default=0>
 	<cfargument name="$offset" type="numeric" required="false" default=0>
-	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="findAll", input=arguments);
+		
 		// we only allow direct associations to be loaded when returning objects
 		if (application.wheels.showErrorInformation && Len(arguments.returnAs) && arguments.returnAs != "query" && Find("(", arguments.include) && arguments.returnIncluded)
 			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You may only include direct associations to this object when returning an array of objects.");
@@ -148,7 +149,7 @@
 			if (arguments.count gt 0)
 				loc.totalRecords = arguments.count;
 			else
-				loc.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize);
+				loc.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
 			loc.currentPage = arguments.page;
 			if (loc.totalRecords == 0)
 			{
@@ -173,7 +174,7 @@
 				}
 				else
 				{
-					loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize);
+					loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
 					if (loc.values.RecordCount) {
 						loc.paginationWhere = "";
 						loc.iEnd = ListLen(variables.wheels.class.keys);
@@ -188,7 +189,6 @@
 							arguments.where = "(" & arguments.where & ")" & " AND " & loc.paginationWhere;
 						else
 							arguments.where = loc.paginationWhere;
-						arguments.$softDeleteCheck = false;
 					}
 				}
 			}
@@ -222,7 +222,7 @@
 				loc.sql = [];
 				loc.sql = $addSelectClause(sql=loc.sql, select=arguments.select, include=arguments.include);
 				ArrayAppend(loc.sql, $fromClause(include=arguments.include));
-				loc.sql = $addWhereClause(sql=loc.sql, where=loc.originalWhere, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
+				loc.sql = $addWhereClause(sql=loc.sql, where=loc.originalWhere, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 				loc.sql = $addGroupByClause(sql=loc.sql, select=arguments.select, group=arguments.group, include=arguments.include, distinct=arguments.distinct);
 				loc.sql = $addOrderByClause(sql=loc.sql, order=arguments.order, include=arguments.include);
 				$addToCache(key=loc.queryShellKey, value=loc.sql, category="sql");
@@ -298,7 +298,7 @@
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="returnAs" type="string" required="false" hint="Can be set to either `object` or `query`. See documentation for @findAll for more info.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var returnValue = "";
 		$insertDefaults(name="findByKey", input=arguments);
@@ -339,7 +339,7 @@
 	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="returnAs" type="string" required="false" hint="Can be set to either `object` or `query`. See documentation for @findAll for more info.">
-	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var returnValue = "";
 		$insertDefaults(name="findOne", input=arguments);
@@ -371,20 +371,21 @@
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="instantiate" type="boolean" required="false" hint="Whether or not to instantiate the object(s) first. When objects are not instantiated any callbacks and validations set on them will be skipped.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="updateAll", input=arguments);
-		arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,parameterize,instantiate,transaction,callbacks,$softDeleteCheck", setOnModel=false);
+		arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,reload,parameterize,instantiate,transaction,callbacks,includeSoftDeletes", setOnModel=false);
 		
 		if (arguments.instantiate) // find and instantiate each object and call its update function
 		{
 			loc.returnValue = 0;
-			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, callbacks=arguments.callbacks, $softDeleteCheck=arguments.$softDeleteCheck);
+			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, reload=arguments.reload, parameterize=arguments.parameterize, callbacks=arguments.callbacks, includeSoftDeletes=arguments.includeSoftDeletes);
 			for (loc.i=1; loc.i lte loc.records.recordCount; loc.i++)
 			{
 				loc.object = $createInstance(properties=loc.records, row=loc.i, persisted=true);
@@ -407,7 +408,7 @@
 				if (StructCount(arguments.properties) gt loc.pos)
 					ArrayAppend(arguments.sql, ",");
 			}
-			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
+			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 			arguments.sql = $addWhereClauseParameters(sql=arguments.sql, where=arguments.where);
 			
 			loc.returnValue = $runTransaction(method="$updateAll", argumentCollection=arguments);
@@ -433,10 +434,13 @@
 	categories="model-class,update" chapters="updating-records,associations" functions="hasOne,hasMany,update,updateAll,updateOne">
 	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var returnValue = "";
+		$insertDefaults(name="updateByKey", input=arguments);
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");
 		returnValue = updateOne(argumentCollection=arguments);
@@ -458,11 +462,14 @@
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
-		loc.object = findOne(where=arguments.where, order=arguments.order);
+		$insertDefaults(name="updateOne", input=arguments);
+		loc.object = findOne(where=arguments.where, order=arguments.order, reload=arguments.reload, includeSoftDeletes=arguments.includeSoftDeletes);
 		StructDelete(arguments, "where");
 		StructDelete(arguments, "order");
 		if (IsObject(loc.object))
@@ -488,31 +495,33 @@
 	categories="model-class,delete" chapters="deleting-records,associations" functions="delete,deleteByKey,deleteOne,hasMany">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="instantiate" type="boolean" required="false" hint="See documentation for @updateAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfargument name="$softDeleteCheck" type="boolean" required="false" default="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+	<cfargument name="softDelete" type="boolean" required="false" default="true" hint="See documentation for @delete.">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="deleteAll", input=arguments);
 		
 		if (arguments.instantiate)
 		{
-			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, parameterize=arguments.parameterize, $softDeleteCheck=arguments.$softDeleteCheck);
+			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, reload=arguments.reload, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
 			loc.returnValue = 0;
 			for (loc.i=1; loc.i lte loc.records.recordCount; loc.i++)
 			{
 				loc.object = $createInstance(properties=loc.records, row=loc.i, persisted=true);
-				if (loc.object.delete(parameterize=arguments.parameterize, transaction=arguments.transaction, callbacks=arguments.callbacks))
+				if (loc.object.delete(parameterize=arguments.parameterize, transaction=arguments.transaction, callbacks=arguments.callbacks, softDelete=arguments.softDelete))
 					loc.returnValue++;
 			}
 		}
 		else
 		{
 			arguments.sql = [];
-			arguments.sql = $addDeleteClause(sql=arguments.sql);
-			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
+			arguments.sql = $addDeleteClause(sql=arguments.sql, softDelete=arguments.softDelete);
+			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 			arguments.sql = $addWhereClauseParameters(sql=arguments.sql, where=arguments.where);
 			
 			loc.returnValue = $runTransaction(method="$deleteAll", argumentCollection=arguments);
@@ -534,12 +543,16 @@
 	'
 	categories="model-class,delete" chapters="deleting-records" functions="delete,deleteAll,deleteOne">
 	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+	<cfargument name="softDelete" type="boolean" required="false" default="true" hint="See documentation for @delete.">
 	<cfscript>
 		var loc = {};
+		$insertDefaults(name="deleteByKey", input=arguments);
 		loc.where = $keyWhereString(values=arguments.key);
-		loc.returnValue = deleteOne(where=loc.where, transaction=arguments.transaction, callbacks=arguments.callbacks);
+		loc.returnValue = deleteOne(where=loc.where, reload=arguments.reload, transaction=arguments.transaction, callbacks=arguments.callbacks, includeSoftDeletes=arguments.includeSoftDeletes, softDelete=arguments.softDelete);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -557,13 +570,17 @@
 	categories="model-class,delete" chapters="deleting-records,associations" functions="delete,deleteAll,deleteOne,hasOne">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+	<cfargument name="softDelete" type="boolean" required="false" default="true" hint="See documentation for @delete.">
 	<cfscript>
 		var loc = {};
-		loc.object = findOne(where=arguments.where, order=arguments.order);
+		$insertDefaults(name="deleteOne", input=arguments);
+		loc.object = findOne(where=arguments.where, order=arguments.order, reload=arguments.reload, includeSoftDeletes=arguments.includeSoftDeletes);
 		if (IsObject(loc.object))
-			loc.returnValue = loc.object.delete(transaction=arguments.transaction, callbacks=arguments.callbacks);
+			loc.returnValue = loc.object.delete(transaction=arguments.transaction, callbacks=arguments.callbacks, softDelete=arguments.softDelete);
 		else
 			loc.returnValue = false;
 	</cfscript>
@@ -636,12 +653,13 @@
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+	<cfargument name="softDelete" type="boolean" required="false" default="true" hint="Set me to `false` to permanently delete a record even if it has a soft delete column.">
 	<cfscript>
 		$insertDefaults(name="delete", input=arguments);
-		
 		arguments.sql = [];
-		arguments.sql = $addDeleteClause(sql=arguments.sql);
-		arguments.sql = $addKeyWhereClause(sql=arguments.sql);
+		arguments.sql = $addDeleteClause(sql=arguments.sql, softDelete=arguments.softDelete);
+		arguments.sql = $addKeyWhereClause(sql=arguments.sql, includeSoftDeletes=arguments.includeSoftDeletes);
 	</cfscript>
 	<cfreturn $runTransaction(method="$delete", argumentCollection=arguments)>
 </cffunction>

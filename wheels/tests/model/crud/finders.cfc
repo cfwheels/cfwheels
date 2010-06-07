@@ -174,4 +174,33 @@
 		<cfset assert('loc.r eq false')>
 	</cffunction>
 
+	<cffunction name="test_findByKey_with_include_soft_deletes">
+		<cftransaction action="begin">
+			<cfset loc.post1 = model("Post").findOne()>
+			<cfset loc.post1.delete(transaction="none")>
+			<cfset loc.post2 = model("Post").findByKey(key=loc.post1.id, includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('IsObject(loc.post2) is true')>
+	</cffunction>
+
+	<cffunction name="test_findOne_with_include_soft_deletes">
+		<cftransaction action="begin">
+			<cfset loc.post1 = model("Post").findOne()>
+			<cfset loc.post1.delete(transaction="none")>
+			<cfset loc.post2 = model("Post").findOne(where="id=#loc.post1.id#", includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('IsObject(loc.post2) is true')>
+	</cffunction>
+
+	<cffunction name="test_findAll_with_include_soft_deletes">
+		<cftransaction action="begin">
+			<cfset model("Post").deleteAll()>
+			<cfset loc.allPosts = model("Post").findAll(includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.allPosts.recordcount eq 4')>
+	</cffunction>
+
 </cfcomponent>

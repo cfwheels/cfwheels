@@ -15,4 +15,13 @@
 		<cfset assert("loc.result IS 0")>
 	</cffunction>
 
+	<cffunction name="test_minimum_with_include_soft_deletes">
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").deleteAll(where="views=0", transaction="none")>
+			<cfset loc.minimum = model("Post").minimum(property="views", includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.minimum eq 0')>
+	</cffunction>
+
 </cfcomponent>

@@ -111,7 +111,9 @@
 	application.wheels.functions.dateTimeSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, separator=" - "};
 	application.wheels.functions.daySelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
 	application.wheels.functions.delete = {parameterize=true};
-	application.wheels.functions.deleteAll = {parameterize=true, instantiate=false};
+	application.wheels.functions.deleteAll = {reload=false, parameterize=true, instantiate=false};
+	application.wheels.functions.deleteByKey = {reload=false};
+	application.wheels.functions.deleteOne = {reload=false};
 	application.wheels.functions.distanceOfTimeInWords = {includeSeconds=false};
 	application.wheels.functions.errorMessageOn = {prependText="", appendText="", wrapperElement="span", class="error-message"};
 	application.wheels.functions.errorMessagesFor = {class="error-messages", showDuplicates=true};
@@ -164,7 +166,9 @@
 	application.wheels.functions.timeUntilInWords = {includeSeconds=false};
 	application.wheels.functions.truncate = {length=30, truncateString="..."};
 	application.wheels.functions.update = {parameterize=true};
-	application.wheels.functions.updateAll = {parameterize=true, instantiate=false};
+	application.wheels.functions.updateAll = {reload=false, parameterize=true, instantiate=false};
+	application.wheels.functions.updateByKey = {reload=false};
+	application.wheels.functions.updateOne = {reload=false};
 	application.wheels.functions.URLFor = {onlyPath=true, host="", protocol="", port=0};
 	application.wheels.functions.validatesConfirmationOf = {message="[property] should match confirmation"};
 	application.wheels.functions.validatesExclusionOf = {message="[property] is reserved", allowBlank=false};

@@ -1,0 +1,70 @@
+<cfcomponent extends="wheelsMapping.test">
+ 
+ 	<cffunction name="test_update">
+		<cftransaction action="begin">
+			<cfset loc.author = model("Author").findOne(reload=true)>
+			<cfset loc.author.update(firstName="Kermit", lastName="Frog")>
+			<cfset loc.allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'", reload=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.allKermits.recordcount eq 1')>
+	</cffunction>
+
+ 	<cffunction name="test_update_one">
+		<cftransaction action="begin">
+			<cfset model("Author").updateOne(where="firstName='Andy'", firstName="Kermit", lastName="Frog")>
+			<cfset loc.allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'", reload=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.allKermits.recordcount eq 1')>
+	</cffunction>
+
+ 	<cffunction name="test_update_one_for_soft_deleted_records">
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").deleteOne(where="views=0")>
+			<cfset model("Post").updateOne(where="views=0", title="This is a new title", includeSoftDeletes=true, reload=true)>
+			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true, reload=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.changedPosts.recordcount eq 1')>
+	</cffunction>
+
+ 	<cffunction name="test_update_by_key">
+		<cftransaction action="begin">
+			<cfset loc.author = model("Author").findOne(reload=true)>
+			<cfset model("Author").updateByKey(key=loc.author.id, firstName="Kermit", lastName="Frog")>
+			<cfset loc.allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'", reload=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.allKermits.recordcount eq 1')>
+	</cffunction>
+
+ 	<cffunction name="test_update_by_key_for_soft_deleted_records">
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").findOne(where="views=0")>
+			<cfset model("Post").updateByKey(key=loc.post.id, title="This is a new title", includeSoftDeletes=true, reload=true)>
+			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true, reload=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.changedPosts.recordcount eq 1')>
+	</cffunction>
+
+ 	<cffunction name="test_update_all">
+		<cftransaction action="begin">
+			<cfset model("Author").updateAll(firstName="Kermit", lastName="Frog")>
+			<cfset loc.allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'", reload=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.allKermits.recordcount eq 7')>
+	</cffunction>
+
+ 	<cffunction name="test_update_all_for_soft_deleted_records">
+		<cftransaction action="begin">
+			<cfset model("Post").updateAll(title="This is a new title", includeSoftDeletes=true, reload=true)>
+			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true, reload=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.changedPosts.recordcount eq 4')>
+	</cffunction>
+
+</cfcomponent>

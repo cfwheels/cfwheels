@@ -47,4 +47,14 @@
 		<cfset assert("loc.result IS 2")>
 	</cffunction>
 	
+	<cffunction name="test_count_with_include_soft_deletes">
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").findOne(where="views=0")>
+			<cfset loc.post.delete(transaction="none")>
+			<cfset loc.count = model("Post").count(property="views", includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.count eq 4')>
+	</cffunction>	
+	
 </cfcomponent>

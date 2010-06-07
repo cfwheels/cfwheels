@@ -98,7 +98,8 @@ CREATE TABLE [dbo].[Posts](
 	[title] [varchar](250) NOT NULL,
 	[body] [text] NOT NULL,
 	[createdat] [datetime] NOT NULL,
-	[updatedat] [datetime] NULL,
+	[updatedat] [datetime] NOT NULL,
+	[deletedat] [datetime] NULL,
 	[views] [int] NOT NULL CONSTRAINT [DF_Posts_views]  DEFAULT ((0)),
 	[averagerating] [float] NULL,
  CONSTRAINT [PK_Posts] PRIMARY KEY CLUSTERED 
