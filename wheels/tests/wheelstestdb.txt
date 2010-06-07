@@ -107,10 +107,11 @@ CREATE TABLE `posts` (
   `authorid` int(11) DEFAULT NULL,
   `title` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
   `body` text COLLATE utf8_unicode_ci NOT NULL,
+  `createdat` datetime NOT NULL,
+  `updatedat` datetime NOT NULL,
+  `deletedat` datetime DEFAULT NULL,
   `views` int(11) NOT NULL DEFAULT '0',
   `averagerating` float DEFAULT NULL,
-  `createdat` datetime NOT NULL,
-  `updatedat` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
