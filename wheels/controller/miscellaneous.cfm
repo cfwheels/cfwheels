@@ -186,7 +186,7 @@
 		}
 
 		// prompt the user to download the file
-		$header(name="content-disposition", value="#arguments.disposition#; filename=#loc.name#");
+		$header(name="content-disposition", value="#arguments.disposition#; filename=""#loc.name#""");
 		$content(type="#loc.mime#", file="#loc.fullPath#", deleteFile="#arguments.deleteFile#");
 	</cfscript>
 </cffunction>
