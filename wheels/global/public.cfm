@@ -547,7 +547,7 @@
 				loc.prepend = Mid(loc.text, 1, Len(loc.text)-loc.upperCasePos);
 				loc.text = Reverse(Mid(Reverse(loc.text), 1, loc.upperCasePos));
 			}
-			loc.uncountables = "advice,air,blood,deer,equipment,fish,food,furniture,garbage,graffiti,grass,homework,housework,information,knowledge,luggage,mathematics,meat,milk,money,music,pollution,research,rice,sand,series,sheep,soap,software,species,sugar,traffic,transportation,travel,trash,water";
+			loc.uncountables = "advice,air,blood,deer,equipment,fish,food,furniture,garbage,graffiti,grass,homework,housework,information,knowledge,luggage,mathematics,meat,milk,money,music,pollution,research,rice,sand,series,sheep,soap,software,species,sugar,traffic,transportation,travel,trash,water,feedback";
 			loc.irregulars = "child,children,foot,feet,man,men,move,moves,person,people,sex,sexes,tooth,teeth,woman,women";
 			if (ListFindNoCase(loc.uncountables, loc.text))
 				loc.returnValue = loc.text;
