@@ -497,15 +497,6 @@
 		// by default we pluralize/singularize the entire string
 		loc.text = arguments.text;
 
-		if (REFind("[A-Z]", loc.text))
-		{
-			// only pluralize/singularize the last part of a camelCased variable (e.g. in "websiteStatusUpdate" we only change the "update" part)
-			// also set a variable with the unchanged part of the string (to be prepended before returning final result)
-			loc.upperCasePos = REFind("[A-Z]", Reverse(loc.text));
-			loc.prepend = Mid(loc.text, 1, Len(loc.text)-loc.upperCasePos);
-			loc.text = Reverse(Mid(Reverse(loc.text), 1, loc.upperCasePos));
-		}
-
 		// when count is 1 we don't need to pluralize at all so just set the return value to the input string
 		loc.returnValue = loc.text;
 
