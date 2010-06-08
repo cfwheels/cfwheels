@@ -26,7 +26,7 @@
 	</cffunction>
 
 	<cffunction name="test_only_redirect_was_performed">
-		<cfset controller.redirectTo(back=true)>
+		<cfset controller.redirectTo(controller="wheels", action="wheels")>
 		<cfset loc.e = true>
 		<cfset loc.r = controller.$performedRedirect()>
 		<cfset assert('loc.e eq loc.r')>
