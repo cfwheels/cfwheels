@@ -316,7 +316,7 @@
 	<cfargument name="name" type="string" required="true">
 		<cfscript>
 			var returnValue = false;
-			if (StructKeyExists(application.wheels.controllers, arguments.name))
+			if (application.wheels.cacheControllerInitialization && StructKeyExists(application.wheels.controllers, arguments.name))
 				returnValue = application.wheels.controllers[arguments.name];
 		</cfscript>
 	<cfreturn returnValue>
