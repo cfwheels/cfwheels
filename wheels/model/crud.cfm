@@ -20,8 +20,8 @@
 	'
 	categories="model-class,create" chapters="creating-records,associations" functions="hasOne,hasMany,new">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
-	<cfargument name="defaults" type="boolean" required="false" hint="See documentation for @save.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @save.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
@@ -30,7 +30,7 @@
 		loc.parameterize = arguments.parameterize;
 		StructDelete(arguments, "parameterize");
 		loc.returnValue = new(argumentCollection=arguments);
-		loc.returnValue.save(parameterize=loc.parameterize, defaults=arguments.defaults, transaction=arguments.transaction, callbacks=arguments.callbacks);
+		loc.returnValue.save(parameterize=loc.parameterize, reload=arguments.reload, transaction=arguments.transaction, callbacks=arguments.callbacks);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -53,15 +53,12 @@
 	'
 	categories="model-class,create" chapters="creating-records,associations" functions="create,hasMany,hasOne">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="The properties you want to set on the object (can also be passed in as named arguments).">
-	<cfargument name="defaults" type="boolean" required="false" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="new", input=arguments);
-		arguments.properties = $setProperties(argumentCollection=arguments, filterList="properties,defaults,transaction,callbacks", setOnModel=false);
+		arguments.properties = $setProperties(argumentCollection=arguments, filterList="properties,reload,transaction,callbacks", setOnModel=false);
 		loc.returnValue = $createInstance(properties=arguments.properties, persisted=false, callbacks=arguments.callbacks);
-		if (arguments.defaults)
-			loc.returnValue.$setDefaultValues();
+		loc.returnValue.$setDefaultValues();
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -716,15 +713,15 @@
 			<cfset redirectTo(action="userEdit")>
 		<cfelse>
 			<cfset flashInsert(alert="Error, please correct!")>
-			<cfset renderPage(action="userEdit")
+			<cfset renderPage(action="userEdit")>
 		</cfif>
 	'
 	categories="model-object,crud" chapters="creating-records" functions="">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="defaults" type="boolean" required="false" hint="Whether or not to set default values for properties.">
-	<cfargument name="validate" type="boolean" required="false" default="true" hint="Whether or not to run validations when saving">
+	<cfargument name="reload" type="boolean" required="false" hint="Set to `true` to reload the object from the database once an insert/update has completed.">
+	<cfargument name="validate" type="boolean" required="false" default="true" hint="Set to `false` to disable validations for this save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="Use `commit` to update the database when the save has completed, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="Set to `false` to disable callbacks for this save.">
 	<cfset $insertDefaults(name="save", input=arguments)>
 	<cfset clearErrors()>
 	<cfreturn $runTransaction(method="$save", argumentCollection=arguments)>
@@ -738,11 +735,7 @@
 			{
 				if ($callback("beforeValidationOnCreate", arguments.callbacks) && $validate("onSave,onCreate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnCreate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeCreate", arguments.callbacks))
 				{
-					$create(parameterize=arguments.parameterize);
-					if (arguments.defaults)
-					{
-						$setDefaultValues();
-					}
+					$create(parameterize=arguments.parameterize, reload=arguments.reload);
 					if ($callback("afterCreate", arguments.callbacks) && $callback("afterSave", arguments.callbacks))
 					{
 						$updatePersistedProperties();
@@ -754,7 +747,7 @@
 			{
 				if ($callback("beforeValidationOnUpdate", arguments.callbacks) && $validate("onSave,onUpdate", arguments.validate) && $callback("afterValidation", arguments.callbacks) && $callback("afterValidationOnUpdate", arguments.callbacks) && $callback("beforeSave", arguments.callbacks) && $callback("beforeUpdate", arguments.callbacks))
 				{
-					$update(parameterize=arguments.parameterize);
+					$update(parameterize=arguments.parameterize, reload=arguments.reload);
 					if ($callback("afterUpdate", arguments.callbacks) && $callback("afterSave", arguments.callbacks))
 					{
 						$updatePersistedProperties();
@@ -796,11 +789,12 @@
 	categories="model-object,crud" chapters="updating-records,associations" functions="hasMany,hasOne,updateAll,updateByKey,updateOne">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfset $insertDefaults(name="update", input=arguments)>
-	<cfset $setProperties(argumentCollection=arguments, filterList="parameterize,properties,transaction,callbacks") />
-	<cfreturn save(parameterize=arguments.parameterize, transaction=arguments.transaction)>
+	<cfset $setProperties(argumentCollection=arguments, filterList="properties,parameterize,reload,transaction,callbacks")>
+	<cfreturn save(parameterize=arguments.parameterize, reload=arguments.reload, transaction=arguments.transaction, callbacks=arguments.callbacks)>
 </cffunction>
 
 <!--- other --->
@@ -825,8 +819,8 @@
 	</cfscript>
 </cffunction>
 
-<!--- PRIVATE MODEL CLASS METHODS --->
 
+<!--- PRIVATE MODEL CLASS METHODS --->
 
 <!--- other --->
 
@@ -856,6 +850,7 @@
 
 <cffunction name="$create" returntype="boolean" access="public" output="false">
 	<cfargument name="parameterize" type="any" required="true">
+	<cfargument name="reload" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
 		if (variables.wheels.class.timeStampingOnCreate)
@@ -888,13 +883,15 @@
 		loc.generatedKey = variables.wheels.class.adapter.$generatedKey();
 		if (StructKeyExists(loc.ins.result, loc.generatedKey))
 			this[ListGetAt(variables.wheels.class.keys, 1)] = loc.ins.result[loc.generatedKey];
-		this.reload();
+		if (arguments.reload)
+			this.reload();
 	</cfscript>
 	<cfreturn true>
 </cffunction>
 
 <cffunction name="$update" returntype="boolean" access="public" output="false">
 	<cfargument name="parameterize" type="any" required="true">
+	<cfargument name="reload" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
 		if (variables.wheels.class.timeStampingOnUpdate)
@@ -922,6 +919,8 @@
 			ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
 			loc.sql = $addKeyWhereClause(sql=loc.sql);
 			loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
+			if (arguments.reload)
+				this.reload();
 		}
 	</cfscript>
 	<cfreturn true>
