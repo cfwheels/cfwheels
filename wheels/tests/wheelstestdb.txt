@@ -160,21 +160,21 @@ CREATE TABLE `tags` (
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `firstname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `lastname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `address` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `city` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `state` char(2) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `zipcode` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `phone` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fax` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `birthday` datetime DEFAULT NULL,
-  `birthdaymonth` int(11) DEFAULT NULL,
-  `birthdayyear` int(11) DEFAULT NULL,
-  `birthtime` datetime DEFAULT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `UserName` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `Password` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `FirstName` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `LastName` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `Address` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `City` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `State` char(2) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ZipCode` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `Phone` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `Fax` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `BirthDay` datetime DEFAULT NULL,
+  `BirthDayMonth` int(11) DEFAULT NULL,
+  `BirthDayYear` int(11) DEFAULT NULL,
+  `BirthTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
