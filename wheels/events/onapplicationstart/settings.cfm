@@ -104,7 +104,7 @@
 	application.wheels.functions.checkBox = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", checkedValue=1, unCheckedValue=0};
 	application.wheels.functions.checkBoxTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", value=1};
 	application.wheels.functions.count = {parameterize=true};
-	application.wheels.functions.create = {parameterize=true, defaults=true};
+	application.wheels.functions.create = {parameterize=true, reload=false};
 	application.wheels.functions.dateSelect = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names"};
 	application.wheels.functions.dateSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names"};
 	application.wheels.functions.dateTimeSelect = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, separator=" - "};
@@ -136,7 +136,6 @@
 	application.wheels.functions.minimum = {parameterize=true, ifNull=""};
 	application.wheels.functions.minuteSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, minuteStep=1};
 	application.wheels.functions.monthSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, monthDisplay="names"};
-	application.wheels.functions.new = {defaults=false};
 	application.wheels.functions.paginationLinks = {windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prepend="", append="", prependToPage="", prependOnFirst=true, prependOnAnchor=true, appendToPage="", appendOnLast=true, appendOnAnchor=true, classForCurrent="", name="page", showSinglePage=false, pageNumberAsParam=true};
 	application.wheels.functions.passwordField = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span"};
 	application.wheels.functions.passwordFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
@@ -146,7 +145,7 @@
 	application.wheels.functions.renderPage = {layout=true};
 	application.wheels.functions.renderPageToString = {layout=true};
 	application.wheels.functions.renderPartial = {layout=""};
-	application.wheels.functions.save = {parameterize=true, defaults=true};
+	application.wheels.functions.save = {parameterize=true, reload=false};
 	application.wheels.functions.secondSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
 	application.wheels.functions.select = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, valueField="", textField=""};
 	application.wheels.functions.selectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, multiple=false, valueField="", textField=""};
@@ -165,7 +164,7 @@
 	application.wheels.functions.timeSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1};
 	application.wheels.functions.timeUntilInWords = {includeSeconds=false};
 	application.wheels.functions.truncate = {length=30, truncateString="..."};
-	application.wheels.functions.update = {parameterize=true};
+	application.wheels.functions.update = {parameterize=true, reload=false};
 	application.wheels.functions.updateAll = {reload=false, parameterize=true, instantiate=false};
 	application.wheels.functions.updateByKey = {reload=false};
 	application.wheels.functions.updateOne = {reload=false};

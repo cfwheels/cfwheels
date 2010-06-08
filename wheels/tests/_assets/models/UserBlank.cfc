@@ -2,7 +2,7 @@
 
 	<cffunction name="init">
 		<cfset table("users")>
-		<cfset setDefaultValidations(true)>
+		<cfset automaticValidations(true)>
 	</cffunction>
 
 </cfcomponent>

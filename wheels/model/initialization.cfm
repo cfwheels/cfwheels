@@ -17,7 +17,7 @@
 		variables.wheels.class.callbacks = {};
 		variables.wheels.class.keys = "";
 		variables.wheels.class.connection = {datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword};
-		variables.wheels.class.setDefaultValidations = application.wheels.setDefaultValidations;
+		variables.wheels.class.automaticValidations = application.wheels.automaticValidations;
 
 		loc.callbacks = "afterNew,afterFind,afterInitialization,beforeDelete,afterDelete,beforeSave,afterSave,beforeCreate,afterCreate,beforeUpdate,afterUpdate,beforeValidation,afterValidation,beforeValidationOnCreate,afterValidationOnCreate,beforeValidationOnUpdate,afterValidationOnUpdate";
 		loc.iEnd = ListLen(loc.callbacks);
@@ -89,7 +89,7 @@
 				{
 					setPrimaryKey(loc.property);
 				}
-				else if (variables.wheels.class.setDefaultValidations and not ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#,#application.wheels.softDeleteProperty#", loc.property))
+				else if (variables.wheels.class.automaticValidations and not ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#,#application.wheels.softDeleteProperty#", loc.property))
 				{
 					// set nullable validations if the developer has not
 					loc.defaultValidationsAllowBlank = false;

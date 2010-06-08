@@ -10,7 +10,7 @@
 <cfset application.wheels.mixins = {}>
 
 <!--- turn off default validations for testing --->
-<cfset application.wheels.setDefaultValidations = false />
+<cfset application.wheels.automaticValidations = false />
 <cfset application.wheels.assetQueryString = false />
 <cfset application.wheels.assetPaths = false />
 

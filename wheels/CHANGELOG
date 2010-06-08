@@ -15,24 +15,24 @@ Changes
 	
 	* Prepend included model properties with their class name in queries - #442 [Andy Bellenie]
 	
-	* support for default validations - [James Gibson, Andy Bellenie, Tony Petruzzi]
+	* support for automatic validations - [James Gibson, Andy Bellenie, Tony Petruzzi]
 	
-		- configured by calling set(setDefaultValidations=true) in your environments settings.cfm
+		- configured by calling set(automaticValidations=true) in your environment's settings.cfm
 	
-		updates to model initialization to create default validations for fields. The
-		validations include:
+		updates model initialization to automatically add validation to properties based on your database configuration. 
+		The validations include:
 		
 		- validatesPresenceOf for fields that are nullable=false
 		- validatesLengthOf for string fields (cf_sql_char & cf_sql_varchar)
-		- validtesNumericalityOf for numeric fields, it integer is set correctly for the
+		- validatesNumericalityOf for numeric fields, it integer is set correctly for the
 		field type also.
 		
-		There is a new setting "setDefaultValidations" which is checked before setting
-		any validations. Also, no default validations are applied to primary key fields
-		or to fields for which the validation has already been set.
+		There is a new setting "automaticValidations" which is checked before setting
+		any validations. Also, no automatic validations are applied to primary key fields
+		or to fields for which a custom validation has already been set.
 		
-		default validations can also be turned off on a per model basis by using the
-		setDefaultValidations(false) in the model's init() method.
+		automatic validations can also be turned off on a per model basis by using the
+		automaticValidations(false) in the model's init() method.
 		
 	* updated findAll() to allow for more than one association as long as they are direct. - [James Gibson]
 	
@@ -123,9 +123,9 @@ Changes
 		Adds the default Wheels routes to your application. Only use this method if you have set `loadDefaultRoutes` to `false`
 		and want to control exactly where in the route order you want to place the default routes.
 		
-	* setting: setDefaultValidations
+	* setting: automaticValidations
 	
-		Used to globally turn on/off default validations in model
+		Used to globally turn on/off automatic validations in model
 		
 	* allow plugins in maintenance mode - [James Gibson]
 	
