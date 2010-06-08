@@ -23,5 +23,7 @@
 				variables[$wheels.methodName] = application.wheels.plugins[$wheels.pluginName][$wheels.methodName];
 			}
 		}
+		// get rid of any extra data create in $wheels
+		StructDelete(variables, "$wheels", false);
 	}
 </cfscript>
