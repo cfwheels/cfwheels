@@ -156,14 +156,6 @@ CREATE TABLE `tags` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `userphotos`
---
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `wheelstestdb`.`userphotos` AS select `u`.`id` AS `userid`,`u`.`username` AS `username`,`u`.`firstname` AS `firstname`,`u`.`lastname` AS `lastname`,`pg`.`title` AS `title`,`pg`.`photogalleryid` AS `photogalleryid` from (`wheelstestdb`.`users` `u` join `wheelstestdb`.`photogalleries` `pg` on((`u`.`id` = `pg`.`userid`)));
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
@@ -185,3 +177,11 @@ CREATE TABLE `users` (
   `birthtime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `userphotos`
+--
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW .`userphotos` AS select `u`.`id` AS `userid`,`u`.`username` AS `username`,`u`.`firstname` AS `firstname`,`u`.`lastname` AS `lastname`,`pg`.`title` AS `title`,`pg`.`photogalleryid` AS `photogalleryid` from (`users` `u` join `photogalleries` `pg` on((`u`.`id` = `pg`.`userid`)));
