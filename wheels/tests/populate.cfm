@@ -1,6 +1,6 @@
 <!--- reset all tables --->
 <cfloop list="user,photogallery,photogalleryphoto,author,post,city,shop,profile" index="loc.i">
-	<cfset model(loc.i).deleteAll(instantiate=false)>
+	<cfset model(loc.i).deleteAll(instantiate=false, softDelete=false, includeSoftDeletes=true)>
 </cfloop>
 
 <!--- populate with data --->
