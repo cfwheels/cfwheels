@@ -82,7 +82,7 @@
 	application.wheels.deletePluginDirectories = true;
 	application.wheels.loadIncompatiblePlugins = true;
 	application.wheels.loadDefaultRoutes = true;
-	application.wheels.setDefaultValidations = true;
+	application.wheels.automaticValidations = true;
 	application.wheels.setUpdatedAtOnCreate = true;
 	application.wheels.useExpandedColumnAliases = true;
 
