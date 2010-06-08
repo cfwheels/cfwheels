@@ -191,12 +191,15 @@
 		loc.object = false;
 		loc.delete = false;
 		loc.arguments = {};
-		loc.returnValue = false;
 		loc.model = model(arguments.association.modelName);
 		
 		// check to see if the struct has all of the keys we need from rejectIfBlank
 		if ($structKeysExist(struct=arguments.value, properties=arguments.association.nested.rejectIfBlank))
 		{
+			// if we were passed in an object, use it.
+			if (IsObject(arguments.value))
+				return arguments.value;
+		
 			// get our primary keys, if they don't exist, then we create a new object
 			loc.arguments.key = $createPrimaryKeyList(params=arguments.value, keys=loc.model.primaryKey());
 
@@ -211,20 +214,16 @@
 				loc.method = "new";
 				StructDelete(loc.arguments, "key", false);
 			}
-			else if (IsObject(loc.object) && !loc.delete)
-			{
-				loc.method = "findByKey";
-			}
 			else if (Len(loc.arguments.key) && loc.delete && arguments.association.nested.delete)
 			{
 				loc.method = "deleteByKey";
 			}
 			
 			if (Len(loc.method))
-				loc.returnValue = $invoke(componentReference=loc.model, method=loc.method, argumentCollection=loc.arguments);
+				loc.object = $invoke(componentReference=loc.model, method=loc.method, argumentCollection=loc.arguments);
 		}	
 	</cfscript>
-	<cfreturn loc.returnValue />
+	<cfreturn loc.object />
 </cffunction>
 
 <cffunction name="$createPrimaryKeyList" returntype="string" access="public" output="false">

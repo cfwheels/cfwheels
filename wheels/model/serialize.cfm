@@ -124,7 +124,7 @@
 				ArrayAppend(loc.returnValue, loc.struct);
 				loc.doneStructs = ListAppend(loc.doneStructs, loc.structHash, Chr(7));
 			}
-		}	
+		}
 	</cfscript>
 	<cfreturn loc.returnValue />
 </cffunction>
