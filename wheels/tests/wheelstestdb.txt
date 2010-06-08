@@ -37,7 +37,8 @@ DROP TABLE IF EXISTS `cities`;
 CREATE TABLE IF NOT EXISTS `cities` (
   `countyid` char(4) COLLATE utf8_unicode_ci NOT NULL,
   `citycode` tinyint(4) NOT NULL,
-  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`countyid`,`citycode`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -147,7 +148,8 @@ DROP TABLE IF EXISTS `shops`;
 CREATE TABLE IF NOT EXISTS `shops` (
   `shopid` char(9) COLLATE utf8_unicode_ci NOT NULL,
   `citycode` tinyint(4) DEFAULT NULL,
-  `name` varchar(80) COLLATE utf8_unicode_ci NOT NULL
+  `name` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`shopid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
