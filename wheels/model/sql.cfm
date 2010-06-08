@@ -182,6 +182,7 @@
 	<cfargument name="include" type="string" required="true">
 	<cfargument name="renameFields" type="boolean" required="false" default="true">
 	<cfargument name="addCalculatedProperties" type="boolean" required="false" default="true">
+	<cfargument name="useExpandedColumnAliases" type="boolean" required="false" default="#application.wheels.useExpandedColumnAliases#">
 	<cfscript>
 		var loc = {};
 		// setup an array containing class info for current class and all the ones that should be included
@@ -238,7 +239,7 @@
 					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem))
 					{
 						// if expanded column aliases is enabled then mark all columns from included classes as duplicates in order to prepend them with their class name
-						if ((application.wheels.useExpandedColumnAliases && loc.j gt 1 or loc.duplicateCount) && arguments.renameFields)
+						if ((arguments.useExpandedColumnAliases && loc.j gt 1 or loc.duplicateCount) && arguments.renameFields)
 							loc.toAppend = loc.toAppend & "[[duplicate]]" & loc.j;
 						if (ListFindNoCase(loc.classData.propertyList, loc.iItem))
 						{

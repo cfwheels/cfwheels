@@ -12,4 +12,14 @@
 		<cfset raised('loc.model.$createSQLFieldList(list="comments.*", include="")') />
 	</cffunction>
 
+	<cffunction name="test_association_with_expanded_aliases_enabled">
+		<cfset loc.columnList = ListSort(model("Author").$createSQLFieldList(list="", include="Posts", useExpandedColumnAliases=true), "text")>
+		<cfset assert('loc.columnList eq "authors.firstname,authors.id,authors.lastname,posts.authorid AS postauthorid,posts.averagerating AS postaveragerating,posts.body AS postbody,posts.createdat AS postcreatedat,posts.deletedat AS postdeletedat,posts.id AS postid,posts.title AS posttitle,posts.updatedat AS postupdatedat,posts.views AS postviews"')>
+	</cffunction>
+
+	<cffunction name="test_association_with_expanded_aliases_disabled">
+		<cfset loc.columnList = ListSort(model("Author").$createSQLFieldList(list="", include="Posts", useExpandedColumnAliases=false), "text")>
+		<cfset assert('loc.columnList eq "authors.firstname,authors.id,authors.lastname,posts.authorid,posts.averagerating,posts.body,posts.createdat,posts.deletedat,posts.id AS postid,posts.title,posts.updatedat,posts.views"')>
+	</cffunction>
+
 </cfcomponent>
