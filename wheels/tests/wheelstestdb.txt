@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 06, 2010 at 11:02 PM
+-- Generation Time: Jun 08, 2010 at 06:09 PM
 -- Server version: 5.1.44
 -- PHP Version: 5.2.13
 
@@ -19,7 +19,8 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Table structure for table `authors`
 --
 
-CREATE TABLE `authors` (
+DROP TABLE IF EXISTS `authors`;
+CREATE TABLE IF NOT EXISTS `authors` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `firstname` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `lastname` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
@@ -32,7 +33,8 @@ CREATE TABLE `authors` (
 -- Table structure for table `cities`
 --
 
-CREATE TABLE `cities` (
+DROP TABLE IF EXISTS `cities`;
+CREATE TABLE IF NOT EXISTS `cities` (
   `countyid` char(4) COLLATE utf8_unicode_ci NOT NULL,
   `citycode` tinyint(4) NOT NULL,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL
@@ -44,7 +46,8 @@ CREATE TABLE `cities` (
 -- Table structure for table `classifications`
 --
 
-CREATE TABLE `classifications` (
+DROP TABLE IF EXISTS `classifications`;
+CREATE TABLE IF NOT EXISTS `classifications` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `postid` int(11) NOT NULL,
   `tagid` int(11) NOT NULL,
@@ -57,7 +60,8 @@ CREATE TABLE `classifications` (
 -- Table structure for table `comments`
 --
 
-CREATE TABLE `comments` (
+DROP TABLE IF EXISTS `comments`;
+CREATE TABLE IF NOT EXISTS `comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `postid` int(11) NOT NULL,
   `body` text COLLATE utf8_unicode_ci NOT NULL,
@@ -74,7 +78,8 @@ CREATE TABLE `comments` (
 -- Table structure for table `photogalleries`
 --
 
-CREATE TABLE `photogalleries` (
+DROP TABLE IF EXISTS `photogalleries`;
+CREATE TABLE IF NOT EXISTS `photogalleries` (
   `photogalleryid` int(11) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -88,7 +93,8 @@ CREATE TABLE `photogalleries` (
 -- Table structure for table `photogalleryphotos`
 --
 
-CREATE TABLE `photogalleryphotos` (
+DROP TABLE IF EXISTS `photogalleryphotos`;
+CREATE TABLE IF NOT EXISTS `photogalleryphotos` (
   `photogalleryphotoid` int(11) NOT NULL AUTO_INCREMENT,
   `photogalleryid` int(11) NOT NULL,
   `filename` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -102,7 +108,8 @@ CREATE TABLE `photogalleryphotos` (
 -- Table structure for table `posts`
 --
 
-CREATE TABLE `posts` (
+DROP TABLE IF EXISTS `posts`;
+CREATE TABLE IF NOT EXISTS `posts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `authorid` int(11) DEFAULT NULL,
   `title` varchar(250) COLLATE utf8_unicode_ci NOT NULL,
@@ -121,7 +128,8 @@ CREATE TABLE `posts` (
 -- Table structure for table `profiles`
 --
 
-CREATE TABLE `profiles` (
+DROP TABLE IF EXISTS `profiles`;
+CREATE TABLE IF NOT EXISTS `profiles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `authorid` int(11) DEFAULT NULL,
   `dateofbirth` datetime NOT NULL,
@@ -135,7 +143,8 @@ CREATE TABLE `profiles` (
 -- Table structure for table `shops`
 --
 
-CREATE TABLE `shops` (
+DROP TABLE IF EXISTS `shops`;
+CREATE TABLE IF NOT EXISTS `shops` (
   `shopid` char(9) COLLATE utf8_unicode_ci NOT NULL,
   `citycode` tinyint(4) DEFAULT NULL,
   `name` varchar(80) COLLATE utf8_unicode_ci NOT NULL
@@ -147,7 +156,8 @@ CREATE TABLE `shops` (
 -- Table structure for table `tags`
 --
 
-CREATE TABLE `tags` (
+DROP TABLE IF EXISTS `tags`;
+CREATE TABLE IF NOT EXISTS `tags` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
@@ -159,7 +169,8 @@ CREATE TABLE `tags` (
 -- Table structure for table `users`
 --
 
-CREATE TABLE `users` (
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `UserName` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `Password` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
@@ -175,7 +186,7 @@ CREATE TABLE `users` (
   `BirthDayMonth` int(11) DEFAULT NULL,
   `BirthDayYear` int(11) DEFAULT NULL,
   `BirthTime` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`Id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -184,4 +195,5 @@ CREATE TABLE `users` (
 -- Table structure for table `userphotos`
 --
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW .`userphotos` AS select `u`.`id` AS `userid`,`u`.`username` AS `username`,`u`.`firstname` AS `firstname`,`u`.`lastname` AS `lastname`,`pg`.`title` AS `title`,`pg`.`photogalleryid` AS `photogalleryid` from (`users` `u` join `photogalleries` `pg` on((`u`.`id` = `pg`.`userid`)));
+DROP TABLE IF EXISTS `userphotos`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `userphotos` AS select `u`.`Id` AS `userid`,`u`.`UserName` AS `username`,`u`.`FirstName` AS `firstname`,`u`.`LastName` AS `lastname`,`pg`.`title` AS `title`,`pg`.`photogalleryid` AS `photogalleryid` from (`users` `u` join `photogalleries` `pg` on((`u`.`Id` = `pg`.`userid`)));
