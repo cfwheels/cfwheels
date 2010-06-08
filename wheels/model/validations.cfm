@@ -518,7 +518,7 @@
 	<cfreturn loc.returnValue />
 </cffunction>
 
-<cffunction name="setDefaultValidations" returntype="void" access="public" output="false" hint="whether to turn default validations on or off for this model.">
+<cffunction name="automaticValidations" returntype="void" access="public" output="false" hint="whether to turn default validations on or off for this model.">
 	<cfargument name="value" type="boolean" required="true">
-	<cfset variables.wheels.class.setDefaultValidations = arguments.value>
+	<cfset variables.wheels.class.automaticValidations = arguments.value>
 </cffunction>
