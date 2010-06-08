@@ -122,25 +122,30 @@
 		<cfset halt(false, 'loc.q')>
 		<cfset assert('loc.q eq loc.r')> --->
 	</cffunction>
-
-	<cffunction name="test_findAll_norecords_returns_correct_type">
-		<cfset loc.q = loc.user.findAll(where="id = 0")>
-		<cfset halt(false, 'loc.q')>
-		<cfset assert('isquery(loc.q) and loc.q.recordcount eq 0')>
-
+	
+	<cffunction name="test_findAll_returnAs_query_noRecords_returns_correct_type">
 		<cfset loc.q = loc.user.findAll(where="id = 0", returnas="query")>
 		<cfset halt(false, 'loc.q')>
 		<cfset assert('isquery(loc.q) and loc.q.recordcount eq 0')>
-
-		<!--- readd when we have implemented the code to throw an error when an incorrect returnAs value is passed in
-		<cfset loc.q = raised('loc.user.findAll(where="id = 0", returnas="object")')>
-		<cfset loc.r = "Wheels.IncorrectArgumentValue">
+	</cffunction>
+	
+	<cffunction name="test_findAll_returnAs_structs_noRecords_returns_correct_type">
+		<cfset loc.q = loc.user.findAll(where="id = 0", returnAs="structs")>
 		<cfset halt(false, 'loc.q')>
-		<cfset assert('loc.q eq loc.r')> --->
-
+		<cfset assert('isarray(loc.q) and arrayisempty(loc.q)')>
+	</cffunction>
+	
+	<cffunction name="test_findAll_returnAs_objects_noRecords_returns_correct_type">
 		<cfset loc.q = loc.user.findAll(where="id = 0", returnas="objects")>
 		<cfset halt(false, 'loc.q')>
 		<cfset assert('isarray(loc.q) and arrayisempty(loc.q)')>
+	</cffunction>
+
+	<cffunction name="test_findAll_returnAs_invalid_throws_error">
+		<cfset loc.q = raised('loc.user.findAll(where="id = 1", returnas="notvalid")')>
+		<cfset loc.r = "Wheels.IncorrectArgumentValue">
+		<cfset halt(false, 'loc.q')>
+		<cfset assert('loc.q eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_exists_by_key_valid">

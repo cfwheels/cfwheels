@@ -198,7 +198,6 @@
 
 		if (StructKeyExists(loc, "returnValue") && !Len(loc.returnValue))
 		{
-			// TODO: looks like we do not have any tests around returning the right values
 			if (arguments.returnAs == "query")
 				loc.returnValue = QueryNew("");
 			else if (singularize(arguments.returnAs) == arguments.returnAs)
@@ -254,20 +253,33 @@
 				request[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
 			request.wheels[Hash(SerializeJSON(loc.findAll.query))] = variables.wheels.class.modelName; // place an identifer in request scope so we can reference this query when passed in to view functions
-			if (arguments.returnAs == "query")
+			
+			switch (arguments.returnAs)
 			{
-				loc.returnValue = loc.findAll.query;
-				// execute callbacks unless we're currently running the count or primary key pagination queries (we only want the callback to run when we have the actual data)
-				if (loc.returnValue.columnList != "wheelsqueryresult" && !arguments.$limit && !arguments.$offset)
-					$callback("afterFind", arguments.callbacks, loc.returnValue);
-			}
-			else if (ListFindNoCase("struct,structs", arguments.returnAs))
-			{
-				loc.returnValue = $serializeQueryToStructs(query=loc.findAll.query, argumentCollection=arguments);
-			}
-			else if (Len(arguments.returnAs))
-			{
-				loc.returnValue = $serializeQueryToObjects(query=loc.findAll.query, argumentCollection=arguments);
+				case "query":
+				{
+					loc.returnValue = loc.findAll.query;
+					// execute callbacks unless we're currently running the count or primary key pagination queries (we only want the callback to run when we have the actual data)
+					if (loc.returnValue.columnList != "wheelsqueryresult" && !arguments.$limit && !arguments.$offset)
+						$callback("afterFind", arguments.callbacks, loc.returnValue);
+					break;
+				}
+				case "struct": case "structs":
+				{
+					loc.returnValue = $serializeQueryToStructs(query=loc.findAll.query, argumentCollection=arguments);
+					break;
+				}
+				case "object": case "objects":
+				{
+					loc.returnValue = $serializeQueryToObjects(query=loc.findAll.query, argumentCollection=arguments);
+					break;
+				}
+				default:
+				{
+					if (application.wheels.showErrorInformation)
+						$throw(type="Wheels.IncorrectArgumentValue", message="Incorrect Arguments", extendedInfo="The `returnAs` may be either `query`, `struct(s)` or `object(s)`");
+					break;
+				}
 			}
 		}
 	</cfscript>
