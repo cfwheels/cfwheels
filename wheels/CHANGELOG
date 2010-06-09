@@ -184,6 +184,8 @@ Bug Fixes
 * Update to capitalize() to return nothing if the passed in string is empty - [James Gibson]
 * validatesPresenceOf() now takes whitespace into account - [Tony Petruzzi]
 * Fix for lock timeouts occurring during race conditions in the "design" and "development" modes - #467 [John C. Bland II, Andy Bellenie, Tony Petruzzi]
+* Fix so Wheels uses passed in width/height in imageTag() when only one of them is passed in - #328 [Andy Bellenie, Per Djurner]
+* Don't append .css, .js to asset files when they end in .cfm - [Tony Petruzzi]
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
