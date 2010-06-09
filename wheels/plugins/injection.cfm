@@ -9,19 +9,12 @@
 			$wheels.className = Reverse(SpanExcluding(Reverse(GetMetaData(this).name), "."));
 		if (StructKeyExists(application.wheels.mixins, $wheels.className))
 		{
-			$wheels.iList = application.wheels.mixins[$wheels.className];
-			$wheels.iEnd = ListLen($wheels.iList);
-			for ($wheels.i=1; $wheels.i <= $wheels.iEnd; $wheels.i++)
+			if (!StructKeyExists(variables, "core"))
 			{
-				$wheels.iItem = ListGetAt($wheels.iList, $wheels.i);
-				$wheels.pluginName = ListFirst($wheels.iItem, ".");
-				$wheels.methodName = ListLast($wheels.iItem, ".");
-				if (!StructKeyExists(variables, "core"))
-					variables.core = {};
-				if (StructKeyExists(variables, $wheels.methodName) && !StructKeyExists(variables.core, $wheels.methodName))
-					variables.core[$wheels.methodName] = variables[$wheels.methodName];
-				variables[$wheels.methodName] = application.wheels.plugins[$wheels.pluginName][$wheels.methodName];
+				variables.core = {};
+				StructAppend(variables.core, variables);
 			}
+			StructAppend(variables, application.wheels.mixins[$wheels.className], true);
 		}
 		// get rid of any extra data create in $wheels
 		StructDelete(variables, "$wheels", false);
