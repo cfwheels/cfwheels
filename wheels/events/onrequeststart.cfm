@@ -71,6 +71,8 @@
 		request.wheels.cacheCounts.misses = 0;
 		request.wheels.cacheCounts.culls = 0;
 
+		if (!application.wheels.cacheControllerInitialization)
+			StructClear(application.wheels.controllers);
 		if (!application.wheels.cacheRoutes)
 			$loadRoutes();
 		if (!application.wheels.cacheDatabaseSchema)
