@@ -149,7 +149,8 @@
 				}
 			}
 		}
-		StructAppend(arguments.input, application.wheels.functions[arguments.name], false);
+		if (StructKeyExists(application.wheels.functions, arguments.name))
+			StructAppend(arguments.input, application.wheels.functions[arguments.name], false);
 	</cfscript>
 </cffunction>
 
