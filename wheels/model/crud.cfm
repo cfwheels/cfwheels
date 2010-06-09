@@ -707,8 +707,16 @@
 		loc.iEnd = ListLen(loc.properties);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.property = ListGetAt(loc.properties, loc.i);
-			this[loc.property] = loc.query[loc.property][1];
+			// coldfusion has a problem with blank boolean values in the query
+			try
+			{
+				loc.property = ListGetAt(loc.properties, loc.i);
+				this[loc.property] = loc.query[loc.property][1];
+			}
+			catch (Any e)
+			{
+				loc.property = "";
+			}
 		}
 	</cfscript>
 </cffunction>
