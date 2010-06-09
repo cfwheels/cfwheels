@@ -179,7 +179,7 @@
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
 		var returnValue = false;
-		if (application.wheels.cacheModelInitialization && StructKeyExists(application.wheels.models, arguments.name))
+		if (StructKeyExists(application.wheels.models, arguments.name))
 			returnValue = application.wheels.models[arguments.name];
 	</cfscript>
 	<cfreturn returnValue>
