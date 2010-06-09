@@ -5,6 +5,9 @@ Bug Fixes
 * Fixed the handling for the "errorEmailServer" setting so that error emails can now be sent without having to set the server in the ColdFusion administrator - [Per Djurner]
 * Corrected pluralize rules - #450 [Joshua Clingenpeel, Tony Petruzzi]
 * Remove possible spaces in list passed in to callback registration - #448 [Raul Riera]
+* Check to see that a function has a declaration in the settings before setting defaults - [James Gibson]
+* Update to capitalize() to return nothing if the passed in string is empty - [James Gibson]
+
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
