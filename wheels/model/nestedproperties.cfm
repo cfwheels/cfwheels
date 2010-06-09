@@ -196,10 +196,6 @@
 		// check to see if the struct has all of the keys we need from rejectIfBlank
 		if ($structKeysExist(struct=arguments.value, properties=arguments.association.nested.rejectIfBlank))
 		{
-			// if we were passed in an object, use it.
-			if (IsObject(arguments.value))
-				return arguments.value;
-		
 			// get our primary keys, if they don't exist, then we create a new object
 			loc.arguments.key = $createPrimaryKeyList(params=arguments.value, keys=loc.model.primaryKey());
 
