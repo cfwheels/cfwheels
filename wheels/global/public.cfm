@@ -397,6 +397,8 @@
 				arguments.action = loc.params.action;
 			if (!Len(arguments.controller) && StructKeyExists(loc.params, "controller"))
 				arguments.controller = loc.params.controller;
+			if (Len(arguments.key) && !Len(arguments.action) && StructKeyExists(loc.params, "action"))
+				arguments.action = loc.params.action;
 			loc.returnValue = loc.returnValue & "?controller=" & $hyphenize(arguments.controller);
 			if (Len(arguments.action))
 				loc.returnValue = loc.returnValue & "&action=" & $hyphenize(arguments.action);
