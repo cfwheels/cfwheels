@@ -346,7 +346,7 @@
 				if (loc.thisValidation.method == "$validatePresenceOf")
 				{
 					// if the property does not exist or if it's blank we add an error on the object (for all other validation types we call corresponding methods below instead)
-					if (!StructKeyExists(this, loc.thisValidation.args.property) || !Len(this[loc.thisValidation.args.property]))
+					if (!StructKeyExists(this, loc.thisValidation.args.property) || !Len(Trim(this[loc.thisValidation.args.property])))
 						addError(property=loc.thisValidation.args.property, message=loc.thisValidation.args.message);
 				}
 				else
