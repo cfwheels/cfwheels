@@ -620,3 +620,11 @@ Should now call bar() instead and marking foo() as deprecated
 		}
 		</cfscript>
 </cffunction>
+
+<cffunction name="$clearModelInitializationCache">
+	<cfset StructClear(application.wheels.models)>
+</cffunction>
+
+<cffunction name="$clearControllerInitializationCache">
+	<cfset StructClear(application.wheels.controllers)>
+</cffunction>
