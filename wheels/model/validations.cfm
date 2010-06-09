@@ -242,13 +242,13 @@
 			if (isNew())
 			{
 				// if this is a brand new object that has not been saved to the database we validate the `onCreate` methods (`onSave` methods are always called)
-				if ($callback("beforeValidationOnCreate") && $validate("onSave") && $validate("onCreate") && $callback("afterValidation") && $callback("afterValidationOnCreate"))
+				if ($callback("beforeValidationOnCreate") && $validate("onSave,onCreate") && $callback("afterValidation") && $callback("afterValidationOnCreate"))
 					loc.returnValue = true;
 			}
 			else
 			{
 				// if this record already exists in the database we validate the `onUpdate` methods
-				if ($callback("beforeValidationOnUpdate") && $validate("onSave") && $validate("onUpdate") && $callback("afterValidation") && $callback("afterValidationOnUpdate"))
+				if ($callback("beforeValidationOnUpdate") && $validate("onSave,onUpdate") && $callback("afterValidation") && $callback("afterValidationOnUpdate"))
 					loc.returnValue = true;
 			}
 		}
@@ -335,27 +335,31 @@
 	<cfargument name="type" type="string" required="true">
 	<cfscript>
 		var loc = {};
-
-		// loop through all validations for passed in type (`onSave`, `onCreate` etc) that has been set on this model object
-		loc.iEnd = ArrayLen(variables.wheels.class.validations[arguments.type]);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		// loop over the passed in types
+		for (loc.typeIndex=1; loc.typeIndex <= ListLen(arguments.type); loc.typeIndex++)
 		{
-			loc.thisValidation = variables.wheels.class.validations[arguments.type][loc.i];
-			if ($evaluateValidationCondition(argumentCollection=loc.thisValidation.args))
+			loc.type = ListGetAt(arguments.type, loc.typeIndex);
+			// loop through all validations for passed in type (`onSave`, `onCreate` etc) that has been set on this model object
+			loc.iEnd = ArrayLen(variables.wheels.class.validations[loc.type]);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				if (loc.thisValidation.method == "$validatePresenceOf")
+				loc.thisValidation = variables.wheels.class.validations[loc.type][loc.i];
+				if ($evaluateValidationCondition(argumentCollection=loc.thisValidation.args))
 				{
-					// if the property does not exist or if it's blank we add an error on the object (for all other validation types we call corresponding methods below instead)
-					if (!StructKeyExists(this, loc.thisValidation.args.property) || !Len(Trim(this[loc.thisValidation.args.property])))
-						addError(property=loc.thisValidation.args.property, message=loc.thisValidation.args.message);
-				}
-				else
-				{
-					// if the validation set does not allow blank values we can set an error right away, otherwise we call a method to run the actual check
-					if (StructKeyExists(loc.thisValidation.args, "property") && StructKeyExists(loc.thisValidation.args, "allowBlank") && !loc.thisValidation.args.allowBlank && (!StructKeyExists(this, loc.thisValidation.args.property) || !Len(this[loc.thisValidation.args.property])))
-						addError(property=loc.thisValidation.args.property, message=loc.thisValidation.args.message);
-					else if (!StructKeyExists(loc.thisValidation.args, "property") || (StructKeyExists(this, loc.thisValidation.args.property) && Len(this[loc.thisValidation.args.property])))
-						$invoke(method=loc.thisValidation.method, argumentCollection=loc.thisValidation.args);
+					if (loc.thisValidation.method == "$validatePresenceOf")
+					{
+						// if the property does not exist or if it's blank we add an error on the object (for all other validation types we call corresponding methods below instead)
+						if (!StructKeyExists(this, loc.thisValidation.args.property) || !Len(Trim(this[loc.thisValidation.args.property])))
+							addError(property=loc.thisValidation.args.property, message=loc.thisValidation.args.message);
+					}
+					else
+					{
+						// if the validation set does not allow blank values we can set an error right away, otherwise we call a method to run the actual check
+						if (StructKeyExists(loc.thisValidation.args, "property") && StructKeyExists(loc.thisValidation.args, "allowBlank") && !loc.thisValidation.args.allowBlank && (!StructKeyExists(this, loc.thisValidation.args.property) || !Len(this[loc.thisValidation.args.property])))
+							addError(property=loc.thisValidation.args.property, message=loc.thisValidation.args.message);
+						else if (!StructKeyExists(loc.thisValidation.args, "property") || (StructKeyExists(this, loc.thisValidation.args.property) && Len(this[loc.thisValidation.args.property])))
+							$invoke(method=loc.thisValidation.method, argumentCollection=loc.thisValidation.args);
+					}
 				}
 			}
 		}
