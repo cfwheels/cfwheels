@@ -7,6 +7,7 @@
 		<cfset loc.args.property = "birthday">
 		<cfset loc.args.includeblank = false>
 		<cfset loc.args.order = "year">
+		<cfset loc.args.label = false>
 		<cfset loc.controller.changeBirthday = changeBirthday>
 	</cffunction>
 

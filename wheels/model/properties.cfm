@@ -362,3 +362,8 @@
 	</cfscript>
 	<cfreturn returnValue />
 </cffunction>
+
+<cffunction name="$label" returntype="string" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfreturn variables.wheels.class.properties[arguments.property].label>
+</cffunction>

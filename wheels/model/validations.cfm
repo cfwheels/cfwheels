@@ -303,7 +303,7 @@
 				if (StructKeyExists(arguments, "properties"))
 				{
 					loc.validation.args.property = Trim(ListGetAt(loc.validation.args.properties, loc.j));
-					loc.validation.args.message = $validationErrorMessage(message=loc.validation.args.message, property=loc.validation.args.property);
+					//loc.validation.args.message = $validationErrorMessage(message=loc.validation.args.message, property=loc.validation.args.property);
 				}
 				StructDelete(loc.validation.args, "when");
 				StructDelete(loc.validation.args, "methods");
@@ -315,14 +315,12 @@
 </cffunction>
 
 <cffunction name="$validationErrorMessage" returntype="string" access="public" output="false" hint="Creates nicer looking error text by humanizing the property name and capitalizing it when appropriate.">
-	<cfargument name="message" type="string" required="true">
 	<cfargument name="property" type="string" required="true">
+	<cfargument name="message" type="string" required="true">
 	<cfscript>
 		var returnValue = "";
-
 		// turn property names into lower cased words
-		returnValue = Replace(arguments.message, "[property]", LCase(humanize(arguments.property)), "all");
-
+		returnValue = Replace(arguments.message, "[property]", LCase(variables.wheels.class.properties[arguments.property].label), "all");
 		// capitalize the first word in the property name if it comes first in the sentence
 		if (Left(arguments.message, 10) == "[property]")
 			returnValue = capitalize(returnValue);
@@ -357,13 +355,13 @@
 					{
 						// if the property does not exist or if it's blank we add an error on the object (for all other validation types we call corresponding methods below instead)
 						if (!StructKeyExists(this, loc.thisValidation.args.property) || !Len(trim(this[loc.thisValidation.args.property])))
-							addError(property=loc.thisValidation.args.property, message=loc.thisValidation.args.message);
+							addError(property=loc.thisValidation.args.property, message=$validationErrorMessage(loc.thisValidation.args.property, loc.thisValidation.args.message));
 					}
 					else
 					{
 						// if the validation set does not allow blank values we can set an error right away, otherwise we call a method to run the actual check
 						if (StructKeyExists(loc.thisValidation.args, "property") && StructKeyExists(loc.thisValidation.args, "allowBlank") && !loc.thisValidation.args.allowBlank && (!StructKeyExists(this, loc.thisValidation.args.property) || !Len(this[loc.thisValidation.args.property])))
-							addError(property=loc.thisValidation.args.property, message=loc.thisValidation.args.message);
+							addError(property=loc.thisValidation.args.property, message=$validationErrorMessage(loc.thisValidation.args.property, loc.thisValidation.args.message));
 						else if (!StructKeyExists(loc.thisValidation.args, "property") || (StructKeyExists(this, loc.thisValidation.args.property) && Len(this[loc.thisValidation.args.property])))
 							$invoke(method=loc.thisValidation.method, argumentCollection=loc.thisValidation.args);
 					}
@@ -392,28 +390,28 @@
 		var loc = {};
 		loc.virtualConfirmProperty = arguments.property & "Confirmation";
 		if (StructKeyExists(this, loc.virtualConfirmProperty) && this[arguments.property] != this[loc.virtualConfirmProperty])
-			addError(property=loc.virtualConfirmProperty, message=arguments.message);
+			addError(property=loc.virtualConfirmProperty, message=$validationErrorMessage(arguments.property, arguments.message));
 	</cfscript>
 </cffunction>
 
 <cffunction name="$validateExclusionOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesExclusionOf method.">
 	<cfscript>
 		if (ListFindNoCase(arguments.list, this[arguments.property]))
-			addError(property=arguments.property, message=arguments.message);
+			addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
 	</cfscript>
 </cffunction>
 
 <cffunction name="$validateFormatOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesFormatOf method.">
 	<cfscript>
 		if ((Len(arguments.regEx) && !REFindNoCase(arguments.regEx, this[arguments.property])) || (Len(arguments.type) && !IsValid(arguments.type, this[arguments.property])))
-			addError(property=arguments.property, message=arguments.message);
+			addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
 	</cfscript>
 </cffunction>
 
 <cffunction name="$validateInclusionOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesInclusionOf method.">
 	<cfscript>
 		if (!ListFindNoCase(arguments.list, this[arguments.property]))
-			addError(property=arguments.property, message=arguments.message);
+			addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
 	</cfscript>
 </cffunction>
 
@@ -421,23 +419,23 @@
 	<cfscript>
 		if (arguments.maximum)
 		{
-			if (Len(this[arguments.property]) > arguments.maximum)
-				addError(property=arguments.property, message=arguments.message);
+			if (Len(this[arguments.property]) gt arguments.maximum)
+				addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
 		}
 		else if (arguments.minimum)
 		{
-			if (Len(this[arguments.property]) < arguments.minimum)
-				addError(property=arguments.property, message=arguments.message);
+			if (Len(this[arguments.property]) lt arguments.minimum)
+				addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
 		}
 		else if (arguments.exactly)
 		{
-			if (Len(this[arguments.property]) != arguments.exactly)
-				addError(property=arguments.property, message=arguments.message);
+			if (Len(this[arguments.property]) neq arguments.exactly)
+				addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
 		}
 		else if (IsArray(arguments.within) && ArrayLen(arguments.within))
 		{
-			if (Len(this[arguments.property]) < arguments.within[1] || Len(this[arguments.property]) > arguments.within[2])
-				addError(property=arguments.property, message=arguments.message);
+			if (Len(this[arguments.property]) lt arguments.within[1] or Len(this[arguments.property]) gt arguments.within[2])
+				addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
 		}
 	</cfscript>
 </cffunction>
@@ -445,9 +443,9 @@
 <cffunction name="$validateNumericalityOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesNumericalityOf method.">
 	<cfscript>
 		if (!IsNumeric(this[arguments.property]))
-			addError(property=arguments.property, message=arguments.message);
+			addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
 		else if (arguments.onlyInteger && Round(this[arguments.property]) != this[arguments.property])
-			addError(property=arguments.property, message=arguments.message);
+			addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
 	</cfscript>
 </cffunction>
 
@@ -488,7 +486,7 @@
 
 		// we add an error if an object was found in the database and the current object is either not saved yet or not the same as the one in the database
 		if (IsObject(loc.existingObject) && (isNew() || loc.existingObject.key() != key($persisted=true)))
-			addError(property=arguments.property, message=arguments.message);
+			addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
 	</cfscript>
 </cffunction>
 
@@ -518,7 +516,7 @@
 	<cfreturn loc.returnValue />
 </cffunction>
 
-<cffunction name="automaticValidations" returntype="void" access="public" output="false" hint="whether to turn default validations on or off for this model.">
+<cffunction name="automaticValidations" returntype="void" access="public" output="false" hint="Whether to turn default validations on or off for this model.">
 	<cfargument name="value" type="boolean" required="true">
 	<cfset variables.wheels.class.automaticValidations = arguments.value>
 </cffunction>

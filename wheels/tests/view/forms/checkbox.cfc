@@ -4,6 +4,7 @@
 		<cfset loc.controller = createobject("component", "wheelsMapping.tests._assets.controllers.ControllerWithModel")>
 		<cfset loc.args= {}>
 		<cfset loc.args.objectName = "user">
+		<cfset loc.args.label = false>
 	</cffunction>
 
 	<cffunction name="test_checked_when_property_value_equals_checkedValue">

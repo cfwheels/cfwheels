@@ -203,7 +203,7 @@
 		loc.returnValue = arguments.prependToLabel;
 		loc.attributes = {};
 		for (loc.key in arguments)
-			if (Left(loc.key, 5) == "label" && Len(loc.key) > 5 && loc.key != "labelPlacement")
+			if (Left(loc.key, 5) == "label" && Len(loc.key) gt 5 && loc.key != "labelPlacement")
 				loc.attributes[Replace(loc.key, "label", "")] = arguments[loc.key];
 		if (StructKeyExists(arguments, "id"))
 			loc.attributes.for = arguments.id;
@@ -217,7 +217,7 @@
 <cffunction name="$formBeforeElement" returntype="string" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">
-	<cfargument name="label" type="string" required="true">
+	<cfargument name="label" type="any" required="true">
 	<cfargument name="labelPlacement" type="string" required="true">
 	<cfargument name="prepend" type="string" required="true">
 	<cfargument name="append" type="string" required="true">
@@ -229,6 +229,7 @@
 		loc.returnValue = "";
 		if ($formHasError(argumentCollection=arguments) and Len(arguments.errorElement))
 			loc.returnValue = loc.returnValue & $tag(name=arguments.errorElement, class="field-with-errors");
+		arguments.label = $getFieldLabel(argumentCollection=arguments);
 		if (Len(arguments.label) && arguments.labelPlacement != "after")
 		{
 			loc.returnValue = loc.returnValue & $createLabel(argumentCollection=arguments);
@@ -256,6 +257,7 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = arguments.append;
+		arguments.label = $getFieldLabel(argumentCollection=arguments);
 		if (Len(arguments.label) && arguments.labelPlacement != "before")
 		{
 			if (arguments.labelPlacement == "after")
@@ -268,4 +270,25 @@
 			loc.returnValue = loc.returnValue & "</" & arguments.errorElement & ">";
 	</cfscript>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$getFieldLabel" returntype="string" access="public" output="false">
+	<cfargument name="objectName" type="any" required="true">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="label" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		if (arguments.label eq false)
+			return "";
+		if (arguments.label eq true and !IsStruct(arguments.objectName))
+		{
+			if (IsObject(arguments.objectName))
+				loc.object = arguments.objectName;
+			else
+				loc.object = $getObject(arguments.objectName);
+			if (IsObject(loc.object))
+				return loc.object.$label(arguments.property);
+		}
+		return arguments.label;	
+	</cfscript>
 </cffunction>
