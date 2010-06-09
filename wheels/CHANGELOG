@@ -7,6 +7,8 @@ Bug Fixes
 * Remove possible spaces in list passed in to callback registration - #448 [Raul Riera]
 * Check to see that a function has a declaration in the settings before setting defaults - [James Gibson]
 * Update to capitalize() to return nothing if the passed in string is empty - [James Gibson]
+* validatesPresenceOf() now takes whitespace into account - [Tony Petruzzi]
+* Fix for lock timeouts occurring during race conditions in the "design" and "development" modes - #467 [John C. Bland II, Andy Bellenie, Tony Petruzzi]
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
