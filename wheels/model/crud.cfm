@@ -184,12 +184,12 @@
 				loc.totalPages = Ceiling(loc.totalRecords/arguments.perPage);
 				loc.limit = arguments.perPage;
 				loc.offset = (arguments.perPage * arguments.page) - arguments.perPage;
-				
+
 				// if the full range of records is not requested we correct the limit to get the exact amount instead
 				// for example if totalRecords is 57, limit is 10 and offset 50 (i.e. requesting records 51-60) we change the limit to 7
 				if ((loc.limit + loc.offset) > loc.totalRecords)
 					loc.limit = loc.totalRecords - loc.offset;
-				
+
 				if (loc.limit < 1)
 				{
 					// if limit is 0 or less it means that a page that has no records was asked for so we return an empty query
@@ -279,7 +279,7 @@
 				loc.findAll = variables.wheels.class.adapter.$query(argumentCollection=loc.finderArgs);
 				request[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
-			request.wheels[Hash(GetMetaData(loc.findAll.query).toString())] = variables.wheels.class.name; // place an identifer in request scope so we can reference this query when passed in to view functions 
+			request.wheels[Hash(GetMetaData(loc.findAll.query).toString())] = variables.wheels.class.name; // place an identifer in request scope so we can reference this query when passed in to view functions
 			if (arguments.returnAs == "query")
 			{
 				loc.returnValue = loc.findAll.query;
@@ -742,10 +742,10 @@
 	'
 		<!--- Create a new author and save it to the database --->
 		<cfset newAuthor = model("author").create(params.author)>
-		
+
 		<!--- Same as above using named arguments --->
-		<cfset newAuthor = model("author").create(firstName="John", lastName="Doe")>	
-			
+		<cfset newAuthor = model("author").create(firstName="John", lastName="Doe")>
+
 		<!--- Same as above using both named arguments and a struct --->
 		<cfset newAuthor = model("author").create(active=1, properties=params.author)>
 
@@ -910,12 +910,20 @@
 	<cfscript>
 		var loc = {};
 		loc.query = findByKey(key=key(), reload=true, returnAs="query");
-		loc.properties = propertyNames();		
+		loc.properties = propertyNames();
 		loc.iEnd = ListLen(loc.properties);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.property = ListGetAt(loc.properties, loc.i);
-			this[loc.property] = loc.query[loc.property][1];
+			// coldfusion has a problem with blank boolean values in the query
+			try
+			{
+				loc.property = ListGetAt(loc.properties, loc.i);
+				this[loc.property] = loc.query[loc.property][1];
+			}
+			catch (Any e)
+			{
+				loc.property = "";
+			}
 		}
 	</cfscript>
 </cffunction>
@@ -967,7 +975,7 @@
 	<cfargument name="distinct" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
-		
+
 		// setup an array containing class info for current class and all the ones that should be included
 		loc.classes = [];
 		if (Len(arguments.include))
@@ -997,28 +1005,28 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.iItem = Trim(ListGetAt(arguments.select, loc.i));
-				
+
 				// look for duplicates
 				loc.duplicateCount = ListValueCountNoCase(loc.addedProperties, loc.iItem);
 				loc.addedProperties = ListAppend(loc.addedProperties, loc.iItem);
-	
+
 				// loop through all classes (current and all included ones)
 				loc.jEnd = ArrayLen(loc.classes);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
 					loc.toAppend = "";
 					loc.classData = loc.classes[loc.j];
-	
+
 					// get the class name (the variable it is stored in differs depending on if it's taken from the current class or the association info)
 					if (StructKeyExists(loc.classData, "class"))
 						loc.modelName = loc.classData.class;
 					else if (StructKeyExists(loc.classData, "name"))
 						loc.modelName = loc.classData.name;
-	
+
 					// create a struct for this model unless it already exists
 					if (!StructKeyExists(loc.addedPropertiesByModel, loc.modelName))
 						loc.addedPropertiesByModel[loc.modelName] = "";
-	
+
 					// if we find the property in this model and it's not already added we go ahead and add it to the select clause
 					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.modelName], loc.iItem))
 					{
@@ -1046,7 +1054,7 @@
 					$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.iItem#` property but couldn't find it in the database table.", extendedInfo="Verify the `select` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
 			}
 
-			// let's replace eventual duplicates in the clause by prepending the class name		
+			// let's replace eventual duplicates in the clause by prepending the class name
 			if (Len(arguments.include))
 			{
 				loc.newSelect = "";
@@ -1058,7 +1066,7 @@
 
 					// get the property part, done by taking everytyhing from the end of the string to a . or a space (which would be found when using " AS ")
 					loc.property = Reverse(SpanExcluding(Reverse(loc.iItem), ". "));
-					
+
 					// check if this one has been flagged as a duplicate, we get the number of classes to skip and also remove the flagged info from the item
 					loc.duplicateCount = 0;
 					loc.matches = REFind("^\[\[duplicate\]\](\d+)(.+)$", loc.iItem, 1, true);
@@ -1105,8 +1113,8 @@
 			loc.select = arguments.select;
 		}
 		if (arguments.distinct)
-			loc.select = "DISTINCT " & loc.select;		
-		loc.select = "SELECT " & loc.select;		
+			loc.select = "DISTINCT " & loc.select;
+		loc.select = "SELECT " & loc.select;
 		ArrayAppend(arguments.sql, loc.select);
 	</cfscript>
 	<cfreturn arguments.sql>
@@ -1263,7 +1271,7 @@
 					ArrayAppend(arguments.sql, loc.addToWhere);
 				}
 			}
-		}		
+		}
 	</cfscript>
 	<cfreturn arguments.sql>
 </cffunction>
@@ -1448,7 +1456,7 @@
 					}
 					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[ListGetAt(loc.first, loc.j)].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[ListGetAt(loc.second, loc.j)].column#");
 				}
-				loc.classAssociations[loc.name].join = loc.join & Replace(loc.toAppend, ",", " AND ", "all");			
+				loc.classAssociations[loc.name].join = loc.join & Replace(loc.toAppend, ",", " AND ", "all");
 			}
 
 			// go up or down one level in the association tree
