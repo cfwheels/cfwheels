@@ -13,6 +13,7 @@ Bug Fixes
 * Don't append .css, .js to asset files when they end in .cfm - [Tony Petruzzi]
 * Update to reload to catch the query blank boolean error. - [James Gibson]
 * onCreate validations do not run when onSave validations fail - #455 [Andy Bellenie]
+* Fixes bug with nullable foreign keys in where clause - [Andy Bellenie]
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
