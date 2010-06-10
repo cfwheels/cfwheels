@@ -12,18 +12,19 @@
 		var loc = {};
 		switch(arguments.type)
 		{
-			case "bigint": case "bigserial": {loc.returnValue = "cf_sql_bigint"; break;}
-			case "bit": {loc.returnValue = "cf_sql_bit"; break;}
+			case "bigint": case "int8": case "bigserial": case "serial8": {loc.returnValue = "cf_sql_bigint"; break;}
+			case "bit": case "varbit": {loc.returnValue = "cf_sql_bit"; break;}
 			case "bool": case "boolean": {loc.returnValue = "cf_sql_varchar"; break;}
 			case "bytea": {loc.returnValue = "cf_sql_binary"; break;}
 			case "char": case "character": {loc.returnValue = "cf_sql_char"; break;}
-			case "date": case "timestamp": {loc.returnValue = "cf_sql_timestamp"; break;}
-			case "decimal": case "double": case "precision": case "float": {loc.returnValue = "cf_sql_decimal"; break;}
+			case "date": case "timestamp": case "timestamptz": {loc.returnValue = "cf_sql_timestamp"; break;}
+			case "decimal": case "double": case "precision": case "float": case "float4": case "float8": {loc.returnValue = "cf_sql_decimal"; break;}
 			case "integer": case "int": case "int4": case "serial": case "oid": {loc.returnValue = "cf_sql_integer"; break;}  // oid cols should probably be avoided - placed here for completeness
 			case "numeric": case "smallmoney": case "money": {loc.returnValue = "cf_sql_numeric"; break;}  // postgres has deprecated the money type: http://www.postgresql.org/docs/8.1/static/datatype-money.html
 			case "real": {loc.returnValue = "cf_sql_real"; break;}
-			case "smallint": {loc.returnValue = "cf_sql_smallint"; break;}
+			case "smallint": case "int2": {loc.returnValue = "cf_sql_smallint"; break;}
 			case "text": {loc.returnValue = "cf_sql_longvarchar"; break;}
+			case "time": case "timetz": {loc.returnValue = "cf_sql_time"; break;}
 			case "varchar": case "varying": case "bpchar": {loc.returnValue = "cf_sql_varchar"; break;}
 		}
 	</cfscript>
