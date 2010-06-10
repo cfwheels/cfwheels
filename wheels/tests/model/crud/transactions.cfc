@@ -8,7 +8,6 @@
 		<cfset application.wheels.transactionMode = "none">
 	</cffunction>
 
-
 	<cffunction name="test_create_rollbacks_when_callback_returns_false">
 		<cfset loc.author = model("authorFalseCallbacks").create(firstname="Kermit", lastname="The Frog")>
 		<cfset loc.author = model("authorFalseCallbacks").findOne(where="firstname='Kermit'", reload=true)>

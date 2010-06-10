@@ -425,7 +425,7 @@
 			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 			arguments.sql = $addWhereClauseParameters(sql=arguments.sql, where=arguments.where);
 			
-			loc.returnValue = $runTransaction(method="$updateAll", argumentCollection=arguments);
+			loc.returnValue = invokeWithTransaction(method="$updateAll", argumentCollection=arguments);
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -538,7 +538,7 @@
 			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 			arguments.sql = $addWhereClauseParameters(sql=arguments.sql, where=arguments.where);
 			
-			loc.returnValue = $runTransaction(method="$deleteAll", argumentCollection=arguments);
+			loc.returnValue = invokeWithTransaction(method="$deleteAll", argumentCollection=arguments);
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -675,7 +675,7 @@
 		arguments.sql = $addDeleteClause(sql=arguments.sql, softDelete=arguments.softDelete);
 		arguments.sql = $addKeyWhereClause(sql=arguments.sql, includeSoftDeletes=arguments.includeSoftDeletes);
 	</cfscript>
-	<cfreturn $runTransaction(method="$delete", argumentCollection=arguments)>
+	<cfreturn invokeWithTransaction(method="$delete", argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$delete" returntype="boolean" access="public" output="false">
@@ -744,7 +744,7 @@
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="Set to `false` to disable callbacks for this save.">
 	<cfset $insertDefaults(name="save", input=arguments)>
 	<cfset clearErrors()>
-	<cfreturn $runTransaction(method="$save", argumentCollection=arguments)>
+	<cfreturn invokeWithTransaction(method="$save", argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$save" returntype="boolean" access="public" output="false">
