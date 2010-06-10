@@ -239,7 +239,6 @@
 			if (StructKeyExists(arguments, "query") && IsQuery(arguments.query))
 			{
 				loc.query = arguments.query;
-				StructDelete(arguments, "query");
 				loc.returnValue = "";
 				loc.iEnd = loc.query.recordCount;
 				if (Len(arguments.$group))
@@ -317,14 +316,12 @@
 			else if (StructKeyExists(arguments, "object") && IsObject(arguments.object))
 			{
 				loc.object = arguments.object;
-				StructDelete(arguments, "object");
 				StructAppend(arguments, loc.object.properties(), false);
 			}
 			else if (StructKeyExists(arguments, "objects") && IsArray(arguments.objects))
 			{
 				loc.originalArguments = Duplicate(arguments);
 				loc.array = arguments.objects;
-				StructDelete(arguments, "objects");
 				loc.returnValue = "";
 				loc.iEnd = ArrayLen(loc.array);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
