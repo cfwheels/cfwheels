@@ -186,6 +186,11 @@ Bug Fixes
 * Fix for lock timeouts occurring during race conditions in the "design" and "development" modes - #467 [John C. Bland II, Andy Bellenie, Tony Petruzzi]
 * Fix so Wheels uses passed in width/height in imageTag() when only one of them is passed in - #328 [Andy Bellenie, Per Djurner]
 * Don't append .css, .js to asset files when they end in .cfm - [Tony Petruzzi]
+* Update to reload to catch the query blank boolean error - [James Gibson]
+* onCreate validations do not run when onSave validations fail - #455 [Andy Bellenie]
+* Fixes bug with nullable foreign keys in where clause - [Andy Bellenie]
+* Update to clean up variables from all scopes after running plugin injection - [James Gibson]
+* Updated PostgreSQL types - [Jaroslaw Krzemienski, Per Djurner]
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
