@@ -21,7 +21,7 @@
 	<cfargument name="transaction" type="string" required="true" hint="See documentation for @save.">
 	<cfargument name="isolation" type="string" default="read_committed" hint="See documentation for @save.">
 	<cfset var loc = {} />
-	<cfset loc.methodArgs = $setProperties(properties=StructNew(), argumentCollection=arguments, filterList="method,transaction,isolation", setOnModel=false)>
+	<cfset loc.methodArgs = $setProperties(properties=StructNew(), argumentCollection=arguments, filterList="method,transaction,isolation", setOnModel=false, $useFilterLists=false)>
 	<cfif not StructKeyExists(variables, arguments.method)>
 		<cfif application.wheels.showErrorInformation>
 			<cfthrow type="Wheels.IncorrectArguments" message="Model method not found!" extendedInfo="The method `#arguments.method#` does not exist in this model." />
