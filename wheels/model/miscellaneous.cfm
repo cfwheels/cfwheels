@@ -79,5 +79,6 @@
 </cffunction>
 
 <cffunction name="setPrimaryKeys" returntype="void" access="public" output="false" hint="Alias for setPrimaryKey()">
+	<cfargument name="property" type="string" required="true">
 	<cfset setPrimaryKey(argumentCollection=arguments)>
 </cffunction>
