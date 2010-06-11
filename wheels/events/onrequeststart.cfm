@@ -83,8 +83,6 @@
 		{
 			application.wheels.existingControllerFiles = "";
 			application.wheels.nonExistingControllerFiles = "";
-			application.wheels.existingHelperFiles = "";
-			application.wheels.nonExistingHelperFiles = "";
 		}
 		$include(template="#application.wheels.eventPath#/onrequeststart.cfm");
 		if (application.wheels.showDebugInformation)
