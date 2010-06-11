@@ -197,33 +197,36 @@
 	<cfreturn returnValue>
 </cffunction>
 
+<cffunction name="$controllerFileName" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.controllerFileExists = false;
+		if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingControllerFiles, arguments.name))
+		{
+			if (FileExists(ExpandPath("#application.wheels.controllerPath#/#capitalize(arguments.name)#.cfc")))
+				loc.controllerFileExists = true;
+			if (application.wheels.cacheFileChecking)
+			{
+				if (loc.controllerFileExists)
+					application.wheels.existingControllerFiles = ListAppend(application.wheels.existingControllerFiles, arguments.name);
+				else
+					application.wheels.nonExistingControllerFiles = ListAppend(application.wheels.nonExistingControllerFiles, arguments.name);
+			}
+		}
+		if (ListFindNoCase(application.wheels.existingControllerFiles, arguments.name) || loc.controllerFileExists)
+			loc.returnValue = capitalize(arguments.name);
+		else
+			loc.returnValue = "Controller";
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$createControllerClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.fileName = capitalize(arguments.name);
-
-		// check if the controller file exists and store the results for performance reasons
-		if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingControllerFiles, arguments.name))
-		{
-			if (FileExists(ExpandPath("#application.wheels.controllerPath#/#loc.fileName#.cfc")))
-				application.wheels.existingControllerFiles = ListAppend(application.wheels.existingControllerFiles, arguments.name);
-			else
-				application.wheels.nonExistingControllerFiles = ListAppend(application.wheels.nonExistingControllerFiles, arguments.name);
-		}
-
-		// check if the controller's view helper file exists and store the results for performance reasons
-		if (!ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingHelperFiles, arguments.name))
-		{
-			if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(arguments.name)#/helpers.cfm")))
-				application.wheels.existingHelperFiles = ListAppend(application.wheels.existingHelperFiles, arguments.name);
-			else
-				application.wheels.nonExistingHelperFiles = ListAppend(application.wheels.nonExistingHelperFiles, arguments.name);
-		}
-
-		if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name))
-			loc.fileName = "Controller";
-		application.wheels.controllers[arguments.name] = $createObjectFromRoot(path=application.wheels.controllerComponentPath, fileName=loc.fileName, method="$initControllerClass", name=arguments.name);
+		application.wheels.controllers[arguments.name] = $createObjectFromRoot(path=application.wheels.controllerComponentPath, fileName=$controllerFileName(arguments.name), method="$initControllerClass", name=arguments.name);
 		loc.returnValue = application.wheels.controllers[arguments.name];
 	</cfscript>
 	<cfreturn loc.returnValue>

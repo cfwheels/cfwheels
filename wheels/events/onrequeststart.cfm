@@ -76,13 +76,6 @@
 		}
 		if (!application.wheels.cacheDatabaseSchema)
 			$clearCache("sql");
-		if (!application.wheels.cacheFileChecking)
-		{
-			application.wheels.existingControllerFiles = "";
-			application.wheels.nonExistingControllerFiles = "";
-			application.wheels.existingHelperFiles = "";
-			application.wheels.nonExistingHelperFiles = "";
-		}
 		$include(template="#application.wheels.eventPath#/onrequeststart.cfm");
 		if (application.wheels.showDebugInformation)
 			$debugPoint("requestStart");
