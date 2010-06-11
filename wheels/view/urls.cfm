@@ -41,7 +41,7 @@
 			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
 		}
 		arguments.href = URLFor(argumentCollection=arguments);
-		arguments.href = toXHTML(arguments.href);
+		arguments.href = Replace(arguments.href, "&", "&amp;", "all"); // make sure we return XHMTL compliant code
 		if (!Len(arguments.text))
 			arguments.text = arguments.href;
 		loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port";
@@ -77,7 +77,7 @@
 		var loc = {};
 		$insertDefaults(name="buttonTo", reserved="method", input=arguments);
 		arguments.action = URLFor(argumentCollection=arguments);
-		arguments.action = toXHTML(arguments.action);
+		arguments.action = Replace(arguments.action, "&", "&amp;", "all"); // make sure we return XHMTL compliant code
 		arguments.method = "post";
 		if (Len(arguments.confirm))
 		{

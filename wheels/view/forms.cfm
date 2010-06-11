@@ -34,7 +34,7 @@
 		arguments.action = URLFor(argumentCollection=arguments);
 
 		// make sure we return XHMTL compliant code
-		arguments.action = toXHTML(arguments.action);
+		arguments.action = Replace(arguments.action, "&", "&amp;", "all");
 
 		// deletes the action attribute and instead adds some tricky javascript spam protection to the onsubmit attribute
 		if (arguments.spamProtection)
