@@ -193,12 +193,24 @@
 	<cfargument name="property" type="string" required="false" default="" hint="Name of property to check for change.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = false;
+		
+		// always return true if $persistedProperties does not exists
+		if (!StructKeyExists(variables, "$persistedProperties"))
+			return true; 
+		
 		for (loc.key in variables.wheels.class.properties)
-			if (!StructKeyExists(variables, "$persistedProperties") || (StructKeyExists(this, loc.key) && StructKeyExists(variables.$persistedProperties, loc.key) && Compare(this[loc.key], variables.$persistedProperties[loc.key])) && (!Len(arguments.property) || loc.key == arguments.property))
-				loc.returnValue = true;
+		{
+			// return true if we have the key on this and not in variables.$persistedProperties
+			if (StructKeyExists(this, loc.key) && !StructKeyExists(variables.$persistedProperties, loc.key) && (!Len(arguments.property) || loc.key == arguments.property))
+				return true;
+			// return true if the compare() fails
+			else if ((StructKeyExists(this, loc.key) && StructKeyExists(variables.$persistedProperties, loc.key) && Compare(this[loc.key], variables.$persistedProperties[loc.key])) && (!Len(arguments.property) || loc.key == arguments.property)) 
+				return true;
+		}
+		// if we get here, it means that all of the properties that were checked had a value in 
+		// $persistedProperties and it matched or some of the properties did not exist in the this scope
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn false>
 </cffunction>
 
 <cffunction name="changedProperties" returntype="string" access="public" output="false" hint="Returns a list of the object properties that have been changed but not yet saved to the database."
