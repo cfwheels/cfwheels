@@ -358,14 +358,20 @@
 			loc.include = application.wheels.viewPath;
 			if (IsBoolean(arguments.$layout))
 			{
+				loc.layoutFileExists = false;
 				if (!ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) && !ListFindNoCase(application.wheels.nonExistingLayoutFiles, variables.params.controller))
 				{
 					if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.params.controller)#/layout.cfm")))
-						application.wheels.existingLayoutFiles = ListAppend(application.wheels.existingLayoutFiles, variables.params.controller);
-					else
-						application.wheels.nonExistingLayoutFiles = ListAppend(application.wheels.nonExistingLayoutFiles, variables.params.controller);
+						loc.layoutFileExists = true;
+					if (application.wheels.cacheFileChecking)
+					{
+						if (loc.layoutFileExists)
+							application.wheels.existingLayoutFiles = ListAppend(application.wheels.existingLayoutFiles, variables.params.controller);
+						else
+							application.wheels.nonExistingLayoutFiles = ListAppend(application.wheels.nonExistingLayoutFiles, variables.params.controller);
+					}
 				}
-				if (ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller))
+				if (ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) || loc.layoutFileExists)
 				{
 					loc.include = loc.include & "/" & variables.params.controller & "/" & "layout.cfm";
 				}
