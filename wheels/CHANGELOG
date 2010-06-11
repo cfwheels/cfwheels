@@ -114,8 +114,6 @@ Changes
 		hasManyRadioButton(): used to output radio buttons for a relationship on a model
 		hasManyCheckBox(): used to output a checkbox for a relationship on a model
 
-	* Add width/height arguments to imageTag() - #328 [Andy Bellenie]
-
 [Application]
 
 	* method: addDefaultRoutes() - [Per Djurner]
@@ -191,6 +189,8 @@ Bug Fixes
 * Fixes bug with nullable foreign keys in where clause - [Andy Bellenie]
 * Update to clean up variables from all scopes after running plugin injection - [James Gibson]
 * Updated PostgreSQL types - [Jaroslaw Krzemienski, Per Djurner]
+* Fix for race condition when checking for existing controller files in the "design" and "development" modes - #360 [Andrea Campolonghi, Per Djurner]
+
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
