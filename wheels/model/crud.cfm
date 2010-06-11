@@ -922,7 +922,7 @@
 			}
 			catch (Any e)
 			{
-				loc.property = "";
+				this[loc.property] = "";
 			}
 		}
 	</cfscript>
