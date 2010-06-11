@@ -715,7 +715,7 @@
 			}
 			catch (Any e)
 			{
-				loc.property = "";
+				this[loc.property] = "";
 			}
 		}
 	</cfscript>
@@ -748,6 +748,10 @@
 </cffunction>
 
 <cffunction name="$save" returntype="boolean" access="public" output="false">
+	<cfargument name="parameterize" type="any" required="true" />
+	<cfargument name="reload" type="boolean" required="true" />
+	<cfargument name="validate" type="boolean" required="true" />
+	<cfargument name="callbacks" type="boolean" required="true" />
 	<cfscript>
 		if ($callback("beforeValidation", arguments.callbacks))
 		{
