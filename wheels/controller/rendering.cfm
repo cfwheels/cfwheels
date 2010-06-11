@@ -138,7 +138,7 @@
 		var loc = {};
 		if (IsQuery(arguments.$partial) && arguments.$partial.recordCount)
 		{
-			arguments.$name = request.wheels[Hash(GetMetaData(arguments.$partial).toString())];
+			arguments.$name = request.wheels[Hash(SerializeJSON(arguments.$partial))];
 			arguments[pluralize(arguments.$name)] = arguments.$partial;
 		}
 		else if (IsObject(arguments.$partial))
