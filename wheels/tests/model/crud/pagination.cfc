@@ -85,4 +85,10 @@
 		<cfset assert('loc.e.photogalleryid[2] eq loc.r.photogalleryid[10]')>
 	</cffunction>
 
+	<cffunction name="test_make_sure_that_remapped_columns_containing_desc_and_asc_work">
+		<cfset loc.result = model("photogalleryphoto").findAll(page=1, perPage=20, order='DESCription1 DESC', handle="pagination_order_test_1")>
+		<cfset assert('request.wheels.pagination_order_test_1.CURRENTPAGE eq 1')>
+		<cfset assert('request.wheels.pagination_order_test_1.TOTALPAGES eq 13')>
+		<cfset assert('request.wheels.pagination_order_test_1.TOTALRECORDS eq 250')>
+	</cffunction>
 </cfcomponent>

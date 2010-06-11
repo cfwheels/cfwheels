@@ -84,7 +84,7 @@
 			loc.iEnd = ListLen(loc.thirdOrder);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.iItem = ReplaceNoCase(ReplaceNoCase(ListGetAt(loc.thirdOrder, loc.i), " ASC", ""), " DESC", "");
+				loc.iItem = ReReplace(ReReplace(ListGetAt(loc.thirdOrder, loc.i), " ASC\b", ""), " DESC\b", "");
 				if (!ListFindNoCase(loc.thirdSelect, loc.iItem))
 					loc.thirdSelect = ListAppend(loc.thirdSelect, loc.iItem);
 				if (loc.containsGroup) {
@@ -101,7 +101,7 @@
 			loc.firstOrder = $tableName(list=loc.thirdOrder, action="remove");
 
 			// second order clause is the same as the first but with the ordering reversed
-			loc.secondOrder = ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(loc.firstOrder, " DESC", chr(7), "all"), " ASC", " DESC", "all"), chr(7), " ASC", "all");
+			loc.secondOrder = ReReplace(ReReplace(ReReplace(loc.firstOrder, " DESC\b", chr(7), "all"), " ASC\b", " DESC", "all"), chr(7), " ASC", "all");
 
 			// fix column aliases from order by clauses
 			loc.thirdOrder = $columnAlias(list=loc.thirdOrder, action="remove");
@@ -123,6 +123,7 @@
 				ArrayDeleteAt(arguments.sql, ArrayLen(arguments.sql));
 			ArrayPrepend(arguments.sql, loc.beforeWhere);
 			ArrayAppend(arguments.sql, loc.afterWhere);
+
 		}
 		else
 		{

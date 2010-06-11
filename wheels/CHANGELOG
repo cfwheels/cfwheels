@@ -162,6 +162,7 @@ Bug Fixes
 * match and purge whitespace in where clause - #381 [Tony Petruzzi]
 * Callbacks shouldn't need to be pre-loaded - #388 [Andy Bellenie]
 * Missing default for action argument on linkTo - #321 [Andy Bellenie]
+* Error in SQL Server pagination with mapped columns - #456 [Don Humphreys, Tony Petruzzi]
 
 Other
 =====
