@@ -79,11 +79,6 @@
 			$loadRoutes();
 		if (!application.wheels.cacheDatabaseSchema)
 			$clearCache("sql");
-		if (!application.wheels.cacheFileChecking)
-		{
-			application.wheels.existingControllerFiles = "";
-			application.wheels.nonExistingControllerFiles = "";
-		}
 		$include(template="#application.wheels.eventPath#/onrequeststart.cfm");
 		if (application.wheels.showDebugInformation)
 			$debugPoint("requestStart");

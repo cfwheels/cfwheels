@@ -19,11 +19,7 @@
 		var loc = {};
 		// if the controller file exists we instantiate it, otherwise we instantiate the parent controller
 		// this is done so that an action's view page can be rendered without having an actual controller file for it
-		if (ListFindNoCase(application.wheels.existingControllerFiles, variables.wheels.name))
-			loc.fileName = capitalize(variables.wheels.name);
-		else
-			loc.fileName = "Controller";
-		loc.returnValue = $createObjectFromRoot(path=application.wheels.controllerPath, fileName=loc.fileName, method="$initControllerObject", name=variables.wheels.name, params=arguments.params);
+		loc.returnValue = $createObjectFromRoot(path=application.wheels.controllerPath, fileName=$controllerFileName(variables.wheels.name), method="$initControllerObject", name=variables.wheels.name, params=arguments.params);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
