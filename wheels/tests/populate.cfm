@@ -111,7 +111,7 @@
 			<cfset loc.photo = model("photogalleryphoto").create(
 				photogalleryid="#loc.gallery.photogalleryid#"
 				,filename="Gallery #loc.gallery.photogalleryid# Photo Test #loc.i2#"
-				,description="'test photo #loc.i2# for gallery #loc.gallery.photogalleryid#"
+				,description1="'test photo #loc.i2# for gallery #loc.gallery.photogalleryid#"
 			)>
 		</cfloop>
 	</cfloop>
