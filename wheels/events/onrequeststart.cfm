@@ -80,8 +80,6 @@
 		{
 			application.wheels.existingControllerFiles = "";
 			application.wheels.nonExistingControllerFiles = "";
-			application.wheels.existingLayoutFiles = "";
-			application.wheels.nonExistingLayoutFiles = "";
 			application.wheels.existingHelperFiles = "";
 			application.wheels.nonExistingHelperFiles = "";
 		}
