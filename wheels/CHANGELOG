@@ -162,7 +162,6 @@ Bug Fixes
 * match and purge whitespace in where clause - #381 [Tony Petruzzi]
 * Callbacks shouldn't need to be pre-loaded - #388 [Andy Bellenie]
 * Missing default for action argument on linkTo - #321 [Andy Bellenie]
-* Error in SQL Server pagination with mapped columns - #456 [Don Humphreys, Tony Petruzzi]
 
 Other
 =====
@@ -191,6 +190,7 @@ Bug Fixes
 * Update to clean up variables from all scopes after running plugin injection - [James Gibson]
 * Updated PostgreSQL types - [Jaroslaw Krzemienski, Per Djurner]
 * Fix for race condition when checking for existing controller files in the "design" and "development" modes - #360 [Andrea Campolonghi, Per Djurner]
+* Error in SQL Server pagination with mapped columns - #456 [Don Humphreys, Tony Petruzzi]
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
