@@ -101,7 +101,7 @@
 			loc.firstOrder = $tableName(list=loc.thirdOrder, action="remove");
 
 			// second order clause is the same as the first but with the ordering reversed
-			loc.secondOrder = ReReplace(ReReplace(ReReplace(loc.firstOrder, " DESC\b", chr(7), "all"), " ASC\b", " DESC", "all"), chr(7), " ASC", "all");
+			loc.secondOrder = Replace(ReReplace(ReReplace(loc.firstOrder, " DESC\b", chr(7), "all"), " ASC\b", " DESC", "all"), chr(7), " ASC", "all");
 
 			// fix column aliases from order by clauses
 			loc.thirdOrder = $columnAlias(list=loc.thirdOrder, action="remove");
