@@ -193,6 +193,7 @@ Bug Fixes
 * Error in SQL Server pagination with mapped columns - #456 [Don Humphreys, Tony Petruzzi]
 * Updated hasChanged() for a race condition that wasn't met - [James Gibson]
 * Fixed pagination error in Oracle when using the "include" argument - #449 [Per Djurner]
+* Fixed incorrect layout rendering for renderPartial() and includePartial() - #488 [Jordan Sitkin, Per Djurner]
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
