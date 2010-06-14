@@ -38,6 +38,20 @@
 		arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
 		if (arguments.limit > 0)
 		{
+			// we need to add columns from the order clause to the select clause when using distinct
+			if (Left(arguments.sql[1], 15) == "SELECT DISTINCT")
+			{
+				loc.select = ReplaceNoCase(arguments.sql[1], "SELECT DISTINCT ", "");
+				loc.order = ReplaceNoCase(arguments.sql[ArrayLen(arguments.sql)], "ORDER BY ", "");
+				loc.iEnd = ListLen(loc.order);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					loc.iItem = ReReplace(ReReplace(ListGetAt(loc.order, loc.i), " ASC\b", ""), " DESC\b", "");
+					if (!ListFindNoCase(loc.select, loc.iItem))
+						loc.select = ListAppend(loc.select, loc.iItem);
+				}
+				arguments.sql[1] = "SELECT DISTINCT " & loc.select;
+			}
 			loc.beforeWhere = "SELECT * FROM (SELECT a.*, rownum rnum FROM (";
 			loc.afterWhere = ") a WHERE rownum <=" & arguments.limit+arguments.offset & ")" & " WHERE rnum >" & arguments.offset;
 			ArrayPrepend(arguments.sql, loc.beforeWhere);
