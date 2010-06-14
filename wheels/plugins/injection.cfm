@@ -7,7 +7,7 @@
 		if (StructKeyExists($wheels.metaData, "displayName"))
 			$wheels.className = $wheels.metaData.displayName;
 		else
-			$wheels.className = Reverse(SpanExcluding(Reverse(GetMetaData(this).name), "."));
+			$wheels.className = Reverse(SpanExcluding(Reverse($wheels.metaData.name), "."));
 		if (StructKeyExists(application.wheels.mixins, $wheels.className))
 		{
 			if (!StructKeyExists(variables, "core"))
