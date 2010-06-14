@@ -61,4 +61,9 @@
 		<cfset assert("request.wheels.response Contains 'partial template content' AND request.wheels.response Contains 'start:partiallayout' AND request.wheels.response Contains 'end:partiallayout'")>
 	</cffunction>
 
+	<cffunction name="test_rendering_partial_with_specific_layout_in_root">
+		<cfset controller.renderPartial(partial="partialTemplate", layout="/partialRootLayout")>
+		<cfset assert("request.wheels.response Contains 'partial template content' AND request.wheels.response Contains 'start:partialrootlayout' AND request.wheels.response Contains 'end:partialrootlayout'")>
+	</cffunction>
+
 </cfcomponent>
