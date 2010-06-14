@@ -843,12 +843,17 @@
 	<cfargument name="property" type="string" required="false" default="" hint="Name of property to check for change.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = false;
+		if (!StructKeyExists(variables, "$persistedProperties"))
+			return true;
 		for (loc.key in variables.wheels.class.properties)
-			if (!StructKeyExists(variables, "$persistedProperties") || (StructKeyExists(this, loc.key) && StructKeyExists(variables.$persistedProperties, loc.key) && Compare(this[loc.key], variables.$persistedProperties[loc.key])) && (!Len(arguments.property) || loc.key == arguments.property))
-				loc.returnValue = true;
+		{
+			if (StructKeyExists(this, loc.key) && !StructKeyExists(variables.$persistedProperties, loc.key) && (!Len(arguments.property) || loc.key == arguments.property))
+				return true;
+			else if ((StructKeyExists(this, loc.key) && StructKeyExists(variables.$persistedProperties, loc.key) && Compare(this[loc.key], variables.$persistedProperties[loc.key])) && (!Len(arguments.property) || loc.key == arguments.property))
+				return true;
+		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn false>
 </cffunction>
 
 <cffunction name="changedFrom" returntype="string" access="public" output="false"
