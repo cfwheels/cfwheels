@@ -117,7 +117,7 @@
 		if (!Len(arguments.$template))
 			arguments.$template = "/" & arguments.$controller & "/" & arguments.$action;
 		loc.content = $includeFile($name=arguments.$template, $type="page");
-		loc.returnValue = $renderLayout($content=loc.content, $layout=arguments.$layout);
+		loc.returnValue = $renderLayout($content=loc.content, $layout=arguments.$layout, $type="page");
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -157,11 +157,9 @@
 		}
 		if (StructKeyExists(arguments, "$name"))
 		{
-			if (Len(arguments.$layout))
-				arguments.$layout = Replace("_" & arguments.$layout, "__", "_", "one");
 			arguments.$type = "partial";
 			loc.content = $includeFile(argumentCollection=arguments);
-			loc.returnValue = $renderLayout($content=loc.content, $layout=arguments.$layout);
+			loc.returnValue = $renderLayout($content=loc.content, $layout=arguments.$layout, $type=arguments.$type);
 		}
 		else
 		{
@@ -353,7 +351,7 @@
 			}
 			else
 			{
-				loc.returnValue = $includeFile($name=arguments.$layout, $type="layout");
+				loc.returnValue = $includeFile($name=arguments.$layout, $type=arguments.$type);
 			}
 		}
 		else
