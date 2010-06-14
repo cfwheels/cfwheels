@@ -222,9 +222,20 @@
 <cffunction name="$clearCallbacks" returntype="void" access="public" output="false" hint="Removes all callbacks registered for this model. Pass in the `type` argument to only remove callbacks for that specific type.">
 	<cfargument name="type" type="string" required="false" default="" hint="Type of callback (`beforeSave` etc).">
 	<cfscript>
-		for (loc.key in variables.wheels.class.callbacks)
-			if (!Len(arguments.type) || arguments.type == loc.key)
-				ArrayClear(variables.wheels.class.callbacks[loc.key]);
+		var loc = {};
+		// clean up the list of types passed in
+		arguments.type = $listClean(list="#arguments.type#", returnAs="array");
+		// no type(s) was passed in. get all the callback types registered
+		if (ArrayIsEmpty(arguments.type))
+		{
+			arguments.type = ListToArray(StructKeyList(variables.wheels.class.callbacks));
+		}
+		// loop through each callback type and clear it
+		loc.iEnd = ArrayLen(arguments.type);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			variables.wheels.class.callbacks[arguments.type[loc.i]] = [];
+		}
 	</cfscript>
 </cffunction>
 
