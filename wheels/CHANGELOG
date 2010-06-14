@@ -191,6 +191,7 @@ Bug Fixes
 * Updated PostgreSQL types - [Jaroslaw Krzemienski, Per Djurner]
 * Fix for race condition when checking for existing controller files in the "design" and "development" modes - #360 [Andrea Campolonghi, Per Djurner]
 * Error in SQL Server pagination with mapped columns - #456 [Don Humphreys, Tony Petruzzi]
+* Updated hasChanged() for a race condition that wasn't met - [James Gibson]
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
