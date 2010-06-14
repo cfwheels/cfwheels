@@ -192,6 +192,7 @@ Bug Fixes
 * Fix for race condition when checking for existing controller files in the "design" and "development" modes - #360 [Andrea Campolonghi, Per Djurner]
 * Error in SQL Server pagination with mapped columns - #456 [Don Humphreys, Tony Petruzzi]
 * Updated hasChanged() for a race condition that wasn't met - [James Gibson]
+* Fixed pagination error in Oracle when using the "include" argument - #449 [Per Djurner]
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
