@@ -47,6 +47,8 @@
 	<cfargument name="shortcut" type="string" required="false" default="" hint="Set this argument to create an additional dynamic method that gets the objects for a many-to-many association.">
 	<cfargument name="through" type="string" required="false" default="#singularize(arguments.shortcut)#,#arguments.name#" hint="Set this argument if you need to override the Wheels convention when using the `shortcut` argument.">
 	<cfscript>
+		var singularizeName = capitalize(singularize(arguments.name));
+		var capitalizeName = capitalize(arguments.name);
 		$insertDefaults(name="hasMany", input=arguments);
 		// deprecate the class argument (change of name only)
 		if (StructKeyExists(arguments, "class"))
@@ -57,7 +59,7 @@
 		}
 
 		arguments.type = "hasMany";
-		arguments.methods = "#arguments.name#,#capitalize(singularize(arguments.name))#Count,add#capitalize(singularize(arguments.name))#,create#capitalize(singularize(arguments.name))#,delete#capitalize(singularize(arguments.name))#,deleteAll#capitalize(arguments.name)#,findOne#capitalize(singularize(arguments.name))#,has#capitalize(arguments.name)#,new#capitalize(singularize(arguments.name))#,remove#capitalize(singularize(arguments.name))#,removeAll#capitalize(arguments.name)#";
+		arguments.methods = "#arguments.name#,#singularizeName#Count,add#singularizeName#,create#singularizeName#,delete#singularizeName#,deleteAll#capitalizeName#,findOne#singularizeName#,has#capitalizeName#,new#singularizeName#,remove#singularizeName#,removeAll#capitalizeName#";
 		$registerAssociation(argumentCollection=arguments);
 	</cfscript>
 </cffunction>
@@ -77,6 +79,7 @@
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="joinType" type="string" required="false" hint="See documentation for @belongsTo.">
 	<cfscript>
+		var capitalizeName = capitalize(arguments.name);
 		$insertDefaults(name="hasOne", input=arguments);
 		// deprecate the class argument (change of name only)
 		if (StructKeyExists(arguments, "class"))
@@ -87,7 +90,7 @@
 		}
 
 		arguments.type = "hasOne";
-		arguments.methods = "#arguments.name#,create#capitalize(arguments.name)#,delete#capitalize(arguments.name)#,has#capitalize(arguments.name)#,new#capitalize(arguments.name)#,remove#capitalize(arguments.name)#,set#capitalize(arguments.name)#";
+		arguments.methods = "#arguments.name#,create#capitalizeName#,delete#capitalizeName#,has#capitalizeName#,new#capitalizeName#,remove#capitalizeName#,set#capitalizeName#";
 		$registerAssociation(argumentCollection=arguments);
 	</cfscript>
 </cffunction>
