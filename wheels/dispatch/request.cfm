@@ -154,7 +154,7 @@
 	<cfargument name="formScope" type="struct" required="true">
 	<cfargument name="urlScope" type="struct" required="true">
 	<cfargument name="parameters" type="struct" required="false" default="#Duplicate(GetPageContext().getRequest().getParameterMap())#">
-	<cfargument name="multipart" type="any" required="false" default="#form.getPartsArray()#">
+	<cfargument name="multipart" type="any" required="false" default="#$multipartData()#">
 	<cfscript>
 		var loc = {};
 		loc.original = {};
@@ -179,19 +179,16 @@
 				loc.parameters[loc.item][loc.i] = arguments.parameters[loc.item][loc.i];
 		}
 		// if this is defined, then we have a multipart for and will be getting our form values from here
-		if (StructKeyExists(arguments, "multipart"))
+		if (!ArrayIsEmpty(arguments.multipart))
 		{
 			// build our multipart struct
 			loc.iEnd = ArrayLen(arguments.multipart);
 			for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 			{
 				loc.param = arguments.multipart[loc.i];
-				if (loc.param.isParam())
-				{
-					if (!StructKeyExists(loc.multipart, loc.param.getName()))
-						loc.multipart[loc.param.getName()] = [];
-					ArrayAppend(loc.multipart[loc.param.getName()], loc.param.getStringValue());
-				}
+				if (!StructKeyExists(loc.multipart, loc.param.key))
+					loc.multipart[loc.param.key] = [];
+				ArrayAppend(loc.multipart[loc.param.key], loc.param.value);
 			}
 
 			// now overwrite our parameters with the multipart values
@@ -393,4 +390,33 @@
 		StructClear(arguments.sessionScope.flash);
 	</cfscript>
 	<cfreturn Trim(request.wheels.response)>
+</cffunction>
+
+<cffunction name="$multipartData" returntype="array" access="public" output="false"
+	hint="returns an array of raw multipart form parts. each element in the array contains a struct with a 'key' and 'value' element.">
+	<cfset var loc = {}>
+	<cfset loc.data = []>
+
+	<!---
+	Railo always has the form.getRaw() even if the form is not multipart.
+	Exit if the form post wasn't multipart
+	 --->
+	<cfif ListFirst(request.cgi.content_type, ";") neq "multipart/form-data">
+		<cfreturn loc.data>
+	</cfif>
+
+	<cfif StructKeyExists(server, "railo")>
+		<cfloop array="#form.getRaw()#" index="loc.i">
+			<cfset loc.t = {key = i.getName(), value = i.getValue()}>
+			<cfset arrayappend(loc.data, loc.t)>
+		</cfloop>
+	<cfelse>
+		<cfloop array="#form.getPartsArray()#" index="loc.i">
+			<cfif loc.i.isParam()>
+				<cfset loc.t = {key = i.getName(), value = i.getStringValue()}>
+				<cfset arrayappend(loc.data, loc.t)>
+			</cfif>
+		</cfloop>
+	</cfif>
+	<cfreturn loc.data>
 </cffunction>

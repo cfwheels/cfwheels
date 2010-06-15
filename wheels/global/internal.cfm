@@ -26,7 +26,7 @@
 	<cfargument name="path" type="string" required="false" default="" />
 	<cfscript>
 		var loc = {};
-		for (loc.item in arguments.struct) 
+		for (loc.item in arguments.struct)
 		{
 			if (IsStruct(arguments.struct[loc.item])) // go further down the rabit hole
 			{
@@ -79,7 +79,7 @@
 </cffunction>
 
 <cffunction name="$cgiScope" returntype="struct" access="public" output="false" hint="This copies all the variables Wheels needs from the CGI scope to the request scope.">
-	<cfargument name="keys" type="string" required="false" default="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host">
+	<cfargument name="keys" type="string" required="false" default="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,content_type">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
@@ -142,7 +142,7 @@
 <cffunction name="$findRoute" returntype="struct" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		
+
 		// throw an error if a route with this name has not been set by developer in the config/routes.cfm file
 		if (application.wheels.showErrorInformation && !StructKeyExists(application.wheels.namedRoutePositions, arguments.route))
 			$throw(type="Wheels.RouteNotFound", message="Could not find the `#arguments.route#` route.", extendedInfo="Create a new route in `config/routes.cfm` with the name `#arguments.route#`.");
@@ -195,7 +195,7 @@
 		if (arguments.$URLRewriting == "Off")
 			loc.delim = "&";
 		else
-			loc.delim = "?";		
+			loc.delim = "?";
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.params, "&");
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -435,7 +435,7 @@
 					loc.returnValue = Duplicate(application.wheels.cache[arguments.category][arguments.key].value);
 			}
 		}
-		
+
 		if (application.wheels.showDebugInformation && IsBoolean(loc.returnValue) && !loc.returnValue)
 			request.wheels.cacheCounts.misses = request.wheels.cacheCounts.misses + 1;
 	</cfscript>
@@ -600,7 +600,7 @@ Should now call bar() instead and marking foo() as deprecated
 		// add the wheels default routes at the end if requested
 		if (application.wheels.loadDefaultRoutes)
 			addDefaultRoutes();
-		
+
 		// set lookup info for the named routes
 		$setNamedRoutePositions();
 		</cfscript>
