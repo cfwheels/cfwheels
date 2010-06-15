@@ -40,18 +40,18 @@
 					{
 						loc.jEnd = ArrayLen(loc.returnValue[loc.i][loc.include]);
 						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-							loc.returnValue[loc.i][loc.include][loc.j] = loc.model.$createInstance(properties=loc.returnValue[loc.i][loc.include][loc.j], persisted=true, base=false, callbacks=arguments.callbacks, $runAfterFind=true);
+							loc.returnValue[loc.i][loc.include][loc.j] = loc.model.$createInstance(properties=loc.returnValue[loc.i][loc.include][loc.j], persisted=true, base=false, callbacks=arguments.callbacks);
 					}
 					else
 					{
 						// we have a hasOne or belongsTo assocation, so just add the object to the root object
-						loc.returnValue[loc.i][loc.include] = loc.model.$createInstance(properties=loc.returnValue[loc.i][loc.include], persisted=true, base=false, callbacks=arguments.callbacks, $runAfterFind=true);
+						loc.returnValue[loc.i][loc.include] = loc.model.$createInstance(properties=loc.returnValue[loc.i][loc.include], persisted=true, base=false, callbacks=arguments.callbacks);
 					}
 				}
 			}
 		
 			// create an instance
-			loc.returnValue[loc.i] = $createInstance(properties=loc.returnValue[loc.i], persisted=true, callbacks=arguments.callbacks, $runAfterFind=true);
+			loc.returnValue[loc.i] = $createInstance(properties=loc.returnValue[loc.i], persisted=true, callbacks=arguments.callbacks);
 		}
 	</cfscript>
 	<cfreturn loc.returnValue />

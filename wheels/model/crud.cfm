@@ -399,11 +399,10 @@
 		if (arguments.instantiate) // find and instantiate each object and call its update function
 		{
 			loc.returnValue = 0;
-			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, reload=arguments.reload, parameterize=arguments.parameterize, callbacks=arguments.callbacks, includeSoftDeletes=arguments.includeSoftDeletes);
-			for (loc.i=1; loc.i lte loc.records.recordCount; loc.i++)
+			loc.objects = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, reload=arguments.reload, parameterize=arguments.parameterize, callbacks=arguments.callbacks, includeSoftDeletes=arguments.includeSoftDeletes, returnIncluded=false, returnAs="objects");
+			for (loc.i=1; loc.i lte ArrayLen(loc.objects); loc.i++)
 			{
-				loc.object = $createInstance(properties=loc.records, row=loc.i, persisted=true);
-				if (loc.object.update(properties=arguments.properties, parameterize=arguments.parameterize, transaction=arguments.transaction, callbacks=arguments.callbacks))
+				if (loc.objects[loc.i].update(properties=arguments.properties, parameterize=arguments.parameterize, transaction=arguments.transaction, callbacks=arguments.callbacks))
 					loc.returnValue = loc.returnValue + 1;
 			}
 		}
@@ -522,12 +521,11 @@
 		
 		if (arguments.instantiate)
 		{
-			loc.records = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, reload=arguments.reload, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
 			loc.returnValue = 0;
-			for (loc.i=1; loc.i lte loc.records.recordCount; loc.i++)
+			loc.objects = findAll(select=propertyNames(), where=arguments.where, include=arguments.include, reload=arguments.reload, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes, returnIncluded=false, returnAs="objects");
+			for (loc.i=1; loc.i lte ArrayLen(loc.objects); loc.i++)
 			{
-				loc.object = $createInstance(properties=loc.records, row=loc.i, persisted=true);
-				if (loc.object.delete(parameterize=arguments.parameterize, transaction=arguments.transaction, callbacks=arguments.callbacks, softDelete=arguments.softDelete))
+				if (loc.objects[loc.i].delete(parameterize=arguments.parameterize, transaction=arguments.transaction, callbacks=arguments.callbacks, softDelete=arguments.softDelete))
 					loc.returnValue++;
 			}
 		}
@@ -850,20 +848,19 @@
 <!--- other --->
 
 <cffunction name="$createInstance" returntype="any" access="public" output="false">
-	<cfargument name="properties" type="any" required="true">
+	<cfargument name="properties" type="struct" required="true">
 	<cfargument name="persisted" type="boolean" required="true">
 	<cfargument name="row" type="numeric" required="false" default="1">
 	<cfargument name="base" type="boolean" required="false" default="true">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfargument name="$runAfterFind" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		loc.fileName = capitalize(variables.wheels.class.modelName);
 		if (!ListFindNoCase(application.wheels.existingModelFiles, variables.wheels.class.modelName))
 			loc.fileName = "Model";
-		loc.returnValue = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.modelName, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row, base=arguments.base, useFilterLists=(not (IsQuery(arguments.properties) || arguments.$runAfterFind)));
-		// if this method is called with a struct we're creating a new object and then we call the afterNew callback. If called with a query we call the afterFind callback instead. If the called method does not return false we proceed and run the afterInitialize callback.
-		if (((IsQuery(arguments.properties) || arguments.$runAfterFind) && loc.returnValue.$callback("afterFind", arguments.callbacks)) || (IsStruct(arguments.properties) && loc.returnValue.$callback("afterNew", arguments.callbacks)))
+		loc.returnValue = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.modelName, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row, base=arguments.base, useFilterLists=(!arguments.persisted));
+		// if the object should be persisted, call afterFind else call afterNew
+		if ((arguments.persisted && loc.returnValue.$callback("afterFind", arguments.callbacks)) || (!arguments.persisted && loc.returnValue.$callback("afterNew", arguments.callbacks)))
 			loc.returnValue.$callback("afterInitialization", arguments.callbacks);
 	</cfscript>
 	<cfreturn loc.returnValue>
