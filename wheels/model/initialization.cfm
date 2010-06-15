@@ -33,7 +33,7 @@
 			init();
 
 		// load the database adapter
-		variables.wheels.class.adapter = createobject("component", "wheelsMapping.Connection").init(datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword);
+		variables.wheels.class.adapter = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#", fileName="Connection", method="init", datasource="#application.wheels.dataSourceName#", username="#application.wheels.dataSourceUserName#", password="#application.wheels.dataSourcePassword#");
 
 		// set the table name unless set manually by the developer
 		if (!StructKeyExists(variables.wheels.class, "tableName"))
