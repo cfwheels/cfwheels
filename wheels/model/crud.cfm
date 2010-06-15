@@ -1402,13 +1402,13 @@
 		loc.pos = 1;
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			// look for the next delimiter in the string and set it
-			loc.delimPos = FindOneOf("(),", loc.include, loc.pos);
-			loc.delimChar = Mid(loc.include, loc.delimPos, 1);
+			// look for the next delimiter sequence in the string and set it (can be single delims or a chain, e.g ',' or ')),'
+			loc.delimFind = ReFind("[(\(|\)|,)]+", loc.include, loc.pos, true);
+			loc.delimSequence = Mid(loc.include, loc.delimFind.pos[1], loc.delimFind.len[1]);
 
 			// set current association name and set new position to start search in the next loop
-			loc.name = Mid(loc.include, loc.pos, loc.delimPos-loc.pos);
-			loc.pos = REFindNoCase("[a-z]", loc.include, loc.delimPos);
+			loc.name = Mid(loc.include, loc.pos, loc.delimFind.pos[1]-loc.pos);
+			loc.pos = REFindNoCase("[a-z]", loc.include, loc.delimFind.pos[1]);
 
 			// create a reference to current class in include string and get its association info
 			loc.class = model(ListLast(loc.levels));
@@ -1464,11 +1464,15 @@
 				loc.classAssociations[loc.name].join = loc.join & Replace(loc.toAppend, ",", " AND ", "all");
 			}
 
-			// go up or down one level in the association tree
-			if (loc.delimChar == "(")
-				loc.levels = ListAppend(loc.levels, loc.classAssociations[loc.name].class);
-			else if (loc.delimChar == ")")
-				loc.levels = ListDeleteAt(loc.levels, ListLen(loc.levels));
+			// loop over each character in the delimiter sequence and move up/down the levels as appropriate
+			for (loc.x=1; loc.x lte Len(loc.delimSequence); loc.x++)
+			{
+				loc.delimChar = Mid(loc.delimSequence, loc.x, 1);
+				if (loc.delimChar == "(")
+					loc.levels = ListAppend(loc.levels, loc.classAssociations[loc.name].class);
+				else if (loc.delimChar == ")")
+					loc.levels = ListDeleteAt(loc.levels, ListLen(loc.levels));
+			}			
 
 			// add info to the array that we will return
 			ArrayAppend(loc.returnValue, loc.classAssociations[loc.name]);
