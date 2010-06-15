@@ -413,7 +413,7 @@
 	<cfelse>
 		<cfloop array="#form.getPartsArray()#" index="loc.i">
 			<cfif loc.i.isParam()>
-				<cfset loc.t = {key = i.getName(), value = i.getStringValue()}>
+				<cfset loc.t = {key = loc.i.getName(), value = loc.i.getStringValue()}>
 				<cfset arrayappend(loc.data, loc.t)>
 			</cfif>
 		</cfloop>
