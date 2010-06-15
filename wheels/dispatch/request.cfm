@@ -407,7 +407,7 @@
 
 	<cfif StructKeyExists(server, "railo")>
 		<cfloop array="#form.getRaw()#" index="loc.i">
-			<cfset loc.t = {key = i.getName(), value = i.getValue()}>
+			<cfset loc.t = {key = loc.i.getName(), value = loc.i.getValue()}>
 			<cfset arrayappend(loc.data, loc.t)>
 		</cfloop>
 	<cfelse>
