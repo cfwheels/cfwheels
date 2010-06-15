@@ -21,6 +21,7 @@ Bug Fixes
 * Updated hasChanged() for a race condition that wasn't met - [James Gibson]
 * Fixed pagination error in Oracle when using the "include" argument - #449 [Per Djurner]
 * Fixed incorrect layout rendering for renderPartial() and includePartial() - #488 [Jordan Sitkin, Per Djurner]
+* Fix for complex "include" strings - #453 [Jordan Sitkin, Andy Bellenie]
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
