@@ -78,6 +78,7 @@
 		hint="retrieves all the column information from a table">
 		<cfargument name="tableName" type="string" required="true" hint="the table to retrieve column information for">
 		<cfscript>
+		var loc = {};
 		loc.args = duplicate(variables.instance.connection);
 		loc.args.table = arguments.tableName;
 		loc.args.type = "columns";
