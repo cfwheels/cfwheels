@@ -388,13 +388,14 @@
 	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="instantiate" type="boolean" required="false" hint="Whether or not to instantiate the object(s) first. When objects are not instantiated any callbacks and validations set on them will be skipped.">
+	<cfargument name="validate" type="boolean" required="false" default="true" hint="Set to `false` to disable validations for this save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="updateAll", input=arguments);
-		arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,reload,parameterize,instantiate,transaction,callbacks,includeSoftDeletes", setOnModel=false);
+		arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,reload,parameterize,instantiate,validate,transaction,callbacks,includeSoftDeletes", setOnModel=false);
 		
 		if (arguments.instantiate) // find and instantiate each object and call its update function
 		{
@@ -448,6 +449,7 @@
 	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
+	<cfargument name="validate" type="boolean" required="false" default="true" hint="Set to `false` to disable validations for this save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
@@ -476,6 +478,7 @@
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
+	<cfargument name="validate" type="boolean" required="false" default="true" hint="Set to `false` to disable validations for this save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
@@ -492,6 +495,48 @@
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
+
+<cffunction name="updateProperty" returntype="boolean" access="public" output="false" hint="Updates a single attribute and saves the record without going through the normal vlidation procedure. This is especially useful for boolean flags on existing records."
+	examples=
+	'
+		<!--- Sets the `new` property to `1` through updateProperty() --->
+		<cfset product = model("product").findByKey(56)>
+		<cfset product.updateProperty("new", 1)>
+	'
+	categories="model-class,update" chapters="updating-records,associations" functions="hasOne,update,updateAll,updateByKey,updateProperties">
+	<cfargument name="property" type="string" required="true" />
+	<cfargument name="value" type="any" required="true" />
+	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfscript>
+		$insertDefaults(name="updateProperty", input=arguments);
+		arguments.validate = false;
+		this[arguments.property] = arguments.value;
+	</cfscript>
+	<cfreturn save(parameterize=arguments.parameterize, reload=false, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks) />
+</cffunction>
+
+<cffunction name="updateProperties" returntype="boolean" access="public" output="false" hint="Updates all the properties from the properties argument or other named arguments. If the object is invalid, the save will fail and false will be returned."
+	examples=
+	'
+		<!--- Sets the `new` property to `1` through updateProperties() --->
+		<cfset product = model("product").findByKey(56)>
+		<cfset product.updateProperties(new=1)>
+	'
+	categories="model-class,update" chapters="updating-records,associations" functions="hasOne,update,updateAll,updateByKey,updateProperties">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" />
+	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
+	<cfargument name="validate" type="boolean" required="false" default="true" hint="Set to `false` to disable validations for this save.">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfscript>
+		$insertDefaults(name="updateProperties", input=arguments);
+		$setProperties(argumentCollection=arguments, filterList="properties,parameterize,validate,transaction,callbacks");
+	</cfscript>
+	<cfreturn save(parameterize=arguments.parameterize, reload=false, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks) />
+</cffunction>
+
 
 <!--- delete --->
 
@@ -816,7 +861,7 @@
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfset $insertDefaults(name="update", input=arguments)>
-	<cfset $setProperties(argumentCollection=arguments, filterList="properties,parameterize,reload,transaction,callbacks")>
+	<cfset $setProperties(argumentCollection=arguments, filterList="properties,parameterize,reload,validate,transaction,callbacks")>
 	<cfreturn save(parameterize=arguments.parameterize, reload=arguments.reload, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks)>
 </cffunction>
 

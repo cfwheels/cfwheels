@@ -128,6 +128,66 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="propertyIsPresent" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified property has been set by the user or by a database load."
+	examples=
+	'
+		<!--- Get an object, set a value and then see if the property exists --->
+		<cfset anEmployee = model("employee").new()>
+		<cfset anEmployee.firstName = "dude">
+		<cfset anEmployee.propertyIsPresent("firstName")><!--- returns true --->
+	'
+	categories="model-object,miscellaneous" chapters="" functions="">
+	<cfargument name="property" type="string" required="true" />
+	<cfscript>
+		var isPresent = false;
+		if (StructKeyExists(this, arguments.property))
+			isPresent = true;
+	</cfscript>
+	<cfreturn isPresent />
+</cffunction>
+
+<cffunction name="columnForProperty" returntype="any" access="public" output="false" hint="Returns the column object for the named attribute."
+	examples=
+	'
+		<!--- Get an object, set a value and then see if the property exists --->
+		<cfset anEmployee = model("employee").new()>
+		<cfset anEmployee.columnForProperty("firstName")><!--- returns column name, in this case "firstname" --->
+	'
+	categories="model-object,miscellaneous" chapters="" functions="">
+	<cfargument name="property" type="string" required="true" />
+	<cfscript>
+		var columnName = false;
+		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
+			columnName = variables.wheels.class.properties[arguments.property].column;
+	</cfscript>
+	<cfreturn columnName />
+</cffunction>
+
+<cffunction name="toggle" returntype="any" access="public" output="false" hint="Assigns to the property specified the opposite of the properties current boolean value. Throws an error if the property cannot be converted to a boolean value. Returns this object if save is false."
+	examples=
+	'
+		<!--- Get an object, and toggle a boolean property --->
+		<cfset user = model("user").findByKey(58)>
+		<cfset user.toggle("isActive")><!--- returns whether the object was saved properly --->
+		<!--- you can also use a dynamic helper for this --->
+		<cfset user.toggleIsActive()>
+	'
+	categories="model-object,miscellaneous" chapters="" functions="">
+	<cfargument name="property" type="string" required="true" />
+	<cfargument name="save" type="boolean" required="false" hint="Argument to decide whether save the property after it has been toggled. Defaults to true." />
+	<cfscript>
+		$insertDefaults(name="toggle", input=arguments);
+		if (!StructKeyExists(this, arguments.property))
+			$throw(type="Wheels.PropertyDoesNotExist", message="Property Does Not Exist", extendedInfo="You may only toggle a property that exists on this model.");
+		if (!IsBoolean(this[arguments.property]))
+			$throw(type="Wheels.PropertyIsIncorrectType", message="Incorrect Arguments", extendedInfo="You may only toggle a property that evaluates to the boolean value.");
+		this[arguments.property] = !this[arguments.property];	
+		if (arguments.save)
+			return updateProperty(property=arguments.property, value=this[arguments.property]);
+	</cfscript>	
+	<cfreturn this />
+</cffunction>
+
 <cffunction name="properties" returntype="struct" access="public" output="false" hint="Returns a structure of all the properties with their names as keys and the values of the property as values."
 	examples=
 	'

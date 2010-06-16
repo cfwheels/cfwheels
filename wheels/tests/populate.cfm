@@ -18,6 +18,7 @@
 	,birthday='11/01/1975'
 	,birthdaymonth=11
 	,birthdayyear=1975
+	,isactive=true
 )>
 
 <cfset loc.user = model("user").create(
@@ -34,6 +35,7 @@
 	,birthday='10/05/1972'
 	,birthdaymonth=10
 	,birthdayyear=1972
+	,isactive=true
 )>
 
 <cfset loc.user = model("user").create(
@@ -50,6 +52,7 @@
 	,birthday='09/12/1973'
 	,birthdaymonth=9
 	,birthdayyear=1973
+	,isactive=true
 )>
 
 <cfset loc.user = model("user").create(
@@ -66,6 +69,7 @@
 	,birthday='06/14/1981'
 	,birthdaymonth=6
 	,birthdayyear=1981
+	,isactive=true
 )>
 
 <cfset loc.user = model("user").create(
@@ -82,6 +86,7 @@
 	,birthday='11/12/1973'
 	,birthdaymonth=11
 	,birthdayyear=1973
+	,isactive=true
 )>
 
 <cfset loc.per = model("author").create(firstName="Per", lastName="Djurner")>

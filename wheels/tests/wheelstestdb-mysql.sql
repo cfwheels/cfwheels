@@ -28,6 +28,7 @@ CREATE TABLE `wheelstestdb`.`Users` (
   `BirthDayMonth` INT(10) NULL,
   `BirthDayYear` INT(10) NULL,
   `BirthTime` DATETIME NULL DEFAULT '2000-01-01 18:26:08.690',
+  `IsActive` BIT NULL,
   PRIMARY KEY (`Id`)
 )
 ENGINE = INNODB;

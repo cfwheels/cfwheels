@@ -163,11 +163,14 @@
 	application.wheels.functions.timeSelect = {label=true, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1};
 	application.wheels.functions.timeSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1};
 	application.wheels.functions.timeUntilInWords = {includeSeconds=false};
+	application.wheels.functions.toggle = {save=true};
 	application.wheels.functions.truncate = {length=30, truncateString="..."};
 	application.wheels.functions.update = {parameterize=true, reload=false};
 	application.wheels.functions.updateAll = {reload=false, parameterize=true, instantiate=false};
 	application.wheels.functions.updateByKey = {reload=false};
 	application.wheels.functions.updateOne = {reload=false};
+	application.wheels.functions.updateProperty = {parameterize=true};
+	application.wheels.functions.updateProperties = {parameterize=true};
 	application.wheels.functions.URLFor = {onlyPath=true, host="", protocol="", port=0};
 	application.wheels.functions.validatesConfirmationOf = {message="[property] should match confirmation"};
 	application.wheels.functions.validatesExclusionOf = {message="[property] is reserved", allowBlank=false};
