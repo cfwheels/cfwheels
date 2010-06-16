@@ -25,7 +25,7 @@
 			case "smallint": case "int2": {loc.returnValue = "cf_sql_smallint"; break;}
 			case "text": {loc.returnValue = "cf_sql_longvarchar"; break;}
 			case "time": case "timetz": {loc.returnValue = "cf_sql_time"; break;}
-			case "varchar": case "varying": case "bpchar": {loc.returnValue = "cf_sql_varchar"; break;}
+			case "varchar": case "varying": case "bpchar": case "uuid": {loc.returnValue = "cf_sql_varchar"; break;}
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
