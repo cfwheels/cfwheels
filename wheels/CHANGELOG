@@ -15,7 +15,7 @@ Changes
 	
 	* Prepend included model properties with their class name in queries - #442 [Andy Bellenie]
 	
-	* support for automatic validations - [James Gibson, Andy Bellenie, Tony Petruzzi]
+	* Support for automatic validations - [James Gibson, Andy Bellenie, Tony Petruzzi]
 	
 		- configured by calling set(automaticValidations=true) in your environment's settings.cfm
 	
@@ -34,25 +34,25 @@ Changes
 		automatic validations can also be turned off on a per model basis by using the
 		automaticValidations(false) in the model's init() method.
 		
-	* updated findAll() to allow for more than one association as long as they are direct. - [James Gibson]
+	* Updated findAll() to allow for more than one association as long as they are direct. - [James Gibson]
 	
 		This means that you can do an include like include="objects,someotherobject" but not
 		include="object(someotherobject)"
 		
-	* update to wheels to add GROUP BY functionality - [James Gibson]
+	* Update to wheels to add GROUP BY functionality - [James Gibson]
 	
-	* added accessibleproperties() and protectedproperties() to protect model variables from masss assignment - [James Gibson]
+	* Added accessibleproperties() and protectedproperties() to protect model variables from masss assignment - [James Gibson]
 	
-	* update to $create() to timestamp the updatedAt column if it exists - [James Gibson]
+	* Update to $create() to timestamp the updatedAt column if it exists - [James Gibson]
 
-	* allow views to be used as models - #390 [Tony Petruzzi]
+	* Allow views to be used as models - #390 [Tony Petruzzi]
 	
 		to do this, you must use setPrimaryKey() in your model's init method to tell
 		Wheels what column(s) in the view it should use for the primary key(s)
 		
 		<cfset setPrimaryKey("column1,column2")>
 		
-	* allow for nested attributes - [James Gibson]
+	* Allow for nested attributes - [James Gibson]
 	
 	* Adds transaction handling support - [Andy Bellenie]
 
@@ -68,7 +68,7 @@ Changes
 	
 	* Added directory and deleteFile arguments to sendFile() - #323 [Tony Petruzzi]
 	
-	* support for onMissingMethod() method - [James Gibson]
+	* Support for onMissingMethod() method - [James Gibson]
 	
 	* Ability to pass in arguments to filters. - [Per Djurner]
 	
@@ -90,7 +90,7 @@ Changes
 	
 	* Added "head" argument to styleSheetLinkTag and javaScriptIncludeTag - [Per Djurner]
 	
-	* support for assetQueryString - [James Gibson]
+	* Support for assetQueryString - [James Gibson]
 	
 		- configured by calling set(assetQueryString=true) in your environments settings.cfm
 	    - defaults to false for design & development
@@ -109,35 +109,37 @@ Changes
 	
 	* Updates checkBoxTag() and checkBox() to allow for unchecked value - [James Gibson]
 	
-	* addition of new form helpers to easily add checkboxes and radio buttons to hasMany relationships on a model. - [James Gibson]
+	* Addition of new form helpers to easily add checkboxes and radio buttons to hasMany relationships on a model. - [James Gibson]
 
 		hasManyRadioButton(): used to output radio buttons for a relationship on a model
 		hasManyCheckBox(): used to output a checkbox for a relationship on a model
+		
+	* Added buttonTag() form helper - [Tony Petruzzi]
 
 [Application]
 
-	* method: addDefaultRoutes() - [Per Djurner]
+	* Method: addDefaultRoutes() - [Per Djurner]
 		
 		Adds the default Wheels routes to your application. Only use this method if you have set `loadDefaultRoutes` to `false`
 		and want to control exactly where in the route order you want to place the default routes.
 		
-	* setting: automaticValidations
+	* Setting: automaticValidations
 	
 		Used to globally turn on/off automatic validations in model
 		
-	* allow plugins in maintenance mode - [James Gibson]
+	* Allow plugins in maintenance mode - [James Gibson]
 	
-	* setting: defaults for truncate and wordTruncate - [James Gibson]
+	* Setting: defaults for truncate and wordTruncate - [James Gibson]
 	
-	* setting: setUpdatedAtOnCreate - [James Gibson]
+	* Setting: setUpdatedAtOnCreate - [James Gibson]
 	
 		tells wheels if it should update the updatedAt property on create
 		
-	* setting: errorEmailSubject - #392 [Per Djurner]
+	* Setting: errorEmailSubject - #392 [Per Djurner]
 	
 		allow customizing error email subject
 		
-	* setting: deletePluginDirectories - #385 [Per Djurner]
+	* Setting: deletePluginDirectories - #385 [Per Djurner]
 	
 		tell wheels whether to delete plugin directories if no corresponding plugin zip file exists
 		
@@ -147,7 +149,7 @@ Changes
 		
 [Core]
 
-	* added toXHTML() - [Tony Petruzzi]
+	* Added toXHTML() - [Tony Petruzzi]
 	
 		returns an XHTML compliant string
 	
