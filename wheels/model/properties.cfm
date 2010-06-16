@@ -128,7 +128,38 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="propertyIsPresent" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified property has been set by the user or by a database load."
+<cffunction name="columns" returntype="array" access="public" output="false" hint="Returns an array of columns names for the table associated with this class."
+	examples=
+	'
+		<!--- Get the columns names in the order they are in the database --->
+		<cfset anEmployee = model("employee").columns()>
+	'
+	categories="model-object,miscellaneous" chapters="" functions="">
+	<cfreturn ListToArray(variables.wheels.class.columnList) />
+</cffunction>
+
+<cffunction name="hasProperty" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified property exists on the model."
+	examples=
+	'
+		<!--- Get an object, set a value and then see if the property exists --->
+		<cfset anEmployee = model("employee").new()>
+		<cfset anEmployee.firstName = "dude">
+		<cfset anEmployee.hasProperty("firstName")><!--- returns true --->
+		
+		<!--- this is also a dynamic method so you could do --->
+		<cfset anEmployee.hasFirstName()>
+	'
+	categories="model-object,miscellaneous" chapters="" functions="">
+	<cfargument name="property" type="string" required="true" />
+	<cfscript>
+		var hasProperty = false;
+		if (StructKeyExists(this, arguments.property))
+			hasProperty = true;
+	</cfscript>
+	<cfreturn hasProperty />
+</cffunction>
+
+<cffunction name="propertyIsPresent" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified property exists on the model and is not a blank string."
 	examples=
 	'
 		<!--- Get an object, set a value and then see if the property exists --->
@@ -140,7 +171,7 @@
 	<cfargument name="property" type="string" required="true" />
 	<cfscript>
 		var isPresent = false;
-		if (StructKeyExists(this, arguments.property))
+		if (StructKeyExists(this, arguments.property) && Len(this[arguments.property]))
 			isPresent = true;
 	</cfscript>
 	<cfreturn isPresent />

@@ -13,6 +13,8 @@
 			loc.returnValue = columnForProperty(property=ReplaceNoCase(arguments.missingMethodName, "columnFor", ""));
 		else if (Left(arguments.missingMethodName, 6) == "toggle" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "toggle", "")))
 			loc.returnValue = toggle(property=ReplaceNoCase(arguments.missingMethodName, "toggle", ""), argumentCollection=arguments.missingMethodArguments);
+		else if (Left(arguments.missingMethodName, 3) == "has" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "has", "")))
+			loc.returnValue = hasProperty(property=ReplaceNoCase(arguments.missingMethodName, "has", ""));
 		else if (Left(arguments.missingMethodName, 6) == "update" && StructKeyExists(variables.wheels.class.properties, ReplaceNoCase(arguments.missingMethodName, "update", "")))
 		{
 			if (!StructKeyExists(arguments.missingMethodArguments, "value"))
