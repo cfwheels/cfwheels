@@ -19,6 +19,9 @@
 		variables.wheels.class.connection = {datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword};
 		variables.wheels.class.automaticValidations = application.wheels.automaticValidations;
 
+		setTableNamePrefix(get("tableNamePrefix"));
+		table(LCase(pluralize(variables.wheels.class.modelName)));
+
 		loc.callbacks = "afterNew,afterFind,afterInitialization,beforeDelete,afterDelete,beforeSave,afterSave,beforeCreate,afterCreate,beforeUpdate,afterUpdate,beforeValidation,afterValidation,beforeValidationOnCreate,afterValidationOnCreate,beforeValidationOnUpdate,afterValidationOnUpdate";
 		loc.iEnd = ListLen(loc.callbacks);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -35,16 +38,8 @@
 		// load the database adapter
 		variables.wheels.class.adapter = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#", fileName="Connection", method="init", datasource="#application.wheels.dataSourceName#", username="#application.wheels.dataSourceUserName#", password="#application.wheels.dataSourcePassword#");
 
-		// set the table name unless set manually by the developer
-		if (!StructKeyExists(variables.wheels.class, "tableName"))
-		{
-			variables.wheels.class.tableName = LCase(pluralize(variables.wheels.class.modelName));
-			if (Len(application.wheels.tableNamePrefix))
-				variables.wheels.class.tableName = application.wheels.tableNamePrefix & "_" & variables.wheels.class.tableName;
-		}
-
 		// get columns for the table
-		loc.columns = variables.wheels.class.adapter.$getColumns(variables.wheels.class.tableName);
+		loc.columns = variables.wheels.class.adapter.$getColumns(tableName());
 
 		variables.wheels.class.propertyList = "";
 		variables.wheels.class.columnList = "";

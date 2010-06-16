@@ -174,7 +174,7 @@
 		{
 			loc.iItem = Trim(ListGetAt(arguments.property, loc.i));
 			if (ListFindNoCase(variables.wheels.class.propertyList, loc.iItem))
-				loc.properties = ListAppend(loc.properties, variables.wheels.class.tableName & "." & variables.wheels.class.properties[loc.iItem].column);
+				loc.properties = ListAppend(loc.properties, tableName() & "." & variables.wheels.class.properties[loc.iItem].column);
 			else if (ListFindNoCase(variables.wheels.class.calculatedPropertyList, loc.iItem))
 				loc.properties = ListAppend(loc.properties, variables.wheels.class.calculatedProperties[loc.iItem].sql);
 		}

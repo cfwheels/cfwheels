@@ -18,7 +18,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="table" returntype="void" access="public" output="false" hint="Use this method to tell Wheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard Wheels convention of a singular object name mapping to a plural table name."
+<<cffunction name="table" returntype="void" access="public" output="false" hint="Use this method to tell Wheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard Wheels convention of a singular object name mapping to a plural table name."
 	examples=
 	'
 		<!--- In models/User.cfc --->
@@ -29,9 +29,7 @@
 	'
 	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,tableName">
 	<cfargument name="name" type="string" required="true" hint="Name of the table to map this model to.">
-	<cfscript>
-		variables.wheels.class.tableName = arguments.name;
-	</cfscript>
+	<cfset variables.wheels.class.tableName = arguments.name>
 </cffunction>
 
 <!--- PUBLIC MODEL CLASS METHODS --->
@@ -67,7 +65,17 @@
 		<cfset whatAmIMappedTo = model("user").tableName()>
 	'
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,table">
-	<cfreturn variables.wheels.class.tableName>
+	<cfreturn getTableNamePrefix() & variables.wheels.class.tableName>
+</cffunction>
+
+<!--- tableNamePrefix --->
+<cffunction name="setTableNamePrefix" returntype="void" access="public" output="false" hint="sets the tablename prefix for the table">
+	<cfargument name="prefix" type="string" required="true" hint="the prefix to prepend to the table name">
+	<cfset variables.wheels.class.tableNamePrefix =  arguments.prefix>
+</cffunction>
+
+<cffunction name="getTableNamePrefix" returntype="string" access="public" output="false" hint="returnss the tablename prefix for the table">
+	<cfreturn variables.wheels.class.tableNamePrefix>
 </cffunction>
 
 <cffunction name="setPrimaryKey" returntype="void" access="public" output="false" hint="allows you to pass in the names of the property that should be used as the primary key(s)">

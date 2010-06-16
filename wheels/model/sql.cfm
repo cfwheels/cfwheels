@@ -5,13 +5,13 @@
 		var loc = {};
 		if (variables.wheels.class.softDeletion && arguments.softDelete)
 		{
-			ArrayAppend(arguments.sql, "UPDATE #variables.wheels.class.tableName# SET #variables.wheels.class.softDeleteColumn# = ");
+			ArrayAppend(arguments.sql, "UPDATE #tableName()# SET #variables.wheels.class.softDeleteColumn# = ");
 			loc.param = {value=Now(), type="cf_sql_timestamp"};
 			ArrayAppend(arguments.sql, loc.param);
 		}
 		else
 		{
-			ArrayAppend(arguments.sql, "DELETE FROM #variables.wheels.class.tableName#");
+			ArrayAppend(arguments.sql, "DELETE FROM #tableName()#");
 		}
 	</cfscript>
 	<cfreturn arguments.sql>

@@ -179,7 +179,7 @@
 						{
 							loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
 							loc.list = Evaluate("QuotedValueList(loc.values.#loc.property#)");
-							loc.paginationWhere = ListAppend(loc.paginationWhere, "#variables.wheels.class.tableName#.#variables.wheels.class.properties[loc.property].column# IN (#loc.list#)", Chr(7));
+							loc.paginationWhere = ListAppend(loc.paginationWhere, "#tableName()#.#variables.wheels.class.properties[loc.property].column# IN (#loc.list#)", Chr(7));
 						}
 						loc.paginationWhere = Replace(loc.paginationWhere, Chr(7), " AND ", "all");
 						if (Len(arguments.where) && Len(arguments.include)) // this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
@@ -410,7 +410,7 @@
 		else
 		{
 			arguments.sql = [];
-			ArrayAppend(arguments.sql, "UPDATE #variables.wheels.class.tableName# SET");
+			ArrayAppend(arguments.sql, "UPDATE #tableName()# SET");
 			loc.pos = 0;
 			for (loc.key in arguments.properties)
 			{
@@ -926,7 +926,7 @@
 			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 		loc.sql = [];
 		loc.sql2 = [];
-		ArrayAppend(loc.sql, "INSERT INTO #variables.wheels.class.tableName# (");
+		ArrayAppend(loc.sql, "INSERT INTO #tableName()# (");
 		ArrayAppend(loc.sql2, " VALUES (");
 		for (loc.key in variables.wheels.class.properties)
 		{
@@ -964,7 +964,7 @@
 		if (variables.wheels.class.timeStampingOnUpdate)
 			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 		loc.sql = [];
-		ArrayAppend(loc.sql, "UPDATE #variables.wheels.class.tableName# SET ");
+		ArrayAppend(loc.sql, "UPDATE #tableName()# SET ");
 		for (loc.key in variables.wheels.class.properties)
 		{
 			// include all changed non-key values in the update
