@@ -31,10 +31,6 @@
 				$throw(type="Wheels.AssociationNotFound", message="The assocation `#loc.association#` was not found on the #variables.wheels.class.modelName# model.", extendedInfo="Make sure your have call `hasMany()`, `hasOne()`, or `belongsTo()` before calling the `nestedProperties()` method.");
 			}
 		}
-		
-		beforeValidationOnCreate(method="$validateAssociations");
-		afterCreate(method="$saveAssociations");
-		beforeUpdate(method="$saveAssociations");
 	</cfscript>
 </cffunction>
 
@@ -44,18 +40,22 @@
 </cffunction>
 
 <cffunction name="$saveAssociations" returntype="boolean" access="public" output="false">
-	<cfreturn $traverseAssociations(method="save") />
+	<cfargument name="parameterize" type="any" required="true" />
+	<cfargument name="reload" type="boolean" required="true" />
+	<cfargument name="validate" type="boolean" required="true" />
+	<cfargument name="callbacks" type="boolean" required="true" />
+	<cfreturn $traverseAssociations(method="save", argumentCollection=arguments) />
 </cffunction>
 
 <cffunction name="$traverseAssociations" returntype="boolean" access="public" output="false">
 	<cfargument name="method" type="string" required="true" />
-	<cfargument name="associations" type="struct" required="false" default="#variables.wheels.class.associations#" />
 	<cfscript>
 		var loc = {};
 		loc.returnValue = true;
-		for (loc.association in arguments.associations)
+		loc.associations = variables.wheels.class.associations;
+		for (loc.association in loc.associations)
 		{
-			if (arguments.associations[loc.association].nested.allow && arguments.associations[loc.association].nested.autoSave && StructKeyExists(this, loc.association))
+			if (loc.associations[loc.association].nested.allow && loc.associations[loc.association].nested.autoSave && StructKeyExists(this, loc.association))
 			{
 				loc.array = this[loc.association];
 				
@@ -75,9 +75,9 @@
 					for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 					{
 						if (arguments.method == "save")
-							if (ListFindNoCase("hasMany,hasOne", arguments.associations[loc.association].type))
+							if (ListFindNoCase("hasMany,hasOne", loc.associations[loc.association].type))
 								$setForeignKeyValues(missingMethodArguments=loc.array[loc.i], keys=loc.info.foreignKey);
-						loc.saveResult = $invoke(componentReference=loc.array[loc.i], method=arguments.method);
+						loc.saveResult = $invoke(componentReference=loc.array[loc.i], argumentCollection=arguments);
 						if (loc.returnValue) // don't change the return value if we have already received a false
 							loc.returnValue = loc.saveResult;
 					}
