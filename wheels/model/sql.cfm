@@ -144,16 +144,17 @@
 	<cfargument name="include" type="string" required="true">
 	<cfargument name="group" type="string" required="true">
 	<cfargument name="distinct" type="boolean" required="true">
+	<cfargument name="returnAs" type="string" required="true">
 	<cfscript>
 		var loc = { group = "" };
 		// if we want a distinct statement, we can do it grouping every field in the select
 		if (arguments.distinct)
 		{
-			loc.group = $createSQLFieldList(list=arguments.select, include=arguments.include, renameFields=false, addCalculatedProperties=false);
+			loc.group = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
 		}
 		else if (Len(arguments.group))
 		{
-			loc.group = $createSQLFieldList(list=arguments.group, include=arguments.include, renameFields=false, addCalculatedProperties=false);
+			loc.group = $createSQLFieldList(list=arguments.group, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
 		}
 		if (Len(loc.group))
 		{
@@ -168,9 +169,10 @@
 	<cfargument name="sql" type="array" required="true">
 	<cfargument name="select" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
+	<cfargument name="returnAs" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.select = $createSQLFieldList(list=arguments.select, include=arguments.include);
+		loc.select = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs);
 		loc.select = "SELECT " & loc.select;
 		ArrayAppend(arguments.sql, loc.select);
 	</cfscript>
@@ -180,6 +182,7 @@
 <cffunction name="$createSQLFieldList" returntype="string" access="public" output="false">
 	<cfargument name="list" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
+	<cfargument name="returnAs" type="string" required="true">
 	<cfargument name="renameFields" type="boolean" required="false" default="true">
 	<cfargument name="addCalculatedProperties" type="boolean" required="false" default="true">
 	<cfargument name="useExpandedColumnAliases" type="boolean" required="false" default="#application.wheels.useExpandedColumnAliases#">
@@ -239,7 +242,29 @@
 					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem))
 					{
 						// if expanded column aliases is enabled then mark all columns from included classes as duplicates in order to prepend them with their class name
-						if ((arguments.useExpandedColumnAliases && loc.j gt 1 or loc.duplicateCount) && arguments.renameFields)
+						loc.flagAsDuplicate = false;
+						if (arguments.renameFields)
+						{
+							if (loc.duplicateCount)
+							{
+								// always flag as a duplicate when a property with this name has already been added
+								loc.flagAsDuplicate  = true;
+							}
+							else if (loc.j > 1)
+							{
+								if (arguments.useExpandedColumnAliases)
+								{
+									// when on included models and using the new setting we flag every property as a duplicate so that the model name always gets prepended
+									loc.flagAsDuplicate  = true;
+								}
+								else if (!arguments.useExpandedColumnAliases && arguments.returnAs != "query")
+								{
+									// with the old setting we only do it when we're returning object(s) since when creating instances on none base models we need the model name prepended
+									loc.flagAsDuplicate  = true;
+								}
+							}
+						}						
+						if (loc.flagAsDuplicate )
 							loc.toAppend = loc.toAppend & "[[duplicate]]" & loc.j;
 						if (ListFindNoCase(loc.classData.propertyList, loc.iItem))
 						{
