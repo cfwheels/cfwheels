@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="setup">
-		<cfset model("tag").$registerCallback(type="beforeCreate", methods="callbackThatSetsProperty,callbackThatReturnsFalse")>
+		<cfset model("tag").$registerCallback(type="beforeCreate", methods="callbackThatSetsProperty, callbackThatReturnsFalse")>
 	</cffunction>
 	
 	<cffunction name="teardown">
