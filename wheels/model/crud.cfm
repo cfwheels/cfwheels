@@ -245,7 +245,7 @@
 			if (!IsArray(loc.sql))
 			{
 				loc.sql = [];
-				loc.sql = $addSelectClause(sql=loc.sql, select=arguments.select, include=arguments.include, distinct=arguments.distinct);
+				loc.sql = $addSelectClause(sql=loc.sql, select=arguments.select, include=arguments.include, distinct=arguments.distinct, returnAs=arguments.returnAs);
 				loc.sql = $addFromClause(sql=loc.sql, include=arguments.include);
 				loc.sql = $addWhereClause(sql=loc.sql, where=loc.originalWhere, include=arguments.include, $softDeleteCheck=arguments.$softDeleteCheck);
 				loc.sql = $addOrderByClause(sql=loc.sql, order=arguments.order, include=arguments.include);
@@ -978,6 +978,7 @@
 	<cfargument name="select" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
 	<cfargument name="distinct" type="boolean" required="true">
+	<cfargument name="returnAs" type="string" required="true">
 	<cfscript>
 		var loc = {};
 
@@ -1035,7 +1036,7 @@
 					// if we find the property in this model and it's not already added we go ahead and add it to the select clause
 					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.modelName], loc.iItem))
 					{
-						if (loc.duplicateCount)
+						if ((arguments.returnAs != "query" && loc.j > 1) || loc.duplicateCount)
 							loc.toAppend = loc.toAppend & "[[duplicate]]" & loc.j;
 						if (ListFindNoCase(loc.classData.propertyList, loc.iItem))
 						{
