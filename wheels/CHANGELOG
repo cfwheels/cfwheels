@@ -22,6 +22,7 @@ Bug Fixes
 * Fixed pagination error in Oracle when using the "include" argument - #449 [Per Djurner]
 * Fixed incorrect layout rendering for renderPartial() and includePartial() - #488 [Jordan Sitkin, Per Djurner]
 * Fix for complex "include" strings - #453 [Jordan Sitkin, Andy Bellenie]
+* Fixed naming conflict occurring for properties starting with the same name as its model on included objects - #461 [Tony Petruzzi, Per Djurner, Raul Riera]
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
