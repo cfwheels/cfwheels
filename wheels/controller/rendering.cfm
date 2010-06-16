@@ -139,17 +139,17 @@
 		if (IsQuery(arguments.$partial) && arguments.$partial.recordCount)
 		{
 			arguments.$name = request.wheels[Hash(SerializeJSON(arguments.$partial))];
-			arguments[pluralize(arguments.$name)] = arguments.$partial;
+			arguments.query = arguments.$partial;
 		}
 		else if (IsObject(arguments.$partial))
 		{
 			arguments.$name = arguments.$partial.$classData().name;
-			arguments[arguments.$name] = arguments.$partial;
+			arguments.object = arguments.$partial;
 		}
 		else if (IsArray(arguments.$partial) && ArrayLen(arguments.$partial))
 		{
 			arguments.$name = arguments.$partial[1].$classData().name;
-			arguments[pluralize(arguments.$name)] = arguments.$partial;
+			arguments.objects = arguments.$partial;
 		}
 		else if (IsSimpleValue(arguments.$partial))
 		{
@@ -213,10 +213,10 @@
 		arguments.$template = loc.include;
 		if (arguments.$type == "partial")
 		{
-			loc.pluralizedName = pluralize(arguments.$name);
-			if (StructKeyExists(arguments, loc.pluralizedName) && IsQuery(arguments[loc.pluralizedName]))
+			if (StructKeyExists(arguments, "query") && IsQuery(arguments.query))
 			{
-				loc.query = arguments[loc.pluralizedName];
+				loc.query = arguments.query;
+				StructDelete(arguments, "query");
 				loc.returnValue = "";
 				loc.iEnd = loc.query.recordCount;
 				if (Len(arguments.$group))
@@ -284,15 +284,17 @@
 					}
 				}
 			}
-			else if (StructKeyExists(arguments, arguments.$name) && IsObject(arguments[arguments.$name]))
+			else if (StructKeyExists(arguments, "object") && IsObject(arguments.object))
 			{
-				loc.object = arguments[arguments.$name];
+				loc.object = arguments.object;
+				StructDelete(arguments, "object");
 				StructAppend(arguments, loc.object.properties(), false);
 			}
-			else if (StructKeyExists(arguments, loc.pluralizedName) && IsArray(arguments[loc.pluralizedName]))
+			else if (StructKeyExists(arguments, "objects") && IsArray(arguments.objects))
 			{
 				loc.originalArguments = Duplicate(arguments);
-				loc.array = arguments[loc.pluralizedName];
+				loc.array = arguments.objects;
+				StructDelete(arguments, "objects");
 				loc.returnValue = "";
 				loc.iEnd = ArrayLen(loc.array);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)

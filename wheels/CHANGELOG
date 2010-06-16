@@ -23,6 +23,7 @@ Bug Fixes
 * Fixed incorrect layout rendering for renderPartial() and includePartial() - #488 [Jordan Sitkin, Per Djurner]
 * Fix for complex "include" strings - #453 [Jordan Sitkin, Andy Bellenie]
 * Fixed naming conflict occurring for properties starting with the same name as its model on included objects - #461 [Tony Petruzzi, Per Djurner, Raul Riera]
+* Fixed pluralization issue related to partials used with object(s)/queries and removed the limitation of the file being tied to the model name - #427 [Per Djurner, James Gibson]
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
