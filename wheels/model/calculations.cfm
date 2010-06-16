@@ -8,8 +8,8 @@
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="count,maximum,minimum,sum">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to calculate the average for.">
-	<cfargument name="where" type="string" required="false" default="" hint="An SQL fragment such as `lastName LIKE 'A%'` for example.">
-	<cfargument name="include" type="string" required="false" default="" hint="Any associations that need to be included in the query.">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="distinct" type="boolean" required="false" hint="When `true`, `AVG` will be performed only on each unique instance of a value, regardless of how many times the value occurs.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="ifNull" type="any" required="false" hint="The value returned if no records are found. Common usage is to set this to `0` to make sure a numeric value is always returned instead of a blank string.">
@@ -90,8 +90,8 @@
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="average,count,minimum,sum">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to get the highest value for (has to be a property of a numeric data type).">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
@@ -110,8 +110,8 @@
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="average,count,maximum,sum">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to get the lowest value for (has to be a property of a numeric data type).">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
@@ -133,8 +133,8 @@
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="average,count,maximum,minimum">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to get the sum for (has to be a property of a numeric data type).">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="distinct" type="boolean" required="false" hint="When `true`, `SUM` returns the sum of unique values only.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
