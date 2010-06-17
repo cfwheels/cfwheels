@@ -81,8 +81,11 @@
 	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="$functionName" type="string" required="true">
+	<cfargument name="combine" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
+		loc.combine = arguments.combine;
+		StructDelete(arguments, "combine", false);
 		loc.name = $tagName(arguments.objectName, arguments.property);
 		arguments.$id = $tagId(arguments.objectName, arguments.property);
 		loc.value = $formValue(argumentCollection=arguments);
@@ -92,7 +95,13 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(arguments.order, loc.i);
-			arguments.name = loc.name & "($" & loc.item & ")";
+			loc.marker = "($" & loc.item & ")";
+			if(!loc.combine)
+			{
+				loc.name = $tagName(arguments.objectName, "#arguments.property#-#loc.item#");
+				loc.marker = "";
+			}
+			arguments.name = loc.name & loc.marker;
 			if (Len(loc.value))
 				if (Isdate(loc.value))
 					arguments.value = Evaluate("#loc.item#(loc.value)");

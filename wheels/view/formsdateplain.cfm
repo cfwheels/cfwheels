@@ -21,6 +21,7 @@
 	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
 	<cfscript>
 		$insertDefaults(name="dateSelectTags", input=arguments);
 		arguments.property = arguments.name;
@@ -54,6 +55,7 @@
 	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
 	<cfscript>
 		$insertDefaults(name="timeSelectTags", input=arguments);
 		arguments.property = arguments.name;
@@ -93,6 +95,7 @@
 	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
 	<cfscript>
 		var loc = {};
 		$insertDefaults(name="dateTimeSelectTags", input=arguments);
