@@ -42,9 +42,9 @@
 
 	<cffunction name="test_send_with_attachment">
 		<cfset args.template = "plainEmailTemplate">
-		<cfset args.file = "wheelslogo.jpg">
+		<cfset args.file = "cfwheels-logo.png">
 		<cfset result = controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.mailparams[1].file Contains '_assets' AND result.mailparams[1].file Contains 'wheelslogo.jpg'")>
+		<cfset assert("result.mailparams[1].file Contains '_assets' AND result.mailparams[1].file Contains 'cfwheels-logo.png'")>
 	</cffunction>
 
 	<cffunction name="test_send_with_custom_argument">

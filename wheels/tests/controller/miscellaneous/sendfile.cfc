@@ -9,40 +9,40 @@
 	</cffunction>
 	
 	<cffunction name="test_only_file_supplied">
-		<cfset args.file = "../wheels/tests/_assets/files/wheelslogo.jpg">
+		<cfset args.file = "../wheels/tests/_assets/files/cfwheels-logo.png">
 		<cfset loc.r = controller.sendFile(argumentCollection=args)>
-		<cfset assert('loc.r.file eq "wheelslogo.jpg"')>
-		<cfset assert('loc.r.mime eq "image/jpg"')>
-		<cfset assert('loc.r.name eq "wheelslogo.jpg"')>
+		<cfset assert('loc.r.file eq "cfwheels-logo.png"')>
+		<cfset assert('loc.r.mime eq "image/png"')>
+		<cfset assert('loc.r.name eq "cfwheels-logo.png"')>
 	</cffunction>
 	
 	<cffunction name="test_file_and_name_supplied">
-		<cfset args.file = "../wheels/tests/_assets/files/wheelslogo.jpg">
-		<cfset args.name = "A Weird FileName.jpg">
+		<cfset args.file = "../wheels/tests/_assets/files/cfwheels-logo.png">
+		<cfset args.name = "A Weird FileName.png">
 		<cfset loc.r = controller.sendFile(argumentCollection=args)>
-		<cfset assert('loc.r.file eq "wheelslogo.jpg"')>
-		<cfset assert('loc.r.mime eq "image/jpg"')>
-		<cfset assert('loc.r.name eq "A Weird FileName.jpg"')>
+		<cfset assert('loc.r.file eq "cfwheels-logo.png"')>
+		<cfset assert('loc.r.mime eq "image/png"')>
+		<cfset assert('loc.r.name eq "A Weird FileName.png"')>
 	</cffunction>
 	
 	<cffunction name="test_change_disposition">
-		<cfset args.file = "../wheels/tests/_assets/files/wheelslogo.jpg">
+		<cfset args.file = "../wheels/tests/_assets/files/cfwheels-logo.png">
 		<cfset args.disposition = "attachment">
 		<cfset loc.r = controller.sendFile(argumentCollection=args)>
-		<cfset assert('loc.r.file eq "wheelslogo.jpg"')>
+		<cfset assert('loc.r.file eq "cfwheels-logo.png"')>
 		<cfset assert('loc.r.disposition eq "attachment"')>
-		<cfset assert('loc.r.mime eq "image/jpg"')>
-		<cfset assert('loc.r.name eq "wheelslogo.jpg"')>
+		<cfset assert('loc.r.mime eq "image/png"')>
+		<cfset assert('loc.r.name eq "cfwheels-logo.png"')>
 	</cffunction>
 	
 	<cffunction name="test_overload_mimetype">
-		<cfset args.file = "../wheels/tests/_assets/files/wheelslogo.jpg">
+		<cfset args.file = "../wheels/tests/_assets/files/cfwheels-logo.png">
 		<cfset args.type = "wheels/custom">
 		<cfset loc.r = controller.sendFile(argumentCollection=args)>
-		<cfset assert('loc.r.file eq "wheelslogo.jpg"')>
+		<cfset assert('loc.r.file eq "cfwheels-logo.png"')>
 		<cfset assert('loc.r.disposition eq "attachment"')>
 		<cfset assert('loc.r.mime eq "wheels/custom"')>
-		<cfset assert('loc.r.name eq "wheelslogo.jpg"')>
+		<cfset assert('loc.r.name eq "cfwheels-logo.png"')>
 	</cffunction>
 	
 	<cffunction name="test_no_extension_one_file_exists">
@@ -54,18 +54,18 @@
 	</cffunction>
 	
 	<cffunction name="test_no_extension_multiple_files_exists">
-		<cfset args.file = "../wheels/tests/_assets/files/wheelslogo">
+		<cfset args.file = "../wheels/tests/_assets/files/cfwheels-logo">
 		<cfset loc.r = raised("controller.sendFile(argumentCollection=args)")>
 		<cfset assert('loc.r eq "Wheels.FileNotFound"')>
 	</cffunction>
 	
 	<cffunction name="test_specifying_a_directory">
 		<cfset args.directory = expandPath("/wheelsMapping/tests/_assets")>
-		<cfset args.file = "files/wheelslogo.jpg">
+		<cfset args.file = "files/cfwheels-logo.png">
 		<cfset loc.r = controller.sendFile(argumentCollection=args)>
-		<cfset assert('loc.r.file eq "wheelslogo.jpg"')>
-		<cfset assert('loc.r.mime eq "image/jpg"')>
-		<cfset assert('loc.r.name eq "wheelslogo.jpg"')>
+		<cfset assert('loc.r.file eq "cfwheels-logo.png"')>
+		<cfset assert('loc.r.mime eq "image/png"')>
+		<cfset assert('loc.r.name eq "cfwheels-logo.png"')>
 	</cffunction>
 	
 </cfcomponent>
