@@ -132,12 +132,12 @@
 		loc.returnValue = "<" & arguments.name;
 		
 		// if named arguments are passed in we add these to the attributes argument instead so we can handle them all in the same code below
-		if (StructCount(arguments) > 5)
+		if (StructCount(arguments) gt 5)
 		{
 			for (loc.key in arguments)
 			{
 				if (!ListFindNoCase("name,attributes,close,skip,skipStartingWith", loc.key))
-					arguments.attributes[loc.key] = arguments[loc.key];	
+					arguments.attributes[loc.key] = arguments[loc.key];
 			}
 		}
 		
@@ -145,12 +145,20 @@
 		// since the order of a struct can differ we sort the attributes in alphabetical order before placing them in the HTML tag (we could just place them in random order in the HTML but that would complicate testing for example)
 		loc.sortedKeys = ListSort(StructKeyList(arguments.attributes), "textnocase");
 		loc.iEnd = ListLen(loc.sortedKeys);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
 		{
 			loc.key = ListGetAt(loc.sortedKeys, loc.i);
 			// place the attribute name and value in the string unless it should be skipped according to the arguments or if it's an internal argument (starting with a "$" sign)
 			if (!ListFindNoCase(arguments.skip, loc.key) && (!Len(arguments.skipStartingWith) || Left(loc.key, Len(arguments.skipStartingWith)) != arguments.skipStartingWith) && Left(loc.key, 1) != "$")
-				loc.returnValue = loc.returnValue & " " & LCase(loc.key) & "=""" & arguments.attributes[loc.key] & """";	
+				// replace boolean arguments for the disabled and readonly attributs with the key (if true) or skip putting it in the output altogether (if false)
+				if (ListFindNoCase("disabled,readonly", loc.key) and IsBoolean(arguments.attributes[loc.key]))
+				{
+					if (arguments.attributes[loc.key])
+						loc.returnValue = loc.returnValue & " " & LCase(loc.key) & "=""" & LCase(loc.key) & """";
+				} else {
+					loc.returnValue = loc.returnValue & " " & LCase(loc.key) & "=""" & arguments.attributes[loc.key] & """";	
+				}
 		}
 
 		// close the tag (usually done on self-closing tags like "img" for example) or just end it (for tags like "div" for example)
