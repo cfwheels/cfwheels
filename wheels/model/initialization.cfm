@@ -64,6 +64,7 @@
 
 				// set the info we need for each property
 				variables.wheels.class.properties[loc.property] = {};
+				variables.wheels.class.properties[loc.property].dataType = loc.type;
 				variables.wheels.class.properties[loc.property].type = variables.wheels.class.adapter.$getType(loc.type);
 				variables.wheels.class.properties[loc.property].column = loc.columns["column_name"][loc.i];
 				variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];

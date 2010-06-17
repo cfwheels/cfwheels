@@ -58,7 +58,7 @@
 				loc.null = false;
 			else
 				loc.null = true;
-			loc.param = {value=loc.value, type=variables.wheels.class.properties[loc.key].type, scale=variables.wheels.class.properties[loc.key].scale, null=loc.null};
+			loc.param = {value=loc.value, type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale, null=loc.null};
 			ArrayAppend(arguments.sql, loc.param);
 			if (loc.i < loc.iEnd)
 				ArrayAppend(arguments.sql, " AND ");
@@ -399,6 +399,7 @@
 							if (ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
 							{
 								loc.param.type = loc.classData.properties[ListLast(loc.param.property, ".")].type;
+								loc.param.dataType = loc.classData.properties[ListLast(loc.param.property, ".")].dataType;
 								loc.param.scale = loc.classData.properties[ListLast(loc.param.property, ".")].scale;
 								loc.param.column = loc.classData.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
 								break;
@@ -406,6 +407,7 @@
 							else if (ListFindNoCase(loc.classData.calculatedPropertyList, ListLast(loc.param.property, ".")))
 							{
 								loc.param.type = "CF_SQL_CHAR";
+								loc.param.dataType = "char";
 								loc.param.scale = 0;
 								loc.param.column = loc.classData.calculatedProperties[ListLast(loc.param.property, ".")].sql;
 								break;
@@ -433,7 +435,7 @@
 				{
 					loc.column = loc.params[loc.i].column;
 					ArrayAppend(arguments.sql, "#loc.column# #loc.params[loc.i].operator#");
-					loc.param = {type=loc.params[loc.i].type, scale=loc.params[loc.i].scale};
+					loc.param = {type=loc.params[loc.i].type, dataType=loc.params[loc.i].dataType, scale=loc.params[loc.i].scale};
 					ArrayAppend(arguments.sql, loc.param);
 				}
 			}
