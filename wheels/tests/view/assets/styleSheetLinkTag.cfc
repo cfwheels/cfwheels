@@ -23,20 +23,4 @@
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
-	<cffunction name="test_external_stylesheet">
-		<cfset loc.args.source = "test.css.cfm">
-		<cfset loc.args.host = "www.google.com">
-		<cfset loc.args.protocol = "http">
-		<cfset loc.args.port = "8080">
-		<cfset loc.e = loc.controller.styleSheetLinkTag(argumentcollection=loc.args)>
-		<cfset loc.r = '<link href="http://www.google.com:8080/a/b/index.cfm/test.css.cfm" media="all" rel="stylesheet" type="text/css" />#chr(10)#'>
-		<cfset assert("loc.e eq loc.r")>
-		
-		<cfset loc.args.protocol = "ftp">
-		<cfset structdelete(loc.args, "port", false)>
-		<cfset loc.e = loc.controller.styleSheetLinkTag(argumentcollection=loc.args)>
-		<cfset loc.r = '<link href="ftp://www.google.com/a/b/index.cfm/test.css.cfm" media="all" rel="stylesheet" type="text/css" />#chr(10)#'>
-		<cfset assert("loc.e eq loc.r")>
-	</cffunction>
-
 </cfcomponent>

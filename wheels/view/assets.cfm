@@ -11,39 +11,20 @@
 	<cfargument name="type" type="string" required="false" hint="The `type` attribute for the `link` tag.">
 	<cfargument name="media" type="string" required="false" hint="The `media` attribute for the `link` tag.">
 	<cfargument name="head" type="string" required="false" hint="Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior which is to place the output where the function is called from.">
-	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor">
-	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor">
-	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = "";
+		$insertDefaults(name="styleSheetLinkTag", input=arguments);
 		$combineArguments(args=arguments, combine="sources,source", required=true);
 		$insertDefaults(name="styleSheetLinkTag", reserved="href,rel", input=arguments);
-		arguments.sources = $listClean(list="#arguments.sources#", returnAs="array");
 		arguments.rel = "stylesheet";
-		loc.CSSPath = application.wheels.webPath & application.wheels.stylesheetPath;
-		if(StructKeyExists(arguments, "host") || StructKeyExists(arguments, "protocol") || StructKeyExists(arguments, "port"))
-		{	
-			arguments.onlyPath = false;
-			loc.CSSPath = URLFor(argumentCollection=arguments);
-			StructDelete(arguments, "onlyPath", false);
-		}
-		StructDelete(arguments, "host", false);
-		StructDelete(arguments, "protocol", false);
-		StructDelete(arguments, "port", false);
-		if(Right(loc.CSSPath, 1) neq "/")
-		{
-			loc.CSSPath &= "/";
-		}
-		loc.iEnd = ArrayLen(arguments.sources);
+		loc.returnValue = "";
+		loc.iEnd = ListLen(arguments.sources);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.item = arguments.sources[loc.i];
+			loc.item = ListGetAt(arguments.sources, loc.i);
+			arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & Trim(loc.item);
 			if (!ListFindNoCase("css,cfm", ListLast(loc.item, ".")))
-			{
-				loc.item &= ".css";
-			}
-			arguments.href = loc.CSSPath & loc.item;
+				arguments.href = arguments.href & ".css";
 			arguments.href = $assetDomain(arguments.href) & $appendQueryString();
 			loc.returnValue = loc.returnValue & $tag(name="link", skip="sources,head", close=true, attributes=arguments) & chr(10);
 		}
@@ -68,38 +49,19 @@
 	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many JavaScript files in the `javascripts` folder, minus the `.js` extension. (Can also be called with the `source` argument).">
 	<cfargument name="type" type="string" required="false" hint="The `type` attribute for the `script` tag.">
 	<cfargument name="head" type="string" required="false" hint="See documentation for @styleSheetLinkTag.">
-	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor">
-	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor">
-	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = "";
+		$insertDefaults(name="javaScriptIncludeTag", input=arguments);
 		$combineArguments(args=arguments, combine="sources,source", required=true);
 		$insertDefaults(name="javaScriptIncludeTag", reserved="src", input=arguments);
-		arguments.sources = $listClean(list="#arguments.sources#", returnAs="array");
-		loc.JSPath = application.wheels.webPath & application.wheels.javascriptPath;
-		if(StructKeyExists(arguments, "host") || StructKeyExists(arguments, "protocol") || StructKeyExists(arguments, "port"))
-		{	
-			arguments.onlyPath = false;
-			loc.JSPath = URLFor(argumentCollection=arguments);
-			StructDelete(arguments, "onlyPath", false);
-		}
-		StructDelete(arguments, "host", false);
-		StructDelete(arguments, "protocol", false);
-		StructDelete(arguments, "port", false);
-		if(Right(loc.JSPath, 1) neq "/")
-		{
-			loc.JSPath &= "/";
-		}
-		loc.iEnd = ArrayLen(arguments.sources);
+		loc.returnValue = "";
+		loc.iEnd = ListLen(arguments.sources);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.item = arguments.sources[loc.i];
+			loc.item = ListGetAt(arguments.sources, loc.i);
+			arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & Trim(loc.item);
 			if (!ListFindNoCase("js,cfm", ListLast(loc.item, ".")))
-			{
-				loc.item &= ".js";
-			}
-			arguments.src = loc.JSPath & loc.item;
+				arguments.src = arguments.src & ".js";
 			arguments.src = $assetDomain(arguments.src) & $appendQueryString();
 			loc.returnValue = loc.returnValue & $element(name="script", skip="sources,head", attributes=arguments) & chr(10);
 		}
