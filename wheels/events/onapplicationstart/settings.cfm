@@ -178,7 +178,7 @@
 	application.wheels.functions.validatesFormatOf = {message="[property] is invalid", allowBlank=false};
 	application.wheels.functions.validatesInclusionOf = {message="[property] is not included in the list", allowBlank=false};
 	application.wheels.functions.validatesLengthOf = {message="[property] is the wrong length", allowBlank=false, exactly=0, maximum=0, minimum=0, within=""};
-	application.wheels.functions.validatesNumericalityOf = {message="[property] is not a number", allowBlank=false, onlyInteger=false};
+	application.wheels.functions.validatesNumericalityOf = {message="[property] is not a number", allowBlank=false, onlyInteger=false, odd="", even="", greaterThan="", greaterThanOrEqualTo="", equalTo="", lessThan="", lessThanOrEqualTo=""};
 	application.wheels.functions.validatesPresenceOf = {message="[property] can't be empty"};
 	application.wheels.functions.validatesUniquenessOf = {message="[property] has already been taken", allowBlank=false};
 	application.wheels.functions.verifies = {handler=""};

@@ -131,6 +131,13 @@
 	<cfargument name="onlyInteger" type="boolean" required="false" hint="Specifies whether the property value has to be an integer.">
 	<cfargument name="if" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="odd" type="boolean" required="false" hint="Specifies the value must be an odd number.">
+	<cfargument name="even" type="boolean" required="false" hint="Specifies the value must be an even number.">
+	<cfargument name="greaterThan" type="numeric" required="false" hint="Specifies the value must be greater than the supplied value.">
+	<cfargument name="greaterThanOrEqualTo" type="numeric" required="false" hint="Specifies the value must be greater than or equal the supplied value.">
+	<cfargument name="equalTo" type="numeric" required="false" hint="Specifies the value must be equal to the supplied value.">
+	<cfargument name="lessThan" type="numeric" required="false" hint="Specifies the value must be less than the supplied value.">
+	<cfargument name="lessThanOrEqualTo" type="numeric" required="false" hint="Specifies the value must be less than or equal the supplied value.">
 	<cfset $insertDefaults(name="validatesNumericalityOf", input=arguments)>
 	<cfset $registerValidation(methods="$validateNumericalityOf", argumentCollection=arguments)>
 </cffunction>
@@ -442,10 +449,19 @@
 
 <cffunction name="$validateNumericalityOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesNumericalityOf method.">
 	<cfscript>
-		if (!IsNumeric(this[arguments.property]))
+		if (
+			!IsNumeric(this[arguments.property])
+			|| (arguments.onlyInteger && Round(this[arguments.property]) != this[arguments.property])
+			|| (IsNumeric(arguments.greaterThan) && this[arguments.property] lte arguments.greaterThan)
+			|| (IsNumeric(arguments.greaterThanOrEqualTo) && this[arguments.property] lt arguments.greaterThanOrEqualTo)
+			|| (IsNumeric(arguments.equalTo) && this[arguments.property] neq arguments.equalTo)
+			|| (IsNumeric(arguments.lessThan) && this[arguments.property] gte arguments.lessThan)
+			|| (IsNumeric(arguments.lessThanOrEqualTo) && this[arguments.property] gt arguments.lessThanOrEqualTo)
+			|| (IsBoolean(arguments.odd) && arguments.odd && !BitAnd(this[arguments.property], 1))
+			|| (IsBoolean(arguments.even) && arguments.even && BitAnd(this[arguments.property], 1))
+		){
 			addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
-		else if (arguments.onlyInteger && Round(this[arguments.property]) != this[arguments.property])
-			addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
+		}
 	</cfscript>
 </cffunction>
 

@@ -259,6 +259,90 @@
 		<cfset assert('!loc.user.valid()')>
 	</cffunction>
 
+	<cffunction name="test_validatesNumericalityOf_greaterThan_valid">
+		<cfset loc.user.birthdaymonth = "11">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", greatThan="10")>
+		<cfset assert('loc.user.valid()')>
+	</cffunction>
+
+	<cffunction name="test_validatesNumericalityOf_greaterThan_invalid">
+		<cfset loc.user.birthdaymonth = "10">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", greaterThan="10")>
+		<cfset assert('!loc.user.valid()')>
+	</cffunction>
+
+	<cffunction name="test_validatesNumericalityOf_greaterThanOrEqualTo_valid">
+		<cfset loc.user.birthdaymonth = "10">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", greaterThanOrEqualTo="10")>
+		<cfset assert('loc.user.valid()')>
+	</cffunction>
+
+	<cffunction name="test_validatesNumericalityOf_greaterThanOrEqualTo_invalid">
+		<cfset loc.user.birthdaymonth = "9">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", greaterThanOrEqualTo="10")>
+		<cfset assert('!loc.user.valid()')>
+	</cffunction>
+
+	<cffunction name="test_validatesNumericalityOf_equalTo_valid">
+		<cfset loc.user.birthdaymonth = "10">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", equalTo="10")>
+		<cfset assert('loc.user.valid()')>
+	</cffunction>
+
+	<cffunction name="test_validatesNumericalityOf_equalTo_invalid">
+		<cfset loc.user.birthdaymonth = "9">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", equalTo="10")>
+		<cfset assert('!loc.user.valid()')>
+	</cffunction>
+
+	<cffunction name="test_validatesNumericalityOf_lessThan_valid">
+		<cfset loc.user.birthdaymonth = "9">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", lessThan="10")>
+		<cfset assert('loc.user.valid()')>
+	</cffunction>
+
+	<cffunction name="test_validatesNumericalityOf_lessThan_invalid">
+		<cfset loc.user.birthdaymonth = "10">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", lessThan="10")>
+		<cfset assert('!loc.user.valid()')>
+	</cffunction>
+
+	<cffunction name="test_validatesNumericalityOf_lessThanOrEqualTo_valid">
+		<cfset loc.user.birthdaymonth = "10">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", lessThanOrEqualTo="10")>
+		<cfset assert('loc.user.valid()')>
+	</cffunction>
+
+	<cffunction name="test_validatesNumericalityOf_lessThanOrEqualTo_invalid">
+		<cfset loc.user.birthdaymonth = "11">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", lessThanOrEqualTo="10")>
+		<cfset assert('!loc.user.valid()')>
+	</cffunction>
+
+	<cffunction name="test_validatesNumericalityOf_odd_valid">
+		<cfset loc.user.birthdaymonth = "13">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", odd="true")>
+		<cfset assert('loc.user.valid()')>
+	</cffunction>
+
+	<cffunction name="test_validatesNumericalityOf_odd_invalid">
+		<cfset loc.user.birthdaymonth = "14">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", odd="true")>
+		<cfset assert('!loc.user.valid()')>
+	</cffunction>
+
+	<cffunction name="test_validatesNumericalityOf_even_valid">
+		<cfset loc.user.birthdaymonth = "14">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", even="true")>
+		<cfset assert('loc.user.valid()')>
+	</cffunction>
+
+	<cffunction name="test_validatesNumericalityOf_even_invalid">
+		<cfset loc.user.birthdaymonth = "13">
+		<cfset loc.user.validatesNumericalityOf(property="birthdaymonth", even="true")>
+		<cfset assert('!loc.user.valid()')>
+	</cffunction>
+
 
 	<!--- validatesPresenceOf --->
 	<cffunction name="test_validatesPresenceOf_valid">
@@ -271,7 +355,7 @@
 		<cfset loc.user.validatesPresenceOf(property="firstname")>
 		<cfset assert('!loc.user.valid()')>
 	</cffunction>
-	
+
 	<cffunction name="test_validatesPresenceOf_invalid_when_blank">
 		<cfset loc.user.firstname = "   ">
 		<cfset loc.user.validatesPresenceOf(property="firstname")>
