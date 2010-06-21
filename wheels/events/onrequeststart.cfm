@@ -72,9 +72,9 @@
 		request.wheels.cacheCounts.culls = 0;
 
 		if (!application.wheels.cacheModelInitialization)
-			$simpleLock(name="modelLock", execute="$clearModelInitializationCache");
+			$simpleLock(name="modelLock", execute="$clearModelInitializationCache", type="exclusive");
 		if (!application.wheels.cacheControllerInitialization)
-			$simpleLock(name="controllerLock", execute="$clearControllerInitializationCache");
+			$simpleLock(name="controllerLock", execute="$clearControllerInitializationCache", type="exclusive");
 		if (!application.wheels.cacheRoutes)
 			$loadRoutes();
 		if (!application.wheels.cachePlugins)

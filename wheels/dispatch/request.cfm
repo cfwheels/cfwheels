@@ -357,7 +357,6 @@
 	<cfargument name="scriptName" type="string" required="false" default="#request.cgi.script_name#">
 	<cfargument name="formScope" type="struct" required="false" default="#form#">
 	<cfargument name="urlScope" type="struct" required="false" default="#url#">
-	<cfargument name="sessionScope" type="struct" required="false" default="#session#">
 	<cfscript>
 		var loc = {};
 		if (application.wheels.showDebugInformation)
@@ -383,7 +382,7 @@
 			$location(argumentCollection=request.wheels.redirect);
 
 		// clear out the flash (note that this is not done for redirects since the processing does not get here)
-		loc.controller.flashClear(arguments.sessionScope);
+		loc.controller.flashClear();
 	</cfscript>
 	<cfreturn Trim(request.wheels.response)>
 </cffunction>

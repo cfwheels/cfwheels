@@ -21,7 +21,7 @@
 			// we can just return the flash since it is created at the beginning of the request
 			// this way we always return what is expected - a struct
 			return arguments.$flash;
-		}
+		}		
 	</cfscript>
 </cffunction>
 
@@ -31,20 +31,8 @@
 		<cfset flashClear()>
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashDelete,flashIsEmpty,flashCount,flashKeyExists,flashInsert">
-	<cfargument name="$sessionScope" type="struct" required="false">
 	<cfargument name="$flashStorage" type="string" required="false" default="#get('flashStorage')#">
-	<cfscript>
-		if (arguments.$flashStorage == "session" && StructKeyExists(arguments, "$sessionScope"))
-		{
-			// special handling for when we need to clear the session stored flash from a coldfusion event
-			// we cannot access the session scope directly then and we have to pass it through instead
-			StructClear(arguments.$sessionScope.flash);
-		}
-		else
-		{
-			$writeFlash(StructNew());
-		}
-	</cfscript>
+	<cfset $writeFlash(StructNew())>
 </cffunction>
 
 <cffunction name="flashCount" returntype="numeric" access="public" output="false" hint="Checks how many keys exist in the Flash."
