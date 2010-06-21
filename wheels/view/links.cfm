@@ -45,7 +45,7 @@
 		arguments.href = toXHTML(arguments.href);
 		if (!Len(arguments.text))
 			arguments.text = arguments.href;
-		loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port,link";
+		loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port";
 		if (Len(arguments.route))
 			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
 		loc.returnValue = $element(name="a", skip=loc.skip, content=arguments.text, attributes=arguments);
