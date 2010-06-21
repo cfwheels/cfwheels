@@ -39,6 +39,7 @@
 	<cfset loc.lockArgs = Duplicate(arguments)>
 	<cfset StructDelete(loc.lockArgs, "execute")>
 	<cfset StructDelete(loc.lockArgs, "executeArgs")>
+	<cfset arguments.executeArgs.$locked = true>
 	<cflock attributeCollection="#loc.lockArgs#">
 		<cfinvoke method="#arguments.execute#" argumentCollection="#arguments.executeArgs#" returnvariable="loc.returnValue">
 	</cflock>

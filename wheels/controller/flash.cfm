@@ -103,6 +103,8 @@
 <cffunction name="$readFlash" returntype="struct" access="public" output="false">
 	<cfargument name="flashStorage" type="string" required="false" default="#get('flashStorage')#">
 	<cfscript>
+		if (!StructKeyExists(arguments, "$locked"))
+			return $simpleLock(name="flashLock", type="readonly", execute="$readFlash", executeArgs=arguments);		
 		if (arguments.flashStorage == "session" && StructKeyExists(session, "flash"))
 			return Duplicate(session.flash);
 		else if (arguments.flashStorage == "cookie" && StructKeyExists(cookie, "flash"))
@@ -115,6 +117,8 @@
 	<cfargument name="flash" type="struct" required="true">
 	<cfargument name="flashStorage" type="string" required="false" default="#get('flashStorage')#">
 	<cfscript>
+		if (!StructKeyExists(arguments, "$locked"))
+			$simpleLock(name="flashLock", type="exclusive", execute="$writeFlash", executeArgs=arguments);		
 		if (arguments.flashStorage == "session")
 			session.flash = arguments.flash;
 		else if (arguments.flashStorage == "cookie")
