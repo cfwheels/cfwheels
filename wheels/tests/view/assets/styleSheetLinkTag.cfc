@@ -23,4 +23,13 @@
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
+	<cffunction name="test_support_external_links">
+		<cfset loc.args.source = "http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css,test.css,https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css">
+		<cfset loc.e = loc.controller.styleSheetLinkTag(argumentcollection=loc.args)>
+		<cfset loc.r = '<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />#chr(10)#<link href="#application.wheels.webpath#stylesheets/test.css" media="all" rel="stylesheet" type="text/css" />#chr(10)#<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />#chr(10)#'>
+		<cfset halt(halt=false, expression='htmleditformat(loc.e)', format="text")>
+		<cfset halt(halt=false, expression='htmleditformat(loc.r)', format="text")>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
 </cfcomponent>

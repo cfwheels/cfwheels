@@ -25,4 +25,10 @@
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
+	<cffunction name="test_external_links">
+		<cfset loc.e = '<a href="http://www.cfwheels.com">CFWheels</a>'>
+		<cfset loc.r = loc.controller.linkTo(href="http://www.cfwheels.com", text="CFWheels")>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+
 </cfcomponent>

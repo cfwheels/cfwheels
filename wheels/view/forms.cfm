@@ -48,7 +48,8 @@
 		request.wheels.currentFormMethod = arguments.method;
 
 		// set the form's action attribute to the URL that we want to send to
-		arguments.action = URLFor(argumentCollection=arguments);
+		if (!ReFindNoCase("^https?:\/\/", arguments.action))
+			arguments.action = URLFor(argumentCollection=arguments);
 
 		// make sure we return XHMTL compliant code
 		arguments.action = toXHTML(arguments.action);

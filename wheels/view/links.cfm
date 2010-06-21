@@ -31,19 +31,21 @@
 	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="href" type="string" required="false" hint="Used to link to an extrenal site">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="linkTo", reserved="href", input=arguments);
+		$insertDefaults(name="linkTo", input=arguments);
 		if (Len(arguments.confirm))
 		{
 			loc.onclick = "return confirm('#JSStringFormat(arguments.confirm)#');";
 			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
 		}
-		arguments.href = URLFor(argumentCollection=arguments);
+		if (!StructKeyExists(arguments, "href"))
+			arguments.href = URLFor(argumentCollection=arguments);
 		arguments.href = toXHTML(arguments.href);
 		if (!Len(arguments.text))
 			arguments.text = arguments.href;
-		loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port";
+		loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port,link";
 		if (Len(arguments.route))
 			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
 		loc.returnValue = $element(name="a", skip=loc.skip, content=arguments.text, attributes=arguments);

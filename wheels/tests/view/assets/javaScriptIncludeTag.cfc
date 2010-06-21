@@ -23,4 +23,13 @@
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
+	<cffunction name="test_support_external_links">
+		<cfset loc.args.source = "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js,test,https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
+		<cfset loc.e = loc.controller.javaScriptIncludeTag(argumentcollection=loc.args)>
+		<cfset loc.r = '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>#chr(10)#<script src="#application.wheels.webpath#javascripts/test.js" type="text/javascript"></script>#chr(10)#<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>#chr(10)#'>
+		<cfset halt(halt=false, expression='htmleditformat(loc.e)', format="text")>
+		<cfset halt(halt=false, expression='htmleditformat(loc.r)', format="text")>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
 </cfcomponent>

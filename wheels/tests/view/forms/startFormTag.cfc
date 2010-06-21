@@ -61,4 +61,12 @@
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
+	<cffunction name="test_external_link">
+		<cfset loc.args.action = "https://www.cfwheels.com">
+		<cfset loc.args.multipart = true>
+		<cfset loc.e = '<form action="https://www.cfwheels.com" enctype="multipart/form-data" method="post">'>
+		<cfset loc.r = loc.controller.startFormTag(argumentcollection=loc.args)>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
 </cfcomponent>

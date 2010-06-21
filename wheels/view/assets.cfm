@@ -18,14 +18,22 @@
 		$insertDefaults(name="styleSheetLinkTag", reserved="href,rel", input=arguments);
 		arguments.rel = "stylesheet";
 		loc.returnValue = "";
-		loc.iEnd = ListLen(arguments.sources);
+		arguments.sources = $listClean(list="#arguments.sources#", returnAs="array");
+		loc.iEnd = ArrayLen(arguments.sources);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.item = ListGetAt(arguments.sources, loc.i);
-			arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & Trim(loc.item);
-			if (!ListFindNoCase("css,cfm", ListLast(loc.item, ".")))
-				arguments.href = arguments.href & ".css";
-			arguments.href = $assetDomain(arguments.href) & $appendQueryString();
+			loc.item = arguments.sources[loc.i];
+			if (ReFindNoCase("^https?:\/\/", loc.item))
+			{
+				arguments.href = arguments.sources[loc.i];
+			}
+			else
+			{
+				arguments.href = application.wheels.webPath & application.wheels.stylesheetPath & "/" & loc.item;
+				if (!ListFindNoCase("css,cfm", ListLast(loc.item, ".")))
+					arguments.href = arguments.href & ".css";
+				arguments.href = $assetDomain(arguments.href) & $appendQueryString();
+			}
 			loc.returnValue = loc.returnValue & $tag(name="link", skip="sources,head", close=true, attributes=arguments) & chr(10);
 		}
 		if (arguments.head)
@@ -55,14 +63,22 @@
 		$combineArguments(args=arguments, combine="sources,source", required=true);
 		$insertDefaults(name="javaScriptIncludeTag", reserved="src", input=arguments);
 		loc.returnValue = "";
-		loc.iEnd = ListLen(arguments.sources);
+		arguments.sources = $listClean(list="#arguments.sources#", returnAs="array");
+		loc.iEnd = ArrayLen(arguments.sources);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.item = ListGetAt(arguments.sources, loc.i);
-			arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & Trim(loc.item);
-			if (!ListFindNoCase("js,cfm", ListLast(loc.item, ".")))
-				arguments.src = arguments.src & ".js";
-			arguments.src = $assetDomain(arguments.src) & $appendQueryString();
+			loc.item = arguments.sources[loc.i];
+			if (ReFindNoCase("^https?:\/\/", loc.item))
+			{
+				arguments.src = arguments.sources[loc.i];
+			}
+			else
+			{
+				arguments.src = application.wheels.webPath & application.wheels.javascriptPath & "/" & loc.item;
+				if (!ListFindNoCase("js,cfm", ListLast(loc.item, ".")))
+					arguments.src = arguments.src & ".js";
+				arguments.src = $assetDomain(arguments.src) & $appendQueryString();
+			}
 			loc.returnValue = loc.returnValue & $element(name="script", skip="sources,head", attributes=arguments) & chr(10);
 		}
 		if (arguments.head)
