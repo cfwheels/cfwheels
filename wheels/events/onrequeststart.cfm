@@ -77,6 +77,8 @@
 			$simpleLock(name="controllerLock", execute="$clearControllerInitializationCache");
 		if (!application.wheels.cacheRoutes)
 			$loadRoutes();
+		if (!application.wheels.cachePlugins)
+			$loadPlugins();
 		if (!application.wheels.cacheDatabaseSchema)
 			$clearCache("sql");
 		$include(template="#application.wheels.eventPath#/onrequeststart.cfm");
