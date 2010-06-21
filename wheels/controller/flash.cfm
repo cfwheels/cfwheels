@@ -7,21 +7,22 @@
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flashClear,flashDelete,flashIsEmpty,flashCount,flashKeyExists,flashInsert">
 	<cfargument name="key" type="string" required="false" hint="The key to get the value for.">
+	<cfargument name="$flash" type="struct" required="false" default="#$readFlash()#">
 	<cfscript>
-		var returnValue = "";
-		if (Structkeyexists(arguments, "key"))
+		if (StructKeyExists(arguments, "key"))
 		{
-			if (flashKeyExists(arguments.key))
-				returnValue = session.flash[arguments.key];
+			if (flashKeyExists(key=arguments.key, $flash=arguments.$flash))
+				return StructFind(arguments.$flash, arguments.key);
+			else
+				return "";
 		}
 		else
 		{
-			// we can just return session.flash since it is created at the beginning of the request
+			// we can just return the flash since it is created at the beginning of the request
 			// this way we always return what is expected - a struct
-			returnValue = session.flash;
+			return arguments.$flash;
 		}
 	</cfscript>
-	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="flashClear" returntype="void" access="public" output="false" hint="Deletes everything from the Flash."
@@ -30,8 +31,19 @@
 		<cfset flashClear()>
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashDelete,flashIsEmpty,flashCount,flashKeyExists,flashInsert">
+	<cfargument name="$sessionScope" type="struct" required="false">
+	<cfargument name="$flashStorage" type="string" required="false" default="#get('flashStorage')#">
 	<cfscript>
-		session.flash = {};
+		if (arguments.$flashStorage == "session" && StructKeyExists(arguments, "$sessionScope"))
+		{
+			// special handling for when we need to clear the session stored flash from a coldfusion event
+			// we cannot access the session scope directly then and we have to pass it through instead
+			StructClear(arguments.$sessionScope.flash);
+		}
+		else
+		{
+			$writeFlash(StructNew());
+		}
 	</cfscript>
 </cffunction>
 
@@ -43,7 +55,8 @@
 		</cfif>
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashIsEmpty,flashKeyExists,flashInsert">
-	<cfreturn StructCount(session.flash)>
+	<cfargument name="$flash" type="struct" required="false" default="#$readFlash()#">
+	<cfreturn StructCount(arguments.$flash)>
 </cffunction>
 
 <cffunction name="flashDelete" returntype="boolean" access="public" output="false" hint="Deletes a specific key from the Flash."
@@ -53,7 +66,13 @@
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashIsEmpty,flashCount,flashKeyExists,flashInsert">
 	<cfargument name="key" type="string" required="true" hint="The key to delete.">
-	<cfreturn StructDelete(session.flash, arguments.key, true)>
+	<cfargument name="$flash" type="struct" required="false" default="#$readFlash()#">
+	<cfscript>
+		var returnValue = "";
+		returnValue = StructDelete(arguments.$flash, arguments.key, true);
+		$writeFlash(arguments.$flash);
+		return returnValue;
+	</cfscript>
 </cffunction>
 
 <cffunction name="flashInsert" returntype="void" access="public" output="false" hint="Inserts a new key/value to the Flash."
@@ -62,8 +81,10 @@
 		<cfset flashInsert(msg="It Worked!")>
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashIsEmpty,flashCount,flashKeyExists">
+	<cfargument name="$flash" type="struct" required="false" default="#$readFlash()#">
 	<cfscript>
-		session.flash[StructKeyList(arguments)] = arguments[1];
+		StructInsert(arguments.$flash, ListLast(ListSort(StructKeyList(arguments), "textnocase")), arguments[2], true);
+		$writeFlash(arguments.$flash);
 	</cfscript>
 </cffunction>
 
@@ -75,7 +96,7 @@
 		</cfif>
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashCount,flashKeyExists,flashInsert">
-	<cfreturn NOT flashCount()>
+	<cfreturn !flashCount()>
 </cffunction>
 
 <cffunction name="flashKeyExists" returntype="boolean" access="public" output="false" hint="Checks if a specific key exists in the Flash."
@@ -87,5 +108,28 @@
 	'
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashIsEmpty,flashCount,flashInsert">
 	<cfargument name="key" type="string" required="true" hint="The key to check if it exists.">
-	<cfreturn StructKeyExists(session.flash, arguments.key)>
+	<cfargument name="$flash" type="struct" required="false" default="#$readFlash()#">
+	<cfreturn StructKeyExists(arguments.$flash, arguments.key)>
+</cffunction>
+
+<cffunction name="$readFlash" returntype="struct" access="public" output="false">
+	<cfargument name="flashStorage" type="string" required="false" default="#get('flashStorage')#">
+	<cfscript>
+		if (arguments.flashStorage == "session" && StructKeyExists(session, "flash"))
+			return Duplicate(session.flash);
+		else if (arguments.flashStorage == "cookie" && StructKeyExists(cookie, "flash"))
+			return DeSerializeJSON(cookie.flash);
+		return StructNew();
+	</cfscript>
+</cffunction>
+
+<cffunction name="$writeFlash" returntype="void" access="public" output="false">
+	<cfargument name="flash" type="struct" required="true">
+	<cfargument name="flashStorage" type="string" required="false" default="#get('flashStorage')#">
+	<cfscript>
+		if (arguments.flashStorage == "session")
+			session.flash = arguments.flash;
+		else if (arguments.flashStorage == "cookie")
+			cookie.flash = SerializeJSON(arguments.flash);
+	</cfscript>
 </cffunction>

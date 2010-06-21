@@ -4,8 +4,9 @@
 	<cfset controller = $controller(name="dummy").$createControllerObject(params)>
 
 	<cffunction name="setup">
-		<cfset session.flash = StructNew()>
-		<cfset session.flash.success = "Congrats!">
+		<cfset controller.flashInsert(success="Congrats!")>
+		<cfset flashStorage = application.wheels.flashStorage>
+		<cfset application.wheels.flashStorage = "cookie">
 	</cffunction>
 	
 	<cffunction name="test_key_exists">
@@ -24,7 +25,7 @@
 	</cffunction>	
 	
 	<cffunction name="test_key_provided_flash_empty">
-		<cfset StructClear(session.flash)>
+		<cfset controller.flashClear()>
 		<cfset result = controller.flash("invalidkey")>
 		<cfset assert("result IS ''")>
 	</cffunction>
@@ -35,9 +36,13 @@
 	</cffunction>
 	
 	<cffunction name="test_no_key_provided_flash_empty">
-		<cfset StructClear(session.flash)>
+		<cfset controller.flashClear()>
 		<cfset result = controller.flash()>
 		<cfset assert("IsStruct(result) AND StructIsEmpty(result)")>
+	</cffunction>
+
+	<cffunction name="teardown">
+		<cfset application.wheels.flashStorage = flashStorage>
 	</cffunction>
 
 </cfcomponent>

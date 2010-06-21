@@ -2,9 +2,9 @@
 
 	<cfinclude template="/wheelsMapping/view/miscellaneous.cfm">
 
-	<cffunction name="test_getting_object_from_session_scope">
-		<cfset session.obj = model("post").findOne()>
-		<cfset loc.result = $getObject("session.obj")>
+	<cffunction name="test_getting_object_from_request_scope">
+		<cfset request.obj = model("post").findOne()>
+		<cfset loc.result = $getObject("request.obj")>
 		<cfset assert("IsObject(loc.result)")>
 	</cffunction>
 

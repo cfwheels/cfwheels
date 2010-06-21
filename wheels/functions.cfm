@@ -1,6 +1,5 @@
 <cfset this.name = Hash(GetDirectoryFromPath(GetBaseTemplatePath()))>
 <cfset this.mappings["/wheelsMapping"] = GetDirectoryFromPath(GetBaseTemplatePath()) & "wheels">
-<cfset this.sessionManagement = true>
 <cfif StructKeyExists(server, "railo")>
 	<cfinclude template="../config/app.cfm">
 	<cfinclude template="controller/appfunctions.cfm">

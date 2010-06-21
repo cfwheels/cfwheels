@@ -371,10 +371,6 @@
 		// set params in the request scope as well so we can display it in the debug info outside of the dispatch / controller context
 		request.wheels.params = loc.params;
 
-		// create an empty flash unless it already exists
-		if (!StructKeyExists(arguments.sessionScope, "flash"))
-			arguments.sessionScope.flash = {};
-
 		if (application.wheels.showDebugInformation)
 			$debugPoint("setup");
 
@@ -387,7 +383,7 @@
 			$location(argumentCollection=request.wheels.redirect);
 
 		// clear out the flash (note that this is not done for redirects since the processing does not get here)
-		StructClear(arguments.sessionScope.flash);
+		loc.controller.flashClear(arguments.sessionScope);
 	</cfscript>
 	<cfreturn Trim(request.wheels.response)>
 </cffunction>
