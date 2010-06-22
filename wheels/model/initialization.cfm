@@ -89,7 +89,7 @@
 				{
 					// set nullable validations if the developer has not
 					loc.defaultValidationsAllowBlank = false;
-					if (!variables.wheels.class.properties[loc.property].nullable and !$validationExists(property=loc.property, validation="validatesPresenceOf"))
+					if (!variables.wheels.class.properties[loc.property].nullable and !Len(loc.columns["column_default_value"][loc.i]) and !$validationExists(property=loc.property, validation="validatesPresenceOf"))
 						validatesPresenceOf(properties=loc.property);
 						loc.defaultValidationsAllowBlank = true;
 					// set length validations if the developer has not
