@@ -314,20 +314,23 @@
 			}
 			else if (StructKeyExists(arguments, "object") && IsObject(arguments.object))
 			{
-				loc.object = arguments.object;
+				loc.modelName = arguments.object.$classData().modelName;
+				arguments[loc.modelName] = arguments.object;
 				StructDelete(arguments, "object");
-				StructAppend(arguments, loc.object.properties(), false);
+				StructAppend(arguments, arguments[loc.modelName].properties(), false);
 			}
 			else if (StructKeyExists(arguments, "objects") && IsArray(arguments.objects))
 			{
 				loc.originalArguments = Duplicate(arguments);
 				loc.array = arguments.objects;
 				StructDelete(arguments, "objects");
+				loc.modelName = loc.array[1].$classData().modelName;
 				loc.returnValue = "";
 				loc.iEnd = ArrayLen(loc.array);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					arguments.current = loc.i;
+					arguments[loc.modelName] = loc.array[loc.i];
 					loc.properties = loc.array[loc.i].properties();
 
 					// we have to overwrite the values in each loop but first we remove the ones that are in the original arguments since they take precedence
