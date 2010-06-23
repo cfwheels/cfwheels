@@ -97,6 +97,7 @@
 	application.wheels.maximumItemsToCache = 5000;
 	application.wheels.cacheCullPercentage = 10;
 	application.wheels.cacheCullInterval = 5;
+	application.wheels.cacheDatePart = "n";
 	application.wheels.defaultCacheTime = 60;
 	application.wheels.clearQueryCacheOnReload = true;
 

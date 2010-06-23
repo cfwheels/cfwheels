@@ -402,7 +402,7 @@
 		if ($cacheCount() < application.wheels.maximumItemsToCache)
 		{
 			application.wheels.cache[arguments.category][arguments.key] = {};
-			application.wheels.cache[arguments.category][arguments.key].expiresAt = DateAdd("n", arguments.time, Now());
+			application.wheels.cache[arguments.category][arguments.key].expiresAt = DateAdd(application.wheels.cacheDatePart, arguments.time, Now());
 			if (IsSimpleValue(arguments.value))
 				application.wheels.cache[arguments.category][arguments.key].value = arguments.value;
 			else
