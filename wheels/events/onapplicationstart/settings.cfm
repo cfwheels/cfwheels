@@ -85,7 +85,7 @@
 	application.wheels.loadDefaultRoutes = true;
 	application.wheels.automaticValidations = true;
 	application.wheels.setUpdatedAtOnCreate = true;
-	application.wheels.useExpandedColumnAliases = true;
+	application.wheels.useExpandedColumnAliases = false;
 
 	// if session management is enabled in the application we default to storing flash data in the session scope, if not we use a cookie
 	if (StructKeyExists(this, "sessionManagement") && this.sessionManagement)
