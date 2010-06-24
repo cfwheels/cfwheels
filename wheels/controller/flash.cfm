@@ -118,7 +118,7 @@
 	<cfargument name="flashStorage" type="string" required="false" default="#get('flashStorage')#">
 	<cfscript>
 		if (!StructKeyExists(arguments, "$locked"))
-			$simpleLock(name="flashLock", type="exclusive", execute="$writeFlash", executeArgs=arguments);		
+			return $simpleLock(name="flashLock", type="exclusive", execute="$writeFlash", executeArgs=arguments);		
 		if (arguments.flashStorage == "session")
 			session.flash = arguments.flash;
 		else if (arguments.flashStorage == "cookie")
