@@ -218,6 +218,23 @@
 
 		<cfdump attributeCollection="#attributeArgs#"><cfabort>
 	</cffunction>
+	
+	<cffunction name="debug" returntype="Any" output="false" hint="used to dump an expression and view the results later.">
+		<cfargument name="label" type="string" required="true" hint="label for the debug output">
+		<cfargument name="expression" type="string" required="true" hint="the expression you want to see output for">
+		<cfset var attributeArgs = {}>
+		<cfset var dump = "">
+
+		<cfset attributeArgs["var"] = "#evaluate(arguments.expression)#">
+
+		<cfset structdelete(arguments, "halt")>
+		<cfset structdelete(arguments, "expression")>
+		<cfset structappend(attributeArgs, arguments, true)>
+		<cfsavecontent variable="dump">
+		<cfdump attributeCollection="#attributeArgs#">
+		</cfsavecontent>
+		<cfset request["_testdebug"][arguments.label] = dump>
+	</cffunction>
 
 	<cffunction name="raised" returntype="string" output="false" hint="catches an raised error and returns the error type. great if you want to test that a certain exception will be raised.">
 		<cfargument type="string" name="expression" required="true">

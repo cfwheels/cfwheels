@@ -56,5 +56,11 @@ table.testing tr.errRow {background-color:#FFDFDF;}
 	</cfif>
 </cfloop>
 </table>
+<cfif structkeyexists(request, "_testdebug")>
+	<cfloop collection="#request._testdebug#" item="i">
+	<h3>#i#</h3>
+	#request._testdebug[i]#
+	</cfloop>
+</cfif>
 </cfoutput>
 </cfif>
