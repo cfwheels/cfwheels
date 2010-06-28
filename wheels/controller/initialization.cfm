@@ -3,6 +3,7 @@
 <cffunction name="$initControllerClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="false" default="">
 	<cfscript>
+		variables.wheels = {};
 		variables.wheels.name = arguments.name;
 		variables.wheels.verifications = [];
 		variables.wheels.filters = [];
@@ -27,7 +28,7 @@
 
 <cffunction name="$setControllerClassData" returntype="void" access="public" output="false">
 	<cfscript>
-		variables.wheels = application.wheels.controllers[arguments.name].$getControllerClassData();
+		variables.wheels = duplicate(application.wheels.controllers[arguments.name].$getControllerClassData());
 	</cfscript>
 </cffunction>
 
