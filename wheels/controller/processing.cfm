@@ -56,7 +56,7 @@
 				loc.executeArgs.static = loc.static;
 				loc.executeArgs.category = loc.category;
 				// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, caling the controller action (which in turn sets the content to the request scope)
-				request.wheels.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+				variables.wheels.$response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 			}
 			else
 			{
@@ -136,7 +136,7 @@
 		if (arguments.static)
 			$cache(cache="serverCache", timeSpan=CreateTimeSpan(0,0,arguments.time,0));
 		else
-			$addToCache(key=arguments.key, value=request.wheels.response, time=arguments.time, category=arguments.category);
+			$addToCache(key=arguments.key, value=variables.wheels.$response, time=arguments.time, category=arguments.category);
 	</cfscript>
-	<cfreturn request.wheels.response>
+	<cfreturn $getResponse()>
 </cffunction>

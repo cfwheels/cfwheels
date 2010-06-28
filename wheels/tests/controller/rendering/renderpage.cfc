@@ -7,22 +7,22 @@
 
 	<cffunction name="test_rendering_current_action">
 		<cfset result = controller.renderPage()>
-		<cfset assert("request.wheels.response Contains 'view template content'")>
+		<cfset assert("controller.$getResponse() Contains 'view template content'")>
 	</cffunction>
 
 	<cffunction name="test_rendering_view_for_another_controller_and_action">
 		<cfset result = controller.renderPage(controller="main", action="template")>
-		<cfset assert("request.wheels.response Contains 'main controller template content'")>
+		<cfset assert("controller.$getResponse() Contains 'main controller template content'")>
 	</cffunction>
 
 	<cffunction name="test_rendering_view_for_another_action">
 		<cfset result = controller.renderPage(action="template")>
-		<cfset assert("request.wheels.response Contains 'specific template content'")>
+		<cfset assert("controller.$getResponse() Contains 'specific template content'")>
 	</cffunction>
 
 	<cffunction name="test_rendering_specific_template">
 		<cfset result = controller.renderPage(template="template")>
-		<cfset assert("request.wheels.response Contains 'specific template content'")>
+		<cfset assert("controller.$getResponse() Contains 'specific template content'")>
 	</cffunction>
 
 	<cffunction name="test_rendering_and_returning_as_string">

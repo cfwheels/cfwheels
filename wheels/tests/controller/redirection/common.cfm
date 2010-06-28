@@ -7,5 +7,4 @@
 <cffunction name="teardown">
 	<cfset request.cgi = $$oldCGIScope>
 	<cfset application.wheels.viewPath = $$oldViewPath>
-	<cfset StructDelete(request.wheels, "redirect", false)>
 </cffunction>

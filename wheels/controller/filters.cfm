@@ -104,7 +104,7 @@
 				loc.arguments = loc.filter.arguments;
 				loc.arguments.method = loc.filter.through;
 				loc.result = $invoke(argumentCollection=loc.arguments);
-				if ((StructKeyExists(loc, "result") && !loc.result) || StructKeyExists(request.wheels, "response") || StructKeyExists(request.wheels, "redirect"))
+				if ((StructKeyExists(loc, "result") && !loc.result) || $performedRenderOrRedirect())
 				{
 					// the filter function returned false or rendered content so we skip the remaining filters in the chain
 					break;

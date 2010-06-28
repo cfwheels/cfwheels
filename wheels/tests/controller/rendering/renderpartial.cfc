@@ -7,7 +7,7 @@
 
 	<cffunction name="test_rendering_partial">
 		<cfset result = controller.renderPartial(partial="partialTemplate")>
-		<cfset assert("request.wheels.response Contains 'partial template content'")>
+		<cfset assert("controller.$getResponse() Contains 'partial template content'")>
 	</cffunction>
 
 	<cffunction name="test_rendering_partial_and_returning_as_string">

@@ -378,13 +378,15 @@
 		loc.controller.$processAction();
 
 		// if there is a delayed redirect pending we execute it here thus halting the rest of the request
-		if (StructKeyExists(request.wheels, "redirect"))
-			$location(argumentCollection=request.wheels.redirect);
+		if (loc.controller.$performedRedirect())
+		{
+			$location(argumentCollection=loc.controller.$getRedirect());
+		}
 
 		// clear out the flash (note that this is not done for redirects since the processing does not get here)
 		loc.controller.flashClear();
 	</cfscript>
-	<cfreturn Trim(request.wheels.response)>
+	<cfreturn loc.controller.$getResponse()>
 </cffunction>
 
 <cffunction name="$multipartData" returntype="array" access="public" output="false"

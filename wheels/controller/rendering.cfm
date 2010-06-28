@@ -46,7 +46,7 @@
 		if (arguments.$returnAs == "string")
 			loc.returnValue = loc.page;
 		else
-			request.wheels.response = loc.page;
+			variables.wheels.$response = loc.page;
 		if (application.wheels.showDebugInformation)
 			$debugPoint("view");
 	</cfscript>
@@ -63,7 +63,7 @@
 	'
 	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderText,renderPartial">
 	<cfscript>
-		request.wheels.response = "";
+		variables.wheels.$response = "";
 	</cfscript>
 </cffunction>
 
@@ -76,7 +76,7 @@
 	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderNothing,renderPartial">
 	<cfargument name="text" type="any" required="true" hint="The text to be rendered.">
 	<cfscript>
-		request.wheels.response = arguments.text;
+		variables.wheels.$response = arguments.text;
 	</cfscript>
 </cffunction>
 
@@ -98,7 +98,7 @@
 		if (arguments.$returnAs == "string")
 			loc.returnValue = loc.partial;
 		else
-			request.wheels.response = loc.partial;
+			variables.wheels.$response = loc.partial;
 	</cfscript>
 	<cfif StructKeyExists(loc, "returnValue")>
 		<cfreturn loc.returnValue>
@@ -408,11 +408,25 @@
 </cffunction>
 
 <cffunction name="$performedRender" returntype="boolean" access="public" output="false">
-	<cfreturn StructKeyExists(request.wheels, "response")>
+	<cfreturn StructKeyExists(variables.wheels, "$response")>
 </cffunction>
 
 <cffunction name="$performedRedirect" returntype="boolean" access="public" output="false">
-	<cfreturn StructKeyExists(request.wheels, "redirect")>
+	<cfreturn StructKeyExists(variables.wheels, "$redirect")>
+</cffunction>
+
+<cffunction name="$getResponse" returntype="string" access="public" output="false">
+	<cfif StructKeyExists(variables.wheels, "$response")>
+		<cfreturn trim(variables.wheels.$response)>
+	</cfif>
+	<cfreturn "">
+</cffunction>
+
+<cffunction name="$getRedirect" returntype="struct" access="public" output="false">
+	<cfif StructKeyExists(variables.wheels, "$redirect")>
+		<cfreturn variables.wheels.$redirect>
+	</cfif>
+	<cfreturn StructNew()>
 </cffunction>
 
 <cffunction name="yield" returntype="string" access="public" output="false" hint="Used to output the content for a particular selection."	

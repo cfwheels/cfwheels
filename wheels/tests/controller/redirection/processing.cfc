@@ -7,7 +7,8 @@
 
 	<cffunction name="test_remaining_action_code_should_run">
 		<cfset controller.$callAction(action="testRedirect")>
-		<cfset assert("IsDefined('request.wheels.redirect.url') AND IsDefined('request.setInActionAfterRedirect')")>
+		<cfset loc.r = controller.$getRedirect()>
+		<cfset assert("IsDefined('loc.r.url') AND IsDefined('request.setInActionAfterRedirect')")>
 	</cffunction>
 
 </cfcomponent>
