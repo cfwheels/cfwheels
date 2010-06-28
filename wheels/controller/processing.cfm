@@ -56,7 +56,7 @@
 				loc.executeArgs.static = loc.static;
 				loc.executeArgs.category = loc.category;
 				// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, caling the controller action (which in turn sets the content to the request scope)
-				variables.wheels.$response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+				variables.wheels.instance.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 			}
 			else
 			{
@@ -103,7 +103,7 @@
 			}
 			catch(Any e)
 			{
-				if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.wheels.name)#/#LCase(arguments.action)#.cfm")))
+				if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.wheels.class.name)#/#LCase(arguments.action)#.cfm")))
 				{
 					$throw(object=e);
 				}
@@ -111,7 +111,7 @@
 				{
 					if (application.wheels.showErrorInformation)
 					{
-						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.action#` action in the `#variables.wheels.name#` controller.", extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(variables.wheels.name)#` directory (create the directory as well if it doesn't already exist).");
+						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.action#` action in the `#variables.wheels.class.name#` controller.", extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(variables.wheels.class.name)#` directory (create the directory as well if it doesn't already exist).");
 					}
 					else
 					{
@@ -136,7 +136,7 @@
 		if (arguments.static)
 			$cache(cache="serverCache", timeSpan=CreateTimeSpan(0,0,arguments.time,0));
 		else
-			$addToCache(key=arguments.key, value=variables.wheels.$response, time=arguments.time, category=arguments.category);
+			$addToCache(key=arguments.key, value=variables.wheels.instance.response, time=arguments.time, category=arguments.category);
 	</cfscript>
-	<cfreturn $getResponse()>
+	<cfreturn response()>
 </cffunction>

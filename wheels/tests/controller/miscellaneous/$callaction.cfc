@@ -14,12 +14,12 @@
 
 	<cffunction name="test_setting_variable_for_view">
 		<cfset controller.$callAction(action="test")>
-		<cfset assert("controller.$getResponse() Contains 'variableForViewContent'")>
+		<cfset assert("controller.response() Contains 'variableForViewContent'")>
 	</cffunction>
 
 	<cffunction name="test_implicitly_calling_render_page">
 		<cfset controller.$callAction(action="test")>
-		<cfset assert("controller.$getResponse() Contains 'view template content'")>
+		<cfset assert("controller.response() Contains 'view template content'")>
 	</cffunction>
 
 

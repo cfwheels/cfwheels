@@ -1,7 +1,8 @@
 <cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
-		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.params = {controller="dummy", action="dummy"}>
+		<cfset loc.controller = $controller(name="dummy").$createControllerObject(loc.params)>
 	</cffunction>
 
 	<cffunction name="test_contentFor_and_yield_assigning_section">

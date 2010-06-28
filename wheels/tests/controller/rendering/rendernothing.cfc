@@ -7,7 +7,7 @@
 
 	<cffunction name="test_render_nothing">
 		<cfset controller.renderNothing()>
-		<cfset assert("controller.$getResponse() IS ''")>
+		<cfset assert("controller.response() IS ''")>
 	</cffunction>
 
 </cfcomponent>

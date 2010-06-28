@@ -46,7 +46,7 @@
 		if (arguments.$returnAs == "string")
 			loc.returnValue = loc.page;
 		else
-			variables.wheels.$response = loc.page;
+			variables.wheels.instance.response = loc.page;
 		if (application.wheels.showDebugInformation)
 			$debugPoint("view");
 	</cfscript>
@@ -63,7 +63,7 @@
 	'
 	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderText,renderPartial">
 	<cfscript>
-		variables.wheels.$response = "";
+		variables.wheels.instance.response = "";
 	</cfscript>
 </cffunction>
 
@@ -76,7 +76,7 @@
 	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderNothing,renderPartial">
 	<cfargument name="text" type="any" required="true" hint="The text to be rendered.">
 	<cfscript>
-		variables.wheels.$response = arguments.text;
+		variables.wheels.instance.response = arguments.text;
 	</cfscript>
 </cffunction>
 
@@ -98,7 +98,7 @@
 		if (arguments.$returnAs == "string")
 			loc.returnValue = loc.partial;
 		else
-			variables.wheels.$response = loc.partial;
+			variables.wheels.instance.response = loc.partial;
 	</cfscript>
 	<cfif StructKeyExists(loc, "returnValue")>
 		<cfreturn loc.returnValue>
@@ -361,7 +361,7 @@
 			// store the content in a variable in the request scope so it can be accessed
 			// by the yield function that the developer uses in layout files
 			// (this is done so we avoid passing data to/from it since it would complicate things for the developer)
-			contentFor("layout", arguments.$content); 
+			contentFor("layout", arguments.$content);
 			loc.include = application.wheels.viewPath;
 			if (IsBoolean(arguments.$layout))
 			{
@@ -408,23 +408,27 @@
 </cffunction>
 
 <cffunction name="$performedRender" returntype="boolean" access="public" output="false">
-	<cfreturn StructKeyExists(variables.wheels, "$response")>
+	<cfreturn StructKeyExists(variables.wheels.instance, "response")>
 </cffunction>
 
 <cffunction name="$performedRedirect" returntype="boolean" access="public" output="false">
-	<cfreturn StructKeyExists(variables.wheels, "$redirect")>
+	<cfreturn StructKeyExists(variables.wheels.instance, "redirect")>
 </cffunction>
 
-<cffunction name="$getResponse" returntype="string" access="public" output="false">
-	<cfif StructKeyExists(variables.wheels, "$response")>
-		<cfreturn trim(variables.wheels.$response)>
+<cffunction name="response" returntype="string" access="public" output="false">
+	<cfif StructCount(arguments) IS NOT 0>
+		<cfset variables.wheels.instance.response = arguments[1]>	
+	<cfelse>
+		<cfif StructKeyExists(variables.wheels.instance, "response")>
+			<cfreturn Trim(variables.wheels.instance.response)>
+		</cfif>
+		<cfreturn "">
 	</cfif>
-	<cfreturn "">
 </cffunction>
 
 <cffunction name="$getRedirect" returntype="struct" access="public" output="false">
-	<cfif StructKeyExists(variables.wheels, "$redirect")>
-		<cfreturn variables.wheels.$redirect>
+	<cfif StructKeyExists(variables.wheels.instance, "redirect")>
+		<cfreturn variables.wheels.instance.redirect>
 	</cfif>
 	<cfreturn StructNew()>
 </cffunction>
@@ -453,8 +457,8 @@
 	<cfif !len(arguments.section)>
 		<cfset arguments.section = "layout">
 	</cfif>
-	<cfif !StructKeyExists(variables.wheels.$contentFor, arguments.section)>
+	<cfif !StructKeyExists(variables.wheels.instance.contentFor, arguments.section)>
 		<cfreturn "">
 	</cfif>
-	<cfreturn ArrayToList(variables.wheels.$contentFor[arguments.section], chr(10))>
+	<cfreturn ArrayToList(variables.wheels.instance.contentFor[arguments.section], chr(10))>
 </cffunction>

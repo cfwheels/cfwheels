@@ -16,17 +16,17 @@
 	<cfargument name="handler" type="string" required="false" hint="Pass in the name of a function that should handle failed verifications (default is to just abort the request when a verification fails).">
 	<cfscript>
 		$insertDefaults(name="verifies", input=arguments);
-		ArrayAppend(variables.wheels.verifications, Duplicate(arguments));
+		ArrayAppend(variables.wheels.class.verifications, Duplicate(arguments));
 	</cfscript>
 </cffunction>
 
 <cffunction name="verificationChain" returntype="array" access="public" output="false" hint="Returns an array of all the verifications set on this controller in the order in which they will be executed.">
-	<cfreturn variables.wheels.verifications>
+	<cfreturn variables.wheels.class.verifications>
 </cffunction>
 
 <cffunction name="setVerificationChain" returntype="void" access="public" output="false" hint="Use this function if you need a more low level way of setting the entire verification chain for a controller.">
 	<cfargument name="chain" type="array" required="true" hint="The entire verification chain that you want to use for this controller.">
-	<cfset variables.wheels.verifications = arguments.chain>
+	<cfset variables.wheels.class.verifications = arguments.chain>
 </cffunction>
 
 <cffunction name="$runVerifications" returntype="void" access="public" output="false">

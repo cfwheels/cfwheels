@@ -7,7 +7,7 @@
 
 	<cffunction name="test_render_text">
 		<cfset controller.renderText("OMG, look what I rendered!")>
-		<cfset assert("controller.$getResponse() IS 'OMG, look what I rendered!'")>
+		<cfset assert("controller.response() IS 'OMG, look what I rendered!'")>
 	</cffunction>
 
 </cfcomponent>

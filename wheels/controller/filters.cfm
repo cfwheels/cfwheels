@@ -45,14 +45,14 @@
 					}
 				}
 			}
-			ArrayAppend(variables.wheels.filters, loc.filter);
+			ArrayAppend(variables.wheels.class.filters, loc.filter);
 		}
 	</cfscript>
 </cffunction>
 
 <cffunction name="setFilterChain" returntype="void" access="public" output="false" hint="Use this function if you need a more low level way of setting the entire filter chain for a controller.">
 	<cfargument name="chain" type="array" required="true" hint="The entire filter chain that you want to use for this controller.">
-	<cfset variables.wheels.filters = arguments.chain>
+	<cfset variables.wheels.class.filters = arguments.chain>
 </cffunction>
 
 <!--- PUBLIC CONTROLLER CLASS FUNCTIONS --->
@@ -69,15 +69,15 @@
 
 		if (arguments.type eq "all")
 		{// return all filters
-			return variables.wheels.filters;
+			return variables.wheels.class.filters;
 		}
 
 		// loop over the filters and return all those that match the supplied type
 		loc.returnValue = ArrayNew(1);
-		loc.iEnd = ArrayLen(variables.wheels.filters);
+		loc.iEnd = ArrayLen(variables.wheels.class.filters);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++) {
-			if (variables.wheels.filters[loc.i].type eq arguments.type)
-				ArrayAppend(loc.returnValue, variables.wheels.filters[loc.i]);
+			if (variables.wheels.class.filters[loc.i].type eq arguments.type)
+				ArrayAppend(loc.returnValue, variables.wheels.class.filters[loc.i]);
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -99,7 +99,7 @@
 			{
 				if (!StructKeyExists(variables, loc.filter.through))
 				{
-					$throw(type="Wheels.filterNotFound", message="Wheels tried to run the `#loc.filter.through#` function as a #arguments.type# filter but could not find it.", extendedInfo="Make sure there is a function named `#loc.filter.through#` in the `#variables.wheels.name#.cfc` file.");
+					$throw(type="Wheels.filterNotFound", message="Wheels tried to run the `#loc.filter.through#` function as a #arguments.type# filter but could not find it.", extendedInfo="Make sure there is a function named `#loc.filter.through#` in the `#variables.wheels.class.name#.cfc` file.");
 				}
 				loc.arguments = loc.filter.arguments;
 				loc.arguments.method = loc.filter.through;

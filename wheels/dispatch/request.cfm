@@ -386,7 +386,7 @@
 		// clear out the flash (note that this is not done for redirects since the processing does not get here)
 		loc.controller.flashClear();
 	</cfscript>
-	<cfreturn loc.controller.$getResponse()>
+	<cfreturn loc.controller.response()>
 </cffunction>
 
 <cffunction name="$multipartData" returntype="array" access="public" output="false"
