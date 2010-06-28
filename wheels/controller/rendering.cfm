@@ -358,7 +358,10 @@
 		var loc = {};
 		if ((IsBoolean(arguments.$layout) && arguments.$layout) || (!IsBoolean(arguments.$layout) && Len(arguments.$layout)))
 		{
-			request.wheels.contentForLayout = arguments.$content; // store the content in a variable in the request scope so it can be accessed by the contentForLayout function that the developer uses in layout files (this is done so we avoid passing data to/from it since it would complicate things for the developer)
+			// store the content in a variable in the request scope so it can be accessed
+			// by the yield function that the developer uses in layout files
+			// (this is done so we avoid passing data to/from it since it would complicate things for the developer)
+			contentFor("layout", arguments.$content); 
 			loc.include = application.wheels.viewPath;
 			if (IsBoolean(arguments.$layout))
 			{
@@ -410,4 +413,34 @@
 
 <cffunction name="$performedRedirect" returntype="boolean" access="public" output="false">
 	<cfreturn StructKeyExists(request.wheels, "redirect")>
+</cffunction>
+
+<cffunction name="yield" returntype="string" access="public" output="false" hint="Used to output the content for a particular selection."	
+	examples=
+	'
+		<!--- views/layout.cfm --->
+		<html>
+		<head>
+		    <title>My Site</title>
+		    ##yield("head")##
+		</head>
+		<body>
+
+		<cfoutput>
+		##yield()##
+		</cfoutput>
+
+		</body>
+		</html>
+	'
+	categories="view-helper,miscellaneous" chapters="using-layouts">
+	<cfargument name="section" type="string" required="false" default="">
+	<!--- blank defaults to layout --->
+	<cfif !len(arguments.section)>
+		<cfset arguments.section = "layout">
+	</cfif>
+	<cfif !StructKeyExists(variables.wheels.$contentFor, arguments.section)>
+		<cfreturn "">
+	</cfif>
+	<cfreturn ArrayToList(variables.wheels.$contentFor[arguments.section], chr(10))>
 </cffunction>

@@ -1,22 +1,36 @@
-<cffunction name="contentForLayout" returntype="string" access="public" output="false" hint="Used inside a layout file to output the HTML created in the view."
+<cffunction name="contentFor" returntype="void" access="public" output="false" hint="Used to store a sections output for later rendering with a layout"
 	examples=
-	'
-		<!--- views/layout.cfm --->
+	'	
+		<!--- from within your view --->
+		<cfsavecontent variable="mysidebar">
+		<h1>My Sidebar Text</h1>
+		</cfsavecontent>
+		<cfset contentFor("sidebase", mysidebar)>
+		
+		
+		<!--- in your layout --->
 		<html>
 		<head>
 		    <title>My Site</title>
 		</head>
 		<body>
+		
+		##yield("sidebar")##
 
 		<cfoutput>
-		##contentForLayout()##
+		##yield()##
 		</cfoutput>
 
 		</body>
 		</html>
 	'
 	categories="view-helper,miscellaneous" chapters="using-layouts">
-	<cfreturn request.wheels.contentForLayout>
+	<cfargument name="section" type="string" required="true">
+	<cfargument name="content" type="string" required="true">
+	<cfif !StructKeyExists(variables.wheels.$contentFor, arguments.section)>
+		<cfset variables.wheels.$contentFor[arguments.section] = []>
+	</cfif>
+	<cfset ArrayAppend(variables.wheels.$contentFor[arguments.section], arguments.content)>
 </cffunction>
 
 <cffunction name="includePartial" returntype="string" access="public" output="false" hint="Includes the specified file in the view. Similar to using `cfinclude` but with the ability to cache the result and using Wheels specific file look-up. By default, Wheels will look for the file in the current controller's view folder. To include a file relative from the `views` folder, you can start the path supplied to `name` with a forward slash."

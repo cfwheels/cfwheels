@@ -1,6 +1,6 @@
 <cfoutput>
 start:defaultlayout
-#contentForLayout()#
+#yield()#
 <cfif structKeyExists(variables, "variableForLayout")>
 	#variableForLayout#
 </cfif>

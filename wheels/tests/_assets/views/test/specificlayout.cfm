@@ -1,5 +1,5 @@
 <cfoutput>
 start:specificlayout
-#contentForLayout()#
+#yield()#
 end:specificlayout
 </cfoutput>

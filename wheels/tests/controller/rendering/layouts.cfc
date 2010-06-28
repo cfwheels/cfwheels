@@ -12,7 +12,7 @@
 
 	<cffunction name="test_rendering_with_default_layout_in_controller_folder">
 		<cfset tempFile = Replace(Replace(GetCurrentTemplatePath(), "\", "/", "all"), "controller/rendering/layouts.cfc", "_assets/views/test/layout.cfm")>
-		<cffile action="write" output="<cfoutput>start:controllerlayout##contentForLayout()##end:controllerlayout</cfoutput>" file="#tempFile#">
+		<cffile action="write" output="<cfoutput>start:controllerlayout##yield()##end:controllerlayout</cfoutput>" file="#tempFile#">
 		<cfset application.wheels.existingLayoutFiles = "test">
 		<cfset controller.renderPage()>
 		<cfset assert("request.wheels.response Contains 'view template content' AND request.wheels.response Contains 'start:controllerlayout' AND request.wheels.response Contains 'end:controllerlayout'")>

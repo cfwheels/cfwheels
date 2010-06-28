@@ -7,6 +7,7 @@
 		variables.wheels.verifications = [];
 		variables.wheels.filters = [];
 		variables.wheels.cachableActions = [];
+		variables.wheels.$contentFor = {};
 		if (StructKeyExists(variables, "init"))
 			init();
 	</cfscript>

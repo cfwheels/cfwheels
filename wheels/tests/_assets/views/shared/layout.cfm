@@ -1,5 +1,5 @@
 <cfoutput>
 start:sharedlayout
-#contentForLayout()#
+#yield()#
 end:sharedlayout
 </cfoutput>

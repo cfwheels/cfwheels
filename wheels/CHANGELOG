@@ -86,6 +86,15 @@ Changes
 
 [Views]
 
+	* Added contentFor()
+	
+		- takes an optional section argument to append, by default appends content for the layout section 
+
+	* Added yield() replaces contentForLayout()
+	
+		- takes an optional section argument to return, by default returns content for the layout section
+		- when upgrading just replace all contentForLayout() calls with yield()
+
 	* Ability for years to display in descending order in date select form tags - [Tony Petruzzi]
 	
 	* Added "head" argument to styleSheetLinkTag and javaScriptIncludeTag - [Per Djurner]
