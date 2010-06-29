@@ -7,6 +7,7 @@
 		variables.$class.verifications = [];
 		variables.$class.filters = [];
 		variables.$class.cachableActions = [];
+		variables.$class.layout = {};
 		if (StructKeyExists(variables, "init"))
 			init();
 	</cfscript>
@@ -60,6 +61,10 @@
 		loc.executeArgs = {};
 		loc.executeArgs.name = arguments.name;
 		$simpleLock(name="controllerLock", type="readonly", execute="$setControllerClassData", executeArgs=loc.executeArgs);
+
+		// put layout file in instance variable
+		variables.$instance.layout = duplicate(variables.$class.layout);
+
 		variables.params = arguments.params;
 	</cfscript>
 	<cfreturn this>
@@ -67,6 +72,13 @@
 
 <cffunction name="$getControllerClassData" returntype="struct" access="public" output="false">
 	<cfreturn variables.$class>
+</cffunction>
+
+<cffunction name="$getControllerInstanceData" returntype="struct" access="public" output="false">
+	<cfif StructKeyExists(variables, "$instance")>
+		<cfreturn variables.$instance>
+	</cfif>
+	<cfreturn StructNew()>
 </cffunction>
 
 <cffunction name="controllerName" returntype="string" access="public" output="false" hint="Returns the name of the controller.">

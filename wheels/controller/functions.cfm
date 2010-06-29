@@ -2,6 +2,7 @@
 <cfinclude template="filters.cfm">
 <cfinclude template="flash.cfm">
 <cfinclude template="initialization.cfm">
+<cfinclude template="layouts.cfm">
 <cfinclude template="processing.cfm">
 <cfinclude template="miscellaneous.cfm">
 <cfinclude template="redirection.cfm">

@@ -22,8 +22,18 @@
 		$insertDefaults(name="renderPage", input=arguments);
 		$dollarify(arguments, "controller,action,template,layout,cache,returnAs,hideDebugInformation");
 		if (application.wheels.showDebugInformation)
+		{
 			$debugPoint("view");
+		}
+		
+		// if no layout specific arguments were passed in use the this instance's layout
+		if(!Len(arguments.$layout))
+		{
+			arguments.$layout = $layoutForAction(arguments.$action);
+		}
+
 		// if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
+		// never show debugging out in ajax requests
 		if ((!IsBoolean(arguments.$layout) || arguments.$layout) && !arguments.$hideDebugInformation)
 			request.wheels.showDebugInformation = true;
 		if (application.wheels.cachePages && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
