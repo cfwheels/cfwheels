@@ -88,11 +88,11 @@ Changes
 
 [Views]
 
-	* Added contentFor()
+	* Added contentFor() - [Tony Petruzzi]
 	
 		- takes an optional section argument to append, by default appends content for the layout section 
 
-	* Added yield() replaces contentForLayout()
+	* Added yield() replaces contentForLayout() - [Tony Petruzzi]
 	
 		- takes an optional section argument to return, by default returns content for the layout section
 		- when upgrading just replace all contentForLayout() calls with yield()
