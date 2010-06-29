@@ -84,7 +84,7 @@
 		// schedule or perform the redirect right away
 		if (arguments.delay)
 		{
-			if (StructKeyExists(variables.wheels.instance, "redirect"))
+			if (StructKeyExists(variables.$instance, "redirect"))
 			{
 				// throw an error if the developer has already scheduled a redirect previously in this request
 				$throw(type="Wheels.RedirectToAlreadyCalled", message="`redirectTo()` was already called.");		
@@ -92,7 +92,7 @@
 			else
 			{
 				// schedule a redirect that will happen after the action code has been completed
-				variables.wheels.instance.redirect = {url=loc.url, addToken=arguments.addToken, statusCode=arguments.statusCode};			
+				variables.$instance.redirect = {url=loc.url, addToken=arguments.addToken, statusCode=arguments.statusCode};			
 			}
 		}
 		else

@@ -46,7 +46,7 @@
 		if (arguments.$returnAs == "string")
 			loc.returnValue = loc.page;
 		else
-			variables.wheels.instance.response = loc.page;
+			variables.$instance.response = loc.page;
 		if (application.wheels.showDebugInformation)
 			$debugPoint("view");
 	</cfscript>
@@ -63,7 +63,7 @@
 	'
 	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderText,renderPartial">
 	<cfscript>
-		variables.wheels.instance.response = "";
+		variables.$instance.response = "";
 	</cfscript>
 </cffunction>
 
@@ -76,7 +76,7 @@
 	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderNothing,renderPartial">
 	<cfargument name="text" type="any" required="true" hint="The text to be rendered.">
 	<cfscript>
-		variables.wheels.instance.response = arguments.text;
+		variables.$instance.response = arguments.text;
 	</cfscript>
 </cffunction>
 
@@ -98,7 +98,7 @@
 		if (arguments.$returnAs == "string")
 			loc.returnValue = loc.partial;
 		else
-			variables.wheels.instance.response = loc.partial;
+			variables.$instance.response = loc.partial;
 	</cfscript>
 	<cfif StructKeyExists(loc, "returnValue")>
 		<cfreturn loc.returnValue>
@@ -408,27 +408,27 @@
 </cffunction>
 
 <cffunction name="$performedRender" returntype="boolean" access="public" output="false">
-	<cfreturn StructKeyExists(variables.wheels.instance, "response")>
+	<cfreturn StructKeyExists(variables.$instance, "response")>
 </cffunction>
 
 <cffunction name="$performedRedirect" returntype="boolean" access="public" output="false">
-	<cfreturn StructKeyExists(variables.wheels.instance, "redirect")>
+	<cfreturn StructKeyExists(variables.$instance, "redirect")>
 </cffunction>
 
 <cffunction name="response" returntype="string" access="public" output="false">
 	<cfif StructCount(arguments) IS NOT 0>
-		<cfset variables.wheels.instance.response = arguments[1]>	
+		<cfset variables.$instance.response = arguments[1]>	
 	<cfelse>
-		<cfif StructKeyExists(variables.wheels.instance, "response")>
-			<cfreturn Trim(variables.wheels.instance.response)>
+		<cfif StructKeyExists(variables.$instance, "response")>
+			<cfreturn Trim(variables.$instance.response)>
 		</cfif>
 		<cfreturn "">
 	</cfif>
 </cffunction>
 
 <cffunction name="$getRedirect" returntype="struct" access="public" output="false">
-	<cfif StructKeyExists(variables.wheels.instance, "redirect")>
-		<cfreturn variables.wheels.instance.redirect>
+	<cfif StructKeyExists(variables.$instance, "redirect")>
+		<cfreturn variables.$instance.redirect>
 	</cfif>
 	<cfreturn StructNew()>
 </cffunction>
@@ -457,8 +457,8 @@
 	<cfif !len(arguments.section)>
 		<cfset arguments.section = "layout">
 	</cfif>
-	<cfif !StructKeyExists(variables.wheels.instance.contentFor, arguments.section)>
+	<cfif !StructKeyExists(variables.$instance.contentFor, arguments.section)>
 		<cfreturn "">
 	</cfif>
-	<cfreturn ArrayToList(variables.wheels.instance.contentFor[arguments.section], chr(10))>
+	<cfreturn ArrayToList(variables.$instance.contentFor[arguments.section], chr(10))>
 </cffunction>

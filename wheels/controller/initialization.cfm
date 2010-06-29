@@ -3,10 +3,10 @@
 <cffunction name="$initControllerClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="false" default="">
 	<cfscript>
-		variables.wheels.class.name = arguments.name;
-		variables.wheels.class.verifications = [];
-		variables.wheels.class.filters = [];
-		variables.wheels.class.cachableActions = [];
+		variables.$class.name = arguments.name;
+		variables.$class.verifications = [];
+		variables.$class.filters = [];
+		variables.$class.cachableActions = [];
 		if (StructKeyExists(variables, "init"))
 			init();
 	</cfscript>
@@ -19,14 +19,14 @@
 		var loc = {};
 		// if the controller file exists we instantiate it, otherwise we instantiate the parent controller
 		// this is done so that an action's view page can be rendered without having an actual controller file for it
-		loc.returnValue = $createObjectFromRoot(path=application.wheels.controllerPath, fileName=$controllerFileName(variables.wheels.class.name), method="$initControllerObject", name=variables.wheels.class.name, params=arguments.params);
+		loc.returnValue = $createObjectFromRoot(path=application.wheels.controllerPath, fileName=$controllerFileName(variables.$class.name), method="$initControllerObject", name=variables.$class.name, params=arguments.params);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$setControllerClassData" returntype="void" access="public" output="false">
 	<cfscript>
-		variables.wheels.class = application.wheels.controllers[arguments.name].$getControllerClassData();
+		variables.$class = application.wheels.controllers[arguments.name].$getControllerClassData();
 	</cfscript>
 </cffunction>
 
@@ -37,8 +37,8 @@
 		var loc = {};
 
 		// create a struct for storing request specific data
-		variables.wheels.instance = {};
-		variables.wheels.instance.contentFor = {};
+		variables.$instance = {};
+		variables.$instance.contentFor = {};
 
 		// include controller specific helper files if they exist, cache the file check for performance reasons
 		loc.helperFileExists = false;
@@ -66,9 +66,9 @@
 </cffunction>
 
 <cffunction name="$getControllerClassData" returntype="struct" access="public" output="false">
-	<cfreturn variables.wheels.class>
+	<cfreturn variables.$class>
 </cffunction>
 
 <cffunction name="controllerName" returntype="string" access="public" output="false" hint="Returns the name of the controller.">
-	<cfreturn variables.wheels.class.name>
+	<cfreturn variables.$class.name>
 </cffunction>

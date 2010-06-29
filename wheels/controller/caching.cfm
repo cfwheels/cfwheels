@@ -31,20 +31,20 @@
 
 <cffunction name="$addCachableAction" returntype="void" access="public" output="false">
 	<cfargument name="action" type="struct" required="true">
-	<cfset ArrayAppend(variables.wheels.class.cachableActions, arguments.action)>
+	<cfset ArrayAppend(variables.$class.cachableActions, arguments.action)>
 </cffunction>
 
 <cffunction name="$clearCachableActions" returntype="void" access="public" output="false">
-	<cfset ArrayClear(variables.wheels.class.cachableActions)>
+	<cfset ArrayClear(variables.$class.cachableActions)>
 </cffunction>
 
 <cffunction name="$setCachableActions" returntype="void" access="public" output="false">
 	<cfargument name="actions" type="array" required="true">
-	<cfset variables.wheels.class.cachableActions = arguments.actions>
+	<cfset variables.$class.cachableActions = arguments.actions>
 </cffunction>
 
 <cffunction name="$cachableActions" returntype="array" access="public" output="false">
-	<cfreturn variables.wheels.class.cachableActions>
+	<cfreturn variables.$class.cachableActions>
 </cffunction>
 
 <cffunction name="$hasCachableActions" returntype="boolean" access="public" output="false">

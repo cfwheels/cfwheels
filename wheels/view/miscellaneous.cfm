@@ -27,10 +27,10 @@
 	categories="view-helper,miscellaneous" chapters="using-layouts">
 	<cfargument name="section" type="string" required="true">
 	<cfargument name="content" type="string" required="true">
-	<cfif !StructKeyExists(variables.wheels.instance.contentFor, arguments.section)>
-		<cfset variables.wheels.instance.contentFor[arguments.section] = []>
+	<cfif !StructKeyExists(variables.$instance.contentFor, arguments.section)>
+		<cfset variables.$instance.contentFor[arguments.section] = []>
 	</cfif>
-	<cfset ArrayAppend(variables.wheels.instance.contentFor[arguments.section], arguments.content)>
+	<cfset ArrayAppend(variables.$instance.contentFor[arguments.section], arguments.content)>
 </cffunction>
 
 <cffunction name="includePartial" returntype="string" access="public" output="false" hint="Includes the specified file in the view. Similar to using `cfinclude` but with the ability to cache the result and using Wheels specific file look-up. By default, Wheels will look for the file in the current controller's view folder. To include a file relative from the `views` folder, you can start the path supplied to `name` with a forward slash."
