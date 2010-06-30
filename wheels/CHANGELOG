@@ -85,9 +85,66 @@ Changes
 		Example: <cfset redirectTo(route="home", delay="true")><cfreturn>
 		
 	* Added the ability to attach files with sendEmail() - [Per Djurner]
+	
+	* Ability to store flash in cookies - [Per Djurner]
+	
+	* Ability to add flash messages when redirecting - [Per Djurner]
+	
+		This will redirect the user back to the previous page and put a key called "notice"
+		in the flash container.
+		
+		<!--- add a flash notice when redirecting --->
+		<cfset redirectTo(back="true", notice="You are have been redirected")>
+		
+		<!--- get the flash notice --->
+		<cfoutput>#flash("notice")#</cfoutput>
+		
+		
+		If for some reason you need to add a key to the flash container that conflicts with
+		the arguments for redirectTo(), you can prepend "flash" to your key name and wheels
+		will remove the "flash" part and set your key.
+		
+		<!--- add a flash notice when redirecting --->
+		<cfset redirectTo(back="true", flashBack="You are have been redirected")>
+		
+		<!--- get the flash notice --->
+		<cfoutput>#flash("back")#</cfoutput>
 
 [Views]
 
+	* Added support for external links for specific form helpers - [Tony Petruzzi]
+	
+		You can use external links by passing in a URL beginning with either "http" or "https"
+		to the helpers' argument listed below:
+	
+		linkTo - href 
+		
+		#linkTo(href="http://www.cfwheels.com", text="CFWheels")#
+		
+		startFormTag - action
+		
+		#startFormTag(action="https://www.cfwheels.com")#
+		
+		javascriptIncludeTag - sources
+		
+		#javaScriptIncludeTag(sources="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js")#
+		
+		styleSheetLinkTag - sources
+		
+		#styleSheetLinkTag(sources="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css")#
+		
+
+	* Added labels by default to form fields - [Andy Bellenie]
+	
+		For object helpers:
+		label=true -> automatically labels the field based on property or custom label
+		label="" or label=false -> returns no label.
+		label="anything else" -> as before.
+
+		The new default setting is label=true. Existing 1.1 applications that had not specified a label for a field will now find automatic ones appearing.
+		To correct this, either add label=""/label=false to the helper call in the view, or add a global setting for all helpers, e.g. 
+		<cfset set(functionName="textField", label=false)>
+		
 	* Added contentFor() - [Tony Petruzzi]
 	
 		- takes an optional section argument to append, by default appends content for the layout section 
@@ -175,6 +232,7 @@ Bug Fixes
 * match and purge whitespace in where clause - #381 [Tony Petruzzi]
 * Callbacks shouldn't need to be pre-loaded - #388 [Andy Bellenie]
 * Missing default for action argument on linkTo - #321 [Andy Bellenie]
+* Session scope not locked when accessing flash - #275 [James Gibson, Per Djurner]
 
 Other
 =====
