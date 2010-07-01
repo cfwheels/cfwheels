@@ -397,6 +397,12 @@
 					loc.jEnd = ArrayLen(loc.classes);
 					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 					{
+						// defaults for cfqueryparam, will be overridden and set appropriately when a column mapping is found below
+						loc.param.type = "CF_SQL_CHAR";
+						loc.param.dataType = "char";
+						loc.param.scale = 0;
+						loc.param.list = false;
+
 						loc.classData = loc.classes[loc.j];
 						if (loc.param.property Does Not Contain "." || ListFirst(loc.param.property, ".") == loc.classData.tableName)
 						{
@@ -410,9 +416,6 @@
 							}
 							else if (ListFindNoCase(loc.classData.calculatedPropertyList, ListLast(loc.param.property, ".")))
 							{
-								loc.param.type = "CF_SQL_CHAR";
-								loc.param.dataType = "char";
-								loc.param.scale = 0;
 								loc.param.column = loc.classData.calculatedProperties[ListLast(loc.param.property, ".")].sql;
 								break;
 							}
@@ -422,6 +425,8 @@
 						$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.param.property#` property but couldn't find it in the database table.", extendedInfo="Verify the `where` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
 					loc.temp = REFind("^[a-zA-Z0-9-_\.]*#variables.wheels.class.RESQLOperators#", loc.elementDataPart, 1, true);
 					loc.param.operator = Trim(Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]));
+					if (loc.param.operator == "IN")
+						loc.param.list = true;
 					ArrayAppend(loc.params, loc.param);
 				}
 			}
@@ -439,7 +444,7 @@
 				{
 					loc.column = loc.params[loc.i].column;
 					ArrayAppend(loc.returnValue, "#loc.column# #loc.params[loc.i].operator#");
-					loc.param = {type=loc.params[loc.i].type, dataType=loc.params[loc.i].dataType, scale=loc.params[loc.i].scale};
+					loc.param = {type=loc.params[loc.i].type, dataType=loc.params[loc.i].dataType, scale=loc.params[loc.i].scale, list=loc.params[loc.i].list};
 					ArrayAppend(loc.returnValue, loc.param);
 				}
 			}
