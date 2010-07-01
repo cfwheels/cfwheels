@@ -1,13 +1,13 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="test_from_clause">
-		<cfset loc.result = model("author").$fromClause()>
+		<cfset loc.result = model("author").$fromClause(include="")>
 		<cfset assert("loc.result IS 'FROM authors'")>
 	</cffunction>
 
 	<cffunction name="test_from_clause_with_mapped_table">
 		<cfset model("author").table("tbl_authors")>
-		<cfset loc.result = model("author").$fromClause()>
+		<cfset loc.result = model("author").$fromClause(include="")>
 		<cfset model("author").table("authors")>
 		<cfset assert("loc.result IS 'FROM tbl_authors'")>
 	</cffunction>

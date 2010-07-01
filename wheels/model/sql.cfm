@@ -18,7 +18,7 @@
 </cffunction>
 
 <cffunction name="$fromClause" returntype="string" access="public" output="false">
-	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="include" type="string" required="true">
 	<cfscript>
 		var loc = {};
 
@@ -67,21 +67,21 @@
 	<cfreturn arguments.sql>
 </cffunction>
 
-<cffunction name="$addOrderByClause" returntype="array" access="public" output="false">
-	<cfargument name="sql" type="array" required="true">
+<cffunction name="$orderByClause" returntype="string" access="public" output="false">
 	<cfargument name="order" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
 	<cfscript>
 		var loc = {};
+		loc.returnValue = "";
 		if (Len(arguments.order))
 		{
 			if (arguments.order == "random")
 			{
-				loc.order = variables.wheels.class.adapter.$randomOrder();
+				loc.returnValue = variables.wheels.class.adapter.$randomOrder();
 			}
 			else if (arguments.order Contains "(")
 			{
-				loc.order = arguments.order;
+				loc.returnValue = arguments.order;
 			}
 			else
 			{
@@ -91,7 +91,7 @@
 					loc.classes = $expandedAssociations(include=arguments.include);
 				ArrayPrepend(loc.classes, variables.wheels.class);
 
-				loc.order = "";
+				loc.returnValue = "";
 				loc.iEnd = ListLen(arguments.order);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
@@ -100,7 +100,7 @@
 						loc.iItem = loc.iItem & " ASC";
 					if (loc.iItem Contains ".")
 					{
-						loc.order = ListAppend(loc.order, loc.iItem);
+						loc.returnValue = ListAppend(loc.returnValue, loc.iItem);
 					}
 					else
 					{
@@ -119,9 +119,9 @@
 								if (!ListFindNoCase(loc.classData.columnList, loc.property))
 									loc.toAdd = loc.toAdd & " AS " & loc.property;
 								loc.toAdd = loc.toAdd & " " & UCase(ListLast(loc.iItem, " "));
-								if (!ListFindNoCase(loc.order, loc.toAdd))
+								if (!ListFindNoCase(loc.returnValue, loc.toAdd))
 								{
-									loc.order = ListAppend(loc.order, loc.toAdd);
+									loc.returnValue = ListAppend(loc.returnValue, loc.toAdd);
 									break;
 								}
 							}
@@ -131,52 +131,41 @@
 					}
 				}
 			}
-			loc.order = "ORDER BY " & loc.order;
-			ArrayAppend(arguments.sql, loc.order);
+			loc.returnValue = "ORDER BY " & loc.returnValue;
 		}
 	</cfscript>
-	<cfreturn arguments.sql>
+	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$addGroupByClause" returntype="array" access="public" output="false">
-	<cfargument name="sql" type="array" required="true">
+<cffunction name="$groupByClause" returntype="string" access="public" output="false">
 	<cfargument name="select" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
 	<cfargument name="group" type="string" required="true">
 	<cfargument name="distinct" type="boolean" required="true">
 	<cfargument name="returnAs" type="string" required="true">
 	<cfscript>
-		var loc = { group = "" };
+		var returnValue = "";
 		// if we want a distinct statement, we can do it grouping every field in the select
 		if (arguments.distinct)
-		{
-			loc.group = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
-		}
+			returnValue = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
 		else if (Len(arguments.group))
-		{
-			loc.group = $createSQLFieldList(list=arguments.group, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
-		}
-		if (Len(loc.group))
-		{
-			loc.group = "GROUP BY " & loc.group;
-			ArrayAppend(arguments.sql, loc.group);
-		}
+			returnValue = $createSQLFieldList(list=arguments.group, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
+		if (Len(returnValue))
+			returnValue = "GROUP BY " & returnValue;
 	</cfscript>
-	<cfreturn arguments.sql>
+	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="$addSelectClause" returntype="array" access="public" output="false">
-	<cfargument name="sql" type="array" required="true">
+<cffunction name="$selectClause" returntype="string" access="public" output="false">
 	<cfargument name="select" type="string" required="true">
 	<cfargument name="include" type="string" required="true">
 	<cfargument name="returnAs" type="string" required="true">
 	<cfscript>
-		var loc = {};
-		loc.select = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs);
-		loc.select = "SELECT " & loc.select;
-		ArrayAppend(arguments.sql, loc.select);
+		var returnValue = "";
+		returnValue = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs);
+		returnValue = "SELECT " & returnValue;
 	</cfscript>
-	<cfreturn arguments.sql>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="$createSQLFieldList" returntype="string" access="public" output="false">
@@ -361,6 +350,21 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
+		loc.whereClause = $whereClause(where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
+		loc.iEnd = ArrayLen(loc.whereClause);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			ArrayAppend(arguments.sql, loc.whereClause[loc.i]);
+	</cfscript>
+	<cfreturn arguments.sql>
+</cffunction>
+
+<cffunction name="$whereClause" returntype="array" access="public" output="false">
+	<cfargument name="where" type="string" required="true">
+	<cfargument name="include" type="string" required="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="true">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = [];
 		if (Len(arguments.where))
 		{
 			// setup an array containing class info for current class and all the ones that should be included
@@ -368,8 +372,8 @@
 			if (Len(arguments.include))
 				loc.classes = $expandedAssociations(include=arguments.include);
 			ArrayPrepend(loc.classes, variables.wheels.class);
-			ArrayAppend(arguments.sql, "WHERE");
-			loc.wherePos = ArrayLen(arguments.sql) + 1;
+			ArrayAppend(loc.returnValue, "WHERE");
+			loc.wherePos = ArrayLen(loc.returnValue) + 1;
 			loc.params = ArrayNew(1);
 			loc.where = ReplaceList(REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all"), "AND,OR", "#chr(7)#AND,#chr(7)#OR");
 			for (loc.i=1; loc.i <= ListLen(loc.where, Chr(7)); loc.i++)
@@ -430,13 +434,13 @@
 			{
 				loc.item = ListGetAt(loc.where, loc.i, "?");
 				if (Len(Trim(loc.item)))
-					ArrayAppend(arguments.sql, loc.item);
+					ArrayAppend(loc.returnValue, loc.item);
 				if (loc.i < ListLen(loc.where, "?"))
 				{
 					loc.column = loc.params[loc.i].column;
-					ArrayAppend(arguments.sql, "#loc.column# #loc.params[loc.i].operator#");
+					ArrayAppend(loc.returnValue, "#loc.column# #loc.params[loc.i].operator#");
 					loc.param = {type=loc.params[loc.i].type, dataType=loc.params[loc.i].dataType, scale=loc.params[loc.i].scale};
-					ArrayAppend(arguments.sql, loc.param);
+					ArrayAppend(loc.returnValue, loc.param);
 				}
 			}
 		}
@@ -465,20 +469,20 @@
 			{
 				if (Len(arguments.where))
 				{
-					ArrayInsertAt(arguments.sql, loc.wherePos, " (");
-					ArrayAppend(arguments.sql, ") AND (");
-					ArrayAppend(arguments.sql, loc.addToWhere);
-					ArrayAppend(arguments.sql, ")");
+					ArrayInsertAt(loc.returnValue, loc.wherePos, " (");
+					ArrayAppend(loc.returnValue, ") AND (");
+					ArrayAppend(loc.returnValue, loc.addToWhere);
+					ArrayAppend(loc.returnValue, ")");
 				}
 				else
 				{
-					ArrayAppend(arguments.sql, "WHERE ");
-					ArrayAppend(arguments.sql, loc.addToWhere);
+					ArrayAppend(loc.returnValue, "WHERE ");
+					ArrayAppend(loc.returnValue, loc.addToWhere);
 				}
 			}
 		}
 	</cfscript>
-	<cfreturn arguments.sql>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$addWhereClauseParameters" returntype="array" access="public" output="false">

@@ -217,11 +217,15 @@
 			if (!IsArray(loc.sql))
 			{
 				loc.sql = [];
-				loc.sql = $addSelectClause(sql=loc.sql, select=arguments.select, include=arguments.include, returnAs=arguments.returnAs);
+				ArrayAppend(loc.sql, $selectClause(select=arguments.select, include=arguments.include, returnAs=arguments.returnAs));
 				ArrayAppend(loc.sql, $fromClause(include=arguments.include));
 				loc.sql = $addWhereClause(sql=loc.sql, where=loc.originalWhere, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
-				loc.sql = $addGroupByClause(sql=loc.sql, select=arguments.select, group=arguments.group, include=arguments.include, distinct=arguments.distinct, returnAs=arguments.returnAs);
-				loc.sql = $addOrderByClause(sql=loc.sql, order=arguments.order, include=arguments.include);
+				loc.groupBy = $groupByClause(select=arguments.select, group=arguments.group, include=arguments.include, distinct=arguments.distinct, returnAs=arguments.returnAs);
+				if (Len(loc.groupBy))
+					ArrayAppend(loc.sql, loc.groupBy);
+				loc.orderBy = $orderByClause(order=arguments.order, include=arguments.include);
+				if (Len(loc.orderBy))
+					ArrayAppend(loc.sql, loc.orderBy);
 				$addToCache(key=loc.queryShellKey, value=loc.sql, category="sql");
 			}
 
@@ -424,7 +428,6 @@
 			}
 			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 			arguments.sql = $addWhereClauseParameters(sql=arguments.sql, where=arguments.where);
-			
 			loc.returnValue = invokeWithTransaction(method="$updateAll", argumentCollection=arguments);
 		}
 	</cfscript>
@@ -580,7 +583,6 @@
 			arguments.sql = $addDeleteClause(sql=arguments.sql, softDelete=arguments.softDelete);
 			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 			arguments.sql = $addWhereClauseParameters(sql=arguments.sql, where=arguments.where);
-			
 			loc.returnValue = invokeWithTransaction(method="$deleteAll", argumentCollection=arguments);
 		}
 	</cfscript>
