@@ -54,7 +54,18 @@ Changes
 		
 	* Allow for nested attributes - [James Gibson]
 	
-	* Adds transaction handling support - [Andy Bellenie]
+	* Add automatic deletion of dependent models - #367 (Per Dejuner, Andy Bellenie]
+
+	* Adds transaction handling support - #325 [Andy Bellenie]
+	
+	* Allow overriding of soft-deletes - #324 [Andy Bellenie]
+
+	* Ability to set defaults on a model - #244 [Andy Bellenie]
+	
+	* Argument for model methods to be able to turn off callbacks - #236 [Andy Bellenie]
+	
+	* Ability to set a default value for column statistics with ifNull argument - #330 [Andy Bellenie]
+	
 
 [Dispatch]
 
@@ -183,7 +194,9 @@ Changes
 		hasManyCheckBox(): used to output a checkbox for a relationship on a model
 		
 	* Added buttonTag() form helper - [Tony Petruzzi]
-
+	
+	* Add "disabled" and "readonly" arguments to form input helpers [Andy Bellenie]	
+	
 [Application]
 
 	* Method: addDefaultRoutes() - [Per Djurner]
@@ -214,6 +227,8 @@ Changes
 	* Allow setting multiple argument defaults at once - #426 [Raul Rivera, Per Djurner]
 	
 		Example: <cfset set(functionName="textField,textArea,select", labelPlacement="before")>
+		
+	* Added cachePlugins setting - #304 [Andy Bellenie]
 		
 [Core]
 
