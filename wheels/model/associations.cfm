@@ -44,6 +44,7 @@
 	<cfargument name="modelName" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="joinType" type="string" required="false" hint="See documentation for @belongsTo.">
+	<cfargument name="dependent" type="string" required="false" hint="Set to `delete` to instantiate associated models and call their delete method, `deleteAll` to delete without instantiating, `nullify` to remove the foreign key or `false` to do nothing.">
 	<cfargument name="shortcut" type="string" required="false" default="" hint="Set this argument to create an additional dynamic method that gets the objects for a many-to-many association.">
 	<cfargument name="through" type="string" required="false" default="#singularize(arguments.shortcut)#,#arguments.name#" hint="Set this argument if you need to override the Wheels convention when using the `shortcut` argument.">
 	<cfscript>
@@ -78,6 +79,7 @@
 	<cfargument name="modelName" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="joinType" type="string" required="false" hint="See documentation for @belongsTo.">
+	<cfargument name="dependent" type="string" required="false" hint="See documentation for @hasMany.">
 	<cfscript>
 		var capitalizeName = capitalize(arguments.name);
 		$insertDefaults(name="hasOne", input=arguments);
@@ -125,4 +127,37 @@
 </cffunction>
 
 
+<cffunction name="$deleteDependents" returntype="void" access="public" output="false">
+	<cfscript>
+	var loc = {};
+	for (loc.key in variables.wheels.class.associations)
+	{
+		if (ListFindNoCase("hasMany,hasOne", variables.wheels.class.associations[loc.key].type) and variables.wheels.class.associations[loc.key].dependent neq false)
+		{
+			switch(variables.wheels.class.associations[loc.key].dependent)
+			{
+				case "delete":
+				{
+					$invoke(componentReference=this, method="deleteAll#(loc.key)#", instantiate=true);
+					break;
+				}
+				case "deleteAll":
+				{
+					$invoke(componentReference=this, method="deleteAll#(loc.key)#");
+					break;
+				}
+				case "nullify":
+				{
+					$invoke(componentReference=this, method="removeAll#(loc.key)#");
+					break;
+				}
+				default:
+				{
+					$throw(type="Wheels.InvalidArgument", message="'#variables.wheels.class.associations[loc.key].dependent#' is not a valid dependency.", extendedInfo="Use `delete`, `deleteAll`, `nullify` or false.");
+				}
+			}
+		}	
+	}
+	</cfscript>
+</cffunction>
 

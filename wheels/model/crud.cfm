@@ -726,6 +726,7 @@
 		var loc = {};
 		if ($callback("beforeDelete", arguments.callbacks))
 		{
+			$deleteDependents(); // delete dependents before the main record in case of foreign key constraints
 			loc.del = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
 			if (loc.del.result.recordCount eq 1 and $callback("afterDelete", arguments.callbacks))
 				return true;
