@@ -156,5 +156,42 @@
 		</cftransaction>
 		<cfset assert("loc.dynamicResult IS loc.coreResult")>
 	</cffunction>
+	
+	<cffunction name="test_dependency_delete">
+		<cftransaction>
+			<cfset loc.postWithAuthor = model("post").findOne(order="id")>
+			<cfset loc.author = model("author").findByKey(loc.postWithAuthor.authorId)>
+			<cfset loc.author.hasMany(name="posts", dependent="delete")>
+			<cfset loc.author.delete()>
+			<cfset loc.posts = model("post").findAll(where="authorId=#loc.author.id#")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert("loc.posts.recordcount eq 0")>
+	</cffunction>
+
+	<cffunction name="test_dependency_deleteAll">
+		<cftransaction>
+			<cfset loc.postWithAuthor = model("post").findOne(order="id")>
+			<cfset loc.author = model("author").findByKey(loc.postWithAuthor.authorId)>
+			<cfset loc.author.hasMany(name="posts", dependent="deleteAll")>
+			<cfset loc.author.delete()>
+			<cfset loc.posts = model("post").findAll(where="authorId=#loc.author.id#")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert("loc.posts.recordcount eq 0")>
+	</cffunction>
+
+	<cffunction name="test_dependency_removeAll">
+		<cftransaction>
+			<cfset loc.postWithAuthor = model("post").findOne(order="id")>
+			<cfset loc.author = model("author").findByKey(loc.postWithAuthor.authorId)>
+			<cfset loc.author.hasMany(name="posts", dependent="removeAll")>
+			<cfset loc.author.delete()>
+			<cfset loc.posts = model("post").findAll(where="authorId=#loc.author.id#")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert("loc.posts.recordcount eq 0")>
+	</cffunction>
+
 
 </cfcomponent>

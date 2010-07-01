@@ -146,14 +146,14 @@
 					$invoke(componentReference=this, method="deleteAll#(loc.key)#");
 					break;
 				}
-				case "nullify":
+				case "removeAll":
 				{
 					$invoke(componentReference=this, method="removeAll#(loc.key)#");
 					break;
 				}
 				default:
 				{
-					$throw(type="Wheels.InvalidArgument", message="'#variables.wheels.class.associations[loc.key].dependent#' is not a valid dependency.", extendedInfo="Use `delete`, `deleteAll`, `nullify` or false.");
+					$throw(type="Wheels.InvalidArgument", message="'#variables.wheels.class.associations[loc.key].dependent#' is not a valid dependency.", extendedInfo="Use `delete`, `deleteAll`, `removeAll` or false.");
 				}
 			}
 		}	
