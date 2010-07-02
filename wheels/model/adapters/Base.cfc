@@ -122,4 +122,47 @@
 		</cfswitch>
 	</cffunction>
 
+	<cffunction name="$cleanInStatmentValue" returntype="string" access="public" output="false">
+		<cfargument name="statement" type="string" required="true">
+		<cfscript>
+		var loc = {};
+		loc.delim = ",";
+		if (Find("'", arguments.statement))
+		{
+			loc.delim = "','";
+			arguments.statement = RemoveChars(arguments.statement, 1, 1);
+			arguments.statement = reverse(RemoveChars(reverse(arguments.statement), 1, 1));
+			arguments.statement = Replace(arguments.statement, "''", "'", "all");
+		}
+		arguments.statement = ReplaceNoCase(arguments.statement, loc.delim, chr(7), "all");
+		</cfscript>
+		<cfreturn arguments.statement>
+	</cffunction>
+	
+	<cffunction name="$CFQueryParameters" returntype="struct" access="public" output="false">
+		<cfargument name="settings" type="struct" required="true">
+		<cfscript>
+		var loc = {};
+		loc.params = {};
+		loc.params.cfsqltype = arguments.settings.type;
+		loc.params.value = arguments.settings.value;
+		if (StructKeyExists(arguments.settings, "null"))
+		{
+			loc.params.null = arguments.settings.null;
+		}
+		if (StructKeyExists(arguments.settings, "scale") AND arguments.settings.scale GT 0)
+		{
+			loc.params.scale = arguments.settings.scale;
+		}
+		if (StructKeyExists(arguments.settings, "list") AND arguments.settings.list)
+		{
+			loc.params.list = arguments.settings.list;
+			loc.params.separator = chr(7);
+			loc.params.value = $cleanInStatmentValue(loc.params.value);
+		}
+		</cfscript>	
+		<cfreturn loc.params>
+	</cffunction>
+
+
 </cfcomponent>

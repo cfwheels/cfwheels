@@ -19,8 +19,13 @@
 	</cffunction>
 
 	<cffunction name="test_in_statment_should_not_error">
-		<cfset loc.r = model("post").findAll(where="views IN(5,3)")>
+		<cfset loc.r = model("user").findAll(where="username IN('tonyp','perd','chrisp') AND (firstname = 'tony' OR firstname = 'per' OR firstname = 'chris') OR id IN(1,2,3)")>
 		<cfset assert('loc.r.recordcount eq 3')>
+	</cffunction>
+	
+	<cffunction name="test_in_statment_respect__parenthesis_commas_and_single_quotes">
+		<cfset loc.r = model("user").findAll(where="username IN('tony''s','pe''(yo,yo)rd','chrisp')")>
+		<cfset assert('loc.r.recordcount eq 1')>
 	</cffunction>
 
 </cfcomponent>
