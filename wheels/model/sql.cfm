@@ -425,7 +425,7 @@
 						$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.param.property#` property but couldn't find it in the database table.", extendedInfo="Verify the `where` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
 					loc.temp = REFind("^[a-zA-Z0-9-_\.]* ?#variables.wheels.class.RESQLOperators#", loc.elementDataPart, 1, true);
 					loc.param.operator = Trim(Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]));
-					if (loc.param.operator == "IN")
+					if (Right(loc.param.operator, 2) == "IN")
 						loc.param.list = true;
 					ArrayAppend(loc.params, loc.param);
 				}

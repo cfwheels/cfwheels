@@ -13,4 +13,15 @@
 		</cfloop>
 	</cffunction>
 
+	<cffunction name="test_in_like_operators">
+			<cfset result = model("author").$whereClause(where="id IN (1,2,3)")>
+			<cfset assert("Right(result[2], 2) IS 'IN'")>
+			<cfset result = model("author").$whereClause(where="id NOT IN (1,2,3)")>
+			<cfset assert("Right(result[2], 6) IS 'NOT IN'")>
+			<cfset result = model("author").$whereClause(where="lastName LIKE 'Djurner'")>
+			<cfset assert("Right(result[2], 4) IS 'LIKE'")>
+			<cfset result = model("author").$whereClause(where="lastName NOT LIKE 'Djurner'")>
+			<cfset assert("Right(result[2], 8) IS 'NOT LIKE'")>
+	</cffunction>
+
 </cfcomponent>
