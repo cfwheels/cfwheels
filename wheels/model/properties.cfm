@@ -51,7 +51,7 @@
 		// validate setup
 		if (Len(arguments.column) and Len(arguments.sql))
 			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot specify both a column and a sql statement when setting up the mapping for this property.");
-		if (Len(arguments.sql) and Len(arguments.defaultValue))
+		if (Len(arguments.sql) and StructKeyExists(arguments, "defaultValue"))
 			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot specify a default value for calculated properties.");
 		
 		// create the key
