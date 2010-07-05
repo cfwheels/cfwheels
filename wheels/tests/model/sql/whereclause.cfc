@@ -24,4 +24,15 @@
 			<cfset assert("Right(result[2], 8) IS 'NOT LIKE'")>
 	</cffunction>
 
+	<cffunction name="test_in_statement_floats">
+		<cfset result = model("post").$whereClause(where="averagerating IN(3.6,3.2)")>
+		<cfset assert('arraylen(result) gte 4')>
+		<cfset assert('isstruct(result[4])')>
+		<cfset assert('result[4].datatype eq "float"')>
+		<cfset result = model("post").$whereClause(where="averagerating NOT IN(3.6,3.2)")>
+		<cfset assert('arraylen(result) gte 4')>
+		<cfset assert('isstruct(result[4])')>
+		<cfset assert('result[4].datatype eq "float"')>
+	</cffunction>
+
 </cfcomponent>

@@ -8,7 +8,7 @@
 		variables.wheels.class.modelName = arguments.name;
 		variables.wheels.class.RESQLAs = "[[:space:]]AS[[:space:]][A-Za-z1-9]+";
 		variables.wheels.class.RESQLOperators = "((?: (?:NOT )?LIKE)|(?: (?:NOT )?IN)|(?:<>)|(?:<=)|(?:>=)|(?:!=)|(?:!<)|(?:!>)|=|<|>)";
-		variables.wheels.class.RESQLWhere = "(#variables.wheels.class.RESQLOperators# ?)(\('.+?'\)|\((-?[0-9],?)+\)|'.+?'()|''|(-?[0-9]+)())(($|\)| (AND|OR)))";
+		variables.wheels.class.RESQLWhere = "(#variables.wheels.class.RESQLOperators# ?)(\('.+?'\)|\((-?[0-9\.],?)+\)|'.+?'()|''|(-?[0-9]+)())(($|\)| (AND|OR)))";
 		variables.wheels.class.mapping = {};
 		variables.wheels.class.properties = {};
 		variables.wheels.class.accessibleProperties = {};
@@ -163,7 +163,7 @@
 	<cfargument name="useFilterLists" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
-		
+
 		variables.wheels = {};
 		variables.wheels.errors = [];
 		// copy class variables from the object in the application scope
@@ -172,7 +172,7 @@
 		// setup object properties in the this scope
 		if (IsQuery(arguments.properties) && arguments.properties.recordCount != 0)
 			arguments.properties = $queryRowToStruct(argumentCollection=arguments);
-		
+
 		if (IsStruct(arguments.properties) && !StructIsEmpty(arguments.properties))
 			$setProperties(properties=arguments.properties, setOnModel=true, $useFilterLists=arguments.useFilterLists);
 
