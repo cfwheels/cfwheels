@@ -19,3 +19,6 @@
 
 <!--- turn off transactions by default --->
 <cfset application.wheels.transactionMode = "none">
+
+<!--- turn off request query caching --->
+<cfset application.wheels.cacheQueriesDuringRequest = false>

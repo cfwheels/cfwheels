@@ -100,6 +100,7 @@
 	application.wheels.cacheDatePart = "n";
 	application.wheels.defaultCacheTime = 60;
 	application.wheels.clearQueryCacheOnReload = true;
+	application.wheels.cacheQueriesDuringRequest = true;
 
 	// function defaults
 	application.wheels.functions = {};
