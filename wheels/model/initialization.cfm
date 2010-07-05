@@ -72,7 +72,6 @@
 				variables.wheels.class.properties[loc.property].size = loc.columns["column_size"][loc.i];
 				variables.wheels.class.properties[loc.property].label = Humanize(loc.property);
 				variables.wheels.class.properties[loc.property].validationtype = variables.wheels.class.adapter.$getValidationType(variables.wheels.class.properties[loc.property].type);
-				variables.wheels.class.properties[loc.property].defaultValue = "";
 
 				if (StructKeyExists(variables.wheels.class.mapping, loc.property)) {
 					if (StructKeyExists(variables.wheels.class.mapping[loc.property], "label"))

@@ -46,7 +46,7 @@
 	<cfargument name="column" type="string" required="false" default="" hint="The name of the column in the database table to map the property to.">
 	<cfargument name="sql" type="string" required="false" default="" hint="An SQL function to use to calculate the property value.">
 	<cfargument name="label" type="string" required="false" default="" hint="A custom label for this property.">
-	<cfargument name="defaultValue" type="string" required="false" default="" hint="A default value for this property.">
+	<cfargument name="defaultValue" type="string" required="false" hint="A default value for this property.">
 	<cfscript>
 		// validate setup
 		if (Len(arguments.column) and Len(arguments.sql))
@@ -70,10 +70,10 @@
 			variables.wheels.class.mapping[arguments.name].value = arguments.sql;
 		}
 		
-		if (Len(arguments.label)) 
+		if (Len(arguments.label))
 			variables.wheels.class.mapping[arguments.name].label = arguments.label;
 		
-		if (Len(arguments.defaultValue)) 
+		if (StructKeyExists(arguments, "defaultValue"))
 			variables.wheels.class.mapping[arguments.name].defaultValue = arguments.defaultValue;
 	</cfscript>
 </cffunction>
@@ -451,7 +451,7 @@
 	var loc = {};
 	for (loc.key in variables.wheels.class.properties)
 	{
-		if (Len(variables.wheels.class.properties[loc.key].defaultValue) && (!StructKeyExists(this, loc.key) || !Len(this[loc.key])))
+		if (StructKeyExists(variables.wheels.class.properties[loc.key], "defaultValue") && (!StructKeyExists(this, loc.key) || !Len(this[loc.key])))
 		{
 			// set the default value unless it is blank or a value already exists for that property on the object
 			this[loc.key] = variables.wheels.class.properties[loc.key].defaultValue;
