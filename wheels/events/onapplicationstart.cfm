@@ -43,6 +43,7 @@
 		application.wheels.nonExistingHelperFiles = "";
 		application.wheels.routes = [];
 		application.wheels.namedRoutePositions = {};
+		application.wheels.mixins = {};
 		application.wheels.cache = {};
 		application.wheels.cache.sql = {};
 		application.wheels.cache.image = {};
@@ -94,7 +95,6 @@
 			$objectcache(action="clear");
 		}
 
-		$loadPlugins();
 		$loadRoutes();
 
 		// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
@@ -108,6 +108,8 @@
 			if (Left(loc.method, 1) != "$" && !ListFindNoCase(loc.allowedGlobalMethods, loc.method))
 				application.wheels.protectedControllerMethods = ListAppend(application.wheels.protectedControllerMethods, loc.method);
 		}
+
+		$loadPlugins();
 
 		// create the dispatcher that will handle all incoming requests
 		application.wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
