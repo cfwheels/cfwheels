@@ -142,6 +142,6 @@ DELETE
 FROM tags
 </cfquery>
 <cfquery name="ins" datasource="wheelstestdb">
-INSERT INTO tags (name)
-VALUES ('releases')
+INSERT INTO tags (name, description)
+VALUES ('releases', 'testdesc')
 </cfquery>
