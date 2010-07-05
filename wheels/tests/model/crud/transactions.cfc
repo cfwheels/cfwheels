@@ -129,7 +129,7 @@
 	</cffunction>
 
 	<cffunction name="test_deleteAll_with_transactions_disabled">
-		<cftransaction isolation="read_uncommitted">
+		<cftransaction>
 			<cfset model("author").deleteAll(instantiate=true, transaction="none")>
 			<cfset loc.results = model("author").findAll()>
 			<cfset assert("loc.results.recordcount IS 0")>
