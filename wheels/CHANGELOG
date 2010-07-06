@@ -72,6 +72,8 @@ Changes
 	* Updated the request processing to not call the action if a before filter has rendered content - [James Gibson]
 	
 	* Removed differences in params structure for form / URL variables - #232 [Mike Henke, Tony Petruzzi]
+	
+	* Added wildcard routes [Andy Bellenie]
 
 [Controllers]
 

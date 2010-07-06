@@ -40,5 +40,12 @@
 		<cfset assert('loc.r.action eq "index"')>
 		<cfset assert('loc.r.variables eq "firstname,lastname"')>
 	</cffunction>
+	
+	<cffunction name="test_wildcard_route">
+		<cfset addRoute(pattern="*", controller="pages", action="index")>
+		<cfset loc.r = loc.dispatch.$findMatchingRoute("/thisismyroute/therearemanylikeit/butthisoneismine")>
+		<cfset assert('loc.r.controller eq "pages"')>
+		<cfset assert('loc.r.action eq "index"')>
+	</cffunction>
 
 </cfcomponent>

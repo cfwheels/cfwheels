@@ -302,33 +302,34 @@
 	<cfscript>
 		var loc = {};
 		loc.iEnd = ArrayLen(application.wheels.routes);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
 		{
 			loc.currentRoute = application.wheels.routes[loc.i].pattern;
-			if (arguments.path == "" && loc.currentRoute == "")
+			if (loc.currentRoute == "*") {
+				loc.returnValue = application.wheels.routes[loc.i];
+				break;
+			} 
+			else if (arguments.path == "" && loc.currentRoute == "")
 			{
 				loc.returnValue = application.wheels.routes[loc.i];
 				break;
 			}
-			else
+			else if (ListLen(arguments.path, "/") gte ListLen(loc.currentRoute, "/") && loc.currentRoute != "")
 			{
-				if (ListLen(arguments.path, "/") >= ListLen(loc.currentRoute, "/") && loc.currentRoute != "")
+				loc.match = true;
+				loc.jEnd = ListLen(loc.currentRoute, "/");
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
-					loc.match = true;
-					loc.jEnd = ListLen(loc.currentRoute, "/");
-					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-					{
-						loc.item = ListGetAt(loc.currentRoute, loc.j, "/");
-						loc.thisRoute = ReplaceList(loc.item, "[,]", ",");
-						loc.thisURL = ListGetAt(arguments.path, loc.j, "/");
-						if (Left(loc.item, 1) != "[" && loc.thisRoute != loc.thisURL)
-							loc.match = false;
-					}
-					if (loc.match)
-					{
-						loc.returnValue = application.wheels.routes[loc.i];
-						break;
-					}
+					loc.item = ListGetAt(loc.currentRoute, loc.j, "/");
+					loc.thisRoute = ReplaceList(loc.item, "[,]", ",");
+					loc.thisURL = ListGetAt(arguments.path, loc.j, "/");
+					if (Left(loc.item, 1) != "[" && loc.thisRoute != loc.thisURL)
+						loc.match = false;
+				}
+				if (loc.match)
+				{
+					loc.returnValue = application.wheels.routes[loc.i];
+					break;
 				}
 			}
 		}
