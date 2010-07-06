@@ -1,5 +1,5 @@
 <cfoutput>
 start:partiallayout
-#yield()#
+#includeContent()#
 end:partiallayout
 </cfoutput>

@@ -1,3 +1,3 @@
 <div>
-<cfoutput>#yield()#</cfoutput>
+<cfoutput>#includeContent()#</cfoutput>
 </div>

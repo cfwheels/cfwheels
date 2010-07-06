@@ -1,3 +1,3 @@
 <cfinclude template="../styles/header.cfm">
-<cfoutput>#yield()#</cfoutput>
+<cfoutput>#includeContent()#</cfoutput>
 <cfinclude template="../styles/footer.cfm">

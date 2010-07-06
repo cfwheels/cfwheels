@@ -369,7 +369,7 @@
 		if ((IsBoolean(arguments.$layout) && arguments.$layout) || (!IsBoolean(arguments.$layout) && Len(arguments.$layout)))
 		{
 			// store the content in a variable in the request scope so it can be accessed
-			// by the yield function that the developer uses in layout files
+			// by the includeContent function that the developer uses in layout files
 			// (this is done so we avoid passing data to/from it since it would complicate things for the developer)
 			contentFor("layout", arguments.$content);
 			loc.include = application.wheels.viewPath;
@@ -444,22 +444,22 @@
 </cffunction>
 
 <cffunction name="contentForLayout" returntype="string" access="public" output="false">
-	<cfreturn yield("layout")>
+	<cfreturn includeContent("layout")>
 </cffunction>
 
-<cffunction name="yield" returntype="string" access="public" output="false" hint="Used to output the content for a particular selection."	
+<cffunction name="includeContent" returntype="string" access="public" output="false" hint="Used to output the content for a particular selection."	
 	examples=
 	'
 		<!--- views/layout.cfm --->
 		<html>
 		<head>
 		    <title>My Site</title>
-		    ##yield("head")##
+		    ##includeContent("head")##
 		</head>
 		<body>
 
 		<cfoutput>
-		##yield()##
+		##includeContent()##
 		</cfoutput>
 
 		</body>

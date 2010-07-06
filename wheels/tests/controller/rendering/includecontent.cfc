@@ -5,28 +5,28 @@
 		<cfset loc.controller = $controller(name="dummy").$createControllerObject(loc.params)>
 	</cffunction>
 
-	<cffunction name="test_contentFor_and_yield_assigning_section">
+	<cffunction name="test_contentFor_and_includeContent_assigning_section">
 		<cfset loc.a = ["head1", "head2", "head3"]>
 		<cfloop array="#loc.a#" index="loc.i">
 			<cfset loc.controller.contentFor("head", loc.i)>
 		</cfloop>
 		<cfset loc.e = ArrayToList(loc.a, chr(10))>
-		<cfset loc.r = loc.controller.yield("head")>
+		<cfset loc.r = loc.controller.includeContent("head")>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 	
-	<cffunction name="test_contentFor_and_yield_default_section">
+	<cffunction name="test_contentFor_and_includeContent_default_section">
 		<cfset loc.a = ["layout1", "layout2", "layout3"]>
 		<cfloop array="#loc.a#" index="loc.i">
 			<cfset loc.controller.contentFor("layout", loc.i)>
 		</cfloop>
 		<cfset loc.e = ArrayToList(loc.a, chr(10))>
-		<cfset loc.r = loc.controller.yield()>
+		<cfset loc.r = loc.controller.includeContent()>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 	
-	<cffunction name="test_yield_invalid_section_returns_blank">
-		<cfset loc.r = loc.controller.yield("somethingstupid")>
+	<cffunction name="test_includeContent_invalid_section_returns_blank">
+		<cfset loc.r = loc.controller.includeContent("somethingstupid")>
 		<cfset assert('loc.r eq ""')>
 	</cffunction>
 

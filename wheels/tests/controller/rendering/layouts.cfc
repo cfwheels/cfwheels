@@ -12,7 +12,7 @@
 
 	<cffunction name="test_rendering_with_default_layout_in_controller_folder">
 		<cfset tempFile = Replace(Replace(GetCurrentTemplatePath(), "\", "/", "all"), "controller/rendering/layouts.cfc", "_assets/views/test/layout.cfm")>
-		<cffile action="write" output="<cfoutput>start:controllerlayout##yield()##end:controllerlayout</cfoutput>" file="#tempFile#">
+		<cffile action="write" output="<cfoutput>start:controllerlayout##includeContent()##end:controllerlayout</cfoutput>" file="#tempFile#">
 		<cfset application.wheels.existingLayoutFiles = "test">
 		<cfset controller.renderPage()>
 		<cfset loc.r = controller.response()>

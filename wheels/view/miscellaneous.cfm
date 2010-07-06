@@ -15,10 +15,10 @@
 		</head>
 		<body>
 		
-		##yield("sidebar")##
+		##includeContent("sidebar")##
 
 		<cfoutput>
-		##yield()##
+		##includeContent()##
 		</cfoutput>
 
 		</body>
