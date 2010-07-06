@@ -33,6 +33,16 @@
 	<cfset ArrayAppend(variables.$instance.contentFor[arguments.section], arguments.content)>
 </cffunction>
 
+<cffunction name="includeLayout" returntype="string" access="public" output="false" hint="Includes the contents of another layout file, usually done to include a parent layout from a child layout.">
+	<cfargument name="name" type="string" required="false" default="layout" hint="Name of the layout to include.">
+	<cfscript>
+		arguments.partial = arguments.name;
+		StructDelete(arguments, "name");
+		arguments.$prependWithUnderscore = false;
+		return includePartial(argumentCollection=arguments);
+	</cfscript>
+</cffunction>
+
 <cffunction name="includePartial" returntype="string" access="public" output="false" hint="Includes the specified file in the view. Similar to using `cfinclude` but with the ability to cache the result and using Wheels specific file look-up. By default, Wheels will look for the file in the current controller's view folder. To include a file relative from the `views` folder, you can start the path supplied to `name` with a forward slash."
 	examples=
 	'
@@ -51,6 +61,7 @@
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPartial.">
 	<cfargument name="layout" type="string" required="false" hint="See documentation for @renderPartial.">
 	<cfargument name="spacer" type="string" required="false" hint="HTML or string to place between partials when called using a query.">
+	<cfargument name="$prependWithUnderscore" type="boolean" required="false" default="true">
 	<cfset $insertDefaults(name="includePartial", input=arguments)>
 	<cfreturn $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,group,cache,layout,spacer"))>
 </cffunction>

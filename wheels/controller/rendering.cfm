@@ -219,11 +219,12 @@
 	<cfargument name="$name" type="any" required="true">
 	<cfargument name="$type" type="any" required="true">
 	<cfargument name="$baseTemplatePath" type="string" required="false" default="#application.wheels.viewPath#" />
+	<cfargument name="$prependWithUnderscore" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		loc.include = arguments.$baseTemplatePath;
 		loc.fileName = Spanexcluding(Reverse(ListFirst(Reverse(arguments.$name), "/")), ".") & ".cfm"; // extracts the file part of the path and replace ending ".cfm"
-		if (arguments.$type == "partial")
+		if (arguments.$type == "partial" && arguments.$prependWithUnderscore)
 			loc.fileName = Replace("_" & loc.fileName, "__", "_", "one"); // replaces leading "_" when the file is a partial
 		loc.folderName = Reverse(ListRest(Reverse(arguments.$name), "/"));
 		if (Left(arguments.$name, 1) == "/")
