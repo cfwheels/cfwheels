@@ -246,13 +246,8 @@
 				loc.finderArgs.parameterize = arguments.parameterize;
 				loc.finderArgs.limit = arguments.$limit;
 				loc.finderArgs.offset = arguments.$offset;
-				if (application.wheels.cacheQueries && Len(arguments.cache))
-				{
-					if (IsBoolean(arguments.cache) && arguments.cache)
-						loc.finderArgs.cachedWithin = CreateTimeSpan(0,0,application.wheels.defaultCacheTime,0);
-					else if (IsNumeric(arguments.cache))
-						loc.finderArgs.cachedWithin = CreateTimeSpan(0,0,arguments.cache,0);
-				}
+				if (application.wheels.cacheQueries && ((IsBoolean(arguments.cache) && arguments.cache) || IsNumeric(arguments.cache)))
+					loc.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache);
 				loc.findAll = variables.wheels.class.adapter.$query(argumentCollection=loc.finderArgs);
 				request[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}

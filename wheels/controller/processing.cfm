@@ -134,7 +134,7 @@
 	<cfscript>
 		$callAction(action=arguments.action);
 		if (arguments.static)
-			$cache(cache="serverCache", timeSpan=CreateTimeSpan(0,0,arguments.time,0));
+			$cache(cache="serverCache", timeSpan=$timeSpanForCache(arguments.time));
 		else
 			$addToCache(key=arguments.key, value=variables.$instance.response, time=arguments.time, category=arguments.category);
 	</cfscript>

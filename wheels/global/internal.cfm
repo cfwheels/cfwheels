@@ -1,3 +1,24 @@
+<cffunction name="$timeSpanForCache" returntype="any" access="public" output="false">
+	<cfargument name="cache" type="any" required="true">
+	<cfargument name="defaultCacheTime" type="numeric" required="false" default="#application.wheels.defaultCacheTime#">
+	<cfargument name="cacheDatePart" type="string" required="false" default="#application.wheels.cacheDatePart#">
+	<cfscript>
+		var loc = {};
+		loc.cache = 0;
+		if (IsBoolean(arguments.cache) && arguments.cache)
+			loc.cache = arguments.defaultCacheTime;
+		else if (IsNumeric(arguments.cache))
+			loc.cache = arguments.cache;
+		loc.list = "0,0,0,0";
+		loc.dateParts = "d,h,n,s";
+		loc.iEnd = ListLen(loc.dateParts);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			if (arguments.cacheDatePart == ListGetAt(loc.dateParts, loc.i))
+				loc.list = ListSetAt(loc.list, loc.i, loc.cache);			
+		return CreateTimeSpan(ListGetAt(loc.list, 1),ListGetAt(loc.list, 2),ListGetAt(loc.list, 3),ListGetAt(loc.list, 4));
+	</cfscript>
+</cffunction>
+
 <cffunction name="$combineArguments" returntype="void" access="public" output="false">
 	<cfargument name="args" type="struct" required="true">
 	<cfargument name="combine" type="string" required="true">
