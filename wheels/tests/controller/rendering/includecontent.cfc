@@ -18,7 +18,7 @@
 	<cffunction name="test_contentFor_and_includeContent_default_section">
 		<cfset loc.a = ["layout1", "layout2", "layout3"]>
 		<cfloop array="#loc.a#" index="loc.i">
-			<cfset loc.controller.contentFor("layout", loc.i)>
+			<cfset loc.controller.contentFor("body", loc.i)>
 		</cfloop>
 		<cfset loc.e = ArrayToList(loc.a, chr(10))>
 		<cfset loc.r = loc.controller.includeContent()>
