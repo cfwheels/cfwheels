@@ -167,6 +167,7 @@ go
 CREATE TABLE [dbo].[Tags](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[name] [varchar](50) NOT NULL,
+	[description] [varchar](50) NULL,
  CONSTRAINT [PK_Tags] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC

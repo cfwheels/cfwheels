@@ -113,6 +113,7 @@ DROP TABLE IF EXISTS `wheelstestdb`.`Tags`;
 CREATE TABLE `wheelstestdb`.`Tags` (
   `id` INT(10) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL,
+  `description` VARCHAR(50) NULL,
   PRIMARY KEY (`id`)
 )
 ENGINE = INNODB;
