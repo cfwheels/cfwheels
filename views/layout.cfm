@@ -1,6 +1,6 @@
 <!--- Place HTML here that should be used as the default layout of your application --->
 <html>
 	<body>
-		<cfoutput>#yield()#</cfoutput>
+		<cfoutput>#contentForLayout()#</cfoutput>
 	</body>
 </html>

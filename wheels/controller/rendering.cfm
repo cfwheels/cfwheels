@@ -443,6 +443,10 @@
 	<cfreturn StructNew()>
 </cffunction>
 
+<cffunction name="contentForLayout" returntype="string" access="public" output="false">
+	<cfreturn yield("layout")>
+</cffunction>
+
 <cffunction name="yield" returntype="string" access="public" output="false" hint="Used to output the content for a particular selection."	
 	examples=
 	'
