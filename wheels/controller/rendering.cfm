@@ -372,7 +372,7 @@
 			// store the content in a variable in the request scope so it can be accessed
 			// by the includeContent function that the developer uses in layout files
 			// (this is done so we avoid passing data to/from it since it would complicate things for the developer)
-			contentFor("body", arguments.$content);
+			contentFor(body=arguments.$content);
 			loc.include = application.wheels.viewPath;
 			if (IsBoolean(arguments.$layout))
 			{
@@ -468,12 +468,13 @@
 	'
 	categories="view-helper,miscellaneous" chapters="using-layouts">
 	<cfargument name="section" type="string" required="false" default="">
+	<cfargument name="default" type="string" required="false" default="">
 	<!--- blank defaults to layout --->
 	<cfif !len(arguments.section)>
 		<cfset arguments.section = "body">
 	</cfif>
 	<cfif !StructKeyExists(variables.$instance.contentFor, arguments.section)>
-		<cfreturn "">
+		<cfreturn arguments.default>
 	</cfif>
 	<cfreturn ArrayToList(variables.$instance.contentFor[arguments.section], chr(10))>
 </cffunction>

@@ -5,7 +5,7 @@
 		<cfsavecontent variable="mysidebar">
 		<h1>My Sidebar Text</h1>
 		</cfsavecontent>
-		<cfset contentFor("sidebase", mysidebar)>
+		<cfset contentFor(sidebase=mysidebar)>
 		
 		
 		<!--- in your layout --->
@@ -25,12 +25,76 @@
 		</html>
 	'
 	categories="view-helper,miscellaneous" chapters="using-layouts">
-	<cfargument name="section" type="string" required="true">
-	<cfargument name="content" type="string" required="true">
-	<cfif !StructKeyExists(variables.$instance.contentFor, arguments.section)>
-		<cfset variables.$instance.contentFor[arguments.section] = []>
+	<cfargument name="position" type="any" required="false" default="last" hint="The position where you want the content placed. Valid values are `first`, `last` or the numeric position.">
+	<cfargument name="overwrite" type="any" required="false" default="false" hint="Do you want to overwrite any of the content. Valid values are `false`, `true` or `all`">
+	<cfset var loc = {}>
+	
+	<!--- position in the array for the content --->
+	<cfset loc.position = "last">
+	<!--- should we overwrite or insert into the array --->
+	<cfset loc.overwrite = "false">
+	
+	<!--- extract optional arguments --->
+	<cfif structkeyexists(arguments, "position")>
+		<cfset loc.position = arguments.position>
+		<cfset StructDelete(arguments, "position", false)>
 	</cfif>
-	<cfset ArrayAppend(variables.$instance.contentFor[arguments.section], arguments.content)>
+	
+	<cfif structkeyexists(arguments, "overwrite")>
+		<cfset loc.overwrite = arguments.overwrite>
+		<cfset StructDelete(arguments, "overwrite", false)>
+	</cfif>
+	
+	<!--- if no other arguments exists, exit --->
+	<cfif StructIsEmpty(arguments)>
+		<cfreturn>
+	</cfif>
+	
+	<!--- since we're not going to know the name of the section, we have to get it dynamically --->
+	<cfset loc.section = ListFirst(StructKeyList(arguments))>
+	<cfset loc.content = arguments[loc.section]>
+	
+	<cfif !IsBoolean(loc.overwrite)>
+		<cfset loc.overwrite = "all">
+	</cfif>
+	
+	<cfif !StructKeyExists(variables.$instance.contentFor, loc.section) OR loc.overwrite eq "all">
+		<!--- if the section doesn't exists, or they want to overwrite the whole thing --->
+		<cfset variables.$instance.contentFor[loc.section] = []>
+		<cfset ArrayAppend(variables.$instance.contentFor[loc.section], loc.content)>
+	<cfelse>
+		<cfset loc.size = ArrayLen(variables.$instance.contentFor[loc.section])>
+		<!--- they want to append, prepend or insert at a specific point in the array --->
+		<!--- make sure position is within range --->
+		<cfif !IsNumeric(loc.position) AND !ListFindNoCase("first,last", loc.position)>
+			<cfset loc.position = "last">
+		</cfif>
+		<cfif IsNumeric(loc.position)>
+			<cfif loc.position lte 0>
+				<cfset loc.position = "first">
+			</cfif>
+			<cfif loc.position gte loc.size>
+				<cfset loc.position = "last">
+			</cfif>
+		</cfif>
+
+		<cfif loc.overwrite>
+			<cfif loc.position eq "last">
+				<cfset loc.position = loc.size>
+			<cfelseif loc.position eq "first">
+				<cfset loc.position = 1>
+			</cfif>
+			<cfset variables.$instance.contentFor[loc.section][loc.position] = loc.content>
+		<cfelse>
+			<cfif loc.position eq "last">
+				<cfset ArrayAppend(variables.$instance.contentFor[loc.section], loc.content)>
+			<cfelseif loc.position eq "first">
+				<cfset ArrayPrePend(variables.$instance.contentFor[loc.section], loc.content)>
+			<cfelse>
+				<cfset ArrayInsertAt(variables.$instance.contentFor[loc.section], loc.position, loc.content)>
+			</cfif>
+		</cfif>			
+	</cfif>
 </cffunction>
 
 <cffunction name="includeLayout" returntype="string" access="public" output="false" hint="Includes the contents of another layout file, usually done to include a parent layout from a child layout.">
