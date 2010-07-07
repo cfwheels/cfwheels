@@ -103,7 +103,7 @@
 		if (application.wheels.cacheImages)
 		{
 			loc.category = "image";
-			loc.key = $hashStruct(arguments);
+			loc.key = $hashedKey(arguments);
 			loc.lockName = loc.category & loc.key;
 			loc.conditionArgs = {};
 			loc.conditionArgs.category = loc.category;

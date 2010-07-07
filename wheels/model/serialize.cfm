@@ -72,7 +72,7 @@
 		{
 			// create a new struct
 			loc.struct = $queryRowToStruct(properties=arguments.query, row=loc.i);
-			loc.structHash = $hashStruct(loc.struct);
+			loc.structHash = $hashedKey(loc.struct);
 			if (!ListFind(loc.doneStructs, loc.structHash, Chr(7)))
 			{
 				if (Len(arguments.include) && arguments.returnIncluded)
@@ -96,7 +96,7 @@
 								// is there anything we can do here to not instantiate an object if it is not going to be use or is already created
 								// this extra instantiation is really slowing things down
 								loc.hasManyStruct = loc.model.$queryRowToStruct(properties=arguments.query, row=loc.j, base=false);
-								loc.hasManyStructHash = $hashStruct(loc.hasManyStruct);
+								loc.hasManyStructHash = $hashedKey(loc.hasManyStruct);
 								
 								if (!ListFind(loc.hasManyDoneStructs, loc.hasManyStructHash, Chr(7)))
 								{

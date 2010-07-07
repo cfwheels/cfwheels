@@ -1,13 +1,43 @@
+<cffunction name="$listClean" returntype="any" access="public" output="false" hint="removes whitespace between list elements. optional argument to return the list as an array.">
+	<cfargument name="list" type="string" required="true">
+	<cfargument name="delim" type="string" required="false" default=",">
+	<cfargument name="returnAs" type="string" required="false" default="string">
+	<cfset var loc = {}>
+	<cfset loc.list = ListToArray(arguments.list, arguments.delim)>
+	<cfset loc.iEnd = ArrayLen(loc.list)>
+	<cfloop from="1" to="#loc.iEnd#" index="loc.i">
+		<cfset loc.list[loc.i] = trim(loc.list[loc.i])>
+	</cfloop>
+	<cfif arguments.returnAs eq "array">
+		<cfreturn loc.list>
+	</cfif>
+	<cfreturn ArrayToList(loc.list, arguments.delim)>
+</cffunction>
+
+<cffunction name="$hashedKey" returntype="string" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = "";
+		for (loc.key in arguments)
+		{
+			loc.value = arguments[loc.key];
+			if (IsSimpleValue(loc.value))
+				loc.returnValue = loc.returnValue & loc.value;
+			else
+				loc.returnValue = loc.returnValue & ListSort(ReplaceList(SerializeJSON(loc.value), "{,}", ","), "text");
+		}
+		return Hash(loc.returnValue);
+	</cfscript>
+</cffunction>
+
 <cffunction name="$timeSpanForCache" returntype="any" access="public" output="false">
 	<cfargument name="cache" type="any" required="true">
 	<cfargument name="defaultCacheTime" type="numeric" required="false" default="#application.wheels.defaultCacheTime#">
 	<cfargument name="cacheDatePart" type="string" required="false" default="#application.wheels.cacheDatePart#">
 	<cfscript>
 		var loc = {};
-		loc.cache = 0;
-		if (IsBoolean(arguments.cache) && arguments.cache)
-			loc.cache = arguments.defaultCacheTime;
-		else if (IsNumeric(arguments.cache))
+		loc.cache = arguments.defaultCacheTime;
+		if (IsNumeric(arguments.cache))
 			loc.cache = arguments.cache;
 		loc.list = "0,0,0,0";
 		loc.dateParts = "d,h,n,s";
@@ -385,11 +415,6 @@
 		returnValue = $doubleCheckedLock(name="controllerLock", condition="$cachedControllerClassExists", execute="$createControllerClass", conditionArgs=arguments, executeArgs=arguments);
 	</cfscript>
 	<cfreturn returnValue>
-</cffunction>
-
-<cffunction name="$hashStruct" returntype="string" access="public" output="false">
-	<cfargument name="args" type="struct" required="true">
-	<cfreturn Hash(ListSort(ReplaceList(SerializeJSON(arguments.args), "{,}", ","), "text"))>
 </cffunction>
 
 <cffunction name="$addToCache" returntype="void" access="public" output="false">

@@ -12,6 +12,7 @@
 	<cfscript>
 		var loc = {};
 		$args(args=arguments, name="caches", combine="action/actions");
+		arguments.action = $listClean(arguments.action);
 		if (!Len(arguments.action))
 		{
 			// since no actions were passed in we assume that all actions should be cachable and indicate this with a *
@@ -20,7 +21,7 @@
 		loc.iEnd = ListLen(arguments.action);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.item = Trim(ListGetAt(arguments.action, loc.i));
+			loc.item = ListGetAt(arguments.action, loc.i);
 			loc.action = {action=loc.item, time=arguments.time, static=arguments.static};
 			$addCachableAction(loc.action);
 		}
@@ -51,10 +52,6 @@
 	<cfreturn ArrayIsEmpty($cachableActions())>
 </cffunction>
 
-<cffunction name="$cacheKey" returntype="string" access="public" output="false">
-	<cfreturn hash("#request.cgi.http_host##controllerName()##SerializeJSON(params)#")>
-</cffunction>
-
 <cffunction name="$cacheSettingsForAction" returntype="any" access="public" output="false">
 	<cfargument name="action" type="string" required="true">
 	<cfscript>
@@ -71,6 +68,6 @@
 				loc.returnValue.static = loc.cachableActions[loc.i].static;
 			}
 		}
+		return loc.returnValue;
 	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>

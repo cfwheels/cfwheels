@@ -7,7 +7,7 @@
 	</cffunction>
 
 	<cffunction name="_method">
-		<cfreturn $hashStruct(arguments)>
+		<cfreturn $hashedKey(arguments)>
 	</cffunction>
 
 </cfcomponent>
