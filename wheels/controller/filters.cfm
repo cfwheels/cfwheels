@@ -21,6 +21,7 @@
 		arguments.only = $listClean(arguments.only);
 		arguments.except = $listClean(arguments.except);
 
+		loc.namedArguments = "through,type,only,except";
 		loc.iEnd = ListLen(arguments.through);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
@@ -30,19 +31,15 @@
 			loc.filter.only = arguments.only;
 			loc.filter.except = arguments.except;
 			loc.filter.arguments = {};
-			if (StructCount(arguments) > 4)
+			if (StructCount(arguments) > ListLen(loc.namedArguments))
 			{
 				loc.dynamicArgument = loc.filter.through & "Arguments";
 				if (StructKeyExists(arguments, loc.dynamicArgument))
-				{
 					loc.filter.arguments = arguments[loc.dynamicArgument];
-				}
 				for (loc.key in arguments)
 				{
-					if (!ListFindNoCase("through,type,only,except,#loc.dynamicArgument#", loc.key))
-					{
+					if (!ListFindNoCase(ListAppend(loc.namedArguments, loc.dynamicArgument), loc.key))
 						loc.filter.arguments[loc.key] = arguments[loc.key];
-					}
 				}
 			}
 			ArrayAppend(variables.$class.filters, loc.filter);
@@ -62,25 +59,24 @@
 	<cfscript>
 		var loc = {};
 
+		// invalid type
 		if (!ListFindNoCase("before,after,all", arguments.type))
-		{// invalid type
 			$throw(type="Wheels.InvalidFilterType", message="The filter type of `#arguments.type#` is invalid.", extendedInfo="Please use either `before` or `after`.");
-		}
 
-		if (arguments.type eq "all")
-		{// return all filters
+		// return all filters
+		if (arguments.type == "all")
 			return variables.$class.filters;
-		}
 
 		// loop over the filters and return all those that match the supplied type
 		loc.returnValue = ArrayNew(1);
 		loc.iEnd = ArrayLen(variables.$class.filters);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++) {
-			if (variables.$class.filters[loc.i].type eq arguments.type)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			if (variables.$class.filters[loc.i].type == arguments.type)
 				ArrayAppend(loc.returnValue, variables.$class.filters[loc.i]);
 		}
+		return loc.returnValue;
 	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>
 
 <!--- PRIVATE FUNCTIONS --->
@@ -98,17 +94,15 @@
 			if ((!Len(loc.filter.only) && !Len(loc.filter.except)) || (Len(loc.filter.only) && ListFindNoCase(loc.filter.only, arguments.action)) || (Len(loc.filter.except) && !ListFindNoCase(loc.filter.except, arguments.action)))
 			{
 				if (!StructKeyExists(variables, loc.filter.through))
-				{
 					$throw(type="Wheels.filterNotFound", message="Wheels tried to run the `#loc.filter.through#` function as a #arguments.type# filter but could not find it.", extendedInfo="Make sure there is a function named `#loc.filter.through#` in the `#variables.$class.name#.cfc` file.");
-				}
+
 				loc.arguments = loc.filter.arguments;
 				loc.arguments.method = loc.filter.through;
 				loc.result = $invoke(argumentCollection=loc.arguments);
+
+				// if the filter function returned false or rendered content we skip the remaining filters in the chain
 				if ((StructKeyExists(loc, "result") && !loc.result) || $performedRenderOrRedirect())
-				{
-					// the filter function returned false or rendered content so we skip the remaining filters in the chain
 					break;
-				}
 			}
 		}
 	</cfscript>

@@ -427,14 +427,16 @@
 </cffunction>
 
 <cffunction name="response" returntype="string" access="public" output="false">
-	<cfif StructCount(arguments) IS NOT 0>
-		<cfset variables.$instance.response = arguments[1]>	
+	<cfif StructKeyExists(variables.$instance, "response")>
+		<cfreturn Trim(variables.$instance.response)>
 	<cfelse>
-		<cfif StructKeyExists(variables.$instance, "response")>
-			<cfreturn Trim(variables.$instance.response)>
-		</cfif>
 		<cfreturn "">
 	</cfif>
+</cffunction>
+
+<cffunction name="setResponse" returntype="void" access="public" output="false">
+	<cfargument name="content" type="string" required="true" hint="The content to set as the response.">
+	<cfset variables.$instance.response = arguments.content>	
 </cffunction>
 
 <cffunction name="$getRedirect" returntype="struct" access="public" output="false">
