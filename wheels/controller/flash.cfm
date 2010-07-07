@@ -100,6 +100,35 @@
 	<cfreturn StructKeyExists(arguments.$flash, arguments.key)>
 </cffunction>
 
+<cffunction name="flashMessages" returntype="string" access="public" output="false" hint="Outputs a list of messages that exists in the Flash.">
+	<cfargument name="key" type="string" required="false" hint="The key to show the value for.">
+	<cfargument name="class" type="string" required="false" hint="CSS class to set on the div element that contains the messages.">
+	<cfargument name="$flash" type="struct" required="false" default="#$readFlash()#">
+	<cfscript>
+		var loc = {};
+		$insertDefaults(name="flashMessages", input=arguments);
+		loc.listItems = "";
+		loc.keys = StructKeyList(arguments.$flash);
+		loc.keys = ListSort(loc.keys, "textnocase");
+		loc.iEnd = ListLen(loc.keys);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(loc.keys, loc.i);
+			loc.attributes = {class=loc.item & "-message"};
+			if (!StructKeyExists(arguments, "key") || arguments.key == loc.item)
+			{
+				loc.content = flash(loc.item);
+				if (IsSimpleValue(loc.content))
+					loc.listItems = loc.listItems & $element(name="p", content=loc.content, attributes=loc.attributes);
+			}
+		}
+		if (Len(loc.listItems))
+			return $element(name="div", skip="key", content=loc.listItems, attributes=arguments);
+		else
+			return "";
+	</cfscript>
+</cffunction>
+
 <cffunction name="$readFlash" returntype="struct" access="public" output="false">
 	<cfargument name="flashStorage" type="string" required="false" default="#get('flashStorage')#">
 	<cfscript>

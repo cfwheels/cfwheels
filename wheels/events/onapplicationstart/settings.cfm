@@ -133,6 +133,7 @@
 	application.wheels.functions.findAll = {reload=false, parameterize=true, perPage=10, order="", group="", returnAs="query", returnIncluded=true};
 	application.wheels.functions.findByKey = {reload=false, parameterize=true, returnAs="object"};
 	application.wheels.functions.findOne = {reload=false, parameterize=true, returnAs="object"};
+	application.wheels.functions.flashMessages = {class="flash-messages"};
 	application.wheels.functions.hasMany = {joinType="outer", dependent=false};
 	application.wheels.functions.hasOne = {joinType="outer", dependent=false};
 	application.wheels.functions.hiddenField = {};
