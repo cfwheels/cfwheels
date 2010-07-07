@@ -26,7 +26,7 @@
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="create", input=arguments);
+		$args(name="create", args=arguments);
 		loc.parameterize = arguments.parameterize;
 		StructDelete(arguments, "parameterize");
 		loc.returnValue = new(argumentCollection=arguments);
@@ -113,7 +113,7 @@
 	<cfargument name="$offset" type="numeric" required="false" default=0>
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="findAll", input=arguments);
+		$args(name="findAll", args=arguments);
 		
 		// we only allow direct associations to be loaded when returning objects
 		if (application.wheels.showErrorInformation && Len(arguments.returnAs) && arguments.returnAs != "query" && Find("(", arguments.include) && arguments.returnIncluded)
@@ -314,7 +314,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var returnValue = "";
-		$insertDefaults(name="findByKey", input=arguments);
+		$args(name="findByKey", args=arguments);
 		// convert primary key column name(s) / value(s) to a WHERE clause that is then used in the findOne call
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");
@@ -355,7 +355,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var returnValue = "";
-		$insertDefaults(name="findOne", input=arguments);
+		$args(name="findOne", args=arguments);
 		returnValue = findAll(argumentCollection=arguments);
 		if (IsArray(returnValue))
 		{
@@ -393,7 +393,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="updateAll", input=arguments);
+		$args(name="updateAll", args=arguments);
 		arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,reload,parameterize,instantiate,validate,transaction,callbacks,includeSoftDeletes", setOnModel=false);
 		
 		if (arguments.instantiate) // find and instantiate each object and call its update function
@@ -453,7 +453,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var returnValue = "";
-		$insertDefaults(name="updateByKey", input=arguments);
+		$args(name="updateByKey", args=arguments);
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");
 		returnValue = updateOne(argumentCollection=arguments);
@@ -482,7 +482,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="updateOne", input=arguments);
+		$args(name="updateOne", args=arguments);
 		loc.object = findOne(where=arguments.where, order=arguments.order, reload=arguments.reload, includeSoftDeletes=arguments.includeSoftDeletes);
 		StructDelete(arguments, "where");
 		StructDelete(arguments, "order");
@@ -508,7 +508,7 @@
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
-		$insertDefaults(name="updateProperty", input=arguments);
+		$args(name="updateProperty", args=arguments);
 		arguments.validate = false;
 		this[arguments.property] = arguments.value;
 	</cfscript>
@@ -529,7 +529,7 @@
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
-		$insertDefaults(name="updateProperties", input=arguments);
+		$args(name="updateProperties", args=arguments);
 		$setProperties(argumentCollection=arguments, filterList="properties,parameterize,validate,transaction,callbacks");
 	</cfscript>
 	<cfreturn save(parameterize=arguments.parameterize, reload=false, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks) />
@@ -560,7 +560,7 @@
 	<cfargument name="softDelete" type="boolean" required="false" default="true" hint="See documentation for @delete.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="deleteAll", input=arguments);
+		$args(name="deleteAll", args=arguments);
 		
 		if (arguments.instantiate)
 		{
@@ -604,7 +604,7 @@
 	<cfargument name="softDelete" type="boolean" required="false" default="true" hint="See documentation for @delete.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="deleteByKey", input=arguments);
+		$args(name="deleteByKey", args=arguments);
 		loc.where = $keyWhereString(values=arguments.key);
 		loc.returnValue = deleteOne(where=loc.where, reload=arguments.reload, transaction=arguments.transaction, callbacks=arguments.callbacks, includeSoftDeletes=arguments.includeSoftDeletes, softDelete=arguments.softDelete);
 	</cfscript>
@@ -631,7 +631,7 @@
 	<cfargument name="softDelete" type="boolean" required="false" default="true" hint="See documentation for @delete.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="deleteOne", input=arguments);
+		$args(name="deleteOne", args=arguments);
 		loc.object = findOne(where=arguments.where, order=arguments.order, reload=arguments.reload, includeSoftDeletes=arguments.includeSoftDeletes);
 		if (IsObject(loc.object))
 			loc.returnValue = loc.object.delete(transaction=arguments.transaction, callbacks=arguments.callbacks, softDelete=arguments.softDelete);
@@ -673,7 +673,7 @@
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="exists", input=arguments);
+		$args(name="exists", args=arguments);
 		if (application.wheels.showErrorInformation)
 			if (Len(arguments.key) && Len(arguments.where))
 				$throw(type="Wheels.IncorrectArguments", message="You cannot pass in both `key` and `where`.");
@@ -710,7 +710,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfargument name="softDelete" type="boolean" required="false" default="true" hint="Set me to `false` to permanently delete a record even if it has a soft delete column.">
 	<cfscript>
-		$insertDefaults(name="delete", input=arguments);
+		$args(name="delete", args=arguments);
 		arguments.sql = [];
 		arguments.sql = $addDeleteClause(sql=arguments.sql, softDelete=arguments.softDelete);
 		arguments.sql = $addKeyWhereClause(sql=arguments.sql, includeSoftDeletes=arguments.includeSoftDeletes);
@@ -783,7 +783,7 @@
 	<cfargument name="validate" type="boolean" required="false" default="true" hint="Set to `false` to disable validations for this save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="Use `commit` to update the database when the save has completed, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="Set to `false` to disable callbacks for this save.">
-	<cfset $insertDefaults(name="save", input=arguments)>
+	<cfset $args(name="save", args=arguments)>
 	<cfset clearErrors()>
 	<cfreturn invokeWithTransaction(method="$save", argumentCollection=arguments)>
 </cffunction>
@@ -858,7 +858,7 @@
 	<cfargument name="validate" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfset $insertDefaults(name="update", input=arguments)>
+	<cfset $args(name="update", args=arguments)>
 	<cfset $setProperties(argumentCollection=arguments, filterList="properties,parameterize,reload,validate,transaction,callbacks")>
 	<cfreturn save(parameterize=arguments.parameterize, reload=arguments.reload, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks)>
 </cffunction>

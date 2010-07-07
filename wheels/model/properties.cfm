@@ -207,7 +207,7 @@
 	<cfargument name="property" type="string" required="true" />
 	<cfargument name="save" type="boolean" required="false" hint="Argument to decide whether save the property after it has been toggled. Defaults to true." />
 	<cfscript>
-		$insertDefaults(name="toggle", input=arguments);
+		$args(name="toggle", args=arguments);
 		if (!StructKeyExists(this, arguments.property))
 			$throw(type="Wheels.PropertyDoesNotExist", message="Property Does Not Exist", extendedInfo="You may only toggle a property that exists on this model.");
 		if (!IsBoolean(this[arguments.property]))

@@ -267,8 +267,8 @@
 </cffunction>
 
 <cffunction name="$args" returntype="void" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
 	<cfargument name="args" type="struct" required="true">
+	<cfargument name="name" type="string" required="true">
 	<cfargument name="reserved" type="string" required="false" default="">
 	<cfargument name="combine" type="string" required="false" default="">
 	<cfscript>
@@ -302,31 +302,8 @@
 				}
 			}
 		}
-		StructAppend(arguments.args, application.wheels.functions[arguments.name], false);
-	</cfscript>
-</cffunction>
-
-<cffunction name="$insertDefaults" returntype="void" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="input" type="struct" required="true">
-	<cfargument name="reserved" type="string" required="false" default="">
-	<cfscript>
-		var loc = {};
-		if (application.wheels.showErrorInformation)
-		{
-			if (ListLen(arguments.reserved))
-			{
-				loc.iEnd = ListLen(arguments.reserved);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-				{
-					loc.item = ListGetAt(arguments.reserved, loc.i);
-					if (StructKeyExists(arguments.input, loc.item))
-						$throw(type="Wheels.IncorrectArguments", message="The `#loc.item#` argument is not allowed.", extendedInfo="Do not pass in the `#loc.item#` argument, it will be set automatically by Wheels.");
-				}
-			}
-		}
 		if (StructKeyExists(application.wheels.functions, arguments.name))
-			StructAppend(arguments.input, application.wheels.functions[arguments.name], false);
+			StructAppend(arguments.args, application.wheels.functions[arguments.name], false);
 	</cfscript>
 </cffunction>
 

@@ -213,7 +213,7 @@
 	<cfargument name="$URLRewriting" type="string" required="false" default="#application.wheels.URLRewriting#">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="URLFor", input=arguments);
+		$args(name="URLFor", args=arguments);
 		loc.params = {};
 		if (StructKeyExists(variables, "params"))
 			StructAppend(loc.params, variables.params, true);

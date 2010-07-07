@@ -15,7 +15,7 @@
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="Foreign key property name (usually not needed if you follow the Wheels conventions since the foreign key name will be deduced from the `name` argument).">
 	<cfargument name="joinType" type="string" required="false" hint="Use to set the join type when joining associated tables, possible values are `inner` (for `INNER JOIN`) and `outer` (for `LEFT OUTER JOIN`).">
 	<cfscript>
-		$insertDefaults(name="belongsTo", input=arguments);
+		$args(name="belongsTo", args=arguments);
 		// deprecate the class argument (change of name only)
 		if (StructKeyExists(arguments, "class"))
 		{
@@ -50,7 +50,7 @@
 	<cfscript>
 		var singularizeName = capitalize(singularize(arguments.name));
 		var capitalizeName = capitalize(arguments.name);
-		$insertDefaults(name="hasMany", input=arguments);
+		$args(name="hasMany", args=arguments);
 		// deprecate the class argument (change of name only)
 		if (StructKeyExists(arguments, "class"))
 		{
@@ -82,7 +82,7 @@
 	<cfargument name="dependent" type="string" required="false" hint="See documentation for @hasMany.">
 	<cfscript>
 		var capitalizeName = capitalize(arguments.name);
-		$insertDefaults(name="hasOne", input=arguments);
+		$args(name="hasOne", args=arguments);
 		// deprecate the class argument (change of name only)
 		if (StructKeyExists(arguments, "class"))
 		{

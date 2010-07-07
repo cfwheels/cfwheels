@@ -14,7 +14,7 @@
 	<cfargument name="when" type="string" required="false" default="onSave" hint="Pass in `onCreate` or `onUpdate` to limit when this validation occurs (by default validation will occur on both create and update, i.e. `onSave`).">
 	<cfargument name="if" type="string" required="false" default="" hint="String expression to be evaluated that decides if validation will be run (if the expression returns `true` validation will run).">
 	<cfargument name="unless" type="string" required="false" default="" hint="String expression to be evaluated that decides if validation will be run (if the expression returns `false` validation will run).">
-	<cfset $insertDefaults(name="validatesConfirmationOf", input=arguments)>
+	<cfset $args(name="validatesConfirmationOf", args=arguments)>
 	<cfset $registerValidation(methods="$validateConfirmationOf", argumentCollection=arguments)>
 </cffunction>
 
@@ -33,7 +33,7 @@
 	<cfargument name="if" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfscript>
-		$insertDefaults(name="validatesExclusionOf", input=arguments);
+		$args(name="validatesExclusionOf", args=arguments);
 		arguments.list = $listClean(arguments.list);
 		$registerValidation(methods="$validateExclusionOf", argumentCollection=arguments);
 	</cfscript>
@@ -58,7 +58,7 @@
 	<cfargument name="if" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfscript>
-		$insertDefaults(name="validatesFormatOf", input=arguments);
+		$args(name="validatesFormatOf", args=arguments);
 		if (application.wheels.showErrorInformation)
 		{
 			if (Len(arguments.type) && !ListFindNoCase("creditcard,date,email,eurodate,guid,social_security_number,ssn,telephone,time,URL,USdate,UUID,variableName,zipcode", arguments.type))
@@ -83,7 +83,7 @@
 	<cfargument name="if" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfscript>
-		$insertDefaults(name="validatesInclusionOf", input=arguments);
+		$args(name="validatesInclusionOf", args=arguments);
 		arguments.list = $listClean(arguments.list);
 		$registerValidation(methods="$validateInclusionOf", argumentCollection=arguments);
 	</cfscript>
@@ -110,7 +110,7 @@
 	<cfargument name="if" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfscript>
-		$insertDefaults(name="validatesLengthOf", input=arguments);
+		$args(name="validatesLengthOf", args=arguments);
 		if (Len(arguments.within))
 			arguments.within = $listClean(list=arguments.within, returnAs="array");
 		$registerValidation(methods="$validateLengthOf", argumentCollection=arguments);
@@ -138,7 +138,7 @@
 	<cfargument name="equalTo" type="numeric" required="false" hint="Specifies the value must be equal to the supplied value.">
 	<cfargument name="lessThan" type="numeric" required="false" hint="Specifies the value must be less than the supplied value.">
 	<cfargument name="lessThanOrEqualTo" type="numeric" required="false" hint="Specifies the value must be less than or equal the supplied value.">
-	<cfset $insertDefaults(name="validatesNumericalityOf", input=arguments)>
+	<cfset $args(name="validatesNumericalityOf", args=arguments)>
 	<cfset $registerValidation(methods="$validateNumericalityOf", argumentCollection=arguments)>
 </cffunction>
 
@@ -154,7 +154,7 @@
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="if" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfset $insertDefaults(name="validatesPresenceOf", input=arguments)>
+	<cfset $args(name="validatesPresenceOf", args=arguments)>
 	<cfset $registerValidation(methods="$validatePresenceOf", argumentCollection=arguments)>
 </cffunction>
 
@@ -176,7 +176,7 @@
 	<cfargument name="if" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfscript>
-		$insertDefaults(name="validatesUniquenessOf", input=arguments);
+		$args(name="validatesUniquenessOf", args=arguments);
 		arguments.scope = $listClean(arguments.scope);
 		$registerValidation(methods="$validateUniquenessOf", argumentCollection=arguments);
 	</cfscript>
