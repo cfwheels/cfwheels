@@ -588,53 +588,44 @@
 			// create a reference to current class in include string and get its association info
 			loc.class = model(ListLast(loc.levels));
 			loc.classAssociations = loc.class.$classData().associations;
-			
-			// create a shortcut reference to the current association
-			loc.current = loc.classAssociations[loc.name];
 
 			// throw an error if the association was not found
 			if (application.wheels.showErrorInformation && !StructKeyExists(loc.classAssociations, loc.name))
 				$throw(type="Wheels.AssociationNotFound", message="An association named `#loc.name#` could not be found on the `#ListLast(loc.levels)#` model.", extendedInfo="Setup an association in the `init` method of the `models/#capitalize(ListLast(loc.levels))#.cfc` file and name it `#loc.name#`. You can use the `belongsTo`, `hasOne` or `hasMany` method to set it up.");
 
 			// create a reference to the associated class
-			loc.associatedClass = model(loc.current.modelName);
+			loc.associatedClass = model(loc.classAssociations[loc.name].modelName);
 
-			if (!Len(loc.current.foreignKey))
+			if (!Len(loc.classAssociations[loc.name].foreignKey))
 			{
-				if (loc.current.type == "belongsTo")
+				if (loc.classAssociations[loc.name].type == "belongsTo")
 				{
-					loc.current.foreignKey = loc.associatedClass.$classData().modelName & Replace(loc.associatedClass.$classData().keys, ",", ",#loc.associatedClass.$classData().modelName#", "all");
+					loc.classAssociations[loc.name].foreignKey = loc.associatedClass.$classData().modelName & Replace(loc.associatedClass.$classData().keys, ",", ",#loc.associatedClass.$classData().modelName#", "all");
 				}
 				else
 				{
-					loc.current.foreignKey = loc.class.$classData().modelName & Replace(loc.class.$classData().keys, ",", ",#loc.class.$classData().modelName#", "all");
+					loc.classAssociations[loc.name].foreignKey = loc.class.$classData().modelName & Replace(loc.class.$classData().keys, ",", ",#loc.class.$classData().modelName#", "all");
 				}
 			}
 
-			loc.current.tableName = loc.associatedClass.$classData().tableName;
-			loc.current.columnList = loc.associatedClass.$classData().columnList;
-			loc.current.properties = loc.associatedClass.$classData().properties;
-			loc.current.propertyList = loc.associatedClass.$classData().propertyList;
-			loc.current.calculatedProperties = loc.associatedClass.$classData().calculatedProperties;
-			loc.current.calculatedPropertyList = loc.associatedClass.$classData().calculatedPropertyList;
+			loc.classAssociations[loc.name].tableName = loc.associatedClass.$classData().tableName;
+			loc.classAssociations[loc.name].columnList = loc.associatedClass.$classData().columnList;
+			loc.classAssociations[loc.name].properties = loc.associatedClass.$classData().properties;
+			loc.classAssociations[loc.name].propertyList = loc.associatedClass.$classData().propertyList;
+			loc.classAssociations[loc.name].calculatedProperties = loc.associatedClass.$classData().calculatedProperties;
+			loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClass.$classData().calculatedPropertyList;
 
 			// create the join string if it hasn't already been done (no need to lock this code since when multiple requests process it they will end up setting the same value (no intermediate value is ever set on the join variable in the application scoped model object)
-			if (!StructKeyExists(loc.current, "join"))
+			if (!StructKeyExists(loc.classAssociations[loc.name], "join"))
 			{
-				loc.joinType = ReplaceNoCase(loc.current.joinType, "outer", "left outer", "one");
-				loc.join = UCase(loc.joinType) & " JOIN ";
-				loc.join = loc.join & loc.current.tableName;
-
-				// if this is a self join we need to alias the table name
-				if (loc.class.$classData().tableName == loc.current.tableName)
-					loc.join = loc.join & " AS " & loc.current.tableName & loc.name;
-
+				loc.joinType = ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one");
+				loc.join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# ON ";
 				loc.toAppend = "";
-				loc.jEnd = ListLen(loc.current.foreignKey);
+				loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
-					loc.key1 = ListGetAt(loc.current.foreignKey, loc.j);
-					if (loc.current.type == "belongsTo")
+					loc.key1 = ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.j);
+					if (loc.classAssociations[loc.name].type == "belongsTo")
 					{
 						loc.key2 = ListFindNoCase(loc.associatedClass.$classData().keys, loc.key1);
 						if (loc.key2)
@@ -654,17 +645,9 @@
 						loc.first = loc.key2;
 						loc.second = loc.key1;
 					}
-
-					loc.append = "#loc.class.$classData().tableName#.#loc.class.$classData().properties[loc.first].column# = #loc.current.tableName#";
-
-					// if this is a self join we need to use the same aliased table name that we used previously
-					if (loc.class.$classData().tableName == loc.current.tableName)
-						loc.append = loc.append & loc.name;
-	
-					loc.append = loc.append & ".#loc.associatedClass.$classData().properties[loc.second].column#";
-					loc.toAppend = ListAppend(loc.toAppend, loc.append);
+					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[loc.first].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[loc.second].column#");
 				}
-				loc.current.join = loc.join & " ON " & Replace(loc.toAppend, ",", " AND ", "all");
+				loc.classAssociations[loc.name].join = loc.join & Replace(loc.toAppend, ",", " AND ", "all");
 			}
 
 			// loop over each character in the delimiter sequence and move up/down the levels as appropriate
@@ -672,13 +655,13 @@
 			{
 				loc.delimChar = Mid(loc.delimSequence, loc.x, 1);
 				if (loc.delimChar == "(")
-					loc.levels = ListAppend(loc.levels, loc.current.modelName);
+					loc.levels = ListAppend(loc.levels, loc.classAssociations[loc.name].modelName);
 				else if (loc.delimChar == ")")
 					loc.levels = ListDeleteAt(loc.levels, ListLen(loc.levels));
 			}
 
 			// add info to the array that we will return
-			ArrayAppend(loc.returnValue, loc.current);
+			ArrayAppend(loc.returnValue, loc.classAssociations[loc.name]);
 		}
 		</cfscript>
 		<cfreturn loc.returnValue>
