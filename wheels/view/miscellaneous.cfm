@@ -126,7 +126,7 @@
 	<cfargument name="layout" type="string" required="false" hint="See documentation for @renderPartial.">
 	<cfargument name="spacer" type="string" required="false" hint="HTML or string to place between partials when called using a query.">
 	<cfargument name="$prependWithUnderscore" type="boolean" required="false" default="true">
-	<cfset $insertDefaults(name="includePartial", input=arguments)>
+	<cfset $args(name="includePartial", args=arguments)>
 	<cfreturn $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,group,cache,layout,spacer"))>
 </cffunction>
 

@@ -34,7 +34,7 @@
 	<cfargument name="href" type="string" required="false" hint="Used to link to an extrenal site">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="linkTo", input=arguments);
+		$args(name="linkTo", args=arguments);
 		if (Len(arguments.confirm))
 		{
 			loc.onclick = "return confirm('#JSStringFormat(arguments.confirm)#');";
@@ -75,7 +75,7 @@
 	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="buttonTo", reserved="method", input=arguments);
+		$args(name="buttonTo", reserved="method", args=arguments);
 		arguments.action = URLFor(argumentCollection=arguments);
 		arguments.action = toXHTML(arguments.action);
 		arguments.method = "post";
@@ -105,7 +105,7 @@
 	<cfargument name="encode" type="boolean" required="false" hint="Pass `true` here to encode the email address, making it harder for bots to harvest it for example.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="mailTo", reserved="href", input=arguments);
+		$args(name="mailTo", reserved="href", args=arguments);
 		arguments.href = "mailto:#arguments.emailAddress#";
 		if (Len(arguments.name))
 			loc.content = arguments.name;
@@ -190,7 +190,7 @@
 
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="paginationLinks", input=arguments);
+		$args(name="paginationLinks", args=arguments);
 		loc.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prepend,append,prependToPage,prependOnFirst,prependOnAnchor,appendToPage,appendOnLast,appendOnAnchor,classForCurrent,handle,name,showSinglePage,pageNumberAsParam";
 		loc.linkToArguments = Duplicate(arguments);
 		loc.iEnd = ListLen(loc.skipArgs);

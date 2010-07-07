@@ -12,7 +12,7 @@
 	<cfargument name="showDuplicates" type="boolean" required="false" hint="Whether to show duplicate error messages.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="errorMessagesFor", input=arguments);
+		$args(name="errorMessagesFor", args=arguments);
 		loc.object = $getObject(arguments.objectName);
 		if (application.wheels.showErrorInformation && !IsObject(loc.object))
 			$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
@@ -62,7 +62,7 @@
 	<cfargument name="class" type="string" required="false" hint="CSS class to set on the wrapper element.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="errorMessageOn", input=arguments);
+		$args(name="errorMessageOn", args=arguments);
 		loc.object = $getObject(arguments.objectName);
 		if (application.wheels.showErrorInformation && !IsObject(loc.object))
 			$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");

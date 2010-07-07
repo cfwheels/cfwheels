@@ -24,7 +24,7 @@
 	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="combine" type="boolean" required="false" hint="Set to `false` to not combine the select parts into a single DateTime object.">
 	<cfscript>
-		$insertDefaults(name="dateSelect", input=arguments);
+		$args(name="dateSelect", args=arguments);
 		arguments.$functionName = "dateSelect";
 	</cfscript>
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
@@ -54,7 +54,7 @@
 	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
 	<cfscript>
-		$insertDefaults(name="timeSelect", input=arguments);
+		$args(name="timeSelect", args=arguments);
 		arguments.$functionName = "timeSelect";
 	</cfscript>
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
@@ -90,7 +90,7 @@
 	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
 	<cfscript>
-		$insertDefaults(name="dateTimeSelect", reserved="name", input=arguments);
+		$args(name="dateTimeSelect", reserved="name", args=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.$functionName = "dateTimeSelect";
 	</cfscript>

@@ -42,7 +42,7 @@
 	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="startFormTag", input=arguments);
+		$args(name="startFormTag", args=arguments);
 
 		// sets a flag to indicate whether we use get or post on this form, used when obfuscating params
 		request.wheels.currentFormMethod = arguments.method;
@@ -94,7 +94,7 @@
 	<cfargument name="disable" type="any" required="false" hint="Whether to disable the button upon clicking (prevents double-clicking).">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="submitTag", reserved="type,src", input=arguments);
+		$args(name="submitTag", reserved="type,src", args=arguments);
 		if (Len(arguments.disable))
 		{
 			loc.onclick = "this.disabled=true;";
@@ -142,7 +142,7 @@
 	<cfargument name="disable" type="any" required="false" hint="Whether to disable the button upon clicking (prevents double-clicking).">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="buttonTag", input=arguments);
+		$args(name="buttonTag", args=arguments);
 
 		if (Len(arguments.disable))
 		{

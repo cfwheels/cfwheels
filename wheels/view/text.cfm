@@ -13,7 +13,7 @@
 	<cfargument name="domains" type="string" required="false" hint="The domains (.com, .co.uk etc) to auto link, not used with email addresses.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="autoLink", input=arguments);
+		$args(name="autoLink", args=arguments);
 		loc.domains = Replace(ListChangeDelims(arguments.domains, "|"), ".", "\.", "all");
 		loc.urlRegex = "(?ix)([^(url=)|(href=)'""])(((https?)://([^:]+\:[^@]*@)?)([\d\w\-]+\.)?[\w\d\-\.]+\.(" & loc.domains & ")(( / [\w\d\.\-@%\\\/:]* )+)?(\?[\w\d\?%,\.\/\##!@:=\+~_\-&amp;]*(?<![\.]))?)";
 		loc.mailRegex = "(([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,}))";
@@ -198,7 +198,7 @@
 	<cfargument name="truncateString" type="string" required="false" hint="String to replace the last characters with.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="truncate", input=arguments);
+		$args(name="truncate", args=arguments);
 		if (Len(arguments.text) gt arguments.length)
 			loc.returnValue = Left(arguments.text, arguments.length-Len(arguments.truncateString)) & arguments.truncateString;
 		else

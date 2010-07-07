@@ -13,9 +13,9 @@
 	<cfargument name="head" type="string" required="false" hint="Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior which is to place the output where the function is called from.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="styleSheetLinkTag", input=arguments);
+		$args(name="styleSheetLinkTag", args=arguments);
 		$combineArguments(args=arguments, combine="sources,source", required=true);
-		$insertDefaults(name="styleSheetLinkTag", reserved="href,rel", input=arguments);
+		$args(name="styleSheetLinkTag", reserved="href,rel", args=arguments);
 		arguments.rel = "stylesheet";
 		loc.returnValue = "";
 		arguments.sources = $listClean(list="#arguments.sources#", returnAs="array");
@@ -59,9 +59,9 @@
 	<cfargument name="head" type="string" required="false" hint="See documentation for @styleSheetLinkTag.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="javaScriptIncludeTag", input=arguments);
+		$args(name="javaScriptIncludeTag", args=arguments);
 		$combineArguments(args=arguments, combine="sources,source", required=true);
-		$insertDefaults(name="javaScriptIncludeTag", reserved="src", input=arguments);
+		$args(name="javaScriptIncludeTag", reserved="src", args=arguments);
 		loc.returnValue = "";
 		arguments.sources = $listClean(list="#arguments.sources#", returnAs="array");
 		loc.iEnd = ArrayLen(arguments.sources);
@@ -99,7 +99,7 @@
 	<cfargument name="source" type="string" required="true" hint="The file name of the image if it's availabe in the local file system (i.e. ColdFusion will be able to access it). Provide the full URL if the image is on a remote server.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="imageTag", reserved="src", input=arguments);
+		$args(name="imageTag", reserved="src", args=arguments);
 		if (application.wheels.cacheImages)
 		{
 			loc.category = "image";

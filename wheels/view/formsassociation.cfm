@@ -8,7 +8,7 @@
 	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="hasManyRadioButton", input=arguments);
+		$args(name="hasManyRadioButton", args=arguments);
 		loc.checked = false;
 		loc.returnValue = "";
 		loc.value = $hasManyFormValue(argumentCollection=arguments);
@@ -42,7 +42,7 @@
 	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="hasManyCheckBox", input=arguments);
+		$args(name="hasManyCheckBox", args=arguments);
 		loc.checked = true;
 		loc.returnValue = "";
 		loc.included = includedInObject(argumentCollection=arguments);

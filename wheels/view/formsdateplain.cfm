@@ -23,7 +23,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
 	<cfscript>
-		$insertDefaults(name="dateSelectTags", input=arguments);
+		$args(name="dateSelectTags", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.selected;
@@ -57,7 +57,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
 	<cfscript>
-		$insertDefaults(name="timeSelectTags", input=arguments);
+		$args(name="timeSelectTags", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.selected;
@@ -98,7 +98,7 @@
 	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="dateTimeSelectTags", input=arguments);
+		$args(name="dateTimeSelectTags", args=arguments);
 		loc.returnValue = "";
 		loc.separator = arguments.separator;
 		arguments.order = arguments.dateOrder;
@@ -139,7 +139,7 @@
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
-		$insertDefaults(name="yearSelectTag", input=arguments);
+		$args(name="yearSelectTag", args=arguments);
 		if (IsNumeric(arguments.selected))
 			arguments.selected = createDate(arguments.selected, Month(Now()), Day(Now()));
 		arguments.order = "year";
@@ -167,7 +167,7 @@
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
-		$insertDefaults(name="monthSelectTag", input=arguments);
+		$args(name="monthSelectTag", args=arguments);
 		if (IsNumeric(arguments.selected) and arguments.selected gt 0 and arguments.selected lte 12)
 			arguments.selected = createDate(Year(Now()), arguments.selected, Day(Now()));
 		arguments.order = "month";
@@ -194,7 +194,7 @@
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
-		$insertDefaults(name="daySelectTag", input=arguments);
+		$args(name="daySelectTag", args=arguments);
 		if (IsNumeric(arguments.selected) and arguments.selected gt 0 and arguments.selected lte 31)
 			arguments.selected = createDate(Year(Now()), Month(Now()), arguments.selected);
 		arguments.order = "day";
@@ -221,7 +221,7 @@
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
-		$insertDefaults(name="hourSelectTag", input=arguments);
+		$args(name="hourSelectTag", args=arguments);
 		if (IsNumeric(arguments.selected) and arguments.selected gte 0 and arguments.selected lt 60)
 			arguments.selected = createTime(arguments.selected, Minute(Now()), Second(Now()));
 		arguments.order = "hour";
@@ -249,7 +249,7 @@
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
-		$insertDefaults(name="minuteSelectTag", input=arguments);
+		$args(name="minuteSelectTag", args=arguments);
 		if (IsNumeric(arguments.selected) and arguments.selected gte 0 and arguments.selected lt 60)
 			arguments.selected = createTime(Hour(Now()), arguments.selected, Second(Now()));
 		arguments.order = "minute";
@@ -276,7 +276,7 @@
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
-		$insertDefaults(name="secondSelectTag", input=arguments);
+		$args(name="secondSelectTag", args=arguments);
 		if (IsNumeric(arguments.selected) and arguments.selected gte 0 and arguments.selected lt 60)
 			arguments.selected = createTime(Hour(Now()), Minute(Now()), arguments.selected);
 		arguments.order = "second";
