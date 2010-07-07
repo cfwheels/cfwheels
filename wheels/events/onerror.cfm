@@ -21,7 +21,7 @@
 			if (application.wheels.sendEmailOnError)
 			{
 				loc.mailArgs = {};
-				$insertDefaults(name="sendEmail", input=loc.mailArgs);
+				$args(name="sendEmail", input=loc.mailArgs);
 				if (StructKeyExists(application.wheels, "errorEmailServer") && Len(application.wheels.errorEmailServer))
 					loc.mailArgs.server = application.wheels.errorEmailServer;
 				loc.mailArgs.from = application.wheels.errorEmailAddress;
