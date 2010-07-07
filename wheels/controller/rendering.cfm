@@ -467,14 +467,14 @@
 		</html>
 	'
 	categories="view-helper,miscellaneous" chapters="using-layouts">
-	<cfargument name="section" type="string" required="false" default="">
+	<cfargument name="name" type="string" required="false" default="">
 	<cfargument name="default" type="string" required="false" default="">
 	<!--- blank defaults to layout --->
-	<cfif !len(arguments.section)>
-		<cfset arguments.section = "body">
+	<cfif !len(arguments.name)>
+		<cfset arguments.name = "body">
 	</cfif>
-	<cfif !StructKeyExists(variables.$instance.contentFor, arguments.section)>
+	<cfif !StructKeyExists(variables.$instance.contentFor, arguments.name)>
 		<cfreturn arguments.default>
 	</cfif>
-	<cfreturn ArrayToList(variables.$instance.contentFor[arguments.section], chr(10))>
+	<cfreturn ArrayToList(variables.$instance.contentFor[arguments.name], chr(10))>
 </cffunction>
