@@ -101,18 +101,16 @@
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPage.">
 	<cfargument name="layout" type="string" required="false" hint="See documentation for @renderPage.">
 	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for @renderPage.">
+	<cfargument name="dataFunction" type="any" required="false" hint="name of controller function to load data from.">
 	<cfscript>
 		var loc = {};
 		$args(name="renderPartial", args=arguments);
-		loc.partial = $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,cache,layout,returnAs"));
+		loc.partial = $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,cache,layout,returnAs,dataFunction"));
 		if (arguments.$returnAs == "string")
-			loc.returnValue = loc.partial;
+			return loc.partial;
 		else
 			variables.$instance.response = loc.partial;
 	</cfscript>
-	<cfif StructKeyExists(loc, "returnValue")>
-		<cfreturn loc.returnValue>
-	</cfif>
 </cffunction>
 
 <!--- PRIVATE FUNCTIONS --->
@@ -153,6 +151,29 @@
 	<cfreturn returnValue>
 </cffunction>
 
+<cffunction name="$argumentsForPartial" returntype="struct" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		if (StructKeyExists(arguments, "$dataFunction") && arguments.$dataFunction != "false")
+		{
+			if (IsBoolean(arguments.$dataFunction))
+			{
+				if (StructKeyExists(variables, arguments.$name))
+				{
+					loc.metaData = GetMetaData(variables[arguments.$name]);
+					if (StructKeyExists(loc.metaData, "returnType") && loc.metaData.returnType == "struct" && StructKeyExists(loc.metaData, "access") && loc.metaData.access == "private")
+						return $invoke(method=arguments.$name);
+				}
+			}
+			else
+			{
+				return $invoke(method=arguments.$dataFunction);
+			}
+		}
+		return {};
+</cfscript>
+</cffunction>
+
 <cffunction name="$renderPartial" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
@@ -179,16 +200,13 @@
 		{
 			arguments.$type = "partial";
 			arguments.$template = $generateIncludeTemplatePath(argumentCollection=arguments);
+			StructAppend(arguments, $argumentsForPartial(argumentCollection=arguments), false);
 			loc.content = $includeFile(argumentCollection=arguments);
-			loc.returnValue = $renderLayout($content=loc.content, $layout=arguments.$layout, $type=arguments.$type);
+			return $renderLayout($content=loc.content, $layout=arguments.$layout, $type=arguments.$type);
 		}
-		else
-		{
-			// when $name has not been set (which means that it's either an empty array or query) we just return an empty string
-			loc.returnValue = "";
-		}
+		// when $name has not been set (which means that it's either an empty array or query) we just return an empty string
+		return "";
 	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$includeOrRenderPartial" returntype="string" access="public" output="false">

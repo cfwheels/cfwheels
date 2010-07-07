@@ -125,9 +125,10 @@
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPartial.">
 	<cfargument name="layout" type="string" required="false" hint="See documentation for @renderPartial.">
 	<cfargument name="spacer" type="string" required="false" hint="HTML or string to place between partials when called using a query.">
+	<cfargument name="dataFunction" type="any" required="false" hint="name of controller function to load data from.">
 	<cfargument name="$prependWithUnderscore" type="boolean" required="false" default="true">
 	<cfset $args(name="includePartial", args=arguments)>
-	<cfreturn $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,group,cache,layout,spacer"))>
+	<cfreturn $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,group,cache,layout,spacer,dataFunction"))>
 </cffunction>
 
 <cffunction name="cycle" returntype="string" access="public" output="false" hint="Cycles through list values every time it is called."

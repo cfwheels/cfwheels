@@ -139,7 +139,7 @@
 	application.wheels.functions.hiddenField = {};
 	application.wheels.functions.hourSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
 	application.wheels.functions.imageTag = {};
-	application.wheels.functions.includePartial = {layout="", spacer=""};
+	application.wheels.functions.includePartial = {layout="", spacer="", dataFunction=true};
 	application.wheels.functions.javaScriptIncludeTag = {type="text/javascript", head=false};
 	application.wheels.functions.linkTo = {onlyPath=true, host="", protocol="", port=0};
 	application.wheels.functions.mailTo = {encode=false};
@@ -155,7 +155,7 @@
 	application.wheels.functions.redirectTo = {onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302, delay=false};
 	application.wheels.functions.renderPage = {layout=true};
 	application.wheels.functions.renderPageToString = {layout=true};
-	application.wheels.functions.renderPartial = {layout=""};
+	application.wheels.functions.renderPartial = {layout="", dataFunction=true};
 	application.wheels.functions.save = {parameterize=true, reload=false};
 	application.wheels.functions.secondSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
 	application.wheels.functions.select = {label=true, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", includeBlank=false, valueField="", textField=""};

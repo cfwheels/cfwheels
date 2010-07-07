@@ -11,4 +11,11 @@
 		<cfset renderPage(action="test")>
 	</cffunction>
 
+	<cffunction name="partialDataTemplate" returnType="struct" access="private">
+		<cfset var data = {}>
+		<cfset data.fruit = "Apple,Banana,Kiwi">
+		<cfset data.somethingElse = true>
+		<cfreturn data>
+	</cffunction>
+
 </cfcomponent>

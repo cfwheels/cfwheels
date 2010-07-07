@@ -13,6 +13,11 @@
 		<cfset assert("result Contains 'partial template content'")>
 	</cffunction>
 
+	<cffunction name="test_including_partial_loading_data">
+		<cfsavecontent variable="result"><cfoutput>#controller.includePartial(partial="partialDataTemplate")#</cfoutput></cfsavecontent>
+		<cfset assert("result IS 'Apple,Banana,Kiwi'")>
+	</cffunction>
+
 	<cffunction name="test_including_partial_with_query">
 		<cfset usersQuery = model("user").findAll(order="firstName")>
 		<cfset request.partialTests.currentTotal = 0>
