@@ -62,9 +62,6 @@
 		loc.executeArgs.name = arguments.name;
 		$simpleLock(name="controllerLock", type="readonly", execute="$setControllerClassData", executeArgs=loc.executeArgs);
 
-		// put layout file in instance variable
-		variables.$instance.layout = duplicate(variables.$class.layout);
-
 		variables.params = arguments.params;
 	</cfscript>
 	<cfreturn this>

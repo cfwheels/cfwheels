@@ -29,7 +29,7 @@
 		// if no layout specific arguments were passed in use the this instance's layout
 		if(!Len(arguments.$layout))
 		{
-			arguments.$layout = $layoutForAction(arguments.$action);
+			arguments.$layout = $useLayout(arguments.$action);
 		}
 
 		// if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
