@@ -5,7 +5,7 @@
 	'
 		<p><cfoutput>##flash("message")##</cfoutput></p>
 	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flashClear,flashDelete,flashIsEmpty,flashCount,flashKeyExists,flashInsert">
+	categories="controller-request,flash" chapters="using-the-flash" functions="flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfargument name="key" type="string" required="false" hint="The key to get the value for.">
 	<cfargument name="$flash" type="struct" required="false" default="#$readFlash()#">
 	<cfscript>
@@ -30,7 +30,7 @@
 	'
 		<cfset flashClear()>
 	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashDelete,flashIsEmpty,flashCount,flashKeyExists,flashInsert">
+	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfargument name="$flashStorage" type="string" required="false" default="#get('flashStorage')#">
 	<cfset $writeFlash(StructNew())>
 </cffunction>
@@ -42,7 +42,7 @@
 		  do something...
 		</cfif>
 	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashIsEmpty,flashKeyExists,flashInsert">
+	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfargument name="$flash" type="struct" required="false" default="#$readFlash()#">
 	<cfreturn StructCount(arguments.$flash)>
 </cffunction>
@@ -52,7 +52,7 @@
 	'
 		<cfset flashDelete(key="errorMessage")>
 	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashIsEmpty,flashCount,flashKeyExists,flashInsert">
+	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashInsert,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfargument name="key" type="string" required="true" hint="The key to delete.">
 	<cfargument name="$flash" type="struct" required="false" default="#$readFlash()#">
 	<cfscript>
@@ -68,7 +68,7 @@
 	'
 		<cfset flashInsert(msg="It Worked!")>
 	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashIsEmpty,flashCount,flashKeyExists">
+	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashIsEmpty,flashKeep,flashKeyExists,flashMessages">
 	<cfargument name="$flash" type="struct" required="false" default="#$readFlash()#">
 	<cfscript>
 		StructInsert(arguments.$flash, ListLast(ListSort(StructKeyList(arguments), "textnocase")), arguments[2], true);
@@ -83,8 +83,21 @@
 		  <cfabort>
 		</cfif>
 	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashCount,flashKeyExists,flashInsert">
+	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashKeep,flashKeyExists,flashMessages">
 	<cfreturn !flashCount()>
+</cffunction>
+
+<cffunction name="flashKeep" returntype="void" access="public" output="false" hint="Make the entire Flash or specific key in it stick around for one more request."
+	examples=
+	'
+		<cfset flashKeep()>
+	'
+	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeyExists,flashMessages">
+	<cfargument name="key" type="string" required="false" default="" hint="A key or list of keys to flag for keeping. This argument is also aliased as `keys`.">
+	<cfscript>
+		$args(args=arguments, name="flashKeep", combine="key/keys");
+		request.wheels.flashKeep = arguments.key;
+	</cfscript>
 </cffunction>
 
 <cffunction name="flashKeyExists" returntype="boolean" access="public" output="false" hint="Checks if a specific key exists in the Flash."
@@ -94,13 +107,18 @@
 		  do something...
 		</cfif>
 	'
-	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashDelete,flashIsEmpty,flashCount,flashInsert">
+	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashMessages">
 	<cfargument name="key" type="string" required="true" hint="The key to check if it exists.">
 	<cfargument name="$flash" type="struct" required="false" default="#$readFlash()#">
 	<cfreturn StructKeyExists(arguments.$flash, arguments.key)>
 </cffunction>
 
-<cffunction name="flashMessages" returntype="string" access="public" output="false" hint="Outputs a list of messages that exists in the Flash.">
+<cffunction name="flashMessages" returntype="string" access="public" output="false" hint="Outputs a list of messages that exists in the Flash."
+	examples=
+	'
+		<cfoutput>##flashMessages()##</cfoutput>
+	'
+	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists">
 	<cfargument name="key" type="string" required="false" hint="The key to show the value for.">
 	<cfargument name="class" type="string" required="false" hint="CSS class to set on the div element that contains the messages.">
 	<cfargument name="$flash" type="struct" required="false" default="#$readFlash()#">
@@ -152,5 +170,22 @@
 			session.flash = arguments.flash;
 		else if (arguments.flashStorage == "cookie")
 			cookie.flash = SerializeJSON(arguments.flash);
+	</cfscript>
+</cffunction>
+
+<cffunction name="$flashClear" returntype="void" access="public" output="false">
+	<cfargument name="$flash" type="struct" required="false" default="#$readFlash()#">
+	<cfscript>
+		flashClear();
+		loc.oldFlash = arguments.$flash;
+		for (loc.key in loc.oldFlash)
+		{
+			if (StructKeyExists(request.wheels, "flashKeep") && (!Len(request.wheels.flashKeep) || StructKeyExists(request.wheels.flashKeep, loc.key)))
+			{
+				loc.args = {};
+				loc.args[loc.key] = loc.oldFlash[loc.key];
+				flashInsert(argumentCollection=loc.args);				
+			}
+		}
 	</cfscript>
 </cffunction>
