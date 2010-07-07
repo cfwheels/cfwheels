@@ -15,7 +15,7 @@
 	<cfargument name="params" type="string" required="false" default="" hint="Verify that the passed in variable name exists in the params.">
 	<cfargument name="handler" type="string" required="false" hint="Pass in the name of a function that should handle failed verifications (default is to just abort the request when a verification fails).">
 	<cfscript>
-		$insertDefaults(name="verifies", input=arguments);
+		$args(name="verifies", args=arguments);
 		ArrayAppend(variables.$class.verifications, Duplicate(arguments));
 	</cfscript>
 </cffunction>
@@ -37,7 +37,6 @@
 	<cfargument name="cookieScope" type="struct" required="false" default="#cookie#">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = "";
 		loc.verifications = verificationChain();
 		loc.abort = false;
 		loc.iEnd = ArrayLen(loc.verifications);

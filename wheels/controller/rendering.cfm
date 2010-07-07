@@ -19,7 +19,7 @@
 	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false" hint="Set to `true` to hide the debug information at the end of the output. This is useful when you're testing XML output in an environment where the global setting for `showDebugInformation` is `true` for example.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="renderPage", input=arguments);
+		$args(name="renderPage", args=arguments);
 		$dollarify(arguments, "controller,action,template,layout,cache,returnAs,hideDebugInformation");
 		if (application.wheels.showDebugInformation)
 		{
@@ -103,7 +103,7 @@
 	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for @renderPage.">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="renderPartial", input=arguments);
+		$args(name="renderPartial", args=arguments);
 		loc.partial = $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,cache,layout,returnAs"));
 		if (arguments.$returnAs == "string")
 			loc.returnValue = loc.partial;
@@ -427,11 +427,12 @@
 </cffunction>
 
 <cffunction name="response" returntype="string" access="public" output="false">
-	<cfif StructKeyExists(variables.$instance, "response")>
-		<cfreturn Trim(variables.$instance.response)>
-	<cfelse>
-		<cfreturn "">
-	</cfif>
+	<cfscript>
+		if ($performedRender())
+			return Trim(variables.$instance.response);
+		else
+			return "";
+	</cfscript>
 </cffunction>
 
 <cffunction name="setResponse" returntype="void" access="public" output="false">
@@ -440,10 +441,12 @@
 </cffunction>
 
 <cffunction name="$getRedirect" returntype="struct" access="public" output="false">
-	<cfif StructKeyExists(variables.$instance, "redirect")>
-		<cfreturn variables.$instance.redirect>
-	</cfif>
-	<cfreturn StructNew()>
+	<cfscript>
+		if ($performedRedirect())
+			return variables.$instance.redirect;
+		else
+			return StructNew();
+	</cfscript>
 </cffunction>
 
 <cffunction name="contentForLayout" returntype="string" access="public" output="false">
@@ -469,14 +472,12 @@
 		</html>
 	'
 	categories="view-helper,miscellaneous" chapters="using-layouts">
-	<cfargument name="name" type="string" required="false" default="">
+	<cfargument name="name" type="string" required="false" default="body">
 	<cfargument name="default" type="string" required="false" default="">
-	<!--- blank defaults to layout --->
-	<cfif !len(arguments.name)>
-		<cfset arguments.name = "body">
-	</cfif>
-	<cfif !StructKeyExists(variables.$instance.contentFor, arguments.name)>
-		<cfreturn arguments.default>
-	</cfif>
-	<cfreturn ArrayToList(variables.$instance.contentFor[arguments.name], chr(10))>
+	<cfscript>
+		if (StructKeyExists(variables.$instance.contentFor, arguments.name))
+			return ArrayToList(variables.$instance.contentFor[arguments.name], Chr(10));
+		else
+			return arguments.default;
+	</cfscript>
 </cffunction>

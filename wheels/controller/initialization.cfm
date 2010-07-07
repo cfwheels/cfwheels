@@ -70,14 +70,3 @@
 <cffunction name="$getControllerClassData" returntype="struct" access="public" output="false">
 	<cfreturn variables.$class>
 </cffunction>
-
-<cffunction name="$getControllerInstanceData" returntype="struct" access="public" output="false">
-	<cfif StructKeyExists(variables, "$instance")>
-		<cfreturn variables.$instance>
-	</cfif>
-	<cfreturn StructNew()>
-</cffunction>
-
-<cffunction name="controllerName" returntype="string" access="public" output="false" hint="Returns the name of the controller.">
-	<cfreturn variables.$class.name>
-</cffunction>

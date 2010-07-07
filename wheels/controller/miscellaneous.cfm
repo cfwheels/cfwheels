@@ -125,13 +125,11 @@
 	<cfargument name="$testingMode" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="sendFile", input=arguments);
+		$args(name="sendFile", args=arguments);
 
 		loc.folder = arguments.directory;
 		if (!Len(loc.folder))
-		{
 			loc.folder = ExpandPath(application.wheels.filePath);
-		}
 
 		loc.folder = Replace(loc.folder, "\", "/", "all");
 		loc.file = Replace(arguments.file, "\", "/", "all");
@@ -168,17 +166,13 @@
 
 		// replace the display name for the file if supplied
 		if (Len(arguments.name))
-		{
 			loc.name = arguments.name;
-		}
 
 		loc.mime = arguments.type;
 		if (!Len(loc.mime))
-		{
 			loc.mime = mimeTypes(loc.extension);
-		}
 
-		// if testing, return the varaibles
+		// if testing, return the variables
 		if (arguments.$testingMode)
 		{
 			StructAppend(loc, arguments, false);

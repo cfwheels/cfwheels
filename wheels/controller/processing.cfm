@@ -9,7 +9,7 @@
 		this.$runFilters(type="before", action=params.action);
 		
 		// check to see if the controller params has changed and if so, instantiate the new controller and re-run filters and verifications
-		if (params.controller != this.controllerName())
+		if (params.controller != variables.$class.name)
 		{
 			this = $controller(params.controller).$createControllerObject(params);
 			if (loc.debug)
@@ -43,7 +43,7 @@
 			if (loc.actionIsCachable)
 			{
 				loc.category = "action";
-				loc.key = $hashedKey(request.cgi.http_host, controllerName(), variables.params);
+				loc.key = $hashedKey(request.cgi.http_host, variables.$class.name, variables.params);
 				loc.lockName = loc.category & loc.key;
 				loc.conditionArgs = {};
 				loc.conditionArgs.key = loc.key;

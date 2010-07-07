@@ -124,7 +124,7 @@
 	<cfargument name="$flash" type="struct" required="false" default="#$readFlash()#">
 	<cfscript>
 		var loc = {};
-		$insertDefaults(name="flashMessages", input=arguments);
+		$args(name="flashMessages", args=arguments);
 		loc.listItems = "";
 		loc.keys = StructKeyList(arguments.$flash);
 		loc.keys = ListSort(loc.keys, "textnocase");
