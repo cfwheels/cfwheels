@@ -170,7 +170,7 @@
 				return $invoke(method=arguments.$dataFunction);
 			}
 		}
-		return {};
+		return structnew();
 </cfscript>
 </cffunction>
 
