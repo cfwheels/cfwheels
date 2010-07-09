@@ -13,9 +13,23 @@
 		<cfset assert("result Contains 'partial template content'")>
 	</cffunction>
 
-	<cffunction name="test_including_partial_loading_data">
+ 	<cffunction name="test_including_partial_loading_data">
 		<cfsavecontent variable="result"><cfoutput>#controller.includePartial(partial="partialDataTemplate")#</cfoutput></cfsavecontent>
 		<cfset assert("result IS 'Apple,Banana,Kiwi'")>
+	</cffunction>
+	
+	<cffunction name="test_including_partial_loading_data_not_allowed_from_public_method">
+		<cfset result = "">
+		<cftry>
+			<cfsavecontent variable="result"><cfoutput>#controller.includePartial(partial="partialDataTemplate", dataFunction="partialDataTemplatePublic")#</cfoutput></cfsavecontent>
+			<cfcatch type="any">
+				<cfset result = cfcatch>
+			</cfcatch>
+		</cftry>
+		<cfset assert("!issimplevalue(result)")>
+		<cfset assert("result.type eq 'expression'")>
+		<cfset assert("result.element eq 'fruit'")>
+		<cfset assert("result.resolvedname eq 'arguments'")>
 	</cffunction>
 
 	<cffunction name="test_including_partial_with_query">

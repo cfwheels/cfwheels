@@ -156,18 +156,14 @@
 		var loc = {};
 		if (StructKeyExists(arguments, "$dataFunction") && arguments.$dataFunction != "false")
 		{
+			loc.method = arguments.$dataFunction;
 			if (IsBoolean(arguments.$dataFunction))
+				loc.method = arguments.$name;
+			if (StructKeyExists(variables, loc.method))
 			{
-				if (StructKeyExists(variables, arguments.$name))
-				{
-					loc.metaData = GetMetaData(variables[arguments.$name]);
-					if (StructKeyExists(loc.metaData, "returnType") && loc.metaData.returnType == "struct" && StructKeyExists(loc.metaData, "access") && loc.metaData.access == "private")
-						return $invoke(method=arguments.$name);
-				}
-			}
-			else
-			{
-				return $invoke(method=arguments.$dataFunction);
+				loc.metaData = GetMetaData(variables[loc.method]);
+				if (StructKeyExists(loc.metaData, "returnType") && loc.metaData.returnType == "struct" && StructKeyExists(loc.metaData, "access") && loc.metaData.access == "private")
+					return $invoke(method=loc.method);
 			}
 		}
 		return structnew();

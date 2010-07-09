@@ -17,5 +17,12 @@
 		<cfset data.somethingElse = true>
 		<cfreturn data>
 	</cffunction>
+	
+	<cffunction name="partialDataTemplatePublic" returnType="struct" access="public">
+		<cfset var data = {}>
+		<cfset data.fruit = "Apple,Banana,Kiwi">
+		<cfset data.somethingElse = true>
+		<cfreturn data>
+	</cffunction>
 
 </cfcomponent>
