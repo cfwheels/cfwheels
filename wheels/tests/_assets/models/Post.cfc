@@ -3,7 +3,6 @@
 	<cffunction name="init">
 		<cfset belongsTo("author")>
 		<cfset hasMany("comments")>
-		<cfset property(name="test", sql="averagerating")>
 	</cffunction>
 
 	<cffunction name="afterFindCallback">
