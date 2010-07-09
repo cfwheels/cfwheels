@@ -167,7 +167,7 @@
 			}
 		}
 		return structnew();
-</cfscript>
+	</cfscript>
 </cffunction>
 
 <cffunction name="$renderPartial" returntype="string" access="public" output="false">
