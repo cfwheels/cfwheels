@@ -202,8 +202,8 @@
 	</cffunction>
 
 	<cffunction name="halt" returntype="Any" output="false" hint="used to dump an expression and halt testing. Useful when you want to see what an expression will output first so you can write tests for it.">
-		<cfargument name="halt" type="boolean" required="true" hint="should we halt. true will halt and dump output. false will just return so tests can continue">
 		<cfargument name="expression" type="string" required="true" hint="the expression you want to see output for">
+		<cfargument name="halt" type="boolean" required="false" default="true" hint="should we halt. true will halt and dump output. false will just return so tests can continue">
 		<cfset var attributeArgs = {}>
 
 		<cfif not arguments.halt>
@@ -218,16 +218,15 @@
 
 		<cfdump attributeCollection="#attributeArgs#"><cfabort>
 	</cffunction>
-	
+
 	<cffunction name="debug" returntype="Any" output="false" hint="used to dump an expression and view the results later.">
-		<cfargument name="label" type="string" required="true" hint="label for the debug output">
 		<cfargument name="expression" type="string" required="true" hint="the expression you want to see output for">
+		<cfargument name="label" type="string" required="false" default="" hint="label for the debug output">
 		<cfset var attributeArgs = {}>
 		<cfset var dump = "">
 
 		<cfset attributeArgs["var"] = "#evaluate(arguments.expression)#">
 
-		<cfset structdelete(arguments, "halt")>
 		<cfset structdelete(arguments, "expression")>
 		<cfset structappend(attributeArgs, arguments, true)>
 		<cfsavecontent variable="dump">

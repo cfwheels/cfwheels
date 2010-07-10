@@ -49,4 +49,9 @@
 		<cfset assert('result[4].datatype eq "float"')>
 	</cffunction>
 
+	<cffunction name="test_should_allow">
+		
+	</cffunction>
+
+
 </cfcomponent>

@@ -107,7 +107,7 @@
 		<cfset loc.args.formScope["obj[published-day]"] = 30>
 		<cfset loc.args.formScope["obj[published-year]"] = 2000>
 		<cfset loc.params = loc.dispatch.$createParams(argumentCollection=loc.args)>
-		<cfset halt(false, 'loc.params')>
+		<cfset halt('loc.params', false)>
 		<cfset assert('structkeyexists(loc.params.obj, "published-day")')>
 		<cfset assert('structkeyexists(loc.params.obj, "published-year")')>
 		<cfset assert('loc.params.obj["published-day"] eq 30')>
