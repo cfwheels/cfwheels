@@ -45,11 +45,11 @@
 			loc.verification = loc.verifications[loc.i];
 			if ((!Len(loc.verification.only) && !Len(loc.verification.except)) || (Len(loc.verification.only) && ListFindNoCase(loc.verification.only, arguments.action)) || (Len(loc.verification.except) && !ListFindNoCase(loc.verification.except, arguments.action)))
 			{
-				if (IsBoolean(loc.verification.post) && ((loc.verification.post && arguments.cgiScope.request_method != "post") || (!loc.verification.post && arguments.cgiScope.request_method == "post")))
+				if (IsBoolean(loc.verification.post) && ((loc.verification.post && !isPost()) || (!loc.verification.post && isPost())))
 					loc.abort = true;
-				if (IsBoolean(loc.verification.get) && ((loc.verification.get && arguments.cgiScope.request_method != "get") || (!loc.verification.get && arguments.cgiScope.request_method == "get")))
+				if (IsBoolean(loc.verification.get) && ((loc.verification.get && !isGet()) || (!loc.verification.get && isGet())))
 					loc.abort = true;
-				if (IsBoolean(loc.verification.ajax) && ((loc.verification.ajax && arguments.cgiScope.http_x_requested_with != "XMLHTTPRequest") || (!loc.verification.ajax && arguments.cgiScope.http_x_requested_with == "XMLHTTPRequest")))
+				if (IsBoolean(loc.verification.ajax) && ((loc.verification.ajax && !isAjax()) || (!loc.verification.ajax && isAjax())))
 					loc.abort = true;
 				loc.jEnd = ListLen(loc.verification.params);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)

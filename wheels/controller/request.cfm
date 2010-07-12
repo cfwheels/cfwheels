@@ -4,7 +4,7 @@
 		<cfset requestIsSecure = isSecure()>
 	'
 	categories="controller-request,miscellaneous" chapters="" functions="isGet,isPost,isAjax">
-	<cfreturn (request.cgi.server_port_secure)>
+	<cfreturn (request.cgi.server_port_secure eq true)>
 </cffunction>
 
 <cffunction name="isAjax" returntype="boolean" access="public" output="false" hint="Returns whether the page was called from JavaScript or not."

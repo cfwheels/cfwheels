@@ -8,7 +8,9 @@
 	</cffunction>
 	
 	<cffunction name="test_isSecure_invalid">
-		<cfset request.cgi.request_method = "">
+		<cfset request.cgi.server_port_secure = "">
+		<cfset assert("controller.isSecure() eq false")>
+		<cfset request.cgi.server_port_secure = "no">
 		<cfset assert("controller.isSecure() eq false")>
 	</cffunction>
 
