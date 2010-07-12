@@ -7,7 +7,7 @@
 		<cfset beforeDelete("callbackThatReturnsTrue")>
 		<cfset property(name="firstName", label="First name(s)", defaultValue="Dave")>
 		<cfset property(name="lastName", label="Last name", defaultValue="")>
-		<cfset nestedProperties(association="profile", autoSave=true, allowDelete=true)>
+		<cfset nestedProperties(associations="profile")>
 	</cffunction>
 
 	<cffunction name="callbackThatReturnsTrue">
