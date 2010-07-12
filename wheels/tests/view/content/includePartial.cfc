@@ -14,14 +14,19 @@
 	</cffunction>
 
 	<cffunction name="test_including_partial_loading_data">
-		<cfsavecontent variable="result"><cfoutput>#controller.includePartial(partial="partialDataTemplate")#</cfoutput></cfsavecontent>
+		<cfsavecontent variable="result"><cfoutput>#controller.includePartial(partial="partialDataImplicitPrivate")#</cfoutput></cfsavecontent>
 		<cfset assert("result IS 'Apple,Banana,Kiwi'")>
 	</cffunction>
-	
-	<cffunction name="test_including_partial_loading_data_not_allowed_from_public_method">
+
+	<cffunction name="test_including_partial_loading_data_allowed_from_explicit_public_method">
+		<cfsavecontent variable="result"><cfoutput>#controller.includePartial(partial="partialDataExplicitPublic", dataFunction="partialDataExplicitPublic")#</cfoutput></cfsavecontent>
+		<cfset assert("result IS 'Apple,Banana,Kiwi'")>
+	</cffunction>
+
+	<cffunction name="test_including_partial_loading_data_not_allowed_from_implicit_public_method">
 		<cfset result = "">
 		<cftry>
-			<cfsavecontent variable="result"><cfoutput>#controller.includePartial(partial="partialDataTemplate", dataFunction="partialDataTemplatePublic")#</cfoutput></cfsavecontent>
+		<cfsavecontent variable="result"><cfoutput>#controller.includePartial(partial="partialDataImplicitPublic")#</cfoutput></cfsavecontent>
 			<cfcatch type="any">
 				<cfset result = cfcatch>
 			</cfcatch>
