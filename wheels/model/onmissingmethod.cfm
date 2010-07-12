@@ -55,14 +55,14 @@
 				loc.firstValue = arguments.missingMethodArguments.value;
 			else if (StructKeyExists(arguments.missingMethodArguments, "values"))
 				loc.firstValue = Trim(ListFirst(arguments.missingMethodArguments.values));
-			loc.addToWhere = "#loc.firstProperty# = '#loc.firstValue#'";
+			loc.addToWhere = loc.firstProperty & " " & $dynamicFinderOperator(loc.firstProperty) & " '" & loc.firstValue & "'";
 			if (Len(loc.secondProperty))
 			{
 				if (StructCount(arguments.missingMethodArguments) == 1)
 					loc.secondValue = Trim(ListLast(arguments.missingMethodArguments[1]));
 				else if (StructKeyExists(arguments.missingMethodArguments, "values"))
 					loc.secondValue = Trim(ListLast(arguments.missingMethodArguments.values));
-				loc.addToWhere = loc.addToWhere & " AND #loc.secondProperty# = '#loc.secondValue#'";
+				loc.addToWhere = loc.addToWhere & " AND " & loc.secondProperty & " " & $dynamicFinderOperator(loc.secondProperty) & " '" & loc.secondValue & "'";
 			}
 			arguments.missingMethodArguments.where = IIf(StructKeyExists(arguments.missingMethodArguments, "where"), "'(' & arguments.missingMethodArguments.where & ') AND (' & loc.addToWhere & ')'", "loc.addToWhere");
 			StructDelete(arguments.missingMethodArguments, "1");
@@ -78,6 +78,16 @@
 			$throw(type="Wheels.MethodNotFound", message="The method `#arguments.missingMethodName#` was not found in the `#variables.wheels.class.modelName#` model.", extendedInfo="Check your spelling or add the method to the model's CFC file.");
 	</cfscript>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$dynamicFinderOperator" returntype="string" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfscript>
+		if (variables.wheels.class.properties[arguments.property].dataType == "text")
+			return "LIKE";
+		else
+			return "=";
+	</cfscript>
 </cffunction>
 
 <cffunction name="$associationMethod" returntype="any" access="public" output="false">

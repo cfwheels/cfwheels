@@ -69,13 +69,6 @@
 		<cfset assert('valuelist(loc.q.lastname) eq "peters,petruzzi"')>
 	</cffunction>
 
-	<cffunction name="test_findOneByXXX">
-		<cfset loc.q = loc.user.findOneByFirstname('per')>
-		<cfset assert('isobject(loc.q)')>
-		<cfset loc.q = loc.user.findOneByZipcode(value="22222", order="id")>
-		<cfset assert('isobject(loc.q)')>
-	</cffunction>
-
 	<cffunction name="test_findAllByXXX">
 		<cfset loc.q = loc.user.findAllByZipcode(value="22222", order="id")>
 		<cfset assert('loc.q.recordcount eq 2')>
