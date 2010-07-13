@@ -92,7 +92,7 @@
 			else
 			{
 				// schedule a redirect that will happen after the action code has been completed
-				variables.$instance.redirect = {url=loc.url, addToken=arguments.addToken, statusCode=arguments.statusCode};			
+				variables.$instance.redirect = {url=loc.url, addToken=arguments.addToken, statusCode=arguments.statusCode, $args=arguments};			
 			}
 		}
 		else

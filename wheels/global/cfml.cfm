@@ -171,6 +171,7 @@
 
 <cffunction name="$location" returntype="void" access="public" output="false">
 	<cfargument name="delay" type="boolean" required="false" default="false">
+	<cfset StructDelete(arguments, "$args", false) />
 	<cfif !arguments.delay>
 		<cfset StructDelete(arguments, "delay", false) />
 		<cflocation attributeCollection="#arguments#">
