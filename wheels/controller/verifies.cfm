@@ -3,6 +3,12 @@
 	'
 		<!--- Tell Wheels to verify that the `handleForm` action is always a post request when executed --->
 		<cfset verifies(only="handleForm", post=true)>
+		
+		<!--- Make sure that the edit action is a get request, that userid exists in the params and that it''s an integer --->
+		<cfset verifies(only="edit", post="get", params="userid", paramsTypes="integer")>
+		
+		<!--- Just like above only this time we want to redirect the visitor to the index page of the controller if the request is invalid and show a flash error --->
+		<cfset verifies(only="edit", post="get", params="userid", paramsTypes="integer", action="index", error="Invalid userid")>
 	'
 	categories="controller-initialization" chapters="filters-and-verification" functions="filters">
 	<cfargument name="only" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell Wheels that the verifications should only be run on these actions.">
@@ -14,6 +20,9 @@
 	<cfargument name="session" type="string" required="false" default="" hint="Verify that the passed in variable name exists in the session.">
 	<cfargument name="params" type="string" required="false" default="" hint="Verify that the passed in variable name exists in the params.">
 	<cfargument name="handler" type="string" required="false" hint="Pass in the name of a function that should handle failed verifications (default is to just abort the request when a verification fails).">
+	<cfargument name="cookieTypes" type="string" required="false" default="" hint="mapping to each listed cookie variable to type check against. (will be passed through to CFML's `isValid` function).">
+	<cfargument name="sessionTypes" type="string" required="false" default="" hint="mapping to each listed session variable to type check against. (will be passed through to CFML's `isValid` function).">
+	<cfargument name="paramsTypes" type="string" required="false" default="" hint="mapping to each listed params variable to type check against. (will be passed through to CFML's `isValid` function).">
 	<cfscript>
 		$args(name="verifies", args=arguments);
 		ArrayAppend(variables.$class.verifications, Duplicate(arguments));
@@ -38,6 +47,7 @@
 	<cfscript>
 		var loc = {};
 		loc.verifications = verificationChain();
+		loc.$args = "only,except,post,get,ajax,cookie,session,params,handle,cookieTypes,sessionTypes,paramsTypes,handler";
 		loc.abort = false;
 		loc.iEnd = ArrayLen(loc.verifications);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -54,19 +64,19 @@
 				loc.jEnd = ListLen(loc.verification.params);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
-					if (!StructKeyExists(arguments.params, ListGetAt(loc.verification.params, loc.j)))
+					if (!StructKeyExists(arguments.params, ListGetAt(loc.verification.params, loc.j)) || (Len(loc.verification.paramsTypes) && !IsValid(ListGetAt(loc.verification.paramsTypes, loc.j), arguments.params[ListGetAt(loc.verification.params, loc.j)])))
 						loc.abort = true;
 				}
 				loc.jEnd = ListLen(loc.verification.session);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
-					if (!StructKeyExists(arguments.sessionScope, ListGetAt(loc.verification.session, loc.j)))
+					if (!StructKeyExists(arguments.sessionScope, ListGetAt(loc.verification.session, loc.j)) || (Len(loc.verification.sessionTypes) && !IsValid(ListGetAt(loc.verification.sessionTypes, loc.j), arguments.sessionScope[ListGetAt(loc.verification.session, loc.j)])))
 						loc.abort = true;
 				}
 				loc.jEnd = ListLen(loc.verification.cookie);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
-					if (!StructKeyExists(arguments.cookieScope, ListGetAt(loc.verification.cookie, loc.j)))
+					if (!StructKeyExists(arguments.cookieScope, ListGetAt(loc.verification.cookie, loc.j)) || (Len(loc.verification.cookieTypes) && !IsValid(ListGetAt(loc.verification.cookieTypes, loc.j), arguments.cookieScope[ListGetAt(loc.verification.cookie, loc.j)])))
 						loc.abort = true;
 				}
 			}
@@ -75,12 +85,28 @@
 				if (Len(loc.verification.handler))
 				{
 					$invoke(method=loc.verification.handler);
-					$location(url=arguments.cgiScope.http_referer, addToken=false);
+					redirectTo(back="true");
 				}
 				else
 				{
-					$abort();
+					// check to see if we should perform a redirect or abort completly
+					loc.redirectArgs = {};
+					for(loc.key in loc.verification)
+					{
+						if (!ListFindNoCase(loc.$args, loc.key) && StructKeyExists(loc.verification, loc.key))
+							loc.redirectArgs[loc.key] = loc.verification[loc.key];
+					}
+					if (!StructIsEmpty(loc.redirectArgs))
+					{
+						redirectTo(argumentCollection=loc.redirectArgs);
+					}
+					else
+					{
+						variables.$instance.abort = true;
+					}
 				}
+				// an abort was issued, no need to process further in the chain
+				break;
 			}
 		}
 	</cfscript>
