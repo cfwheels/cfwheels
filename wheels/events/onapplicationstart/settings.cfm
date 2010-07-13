@@ -17,7 +17,7 @@
 	application.wheels.dataSourcePassword = "";
 	application.wheels.transactionMode = "commit"; // use 'commit', 'rollback' or 'none' to set default transaction handling for creates, updates and deletes
 
-	// settings that depend on the environment
+	// cache settings
 	application.wheels.cacheDatabaseSchema = false;
 	application.wheels.cacheFileChecking = false;
 	application.wheels.cacheImages = false;
@@ -29,17 +29,6 @@
 	application.wheels.cachePartials = false;
 	application.wheels.cacheQueries = false;
 	application.wheels.cachePlugins = true;
-	application.wheels.showDebugInformation = true;
-	application.wheels.showErrorInformation = true;
-	application.wheels.sendEmailOnError = false;
-	application.wheels.errorEmailAddress = "";
-	application.wheels.errorEmailSubject = "Error";
-	application.wheels.assetQueryString = false;
-	// assetPaths can be struct with two keys,  http and https, if no https struct key, http is used for secure and non-secure
-	// ex. {http="asset0.domain1.com,asset2.domain1.com,asset3.domain1.com", https="secure.domain1.com"}
-	application.wheels.assetPaths = false;
-
-	// override settings for specific environments
 	if (application.wheels.environment != "design")
 	{
 		application.wheels.cacheDatabaseSchema = true;
@@ -55,18 +44,33 @@
 		application.wheels.cachePages = true;
 		application.wheels.cachePartials = true;
 		application.wheels.cacheQueries = true;
-		application.wheels.showDebugInformation = false;
-		application.wheels.assetQueryString = true;
 	}
+
+	// debugging and error settings
+	application.wheels.showDebugInformation = true;
+	application.wheels.showErrorInformation = true;
+	application.wheels.sendEmailOnError = false;
+	application.wheels.errorEmailSubject = "Error";
+	application.wheels.excludeFromErrorEmail = "";
+	if (request.cgi.server_name Contains ".")
+		application.wheels.errorEmailAddress = "webmaster@" & Reverse(ListGetAt(Reverse(request.cgi.server_name), 2,".")) & "." & Reverse(ListGetAt(Reverse(request.cgi.server_name), 1, "."));
+	else
+		application.wheels.errorEmailAddress = "";
 	if (application.wheels.environment == "production")
 	{
 		application.wheels.showErrorInformation = false;
-		if (request.cgi.server_name Contains ".")
-		{
-			application.wheels.sendEmailOnError = true;
-			application.wheels.errorEmailAddress = "webmaster@" & Reverse(ListGetAt(Reverse(request.cgi.server_name), 2,".")) & "." & Reverse(ListGetAt(Reverse(request.cgi.server_name), 1, "."));
-		}
+		application.wheels.sendEmailOnError = true;
 	}
+	if (application.wheels.environment != "design" && application.wheels.environment != "development")
+		application.wheels.showDebugInformation = false;
+
+	// asset path settings
+	// assetPaths can be struct with two keys,  http and https, if no https struct key, http is used for secure and non-secure
+	// ex. {http="asset0.domain1.com,asset2.domain1.com,asset3.domain1.com", https="secure.domain1.com"}
+	application.wheels.assetQueryString = false;
+	application.wheels.assetPaths = false;
+	if (application.wheels.environment != "design" && application.wheels.environment != "development")
+		application.wheels.assetQueryString = true;
 
 	// paths
 	application.wheels.controllerPath = "controllers";

@@ -7,9 +7,15 @@
 <p><strong>Date & Time:</strong><br />#DateFormat(now(), "MMMM D, YYYY")# at #TimeFormat(now(), "h:MM TT")#</p>
 <cfset loc.scopes = "CGI,Form,URL,Application,Session,Request,Cookie,Arguments.Exception.Cause">
 <cfloop list="#loc.scopes#" index="loc.i">
+	<cfset loc.scopeCopy = Duplicate(Evaluate(loc.i))>
+	<cfloop list="#get('excludeFromErrorEmail')#" index="loc.j">
+		<cfif ListFirst(loc.j, ".") IS loc.i AND StructKeyExists(loc.scopeCopy, ListRest(loc.j, "."))>
+			<cfset StructDelete(loc.scopeCopy, ListRest(loc.j, "."))>
+		</cfif>
+	</cfloop>
 	<cftry>
 		<h2>#ListLast(loc.i, ".")#</h2>
-		<cfdump var="#Evaluate(loc.i)#" format="text" showUDFs="false" hide="wheels">
+		<cfdump var="#loc.scopeCopy#" format="text" showUDFs="false" hide="wheels">
 	<cfcatch>
 	</cfcatch>
 	</cftry>
