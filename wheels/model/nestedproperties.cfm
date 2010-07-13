@@ -1,20 +1,18 @@
 <!--- class methods --->
 <cffunction name="nestedProperties" output="false" access="public" returntype="void" hint="I allow nested objects and arrays to be set from params.">
-	<cfargument name="associations" type="string" required="false" default="" hint="List out the associations you want to allow to be set through the params." />
-	<cfargument name="autoSave" type="boolean" required="false" default="true" hint="Whether to save the association(s) when the parent object is saved." />
-	<cfargument name="allowDelete" type="boolean" required="false" default="false" hint="Set `allowDelete` to true to tell wheels to look for the property _delete in your model that will be evaluated to see if the model should be deleted." />
-	<cfargument name="sortProperty" type="string" required="false" default="" hint="Set `sortProperty` to a property on the object that you would like to sort by. The property should be numeric and should start with 1 and should be consecutive. Only valid with hasMany associations." />
-	<cfargument name="rejectIfBlank" type="string" required="false" default="" hint="A list of properties that should not be blank, if anyone of the properties are blank, the submission will be rejected." />
+	<cfargument name="association" type="string" required="false" default="" hint="The association (or list of associations) you want to allow to be set through the params. This argument is also aliased as `associations`" />
+	<cfargument name="autoSave" type="boolean" required="false" hint="Whether to save the association(s) when the parent object is saved." />
+	<cfargument name="allowDelete" type="boolean" required="false" hint="Set `allowDelete` to true to tell wheels to look for the property _delete in your model that will be evaluated to see if the model should be deleted." />
+	<cfargument name="sortProperty" type="string" required="false" hint="Set `sortProperty` to a property on the object that you would like to sort by. The property should be numeric and should start with 1 and should be consecutive. Only valid with hasMany associations." />
+	<cfargument name="rejectIfBlank" type="string" required="false" hint="A list of properties that should not be blank, if anyone of the properties are blank, the submission will be rejected." />
 	<cfscript>
 		var loc = {};
-		
-		if (StructKeyExists(arguments, "association"))
-			arguments.associations = ListAppend($listClean(arguments.associations), arguments.association);
-			
-		loc.iEnd = ListLen(arguments.associations);
+		$args(args=arguments, name="nestedProperties", combine="association/associations");
+		arguments.association = $listClean(arguments.association);
+		loc.iEnd = ListLen(arguments.association);
 		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 		{
-			loc.association = ListGetAt(arguments.associations, loc.i);
+			loc.association = ListGetAt(arguments.association, loc.i);
 			if (StructKeyExists(variables.wheels.class.associations, loc.association))
 			{
 				variables.wheels.class.associations[loc.association].nested.allow = true;
@@ -28,7 +26,7 @@
 			}
 			else if (application.wheels.showErrorInformation)
 			{
-				$throw(type="Wheels.AssociationNotFound", message="The assocation `#loc.association#` was not found on the #variables.wheels.class.modelName# model.", extendedInfo="Make sure your have call `hasMany()`, `hasOne()`, or `belongsTo()` before calling the `nestedProperties()` method.");
+				$throw(type="Wheels.AssociationNotFound", message="The `#loc.association#` assocation was not found on the #variables.wheels.class.modelName# model.", extendedInfo="Make sure you have called `hasMany()`, `hasOne()`, or `belongsTo()` before calling the `nestedProperties()` method.");
 			}
 		}
 	</cfscript>
