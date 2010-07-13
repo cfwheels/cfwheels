@@ -6,6 +6,9 @@
 			$debugPoint("beforeFilters");
 		// run verifications and before filters if they exist on the controller
 		this.$runVerifications(action=params.action, params=params);
+		// return immediately if an abort is issue from a verification
+		if ($abortIssued())
+			return;
 		this.$runFilters(type="before", action=params.action);
 		
 		// check to see if the controller params has changed and if so, instantiate the new controller and re-run filters and verifications

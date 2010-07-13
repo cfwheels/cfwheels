@@ -392,6 +392,10 @@
 	<cfreturn StructKeyExists(variables.$instance, "redirect")>
 </cffunction>
 
+<cffunction name="$abortIssued" returntype="boolean" access="public" output="false">
+	<cfreturn StructKeyExists(variables.$instance, "abort")>
+</cffunction>
+
 <cffunction name="response" returntype="string" access="public" output="false">
 	<cfscript>
 		if ($performedRender())
