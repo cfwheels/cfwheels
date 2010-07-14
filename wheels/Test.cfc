@@ -309,16 +309,9 @@
 		<!---
 			Check for and if necessary set up the structure to store test results
 		--->
-		<cfparam name="request.#resultkey#" 				default="#structNew()#">
-		<cfparam name="request.#resultkey#.begin" 			default="#now()#">
-		<cfparam name="request.#resultkey#.ok" 				default="true">
-		<cfparam name="request.#resultkey#.numCases" 		default="0">
-		<cfparam name="request.#resultkey#.numTests" 		default="0">
-		<cfparam name="request.#resultkey#.numSuccesses" 	default="0">
-		<cfparam name="request.#resultkey#.numFailures" 	default="0">
-		<cfparam name="request.#resultkey#.numErrors" 		default="0">
-		<cfparam name="request.#resultkey#.summary"			default="#arrayNew(1)#">
-		<cfparam name="request.#resultkey#.results" 		default="#arrayNew(1)#">
+		<cfif !StructKeyExists(request, resultKey)>
+			<cfset $resetTestResults(resultKey)>
+		</cfif>
 
 		<cfset testCase = getMetadata(this).name>
 
@@ -422,18 +415,18 @@
 	--->
 	<cffunction name="$resetTestResults" returntype="void" output="false">
 		<cfargument name="resultKey" type="string" required="false" default="test">
-
-		<cfset request[resultkey] = structNew()>
-		<cfparam name="request[resultkey].begin" 			default="#now()#">
-		<cfparam name="request[resultkey].ok" 				default="true">
-		<cfparam name="request[resultkey].numCases" 		default="0">
-		<cfparam name="request[resultkey].numTests" 		default="0">
-		<cfparam name="request[resultkey].numSuccesses" 	default="0">
-		<cfparam name="request[resultkey].numFailures" 		default="0">
-		<cfparam name="request[resultkey].numErrors" 		default="0">
-		<cfparam name="request[resultkey].summary"			default="#arrayNew(1)#">
-		<cfparam name="request[resultkey].results" 			default="#arrayNew(1)#">
-
+		<cfscript>
+		request[resultkey] = {};
+		request[resultkey].begin = now();
+		request[resultkey].ok = true;
+		request[resultkey].numCases = 0;
+		request[resultkey].numTests = 0;
+		request[resultkey].numSuccesses = 0;
+		request[resultkey].numFailures = 0;
+		request[resultkey].numErrors = 0;
+		request[resultkey].summary = [];
+		request[resultkey].results = [];
+		</cfscript>
 	</cffunction>
 
 	<!---
