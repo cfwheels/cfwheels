@@ -295,7 +295,9 @@
 			if (StructKeyExists(this, loc.key) && !StructKeyExists(variables.$persistedProperties, loc.key) && (!Len(arguments.property) || loc.key == arguments.property))
 				return true;
 			// return true if the compare() fails
-			else if ((StructKeyExists(this, loc.key) && StructKeyExists(variables.$persistedProperties, loc.key) && Compare(this[loc.key], variables.$persistedProperties[loc.key])) && (!Len(arguments.property) || loc.key == arguments.property)) 
+			else if ((StructKeyExists(this, loc.key) && StructKeyExists(variables.$persistedProperties, loc.key) && !IsBinary(this[loc.key]) && Compare(this[loc.key], variables.$persistedProperties[loc.key])) && (!Len(arguments.property) || loc.key == arguments.property)) 
+				return true;
+			else if ((StructKeyExists(this, loc.key) && StructKeyExists(variables.$persistedProperties, loc.key) && IsBinary(this[loc.key]) && Compare(ToString(this[loc.key]), ToString(variables.$persistedProperties[loc.key]))) && (!Len(arguments.property) || loc.key == arguments.property)) 
 				return true;
 		}
 		// if we get here, it means that all of the properties that were checked had a value in 

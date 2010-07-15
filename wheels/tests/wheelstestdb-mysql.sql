@@ -49,6 +49,7 @@ CREATE TABLE `wheelstestdb`.`PhotoGalleryPhotos` (
   `photogalleryid` INT(10) NOT NULL,
   `filename` VARCHAR(255) NOT NULL,
   `description` VARCHAR(255) NOT NULL,
+  `filedata` BINARY NULL,
   PRIMARY KEY (`photogalleryphotoid`)
 )
 ENGINE = INNODB;

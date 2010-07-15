@@ -85,6 +85,7 @@ CREATE TABLE [dbo].[PhotoGalleryPhotos](
 	[photogalleryid] [int] NOT NULL,
 	[filename] [varchar](255) NOT NULL,
 	[description] [varchar](255) NOT NULL,
+	[filedata] [image] NULL,
  CONSTRAINT [PK_photogalleryphotos] PRIMARY KEY CLUSTERED 
 (
 	[photogalleryphotoid] ASC

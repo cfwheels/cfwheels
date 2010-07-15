@@ -144,6 +144,7 @@
 		<cfscript>
 		var loc = {};
 		loc.params = {};
+		loc.params._useNull = false;
 		loc.params.cfsqltype = arguments.settings.type;
 		loc.params.value = arguments.settings.value;
 		if (StructKeyExists(arguments.settings, "null"))
@@ -159,6 +160,10 @@
 			loc.params.list = arguments.settings.list;
 			loc.params.separator = chr(7);
 			loc.params.value = $cleanInStatmentValue(loc.params.value);
+		}
+		if (!IsBinary(loc.params.value) && loc.params.value eq "null")
+		{
+			loc.params._useNull = true;
 		}
 		</cfscript>	
 		<cfreturn loc.params>

@@ -18,9 +18,22 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
+
 		for (loc.key in arguments)
 		{
 			loc.value = arguments[loc.key];
+			// SerializeJason crashes if a query contains binary data
+			// a workaround is to use the underline meta information
+			// to build the hash
+			// this information was gathered from
+			// http://www.silverwareconsulting.com/index.cfm/2009/1/20/Capturing-the-SQL-Generated-by-CFQUERY
+			if(IsQuery(loc.value))
+			{
+				if (StructKeyExists(server, "railo"))
+					loc.value = loc.value.getSQL().toString();
+				else
+					loc.value = loc.value.getMetaData().getExtendedMetaData();
+			}
 			if (IsSimpleValue(loc.value))
 				loc.returnValue = loc.returnValue & loc.value;
 			else

@@ -416,7 +416,7 @@
 				loc.pos = loc.pos + 1;
 				ArrayAppend(arguments.sql, "#variables.wheels.class.properties[loc.key].column# = ");
 
-				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale, null=arguments.properties[loc.key] == ""};
+				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale, null=!len(arguments.properties[loc.key])};
 				ArrayAppend(arguments.sql, loc.param);
 				if (StructCount(arguments.properties) gt loc.pos)
 					ArrayAppend(arguments.sql, ",");
@@ -932,7 +932,7 @@
 			{
 				ArrayAppend(loc.sql, variables.wheels.class.properties[loc.key].column);
 				ArrayAppend(loc.sql, ",");
-				loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale, null=this[loc.key] == ""};
+				loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale, null=!len(this[loc.key])};
 				ArrayAppend(loc.sql2, loc.param);
 				ArrayAppend(loc.sql2, ",");
 			}
@@ -969,11 +969,12 @@
 			if (StructKeyExists(this, loc.key) && !ListFindNoCase(variables.wheels.class.keys, loc.key) && hasChanged(loc.key))
 			{
 				ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
-				loc.param = {value = this[loc.key], type = variables.wheels.class.properties[loc.key].type, dataType = variables.wheels.class.properties[loc.key].dataType, scale = variables.wheels.class.properties[loc.key].scale, null = this[loc.key] == ""};
+				loc.param = {value = this[loc.key], type = variables.wheels.class.properties[loc.key].type, dataType = variables.wheels.class.properties[loc.key].dataType, scale = variables.wheels.class.properties[loc.key].scale, null = !len(this[loc.key])};
 				ArrayAppend(loc.sql, loc.param);
 				ArrayAppend(loc.sql, ",");
 			}
 		}
+
 		if (ArrayLen(loc.sql) gt 1) // only submit the update if we generated an sql set statement
 		{
 			ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
