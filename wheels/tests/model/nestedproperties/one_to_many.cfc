@@ -21,7 +21,8 @@
 		<!--- User --->
 		<cfset loc.u = loc.user.findOneByLastName("Petruzzi")>
 		<!--- Gallery --->
-		<cfset loc.g = loc.gallery.new({userId=loc.u.id, title="Nested Properties Gallery", description="A gallery testing nested properties."})>
+		<cfset loc.params = {userId=loc.u.id, title="Nested Properties Gallery", description="A gallery testing nested properties."}>
+		<cfset loc.g = loc.gallery.new(loc.params)>
 		<cfset
 			loc.g.photoGalleryPhotos = [
 				loc.photo.new(userId=loc.u.id, filename="Nested Properties Photo Test 1", DESCRIPTION1="test photo 1 for nested properties gallery"),
