@@ -31,6 +31,11 @@
 		<cfset assert('loc.q eq false')>
 	</cffunction>
 
+ 	<cffunction name="test_findByKey_returns_false_when_passed_blank_string">
+		<cfset loc.q = loc.user.findByKey("")>
+		<cfset assert('loc.q eq false')>
+	</cffunction>
+
  	<cffunction name="test_findByKey_returns_empty_query_when_record_not_found_with_return_as_equal_query">
 		<cfset loc.q = loc.user.findByKey(key=999999999, returnAs="query")>
 		<cfset assert('loc.q.RecordCount eq false')>

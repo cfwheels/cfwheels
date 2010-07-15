@@ -682,18 +682,15 @@
 				loc.value = Trim(ListGetAt(arguments.values, loc.i));
 			else if (Len(arguments.keys))
 				loc.value = this[ListGetAt(arguments.keys, loc.i)];
-			else
-				loc.value = "IS NULL";
-			if (loc.value != "IS NULL")
-				{
-				loc.toAppend = loc.key & "=";
-				if (!IsNumeric(loc.value))
-					loc.toAppend = loc.toAppend & "'";
-				loc.toAppend = loc.toAppend & loc.value;
-				if (!IsNumeric(loc.value))
-					loc.toAppend = loc.toAppend & "'";
-				loc.returnValue = ListAppend(loc.returnValue, loc.toAppend, " ");
-				}
+			else 
+				loc.value = "";
+			loc.toAppend = loc.key & "=";
+			if (!IsNumeric(loc.value))
+				loc.toAppend = loc.toAppend & "'";
+			loc.toAppend = loc.toAppend & loc.value;
+			if (!IsNumeric(loc.value))
+				loc.toAppend = loc.toAppend & "'";
+			loc.returnValue = ListAppend(loc.returnValue, loc.toAppend, " ");
 			if (loc.i < loc.iEnd)
 				loc.returnValue = ListAppend(loc.returnValue, "AND", " ");
 		}

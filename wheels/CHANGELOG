@@ -250,6 +250,7 @@ Bug Fixes
 * Callbacks shouldn't need to be pre-loaded - #388 [Andy Bellenie]
 * Missing default for action argument on linkTo - #321 [Andy Bellenie]
 * Session scope not locked when accessing flash - #275 [James Gibson, Per Djurner]
+* findByKey returns record when passed a blank key - #514 [Andy Bellenie]
 
 Other
 =====
