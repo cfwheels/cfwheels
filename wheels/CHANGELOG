@@ -1,9 +1,13 @@
-WHEELS BLEEDING EDGE (3848)
+WHEELS BLEEDING EDGE (4686)
 
 Changes
 =======
 
 [Models]
+
+	* Make it possible to use a blank value as a property default - [Andy Bellenie]
+
+	* Support NOT IN, IN, NOT LIKE, IS NULL, IS NOT NULL in where clause - [Per Djurner, Tony Petruzzi]
 
 	* SQLite support - [Per Djurner]
 
@@ -77,7 +81,18 @@ Changes
 
 [Controllers]
 
-	* Added layout() for specifying a controller or action specific layout - [Tony Petruzzi]
+	* Update to verifies - [Tony Petruzzi]
+	
+		you can now do simple validations on variables
+		
+		you can now perform a redirect instead of aborting the entire request.
+		any extra arguments passed into verifies are passed to redirectTo.
+
+	* Added dataFunction argument to includePartial - [Per Djurner]
+
+	* A flashKeep() function - [Per Djurner]
+
+	* Added layout() for specifying a controller specific layout - [Tony Petruzzi]
 
 	* Made the showDebugInformation argument on renderPage() part of the API - [Per Djurner]
 	
@@ -125,6 +140,10 @@ Changes
 
 [Views]
 
+	* Added a flashMessages() function - [Per Djurner]
+
+	* Added support for inherited / nested layout templates - [Per Djurner]
+
 	* Added support for external links for specific form helpers - [Tony Petruzzi]
 	
 		You can use external links by passing in a URL beginning with either "http" or "https"
@@ -162,10 +181,11 @@ Changes
 	
 		- takes an optional section argument to append, by default appends content for the layout section 
 
-	* Added yield() replaces contentForLayout() - [Tony Petruzzi]
+	* Added includeContent() - [Per Djurner, Tony Petruzzi]
 	
+		- replace contentForLayout()
 		- takes an optional section argument to return, by default returns content for the layout section
-		- when upgrading just replace all contentForLayout() calls with yield()
+		- when upgrading just replace all contentForLayout() calls with includeContent()
 
 	* Ability for years to display in descending order in date select form tags - [Tony Petruzzi]
 	
@@ -238,19 +258,17 @@ Changes
 	
 		returns an XHTML compliant string
 	
-		
-
-
 Bug Fixes
 =========
-
 * $yearSelectTag() should take into account reverse ordering - [Tony Petruzzi]
-* correct id for radioButton() when value is blank - #373 [Tony Petruzzi]
-* match and purge whitespace in where clause - #381 [Tony Petruzzi]
-* Callbacks shouldn't need to be pre-loaded - #388 [Andy Bellenie]
-* Missing default for action argument on linkTo - #321 [Andy Bellenie]
+* Binary data support - #133 [Tony Petruzzi]
 * Session scope not locked when accessing flash - #275 [James Gibson, Per Djurner]
-* findByKey returns record when passed a blank key - #514 [Andy Bellenie]
+* Missing default for action argument on linkTo - #321 [Andy Bellenie]
+* Correct id for radioButton() when value is blank - #373 [Tony Petruzzi]
+* Match and purge whitespace in where clause - #381 [Tony Petruzzi]
+* Callbacks shouldn't need to be pre-loaded - #388 [Andy Bellenie]
+* Added excludeFromErrorEmail setting - #447 [Per Djurner]
+* findByKey() returns record when passed a blank key - #514 [Andy Bellenie]
 
 Other
 =====
