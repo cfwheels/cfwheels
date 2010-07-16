@@ -9,19 +9,15 @@
 <cfset loc.skip = get("excludeFromErrorEmail")>
 <cfloop list="#loc.scopes#" index="loc.i">
 	<cfset loc.scopeName = ListLast(loc.i, ".")>
-	<cfif NOT ListFindNoCase(loc.skip, loc.scopeName)>
+	<cfif NOT ListFindNoCase(loc.skip, loc.scopeName) AND IsDefined(loc.scopeName) AND IsStruct(loc.scopeName)>
 		<cfset loc.scopeCopy = Duplicate(Evaluate(loc.i))>
 		<cfloop list="#loc.skip#" index="loc.j">
 			<cfif loc.j Contains "." AND ListFirst(loc.j, ".") IS loc.scopeName AND StructKeyExists(loc.scopeCopy, ListRest(loc.j, "."))>
 				<cfset StructDelete(loc.scopeCopy, ListRest(loc.j, "."))>
 			</cfif>
 		</cfloop>
-		<cftry>
-			<h2>#loc.scopeName#</h2>
-			<cfdump var="#loc.scopeCopy#" format="text" showUDFs="false" hide="wheels">
-		<cfcatch>
-		</cfcatch>
-		</cftry>
+		<h2>#loc.scopeName#</h2>
+		<cfdump var="#loc.scopeCopy#" format="text" showUDFs="false" hide="wheels">
 	</cfif>
 </cfloop>
 </cfoutput>
