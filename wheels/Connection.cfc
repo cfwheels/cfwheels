@@ -31,7 +31,7 @@
 				loc.info = $dbinfo(argumentCollection=loc.args);
 			}
 
-			if (loc.info.driver_name Contains "SQLServer" || loc.info.driver_name Contains "Microsoft SQL Server")
+			if (loc.info.driver_name Contains "SQLServer" || loc.info.driver_name Contains "Microsoft SQL Server" || loc.info.driver_name Contains "MS SQL Server")
 				loc.adapterName = "MicrosoftSQLServer";
 			else if (loc.info.driver_name Contains "MySQL")
 				loc.adapterName = "MySQL";
