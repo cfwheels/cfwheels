@@ -33,8 +33,6 @@
 		</cftry>
 		<cfset assert("!issimplevalue(result)")>
 		<cfset assert("result.type eq 'expression'")>
-		<cfset assert("result.element eq 'fruit'")>
-		<cfset assert("result.resolvedname eq 'arguments'")>
 	</cffunction>
 
 	<cffunction name="test_including_partial_with_query">
