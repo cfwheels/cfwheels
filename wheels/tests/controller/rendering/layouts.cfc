@@ -4,14 +4,14 @@
 
 	<cfset params = {controller="test", action="test"}>
 	<cfset controller = $controller(name="test").$createControllerObject(params)>
-	
+
 	<cffunction name="test_rendering_without_layout">
 		<cfset controller.renderPage(layout=false)>
 		<cfset assert("controller.response() IS 'view template content'")>
 	</cffunction>
 
 	<cffunction name="test_rendering_with_default_layout_in_controller_folder">
-		<cfset tempFile = Replace(Replace(GetCurrentTemplatePath(), "\", "/", "all"), "controller/rendering/layouts.cfc", "_assets/views/test/layout.cfm")>
+		<cfset tempFile = expandPath("/wheelsMapping/tests/_assets/views/test/layout.cfm")>
 		<cffile action="write" output="<cfoutput>start:controllerlayout##includeContent()##end:controllerlayout</cfoutput>" file="#tempFile#">
 		<cfset application.wheels.existingLayoutFiles = "test">
 		<cfset controller.renderPage()>
