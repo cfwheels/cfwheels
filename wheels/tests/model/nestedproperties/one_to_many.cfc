@@ -6,17 +6,17 @@
 		<cfset loc.user = model("user")>
 		<cfset loc.testGallery = $setTestObjects()>
 	</cffunction>
-	
+
 	<cffunction name="test_add_children_via_object_array">
 		<cftransaction>
 			<cfset assert("loc.testGallery.save()")>
 			<cfset loc.testGallery = loc.gallery.findOneByTitle(value="Nested Properties Gallery", include="photoGalleryPhotos")>
 			<cfset assert("IsArray(loc.testGallery.photoGalleryPhotos)")>
 			<cfset assert("ArrayLen(loc.testGallery.photoGalleryPhotos) eq 3")>
-			<cftransaction action="rollback">
+			<cftransaction action="rollback"/>
 		</cftransaction>
 	</cffunction>
-	
+
 	<cffunction name="$setTestObjects" access="private" hint="Sets up test gallery/gallery photo objects.">
 		<!--- User --->
 		<cfset loc.u = loc.user.findOneByLastName("Petruzzi")>
@@ -32,5 +32,5 @@
 		>
 		<cfreturn loc.g>
 	</cffunction>
-	
+
 </cfcomponent>
