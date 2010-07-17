@@ -138,13 +138,12 @@
 		</cfscript>
 		<cfreturn arguments.statement>
 	</cffunction>
-	
+
 	<cffunction name="$CFQueryParameters" returntype="struct" access="public" output="false">
 		<cfargument name="settings" type="struct" required="true">
 		<cfscript>
 		var loc = {};
 		loc.params = {};
-		loc.params._useNull = false;
 		loc.params.cfsqltype = arguments.settings.type;
 		loc.params.value = arguments.settings.value;
 		if (StructKeyExists(arguments.settings, "null"))
@@ -163,11 +162,60 @@
 		}
 		if (!IsBinary(loc.params.value) && loc.params.value eq "null")
 		{
-			loc.params._useNull = true;
+			loc.params.useNull = true;
 		}
-		</cfscript>	
+		</cfscript>
 		<cfreturn loc.params>
 	</cffunction>
 
+	<cffunction name="$performQuery" returntype="struct" access="public" output="false">
+		<cfargument name="sql" type="array" required="true">
+		<cfargument name="parameterize" type="boolean" required="true">
+		<cfargument name="limit" type="numeric" required="false" default="0">
+		<cfargument name="offset" type="numeric" required="false" default="0">
+		<cfargument name="$primaryKey" type="string" required="false" default="">
+		<cfargument name="$getid" type="boolean" required="false" default="false">
+		<cfscript>
+		var loc = {};
+		var query = {};
+
+		loc.returnValue = {};
+		loc.args = {};
+
+		loc.args.result = "loc.result";
+		loc.args.name = "query.name";
+		loc.args.datasource = variables.instance.connection.datasource;
+		if (Len(variables.instance.connection.username))
+			loc.args.username = variables.instance.connection.username;
+		if (Len(variables.instance.connection.password))
+			loc.args.password = variables.instance.connection.password;
+		if (application.wheels.serverName == "Railo")
+			loc.args.psq = false; // set queries in Railo to not preserve single quotes on the entire cfquery block (we'll handle this individually in the SQL statement instead)
+
+		// overloaded arguments are settings for the query
+		loc.orgArgs = duplicate(arguments);
+		StructDelete(loc.orgArgs, "sql", false);
+		StructDelete(loc.orgArgs, "parameterize", false);
+		StructDelete(loc.orgArgs, "limit", false);
+		StructDelete(loc.orgArgs, "offset", false);
+		StructDelete(loc.orgArgs, "$primaryKey", false);
+		StructAppend(loc.args, loc.orgArgs, true);
+		</cfscript>
+
+		<cfquery attributeCollection="#loc.args#"><cfloop array="#arguments.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfif arguments.parameterize><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif StructKeyExists(loc.queryParamAttributes, "useNull")>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")>(<cfqueryparam attributeCollection="#loc.queryParamAttributes#">)<cfelse><cfqueryparam attributeCollection="#loc.queryParamAttributes#"></cfif><cfelse>'#loc.i.value#'</cfif><cfelse>#Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif></cfquery>
+
+		<cfscript>
+		if (StructKeyExists(query, "name"))
+			loc.returnValue.query = query.name;
+		// railo does not yet support the "identitycol" value returned from the cfquery tag so until they do we need to get it manually
+		if (arguments.$getid)
+		{
+			loc.$id = $identitySelect(loc.args, loc.result, arguments);
+			StructAppend(loc.result, loc.$id);
+		}
+		loc.returnValue.result = loc.result;
+		</cfscript>
+		<cfreturn loc.returnValue>
+	</cffunction>
 
 </cfcomponent>

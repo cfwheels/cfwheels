@@ -34,7 +34,7 @@
 	<cfargument name="$primaryKey" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
-		var query = {};
+
 		arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
 		if (arguments.limit > 0)
 		{
@@ -43,37 +43,31 @@
 			ArrayPrepend(arguments.sql, loc.beforeWhere);
 			ArrayAppend(arguments.sql, loc.afterWhere);
 		}
-		arguments.name = "query.name";
-		arguments.result = "loc.result";
-		arguments.datasource = variables.instance.connection.datasource;
-		if (Len(variables.instance.connection.username))
-			arguments.username = variables.instance.connection.username;
-		if (Len(variables.instance.connection.password))
-			arguments.password = variables.instance.connection.password;
-		if (application.wheels.serverName == "Railo")
-			arguments.psq = false; // set queries in Railo to not preserve single quotes on the entire cfquery block (we'll handle this individually in the SQL statement instead)  
-		loc.sql = arguments.sql;
-		loc.limit = arguments.limit;
-		loc.offset = arguments.offset;
-		loc.parameterize = arguments.parameterize;
-		loc.primaryKey = arguments.$primaryKey;
-		StructDelete(arguments, "sql");
-		StructDelete(arguments, "limit");
-		StructDelete(arguments, "offset");
-		StructDelete(arguments, "parameterize");
-		StructDelete(arguments, "$primaryKey");
+
+		// oracle doesn't support limit and offset in sql
+		StructDelete(arguments, "limit", false);
+		StructDelete(arguments, "offset", false);
+
+		if (left(arguments.sql[1], 11) eq "INSERT INTO")
+			arguments.$getid = true;
+
+		loc.returnValue = $performQuery(argumentCollection=arguments);
 	</cfscript>
-	<cfquery attributeCollection="#arguments#"><cfloop array="#loc.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfif IsBoolean(loc.parameterize) AND loc.parameterize><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif loc.queryParamAttributes._useNull>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")>(<cfqueryparam attributeCollection="#loc.queryParamAttributes#">)<cfelse><cfqueryparam attributeCollection="#loc.queryParamAttributes#"></cfif><cfelse>'#loc.i.value#'</cfif><cfelse>#Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")#</cfif>#chr(13)##chr(10)#</cfloop></cfquery>
-	<cfscript>
-		loc.returnValue.result = loc.result;
-		if (StructKeyExists(query, "name"))
-			loc.returnValue.query = query.name;
-	</cfscript>
-	<cfif StructKeyExists(loc.result, "sql") AND Left(loc.result.sql, 12) IS "INSERT INTO ">
-		<!--- the rowid value returned by ColdFusion is not the actual primary key value (unlike the way it works for sql server and mysql) so on insert statements we need to get that value out of the database using the rowid reference --->
-		<cfset loc.tbl = SpanExcluding(Right(loc.result.sql, Len(loc.result.sql)-12), " ")>
-		<cfquery attributeCollection="#arguments#">SELECT #loc.primaryKey# FROM #loc.tbl# WHERE ROWID = '#loc.result.rowid#'</cfquery>
-		<cfset loc.returnValue.result.rowid = query.name[loc.primaryKey]>
-	</cfif>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$identitySelect" returntype="struct" access="public" output="false">
+	<cfargument name="queryargs" type="struct" required="true">
+	<cfargument name="result" type="struct" required="true">
+	<cfargument name="args" type="struct" required="true">
+	<cfset var loc = {}>
+	<cfset var query = {}>
+	<cfset loc.returnValue = {}>
+
+	<!--- the rowid value returned by ColdFusion is not the actual primary key value (unlike the way it works for sql server and mysql) so on insert statements we need to get that value out of the database using the rowid reference --->
+	<cfset loc.tbl = SpanExcluding(Right(arguments.result.sql, Len(arguments.result.sql)-12), " ")>
+	<cfquery attributeCollection="#arguments.queryargs#">SELECT #arguments.args.$primaryKey# FROM #loc.tbl# WHERE ROWID = '#arguments.result.rowid#'</cfquery>
+	<cfset loc.returnValue.rowid = query.name[arguments.args.$primaryKey]>
+
 	<cfreturn loc.returnValue>
 </cffunction>

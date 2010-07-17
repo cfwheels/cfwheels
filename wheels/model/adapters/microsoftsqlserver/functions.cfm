@@ -42,10 +42,13 @@
 	<cfargument name="parameterize" type="boolean" required="true">
 	<cfargument name="$primaryKey" type="string" required="false" default="">
 	<cfscript>
-		var loc = { containsGroup = false, afterWhere = "" };
-		var query = {};
+		var loc = {};
+
 		if (arguments.limit + arguments.offset gt 0)
 		{
+			loc.containsGroup = false;
+			loc.afterWhere = "";
+
 			if (IsSimpleValue(arguments.sql[ArrayLen(arguments.sql) - 1]) and FindNoCase("GROUP BY", arguments.sql[ArrayLen(arguments.sql) - 1]))
 				loc.containsGroup = true;
 			if (arguments.sql[ArrayLen(arguments.sql)] Contains ",")
@@ -63,7 +66,7 @@
 					if (ListFind(loc.doneColumns, loc.column))
 					{
 						loc.done++;
-						loc.item = loc.item & " AS tmp" & loc.done; 
+						loc.item = loc.item & " AS tmp" & loc.done;
 					}
 					loc.doneColumns = ListAppend(loc.doneColumns, loc.column);
 					loc.newOrder = ListAppend(loc.newOrder, loc.item);
@@ -76,7 +79,7 @@
 			loc.thirdOrder = ReplaceNoCase(arguments.sql[ArrayLen(arguments.sql)], "ORDER BY ", "");
 			if (loc.containsGroup)
 				loc.thirdGroup = ReplaceNoCase(arguments.sql[ArrayLen(arguments.sql) - 1], "GROUP BY ", "");
-	
+
 			// the first select is the outer most in the query and need to contain columns without table names and using aliases when they exist
 			loc.firstSelect = $columnAlias(list=$tableName(list=loc.thirdSelect, action="remove"), action="keep");
 
@@ -129,36 +132,28 @@
 		{
 			arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
 		}
-		arguments.name = "query.name";
-		arguments.result = "loc.result";
-		arguments.datasource = variables.instance.connection.datasource;
-		if (Len(variables.instance.connection.username))
-			arguments.username = variables.instance.connection.username;
-		if (Len(variables.instance.connection.password))
-			arguments.password = variables.instance.connection.password;
-		if (application.wheels.serverName == "Railo")
-			arguments.psq = false; // set queries in Railo to not preserve single quotes on the entire cfquery block (we'll handle this individually in the SQL statement instead)  
-		loc.sql = arguments.sql;
-		loc.limit = arguments.limit;
-		loc.offset = arguments.offset;
-		loc.parameterize = arguments.parameterize;
-		loc.primaryKey = arguments.$primaryKey;
-		StructDelete(arguments, "sql");
-		StructDelete(arguments, "limit");
-		StructDelete(arguments, "offset");
-		StructDelete(arguments, "parameterize");
-		StructDelete(arguments, "$primaryKey");
+
+		// sql server doesn't support limit and offset in sql
+		StructDelete(arguments, "limit", false);
+		StructDelete(arguments, "offset", false);
+
+		if (StructKeyExists(server, "railo") AND left(arguments.sql[1], 11) eq "INSERT INTO")
+			arguments.$getid = true;
+
+		loc.returnValue = $performQuery(argumentCollection=arguments);
 	</cfscript>
-	<cfquery attributeCollection="#arguments#"><cfloop array="#loc.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfif IsBoolean(loc.parameterize) AND loc.parameterize><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif loc.queryParamAttributes._useNull>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")>(<cfqueryparam attributeCollection="#loc.queryParamAttributes#">)<cfelse><cfqueryparam attributeCollection="#loc.queryParamAttributes#"></cfif><cfelse>'#loc.i.value#'</cfif><cfelse>#Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")#</cfif>#chr(13)##chr(10)#</cfloop></cfquery>
-	<cfscript>
-		loc.returnValue.result = loc.result;
-		if (StructKeyExists(query, "name"))
-			loc.returnValue.query = query.name;
-	</cfscript>
-	<cfif StructKeyExists(server, "railo") AND StructKeyExists(loc.result, "sql") AND Left(loc.result.sql, 12) IS "INSERT INTO ">
-		<!--- railo does not yet support the "identitycol" value returned from the cfquery tag so until they do we need to get it manually --->
-		<cfquery attributeCollection="#arguments#">SELECT @@identity AS lastId</cfquery>
-		<cfset loc.returnValue.result.identitycol = query.name.lastId>
-	</cfif>
+	<cfreturn loc.returnValue>
+
+</cffunction>
+
+<cffunction name="$identitySelect" returntype="struct" access="public" output="false">
+	<cfargument name="queryargs" type="struct" required="true">
+	<cfargument name="result" type="struct" required="true">
+	<cfargument name="args" type="struct" required="true">
+	<cfset var loc = {}>
+	<cfset var query = {}>
+	<cfset loc.returnValue = {}>
+	<cfquery attributeCollection="#arguments.queryargs#">SELECT @@identity AS lastId</cfquery>
+	<cfset loc.returnValue.identitycol = query.name.lastId>
 	<cfreturn loc.returnValue>
 </cffunction>
