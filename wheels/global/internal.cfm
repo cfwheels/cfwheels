@@ -57,7 +57,7 @@
 		loc.iEnd = ListLen(loc.dateParts);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			if (arguments.cacheDatePart == ListGetAt(loc.dateParts, loc.i))
-				loc.list = ListSetAt(loc.list, loc.i, loc.cache);			
+				loc.list = ListSetAt(loc.list, loc.i, loc.cache);
 		return CreateTimeSpan(ListGetAt(loc.list, 1),ListGetAt(loc.list, 2),ListGetAt(loc.list, 3),ListGetAt(loc.list, 4));
 	</cfscript>
 </cffunction>
@@ -568,6 +568,7 @@ Should now call bar() instead and marking foo() as deprecated
 	<cfargument name="announce" type="boolean" required="false" default="true">
 	<cfset var loc = {}>
 	<cfset loc.ret = {}>
+	<cfset loc.tagcontext = []>
 	<cfif not application.wheels.showErrorInformation>
 		<cfreturn loc.ret>
 	</cfif>
@@ -579,7 +580,9 @@ Should now call bar() instead and marking foo() as deprecated
 	deprecated method is being called in
 	 --->
 	<cfset loc.exception = createObject("java","java.lang.Exception").init()>
-	<cfset loc.tagcontext = loc.exception.tagcontext>
+	<cfif StructKeyExists(loc.exception, "tagcontext")>
+		<cfset loc.tagcontext = loc.exception.tagcontext>
+	</cfif>
 	<!---
 	TagContext is an array. The first element of the array will always be the context for this
 	method announcing the deprecation. The second element will be the deprecated function that
@@ -680,7 +683,7 @@ Should now call bar() instead and marking foo() as deprecated
 	// get a list of plugin files and folders
 	loc.pluginFolders = $directory(directory=loc.pluginFolder, type="dir");
 	loc.pluginFiles = $directory(directory=loc.pluginFolder, filter="*.zip", type="file", sort="name DESC");
-	
+
 	// delete plugin directories if no corresponding plugin zip file exists
 	if (application.wheels.deletePluginDirectories)
 	{
@@ -696,7 +699,7 @@ Should now call bar() instead and marking foo() as deprecated
 			}
 		}
 	}
-	
+
 	// create directory and unzip code for the most recent version of each plugin
 	if (loc.pluginFiles.recordCount)
 	{
@@ -799,7 +802,7 @@ Should now call bar() instead and marking foo() as deprecated
 			}
 		}
 	}
-	
+
 	// allow developers to inject plugins into the application variables scope
 	if (!StructIsEmpty(application.wheels.mixins))
 		$include(template="wheels/plugins/injection.cfm");
