@@ -189,8 +189,10 @@
 			loc.args.username = variables.instance.connection.username;
 		if (Len(variables.instance.connection.password))
 			loc.args.password = variables.instance.connection.password;
+		// set queries in Railo to not preserve single quotes on the entire
+		// cfquery block (we'll handle this individually in the SQL statement instead)
 		if (application.wheels.serverName == "Railo")
-			loc.args.psq = false; // set queries in Railo to not preserve single quotes on the entire cfquery block (we'll handle this individually in the SQL statement instead)
+			loc.args.psq = false;
 
 		// overloaded arguments are settings for the query
 		loc.orgArgs = duplicate(arguments);
@@ -199,6 +201,7 @@
 		StructDelete(loc.orgArgs, "limit", false);
 		StructDelete(loc.orgArgs, "offset", false);
 		StructDelete(loc.orgArgs, "$primaryKey", false);
+		StructDelete(loc.orgArgs, "$getid", false);
 		StructAppend(loc.args, loc.orgArgs, true);
 		</cfscript>
 
@@ -207,7 +210,7 @@
 		<cfscript>
 		if (StructKeyExists(query, "name"))
 			loc.returnValue.query = query.name;
-		// railo does not yet support the "identitycol" value returned from the cfquery tag so until they do we need to get it manually
+		// see if we need to retrieve the generated key
 		if (arguments.$getid)
 		{
 			loc.$id = $identitySelect(loc.args, loc.result, arguments);
