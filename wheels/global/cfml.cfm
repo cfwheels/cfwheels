@@ -171,9 +171,13 @@
 
 <cffunction name="$location" returntype="void" access="public" output="false">
 	<cfargument name="delay" type="boolean" required="false" default="false">
-	<cfset StructDelete(arguments, "$args", false) />
-	<cfif !arguments.delay>
-		<cfset StructDelete(arguments, "delay", false) />
+	<cfset StructDelete(arguments, "$args", false)>
+	<cfif NOT arguments.delay>
+		<cfset StructDelete(arguments, "delay", false)>
+		<cfif arguments.url Contains "?" AND arguments.url Contains "##">
+			<!--- fix for cflocation anchor bug --->
+			<cfset arguments.url = Replace(arguments.url, "##", "&##")>
+		</cfif>
 		<cflocation attributeCollection="#arguments#">
 	</cfif>
 </cffunction>
