@@ -166,6 +166,8 @@
 									<cfset tokenValue = "array of #arrayLen(tokenValue)# items">
 								<cfelseif isStruct(tokenValue)>
 									<cfset tokenValue = "struct with #structCount(tokenValue)# members">
+								<cfelseif IsCustomFunction(tokenValue)>
+									<cfset tokenValue = "UDF">
 								</cfif>
 							</cfif>
 
