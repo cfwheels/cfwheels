@@ -53,26 +53,26 @@
 			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot specify both a column and a sql statement when setting up the mapping for this property.");
 		if (Len(arguments.sql) and StructKeyExists(arguments, "defaultValue"))
 			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You cannot specify a default value for calculated properties.");
-		
+
 		// create the key
 		if (!StructKeyExists(variables.wheels.class.mapping, arguments.name))
 			variables.wheels.class.mapping[arguments.name] = {};
-			
+
 		if (Len(arguments.column))
 		{
 			variables.wheels.class.mapping[arguments.name].type = "column";
 			variables.wheels.class.mapping[arguments.name].value = arguments.column;
 		}
-		
+
 		if (Len(arguments.sql))
 		{
 			variables.wheels.class.mapping[arguments.name].type = "sql";
 			variables.wheels.class.mapping[arguments.name].value = arguments.sql;
 		}
-		
+
 		if (Len(arguments.label))
 			variables.wheels.class.mapping[arguments.name].label = arguments.label;
-		
+
 		if (StructKeyExists(arguments, "defaultValue"))
 			variables.wheels.class.mapping[arguments.name].defaultValue = arguments.defaultValue;
 	</cfscript>
@@ -145,7 +145,7 @@
 		<cfset anEmployee = model("employee").new()>
 		<cfset anEmployee.firstName = "dude">
 		<cfset anEmployee.hasProperty("firstName")><!--- returns true --->
-		
+
 		<!--- this is also a dynamic method so you could do --->
 		<cfset anEmployee.hasFirstName()>
 	'
@@ -212,10 +212,10 @@
 			$throw(type="Wheels.PropertyDoesNotExist", message="Property Does Not Exist", extendedInfo="You may only toggle a property that exists on this model.");
 		if (!IsBoolean(this[arguments.property]))
 			$throw(type="Wheels.PropertyIsIncorrectType", message="Incorrect Arguments", extendedInfo="You may only toggle a property that evaluates to the boolean value.");
-		this[arguments.property] = !this[arguments.property];	
+		this[arguments.property] = !this[arguments.property];
 		if (arguments.save)
 			return updateProperty(property=arguments.property, value=this[arguments.property]);
-	</cfscript>	
+	</cfscript>
 	<cfreturn this />
 </cffunction>
 
@@ -284,23 +284,42 @@
 	<cfargument name="property" type="string" required="false" default="" hint="Name of property to check for change.">
 	<cfscript>
 		var loc = {};
-		
+
 		// always return true if $persistedProperties does not exists
 		if (!StructKeyExists(variables, "$persistedProperties"))
-			return true; 
-		
-		for (loc.key in variables.wheels.class.properties)
+			return true;
+
+		if (!Len(arguments.property))
 		{
-			// return true if we have the key on this and not in variables.$persistedProperties
-			if (StructKeyExists(this, loc.key) && !StructKeyExists(variables.$persistedProperties, loc.key) && (!Len(arguments.property) || loc.key == arguments.property))
-				return true;
-			// return true if the compare() fails
-			else if ((StructKeyExists(this, loc.key) && StructKeyExists(variables.$persistedProperties, loc.key) && !IsBinary(this[loc.key]) && Compare(this[loc.key], variables.$persistedProperties[loc.key])) && (!Len(arguments.property) || loc.key == arguments.property)) 
-				return true;
-			else if ((StructKeyExists(this, loc.key) && StructKeyExists(variables.$persistedProperties, loc.key) && IsBinary(this[loc.key]) && Compare(ToString(this[loc.key]), ToString(variables.$persistedProperties[loc.key]))) && (!Len(arguments.property) || loc.key == arguments.property)) 
-				return true;
+			// they haven't specified a particular property so loop through
+			// them all
+			arguments.property = StructKeyList(variables.wheels.class.properties);
 		}
-		// if we get here, it means that all of the properties that were checked had a value in 
+
+		arguments.property = ListToArray(arguments.property);
+
+		loc.iEnd = ArrayLen(arguments.property);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.key = arguments.property[loc.i];
+			if (StructKeyExists(this, loc.key))
+			{
+				if (!StructKeyExists(variables.$persistedProperties, loc.key))
+				{
+					return true;
+				}
+				else
+				{
+					// hehehehe... convert each datatype to a string
+					// for easier comparision
+					loc.a = $convertToString(this[loc.key]);
+					loc.b = $convertToString(variables.$persistedProperties[loc.key]);
+					if(Compare(loc.a, loc.b) neq 0)
+						return true;
+				}
+			}
+		}
+		// if we get here, it means that all of the properties that were checked had a value in
 		// $persistedProperties and it matched or some of the properties did not exist in the this scope
 	</cfscript>
 	<cfreturn false>

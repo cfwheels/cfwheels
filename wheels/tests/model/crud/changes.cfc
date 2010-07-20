@@ -126,4 +126,36 @@
 		<cfset assert("loc.result IS 'Djurner'")>
 	</cffunction>
 
+	<cffunction name="test_date_compare">
+		<cfset loc.user = model("user").findOne(username = "tonyp")>
+		<cfset loc.user.birthday = "11/01/1975 12:00 AM">
+		<cfset loc.e = loc.user.hasChanged("birthday")>
+		<cfset assert('loc.e eq false')>
+	</cffunction>
+	
+	<cffunction name="test_binary_compare">
+		<cfset loc.gallery = model("photogallery").findOne(
+			include="user"
+			,where="users.lastname = 'petruzzi'"
+			,orderby="photogalleryid"
+		)>
+		<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.png')#" variable="loc.binaryData">
+		<cftransaction action="begin">
+			<cfset loc.photogalleryphoto = model("PhotoGalleryPhoto").create(
+				photogalleryid="#loc.gallery.photogalleryid#"
+				,filename="somefilename"
+				,fileData=loc.binaryData
+				,description1="something something" 
+			)>
+			<cfset loc.photogalleryphoto = model("PhotoGalleryPhoto").findByKey(loc.photogalleryphoto.photogalleryphotoid)>
+			<cfset loc.photogalleryphoto.fileData = loc.binaryData>
+			<cfset loc.e1 = loc.photogalleryphoto.hasChanged("fileData")>
+			<cfset loc.photogalleryphoto.fileData = "tonyp">
+			<cfset loc.e2 = loc.photogalleryphoto.hasChanged("fileData")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.e1 eq false')>
+		<cfset assert('loc.e2 eq true')>
+	</cffunction>
+
 </cfcomponent>
