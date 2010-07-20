@@ -87,10 +87,12 @@
 				else if (variables.wheels.class.automaticValidations and not ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#,#application.wheels.softDeleteProperty#", loc.property))
 				{
 					// set nullable validations if the developer has not
-					loc.defaultValidationsAllowBlank = false;
+					loc.defaultValidationsAllowBlank = variables.wheels.class.properties[loc.property].nullable;
 					if (!variables.wheels.class.properties[loc.property].nullable and !Len(loc.columns["column_default_value"][loc.i]) and !$validationExists(property=loc.property, validation="validatesPresenceOf"))
+					{
 						validatesPresenceOf(properties=loc.property);
 						loc.defaultValidationsAllowBlank = true;
+					}
 					// set length validations if the developer has not
 					if (variables.wheels.class.properties[loc.property].validationtype eq "string" and !$validationExists(property=loc.property, validation="validatesLengthOf"))
 						validatesLengthOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, maximum=variables.wheels.class.properties[loc.property].size);
