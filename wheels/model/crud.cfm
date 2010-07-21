@@ -494,7 +494,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="updateProperty" returntype="boolean" access="public" output="false" hint="Updates a single attribute and saves the record without going through the normal vlidation procedure. This is especially useful for boolean flags on existing records."
+<cffunction name="updateProperty" returntype="boolean" access="public" output="false" hint="Updates a single attribute and saves the record without going through the normal validation procedure. This is especially useful for boolean flags on existing records."
 	examples=
 	'
 		<!--- Sets the `new` property to `1` through updateProperty() --->
@@ -515,7 +515,7 @@
 	<cfreturn save(parameterize=arguments.parameterize, reload=false, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks) />
 </cffunction>
 
-<cffunction name="updateProperties" returntype="boolean" access="public" output="false" hint="Updates all the properties from the properties argument or other named arguments. If the object is invalid, the save will fail and false will be returned."
+<cffunction name="updateProperties" returntype="boolean" access="public" output="false" hint="Updates all the properties from the `properties` argument or other named arguments. If the object is invalid, the save will fail and `false` will be returned."
 	examples=
 	'
 		<!--- Sets the `new` property to `1` through updateProperties() --->

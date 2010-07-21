@@ -15,17 +15,20 @@
 		<cfset assert("IsObject(loc.p)")>
 	</cffunction>
 
-	<cffunction name="test_delete_child_object">
+	<cffunction name="test_delete_child_object_through_update">
 		<cfset assert("IsObject(loc.testAuthor.profile)")>
 		<cftransaction>
+			<!--- Save test author with child profile and grab new profile's ID --->
 			<cfset loc.testAuthor.save()>
-			<cfset loc.testAuthor.profile._delete = true>
 			<cfset loc.profileID = loc.testAuthor.profile.id>
-			<cfset assert("loc.testAuthor.save()")>
-			<cfset loc.p = loc.profile.findByKey(loc.profileID)>
+			<!--- Delete profile through nested property --->
+			<cfset loc.updateStruct.profile._delete = true>
+			<cfset assert("loc.testAuthor.update(properties=loc.updateStruct)")>
+			<!--- Should return `false` because the record is now deleted --->
+			<cfset loc.missingProfile = loc.profile.findByKey(key=loc.profileId, reload=true)>
 			<cftransaction action="rollback"/>
 		</cftransaction>
-		<cfset assert("not loc.p")>
+		<cfset assert("IsBoolean(loc.missingProfile) and not loc.missingProfile")>
 	</cffunction>
 
 	<cffunction name="$setTestObjects" access="private" hint="Sets up test author and profile objects.">
