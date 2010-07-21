@@ -8,7 +8,7 @@
 	<cffunction name="afterFindCallback">
 		<cfif StructIsEmpty(arguments)>
 			<cfset this.title = "setOnObject">
-			<cfset this.views = 100>
+			<cfset this.views = this.views + 100>
 		<cfelse>
 			<cfset arguments.title = "setOnQueryRecord">
 			<cfset arguments.views = arguments.views + 100>
