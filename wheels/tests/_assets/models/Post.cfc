@@ -9,9 +9,11 @@
 		<cfif StructIsEmpty(arguments)>
 			<cfset this.title = "setOnObject">
 			<cfset this.views = this.views + 100>
+			<cfset this.something = "hello world">
 		<cfelse>
 			<cfset arguments.title = "setOnQueryRecord">
 			<cfset arguments.views = arguments.views + 100>
+			<cfset arguments.something = "hello world">
 			<cfreturn arguments>
 		</cfif>
 	</cffunction>
