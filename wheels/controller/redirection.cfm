@@ -69,12 +69,27 @@
 		// set the url that will be used in the cflocation tag
 		if (arguments.back)
 		{
-			if (!Len(request.cgi.http_referer))
-				$throw(type="Wheels.RedirectBackError", message="Can't redirect back to the referring URL because it is blank.", extendedInfo="Catch this error in your code to handle it gracefully.");
-			else if (request.cgi.http_referer Does Not Contain request.cgi.server_name)
-				$throw(type="Wheels.RedirectBackError", message="Can't redirect back to the referring URL because it is not on the same domain.", extendedInfo="Catch this error in your code to handle it gracefully.");
-			else
+			if (Len(request.cgi.http_referer) && request.cgi.http_referer Contains request.cgi.server_name)
+			{
+				// referrer exists and points to the same domain so it's ok to redirect to it
 				loc.url = request.cgi.http_referer;
+				if (Len(arguments.params))
+				{
+					// append params to the referrer url
+					loc.params = $constructParams(arguments.params);
+					if (request.cgi.http_referer Contains "?")
+						loc.params = Replace(loc.params, "?", "&");
+					loc.url = loc.url & loc.params;
+				} 
+			}
+			else
+			{
+				// we can't redirect to the referrer so we either use a fallback route/controller/action combo or send to the root of the site
+				if (Len(arguments.route) || Len(arguments.controller) || Len(arguments.action))
+					loc.url = URLFor(argumentCollection=arguments);
+				else
+					loc.url = application.wheels.webPath;
+			}
 		}
 		else
 		{
