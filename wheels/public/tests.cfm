@@ -13,6 +13,7 @@
 table.testing {border:0;margin-bottom:15px;}
 table.testing td, table.testing th {padding:2px 20px 2px 2px;text-align:left;vertical-align:top;font-size:14px;}
 table.testing td.n {text-align:right;}
+table.testing tr.errRow {background-color:#FFDFDF;}
 </style>
 <cfoutput>
 <p><a href="#linkParams#">Run All Tests</a> | <a href="#linkParams#&reload=true">Reload Test Data</a></p>
@@ -28,32 +29,40 @@ table.testing td.n {text-align:right;}
 <table class="testing">
 <tr><th>Package</th></th><th>Tests</th><th>Failures</th><th>Errors</th></tr>
 <cfloop from="1" to="#arrayLen(testresults.summary)#" index="testIndex">
-	<tr>
+	<cfset summary = testresults.summary[testIndex]>
+	<tr<cfif summary.numFailures + summary.numErrors gt 0> class="errRow"</cfif>>
 		<td>
-			<cfset a = ListToArray(testresults.summary[testIndex].packageName, ".")>
+			<cfset a = ListToArray(summary.packageName, ".")>
 			<cfset b = createObject("java", "java.util.ArrayList").Init(a)>
 			<cfset c = arraylen(a)>
 			<cfloop from="1" to="#c#" index="i"><a href="#linkParams#&package=#ArrayToList(b.subList(JavaCast('int', 0), JavaCast('int', i)), '.')#">#a[i]#</a><cfif i neq c>.</cfif></cfloop>
 		</td>
-		<td class="n">#testresults.summary[testIndex].numTests#</td>
-		<td class="n<cfif testresults.summary[testIndex].numFailures neq 0> failed</cfif>">#testresults.summary[testIndex].numFailures#</td>
-		<td class="n<cfif testresults.summary[testIndex].numErrors neq 0> failed</cfif>">#testresults.summary[testIndex].numErrors#</td>
+		<td class="n">#summary.numTests#</td>
+		<td class="n<cfif summary.numFailures neq 0> failed</cfif>">#summary.numFailures#</td>
+		<td class="n<cfif summary.numErrors neq 0> failed</cfif>">#summary.numErrors#</td>
 	</tr>
 </cfloop>
 </table>
 <table class="testing">
 <tr><th>Package</th><th>Test Name</th><th>Time</th><th>Status</th></tr>
 <cfloop from="1" to="#arrayLen(testresults.results)#" index="testIndex">
-	<tr>
-		<td><a href="#linkParams#&package=#testresults.results[testIndex].packageName#">#testresults.results[testIndex].cleanTestCase#</a></td>
-		<td><a href="#linkParams#&package=#testresults.results[testIndex].packageName#&test=#testresults.results[testIndex].testName#">#testresults.results[testIndex].cleanTestName#</a></td>
-		<td class="n">#testresults.results[testIndex].time#</td>
-		<td class="<cfif testresults.results[testIndex].status eq 'Success'>success<cfelse>failed</cfif>">#testresults.results[testIndex].status#</td>
+	<cfset result = testresults.results[testIndex]>
+	<tr<cfif result.status neq "Success"> class="errRow"</cfif>>
+		<td><a href="#linkParams#&package=#result.packageName#">#result.cleanTestCase#</a></td>
+		<td><a href="#linkParams#&package=#result.packageName#&test=#result.testName#">#result.cleanTestName#</a></td>
+		<td class="n">#result.time#</td>
+		<td class="<cfif result.status eq 'Success'>success<cfelse>failed</cfif>">#result.status#</td>
 	</tr>
-	<cfif testresults.results[testIndex].status neq "Success">
-		<tr><td colspan="7" class="failed">#replace(testresults.results[testIndex].message, chr(10), "<br/>", "ALL")#</td></tr>
+	<cfif result.status neq "Success">
+		<tr class="errRow"><td colspan="4" class="failed">#replace(result.message, chr(10), "<br/>", "ALL")#</td></tr>
 	</cfif>
 </cfloop>
 </table>
+<cfif StructKeyExists(request, "_testdebug")>
+	<cfloop collection="#request._testdebug#" item="i">
+	<h3>#i#</h3>
+	#request._testdebug[i]#
+	</cfloop>
+</cfif>
 </cfoutput>
 </cfif>

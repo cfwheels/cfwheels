@@ -107,7 +107,6 @@
 		<cfset loc.r = loc.user.errorCount(name="base_errors")>
 		<cfset assert('loc.r eq 2')>
 		<cfset loc.user.clearErrors(name="base_errors")>
-		<cfset halt(false, 'loc.user.allErrors()')>
 		<cfset loc.r = loc.user.errorCount(name="base_errors")>
 		<cfset assert('loc.r eq 0')>
 		<cfset loc.r = loc.user.hasErrors(name="base_errors")>

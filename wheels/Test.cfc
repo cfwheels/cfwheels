@@ -166,6 +166,8 @@
 									<cfset tokenValue = "array of #arrayLen(tokenValue)# items">
 								<cfelseif isStruct(tokenValue)>
 									<cfset tokenValue = "struct with #structCount(tokenValue)# members">
+								<cfelseif IsCustomFunction(tokenValue)>
+									<cfset tokenValue = "UDF">
 								</cfif>
 							</cfif>
 
@@ -202,8 +204,8 @@
 	</cffunction>
 
 	<cffunction name="halt" returntype="Any" output="false" hint="used to dump an expression and halt testing. Useful when you want to see what an expression will output first so you can write tests for it.">
-		<cfargument name="halt" type="boolean" required="true" hint="should we halt. true will halt and dump output. false will just return so tests can continue">
 		<cfargument name="expression" type="string" required="true" hint="the expression you want to see output for">
+		<cfargument name="halt" type="boolean" required="false" default="true" hint="should we halt. true will halt and dump output. false will just return so tests can continue">
 		<cfset var attributeArgs = {}>
 
 		<cfif not arguments.halt>
@@ -217,6 +219,22 @@
 		<cfset structappend(attributeArgs, arguments, true)>
 
 		<cfdump attributeCollection="#attributeArgs#"><cfabort>
+	</cffunction>
+
+	<cffunction name="debug" returntype="Any" output="false" hint="used to dump an expression and view the results later.">
+		<cfargument name="expression" type="string" required="true" hint="the expression you want to see output for">
+		<cfargument name="label" type="string" required="false" default="" hint="label for the debug output">
+		<cfset var attributeArgs = {}>
+		<cfset var dump = "">
+
+		<cfset attributeArgs["var"] = "#evaluate(arguments.expression)#">
+
+		<cfset structdelete(arguments, "expression")>
+		<cfset structappend(attributeArgs, arguments, true)>
+		<cfsavecontent variable="dump">
+		<cfdump attributeCollection="#attributeArgs#">
+		</cfsavecontent>
+		<cfset request["_testdebug"][arguments.label] = dump>
 	</cffunction>
 
 	<cffunction name="raised" returntype="string" output="false" hint="catches an raised error and returns the error type. great if you want to test that a certain exception will be raised.">
@@ -293,16 +311,9 @@
 		<!---
 			Check for and if necessary set up the structure to store test results
 		--->
-		<cfparam name="request.#resultkey#" 				default="#structNew()#">
-		<cfparam name="request.#resultkey#.begin" 			default="#now()#">
-		<cfparam name="request.#resultkey#.ok" 				default="true">
-		<cfparam name="request.#resultkey#.numCases" 		default="0">
-		<cfparam name="request.#resultkey#.numTests" 		default="0">
-		<cfparam name="request.#resultkey#.numSuccesses" 	default="0">
-		<cfparam name="request.#resultkey#.numFailures" 	default="0">
-		<cfparam name="request.#resultkey#.numErrors" 		default="0">
-		<cfparam name="request.#resultkey#.summary"			default="#arrayNew(1)#">
-		<cfparam name="request.#resultkey#.results" 		default="#arrayNew(1)#">
+		<cfif !StructKeyExists(request, resultKey)>
+			<cfset $resetTestResults(resultKey)>
+		</cfif>
 
 		<cfset testCase = getMetadata(this).name>
 
@@ -406,18 +417,18 @@
 	--->
 	<cffunction name="$resetTestResults" returntype="void" output="false">
 		<cfargument name="resultKey" type="string" required="false" default="test">
-
-		<cfset request[resultkey] = structNew()>
-		<cfparam name="request[resultkey].begin" 			default="#now()#">
-		<cfparam name="request[resultkey].ok" 				default="true">
-		<cfparam name="request[resultkey].numCases" 		default="0">
-		<cfparam name="request[resultkey].numTests" 		default="0">
-		<cfparam name="request[resultkey].numSuccesses" 	default="0">
-		<cfparam name="request[resultkey].numFailures" 		default="0">
-		<cfparam name="request[resultkey].numErrors" 		default="0">
-		<cfparam name="request[resultkey].summary"			default="#arrayNew(1)#">
-		<cfparam name="request[resultkey].results" 			default="#arrayNew(1)#">
-
+		<cfscript>
+		request[resultkey] = {};
+		request[resultkey].begin = now();
+		request[resultkey].ok = true;
+		request[resultkey].numCases = 0;
+		request[resultkey].numTests = 0;
+		request[resultkey].numSuccesses = 0;
+		request[resultkey].numFailures = 0;
+		request[resultkey].numErrors = 0;
+		request[resultkey].summary = [];
+		request[resultkey].results = [];
+		</cfscript>
 	</cffunction>
 
 	<!---
