@@ -26,6 +26,7 @@
 	application.wheels.cachePages = false;
 	application.wheels.cachePartials = false;
 	application.wheels.cacheQueries = false;
+	application.wheels.cachePlugins = true;
 	application.wheels.showDebugInformation = true;
 	application.wheels.showErrorInformation = true;
 	application.wheels.sendEmailOnError = false;
