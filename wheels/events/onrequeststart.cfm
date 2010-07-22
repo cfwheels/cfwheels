@@ -75,10 +75,10 @@
 			$simpleLock(name="modelLock", execute="$clearModelInitializationCache", type="exclusive");
 		if (!application.wheels.cacheControllerInitialization)
 			$simpleLock(name="controllerLock", execute="$clearControllerInitializationCache", type="exclusive");
-		if (!application.wheels.cacheRoutes)
-			$loadRoutes();
 		if (!application.wheels.cachePlugins)
 			$loadPlugins();
+		if (!application.wheels.cacheRoutes)
+			$loadRoutes();
 		if (!application.wheels.cacheDatabaseSchema)
 			$clearCache("sql");
 		$include(template="#application.wheels.eventPath#/onrequeststart.cfm");
