@@ -90,7 +90,7 @@ Changes
 
 	* Added dataFunction argument to includePartial - [Per Djurner]
 
-	* A flashKeep() function - [Per Djurner]
+	* Added flashKeep() function - [Per Djurner]
 
 	* Added layout() for specifying a controller specific layout - [Tony Petruzzi]
 
