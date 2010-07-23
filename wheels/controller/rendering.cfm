@@ -241,7 +241,7 @@
 	<cfscript>
 		var loc = {};
 		loc.include = arguments.$baseTemplatePath;
-		loc.fileName = Spanexcluding(Reverse(ListFirst(Reverse(arguments.$name), "/")), ".") & ".cfm"; // extracts the file part of the path and replace ending ".cfm"
+		loc.fileName = ReplaceNoCase(Reverse(ListFirst(Reverse(arguments.$name), "/")), ".cfm", "", "all") & ".cfm"; // extracts the file part of the path and replace ending ".cfm"
 		if (arguments.$type == "partial" && arguments.$prependWithUnderscore)
 			loc.fileName = Replace("_" & loc.fileName, "__", "_", "one"); // replaces leading "_" when the file is a partial
 		loc.folderName = Reverse(ListRest(Reverse(arguments.$name), "/"));
@@ -252,7 +252,7 @@
 		else
 			loc.include = loc.include & "/" & variables.params.controller & "/" & loc.fileName; // Include a file in the current controller's view folder
 	</cfscript>
-	<cfreturn loc.include />
+	<cfreturn LCase(loc.include) />
 </cffunction>
 
 <cffunction name="$includeFile" returntype="string" access="public" output="false">
