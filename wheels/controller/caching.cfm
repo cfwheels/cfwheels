@@ -68,6 +68,6 @@
 				loc.returnValue.static = loc.cachableActions[loc.i].static;
 			}
 		}
-		return loc.returnValue;
 	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
