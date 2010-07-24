@@ -161,7 +161,7 @@
 				if (StructKeyExists(variables, arguments.$name))
 				{
 					loc.metaData = GetMetaData(variables[arguments.$name]);
-					if (StructKeyExists(loc.metaData, "returnType") && loc.metaData.returnType == "struct" && StructKeyExists(loc.metaData, "access") && loc.metaData.access == "private")
+					if (IsStruct(loc.metaData) and StructKeyExists(loc.metaData, "returnType") && loc.metaData.returnType == "struct" && StructKeyExists(loc.metaData, "access") && loc.metaData.access == "private")
 						return $invoke(method=arguments.$name);
 				}
 			}
