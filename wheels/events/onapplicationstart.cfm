@@ -109,7 +109,12 @@
 				application.wheels.protectedControllerMethods = ListAppend(application.wheels.protectedControllerMethods, loc.method);
 		}
 
+		// reload the plugins each time we reload the application
 		$loadPlugins();
+
+		// allow developers to inject plugins into the application variables scope
+		if (!StructIsEmpty(application.wheels.mixins))
+			$include(template="wheels/plugins/injection.cfm");
 
 		// create the dispatcher that will handle all incoming requests
 		application.wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");

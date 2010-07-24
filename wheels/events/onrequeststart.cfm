@@ -38,6 +38,10 @@
 		// copy over the cgi variables we need to the request scope unless it's already been done on application start
 		if (!StructKeyExists(request, "cgi"))
 			request.cgi = $cgiScope();
+		
+		// reload the plugins on each request if cachePlugins is set to false
+		if (!application.wheels.cachePlugins)
+			$loadPlugins();
 
 		// inject methods from plugins directly to Application.cfc
 		if (!StructIsEmpty(application.wheels.mixins))
@@ -75,8 +79,6 @@
 			$simpleLock(name="modelLock", execute="$clearModelInitializationCache", type="exclusive");
 		if (!application.wheels.cacheControllerInitialization)
 			$simpleLock(name="controllerLock", execute="$clearControllerInitializationCache", type="exclusive");
-		if (!application.wheels.cachePlugins)
-			$loadPlugins();
 		if (!application.wheels.cacheRoutes)
 			$loadRoutes();
 		if (!application.wheels.cacheDatabaseSchema)

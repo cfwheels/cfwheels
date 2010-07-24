@@ -18,26 +18,39 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
-
-		for (loc.key in arguments)
+		loc.keyList = ListSort(StructKeyList(arguments), "textnocase", "asc");
+		
+		// we need to make sure we are looping through the passed in arguments the same everytime
+		for (loc.i = 1; loc.i lte ListLen(loc.keyList); loc.i++)
 		{
-			loc.value = arguments[loc.key];
-			// SerializeJason crashes if a query contains binary data
-			// a workaround is to use the underline meta information
-			// to build the hash
-			// this information was gathered from
-			// http://www.silverwareconsulting.com/index.cfm/2009/1/20/Capturing-the-SQL-Generated-by-CFQUERY
-			if(IsQuery(loc.value))
+			loc.value = arguments[ListGetAt(loc.keyList, loc.i)];
+			
+			// for ( in ) can pass around undefined values so we need to check that the variables exists
+			if (StructKeyExists(loc, "value"))
 			{
-				if (StructKeyExists(server, "railo"))
-					loc.value = loc.value.getSQL().toString();
+				// SerializeJason crashes if a query contains binary data
+				// a workaround is to use the underline meta information
+				// to build the hash
+				// this information was gathered from
+				// http://www.silverwareconsulting.com/index.cfm/2009/1/20/Capturing-the-SQL-Generated-by-CFQUERY
+				if(IsQuery(loc.value))
+				{
+					if (StructKeyExists(server, "railo"))
+						loc.sql = loc.value.getSQL().toString();
+					else
+						loc.sql = loc.value.getMetaData().getExtendedMetaData();
+						
+					// a query could be passed in that is generated from QueryNew() and would not have any of this metadata
+					// so we need to make sure that we have something to add to the hash
+					if (StructKeyExists(loc, "sql"))
+						loc.value = loc.sql;
+				}
+				
+				if (IsSimpleValue(loc.value))
+					loc.returnValue = loc.returnValue & loc.value;
 				else
-					loc.value = loc.value.getMetaData().getExtendedMetaData();
+					loc.returnValue = loc.returnValue & ListSort(ReplaceList(SerializeJSON(loc.value), "{,}", ","), "text");
 			}
-			if (IsSimpleValue(loc.value))
-				loc.returnValue = loc.returnValue & loc.value;
-			else
-				loc.returnValue = loc.returnValue & ListSort(ReplaceList(SerializeJSON(loc.value), "{,}", ","), "text");
 		}
 		return Hash(loc.returnValue);
 	</cfscript>
@@ -802,9 +815,5 @@ Should now call bar() instead and marking foo() as deprecated
 			}
 		}
 	}
-
-	// allow developers to inject plugins into the application variables scope
-	if (!StructIsEmpty(application.wheels.mixins))
-		$include(template="wheels/plugins/injection.cfm");
 	</cfscript>
 </cffunction>
