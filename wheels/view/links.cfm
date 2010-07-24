@@ -1,4 +1,4 @@
-<cffunction name="linkTo" returntype="string" access="public" output="false" hint="Creates a link to another page in your application. Pass in the name of a `route` to use your configured routes or a `controller`/`action`/`key` combination."
+<cffunction name="linkTo" returntype="string" access="public" output="false" hint="Creates a link to another page in your application. Pass in the name of a `route` to use your configured routes or a `controller`/`action`/`key` combination. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
 	examples=
 	'
 		##linkTo(text="Log Out", controller="account", action="logout")##
@@ -101,7 +101,7 @@
 	'
 	categories="view-helper,links" functions="URLFor,linkTo,buttonTo">
 	<cfargument name="emailAddress" type="string" required="true" hint="The email address to link to.">
-	<cfargument name="name" type="string" required="false" default="" hint="A string to use as the link text (""Joe"" or ""Support Department"", for example).">
+	<cfargument name="name" type="string" required="false" default="" hint='A string to use as the link text ("Joe" or "Support Department", for example).'>
 	<cfargument name="encode" type="boolean" required="false" hint="Pass `true` here to encode the email address, making it harder for bots to harvest it for example.">
 	<cfscript>
 		var loc = {};

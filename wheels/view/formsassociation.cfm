@@ -1,4 +1,4 @@
-<cffunction name="hasManyRadioButton" returntype="string" access="public" output="false" hint="Used as a short cut to output the proper form elements for an association.">
+<cffunction name="hasManyRadioButton" returntype="string" access="public" output="false" hint="Used as a short cut to output the proper form elements for an association. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.">
 	<cfargument name="objectName" type="string" required="true" />
 	<cfargument name="association" type="string" required="true" />
 	<cfargument name="property" type="string" required="true" />
@@ -29,7 +29,7 @@
 	<cfreturn loc.returnValue />
 </cffunction>
 
-<cffunction name="hasManyCheckBox" returntype="string" access="public" output="false" hint="Used as a short cut to output the proper form elements for an association.">
+<cffunction name="hasManyCheckBox" returntype="string" access="public" output="false" hint="Used as a short cut to output the proper form elements for an association. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.">
 	<cfargument name="objectName" type="string" required="true" />
 	<cfargument name="association" type="string" required="true" />
 	<cfargument name="keys" type="string" required="true" />
@@ -123,9 +123,3 @@
 	</cfscript>
 	<cfreturn loc.returnValue />
 </cffunction>
-
-
-
-
-
-

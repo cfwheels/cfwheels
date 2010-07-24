@@ -3,7 +3,12 @@
 	'
 		<!--- view code --->
 		<head>
+			<!--- Includes stylesheets/styles.css --->
 		    ##styleSheetLinkTag("styles")##
+			<!--- Includes `stylesheets/blog.css` and `stylesheets/comments.css` --->
+			##styleSheetLinkTag("blog,comments")##
+			<!--- Includes printer style sheet --->
+			##styleSheetLinkTag(source="print", media="print")##
 		</head>
 	'
 	categories="view-helper,assets" chapters="miscellaneous-helpers" functions="javaScriptIncludeTag,imageTag">
@@ -90,7 +95,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="imageTag" returntype="string" access="public" output="false" hint="Returns an `img` tag and will (if the image is stored in the local `images` folder) set the `width`, `height`, and `alt` attributes automatically for you."
+<cffunction name="imageTag" returntype="string" access="public" output="false" hint="Returns an `img` tag. If the image is stored in the local `images` folder, the tag will also set the `width`, `height`, and `alt` attributes for you. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
 	examples=
 	'
 		##imageTag("logo.png")##
