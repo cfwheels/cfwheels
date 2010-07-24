@@ -19,7 +19,7 @@
 	examples=
 	'
 		<!--- Add an error on the object --->
-		<cfset addError(message="Your email address has to be the same as your domain name.")>
+		<cfset addErrorToBase(message="Your email address has to be the same as your domain name.")>
 	'
 	categories="model-object,errors" chapters="object-validation" functions="addError,allErrors,clearErrors,errorCount,errorsOn,errorsOnBase,hasErrors">
 	<cfargument name="message" type="string" required="true" hint="See documentation for @addError.">
