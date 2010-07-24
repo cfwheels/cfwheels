@@ -505,14 +505,3 @@
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
-
-<cffunction name="$convertToString" returntype="string" access="public" output="false">
-	<cfargument name="value" type="Any" required="true">
-	<cfif IsBinary(arguments.value)>
-		<cfreturn ToString(arguments.value)>
-	<cfelseif IsDate(arguments.value)>
-		<cfreturn CreateDateTime(year(arguments.value), month(arguments.value), day(arguments.value), hour(arguments.value), minute(arguments.value), second(arguments.value))>
-	<cfelse>
-		<cfreturn arguments.value>
-	</cfif>
-</cffunction>
