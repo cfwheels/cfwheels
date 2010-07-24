@@ -22,12 +22,19 @@
 
 		loc.thisRoute = Duplicate(arguments);
 		loc.thisRoute.variables = "";
-		loc.iEnd = ListLen(arguments.pattern, "/");
+		if (Find(".", loc.thisRoute.pattern))
+		{
+			loc.thisRoute.format = ListLast(loc.thisRoute.pattern, ".");
+			loc.thisRoute.formatVariable = ReplaceList(loc.thisRoute.format, "[,]", "");
+			loc.thisRoute.pattern = ListFirst(loc.thisRoute.pattern, ".");
+		}
+		loc.iEnd = ListLen(loc.thisRoute.pattern, "/");
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.item = ListGetAt(arguments.pattern, loc.i, "/");
-			if (loc.item Contains "[")
-				loc.thisRoute.variables = ListAppend(loc.thisRoute.variables, ReplaceList(loc.item, "[,]", ","));
+			loc.item = ListGetAt(loc.thisRoute.pattern, loc.i, "/");
+			
+			if (REFind("^\[", loc.item))
+				loc.thisRoute.variables = ListAppend(loc.thisRoute.variables, ReplaceList(loc.item, "[,]", ""));
 		}
 		ArrayAppend(application.wheels.routes, loc.thisRoute);
 	</cfscript>
@@ -228,7 +235,7 @@
 		{
 			arguments.key = arguments.key.key();
 		}
-
+		
 		// build the link
 		loc.returnValue = application.wheels.webPath & ListLast(request.cgi.script_name, "/");
 		if (Len(arguments.route))
@@ -247,6 +254,9 @@
 					loc.returnValue = loc.returnValue & $hyphenize(arguments.action);
 				else
 					loc.returnValue = loc.returnValue & $hyphenize(loc.route.action);
+				// add it the format if it exists
+				if (StructKeyExists(loc.route, "formatVariable") && StructKeyExists(arguments, loc.route.formatVariable))
+					loc.returnValue = loc.returnValue & "&#loc.route.formatVariable#=#arguments[loc.route.formatVariable]#";
 				loc.iEnd = ListLen(loc.route.variables);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
@@ -278,6 +288,9 @@
 						loc.returnValue = loc.returnValue & "/" & loc.property; // add hard coded param from route
 					}
 				}
+				// add it the format if it exists
+				if (StructKeyExists(loc.route, "formatVariable") && StructKeyExists(arguments, loc.route.formatVariable))
+					loc.returnValue = loc.returnValue & ".#arguments[loc.route.formatVariable]#";
 			}
 		}
 		else // link based on controller/action/key

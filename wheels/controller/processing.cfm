@@ -1,4 +1,4 @@
-<cffunction name="$processAction" returntype="void" access="public" output="false">
+<cffunction name="$processAction" returntype="boolean" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		loc.debug = application.wheels.showDebugInformation;
@@ -8,18 +8,12 @@
 		this.$runVerifications(action=params.action, params=params);
 		// return immediately if an abort is issue from a verification
 		if ($abortIssued())
-			return;
+			return true;
 		this.$runFilters(type="before", action=params.action);
 		
 		// check to see if the controller params has changed and if so, instantiate the new controller and re-run filters and verifications
 		if (params.controller != variables.$class.name)
-		{
-			this = $controller(params.controller).$createControllerObject(params);
-			if (loc.debug)
-				$debugPoint("beforeFilters");
-			this.$processAction();
-			return;
-		}
+			return false;
 		
 		if (loc.debug)
 			$debugPoint("beforeFilters,action");
@@ -75,7 +69,7 @@
 		if (loc.debug)
 			$debugPoint("afterFilters");
 	</cfscript>
-	<cfreturn />
+	<cfreturn true />
 </cffunction>
 
 <cffunction name="$callAction" returntype="void" access="public" output="false">

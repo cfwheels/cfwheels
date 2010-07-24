@@ -4,6 +4,7 @@
 
 <cffunction name="$createParams" returntype="struct" access="public" output="false">
 	<cfargument name="path" type="string" required="true">
+	<cfargument name="format" type="string" required="true">
 	<cfargument name="route" type="struct" required="true">
 	<cfargument name="formScope" type="struct" required="true">
 	<cfargument name="urlScope" type="struct" required="true">
@@ -53,7 +54,9 @@
 			{
 				if (FindNoCase("($checkbox)", loc.key))
 				{
-					// if no other form parameter exists with this name it means that the checkbox was left blank and therefore we force the value to the unchecked values for the checkbox (to get around the problem that unchecked checkboxes don't post at all)
+					// if no other form parameter exists with this name it means that the checkbox was left 
+					// blank and therefore we force the value to the unchecked values for the checkbox 
+					// (to get around the problem that unchecked checkboxes don't post at all)
 					loc.formParamName = ReplaceNoCase(loc.key, "($checkbox)", "");
 					if (!StructKeyExists(loc.returnValue, loc.formParamName))
 					{
@@ -132,12 +135,16 @@
 		*	so that we don't have more logic around
 		*	params in arrays
 		************************************/
-
+		
 		// add controller and action unless they already exist
 		if (!StructKeyExists(loc.returnValue, "controller"))
 			loc.returnValue.controller = arguments.route.controller;
 		if (!StructKeyExists(loc.returnValue, "action"))
 			loc.returnValue.action = arguments.route.action;
+		
+		// add in our format if it is available
+		if (StructKeyExists(arguments.route, "formatVariable") && Len(arguments.format))
+			loc.returnValue[arguments.route.formatVariable] = arguments.format;
 
 		// convert controller to upperCamelCase and action to normal camelCase
 		loc.returnValue.controller = REReplace(loc.returnValue.controller, "-([a-z])", "\u\1", "all");
@@ -299,11 +306,16 @@
 
 <cffunction name="$findMatchingRoute" returntype="struct" access="public" output="false">
 	<cfargument name="path" type="string" required="true">
+	<cfargument name="format" type="string" required="true" />
 	<cfscript>
 		var loc = {};
+		
 		loc.iEnd = ArrayLen(application.wheels.routes);
-		for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
+			loc.format = false;
+			if (StructKeyExists(application.wheels.routes[loc.i], "format"))
+				loc.format = application.wheels.routes[loc.i].format;
 			loc.currentRoute = application.wheels.routes[loc.i].pattern;
 			if (loc.currentRoute == "*") {
 				loc.returnValue = application.wheels.routes[loc.i];
@@ -321,7 +333,7 @@
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
 					loc.item = ListGetAt(loc.currentRoute, loc.j, "/");
-					loc.thisRoute = ReplaceList(loc.item, "[,]", ",");
+					loc.thisRoute = ReplaceList(loc.item, "[,]", "");
 					loc.thisURL = ListGetAt(arguments.path, loc.j, "/");
 					if (Left(loc.item, 1) != "[" && loc.thisRoute != loc.thisURL)
 						loc.match = false;
@@ -329,6 +341,8 @@
 				if (loc.match)
 				{
 					loc.returnValue = application.wheels.routes[loc.i];
+					if (Len(arguments.format) && !IsBoolean(loc.format))
+						loc.returnValue[ReplaceList(loc.format, "[,]", "")] = arguments.format;
 					break;
 				}
 			}
@@ -348,7 +362,17 @@
 		if (arguments.pathInfo == arguments.scriptName || arguments.pathInfo == "/" || arguments.pathInfo == "")
 			returnValue = "";
 		else
-			returnValue = Right(arguments.pathInfo, Len(arguments.pathInfo)-1);
+			returnValue = ListFirst(Right(arguments.pathInfo, Len(arguments.pathInfo)-1), ".");
+	</cfscript>
+	<cfreturn returnValue>
+</cffunction>
+
+<cffunction name="$getFormatFromRequest" returntype="string" access="public" output="false">
+	<cfargument name="pathInfo" type="string" required="true">
+	<cfscript>
+		var returnValue = "";
+		if (Find(".", arguments.pathInfo))
+			returnValue = ListLast(arguments.pathInfo, ".");
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
@@ -365,9 +389,10 @@
 
 		// determine the path from the url, find a matching route for it and create the params struct
 		loc.path = $getPathFromRequest(pathInfo=arguments.pathInfo, scriptName=arguments.scriptName);
-		loc.route = $findMatchingRoute(path=loc.path);
-		loc.params = $createParams(path=loc.path, route=loc.route, formScope=arguments.formScope, urlScope=arguments.urlScope);
-
+		loc.format = $getFormatFromRequest(pathInfo=arguments.pathInfo);
+		loc.route = $findMatchingRoute(path=loc.path, format=loc.format);
+		loc.params = $createParams(path=loc.path, format=loc.format, route=loc.route, formScope=arguments.formScope, urlScope=arguments.urlScope);
+		
 		// set params in the request scope as well so we can display it in the debug info outside of the dispatch / controller context
 		request.wheels.params = loc.params;
 
@@ -376,13 +401,17 @@
 
 		// create the requested controller
 		loc.controller = $controller(loc.params.controller).$createControllerObject(loc.params);
-		loc.controller.$processAction();
-
+		
+		// if the controller fails to process, instantiate a new controller and try again
+		if (!loc.controller.$processAction())
+		{
+			loc.controller = $controller(loc.params.controller).$createControllerObject(loc.params);
+			loc.controller.$processAction();
+		}
+		
 		// if there is a delayed redirect pending we execute it here thus halting the rest of the request
 		if (loc.controller.$performedRedirect())
-		{
 			$location(argumentCollection=loc.controller.$getRedirect());
-		}
 
 		// clear out the flash (note that this is not done for redirects since the processing does not get here)
 		loc.controller.$flashClear();
