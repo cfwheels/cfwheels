@@ -58,7 +58,7 @@
 <cffunction name="$findRoute" returntype="struct" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		
+
 		// throw an error if a route with this name has not been set by developer in the config/routes.cfm file
 		if (application.wheels.showErrorInformation && !StructKeyExists(application.wheels.namedRoutePositions, arguments.route))
 			$throw(type="Wheels.RouteNotFound", message="Could not find the `#arguments.route#` route.", extendedInfo="Create a new route in `config/routes.cfm` with the name `#arguments.route#`.");
@@ -400,6 +400,7 @@ Should now call bar() instead and marking foo() as deprecated
 	<cfargument name="announce" type="boolean" required="false" default="true">
 	<cfset var loc = {}>
 	<cfset loc.ret = {}>
+	<cfset loc.tagcontext = []>
 	<cfif not application.wheels.showErrorInformation>
 		<cfreturn loc.ret>
 	</cfif>
@@ -411,7 +412,9 @@ Should now call bar() instead and marking foo() as deprecated
 	deprecated method is being called in
 	 --->
 	<cfset loc.exception = createObject("java","java.lang.Exception").init()>
-	<cfset loc.tagcontext = loc.exception.tagcontext>
+	<cfif StructKeyExists(loc.exception, "tagcontext")>
+		<cfset loc.tagcontext = loc.exception.tagcontext>
+	</cfif>
 	<!---
 	TagContext is an array. The first element of the array will always be the context for this
 	method announcing the deprecation. The second element will be the deprecated function that
@@ -590,7 +593,7 @@ Should now call bar() instead and marking foo() as deprecated
 			}
 		}
 	}
-	
+
 	// allow developers to inject plugins into the application variables scope
 	if (!StructIsEmpty(application.wheels.mixins))
 		$include(template="wheels/plugins/injection.cfm");
