@@ -270,6 +270,7 @@ Bug Fixes
 * Added excludeFromErrorEmail setting - #447 [Per Djurner]
 * findByKey() returns record when passed a blank key - #514 [Andy Bellenie]
 * hasChanged() compares dates correctly - #515 [Tony Petruzzi]
+* validatesUniquenessOf doesn't recognise soft-deleted columns - #532 [Andy Bellenie]
 
 Other
 =====
