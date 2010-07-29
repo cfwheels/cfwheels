@@ -498,7 +498,7 @@
 		}
 		
 		if (variables.wheels.class.softDeletion)
-			loc.where = loc.where & " " & variables.wheels.class.tableName & "." & variables.wheels.class.softDeleteColumn & " IS NULL";
+			loc.where = loc.where & " AND " & variables.wheels.class.tableName & "." & variables.wheels.class.softDeleteColumn & " IS NULL";
 
 		// try to fetch existing object from the database
 		loc.existingObject = findOne(where=loc.where, reload=true);
