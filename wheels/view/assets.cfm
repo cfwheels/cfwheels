@@ -18,7 +18,7 @@
 	<cfargument name="head" type="string" required="false" hint="Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior which is to place the output where the function is called from.">
 	<cfscript>
 		var loc = {};
-		$args(name="styleSheetLinkTag", args=arguments, combine="sources,source/!", reserved="href,rel");
+		$args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href,rel");
 		arguments.rel = "stylesheet";
 		loc.returnValue = "";
 		arguments.sources = $listClean(list=arguments.sources, returnAs="array");
@@ -62,7 +62,7 @@
 	<cfargument name="head" type="string" required="false" hint="See documentation for @styleSheetLinkTag.">
 	<cfscript>
 		var loc = {};
-		$args(name="javaScriptIncludeTag", args=arguments, combine="sources,source/!", reserved="src");
+		$args(name="javaScriptIncludeTag", args=arguments, combine="sources/source/!", reserved="src");
 		loc.returnValue = "";
 		arguments.sources = $listClean(list=arguments.sources, returnAs="array");
 		loc.iEnd = ArrayLen(arguments.sources);
