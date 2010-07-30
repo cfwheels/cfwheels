@@ -285,7 +285,7 @@
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		if (StructKeyExists(arguments, "multiple"))
+		if (StructKeyExists(arguments, "multiple") and IsBoolean(arguments.multiple))
 		{
 			if (arguments.multiple)
 				arguments.multiple = "multiple";
