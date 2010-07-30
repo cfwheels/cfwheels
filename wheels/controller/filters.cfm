@@ -9,7 +9,7 @@
 		<!--- Always execute `isLoggedIn` and `checkIPAddress` (in that order) before all actions in this controller except the `home` and `login` actions --->
 		<cfset filters(through="isLoggedIn,checkIPAddress", except="home,login")>
 	'
-	categories="controller-initialization" chapters="filters-and-verification" functions="verifies">
+	categories="controller-initialization" chapters="filters-and-verification" functions="setFilterChain,filterChain">
 	<cfargument name="through" type="string" required="true" hint="Function(s) to execute before or after the action(s).">
 	<cfargument name="type" type="string" required="false" default="before" hint="Whether to run the function(s) before or after the action(s).">
 	<cfargument name="only" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell Wheels that the filter function(s) should only be run on these actions.">
@@ -47,7 +47,17 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="setFilterChain" returntype="void" access="public" output="false" hint="Use this function if you need a more low level way of setting the entire filter chain for a controller.">
+<cffunction name="setFilterChain" returntype="void" access="public" output="false" hint="Use this function if you need a more low level way of setting the entire filter chain for a controller."
+	examples=
+	'
+		<!--- Set filter chain directly in an array --->
+		<cfset setFilterChain([
+			{through="restrictAccess"},
+			{through="isLoggedIn,checkIPAddress", except="home,login"},
+			{type="after", through="logConversion", only="thankYou"}
+		])>
+	'
+	categories="controller-initialization" chapters="filters-and-verification" functions="filters,filterChain">
 	<cfargument name="chain" type="array" required="true" hint="An array of structs, each of which represent arguments that get passed to the `filters` function. This should represent the entire filter chain that you want to use for this controller.">
 	<cfscript>
 		var loc = {};
@@ -63,7 +73,15 @@
 
 <!--- PUBLIC CONTROLLER CLASS FUNCTIONS --->
 
-<cffunction name="filterChain" returntype="array" access="public" output="false" hint="Returns an array of all the filters set on this controller in the order in which they will be executed.">
+<cffunction name="filterChain" returntype="array" access="public" output="false" hint="Returns an array of all the filters set on this controller in the order in which they will be executed."
+	examples=
+	'
+		<!--- Get filter chain, remove the first item, and set it back --->
+		<cfset myFilterChain = filterChain()>
+		<cfset ArrayDeleteAt(myFilterChain, 1)>
+		<cfset setFilterChain(myFilterChain)>
+	'
+	categories="controller-initialization" chapters="filters-and-verification" functions="filters,setFilterChain">
 	<cfargument name="type" type="string" required="false" default="all" hint="Use this argument to return only `before` or `after` filters.">
 	<cfscript>
 		var loc = {};
