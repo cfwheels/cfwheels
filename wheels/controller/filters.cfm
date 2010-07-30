@@ -48,8 +48,17 @@
 </cffunction>
 
 <cffunction name="setFilterChain" returntype="void" access="public" output="false" hint="Use this function if you need a more low level way of setting the entire filter chain for a controller.">
-	<cfargument name="chain" type="array" required="true" hint="The entire filter chain that you want to use for this controller.">
-	<cfset variables.$class.filters = arguments.chain>
+	<cfargument name="chain" type="array" required="true" hint="An array of structs, each of which represent arguments that get passed to the `filters` function. This should represent the entire filter chain that you want to use for this controller.">
+	<cfscript>
+		var loc = {};
+		
+		// Clear current filter chain
+		variables.$class.filters = [];
+		// Loop through chain passed in arguments and add each item to filter chain
+		for(loc.i = 1; loc.i <= ArrayLen(arguments.chain); loc.i++) {
+			filters(argumentCollection=arguments.chain[loc.i]);
+		}
+	</cfscript>
 </cffunction>
 
 <!--- PUBLIC CONTROLLER CLASS FUNCTIONS --->

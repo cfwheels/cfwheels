@@ -25,6 +25,7 @@
 		<cfset controller.setFilterChain([])>
 		<!--- Compare filter chains --->
 		<cfset assert("ArrayLen(filterChainSet) eq ArrayLen(filterChainNormal)")>
+		<cfset assert("filterChainSet.equals(filterChainNormal)")>
 	</cffunction>
 
 </cfcomponent>
