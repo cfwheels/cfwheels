@@ -43,6 +43,15 @@
 		<cfset assert("result IS '<div class=""flash-messages""><p class=""success-message"">Congrats!</p></div>'")>
 	</cffunction>
 	
+	<cffunction name="test_control_order_via_keys_argument">
+		<cfset controller.flashInsert(success="Congrats!")>
+		<cfset controller.flashInsert(alert="Error!")>
+		<cfset result = controller.flashMessages(keys="success,alert")>
+		<cfset assert("result IS '<div class=""flash-messages""><p class=""success-message"">Congrats!</p><p class=""alert-message"">Error!</p></div>'")>
+		<cfset result = controller.flashMessages(keys="alert,success")>
+		<cfset assert("result IS '<div class=""flash-messages""><p class=""alert-message"">Error!</p><p class=""success-message"">Congrats!</p></div>'")>
+	</cffunction>
+	
 	<cffunction name="teardown">
 		<cfset application.wheels.flashStorage = flashStorage>
 	</cffunction>
