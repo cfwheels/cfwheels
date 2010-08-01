@@ -71,8 +71,11 @@
 	<cfargument name="keys" type="string" required="true" />
 	<cfscript>
 		var loc = {};
-		loc.returnValue = 0;
+		loc.returnValue = false;
 		loc.object = $getObject(arguments.objectName);
+		
+		// clean up our key argument if there is a comma on the beginning or end
+		arguments.keys = REReplace(arguments.keys, "^,|,$", "", "all");
 		
 		if (!StructKeyExists(loc.object, arguments.association) || !IsArray(loc.object[arguments.association]))
 			return loc.returnValue;
