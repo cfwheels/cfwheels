@@ -109,7 +109,9 @@
 		var loc = {};
 		loc.model = model(arguments.association.modelName);
 
-		this[arguments.property] = [];
+		if (!StructKeyExists(this, arguments.property) || !IsArray(this[arguments.property]))
+			this[arguments.property] = [];
+		
 		if (IsStruct(arguments.value))
 		{
 			for (loc.item in arguments.value)
@@ -143,8 +145,10 @@
 			loc.iEnd = ArrayLen(arguments.value);
 			for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 			{
-				ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association));
-				$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i]);
+				// only create the object if the developer has not already loaded on for this position
+				if (loc.i gt ArrayLen(this[arguments.property]) || !IsObject(this[arguments.property][loc.i]))
+					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association));
+				$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i], position=loc.i);
 			}
 		}
 		// sort the order of the objects in the array if the property is set
@@ -169,13 +173,15 @@
 <cffunction name="$updateCollectionObject" returntype="void" output="false" access="public">
 	<cfargument name="property" type="string" required="true" />
 	<cfargument name="value" type="struct" required="true" />
+	<cfargument name="position" type="numeric" required="false" default="0" />
 	<cfscript>
 		var loc = {};
-		loc.position = ArrayLen(this[arguments.property]);
-		if (IsObject(this[arguments.property][loc.position]))
-			this[arguments.property][loc.position].setProperties(properties=arguments.value);
+		if (!arguments.position)
+			arguments.position = ArrayLen(this[arguments.property]);
+		if (IsObject(this[arguments.property][arguments.position]))
+			this[arguments.property][arguments.position].setProperties(properties=arguments.value);
 		else
-			ArrayDeleteAt(this[arguments.property], loc.position);
+			ArrayDeleteAt(this[arguments.property], arguments.position);
 	</cfscript>
 </cffunction>
 
