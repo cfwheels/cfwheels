@@ -612,7 +612,12 @@ Should now call bar() instead and marking foo() as deprecated
 	create an exception so we can get the TagContext and display what file and line number the
 	deprecated method is being called in
 	 --->
-	<cfset loc.exception = createObject("java","java.lang.Exception").init()>
+	<cftry>
+		<cfthrow type="Expression">
+		<cfcatch type="any">
+			<cfset loc.exception = cfcatch>
+		</cfcatch>
+	</cftry>
 	<cfif StructKeyExists(loc.exception, "tagcontext")>
 		<cfset loc.tagcontext = loc.exception.tagcontext>
 	</cfif>
@@ -628,7 +633,11 @@ Should now call bar() instead and marking foo() as deprecated
 		<!--- the line number --->
 		<cfset loc.ret.line = loc.context.line>
 		<!--- the deprecated method that was called --->
-		<cfset loc.ret.method = rereplacenocase(loc.context.raw_trace, ".*\$func([^\.]*)\..*", "\1")>
+		<cfif StructKeyExists(server, "railo")>
+			<cfset loc.ret.method = rereplacenocase(loc.context.codePrintPlain, '.*\<cffunction name="([^"]*)">.*', "\1")>
+		<cfelse>
+			<cfset loc.ret.method = rereplacenocase(loc.context.raw_trace, ".*\$func([^\.]*)\..*", "\1")>
+		</cfif>
 		<!--- the user template where the method called occurred --->
 		<cfset loc.ret.template = loc.context.template>
 		<!--- try to get the code --->
