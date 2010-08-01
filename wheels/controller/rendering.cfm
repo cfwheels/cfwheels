@@ -28,9 +28,7 @@
 		
 		// if no layout specific arguments were passed in use the this instance's layout
 		if(!Len(arguments.$layout))
-		{
 			arguments.$layout = $useLayout(arguments.$action);
-		}
 
 		// if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
 		// never show debugging out in ajax requests
@@ -236,6 +234,7 @@
 <cffunction name="$generateIncludeTemplatePath" returntype="string" access="public" output="false">
 	<cfargument name="$name" type="any" required="true">
 	<cfargument name="$type" type="any" required="true">
+	<cfargument name="$controllerName" type="string" required="false" default="#variables.params.controller#" />
 	<cfargument name="$baseTemplatePath" type="string" required="false" default="#application.wheels.viewPath#" />
 	<cfargument name="$prependWithUnderscore" type="boolean" required="false" default="true">
 	<cfscript>
@@ -248,9 +247,9 @@
 		if (Left(arguments.$name, 1) == "/")
 			loc.include = loc.include & loc.folderName & "/" & loc.fileName; // Include a file in a sub folder to views
 		else if (arguments.$name Contains "/")
-			loc.include = loc.include & "/" & variables.params.controller & "/" & loc.folderName & "/" & loc.fileName; // Include a file in a sub folder of the current controller
+			loc.include = loc.include & "/" & arguments.$controllerName & "/" & loc.folderName & "/" & loc.fileName; // Include a file in a sub folder of the current controller
 		else
-			loc.include = loc.include & "/" & variables.params.controller & "/" & loc.fileName; // Include a file in the current controller's view folder
+			loc.include = loc.include & "/" & arguments.$controllerName & "/" & loc.fileName; // Include a file in the current controller's view folder
 	</cfscript>
 	<cfreturn LCase(loc.include) />
 </cffunction>
