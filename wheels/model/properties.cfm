@@ -177,7 +177,7 @@
 	<cfreturn isPresent />
 </cffunction>
 
-<cffunction name="columnForProperty" returntype="any" access="public" output="false" hint="Returns the column object for the named attribute."
+<cffunction name="columnForProperty" returntype="any" access="public" output="false" hint="Returns the column name for the named attribute."
 	examples=
 	'
 		<!--- Get an object, set a value and then see if the property exists --->
@@ -192,6 +192,23 @@
 			columnName = variables.wheels.class.properties[arguments.property].column;
 	</cfscript>
 	<cfreturn columnName />
+</cffunction>
+
+<cffunction name="columnDataForProperty" returntype="any" access="public" output="false" hint="Returns the column struct for the named attribute."
+	examples=
+	'
+		<!--- Get an object, set a value and then see if the property exists --->
+		<cfset anEmployee = model("employee").new()>
+		<cfset anEmployee.columnDataForProperty("firstName")><!--- returns column struct --->
+	'
+	categories="model-object,miscellaneous" chapters="" functions="">
+	<cfargument name="property" type="string" required="true" />
+	<cfscript>
+		var columnData = false;
+		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
+			columnData = variables.wheels.class.properties[arguments.property];
+	</cfscript>
+	<cfreturn columnData />
 </cffunction>
 
 <cffunction name="toggle" returntype="any" access="public" output="false" hint="Assigns to the property specified the opposite of the properties current boolean value. Throws an error if the property cannot be converted to a boolean value. Returns this object if save is false."
