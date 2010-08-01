@@ -30,12 +30,12 @@
 		var loc = {};
 		loc.returnValue = "";
 		loc.keyList = ListSort(StructKeyList(arguments), "textnocase", "asc");
-		
+
 		// we need to make sure we are looping through the passed in arguments the same everytime
 		for (loc.i = 1; loc.i lte ListLen(loc.keyList); loc.i++)
 		{
 			loc.value = arguments[ListGetAt(loc.keyList, loc.i)];
-			
+
 			// for ( in ) can pass around undefined values so we need to check that the variables exists
 			if (StructKeyExists(loc, "value"))
 			{
@@ -47,16 +47,25 @@
 				if(IsQuery(loc.value))
 				{
 					if (StructKeyExists(server, "railo"))
-						loc.sql = loc.value.getSQL().toString();
+					{
+						loc.sql = loc.value.getSQL();
+						// toString is not available if the query is generated
+						if (StructKeyExists(loc, "sql"))
+						{
+							loc.sql = loc.sql.toString();
+						}
+					}
 					else
+					{
 						loc.sql = loc.value.getMetaData().getExtendedMetaData();
-						
+					}
+
 					// a query could be passed in that is generated from QueryNew() and would not have any of this metadata
 					// so we need to make sure that we have something to add to the hash
 					if (StructKeyExists(loc, "sql"))
 						loc.value = loc.sql;
 				}
-				
+
 				if (IsSimpleValue(loc.value))
 					loc.returnValue = loc.returnValue & loc.value;
 				else
