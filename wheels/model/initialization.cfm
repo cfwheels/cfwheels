@@ -93,6 +93,9 @@
 						validatesPresenceOf(properties=loc.property);
 						loc.defaultValidationsAllowBlank = true;
 					}
+					// always allowblank if a database default has been set
+					if (Len(loc.columns["column_default_value"][loc.i]))
+						loc.defaultValidationsAllowBlank = true;
 					// set length validations if the developer has not
 					if (variables.wheels.class.properties[loc.property].validationtype eq "string" and !$validationExists(property=loc.property, validation="validatesLengthOf"))
 						validatesLengthOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, maximum=variables.wheels.class.properties[loc.property].size);
