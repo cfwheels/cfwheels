@@ -18,7 +18,7 @@
 	'
 	categories="model-class" chapters="transactions" functions="new,create,save,update,updateByKey,updateOne,updateAll,delete,deleteByKey,deleteOne,deleteAll">
 	<cfargument name="method" type="string" required="true" hint="Model method to run.">
-	<cfargument name="transaction" type="string" required="true" hint="See documentation for @save.">
+	<cfargument name="transaction" type="string" default="commit" hint="See documentation for @save.">
 	<cfargument name="isolation" type="string" default="read_committed" hint="See documentation for @save.">
 	<cfset var loc = {} />
 	<cfset loc.methodArgs = $setProperties(properties=StructNew(), argumentCollection=arguments, filterList="method,transaction,isolation", setOnModel=false, $useFilterLists=false)>
