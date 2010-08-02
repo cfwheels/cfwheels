@@ -43,7 +43,7 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			// include the email template and return it
-			loc.content = $renderPage($template=ListGetAt(arguments.template, loc.i), $layout=ListGetAt(arguments.layout, loc.i));
+			loc.content = $renderPage($template=ListGetAt(arguments.template, loc.i), $layout=ListGetAt(arguments.layout, loc.i), $overwrite=true);
 			loc.mailpart = {};
 			loc.mailpart.tagContent = loc.content;
 			if (ArrayIsEmpty(arguments.mailparts))
