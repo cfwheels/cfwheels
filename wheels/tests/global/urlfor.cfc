@@ -8,7 +8,7 @@
 
 	<cffunction name="teardown">
 		<cfset application.wheels.routes = loc.original_routes>
-		<cfset application.wheels.URLRewritin = loc.original_rewrite>
+		<cfset application.wheels.URLRewriting = loc.original_rewrite>
 	</cffunction>
 
 	<cffunction name="test_links_are_properly_hyphenated">
