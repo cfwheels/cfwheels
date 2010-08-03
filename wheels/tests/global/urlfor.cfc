@@ -2,10 +2,13 @@
 
 	<cffunction name="setup">
 		<cfset loc.original_routes = duplicate(application.wheels.routes)>
+		<cfset loc.original_rewrite = application.wheels.URLRewriting>
+		<cfset application.wheels.URLRewriting = "On">
 	</cffunction>
 
 	<cffunction name="teardown">
 		<cfset application.wheels.routes = loc.original_routes>
+		<cfset application.wheels.URLRewritin = loc.original_rewrite>
 	</cffunction>
 
 	<cffunction name="test_links_are_properly_hyphenated">
