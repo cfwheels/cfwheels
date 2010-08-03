@@ -78,7 +78,13 @@
 					// append params to the referrer url
 					loc.params = $constructParams(arguments.params);
 					if (request.cgi.http_referer Contains "?")
+					{
 						loc.params = Replace(loc.params, "?", "&");
+					}
+					else if (left(loc.params, 1) == "&" && !Find(request.cgi.http_referer, "?"))
+					{
+						loc.params = Replace(loc.params, "&", "?", "one");
+					}
 					loc.url = loc.url & loc.params;
 				} 
 			}
