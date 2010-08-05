@@ -132,23 +132,27 @@
 	var loc = {};
 	for (loc.key in variables.wheels.class.associations)
 	{
-		if (ListFindNoCase("hasMany,hasOne", variables.wheels.class.associations[loc.key].type) and variables.wheels.class.associations[loc.key].dependent neq false)
+		if (ListFindNoCase("hasMany,hasOne", variables.wheels.class.associations[loc.key].type) && variables.wheels.class.associations[loc.key].dependent != false)
 		{
+			loc.all = "";
+			if (variables.wheels.class.associations[loc.key].type == "hasMany")
+				loc.all = "All";
+		
 			switch(variables.wheels.class.associations[loc.key].dependent)
 			{
 				case "delete":
 				{
-					$invoke(componentReference=this, method="deleteAll#(loc.key)#", instantiate=true);
+					$invoke(componentReference=this, method="delete#loc.all##loc.key#", instantiate=true);
 					break;
 				}
 				case "deleteAll":
 				{
-					$invoke(componentReference=this, method="deleteAll#(loc.key)#");
+					$invoke(componentReference=this, method="delete#loc.all##loc.key#");
 					break;
 				}
 				case "removeAll":
 				{
-					$invoke(componentReference=this, method="removeAll#(loc.key)#");
+					$invoke(componentReference=this, method="remove#loc.all##loc.key#");
 					break;
 				}
 				default:
