@@ -19,7 +19,7 @@
 	<cffunction name="test_with_seconds_below_10_seconds">
 		<cfset loc.c = 10 - 1>
 		<cfset loc.args.toTime = dateadd('s', loc.c, loc.args.fromTime)>
-		<cfset halt("loc.controller.distanceOfTimeInWords(argumentcollection=loc.args)", false)>
+		<cfset debug("loc.controller.distanceOfTimeInWords(argumentcollection=loc.args)", false)>
 		<cfinvoke component="#loc.controller#" method="#loc.f#" argumentcollection="#loc.args#" returnvariable="loc.e">
 		<cfset loc.r = "less than 10 seconds">
 		<cfset assert("loc.e eq loc.r")>

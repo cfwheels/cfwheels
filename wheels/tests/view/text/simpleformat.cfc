@@ -20,7 +20,7 @@ augue validus cui lucidus.">
 
 	<cffunction name="test_text_should_format">
 		<cfset loc.e = loc.controller.simpleFormat(argumentcollection=loc.args)>
-		<cfset halt(expression='loc.e', halt=false, format="text")>
+		<cfset debug(expression='loc.e', display=false, format="text")>
 		<cfset loc.r = "<p>Lobortis, erat feugiat jus autem</p>
 
 <p>vel obruo dolor luptatum, os in interdico ex. Sit typicus</p>

@@ -43,7 +43,7 @@
 	<cffunction name="test_with_seconds_below_60_seconds">
 		<cfset loc.c = 60 - 1>
 		<cfset loc.args.toTime = dateadd('s', loc.c, loc.now)>
-		<cfset halt('loc.args', false)>
+		<cfset debug('loc.args', false)>
 		<cfset loc.e = loc.controller.timeUntilInWords(argumentCollection=loc.args)>
 		<cfset loc.r = "less than a minute">
 		<cfset assert("loc.e eq loc.r")>
