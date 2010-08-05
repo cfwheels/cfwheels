@@ -30,6 +30,7 @@
 	'
 	categories="controller-request,rendering" chapters="rendering-layout">
 	<cfargument name="template" required="true" type="string" hint="the name of the layout template or method name you want to use">
+	<cfargument name="ajax" required="false" type="string" hint="the name of the layout template you want to use for ajax requests">
 	<cfargument name="except" type="string" required="false" hint="a list of actions that SHOULD NOT get the layout">
 	<cfargument name="only" type="string" required="false" hint="a list of action that SHOULD ONLY get the layout">
 	<cfargument name="useDefault" type="boolean" required="false" default="true" hint="when specifying conditions or a method, should we use the default layout if not satisfied">
@@ -39,6 +40,7 @@
 		{
 			StructDelete(arguments, "except", false);
 			StructDelete(arguments, "only", false);
+			StructDelete(arguments, "ajax", false);
 		}
 		if (StructKeyExists(arguments, "except"))
 			arguments.except = $listClean(arguments.except);
@@ -65,7 +67,10 @@
 			}
 			else if ((!StructKeyExists(variables.$class.layout, "except") || !ListFindNoCase(variables.$class.layout.except, arguments.$action)) && (!StructKeyExists(variables.$class.layout, "only") || ListFindNoCase(variables.$class.layout.only, arguments.$action)))
 			{
-				loc.returnValue = variables.$class.layout.template;
+				if (isAjax() && StructKeyExists(variables.$class.layout, "ajax"))
+					loc.returnValue = variables.$class.layout.ajax;
+				else
+					loc.returnValue = variables.$class.layout.template;
 			}
 		}
 		return loc.returnValue;
