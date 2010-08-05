@@ -303,7 +303,7 @@
 		if (Len(arguments.valueToAppend))
 			loc.returnValue = loc.returnValue & "-" & arguments.valueToAppend;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn REReplace(loc.returnValue, "-+", "-", "all")>
 </cffunction>
 
 <cffunction name="$tagName" returntype="string" access="public" output="false">
