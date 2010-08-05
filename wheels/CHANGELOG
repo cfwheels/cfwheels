@@ -140,6 +140,8 @@ Changes
 
 [Views]
 
+	* Added a h() function - [Tony Petruzzi]
+
 	* Added a flashMessages() function - [Per Djurner]
 
 	* Added support for inherited / nested layout templates - [Per Djurner]
