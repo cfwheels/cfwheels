@@ -29,11 +29,15 @@
 		// if no layout specific arguments were passed in use the this instance's layout
 		if(!Len(arguments.$layout))
 			arguments.$layout = $useLayout(arguments.$action);
-
-		// if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
+		
 		// never show debugging out in ajax requests
-		if ((!IsBoolean(arguments.$layout) || arguments.$layout) && !arguments.$hideDebugInformation)
+		if (isAjax())
+			arguments.$hideDebugInformation = true;	
+		
+		// if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
+		if (!arguments.$hideDebugInformation)
 			request.wheels.showDebugInformation = true;
+		
 		if (application.wheels.cachePages && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
 			loc.category = "action";
@@ -322,6 +326,7 @@
 					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					{
 						arguments.current = loc.i;
+						arguments.totalCount = loc.iEnd;
 						loc.jEnd = ListLen(loc.query.columnList);
 						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 						{
@@ -350,24 +355,21 @@
 			}
 			else if (StructKeyExists(arguments, "objects") && IsArray(arguments.objects))
 			{
-				loc.originalArguments = Duplicate(arguments);
 				loc.array = arguments.objects;
 				StructDelete(arguments, "objects");
+				loc.originalArguments = Duplicate(arguments);
 				loc.modelName = loc.array[1].$classData().modelName;
 				loc.returnValue = "";
 				loc.iEnd = ArrayLen(loc.array);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
+					StructClear(arguments);
+					StructAppend(arguments, loc.originalArguments);
 					arguments.current = loc.i;
+					arguments.totalCount = loc.iEnd;
 					arguments[loc.modelName] = loc.array[loc.i];
 					loc.properties = loc.array[loc.i].properties();
-
-					// we have to overwrite the values in each loop but first we remove the ones that are in the original arguments since they take precedence
-					for (loc.key in loc.originalArguments)
-						if (StructKeyExists(loc.properties, loc.key))
-							StructDelete(loc.properties, loc.key);
 					StructAppend(arguments, loc.properties, true);
-
 					loc.returnValue = loc.returnValue & $includeAndReturnOutput(argumentCollection=arguments);
 					if (StructKeyExists(arguments, "$spacer") && loc.i < loc.iEnd)
 						loc.returnValue = loc.returnValue & arguments.$spacer;
