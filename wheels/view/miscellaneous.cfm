@@ -347,7 +347,7 @@
 				loc.objectReference = "";
 				for (loc.j = 1; loc.j lte loc.i; loc.j++)
 					loc.objectReference = ListAppend(loc.objectReference, ListGetAt(arguments.objectName, loc.j, "["), "[");
-				loc.returnValue = ListSetAt(loc.returnValue, loc.i, $getObject(loc.objectReference).key() & "]", "[");
+				loc.returnValue = ListSetAt(loc.returnValue, loc.i, $getObject(loc.objectReference).key($returnTickCountWhenNew=true) & "]", "[");
 			}
 		}
 	</cfscript>

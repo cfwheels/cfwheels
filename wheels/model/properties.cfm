@@ -109,6 +109,7 @@
 	'
 	categories="model-object,miscellaneous" chapters="" functions="">
 	<cfargument name="$persisted" type="boolean" required="false" default="false">
+	<cfargument name="$returnTickCountWhenNew" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
@@ -124,6 +125,8 @@
 					loc.returnValue = ListAppend(loc.returnValue, this[loc.property]);
 			}
 		}
+		if (!Len(loc.returnValue) && arguments.$returnTickCountWhenNew)
+			loc.returnValue = variables.wheels.tickCountId;
 		</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

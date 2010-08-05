@@ -116,16 +116,11 @@
 		{
 			for (loc.item in arguments.value)
 			{
-				if (loc.item == "new")
+				// check to see if the id is a tickcount, if so the object is new
+				if (IsNumeric(loc.item) && Ceiling(GetTickCount() / 900000000) == Ceiling(loc.item / 900000000))
 				{
-					loc.keyList = ListSort(StructKeyList(arguments.value[loc.item]), "numeric", "asc");
-					loc.iEnd = ListLen(loc.keyList);
-					for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
-					{
-						loc.item2 = ListGetAt(loc.keyList, loc.i);
-						ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item][loc.item2], association=arguments.association));
-						$updateCollectionObject(property=arguments.property, value=arguments.value[loc.item][loc.item2]);
-					}
+					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item], association=arguments.association));	
+					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.item]);
 				}
 				else
 				{
