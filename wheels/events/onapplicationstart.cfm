@@ -34,13 +34,12 @@
 		application.wheels.version = "1.1 Beta 1";
 		application.wheels.controllers = {};
 		application.wheels.models = {};
-		application.wheels.existingModelFiles = "";
-		application.wheels.existingControllerFiles = "";
-		application.wheels.nonExistingControllerFiles = "";
-		application.wheels.existingLayoutFiles = "";
-		application.wheels.nonExistingLayoutFiles = "";
 		application.wheels.existingHelperFiles = "";
+		application.wheels.existingLayoutFiles = "";
+		application.wheels.existingObjectFiles = "";
 		application.wheels.nonExistingHelperFiles = "";
+		application.wheels.nonExistingLayoutFiles = "";
+		application.wheels.nonExistingObjectFiles = "";
 		application.wheels.routes = [];
 		application.wheels.namedRoutePositions = {};
 		application.wheels.mixins = {};

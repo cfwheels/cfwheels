@@ -138,19 +138,6 @@
 	</cfscript>
 </cffunction>
 
-<!--- convert an array to a structure --->
-<cffunction name="$arrayToStruct" returntype="struct" access="public" output="false">
-	<cfargument name="array" type="array" required="true" />
-	<cfscript>
-		var loc = {};
-		loc.struct = {};
-		loc.iEnd = ArrayLen(arguments.array);
-		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
-			loc.struct[loc.i] = arguments.array[loc.i];
-	</cfscript>
-	<cfreturn loc.struct />
-</cffunction>
-
 <cffunction name="$structKeysExist" returntype="boolean" access="public" output="false" hint="Check to see if all keys in the list exist for the structure and have length.">
 	<cfargument name="struct" type="struct" required="true" />
 	<cfargument name="keys" type="string" required="false" default="" />
@@ -360,7 +347,8 @@
 	<cfscript>
 		var returnValue = "";
 		arguments.returnVariable = "returnValue";
-		arguments.component = arguments.path & "." & arguments.fileName;
+		arguments.component = ListChangeDelims(arguments.path, ".", "/") & "." & ListChangeDelims(arguments.fileName, ".", "/");
+		arguments.argumentCollection = Duplicate(arguments);
 		StructDelete(arguments, "path");
 		StructDelete(arguments, "fileName");
 	</cfscript>
@@ -396,37 +384,64 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="$controllerFileName" returntype="string" access="public" output="false">
+<cffunction name="$objectFileName" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
+	<cfargument name="objectPath" type="string" required="true">
+	<cfargument name="type" type="string" required="true" hint="Can be either `controller` or `model`." />
 	<cfscript>
 		var loc = {};
-		loc.controllerFileExists = false;
-		if (!ListFindNoCase(application.wheels.existingControllerFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingControllerFiles, arguments.name))
+		loc.objectFileExists = false;
+		
+		// if the name contains the delimiter let's capitalize the last element and append it back to the list
+		if (ListLen(arguments.name, "/") gt 1)
+			arguments.name = ListInsertAt(arguments.name, ListLen(arguments.name, "/"), capitalize(ListLast(arguments.name, "/")), "/");
+		else
+			arguments.name = capitalize(arguments.name);
+		
+		// we are going to store the full controller path in the existing / non-existing lists so we can have controllers in multiple places
+		loc.fullObjectPath = arguments.objectPath & "/" & arguments.name;
+		
+		if (!ListFindNoCase(application.wheels.existingObjectFiles, loc.fullObjectPath) && !ListFindNoCase(application.wheels.nonExistingObjectFiles, loc.fullObjectPath))
 		{
-			if (FileExists(ExpandPath("#application.wheels.controllerPath#/#capitalize(arguments.name)#.cfc")))
-				loc.controllerFileExists = true;
+			if (FileExists(ExpandPath("#loc.fullObjectPath#.cfc")))
+				loc.objectFileExists = true;
 			if (application.wheels.cacheFileChecking)
 			{
-				if (loc.controllerFileExists)
-					application.wheels.existingControllerFiles = ListAppend(application.wheels.existingControllerFiles, arguments.name);
+				if (loc.objectFileExists)
+					application.wheels.existingObjectFiles = ListAppend(application.wheels.existingObjectFiles, loc.fullObjectPath);
 				else
-					application.wheels.nonExistingControllerFiles = ListAppend(application.wheels.nonExistingControllerFiles, arguments.name);
+					application.wheels.nonExistingObjectFiles = ListAppend(application.wheels.nonExistingObjectFiles, loc.fullObjectPath);
 			}
 		}
-		if (ListFindNoCase(application.wheels.existingControllerFiles, arguments.name) || loc.controllerFileExists)
-			loc.returnValue = capitalize(arguments.name);
+		if (ListFindNoCase(application.wheels.existingObjectFiles, loc.fullObjectPath) || loc.objectFileExists)
+			loc.returnValue = arguments.name;
 		else
-			loc.returnValue = "Controller";
+			loc.returnValue = capitalize(arguments.type);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$createControllerClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
+	<cfargument name="controllerPaths" type="string" required="false" default="#application.wheels.controllerPath#">
+	<cfargument name="type" type="string" required="false" default="controller" />
 	<cfscript>
 		var loc = {};
-		application.wheels.controllers[arguments.name] = $createObjectFromRoot(path=application.wheels.controllerPath, fileName=$controllerFileName(arguments.name), method="$initControllerClass", name=arguments.name);
-		loc.returnValue = application.wheels.controllers[arguments.name];
+		
+		// let's allow for multiple controller paths so that plugins can contain controllers
+		// the last path is the one we will instantiate the base controller on if the controller is not found on any of the paths
+		for (loc.i = 1; loc.i lte ListLen(arguments.controllerPaths); loc.i++)
+		{
+			loc.controllerPath = ListGetAt(arguments.controllerPaths, loc.i);
+			loc.fileName = $objectFileName(name=arguments.name, objectPath=loc.controllerPath, type=arguments.type);
+		
+			if (loc.fileName != "Controller" || loc.i == ListLen(arguments.controllerPaths))
+			{
+				application.wheels.controllers[arguments.name] = $createObjectFromRoot(path=loc.controllerPath, fileName=loc.fileName, method="$initControllerClass", name=arguments.name);
+				loc.returnValue = application.wheels.controllers[arguments.name];
+				break;
+			}
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -552,15 +567,24 @@
 
 <cffunction name="$createModelClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
+	<cfargument name="modelPaths" type="string" required="false" default="#application.wheels.modelPath#">
+	<cfargument name="type" type="string" required="false" default="model" />
 	<cfscript>
 		var loc = {};
-		loc.fileName = capitalize(arguments.name);
-		if (FileExists(ExpandPath("#application.wheels.modelPath#/#loc.fileName#.cfc")))
-			application.wheels.existingModelFiles = ListAppend(application.wheels.existingModelFiles, arguments.name);
-		else
-			loc.fileName = "Model";
-		application.wheels.models[arguments.name] = $createObjectFromRoot(path=application.wheels.modelComponentPath, fileName=loc.fileName, method="$initModelClass", name=arguments.name);
-		loc.returnValue = application.wheels.models[arguments.name];
+		// let's allow for multiple controller paths so that plugins can contain controllers
+		// the last path is the one we will instantiate the base controller on if the controller is not found on any of the paths
+		for (loc.i = 1; loc.i lte ListLen(arguments.modelPaths); loc.i++)
+		{
+			loc.modelPath = ListGetAt(arguments.modelPaths, loc.i);
+			loc.fileName = $objectFileName(name=arguments.name, objectPath=loc.modelPath, type=arguments.type);
+		
+			if (loc.fileName != arguments.type || loc.i == ListLen(arguments.modelPaths))
+			{
+				application.wheels.models[arguments.name] = $createObjectFromRoot(path=loc.modelPath, fileName=loc.fileName, method="$initModelClass", name=arguments.name);
+				loc.returnValue = application.wheels.models[arguments.name];
+				break;
+			}
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

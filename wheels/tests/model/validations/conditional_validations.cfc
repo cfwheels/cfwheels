@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="setup">
-        <cfset loc.user = createobject("component", "wheelsMapping.model").$initModelClass("Users")>
+        <cfset loc.user = createobject("component", "wheelsMapping.model").$initModelClass(name="Users", path=get("modelPath"))>
         <cfset loc.user.username = "TheLongestNameInTheWorld">
         <cfset loc.args = {}>
         <cfset loc.args.property = "username">
