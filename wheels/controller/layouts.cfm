@@ -30,7 +30,7 @@
 	'
 	categories="controller-request,rendering" chapters="rendering-layout">
 	<cfargument name="template" required="true" type="string" hint="the name of the layout template or method name you want to use">
-	<cfargument name="ajax" required="false" type="string" hint="the name of the layout template you want to use for ajax requests">
+	<cfargument name="ajax" required="false" type="string" default="" hint="the name of the layout template you want to use for ajax requests">
 	<cfargument name="except" type="string" required="false" hint="a list of actions that SHOULD NOT get the layout">
 	<cfargument name="only" type="string" required="false" hint="a list of action that SHOULD ONLY get the layout">
 	<cfargument name="useDefault" type="boolean" required="false" default="true" hint="when specifying conditions or a method, should we use the default layout if not satisfied">
@@ -40,7 +40,6 @@
 		{
 			StructDelete(arguments, "except", false);
 			StructDelete(arguments, "only", false);
-			StructDelete(arguments, "ajax", false);
 		}
 		if (StructKeyExists(arguments, "except"))
 			arguments.except = $listClean(arguments.except);
@@ -55,22 +54,22 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = true;
+		loc.layoutType = "template";
+		if (isAjax() && Len(variables.$class.layout.ajax))
+			loc.layoutType = "ajax";
 		if (!StructIsEmpty(variables.$class.layout))
 		{
 			loc.returnValue = variables.$class.layout.useDefault;
-			if ((StructKeyExists(this, variables.$class.layout.template) && IsCustomFunction(this[variables.$class.layout.template])) || IsCustomFunction(variables.$class.layout.template))
+			if ((StructKeyExists(this, variables.$class.layout[loc.layoutType]) && IsCustomFunction(this[variables.$class.layout[loc.layoutType]])) || IsCustomFunction(variables.$class.layout[loc.layoutType]))
 			{
 				// if the developer doesn't return anything from the method or if they return a blank string it should use the default layout still
-				loc.temp = $invoke(method=variables.$class.layout.template, action=arguments.$action);
+				loc.temp = $invoke(method=variables.$class.layout[loc.layoutType], action=arguments.$action);
 				if (StructKeyExists(loc, "temp"))
 					loc.returnValue = loc.temp;
 			}
 			else if ((!StructKeyExists(variables.$class.layout, "except") || !ListFindNoCase(variables.$class.layout.except, arguments.$action)) && (!StructKeyExists(variables.$class.layout, "only") || ListFindNoCase(variables.$class.layout.only, arguments.$action)))
 			{
-				if (isAjax() && StructKeyExists(variables.$class.layout, "ajax"))
-					loc.returnValue = variables.$class.layout.ajax;
-				else
-					loc.returnValue = variables.$class.layout.template;
+				loc.returnValue = variables.$class.layout[loc.layoutType];
 			}
 		}
 		return loc.returnValue;
