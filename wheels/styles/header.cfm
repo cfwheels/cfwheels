@@ -77,12 +77,12 @@
 		text-decoration: none;
 	}
 
-	#content ul
+	#content ul, #content ol
 	{
 		margin: 10px 0 15px 25px;
 	}
 
-	#content ul li
+	#content ul li, #content ol li
 	{
 		padding-bottom: 0;
 	}
