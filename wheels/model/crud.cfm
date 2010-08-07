@@ -794,6 +794,9 @@
 	<cfargument name="validate" type="boolean" required="true" />
 	<cfargument name="callbacks" type="boolean" required="true" />
 	<cfscript>
+		// make sure all of our associations are set properly before saving
+		$setAssociations();
+	
 		if ($callback("beforeValidation", arguments.callbacks))
 		{
 			if (isNew())

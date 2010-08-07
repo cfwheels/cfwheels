@@ -33,7 +33,24 @@
 </cffunction>
 
 <cffunction name="$validateAssociations" returntype="boolean" access="public" output="false">
-	<cfset $traverseAssociations(method="valid") />
+	<cfscript>
+		var loc = {};
+		loc.associations = variables.wheels.class.associations;
+		for (loc.association in loc.associations)
+		{
+			if (loc.associations[loc.association].nested.allow && loc.associations[loc.association].nested.autoSave && StructKeyExists(this, loc.association))
+			{
+				loc.array = this[loc.association];
+				
+				if (IsObject(this[loc.association]))
+					loc.array = [ this[loc.association] ];
+			
+				if (IsArray(loc.array))
+					for (loc.i = 1; loc.i lte ArrayLen(loc.array); loc.i++)
+						$invoke(componentReference=loc.array[loc.i], method="valid");
+			}
+		}
+	</cfscript>
 	<cfreturn true />
 </cffunction>
 
@@ -42,11 +59,6 @@
 	<cfargument name="reload" type="boolean" required="true" />
 	<cfargument name="validate" type="boolean" required="true" />
 	<cfargument name="callbacks" type="boolean" required="true" />
-	<cfreturn $traverseAssociations(method="save", argumentCollection=arguments) />
-</cffunction>
-
-<cffunction name="$traverseAssociations" returntype="boolean" access="public" output="false">
-	<cfargument name="method" type="string" required="true" />
 	<cfscript>
 		var loc = {};
 		loc.returnValue = true;
@@ -63,19 +75,14 @@
 				if (IsArray(loc.array))
 				{
 					// get our expanded information for this association
-					if (arguments.method == "save")
-					{
-						loc.info = $expandedAssociations(include=loc.association);
-						loc.info = loc.info[1];
-					}
+					loc.info = $expandedAssociations(include=loc.association);
+					loc.info = loc.info[1];
 					
-					loc.iEnd = ArrayLen(loc.array);
-					for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+					for (loc.i = 1; loc.i lte ArrayLen(loc.array); loc.i++)
 					{
-						if (arguments.method == "save")
-							if (ListFindNoCase("hasMany,hasOne", loc.associations[loc.association].type))
-								$setForeignKeyValues(missingMethodArguments=loc.array[loc.i], keys=loc.info.foreignKey);
-						loc.saveResult = $invoke(componentReference=loc.array[loc.i], argumentCollection=arguments);
+						if (ListFindNoCase("hasMany,hasOne", loc.associations[loc.association].type))
+							$setForeignKeyValues(missingMethodArguments=loc.array[loc.i], keys=loc.info.foreignKey);
+						loc.saveResult = $invoke(componentReference=loc.array[loc.i], method="save", argumentCollection=arguments);
 						if (loc.returnValue) // don't change the return value if we have already received a false
 							loc.returnValue = loc.saveResult;
 					}
@@ -86,12 +93,33 @@
 	<cfreturn loc.returnValue />
 </cffunction>
 
+<cffunction name="$setAssociations" returntype="boolean" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.associations = variables.wheels.class.associations;
+		for (loc.item in loc.associations)
+		{
+			loc.association = loc.associations[loc.item];
+			if (loc.association.nested.allow && loc.association.nested.autoSave && StructKeyExists(this, loc.item))
+			{
+				if (ListFindNoCase("belongsTo,hasOne", loc.association.type) && IsStruct(this[loc.item]))
+					$setOneToOneAssociationProperty(property=loc.item, value=this[loc.item], association=loc.association, delete=true);
+				else if (loc.association.type == "hasMany" && IsArray(this[loc.item]) && ArrayLen(this[loc.item]))
+					$setCollectionAssociationProperty(property=loc.item, value=this[loc.item], association=loc.association, delete=true);
+			}
+		}
+	</cfscript>
+	<cfreturn true />
+</cffunction>
+
 <cffunction name="$setOneToOneAssociationProperty" returntype="void" access="public" output="false">
 	<cfargument name="property" type="string" required="true" />
 	<cfargument name="value" type="struct" required="true" />
 	<cfargument name="association" type="struct" required="true" />
+	<cfargument name="delete" type="boolean" required="false" default="false" />
 	<cfscript>
-		this[arguments.property] = $getAssociationObject(argumentCollection=arguments);
+		if (!StructKeyExists(this, arguments.property) || !IsObject(this[arguments.property]) || StructKeyExists(this[arguments.property], "_delete"))
+			this[arguments.property] = $getAssociationObject(argumentCollection=arguments);
 	
 		if (IsObject(this[arguments.property]))
 			this[arguments.property].setProperties(properties=arguments.value);
@@ -105,6 +133,7 @@
 	<cfargument name="property" type="string" required="true" />
 	<cfargument name="value" type="any" required="true" />
 	<cfargument name="association" type="struct" required="true" />
+	<cfargument name="delete" type="boolean" required="false" default="false" />
 	<cfscript>
 		var loc = {};
 		loc.model = model(arguments.association.modelName);
@@ -119,7 +148,7 @@
 				// check to see if the id is a tickcount, if so the object is new
 				if (IsNumeric(loc.item) && Ceiling(GetTickCount() / 900000000) == Ceiling(loc.item / 900000000))
 				{
-					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item], association=arguments.association));	
+					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item], association=arguments.association, delete=arguments.delete));	
 					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.item]);
 				}
 				else
@@ -130,19 +159,18 @@
 					loc.iEnd = ListLen(loc.keys);
 					for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 						arguments.value[loc.item][ListGetAt(loc.keys, loc.i)] = loc.itemArray[loc.i];
-					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item], association=arguments.association));	
+					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item], association=arguments.association, delete=arguments.delete));	
 					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.item]);
 				}
 			}
 		}
-		else if (IsArray(arguments.value)) // we also accept arrays even though it is not how wheels normally works, this is for more advanced form that must use oridinal positioning
+		else if (IsArray(arguments.value))
 		{
-			loc.iEnd = ArrayLen(arguments.value);
-			for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+			for (loc.i = 1; loc.i lte ArrayLen(arguments.value); loc.i++)
 			{
 				// only create the object if the developer has not already loaded on for this position
 				if (loc.i gt ArrayLen(this[arguments.property]) || !IsObject(this[arguments.property][loc.i]))
-					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association));
+					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete));
 				$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i], position=loc.i);
 			}
 		}
@@ -184,6 +212,7 @@
 	<cfargument name="property" type="string" required="true" />
 	<cfargument name="value" type="struct" required="true" />
 	<cfargument name="association" type="struct" required="true" />
+	<cfargument name="delete" type="boolean" required="true" />
 	<cfscript>
 		var loc = {};
 		loc.method = "";
@@ -209,7 +238,7 @@
 				loc.method = "new";
 				StructDelete(loc.arguments, "key", false);
 			}
-			else if (Len(loc.arguments.key) && loc.delete && arguments.association.nested.delete)
+			else if (Len(loc.arguments.key) && loc.delete && arguments.association.nested.delete && arguments.delete)
 			{
 				loc.method = "deleteByKey";
 			}

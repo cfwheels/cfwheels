@@ -3,14 +3,15 @@
 	<cffunction name="setup">
 		<cfset loc.author = model("author")>
 		<cfset loc.profile = model("profile")>
-		<cfset loc.testAuthor = $setTestObjects()>
+		<cfset $setTestObjects()>
 		<cfset loc.testParamsStruct = $setTestParamsStruct()>
 	</cffunction>
 	
 	<cffunction name="test_add_entire_data_set_via_create_and_struct" hint="Simulates adding an `author` and its child `profile` through a single structure passed into `author.create()`, much like what's normally done with the `params` struct.">
 		<cftransaction>
 			<!--- Should return `true` on successful create --->
-			<cfset assert("loc.author.create(loc.testParamsStruct.author)")>
+			<cfset loc.author = loc.author.create(loc.testParamsStruct.author) />
+			<cfset assert('IsObject(loc.author)')>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<!--- Test whether profile was transformed into an object --->
@@ -20,7 +21,7 @@
 	</cffunction>
 	
 	<cffunction name="test_add_entire_data_set_via_new_and_struct" hint="Simulates adding an `author` and its child `profile` through a single structure passed into `author.new()` and saved with `author.save()`, much like what's normally done with the `params` struct.">
-		<cfset loc.author.new(loc.testParamsStruct.author)>
+		<cfset loc.author = loc.author.new(loc.testParamsStruct.author)>
 		<cftransaction>
 			<!--- Should return `true` on successful create --->
 			<cfset assert("loc.author.save()")>
@@ -83,10 +84,9 @@
 	</cffunction>
 
 	<cffunction name="$setTestObjects" access="private" hint="Sets up test `author` and `profile` objects.">
-		<cfset loc.a = loc.author.findOneByLastName(value="Peters", include="profile")>
-		<cfset loc.bioText = "Loves learning how to write tests.">
-		<cfset loc.a.profile = model("profile").new(dateOfBirth="10/02/1980 18:00:00", bio=loc.bioText)>
-		<cfreturn loc.a>
+		<cfset loc.testAuthor = loc.author.findOneByLastName(value="Peters", include="profile")>
+		<cfset loc.bioText = "Loves learning how to write tests." />
+		<cfset loc.testAuthor.profile = model("profile").new(dateOfBirth="10/02/1980 18:00:00", bio=loc.bioText)>
 	</cffunction>
 	
 	<cffunction name="$setTestParamsStruct" access="private" hint="Sets up test `author` struct reminiscent of what would be passed through a form. The `author` represented here also includes a nested child `profile` struct.">
