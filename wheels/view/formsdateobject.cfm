@@ -9,6 +9,8 @@
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textField,submitTag,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="false" default="" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="false" default="" hint="See documentation for @textField.">
+	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
+	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
 	<cfargument name="order" type="string" required="false" hint="Use to change the order of or exclude date select tags.">
 	<cfargument name="separator" type="string" required="false" hint="Use to change the character that is displayed between the date select tags.">
 	<cfargument name="startYear" type="numeric" required="false" hint="First year in select list.">
@@ -25,6 +27,7 @@
 	<cfargument name="combine" type="boolean" required="false" hint="Set to `false` to not combine the select parts into a single DateTime object.">
 	<cfscript>
 		$args(name="dateSelect", args=arguments);
+		arguments.objectName = $objectName(argumentCollection=arguments);
 		arguments.$functionName = "dateSelect";
 	</cfscript>
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
@@ -41,6 +44,8 @@
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect">
 	<cfargument name="objectName" type="any" required="false" default="" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="false" default="" hint="See documentation for @textField.">
+	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
+	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
 	<cfargument name="order" type="string" required="false" hint="Use to change the order of or exclude time select tags.">
 	<cfargument name="separator" type="string" required="false" hint="Use to change the character that is displayed between the time select tags.">
 	<cfargument name="minuteStep" type="numeric" required="false" hint="Pass in `10` to only show minute 10, 20,30 etc.">
@@ -55,6 +60,7 @@
 	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
 	<cfscript>
 		$args(name="timeSelect", args=arguments);
+		arguments.objectName = $objectName(argumentCollection=arguments);
 		arguments.$functionName = "timeSelect";
 	</cfscript>
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
@@ -71,6 +77,8 @@
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateSelect,timeSelect">
 	<cfargument name="objectName" type="string" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
+	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
+	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
 	<cfargument name="dateOrder" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="dateSeparator" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="startYear" type="numeric" required="false" hint="See documentation for @dateSelect.">
@@ -91,6 +99,7 @@
 	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
 	<cfscript>
 		$args(name="dateTimeSelect", reserved="name", args=arguments);
+		arguments.objectName = $objectName(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		arguments.$functionName = "dateTimeSelect";
 	</cfscript>

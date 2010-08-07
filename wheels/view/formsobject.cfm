@@ -9,6 +9,8 @@
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="The variable name of the object to build the form control for.">
 	<cfargument name="property" type="string" required="true" hint="The name of the property to use in the form control.">
+	<cfargument name="association" type="string" required="false" hint="The name of the association that the property is located on. Used for building nested forms that work with nested properties. If you are building a form with deep nesting, simply pass in a list to the nested object and wheels will figure it out.">
+	<cfargument name="position" type="string" required="false" hint="The position used when referencing a hasMany relationship in the `association` argument. Used for building nested forms that work with nested properties. If you are building a form with deep nestings, simply pass in a list of positions and wheels will figure it out.">
 	<cfargument name="label" type="string" required="false" hint="The label text to use in the form control.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="Whether to place the label before, after, or wrapped around the form control.">
 	<cfargument name="prepend" type="string" required="false" hint="String to prepend to the form control. Useful to wrap the form control around HTML tags.">
@@ -19,6 +21,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="textField", reserved="type,name,value", args=arguments);
+		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
@@ -29,7 +32,7 @@
 		if (StructKeyExists(loc, "maxlength"))
 			arguments.maxlength = loc.maxlength;
 		arguments.value = $formValue(argumentCollection=arguments);
-		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
+		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -45,6 +48,8 @@
 	categories="view-helper,forms-object" chapter="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
+	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
+	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
 	<cfargument name="label" type="string" required="false" hint="See documentation for @textField">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
@@ -55,6 +60,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="passwordField", reserved="type,name,value", args=arguments);
+		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
@@ -65,7 +71,7 @@
 		if (StructKeyExists(loc, "maxlength"))
 			arguments.maxlength = loc.maxlength;
 		arguments.value = $formValue(argumentCollection=arguments);
-		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
+		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -81,9 +87,12 @@
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
+	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
+	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
 	<cfscript>
 		var loc = {};
 		$args(name="hiddenField", reserved="type,name,value", args=arguments);
+		arguments.objectName = $objectName(argumentCollection=arguments);
 		arguments.type = "hidden";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		if (!StructKeyExists(arguments, "id"))
@@ -91,7 +100,7 @@
 		arguments.value = $formValue(argumentCollection=arguments);
 		if (application.wheels.obfuscateUrls && StructKeyExists(request.wheels, "currentFormMethod") && request.wheels.currentFormMethod == "get")
 			arguments.value = obfuscateParam(arguments.value);
-		loc.returnValue = $tag(name="input", close=true, skip="objectName,property", attributes=arguments);
+		loc.returnValue = $tag(name="input", close=true, skip="objectName,property,association,position", attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -107,6 +116,8 @@
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
+	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
+	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
 	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
@@ -117,13 +128,14 @@
 	<cfscript>
 		var loc = {};
 		$args(name="fileField", reserved="type,name", args=arguments);
+		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.type = "file";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
-		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
+		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -139,6 +151,8 @@
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
+	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
+	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
 	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
@@ -149,13 +163,14 @@
 	<cfscript>
 		var loc = {};
 		$args(name="textArea", reserved="name", args=arguments);
+		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		loc.content = $formValue(argumentCollection=arguments);
-		loc.returnValue = loc.before & $element(name="textarea", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
+		loc.returnValue = loc.before & $element(name="textarea", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,association,position", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -174,6 +189,8 @@
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textField,submitTag,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
+	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
+	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
 	<cfargument name="tagValue" type="string" required="true" hint="The value of the radio button when `selected`.">
 	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
@@ -185,6 +202,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="radioButton", reserved="type,name,value,checked", args=arguments);
+		arguments.objectName = $objectName(argumentCollection=arguments);
 		loc.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.tagValue, "[^a-z0-9- ]", "", "all"), " ", "-", "all"));
 		if (!StructKeyExists(arguments, "id"))
 		{
@@ -199,7 +217,7 @@
 		arguments.value = arguments.tagValue;
 		if (arguments.tagValue == $formValue(argumentCollection=arguments))
 			arguments.checked = "checked";
-		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments) & loc.after;
+		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,tagValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,association,position", skipStartingWith="label", attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -215,6 +233,8 @@
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
+	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
+	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
 	<cfargument name="checkedValue" type="string" required="false" hint="The value of the check box when it's on the `checked` state.">
 	<cfargument name="uncheckedValue" type="string" required="false" hint="The value of the check box when it's on the `unchecked` state.">
 	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
@@ -227,6 +247,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="checkBox", reserved="type,name,value,checked", args=arguments);
+		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
@@ -237,7 +258,7 @@
 		loc.value = $formValue(argumentCollection=arguments);
 		if (loc.value == arguments.value || IsNumeric(loc.value) && loc.value == 1 || !IsNumeric(loc.value) && IsBoolean(loc.value) && loc.value)
 			arguments.checked = "checked";
-		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", attributes=arguments);
+		loc.returnValue = loc.before & $tag(name="input", close=true, skip="objectName,property,checkedValue,uncheckedValue,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,association,position", skipStartingWith="label", attributes=arguments);
 		if (Len(arguments.uncheckedValue))
 		{
 			loc.hiddenAttributes = {};
@@ -266,6 +287,8 @@
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
 	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
+	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
+	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
 	<cfargument name="options" type="any" required="true" hint="A collection to populate the select form control with. Can be a query recordset or an array of objects.">
 	<cfargument name="includeBlank" type="any" required="false" hint="Whether to include a blank option in the select form control. Pass `true` to include a blank line or a string that should represent what display text should appear for the empty value (for example, ""- Select One -"").">
 	<cfargument name="valueField" type="string" required="false" hint="The column or property to use for the value of each list element. Used only when a query or array of objects has been supplied in the `options` argument.">
@@ -280,6 +303,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="select", reserved="name", args=arguments);
+		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
@@ -302,7 +326,7 @@
 			loc.blankOptionAttributes = {value=""};
 			loc.content = $element(name="option", content=loc.blankOptionText, attributes=loc.blankOptionAttributes) & loc.content;
 		}
-		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,options,includeBlank,valueField,textField,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
+		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,options,includeBlank,valueField,textField,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,association,position", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

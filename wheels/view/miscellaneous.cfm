@@ -275,6 +275,37 @@
 	<cfreturn returnValue>
 </cffunction>
 
+<cffunction name="$objectName" returntype="any" access="public" output="false">
+	<cfargument name="objectName" type="any" required="true">
+	<cfargument name="association" type="string" required="false" default="">
+	<cfargument name="position" type="string" required="false" default="">
+	<cfscript>
+		var loc = {};
+		loc.pluralAssociationCount = 0;
+		// combine our arguments
+		$combineArguments(args=arguments, combine="positions,position");
+		$combineArguments(args=arguments, combine="associations,association");
+		// only try to create the object name if we have a simple value
+		if (IsSimpleValue(arguments.objectName) && ListLen(arguments.associations))
+		{
+			for (loc.i = 1; loc.i lte ListLen(arguments.associations); loc.i++)
+			{
+				loc.association = ListGetAt(arguments.associations, loc.i);
+				arguments.objectName = arguments.objectName & "['" & loc.association & "']";
+				// is this assocication plural?
+				if (loc.association != singularize(loc.association))
+				{
+					loc.pluralAssociationCount++;
+					if (loc.pluralAssociationCount gt ListLen(arguments.positions) && application.wheels.showErrorInformation)
+						$throw(type="Wheels.InvalidArgument", message="You passed the hasMany association of `#loc.association#` but did not provide a corresponding position.");
+					arguments.objectName = arguments.objectName & "[" & ListGetAt(arguments.positions, loc.pluralAssociationCount) & "]";
+				}
+			}
+		}
+	</cfscript>
+	<cfreturn arguments.objectName>
+</cffunction>
+
 <cffunction name="$tagId" returntype="string" access="public" output="false">
 	<cfargument name="objectName" type="any" required="true">
 	<cfargument name="property" type="string" required="true">

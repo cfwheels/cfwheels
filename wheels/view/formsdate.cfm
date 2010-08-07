@@ -176,7 +176,7 @@
 				loc.content = loc.content & $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=loc.args);
 			}
 		}
-		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
+		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,association,position", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
