@@ -156,7 +156,7 @@
 	<cfargument name="property" type="string" required="true" />
 	<cfscript>
 		var hasProperty = false;
-		if (StructKeyExists(this, arguments.property))
+		if (StructKeyExists(this, arguments.property) && !IsCustomFunction(this[arguments.property]))
 			hasProperty = true;
 	</cfscript>
 	<cfreturn hasProperty />
@@ -174,7 +174,7 @@
 	<cfargument name="property" type="string" required="true" />
 	<cfscript>
 		var isPresent = false;
-		if (StructKeyExists(this, arguments.property) && Len(this[arguments.property]))
+		if (StructKeyExists(this, arguments.property) && !IsCustomFunction(this[arguments.property]) && IsSimpleValue(this[arguments.property]) && Len(this[arguments.property]))
 			isPresent = true;
 	</cfscript>
 	<cfreturn isPresent />
