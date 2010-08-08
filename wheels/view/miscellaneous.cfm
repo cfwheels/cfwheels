@@ -281,7 +281,8 @@
 	<cfargument name="position" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
-		loc.pluralAssociationCount = 0;
+		loc.currentModelObject = false;
+		loc.hasManyAssociationCount = 0;
 		// combine our arguments
 		$combineArguments(args=arguments, combine="positions,position");
 		$combineArguments(args=arguments, combine="associations,association");
@@ -291,14 +292,15 @@
 			for (loc.i = 1; loc.i lte ListLen(arguments.associations); loc.i++)
 			{
 				loc.association = ListGetAt(arguments.associations, loc.i);
+				loc.currentModelObject = $getObject(arguments.objectName);
 				arguments.objectName = arguments.objectName & "['" & loc.association & "']";
-				// is this assocication plural?
-				if (loc.association != singularize(loc.association))
+				// is this assocication a hasMany?
+				if (loc.currentModelObject.$expandedAssociations(include=loc.association)[1].type == "hasMany")
 				{
-					loc.pluralAssociationCount++;
-					if (loc.pluralAssociationCount gt ListLen(arguments.positions) && application.wheels.showErrorInformation)
+					loc.hasManyAssociationCount++;
+					if (loc.hasManyAssociationCount gt ListLen(arguments.positions) && application.wheels.showErrorInformation)
 						$throw(type="Wheels.InvalidArgument", message="You passed the hasMany association of `#loc.association#` but did not provide a corresponding position.");
-					arguments.objectName = arguments.objectName & "[" & ListGetAt(arguments.positions, loc.pluralAssociationCount) & "]";
+					arguments.objectName = arguments.objectName & "[" & ListGetAt(arguments.positions, loc.hasManyAssociationCount) & "]";
 				}
 			}
 		}

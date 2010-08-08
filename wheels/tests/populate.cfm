@@ -122,6 +122,20 @@
 	</cfloop>
 </cfloop>
 
+<cfset loc.posts = model("post").findAll()>
+
+<cfloop query="loc.posts">
+	<cfloop from="1" to="3" index="loc.i">
+		<cfset loc.comment = model("comment").create(
+			postid=loc.posts.id
+			,body="This is comment #loc.i#"
+			,name="some commenter #loc.i#"
+			, url="http://#loc.i#.somecommenter.com"
+			, email="#loc.i#@#loc.i#.com"
+		)>
+	</cfloop>
+</cfloop>
+
 <!--- cities and shops --->
 <cfloop from="1" to="5" index="loc.i">
 	<cfset model("city").create(
