@@ -246,7 +246,9 @@
 				{
 					if (arguments.attributes[loc.key])
 						loc.returnValue = loc.returnValue & " " & LCase(loc.key) & "=""" & LCase(loc.key) & """";
-				} else {
+				}
+				else
+				{
 					loc.returnValue = loc.returnValue & " " & LCase(loc.key) & "=""" & arguments.attributes[loc.key] & """";	
 				}
 		}
@@ -326,8 +328,6 @@
 				loc.returnValue = REReplace(REReplace(loc.returnValue & arguments.property, "[,\[]", "-", "all"), "[""'\]]", "", "all");
 			else
 				loc.returnValue = REReplace(REReplace(loc.returnValue & "-" & arguments.property, "[,\[]", "-", "all"), "[""'\]]", "", "all");
-			if (Find("--", loc.returnValue)) // we have a new object and we don't want to repeat ids
-				loc.returnValue = Replace(loc.returnValue, "--", "-new-" & $getNewObjectCount(loc.returnValue) & "-", "all");
 		}
 		else
 		{
@@ -415,33 +415,9 @@
 		loc.returnValue = "";
 		
 		if (Find(".", arguments.objectName) or Find("[", arguments.objectName)) // we can't directly invoke objects in structure or arrays of objects so we must evaluate
-		{
-			if (ReFind("\[\]", arguments.objectName)) // we have an array object without a postion so create a new object to return
-			{
-				loc.array = ListToArray(ReplaceList(arguments.objectName, "],'", ""), "[", false);
-				loc.returnValue = $invoke(componentReference=model(singularize(loc.array[ArrayLen(loc.array)])), method="new");
-			}
-			else
-			{
-				loc.returnValue = Evaluate(arguments.objectName);
-			}
-		}
+			loc.returnValue = Evaluate(arguments.objectName);
 		else
-		{
 			loc.returnValue = variables[arguments.objectName];
-		}
 	</cfscript>
 	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="$getNewObjectCount" returntype="numeric" access="public" output="false">
-	<cfargument name="id" type="string" required="true" />
-	<cfscript>
-		if (!StructKeyExists(request.wheels, "counts"))
-			request.wheels.counts = {};
-		if (!StructKeyExists(request.wheels.counts, arguments.id))
-			request.wheels.counts[arguments.id] = 0;
-		request.wheels.counts[arguments.id]++;
-	</cfscript>
-	<cfreturn request.wheels.counts[arguments.id] />
 </cffunction>
