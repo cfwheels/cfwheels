@@ -43,7 +43,7 @@
 		<cfset loc.result = pluralize("statusUpdate")>
 		<cfset assert("NOT Compare(loc.result, 'statusUpdates')")>
 	</cffunction>
-	
+
 	<cffunction name="test_pluralize_issue_450">
 		<cfset loc.result = pluralize("statuscode")>
 		<cfset assert("NOT Compare(loc.result, 'statuscodes')")>
@@ -93,5 +93,12 @@
 		<cfset loc.result = humanize("URLVariable")>
 		<cfset assert("NOT Compare(loc.result, 'URL Variable')")>
 	</cffunction>
+
+	<cffunction name="test_singularize_of_address">
+		<cfset loc.result = singularize("address")>
+		<cfset debug('loc.result')>
+		<cfset assert("NOT Compare(loc.result, 'address')")>
+	</cffunction>
+
 
 </cfcomponent>
