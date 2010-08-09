@@ -10,9 +10,10 @@
 		<cfset loc.r = loc.author.primaryKeys()>
 		<cfset assert("loc.e IS loc.r")>
 	</cffunction>
-	
+
 	<cffunction name="test_setprimarykey_appends_keys">
 		<cfset loc.author = model("author")>
+		<cfset loc.author = duplicate(loc.author)>
 		<cfset loc.e = loc.author.$classData().keys>
 		<cfset loc.r = "id">
 		<cfset assert("loc.e IS loc.r")>
