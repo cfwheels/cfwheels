@@ -14,6 +14,8 @@
 		loc.returnValue = Duplicate(arguments.formScope);
 		StructAppend(loc.returnValue, arguments.urlScope, true);
 		
+		// get rid of the fieldnames
+		StructDelete(loc.returnValue, "fieldnames", false);
 
 		// go through the matching route pattern and add URL variables from the route to the struct
 		loc.iEnd = ListLen(arguments.route.pattern, "/");
