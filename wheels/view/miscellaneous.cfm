@@ -296,8 +296,10 @@
 				loc.association = ListGetAt(arguments.associations, loc.i);
 				loc.currentModelObject = $getObject(arguments.objectName);
 				arguments.objectName = arguments.objectName & "['" & loc.association & "']";
+				loc.expanded = loc.currentModelObject.$expandedAssociations(include=loc.association);
+				loc.expanded = loc.expanded[1];
 				// is this assocication a hasMany?
-				if (loc.currentModelObject.$expandedAssociations(include=loc.association)[1].type == "hasMany")
+				if (loc.expanded.type == "hasMany")
 				{
 					loc.hasManyAssociationCount++;
 					if (loc.hasManyAssociationCount gt ListLen(arguments.positions) && application.wheels.showErrorInformation)
@@ -414,10 +416,20 @@
 		var loc = {};
 		loc.returnValue = "";
 		
-		if (Find(".", arguments.objectName) or Find("[", arguments.objectName)) // we can't directly invoke objects in structure or arrays of objects so we must evaluate
-			loc.returnValue = Evaluate(arguments.objectName);
-		else
-			loc.returnValue = variables[arguments.objectName];
+		try
+		{
+			if (Find(".", arguments.objectName) or Find("[", arguments.objectName)) // we can't directly invoke objects in structure or arrays of objects so we must evaluate
+				loc.returnValue = Evaluate(arguments.objectName);
+			else
+				loc.returnValue = variables[arguments.objectName];
+		}
+		catch (Any e)
+		{
+			if (application.wheels.showErrorInformation)
+				$throw(type="Wheels.ObjectNotFound", message="Wheels tried to find the model object `#arguments.objectName#` for the form helper, but it does not exist.");
+			else
+				$throw(argumentCollection=e);
+		}	
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
