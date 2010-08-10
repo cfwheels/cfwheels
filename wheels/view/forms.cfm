@@ -330,18 +330,15 @@
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="label" type="string" required="true">
 	<cfscript>
-		var loc = {};
-		if (arguments.label eq false)
+		var object = false;
+		if (Compare("false", arguments.label) == 0)
 			return "";
-		if (arguments.label eq true and !IsStruct(arguments.objectName))
+		if (arguments.label == "useDefaultLabel" && !IsStruct(arguments.objectName))
 		{
-			if (IsObject(arguments.objectName))
-				loc.object = arguments.objectName;
-			else
-				loc.object = $getObject(arguments.objectName);
-			if (IsObject(loc.object))
-				return loc.object.$label(arguments.property);
+			object = $getObject(arguments.objectName);
+			if (IsObject(object))
+				return object.$label(arguments.property);
 		}
-		return arguments.label;
 	</cfscript>
+	<cfreturn arguments.label />
 </cffunction>
