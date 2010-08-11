@@ -168,10 +168,21 @@
 		{
 			for (loc.i = 1; loc.i lte ArrayLen(arguments.value); loc.i++)
 			{
-				// only create the object if the developer has not already loaded on for this position
-				if (loc.i gt ArrayLen(this[arguments.property]) || !IsObject(this[arguments.property][loc.i]))
+				if (IsObject(arguments.value[loc.i]) && ArrayLen(this[arguments.property]) gte loc.i && IsObject(this[arguments.property][loc.i]) && this[arguments.property][loc.i].compareTo(arguments.value[loc.i]))
+				{
+					this[arguments.property][loc.i] = $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete);
+					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i], position=loc.i);
+				}
+				else if (IsStruct(arguments.value[loc.i]) && ArrayLen(this[arguments.property]) gte loc.i && IsObject(this[arguments.property][loc.i]))
+				{
+					this[arguments.property][loc.i] = $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete);
+					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i], position=loc.i);
+				}
+				else
+				{
 					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete));
-				$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i], position=loc.i);
+					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i]);
+				}
 			}
 		}
 		// sort the order of the objects in the array if the property is set
@@ -226,8 +237,10 @@
 		{
 			// get our primary keys, if they don't exist, then we create a new object
 			loc.arguments.key = $createPrimaryKeyList(params=arguments.value, keys=loc.model.primaryKey());
-
-			if (Len(loc.arguments.key))
+			
+			if (IsObject(arguments.value))
+				loc.object = arguments.value;
+			else if (Len(loc.arguments.key))
 				loc.object = loc.model.findByKey(argumentCollection=loc.arguments);
 		
 			if (StructKeyExists(arguments.value, "_delete") && IsBoolean(arguments.value["_delete"]) && arguments.value["_delete"])
@@ -235,16 +248,14 @@
 			
 			if (!IsObject(loc.object) && !loc.delete)
 			{
-				loc.method = "new";
 				StructDelete(loc.arguments, "key", false);
+				return $invoke(componentReference=loc.model, method="new", argumentCollection=loc.arguments);
 			}
 			else if (Len(loc.arguments.key) && loc.delete && arguments.association.nested.delete && arguments.delete)
 			{
-				loc.method = "deleteByKey";
+				$invoke(componentReference=loc.model, method="deleteByKey", argumentCollection=loc.arguments);
+				return false;
 			}
-			
-			if (Len(loc.method))
-				loc.object = $invoke(componentReference=loc.model, method=loc.method, argumentCollection=loc.arguments);
 		}	
 	</cfscript>
 	<cfreturn loc.object />
