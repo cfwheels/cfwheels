@@ -1,39 +1,43 @@
-<cffunction name="usesLayout" access="public" returntype="void" output="false" hint="Used to specify a controller or action specific layout"
+<cffunction name="usesLayout" access="public" returntype="void" output="false" hint="Used within a controller's `init()` method to specify controller- or action-specific layouts."
 	examples=
 	'
+		<!---
+			Example 1: We want this layout to be used as the default throughout the entire
+			controller, except for the myajax action
+		 --->
 		<cffunction name="init">
-			<!---
-			We want this layout to be used as the default throughout the entire controller
-			except for the index action
-			 --->
-			<cfset usesLayout("myLayout", except="myajax")>
+			<cfset usesLayout(template="myLayout", except="myajax")>
 		</cffunction>
 		
-		<cffunction name="index">
+		<!---
+			Example 2: Use a custom layout for these actions but use the default layout.cfm
+			for the rest
+		--->
+		<cffunction name="init">
+			<cfset usesLayout(template="myLayout", only="termsOfService,shippingPolicy")>
 		</cffunction>
 		
-		<cffunction name="show">
+		<!--- Example 3: Define a custom method to decide which layout to display --->
+		<cffunction name="init">
+			<cfset usesLayout("setLayout")>
 		</cffunction>
 		
-		<cffunction name="create">
-		</cffunction>		
-		
-		<cffunction name="edit">
-		</cffunction>
-		
-		<cffunction name="myajax">
-			<!---
-			since this action is within the exception rule of the 
-			default layout, it will not get a layout
-			 --->
+		<cffunction name="setLayout">
+			<!--- Use holiday theme for the month of December --->
+			<cfif Month(Now()) eq 12>
+				<cfreturn "holiday">
+			<!--- Otherwise, use default layout by returning `true` --->
+			<cfelse>
+				<cfreturn true>
+			</cfif>
 		</cffunction>
 	'
 	categories="controller-request,rendering" chapters="rendering-layout">
-	<cfargument name="template" required="true" type="string" hint="the name of the layout template or method name you want to use">
-	<cfargument name="ajax" required="false" type="string" default="" hint="the name of the layout template you want to use for ajax requests">
-	<cfargument name="except" type="string" required="false" hint="a list of actions that SHOULD NOT get the layout">
-	<cfargument name="only" type="string" required="false" hint="a list of action that SHOULD ONLY get the layout">
-	<cfargument name="useDefault" type="boolean" required="false" default="true" hint="when specifying conditions or a method, should we use the default layout if not satisfied">
+	<cfargument name="template" required="true" type="string" hint="Name of the layout template or method name you want to use">
+	<cfargument name="ajax" required="false" type="string" default="" hint="Name of the layout template you want to use for AJAX requests">
+	<cfargument name="except" type="string" required="false" hint="List of actions that SHOULD NOT get the layout">
+	<cfargument name="only" type="string" required="false" hint="List of action that SHOULD ONLY get the layout">
+	<cfargument name="useDefault" type="boolean" required="false" default="true" hint="When specifying conditions or a method, pass `true` to use the default `layout.cfm` if none of the conditions are met">
 	<cfscript>
 		// when the layout is a method, the method itself should handle all the logic
 		if ((StructKeyExists(this, arguments.template) && IsCustomFunction(this[arguments.template])) || IsCustomFunction(arguments.template))
