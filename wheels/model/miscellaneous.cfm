@@ -90,3 +90,12 @@
 	<cfargument name="property" type="string" required="true">
 	<cfset setPrimaryKey(argumentCollection=arguments)>
 </cffunction>
+
+<cffunction name="compareTo" access="public" output="false" returntype="boolean" hint="Pass in another wheels model object to see if the two objects are the same.">
+	<cfargument name="object" type="component" required="true">
+	<cfreturn Compare(this.$objectId(), arguments.object.$objectId()) eq 0 />
+</cffunction>
+
+<cffunction name="$objectId" access="public" output="false" returntype="string">
+	<cfreturn variables.wheels.tickCountId />
+</cffunction>
