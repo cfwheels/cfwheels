@@ -101,10 +101,9 @@
 					if (!variables.wheels.class.properties[loc.property].nullable and !Len(loc.columns["column_default_value"][loc.i]) and !$validationExists(property=loc.property, validation="validatesPresenceOf"))
 					{
 						validatesPresenceOf(properties=loc.property);
-						loc.defaultValidationsAllowBlank = true;
 					}
-					// always allowblank if a database default has been set
-					if (Len(loc.columns["column_default_value"][loc.i]))
+					// always allowblank if a database default or validatesPresenceOf() has been set
+					if (Len(loc.columns["column_default_value"][loc.i]) or $validationExists(property=loc.property, validation="validatesPresenceOf"))
 						loc.defaultValidationsAllowBlank = true;
 					// set length validations if the developer has not
 					if (variables.wheels.class.properties[loc.property].validationtype eq "string" and !$validationExists(property=loc.property, validation="validatesLengthOf"))
