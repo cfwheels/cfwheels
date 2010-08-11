@@ -1,8 +1,8 @@
 <cffunction name="$serializeQueryToObjects" access="public" output="false" returntype="any">
 	<cfargument name="query" type="query" required="true" />
-	<cfargument name="include" type="string" required="true" />
-	<cfargument name="callbacks" type="string" required="true" />
-	<cfargument name="returnIncluded" type="string" required="true" />
+	<cfargument name="include" type="string" required="false" default="" />
+	<cfargument name="callbacks" type="string" required="false" default="true" />
+	<cfargument name="returnIncluded" type="string" required="false" default="true" />
 	<cfscript>
 		var loc = {};
 		// grab our objects as structs first so we don't waste cpu creating objects we don't need
