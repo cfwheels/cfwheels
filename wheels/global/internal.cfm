@@ -28,28 +28,20 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
-		loc.keyList = ListSort(StructKeyList(arguments), "textnocase", "asc");
-
-		// we need to make sure we are looping through the passed in arguments the same everytime
-		for (loc.i = 1; loc.i lte ListLen(loc.keyList); loc.i++)
+		// TODO: remove this switch and use SerializeJSON()
+		// SerializeJSON() is over 4x faster then cfwddx
+		// however because CF8 has bug where SerializeJSON()
+		// errors when a query contains binary data, we need
+		// to use cfwddx until it is fixed
+		if (StructKeyExists(server, "railo"))
 		{
-			loc.value = arguments[ListGetAt(loc.keyList, loc.i)];
-
-			// for ( in ) can pass around undefined values so we need to check that the variables exists
-			if (StructKeyExists(loc, "value"))
-			{
-				// SerializeJSON crashes if a query contains binary data
-				// a workaround is to use cfwddx
-				if(IsQuery(loc.value))
-					loc.value = $wddx(input=loc.value);
-				
-				if (IsSimpleValue(loc.value))
-					loc.returnValue = loc.returnValue & loc.value;
-				else
-					loc.returnValue = loc.returnValue & ListSort(ReplaceList(SerializeJSON(loc.value), "{,}", ","), "text");
-			}
+			loc.returnValue = ReReplace(SerializeJSON(arguments), '[\[\]:{}"]', "#chr(7)#", "all");
 		}
-		return Hash(loc.returnValue);
+		else
+		{
+			loc.returnValue = ReReplace($wddx(input=arguments), "[\<\>]", "#chr(7)#", "all");
+		}
+		return Hash(ListSort(ReReplace(loc.returnValue, "#chr(7)#+", "#chr(7)#", "all"), "text", "asc", "#chr(7)#"));
 	</cfscript>
 </cffunction>
 
