@@ -35,7 +35,7 @@
 				{
 					try
 					{
-						loc.returnValue[loc.key][loc.i] = deobfuscateParam(loc.returnValue[loc.key][loc.i]);
+						loc.returnValue[loc.key] = deobfuscateParam(loc.returnValue[loc.key]);
 					}
 					catch(Any e)
 					{}
