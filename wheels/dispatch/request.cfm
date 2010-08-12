@@ -291,32 +291,3 @@
 	</cfscript>
 	<cfreturn loc.controller.response()>
 </cffunction>
-
-<cffunction name="$multipartData" returntype="array" access="public" output="false"
-	hint="returns an array of raw multipart form parts. each element in the array contains a struct with a 'key' and 'value' element.">
-	<cfset var loc = {}>
-	<cfset loc.data = []>
-
-	<!---
-	Railo always has the form.getRaw() even if the form is not multipart.
-	Exit if the form post wasn't multipart
-	 --->
-	<cfif ListFirst(request.cgi.content_type, ";") neq "multipart/form-data">
-		<cfreturn loc.data>
-	</cfif>
-
-	<cfif StructKeyExists(server, "railo")>
-		<cfloop array="#form.getRaw()#" index="loc.i">
-			<cfset loc.t = {key = loc.i.getName(), value = loc.i.getValue()}>
-			<cfset arrayappend(loc.data, loc.t)>
-		</cfloop>
-	<cfelse>
-		<cfloop array="#form.getPartsArray()#" index="loc.i">
-			<cfif loc.i.isParam()>
-				<cfset loc.t = {key = loc.i.getName(), value = loc.i.getStringValue()}>
-				<cfset arrayappend(loc.data, loc.t)>
-			</cfif>
-		</cfloop>
-	</cfif>
-	<cfreturn loc.data>
-</cffunction>
