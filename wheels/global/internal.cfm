@@ -38,33 +38,11 @@
 			// for ( in ) can pass around undefined values so we need to check that the variables exists
 			if (StructKeyExists(loc, "value"))
 			{
-				// SerializeJason crashes if a query contains binary data
-				// a workaround is to use the underline meta information
-				// to build the hash
-				// this information was gathered from
-				// http://www.silverwareconsulting.com/index.cfm/2009/1/20/Capturing-the-SQL-Generated-by-CFQUERY
+				// SerializeJSON crashes if a query contains binary data
+				// a workaround is to use cfwddx
 				if(IsQuery(loc.value))
-				{
-					if (StructKeyExists(server, "railo"))
-					{
-						loc.sql = loc.value.getSQL();
-						// toString is not available if the query is generated
-						if (StructKeyExists(loc, "sql"))
-						{
-							loc.sql = loc.sql.toString();
-						}
-					}
-					else
-					{
-						loc.sql = loc.value.getMetaData().getExtendedMetaData();
-					}
-
-					// a query could be passed in that is generated from QueryNew() and would not have any of this metadata
-					// so we need to make sure that we have something to add to the hash
-					if (StructKeyExists(loc, "sql"))
-						loc.value = loc.sql;
-				}
-
+					loc.value = $wddx(input=loc.value);
+				
 				if (IsSimpleValue(loc.value))
 					loc.returnValue = loc.returnValue & loc.value;
 				else

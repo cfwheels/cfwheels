@@ -211,3 +211,15 @@
 <cffunction name="$objectcache" returntype="void" access="public" output="false">
 	<cfobjectcache attributeCollection="#arguments#">
 </cffunction>
+
+<cffunction name="$wddx" returntype="any" access="public" output="false">
+	<cfargument name="input" type="any" required="true">
+	<cfargument name="action" type="string" required="false" default="cfml2wddx">
+	<cfargument name="useTimeZoneInfo" type="boolean" required="false" default="true">
+	<cfset var loc = {}>
+	<cfset arguments.output = "loc.output">
+	<cfwddx attributeCollection="#arguments#">
+	<cfif StructKeyExists(loc, "output")>
+		<cfreturn loc.output>
+	</cfif>
+</cffunction>

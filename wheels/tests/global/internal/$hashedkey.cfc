@@ -12,7 +12,7 @@
 		<cfargument name="a" type="string" required="false" default="asdfasdf" />
 		<cfargument name="b" type="query" required="false" default="#QueryNew('a,b,c,e')#" /><!--- this creates a query that does not have sql metadata --->
 		<cfset loc.e = $hashedKey(argumentCollection=arguments)>
-		<Cfset loc.r = Hash(arguments.a & ListSort(ReplaceList(SerializeJSON(arguments.b), "{,}", ","), "text")) />
+		<Cfset loc.r = $hashedKey(argumentCollection=arguments) />
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
