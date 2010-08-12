@@ -375,7 +375,7 @@
 			ArrayAppend(loc.returnValue, "WHERE");
 			loc.wherePos = ArrayLen(loc.returnValue) + 1;
 			loc.params = ArrayNew(1);
-			loc.where = ReplaceList(REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all"), "WHERE,AND,OR", "#Chr(7)#WHERE,#chr(7)#AND,#chr(7)#OR");
+			loc.where = ReplaceList(REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all"), "AND,OR", "#chr(7)#AND,#chr(7)#OR");
 			for (loc.i=1; loc.i <= ListLen(loc.where, Chr(7)); loc.i++)
 			{
 				loc.param = {};
@@ -388,7 +388,7 @@
 					loc.elementDataPart = SpanExcluding(loc.element, ")");
 				else
 					loc.elementDataPart = loc.element;
-				loc.elementDataPart = Trim(ReplaceList(loc.elementDataPart, "WHERE,AND,OR", ""));
+				loc.elementDataPart = Trim(ReplaceList(loc.elementDataPart, "AND,OR", ""));
 				loc.temp = REFind("^([a-zA-Z0-9-_\.]*) ?#variables.wheels.class.RESQLOperators#", loc.elementDataPart, 1, true);
 				if (ArrayLen(loc.temp.len) gt 1)
 				{
@@ -430,7 +430,7 @@
 					ArrayAppend(loc.params, loc.param);
 				}
 			}
-			loc.where = ReplaceList(loc.where, "#Chr(7)#WHERE,#Chr(7)#AND,#Chr(7)#OR", "WHERE,AND,OR");
+			loc.where = ReplaceList(loc.where, "#Chr(7)#AND,#Chr(7)#OR", "AND,OR");
 
 			// add to sql array
 			loc.where = " #loc.where# ";
