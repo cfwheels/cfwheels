@@ -33,7 +33,7 @@
 		// however because CF8 has bug where SerializeJSON()
 		// errors when a query contains binary data, we need
 		// to use cfwddx until it is fixed
-		if (StructKeyExists(server, "railo"))
+		if (StructKeyExists(server, "railo") || (StructKeyExists(server, "coldfusion") && ListFirst(server.coldfusion.productversion) gte 9))
 		{
 			loc.returnValue = ReReplace(SerializeJSON(arguments), '[\[\]:{}"]', "#chr(7)#", "all");
 		}
