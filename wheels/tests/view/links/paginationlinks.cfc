@@ -4,8 +4,8 @@
 
 	<cffunction name="setup">
 		<cfset var loc = StructNew()>
-		<cfset copies.application.wheels.routes = Duplicate(application.wheels.routes)>
-		<cfset copies.application.wheels.namedRoutePositions = Duplicate(application.wheels.namedRoutePositions)>
+		<cfset copies = {}>
+		<cfset StructAppend(copies, Duplicate(application.wheels))>
 		<cfset controller = $controller(name="dummy").$createControllerObject(params)>
 		<cfset loc.route = StructNew()>
 		<cfset loc.route.name = "pagination">
@@ -15,11 +15,11 @@
 		<cfset loc.route.variables = "special">
 		<cfset ArrayInsertAt(application.wheels.routes, 2, loc.route)>
 		<cfset application.wheels.namedRoutePositions.pagination = 2>
+		<cfset application.wheels.URLRewriting = "on">
 	</cffunction>
 
 	<cffunction name="teardown">
-		<cfset application.wheels.routes = Duplicate(copies.application.wheels.routes)>
-		<cfset application.wheels.namedRoutePositions = Duplicate(copies.application.wheels.namedRoutePositions)>
+		<cfset StructAppend(application.wheels, duplicate(copies), true)>
 	</cffunction>
 	
 	<cffunction name="test_current_page">
