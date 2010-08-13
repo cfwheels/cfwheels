@@ -96,7 +96,6 @@
 
 	<cffunction name="test_singularize_of_address">
 		<cfset loc.result = singularize("address")>
-		<cfset debug('loc.result')>
 		<cfset assert("NOT Compare(loc.result, 'address')")>
 	</cffunction>
 
