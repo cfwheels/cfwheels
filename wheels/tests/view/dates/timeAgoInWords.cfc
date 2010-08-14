@@ -137,7 +137,7 @@
 		<cfset loc.c = 1051200 - 1>
 		<cfset loc.args.fromTime = dateadd('n', -loc.c, loc.now)>
 		<cfset loc.e = loc.controller.timeAgoInWords(argumentCollection=loc.args)>
-		<cfset loc.r = "about 1 year">
+		<cfset loc.r = "almost 2 years">
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 

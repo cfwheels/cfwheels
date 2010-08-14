@@ -16,10 +16,13 @@
 		loc.hours = 0;
 		loc.days = 0;
 		loc.returnValue = "";
-
 		if (loc.minuteDiff <= 1)
 		{
-			if (arguments.includeSeconds && loc.secondDiff < 60)
+			if (loc.secondDiff < 60)
+				loc.returnValue = "less than a minute";
+			else
+				loc.returnValue = "1 minute";
+			if (arguments.includeSeconds)
 			{
 				if (loc.secondDiff < 5)
 					loc.returnValue = "less than 5 seconds";
@@ -29,12 +32,6 @@
 					loc.returnValue = "less than 20 seconds";
 				else if (loc.secondDiff < 40)
 					loc.returnValue = "half a minute";
-				else
-					loc.returnValue = "less than a minute";
-			}
-			else
-			{
-				loc.returnValue = "1 minute";
 			}
 		}
 		else if (loc.minuteDiff < 45)
@@ -68,11 +65,19 @@
 			loc.months = Int(loc.minuteDiff/43200);
 			loc.returnValue = loc.months & " months";
 		}
-		else if (loc.minuteDiff < 1051200)
+		else if (loc.minuteDiff < 657000)
 		{
 			loc.returnValue = "about 1 year";
 		}
-		else if (loc.minuteDiff > 1051200)
+		else if (loc.minuteDiff < 919800)
+		{
+			loc.returnValue = "over 1 year";
+		}
+		else if (loc.minuteDiff < 1051200)
+		{
+			loc.returnValue = "almost 2 years";
+		}
+		else if (loc.minuteDiff >= 1051200)
 		{
 			loc.years = Int(loc.minuteDiff/525600);
 			loc.returnValue = "over " & loc.years & " years";
