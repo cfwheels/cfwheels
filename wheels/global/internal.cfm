@@ -28,20 +28,28 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
-		// TODO: remove this switch and use SerializeJSON()
-		// SerializeJSON() is over 4x faster then cfwddx
-		// however because CF8 has bug where SerializeJSON()
-		// errors when a query contains binary data, we need
-		// to use cfwddx until it is fixed
-		if (StructKeyExists(server, "railo") || (StructKeyExists(server, "coldfusion") && ListFirst(server.coldfusion.productversion) gte 9))
+		loc.keyList = ListSort(StructKeyList(arguments), "textnocase", "asc");
+
+		// we need to make sure we are looping through the passed in arguments the same everytime
+		for (loc.i = 1; loc.i lte ListLen(loc.keyList); loc.i++)
 		{
-			loc.returnValue = ReReplace(SerializeJSON(arguments), '[\[\]:{}"]', "#chr(7)#", "all");
+			loc.value = arguments[ListGetAt(loc.keyList, loc.i)];
+
+			// for ( in ) can pass around undefined values so we need to check that the variables exists
+			if (StructKeyExists(loc, "value"))
+			{
+				// SerializeJSON crashes if a query contains binary data
+				// a workaround is to use cfwddx
+				if(IsQuery(loc.value))
+					loc.value = $wddx(input=loc.value);
+
+				if (IsSimpleValue(loc.value))
+					loc.returnValue = loc.returnValue & loc.value;
+				else
+					loc.returnValue = loc.returnValue & ListSort(ReplaceList(SerializeJSON(loc.value), "{,}", ","), "text");
+			}
 		}
-		else
-		{
-			loc.returnValue = ReReplace($wddx(input=arguments), "[\<\>]", "#chr(7)#", "all");
-		}
-		return Hash(ListSort(ReReplace(loc.returnValue, "#chr(7)#+", "#chr(7)#", "all"), "text", "asc", "#chr(7)#"));
+		return Hash(loc.returnValue);
 	</cfscript>
 </cffunction>
 
@@ -356,16 +364,16 @@
 	<cfscript>
 		var loc = {};
 		loc.objectFileExists = false;
-		
+
 		// if the name contains the delimiter let's capitalize the last element and append it back to the list
 		if (ListLen(arguments.name, "/") gt 1)
 			arguments.name = ListInsertAt(arguments.name, ListLen(arguments.name, "/"), capitalize(ListLast(arguments.name, "/")), "/");
 		else
 			arguments.name = capitalize(arguments.name);
-		
+
 		// we are going to store the full controller path in the existing / non-existing lists so we can have controllers in multiple places
 		loc.fullObjectPath = arguments.objectPath & "/" & arguments.name;
-		
+
 		if (!ListFindNoCase(application.wheels.existingObjectFiles, loc.fullObjectPath) && !ListFindNoCase(application.wheels.nonExistingObjectFiles, loc.fullObjectPath))
 		{
 			if (FileExists(ExpandPath("#loc.fullObjectPath#.cfc")))
@@ -392,14 +400,14 @@
 	<cfargument name="type" type="string" required="false" default="controller" />
 	<cfscript>
 		var loc = {};
-		
+
 		// let's allow for multiple controller paths so that plugins can contain controllers
 		// the last path is the one we will instantiate the base controller on if the controller is not found on any of the paths
 		for (loc.i = 1; loc.i lte ListLen(arguments.controllerPaths); loc.i++)
 		{
 			loc.controllerPath = ListGetAt(arguments.controllerPaths, loc.i);
 			loc.fileName = $objectFileName(name=arguments.name, objectPath=loc.controllerPath, type=arguments.type);
-		
+
 			if (loc.fileName != "Controller" || loc.i == ListLen(arguments.controllerPaths))
 			{
 				application.wheels.controllers[arguments.name] = $createObjectFromRoot(path=loc.controllerPath, fileName=loc.fileName, method="$initControllerClass", name=arguments.name);
@@ -542,7 +550,7 @@
 		{
 			loc.modelPath = ListGetAt(arguments.modelPaths, loc.i);
 			loc.fileName = $objectFileName(name=arguments.name, objectPath=loc.modelPath, type=arguments.type);
-		
+
 			if (loc.fileName != arguments.type || loc.i == ListLen(arguments.modelPaths))
 			{
 				application.wheels.models[arguments.name] = $createObjectFromRoot(path=loc.modelPath, fileName=loc.fileName, method="$initModelClass", name=arguments.name);
