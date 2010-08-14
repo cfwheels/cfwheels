@@ -1,19 +1,26 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
-<cffunction name="sendEmail" returntype="any" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in. Besides the Wheels specific arguments you can also pass in any argument that is accepted by the `cfmail` tag."
+
+<cffunction name="sendEmail" returntype="any" access="public" output="false" hint="Sends an email using a template and an optional layout to wrap it in. Besides the Wheels-specific arguments documented here, you can also pass in any argument that is accepted by the `cfmail` tag as well as your own arguments to be used by the view."
 	examples=
 	'
-		<!--- Get a member and send a welcome email passing in a few custom variables to the template --->
-		<cfset newMember = model("member").findByKey(params.key)>
-		<cfset sendEmail(to=newMember.email, template="myemailtemplate", subject="Thank You for Becoming a Member", recipientName=newMember.name, startDate=newMember.startDate)>
+		<!--- Get a member and send a welcome email, passing in a few custom variables to the template --->
+		<cfset newMember = model("member").findByKey(params.member.id)>
+		<cfset sendEmail(
+			to=newMember.email,
+			template="myemailtemplate",
+			subject="Thank You for Becoming a Member",
+			recipientName=newMember.name,
+			startDate=newMember.startDate
+		)>
 	'
 	categories="controller-request,miscellaneous" chapters="sending-email" functions="">
-	<cfargument name="template" type="string" required="false" default="" hint="The path to the email template or two paths if you want to send a multipart email. if the `detectMultipart` argument is `false` the template for the text version should be the first one in the list. This argument is also aliased as `templates`.">
+	<cfargument name="template" type="string" required="false" default="" hint="The path to the email template or two paths if you want to send a multipart email. if the `detectMultipart` argument is `false`, the template for the text version should be the first one in the list. This argument is also aliased as `templates`.">
 	<cfargument name="from" type="string" required="true" hint="Email address to send from.">
-	<cfargument name="to" type="string" required="true" hint="Email address to send to.">
+	<cfargument name="to" type="string" required="true" hint="List of email addresses to send the email to.">
 	<cfargument name="subject" type="string" required="true" hint="The subject line of the email.">
 	<cfargument name="layout" type="any" required="false" hint="Layout(s) to wrap the email template in. This argument is also aliased as `layouts`.">
-	<cfargument name="file" type="string" required="false" default="" hint="The name(s) of the file(s) to attach to the email. This argument is also aliased as `files`.">
-	<cfargument name="detectMultipart" type="boolean" required="false" hint="When set to `true` and multiple templates are passed in Wheels will detect which of the templates is text and which one is HTML (by counting the `<` characters).">
+	<cfargument name="file" type="string" required="false" default="" hint="A list of the names of the files to attach to the email. This will reference files stored in the `files` folder (or a path relative to it). This argument is also aliased as `files`.">
+	<cfargument name="detectMultipart" type="boolean" required="false" hint="When set to `true` and multiple values are provided for the `template` argument, Wheels will detect which of the templates is text and which one is HTML (by counting the `<` characters).">
 	<cfargument name="$deliver" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
@@ -103,7 +110,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="sendFile" returntype="any" access="public" output="false" hint="Sends a file to the user (from the `files` folder by default)."
+<cffunction name="sendFile" returntype="any" access="public" output="false" hint="Sends a file to the user (from the `files` folder or a path relative to it by default)."
 	examples=
 	'
 		<!--- Send a PDF file to the user --->
@@ -119,7 +126,7 @@
 	<cfargument name="file" type="string" required="true" hint="The file to send to the user.">
 	<cfargument name="name" type="string" required="false" default="" hint="The file name to show in the browser download dialog box.">
 	<cfargument name="type" type="string" required="false" default="" hint="The HTTP content type to deliver the file as.">
-	<cfargument name="disposition" type="string" required="false" hint="Set to 'inline' to have the browser handle the opening of the file or set to 'attachment' to force a download dialog box.">
+	<cfargument name="disposition" type="string" required="false" hint="Set to `inline` to have the browser handle the opening of the file (possibly inline in the browser) or set to `attachment` to force a download dialog box.">
 	<cfargument name="directory" type="string" required="false" default="" hint="Directory outside of the webroot where the file exists. Must be a full path.">
 	<cfargument name="deleteFile" type="boolean" required="false" default="false" hint="Pass in `true` to delete the file on the server after sending it.">
 	<cfargument name="$testingMode" type="boolean" required="false" default="false">
