@@ -1,22 +1,34 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
-<cffunction name="renderPage" returntype="any" access="public" output="false" hint="Renders content to the browser by including the view page for the specified `controller` and `action`."
+<cffunction name="renderPage" returntype="any" access="public" output="false" hint="Instructs the controller which view template and layout to render when it's finished processing the action. Note that when passing values for `controller` and/or `action`, this function does not load the actual action but rather just loads the corresponding view template."
 	examples=
 	'
-		<!--- Render a view page for a different action than the current one --->
-		<cfset renderPage(action="someOtherAction")>
+		<!--- Render a view page for a different action within the same controller --->
+		<cfset renderPage(action="edit")>
+		
+		<!--- Render a view page for a different action within a different controller --->
+		<cfset renderPage(controller="blog", action="new")>
+		
+		<!--- Another way to render the blog/new template from within a different controller --->
+		<cfset renderPage(template="/blog/new")>
 
 		<!--- Render the view page for the current action but without a layout and cache it for 60 minutes --->
 		<cfset renderPage(layout=false, cache=60)>
+		
+		<!--- Load a layout from a different folder within `views` --->
+		<cfset renderPage(layout="/layouts/blog")>
+		
+		<!--- Don''t render the view immediately but rather return and store in a variable for further processing --->
+		<cfset myView = renderPage(returnAs="string")>
 	'
 	categories="controller-request,rendering" chapters="rendering-pages" functions="renderNothing,renderText,renderPartial">
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Controller to include the view page for.">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Action to include the view page for.">
-	<cfargument name="template" type="string" required="false" default="" hint="A specific template to render.">
-	<cfargument name="layout" type="any" required="false" hint="The layout to wrap the content in.">
-	<cfargument name="cache" type="any" required="false" default="" hint="Minutes to cache the content for.">
-	<cfargument name="returnAs" type="string" required="false" default="" hint="Set to `string` to return the result to the controller instead of sending it to the browser immediately.">
-	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false" hint="Set to `true` to hide the debug information at the end of the output. This is useful when you're testing XML output in an environment where the global setting for `showDebugInformation` is `true` for example.">
+	<cfargument name="template" type="string" required="false" default="" hint="A specific template to render. Prefix with a leading slash `/` if you need to build a path from the root `views` folder.">
+	<cfargument name="layout" type="any" required="false" hint="The layout to wrap the content in. Prefix with a leading slash `/` if you need to build a path from the root `views` folder. Pass `false` to not load a layout at all.">
+	<cfargument name="cache" type="any" required="false" default="" hint="Number of minutes to cache the content for.">
+	<cfargument name="returnAs" type="string" required="false" default="" hint="Set to `string` to return the result instead of automatically sending it to the client.">
+	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false" hint="Set to `true` to hide the debug information at the end of the output. This is useful when you're testing XML output in an environment where the global setting for `showDebugInformation` is `true`.">
 	<cfscript>
 		var loc = {};
 		$args(name="renderPage", args=arguments);
@@ -67,10 +79,10 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="renderNothing" returntype="void" access="public" output="false" hint="Renders a blank string to the browser. This is very similar to calling `cfabort` with the advantage that any after filters you have set on the action will still be run."
+<cffunction name="renderNothing" returntype="void" access="public" output="false" hint="Instructs the controller to render an empty string when it's finished processing the action. This is very similar to calling `cfabort` with the advantage that any after filters you have set on the action will still be run."
 	examples=
 	'
-		<!--- Render a blank white page to the browser --->
+		<!--- Render a blank white page to the client --->
 		<cfset renderNothing()>
 	'
 	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderText,renderPartial">
@@ -79,11 +91,15 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="renderText" returntype="void" access="public" output="false" hint="Renders the specified text to the browser."
+<cffunction name="renderText" returntype="void" access="public" output="false" hint="Instructs the controller to render specified text when it's finished processing the action."
 	examples=
 	'
-		<!--- Render just the text "Done!" to the browser --->
+		<!--- Render just the text "Done!" to the client --->
 		<cfset renderText("Done!")>
+		
+		<!--- Render serialized product data to the client --->
+		<cfset products = model("product").findAll()>
+		<cfset renderText(SerializeJson(products))>
 	'
 	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderNothing,renderPartial">
 	<cfargument name="text" type="any" required="true" hint="The text to be rendered.">
@@ -92,18 +108,21 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="renderPartial" returntype="any" access="public" output="false" hint="Renders content to the browser by including a partial."
+<cffunction name="renderPartial" returntype="any" access="public" output="false" hint="Instructs the controller to render a partial when it's finished processing the action."
 	examples=
 	'
 		<!--- Render the partial `_comment.cfm` located in the current controller''s view folder --->
 		<cfset renderPartial("comment")>
+		
+		<!--- Render the partial at `views/shared/_comment.cfm` --->
+		<cfset renderPartial("/shared/comment")>
 	'
 	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderNothing,renderText">
-	<cfargument name="partial" type="string" required="true" hint="The name of the file to be used (starting with an optional path and with the underscore and file extension excluded).">
+	<cfargument name="partial" type="string" required="true" hint="The name of the partial file to be used. Prefix with a leading slash `/` if you need to build a path from the root `views` folder. Do not include the partial filename's underscore and file extension.">
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPage.">
 	<cfargument name="layout" type="string" required="false" hint="See documentation for @renderPage.">
 	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for @renderPage.">
-	<cfargument name="dataFunction" type="any" required="false" hint="name of controller function to load data from.">
+	<cfargument name="dataFunction" type="any" required="false" hint="Name of a controller function to load data from.">
 	<cfscript>
 		var loc = {};
 		$args(name="renderPartial", args=arguments);

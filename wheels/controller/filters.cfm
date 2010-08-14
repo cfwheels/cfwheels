@@ -58,7 +58,7 @@
 		])>
 	'
 	categories="controller-initialization" chapters="filters-and-verification" functions="filters,filterChain">
-	<cfargument name="chain" type="array" required="true" hint="An array of structs, each of which represent arguments that get passed to the `filters` function. This should represent the entire filter chain that you want to use for this controller.">
+	<cfargument name="chain" type="array" required="true" hint="An array of structs, each of which represent an `argumentCollection` that get passed to the `filters` function. This should represent the entire filter chain that you want to use for this controller.">
 	<cfscript>
 		var loc = {};
 		

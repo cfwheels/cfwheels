@@ -1,7 +1,10 @@
-<cffunction name="isSecure" returntype="boolean" access="public" output="false" hint="Returns whether wheels is communicating over a secure port."
+<cffunction name="isSecure" returntype="boolean" access="public" output="false" hint="Returns whether Wheels is communicating over a secure port."
 	examples=
 	'
-		<cfset requestIsSecure = isSecure()>
+		<!--- Redirect non-secure connections to the secure version --->
+		<cfif not isSecure()>
+			<cfset redirectTo(protocol="https")>
+		</cfif>
 	'
 	categories="controller-request,miscellaneous" chapters="" functions="isGet,isPost,isAjax">
 	<cfreturn (request.cgi.server_port_secure eq true)>
@@ -13,28 +16,28 @@
 		<cfset requestIsAjax = isAjax()>
 	'
 	categories="controller-request,miscellaneous" chapters="" functions="isGet,isPost,isSecure">
-	<cfreturn (request.cgi.http_x_requested_with eq "XMLHTTPRequest")>
+	<cfreturn (request.cgi.http_x_requested_with is "XMLHTTPRequest")>
 </cffunction>
 
-<cffunction name="isGet" returntype="boolean" access="public" output="false" hint="Returns whether the request was a normal (GET) request or not."
+<cffunction name="isGet" returntype="boolean" access="public" output="false" hint="Returns whether the request was a normal `GET` request or not."
 	examples=
 	'
 		<cfset requestIsGet = isGet()>
 	'
 	categories="controller-request,miscellaneous" chapters="" functions="isAjax,isPost,isSecure">
-	<cfreturn (request.cgi.request_method eq "get")>
+	<cfreturn (request.cgi.request_method is "get")>
 </cffunction>
 
-<cffunction name="isPost" returntype="boolean" access="public" output="false" hint="Returns whether the request came from a form submission or not."
+<cffunction name="isPost" returntype="boolean" access="public" output="false" hint="Returns whether the request came from a form `POST` submission or not."
 	examples=
 	'
 		<cfset requestIsPost = isPost()>
 	'
 	categories="controller-request,miscellaneous" chapters="" functions="isAjax,isGet,isSecure">
-	<cfreturn (request.cgi.request_method eq "post")>
+	<cfreturn (request.cgi.request_method is "post")>
 </cffunction>
 
-<cffunction name="pagination" returntype="struct" access="public" output="false" hint="Returns a struct with information about the specificed paginated query. The variables that will be returned are `currentPage`, `totalPages` and `totalRecords`."
+<cffunction name="pagination" returntype="struct" access="public" output="false" hint="Returns a struct with information about the specificed paginated query. The keys that will be included in the struct are `currentPage`, `totalPages` and `totalRecords`."
 	examples=
 	'
 		<cfparam name="params.page" default="1">
