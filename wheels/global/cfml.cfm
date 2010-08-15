@@ -48,6 +48,10 @@
 	</cfif>
 </cffunction>
 
+<cffunction name="$setting" returntype="void" access="public" output="false">
+	<cfsetting attributeCollection="#arguments#">
+</cffunction>
+
 <cffunction name="$image" returntype="struct" access="public" output="false">
 	<cfset var returnValue = {}>
 	<cfset arguments.structName = "returnValue">

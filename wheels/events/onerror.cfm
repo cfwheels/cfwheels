@@ -3,6 +3,7 @@
 	<cfargument name="eventName" type="any" required="true">
 	<cfscript>
 		var returnValue = "";
+		$setting(requestTimeout=600); // in case the error was caused by a timeout we have to add extra time for error handling
 		returnValue = $simpleLock(execute="$runOnError", executeArgs=arguments, name="wheelsReloadLock", type="readOnly", timeout=180);
 	</cfscript>
 	<cfoutput>
