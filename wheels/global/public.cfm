@@ -3,12 +3,20 @@
 <cffunction name="addRoute" returntype="void" access="public" output="false" hint="Adds a new route to your application."
 	examples=
 	'
-		<!--- Adds a route which will invoke the `profile` action on the `user` controller with `params.userName` set when the URL matches the `pattern` argument --->
+		<!--- Example 1: Adds a route which will invoke the `profile` action on the `user` controller with `params.userName` set when the URL matches the `pattern` argument --->
 		<cfset addRoute(name="userProfile", pattern="user/[username]", controller="user", action="profile")>
+		
+		<!--- Example 2: Category/product URLs. Note the order of precedence is such that the more specific route should be defined first so Wheels will fall back to the less-specific version if it''s not found --->
+		<cfset addRoute(name="product", pattern="products/[categorySlug]/[productSlug]", controller="products", action="product")>
+		<cfset addRoute(name="productCategory", pattern="products/[categorySlug]", controller="products", action="category")>
+		<cfset addRoute(name="products", pattern="products", controller="products", action="index")>
+		
+		<!--- Example 3: Change the `home` route. This should be listed last because it is least specific --->
+		<cfset addRoute(name="home", pattern="", controller="main", action="index")>
 	'
 	categories="configuration" chapters="using-routes" functions="">
-	<cfargument name="name" type="string" required="false" default="" hint="Name for the route.">
-	<cfargument name="pattern" type="string" required="true" hint="The URL pattern for the route.">
+	<cfargument name="name" type="string" required="false" default="" hint="Name for the route. This is referenced as the `name` argument in functions based on @URLFor like @linkTo, @startFormTag, etc.">
+	<cfargument name="pattern" type="string" required="true" hint="The URL pattern that the route will match.">
 	<cfargument name="controller" type="string" required="false" default="" hint="Controller to call when route matches (unless the controller name exists in the pattern).">
 	<cfargument name="action" type="string" required="false" default="" hint="Action to call when route matches (unless the action name exists in the pattern).">
 	<cfscript>
@@ -40,10 +48,10 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="addDefaultRoutes" returntype="void" access="public" output="false" hint="Adds the default Wheels routes to your application. Only use this method if you have set `loadDefaultRoutes` to `false` and want to control exactly where in the route order you want to place the default routes."
+<cffunction name="addDefaultRoutes" returntype="void" access="public" output="false" hint="Adds the default Wheels routes (for example, `[controller]/[action]/[key]`, etc.) to your application. Only use this method if you have set `loadDefaultRoutes` to `false` and want to control exactly where in the route order you want to place the default routes."
 	examples=
 	'
-		<!--- Adds the default routes to your application (done in "routes.cfm") --->
+		<!--- Adds the default routes to your application (done in `config/routes.cfm`) --->
 		<cfset addDefaultRoutes()>
 	'
 	categories="configuration" chapters="using-routes" functions="">
@@ -57,8 +65,14 @@
 <cffunction name="set" returntype="void" access="public" output="false" hint="Use to configure a global setting or set a default for a function."
 	examples=
 	'
+		<!--- Example 1: Set the `URLRewriting` setting to `Partial` --->
 		<cfset set(URLRewriting="Partial")>
+		
+		<!--- Example 2: Set default values for the arguments in the `buttonTo` view helper. This works for the majority of Wheels functions/arguments. --->
 		<cfset set(functionName="buttonTo", onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable="")>
+		
+		<!--- Example 3: Set the default values for a form helper to get the form marked up to your preferences --->
+		<cfset set(functionName="textField", labelPlacement="before", prependToLabel="<div>", append="</div>", appendToLabel="<br />")>
 	'
 	categories="configuration" chapters="configuration-and-defaults" functions="get">
 	<cfscript>
@@ -125,13 +139,13 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="get" returntype="any" access="public" output="false" hint="Returns the current setting for the supplied variable name."
+<cffunction name="get" returntype="any" access="public" output="false" hint="Returns the current setting for the supplied Wheels setting or the current default for the supplied Wheels function argument."
 	examples=
 	'
-		<!--- Get the current setting for the `tableNamePrefix` variable --->
+		<!--- Get the current value for the `tableNamePrefix` Wheels setting --->
 		<cfset setting = get("tableNamePrefix")>
 
-		<!--- Get the default for the `message` argument on the `validatesConfirmationOf` method  --->
+		<!--- Get the default for the `message` argument of the `validatesConfirmationOf` method  --->
 		<cfset setting = get(functionName="validatesConfirmationOf", name="message")>
 	'
 	categories="global,miscellaneous" chapters="configuration-and-defaults" functions="set">
@@ -150,7 +164,7 @@
 <cffunction name="model" returntype="any" access="public" output="false" hint="Returns a reference to the requested model so that class level methods can be called on it."
 	examples=
 	'
-		<!--- The `model("author")` part of the code below gets a reference to the model in the application scope and then `findByKey` is called on it --->
+		<!--- The `model("author")` part of the code below gets a reference to the model from the application scope, and then the `findByKey` class level method is called on it --->
 		<cfset authorObject = model("author").findByKey(1)>
 	'
 	categories="global,miscellaneous" chapters="object-relational-mapping" functions="">
@@ -158,7 +172,7 @@
 	<cfreturn $doubleCheckedLock(name="modelLock", condition="$cachedModelClassExists", execute="$createModelClass", conditionArgs=arguments, executeArgs=arguments)>
 </cffunction>
 
-<cffunction name="obfuscateParam" returntype="string" access="public" output="false" hint="Obfuscates a value, typically used for hiding primary key values when passed along in the URL."
+<cffunction name="obfuscateParam" returntype="string" access="public" output="false" hint="Obfuscates a value. Typically used for hiding primary key values when passed along in the URL."
 	examples=
 	'
 		<!--- Obfuscate the primary key value `99` --->
@@ -185,7 +199,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="pluginNames" returntype="string" access="public" output="false" hint="Returns a list of all installed plugins."
+<cffunction name="pluginNames" returntype="string" access="public" output="false" hint="Returns a list of all installed plugins' names."
 	examples=
 	'
 		<!--- Check if the Scaffold plugin is installed --->
@@ -200,11 +214,14 @@
 <cffunction name="URLFor" returntype="string" access="public" output="false" hint="Creates an internal URL based on supplied arguments."
 	examples=
 	'
-		<!--- Create the URL for the `logOut` action on the `account` controller, typically resulting in `/account/logout` --->
+		<!--- Create the URL for the `logOut` action on the `account` controller, typically resulting in `/account/log-out` --->
 		##URLFor(controller="account", action="logOut")##
 
 		<!--- Create a URL with an anchor set on it --->
 		##URLFor(action="comments", anchor="comment10")##
+		
+		<!--- Create a URL based on a route called `products`, which expects params for `categorySlug` and `productSlug` --->
+		##URLFor(route="product", categorySlug="accessories", productSlug="battery-charger")##
 	'
 	categories="global,miscellaneous" chapters="request-handling,linking-pages" functions="redirectTo,linkTo,startFormTag">
 	<cfargument name="route" type="string" required="false" default="" hint="Name of a route that you have configured in `config/routes.cfm`.">
@@ -366,7 +383,7 @@
 	<cfreturn UCase(Left(arguments.text, 1)) & Mid(arguments.text, 2, Len(arguments.text)-1)>
 </cffunction>
 
-<cffunction name="humanize" returntype="string" access="public" output="false" hint="Returns readable text by capitalizing, converting camel casing to multiple words."
+<cffunction name="humanize" returntype="string" access="public" output="false" hint="Returns readable text by capitalizing and converting camel casing to multiple words."
 	examples=
 	'
 		<!--- Humanize a string, will result in "Wheels Is A Framework" --->
@@ -383,14 +400,14 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="pluralize" returntype="string" access="public" output="false" hint="Returns the plural form of the passed in word."
+<cffunction name="pluralize" returntype="string" access="public" output="false" hint="Returns the plural form of the passed in word. Can also pluralize a word based on a value passed to the `count` argument."
 	examples=
 	'
 		<!--- Pluralize a word, will result in "people" --->
 		##pluralize("person")##
 
 		<!--- Pluralize based on the count passed in --->
-		Your search returned ##pluralize(word="person", count=users.recordCount)##
+		Your search returned ##pluralize(word="person", count=users.RecordCount)##
 	'
 	categories="global,string" chapters="miscellaneous-helpers" functions="capitalize,humanize,singularize">
 	<cfargument name="word" type="string" required="true" hint="The word to pluralize.">
@@ -410,15 +427,15 @@
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="singularize")>
 </cffunction>
 
-<cffunction name="toXHTML" returntype="string" access="public" output="false" hint="returns an XHTML compliant string">
-	<cfargument name="str" type="string" required="true" hint="string to make XHTML compliant">
-	<cfset arguments.str = Replace(arguments.str, "&", "&amp;", "all")>
-	<cfreturn arguments.str>
+<cffunction name="toXHTML" returntype="string" access="public" output="false" hint="Returns an XHTML-compliant string.">
+	<cfargument name="text" type="string" required="true" hint="String to make XHTML-compliant.">
+	<cfset arguments.text = Replace(arguments.text, "&", "&amp;", "all")>
+	<cfreturn arguments.text>
 </cffunction>
 
-<cffunction name="mimeTypes" returntype="string" access="public" output="false" hint="gets the associated mimetype from the extension">
-	<cfargument name="extension" required="true" type="string" hint="the extension to get the mimetype for">
-	<cfargument name="fallback" required="false" type="string" default="application/octet-stream" hint="the fallback mimetype to return. default to application/octet-stream">
+<cffunction name="mimeTypes" returntype="string" access="public" output="false" hint="Returns an associated MIME type based on a file extension.">
+	<cfargument name="extension" required="true" type="string" hint="The extension to get the MIME type for.">
+	<cfargument name="fallback" required="false" type="string" default="application/octet-stream" hint="the fallback MIME type to return.">
 	<cfif StructKeyExists(application.wheels.mimetypes, arguments.extension)>
 		<cfset arguments.fallback = application.wheels.mimetypes[arguments.extension]>
 	</cfif>
