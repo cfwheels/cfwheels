@@ -34,4 +34,22 @@
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 	
+	<cffunction name="test_specify_position_outside_of_size_should_not_error">
+		<cfset loc.controller.contentFor(testing="A")>
+		<cfset loc.controller.contentFor(testing="B")>
+		<cfset loc.controller.contentFor(testing="C")>
+		<cfset loc.controller.contentFor(testing="D", position="6")>
+		<cfset loc.r = loc.controller.includeContent("testing")>
+		<cfset loc.e = ["A","B","C","D"]>
+		<cfset loc.e = ArrayToList(loc.e, chr(10))>
+		<cfset debug('loc.r')>
+		<cfset assert('loc.e eq loc.r')>
+		<cfset loc.controller.contentFor(testing="D", position="-5")>
+		<cfset loc.r = loc.controller.includeContent("testing")>
+		<cfset loc.e = ["D","A","B","C","D"]>
+		<cfset loc.e = ArrayToList(loc.e, chr(10))>
+		<cfset debug('loc.r')>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+	
 </cfcomponent>

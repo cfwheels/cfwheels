@@ -70,10 +70,9 @@
 			<cfset loc.position = "last">
 		</cfif>
 		<cfif IsNumeric(loc.position)>
-			<cfif loc.position lte 0>
+			<cfif loc.position lte 1>
 				<cfset loc.position = "first">
-			</cfif>
-			<cfif loc.position gte loc.size>
+			<cfelseif loc.position gte loc.size>
 				<cfset loc.position = "last">
 			</cfif>
 		</cfif>
