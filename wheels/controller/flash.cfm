@@ -205,6 +205,7 @@
 	categories="controller-request,flash" chapters="using-the-flash" functions="flash,flashClear,flashCount,flashDelete,flashInsert,flashIsEmpty,flashKeep,flashKeyExists">
 	<cfargument name="keys" type="string" required="false" hint="The key (or list of keys) to show the value for. You can also use the `key` argument instead for better readability when accessing a single key.">
 	<cfargument name="class" type="string" required="false" hint="HTML `class` to set on the `div` element that contains the messages.">
+	<cfargument name="includeEmptyContainer" type="boolean" required="false" hint="Includes the DIV container even if the flash is empty.">
 	<cfargument name="$flash" type="struct" required="false" default="#$readFlash()#">
 	<cfscript>
 		// Initialization
@@ -237,8 +238,9 @@
 					loc.listItems = loc.listItems & $element(name="p", content=loc.content, attributes=loc.attributes);
 			}
 		}
-		if (Len(loc.listItems))
-			return $element(name="div", skip="key,keys", content=loc.listItems, attributes=arguments);
+        
+		if (Len(loc.listItems) || arguments.includeEmptyContainer)
+			return $element(name="div", skip="key,keys,includeEmptyContainer", content=loc.listItems, attributes=arguments);
 		else
 			return "";
 	</cfscript>

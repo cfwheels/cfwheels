@@ -9,6 +9,10 @@
 		<cfset controller.flashClear()>
 	</cffunction>
 
+	<cffunction name="teardown">
+		<cfset application.wheels.flashStorage = flashStorage>
+	</cffunction>
+
 	<cffunction name="test_normal_output">
 		<cfset controller.flashInsert(success="Congrats!")>
 		<cfset controller.flashInsert(alert="Error!")>
@@ -33,6 +37,11 @@
 		<cfset result = controller.flashMessages()>
 		<cfset assert("result IS ''")>
 	</cffunction>
+	
+	<cffunction name="test_empty_flash_includeEmptyContainer">
+		<cfset result = controller.flashMessages(includeEmptyContainer="true")>
+		<cfset assert("result IS '<div class=""flash-messages""></div>'")>
+	</cffunction>
 
 	<cffunction name="test_skipping_complex_values">
 		<cfset controller.flashInsert(success="Congrats!")>
@@ -51,9 +60,6 @@
 		<cfset result = controller.flashMessages(keys="alert,success")>
 		<cfset assert("result IS '<div class=""flash-messages""><p class=""alert-message"">Error!</p><p class=""success-message"">Congrats!</p></div>'")>
 	</cffunction>
-	
-	<cffunction name="teardown">
-		<cfset application.wheels.flashStorage = flashStorage>
-	</cffunction>
+
 
 </cfcomponent>
