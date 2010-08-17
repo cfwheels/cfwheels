@@ -42,13 +42,11 @@
 		<cfset loc.r = loc.controller.includeContent("testing")>
 		<cfset loc.e = ["A","B","C","D"]>
 		<cfset loc.e = ArrayToList(loc.e, chr(10))>
-		<cfset debug('loc.r')>
 		<cfset assert('loc.e eq loc.r')>
 		<cfset loc.controller.contentFor(testing="D", position="-5")>
 		<cfset loc.r = loc.controller.includeContent("testing")>
 		<cfset loc.e = ["D","A","B","C","D"]>
 		<cfset loc.e = ArrayToList(loc.e, chr(10))>
-		<cfset debug('loc.r')>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 	
