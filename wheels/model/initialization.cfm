@@ -122,6 +122,12 @@
 			}
 		}
 
+		// raise error when no primary key has been defined for the table
+		if (!Len(primaryKeys()))
+		{
+			$throw(type="Wheels.NoPrimaryKey", message="No primary key exists on the `#tableName()#` table.", extendedInfo="Set an appropriate primary key on the `#tableName()#` table.");
+		}
+
 		// add calculated properties
 		variables.wheels.class.calculatedPropertyList = "";
 		for (loc.key in variables.wheels.class.mapping)
