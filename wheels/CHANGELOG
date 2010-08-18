@@ -1,9 +1,16 @@
-WHEELS BLEEDING EDGE (4686)
+WHEELS BLEEDING EDGE (4860)
 
 Changes
 =======
 
 [Models]
+
+	* Support for H2 databases - [Per Djurner]
+
+	* DRYed up afterFind callback creation - [Tony Petruzzi]
+	
+		- No need now to write the same logic for queries and objects. Both ways now use the query way.
+		- To preserve backwards compatibility the setting `afterFindCallbackLegacySupport` has been introduced.
 
 	* Make it possible to use a blank value as a property default - [Andy Bellenie]
 
@@ -73,6 +80,10 @@ Changes
 
 [Dispatch]
 
+	* Support for "format" parsing in routes patterns - [James Gibson]
+	
+		- [controller]/[action].[format]
+
 	* Updated the request processing to not call the action if a before filter has rendered content - [James Gibson]
 	
 	* Removed differences in params structure for form / URL variables - #232 [Mike Henke, Tony Petruzzi]
@@ -80,6 +91,10 @@ Changes
 	* Added wildcard routes [Andy Bellenie]
 
 [Controllers]
+
+	* RedirectTo(back=true) doesn't throw error when cgi.http_referer is blank - [Per Djurner]
+	
+		- now fallbaks to root or route/controller/action
 
 	* Update to verifies - [Tony Petruzzi]
 	
@@ -139,6 +154,10 @@ Changes
 		<cfoutput>#flash("back")#</cfoutput>
 
 [Views]
+
+	* FlashMessages() can now pass a list of keys - [Chris Peters]
+	
+		- controls which messages to display as well as the order they are displayed in 
 
 	* Added a h() function - [Tony Petruzzi]
 
