@@ -45,10 +45,10 @@
 	<cfscript>
 		var loc = {};
 		ArrayAppend(arguments.sql, " WHERE ");
-		loc.iEnd = ListLen(variables.wheels.class.keys);
+		loc.iEnd = ListLen(primaryKeys());
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.key = ListGetAt(variables.wheels.class.keys, loc.i);
+			loc.key = primaryKeys(loc.i);
 			ArrayAppend(arguments.sql, "#variables.wheels.class.properties[loc.key].column# = ");
 			if (hasChanged(loc.key))
 				loc.value = changedFrom(loc.key);
@@ -668,7 +668,7 @@
 </cffunction>
 
 <cffunction name="$keyWhereString" returntype="string" access="public" output="false">
-	<cfargument name="properties" type="any" required="false" default="#variables.wheels.class.keys#">
+	<cfargument name="properties" type="any" required="false" default="#primaryKeys()#">
 	<cfargument name="values" type="any" required="false" default="">
 	<cfargument name="keys" type="any" required="false" default="">
 	<cfscript>

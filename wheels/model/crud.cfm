@@ -126,10 +126,10 @@
 			{
 				// insert primary keys to order clause unless they are already there, this guarantees that the ordering is unique which is required to make pagination work properly
 				loc.compareList = $listClean(ReplaceNoCase(ReplaceNoCase(arguments.order, " ASC", "", "all"), " DESC", "", "all"));
-				loc.iEnd = ListLen(variables.wheels.class.keys);
+				loc.iEnd = ListLen(primaryKeys());
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
-					loc.iItem = ListGetAt(variables.wheels.class.keys, loc.i);
+					loc.iItem = primaryKeys(loc.i);
 					if (!ListFindNoCase(loc.compareList, loc.iItem) && !ListFindNoCase(loc.compareList, tableName() & "." & loc.iItem))
 						arguments.order = ListAppend(arguments.order, loc.iItem);
 				}
@@ -171,13 +171,13 @@
 				}
 				else
 				{
-					loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=variables.wheels.class.keys, where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
+					loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=primaryKeys(), where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
 					if (loc.values.RecordCount) {
 						loc.paginationWhere = "";
-						loc.iEnd = ListLen(variables.wheels.class.keys);
+						loc.iEnd = ListLen(primaryKeys());
 						for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 						{
-							loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
+							loc.property = primaryKeys(loc.i);
 							loc.list = Evaluate("QuotedValueList(loc.values.#loc.property#)");
 							loc.paginationWhere = ListAppend(loc.paginationWhere, "#tableName()#.#variables.wheels.class.properties[loc.property].column# IN (#loc.list#)", Chr(7));
 						}
@@ -945,10 +945,10 @@
 		loc.iEnd = ArrayLen(loc.sql);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			ArrayAppend(loc.sql, loc.sql2[loc.i]);
-		loc.ins = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize, $primaryKey=variables.wheels.class.keys);
+		loc.ins = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize, $primaryKey=primaryKeys());
 		loc.generatedKey = variables.wheels.class.adapter.$generatedKey();
 		if (StructKeyExists(loc.ins.result, loc.generatedKey))
-			this[ListGetAt(variables.wheels.class.keys, 1)] = loc.ins.result[loc.generatedKey];
+			this[primaryKeys(1)] = loc.ins.result[loc.generatedKey];
 		if (arguments.reload)
 			this.reload();
 	</cfscript>
@@ -967,7 +967,7 @@
 		for (loc.key in variables.wheels.class.properties)
 		{
 			// include all changed non-key values in the update
-			if (StructKeyExists(this, loc.key) && !ListFindNoCase(variables.wheels.class.keys, loc.key) && hasChanged(loc.key))
+			if (StructKeyExists(this, loc.key) && !ListFindNoCase(primaryKeys(), loc.key) && hasChanged(loc.key))
 			{
 				ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
 				loc.param = {value = this[loc.key], type = variables.wheels.class.properties[loc.key].type, dataType = variables.wheels.class.properties[loc.key].dataType, scale = variables.wheels.class.properties[loc.key].scale, null = !len(this[loc.key])};

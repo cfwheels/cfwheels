@@ -109,7 +109,7 @@
 				if (StructKeyExists(arguments.missingMethodArguments, "include"))
 					loc.include = "#loc.include#(#arguments.missingMethodArguments.include#)";
 				arguments.missingMethodArguments.include = loc.include;
-				loc.where = $keyWhereString(properties=loc.joinAssociation.foreignKey, keys=variables.wheels.class.keys);
+				loc.where = $keyWhereString(properties=loc.joinAssociation.foreignKey, keys=primaryKeys());
 				if (StructKeyExists(arguments.missingMethodArguments, "where"))
 					loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 				arguments.missingMethodArguments.where = loc.where;
@@ -123,7 +123,7 @@
 				loc.componentReference = model(loc.info.modelName);
 				if (loc.info.type == "hasOne")
 				{
-					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=variables.wheels.class.keys);
+					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=primaryKeys());
 					if (StructKeyExists(arguments.missingMethodArguments, "where"))
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasProfile" becomes "hasObject")
@@ -195,7 +195,7 @@
 				}
 				else if (loc.info.type == "hasMany")
 				{
-					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=variables.wheels.class.keys);
+					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=primaryKeys());
 					if (StructKeyExists(arguments.missingMethodArguments, "where"))
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					loc.singularKey = singularize(loc.key);
@@ -343,7 +343,7 @@
 				}
 				else if (loc.info.type == "belongsTo")
 				{
-					loc.where = $keyWhereString(keys=loc.info.foreignKey, properties=variables.wheels.class.keys);
+					loc.where = $keyWhereString(keys=loc.info.foreignKey, properties=primaryKeys());
 					if (StructKeyExists(arguments.missingMethodArguments, "where"))
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasAuthor" becomes "hasObject")
@@ -394,7 +394,7 @@
 			if (arguments.setToNull)
 				arguments.missingMethodArguments[ListGetAt(arguments.keys, loc.i)] = "";
 			else
-				arguments.missingMethodArguments[ListGetAt(arguments.keys, loc.i)] = this[ListGetAt(variables.wheels.class.keys, loc.i)];
+				arguments.missingMethodArguments[ListGetAt(arguments.keys, loc.i)] = this[primaryKeys(loc.i)];
 		}
 	</cfscript>
 </cffunction>

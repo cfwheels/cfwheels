@@ -113,10 +113,10 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
-		loc.iEnd = ListLen(variables.wheels.class.keys);
+		loc.iEnd = ListLen(primaryKeys());
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
+			loc.property = primaryKeys(loc.i);
 			if (StructKeyExists(this, loc.property))
 			{
 				if (arguments.$persisted && hasChanged(loc.property))

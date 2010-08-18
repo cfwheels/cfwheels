@@ -102,10 +102,10 @@
 								{
 									// create object instance from values in current query row if it belongs to the current object
 									loc.primaryKeyColumnValues = "";
-									loc.kEnd = ListLen(variables.wheels.class.keys);
+									loc.kEnd = ListLen(primaryKeys());
 									
 									for (loc.k=1; loc.k <= loc.kEnd; loc.k++)
-										loc.primaryKeyColumnValues = ListAppend(loc.primaryKeyColumnValues, arguments.query[ListGetAt(variables.wheels.class.keys, loc.k)][loc.j]);
+										loc.primaryKeyColumnValues = ListAppend(loc.primaryKeyColumnValues, arguments.query[primaryKeys(loc.k)][loc.j]);
 
 									if (Len(loc.model.$keyFromStruct(loc.hasManyStruct)) && this.$keyFromStruct(loc.struct) == loc.primaryKeyColumnValues)
 										ArrayAppend(loc.struct[loc.include], loc.hasManyStruct);
@@ -164,10 +164,10 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
-		loc.iEnd = ListLen(variables.wheels.class.keys);
+		loc.iEnd = ListLen(primaryKeys());
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.property = ListGetAt(variables.wheels.class.keys, loc.i);
+			loc.property = primaryKeys(loc.i);
 			if (StructKeyExists(arguments.struct, loc.property))
 				loc.returnValue = ListAppend(loc.returnValue, arguments.struct[loc.property]);
 		}

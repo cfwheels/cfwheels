@@ -51,11 +51,16 @@
 		<cfset theKeyName = model("employee").primaryKey()>
 	'
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="">
+	<cfargument name="position" type="numeric" required="false" default="0">
+	<cfif arguments.position gt 0>
+		<cfreturn ListGetAt(variables.wheels.class.keys, arguments.position)>
+	</cfif>
 	<cfreturn variables.wheels.class.keys>
 </cffunction>
 
 <cffunction name="primaryKeys" returntype="string" access="public" output="false" hint="Alias for primaryKey()">
-	<cfreturn primaryKey()>
+	<cfargument name="position" type="numeric" required="false" default="0">
+	<cfreturn primaryKey(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="tableName" returntype="string" access="public" output="false" hint="Returns the name of the database table that this model is mapped to."
