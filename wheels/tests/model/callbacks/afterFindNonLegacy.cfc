@@ -1,12 +1,12 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="setup">
-		<cfset application.wheels.afterFindCallbackLegacyCompatability = false>
+		<cfset application.wheels.afterFindCallbackLegacySupport = false>
 		<cfset model("post").$registerCallback(type="afterFind", methods="afterFindCallback")>
 	</cffunction>
 	
 	<cffunction name="teardown">
-		<cfset application.wheels.afterFindCallbackLegacyCompatability = true>
+		<cfset application.wheels.afterFindCallbackLegacySupport = true>
 		<cfset model("post").$clearCallbacks(type="afterFind")>
 	</cffunction>
 

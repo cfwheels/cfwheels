@@ -280,7 +280,7 @@
 				}
 				else
 				{
-					if (application.wheels.afterFindCallbackLegacyCompatability)
+					if (application.wheels.afterFindCallbackLegacySupport)
 					{
 						loc.returnValue = $invoke(method=loc.method);
 					}
