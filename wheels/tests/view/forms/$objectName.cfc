@@ -10,7 +10,7 @@
 	</cffunction>
 
 	<cffunction name="test_$objectName_with_objectName_as_struct">
-		<cfset loc.struct = { "formField" = "formValue" }>
+		<cfset loc.struct = { formField = "formValue" }>
 		<cfset loc.objectName = loc.controller.$objectName(objectName=loc.struct)>
 		<cfset assert('IsStruct(loc.objectName) eq true') />
 	</cffunction>
