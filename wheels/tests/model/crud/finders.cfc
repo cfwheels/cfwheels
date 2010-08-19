@@ -206,4 +206,9 @@
 		<cfset assert('loc.allPosts.recordcount eq 4')>
 	</cffunction>
 
+	<cffunction name="test_findOne_returns_empty_array_for_included_model_when_none_exist">
+		<cfset loc.e = model("author").findOne(where="lastname = 'Bellenie'", include="posts")>
+		<cfset assert('IsArray(loc.e.posts) && ArrayIsEmpty(loc.e.posts)')>
+	</cffunction>
+
 </cfcomponent>
