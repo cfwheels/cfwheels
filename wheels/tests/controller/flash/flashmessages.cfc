@@ -37,7 +37,7 @@
 		<cfset result = controller.flashMessages()>
 		<cfset assert("result IS ''")>
 	</cffunction>
-	
+
 	<cffunction name="test_empty_flash_includeEmptyContainer">
 		<cfset result = controller.flashMessages(includeEmptyContainer="true")>
 		<cfset assert("result IS '<div class=""flash-messages""></div>'")>
@@ -51,7 +51,7 @@
 		<cfset result = controller.flashMessages()>
 		<cfset assert("result IS '<div class=""flash-messages""><p class=""success-message"">Congrats!</p></div>'")>
 	</cffunction>
-	
+
 	<cffunction name="test_control_order_via_keys_argument">
 		<cfset controller.flashInsert(success="Congrats!")>
 		<cfset controller.flashInsert(alert="Error!")>
@@ -62,9 +62,9 @@
 	</cffunction>
 
 	<cffunction name="test_casing_of_class_attribute">
-		<cfset controller.flashInsert(success="")>
+		<cfset controller.flashInsert(something="")>
 		<cfset loc.r = controller.flashMessages()>
-		<cfset loc.e = 'class="success-message"'>
+		<cfset loc.e = 'class="something-message"'>
 		<cfset assert('Find(loc.e, loc.r)')>
 		<cfset controller.flashClear()>
 		<cfset controller.flashInsert("someThing"="")>
@@ -75,7 +75,17 @@
 		<cfset controller.flashInsert(someThing="")>
 		<cfset loc.r = controller.flashMessages()>
 		<cfset loc.e = 'class="something-message"'>
-		cfset assert('Find(loc.e, loc.r)')>
+		<cfset assert('Find(loc.e, loc.r)')>
+		<cfset controller.flashClear()>
+		<cfset controller.flashInsert("SOMETHING"="")>
+		<cfset loc.r = controller.flashMessages()>
+		<cfset loc.e = 'class="something-message"'>
+		<cfset assert('Find(loc.e, loc.r)')>
+		<cfset controller.flashClear()>
+		<cfset controller.flashInsert("something"="")>
+		<cfset loc.r = controller.flashMessages()>
+		<cfset loc.e = 'class="something-message"'>
+		<cfset assert('Find(loc.e, loc.r)')>
 	</cffunction>
 
 </cfcomponent>
