@@ -263,14 +263,14 @@
 			{
 				loc.returnValue = loc.returnValue & "?controller=";
 				if (Len(arguments.controller))
-					loc.returnValue = loc.returnValue & $hyphenize(arguments.controller);
+					loc.returnValue = loc.returnValue & hyphenize(arguments.controller);
 				else
-					loc.returnValue = loc.returnValue & $hyphenize(loc.route.controller);
+					loc.returnValue = loc.returnValue & hyphenize(loc.route.controller);
 				loc.returnValue = loc.returnValue & "&action=";
 				if (Len(arguments.action))
-					loc.returnValue = loc.returnValue & $hyphenize(arguments.action);
+					loc.returnValue = loc.returnValue & hyphenize(arguments.action);
 				else
-					loc.returnValue = loc.returnValue & $hyphenize(loc.route.action);
+					loc.returnValue = loc.returnValue & hyphenize(loc.route.action);
 				// add it the format if it exists
 				if (StructKeyExists(loc.route, "formatVariable") && StructKeyExists(arguments, loc.route.formatVariable))
 					loc.returnValue = loc.returnValue & "&#loc.route.formatVariable#=#arguments[loc.route.formatVariable]#";
@@ -295,7 +295,7 @@
 							$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="The route chosen by Wheels `#loc.route.name#` requires the argument `#loc.property#`. Pass the argument `#loc.property#` or change your routes to reflect the proper variables needed.");
 						loc.param = $URLEncode(arguments[loc.property]);
 						if (loc.property == "controller" || loc.property == "action")
-							loc.param = $hyphenize(loc.param);
+							loc.param = hyphenize(loc.param);
 						else if (application.wheels.obfuscateUrls)
 							loc.param = obfuscateParam(loc.param);
 						loc.returnValue = loc.returnValue & "/" & loc.param; // get param from arguments
@@ -319,9 +319,9 @@
 				arguments.controller = loc.params.controller;
 			if (Len(arguments.key) && !Len(arguments.action) && StructKeyExists(loc.params, "action"))
 				arguments.action = loc.params.action;
-			loc.returnValue = loc.returnValue & "?controller=" & $hyphenize(arguments.controller);
+			loc.returnValue = loc.returnValue & "?controller=" & hyphenize(arguments.controller);
 			if (Len(arguments.action))
-				loc.returnValue = loc.returnValue & "&action=" & $hyphenize(arguments.action);
+				loc.returnValue = loc.returnValue & "&action=" & hyphenize(arguments.action);
 			if (Len(arguments.key))
 			{
 				loc.param = $URLEncode(arguments.key);
@@ -440,6 +440,11 @@
 		<cfset arguments.fallback = application.wheels.mimetypes[arguments.extension]>
 	</cfif>
 	<cfreturn arguments.fallback>
+</cffunction>
+
+<cffunction name="hyphenize" returntype="string" access="public" output="false" hint="Converts camelcase strings to lowercase strings with hyphens instead. Example: `myVariable` becomes `my-variable`.">
+	<cfargument name="string" type="string" required="true" hint="The string to hyphenize.">
+	<cfreturn LCase(REReplace(REReplace(arguments.string, "([A-Z])", "-\l\1", "all"), "^-", "", "one"))>
 </cffunction>
 
 <!--- PRIVATE FUNCTIONS --->
