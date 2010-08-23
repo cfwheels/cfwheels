@@ -59,7 +59,7 @@
 						loc.returnValue[loc.formParamName] = loc.returnValue[loc.key];
 					StructDelete(loc.returnValue, loc.key);
 				}
-				else if (REFindNoCase(".*\((\$year|\$month|\$day|\$hour|\$minute|\$second)\)$", loc.key))
+				else if (REFindNoCase(".*\((\$year|\$month|\$day|\$hour|\$minute|\$second|\$ampm)\)$", loc.key))
 				{
 					loc.temp = ListToArray(loc.key, "(");
 					loc.firstKey = loc.temp[1];
@@ -84,6 +84,12 @@
 					loc.dates[loc.key].minute = 0;
 				if (!StructKeyExists(loc.dates[loc.key], "second"))
 					loc.dates[loc.key].second = 0;
+				if (StructKeyExists(loc.dates[loc.key], "ampm")) {
+					if (loc.dates[loc.key].ampm IS "AM" && loc.dates[loc.key].hour EQ 12)
+						loc.dates[loc.key].hour = 0;
+					else if (loc.dates[loc.key].ampm IS "PM")
+						loc.dates[loc.key].hour += 12;
+				}
 				if (!StructKeyExists(loc.returnValue, loc.key) || !IsArray(loc.returnValue[loc.key]))
 					loc.returnValue[loc.key] = [];
 				try

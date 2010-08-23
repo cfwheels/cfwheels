@@ -58,6 +58,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
+	<cfargument name="twelveHour" type="boolean" required="false" default="false" hint="whether to display the hours in 24 or 12 hour format. 12 hour format has AM/PM drop downs">
 	<cfscript>
 		$args(name="timeSelect", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
@@ -97,6 +98,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
+	<cfargument name="twelveHour" type="boolean" required="false" default="false" hint="See documentation for @timeSelect.">
 	<cfscript>
 		$args(name="dateTimeSelect", reserved="name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
