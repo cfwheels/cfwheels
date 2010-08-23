@@ -1,19 +1,19 @@
 <!--- PUBLIC MODEL INITIALIZATION METHODS --->
 
-<cffunction name="belongsTo" returntype="void" access="public" output="false" hint="Sets up a `belongsTo` association between this model and the specified one."
+<cffunction name="belongsTo" returntype="void" access="public" output="false" hint="Sets up a `belongsTo` association between this model and the specified one. Use this association when this model contains a foreign key referencing another model."
 	examples=
 	'
-		<!--- Specify that instances of this model belongs to an author (the table for this model should have a foreign key set on it, typically named `authorid`) --->
+		<!--- Specify that instances of this model belong to an author. (The table for this model should have a foreign key set on it, typically named `authorid`.) --->
 		<cfset belongsTo("author")>
 
-		<!--- Same as above but since we give the association a different name we have to set `modelName` and `foreignKey` since Wheels won''t be able to figure it out based on the association name anymore --->
+		<!--- Same as above, but because we have broken away from the foreign key naming convention, we need to set `modelName` and `foreignKey` --->
 		<cfset belongsTo(name="bookWriter", modelName="author", foreignKey="authorId")>
 	'
 	categories="model-initialization,associations" chapters="associations" functions="hasOne,hasMany">
-	<cfargument name="name" type="string" required="true" hint="Gives the association a name that you refer to when working with the association (in the `include` argument to @findAll to name one example).">
-	<cfargument name="modelName" type="string" required="false" default="" hint="Name of associated model (usually not needed if you follow the Wheels conventions since the model name will be deduced from the `name` argument).">
-	<cfargument name="foreignKey" type="string" required="false" default="" hint="Foreign key property name (usually not needed if you follow the Wheels conventions since the foreign key name will be deduced from the `name` argument).">
-	<cfargument name="joinType" type="string" required="false" hint="Use to set the join type when joining associated tables, possible values are `inner` (for `INNER JOIN`) and `outer` (for `LEFT OUTER JOIN`).">
+	<cfargument name="name" type="string" required="true" hint="Gives the association a name that you refer to when working with the association (in the `include` argument to @findAll, to name one example).">
+	<cfargument name="modelName" type="string" required="false" default="" hint="Name of associated model (usually not needed if you follow Wheels conventions because the model name will be deduced from the `name` argument).">
+	<cfargument name="foreignKey" type="string" required="false" default="" hint="Foreign key property name (usually not needed if you follow Wheels conventions since the foreign key name will be deduced from the `name` argument).">
+	<cfargument name="joinType" type="string" required="false" hint="Use to set the join type when joining associated tables. Possible values are `inner` (for `INNER JOIN`) and `outer` (for `LEFT OUTER JOIN`).">
 	<cfscript>
 		$args(name="belongsTo", args=arguments);
 		// deprecate the class argument (change of name only)
@@ -33,20 +33,43 @@
 <cffunction name="hasMany" returntype="void" access="public" output="false" hint="Sets up a `hasMany` association between this model and the specified one."
 	examples=
 	'
-		<!--- Specify that instances of this model has many comments (the table for the associated model, not the current, should have the foreign key set on it) --->
+		<!---
+			Example1: Specify that instances of this model has many comments.
+			(The table for the associated model, not the current, should have the foreign key set on it.)
+		--->
 		<cfset hasMany("comments")>
 
-		<!--- Specify that this model (let''s call it `reader` in this case) has many subscriptions and setup a shortcut to the `magazine` model (useful when dealing with many to many relationships) --->
-		<cfset hasMany(name="subscriptions", shortcut="magazines")>
+		<!---
+			Example 2: Specify that this model (let''s call it `reader` in this case) has many subscriptions and setup a shortcut to the `publication` model.
+			(Useful when dealing with many-to-many relationships.)
+		--->
+		<cfset hasMany(name="subscriptions", shortcut="publications")>
+		
+		<!--- Example 3: Automatically delete all associated `comments` whenever this object is deleted --->
+		<cfset hasMany(name="comments", dependent="deleteAll")>
+		
+		<!---
+			Example 4: When not following Wheels naming conventions for associations, it can get complex to define how a `shortcut` works.
+			In this example, we are naming our `shortcut` differently than the actual model''s name.
+		--->
+		<!--- In the models/Customer.cfc `init()` method --->
+		<cfset hasMany(name="subscriptions", shortcut="magazines", through="publication,subscriptions")>
+		
+		<!--- In the models/Subscriptions.cfc `init()` method --->
+		<cfset belongsTo("customer")>
+		<cfset belongsTo("publication")>
+		
+		<!--- In the models/Publication `init()` method --->
+		<cfset hasMany("subscriptions")>
 	'
 	categories="model-initialization,associations" chapters="associations" functions="belongsTo,hasOne">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @belongsTo.">
 	<cfargument name="modelName" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="joinType" type="string" required="false" hint="See documentation for @belongsTo.">
-	<cfargument name="dependent" type="string" required="false" hint="Set to `delete` to instantiate associated models and call their delete method, `deleteAll` to delete without instantiating, `nullify` to remove the foreign key or `false` to do nothing.">
-	<cfargument name="shortcut" type="string" required="false" default="" hint="Set this argument to create an additional dynamic method that gets the objects for a many-to-many association.">
-	<cfargument name="through" type="string" required="false" default="#singularize(arguments.shortcut)#,#arguments.name#" hint="Set this argument if you need to override the Wheels convention when using the `shortcut` argument.">
+	<cfargument name="dependent" type="string" required="false" hint="Defines how to handle dependent models when you delete a record from this model. Set to `delete` to instantiate associated models and call their @delete method, `deleteAll` to delete without instantiating, `nullify` to remove the foreign key, or `false` to do nothing.">
+	<cfargument name="shortcut" type="string" required="false" default="" hint="Set this argument to create an additional dynamic method that gets the object(s) from the other side of a many-to-many association.">
+	<cfargument name="through" type="string" required="false" default="#singularize(arguments.shortcut)#,#arguments.name#" hint="Set this argument if you need to override Wheels conventions when using the `shortcut` argument. Accepts a list of two association names representing the chain from the opposite side of the many-to-many relationship to this model.">
 	<cfscript>
 		var singularizeName = capitalize(singularize(arguments.name));
 		var capitalizeName = capitalize(arguments.name);
@@ -68,11 +91,14 @@
 <cffunction name="hasOne" returntype="void" access="public" output="false" hint="Sets up a `hasOne` association between this model and the specified one."
 	examples=
 	'
-		<!--- Specify that instances of this model has one profile (the table for the associated model, not the current, should have the foreign key set on it) --->
+		<!--- Specify that instances of this model has one profile. (The table for the associated model, not the current, should have the foreign key set on it.) --->
 		<cfset hasOne("profile")>
 
-		<!--- Same as above but setting the `joinType` to `inner` which basically means this model should always have a record in the `profiles` table --->
+		<!--- Same as above but setting the `joinType` to `inner`, which basically means this model should always have a record in the `profiles` table --->
 		<cfset hasOne(name="profile", joinType="inner")>
+		
+		<!--- Automatically delete the associated `profile` whenever this object is deleted --->
+		<cfset hasMany(name="comments", dependent="delete")>
 	'
 	categories="model-initialization,associations" chapters="associations" functions="belongsTo,hasMany">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @belongsTo.">
@@ -164,4 +190,3 @@
 	}
 	</cfscript>
 </cffunction>
-
