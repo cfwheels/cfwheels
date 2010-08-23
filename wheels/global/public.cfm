@@ -444,7 +444,10 @@
 
 <cffunction name="hyphenize" returntype="string" access="public" output="false" hint="Converts camelcase strings to lowercase strings with hyphens instead. Example: `myVariable` becomes `my-variable`.">
 	<cfargument name="string" type="string" required="true" hint="The string to hyphenize.">
-	<cfreturn LCase(REReplace(REReplace(arguments.string, "([A-Z])", "-\l\1", "all"), "^-", "", "one"))>
+	<cfset arguments.string = REReplace(arguments.string, "([A-Z][a-z])", "-\l\1", "all")>
+	<cfset arguments.string = REReplace(arguments.string, "([a-z])([A-Z])", "\1-\l\2", "all")>
+	<cfset arguments.string = REReplace(arguments.string, "^-", "", "one")>
+	<cfreturn LCase(arguments.string)>
 </cffunction>
 
 <!--- PRIVATE FUNCTIONS --->
