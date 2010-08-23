@@ -246,21 +246,21 @@
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = arguments.$id & "-ampm";
 		loc.content = "";
-		
-		loc.iEnd = ListLen(loc.options);	
+
+		loc.iEnd = ListLen(loc.options);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.option = ListGetAt(loc.options, loc.i);
-			
+
 			loc.args = {};
 			loc.args.value = loc.option;
 			if (arguments.value IS loc.option)
 				loc.args.selected = "selected";
-				
+
 			loc.content = loc.content & $element(name="option", content=loc.option, attributes=loc.args);
 		}
 
-		loc.returnValue = $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,association,position", skipStartingWith="label", content=loc.content, attributes=arguments);
+		loc.returnValue = $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
