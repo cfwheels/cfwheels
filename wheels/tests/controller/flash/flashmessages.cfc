@@ -61,5 +61,21 @@
 		<cfset assert("result IS '<div class=""flash-messages""><p class=""alert-message"">Error!</p><p class=""success-message"">Congrats!</p></div>'")>
 	</cffunction>
 
+	<cffunction name="test_casing_of_class_attribute">
+		<cfset controller.flashInsert(success="")>
+		<cfset loc.r = controller.flashMessages()>
+		<cfset loc.e = 'class="success-message"'>
+		<cfset assert('Find(loc.e, loc.r)')>
+		<cfset controller.flashClear()>
+		<cfset controller.flashInsert("someThing"="")>
+		<cfset loc.r = controller.flashMessages()>
+		<cfset loc.e = 'class="some-thing-message"'>
+		cfset assert('Find(loc.e, loc.r)')>
+		<cfset controller.flashClear()>
+		<cfset controller.flashInsert(someThing="")>
+		<cfset loc.r = controller.flashMessages()>
+		<cfset loc.e = 'class="something-message"'>
+		cfset assert('Find(loc.e, loc.r)')>
+	</cffunction>
 
 </cfcomponent>
