@@ -7,10 +7,10 @@
 		<cfset avgSalary = model("employee").average("salary")>
 		
 		<!--- Get the average salary for employees in a given department --->
-		<cfset avgSalary = model("employee").average(property="salary", where="departmentId=#params.key#")>
+		<cfset avgSalary = model("employee").average(property="salary", where="departmentId=##params.key##")>
 		
 		<!--- Make sure a numeric value is always returned if no records are calculated --->
-		<cfset avgSalary = model("employee").average(property="salary", where="salary BETWEEN #params.min# AND #params.max#", ifNull=0>
+		<cfset avgSalary = model("employee").average(property="salary", where="salary BETWEEN ##params.min## AND ##params.max##", ifNull=0>
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="count,maximum,minimum,sum">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to calculate the average for.">
@@ -95,10 +95,10 @@
 		<cfset highestSalary = model("employee").maximum("salary")>
 		
 		<!--- Get the amount of the highest salary for employees in a given department --->
-		<cfset highestSalary = model("employee").maximum(property="salary", where="departmentId=#params.key#")>
+		<cfset highestSalary = model("employee").maximum(property="salary", where="departmentId=##params.key##")>
 		
 		<!--- Make sure a numeric value is always returned, even if no records are found to calculate the maximum for --->
-		<cfset highestSalary = model("employee").maximum(property="salary", where="salary > #params.minSalary#", ifNull=0)>
+		<cfset highestSalary = model("employee").maximum(property="salary", where="salary > ##params.minSalary##", ifNull=0)>
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="average,count,minimum,sum">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to get the highest value for (must be a property of a numeric data type).">
@@ -121,10 +121,10 @@
 		<cfset lowestSalary = model("employee").minimum("salary")>
 		
 		<!--- Get the amount of the lowest salary for employees in a given department --->
-		<cfset lowestSalary = model("employee").minimum(property="salary", where="departmentId=#params.id#")>
+		<cfset lowestSalary = model("employee").minimum(property="salary", where="departmentId=##params.id##")>
 		
 		<!--- Make sure a numeric amount is always returned, even when there were no records analyzed by the query --->
-		<cfset lowestSalary = model("employee").minimum(property="salary", where="salary BETWEEN #params.min# AND #params.max#", ifNull=0)>
+		<cfset lowestSalary = model("employee").minimum(property="salary", where="salary BETWEEN ##params.min## AND ##params.max##", ifNull=0)>
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="average,count,maximum,sum">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to get the lowest value for (must be a property of a numeric data type).">
@@ -150,7 +150,7 @@
 		<cfset allAustralianSalaries = model("employee").sum(property="salary", include="country", where="countryname=''Australia''")>
 		
 		<!--- Make sure a numeric value is always returned, even if there are no records analyzed by the query --->
-		<cfset salarySum = model("employee").sum(property="salary", where="salary BETWEEN #params.min# AND #params.max#", ifNull=0)>
+		<cfset salarySum = model("employee").sum(property="salary", where="salary BETWEEN ##params.min## AND ##params.max##", ifNull=0)>
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="average,count,maximum,minimum">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to get the sum for (must be a property of a numeric data type).">
