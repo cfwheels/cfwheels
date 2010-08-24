@@ -103,7 +103,7 @@
 			arguments.twelveHour = true;
 			if (!ListFindNoCase(arguments.order, "ampm"))
 			{
-				arguments.order = ListAppend(arguments.order, "ampm")
+				arguments.order = ListAppend(arguments.order, "ampm");
 			}
 		}
 
