@@ -1,6 +1,6 @@
 <!--- PUBLIC MODEL INITIALIZATION METHODS --->
 
-<cffunction name="afterNew" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after a new object has been initialized (usually done with the @new method)."
+<cffunction name="afterNew" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after a new object has been initialized (which is usually done with the @new method)."
 	examples=
 	'
 		<!--- Instruct Wheels to call the `fixObj` method --->
@@ -11,7 +11,7 @@
 	<cfset $registerCallback(type="afterNew", argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="afterFind" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an existing object has been initialized (usually done with the @findByKey or @findOne method)."
+<cffunction name="afterFind" returntype="void" access="public" output="false" hint="Registers method(s) that should be called after an existing object has been initialized (which is usually done with the @findByKey or @findOne method)."
 	examples=
 	'
 		<!--- Instruct Wheels to call the `setTime` method after getting objects or records with one of the finder methods --->
@@ -20,12 +20,8 @@
 		</cffunction>
 
 		<cffunction name="setTime">
-			<cfif StructIsEmpty(arguments)>
-				<cfset this.fetchedAt = Now()>
-			<cfelse>
-				<cfset arguments.fetchedAt = Now()>
-				<cfreturn arguments>
-			</cfif>
+			<cfset arguments.fetchedAt = Now()>
+			<cfreturn arguments>
 		</cffunction>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">

@@ -5,6 +5,12 @@
 	'
 		<!--- Get the average salary for all employees --->
 		<cfset avgSalary = model("employee").average("salary")>
+		
+		<!--- Get the average salary for employees in a given department --->
+		<cfset avgSalary = model("employee").average(property="salary", where="departmentId=#params.key#")>
+		
+		<!--- Make sure a numeric value is always returned if no records are calculated --->
+		<cfset avgSalary = model("employee").average(property="salary", where="salary BETWEEN #params.min# AND #params.max#", ifNull=0>
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="count,maximum,minimum,sum">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to calculate the average for.">
@@ -54,12 +60,12 @@
 		<!--- Count how many authors there are in the table --->
 		<cfset authorCount = model("author").count()>
 
-		<!--- Count how many authors whose last name starts with "A" there are --->
+		<!--- Count how many authors that have a last name starting with an "A" --->
 		<cfset authorOnACount = model("author").count(where="lastName LIKE ''A%''")>
 
-		<!--- Count how many authors that have written books starting on "A" --->
-		<cfset authorWithBooksOnACount = model("author").count(include="books", where="title LIKE ''A%''")>
-
+		<!--- Count how many authors that have written books starting with an "A" --->
+		<cfset authorWithBooksOnACount = model("author").count(include="books", where="booktitle LIKE ''A%''")>
+		
 		<!--- Count the number of comments on a specific post (a `hasMany` association from `post` to `comment` is required) --->
 		<!--- The `commentCount` method will call `model("comment").count(where="postId=##post.id##")` internally --->
 		<cfset aPost = model("post").findByKey(params.postId)>
@@ -87,9 +93,15 @@
 	'
 		<!--- Get the amount of the highest salary for all employees --->
 		<cfset highestSalary = model("employee").maximum("salary")>
+		
+		<!--- Get the amount of the highest salary for employees in a given department --->
+		<cfset highestSalary = model("employee").maximum(property="salary", where="departmentId=#params.key#")>
+		
+		<!--- Make sure a numeric value is always returned, even if no records are found to calculate the maximum for --->
+		<cfset highestSalary = model("employee").maximum(property="salary", where="salary > #params.minSalary#", ifNull=0)>
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="average,count,minimum,sum">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to get the highest value for (has to be a property of a numeric data type).">
+	<cfargument name="property" type="string" required="true" hint="Name of the property to get the highest value for (must be a property of a numeric data type).">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
@@ -107,9 +119,15 @@
 	'
 		<!--- Get the amount of the lowest salary for all employees --->
 		<cfset lowestSalary = model("employee").minimum("salary")>
+		
+		<!--- Get the amount of the lowest salary for employees in a given department --->
+		<cfset lowestSalary = model("employee").minimum(property="salary", where="departmentId=#params.id#")>
+		
+		<!--- Make sure a numeric amount is always returned, even when there were no records analyzed by the query --->
+		<cfset lowestSalary = model("employee").minimum(property="salary", where="salary BETWEEN #params.min# AND #params.max#", ifNull=0)>
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="average,count,maximum,sum">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to get the lowest value for (has to be a property of a numeric data type).">
+	<cfargument name="property" type="string" required="true" hint="Name of the property to get the lowest value for (must be a property of a numeric data type).">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
@@ -126,13 +144,16 @@
 	examples=
 	'
 		<!--- Get the sum of all salaries --->
-		<cfset allSalaries = model("employee").sum(property="salary")>
+		<cfset allSalaries = model("employee").sum("salary")>
 
-		<!--- Get the sum of all salaries for employees in Australia --->
-		<cfset allAustralianSalaries = model("employee").sum(property="salary", include="country", where="name=''Australia''")>
+		<!--- Get the sum of all salaries for employees in a given country --->
+		<cfset allAustralianSalaries = model("employee").sum(property="salary", include="country", where="countryname=''Australia''")>
+		
+		<!--- Make sure a numeric value is always returned, even if there are no records analyzed by the query --->
+		<cfset salarySum = model("employee").sum(property="salary", where="salary BETWEEN #params.min# AND #params.max#", ifNull=0)>
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="average,count,maximum,minimum">
-	<cfargument name="property" type="string" required="true" hint="Name of the property to get the sum for (has to be a property of a numeric data type).">
+	<cfargument name="property" type="string" required="true" hint="Name of the property to get the sum for (must be a property of a numeric data type).">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="distinct" type="boolean" required="false" hint="When `true`, `SUM` returns the sum of unique values only.">
