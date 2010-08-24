@@ -190,10 +190,7 @@
 				}
 			}
 			// store pagination info in the request scope so all pagination methods can access it
-			request.wheels[arguments.handle] = {};
-			request.wheels[arguments.handle].currentPage = loc.currentPage;
-			request.wheels[arguments.handle].totalPages = loc.totalPages;
-			request.wheels[arguments.handle].totalRecords = loc.totalRecords;
+			setPagination(loc.totalRecords, loc.currentPage, arguments.perPage, arguments.handle);
 		}
 
 		if (StructKeyExists(loc, "returnValue") && !Len(loc.returnValue))
