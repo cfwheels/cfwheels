@@ -61,31 +61,37 @@
 		<cfset assert("result IS '<div class=""flash-messages""><p class=""alert-message"">Error!</p><p class=""success-message"">Congrats!</p></div>'")>
 	</cffunction>
 
-	<cffunction name="test_casing_of_class_attribute">
-		<cfset controller.flashInsert(something="")>
+	<cffunction name="test_casing_of_class_attribute_lower">
+ 		<cfset controller.flashInsert(something="")>
 		<cfset loc.r = controller.flashMessages()>
 		<cfset loc.e = 'class="something-message"'>
+		<cfset debug('loc.e', false)>
+		<cfset debug('loc.r', false)>
 		<cfset assert('Find(loc.e, loc.r)')>
-		<cfset controller.flashClear()>
+	</cffunction>
+	
+	<cffunction name="test_casing_of_class_attribute_mixed">
+		<!--- 
+		https://jira.jboss.org/browse/RAILO-933
+		note that a workaround for RAILO is to quote the arugment:
 		<cfset controller.flashInsert("someThing"="")>
-		<cfset loc.r = controller.flashMessages()>
-		<cfset loc.e = 'class="some-thing-message"'>
-		cfset assert('Find(loc.e, loc.r)')>
-		<cfset controller.flashClear()>
+		Just remember that this throws a compilation error in ACF
+		 --->
 		<cfset controller.flashInsert(someThing="")>
 		<cfset loc.r = controller.flashMessages()>
-		<cfset loc.e = 'class="something-message"'>
-		<cfset assert('Find(loc.e, loc.r)')>
-		<cfset controller.flashClear()>
-		<cfset controller.flashInsert("SOMETHING"="")>
-		<cfset loc.r = controller.flashMessages()>
-		<cfset loc.e = 'class="something-message"'>
-		<cfset assert('Find(loc.e, loc.r)')>
-		<cfset controller.flashClear()>
-		<cfset controller.flashInsert("something"="")>
-		<cfset loc.r = controller.flashMessages()>
-		<cfset loc.e = 'class="something-message"'>
+		<cfset loc.e = 'class="some-thing-message"'>
+		<cfset debug('loc.e', false)>
+		<cfset debug('loc.r', false)>
 		<cfset assert('Find(loc.e, loc.r)')>
 	</cffunction>
 
+	<cffunction name="test_casing_of_class_attribute_upper">
+		<cfset controller.flashInsert(SOMETHING="")>
+		<cfset loc.r = controller.flashMessages()>
+		<cfset loc.e = 'class="something-message"'>
+		<cfset debug('loc.e', false)>
+		<cfset debug('loc.r', false)>
+		<cfset assert('Find(loc.e, loc.r)')>
+	</cffunction>
+	
 </cfcomponent>
