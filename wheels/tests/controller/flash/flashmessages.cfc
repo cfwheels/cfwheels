@@ -4,13 +4,7 @@
 	<cfset controller = $controller(name="dummy").$createControllerObject(params)>
 
 	<cffunction name="setup">
-		<cfset flashStorage = application.wheels.flashStorage>
-		<cfset application.wheels.flashStorage = "cookie">
 		<cfset controller.flashClear()>
-	</cffunction>
-
-	<cffunction name="teardown">
-		<cfset application.wheels.flashStorage = flashStorage>
 	</cffunction>
 
 	<cffunction name="test_normal_output">
@@ -69,9 +63,9 @@
 		<cfset debug('loc.r', false)>
 		<cfset assert('Find(loc.e, loc.r)')>
 	</cffunction>
-	
+
 	<cffunction name="test_casing_of_class_attribute_mixed">
-		<!--- 
+		<!---
 		https://jira.jboss.org/browse/RAILO-933
 		note that a workaround for RAILO is to quote the arugment:
 		<cfset controller.flashInsert("someThing"="")>
@@ -93,5 +87,5 @@
 		<cfset debug('loc.r', false)>
 		<cfset assert('Find(loc.e, loc.r)')>
 	</cffunction>
-	
+
 </cfcomponent>

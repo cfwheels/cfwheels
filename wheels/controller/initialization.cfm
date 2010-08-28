@@ -5,18 +5,19 @@
 	<cfscript>
 		variables.$class.name = arguments.name;
 		variables.$class.path = arguments.path;
-		
+
 		// if our name has pathing in it, remove it and add it to the end of of the $class.path variable
 		if (Find("/", arguments.name))
 		{
 			variables.$class.name = ListLast(arguments.name, "/");
 			variables.$class.path = ListAppend(arguments.path, ListDeleteAt(arguments.name, ListLen(arguments.name, "/"), "/"), "/");
 		}
-		
+
 		variables.$class.verifications = [];
 		variables.$class.filters = [];
 		variables.$class.cachableActions = [];
 		variables.$class.layout = {};
+		$setFlashStorage(get("flashStorage"));
 		if (StructKeyExists(variables, "init"))
 			init();
 	</cfscript>
