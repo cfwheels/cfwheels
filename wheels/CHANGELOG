@@ -3,7 +3,6 @@ WHEELS VERSION 1.0.6 (unreleased)
 Changes
 ============
 * Ability for years to display in descending order in date select form tags - [Tony Petruzzi]
-* Make it possible to use a blank value as a property default - [Andy Bellenie]
 * Removed differences in params structure for form / URL variables - #232 [Mike Henke, Tony Petruzzi]
 * Added cachePlugins setting - #304 [Andy Bellenie]
 * Added toXHTML() - [Tony Petruzzi]
