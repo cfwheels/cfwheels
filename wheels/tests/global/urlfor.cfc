@@ -1,12 +1,14 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="setup">
-		<cfset loc.savedInfo.routes = duplicate(application.wheels.routes)>
-		<cfset loc.savedInfo.namedRoutePositions = duplicate(application.wheels.namedRoutePositions)>
+		<cfset loc.original_routes = duplicate(application.wheels.routes)>
+		<cfset loc.original_rewrite = application.wheels.URLRewriting>
+		<cfset application.wheels.URLRewriting = "On">
 	</cffunction>
 
 	<cffunction name="teardown">
-		<cfset structAppend(application.wheels, loc.savedInfo, true)>
+		<cfset application.wheels.routes = loc.original_routes>
+		<cfset application.wheels.URLRewriting = loc.original_rewrite>
 	</cffunction>
 
 	<cffunction name="test_links_are_properly_hyphenated">
