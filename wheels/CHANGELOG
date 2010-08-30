@@ -6,6 +6,7 @@ Changes
 * Removed differences in params structure for form / URL variables - #232 [Mike Henke, Tony Petruzzi]
 * Added cachePlugins setting - #304 [Andy Bellenie]
 * Added toXHTML() - [Tony Petruzzi]
+* Each object is now passed through to the partial file as its model name - [Per Djurner]
 
 Bug Fixes
 =========

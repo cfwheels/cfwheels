@@ -286,20 +286,23 @@
 			}
 			else if (StructKeyExists(arguments, "object") && IsObject(arguments.object))
 			{
-				loc.object = arguments.object;
+				loc.modelName = arguments.object.$classData().name;
+				arguments[loc.modelName] = arguments.object;
 				StructDelete(arguments, "object");
-				StructAppend(arguments, loc.object.properties(), false);
+				StructAppend(arguments, arguments[loc.modelName].properties(), false);
 			}
 			else if (StructKeyExists(arguments, "objects") && IsArray(arguments.objects))
 			{
 				loc.originalArguments = Duplicate(arguments);
 				loc.array = arguments.objects;
 				StructDelete(arguments, "objects");
+				loc.modelName = loc.array[1].$classData().name;
 				loc.returnValue = "";
 				loc.iEnd = ArrayLen(loc.array);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					arguments.current = loc.i;
+					arguments[loc.modelName] = loc.array[loc.i];
 					loc.properties = loc.array[loc.i].properties();
 					for (loc.key in loc.originalArguments)
 						if (StructKeyExists(loc.properties, loc.key))
