@@ -608,3 +608,47 @@ Should now call bar() instead and marking foo() as deprecated
 		$include(template="wheels/plugins/injection.cfm");
 	</cfscript>
 </cffunction>
+
+<cffunction name="$listClean" returntype="any" access="public" output="false" hint="removes whitespace between list elements. optional argument to return the list as an array.">
+	<cfargument name="list" type="string" required="true">
+	<cfargument name="delim" type="string" required="false" default=",">
+	<cfargument name="returnAs" type="string" required="false" default="string">
+	<cfscript>
+		var loc = {};
+		loc.list = ListToArray(arguments.list, arguments.delim);
+		for (loc.i = 1; loc.i lte ArrayLen(loc.list); loc.i++)
+			loc.list[loc.i] = Trim(loc.list[loc.i]);
+		if (arguments.returnAs == "array")
+			return loc.list;
+	</cfscript>
+	<cfreturn ArrayToList(loc.list, arguments.delim)>
+</cffunction>
+
+<cffunction name="$hashedKey" returntype="string" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = "";
+		loc.keyList = ListSort(StructKeyList(arguments), "textnocase", "asc");
+
+		// we need to make sure we are looping through the passed in arguments the same everytime
+		for (loc.i = 1; loc.i lte ListLen(loc.keyList); loc.i++)
+		{
+			loc.value = arguments[ListGetAt(loc.keyList, loc.i)];
+
+			// for ( in ) can pass around undefined values so we need to check that the variables exists
+			if (StructKeyExists(loc, "value"))
+			{
+				// SerializeJSON crashes if a query contains binary data
+				// a workaround is to use cfwddx
+				if(IsQuery(loc.value))
+					loc.value = $wddx(input=loc.value);
+
+				if (IsSimpleValue(loc.value))
+					loc.returnValue = loc.returnValue & loc.value;
+				else
+					loc.returnValue = loc.returnValue & ListSort(ReplaceList(SerializeJSON(loc.value), "{,}", ","), "text");
+			}
+		}
+		return Hash(loc.returnValue);
+	</cfscript>
+</cffunction>
