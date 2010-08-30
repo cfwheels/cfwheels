@@ -43,6 +43,7 @@
 		application.wheels.nonExistingHelperFiles = "";
 		application.wheels.routes = [];
 		application.wheels.namedRoutePositions = {};
+		application.wheels.mixins = {};
 		application.wheels.cache = {};
 		application.wheels.cache.sql = {};
 		application.wheels.cache.image = {};
@@ -91,8 +92,6 @@
 		$include(template="#application.wheels.configPath#/settings.cfm");
 		$include(template="#application.wheels.configPath#/#application.wheels.environment#/settings.cfm");
 
-		$loadPlugins();
-
 		// load developer routes and add wheels default ones at the end
 		$include(template="#application.wheels.configPath#/routes.cfm");
 		$include(template="wheels/events/onapplicationstart/routes.cfm");
@@ -108,6 +107,8 @@
 			if (Left(loc.method, 1) != "$" && !ListFindNoCase(loc.allowedGlobalMethods, loc.method))
 				application.wheels.protectedControllerMethods = ListAppend(application.wheels.protectedControllerMethods, loc.method);
 		}
+
+		$loadPlugins();
 
 		// create the dispatcher that will handle all incoming requests
 		application.wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$returnDispatcher");
