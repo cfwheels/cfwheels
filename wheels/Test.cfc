@@ -102,8 +102,16 @@
 	<!--- include main wheels functions in tests by default --->
 	<cfinclude template="/wheelsMapping/global/functions.cfm">
 
-	<cfset variables.WHEELS_TESTS_BASE_COMPONENT_PATH = "">
-	<cfset variables.ROOT_TEST_PATH = "">
+	<!--- variables that are used by the testing framework itself --->
+	<cfset TESTING_FRAMEWORK_VARS = {}>
+	<cfset TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH  = "">
+	<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = "">
+	<cfset TESTING_FRAMEWORK_VARS.RUNNING_TEST = "">
+	
+	<!--- used to hold debug information for display --->
+	<cfif !StructKeyExists(request, "TESTING_FRAMEWORK_DEBUGGING")>
+		<cfset request["TESTING_FRAMEWORK_DEBUGGING"] = {}>
+	</cfif>
 
 	<!---
 		Called from a test function.  If expression evaluates to false,
@@ -203,38 +211,30 @@
 
 	</cffunction>
 
-	<cffunction name="halt" returntype="Any" output="false" hint="used to dump an expression and halt testing. Useful when you want to see what an expression will output first so you can write tests for it.">
-		<cfargument name="expression" type="string" required="true" hint="the expression you want to see output for">
-		<cfargument name="halt" type="boolean" required="false" default="true" hint="should we halt. true will halt and dump output. false will just return so tests can continue">
-		<cfset var attributeArgs = {}>
-
-		<cfif not arguments.halt>
-			<cfreturn>
-		</cfif>
-
-		<cfset attributeArgs["var"] = "#evaluate(arguments.expression)#">
-
-		<cfset structdelete(arguments, "halt")>
-		<cfset structdelete(arguments, "expression")>
-		<cfset structappend(attributeArgs, arguments, true)>
-
-		<cfdump attributeCollection="#attributeArgs#"><cfabort>
-	</cffunction>
-
-	<cffunction name="debug" returntype="Any" output="false" hint="used to dump an expression and view the results later.">
-		<cfargument name="expression" type="string" required="true" hint="the expression you want to see output for">
-		<cfargument name="label" type="string" required="false" default="" hint="label for the debug output">
+	<cffunction name="debug" returntype="Any" output="false" hint="used to examine an expression. any overloaded arguments get passed to cfdump's attributeCollection">
+		<cfargument name="expression" type="string" required="true" hint="the expression to examine.">
+		<cfargument name="display" type="boolean" required="false" default="true" hint="whether to display the debug call. false returns without outputting anything into the buffer. good when you want to leave the debug command in the test for later purposes, but don't want it to display">
 		<cfset var attributeArgs = {}>
 		<cfset var dump = "">
-
+		
+		<cfif !arguments.display>
+			<cfreturn>
+		</cfif>
+		
 		<cfset attributeArgs["var"] = "#evaluate(arguments.expression)#">
 
 		<cfset structdelete(arguments, "expression")>
+		<cfset structdelete(arguments, "display")>
 		<cfset structappend(attributeArgs, arguments, true)>
+		
 		<cfsavecontent variable="dump">
 		<cfdump attributeCollection="#attributeArgs#">
 		</cfsavecontent>
-		<cfset request["_testdebug"][arguments.label] = dump>
+		
+		<cfif !StructKeyExists(request["TESTING_FRAMEWORK_DEBUGGING"], TESTING_FRAMEWORK_VARS.RUNNING_TEST)>
+			<cfset request["TESTING_FRAMEWORK_DEBUGGING"][TESTING_FRAMEWORK_VARS.RUNNING_TEST] = []>
+		</cfif>
+		<cfset arrayAppend(request["TESTING_FRAMEWORK_DEBUGGING"][TESTING_FRAMEWORK_VARS.RUNNING_TEST], dump)>
 	</cffunction>
 
 	<cffunction name="raised" returntype="string" output="false" hint="catches an raised error and returns the error type. great if you want to test that a certain exception will be raised.">
@@ -325,6 +325,9 @@
 		<cfset keyList = listSort(structKeyList(this), "textnocase", "asc")>
 
 		<cfloop list="#keyList#" index="key">
+		
+			<!--- keep track of the test name so we can display debug information --->
+			<cfset TESTING_FRAMEWORK_VARS.RUNNING_TEST = key>
 
 			<cfif (left(key, 4) eq "test" and isCustomFunction(this[key])) and (!len(arguments.testname) or (len(arguments.testname) and arguments.testname eq key))>
 
@@ -444,7 +447,7 @@
 		<cfset var loc = {}>
 		<cfset loc.ret = false>
 		<cfif structkeyexists(request, resultkey)>
-			<cfset request[resultkey].path = variables.WHEELS_TESTS_BASE_COMPONENT_PATH>
+			<cfset request[resultkey].path = TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH>
 			<cfset loc.a = ArrayLen(request[resultkey].summary)>
 			<cfset loc.b = ArrayLen(request[resultkey].results)>
 			<cfloop from="1" to="#loc.a#" index="loc.i">
@@ -498,26 +501,26 @@
 		<!--- which tests to run --->
 		<cfif loc.type eq "core">
 			<!--- core tests --->
-			<cfset variables.ROOT_TEST_PATH = application.wheels.wheelsComponentPath>
+			<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = application.wheels.wheelsComponentPath>
 		<cfelseif loc.type eq "app">
 			<!--- app tests --->
-			<cfset variables.ROOT_TEST_PATH = application.wheels.rootComponentPath>
+			<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = application.wheels.rootComponentPath>
 		<cfelse>
 			<!--- specific plugin tests --->
-			<cfset variables.ROOT_TEST_PATH = application.wheels.rootComponentPath>
-			<cfset variables.ROOT_TEST_PATH = ListAppend(variables.ROOT_TEST_PATH, "#application.wheels.pluginComponentPath#.#loc.type#", ".")>
+			<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = application.wheels.rootComponentPath>
+			<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = ListAppend(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "#application.wheels.pluginComponentPath#.#loc.type#", ".")>
 		</cfif>
 
-		<cfset variables.ROOT_TEST_PATH = ListAppend(variables.ROOT_TEST_PATH, "tests", ".")>
+		<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = ListAppend(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "tests", ".")>
 
 		<!--- add the package if specified --->
-		<cfset loc.test_path = listappend("#variables.ROOT_TEST_PATH#", loc.package, ".")>
+		<cfset loc.test_path = listappend("#TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH#", loc.package, ".")>
 
 		<!--- clean up testpath --->
 		<cfset loc.test_path = listchangedelims(loc.test_path, ".", "./\")>
 
 		<!--- convert to regular path --->
-		<cfset loc.relative_root_test_path = "/" & listchangedelims(variables.ROOT_TEST_PATH, "/", ".")>
+		<cfset loc.relative_root_test_path = "/" & listchangedelims(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "/", ".")>
 		<cfset loc.full_root_test_path = expandpath(loc.relative_root_test_path)>
 		<cfset loc.releative_test_path = "/" & listchangedelims(loc.test_path, "/", ".")>
 		<cfset loc.full_test_path = expandPath(loc.releative_test_path)>
@@ -542,7 +545,7 @@
 		<cfdirectory directory="#loc.full_test_path#" action="list" recurse="true" name="q" filter="#loc.test_filter#.cfc" />
 
 		<!--- for test results display --->
-		<cfset variables.WHEELS_TESTS_BASE_COMPONENT_PATH = loc.test_path>
+		<cfset TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH = loc.test_path>
 
 		<!---
 		if env.cfm files exists, call to override enviroment settings so tests can run.
@@ -595,7 +598,7 @@
 
 	<cffunction name="$cleanTestCase" returntype="string" output="false" hint="removes the base test directory from the test name to make them prettier and more readable">
 		<cfargument name="str" type="string" required="true" hint="test case name to clean up">
-		<cfreturn listchangedelims(replace(arguments.str, variables.WHEELS_TESTS_BASE_COMPONENT_PATH, ""), ".", ".")>
+		<cfreturn listchangedelims(replace(arguments.str, TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH, ""), ".", ".")>
 	</cffunction>
 
 	<cffunction name="$cleanTestName" returntype="string" output="false" hint="cleans up the test name so they are more readable">
@@ -605,7 +608,7 @@
 
 	<cffunction name="$cleanTestPath" returntype="string" output="false" hint="cleans up the test name so they are more readable">
 		<cfargument name="str" type="string" required="true" hint="test name to clean up">
-		<cfreturn listchangedelims(replace(arguments.str, variables.ROOT_TEST_PATH, ""), ".", ".")>
+		<cfreturn listchangedelims(replace(arguments.str, TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, ""), ".", ".")>
 	</cffunction>
 
 	<cfinclude template="plugins/injection.cfm">
