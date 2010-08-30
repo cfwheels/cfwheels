@@ -257,7 +257,7 @@
 
 			// return existing query result if it has been run already in current request, otherwise pass off the sql array to the query
 			loc.queryKey = "wheels" & variables.wheels.class.name & $hashStruct(arguments) & loc.originalWhere;
-			if (!arguments.reload && StructKeyExists(request, loc.queryKey))
+			if (application.wheels.cacheQueriesDuringRequest && !arguments.reload && StructKeyExists(request, loc.queryKey))
 			{
 				loc.findAll = request[loc.queryKey];
 			}

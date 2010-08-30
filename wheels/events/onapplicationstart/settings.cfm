@@ -76,6 +76,7 @@
 	application.wheels.cacheCullPercentage = 10;
 	application.wheels.cacheCullInterval = 5;
 	application.wheels.defaultCacheTime = 60;
+	application.wheels.cacheQueriesDuringRequest = true;
 
 	// function defaults
 	application.wheels.functions = {};
