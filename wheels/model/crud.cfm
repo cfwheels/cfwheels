@@ -240,7 +240,7 @@
 			arguments.where = REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all");
 
 			// get info from cache when available, otherwise create the generic select, from, where and order by clause
-			loc.queryShellKey = variables.wheels.class.name & $hashStruct(arguments);
+			loc.queryShellKey = $hashedKey(variables.wheels.class.name, arguments);
 			loc.sql = $getFromCache(loc.queryShellKey, "sql");
 			if (!IsArray(loc.sql))
 			{
@@ -256,10 +256,10 @@
 			loc.sql = $addWhereClauseParameters(sql=loc.sql, where=loc.originalWhere);
 
 			// return existing query result if it has been run already in current request, otherwise pass off the sql array to the query
-			loc.queryKey = "wheels" & variables.wheels.class.name & $hashStruct(arguments) & loc.originalWhere;
-			if (application.wheels.cacheQueriesDuringRequest && !arguments.reload && StructKeyExists(request, loc.queryKey))
+			loc.queryKey = $hashedKey(variables.wheels.class.name, arguments, loc.originalWhere);
+			if (application.wheels.cacheQueriesDuringRequest && !arguments.reload && StructKeyExists(request.wheels, loc.queryKey))
 			{
-				loc.findAll = request[loc.queryKey];
+				loc.findAll = request.wheels[loc.queryKey];
 			}
 			else
 			{
@@ -269,7 +269,7 @@
 				loc.finderArgs.parameterize = arguments.parameterize;
 				loc.finderArgs.limit = arguments.$limit;
 				loc.finderArgs.offset = arguments.$offset;
-				if (application.wheels.cacheQueries && Len(arguments.cache))
+				if (application.wheels.cacheQueries && (IsNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
 				{
 					if (IsBoolean(arguments.cache) && arguments.cache)
 						loc.finderArgs.cachedWithin = CreateTimeSpan(0,0,application.wheels.defaultCacheTime,0);
@@ -277,9 +277,9 @@
 						loc.finderArgs.cachedWithin = CreateTimeSpan(0,0,arguments.cache,0);
 				}
 				loc.findAll = variables.wheels.class.adapter.$query(argumentCollection=loc.finderArgs);
-				request[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
+				request.wheels[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
-			request.wheels[Hash(SerializeJSON(loc.findAll.query))] = variables.wheels.class.name; // place an identifer in request scope so we can reference this query when passed in to view functions
+			request.wheels[$hashedKey(loc.findAll.query)] = variables.wheels.class.name; // place an identifer in request scope so we can reference this query when passed in to view functions
 			if (arguments.returnAs == "query")
 			{
 				loc.returnValue = loc.findAll.query;

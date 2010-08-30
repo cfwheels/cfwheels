@@ -258,7 +258,6 @@
 					}
 				}
 				// update the request with a hash of the query if it changed so that we can find it with pagination
-				loc.querykey = Hash(SerializeJSON(arguments.collection));
 				if (!StructKeyExists(request.wheels, loc.querykey))
 					request.wheels[loc.querykey] = variables.wheels.class.name;
 			}

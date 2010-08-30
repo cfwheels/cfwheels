@@ -25,7 +25,7 @@
 		if (application.wheels.cachePages && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
 			loc.category = "action";
-			loc.key = "#arguments.$action##$hashStruct(variables.params)##$hashStruct(arguments)#";
+			loc.key = $hashedKey(arguments, variables.params);
 			loc.lockName = loc.category & loc.key;
 			loc.conditionArgs = {};
 			loc.conditionArgs.category = loc.category;
@@ -138,7 +138,7 @@
 		var loc = {};
 		if (IsQuery(arguments.$partial) && arguments.$partial.recordCount)
 		{
-			arguments.$name = request.wheels[Hash(SerializeJSON(arguments.$partial))];
+			arguments.$name = request.wheels[$hashedKey(arguments.$partial)];
 			arguments.query = arguments.$partial;
 		}
 		else if (IsObject(arguments.$partial))
@@ -176,7 +176,7 @@
 		if (application.wheels.cachePartials && (isNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
 			loc.category = "partial";
-			loc.key = "#arguments.$partial.toString()##$hashStruct(variables.params)##$hashStruct(arguments)#";
+			loc.key = $hashedKey(arguments);
 			loc.lockName = loc.category & loc.key;
 			loc.conditionArgs = {};
 			loc.conditionArgs.category = loc.category;
