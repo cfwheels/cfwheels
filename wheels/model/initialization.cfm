@@ -46,7 +46,7 @@
 			init();
 
 		// load the database adapter
-		variables.wheels.class.adapter = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#", fileName="Connection", method="init", datasource="#application.wheels.dataSourceName#", username="#application.wheels.dataSourceUserName#", password="#application.wheels.dataSourcePassword#");
+		variables.wheels.class.adapter = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#", fileName="Connection", method="init", datasource="#variables.wheels.class.connection.datasource#", username="#variables.wheels.class.connection.username#", password="#variables.wheels.class.connection.password#");
 
 		// get columns for the table
 		loc.columns = variables.wheels.class.adapter.$getColumns(tableName());
