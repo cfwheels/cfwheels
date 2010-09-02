@@ -15,17 +15,18 @@
 		// check and store server engine name, throw error if using a version that we don't support
 		if (StructKeyExists(server, "railo"))
 		{
-			application.wheels.serverName = "Railo";
 			application.wheels.serverVersion = server.railo.version;
+			application.wheels.serverName = "Railo";
+			loc.minimumServerVersionNumber = "3.1.2.020";
 		}
 		else
 		{
-			application.wheels.serverName = "Adobe ColdFusion";
 			application.wheels.serverVersion = server.coldfusion.productversion;
+			application.wheels.serverName = "Adobe ColdFusion";
+			loc.minimumServerVersionNumber = "8.0.1";
 		}
-		loc.majorVersion = Left(application.wheels.serverVersion, 1);
-		if ((application.wheels.serverName == "Railo" && loc.majorVersion < 3) || (application.wheels.serverName == "Adobe ColdFusion" && loc.majorVersion < 8))
-			$throw(type="Wheels.EngineNotSupported", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Upgrade to Adobe ColdFusion 8 (or higher) or Railo 3.0 (or higher).");
+		if (Replace(application.wheels.serverVersion, ".", "", "all") < REReplace(loc.minimumServerVersionNumber, "[^0-9]]", "", "all"))
+			$throw(type="Wheels.EngineNotSupported", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Please upgrade to version #loc.minimumServerVersionNumber# or higher.");
 
 		// copy over the cgi variables we need to the request scope (since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example)
 		request.cgi = $cgiScope();
