@@ -352,6 +352,30 @@
 	<cfreturn returnValue>
 </cffunction>
 
+<cffunction name="$fileExistsNoCase" returntype="boolean" access="public" output="false">
+	<cfargument name="absolutePath" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		
+		// break up the full path string in the path name only and the file name only
+		loc.path = GetDirectoryFromPath(arguments.absolutePath);
+		loc.file = Replace(arguments.absolutePath, loc.path, "");
+
+		// get all existing files in the directory and place them in a list
+		loc.dirInfo = $directory(directory=loc.path);
+		loc.fileList = ValueList(loc.dirInfo.name);
+
+		// loop through the file list and return true if the file exists regardless of case (the == operator is case insensitive)
+		loc.iEnd = ListLen(loc.fileList);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			if (ListGetAt(loc.fileList, loc.i) == loc.file)
+				return true;
+
+		// the file wasn't found in the directory so we return false
+		return false;
+	</cfscript>
+</cffunction>
+
 <cffunction name="$objectFileName" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="objectPath" type="string" required="true">
