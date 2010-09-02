@@ -107,6 +107,15 @@
 	application.wheels.defaultCacheTime = 60;
 	application.wheels.clearQueryCacheOnReload = true;
 	application.wheels.cacheQueriesDuringRequest = true;
+	
+	// possible formats for provides
+	application.wheels.formats = {};
+	application.wheels.formats.html = "text/html";
+	application.wheels.formats.xml = "text/xml";
+	application.wheels.formats.json = "text/json";
+	application.wheels.formats.csv = "text/csv";
+	application.wheels.formats.pdf = "application/pdf";
+	application.wheels.formats.xls = "application/vnd.ms-excel";
 
 	// function defaults
 	application.wheels.functions = {};
@@ -161,6 +170,7 @@
 	application.wheels.functions.radioButtonTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
 	application.wheels.functions.redirectTo = {onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302, delay=false};
 	application.wheels.functions.renderPage = {layout=""};
+	application.wheels.functions.renderWith = {layout=""};
 	application.wheels.functions.renderPageToString = {layout=true};
 	application.wheels.functions.renderPartial = {layout="", dataFunction=true};
 	application.wheels.functions.save = {parameterize=true, reload=false};

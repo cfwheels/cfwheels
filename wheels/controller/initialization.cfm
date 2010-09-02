@@ -17,6 +17,14 @@
 		variables.$class.filters = [];
 		variables.$class.cachableActions = [];
 		variables.$class.layout = {};
+		
+		// default the controller to only respond to html
+		variables.$class.formats = {};
+		variables.$class.formats.default = "html";
+		variables.$class.formats.actions = {};
+		variables.$class.formats.existingTemplates = "";
+		variables.$class.formats.nonExistingTemplates = "";
+		
 		$setFlashStorage(get("flashStorage"));
 		if (StructKeyExists(variables, "init"))
 			init();

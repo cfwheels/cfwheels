@@ -1,3 +1,13 @@
+<cffunction name="$toXml" returntype="xml" access="public" output="false">
+	<cfargument name="data" type="any" required="true">
+	<cfscript>
+		// only instantiate the toXml object once per request
+		if (!StructKeyExists(request.wheels, "toXml"))
+			request.wheels.toXml = $createObjectFromRoot(path="lib", fileName="toXML", method="init");
+	</cfscript>
+	<cfreturn request.wheels.toXml.toXml(arguments.data) />
+</cffunction>
+
 <cffunction name="$convertToString" returntype="string" access="public" output="false">
 	<cfargument name="value" type="Any" required="true">
 	<cfscript>
@@ -33,14 +43,20 @@
 		// we need to make sure we are looping through the passed in arguments the same everytime
 		for (loc.i = 1; loc.i lte ListLen(loc.keyList); loc.i++)
 		{
-			loc.value = arguments[ListGetAt(loc.keyList, loc.i)];
+			loc.value = Duplicate(arguments[ListGetAt(loc.keyList, loc.i)]);
 
 			// for ( in ) can pass around undefined values so we need to check that the variables exists
 			if (StructKeyExists(loc, "value"))
 			{
-				// SerializeJSON crashes if a query contains binary data
-				// a workaround is to use cfwddx
-				if(IsQuery(loc.value))
+				if (IsArray(loc.value) && !IsBinary(loc.value))
+					for (loc.i = 1; loc.i lte ArrayLen(loc.value); loc.i++)
+						loc.value[loc.i] = $hashedKey(value=loc.value[loc.i]);
+				else if (IsStruct(loc.value))
+					for (loc.item in loc.value)
+						loc.value[loc.item] = $hashedKey(value=loc.value[loc.item]);
+				else if (IsBinary(loc.value))
+					loc.value = ToBase64(loc.value);
+				else if (IsQuery(loc.value))
 					loc.value = $wddx(input=loc.value);
 
 				if (IsSimpleValue(loc.value))
@@ -49,8 +65,8 @@
 					loc.returnValue = loc.returnValue & ListSort(ReplaceList(SerializeJSON(loc.value), "{,}", ","), "text");
 			}
 		}
-		return Hash(loc.returnValue);
 	</cfscript>
+	<cfreturn Hash(loc.returnValue)>
 </cffunction>
 
 <cffunction name="$timeSpanForCache" returntype="any" access="public" output="false">
@@ -131,7 +147,7 @@
 </cffunction>
 
 <cffunction name="$cgiScope" returntype="struct" access="public" output="false" hint="This copies all the variables Wheels needs from the CGI scope to the request scope.">
-	<cfargument name="keys" type="string" required="false" default="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,content_type">
+	<cfargument name="keys" type="string" required="false" default="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
