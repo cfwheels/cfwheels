@@ -134,13 +134,9 @@
 				<cfif loc.i IS NOT "fieldnames" AND loc.i IS NOT "route" AND loc.i IS NOT "controller" AND loc.i IS NOT "action" AND loc.i IS NOT "key">
 					<cfset loc.additionalParamsExists = true>
 					<cfif isStruct(request.wheels.params[loc.i])>
-						<cfloop collection="#request.wheels.params[loc.i]#" item="loc.j">
-							#lCase(loc.i)#.#lCase(loc.j)# = #SerializeJSON(request.wheels.params[loc.i][loc.j])#<br />
-						</cfloop>
+						#lCase(loc.i)# = #SerializeJSON(request.wheels.params[loc.i])#<br />
 					<cfelseif IsArray(request.wheels.params[loc.i])>
-						<cfloop array="#request.wheels.params[loc.i]#" index="loc.x">
-							#lCase(loc.i)#[#lCase(loc.x)#].#LCase(loc.y)# = #SerializeJSON(request.wheels.params[loc.i][loc.x][loc.y])#<br />
-						</cfloop>
+						#lCase(loc.i)# = #SerializeJSON(request.wheels.params[loc.i])#<br />
 					<cfelseif IsSimpleValue(request.wheels.params[loc.i])>
 						#lCase(loc.i)# = #request.wheels.params[loc.i]#<br />
 					</cfif>
