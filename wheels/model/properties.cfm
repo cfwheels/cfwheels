@@ -1,8 +1,14 @@
 <!--- PUBLIC MODEL INITIALIZATION METHODS --->
 
 <cffunction name="accessibleProperties" returntype="void" access="public" output="false" hint="Use this method to specify which properties can be set through mass assignment."
+	examples='
+		<!--- In `models/User.cfc`, only `isActive` can be set through mass assignment operations like `updateAll()` --->
+		<cffunction name="init">
+			<cfset accessibleProperties("isActive")>
+		</cffunction>
+	'
 	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="protectedProperties">
-	<cfargument name="properties" type="string" required="false" default="" />
+	<cfargument name="properties" type="string" required="false" default="" hint="Property name (or list of property names) that are allowed to be altered through mass assignment." />
 	<cfscript>
 		var loc = {};
 		if (StructKeyExists(arguments, "property"))
@@ -16,8 +22,14 @@
 </cffunction>
 
 <cffunction name="protectedProperties" returntype="void" access="public" output="false" hint="Use this method to specify which properties cannot be set through mass assignment."
+	examples='
+		<!--- In `models/User.cfc`, `firstName` and `lastName` cannot be changed through mass assignment operations like `updateAll()` --->
+		<cffunction name="init">
+			<cfset protectedProperties("firstName,lastName")>
+		</cffunction>
+	'
 	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="accessibleProperties">
-	<cfargument name="properties" type="string" required="false" default="" />
+	<cfargument name="properties" type="string" required="false" default="" hint="Property name (or list of property names) that are not allowed to be altered through mass assignment." />
 	<cfscript>
 		var loc = {};
 		if (StructKeyExists(arguments, "property"))
@@ -26,26 +38,26 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="property" returntype="void" access="public" output="false" hint="Use this method to map an object property to either a table column with a different name than the property or to a specific SQL function. You only need to use this method when you want to override the default mapping that Wheels performs."
+<cffunction name="property" returntype="void" access="public" output="false" hint="Use this method to map an object property to either a table column with a different name than the property or to a SQL expression. You only need to use this method when you want to override the default object relational mapping that Wheels performs."
 	examples=
 	'
-		<!--- Tell Wheels that when we are referring to `firstName` in the CFML code it should translate to the `STR_USERS_FNAME` column when interacting with the database instead of the default (which would be the `firstname` column) --->
+		<!--- Tell Wheels that when we are referring to `firstName` in the CFML code, it should translate to the `STR_USERS_FNAME` column when interacting with the database instead of the default (which would be the `firstname` column) --->
 		<cfset property(name="firstName", column="STR_USERS_FNAME")>
 
-		<!--- Tell Wheels that when we are referring to `fullName` in the CFML code it should concatenate the `STR_USERS_FNAME` and `STR_USERS_LNAME` columns --->
+		<!--- Tell Wheels that when we are referring to `fullName` in the CFML code, it should concatenate the `STR_USERS_FNAME` and `STR_USERS_LNAME` columns --->
 		<cfset property(name="fullName", sql="STR_USERS_FNAME + '' '' + STR_USERS_LNAME")>
 
 		<!--- Tell Wheels that when displaying error messages or labels for form fields, we want to use `First name(s)` as the label for the `STR_USERS_FNAME` column --->
 		<cfset property(name="firstName", label="First name(s)")>
 
-		<!--- Tell Wheels that when creating new objects we want them to be auto-populated with a `firstName` property with a value of `Dave` --->
+		<!--- Tell Wheels that when creating new objects, we want them to be auto-populated with a `firstName` property of value `Dave` --->
 		<cfset property(name="firstName", defaultValue="Dave")>
 	'
 	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,propertyNames,table,tableName">
 	<cfargument name="name" type="string" required="true" hint="The name that you want to use for the column or SQL function result in the CFML code.">
 	<cfargument name="column" type="string" required="false" default="" hint="The name of the column in the database table to map the property to.">
-	<cfargument name="sql" type="string" required="false" default="" hint="An SQL function to use to calculate the property value.">
-	<cfargument name="label" type="string" required="false" default="" hint="A custom label for this property.">
+	<cfargument name="sql" type="string" required="false" default="" hint="A SQL expression to use to calculate the property value.">
+	<cfargument name="label" type="string" required="false" default="" hint="A custom label for this property to be referenced in the interface and error messages.">
 	<cfargument name="defaultValue" type="string" required="false" hint="A default value for this property.">
 	<cfscript>
 		// validate setup
@@ -80,7 +92,7 @@
 
 <!--- PUBLIC MODEL CLASS METHODS --->
 
-<cffunction name="propertyNames" returntype="string" access="public" output="false" hint="Returns a list of property names ordered by their respective column's ordinal position in the database table and with eventual calculated properties at the end."
+<cffunction name="propertyNames" returntype="string" access="public" output="false" hint="Returns a list of property names ordered by their respective column's ordinal position in the database table. Also includes calculated property names that will be generated by the Wheels ORM."
 	examples=
 	'
 		<!--- Get a list of the property names in use in the user model --->
@@ -100,14 +112,14 @@
 
 <!--- get / set properties --->
 
-<cffunction name="key" returntype="string" access="public" output="false" hint="Returns the value of the primary key for the object. If you have a single primary key named `id` then `someObject.key()` is functionally equivalent to `someObject.id`. This method is more useful when you do dynamic programming and don't know the name of the primary key or when you use composite keys (in which case it's convenient to use this method to get a list of both key values returned)."
+<cffunction name="key" returntype="string" access="public" output="false" hint="Returns the value of the primary key for the object. If you have a single primary key named `id`, then `someObject.key()` is functionally equivalent to `someObject.id`. This method is more useful when you do dynamic programming and don't know the name of the primary key or when you use composite keys (in which case it's convenient to use this method to get a list of both key values returned)."
 	examples=
 	'
 		<!--- Get an object and then get the primary key value(s) --->
-		<cfset anEmployee = model("employee").findByKey(params.key)>
-		<cfset val = anEmployee.key()>
+		<cfset employee = model("employee").findByKey(params.key)>
+		<cfset val = employee.key()>
 	'
-	categories="model-object,miscellaneous" chapters="" functions="">
+	categories="model-object,miscellaneous" chapters="object-relational-mapping" functions="">
 	<cfargument name="$persisted" type="boolean" required="false" default="false">
 	<cfargument name="$returnTickCountWhenNew" type="boolean" required="false" default="false">
 	<cfscript>
@@ -131,29 +143,29 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="columns" returntype="array" access="public" output="false" hint="Returns an array of columns names for the table associated with this class."
+<cffunction name="columns" returntype="array" access="public" output="false" hint="Returns an array of columns names for the table associated with this class. Does not include calculated properties that will be generated by the Wheels ORM."
 	examples=
 	'
 		<!--- Get the columns names in the order they are in the database --->
-		<cfset anEmployee = model("employee").columns()>
+		<cfset employee = model("employee").columns()>
 	'
-	categories="model-object,miscellaneous" chapters="" functions="">
+	categories="model-object,miscellaneous" chapters="object-relational-mapping" functions="">
 	<cfreturn ListToArray(variables.wheels.class.columnList) />
 </cffunction>
 
-<cffunction name="hasProperty" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified property exists on the model."
+<cffunction name="hasProperty" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified property name exists on the model."
 	examples=
 	'
 		<!--- Get an object, set a value and then see if the property exists --->
-		<cfset anEmployee = model("employee").new()>
-		<cfset anEmployee.firstName = "dude">
-		<cfset anEmployee.hasProperty("firstName")><!--- returns true --->
+		<cfset employee = model("employee").new()>
+		<cfset employee.firstName = "dude">
+		<cfset employee.hasProperty("firstName")><!--- returns true --->
 
-		<!--- this is also a dynamic method so you could do --->
-		<cfset anEmployee.hasFirstName()>
+		<!--- This is also a dynamic method that you could do --->
+		<cfset employee.hasFirstName()>
 	'
-	categories="model-object,miscellaneous" chapters="" functions="">
-	<cfargument name="property" type="string" required="true" />
+	categories="model-object,miscellaneous" chapters="object-relational-mapping" functions="">
+	<cfargument name="property" type="string" required="true" hint="Name of property to inspect." />
 	<cfscript>
 		var hasProperty = false;
 		if (StructKeyExists(this, arguments.property) && !IsCustomFunction(this[arguments.property]))
@@ -166,12 +178,15 @@
 	examples=
 	'
 		<!--- Get an object, set a value and then see if the property exists --->
-		<cfset anEmployee = model("employee").new()>
-		<cfset anEmployee.firstName = "dude">
-		<cfset anEmployee.propertyIsPresent("firstName")><!--- returns true --->
+		<cfset employee = model("employee").new()>
+		<cfset employee.firstName = "dude">
+		<cfreturn employee.propertyIsPresent("firstName")><!--- Returns true --->
+		
+		<cfset employee.firstName = "">
+		<cfreturn employee.propertyIsPresent("firstName")><!--- Returns false --->
 	'
 	categories="model-object,miscellaneous" chapters="" functions="">
-	<cfargument name="property" type="string" required="true" />
+	<cfargument name="property" type="string" required="true" hint="See documentation for @hasProperty." />
 	<cfscript>
 		var isPresent = false;
 		if (StructKeyExists(this, arguments.property) && !IsCustomFunction(this[arguments.property]) && IsSimpleValue(this[arguments.property]) && Len(this[arguments.property]))
@@ -180,15 +195,15 @@
 	<cfreturn isPresent />
 </cffunction>
 
-<cffunction name="columnForProperty" returntype="any" access="public" output="false" hint="Returns the column name for the named attribute."
+<cffunction name="columnForProperty" returntype="any" access="public" output="false" hint="Returns the column name mapped for the named model property."
 	examples=
 	'
 		<!--- Get an object, set a value and then see if the property exists --->
-		<cfset anEmployee = model("employee").new()>
-		<cfset anEmployee.columnForProperty("firstName")><!--- returns column name, in this case "firstname" --->
+		<cfset employee = model("employee").new()>
+		<cfset employee.columnForProperty("firstName")><!--- returns column name, in this case "firstname" if the convention is used --->
 	'
-	categories="model-object,miscellaneous" chapters="" functions="">
-	<cfargument name="property" type="string" required="true" />
+	categories="model-object,miscellaneous" chapters="object-relational-mapping" functions="">
+	<cfargument name="property" type="string" required="true" hint="See documentation for @hasProperty." />
 	<cfscript>
 		var columnName = false;
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
@@ -197,15 +212,15 @@
 	<cfreturn columnName />
 </cffunction>
 
-<cffunction name="columnDataForProperty" returntype="any" access="public" output="false" hint="Returns the column struct for the named attribute."
+<cffunction name="columnDataForProperty" returntype="any" access="public" output="false" hint="Returns a struct with data for the named property."
 	examples=
 	'
 		<!--- Get an object, set a value and then see if the property exists --->
-		<cfset anEmployee = model("employee").new()>
-		<cfset anEmployee.columnDataForProperty("firstName")><!--- returns column struct --->
+		<cfset employee = model("employee").new()>
+		<cfset employee.columnDataForProperty("firstName")><!--- returns column struct --->
 	'
-	categories="model-object,miscellaneous" chapters="" functions="">
-	<cfargument name="property" type="string" required="true" />
+	categories="model-object,miscellaneous" chapters="object-relational-mapping" functions="">
+	<cfargument name="property" type="string" required="true" hint="Name of column to retrieve data for." />
 	<cfscript>
 		var columnData = false;
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
@@ -214,16 +229,16 @@
 	<cfreturn columnData />
 </cffunction>
 
-<cffunction name="toggle" returntype="any" access="public" output="false" hint="Assigns to the property specified the opposite of the properties current boolean value. Throws an error if the property cannot be converted to a boolean value. Returns this object if save is false."
+<cffunction name="toggle" returntype="any" access="public" output="false" hint="Assigns to the property specified the opposite of the property's current boolean value. Throws an error if the property cannot be converted to a boolean value. Returns this object if save called internally is `false`."
 	examples=
 	'
 		<!--- Get an object, and toggle a boolean property --->
 		<cfset user = model("user").findByKey(58)>
-		<cfset user.toggle("isActive")><!--- returns whether the object was saved properly --->
-		<!--- you can also use a dynamic helper for this --->
-		<cfset user.toggleIsActive()>
+		<cfset isSuccess = user.toggle("isActive")><!--- returns whether the object was saved properly --->
+		<!--- You can also use a dynamic helper for this --->
+		<cfset isSuccess = user.toggleIsActive()>
 	'
-	categories="model-object,miscellaneous" chapters="" functions="">
+	categories="model-object,miscellaneous" chapters="object-relational-mapping" functions="">
 	<cfargument name="property" type="string" required="true" />
 	<cfargument name="save" type="boolean" required="false" hint="Argument to decide whether save the property after it has been toggled. Defaults to true." />
 	<cfscript>
@@ -246,7 +261,7 @@
 		<cfset user = model("user").findByKey(1)>
 		<cfset props = user.properties()>
 	'
-	categories="model-object,miscellaneous" chapters="" functions="setProperties">
+	categories="model-object,miscellaneous" chapters="object-relational-mapping" functions="setProperties">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
@@ -272,9 +287,9 @@
 <cffunction name="setProperties" returntype="void" access="public" output="false" hint="Allows you to set all the properties of an object at once by passing in a structure with keys matching the property names."
 	examples=
 	'
-		<!--- update the properties of the object with the params struct containing the values of a form post --->
+		<!--- Update the properties of the object with the params struct containing the values of a form post --->
 		<cfset user = model("user").findByKey(1)>
-		<cfset user.setProperties(params)>
+		<cfset user.setProperties(params.user)>
 	'
 	categories="model-object,miscellaneous" chapters="" functions="properties">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
@@ -283,7 +298,7 @@
 
 <!--- changes --->
 
-<cffunction name="hasChanged" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified object property (or any if none was passed in) have been changed but not yet saved to the database. Will also return `true` if the object is new and no record for it exists in the database."
+<cffunction name="hasChanged" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified property (or any if none was passed in) has been changed but not yet saved to the database. Will also return `true` if the object is new and no record for it exists in the database."
 	examples=
 	'
 		<!--- Get a member object and change the `email` property on it --->
@@ -291,7 +306,7 @@
 		<cfset member.email = params.newEmail>
 
 		<!--- Check if the `email` property has changed --->
-		<cfif member.hasChanged(property="email")>
+		<cfif member.hasChanged("email")>
 			<!--- Do something... --->
 		</cfif>
 
@@ -348,11 +363,11 @@
 <cffunction name="changedProperties" returntype="string" access="public" output="false" hint="Returns a list of the object properties that have been changed but not yet saved to the database."
 	examples=
 	'
-		<!--- Get an object, change it and then ask for its changes (will return a list of the property names that have changed, not the values themselves) --->
+		<!--- Get an object, change it, and then ask for its changes (will return a list of the property names that have changed, not the values themselves) --->
 		<cfset member = model("member").findByKey(params.memberId)>
 		<cfset member.firstName = params.newFirstName>
 		<cfset member.email = params.newEmail>
-		<cfset changes = member.changedProperties()>
+		<cfset changedProperties = member.changedProperties()>
 	'
 	categories="model-object,changes" chapters="dirty-records" functions="allChanges,changedFrom,hasChanged">
 	<cfscript>
@@ -372,8 +387,8 @@
 		<cfset member = model("member").findByKey(params.memberId)>
 		<cfset member.email = params.newEmail>
 
-		<!---Get the previous value (what the `email` property was before it was changed)--->
-		<cfset oldValue = member.changedFrom(property="email")>
+		<!--- Get the previous value (what the `email` property was before it was changed)--->
+		<cfset oldValue = member.changedFrom("email")>
 
 		<!--- The above can also be done using a dynamic function like this --->
 		<cfset oldValue = member.emailChangedFrom()>
@@ -391,11 +406,11 @@
 <cffunction name="allChanges" returntype="struct" access="public" output="false" hint="Returns a struct detailing all changes that have been made on the object but not yet saved to the database."
 	examples=
 	'
-		<!--- Get an object, change it and then ask for its changes (will return a struct containing the changes, both property names and their values) --->
+		<!--- Get an object, change it, and then ask for its changes (will return a struct containing the changes, both property names and their values) --->
 		<cfset member = model("member").findByKey(params.memberId)>
 		<cfset member.firstName = params.newFirstName>
 		<cfset member.email = params.newEmail>
-		<cfset allChangesAsStruct = member.allChanges()>
+		<cfset allChanges = member.allChanges()>
 	'
 	categories="model-object,changes" chapters="dirty-records" functions="changedFrom,changedProperties,hasChanged">
 	<cfscript>

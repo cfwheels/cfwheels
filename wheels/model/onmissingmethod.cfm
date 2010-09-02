@@ -1,6 +1,6 @@
-<cffunction name="onMissingMethod" returntype="any" access="public" output="false" hint="This method handles dynamic finders, property and association methods. It is not part of the public API.">
-	<cfargument name="missingMethodName" type="string" required="true">
-	<cfargument name="missingMethodArguments" type="struct" required="true">
+<cffunction name="onMissingMethod" returntype="any" access="public" output="false" hint="This method handles dynamic finders, properties, and association methods. It is not part of the public API.">
+	<cfargument name="missingMethodName" type="string" required="true" hint="Name of method attempted to load.">
+	<cfargument name="missingMethodArguments" type="struct" required="true" hint="Name/value pairs of arguments that were passed to the attempted method call.">
 	<cfscript>
 		var loc = {};
 		if (Right(arguments.missingMethodName, 10) == "hasChanged" && StructKeyExists(variables.wheels.class.properties,ReplaceNoCase(arguments.missingMethodName, "hasChanged", "")))
@@ -367,8 +367,6 @@
 		<cfreturn loc.returnValue>
 	</cfif>
 </cffunction>
-
-
 
 <cffunction name="$propertyValue" returntype="string" access="public" output="false" hint="Returns the object's value of the passed in property name. If you pass in a list of property names you will get the values back in a list as well.">
 	<cfargument name="name" type="string" required="true" hint="Name of property to get value for.">

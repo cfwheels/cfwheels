@@ -1,19 +1,20 @@
-<cffunction name="invokeWithTransaction" returntype="any" access="public" output="false" hint="Runs the specified method with a single database transaction"
+<cffunction name="invokeWithTransaction" returntype="any" access="public" output="false" hint="Runs the specified method within a single database transaction."
 	examples=
 	'
-		<!--- this is the method to be run inside a transaction --->
+		<!--- This is the method to be run inside a transaction --->
 		<cffunction name="tranferFunds" returntype="boolean" output="false">
 			<cfargument name="personFrom">
 			<cfargument name="personTo">
 			<cfargument name="amount">
 			<cfif arguments.personFrom.withdraw(arguments.amount) and arguments.personTo.deposit(arguments.amount)>
 				<cfreturn true>
+			<cfelse>
+				<cfreturn false>
 			</cfif>
-			<cfreturn false>
 		</cffunction>
 		
-		<cfset david = model("Person").findByName("David")>
-		<cfset mary = model("Person").findByName("Mary")>
+		<cfset david = model("Person").findOneByName("David")>
+		<cfset mary = model("Person").findOneByName("Mary")>
 		<cfset invokeWithTransaction(method="transferFunds", personFrom=david, personTo=mary, amount=100)>
 	'
 	categories="model-class" chapters="transactions" functions="new,create,save,update,updateByKey,updateOne,updateAll,delete,deleteByKey,deleteOne,deleteAll">

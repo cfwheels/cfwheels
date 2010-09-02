@@ -4,10 +4,10 @@
 	examples=
 	'
 		<!--- Add an error to the `email` property --->
-		<cfset addError(property="email", message="Sorry, you are not allowed to use that email, try again please.")>
+		<cfset this.addError(property="email", message="Sorry, you are not allowed to use that email. Try again, please.")>
 	'
 	categories="model-object,errors" chapters="object-validation" functions="addErrorToBase,allErrors,clearErrors,errorCount,errorsOn,errorsOnBase,hasErrors">
-	<cfargument name="property" type="string" required="true" hint="The name of the property you want to add an error for.">
+	<cfargument name="property" type="string" required="true" hint="The name of the property you want to add an error on.">
 	<cfargument name="message" type="string" required="true" hint="The error message (such as ""Please enter a correct name in the form field"" for example).">
 	<cfargument name="name" type="string" required="false" default="" hint="A name to identify the error by (useful when you need to distinguish one error from another one set on the same object and you don't want to use the error message itself for that).">
 	<cfscript>
@@ -19,7 +19,7 @@
 	examples=
 	'
 		<!--- Add an error on the object --->
-		<cfset addErrorToBase(message="Your email address has to be the same as your domain name.")>
+		<cfset this.addErrorToBase(message="Your email address must be the same as your domain name.")>
 	'
 	categories="model-object,errors" chapters="object-validation" functions="addError,allErrors,clearErrors,errorCount,errorsOn,errorsOnBase,hasErrors">
 	<cfargument name="message" type="string" required="true" hint="See documentation for @addError.">
@@ -43,8 +43,11 @@
 <cffunction name="clearErrors" returntype="void" access="public" output="false" hint="Clears out all errors set on the object or only the ones set for a specific property or name."
 	examples=
 	'
+		<!--- Clear all errors on the object as a whole --->
+		<cfset this.clearErrors()>
+		
 		<!--- Clear all errors on `firstName` --->
-		<cfset clearErrors("firstName")>
+		<cfset this.clearErrors("firstName")>
 	'
 	categories="model-object,errors" chapters="object-validation" functions="addError,addErrorToBase,allErrors,errorCount,errorsOn,errorsOnBase,hasErrors">
 	<cfargument name="property" type="string" required="false" default="" hint="Specify a property name here if you want to clear all errors set on that property.">
@@ -72,6 +75,11 @@
 		<cfif author.errorCount() GTE 10>
 			<!--- Do something to deal with this very erroneous author here... --->
 		</cfif>
+		
+		<!--- Check how many errors are associated with the `email` property --->
+		<cfif author.errorCount("email") gt 0>
+			<!--- Do something to deal with this erroneous author here... --->
+		</cfif>
 	'
 	categories="model-object,errors" chapters="object-validation" functions="addError,addErrorToBase,allErrors,clearErrors,errorsOn,errorsOnBase,hasErrors">
 	<cfargument name="property" type="string" required="false" default="" hint="Specify a property name here if you want to count only errors set on a specific property.">
@@ -86,7 +94,7 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="errorsOn" returntype="array" access="public" output="false" hint="Returns an array of all errors associated with the supplied property (and error name when passed in)."
+<cffunction name="errorsOn" returntype="array" access="public" output="false" hint="Returns an array of all errors associated with the supplied property (and error name if passed in)."
 	examples=
 	'
 		<!--- Get all errors related to the email address of the user object --->
@@ -120,7 +128,7 @@
 	<cfreturn errorsOn(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="hasErrors" returntype="boolean" access="public" output="false" hint="Returns `true` if the object has any errors. You can also limit to only check a specific property and name for errors."
+<cffunction name="hasErrors" returntype="boolean" access="public" output="false" hint="Returns `true` if the object has any errors. You can also limit to only check a specific property or name for errors."
 	examples=
 	'
 		<!--- Check if the post object has any errors set on it --->

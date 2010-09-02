@@ -367,13 +367,13 @@
 
 <!--- update --->
 
-<cffunction name="updateAll" returntype="numeric" access="public" output="false" hint="Updates all properties for the records that match the where argument. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument. By default objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in `instantiate=true`. This method returns the number of records that were updated."
+<cffunction name="updateAll" returntype="numeric" access="public" output="false" hint="Updates all properties for the records that match the `where` argument. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument. By default, objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in `instantiate=true`. This method returns the number of records that were updated."
 	examples=
 	'
 		<!--- Update the `published` and `publishedAt` properties for all records that have `published=0` --->
 		<cfset recordsUpdated = model("post").updateAll(published=1, publishedAt=Now(), where="published=0")>
 
-		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call (the `removeAllComments` method below will call `model("comment").updateAll(postid="", where="postId=##post.id##")` internally) --->
+		<!--- If you have a `hasMany` association setup from `post` to `comment`, you can do a scoped call. (The `removeAllComments` method below will call `model("comment").updateAll(postid="", where="postId=##post.id##")` internally.) --->
 		<cfset aPost = model("post").findByKey(params.postId)>
 		<cfset removedSuccessfully = aPost.removeAllComments()>
 	'
@@ -383,8 +383,8 @@
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="instantiate" type="boolean" required="false" hint="Whether or not to instantiate the object(s) first. When objects are not instantiated any callbacks and validations set on them will be skipped.">
-	<cfargument name="validate" type="boolean" required="false" default="true" hint="Set to `false` to disable validations for this save.">
+	<cfargument name="instantiate" type="boolean" required="false" hint="Whether or not to instantiate the object(s) first. When objects are not instantiated, any callbacks and validations set on them will be skipped.">
+	<cfargument name="validate" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
@@ -437,14 +437,14 @@
 		<!--- Updates the object with `33` as the primary key value with values passed in through the URL/form --->
 		<cfset result = model("post").updateByKey(33, params.post)>
 
-		<!--- Updates the object with `33` using named arguments --->
+		<!--- Updates the object with `33` as the primary key using named arguments --->
 		<cfset result = model("post").updateByKey(key=33, title="New version of Wheels just released", published=1)>
 	'
 	categories="model-class,update" chapters="updating-records,associations" functions="hasOne,hasMany,update,updateAll,updateOne">
 	<cfargument name="key" type="any" required="true" hint="See documentation for @findByKey.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
-	<cfargument name="validate" type="boolean" required="false" default="true" hint="Set to `false` to disable validations for this save.">
+	<cfargument name="validate" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
@@ -464,7 +464,7 @@
 		<!--- Sets the `new` property to `1` on the most recently released product --->
 		<cfset result = model("product").updateOne(order="releaseDate DESC", new=1)>
 
-		<!--- If you have a `hasOne` association setup from `user` to `profile` you can do a scoped call (the `removeProfile` method below will call `model("profile").updateOne(where="userId=##aUser.id##", userId="")` internally) --->
+		<!--- If you have a `hasOne` association setup from `user` to `profile`, you can do a scoped call. (The `removeProfile` method below will call `model("profile").updateOne(where="userId=##aUser.id##", userId="")` internally.) --->
 		<cfset aUser = model("user").findByKey(params.userId)>
 		<cfset aUser.removeProfile()>
 	'
@@ -473,7 +473,7 @@
 	<cfargument name="order" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
 	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @findAll.">
-	<cfargument name="validate" type="boolean" required="false" default="true" hint="Set to `false` to disable validations for this save.">
+	<cfargument name="validate" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
@@ -491,7 +491,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="updateProperty" returntype="boolean" access="public" output="false" hint="Updates a single attribute and saves the record without going through the normal validation procedure. This is especially useful for boolean flags on existing records."
+<cffunction name="updateProperty" returntype="boolean" access="public" output="false" hint="Updates a single property and saves the record without going through the normal validation procedure. This is especially useful for boolean flags on existing records."
 	examples=
 	'
 		<!--- Sets the `new` property to `1` through updateProperty() --->
@@ -499,8 +499,8 @@
 		<cfset product.updateProperty("new", 1)>
 	'
 	categories="model-class,update" chapters="updating-records,associations" functions="hasOne,update,updateAll,updateByKey,updateProperties">
-	<cfargument name="property" type="string" required="true" />
-	<cfargument name="value" type="any" required="true" />
+	<cfargument name="property" type="string" required="true" hint="Name of the property to update the value for globally.">
+	<cfargument name="value" type="any" required="true" hint="Value to set on the given property globally.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
@@ -515,14 +515,14 @@
 <cffunction name="updateProperties" returntype="boolean" access="public" output="false" hint="Updates all the properties from the `properties` argument or other named arguments. If the object is invalid, the save will fail and `false` will be returned."
 	examples=
 	'
-		<!--- Sets the `new` property to `1` through updateProperties() --->
+		<!--- Sets the `new` property to `1` through `updateProperties()` --->
 		<cfset product = model("product").findByKey(56)>
 		<cfset product.updateProperties(new=1)>
 	'
 	categories="model-class,update" chapters="updating-records,associations" functions="hasOne,update,updateAll,updateByKey,updateProperties">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" />
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="Struct containing key/value pairs with properties and associated values that need to be updated globally.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="validate" type="boolean" required="false" default="true" hint="Set to `false` to disable validations for this save.">
+	<cfargument name="validate" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
@@ -535,15 +535,15 @@
 
 <!--- delete --->
 
-<cffunction name="deleteAll" returntype="numeric" access="public" output="false" hint="Deletes all records that match the where argument. By default objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in `instantiate=true`. Returns the number of records that were deleted."
+<cffunction name="deleteAll" returntype="numeric" access="public" output="false" hint="Deletes all records that match the `where` argument. By default, objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in `instantiate=true`. Returns the number of records that were deleted."
 	examples=
 	'
 		<!--- Delete all inactive users without instantiating them (will skip validation and callbacks) --->
 		<cfset recordsDeleted = model("user").deleteAll(where="inactive=1", instantiate=false)>
 
-		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call (the `deleteAllComments` method below will call `model("comment").deleteAll(where="postId=##post.id##")` internally) --->
-		<cfset aPost = model("post").findByKey(params.postId)>
-		<cfset howManyDeleted = aPost.deleteAllComments()>
+		<!--- If you have a `hasMany` association setup from `post` to `comment`, you can do a scoped call. (The `deleteAllComments` method below will call `model("comment").deleteAll(where="postId=##post.id##")` internally.) --->
+		<cfset post = model("post").findByKey(params.postId)>
+		<cfset howManyDeleted = post.deleteAllComments()>
 	'
 	categories="model-class,delete" chapters="deleting-records,associations" functions="delete,deleteByKey,deleteOne,hasMany">
 	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
@@ -651,17 +651,17 @@
 			<!--- Do something... --->
 		</cfif>
 
-		<!--- If you have a `belongsTo` association setup from `comment` to `post` you can do a scoped call (the `hasPost` method below will call `model("post").exists(comment.postId)` internally) --->
-		<cfset aComment = model("comment").findByKey(params.commentId)>
-		<cfset commentHasAPost = aComment.hasPost()>
+		<!--- If you have a `belongsTo` association setup from `comment` to `post`, you can do a scoped call. (The `hasPost` method below will call `model("post").exists(comment.postId)` internally.) --->
+		<cfset comment = model("comment").findByKey(params.commentId)>
+		<cfset commentHasAPost = comment.hasPost()>
 
-		<!--- If you have a `hasOne` association setup from `user` to `profile` you can do a scoped call (the `hasProfile` method below will call `model("profile").exists(where="userId=##user.id##")` internally) --->
-		<cfset aUser = model("user").findByKey(params.userId)>
-		<cfset userHasProfile = aUser.hasProfile()>
+		<!--- If you have a `hasOne` association setup from `user` to `profile`, you can do a scoped call. (The `hasProfile` method below will call `model("profile").exists(where="userId=##user.id##")` internally.) --->
+		<cfset user = model("user").findByKey(params.userId)>
+		<cfset userHasProfile = user.hasProfile()>
 
-		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call (the `hasComments` method below will call `model("comment").exists(where="postid=##post.id##")` internally) --->
-		<cfset aPost = model("post").findByKey(params.postId)>
-		<cfset postHasComments = aPost.hasComments()>
+		<!--- If you have a `hasMany` association setup from `post` to `comment`, you can do a scoped call. (The `hasComments` method below will call `model("comment").exists(where="postid=##post.id##")` internally.) --->
+		<cfset post = model("post").findByKey(params.postId)>
+		<cfset postHasComments = post.hasComments()>
 	'
 	categories="model-class,miscellaneous" chapters="reading-records,associations" functions="belongsTo,hasMany,hasOne">
 	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @findByKey.">
@@ -675,9 +675,9 @@
 			if (Len(arguments.key) && Len(arguments.where))
 				$throw(type="Wheels.IncorrectArguments", message="You cannot pass in both `key` and `where`.");
 		if (Len(arguments.where))
-			loc.returnValue = findOne(select=primaryKey(), where=arguments.where, reload=arguments.reload, returnAs="query").recordCount gte 1;
+			loc.returnValue = findOne(select=primaryKey(), where=arguments.where, reload=arguments.reload, returnAs="query").RecordCount gte 1;
 		else if (Len(arguments.key))
-			loc.returnValue = findByKey(key=arguments.key, select=primaryKey(), reload=arguments.reload, returnAs="query").recordCount == 1;
+			loc.returnValue = findByKey(key=arguments.key, select=primaryKey(), reload=arguments.reload, returnAs="query").RecordCount == 1;
 		else
 			loc.returnValue = false;
 	</cfscript>
@@ -692,20 +692,20 @@
 	examples=
 	'
 		<!--- Get a post object and then delete it from the database --->
-		<cfset aPost = model("post").findByKey(33)>
-		<cfset aPost.delete()>
+		<cfset post = model("post").findByKey(33)>
+		<cfset post.delete()>
 
-		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call (the `deleteComment` method below will call `aComment.delete()` internally) --->
-		<cfset aPost = model("post").findByKey(params.postId)>
-		<cfset aComment = model("comment").findByKey(params.commentId)>
-		<cfset aPost.deleteComment(aComment)>
+		<!--- If you have a `hasMany` association setup from `post` to `comment`, you can do a scoped call. (The `deleteComment` method below will call `comment.delete()` internally.) --->
+		<cfset post = model("post").findByKey(params.postId)>
+		<cfset comment = model("comment").findByKey(params.commentId)>
+		<cfset post.deleteComment(comment)>
 	'
 	categories="model-object,crud" chapters="deleting-records,associations" functions="deleteAll,deleteByKey,deleteOne,hasMany">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
-	<cfargument name="softDelete" type="boolean" required="false" default="true" hint="Set me to `false` to permanently delete a record even if it has a soft delete column.">
+	<cfargument name="softDelete" type="boolean" required="false" default="true" hint="Set to `false` to permanently delete a record, even if it has a soft delete column.">
 	<cfscript>
 		$args(name="delete", args=arguments);
 		arguments.sql = [];
@@ -732,10 +732,10 @@
 <cffunction name="reload" returntype="void" access="public" output="false" hint="Reloads the property values of this object from the database."
 	examples=
 	'
-		<!--- Get an object, call a method on it that could potentially change values and then reload the values from the database --->
-		<cfset anEmployee = model("employee").findByKey(params.key)>
-		<cfset anEmployee.someCallThatChangesValuesInTheDatabase()>
-		<cfset anEmployee.reload()>
+		<!--- Get an object, call a method on it that could potentially change values, and then reload the values from the database --->
+		<cfset employee = model("employee").findByKey(params.key)>
+		<cfset employee.someCallThatChangesValuesInTheDatabase()>
+		<cfset employee.reload()>
 	'
 	categories="model-object,miscellaneous" chapters="reading-records" functions="">
 	<cfscript>
@@ -768,18 +768,18 @@
 		<!--- Save the user object directly in an if statement without using `cfqueryparam` and take appropriate action based on the result --->
 		<cfif user.save(parameterize=false)>
 			<cfset flashInsert(notice="The user was saved!")>
-			<cfset redirectTo(action="userEdit")>
+			<cfset redirectTo(action="edit")>
 		<cfelse>
 			<cfset flashInsert(alert="Error, please correct!")>
-			<cfset renderPage(action="userEdit")>
+			<cfset renderPage(action="edit")>
 		</cfif>
 	'
 	categories="model-object,crud" chapters="creating-records" functions="">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="reload" type="boolean" required="false" hint="Set to `true` to reload the object from the database once an insert/update has completed.">
-	<cfargument name="validate" type="boolean" required="false" default="true" hint="Set to `false` to disable validations for this save.">
-	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="Use `commit` to update the database when the save has completed, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="Set to `false` to disable callbacks for this save.">
+	<cfargument name="validate" type="boolean" required="false" default="true" hint="Set to `false` to skip validations for this operation.">
+	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="Set this to `commit` to update the database when the save has completed, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="Set to `false` to disable callbacks for this operation.">
 	<cfset $args(name="save", args=arguments)>
 	<cfset clearErrors()>
 	<cfreturn invokeWithTransaction(method="$save", argumentCollection=arguments)>
@@ -832,21 +832,21 @@
 		<cfset post = model("post").findByKey(33)>
 		<cfset post.update(title="New version of Wheels just released")>
 
-		<!--- Get a post object and then update its title and other properties as decided by what is pased in from the URL/form --->
+		<!--- Get a post object and then update its title and other properties based on what is pased in from the URL/form --->
 		<cfset post = model("post").findByKey(params.key)>
 		<cfset post.update(title="New version of Wheels just released", properties=params.post)>
 
-		<!--- If you have a `hasOne` association setup from `author` to `bio` you can do a scoped call (the `setBio` method below will call `aBio.update(authorId=anAuthor.id)` internally) --->
-		<cfset anAuthor = model("author").findByKey(params.authorId)>
-		<cfset aBio = model("bio").findByKey(params.bioId)>
-		<cfset anAuthor.setBio(aBio)>
+		<!--- If you have a `hasOne` association setup from `author` to `bio`, you can do a scoped call. (The `setBio` method below will call `bio.update(authorId=anAuthor.id)` internally.) --->
+		<cfset author = model("author").findByKey(params.authorId)>
+		<cfset bio = model("bio").findByKey(params.bioId)>
+		<cfset author.setBio(bio)>
 
-		<!--- If you have a `hasMany` association setup from `owner` to `car` you can do a scoped call (the `addCar` method below will call `aCar.update(ownerId=anOwner.id)` internally) --->
+		<!--- If you have a `hasMany` association setup from `owner` to `car`, you can do a scoped call. (The `addCar` method below will call `car.update(ownerId=anOwner.id)` internally.) --->
 		<cfset anOwner = model("owner").findByKey(params.ownerId)>
 		<cfset aCar = model("car").findByKey(params.carId)>
 		<cfset anOwner.addCar(aCar)>
 
-		<!--- If you have a `hasMany` association setup from `post` to `comment` you can do a scoped call (the `removeComment` method below will call `aComment.update(postId="")` internally) --->
+		<!--- If you have a `hasMany` association setup from `post` to `comment`, you can do a scoped call. (The `removeComment` method below will call `comment.update(postId="")` internally.) --->
 		<cfset aPost = model("post").findByKey(params.postId)>
 		<cfset aComment = model("comment").findByKey(params.commentId)>
 		<cfset aPost.removeComment(aComment)>
@@ -865,12 +865,12 @@
 
 <!--- other --->
 
-<cffunction name="isNew" returntype="boolean" access="public" output="false" hint="Returns `true` if this object hasn't been saved yet (in other words no record exists in the database yet). Returns `false` if a record exists."
+<cffunction name="isNew" returntype="boolean" access="public" output="false" hint="Returns `true` if this object hasn't been saved yet. (In other words, no matching record exists in the database yet.) Returns `false` if a record exists."
 	examples=
 	'
 		<!--- Create a new object and then check if it is new (yes, this example is ridiculous. It makes more sense in the context of callbacks for example) --->
-		<cfset anEmployee = model("employee").new()>
-		<cfif anEmployee.isNew()>
+		<cfset employee = model("employee").new()>
+		<cfif employee.isNew()>
 			<!--- Do something... --->
 		</cfif>
 	'
