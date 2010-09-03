@@ -3,7 +3,7 @@
 	<cfscript>
 		// only instantiate the toXml object once per request
 		if (!StructKeyExists(request.wheels, "toXml"))
-			request.wheels.toXml = $createObjectFromRoot(path="lib", fileName="toXML", method="init");
+			request.wheels.toXml = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#.vendor.toXML", fileName="toXML", method="init");
 	</cfscript>
 	<cfreturn request.wheels.toXml.toXml(arguments.data) />
 </cffunction>
