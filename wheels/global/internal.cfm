@@ -38,31 +38,24 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
+		loc.values = [];
 		loc.keyList = ListSort(StructKeyList(arguments), "textnocase", "asc");
-
+		
 		// we need to make sure we are looping through the passed in arguments the same everytime
 		for (loc.i = 1; loc.i lte ListLen(loc.keyList); loc.i++)
 		{
-			loc.value = Duplicate(arguments[ListGetAt(loc.keyList, loc.i)]);
+			ArrayAppend(loc.values, arguments[ListGetAt(loc.keyList, loc.i)]);
+		}
 
-			// for ( in ) can pass around undefined values so we need to check that the variables exists
-			if (StructKeyExists(loc, "value"))
+		if(!ArrayIsEmpty(loc.values))
+		{
+			if (server.coldfusion.productname != "Railo" && ListFirst(server.coldfusion.productversion) lt 9)
 			{
-				if (IsArray(loc.value) && !IsBinary(loc.value))
-					for (loc.i = 1; loc.i lte ArrayLen(loc.value); loc.i++)
-						loc.value[loc.i] = $hashedKey(value=loc.value[loc.i]);
-				else if (IsStruct(loc.value))
-					for (loc.item in loc.value)
-						loc.value[loc.item] = $hashedKey(value=loc.value[loc.item]);
-				else if (IsBinary(loc.value))
-					loc.value = ToBase64(loc.value);
-				else if (IsQuery(loc.value))
-					loc.value = $wddx(input=loc.value);
-
-				if (IsSimpleValue(loc.value))
-					loc.returnValue = loc.returnValue & loc.value;
-				else
-					loc.returnValue = loc.returnValue & ListSort(ReplaceList(SerializeJSON(loc.value), "{,}", ","), "text");
+				loc.returnValue = $wddx(input=loc.values);
+			}
+			else
+			{
+				loc.returnValue = ListSort(ReplaceList(SerializeJSON(loc.values), "{,}", ","), "text");
 			}
 		}
 	</cfscript>
