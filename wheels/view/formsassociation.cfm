@@ -1,10 +1,22 @@
-<cffunction name="hasManyRadioButton" returntype="string" access="public" output="false" hint="Used as a short cut to output the proper form elements for an association. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.">
-	<cfargument name="objectName" type="string" required="true" />
-	<cfargument name="association" type="string" required="true" />
-	<cfargument name="property" type="string" required="true" />
-	<cfargument name="keys" type="string" required="true" />
-	<cfargument name="tagValue" type="string" required="true" />
-	<cfargument name="checkIfBlank" type="boolean" required="false" default="false" />
+<cffunction name="hasManyRadioButton" returntype="string" access="public" output="false" hint="Used as a shortcut to output the proper form elements for an association. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
+	examples='
+		<!--- Show radio buttons for associating a default address with the current author --->
+		<cfloop query="addresses">
+			##hasManyRadioButton(
+				label=addresses.title,
+				objectName="author",
+				association="authorsDefaultAddresses",
+				keys="#author.key()#,#addresses.id#"
+			)##
+		</cfloop>
+	'
+	categories="view-helper,forms-association" chapters="nested-properties" functions="">
+	<cfargument name="objectName" type="string" required="true" hint="Name of the variable containing the parent object to represent with this form field." />
+	<cfargument name="association" type="string" required="true" hint="Name of the association set in the parent object to represent with this form field." />
+	<cfargument name="property" type="string" required="true" hint="Name of the property in the child object to represent with this form field." />
+	<cfargument name="keys" type="string" required="true" hint="Primary keys associated with this form field." />
+	<cfargument name="tagValue" type="string" required="true" hint="The value of the radio button when `selected`." />
+	<cfargument name="checkIfBlank" type="boolean" required="false" default="false" hint="Whether or not to check this form field as a default if there is a blank value set for the property." />
 	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
@@ -29,10 +41,22 @@
 	<cfreturn loc.returnValue />
 </cffunction>
 
-<cffunction name="hasManyCheckBox" returntype="string" access="public" output="false" hint="Used as a short cut to output the proper form elements for an association. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.">
-	<cfargument name="objectName" type="string" required="true" />
-	<cfargument name="association" type="string" required="true" />
-	<cfargument name="keys" type="string" required="true" />
+<cffunction name="hasManyCheckBox" returntype="string" access="public" output="false" hint="Used as a shortcut to output the proper form elements for an association. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes."
+	examples='
+		<!--- Show check boxes for associating authors with the current book --->
+		<cfloop query="authors">
+			##hasManyCheckBox(
+				label=authors.fullName,
+				objectName="book",
+				association="bookAuthors",
+				keys="#book.key()#,#authors.id#"
+			)##
+		</cfloop>
+	'
+	categories="view-helper,forms-association" chapters="nested-properties" functions="">
+	<cfargument name="objectName" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
+	<cfargument name="association" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
+	<cfargument name="keys" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
 	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
@@ -65,10 +89,14 @@
 	<cfreturn loc.returnValue />
 </cffunction>
 
-<cffunction name="includedInObject" returntype="boolean" access="public" output="false" hint="Used as a short cut to check if the specified ids are a part of the main form object. This method should only be used for hasMany associations.">
-	<cfargument name="objectName" type="string" required="true" />
-	<cfargument name="association" type="string" required="true" />
-	<cfargument name="keys" type="string" required="true" />
+<cffunction name="includedInObject" returntype="boolean" access="public" output="false" hint="Used as a shortcut to check if the specified IDs are a part of the main form object. This method should only be used for `hasMany` associations."
+	examples='
+		
+	'
+	categories="view-helper,forms-association" chapters="nested-properties" functions="">
+	<cfargument name="objectName" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
+	<cfargument name="association" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
+	<cfargument name="keys" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
 	<cfscript>
 		var loc = {};
 		loc.returnValue = false;

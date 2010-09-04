@@ -27,7 +27,7 @@
 		</cfoutput>
 	'
 	categories="view-helper,forms-general" chapters="form-helpers-and-showing-errors" functions="URLFor,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="method" type="string" required="false" hint="The type of method to use in the form tag, `get` and `post` are the options.">
+	<cfargument name="method" type="string" required="false" hint="The type of method to use in the form tag. `get` and `post` are the options.">
 	<cfargument name="multipart" type="boolean" required="false" hint="Set to `true` if the form should be able to upload files.">
 	<cfargument name="spamProtection" type="boolean" required="false" hint="Set to `true` to protect the form against spammers (done with JavaScript).">
 	<cfargument name="route" type="string" required="false" default="" hint="See documentation for @URLFor.">
@@ -91,7 +91,7 @@
 	categories="view-helper,forms-general" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="value" type="string" required="false" hint="Message to display in the button form control.">
 	<cfargument name="image" type="string" required="false" hint="File name of the image file to use in the button form control.">
-	<cfargument name="disable" type="any" required="false" hint="Whether to disable the button upon clicking (prevents double-clicking).">
+	<cfargument name="disable" type="any" required="false" hint="Whether or not to disable the button upon clicking. (prevents double-clicking.)">
 	<cfscript>
 		var loc = {};
 		$args(name="submitTag", reserved="type,src", args=arguments);
@@ -135,11 +135,11 @@
 		</cfoutput>
 	'
 	categories="view-helper,forms-general" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="content" type="string" required="false" hint="Content to the user inside the button.">
-	<cfargument name="type" type="string" required="false" hint="The type for the button: button, reset, submit.">
+	<cfargument name="content" type="string" required="false" hint="Content to display inside the button.">
+	<cfargument name="type" type="string" required="false" hint="The type for the button: `button`, `reset`, or `submit`.">
 	<cfargument name="image" type="string" required="false" hint="File name of the image file to use in the button form control.">
 	<cfargument name="value" type="string" required="false" hint="The value of the button when submitted.">
-	<cfargument name="disable" type="any" required="false" hint="Whether to disable the button upon clicking (prevents double-clicking).">
+	<cfargument name="disable" type="any" required="false" hint="Whether or not to disable the button upon clicking. (Prevents double-clicking.)">
 	<cfscript>
 		var loc = {};
 		$args(name="buttonTag", args=arguments);

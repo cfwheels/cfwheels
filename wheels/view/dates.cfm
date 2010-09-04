@@ -104,7 +104,7 @@
 		<cfset aLittleAhead = Now() + 30>
 		<cfoutput>##timeUntilInWords(aLittleAhead)##</cfoutput>
 	'
-	categories="view-helper,dates" chapters="miscellaneous-helpers" functions="timeAgoInWords,distanceOfTimeInWords.">
+	categories="view-helper,dates" chapters="miscellaneous-helpers" functions="timeAgoInWords,distanceOfTimeInWords">
 	<cfargument name="toTime" type="date" required="true" hint="See documentation for @distanceOfTimeInWords.">
 	<cfargument name="includeSeconds" type="boolean" required="false" hint="See documentation for @distanceOfTimeInWords.">
 	<cfargument name="fromTime" type="date" required="false" default="#now()#" hint="See documentation for @distanceOfTimeInWords.">
