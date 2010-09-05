@@ -6,7 +6,7 @@
 				label=addresses.title,
 				objectName="author",
 				association="authorsDefaultAddresses",
-				keys="#author.key()#,#addresses.id#"
+				keys="##author.key()##,##addresses.id##"
 			)##
 		</cfloop>
 	'
@@ -25,15 +25,15 @@
 		loc.returnValue = "";
 		loc.value = $hasManyFormValue(argumentCollection=arguments);
 		loc.included = includedInObject(argumentCollection=arguments);
-		
+
 		if (!loc.included)
 		{
 			loc.included = "";
 		}
-		
+
 		if (loc.value == arguments.tagValue || (arguments.checkIfBlank && loc.value != arguments.tagValue))
 			loc.checked = true;
-		
+
 		loc.tagId = "#arguments.objectName#-#arguments.association#-#Replace(arguments.keys, ",", "-", "all")#-#arguments.property#-#arguments.tagValue#";
 		loc.tagName = "#arguments.objectName#[#arguments.association#][#arguments.keys#][#arguments.property#]";
 		loc.returnValue = radioButtonTag(name=loc.tagName, id=loc.tagId, value=arguments.tagValue, checked=loc.checked, label=arguments.label);
@@ -49,7 +49,7 @@
 				label=authors.fullName,
 				objectName="book",
 				association="bookAuthors",
-				keys="#book.key()#,#authors.id#"
+				keys="##book.key()##,##authors.id##"
 			)##
 		</cfloop>
 	'
@@ -70,20 +70,20 @@
 		loc.checked = true;
 		loc.returnValue = "";
 		loc.included = includedInObject(argumentCollection=arguments);
-		
+
 		if (!loc.included)
 		{
 			loc.included = "";
 			loc.checked = false;
 		}
-		
+
 		loc.tagId = "#arguments.objectName#-#arguments.association#-#Replace(arguments.keys, ",", "-", "all")#-_delete";
 		loc.tagName = "#arguments.objectName#[#arguments.association#][#arguments.keys#][_delete]";
-		
+
 		StructDelete(arguments, "keys", false);
 		StructDelete(arguments, "objectName", false);
 		StructDelete(arguments, "association", false);
-		
+
 		loc.returnValue = checkBoxTag(name=loc.tagName, id=loc.tagId, value=0, checked=loc.checked, uncheckedValue=1, argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue />
@@ -91,7 +91,7 @@
 
 <cffunction name="includedInObject" returntype="boolean" access="public" output="false" hint="Used as a shortcut to check if the specified IDs are a part of the main form object. This method should only be used for `hasMany` associations."
 	examples='
-		
+
 	'
 	categories="view-helper,forms-association" chapters="nested-properties" functions="">
 	<cfargument name="objectName" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
@@ -101,16 +101,16 @@
 		var loc = {};
 		loc.returnValue = false;
 		loc.object = $getObject(arguments.objectName);
-		
+
 		// clean up our key argument if there is a comma on the beginning or end
 		arguments.keys = REReplace(arguments.keys, "^,|,$", "", "all");
-		
+
 		if (!StructKeyExists(loc.object, arguments.association) || !IsArray(loc.object[arguments.association]))
 			return loc.returnValue;
-		
+
 		if (!Len(arguments.keys))
 			return loc.returnValue;
-		
+
 		loc.iEnd = ArrayLen(loc.object[arguments.association]);
 		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 		{
@@ -134,13 +134,13 @@
 		var loc = {};
 		loc.returnValue = "";
 		loc.object = $getObject(arguments.objectName);
-		
+
 		if (!StructKeyExists(loc.object, arguments.association) || !IsArray(loc.object[arguments.association]))
 			return loc.returnValue;
-		
+
 		if (!Len(arguments.keys))
 			return loc.returnValue;
-		
+
 		loc.iEnd = ArrayLen(loc.object[arguments.association]);
 		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 		{
