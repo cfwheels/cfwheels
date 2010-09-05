@@ -40,7 +40,7 @@
 		loc.returnValue = "";
 		loc.values = [];
 		loc.keyList = ListSort(StructKeyList(arguments), "textnocase", "asc");
-		
+
 		// we need to make sure we are looping through the passed in arguments the same everytime
 		for (loc.i = 1; loc.i lte ListLen(loc.keyList); loc.i++)
 		{
@@ -365,7 +365,7 @@
 	<cfargument name="absolutePath" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		
+
 		// break up the full path string in the path name only and the file name only
 		loc.path = GetDirectoryFromPath(arguments.absolutePath);
 		loc.file = Replace(arguments.absolutePath, loc.path, "");
@@ -870,4 +870,31 @@ Should now call bar() instead and marking foo() as deprecated
 		}
 	}
 	</cfscript>
+</cffunction>
+
+<cffunction name="$checkMinimumVersion" access="public" returntype="boolean" output="false">
+	<cfargument name="version" type="string" required="true">
+	<cfargument name="minversion" type="string" required="true">
+	<cfscript>
+	var loc = {};
+
+	// remove periods and commas from the version and minimum version
+	arguments.version = ListChangeDelims(arguments.version, "", ".,");
+	arguments.minversion = ListChangeDelims(arguments.minversion, "", ".,");
+
+	// make version and minversion the same length pad zeros to the end
+	loc.a = max(len(arguments.version), len(arguments.minversion));
+
+	arguments.version = arguments.version & RepeatString("0", loc.a - len(arguments.version));
+	arguments.minversion = arguments.minversion & RepeatString("0", loc.a - len(arguments.minversion));
+
+	// make sure the version is an integer
+	if (IsNumeric(arguments.version) && IsNumeric(arguments.minversion) && arguments.version >= arguments.minversion)
+	{
+		return true;
+	}
+
+	return false;
+	</cfscript>
+	<cfreturn >
 </cffunction>

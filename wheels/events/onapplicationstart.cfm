@@ -16,28 +16,20 @@
 		// really need to refactor this into a method
 		if (StructKeyExists(server, "railo"))
 		{
-			application.wheels.serverVersion = server.railo.version;
 			application.wheels.serverName = "Railo";
-			loc.minimumServerVersionNumber = "3.1.2.020";
-			loc.s = ListToArray(application.wheels.serverVersion, ".");
-			loc.m = ListToArray(loc.minimumServerVersionNumber, ".");
+			application.wheels.serverVersion = server.railo.version;
+			loc.minimumServerVersion = "3.1.2.018";
 		}
 		else
 		{
-			application.wheels.serverVersion = server.coldfusion.productversion;
 			application.wheels.serverName = "Adobe ColdFusion";
-			loc.minimumServerVersionNumber = "8,0,1,0";
-			loc.s = ListToArray(application.wheels.serverVersion);
-			loc.m = ListToArray(loc.minimumServerVersionNumber);
+			application.wheels.serverVersion = server.coldfusion.productversion;
+			loc.minimumServerVersion = "8,0,1,0";
 		}
-		
-		loc.iEnd = ArrayLen(loc.s);
-		for(loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+
+		if (!$checkMinimumVersion(application.wheels.serverVersion, loc.minimumServerVersion))
 		{
-			if (loc.s[loc.i] lt loc.m[loc.i])
-			{
-				$throw(type="Wheels.EngineNotSupported", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Please upgrade to version #loc.minimumServerVersionNumber# or higher.");
-			}
+			$throw(type="Wheels.EngineNotSupported", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Please upgrade to version #loc.minimumServerVersion# or higher.");
 		}
 
 		// copy over the cgi variables we need to the request scope (since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example)
