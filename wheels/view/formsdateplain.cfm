@@ -1,9 +1,14 @@
-<cffunction name="dateSelectTags" returntype="string" access="public" output="false" hint="Builds and returns a string containing three select form controls (month, day and year)."
+<cffunction name="dateSelectTags" returntype="string" access="public" output="false" hint="Builds and returns a string containing three select form controls (month, day, and year) based on a `name` and `value`."
 	examples=
 	'
-		<!--- view code --->
+		<!--- This "Tag" version of function accepts `name` and `selected` instead of binding to a model object --->
 		<cfoutput>
-		    <p>##dateSelectTags()##</p>
+			##dateSelectTags(name="dateStart", selected=params.dateStart)##
+		</cfoutput>
+		
+		<!--- Show fields for month and year only --->
+		<cfoutput>
+			##dateSelectTags(name="expiration", selected=params.expiration, order="month,year")##
 		</cfoutput>
 	'
 	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textFieldTag,submitTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,timeSelectTags">
@@ -34,12 +39,17 @@
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="timeSelectTags" returntype="string" access="public" output="false" hint="Builds and returns a string containing three select form controls for a time based on the supplied `objectName` and `property`."
+<cffunction name="timeSelectTags" returntype="string" access="public" output="false" hint="Builds and returns a string containing three select form controls for hour, minute, and second based on `name`."
 	examples=
 	'
-		<!--- view code --->
+		<!--- This "Tag" version of function accepts `name` and `selected` instead of binding to a model object --->
 		<cfoutput>
-		    <p>##timeSelectTags(name="timeOfMeeting")##</p>
+		    ##timeSelectTags(name="timeOfMeeting" selected=params.timeOfMeeting)##
+		</cfoutput>
+		
+		<!--- Show fields for `hour` and `minute` only --->
+		<cfoutput>
+			##timeSelectTags(name="timeOfMeeting", selected=params.timeOfMeeting, order="hour,minute")##
 		</cfoutput>
 	'
 	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags">
@@ -69,12 +79,17 @@
 	<cfreturn $dateOrTimeSelect(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="dateTimeSelectTags" returntype="string" access="public" output="false" hint="Builds and returns a string containing six select form controls (three for date selection and the remaining three for time selection)."
+<cffunction name="dateTimeSelectTags" returntype="string" access="public" output="false" hint="Builds and returns a string containing six select form controls (three for date selection and the remaining three for time selection) based on a `name`."
 	examples=
 	'
-		<!--- view code --->
+		<!--- This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object --->
 		<cfoutput>
-		    <p>##dateTimeSelectTags()##</p>
+		    ##dateTimeSelectTags(name="dateTimeStart", selected=params.dateTimeStart)##
+		</cfoutput>
+		
+		<!--- Show fields for month, day, hour, and minute --->
+		<cfoutput>
+			##dateTimeSelectTags(name="dateTimeStart", selected=params.dateTimeStart, dateOrder="month,day", timeOrder="hour,minute")##
 		</cfoutput>
 	'
 	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateSelectTags,timeSelectTags">
@@ -123,9 +138,16 @@
 <cffunction name="yearSelectTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a select form control for a range of years based on the supplied `name`."
 	examples=
 	'
-		<!--- view code --->
+		<!--- View code --->
 		<cfoutput>
-		    <p>##yearSelectTag(name="yearOfBirthday")##</p>
+		    ##yearSelectTag(name="yearOfBirthday", selected=params.yearOfBirthday)##
+		</cfoutput>
+		
+		<!--- Only allow selection of year to be for the past 50 years, minimum being 18 years ago --->
+		<cfset fiftyYearsAgo = Now() - 50>
+		<cfset eighteenYearsAgo = Now() - 18>
+		<cfoutput>
+			##yearSelectTag(name="yearOfBirthday", selected=params.yearOfBirthday, startYear=fiftyYearsAgo, endYear=eighteenYearsAgo)##
 		</cfoutput>
 	'
 	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
@@ -152,9 +174,9 @@
 <cffunction name="monthSelectTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a select form control for the months of the year based on the supplied `name`."
 	examples=
 	'
-		<!--- view code --->
+		<!--- This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object --->
 		<cfoutput>
-		    <p>##monthSelectTag(name="monthOfBirthday")##</p>
+		    ##monthSelectTag(name="monthOfBirthday", selected=params.monthOfBirthday)##
 		</cfoutput>
 	'
 	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
@@ -180,9 +202,9 @@
 <cffunction name="daySelectTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a select form control for the days of the week based on the supplied `name`."
 	examples=
 	'
-		<!--- view code --->
+		<!--- This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object --->
 		<cfoutput>
-		    <p>##daySelectTag(name="dayOfWeek")##</p>
+		    ##daySelectTag(name="dayOfWeek", selected=params.dayOfWeek)##
 		</cfoutput>
 	'
 	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
@@ -207,9 +229,14 @@
 <cffunction name="hourSelectTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing one select form control for the hours of the day based on the supplied `name`."
 	examples=
 	'
-		<!--- view code --->
+		<!--- This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object --->
 		<cfoutput>
-		    <p>##hourSelectTag(name="hourOfMeeting")##</p>
+		    ##hourSelectTag(name="hourOfMeeting", selected=params.hourOfMeeting)##
+		</cfoutput>
+		
+		<!--- Show 12 hours instead of 24 --->
+		<cfoutput>
+			##hourSelectTag(name="hourOfMeeting", selected=params.hourOfMeeting, twelveHour=true)##
 		</cfoutput>
 	'
 	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
@@ -235,9 +262,14 @@
 <cffunction name="minuteSelectTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing one select form control for the minutes of an hour based on the supplied `name`."
 	examples=
 	'
-		<!--- view code --->
+		<!--- This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object --->
 		<cfoutput>
-		    <p>##minuteSelectTag(name="minuteOfMeeting")##</p>
+		    ##minuteSelectTag(name="minuteOfMeeting", value=params.minuteOfMeeting)##
+		</cfoutput>
+		
+		<!--- Only show 15-minute intervals --->
+		<cfoutput>
+			##minuteSelectTag(name="minuteOfMeeting", value=params.minuteOfMeeting, minuteStep=15)##
 		</cfoutput>
 	'
 	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
@@ -263,9 +295,9 @@
 <cffunction name="secondSelectTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing one select form control for the seconds of a minute based on the supplied `name`."
 	examples=
 	'
-		<!--- view code --->
+		<!--- This "Tag" version of the function accepts a `name` and `selected` instead of binding to a model object --->
 		<cfoutput>
-		    <p>##secondSelectTag(name="secondsToLaunch")##</p>
+		    ##secondSelectTag(name="secondsToLaunch", selected=params.secondsToLaunch)##
 		</cfoutput>
 	'
 	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
