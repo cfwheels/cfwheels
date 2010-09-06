@@ -23,7 +23,7 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="h" returntype="string" access="public" output="false" hint="Escapes unsafe HTML. Alias for HTMEditFormat()"
+<cffunction name="h" returntype="string" access="public" output="false" hint="Escapes unsafe HTML. Alias for XMLFormat()"
 	examples=
 	'
 		##h("<b>This "is" a test string & it should format properly</b>")##
@@ -32,5 +32,5 @@
 	categories="view-helper,sanitize" functions="stripLinks,stripTags">
 	<cfargument name="content" type="string" required="true">
 	<!--- you can't use argumentCollection --->
-	<cfreturn HTMLEditFormat(arguments.content)>
+	<cfreturn XMLFormat(arguments.content)>
 </cffunction>
