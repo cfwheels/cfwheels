@@ -229,7 +229,9 @@
 			for (loc.key in arguments)
 			{
 				if (!ListFindNoCase("name,attributes,close,skip,skipStartingWith", loc.key))
+				{
 					arguments.attributes[loc.key] = arguments[loc.key];
+				}
 			}
 		}
 		
@@ -243,25 +245,39 @@
 			loc.key = ListGetAt(loc.sortedKeys, loc.i);
 			// place the attribute name and value in the string unless it should be skipped according to the arguments or if it's an internal argument (starting with a "$" sign)
 			if (!ListFindNoCase(arguments.skip, loc.key) && (!Len(arguments.skipStartingWith) || Left(loc.key, Len(arguments.skipStartingWith)) != arguments.skipStartingWith) && Left(loc.key, 1) != "$")
+			{
 				// replace boolean arguments for the disabled and readonly attributs with the key (if true) or skip putting it in the output altogether (if false)
 				if (ListFindNoCase("disabled,readonly", loc.key) and IsBoolean(arguments.attributes[loc.key]))
 				{
 					if (arguments.attributes[loc.key])
-						loc.returnValue = loc.returnValue & " " & LCase(loc.key) & "=""" & LCase(loc.key) & """";
+					{
+						loc.returnValue &= $tagAttribute(loc.key, LCase(loc.key));
+					}
 				}
 				else
 				{
-					loc.returnValue = loc.returnValue & " " & LCase(loc.key) & "=""" & arguments.attributes[loc.key] & """";	
+					loc.returnValue &= $tagAttribute(loc.key, arguments.attributes[loc.key]);
 				}
+			}
 		}
 
 		// close the tag (usually done on self-closing tags like "img" for example) or just end it (for tags like "div" for example)
 		if (arguments.close)
-			loc.returnValue = loc.returnValue & " />";
+		{
+			loc.returnValue &= " />";
+		}
 		else
-			loc.returnValue = loc.returnValue & ">";		
+		{
+			loc.returnValue &= ">";
+		}		
 	</cfscript>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="$tagAttribute" returntype="string" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="value" type="string" required="true">
+	<cfreturn ' #LCase(arguments.name)#="#arguments.value#"'>
 </cffunction>
 
 <cffunction name="$element" returntype="string" access="public" output="false">
