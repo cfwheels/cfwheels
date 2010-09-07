@@ -185,7 +185,21 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="response" returntype="string" access="public" output="false">
+<cffunction name="response" returntype="string" access="public" output="false" hint="Returns content that Wheels will send to the client in response to the request."
+	examples='
+		<!--- In a controller --->
+		<cffunction name="init">
+			<cfset filters(type="after", through="translateResponse")>
+		</cffunction>
+		
+		<!--- After filter translates response and sets it --->
+		<cffunction name="translateResponse">
+			<cfset var wheelsResponse = response()>
+			<cfset var translatedResponse = someTranslationMethod(wheelsResponse)>
+			<cfset setResponse(translatedResponse)>
+		</cffunction>
+	'
+	categories="" chapters="" functions="setResponse">
 	<cfscript>
 		if ($performedRender())
 			return Trim(variables.$instance.response);
@@ -194,7 +208,21 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="setResponse" returntype="void" access="public" output="false">
+<cffunction name="setResponse" returntype="void" access="public" output="false" hint="Sets content that Wheels will send to the client in response to the request."
+	examples='
+		<!--- In a controller --->
+		<cffunction name="init">
+			<cfset filters(type="after", through="translateResponse")>
+		</cffunction>
+		
+		<!--- After filter translates response and sets it --->
+		<cffunction name="translateResponse">
+			<cfset var wheelsResponse = response()>
+			<cfset var translatedResponse = someTranslationFunction(wheelsResponse)>
+			<cfset setResponse(translatedResponse)>
+		</cffunction>
+	'
+	categories="" chapters="" functions="response">
 	<cfargument name="content" type="string" required="true" hint="The content to set as the response.">
 	<cfset variables.$instance.response = arguments.content>	
 </cffunction>
