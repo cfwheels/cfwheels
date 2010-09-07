@@ -4,7 +4,7 @@
 		##linkTo(text="Log Out", controller="account", action="logout")##
 		-> <a href="/account/logout">Log Out</a>
 
-		<!--- if you''re already in the "account" controller, Wheels will assume that''s where you want the link to go. --->
+		<!--- if you''re already in the `account` controller, Wheels will assume that''s where you want the link to point --->
 		##linkTo(text="Log Out", action="logout")##
 		-> <a href="/account/logout">Log Out</a>
 
@@ -14,9 +14,17 @@
 		##linkTo(text="View Settings", action="settings", params="show=all&sort=asc")##
 		-> <a href="/account/settings?show=all&amp;sort=asc">View Settings</a>
 
-		<!--- given that a userProfile route has been configured in config/routes.cfm --->
+		<!--- Given that a `userProfile` route has been configured in `config/routes.cfm` --->
 		##linkTo(text="Joe''s Profile", route="userProfile", userName="joe")##
 		-> <a href="/user/joe">Joe''s Profile</a>
+		
+		<!--- Link to an external website --->
+		##linkTo(text="ColdFusion Framework", href="http://cfwheels.org/")##
+		-> <a href="http://cfwheels.org/">ColdFusion Framework</a>
+		
+		<!--- Give the link `class` and `id` attributes --->
+		##linkTo(text="Delete Post", action="delete", key=99, class="delete", id="delete-99")##
+		-> <a class="delete" href="/blog/delete/99" id="delete-99">Delete Post</a>
 	'
 	categories="view-helper,links" chapters="linking-pages" functions="URLFor,buttonTo,mailTo">
 	<cfargument name="text" type="string" required="false" default="" hint="The text content of the link.">
@@ -31,7 +39,7 @@
 	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="href" type="string" required="false" hint="Used to link to an extrenal site">
+	<cfargument name="href" type="string" required="false" hint="Pass a link to an external site here if you want to bypass the Wheels routing system altogether and link to an external URL.">
 	<cfscript>
 		var loc = {};
 		$args(name="linkTo", args=arguments);
@@ -56,7 +64,7 @@
 <cffunction name="buttonTo" returntype="string" access="public" output="false" hint="Creates a form containing a single button that submits to the URL. The URL is built the same way as the @linkTo function."
 	examples=
 	'
-		##buttonTo(text="Delete Account", action="perFormDelete", disabled="Wait...")##
+		##buttonTo(text="Delete Account", action="perFormDelete", disable="Wait...")##
 	'
 	categories="view-helper,links" functions="URLFor,linkTo,mailTo">
 	<cfargument name="text" type="string" required="false" hint="The text content of the button.">
@@ -128,43 +136,45 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="paginationLinks" returntype="string" access="public" output="false" hint="Builds and returns a string containing links to pages based on a paginated query. Uses @linkTo internally to build the link, so you need to pass in a `route` name or a `controller`/`action`/`key` combination. All other @linkTo arguments can be supplied as well, in which case they are passed through directly to @linkTo. If you have paginated more than one query in the controller, you can use the `handle` argument to reference them. (Don't forget to pass in a `handle` to the @findAll function in your controller first)."
+<cffunction name="paginationLinks" returntype="string" access="public" output="false" hint="Builds and returns a string containing links to pages based on a paginated query. Uses @linkTo internally to build the link, so you need to pass in a `route` name or a `controller`/`action`/`key` combination. All other @linkTo arguments can be supplied as well, in which case they are passed through directly to @linkTo. If you have paginated more than one query in the controller, you can use the `handle` argument to reference them. (Don't forget to pass in a `handle` to the @findAll function in your controller first.)"
 	examples=
 	'
-		<!--- controller code --->
+		<!--- Example 1: List authors page by page, 25 at a time --->
+		<!--- Controller code --->
 		<cfparam name="params.page" default="1">
 		<cfset allAuthors = model("author").findAll(page=params.page, perPage=25, order="lastName")>
 
-		<!--- view code --->
+		<!--- View code --->
 		<ul>
 		    <cfoutput query="allAuthors">
 		        <li>##firstName## ##lastName##</li>
 		    </cfoutput>
 		</ul>
 		<cfoutput>##paginationLinks(action="listAuthors")##</cfoutput>
-
-		<!--- view code --->
+		
+		<!--- Example 2: Using the same model call above, show all authors with a window size of 5 --->
+		<!--- View code --->
 		<cfoutput>##paginationLinks(action="listAuthors", windowSize=5)##</cfoutput>
 
-
-		<!--- controller code --->
+		<!--- Example 3: If more than one paginated query is being run, then you need to reference the correct `handle` in the view --->
+		<!--- Controller code --->
 		<cfset allAuthors = model("author").findAll(handle="authQuery", page=5, order="id")>
 
-		<!--- view code --->
+		<!--- View code --->
 		<ul>
 		    <cfoutput>##paginationLinks(action="listAuthors", handle="authQuery", prependToLink="<li>", appendToLink="</li>")##</cfoutput>
 		</ul>
 
-
-		<!--- route setup in config/routes.cfm --->
+		<!--- Example 4: Call to `paginationLinks` using routes --->
+		<!--- Route setup in config/routes.cfm --->
 		<cfset addRoute(name="paginatedCommentListing", pattern="blog/[year]/[month]/[day]/[page]", controller="theBlog", action="stats")>
 		<cfset addRoute(name="commentListing", pattern="blog/[year]/[month]/[day]",  controller="theBlog", action="stats")>
 
-		<!--- controller code --->
+		<!--- Ccontroller code --->
 		<cfparam name="params.page" default="1">
 		<cfset comments = model("comment").findAll(page=params.page, order="createdAt")>
 
-		<!--- view code --->
+		<!--- View code --->
 		<ul>
 		    <cfoutput>##paginationLinks(route="paginatedCommentListing", year=2009, month="feb", day=10)##</cfoutput>
 		</ul>

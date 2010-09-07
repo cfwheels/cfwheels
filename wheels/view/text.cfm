@@ -1,4 +1,4 @@
-<cffunction name="autoLink" returntype="string" access="public" output="false" hint="Turns all URLs and e-mail addresses into clickable links."
+<cffunction name="autoLink" returntype="string" access="public" output="false" hint="Turns all URLs and email addresses into hyperlinks."
 	examples=
 	'
 		##autoLink("Download Wheels from http://cfwheels.org/download")##
@@ -9,8 +9,8 @@
 	'
 	categories="view-helper,text" functions="excerpt,highlight,simpleFormat,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="The text to create links in.">
-	<cfargument name="link" type="string" required="false" default="all" hint="Whether to link URLs, email addresses or both. Possible values are: `all` (default), `URLs` and `emailAddresses`.">
-	<cfargument name="domains" type="string" required="false" hint="The domains (.com, .co.uk etc) to auto link, not used with email addresses.">
+	<cfargument name="link" type="string" required="false" default="all" hint="Whether to link URLs, email addresses, or both. Possible values are `all` (default), `URLs`, and `emailAddresses`.">
+	<cfargument name="domains" type="string" required="false" hint="The top level domains (.com, .co.uk, etc.) to auto link. Not used with email addresses.">
 	<cfscript>
 		var loc = {};
 		$args(name="autoLink", args=arguments);
@@ -27,7 +27,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="excerpt" returntype="string" access="public" output="false" hint="Extracts an excerpt from text that matches the first instance of phrase."
+<cffunction name="excerpt" returntype="string" access="public" output="false" hint="Extracts an excerpt from text that matches the first instance of a given phrase."
 	examples=
 	'
 		##excerpt(text="ColdFusion Wheels is a Rails-like MVC framework for Adobe ColdFusion and Railo", phrase="framework", radius=5)##
@@ -121,10 +121,10 @@
 <cffunction name="simpleFormat" returntype="string" access="public" output="false" hint="Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards)."
 	examples=
 	'
-		<!--- how most of your calls will look --->
+		<!--- How most of your calls will look --->
 		##simpleFormat(post.comments)##
 
-		<!--- demonstrates what output looks like with specific data --->
+		<!--- Demonstrates what output looks like with specific data --->
 		<cfsavecontent variable="comment">
 			I love this post!
 
@@ -183,7 +183,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="truncate" returntype="string" access="public" output="false" hint="Truncates text to the specified length and replaces the last characters with the specified truncate string. (Defaults to ""..."")."
+<cffunction name="truncate" returntype="string" access="public" output="false" hint="Truncates text to the specified length and replaces the last characters with the specified truncate string (which defaults to ""..."")."
 	examples=
 	'
 		##truncate(text="Wheels is a framework for ColdFusion", length=20)##
@@ -207,18 +207,18 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="wordTruncate" returntype="string" access="public" output="false" hint="Truncates text to the specified length of words and replaces the remaining characters with the specified truncate string. (Defaults to ""..."")."
+<cffunction name="wordTruncate" returntype="string" access="public" output="false" hint="Truncates text to the specified length of words and replaces the remaining characters with the specified truncate string (which defaults to ""..."")."
 	examples=
 	'
 		##wordTruncate(text="Wheels is a framework for ColdFusion", length=4)##
-		-> Wheels is a frame...
+		-> Wheels is a framework...
 
 		##truncate(text="Wheels is a framework for ColdFusion", truncateString=" (more)")##
 		-> Wheels is a framework for (more)
 	'
 	categories="view-helper,text" functions="autoLink,excerpt,highlight,simpleFormat,titleize">
 	<cfargument name="text" type="string" required="true" hint="The text to truncate.">
-	<cfargument name="length" type="numeric" required="false" default="5" hint="Length to truncate the text to.">
+	<cfargument name="length" type="numeric" required="false" default="5" hint="Number of words to truncate the text to.">
 	<cfargument name="truncateString" type="string" required="false" default="..." hint="String to replace the last characters with.">
 	<cfscript>
 		var loc = {};

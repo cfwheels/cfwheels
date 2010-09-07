@@ -5,7 +5,7 @@
 		-> <strong>Wheels</strong> is a framework for ColdFusion.
 	'
 	categories="view-helper,sanitize" functions="stripTags,h">
-	<cfargument name="html" type="string" required="true" hint="The html to remove links from.">
+	<cfargument name="html" type="string" required="true" hint="The HTML to remove links from.">
 	<cfreturn REReplaceNoCase(arguments.html, "<a.*?>(.*?)</a>", "\1" , "all")>
 </cffunction>
 
@@ -16,14 +16,14 @@
 		-> Wheels is a framework for ColdFusion.
 	'
 	categories="view-helper,sanitize" functions="stripLinks,h">
-	<cfargument name="html" type="string" required="true" hint="The HTML to remove links from.">
+	<cfargument name="html" type="string" required="true" hint="The HTML to remove tag markup from.">
 	<cfset var returnValue = "">
 	<cfset returnValue = REReplaceNoCase(arguments.html, "<\ *[a-z].*?>", "", "all")>
 	<cfset returnValue = REReplaceNoCase(returnValue, "<\ */\ *[a-z].*?>", "", "all")>
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="h" returntype="string" access="public" output="false" hint="Escapes unsafe HTML. Alias for XMLFormat()"
+<cffunction name="h" returntype="string" access="public" output="false" hint="Escapes unsafe HTML. Alias for your CFML engine's `XMLFormat()` function."
 	examples=
 	'
 		##h("<b>This "is" a test string & it should format properly</b>")##
