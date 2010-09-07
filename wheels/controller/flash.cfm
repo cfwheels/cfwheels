@@ -236,7 +236,7 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(loc.flashKeys, loc.i);
-			loc.attributes = {class=hyphenize(loc.item) & "-message"};
+			loc.attributes = {class=LCase(loc.item) & "-message"};
 			if (!StructKeyExists(arguments, "key") || arguments.key == loc.item)
 			{
 				loc.content = loc.$flash[loc.item];
