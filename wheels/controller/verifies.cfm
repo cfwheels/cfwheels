@@ -10,7 +10,7 @@
 		<!--- Just like above, only this time we want to redirect the visitor to the index page of the controller if the request is invalid and show an error in The Flash --->
 		<cfset verifies(only="edit", get=true, params="userId", paramsTypes="integer", handler="index", error="Invalid userId")>
 	'
-	categories="controller-initialization" chapters="filters-and-verification" functions="verificationChain,setVerificationChain">
+	categories="controller-initialization,verification" chapters="filters-and-verification" functions="verificationChain,setVerificationChain">
 	<cfargument name="only" type="string" required="false" default="" hint="List of action names to limit this verification to.">
 	<cfargument name="except" type="string" required="false" default="" hint="List of action names to exclude this verification from.">
 	<cfargument name="post" type="any" required="false" default="" hint="Set to `true` to verify that this is a `POST` request.">
@@ -36,7 +36,7 @@
 		<cfset ArrayDeleteAt(myVerificationChain, 1)>
 		<cfset setVerificationChain(myVerificationChain)>
 	'
-	categories="controller-initialization" chapters="filters-and-verification" functions="verifies,setVerificationChain">
+	categories="controller-initialization,verification" chapters="filters-and-verification" functions="verifies,setVerificationChain">
 	<cfreturn variables.$class.verifications>
 </cffunction>
 
@@ -49,7 +49,7 @@
 			{only="edit", get=true, params="userId", paramsTypes="integer", handler="index", error="Invalid userId"}
 		])>
 	'
-	categories="controller-initialization" chapters="filters-and-verification" functions="verifies,verificationChain">
+	categories="controller-initialization,verification" chapters="filters-and-verification" functions="verifies,verificationChain">
 	<cfargument name="chain" type="array" required="true" hint="An array of structs, each of which represent an `argumentCollection` that get passed to the `verifies` function. This should represent the entire verification chain that you want to use for this controller.">
 	<cfscript>
 		var loc = {};

@@ -5,7 +5,7 @@
 			<cfset provides("html,xml,json")>
 		</cffunction>
 	'
-	categories="" chapters="" functions="onlyProvides,renderWith">
+	categories="controller-initialization,provides" chapters="" functions="onlyProvides,renderWith">
 	<cfargument name="formats" required="false" default="" type="string" hint="Formats to instruct the controller to provide. Valid values are `html` (the default), `xml`, `json`, `csv`, `pdf`, and `xls`." />
 	<cfscript>
 		var loc = {};
@@ -42,7 +42,7 @@
 			<cfset model("product").new()>
 		</cffunction>
 	'
-	categories="" chapters="" functions="provides,renderWith">
+	categories="controller-request,provides" chapters="" functions="provides,renderWith">
 	<cfargument name="formats" required="false" default="" type="string" />
 	<cfargument name="action" type="string" default="#variables.params.action#" />
 	<cfscript>
@@ -80,7 +80,7 @@
 			<cfset model("product").new()>
 		</cffunction>
 	'
-	categories="" chapters="" functions="provides,onlyProvides">
+	categories="controller-request,provides" chapters="" functions="provides,onlyProvides">
 	<cfargument name="data" required="true" type="any" hint="Data to format and render." />
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="See documentation for @renderPage.">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for @renderPage.">

@@ -9,7 +9,7 @@
 		<!--- Always execute `isLoggedIn` and `checkIPAddress` (in that order) before all actions in this controller except the `home` and `login` actions --->
 		<cfset filters(through="isLoggedIn,checkIPAddress", except="home,login")>
 	'
-	categories="controller-initialization" chapters="filters-and-verification" functions="setFilterChain,filterChain">
+	categories="controller-initialization,filtering" chapters="filters-and-verification" functions="setFilterChain,filterChain">
 	<cfargument name="through" type="string" required="true" hint="Function(s) to execute before or after the action(s).">
 	<cfargument name="type" type="string" required="false" default="before" hint="Whether to run the function(s) before or after the action(s).">
 	<cfargument name="only" type="string" required="false" default="" hint="Pass in a list of action names (or one action name) to tell Wheels that the filter function(s) should only be run on these actions.">
@@ -57,7 +57,7 @@
 			{type="after", through="logConversion", only="thankYou"}
 		])>
 	'
-	categories="controller-initialization" chapters="filters-and-verification" functions="filters,filterChain">
+	categories="controller-initialization,filtering" chapters="filters-and-verification" functions="filters,filterChain">
 	<cfargument name="chain" type="array" required="true" hint="An array of structs, each of which represent an `argumentCollection` that get passed to the `filters` function. This should represent the entire filter chain that you want to use for this controller.">
 	<cfscript>
 		var loc = {};
@@ -81,7 +81,7 @@
 		<cfset ArrayDeleteAt(myFilterChain, 1)>
 		<cfset setFilterChain(myFilterChain)>
 	'
-	categories="controller-initialization" chapters="filters-and-verification" functions="filters,setFilterChain">
+	categories="controller-initialization,filtering" chapters="filters-and-verification" functions="filters,setFilterChain">
 	<cfargument name="type" type="string" required="false" default="all" hint="Use this argument to return only `before` or `after` filters.">
 	<cfscript>
 		var loc = {};

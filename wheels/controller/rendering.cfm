@@ -21,7 +21,7 @@
 		<!--- Don''t render the view immediately but rather return and store in a variable for further processing --->
 		<cfset myView = renderPage(returnAs="string")>
 	'
-	categories="controller-request,rendering" chapters="rendering-pages" functions="renderNothing,renderText,renderPartial">
+	categories="controller-request,rendering" chapters="rendering-pages" functions="renderNothing,renderText,renderPartial,usesLayout">
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Controller to include the view page for.">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="Action to include the view page for.">
 	<cfargument name="template" type="string" required="false" default="" hint="A specific template to render. Prefix with a leading slash `/` if you need to build a path from the root `views` folder.">

@@ -5,7 +5,7 @@
 	'
 		<cfset caches(actions="browseByUser,browseByTitle", time=30)>
 	'
-	categories="controller-initialization" chapters="caching" functions="">
+	categories="controller-initialization,caching" chapters="caching" functions="">
 	<cfargument name="action" type="string" required="false" default="" hint="Action(s) to cache. This argument is also aliased as `actions`.">
 	<cfargument name="time" type="numeric" required="false" hint="Minutes to cache the action(s) for.">
 	<cfargument name="static" type="boolean" required="false" hint="Set to `true` to tell Wheels that this is a static page and that it can skip running the controller filters (before and after filters set on actions) and application events (onSessionStart, onRequestStart etc).">
