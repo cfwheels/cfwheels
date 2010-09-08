@@ -122,6 +122,9 @@
 		// count records and get primary keys for pagination
 		if (arguments.page)
 		{
+			if (application.wheels.showErrorInformation && arguments.perPage lte 0)
+				$throw(type="Wheels", message="Incorrect Argument", extendedInfo="The perPage argument should be a positive numeric value.");
+		
 			if (Len(arguments.order))
 			{
 				// insert primary keys to order clause unless they are already there, this guarantees that the ordering is unique which is required to make pagination work properly
