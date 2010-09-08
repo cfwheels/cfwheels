@@ -32,6 +32,45 @@
 	<cfset variables.wheels.class.tableName = arguments.name>
 </cffunction>
 
+<cffunction name="setTableNamePrefix" returntype="void" access="public" output="false" hint="Sets a prefix to prepend to the table name when this model runs SQL queries."
+	examples='
+		<!--- In `models/User.cfc`, add a prefix to the default table name of `tbl` --->
+		<cffunction name="init">
+			<cfset setTableNamePrefix("tbl")>
+		</cffunction>
+	'
+	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,table">
+	<cfargument name="prefix" type="string" required="true" hint="A prefix to prepend to the table name.">
+	<cfset variables.wheels.class.tableNamePrefix =  arguments.prefix>
+</cffunction>
+
+<cffunction name="setPrimaryKey" returntype="void" access="public" output="false" hint="Allows you to pass in the name(s) of the property(s) that should be used as the primary key(s). Pass as a list if defining a composite primary key. Also aliased as `setPrimaryKeys()`."
+	examples='
+		<!--- In `models/User.cfc`, define the primary key as a column called `userID` --->
+		<cffunction name="init">
+			<cfset setPrimaryKey("userID")>
+		</cffunction>
+	'
+	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,table">
+	<cfargument name="property" type="string" required="true" hint="Property (or list of properties) to set as the primary key.">
+	<cfset var loc = {}>
+	<cfloop list="#arguments.property#" index="loc.i">
+		<cfset variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.i)>
+	</cfloop>
+</cffunction>
+
+<cffunction name="setPrimaryKeys" returntype="void" access="public" output="false" hint="Alias for @setPrimaryKey. Use this for better readability when you're setting multiple properties as the primary key."
+	examples='
+		<!--- In `models/Subscription.cfc`, define the primary key as composite of the columns `customerId` and `publicationId` --->
+		<cffunction name="init">
+			<cfset setPrimaryKeys("customerId,publicationId")>
+		</cffunction>
+	'
+	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,table">
+	<cfargument name="property" type="string" required="true" hint="Property (or list of properties) to set as the primary key.">
+	<cfset setPrimaryKey(argumentCollection=arguments)>
+</cffunction>
+
 <!--- PUBLIC MODEL CLASS METHODS --->
 
 <cffunction name="columnNames" returntype="string" access="public" output="false" hint="Returns a list of column names in the table mapped to this model. The list is ordered according to the columns' ordinal positions in the database table."
@@ -80,19 +119,6 @@
 	<cfreturn getTableNamePrefix() & variables.wheels.class.tableName>
 </cffunction>
 
-<!--- tableNamePrefix --->
-<cffunction name="setTableNamePrefix" returntype="void" access="public" output="false" hint="Sets a prefix to prepend to the table name when this model runs SQL queries."
-	examples='
-		<!--- In `models/User.cfc`, add a prefix to the default table name of `tbl` --->
-		<cffunction name="init">
-			<cfset setTableNamePrefix("tbl")>
-		</cffunction>
-	'
-	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,table">
-	<cfargument name="prefix" type="string" required="true" hint="A prefix to prepend to the table name.">
-	<cfset variables.wheels.class.tableNamePrefix =  arguments.prefix>
-</cffunction>
-
 <cffunction name="getTableNamePrefix" returntype="string" access="public" output="false" hint="Returns the table name prefix set for the table."
 	examples='
 		<!--- Get the table name prefix for this user when running a custom query --->
@@ -113,32 +139,7 @@
 	<cfreturn variables.wheels.class.tableNamePrefix>
 </cffunction>
 
-<cffunction name="setPrimaryKey" returntype="void" access="public" output="false" hint="Allows you to pass in the name(s) of the property(s) that should be used as the primary key(s). Pass as a list if defining a composite primary key. Also aliased as `setPrimaryKeys()`."
-	examples='
-		<!--- In `models/User.cfc`, define the primary key as a column called `userID` --->
-		<cffunction name="init">
-			<cfset setPrimaryKey("userID")>
-		</cffunction>
-	'
-	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,table">
-	<cfargument name="property" type="string" required="true" hint="Property (or list of properties) to set as the primary key.">
-	<cfset var loc = {}>
-	<cfloop list="#arguments.property#" index="loc.i">
-		<cfset variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.i)>
-	</cfloop>
-</cffunction>
-
-<cffunction name="setPrimaryKeys" returntype="void" access="public" output="false" hint="Alias for @setPrimaryKey. Use this for better readability when you're setting multiple properties as the primary key."
-	examples='
-		<!--- In `models/Subscription.cfc`, define the primary key as composite of the columns `customerId` and `publicationId` --->
-		<cffunction name="init">
-			<cfset setPrimaryKeys("customerId,publicationId")>
-		</cffunction>
-	'
-	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,table">
-	<cfargument name="property" type="string" required="true" hint="Property (or list of properties) to set as the primary key.">
-	<cfset setPrimaryKey(argumentCollection=arguments)>
-</cffunction>
+<!--- PUBLIC MODEL OBJECT METHODS --->
 
 <cffunction name="compareTo" access="public" output="false" returntype="boolean" hint="Pass in another Wheels model object to see if the two objects are the same."
 	examples='
@@ -148,88 +149,11 @@
 			<cfset renderPage(action="accessDenied")>
 		</cfif>
 	'
-	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,table">
+	categories="model-object,miscellaneous" chapters="" functions="">
 	<cfargument name="object" type="component" required="true">
 	<cfreturn Compare(this.$objectId(), arguments.object.$objectId()) eq 0 />
 </cffunction>
 
 <cffunction name="$objectId" access="public" output="false" returntype="string">
 	<cfreturn variables.wheels.tickCountId />
-</cffunction>
-
-<cffunction name="setPagination" access="public" output="false" returntype="void" hint="allow you to set a pagination handle for a custom query so you can perform pagination in your view with paginationLinks()"
-	examples=
-	'
-		<!--- In your model (ie. User.cfc), create a custom method for your custom query --->
-		<cffunction name="myCustomQuery">
-			<cfargument name="page" type="numeric" required="true">
-			<cfquery name="customQuery" datasource="##get(''datasourcename'')##">
-			select * from users
-			</cfquery>
-			
-			<cfset setPagination(totalRecords="##customQuery.RecordCount##", currentPage="##arguments.page##", perPage="25", handle="myCustomQueryHandle")>
-			<cfreturn customQuery>
-		</cffunction>
-		
-		<!--- in your view you access using paginationLinks() --->
-		<!--- controller code --->
-		<cfparam name="params.page" default="1">
-		<cfset allUsers = model("user").myCustomQuery(page="##params.page##")>
-
-		<!--- view code --->
-		<ul>
-		    <cfoutput query="allAuthors">
-		        <li>##firstName## ##lastName##</li>
-		    </cfoutput>
-		</ul>
-		<cfoutput>##paginationLinks(handle="myCustomQueryHandle")##</cfoutput>
-		
-	'>
-	<cfargument name="totalRecords" type="numeric" required="true">
-	<cfargument name="currentPage" type="numeric" required="false" default="1">
-	<cfargument name="perPage" type="numeric" required="false" default="25">
-	<cfargument name="handle" type="string" required="false" default="query">
-	<cfscript>
-	var loc = {};
-	// totalRecords cannot be negative
-	if (arguments.totalRecords lt 0)
-	{
-		arguments.totalRecords = 0;
-	}
-	// perPage less then zero
-	if (arguments.perPage lte 0)
-	{
-		arguments.perPage = 25;
-	}
-	// calculate the total pages the query will have
-	arguments.totalPages = Ceiling(arguments.totalRecords/arguments.perPage);
-	// currentPage shouldn't be less then 1 or greater then the number of pages
-	if (arguments.currentPage gte arguments.totalPages)
-	{
-		arguments.currentPage = arguments.totalPages;
-	}
-	if (arguments.currentPage lt 1)
-	{
-		arguments.currentPage = 1;
-	}
-	// as a convinence for cfquery and cfloop when doing oldschool type pagination
-	// startrow for cfquery and cfloop
-	arguments.startRow = (arguments.currentPage * arguments.perPage) - arguments.perPage + 1;
-	// maxrows for cfquery
-	arguments.maxRows = arguments.perPage;
-	// endrow for cfloop
-	arguments.endRow = arguments.startRow + arguments.perPage;
-	// endRow shouldn't be greater then the totalRecords or less than startRow
-	if (arguments.endRow gte arguments.totalRecords)
-	{
-		arguments.endRow = arguments.totalRecords;
-	}
-	if (arguments.endRow lt arguments.startRow)
-	{
-		arguments.endRow = arguments.startRow;
-	}
-	loc.args = duplicate(arguments);
-	structDelete(loc.args, "handle", false);
-	request.wheels[arguments.handle] = loc.args;
-	</cfscript>
 </cffunction>

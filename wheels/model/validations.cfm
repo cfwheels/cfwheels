@@ -285,7 +285,7 @@
 			<cfset automaticValidations(false)>
 		</cffunction>
 	'
-	categories="model-object,errors" chapters="object-validation" functions="">
+	categories="model-initialization,validations" chapters="object-validation" functions="">
 	<cfargument name="value" type="boolean" required="true">
 	<cfset variables.wheels.class.automaticValidations = arguments.value>
 </cffunction>
