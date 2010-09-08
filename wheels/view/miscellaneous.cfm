@@ -23,7 +23,7 @@
 		</body>
 		</html>
 	'
-	categories="view-helper,miscellaneous" chapters="using-layouts">
+	categories="view-helper,miscellaneous" chapters="">
 	<cfargument name="position" type="any" required="false" default="last" hint="The position in the section's stack where you want the content placed. Valid values are `first`, `last`, or the numeric position.">
 	<cfargument name="overwrite" type="any" required="false" default="false" hint="Whether or not to overwrite any of the content. Valid values are `false`, `true`, or `all`.">
 	<cfset var loc = {}>

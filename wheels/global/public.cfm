@@ -427,13 +427,21 @@
 	<cfreturn $singularizeOrPluralize(text=arguments.word, which="singularize")>
 </cffunction>
 
-<cffunction name="toXHTML" returntype="string" access="public" output="false" hint="Returns an XHTML-compliant string.">
+<cffunction name="toXHTML" returntype="string" access="public" output="false" hint="Returns an XHTML-compliant string."
+	examples=
+	'
+	'
+	categories="global,string" chapters="" functions="">
 	<cfargument name="text" type="string" required="true" hint="String to make XHTML-compliant.">
 	<cfset arguments.text = Replace(arguments.text, "&", "&amp;", "all")>
 	<cfreturn arguments.text>
 </cffunction>
 
-<cffunction name="mimeTypes" returntype="string" access="public" output="false" hint="Returns an associated MIME type based on a file extension.">
+<cffunction name="mimeTypes" returntype="string" access="public" output="false" hint="Returns an associated MIME type based on a file extension."
+	examples=
+	'
+	'
+	categories="global,miscellaneous" chapters="" functions="">
 	<cfargument name="extension" required="true" type="string" hint="The extension to get the MIME type for.">
 	<cfargument name="fallback" required="false" type="string" default="application/octet-stream" hint="the fallback MIME type to return.">
 	<cfif StructKeyExists(application.wheels.mimetypes, arguments.extension)>
@@ -442,7 +450,11 @@
 	<cfreturn arguments.fallback>
 </cffunction>
 
-<cffunction name="hyphenize" returntype="string" access="public" output="false" hint="Converts camelCase strings to lowercase strings with hyphens as word delimiters instead. Example: `myVariable` becomes `my-variable`.">
+<cffunction name="hyphenize" returntype="string" access="public" output="false" hint="Converts camelCase strings to lowercase strings with hyphens as word delimiters instead. Example: `myVariable` becomes `my-variable`."
+	examples=
+	'
+	'
+	categories="global,string" chapters="" functions="">
 	<cfargument name="string" type="string" required="true" hint="The string to hyphenize.">
 	<cfset arguments.string = REReplace(arguments.string, "([A-Z][a-z])", "-\l\1", "all")>
 	<cfset arguments.string = REReplace(arguments.string, "([a-z])([A-Z])", "\1-\l\2", "all")>
