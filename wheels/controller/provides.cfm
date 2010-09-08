@@ -100,7 +100,7 @@
 			arguments.$acceptableFormats = variables.$class.formats[arguments.action];
 			
 		if (not ListFindNoCase(arguments.$acceptableFormats, loc.contentType))
-			loc.contentType = "";
+			loc.contentType = "html";
 			
 		if (!Len(arguments.template))
 			loc.template = "/" & arguments.controller & "/" & arguments.action;
@@ -125,12 +125,20 @@
 			}
 		}	
 		
-		if (ListFindNoCase(variables.$class.formats.existingTemplates, loc.template) || loc.templateFileExists)
+		if ((ListFindNoCase(variables.$class.formats.existingTemplates, loc.template) || loc.templateFileExists) && loc.contentType != "html")
 			loc.content = renderPage(argumentCollection=arguments, template=loc.template, returnAs="string");
 			
 		if (loc.contentType == "pdf" && application.wheels.showErrorInformation)
 			$throw(type="Wheels.PdfRenderingError"
-				, message="When rendering the a PDF file, don't specify the filename attribute. This will stream the PDF straight to the browser.");		
+				, message="When rendering the a PDF file, don't specify the filename attribute. This will stream the PDF straight to the browser.");
+		
+		// throw an error if we do not have a template to render the content type that we do not have defaults for
+		if (!ListFindNoCase("html,json,xml", loc.contentType) && application.wheels.showErrorInformation)
+			$throw(type="Wheels.renderingError"
+				, message="To render the #loc.contentType# content type, create the template `#loc.template#.cfm` for the #arguments.controller# controller.");	
+				
+		// set our header based on our mime type
+		$header(name="contnet-type", value=application.wheels.formats[loc.contentType], charset="utf-8");					
 		
 		switch (loc.contentType)
 		{
@@ -141,8 +149,7 @@
 				break; 
 			}
 			case "json":
-			{ 
-				$header(name="content-type", value="text/json" , charset="utf-8");
+			{
 				if (StructKeyExists(loc, "content"))
 					renderText(loc.content);
 				else
@@ -151,12 +158,15 @@
 			}
 			case "xml":
 			{
-				$header(name="content-type", value="text/xml" , charset="utf-8");
 				if (StructKeyExists(loc, "content"))
 					renderText(loc.content);
 				else
 					renderText($toXml(arguments.data)); 
 				break; 
+			}
+			default:
+			{
+				renderText(loc.content);
 			}
 		}
 	</cfscript>
@@ -167,7 +177,7 @@
 	<cfargument name="httpAccept" type="string" required="false" default="#request.cgi.http_accept#" />
 	<cfscript>
 		var loc = {};
-		loc.format = "";
+		loc.format = "html";
 		
 		// see if we have a format param
 		if (StructKeyExists(arguments.params, "format"))
