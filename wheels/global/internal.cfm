@@ -49,7 +49,7 @@
 
 		if(!ArrayIsEmpty(loc.values))
 		{
-			if (server.coldfusion.productname != "Railo" && ListFirst(server.coldfusion.productversion) lt 9)
+			if (application.wheels.serverName eq "Adobe ColdFusion")
 			{
 				loc.returnValue = $wddx(input=loc.values);
 			}
