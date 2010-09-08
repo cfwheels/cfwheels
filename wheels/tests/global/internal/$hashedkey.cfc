@@ -16,7 +16,7 @@
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 	
-	<cffunction name="test_FAIL_same_output">
+	<cffunction name="test_same_output">
 		<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.png')#" variable="loc.binaryData">
 		<cftransaction action="begin">
 			<cfset loc.photogalleryphoto = model("PhotoGalleryPhoto").findOne()>
