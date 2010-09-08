@@ -179,7 +179,7 @@
 		    <cfoutput>##paginationLinks(route="paginatedCommentListing", year=2009, month="feb", day=10)##</cfoutput>
 		</ul>
 	'
-	categories="view-helper,links" chapters="getting-paginated-data,displaying-links-for-pagination" functions="pagination,linkTo,findAll">
+	categories="view-helper,links" chapters="getting-paginated-data,displaying-links-for-pagination" functions="pagination,setPagination,linkTo,findAll">
 	<cfargument name="windowSize" type="numeric" required="false" hint="The number of page links to show around the current page.">
 	<cfargument name="alwaysShowAnchors" type="boolean" required="false" hint="Whether or not links to the first and last page should always be displayed.">
 	<cfargument name="anchorDivider" type="string" required="false" hint="String to place next to the anchors on either side of the list.">

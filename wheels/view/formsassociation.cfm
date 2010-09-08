@@ -10,7 +10,7 @@
 			)##
 		</cfloop>
 	'
-	categories="view-helper,forms-association" chapters="nested-properties" functions="">
+	categories="view-helper,forms-association" chapters="nested-properties" functions="hasMany,hasManyCheckBox,includedInObject,nestedProperties">
 	<cfargument name="objectName" type="string" required="true" hint="Name of the variable containing the parent object to represent with this form field." />
 	<cfargument name="association" type="string" required="true" hint="Name of the association set in the parent object to represent with this form field." />
 	<cfargument name="property" type="string" required="true" hint="Name of the property in the child object to represent with this form field." />
@@ -53,7 +53,7 @@
 			)##
 		</cfloop>
 	'
-	categories="view-helper,forms-association" chapters="nested-properties" functions="">
+	categories="view-helper,forms-association" chapters="nested-properties" functions="hasMany,hasManyRadioButton,includedInObject,nestedProperties">
 	<cfargument name="objectName" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
 	<cfargument name="association" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
 	<cfargument name="keys" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
@@ -90,10 +90,10 @@
 </cffunction>
 
 <cffunction name="includedInObject" returntype="boolean" access="public" output="false" hint="Used as a shortcut to check if the specified IDs are a part of the main form object. This method should only be used for `hasMany` associations."
-	examples='
-
+	examples=
 	'
-	categories="view-helper,forms-association" chapters="nested-properties" functions="">
+	'
+	categories="view-helper,forms-association" chapters="nested-properties" functions="hasMany,hasManyCheckBox,hasManyRadioButton,nestedProperties">
 	<cfargument name="objectName" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
 	<cfargument name="association" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
 	<cfargument name="keys" type="string" required="true" hint="See documentation for @hasManyRadioButton." />

@@ -95,7 +95,11 @@
 	</cfif>
 </cffunction>
 
-<cffunction name="includeLayout" returntype="string" access="public" output="false" hint="Includes the contents of another layout file. This is usually used to include a parent layout from within a child layout.">
+<cffunction name="includeLayout" returntype="string" access="public" output="false" hint="Includes the contents of another layout file. This is usually used to include a parent layout from within a child layout."
+	examples=
+	'
+	'
+	categories="view-helper,miscellaneous" chapters="using-layouts" functions="usesLayout,renderPage">
 	<cfargument name="name" type="string" required="false" default="layout" hint="Name of the layout file to include.">
 	<cfscript>
 		arguments.partial = arguments.name;

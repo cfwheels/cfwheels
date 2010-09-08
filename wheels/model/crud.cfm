@@ -996,3 +996,80 @@
 		this[arguments.property] = Now();
 	</cfscript>
 </cffunction>
+
+<cffunction name="setPagination" access="public" output="false" returntype="void" hint="allow you to set a pagination handle for a custom query so you can perform pagination in your view with paginationLinks()"
+	examples=
+	'
+		<!--- In your model (ie. User.cfc), create a custom method for your custom query --->
+		<cffunction name="myCustomQuery">
+			<cfargument name="page" type="numeric" required="true">
+			<cfquery name="customQuery" datasource="##get(''datasourcename'')##">
+			select * from users
+			</cfquery>
+			
+			<cfset setPagination(totalRecords="##customQuery.RecordCount##", currentPage="##arguments.page##", perPage="25", handle="myCustomQueryHandle")>
+			<cfreturn customQuery>
+		</cffunction>
+		
+		<!--- in your view you access using paginationLinks() --->
+		<!--- controller code --->
+		<cfparam name="params.page" default="1">
+		<cfset allUsers = model("user").myCustomQuery(page="##params.page##")>
+
+		<!--- view code --->
+		<ul>
+		    <cfoutput query="allAuthors">
+		        <li>##firstName## ##lastName##</li>
+		    </cfoutput>
+		</ul>
+		<cfoutput>##paginationLinks(handle="myCustomQueryHandle")##</cfoutput>
+	'
+	categories="model-class,miscellaneous" chapters="getting-paginated-data" functions="findAll,paginationLinks">
+	<cfargument name="totalRecords" type="numeric" required="true">
+	<cfargument name="currentPage" type="numeric" required="false" default="1">
+	<cfargument name="perPage" type="numeric" required="false" default="25">
+	<cfargument name="handle" type="string" required="false" default="query">
+	<cfscript>
+		var loc = {};
+		// totalRecords cannot be negative
+		if (arguments.totalRecords lt 0)
+		{
+			arguments.totalRecords = 0;
+		}
+		// perPage less then zero
+		if (arguments.perPage lte 0)
+		{
+			arguments.perPage = 25;
+		}
+		// calculate the total pages the query will have
+		arguments.totalPages = Ceiling(arguments.totalRecords/arguments.perPage);
+		// currentPage shouldn't be less then 1 or greater then the number of pages
+		if (arguments.currentPage gte arguments.totalPages)
+		{
+			arguments.currentPage = arguments.totalPages;
+		}
+		if (arguments.currentPage lt 1)
+		{
+			arguments.currentPage = 1;
+		}
+		// as a convinence for cfquery and cfloop when doing oldschool type pagination
+		// startrow for cfquery and cfloop
+		arguments.startRow = (arguments.currentPage * arguments.perPage) - arguments.perPage + 1;
+		// maxrows for cfquery
+		arguments.maxRows = arguments.perPage;
+		// endrow for cfloop
+		arguments.endRow = arguments.startRow + arguments.perPage;
+		// endRow shouldn't be greater then the totalRecords or less than startRow
+		if (arguments.endRow gte arguments.totalRecords)
+		{
+			arguments.endRow = arguments.totalRecords;
+		}
+		if (arguments.endRow lt arguments.startRow)
+		{
+			arguments.endRow = arguments.startRow;
+		}
+		loc.args = duplicate(arguments);
+		structDelete(loc.args, "handle", false);
+		request.wheels[arguments.handle] = loc.args;
+	</cfscript>
+</cffunction>
