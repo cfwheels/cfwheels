@@ -1,5 +1,11 @@
 <!--- PUBLIC CONFIGURATION FUNCTIONS --->
 
+<cffunction name="addFormat" returntype="void" access="public" output="false" hint="Adds a new format to your application.">
+	<cfargument name="extension" type="string" required="true" />
+	<cfargument name="mimeType" type="string" required="true" />
+	<cfset application.wheels.formats[arguments.extension] = arguments.mimeType />
+</cffunction>
+
 <cffunction name="addRoute" returntype="void" access="public" output="false" hint="Adds a new route to your application."
 	examples=
 	'
