@@ -132,28 +132,10 @@
 		{
 			arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
 		}
-
 		// sql server doesn't support limit and offset in sql
 		StructDelete(arguments, "limit", false);
 		StructDelete(arguments, "offset", false);
-
-		if (StructKeyExists(server, "railo") AND left(arguments.sql[1], 11) eq "INSERT INTO")
-			arguments.$getid = true;
-
 		loc.returnValue = $performQuery(argumentCollection=arguments);
 	</cfscript>
-	<cfreturn loc.returnValue>
-
-</cffunction>
-
-<cffunction name="$identitySelect" returntype="struct" access="public" output="false">
-	<cfargument name="queryargs" type="struct" required="true">
-	<cfargument name="result" type="struct" required="true">
-	<cfargument name="args" type="struct" required="true">
-	<cfset var loc = {}>
-	<cfset var query = {}>
-	<cfset loc.returnValue = {}>
-	<cfquery attributeCollection="#arguments.queryargs#">SELECT @@identity AS lastId</cfquery>
-	<cfset loc.returnValue.identitycol = query.name.lastId>
 	<cfreturn loc.returnValue>
 </cffunction>
