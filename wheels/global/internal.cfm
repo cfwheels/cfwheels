@@ -51,7 +51,10 @@
 			// this might fail if a query contains binary data so in those rare cases we fall back on using cfwddx (which is a little bit slower which is why we don't use it all the time)
 			try
 			{
-				loc.returnValue = ListSort(ReplaceList(SerializeJSON(loc.values), "{,}", ","), "text");
+				loc.returnValue = SerializeJSON(loc.values);
+				// remove the characters that indicate array or struct so that we can sort it as a list below
+				loc.returnValue = ReplaceList(loc.returnValue, "{,},[,]", ",,,");
+				loc.returnValue = ListSort(loc.returnValue, "text");
 			}
 			catch (Any e)
 			{
