@@ -54,7 +54,7 @@
 	<cfset loc.returnValue = {}>
 
 	<!--- getting the id of the last inserted row is not supported so we need to get it manually --->
-	<cfquery attributeCollection="#arguments.queryargs#">SELECT sqlite3_last_insert_rowid() AS lastId</cfquery>
+	<cfquery attributeCollection="#arguments.queryargs#">SELECT last_insert_rowid() AS lastId</cfquery>
 	<cfset loc.returnValue.generated_key = query.name.lastId>
 
 	<cfreturn loc.returnValue>
