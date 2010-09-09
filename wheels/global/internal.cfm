@@ -34,32 +34,32 @@
 	<cfreturn ArrayToList(loc.list, arguments.delim)>
 </cffunction>
 
-<cffunction name="$hashedKey" returntype="string" access="public" output="false">
+<cffunction name="$hashedKey" returntype="string" access="public" output="false" hint="Creates a unique string based on any arguments passed in (used as a key for caching mostly).">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
+
+		// we need to make sure we are looping through the passed in arguments in the same order everytime
 		loc.values = [];
 		loc.keyList = ListSort(StructKeyList(arguments), "textnocase", "asc");
-
-		// we need to make sure we are looping through the passed in arguments the same everytime
-		for (loc.i = 1; loc.i lte ListLen(loc.keyList); loc.i++)
-		{
+		loc.iEnd = ListLen(loc.keyList);
+		for (loc.i = 1; loc.i <= loc.iEnd; loc.i++)
 			ArrayAppend(loc.values, arguments[ListGetAt(loc.keyList, loc.i)]);
-		}
 
-		if(!ArrayIsEmpty(loc.values))
+		if (!ArrayIsEmpty(loc.values))
 		{
-			if (application.wheels.serverName eq "Adobe ColdFusion")
-			{
-				loc.returnValue = $wddx(input=loc.values);
-			}
-			else
+			// this might fail if a query contains binary data so in those rare cases we fall back on using cfwddx (which is a little bit slower which is why we don't use it all the time)
+			try
 			{
 				loc.returnValue = ListSort(ReplaceList(SerializeJSON(loc.values), "{,}", ","), "text");
 			}
+			catch (Any e)
+			{
+				loc.returnValue = $wddx(input=loc.values);
+			}
 		}
+		return Hash(loc.returnValue);
 	</cfscript>
-	<cfreturn Hash(loc.returnValue)>
 </cffunction>
 
 <cffunction name="$timeSpanForCache" returntype="any" access="public" output="false">
