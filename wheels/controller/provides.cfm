@@ -126,19 +126,19 @@
 		}	
 		
 		if ((ListFindNoCase(variables.$class.formats.existingTemplates, loc.template) || loc.templateFileExists) && loc.contentType != "html")
-			loc.content = renderPage(argumentCollection=arguments, template=loc.template, returnAs="string");
+			loc.content = renderPage(argumentCollection=arguments, template=loc.template, returnAs="string", layout=false, hideDebugInformation=true);
 			
 		if (loc.contentType == "pdf" && application.wheels.showErrorInformation)
 			$throw(type="Wheels.PdfRenderingError"
 				, message="When rendering the a PDF file, don't specify the filename attribute. This will stream the PDF straight to the browser.");
 		
 		// throw an error if we do not have a template to render the content type that we do not have defaults for
-		if (!ListFindNoCase("html,json,xml", loc.contentType) && application.wheels.showErrorInformation)
+		if (!ListFindNoCase("html,json,xml", loc.contentType) && !StructKeyExists(loc, "content") && application.wheels.showErrorInformation)
 			$throw(type="Wheels.renderingError"
-				, message="To render the #loc.contentType# content type, create the template `#loc.template#.cfm` for the #arguments.controller# controller.");	
+				, message="To render the #loc.contentType# content type, create the template `#loc.template#.cfm` for the #arguments.controller# controller.");			
 				
 		// set our header based on our mime type
-		$header(name="contnet-type", value=application.wheels.formats[loc.contentType], charset="utf-8");					
+		$header(name="content-type", value=application.wheels.formats[loc.contentType], charset="utf-8");
 		
 		switch (loc.contentType)
 		{
@@ -149,7 +149,7 @@
 				break; 
 			}
 			case "json":
-			{
+			{ 
 				if (StructKeyExists(loc, "content"))
 					renderText(loc.content);
 				else
@@ -167,6 +167,7 @@
 			default:
 			{
 				renderText(loc.content);
+				break;
 			}
 		}
 	</cfscript>
