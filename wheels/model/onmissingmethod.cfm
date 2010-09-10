@@ -160,7 +160,6 @@
 					}
 					else if (loc.name == "setObject")
 					{
-						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
 						// single argument, must be either the key or the object
 						if (StructCount(arguments.missingMethodArguments) eq 1)
 						{
@@ -188,7 +187,7 @@
 							else if (StructKeyExists(arguments.missingMethodArguments, "key"))
 								loc.method = "updateByKey";
 							else
-								$throw(type="Wheels.IncorrectArguments", message="The `#loc.singularKey#` or `key` named argument is required.", extendedInfo="When using multiple arguments for #loc.name#() you must supply an object using the argument `#loc.singularKey#` or a key using the argument `key`, e.g. #loc.name#(#loc.singularKey#=post) or #loc.name#(key=post.id).");
+								$throw(type="Wheels.IncorrectArguments", message="The `#loc.key#` or `key` named argument is required.", extendedInfo="When using multiple arguments for #loc.name#() you must supply an object using the argument `#loc.key#` or a key using the argument `key`, e.g. #loc.name#(#loc.key#=post) or #loc.name#(key=post.id).");
 						}
 						$setForeignKeyValues(missingMethodArguments=arguments.missingMethodArguments, keys=loc.info.foreignKey);
 					}
