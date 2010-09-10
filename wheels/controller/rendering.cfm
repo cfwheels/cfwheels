@@ -199,7 +199,7 @@
 			<cfset setResponse(translatedResponse)>
 		</cffunction>
 	'
-	categories="" chapters="" functions="setResponse">
+	categories="controller-request,rendering" chapters="" functions="setResponse">
 	<cfscript>
 		if ($performedRender())
 			return Trim(variables.$instance.response);
@@ -222,7 +222,7 @@
 			<cfset setResponse(translatedResponse)>
 		</cffunction>
 	'
-	categories="" chapters="" functions="response">
+	categories="controller-request,rendering" chapters="" functions="response">
 	<cfargument name="content" type="string" required="true" hint="The content to set as the response.">
 	<cfset variables.$instance.response = arguments.content>	
 </cffunction>

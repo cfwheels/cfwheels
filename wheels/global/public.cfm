@@ -1,8 +1,17 @@
 <!--- PUBLIC CONFIGURATION FUNCTIONS --->
 
-<cffunction name="addFormat" returntype="void" access="public" output="false" hint="Adds a new format to your application.">
-	<cfargument name="extension" type="string" required="true" />
-	<cfargument name="mimeType" type="string" required="true" />
+<cffunction name="addFormat" returntype="void" access="public" output="false" hint="Adds a new MIME format to your Wheels application for use with responding to multiple formats."
+	examples='
+		<!--- Add the `js` format --->
+		<cfset addFormat(extension="js", mimeType="text/javascript")>
+		
+		<!--- Add the `ppt` and `pptx` formats --->
+		<cfset addFormat(extension="ppt", mimeType="application/vnd.ms-powerpoint")>
+		<cfset addFormat(extension="pptx", mimeType="application/vnd.ms-powerpoint")>
+	'
+	categories="configuration" chapters="responding-with-multiple-formats" functions="provides,renderWith">
+	<cfargument name="extension" type="string" required="true" hint="File extension to add." />
+	<cfargument name="mimeType" type="string" required="true" hint="Matching MIME type to associate with the file extension." />
 	<cfset application.wheels.formats[arguments.extension] = arguments.mimeType />
 </cffunction>
 
@@ -436,6 +445,10 @@
 <cffunction name="toXHTML" returntype="string" access="public" output="false" hint="Returns an XHTML-compliant string."
 	examples=
 	'
+		<!--- Outputs `productId=5&amp;categoryId=12&amp;returningCustomer=1` --->
+		<cfoutput>
+			##toXHTML("productId=5&categoryId=12&returningCustomer=1")##
+		</cfoutput>
 	'
 	categories="global,string" chapters="" functions="">
 	<cfargument name="text" type="string" required="true" hint="String to make XHTML-compliant.">
@@ -446,6 +459,11 @@
 <cffunction name="mimeTypes" returntype="string" access="public" output="false" hint="Returns an associated MIME type based on a file extension."
 	examples=
 	'
+		<!--- Get the internally-stored MIME type for `xls` --->
+		<cfset mimeType = mimeTypes("xls")>
+		
+		<!--- Get the internally-stored MIME type for a dynamic value. Fall back to a MIME type of `text/plain` if it''s not found --->
+		<cfset mimeType = mimeTypes(extension=params.type, fallback="text/plain")>
 	'
 	categories="global,miscellaneous" chapters="" functions="">
 	<cfargument name="extension" required="true" type="string" hint="The extension to get the MIME type for.">
@@ -459,6 +477,10 @@
 <cffunction name="hyphenize" returntype="string" access="public" output="false" hint="Converts camelCase strings to lowercase strings with hyphens as word delimiters instead. Example: `myVariable` becomes `my-variable`."
 	examples=
 	'
+		<!--- Outputs "my-blog-post" --->
+		<cfoutput>
+			##hyphenize("myBlogPost")##
+		</cfoutput>
 	'
 	categories="global,string" chapters="" functions="">
 	<cfargument name="string" type="string" required="true" hint="The string to hyphenize.">

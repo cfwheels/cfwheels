@@ -98,6 +98,20 @@
 <cffunction name="includeLayout" returntype="string" access="public" output="false" hint="Includes the contents of another layout file. This is usually used to include a parent layout from within a child layout."
 	examples=
 	'
+		<!--- Make sure that the `sidebar` value is provided for the parent layout --->
+		<cfsavecontent variable="categoriesSidebar">
+			<cfoutput>
+				<ul>
+					##includePartial(categories)##
+				</ul>
+			</cfoutput>
+		</cfsavecontent>
+		<cfset contentFor(sidebar=categoriesSidebar)>
+		
+		<!--- Include parent layout at `views/layout.cfm` --->
+		<cfoutput>
+			##includeLayout("/layout.cfm")##
+		</cfoutput>
 	'
 	categories="view-helper,miscellaneous" chapters="using-layouts" functions="usesLayout,renderPage">
 	<cfargument name="name" type="string" required="false" default="layout" hint="Name of the layout file to include.">

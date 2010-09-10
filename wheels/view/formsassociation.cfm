@@ -92,6 +92,10 @@
 <cffunction name="includedInObject" returntype="boolean" access="public" output="false" hint="Used as a shortcut to check if the specified IDs are a part of the main form object. This method should only be used for `hasMany` associations."
 	examples=
 	'
+		<!--- Check to see if the customer is subscribed to the Swimsuit Edition. Note that the order of the `keys` argument should match the order of the `customerid` and `publicationid` columns in the `subscriptions` join table --->
+		<cfif not includedInObject(objectName="customer", association="subscriptions", keys="##customer.key()##,##swimsuitEdition.id##")>
+			<cfset assignSalesman(customer)>
+		</cfif>
 	'
 	categories="view-helper,forms-association" chapters="nested-properties" functions="hasMany,hasManyCheckBox,hasManyRadioButton,nestedProperties">
 	<cfargument name="objectName" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
@@ -115,7 +119,7 @@
 		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
 		{
 			loc.assoc = loc.object[arguments.association][loc.i];
-			if (isObject(loc.assoc) && loc.assoc.key() == arguments.keys)
+			if (IsObject(loc.assoc) && loc.assoc.key() == arguments.keys)
 			{
 				loc.returnValue = loc.i;
 				break;
