@@ -1,6 +1,6 @@
 <!--- PUBLIC MODEL CLASS METHODS --->
 
-<cffunction name="average" returntype="any" access="public" output="false" hint="Calculates the average value for a given property. Uses the SQL function `AVG`. If no records can be found to perform the calculation on, a blank string is returned."
+<cffunction name="average" returntype="any" access="public" output="false" hint="Calculates the average value for a given property. Uses the SQL function `AVG`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned."
 	examples=
 	'
 		<!--- Get the average salary for all employees --->
@@ -77,6 +77,7 @@
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
+		var returnValue = "";
 		$args(name="count", args=arguments);
 		arguments.type = "COUNT";
 		arguments.property = ListFirst(primaryKey());
@@ -84,11 +85,15 @@
 			arguments.distinct = true;
 		else
 			arguments.distinct = false;
+		returnValue = $calculate(argumentCollection=arguments);
+		if (IsNumeric(returnValue))
+			return returnValue;
+		else
+			return 0;
 	</cfscript>
-	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="maximum" returntype="any" access="public" output="false" hint="Calculates the maximum value for a given property. Uses the SQL function `MAX`. If no records can be found to perform the calculation on, a blank string is returned."
+<cffunction name="maximum" returntype="any" access="public" output="false" hint="Calculates the maximum value for a given property. Uses the SQL function `MAX`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned."
 	examples=
 	'
 		<!--- Get the amount of the highest salary for all employees --->
@@ -114,7 +119,7 @@
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="minimum" returntype="any" access="public" output="false" hint="Calculates the minimum value for a given property. Uses the SQL function `MIN`. If no records can be found to perform the calculation on, a blank string is returned."
+<cffunction name="minimum" returntype="any" access="public" output="false" hint="Calculates the minimum value for a given property. Uses the SQL function `MIN`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned."
 	examples=
 	'
 		<!--- Get the amount of the lowest salary for all employees --->
@@ -140,7 +145,7 @@
 	<cfreturn $calculate(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="sum" returntype="any" access="public" output="false" hint="Calculates the sum of values for a given property. Uses the SQL function `SUM`. If no records can be found to perform the calculation on, `0` is returned."
+<cffunction name="sum" returntype="any" access="public" output="false" hint="Calculates the sum of values for a given property. Uses the SQL function `SUM`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned."
 	examples=
 	'
 		<!--- Get the sum of all salaries --->
