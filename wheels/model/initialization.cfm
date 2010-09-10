@@ -89,6 +89,8 @@
 				loc.defaultValue = loc.columns["column_default_value"][loc.i];
 				if ((Left(loc.defaultValue,2) == "((" && Right(loc.defaultValue,2) == "))") || (Left(loc.defaultValue,2) == "('" && Right(loc.defaultValue,2) == "')"))
 					loc.defaultValue = Mid(loc.defaultValue, 3, Len(loc.defaultValue)-4);
+				else if (Left(loc.defaultValue,1) == "(" && Right(loc.defaultValue,1) == ")")
+					loc.defaultValue = Mid(loc.defaultValue, 2, Len(loc.defaultValue)-2);
 				variables.wheels.class.properties[loc.property].defaultValue = loc.defaultValue;
 				if (loc.columns["is_primarykey"][loc.i])
 				{
