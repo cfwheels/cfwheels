@@ -84,12 +84,6 @@
 		// load wheels settings
 		$include(template="wheels/events/onapplicationstart/settings.cfm");
 
-		// set a default (can be overridden in developer settings below) for whether or not to show the links in the debug area to run tests
-		if (DirectoryExists(GetDirectoryFromPath(GetBaseTemplatePath()) & "wheels/tests"))
-			application.wheels.enableTests = true;
-		else
-			application.wheels.enableTests = false; // the tests folder has been removed (as it will be for official Wheels releases until we support application tests) so we default to not show the links
-
 		// load general developer settings first, then override with environment specific ones
 		$include(template="#application.wheels.configPath#/settings.cfm");
 		$include(template="#application.wheels.configPath#/#application.wheels.environment#/settings.cfm");
