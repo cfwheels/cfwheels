@@ -1,7 +1,9 @@
-WHEELS BLEEDING EDGE (4860)
+WHEELS VERSION 1.1 BETA 1 (09/10/2010)
 
 Changes
 =======
+
+* Adobe ColdFusion 8.0.1 or Railo 3.1.2.020 is required
 
 [Models]
 
@@ -76,6 +78,12 @@ Changes
 	* Argument for model methods to be able to turn off callbacks - #236 [Andy Bellenie]
 	
 	* Ability to set a default value for column statistics with ifNull argument - #330 [Andy Bellenie]
+	
+	* Added a position argument to primaryKeys() for easier retrieval - [Tony Petruzzi]
+	
+	* Added setPagination() to model for paginating custom queries - [Tony Petruzzi]
+	
+	* Corrected count() to always return 0 if no records are found - [Per Djurner]
 	
 
 [Dispatch]
@@ -152,14 +160,19 @@ Changes
 		
 		<!--- get the flash notice --->
 		<cfoutput>#flash("back")#</cfoutput>
+		
+	* Controllers can now respond to different formats such as `xml`, `json`, `csv`, `pdf`, and `xls` - [James Gibson]
+	
+		This functionality was taken from the Provides plugin
+		http://cfwheels.org/plugins/listing/6
 
 [Views]
 
 	* FlashMessages() can now pass a list of keys - [Chris Peters]
 	
-		- controls which messages to display as well as the order they are displayed in 
+		controls which messages to display as well as the order they are displayed in 
 
-	* Added a h() function - [Tony Petruzzi]
+	* Added a h() function for sanitizing user output  - [Tony Petruzzi]
 
 	* Added a flashMessages() function - [Per Djurner]
 
@@ -292,6 +305,8 @@ Bug Fixes
 * findByKey() returns record when passed a blank key - #514 [Andy Bellenie]
 * hasChanged() compares dates correctly - #515 [Tony Petruzzi]
 * validatesUniquenessOf doesn't recognise soft-deleted columns - #532 [Andy Bellenie]
+* adds 12-hour format to date/time selects helpers - #551 [Tony Petruzzi]
+* Bad $throw in wheels/model/onmissingmethod.cfm - #555 [Per Djurner, Awmichel90]
 
 Other
 =====
