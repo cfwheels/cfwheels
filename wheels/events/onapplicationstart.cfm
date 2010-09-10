@@ -114,12 +114,12 @@
 		// reload the plugins each time we reload the application
 		$loadPlugins();
 		
-		// load developer routes and adds the default wheels routes (unless the developer has specified not to)
-		$loadRoutes();
-
 		// allow developers to inject plugins into the application variables scope
 		if (!StructIsEmpty(application.wheels.mixins))
 			$include(template="wheels/plugins/injection.cfm");
+
+		// load developer routes and adds the default wheels routes (unless the developer has specified not to)
+		$loadRoutes();
 
 		// create the dispatcher that will handle all incoming requests
 		application.wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
