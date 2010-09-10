@@ -12,9 +12,18 @@
 		{
 			if (!StructKeyExists(variables, "core"))
 			{
-				variables.core = {};
-				StructAppend(variables.core, variables);
-				StructDelete(variables.core, "$wheels", false);
+				if (application.wheels.serverName eq "Railo")
+				{
+					// this is to work around the railo bug
+					// https://jira.jboss.org/browse/RAILO-936
+					variables.core = duplicate(variables);
+				}
+				else
+				{
+					variables.core = {};
+					StructAppend(variables.core, variables);
+					StructDelete(variables.core, "$wheels", false);
+				}
 			}
 			StructAppend(variables, application.wheels.mixins[$wheels.className], true);
 		}
