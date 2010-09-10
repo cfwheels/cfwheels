@@ -99,8 +99,6 @@
 			$objectcache(action="clear");
 		}
 
-		$loadRoutes();
-
 		// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
 		loc.allowedGlobalMethods = "get,set,addroute,addDefaultRoutes";
 		loc.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application.wheels.controllerPath, fileName="Wheels", method="$initControllerClass"));
@@ -115,6 +113,9 @@
 
 		// reload the plugins each time we reload the application
 		$loadPlugins();
+		
+		// load developer routes and adds the default wheels routes (unless the developer has specified not to)
+		$loadRoutes();
 
 		// allow developers to inject plugins into the application variables scope
 		if (!StructIsEmpty(application.wheels.mixins))
