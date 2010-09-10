@@ -311,6 +311,7 @@ Bug Fixes
 Other
 =====
 * Refactor to avoid polluting the Application.cfc's this scope with the rootDir variable - [Per Djurner]
+* Customize RocketUnit Testing framework is now included - [RocketBoots Pty Limited]
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
