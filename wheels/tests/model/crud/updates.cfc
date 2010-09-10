@@ -1,5 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
- 
+
  	<cffunction name="test_update">
 		<cftransaction action="begin">
 			<cfset loc.author = model("Author").findOne()>
@@ -8,6 +8,28 @@
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset assert('loc.allKermits.recordcount eq 1')>
+	</cffunction>
+
+ 	<cffunction name="test_dynamic_update_with_named_argument">
+		<cftransaction action="begin">
+			<cfset loc.author = model("author").findOne(where="firstName='Andy'")>
+			<cfset loc.profile = model("profile").findOne(where="bio LIKE 'ColdFusion Developer'")>
+			<cfset loc.author.setProfile(profile=loc.profile)>
+			<cfset loc.updatedProfile = model("profile").findByKey(loc.profile.id)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert("loc.updatedProfile.authorId IS loc.author.id")>
+	</cffunction>
+
+ 	<cffunction name="test_dynamic_update_with_unnamed_argument">
+		<cftransaction action="begin">
+			<cfset loc.author = model("author").findOne(where="firstName='Andy'")>
+			<cfset loc.profile = model("profile").findOne(where="bio LIKE 'ColdFusion Developer'")>
+			<cfset loc.author.setProfile(loc.profile)>
+			<cfset loc.updatedProfile = model("profile").findByKey(loc.profile.id)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert("loc.updatedProfile.authorId IS loc.author.id")>
 	</cffunction>
 
  	<cffunction name="test_update_one">
