@@ -78,7 +78,7 @@
 				variables.wheels.class.properties[loc.property].type = variables.wheels.class.adapter.$getType(loc.type);
 				variables.wheels.class.properties[loc.property].column = loc.columns["column_name"][loc.i];
 				variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];
-				variables.wheels.class.properties[loc.property].nullable = ReplaceList(trim(loc.columns["is_nullable"][loc.i]), "N,Y", "No,Yes");
+				variables.wheels.class.properties[loc.property].nullable = trim(loc.columns["is_nullable"][loc.i]);
 				variables.wheels.class.properties[loc.property].size = loc.columns["column_size"][loc.i];
 				variables.wheels.class.properties[loc.property].label = Humanize(loc.property);
 				variables.wheels.class.properties[loc.property].validationtype = variables.wheels.class.adapter.$getValidationType(variables.wheels.class.properties[loc.property].type);
