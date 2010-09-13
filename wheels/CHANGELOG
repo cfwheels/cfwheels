@@ -1,4 +1,11 @@
-WHEELS VERSION 1.1 BETA 1 (09/10/2010)
+WHEELS VERSION 1.1 BETA 2
+
+Bug Fixes
+=======
+* Fixed so the information_schema info in the H2 database does not clash with the public tables - #573 [Per Djurner]
+
+
+WHEELS VERSION 1.1 BETA 1
 
 Changes
 =======
