@@ -62,3 +62,30 @@
 	<cfset loc.returnValue.generated_key = query.name.lastId>
 	<cfreturn loc.returnValue>
 </cffunction>
+
+<cffunction name="$getColumns" returntype="query" access="public" output="false">
+	<cfscript>
+		var loc = {};
+		
+		// get column details using cfdbinfo in the base adapter
+		loc.columns = super.$getColumns(argumentCollection=arguments);
+		
+		// since cfdbinfo incorrectly returns information_schema tables we need to create a new query result that excludes these tables
+		loc.returnValue = QueryNew(loc.columns.columnList);
+		loc.iEnd = loc.columns.recordCount;
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			if (loc.columns["table_schem"][loc.i] != "information_schema")
+			{
+				QueryAddRow(loc.returnValue);
+				loc.jEnd = ListLen(loc.columns.columnList);
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				{
+					loc.columnName = ListGetAt(loc.columns.columnList, loc.j);
+					QuerySetCell(loc.returnValue, loc.columnName, loc.columns[loc.columnName][loc.i]);
+				}
+			}
+		}
+		return loc.returnValue; 
+	</cfscript>
+</cffunction>
