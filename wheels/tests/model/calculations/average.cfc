@@ -48,7 +48,7 @@
 	
 	<cffunction name="test_average_with_include_soft_deletes">
 		<cftransaction action="begin">
-			<cfset loc.post = model("Post").findOne(where="views=0")>
+			<cfset loc.post = model("Post").findOne(where="views=0", order="id")>
 			<cfset loc.post.delete(transaction="none")>
 			<cfset loc.average = model("Post").average(property="views", includeSoftDeletes=true)>
 			<cftransaction action="rollback" />

@@ -27,7 +27,7 @@
 		<cfset params.format = "xml">
 		<cfset controller = $controller(name="test").$createControllerObject(params)>
 		<cfset controller.provides("xml") />
-		<cfset user = model("user").findOne(where="username = 'tonyp'") />
+		<cfset user = model("user").findOne(where="username = 'tonyp'", order="id") />
 		<cfset controller.renderWith(data=user, layout=false)>
 		<cfset assert("controller.response() Contains 'xml template content'")>
 	</cffunction>
@@ -37,7 +37,7 @@
 		<cfset params.format = "xml">
 		<cfset controller = $controller(name="test").$createControllerObject(params)>
 		<cfset controller.provides("xml") />
-		<cfset user = model("user").findOne(where="username = 'tonyp'") />
+		<cfset user = model("user").findOne(where="username = 'tonyp'", order="id") />
 		<cfset controller.renderWith(data=user)>
 		<cfset assert("IsXml(controller.response()) eq true")>
 	</cffunction>
@@ -46,7 +46,7 @@
 		<cfset params.format = "json">
 		<cfset controller = $controller(name="test").$createControllerObject(params)>
 		<cfset controller.provides("json") />
-		<cfset user = model("user").findOne(where="username = 'tonyp'") />
+		<cfset user = model("user").findOne(where="username = 'tonyp'", order="id") />
 		<cfset controller.renderWith(data=user, layout=false)>
 		<cfset assert("controller.response() Contains 'json template content'")>
 	</cffunction>
@@ -56,7 +56,7 @@
 		<cfset params.format = "json">
 		<cfset controller = $controller(name="test").$createControllerObject(params)>
 		<cfset controller.provides("json") />
-		<cfset user = model("user").findOne(where="username = 'tonyp'") />
+		<cfset user = model("user").findOne(where="username = 'tonyp'", order="id") />
 		<cfset controller.renderWith(data=user)>
 		<cfset assert("IsJSON(controller.response()) eq true")>
 	</cffunction>
@@ -65,7 +65,7 @@
 		<cfset params.format = "pdf">
 		<cfset controller = $controller(name="test").$createControllerObject(params)>
 		<cfset controller.provides("pdf") />
-		<cfset user = model("user").findOne(where="username = 'tonyp'") />
+		<cfset user = model("user").findOne(where="username = 'tonyp'", order="id") />
 		<cftry>
 			<cfset controller.renderWith(data=user, layout=false)>
 			<cfset fail(message="Error did not occur.")>

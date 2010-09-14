@@ -45,7 +45,7 @@
 		<cftransaction action="begin">
 			<cfset loc.post = model("Post").deleteOne(where="views=0")>
 			<cfset model("Post").updateOne(where="views=0", title="This is a new title", includeSoftDeletes=true)>
-			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true)>
+			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true, order="id")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset assert('loc.changedPosts.recordcount eq 1')>
@@ -63,9 +63,9 @@
 
  	<cffunction name="test_update_by_key_for_soft_deleted_records">
 		<cftransaction action="begin">
-			<cfset loc.post = model("Post").findOne(where="views=0")>
+			<cfset loc.post = model("Post").findOne(where="views=0", order="id")>
 			<cfset model("Post").updateByKey(key=loc.post.id, title="This is a new title", includeSoftDeletes=true)>
-			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true)>
+			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true, order="id")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset assert('loc.changedPosts.recordcount eq 1')>
@@ -83,7 +83,7 @@
  	<cffunction name="test_update_all_for_soft_deleted_records">
 		<cftransaction action="begin">
 			<cfset model("Post").updateAll(title="This is a new title", includeSoftDeletes=true)>
-			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true)>
+			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true, order="id")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset assert('loc.changedPosts.recordcount eq 4')>

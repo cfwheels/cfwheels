@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="test_key">
-		<cfset loc.author = model("author").findOne()>
+		<cfset loc.author = model("author").findOne(order="id")>
 		<cfset loc.result = loc.author.key()>
 		<cfset assert("loc.result IS loc.author.id")>
 	</cffunction>
@@ -67,7 +67,7 @@
 	</cffunction>
 
 	<cffunction name="test_setting_and_getting_properties_with_named_arguments">
-		<cfset loc.author = model("author").findOne()>
+		<cfset loc.author = model("author").findOne(order="id")>
 		<cfset loc.author.setProperties(firstName="a", lastName="b")>
 		<cfset loc.result = loc.author.properties()>
 		<cfset loc.compareWith.id = loc.author.key()>

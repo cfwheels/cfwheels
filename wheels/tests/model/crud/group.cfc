@@ -13,7 +13,7 @@
 	</cffunction>
 	
 	<cffunction name="test_max_works_with_group_functionality">
-		<cfset loc.r = model("post").findAll(select="id, authorid, title, MAX(posts.views) AS maxView", group="id, authorid, title")>
+		<cfset loc.r = model("post").findAll(select="id, authorid, title, MAX(posts.views) AS maxView", group="id, authorid, title", order="id")>
 		<cfset assert('loc.r.recordcount eq 4')>
 	</cffunction>
 	

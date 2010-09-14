@@ -102,7 +102,7 @@
 <cfset loc.raul = model("author").create(firstName="Raul", lastName="Riera")>
 <cfset loc.andy = model("author").create(firstName="Andy", lastName="Bellenie")>
 
-<cfset loc.users = model("user").findAll()>
+<cfset loc.users = model("user").findAll(order="id")>
 
 <cfloop query="loc.users">
 	<cfloop from="1" to="5" index="loc.i">
@@ -122,7 +122,7 @@
 	</cfloop>
 </cfloop>
 
-<cfset loc.posts = model("post").findAll()>
+<cfset loc.posts = model("post").findAll(order="id")>
 
 <cfloop query="loc.posts">
 	<cfloop from="1" to="3" index="loc.i">
