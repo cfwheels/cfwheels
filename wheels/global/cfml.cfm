@@ -227,3 +227,12 @@
 		<cfreturn loc.output>
 	</cfif>
 </cffunction>
+
+<cffunction name="$structDelete" returntype="void" access="public" output="false">
+	<cfargument name="myStruct" type="struct" required="true">
+	<cfargument name="keys" type="string" required="true">
+	<cfset var loc = {}>
+	<cfloop list="#arguments.keys#" index="loc.i">
+		<cfset StructDelete(arguments.myStruct, loc.i, false)>
+	</cfloop>
+</cffunction>
