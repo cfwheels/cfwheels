@@ -20,7 +20,7 @@
 		if (arguments.link != "URLs")
 		{
 			arguments.regex = "(?:(?:<a\s[^>]+)?(?:[^@\s]+)@(?:(?:[-a-z0-9]+\.)+[a-z]{2,}))";
-			arguments.protocol = "mailto:"
+			arguments.protocol = "mailto:";
 			arguments.text = $autoLinkLoop(argumentCollection=arguments);
 		}
 	</cfscript>
