@@ -3,6 +3,7 @@ WHEELS VERSION 1.1 BETA 2
 Bug Fixes
 =======
 * Fixed so the information_schema info in the H2 database does not clash with the public tables - #573 [Per Djurner]
+* Corrected deobfuscation logic so that it... umm... works :) - #577 [Per Djurner]
 
 
 WHEELS VERSION 1.1 BETA 1

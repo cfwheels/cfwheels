@@ -138,17 +138,19 @@
 				loc.iEnd = Len(loc.returnValue);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 					loc.checksumtest = (loc.checksumtest + Left(Right(loc.returnValue, loc.i),1));
-				if (Left(ToString(FormatBaseN((loc.checksumtest+154),10)),2) != Left(InputBasen(loc.checksum, 16),2))
+				loc.c1 = ToString(FormatBaseN((loc.checksumtest+154),10));
+				loc.c2 = InputBasen(loc.checksum, 16);
+				if (loc.c1 != loc.c2)
 					loc.returnValue = arguments.param;
 			}
 			catch(Any e)
 			{
-	    	loc.returnValue = arguments.param;
+		    	loc.returnValue = arguments.param;
 			}
 		}
 		else
 		{
-    	loc.returnValue = arguments.param;
+	    	loc.returnValue = arguments.param;
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
