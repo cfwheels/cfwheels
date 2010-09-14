@@ -9,22 +9,53 @@
 	'
 	categories="view-helper,text" functions="excerpt,highlight,simpleFormat,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="The text to create links in.">
-	<cfargument name="link" type="string" required="false" default="all" hint="Whether to link URLs, email addresses, or both. Possible values are `all` (default), `URLs`, and `emailAddresses`.">
-	<cfargument name="domains" type="string" required="false" hint="The top level domains (.com, .co.uk, etc.) to auto link. Not used with email addresses.">
+	<cfargument name="link" type="string" required="false" default="all" hint="Whether to link URLs, email addresses or both. Possible values are: `all` (default), `URLs` and `emailAddresses`.">
 	<cfscript>
 		var loc = {};
-		$args(name="autoLink", args=arguments);
-		loc.domains = Replace(ListChangeDelims(arguments.domains, "|"), ".", "\.", "all");
-		loc.urlRegex = "(?ix)([^(url=)|(href=)'""])(((https?)://([^:]+\:[^@]*@)?)([\d\w\-]+\.)?[\w\d\-\.]+\.(" & loc.domains & ")(( / [\w\d\.\-@%\\\/:]* )+)?(\?[\w\d\?%,\.\/\##!@:=\+~_\-&amp;]*(?<![\.]))?)";
-		loc.mailRegex = "(([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,}))";
-		loc.returnValue = " " & arguments.text & " "; // spaces added because the regex assumes links are in the middle of the text
 		if (arguments.link != "emailAddresses")
-			loc.returnValue = loc.returnValue.ReplaceAll(loc.urlRegex, "$1<a href=""$2"">$2</a>");
+		{
+			arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.)[^\s\b]+)";
+			arguments.text = $autoLinkLoop(argumentCollection=arguments);
+		}
 		if (arguments.link != "URLs")
-			loc.returnValue = REReplaceNoCase(loc.returnValue, loc.mailRegex, "<a href=""mailto:\1"">\1</a>", "all");
-		loc.returnValue = Mid(loc.returnValue, 2, Len(loc.returnValue)-2);
+		{
+			arguments.regex = "(?:(?:<a\s[^>]+)?(?:[^@\s]+)@(?:(?:[-a-z0-9]+\.)+[a-z]{2,}))";
+			arguments.protocol = "mailto:"
+			arguments.text = $autoLinkLoop(argumentCollection=arguments);
+		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn arguments.text>
+</cffunction>
+
+<cffunction name="$autoLinkLoop" access="public" returntype="string" output="false">
+	<cfargument name="text" type="string" required="true">
+	<cfargument name="regex" type="string" required="true">
+	<cfargument name="protocol" type="string" required="false" default="">
+	<cfscript>
+	var loc = {};
+	loc.PunctuationRegEx = "([^\w\/-]+)$";
+	loc.startPosition = 1;
+	loc.match = ReFindNoCase(arguments.regex, arguments.text, loc.startPosition, true);
+	while(loc.match.pos[1] gt 0)
+	{
+		loc.startPosition = loc.match.pos[1] + loc.match.len[1];
+		loc.str = Mid(arguments.text, loc.match.pos[1], loc.match.len[1]);
+		if (Left(loc.str, 2) neq "<a")
+		{
+			arguments.text = RemoveChars(arguments.text, loc.match.pos[1], loc.match.len[1]);
+			// remove any sort of trailing puncuation
+			loc.punctuation = ArrayToList(ReMatchNoCase(loc.PunctuationRegEx, loc.str));
+			loc.str = REReplaceNoCase(loc.str, loc.PunctuationRegEx, "", "all");
+			arguments.href = arguments.protocol & loc.str;
+			loc.element = $element("a", arguments, loc.str, "text,regex,link,domains,protocol") & loc.punctuation;
+			arguments.text = Insert(loc.element, arguments.text, loc.match.pos[1]-1);
+			loc.startPosition = loc.match.pos[1] + len(loc.element);
+		}
+		loc.startPosition++;
+		loc.match = ReFindNoCase(arguments.regex, arguments.text, loc.startPosition, true);
+	}
+	</cfscript>
+	<cfreturn arguments.text>
 </cffunction>
 
 <cffunction name="excerpt" returntype="string" access="public" output="false" hint="Extracts an excerpt from text that matches the first instance of a given phrase."
