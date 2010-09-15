@@ -3,8 +3,10 @@
 
 <cfif loc.db IS "microsoftsqlserver">
 	<cfset loc.ident = "IDENTITY(1,1)">
-<cfelse>
+<cfelseif loc.db IS "mysql">
 	<cfset loc.ident = "AUTO_INCREMENT">
+<cfelse>
+	<cfset loc.ident = "IDENTITY">
 </cfif>
 
 <cfset tables = "users,photogalleries,photogalleryphotos,posts,authors,classifications,comments,profiles,tags,cities,shops,userphotos">
@@ -28,7 +30,7 @@
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE users
 (
-	id int #loc.ident# PRIMARY KEY NOT NULL,
+	id int NOT NULL #loc.ident# PRIMARY KEY,
 	username varchar(50) NOT NULL,
 	password varchar(50) NOT NULL,
 	firstname varchar(50) NOT NULL,
@@ -50,7 +52,7 @@ CREATE TABLE users
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE photogalleries
 (
-	photogalleryid int #loc.ident# PRIMARY KEY NOT NULL,
+	photogalleryid int NOT NULL #loc.ident# PRIMARY KEY,
 	userid int NOT NULL,
 	title varchar(255) NOT NULL,
 	description text NOT NULL
@@ -60,18 +62,18 @@ CREATE TABLE photogalleries
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE photogalleryphotos
 (
-	photogalleryphotoid int #loc.ident# PRIMARY KEY NOT NULL,
+	photogalleryphotoid int NOT NULL #loc.ident# PRIMARY KEY,
 	photogalleryid int NOT NULL,
 	filename varchar(255) NOT NULL,
 	description varchar(255) NOT NULL,
-	filedata blob NULL
+	filedata <cfif loc.db IS "microsoftsqlserver">image<cfelse>blob</cfif> NULL
 )
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE posts
 (
-	id int #loc.ident# PRIMARY KEY NOT NULL,
+	id int NOT NULL #loc.ident# PRIMARY KEY,
 	authorid int NULL,
 	title varchar(250) NOT NULL,
 	body text NOT NULL,
@@ -86,7 +88,7 @@ CREATE TABLE posts
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE authors
 (
-	id int #loc.ident# PRIMARY KEY NOT NULL,
+	id int NOT NULL #loc.ident# PRIMARY KEY,
 	firstname varchar(100) NOT NULL,
 	lastname varchar(100) NOT NULL
 )
@@ -95,7 +97,7 @@ CREATE TABLE authors
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE classifications
 (
-	id int #loc.ident# PRIMARY KEY NOT NULL,
+	id int NOT NULL #loc.ident# PRIMARY KEY,
 	postid int NOT NULL,
 	tagid int NOT NULL
 )
@@ -104,7 +106,7 @@ CREATE TABLE classifications
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE comments
 (
-	id int #loc.ident# PRIMARY KEY NOT NULL,
+	id int NOT NULL #loc.ident# PRIMARY KEY,
 	postid int NOT NULL,
 	body text NOT NULL,
 	name varchar(100) NOT NULL,
@@ -117,7 +119,7 @@ CREATE TABLE comments
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE profiles
 (
-	id int #loc.ident# PRIMARY KEY NOT NULL,
+	id int NOT NULL #loc.ident# PRIMARY KEY,
 	authorid int NULL,
 	dateofbirth datetime NOT NULL,
 	bio text NULL
@@ -127,7 +129,7 @@ CREATE TABLE profiles
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE tags
 (
-	id int #loc.ident# PRIMARY KEY NOT NULL,
+	id int NOT NULL #loc.ident# PRIMARY KEY,
 	name varchar(50) NOT NULL,
 	description varchar(50) NULL
 )
@@ -146,7 +148,7 @@ CREATE TABLE cities
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE shops
 (
-	shopid char(9) PRIMARY KEY NOT NULL,
+	shopid char(9) NOT NULL PRIMARY KEY,
 	citycode tinyint NULL,
 	name varchar(80) NOT NULL
 )
