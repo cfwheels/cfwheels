@@ -38,7 +38,7 @@
 		<cfset loc.user.birthDayMonth = "This is not a number!">
 		<cfset loc.user.valid()>
 		<cfset loc.arrResult = loc.user.errorsOn("birthDayMonth")>
-		<cfset assert('ArrayLen(loc.arrResult) eq 1 AND loc.arrResult[1].message eq "Birth day month is not a number"')>
+		<cfset assert('ArrayLen(loc.arrResult) eq 1 AND loc.arrResult[1].message eq "Birthdaymonth is not a number"')>
 	</cffunction>
 
 	<cffunction name="test_validates_numericality_of_valid">
@@ -50,7 +50,7 @@
 		<cfset loc.user.birthDayMonth = "7.825">
 		<cfset loc.user.valid()>
 		<cfset loc.arrResult = loc.user.errorsOn("birthDayMonth")>
-		<cfset assert('ArrayLen(loc.arrResult) eq 1 AND loc.arrResult[1].message eq "Birth day month is not a number"')>
+		<cfset assert('ArrayLen(loc.arrResult) eq 1 AND loc.arrResult[1].message eq "Birthdaymonth is not a number"')>
 	</cffunction>
 
 	<cffunction name="test_validates_format_of_date_invalid">
@@ -69,7 +69,7 @@
 		<cfset loc.user.birthTime = "This is not a time!">
 		<cfset loc.user.valid()>
 		<cfset loc.arrResult = loc.user.errorsOn("birthTime")>
-		<cfset assert('ArrayLen(loc.arrResult) eq 1 AND loc.arrResult[1].message eq "Birth time is invalid"')>
+		<cfset assert('ArrayLen(loc.arrResult) eq 1 AND loc.arrResult[1].message eq "Birthtime is invalid"')>
 	</cffunction>
 
 	<cffunction name="test_validates_format_of_time_valid">
