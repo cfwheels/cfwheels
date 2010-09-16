@@ -29,29 +29,29 @@
 	</cffunction>
 
 	<cffunction name="test_setting_property_on_one_object">
-		<cfset loc.post = model("post").findOne(order="id")>
+		<cfset loc.post = model("post").findOne()>
 		<cfset assert("loc.post.title IS 'setOnObject'")>
 	</cffunction>
 
 	<cffunction name="test_setting_property_on_one_object_with_skipped_callback">
-		<cfset loc.post = model("post").findOne(callbacks=false, order="id")>
+		<cfset loc.post = model("post").findOne(callbacks=false)>
 		<cfset assert("loc.post.title IS 'Title for first test post'")>
 	</cffunction>
 
 	<cffunction name="test_setting_properties_on_multiple_objects">
-		<cfset loc.posts = model("post").findAll(returnAs="objects", order="id")>
+		<cfset loc.posts = model("post").findAll(returnAs="objects")>
 		<cfset assert("loc.posts[1].title IS 'setOnObject' AND loc.posts[2].title IS 'setOnObject'")>
 	</cffunction>
 
 	<cffunction name="test_setting_properties_on_multiple_objects_with_skipped_callback">
-		<cfset loc.posts = model("post").findAll(returnAs="objects", callbacks=false, order="id")>
+		<cfset loc.posts = model("post").findAll(returnAs="objects", callbacks=false)>
 		<cfset assert("loc.posts[1].title IS 'Title for first test post' AND loc.posts[2].title IS 'Title for second test post'")>
 	</cffunction>
 
 	<cffunction name="test_creation_of_new_column_and_property">
 		<cfset loc.posts = model("post").findAll(order="id DESC")>
 		<cfset assert("loc.posts.something[1] eq 'hello world'")>
-		<cfset loc.posts = model("post").findAll(returnAs="objects", order="id")>
+		<cfset loc.posts = model("post").findAll(returnAs="objects")>
 		<cfset assert("loc.posts[1].something eq 'hello world'")>
 	</cffunction>
 

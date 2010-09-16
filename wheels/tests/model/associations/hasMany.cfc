@@ -3,7 +3,7 @@
 	<cffunction name="test_getting_children">
 		<cfset loc.author = model("author").findOne(order="id")>
 		<cfset loc.dynamicResult = loc.author.posts()>
-		<cfset loc.coreResult = model("post").findAll(where="authorId=#loc.author.id#", order="id")>
+		<cfset loc.coreResult = model("post").findAll(where="authorId=#loc.author.id#")>
 		<cfset assert("loc.dynamicResult['title'][1] IS loc.coreResult['title'][1]")>
 	</cffunction>
 
@@ -23,8 +23,8 @@
 
 	<cffunction name="test_getting_one_child">
 		<cfset loc.author = model("author").findOne(order="id")>
-		<cfset loc.dynamicResult = loc.author.findOnePost(order="id")>
-		<cfset loc.coreResult = model("post").findOne(where="authorId=#loc.author.id#", order="id")>
+		<cfset loc.dynamicResult = loc.author.findOnePost()>
+		<cfset loc.coreResult = model("post").findOne(where="authorId=#loc.author.id#")>
 		<cfset assert("loc.dynamicResult.title IS loc.coreResult.title")>
 	</cffunction>
 
@@ -163,7 +163,7 @@
 			<cfset loc.author = model("author").findByKey(key=loc.postWithAuthor.authorId)>
 			<cfset loc.author.hasMany(name="posts", dependent="delete")>
 			<cfset loc.author.delete()>
-			<cfset loc.posts = model("post").findAll(where="authorId=#loc.author.id#", order="id")>
+			<cfset loc.posts = model("post").findAll(where="authorId=#loc.author.id#")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset assert("loc.posts.recordcount eq 0")>
@@ -175,7 +175,7 @@
 			<cfset loc.author = model("author").findByKey(key=loc.postWithAuthor.authorId)>
 			<cfset loc.author.hasMany(name="posts", dependent="deleteAll")>
 			<cfset loc.author.delete()>
-			<cfset loc.posts = model("post").findAll(where="authorId=#loc.author.id#", order="id")>
+			<cfset loc.posts = model("post").findAll(where="authorId=#loc.author.id#")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset assert("loc.posts.recordcount eq 0")>
@@ -187,7 +187,7 @@
 			<cfset loc.author = model("author").findByKey(key=loc.postWithAuthor.authorId)>
 			<cfset loc.author.hasMany(name="posts", dependent="removeAll")>
 			<cfset loc.author.delete()>
-			<cfset loc.posts = model("post").findAll(where="authorId=#loc.author.id#", order="id")>
+			<cfset loc.posts = model("post").findAll(where="authorId=#loc.author.id#")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset assert("loc.posts.recordcount eq 0")>

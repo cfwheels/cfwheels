@@ -19,9 +19,9 @@
 	<cffunction name="test_same_output">
 		<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.png')#" variable="loc.binaryData">
 		<cftransaction action="begin">
-			<cfset loc.photogalleryphoto = model("PhotoGalleryPhoto").findOne(order="photogalleryphotoid")>
+			<cfset loc.photogalleryphoto = model("PhotoGalleryPhoto").findOne()>
 			<cfset loc.photogalleryphoto.update(filename="somefilename", fileData=loc.binaryData)>
-			<cfset loc.photogalleryphoto = model("PhotoGalleryPhoto").findAll(where="photogalleryphotoid = #loc.photogalleryphoto.photogalleryphotoid#", order="photogalleryphotoid")>
+			<cfset loc.photogalleryphoto = model("PhotoGalleryPhoto").findAll(where="photogalleryphotoid = #loc.photogalleryphoto.photogalleryphotoid#")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset loc.a = []>

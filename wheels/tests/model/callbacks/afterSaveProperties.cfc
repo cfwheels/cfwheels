@@ -2,7 +2,7 @@
 
 	<cffunction name="test_have_access_to_changed_property_values_in_aftersave">
 		<cfset model("user").$registerCallback(type="afterSave", methods="saveHasChanged")>
-		<cfset loc.obj = model("user").findOne(where="username = 'tonyp'", order="id")>
+		<cfset loc.obj = model("user").findOne(where="username = 'tonyp'")>
 		<cfset loc.obj.saveHasChanged = saveHasChanged>
 		<cfset loc.obj.getHasObjectChanged = getHasObjectChanged>
 		<cfset assert('loc.obj.hasChanged() eq false')>

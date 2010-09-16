@@ -67,7 +67,7 @@
 	</cffunction>
 
  	<cffunction name="test_findAll">
-		<cfset loc.q = loc.user.findAll(order="id")>
+		<cfset loc.q = loc.user.findAll()>
 		<cfset assert('loc.q.recordcount eq 5')>
 		<cfset loc.q = loc.user.findAll(where="lastname = 'petruzzi' OR lastname = 'peters'", order="lastname")>
 		<cfset assert('loc.q.recordcount eq 2')>
@@ -122,25 +122,25 @@
 	</cffunction>
 	
 	<cffunction name="test_findAll_returnAs_query_noRecords_returns_correct_type">
-		<cfset loc.q = loc.user.findAll(where="id = 0", returnas="query", order="id")>
+		<cfset loc.q = loc.user.findAll(where="id = 0", returnas="query")>
 		<cfset debug('loc.q', false)>
 		<cfset assert('isquery(loc.q) and loc.q.recordcount eq 0')>
 	</cffunction>
 	
 	<cffunction name="test_findAll_returnAs_structs_noRecords_returns_correct_type">
-		<cfset loc.q = loc.user.findAll(where="id = 0", returnAs="structs", order="id")>
+		<cfset loc.q = loc.user.findAll(where="id = 0", returnAs="structs")>
 		<cfset debug('loc.q', false)>
 		<cfset assert('isarray(loc.q) and arrayisempty(loc.q)')>
 	</cffunction>
 	
 	<cffunction name="test_findAll_returnAs_objects_noRecords_returns_correct_type">
-		<cfset loc.q = loc.user.findAll(where="id = 0", returnas="objects", order="id")>
+		<cfset loc.q = loc.user.findAll(where="id = 0", returnas="objects")>
 		<cfset debug('loc.q', false)>
 		<cfset assert('isarray(loc.q) and arrayisempty(loc.q)')>
 	</cffunction>
 
 	<cffunction name="test_findAll_returnAs_invalid_throws_error">
-		<cfset loc.q = raised('loc.user.findAll(where="id = 1", returnas="notvalid", order="id")')>
+		<cfset loc.q = raised('loc.user.findAll(where="id = 1", returnas="notvalid")')>
 		<cfset loc.r = "Wheels.IncorrectArgumentValue">
 		<cfset debug('loc.q', false)>
 		<cfset assert('loc.q eq loc.r')>
@@ -179,7 +179,7 @@
 
 	<cffunction name="test_findByKey_with_include_soft_deletes">
 		<cftransaction action="begin">
-			<cfset loc.post1 = model("Post").findOne(order="id")>
+			<cfset loc.post1 = model("Post").findOne()>
 			<cfset loc.post1.delete(transaction="none")>
 			<cfset loc.post2 = model("Post").findByKey(key=loc.post1.id, includeSoftDeletes=true)>
 			<cftransaction action="rollback" />
@@ -189,9 +189,9 @@
 
 	<cffunction name="test_findOne_with_include_soft_deletes">
 		<cftransaction action="begin">
-			<cfset loc.post1 = model("Post").findOne(order="id")>
+			<cfset loc.post1 = model("Post").findOne()>
 			<cfset loc.post1.delete(transaction="none")>
-			<cfset loc.post2 = model("Post").findOne(where="id=#loc.post1.id#", includeSoftDeletes=true, order="id")>
+			<cfset loc.post2 = model("Post").findOne(where="id=#loc.post1.id#", includeSoftDeletes=true)>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset assert('IsObject(loc.post2) is true')>
@@ -200,7 +200,7 @@
 	<cffunction name="test_findAll_with_include_soft_deletes">
 		<cftransaction action="begin">
 			<cfset model("Post").deleteAll()>
-			<cfset loc.allPosts = model("Post").findAll(includeSoftDeletes=true, order="id")>
+			<cfset loc.allPosts = model("Post").findAll(includeSoftDeletes=true)>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset assert('loc.allPosts.recordcount eq 4')>
