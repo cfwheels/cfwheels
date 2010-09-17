@@ -201,6 +201,8 @@
 		var loc = {};
 		if (IsValid("integer", arguments.param) && IsNumeric(arguments.param) && arguments.param > 0)
 		{
+			// railo strips leading zeros from integers so do this for both engines
+			arguments.param = Val(arguments.param);
 			loc.iEnd = Len(arguments.param);
 			loc.a = (10^loc.iEnd) + Reverse(arguments.param);
 			loc.b = "0";

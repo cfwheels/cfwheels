@@ -26,7 +26,7 @@
 
 	<cffunction name="test_obfuscate_0413">
 		<cfset results.param = obfuscateParam(0413)>
-		<cfset assert("results.param IS 'a23299'")>
+		<cfset assert("results.param IS 'a24ef'")>
 	</cffunction>
 
 	<cffunction name="test_per_should_not_obfuscate">

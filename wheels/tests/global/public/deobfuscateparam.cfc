@@ -24,9 +24,9 @@
 		<cfset assert("results.param IS 69247541")>
 	</cffunction>
 
-	<cffunction name="test_deobfuscate_a23299">
-		<cfset results.param = deobfuscateParam('a23299')>
-		<cfset assert("results.param IS 0413")>
+	<cffunction name="test_deobfuscate_a24ef">
+		<cfset results.param = deobfuscateParam('a24ef')>
+		<cfset assert("results.param IS 413")>
 	</cffunction>
 
 	<cffunction name="test_becca2515_should_not_deobfuscate">
