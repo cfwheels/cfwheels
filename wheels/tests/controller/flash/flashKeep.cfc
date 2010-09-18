@@ -1,9 +1,14 @@
 <cfcomponent extends="wheelsMapping.test">
 
-	<cfset params = {controller="dummy", action="dummy"}>
-	<cfset controller = $controller(name="dummy").$createControllerObject(params)>
-
+	<cfinclude template="setup.cfm">
+	
 	<cffunction name="test_flashKeep_saves_flash_items">
+		<cfset run_flashKeep_saves_flash_items()>
+		<cfset controller.$setFlashStorage("cookie")>
+		<cfset run_flashKeep_saves_flash_items()>
+	</cffunction>
+
+	<cffunction name="run_flashKeep_saves_flash_items">
 		<cfset controller.flashInsert(tony="Petruzzi", per="Djurner", james="Gibson")>
 		<cfset controller.flashKeep("per,james")>
 		<cfset controller.$flashClear()>
@@ -14,5 +19,5 @@
 		<cfset assert('controller.flash("per") eq "Djurner"')>
 		<cfset assert('controller.flash("james") eq "Gibson"')>
 	</cffunction>
-
+	
 </cfcomponent>
