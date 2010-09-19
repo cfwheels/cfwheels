@@ -136,7 +136,7 @@
 	<cffunction name="test_binary_compare">
 		<cfset loc.gallery = model("photogallery").findOne(
 			include="user"
-			,where="users.lastname = 'petruzzi'"
+			,where="users.lastname = 'Petruzzi'"
 			,orderby="photogalleryid"
 		)>
 		<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.png')#" variable="loc.binaryData">

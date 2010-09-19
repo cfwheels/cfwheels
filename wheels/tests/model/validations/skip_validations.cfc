@@ -42,7 +42,7 @@
 
 	<cffunction name="test_can_update_existing_record_validation_execute">
 		<cftransaction>
-			<cfset loc.u = loc.user.findOne(where="lastname = 'petruzzi'")>
+			<cfset loc.u = loc.user.findOne(where="lastname = 'Petruzzi'")>
 			<cfset loc.p = loc.u.properties()>
 			<cfset loc.r = loc.u.update(loc.args)>
 			<cfset loc.e = loc.u.isnew()>
@@ -56,7 +56,7 @@
 	<cffunction name="test_cannot_update_existing_record_validation_execute">
 		<cftransaction>
 			<cfset loc.args.password = "1">
-			<cfset loc.u = loc.user.findOne(where="lastname = 'petruzzi'")>
+			<cfset loc.u = loc.user.findOne(where="lastname = 'Petruzzi'")>
 			<cfset loc.p = loc.u.properties()>
 			<cfset loc.r = loc.u.update(loc.args)>
 			<cfset loc.e = loc.u.isnew()>
@@ -70,7 +70,7 @@
 	<cffunction name="test_cant_update_existing_record_validation_skipped">
 		<cftransaction>
 			<cfset loc.args.password = "1">
-			<cfset loc.u = loc.user.findOne(where="lastname = 'petruzzi'")>
+			<cfset loc.u = loc.user.findOne(where="lastname = 'Petruzzi'")>
 			<cfset loc.p = loc.u.properties()>
 			<cfset loc.u.setProperties(loc.args)>
 			<cfset loc.e = loc.u.isnew()>

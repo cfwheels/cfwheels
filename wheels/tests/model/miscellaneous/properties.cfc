@@ -21,7 +21,7 @@
 		<cfset loc.args.City = "deerfield beach">
 		<cfset loc.args.Fax = "9545551212">
 		<cfset loc.args.FirstName = "anthony">
-		<cfset loc.args.LastName = "petruzzi">
+		<cfset loc.args.LastName = "Petruzzi">
 		<cfset loc.args.Password = "it's a secret">
 		<cfset loc.args.Phone = "9544826106">
 		<cfset loc.args.State = "fl">
