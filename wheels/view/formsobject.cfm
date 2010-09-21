@@ -496,10 +496,29 @@
 				}
 				else if (IsObject(arguments.options[loc.i]))
 				{
-					if (StructKeyExists(arguments.options[loc.i], arguments.valueField))
-						loc.optionValue = arguments.options[loc.i][arguments.valueField];
-					if (StructKeyExists(arguments.options[loc.i], arguments.textField))
-						loc.optionText = arguments.options[loc.i][arguments.textField];
+					loc.object = arguments.options[loc.i];
+					if (!Len(arguments.valueField) || !Len(arguments.textField))
+					{
+						loc.propertyNames = loc.object.propertyNames();
+						loc.jEnd = ListLen(loc.propertyNames);
+						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+						{
+							loc.propertyName = ListGetAt(loc.propertyNames, loc.j);
+							if (StructKeyExists(loc.object, loc.propertyName))
+							{
+								loc.propertyValue = loc.object[loc.propertyName];
+								if (!Len(arguments.valueField) && IsNumeric(loc.propertyValue))
+									arguments.valueField = loc.propertyName;
+								if (!Len(arguments.textField) && !IsNumeric(loc.propertyValue))
+									arguments.textField = loc.propertyName;
+							}
+						}
+					
+					}
+					if (StructKeyExists(loc.object, arguments.valueField))
+						loc.optionValue = loc.object[arguments.valueField];
+					if (StructKeyExists(loc.object, arguments.textField))
+						loc.optionText = loc.object[arguments.textField];
 				}
 				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=loc.optionValue, optionText=loc.optionText);
 			}
