@@ -114,7 +114,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="findAll", args=arguments);
-		
+
 		// we only allow direct associations to be loaded when returning objects
 		if (application.wheels.showErrorInformation && Len(arguments.returnAs) && arguments.returnAs != "query" && Find("(", arguments.include) && arguments.returnIncluded)
 			$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="You may only include direct associations to this object when returning an array of objects.");
@@ -124,7 +124,7 @@
 		{
 			if (application.wheels.showErrorInformation && arguments.perPage lte 0)
 				$throw(type="Wheels", message="Incorrect Argument", extendedInfo="The perPage argument should be a positive numeric value.");
-		
+
 			if (Len(arguments.order))
 			{
 				// insert primary keys to order clause unless they are already there, this guarantees that the ordering is unique which is required to make pagination work properly
@@ -252,7 +252,7 @@
 				request.wheels[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
 			request.wheels[$hashedKey(loc.findAll.query)] = variables.wheels.class.modelName; // place an identifer in request scope so we can reference this query when passed in to view functions
-			
+
 			switch (arguments.returnAs)
 			{
 				case "query":
@@ -395,7 +395,7 @@
 		var loc = {};
 		$args(name="updateAll", args=arguments);
 		arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,reload,parameterize,instantiate,validate,transaction,callbacks,includeSoftDeletes", setOnModel=false);
-		
+
 		if (arguments.instantiate) // find and instantiate each object and call its update function
 		{
 			loc.returnValue = 0;
@@ -561,7 +561,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="deleteAll", args=arguments);
-		
+
 		if (arguments.instantiate)
 		{
 			loc.returnValue = 0;
@@ -605,6 +605,10 @@
 	<cfscript>
 		var loc = {};
 		$args(name="deleteByKey", args=arguments);
+		if (ListLen(primaryKeys()) != ListLen(arguments.key))
+		{
+			$throw(type="Wheels.InvalidArgumentValue", message="The `key` argument contains an invalid value.", extendedInfo="The `key` argument contains a list, however this table doesn't have a composite key. A list of values is allowed for the `key` argument, but this only applies in the case when the table contains a composite key.");
+		}
 		loc.where = $keyWhereString(values=arguments.key);
 		loc.returnValue = deleteOne(where=loc.where, reload=arguments.reload, transaction=arguments.transaction, callbacks=arguments.callbacks, includeSoftDeletes=arguments.includeSoftDeletes, softDelete=arguments.softDelete);
 	</cfscript>
@@ -796,7 +800,7 @@
 	<cfscript>
 		// make sure all of our associations are set properly before saving
 		$setAssociations();
-	
+
 		if ($callback("beforeValidation", arguments.callbacks))
 		{
 			if (isNew())
@@ -1009,11 +1013,11 @@
 			<cfquery name="customQuery" datasource="##get(''datasourcename'')##">
 			select * from users
 			</cfquery>
-			
+
 			<cfset setPagination(totalRecords="##customQuery.RecordCount##", currentPage="##arguments.page##", perPage="25", handle="myCustomQueryHandle")>
 			<cfreturn customQuery>
 		</cffunction>
-		
+
 		<!--- in your view you access using paginationLinks() --->
 		<!--- controller code --->
 		<cfparam name="params.page" default="1">
