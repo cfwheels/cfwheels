@@ -157,3 +157,23 @@
 <cffunction name="$objectId" access="public" output="false" returntype="string">
 	<cfreturn variables.wheels.tickCountId />
 </cffunction>
+
+<cffunction name="isInstance" returntype="boolean" access="public" output="false" hint="Use this method to check whether you are currently in an instance object."
+	examples='
+		<!--- use the passed in `id` when we''re not already in an instance. --->
+		<cffunction name="memberIsAdmin">
+			<cfif isInstance()>
+				<cfreturn this.admin>
+			<cfelse>
+				<cfreturn findByKey(arguments.id).admin>
+			</cfif>
+		</cffunction>
+	'
+	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="isClass">
+	<cfreturn StructKeyExists(variables.wheels, "instance")>
+</cffunction>
+
+<cffunction name="isClass" returntype="boolean" access="public" output="false" hint="Use this method to check whether you are currently in a class level object."
+	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="isInstance">
+	<cfreturn !isInstance(argumentCollection=arguments)>
+</cffunction>

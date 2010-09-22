@@ -191,6 +191,7 @@
 		var loc = {};
 
 		variables.wheels = {};
+		variables.wheels.instance = {};
 		variables.wheels.errors = [];
 		// keep a unique identifier for each model created in case we need it for nested properties
 		variables.wheels.tickCountId = GetTickCount().toString(); // make sure we have it in milliseconds

@@ -269,25 +269,18 @@
 			loc.method = loc.callbacks[loc.i];
 			if (arguments.type == "afterFind")
 			{
+				// since this is an afterFind callback we need to handle it differently
 				if (IsQuery(arguments.collection))
 				{
-					// since this is an afterFind callback we need to handle it differently
 					loc.returnValue = $queryCallback(method=loc.method, collection=arguments.collection);
 				}
 				else
 				{
-					if (application.wheels.afterFindCallbackLegacySupport)
+					loc.returnValue = $invoke(method=loc.method, argumentCollection=properties());
+					if (StructKeyExists(loc, "returnValue") && IsStruct(loc.returnValue))
 					{
-						loc.returnValue = $invoke(method=loc.method);
-					}
-					else
-					{
-						loc.returnValue = $invoke(method=loc.method, argumentCollection=properties());
-						if(StructKeyExists(loc, "returnValue") && IsStruct(loc.returnValue))
-						{
-							setProperties(loc.returnValue);
-							StructDelete(loc, "returnValue");
-						}
+						setProperties(loc.returnValue);
+						StructDelete(loc, "returnValue");
 					}
 				}
 			}

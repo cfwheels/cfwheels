@@ -90,8 +90,6 @@
 	application.wheels.automaticValidations = true;
 	application.wheels.setUpdatedAtOnCreate = true;
 	application.wheels.useExpandedColumnAliases = false;
-	// for backwards compatability with afterFind callbacks
-	application.wheels.afterFindCallbackLegacySupport = true;
 
 	// if session management is enabled in the application we default to storing flash data in the session scope, if not we use a cookie
 	if (StructKeyExists(this, "sessionManagement") && this.sessionManagement)
@@ -138,8 +136,8 @@
 	application.wheels.functions.deleteByKey = {reload=false};
 	application.wheels.functions.deleteOne = {reload=false};
 	application.wheels.functions.distanceOfTimeInWords = {includeSeconds=false};
-	application.wheels.functions.errorMessageOn = {prependText="", appendText="", wrapperElement="span", class="error-message"};
-	application.wheels.functions.errorMessagesFor = {class="error-messages", showDuplicates=true};
+	application.wheels.functions.errorMessageOn = {prependText="", appendText="", wrapperElement="span", class="errorMessage"};
+	application.wheels.functions.errorMessagesFor = {class="errorMessages", showDuplicates=true};
 	application.wheels.functions.exists = {reload=false, parameterize=true};
 	application.wheels.functions.fileField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span"};
 	application.wheels.functions.fileFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
@@ -147,7 +145,7 @@
 	application.wheels.functions.findByKey = {reload=false, parameterize=true, returnAs="object"};
 	application.wheels.functions.findOne = {reload=false, parameterize=true, returnAs="object"};
 	application.wheels.functions.flashKeep = {};
-	application.wheels.functions.flashMessages = {class="flash-messages", includeEmptyContainer="false"};
+	application.wheels.functions.flashMessages = {class="flashMessages", includeEmptyContainer="false"};
 	application.wheels.functions.hasMany = {joinType="outer", dependent=false};
 	application.wheels.functions.hasOne = {joinType="outer", dependent=false};
 	application.wheels.functions.hiddenField = {};
