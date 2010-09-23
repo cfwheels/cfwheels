@@ -1,9 +1,13 @@
 <cfsetting requesttimeout="10000" showdebugoutput="false">
 <cfparam name="params.type" default="core">
-<cfset testresults = $createObjectFromRoot(path=application.wheels.wheelsComponentPath, fileName="test", method="$WheelsRunner", options=params)>
-
+<cfif params.type IS "core">
+	<cfset testresults = $createObjectFromRoot(path=application.wheels.wheelsComponentPath, fileName="Test", method="$WheelsRunner", options=params)>
+<cfelse>
+	<cfset testresults = $createObjectFromRoot(path="tests", fileName="Test", method="$WheelsRunner", options=params)>
+</cfif>
+<h1>Test Results</h1>
 <cfif !isStruct(testresults)>
-	<cfoutput><p>No tests found.</p></cfoutput>
+	<cfoutput><p style="margin-bottom:50px;">Sorry, no tests were found.</p></cfoutput>
 <cfelse>
 <cfset linkParams = "?controller=wheels&action=wheels&view=tests&type=#params.type#">
 <style>
