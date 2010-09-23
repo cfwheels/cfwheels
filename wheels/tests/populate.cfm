@@ -1,6 +1,8 @@
+<!--- get the version of the database we're running against --->
 <cfdbinfo name="loc.dbinfo" datasource="wheelstestdb" type="version">
 <cfset loc.db = LCase(Replace(loc.dbinfo.database_productname, " ", "", "all"))>
 
+<!--- handle differences in database for identity inserts --->
 <cfif loc.db IS "microsoftsqlserver">
 	<cfset loc.ident = "IDENTITY(1,1)">
 <cfelseif loc.db IS "mysql">
@@ -9,43 +11,72 @@
 	<cfset loc.ident = "IDENTITY">
 </cfif>
 
-<cfset tables = "users,photogalleries,photogalleryphotos,posts,authors,classifications,comments,profiles,tags,cities,shops,userphotos">
-<cfloop list="#tables#" index="loc.i">
-	<cftry>
-		<cfquery name="loc.query" datasource="wheelstestdb">
-		DROP VIEW #loc.i#
-		</cfquery>
-	<cfcatch>
-	</cfcatch>
-	</cftry>
-	<cftry>
+<!--- get a listing of all the tables and view in the database --->
+<cfdbinfo name="loc.dbinfo" datasource="wheelstestdb" type="tables">
+<cfset loc.tableList = ValueList(loc.dbinfo.table_name, chr(7))>
+
+<!--- list of tables to delete --->
+<cfset loc.tables = "authors,cities,classifications,comments,photogalleries,photogalleryphotos,posts,profiles,shops,tags,users">
+<cfloop list="#loc.tables#" index="loc.i">
+	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
 		<cfquery name="loc.query" datasource="wheelstestdb">
 		DROP TABLE #loc.i#
 		</cfquery>
-	<cfcatch>
-	</cfcatch>
-	</cftry>
+	</cfif>
 </cfloop>
 
+<!--- list of views to delete --->
+<cfset loc.views = "userphotos">
+<cfloop list="#loc.views#" index="loc.i">
+	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
+		<cfquery name="loc.query" datasource="wheelstestdb">
+		DROP VIEW #loc.i#
+		</cfquery>
+	</cfif>
+</cfloop>
+
+
+<!--- 
+create tables
+ --->
 <cfquery name="loc.query" datasource="wheelstestdb">
-CREATE TABLE users
+CREATE TABLE authors
 (
 	id int NOT NULL #loc.ident# PRIMARY KEY,
-	username varchar(50) NOT NULL,
-	password varchar(50) NOT NULL,
-	firstname varchar(50) NOT NULL,
-	lastname varchar(50) NOT NULL,
-	address varchar(100) NULL,
-	city varchar(50) NULL,
-	state char(2) NULL,
-	zipcode varchar(50) NULL,
-	phone varchar(20) NULL,
-	fax varchar(20) NULL,
-	birthday datetime NULL,
-	birthdaymonth int NULL,
-	birthdayyear int NULL,
-	birthtime datetime NULL DEFAULT '2000-01-01 18:26:08.690',
-	isactive bit NULL
+	firstname varchar(100) NOT NULL,
+	lastname varchar(100) NOT NULL
+)
+</cfquery>
+
+<cfquery name="loc.query" datasource="wheelstestdb">
+CREATE TABLE cities
+(
+	countyid char(4) NOT NULL,
+	citycode tinyint NOT NULL,
+	name varchar(50) NOT NULL,
+	PRIMARY KEY(countyid,citycode)
+)
+</cfquery>
+
+<cfquery name="loc.query" datasource="wheelstestdb">
+CREATE TABLE classifications
+(
+	id int NOT NULL #loc.ident# PRIMARY KEY,
+	postid int NOT NULL,
+	tagid int NOT NULL
+)
+</cfquery>
+
+<cfquery name="loc.query" datasource="wheelstestdb">
+CREATE TABLE comments
+(
+	id int NOT NULL #loc.ident# PRIMARY KEY,
+	postid int NOT NULL,
+	body text NOT NULL,
+	name varchar(100) NOT NULL,
+	url varchar(100) NULL,
+	email varchar(100) NULL,
+	createdat datetime NOT NULL
 )
 </cfquery>
 
@@ -86,62 +117,12 @@ CREATE TABLE posts
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
-CREATE TABLE authors
-(
-	id int NOT NULL #loc.ident# PRIMARY KEY,
-	firstname varchar(100) NOT NULL,
-	lastname varchar(100) NOT NULL
-)
-</cfquery>
-
-<cfquery name="loc.query" datasource="wheelstestdb">
-CREATE TABLE classifications
-(
-	id int NOT NULL #loc.ident# PRIMARY KEY,
-	postid int NOT NULL,
-	tagid int NOT NULL
-)
-</cfquery>
-
-<cfquery name="loc.query" datasource="wheelstestdb">
-CREATE TABLE comments
-(
-	id int NOT NULL #loc.ident# PRIMARY KEY,
-	postid int NOT NULL,
-	body text NOT NULL,
-	name varchar(100) NOT NULL,
-	url varchar(100) NULL,
-	email varchar(100) NULL,
-	createdat datetime NOT NULL
-)
-</cfquery>
-
-<cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE profiles
 (
 	id int NOT NULL #loc.ident# PRIMARY KEY,
 	authorid int NULL,
 	dateofbirth datetime NOT NULL,
 	bio text NULL
-)
-</cfquery>
-
-<cfquery name="loc.query" datasource="wheelstestdb">
-CREATE TABLE tags
-(
-	id int NOT NULL #loc.ident# PRIMARY KEY,
-	name varchar(50) NOT NULL,
-	description varchar(50) NULL
-)
-</cfquery>
-
-<cfquery name="loc.query" datasource="wheelstestdb">
-CREATE TABLE cities
-(
-	countyid char(4) NOT NULL,
-	citycode tinyint NOT NULL,
-	name varchar(50) NOT NULL,
-	PRIMARY KEY(countyid,citycode)
 )
 </cfquery>
 
@@ -155,10 +136,46 @@ CREATE TABLE shops
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
+CREATE TABLE tags
+(
+	id int NOT NULL #loc.ident# PRIMARY KEY,
+	name varchar(50) NOT NULL,
+	description varchar(50) NULL
+)
+</cfquery>
+
+<cfquery name="loc.query" datasource="wheelstestdb">
+CREATE TABLE users
+(
+	id int NOT NULL #loc.ident# PRIMARY KEY,
+	username varchar(50) NOT NULL,
+	password varchar(50) NOT NULL,
+	firstname varchar(50) NOT NULL,
+	lastname varchar(50) NOT NULL,
+	address varchar(100) NULL,
+	city varchar(50) NULL,
+	state char(2) NULL,
+	zipcode varchar(50) NULL,
+	phone varchar(20) NULL,
+	fax varchar(20) NULL,
+	birthday datetime NULL,
+	birthdaymonth int NULL,
+	birthdayyear int NULL,
+	birthtime datetime NULL DEFAULT '2000-01-01 18:26:08.690',
+	isactive bit NULL
+)
+</cfquery>
+
+
+<!--- 
+create views
+ --->
+<cfquery name="loc.query" datasource="wheelstestdb">
 CREATE VIEW userphotos AS
 SELECT u.id AS userid, u.username AS username, u.firstname AS firstname, u.lastname AS lastname, pg.title AS title, pg.photogalleryid AS photogalleryid
 FROM users u INNER JOIN photogalleries pg ON u.id = pg.userid;
 </cfquery>
+
 
 <!--- populate with data --->
 <cfset loc.user = model("user").create(
