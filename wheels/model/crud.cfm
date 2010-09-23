@@ -315,6 +315,10 @@
 	<cfscript>
 		var returnValue = "";
 		$args(name="findByKey", args=arguments);
+		if (Len(arguments.key))
+		{
+			$keyLengthCheck(arguments.key);
+		}
 		// convert primary key column name(s) / value(s) to a WHERE clause that is then used in the findOne call
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");
@@ -454,6 +458,7 @@
 	<cfscript>
 		var returnValue = "";
 		$args(name="updateByKey", args=arguments);
+		$keyLengthCheck(arguments.key);
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");
 		returnValue = updateOne(argumentCollection=arguments);
@@ -605,10 +610,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="deleteByKey", args=arguments);
-		if (ListLen(primaryKeys()) != ListLen(arguments.key))
-		{
-			$throw(type="Wheels.InvalidArgumentValue", message="The `key` argument contains an invalid value.", extendedInfo="The `key` argument contains a list, however this table doesn't have a composite key. A list of values is allowed for the `key` argument, but this only applies in the case when the table contains a composite key.");
-		}
+		$keyLengthCheck(arguments.key);
 		loc.where = $keyWhereString(values=arguments.key);
 		loc.returnValue = deleteOne(where=loc.where, reload=arguments.reload, transaction=arguments.transaction, callbacks=arguments.callbacks, includeSoftDeletes=arguments.includeSoftDeletes, softDelete=arguments.softDelete);
 	</cfscript>
@@ -993,6 +995,18 @@
 </cffunction>
 
 <!--- other --->
+
+<cffunction name="$keyLengthCheck" returntype="void" access="public" output="false"
+	hint="Makes sure that the number of keys passed in is the same as the number of keys defined for the model. If not, an error is raised.">
+	<cfargument name="key" type="any" required="true">
+	<cfscript>
+	if (ListLen(primaryKeys()) != ListLen(arguments.key))
+	{
+		$throw(type="Wheels.InvalidArgumentValue", message="The `key` argument contains an invalid value.", extendedInfo="The `key` argument contains a list, however this table doesn't have a composite key. A list of values is allowed for the `key` argument, but this only applies in the case when the table contains a composite key.");
+	}
+	</cfscript>
+</cffunction>
+
 
 <!---
 	developers can now override this method for localizing dates if they prefer.
