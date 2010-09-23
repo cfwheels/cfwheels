@@ -179,14 +179,14 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = Trim(arguments.text);
-		loc.returnValue = Replace(loc.returnValue, "#Chr(13)##Chr(10)#", Chr(10), "all");
+		loc.returnValue = Replace(loc.returnValue, "#Chr(13)#", "", "all");
 		loc.returnValue = Replace(loc.returnValue, "#Chr(10)##Chr(10)#", "</p><p>", "all");
 		loc.returnValue = Replace(loc.returnValue, "#Chr(10)#", "<br />", "all");
 		
 		// add back in our returns so we can strip the tags and re-apply them without issue
 		// this is good to be edited the textarea text in it's original format (line returns)
-		loc.returnValue = Replace(loc.returnValue, "</p><p>", "</p>#Chr(13)##Chr(10)##Chr(13)##Chr(10)#<p>", "all");
-		loc.returnValue = Replace(loc.returnValue, "<br />", "<br />#Chr(13)##Chr(10)#", "all");
+		loc.returnValue = Replace(loc.returnValue, "</p><p>", "</p>#Chr(10)##Chr(10)#<p>", "all");
+		loc.returnValue = Replace(loc.returnValue, "<br />", "<br />#Chr(10)#", "all");
 		
 		if (arguments.wrap)
 			loc.returnValue = "<p>" & loc.returnValue & "</p>";

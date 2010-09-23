@@ -34,6 +34,7 @@ luptatum valetudo ne, venio vero regula letalis valde vicis.</p>
 <p>Utrum blandit bene refero ut eum eligo cogo duis bene aptent distineo duis quis.<br />
 Hendrerit nostrud abigo vicis<br />
 augue validus cui lucidus.</p>">
+		<cfset loc.r = Replace(loc.r, "#Chr(13)#", "", "all")>
 		<cfset assert("htmleditformat(loc.e) eq htmleditformat(loc.r)")>
 	</cffunction>
 
