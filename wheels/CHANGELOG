@@ -12,6 +12,7 @@ Bug Fixes
 * Fixed autoLink() so that it can handle all types of domains - #560 [Tom King, Tony Petruzzi]
 * Fixed so correct defaults are set for valueField and textField on select() when dealing with objects - #445 [Per Djurner]
 * Adapters now only fall backs on native code for getting the last inserted key when Railo/ACF can't do it automatically - #562 [Per Djurner]
+* SimpleFormat produces different output depending on the operating system - #570 [Raul Riera, Tony Petruzzi, Per Djurner]
 
 Other
 =====
