@@ -325,11 +325,8 @@ FROM users u INNER JOIN photogalleries pg ON u.id = pg.userid;
 	)>
 </cfloop>
 
-<cfquery name="del" datasource="wheelstestdb">
-DELETE
-FROM tags
-</cfquery>
-<cfquery name="ins" datasource="wheelstestdb">
-INSERT INTO tags (name, description)
-VALUES ('releases', 'testdesc')
-</cfquery>
+<!--- tags --->
+<cfset model("tag").create(
+	name="releases"
+	,description="testdesc"
+)>
