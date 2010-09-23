@@ -34,28 +34,28 @@
 	<cfargument name="$primaryKey" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
-
 		arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
-
-		if (left(arguments.sql[1], 11) eq "INSERT INTO")
-			arguments.$getid = true;
-
 		loc.returnValue = $performQuery(argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$identitySelect" returntype="struct" access="public" output="false">
-	<cfargument name="queryargs" type="struct" required="true">
+<cffunction name="$identitySelect" returntype="any" access="public" output="false">
+	<cfargument name="queryAttributes" type="struct" required="true">
 	<cfargument name="result" type="struct" required="true">
-	<cfargument name="args" type="struct" required="true">
+	<cfargument name="primaryKey" type="string" required="true">
 	<cfset var loc = {}>
 	<cfset var query = {}>
-	<cfset loc.returnValue = {}>
-
-	<!--- getting the id of the last inserted row is not supported so we need to get it manually --->
-	<cfquery attributeCollection="#arguments.queryargs#">SELECT last_insert_rowid() AS lastId</cfquery>
-	<cfset loc.returnValue.generated_key = query.name.lastId>
-
-	<cfreturn loc.returnValue>
+	<cfset loc.sql = Trim(arguments.result.sql)>
+	<cfif Left(loc.sql, 11) IS "INSERT INTO" AND NOT StructKeyExists(arguments.result, $generatedKey())>
+		<cfset loc.startPar = Find("(", loc.sql) + 1>
+		<cfset loc.endPar = Find(")", loc.sql)>
+		<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
+		<cfif NOT ListFindNoCase(loc.columnList, arguments.primaryKey)>
+			<cfset loc.returnValue = {}>
+			<cfquery attributeCollection="#arguments.queryAttributes#">SELECT last_insert_rowid() AS lastId</cfquery>
+			<cfset loc.returnValue[$generatedKey()] = query.name.lastId>
+			<cfreturn loc.returnValue>
+		</cfif>
+	</cfif>
 </cffunction>

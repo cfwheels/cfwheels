@@ -174,7 +174,6 @@
 		<cfargument name="limit" type="numeric" required="false" default="0">
 		<cfargument name="offset" type="numeric" required="false" default="0">
 		<cfargument name="$primaryKey" type="string" required="false" default="">
-		<cfargument name="$getid" type="boolean" required="false" default="false">
 		<cfscript>
 		var loc = {};
 		var query = {};
@@ -201,7 +200,6 @@
 		StructDelete(loc.orgArgs, "limit", false);
 		StructDelete(loc.orgArgs, "offset", false);
 		StructDelete(loc.orgArgs, "$primaryKey", false);
-		StructDelete(loc.orgArgs, "$getid", false);
 		StructAppend(loc.args, loc.orgArgs, true);
 		</cfscript>
 
@@ -210,12 +208,14 @@
 		<cfscript>
 		if (StructKeyExists(query, "name"))
 			loc.returnValue.query = query.name;
-		// see if we need to retrieve the generated key
-		if (arguments.$getid)
-		{
-			loc.$id = $identitySelect(loc.args, loc.result, arguments);
+
+		// get/set the primary key value if necessary
+		// will be done on insert statement involving auto-incremented primary keys when Railo/ACF cannot retrieve it for us
+		// this happens on non-supported databases (example: H2, SQLite) and drivers (example: jTDS)
+		loc.$id = $identitySelect(queryAttributes=loc.args, result=loc.result, primaryKey=arguments.$primaryKey);
+		if (StructKeyExists(loc, "$id"))
 			StructAppend(loc.result, loc.$id);
-		}
+
 		loc.returnValue.result = loc.result;
 		</cfscript>
 		<cfreturn loc.returnValue>

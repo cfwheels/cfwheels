@@ -47,27 +47,29 @@
 		// oracle doesn't support limit and offset in sql
 		StructDelete(arguments, "limit", false);
 		StructDelete(arguments, "offset", false);
-
-		if (left(arguments.sql[1], 11) eq "INSERT INTO")
-			arguments.$getid = true;
-
 		loc.returnValue = $performQuery(argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$identitySelect" returntype="struct" access="public" output="false">
-	<cfargument name="queryargs" type="struct" required="true">
+<cffunction name="$identitySelect" returntype="any" access="public" output="false">
+	<cfargument name="queryAttributes" type="struct" required="true">
 	<cfargument name="result" type="struct" required="true">
-	<cfargument name="args" type="struct" required="true">
+	<cfargument name="primaryKey" type="string" required="true">
 	<cfset var loc = {}>
 	<cfset var query = {}>
-	<cfset loc.returnValue = {}>
-
-	<!--- the rowid value returned by ColdFusion is not the actual primary key value (unlike the way it works for sql server and mysql) so on insert statements we need to get that value out of the database using the rowid reference --->
-	<cfset loc.tbl = SpanExcluding(Right(arguments.result.sql, Len(arguments.result.sql)-12), " ")>
-	<cfquery attributeCollection="#arguments.queryargs#">SELECT #arguments.args.$primaryKey# FROM #loc.tbl# WHERE ROWID = '#arguments.result.rowid#'</cfquery>
-	<cfset loc.returnValue.rowid = query.name[arguments.args.$primaryKey]>
-
-	<cfreturn loc.returnValue>
+	<cfset loc.sql = Trim(arguments.result.sql)>
+	<cfif Left(loc.sql, 11) IS "INSERT INTO" AND NOT StructKeyExists(arguments.result, $generatedKey())>
+		<cfset loc.startPar = Find("(", loc.sql) + 1>
+		<cfset loc.endPar = Find(")", loc.sql)>
+		<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
+		<cfif NOT ListFindNoCase(loc.columnList, arguments.primaryKey)>
+			<cfset loc.returnValue = {}>
+			<!--- the rowid value returned by Railo/ACF is not the actual primary key value (unlike the way it works for sql server and mysql) so on insert statements we need to get that value out of the database using the rowid reference --->
+			<cfset loc.tbl = SpanExcluding(Right(loc.sql, Len(loc.sql)-12), " ")>
+			<cfquery attributeCollection="#arguments.queryAttributes#">SELECT #arguments.primaryKey# FROM #loc.tbl# WHERE ROWID = '#arguments.result[$generatedKey()]#'</cfquery>
+			<cfset loc.returnValue[$generatedKey()] = query.name[arguments.args.$primaryKey]>
+			<cfreturn loc.returnValue>
+		</cfif>
+	</cfif>
 </cffunction>
