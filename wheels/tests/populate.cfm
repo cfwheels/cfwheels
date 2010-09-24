@@ -2,13 +2,16 @@
 <cfdbinfo name="loc.dbinfo" datasource="wheelstestdb" type="version">
 <cfset loc.db = LCase(Replace(loc.dbinfo.database_productname, " ", "", "all"))>
 
-<!--- handle differences in database for identity inserts --->
+<!--- handle differences in database for identity inserts and engines --->
 <cfif loc.db IS "microsoftsqlserver">
 	<cfset loc.ident = "IDENTITY(1,1)">
+	<cfset loc.engine = "">
 <cfelseif loc.db IS "mysql">
 	<cfset loc.ident = "AUTO_INCREMENT">
+	<cfset loc.engine = "ENGINE=InnoDB">
 <cfelse>
 	<cfset loc.ident = "IDENTITY">
+	<cfset loc.engine = "">
 </cfif>
 
 <!--- get a listing of all the tables and view in the database --->
@@ -45,7 +48,7 @@ CREATE TABLE authors
 	id int NOT NULL #loc.ident# PRIMARY KEY,
 	firstname varchar(100) NOT NULL,
 	lastname varchar(100) NOT NULL
-)
+) #loc.engine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
@@ -55,7 +58,7 @@ CREATE TABLE cities
 	citycode tinyint NOT NULL,
 	name varchar(50) NOT NULL,
 	PRIMARY KEY(countyid,citycode)
-)
+) #loc.engine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
@@ -64,7 +67,7 @@ CREATE TABLE classifications
 	id int NOT NULL #loc.ident# PRIMARY KEY,
 	postid int NOT NULL,
 	tagid int NOT NULL
-)
+) #loc.engine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
@@ -77,7 +80,7 @@ CREATE TABLE comments
 	url varchar(100) NULL,
 	email varchar(100) NULL,
 	createdat datetime NOT NULL
-)
+) #loc.engine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
@@ -87,7 +90,7 @@ CREATE TABLE photogalleries
 	userid int NOT NULL,
 	title varchar(255) NOT NULL,
 	description text NOT NULL
-)
+) #loc.engine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
@@ -98,7 +101,7 @@ CREATE TABLE photogalleryphotos
 	filename varchar(255) NOT NULL,
 	description varchar(255) NOT NULL,
 	filedata <cfif loc.db IS "microsoftsqlserver">image<cfelse>blob</cfif> NULL
-)
+) #loc.engine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
@@ -113,7 +116,7 @@ CREATE TABLE posts
 	deletedat datetime NULL,
 	views int NOT NULL DEFAULT 0,
 	averagerating float NULL
-)
+) #loc.engine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
@@ -123,7 +126,7 @@ CREATE TABLE profiles
 	authorid int NULL,
 	dateofbirth datetime NOT NULL,
 	bio text NULL
-)
+) #loc.engine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
@@ -132,7 +135,7 @@ CREATE TABLE shops
 	shopid char(9) NOT NULL PRIMARY KEY,
 	citycode tinyint NULL,
 	name varchar(80) NOT NULL
-)
+) #loc.engine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
@@ -141,7 +144,7 @@ CREATE TABLE tags
 	id int NOT NULL #loc.ident# PRIMARY KEY,
 	name varchar(50) NOT NULL,
 	description varchar(50) NULL
-)
+) #loc.engine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
@@ -163,7 +166,7 @@ CREATE TABLE users
 	birthdayyear int NULL,
 	birthtime datetime NULL DEFAULT '2000-01-01 18:26:08.690',
 	isactive bit NULL
-)
+) #loc.engine#
 </cfquery>
 
 
