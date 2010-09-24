@@ -121,6 +121,12 @@
 	<cfscript>
 		var loc = {};
 		$args(name="imageTag", reserved="src", args=arguments);
+		// ugly fix due to the fact that id can't be passed along to cfinvoke
+		if (StructKeyExists(arguments, "id"))
+		{
+			arguments.wheelsId = arguments.id;
+			StructDelete(arguments, "id");
+		}
 		if (application.wheels.cacheImages)
 		{
 			loc.category = "image";
@@ -132,24 +138,15 @@
 			loc.executeArgs = arguments;
 			loc.executeArgs.category = loc.category;
 			loc.executeArgs.key = loc.key;
-
-			// ugly fix due to the fact that id can't be passed along to cfinvoke
-			if (StructKeyExists(arguments, "id"))
-			{
-				loc.executeArgs.wheelsId = arguments.id;
-				StructDelete(arguments, "id");
-			}
-
 			loc.returnValue = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$addImageTagToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
-
-			// ugly fix continued
-			if (StructKeyExists(loc.executeArgs, "wheelsId"))
-				loc.returnValue = ReplaceNoCase(loc.returnValue, "wheelsId", "id");
 		}
 		else
 		{
 			loc.returnValue = $imageTag(argumentCollection=arguments);
 		}
+		// ugly fix continued
+		if (StructKeyExists(arguments, "wheelsId"))
+			loc.returnValue = ReplaceNoCase(loc.returnValue, "wheelsId", "id");
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
