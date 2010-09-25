@@ -22,9 +22,13 @@
 <cfset loc.tables = "authors,cities,classifications,comments,photogalleries,photogalleryphotos,posts,profiles,shops,tags,users">
 <cfloop list="#loc.tables#" index="loc.i">
 	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
-		<cfquery name="loc.query" datasource="wheelstestdb">
-		DROP TABLE #loc.i#
-		</cfquery>
+		<cftry>
+			<cfquery name="loc.query" datasource="wheelstestdb">
+			DROP TABLE #loc.i#
+			</cfquery>
+			<cfcatch>
+			</cfcatch>
+		</cftry>
 	</cfif>
 </cfloop>
 
@@ -32,9 +36,13 @@
 <cfset loc.views = "userphotos">
 <cfloop list="#loc.views#" index="loc.i">
 	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
-		<cfquery name="loc.query" datasource="wheelstestdb">
-		DROP VIEW #loc.i#
-		</cfquery>
+		<cftry>
+			<cfquery name="loc.query" datasource="wheelstestdb">
+			DROP VIEW #loc.i#
+			</cfquery>
+			<cfcatch>
+			</cfcatch>
+		</cftry>
 	</cfif>
 </cfloop>
 
