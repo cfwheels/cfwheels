@@ -69,7 +69,7 @@
  	<cffunction name="test_findAll">
 		<cfset loc.q = loc.user.findAll()>
 		<cfset assert('loc.q.recordcount eq 5')>
-		<cfset loc.q = loc.user.findAll(where="lastname = 'Petruzzi' OR lastname = 'peters'", order="lastname")>
+		<cfset loc.q = loc.user.findAll(where="lastname = 'Petruzzi' OR lastname = 'Peters'", order="lastname")>
 		<cfset assert('loc.q.recordcount eq 2')>
 		<cfset assert('valuelist(loc.q.lastname) eq "peters,Petruzzi"')>
 	</cffunction>
