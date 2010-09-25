@@ -39,14 +39,14 @@
 	</cffunction>
 
 	<cffunction name="test_first_non_numeric_property_default_text_field_on_query">
-		<cfset loc.users = loc.user.findAll(returnAs="query")>
+		<cfset loc.users = loc.user.findAll(returnAs="query", order="id")>
 	    <cfset loc.r = loc.controller.select(objectName="user", property="firstname", options=loc.users, label=false)>
 	    <cfset loc.e = '<select id="user-firstname" name="user[firstname]"><option value="#loc.users["id"][1]#">tonyp</option><option value="#loc.users["id"][2]#">chrisp</option><option value="#loc.users["id"][3]#">perd</option><option value="#loc.users["id"][4]#">raulr</option><option value="#loc.users["id"][5]#">joeb</option></select>'>
 	    <cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_first_non_numeric_property_default_text_field_on_objects">
-		<cfset loc.users = loc.user.findAll(returnAs="objects")>
+		<cfset loc.users = loc.user.findAll(returnAs="objects", order="id")>
 	    <cfset loc.r = loc.controller.select(objectName="user", property="firstname", options=loc.users, label=false)>
 	    <cfset loc.e = '<select id="user-firstname" name="user[firstname]"><option value="#loc.users[1].id#">tonyp</option><option value="#loc.users[2].id#">chrisp</option><option value="#loc.users[3].id#">perd</option><option value="#loc.users[4].id#">raulr</option><option value="#loc.users[5].id#">joeb</option></select>'>
 	    <cfset assert('loc.e eq loc.r')>

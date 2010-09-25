@@ -17,7 +17,7 @@
 	</cffunction>
 
 	<cffunction name="test_allChanges">
-		<cfset loc.author = model("author").findOne()>
+		<cfset loc.author = model("author").findOne(order="id")>
 		<cfset loc.author.firstName = "a">
 		<cfset loc.author.lastName = "b">
 		<cfset loc.compareWith.firstName.changedFrom = "Per">
@@ -127,7 +127,7 @@
 	</cffunction>
 
 	<cffunction name="test_date_compare">
-		<cfset loc.user = model("user").findOne(username = "tonyp")>
+		<cfset loc.user = model("user").findOne(where="username = 'tonyp'")>
 		<cfset loc.user.birthday = "11/01/1975 12:00 AM">
 		<cfset loc.e = loc.user.hasChanged("birthday")>
 		<cfset assert('loc.e eq false')>
