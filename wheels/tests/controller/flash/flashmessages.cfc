@@ -1,5 +1,5 @@
 <cfcomponent extends="wheelsMapping.test">
-	
+
 	<cfinclude template="setup.cfm">
 
 	<cffunction name="test_normal_output">
@@ -7,7 +7,7 @@
 		<cfset controller.$setFlashStorage("cookie")>
 		<cfset run_normal_output()>
 	</cffunction>
-	
+
 	<cffunction name="run_normal_output">
 		<cfset controller.flashInsert(success="Congrats!")>
 		<cfset controller.flashInsert(alert="Error!")>
@@ -20,7 +20,7 @@
 		<cfset controller.$setFlashStorage("cookie")>
 		<cfset run_specific_key_only()>
 	</cffunction>
-	
+
 	<cffunction name="run_specific_key_only">
 		<cfset controller.flashInsert(success="Congrats!")>
 		<cfset controller.flashInsert(alert="Error!")>
@@ -33,7 +33,7 @@
 		<cfset controller.$setFlashStorage("cookie")>
 		<cfset run_passing_through_id()>
 	</cffunction>
-	
+
 	<cffunction name="run_passing_through_id">
 		<cfset controller.flashInsert(success="Congrats!")>
 		<cfset result = controller.flashMessages(id="my-id")>
@@ -45,7 +45,7 @@
 		<cfset controller.$setFlashStorage("cookie")>
 		<cfset run_empty_flash()>
 	</cffunction>
-	
+
 	<cffunction name="run_empty_flash">
 		<cfset result = controller.flashMessages()>
 		<cfset assert("result IS ''")>
@@ -56,7 +56,7 @@
 		<cfset controller.$setFlashStorage("cookie")>
 		<cfset run_empty_flash_includeEmptyContainer()>
 	</cffunction>
-	
+
 	<cffunction name="run_empty_flash_includeEmptyContainer">
 		<cfset result = controller.flashMessages(includeEmptyContainer="true")>
 		<cfset assert("result IS '<div class=""flashMessages""></div>'")>
@@ -67,7 +67,7 @@
 		<cfset controller.$setFlashStorage("cookie")>
 		<cfset run_skipping_complex_values()>
 	</cffunction>
-	
+
 	<cffunction name="run_skipping_complex_values">
 		<cfset controller.flashInsert(success="Congrats!")>
 		<cfset arr = []>
@@ -82,7 +82,7 @@
 		<cfset controller.$setFlashStorage("cookie")>
 		<cfset run_control_order_via_keys_argument()>
 	</cffunction>
-	
+
 	<cffunction name="run_control_order_via_keys_argument">
 		<cfset controller.flashInsert(success="Congrats!")>
 		<cfset controller.flashInsert(alert="Error!")>
@@ -97,11 +97,15 @@
 		<cfset controller.$setFlashStorage("cookie")>
 		<cfset run_casing_of_class_attribute()>
 	</cffunction>
-	
+
 	<cffunction name="run_casing_of_class_attribute">
  		<cfset controller.flashInsert(something="")>
 		<cfset loc.r = controller.flashMessages()>
-		<cfset loc.e = 'class="somethingMessage"'>
+		<cfif application.wheels.serverName eq "Railo">
+			<cfset loc.e = 'class="SOMETHINGMessage"'>
+		<cfelse>
+			<cfset loc.e = 'class="somethingMessage"'>
+		</cfif>
 		<cfset assert('Find(loc.e, loc.r)')>
 		<cfset controller.flashInsert(someThing="")>
 	</cffunction>
@@ -111,7 +115,7 @@
 		<cfset controller.$setFlashStorage("cookie")>
 		<cfset run_casing_of_class_attribute_mixed()>
 	</cffunction>
-	
+
 	<cffunction name="run_casing_of_class_attribute_mixed">
 		<!---
 		https://jira.jboss.org/browse/RAILO-933
@@ -121,7 +125,12 @@
 		 --->
 		<cfset controller.flashInsert(someThing="")>
 		<cfset loc.r = controller.flashMessages()>
-		<cfset loc.e = 'class="someThingMessage"'>
+		<cfset loc.r = controller.flashMessages()>
+		<cfif application.wheels.serverName eq "Railo">
+			<cfset loc.e = 'class="SOMETHINGMessage"'>
+		<cfelse>
+			<cfset loc.e = 'class="someThingMessage"'>
+		</cfif>
 		<cfset assert('Find(loc.e, loc.r)')>
 	</cffunction>
 
@@ -130,7 +139,7 @@
 		<cfset controller.$setFlashStorage("cookie")>
 		<cfset run_casing_of_class_attribute_upper()>
 	</cffunction>
-	
+
 	<cffunction name="run_casing_of_class_attribute_upper">
 		<cfset controller.flashInsert(SOMETHING="")>
 		<cfset loc.r = controller.flashMessages()>
@@ -143,12 +152,16 @@
 		<cfset controller.$setFlashStorage("cookie")>
 		<cfset run_setting_class()>
 	</cffunction>
-	
+
 	<cffunction name="run_setting_class">
 		<cfset controller.flashInsert(success="test")>
 		<cfset loc.r = controller.flashMessages(class="custom-class")>
 		<cfset loc.e = 'class="custom-class"'>
-		<cfset loc.e2 = 'class="successMessage"'>
+		<cfif application.wheels.serverName eq "Railo">
+			<cfset loc.e2 = 'class="SUCCESSMessage"'>
+		<cfelse>
+			<cfset loc.e2 = 'class="successMessage"'>
+		</cfif>
 		<cfset assert('Find(loc.e, loc.r) AND Find(loc.e2, loc.r)')>
 	</cffunction>
 
