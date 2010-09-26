@@ -2,8 +2,7 @@
 
 	<cffunction name="setup">
 		<cfset loc.controller = $controller(name="dummy")>
-		<cfset loc.args= {}>
-		<cfset loc.args.objectName = "user">
+		<cfset loc.args = {}>
 		<cfset loc.args.label = false>
 	</cffunction>
 
