@@ -163,14 +163,14 @@
 		</cfoutput>
 		<!---
 			Generates this (sorted alphabetically):
-			<div class="flash-messages">
-				<p class="alert-message">
+			<div class="flashMessages">
+				<p class="alertMessage">
 					Don''t forget to tweet about this post!
 				</p>
-				<p class="error-message">
+				<p class="errorMessage">
 					This is an error message.
 				</p>
-				<p class="success-message">
+				<p class="successMessage">
 					Your post was successfully submitted.
 				</p>
 			</div>
@@ -182,8 +182,8 @@
 		</cfoutput>
 		<!---
 			Generates this:
-			<div class="flash-message">
-				<p class="success-message">
+			<div class="flashMessage">
+				<p class="successMessage">
 					Your post was successfully submitted.
 				</p>
 			</div>
@@ -195,11 +195,11 @@
 		</cfoutput>
 		<!---
 			Generates this (sorted alphabetically):
-			<div class="flash-messages">
-				<p class="success-message">
+			<div class="flashMessages">
+				<p class="successMessage">
 					Your post was successfully submitted.
 				</p>
-				<p class="alert-message">
+				<p class="alertMessage">
 					Don''t forget to tweet about this post!
 				</p>
 			</div>
@@ -209,6 +209,7 @@
 	<cfargument name="keys" type="string" required="false" hint="The key (or list of keys) to show the value for. You can also use the `key` argument instead for better readability when accessing a single key.">
 	<cfargument name="class" type="string" required="false" hint="HTML `class` to set on the `div` element that contains the messages.">
 	<cfargument name="includeEmptyContainer" type="boolean" required="false" hint="Includes the DIV container even if the flash is empty.">
+	<cfargument name="lowerCaseDynamicClassValues" type="boolean" required="false" hint="Outputs all class attribute values in lower case (except the main one).">
 	<cfscript>
 		// Initialization
 		var loc = {};
@@ -236,7 +237,10 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(loc.flashKeys, loc.i);
-			loc.attributes = {class=loc.item & "Message"};
+			if (arguments.lowerCaseDynamicClassValues)
+				loc.attributes = {class=LCase(loc.item) & "Message"};
+			else
+				loc.attributes = {class=loc.item & "Message"};
 			if (!StructKeyExists(arguments, "key") || arguments.key == loc.item)
 			{
 				loc.content = loc.$flash[loc.item];
@@ -249,7 +253,7 @@
 
 		if (Len(loc.listItems) || arguments.includeEmptyContainer)
 		{
-			loc.returnValue = $element(name="div", skip="key,keys,includeEmptyContainer", content=loc.listItems, attributes=arguments);
+			loc.returnValue = $element(name="div", skip="key,keys,includeEmptyContainer,lowerCaseDynamicClassValues", content=loc.listItems, attributes=arguments);
 		}
 		return loc.returnValue;
 	</cfscript>
