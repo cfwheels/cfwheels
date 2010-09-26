@@ -4,7 +4,7 @@
 	examples='
 		<!--- Add the `js` format --->
 		<cfset addFormat(extension="js", mimeType="text/javascript")>
-		
+
 		<!--- Add the `ppt` and `pptx` formats --->
 		<cfset addFormat(extension="ppt", mimeType="application/vnd.ms-powerpoint")>
 		<cfset addFormat(extension="pptx", mimeType="application/vnd.ms-powerpoint")>
@@ -20,12 +20,12 @@
 	'
 		<!--- Example 1: Adds a route which will invoke the `profile` action on the `user` controller with `params.userName` set when the URL matches the `pattern` argument --->
 		<cfset addRoute(name="userProfile", pattern="user/[username]", controller="user", action="profile")>
-		
+
 		<!--- Example 2: Category/product URLs. Note the order of precedence is such that the more specific route should be defined first so Wheels will fall back to the less-specific version if it''s not found --->
 		<cfset addRoute(name="product", pattern="products/[categorySlug]/[productSlug]", controller="products", action="product")>
 		<cfset addRoute(name="productCategory", pattern="products/[categorySlug]", controller="products", action="category")>
 		<cfset addRoute(name="products", pattern="products", controller="products", action="index")>
-		
+
 		<!--- Example 3: Change the `home` route. This should be listed last because it is least specific --->
 		<cfset addRoute(name="home", pattern="", controller="main", action="index")>
 	'
@@ -82,10 +82,10 @@
 	'
 		<!--- Example 1: Set the `URLRewriting` setting to `Partial` --->
 		<cfset set(URLRewriting="Partial")>
-		
+
 		<!--- Example 2: Set default values for the arguments in the `buttonTo` view helper. This works for the majority of Wheels functions/arguments. --->
 		<cfset set(functionName="buttonTo", onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable="")>
-		
+
 		<!--- Example 3: Set the default values for a form helper to get the form marked up to your preferences --->
 		<cfset set(functionName="textField", labelPlacement="before", prependToLabel="<div>", append="</div>", appendToLabel="<br />")>
 	'
@@ -238,7 +238,7 @@
 
 		<!--- Create a URL with an anchor set on it --->
 		##URLFor(action="comments", anchor="comment10")##
-		
+
 		<!--- Create a URL based on a route called `products`, which expects params for `categorySlug` and `productSlug` --->
 		##URLFor(route="product", categorySlug="accessories", productSlug="battery-charger")##
 	'
@@ -407,13 +407,26 @@
 	'
 		<!--- Humanize a string, will result in "Wheels Is A Framework" --->
 		##humanize("wheelsIsAFramework")##
+
+		<!--- Humanize a string, force wheels to replace "Cfml" with "CFML" --->
+		##humanize("wheelsIsACFMLFramework", "CFML")##
 	'
 	categories="global,string" chapters="miscellaneous-helpers" functions="capitalize,pluralize,singularize">
 	<cfargument name="text" type="string" required="true" hint="Text to humanize.">
+	<cfargument name="except" type="string" required="false" default="" hint="a list of strings (space separated) to replace within the output.">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = REReplace(arguments.text, "([[:upper:]])", " \1", "all"); // adds a space before every capitalized word
-		loc.returnValue = REReplace(loc.returnValue, "([[:upper:]]) ([[:upper:]]) ", "\1\2", "all"); // fixes abbreviations so they form a word again (example: aURLVariable)
+		loc.returnValue = REReplace(loc.returnValue, "([[:upper:]]) ([[:upper:]])(?:\s|\b)", "\1\2", "all"); // fixes abbreviations so they form a word again (example: aURLVariable)
+		if (Len(arguments.except))
+		{
+			loc.iEnd = ListLen(arguments.except, " ");
+			for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+			{
+				loc.a = ListGetAt(arguments.except, loc.i);
+				loc.returnValue = ReReplaceNoCase(loc.returnValue, "#loc.a#(?:\b)", "#loc.a#", "all");
+			}
+		}
 		loc.returnValue = Trim(capitalize(loc.returnValue)); // capitalize the first letter and trim final result (which removes the leading space that happens if the string starts with an upper case character)
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -465,7 +478,7 @@
 	'
 		<!--- Get the internally-stored MIME type for `xls` --->
 		<cfset mimeType = mimeTypes("xls")>
-		
+
 		<!--- Get the internally-stored MIME type for a dynamic value. Fall back to a MIME type of `text/plain` if it''s not found --->
 		<cfset mimeType = mimeTypes(extension=params.type, fallback="text/plain")>
 	'
