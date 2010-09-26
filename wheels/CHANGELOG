@@ -3,6 +3,7 @@ WHEELS VERSION 1.1 BETA 2
 Changes
 =======
 * Removed the `afterFindCallbackLegacySupport` setting and made the new way introduced in beta 1 the only way - #580 [Per Djurner]
+* Changed "class" attribute on flashMessages(), errorMessageOn() and errorMessagesFor() to be camelCased - #554 [Per Djurner]
 
 Bug Fixes
 =========
@@ -14,6 +15,9 @@ Bug Fixes
 * Adapters now only fall backs on native code for getting the last inserted key when Railo/ACF can't do it automatically - #562 [Per Djurner]
 * simpleFormat() produces different output depending on the operating system - #570 [Raul Riera, Tony Petruzzi, Per Djurner]
 * imageTag() was outputting the "id" attribute twice when caching was on - #582 [Andy Bellenie, Per Djurner]
+* Changed to using SCOPE_IDENTITY() as fallback for SQL Server - [Tony Petruzzi, Per Djurner]
+* Fixed overwrite problem when using composite keys - #587 [Andy Bellenie, Per Djurner]
+* Fixed bug with upper case input in humanize() and allow exception list for when abbreviations aren't caught - #587 [Andy Bellenie, Tony Petruzzi, Per Djurner]
 
 Other
 =====
