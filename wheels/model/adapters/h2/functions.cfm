@@ -58,7 +58,7 @@
 		<cfset loc.startPar = Find("(", loc.sql) + 1>
 		<cfset loc.endPar = Find(")", loc.sql)>
 		<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
-		<cfif NOT ListFindNoCase(loc.columnList, arguments.primaryKey)>
+		<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
 			<cfset loc.returnValue = {}>
 			<cfquery attributeCollection="#arguments.queryAttributes#">SELECT LAST_INSERT_ID() AS lastId</cfquery>
 			<cfset loc.returnValue[$generatedKey()] = query.name.lastId>

@@ -20,4 +20,12 @@
 		</cftransaction>
 	</cffunction>
 
+	<cffunction name="test_composite_key_values_should_be_set_when_they_both_exist">
+		<cftransaction>
+			<cfset results.city = model("city").create(citycode=99, countyid="z", name="test")>
+			<cfset assert("results.city.citycode IS 99 AND results.city.countyid IS 'z'")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+	</cffunction>
+
 </cfcomponent>

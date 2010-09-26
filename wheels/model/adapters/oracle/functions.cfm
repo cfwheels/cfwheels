@@ -63,7 +63,7 @@
 		<cfset loc.startPar = Find("(", loc.sql) + 1>
 		<cfset loc.endPar = Find(")", loc.sql)>
 		<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
-		<cfif NOT ListFindNoCase(loc.columnList, arguments.primaryKey)>
+		<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
 			<cfset loc.returnValue = {}>
 			<!--- the rowid value returned by Railo/ACF is not the actual primary key value (unlike the way it works for sql server and mysql) so on insert statements we need to get that value out of the database using the rowid reference --->
 			<cfset loc.tbl = SpanExcluding(Right(loc.sql, Len(loc.sql)-12), " ")>
