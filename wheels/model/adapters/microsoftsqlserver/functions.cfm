@@ -153,7 +153,7 @@
 		<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
 		<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
 			<cfset loc.returnValue = {}>
-			<cfquery attributeCollection="#arguments.queryAttributes#">SELECT @@identity AS lastId</cfquery>
+			<cfquery attributeCollection="#arguments.queryAttributes#">SELECT SCOPE_IDENTITY() AS lastId</cfquery>
 			<cfset loc.returnValue[$generatedKey()] = query.name.lastId>
 			<cfreturn loc.returnValue>
 		</cfif>
