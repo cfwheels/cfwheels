@@ -84,30 +84,9 @@
 		<cfset assert("NOT Compare(loc.result, 'errormessage')")>
 	</cffunction>	
 
-	<cffunction name="test_humanize_normal_variable">
-		<cfset loc.result = humanize("wheelsIsAFramework")>
-		<cfset assert("NOT Compare(loc.result, 'Wheels Is A Framework')")>
-	</cffunction>
-
-	<cffunction name="test_humanize_variable_starting_with_uppercase">
-		<cfset loc.result = humanize("WheelsIsAFramework")>
-		<cfset assert("NOT Compare(loc.result, 'Wheels Is A Framework')")>
-	</cffunction>
-
-	<cffunction name="test_humanize_variable_with_abbreviation">
-		<cfset loc.result = humanize("aURLVariable")>
-		<cfset assert("NOT Compare(loc.result, 'A URL Variable')")>
-	</cffunction>
-
-	<cffunction name="test_humanize_variable_with_abbreviation_starting_with_uppercase">
-		<cfset loc.result = humanize("URLVariable")>
-		<cfset assert("NOT Compare(loc.result, 'URL Variable')")>
-	</cffunction>
-
 	<cffunction name="test_singularize_of_address">
 		<cfset loc.result = singularize("address")>
 		<cfset assert("NOT Compare(loc.result, 'address')")>
 	</cffunction>
-
 
 </cfcomponent>
