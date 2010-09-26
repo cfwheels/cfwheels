@@ -7,7 +7,7 @@
 	<cffunction name="test_using_method">
 		<cfset loc.args = {template="controller_layout_test"}>
 		<cfset params = {controller="dummy", action="index"}>
-		<cfset controller = $controller(name="dummy").$createControllerObject(params)>
+		<cfset controller = $controller(name="dummy").new(params)>
 		<cfset controller.controller_layout_test = controller_layout_test>
 		<cfset controller.usesLayout(argumentCollection=loc.args)>
 
@@ -35,7 +35,7 @@
 		<cfset request.cgi.http_x_requested_with = "XMLHTTPRequest">
 		<cfset loc.args = {template="controller_layout_test"}>
 		<cfset params = {controller="dummy", action="index"}>
-		<cfset controller = $controller(name="dummy").$createControllerObject(params)>
+		<cfset controller = $controller(name="dummy").new(params)>
 		<cfset controller.controller_layout_test = controller_layout_test>
 		<cfset controller.usesLayout(argumentCollection=loc.args)>
 
@@ -48,7 +48,7 @@
 		<cfset request.cgi.http_x_requested_with = "XMLHTTPRequest">
 		<cfset loc.args = {template="controller_layout_test", ajax="controller_layout_test_ajax"}>
 		<cfset params = {controller="dummy", action="index"}>
-		<cfset controller = $controller(name="dummy").$createControllerObject(params)>
+		<cfset controller = $controller(name="dummy").new(params)>
 		<cfset controller.controller_layout_test = controller_layout_test>
 		<cfset controller.controller_layout_test_ajax = controller_layout_test_ajax>
 		<cfset controller.usesLayout(argumentCollection=loc.args)>
@@ -76,7 +76,7 @@
 	<cffunction name="test_should_respect_exceptions">
 		<cfset loc.args = {template="mylayout", except="index"}>
 		<cfset params = {controller="dummy", action="index"}>
-		<cfset controller = $controller(name="dummy").$createControllerObject(params)>
+		<cfset controller = $controller(name="dummy").new(params)>
 		<cfset controller.usesLayout(argumentCollection=loc.args)>
 
 		<cfset loc.e = "mylayout">
@@ -99,7 +99,7 @@
 		<cfset request.cgi.http_x_requested_with = "XMLHTTPRequest">
 		<cfset loc.args = {template="mylayout", ajax="mylayout_ajax", except="index"}>
 		<cfset params = {controller="dummy", action="index"}>
-		<cfset controller = $controller(name="dummy").$createControllerObject(params)>
+		<cfset controller = $controller(name="dummy").new(params)>
 		<cfset controller.usesLayout(argumentCollection=loc.args)>
 
 		<cfset loc.e = "mylayout_ajax">
@@ -121,7 +121,7 @@
 	<cffunction name="test_should_respect_only">
 		<cfset loc.args = {template="mylayout", only="index"}>
 		<cfset params = {controller="dummy", action="index"}>
-		<cfset controller = $controller(name="dummy").$createControllerObject(params)>
+		<cfset controller = $controller(name="dummy").new(params)>
 		<cfset controller.usesLayout(argumentCollection=loc.args)>
 
 		<cfset loc.e = "true">
@@ -144,7 +144,7 @@
 		<cfset request.cgi.http_x_requested_with = "XMLHTTPRequest">
 		<cfset loc.args = {template="mylayout", ajax="mylayout_ajax", only="index"}>
 		<cfset params = {controller="dummy", action="index"}>
-		<cfset controller = $controller(name="dummy").$createControllerObject(params)>
+		<cfset controller = $controller(name="dummy").new(params)>
 		<cfset controller.usesLayout(argumentCollection=loc.args)>
 
 		<cfset loc.e = "true">

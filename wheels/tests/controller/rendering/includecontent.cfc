@@ -2,7 +2,7 @@
 
 	<cffunction name="setup">
 		<cfset loc.params = {controller="dummy", action="dummy"}>
-		<cfset loc.controller = $controller(name="dummy").$createControllerObject(loc.params)>
+		<cfset loc.controller = $controller(name="dummy").new(loc.params)>
 	</cffunction>
 
 	<cffunction name="test_contentFor_and_includeContent_assigning_section">

@@ -8,7 +8,7 @@
 		<cfset application.wheels.viewPath = "wheels/tests/_assets/views">
 		<cfset application.wheels.existingHelperFiles = "test">
 		<cfset params = {controller="test", action="helperCaller"}>
-		<cfset controller = $controller(name="test").$createControllerObject(params)>
+		<cfset controller = $controller(name="test").new(params)>
 	</cffunction>
 	
 	<cffunction name="test_inclusion_of_global_helper_file">

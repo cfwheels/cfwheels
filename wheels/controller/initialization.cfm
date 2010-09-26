@@ -32,7 +32,7 @@
 	<cfreturn this>
 </cffunction>
 
-<cffunction name="$createControllerObject" returntype="any" access="public" output="false">
+<cffunction name="new" returntype="any" access="public" output="false">
 	<cfargument name="params" type="struct" required="true">
 	<cfscript>
 		var loc = {};

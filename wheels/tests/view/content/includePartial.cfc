@@ -6,7 +6,7 @@
 	</cffunction>
 
 	<cfset params = {controller="test", action="test"}>
-	<cfset controller = $controller(name="test").$createControllerObject(params)>
+	<cfset controller = $controller(name="test").new(params)>
 
 	<cffunction name="test_including_partial">
 		<cfsavecontent variable="result"><cfoutput>#controller.includePartial(partial="partialTemplate")#</cfoutput></cfsavecontent>

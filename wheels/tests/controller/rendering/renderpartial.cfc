@@ -3,7 +3,7 @@
 	<cfinclude template="setupAndTeardown.cfm">
 
 	<cfset params = {controller="test", action="test"}>	
-	<cfset controller = $controller(name="test").$createControllerObject(params)>
+	<cfset controller = $controller(name="test").new(params)>
 
 	<cffunction name="test_rendering_partial">
 		<cfset result = controller.renderPartial(partial="partialTemplate")>

@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cfset params = {controller="test", action="test"}>
-	<cfset controller = $controller(name="dummy").$createControllerObject(params)>
+	<cfset controller = $controller(name="dummy").new(params)>
 	
 	<cffunction name="setup">
 		<cfset args = StructNew()>

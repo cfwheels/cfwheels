@@ -3,7 +3,7 @@
 	<cfset params = {controller="test", action="testRedirect"}>
 
 	<cffunction name="setup">
-		<cfset controller = $controller(name="test").$createControllerObject(params)>
+		<cfset controller = $controller(name="test").new(params)>
 		<cfset copies.request.cgi = request.cgi>
 		<cfset copies.application.wheels.viewPath = application.wheels.viewPath>
 	</cffunction>

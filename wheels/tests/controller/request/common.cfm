@@ -1,5 +1,5 @@
 <cfset params = {controller="dummy", action="dummy"}>
-<cfset controller = $controller(name="dummy").$createControllerObject(params)>
+<cfset controller = $controller(name="dummy").new(params)>
 
 <cffunction name="setup">
 	<cfset $$oldCGIScope = request.cgi>

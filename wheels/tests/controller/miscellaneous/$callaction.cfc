@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cfset params = {controller="test", action="test"}>
-	<cfset controller = $controller(name="test").$createControllerObject(params)>
+	<cfset controller = $controller(name="test").new(params)>
 
 	<cffunction name="setup">
 		<cfset oldViewPath = application.wheels.viewPath>

@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cfset params = {controller="dummy", action="dummy"}>
-	<cfset controller = $controller(name="dummy").$createControllerObject(params)>
+	<cfset controller = $controller(name="dummy").new(params)>
 	<cfset controller.before1 = before1>
 	<cfset controller.before2 = before2>
 	<cfset controller.before3 = before3>
