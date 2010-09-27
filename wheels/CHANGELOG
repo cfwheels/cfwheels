@@ -4,10 +4,10 @@ Changes
 =======
 * Removed the `afterFindCallbackLegacySupport` setting and made the new way introduced in beta 1 the only way - #580 [Per Djurner]
 * Changed "class" attribute on flashMessages(), errorMessageOn() and errorMessagesFor() to be camelCased - #554 [Per Djurner]
+* Full support for the H2 database - [Per Djurner]
 
 Bug Fixes
 =========
-* Fixed so the information_schema info in the H2 database does not clash with the public tables - #573 [Per Djurner]
 * Corrected deobfuscation logic so that it... umm... works :) - #577 [Per Djurner, James Gibson]
 * Fix for obfuscateParam() related to leading zeros in integer values on Railo - #578 [Tony Petruzzi]
 * Fixed autoLink() so that it can handle all types of domains - #560 [Tom King, Tony Petruzzi]
@@ -35,8 +35,6 @@ Changes
 * Adobe ColdFusion 8.0.1 or Railo 3.1.2.020 is required
 
 [Models]
-
-	* Support for H2 databases - [Per Djurner]
 
 	* DRYed up afterFind callback creation - [Tony Petruzzi]
 	
