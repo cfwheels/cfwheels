@@ -3,11 +3,11 @@
 	<cfinclude template="setupAndTeardown.cfm">
 
 	<cfset params = {controller="dummy", action="dummy"}>
-	<cfset controller = $controller(name="dummy").new(params)>
+	<cfset loc.controller = controller(name="dummy").new(params)>
 
 	<cffunction name="test_render_nothing">
-		<cfset controller.renderNothing()>
-		<cfset assert("controller.response() IS ''")>
+		<cfset loc.controller.renderNothing()>
+		<cfset assert("loc.controller.response() IS ''")>
 	</cffunction>
 
 </cfcomponent>

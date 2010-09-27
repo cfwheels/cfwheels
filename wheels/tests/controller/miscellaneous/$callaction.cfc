@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cfset params = {controller="test", action="test"}>
-	<cfset controller = $controller(name="test").new(params)>
+	<cfset loc.controller = controller(name="test").new(params)>
 
 	<cffunction name="setup">
 		<cfset oldViewPath = application.wheels.viewPath>
@@ -13,13 +13,13 @@
 	</cffunction>
 
 	<cffunction name="test_setting_variable_for_view">
-		<cfset controller.$callAction(action="test")>
-		<cfset assert("controller.response() Contains 'variableForViewContent'")>
+		<cfset loc.controller.$callAction(action="test")>
+		<cfset assert("loc.controller.response() Contains 'variableForViewContent'")>
 	</cffunction>
 
 	<cffunction name="test_implicitly_calling_render_page">
-		<cfset controller.$callAction(action="test")>
-		<cfset assert("controller.response() Contains 'view template content'")>
+		<cfset loc.controller.$callAction(action="test")>
+		<cfset assert("loc.controller.response() Contains 'view template content'")>
 	</cffunction>
 
 

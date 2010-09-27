@@ -2,7 +2,7 @@
 
 	<cffunction name="setup">
 		<cfscript>
-			loc.controller = $controller(name="dummy");
+			loc.controller = controller(name="dummy");
 			application.wheels.assetQueryString = true;
 		</cfscript>
 	</cffunction>

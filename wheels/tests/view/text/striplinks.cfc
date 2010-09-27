@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="setup">
-		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.controller = controller(name="dummy")>
 		<cfset loc.args = {}>
 		<cfset loc.args.html = 'this <a href="http://www.google.com" title="google">is</a> a <a href="mailto:someone@example.com" title="invalid email">test</a> to <a name="anchortag">see</a> if this works or not.'>
 	</cffunction>

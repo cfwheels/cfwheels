@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
-		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.controller = controller(name="dummy")>
 		<cfset loc.imagePath = application.wheels.webPath & application.wheels.imagePath>
 	</cffunction>
 

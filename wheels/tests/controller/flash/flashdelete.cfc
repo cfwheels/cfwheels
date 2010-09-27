@@ -9,8 +9,8 @@
 	</cffunction>
 
 	<cffunction name="run_flashDelete_invalid">
-		<cfset controller.flashClear()>
-		<cfset result = controller.flashDelete(key="success")>
+		<cfset loc.controller.flashClear()>
+		<cfset result = loc.controller.flashDelete(key="success")>
 		<cfset assert("result IS false")>
 	</cffunction>
 	
@@ -21,9 +21,9 @@
 	</cffunction>
 
 	<cffunction name="run_flashDelete_valid">
-		<cfset controller.flashClear()>
-		<cfset controller.flashInsert(success="Congrats!")>
-		<cfset result = controller.flashDelete(key="success")>
+		<cfset loc.controller.flashClear()>
+		<cfset loc.controller.flashInsert(success="Congrats!")>
+		<cfset result = loc.controller.flashDelete(key="success")>
 		<cfset assert("result IS true")>
 	</cffunction>
 	

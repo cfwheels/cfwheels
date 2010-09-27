@@ -4,14 +4,14 @@
 
 	<cffunction name="test_flashClear_valid">
 		<cfset run_flashClear_valid()>
-		<cfset controller.$setFlashStorage("cookie")>
+		<cfset loc.controller.$setFlashStorage("cookie")>
 		<cfset run_flashClear_valid()>
 	</cffunction>
 	
 	<cffunction name="run_flashClear_valid">
-		<cfset controller.flashInsert(success="Congrats!")>
-		<cfset controller.flashClear()>
-		<cfset result = StructKeyList(controller.flash())>
+		<cfset loc.controller.flashInsert(success="Congrats!")>
+		<cfset loc.controller.flashClear()>
+		<cfset result = StructKeyList(loc.controller.flash())>
 		<cfset assert("result IS ''")>
 	</cffunction>
 

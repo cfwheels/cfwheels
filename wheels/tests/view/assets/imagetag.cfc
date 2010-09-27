@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="setup">
-		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.controller = controller(name="dummy")>
 		<cfset loc.args = {}>
 		<cfset loc.args.source = "../wheels/tests/_assets/files/cfwheels-logo.png">
 		<cfset loc.args.alt = "wheelstestlogo">

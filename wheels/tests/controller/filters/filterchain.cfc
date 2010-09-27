@@ -1,24 +1,24 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cfset params = {controller="dummy", action="dummy"}>
-	<cfset controller = $controller(name="dummy").new(params)>
-	<cfset controller.before1 = before1>
-	<cfset controller.before2 = before2>
-	<cfset controller.before3 = before3>
-	<cfset controller.after1 = after1>
-	<cfset controller.after2 = after2>
+	<cfset loc.controller = controller(name="dummy").new(params)>
+	<cfset loc.controller.before1 = before1>
+	<cfset loc.controller.before2 = before2>
+	<cfset loc.controller.before3 = before3>
+	<cfset loc.controller.after1 = after1>
+	<cfset loc.controller.after2 = after2>
 
 	<cffunction name="test_return_correct_type">
 
-		<cfset controller.filters(through="before1", type="before")>
-		<cfset controller.filters(through="before2", type="before")>
-		<cfset controller.filters(through="before3", type="before")>
-		<cfset controller.filters(through="after1", type="after")>
-		<cfset controller.filters(through="after2", type="after")>
+		<cfset loc.controller.filters(through="before1", type="before")>
+		<cfset loc.controller.filters(through="before2", type="before")>
+		<cfset loc.controller.filters(through="before3", type="before")>
+		<cfset loc.controller.filters(through="after1", type="after")>
+		<cfset loc.controller.filters(through="after2", type="after")>
 
-		<cfset loc.before = controller.filterChain("before")>
-		<cfset loc.after = controller.filterChain("after")>
-		<cfset loc.all = controller.filterChain()>
+		<cfset loc.before = loc.controller.filterChain("before")>
+		<cfset loc.after = loc.controller.filterChain("after")>
+		<cfset loc.all = loc.controller.filterChain()>
 
 		<cfset assert('ArrayLen(loc.before) eq 3')>
 		<cfset assert('loc.before[1].through eq "before1"')>

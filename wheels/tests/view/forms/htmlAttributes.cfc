@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="setup">
-		<cfset loc.controller = $controller(name="ControllerWithModel")>
+		<cfset loc.controller = controller(name="ControllerWithModel")>
 	</cffunction>
 
 	<cffunction name="test_tag_with_disabled_and_readonly_set_to_true">

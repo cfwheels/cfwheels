@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="setup">
-		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.controller = controller(name="dummy")>
 		<cfset loc.args = {}>
 		<cfset loc.args.values = "1,2,3,4,5,6">
 		<cfset loc.args.name = "cycle_test">

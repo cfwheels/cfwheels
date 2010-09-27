@@ -450,15 +450,6 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$controller" returntype="any" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfscript>
-		var returnValue = "";
-		returnValue = $doubleCheckedLock(name="controllerLock", condition="$cachedControllerClassExists", execute="$createControllerClass", conditionArgs=arguments, executeArgs=arguments);
-	</cfscript>
-	<cfreturn returnValue>
-</cffunction>
-
 <cffunction name="$addToCache" returntype="void" access="public" output="false">
 	<cfargument name="key" type="string" required="true">
 	<cfargument name="value" type="any" required="true">

@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="setup">
-		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.controller = controller(name="dummy")>
 		<cfset loc.args = {}>
 		<cfset loc.args.text = "CFWheels: testing the excerpt view helper to see if it works or not.">
 		<cfset loc.args.phrase = "CFWheels: testing the excerpt">

@@ -4,15 +4,15 @@
 
 	<cffunction name="test_flashCount_valid">
 		<cfset run_flashCount_valid()>
-		<cfset controller.$setFlashStorage("cookie")>
+		<cfset loc.controller.$setFlashStorage("cookie")>
 		<cfset run_flashCount_valid()>
 	</cffunction>
 	
 	<cffunction name="run_flashCount_valid">
-		<cfset controller.flashInsert(success="Congrats!")>
-		<cfset controller.flashInsert(anotherKey="Test!")>
-		<cfset result = controller.flashCount()>
-		<cfset compare = controller.flashCount()>
+		<cfset loc.controller.flashInsert(success="Congrats!")>
+		<cfset loc.controller.flashInsert(anotherKey="Test!")>
+		<cfset result = loc.controller.flashCount()>
+		<cfset compare = loc.controller.flashCount()>
 		<cfset assert("result IS compare")>
 	</cffunction>
 

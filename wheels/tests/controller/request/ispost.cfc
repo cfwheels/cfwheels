@@ -4,12 +4,12 @@
 
 	<cffunction name="test_isPost_valid">
 		<cfset request.cgi.request_method = "post">
-		<cfset assert("controller.isPost() eq true")>
+		<cfset assert("loc.controller.isPost() eq true")>
 	</cffunction>
 	
 	<cffunction name="test_isPost_invalid">
 		<cfset request.cgi.request_method = "">
-		<cfset assert("controller.isPost() eq false")>
+		<cfset assert("loc.controller.isPost() eq false")>
 	</cffunction>
 
 </cfcomponent>

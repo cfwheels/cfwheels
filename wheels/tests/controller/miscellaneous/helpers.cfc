@@ -8,16 +8,16 @@
 		<cfset application.wheels.viewPath = "wheels/tests/_assets/views">
 		<cfset application.wheels.existingHelperFiles = "test">
 		<cfset params = {controller="test", action="helperCaller"}>
-		<cfset controller = $controller(name="test").new(params)>
+		<cfset loc.controller = controller(name="test").new(params)>
 	</cffunction>
 	
 	<cffunction name="test_inclusion_of_global_helper_file">
-		<cfset controller.renderPage()>
+		<cfset loc.controller.renderPage()>
 		<cfset assert("StructKeyExists(request.test, 'globalHelperFunctionWasCalled')")>
 	</cffunction>
 	
 	<cffunction name="test_inclusion_of_controller_helper_file">
-		<cfset controller.renderPage()>
+		<cfset loc.controller.renderPage()>
 		<cfset assert("StructKeyExists(request.test, 'controllerHelperFunctionWasCalled')")>
 	</cffunction>
 

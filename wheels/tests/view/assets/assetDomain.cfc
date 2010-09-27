@@ -2,7 +2,7 @@
 
 	<cffunction name="setup">
 		<cfscript>
-			loc.controller = $controller(name="dummy");
+			loc.controller = controller(name="dummy");
 			application.wheels.assetPaths = {http="asset0.localhost, asset2.localhost", https="secure.localhost"};
 		</cfscript>
 	</cffunction>

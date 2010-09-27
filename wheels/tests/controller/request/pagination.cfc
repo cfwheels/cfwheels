@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 	
 	<cfset params = {controller="dummy", action="dummy"}>
-	<cfset controller = $controller(name="dummy").new(params)>
+	<cfset loc.controller = controller(name="dummy").new(params)>
 	
 	<cffunction name="setup">
 		<cfset request.wheels["myhandle"] = {test="true"}>
@@ -12,7 +12,7 @@
 	</cffunction>
 
 	<cffunction name="test_pagination_handle_exists">
-		<cfset loc.r = controller.pagination('myhandle')>
+		<cfset loc.r = loc.controller.pagination('myhandle')>
 		<cfset assert('isstruct(loc.r)')>
 		<cfset assert('structkeyexists(loc.r, "test")')>
 		<cfset assert('loc.r.test eq true')>
@@ -20,7 +20,7 @@
 	
 	<cffunction name="test_pagination_handle_does_not_exists">
 		<cfset loc.e = "Wheels.QueryHandleNotFound">
-		<cfset loc.r = raised('controller.pagination("someotherhandle")')>
+		<cfset loc.r = raised('loc.controller.pagination("someotherhandle")')>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 

@@ -113,6 +113,15 @@
 
 <!--- miscellaneous --->
 
+<cffunction name="controller" returntype="any" access="public" output="false" hint="Returns a reference to the requested controller so that class level methods can be called on it.">
+	<cfargument name="name" type="string" required="true" hint="Name of the controller.">
+	<cfscript>
+		var returnValue = "";
+		returnValue = $doubleCheckedLock(name="controllerLock", condition="$cachedControllerClassExists", execute="$createControllerClass", conditionArgs=arguments, executeArgs=arguments);
+	</cfscript>
+	<cfreturn returnValue>
+</cffunction>
+
 <cffunction name="deobfuscateParam" returntype="string" access="public" output="false" hint="Deobfuscates a value."
 	examples=
 	'

@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="setup">
-		<cfset loc.controller = $controller(name="ControllerWithNestedModel")>
+		<cfset loc.controller = controller(name="ControllerWithNestedModel")>
 	</cffunction>
 
 	<cffunction name="test_$objectName_with_objectName">

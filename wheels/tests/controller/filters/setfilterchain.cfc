@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cfset params = {controller="dummy", action="dummy"}>
-	<cfset controller = $controller(name="dummy").new(params)>
+	<cfset loc.controller = controller(name="dummy").new(params)>
 
 	<cffunction name="test_valid">
 		<!--- Build filter chain through array - this is what we're testing --->
@@ -12,17 +12,17 @@
 				{type="after", through="logConversion", only="thankYou"}
 			]
 		>
-		<cfset controller.setFilterChain(myFilterChain)>
-		<cfset filterChainSet = controller.filterChain()>
+		<cfset loc.controller.setFilterChain(myFilterChain)>
+		<cfset filterChainSet = loc.controller.filterChain()>
 		<!--- Undo test --->
-		<cfset controller.setFilterChain(ArrayNew(1))>
+		<cfset loc.controller.setFilterChain(ArrayNew(1))>
 		<!--- Build filter chain through "normal" filters() function --->
-		<cfset controller.filters(through="restrictAccess")>
-		<cfset controller.filters(through="isLoggedIn,checkIPAddress", except="home,login")>
-		<cfset controller.filters(type="after", through="logConversion", only="thankYou")>
-		<cfset filterChainNormal = controller.filterChain()>
+		<cfset loc.controller.filters(through="restrictAccess")>
+		<cfset loc.controller.filters(through="isLoggedIn,checkIPAddress", except="home,login")>
+		<cfset loc.controller.filters(type="after", through="logConversion", only="thankYou")>
+		<cfset filterChainNormal = loc.controller.filterChain()>
 		<!--- Undo test --->
-		<cfset controller.setFilterChain(ArrayNew(1))>
+		<cfset loc.controller.setFilterChain(ArrayNew(1))>
 		<!--- Compare filter chains --->
 		<cfset assert("ArrayLen(filterChainSet) eq ArrayLen(filterChainNormal)")>
 		<cfset assert("filterChainSet.equals(filterChainNormal)")>

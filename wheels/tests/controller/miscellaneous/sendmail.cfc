@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cfset params = {controller="test", action="test"}>
-	<cfset controller = $controller(name="dummy").new(params)>
+	<cfset loc.controller = controller(name="dummy").new(params)>
 
 	<cffunction name="setup">
 		<cfset args = StructNew()>
@@ -17,52 +17,52 @@
 
 	<cffunction name="test_send_plain">
 		<cfset args.template = "plainEmailTemplate">
-		<cfset result = controller.sendEmail(argumentCollection=args)>
+		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
 		<cfset assert("ListLen(StructKeyList(result)) IS 5 AND StructKeyExists(result, 'to') AND StructKeyExists(result, 'from') AND StructKeyExists(result, 'subject') AND result.type IS 'text' AND result.tagContent IS 'dummy plain email body'")>
 	</cffunction>
 
 	<cffunction name="test_send_html">
 		<cfset args.template = "HTMLEmailTemplate">
-		<cfset result = controller.sendEmail(argumentCollection=args)>
+		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
 		<cfset assert("result.type IS 'html' AND result.tagContent IS '<p>dummy html email body</p>'")>
 	</cffunction>
 
 	<cffunction name="test_send_combined_in_correct_order">
 		<cfset args.templates = "HTMLEmailTemplate,plainEmailTemplate">
-		<cfset result = controller.sendEmail(argumentCollection=args)>
+		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
 		<cfset assert("result.mailparts[1].type IS 'text' AND result.mailparts[2].tagContent IS '<p>dummy html email body</p>'")>
 	</cffunction>
 
 	<cffunction name="test_send_with_layout">
 		<cfset args.template = "HTMLEmailTemplate">
 		<cfset args.layout = "emailLayout">
-		<cfset result = controller.sendEmail(argumentCollection=args)>
+		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
 		<cfset assert("result.tagContent Contains '<div>'")>
 	</cffunction>
 
 	<cffunction name="test_send_with_attachment">
 		<cfset args.template = "plainEmailTemplate">
 		<cfset args.file = "cfwheels-logo.png">
-		<cfset result = controller.sendEmail(argumentCollection=args)>
+		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
 		<cfset assert("result.mailparams[1].file Contains '_assets' AND result.mailparams[1].file Contains 'cfwheels-logo.png'")>
 	</cffunction>
 
 	<cffunction name="test_send_with_custom_argument">
 		<cfset args.template = "plainEmailTemplate">
 		<cfset args.customArgument = "IPassedInThisAsACustomArgument">
-		<cfset result = controller.sendEmail(argumentCollection=args)>
+		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
 		<cfset assert("result.tagContent Contains 'IPassedInThisAsACustomArgument'")>
 	</cffunction>
 
 	<cffunction name="test_send_from_different_path">
 		<cfset args.template = "/shared/anotherPlainEmailTemplate">
-		<cfset result = controller.sendEmail(argumentCollection=args)>
+		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
 		<cfset assert("result.tagContent IS 'another dummy plain email body'")>
 	</cffunction>
 
 	<cffunction name="test_send_from_sub_folder">
 		<cfset args.template = "sub/anotherHTMLEmailTemplate">
-		<cfset result = controller.sendEmail(argumentCollection=args)>
+		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
 		<cfset assert("result.tagContent IS '<p>another dummy html email body</p>'")>
 	</cffunction>
 

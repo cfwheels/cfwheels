@@ -1,3 +1,17 @@
+<!--- PUBLIC FUNCTIONS --->
+
+<cffunction name="new" returntype="any" access="public" output="false" hint="Creates and returns a controller object. Used primarily for testing purposes.">
+	<cfargument name="params" type="struct" required="true" hint="The params struct (combination of `form` and `URL` variables).">
+	<cfscript>
+		var loc = {};
+		// if the controller file exists we instantiate it, otherwise we instantiate the parent controller
+		// this is done so that an action's view page can be rendered without having an actual controller file for it
+		loc.controllerName = $objectFileName(name=variables.$class.name, objectPath=variables.$class.path, type="controller");
+		loc.returnValue = $createObjectFromRoot(path=variables.$class.path, fileName=loc.controllerName, method="$initControllerObject", name=variables.$class.name, params=arguments.params);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$initControllerClass" returntype="any" access="public" output="false">
@@ -30,18 +44,6 @@
 			init();
 	</cfscript>
 	<cfreturn this>
-</cffunction>
-
-<cffunction name="new" returntype="any" access="public" output="false">
-	<cfargument name="params" type="struct" required="true">
-	<cfscript>
-		var loc = {};
-		// if the controller file exists we instantiate it, otherwise we instantiate the parent controller
-		// this is done so that an action's view page can be rendered without having an actual controller file for it
-		loc.controllerName = $objectFileName(name=variables.$class.name, objectPath=variables.$class.path, type="controller");
-		loc.returnValue = $createObjectFromRoot(path=variables.$class.path, fileName=loc.controllerName, method="$initControllerObject", name=variables.$class.name, params=arguments.params);
-	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$setControllerClassData" returntype="void" access="public" output="false">

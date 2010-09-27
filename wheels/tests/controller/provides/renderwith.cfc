@@ -14,9 +14,9 @@
 
 	
 	<cffunction name="test_throws_error_without_data_argument">
-		<cfset controller = $controller(name="test").new(params)>
+		<cfset loc.controller = controller(name="test").new(params)>
 		<cftry>
-			<cfset result = controller.renderWith()>
+			<cfset result = loc.controller.renderWith()>
 			<cfcatch type="any">
 				<cfset assert('true eq true') />
 			</cfcatch>
@@ -25,49 +25,49 @@
 
 	<cffunction name="test_current_action_as_xml_with_template">
 		<cfset params.format = "xml">
-		<cfset controller = $controller(name="test").new(params)>
-		<cfset controller.provides("xml") />
+		<cfset loc.controller = controller(name="test").new(params)>
+		<cfset loc.controller.provides("xml") />
 		<cfset user = model("user").findOne(where="username = 'tonyp'") />
-		<cfset controller.renderWith(data=user, layout=false)>
-		<cfset assert("controller.response() Contains 'xml template content'")>
+		<cfset loc.controller.renderWith(data=user, layout=false)>
+		<cfset assert("loc.controller.response() Contains 'xml template content'")>
 	</cffunction>
 
 	<cffunction name="test_current_action_as_xml_without_template">
 		<cfset params.action = "test2">
 		<cfset params.format = "xml">
-		<cfset controller = $controller(name="test").new(params)>
-		<cfset controller.provides("xml") />
+		<cfset loc.controller = controller(name="test").new(params)>
+		<cfset loc.controller.provides("xml") />
 		<cfset user = model("user").findOne(where="username = 'tonyp'") />
-		<cfset controller.renderWith(data=user)>
-		<cfset assert("IsXml(controller.response()) eq true")>
+		<cfset loc.controller.renderWith(data=user)>
+		<cfset assert("IsXml(loc.controller.response()) eq true")>
 	</cffunction>
 
 	<cffunction name="test_current_action_as_json_with_template">
 		<cfset params.format = "json">
-		<cfset controller = $controller(name="test").new(params)>
-		<cfset controller.provides("json") />
+		<cfset loc.controller = controller(name="test").new(params)>
+		<cfset loc.controller.provides("json") />
 		<cfset user = model("user").findOne(where="username = 'tonyp'") />
-		<cfset controller.renderWith(data=user, layout=false)>
-		<cfset assert("controller.response() Contains 'json template content'")>
+		<cfset loc.controller.renderWith(data=user, layout=false)>
+		<cfset assert("loc.controller.response() Contains 'json template content'")>
 	</cffunction>
 
 	<cffunction name="test_current_action_as_json_without_template">
 		<cfset params.action = "test2">
 		<cfset params.format = "json">
-		<cfset controller = $controller(name="test").new(params)>
-		<cfset controller.provides("json") />
+		<cfset loc.controller = controller(name="test").new(params)>
+		<cfset loc.controller.provides("json") />
 		<cfset user = model("user").findOne(where="username = 'tonyp'") />
-		<cfset controller.renderWith(data=user)>
-		<cfset assert("IsJSON(controller.response()) eq true")>
+		<cfset loc.controller.renderWith(data=user)>
+		<cfset assert("IsJSON(loc.controller.response()) eq true")>
 	</cffunction>
 
 	<cffunction name="test_current_action_as_pdf_with_template_throws_error">
 		<cfset params.format = "pdf">
-		<cfset controller = $controller(name="test").new(params)>
-		<cfset controller.provides("pdf") />
+		<cfset loc.controller = controller(name="test").new(params)>
+		<cfset loc.controller.provides("pdf") />
 		<cfset user = model("user").findOne(where="username = 'tonyp'") />
 		<cftry>
-			<cfset controller.renderWith(data=user, layout=false)>
+			<cfset loc.controller.renderWith(data=user, layout=false)>
 			<cfset fail(message="Error did not occur.")>
 			<cfcatch type="any">
 				<cfset assert("true eq true")>

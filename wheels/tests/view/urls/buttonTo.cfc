@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="setup">
-		<cfset loc.controller = $controller(name="dummy")>
+		<cfset loc.controller = controller(name="dummy")>
 		<cfset oldURLRewriting = application.wheels.URLRewriting>
 		<cfset application.wheels.URLRewriting = "On">
 		<cfset oldScriptName = request.cgi.script_name>

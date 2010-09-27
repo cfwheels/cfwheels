@@ -279,12 +279,12 @@
 			$debugPoint("setup");
 
 		// create the requested controller
-		loc.controller = $controller(loc.params.controller).new(loc.params);
+		loc.controller = controller(loc.params.controller).new(loc.params);
 		
 		// if the controller fails to process, instantiate a new controller and try again
 		if (!loc.controller.$processAction())
 		{
-			loc.controller = $controller(loc.params.controller).new(loc.params);
+			loc.controller = controller(loc.params.controller).new(loc.params);
 			loc.controller.$processAction();
 		}
 		
