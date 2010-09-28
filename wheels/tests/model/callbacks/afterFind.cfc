@@ -8,6 +8,11 @@
 		<cfset model("post").$clearCallbacks(type="afterFind")>
 	</cffunction>
 
+	<cffunction name="test_property_named_method_should_not_clash_with_cfinvoke">
+		<cfset loc.results = model("collisionTest").findAll()>
+		<cfset assert("loc.results['method'][1] IS 'done'")>
+	</cffunction>
+	
 	<cffunction name="test_setting_one_query_record">
 		<cfset loc.posts = model("post").findAll(maxRows=1, order="id DESC")>
 		<cfset assert("loc.posts.views[1] IS 103 AND loc.posts['title'][1] IS 'setTitle'")>

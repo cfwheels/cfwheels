@@ -19,7 +19,7 @@
 <cfset loc.tableList = ValueList(loc.dbinfo.table_name, chr(7))>
 
 <!--- list of tables to delete --->
-<cfset loc.tables = "authors,cities,classifications,comments,photogalleries,photogalleryphotos,posts,profiles,shops,tags,users">
+<cfset loc.tables = "authors,cities,classifications,comments,photogalleries,photogalleryphotos,posts,profiles,shops,tags,users,collisiontests">
 <cfloop list="#loc.tables#" index="loc.i">
 	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
 		<cftry>
@@ -75,6 +75,14 @@ CREATE TABLE classifications
 	id int NOT NULL #loc.ident# PRIMARY KEY,
 	postid int NOT NULL,
 	tagid int NOT NULL
+) #loc.engine#
+</cfquery>
+
+<cfquery name="loc.query" datasource="wheelstestdb">
+CREATE TABLE collisiontests
+(
+	id int NOT NULL #loc.ident# PRIMARY KEY,
+	method varchar(100) NOT NULL
 ) #loc.engine#
 </cfquery>
 
@@ -341,3 +349,8 @@ FROM users u INNER JOIN photogalleries pg ON u.id = pg.userid;
 	name="releases"
 	,description="testdesc"
 )>
+
+<cfquery name="loc.query" datasource="wheelstestdb">
+INSERT INTO collisiontests (method)
+VALUES ('test')
+</cfquery>
