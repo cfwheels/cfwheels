@@ -23,7 +23,11 @@
 		<cfset loc.user.setPagination(1000, -4, 50, "pageTest")>
 		<cfset assert_pagination(handle="pageTest", totalRecords=1000, currentPage=1, perPage=50)>
 	</cffunction>
-
+	
+	<cffunction name="test_numeric_arguments_must_be_integers">
+		<cfset loc.user.setPagination(1000.9998, 5.876, 50.847, "pageTest")>
+		<cfset assert_pagination(handle="pageTest", totalRecords=1000, currentPage=5, perPage=50)>
+	</cffunction>
 
 	<cffunction name="assert_pagination">
 		<cfargument name="handle" type="string" required="true">
