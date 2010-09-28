@@ -13,13 +13,14 @@
 		switch(arguments.type)
 		{
 			case "blob": {loc.returnValue = "cf_sql_blob"; break;}
-			case "boolean": {loc.returnValue = "cf_sql_bit"; break;}
+			case "boolean": case "bit": {loc.returnValue = "cf_sql_bit"; break;}
 			case "char": {loc.returnValue = "cf_sql_char"; break;}
 			case "date": {loc.returnValue = "cf_sql_date"; break;}
 			case "datetime": {loc.returnValue = "cf_sql_timestamp"; break;}
-			case "int": case "integer": {loc.returnValue = "cf_sql_integer"; break;}
+			case "int": case "integer": case "tinyint": {loc.returnValue = "cf_sql_integer"; break;}
 			case "numeric": {loc.returnValue = "cf_sql_numeric"; break;}
 			case "real": {loc.returnValue = "cf_sql_real"; break;}
+			case "float": {loc.returnValue = "cf_sql_float"; break;}
 			case "varchar": case "text": {loc.returnValue = "cf_sql_varchar"; break;}
 		}
 	</cfscript>
