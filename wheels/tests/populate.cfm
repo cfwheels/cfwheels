@@ -9,6 +9,9 @@
 <cfelseif loc.db IS "mysql">
 	<cfset loc.ident = "AUTO_INCREMENT">
 	<cfset loc.engine = "ENGINE=InnoDB">
+<cfelseif loc.db IS "sqlite">
+	<cfset loc.ident = "AUTOINCREMENT">
+	<cfset loc.engine = "">
 <cfelse>
 	<cfset loc.ident = "IDENTITY">
 	<cfset loc.engine = "">
@@ -53,7 +56,11 @@ create tables
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE authors
 (
-	id int NOT NULL #loc.ident# PRIMARY KEY,
+	<cfif loc.db IS "sqlite">
+		id integer NOT NULL PRIMARY KEY #loc.ident#,
+	<cfelse>
+		id int NOT NULL #loc.ident# PRIMARY KEY,
+	</cfif>
 	firstname varchar(100) NOT NULL,
 	lastname varchar(100) NOT NULL
 ) #loc.engine#
@@ -72,7 +79,11 @@ CREATE TABLE cities
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE classifications
 (
-	id int NOT NULL #loc.ident# PRIMARY KEY,
+	<cfif loc.db IS "sqlite">
+		id integer NOT NULL PRIMARY KEY #loc.ident#,
+	<cfelse>
+		id int NOT NULL #loc.ident# PRIMARY KEY,
+	</cfif>
 	postid int NOT NULL,
 	tagid int NOT NULL
 ) #loc.engine#
@@ -81,7 +92,11 @@ CREATE TABLE classifications
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE collisiontests
 (
-	id int NOT NULL #loc.ident# PRIMARY KEY,
+	<cfif loc.db IS "sqlite">
+		id integer NOT NULL PRIMARY KEY #loc.ident#,
+	<cfelse>
+		id int NOT NULL #loc.ident# PRIMARY KEY,
+	</cfif>
 	method varchar(100) NOT NULL
 ) #loc.engine#
 </cfquery>
@@ -89,7 +104,11 @@ CREATE TABLE collisiontests
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE comments
 (
-	id int NOT NULL #loc.ident# PRIMARY KEY,
+	<cfif loc.db IS "sqlite">
+		id integer NOT NULL PRIMARY KEY #loc.ident#,
+	<cfelse>
+		id int NOT NULL #loc.ident# PRIMARY KEY,
+	</cfif>
 	postid int NOT NULL,
 	body text NOT NULL,
 	name varchar(100) NOT NULL,
@@ -102,7 +121,11 @@ CREATE TABLE comments
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE photogalleries
 (
-	photogalleryid int NOT NULL #loc.ident# PRIMARY KEY,
+	<cfif loc.db IS "sqlite">
+		photogalleryid integer NOT NULL PRIMARY KEY #loc.ident#,
+	<cfelse>
+		photogalleryid int NOT NULL #loc.ident# PRIMARY KEY,
+	</cfif>
 	userid int NOT NULL,
 	title varchar(255) NOT NULL,
 	description text NOT NULL
@@ -112,7 +135,11 @@ CREATE TABLE photogalleries
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE photogalleryphotos
 (
-	photogalleryphotoid int NOT NULL #loc.ident# PRIMARY KEY,
+	<cfif loc.db IS "sqlite">
+		photogalleryphotoid integer NOT NULL PRIMARY KEY #loc.ident#,
+	<cfelse>
+		photogalleryphotoid int NOT NULL #loc.ident# PRIMARY KEY,
+	</cfif>
 	photogalleryid int NOT NULL,
 	filename varchar(255) NOT NULL,
 	description varchar(255) NOT NULL,
@@ -123,7 +150,11 @@ CREATE TABLE photogalleryphotos
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE posts
 (
-	id int NOT NULL #loc.ident# PRIMARY KEY,
+	<cfif loc.db IS "sqlite">
+		id integer NOT NULL PRIMARY KEY #loc.ident#,
+	<cfelse>
+		id int NOT NULL #loc.ident# PRIMARY KEY,
+	</cfif>
 	authorid int NULL,
 	title varchar(250) NOT NULL,
 	body text NOT NULL,
@@ -138,7 +169,11 @@ CREATE TABLE posts
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE profiles
 (
-	id int NOT NULL #loc.ident# PRIMARY KEY,
+	<cfif loc.db IS "sqlite">
+		id integer NOT NULL PRIMARY KEY #loc.ident#,
+	<cfelse>
+		id int NOT NULL #loc.ident# PRIMARY KEY,
+	</cfif>
 	authorid int NULL,
 	dateofbirth datetime NOT NULL,
 	bio text NULL
@@ -157,7 +192,11 @@ CREATE TABLE shops
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE tags
 (
-	id int NOT NULL #loc.ident# PRIMARY KEY,
+	<cfif loc.db IS "sqlite">
+		id integer NOT NULL PRIMARY KEY #loc.ident#,
+	<cfelse>
+		id int NOT NULL #loc.ident# PRIMARY KEY,
+	</cfif>
 	name varchar(50) NOT NULL,
 	description varchar(50) NULL
 ) #loc.engine#
@@ -166,7 +205,11 @@ CREATE TABLE tags
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE users
 (
-	id int NOT NULL #loc.ident# PRIMARY KEY,
+	<cfif loc.db IS "sqlite">
+		id integer NOT NULL PRIMARY KEY #loc.ident#,
+	<cfelse>
+		id int NOT NULL #loc.ident# PRIMARY KEY,
+	</cfif>
 	username varchar(50) NOT NULL,
 	password varchar(50) NOT NULL,
 	firstname varchar(50) NOT NULL,
