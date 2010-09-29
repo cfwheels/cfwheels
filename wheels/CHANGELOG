@@ -18,6 +18,10 @@ Bug Fixes
 * Changed to using SCOPE_IDENTITY() as fallback for SQL Server - [Tony Petruzzi, Per Djurner]
 * Fixed overwrite problem when using composite keys - #587 [Andy Bellenie, Per Djurner]
 * Fixed bug with upper case input in humanize() and allow exception list for when abbreviations aren't caught - #587 [Andy Bellenie, Tony Petruzzi, Per Djurner]
+* Made it possible to call model (and other) methods on session start - [W. Scott Hayes, Per Djurner]
+* Fixed bug in setPagination() where floats could be passed in for the numeric values - [Tony Petruzzi]
+* Added missing data types for SQLite - [Raul Riera]
+
 
 Other
 =====
