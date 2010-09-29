@@ -3,7 +3,7 @@
 	<cfinclude template="setupAndTeardown.cfm">
 
 	<cfset params = {controller="test", action="test"}>
-	<cfset loc.controller = controller(name="test").new(params)>
+	<cfset loc.controller = controller("test", params)>
 
 	<cffunction name="test_rendering_without_layout">
 		<cfset loc.controller.renderPage(layout=false)>

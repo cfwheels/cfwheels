@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cfset params = {controller="dummy", action="dummy"}>
-	<cfset loc.controller = controller(name="dummy").new(params)>
+	<cfset loc.controller = controller("dummy", params)>
 
 	<cffunction name="test_valid">
 		<!--- Build filter chain through array - this is what we're testing --->

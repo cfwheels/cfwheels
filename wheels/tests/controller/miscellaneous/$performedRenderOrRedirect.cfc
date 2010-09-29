@@ -4,7 +4,7 @@
 
 	<cffunction name="setup">
 		<cfset params = {controller="dummy", action="dummy"}>
-		<cfset loc.controller = controller(name="dummy").new(params)>
+		<cfset loc.controller = controller("dummy", params)>
 	</cffunction>
 
 	<cffunction name="test_redirect_or_render_has_not_been_performed">

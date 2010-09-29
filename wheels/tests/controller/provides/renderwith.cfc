@@ -14,7 +14,7 @@
 
 	
 	<cffunction name="test_throws_error_without_data_argument">
-		<cfset loc.controller = controller(name="test").new(params)>
+		<cfset loc.controller = controller("test", params)>
 		<cftry>
 			<cfset result = loc.controller.renderWith()>
 			<cfcatch type="any">
@@ -25,7 +25,7 @@
 
 	<cffunction name="test_current_action_as_xml_with_template">
 		<cfset params.format = "xml">
-		<cfset loc.controller = controller(name="test").new(params)>
+		<cfset loc.controller = controller("test", params)>
 		<cfset loc.controller.provides("xml") />
 		<cfset user = model("user").findOne(where="username = 'tonyp'") />
 		<cfset loc.controller.renderWith(data=user, layout=false)>
@@ -35,7 +35,7 @@
 	<cffunction name="test_current_action_as_xml_without_template">
 		<cfset params.action = "test2">
 		<cfset params.format = "xml">
-		<cfset loc.controller = controller(name="test").new(params)>
+		<cfset loc.controller = controller("test", params)>
 		<cfset loc.controller.provides("xml") />
 		<cfset user = model("user").findOne(where="username = 'tonyp'") />
 		<cfset loc.controller.renderWith(data=user)>
@@ -44,7 +44,7 @@
 
 	<cffunction name="test_current_action_as_json_with_template">
 		<cfset params.format = "json">
-		<cfset loc.controller = controller(name="test").new(params)>
+		<cfset loc.controller = controller("test", params)>
 		<cfset loc.controller.provides("json") />
 		<cfset user = model("user").findOne(where="username = 'tonyp'") />
 		<cfset loc.controller.renderWith(data=user, layout=false)>
@@ -54,7 +54,7 @@
 	<cffunction name="test_current_action_as_json_without_template">
 		<cfset params.action = "test2">
 		<cfset params.format = "json">
-		<cfset loc.controller = controller(name="test").new(params)>
+		<cfset loc.controller = controller("test", params)>
 		<cfset loc.controller.provides("json") />
 		<cfset user = model("user").findOne(where="username = 'tonyp'") />
 		<cfset loc.controller.renderWith(data=user)>
@@ -63,7 +63,7 @@
 
 	<cffunction name="test_current_action_as_pdf_with_template_throws_error">
 		<cfset params.format = "pdf">
-		<cfset loc.controller = controller(name="test").new(params)>
+		<cfset loc.controller = controller("test", params)>
 		<cfset loc.controller.provides("pdf") />
 		<cfset user = model("user").findOne(where="username = 'tonyp'") />
 		<cftry>

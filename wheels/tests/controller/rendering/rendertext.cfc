@@ -3,7 +3,7 @@
 	<cfinclude template="setupAndTeardown.cfm">
 
 	<cfset params = {controller="dummy", action="dummy"}>
-	<cfset loc.controller = controller(name="dummy").new(params)>
+	<cfset loc.controller = controller("dummy", params)>
 
 	<cffunction name="test_render_text">
 		<cfset loc.controller.renderText("OMG, look what I rendered!")>

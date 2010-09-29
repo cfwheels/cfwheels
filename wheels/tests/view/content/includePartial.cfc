@@ -6,7 +6,7 @@
 	</cffunction>
 
 	<cfset params = {controller="test", action="test"}>
-	<cfset loc.controller = controller(name="test").new(params)>
+	<cfset loc.controller = controller("test", params)>
 
 	<cffunction name="test_including_partial">
 		<cfsavecontent variable="result"><cfoutput>#loc.controller.includePartial(partial="partialTemplate")#</cfoutput></cfsavecontent>

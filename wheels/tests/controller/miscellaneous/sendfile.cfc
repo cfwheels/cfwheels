@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cfset params = {controller="test", action="test"}>
-	<cfset loc.controller = controller(name="dummy").new(params)>
+	<cfset loc.controller = controller("dummy", params)>
 	
 	<cffunction name="setup">
 		<cfset args = StructNew()>

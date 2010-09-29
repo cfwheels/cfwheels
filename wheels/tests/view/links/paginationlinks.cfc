@@ -6,7 +6,7 @@
 		<cfset var loc = StructNew()>
 		<cfset copies = {}>
 		<cfset StructAppend(copies, Duplicate(application.wheels))>
-		<cfset test.controller = controller(name="dummy").new(params)>
+		<cfset test.controller = controller("dummy", params)>
 		<cfset loc.route = StructNew()>
 		<cfset loc.route.name = "pagination">
 		<cfset loc.route.pattern = "pag/ina/tion/[special]">

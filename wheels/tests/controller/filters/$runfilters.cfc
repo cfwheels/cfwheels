@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cfset params = {controller="filtering", action="index"}>	
-	<cfset loc.controller = controller(name="filtering").new(params)>
+	<cfset loc.controller = controller("filtering", params)>
 
 	<cffunction name="setup">
 		<cfset request.filterTests = StructNew()>

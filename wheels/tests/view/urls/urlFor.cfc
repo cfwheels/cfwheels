@@ -5,7 +5,7 @@
 		<cfset params.action = "edit">
 		<cfset params.key = "1">
 
-		<cfset loc.controller = controller(name=params.controller).new(params)>
+		<cfset loc.controller = controller(params.controller, params)>
 		<cfset loc.args = {}>
 		<cfset loc.args.controller = "Blog">
 		<cfset loc.args.action = "edit">

@@ -115,15 +115,16 @@
 
 <cffunction name="controller" returntype="any" access="public" output="false" hint="Creates and returns a controller object. Used primarily for testing purposes.">
 	<cfargument name="name" type="string" required="true" hint="Name of the controller to create.">
-	<cfargument name="params" type="struct" required="true" hint="The params struct (combination of `form` and `URL` variables).">
+	<cfargument name="params" type="struct" required="false" default="#StructNew()#" hint="The params struct (combination of `form` and `URL` variables).">
 	<cfscript>
 		var loc = {};
 		loc.args = {};
 		loc.args.name = arguments.name;
-		loc.controllerClass = $doubleCheckedLock(name="controllerLock", condition="$cachedControllerClassExists", execute="$createControllerClass", conditionArgs=loc.args, executeArgs=loc.args);
-		loc.returnValue = loc.controllerClass.$createControllerObject(arguments.params);
+		loc.returnValue = $doubleCheckedLock(name="controllerLock", condition="$cachedControllerClassExists", execute="$createControllerClass", conditionArgs=loc.args, executeArgs=loc.args);
+		if (!StructIsEmpty(arguments.params))
+			loc.returnValue = loc.returnValue.$createControllerObject(arguments.params);
+		return loc.returnValue;
 	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="deobfuscateParam" returntype="string" access="public" output="false" hint="Deobfuscates a value."
