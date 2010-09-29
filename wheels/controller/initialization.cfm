@@ -1,7 +1,7 @@
-<!--- PUBLIC FUNCTIONS --->
+<!--- PRIVATE FUNCTIONS --->
 
-<cffunction name="new" returntype="any" access="public" output="false" hint="Creates and returns a controller object. Used primarily for testing purposes.">
-	<cfargument name="params" type="struct" required="true" hint="The params struct (combination of `form` and `URL` variables).">
+<cffunction name="$createControllerObject" returntype="any" access="public" output="false">
+	<cfargument name="params" type="struct" required="true">
 	<cfscript>
 		var loc = {};
 		// if the controller file exists we instantiate it, otherwise we instantiate the parent controller
@@ -11,8 +11,6 @@
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
-
-<!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$initControllerClass" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="false" default="">
