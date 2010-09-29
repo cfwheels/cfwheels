@@ -5,6 +5,9 @@
 		// abort if called from incorrect file
 		$abortInvalidRequest();
 
+		// setup the wheels storage struct for the current request
+		$initializeRequestScope();
+
 		// set or reset all settings but make sure to pass along the reload password between forced reloads with "reload=x"
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "reloadPassword"))
 			loc.oldReloadPassword = application.wheels.reloadPassword;

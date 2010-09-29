@@ -1,3 +1,23 @@
+<cffunction name="$initializeRequestScope" returntype="void" access="public" output="false">
+	<cfscript>
+		if (!StructKeyExists(request, "wheels"))
+		{
+			request.wheels = {};
+			request.wheels.params = {};
+			request.wheels.cache = {};
+			
+			// create a structure to track the transaction status for all adapters
+			request.wheels.transactions = {};
+	
+			// store cache info for output in debug area
+			request.wheels.cacheCounts = {};
+			request.wheels.cacheCounts.hits = 0;
+			request.wheels.cacheCounts.misses = 0;
+			request.wheels.cacheCounts.culls = 0;
+		}
+	</cfscript>
+</cffunction>
+
 <cffunction name="$toXml" returntype="xml" access="public" output="false">
 	<cfargument name="data" type="any" required="true">
 	<cfscript>

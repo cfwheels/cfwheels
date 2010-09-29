@@ -4,10 +4,8 @@
 		// abort if called from incorrect file
 		$abortInvalidRequest();
 
-		// need to setup the wheels struct here since it's used to store debugging info below if this is a reload request
-		// the struct may have been created already on session start and in that case we do not want to reset it
-		if (!StructKeyExists(request, "wheels"))
-			request.wheels = {};
+		// need to setup the wheels struct up here since it's used to store debugging info below if this is a reload request
+		$initializeRequestScope();
 
 		// reload application by calling onApplicationStart if requested
 		if (StructKeyExists(URL, "reload") && (!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword") || !Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
@@ -65,17 +63,6 @@
 			StructDelete(this, "onRequest");
 			StructDelete(variables, "onRequest");
 		}
-
-		request.wheels.params = {};
-		request.wheels.cache = {};
-		
-		// create a structure to track the transaction status for all adapters
-		request.wheels.transactions = {};
-
-		request.wheels.cacheCounts = {};
-		request.wheels.cacheCounts.hits = 0;
-		request.wheels.cacheCounts.misses = 0;
-		request.wheels.cacheCounts.culls = 0;
 
 		if (!application.wheels.cacheModelInitialization)
 			$simpleLock(name="modelLock", execute="$clearModelInitializationCache", type="exclusive");
