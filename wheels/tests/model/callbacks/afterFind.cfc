@@ -9,8 +9,8 @@
 	</cffunction>
 
 	<cffunction name="test_property_named_method_should_not_clash_with_cfinvoke">
-		<cfset loc.results = model("collisionTest").findAll()>
-		<cfset assert("loc.results['method'][1] IS 'done'")>
+		<cfset loc.results = model("collisionTest").findAll(returnAs="objects")>
+		<cfset assert("loc.results[1].method IS 'done'")>
 	</cffunction>
 	
 	<cffunction name="test_setting_one_query_record">
