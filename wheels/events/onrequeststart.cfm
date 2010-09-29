@@ -5,7 +5,9 @@
 		$abortInvalidRequest();
 
 		// need to setup the wheels struct here since it's used to store debugging info below if this is a reload request
-		request.wheels = {};
+		// the struct may have been created already on session start and in that case we do not want to reset it
+		if (!StructKeyExists(request, "wheels"))
+			request.wheels = {};
 
 		// reload application by calling onApplicationStart if requested
 		if (StructKeyExists(URL, "reload") && (!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword") || !Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
