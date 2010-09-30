@@ -86,10 +86,10 @@
 		}
 		else if (StructKeyExists(this, "onMissingMethod"))
 		{
-			loc.argumentCollection = {};
-			loc.argumentCollection.missingMethodName = arguments.action;
-			loc.argumentCollection.missingMethodArguments = {};
-			$invoke(method="onMissingMethod", argumentCollection=loc.argumentCollection);
+			loc.invokeArgs = {};
+			loc.invokeArgs.missingMethodName = arguments.action;
+			loc.invokeArgs.missingMethodArguments = {};
+			$invoke(method="onMissingMethod", invokeArgs=loc.invokeArgs);
 		}
 
 		if (!$performedRenderOrRedirect())

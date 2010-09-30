@@ -122,11 +122,7 @@
 			{
 				if (!StructKeyExists(variables, loc.filter.through))
 					$throw(type="Wheels.filterNotFound", message="Wheels tried to run the `#loc.filter.through#` function as a #arguments.type# filter but could not find it.", extendedInfo="Make sure there is a function named `#loc.filter.through#` in the `#variables.$class.name#.cfc` file.");
-
-				loc.arguments = loc.filter.arguments;
-				loc.arguments.method = loc.filter.through;
-				loc.result = $invoke(argumentCollection=loc.arguments);
-
+				loc.result = $invoke(method=loc.filter.through, invokeArgs=loc.filter.arguments);
 				// if the filter function returned false or rendered content we skip the remaining filters in the chain
 				if ((StructKeyExists(loc, "result") && !loc.result) || $performedRenderOrRedirect())
 					break;

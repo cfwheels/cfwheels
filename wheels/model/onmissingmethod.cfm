@@ -359,7 +359,7 @@
 				}
 			}
 			if (Len(loc.method))
-				loc.returnValue = $invoke(componentReference=loc.componentReference, method=loc.method, argumentCollection=arguments.missingMethodArguments);
+				loc.returnValue = $invoke(componentReference=loc.componentReference, method=loc.method, invokeArgs=arguments.missingMethodArguments);
 		}
 	</cfscript>
 	<cfif StructKeyExists(loc, "returnValue")>

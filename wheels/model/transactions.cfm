@@ -31,7 +31,7 @@
 	</cfif>
 	<cfif $openTransaction(arguments.transaction)>
 		<cftransaction action="begin" isolation="#arguments.isolation#">
-			<cfset loc.returnValue = $invoke(method=arguments.method, componentReference=this, argumentCollection=loc.methodArgs) />
+			<cfset loc.returnValue = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs) />
 			<cfif not StructKeyExists(loc, "returnValue") or not IsBoolean(loc.returnValue)>
 				<cfset $throw(type="Wheels", message="Invalid return type", extendedInfo="Methods invoked using `invokeWithTransaction` must return a boolean value.")>
 			</cfif>
@@ -43,7 +43,7 @@
 		</cftransaction>
 		<cfset $closeTransaction()>
 	<cfelse>
-		<cfset loc.returnValue = $invoke(method=arguments.method, componentReference=this, argumentCollection=loc.methodArgs) />
+		<cfset loc.returnValue = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs) />
 	</cfif>
 	<cfreturn loc.returnValue />
 </cffunction>

@@ -67,7 +67,9 @@
 			if ((StructKeyExists(this, variables.$class.layout[loc.layoutType]) && IsCustomFunction(this[variables.$class.layout[loc.layoutType]])) || IsCustomFunction(variables.$class.layout[loc.layoutType]))
 			{
 				// if the developer doesn't return anything from the method or if they return a blank string it should use the default layout still
-				loc.temp = $invoke(method=variables.$class.layout[loc.layoutType], action=arguments.$action);
+				loc.invokeArgs = {};
+				loc.invokeArgs.action = arguments.$action;
+				loc.temp = $invoke(method=variables.$class.layout[loc.layoutType], invokeArgs=loc.invokeArgs);
 				if (StructKeyExists(loc, "temp"))
 					loc.returnValue = loc.temp;
 			}

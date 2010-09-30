@@ -90,7 +90,7 @@
 					{
 						if (ListFindNoCase("hasMany,hasOne", loc.associations[loc.association].type))
 							$setForeignKeyValues(missingMethodArguments=loc.array[loc.i], keys=loc.info.foreignKey);
-						loc.saveResult = $invoke(componentReference=loc.array[loc.i], method="save", argumentCollection=arguments);
+						loc.saveResult = $invoke(componentReference=loc.array[loc.i], method="save", invokeArgs=arguments);
 						if (loc.returnValue) // don't change the return value if we have already received a false
 							loc.returnValue = loc.saveResult;
 					}
@@ -257,11 +257,11 @@
 			if (!IsObject(loc.object) && !loc.delete)
 			{
 				StructDelete(loc.arguments, "key", false);
-				return $invoke(componentReference=loc.model, method="new", argumentCollection=loc.arguments);
+				return $invoke(componentReference=loc.model, method="new", invokeArgs=loc.arguments);
 			}
 			else if (Len(loc.arguments.key) && loc.delete && arguments.association.nested.delete && arguments.delete)
 			{
-				$invoke(componentReference=loc.model, method="deleteByKey", argumentCollection=loc.arguments);
+				$invoke(componentReference=loc.model, method="deleteByKey", invokeArgs=loc.arguments);
 				return false;
 			}
 		}	

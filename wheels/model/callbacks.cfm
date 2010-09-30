@@ -276,7 +276,8 @@
 				}
 				else
 				{
-					loc.returnValue = $invoke(method=loc.method, argumentCollection=properties());
+					loc.invokeArgs = properties();
+					loc.returnValue = $invoke(method=loc.method, invokeArgs=loc.invokeArgs);
 					if (StructKeyExists(loc, "returnValue") && IsStruct(loc.returnValue))
 					{
 						setProperties(loc.returnValue);
@@ -317,23 +318,23 @@
 		for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 		{
 			// get the values in the current query row so that we can pass them in as arguments to the callback method
-			loc.args = {};
+			loc.invokeArgs = {};
 			loc.kEnd = ListLen(arguments.collection.columnList);
 			for (loc.k=1; loc.k <= loc.kEnd; loc.k++)
 			{
 				loc.kItem = ListGetAt(arguments.collection.columnList, loc.k);
 				try // coldfusion has a problem with empty strings in queries for bit types
 				{
-					loc.args[loc.kItem] = arguments.collection[loc.kItem][loc.j];
+					loc.invokeArgs[loc.kItem] = arguments.collection[loc.kItem][loc.j];
 				}
 				catch (Any e)
 				{
-					loc.args[loc.kItem] = "";
+					loc.invokeArgs[loc.kItem] = "";
 				}
 			}
 
 			// execute the callback method
-			loc.result = $invoke(method=arguments.method, argumentCollection=loc.args);
+			loc.result = $invoke(method=arguments.method, invokeArgs=loc.invokeArgs);
 
 			if (StructKeyExists(loc, "result"))
 			{

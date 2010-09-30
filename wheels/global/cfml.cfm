@@ -6,7 +6,7 @@
 	<cfargument name="timeout" type="numeric" required="false" default="30">
 	<cfset var loc = {}>
 	<cflock name="#arguments.name#" type="readonly" timeout="#arguments.timeout#">
-		<cfset loc.returnValue = $invoke(componentReference=arguments.object, method=arguments.method, argumentCollection=arguments.args)>
+		<cfset loc.returnValue = $invoke(componentReference=arguments.object, method=arguments.method, invokeArgs=arguments.args)>
 	</cflock>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -19,12 +19,12 @@
 	<cfargument name="executeArgs" type="struct" required="false" default="#StructNew()#">
 	<cfargument name="timeout" type="numeric" required="false" default="30">
 	<cfset var loc = {}>
-	<cfset loc.returnValue = $invoke(method=arguments.condition, argumentCollection=arguments.conditionArgs)>
+	<cfset loc.returnValue = $invoke(method=arguments.condition, invokeArgs=arguments.conditionArgs)>
 	<cfif IsBoolean(loc.returnValue) AND NOT loc.returnValue>
 		<cflock name="#arguments.name#" timeout="#arguments.timeout#">
-			<cfset loc.returnValue = $invoke(method=arguments.condition, argumentCollection=arguments.conditionArgs)>
+			<cfset loc.returnValue = $invoke(method=arguments.condition, invokeArgs=arguments.conditionArgs)>
 			<cfif IsBoolean(loc.returnValue) AND NOT loc.returnValue>
-				<cfset loc.returnValue = $invoke(method=arguments.execute, argumentCollection=arguments.executeArgs)>
+				<cfset loc.returnValue = $invoke(method=arguments.execute, invokeArgs=arguments.executeArgs)>
 			</cfif>
 		</cflock>
 	</cfif>
@@ -166,6 +166,10 @@
 	<cfelseif NOT StructKeyExists(variables, arguments.method)>
 		<!--- this is done so that we can call dynamic methods via "onMissingMethod" on the object (we need to pass in the object for this so it can call methods on the "this" scope instead) --->
 		<cfset arguments.component = this>
+	</cfif>
+	<cfif StructKeyExists(arguments, "invokeArgs")>
+		<cfset arguments.argumentCollection = arguments.invokeArgs>
+		<cfset StructDelete(arguments, "invokeArgs")>
 	</cfif>
 	<cfinvoke attributeCollection="#arguments#">
 	<cfif StructKeyExists(loc, "returnValue")>

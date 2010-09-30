@@ -168,7 +168,9 @@
 			{
 				case "delete":
 				{
-					$invoke(componentReference=this, method="delete#loc.all##loc.key#", instantiate=true);
+					loc.invokeArgs = {};
+					loc.invokeArgs.instantiate = true;
+					$invoke(componentReference=this, method="delete#loc.all##loc.key#", invokeArgs=loc.invokeArgs);
 					break;
 				}
 				case "deleteAll":
