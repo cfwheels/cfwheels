@@ -118,15 +118,28 @@
 		$args(name="dateTimeSelectTags", args=arguments);
 		loc.returnValue = "";
 		loc.separator = arguments.separator;
+		loc.label = arguments.label;
+
+		// create date portion
 		arguments.order = arguments.dateOrder;
 		arguments.separator = arguments.dateSeparator;
+		// when a list of 6 elements has been passed in as labels we assume the first 3 are meant to be placed on the date related tags
+		if (ListLen(loc.label) == 6)
+			arguments.label = ListGetAt(loc.label, 1) & "," & ListGetAt(loc.label, 2) & "," & ListGetAt(loc.label, 3);
 		if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect")
 			loc.returnValue = loc.returnValue & dateSelect(argumentCollection=arguments);
 		else
 			loc.returnValue = loc.returnValue & dateSelectTags(argumentCollection=arguments);
+
+		// separate date and time with a string ("-" by default)
 		loc.returnValue = loc.returnValue & loc.separator;
+
+		// create time portion
 		arguments.order = arguments.timeOrder;
 		arguments.separator = arguments.timeSeparator;
+		// when a list of 6 elements has been passed in as labels we assume the last 3 are meant to be placed on the time related tags
+		if (ListLen(loc.label) == 6)
+			arguments.label = ListGetAt(loc.label, 4) & "," & ListGetAt(loc.label, 5) & "," & ListGetAt(loc.label, 6);
 		if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect")
 			loc.returnValue = loc.returnValue & timeSelect(argumentCollection=arguments);
 		else

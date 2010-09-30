@@ -1,9 +1,30 @@
 <cfcomponent extends="wheelsMapping.test">
 
 	<cffunction name="setup">
+		<cfset pkg.controller = controller("dummy")>
+		<cfset result = "">
+		<cfset results = {}>
 		<cfset loc.controller = controller(name="dummy")>
 		<cfset loc.args = {}>
 		<cfset loc.args.label = false>
+	</cffunction>
+
+	<cffunction name="testNoLabels">
+		<cfset result = pkg.controller.dateTimeSelectTags(name="theName", label=false)>
+		<cfset assert("result Does Not Contain 'label'")>
+	</cffunction>
+
+	<cffunction name="testSameLabels">
+		<cfset var loc = {}>
+		<cfset loc.str = pkg.controller.dateTimeSelectTags(name="theName", label="lblText")>
+		<cfset loc.sub = "lblText">
+		<cfset result = (Len(loc.str)-Len(Replace(loc.str,loc.sub,"","all")))/Len(loc.sub)>
+		<cfset assert("result IS 6")>
+	</cffunction>
+
+	<cffunction name="testSplittingLabels">
+		<cfset result = pkg.controller.dateTimeSelectTags(name="theName", label="labelMonth,labelDay,labelYear,labelHour,labelMinute,labelSecond")>
+		<cfset assert("result Contains 'labelDay' AND result Contains 'labelSecond'")>
 	</cffunction>
 
 	<cffunction name="test_dateTimeSelectTags_allow_to_select_blank">
