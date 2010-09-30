@@ -7,6 +7,11 @@
 		<cfset loc.args.label = false>
 	</cffunction>
 
+	<cffunction name="testSplittingLabels">
+		<cfset result = loc.controller.dateTimeSelect(objectName="user", property="birthday", label="labelMonth,labelDay,labelYear,labelHour,labelMinute,labelSecond")>
+		<cfset assert("result Contains 'labelDay' AND result Contains 'labelSecond'")>
+	</cffunction>
+
 	<cffunction name="test_datetimeselect">
 		<cfset loc.args.property = "birthday">
 		<cfset debug("loc.controller.dateTimeSelect(argumentcollection=loc.args)", false)>

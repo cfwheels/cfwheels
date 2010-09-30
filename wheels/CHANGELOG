@@ -21,6 +21,7 @@ Bug Fixes
 * Made it possible to call model (and other) methods on application / session start - [W. Scott Hayes, Per Djurner]
 * Fixed bug in setPagination() where floats could be passed in for the numeric values - [Tony Petruzzi]
 * Added missing data types for SQLite - [Raul Riera]
+* Fixed so labels on dateTimeSelectTags() and dateTimeSelect() get applied correctly to all six possible form inputs - #531 [Raul Riera, Tony Petruzzi, Chris Peters, Per Djurner]
 
 
 Other
