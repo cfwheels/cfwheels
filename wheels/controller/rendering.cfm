@@ -273,11 +273,12 @@
 		{
 			if (IsBoolean(arguments.$dataFunction))
 			{
-				if (StructKeyExists(variables, arguments.$name))
+				loc.dataFunction = SpanExcluding(ListLast(arguments.$name, "/"), ".");
+				if (StructKeyExists(variables, loc.dataFunction))
 				{
-					loc.metaData = GetMetaData(variables[arguments.$name]);
-					if (IsStruct(loc.metaData) and StructKeyExists(loc.metaData, "returnType") && loc.metaData.returnType == "struct" && StructKeyExists(loc.metaData, "access") && loc.metaData.access == "private")
-						return $invoke(method=arguments.$name);
+					loc.metaData = GetMetaData(variables[loc.dataFunction]);
+					if (IsStruct(loc.metaData) && StructKeyExists(loc.metaData, "returnType") && loc.metaData.returnType == "struct" && StructKeyExists(loc.metaData, "access") && loc.metaData.access == "private")
+						return $invoke(method=loc.dataFunction);
 				}
 			}
 			else

@@ -1,4 +1,4 @@
-WHEELS VERSION 1.1 BETA 2
+WHEELS VERSION 1.1 RC 1
 
 Changes
 =======
@@ -22,6 +22,7 @@ Bug Fixes
 * Fixed bug in setPagination() where floats could be passed in for the numeric values - [Tony Petruzzi]
 * Added missing data types for SQLite - [Raul Riera]
 * Fixed so labels on dateTimeSelectTags() and dateTimeSelect() get applied correctly to all six possible form inputs - #531 [Raul Riera, Tony Petruzzi, Chris Peters, Per Djurner]
+* Made it possible to call the controller data function from a partial located in the root or sub folder - [Per Djurner, Chris Peters]
 
 
 Other
