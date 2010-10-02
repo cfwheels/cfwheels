@@ -12,7 +12,6 @@
 		var loc = {};
 		switch(arguments.type)
 		{
-			case "blob": {loc.returnValue = "cf_sql_blob"; break;}
 			case "boolean": case "bit": {loc.returnValue = "cf_sql_bit"; break;}
 			case "char": {loc.returnValue = "cf_sql_char"; break;}
 			case "date": {loc.returnValue = "cf_sql_date"; break;}
@@ -21,7 +20,7 @@
 			case "numeric": {loc.returnValue = "cf_sql_numeric"; break;}
 			case "real": {loc.returnValue = "cf_sql_real"; break;}
 			case "float": {loc.returnValue = "cf_sql_float"; break;}
-			case "varchar": case "text": {loc.returnValue = "cf_sql_varchar"; break;}
+			case "varchar": case "text": case "blob": {loc.returnValue = "cf_sql_varchar"; break;}
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
