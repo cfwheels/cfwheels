@@ -1,20 +1,15 @@
 WHEELS VERSION 1.1 RC 1
 
-Changes
-=======
-* Removed the `afterFindCallbackLegacySupport` setting and made the new way introduced in beta 1 the only way - #580 [Per Djurner]
-* Changed "class" attribute on flashMessages(), errorMessageOn() and errorMessagesFor() to be camelCased - #554 [Per Djurner]
-* Full support for the H2 database - [Per Djurner]
-
 Bug Fixes
 =========
+* Corrected some bugs related to case, ordering and pagination on the H2 database - [Per Djurner]
+* Fixed autoLink() so that it can handle all types of domains - #560 [Tom King, Tony Petruzzi]
 * Corrected deobfuscation logic so that it... umm... works :) - #577 [Per Djurner, James Gibson]
 * Fix for obfuscateParam() related to leading zeros in integer values on Railo - #578 [Tony Petruzzi]
-* Fixed autoLink() so that it can handle all types of domains - #560 [Tom King, Tony Petruzzi]
-* Fixed so correct defaults are set for valueField and textField on select() when dealing with objects - #445 [Per Djurner]
+* Fixed so correct defaults are set for "valueField" and "textField" on select() when dealing with objects - #445 [Per Djurner]
 * Adapters now only fall backs on native code for getting the last inserted key when Railo/ACF can't do it automatically - #562 [Per Djurner]
-* simpleFormat() produces different output depending on the operating system - #570 [Raul Riera, Tony Petruzzi, Per Djurner]
-* imageTag() was outputting the "id" attribute twice when caching was on - #582 [Andy Bellenie, Per Djurner]
+* simpleFormat() now produce the exact same output regardless of the operating system - #570 [Raul Riera, Tony Petruzzi, Per Djurner]
+* imageTag() was outputting the "id" attribute twice when caching was on, fixed now - #582 [Andy Bellenie, Per Djurner]
 * Changed to using SCOPE_IDENTITY() as fallback for SQL Server - [Tony Petruzzi, Per Djurner]
 * Fixed overwrite problem when using composite keys - #587 [Andy Bellenie, Per Djurner]
 * Fixed bug with upper case input in humanize() and allow exception list for when abbreviations aren't caught - #587 [Andy Bellenie, Tony Petruzzi, Per Djurner]
@@ -23,332 +18,118 @@ Bug Fixes
 * Added missing data types for SQLite - [Raul Riera]
 * Fixed so labels on dateTimeSelectTags() and dateTimeSelect() get applied correctly to all six possible form inputs - #531 [Raul Riera, Tony Petruzzi, Chris Peters, Per Djurner]
 * Made it possible to call the controller data function from a partial located in the root or sub folder - [Per Djurner, Chris Peters]
+* The full tag context of an error was missing from the error emails, fixed now - [Andy Bellenie]
 
+Miscellaneous
+=============
+* Removed the `afterFindCallbackLegacySupport` setting and made the new way introduced in Beta 1 the only way - #580 [Per Djurner]
+* Changed "class" attribute on flashMessages(), errorMessageOn() and errorMessagesFor() to be camelCased - #554 [Per Djurner]
+* Added better error reporting when passing in one primary key value when multiple are expected - #540 [Adam Michel, Tony Petruzzi]
 
-Other
-=====
-* Better error reporting when passing in one primary key value when multiple are expected - #540 [Adam Michel, Tony Petruzzi]
-
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WHEELS VERSION 1.1 BETA 1
 
-Changes
-=======
+Model Enhancements
+==================
+* Support for automatic validations based on database settings (column does not allow nulls, has a maximum length etc) - [James Gibson, Andy Bellenie, Tony Petruzzi]
+* Support for handling binary data columns - #133 [Tony Petruzzi]
+* Callbacks are not pre-loaded anymore - #388 [Andy Bellenie]
+* Support for NOT IN, IN, NOT LIKE, IS NULL, IS NOT NULL in where clause with proper use of cfqueryparam - [Per Djurner, Tony Petruzzi]
+* Made it possible to use a blank value as a property default - [Andy Bellenie]
+* Ability to skip validation when saving, e.g. save(validate=false) - [Tony Petruzzi]
+* Added argument for model methods to be able to turn off callbacks, e.g. save(callbacks=false) - #236 [Andy Bellenie]
+* Ability to set a default value for column statistics with "ifNull" argument - #330 [Andy Bellenie]
+* Support for nested properties (saving data in associated model objects through the parent) - [James Gibson]
+* Added automatic deletion of dependent models - #367 (Per Djurner, Andy Bellenie]
+* Added "setUpdatedAtOnCreate" to tell Wheels if it should update the "updatedAt" property when creating new records - [James Gibson]
+* New setting "useExpandedColumnAliases" that you can set to "true" to prepend included model properties with their model name in queries - #442 [Andy Bellenie]
+* Support for the SQLite database - [Per Djurner]
+* Arguments are now always passed in to "afterFind" callback methods and you can return them to set both queries and objects - [Tony Petruzzi]
+* Updated findAll() to allow for more than one association as long as they are direct (i.e. include="assoc1,assoc2" works but not include="assoc1(assoc2)) - [James Gibson]
+* Update to add GROUP BY functionality in finders - [James Gibson]
+* Allow overriding of soft-deletes - #324 [Andy Bellenie]
+* Added accessibleProperties() and protectedProperties() to protect model variables from mass assignment - [James Gibson]
+* Ability to set defaults on a model using the "defaultValue" argument to property() - #244 [Andy Bellenie]
+* Added transaction handling support, use the "transaction" argument on save(), updateAll() etc, callbacks are automatically wrapped in a transaction - #325 [Andy Bellenie]
+* Added a position argument to primaryKeys() for easier retrieval - [Tony Petruzzi]
+* Added a setPagination() function to make it possible to use paginationLinks() and similar functions for custom queries (i.e. ones not created with the Wheels ORM) - [Tony Petruzzi]
+* Allow database views to be used as a model by calling setPrimaryKey() - #390 [Tony Petruzzi]
 
-* Adobe ColdFusion 8.0.1 or Railo 3.1.2.020 is required
+View Enhancements
+=================
+* Labels will now be added automatically for form helpers based on the object's property name (or a custom label set in the model) - [Andy Bellenie]
+* Added default for "action" argument on linkTo() - #321 [Andy Bellenie]
+* Added 12-hour format to date/time select helpers - #551 [Tony Petruzzi]
+* Added a flashMessages() function that outputs all key/values from the Flash - [Per Djurner]
+* Added support for inherited / nested layout templates through includeLayout() - [Per Djurner]
+* Added "head" argument to styleSheetLinkTag() and JavaScriptIncludeTag() - [Per Djurner]
+* flashMessages() can now pass a list of keys that controls which messages to display as well as the order they are displayed in - [Chris Peters]
+* Ability for years to display in descending order in date select form tags - [Tony Petruzzi]
+* Support for an automatic "assetQueryString" which can be used to force local browser caches to refresh when there is an update to your assets (CSS, JavaScript etc) - [James Gibson]
+* Added buttonTag() form helper - [Tony Petruzzi]
+* Added "disabled" and "readonly" arguments to form input helpers [Andy Bellenie]	
+* Allows disabling error elements appearing on form fields by setting "errorElement" - [Andy Bellenie]
+* Updates to checkBoxTag() and checkBox() to allow for unchecked values - [James Gibson]
+* Added "pageNumberAsParam" argument to paginationLinks() that decides whether the page parameter should be part of the route or just a regular parameter - [James Gibson]
+* Added contentFor() and includeContent() used to set/display content - [Tony Petruzzi]
+* Added hasManyRadioButton() and hasManyCheckBox() used to easily add radio buttons / checkboxes for a hasMany relationship on a model when using nested properties. - [James Gibson]
+* New global defaults for truncate() and wordTruncate() - [James Gibson]
+* Added a toXHTML() function that returns an XHTML compliant string - [Tony Petruzzi]
+* Added "dataFunction" argument to includePartial() for getting data from a controller function automatically - [Per Djurner]
+* Added a h() function for sanitizing user output  - [Tony Petruzzi]
+* Added support for external links in linkTo(), startFormTag(), JavaScriptIncludeTag() and StyleSheetLinkTag() - [Tony Petruzzi]
 
-[Models]
+Controller Enhancements
+=======================
+* Updated the request processing to not call the action if a before filter has rendered content - [James Gibson]
+* Support for using an onMissingMethod() inside controllers - [James Gibson]
+* redirectTo() now accepts a "delay" argument which can be used to delay the redirection until after the action code has completed (useful for testing) - [James Gibson, Tony Petruzzi]
+* Added addDefaultRoutes(), used to control exactly where in the route order to place the default routes - [Per Djurner]
+* New setting called "loadDefaultRoutes" which you can set to false when you want to use addDefaultRoutes() to load the routes manually - [Per Djurner]
+* Added the ability to attach files with sendEmail() - [Per Djurner]
+* Added "directory" and "deleteFile" arguments to sendFile() - #323 [Tony Petruzzi]
+* Added the ability to set wildcard routes - [Andy Bellenie]
+* Controllers can now respond to different formats such as "xml", "json", "csv", "pdf" and "xls" - [James Gibson]
+* Ability to store Flash in cookies - [Per Djurner]
+* Ability to add Flash messages when redirecting - [Per Djurner]
+* redirecTo(back=true) can now fall back on a route/controller/action when the referrer is blank instead of throwing an error - [Per Djurner] 
+* Support for "format" parsing in route patterns ([controller]/[action].[format]) - [James Gibson]
+* Ability to pass through arguments to filters - [Per Djurner]
+* Added flashKeep() function for keeping Flash contents for one additional request - [Per Djurner]
+* You can now validate type on incoming parameters using verifies() - [Tony Petruzzi]
+* Defaulted day to 1 and month to 1 when submitting forms - [Tony Petruzzi]
+* Added layout() for specifying a controller specific layout - [Tony Petruzzi]
+* You can now perform a redirect instead of aborting the request using verifies(), any extra arguments passed in are passed through to redirectTo() - [Tony Petruzzi]
 
-	* DRYed up afterFind callback creation - [Tony Petruzzi]
-	
-		- No need now to write the same logic for queries and objects. Both ways now use the query way.
-		- To preserve backwards compatibility the setting `afterFindCallbackLegacySupport` has been introduced.
+Other Enhancements
+==================
+* Allowed plugins to run in maintenance mode - [James Gibson]
+* Added "excludeFromErrorEmail" setting - #447 [Per Djurner]
+* New setting, "errorEmailSubject", that allows you to customize the subject line of error emails - #392 [Per Djurner]
+* New setting, "deletePluginDirectories" that tells Wheels whether to delete plugin directories if no corresponding ZIP file exists - #385 [Per Djurner]
+* Added a "cachePlugins" setting to allow developers to not cache plugins during the development of them - #304 [Andy Bellenie]
+* Allow setting multiple argument defaults at once, e.g. set(functionName="textField,textArea,select", labelPlacement="before"  - #426 [Raul Riera, Per Djurner]
+* A full testing framework is now included in Wheels, unit tests can be created in the "tests" folder - [Tony Petruzzi]
 
-	* Make it possible to use a blank value as a property default - [Andy Bellenie]
-
-	* Support NOT IN, IN, NOT LIKE, IS NULL, IS NOT NULL in where clause - [Per Djurner, Tony Petruzzi]
-
-	* SQLite support - [Per Djurner]
-
-	* Deprecated the "class" argument on association methods (belongsTo,hasMany,hasOne). Use "modelName" instead. - [Per Djurner]
-	
-	* Ability to skip validation when saving - [Tony Petruzzi]
-	
-	* Lockdown transactions between callbacks - #325 [Andy Bellenie]
-	
-	* Prepend included model properties with their class name in queries - #442 [Andy Bellenie]
-	
-	* Support for automatic validations - [James Gibson, Andy Bellenie, Tony Petruzzi]
-	
-		- configured by calling set(automaticValidations=true) in your environment's settings.cfm
-	
-		updates model initialization to automatically add validation to properties based on your database configuration. 
-		The validations include:
-		
-		- validatesPresenceOf for fields that are nullable=false
-		- validatesLengthOf for string fields (cf_sql_char & cf_sql_varchar)
-		- validatesNumericalityOf for numeric fields, it integer is set correctly for the
-		field type also.
-		
-		There is a new setting "automaticValidations" which is checked before setting
-		any validations. Also, no automatic validations are applied to primary key fields
-		or to fields for which a custom validation has already been set.
-		
-		automatic validations can also be turned off on a per model basis by using the
-		automaticValidations(false) in the model's init() method.
-		
-	* Updated findAll() to allow for more than one association as long as they are direct. - [James Gibson]
-	
-		This means that you can do an include like include="objects,someotherobject" but not
-		include="object(someotherobject)"
-		
-	* Update to wheels to add GROUP BY functionality - [James Gibson]
-	
-	* Added accessibleproperties() and protectedproperties() to protect model variables from masss assignment - [James Gibson]
-	
-	* Update to $create() to timestamp the updatedAt column if it exists - [James Gibson]
-
-	* Allow views to be used as models - #390 [Tony Petruzzi]
-	
-		to do this, you must use setPrimaryKey() in your model's init method to tell
-		Wheels what column(s) in the view it should use for the primary key(s)
-		
-		<cfset setPrimaryKey("column1,column2")>
-		
-	* Allow for nested attributes - [James Gibson]
-	
-	* Add automatic deletion of dependent models - #367 (Per Dejuner, Andy Bellenie]
-
-	* Adds transaction handling support - #325 [Andy Bellenie]
-	
-	* Allow overriding of soft-deletes - #324 [Andy Bellenie]
-
-	* Ability to set defaults on a model - #244 [Andy Bellenie]
-	
-	* Argument for model methods to be able to turn off callbacks - #236 [Andy Bellenie]
-	
-	* Ability to set a default value for column statistics with ifNull argument - #330 [Andy Bellenie]
-	
-	* Added a position argument to primaryKeys() for easier retrieval - [Tony Petruzzi]
-	
-	* Added setPagination() to model for paginating custom queries - [Tony Petruzzi]
-	
-	* Corrected count() to always return 0 if no records are found - [Per Djurner]
-	
-
-[Dispatch]
-
-	* Support for "format" parsing in routes patterns - [James Gibson]
-	
-		- [controller]/[action].[format]
-
-	* Updated the request processing to not call the action if a before filter has rendered content - [James Gibson]
-	
-	* Removed differences in params structure for form / URL variables - #232 [Mike Henke, Tony Petruzzi]
-	
-	* Added wildcard routes [Andy Bellenie]
-
-[Controllers]
-
-	* RedirectTo(back=true) doesn't throw error when cgi.http_referer is blank - [Per Djurner]
-	
-		- now fallbaks to root or route/controller/action
-
-	* Update to verifies - [Tony Petruzzi]
-	
-		you can now do simple validations on variables
-		
-		you can now perform a redirect instead of aborting the entire request.
-		any extra arguments passed into verifies are passed to redirectTo.
-
-	* Added dataFunction argument to includePartial - [Per Djurner]
-
-	* Added flashKeep() function - [Per Djurner]
-
-	* Added layout() for specifying a controller specific layout - [Tony Petruzzi]
-
-	* Made the showDebugInformation argument on renderPage() part of the API - [Per Djurner]
-	
-	* Added directory and deleteFile arguments to sendFile() - #323 [Tony Petruzzi]
-	
-	* Support for onMissingMethod() method - [James Gibson]
-	
-	* Ability to pass in arguments to filters. - [Per Djurner]
-	
-		Can be passed in both as named arguments and to the "args" argument.
-		Example: filters(through="runIt", args=loc.someStruct, anyNameGoesHere="something")
-		
-	* Change to redirectTo() to allow delay of the redirection - [James Gibson, Tony Petruzzi]
-	
-		Use by setting the new "delay" argument to "true". By default it is set to "false" to preserve backwards compatibility
-		Make sure to put a <cfreturn> on the next line after calling redirectTo() with a delay
-		
-		Example: <cfset redirectTo(route="home", delay="true")><cfreturn>
-		
-	* Added the ability to attach files with sendEmail() - [Per Djurner]
-	
-	* Ability to store flash in cookies - [Per Djurner]
-	
-	* Ability to add flash messages when redirecting - [Per Djurner]
-	
-		This will redirect the user back to the previous page and put a key called "notice"
-		in the flash container.
-		
-		<!--- add a flash notice when redirecting --->
-		<cfset redirectTo(back="true", notice="You are have been redirected")>
-		
-		<!--- get the flash notice --->
-		<cfoutput>#flash("notice")#</cfoutput>
-		
-		
-		If for some reason you need to add a key to the flash container that conflicts with
-		the arguments for redirectTo(), you can prepend "flash" to your key name and wheels
-		will remove the "flash" part and set your key.
-		
-		<!--- add a flash notice when redirecting --->
-		<cfset redirectTo(back="true", flashBack="You are have been redirected")>
-		
-		<!--- get the flash notice --->
-		<cfoutput>#flash("back")#</cfoutput>
-		
-	* Controllers can now respond to different formats such as `xml`, `json`, `csv`, `pdf`, and `xls` - [James Gibson]
-	
-		This functionality was taken from the Provides plugin
-		http://cfwheels.org/plugins/listing/6
-
-[Views]
-
-	* FlashMessages() can now pass a list of keys - [Chris Peters]
-	
-		controls which messages to display as well as the order they are displayed in 
-
-	* Added a h() function for sanitizing user output  - [Tony Petruzzi]
-
-	* Added a flashMessages() function - [Per Djurner]
-
-	* Added support for inherited / nested layout templates - [Per Djurner]
-
-	* Added support for external links for specific form helpers - [Tony Petruzzi]
-	
-		You can use external links by passing in a URL beginning with either "http" or "https"
-		to the helpers' argument listed below:
-	
-		linkTo - href 
-		
-		#linkTo(href="http://www.cfwheels.com", text="CFWheels")#
-		
-		startFormTag - action
-		
-		#startFormTag(action="https://www.cfwheels.com")#
-		
-		javascriptIncludeTag - sources
-		
-		#javaScriptIncludeTag(sources="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js")#
-		
-		styleSheetLinkTag - sources
-		
-		#styleSheetLinkTag(sources="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css")#
-		
-
-	* Added labels by default to form fields - [Andy Bellenie]
-	
-		For object helpers:
-		label=true -> automatically labels the field based on property or custom label
-		label="" or label=false -> returns no label.
-		label="anything else" -> as before.
-
-		The new default setting is label=true. Existing 1.1 applications that had not specified a label for a field will now find automatic ones appearing.
-		To correct this, either add label=""/label=false to the helper call in the view, or add a global setting for all helpers, e.g. 
-		<cfset set(functionName="textField", label=false)>
-		
-	* Added contentFor() - [Tony Petruzzi]
-	
-		- takes an optional section argument to append, by default appends content for the layout section 
-
-	* Added includeContent() - [Per Djurner, Tony Petruzzi]
-	
-		- replace contentForLayout()
-		- takes an optional section argument to return, by default returns content for the layout section
-		- when upgrading just replace all contentForLayout() calls with includeContent()
-
-	* Ability for years to display in descending order in date select form tags - [Tony Petruzzi]
-	
-	* Added "head" argument to styleSheetLinkTag and javaScriptIncludeTag - [Per Djurner]
-	
-	* Support for assetQueryString - [James Gibson]
-	
-		- configured by calling set(assetQueryString=true) in your environments settings.cfm
-	    - defaults to false for design & development
-	    - defaults to true for testing, maintenance & production
-	    - can be set to a string by the developer and the string will be appended to all asset urls
-	    - when set to true, a timestamp integer is created and used for all assets generated by wheels,
-	    the format is yyyymmddHHmmss
-	    
-	* Defaulted day to 1 and month to 1 when submitting forms - [Tony Petruzzi]
-	
-	* Added pageNumberAsParam setting to paginationLinks() - [James Gibson]
-	
-		this tells whether the page parameter should be part of the route or just a param
-		
-	* Allows disabling error elements appearing on form fields by setting errorElement - [Andy Bellenie]
-	
-	* Updates checkBoxTag() and checkBox() to allow for unchecked value - [James Gibson]
-	
-	* Addition of new form helpers to easily add checkboxes and radio buttons to hasMany relationships on a model. - [James Gibson]
-
-		hasManyRadioButton(): used to output radio buttons for a relationship on a model
-		hasManyCheckBox(): used to output a checkbox for a relationship on a model
-		
-	* Added buttonTag() form helper - [Tony Petruzzi]
-	
-	* Add "disabled" and "readonly" arguments to form input helpers [Andy Bellenie]	
-	
-[Application]
-
-	* Method: addDefaultRoutes() - [Per Djurner]
-		
-		Adds the default Wheels routes to your application. Only use this method if you have set `loadDefaultRoutes` to `false`
-		and want to control exactly where in the route order you want to place the default routes.
-		
-	* Setting: automaticValidations
-	
-		Used to globally turn on/off automatic validations in model
-		
-	* Allow plugins in maintenance mode - [James Gibson]
-	
-	* Setting: defaults for truncate and wordTruncate - [James Gibson]
-	
-	* Setting: setUpdatedAtOnCreate - [James Gibson]
-	
-		tells wheels if it should update the updatedAt property on create
-		
-	* Setting: errorEmailSubject - #392 [Per Djurner]
-	
-		allow customizing error email subject
-		
-	* Setting: deletePluginDirectories - #385 [Per Djurner]
-	
-		tell wheels whether to delete plugin directories if no corresponding plugin zip file exists
-		
-	* Allow setting multiple argument defaults at once - #426 [Raul Rivera, Per Djurner]
-	
-		Example: <cfset set(functionName="textField,textArea,select", labelPlacement="before")>
-		
-	* Added cachePlugins setting - #304 [Andy Bellenie]
-		
-[Core]
-
-	* Added toXHTML() - [Tony Petruzzi]
-	
-		returns an XHTML compliant string
-	
 Bug Fixes
 =========
-* $yearSelectTag() should take into account reverse ordering - [Tony Petruzzi]
-* Binary data support - #133 [Tony Petruzzi]
-* Session scope not locked when accessing flash - #275 [James Gibson, Per Djurner]
-* Missing default for action argument on linkTo - #321 [Andy Bellenie]
-* Correct id for radioButton() when value is blank - #373 [Tony Petruzzi]
-* Match and purge whitespace in where clause - #381 [Tony Petruzzi]
-* Callbacks shouldn't need to be pre-loaded - #388 [Andy Bellenie]
-* Added excludeFromErrorEmail setting - #447 [Per Djurner]
-* findByKey() returns record when passed a blank key - #514 [Andy Bellenie]
-* hasChanged() compares dates correctly - #515 [Tony Petruzzi]
-* validatesUniquenessOf doesn't recognise soft-deleted columns - #532 [Andy Bellenie]
-* adds 12-hour format to date/time selects helpers - #551 [Tony Petruzzi]
-* Bad $throw in wheels/model/onmissingmethod.cfm - #555 [Per Djurner, Awmichel90]
+* Session scope is now locked when accessing the Flash - #275 [James Gibson, Per Djurner]
+* Corrected the "id" attribute for radioButton() when value is blank - #373 [Tony Petruzzi]
+* findByKey() now correctly returns "false" when passed a blank "key" argument - #514 [Andy Bellenie]
+* Fixed so hasChanged() compares dates correctly - #515 [Tony Petruzzi]
+* validatesUniquenessOf() now recognizes soft-deleted columns as well - #532 [Andy Bellenie]
+* Corrected a bad throw in onMissingMethod() - #555 [Per Djurner, Adam Michel]
+* Corrected count() to always return 0 if no records are found - [Per Djurner]
+* Removed differences in params structure for form / URL variables - #232 [Mike Henke, Tony Petruzzi]
 
-Other
-=====
-* Refactor to avoid polluting the Application.cfc's this scope with the rootDir variable - [Per Djurner]
-* Customize RocketUnit Testing framework is now included - [RocketBoots Pty Limited]
+Miscellaneous
+=============
+* Adobe ColdFusion 8.0.1 or Railo 3.1.2.020 is now required [Tony Petruzzi, Per Djurner]
+* Deprecated the "class" argument on association methods (belongsTo(), hasMany(), hasOne()), use "modelName" instead. - [Per Djurner]
+* Refactor to avoid polluting the Application.cfc's this scope with the "rootDir" variable - [Per Djurner]
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WHEELS VERSION 1.0.5
 
@@ -378,9 +159,7 @@ Bug Fixes
 * Fixed pluralization issue related to partials used with object(s)/queries and removed the limitation of the file being tied to the model name - #427 [Per Djurner, James Gibson]
 * Prevent additional errors from occurring during display of CFML errors - #466 [John C. Bland II, Per Djurner, Tony Petruzzi]
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WHEELS VERSION 1.0.4
 
@@ -397,9 +176,7 @@ Bug Fixes
 * Fixed so URLFor() is not duplicating controller and action when URL rewriting is off - #433 [Per Djurner]
 * Added support to imageTag() for all image types that the CFML engine supports - [Cathy Shapiro, Per Djurner]
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WHEELS VERSION 1.0.3
 
@@ -419,9 +196,7 @@ Bug Fixes
 * Fixed error with a call to http://localhost/badtemplate.cfm not showing the output of the onmissingtemplate.cfm file - [Clarke Bishop, Andy Bellenie, Per Djurner]
 * Corrected link in error email when URL rewriting is on - [Andy Bellenie]
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WHEELS VERSION 1.0.2
 
@@ -430,9 +205,7 @@ Bug Fixes
 * Added work-around for CF9 / OSX related "extends" bug in MySQL adapter - #378 [Russ Johnson, Jordan Sitkin, John C. Bland II, Per Djurner]
 * Fixed call to non existing function in URLFor() - [Andy Bellenie, Per Djurner]
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WHEELS VERSION 1.0.1
 
@@ -465,33 +238,40 @@ Bug Fixes
 * Fixed so queries created in afterFind callbacks can be referenced from view helpers - [James Gibson]
 * Fixed so links are properly hyphenated when controller/action is part of the placeholder route values. - [William Fisk, Per Djurner]
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WHEELS VERSION 1.0
 
-Changes
-=======
+Model Enhancements
+==================
+* Added "xml" datatype for SQL Server 2005/2008 - #295 [Andy Bellenie, Per Djurner]
+* Added the Railo specific cfquery attribute called "psq" to make Wheels run on a default installation of Railo - [Raul Riera, Per Djurner]
 * Changed setProperties() to allow any passed in variable to be set on the object - [Per Djurner]
 * Changed properties() so that it returns anything in the this scope that is not a function - [Per Djurner]
-* Support for setting Application.cfc this scoped variables through config/app.cfm - #315 [Jay McEntire, Per Djurner]
 * Modified so SUM, AVG, MIN, MAX returns blank string and COUNT returns 0 when no records are found - [Tony Petruzzi, Per Djurner]
 * Support for "if"/"unless" in validate(), validateOnCreate() and validateOnUpdate() - [Per Djurner]
 * Support for built-in CFML types in validatesFormatOf() - [Raul Riera, Per Djurner]
-* Allow plugin developer to specify a list of supported Wheels versions instead of just one - [Chris Peters, Per Djurner]
-* Rewrite Rules for IIS7 - [Sameer Gupta, Mike Rampton, Per Djurner]
-* Rewrite support in sub folders in Apache - [Peter Amiri]
 * Added "allowBlank" argument on validatesUniquenessOf() - #271 [Per Djurner]
-* Methods from plugins can now be injected to "Application.cfc" - #288 [James Gibson, Per Djurner]
+* Removed a query in findAll that didn't need to run when the join type was set to inner - [Mike Henke, Per Djurner]
+* Updated model error functions to take and perform actions with properties and name errors - [Tony Petruzzi]
+
+View Enhancements
+=================
 * Consistent style and reload links added to debug area - [Per Djurner]
-* Added "xml" datatype for SQL Server 2005/2008 - #295 [Andy Bellenie, Per Djurner]
-* Turned off rewriting for "robots.txt" file - #278 [Chris Peters, Per Djurner]
 * Trimmed final output's white space - #279 [Chris Peters, Per Djurner]
 * Humanized list / array items in $optionsForSelect() - #267 [James Gibson]
-* Updated model error functions to take and perform actions with properties and name errors - [Tony Petruzzi]
-* Removed a query in findAll that didn't need to run when the join type was set to inner - [Mike Henke, Per Djurner]
-* Added the Railo specific cfquery attribute called "psq" to make Wheels run on a default installation of Railo - [Raul Riera, Per Djurner]
+
+Controller Enhancements
+=======================
+* Rewrite Rules for IIS7 - [Sameer Gupta, Mike Rampton, Per Djurner]
+* Rewrite support in sub folders in Apache - [Peter Amiri]
+* Turned off rewriting for "robots.txt" file - #278 [Chris Peters, Per Djurner]
+
+Other Enhancements
+==================
+* Support for setting Application.cfc this scoped variables through config/app.cfm - #315 [Jay McEntire, Per Djurner]
+* Allow plugin developer to specify a list of supported Wheels versions instead of just one - [Chris Peters, Per Djurner]
+* Methods from plugins can now be injected to "Application.cfc" - #288 [James Gibson, Per Djurner]
 
 Bug Fixes
 =========
@@ -521,8 +301,8 @@ Bug Fixes
 * Fixed so you can order on included tables in finders without speciyfing table name - [Per Djurner]
 * Fixed so pagination returns an empty query instead of the full record set when specifying a page out of range - [Per Djurner]
 
-Other
-=====
+Miscellaneous
+=============
 * Refactored validations code - #266 [Per Djurner]
 * Copied cgi scope to request scope - #277 [Tony Petruzzi, James Gibson, Per Djurner]
 * Removed an unnecessary variable assignment - #265 [William Fisk, Per Djurner]
