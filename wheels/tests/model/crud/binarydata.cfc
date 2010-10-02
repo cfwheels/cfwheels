@@ -1,7 +1,15 @@
 <cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
-		<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.png')#" variable="loc.binaryData">	
+		<cfdbinfo name="loc.dbinfo" datasource="wheelstestdb" type="version">
+		<cfset loc.db = LCase(Replace(loc.dbinfo.database_productname, " ", "", "all"))>
+		
+		<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.png')#" variable="loc.binaryData">
+			
+		<!--- There appears to be a problem with the JDBC SQLite adapter and BLOB datatypes, so let's convert it to a string --->
+		<cfif loc.db IS "sqlite">
+			<cfset loc.binaryData = ToBase64(loc.binaryData)>
+		</cfif>
 	</cffunction>
 
  	<cffunction name="test_update">
@@ -12,7 +20,8 @@
 			<cfset loc._binary = loc.photogalleryphoto.filedata>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset assert('IsBinary(loc._binary)')>
+		
+		<cfset assert('IsBinary(ToBinary(loc._binary))')>
 	</cffunction>
 	
  	<cffunction name="test_insert">
@@ -32,7 +41,7 @@
 			<cfset loc._binary = loc.photogalleryphoto.filedata>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset assert('IsBinary(loc._binary)')>
+		<cfset assert('IsBinary(ToBinary(loc._binary))')>
 	</cffunction>
 
 </cfcomponent>
