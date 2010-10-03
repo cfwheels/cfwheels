@@ -13,7 +13,7 @@
 	<cfset loc.identityColumnType = "int NOT NULL AUTO_INCREMENT">
 	<cfset loc.storageEngine = "ENGINE=InnoDB">
 <cfelseif loc.db IS "sqlite">
-	<cfset loc.identityColumnType = "integer NOT NULL AUTOINCREMENT">
+	<cfset loc.identityColumnType = "integer NOT NULL PRIMARY KEY AUTOINCREMENT">
 <cfelseif loc.db IS "h2">
 	<cfset loc.identityColumnType = "int NOT NULL IDENTITY">
 <cfelseif loc.db IS "postgresql">
@@ -63,8 +63,8 @@ CREATE TABLE authors
 (
 	id #loc.identityColumnType#,
 	firstname varchar(100) NOT NULL,
-	lastname varchar(100) NOT NULL,
-	PRIMARY KEY(id)
+	lastname varchar(100) NOT NULL
+	<cfif loc.identityColumnType Does Not Contain "PRIMARY KEY">,PRIMARY KEY(id)</cfif>
 ) #loc.storageEngine#
 </cfquery>
 
@@ -83,8 +83,8 @@ CREATE TABLE classifications
 (
 	id #loc.identityColumnType#,
 	postid int NOT NULL,
-	tagid int NOT NULL,
-	PRIMARY KEY(id)
+	tagid int NOT NULL
+	<cfif loc.identityColumnType Does Not Contain "PRIMARY KEY">,PRIMARY KEY(id)</cfif>
 ) #loc.storageEngine#
 </cfquery>
 
@@ -92,8 +92,8 @@ CREATE TABLE classifications
 CREATE TABLE collisiontests
 (
 	id #loc.identityColumnType#,
-	method varchar(100) NOT NULL,
-	PRIMARY KEY(id)
+	method varchar(100) NOT NULL
+	<cfif loc.identityColumnType Does Not Contain "PRIMARY KEY">,PRIMARY KEY(id)</cfif>
 ) #loc.storageEngine#
 </cfquery>
 
@@ -106,8 +106,8 @@ CREATE TABLE comments
 	name varchar(100) NOT NULL,
 	url varchar(100) NULL,
 	email varchar(100) NULL,
-	createdat #loc.datetimeColumnType# NOT NULL,
-	PRIMARY KEY(id)
+	createdat #loc.datetimeColumnType# NOT NULL
+	<cfif loc.identityColumnType Does Not Contain "PRIMARY KEY">,PRIMARY KEY(id)</cfif>
 ) #loc.storageEngine#
 </cfquery>
 
@@ -117,8 +117,8 @@ CREATE TABLE photogalleries
 	photogalleryid #loc.identityColumnType#,
 	userid int NOT NULL,
 	title varchar(255) NOT NULL,
-	description text NOT NULL,
-	PRIMARY KEY(photogalleryid)
+	description text NOT NULL
+	<cfif loc.identityColumnType Does Not Contain "PRIMARY KEY">,PRIMARY KEY(photogalleryid)</cfif>
 ) #loc.storageEngine#
 </cfquery>
 
@@ -129,8 +129,8 @@ CREATE TABLE photogalleryphotos
 	photogalleryid int NOT NULL,
 	filename varchar(255) NOT NULL,
 	description varchar(255) NOT NULL,
-	filedata #loc.binaryColumnType# NULL,
-	PRIMARY KEY(photogalleryphotoid)
+	filedata #loc.binaryColumnType# NULL
+	<cfif loc.identityColumnType Does Not Contain "PRIMARY KEY">,PRIMARY KEY(photogalleryphotoid)</cfif>
 ) #loc.storageEngine#
 </cfquery>
 
@@ -145,8 +145,8 @@ CREATE TABLE posts
 	updatedat #loc.datetimeColumnType# NOT NULL,
 	deletedat #loc.datetimeColumnType# NULL,
 	views int NOT NULL DEFAULT 0,
-	averagerating float NULL,
-	PRIMARY KEY(id)
+	averagerating float NULL
+	<cfif loc.identityColumnType Does Not Contain "PRIMARY KEY">,PRIMARY KEY(id)</cfif>
 ) #loc.storageEngine#
 </cfquery>
 
@@ -156,8 +156,8 @@ CREATE TABLE profiles
 	id #loc.identityColumnType#,
 	authorid int NULL,
 	dateofbirth #loc.datetimeColumnType# NOT NULL,
-	bio text NULL,
-	PRIMARY KEY(id)
+	bio text NULL
+	<cfif loc.identityColumnType Does Not Contain "PRIMARY KEY">,PRIMARY KEY(id)</cfif>
 ) #loc.storageEngine#
 </cfquery>
 
@@ -166,8 +166,8 @@ CREATE TABLE shops
 (
 	shopid char(9) NOT NULL,
 	citycode int NULL,
-	name varchar(80) NOT NULL,
-	PRIMARY KEY(shopid)
+	name varchar(80) NOT NULL
+	<cfif loc.identityColumnType Does Not Contain "PRIMARY KEY">,PRIMARY KEY(shopid)</cfif>
 ) #loc.storageEngine#
 </cfquery>
 
@@ -176,8 +176,8 @@ CREATE TABLE tags
 (
 	id #loc.identityColumnType#,
 	name varchar(50) NOT NULL,
-	description varchar(50) NULL,
-	PRIMARY KEY(id)
+	description varchar(50) NULL
+	<cfif loc.identityColumnType Does Not Contain "PRIMARY KEY">,PRIMARY KEY(id)</cfif>
 ) #loc.storageEngine#
 </cfquery>
 
@@ -199,8 +199,8 @@ CREATE TABLE users
 	birthdaymonth int NULL,
 	birthdayyear int NULL,
 	birthtime #loc.datetimeColumnType# NULL DEFAULT '2000-01-01 18:26:08.690',
-	isactive int NULL,
-	PRIMARY KEY(id)	
+	isactive int NULL
+	<cfif loc.identityColumnType Does Not Contain "PRIMARY KEY">,PRIMARY KEY(id)</cfif>
 ) #loc.storageEngine#
 </cfquery>
 
