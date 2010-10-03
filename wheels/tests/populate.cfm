@@ -2,19 +2,24 @@
 <cfdbinfo name="loc.dbinfo" datasource="wheelstestdb" type="version">
 <cfset loc.db = LCase(Replace(loc.dbinfo.database_productname, " ", "", "all"))>
 
-<!--- handle differences in database for identity inserts and engines --->
+<!--- handle differences in database for identity inserts, column types etc--->
+<cfset loc.storageEngine = "">
+<cfset loc.dateTimeColumnType = "datetime">
+<cfset loc.binaryColumnType = "blob">
 <cfif loc.db IS "microsoftsqlserver">
-	<cfset loc.ident = "IDENTITY(1,1)">
-	<cfset loc.engine = "">
+	<cfset loc.identityColumnType = "int NOT NULL IDENTITY(1,1)">
+	<cfset loc.binaryColumnType = "image">
 <cfelseif loc.db IS "mysql">
-	<cfset loc.ident = "AUTO_INCREMENT">
-	<cfset loc.engine = "ENGINE=InnoDB">
+	<cfset loc.identityColumnType = "int NOT NULL AUTO_INCREMENT">
+	<cfset loc.storageEngine = "ENGINE=InnoDB">
 <cfelseif loc.db IS "sqlite">
-	<cfset loc.ident = "AUTOINCREMENT">
-	<cfset loc.engine = "">
-<cfelse>
-	<cfset loc.ident = "IDENTITY">
-	<cfset loc.engine = "">
+	<cfset loc.identityColumnType = "int NOT NULL AUTOINCREMENT">
+<cfelseif loc.db IS "h2">
+	<cfset loc.identityColumnType = "int NOT NULL IDENTITY">
+<cfelseif loc.db IS "postgresql">
+	<cfset loc.identityColumnType = "SERIAL NOT NULL">
+	<cfset loc.dateTimeColumnType = "timestamp">
+	<cfset loc.binaryColumnType = "bytea">
 </cfif>
 
 <!--- get a listing of all the tables and view in the database --->
@@ -56,160 +61,130 @@ create tables
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE authors
 (
-	<cfif loc.db IS "sqlite">
-		id integer NOT NULL PRIMARY KEY #loc.ident#,
-	<cfelse>
-		id int NOT NULL #loc.ident# PRIMARY KEY,
-	</cfif>
+	id #loc.identityColumnType#,
 	firstname varchar(100) NOT NULL,
-	lastname varchar(100) NOT NULL
-) #loc.engine#
+	lastname varchar(100) NOT NULL,
+	PRIMARY KEY(id)
+) #loc.storageEngine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE cities
 (
 	countyid char(4) NOT NULL,
-	citycode tinyint NOT NULL,
+	citycode int NOT NULL,
 	name varchar(50) NOT NULL,
 	PRIMARY KEY(countyid,citycode)
-) #loc.engine#
+) #loc.storageEngine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE classifications
 (
-	<cfif loc.db IS "sqlite">
-		id integer NOT NULL PRIMARY KEY #loc.ident#,
-	<cfelse>
-		id int NOT NULL #loc.ident# PRIMARY KEY,
-	</cfif>
+	id #loc.identityColumnType#,
 	postid int NOT NULL,
-	tagid int NOT NULL
-) #loc.engine#
+	tagid int NOT NULL,
+	PRIMARY KEY(id)
+) #loc.storageEngine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE collisiontests
 (
-	<cfif loc.db IS "sqlite">
-		id integer NOT NULL PRIMARY KEY #loc.ident#,
-	<cfelse>
-		id int NOT NULL #loc.ident# PRIMARY KEY,
-	</cfif>
-	method varchar(100) NOT NULL
-) #loc.engine#
+	id #loc.identityColumnType#,
+	method varchar(100) NOT NULL,
+	PRIMARY KEY(id)
+) #loc.storageEngine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE comments
 (
-	<cfif loc.db IS "sqlite">
-		id integer NOT NULL PRIMARY KEY #loc.ident#,
-	<cfelse>
-		id int NOT NULL #loc.ident# PRIMARY KEY,
-	</cfif>
+	id #loc.identityColumnType#,
 	postid int NOT NULL,
 	body text NOT NULL,
 	name varchar(100) NOT NULL,
 	url varchar(100) NULL,
 	email varchar(100) NULL,
-	createdat datetime NOT NULL
-) #loc.engine#
+	createdat #loc.datetimeColumnType# NOT NULL,
+	PRIMARY KEY(id)
+) #loc.storageEngine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE photogalleries
 (
-	<cfif loc.db IS "sqlite">
-		photogalleryid integer NOT NULL PRIMARY KEY #loc.ident#,
-	<cfelse>
-		photogalleryid int NOT NULL #loc.ident# PRIMARY KEY,
-	</cfif>
+	photogalleryid #loc.identityColumnType#,
 	userid int NOT NULL,
 	title varchar(255) NOT NULL,
-	description text NOT NULL
-) #loc.engine#
+	description text NOT NULL,
+	PRIMARY KEY(photogalleryid)
+) #loc.storageEngine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE photogalleryphotos
 (
-	<cfif loc.db IS "sqlite">
-		photogalleryphotoid integer NOT NULL PRIMARY KEY #loc.ident#,
-	<cfelse>
-		photogalleryphotoid int NOT NULL #loc.ident# PRIMARY KEY,
-	</cfif>
+	photogalleryphotoid #loc.identityColumnType#,
 	photogalleryid int NOT NULL,
 	filename varchar(255) NOT NULL,
 	description varchar(255) NOT NULL,
-	filedata <cfif loc.db IS "microsoftsqlserver">image<cfelse>blob</cfif> NULL
-) #loc.engine#
+	filedata #loc.binaryColumnType# NULL,
+	PRIMARY KEY(photogalleryphotoid)
+) #loc.storageEngine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE posts
 (
-	<cfif loc.db IS "sqlite">
-		id integer NOT NULL PRIMARY KEY #loc.ident#,
-	<cfelse>
-		id int NOT NULL #loc.ident# PRIMARY KEY,
-	</cfif>
+	id #loc.identityColumnType#,
 	authorid int NULL,
 	title varchar(250) NOT NULL,
 	body text NOT NULL,
-	createdat datetime NOT NULL,
-	updatedat datetime NOT NULL,
-	deletedat datetime NULL,
+	createdat #loc.datetimeColumnType# NOT NULL,
+	updatedat #loc.datetimeColumnType# NOT NULL,
+	deletedat #loc.datetimeColumnType# NULL,
 	views int NOT NULL DEFAULT 0,
-	averagerating float NULL
-) #loc.engine#
+	averagerating float NULL,
+	PRIMARY KEY(id)
+) #loc.storageEngine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE profiles
 (
-	<cfif loc.db IS "sqlite">
-		id integer NOT NULL PRIMARY KEY #loc.ident#,
-	<cfelse>
-		id int NOT NULL #loc.ident# PRIMARY KEY,
-	</cfif>
+	id #loc.identityColumnType#,
 	authorid int NULL,
-	dateofbirth datetime NOT NULL,
-	bio text NULL
-) #loc.engine#
+	dateofbirth #loc.datetimeColumnType# NOT NULL,
+	bio text NULL,
+	PRIMARY KEY(id)
+) #loc.storageEngine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE shops
 (
-	shopid char(9) NOT NULL PRIMARY KEY,
-	citycode tinyint NULL,
-	name varchar(80) NOT NULL
-) #loc.engine#
+	shopid char(9) NOT NULL,
+	citycode int NULL,
+	name varchar(80) NOT NULL,
+	PRIMARY KEY(shopid)
+) #loc.storageEngine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE tags
 (
-	<cfif loc.db IS "sqlite">
-		id integer NOT NULL PRIMARY KEY #loc.ident#,
-	<cfelse>
-		id int NOT NULL #loc.ident# PRIMARY KEY,
-	</cfif>
+	id #loc.identityColumnType#,
 	name varchar(50) NOT NULL,
-	description varchar(50) NULL
-) #loc.engine#
+	description varchar(50) NULL,
+	PRIMARY KEY(id)
+) #loc.storageEngine#
 </cfquery>
 
 <cfquery name="loc.query" datasource="wheelstestdb">
 CREATE TABLE users
 (
-	<cfif loc.db IS "sqlite">
-		id integer NOT NULL PRIMARY KEY #loc.ident#,
-	<cfelse>
-		id int NOT NULL #loc.ident# PRIMARY KEY,
-	</cfif>
+	id #loc.identityColumnType#,
 	username varchar(50) NOT NULL,
 	password varchar(50) NOT NULL,
 	firstname varchar(50) NOT NULL,
@@ -220,14 +195,14 @@ CREATE TABLE users
 	zipcode varchar(50) NULL,
 	phone varchar(20) NULL,
 	fax varchar(20) NULL,
-	birthday datetime NULL,
+	birthday #loc.datetimeColumnType# NULL,
 	birthdaymonth int NULL,
 	birthdayyear int NULL,
-	birthtime datetime NULL DEFAULT '2000-01-01 18:26:08.690',
-	isactive bit NULL
-) #loc.engine#
+	birthtime #loc.datetimeColumnType# NULL DEFAULT '2000-01-01 18:26:08.690',
+	isactive int NULL,
+	PRIMARY KEY(id)	
+) #loc.storageEngine#
 </cfquery>
-
 
 <!--- 
 create views
@@ -254,7 +229,7 @@ FROM users u INNER JOIN photogalleries pg ON u.id = pg.userid;
 	,birthday='11/01/1975'
 	,birthdaymonth=11
 	,birthdayyear=1975
-	,isactive=true
+	,isactive=1
 )>
 
 <cfset loc.user = model("user").create(
@@ -271,7 +246,7 @@ FROM users u INNER JOIN photogalleries pg ON u.id = pg.userid;
 	,birthday='10/05/1972'
 	,birthdaymonth=10
 	,birthdayyear=1972
-	,isactive=true
+	,isactive=1
 )>
 
 <cfset loc.user = model("user").create(
@@ -288,7 +263,7 @@ FROM users u INNER JOIN photogalleries pg ON u.id = pg.userid;
 	,birthday='09/12/1973'
 	,birthdaymonth=9
 	,birthdayyear=1973
-	,isactive=true
+	,isactive=1
 )>
 
 <cfset loc.user = model("user").create(
@@ -305,7 +280,7 @@ FROM users u INNER JOIN photogalleries pg ON u.id = pg.userid;
 	,birthday='06/14/1981'
 	,birthdaymonth=6
 	,birthdayyear=1981
-	,isactive=true
+	,isactive=1
 )>
 
 <cfset loc.user = model("user").create(
@@ -322,7 +297,7 @@ FROM users u INNER JOIN photogalleries pg ON u.id = pg.userid;
 	,birthday='11/12/1973'
 	,birthdaymonth=11
 	,birthdayyear=1973
-	,isactive=true
+	,isactive=1
 )>
 
 <cfset loc.per = model("author").create(firstName="Per", lastName="Djurner")>
