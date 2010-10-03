@@ -13,7 +13,7 @@
 	<cfset loc.identityColumnType = "int NOT NULL AUTO_INCREMENT">
 	<cfset loc.storageEngine = "ENGINE=InnoDB">
 <cfelseif loc.db IS "sqlite">
-	<cfset loc.identityColumnType = "int NOT NULL AUTOINCREMENT">
+	<cfset loc.identityColumnType = "integer NOT NULL AUTOINCREMENT">
 <cfelseif loc.db IS "h2">
 	<cfset loc.identityColumnType = "int NOT NULL IDENTITY">
 <cfelseif loc.db IS "postgresql">
