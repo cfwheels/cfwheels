@@ -19,6 +19,7 @@ Bug Fixes
 * Fixed so labels on dateTimeSelectTags() and dateTimeSelect() get applied correctly to all six possible form inputs - #531 [Raul Riera, Tony Petruzzi, Chris Peters, Per Djurner]
 * Made it possible to call the controller data function from a partial located in the root or sub folder - [Per Djurner, Chris Peters]
 * The full tag context of an error was missing from the error emails, fixed now - [Andy Bellenie]
+* Fixed a PostgreSQL pagination query that would fail under certain conditions (edge case) - [Per Djurner]
 
 Miscellaneous
 =============
