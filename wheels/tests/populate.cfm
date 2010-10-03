@@ -208,7 +208,7 @@ CREATE TABLE users
 	PRIMARY KEY(id #loc.identityKeyWord#)	
 ) #loc.storageEngine#
 </cfquery>
-<cfabort>
+
 <!--- 
 create views
  --->
