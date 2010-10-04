@@ -3,7 +3,7 @@
 	<cffunction name="init">
 		<cfset belongsTo(name="user", modelName="user", foreignKey="userid")>
 		<cfset hasMany(name="photogalleryphotos", modelName="photogalleryphoto", foreignKey="photogalleryid")>
-		<cfset nestedProperties(associations="photogalleryphotos")>
+		<cfset nestedProperties(associations="photogalleryphotos", allowDelete="true")>
 	</cffunction>
 
 </cfcomponent>

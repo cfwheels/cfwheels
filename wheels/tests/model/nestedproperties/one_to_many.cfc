@@ -16,6 +16,20 @@
 			<cftransaction action="rollback"/>
 		</cftransaction>
 	</cffunction>
+	
+	<cffunction name="test_delete_children_via_object_array">
+		<cftransaction>
+			<cfset assert("loc.testGallery.save()")>
+			<cfset loc.testGallery = loc.gallery.findOneByTitle(value="Nested Properties Gallery", include="photoGalleryPhotos")>
+			<cfloop array="#loc.testGallery.photoGalleryPhotos#" index="loc.i">
+				<cfset loc.i._delete = true>
+			</cfloop>
+			<cfset loc.testGallery.save()>
+			<cfset assert("IsArray(loc.testGallery.photoGalleryPhotos)")>
+			<cfset assert("ArrayLen(loc.testGallery.photoGalleryPhotos) eq 0")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
 
 	<cffunction name="$setTestObjects" access="private" hint="Sets up test gallery/gallery photo objects.">
 		<!--- User --->

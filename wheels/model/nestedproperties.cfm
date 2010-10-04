@@ -179,12 +179,27 @@
 				if (IsObject(arguments.value[loc.i]) && ArrayLen(this[arguments.property]) gte loc.i && IsObject(this[arguments.property][loc.i]) && this[arguments.property][loc.i].compareTo(arguments.value[loc.i]))
 				{
 					this[arguments.property][loc.i] = $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete);
-					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i], position=loc.i);
+					if (!IsStruct(this[arguments.property][loc.i]) && !this[arguments.property][loc.i])
+					{
+						ArrayDeleteAt(this[arguments.property], loc.i);
+						loc.i--;
+					}
+					else
+					{
+						$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i], position=loc.i);
+					}
 				}
 				else if (IsStruct(arguments.value[loc.i]) && ArrayLen(this[arguments.property]) gte loc.i && IsObject(this[arguments.property][loc.i]))
 				{
 					this[arguments.property][loc.i] = $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete);
-					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i], position=loc.i);
+					if (!IsStruct(this[arguments.property][loc.i]) && !this[arguments.property][loc.i])
+					{
+						ArrayDeleteAt(this[arguments.property], loc.i);
+					}
+					else
+					{
+						$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i], position=loc.i);
+					}
 				}
 				else
 				{
