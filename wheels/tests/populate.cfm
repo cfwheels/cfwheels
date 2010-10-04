@@ -1,5 +1,5 @@
 <!--- get the version of the database we're running against --->
-<cfdbinfo name="loc.dbinfo" datasource="wheelstestdb" type="version">
+<cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="version">
 <cfset loc.db = LCase(Replace(loc.dbinfo.database_productname, " ", "", "all"))>
 
 <!--- handle differences in database for identity inserts, column types etc--->
@@ -23,7 +23,7 @@
 </cfif>
 
 <!--- get a listing of all the tables and view in the database --->
-<cfdbinfo name="loc.dbinfo" datasource="wheelstestdb" type="tables">
+<cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="tables">
 <cfset loc.tableList = ValueList(loc.dbinfo.table_name, chr(7))>
 
 <!--- list of tables to delete --->
@@ -31,7 +31,7 @@
 <cfloop list="#loc.tables#" index="loc.i">
 	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
 		<cftry>
-			<cfquery name="loc.query" datasource="wheelstestdb">
+			<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 			DROP TABLE #loc.i#
 			</cfquery>
 			<cfcatch>
@@ -45,7 +45,7 @@
 <cfloop list="#loc.views#" index="loc.i">
 	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
 		<cftry>
-			<cfquery name="loc.query" datasource="wheelstestdb">
+			<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 			DROP VIEW #loc.i#
 			</cfquery>
 			<cfcatch>
@@ -55,10 +55,10 @@
 </cfloop>
 
 
-<!--- 
+<!---
 create tables
  --->
-<cfquery name="loc.query" datasource="wheelstestdb">
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 CREATE TABLE authors
 (
 	id #loc.identityColumnType#,
@@ -68,7 +68,7 @@ CREATE TABLE authors
 ) #loc.storageEngine#
 </cfquery>
 
-<cfquery name="loc.query" datasource="wheelstestdb">
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 CREATE TABLE cities
 (
 	countyid char(4) NOT NULL,
@@ -78,7 +78,7 @@ CREATE TABLE cities
 ) #loc.storageEngine#
 </cfquery>
 
-<cfquery name="loc.query" datasource="wheelstestdb">
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 CREATE TABLE classifications
 (
 	id #loc.identityColumnType#,
@@ -88,7 +88,7 @@ CREATE TABLE classifications
 ) #loc.storageEngine#
 </cfquery>
 
-<cfquery name="loc.query" datasource="wheelstestdb">
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 CREATE TABLE collisiontests
 (
 	id #loc.identityColumnType#,
@@ -97,7 +97,7 @@ CREATE TABLE collisiontests
 ) #loc.storageEngine#
 </cfquery>
 
-<cfquery name="loc.query" datasource="wheelstestdb">
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 CREATE TABLE comments
 (
 	id #loc.identityColumnType#,
@@ -111,7 +111,7 @@ CREATE TABLE comments
 ) #loc.storageEngine#
 </cfquery>
 
-<cfquery name="loc.query" datasource="wheelstestdb">
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 CREATE TABLE photogalleries
 (
 	photogalleryid #loc.identityColumnType#,
@@ -122,7 +122,7 @@ CREATE TABLE photogalleries
 ) #loc.storageEngine#
 </cfquery>
 
-<cfquery name="loc.query" datasource="wheelstestdb">
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 CREATE TABLE photogalleryphotos
 (
 	photogalleryphotoid #loc.identityColumnType#,
@@ -134,7 +134,7 @@ CREATE TABLE photogalleryphotos
 ) #loc.storageEngine#
 </cfquery>
 
-<cfquery name="loc.query" datasource="wheelstestdb">
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 CREATE TABLE posts
 (
 	id #loc.identityColumnType#,
@@ -150,7 +150,7 @@ CREATE TABLE posts
 ) #loc.storageEngine#
 </cfquery>
 
-<cfquery name="loc.query" datasource="wheelstestdb">
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 CREATE TABLE profiles
 (
 	id #loc.identityColumnType#,
@@ -161,7 +161,7 @@ CREATE TABLE profiles
 ) #loc.storageEngine#
 </cfquery>
 
-<cfquery name="loc.query" datasource="wheelstestdb">
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 CREATE TABLE shops
 (
 	shopid char(9) NOT NULL,
@@ -171,7 +171,7 @@ CREATE TABLE shops
 ) #loc.storageEngine#
 </cfquery>
 
-<cfquery name="loc.query" datasource="wheelstestdb">
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 CREATE TABLE tags
 (
 	id #loc.identityColumnType#,
@@ -181,7 +181,7 @@ CREATE TABLE tags
 ) #loc.storageEngine#
 </cfquery>
 
-<cfquery name="loc.query" datasource="wheelstestdb">
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 CREATE TABLE users
 (
 	id #loc.identityColumnType#,
@@ -204,10 +204,10 @@ CREATE TABLE users
 ) #loc.storageEngine#
 </cfquery>
 
-<!--- 
+<!---
 create views
  --->
-<cfquery name="loc.query" datasource="wheelstestdb">
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 CREATE VIEW userphotos AS
 SELECT u.id AS userid, u.username AS username, u.firstname AS firstname, u.lastname AS lastname, pg.title AS title, pg.photogalleryid AS photogalleryid
 FROM users u INNER JOIN photogalleries pg ON u.id = pg.userid;
@@ -368,7 +368,7 @@ FROM users u INNER JOIN photogalleries pg ON u.id = pg.userid;
 	,description="testdesc"
 )>
 
-<cfquery name="loc.query" datasource="wheelstestdb">
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 INSERT INTO collisiontests (method)
 VALUES ('test')
 </cfquery>
