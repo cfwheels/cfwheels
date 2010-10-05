@@ -16,8 +16,6 @@
 <cfelseif loc.db IS "mysql">
 	<cfset loc.identityColumnType = "int NOT NULL AUTO_INCREMENT">
 	<cfset loc.storageEngine = "ENGINE=InnoDB">
-<cfelseif loc.db IS "sqlite">
-	<cfset loc.identityColumnType = "integer NOT NULL PRIMARY KEY AUTOINCREMENT">
 <cfelseif loc.db IS "h2">
 	<cfset loc.identityColumnType = "int NOT NULL IDENTITY">
 <cfelseif loc.db IS "postgresql">
@@ -73,7 +71,7 @@ CREATE TABLE authors
 	id #loc.identityColumnType#
 	,firstname varchar(100) NOT NULL
 	,lastname varchar(100) NOT NULL
-	<cfif loc.db neq "sqlite">,PRIMARY KEY(id)</cfif>
+	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
 
@@ -93,7 +91,7 @@ CREATE TABLE classifications
 	id #loc.identityColumnType#
 	,postid int NOT NULL
 	,tagid int NOT NULL
-	<cfif loc.db neq "sqlite">,PRIMARY KEY(id)</cfif>
+	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
 
@@ -102,7 +100,7 @@ CREATE TABLE collisiontests
 (
 	id #loc.identityColumnType#
 	,method varchar(100) NOT NULL
-	<cfif loc.db neq "sqlite">,PRIMARY KEY(id)</cfif>
+	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
 
@@ -116,7 +114,7 @@ CREATE TABLE comments
 	,url varchar(100) NULL
 	,email varchar(100) NULL
 	,createdat #loc.datetimeColumnType# NOT NULL
-	<cfif loc.db neq "sqlite">,PRIMARY KEY(id)</cfif>
+	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
 
@@ -127,7 +125,7 @@ CREATE TABLE photogalleries
 	,userid int NOT NULL
 	,title varchar(255) NOT NULL
 	,description #loc.textColumnType# NOT NULL
-	<cfif loc.db neq "sqlite">,PRIMARY KEY(photogalleryid)</cfif>
+	,PRIMARY KEY(photogalleryid)
 ) #loc.storageEngine#
 </cfquery>
 
@@ -139,7 +137,7 @@ CREATE TABLE photogalleryphotos
 	,filename varchar(255) NOT NULL
 	,description varchar(255) NOT NULL
 	,filedata #loc.binaryColumnType# NULL
-	<cfif loc.db neq "sqlite">,PRIMARY KEY(photogalleryphotoid)</cfif>
+	,PRIMARY KEY(photogalleryphotoid)
 ) #loc.storageEngine#
 </cfquery>
 
@@ -155,7 +153,7 @@ CREATE TABLE posts
 	,deletedat #loc.datetimeColumnType# NULL
 	,views int DEFAULT 0 NOT NULL
 	,averagerating float NULL
-	<cfif loc.db neq "sqlite">,PRIMARY KEY(id)</cfif>
+	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
 
@@ -166,7 +164,7 @@ CREATE TABLE profiles
 	,authorid int NULL
 	,dateofbirth #loc.datetimeColumnType# NOT NULL
 	,bio #loc.textColumnType# NULL
-	<cfif loc.db neq "sqlite">,PRIMARY KEY(id)</cfif>
+	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
 
@@ -186,7 +184,7 @@ CREATE TABLE tags
 	id #loc.identityColumnType#
 	,name varchar(50) NOT NULL
 	,description varchar(50) NULL
-	<cfif loc.db neq "sqlite">,PRIMARY KEY(id)</cfif>
+	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
 
@@ -209,7 +207,7 @@ CREATE TABLE users
 	,birthdayyear int NULL
 	,birthtime #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NULL
 	,isactive int NULL
-	<cfif loc.db neq "sqlite">,PRIMARY KEY(id)</cfif>
+	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
 

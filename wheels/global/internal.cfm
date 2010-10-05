@@ -756,7 +756,7 @@ Should now call bar() instead and marking foo() as deprecated
 	var loc = {};
 	application.wheels.plugins = {};
 	application.wheels.incompatiblePlugins = "";
-	application.wheels.mixableComponents = "application,dispatch,controller,model,microsoftsqlserver,mysql,oracle,postgresql,sqlite";
+	application.wheels.mixableComponents = "application,dispatch,controller,model,microsoftsqlserver,mysql,oracle,postgresql,h2";
 	application.wheels.mixins = {};
 	application.wheels.dependantPlugins = "";
 	loc.pluginFolder = GetDirectoryFromPath(GetBaseTemplatePath()) & "plugins";

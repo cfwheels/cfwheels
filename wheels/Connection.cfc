@@ -39,8 +39,6 @@
 				loc.adapterName = "Oracle";
 			else if (loc.info.driver_name Contains "PostgreSQL")
 				loc.adapterName = "PostgreSQL";
-			else if (loc.info.driver_name Contains "SQLite")
-				loc.adapterName = "SQLite";
 			else if (loc.info.driver_name Contains "H2")
 				loc.adapterName = "H2";
 			else
