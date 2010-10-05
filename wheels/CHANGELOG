@@ -3,6 +3,7 @@ WHEELS VERSION 1.1 BETA 2
 Bug Fixes
 =========
 * Corrected some bugs related to case, ordering and pagination on the H2 database - [Per Djurner]
+* made it possible to use plugins on the H2 database - [Per Djurner]
 * Fixed autoLink() so that it can handle all types of domains - #560 [Tom King, Tony Petruzzi]
 * Corrected deobfuscation logic so that it... umm... works :) - #577 [Per Djurner, James Gibson]
 * Fix for obfuscateParam() related to leading zeros in integer values on Railo - #578 [Tony Petruzzi]
@@ -15,7 +16,6 @@ Bug Fixes
 * Fixed bug with upper case input in humanize() and allow exception list for when abbreviations aren't caught - #587 [Andy Bellenie, Tony Petruzzi, Per Djurner]
 * Made it possible to call model (and other) methods on application / session start - [W. Scott Hayes, Per Djurner]
 * Fixed bug in setPagination() where floats could be passed in for the numeric values - [Tony Petruzzi]
-* Added missing data types for SQLite - [Raul Riera]
 * Fixed so labels on dateTimeSelectTags() and dateTimeSelect() get applied correctly to all six possible form inputs - #531 [Raul Riera, Tony Petruzzi, Chris Peters, Per Djurner]
 * Made it possible to call the controller data function from a partial located in the root or sub folder - [Per Djurner, Chris Peters]
 * The full tag context of an error was missing from the error emails, fixed now - [Andy Bellenie]
@@ -46,7 +46,6 @@ Model Enhancements
 * Added automatic deletion of dependent models - #367 (Per Djurner, Andy Bellenie]
 * Added "setUpdatedAtOnCreate" to tell Wheels if it should update the "updatedAt" property when creating new records - [James Gibson]
 * New setting "useExpandedColumnAliases" that you can set to "true" to prepend included model properties with their model name in queries - #442 [Andy Bellenie]
-* Support for the SQLite database - [Per Djurner]
 * Arguments are now always passed in to "afterFind" callback methods and you can return them to set both queries and objects - [Tony Petruzzi]
 * Updated findAll() to allow for more than one association as long as they are direct (i.e. include="assoc1,assoc2" works but not include="assoc1(assoc2)) - [James Gibson]
 * Update to add GROUP BY functionality in finders - [James Gibson]
