@@ -1,3 +1,11 @@
+WHEELS VERSION 1.1 RC 1
+
+Bug Fixes
+=========
+* Added "errorClass" argument to form helpers and set the default to "fieldWithErrors" to make the naming consistent - [Per Djurner]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 WHEELS VERSION 1.1 BETA 2
 
 Bug Fixes

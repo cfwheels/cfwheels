@@ -160,6 +160,7 @@
 	<cfargument name="prependToLabel" type="string" required="true">
 	<cfargument name="appendToLabel" type="string" required="true">
 	<cfargument name="errorElement" type="string" required="false" default="">
+	<cfargument name="errorClass" type="string" required="false" default="">
 	<cfargument name="$type" type="string" required="true">
 	<cfargument name="$loopFrom" type="numeric" required="true">
 	<cfargument name="$loopTo" type="numeric" required="true">
@@ -211,7 +212,7 @@
 				loc.content = loc.content & $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=loc.args);
 			}
 		}
-		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
+		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -260,7 +261,7 @@
 			loc.content = loc.content & $element(name="option", content=loc.option, attributes=loc.args);
 		}
 
-		loc.returnValue = $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments);
+		loc.returnValue = $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep,association,position,twelveHour", skipStartingWith="label", content=loc.content, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

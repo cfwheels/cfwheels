@@ -29,6 +29,7 @@
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="combine" type="boolean" required="false" hint="Set to `false` to not combine the select parts into a single `DateTime` object.">
 	<cfscript>
 		$args(name="dateSelect", args=arguments);
@@ -72,6 +73,7 @@
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="twelveHour" type="boolean" required="false" default="false" hint="whether to display the hours in 24 or 12 hour format. 12 hour format has AM/PM drop downs">
 	<cfscript>
@@ -117,6 +119,7 @@
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="twelveHour" type="boolean" required="false" default="false" hint="See documentation for @timeSelect.">
 	<cfscript>
