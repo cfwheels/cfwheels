@@ -197,12 +197,6 @@
 <cffunction name="$dbinfo" returntype="any" access="public" output="false">
 	<cfset var loc = {}>
 	<cfset arguments.name = "loc.returnValue">
-	<cfif NOT Len(arguments.username)>
-		<cfset StructDelete(arguments, "username")>
-	</cfif>
-	<cfif NOT Len(arguments.password)>
-		<cfset StructDelete(arguments, "password")>
-	</cfif>
 	<cfdbinfo attributeCollection="#arguments#">
 	<cfreturn loc.returnValue>
 </cffunction>
