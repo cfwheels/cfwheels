@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Model">
+<cfcomponent extends="Model">
 
 	<cffunction name="init">
 		<cfset hasMany("posts")>
@@ -8,6 +8,8 @@
 		<cfset property(name="firstName", label="First name(s)", defaultValue="Dave")>
 		<cfset property(name="lastName", label="Last name", defaultValue="")>
 		<cfset nestedProperties(associations="profile", allowDelete=true)>
+
+		<cfset beforeCreate("oracleAutoInc")>
 	</cffunction>
 
 	<cffunction name="callbackThatReturnsTrue">

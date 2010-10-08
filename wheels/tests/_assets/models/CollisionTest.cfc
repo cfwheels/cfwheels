@@ -1,6 +1,7 @@
-<cfcomponent extends="wheelsMapping.Model">
+<cfcomponent extends="Model">
 
 	<cffunction name="init">
+		<cfset beforeCreate("oracleAutoInc")>
 		<cfset afterFind("afterFindCallback")>
 	</cffunction>
 

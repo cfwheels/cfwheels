@@ -1,12 +1,12 @@
-<cfcomponent extends="wheelsMapping.Model">
+<cfcomponent extends="Model">
 
 	<cffunction name="init">
 		<cfset table("userphotos")>
-		<cfset setPrimaryKey("photogalleryid")>
+		<cfset setPrimaryKey("galleryid")>
 		<cfset hasMany(
-				name="photogalleryphotos"
-				,modelName="photogalleryphoto"
-				,foreignKey="photogalleryid"
+				name="photos"
+				,modelName="photo"
+				,foreignKey="galleryid"
 			)>
 	</cffunction>
 

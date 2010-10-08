@@ -1,8 +1,10 @@
-<cfcomponent extends="wheelsMapping.Model">
+<cfcomponent extends="Model">
 
 	<cffunction name="init">
 		<cfset belongsTo("author")>
 		<cfset hasMany("comments")>
+
+		<cfset beforeCreate("oracleAutoInc")>
 	</cffunction>
 
 	<cffunction name="afterFindCallback">
@@ -17,5 +19,5 @@
 			<cfreturn arguments>
 		</cfif>
 	</cffunction>
-	
+
 </cfcomponent>
