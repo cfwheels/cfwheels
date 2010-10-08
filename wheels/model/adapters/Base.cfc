@@ -5,7 +5,15 @@
 		<cfargument name="datasource" type="string" required="true">
 		<cfargument name="username" type="string" required="true">
 		<cfargument name="password" type="string" required="true">
-		<cfset variables.instance.connection = arguments>
+		<cfargument name="info" type="struct" required="true">
+		<cfscript>
+		variables.instance.info = duplicate(arguments.info);
+		StructDelete(arguments, "info", false);
+		variables.instance.connection = {};
+		variables.instance.connection.datasource = arguments.datasource;
+		variables.instance.connection.username = arguments.username;
+		variables.instance.connection.password = arguments.password;
+		</cfscript>
 		<cfreturn this>
 	</cffunction>
 
@@ -82,20 +90,34 @@
 		loc.args = duplicate(variables.instance.connection);
 		loc.args.table = arguments.tableName;
 		loc.args.type = "columns";
-		if (application.wheels.showErrorInformation)
+		// The Railo Oracle JDBC driver has a problem where it
+		// quotes tables names. We get around this by upper
+		// casing it
+		if (application.wheels.serverName eq "Railo" && variables.instance.info.driver_name eq "Oracle JDBC driver")
 		{
-			try
+			loc.args.table = ucase(loc.args.table);
+		}
+
+		try
+		{
+			if (application.wheels.serverName eq "Adobe ColdFusion" && variables.instance.info.driver_name eq "Oracle JDBC driver")
+			{
+				loc.columns = $$dbinfo(argumentCollection=loc.args);
+			}
+			else
 			{
 				loc.columns = $dbinfo(argumentCollection=loc.args);
 			}
-			catch (Any e)
-			{
-				$throw(type="Wheels.TableNotFound", message="The `#arguments.tableName#` table could not be found in the database.", extendedInfo="Add a table named `#arguments.tableName#` to your database or tell Wheels to use a different table for this model. For example you can tell a `user` model to use a table called `tbl_users` by creating a `User.cfc` file in the `models` folder, creating an `init` method inside it and then calling `table(""tbl_users"")` from within it.");
-			}
 		}
-		else
+		catch (Any e)
 		{
-			loc.columns = $dbinfo(argumentCollection=loc.args);
+			// Oracle driver doesn't throw an error if table isn't found
+			loc.columns = QueryNew("");
+		}
+
+		if (loc.columns.RecordCount eq 0)
+		{
+			$throw(type="Wheels.TableNotFound", message="The `#arguments.tableName#` table could not be found in the database.", extendedInfo="Add a table named `#arguments.tableName#` to your database or tell Wheels to use a different table for this model. For example you can tell a `user` model to use a table called `tbl_users` by creating a `User.cfc` file in the `models` folder, creating an `init` method inside it and then calling `table(""tbl_users"")` from within it.");
 		}
 		</cfscript>
 		<cfreturn loc.columns>
@@ -179,15 +201,9 @@
 		var query = {};
 
 		loc.returnValue = {};
-		loc.args = {};
-
+		loc.args = duplicate(variables.instance.connection);
 		loc.args.result = "loc.result";
 		loc.args.name = "query.name";
-		loc.args.datasource = variables.instance.connection.datasource;
-		if (Len(variables.instance.connection.username))
-			loc.args.username = variables.instance.connection.username;
-		if (Len(variables.instance.connection.password))
-			loc.args.password = variables.instance.connection.password;
 		// set queries in Railo to not preserve single quotes on the entire
 		// cfquery block (we'll handle this individually in the SQL statement instead)
 		if (application.wheels.serverName == "Railo")
