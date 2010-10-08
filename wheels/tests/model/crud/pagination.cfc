@@ -2,8 +2,8 @@
 
 	<cffunction name="setup">
 		<cfset loc.user = model("user")>
-		<cfset loc.photogalleryphoto = model("photogalleryphoto")>
-		<cfset loc.photogallery = model("photogallery")>
+		<cfset loc.photo = model("photo")>
+		<cfset loc.gallery = model("gallery")>
 	</cffunction>
 
 	<cffunction name="test_exist_early_if_no_records_match_where_clause">
@@ -45,10 +45,10 @@
 	</cffunction>
 
 	<cffunction name="test_specify_where_on_joined_table">
-		<cfset loc.q = loc.photogallery.findOne(
+		<cfset loc.q = loc.gallery.findOne(
 			include="user"
 			,where="users.lastname = 'Petruzzi'"
-			,orderby="photogalleryid"
+			,orderby="id"
 		)>
 
 		<!--- 10 records, 2 perpage, 5 pages --->
@@ -56,37 +56,37 @@
 				perpage="2"
 				,page="1"
 				,handle="pagination_test"
-				,order="photogalleryphotoid"
-				,include="photogallery"
-				,where="photogalleryid = #loc.q.photogalleryid#"
+				,order="id"
+				,include="gallery"
+				,where="galleryid = #loc.q.id#"
 		}>
 
 		<cfset loc.args2 = duplicate(loc.args)>
 		<cfset structdelete(loc.args2, "perpage", false)>
 		<cfset structdelete(loc.args2, "page", false)>
 		<cfset structdelete(loc.args2, "handle", false)>
-		<cfset loc.r = loc.photogalleryphoto.findAll(argumentCollection=loc.args2)>
+		<cfset loc.r = loc.photo.findAll(argumentCollection=loc.args2)>
 
 		<!--- page 1 --->
-		<cfset loc.e = loc.photogalleryphoto.findAll(argumentCollection=loc.args)>
-		<cfset assert('loc.e.photogalleryid[1] eq loc.r.photogalleryid[1]')>
-		<cfset assert('loc.e.photogalleryid[2] eq loc.r.photogalleryid[2]')>
+		<cfset loc.e = loc.photo.findAll(argumentCollection=loc.args)>
+		<cfset assert('loc.e.galleryid[1] eq loc.r.galleryid[1]')>
+		<cfset assert('loc.e.galleryid[2] eq loc.r.galleryid[2]')>
 
 		<!--- page 3 --->
 		<cfset loc.args.page = "3">
-		<cfset loc.e = loc.photogalleryphoto.findAll(argumentCollection=loc.args)>
-		<cfset assert('loc.e.photogalleryid[1] eq loc.r.photogalleryid[5]')>
-		<cfset assert('loc.e.photogalleryid[2] eq loc.r.photogalleryid[6]')>
+		<cfset loc.e = loc.photo.findAll(argumentCollection=loc.args)>
+		<cfset assert('loc.e.galleryid[1] eq loc.r.galleryid[5]')>
+		<cfset assert('loc.e.galleryid[2] eq loc.r.galleryid[6]')>
 
 		<!--- page 5 --->
 		<cfset loc.args.page = "5">
-		<cfset loc.e = loc.photogalleryphoto.findAll(argumentCollection=loc.args)>
-		<cfset assert('loc.e.photogalleryid[1] eq loc.r.photogalleryid[9]')>
-		<cfset assert('loc.e.photogalleryid[2] eq loc.r.photogalleryid[10]')>
+		<cfset loc.e = loc.photo.findAll(argumentCollection=loc.args)>
+		<cfset assert('loc.e.galleryid[1] eq loc.r.galleryid[9]')>
+		<cfset assert('loc.e.galleryid[2] eq loc.r.galleryid[10]')>
 	</cffunction>
 
 	<cffunction name="test_make_sure_that_remapped_columns_containing_desc_and_asc_work">
-		<cfset loc.result = model("photogalleryphoto").findAll(page=1, perPage=20, order='DESCription1 DESC', handle="pagination_order_test_1")>
+		<cfset loc.result = model("photo").findAll(page=1, perPage=20, order='DESCription1 DESC', handle="pagination_order_test_1")>
 		<cfset assert('request.wheels.pagination_order_test_1.CURRENTPAGE eq 1')>
 		<cfset assert('request.wheels.pagination_order_test_1.TOTALPAGES eq 13')>
 		<cfset assert('request.wheels.pagination_order_test_1.TOTALRECORDS eq 250')>

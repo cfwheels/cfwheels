@@ -11,14 +11,14 @@
 		<cfset loc.view = model("ViewUserPhotoKeyUserId").findOne(order="userid")>
 		<cfset loc.view = model("ViewUserPhotoKeyUserId").findByKey(loc.view.userid)>
 		<cfset assert('IsObject(loc.view)')>
-		<cfset loc.view = model("ViewUserPhotoKeyPhotoGalleryId").findOne(order="photogalleryid")>
-		<cfset loc.view = model("ViewUserPhotoKeyPhotoGalleryId").findByKey(loc.view.photogalleryid)>
+		<cfset loc.view = model("ViewUserPhotoKeyPhotoGalleryId").findOne(order="galleryid")>
+		<cfset loc.view = model("ViewUserPhotoKeyPhotoGalleryId").findByKey(loc.view.galleryid)>
 		<cfset assert('IsObject(loc.view)')>
 	</cffunction>
 
 	<cffunction name="test_associations_should_still_work">
 		<cfset loc.view = model("ViewUserPhotoKeyPhotoGalleryId").findAll(
-				include="photogalleryphotos"
+				include="photos"
 				,where="username = 'tonyp'"
 			)>
 		<cfset assert('loc.view.recordcount neq 0')>
