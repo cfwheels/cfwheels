@@ -25,4 +25,13 @@
 		<cfbreak>
 	</cfif>
 </cfloop>
+<cfif ArrayLen(arguments.wheelsError.tagContext) gte 2>
+	<h2>Tag context</h2>
+	<p>
+	Error thrown on line #arguments.wheelsError.tagContext[2].line# in #Replace(arguments.wheelsError.tagContext[2].template, loc.path, "")#<br /> <!--- skip the first item in the array as this is always the $throw() method --->
+	<cfloop from="3" to="#ArrayLen(arguments.wheelsError.tagContext)#" index="loc.i">
+		- called from line #arguments.wheelsError.tagContext[loc.i].line# in #Replace(arguments.wheelsError.tagContext[loc.i].template, loc.path, "")#<br />
+	</cfloop>
+	</p>
+</cfif>
 </cfoutput>
