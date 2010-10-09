@@ -9,6 +9,7 @@
 <cfset loc.binaryColumnType = "blob">
 <cfset loc.textColumnType = "text">
 <cfset loc.intColumnType = "int">
+<cfset loc.floatColumnType = "float">
 <cfset loc.identityColumnType = "">
 
 <cfif loc.db IS "microsoftsqlserver">
@@ -28,6 +29,7 @@
 	<cfset loc.dateTimeColumnType = "timestamp">
 	<cfset loc.textColumnType = "varchar2(4000)">
 	<cfset loc.intColumnType = "number(38,0)">
+	<cfset loc.floatColumnType = "number(38,2)">
 	<cfset loc.dateTimeDefault = "to_timestamp(#loc.dateTimeDefault#,'yyyy-dd-mm hh24:mi:ss.FF')">
 </cfif>
 
@@ -153,7 +155,7 @@ CREATE TABLE posts
 	,updatedat #loc.datetimeColumnType# NOT NULL
 	,deletedat #loc.datetimeColumnType# NULL
 	,views #loc.intColumnType# DEFAULT 0 NOT NULL
-	,averagerating float NULL
+	,averagerating #loc.floatColumnType# NULL
 	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
