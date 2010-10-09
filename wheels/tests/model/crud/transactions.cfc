@@ -151,4 +151,14 @@
 		<cfset assert("IsObject(loc.tag)")>
 	</cffunction>
 
+	<cffunction name="test_should_close_when_error_raised">
+		<cfset loc.hash = model("tag").$hashedConnectionArgs()>
+		<cftry>
+			<cfset loc.tag = model("tag").create(id="", name="Kermit", description="The Frog", transaction="rollback")>
+			<cfcatch type="any"></cfcatch>
+		</cftry>
+		<cfset assert('request.wheels.transactions[loc.hash] eq false')>
+	</cffunction>
+
+
 </cfcomponent>

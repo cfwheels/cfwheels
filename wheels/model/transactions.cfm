@@ -12,7 +12,7 @@
 				<cfreturn false>
 			</cfif>
 		</cffunction>
-		
+
 		<cfset david = model("Person").findOneByName("David")>
 		<cfset mary = model("Person").findOneByName("Mary")>
 		<cfset invokeWithTransaction(method="transferFunds", personFrom=david, personTo=mary, amount=100)>
@@ -31,17 +31,27 @@
 	</cfif>
 	<cfif $openTransaction(arguments.transaction)>
 		<cftransaction action="begin" isolation="#arguments.isolation#">
-			<cfset loc.returnValue = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs) />
+			<cftry>
+				<cfset loc.returnValue = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs) />
+				<cfcatch type="any">
+					<cftransaction action="rollback" />
+					<cfset $closeTransaction()>
+					<cfrethrow/>
+				</cfcatch>
+			</cftry>
 			<cfif not StructKeyExists(loc, "returnValue") or not IsBoolean(loc.returnValue)>
-				<cfset $throw(type="Wheels", message="Invalid return type", extendedInfo="Methods invoked using `invokeWithTransaction` must return a boolean value.")>
+				<cfset loc.returnValue = "">
 			</cfif>
-			<cfif loc.returnValue>
+			<cfif IsBoolean(loc.returnValue) AND loc.returnValue>
 				<cftransaction action="#arguments.transaction#" />
 			<cfelse>
 				<cftransaction action="rollback" />
-			</cfif>	
+			</cfif>
 		</cftransaction>
 		<cfset $closeTransaction()>
+		<cfif not IsBoolean(loc.returnValue)>
+			<cfset $throw(type="Wheels", message="Invalid return type", extendedInfo="Methods invoked using `invokeWithTransaction` must return a boolean value.")>
+		</cfif>
 	<cfelse>
 		<cfset loc.returnValue = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs) />
 	</cfif>
