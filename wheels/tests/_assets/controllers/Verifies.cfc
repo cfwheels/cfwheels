@@ -6,7 +6,7 @@
 		<cfset verifies(only="actionPostWithRedirect", post="true", action="index", controller="somewhere", error="invalid")>
 		<cfset verifies(only="actionPostWithTypesValid", post="true", params="userid,authorid", paramsTypes="integer,guid")>
 		<cfset verifies(only="actionPostWithTypesInValid", post="true", params="userid,authorid", paramsTypes="integer,guid")>
-		<cfset verifies(only="actionPostWithString", post="true", params="username,password", paramsTypes="string,stringBlank")>
+		<cfset verifies(only="actionPostWithString", post="true", params="username,password", paramsTypes="string,blank")>
 	</cffunction>
 
 	<cffunction name="actionGet">
