@@ -73,19 +73,32 @@
 	<cfset var loc = {}>
 	<cfset var query = {}>
 	<cfset loc.sql = Trim(arguments.result.sql)>
-	<cfif Left(loc.sql, 11) IS "INSERT INTO" AND NOT StructKeyExists(arguments.result, $generatedKey())>
-		<cfset loc.startPar = Find("(", loc.sql) + 1>
-		<cfset loc.endPar = Find(")", loc.sql)>
-		<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
-		<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
-			<cfset loc.returnValue = {}>
-			<!--- the rowid value returned by Railo/ACF is not the actual primary key value (unlike the way it works for sql server and mysql) so on insert statements we need to get that value out of the database using the rowid reference --->
-			<cfset loc.tbl = SpanExcluding(Right(loc.sql, Len(loc.sql)-12), " ")>
-			<cfquery attributeCollection="#arguments.queryAttributes#">SELECT #arguments.primaryKey# FROM #loc.tbl# WHERE ROWID = '#arguments.result[$generatedKey()]#'</cfquery>
-			<cfset loc.returnValue[$generatedKey()] = query.name[arguments.args.$primaryKey]>
-			<cfreturn loc.returnValue>
+	<cfif Left(loc.sql, 11) IS "INSERT INTO">
+		<cfset arguments.table = SpanExcluding(Right(loc.sql, Len(loc.sql)-12), " ")>
+		<cfset arguments.primaryKey = ListFirst(arguments.primaryKey)>
+		<cfif NOT StructKeyExists(arguments.result, $generatedKey())>
+			<cfset loc.startPar = Find("(", loc.sql) + 1>
+			<cfset loc.endPar = Find(")", loc.sql)>
+			<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
+			<cfif NOT ListFindNoCase(loc.columnList, arguments.primaryKey)>
+				<cfreturn $identityRetrieve(argumentCollection=arguments)>
+			</cfif>
+		<cfelse>
+			<cfreturn $identityRetrieve(argumentCollection=arguments)>
 		</cfif>
 	</cfif>
+</cffunction>
+
+<cffunction name="$identityRetrieve" access="public" returntype="any" output="false">
+	<cfargument name="queryAttributes" type="struct" required="true">
+	<cfargument name="result" type="struct" required="true">
+	<cfargument name="primaryKey" type="string" required="true">
+	<cfargument name="table" type="string" required="true">
+	<cfset var loc = {}>
+	<cfset var query = {}>
+	<cfquery attributeCollection="#arguments.queryAttributes#">SELECT #arguments.primaryKey# AS lastId FROM #arguments.table# WHERE ROWID = '#arguments.result[$generatedKey()]#'</cfquery>
+	<cfset loc.returnValue[$generatedKey()] = query.name.lastId>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$$dbinfo">
