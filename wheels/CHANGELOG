@@ -4,7 +4,12 @@ Bug Fixes
 =========
 * Added "errorClass" argument to form helpers and set the default to "fieldWithErrors" to make the naming consistent - [Per Djurner]
 * The full tag context of an error was missing from the error emails, fixed now - [Andy Bellenie]
-* Fixed bug in nested properties related to deleting children via object array - #595 [Tony Petruzzi]
+* Fixed bug in nested properties related to deleting children via object array - #595 [Adam Michel, Tony Petruzzi]
+* Make sure transaction get rollbacked and marker gets closed on error - [Tony Petruzzi]
+
+Miscellaneous
+=============
+* Better Oracle support (Adobe ColdFusion only) - [Ryan Hoppitt, Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
