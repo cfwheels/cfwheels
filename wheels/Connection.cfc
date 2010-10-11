@@ -54,17 +54,13 @@
 		{
 			loc.info.adapterName = "PostgreSQL";
 		}
-		else if (loc.q.driver_name Contains "SQLite")
-		{
-			loc.info.adapterName = "SQLite";
-		}
 		else if (loc.q.driver_name Contains "H2")
 		{
 			loc.info.adapterName = "H2";
 		}
 		else
 		{
-			$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, MySQL, Oracle, H2, SQLite or PostgreSQL.");
+			$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, MySQL, Oracle, H2 or PostgreSQL.");
 		}
 
 		loc.cols = ListToArray(loc.q.ColumnList);
