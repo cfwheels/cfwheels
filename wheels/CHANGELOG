@@ -7,6 +7,7 @@ Bug Fixes
 * Fixed bug in nested properties related to deleting children via object array - #595 [Adam Michel, Tony Petruzzi]
 * Make sure transaction get rollbacked and marker gets closed on error - [Tony Petruzzi]
 * Fixed so deprecation notices only gets set when the debug info is to be displayed - [John C. Bland II, Per Djurner]
+* Fix to make preserveSingleQuotes() call work in Railo 3.2 - [Raul Riera, Per Djurner]
 
 Miscellaneous
 =============
