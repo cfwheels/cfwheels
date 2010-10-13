@@ -641,7 +641,7 @@ Should now call bar() instead and marking foo() as deprecated
 	<cfset var loc = {}>
 	<cfset loc.ret = {}>
 	<cfset loc.tagcontext = []>
-	<cfif not application.wheels.showErrorInformation>
+	<cfif not application.wheels.showDebugInformation>
 		<cfreturn loc.ret>
 	</cfif>
 	<!--- set return value --->
