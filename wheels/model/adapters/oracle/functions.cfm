@@ -97,7 +97,7 @@
 	<cfset var loc = {}>
 	<cfset var query = {}>
 	<cfquery attributeCollection="#arguments.queryAttributes#">SELECT #arguments.primaryKey# AS lastId FROM #arguments.table# WHERE ROWID = '#arguments.result[$generatedKey()]#'</cfquery>
-	<cfset loc.returnValue[$generatedKey()] = query.name.lastId>
+	<cfset loc.returnValue[$generatedKey()] = Trim(query.name.lastId)>
 	<cfreturn loc.returnValue>
 </cffunction>
 
