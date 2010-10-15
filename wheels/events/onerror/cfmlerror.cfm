@@ -2,7 +2,7 @@
 	<h1>Summary</h1>
 	<p>
 		<strong>Error:</strong><br />
-		<cfif StructKeyExists(arguments.exception.rootcause, "message")>
+		<cfif StructKeyExists(arguments.exception, "rootcause") and StructKeyExists(arguments.exception.rootcause, "message")>
 			#arguments.exception.rootcause.message#
 			<cfif arguments.exception.rootcause.detail IS NOT ""><br />#arguments.exception.rootcause.detail#</cfif>
 		<cfelse>
