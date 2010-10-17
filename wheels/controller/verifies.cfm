@@ -146,14 +146,14 @@
 				loc.typeCheck = ListGetAt(arguments.types, loc.i);
 
 				// by default string aren't allowed to be blank
-				loc.typeAllowedBank = false;
+				loc.typeAllowedBlank = false;
 				if (loc.typeCheck == "blank")
 				{
-					loc.typeAllowedBank = true;
+					loc.typeAllowedBlank = true;
 					loc.typeCheck = "string";
 				}
 
-				if(!IsValid(loc.typeCheck, loc.value) || (loc.typeCheck == "string" && !loc.typeAllowedBank && !Len(trim(loc.value))))
+				if(!IsValid(loc.typeCheck, loc.value) || (loc.typeCheck == "string" && !loc.typeAllowedBlank && !Len(trim(loc.value))))
 				{
 					return false;
 				}
