@@ -82,6 +82,27 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 
+	<cffunction name="$addColumnsToSelectAndGroupBy" returntype="array" access="public" output="false">
+		<cfargument name="sql" type="array" required="true">
+		<cfscript>
+			var loc = {};
+			loc.returnValue = arguments.sql;
+			if (IsSimpleValue(loc.returnValue[ArrayLen(loc.returnValue)]) && Left(loc.returnValue[ArrayLen(loc.returnValue)], 8) IS "ORDER BY" && IsSimpleValue(loc.returnValue[ArrayLen(loc.returnValue)-1]) && Left(loc.returnValue[ArrayLen(loc.returnValue)-1], 8) IS "GROUP BY")
+			{
+				loc.iEnd = ListLen(loc.returnValue[ArrayLen(loc.returnValue)]);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					loc.item = Trim(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(ListGetAt(loc.returnValue[ArrayLen(loc.returnValue)], loc.i), "ORDER BY ", ""), " ASC", ""), " DESC", ""));
+					if (!ListFindNoCase(ReplaceNoCase(loc.returnValue[ArrayLen(loc.returnValue)-1], "GROUP BY ", ""), loc.item))
+						loc.returnValue[ArrayLen(loc.returnValue)-1] = ListAppend(loc.returnValue[ArrayLen(loc.returnValue)-1], loc.item);
+					if (!ListFindNoCase(ReplaceNoCase(loc.returnValue[1], "SELECT ", ""), loc.item))
+						loc.returnValue[1] = ListAppend(loc.returnValue[1], loc.item);
+				}
+			}
+		</cfscript>
+		<cfreturn loc.returnValue>
+	</cffunction>
+
 	<cffunction name="$getColumns" returntype="query" access="public" output="false"
 		hint="retrieves all the column information from a table">
 		<cfargument name="tableName" type="string" required="true" hint="the table to retrieve column information for">
