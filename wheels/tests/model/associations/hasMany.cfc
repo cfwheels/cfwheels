@@ -6,6 +6,13 @@
 		<cfset loc.coreResult = model("post").findAll(where="authorId=#loc.author.id#")>
 		<cfset assert("loc.dynamicResult['title'][1] IS loc.coreResult['title'][1]")>
 	</cffunction>
+	
+	<cffunction name="test_getting_children_with_include">
+		<cfset loc.author = model("author").findOne(order="id", include="posts")>
+		<cfset assert("IsObject(loc.author) && ArrayLen(loc.author.posts) eq 3")>
+		<cfset loc.author = model("author").findOne(order="id", include="posts", returnAs="query")>
+		<cfset assert("loc.author.recordcount eq 3")>
+	</cffunction>
 
 	<cffunction name="test_counting_children">
 		<cfset loc.author = model("author").findOne(order="id")>
