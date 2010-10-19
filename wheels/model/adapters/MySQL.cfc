@@ -1,5 +1,9 @@
 <cfcomponent extends="Base" output="false">
 
+	<cffunction name="init" access="public" returntype="any" output="false">
+		<cfreturn super.init(argumentCollection=arguments)>
+	</cffunction>
+
 	<cffunction name="$generatedKey" returntype="string" access="public" output="false">
 		<cfreturn "generated_key">
 	</cffunction>
