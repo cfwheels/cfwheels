@@ -28,15 +28,15 @@
 		<cfset result = model("post").$whereClause(where="averagerating IN(3.6,3.2)")>
 		<cfset assert('arraylen(result) gte 4')>
 		<cfset assert('isstruct(result[4])')>
-		<cfset assert('result[4].datatype eq "float" OR result[4].datatype eq "float8" OR result[4].datatype eq "double"')>
+		<cfset assert('result[4].datatype eq "float" OR result[4].datatype eq "float8" OR result[4].datatype eq "double" OR result[4].datatype eq "number"')>
 		<cfset result = model("post").$whereClause(where="averagerating NOT IN(3.6,3.2)")>
 		<cfset assert('arraylen(result) gte 4')>
 		<cfset assert('isstruct(result[4])')>
-		<cfset assert('result[4].datatype eq "float" OR result[4].datatype eq "float8" OR result[4].datatype eq "double"')>
+		<cfset assert('result[4].datatype eq "float" OR result[4].datatype eq "float8" OR result[4].datatype eq "double" OR result[4].datatype eq "number"')>
 		<cfset result = model("post").$whereClause(where="averagerating = 3.6")>
 		<cfset assert('arraylen(result) gte 4')>
 		<cfset assert('isstruct(result[4])')>
-		<cfset assert('result[4].datatype eq "float" OR result[4].datatype eq "float8" OR result[4].datatype eq "double"')>
+		<cfset assert('result[4].datatype eq "float" OR result[4].datatype eq "float8" OR result[4].datatype eq "double" OR result[4].datatype eq "number"')>
 	</cffunction>
 
 	<cffunction name="test_is_null">
@@ -46,7 +46,7 @@
 		<cfset result = model("post").$whereClause(where="averagerating IS NOT NULL")>
 		<cfset assert('arraylen(result) gte 4')>
 		<cfset assert('isstruct(result[4])')>
-		<cfset assert('result[4].datatype eq "float" OR result[4].datatype eq "float8" OR result[4].datatype eq "double"')>
+		<cfset assert('result[4].datatype eq "float" OR result[4].datatype eq "float8" OR result[4].datatype eq "double" OR result[4].datatype eq "number"')>
 	</cffunction>
 
 	<cffunction name="test_should_allow">
