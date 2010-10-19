@@ -49,10 +49,11 @@
 		var loc = {};
 
 		arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
+		arguments.sql = $addColumnsToSelectAndGroupBy(arguments.sql);
 		if (arguments.limit > 0)
 		{
-			loc.beforeWhere = "SELECT * FROM (SELECT a.*, rownum rnum FROM (";
-			loc.afterWhere = ") a WHERE rownum <=" & arguments.limit+arguments.offset & ")" & " WHERE rnum >" & arguments.offset;
+			loc.beforeWhere = "SELECT #arguments.$primaryKey# FROM (SELECT tmp.#arguments.$primaryKey#, rownum rnum FROM (";
+			loc.afterWhere = ") tmp WHERE rownum <=" & arguments.limit+arguments.offset & ")" & " WHERE rnum >" & arguments.offset;
 			ArrayPrepend(arguments.sql, loc.beforeWhere);
 			ArrayAppend(arguments.sql, loc.afterWhere);
 		}

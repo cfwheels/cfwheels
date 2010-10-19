@@ -246,6 +246,7 @@
 				loc.finderArgs.parameterize = arguments.parameterize;
 				loc.finderArgs.limit = arguments.$limit;
 				loc.finderArgs.offset = arguments.$offset;
+				loc.finderArgs.$primaryKey = primaryKeys();
 				if (application.wheels.cacheQueries && (IsNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
 					loc.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache);
 				loc.findAll = variables.wheels.class.adapter.$query(argumentCollection=loc.finderArgs);
