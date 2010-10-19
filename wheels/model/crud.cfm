@@ -361,31 +361,26 @@
 	<cfscript>
 		var returnValue = "";
 		$args(name="findOne", args=arguments);
-
-		if (Len(arguments.include))
+		if (!Len(arguments.include) || (StructKeyExists(variables.wheels.class.associations, arguments.include) && variables.wheels.class.associations[arguments.include].type != "hasMany"))
 		{
-			// since we're joining with associated tables we could potentially get duplicate records for one object and we work around this by using the pagination code which has this functionality built in
+			// no joins will be done or the join will be done to a single record so we can safely get just one record from the database
+			// note that the check above can be improved to go through the entire include string and check if all associations are "single" (i.e. hasOne or belongsTo)
+			arguments.maxRows = 1;
+		}
+		else
+		{
+			// since we're joining with associated tables (and not to just one record) we could potentially get duplicate records for one object and we work around this by using the pagination code which has this functionality built in
 			arguments.page = 1;
 			arguments.perPage = 1;
 			arguments.count = 1;
 		}
-		else
-		{
-			// no joins will be done so we can safely get just one record from the database
-			arguments.maxRows = 1;
-		}
-
 		returnValue = findAll(argumentCollection=arguments);
 		if (IsArray(returnValue))
 		{
-			if (ArrayLen(returnValue) eq 1)
-			{
+			if (ArrayLen(returnValue))
 				returnValue = returnValue[1];
-			}
 			else
-			{
 				returnValue = false;
-			}
 		}
 	</cfscript>
 	<cfreturn returnValue>
