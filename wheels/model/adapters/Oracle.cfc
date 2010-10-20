@@ -183,6 +183,46 @@
 		</cfscript>
 	</cffunction>
 
+	<cffunction name="$getColumns" returntype="query" access="public" output="false">
+		<cfargument name="tableName" type="string" required="true">
+		<cfscript>
+			var loc = {};
+			loc.args = duplicate(variables.instance.connection);
+			loc.args.table = arguments.tableName;
+			loc.args.type = "columns";
+			// The Railo Oracle JDBC driver has a problem where it
+			// quotes tables names. We get around this by upper
+			// casing it
+			if (application.wheels.serverName eq "Railo" && variables.instance.info.driver_name eq "Oracle JDBC driver")
+			{
+				loc.args.table = ucase(loc.args.table);
+			}
+	
+			try
+			{
+				if (application.wheels.serverName eq "Adobe ColdFusion" && variables.instance.info.driver_name eq "Oracle JDBC driver")
+				{
+					loc.columns = $$dbinfo(argumentCollection=loc.args);
+				}
+				else
+				{
+					loc.columns = $dbinfo(argumentCollection=loc.args);
+				}
+			}
+			catch (Any e)
+			{
+				// Oracle driver doesn't throw an error if table isn't found
+				loc.columns = QueryNew("");
+			}
+	
+			if (loc.columns.RecordCount eq 0)
+			{
+				$throw(type="Wheels.TableNotFound", message="The `#arguments.tableName#` table could not be found in the database.", extendedInfo="Add a table named `#arguments.tableName#` to your database or tell Wheels to use a different table for this model. For example you can tell a `user` model to use a table called `tbl_users` by creating a `User.cfc` file in the `models` folder, creating an `init` method inside it and then calling `table(""tbl_users"")` from within it.");
+			}
+		</cfscript>
+		<cfreturn loc.columns>
+	</cffunction>
+
 	<cfinclude template="../../plugins/injection.cfm">
 
 </cfcomponent>
