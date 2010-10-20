@@ -1,7 +1,6 @@
 <cfcomponent extends="Model">
 
 	<cffunction name="init">
-		<cfset beforeCreate("oracleAutoInc")>
 		<cfset beforeSave("callbackThatReturnsTrue")>
 	</cffunction>
 

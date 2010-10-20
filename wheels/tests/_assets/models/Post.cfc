@@ -3,8 +3,6 @@
 	<cffunction name="init">
 		<cfset belongsTo("author")>
 		<cfset hasMany("comments")>
-
-		<cfset beforeCreate("oracleAutoInc")>
 	</cffunction>
 
 	<cffunction name="afterFindCallback">

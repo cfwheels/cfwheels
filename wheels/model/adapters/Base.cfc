@@ -5,15 +5,7 @@
 		<cfargument name="datasource" type="string" required="true">
 		<cfargument name="username" type="string" required="true">
 		<cfargument name="password" type="string" required="true">
-		<cfargument name="info" type="struct" required="true">
-		<cfscript>
-		variables.instance.info = duplicate(arguments.info);
-		StructDelete(arguments, "info", false);
-		variables.instance.connection = {};
-		variables.instance.connection.datasource = arguments.datasource;
-		variables.instance.connection.username = arguments.username;
-		variables.instance.connection.password = arguments.password;
-		</cfscript>
+		<cfset variables.instance.connection = arguments>
 		<cfreturn this>
 	</cffunction>
 
@@ -207,9 +199,14 @@
 		var query = {};
 
 		loc.returnValue = {};
-		loc.args = duplicate(variables.instance.connection);
+		loc.args = {};
 		loc.args.result = "loc.result";
 		loc.args.name = "query.name";
+		loc.args.datasource = variables.instance.connection.datasource;
+		if (Len(variables.instance.connection.username))
+			loc.args.username = variables.instance.connection.username;
+		if (Len(variables.instance.connection.password))
+			loc.args.password = variables.instance.connection.password;
 		// set queries in Railo to not preserve single quotes on the entire
 		// cfquery block (we'll handle this individually in the SQL statement instead)
 		if (application.wheels.serverName == "Railo")

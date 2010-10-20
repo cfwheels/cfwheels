@@ -8,8 +8,6 @@
 		<cfset property(name="firstName", label="First name(s)", defaultValue="Dave")>
 		<cfset property(name="lastName", label="Last name", defaultValue="")>
 		<cfset nestedProperties(associations="profile", allowDelete=true)>
-
-		<cfset beforeCreate("oracleAutoInc")>
 	</cffunction>
 
 	<cffunction name="callbackThatReturnsTrue">

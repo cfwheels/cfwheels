@@ -3,8 +3,6 @@
 	<cffunction name="init">
 		<cfset property(name="DESCRIPTION1", column="description")>
 		<cfset belongsTo(name="gallery", modelName="gallery", foreignKey="id")>
-
-		<cfset beforeCreate("oracleAutoInc")>
 	</cffunction>
 
 </cfcomponent>

@@ -10,8 +10,6 @@
 		<cfset validate("validateCalled")>
 		<cfset validateOnCreate("validateOnCreateCalled")>
 		<cfset validateOnUpdate("validateOnUpdateCalled")>
-
-		<cfset beforeCreate("oracleAutoInc")>
 	</cffunction>
 
 	<cffunction name="validateCalled">
