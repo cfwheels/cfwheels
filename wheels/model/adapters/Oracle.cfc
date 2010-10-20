@@ -64,7 +64,6 @@
 			StructDelete(arguments, "limit", false);
 			StructDelete(arguments, "offset", false);
 			loc.returnValue = $performQuery(argumentCollection=arguments);
-			loc.returnValue = $handleTimestampObject(loc.returnValue);
 		</cfscript>
 		<cfreturn loc.returnValue>
 	</cffunction>
@@ -77,80 +76,27 @@
 		<cfset var query = {}>
 		<cfset loc.sql = Trim(arguments.result.sql)>
 		<cfif Left(loc.sql, 11) IS "INSERT INTO">
-			<cfset arguments.table = SpanExcluding(Right(loc.sql, Len(loc.sql)-12), " ")>
-			<cfset arguments.primaryKey = ListFirst(arguments.primaryKey)>
-			<cfif NOT StructKeyExists(arguments.result, $generatedKey())>
-				<cfset loc.startPar = Find("(", loc.sql) + 1>
-				<cfset loc.endPar = Find(")", loc.sql)>
-				<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
-				<cfif NOT ListFindNoCase(loc.columnList, arguments.primaryKey)>
-					<cfreturn $identityRetrieve(argumentCollection=arguments)>
-				</cfif>
+			<cfset loc.startPar = Find("(", loc.sql) + 1>
+			<cfset loc.endPar = Find(")", loc.sql)>
+			<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>
+			<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
+				<cfset loc.returnValue = {}>
+				<cfset loc.tbl = SpanExcluding(Right(loc.sql, Len(loc.sql)-12), " ")>
+				<cfquery attributeCollection="#arguments.queryAttributes#">SELECT #arguments.primaryKey# AS lastId FROM #loc.tbl# WHERE ROWID = '#arguments.result[$generatedKey()]#'</cfquery>
+				<cfset loc.returnValue[$generatedKey()] = Trim(query.name.lastId)>
+				<cfreturn loc.returnValue>
 			<cfelse>
-				<cfreturn $identityRetrieve(argumentCollection=arguments)>
+				<!--- since Oracle always returns rowid we need to delete it in those cases where we have manually inserted the primary key, if we don't do this we'll end up setting the rowid value to the object --->
+				<cfif StructKeyExists(arguments.result, "rowid")>
+					<cfset StructDelete(arguments.result, "rowid")>
+				</cfif>
+				<cfif StructKeyExists(arguments.result, "generatedkey")>
+					<cfset StructDelete(arguments.result, "generatedkey")>
+				</cfif>
 			</cfif>
 		</cfif>
 	</cffunction>
 	
-	<cffunction name="$identityRetrieve" access="public" returntype="any" output="false">
-		<cfargument name="queryAttributes" type="struct" required="true">
-		<cfargument name="result" type="struct" required="true">
-		<cfargument name="primaryKey" type="string" required="true">
-		<cfargument name="table" type="string" required="true">
-		<cfset var loc = {}>
-		<cfset var query = {}>
-		<cfquery attributeCollection="#arguments.queryAttributes#">SELECT #arguments.primaryKey# AS lastId FROM #arguments.table# WHERE ROWID = '#arguments.result[$generatedKey()]#'</cfquery>
-		<cfset loc.returnValue[$generatedKey()] = Trim(query.name.lastId)>
-		<cfreturn loc.returnValue>
-	</cffunction>
-	
-	<cffunction name="$handleTimestampObject" hint="Oracle will return timestamp as an object. you need to call timestampValue() to get the string representation">
-		<cfargument name="results" type="struct" required="true">
-		<cfscript>
-			var loc = {};
-			// only do this for Adobe Coldfusion, if a query exists and if the JDBC_MAJOR_VERSION is greater than 9 (8 doesn't have this problem)
-			if (application.wheels.serverName eq "Adobe ColdFusion" && StructKeyExists(arguments.results, "query"))
-			{
-				// look for all timestamp columns
-				loc.query = arguments.results.query;
-				loc.rows = loc.query.RecordCount;
-				if (loc.rows gt 0)
-				{
-					loc.metadata = GetMetaData(loc.query);
-					loc.columns = [];
-					loc.iEnd = ArrayLen(loc.metadata);
-					for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
-					{
-						loc.column = loc.metadata[loc.i];
-						if (loc.column.typename eq "timestamp")
-						{
-							ArrayAppend(loc.columns, loc.column.name);
-						}
-					}
-		
-					// if we have any timestamp columns
-					if (!ArrayIsEmpty(loc.columns))
-					{
-						loc.iEnd = ArrayLen(loc.columns);
-						for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
-						{
-							loc.column = loc.columns[loc.i];
-							for (loc.row = 1; loc.row lte loc.rows; loc.row++)
-							{
-								if (IsObject(loc.query[loc.column][loc.row]))
-								{
-									loc.query[loc.column][loc.row] = loc.query[loc.column][loc.row].timestampValue();
-								}
-							}
-						}
-					}
-					arguments.results.query = loc.query;
-				}
-			}
-			return arguments.results;
-		</cfscript>
-	</cffunction>
-
 	<cfinclude template="../../plugins/injection.cfm">
 
 </cfcomponent>
