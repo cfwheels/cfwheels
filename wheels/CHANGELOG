@@ -2,16 +2,21 @@ WHEELS VERSION 1.1 RC 1
 
 Bug Fixes
 =========
-* Added "errorClass" argument to form helpers and set the default to "fieldWithErrors" to make the naming consistent - [Per Djurner]
 * The full tag context of an error was missing from the error emails, fixed now - [Andy Bellenie]
 * Fixed bug in nested properties related to deleting children via object array - #595 [Adam Michel, Tony Petruzzi]
-* Make sure transaction get rollbacked and marker gets closed on error - [Tony Petruzzi]
+* Make sure transactions are rolled back and marker gets closed on error - [Tony Petruzzi]
 * Fixed so deprecation notices only gets set when the debug info is to be displayed - [John C. Bland II, Per Djurner]
 * Fix to make preserveSingleQuotes() call work in Railo 3.2 - [Raul Riera, Per Djurner]
+* Fixed bug with dynamic finders where we were looking for a non existing data type on a calculated property - [Brian Ward, Per Djurner]
+* Fix to make sure findOne() does not query the database for more records than needed - #605 [Per Djurner, Tony Petruzzi]
+* Corrected H2, Oracle and PostgreSQL code for when GROUP BY clause needs to contain columns from the ORDER BY clause - [Per Djurner]
+* Correction to get exactly one record when we're dealing with single associations instead of basing it on the "joinType" argument - [Per Djurner]
+* Update to error handling to make sure the "rootCause" data exists before trying to use it - [James Gibson]
+* Corrections and improvements to Oracle support - [Ryan Hoppitt, Tony Petruzzi, Per Djurner]
 
 Miscellaneous
 =============
-* Better Oracle support (Adobe ColdFusion only) - [Ryan Hoppitt, Tony Petruzzi]
+* Added "errorClass" argument to form helpers and set the default to "fieldWithErrors" to make the naming consistent - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
