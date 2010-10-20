@@ -12,5 +12,3 @@
 	To run with rewriting "On", you need to apply the necessary rewrite rules on the web server first.
 	<cfset set(URLRewriting="Partial")>
 --->
-
-<cfset set(transactionMode="none")>
