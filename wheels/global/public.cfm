@@ -113,7 +113,11 @@
 
 <!--- miscellaneous --->
 
-<cffunction name="controller" returntype="any" access="public" output="false" hint="Creates and returns a controller object. Used primarily for testing purposes.">
+<cffunction name="controller" returntype="any" access="public" output="false" hint="Creates and returns a controller object with your own custom `name` and `params`. Used primarily for testing purposes."
+	examples='
+		<cfset testController = controller("users", params)>
+	'
+	categories="global,miscellaneous" chapters="" functions="">
 	<cfargument name="name" type="string" required="true" hint="Name of the controller to create.">
 	<cfargument name="params" type="struct" required="false" default="#StructNew()#" hint="The params struct (combination of `form` and `URL` variables).">
 	<cfscript>
