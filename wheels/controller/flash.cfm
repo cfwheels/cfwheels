@@ -237,9 +237,10 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(loc.flashKeys, loc.i);
+			loc.class = loc.item & "Message";
 			if (arguments.lowerCaseDynamicClassValues)
-				loc.item = LCase(loc.item);
-			loc.attributes = {class=loc.item & "Message"};
+				loc.class = LCase(loc.class);
+			loc.attributes = {class=loc.class};
 			if (!StructKeyExists(arguments, "key") || arguments.key == loc.item)
 			{
 				loc.content = loc.$flash[loc.item];
