@@ -106,7 +106,7 @@
 			{
 				try
 				{
-					loc.columns = $dbinfo(argumentCollection=loc.args);
+					loc.columns = $getColumnInfo(argumentCollection=loc.args);
 				}
 				catch (Any e)
 				{
@@ -115,7 +115,7 @@
 			}
 			else
 			{
-				loc.columns = $dbinfo(argumentCollection=loc.args);
+				loc.columns = $getColumnInfo(argumentCollection=loc.args);
 			}
 		</cfscript>
 		<cfreturn loc.columns>
@@ -238,6 +238,15 @@
 		loc.returnValue.result = loc.result;
 		</cfscript>
 		<cfreturn loc.returnValue>
+	</cffunction>
+
+	<cffunction name="$getColumnInfo" returntype="query" access="public" output="false">
+		<cfargument name="table" type="string" required="true">
+		<cfargument name="datasource" type="string" required="true">
+		<cfargument name="username" type="string" required="true">
+		<cfargument name="password" type="string" required="true">
+		<cfset arguments.type = "columns">
+		<cfreturn $dbinfo(argumentCollection=arguments)>
 	</cffunction>
 
 </cfcomponent>
