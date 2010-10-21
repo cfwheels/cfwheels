@@ -202,7 +202,7 @@
 		loc.args = {};
 		loc.args = duplicate(arguments.connection);
 		loc.args.result = "loc.result";
-		//loc.args.name = "query.name";
+		loc.args.name = "query.name";
 		// set queries in Railo to not preserve single quotes on the entire
 		// cfquery block (we'll handle this individually in the SQL statement instead)
 		if (application.wheels.serverName == "Railo")
