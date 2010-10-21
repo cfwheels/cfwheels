@@ -13,6 +13,7 @@ Bug Fixes
 * Correction to get exactly one record when we're dealing with single associations instead of basing it on the "joinType" argument - [Per Djurner]
 * Update to error handling to make sure the "rootCause" data exists before trying to use it - [James Gibson]
 * Corrections and improvements to Oracle support - [Ryan Hoppitt, Tony Petruzzi, Per Djurner]
+* Fixed so the "Message" part is also in lower case when "lowerCaseDynamicClassValues" is "true" in flashMessages() - [John C. Bland II, Per Djurner]
 
 Miscellaneous
 =============
