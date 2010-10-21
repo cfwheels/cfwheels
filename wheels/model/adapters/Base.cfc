@@ -101,7 +101,6 @@
 			var loc = {};
 			loc.args = duplicate(variables.instance.connection);
 			loc.args.table = arguments.tableName;
-			loc.args.type = "columns";
 			if (application.wheels.showErrorInformation)
 			{
 				try
