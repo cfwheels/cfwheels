@@ -142,6 +142,13 @@
 		ORDER BY
 			TC.COLUMN_ID
 		</cfquery>
+		<!---
+		wheels catches the error and raises a Wheels.TableNotFound error
+		to mimic this we will throw an error if the query result is empty
+		 --->
+		<cfif !loc.returnValue.RecordCount>
+			<cfthrow/>
+		</cfif>
 		<cfreturn loc.returnValue>
 	</cffunction>
 
