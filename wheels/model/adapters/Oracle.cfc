@@ -126,6 +126,14 @@
 		var loc = {};
 		loc.args = duplicate(arguments);
 		StructDelete(loc.args, "table");
+		if (!Len(loc.args.username))
+		{
+			StructDelete(loc.args, "username");
+		}
+		if (!Len(loc.args.password))
+		{
+			StructDelete(loc.args, "password");
+		}
 		loc.args.name = "loc.returnValue";
 		</cfscript>
 		<cfquery attributeCollection="#loc.args#">
@@ -172,8 +180,9 @@
 		<cfargument name="results" type="struct" required="true">
 		<cfscript>
 		var loc = {};
-		// only do this for Adobe Coldfusion, if a query exists and if the JDBC_MAJOR_VERSION is greater than 9 (8 doesn't have this problem)
-		if (application.wheels.serverName eq "Adobe ColdFusion" && StructKeyExists(arguments.results, "query"))
+		// depending on the driver and engine used with oracle, timestamps can be returned as
+		// objects instead of strings. 
+		if (StructKeyExists(arguments.results, "query"))
 		{
 			// look for all timestamp columns
 			loc.query = arguments.results.query;
@@ -201,8 +210,12 @@
 						for (loc.row = 1; loc.row lte loc.rows; loc.row++)
 						{
 							if (IsObject(loc.query[loc.column][loc.row]))
-							{
+							{// call timestampValue() on objects to convert to string 
 								loc.query[loc.column][loc.row] = loc.query[loc.column][loc.row].timestampValue();
+							}
+							else if (IsSimpleValue(loc.query[loc.column][loc.row]) && Len(loc.query[loc.column][loc.row]))
+							{// if the driver does the conversion automatically, there is no need to continue 
+								break;
 							}
 						}
 					}
