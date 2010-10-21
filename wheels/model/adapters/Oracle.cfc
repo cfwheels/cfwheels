@@ -84,12 +84,27 @@
 				<cfset loc.returnValue = {}>
 				<cfset loc.tbl = SpanExcluding(Right(loc.sql, Len(loc.sql)-12), " ")>
 				<cfif !StructKeyExists(arguments.result, $generatedKey())>
-					<cfquery attributeCollection="#arguments.queryAttributes#">SELECT #loc.tbl#_seq.nextval AS lastId FROM dual</cfquery>
+					<!---
+					there isn't a way in oracle to tell what (if any) sequences exists
+					on a table. hence we'll just have to perform a guess for now.
+					TODO: in 1.2 we need to look at letting the developer specify the sequence
+					name through a setting in the model
+					--->
+					<cftry>
+						<cfquery attributeCollection="#arguments.queryAttributes#">SELECT #loc.tbl#_seq.currval AS lastId FROM dual</cfquery>
+						<cfcatch type="any">
+							<!--- in case the sequence doesn't exists return a blank string for the expected value --->
+							<cfset query.name.lastId = "">
+						</cfcatch>
+					</cftry>
 				<cfelse>
 					<cfquery attributeCollection="#arguments.queryAttributes#">SELECT #arguments.primaryKey# AS lastId FROM #loc.tbl# WHERE ROWID = '#arguments.result[$generatedKey()]#'</cfquery>
 				</cfif>
-				<cfset loc.returnValue[$generatedKey()] = Trim(query.name.lastId)>
-				<cfreturn loc.returnValue>
+				<cfset loc.lastId = Trim(query.name.lastId)>
+				<cfif len(query.name.lastId)>
+					<cfset loc.returnValue[$generatedKey()] = Trim(loc.lastid)>
+					<cfreturn loc.returnValue>
+				</cfif>
 			<cfelse>
 				<!--- since Oracle always returns rowid we need to delete it in those cases where we have manually inserted the primary key, if we don't do this we'll end up setting the rowid value to the object --->
 				<cfif StructKeyExists(arguments.result, "rowid")>
