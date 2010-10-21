@@ -192,6 +192,7 @@
 		<cfargument name="parameterize" type="boolean" required="true">
 		<cfargument name="limit" type="numeric" required="false" default="0">
 		<cfargument name="offset" type="numeric" required="false" default="0">
+		<cfargument name="connection" type="struct" default="#variables.instance.connection#">
 		<cfargument name="$primaryKey" type="string" required="false" default="">
 		<cfscript>
 		var loc = {};
@@ -199,9 +200,9 @@
 
 		loc.returnValue = {};
 		loc.args = {};
-		loc.args = duplicate(variables.instance.connection);
+		loc.args = duplicate(arguments.connection);
 		loc.args.result = "loc.result";
-		loc.args.name = "query.name";
+		//loc.args.name = "query.name";
 		// set queries in Railo to not preserve single quotes on the entire
 		// cfquery block (we'll handle this individually in the SQL statement instead)
 		if (application.wheels.serverName == "Railo")
