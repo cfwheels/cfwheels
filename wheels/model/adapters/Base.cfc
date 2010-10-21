@@ -200,13 +200,9 @@
 
 		loc.returnValue = {};
 		loc.args = {};
+		loc.args = duplicate(variables.instance.connection);
 		loc.args.result = "loc.result";
 		loc.args.name = "query.name";
-		loc.args.datasource = variables.instance.connection.datasource;
-		if (Len(variables.instance.connection.username))
-			loc.args.username = variables.instance.connection.username;
-		if (Len(variables.instance.connection.password))
-			loc.args.password = variables.instance.connection.password;
 		// set queries in Railo to not preserve single quotes on the entire
 		// cfquery block (we'll handle this individually in the SQL statement instead)
 		if (application.wheels.serverName == "Railo")
