@@ -64,6 +64,7 @@
 			StructDelete(arguments, "limit", false);
 			StructDelete(arguments, "offset", false);
 			loc.returnValue = $performQuery(argumentCollection=arguments);
+			loc.returnValue = $handleTimestampObject(loc.returnValue);
 		</cfscript>
 		<cfreturn loc.returnValue>
 	</cffunction>
@@ -150,6 +151,52 @@
 			<cfthrow/>
 		</cfif>
 		<cfreturn loc.returnValue>
+	</cffunction>
+
+	<cffunction name="$handleTimestampObject" hint="Oracle will return timestamp as an object. you need to call timestampValue() to get the string representation">
+		<cfargument name="results" type="struct" required="true">
+		<cfscript>
+		var loc = {};
+		// only do this for Adobe Coldfusion, if a query exists and if the JDBC_MAJOR_VERSION is greater than 9 (8 doesn't have this problem)
+		if (application.wheels.serverName eq "Adobe ColdFusion" && StructKeyExists(arguments.results, "query"))
+		{
+			// look for all timestamp columns
+			loc.query = arguments.results.query;
+			loc.rows = loc.query.RecordCount;
+			if (loc.rows gt 0)
+			{
+				loc.metadata = GetMetaData(loc.query);
+				loc.columns = [];
+				loc.iEnd = ArrayLen(loc.metadata);
+				for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+				{
+					loc.column = loc.metadata[loc.i];
+					if (loc.column.typename eq "timestamp")
+					{
+						ArrayAppend(loc.columns, loc.column.name);
+					}
+				}
+				// if we have any timestamp columns
+				if (!ArrayIsEmpty(loc.columns))
+				{
+					loc.iEnd = ArrayLen(loc.columns);
+					for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+					{
+						loc.column = loc.columns[loc.i];
+						for (loc.row = 1; loc.row lte loc.rows; loc.row++)
+						{
+							if (IsObject(loc.query[loc.column][loc.row]))
+							{
+								loc.query[loc.column][loc.row] = loc.query[loc.column][loc.row].timestampValue();
+							}
+						}
+					}
+				}
+				arguments.results.query = loc.query;
+			}
+		}
+		return arguments.results;
+		</cfscript>
 	</cffunction>
 
 	<cfinclude template="../../plugins/injection.cfm">
