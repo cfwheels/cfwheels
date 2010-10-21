@@ -16,4 +16,14 @@
 		<cfset assert('loc.q.recordCount IS 3')>
 	</cffunction>
 
+	<cffunction name="testCustomQueryAndORMQueryInTransaction">
+		<cftransaction>
+			<cfquery name="loc.resultOne" datasource="wheelstestdb">
+			SELECT id FROM users
+			</cfquery>
+			<cfset loc.resultTwo = model("user").findAll(select="id")>
+		</cftransaction>
+		<cfset assert("loc.resultOne.recordCount IS loc.resultTwo.recordCount")>
+	</cffunction>
+
 </cfcomponent>
