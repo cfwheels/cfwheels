@@ -192,18 +192,24 @@
 		<cfargument name="parameterize" type="boolean" required="true">
 		<cfargument name="limit" type="numeric" required="false" default="0">
 		<cfargument name="offset" type="numeric" required="false" default="0">
+		<cfargument name="connection" type="struct" required="false" default="#variables.instance.connection#">
 		<cfargument name="$primaryKey" type="string" required="false" default="">
 		<cfscript>
 		var loc = {};
 		var query = {};
 
 		loc.returnValue = {};
-		loc.args = {};
+		loc.args = duplicate(arguments.connection);
 		loc.args.result = "loc.result";
 		loc.args.name = "query.name";
-		loc.args.datasource = variables.instance.connection.datasource;
-		if (Len(variables.instance.connection.username))
-			loc.args.username = variables.instance.connection.username;
+		if (StructKeyExists(loc.args, "username") && !Len(loc.args.username))
+		{
+			StructDelete(loc.args, "username", false);
+		}
+		if (StructKeyExists(loc.args, "password") && !Len(loc.args.password))
+		{
+			StructDelete(loc.args, "password", false);
+		}
 		if (Len(variables.instance.connection.password))
 			loc.args.password = variables.instance.connection.password;
 		// set queries in Railo to not preserve single quotes on the entire
