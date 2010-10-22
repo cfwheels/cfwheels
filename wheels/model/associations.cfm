@@ -173,6 +173,13 @@
 					$invoke(componentReference=this, method="delete#loc.all##loc.key#", invokeArgs=loc.invokeArgs);
 					break;
 				}
+				case "remove":
+				{
+					loc.invokeArgs = {};
+					loc.invokeArgs.instantiate = true;
+					$invoke(componentReference=this, method="remove#loc.all##loc.key#", invokeArgs=loc.invokeArgs);
+					break;
+				}
 				case "deleteAll":
 				{
 					$invoke(componentReference=this, method="delete#loc.all##loc.key#");
