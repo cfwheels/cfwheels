@@ -210,5 +210,15 @@
 		<cfset loc.e = model("author").findOne(where="lastname = 'Bellenie'", include="posts")>
 		<cfset assert('IsArray(loc.e.posts) && ArrayIsEmpty(loc.e.posts)')>
 	</cffunction>
+	
+	<cffunction name="test_findOne_with_blank_string_on_nullable_column">
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").findOne()>
+			<cfset loc.createdComment = loc.post.createComment(body="I like ice cream", name="Mr Whippy")>
+			<cfset loc.foundComment = model("Comment").findOne(where="id=#loc.createdComment.id# AND url=''")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('IsObject(loc.foundComment) is true')>
+	</cffunction>
 
 </cfcomponent>
