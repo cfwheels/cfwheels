@@ -83,7 +83,7 @@
 			<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
 				<cfset loc.returnValue = {}>
 				<cfset loc.tbl = SpanExcluding(Right(loc.sql, Len(loc.sql)-12), " ")>
-				<cfif !StructKeyExists(arguments.result, $generatedKey())>
+				<cfif !StructKeyExists(arguments.result, $generatedKey()) || application.wheels.serverName != "Adobe ColdFusion">
 					<!---
 					there isn't a way in oracle to tell what (if any) sequences exists
 					on a table. hence we'll just have to perform a guess for now.
@@ -181,7 +181,7 @@
 		<cfscript>
 		var loc = {};
 		// depending on the driver and engine used with oracle, timestamps can be returned as
-		// objects instead of strings. 
+		// objects instead of strings.
 		if (StructKeyExists(arguments.results, "query"))
 		{
 			// look for all timestamp columns
@@ -210,11 +210,11 @@
 						for (loc.row = 1; loc.row lte loc.rows; loc.row++)
 						{
 							if (IsObject(loc.query[loc.column][loc.row]))
-							{// call timestampValue() on objects to convert to string 
+							{// call timestampValue() on objects to convert to string
 								loc.query[loc.column][loc.row] = loc.query[loc.column][loc.row].timestampValue();
 							}
 							else if (IsSimpleValue(loc.query[loc.column][loc.row]) && Len(loc.query[loc.column][loc.row]))
-							{// if the driver does the conversion automatically, there is no need to continue 
+							{// if the driver does the conversion automatically, there is no need to continue
 								break;
 							}
 						}
