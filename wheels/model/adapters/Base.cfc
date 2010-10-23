@@ -210,8 +210,6 @@
 		{
 			StructDelete(loc.args, "password", false);
 		}
-		if (Len(variables.instance.connection.password))
-			loc.args.password = variables.instance.connection.password;
 		// set queries in Railo to not preserve single quotes on the entire
 		// cfquery block (we'll handle this individually in the SQL statement instead)
 		if (application.wheels.serverName == "Railo")
