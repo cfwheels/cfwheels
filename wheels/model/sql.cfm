@@ -411,7 +411,6 @@
 								loc.param.type = loc.classData.properties[ListLast(loc.param.property, ".")].type;
 								loc.param.dataType = loc.classData.properties[ListLast(loc.param.property, ".")].dataType;
 								loc.param.scale = loc.classData.properties[ListLast(loc.param.property, ".")].scale;
-								loc.param.nullable = loc.classData.properties[ListLast(loc.param.property, ".")].nullable;
 								loc.param.column = loc.classData.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
 								break;
 							}
@@ -445,7 +444,7 @@
 				{
 					loc.column = loc.params[loc.i].column;
 					ArrayAppend(loc.returnValue, "#loc.column# #loc.params[loc.i].operator#");
-					loc.param = {type=loc.params[loc.i].type, dataType=loc.params[loc.i].dataType, scale=loc.params[loc.i].scale, list=loc.params[loc.i].list, nullable=loc.params[loc.i].nullable};
+					loc.param = {type=loc.params[loc.i].type, dataType=loc.params[loc.i].dataType, scale=loc.params[loc.i].scale, list=loc.params[loc.i].list};
 					ArrayAppend(loc.returnValue, loc.param);
 				}
 			}
@@ -512,26 +511,14 @@
 
 			loc.pos = ArrayLen(loc.originalValues);
 			loc.iEnd = ArrayLen(arguments.sql);
-			loc.arrayElementsToDelete = "";
 			for (loc.i=loc.iEnd; loc.i gt 0; loc.i--)
 			{
 				if (IsStruct(arguments.sql[loc.i]) && loc.pos gt 0)
 				{
 					arguments.sql[loc.i].value = loc.originalValues[loc.pos];
-					if (arguments.sql[loc.i].nullable and loc.originalValues[loc.pos] == "")
-					{
-						arguments.sql[loc.i-1] = Replace(arguments.sql[loc.i-1], "=", " IS NULL");
-						loc.arrayElementsToDelete = ListAppend(loc.arrayElementsToDelete, loc.i);
-					}
-					StructDelete(arguments.sql[loc.i], "nullable");
+					if (loc.originalValues[loc.pos] == "")
+						arguments.sql[loc.i].null = true;
 					loc.pos--;
-				}
-			}
-			if (ListLen(loc.arrayElementsToDelete))
-			{
-				for (loc.i=1; loc.i lte ListLen(loc.arrayElementsToDelete); loc.i++)
-				{
-					ArrayDeleteAt(arguments.sql, ListGetAt(loc.arrayElementsToDelete, loc.i));
 				}
 			}
 		}
