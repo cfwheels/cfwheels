@@ -91,4 +91,14 @@
 		<cfset assert('request.wheels.pagination_order_test_1.TOTALPAGES eq 13')>
 		<cfset assert('request.wheels.pagination_order_test_1.TOTALRECORDS eq 250')>
 	</cffunction>
+
+	<cffunction name="test_with_renamed_primary_key">
+		<cfset loc.photo = model("photo2").findAll(
+				page=1
+				,perpage=3
+				,where="DESCRIPTION1 LIKE '%test%'"
+		)>
+		<cfset assert('loc.photo.recordcount eq 3')>
+	</cffunction>
+
 </cfcomponent>

@@ -182,7 +182,7 @@
 						{
 							loc.property = primaryKeys(loc.i);
 							loc.list = Evaluate("QuotedValueList(loc.values.#loc.property#)");
-							loc.paginationWhere = ListAppend(loc.paginationWhere, "#tableName()#.#variables.wheels.class.properties[loc.property].column# IN (#loc.list#)", Chr(7));
+							loc.paginationWhere = ListAppend(loc.paginationWhere, "#tableName()#.#loc.property# IN (#loc.list#)", Chr(7));
 						}
 						loc.paginationWhere = Replace(loc.paginationWhere, Chr(7), " AND ", "all");
 						if (Len(arguments.where) && Len(arguments.include)) // this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
