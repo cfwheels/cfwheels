@@ -83,7 +83,7 @@
 			<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
 				<cfset loc.returnValue = {}>
 				<cfset loc.tbl = SpanExcluding(Right(loc.sql, Len(loc.sql)-12), " ")>
-				<cfif !StructKeyExists(arguments.result, $generatedKey()) || application.wheels.serverName != "Adobe ColdFusion">
+				<cfif !StructKeyExists(arguments.result, $generatedKey()) || application.wheels.serverName IS NOT "Adobe ColdFusion">
 					<!---
 					there isn't a way in oracle to tell what (if any) sequences exists
 					on a table. hence we'll just have to perform a guess for now.
