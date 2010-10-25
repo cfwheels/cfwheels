@@ -3,7 +3,7 @@
 
 <cfset application.wheels.controllerPath = "wheels/tests/_assets/controllers">
 <cfset application.wheels.modelPath = "/wheelsMapping/tests/_assets/models">
-<cfset application.wheels.modelComponentPath = "wheelsMapping.Tests._assets.models">
+<cfset application.wheels.modelComponentPath = "wheelsMapping.tests._assets.models">
 <cfset application.wheels.dataSourceName = "wheelstestdb">
 <!--- unload all plugins before running core tests --->
 <cfset application.wheels.plugins = {}>
