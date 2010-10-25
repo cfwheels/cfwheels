@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="test_existing_object">
 		<cfset loc.args.type = "myCustomCallBack">

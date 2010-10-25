@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
 		<cfset model("tag").$registerCallback(type="beforeValidationOnCreate", methods="callbackThatSetsProperty,callbackThatReturnsFalse")>

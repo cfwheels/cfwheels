@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
 		<cfset loc.controller = controller(name="dummy")>
@@ -17,7 +17,7 @@
 	</cffunction>
 
 	<cffunction name="test_with_string">
-		<cfset loc.args.objectname = "wheelsMapping.test.view.miscellaneous">
+		<cfset loc.args.objectname = "wheelsMapping.Test.view.miscellaneous">
 		<cfset loc.args.property = "lastname">
 
 		<cfset loc.e = loc.controller.$tagid(argumentcollection=loc.args)>

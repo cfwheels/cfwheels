@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
 		<cfset loc.source = model("user").findAll(select="id,lastName", maxRows=3)>

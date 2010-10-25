@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="test_normal_variable">
 		<cfset loc.result = humanize("wheelsIsAFramework")>

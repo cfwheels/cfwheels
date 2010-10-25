@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="test_columnForProperty_returns_column_name">
 		<cfset loc.model = model("author").new() />

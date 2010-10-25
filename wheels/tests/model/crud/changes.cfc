@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="test_comparing_existing_properties_only">
 		<cfset loc.author = model("author").findOne(select="firstName")>

@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="test_distinct_works_with_group_by">
 		<cfset loc.r = model("post").findAll(select="views", distinct=true)>

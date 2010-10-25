@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="test_accepts_undefined_value">
 		<cfargument name="value1" type="string" required="false" default="asdfasdf" />

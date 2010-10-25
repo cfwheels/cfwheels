@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cfset railoVersion = "3.1.2.020">
 	<cfset adobeVersion = "8,0,1,0">

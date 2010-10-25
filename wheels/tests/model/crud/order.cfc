@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="test_order_clause_no_sort">
 		<cfset loc.result = model("author").findOne(order="lastName")>
