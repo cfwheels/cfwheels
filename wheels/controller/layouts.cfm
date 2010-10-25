@@ -59,7 +59,7 @@
 		var loc = {};
 		loc.returnValue = true;
 		loc.layoutType = "template";
-		if (isAjax() && Len(variables.$class.layout.ajax))
+		if (isAjax() && StructKeyExists(variables.$class.layout, "ajax") && Len(variables.$class.layout.ajax))
 			loc.layoutType = "ajax";
 		if (!StructIsEmpty(variables.$class.layout))
 		{
