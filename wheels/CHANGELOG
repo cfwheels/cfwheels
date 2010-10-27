@@ -14,6 +14,10 @@ Bug Fixes
 * Update to error handling to make sure the "rootCause" data exists before trying to use it - [James Gibson]
 * Corrections and improvements to Oracle support - [Ryan Hoppitt, Tony Petruzzi, Per Djurner]
 * Fixed so the "Message" part is also in lower case when "lowerCaseDynamicClassValues" is "true" in flashMessages() - [John C. Bland II, Per Djurner]
+* Case corrections to ensure compatibility with Linux - [Per Djurner]
+* Fix for using layouts on AJAX calls when usesLayout() has not been called - [Per Djurner]
+* Added missing dependency operation remove with instantiation - [Andy Bellenie]
+* Fixed bug with pagination and renamed primary keys - [Tony Petruzzi]
 
 Miscellaneous
 =============
