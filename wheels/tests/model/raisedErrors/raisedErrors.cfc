@@ -8,7 +8,7 @@
 	</cffunction>
 
 	<cffunction name="test_no_primary_key">
-		<cfset loc.e = raised("model('noprimarykey')")>
+		<cfset loc.e = raised("model('noPrimaryKey')")>
 		<cfset debug("loc.e", false)>
 		<cfset loc.r = "Wheels.NoPrimaryKey">
 		<cfset assert("loc.e eq loc.r")>
