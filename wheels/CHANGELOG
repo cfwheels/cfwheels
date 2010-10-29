@@ -1,3 +1,11 @@
+WHEELS VERSION 1.1 FINAL
+
+Bug Fixes
+=========
+* Don't use the cfzip "overwrite" attribute when unzipping plugins since it updates the date on the files on Railo - [William Fisk, Per Djurner]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 WHEELS VERSION 1.1 RC 1
 
 Bug Fixes
@@ -267,7 +275,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.0
+WHEELS VERSION 1.0 FINAL
 
 Model Enhancements
 ==================
