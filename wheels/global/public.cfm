@@ -141,7 +141,7 @@
 	<cfargument name="param" type="string" required="true" hint="Value to deobfuscate.">
 	<cfscript>
 		var loc = {};
-		if (Val(arguments.param) != arguments.param)
+		if (Val(SpanIncluding(arguments.param, "0,1,2,3,4,5,6,7,8,9")) != arguments.param)
 		{
 			try
 			{
@@ -220,7 +220,7 @@
 		if (IsValid("integer", arguments.param) && IsNumeric(arguments.param) && arguments.param > 0)
 		{
 			// railo strips leading zeros from integers so do this for both engines
-			arguments.param = Val(arguments.param);
+			arguments.param = Val(SpanIncluding(arguments.param, "0,1,2,3,4,5,6,7,8,9"));
 			loc.iEnd = Len(arguments.param);
 			loc.a = (10^loc.iEnd) + Reverse(arguments.param);
 			loc.b = "0";
