@@ -4,6 +4,11 @@
 		<cfset results = {}>
 	</cffunction>
 
+	<cffunction name="test_obfuscate_400">
+		<cfset results.param = obfuscateParam(400)>
+		<cfset assert("results.param IS '9e221'")>
+	</cffunction>
+
 	<cffunction name="test_obfuscate_1">
 		<cfset results.param = obfuscateParam(1)>
 		<cfset assert("results.param IS '9b1c6'")>
