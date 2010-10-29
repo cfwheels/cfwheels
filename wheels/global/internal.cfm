@@ -796,7 +796,12 @@ Should now call bar() instead and marking foo() as deprecated
 				loc.thisPluginFolder = loc.pluginFolder & "/" & LCase(loc.pluginName);
 				if (!DirectoryExists(loc.thisPluginFolder))
 					$directory(action="create", directory=loc.thisPluginFolder);
-				$zip(action="unzip", destination=loc.thisPluginFolder, file=loc.thisPluginFile, overwrite=application.wheels.overwritePlugins);
+
+				// unzip the plugin to its directory unless the developer has told us not to
+				// we don't use the overwrite attribute on cfzip since it's been reported that it updates the date on the files on railo
+				if (application.wheels.overwritePlugins)
+					$zip(action="unzip", destination=loc.thisPluginFolder, file=loc.thisPluginFile, overwrite=true);
+
 				loc.fileName = LCase(loc.pluginName) & "." & loc.pluginName;
 				loc.plugin = $createObjectFromRoot(path=application.wheels.pluginComponentPath, fileName=loc.fileName, method="init");
 				loc.plugin.pluginVersion = loc.pluginVersion;
