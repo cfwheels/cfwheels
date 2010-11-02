@@ -362,4 +362,18 @@
 		<cfset assert('!loc.user.valid()')>
 	</cffunction>
 
+
+	<!--- validatesUniquenessOf --->
+	<cffunction name="test_validatesUniquenessOf_valid">
+		<cfset loc.user.firstname = "tony">
+		<cfset loc.user.validatesUniquenessOf(property="firstname")>
+		<cfset assert('!loc.user.valid()')>
+	</cffunction>
+
+	<cffunction name="test_validatesUniquenessOf_with_blank_property_value">
+		<cfset loc.user.firstname = "">
+		<cfset loc.user.validatesUniquenessOf(property="firstname")>
+		<cfset assert('loc.user.valid()')>
+	</cffunction>
+
 </cfcomponent>
