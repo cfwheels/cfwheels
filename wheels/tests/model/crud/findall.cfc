@@ -18,7 +18,7 @@
 
 	<cffunction name="test_custom_query_and_orm_query_in_transaction">
 		<cftransaction>
-			<cfquery name="loc.resultOne" datasource="wheelstestdb">
+			<cfquery name="loc.resultOne" datasource="#application.wheels.dataSourceName#">
 			SELECT id FROM users
 			</cfquery>
 			<cfset loc.resultTwo = model("user").findAll(select="id")>
