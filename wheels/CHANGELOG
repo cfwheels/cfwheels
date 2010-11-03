@@ -6,6 +6,7 @@ Bug Fixes
 * Update to the error template to make sure errors are not thrown while trying to send out error emails - [James Gibson]
 * Fixes a bug with obfuscation on Railo that happens when the mathematical constant "e" is in the string together with no other letters - [Jon Lynch, Tony Petruzzi, Per Djurner]
 * Allow the use of blank property values with validatesUniquenessOf() - #632 [Andy Bellenie]
+* Don't call validateUniquenessOf unless property exists - [Raul Riera, Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
