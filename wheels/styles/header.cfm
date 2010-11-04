@@ -94,12 +94,12 @@
 
 	pre
 	{
-	  border: 1px solid #a6a2a2;
-	  overflow-x: auto;
-	  width: 638px;
-	  padding: 15px;
-	  margin-bottom: 15px;
-	  background: #ffffe0;
+		border: 1px solid #a6a2a2;
+		overflow-x: auto;
+		width: 95%;
+		padding: 15px;
+		margin-bottom: 15px;
+		background: #ffffe0;
 	}
 
 	code
