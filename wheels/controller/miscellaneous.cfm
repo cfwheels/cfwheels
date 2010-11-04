@@ -133,13 +133,17 @@
 	<cfscript>
 		var loc = {};
 		$args(name="sendFile", args=arguments);
+		loc.relativeRoot = application.wheels.rootPath;
+		if (Right(loc.relativeRoot, 1) != "/")
+		{
+			loc.relativeRoot = loc.relativeRoot & "/";
+		}
 
-		loc.root = ExpandPath(application.wheels.rootPath);
-
+		loc.root = ExpandPath(loc.relativeRoot);
 		loc.folder = arguments.directory;
 		if (!Len(loc.folder))
 		{
-			loc.folder = application.wheels.rootPath & application.wheels.filePath;
+			loc.folder = loc.relativeRoot & application.wheels.filePath; 
 		}
 
 		if (Left(loc.folder, Len(loc.root)) eq loc.root)
