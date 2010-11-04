@@ -5,19 +5,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex,nofollow" />
 	<style>
-	*
+	body
 	{
 		padding: 0;
 		margin: 0;
-	}
-
-	body
-	{
-		text-align: center;
-		font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-		line-height: 1.5em;
-		font-size: 14px;
-		color: #333;
 		background: #ddd;
 	}
 
@@ -25,7 +16,7 @@
 	{
 		margin: auto;
 		text-align: left;
-		width: 698px;
+		width: 980px;
 		background: #fff;
 		border-left: 3px solid #999;
 		border-right: 3px solid #999;
@@ -36,9 +27,13 @@
 	{
 		background: #fff;
 		padding: 15px;
+		font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+		line-height: 1.5em;
+		font-size: 14px;
+		color: #333;
 	}
 
-	h1
+	#content h1
 	{
 		font-size: 24px;
 		font-weight: bold;
@@ -46,19 +41,19 @@
 		margin: 10px 0 5px 0;
 	}
 
-	h2
+	#content h2
 	{
 		font-size: 16px;
 		font-weight: bold;
 		color: #B00701;
 	}
 
-	p
+	#content p
 	{
 		margin-bottom: 15px;
 	}
 
-	p.small
+	#content p.small
 	{
 		font-size: 11px;
 	}
@@ -80,19 +75,21 @@
 	#content ul, #content ol
 	{
 		margin: 10px 0 15px 25px;
+		padding: 0;
 	}
 
 	#content ul li, #content ol li
 	{
 		padding-bottom: 0;
+		
 	}
 
-	img
+	#content img
 	{
 		border: none;
 	}
 
-	pre
+	#content pre
 	{
 		border: 1px solid #a6a2a2;
 		overflow-x: auto;
@@ -102,13 +99,13 @@
 		background: #ffffe0;
 	}
 
-	code
+	#content code
 	{
 		color: #000;
 		font-family: Courier;
 	}
 
-	tt
+	#content tt
 	{
 		font-family: Courier;
 		font-size: 12px;
@@ -117,6 +114,7 @@
 		padding: 1px 3px;
 		border: 1px solid #ededed;
 	}
+	
 	#logo
 	{
 		float: right;
