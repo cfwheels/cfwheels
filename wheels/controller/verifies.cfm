@@ -72,7 +72,7 @@
 	<cfscript>
 		var loc = {};
 		loc.verifications = verificationChain();
-		loc.$args = "only,except,post,get,ajax,cookie,session,params,handle,cookieTypes,sessionTypes,paramsTypes,handler";
+		loc.$args = "only,except,post,get,ajax,cookie,session,params,cookieTypes,sessionTypes,paramsTypes,handler";
 		loc.abort = false;
 		loc.iEnd = ArrayLen(loc.verifications);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
