@@ -16,7 +16,7 @@
 	{
 		margin: auto;
 		text-align: left;
-		width: 980px;
+		width: 960px;
 		background: #fff;
 		border-left: 3px solid #999;
 		border-right: 3px solid #999;
