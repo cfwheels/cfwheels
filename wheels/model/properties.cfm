@@ -526,5 +526,12 @@
 
 <cffunction name="$label" returntype="string" access="public" output="false">
 	<cfargument name="property" type="string" required="true">
-	<cfreturn variables.wheels.class.properties[arguments.property].label>
+	<cfscript>
+		if (StructKeyExists(variables.wheels.class.properties, arguments.property) && StructKeyExists(variables.wheels.class.properties[arguments.property], "label"))
+			return variables.wheels.class.properties[arguments.property].label;
+		else if (StructKeyExists(variables.wheels.class.mapping, arguments.property) && StructKeyExists(variables.wheels.class.mapping[arguments.property], "label"))
+			return variables.wheels.class.mapping[arguments.property].label;
+		else
+			$throw(type="Wheels.LabelDoesNotExist", message="Label Does Not Exist", extendedInfo="The property `#arguments.property#` does not have a label defined. Use the label argument of the `property` method to add one.");
+	</cfscript>
 </cffunction>

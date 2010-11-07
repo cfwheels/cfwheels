@@ -8,6 +8,7 @@ Bug Fixes
 * Allow the use of blank property values with validatesUniquenessOf() - #632 [Andy Bellenie]
 * Don't call validateUniquenessOf unless property exists - [Raul Riera, Tony Petruzzi]
 * Transaction="none" would throw an error if methods within a callback chain also attempted to make db changes - #613 [Andy Bellenie]
+* Fixed bug that prevented the use of custom labels on calculated or non-persisted properties in form helpers and error messages - #630 [Andy Bellenie]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
