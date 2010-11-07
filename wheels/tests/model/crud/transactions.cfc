@@ -151,6 +151,14 @@
 		<cfset assert("IsObject(loc.tag)")>
 	</cffunction>
 
+	<cffunction name="test_nested_transaction_within_callback_with_transactions_disabled">
+		<cftransaction>
+			<cfset loc.tag = model("tagWithDataCallbacks").create(name="Kermit", description="The Frog", transaction="none")>
+			<cfset assert("IsObject(loc.tag)")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+	</cffunction>
+
 	<cffunction name="test_should_close_when_error_raised">
 		<cfset loc.hash = model("tag").$hashedConnectionArgs()>
 		<cftry>
@@ -159,6 +167,5 @@
 		</cftry>
 		<cfset assert('request.wheels.transactions[loc.hash] eq false')>
 	</cffunction>
-
 
 </cfcomponent>
