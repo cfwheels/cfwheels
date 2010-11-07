@@ -3,15 +3,16 @@
 	<cffunction name="$generatedKey" returntype="string" access="public" output="false">
 		<cfreturn "generated_key">
 	</cffunction>
-	
+
 	<cffunction name="$randomOrder" returntype="string" access="public" output="false">
 		<cfreturn "RAND()">
 	</cffunction>
-	
+
 	<cffunction name="$getType" returntype="string" access="public" output="false">
 		<cfargument name="type" type="string" required="true">
 		<cfscript>
 			var loc = {};
+			loc.returnValue = "";
 			switch(arguments.type)
 			{
 				case "bigint": case "int8": {loc.returnValue = "cf_sql_bigint"; break;}
@@ -34,7 +35,7 @@
 		</cfscript>
 		<cfreturn loc.returnValue>
 	</cffunction>
-	
+
 	<cffunction name="$query" returntype="struct" access="public" output="false">
 		<cfargument name="sql" type="array" required="true">
 		<cfargument name="limit" type="numeric" required="false" default=0>
@@ -49,7 +50,7 @@
 		</cfscript>
 		<cfreturn loc.returnValue>
 	</cffunction>
-	
+
 	<cffunction name="$identitySelect" returntype="any" access="public" output="false">
 		<cfargument name="queryAttributes" type="struct" required="true">
 		<cfargument name="result" type="struct" required="true">
@@ -69,14 +70,20 @@
 			</cfif>
 		</cfif>
 	</cffunction>
-	
-	<cffunction name="$getColumns" returntype="query" access="public" output="false">
+
+<!--- 	<cffunction name="$getColumns" returntype="query" access="public" output="false">
 		<cfscript>
 			var loc = {};
-			
+			loc.returnValue = "";
+
 			// get column details using cfdbinfo in the base adapter
 			loc.columns = super.$getColumns(argumentCollection=arguments);
-			
+
+			if (application.wheels.serverName NEQ "Railo")
+			{
+				return loc.columns;
+			}
+
 			// since cfdbinfo incorrectly returns information_schema tables we need to create a new query result that excludes these tables
 			loc.returnValue = QueryNew(loc.columns.columnList);
 			loc.iEnd = loc.columns.recordCount;
@@ -93,8 +100,68 @@
 					}
 				}
 			}
-			return loc.returnValue; 
+			return loc.returnValue;
 		</cfscript>
+	</cffunction> --->
+
+	<cffunction name="$getColumnInfo" returntype="query" access="public" output="false">
+		<cfargument name="table" type="string" required="true">
+		<cfargument name="datasource" type="string" required="true">
+		<cfargument name="username" type="string" required="true">
+		<cfargument name="password" type="string" required="true">
+		<cfscript>
+		var loc = {};
+		loc.args = duplicate(arguments);
+		StructDelete(loc.args, "table");
+		if (!Len(loc.args.username))
+		{
+			StructDelete(loc.args, "username");
+		}
+		if (!Len(loc.args.password))
+		{
+			StructDelete(loc.args, "password");
+		}
+		loc.args.name = "loc.returnValue";
+		</cfscript>
+		<cfquery attributeCollection="#loc.args#">
+		SELECT
+			cols.CHARACTER_OCTET_LENGTH  CHARACTER_OCTET_LENGTH
+			,cols.COLUMN_DEFAULT  COLUMN_DEFAULT_VALUE
+			,cols.COLUMN_NAME  COLUMN_NAME
+			,cols.CHARACTER_MAXIMUM_LENGTH COLUMN_SIZE
+			,cols.NUMERIC_SCALE DECIMAL_DIGITS
+			,CASE WHEN fks.COLUMN_LIST IS NULL THEN 0 ELSE 1 END IS_FOREIGNKEY
+			,cols.IS_NULLABLE IS_NULLABLE
+			,CASE WHEN pks.COLUMN_LIST IS NULL THEN 0 ELSE 1 END IS_PRIMARYKEY
+			,'' REFERENCED_PRIMARYKEY
+			,'' REFERENCED_PRIMARYKEY_TABLE
+			,cols.ORDINAL_POSITION ORDINAL_POSITION
+			,cols.REMARKS REMARKS
+			,cols.TYPE_NAME TYPE_NAME
+		FROM
+			INFORMATION_SCHEMA.COLUMNS cols
+			LEFT OUTER JOIN INFORMATION_SCHEMA.CONSTRAINTS pks
+				ON pks.table_name = cols.table_name
+				AND pks.CONSTRAINT_TYPE = 'PRIMARY KEY'
+				AND POSITION(cols.COLUMN_NAME, pks.COLUMN_LIST)
+			LEFT OUTER JOIN INFORMATION_SCHEMA.CONSTRAINTS fks
+				ON fks.table_name = cols.table_name
+				AND fks.CONSTRAINT_TYPE = 'REFERENTIAL'
+				AND POSITION(cols.COLUMN_NAME, fks.COLUMN_LIST)
+		WHERE
+			cols.table_name = '#UCase(arguments.table)#'
+			AND cols.TABLE_SCHEMA <> 'INFORMATION_SCHEMA'
+		ORDER BY
+			cols.ordinal_position
+		</cfquery>
+		<!---
+		wheels catches the error and raises a Wheels.TableNotFound error
+		to mimic this we will throw an error if the query result is empty
+		 --->
+		<cfif !loc.returnValue.RecordCount>
+			<cfthrow/>
+		</cfif>
+		<cfreturn loc.returnValue>
 	</cffunction>
 
 	<cfinclude template="../../plugins/injection.cfm">
