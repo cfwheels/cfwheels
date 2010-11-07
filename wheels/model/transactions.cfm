@@ -1,4 +1,4 @@
-<cffunction name="invokeWithTransaction" returntype="any" access="public" output="false" hint="Runs the specified method as within a single database transaction."
+<cffunction name="invokeWithTransaction" returntype="any" access="public" output="false" hint="Runs the specified method within a single database transaction."
 	examples=
 	'
 		<!--- This is the method to be run inside a transaction --->
