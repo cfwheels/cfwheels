@@ -1,7 +1,7 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
-		<cfset loc.user = createobject("component", "wheelsMapping.model").$initModelClass(name="user", path=get("modelPath"))>
+		<cfset loc.user = createobject("component", "wheelsMapping.Model").$initModelClass(name="user", path=get("modelPath"))>
 	</cffunction>
 
 	<!--- validatesConfirmationOf --->
@@ -360,6 +360,20 @@
 		<cfset loc.user.firstname = "   ">
 		<cfset loc.user.validatesPresenceOf(property="firstname")>
 		<cfset assert('!loc.user.valid()')>
+	</cffunction>
+
+
+	<!--- validatesUniquenessOf --->
+	<cffunction name="test_validatesUniquenessOf_valid">
+		<cfset loc.user.firstname = "Tony">
+		<cfset loc.user.validatesUniquenessOf(property="firstname")>
+		<cfset assert('!loc.user.valid()')>
+	</cffunction>
+
+	<cffunction name="test_validatesUniquenessOf_with_blank_property_value">
+		<cfset loc.user.firstname = "">
+		<cfset loc.user.validatesUniquenessOf(property="firstname")>
+		<cfset assert('loc.user.valid()')>
 	</cffunction>
 
 </cfcomponent>

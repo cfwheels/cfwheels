@@ -64,6 +64,7 @@
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
 		$args(name="hasManyCheckBox", args=arguments);

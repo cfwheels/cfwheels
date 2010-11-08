@@ -61,7 +61,7 @@
 	<cfreturn />
 </cffunction>
 	
-<cffunction name="renderWith" access="public" returntype="void" output="false" hint="Instructs the controller to render the data passed in to the format that is requested. If the format requested is `json` or `xml`, Wheels will transform the data into that format automatically. For other formats (or to override the automatic formatting), you can also create a view template in this format: `nameofaction.xml.cfm`, `nameofaction.json.cfm`, `nameofaction.pdf.cfm`, etc."
+<cffunction name="renderWith" access="public" returntype="any" output="false" hint="Instructs the controller to render the data passed in to the format that is requested. If the format requested is `json` or `xml`, Wheels will transform the data into that format automatically. For other formats (or to override the automatic formatting), you can also create a view template in this format: `nameofaction.xml.cfm`, `nameofaction.json.cfm`, `nameofaction.pdf.cfm`, etc."
 	examples='
 		<!--- In your controller --->
 		<cffunction name="init">
@@ -89,88 +89,114 @@
 	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPage.">
 	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for @renderPage.">
 	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false" hint="See documentation for @renderPage.">
-	<cfargument name="$acceptableFormats" type="string" required="false" default="#variables.$class.formats.default#" />
 	<cfscript>
 		var loc = {};
 		$args(name="renderWith", args=arguments);
-		loc.templateFileExists = false;
 		loc.contentType = $requestContentType();
+		loc.acceptableFormats = $acceptableFormats(action=arguments.action);
 		
-		if (StructKeyExists(variables.$class.formats, arguments.action))
-			arguments.$acceptableFormats = variables.$class.formats[arguments.action];
-			
-		if (not ListFindNoCase(arguments.$acceptableFormats, loc.contentType))
+		// default to html if the content type found is not acceptable
+		if (not ListFindNoCase(loc.acceptableFormats, loc.contentType))
 			loc.contentType = "html";
-			
-		if (!Len(arguments.template))
-			loc.template = "/" & arguments.controller & "/" & arguments.action;
-		else
-			loc.template = arguments.template;
-			
-		if (Len(loc.contentType))
-			loc.template = loc.template & "." & loc.contentType;
 		
-		loc.templatePath = $generateIncludeTemplatePath($type="page", $name=loc.template, $template=loc.template);
-		if (!ListFindNoCase(variables.$class.formats.existingTemplates, loc.template) && !ListFindNoCase(variables.$class.formats.nonExistingTemplates, loc.template))
+		// call render page and exit if we are just rendering html
+		if (loc.contentType == "html")
 		{
-			if (FileExists(ExpandPath(loc.templatePath)))
-				loc.templateFileExists = true;
-			
-			if (application.wheels.cacheFileChecking)
-			{
-				if (loc.templateFileExists)
-					variables.$class.formats.existingTemplates = ListAppend(variables.$class.formats.existingTemplates, loc.template);
-				else
-					variables.$class.formats.nonExistingTemplates = ListAppend(variables.$class.formats.nonExistingTemplates, loc.template);
-			}
-		}	
+			StructDelete(arguments, "data", false); 
+			return renderPage(argumentCollection=arguments);
+		}
 		
-		if ((ListFindNoCase(variables.$class.formats.existingTemplates, loc.template) || loc.templateFileExists) && loc.contentType != "html")
-			loc.content = renderPage(argumentCollection=arguments, template=loc.template, returnAs="string", layout=false, hideDebugInformation=true);
-			
-		if (loc.contentType == "pdf" && application.wheels.showErrorInformation)
+		loc.templateName = $generateRenderWithTemplatePath(argumentCollection=arguments, contentType=loc.contentType);
+		loc.templatePathExists = $formatTemplatePathExists($name=loc.templateName);	
+		
+		if (loc.templatePathExists)
+			loc.content = renderPage(argumentCollection=arguments, template=loc.templateName, returnAs="string", layout=false, hideDebugInformation=true);
+		
+		// throw an error if we rendered a pdf template and we got here, the cfdocument call should have stopped processing
+		if (loc.contentType == "pdf" && application.wheels.showErrorInformation && loc.templatePathExists)
 			$throw(type="Wheels.PdfRenderingError"
 				, message="When rendering the a PDF file, don't specify the filename attribute. This will stream the PDF straight to the browser.");
-		
+
 		// throw an error if we do not have a template to render the content type that we do not have defaults for
-		if (!ListFindNoCase("html,json,xml", loc.contentType) && !StructKeyExists(loc, "content") && application.wheels.showErrorInformation)
+		if (!ListFindNoCase("json,xml", loc.contentType) && !StructKeyExists(loc, "content") && application.wheels.showErrorInformation)
 			$throw(type="Wheels.renderingError"
-				, message="To render the #loc.contentType# content type, create the template `#loc.template#.cfm` for the #arguments.controller# controller.");			
+				, message="To render the #loc.contentType# content type, create the template `#loc.template#.cfm` for the #arguments.controller# controller.");
 				
 		// set our header based on our mime type
 		$header(name="content-type", value=application.wheels.formats[loc.contentType], charset="utf-8");
 		
-		switch (loc.contentType)
+		// if we do not have the loc.content variable and we are not rendering html then try to create it
+		if (!StructKeyExists(loc, "content"))
 		{
-			case "html":
-			{ 
-				StructDelete(arguments, "data", false); 
-				renderPage(argumentCollection=arguments); 
-				break; 
-			}
-			case "json":
-			{ 
-				if (StructKeyExists(loc, "content"))
-					renderText(loc.content);
-				else
-					renderText(SerializeJSON(arguments.data));
-				break; 
-			}
-			case "xml":
+			switch (loc.contentType)
 			{
-				if (StructKeyExists(loc, "content"))
-					renderText(loc.content);
-				else
-					renderText($toXml(arguments.data)); 
-				break; 
-			}
-			default:
-			{
-				renderText(loc.content);
-				break;
+				case "json": { loc.content = SerializeJSON(arguments.data); break; }
+				case "xml": { loc.content = $toXml(arguments.data); break; };
 			}
 		}
+		
+		// if the developer passed in returnAs = string then return the generated content to them
+		if (arguments.returnAs == "string")
+			return loc.content;
+			
+		renderText(loc.content);
 	</cfscript>
+</cffunction>
+
+<cffunction name="$acceptableFormats" access="public" output="false" returntype="string" hint="">
+	<cfargument name="action" type="string" required="true">
+	<cfscript>
+		var returnValue = variables.$class.formats.default;
+		if (StructKeyExists(variables.$class.formats, arguments.action))
+			returnValue = variables.$class.formats[arguments.action];
+	</cfscript>
+	<cfreturn returnValue />
+</cffunction>
+
+<cffunction name="$generateRenderWithTemplatePath" access="public" output="false" returntype="string" hint="">
+	<cfargument name="controller" type="string" required="true">
+	<cfargument name="action" type="string" required="true">
+	<cfargument name="template" type="string" required="true">
+	<cfargument name="contentType" type="string" required="true">
+	<cfscript>
+		var templateName = "";
+		
+		if (!Len(arguments.template))
+			templateName = "/" & arguments.controller & "/" & arguments.action;
+		else
+			templateName = arguments.template;
+			
+		if (Len(arguments.contentType))
+			templateName = templateName & "." & arguments.contentType;
+	</cfscript>
+	<cfreturn templateName />
+</cffunction>
+
+<cffunction name="$formatTemplatePathExists" access="public" output="false" returntype="boolean">
+	<cfargument name="$name" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.templatePath = $generateIncludeTemplatePath($type="page", $name=arguments.$name, $template=arguments.$name);
+		loc.templatePathExists = false;
+		
+		if (!ListFindNoCase(variables.$class.formats.existingTemplates, arguments.$name) && !ListFindNoCase(variables.$class.formats.nonExistingTemplates, arguments.$name))
+		{
+			if (FileExists(ExpandPath(loc.templatePath)))
+				loc.templatePathExists = true;
+			
+			if (application.wheels.cacheFileChecking)
+			{
+				if (loc.templateFileExists)
+					variables.$class.formats.existingTemplates = ListAppend(variables.$class.formats.existingTemplates, arguments.$name);
+				else
+					variables.$class.formats.nonExistingTemplates = ListAppend(variables.$class.formats.nonExistingTemplates, arguments.$name);
+			}
+		}
+		
+		if (!loc.templatePathExists && ListFindNoCase(variables.$class.formats.existingTemplates, arguments.$name))
+			loc.templatePathExists = true;
+	</cfscript>
+	<cfreturn loc.templatePathExists />
 </cffunction>
 	
 <cffunction name="$requestContentType" access="public" output="false" returntype="string">

@@ -91,7 +91,7 @@
 		<cfset comments = post.comments()>
 	'
 	categories="model-class,read" chapters="reading-records,associations" functions="findByKey,findOne,hasMany">
-	<cfargument name="where" type="string" required="false" default="" hint="This argument maps to the `WHERE` clause of the query. The following operators are supported: `=`, `<>`, `<`, `<=`, `>`, `>=`, `LIKE`, `AND`, and `OR`. (Note that the key words need to be written in upper case.) You can also use parentheses to group statements. You do not need to specify the table name(s); Wheels will do that for you.">
+	<cfargument name="where" type="string" required="false" default="" hint="This argument maps to the `WHERE` clause of the query. The following operators are supported: `=`, `!=`, `<>`, `<`, `<=`, `>`, `>=`, `LIKE`, `NOT LIKE`, `IN`, `NOT IN`, `IS NULL`, `IS NOT NULL`, `AND`, and `OR`. (Note that the key words need to be written in upper case.) You can also use parentheses to group statements. You do not need to specify the table name(s); Wheels will do that for you.">
 	<cfargument name="order" type="string" required="false" hint="Maps to the `ORDER BY` clause of the query. You do not need to specify the table name(s); Wheels will do that for you.">
 	<cfargument name="group" type="string" required="false" hint="Maps to the `GROUP BY` clause of the query. You do not need to specify the table name(s); Wheels will do that for you.">
 	<cfargument name="select" type="string" required="false" default="" hint="Determines how the `SELECT` clause for the query used to return data will look.	You can pass in a list of the properties (which map to columns) that you want returned from your table(s). If you don't set this argument at all, Wheels will select all properties from your table(s). If you specify a table name (e.g. `users.email`) or alias a column (e.g. `fn AS firstName`) in the list, then the entire list will be passed through unchanged and used in the `SELECT` clause of the query. By default, all column names in tables `JOIN`ed via the `include` argument will be prepended with the singular version of the included table name.">
@@ -182,7 +182,7 @@
 						{
 							loc.property = primaryKeys(loc.i);
 							loc.list = Evaluate("QuotedValueList(loc.values.#loc.property#)");
-							loc.paginationWhere = ListAppend(loc.paginationWhere, "#tableName()#.#variables.wheels.class.properties[loc.property].column# IN (#loc.list#)", Chr(7));
+							loc.paginationWhere = ListAppend(loc.paginationWhere, "#tableName()#.#loc.property# IN (#loc.list#)", Chr(7));
 						}
 						loc.paginationWhere = Replace(loc.paginationWhere, Chr(7), " AND ", "all");
 						if (Len(arguments.where) && Len(arguments.include)) // this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
@@ -246,6 +246,7 @@
 				loc.finderArgs.parameterize = arguments.parameterize;
 				loc.finderArgs.limit = arguments.$limit;
 				loc.finderArgs.offset = arguments.$offset;
+				loc.finderArgs.$primaryKey = primaryKeys();
 				if (application.wheels.cacheQueries && (IsNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
 					loc.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache);
 				loc.findAll = variables.wheels.class.adapter.$query(argumentCollection=loc.finderArgs);
@@ -360,6 +361,19 @@
 	<cfscript>
 		var returnValue = "";
 		$args(name="findOne", args=arguments);
+		if (!Len(arguments.include) || (StructKeyExists(variables.wheels.class.associations, arguments.include) && variables.wheels.class.associations[arguments.include].type != "hasMany"))
+		{
+			// no joins will be done or the join will be done to a single record so we can safely get just one record from the database
+			// note that the check above can be improved to go through the entire include string and check if all associations are "single" (i.e. hasOne or belongsTo)
+			arguments.maxRows = 1;
+		}
+		else
+		{
+			// since we're joining with associated tables (and not to just one record) we could potentially get duplicate records for one object and we work around this by using the pagination code which has this functionality built in
+			arguments.page = 1;
+			arguments.perPage = 1;
+			arguments.count = 1;
+		}
 		returnValue = findAll(argumentCollection=arguments);
 		if (IsArray(returnValue))
 		{

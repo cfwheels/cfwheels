@@ -113,7 +113,11 @@
 
 <!--- miscellaneous --->
 
-<cffunction name="controller" returntype="any" access="public" output="false" hint="Creates and returns a controller object. Used primarily for testing purposes.">
+<cffunction name="controller" returntype="any" access="public" output="false" hint="Creates and returns a controller object with your own custom `name` and `params`. Used primarily for testing purposes."
+	examples='
+		<cfset testController = controller("users", params)>
+	'
+	categories="global,miscellaneous" chapters="" functions="">
 	<cfargument name="name" type="string" required="true" hint="Name of the controller to create.">
 	<cfargument name="params" type="struct" required="false" default="#StructNew()#" hint="The params struct (combination of `form` and `URL` variables).">
 	<cfscript>
@@ -137,7 +141,7 @@
 	<cfargument name="param" type="string" required="true" hint="Value to deobfuscate.">
 	<cfscript>
 		var loc = {};
-		if (Val(arguments.param) != arguments.param)
+		if (Val(SpanIncluding(arguments.param, "0,1,2,3,4,5,6,7,8,9")) != arguments.param)
 		{
 			try
 			{
@@ -216,7 +220,7 @@
 		if (IsValid("integer", arguments.param) && IsNumeric(arguments.param) && arguments.param > 0)
 		{
 			// railo strips leading zeros from integers so do this for both engines
-			arguments.param = Val(arguments.param);
+			arguments.param = Val(SpanIncluding(arguments.param, "0,1,2,3,4,5,6,7,8,9"));
 			loc.iEnd = Len(arguments.param);
 			loc.a = (10^loc.iEnd) + Reverse(arguments.param);
 			loc.b = "0";

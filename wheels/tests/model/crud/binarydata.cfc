@@ -6,31 +6,31 @@
 
  	<cffunction name="test_update">
 		<cftransaction action="begin">
-			<cfset loc.photogalleryphoto = model("PhotoGalleryPhoto").findOne()>
-			<cfset loc.photogalleryphoto.update(filename="somefilename", fileData=loc.binaryData)>
-			<cfset loc.photogalleryphoto = model("PhotoGalleryPhoto").findByKey(loc.photogalleryphoto.photogalleryphotoid)>
-			<cfset loc._binary = loc.photogalleryphoto.filedata>
+			<cfset loc.photo = model("photo").findOne()>
+			<cfset loc.photo.update(filename="somefilename", fileData=loc.binaryData)>
+			<cfset loc.photo = model("photo").findByKey(loc.photo.id)>
+			<cfset loc._binary = loc.photo.filedata>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		
+
 		<cfset assert('IsBinary(ToBinary(loc._binary))')>
 	</cffunction>
-	
+
  	<cffunction name="test_insert">
-		<cfset loc.gallery = model("photogallery").findOne(
+		<cfset loc.gallery = model("gallery").findOne(
 			include="user"
 			,where="users.lastname = 'Petruzzi'"
-			,orderby="photogalleryid"
+			,orderby="id"
 		)>
 		<cftransaction action="begin">
-			<cfset loc.photogalleryphoto = model("PhotoGalleryPhoto").create(
-				photogalleryid="#loc.gallery.photogalleryid#"
+			<cfset loc.photo = model("photo").create(
+				galleryid="#loc.gallery.id#"
 				,filename="somefilename"
 				,fileData=loc.binaryData
-				,description1="something something" 
+				,description1="something something"
 			)>
-			<cfset loc.photogalleryphoto = model("PhotoGalleryPhoto").findByKey(loc.photogalleryphoto.photogalleryphotoid)>
-			<cfset loc._binary = loc.photogalleryphoto.filedata>
+			<cfset loc.photo = model("photo").findByKey(loc.photo.id)>
+			<cfset loc._binary = loc.photo.filedata>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset assert('IsBinary(ToBinary(loc._binary))')>

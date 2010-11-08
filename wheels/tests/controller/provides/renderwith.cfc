@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
 		<cfset params = {controller="test", action="test"}>
@@ -23,6 +23,15 @@
 		</cftry>
 	</cffunction>
 
+	<cffunction name="test_current_action_as_xml_with_template_returning_string_to_controller">
+		<cfset params.format = "xml">
+		<cfset loc.controller = controller("test", params)>
+		<cfset loc.controller.provides("xml") />
+		<cfset user = model("user").findOne(where="username = 'tonyp'") />
+		<cfset loc.data = loc.controller.renderWith(data=user, layout=false, returnAs="string")>
+		<cfset assert("loc.data Contains 'xml template content'")>
+	</cffunction>
+
 	<cffunction name="test_current_action_as_xml_with_template">
 		<cfset params.format = "xml">
 		<cfset loc.controller = controller("test", params)>
@@ -42,6 +51,16 @@
 		<cfset assert("IsXml(loc.controller.response()) eq true")>
 	</cffunction>
 
+	<cffunction name="test_current_action_as_xml_without_template_returning_string_to_controller">
+		<cfset params.action = "test2">
+		<cfset params.format = "xml">
+		<cfset loc.controller = controller("test", params)>
+		<cfset loc.controller.provides("xml") />
+		<cfset user = model("user").findOne(where="username = 'tonyp'") />
+		<cfset loc.data = loc.controller.renderWith(data=user, returnAs="string")>
+		<cfset assert("IsXml(loc.data) eq true")>
+	</cffunction>
+
 	<cffunction name="test_current_action_as_json_with_template">
 		<cfset params.format = "json">
 		<cfset loc.controller = controller("test", params)>
@@ -59,6 +78,16 @@
 		<cfset user = model("user").findOne(where="username = 'tonyp'") />
 		<cfset loc.controller.renderWith(data=user)>
 		<cfset assert("IsJSON(loc.controller.response()) eq true")>
+	</cffunction>
+
+	<cffunction name="test_current_action_as_json_without_template_returning_string_to_controller">
+		<cfset params.action = "test2">
+		<cfset params.format = "json">
+		<cfset loc.controller = controller("test", params)>
+		<cfset loc.controller.provides("json") />
+		<cfset user = model("user").findOne(where="username = 'tonyp'") />
+		<cfset loc.data = loc.controller.renderWith(data=user, returnAs="string")>
+		<cfset assert("IsJSON(loc.data) eq true")>
 	</cffunction>
 
 	<cffunction name="test_current_action_as_pdf_with_template_throws_error">

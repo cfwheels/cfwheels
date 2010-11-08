@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.controller">
+<cfcomponent extends="wheelsMapping.Controller">
 
 	<cfset user = model("user").new()>
 	<cfset user.addError("firstname", "firstname error1")>

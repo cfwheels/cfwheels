@@ -1,7 +1,7 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
-		<cfset loc.dispatch = createobject("component", "wheelsMapping.dispatch")>
+		<cfset loc.dispatch = createobject("component", "wheelsMapping.Dispatch")>
 		<cfset SavedRoutes = duplicate(application.wheels.routes)>
 		<cfset application.wheels.routes = []>
 	</cffunction>

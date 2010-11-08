@@ -74,29 +74,48 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 
-	<cffunction name="$getColumns" returntype="query" access="public" output="false"
-		hint="retrieves all the column information from a table">
+	<cffunction name="$addColumnsToSelectAndGroupBy" returntype="array" access="public" output="false">
+		<cfargument name="sql" type="array" required="true">
+		<cfscript>
+			var loc = {};
+			loc.returnValue = arguments.sql;
+			if (IsSimpleValue(loc.returnValue[ArrayLen(loc.returnValue)]) && Left(loc.returnValue[ArrayLen(loc.returnValue)], 8) IS "ORDER BY" && IsSimpleValue(loc.returnValue[ArrayLen(loc.returnValue)-1]) && Left(loc.returnValue[ArrayLen(loc.returnValue)-1], 8) IS "GROUP BY")
+			{
+				loc.iEnd = ListLen(loc.returnValue[ArrayLen(loc.returnValue)]);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					loc.item = Trim(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(ListGetAt(loc.returnValue[ArrayLen(loc.returnValue)], loc.i), "ORDER BY ", ""), " ASC", ""), " DESC", ""));
+					if (!ListFindNoCase(ReplaceNoCase(loc.returnValue[ArrayLen(loc.returnValue)-1], "GROUP BY ", ""), loc.item))
+						loc.returnValue[ArrayLen(loc.returnValue)-1] = ListAppend(loc.returnValue[ArrayLen(loc.returnValue)-1], loc.item);
+					if (!ListFindNoCase(ReplaceNoCase(loc.returnValue[1], "SELECT ", ""), loc.item))
+						loc.returnValue[1] = ListAppend(loc.returnValue[1], loc.item);
+				}
+			}
+		</cfscript>
+		<cfreturn loc.returnValue>
+	</cffunction>
+
+	<cffunction name="$getColumns" returntype="query" access="public" output="false" hint="retrieves all the column information from a table">
 		<cfargument name="tableName" type="string" required="true" hint="the table to retrieve column information for">
 		<cfscript>
-		var loc = {};
-		loc.args = duplicate(variables.instance.connection);
-		loc.args.table = arguments.tableName;
-		loc.args.type = "columns";
-		if (application.wheels.showErrorInformation)
-		{
-			try
+			var loc = {};
+			loc.args = duplicate(variables.instance.connection);
+			loc.args.table = arguments.tableName;
+			if (application.wheels.showErrorInformation)
 			{
-				loc.columns = $dbinfo(argumentCollection=loc.args);
+				try
+				{
+					loc.columns = $getColumnInfo(argumentCollection=loc.args);
+				}
+				catch (Any e)
+				{
+					$throw(type="Wheels.TableNotFound", message="The `#arguments.tableName#` table could not be found in the database.", extendedInfo="Add a table named `#arguments.tableName#` to your database or tell Wheels to use a different table for this model. For example you can tell a `user` model to use a table called `tbl_users` by creating a `User.cfc` file in the `models` folder, creating an `init` method inside it and then calling `table(""tbl_users"")` from within it.");
+				}
 			}
-			catch (Any e)
+			else
 			{
-				$throw(type="Wheels.TableNotFound", message="The `#arguments.tableName#` table could not be found in the database.", extendedInfo="Add a table named `#arguments.tableName#` to your database or tell Wheels to use a different table for this model. For example you can tell a `user` model to use a table called `tbl_users` by creating a `User.cfc` file in the `models` folder, creating an `init` method inside it and then calling `table(""tbl_users"")` from within it.");
+				loc.columns = $getColumnInfo(argumentCollection=loc.args);
 			}
-		}
-		else
-		{
-			loc.columns = $dbinfo(argumentCollection=loc.args);
-		}
 		</cfscript>
 		<cfreturn loc.columns>
 	</cffunction>
@@ -173,21 +192,24 @@
 		<cfargument name="parameterize" type="boolean" required="true">
 		<cfargument name="limit" type="numeric" required="false" default="0">
 		<cfargument name="offset" type="numeric" required="false" default="0">
+		<cfargument name="connection" type="struct" required="false" default="#variables.instance.connection#">
 		<cfargument name="$primaryKey" type="string" required="false" default="">
 		<cfscript>
 		var loc = {};
 		var query = {};
 
 		loc.returnValue = {};
-		loc.args = {};
-
+		loc.args = duplicate(arguments.connection);
 		loc.args.result = "loc.result";
 		loc.args.name = "query.name";
-		loc.args.datasource = variables.instance.connection.datasource;
-		if (Len(variables.instance.connection.username))
-			loc.args.username = variables.instance.connection.username;
-		if (Len(variables.instance.connection.password))
-			loc.args.password = variables.instance.connection.password;
+		if (StructKeyExists(loc.args, "username") && !Len(loc.args.username))
+		{
+			StructDelete(loc.args, "username", false);
+		}
+		if (StructKeyExists(loc.args, "password") && !Len(loc.args.password))
+		{
+			StructDelete(loc.args, "password", false);
+		}
 		// set queries in Railo to not preserve single quotes on the entire
 		// cfquery block (we'll handle this individually in the SQL statement instead)
 		if (application.wheels.serverName == "Railo")
@@ -203,7 +225,7 @@
 		StructAppend(loc.args, loc.orgArgs, true);
 		</cfscript>
 
-		<cfquery attributeCollection="#loc.args#"><cfloop array="#arguments.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfif arguments.parameterize><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif StructKeyExists(loc.queryParamAttributes, "useNull")>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")>(<cfqueryparam attributeCollection="#loc.queryParamAttributes#">)<cfelse><cfqueryparam attributeCollection="#loc.queryParamAttributes#"></cfif><cfelse>'#loc.i.value#'</cfif><cfelse>#Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif></cfquery>
+		<cfquery attributeCollection="#loc.args#"><cfloop array="#arguments.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfif arguments.parameterize><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif StructKeyExists(loc.queryParamAttributes, "useNull")>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")>(<cfqueryparam attributeCollection="#loc.queryParamAttributes#">)<cfelse><cfqueryparam attributeCollection="#loc.queryParamAttributes#"></cfif><cfelse>'#loc.i.value#'</cfif><cfelse><cfset loc.i = Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")>#PreserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif></cfquery>
 
 		<cfscript>
 		if (StructKeyExists(query, "name"))
@@ -219,6 +241,15 @@
 		loc.returnValue.result = loc.result;
 		</cfscript>
 		<cfreturn loc.returnValue>
+	</cffunction>
+
+	<cffunction name="$getColumnInfo" returntype="query" access="public" output="false">
+		<cfargument name="table" type="string" required="true">
+		<cfargument name="datasource" type="string" required="true">
+		<cfargument name="username" type="string" required="true">
+		<cfargument name="password" type="string" required="true">
+		<cfset arguments.type = "columns">
+		<cfreturn $dbinfo(argumentCollection=arguments)>
 	</cffunction>
 
 </cfcomponent>

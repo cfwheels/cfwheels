@@ -3,10 +3,10 @@
 	'
 		<!--- Tell Wheels to verify that the `handleForm` action is always a `POST` request when executed --->
 		<cfset verifies(only="handleForm", post=true)>
-		
+
 		<!--- Make sure that the edit action is a `GET` request, that `userId` exists in the `params` struct, and that it''s an integer --->
 		<cfset verifies(only="edit", get=true, params="userId", paramsTypes="integer")>
-		
+
 		<!--- Just like above, only this time we want to redirect the visitor to the index page of the controller if the request is invalid and show an error in The Flash --->
 		<cfset verifies(only="edit", get=true, params="userId", paramsTypes="integer", handler="index", error="Invalid userId")>
 	'
@@ -53,7 +53,7 @@
 	<cfargument name="chain" type="array" required="true" hint="An array of structs, each of which represent an `argumentCollection` that get passed to the `verifies` function. This should represent the entire verification chain that you want to use for this controller.">
 	<cfscript>
 		var loc = {};
-		
+
 		// Clear current verification chain
 		variables.$class.verifications = [];
 		// Loop through chain passed in arguments and add each item to verification chain
@@ -72,7 +72,7 @@
 	<cfscript>
 		var loc = {};
 		loc.verifications = verificationChain();
-		loc.$args = "only,except,post,get,ajax,cookie,session,params,handle,cookieTypes,sessionTypes,paramsTypes,handler";
+		loc.$args = "only,except,post,get,ajax,cookie,session,params,cookieTypes,sessionTypes,paramsTypes,handler";
 		loc.abort = false;
 		loc.iEnd = ArrayLen(loc.verifications);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -86,24 +86,12 @@
 					loc.abort = true;
 				if (IsBoolean(loc.verification.ajax) && ((loc.verification.ajax && !isAjax()) || (!loc.verification.ajax && isAjax())))
 					loc.abort = true;
-				loc.jEnd = ListLen(loc.verification.params);
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-				{
-					if (!StructKeyExists(arguments.params, ListGetAt(loc.verification.params, loc.j)) || (Len(loc.verification.paramsTypes) && !IsValid(ListGetAt(loc.verification.paramsTypes, loc.j), arguments.params[ListGetAt(loc.verification.params, loc.j)])))
-						loc.abort = true;
-				}
-				loc.jEnd = ListLen(loc.verification.session);
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-				{
-					if (!StructKeyExists(arguments.sessionScope, ListGetAt(loc.verification.session, loc.j)) || (Len(loc.verification.sessionTypes) && !IsValid(ListGetAt(loc.verification.sessionTypes, loc.j), arguments.sessionScope[ListGetAt(loc.verification.session, loc.j)])))
-						loc.abort = true;
-				}
-				loc.jEnd = ListLen(loc.verification.cookie);
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-				{
-					if (!StructKeyExists(arguments.cookieScope, ListGetAt(loc.verification.cookie, loc.j)) || (Len(loc.verification.cookieTypes) && !IsValid(ListGetAt(loc.verification.cookieTypes, loc.j), arguments.cookieScope[ListGetAt(loc.verification.cookie, loc.j)])))
-						loc.abort = true;
-				}
+				if(!$checkVerificationsVars(arguments.params, loc.verification.params, loc.verification.paramsTypes))
+					loc.abort = true;
+				if(!$checkVerificationsVars(arguments.sessionScope, loc.verification.session, loc.verification.sessionTypes))
+					loc.abort = true;
+				if(!$checkVerificationsVars(arguments.cookieScope, loc.verification.cookie, loc.verification.cookieTypes))
+					loc.abort = true;
 			}
 			if (loc.abort)
 			{
@@ -135,4 +123,42 @@
 			}
 		}
 	</cfscript>
+</cffunction>
+
+<cffunction name="$checkVerificationsVars" returntype="boolean" access="public" output="false">
+	<cfargument name="scope" type="struct" required="true">
+	<cfargument name="vars" type="string" required="true">
+	<cfargument name="types" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.iEnd = ListLen(arguments.vars);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.varCheck = ListGetAt(arguments.vars, loc.i);
+			if (!StructKeyExists(arguments.scope, loc.varCheck))
+			{
+				return false;
+			}
+
+			if (Len(arguments.types))
+			{
+				loc.value = arguments.scope[loc.varCheck];
+				loc.typeCheck = ListGetAt(arguments.types, loc.i);
+
+				// by default string aren't allowed to be blank
+				loc.typeAllowedBlank = false;
+				if (loc.typeCheck == "blank")
+				{
+					loc.typeAllowedBlank = true;
+					loc.typeCheck = "string";
+				}
+
+				if(!IsValid(loc.typeCheck, loc.value) || (loc.typeCheck == "string" && !loc.typeAllowedBlank && !Len(trim(loc.value))))
+				{
+					return false;
+				}
+			}
+		}
+	</cfscript>
+	<cfreturn true>
 </cffunction>

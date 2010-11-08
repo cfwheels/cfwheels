@@ -2,7 +2,7 @@
 	<h1>Summary</h1>
 	<p>
 		<strong>Error:</strong><br />
-		<cfif StructKeyExists(arguments.exception.rootcause, "message")>
+		<cfif StructKeyExists(arguments.exception, "rootcause") and StructKeyExists(arguments.exception.rootcause, "message")>
 			#arguments.exception.rootcause.message#
 			<cfif arguments.exception.rootcause.detail IS NOT ""><br />#arguments.exception.rootcause.detail#</cfif>
 		<cfelse>
@@ -44,24 +44,27 @@
 	<cfloop list="#loc.scopes#" index="loc.i">
 		<cfset loc.scopeName = ListLast(loc.i, ".")>
 		<cfif NOT ListFindNoCase(loc.skip, loc.scopeName) AND IsDefined(loc.scopeName)>
-			<cfset loc.scopeCopy = Duplicate(Evaluate(loc.i))>
-			<cfif IsStruct(loc.scopeCopy)>
-				<cfset loc.keys = StructKeyList(loc.scopeCopy)>
-				<cfloop list="#loc.keys#" index="loc.j">
-					<cfif Left(loc.j, 6) IS "wheels">
-						<cfset StructDelete(loc.scopeCopy, loc.j)>
-					</cfif>
-				</cfloop>
-				<p><strong>#loc.scopeName#</strong>
-				<cfset loc.hide = "">
-				<cfloop list="#loc.skip#" index="loc.j">
-					<cfif loc.j Contains "." AND ListFirst(loc.j, ".") IS loc.scopeName>
-						<cfset loc.hide = ListAppend(loc.hide, ListRest(loc.j, "."))>
-					</cfif>
-				</cfloop>
-				<cfdump var="#loc.scopeCopy#" format="text" showUDFs="false" hide="#loc.hide#">
-				</p>
-			</cfif>
+			<cftry>
+				<cfset loc.scopeCopy = Duplicate(Evaluate(loc.i))>
+				<cfif IsStruct(loc.scopeCopy)>
+					<cfset loc.keys = StructKeyList(loc.scopeCopy)>
+					<cfloop list="#loc.keys#" index="loc.j">
+						<cfif Left(loc.j, 6) IS "wheels">
+							<cfset StructDelete(loc.scopeCopy, loc.j)>
+						</cfif>
+					</cfloop>
+					<p><strong>#loc.scopeName#</strong>
+					<cfset loc.hide = "">
+					<cfloop list="#loc.skip#" index="loc.j">
+						<cfif loc.j Contains "." AND ListFirst(loc.j, ".") IS loc.scopeName>
+							<cfset loc.hide = ListAppend(loc.hide, ListRest(loc.j, "."))>
+						</cfif>
+					</cfloop>
+					<cfdump var="#loc.scopeCopy#" format="text" showUDFs="false" hide="#loc.hide#">
+					</p>
+				</cfif>
+				<cfcatch type="any"><!--- just keep going, we need to send out error emails ---></cfcatch>
+			</cftry>
 		</cfif>
 	</cfloop>
 </cfoutput>

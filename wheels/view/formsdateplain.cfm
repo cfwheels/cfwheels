@@ -20,7 +20,7 @@
 	<cfargument name="endYear" type="numeric" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="monthDisplay" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @dateSelect.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField. The label will be applied to all `select` tags but you can pass in a list to cutomize each one individually.">
+	<cfargument name="label" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
@@ -59,7 +59,7 @@
 	<cfargument name="separator" type="string" required="false" hint="See documentation for @timeSelect.">
 	<cfargument name="minuteStep" type="numeric" required="false" hint="See documentation for @timeSelect.">
 	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @timeSelect.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField. The label will be applied to all `select` tags but you can pass in a list to cutomize each one individually.">
+	<cfargument name="label" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
@@ -105,7 +105,7 @@
 	<cfargument name="minuteStep" type="numeric" required="false" hint="See documentation for @dateTimeSelect.">
 	<cfargument name="separator" type="string" required="false" hint="See documentation for @dateTimeSelect.">
 	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField. The label will be applied to all `select` tags but you can pass in a list to cutomize each one individually.">
+	<cfargument name="label" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">

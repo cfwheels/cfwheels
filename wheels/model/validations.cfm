@@ -346,7 +346,7 @@
 	<cfscript>
 		var returnValue = "";
 		// turn property names into lower cased words
-		returnValue = Replace(arguments.message, "[property]", LCase(variables.wheels.class.properties[arguments.property].label), "all");
+		returnValue = Replace(arguments.message, "[property]", LCase(this.$label(arguments.property)), "all");
 		// capitalize the first word in the property name if it comes first in the sentence
 		if (Left(arguments.message, 10) == "[property]")
 			returnValue = capitalize(returnValue);
@@ -386,9 +386,9 @@
 					else
 					{
 						// if the validation set does not allow blank values we can set an error right away, otherwise we call a method to run the actual check
-						if (StructKeyExists(loc.thisValidation.args, "property") && StructKeyExists(loc.thisValidation.args, "allowBlank") && !loc.thisValidation.args.allowBlank && (!StructKeyExists(this, loc.thisValidation.args.property) || !Len(this[loc.thisValidation.args.property])))
+						if (loc.thisValidation.method != "$validatesUniquenessOf" && StructKeyExists(loc.thisValidation.args, "property") && StructKeyExists(loc.thisValidation.args, "allowBlank") && !loc.thisValidation.args.allowBlank && (!StructKeyExists(this, loc.thisValidation.args.property) || !Len(this[loc.thisValidation.args.property])))
 							addError(property=loc.thisValidation.args.property, message=$validationErrorMessage(loc.thisValidation.args.property, loc.thisValidation.args.message));
-						else if (!StructKeyExists(loc.thisValidation.args, "property") || (StructKeyExists(this, loc.thisValidation.args.property) && Len(this[loc.thisValidation.args.property])))
+						else if ((loc.thisValidation.method == "$validatesUniquenessOf" && StructKeyExists(this, loc.thisValidation.args.property)) || !StructKeyExists(loc.thisValidation.args, "property") || (StructKeyExists(this, loc.thisValidation.args.property) && Len(this[loc.thisValidation.args.property])))
 							$invoke(method=loc.thisValidation.method, invokeArgs=loc.thisValidation.args);
 					}
 				}
@@ -515,7 +515,7 @@
 					loc.where = loc.where & "'";
 			}
 		}
-		
+
 		if (variables.wheels.class.softDeletion)
 			loc.where = loc.where & " AND " & variables.wheels.class.tableName & "." & variables.wheels.class.softDeleteColumn & " IS NULL";
 

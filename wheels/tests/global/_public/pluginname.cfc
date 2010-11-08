@@ -1,6 +1,6 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
-	<cfset global.controller = createobject("component", "wheelsMapping.controller") />
+	<cfset global.controller = createobject("component", "wheelsMapping.Controller") />
 	
 	<cffunction name="test_pluginName_valid">
 		<cfset fail()>

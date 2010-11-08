@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="test_table_not_found">
 		<cfset loc.e = raised("model('table_not_found')")>
@@ -8,7 +8,7 @@
 	</cffunction>
 
 	<cffunction name="test_no_primary_key">
-		<cfset loc.e = raised("model('noprimarykey')")>
+		<cfset loc.e = raised("model('noPrimaryKey')")>
 		<cfset debug("loc.e", false)>
 		<cfset loc.r = "Wheels.NoPrimaryKey">
 		<cfset assert("loc.e eq loc.r")>

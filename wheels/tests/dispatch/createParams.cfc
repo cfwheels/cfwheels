@@ -1,7 +1,7 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
-		<cfset loc.dispatch = createobject("component", "wheelsMapping.dispatch")>
+		<cfset loc.dispatch = createobject("component", "wheelsMapping.Dispatch")>
 		<cfset loc.args = {}>
 		<cfset loc.args.path = "home">
 		<cfset loc.args.format = "" />

@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="test_accepts_undefined_value">
 		<cfargument name="value1" type="string" required="false" default="asdfasdf" />
@@ -15,13 +15,13 @@
 		<cfset loc.r = "">
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
-	
+
 	<cffunction name="test_same_output">
 		<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.png')#" variable="loc.binaryData">
 		<cftransaction action="begin">
-			<cfset loc.photogalleryphoto = model("PhotoGalleryPhoto").findOne()>
-			<cfset loc.photogalleryphoto.update(filename="somefilename", fileData=loc.binaryData)>
-			<cfset loc.photogalleryphoto = model("PhotoGalleryPhoto").findAll(where="photogalleryphotoid = #loc.photogalleryphoto.photogalleryphotoid#")>
+			<cfset loc.photo = model("photo").findOne()>
+			<cfset loc.photo.update(filename="somefilename", fileData=loc.binaryData)>
+			<cfset loc.photo = model("photo").findAll(where="id = #loc.photo.id#")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset loc.a = []>
@@ -37,7 +37,7 @@
 		<cfset loc.a[3] = loc.query>
 		<cfset loc.a[4] = [1,2,3,4,5,6]>
 		<cfset loc.a[5] = {a=1,b=2,c=3,d=4}>
-		<cfset loc.a[6] = loc.photogalleryphoto>
+		<cfset loc.a[6] = loc.photo>
 		<cfset loc.args = {}>
 		<cfset loc.args.a = loc.a>
 		<cfset loc.e = $hashedKey(argumentCollection=loc.args)>

@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="test_comparing_existing_properties_only">
 		<cfset loc.author = model("author").findOne(select="firstName")>
@@ -132,18 +132,18 @@
 		<cfset loc.e = loc.user.hasChanged("birthday")>
 		<cfset assert('loc.e eq false')>
 	</cffunction>
-	
+
 	<cffunction name="test_binary_compare">
 		<cftransaction>
-			<cfset loc.photo = model("photoGalleryPhoto").findOne(order=model("photoGalleryPhoto").primaryKey())>
+			<cfset loc.photo = model("photo").findOne(order=model("photo").primaryKey())>
 			<cfset assert("NOT loc.photo.hasChanged('fileData')")>
 			<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.png')#" variable="loc.binaryData">
 			<cfset loc.photo.fileData = loc.binaryData>
 			<cfset assert("loc.photo.hasChanged('fileData')")>
-			<cfset loc.photo.photogalleryid = 99>
+			<cfset loc.photo.galleryid = 99>
 			<cfset loc.photo.save()>
 			<cfset assert("NOT loc.photo.hasChanged('fileData')")>
-			<cfset loc.photo = model("photoGalleryPhoto").findOne(where="photogalleryid=99")>
+			<cfset loc.photo = model("photo").findOne(where="galleryid=99")>
 			<cfset assert("NOT loc.photo.hasChanged('fileData')")>
 			<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.txt')#" variable="loc.binaryData">
 			<cfset loc.photo.fileData = loc.binaryData>

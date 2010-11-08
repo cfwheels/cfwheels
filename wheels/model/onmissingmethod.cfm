@@ -83,7 +83,7 @@
 <cffunction name="$dynamicFinderOperator" returntype="string" access="public" output="false">
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
-		if (variables.wheels.class.properties[arguments.property].dataType == "text")
+		if (StructKeyExists(variables.wheels.class.properties, arguments.property) && variables.wheels.class.properties[arguments.property].dataType == "text")
 			return "LIKE";
 		else
 			return "=";

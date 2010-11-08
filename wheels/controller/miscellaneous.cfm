@@ -133,38 +133,44 @@
 	<cfscript>
 		var loc = {};
 		$args(name="sendFile", args=arguments);
-
-		loc.folder = arguments.directory;
-		if (!Len(loc.folder))
-			loc.folder = ExpandPath(application.wheels.filePath);
-
-		loc.folder = Replace(loc.folder, "\", "/", "all");
-		loc.file = Replace(arguments.file, "\", "/", "all");
-
-		// extract the path from the file name
-		if (loc.file contains "/")
+		loc.relativeRoot = application.wheels.rootPath;
+		if (Right(loc.relativeRoot, 1) != "/")
 		{
-			loc.path = Reverse(ListRest(Reverse(loc.file), "/"));
-			loc.folder = loc.folder & "/" & loc.path;
-			loc.file = Replace(loc.file, loc.path, "");
-			loc.file = Right(loc.file, Len(loc.file)-1);
+			loc.relativeRoot = loc.relativeRoot & "/";
 		}
 
-		loc.fullPath = loc.folder & "/" & loc.file;
+		loc.root = ExpandPath(loc.relativeRoot);
+		loc.folder = arguments.directory;
+		if (!Len(loc.folder))
+		{
+			loc.folder = loc.relativeRoot & application.wheels.filePath; 
+		}
+
+		if (Left(loc.folder, Len(loc.root)) eq loc.root)
+		{
+			loc.folder = RemoveChars(loc.folder, 1, Len(loc.root));
+		}
+
+		loc.fullPath = Replace(loc.folder, "\", "/", "all");
+		loc.fullPath = ListAppend(loc.fullPath, arguments.file, "/");
+		loc.fullPath = ExpandPath(loc.fullPath);
+		loc.fullPath = Replace(loc.fullPath, "\", "/", "all");
+		loc.file = ListLast(loc.fullPath, "/");
+		loc.directory = Reverse(ListRest(Reverse(loc.fullPath), "/"));
 
 		// if the file is not found, try searching for it
 		if (!FileExists(loc.fullPath))
 		{
-			loc.match = $directory(action="list", directory="#loc.folder#", filter="#loc.file#.*");
+			loc.match = $directory(action="list", directory="#loc.directory#", filter="#loc.file#.*");
 			// only extract the extension if we find a single match
 			if (loc.match.recordCount == 1)
 			{
 				loc.file = loc.file & "." & ListLast(loc.match.name, ".");
-				loc.fullPath = loc.folder & "/" & loc.file;
+				loc.fullPath = loc.directory & "/" & loc.file;
 			}
 			else
 			{
-				$throw(type="Wheels.FileNotFound", message="A file could not be found.", extendedInfo="Make sure a file with the name `#loc.file#` exists in the `#loc.folder#` folder.");
+				$throw(type="Wheels.FileNotFound", message="A file could not be found.", extendedInfo="Make sure a file with the name `#loc.file#` exists in the `#loc.directory#` folder.");
 			}
 		}
 

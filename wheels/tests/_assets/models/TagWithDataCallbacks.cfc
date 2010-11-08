@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Model">
+<cfcomponent extends="Model">
 
 	<cffunction name="init">
 		<cfset table("tags")>
@@ -11,6 +11,10 @@
 			<cfreturn true>
 		</cfif>
 		<cfreturn false>
+	</cffunction>
+	
+	<cffunction name="crashMe">
+		<cfset var foo = 1 / 0>
 	</cffunction>
 
 </cfcomponent>

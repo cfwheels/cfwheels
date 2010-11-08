@@ -277,11 +277,12 @@
 	<cfargument name="prependToLabel" type="string" required="true">
 	<cfargument name="appendToLabel" type="string" required="true">
 	<cfargument name="errorElement" type="string" required="true">
+	<cfargument name="errorClass" type="string" required="true">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
 		if ($formHasError(argumentCollection=arguments) and Len(arguments.errorElement))
-			loc.returnValue = loc.returnValue & $tag(name=arguments.errorElement, class="field-with-errors");
+			loc.returnValue = loc.returnValue & $tag(name=arguments.errorElement, class=arguments.errorClass);
 		arguments.label = $getFieldLabel(argumentCollection=arguments);
 		if (Len(arguments.label) && arguments.labelPlacement != "after")
 		{

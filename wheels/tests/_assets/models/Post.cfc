@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.Model">
+<cfcomponent extends="Model">
 
 	<cffunction name="init">
 		<cfset belongsTo("author")>
@@ -17,5 +17,5 @@
 			<cfreturn arguments>
 		</cfif>
 	</cffunction>
-	
+
 </cfcomponent>

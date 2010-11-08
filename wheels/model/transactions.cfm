@@ -12,7 +12,7 @@
 				<cfreturn false>
 			</cfif>
 		</cffunction>
-		
+
 		<cfset david = model("Person").findOneByName("David")>
 		<cfset mary = model("Person").findOneByName("Mary")>
 		<cfset invokeWithTransaction(method="transferFunds", personFrom=david, personTo=mary, amount=100)>
@@ -21,54 +21,68 @@
 	<cfargument name="method" type="string" required="true" hint="Model method to run.">
 	<cfargument name="transaction" type="string" default="commit" hint="See documentation for @save.">
 	<cfargument name="isolation" type="string" default="read_committed" hint="See documentation for @save.">
+	
 	<cfset var loc = {} />
+	
 	<cfset loc.methodArgs = $setProperties(properties=StructNew(), argumentCollection=arguments, filterList="method,transaction,isolation", setOnModel=false, $useFilterLists=false)>
+	<cfset loc.connectionArgs = this.$hashedConnectionArgs()>
+	<cfset loc.closeTransaction = true>
+	
 	<cfif not StructKeyExists(variables, arguments.method)>
-		<cfif application.wheels.showErrorInformation>
-			<cfthrow type="Wheels.IncorrectArguments" message="Model method not found!" extendedInfo="The method `#arguments.method#` does not exist in this model." />
-		</cfif>
-		<cfreturn false />
+		<cfset $throw(type="Wheels", message="Model method not found!", extendedInfo="The method `#arguments.method#` does not exist in this model.")>
 	</cfif>
-	<cfif $openTransaction(arguments.transaction)>
-		<cftransaction action="begin" isolation="#arguments.isolation#">
-			<cfset loc.returnValue = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs) />
-			<cfif not StructKeyExists(loc, "returnValue") or not IsBoolean(loc.returnValue)>
-				<cfset $throw(type="Wheels", message="Invalid return type", extendedInfo="Methods invoked using `invokeWithTransaction` must return a boolean value.")>
-			</cfif>
-			<cfif loc.returnValue>
-				<cftransaction action="#arguments.transaction#" />
-			<cfelse>
-				<cftransaction action="rollback" />
-			</cfif>	
-		</cftransaction>
-		<cfset $closeTransaction()>
+	
+	<!--- create the marker for an open transaction if it doesn't already exist --->
+	<cfif not StructKeyExists(request.wheels.transactions, loc.connectionArgs)>
+		<cfset request.wheels.transactions[loc.connectionArgs] = false>
+	</cfif>
+	
+	<!--- if a transaction is already marked as open, change the mode to 'none', otherwise open one --->
+	<cfif request.wheels.transactions[loc.connectionArgs]>	
+		<cfset arguments.transaction = "none">
+		<cfset loc.closeTransaction = false>
 	<cfelse>
-		<cfset loc.returnValue = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs) />
+		<cfset request.wheels.transactions[loc.connectionArgs] = true>
 	</cfif>
+	
+	<!--- run the method ---> 
+	<cfswitch expression="#arguments.transaction#">
+		<cfcase value="commit,rollback">
+			<cftransaction action="begin" isolation="#arguments.isolation#">
+				<cftry>
+					<cfset loc.returnValue = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs)>
+					<cfif IsBoolean(loc.returnValue) and loc.returnValue>
+						<cftransaction action="#arguments.transaction#" />
+					<cfelse>
+						<cftransaction action="rollback" />
+					</cfif>
+					<cfcatch type="any">
+						<cftransaction action="rollback" />
+						<cfset request.wheels.transactions[loc.connectionArgs] = false>
+						<cfrethrow />
+					</cfcatch>
+				</cftry>
+			</cftransaction>
+		</cfcase>
+		<cfcase value="none">
+			<cfset loc.returnValue = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs)>
+		</cfcase>
+		<cfdefaultcase>
+			<cfset $throw(type="Wheels", message="Invalid transaction type", extendedInfo="The transaction type of `#arguments.transaction#` is invalid. Please use `commit`, `rollback` or `none`.")>
+		</cfdefaultcase>
+	</cfswitch>
+	
+	<!--- close the connection --->
+	<cfif loc.closeTransaction>
+		<cfset request.wheels.transactions[loc.connectionArgs] = false>
+	</cfif>
+
+	<!--- check the return type --->
+	<cfif not IsBoolean(loc.returnValue)>
+		<cfset $throw(type="Wheels", message="Invalid return type", extendedInfo="Methods invoked using `invokeWithTransaction` must return a boolean value.")>
+	</cfif>
+	
 	<cfreturn loc.returnValue />
-</cffunction>
-
-<cffunction name="$openTransaction" returntype="boolean" access="public" output="false" hint="I check for an existing transaction.">
-	<cfargument name="transaction" type="string" required="true" hint="See documentation for @save.">
-	<cfscript>
-		// check that the supplied transaction argument is valid
-		if (!ListFindNoCase("commit,rollback,none", arguments.transaction))
-			$throw(type="Wheels", message="Invalid transaction type", extendedInfo="The transaction type of `#arguments.transaction#` is invalid. Please use `commit`, `rollback` or `none`.");
-		// create a tracer variable in request scope for the current model's datasource
-		if (!StructKeyExists(request.wheels.transactions, $hashedConnectionArgs()))
-			request.wheels.transactions[$hashedConnectionArgs()] = false;
-		// open a new transaction if the user has requested it and there isn't one already open
-		if (ListFindNoCase("commit,rollback", arguments.transaction) and !request.wheels.transactions[$hashedConnectionArgs()])
-		{
-			request.wheels.transactions[$hashedConnectionArgs()] = true;
-			return true;
-		}
-	</cfscript>
-	<cfreturn false />
-</cffunction>
-
-<cffunction name="$closeTransaction" returntype="void" access="public" output="false" hint="I check for an existing transaction.">
-	<cfset request.wheels.transactions[$hashedConnectionArgs()] = false>
 </cffunction>
 
 <cffunction name="$hashedConnectionArgs" returntype="string" access="public" output="false">

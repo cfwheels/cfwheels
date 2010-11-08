@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.test">
+<cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
 		<cfset loc.user = model("user")>
@@ -57,7 +57,7 @@
 	</cffunction>
 
 	<cffunction name="test_findOne_returns_false_when_record_not_found_with_inner_join_include">
-		<cfset loc.e = loc.user.findOne(where="lastname= = 'somenamenotfound'", include="photogalleries") />
+		<cfset loc.e = loc.user.findOne(where="lastname= = 'somenamenotfound'", include="galleries") />
 		<cfset assert('loc.e eq false')>
 	</cffunction>
 
@@ -120,19 +120,19 @@
 		<cfset debug('loc.q', false)>
 		<cfset assert('loc.q eq loc.r')> --->
 	</cffunction>
-	
+
 	<cffunction name="test_findAll_returnAs_query_noRecords_returns_correct_type">
 		<cfset loc.q = loc.user.findAll(where="id = 0", returnas="query")>
 		<cfset debug('loc.q', false)>
 		<cfset assert('isquery(loc.q) and loc.q.recordcount eq 0')>
 	</cffunction>
-	
+
 	<cffunction name="test_findAll_returnAs_structs_noRecords_returns_correct_type">
 		<cfset loc.q = loc.user.findAll(where="id = 0", returnAs="structs")>
 		<cfset debug('loc.q', false)>
 		<cfset assert('isarray(loc.q) and arrayisempty(loc.q)')>
 	</cffunction>
-	
+
 	<cffunction name="test_findAll_returnAs_objects_noRecords_returns_correct_type">
 		<cfset loc.q = loc.user.findAll(where="id = 0", returnas="objects")>
 		<cfset debug('loc.q', false)>
