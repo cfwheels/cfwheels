@@ -5,8 +5,6 @@ Bug Fixes
 * Don't use the cfzip "overwrite" attribute when unzipping plugins since it updates the date on the files on Railo - [William Fisk, Per Djurner]
 * Update to the error template to make sure errors are not thrown while trying to send out error emails - [James Gibson]
 * Fixes a bug with obfuscation on Railo that happens when the mathematical constant "e" is in the string together with no other letters - [Jon Lynch, Tony Petruzzi, Per Djurner]
-* Allow the use of blank property values with validatesUniquenessOf() - #632 [Andy Bellenie]
-* Don't call validateUniquenessOf() unless property exists - [Raul Riera, Tony Petruzzi]
 * Transaction="none" would throw an error if methods within a callback chain also attempted to make database changes - #613 [Andy Bellenie]
 * Fixed bug that prevented the use of custom labels on calculated or non-persisted properties in form helpers and error messages - #630 [Andy Bellenie, Mike Henke]
 * Update to renderwith() to return the content if "returnAs" equals "string" - [James Gibson, W. Scott Hayes]
