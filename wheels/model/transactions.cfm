@@ -25,7 +25,8 @@
 	<cfset var loc = {} />
 	
 	<cfset loc.methodArgs = $setProperties(properties=StructNew(), argumentCollection=arguments, filterList="method,transaction,isolation", setOnModel=false, $useFilterLists=false)>
-	<cfset loc.connectionArgs = $hashedConnectionArgs()>
+	<cfset loc.connectionArgs = this.$hashedConnectionArgs()>
+	<cfset loc.closeTransaction = true>
 	
 	<cfif not StructKeyExists(variables, arguments.method)>
 		<cfset $throw(type="Wheels", message="Model method not found!", extendedInfo="The method `#arguments.method#` does not exist in this model.")>
@@ -37,8 +38,9 @@
 	</cfif>
 	
 	<!--- if a transaction is already marked as open, change the mode to 'none', otherwise open one --->
-	<cfif request.wheels.transactions[loc.connectionArgs]>
+	<cfif request.wheels.transactions[loc.connectionArgs]>	
 		<cfset arguments.transaction = "none">
+		<cfset loc.closeTransaction = false>
 	<cfelse>
 		<cfset request.wheels.transactions[loc.connectionArgs] = true>
 	</cfif>
@@ -46,7 +48,7 @@
 	<!--- run the method ---> 
 	<cfswitch expression="#arguments.transaction#">
 		<cfcase value="commit,rollback">
-			<cftransaction isolation="#arguments.isolation#">
+			<cftransaction action="begin" isolation="#arguments.isolation#">
 				<cftry>
 					<cfset loc.returnValue = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs)>
 					<cfif IsBoolean(loc.returnValue) and loc.returnValue>
@@ -70,13 +72,15 @@
 		</cfdefaultcase>
 	</cfswitch>
 	
+	<!--- close the connection --->
+	<cfif loc.closeTransaction>
+		<cfset request.wheels.transactions[loc.connectionArgs] = false>
+	</cfif>
+
 	<!--- check the return type --->
 	<cfif not IsBoolean(loc.returnValue)>
 		<cfset $throw(type="Wheels", message="Invalid return type", extendedInfo="Methods invoked using `invokeWithTransaction` must return a boolean value.")>
 	</cfif>
-	
-	<!--- close the connection --->
-	<cfset request.wheels.transactions[loc.connectionArgs] = false>
 	
 	<cfreturn loc.returnValue />
 </cffunction>

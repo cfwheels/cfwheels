@@ -159,13 +159,25 @@
 		</cftransaction>
 	</cffunction>
 
-	<cffunction name="test_should_close_when_error_raised">
+	<cffunction name="test_transaction_gets_closed_when_error_raised">
 		<cfset loc.hash = model("tag").$hashedConnectionArgs()>
 		<cftry>
 			<cfset loc.tag = model("tag").create(id="", name="Kermit", description="The Frog", transaction="rollback")>
 			<cfcatch type="any"></cfcatch>
 		</cftry>
 		<cfset assert('request.wheels.transactions[loc.hash] eq false')>
+	</cffunction>
+
+	<cffunction name="test_rollback_when_error_raised">
+		<cfset loc.tag = Duplicate(model("tagWithDataCallbacks").new(name="Kermit", description="The Frog"))>
+		<cfset loc.tag.afterSave(methods="crashMe")>
+		<cftry>
+			<cfset loc.tag.save()>
+			<cfcatch>
+				<cfset loc.results = model("tag").findAll(where="name = 'Kermit'")>
+			</cfcatch>
+		</cftry>
+		<cfset assert("loc.results.recordcount IS 0")>
 	</cffunction>
 
 </cfcomponent>

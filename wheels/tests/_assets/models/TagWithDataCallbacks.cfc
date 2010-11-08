@@ -12,5 +12,9 @@
 		</cfif>
 		<cfreturn false>
 	</cffunction>
+	
+	<cffunction name="crashMe">
+		<cfset var foo = 1 / 0>
+	</cffunction>
 
 </cfcomponent>
