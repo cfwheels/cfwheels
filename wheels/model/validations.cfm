@@ -441,28 +441,41 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validatesLengthOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesLengthOf method.">
+<cffunction name="$validatesLengthOf" returntype="any" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesLengthOf method.">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="message" type="string" required="true">
+	<cfargument name="exactly" type="numeric" required="true">
+	<cfargument name="maximum" type="numeric" required="true">
+	<cfargument name="minimum" type="numeric" required="true">
+	<cfargument name="within" type="any" required="true">
+	<cfargument name="$properties" type="struct" required="false" default="#properties()#">
+	<cfargument name="$test" type="boolean" required="false" default="false">
 	<cfscript>
+		var args = {};
 		if (arguments.maximum)
 		{
-			if (Len(this[arguments.property]) gt arguments.maximum)
-				addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
+			if (Len(arguments.$properties[arguments.property]) > arguments.maximum)
+				args = {property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message)};
 		}
 		else if (arguments.minimum)
 		{
-			if (Len(this[arguments.property]) lt arguments.minimum)
-				addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
+			if (Len(arguments.$properties[arguments.property]) < arguments.minimum)
+				args = {property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message)};
 		}
 		else if (arguments.exactly)
 		{
-			if (Len(this[arguments.property]) neq arguments.exactly)
-				addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
+			if (Len(arguments.$properties[arguments.property]) != arguments.exactly)
+				args = {property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message)};
 		}
 		else if (IsArray(arguments.within) && ArrayLen(arguments.within))
 		{
-			if (Len(this[arguments.property]) lt arguments.within[1] or Len(this[arguments.property]) gt arguments.within[2])
-				addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
+			if (Len(arguments.$properties[arguments.property]) < arguments.within[1] || Len(arguments.$properties[arguments.property]) > arguments.within[2])
+				args = {property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message)};
 		}
+		if (arguments.$test)
+			return args;
+		else if (!StructIsEmpty(args))
+			addError(argumentCollection=args);
 	</cfscript>
 </cffunction>
 
