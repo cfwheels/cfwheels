@@ -386,9 +386,9 @@
 					else
 					{
 						// if the validation set does not allow blank values we can set an error right away, otherwise we call a method to run the actual check
-						if (loc.thisValidation.method != "$validatesUniquenessOf" && StructKeyExists(loc.thisValidation.args, "property") && StructKeyExists(loc.thisValidation.args, "allowBlank") && !loc.thisValidation.args.allowBlank && (!StructKeyExists(this, loc.thisValidation.args.property) || !Len(this[loc.thisValidation.args.property])))
+						if (StructKeyExists(loc.thisValidation.args, "property") && StructKeyExists(loc.thisValidation.args, "allowBlank") && !loc.thisValidation.args.allowBlank && (!StructKeyExists(this, loc.thisValidation.args.property) || !Len(this[loc.thisValidation.args.property])))
 							addError(property=loc.thisValidation.args.property, message=$validationErrorMessage(loc.thisValidation.args.property, loc.thisValidation.args.message));
-						else if ((loc.thisValidation.method == "$validatesUniquenessOf" && StructKeyExists(this, loc.thisValidation.args.property)) || !StructKeyExists(loc.thisValidation.args, "property") || (StructKeyExists(this, loc.thisValidation.args.property) && Len(this[loc.thisValidation.args.property])))
+						else if (!StructKeyExists(loc.thisValidation.args, "property") || (StructKeyExists(this, loc.thisValidation.args.property) && Len(this[loc.thisValidation.args.property])))
 							$invoke(method=loc.thisValidation.method, invokeArgs=loc.thisValidation.args);
 					}
 				}

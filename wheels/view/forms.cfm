@@ -256,8 +256,8 @@
 		loc.returnValue = arguments.prependToLabel;
 		loc.attributes = {};
 		for (loc.key in arguments)
-			if (Left(loc.key, 5) == "label" && Len(loc.key) gt 5 && loc.key != "labelPlacement")
-				loc.attributes[Replace(loc.key, "label", "")] = arguments[loc.key];
+			if (CompareNoCase(Left(loc.key, 5), "label") eq 0 && Len(loc.key) gt 5 && loc.key != "labelPlacement")
+				loc.attributes[ReplaceNoCase(loc.key, "label", "")] = arguments[loc.key];
 		if (StructKeyExists(arguments, "id"))
 			loc.attributes.for = arguments.id;
 		loc.returnValue = loc.returnValue & $tag(name="label", attributes=loc.attributes);
