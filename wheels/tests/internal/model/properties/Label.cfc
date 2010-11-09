@@ -18,14 +18,17 @@
 		<cfset var loc = {}>
 		<cfset loc.mapping = {}>
 		<cfset loc.mapping.someProp = {}>
+		<cfset result = variables.object.$label(property="someProp", mapping=loc.mapping)>
+		<cfset assert("result IS 'Some Prop'")>
+	</cffunction>
+	
+	<cffunction name="testMappedPropertyWithCustomLabel">
+		<cfset var loc = {}>
+		<cfset loc.mapping = {}>
+		<cfset loc.mapping.someProp = {}>
 		<cfset loc.mapping.someProp.label = "someMapLabel">
 		<cfset result = variables.object.$label(property="someProp", mapping=loc.mapping)>
 		<cfset assert("result IS 'someMapLabel'")>
-	</cffunction>
-
-	<cffunction name="testThrowError">
-		<cfset result = raised("variables.object.$label(property='x')")>
-		<cfset assert("result IS 'Wheels.LabelDoesNotExist'")>
 	</cffunction>
 
 </cfcomponent>
