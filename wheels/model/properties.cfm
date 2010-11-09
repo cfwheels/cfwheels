@@ -534,6 +534,6 @@
 		else if (StructKeyExists(arguments.mapping, arguments.property) && StructKeyExists(arguments.mapping[arguments.property], "label"))
 			return arguments.mapping[arguments.property].label;
 		else
-			$throw(type="Wheels.LabelDoesNotExist", message="The `#arguments.property#` property does not have a label defined.", extendedInfo="Use the `label` argument of the `property()` method to add one.");
+			return Humanize(arguments.property);
 	</cfscript>
 </cffunction>

@@ -1,3 +1,11 @@
+WHEELS VERSION 1.1.1
+
+Bug Fixes
+=========
+* Default to the humanized property name for labels on calculated or non-persistant properties instead of throwing an error - [Andy Bellenie]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 WHEELS VERSION 1.1 FINAL
 
 Bug Fixes
