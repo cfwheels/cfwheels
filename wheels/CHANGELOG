@@ -8,6 +8,7 @@ Bug Fixes
 * Transaction="none" would throw an error if methods within a callback chain also attempted to make database changes - #613 [Andy Bellenie]
 * Fixed bug that prevented the use of custom labels on calculated or non-persisted properties in form helpers and error messages - #630 [Andy Bellenie, Mike Henke]
 * Update to renderwith() to return the content if "returnAs" equals "string" - [James Gibson, W. Scott Hayes]
+* Removed case-sensitivity on labelXXX arguments passed through to form helpers - [Andy Bellenie]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
