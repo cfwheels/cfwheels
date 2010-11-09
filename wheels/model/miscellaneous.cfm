@@ -188,23 +188,22 @@
 	<cfreturn !isInstance(argumentCollection=arguments)>
 </cffunction>
 
-<cffunction name="setPagination" access="public" output="false" returntype="void" hint="allow you to set a pagination handle for a custom query so you can perform pagination in your view with paginationLinks()"
+<cffunction name="setPagination" access="public" output="false" returntype="void" hint="Allows you to set a pagination handle for a custom query so you can perform pagination on it in your view with `paginationLinks()`."
 	examples=
 	'
 		<!---
 			Note that there are two ways to do pagination yourself using
 			a custom query.
 			
-			1) The first one is the old way where you would do a query
-			and grab everything that matched and then use the cfouput
-			or cfloop tag to page through the results.
+			1) Do a query that grabs everything that matches and then use
+			the `cfouput` or `cfloop` tag to page through the results.
 				
-			2) The second one involves using your database to make two queries.
-			The first query basically does a count of the total number of
-			records that match the criteria and the second query actually
-			selects the page of records for retrieval.
+			2) Use your database to make 2 queries. The first query
+			basically does a count of the total number of records that match
+			the criteria and the second query actually selects the page of
+			records for retrieval.
 			
-			In the example below we will show how to write a custom query
+			In the example below, we will show how to write a custom query
 			using both of these methods. Note that the syntax where your
 			database performs the pagination will differ depending on the
 			database engine you are using. Plese consult your database
@@ -215,112 +214,113 @@
 		--->
 		
 		<!--- 
-			First method (handle the pagination through ColdFusion)
+			First method: Handle the pagination through your CFML engine
 		--->
 		
-		<!--- model code --->
+		<!--- Model code --->
 		<!--- In your model (ie. User.cfc), create a custom method for your custom query --->
 		<cffunction name="myCustomQuery">
-			<cfargument name="page" type="numeric" required="true">
+			<cfargument name="page" type="numeric">
 			<cfargument name="perPage" type="numeric" required="false" default="25">
 						
-			<cfquery name="customQuery" datasource="##variables.wheels.class.connection.datasource##">
-			select * from users
+			<cfquery name="local.customQuery" datasource="##get(''dataSourceName'')##">
+				SELECT * FROM users
 			</cfquery>
 
-			<cfset setPagination(totalRecords="##customQuery.RecordCount##", currentPage="##arguments.page##", perPage="##arguments.perPage##", handle="myCustomQueryHandle")>
+			<cfset setPagination(totalRecords=local.customQuery.RecordCount, currentPage=arguments.page, perPage=arguments.perPage, handle="myCustomQueryHandle")>
 			<cfreturn customQuery>
 		</cffunction>
 				
-		<!--- controller code --->
+		<!--- Controller code --->
 		<cffunction name="list">
 			<cfparam name="params.page" default="1">
 			<cfparam name="params.perPage" default="25">
-			<cfset allUsers = model("user").myCustomQuery(page="##params.page##", perPage="##params.perPage##")>
+			
+			<cfset allUsers = model("user").myCustomQuery(page=params.page, perPage=params.perPage)>
 			<!--- 
-				since we''re going to let cfoutput/cfloop handle the pagination
+				Because we''re going to let `cfoutput`/`cfloop` handle the pagination,
 				we''re going to need to get some addition information about the
 				pagination.
 			 --->
 			<cfset paginationData = pagination("myCustomQueryHandle")>
 		</cffunction>
 		
-		<!--- view code (using CFLOOP) --->
-		<!--- use the information from paginationData to page through the records --->
+		<!--- View code (using `cfloop`) --->
+		<!--- Use the information from `paginationData` to page through the records --->
 		<cfoutput>
 		<ul>
 		    <cfloop query="allUsers" statrow="##paginationData.startrow##" endrow="##paginationData.endrow##">
-		        <li>##firstName## ##lastName##</li>
+		        <li>##allUsers.firstName## ##allUsers.lastName##</li>
 		    </cfloop>
 		</ul>
 		##paginationLinks(handle="myCustomQueryHandle")##
 		</cfoutput>
 		
-		<!--- view code (using CFOUTPUT) --->
-		<!--- use the information from paginationData to page through the records --->
+		<!--- View code (using `cfoutput`) --->
+		<!--- Use the information from `paginationData` to page through the records --->
 		<ul>
 		    <cfoutput query="allUsers" statrow="##paginationData.startrow##" maxrows="##paginationData.maxrows##">
-		        <li>##firstName## ##lastName##</li>
+		        <li>##allUsers.firstName## ##allUsers.lastName##</li>
 		    </cfoutput>
 		</ul>
 		<cfoutput>##paginationLinks(handle="myCustomQueryHandle")##</cfoutput>
 		
 		
 		<!--- 
-			Second method (handle the pagination through the database)
+			Second method: Handle the pagination through the database
 		--->
 		
-		<!--- model code --->
-		<!--- In your model (ie. User.cfc), create a custom method for your custom query --->
+		<!--- Model code --->
+		<!--- In your model (ie. `User.cfc`), create a custom method for your custom query --->
 		<cffunction name="myCustomQuery">
-			<cfargument name="page" type="numeric" required="true">
+			<cfargument name="page" type="numeric">
 			<cfargument name="perPage" type="numeric" required="false" default="25">
 			
-			<cfquery name="customQueryCount" datasource="##variables.wheels.class.connection.datasource##">
-			select count(*) as thecount from users
+			<cfquery name="local.customQueryCount" datasource="##get(''dataSouceName'')##">
+				SELECT COUNT(*) AS theCount FROM users
 			</cfquery>
 						
-			<cfquery name="customQuery" datasource="##variables.wheels.class.connection.datasource##">
-			select * from users
-			limit ##arguments.page## offset ##arguments.perPage##
+			<cfquery name="local.customQuery" datasource="##get(''dataSourceName'')##">
+				SELECT * FROM users
+				LIMIT ##arguments.page## OFFSET ##arguments.perPage##
 			</cfquery>
 			
-			<!--- notice the we use the value from the first query for totalRecords  --->
-			<cfset setPagination(totalRecords="##customQueryCount.thecount##", currentPage="##arguments.page##", perPage="##arguments.perPage##", handle="myCustomQueryHandle")>
-			<!--- we return the second query --->
+			<!--- Notice the we use the value from the first query for `totalRecords`  --->
+			<cfset setPagination(totalRecords=local.customQueryCount.theCount, currentPage=arguments.page, perPage=arguments.perPage, handle="myCustomQueryHandle")>
+			<!--- We return the second query --->
 			<cfreturn customQuery>
 		</cffunction>
 				
-		<!--- controller code --->
+		<!--- Controller code --->
 		<cffunction name="list">
 			<cfparam name="params.page" default="1">
 			<cfparam name="params.perPage" default="25">
-			<cfset allUsers = model("user").myCustomQuery(page="##params.page##", perPage="##params.perPage##")>
+			<cfset allUsers = model("user").myCustomQuery(page=params.page, perPage=params.perPage)>
 		</cffunction>
 		
-		<!--- view code (using CFLOOP) --->
+		<!--- View code (using `cfloop`) --->
 		<cfoutput>
 		<ul>
 		    <cfloop query="allUsers">
-		        <li>##firstName## ##lastName##</li>
+		        <li>##allUsers.firstName## ##allUsers.lastName##</li>
 		    </cfloop>
 		</ul>
 		##paginationLinks(handle="myCustomQueryHandle")##
 		</cfoutput>
 		
-		<!--- view code (using CFOUPUT) --->
+		<!--- View code (using `cfoutput`) --->
 		<ul>
 		    <cfoutput query="allUsers">
-		        <li>##firstName## ##lastName##</li>
+		        <li>##allUsers.firstName## ##allUsers.lastName##</li>
 		    </cfoutput>
 		</ul>
 		<cfoutput>##paginationLinks(handle="myCustomQueryHandle")##</cfoutput>
 	'
 	categories="model-class,miscellaneous" chapters="getting-paginated-data" functions="findAll,paginationLinks">
-	<cfargument name="totalRecords" type="numeric" required="true">
-	<cfargument name="currentPage" type="numeric" required="false" default="1">
-	<cfargument name="perPage" type="numeric" required="false" default="25">
-	<cfargument name="handle" type="string" required="false" default="query">
+	<cfargument name="totalRecords" type="numeric" required="true" hint="Total count of records that should be represented by the paginated links.">
+	<cfargument name="currentPage" type="numeric" required="false" default="1" hint="Page number that should be represented by the data being fetched and the paginated links.">
+	<cfargument name="perPage" type="numeric" required="false" default="25" hint="Number of records that should be represented on each page of data.">
+	<cfargument name="handle" type="string" required="false" default="query" hint="Name of handle to reference in @paginationLinks.">
 	<cfscript>
 		var loc = {};
 
