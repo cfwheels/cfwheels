@@ -29,13 +29,14 @@
 	<cfargument name="errorClass" type="string" required="false" hint="The class name of the HTML tag that wraps the form control when there are errors.">
 	<cfscript>
 		var loc = {};
-		$args(name="textField", reserved="type,name,value", args=arguments);
+		$args(name="textField", reserved="name,value", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = $tagId(arguments.objectName, arguments.property);
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
-		arguments.type = "text";
+		if (!StructKeyExists(arguments, "type"))
+			arguments.type = "text";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		loc.maxlength = $maxLength(argumentCollection=arguments);
 		if (StructKeyExists(loc, "maxlength"))
