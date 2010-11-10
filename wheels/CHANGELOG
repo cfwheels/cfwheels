@@ -3,6 +3,7 @@ WHEELS VERSION 1.1.1
 Bug Fixes
 =========
 * Default to the humanized property name for labels on calculated or non-persistant properties instead of throwing an error - [Andy Bellenie]
+* BelongsTo associations were throwing an error when the model had a composite key - #641 [Andy Bellenie]
 
 Miscellaneous
 =============
