@@ -30,5 +30,11 @@
 		<cfset loc.authorExistsByAssociation = loc.newPost.hasAuthor()>
 		<cfset assert("loc.authorExistsByAssociation IS true")>
 	</cffunction>
+	
+	<cffunction name="test_getting_parent_on_combined_key_model">
+		<cfset loc.combikey = model("combikey").findOne()>
+		<cfset loc.user = loc.combikey.user()>
+		<cfset assert("IsObject(loc.user)")>
+	</cffunction>
 
 </cfcomponent>

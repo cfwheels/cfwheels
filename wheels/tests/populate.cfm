@@ -38,7 +38,7 @@
 <cfset loc.tableList = ValueList(loc.dbinfo.table_name, chr(7))>
 
 <!--- list of tables to delete --->
-<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests">
+<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys">
 <cfloop list="#loc.tables#" index="loc.i">
 	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
 		<cftry>
@@ -104,6 +104,16 @@ CREATE TABLE collisiontests
 	id #loc.identityColumnType#
 	,method varchar(100) NOT NULL
 	,PRIMARY KEY(id)
+) #loc.storageEngine#
+</cfquery>
+
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
+CREATE TABLE combikeys
+(
+	id1 int NOT NULL
+	,id2 int NOT NULL
+	,userId int NOT NULL
+	,PRIMARY KEY(id1,id2)
 ) #loc.storageEngine#
 </cfquery>
 
@@ -213,6 +223,7 @@ CREATE TABLE users
 	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
+
 
 <!--- create oracle sequences --->
 <cfif loc.db eq "oracle">
@@ -401,4 +412,11 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 <!--- collisiontests --->
 <cfset model("collisiontest").create(
 	method="test"
+)>
+
+<!--- collisiontests --->
+<cfset model("CombiKey").create(
+	id1="1",
+	id2="1",
+	userId="1"
 )>
