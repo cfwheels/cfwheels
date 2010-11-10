@@ -4,6 +4,10 @@ Bug Fixes
 =========
 * Default to the humanized property name for labels on calculated or non-persistant properties instead of throwing an error - [Andy Bellenie]
 
+Miscellaneous
+=============
+* Ability to use custom types (HTML5) to textField and textFieldTag formhelpers - [Raul Riera]
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WHEELS VERSION 1.1 FINAL
