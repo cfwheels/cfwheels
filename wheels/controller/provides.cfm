@@ -186,7 +186,7 @@
 			
 			if (application.wheels.cacheFileChecking)
 			{
-				if (loc.templateFileExists)
+				if (loc.templatePathExists)
 					variables.$class.formats.existingTemplates = ListAppend(variables.$class.formats.existingTemplates, arguments.$name);
 				else
 					variables.$class.formats.nonExistingTemplates = ListAppend(variables.$class.formats.nonExistingTemplates, arguments.$name);
