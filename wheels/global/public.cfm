@@ -601,7 +601,7 @@
 
 		// return the count number in the string (e.g. "5 sites" instead of just "sites")
 		if (arguments.returnCount && arguments.count != -1)
-			loc.returnValue = NumberFormat(arguments.count) & " " & loc.returnValue;
+			loc.returnValue = LSNumberFormat(arguments.count) & " " & loc.returnValue;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
