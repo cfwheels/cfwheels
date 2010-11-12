@@ -1,20 +1,17 @@
 <cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
+		<cfset $ENV = duplicate(application)>
 		<cfset params = {controller="test", action="test"}>
-		<cfset $$oldViewPath = application.wheels.viewPath>
-		<cfset $$cacheFileChecking = application.wheels.cacheFileChecking>
 		<cfset application.wheels.viewPath = "wheels/tests/_assets/views">
 	</cffunction>
-	
+
 	<cffunction name="teardown">
-		<cfset params = {controller="test", action="test"}>
-		<cfset application.wheels.viewPath = $$oldViewPath>
-		<cfset application.wheels.cacheFileChecking = $$cacheFileChecking>
+		<cfset application = $ENV>
 		<cfset $header(name="content-type", value="text/html" , charset="utf-8") />
 	</cffunction>
 
-	
+
 	<cffunction name="test_throws_error_without_data_argument">
 		<cfset loc.controller = controller("test", params)>
 		<cftry>
@@ -105,8 +102,8 @@
 			</cfcatch>
 		</cftry>
 	</cffunction>
-	
-	<cffunction name="test_current_action_as_json_with_template_in_production">
+
+ 	<cffunction name="test_current_action_as_json_with_template_in_production">
 		<cfset application.wheels.cacheFileChecking = true>
 		<cfset params.format = "json">
 		<cfset loc.controller = controller("test", params)>
