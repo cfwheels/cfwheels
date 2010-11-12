@@ -90,7 +90,9 @@
 	application.wheels.automaticValidations = true;
 	application.wheels.setUpdatedAtOnCreate = true;
 	application.wheels.useExpandedColumnAliases = false;
-
+	application.wheels.functionCache = {};
+	application.wheels.functionCache.linkTo = {};
+	
 	// if session management is enabled in the application we default to storing flash data in the session scope, if not we use a cookie
 	if (StructKeyExists(this, "sessionManagement") && this.sessionManagement)
 		application.wheels.flashStorage = "session";

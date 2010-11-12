@@ -299,13 +299,20 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$args" returntype="void" access="public" output="false">
+<cffunction name="$args" returntype="any" access="public" output="false">
 	<cfargument name="args" type="struct" required="true">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="reserved" type="string" required="false" default="">
 	<cfargument name="combine" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
+		if (!StructKeyExists(arguments.args, "$deepCall") && StructKeyExists(application.wheels.functionCache, arguments.name))
+		{
+			loc.functionHash = Hash(ListSort(ReplaceList(SerializeJSON(arguments.args), "{,}", ","), "text"));
+			if (!StructKeyExists(application.wheels.functionCache[arguments.name], loc.functionHash))
+				application.wheels.functionCache[arguments.name][loc.functionHash] = linkTo(argumentCollection=arguments.args, $deepCall=true);
+			return application.wheels.functionCache[arguments.name][loc.functionHash];
+		}
 		if (Len(arguments.combine))
 		{
 			loc.iEnd = ListLen(arguments.combine);

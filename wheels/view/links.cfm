@@ -42,7 +42,9 @@
 	<cfargument name="href" type="string" required="false" hint="Pass a link to an external site here if you want to bypass the Wheels routing system altogether and link to an external URL.">
 	<cfscript>
 		var loc = {};
-		$args(name="linkTo", args=arguments);
+		loc.cached = $args(name="linkTo", args=arguments);
+		if (StructKeyExists(loc, "cached"))
+			return loc.cached;
 		if (Len(arguments.confirm))
 		{
 			loc.onclick = "return confirm('#JSStringFormat(arguments.confirm)#');";
