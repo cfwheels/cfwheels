@@ -326,11 +326,7 @@
 			
 			// if the function result is not already in the cache we'll have to call the function and place the result in the cache
 			if (!StructKeyExists(application.wheels.functionCache[arguments.name], loc.functionHash))
-			{
-				loc.functionToCall = variables[arguments.name];
-				arguments.args.$deepCall=true;
-				application.wheels.functionCache[arguments.name][loc.functionHash] = loc.functionToCall(argumentCollection=arguments.args);
-			}
+				application.wheels.functionCache[arguments.name][loc.functionHash] = $invoke(method=arguments.name, argumentCollection=arguments.args, $deepCall=true)
 			
 			// now that the result from the function has been placed in the application scope we can simply return it from there
 			return application.wheels.functionCache[arguments.name][loc.functionHash];
