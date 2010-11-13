@@ -202,9 +202,16 @@
 	categories="controller-request,rendering" chapters="" functions="setResponse">
 	<cfscript>
 		if ($performedRender())
-			return Trim(variables.$instance.response);
+		{
+			if (ListFindNoCase("testing,production", get("environment")))
+				return $compactOutput(variables.$instance.response);
+			else
+				return Trim(variables.$instance.response);
+		}
 		else
+		{
 			return "";
+		}
 	</cfscript>
 </cffunction>
 

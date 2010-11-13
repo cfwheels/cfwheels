@@ -1,8 +1,40 @@
+<cffunction name="$compactOutput" returntype="string" access="public" output="false">
+	<cfargument name="output" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		if (!StructKeyExists(application.wheels.vendor, "compactor"))
+		{
+			loc.filePaths = [];
+			loc.filePaths[1] = ExpandPath("wheels/vendor/compactor/compactor.jar");
+			loc.javaLoader = CreateObject("component", "#application.wheels.wheelsComponentPath#.vendor.javaloader.JavaLoader").init(loc.filePaths);
+			application.wheels.vendor.compactor = loc.javaLoader.create("com.mindprod.compactor.Compactor");
+		}
+	</cfscript>
+	<cfreturn application.wheels.vendor.compactor.compactString(arguments.output, "") />
+</cffunction>
+
+<cffunction name="$htmlFormat" returntype="string" access="public" output="false">
+	<cfargument name="string" type="string" required="true" />
+	<cfscript>
+		var loc = {};
+		if (!StructKeyExists(application.wheels.vendor, "stringEscapeUtils"))
+		{
+			loc.filePaths = [];
+			loc.filePaths[1] = ExpandPath("wheels/vendor/commons-lang/commons-lang-2.5.jar");
+			loc.javaLoader = CreateObject("component", "#application.wheels.wheelsComponentPath#.vendor.javaloader.JavaLoader").init(loc.filePaths);
+			application.wheels.vendor.stringEscapeUtils = loc.javaLoader.create("org.apache.commons.lang.StringEscapeUtils");
+		}
+	</cfscript>
+	<cfreturn application.wheels.vendor.stringEscapeUtils.escapeHtml(arguments.string) />
+</cffunction>
+
 <cffunction name="$initializeRequestScope" returntype="void" access="public" output="false">
 	<cfscript>
 		if (!StructKeyExists(request, "wheels"))
 		{
 			request.wheels = {};
+			request.wheels.vendor = {};
+			request.wheels.routes = {};
 			request.wheels.params = {};
 			request.wheels.cache = {};
 			
@@ -22,10 +54,10 @@
 	<cfargument name="data" type="any" required="true">
 	<cfscript>
 		// only instantiate the toXml object once per request
-		if (!StructKeyExists(request.wheels, "toXml"))
-			request.wheels.toXml = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#.vendor.toXml", fileName="toXML", method="init");
+		if (!StructKeyExists(request.wheels.vendor, "toXml"))
+			request.wheels.vendor.toXml = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#.vendor.toXml", fileName="toXML", method="init");
 	</cfscript>
-	<cfreturn request.wheels.toXml.toXml(arguments.data) />
+	<cfreturn request.wheels.vendor.toXml.toXml(arguments.data) />
 </cffunction>
 
 <cffunction name="$convertToString" returntype="string" access="public" output="false">
@@ -241,28 +273,52 @@
 			$throw(type="Wheels.RouteNotFound", message="Could not find the `#arguments.route#` route.", extendedInfo="Create a new route in `config/routes.cfm` with the name `#arguments.route#`.");
 
 		loc.routePos = application.wheels.namedRoutePositions[arguments.route];
-		if (loc.routePos Contains ",")
+		
+		if (ArrayLen(loc.routePos) gt 1)
 		{
-			// there are several routes with this name so we need to figure out which one to use by checking the passed in arguments
-			loc.iEnd = ListLen(loc.routePos);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			// get our routes - we cache them in the request.wheels.routes scope to save time on subsequent calls to $findRoute
+			if (StructKeyExists(request.wheels.routes, arguments.route))
 			{
-				loc.returnValue = application.wheels.routes[ListGetAt(loc.routePos, loc.i)];
+				loc.routeArray = request.wheels.routes[arguments.route];
+			}
+			else
+			{
+				loc.routeArray = [];
+				for (loc.i = 1; loc.i lte ArrayLen(loc.routePos); loc.i++)
+					loc.routeArray[loc.i] = application.wheels.routes[loc.routePos[loc.i]];
+				request.wheels.routes[arguments.route] = loc.routeArray;
+			}
+			
+			loc.foundRoute = false;
+			while (!loc.foundRoute) // need to use a while loop here so we don't loop through all of the routes
+			{
+				if (application.wheels.showErrorInformation && !ArrayLen(loc.routePos))
+					$throw(type="Wheels.RouteMatchNotFound", message="Could not find a match for the `#arguments.route#` route.");
+
+				// we always try to find the route on the first position because we are cleaning the array everytime we don't find a match
+				loc.returnValue = loc.routeArray[1];
 				loc.foundRoute = true;
-				loc.jEnd = ListLen(loc.returnValue.variables);
-				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				
+				for (loc.i = 1; loc.i lte ListLen(loc.returnValue.variables); loc.i++)
 				{
-					loc.variable = ListGetAt(loc.returnValue.variables, loc.j);
+					loc.variable = ListGetAt(loc.returnValue.variables, loc.i);
 					if (!StructKeyExists(arguments, loc.variable) || !Len(arguments[loc.variable]))
+					{
 						loc.foundRoute = false;
+						break;
+					}
 				}
-				if (loc.foundRoute)
-					break;
+				
+				// clean the array of all routes that contain the variable that failed
+				if (!loc.foundRoute)
+					for (loc.i = ArrayLen(loc.routeArray); loc.i gte 1; loc.i--)
+						if (ListFindNoCase(loc.routeArray[loc.i].variables, loc.variable))
+							ArrayDeleteAt(loc.routeArray, loc.i);
 			}
 		}
 		else
 		{
-			loc.returnValue = application.wheels.routes[loc.routePos];
+			loc.returnValue = application.wheels.routes[loc.routePos[1]];
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -326,7 +382,7 @@
 			
 			// if the function result is not already in the cache we'll have to call the function and place the result in the cache
 			if (!StructKeyExists(application.wheels.functionCache[arguments.name], loc.functionHash))
-				application.wheels.functionCache[arguments.name][loc.functionHash] = $invoke(method=arguments.name, argumentCollection=arguments.args, $deepCall=true)
+				application.wheels.functionCache[arguments.name][loc.functionHash] = $invoke(method=arguments.name, argumentCollection=arguments.args, $deepCall=true);
 			
 			// now that the result from the function has been placed in the application scope we can simply return it from there
 			return application.wheels.functionCache[arguments.name][loc.functionHash];
@@ -762,8 +818,8 @@ Should now call bar() instead and marking foo() as deprecated
 			if (StructKeyExists(loc.route, "name") && len(loc.route.name))
 			{
 				if (!StructKeyExists(application.wheels.namedRoutePositions, loc.route.name))
-					application.wheels.namedRoutePositions[loc.route.name] = "";
-				application.wheels.namedRoutePositions[loc.route.name] = ListAppend(application.wheels.namedRoutePositions[loc.route.name], loc.i);
+					application.wheels.namedRoutePositions[loc.route.name] = ArrayNew(1);
+				ArrayAppend(application.wheels.namedRoutePositions[loc.route.name], loc.i);
 			}
 		}
 		</cfscript>

@@ -32,5 +32,5 @@
 	categories="view-helper,sanitize" functions="stripLinks,stripTags">
 	<cfargument name="content" type="string" required="true">
 	<!--- you can't use argumentCollection --->
-	<cfreturn XMLFormat(arguments.content)>
+	<cfreturn $htmlFormat(arguments.content)>
 </cffunction>

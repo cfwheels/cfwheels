@@ -51,6 +51,7 @@
 		application.wheels.routes = [];
 		application.wheels.namedRoutePositions = {};
 		application.wheels.mixins = {};
+		application.wheels.vendor = {};
 		application.wheels.cache = {};
 		application.wheels.cache.sql = {};
 		application.wheels.cache.image = {};
