@@ -54,6 +54,18 @@
 	<cfreturn ArrayToList(loc.list, arguments.delim)>
 </cffunction>
 
+<cffunction name="$simpleHashedKey" returntype="string" access="public" output="false" hint="Same as $hashedKey but cannot handle binary data in queries.">
+	<cfargument name="value" type="any" required="true">
+	<cfscript>
+		var returnValue = "";
+		returnValue = SerializeJSON(arguments.value);
+		// remove the characters that indicate array or struct so that we can sort it as a list below
+		returnValue = ReplaceList(returnValue, "{,},[,]", ",,,");
+		returnValue = ListSort(returnValue, "text");
+		return returnValue;
+	</cfscript>
+</cffunction>
+
 <cffunction name="$hashedKey" returntype="string" access="public" output="false" hint="Creates a unique string based on any arguments passed in (used as a key for caching mostly).">
 	<cfscript>
 		var loc = {};
@@ -71,10 +83,7 @@
 			// this might fail if a query contains binary data so in those rare cases we fall back on using cfwddx (which is a little bit slower which is why we don't use it all the time)
 			try
 			{
-				loc.returnValue = SerializeJSON(loc.values);
-				// remove the characters that indicate array or struct so that we can sort it as a list below
-				loc.returnValue = ReplaceList(loc.returnValue, "{,},[,]", ",,,");
-				loc.returnValue = ListSort(loc.returnValue, "text");
+				loc.returnValue = $simpleHashedKey(loc.values);
 			}
 			catch (Any e)
 			{
@@ -306,13 +315,27 @@
 	<cfargument name="combine" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
+		
+		// if this function has caching enabled we return it from the cache if it exists
+		// when $deepCall is set it means we are calling it from this function and we'll then skip the code below so that the original function can execute normally
 		if (!StructKeyExists(arguments.args, "$deepCall") && StructKeyExists(application.wheels.functionCache, arguments.name))
 		{
-			loc.functionHash = Hash(ListSort(ReplaceList(SerializeJSON(arguments.args), "{,}", ","), "text"));
+			// create a unique key based on arguments passed in
+			// we use the simple version of the function here for performance reasons (we know that we'll never have binary query data passed in anyway so we don't need to deal with that)
+			loc.functionHash = $simpleHashedKey(arguments.args);
+			
+			// if the function result is not already in the cache we'll have to call the function and place the result in the cache
 			if (!StructKeyExists(application.wheels.functionCache[arguments.name], loc.functionHash))
-				application.wheels.functionCache[arguments.name][loc.functionHash] = linkTo(argumentCollection=arguments.args, $deepCall=true);
+			{
+				loc.functionToCall = variables[arguments.name];
+				arguments.args.$deepCall=true;
+				application.wheels.functionCache[arguments.name][loc.functionHash] = loc.functionToCall(argumentCollection=arguments.args);
+			}
+			
+			// now that the result from the function has been placed in the application scope we can simply return it from there
 			return application.wheels.functionCache[arguments.name][loc.functionHash];
 		}
+		
 		if (Len(arguments.combine))
 		{
 			loc.iEnd = ListLen(arguments.combine);
