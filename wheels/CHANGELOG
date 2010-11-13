@@ -10,6 +10,12 @@ Miscellaneous
 =============
 * Ability to use custom types (HTML5) to textField and textFieldTag formhelpers - [Raul Riera]
 
+Enhancements
+============
+* Speed improvement for the method $findRoute when using a large amount of named routes - [James Gibson]
+* Wheels now compacts the output of the rendered content - [James Gibson]
+* Added new method $htmlFormat to properly escape all html entities - [James Gibson]
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WHEELS VERSION 1.1 FINAL
