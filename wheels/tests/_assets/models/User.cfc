@@ -2,6 +2,8 @@
 
 	<cffunction name="init">
 		<cfset hasMany(name="galleries")>
+		<cfset hasOne(name="combikey")>
+		<cfset hasMany(name="combikeys")>
 		<cfset hasMany(name="outerjoinphotogalleries", modelName="gallery", jointype="outer")>
 		<cfset validatesPresenceOf("username,password,firstname,lastname")>
 		<cfset validatesUniquenessOf("username")>

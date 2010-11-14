@@ -374,6 +374,9 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 	</cfloop>
 </cfloop>
 
+<!--- create a profile with an author --->
+<cfset model("profile").create(dateOfBirth="1/1/1970", bio="Unknown Author")>
+
 <cfset loc.posts = model("post").findAll(order="id")>
 
 <cfloop query="loc.posts">

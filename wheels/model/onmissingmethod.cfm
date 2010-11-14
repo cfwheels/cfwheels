@@ -123,7 +123,7 @@
 				loc.componentReference = model(loc.info.modelName);
 				if (loc.info.type == "hasOne")
 				{
-					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=loc.componentReference.primaryKeys());
+					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=primaryKeys());
 					if (StructKeyExists(arguments.missingMethodArguments, "where"))
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasProfile" becomes "hasObject")
@@ -194,7 +194,7 @@
 				}
 				else if (loc.info.type == "hasMany")
 				{
-					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=loc.componentReference.primaryKeys());
+					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=primaryKeys());
 					if (StructKeyExists(arguments.missingMethodArguments, "where"))
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					loc.singularKey = singularize(loc.key);

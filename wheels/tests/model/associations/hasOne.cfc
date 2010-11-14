@@ -55,14 +55,15 @@
 
 	<cffunction name="test_deleting_child">
 		<cfset loc.author = model("author").findOne(order="id")>
+		<cfset loc.profileCount = model("profile").count() />
 		<cftransaction>
 			<cfset loc.author.deleteProfile(transaction="none")>
-			<cfset assert("model('profile').count() IS 0")>
+			<cfset assert("model('profile').count() eq (loc.profileCount - 1)")>
 			<cftransaction action="rollback" />
 		</cftransaction>		
 		<cftransaction>
 			<cfset model("profile").deleteOne(where="authorId=#loc.author.id#", transaction="none")>
-			<cfset assert("model('profile').count() IS 0")>
+			<cfset assert("model('profile').count() eq (loc.profileCount - 1)")>
 			<cftransaction action="rollback" />
 		</cftransaction>		
 	</cffunction>
