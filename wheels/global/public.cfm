@@ -463,7 +463,7 @@
 	<cfargument name="word" type="string" required="true" hint="The word to pluralize.">
 	<cfargument name="count" type="numeric" required="false" default="-1" hint="Pluralization will occur when this value is not `1`.">
 	<cfargument name="returnCount" type="boolean" required="false" default="true" hint="Will return `count` prepended to the pluralization when `true` and `count` is not `-1`.">
-	<cfreturn $singularizeOrPluralize(text=arguments.word, which="pluralize", count=arguments.count, returnCount=arguments.returnCount)>
+	<cfreturn $singularizeOrPluralizeWithCount(text=arguments.word, which="pluralize", count=arguments.count, returnCount=arguments.returnCount)>
 </cffunction>
 
 <cffunction name="singularize" returntype="string" access="public" output="false" hint="Returns the singular form of the passed in word."
@@ -474,7 +474,7 @@
 	'
 	categories="global,string" chapters="miscellaneous-helpers" functions="capitalize,humanize,pluralize">
 	<cfargument name="word" type="string" required="true" hint="String to singularize.">
-	<cfreturn $singularizeOrPluralize(text=arguments.word, which="singularize")>
+	<cfreturn $singularizeOrPluralizeWithCount(text=arguments.word, which="singularize")>
 </cffunction>
 
 <cffunction name="toXHTML" returntype="string" access="public" output="false" hint="Returns an XHTML-compliant string."
@@ -527,47 +527,72 @@
 
 <!--- PRIVATE FUNCTIONS --->
 
-<cffunction name="$singularizeOrPluralize" returntype="string" access="public" output="false" hint="Called by singularize and pluralize to perform the conversion.">
-	<cfargument name="text" type="string" required="true">
-	<cfargument name="which" type="string" required="true">
-	<cfargument name="count" type="numeric" required="false" default="-1">
-	<cfargument name="returnCount" type="boolean" required="false" default="true">
+<cffunction name="$singularizeOrPluralizeWithCount" returntype="string" access="public" output="false" hint="Decides if we need to convert the word based on the count value passed in and then adds the count to the string.">
+	<cfargument name="text" type="string" required="true" hint="See documentation for @pluralize.">
+	<cfargument name="count" type="numeric" required="false" default="-1" hint="See documentation for @pluralize.">
+	<cfargument name="returnCount" type="boolean" required="false" default="true" hint="See documentation for @pluralize.">
+	<cfargument name="which" type="string" required="true" hint="Should be either `singularize` or `pluralize`.">
 	<cfscript>
 		var loc = {};
-
-		// by default we pluralize/singularize the entire string
-		loc.text = arguments.text;
-
-		// when count is 1 we don't need to pluralize at all so just set the return value to the input string
-		loc.returnValue = loc.text;
-
-		if (arguments.count != 1)
+		loc.returnValue = $args(name="$singularizeOrPluralizeWithCount", cachable=true, args=arguments);
+		if (!StructKeyExists(loc, "returnValue"))
 		{
+			// run conversion unless count is passed in and its value means conversion is unnecessary
+			if (arguments.which == "pluralize" && arguments.count == 1)
+				loc.returnValue = arguments.text;
+			else
+				loc.returnValue = $singularizeOrPluralize(text=arguments.text, which=arguments.which);
+	
+			// return the count number in the string (e.g. "5 sites" instead of just "sites")
+			if (arguments.returnCount && arguments.count != -1)
+				loc.returnValue = LSNumberFormat(arguments.count) & " " & loc.returnValue;
+		}
+		return loc.returnValue;
+	</cfscript>
+</cffunction>
 
-			if (REFind("[A-Z]", loc.text))
+<cffunction name="$singularizeOrPluralize" returntype="string" access="public" output="false" hint="Converts a word to singular or plural form.">
+	<cfargument name="text" type="string" required="true" hint="See documentation for @pluralize.">
+	<cfargument name="which" type="string" required="true" hint="See documentation for @$singularizeOrPluralizeWithCount.">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = $args(name="$singularizeOrPluralize", cachable=true, args=arguments);
+		if (!StructKeyExists(loc, "returnValue"))
+		{
+			// default to returning the same string when nothing can be converted
+			loc.returnValue = arguments.text;
+			
+			// only pluralize/singularize the last part of a camelCased variable (e.g. in "websiteStatusUpdate" we only change the "update" part)
+			// also set a variable with the unchanged part of the string (to be prepended before returning final result)
+			if (REFind("[A-Z]", arguments.text))
 			{
-				// only pluralize/singularize the last part of a camelCased variable (e.g. in "websiteStatusUpdate" we only change the "update" part)
-				// also set a variable with the unchanged part of the string (to be prepended before returning final result)
-				loc.upperCasePos = REFind("[A-Z]", Reverse(loc.text));
-				loc.prepend = Mid(loc.text, 1, Len(loc.text)-loc.upperCasePos);
-				loc.text = Reverse(Mid(Reverse(loc.text), 1, loc.upperCasePos));
+				loc.upperCasePos = REFind("[A-Z]", Reverse(arguments.text));
+				loc.prepend = Mid(arguments.text, 1, Len(arguments.text)-loc.upperCasePos);
+				arguments.text = Reverse(Mid(Reverse(arguments.text), 1, loc.upperCasePos));
 			}
+
 			loc.uncountables = "advice,air,blood,deer,equipment,fish,food,furniture,garbage,graffiti,grass,homework,housework,information,knowledge,luggage,mathematics,meat,milk,money,music,pollution,research,rice,sand,series,sheep,soap,software,species,sugar,traffic,transportation,travel,trash,water,feedback";
 			loc.irregulars = "child,children,foot,feet,man,men,move,moves,person,people,sex,sexes,tooth,teeth,woman,women";
-			if (ListFindNoCase(loc.uncountables, loc.text))
-				loc.returnValue = loc.text;
-			else if (ListFindNoCase(loc.irregulars, loc.text))
+			if (ListFindNoCase(loc.uncountables, arguments.text))
 			{
-				loc.pos = ListFindNoCase(loc.irregulars, loc.text);
+				// this word is the same in both plural and singular so it can just be returned as is
+				loc.returnValue = arguments.text;
+			}
+			else if (ListFindNoCase(loc.irregulars, arguments.text))
+			{
+				// this word cannot be converted in a standard way so we return a preset value as specifed in the list above
+				loc.pos = ListFindNoCase(loc.irregulars, arguments.text);
 				if (arguments.which == "singularize" && loc.pos MOD 2 == 0)
 					loc.returnValue = ListGetAt(loc.irregulars, loc.pos-1);
 				else if (arguments.which == "pluralize" && loc.pos MOD 2 != 0)
 					loc.returnValue = ListGetAt(loc.irregulars, loc.pos+1);
 				else
-					loc.returnValue = loc.text;
+					loc.returnValue = arguments.text;
 			}
 			else
 			{
+				// this word can probably be converted to plural/singular using standard rules so we'll do that
+				// we'll start by setting the rules and create an array from them
 				if (arguments.which == "pluralize")
 					loc.ruleList = "(quiz)$,\1zes,^(ox)$,\1en,([m|l])ouse$,\1ice,(matr|vert|ind)ix|ex$,\1ices,(x|ch|ss|sh)$,\1es,([^aeiouy]|qu)y$,\1ies,(hive)$,\1s,(?:([^f])fe|([lr])f)$,\1\2ves,sis$,ses,([ti])um$,\1a,(buffal|tomat|potat|volcan|her)o$,\1oes,(bu)s$,\1ses,(alias|status)$,\1es,(octop|vir)us$,\1i,(ax|test)is$,\1es,s$,s,$,s";
 				else if (arguments.which == "singularize")
@@ -581,27 +606,26 @@
 					loc.rules[loc.count][2] = ListGetAt(loc.ruleList, loc.i+1);
 					loc.count = loc.count + 1;
 				}
+				
+				// loop through the rules looking for a match and perform the regex replace when we find one
 				loc.iEnd = ArrayLen(loc.rules);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
-					if(REFindNoCase(loc.rules[loc.i][1], loc.text))
+					if (REFindNoCase(loc.rules[loc.i][1], arguments.text))
 					{
-						loc.returnValue = REReplaceNoCase(loc.text, loc.rules[loc.i][1], loc.rules[loc.i][2]);
+						loc.returnValue = REReplaceNoCase(arguments.text, loc.rules[loc.i][1], loc.rules[loc.i][2]);
 						break;
 					}
 				}
+
+				// set back to blank string since we worked around the fact that we can't have blank values in lists above by using Chr(7) instead
 				loc.returnValue = Replace(loc.returnValue, Chr(7), "", "all");
 			}
-
-			// this was a camelCased string and we need to prepend the unchanged part to the result
+	
+			// if this is a camel cased string we need to prepend the unchanged part to the result
 			if (StructKeyExists(loc, "prepend"))
 				loc.returnValue = loc.prepend & loc.returnValue;
-
 		}
-
-		// return the count number in the string (e.g. "5 sites" instead of just "sites")
-		if (arguments.returnCount && arguments.count != -1)
-			loc.returnValue = LSNumberFormat(arguments.count) & " " & loc.returnValue;
+		return loc.returnValue;
 	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>
