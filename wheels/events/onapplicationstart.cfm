@@ -60,6 +60,7 @@
 		application.wheels.cache.page = {};
 		application.wheels.cache.partial = {};
 		application.wheels.cache.query = {};
+		application.wheels.cache.functions = {};
 		application.wheels.cacheLastCulledAt = Now();
 
 		// set up paths to various folders in the framework

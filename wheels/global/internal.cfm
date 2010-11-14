@@ -369,23 +369,26 @@
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="reserved" type="string" required="false" default="">
 	<cfargument name="combine" type="string" required="false" default="">
+	<cfargument name="cachable" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		
-		// if this function has caching enabled we return it from the cache if it exists
-		// when $deepCall is set it means we are calling it from this function and we'll then skip the code below so that the original function can execute normally
-		if (!StructKeyExists(arguments.args, "$deepCall") && StructKeyExists(application.wheels.functionCache, arguments.name))
+		// if function result caching is enabled globally, the calling function is cachable and we're not coming from a recursive call we return the result from the cache (setting the cache first when necessary)
+		if (application.wheels.cacheFunctions && arguments.cachable && !StructKeyExists(arguments.args, "$recursive"))
 		{
-			// create a unique key based on arguments passed in
-			// we use the simple version of the function here for performance reasons (we know that we'll never have binary query data passed in anyway so we don't need to deal with that)
+			// create a unique key based on the arguments passed in to the calling function
+			// we use the simple version of the $hashedKey function here for performance reasons (we know that we'll never have binary query data passed in anyway so we don't need to deal with that)
 			loc.functionHash = $simpleHashedKey(arguments.args);
 			
-			// if the function result is not already in the cache we'll have to call the function and place the result in the cache
-			if (!StructKeyExists(application.wheels.functionCache[arguments.name], loc.functionHash))
-				application.wheels.functionCache[arguments.name][loc.functionHash] = $invoke(method=arguments.name, argumentCollection=arguments.args, $deepCall=true);
-			
-			// now that the result from the function has been placed in the application scope we can simply return it from there
-			return application.wheels.functionCache[arguments.name][loc.functionHash];
+			// if the function result is not already in the cache we'll call the function and place the result in the cache
+			loc.functionResult = $getFromCache(key=loc.functionHash, category="functions");
+			if (IsBoolean(loc.functionResult) && !loc.functionResult)
+			{
+				arguments.args.$recursive = true;
+				loc.functionResult = $invoke(method=arguments.name, invokeArgs=arguments.args);
+				$addToCache(key=loc.functionHash, value=loc.functionResult, category="functions");
+			}
+			return loc.functionResult;
 		}
 		
 		if (Len(arguments.combine))
