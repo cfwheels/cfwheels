@@ -379,16 +379,14 @@
 				{
 					if (loc.thisValidation.method == "$validatesPresenceOf")
 					{
-						// if the property does not exist or if it's blank we add an error on the object (for all other validation types we call corresponding methods below instead)
-						if (!StructKeyExists(this, loc.thisValidation.args.property) or (IsSimpleValue(this[loc.thisValidation.args.property]) and !Len(Trim(this[loc.thisValidation.args.property]))) or (IsStruct(this[loc.thisValidation.args.property]) and !StructCount(this[loc.thisValidation.args.property])))
-							addError(property=loc.thisValidation.args.property, message=$validationErrorMessage(loc.thisValidation.args.property, loc.thisValidation.args.message));
+						$validatesPresenceOf(argumentCollection=loc.thisValidation.args);
 					}
 					else
 					{
 						// if the validation set does not allow blank values we can set an error right away, otherwise we call a method to run the actual check
-						if (StructKeyExists(loc.thisValidation.args, "property") && StructKeyExists(loc.thisValidation.args, "allowBlank") && !loc.thisValidation.args.allowBlank && (!StructKeyExists(this, loc.thisValidation.args.property) || !Len(this[loc.thisValidation.args.property])))
+						if (StructKeyExists(loc.thisValidation.args, "property") && StructKeyExists(loc.thisValidation.args, "allowBlank") && !loc.thisValidation.args.allowBlank && (!StructKeyExists(this, loc.thisValidation.args.property) || (!Len(this[loc.thisValidation.args.property]) && loc.thisValidation.method != "$validatesUniquenessOf")))
 							addError(property=loc.thisValidation.args.property, message=$validationErrorMessage(loc.thisValidation.args.property, loc.thisValidation.args.message));
-						else if (!StructKeyExists(loc.thisValidation.args, "property") || (StructKeyExists(this, loc.thisValidation.args.property) && Len(this[loc.thisValidation.args.property])))
+						else if (!StructKeyExists(loc.thisValidation.args, "property") || (StructKeyExists(this, loc.thisValidation.args.property) &&(Len(this[loc.thisValidation.args.property]) || loc.thisValidation.method == "$validatesUniquenessOf")))
 							$invoke(method=loc.thisValidation.method, invokeArgs=loc.thisValidation.args);
 					}
 				}
@@ -441,6 +439,23 @@
 	</cfscript>
 </cffunction>
 
+<cffunction name="$validatesPresenceOf" returntype="any" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesPresenceOf method.">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="message" type="string" required="true">
+	<cfargument name="properties" type="struct" required="false" default="#this.properties()#">
+	<cfargument name="returnAs" type="string" required="false" default="">
+	<cfscript>
+		var args = {};
+		// if the property does not exist or if it's blank we add an error on the object
+		if (!StructKeyExists(arguments.properties, arguments.property) || (IsSimpleValue(arguments.properties[arguments.property]) && !Len(Trim(arguments.properties[arguments.property]))) || (IsStruct(arguments.properties[arguments.property]) && !StructCount(arguments.properties[arguments.property])))
+			args = {property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message)};
+		if (Len(arguments.returnAs))
+			return args;
+		else if (!StructIsEmpty(args))
+			addError(argumentCollection=args);
+	</cfscript>
+</cffunction>
+
 <cffunction name="$validatesLengthOf" returntype="any" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesLengthOf method.">
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="message" type="string" required="true">
@@ -448,31 +463,31 @@
 	<cfargument name="maximum" type="numeric" required="true">
 	<cfargument name="minimum" type="numeric" required="true">
 	<cfargument name="within" type="any" required="true">
-	<cfargument name="$properties" type="struct" required="false" default="#properties()#">
-	<cfargument name="$test" type="boolean" required="false" default="false">
+	<cfargument name="properties" type="struct" required="false" default="#this.properties()#">
+	<cfargument name="returnAs" type="string" required="false" default="">
 	<cfscript>
 		var args = {};
 		if (arguments.maximum)
 		{
-			if (Len(arguments.$properties[arguments.property]) > arguments.maximum)
+			if (Len(arguments.properties[arguments.property]) > arguments.maximum)
 				args = {property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message)};
 		}
 		else if (arguments.minimum)
 		{
-			if (Len(arguments.$properties[arguments.property]) < arguments.minimum)
+			if (Len(arguments.properties[arguments.property]) < arguments.minimum)
 				args = {property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message)};
 		}
 		else if (arguments.exactly)
 		{
-			if (Len(arguments.$properties[arguments.property]) != arguments.exactly)
+			if (Len(arguments.properties[arguments.property]) != arguments.exactly)
 				args = {property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message)};
 		}
 		else if (IsArray(arguments.within) && ArrayLen(arguments.within))
 		{
-			if (Len(arguments.$properties[arguments.property]) < arguments.within[1] || Len(arguments.$properties[arguments.property]) > arguments.within[2])
+			if (Len(arguments.properties[arguments.property]) < arguments.within[1] || Len(arguments.properties[arguments.property]) > arguments.within[2])
 				args = {property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message)};
 		}
-		if (arguments.$test)
+		if (Len(arguments.returnAs))
 			return args;
 		else if (!StructIsEmpty(args))
 			addError(argumentCollection=args);
@@ -497,9 +512,15 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$validatesUniquenessOf" returntype="void" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesUniquenessOf method.">
+<cffunction name="$validatesUniquenessOf" returntype="any" access="public" output="false" hint="Adds an error if the object property fail to pass the validation setup in the @validatesUniquenessOf method.">
+	<cfargument name="property" type="string" required="true">
+	<cfargument name="message" type="string" required="true">
+	<cfargument name="scope" type="string" required="false" default="">
+	<cfargument name="properties" type="struct" required="false" default="#this.properties()#">
+	<cfargument name="returnAs" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
+		loc.args = {};
 
 		// create the WHERE clause to be used in the query that checks if an identical value already exists
 		// wrap value in single quotes unless it's numeric
@@ -537,7 +558,12 @@
 
 		// we add an error if an object was found in the database and the current object is either not saved yet or not the same as the one in the database
 		if (IsObject(loc.existingObject) && (isNew() || loc.existingObject.key() != key($persisted=true)))
-			addError(property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message));
+			loc.args = {property=arguments.property, message=$validationErrorMessage(arguments.property, arguments.message)};
+
+		if (Len(arguments.returnAs))
+			return loc.args;
+		else if (!StructIsEmpty(loc.args))
+			addError(argumentCollection=loc.args);
 	</cfscript>
 </cffunction>
 
