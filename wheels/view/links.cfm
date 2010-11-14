@@ -42,21 +42,25 @@
 	<cfargument name="href" type="string" required="false" hint="Pass a link to an external site here if you want to bypass the Wheels routing system altogether and link to an external URL.">
 	<cfscript>
 		var loc = {};
-		loc.result = $args(name="linkTo", cachable=true, args=arguments); if (StructKeyExists(loc, "result")) return loc.result;
-		if (Len(arguments.confirm))
+		loc.returnValue = $args(name="linkTo", cachable=true, args=arguments);
+		if (!StructKeyExists(loc, "returnValue"))
 		{
-			loc.onclick = "return confirm('#JSStringFormat(arguments.confirm)#');";
-			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
+			// only run our linkTo code if we do not have a cached result
+			if (Len(arguments.confirm))
+			{
+				loc.onclick = "return confirm('#JSStringFormat(arguments.confirm)#');";
+				arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
+			}
+			if (!StructKeyExists(arguments, "href"))
+				arguments.href = URLFor(argumentCollection=arguments);
+			arguments.href = toXHTML(arguments.href);
+			if (!Len(arguments.text))
+				arguments.text = arguments.href;
+			loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port";
+			if (Len(arguments.route))
+				loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
+			loc.returnValue = $element(name="a", skip=loc.skip, content=arguments.text, attributes=arguments);
 		}
-		if (!StructKeyExists(arguments, "href"))
-			arguments.href = URLFor(argumentCollection=arguments);
-		arguments.href = toXHTML(arguments.href);
-		if (!Len(arguments.text))
-			arguments.text = arguments.href;
-		loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port";
-		if (Len(arguments.route))
-			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
-		loc.returnValue = $element(name="a", skip=loc.skip, content=arguments.text, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
