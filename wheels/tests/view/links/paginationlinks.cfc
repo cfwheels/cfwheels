@@ -14,7 +14,7 @@
 		<cfset loc.route.action = "nation">
 		<cfset loc.route.variables = "special">
 		<cfset ArrayInsertAt(application.wheels.routes, 2, loc.route)>
-		<cfset application.wheels.namedRoutePositions.pagination = 2>
+		<cfset application.wheels.namedRoutePositions.pagination = [2]>
 		<cfset application.wheels.URLRewriting = "on">
 	</cffunction>
 
