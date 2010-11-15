@@ -135,7 +135,7 @@
 		<cfset loc = arguments>
 	</cfif>
 	<!--- we prefix returnValue with "wheels" here to make sure the variable does not get overwritten in the included template --->
-	<cfsavecontent variable="loc.wheelsReturnValue"><cfoutput><cfinclude template="../../#LCase(arguments.$template)#"></cfoutput></cfsavecontent>
+	<cfsavecontent variable="loc.wheelsReturnValue"><cfinclude template="../../#LCase(arguments.$template)#"></cfsavecontent>
 	<cfreturn loc.wheelsReturnValue>
 </cffunction>
 

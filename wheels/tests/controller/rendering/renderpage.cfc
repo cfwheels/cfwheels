@@ -29,5 +29,10 @@
 		<cfset result = loc.controller.renderPage(returnAs="string")>
 		<cfset assert("NOT StructKeyExists(request.wheels, 'response') AND result Contains 'view template content'")>
 	</cffunction>
+	
+	<cffunction name="test_rendering_with_cfthread_in_view">
+		<cfset result = loc.controller.renderPage(action="withthread")>
+		<cfset assert("loc.controller.response() Contains '1|Per|Djurner'")>
+	</cffunction>
 
 </cfcomponent>
