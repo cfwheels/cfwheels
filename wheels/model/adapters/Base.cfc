@@ -252,4 +252,5 @@
 		<cfreturn $dbinfo(argumentCollection=arguments)>
 	</cffunction>
 
+	<cfinclude template="../../plugins/injection.cfm">
 </cfcomponent>

@@ -47,5 +47,6 @@
 		</cfscript>
 		<cfreturn loc.returnValue>
 	</cffunction>
-
+	
+	<cfinclude template="plugins/injection.cfm">
 </cfcomponent>
