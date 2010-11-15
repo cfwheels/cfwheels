@@ -6,7 +6,7 @@
 
 	<cffunction name="test_set_perpage">
 		<cfset loc.profileModel.perPage(10)>
-		<cfset assert('loc.profileModel.query().perpage eq 10')>
+		<cfset assert('loc.profileModel.toQuery().perpage eq 10')>
 	</cffunction>
 
 </cfcomponent>
