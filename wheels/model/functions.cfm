@@ -12,5 +12,4 @@
 <cfinclude template="serialize.cfm">
 <cfinclude template="sql.cfm">
 <cfinclude template="transactions.cfm">
-<cfinclude template="tokenizer.cfm">
 <cfinclude template="validations.cfm">
