@@ -204,7 +204,9 @@
 	'
 	categories="global,miscellaneous" chapters="object-relational-mapping" functions="">
 	<cfargument name="name" type="string" required="true" hint="Name of the model to get a reference to.">
-	<cfreturn $doubleCheckedLock(name="modelLock", condition="$cachedModelClassExists", execute="$createModelClass", conditionArgs=arguments, executeArgs=arguments)>
+	<cfset var applicationModel = $doubleCheckedLock(name="modelLock", condition="$cachedModelClassExists", execute="$createModelClass", conditionArgs=arguments, executeArgs=arguments)>
+	<!--- we need an instance of the model to be able to build queries without adding the query data to the application scope model --->
+	<cfreturn applicationModel.$createInstance(properties=StructNew(), persisted=false, callbacks=false)>
 </cffunction>
 
 <cffunction name="obfuscateParam" returntype="string" access="public" output="false" hint="Obfuscates a value. Typically used for hiding primary key values when passed along in the URL."

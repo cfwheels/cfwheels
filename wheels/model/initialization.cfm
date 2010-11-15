@@ -4,10 +4,11 @@
 	<cfscript>
 		var loc = {};
 		variables.wheels = {};
-		variables.wheels.errors = [];
 		variables.wheels.class = {};
 		variables.wheels.class.modelName = arguments.name;
 		variables.wheels.class.path = arguments.path;
+		variables.wheels.instance = {};
+		variables.wheels.instance.errors = [];
 
 		// if our name has pathing in it, remove it and add it to the end of of the $class.path variable
 		if (Find("/", arguments.name))
@@ -19,6 +20,20 @@
 		variables.wheels.class.RESQLAs = "[[:space:]]AS[[:space:]][A-Za-z1-9]+";
 		variables.wheels.class.RESQLOperators = "((?: (?:NOT )?LIKE)|(?: (?:NOT )?IN)|(?: IS(?: NOT)?)|(?:<>)|(?:<=)|(?:>=)|(?:!=)|(?:!<)|(?:!>)|=|<|>)";
 		variables.wheels.class.RESQLWhere = "(#variables.wheels.class.RESQLOperators# ?)(\('.+?'\)|\((-?[0-9\.],?)+\)|'.+?'()|''|(-?[0-9\.]+)()|NULL)(($|\)| (AND|OR)))";
+
+		// define our operators for translation
+		variables.wheels.class.operators = {};
+		variables.wheels.class.operators.eql = {allow="=", negate="!="};
+		variables.wheels.class.operators.in = {allow="IN", negate="NOT IN"};
+		variables.wheels.class.operators.between = {allow="BETWEEN", negate="NOT BETWEEN", seperator="AND"};
+		variables.wheels.class.operators.greaterThan = {allow=">"};
+		variables.wheels.class.operators.greaterThanEql = {allow=">="};
+		variables.wheels.class.operators.lessThan = {allow="<"};
+		variables.wheels.class.operators.lessThanEql = {allow="<="};
+		variables.wheels.class.operators.null = {allow="IS NULL", negate="IS NOT NULL"};
+		
+		// define the operations allowed with "where", "and", and "or"
+		variables.wheels.class.operations = ["eql", "notEql", "in", "notIn", "between", "notBetween", "greaterthan", "greaterthaneql", "lessthan", "lessthaneql", "null", "sql"];
 		variables.wheels.class.mapping = {};
 		variables.wheels.class.properties = {};
 		variables.wheels.class.accessibleProperties = {};
@@ -192,9 +207,22 @@
 
 		variables.wheels = {};
 		variables.wheels.instance = {};
-		variables.wheels.errors = [];
+		
+		// internal namespace for our query data
+		variables.wheels.instance.query = {};
+		variables.wheels.instance.query.distinct = false;
+		variables.wheels.instance.query.select = "";
+		variables.wheels.instance.query.include = "";
+		variables.wheels.instance.query.where = [];
+		variables.wheels.instance.query.group = "";
+		variables.wheels.instance.query.order = [];
+		variables.wheels.instance.query.page = 0;
+		variables.wheels.instance.query.perPage = 0;
+		variables.wheels.instance.query.maxRows = -1;	
+		
+		variables.wheels.instance.errors = [];
 		// keep a unique identifier for each model created in case we need it for nested properties
-		variables.wheels.tickCountId = GetTickCount().toString(); // make sure we have it in milliseconds
+		variables.wheels.instance.tickCountId = GetTickCount().toString(); // make sure we have it in milliseconds
 
 		// copy class variables from the object in the application scope
 		if (!StructKeyExists(variables.wheels, "class"))

@@ -180,7 +180,7 @@
 			}
 		}
 		if (!Len(loc.returnValue) && arguments.$returnTickCountWhenNew)
-			loc.returnValue = variables.wheels.tickCountId;
+			loc.returnValue = variables.wheels.instance.tickCountId;
 		</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

@@ -155,7 +155,7 @@
 </cffunction>
 
 <cffunction name="$objectId" access="public" output="false" returntype="string">
-	<cfreturn variables.wheels.tickCountId />
+	<cfreturn variables.wheels.instance.tickCountId />
 </cffunction>
 
 <cffunction name="isInstance" returntype="boolean" access="public" output="false" hint="Use this method to check whether you are currently in an instance object."

@@ -11,7 +11,7 @@
 	<cfargument name="message" type="string" required="true" hint="The error message (such as ""Please enter a correct name in the form field"" for example).">
 	<cfargument name="name" type="string" required="false" default="" hint="A name to identify the error by (useful when you need to distinguish one error from another one set on the same object and you don't want to use the error message itself for that).">
 	<cfscript>
-		ArrayAppend(variables.wheels.errors, arguments);
+		ArrayAppend(variables.wheels.instance.errors, arguments);
 	</cfscript>
 </cffunction>
 
@@ -37,7 +37,7 @@
 		<cfset errorInfo = user.allErrors()>
 	'
 	categories="model-object,errors" chapters="object-validation" functions="addError,addErrorToBase,clearErrors,errorCount,errorsOn,errorsOnBase,hasErrors">
-	<cfreturn variables.wheels.errors>
+	<cfreturn variables.wheels.instance.errors>
 </cffunction>
 
 <cffunction name="clearErrors" returntype="void" access="public" output="false" hint="Clears out all errors set on the object or only the ones set for a specific property or name."
@@ -56,14 +56,14 @@
 		var loc = {};
 		if (!Len(arguments.property) && !Len(arguments.name))
 		{
-			ArrayClear(variables.wheels.errors);
+			ArrayClear(variables.wheels.instance.errors);
 		}
 		else
 		{
-			loc.iEnd = ArrayLen(variables.wheels.errors);
+			loc.iEnd = ArrayLen(variables.wheels.instance.errors);
 			for (loc.i=loc.iEnd; loc.i >= 1; loc.i--)
-				if (variables.wheels.errors[loc.i].property == arguments.property && (variables.wheels.errors[loc.i].name == arguments.name))
-					ArrayDeleteAt(variables.wheels.errors, loc.i);
+				if (variables.wheels.instance.errors[loc.i].property == arguments.property && (variables.wheels.instance.errors[loc.i].name == arguments.name))
+					ArrayDeleteAt(variables.wheels.instance.errors, loc.i);
 		}
 	</cfscript>
 </cffunction>
@@ -87,7 +87,7 @@
 	<cfscript>
 		var returnValue = "";
 		if (!Len(arguments.property) && !Len(arguments.name))
-			returnValue = ArrayLen(variables.wheels.errors);
+			returnValue = ArrayLen(variables.wheels.instance.errors);
 		else
 			returnValue = ArrayLen(errorsOn(argumentCollection=arguments));
 	</cfscript>
@@ -106,10 +106,10 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = [];
-		loc.iEnd = ArrayLen(variables.wheels.errors);
+		loc.iEnd = ArrayLen(variables.wheels.instance.errors);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			if (variables.wheels.errors[loc.i].property == arguments.property && (variables.wheels.errors[loc.i].name == arguments.name))
-				ArrayAppend(loc.returnValue, variables.wheels.errors[loc.i]);
+			if (variables.wheels.instance.errors[loc.i].property == arguments.property && (variables.wheels.instance.errors[loc.i].name == arguments.name))
+				ArrayAppend(loc.returnValue, variables.wheels.instance.errors[loc.i]);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
