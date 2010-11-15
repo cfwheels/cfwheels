@@ -82,6 +82,7 @@
 	<cfargument name="container" type="array" required="true" />
 	<cfscript>
 		var loc = {};
+
 		loc.operationList = ArrayToList(variables.wheels.class.operations);
 		loc.exclusionList = ListPrepend(loc.operationList, "type,property,container,value,operator,negate");
 		
@@ -122,9 +123,17 @@
 		// loop through the properties and add in our auto eql clauses
 		if (!StructKeyExists(arguments, "$auto"))
 		{
-			// should we try to keep the order of how the arguments were passed in here??? right now coldfusion changes the order to a text ordering
-			for (loc.item in arguments)
+			// AFAIK there is now way to reference the arguments scope as an array
+			// and retrieve the name of the argument and referencing the struct directly
+			// dooesn't guarentee the order.
+			// because of that we will use StructKeyArray() and ArraySort()
+			// to maintain some sort of order
+			loc.keys = StructKeyArray(arguments);
+			ArraySort(loc.keys, "textnocase");
+			loc.iKeys = ArrayLen(loc.keys);
+			for (loc.i=1; loc.i LTE loc.iKeys; loc.i++)
 			{
+				loc.item = loc.keys[loc.i];
 				if (!ListFindNoCase(loc.exclusionList, loc.item))
 				{
 					loc.type = "and";
@@ -230,7 +239,7 @@
 	<cfreturn this />
 </cffunction>
 
-<cffunction name="query" returntype="struct" access="public" output="false">
+<cffunction name="toQuery" returntype="struct" access="public" output="false">
 	<cfreturn variables.wheels.instance.query />
 </cffunction>
 
