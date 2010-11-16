@@ -13,6 +13,7 @@
 	<cfargument name="name" type="string" required="true" hint="Gives the association a name that you refer to when working with the association (in the `include` argument to @findAll, to name one example).">
 	<cfargument name="modelName" type="string" required="false" default="" hint="Name of associated model (usually not needed if you follow Wheels conventions because the model name will be deduced from the `name` argument).">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="Foreign key property name (usually not needed if you follow Wheels conventions since the foreign key name will be deduced from the `name` argument).">
+	<cfargument name="joinKey" type="string" required="false" default="" hint="Column name to join to if not the primary key (usually not needed if you follow wheels conventions since the join key will be the tables primary key/keys).">
 	<cfargument name="joinType" type="string" required="false" hint="Use to set the join type when joining associated tables. Possible values are `inner` (for `INNER JOIN`) and `outer` (for `LEFT OUTER JOIN`).">
 	<cfscript>
 		$args(name="belongsTo", args=arguments);
@@ -66,6 +67,7 @@
 	<cfargument name="name" type="string" required="true" hint="See documentation for @belongsTo.">
 	<cfargument name="modelName" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
+	<cfargument name="joinKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="joinType" type="string" required="false" hint="See documentation for @belongsTo.">
 	<cfargument name="dependent" type="string" required="false" hint="Defines how to handle dependent models when you delete a record from this model. Set to `delete` to instantiate associated models and call their @delete method, `deleteAll` to delete without instantiating, `nullify` to remove the foreign key, or `false` to do nothing.">
 	<cfargument name="shortcut" type="string" required="false" default="" hint="Set this argument to create an additional dynamic method that gets the object(s) from the other side of a many-to-many association.">
@@ -104,6 +106,7 @@
 	<cfargument name="name" type="string" required="true" hint="See documentation for @belongsTo.">
 	<cfargument name="modelName" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
+	<cfargument name="joinKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="joinType" type="string" required="false" hint="See documentation for @belongsTo.">
 	<cfargument name="dependent" type="string" required="false" hint="See documentation for @hasMany.">
 	<cfscript>

@@ -3,6 +3,9 @@
 	<cffunction name="init">
 		<cfset hasMany(name="galleries")>
 		<cfset hasOne(name="combikey")>
+		<!--- crazy join to test the joinKey argument --->
+		<cfset hasOne(name="author", foreignKey="firstName", joinKey="firstName")>
+		<cfset hasMany(name="authors", foreignKey="firstName", joinKey="firstName")>
 		<cfset hasMany(name="combikeys")>
 		<cfset hasMany(name="outerjoinphotogalleries", modelName="gallery", jointype="outer")>
 		<cfset validatesPresenceOf("username,password,firstname,lastname")>

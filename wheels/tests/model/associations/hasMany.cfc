@@ -200,5 +200,10 @@
 		<cfset assert("loc.posts.recordcount eq 0")>
 	</cffunction>
 
+	<cffunction name="test_getting_children_with_join_key">
+		<cfset loc.obj = model("user").findOne(order="id", include="authors")>
+		<cfset assert('loc.obj.firstName eq loc.obj.authors[1].firstName')>
+	</cffunction>
+
 
 </cfcomponent>
