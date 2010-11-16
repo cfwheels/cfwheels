@@ -252,5 +252,16 @@
 		<cfreturn $dbinfo(argumentCollection=arguments)>
 	</cffunction>
 
+	<cffunction name="$quoteValue" returntype="string" access="public" output="false">
+		<cfargument name="str" type="string" required="true" hint="string to quote">
+		<cfscript>
+		if (!IsNumeric(arguments.str))
+		{
+			arguments.str = "'#arguments.str#'";
+		}
+		return arguments.str;
+		</cfscript>
+	</cffunction>
+
 	<cfinclude template="../../plugins/injection.cfm">
 </cfcomponent>
