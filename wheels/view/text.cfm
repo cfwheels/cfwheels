@@ -178,7 +178,7 @@
 	<cfargument name="wrap" type="boolean" required="false" default="true" hint="Set to `true` to wrap the result in a paragraph.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = $htmlFormat(Trim(arguments.text));
+		loc.returnValue = Trim(arguments.text);
 		loc.returnValue = Replace(loc.returnValue, "#Chr(13)#", "", "all");
 		loc.returnValue = Replace(loc.returnValue, "#Chr(10)##Chr(10)#", "</p><p>", "all");
 		loc.returnValue = Replace(loc.returnValue, "#Chr(10)#", "<br />", "all");
