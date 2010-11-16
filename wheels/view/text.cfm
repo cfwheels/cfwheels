@@ -9,9 +9,10 @@
 	'
 	categories="view-helper,text" functions="excerpt,highlight,simpleFormat,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="The text to create links in.">
-	<cfargument name="link" type="string" required="false" default="all" hint="Whether to link URLs, email addresses or both. Possible values are: `all` (default), `URLs` and `emailAddresses`.">
+	<cfargument name="link" type="string" required="false" hint="Whether to link URLs, email addresses or both. Possible values are: `all` (default), `URLs` and `emailAddresses`.">
 	<cfscript>
 		var loc = {};
+		$args(name="autoLink", args=arguments);
 		if (arguments.link != "emailAddresses")
 		{
 			arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.)[^\s\b]+)";
@@ -67,10 +68,11 @@
 	categories="view-helper,text" functions="autoLink,highlight,simpleFormat,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="The text to extract an excerpt from.">
 	<cfargument name="phrase" type="string" required="true" hint="The phrase to extract.">
-	<cfargument name="radius" type="numeric" required="false" default="100" hint="Number of characters to extract surrounding the phrase.">
-	<cfargument name="excerptString" type="string" required="false" default="..." hint="String to replace first and/or last characters with.">
+	<cfargument name="radius" type="numeric" required="false" hint="Number of characters to extract surrounding the phrase.">
+	<cfargument name="excerptString" type="string" required="false" hint="String to replace first and/or last characters with.">
 	<cfscript>
 	var loc = {};
+	$args(name="excerpt", args=arguments);
 	loc.pos = FindNoCase(arguments.phrase, arguments.text, 1);
 	if (loc.pos != 0)
 	{
@@ -113,9 +115,10 @@
 	categories="view-helper,text" functions="autoLink,excerpt,simpleFormat,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="Text to search.">
 	<cfargument name="phrases" type="string" required="true" hint="List of phrases to highlight.">
-	<cfargument name="class" type="string" required="false" default="highlight" hint="Class to use in `span` tags surrounding highlighted phrase(s).">
+	<cfargument name="class" type="string" required="false" hint="Class to use in `span` tags surrounding highlighted phrase(s).">
 	<cfscript>
 		var loc = {};
+		$args(name="highlight", args=arguments);
 		if (!Len(arguments.text) || !Len(arguments.phrases))
 		{
 			loc.returnValue = arguments.text;
@@ -175,10 +178,20 @@
 	'
 	categories="view-helper,text" functions="autoLink,excerpt,highlight,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="The text to format.">
-	<cfargument name="wrap" type="boolean" required="false" default="true" hint="Set to `true` to wrap the result in a paragraph.">
+	<cfargument name="wrap" type="boolean" required="false" hint="Set to `true` to wrap the result in a paragraph.">
+	<cfargument name="escapeHtml" type="boolean" required="false" hint="Whether or not to escape HTML characters before applying the line break formatting.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = Trim(arguments.text);
+		$args(name="simpleFormat", args=arguments);
+		// If we're escaping HTML along with applying the line break formatting
+		if(arguments.escapeHtml)
+		{
+			loc.returnValue = Trim($htmlFormat(arguments.text));
+		}
+		else
+		{
+			loc.returnValue = Trim(arguments.text);
+		}
 		loc.returnValue = Replace(loc.returnValue, "#Chr(13)#", "", "all");
 		loc.returnValue = Replace(loc.returnValue, "#Chr(10)##Chr(10)#", "</p><p>", "all");
 		loc.returnValue = Replace(loc.returnValue, "#Chr(10)#", "<br />", "all");
@@ -249,10 +262,11 @@
 	'
 	categories="view-helper,text" functions="autoLink,excerpt,highlight,simpleFormat,titleize">
 	<cfargument name="text" type="string" required="true" hint="The text to truncate.">
-	<cfargument name="length" type="numeric" required="false" default="5" hint="Number of words to truncate the text to.">
-	<cfargument name="truncateString" type="string" required="false" default="..." hint="String to replace the last characters with.">
+	<cfargument name="length" type="numeric" required="false" hint="Number of words to truncate the text to.">
+	<cfargument name="truncateString" type="string" required="false" hint="String to replace the last characters with.">
 	<cfscript>
 		var loc = {};
+		$args(name="wordTruncate", args=arguments);
 		loc.returnValue = "";
 		loc.wordArray = ListToArray(arguments.text, " ", false);
 		loc.wordLen = ArrayLen(loc.wordArray);

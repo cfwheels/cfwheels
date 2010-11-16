@@ -119,6 +119,7 @@
 
 	// function defaults
 	application.wheels.functions = {};
+	application.wheels.functions.autoLink = {link="all"};
 	application.wheels.functions.average = {distinct=false, parameterize=true, ifNull=""};
 	application.wheels.functions.belongsTo = {joinType="inner"};
 	application.wheels.functions.buttonTo = {onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable=""};
@@ -140,6 +141,7 @@
 	application.wheels.functions.distanceOfTimeInWords = {includeSeconds=false};
 	application.wheels.functions.errorMessageOn = {prependText="", appendText="", wrapperElement="span", class="errorMessage"};
 	application.wheels.functions.errorMessagesFor = {class="errorMessages", showDuplicates=true};
+	application.wheels.functions.excerpt = {radius=100, excerptString="..."};
 	application.wheels.functions.exists = {reload=false, parameterize=true};
 	application.wheels.functions.fileField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
 	application.wheels.functions.fileFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
@@ -151,6 +153,7 @@
 	application.wheels.functions.hasMany = {joinType="outer", dependent=false};
 	application.wheels.functions.hasOne = {joinType="outer", dependent=false};
 	application.wheels.functions.hiddenField = {};
+	application.wheels.functions.highlight = {class="highlight"};
 	application.wheels.functions.hourSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
 	application.wheels.functions.imageTag = {};
 	application.wheels.functions.includePartial = {layout="", spacer="", dataFunction=true};
@@ -178,6 +181,7 @@
 	application.wheels.functions.selectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, multiple=false, valueField="", textField=""};
 	application.wheels.functions.sendEmail = {layout=false, detectMultipart=true};
 	application.wheels.functions.sendFile = {disposition="attachment"};
+	application.wheels.functions.simpleFormat = {wrap=true, escapeHtml=false};
 	application.wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, spamProtection=false};
 	application.wheels.functions.styleSheetLinkTag = {type="text/css", media="all", head=false};
 	application.wheels.functions.submitTag = {value="Save changes", image="", disable=""};
