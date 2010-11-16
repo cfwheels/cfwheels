@@ -5,6 +5,8 @@ Bug Fixes
 * Default to the humanized property name for labels on calculated or non-persistant properties instead of throwing an error - [Andy Bellenie]
 * BelongsTo associations were throwing an error when the model had a composite key - #641 [Andy Bellenie]
 * Added NumberFormat() on the value passed in to "count" in the pluralize() function - [Per Djurner]
+* Allow blank values to be passed through to validation - #638 [Per Djurner]
+* Allow CFTHREAD to be used in views - #612 [Cathy Shapiro, Tony Petruzzi]
 
 Miscellaneous
 =============
@@ -15,6 +17,7 @@ Enhancements
 * Speed improvement for the method $findRoute when using a large amount of named routes - [James Gibson]
 * Wheels now compacts the output of the rendered content - [James Gibson]
 * Added new method $htmlFormat to properly escape all html entities - [James Gibson]
+* Plugins can now be injected into Base Model Adapter and Model Connection components - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
