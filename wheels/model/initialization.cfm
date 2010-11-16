@@ -7,8 +7,6 @@
 		variables.wheels.class = {};
 		variables.wheels.class.modelName = arguments.name;
 		variables.wheels.class.path = arguments.path;
-		variables.wheels.instance = {};
-		variables.wheels.instance.errors = [];
 
 		// if our name has pathing in it, remove it and add it to the end of of the $class.path variable
 		if (Find("/", arguments.name))
@@ -20,7 +18,7 @@
 		variables.wheels.class.RESQLAs = "[[:space:]]AS[[:space:]][A-Za-z1-9]+";
 		variables.wheels.class.RESQLOperators = "((?: (?:NOT )?LIKE)|(?: (?:NOT )?IN)|(?: IS(?: NOT)?)|(?:<>)|(?:<=)|(?:>=)|(?:!=)|(?:!<)|(?:!>)|=|<|>)";
 		variables.wheels.class.RESQLWhere = "(#variables.wheels.class.RESQLOperators# ?)(\('.+?'\)|\((-?[0-9\.],?)+\)|'.+?'()|''|(-?[0-9\.]+)()|NULL)(($|\)| (AND|OR)))";
-
+		
 		// define our operators for translation
 		variables.wheels.class.operators = {};
 		variables.wheels.class.operators.eql = {allow="=", negate="!="};
@@ -207,19 +205,6 @@
 
 		variables.wheels = {};
 		variables.wheels.instance = {};
-		
-		// internal namespace for our query data
-		variables.wheels.instance.query = {};
-		variables.wheels.instance.query.distinct = false;
-		variables.wheels.instance.query.select = "";
-		variables.wheels.instance.query.include = "";
-		variables.wheels.instance.query.where = [];
-		variables.wheels.instance.query.group = "";
-		variables.wheels.instance.query.order = [];
-		variables.wheels.instance.query.page = 0;
-		variables.wheels.instance.query.perPage = 0;
-		variables.wheels.instance.query.maxRows = -1;	
-		
 		variables.wheels.instance.errors = [];
 		// keep a unique identifier for each model created in case we need it for nested properties
 		variables.wheels.instance.tickCountId = GetTickCount().toString(); // make sure we have it in milliseconds
