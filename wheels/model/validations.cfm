@@ -456,7 +456,6 @@
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="message" type="string" required="true">
 	<cfargument name="properties" type="struct" required="false" default="#this.properties()#">
-	<cfargument name="returnAs" type="string" required="false" default="">
 	<cfscript>
 		// if the property does not exist or if it's blank we add an error on the object
 		if (
@@ -520,7 +519,6 @@
 	<cfargument name="message" type="string" required="true">
 	<cfargument name="scope" type="string" required="false" default="">
 	<cfargument name="properties" type="struct" required="false" default="#this.properties()#">
-	<cfargument name="returnAs" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		loc.where = [];

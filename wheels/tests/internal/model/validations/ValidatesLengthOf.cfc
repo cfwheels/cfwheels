@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
-		<cfset variables.args = {property="lastName", message="[property] is the wrong length", exactly=0, maximum=0, minimum=0, within="", returnAs="string"}>
+		<cfset variables.args = {property="lastName", message="[property] is the wrong length", exactly=0, maximum=0, minimum=0, within=""}>
 		<cfset variables.object = model("user").new()>
 	</cffunction>
 
