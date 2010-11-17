@@ -7,6 +7,7 @@ Bug Fixes
 * Added NumberFormat() on the value passed in to "count" in the pluralize() function - [Per Djurner]
 * Allow blank values to be passed through to validation - #638 [Per Djurner]
 * Allow CFTHREAD to be used in views - #612 [Cathy Shapiro, Tony Petruzzi]
+* Unable to use paging on a parameterize=false query - #656 [levi730, Tony Petruzzi]
 
 Miscellaneous
 =============
