@@ -195,6 +195,7 @@ CREATE TABLE shops
 CREATE TABLE tags
 (
 	id #loc.identityColumnType#
+	,parentid #loc.intColumnType# NULL
 	,name varchar(50) NOT NULL
 	,description varchar(50) NULL
 	,PRIMARY KEY(id)
@@ -407,10 +408,18 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 </cfloop>
 
 <!--- tags --->
-<cfset model("tag").create(
-	name="releases"
-	,description="testdesc"
-)>
+<cfset loc.releases = model("tag").create(name="releases",description="testdesc")>
+<cfset model("tag").create(name="minor",description="a minor release", parentid=loc.releases.id)>
+<cfset model("tag").create(name="major",description="a major release", parentid=loc.releases.id)>
+<cfset model("tag").create(name="point",description="a point release", parentid=loc.releases.id)>
+
+<cfset loc.fruit = model("tag").create(name="fruit",description="something to eat")>
+<cfset model("tag").create(name="apple",description="ummmmmm good", parentid=loc.fruit.id)>
+<cfset model("tag").create(name="pear",description="rhymes with Per", parentid=loc.fruit.id)>
+<cfset model("tag").create(name="banana",description="peal it", parentid=loc.fruit.id)>
+
+<!--- classifications --->
+<cfset model("classification").create(postid=1,tagid=7)>
 
 <!--- collisiontests --->
 <cfset model("collisiontest").create(

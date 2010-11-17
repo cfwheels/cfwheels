@@ -5,6 +5,7 @@
 		var loc = {};
 		variables.wheels = {};
 		variables.wheels.class = {};
+		variables.wheels.class.alias = arguments.name;
 		variables.wheels.class.modelName = arguments.name;
 		variables.wheels.class.path = arguments.path;
 
@@ -19,19 +20,7 @@
 		variables.wheels.class.RESQLOperators = "((?: (?:NOT )?LIKE)|(?: (?:NOT )?IN)|(?: IS(?: NOT)?)|(?:<>)|(?:<=)|(?:>=)|(?:!=)|(?:!<)|(?:!>)|=|<|>)";
 		variables.wheels.class.RESQLWhere = "(#variables.wheels.class.RESQLOperators# ?)(\('.+?'\)|\((-?[0-9\.],?)+\)|'.+?'()|''|(-?[0-9\.]+)()|NULL)(($|\)| (AND|OR)))";
 		
-		// define our operators for translation
-		variables.wheels.class.operators = {};
-		variables.wheels.class.operators.eql = {allow="=", negate="!="};
-		variables.wheels.class.operators.in = {allow="IN", negate="NOT IN"};
-		variables.wheels.class.operators.between = {allow="BETWEEN", negate="NOT BETWEEN", seperator="AND"};
-		variables.wheels.class.operators.greaterThan = {allow=">"};
-		variables.wheels.class.operators.greaterThanEql = {allow=">="};
-		variables.wheels.class.operators.lessThan = {allow="<"};
-		variables.wheels.class.operators.lessThanEql = {allow="<="};
-		variables.wheels.class.operators.null = {allow="IS NULL", negate="IS NOT NULL"};
-		
-		// define the operations allowed with "where", "and", and "or"
-		variables.wheels.class.operations = ["eql", "notEql", "in", "notIn", "between", "notBetween", "greaterthan", "greaterthaneql", "lessthan", "lessthaneql", "null", "sql"];
+		variables.wheels.class.aliases = {};
 		variables.wheels.class.mapping = {};
 		variables.wheels.class.properties = {};
 		variables.wheels.class.accessibleProperties = {};

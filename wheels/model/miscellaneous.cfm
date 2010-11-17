@@ -158,6 +158,20 @@
 	<cfreturn variables.wheels.instance.tickCountId />
 </cffunction>
 
+<cffunction name="$alias" access="public" output="false" returntype="void">
+	<cfargument name="associationName" type="string" required="true">
+	<cfset variables.wheels.class.aliases[arguments.associationName] = tableName() & StructCount(variables.wheels.class.aliases)>
+</cffunction>
+
+<cffunction name="$aliasName" access="public" output="false" returntype="string">
+	<cfargument name="associationName" type="string" required="false" default="">
+	<cfscript>
+		if (!Len(arguments.associationName) or !StructKeyExists(variables.wheels.class.aliases, arguments.associationName))
+			return tableName();
+	</cfscript>
+	<cfreturn variables.wheels.class.aliases[arguments.associationName]>
+</cffunction>
+
 <cffunction name="isInstance" returntype="boolean" access="public" output="false" hint="Use this method to check whether you are currently in an instance object."
 	examples='
 		<!--- Use the passed in `id` when we''re not already in an instance --->

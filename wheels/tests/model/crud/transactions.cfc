@@ -39,7 +39,7 @@
 	<cffunction name="test_deleteAll_with_instantiate_rollbacks_when_callback_returns_false">
 		<cfset model("tagFalseCallbacks").deleteAll(instantiate=true)>
 		<cfset loc.results = model("tagFalseCallbacks").findAll()>
-		<cfset assert("loc.results.recordcount IS 1")>
+		<cfset assert("loc.results.recordcount IS 8")>
 	</cffunction>
 
 	<cffunction name="test_updateAll_with_instantiate_rollbacks_when_callback_returns_false">
@@ -79,7 +79,7 @@
 	<cffunction name="test_deleteAll_with_rollback">
 		<cfset model("tag").deleteAll(instantiate=true, transaction="rollback")>
 		<cfset loc.results = model("tag").findAll()>
-		<cfset assert("loc.results.recordcount IS 1")>
+		<cfset assert("loc.results.recordcount IS 8")>
 	</cffunction>
 
 	<cffunction name="test_updateAll_with_rollback">
@@ -141,7 +141,7 @@
 		<cftransaction>
 			<cfset model("tag").updateAll(name="Kermit", instantiate=true, transaction="none")>
 			<cfset loc.results = model("tag").findAll(where="name = 'Kermit'")>
-			<cfset assert("loc.results.recordcount IS 1")>
+			<cfset assert("loc.results.recordcount IS 8")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 	</cffunction>

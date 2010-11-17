@@ -110,8 +110,14 @@
 						{
 							loc.toAdd = "";
 							loc.classData = loc.classes[loc.j];
+							
+							// we need the name of the table on the first go, and the alias otherwise
+							loc.tableName = loc.classData.tableName;
+							if (loc.j != 1)
+								loc.tableName = loc.classData.alias;
+								
 							if (ListFindNoCase(loc.classData.propertyList, loc.property))
-								loc.toAdd = loc.classData.tableName & "." & loc.classData.properties[loc.property].column;
+								loc.toAdd = loc.tableName & "." & loc.classData.properties[loc.property].column;
 							else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.property))
 								loc.toAdd = Replace(loc.classData.calculatedProperties[loc.property].sql, ",", "[[comma]]", "all");
 							if (Len(loc.toAdd))
@@ -222,13 +228,18 @@
 				{
 					loc.toAppend = "";
 					loc.classData = loc.classes[loc.j];
+						
+					// we need the name of the table on the first go, and the alias otherwise
+					loc.tableName = loc.classData.tableName;
+					if (loc.j != 1)
+						loc.tableName = loc.classData.alias;
 
 					// create a struct for this model unless it already exists
-					if (!StructKeyExists(loc.addedPropertiesByModel, loc.classData.modelName))
-						loc.addedPropertiesByModel[loc.classData.modelName] = "";
+					if (!StructKeyExists(loc.addedPropertiesByModel, loc.classData.alias))
+						loc.addedPropertiesByModel[loc.classData.alias] = "";
 
 					// if we find the property in this model and it's not already added we go ahead and add it to the select clause
-					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem))
+					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.classData.alias], loc.iItem))
 					{
 						// if expanded column aliases is enabled then mark all columns from included classes as duplicates in order to prepend them with their class name
 						loc.flagAsDuplicate = false;
@@ -239,7 +250,7 @@
 								// always flag as a duplicate when a property with this name has already been added
 								loc.flagAsDuplicate  = true;
 							}
-							else if (loc.j > 1)
+							else if (loc.j gt 1)
 							{
 								if (arguments.useExpandedColumnAliases)
 								{
@@ -257,7 +268,7 @@
 							loc.toAppend = loc.toAppend & "[[duplicate]]" & loc.j;
 						if (ListFindNoCase(loc.classData.propertyList, loc.iItem))
 						{
-							loc.toAppend = loc.toAppend & loc.classData.tableName & ".";
+							loc.toAppend = loc.toAppend & loc.tableName & ".";
 							if (ListFindNoCase(loc.classData.columnList, loc.iItem))
 							{
 								loc.toAppend = loc.toAppend & loc.iItem;
@@ -273,7 +284,7 @@
 						{
 							loc.toAppend = loc.toAppend & "(" & Replace(loc.classData.calculatedProperties[loc.iItem].sql, ",", "[[comma]]", "all") & ") AS " & loc.iItem;
 						}
-						loc.addedPropertiesByModel[loc.classData.modelName] = ListAppend(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem);
+						loc.addedPropertiesByModel[loc.classData.alias] = ListAppend(loc.addedPropertiesByModel[loc.classData.alias], loc.iItem);
 						break;
 					}
 				}
@@ -402,8 +413,13 @@
 						loc.param.dataType = "char";
 						loc.param.scale = 0;
 						loc.param.list = false;
-
+						
 						loc.classData = loc.classes[loc.j];
+						// we need the name of the table on the first go, and the alias otherwise
+						loc.tableName = loc.classData.tableName;
+						if (loc.j != 1)
+							loc.tableName = loc.classData.alias;
+
 						if (loc.param.property Does Not Contain "." || ListFirst(loc.param.property, ".") == loc.classData.tableName)
 						{
 							if (ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
@@ -411,7 +427,7 @@
 								loc.param.type = loc.classData.properties[ListLast(loc.param.property, ".")].type;
 								loc.param.dataType = loc.classData.properties[ListLast(loc.param.property, ".")].dataType;
 								loc.param.scale = loc.classData.properties[ListLast(loc.param.property, ".")].scale;
-								loc.param.column = loc.classData.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
+								loc.param.column = loc.tableName & "." & loc.classData.properties[ListLast(loc.param.property, ".")].column;
 								break;
 							}
 							else if (ListFindNoCase(loc.classData.calculatedPropertyList, ListLast(loc.param.property, ".")))
@@ -457,17 +473,17 @@
 			if (Len(arguments.include))
 				loc.classes = $expandedAssociations(include=arguments.include);
 			ArrayPrepend(loc.classes, variables.wheels.class);
-			loc.models = "";
-			loc.iEnd = ArrayLen(loc.classes);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-				loc.models = ListAppend(loc.models, loc.classes[loc.i].modelName);
 			loc.addToWhere = "";
-			loc.iEnd = ListLen(loc.models);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i <= ArrayLen(loc.classes); loc.i++)
 			{
-				loc.model = ListGetAt(loc.models, loc.i);
-				if (model(loc.model).$softDeletion())
-					loc.addToWhere = ListAppend(loc.addToWhere, model(loc.model).tableName() & "." & model(loc.model).$softDeleteColumn() & " IS NULL");
+				// we need the name of the table on the first go, and the alias otherwise
+				loc.classData = loc.classes[loc.i];
+				loc.tableName = loc.classData.tableName;
+				if (loc.i != 1)
+					loc.tableName = loc.classData.alias;
+				loc.model = model(loc.classData.modelName);
+				if (loc.model.$softDeletion())
+					loc.addToWhere = ListAppend(loc.addToWhere, loc.model.$aliasName() & "." & loc.model.$softDeleteColumn() & " IS NULL");
 			}
 			loc.addToWhere = Replace(loc.addToWhere, ",", " AND ", "all");
 			if (Len(loc.addToWhere))
@@ -582,11 +598,15 @@
 			loc.delimSequence = Mid(loc.include, loc.delimFind.pos[1], loc.delimFind.len[1]);
 
 			// set current association name and set new position to start search in the next loop
+			loc.previousName = "";
+			if (StructKeyExists(loc, "name"))
+				loc.previousName = loc.name;
 			loc.name = Mid(loc.include, loc.pos, loc.delimFind.pos[1]-loc.pos);
 			loc.pos = REFindNoCase("[a-z]", loc.include, loc.delimFind.pos[1]);
 
 			// create a reference to current class in include string and get its association info
-			loc.class = model(ListLast(loc.levels));
+			loc.className = ListLast(loc.levels);
+			loc.class = model(loc.className);
 			loc.classAssociations = loc.class.$classData().associations;
 
 			// throw an error if the association was not found
@@ -595,43 +615,55 @@
 
 			// create a reference to the associated class
 			loc.associatedClass = model(loc.classAssociations[loc.name].modelName);
-
-			if (!Len(loc.classAssociations[loc.name].foreignKey))
-			{
-				if (loc.classAssociations[loc.name].type == "belongsTo")
-				{
-					loc.classAssociations[loc.name].foreignKey = loc.associatedClass.$classData().modelName & Replace(loc.associatedClass.$classData().keys, ",", ",#loc.associatedClass.$classData().modelName#", "all");
-				}
-				else
-				{
-					loc.classAssociations[loc.name].foreignKey = loc.class.$classData().modelName & Replace(loc.class.$classData().keys, ",", ",#loc.class.$classData().modelName#", "all");
-				}
-			}
-
-			if (!Len(loc.classAssociations[loc.name].joinKey))
-			{
-				if (loc.classAssociations[loc.name].type == "belongsTo")
-				{
-					loc.classAssociations[loc.name].joinKey = loc.associatedClass.$classData().keys;
-				}
-				else
-				{
-					loc.classAssociations[loc.name].joinKey = loc.class.$classData().keys;
-				}
-			}
-
-			loc.classAssociations[loc.name].tableName = loc.associatedClass.$classData().tableName;
-			loc.classAssociations[loc.name].columnList = loc.associatedClass.$classData().columnList;
-			loc.classAssociations[loc.name].properties = loc.associatedClass.$classData().properties;
-			loc.classAssociations[loc.name].propertyList = loc.associatedClass.$classData().propertyList;
-			loc.classAssociations[loc.name].calculatedProperties = loc.associatedClass.$classData().calculatedProperties;
-			loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClass.$classData().calculatedPropertyList;
-
-			// create the join string if it hasn't already been done (no need to lock this code since when multiple requests process it they will end up setting the same value (no intermediate value is ever set on the join variable in the application scoped model object)
+			
+			// create the join string if it hasn't already been done 
+			// (no need to lock this code since when multiple requests process it they will end up setting the same value (no intermediate value is ever set on the join variable in the application scoped model object)
 			if (!StructKeyExists(loc.classAssociations[loc.name], "join"))
 			{
+				// figure out the foreignKey for this association
+				if (!Len(loc.classAssociations[loc.name].foreignKey))
+				{
+					if (loc.classAssociations[loc.name].type == "belongsTo")
+					{
+						loc.classAssociations[loc.name].foreignKey = loc.associatedClass.$classData().modelName & Replace(loc.associatedClass.$classData().keys, ",", ",#loc.associatedClass.$classData().modelName#", "all");
+					}
+					else
+					{
+						loc.classAssociations[loc.name].foreignKey = loc.class.$classData().modelName & Replace(loc.class.$classData().keys, ",", ",#loc.class.$classData().modelName#", "all");
+					}
+				}
+				
+				// figure out the joinKey for this association
+				if (!Len(loc.classAssociations[loc.name].joinKey))
+				{
+					if (loc.classAssociations[loc.name].type == "belongsTo")
+					{
+						loc.classAssociations[loc.name].joinKey = loc.associatedClass.$classData().keys;
+					}
+					else
+					{
+						loc.classAssociations[loc.name].joinKey = loc.class.$classData().keys;
+					}
+				}
+			
+				// set our alias to the tableName if we do not have one
+				loc.classAssociations[loc.name].alias = loc.associatedClass.$classData().tableName;
+				loc.classAssociations[loc.name].tableName = loc.associatedClass.$classData().tableName;
+				loc.classAssociations[loc.name].columnList = loc.associatedClass.$classData().columnList;
+				loc.classAssociations[loc.name].properties = loc.associatedClass.$classData().properties;
+				loc.classAssociations[loc.name].propertyList = loc.associatedClass.$classData().propertyList;
+				loc.classAssociations[loc.name].calculatedProperties = loc.associatedClass.$classData().calculatedProperties;
+				loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClass.$classData().calculatedPropertyList;
+				
+				// check to see if we have a self join and make the joining table name unique
+				if (loc.class.$classData().tableName == loc.associatedClass.$classData().tableName)
+				{
+					loc.associatedClass.$alias(associationName=loc.name);
+					loc.classAssociations[loc.name].alias = loc.associatedClass.$aliasName(associationName=loc.name);
+				}
+				
 				loc.joinType = ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one");
-				loc.join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# ON ";
+				loc.join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# AS #loc.classAssociations[loc.name].alias# ON  "; 
 				loc.toAppend = "";
 				loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
@@ -657,7 +689,7 @@
 						loc.first = loc.key2;
 						loc.second = loc.key1;
 					}
-					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[loc.first].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[loc.second].column#");
+					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$aliasName(associationname=loc.previousName)#.#loc.class.$classData().properties[loc.first].column# = #loc.classAssociations[loc.name].alias#.#loc.associatedClass.$classData().properties[loc.second].column#");
 				}
 				loc.classAssociations[loc.name].join = loc.join & Replace(loc.toAppend, ",", " AND ", "all");
 			}

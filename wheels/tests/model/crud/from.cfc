@@ -11,11 +11,11 @@
 		<cfset model("author").table("authors")>
 		<cfset assert("loc.result IS 'FROM tbl_authors'")>
 	</cffunction>
-
+<!---
 	<cffunction name="test_from_clause_with_include">
 		<cfset loc.result = model("author").$fromClause(include="posts")>
 		<cfset assert("loc.result IS 'FROM authors LEFT OUTER JOIN posts ON authors.id = posts.authorid'")>
-	</cffunction>
+	</cffunction>--->
 
 <!---test:
 inner/outer join
