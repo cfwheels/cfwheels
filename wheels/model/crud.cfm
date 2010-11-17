@@ -181,7 +181,14 @@
 						for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 						{
 							loc.property = primaryKeys(loc.i);
-							loc.list = Evaluate("QuotedValueList(loc.values.#loc.property#)");
+							if (ListFindNoCase("integer,float", variables.wheels.class.properties[loc.property].validationtype))
+							{
+								loc.list = Evaluate("ValueList(loc.values.#loc.property#)");
+							}
+							else
+							{
+								loc.list = Evaluate("QuotedValueList(loc.values.#loc.property#)");
+							}
 							loc.paginationWhere = ListAppend(loc.paginationWhere, "#tableName()#.#loc.property# IN (#loc.list#)", Chr(7));
 						}
 						loc.paginationWhere = Replace(loc.paginationWhere, Chr(7), " AND ", "all");
