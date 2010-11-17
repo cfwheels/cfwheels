@@ -75,15 +75,40 @@
 	<cfargument name="list" type="string" required="true">
 	<cfargument name="delim" type="string" required="false" default=",">
 	<cfargument name="returnAs" type="string" required="false" default="string">
+	<cfargument name="defaultValue" type="any" required="false" default="">
 	<cfscript>
 		var loc = {};
 		loc.list = ListToArray(arguments.list, arguments.delim);
-		for (loc.i = 1; loc.i lte ArrayLen(loc.list); loc.i++)
+		loc.iEnd = ArrayLen(loc.list);
+		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+		{
 			loc.list[loc.i] = Trim(loc.list[loc.i]);
-		if (arguments.returnAs == "array")
-			return loc.list;
+		}
+
+		switch (arguments.returnAs)
+		{
+			case "array":
+			{// already an array so just break out
+				break;
+			}
+			case "struct":
+			{
+				loc.s = {};
+				for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+				{
+					loc.s[loc.list[loc.i]] = arguments.defaultValue;
+				}
+				loc.list = loc.s;
+				break;
+			}
+			default:
+			{// create a list using the supplied delimeter
+				loc.list = ArrayToList(loc.list, arguments.delim);
+				break;
+			}
+		}
 	</cfscript>
-	<cfreturn ArrayToList(loc.list, arguments.delim)>
+	<cfreturn loc.list>
 </cffunction>
 
 <cffunction name="$simpleHashedKey" returntype="string" access="public" output="false" hint="Same as $hashedKey but cannot handle binary data in queries.">
