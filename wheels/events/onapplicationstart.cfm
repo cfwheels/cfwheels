@@ -52,16 +52,6 @@
 		application.wheels.namedRoutePositions = {};
 		application.wheels.mixins = {};
 		application.wheels.vendor = {};
-		application.wheels.cache = {};
-		application.wheels.cache.sql = {};
-		application.wheels.cache.image = {};
-		application.wheels.cache.main = {};
-		application.wheels.cache.action = {};
-		application.wheels.cache.page = {};
-		application.wheels.cache.partial = {};
-		application.wheels.cache.query = {};
-		application.wheels.cache.functions = {};
-		application.wheels.cacheLastCulledAt = Now();
 
 		// set up paths to various folders in the framework
 		application.wheels.webPath = Replace(request.cgi.script_name, Reverse(spanExcluding(Reverse(request.cgi.script_name), "/")), "");
@@ -122,6 +112,9 @@
 
 		// create the dispatcher that will handle all incoming requests
 		application.wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
+
+		// create the cache object
+		application.wheels.cache = $createObjectFromRoot(path="wheels", fileName="Cache", method="init");
 
 		// run the developer's on application start code
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");

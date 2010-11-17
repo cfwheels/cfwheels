@@ -556,113 +556,23 @@
 </cffunction>
 
 <cffunction name="$addToCache" returntype="void" access="public" output="false">
-	<cfargument name="key" type="string" required="true">
-	<cfargument name="value" type="any" required="true">
-	<cfargument name="time" type="numeric" required="false" default="#application.wheels.defaultCacheTime#">
-	<cfargument name="category" type="string" required="false" default="main">
-	<cfscript>
-		var loc = {};
-		if (application.wheels.cacheCullPercentage > 0 && application.wheels.cacheLastCulledAt < DateAdd("n", -application.wheels.cacheCullInterval, Now()) && $cacheCount() >= application.wheels.maximumItemsToCache)
-		{
-			// cache is full so flush out expired items from this cache to make more room if possible
-			loc.deletedItems = 0;
-			loc.cacheCount = $cacheCount();
-			for (loc.key in application.wheels.cache[arguments.category])
-			{
-				if (Now() > application.wheels.cache[arguments.category][loc.key].expiresAt)
-				{
-					$removeFromCache(key=loc.key, category=arguments.category);
-					if (application.wheels.cacheCullPercentage < 100)
-					{
-						loc.deletedItems++;
-						loc.percentageDeleted = (loc.deletedItems / loc.cacheCount) * 100;
-						if (loc.percentageDeleted >= application.wheels.cacheCullPercentage)
-							break;
-					}
-				}
-			}
-			application.wheels.cacheLastCulledAt = Now();
-		}
-		if ($cacheCount() < application.wheels.maximumItemsToCache)
-		{
-			application.wheels.cache[arguments.category][arguments.key] = {};
-			application.wheels.cache[arguments.category][arguments.key].expiresAt = DateAdd(application.wheels.cacheDatePart, arguments.time, Now());
-			if (IsSimpleValue(arguments.value))
-				application.wheels.cache[arguments.category][arguments.key].value = arguments.value;
-			else
-				application.wheels.cache[arguments.category][arguments.key].value = duplicate(arguments.value);
-		}
-	</cfscript>
+	<cfset application.wheels.cache.add(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$getFromCache" returntype="any" access="public" output="false">
-	<cfargument name="key" type="string" required="true">
-	<cfargument name="category" type="string" required="false" default="main">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = false;
-		if (StructKeyExists(application.wheels.cache[arguments.category], arguments.key))
-		{
-			if (Now() > application.wheels.cache[arguments.category][arguments.key].expiresAt)
-			{
-				if (application.wheels.showDebugInformation)
-					request.wheels.cacheCounts.culls = request.wheels.cacheCounts.culls + 1;
-				$removeFromCache(key=arguments.key, category=arguments.category);
-			}
-			else
-			{
-				if (application.wheels.showDebugInformation)
-					request.wheels.cacheCounts.hits = request.wheels.cacheCounts.hits + 1;
-				if (IsSimpleValue(application.wheels.cache[arguments.category][arguments.key].value))
-					loc.returnValue = application.wheels.cache[arguments.category][arguments.key].value;
-				else
-					loc.returnValue = Duplicate(application.wheels.cache[arguments.category][arguments.key].value);
-			}
-		}
-
-		if (application.wheels.showDebugInformation && IsBoolean(loc.returnValue) && !loc.returnValue)
-			request.wheels.cacheCounts.misses = request.wheels.cacheCounts.misses + 1;
-	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn application.wheels.cache.get(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$removeFromCache" returntype="void" access="public" output="false">
-	<cfargument name="key" type="string" required="true">
-	<cfargument name="category" type="string" required="false" default="main">
-	<cfset StructDelete(application.wheels.cache[arguments.category], arguments.key)>
+	<cfset application.wheels.cache.remove(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$cacheCount" returntype="numeric" access="public" output="false">
-	<cfargument name="category" type="string" required="false" default="">
-	<cfscript>
-		var loc = {};
-		if (Len(arguments.category))
-		{
-			loc.returnValue = StructCount(application.wheels.cache[arguments.category]);
-		}
-		else
-		{
-			loc.returnValue = 0;
-			for (loc.key in application.wheels.cache)
-				loc.returnValue = loc.returnValue + StructCount(application.wheels.cache[loc.key]);
-		}
-	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn application.wheels.cache.count(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$clearCache" returntype="void" access="public" output="false">
-	<cfargument name="category" type="string" required="false" default="">
-	<cfscript>
-		var loc = {};
-		if (Len(arguments.category))
-		{
-			StructClear(application.wheels.cache[arguments.category]);
-		}
-		else
-		{
-			StructClear(application.wheels.cache);
-		}
-	</cfscript>
+	<cfreturn application.wheels.cache.clear(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$createModelClass" returntype="any" access="public" output="false">
