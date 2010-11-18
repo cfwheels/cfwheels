@@ -233,7 +233,8 @@
 				loc.orderBy = $orderByClause(order=arguments.order, include=arguments.include);
 				if (Len(loc.orderBy))
 					ArrayAppend(loc.sql, loc.orderBy);
-				$addToCache(key=loc.queryShellKey, value=loc.sql, category="schemas");
+				if (application.wheels.cacheDatabaseSchema)
+					$addToCache(key=loc.queryShellKey, value=loc.sql, category="schemas");
 			}
 
 			// add where clause parameters to the generic sql info
