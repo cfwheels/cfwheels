@@ -1,24 +1,47 @@
+WHEELS VERSION 1.2 BETA 1
+
+Model Enhancements
+==================
+* Allow for self joining tables in associations - #293 [James Gibson]
+* Added "joinKey" on belongsTo(), hasOne() and hasMany() which allows you to specify a column to join to on the opposite side of the relationship from the "foreignKey" - [James Gibson]
+
+View Enhancements
+=================
+* Added a better way to escape all HTML entities - [James Gibson]
+* Ability to use custom types (HTML 5) on textField and textFieldTag form helpers - [Raul Riera]
+* Default to the humanized property name for labels on calculated or non-persistent properties instead of throwing an error - [Andy Bellenie]
+* Added escapeHTML argument on simpleFormat() - [Chris Peters]
+* Made it possible to set global defaults on autoLink(), excerpt(), highlight() and simpleFormat() - [Chris Peters] 
+
+Controller Enhancements
+=======================
+* Speed improvement for finding routes when using a large amount of named routes - [James Gibson]
+* Wheels now compacts the output of the rendered content - [James Gibson]
+
+Other Enhancements
+==================
+* Added automatic caching in production mode of function results based on the arguments passed in - [Per Djurner]
+* Plugin functions can now be injected into base model adapter and model connection components - [Per Djurner]
+
+Bug Fixes
+=========
+* Allow blank values to be passed through to validation - #638 [Per Djurner]
+
+Miscellaneous
+=============
+* ...
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 WHEELS VERSION 1.1.1
 
 Bug Fixes
 =========
-* Default to the humanized property name for labels on calculated or non-persistant properties instead of throwing an error - [Andy Bellenie]
-* BelongsTo associations were throwing an error when the model had a composite key - #641 [Andy Bellenie]
-* Added NumberFormat() on the value passed in to "count" in the pluralize() function - [Per Djurner]
-* Allow blank values to be passed through to validation - #638 [Per Djurner]
-* Allow CFTHREAD to be used in views - #612 [Cathy Shapiro, Tony Petruzzi]
-* Unable to use paging on a parameterize=false query - #656 [levi730, Tony Petruzzi]
-
-Miscellaneous
-=============
-* Ability to use custom types (HTML5) to textField and textFieldTag formhelpers - [Raul Riera]
-
-Enhancements
-============
-* Speed improvement for the method $findRoute when using a large amount of named routes - [James Gibson]
-* Wheels now compacts the output of the rendered content - [James Gibson]
-* Added new method $htmlFormat to properly escape all html entities - [James Gibson]
-* Plugins can now be injected into Base Model Adapter and Model Connection components - [Per Djurner]
+* Added number formatting on the value passed in to "count" in the pluralize() function - [Per Djurner]
+* Fixed renderWith() so that it works in all environment modes when returning JSON - #644 [Tony Petruzzi]
+* Fixed belongsTo association code when using composite keys - #641 [James Gibson, Andy Bellenie]
+* Allow cfthread to be used in views - #612 [Cathy Shapiro, Tony Petruzzi]
+* Fixed paging code for non-parameterized queries - #656 [Mike Lester, Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
