@@ -42,6 +42,7 @@ Bug Fixes
 * Fixed belongsTo association code when using composite keys - #641 [James Gibson, Andy Bellenie]
 * Allow cfthread to be used in views - #612 [Cathy Shapiro, Tony Petruzzi]
 * Fixed paging code for non-parameterized queries - #656 [Mike Lester, Tony Petruzzi]
+* Corrected bug in request verification when session management was disabled in Railo - #658 [Russ Sivak, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

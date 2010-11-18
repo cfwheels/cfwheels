@@ -95,9 +95,15 @@
 	
 	// if session management is enabled in the application we default to storing flash data in the session scope, if not we use a cookie
 	if (StructKeyExists(this, "sessionManagement") && this.sessionManagement)
+	{
+		application.wheels.sessionManagement = true;
 		application.wheels.flashStorage = "session";
+	}
 	else
+	{
+		application.wheels.sessionManagement = false;
 		application.wheels.flashStorage = "cookie";
+	}
 
 	// caching settings
 	application.wheels.maximumItemsToCache = 5000;
