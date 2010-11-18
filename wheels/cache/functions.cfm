@@ -5,7 +5,7 @@
 	<cfargument name="maximumItemsToCache" type="numeric" required="false" default="#application.wheels.maximumItemsToCache#">
 	<cfargument name="cacheDatePart" type="string" required="false" default="#application.wheels.cacheDatePart#">
 	<cfargument name="showDebugInformation" type="boolean" required="false" default="#application.wheels.showDebugInformation#">
-	<cfargument name="nameSpaces" type="string" required="false" default="actions,pages,partials">
+	<cfargument name="nameSpaces" type="string" required="false" default="actions,images,pages,partials,schemas">
 	<cfargument name="defaultNameSpace" type="string" required="false" default="internal">
 	<cfscript>
 		var loc = {};

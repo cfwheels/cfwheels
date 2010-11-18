@@ -26,11 +26,11 @@
 
 	<cffunction name="testNameSpace">
 		<cfset var loc = {}>
-		<cfset cache.add(key="1", value="a", category="sql")>
-		<cfset cache.add(key="2", value="b", category="sql")>
+		<cfset cache.add(key="1", value="a", category="schemas")>
+		<cfset cache.add(key="2", value="b", category="schemas")>
 		<cfset cache.add(key="3", value="c")>
 		<cfset results.one = cache.count()>
-		<cfset results.two = cache.count(category="sql")>
+		<cfset results.two = cache.count(category="schemas")>
 		<cfset assert("results.one IS 3 AND results.two IS 2")>
 	</cffunction>
 

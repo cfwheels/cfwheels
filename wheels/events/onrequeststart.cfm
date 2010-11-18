@@ -71,7 +71,7 @@
 		if (!application.wheels.cacheRoutes)
 			$loadRoutes();
 		if (!application.wheels.cacheDatabaseSchema)
-			$clearCache("sql");
+			$clearCache(category="schemas");
 		$include(template="#application.wheels.eventPath#/onrequeststart.cfm");
 		if (application.wheels.showDebugInformation)
 			$debugPoint("requestStart");
