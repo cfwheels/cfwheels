@@ -233,7 +233,7 @@
 				loc.orderBy = $orderByClause(order=arguments.order, include=arguments.include);
 				if (Len(loc.orderBy))
 					ArrayAppend(loc.sql, loc.orderBy);
-				if (application.wheels.cacheDatabaseSchema)
+				if (application.wheels.cacheModelInitialization)
 					$addToCache(key=loc.queryShellKey, value=loc.sql, category="schemas");
 			}
 

@@ -18,7 +18,6 @@
 	application.wheels.transactionMode = "commit"; // use 'commit', 'rollback' or 'none' to set default transaction handling for creates, updates and deletes
 
 	// cache settings
-	application.wheels.cacheDatabaseSchema = false;
 	application.wheels.cacheFileChecking = false;
 	application.wheels.cacheImages = false;
 	application.wheels.cacheModelInitialization = false;
@@ -32,7 +31,6 @@
 	application.wheels.cachePlugins = true;
 	if (application.wheels.environment != "design")
 	{
-		application.wheels.cacheDatabaseSchema = true;
 		application.wheels.cacheFileChecking = true;
 		application.wheels.cacheImages = true;
 		application.wheels.cacheModelInitialization = true;
