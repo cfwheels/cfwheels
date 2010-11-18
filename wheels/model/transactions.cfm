@@ -20,7 +20,7 @@
 	categories="model-class" chapters="transactions" functions="new,create,save,update,updateByKey,updateOne,updateAll,delete,deleteByKey,deleteOne,deleteAll">
 	<cfargument name="method" type="string" required="true" hint="Model method to run.">
 	<cfargument name="transaction" type="string" default="commit" hint="See documentation for @save.">
-	<cfargument name="isolation" type="string" default="read_committed" hint="See documentation for @save.">
+	<cfargument name="isolation" type="string" default="read_committed" hint="Isolation level to be passed through to the `cftransaction` tag. See your CFML engine's documentation for more details about `cftransaction`'s `isolation` attribute.">
 	
 	<cfset var loc = {} />
 	

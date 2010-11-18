@@ -138,8 +138,8 @@
 	categories="view-helper,miscellaneous" chapters="pages,partials" functions="renderPartial">
 	<cfargument name="partial" type="any" required="true" hint="See documentation for @renderPartial.">
 	<cfargument name="group" type="string" required="false" default="" hint="If passing a query result set for the `partial` argument, use this to specify the field to group the query by. A new query will be passed into the partial template for you to iterate over.">
-	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPartial.">
-	<cfargument name="layout" type="string" required="false" hint="See documentation for @renderPartial.">
+	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPage.">
+	<cfargument name="layout" type="string" required="false" hint="See documentation for @renderPage.">
 	<cfargument name="spacer" type="string" required="false" hint="HTML or string to place between partials when called using a query.">
 	<cfargument name="dataFunction" type="any" required="false" hint="Name of controller function to load data from.">
 	<cfargument name="$prependWithUnderscore" type="boolean" required="false" default="true">

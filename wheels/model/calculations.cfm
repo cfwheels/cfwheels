@@ -72,8 +72,8 @@
 		<cfset amount = aPost.commentCount()>
 	'
 	categories="model-class,statistics" chapters="column-statistics,associations" functions="average,hasMany,maximum,minimum,sum">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @average.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @average.">
+	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
