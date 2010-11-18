@@ -10,37 +10,37 @@
 	</cffunction>
 
 	<cffunction name="test_if_validation_using_expression_invalid">
-		<cfset loc.args.if="1 eq 1">
+		<cfset loc.args.condition="1 eq 1">
 		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
 
 	<cffunction name="test_if_validation_using_expression_valid">
-		<cfset loc.args.if="1 eq 0">
+		<cfset loc.args.condition="1 eq 0">
 		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
 		<cfset assert_test(loc.user, true)>
 	</cffunction>
 
 	<cffunction name="test_if_validation_using_method_invalid">
-		<cfset loc.args.if="isnew()">
+		<cfset loc.args.condition="isnew()">
 		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
 
 	<cffunction name="test_if_validation_using_method_valid">
-		<cfset loc.args.if="!isnew()">
+		<cfset loc.args.condition="!isnew()">
 		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
 		<cfset assert_test(loc.user, true)>
 	</cffunction>
 
 	<cffunction name="test_if_validation_using_method_mixin_and_parameters_invalid">
-		<cfset loc.args.if="this.stupid_method(b='1' , a='2') eq 3">
+		<cfset loc.args.condition="this.stupid_method(b='1' , a='2') eq 3">
 		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
 
 	<cffunction name="test_if_validation_using_method_mixin_and_parameters_valid">
-		<cfset loc.args.if="this.stupid_method(b='1' , a='2') neq 3">
+		<cfset loc.args.condition="this.stupid_method(b='1' , a='2') neq 3">
 		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
 		<cfset assert_test(loc.user, true)>
 	</cffunction>
@@ -82,28 +82,28 @@
 	</cffunction>
 
 	<cffunction name="test_both_validations_if_trigged_unless_not_trigged_valid">
-		<cfset loc.args.if="1 eq 1">
+		<cfset loc.args.condition="1 eq 1">
 		<cfset loc.args.unless="this.username eq 'TheLongestNameInTheWorld'">
 		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
 		<cfset assert_test(loc.user, true)>
 	</cffunction>
 
 	<cffunction name="test_both_validations_if_trigged_unless_trigged_invalid">
-		<cfset loc.args.if="1 eq 1">
+		<cfset loc.args.condition="1 eq 1">
 		<cfset loc.args.unless="this.username eq ''">
 		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
 		<cfset assert_test(loc.user, false)>
 	</cffunction>
 
 	<cffunction name="test_both_validations_if_not_trigged_unless_not_trigged_valid">
-		<cfset loc.args.if="1 eq 0">
+		<cfset loc.args.condition="1 eq 0">
 		<cfset loc.args.unless="this.username eq 'TheLongestNameInTheWorld'">
 		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
 		<cfset assert_test(loc.user, true)>
 	</cffunction>
 
 	<cffunction name="test_both_validations_if_not_trigged_unless_trigged_valid">
-		<cfset loc.args.if="1 eq 0">
+		<cfset loc.args.condition="1 eq 0">
 		<cfset loc.args.unless="this.username eq ''">
 		<cfset loc.user.validatesLengthOf(argumentCollection=loc.args)>
 		<cfset assert_test(loc.user, true)>
