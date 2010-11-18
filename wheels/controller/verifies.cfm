@@ -67,10 +67,15 @@
 	<cfargument name="action" type="string" required="true">
 	<cfargument name="params" type="struct" required="true">
 	<cfargument name="cgiScope" type="struct" required="false" default="#request.cgi#">
-	<cfargument name="sessionScope" type="struct" required="false" default="#session#">
+	<cfargument name="sessionScope" type="struct" required="false" default="#StructNew()#">
 	<cfargument name="cookieScope" type="struct" required="false" default="#cookie#">
 	<cfscript>
 		var loc = {};
+		
+		// only access the session scope when session management is enabled in the app
+		if (StructIsEmpty(arguments.sessionScope) && application.wheels.sessionManagement)
+			arguments.sessionScope = session;
+		
 		loc.verifications = verificationChain();
 		loc.$args = "only,except,post,get,ajax,cookie,session,params,cookieTypes,sessionTypes,paramsTypes,handler";
 		loc.abort = false;
