@@ -5,8 +5,8 @@
 	<cfargument name="maximumItemsToCache" type="numeric" required="false" default="#application.wheels.maximumItemsToCache#">
 	<cfargument name="cacheDatePart" type="string" required="false" default="#application.wheels.cacheDatePart#">
 	<cfargument name="showDebugInformation" type="boolean" required="false" default="#application.wheels.showDebugInformation#">
-	<cfargument name="nameSpaces" type="string" required="false" default="action,functions,image,page,partial,query,sql">
-	<cfargument name="defaultNameSpace" type="string" required="false" default="main">
+	<cfargument name="nameSpaces" type="string" required="false" default="actions,pages,partials">
+	<cfargument name="defaultNameSpace" type="string" required="false" default="internal">
 	<cfscript>
 		var loc = {};
 		StructAppend(variables, arguments);
@@ -51,12 +51,15 @@
 		}
 		if (this.count() < variables.maximumItemsToCache)
 		{
-			variables.cache[arguments.category][arguments.key] = {};
-			variables.cache[arguments.category][arguments.key].expiresAt = DateAdd(variables.cacheDatePart, arguments.time, arguments.currentTime);
+			loc.newItem = {};
+			loc.newItem.addedAt = arguments.currentTime;
+			loc.newItem.expiresAt = DateAdd(variables.cacheDatePart, arguments.time, arguments.currentTime);
+			loc.newItem.hitCount = 0;
 			if (IsSimpleValue(arguments.value))
-				variables.cache[arguments.category][arguments.key].value = arguments.value;
+				loc.newItem.value = arguments.value;
 			else
-				variables.cache[arguments.category][arguments.key].value = Duplicate(arguments.value);
+				loc.newItem.value = Duplicate(arguments.value);
+			variables.cache[arguments.category][arguments.key] = loc.newItem;
 		}
 	</cfscript>
 </cffunction>
@@ -80,6 +83,7 @@
 			{
 				if (variables.showDebugInformation)
 					request.wheels.cacheCounts.hits = request.wheels.cacheCounts.hits + 1;
+				variables.cache[arguments.category][arguments.key].hitCount++;
 				if (IsSimpleValue(variables.cache[arguments.category][arguments.key].value))
 					loc.returnValue = variables.cache[arguments.category][arguments.key].value;
 				else

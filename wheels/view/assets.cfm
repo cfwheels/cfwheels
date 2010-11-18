@@ -129,16 +129,12 @@
 		}
 		if (application.wheels.cacheImages)
 		{
-			loc.category = "image";
 			loc.key = $hashedKey(arguments);
-			loc.lockName = loc.category & loc.key;
 			loc.conditionArgs = {};
-			loc.conditionArgs.category = loc.category;
 			loc.conditionArgs.key = loc.key;
 			loc.executeArgs = arguments;
-			loc.executeArgs.category = loc.category;
 			loc.executeArgs.key = loc.key;
-			loc.returnValue = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$addImageTagToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			loc.returnValue = $doubleCheckedLock(name=loc.key, condition="$getFromCache", execute="$addImageTagToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 		}
 		else
 		{
@@ -155,7 +151,7 @@
 	<cfscript>
 		var returnValue = "";
 		returnValue = $imageTag(argumentCollection=arguments);
-		$addToCache(key=arguments.key, value=returnValue, category=arguments.category);
+		$addToCache(key=arguments.key, value=returnValue);
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
@@ -196,7 +192,7 @@
 		}
 		if (!StructKeyExists(arguments, "alt"))
 			arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
-		loc.returnValue = $tag(name="img", skip="source,key,category", close=true, attributes=arguments);
+		loc.returnValue = $tag(name="img", skip="source,key", close=true, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

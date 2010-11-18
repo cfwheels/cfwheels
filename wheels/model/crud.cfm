@@ -220,7 +220,7 @@
 
 			// get info from cache when available, otherwise create the generic select, from, where and order by clause
 			loc.queryShellKey = $hashedKey(variables.wheels.class.modelName, arguments);
-			loc.sql = $getFromCache(loc.queryShellKey, "sql");
+			loc.sql = $getFromCache(key=loc.queryShellKey);
 			if (!IsArray(loc.sql))
 			{
 				loc.sql = [];
@@ -233,7 +233,7 @@
 				loc.orderBy = $orderByClause(order=arguments.order, include=arguments.include);
 				if (Len(loc.orderBy))
 					ArrayAppend(loc.sql, loc.orderBy);
-				$addToCache(key=loc.queryShellKey, value=loc.sql, category="sql");
+				$addToCache(key=loc.queryShellKey, value=loc.sql);
 			}
 
 			// add where clause parameters to the generic sql info

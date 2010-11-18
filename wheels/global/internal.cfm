@@ -406,12 +406,12 @@
 			loc.functionHash = $simpleHashedKey(arguments.args);
 			
 			// if the function result is not already in the cache we'll call the function and place the result in the cache
-			loc.functionResult = $getFromCache(key=loc.functionHash, category="functions");
+			loc.functionResult = $getFromCache(key=loc.functionHash);
 			if (IsBoolean(loc.functionResult) && !loc.functionResult)
 			{
 				arguments.args.$recursive = true;
 				loc.functionResult = $invoke(method=arguments.name, invokeArgs=arguments.args);
-				$addToCache(key=loc.functionHash, value=loc.functionResult, category="functions");
+				$addToCache(key=loc.functionHash, value=loc.functionResult);
 			}
 			return loc.functionResult;
 		}

@@ -52,7 +52,7 @@
 		
 		if (application.wheels.cachePages && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
-			loc.category = "action";
+			loc.category = "pages";
 			loc.key = $hashedKey(arguments, variables.params);
 			loc.lockName = loc.category & loc.key;
 			loc.conditionArgs = {};
@@ -337,7 +337,7 @@
 		var loc = {};
 		if (application.wheels.cachePartials && (isNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
-			loc.category = "partial";
+			loc.category = "partials";
 			loc.key = $hashedKey(arguments);
 			loc.lockName = loc.category & loc.key;
 			loc.conditionArgs = {};
