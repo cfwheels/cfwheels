@@ -67,7 +67,7 @@
 	<cffunction name="test_rendering_partial_with_layout">
 		<cfset loc.controller.renderPartial(partial="partialTemplate", layout="partialLayout")>
 		<cfset loc.r = loc.controller.response()>
-		<cfset assert("loc.r Contains 'partial template content' AND loc.r Contains 'start:partiallayout' AND loc.r Contains 'end:partiallayout'")>
+		<cfset assert("loc.r Does Not Contain 'view template content' AND loc.r Contains 'partial template content' AND loc.r Contains 'start:partiallayout' AND loc.r Contains 'end:partiallayout'")>
 	</cffunction>
 
 	<cffunction name="test_rendering_partial_with_specific_layout_in_root">

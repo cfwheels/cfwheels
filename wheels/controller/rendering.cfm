@@ -248,7 +248,6 @@
 </cffunction>
 
 <cffunction name="$renderPage" returntype="string" access="public" output="false">
-	<cfargument name="$overwrite" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		if (!Len(arguments.$template))
@@ -257,7 +256,7 @@
 		arguments.$name = arguments.$template;
 		arguments.$template = $generateIncludeTemplatePath(argumentCollection=arguments);
 		loc.content = $includeFile(argumentCollection=arguments);
-		loc.returnValue = $renderLayout($content=loc.content, $layout=arguments.$layout, $type=arguments.$type, $overwrite=arguments.$overwrite);
+		loc.returnValue = $renderLayout($content=loc.content, $layout=arguments.$layout, $type=arguments.$type);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

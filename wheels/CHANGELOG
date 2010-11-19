@@ -1,4 +1,4 @@
-WHEELS VERSION 1.2 BETA 1
+WHEELS VERSION 1.2 BETA 1 (r????)
 
 Model Enhancements
 ==================
@@ -45,6 +45,7 @@ Bug Fixes
 * Corrected bug in request verification when session management was disabled in Railo - #658 [Russ Sivak, Per Djurner]
 * Changed "if" to "condition" on all validation methods to get around the fact that "if" is a reserved word in cfscript - #660 [Mohamad El-Husseini, Per Djurner]
 * Fixed autolink() so that it correctly links and escapes relative paths - #646 [Tony Petruzzi]
+* Fixed so including partials with layouts does not cause duplicated content - #659 [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
