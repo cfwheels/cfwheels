@@ -1,0 +1,69 @@
+
+****************************
+Pre-Requisites
+****************************
+
+1. cfmx 8
+	This has been tested with cfmx 8.  I think that the java client libraries are 
+	put together using java 1.5, so if you aren't running coldfusion on java 1.5, then it's going to fail.
+	if you try it on cf7 and it works, let me know.  I have been told that it does not work on cf7. if you 
+	are running on cf7, check out the memcached old version, as that one has been tested and works on cf7.
+
+2. memcached server
+	You need a running version of memcached server to run this.  that's the storage 
+	vehicle.  if you don't have it, you won't get very far. you can get the memcached
+	server at:  
+		http://www.danga.com/memcached/  - BSD version - and most up to date.
+	You can also run on windows and it will work with that.  the windows port is available here:
+		http://jehiah.cz/projects/memcached-win32/
+	This version client of memcached has been tested with both versions.
+3. memcached Java client -
+	You will need to have a java memcached client to be able to run this.  the java client libraries
+	have been included here for ease of use.  the client that is packaged with this library has been
+	tested and was the one that was developed against.  it will be updated as versions become available.
+	This CF client is based off of the client developed by Dustin Sallings located here:
+		http://bleu.west.spy.net/~dustin/projects/memcached/ - Thanks Dustin!
+	this client is the newer of the two clients. some people may prefer it, however if you wish
+	to have the older client, check out the other cfmemcached library - in the memcached directory.
+
+****************************
+Installation
+****************************
+
+you should be able to drop this into your coldfusion server and run it. 
+you will however notice that there are two directories in the root that say memcached and mecachednew.
+These directories contain two different versions of memcached.  the memcached/ directory contains
+the older of the two client libraries.  the memcachednew contains the newer verision.
+they both work well, however, just choose one. :)  There's nothing wrong with the older version, it works
+great.  the newer java client is however more optimized and contains the ability to do asyncronous sets
+and gets which could lead to better performance.  For coldfusion, the asyncronous gets might be of less
+use, but there are definately going to be instances where they will come in handy.
+
+1. What you will likely want to do is figure out where in your web root you want put this, 
+	i suggest /memcached. and unzip the files into them.
+2. *** if you don't want to use the java loader*** 
+	you might need to take the java jars the lib directory and put them in your coldfusion lib directory
+	<cfmxroot>/lib - the jars just need to be in your java classpath.  if you leave them where they 
+	are, you should be able to get to them.  they might not be in the best location but they will work.
+	I would suggest, leaving them where they are and making sure that the client works before moving 
+	them to a different location.  if you choose not to use the javaloader, using the client will require
+	a server restart.
+3. if you haven't started your memcached server, this would be a good time to do it
+4. you should be able to pull up the memcachedtest.cfm page which will run through a bunch of tests to 
+	make sure that your memcached server is set up correctly.  you will need to open the page up
+	and edit the ipaddress/url of the memcached server if it is not sitting on your local machine.
+	by default it is set up to look for the memcached server on the localhost:11211 port.  if you are
+	running memcached on a different port, make sure you change this.
+5. Once you have made sure that memcached is working correctly, you will want to set it up so that
+	you are storing the memcached factory in the application or server scope and pulling out the memcached
+	client when you need it.  you don't want to have to keep creating the memcached client and the 
+	connection to the server.
+
+***************************
+support
+***************************
+
+if you have any questions, you can reach me at my blog:
+	http://www.flexablecoder.com
+or by email:
+	jon at Wokits dot com

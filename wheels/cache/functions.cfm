@@ -1,5 +1,6 @@
 <cffunction name="init" returntype="any" access="public" output="false">
 	<cfargument name="storage" type="string" required="false" default="#application.wheels.cacheStorage#">
+	<cfargument name="cacheSettings" type="struct" required="false" default="#application.wheels.cacheSettings#">
 	<cfargument name="defaultCacheTime" type="numeric" required="false" default="#application.wheels.defaultCacheTime#">
 	<cfargument name="cacheCullPercentage" type="numeric" required="false" default="#application.wheels.cacheCullPercentage#">
 	<cfargument name="cacheCullInterval" type="numeric" required="false" default="#application.wheels.cacheCullInterval#">
@@ -17,7 +18,7 @@
 		variables.$instance.cacheLastCulledAt = Now();
 		
 		// the actual cache of items is stored where ever the storage component is supposed to
-		variables.$instance.cache = CreateObject("component", "storage.#arguments.storage#").init();
+		variables.$instance.cache = CreateObject("component", "storage.#arguments.storage#").init(argumentCollection=arguments.cacheSettings);
 		
 		// now we just keep the cache stats in our cache object
 		variables.$instance.stats = {};
@@ -66,7 +67,7 @@
 			loc.newItem.expiresAt = DateAdd(variables.$instance.cacheDatePart, arguments.time, arguments.currentTime);
 			loc.newItem.hitCount = 0;
 			variables.$instance.stats[arguments.category][arguments.key] = loc.newItem;
-			variables.$instance.cache.add(arguments.key, arguments.value);
+			variables.$instance.cache.set(arguments.key, arguments.value);
 		}
 	</cfscript>
 </cffunction>

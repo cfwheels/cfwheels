@@ -12,7 +12,7 @@
 		<cfreturn StructKeyExists(variables, "$instance") && StructKeyExists(variables.$instance, "cache")>
 	</cffunction>
 	
-	<cffunction name="add" access="public" output="false" returntype="void">
+	<cffunction name="set" access="public" output="false" returntype="void">
 		<cfargument name="key" type="string" required="true">
 		<cfargument name="value" type="any" required="true">
 		<cfscript>
@@ -23,20 +23,22 @@
 	<cffunction name="get" access="public" output="false" returntype="any">
 		<cfargument name="key" type="string" required="true">
 		<cfscript>
-			var value = "";
+			var loc = {};
+			loc.value = false;
+			
 			if (StructKeyExists(variables.$instance.cache, arguments.key))
 			{
 				if (IsSimpleValue(variables.$instance.cache[arguments.key]))
 				{
-					value = variables.$instance.cache[arguments.key];
+					loc.value = variables.$instance.cache[arguments.key];
 				}
 				else
 				{
-					value = Duplicate(variables.$instance.cache[arguments.key]);
+					loc.value = Duplicate(variables.$instance.cache[arguments.key]);
 				}
 			}
 		</cfscript>
-		<cfreturn value>
+		<cfreturn loc.value>
 	</cffunction>
 	
 	<cffunction name="delete" access="public" output="false" returntype="void">

@@ -2,7 +2,7 @@
 
 	<cffunction name="isAvailable" access="public" description="Method to determine if the cache can be used" output="false" returntype="boolean" />
 
-	<cffunction name="add" access="public" description="Add a specified key and value to the storage mechanism." output="false" returntype="void">
+	<cffunction name="set" access="public" description="Add a specified key and value to the storage mechanism." output="false" returntype="void">
 		<cfargument name="key" type="string" required="true">
 		<cfargument name="value" type="any" required="true">
 	</cffunction>
