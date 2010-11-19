@@ -85,7 +85,6 @@
 <cffunction name="$renderLayout" returntype="string" access="public" output="false">
 	<cfargument name="$content" type="string" required="true">
 	<cfargument name="$layout" type="any" required="true">
-	<cfargument name="$overwrite" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 		if ((IsBoolean(arguments.$layout) && arguments.$layout) || (!IsBoolean(arguments.$layout) && Len(arguments.$layout)))
@@ -93,7 +92,7 @@
 			// store the content in a variable in the request scope so it can be accessed
 			// by the includeContent function that the developer uses in layout files
 			// this is done so we avoid passing data to/from it since it would complicate things for the developer
-			contentFor(body=arguments.$content, overwrite=arguments.$overwrite);
+			contentFor(body=arguments.$content, overwrite=true);
 			loc.include = application.wheels.viewPath;
 			if (IsBoolean(arguments.$layout))
 			{
