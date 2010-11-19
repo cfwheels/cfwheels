@@ -14,7 +14,7 @@
 		var loc = {};
 		if (arguments.link != "emailAddresses")
 		{
-			arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.)[^\s\b]+)";
+			arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.|\/)[^\s\b]+)";
 			arguments.text = $autoLinkLoop(argumentCollection=arguments);
 		}
 		if (arguments.link != "URLs")
