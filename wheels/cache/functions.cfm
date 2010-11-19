@@ -129,6 +129,7 @@
 	<cfargument name="category" type="string" required="false" default="#variables.$instance.defaultNameSpace#">
 	<cfargument name="currentTime" type="date" required="false" default="#Now()#">
 	<cfscript>
+		var loc = {};
 		if (variables.$instance.cacheCullPercentage gt 0 && variables.$instance.cacheLastCulledAt < DateAdd("n", -variables.$instance.cacheCullInterval, arguments.currentTime) && count() gte variables.$instance.maximumItemsToCache)
 		{
 			// cache is full so flush out expired items from this cache to make more room if possible
