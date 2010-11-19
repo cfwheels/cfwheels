@@ -20,7 +20,7 @@
 	'
 	categories="model-class,create" chapters="creating-records,associations" functions="hasOne,hasMany,new">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @save.">
+	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">

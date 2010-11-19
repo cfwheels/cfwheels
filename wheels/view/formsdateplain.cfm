@@ -19,7 +19,7 @@
 	<cfargument name="startYear" type="numeric" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="endYear" type="numeric" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="monthDisplay" type="string" required="false" hint="See documentation for @dateSelect.">
-	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @dateSelect.">
+	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
 	<cfargument name="label" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
@@ -58,7 +58,7 @@
 	<cfargument name="order" type="string" required="false" hint="See documentation for @timeSelect.">
 	<cfargument name="separator" type="string" required="false" hint="See documentation for @timeSelect.">
 	<cfargument name="minuteStep" type="numeric" required="false" hint="See documentation for @timeSelect.">
-	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @timeSelect.">
+	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
 	<cfargument name="label" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
@@ -97,12 +97,12 @@
 	<cfargument name="selected" type="string" required="false" default="" hint="See documentation for @selectTag.">
 	<cfargument name="dateOrder" type="string" required="false" hint="See documentation for @dateTimeSelect.">
 	<cfargument name="dateSeparator" type="string" required="false" hint="See documentation for @dateTimeSelect.">
-	<cfargument name="startYear" type="numeric" required="false" hint="See documentation for @dateTimeSelect.">
-	<cfargument name="endYear" type="numeric" required="false" hint="See documentation for @dateTimeSelect.">
-	<cfargument name="monthDisplay" type="string" required="false" hint="See documentation for @dateTimeSelect.">
+	<cfargument name="startYear" type="numeric" required="false" hint="See documentation for @dateSelect.">
+	<cfargument name="endYear" type="numeric" required="false" hint="See documentation for @dateSelect.">
+	<cfargument name="monthDisplay" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="timeOrder" type="string" required="false" hint="See documentation for @dateTimeSelect.">
 	<cfargument name="timeSeparator" type="string" required="false" hint="See documentation for @dateTimeSelect.">
-	<cfargument name="minuteStep" type="numeric" required="false" hint="See documentation for @dateTimeSelect.">
+	<cfargument name="minuteStep" type="numeric" required="false" hint="See documentation for @timeSelect.">
 	<cfargument name="separator" type="string" required="false" hint="See documentation for @dateTimeSelect.">
 	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
 	<cfargument name="label" type="string" required="false" hint="See documentation for @dateSelect.">
