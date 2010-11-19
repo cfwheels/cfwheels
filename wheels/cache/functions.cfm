@@ -11,15 +11,15 @@
 	<cfargument name="defaultNameSpace" type="string" required="false" default="internal">
 	<cfscript>
 		var loc = {};
-		
+
 		// setup our instance scope
 		variables.$instance = {};
 		StructAppend(variables.$instance, arguments);
 		variables.$instance.cacheLastCulledAt = Now();
-		
+
 		// the actual cache of items is stored where ever the storage component is supposed to
 		variables.$instance.cache = CreateObject("component", "storage.#arguments.storage#").init(argumentCollection=arguments.cacheSettings);
-		
+
 		// now we just keep the cache stats in our cache object
 		variables.$instance.stats = {};
 		variables.$instance.stats[arguments.defaultNameSpace] = {};
@@ -38,27 +38,7 @@
 	<cfargument name="currentTime" type="date" required="false" default="#Now()#">
 	<cfscript>
 		var loc = {};
-		if (variables.$instance.cacheCullPercentage gt 0 && variables.$instance.cacheLastCulledAt < DateAdd("n", -variables.$instance.cacheCullInterval, arguments.currentTime) && count() gte variables.$instance.maximumItemsToCache)
-		{
-			// cache is full so flush out expired items from this cache to make more room if possible
-			loc.deletedItems = 0;
-			loc.count = this.count();
-			for (loc.key in variables.$instance.cache[arguments.category])
-			{
-				if (arguments.currentTime gt variables.$instance.stats[arguments.category][loc.key].expiresAt)
-				{
-					this.remove(key=loc.key, category=arguments.category);
-					if (variables.$instance.cacheCullPercentage < 100)
-					{
-						loc.deletedItems++;
-						loc.percentageDeleted = (loc.deletedItems / loc.count) * 100;
-						if (loc.percentageDeleted gte variables.$instance.cacheCullPercentage)
-							break;
-					}
-				}
-			}
-			variables.$instance.cacheLastCulledAt = arguments.currentTime;
-		}
+		purge(argumentCollection=arguments);
 		if (count() < variables.$instance.maximumItemsToCache)
 		{
 			// set our stats in the cache object
@@ -92,7 +72,7 @@
 				if (variables.$instance.showDebugInformation)
 					request.wheels.cacheCounts.hits = request.wheels.cacheCounts.hits + 1;
 				variables.$instance.stats[arguments.category][arguments.key].hitCount++;
-				
+
 				// we now depend on the storage component to deliver an object back that does not reference the cached object
 				loc.returnValue = variables.$instance.cache.get(arguments.key);
 			}
@@ -100,7 +80,7 @@
 
 		if (variables.$instance.showDebugInformation && IsBoolean(loc.returnValue) && !loc.returnValue)
 			request.wheels.cacheCounts.misses = request.wheels.cacheCounts.misses + 1;
-			
+
 		return loc.returnValue;
 	</cfscript>
 </cffunction>
@@ -141,6 +121,34 @@
 					variables.$instance.cache.delete(loc.key);
 				StructClear(variables.$instance.stats[loc.category]);
 			}
+		}
+	</cfscript>
+</cffunction>
+
+<cffunction name="purge" returntype="void" access="public" output="false">
+	<cfargument name="category" type="string" required="false" default="#variables.$instance.defaultNameSpace#">
+	<cfargument name="currentTime" type="date" required="false" default="#Now()#">
+	<cfscript>
+		if (variables.$instance.cacheCullPercentage gt 0 && variables.$instance.cacheLastCulledAt < DateAdd("n", -variables.$instance.cacheCullInterval, arguments.currentTime) && count() gte variables.$instance.maximumItemsToCache)
+		{
+			// cache is full so flush out expired items from this cache to make more room if possible
+			loc.deletedItems = 0;
+			loc.count = this.count();
+			for (loc.key in variables.$instance.cache[arguments.category])
+			{
+				if (arguments.currentTime gt variables.$instance.stats[arguments.category][loc.key].expiresAt)
+				{
+					this.remove(key=loc.key, category=arguments.category);
+					if (variables.$instance.cacheCullPercentage < 100)
+					{
+						loc.deletedItems++;
+						loc.percentageDeleted = (loc.deletedItems / loc.count) * 100;
+						if (loc.percentageDeleted gte variables.$instance.cacheCullPercentage)
+							break;
+					}
+				}
+			}
+			variables.$instance.cacheLastCulledAt = arguments.currentTime;
 		}
 	</cfscript>
 </cffunction>
