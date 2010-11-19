@@ -1,4 +1,4 @@
-WHEELS VERSION 1.2 BETA 1 (r5384)
+WHEELS VERSION 1.2 BETA 1 (r5386)
 
 Model Enhancements
 ==================
@@ -29,7 +29,7 @@ Bug Fixes
 
 Miscellaneous
 =============
-* ...
+* Removed the "cacheDatabaseSchema" setting, "cacheModelInitialization" should now be used instead - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
