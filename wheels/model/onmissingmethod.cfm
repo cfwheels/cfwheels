@@ -109,7 +109,7 @@
 				if (StructKeyExists(arguments.missingMethodArguments, "include"))
 					loc.include = "#loc.include#(#arguments.missingMethodArguments.include#)";
 				arguments.missingMethodArguments.include = loc.include;
-				loc.where = $keyWhereString(properties=loc.joinAssociation.foreignKey, keys=primaryKeys());
+				loc.where = $keyWhereString(properties=loc.joinAssociation.foreignKey, keys=loc.componentReference.primaryKeys());
 				if (StructKeyExists(arguments.missingMethodArguments, "where"))
 					loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 				arguments.missingMethodArguments.where = loc.where;
@@ -342,7 +342,7 @@
 				}
 				else if (loc.info.type == "belongsTo")
 				{
-					loc.where = $keyWhereString(keys=loc.info.foreignKey, properties=primaryKeys());
+					loc.where = $keyWhereString(keys=loc.info.foreignKey, properties=loc.componentReference.primaryKeys());
 					if (StructKeyExists(arguments.missingMethodArguments, "where"))
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasAuthor" becomes "hasObject")
