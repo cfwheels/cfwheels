@@ -40,16 +40,16 @@
 	</cffunction>
 
 	<cffunction name="test_issue_656_relative_paths_escaped">
-		<cfset loc.str = '<a href="/">http://x.com/x</a>'>
+		<cfset loc.str = 'Download Wheels from <a href="/">http://x.com/x</a> blah blah'>
 		<cfset loc.r = loc.controller.autoLink(loc.str)>
-		<cfset loc.e = '<a href="/">http://x.com/x</a>'>
+		<cfset loc.e = 'Download Wheels from <a href="/">http://x.com/x</a> blah blah'>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_issue_656_relative_paths_link">
-		<cfset loc.str ='Download Wheels from /cfwheels.org/download'>
+		<cfset loc.str ='Download Wheels from /cfwheels.org/download blah blah'>
 		<cfset loc.r = loc.controller.autoLink(loc.str)>
-		<cfset loc.e = 'Download Wheels from <a href="/cfwheels.org/download">/cfwheels.org/download</a>'>
+		<cfset loc.e = 'Download Wheels from <a href="/cfwheels.org/download">/cfwheels.org/download</a> blah blah'>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
