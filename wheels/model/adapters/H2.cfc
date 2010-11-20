@@ -29,7 +29,7 @@
 				case "datetime": case "smalldatetime": case "timestamp": {loc.returnValue = "cf_sql_timestamp"; break;}
 				case "tinyint": {loc.returnValue = "cf_sql_tinyint"; break;}
 				case "varbinary": case "longvarbinary": {loc.returnValue = "cf_sql_varbinary"; break;}
-				case "varchar": case "varchar2": case "longvarchar": case "nvarchar": case "nvarchar2": case "clob": case "nclob": case "text": case "tinytext": case "mediumtext": case "longtext": case "ntext": {loc.returnValue = "cf_sql_varchar"; break;}
+				case "varchar": case "varchar2": case "longvarchar": case "varchar_ignorecase": case "nvarchar": case "nvarchar2": case "clob": case "nclob": case "text": case "tinytext": case "mediumtext": case "longtext": case "ntext": {loc.returnValue = "cf_sql_varchar"; break;}
 			}
 		</cfscript>
 		<cfreturn loc.returnValue>
