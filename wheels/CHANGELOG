@@ -26,11 +26,18 @@ Other Enhancements
 Bug Fixes
 =========
 * Allow blank values to be passed through to validation - #638 [Per Djurner]
-* Added the varchar_ignorecase type to the H2 adapter - #664 [Per Djurner]
 
 Miscellaneous
 =============
 * Removed the "cacheDatabaseSchema" setting, "cacheModelInitialization" should now be used instead - [Per Djurner]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+WHEELS VERSION 1.1.2
+
+Bug Fixes
+=========
+* Added the varchar_ignorecase type to the H2 adapter - #664 [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
