@@ -647,8 +647,8 @@
 				}
 			
 				// set our alias to the tableName if we do not have one
-				loc.classAssociations[loc.name].alias = loc.associatedClass.tableName();
-				loc.classAssociations[loc.name].tableName = loc.associatedClass.tableName();
+				loc.classAssociations[loc.name].alias = loc.associatedClass.$classData().tableName;
+				loc.classAssociations[loc.name].tableName = loc.associatedClass.$classData().tableName;
 				loc.classAssociations[loc.name].columnList = loc.associatedClass.$classData().columnList;
 				loc.classAssociations[loc.name].properties = loc.associatedClass.$classData().properties;
 				loc.classAssociations[loc.name].propertyList = loc.associatedClass.$classData().propertyList;
@@ -656,7 +656,7 @@
 				loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClass.$classData().calculatedPropertyList;
 				
 				// check to see if we have a self join and make the joining table name unique
-				if (loc.class.tableName() == loc.associatedClass.tableName())
+				if (loc.class.$classData().tableName == loc.associatedClass.$classData().tableName)
 				{
 					loc.associatedClass.$alias(associationName=loc.name);
 					loc.classAssociations[loc.name].alias = loc.associatedClass.$aliasName(associationName=loc.name);
