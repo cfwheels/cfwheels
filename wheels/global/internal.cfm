@@ -585,6 +585,21 @@
 </cffunction>
 
 <cffunction name="$getFromCache" returntype="any" access="public" output="false">
+	<cfscript>
+		var cacheItem = application.wheels.cache.get(argumentCollection=arguments);
+		
+		if (application.wheels.showDebugInformation)
+		{
+			if (IsSimpleValue(cacheItem) && IsBoolean(cacheItem) && !cacheItem)
+			{
+				request.wheels.cacheCounts.misses = request.wheels.cacheCounts.misses + 1;
+			}
+			else
+			{
+				request.wheels.cacheCounts.hits = request.wheels.cacheCounts.hits + 1;
+			}
+		}
+	</cfscript>
 	<cfreturn application.wheels.cache.get(argumentCollection=arguments)>
 </cffunction>
 

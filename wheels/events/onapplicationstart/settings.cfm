@@ -18,8 +18,6 @@
 	application.wheels.transactionMode = "commit"; // use 'commit', 'rollback' or 'none' to set default transaction handling for creates, updates and deletes
 
 	// cache settings
-	application.wheels.cacheStorage = "memory"; // this setting is used to tell wheels where to store cache items, possible future storage items include ehCache, memcached, file, softReference
-	application.wheels.cacheSettings = {}; // if you are using a cache storage that required configuration, set those configurations on this variable and they will be passed into the storage object
 	application.wheels.cacheFileChecking = false;
 	application.wheels.cacheImages = false;
 	application.wheels.cacheModelInitialization = false;
@@ -106,6 +104,8 @@
 	}
 
 	// caching settings
+	application.wheels.cacheStorage = "memory"; // this setting is used to tell wheels where to store cache items, possible future storage items include ehCache, memcached, file, softReference
+	application.wheels.cacheStrategy = "age";
 	application.wheels.maximumItemsToCache = 5000;
 	application.wheels.cacheCullPercentage = 10;
 	application.wheels.cacheCullInterval = 5;

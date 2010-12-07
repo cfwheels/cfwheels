@@ -39,10 +39,36 @@
 		<cfreturn loc.value>
 	</cffunction>
 	
+	<cffunction name="evict" access="public" output="false" returntype="numeric">
+		<cfargument name="keys" type="array" required="false" default="#ArrayNew(1)#">
+		<cfargument name="strategy" type="any" required="true">
+		<cfargument name="currentTime" type="date" required="true">
+		<!--- don't do anything as memcached decides when to evict content from the cache with it's internal lru logic --->
+		<cfreturn 0>
+	</cffunction>
+	
 	<cffunction name="delete" access="public" output="false" returntype="void">
 		<cfargument name="key" type="string" required="true">
 		<cfscript>
 			variables.$instance.cache.delete(arguments.key);
+		</cfscript>
+	</cffunction>
+	
+	<cffunction name="count" access="public" output="false" returntype="numeric">
+		<cfscript>
+			var loc = {};
+			loc.stats = variables.$instance.cache.getStats();
+			loc.totalItems = 0;
+			
+			for (loc.item in loc.stats)
+				loc.totalItems = loc.totalItems + (loc.stats[loc.item]["curr_items"] - 2); // for some reason memcached always shows two items in the cache over what there really is
+		</cfscript>
+		<cfreturn loc.totalItems>
+	</cffunction>
+	
+	<cffunction name="flush" access="public" output="false" returntype="void">
+		<cfscript>
+			variables.$instance.cache.flush();
 		</cfscript>
 	</cffunction>
 	
