@@ -19,7 +19,7 @@
 		variables.wheels.class.RESQLAs = "[[:space:]]AS[[:space:]][A-Za-z1-9]+";
 		variables.wheels.class.RESQLOperators = "((?: (?:NOT )?LIKE)|(?: (?:NOT )?IN)|(?: IS(?: NOT)?)|(?:<>)|(?:<=)|(?:>=)|(?:!=)|(?:!<)|(?:!>)|=|<|>)";
 		variables.wheels.class.RESQLWhere = "(#variables.wheels.class.RESQLOperators# ?)(\('.+?'\)|\((-?[0-9\.],?)+\)|'.+?'()|''|(-?[0-9\.]+)()|NULL)(($|\)| (AND|OR)))";
-		
+
 		variables.wheels.class.aliases = {};
 		variables.wheels.class.mapping = {};
 		variables.wheels.class.properties = {};
@@ -46,6 +46,9 @@
 		// run developer's init method if it exists
 		if (StructKeyExists(variables, "init"))
 			init();
+
+		// make sure that the tablename has the respected prefix
+		table(getTableNamePrefix() & tableName());
 
 		// load the database adapter
 		variables.wheels.class.adapter = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#", fileName="Connection", method="init", datasource="#variables.wheels.class.connection.datasource#", username="#variables.wheels.class.connection.username#", password="#variables.wheels.class.connection.password#");
