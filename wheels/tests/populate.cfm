@@ -38,7 +38,7 @@
 <cfset loc.tableList = ValueList(loc.dbinfo.table_name, chr(7))>
 
 <!--- list of tables to delete --->
-<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys">
+<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers">
 <cfloop list="#loc.tables#" index="loc.i">
 	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
 		<cftry>
@@ -203,6 +203,29 @@ CREATE TABLE tags
 </cfquery>
 
 <cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
+CREATE TABLE tblusers
+(
+	id #loc.identityColumnType#
+	,username varchar(50) NOT NULL
+	,password varchar(50) NOT NULL
+	,firstname varchar(50) NOT NULL
+	,lastname varchar(50) NOT NULL
+	,address varchar(100) NULL
+	,city varchar(50) NULL
+	,state char(2) NULL
+	,zipcode varchar(50) NULL
+	,phone varchar(20) NULL
+	,fax varchar(20) NULL
+	,birthday #loc.datetimeColumnType# NULL
+	,birthdaymonth #loc.intColumnType# NULL
+	,birthdayyear #loc.intColumnType# NULL
+	,birthtime #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NULL
+	,isactive #loc.intColumnType# NULL
+	,PRIMARY KEY(id)
+) #loc.storageEngine#
+</cfquery>
+
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
 CREATE TABLE users
 (
 	id #loc.identityColumnType#
@@ -257,7 +280,7 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 </cfquery>
 
 <!--- populate with data --->
-<cfset loc.user = model("USER").create(
+<cfset loc.user = model("user").create(
 	username='tonyp'
 	,password='tonyp123'
 	,firstname='Tony'
