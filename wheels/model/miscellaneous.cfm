@@ -116,7 +116,7 @@
 		<cfset whatAmIMappedTo = model("user").tableName()>
 	'
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,table">
-	<cfreturn getTableNamePrefix() & variables.wheels.class.tableName>
+	<cfreturn variables.wheels.class.tableName>
 </cffunction>
 
 <cffunction name="getTableNamePrefix" returntype="string" access="public" output="false" hint="Returns the table name prefix set for the table."

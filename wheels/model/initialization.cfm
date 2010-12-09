@@ -45,6 +45,9 @@
 		if (StructKeyExists(variables, "init"))
 			init();
 
+		// make sure that the tablename has the respected prefix
+		table(getTableNamePrefix() & tableName());
+
 		// load the database adapter
 		variables.wheels.class.adapter = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#", fileName="Connection", method="init", datasource="#variables.wheels.class.connection.datasource#", username="#variables.wheels.class.connection.username#", password="#variables.wheels.class.connection.password#");
 
