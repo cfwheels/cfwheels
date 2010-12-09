@@ -110,12 +110,12 @@
 						{
 							loc.toAdd = "";
 							loc.classData = loc.classes[loc.j];
-							
+
 							// we need the name of the table on the first go, and the alias otherwise
 							loc.tableName = loc.classData.tableName;
 							if (loc.j != 1)
 								loc.tableName = loc.classData.alias;
-								
+
 							if (ListFindNoCase(loc.classData.propertyList, loc.property))
 								loc.toAdd = loc.tableName & "." & loc.classData.properties[loc.property].column;
 							else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.property))
@@ -228,7 +228,7 @@
 				{
 					loc.toAppend = "";
 					loc.classData = loc.classes[loc.j];
-						
+
 					// we need the name of the table on the first go, and the alias otherwise
 					loc.tableName = loc.classData.tableName;
 					if (loc.j != 1)
@@ -263,7 +263,7 @@
 									loc.flagAsDuplicate  = true;
 								}
 							}
-						}						
+						}
 						if (loc.flagAsDuplicate )
 							loc.toAppend = loc.toAppend & "[[duplicate]]" & loc.j;
 						if (ListFindNoCase(loc.classData.propertyList, loc.iItem))
@@ -413,7 +413,7 @@
 						loc.param.dataType = "char";
 						loc.param.scale = 0;
 						loc.param.list = false;
-						
+
 						loc.classData = loc.classes[loc.j];
 						// we need the name of the table on the first go, and the alias otherwise
 						loc.tableName = loc.classData.tableName;
@@ -615,8 +615,8 @@
 
 			// create a reference to the associated class
 			loc.associatedClass = model(loc.classAssociations[loc.name].modelName);
-			
-			// create the join string if it hasn't already been done 
+
+			// create the join string if it hasn't already been done
 			// (no need to lock this code since when multiple requests process it they will end up setting the same value (no intermediate value is ever set on the join variable in the application scoped model object)
 			if (!StructKeyExists(loc.classAssociations[loc.name], "join"))
 			{
@@ -632,7 +632,7 @@
 						loc.classAssociations[loc.name].foreignKey = loc.class.$classData().modelName & Replace(loc.class.$classData().keys, ",", ",#loc.class.$classData().modelName#", "all");
 					}
 				}
-				
+
 				// figure out the joinKey for this association
 				if (!Len(loc.classAssociations[loc.name].joinKey))
 				{
@@ -645,7 +645,7 @@
 						loc.classAssociations[loc.name].joinKey = loc.class.$classData().keys;
 					}
 				}
-			
+
 				// set our alias to the tableName if we do not have one
 				loc.classAssociations[loc.name].alias = loc.associatedClass.$classData().tableName;
 				loc.classAssociations[loc.name].tableName = loc.associatedClass.$classData().tableName;
@@ -654,16 +654,17 @@
 				loc.classAssociations[loc.name].propertyList = loc.associatedClass.$classData().propertyList;
 				loc.classAssociations[loc.name].calculatedProperties = loc.associatedClass.$classData().calculatedProperties;
 				loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClass.$classData().calculatedPropertyList;
-				
+
 				// check to see if we have a self join and make the joining table name unique
 				if (loc.class.$classData().tableName == loc.associatedClass.$classData().tableName)
 				{
 					loc.associatedClass.$alias(associationName=loc.name);
 					loc.classAssociations[loc.name].alias = loc.associatedClass.$aliasName(associationName=loc.name);
 				}
-				
+
 				loc.joinType = ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one");
-				loc.join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# AS #loc.classAssociations[loc.name].alias# ON  "; 
+				//loc.join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# AS #loc.classAssociations[loc.name].alias# ON  ";
+				loc.join = UCase(loc.joinType) & " JOIN " & variables.wheels.class.adapter.$tableAliasForJoin(loc.classAssociations[loc.name].tableName, loc.classAssociations[loc.name].alias) & " ON  ";
 				loc.toAppend = "";
 				loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
@@ -726,7 +727,7 @@
 				loc.value = Trim(ListGetAt(arguments.values, loc.i));
 			else if (Len(arguments.keys))
 				loc.value = this[ListGetAt(arguments.keys, loc.i)];
-			else 
+			else
 				loc.value = "";
 			loc.toAppend = loc.key & "=";
 			if (!IsNumeric(loc.value))

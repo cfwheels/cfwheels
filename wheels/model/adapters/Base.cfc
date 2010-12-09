@@ -263,5 +263,11 @@
 		</cfscript>
 	</cffunction>
 
+	<cffunction name="$tableAliasForJoin" returntype="string" access="public" output="false">
+		<cfargument name="table" type="string" required="true">
+		<cfargument name="alias" type="string" required="true">
+		<cfreturn "#arguments.table# AS #arguments.alias#">
+	</cffunction>
+
 	<cfinclude template="../../plugins/injection.cfm">
 </cfcomponent>
