@@ -233,11 +233,12 @@
 	<cfargument name="methods" type="string" required="false" default="" hint="Method name or list of method names to call. (Can also be called with the `method` argument.)">
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for @validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
-	<cfset $registerValidation(when="onSave", argumentCollection=arguments)>
+	<cfset $registerValidation(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="validateOnCreate" returntype="void" access="public" output="false" hint="Registers method(s) that should be called to validate new objects before they are inserted."
