@@ -39,6 +39,7 @@ Bug Fixes
 =========
 * Added the varchar_ignorecase type to the H2 adapter - #664 [Per Djurner]
 * Fix so that the full tablename is always retuned - #667 [Tony Petruzzi]
+* Blank should be the selected value when includeBlank is set - #633 [Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
