@@ -140,6 +140,7 @@
 					arguments.value = Evaluate("#loc.item#(loc.value)");
 				}
 			}
+
 			if (loc.firstDone)
 				loc.returnValue = loc.returnValue & arguments.separator;
 			loc.returnValue = loc.returnValue & Evaluate("$#loc.item#SelectTag(argumentCollection=arguments)");
@@ -171,7 +172,8 @@
 	<cfscript>
 		var loc = {};
 		loc.optionContent = "";
-		if (!Len(arguments.value) && (!IsBoolean(arguments.includeBlank) || !arguments.includeBlank))
+		// only set the default value if the value is blank and includeBlank is false
+		if (!Len(arguments.value) && (IsBoolean(arguments.includeBlank) && !arguments.includeBlank))
 			if (arguments.twelveHour && arguments.$type IS "hour")
 				arguments.value = TimeFormat(Now(), 'h');
 			else
@@ -187,6 +189,8 @@
 		{
 			loc.args = {};
 			loc.args.value = "";
+			if(!Len(arguments.value))
+				loc.args.selected = "selected";
 			if (!IsBoolean(arguments.includeBlank))
 				loc.optionContent = arguments.includeBlank;
 			loc.content = loc.content & $element(name="option", content=loc.optionContent, attributes=loc.args);
