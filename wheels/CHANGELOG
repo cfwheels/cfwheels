@@ -35,6 +35,10 @@ Miscellaneous
 
 WHEELS VERSION 1.1.2
 
+Model Enhancements
+==================
+* Add 'when' argument to validate() - #643 [Andy Bellenie, Tony Petruzzi]
+
 Bug Fixes
 =========
 * Added the varchar_ignorecase type to the H2 adapter - #664 [Per Djurner]
