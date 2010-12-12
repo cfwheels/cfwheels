@@ -377,4 +377,19 @@
 		<cfset assert('loc.user.valid()')>
 	</cffunction> --->
 
+	<!--- validate --->
+	<cffunction name="test_validate_registering_methods">
+		<cfset loc.user.firstname = "tony">
+		<cfset loc.user.validate(method="fakemethod")>
+		<cfset loc.user.validate(method="fakemethod2", when="onCreate")>
+		<cfset loc.v = loc.user.$classData().validations>
+		<cfset loc.onsave = loc.v["onsave"]>
+		<cfset loc.oncreate = loc.v["oncreate"]>
+		<cfset assert('arraylen(loc.onsave) eq 1')>
+		<cfset assert('loc.onsave[1].method eq "fakemethod"')>
+		<cfset assert('arraylen(loc.oncreate) eq 1')>
+		<cfset assert('loc.oncreate[1].method eq "fakemethod2"')>
+	</cffunction>
+
+
 </cfcomponent>
