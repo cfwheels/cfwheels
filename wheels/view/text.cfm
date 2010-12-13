@@ -181,30 +181,29 @@
 	<cfargument name="wrap" type="boolean" required="false" hint="Set to `true` to wrap the result in a paragraph.">
 	<cfargument name="escapeHtml" type="boolean" required="false" hint="Whether or not to escape HTML characters before applying the line break formatting.">
 	<cfscript>
-		var loc = {};
 		$args(name="simpleFormat", args=arguments);
+
 		// If we're escaping HTML along with applying the line break formatting
 		if(arguments.escapeHtml)
 		{
-			loc.returnValue = Trim($htmlFormat(arguments.text));
+			arguments.text = $htmlFormat(arguments.text);
 		}
-		else
-		{
-			loc.returnValue = Trim(arguments.text);
-		}
-		loc.returnValue = Replace(loc.returnValue, "#Chr(13)#", "", "all");
-		loc.returnValue = Replace(loc.returnValue, "#Chr(10)##Chr(10)#", "</p><p>", "all");
-		loc.returnValue = Replace(loc.returnValue, "#Chr(10)#", "<br />", "all");
+
+		arguments.text = Trim(arguments.text);
+
+		arguments.text = Replace(arguments.text, "#Chr(13)#", "", "all");
+		arguments.text = Replace(arguments.text, "#Chr(10)##Chr(10)#", "</p><p>", "all");
+		arguments.text = Replace(arguments.text, "#Chr(10)#", "<br />", "all");
 
 		// add back in our returns so we can strip the tags and re-apply them without issue
 		// this is good to be edited the textarea text in it's original format (line returns)
-		loc.returnValue = Replace(loc.returnValue, "</p><p>", "</p>#Chr(10)##Chr(10)#<p>", "all");
-		loc.returnValue = Replace(loc.returnValue, "<br />", "<br />#Chr(10)#", "all");
+		arguments.text = Replace(arguments.text, "</p><p>", "</p>#Chr(10)##Chr(10)#<p>", "all");
+		arguments.text = Replace(arguments.text, "<br />", "<br />#Chr(10)#", "all");
 
 		if (arguments.wrap)
-			loc.returnValue = "<p>" & loc.returnValue & "</p>";
+			arguments.text = "<p>" & arguments.text & "</p>";
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn arguments.text>
 </cffunction>
 
 <cffunction name="titleize" returntype="string" access="public" output="false" hint="Capitalizes all words in the text to create a nicer looking title."
