@@ -73,35 +73,41 @@
 	<cfscript>
 	var loc = {};
 	$args(name="excerpt", args=arguments);
+	// by default we return a blank string
+	loc.returnValue = "";
+	// strip all html tags from text
+	arguments.text = stripTags(arguments.text);
+	// see if phrase exists in text
 	loc.pos = FindNoCase(arguments.phrase, arguments.text, 1);
-	if (loc.pos != 0)
+	// no need to go further if phrase isn't found
+	if (loc.pos eq 0)
 	{
-		if ((loc.pos-arguments.radius) <= 1)
-		{
-			loc.startPos = 1;
-			loc.truncateStart = "";
-		}
-		else
-		{
-			loc.startPos = loc.pos - arguments.radius;
-			loc.truncateStart = arguments.excerptString;
-		}
-		if ((loc.pos+Len(arguments.phrase)+arguments.radius) > Len(arguments.text))
-		{
-			loc.endPos = Len(arguments.text);
-			loc.truncateEnd = "";
-		}
-		else
-		{
-			loc.endPos = loc.pos + arguments.radius;
-			loc.truncateEnd = arguments.excerptString;
-		}
-		loc.returnValue = loc.truncateStart & Mid(arguments.text, loc.startPos, ((loc.endPos+Len(arguments.phrase))-(loc.startPos))) & loc.truncateEnd;
+		return loc.returnValue;
 	}
-	else
+
+	loc.textLen = Len(arguments.text);
+	loc.phraseLen = Len(arguments.phrase);
+	loc.startPos = loc.pos - arguments.radius;
+	loc.truncateStart = arguments.excerptString;
+
+	if (loc.startPos <= 1)
 	{
-		loc.returnValue = "";
+		loc.startPos = 1;
+		loc.truncateStart = "";
 	}
+
+	loc.endPos = loc.pos + loc.phraseLen + arguments.radius;
+	loc.truncateEnd = arguments.excerptString;
+
+	if (loc.endPos > loc.textLen)
+	{
+		// need to compensate for the fact that
+		// loc.startPos is at least 1
+		loc.endPos = loc.textLen + 1;
+		loc.truncateEnd = "";
+	}
+
+	loc.returnValue = loc.truncateStart & Mid(arguments.text, loc.startPos, (loc.endPos - loc.startPos)) & loc.truncateEnd;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
