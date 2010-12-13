@@ -210,9 +210,10 @@
 		if (StructKeyExists(arguments.params, "format"))
 			return arguments.params.format;
 		
-		for (loc.item in application.wheels.formats)
-			if (arguments.httpAccept == application.wheels.formats[loc.item])
+		for (loc.item in application.wheels.formats) {
+			if (arguments.httpAccept CONTAINS application.wheels.formats[loc.item])
 				return loc.item;
+		}
 	</cfscript>
 	<cfreturn loc.format />
 </cffunction>
