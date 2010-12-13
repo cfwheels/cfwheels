@@ -26,6 +26,7 @@ Other Enhancements
 Bug Fixes
 =========
 * Allow blank values to be passed through to validation - #638 [Per Djurner]
+* Allow for encoding autodetection within provides - #674 [Raul Riera]
 
 Miscellaneous
 =============
