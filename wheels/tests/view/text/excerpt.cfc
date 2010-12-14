@@ -65,8 +65,32 @@
 	<cffunction name="test_text_has_html_tags">
 		<cfset loc.args.text = "CFWheels: <p>testing the</p> <b>excerpt</b> <i><b>view</b></i> helper to see if it works or not.">
 		<cfset loc.args.phrase = "excerpt view helper">
+		<cfset loc.args.stripTags = true>
 		<cfset loc.e = loc.controller.excerpt(argumentcollection=loc.args)>
 		<cfset loc.r = "[more]excerpt view helper[more]">
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+	
+	<cffunction name="test_span_to_whole_words">
+		<cfset loc.args.phrase = "excerpt view helper">
+		<cfset loc.args.radius = 5>
+		<cfset loc.args.wholeWords = true>
+		<cfset loc.e = loc.controller.excerpt(argumentcollection=loc.args)>
+		<cfset loc.r = "[more]the excerpt view helper to see[more]">
+		<cfset assert("loc.e eq loc.r")>
+		
+		<cfset loc.args.phrase = "works or not.">
+		<cfset loc.args.radius = 5>
+		<cfset loc.args.wholeWords = true>
+		<cfset loc.e = loc.controller.excerpt(argumentcollection=loc.args)>
+		<cfset loc.r = "[more]if it works or not.">
+		<cfset assert("loc.e eq loc.r")>
+		
+		<cfset loc.args.phrase = "CFWheels: testing">
+		<cfset loc.args.radius = 5>
+		<cfset loc.args.wholeWords = true>
+		<cfset loc.e = loc.controller.excerpt(argumentcollection=loc.args)>
+		<cfset loc.r = "CFWheels: testing the excerpt[more]">
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 

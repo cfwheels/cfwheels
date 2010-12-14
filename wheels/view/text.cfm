@@ -70,13 +70,20 @@
 	<cfargument name="phrase" type="string" required="true" hint="The phrase to extract.">
 	<cfargument name="radius" type="numeric" required="false" hint="Number of characters to extract surrounding the phrase.">
 	<cfargument name="excerptString" type="string" required="false" hint="String to replace first and/or last characters with.">
+	<cfargument name="stripTags" type="boolean" required="false" hint="Should we remove all html tags before extracting the except">
+	<cfargument name="wholeWords" type="boolean" required="false" hint="when extracting the exceprt, span to to grab whole words.">
 	<cfscript>
 	var loc = {};
 	$args(name="excerpt", args=arguments);
 	// by default we return a blank string
 	loc.returnValue = "";
 	// strip all html tags from text
-	arguments.text = stripTags(arguments.text);
+	if (arguments.stripTags)
+	{
+		// have to append "this" since we have a method
+		// with the same name
+		arguments.text = this.stripTags(arguments.text);
+	}
 	// see if phrase exists in text
 	loc.pos = FindNoCase(arguments.phrase, arguments.text, 1);
 	// no need to go further if phrase isn't found
@@ -105,6 +112,28 @@
 		// loc.startPos is at least 1
 		loc.endPos = loc.textLen + 1;
 		loc.truncateEnd = "";
+	}
+
+	if (arguments.wholeWords)
+	{
+		if (loc.startPos > 1)
+		{
+			loc._startPos = len(arguments.text) - loc.startPos;
+			loc.pad = loc._startPos - refind("[[:space:]]", reverse(arguments.text), loc._startPos);
+			loc.startPos = loc.startPos - loc.pad;
+
+			// when endPos gte textLen, need to subtract one to get
+			// the correct startPos
+			if (loc.endPos >= loc.textLen)
+			{
+				loc.startPos = loc.startPos - 1;
+			}
+		}
+
+		if (loc.endPos < loc.textLen)
+		{
+			loc.endPos = refind("[[:space:]]", arguments.text, loc.endPos);
+		}
 	}
 
 	loc.returnValue = loc.truncateStart & Mid(arguments.text, loc.startPos, (loc.endPos - loc.startPos)) & loc.truncateEnd;

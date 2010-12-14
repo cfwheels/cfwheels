@@ -147,7 +147,7 @@
 	application.wheels.functions.distanceOfTimeInWords = {includeSeconds=false};
 	application.wheels.functions.errorMessageOn = {prependText="", appendText="", wrapperElement="span", class="errorMessage"};
 	application.wheels.functions.errorMessagesFor = {class="errorMessages", showDuplicates=true};
-	application.wheels.functions.excerpt = {radius=100, excerptString="..."};
+	application.wheels.functions.excerpt = {radius=100, excerptString="...", stripTags="false", wholeWords="false"};
 	application.wheels.functions.exists = {reload=false, parameterize=true};
 	application.wheels.functions.fileField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
 	application.wheels.functions.fileFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
