@@ -275,14 +275,13 @@
 	<cfargument name="length" type="numeric" required="false" hint="Length to truncate the text to.">
 	<cfargument name="truncateString" type="string" required="false" hint="String to replace the last characters with.">
 	<cfscript>
-		var loc = {};
 		$args(name="truncate", args=arguments);
 		if (Len(arguments.text) gt arguments.length)
-			loc.returnValue = Left(arguments.text, arguments.length-Len(arguments.truncateString)) & arguments.truncateString;
-		else
-			loc.returnValue = arguments.text;
+		{
+			arguments.text = Left(arguments.text, arguments.length-Len(arguments.truncateString)) & arguments.truncateString;
+		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn arguments.text>
 </cffunction>
 
 <cffunction name="wordTruncate" returntype="string" access="public" output="false" hint="Truncates text to the specified length of words and replaces the remaining characters with the specified truncate string (which defaults to ""..."")."
@@ -301,20 +300,18 @@
 	<cfscript>
 		var loc = {};
 		$args(name="wordTruncate", args=arguments);
-		loc.returnValue = "";
 		loc.wordArray = ListToArray(arguments.text, " ", false);
 		loc.wordLen = ArrayLen(loc.wordArray);
 
 		if (loc.wordLen gt arguments.length)
 		{
+			arguments.text = "";
 			for (loc.i = 1; loc.i lte arguments.length; loc.i++)
-				loc.returnValue = ListAppend(loc.returnValue, loc.wordArray[loc.i], " ");
-			loc.returnValue = loc.returnValue & arguments.truncateString;
-		}
-		else
-		{
-			loc.returnValue = arguments.text;
+			{
+				arguments.text = ListAppend(arguments.text, loc.wordArray[loc.i], " ");
+			}
+			arguments.text = arguments.text & arguments.truncateString;
 		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn arguments.text>
 </cffunction>
