@@ -101,4 +101,18 @@
 		<cfset assert('loc.photo.recordcount eq 3')>
 	</cffunction>
 
+	<cffunction name="test_with_parameterize_set_to_false_with_string">
+		<cfset loc.result = model("photo").findAll(page=1, perPage=20, handle="pagination_order_test_1", parameterize="false", where="description1 LIKE '%photo%'")>
+		<cfset assert('request.wheels.pagination_order_test_1.CURRENTPAGE eq 1')>
+		<cfset assert('request.wheels.pagination_order_test_1.TOTALPAGES eq 13')>
+		<cfset assert('request.wheels.pagination_order_test_1.TOTALRECORDS eq 250')>
+	</cffunction>
+
+	<cffunction name="test_with_parameterize_set_to_false_with_numeric">
+		<cfset loc.result = model("photo").findAll(page=1, perPage=20, handle="pagination_order_test_1", parameterize="false", where="id = 1")>
+		<cfset assert('request.wheels.pagination_order_test_1.CURRENTPAGE eq 1')>
+		<cfset assert('request.wheels.pagination_order_test_1.TOTALPAGES eq 1')>
+		<cfset assert('request.wheels.pagination_order_test_1.TOTALRECORDS eq 1')>
+	</cffunction>
+
 </cfcomponent>

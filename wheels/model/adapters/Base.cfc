@@ -225,7 +225,7 @@
 		StructAppend(loc.args, loc.orgArgs, true);
 		</cfscript>
 
-		<cfquery attributeCollection="#loc.args#"><cfloop array="#arguments.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif StructKeyExists(loc.queryParamAttributes, "useNull")>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")><cfif arguments.parameterize>(<cfqueryparam attributeCollection="#loc.queryParamAttributes#">)<cfelse>(#PreserveSingleQuotes(loc.i.value)#)</cfif><cfelse><cfif arguments.parameterize><cfqueryparam attributeCollection="#loc.queryParamAttributes#"><cfelse>'#loc.i.value#'</cfif></cfif><cfelse><cfset loc.i = Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")>#PreserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif></cfquery>
+		<cfquery attributeCollection="#loc.args#"><cfloop array="#arguments.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif StructKeyExists(loc.queryParamAttributes, "useNull")>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")><cfif arguments.parameterize>(<cfqueryparam attributeCollection="#loc.queryParamAttributes#">)<cfelse>(#PreserveSingleQuotes(loc.i.value)#)</cfif><cfelse><cfif arguments.parameterize><cfqueryparam attributeCollection="#loc.queryParamAttributes#"><cfelse>#$quoteValue(loc.i.value)#</cfif></cfif><cfelse><cfset loc.i = Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")>#PreserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif></cfquery>
 
 		<cfscript>
 		if (StructKeyExists(query, "name"))
@@ -250,6 +250,17 @@
 		<cfargument name="password" type="string" required="true">
 		<cfset arguments.type = "columns">
 		<cfreturn $dbinfo(argumentCollection=arguments)>
+	</cffunction>
+
+	<cffunction name="$quoteValue" returntype="string" access="public" output="false">
+		<cfargument name="str" type="string" required="true" hint="string to quote">
+		<cfscript>
+		if (!IsNumeric(arguments.str))
+		{
+			arguments.str = "'#arguments.str#'";
+		}
+		return arguments.str;
+		</cfscript>
 	</cffunction>
 
 </cfcomponent>
