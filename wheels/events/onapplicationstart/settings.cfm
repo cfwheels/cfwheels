@@ -122,6 +122,7 @@
 	application.wheels.formats.csv = "text/csv";
 	application.wheels.formats.pdf = "application/pdf";
 	application.wheels.formats.xls = "application/vnd.ms-excel";
+	application.wheels.formats.js = "text/javascript";
 
 	// function defaults
 	application.wheels.functions = {};

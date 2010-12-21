@@ -81,5 +81,17 @@
 		<cfset loc.controller = controller("dummy", params)>
 		<cfset assert("loc.controller.$requestContentType() eq 'pdf'")>
 	</cffunction>
+	
+	<cffunction name="test_$requestContentType_header_cgi_js">
+		<cfset loc.controller = controller("dummy", params)>
+		<cfset request.cgi.http_accept = "text/javascript">
+		<cfset assert("loc.controller.$requestContentType() eq 'js'")>
+	</cffunction>
+
+	<cffunction name="test_$requestContentType_params_js">
+		<cfset params.format = "js">
+		<cfset loc.controller = controller("dummy", params)>
+		<cfset assert("loc.controller.$requestContentType() eq 'js'")>
+	</cffunction>
 
 </cfcomponent>
