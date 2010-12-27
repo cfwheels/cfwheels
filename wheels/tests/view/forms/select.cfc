@@ -61,4 +61,13 @@
 	    <cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
+	<cffunction name="test_with_array_of_structs_as_options_2">
+		<cfset loc.options = []>
+		<cfset loc.options[1] = {value="petruzzi", name="tony"}>
+		<cfset loc.options[2] = {value="djurner", name="per"}>
+	    <cfset loc.r = loc.controller.select(objectName="user", property="firstname", options=loc.options, valueField="value", textField="name", label=false)>
+	    <cfset loc.e = '<select id="user-firstname" name="user[firstname]"><option value="petruzzi">tony</option><option value="djurner">per</option></select>'>
+	    <cfset assert('loc.e eq loc.r')>
+	</cffunction>
+
 </cfcomponent>

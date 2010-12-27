@@ -427,14 +427,12 @@
 			arguments.options = ListToArray(arguments.options);
 			$optionsForSelect(argumentCollection=arguments);
 		}
-
-		if (IsQuery(arguments.options))
+		else if (IsQuery(arguments.options))
 		{
 			arguments.options = $optionsForSelectConvertQuery(argumentCollection=arguments);
 			$optionsForSelect(argumentCollection=arguments);
 		}
-
-		if (IsStruct(arguments.options))
+		else if (IsStruct(arguments.options))
 		{
 			arguments.options = $optionsForSelectConvertStruct(argumentCollection=arguments);
 			$optionsForSelect(argumentCollection=arguments);
@@ -491,16 +489,30 @@
 					loc.optionText = loc.object[arguments.textField];
 				}
 			}
-			else if (IsStruct(arguments.options[loc.i]) )
+			else if (IsStruct(arguments.options[loc.i]))
 			{
-				loc.key = StructKeyList(arguments.options[loc.i]);
-				loc.optionValue = arguments.options[loc.i][loc.key];
-				loc.optionText = LCase(loc.key);
+				loc.object = arguments.options[loc.i];
+				// if the struct only has one elment then use the key/value pair
+				if(StructCount(loc.object) eq 1)
+				{
+					loc.key = StructKeyList(loc.object);
+					loc.optionValue = loc.object[loc.key];
+					loc.optionText = LCase(loc.key);
+				}
+				else
+				{
+					if (StructKeyExists(loc.object, arguments.valueField))
+					{
+						loc.optionValue = loc.object[arguments.valueField];
+					}
+					if (StructKeyExists(loc.object, arguments.textField))
+					{
+						loc.optionText = loc.object[arguments.textField];
+					}
+				}
 			}
-
 			ArrayAppend(loc.returnValue, $option(objectValue=loc.value, optionValue=loc.optionValue, optionText=loc.optionText));
 		}
-
 	</cfscript>
 	<cfreturn ArrayToList(loc.returnValue, "")>
 </cffunction>
