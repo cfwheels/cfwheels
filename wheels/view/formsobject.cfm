@@ -5,7 +5,7 @@
 		<cfoutput>
 		    ##textField(label="First Name", objectName="user", property="firstName")##
 		</cfoutput>
-		
+
 		<!--- Display fields for phone numbers provided by the `phoneNumbers` association and nested properties --->
 		<fieldset>
 			<legend>Phone Numbers</legend>
@@ -54,7 +54,7 @@
 		<cfoutput>
 		    ##passwordField(label="Password", objectName="user", property="password")##
 		</cfoutput>
-		
+
 		<!--- Display fields for passwords provided by the `passwords` association and nested properties --->
 		<fieldset>
 			<legend>Passwords</legend>
@@ -131,7 +131,7 @@
 		<cfoutput>
 		    ##fileField(label="Photo", objectName="photo", property="imageFile")##
 		</cfoutput>
-		
+
 		<!--- Display fields for photos provided by the `screenshots` association and nested properties --->
 		<fieldset>
 			<legend>Screenshots</legend>
@@ -176,7 +176,7 @@
 		<cfoutput>
 		    ##textArea(label="Overview", objectName="article", property="overview")##
 		</cfoutput>
-		
+
 		<!--- Display fields for photos provided by the `screenshots` association and nested properties --->
 		<fieldset>
 			<legend>Screenshots</legend>
@@ -225,7 +225,7 @@
 		        ##radioButton(objectName="user", property="gender", tagValue="f", label="Female")##
 			</fieldset>
 		</cfoutput>
-		
+
 		<!--- Shows radio buttons for selecting the genders for all committee members provided by the `members` association and nested properties --->
 		<cfoutput>
 			<cfloop from="1" to="##ArrayLen(committee.members)##" index="i">
@@ -283,7 +283,7 @@
 		<cfoutput>
 		    ##checkBox(objectName="photo", property="isPublic", label="Display this photo publicly.")##
 		</cfoutput>
-		
+
 		<!--- Shows check boxes for selecting public access for all photos provided by the `photos` association and nested properties --->
 		<cfoutput>
 			<cfloop from="1" to="##ArrayLen(user.photos)##" index="i">
@@ -351,12 +351,12 @@
 		<cfoutput>
 		    <p>##select(objectName="book", property="authorId", options=authors)##</p>
 		</cfoutput>
-		
+
 		<!--- Example 2: Shows `select` fields for selecting order statuses for all shipments provided by the `orders` association and nested properties --->
 		<!--- - Controller code --->
 		<cfset shipment = model("shipment").findByKey(key=params.key, where="shipments.statusId=##application.NEW_STATUS_ID##", include="order")>
 		<cfset statuses = model("status").findAll(order="name")>
-		
+
 		<!--- - View code --->
 		<cfoutput>
 			<cfloop from="1" to="##ArrayLen(shipments.orders)##" index="i">
@@ -521,13 +521,20 @@
 									arguments.textField = loc.propertyName;
 							}
 						}
-					
+
 					}
 					if (StructKeyExists(loc.object, arguments.valueField))
 						loc.optionValue = loc.object[arguments.valueField];
 					if (StructKeyExists(loc.object, arguments.textField))
 						loc.optionText = loc.object[arguments.textField];
 				}
+				else if (IsStruct(arguments.options[loc.i]) )
+				{
+					loc.key = StructKeyList(arguments.options[loc.i]);
+					loc.optionValue = arguments.options[loc.i][loc.key];
+					loc.optionText = LCase(loc.key);
+				}
+
 				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=loc.optionValue, optionText=loc.optionText);
 			}
 		}
