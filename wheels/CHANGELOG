@@ -11,7 +11,8 @@ View Enhancements
 * Ability to use custom types (HTML 5) on textField and textFieldTag form helpers - [Raul Riera]
 * Default to the humanized property name for labels on calculated or non-persistent properties instead of throwing an error - [Andy Bellenie]
 * Added escapeHTML argument on simpleFormat() - [Chris Peters]
-* Made it possible to set global defaults on autoLink(), excerpt(), highlight() and simpleFormat() - [Chris Peters] 
+* Made it possible to set global defaults on autoLink(), excerpt(), highlight() and simpleFormat() - [Chris Peters]
+* Added support for array of structs for select() and selectTag() - #680 [William Fisk, Tony Petruzzi] 
 
 Controller Enhancements
 =======================
