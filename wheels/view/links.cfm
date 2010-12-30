@@ -22,6 +22,10 @@
 		##linkTo(text="ColdFusion Framework", href="http://cfwheels.org/")##
 		-> <a href="http://cfwheels.org/">ColdFusion Framework</a>
 		
+		<!--- Remote link --->
+		##linkTo(text="View Settings", action="settings", params="show=all&sort=asc", remote="true")##
+		-> <a data-remote="true" href="/account/settings?show=all&amp;sort=asc">View Settings</a>
+		
 		<!--- Give the link `class` and `id` attributes --->
 		##linkTo(text="Delete Post", action="delete", key=99, class="delete", id="delete-99")##
 		-> <a class="delete" href="/blog/delete/99" id="delete-99">Delete Post</a>
@@ -40,6 +44,7 @@
 	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="href" type="string" required="false" hint="Pass a link to an external site here if you want to bypass the Wheels routing system altogether and link to an external URL.">
+	<cfargument name="remote" type="boolean" required="false" hint="Pass true if you wish to make this an asynchronous request">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = $args(name="linkTo", cachable=true, args=arguments);
@@ -47,16 +52,15 @@
 		{
 			// only run our linkTo code if we do not have a cached result
 			if (Len(arguments.confirm))
-			{
-				loc.onclick = "return confirm('#JSStringFormat(arguments.confirm)#');";
-				arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
-			}
+				arguments["data-confirm"] = JSStringFormat(arguments.confirm);
+			if (StructKeyExists(arguments, "remote") && IsBoolean(arguments.remote))
+				arguments["data-remote"] = arguments.remote;
 			if (!StructKeyExists(arguments, "href"))
 				arguments.href = URLFor(argumentCollection=arguments);
 			arguments.href = toXHTML(arguments.href);
 			if (!Len(arguments.text))
 				arguments.text = arguments.href;
-			loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port";
+			loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port,remote";
 			if (Len(arguments.route))
 				loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
 			loc.returnValue = $element(name="a", skip=loc.skip, content=arguments.text, attributes=arguments);
@@ -85,6 +89,7 @@
 	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="remote" type="boolean" required="false" hint="See documentation for @linkTo.">
 	<cfscript>
 		var loc = {};
 		$args(name="buttonTo", reserved="method", args=arguments);
@@ -92,12 +97,16 @@
 		arguments.action = toXHTML(arguments.action);
 		arguments.method = "post";
 		if (Len(arguments.confirm))
-		{
-			loc.onsubmit = "return confirm('#JSStringFormat(arguments.confirm)#');";
-			arguments.onsubmit = $addToJavaScriptAttribute(name="onsubmit", content=loc.onsubmit, attributes=arguments);
-		}
-		loc.content = submitTag(value=arguments.text, image=arguments.image, disable=arguments.disable);
-		loc.skip = "disable,image,text,confirm,route,controller,key,params,anchor,onlyPath,host,protocol,port";
+			loc.submitTagArguments["data-confirm"] = JSStringFormat(arguments.confirm);
+		if (StructKeyExists(arguments, "remote") && IsBoolean(arguments.remote))
+			arguments["data-remote"] = arguments.remote;
+		if (Len(arguments.disable))
+			loc.submitTagArguments["data-disable-with"] = JSStringFormat(arguments.disable);
+		
+		loc.submitTagArguments.value = arguments.text;
+		loc.submitTagArguments.image = arguments.image;
+		loc.content = submitTag(argumentCollection=loc.submitTagArguments);
+		loc.skip = "disable,image,text,confirm,route,controller,key,params,anchor,onlyPath,host,protocol,port,remote";
 		if (Len(arguments.route))
 			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
 		loc.returnValue = $element(name="form", skip=loc.skip, content=loc.content, attributes=arguments);

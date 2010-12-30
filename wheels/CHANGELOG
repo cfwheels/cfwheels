@@ -23,6 +23,7 @@ Other Enhancements
 ==================
 * Added automatic caching in production mode of function results based on the arguments passed in - [Per Djurner]
 * Plugin functions can now be injected into base model adapter and model connection components - [Per Djurner]
+* Added support for Unobstructive Javascript - [Raul Riera]
 
 Bug Fixes
 =========

@@ -40,6 +40,7 @@
 	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="remote" type="boolean" required="false" hint="See documentation for @linkTo.">
 	<cfscript>
 		var loc = {};
 		$args(name="startFormTag", args=arguments);
@@ -54,19 +55,21 @@
 		// make sure we return XHMTL compliant code
 		arguments.action = toXHTML(arguments.action);
 
-		// deletes the action attribute and instead adds some tricky javascript spam protection to the onsubmit attribute
+		// deletes the action attribute and instead adds some tricky javascript spam protection
 		if (arguments.spamProtection)
 		{
-			loc.onsubmit = "this.action='#Left(arguments.action, int((Len(arguments.action)/2)))#'+'#Right(arguments.action, ceiling((Len(arguments.action)/2)))#';";
-			arguments.onsubmit = $addToJavaScriptAttribute(name="onsubmit", content=loc.onsubmit, attributes=arguments);
+			arguments["data-this-action"] = Left(arguments.action, int((Len(arguments.action)/2))) & Right(arguments.action, ceiling((Len(arguments.action)/2)));
 			StructDelete(arguments, "action");
 		}
 
 		// set the form to be able to handle file uploads
 		if (!StructKeyExists(arguments, "enctype") && arguments.multipart)
 			arguments.enctype = "multipart/form-data";
-
-		loc.skip = "multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port";
+		
+		if (StructKeyExists(arguments, "remote") && IsBoolean(arguments.remote))
+			arguments["data-remote"] = arguments.remote;
+		
+		loc.skip = "multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port,remote";
 		if (Len(arguments.route))
 			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
 		if (ListFind(loc.skip, "action"))
@@ -96,13 +99,7 @@
 		var loc = {};
 		$args(name="submitTag", reserved="type,src", args=arguments);
 		if (Len(arguments.disable))
-		{
-			loc.onclick = "this.disabled=true;";
-			if (!Len(arguments.image) && !IsBoolean(arguments.disable))
-				loc.onclick = loc.onclick & "this.value='#JSStringFormat(arguments.disable)#';";
-			loc.onclick = loc.onclick & "this.form.submit();";
-			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
-		}
+			arguments["data-disable-with"] = JSStringFormat(arguments.disable);
 		if (Len(arguments.image))
 		{
 			// create an img tag and then just replace "img" with "input"
