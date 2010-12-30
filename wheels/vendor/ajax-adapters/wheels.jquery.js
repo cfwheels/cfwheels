@@ -1,7 +1,7 @@
 /*
  * jquery-ujs
  *
- * http://github.com/wheels/jquery-ujs/blob/master/src/wheels.js
+ * http://github.com/rails/jquery-ujs/blob/master/src/rails.js
  *
  * This wheels.js file supports jQuery 1.4.3 and 1.4.4 .
  *
