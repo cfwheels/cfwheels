@@ -134,10 +134,12 @@ jQuery(function ($) {
     var disable_with_input_function = function () {
         $(this).find(disable_with_input_selector).each(function () {
             var input = $(this);
-
-            input.data('enable-with', input.val())
-                .attr('value', input.attr('data-disable-with'))
+			var enable_label = (input.data('disable-with') == true) ? input.val() :input.attr('data-disable-with');
+			
+			input.data('enable-with', input.val())
+                .attr('value', enable_label)
                 .attr('disabled', 'disabled');
+
         });
     };
 
