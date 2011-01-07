@@ -72,7 +72,8 @@
 	<cffunction name="test_remote_link">
 		<cfset loc.args.route = "home">
 		<cfset loc.args.remote = "true">
-		<cfset loc.e = '<form action="#loc.argsction#" data-remote="true" method="post">'>
+		<cfset loc.action = loc.controller.toXHTML(loc.controller.urlfor(argumentCollection=loc.args))>
+		<cfset loc.e = '<form action="#loc.action#" data-remote="true" method="post">'>
 		<cfset loc.r = loc.controller.startFormTag(argumentcollection=loc.args)>
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
