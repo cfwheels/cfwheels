@@ -30,7 +30,6 @@
 		<cfset loc.controller.flashInsert(tony="Petruzzi", per="Djurner", james="Gibson")>
 		<cfset loc.controller.flashKeep()>
 		<cfset loc.controller.$flashClear()>
-		<cfset debug('loc.controller.flash()')>
 		<cfset assert('loc.controller.flashCount() eq 3')>
 		<cfset assert('loc.controller.flashKeyExists("tony")')>
 		<cfset assert('loc.controller.flashKeyExists("per")')>
