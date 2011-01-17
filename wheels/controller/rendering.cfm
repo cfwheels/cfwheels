@@ -176,12 +176,18 @@
 	'
 	categories="view-helper,miscellaneous" chapters="using-layouts" functions="">
 	<cfargument name="name" type="string" required="false" default="body" hint="Name of layout section to return content for.">
-	<cfargument name="default" type="string" required="false" default="" hint="What to display as a default if the section is not defined.">
+	<cfargument name="defaultValue" type="string" required="false" default="" hint="What to display as a default if the section is not defined.">
 	<cfscript>
+		if (StructKeyExists(arguments, "default"))
+		{
+			$deprecated("The `default` argument will be deprecated in a future version of Wheels, please use the `defaultValue` argument instead");
+			arguments.defaultValue = arguments.default;
+			StructDelete(arguments, "default");
+		}
 		if (StructKeyExists(variables.$instance.contentFor, arguments.name))
 			return ArrayToList(variables.$instance.contentFor[arguments.name], Chr(10));
 		else
-			return arguments.default;
+			return arguments.defaultValue;
 	</cfscript>
 </cffunction>
 
