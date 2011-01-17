@@ -1,3 +1,27 @@
+WHEELS VERSION 1.1.2
+
+View Enhancements
+=================
+* Select, SelectTag allow an array of structs to be passed to options - #680 [William Fisk, Tony Petruzzi]
+
+Controller Enhancements
+=======================
+* Changed "default" argument on includeContent() to "defaultValue" - #663 [Tony Petruzzi]
+
+Model Enhancements
+==================
+* Add 'when' argument to validate() - #643 [Andy Bellenie, Tony Petruzzi]
+
+Bug Fixes
+=========
+* Added the varchar_ignorecase type to the H2 adapter - #664 [Per Djurner]
+* Fix so that the full tablename is always retuned - #667 [Tony Petruzzi]
+* Pagaination with parameterize set to false for numeric keys - #656 [levi730, Tony Petruzzi]
+* Blank should be the selected value when includeBlank is set - #633 [Tony Petruzzi]
+* validatesLengthOf failed when both maximum and minimum were specified - [Tony Petruzzi]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 WHEELS VERSION 1.1.1
 
 Bug Fixes
