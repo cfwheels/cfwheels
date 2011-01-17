@@ -1,6 +1,6 @@
 <cfsetting requesttimeout="10000" showdebugoutput="false">
 <cfparam name="params.type" default="core">
-<cfif params.type IS "core">
+<cfif params.type NEQ "app">
 	<cfset testresults = $createObjectFromRoot(path=application.wheels.wheelsComponentPath, fileName="Test", method="$WheelsRunner", options=params)>
 <cfelse>
 	<cfset testresults = $createObjectFromRoot(path="tests", fileName="Test", method="$WheelsRunner", options=params)>
