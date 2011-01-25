@@ -2,6 +2,7 @@ WHEELS VERSION 1.2 BETA 1 (r5386)
 
 Model Enhancements
 ==================
+* Fix to make sure the unique identifier in each new model object during a request is unique - [James Gibson]
 * Allow for self joining tables in associations - #293 [James Gibson]
 * Added "joinKey" on belongsTo(), hasOne() and hasMany() which allows you to specify a column to join to on the opposite side of the relationship from the "foreignKey" - [James Gibson]
 
