@@ -199,7 +199,11 @@
 		variables.wheels.instance = {};
 		variables.wheels.instance.errors = [];
 		// keep a unique identifier for each model created in case we need it for nested properties
-		variables.wheels.instance.tickCountId = GetTickCount().toString(); // make sure we have it in milliseconds
+		if (StructKeyExists(request.wheels, "tickCountId"))
+			request.wheels.tickCountId = PrecisionEvaluate(request.wheels.tickCountId + 1);
+		else
+			request.wheels.tickCountId = GetTickCount();
+		variables.wheels.tickCountId = request.wheels.tickCountId.toString(); // make sure we have it in milliseconds
 
 		// copy class variables from the object in the application scope
 		if (!StructKeyExists(variables.wheels, "class"))
