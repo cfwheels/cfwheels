@@ -203,7 +203,7 @@
 			request.wheels.tickCountId = PrecisionEvaluate(request.wheels.tickCountId + 1);
 		else
 			request.wheels.tickCountId = GetTickCount();
-		variables.wheels.tickCountId = request.wheels.tickCountId.toString(); // make sure we have it in milliseconds
+		variables.wheels.instance.tickCountId = request.wheels.tickCountId.toString(); // make sure we have it in milliseconds
 
 		// copy class variables from the object in the application scope
 		if (!StructKeyExists(variables.wheels, "class"))
