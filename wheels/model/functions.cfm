@@ -7,6 +7,7 @@
 <cfinclude template="miscellaneous.cfm">
 <cfinclude template="nestedproperties.cfm">
 <cfinclude template="onmissingmethod.cfm">
+<cfinclude template="pagination.cfm">
 <cfinclude template="properties.cfm">
 <cfinclude template="query.cfm">
 <cfinclude template="serialize.cfm">
