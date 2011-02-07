@@ -209,10 +209,7 @@
 	<cfscript>
 		if ($performedRender())
 		{
-			if (ListFindNoCase("testing,production", get("environment")))
-				return $compactOutput(variables.$instance.response);
-			else
-				return Trim(variables.$instance.response);
+			return Trim(variables.$instance.response);
 		}
 		else
 		{

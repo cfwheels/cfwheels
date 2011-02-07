@@ -1,18 +1,3 @@
-<cffunction name="$compactOutput" returntype="string" access="public" output="false">
-	<cfargument name="output" type="string" required="true">
-	<cfscript>
-		var loc = {};
-		if (!StructKeyExists(application.wheels.vendor, "compactor"))
-		{
-			loc.filePaths = [];
-			loc.filePaths[1] = ExpandPath("wheels/vendor/compactor/compactor.jar");
-			loc.javaLoader = CreateObject("component", "#application.wheels.wheelsComponentPath#.vendor.javaloader.JavaLoader").init(loc.filePaths);
-			application.wheels.vendor.compactor = loc.javaLoader.create("com.mindprod.compactor.Compactor");
-		}
-	</cfscript>
-	<cfreturn application.wheels.vendor.compactor.compactString(arguments.output, "") />
-</cffunction>
-
 <cffunction name="$htmlFormat" returntype="string" access="public" output="false">
 	<cfargument name="string" type="string" required="true" />
 	<cfscript>
