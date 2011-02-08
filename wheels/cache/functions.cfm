@@ -11,6 +11,7 @@
 		
 		// update our storage arguments to have the correct casing
 		arguments.storage = capitalize(LCase(arguments.storage));
+		arguments.strategy = capitalize(LCase(arguments.strategy));
 		
 		// setup our instance scope
 		variables.$instance = {};
