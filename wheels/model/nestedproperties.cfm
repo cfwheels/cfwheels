@@ -88,9 +88,11 @@
 
 					for (loc.i = 1; loc.i lte ArrayLen(loc.array); loc.i++)
 					{
+						loc.saveResult = true;
 						if (ListFindNoCase("hasMany,hasOne", loc.associations[loc.association].type))
 							$setForeignKeyValues(missingMethodArguments=loc.array[loc.i], keys=loc.info.foreignKey);
-						loc.saveResult = $invoke(componentReference=loc.array[loc.i], method="save", invokeArgs=arguments);
+						if (IsObject(loc.array[loc.i]))
+							loc.saveResult = $invoke(componentReference=loc.array[loc.i], method="save", invokeArgs=arguments);
 						if (loc.returnValue) // don't change the return value if we have already received a false
 							loc.returnValue = loc.saveResult;
 					}
