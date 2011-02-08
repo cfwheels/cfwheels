@@ -147,10 +147,9 @@
 		loc.args = {};
 		loc.args.name = arguments.name;
 		loc.returnValue = $doubleCheckedLock(name="controllerLock", condition="$cachedControllerClassExists", execute="$createControllerClass", conditionArgs=loc.args, executeArgs=loc.args);
-		if (!StructIsEmpty(arguments.params))
-			loc.returnValue = loc.returnValue.$createControllerObject(arguments.params);
-		return loc.returnValue;
+		loc.returnValue = loc.returnValue.$createControllerObject(arguments.params);
 	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="deobfuscateParam" returntype="string" access="public" output="false" hint="Deobfuscates a value."
