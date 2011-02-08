@@ -192,6 +192,7 @@
 	<cfargument name="row" type="numeric" required="false" default="1">
 	<cfargument name="base" type="boolean" required="false" default="true">
 	<cfargument name="useFilterLists" type="boolean" required="false" default="true">
+	<cfargument name="callbacks" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 
@@ -213,7 +214,7 @@
 			arguments.properties = $queryRowToStruct(argumentCollection=arguments);
 
 		if (IsStruct(arguments.properties) && !StructIsEmpty(arguments.properties))
-			$setProperties(properties=arguments.properties, setOnModel=true, $useFilterLists=arguments.useFilterLists);
+			$setProperties(properties=arguments.properties, setOnModel=true, $useFilterLists=arguments.useFilterLists, callbacks=arguments.callbacks);
 
 		if (arguments.persisted)
 			$updatePersistedProperties();
