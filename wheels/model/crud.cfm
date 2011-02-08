@@ -256,7 +256,7 @@
 				loc.finderArgs.offset = arguments.$offset;
 				loc.finderArgs.$primaryKey = primaryKeys();
 				if (application.wheels.cacheQueries && (IsNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
-					loc.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache);
+					loc.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache, "schemas");
 				loc.findAll = variables.wheels.class.adapter.$query(argumentCollection=loc.finderArgs);
 				request.wheels[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
