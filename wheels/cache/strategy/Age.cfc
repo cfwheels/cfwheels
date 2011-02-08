@@ -10,7 +10,7 @@
 			if ((variables.$instance.cacheCullPercentage gt 0 
 					&& variables.$instance.cacheLastCulledAt < DateAdd("n", -variables.$instance.cacheCullInterval, arguments.currentTime) 
 					&& arguments.storage.count() gte variables.$instance.maximumItemsToCache)
-				|| ArrayLen(arguments.keys) == 1)
+					|| ArrayLen(arguments.keys) == 1)
 			{
 				// cache is full so flush out expired items from this cache to make more room if possible
 				for (loc.i = 1; loc.i lte ArrayLen(arguments.keys); loc.i++)
@@ -33,11 +33,6 @@
 			}
 		</cfscript>
 		<cfreturn loc.expiredKeys>
-	</cffunction>
-	
-	<cffunction name="checkExpired" access="public" output="false" returntype="array">
-		<cfargument name="value" type="struct" required="true">
-		<cfargument name="storage" type="AbstractStorage" required="true">
 	</cffunction>
 
 </cfcomponent>

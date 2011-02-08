@@ -113,9 +113,12 @@
 		// create the dispatcher that will handle all incoming requests
 		application.wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
 
-		// create the cache object
-		application.wheels.cache = $createObjectFromRoot(path="wheels", fileName="Cache", method="init");
-
+		// create the cache objects for each category
+		application.wheels.caches = {};
+		
+		for (loc.item in application.wheels.cacheSettings)
+			application.wheels.caches[loc.item] = $createObjectFromRoot(path="wheels", fileName="Cache", method="init", argumentCollection=application.wheels.cacheSettings[loc.item]);
+		
 		// run the developer's on application start code
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
 	</cfscript>

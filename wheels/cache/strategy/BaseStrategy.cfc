@@ -1,11 +1,11 @@
 <cfcomponent output="false">
 
 	<cffunction name="init" access="public" output="false" returntype="any">
-		<cfargument name="defaultCacheTime" type="numeric" required="false" default="#application.wheels.defaultCacheTime#">
-		<cfargument name="cacheCullPercentage" type="numeric" required="false" default="#application.wheels.cacheCullPercentage#">
-		<cfargument name="cacheCullInterval" type="numeric" required="false" default="#application.wheels.cacheCullInterval#">
-		<cfargument name="maximumItemsToCache" type="numeric" required="false" default="#application.wheels.maximumItemsToCache#">
-		<cfargument name="cacheDatePart" type="string" required="false" default="#application.wheels.cacheDatePart#">
+		<cfargument name="defaultCacheTime" type="numeric" required="true">
+		<cfargument name="cacheCullPercentage" type="numeric" required="true">
+		<cfargument name="cacheCullInterval" type="numeric" required="true">
+		<cfargument name="maximumItemsToCache" type="numeric" required="true">
+		<cfargument name="cacheDatePart" type="string" required="true">
 		<cfset variables.$instance = {}>
 		<cfset StructAppend(variables.$instance, arguments)>
 		<cfset variables.$instance.cacheLastCulledAt = Now()>

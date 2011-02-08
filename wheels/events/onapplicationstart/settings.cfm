@@ -104,13 +104,22 @@
 	}
 
 	// caching settings
-	application.wheels.cacheStorage = "memory"; // this setting is used to tell wheels where to store cache items, possible future storage items include ehCache, memcached, file, softReference
-	application.wheels.cacheStrategy = "age";
-	application.wheels.maximumItemsToCache = 5000;
-	application.wheels.cacheCullPercentage = 10;
-	application.wheels.cacheCullInterval = 5;
-	application.wheels.cacheDatePart = "n";
-	application.wheels.defaultCacheTime = 60;
+	application.wheels.cacheSettings = {};
+	application.wheels.cacheCategories = "actions,functions,images,main,pages,partials,routes,schemas";
+	
+	for (loc.i = 1; loc.i lte ListLen(application.wheels.cacheCategories); loc.i++)
+	{
+		loc.category = ListGetAt(application.wheels.cacheCategories, loc.i);
+		application.wheels.cacheSettings[loc.category] = {};
+		application.wheels.cacheSettings[loc.category].storage = "memory";
+		application.wheels.cacheSettings[loc.category].strategy = "age";
+		application.wheels.cacheSettings[loc.category].defaultCacheTime = 60;
+		application.wheels.cacheSettings[loc.category].cacheCullPercentage = 10;
+		application.wheels.cacheSettings[loc.category].cacheCullInterval = 5;
+		application.wheels.cacheSettings[loc.category].maximumItemsToCache = 5000;
+		application.wheels.cacheSettings[loc.category].cacheDatePart = "n";
+	}
+	
 	application.wheels.clearQueryCacheOnReload = true;
 	application.wheels.cacheQueriesDuringRequest = true;
 	

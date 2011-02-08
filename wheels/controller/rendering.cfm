@@ -244,7 +244,7 @@
 		var returnValue = "";
 		returnValue = $renderPage(argumentCollection=arguments);
 		if (!IsNumeric(arguments.$cache))
-			arguments.$cache = application.wheels.defaultCacheTime;
+			arguments.$cache = application.wheels.cacheSettings[arguments.category].defaultCacheTime;
 		$addToCache(key=arguments.key, value=returnValue, time=arguments.$cache, category=arguments.category);
 	</cfscript>
 	<cfreturn returnValue>
@@ -269,7 +269,7 @@
 		var returnValue = "";
 		returnValue = $renderPartial(argumentCollection=arguments);
 		if (!IsNumeric(arguments.$cache))
-			arguments.$cache = application.wheels.defaultCacheTime;
+			arguments.$cache = application.wheels.cacheSettings[arguments.category].defaultCacheTime;
 		$addToCache(key=arguments.key, value=returnValue, time=arguments.$cache, category=arguments.category);
 	</cfscript>
 	<cfreturn returnValue>

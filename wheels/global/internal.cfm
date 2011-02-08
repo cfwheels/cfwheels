@@ -138,8 +138,9 @@
 
 <cffunction name="$timeSpanForCache" returntype="any" access="public" output="false">
 	<cfargument name="cache" type="any" required="true">
-	<cfargument name="defaultCacheTime" type="numeric" required="false" default="#application.wheels.defaultCacheTime#">
-	<cfargument name="cacheDatePart" type="string" required="false" default="#application.wheels.cacheDatePart#">
+	<cfargument name="category" type="string" required="true">
+	<cfargument name="defaultCacheTime" type="numeric" required="false" default="#application.wheels.cacheSettings[arguments.category].defaultCacheTime#">
+	<cfargument name="cacheDatePart" type="string" required="false" default="#application.wheels.cacheSettings[arguments.category].cacheDatePart#">
 	<cfscript>
 		var loc = {};
 		loc.cache = arguments.defaultCacheTime;
@@ -391,12 +392,12 @@
 			loc.functionHash = $simpleHashedKey(arguments.args);
 			
 			// if the function result is not already in the cache we'll call the function and place the result in the cache
-			loc.functionResult = $getFromCache(key=loc.functionHash);
+			loc.functionResult = $getFromCache(key=loc.functionHash, category="functions");
 			if (IsBoolean(loc.functionResult) && !loc.functionResult)
 			{
 				arguments.args.$recursive = true;
 				loc.functionResult = $invoke(method=arguments.name, invokeArgs=arguments.args);
-				$addToCache(key=loc.functionHash, value=loc.functionResult);
+				$addToCache(key=loc.functionHash, value=loc.functionResult, category="functions");
 			}
 			return loc.functionResult;
 		}
@@ -566,12 +567,14 @@
 </cffunction>
 
 <cffunction name="$addToCache" returntype="void" access="public" output="false">
-	<cfset application.wheels.cache.add(argumentCollection=arguments)>
+	<cfargument name="category" type="string" required="false" default="main" />
+	<cfset application.wheels.caches[arguments.category].add(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$getFromCache" returntype="any" access="public" output="false">
+	<cfargument name="category" type="string" required="false" default="main" />
 	<cfscript>
-		var cacheItem = application.wheels.cache.get(argumentCollection=arguments);
+		var cacheItem = application.wheels.caches[arguments.category].get(argumentCollection=arguments);
 		
 		if (application.wheels.showDebugInformation)
 		{
@@ -585,19 +588,55 @@
 			}
 		}
 	</cfscript>
-	<cfreturn application.wheels.cache.get(argumentCollection=arguments)>
+	<cfreturn cacheItem>
 </cffunction>
 
 <cffunction name="$removeFromCache" returntype="void" access="public" output="false">
-	<cfset application.wheels.cache.remove(argumentCollection=arguments)>
+	<cfargument name="category" type="string" required="true" />
+	<cfset application.wheels.caches[arguments.category].remove(argumentCollection=arguments)>
 </cffunction>
 
 <cffunction name="$cacheCount" returntype="numeric" access="public" output="false">
-	<cfreturn application.wheels.cache.count(argumentCollection=arguments)>
+	<cfargument name="category" type="string" required="false" default="" />
+	<cfscript>
+		var loc = {};
+		loc.count = 0;
+		
+		if (Len(arguments.category))
+			return application.wheels.caches[arguments.category].count();
+			
+		for (loc.item in application.wheels.caches)
+			loc.count = loc.count + application.wheels.caches[loc.item].count();
+	</cfscript>
+	<cfreturn loc.count />
+</cffunction>
+
+<cffunction name="$cacheCapacity" returntype="numeric" access="public" output="false">
+	<cfargument name="category" type="string" required="false" default="" />
+	<cfscript>
+		var loc = {};
+		loc.capacity = 0;
+		
+		if (Len(arguments.category))
+			return application.wheels.caches[arguments.category].capacity();
+			
+		for (loc.item in application.wheels.caches)
+			loc.capacity = loc.capacity + application.wheels.caches[loc.item].capacity();
+	</cfscript>
+	<cfreturn loc.capacity />
 </cffunction>
 
 <cffunction name="$clearCache" returntype="void" access="public" output="false">
-	<cfreturn application.wheels.cache.clear(argumentCollection=arguments)>
+	<cfargument name="category" type="string" required="false" default="" />
+	<cfscript>
+		var loc = {};
+		
+		if (Len(arguments.category))
+			return application.wheels.caches[arguments.category].clear();
+			
+		for (loc.item in application.wheels.caches)
+			loc.count = loc.count + application.wheels.caches[loc.item].clear();
+	</cfscript>
 </cffunction>
 
 <cffunction name="$createModelClass" returntype="any" access="public" output="false">

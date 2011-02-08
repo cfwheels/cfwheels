@@ -1,11 +1,11 @@
 <cfcomponent implements="AbstractStorage" output="false">
 	
 	<cffunction name="init" access="public" output="false" returntype="any">
-		<cfargument name="timeSpan" type="numeric" required="false" default="#application.wheels.defaultCacheTime#">
+		<cfargument name="defaultCacheTime" type="numeric" required="true">
 		<cfargument name="idleTime" type="numeric" required="false" default="240">
 		<cfscript>
 			variables.$instance = {};
-			variables.$instance.timeSpan = CreateTimeSpan(0, 0, arguments.timeSpan, 0);
+			variables.$instance.timeSpan = CreateTimeSpan(0, 0, arguments.defaultCacheTime, 0);
 			variables.$instance.idleTime = CreateTimeSpan(0, 0, arguments.idleTime, 0);
 		</cfscript>
 		<cfreturn this>

@@ -1,13 +1,16 @@
 <cffunction name="init" returntype="any" access="public" output="false">
-	<cfargument name="storage" type="string" required="false" default="#application.wheels.cacheStorage#">
-	<cfargument name="strategy" type="string" required="false" default="#application.wheels.cacheStrategy#">
-	<cfargument name="defaultCacheTime" type="numeric" required="false" default="#application.wheels.defaultCacheTime#">
-	<cfargument name="cacheCullPercentage" type="numeric" required="false" default="#application.wheels.cacheCullPercentage#">
-	<cfargument name="cacheCullInterval" type="numeric" required="false" default="#application.wheels.cacheCullInterval#">
-	<cfargument name="maximumItemsToCache" type="numeric" required="false" default="#application.wheels.maximumItemsToCache#">
-	<cfargument name="cacheDatePart" type="string" required="false" default="#application.wheels.cacheDatePart#">
+	<cfargument name="storage" type="string" required="true">
+	<cfargument name="strategy" type="string" required="true">
+	<cfargument name="defaultCacheTime" type="numeric" required="false" default="60" />
+	<cfargument name="cacheCullPercentage" type="numeric" required="false" default="10" />
+	<cfargument name="cacheCullInterval" type="numeric" required="false" default="5" />
+	<cfargument name="maximumItemsToCache" type="numeric" required="false" default="5000" />
+	<cfargument name="cacheDatePart" type="string" required="false" default="n" />
 	<cfscript>
 		var loc = {};
+		
+		// update our storage arguments to have the correct casing
+		arguments.storage = capitalize(LCase(arguments.storage));
 		
 		// setup our instance scope
 		variables.$instance = {};
@@ -32,7 +35,7 @@
 		if (variables.$instance.strategy.evictOnSet())
 			variables.$instance.cache.evict(strategy=variables.$instance.strategy, currentTime=arguments.currentTime);
 		
-		if (count() < variables.$instance.maximumItemsToCache)
+		if (count() lt variables.$instance.maximumItemsToCache)
 		{
 			// set our stats in the cache object
 			loc.cacheItem = {};
@@ -96,4 +99,8 @@
 
 <cffunction name="clear" returntype="void" access="public" output="false">
 	<cfreturn variables.$instance.cache.flush()>
+</cffunction>
+
+<cffunction name="capacity" returntype="numeric" access="public" output="false">
+	<cfreturn variables.$instance.maximumItemsToCache />
 </cffunction>
