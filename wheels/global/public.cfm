@@ -296,7 +296,12 @@
 	<cfargument name="$URLRewriting" type="string" required="false" default="#application.wheels.URLRewriting#">
 	<cfscript>
 		var loc = {};
-		$args(name="URLFor", args=arguments);
+		
+		loc.returnValue = $args(name="URLFor", args=arguments, cachable=true);
+		// only run our URLFor code if we do not have a cached result
+		if (StructKeyExists(loc, "returnValue"))
+			return loc.returnValue;
+		
 		loc.params = {};
 		if (StructKeyExists(variables, "params"))
 			StructAppend(loc.params, variables.params, true);
