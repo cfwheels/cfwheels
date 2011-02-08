@@ -48,23 +48,23 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = $args(name="linkTo", cachable=true, args=arguments);
-		if (!StructKeyExists(loc, "returnValue"))
-		{
-			// only run our linkTo code if we do not have a cached result
-			if (Len(arguments.confirm))
-				arguments["data-confirm"] = JSStringFormat(arguments.confirm);
-			if (StructKeyExists(arguments, "remote") && IsBoolean(arguments.remote))
-				arguments["data-remote"] = arguments.remote;
-			if (!StructKeyExists(arguments, "href"))
-				arguments.href = URLFor(argumentCollection=arguments);
-			arguments.href = toXHTML(arguments.href);
-			if (!Len(arguments.text))
-				arguments.text = arguments.href;
-			loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port,remote";
-			if (Len(arguments.route))
-				loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
-			loc.returnValue = $element(name="a", skip=loc.skip, content=arguments.text, attributes=arguments);
-		}
+		// only run our linkTo code if we do not have a cached result
+		if (StructKeyExists(loc, "returnValue"))
+			return loc.returnValue;
+			
+		if (Len(arguments.confirm))
+			arguments["data-confirm"] = JSStringFormat(arguments.confirm);
+		if (StructKeyExists(arguments, "remote") && IsBoolean(arguments.remote))
+			arguments["data-remote"] = arguments.remote;
+		if (!StructKeyExists(arguments, "href"))
+			arguments.href = URLFor(argumentCollection=arguments);
+		arguments.href = toXHTML(arguments.href);
+		if (!Len(arguments.text))
+			arguments.text = arguments.href;
+		loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port,remote";
+		if (Len(arguments.route))
+			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
+		loc.returnValue = $element(name="a", skip=loc.skip, content=arguments.text, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
