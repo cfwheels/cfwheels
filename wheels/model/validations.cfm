@@ -395,6 +395,7 @@
 		// argument value
 		for (loc.i in arguments)
 		{
+			loc.i = LCase(loc.i);
 			loc.value = arguments[loc.i];
 			if (IsSimpleValue(loc.value) AND len(loc.value))
 			{
