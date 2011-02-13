@@ -142,6 +142,12 @@
 
 
 	<!--- validatesLengthOf --->
+	<cffunction name="test_validatesLengthOf_maximum_minimum_invalid">
+		<cfset loc.user.firstname = "thi">
+		<cfset loc.user.validatesLengthOf(property="firstname", minimum="5", maximum="20")>
+		<cfset assert('!loc.user.valid()')>
+	</cffunction>
+	
 	<cffunction name="test_validatesLengthOf_maximum_valid">
 		<cfset loc.user.firstname = "thisisatestagain">
 		<cfset loc.user.validatesLengthOf(property="firstname", maximum="20")>
