@@ -11,140 +11,24 @@
 	<cfscript>
 		var loc = {};
 
-		loc.returnValue = Duplicate(arguments.formScope);
-		StructAppend(loc.returnValue, arguments.urlScope, true);
-		
-		// get rid of the fieldnames
-		StructDelete(loc.returnValue, "fieldnames", false);
-
-		// go through the matching route pattern and add URL variables from the route to the struct
-		loc.iEnd = ListLen(arguments.route.pattern, "/");
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			loc.item = ListGetAt(arguments.route.pattern, loc.i, "/");
-			if (Left(loc.item, 1) == "[")
-				loc.returnValue[ReplaceList(loc.item, "[,]", "")] = ListGetAt(arguments.path, loc.i, "/");
-		}
-
-		// decrypt all values except controller and action
-		if (application.wheels.obfuscateUrls)
-		{
-			for (loc.key in loc.returnValue)
-			{
-				if (loc.key != "controller" && loc.key != "action")
-				{
-					try
-					{
-						loc.returnValue[loc.key] = deobfuscateParam(loc.returnValue[loc.key]);
-					}
-					catch(Any e)
-					{}
-				}
-			}
-		}
-
-		if (StructCount(loc.returnValue))
-		{
-			// loop through form variables, merge any date variables into one, fix checkbox submissions
-			loc.dates = {};
-			for (loc.key in loc.returnValue)
-			{
-				if (FindNoCase("($checkbox)", loc.key))
-				{
-					// if no other form parameter exists with this name it means that the checkbox was left 
-					// blank and therefore we force the value to the unchecked values for the checkbox 
-					// (to get around the problem that unchecked checkboxes don't post at all)
-					loc.formParamName = ReplaceNoCase(loc.key, "($checkbox)", "");
-					if (!StructKeyExists(loc.returnValue, loc.formParamName))
-						loc.returnValue[loc.formParamName] = loc.returnValue[loc.key];
-					StructDelete(loc.returnValue, loc.key);
-				}
-				else if (REFindNoCase(".*\((\$year|\$month|\$day|\$hour|\$minute|\$second|\$ampm)\)$", loc.key))
-				{
-					loc.temp = ListToArray(loc.key, "(");
-					loc.firstKey = loc.temp[1];
-					loc.secondKey = SpanExcluding(loc.temp[2], ")");
-
-					if (!StructKeyExists(loc.dates, loc.firstKey))
-						loc.dates[loc.firstKey] = {};
-					loc.dates[loc.firstKey][ReplaceNoCase(loc.secondKey, "$", "")] = loc.returnValue[loc.key];
-				}
-			}
-			for (loc.key in loc.dates)
-			{
-				if (!StructKeyExists(loc.dates[loc.key], "year"))
-					loc.dates[loc.key].year = 1899;
-				if (!StructKeyExists(loc.dates[loc.key], "month"))
-					loc.dates[loc.key].month = 1;
-				if (!StructKeyExists(loc.dates[loc.key], "day"))
-					loc.dates[loc.key].day = 1;
-				if (!StructKeyExists(loc.dates[loc.key], "hour"))
-					loc.dates[loc.key].hour = 0;
-				if (!StructKeyExists(loc.dates[loc.key], "minute"))
-					loc.dates[loc.key].minute = 0;
-				if (!StructKeyExists(loc.dates[loc.key], "second"))
-					loc.dates[loc.key].second = 0;
-				if (StructKeyExists(loc.dates[loc.key], "ampm")) {
-					if (loc.dates[loc.key].ampm IS "AM" && loc.dates[loc.key].hour EQ 12)
-						loc.dates[loc.key].hour = 0;
-					else if (loc.dates[loc.key].ampm IS "PM")
-						loc.dates[loc.key].hour += 12;
-				}
-				if (!StructKeyExists(loc.returnValue, loc.key) || !IsArray(loc.returnValue[loc.key]))
-					loc.returnValue[loc.key] = [];
-				try
-				{
-					loc.returnValue[loc.key] = CreateDateTime(loc.dates[loc.key].year, loc.dates[loc.key].month, loc.dates[loc.key].day, loc.dates[loc.key].hour, loc.dates[loc.key].minute, loc.dates[loc.key].second);
-				}
-				catch(Any e)
-				{
-					loc.returnValue[loc.key] = "";
-				}
-				
-				if (StructKeyExists(loc.returnValue, "#loc.key#($year)"))
-					StructDelete(loc.returnValue, "#loc.key#($year)");
-				if (StructKeyExists(loc.returnValue, "#loc.key#($month)"))
-					StructDelete(loc.returnValue, "#loc.key#($month)");
-				if (StructKeyExists(loc.returnValue, "#loc.key#($day)"))
-					StructDelete(loc.returnValue, "#loc.key#($day)");
-				if (StructKeyExists(loc.returnValue, "#loc.key#($hour)"))
-					StructDelete(loc.returnValue, "#loc.key#($hour)");
-				if (StructKeyExists(loc.returnValue, "#loc.key#($minute)"))
-					StructDelete(loc.returnValue, "#loc.key#($minute)");
-				if (StructKeyExists(loc.returnValue, "#loc.key#($second)"))
-					StructDelete(loc.returnValue, "#loc.key#($second)");
-			}
-			
-			// add form variables to the params struct
-			$createNestedParamStruct(params=loc.returnValue);
-		}
-
+		loc.params = {};
+		loc.params = $mergeURLAndFormScopes(loc.params, arguments.urlScope, arguments.formScope);
+		loc.params = $mergeRoutePattern(loc.params, arguments.route.pattern, arguments.path);
+		loc.params = $decryptParams(loc.params);
+		loc.params = $translateBlankCheckBoxSubmissions(loc.params);
+		loc.params = $translateDatePartSubmissions(loc.params);
+		loc.params = $createNestedParamStruct(loc.params);
 		/***********************************************
 		*	We now do the routing and controller
 		*	params after we have built all other params
 		*	so that we don't have more logic around
 		*	params in arrays
 		***********************************************/
-		
-		// add controller and action unless they already exist
-		if (!StructKeyExists(loc.returnValue, "controller"))
-			loc.returnValue.controller = arguments.route.controller;
-		if (!StructKeyExists(loc.returnValue, "action"))
-			loc.returnValue.action = arguments.route.action;
-		
-		// add in our format if it is available
-		if (StructKeyExists(arguments.route, "formatVariable") && Len(arguments.format))
-			loc.returnValue[arguments.route.formatVariable] = arguments.format;
-
-		// convert controller to upperCamelCase and action to normal camelCase
-		loc.returnValue.controller = REReplace(loc.returnValue.controller, "-([a-z])", "\u\1", "all");
-		loc.returnValue.action = REReplace(loc.returnValue.action, "-([a-z])", "\u\1", "all");
-
-		// add name of route to params if a named route is running
-		if (StructKeyExists(arguments.route, "name") && Len(arguments.route.name) && !StructKeyExists(loc.returnValue, "route"))
-			loc.returnValue.route = arguments.route.name;
+		loc.params = $ensureControllerAndAction(loc.params, arguments.route);
+		loc.params = $addRouteFormat(loc.params, arguments.route, arguments.format);
+		loc.params = $addRouteName(loc.params, arguments.route);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn loc.params>
 </cffunction>
 
 <cffunction name="$createNestedParamStruct" returntype="struct" access="public" output="false">
@@ -297,3 +181,219 @@
 	</cfscript>
 	<cfreturn loc.controller.response()>
 </cffunction>
+
+<cffunction name="$mergeURLAndFormScopes" returntype="struct" access="public" output="false"
+	hint="merges the url and form scope into a single structure. url scope has presidence">
+	<cfargument name="params" type="struct" required="true">
+	<cfargument name="urlScope" type="struct" required="true">
+	<cfargument name="formScope" type="struct" required="true">
+	<cfscript>
+		structAppend(arguments.params, arguments.formScope, true);
+		structAppend(arguments.params, arguments.urlScope, true);
+	
+		// get rid of the fieldnames
+		StructDelete(arguments.params, "fieldnames", false);
+	</cfscript>
+	<cfreturn arguments.params>
+</cffunction>
+
+<cffunction name="$mergeRoutePattern" returntype="struct" access="public" output="false"
+	hint="parses the route pattern. identifies the variable markers within the pattern and assigns the value from the url variables with the path">
+	<cfargument name="params" type="struct" required="true">
+	<cfargument name="pattern" type="string" required="true">
+	<cfargument name="path" type="string" required="true">
+	<cfscript>
+		var loc = {};
+		loc.iEnd = ListLen(arguments.pattern, "/");
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.item = ListGetAt(arguments.pattern, loc.i, "/");
+			if (Left(loc.item, 1) == "[")
+			{
+				arguments.params[ReplaceList(loc.item, "[,]", "")] = ListGetAt(arguments.path, loc.i, "/");
+			}
+		}
+	</cfscript>
+	<cfreturn arguments.params>
+</cffunction>
+
+<cffunction name="$decryptParams" returntype="struct" access="public" output="false"
+	hint="loops through the params struct passed in and attempts to deobfuscate them. ignores the controller and action params values.">
+	<cfargument name="params" type="struct" required="true">
+	<cfscript>
+		var loc = {};
+		if (application.wheels.obfuscateUrls)
+		{
+			for (loc.key in arguments.params)
+			{
+				if (loc.key != "controller" && loc.key != "action")
+				{
+					try
+					{
+						arguments.params[loc.key] = deobfuscateParam(arguments.params[loc.key]);
+					}
+					catch(Any e)
+					{}
+				}
+			}
+		}
+	</cfscript>
+	<cfreturn arguments.params>
+</cffunction>
+
+<cffunction name="$translateBlankCheckBoxSubmissions" returntype="struct" access="public" output="false"
+	hint="loops through the params struct and handle the cases where checkboxes are unchecked">
+	<cfargument name="params" type="struct" required="true">
+	<cfscript>
+		var loc = {};
+		for (loc.key in arguments.params)
+		{
+			if (FindNoCase("($checkbox)", loc.key))
+			{
+				// if no other form parameter exists with this name it means that the checkbox was left 
+				// blank and therefore we force the value to the unchecked values for the checkbox 
+				// (to get around the problem that unchecked checkboxes don't post at all)
+				loc.formParamName = ReplaceNoCase(loc.key, "($checkbox)", "");
+				if (!StructKeyExists(arguments.params, loc.formParamName))
+				{
+					arguments.params[loc.formParamName] = arguments.params[loc.key];
+				}
+				StructDelete(arguments.params, loc.key, false);
+			}
+		}
+	</cfscript>
+	<cfreturn arguments.params>
+</cffunction>
+
+<cffunction name="$translateDatePartSubmissions" returntype="struct" access="public" output="false"
+	hint="combines date parts into a single value">
+	<cfargument name="params" type="struct" required="true">
+	<cfscript>
+		var loc = {};
+		loc.dates = {};
+
+		for (loc.key in arguments.params)
+		{
+			if (REFindNoCase(".*\((\$year|\$month|\$day|\$hour|\$minute|\$second|\$ampm)\)$", loc.key))
+			{
+				loc.temp = ListToArray(loc.key, "(");
+				loc.firstKey = loc.temp[1];
+				loc.secondKey = SpanExcluding(loc.temp[2], ")");
+	
+				if (!StructKeyExists(loc.dates, loc.firstKey))
+				{
+					loc.dates[loc.firstKey] = {};
+				}
+				loc.dates[loc.firstKey][ReplaceNoCase(loc.secondKey, "$", "")] = arguments.params[loc.key];
+			}
+		}
+
+		for (loc.key in loc.dates)
+		{
+			if (!StructKeyExists(loc.dates[loc.key], "year"))
+			{
+				loc.dates[loc.key].year = 1899;
+			}
+			if (!StructKeyExists(loc.dates[loc.key], "month"))
+			{
+				loc.dates[loc.key].month = 1;
+			}
+			if (!StructKeyExists(loc.dates[loc.key], "day"))
+			{
+				loc.dates[loc.key].day = 1;
+			}
+			if (!StructKeyExists(loc.dates[loc.key], "hour"))
+			{
+				loc.dates[loc.key].hour = 0;
+			}
+			if (!StructKeyExists(loc.dates[loc.key], "minute"))
+			{
+				loc.dates[loc.key].minute = 0;
+			}
+			if (!StructKeyExists(loc.dates[loc.key], "second"))
+			{
+				loc.dates[loc.key].second = 0;
+			}
+			if (StructKeyExists(loc.dates[loc.key], "ampm"))
+			{
+				if (loc.dates[loc.key].ampm IS "AM" && loc.dates[loc.key].hour EQ 12)
+				{
+					loc.dates[loc.key].hour = 0;
+				}
+				else if (loc.dates[loc.key].ampm IS "PM")
+				{
+					loc.dates[loc.key].hour += 12;
+				}
+			}
+			if (!StructKeyExists(arguments.params, loc.key) || !IsArray(arguments.params[loc.key]))
+			{
+				arguments.params[loc.key] = [];
+			}
+			try
+			{
+				arguments.params[loc.key] = CreateDateTime(loc.dates[loc.key].year, loc.dates[loc.key].month, loc.dates[loc.key].day, loc.dates[loc.key].hour, loc.dates[loc.key].minute, loc.dates[loc.key].second);
+			}
+			catch(Any e)
+			{
+				arguments.params[loc.key] = "";
+			}
+			
+			StructDelete(arguments.params, "#loc.key#($year)", false);
+			StructDelete(arguments.params, "#loc.key#($month)", false);
+			StructDelete(arguments.params, "#loc.key#($day)", false);
+			StructDelete(arguments.params, "#loc.key#($hour)", false);
+			StructDelete(arguments.params, "#loc.key#($minute)", false);
+			StructDelete(arguments.params, "#loc.key#($second)", false);
+		}
+	</cfscript>
+	<cfreturn arguments.params>
+</cffunction>
+
+<cffunction name="$ensureControllerAndAction" returntype="struct" access="public" output="false"
+	hint="ensure that the controller and action params exists and camelized">
+	<cfargument name="params" type="struct" required="true">
+	<cfargument name="route" type="struct" required="true">
+	<cfscript>
+		if (!StructKeyExists(arguments.params, "controller"))
+		{
+			arguments.params.controller = arguments.route.controller;
+		}
+		if (!StructKeyExists(arguments.params, "action"))
+		{
+			arguments.params.action = arguments.route.action;
+		}
+
+		// convert controller to upperCamelCase and action to normal camelCase
+		arguments.params.controller = REReplace(arguments.params.controller, "-([a-z])", "\u\1", "all");
+		arguments.params.action = REReplace(arguments.params.action, "-([a-z])", "\u\1", "all");
+	</cfscript>
+	<cfreturn arguments.params>
+</cffunction>
+
+<cffunction name="$addRouteFormat" returntype="struct" access="public" output="false"
+	hint="adds in the format variable from the route if it exists">
+	<cfargument name="params" type="struct" required="true">
+	<cfargument name="route" type="struct" required="true">
+	<cfargument name="format" type="string" required="true">
+	<cfscript>
+		if (StructKeyExists(arguments.route, "formatVariable") && Len(arguments.format))
+		{
+			arguments.params[arguments.route.formatVariable] = arguments.format;
+		}
+	</cfscript>
+	<cfreturn arguments.params>
+</cffunction>
+
+<cffunction name="$addRouteName" returntype="struct" access="public" output="false"
+	hint="adds in the name variable from the route if it exists">
+	<cfargument name="params" type="struct" required="true">
+	<cfargument name="route" type="struct" required="true">
+	<cfscript>
+		if (StructKeyExists(arguments.route, "name") && Len(arguments.route.name) && !StructKeyExists(arguments.params, "route"))
+		{
+			arguments.params.route = arguments.route.name;
+		}
+	</cfscript>
+	<cfreturn arguments.params>
+</cffunction>
+
