@@ -973,7 +973,14 @@
 		loc.iEnd = ArrayLen(loc.sql);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			ArrayAppend(loc.sql, loc.sql2[loc.i]);
-		loc.ins = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize, $primaryKey=primaryKeys());
+
+		// map the primary keys down to the SQL columns before calling
+		loc.primaryKeys = ListToArray(primaryKeys());
+		loc.iEnd = ArrayLen(loc.primaryKeys);
+		for(loc.i = 1; loc.i LTE loc.iEnd; loc.i++)
+			loc.primaryKeys[loc.i] = variables.wheels.class.properties[loc.primaryKeys[loc.i]].column;
+
+		loc.ins = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize, $primaryKey=ArrayToList(loc.primaryKeys));
 		loc.generatedKey = variables.wheels.class.adapter.$generatedKey();
 		if (StructKeyExists(loc.ins.result, loc.generatedKey))
 			this[primaryKeys(1)] = loc.ins.result[loc.generatedKey];
