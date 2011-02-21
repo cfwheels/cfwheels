@@ -381,7 +381,7 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 <!--- cities and shops --->
 <cfloop from="1" to="5" index="loc.i">
 	<cfset model("city").create(
-		countyid="3"
+		id="3"
 		,citycode="#loc.i#"
 		,name="county #loc.i#"
 	)>
