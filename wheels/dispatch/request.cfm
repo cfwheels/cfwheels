@@ -4,7 +4,6 @@
 
 <cffunction name="$createParams" returntype="struct" access="public" output="false">
 	<cfargument name="path" type="string" required="true">
-	<cfargument name="format" type="string" required="true">
 	<cfargument name="route" type="struct" required="true">
 	<cfargument name="formScope" type="struct" required="true">
 	<cfargument name="urlScope" type="struct" required="true">
@@ -13,7 +12,7 @@
 
 		loc.params = {};
 		loc.params = $mergeURLAndFormScopes(loc.params, arguments.urlScope, arguments.formScope);
-		loc.params = $mergeRoutePattern(loc.params, arguments.route.pattern, arguments.path);
+		loc.params = $mergeRoutePattern(loc.params, arguments.route, arguments.path);
 		loc.params = $decryptParams(loc.params);
 		loc.params = $translateBlankCheckBoxSubmissions(loc.params);
 		loc.params = $translateDatePartSubmissions(loc.params);
@@ -25,7 +24,7 @@
 		*	params in arrays
 		***********************************************/
 		loc.params = $ensureControllerAndAction(loc.params, arguments.route);
-		loc.params = $addRouteFormat(loc.params, arguments.route, arguments.format);
+		loc.params = $addRouteFormat(loc.params, arguments.route);
 		loc.params = $addRouteName(loc.params, arguments.route);
 	</cfscript>
 	<cfreturn loc.params>
@@ -69,16 +68,16 @@
 
 <cffunction name="$findMatchingRoute" returntype="struct" access="public" output="false">
 	<cfargument name="path" type="string" required="true">
-	<cfargument name="format" type="string" required="true" />
 	<cfscript>
 		var loc = {};
-		
+	
 		loc.iEnd = ArrayLen(application.wheels.routes);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.format = false;
+			loc.format = "";
 			if (StructKeyExists(application.wheels.routes[loc.i], "format"))
 				loc.format = application.wheels.routes[loc.i].format;
+				
 			loc.currentRoute = application.wheels.routes[loc.i].pattern;
 			if (loc.currentRoute == "*") {
 				loc.returnValue = application.wheels.routes[loc.i];
@@ -104,8 +103,10 @@
 				if (loc.match)
 				{
 					loc.returnValue = application.wheels.routes[loc.i];
-					if (Len(arguments.format) && !IsBoolean(loc.format))
-						loc.returnValue[ReplaceList(loc.format, "[,]", "")] = arguments.format;
+					if (len(loc.format))
+					{
+						loc.returnValue[ReplaceList(loc.format, "[,]", "")] = $getFormatFromRequest(pathInfo=arguments.path);
+					}
 					break;
 				}
 			}
@@ -125,7 +126,7 @@
 		if (arguments.pathInfo == arguments.scriptName || arguments.pathInfo == "/" || arguments.pathInfo == "")
 			returnValue = "";
 		else
-			returnValue = ListFirst(Right(arguments.pathInfo, Len(arguments.pathInfo)-1), ".");
+			returnValue = Right(arguments.pathInfo, Len(arguments.pathInfo)-1);
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
@@ -150,11 +151,7 @@
 		if (application.wheels.showDebugInformation)
 			$debugPoint("setup");
 
-		// determine the path from the url, find a matching route for it and create the params struct
-		loc.path = $getPathFromRequest(pathInfo=arguments.pathInfo, scriptName=arguments.scriptName);
-		loc.format = $getFormatFromRequest(pathInfo=arguments.pathInfo);
-		loc.route = $findMatchingRoute(path=loc.path, format=loc.format);
-		loc.params = $createParams(path=loc.path, format=loc.format, route=loc.route, formScope=arguments.formScope, urlScope=arguments.urlScope);
+		loc.params = $paramParser(argumentsCollection=arguments);
 		
 		// set params in the request scope as well so we can display it in the debug info outside of the dispatch / controller context
 		request.wheels.params = loc.params;
@@ -182,6 +179,19 @@
 	<cfreturn loc.controller.response()>
 </cffunction>
 
+<cffunction name="$paramParser" returntype="struct" access="public" output="false">
+	<cfargument name="pathInfo" type="string" required="false" default="#request.cgi.path_info#">
+	<cfargument name="scriptName" type="string" required="false" default="#request.cgi.script_name#">
+	<cfargument name="formScope" type="struct" required="false" default="#form#">
+	<cfargument name="urlScope" type="struct" required="false" default="#url#">
+	<cfscript>
+		var loc = {};
+		loc.path = $getPathFromRequest(pathInfo=arguments.pathInfo, scriptName=arguments.scriptName);
+		loc.route = $findMatchingRoute(path=loc.path);
+		return $createParams(path=loc.path, route=loc.route, formScope=arguments.formScope, urlScope=arguments.urlScope);
+	</cfscript>
+</cffunction>
+
 <cffunction name="$mergeURLAndFormScopes" returntype="struct" access="public" output="false"
 	hint="merges the url and form scope into a single structure. url scope has presidence">
 	<cfargument name="params" type="struct" required="true">
@@ -200,14 +210,18 @@
 <cffunction name="$mergeRoutePattern" returntype="struct" access="public" output="false"
 	hint="parses the route pattern. identifies the variable markers within the pattern and assigns the value from the url variables with the path">
 	<cfargument name="params" type="struct" required="true">
-	<cfargument name="pattern" type="string" required="true">
+	<cfargument name="route" type="struct" required="true">
 	<cfargument name="path" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.iEnd = ListLen(arguments.pattern, "/");
+		loc.iEnd = ListLen(arguments.route.pattern, "/");
+		if (StructKeyExists(arguments.route, "format"))
+		{
+			arguments.path = Reverse(ListRest(Reverse(arguments.path), "."));
+		}
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.item = ListGetAt(arguments.pattern, loc.i, "/");
+			loc.item = ListGetAt(arguments.route.pattern, loc.i, "/");
 			if (Left(loc.item, 1) == "[")
 			{
 				arguments.params[ReplaceList(loc.item, "[,]", "")] = ListGetAt(arguments.path, loc.i, "/");
@@ -374,11 +388,10 @@
 	hint="adds in the format variable from the route if it exists">
 	<cfargument name="params" type="struct" required="true">
 	<cfargument name="route" type="struct" required="true">
-	<cfargument name="format" type="string" required="true">
 	<cfscript>
-		if (StructKeyExists(arguments.route, "formatVariable") && Len(arguments.format))
+		if (StructKeyExists(arguments.route, "formatVariable") && StructKeyExists(arguments.route, "format"))
 		{
-			arguments.params[arguments.route.formatVariable] = arguments.format;
+			arguments.params[arguments.route.formatVariable] = arguments.route.format;
 		}
 	</cfscript>
 	<cfreturn arguments.params>

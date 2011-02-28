@@ -115,15 +115,4 @@
 		<cfset assert('loc.params.obj["published-year"] eq 2000')>
 	</cffunction>
 	
-	<cffunction name="test_route_with_format">
-		<cfscript>
-			loc.args.path = "people/index";
-			loc.args.format = "pdf";
-			loc.args.route = {pattern="[controller]/[action].[format]", controller="wheels", action="wheels", formatVariable="format", format="[format]"};
-			loc.params = loc.dispatch.$createParams(argumentCollection=loc.args);
-			assert('StructKeyExists(loc.params, "format") eq true');
-			assert('loc.params.format eq "pdf"');
-		</cfscript>
-	</cffunction>
-
 </cfcomponent>
