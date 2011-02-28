@@ -954,7 +954,6 @@
 	<cfargument name="reload" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
-		//$dump(variables.wheels.class.properties);
 		if (variables.wheels.class.timeStampingOnCreate)
 			$timestampProperty(property=variables.wheels.class.timeStampOnCreateProperty);
 		if (application.wheels.setUpdatedAtOnCreate && variables.wheels.class.timeStampingOnUpdate)
