@@ -27,5 +27,10 @@
 			<cftransaction action="rollback" />
 		</cftransaction>
 	</cffunction>
+	
+   	<cffunction name="test_columns_that_are_not_null_should_allow_for_blank_string_during_create">
+		<cfset loc.author = model("author").create(firstName="Test", lastName="", transaction="rollback")>
+		<cfset assert("IsObject(loc.author) AND !len(loc.author.lastName)")>
+	</cffunction>
 
 </cfcomponent>
