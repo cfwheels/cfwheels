@@ -115,4 +115,13 @@
 		<cfset assert('loc.params.obj["published-year"] eq 2000')>
 	</cffunction>
 	
+	<cffunction name="test_controller_in_upper_camel_case">
+		<cfset loc.args.formScope["controller"] = "wheels-test">
+		<cfset loc.params = loc.dispatch.$createParams(argumentCollection=loc.args)>
+		<cfset assert('Compare(loc.params.controller, "WheelsTest") eq 0')>
+		<cfset loc.args.formScope["controller"] = "wheels">
+		<cfset loc.params = loc.dispatch.$createParams(argumentCollection=loc.args)>
+		<cfset assert('Compare(loc.params.controller, "Wheels") eq 0')>
+	</cffunction>
+	
 </cfcomponent>
