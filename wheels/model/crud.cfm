@@ -449,6 +449,7 @@
 			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 			arguments.sql = $addWhereClauseParameters(sql=arguments.sql, where=arguments.where);
 			loc.returnValue = invokeWithTransaction(method="$updateAll", argumentCollection=arguments);
+			$closeTransaction(method="$updateall");
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -605,6 +606,7 @@
 			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 			arguments.sql = $addWhereClauseParameters(sql=arguments.sql, where=arguments.where);
 			loc.returnValue = invokeWithTransaction(method="$deleteAll", argumentCollection=arguments);
+			$closeTransaction(method="$deleteall");
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -748,14 +750,16 @@
 <cffunction name="$delete" returntype="boolean" access="public" output="false">
 	<cfscript>
 		var loc = {};
+		loc.ret = false;
 		if ($callback("beforeDelete", arguments.callbacks))
 		{
 			$deleteDependents(); // delete dependents before the main record in case of foreign key constraints
 			loc.del = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
 			if (loc.del.result.recordCount eq 1 and $callback("afterDelete", arguments.callbacks))
-				return true;
+				loc.ret = true;
 		}
-		return false;
+		$closeTransaction(method="$delete");
+		return loc.ret;
 	</cfscript>
 </cffunction>
 
@@ -821,6 +825,8 @@
 	<cfargument name="validate" type="boolean" required="true" />
 	<cfargument name="callbacks" type="boolean" required="true" />
 	<cfscript>
+		var loc = {};
+		loc.ret = false;
 		// make sure all of our associations are set properly before saving
 		$setAssociations();
 
@@ -834,7 +840,7 @@
 					if ($saveAssociations(argumentCollection=arguments) && $callback("afterCreate", arguments.callbacks) && $callback("afterSave", arguments.callbacks))
 					{
 						$updatePersistedProperties();
-						return true;
+						loc.ret = true;
 					}
 				}
 			}
@@ -846,13 +852,14 @@
 					if ($callback("afterUpdate", arguments.callbacks) && $callback("afterSave", arguments.callbacks))
 					{
 						$updatePersistedProperties();
-						return true;
+						loc.ret = true;
 					}
 				}
 			}
 		}
+		$closeTransaction(method="$save");
 	</cfscript>
-	<cfreturn false />
+	<cfreturn loc.ret />
 </cffunction>
 
 <cffunction name="update" returntype="boolean" access="public" output="false" hint="Updates the object with the supplied properties and saves it to the database. Returns `true` if the object was saved successfully to the database and `false` otherwise."

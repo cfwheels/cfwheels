@@ -39,7 +39,7 @@
 	<cffunction name="test_deleteAll_with_instantiate_rollbacks_when_callback_returns_false">
 		<cfset model("tagFalseCallbacks").deleteAll(instantiate=true)>
 		<cfset loc.results = model("tagFalseCallbacks").findAll()>
-		<cfset assert("loc.results.recordcount IS 1")>
+		<cfset assert("loc.results.recordcount IS 8")>
 	</cffunction>
 
 	<cffunction name="test_updateAll_with_instantiate_rollbacks_when_callback_returns_false">
@@ -79,7 +79,7 @@
 	<cffunction name="test_deleteAll_with_rollback">
 		<cfset model("tag").deleteAll(instantiate=true, transaction="rollback")>
 		<cfset loc.results = model("tag").findAll()>
-		<cfset assert("loc.results.recordcount IS 1")>
+		<cfset assert("loc.results.recordcount IS 8")>
 	</cffunction>
 
 	<cffunction name="test_updateAll_with_rollback">
@@ -141,28 +141,33 @@
 		<cftransaction>
 			<cfset model("tag").updateAll(name="Kermit", instantiate=true, transaction="none")>
 			<cfset loc.results = model("tag").findAll(where="name = 'Kermit'")>
-			<cfset assert("loc.results.recordcount IS 1")>
+			<cfset assert("loc.results.recordcount IS 8")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 	</cffunction>
 
-	<cffunction name="test_nested_transaction_within_callback">
+	<cffunction name="test_nested_transaction_within_callback_respect_initial_transaction_mode">
+		<cfset loc.postsBefore = model('post').count(reload=true)>
 		<cfset loc.tag = model("tagWithDataCallbacks").create(name="Kermit", description="The Frog", transaction="rollback")>
+		<cfset loc.postsAfter = model('post').count(reload=true)>
 		<cfset assert("IsObject(loc.tag)")>
+		<cfset assert("loc.postsBefore eq loc.postsAfter")>
 	</cffunction>
 
 	<cffunction name="test_nested_transaction_within_callback_with_transactions_disabled">
-		<cftransaction>
+ 		<cftransaction>
 			<cfset loc.tag = model("tagWithDataCallbacks").create(name="Kermit", description="The Frog", transaction="none")>
-			<cfset assert("IsObject(loc.tag)")>
-			<cftransaction action="rollback" />
+			<cfset loc.results = model("tag").findAll(where="name = 'Kermit'")>
+ 			<cftransaction action="rollback" />
 		</cftransaction>
+		<cfset assert("IsObject(loc.tag)")>
+		<cfset assert("loc.results.recordcount IS 1")>
 	</cffunction>
 		
 	<cffunction name="test_transaction_closed_after_rollback">
 		<cfset loc.hash = model("tag").$hashedConnectionArgs()>
 		<cfset loc.tag = model("tagWithDataCallbacks").create(name="Kermit", description="The Frog", transaction="rollback")>
-		<cfset assert('request.wheels.transactions[loc.hash] eq false')>
+		<cfset assert('StructIsEmpty(request.wheels.transactions)')>
 	</cffunction>
 	
 	<cffunction name="test_transaction_closed_after_none">
@@ -171,7 +176,7 @@
 			<cfset loc.tag = model("tagWithDataCallbacks").create(name="Kermit", description="The Frog", transaction="none")>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset assert('request.wheels.transactions[loc.hash] eq false')>
+		<cfset assert('StructIsEmpty(request.wheels.transactions)')>
 	</cffunction>
 
 	<cffunction name="test_transaction_closed_when_error_raised">
@@ -180,7 +185,7 @@
 			<cfset loc.tag = model("tag").create(id="", name="Kermit", description="The Frog", transaction="rollback")>
 			<cfcatch type="any"></cfcatch>
 		</cftry>
-		<cfset assert('request.wheels.transactions[loc.hash] eq false')>
+		<cfset assert('StructIsEmpty(request.wheels.transactions)')>
 	</cffunction>
 
 	<cffunction name="test_rollback_when_error_raised">

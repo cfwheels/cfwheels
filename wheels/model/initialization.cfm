@@ -7,6 +7,7 @@
 		variables.wheels.errors = [];
 		variables.wheels.class = {};
 		variables.wheels.class.modelName = arguments.name;
+		variables.wheels.class.modelId = hash(GetMetaData(this).name);
 		variables.wheels.class.path = arguments.path;
 
 		// if our name has pathing in it, remove it and add it to the end of of the $class.path variable
