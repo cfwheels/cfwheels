@@ -89,4 +89,15 @@
 		<cfset assert('loc.changedPosts.recordcount eq 4')>
 	</cffunction>
 
+   	<cffunction name="test_columns_that_are_not_null_should_allow_for_blank_string_during_update">
+		<cftransaction action="begin">
+			<cfset loc.author = model("author").findOne(where="firstName='Tony'")>
+			<cfset loc.author.lastName = "">
+			<cfset loc.author.save()>
+			<cfset loc.author = model("author").findOne(where="firstName='Tony'")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert("IsObject(loc.author) AND !len(loc.author.lastName)")>
+	</cffunction>
+
 </cfcomponent>

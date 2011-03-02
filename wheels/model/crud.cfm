@@ -967,7 +967,7 @@
 			{
 				ArrayAppend(loc.sql, variables.wheels.class.properties[loc.key].column);
 				ArrayAppend(loc.sql, ",");
-				loc.param = {value=this[loc.key], type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale, null=!len(this[loc.key])};
+				loc.param = $buildQueryParamValues(loc.key);
 				ArrayAppend(loc.sql2, loc.param);
 				ArrayAppend(loc.sql2, ",");
 			}
@@ -1011,7 +1011,7 @@
 			if (StructKeyExists(this, loc.key) && !ListFindNoCase(primaryKeys(), loc.key) && hasChanged(loc.key))
 			{
 				ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
-				loc.param = {value = this[loc.key], type = variables.wheels.class.properties[loc.key].type, dataType = variables.wheels.class.properties[loc.key].dataType, scale = variables.wheels.class.properties[loc.key].scale, null = !len(this[loc.key])};
+				loc.param = $buildQueryParamValues(loc.key);
 				ArrayAppend(loc.sql, loc.param);
 				ArrayAppend(loc.sql, ",");
 			}
@@ -1030,6 +1030,19 @@
 </cffunction>
 
 <!--- other --->
+
+<cffunction name="$buildQueryParamValues" returntype="struct" access="public" output="false">
+	<cfargument name="property" type="string" required="true">
+	<cfscript>
+	var ret = {};
+	ret.value = this[arguments.property];
+	ret.type = variables.wheels.class.properties[arguments.property].type;
+	ret.dataType = variables.wheels.class.properties[arguments.property].dataType;
+	ret.scale = variables.wheels.class.properties[arguments.property].scale;
+	ret.null = (!len(this[arguments.property]) && variables.wheels.class.properties[arguments.property].nullable);
+	return ret;
+	</cfscript>
+</cffunction>
 
 <cffunction name="$keyLengthCheck" returntype="void" access="public" output="false"
 	hint="Makes sure that the number of keys passed in is the same as the number of keys defined for the model. If not, an error is raised.">
