@@ -1,3 +1,30 @@
+WHEELS VERSION 1.1.3 (UNRELEASED)
+
+View Enhancements
+=================
+* Allows for relative url linking to be turned off in autolink() - [James Gibson, Tony Petruzzi]
+
+Controller Enhancements
+=======================
+
+Model Enhancements
+==================
+* You can now have bracket markers for all validation arguments - #706 [Tony Petruzzi]
+* Columns marked as not null should allow for blank strings - [Tony Petruzzi]
+
+Bug Fixes
+=========
+* Fixed issue with $create supplying incorrect keys to $query - [Don Humphreys, Tony Petruzzi]
+* The original transaction mode would not be respected during during callbacks - [Andy Bellenie, Tony Petruzzi]
+* "none" transaction modes would never close - [Andy Bellenie, Tony Petruzzi]
+* Incorrect $cache argument - #671 [William Fisk, Tony Petruzzi]
+* Route formats prevented fullstops from being used in params - #666 [Tom King, Raul Riera, Tony Petruzzi]
+* Explicitly require template arugment in sendemail() - #700 [Thomas DeLoreto, Tony Petruzzi]
+* Controller in params should be upper camel case - #703 [William Fisk, Tony Petruzzi]
+* Application scope would not initialize in sub - #721 [Adam Chapman, Tony Petruzzi]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 WHEELS VERSION 1.1.2 (01/29/2011)
 
 View Enhancements
