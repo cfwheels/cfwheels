@@ -135,7 +135,7 @@
 
 	// function defaults
 	application.wheels.functions = {};
-	application.wheels.functions.autoLink = {link="all"};
+	application.wheels.functions.autoLink = {link="all", relative="true"};
 	application.wheels.functions.average = {distinct=false, parameterize=true, ifNull=""};
 	application.wheels.functions.belongsTo = {joinType="inner"};
 	application.wheels.functions.buttonTo = {onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable=""};

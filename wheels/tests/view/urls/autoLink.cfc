@@ -52,5 +52,12 @@
 		<cfset loc.e = 'Download Wheels from <a href="/cfwheels.org/download">/cfwheels.org/download</a> blah blah'>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
+	
+	<cffunction name="test_turn_off_relative_url_linking">
+		<cfset loc.str ='155 cals/3.3miles'>
+		<cfset loc.r = loc.controller.autoLink(text="#loc.str#", relative="false")>
+		<cfset loc.e = '155 cals/3.3miles'>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
 
 </cfcomponent>
