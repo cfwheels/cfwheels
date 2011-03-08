@@ -38,5 +38,26 @@
 		<cfset loc.e = '<a href="http://www.foo.uk">http://www.foo.uk</a>'>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
+	
+	<cffunction name="test_issue_656_relative_paths_escaped">
+		<cfset loc.str = 'Download Wheels from <a href="/">http://x.com/x</a> blah blah'>
+		<cfset loc.r = loc.controller.autoLink(loc.str)>
+		<cfset loc.e = 'Download Wheels from <a href="/">http://x.com/x</a> blah blah'>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+
+	<cffunction name="test_issue_656_relative_paths_link">
+		<cfset loc.str ='Download Wheels from /cfwheels.org/download blah blah'>
+		<cfset loc.r = loc.controller.autoLink(loc.str)>
+		<cfset loc.e = 'Download Wheels from <a href="/cfwheels.org/download">/cfwheels.org/download</a> blah blah'>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+	
+	<cffunction name="test_turn_off_relative_url_linking">
+		<cfset loc.str ='155 cals/3.3miles'>
+		<cfset loc.r = loc.controller.autoLink(text="#loc.str#", relative="false")>
+		<cfset loc.e = '155 cals/3.3miles'>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
 
 </cfcomponent>

@@ -10,11 +10,19 @@
 	categories="view-helper,text" functions="excerpt,highlight,simpleFormat,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="The text to create links in.">
 	<cfargument name="link" type="string" required="false" default="all" hint="Whether to link URLs, email addresses or both. Possible values are: `all` (default), `URLs` and `emailAddresses`.">
+	<cfargument name="relative" type="boolean" required="false" default="true" hint="Should we autolink relative urls">
 	<cfscript>
 		var loc = {};
 		if (arguments.link != "emailAddresses")
 		{
-			arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.|\/)[^\s\b]+)";
+			if(arguments.relative)
+			{
+				arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.|\/)[^\s\b]+)";
+			}
+			else
+			{
+				arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.)[^\s\b]+)";
+			}
 			arguments.text = $autoLinkLoop(argumentCollection=arguments);
 		}
 		if (arguments.link != "URLs")
@@ -47,7 +55,7 @@
 			loc.punctuation = ArrayToList(ReMatchNoCase(loc.PunctuationRegEx, loc.str));
 			loc.str = REReplaceNoCase(loc.str, loc.PunctuationRegEx, "", "all");
 			arguments.href = arguments.protocol & loc.str;
-			loc.element = $element("a", arguments, loc.str, "text,regex,link,domains,protocol") & loc.punctuation;
+			loc.element = $element("a", arguments, loc.str, "text,regex,link,domains,protocol,relative") & loc.punctuation;
 			arguments.text = Insert(loc.element, arguments.text, loc.match.pos[1]-1);
 			loc.startPosition = loc.match.pos[1] + len(loc.element);
 		}
