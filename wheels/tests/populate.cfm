@@ -38,7 +38,7 @@
 <cfset loc.tableList = ValueList(loc.dbinfo.table_name, chr(7))>
 
 <!--- list of tables to delete --->
-<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests">
+<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers">
 <cfloop list="#loc.tables#" index="loc.i">
 	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
 		<cftry>
@@ -104,6 +104,16 @@ CREATE TABLE collisiontests
 	id #loc.identityColumnType#
 	,method varchar(100) NOT NULL
 	,PRIMARY KEY(id)
+) #loc.storageEngine#
+</cfquery>
+
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
+CREATE TABLE combikeys
+(
+	id1 int NOT NULL
+	,id2 int NOT NULL
+	,userId int NOT NULL
+	,PRIMARY KEY(id1,id2)
 ) #loc.storageEngine#
 </cfquery>
 
@@ -185,8 +195,32 @@ CREATE TABLE shops
 CREATE TABLE tags
 (
 	id #loc.identityColumnType#
+	,parentid #loc.intColumnType# NULL
 	,name varchar(50) NOT NULL
 	,description varchar(50) NULL
+	,PRIMARY KEY(id)
+) #loc.storageEngine#
+</cfquery>
+
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
+CREATE TABLE tblusers
+(
+	id #loc.identityColumnType#
+	,username varchar(50) NOT NULL
+	,password varchar(50) NOT NULL
+	,firstname varchar(50) NOT NULL
+	,lastname varchar(50) NOT NULL
+	,address varchar(100) NULL
+	,city varchar(50) NULL
+	,state char(2) NULL
+	,zipcode varchar(50) NULL
+	,phone varchar(20) NULL
+	,fax varchar(20) NULL
+	,birthday #loc.datetimeColumnType# NULL
+	,birthdaymonth #loc.intColumnType# NULL
+	,birthdayyear #loc.intColumnType# NULL
+	,birthtime #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NULL
+	,isactive #loc.intColumnType# NULL
 	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
@@ -213,6 +247,7 @@ CREATE TABLE users
 	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
+
 
 <!--- create oracle sequences --->
 <cfif loc.db eq "oracle">
@@ -246,7 +281,7 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 </cfquery>
 
 <!--- populate with data --->
-<cfset loc.user = model("USER").create(
+<cfset loc.user = model("user").create(
 	username='tonyp'
 	,password='tonyp123'
 	,firstname='Tony'
@@ -364,6 +399,9 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 	</cfloop>
 </cfloop>
 
+<!--- create a profile with an author --->
+<cfset model("profile").create(dateOfBirth="1/1/1970", bio="Unknown Author")>
+
 <cfset loc.posts = model("post").findAll(order="id")>
 
 <cfloop query="loc.posts">
@@ -394,12 +432,27 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 </cfloop>
 
 <!--- tags --->
-<cfset model("tag").create(
-	name="releases"
-	,description="testdesc"
-)>
+<cfset loc.releases = model("tag").create(name="releases",description="testdesc")>
+<cfset model("tag").create(name="minor",description="a minor release", parentid=loc.releases.id)>
+<cfset model("tag").create(name="major",description="a major release", parentid=loc.releases.id)>
+<cfset model("tag").create(name="point",description="a point release", parentid=loc.releases.id)>
+
+<cfset loc.fruit = model("tag").create(name="fruit",description="something to eat")>
+<cfset model("tag").create(name="apple",description="ummmmmm good", parentid=loc.fruit.id)>
+<cfset model("tag").create(name="pear",description="rhymes with Per", parentid=loc.fruit.id)>
+<cfset model("tag").create(name="banana",description="peal it", parentid=loc.fruit.id)>
+
+<!--- classifications --->
+<cfset model("classification").create(postid=1,tagid=7)>
 
 <!--- collisiontests --->
 <cfset model("collisiontest").create(
 	method="test"
+)>
+
+<!--- collisiontests --->
+<cfset model("CombiKey").create(
+	id1="1",
+	id2="1",
+	userId="1"
 )>
