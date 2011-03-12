@@ -14,7 +14,7 @@
 		)>
 	'
 	categories="controller-request,miscellaneous" chapters="sending-email" functions="">
-	<cfargument name="template" type="string" required="true" hint="The path to the email template or two paths if you want to send a multipart email. if the `detectMultipart` argument is `false`, the template for the text version should be the first one in the list. This argument is also aliased as `templates`.">
+	<cfargument name="template" type="string" required="false" default="" hint="The path to the email template or two paths if you want to send a multipart email. if the `detectMultipart` argument is `false`, the template for the text version should be the first one in the list. This argument is also aliased as `templates`.">
 	<cfargument name="from" type="string" required="true" hint="Email address to send from.">
 	<cfargument name="to" type="string" required="true" hint="List of email addresses to send the email to.">
 	<cfargument name="subject" type="string" required="true" hint="The subject line of the email.">
