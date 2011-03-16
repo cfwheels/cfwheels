@@ -162,14 +162,21 @@
 	<cfargument name="required" type="boolean" required="false" default="false">
 	<cfargument name="extendedInfo" type="string" required="false" default="">
 	<cfscript>
-		if (StructKeyExists(arguments.args, ListGetAt(arguments.combine, 2)))
+		var loc = {};
+		loc.first = ListGetAt(arguments.combine, 1);
+		loc.second = ListGetAt(arguments.combine, 2);
+		if (StructKeyExists(arguments.args, loc.second))
 		{
-			arguments.args[ListGetAt(arguments.combine, 1)] = arguments.args[ListGetAt(arguments.combine, 2)];
-			StructDelete(arguments.args, ListGetAt(arguments.combine, 2));
+			arguments.args[loc.first] = arguments.args[loc.second];
+			StructDelete(arguments.args, loc.second);
 		}
 		if (arguments.required && application.wheels.showErrorInformation)
-			if (!StructKeyExists(arguments.args, ListGetAt(arguments.combine, 2)) && !Len(arguments.args[ListGetAt(arguments.combine, 1)]))
-				$throw(type="Wheels.IncorrectArguments", message="The `#ListGetAt(arguments.combine, 2)#` or `#ListGetAt(arguments.combine, 1)#` argument is required but was not passed in.", extendedInfo="#arguments.extendedInfo#");
+		{
+			if (!StructKeyExists(arguments.args, loc.first))
+			{
+				$throw(type="Wheels.IncorrectArguments", message="The `#loc.second#` or `#loc.first#` argument is required but was not passed in.", extendedInfo="#arguments.extendedInfo#");
+			}
+		}
 	</cfscript>
 </cffunction>
 
@@ -381,6 +388,7 @@
 	<cfargument name="reserved" type="string" required="false" default="">
 	<cfargument name="combine" type="string" required="false" default="">
 	<cfargument name="cachable" type="boolean" required="false" default="false">
+	<cfargument name="required" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
 		
@@ -411,7 +419,7 @@
 				loc.first = ListGetAt(loc.item, 1, "/");
 				loc.second = ListGetAt(loc.item, 2, "/");
 				loc.required = false;
-				if (ListLen(loc.item, "/") > 2)
+				if (ListLen(loc.item, "/") > 2 || ListFindNoCase(loc.first, arguments.required))
 				{
 					loc.required = true;
 				}
@@ -433,6 +441,19 @@
 		}
 		if (StructKeyExists(application.wheels.functions, arguments.name))
 			StructAppend(arguments.args, application.wheels.functions[arguments.name], false);
+
+		// make sure that the arguments marked as required exist
+		if (Len(arguments.required))
+		{
+			loc.iEnd = ListLen(arguments.required);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				if(!StructKeyExists(arguments.args, loc.i))
+				{
+					$throw(type="Wheels.IncorrectArguments", message="The `#loc.i#` argument is required but not passed in.");
+				}
+			}
+		}
 	</cfscript>
 </cffunction>
 
