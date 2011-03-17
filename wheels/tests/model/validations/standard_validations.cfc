@@ -382,6 +382,19 @@
 		<cfset loc.user.validatesUniquenessOf(property="firstname")>
 		<cfset assert('loc.user.valid()')>
 	</cffunction>
+	
+	<cffunction name="test_validatesUniquenessOf_takes_softdeletes_into_account">
+			<cftransaction action="begin">
+			<cfset loc.org_post = model('post').findOne()>
+			<cfset loc.properties = loc.org_post.properties()>
+			<cfset loc.new_post = model('post').new(loc.properties)>
+			<cfset loc.org_post.delete()>
+			<cfset loc.valid = loc.new_post.valid()>
+			<cfset assert('loc.valid eq false')>
+			<cftransaction action="rollback" />
+		</cftransaction>
+	</cffunction>
+	
 
 	<!--- <cffunction name="test_validatesUniquenessOf_with_blank_property_value">
 		<cfset loc.user.firstname = "">

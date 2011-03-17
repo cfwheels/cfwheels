@@ -4,6 +4,7 @@
 		<cfset belongsTo("author")>
 		<cfset hasMany("comments")>
 		<cfset hasMany("classifications")>
+		<cfset validatesUniquenessOf("title")>
 	</cffunction>
 
 	<cffunction name="afterFindCallback">

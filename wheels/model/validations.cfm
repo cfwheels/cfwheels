@@ -203,6 +203,7 @@
 	<cfargument name="scope" type="string" required="false" default="" hint="One or more properties by which to limit the scope of the uniqueness constraint.">
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="true" hint="whether to take softDeletes into account when performing uniqueness check">
 	<cfif StructKeyExists(arguments, "if")>
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
@@ -580,6 +581,7 @@
 	<cfargument name="message" type="string" required="true">
 	<cfargument name="scope" type="string" required="false" default="">
 	<cfargument name="properties" type="struct" required="false" default="#this.properties()#">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
 		loc.where = [];
@@ -602,13 +604,8 @@
 			}
 		}
 
-		if (variables.wheels.class.softDeletion)
-		{
-			ArrayAppend(loc.where, "#tableName()#.#$softDeleteColumn()# IS NULL");
-		}
-
 		// try to fetch existing object from the database
-		loc.existingObject = findOne(where=ArrayToList(loc.where, " AND "), reload=true);
+		loc.existingObject = findOne(where=ArrayToList(loc.where, " AND "), reload=true, includeSoftDeletes=arguments.includeSoftDeletes);
 
 		// we add an error if an object was found in the database and the current object is either not saved yet or not the same as the one in the database
 		if (IsObject(loc.existingObject) && (isNew() || loc.existingObject.key() != key($persisted=true)))
