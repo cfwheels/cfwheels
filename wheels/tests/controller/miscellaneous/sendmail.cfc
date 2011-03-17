@@ -13,6 +13,21 @@
 		<cfset application.wheels.viewPath = "wheels/tests/_assets/views">
 		<cfset oldFilePath = application.wheels.filePath>
 		<cfset application.wheels.filePath = "wheels/tests/_assets/files">
+		<cfset oldArgs = application.wheels.functions.sendEmail>
+	</cffunction>
+	
+ 	<cffunction name="test_allow_default_for_from_to_and_subject">
+		<cfset application.wheels.functions.sendEmail.from = "sender@example.com">
+		<cfset application.wheels.functions.sendEmail.to = "recipient@example.com">
+		<cfset application.wheels.functions.sendEmail.subject = "test email">
+		<cfset loc.r = default_args(template="")>
+		<cfset assert('loc.r.from eq "sender@example.com"')>
+		<cfset assert('loc.r.to eq "recipient@example.com"')>
+		<cfset assert('loc.r.subject eq "test email"')>
+		<cfset loc.r = default_args(template="", from="custom_sender@example.com", to="custom_recipient@example.com", subject="custom suject")>
+		<cfset assert('loc.r.from eq "custom_sender@example.com"')>
+		<cfset assert('loc.r.to eq "custom_recipient@example.com"')>
+		<cfset assert('loc.r.subject eq "custom suject"')>
 	</cffunction>
 
 	<cffunction name="test_send_plain">
@@ -69,6 +84,12 @@
 	<cffunction name="teardown">
 		<cfset application.wheels.viewPath = oldViewPath>
 		<cfset application.wheels.filePath = oldFilePath>
+		<cfset application.wheels.functions.sendEmail = oldArgs>
+	</cffunction>
+	
+	<cffunction name="default_args">
+		<cfset $args(args=arguments, name="sendEmail", required="template,from,to,subject")>
+		<cfreturn arguments>
 	</cffunction>
 
 </cfcomponent>

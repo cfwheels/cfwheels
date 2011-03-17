@@ -195,7 +195,7 @@
 	application.wheels.functions.secondSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
 	application.wheels.functions.select = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, valueField="", textField=""};
 	application.wheels.functions.selectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, multiple=false, valueField="", textField=""};
-	application.wheels.functions.sendEmail = {layout=false, detectMultipart=true};
+	application.wheels.functions.sendEmail = {layout=false, detectMultipart=true, from="", to="", subject=""};
 	application.wheels.functions.sendFile = {disposition="attachment"};
 	application.wheels.functions.simpleFormat = {wrap=true, escapeHtml=false};
 	application.wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, spamProtection=false};
