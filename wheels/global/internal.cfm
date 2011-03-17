@@ -120,7 +120,7 @@
 		}
 		if (arguments.required && application.wheels.showErrorInformation)
 		{
-			if (!StructKeyExists(arguments.args, loc.first))
+			if (!StructKeyExists(arguments.args, loc.first) || !Len(arguments.args[loc.first]))
 			{
 				$throw(type="Wheels.IncorrectArguments", message="The `#loc.second#` or `#loc.first#` argument is required but was not passed in.", extendedInfo="#arguments.extendedInfo#");
 			}
@@ -352,9 +352,10 @@
 			loc.iEnd = ListLen(arguments.required);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				if(!StructKeyExists(arguments.args, loc.i))
+				loc.arg = ListGetAt(arguments.required, loc.i);
+				if(!StructKeyExists(arguments.args, loc.arg))
 				{
-					$throw(type="Wheels.IncorrectArguments", message="The `#loc.i#` argument is required but not passed in.");
+					$throw(type="Wheels.IncorrectArguments", message="The `#loc.arg#` argument is required but not passed in.");
 				}
 			}
 		}

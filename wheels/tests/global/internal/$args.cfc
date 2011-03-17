@@ -9,6 +9,13 @@
 		<cfset assert('loc.e eq loc.r')>
 		<cfset loc.r = raised('$args(args=loc.args, name="sendEmail", required="template")')>
 		<cfset assert('loc.e eq loc.r')>
+		<cfset loc.r = raised('$args(args=loc.args, name="sendEmail", template="", required="template")')>
+		<cfset loc.args.template = "">
+		<cfset loc.r = raised('$args(args=loc.args, name="sendEmail", combine="template/templates", required="template")')>
+		<cfset assert('loc.e eq loc.r')>
+		<cfset loc.args.template = "">
+		<cfset loc.r = raised('$args(args=loc.args, name="sendEmail", combine="template/templates")')>
+		<cfset assert('loc.r eq ""')>
 	</cffunction>
 	
 	<cffunction name="test_not_declaring_required_arguments_should_not_raise_error_when_missing">
