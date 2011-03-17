@@ -15,16 +15,16 @@
 	'
 	categories="controller-request,miscellaneous" chapters="sending-email" functions="">
 	<cfargument name="template" type="string" required="false" default="" hint="The path to the email template or two paths if you want to send a multipart email. if the `detectMultipart` argument is `false`, the template for the text version should be the first one in the list. This argument is also aliased as `templates`.">
-	<cfargument name="from" type="string" required="true" hint="Email address to send from.">
-	<cfargument name="to" type="string" required="true" hint="List of email addresses to send the email to.">
-	<cfargument name="subject" type="string" required="true" hint="The subject line of the email.">
+	<cfargument name="from" type="string" required="false" default="" hint="Email address to send from.">
+	<cfargument name="to" type="string" required="false" default="" hint="List of email addresses to send the email to.">
+	<cfargument name="subject" type="string" required="false" default="" hint="The subject line of the email.">
 	<cfargument name="layout" type="any" required="false" hint="Layout(s) to wrap the email template in. This argument is also aliased as `layouts`.">
 	<cfargument name="file" type="string" required="false" default="" hint="A list of the names of the files to attach to the email. This will reference files stored in the `files` folder (or a path relative to it). This argument is also aliased as `files`.">
 	<cfargument name="detectMultipart" type="boolean" required="false" hint="When set to `true` and multiple values are provided for the `template` argument, Wheels will detect which of the templates is text and which one is HTML (by counting the `<` characters).">
 	<cfargument name="$deliver" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
-		$args(args=arguments, name="sendEmail", combine="template/templates/!,layout/layouts,file/files");
+		$args(args=arguments, name="sendEmail", combine="template/templates/!,layout/layouts,file/files", required="template,from,to,subject");
 
 		loc.nonPassThruArgs = "template,templates,layout,layouts,file,files,detectMultipart,$deliver";
 		loc.mailTagArgs = "from,to,bcc,cc,charset,debug,failto,group,groupcasesensitive,mailerid,maxrows,mimeattach,password,port,priority,query,replyto,server,spoolenable,startrow,subject,timeout,type,username,useSSL,useTLS,wraptext";
