@@ -6,6 +6,7 @@ View Enhancements
 
 Controller Enhancements
 =======================
+* Allow for default argument on sendmail for from, to and subject - #727 [Andy Bellenie, Tony Petruzzi]
 
 Model Enhancements
 ==================
@@ -19,9 +20,9 @@ Bug Fixes
 * "none" transaction modes would never close - [Andy Bellenie, Tony Petruzzi]
 * Incorrect $cache argument - #671 [William Fisk, Tony Petruzzi]
 * Route formats prevented fullstops from being used in params - #666 [Tom King, Raul Riera, Tony Petruzzi]
-* Explicitly require template arugment in sendemail() - #700 [Thomas DeLoreto, Tony Petruzzi]
 * Controller in params should be upper camel case - #703 [William Fisk, Tony Petruzzi]
 * Application scope would not initialize in sub - #721 [Adam Chapman, Tony Petruzzi]
+* ValidatesUniquenessOf doesn't read soft-deletes - #719 [Andy Bellenie, Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
