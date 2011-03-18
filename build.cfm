@@ -1,3 +1,9 @@
+<!--- 
+NOTE: there is a bug with cfzip in Railo
+in order to run the build you will need at least version 3.3.0.007
+
+https://issues.jboss.org/browse/RAILO-1223
+ --->
 <!--- set the release version --->
 <cfset release = "1.1.3">
 
@@ -26,6 +32,9 @@ your can't zip empty directories
 
 <cfzip action="zip" file="#source#/cfwheels.#release#.zip" source="#destination#" storePath="false"/>
 
+<!--- need to delete the wheels/tests directory for the release --->
+<cfzip action="delete" file="#source#/cfwheels.#release#.zip" entrypath="wheels/tests" recurse="true" />
+
 <!---
 Copies a directory.
 
@@ -52,7 +61,7 @@ Copies a directory.
     </cfif>
     
     <cfdirectory action="list" directory="#arguments.source#" name="contents">
-	
+
 	<cfif len(arguments.ignore)>
 		<cfquery dbtype="query" name="contents">
 		select * from contents where name not in(#ListQualify(arguments.ignore, "'")#)
