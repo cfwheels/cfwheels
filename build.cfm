@@ -10,13 +10,16 @@
 <!--- copy the current directory to the release directory --->
 <cfset directoryCopy(source, destination, ignore)>
 
-<!--- create user directories --->
+<!--- 
+create user directories. need to add a .gitignore to get around the fact that
+your can't zip empty directories
+ --->
 <cfloop list="#folders#" index="folder">
 	<cfset target = ListAppend(destination, folder, "/")>
 	<cfif !DirectoryExists(target)>
 		<cfdirectory action="create" directory="#target#">
 	</cfif>
-	<cfif !FileExists("#target#/temp.txt")>
+	<cfif !FileExists("#target#/.gitignore")>
 		<cffile action="write" file="#target#/.gitignore" output="">
 	</cfif>
 </cfloop>
