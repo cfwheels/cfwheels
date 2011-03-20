@@ -224,6 +224,18 @@
 		loc.start = "";
 		loc.middle = "";
 		loc.end = "";
+		
+		if (StructKeyExists(arguments, "route"))
+		{
+			// when a route name is specified and the name argument is part
+			// of the route variables specified, we need to force the
+			// arguments.pageNumberAsParam to be false
+			loc.routeConfig = $findRoute(argumentCollection=arguments);
+			if (ListFindNoCase(loc.routeConfig.variables, arguments.name))
+			{
+				arguments.pageNumberAsParam = false;
+			}
+		}
 		if (arguments.showSinglePage || loc.totalPages > 1)
 		{
 			if (Len(arguments.prepend))

@@ -1,12 +1,9 @@
 <cfcomponent extends="wheelsMapping.Test">
 
-	<cfset params = {controller="dummy", action="dummy"}>
-
 	<cffunction name="setup">
-		<cfset var loc = StructNew()>
-		<cfset copies = {}>
-		<cfset StructAppend(copies, Duplicate(application.wheels))>
-		<cfset test.controller = controller("dummy", params)>
+		<cfset copies = Duplicate(application.wheels)>
+		<cfset loc.params = {controller="dummy", action="dummy"}>
+		<cfset loc.controller = controller("dummy", loc.params)>
 		<cfset loc.route = StructNew()>
 		<cfset loc.route.name = "pagination">
 		<cfset loc.route.pattern = "pag/ina/tion/[special]">
@@ -19,37 +16,48 @@
 	</cffunction>
 
 	<cffunction name="teardown">
-		<cfset StructAppend(application.wheels, duplicate(copies), true)>
+		<cfset application.wheels = copies>
 	</cffunction>
 	
 	<cffunction name="test_current_page">
-		<cfset var loc = StructNew()>
 		<cfset loc.authors = model("author").findAll(page=2, perPage=3, order="lastName")>
-		<cfset loc.link = test.controller.linkTo(text="2", params="page=2")>
-		<cfset result = test.controller.paginationLinks(linkToCurrentPage=true)>
-		<cfset assert("result Contains '#loc.link#'")>
-		<cfset result = test.controller.paginationLinks(linkToCurrentPage=false)>
-		<cfset assert("result Does Not Contain '#loc.link#' AND result Contains '2'")>
+		<cfset loc.link = loc.controller.linkTo(text="2", params="page=2")>
+		<cfset loc.result = loc.controller.paginationLinks(linkToCurrentPage=true)>
+		<cfset assert("loc.result Contains '#loc.link#'")>
+		<cfset loc.result = loc.controller.paginationLinks(linkToCurrentPage=false)>
+		<cfset assert("loc.result Does Not Contain '#loc.link#' AND loc.result Contains '2'")>
 	</cffunction>
 
 	<cffunction name="test_route">
-		<cfset var loc = StructNew()>
 		<cfset loc.authors = model("author").findAll(page=2, perPage=3, order="lastName")>
-		<cfset loc.link = test.controller.linkTo(route="pagination", special=99, text="3", params="page=3")>
-		<cfset result = test.controller.paginationLinks(route="pagination", special=99)>
-		<cfset assert("result Contains '#loc.link#' AND result Contains '?page='")>
+		<cfset loc.link = loc.controller.linkTo(route="pagination", special=99, text="3", params="page=3")>
+		<cfset loc.result = loc.controller.paginationLinks(route="pagination", special=99)>
+		<cfset assert("loc.result Contains '#loc.link#' AND loc.result Contains '?page='")>
 	</cffunction>
 
-	<cffunction name="test_page_as_route_param">
-		<cfset var loc = StructNew()>
+	<cffunction name="test_page_as_route_param_with_route_not_containing_page_parameter_in_variables">
 		<cfset loc.authors = model("author").findAll(page=2, perPage=3, order="lastName")>
+		
+		<cfset loc.result = loc.controller.paginationLinks(route="pagination", special=99)>
+		<cfset assert("loc.result Contains '/pag/ina/tion/99?page='")>
+		
+		<cfset loc.result = loc.controller.paginationLinks(route="pagination", special=99, pageNumberAsParam="false")>
+		<cfset assert("loc.result Does Not Contain '/pag/ina/tion/99?page=' AND loc.result contains '/pag/ina/tion/99'")>		
+	</cffunction>
+	
+	<cffunction name="test_page_as_route_param_with_route_containing_page_parameter_in_variables">
+		<cfset loc.authors = model("author").findAll(page=2, perPage=3, order="lastName")>
+		
 		<cfset loc.addToPattern = "/[page]">
 		<cfset loc.addToVariables = ",page">
 		<cfset application.wheels.routes[2].pattern = application.wheels.routes[2].pattern & loc.addToPattern>
 		<cfset application.wheels.routes[2].variables = application.wheels.routes[2].variables & loc.addToVariables>
-		<cfset loc.link = test.controller.linkTo(route="pagination", special=99, text="3", page=3)>
-		<cfset result = test.controller.paginationLinks(route="pagination", special=99, pageNumberAsParam=false)>
-		<cfset assert("result Contains '#loc.link#' AND result Does Not Contain '?page='")>
+		
+		<cfset loc.result = loc.controller.paginationLinks(route="pagination", special=99)>
+		<cfset assert("loc.result Contains '/pag/ina/tion/99/3'")>
+		
+		<cfset loc.result = loc.controller.paginationLinks(route="pagination", special=99, pageNumberAsParam="false")>
+		<cfset assert("loc.result Contains '/pag/ina/tion/99/3'")>
 	</cffunction>
 	
 </cfcomponent>
