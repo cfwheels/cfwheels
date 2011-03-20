@@ -23,6 +23,7 @@ Bug Fixes
 * Controller in params should be upper camel case - #703 [William Fisk, Tony Petruzzi]
 * Application scope would not initialize in sub - #721 [Adam Chapman, Tony Petruzzi]
 * ValidatesUniquenessOf doesn't read soft-deletes - #719 [Andy Bellenie, Tony Petruzzi]
+* PaginationLinks(): routes with page number marker variable would produce the wrong links - [Kenneth Barrett, Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
