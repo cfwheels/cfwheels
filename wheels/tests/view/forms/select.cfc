@@ -54,6 +54,8 @@
 
 	<cffunction name="test_with_array_of_structs_as_options">
 		<cfset loc.options = []>
+		<cfset loc.options[1] = {}>
+		<cfset loc.options[2] = {}>
 		<cfset loc.options[1].tony = "petruzzi">
 		<cfset loc.options[2].per = "djurner">
 	    <cfset loc.r = loc.controller.select(objectName="user", property="firstname", options=loc.options, label=false)>
