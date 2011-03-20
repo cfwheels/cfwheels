@@ -398,7 +398,7 @@
 		{
 			loc.i = LCase(loc.i);
 			loc.value = arguments[loc.i];
-			if (IsSimpleValue(loc.value) AND len(loc.value))
+			if (StructKeyExists(loc, "value") AND IsSimpleValue(loc.value) AND len(loc.value))
 			{
 				if (loc.i eq "property")
 				{
