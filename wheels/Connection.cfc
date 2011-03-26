@@ -41,8 +41,10 @@
 				loc.adapterName = "PostgreSQL";
 			else if (loc.info.driver_name Contains "H2")
 				loc.adapterName = "H2";
+			else if (loc.info.driver_name Contains "Jet")
+				loc.adapterName = "MicrosoftAccess";
 			else
-				$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, MySQL, Oracle or PostgreSQL.");
+				$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, MySQL, Oracle, PostgreSQL, H2, or Microsoft Access.");
 			loc.returnValue = CreateObject("component", "model.adapters.#loc.adapterName#").init(argumentCollection=variables.instance.connection);
 		</cfscript>
 		<cfreturn loc.returnValue>
