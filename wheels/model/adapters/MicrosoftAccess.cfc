@@ -19,7 +19,7 @@
 		<!--- Currency might be better as cf_sql_decimal, however MSAccess stores Currency as double --->
 		<!--- MSAccess Yes/No fields become cf_sql_bit. A default value (true or false) needs to be assigned to a Yes/No field in MSAccess or the table can't be accessed & throws a CF error' --->
 		<cfargument name="type" type="string" required="true">
-		<cfset loc = {}>		
+<!--- 		<cfset loc = {}>		
 		<cfloop index='i' delimiters='#chr(10)#' list='
 			VarChar cf_sql_varchar
 			LongText cf_sql_clob
@@ -36,11 +36,28 @@
 		<cfif arguments.type IS trim(listfirst(trim(i),' '))>
 			<cfset loc.returnValue = trim(listlast(trim(i),' '))>
 			<cfbreak>
-		</cfif>			
-		</cfloop>		
+		</cfif>
+		</cfloop>	--->
 		
-		<!--- <cffile action="append" addnewline="true" file="c:\!log.txt" output="#arguments.type# : #loc.returnValue#" > --->		
-
+		<cfscript>
+			var loc = {};
+			switch(arguments.type)
+			{
+				case "": case "varchar": case "char": case "nvarchar": case "nchar": {loc.returnValue = "cf_sql_varchar"; break;}
+				case "longtext": {loc.returnValue = "cf_sql_clob"; break;}
+				case "byte": {loc.returnValue = "cf_sql_tinyint"; break;}
+				case "decimal": {loc.returnValue = "cf_sql_decimal"; break;}
+				case "short": {loc.returnValue = "cf_sql_smallint"; break;}
+				case "long": {loc.returnValue = "cf_sql_integer"; break;}
+				case "single": {loc.returnValue = "cf_sql_real"; break;}
+				case "double": case "currency": {loc.returnValue = "cf_sql_double"; break;}
+				case "bit": {loc.returnValue = "cf_sql_bit"; break;}
+				case "longbinary": {loc.returnValue = "cf_sql_blob"; break;}
+				case "datetime": {loc.returnValue = "cf_sql_timestamp"; break;}
+			}
+		</cfscript>			
+		
+		
 		<cfreturn loc.returnValue>
 
 	</cffunction>
@@ -75,6 +92,18 @@
 				</cfif>		
 			</cfloop>
 		</cfif>
+		
+		
+
+
+
+		
+		
+		
+		
+		
+		
+		
 
 		<!--- MS ACCESS doesn't support limit and offset in sql --->
 		<cfscript>
@@ -169,8 +198,54 @@
 			// MS ACCESS doesn't support limit and offset in sql
 			StructDelete(arguments, "limit", false);
 			StructDelete(arguments, "offset", false);
-			loc.returnValue = $performQuery(argumentCollection=arguments);
-		</cfscript>
+			// loc.returnValue = $performQuery(argumentCollection=arguments);
+		</cfscript>.
+		
+		<!--- MSACCESS cant handle DISTINCT inside of aggregate funstions e.g. sum, count, avg, etc.. --->
+		<!--- However MSACCESS does understand DISTINCT after SELECT  --->
+		<!--- This uses a sub table after the FROM & includes the WHERE when needed --->
+		<cfif IsSimpleValue(arguments.sql[1]) AND arguments.sql[1] contains "AS wheelsqueryresult" AND arguments.sql[1] contains "(DISTINCT">			
+			<cfset originalSQL = arguments.sql[1] & " " & arguments.sql[2] >			
+			<cfset arguments.sql[1] = replaceNoCase(arguments.sql[1], "(DISTINCT ","(")>			
+			<cfset FieldName = listFirst(arguments.sql[1],")")>
+			<cfset FieldName = trim(listLast(FieldName,"("))>
+			<cfset TableName = trim(replaceNoCase(arguments.sql[2],"FROM ",""))>			
+			<cfset arguments.sql[2] = "FROM (SELECT DISTINCT #FieldName# FROM #TableName# ">			
+			<cfset ArrayAppend(arguments.sql,")")>
+		</cfif>
+		
+
+		
+		<!--- Perform the query --->
+		<cfscript>
+			loc.returnValue = $performQuery(argumentCollection=arguments);		
+		</cfscript>	
+		
+		
+		<!--- Who wants to see crappy MSAccess SQL workarounds. Reverts the result SQL to the it is for other databases. --->
+		<cfif isDefined("originalSQL")>
+			<cfset loc.returnValue.Result.SQL = originalSQL>		
+		</cfif>
+
+
+
+		<!--- DUMP to be removed --->
+<!--- 		<cfsavecontent variable="bbb">
+			<cftry>
+				<hr>
+				arguments
+				<br />
+				<cfdump var="#arguments#">			
+				returnValue
+				<br />
+			
+				<cfdump var="#loc.returnValue#">
+				<cfcatch></cfcatch>
+			</cftry>
+		</cfsavecontent>		
+		<cffile action="append" addnewline="true" file="c:\log.html" output="#bbb#" > --->
+
+
 		
 		<cfreturn loc.returnValue>
 	</cffunction>
