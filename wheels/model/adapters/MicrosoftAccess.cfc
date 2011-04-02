@@ -74,38 +74,42 @@
 			var loc = {};		
 		</cfscript>
 		
-		<!--- MS ACCESS works better with square brackets around field names in SQL INSERT statements. Allows reserved words like password for field names --->
+		<!--- List of MS Access Jet reserved words. Only put [] around fields if these field names are used --->
+		<!--- http://support.microsoft.com/kb/321266 --->
+		<!--- Test now passes: model.crud.create NON AUTO INCREMENTING PRIMARY KEY SHOULD NOT BE CHANGED. For some reason shopid cannot be in brackets. --->
+		<!--- It seems that an error may occur if a MSJET reserved word is used as a fieldname and set as a Primary Key. --->
+		<cfset loc.MSAccessReservedWords ="password:ADD:ALL:Alphanumeric:ALTER:AND:ANY:Application:AS:ASC:Assistant:AUTOINCREMENT:Avg:BETWEEN:BINARY:BIT:BOOLEAN:BY:BYTE:CHAR:CHARACTER:COLUMN:CompactDatabase:CONSTRAINT:Container:Count:COUNTER:CREATE:CreateDatabase:CreateField:CreateGroup:CreateIndex:CreateObject:CreateProperty:CreateRelation:CreateTableDef:CreateUser:CreateWorkspace:CURRENCY:CurrentUser:DATABASE:DATE:DATETIME:DELETE:DESC:Description:DISALLOW:DISTINCT:DISTINCTROW:Document:DOUBLE:DROP:Echo:Else:End:Eqv:Error:EXISTS:Exit:FALSE:Field:Fields:FillCache:FLOAT:FLOAT4:FLOAT8:FOREIGN:Form:Forms:FROM:Full:FUNCTION:GENERAL:GetObject:GetOption:GotoPage:GROUP:GROUP BY:GUID:HAVING:Idle:IEEEDOUBLE:IEEESINGLE:If:IGNORE:Imp:IN:INDEX:Index:Indexes:INNER:INSERT:InsertText:INT:INTEGER:INTEGER1:INTEGER2:INTEGER4:INTO:IS:JOIN:KEY:LastModified:LEFT:Level:Like:LOGICAL:LOGICAL1:LONG:LONGBINARY:LONGTEXT:Macro:Match:Max:Min:Mod:MEMO:Module:MONEY:Move:NAME:NewPassword:NO:Not:NULL:NUMBER:NUMERIC:Object:OLEOBJECT:OFF:ON:OpenRecordset:OPTION:OR:ORDER:Orientation:Outer:OWNERACCESS:Parameter:PARAMETERS:Partial:PERCENT:PIVOT:PRIMARY:PROCEDURE:Property:Queries:Query:Quit:REAL:Recalc:Recordset:REFERENCES:Refresh:RefreshLink:RegisterDatabase:Relation:Repaint:RepairDatabase:Report:Reports:Requery:RIGHT:SCREEN:SECTION:SELECT):SET:SetFocus:SetOption:SHORT:SINGLE:SMALLINT:SOME:SQL:StDev:StDevP:STRING:Sum:TABLE:TableDef:TableDefs:TableID:TEXT:TIME:TIMESTAMP:TOP:TRANSFORM:TRUE:Type:UNION:UNIQUE:UPDATE:User:VALUE:VALUES:Var:VarP:VARBINARY:VARCHAR:WHERE:WITH:Workspace:Xor:Year:YES:YESNO">
+		
+		
+		<!--- MS ACCESS needs square brackets around reserved word field names in SQL INSERT statements. Allows reserved words like password for field names --->
 		<cfif IsSimpleValue(arguments.sql[1]) AND (Left(arguments.sql[1], 11) IS "INSERT INTO")>
 			<cfloop index="i" from ="2" to="#arrayLen(arguments.sql)#" step="2">
 				<cfif arguments.sql[i - 1] eq ")">
 					<cfbreak >
 				</cfif>
-				<cfset arguments.sql[i] = "[" & arguments.sql[i] & "]">
+				<cfset loc.FieldName = trim(arguments.sql[i])>				
+				<cfif ListFindNoCase(loc.MSAccessReservedWords,loc.FieldName,":")>
+					<cfset arguments.sql[i] = "[" & loc.FieldName & "]">
+				</cfif>
 			</cfloop>
 		</cfif>
 		
-		<!--- MS ACCESS works better with square brackets around field names in SQL UPDATE statements. Allows reserved words like password for field names --->
+		<!--- MS ACCESS needs square brackets around reserved word field names in SQL UPDATE statements. Allows reserved words like password for field names --->
 		<cfif IsSimpleValue(arguments.sql[1]) AND Left(arguments.sql[1], 6) IS "UPDATE">
 			<cfloop index="i" from ="2" to="#arrayLen(arguments.sql)#">
-				<cfif IsSimpleValue(arguments.sql[i]) AND right(trim(arguments.sql[i]), 1) EQ "=">		
-					<cfset arguments.sql[i] = "[" & replace(arguments.sql[i], " =","] =")>
+				<cfif IsSimpleValue(arguments.sql[i]) AND right(trim(arguments.sql[i]), 1) EQ "=">					
+					<cfset loc.FieldName = trim(replace(arguments.sql[i], " =",""))>					
+					<cfif ListFindNoCase(loc.MSAccessReservedWords,loc.FieldName,":")>
+						<cfset arguments.sql[i] = "[" & loc.FieldName & "]" & " =">
+					</cfif>
 				</cfif>		
 			</cfloop>
 		</cfif>
 		
+	
 		
 
-
-
-		
-		
-		
-		
-		
-		
-		
-
-		<!--- MS ACCESS doesn't support limit and offset in sql --->
+		<!--- MS ACCESS doesn't support limit and offset in sql. Code copied from MicrosoftSQLServer.cfc --->
 		<cfscript>
 			if (arguments.limit + arguments.offset gt 0)
 			{
