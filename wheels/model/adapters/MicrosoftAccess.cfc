@@ -83,32 +83,42 @@
 		
 		<!--- MS ACCESS needs square brackets around reserved word field names in SQL INSERT statements. Allows reserved words like password for field names --->
 		<cfif IsSimpleValue(arguments.sql[1]) AND (Left(arguments.sql[1], 11) IS "INSERT INTO")>
-			<cfloop index="i" from ="2" to="#arrayLen(arguments.sql)#" step="2">
-				<cfif arguments.sql[i - 1] eq ")">
+			<cfloop index="loc.i" from ="2" to="#arrayLen(arguments.sql)#" step="2">
+				<cfif arguments.sql[loc.i - 1] eq ")">
 					<cfbreak >
 				</cfif>
-				<cfset loc.FieldName = trim(arguments.sql[i])>				
+				<cfset loc.FieldName = trim(arguments.sql[loc.i])>				
 				<cfif ListFindNoCase(loc.MSAccessReservedWords,loc.FieldName,":")>
-					<cfset arguments.sql[i] = "[" & loc.FieldName & "]">
+					<cfset arguments.sql[loc.i] = "[" & loc.FieldName & "]">
 				</cfif>
 			</cfloop>
 		</cfif>
 		
-		<!--- MS ACCESS needs square brackets around reserved word field names in SQL UPDATE statements. Allows reserved words like password for field names --->
+		
+		<!--- MS ACCESS needs square brackets [] around reserved word field names in SQL UPDATE statements. Allows reserved words like password for field names --->
 		<cfif IsSimpleValue(arguments.sql[1]) AND Left(arguments.sql[1], 6) IS "UPDATE">
-			<cfloop index="i" from ="2" to="#arrayLen(arguments.sql)#">
-				<cfif IsSimpleValue(arguments.sql[i]) AND right(trim(arguments.sql[i]), 1) EQ "=">					
-					<cfset loc.FieldName = trim(replace(arguments.sql[i], " =",""))>					
+			<cfloop index="loc.i" from ="2" to="#arrayLen(arguments.sql)#">
+				<cfif IsSimpleValue(arguments.sql[loc.i]) AND right(trim(arguments.sql[loc.i]), 1) EQ "=">					
+					<cfset loc.FieldName = trim(replace(arguments.sql[loc.i], " =",""))>					
 					<cfif ListFindNoCase(loc.MSAccessReservedWords,loc.FieldName,":")>
-						<cfset arguments.sql[i] = "[" & loc.FieldName & "]" & " =">
+						<cfset arguments.sql[loc.i] = "[" & loc.FieldName & "]" & " =">
 					</cfif>
 				</cfif>		
 			</cfloop>
 		</cfif>
 		
-	
 		
-
+		<!--- MSACCESS needs round brackets () around the TABLE JOIN CLAUSES  --->
+		<!--- This must happen before the SQL changes that come after this. --->		
+		<cfif (arraylen(arguments.sql) GTE 2) AND IsSimpleValue(arguments.sql[2]) AND Left(arguments.sql[2], 4) IS "FROM" AND arguments.sql[2] contains " JOIN ">
+			<cfset loc.aryJoins = REMatchNoCase(" INNER JOIN| LEFT OUTER JOIN",arguments.sql[2])>
+			<cfloop array="#loc.aryJoins#" index="loc.i">
+				<cfset arguments.sql[2] = replaceNoCase(arguments.sql[2],  loc.i,  ')' & trim(loc.i))>
+				<cfset arguments.sql[2] = replaceNoCase(arguments.sql[2],  'FROM'  ,  'FROM ('  )>
+			</cfloop>			
+		</cfif>
+		
+		
 		<!--- MS ACCESS doesn't support limit and offset in sql. Code copied from MicrosoftSQLServer.cfc --->
 		<cfscript>
 			if (arguments.limit + arguments.offset gt 0)
@@ -220,6 +230,9 @@
 		
 
 		
+		
+
+		
 		<!--- Perform the query --->
 		<cfscript>
 			loc.returnValue = $performQuery(argumentCollection=arguments);		
@@ -234,16 +247,23 @@
 
 
 		<!--- DUMP to be removed --->
+
 <!--- 		<cfsavecontent variable="bbb">
 			<cftry>
 				<hr>
 				arguments
 				<br />
 				<cfdump var="#arguments#">			
-				returnValue
+				
+				noOfJoins
 				<br />
-			
+				<cfdump var="#loc.aryJoins#">
+				<br />
+				
+				returnValue
+				<br />				
 				<cfdump var="#loc.returnValue#">
+				
 				<cfcatch></cfcatch>
 			</cftry>
 		</cfsavecontent>		
