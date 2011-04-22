@@ -127,7 +127,7 @@
 	application.wheels.formats = {};
 	application.wheels.formats.html = "text/html";
 	application.wheels.formats.xml = "text/xml";
-	application.wheels.formats.json = "text/json";
+	application.wheels.formats.json = "application/json";
 	application.wheels.formats.csv = "text/csv";
 	application.wheels.formats.pdf = "application/pdf";
 	application.wheels.formats.xls = "application/vnd.ms-excel";

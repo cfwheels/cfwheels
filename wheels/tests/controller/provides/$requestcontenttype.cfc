@@ -36,7 +36,7 @@
 
 	<cffunction name="test_$requestContentType_header_cgi_json">
 		<cfset loc.controller = controller("dummy", params)>
-		<cfset request.cgi.http_accept = "text/json">
+		<cfset request.cgi.http_accept = "application/json">
 		<cfset assert("loc.controller.$requestContentType() eq 'json'")>
 	</cffunction>
 
