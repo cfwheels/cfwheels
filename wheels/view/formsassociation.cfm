@@ -14,7 +14,7 @@
 	<cfargument name="objectName" type="string" required="true" hint="Name of the variable containing the parent object to represent with this form field." />
 	<cfargument name="association" type="string" required="true" hint="Name of the association set in the parent object to represent with this form field." />
 	<cfargument name="property" type="string" required="true" hint="Name of the property in the child object to represent with this form field." />
-	<cfargument name="keys" type="string" required="true" hint="Primary keys associated with this form field." />
+	<cfargument name="keys" type="string" required="true" hint="Primary keys associated with this form field. Note that these keys should be listed in the order that they appear in the database table." />
 	<cfargument name="tagValue" type="string" required="true" hint="The value of the radio button when `selected`." />
 	<cfargument name="checkIfBlank" type="boolean" required="false" default="false" hint="Whether or not to check this form field as a default if there is a blank value set for the property." />
 	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
