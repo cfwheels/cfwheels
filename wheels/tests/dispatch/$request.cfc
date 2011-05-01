@@ -32,5 +32,17 @@
 			assert('loc.params.username eq "foo.bar"');
 		</cfscript>
 	</cffunction>
+	
+ 	<cffunction name="test_route_with_format_and_format_not_specified">
+		<cfset addRoute(name="test", pattern="users/[username].[format]", controller="test", action="test")>
+		<cfscript>
+			loc.args = {};
+			loc.args.pathinfo = "/users/foo";
+			loc.args.urlScope["username"] = "foo";
+			loc.params = loc.dispatch.$paramParser(argumentCollection=loc.args);
+			assert('loc.params.username eq "foo"');
+			assert('loc.params.format eq ""');
+		</cfscript>
+	</cffunction>
 
 </cfcomponent>

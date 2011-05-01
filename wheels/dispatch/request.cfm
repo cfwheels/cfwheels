@@ -215,7 +215,7 @@
 	<cfscript>
 		var loc = {};
 		loc.iEnd = ListLen(arguments.route.pattern, "/");
-		if (StructKeyExists(arguments.route, "format"))
+		if (StructKeyExists(arguments.route, "format") AND len(arguments.route.format))
 		{
 			arguments.path = Reverse(ListRest(Reverse(arguments.path), "."));
 		}
