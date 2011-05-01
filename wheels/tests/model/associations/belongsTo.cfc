@@ -31,4 +31,9 @@
 		<cfset assert("loc.authorExistsByAssociation IS true")>
 	</cffunction>
 
+	<cffunction name="test_getting_parent_with_join_key">
+		<cfset loc.obj = model("author").findOne(order="id", include="user")>
+		<cfset assert('loc.obj.firstName eq loc.obj.user.firstName')>
+	</cffunction>
+
 </cfcomponent>

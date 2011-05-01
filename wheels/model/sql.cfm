@@ -608,6 +608,18 @@
 				}
 			}
 
+			if (!Len(loc.classAssociations[loc.name].joinKey))
+			{
+				if (loc.classAssociations[loc.name].type == "belongsTo")
+				{
+					loc.classAssociations[loc.name].joinKey = loc.associatedClass.$classData().keys;
+				}
+				else
+				{
+					loc.classAssociations[loc.name].joinKey = loc.class.$classData().keys;
+				}
+			}
+
 			loc.classAssociations[loc.name].tableName = loc.associatedClass.$classData().tableName;
 			loc.classAssociations[loc.name].columnList = loc.associatedClass.$classData().columnList;
 			loc.classAssociations[loc.name].properties = loc.associatedClass.$classData().properties;
@@ -627,21 +639,21 @@
 					loc.key1 = ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.j);
 					if (loc.classAssociations[loc.name].type == "belongsTo")
 					{
-						loc.key2 = ListFindNoCase(loc.associatedClass.$classData().keys, loc.key1);
+						loc.key2 = ListFindNoCase(loc.classAssociations[loc.name].joinKey, loc.key1);
 						if (loc.key2)
-							loc.key2 = ListGetAt(loc.associatedClass.$classData().keys, loc.key2);
+							loc.key2 = ListGetAt(loc.classAssociations[loc.name].joinKey, loc.key2);
 						else
-							loc.key2 = ListGetAt(loc.associatedClass.$classData().keys, loc.j);
+							loc.key2 = ListGetAt(loc.classAssociations[loc.name].joinKey, loc.j);
 						loc.first = loc.key1;
 						loc.second = loc.key2;
 					}
 					else
 					{
-						loc.key2 = ListFindNoCase(loc.class.$classData().keys, loc.key1);
+						loc.key2 = ListFindNoCase(loc.classAssociations[loc.name].joinKey, loc.key1);
 						if (loc.key2)
-							loc.key2 = ListGetAt(loc.class.$classData().keys, loc.key2);
+							loc.key2 = ListGetAt(loc.classAssociations[loc.name].joinKey, loc.key2);
 						else
-							loc.key2 = ListGetAt(loc.class.$classData().keys, loc.j);
+							loc.key2 = ListGetAt(loc.classAssociations[loc.name].joinKey, loc.j);
 						loc.first = loc.key2;
 						loc.second = loc.key1;
 					}

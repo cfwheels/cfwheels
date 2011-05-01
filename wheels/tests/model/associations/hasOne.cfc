@@ -92,4 +92,9 @@
 		<cfset assert("loc.dynamicResult IS loc.coreResult")>
 	</cffunction>
 
+	<cffunction name="test_getting_child_with_join_key">
+		<cfset loc.obj = model("user").findOne(order="id", include="author")>
+		<cfset assert('loc.obj.firstName eq loc.obj.author.firstName')>
+	</cffunction>
+
 </cfcomponent>

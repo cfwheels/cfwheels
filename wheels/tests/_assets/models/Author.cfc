@@ -3,6 +3,8 @@
 	<cffunction name="init">
 		<cfset hasMany("posts")>
 		<cfset hasOne("profile")>
+		<!--- crazy join to test the joinKey argument --->
+		<cfset belongsTo(name="user", foreignKey="firstName", joinKey="firstName")>
 		<cfset beforeSave("callbackThatReturnsTrue")>
 		<cfset beforeDelete("callbackThatReturnsTrue")>
 		<cfset property(name="firstName", label="First name(s)", defaultValue="Dave")>
