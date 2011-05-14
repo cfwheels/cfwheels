@@ -100,7 +100,6 @@
 				application.wheels.protectedControllerMethods = ListAppend(application.wheels.protectedControllerMethods, loc.method);
 		}
 
-		// reload the plugins each time we reload the application
 		$loadPlugins();
 		
 		// allow developers to inject plugins into the application variables scope
