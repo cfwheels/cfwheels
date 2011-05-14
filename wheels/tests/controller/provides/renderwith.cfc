@@ -21,6 +21,17 @@
 			</cfcatch>
 		</cftry>
 	</cffunction>
+	
+	<cffunction name="test_renderingError_raised_when_template_is_not_found_for_format">
+		<cfset params.format = "xls">
+		<cfset params.action = "notfound">
+		<cfset loc.controller = controller("test", params)>
+		<cfset loc.controller.provides("xml") />
+		<cfset user = model("user").findOne(where="username = 'tonyp'") />
+		<cfset loc.r = raised('loc.controller.renderWith(data=user, layout=false, returnAs="string")')>
+		<cfset loc.e = "Wheels.renderingError">
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
 
 	<cffunction name="test_current_action_as_xml_with_template_returning_string_to_controller">
 		<cfset params.format = "xml">
