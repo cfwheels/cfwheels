@@ -455,6 +455,11 @@
 				loc.optionValue = arguments.options[loc.i][1];
 				loc.optionText = arguments.options[loc.i][2];
 			}
+			else if (IsStruct(arguments.options[loc.i]) && StructKeyExists(arguments.options[loc.i], "value") && StructKeyExists(arguments.options[loc.i], "text"))
+			{
+				loc.optionValue = arguments.options[loc.i]["value"];
+				loc.optionText = arguments.options[loc.i]["text"];
+			}
 			else if (IsObject(arguments.options[loc.i]))
 			{
 				loc.object = arguments.options[loc.i];

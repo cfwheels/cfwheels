@@ -23,6 +23,20 @@
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
 		<cfset assert('loc.options.complexvalues eq loc.r')>
 	</cffunction>
+	
+	<cffunction name="test_array_of_structs_for_option_values">
+		<cfset loc.args.name = "testselect">
+		<cfset loc.args.options = []>
+		<cfset loc.temp = {value="1", text="first"}>
+		<cfset ArrayAppend(loc.args.options, loc.temp)>
+		<cfset loc.temp = {value="2", text="second"}>
+		<cfset ArrayAppend(loc.args.options, loc.temp)>
+		<cfset loc.temp = {value="3", text="third"}>
+		<cfset ArrayAppend(loc.args.options, loc.temp)>
+		<cfset debug("loc.controller.selectTag(argumentcollection=loc.args)", false)>
+		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
+		<cfset assert('loc.options.complexvalues eq loc.r')>
+	</cffunction>
 
 	<cffunction name="test_one_dimensional_array_for_option_values">
 		<cfset loc.args.name = "testselect">
