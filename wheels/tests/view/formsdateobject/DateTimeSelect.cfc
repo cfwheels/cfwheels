@@ -16,6 +16,15 @@
 		<cfset result = loc.controller.dateTimeSelect(objectName="user", property="birthday", label="labelMonth,labelDay,labelYear,labelHour,labelMinute,labelSecond")>
 		<cfset assert("result Contains 'labelDay' AND result Contains 'labelSecond'")>
 	</cffunction>
+	
+	<cffunction name="test_splitting_lable_classes">
+		<cfset loc.labelClass = "month,day,year">
+		<cfset loc.r = loc.controller.dateTimeSelect(objectName="user", property="birthday", label="labelMonth,labelDay,labelYear", labelClass="#loc.labelClass#")>
+		<cfloop list="#loc.labelClass#" index="loc.i">
+			<cfset loc.e = 'label class="#loc.i#"'>
+			<cfset assert('loc.r Contains loc.e')>
+		</cfloop>
+	</cffunction>
 
 	<cffunction name="test_datetimeselect">
 		<cfset loc.args.property = "birthday">

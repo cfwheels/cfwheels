@@ -180,6 +180,12 @@
 				arguments.value = Evaluate("#arguments.$type#(Now())");
 		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1 && ListLen(arguments.label) > 1)
 			arguments.label = ListGetAt(arguments.label, ListFindNoCase(arguments.order, arguments.$type));
+
+		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1 && StructKeyExists(arguments, "labelClass") && ListLen(arguments.labelClass) > 1)
+		{
+			arguments.labelClass = ListGetAt(arguments.labelClass, ListFindNoCase(arguments.order, arguments.$type));
+		}
+		
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = arguments.$id & "-" & arguments.$type;
 		loc.before = $formBeforeElement(argumentCollection=arguments);
