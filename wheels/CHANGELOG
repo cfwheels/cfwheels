@@ -1,3 +1,26 @@
+WHEELS VERSION 1.1.4 (UNRELEASED)
+
+View Enhancements
+=================
+
+* Allow an array of structs to used for options in selectTag() - [Adam Chapman, Tony Petruzzi]
+
+Controller Enhancements
+=======================
+
+Model Enhancements
+==================
+
+* Update to belongsTo(), hasOne() and hasMany() for the new argument joinKey. - [James Gibson, Tony Petruzzi]
+
+Bug Fixes
+=========
+
+* Incorrect MIME type for JSON - #751 [daniel.mcq, , Tony Petruzzi]
+* Route with format will cause exception when route is selected and format is not provided - #738 [Danny Beard, Tony Petruzzi] 
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 WHEELS VERSION 1.1.3 (03/24/2011)
 
 View Enhancements
