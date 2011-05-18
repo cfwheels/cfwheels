@@ -17,7 +17,8 @@ Bug Fixes
 =========
 
 * Incorrect MIME type for JSON - #751 [daniel.mcq, , Tony Petruzzi]
-* Route with format will cause exception when route is selected and format is not provided - #738 [Danny Beard, Tony Petruzzi] 
+* Route with format will cause exception when route is selected and format is not provided - #738 [Danny Beard, Tony Petruzzi]
+* Raise renderError when template is not found for format - #759 [Mike Henke, Tony Petruzzi] 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
