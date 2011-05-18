@@ -1,5 +1,9 @@
 <cfcomponent extends="Controller">
 
+	<cffunction name="init">
+		<cfset provides("html,xml,json,xls")>
+	</cffunction>
+
 	<cffunction name="test">
 		<cfset variableForView = "variableForViewContent">
 		<cfset variableForLayout = "variableForLayoutContent">

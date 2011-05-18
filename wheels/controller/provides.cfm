@@ -119,8 +119,10 @@
 
 		// throw an error if we do not have a template to render the content type that we do not have defaults for
 		if (!ListFindNoCase("json,xml", loc.contentType) && !StructKeyExists(loc, "content") && application.wheels.showErrorInformation)
+		{
 			$throw(type="Wheels.renderingError"
-				, message="To render the #loc.contentType# content type, create the template `#loc.template#.cfm` for the #arguments.controller# controller.");
+				, message="To render the #loc.contentType# content type, create the template `#loc.templateName#.cfm` for the #arguments.controller# controller.");
+		}
 				
 		// set our header based on our mime type
 		$header(name="content-type", value=application.wheels.formats[loc.contentType], charset="utf-8");
