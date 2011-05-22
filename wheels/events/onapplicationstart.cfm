@@ -100,7 +100,18 @@
 				application.wheels.protectedControllerMethods = ListAppend(application.wheels.protectedControllerMethods, loc.method);
 		}
 
-		$loadPlugins();
+		// load plugins
+		application.wheels.PluginObj = $createObjectFromRoot(
+			path="wheels"
+			,fileName="Plugins"
+			,method="init"
+			,pluginPath="#GetDirectoryFromPath(GetBaseTemplatePath())# & 'plugins'"
+		);
+		
+		application.wheels.plugins = application.wheels.PluginObj.getPlugins();
+		application.wheels.incompatiblePlugins = application.wheels.PluginObj.getIncompatiblePlugins();
+		application.wheels.dependantPlugins = application.wheels.PluginObj.getDependantPlugins();
+		application.wheels.mixins = application.wheels.PluginObj.getMixins();
 		
 		// allow developers to inject plugins into the application variables scope
 		if (!StructIsEmpty(application.wheels.mixins))
