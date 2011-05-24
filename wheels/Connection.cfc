@@ -1,5 +1,6 @@
 <cfcomponent output="false">
 	<cfinclude template="global/cfml.cfm">
+	<cfinclude template="global/objects.cfm">
 
 	<cffunction name="init" access="public" returntype="any" output="false">
 		<cfargument name="datasource" type="string" required="true">
@@ -43,7 +44,7 @@
 				loc.adapterName = "H2";
 			else
 				$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, MySQL, Oracle or PostgreSQL.");
-			loc.returnValue = CreateObject("component", "model.adapters.#loc.adapterName#").init(argumentCollection=variables.instance.connection);
+			loc.returnValue = $createObjectFromRoot(path="wheels.model.adapters", fileName="#loc.adapterName#", method="init", argumentCollection=variables.instance.connection);
 		</cfscript>
 		<cfreturn loc.returnValue>
 	</cffunction>
