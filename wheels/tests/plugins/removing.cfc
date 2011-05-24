@@ -16,16 +16,12 @@
 		<cfset loc.badDir = ListAppend(loc.dir, "testing", "/")>
 		<cfset loc.goodDir = ListAppend(loc.dir, "TestGlobalMixins", "/")>
 		
+		<cfset $deleteDirs()>
 		<cfset $createDir()>
 	</cffunction>
 	
-	<cffunction name="teardown">
-		<cfif DirectoryExists(loc.badDir)>
-			<cfdirectory action="delete" recurse="true" directory="#loc.badDir#">
-		</cfif>
-		<cfif DirectoryExists(loc.goodDir)>
-			<cfdirectory action="delete" recurse="true" directory="#loc.goodDir#">
-		</cfif>
+ 	<cffunction name="teardown">
+		<cfset $deleteDirs()>
 	</cffunction>
 	
 	<cffunction name="$pluginObj">
@@ -35,6 +31,15 @@
 	
 	<cffunction name="$createDir">
 		<cfdirectory action="create" directory="#loc.badDir#">
+	</cffunction>
+	
+	<cffunction name="$deleteDirs">
+		<cfif DirectoryExists(loc.badDir)>
+			<cfdirectory action="delete" recurse="true" directory="#loc.badDir#">
+		</cfif>
+		<cfif DirectoryExists(loc.goodDir)>
+			<cfdirectory action="delete" recurse="true" directory="#loc.goodDir#">
+		</cfif>
 	</cffunction>
 
  	<cffunction name="test_remove_unused_plugin_directories">

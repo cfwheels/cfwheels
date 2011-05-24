@@ -22,6 +22,7 @@
 		<cfset variables.$class.pluginPathFull = ReplaceNoCase(ExpandPath(variables.$class.pluginPath), "\", "/", "all")>
 		<!--- extract out plugins --->
 		<cfset $pluginsExtract()>
+		<!--- remove orphan plugin directories --->
 		<cfif variables.$class.deletePluginDirectories>
 			<cfset $pluginDelete()>
 		</cfif>
@@ -52,19 +53,6 @@
 			<cfset loc.plugins[name] = loc.temp>
 		</cfloop>
 		
-		<!--- instead of deleting plugin directories, just remove the plugin from the struct--->
-		<cfif variables.$class.deletePluginDirectories>
-			
-			<cfset loc.files = $pluginFiles()>
-			
-			<cfloop collection="#loc.plugins#" item="loc.plugin">
-				<cfif not StructKeyExists(loc.files, loc.plugin)>
-					<cfset StructDelete(loc.plugins, loc.plugin, false)>
-				</cfif>
-			</cfloop>
-
-		</cfif>
-		
 		<cfreturn loc.plugins>
 	</cffunction>
 	
@@ -77,12 +65,13 @@
 		<cfset loc.plugins = {}>
 
 		<cfloop query="loc.files">
+			<cfset loc.name = ListFirst(name, "-")>
 			<cfset loc.temp = {}>
 			<cfset loc.temp.file = $fullPathToPlugin(name)>
-			<cfset loc.temp.name = ListFirst(name, "-")>
-			<cfset loc.temp.folderPath = $fullPathToPlugin(loc.temp.name)>
+			<cfset loc.temp.name = name>
+			<cfset loc.temp.folderPath = $fullPathToPlugin(loc.name)>
 			<cfset loc.temp.folderExists = directoryExists(loc.temp.folderPath)>
-			<cfset loc.plugins[name] = loc.temp>
+			<cfset loc.plugins[loc.name] = loc.temp>
 		</cfloop>
 
 		<cfreturn loc.plugins>
@@ -103,20 +92,22 @@
 
 	</cffunction>
 	
+	
 	<cffunction name="$pluginDelete">
  		<cfset var loc = {}>
 		<!--- get all plugin folders --->
-		<cfset loc.folders = $folders()>
+		<cfset loc.folders = $pluginFolders()>
 		<!--- get all plugin zip files --->
-		<cfset loc.files = $files()>
+		<cfset loc.files = $pluginFiles()>
 		<!--- put zip files into a list  --->
-		<cfset loc.files = valueList(loc.files.name)>
+		<cfset loc.files = StructKeyList(loc.files)>
 		<!--- loop through the plugins folders --->
-		<cfloop query="loc.folders">
+		<cfloop collection="#loc.folders#" item="loc.iFolder">
+			<cfset loc.folder = loc.folders[loc.iFolder]>
 			<!--- see if a folder is in the list of plugin files --->
-			<cfif !ListContainsNoCase(loc.files, name & "-")>
+			<cfif !ListContainsNoCase(loc.files, loc.folder.name)>
 				<!--- if not, then delete the folder --->
-				<cfset loc.directory = ListAppend(variables.$class.pluginPath, name, "/")>
+				<cfset loc.directory = ListAppend(variables.$class.pluginPath, loc.folder.name, "/")>
 				<cfdirectory action="delete" directory="#loc.directory#" recurse="true">
  			</cfif>
  		</cfloop>
@@ -226,10 +217,7 @@
 		</cfloop>
 	</cffunction>
 	
-	
-	<!--- private methods --->
-	
-	
+
 	<!--- getters --->
 	
 	
