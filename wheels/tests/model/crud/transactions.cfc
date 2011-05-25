@@ -167,7 +167,7 @@
 	<cffunction name="test_transaction_closed_after_rollback">
 		<cfset loc.hash = model("tag").$hashedConnectionArgs()>
 		<cfset loc.tag = model("tagWithDataCallbacks").create(name="Kermit", description="The Frog", transaction="rollback")>
-		<cfset assert('StructIsEmpty(request.wheels.transactions)')>
+		<cfset assert('request.wheels.transactions[loc.hash] is false')>
 	</cffunction>
 	
 	<cffunction name="test_transaction_closed_after_none">
@@ -176,7 +176,7 @@
 			<cfset loc.tag = model("tagWithDataCallbacks").create(name="Kermit", description="The Frog", transaction="none")>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset assert('StructIsEmpty(request.wheels.transactions)')>
+		<cfset assert('request.wheels.transactions[loc.hash] is false')>
 	</cffunction>
 
 	<cffunction name="test_transaction_closed_when_error_raised">
@@ -185,7 +185,7 @@
 			<cfset loc.tag = model("tag").create(id="", name="Kermit", description="The Frog", transaction="rollback")>
 			<cfcatch type="any"></cfcatch>
 		</cftry>
-		<cfset assert('StructIsEmpty(request.wheels.transactions)')>
+		<cfset assert('request.wheels.transactions[loc.hash] is false')>
 	</cffunction>
 
 	<cffunction name="test_rollback_when_error_raised">

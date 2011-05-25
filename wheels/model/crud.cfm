@@ -449,7 +449,6 @@
 			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 			arguments.sql = $addWhereClauseParameters(sql=arguments.sql, where=arguments.where);
 			loc.returnValue = invokeWithTransaction(method="$updateAll", argumentCollection=arguments);
-			$closeTransaction(method="$updateall");
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -606,7 +605,6 @@
 			arguments.sql = $addWhereClause(sql=arguments.sql, where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 			arguments.sql = $addWhereClauseParameters(sql=arguments.sql, where=arguments.where);
 			loc.returnValue = invokeWithTransaction(method="$deleteAll", argumentCollection=arguments);
-			$closeTransaction(method="$deleteall");
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -758,7 +756,6 @@
 			if (loc.del.result.recordCount eq 1 and $callback("afterDelete", arguments.callbacks))
 				loc.ret = true;
 		}
-		$closeTransaction(method="$delete");
 		return loc.ret;
 	</cfscript>
 </cffunction>
@@ -857,7 +854,6 @@
 				}
 			}
 		}
-		$closeTransaction(method="$save");
 	</cfscript>
 	<cfreturn loc.ret />
 </cffunction>
