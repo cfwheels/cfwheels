@@ -10,7 +10,7 @@
 			,overwritePlugins=false
 			,loadIncompatiblePlugins=true
 		}>
-		<cfset $pluginObj(loc.config)>
+		<cfset loc.PluginObj = $pluginObj(loc.config)>
 		<cfset application.wheels.mixins = loc.PluginObj.getMixins()>
 		<cfset loc.m = model("authors").new()>
 		<cfset loc.params = {controller="test", action="index"}>	
@@ -24,7 +24,7 @@
 	
 	<cffunction name="$pluginObj">
 		<cfargument name="config" type="struct" required="true">
-		<cfreturn loc.PluginObj = $createObjectFromRoot(argumentCollection=arguments.config)>
+		<cfreturn $createObjectFromRoot(argumentCollection=arguments.config)>
 	</cffunction>
 	
 	<cffunction name="test_global_method">

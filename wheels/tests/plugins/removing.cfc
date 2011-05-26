@@ -26,7 +26,7 @@
 	
 	<cffunction name="$pluginObj">
 		<cfargument name="config" type="struct" required="true">
-		<cfreturn loc.PluginObj = $createObjectFromRoot(argumentCollection=arguments.config)>
+		<cfreturn $createObjectFromRoot(argumentCollection=arguments.config)>
 	</cffunction>
 	
 	<cffunction name="$createDir">

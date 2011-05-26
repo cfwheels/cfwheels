@@ -86,6 +86,9 @@
 		<cfloop collection="#loc.plugins#" item="loc.p">
 			<cfset loc.plugin = loc.plugins[loc.p]>
 			<cfif not loc.plugin.folderExists OR (loc.plugin.folderExists AND variables.$class.overwritePlugins)>
+				<cfif not loc.plugin.folderExists>
+					<cfdirectory action="create" directory="#loc.plugin.folderPath#">
+				</cfif>
 				<cfzip action="unzip" destination="#loc.plugin.folderPath#" file="#loc.plugin.file#" overwrite="true" />
 			</cfif>
 		</cfloop>
@@ -106,9 +109,7 @@
 			<cfset loc.folder = loc.folders[loc.iFolder]>
 			<!--- see if a folder is in the list of plugin files --->
 			<cfif !ListContainsNoCase(loc.files, loc.folder.name)>
-				<!--- if not, then delete the folder --->
-				<cfset loc.directory = ListAppend(variables.$class.pluginPath, loc.folder.name, "/")>
-				<cfdirectory action="delete" directory="#loc.directory#" recurse="true">
+				<cfdirectory action="delete" directory="#loc.folder.folderPath#" recurse="true">
  			</cfif>
  		</cfloop>
 
@@ -120,7 +121,6 @@
 		
 		<cfset loc.plugins = $pluginFolders()>
 		<cfset loc.wheelsVersion = SpanExcluding(variables.$class.wheelsVersion, " ")>
-		
 		<cfloop collection="#loc.plugins#" item="loc.iPlugins">
 			<cfset loc.plugin = createobject("component", $componentPathToPlugin(loc.iPlugins)).init()>
 			<cfif not StructKeyExists(loc.plugin, "version") OR ListFind(loc.plugin.version, loc.wheelsVersion) OR variables.$class.loadIncompatiblePlugins>
