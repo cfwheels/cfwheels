@@ -181,7 +181,6 @@
 		<cfloop list="#variables.$class.mixableComponents#" index="loc.iMixableComponents">
 			<cfset variables.$class.mixins[loc.iMixableComponents] = {}>
 		</cfloop>
-		<cfdump var="#variables.$class.mixins#">
 		<cfloop collection="#variables.$class.plugins#" item="loc.iPlugin">
 			<!--- reference the plugin --->
 			<cfset loc.plugin = variables.$class.plugins[loc.iPlugin]>
