@@ -817,6 +817,7 @@ Should now call bar() instead and marking foo() as deprecated
 </cffunction>
 
 <cffunction name="$checkMinimumVersion" access="public" returntype="boolean" output="false">
+
 	<cfargument name="version" type="string" required="true">
 	<cfargument name="minversion" type="string" required="true">
 	<cfscript>
@@ -841,4 +842,20 @@ Should now call bar() instead and marking foo() as deprecated
 	return false;
 	</cfscript>
 	<cfreturn >
+</cffunction>
+
+<cffunction name="$loadPlugins" returntype="void" access="public" output="false">
+	<cfscript>
+	application.wheels.PluginObj = $createObjectFromRoot(
+		path="wheels"
+		,fileName="Plugins"
+		,method="init"
+		,pluginPath="#ExpandPath(application.wheels.pluginPath)#"
+	);
+	
+	application.wheels.plugins = application.wheels.PluginObj.getPlugins();
+	application.wheels.incompatiblePlugins = application.wheels.PluginObj.getIncompatiblePlugins();
+	application.wheels.dependantPlugins = application.wheels.PluginObj.getDependantPlugins();
+	application.wheels.mixins = application.wheels.PluginObj.getMixins();
+	</cfscript>
 </cffunction>
