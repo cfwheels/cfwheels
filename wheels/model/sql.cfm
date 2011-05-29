@@ -19,6 +19,7 @@
 
 <cffunction name="$fromClause" returntype="string" access="public" output="false">
 	<cfargument name="include" type="string" required="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
 
@@ -29,7 +30,7 @@
 		if (Len(arguments.include))
 		{
 			// get info for all associations
-			loc.associations = $expandedAssociations(include=arguments.include);
+			loc.associations = $expandedAssociations(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 
 			// add join statement for each include separated by space
 			loc.iEnd = ArrayLen(loc.associations);
@@ -466,25 +467,12 @@
 			}
 		}
 
+		// add softdelete sql
 		if (!arguments.includeSoftDeletes)
 		{
-			/// add soft delete sql
-			loc.classes = [];
-			if (Len(arguments.include))
-				loc.classes = $expandedAssociations(include=arguments.include);
-			ArrayPrepend(loc.classes, variables.wheels.class);
 			loc.addToWhere = "";
-			for (loc.i=1; loc.i <= ArrayLen(loc.classes); loc.i++)
-			{
-				// we need the name of the table on the first go, and the alias otherwise
-				loc.classData = loc.classes[loc.i];
-				loc.tableName = loc.classData.tableName;
-				if (loc.i != 1)
-					loc.tableName = loc.classData.alias;
-				loc.model = model(loc.classData.modelName);
-				if (loc.model.$softDeletion())
-					loc.addToWhere = ListAppend(loc.addToWhere, loc.model.$aliasName() & "." & loc.model.$softDeleteColumn() & " IS NULL");
-			}
+			if ($softDeletion())
+				loc.addToWhere = ListAppend(loc.addToWhere, this.$aliasName() & "." & this.$softDeleteColumn() & " IS NULL");
 			loc.addToWhere = Replace(loc.addToWhere, ",", " AND ", "all");
 			if (Len(loc.addToWhere))
 			{
@@ -577,6 +565,7 @@
 
 <cffunction name="$expandedAssociations" returntype="array" access="public" output="false">
 	<cfargument name="include" type="string" required="true">
+	<cfargument name="includeSoftDeletes" type="boolean" default="false">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = [];
@@ -664,7 +653,7 @@
 
 				loc.joinType = ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one");
 				//loc.join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# AS #loc.classAssociations[loc.name].alias# ON  ";
-				loc.join = UCase(loc.joinType) & " JOIN " & variables.wheels.class.adapter.$tableAliasForJoin(loc.classAssociations[loc.name].tableName, loc.classAssociations[loc.name].alias) & " ON  ";
+				loc.join = UCase(loc.joinType) & " JOIN " & variables.wheels.class.adapter.$tableAliasForJoin(loc.classAssociations[loc.name].tableName, loc.classAssociations[loc.name].alias) & " ON ";
 				loc.toAppend = "";
 				loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
@@ -691,6 +680,8 @@
 						loc.second = loc.key1;
 					}
 					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$aliasName(associationname=loc.previousName)#.#loc.class.$classData().properties[loc.first].column# = #loc.classAssociations[loc.name].alias#.#loc.associatedClass.$classData().properties[loc.second].column#");
+					if (!arguments.includeSoftDeletes and loc.associatedClass.$softDeletion())
+						loc.toAppend = ListAppend(loc.toAppend, loc.associatedClass.$aliasName(associationname=loc.previousName) & "." & loc.associatedClass.$softDeleteColumn() & " IS NULL");
 				}
 				loc.classAssociations[loc.name].join = loc.join & Replace(loc.toAppend, ",", " AND ", "all");
 			}

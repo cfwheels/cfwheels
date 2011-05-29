@@ -210,5 +210,14 @@
 		<cfset loc.e = model("author").findOne(where="lastname = 'Bellenie'", include="posts")>
 		<cfset assert('IsArray(loc.e.posts) && ArrayIsEmpty(loc.e.posts)')>
 	</cffunction>
+	
+	<cffunction name="test_findAll_with_softdeleted_associated_rows">
+		<cftransaction action="begin">
+			<cfset model("Post").deleteAll()>
+			<cfset loc.posts = model("Author").findByKey(key=1, include="Posts", returnAs="query")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.posts.recordcount eq 1')>
+	</cffunction>
 
 </cfcomponent>
