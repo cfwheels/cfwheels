@@ -74,6 +74,8 @@ CREATE TABLE authors
 	id #loc.identityColumnType#
 	,firstname varchar(100) NOT NULL
 	,lastname varchar(100) NOT NULL
+	,favouritePostId int NULL
+	,leastFavouritePostId int NULL
 	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
@@ -454,3 +456,6 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 	id2="1",
 	userId="1"
 )>
+
+<!--- assign posts for multiple join test --->
+<cfset loc.andy.update(favouritePostId=1, leastFavouritePostId=2)>
