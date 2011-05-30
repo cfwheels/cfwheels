@@ -14,7 +14,7 @@
 
 	<cffunction name="test_from_clause_with_include">
 		<cfset loc.result = model("author").$fromClause(include="posts")>
-		<cfset assert("loc.result IS 'FROM authors LEFT OUTER JOIN posts ON authors.id = posts.authorid'")>
+		<cfset assert("loc.result IS 'FROM authors LEFT OUTER JOIN posts ON authors.id = posts.authorid AND posts.deletedat IS NULL'")>
 	</cffunction>
 
 <!---test:
