@@ -16,7 +16,7 @@ Model Enhancements
 Other Enhancements
 ==================
 
-* Added proper HTTP status headers - #705 [cfconcepts, Andy Bellenie]
+* Added proper HTTP status headers - #705 [Randy Johnson , Andy Bellenie]
 
 Bug Fixes
 =========
