@@ -70,10 +70,8 @@
 		<cfset loc.author = model("author").findOne()>
 		<cfset loc.author.setProperties(firstName="a", lastName="b")>
 		<cfset loc.result = loc.author.properties()>
-		<cfset loc.compareWith.id = loc.author.key()>
-		<cfset loc.compareWith.firstName = "a">
-		<cfset loc.compareWith.lastName = "b">
-		<cfset assert("loc.result.toString() IS loc.compareWith.toString()")>
+		<cfset assert('loc.result.firstName eq "a"')>
+		<cfset assert('loc.result.lastName eq "b"')>
 	</cffunction>
 
 </cfcomponent>
