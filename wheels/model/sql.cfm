@@ -19,7 +19,7 @@
 
 <cffunction name="$fromClause" returntype="string" access="public" output="false">
 	<cfargument name="include" type="string" required="true">
-	<cfargument name="includeSoftDeletes" type="boolean" required="true">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
 
