@@ -1,4 +1,4 @@
-<cfcomponent mixin="wheelsMapping.Controller,wheelsMapping.Model">
+<cfcomponent mixin="wheels.Controller,wheels.Model">
 
 	<cffunction name="init">
 		<cfset this.version = "99.9.9">
