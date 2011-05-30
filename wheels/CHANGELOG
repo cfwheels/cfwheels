@@ -13,6 +13,11 @@ Model Enhancements
 
 * Update to belongsTo(), hasOne() and hasMany() for the new argument joinKey. - [James Gibson, Tony Petruzzi]
 
+Other Enhancements
+==================
+
+* Added proper HTTP status headers - #705 [cfconcepts, Andy Bellenie]
+
 Bug Fixes
 =========
 
