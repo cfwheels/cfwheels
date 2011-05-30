@@ -20,6 +20,7 @@ Bug Fixes
 * Route with format will cause exception when route is selected and format is not provided - #738 [Danny Beard, Tony Petruzzi]
 * Raise renderError when template is not found for format - #759 [Mike Henke, Tony Petruzzi]
 * LabelClass should split up the list of classes and attach one class for each label - #757 [Mohamad El-Husseini, Tony Petruzzi]
+* Transactions would not close when used with the dependent argument of hasMany() - #739 [Andy Bellenie]
 * Soft deletes do not work correctly with outer joins - #762 [Andy Bellenie]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
