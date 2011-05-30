@@ -25,11 +25,14 @@ Other Enhancements
 * Added automatic caching in production mode of function results based on the arguments passed in - [Per Djurner]
 * Plugin functions can now be injected into base model adapter and model connection components - [Per Djurner]
 * Added support for Unobstructive Javascript - [Raul Riera]
+* Added proper HTTP status headers - #705 [cfconcepts, Andy Bellenie]
 
 Bug Fixes
 =========
 * Allow blank values to be passed through to validation - #638 [Per Djurner]
 * Allow for encoding autodetection within provides - #674 [Raul Riera]
+* Transactions would not close when used with the dependent argument of hasMany() - #739 [Andy Bellenie]
+* Soft deletes now work correctly with outer joins - #762 [Andy Bellenie]
 
 Miscellaneous
 =============
