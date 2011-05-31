@@ -162,6 +162,12 @@
 		<cfargument name="settings" type="struct" required="true">
 		<cfscript>
 		var loc = {};
+		
+		if(!StructKeyExists(arguments.settings, "value"))
+		{
+			$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syantax error in the WHERE statement such as forgetting to quote strings.");
+		}
+		
 		loc.params = {};
 		loc.params.cfsqltype = arguments.settings.type;
 		loc.params.value = arguments.settings.value;
