@@ -27,4 +27,10 @@
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
+	<cffunction name="test_value_cannot_be_determined_in_where_clause">
+		<cfset loc.e = raised('model("user").count(where="username = tony")')>
+		<cfset loc.r = "Wheels.QueryParamValue">
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
 </cfcomponent>
