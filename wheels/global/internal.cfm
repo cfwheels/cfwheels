@@ -806,7 +806,7 @@ Should now call bar() instead and marking foo() as deprecated
 		path="wheels"
 		,fileName="Plugins"
 		,method="init"
-		,pluginPath="#ExpandPath(application.wheels.pluginPath)#"
+		,pluginPath="#application.wheels.pluginPath#"
 	);
 	
 	application.wheels.plugins = application.wheels.PluginObj.getPlugins();
