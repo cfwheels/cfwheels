@@ -1,4 +1,4 @@
-<cffunction name="errorMessagesFor" returntype="string" access="public" output="false" hint="Builds and returns a list (`ul` tag with a class of `error-messages`) containing all the error messages for all the properties of the object (if any). Returns an empty string otherwise."
+<cffunction name="errorMessagesFor" returntype="string" access="public" output="false" hint="Builds and returns a list (`ul` tag with a default class of `errorMessages`) containing all the error messages for all the properties of the object (if any). Returns an empty string otherwise."
 	examples=
 	'
 		<!--- view code --->
