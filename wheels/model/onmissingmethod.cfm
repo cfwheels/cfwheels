@@ -41,11 +41,7 @@
 
 			// split the values into an array for easier processing
 			loc.values = "";
-			if (StructCount(arguments.missingMethodArguments) == 1)
-			{
-				loc.values = arguments.missingMethodArguments[1];
-			}
-			else if (StructKeyExists(arguments.missingMethodArguments, "value"))
+			if (StructKeyExists(arguments.missingMethodArguments, "value"))
 			{
 				loc.values = arguments.missingMethodArguments.value;
 			}
@@ -53,10 +49,24 @@
 			{
 				loc.values = arguments.missingMethodArguments.values;
 			}
+			else
+			{
+				loc.values = arguments.missingMethodArguments[1];
+			}
 			
 			if (!IsArray(loc.values))
 			{
-				loc.values = $listClean(list=loc.values, delim=loc.delimeter, returnAs="array");
+				if (ArrayLen(loc.finderProperties) eq 1)
+				{
+					// don't know why but this screws up in CF8
+					loc.temp = [];
+					arrayappend(loc.temp, loc.values);
+					loc.values = loc.temp;
+				}
+				else
+				{
+					loc.values = $listClean(list=loc.values, delim=loc.delimeter, returnAs="array");
+				}
 			}
 
 			// where clause

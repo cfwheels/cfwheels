@@ -66,5 +66,17 @@
 		<cfset loc.post = model("Post").findOneByTitle(value="Title for first test post", where="authorid = 1 AND views = 5")>
 		<cfset assert('IsObject(loc.post)')>
 	</cffunction>
+	
+	<cffunction name="test_can_pass_in_commas">
+		<cfset loc.title = "Testing to make, to make sure, commas work">
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").findOne(where="id = 1")>
+			<cfset loc.post.title = loc.title>
+			<cfset loc.post.save()>
+			<cfset loc.post = model("Post").findOneByTitle(values="#loc.title#")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('IsObject(loc.post)')>
+	</cffunction>
 
 </cfcomponent>
