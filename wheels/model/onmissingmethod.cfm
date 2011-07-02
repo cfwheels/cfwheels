@@ -76,7 +76,7 @@
 			loc.iEnd = ArrayLen(loc.finderProperties);
 			for (loc.i = 1; loc.i LTE loc.iEnd; loc.i++)
 			{
-				ArrayAppend(loc.addToWhere, "#loc.finderProperties[loc.i]# #$dynamicFinderOperator(loc.finderProperties[loc.i])# #$quoteValue(loc.values[loc.i])#");
+				ArrayAppend(loc.addToWhere, "#loc.finderProperties[loc.i]# #$dynamicFinderOperator(loc.finderProperties[loc.i])# #variables.wheels.class.adapter.$quoteValue(loc.values[loc.i])#");
 			}
 			
 			// construct where clause
@@ -100,17 +100,6 @@
 			$throw(type="Wheels.MethodNotFound", message="The method `#arguments.missingMethodName#` was not found in the `#variables.wheels.class.modelName#` model.", extendedInfo="Check your spelling or add the method to the model's CFC file.");
 	</cfscript>
 	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="$quoteValue" returntype="string" access="public" output="false">
-	<cfargument name="str" type="string" required="true" hint="string to quote">
-	<cfscript>
-	if (!IsNumeric(arguments.str))
-	{
-		arguments.str = "'#arguments.str#'";
-	}
-	return arguments.str;
-	</cfscript>
 </cffunction>
 
 <cffunction name="$dynamicFinderOperator" returntype="string" access="public" output="false">
