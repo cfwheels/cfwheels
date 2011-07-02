@@ -24,50 +24,72 @@
 		else if (Left(arguments.missingMethodName, 9) == "findOneBy" || Left(arguments.missingMethodName, 9) == "findAllBy")
 		{
 			if (StructKeyExists(server, "railo"))
-				loc.finderProperties = ListToArray(LCase(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, "And", "|"), "findAllBy", ""), "findOneBy", "")), "|"); // since Railo passes in the method name in all upper case we have to do this here
-			else
-				loc.finderProperties = ListToArray(ReplaceNoCase(ReplaceNoCase(Replace(arguments.missingMethodName, "And", "|"), "findAllBy", ""), "findOneBy", ""), "|");
-			loc.firstProperty = loc.finderProperties[1];
-			loc.secondProperty = IIf(ArrayLen(loc.finderProperties) == 2, "loc.finderProperties[2]", "");
-
-			// throw an error when more than one argument is passed in but not `value` (for single property) or `values` (for multiple properties)
-			// this means that model("artist").findOneByName("U2") will still work but not model("artist").findOneByName(values="U2", returnAs="query"), need to pass in just `value` there instead.
-			if (application.wheels.showErrorInformation)
 			{
-				if (StructCount(arguments.missingMethodArguments) gt 1)
+				loc.finderProperties = ListToArray(LCase(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, "And", "|", "all"), "findAllBy", "", "all"), "findOneBy", "", "all")), "|"); // since Railo passes in the method name in all upper case we have to do this here
+			}
+			else
+			{
+				loc.finderProperties = ListToArray(ReplaceNoCase(ReplaceNoCase(Replace(arguments.missingMethodName, "And", "|", "all"), "findAllBy", "", "all"), "findOneBy", "", "all"), "|");
+			}
+
+			// sometimes values will have commas in them, allow the developer to change the delimeter
+			loc.delimeter = ",";
+			if (StructKeyExists(arguments.missingMethodArguments, "delimeter"))
+			{
+				loc.delimeter = arguments.missingMethodArguments["delimeter"];
+			}
+
+			// split the values into an array for easier processing
+			loc.values = "";
+			if (StructKeyExists(arguments.missingMethodArguments, "value"))
+			{
+				loc.values = arguments.missingMethodArguments.value;
+			}
+			else if (StructKeyExists(arguments.missingMethodArguments, "values"))
+			{
+				loc.values = arguments.missingMethodArguments.values;
+			}
+			else
+			{
+				loc.values = arguments.missingMethodArguments[1];
+			}
+			
+			if (!IsArray(loc.values))
+			{
+				if (ArrayLen(loc.finderProperties) eq 1)
 				{
-					if (Len(loc.secondProperty))
-					{
-						if (!StructKeyExists(arguments.missingMethodArguments, "values"))
-							$throw(type="Wheels.IncorrectArguments", message="The `values` argument is required but was not passed in.", extendedInfo="Pass in a list of values to the dynamic finder in the `values` argument.");
-					}
-					else
-					{
-						if (!StructKeyExists(arguments.missingMethodArguments, "value"))
-							$throw(type="Wheels.IncorrectArguments", message="The `value` argument is required but was not passed in.", extendedInfo="Pass in a value to the dynamic finder in the `value` argument.");
-					}
+					// don't know why but this screws up in CF8
+					loc.temp = [];
+					arrayappend(loc.temp, loc.values);
+					loc.values = loc.temp;
+				}
+				else
+				{
+					loc.values = $listClean(list=loc.values, delim=loc.delimeter, returnAs="array");
 				}
 			}
 
-			if (StructCount(arguments.missingMethodArguments) == 1)
-				loc.firstValue = Trim(ListFirst(arguments.missingMethodArguments[1]));
-			else if (StructKeyExists(arguments.missingMethodArguments, "value"))
-				loc.firstValue = arguments.missingMethodArguments.value;
-			else if (StructKeyExists(arguments.missingMethodArguments, "values"))
-				loc.firstValue = Trim(ListFirst(arguments.missingMethodArguments.values));
-			loc.addToWhere = loc.firstProperty & " " & $dynamicFinderOperator(loc.firstProperty) & " '" & loc.firstValue & "'";
-			if (Len(loc.secondProperty))
+			// where clause
+			loc.addToWhere = [];
+	
+			// loop through all the properties they want to query and assign values
+			loc.iEnd = ArrayLen(loc.finderProperties);
+			for (loc.i = 1; loc.i LTE loc.iEnd; loc.i++)
 			{
-				if (StructCount(arguments.missingMethodArguments) == 1)
-					loc.secondValue = Trim(ListLast(arguments.missingMethodArguments[1]));
-				else if (StructKeyExists(arguments.missingMethodArguments, "values"))
-					loc.secondValue = Trim(ListLast(arguments.missingMethodArguments.values));
-				loc.addToWhere = loc.addToWhere & " AND " & loc.secondProperty & " " & $dynamicFinderOperator(loc.secondProperty) & " '" & loc.secondValue & "'";
+				ArrayAppend(loc.addToWhere, "#loc.finderProperties[loc.i]# #$dynamicFinderOperator(loc.finderProperties[loc.i])# #variables.wheels.class.adapter.$quoteValue(loc.values[loc.i])#");
 			}
+			
+			// construct where clause
+			loc.addToWhere = ArrayToList(loc.addToWhere, " AND ");
 			arguments.missingMethodArguments.where = IIf(StructKeyExists(arguments.missingMethodArguments, "where"), "'(' & arguments.missingMethodArguments.where & ') AND (' & loc.addToWhere & ')'", "loc.addToWhere");
+
+			// remove uneeded arguments
+			StructDelete(arguments.missingMethodArguments, "delimeter");
 			StructDelete(arguments.missingMethodArguments, "1");
 			StructDelete(arguments.missingMethodArguments, "value");
 			StructDelete(arguments.missingMethodArguments, "values");
+
+			// call finder method
 			loc.returnValue = IIf(Left(arguments.missingMethodName, 9) == "findOneBy", "findOne(argumentCollection=arguments.missingMethodArguments)", "findAll(argumentCollection=arguments.missingMethodArguments)");
 		}
 		else
