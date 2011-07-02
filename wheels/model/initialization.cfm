@@ -55,7 +55,7 @@
 		variables.wheels.class.adapter = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#", fileName="Connection", method="init", datasource="#variables.wheels.class.connection.datasource#", username="#variables.wheels.class.connection.username#", password="#variables.wheels.class.connection.password#");
 
 		// get columns for the table
-		loc.columns = variables.wheels.class.adapter.$getColumns(tableName());
+		loc.columns = $adapter().$getColumns(tableName());
 
 		variables.wheels.class.propertyList = "";
 		variables.wheels.class.columnList = "";
@@ -81,7 +81,7 @@
 				// set the info we need for each property
 				variables.wheels.class.properties[loc.property] = {};
 				variables.wheels.class.properties[loc.property].dataType = loc.type;
-				variables.wheels.class.properties[loc.property].type = variables.wheels.class.adapter.$getType(loc.type, loc.columns["decimal_digits"][loc.i]);
+				variables.wheels.class.properties[loc.property].type = $adapter().$getType(loc.type, loc.columns["decimal_digits"][loc.i]);
 				variables.wheels.class.properties[loc.property].column = loc.columns["column_name"][loc.i];
 				variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];
 
@@ -93,7 +93,7 @@
 
 				variables.wheels.class.properties[loc.property].size = loc.columns["column_size"][loc.i];
 				variables.wheels.class.properties[loc.property].label = Humanize(loc.property);
-				variables.wheels.class.properties[loc.property].validationtype = variables.wheels.class.adapter.$getValidationType(variables.wheels.class.properties[loc.property].type);
+				variables.wheels.class.properties[loc.property].validationtype = $adapter().$getValidationType(variables.wheels.class.properties[loc.property].type);
 
 				if (StructKeyExists(variables.wheels.class.mapping, loc.property)) {
 					if (StructKeyExists(variables.wheels.class.mapping[loc.property], "label"))
@@ -225,6 +225,10 @@
 
 <cffunction name="$classData" returntype="struct" access="public" output="false">
 	<cfreturn variables.wheels.class>
+</cffunction>
+
+<cffunction name="$adapter" returntype="any" access="public" output="false">
+	<cfreturn $classData().adapter>
 </cffunction>
 
 <cffunction name="$softDeletion" returntype="boolean" access="public" output="false">

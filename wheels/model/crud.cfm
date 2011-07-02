@@ -257,7 +257,7 @@
 				loc.finderArgs.$primaryKey = primaryKeys();
 				if (application.wheels.cacheQueries && (IsNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
 					loc.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache, "schemas");
-				loc.findAll = variables.wheels.class.adapter.$query(argumentCollection=loc.finderArgs);
+				loc.findAll = $adapter().$query(argumentCollection=loc.finderArgs);
 				request.wheels[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
 			request.wheels[$hashedKey(loc.findAll.query)] = variables.wheels.class.modelName; // place an identifer in request scope so we can reference this query when passed in to view functions
@@ -456,7 +456,7 @@
 </cffunction>
 
 <cffunction name="$updateAll" returntype="numeric" access="public" output="false">
-	<cfset var update = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize)>
+	<cfset var update = $adapter().$query(sql=arguments.sql, parameterize=arguments.parameterize)>
 	<cfreturn update.result.recordCount>
 </cffunction>
 
@@ -612,7 +612,7 @@
 </cffunction>
 
 <cffunction name="$deleteAll" returntype="numeric" access="public" output="false">
-	<cfset var delete = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize)>
+	<cfset var delete = $adapter().$query(sql=arguments.sql, parameterize=arguments.parameterize)>
 	<cfreturn delete.result.recordCount>
 </cffunction>
 
@@ -753,7 +753,7 @@
 		if ($callback("beforeDelete", arguments.callbacks))
 		{
 			$deleteDependents(); // delete dependents before the main record in case of foreign key constraints
-			loc.del = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
+			loc.del = $adapter().$query(sql=arguments.sql, parameterize=arguments.parameterize);
 			if (loc.del.result.recordCount eq 1 and $callback("afterDelete", arguments.callbacks))
 				loc.ret = true;
 		}
@@ -983,8 +983,8 @@
 		for(loc.i = 1; loc.i LTE loc.iEnd; loc.i++)
 			loc.primaryKeys[loc.i] = variables.wheels.class.properties[loc.primaryKeys[loc.i]].column;
 
-		loc.ins = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize, $primaryKey=ArrayToList(loc.primaryKeys));
-		loc.generatedKey = variables.wheels.class.adapter.$generatedKey();
+		loc.ins = $adapter().$query(sql=loc.sql, parameterize=arguments.parameterize, $primaryKey=ArrayToList(loc.primaryKeys));
+		loc.generatedKey = $adapter().$generatedKey();
 		if (StructKeyExists(loc.ins.result, loc.generatedKey))
 			this[primaryKeys(1)] = loc.ins.result[loc.generatedKey];
 		if (arguments.reload)
@@ -1018,7 +1018,7 @@
 		{
 			ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
 			loc.sql = $addKeyWhereClause(sql=loc.sql);
-			loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
+			loc.upd = $adapter().$query(sql=loc.sql, parameterize=arguments.parameterize);
 			if (arguments.reload)
 				this.reload();
 		}

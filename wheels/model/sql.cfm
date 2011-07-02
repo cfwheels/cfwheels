@@ -78,7 +78,7 @@
 		{
 			if (arguments.order == "random")
 			{
-				loc.returnValue = variables.wheels.class.adapter.$randomOrder();
+				loc.returnValue = $adapter().$randomOrder();
 			}
 			else if (arguments.order Contains "(")
 			{
@@ -653,7 +653,7 @@
 
 				loc.joinType = ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one");
 				//loc.join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# AS #loc.classAssociations[loc.name].alias# ON  ";
-				loc.join = UCase(loc.joinType) & " JOIN " & variables.wheels.class.adapter.$tableAliasForJoin(loc.classAssociations[loc.name].tableName, loc.classAssociations[loc.name].alias) & " ON ";
+				loc.join = UCase(loc.joinType) & " JOIN " & $adapter().$tableAliasForJoin(loc.classAssociations[loc.name].tableName, loc.classAssociations[loc.name].alias) & " ON ";
 				loc.toAppend = "";
 				loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
