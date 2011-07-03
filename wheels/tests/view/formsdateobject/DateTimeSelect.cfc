@@ -43,4 +43,10 @@
 		</cfloop>
 	</cffunction>
 
+	<cffunction name="test_ampm_select_coming_is_displayed_twice">
+		<cfset loc.r = loc.controller.dateTimeSelect(objectName='user', property='birthday', dateOrder='month,day,year', monthDisplay='abbreviations', twelveHour='true', label='')>
+		<cfset loc.a = ReMatchNoCase("user\[birthday\]\(\$ampm\)", loc.r)>
+		<cfset assert('ArrayLen(loc.a) eq 1')>
+	</cffunction>
+
 </cfcomponent>
