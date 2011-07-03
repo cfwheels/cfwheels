@@ -98,7 +98,7 @@
 		// in order to support 12-hour format, we have to enforce some rules
 		// if arguments.twelveHour is true, then order MUST contain ampm
 		// if the order contains ampm, then arguments.twelveHour MUST be true
-		if (arguments.twelveHour || ListFindNoCase(arguments.order, "ampm"))
+		if (ListFindNoCase(arguments.order, "hour") && arguments.twelveHour && !ListFindNoCase(arguments.order, "ampm"))
 		{
 			arguments.twelveHour = true;
 			if (!ListFindNoCase(arguments.order, "ampm"))
