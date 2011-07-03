@@ -115,4 +115,9 @@
 		<cfset assert('request.wheels.pagination_order_test_1.TOTALRECORDS eq 1')>
 	</cffunction>
 
+	<cffunction name="test_compound_keys">
+		<cfset loc.result = model("combikey").findAll(page=2, perPage=4, order="id2")>
+		<cfset assert('loc.result.recordCount eq 4')>
+	</cffunction>
+
 </cfcomponent>

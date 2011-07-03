@@ -33,6 +33,7 @@ Bug Fixes
 * Allow for encoding autodetection within provides - #674 [Raul Riera]
 * Transactions would not close when used with the dependent argument of hasMany() - #739 [Andy Bellenie]
 * Soft deletes now work correctly with outer joins - #762 [Andy Bellenie]
+* Pagination with compound keys - #725 [Andy Bellenie, jfeasel, Tony Petruzzi]
 
 Miscellaneous
 =============

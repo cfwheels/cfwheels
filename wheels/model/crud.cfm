@@ -175,27 +175,27 @@
 				else
 				{
 					loc.values = findAll($limit=loc.limit, $offset=loc.offset, select=primaryKeys(), where=arguments.where, order=arguments.order, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
-					if (loc.values.RecordCount) {
+					if (loc.values.RecordCount)
+					{
 						loc.paginationWhere = "";
-						loc.iEnd = ListLen(primaryKeys());
-						for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+						for (loc.k=1; loc.k <= loc.values.RecordCount; loc.k++)
 						{
-							loc.property = primaryKeys(loc.i);
-							if (ListFindNoCase("integer,float", variables.wheels.class.properties[loc.property].validationtype))
+							loc.keyComboValues = [];
+							loc.iEnd = ListLen(primaryKeys());
+							for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 							{
-								loc.list = Evaluate("ValueList(loc.values.#loc.property#)");
+								loc.property = primaryKeys(loc.i);
+								ArrayAppend(loc.keyComboValues, "#tableName()#.#loc.property# = #$adapter().$quoteValue(loc.values[loc.property][loc.k])#");
 							}
-							else
-							{
-								loc.list = Evaluate("QuotedValueList(loc.values.#loc.property#)");
-							}
-							loc.paginationWhere = ListAppend(loc.paginationWhere, "#tableName()#.#loc.property# IN (#loc.list#)", Chr(7));
-						}
-						loc.paginationWhere = Replace(loc.paginationWhere, Chr(7), " AND ", "all");
-						if (Len(arguments.where) && Len(arguments.include)) // this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
-							arguments.where = "(" & arguments.where & ")" & " AND " & loc.paginationWhere;
-						else
+							loc.paginationWhere = ListAppend(loc.paginationWhere, "(" & ArrayToList(loc.keyComboValues, " AND ") & ")", Chr(7));
+ 						}
+						loc.paginationWhere = Replace(loc.paginationWhere, Chr(7), " OR ", "all");
+ 						if (Len(arguments.where) && Len(arguments.include)) // this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
+ 							arguments.where = "(" & arguments.where & ")" & " AND " & loc.paginationWhere;
+ 						else
+						{
 							arguments.where = loc.paginationWhere;
+						}
 					}
 				}
 			}
