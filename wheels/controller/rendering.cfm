@@ -254,7 +254,7 @@
 	<cfscript>
 		var loc = {};
 		if (!Len(arguments.$template))
-			arguments.$template = "/" & arguments.$controller & "/" & arguments.$action;
+			arguments.$template = "/" & ListChangeDelims(arguments.$controller, "/", ".") & "/" & arguments.$action;
 		arguments.$type = "page";
 		arguments.$name = arguments.$template;
 		arguments.$template = $generateIncludeTemplatePath(argumentCollection=arguments);
@@ -374,9 +374,9 @@
 		if (Left(arguments.$name, 1) == "/")
 			loc.include = loc.include & loc.folderName & "/" & loc.fileName; // Include a file in a sub folder to views
 		else if (arguments.$name Contains "/")
-			loc.include = loc.include & "/" & arguments.$controllerName & "/" & loc.folderName & "/" & loc.fileName; // Include a file in a sub folder of the current controller
+			loc.include = loc.include & "/" & ListChangeDelims(arguments.$controllerName, "/", ".") & "/" & loc.folderName & "/" & loc.fileName; // Include a file in a sub folder of the current controller
 		else
-			loc.include = loc.include & "/" & arguments.$controllerName & "/" & loc.fileName; // Include a file in the current controller's view folder
+			loc.include = loc.include & "/" & ListChangeDelims(arguments.$controllerName, "/", ".") & "/" & loc.fileName; // Include a file in the current controller's view folder
 	</cfscript>
 	<cfreturn LCase(loc.include) />
 </cffunction>
