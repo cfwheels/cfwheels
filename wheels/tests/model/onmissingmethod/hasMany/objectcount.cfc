@@ -14,7 +14,7 @@
  	<cffunction name="test_objectCount_valid_with_combi_key">
 		<cfset loc.user = loc.userModel.findByKey(key=1)>
 		<cfset loc.combiKeyCount = loc.user.combiKeyCount() />
-		<cfset assert('loc.combiKeyCount eq 1')>
+		<cfset assert('loc.combiKeyCount eq 5')>
 	</cffunction>
 
  	<cffunction name="test_objectCount_returns_zero">
