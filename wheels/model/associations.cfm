@@ -69,7 +69,7 @@
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="joinKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="joinType" type="string" required="false" hint="See documentation for @belongsTo.">
-	<cfargument name="dependent" type="string" required="false" hint="Defines how to handle dependent models when you delete a record from this model. Set to `delete` to instantiate associated models and call their @delete method, `deleteAll` to delete without instantiating, `nullify` to remove the foreign key, or `false` to do nothing.">
+	<cfargument name="dependent" type="string" required="false" hint="Defines how to handle dependent models when you delete a record from this model. Set to `delete` to instantiate associated models and call their @delete method, `deleteAll` to delete without instantiating, `removeAll` to remove the foreign key, or `false` to do nothing.">
 	<cfargument name="shortcut" type="string" required="false" default="" hint="Set this argument to create an additional dynamic method that gets the object(s) from the other side of a many-to-many association.">
 	<cfargument name="through" type="string" required="false" default="#singularize(arguments.shortcut)#,#arguments.name#" hint="Set this argument if you need to override Wheels conventions when using the `shortcut` argument. Accepts a list of two association names representing the chain from the opposite side of the many-to-many relationship to this model.">
 	<cfscript>
