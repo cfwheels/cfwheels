@@ -310,7 +310,7 @@
 			loc.foundRoute = false;
 			while (!loc.foundRoute) // need to use a while loop here so we don't loop through all of the routes
 			{
-				if (application.wheels.showErrorInformation && !ArrayLen(loc.routePos))
+				if (application.wheels.showErrorInformation && !ArrayLen(loc.routeArray))
 					$throw(type="Wheels.RouteMatchNotFound", message="Could not find a match for the `#arguments.route#` route.");
 
 				// we always try to find the route on the first position because we are cleaning the array everytime we don't find a match
