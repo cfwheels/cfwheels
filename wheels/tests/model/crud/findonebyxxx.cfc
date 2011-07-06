@@ -40,7 +40,7 @@
 	</cffunction>
 
 	<cffunction name="test_unlimited_properties_for_dynamic_finders">
-		<cfset loc.post = model("Post").findOneByTitleAndAuthoridAndViews(values="Title for first test post|1|5", delimeter="|")>
+		<cfset loc.post = model("Post").findOneByTitleAndAuthoridAndViews(values="Title for first test post|1|5", delimiter="|")>
 		<cfset assert('IsObject(loc.post)')>
 	</cffunction>
 	
@@ -56,7 +56,7 @@
 			<cfset loc.post = model("Post").findOne(where="id = 1")>
 			<cfset loc.post.title = loc.title>
 			<cfset loc.post.save()>
-			<cfset loc.post = model("Post").findOneByTitleAndAuthorid(values="#loc.title#|1", delimeter="|")>
+			<cfset loc.post = model("Post").findOneByTitleAndAuthorid(values="#loc.title#|1", delimiter="|")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfset assert('IsObject(loc.post)')>

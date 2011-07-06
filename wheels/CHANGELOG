@@ -14,7 +14,7 @@ Model Enhancements
 * Update to belongsTo(), hasOne() and hasMany() for the new argument joinKey. - [James Gibson, Tony Petruzzi]
 * You can pass an unlimited number properties when using dynamic finders - [Tony Petruzzi]
 * Dynamic finders now support passing in an array for values - [Tony Petruzzi]
-* Added the delimeter argument to dynamic finders, this allow you to change the delimeter - [Tony Petruzzi]
+* Added the delimiter argument to dynamic finders, this allow you to change the delimiter - [Tony Petruzzi]
 
 Other Enhancements
 ==================

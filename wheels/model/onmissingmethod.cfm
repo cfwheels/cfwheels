@@ -32,11 +32,11 @@
 				loc.finderProperties = ListToArray(ReplaceNoCase(ReplaceNoCase(Replace(arguments.missingMethodName, "And", "|", "all"), "findAllBy", "", "all"), "findOneBy", "", "all"), "|");
 			}
 
-			// sometimes values will have commas in them, allow the developer to change the delimeter
-			loc.delimeter = ",";
-			if (StructKeyExists(arguments.missingMethodArguments, "delimeter"))
+			// sometimes values will have commas in them, allow the developer to change the delimiter
+			loc.delimiter = ",";
+			if (StructKeyExists(arguments.missingMethodArguments, "delimiter"))
 			{
-				loc.delimeter = arguments.missingMethodArguments["delimeter"];
+				loc.delimiter = arguments.missingMethodArguments["delimiter"];
 			}
 
 			// split the values into an array for easier processing
@@ -65,7 +65,7 @@
 				}
 				else
 				{
-					loc.values = $listClean(list=loc.values, delim=loc.delimeter, returnAs="array");
+					loc.values = $listClean(list=loc.values, delim=loc.delimiter, returnAs="array");
 				}
 			}
 
@@ -84,7 +84,7 @@
 			arguments.missingMethodArguments.where = IIf(StructKeyExists(arguments.missingMethodArguments, "where"), "'(' & arguments.missingMethodArguments.where & ') AND (' & loc.addToWhere & ')'", "loc.addToWhere");
 
 			// remove uneeded arguments
-			StructDelete(arguments.missingMethodArguments, "delimeter");
+			StructDelete(arguments.missingMethodArguments, "delimiter");
 			StructDelete(arguments.missingMethodArguments, "1");
 			StructDelete(arguments.missingMethodArguments, "value");
 			StructDelete(arguments.missingMethodArguments, "values");
