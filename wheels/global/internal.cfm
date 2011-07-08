@@ -823,23 +823,44 @@ Should now call bar() instead and marking foo() as deprecated
 	<cfscript>
 	var loc = {};
 
-	// remove periods and commas from the version and minimum version
-	arguments.version = ListChangeDelims(arguments.version, "", ".,");
-	arguments.minversion = ListChangeDelims(arguments.minversion, "", ".,");
+	arguments.version = ListChangeDelims(arguments.version, ".", ".,");
+	arguments.minversion = ListChangeDelims(arguments.minversion, ".", ".,");
+
+	arguments.version = ListToArray(arguments.version, ".");
+	arguments.minversion = ListToArray(arguments.minversion, ".");
 
 	// make version and minversion the same length pad zeros to the end
-	loc.a = max(len(arguments.version), len(arguments.minversion));
+	loc.minSize = max(ArrayLen(arguments.version), ArrayLen(arguments.minversion));
 
-	arguments.version = arguments.version & RepeatString("0", loc.a - len(arguments.version));
-	arguments.minversion = arguments.minversion & RepeatString("0", loc.a - len(arguments.minversion));
+	ArrayResize(arguments.version, loc.minSize);
+	ArrayResize(arguments.minversion, loc.minSize);
 
-	// make sure the version is an integer
-	if (IsNumeric(arguments.version) && IsNumeric(arguments.minversion) && arguments.version >= arguments.minversion)
+	for(loc.i=1; loc.i LTE loc.minSize; loc.i++)
 	{
-		return true;
+		loc.version = 0;
+		if(ArrayIsDefined(arguments.version, loc.i))
+		{
+			loc.version = val(arguments.version[loc.i]);
+		}
+		
+		loc.minversion = 0;
+		if(ArrayIsDefined(arguments.minversion, loc.i))
+		{
+			loc.minversion = val(arguments.minversion[loc.i]);
+		}
+		
+		if(loc.version gt loc.minversion)
+		{
+			return true;
+		}
+		
+		if(loc.version lt loc.minversion)
+		{
+			return false;
+		}
 	}
 
-	return false;
+	return true;
 	</cfscript>
 	<cfreturn >
 </cffunction>
