@@ -34,6 +34,7 @@ Bug Fixes
 * Better error message when supplying a query param of type string and omitting single quotes - #763 [Adam Chapman, Tony Petruzzi]
 * Allow commas in dynamic finders - #771 [Joshua, Tony Petruzzi]
 * AMPM select displaying twice - #768 [John Bliss, Tony Petruzzi]
+* $request argumentsCollection: should be argumentCollection - #772 [William Fisk, Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
