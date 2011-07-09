@@ -151,7 +151,7 @@
 		if (application.wheels.showDebugInformation)
 			$debugPoint("setup");
 
-		loc.params = $paramParser(argumentsCollection=arguments);
+		loc.params = $paramParser(argumentCollection=arguments);
 		
 		// set params in the request scope as well so we can display it in the debug info outside of the dispatch / controller context
 		request.wheels.params = loc.params;
