@@ -152,6 +152,26 @@
 	<cfreturn columnData />
 </cffunction>
 
+<cffunction name="validationTypeForProperty" returntype="any" access="public" output="false" hint="Returns the validation type for the property"
+	examples=
+	'
+		<!--- first name is a varchar(50) column --->
+		<cfset employee = model("employee").new()>
+		<!--- would output "string" --->
+		<cfoutput>##employee.validationTypeForProperty("firstName")>##</cfoutput>
+	'
+	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="">
+	<cfargument name="property" type="string" required="true" hint="Name of column to retrieve data for." />
+	<cfscript>
+		var columnData = "string";
+		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
+		{
+			columnData = variables.wheels.class.properties[arguments.property].validationtype;
+		}
+	</cfscript>
+	<cfreturn columnData />
+</cffunction>
+
 <!--- PUBLIC MODEL OBJECT METHODS --->
 
 <cffunction name="key" returntype="string" access="public" output="false" hint="Returns the value of the primary key for the object. If you have a single primary key named `id`, then `someObject.key()` is functionally equivalent to `someObject.id`. This method is more useful when you do dynamic programming and don't know the name of the primary key or when you use composite keys (in which case it's convenient to use this method to get a list of both key values returned)."
