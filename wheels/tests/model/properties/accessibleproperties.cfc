@@ -24,7 +24,7 @@
 	<cffunction name="test_all_other_properties_can_be_set_directly">
 		<cfset loc.model = model("post") />
 		<cfset loc.model = duplicate(loc.model)>
-		<cfset loc.model.accessibleProperties(propertyName="views") />
+		<cfset loc.model.accessibleProperties(properties="views") />
 		<cfset loc.model = loc.model.new() />
 		<cfset loc.model.averageRating = 4.9 />
 		<cfset loc.model.body = "This is the body" />
