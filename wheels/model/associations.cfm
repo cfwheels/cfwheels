@@ -15,6 +15,7 @@
 	<cfargument name="foreignKey" type="string" required="false" default="" hint="Foreign key property name (usually not needed if you follow Wheels conventions since the foreign key name will be deduced from the `name` argument).">
 	<cfargument name="joinKey" type="string" required="false" default="" hint="Column name to join to if not the primary key (usually not needed if you follow wheels conventions since the join key will be the tables primary key/keys).">
 	<cfargument name="joinType" type="string" required="false" hint="Use to set the join type when joining associated tables. Possible values are `inner` (for `INNER JOIN`) and `outer` (for `LEFT OUTER JOIN`).">
+	<cfargument name="join" type="string" required="false" hint="Used if you want to suplly the entire join statement yourself.">
 	<cfscript>
 		$args(name="belongsTo", args=arguments);
 		// deprecate the class argument (change of name only)
@@ -72,6 +73,7 @@
 	<cfargument name="dependent" type="string" required="false" hint="Defines how to handle dependent models when you delete a record from this model. Set to `delete` to instantiate associated models and call their @delete method, `deleteAll` to delete without instantiating, `removeAll` to remove the foreign key, or `false` to do nothing.">
 	<cfargument name="shortcut" type="string" required="false" default="" hint="Set this argument to create an additional dynamic method that gets the object(s) from the other side of a many-to-many association.">
 	<cfargument name="through" type="string" required="false" default="#singularize(arguments.shortcut)#,#arguments.name#" hint="Set this argument if you need to override Wheels conventions when using the `shortcut` argument. Accepts a list of two association names representing the chain from the opposite side of the many-to-many relationship to this model.">
+	<cfargument name="join" type="string" required="false" hint="See documentation for @belongsTo.">
 	<cfscript>
 		var singularizeName = capitalize(singularize(arguments.name));
 		var capitalizeName = capitalize(arguments.name);
@@ -109,6 +111,7 @@
 	<cfargument name="joinKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
 	<cfargument name="joinType" type="string" required="false" hint="See documentation for @belongsTo.">
 	<cfargument name="dependent" type="string" required="false" hint="See documentation for @hasMany.">
+	<cfargument name="join" type="string" required="false" hint="See documentation for @belongsTo.">
 	<cfscript>
 		var capitalizeName = capitalize(arguments.name);
 		$args(name="hasOne", args=arguments);

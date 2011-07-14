@@ -6,6 +6,7 @@
 		<!--- crazy join to test the joinKey argument --->
 		<cfset hasOne(name="author", foreignKey="firstName", joinKey="firstName")>
 		<cfset hasMany(name="authors", foreignKey="firstName", joinKey="firstName")>
+		<cfset hasMany(name="authorsCustom", modelName="authors", join="INNER JOIN authors ON authors.firstname = users.firstname AND authors.lastname = users.lastname")>
 		<cfset hasMany(name="combikeys")>
 		<cfset hasMany(name="outerjoinphotogalleries", modelName="gallery", jointype="outer")>
 		<cfset validatesPresenceOf("username,password,firstname,lastname")>

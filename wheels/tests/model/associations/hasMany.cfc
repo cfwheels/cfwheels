@@ -205,5 +205,9 @@
 		<cfset assert('loc.obj.firstName eq loc.obj.authors[1].firstName')>
 	</cffunction>
 
+	<cffunction name="test_supply_join_statement_directly">
+		<cfset loc.obj = model("user").findAll(order="id", include="authorsCustom")>
+		<cfset assert('loc.obj.recordcount eq 4')>
+	</cffunction>
 
 </cfcomponent>
