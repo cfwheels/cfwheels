@@ -92,6 +92,10 @@
 			// call finder method
 			loc.returnValue = IIf(Left(arguments.missingMethodName, 9) == "findOneBy", "findOne(argumentCollection=arguments.missingMethodArguments)", "findAll(argumentCollection=arguments.missingMethodArguments)");
 		}
+		else if (Left(arguments.missingMethodName, 17) == "findOneOrCreateBy" || Left(arguments.missingMethodName, 14) == "findOrCreateBy")
+		{
+			loc.returnValue = $findOneOrCreateBy(argumentCollection=arguments);
+		}
 		else
 		{
 			loc.returnValue = $associationMethod(argumentCollection=arguments);

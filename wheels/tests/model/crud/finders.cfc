@@ -220,4 +220,36 @@
 		<cfset assert('loc.posts.recordcount eq 1')>
 	</cffunction>
 
+	<cffunction name="test_findFirst">
+		<cfset loc.p = model("post").findOne(order="id ASC")>
+		<cfset loc.post = model("post").findFirst()>
+		<cfset assert('loc.post.id eq loc.p.id')>
+	</cffunction>
+	
+	<cffunction name="test_findLast">
+		<cfset loc.p = model("post").findOne(order="id DESC")>
+		<cfset loc.post = model("post").findLast()>
+		<cfset assert('loc.post.id eq loc.p.id')>
+	</cffunction>
+	
+	<cffunction name="test_findOneOrCreateBy">
+		<cftransaction>
+			<cfset loc.author = model("author").findOneOrCreateByLastName(lastname="humphreys", firstname="don")>
+			<cfset assert('IsObject(loc.author)')>
+			<cfset assert('loc.author.lastname eq "humphreys"')>
+			<cfset assert('loc.author.firstname eq "don"')>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+	
+	<cffunction name="test_findAllKeys">
+		<cfset loc.p = model("post").findAll(select="id")>
+		<cfset loc.posts = model("post").findAllKeys()>
+		<cfset loc.keys = ValueList(loc.p.id)>
+		<cfset assert('loc.posts eq loc.keys')>
+		<cfset loc.p = model("post").findAll(select="id")>
+		<cfset loc.posts = model("post").findAllKeys(quoted=true)>
+		<cfset loc.keys = QuotedValueList(loc.p.id)>
+	</cffunction>
+
 </cfcomponent>
