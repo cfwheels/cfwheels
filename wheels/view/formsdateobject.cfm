@@ -65,6 +65,7 @@
 	<cfargument name="order" type="string" required="false" hint="Use to change the order of or exclude time select tags.">
 	<cfargument name="separator" type="string" required="false" hint="Use to change the character that is displayed between the time select tags.">
 	<cfargument name="minuteStep" type="numeric" required="false" hint="Pass in `10` to only show minute 10, 20, 30, etc.">
+	<cfargument name="secondStep" type="numeric" required="false" hint="Pass in `10` to only show seconds 10, 20, 30, etc.">
 	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
 	<cfargument name="label" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
@@ -110,6 +111,7 @@
 	<cfargument name="timeOrder" type="string" required="false" hint="Use to change the order of or exclude time select tags.">
 	<cfargument name="timeSeparator" type="string" required="false" hint="Use to change the character that is displayed between the time select tags.">
 	<cfargument name="minuteStep" type="numeric" required="false" hint="See documentation for @timeSelect.">
+	<cfargument name="secondStep" type="numeric" required="false" hint="See documentation for @timeSelect.">
 	<cfargument name="separator" type="string" required="false" hint="Use to change the character that is displayed between the first and second set of select tags.">
 	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
 	<cfargument name="label" type="string" required="false" hint="See documentation for @dateSelect.">
