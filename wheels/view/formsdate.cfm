@@ -169,15 +169,16 @@
 	<cfargument name="$step" type="numeric" required="true">
 	<cfargument name="$optionNames" type="string" required="false" default="">
 	<cfargument name="twelveHour" type="boolean" required="false" default="false">
+	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
 		var loc = {};
 		loc.optionContent = "";
 		// only set the default value if the value is blank and includeBlank is false
 		if (!Len(arguments.value) && (IsBoolean(arguments.includeBlank) && !arguments.includeBlank))
 			if (arguments.twelveHour && arguments.$type IS "hour")
-				arguments.value = TimeFormat(Now(), 'h');
+				arguments.value = TimeFormat(arguments.$now, 'h');
 			else
-				arguments.value = Evaluate("#arguments.$type#(Now())");
+				arguments.value = Evaluate("#arguments.$type#(arguments.$now)");
 		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1 && ListLen(arguments.label) > 1)
 			arguments.label = ListGetAt(arguments.label, ListFindNoCase(arguments.order, arguments.$type));
 			
@@ -248,12 +249,13 @@
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="value" type="string" required="true">
 	<cfargument name="$id" type="string" required="true">
+	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
 		var loc = {};
 		loc.options = "AM,PM";
 		loc.optionContent = "";
 		if (!Len(arguments.value))
-			arguments.value = TimeFormat(Now(), 'tt');
+			arguments.value = TimeFormat(arguments.$now, 'tt');
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = arguments.$id & "-ampm";
 		loc.content = "";
