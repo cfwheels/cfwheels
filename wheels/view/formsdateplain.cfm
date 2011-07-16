@@ -59,6 +59,7 @@
 	<cfargument name="order" type="string" required="false" hint="See documentation for @timeSelect.">
 	<cfargument name="separator" type="string" required="false" hint="See documentation for @timeSelect.">
 	<cfargument name="minuteStep" type="numeric" required="false" hint="See documentation for @timeSelect.">
+	<cfargument name="secondStep" type="numeric" required="false" hint="See documentation for @timeSelect.">
 	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
 	<cfargument name="label" type="string" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
@@ -104,6 +105,7 @@
 	<cfargument name="timeOrder" type="string" required="false" hint="See documentation for @dateTimeSelect.">
 	<cfargument name="timeSeparator" type="string" required="false" hint="See documentation for @dateTimeSelect.">
 	<cfargument name="minuteStep" type="numeric" required="false" hint="See documentation for @timeSelect.">
+	<cfargument name="secondStep" type="numeric" required="false" hint="See documentation for @timeSelect.">
 	<cfargument name="separator" type="string" required="false" hint="See documentation for @dateTimeSelect.">
 	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
 	<cfargument name="label" type="string" required="false" hint="See documentation for @dateSelect.">
@@ -327,10 +329,16 @@
 		<cfoutput>
 		    ##secondSelectTag(name="secondsToLaunch", selected=params.secondsToLaunch)##
 		</cfoutput>
+		
+		<!--- Only show 15-second intervals --->
+		<cfoutput>
+			##secondSelectTag(name="secondsToLaunch", value=params.secondsToLaunch, secondStep=15)##
+		</cfoutput>
 	'
 	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textFieldTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
 	<cfargument name="selected" type="string" required="false" default="" hint="The second that should be selected initially.">
+	<cfargument name="secondStep" type="numeric" required="false" hint="See documentation for @timeSelect.">
 	<cfargument name="includeBlank" type="any" required="false" hint="See documentation for @select.">
 	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
