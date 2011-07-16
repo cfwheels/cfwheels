@@ -123,20 +123,29 @@
 	<cffunction name="$getValidationType" returntype="string" access="public" output="false">
 		<cfargument name="type" type="string" required="true">
 		<cfswitch expression="#arguments.type#">
-			<cfcase value="cf_sql_real,cf_sql_numeric,cf_sql_float,cf_sql_decimal,cf_sql_double" delimiters=",">
+			<cfcase value="CF_SQL_DECIMAL,CF_SQL_DOUBLE,CF_SQL_FLOAT,CF_SQL_MONEY,CF_SQL_MONEY4,CF_SQL_NUMERIC,CF_SQL_REAL" delimiters=",">
 				<cfreturn "float">
 			</cfcase>
-			<cfcase value="cf_sql_tinyint,cf_sql_smallint,cf_sql_integer,cf_sql_bigint" delimiters=",">
+			<cfcase value="CF_SQL_INTEGER,CF_SQL_BIGINT,CF_SQL_SMALLINT,CF_SQL_TINYINT" delimiters=",">
 				<cfreturn "integer">
 			</cfcase>
-			<cfcase value="cf_sql_char,cf_sql_varchar" delimiters=",">
-				<cfreturn "string">
+			<cfcase value="CF_SQL_BINARY,CF_SQL_VARBINARY,CF_SQL_LONGVARBINARY,CF_SQL_BLOB,CF_SQL_CLOB" delimiters=",">
+				<cfreturn "binary">
 			</cfcase>
-			<cfcase value="cf_sql_date,cf_sql_timestamp,cf_sql_time" delimiters=",">
+			<cfcase value="CF_SQL_DATE,CF_SQL_TIME,CF_SQL_TIMESTAMP" delimiters=",">
 				<cfreturn "datetime">
 			</cfcase>
+			<cfcase value="CF_SQL_BIT" delimiters=",">
+				<cfreturn "boolean">
+			</cfcase>
+			<cfcase value="CF_SQL_ARRAY" delimiters=",">
+				<cfreturn "array">
+			</cfcase>
+			<cfcase value="CF_SQL_STRUCT" delimiters=",">
+				<cfreturn "struct">
+			</cfcase>
 			<cfdefaultcase>
-				<cfreturn "">
+				<cfreturn "string">
 			</cfdefaultcase>
 		</cfswitch>
 	</cffunction>
