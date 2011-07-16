@@ -274,7 +274,7 @@
 		<!--- Use the information from `paginationData` to page through the records --->
 		<cfoutput>
 		<ul>
-		    <cfloop query="allUsers" statrow="##paginationData.startrow##" endrow="##paginationData.endrow##">
+		    <cfloop query="allUsers" startrow="##paginationData.startrow##" endrow="##paginationData.endrow##">
 		        <li>##allUsers.firstName## ##allUsers.lastName##</li>
 		    </cfloop>
 		</ul>
@@ -284,7 +284,7 @@
 		<!--- View code (using `cfoutput`) --->
 		<!--- Use the information from `paginationData` to page through the records --->
 		<ul>
-		    <cfoutput query="allUsers" statrow="##paginationData.startrow##" maxrows="##paginationData.maxrows##">
+		    <cfoutput query="allUsers" startrow="##paginationData.startrow##" maxrows="##paginationData.maxrows##">
 		        <li>##allUsers.firstName## ##allUsers.lastName##</li>
 		    </cfoutput>
 		</ul>
