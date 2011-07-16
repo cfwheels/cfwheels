@@ -151,5 +151,17 @@
 			<cftransaction action="rollback" />
 		</cftransaction>
 	</cffunction>
+	
+	<cffunction name="test_float_compare">
+		<cftransaction>
+			<cfset loc.post = model("post").findByKey(2)>
+			<cfset loc.post.averagerating = 3.0000>
+			<cfset loc.post.save(reload=true)>
+			<cfset loc.post.averagerating = "3.0000">
+			<cfset loc.changed = loc.post.hasChanged("averagerating")>
+			<cfset assert('loc.changed eq false')>
+			<cftransaction action="rollback" />
+		</cftransaction>
+	</cffunction>
 
 </cfcomponent>
