@@ -1,9 +1,18 @@
 <cfcomponent extends="wheelsMapping.Test">
 
-	<cfset loc.controller = controller(name="dummy")>
+	<cffunction name="setup">
+		<cfset loc.controller = controller(name="dummy")>
+	</cffunction>
 
-	<cffunction name="_test_x">
-		<cfset assert("1 IS 1")>
+	<cffunction name="test_step_argument">
+		<cfset loc.args.name = "countdown">
+		<cfset loc.args.selected = 15>
+		<cfset loc.args.minuteStep = 15>
+		<cfset loc.r = loc.controller.minuteSelectTag(argumentcollection=loc.args)>
+		<cfset loc.e = '<option selected="selected" value="15">'>
+		<cfset assert('loc.r CONTAINS loc.e')>
+		<cfset loc.matches = ReMatchNoCase("\<option", loc.r)>
+		<cfset assert('arraylen(loc.matches) eq 4')>
 	</cffunction>
 
 </cfcomponent>
