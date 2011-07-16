@@ -30,11 +30,64 @@
 
 <cffunction name="$convertToString" returntype="string" access="public" output="false">
 	<cfargument name="value" type="Any" required="true">
+	<cfargument name="type" type="string" required="false" default="">
 	<cfscript>
-		if (IsBinary(arguments.value))
-			return ToString(arguments.value);
-		else if (IsDate(arguments.value))
-			return CreateDateTime(year(arguments.value), month(arguments.value), day(arguments.value), hour(arguments.value), minute(arguments.value), second(arguments.value));
+		var loc = {};
+		
+		if (!len(arguments.type))
+		{
+			if (IsArray(arguments.value))
+			{
+				arguments.type = "array";
+			}
+			else if (IsStruct(arguments.value))
+			{
+				arguments.type = "struct";
+			}
+			else if (IsBinary(arguments.value))
+			{
+				arguments.type = "binary";
+			}
+			else if (IsNumeric(arguments.value))
+			{
+				arguments.type = "integer";
+			}
+			else if (IsDate(arguments.value))
+			{
+				arguments.type = "datetime";
+			}
+		}
+		
+		switch (arguments.type)
+		{
+			case "array":
+				arguments.value = ArrayToList(arguments.value);
+				break;
+			case "struct":
+				loc.str = "";
+				loc.keyList = ListSort(StructKeyList(arguments.value), "textnocase", "asc");
+				loc.iEnd = ListLen(loc.keyList);
+				for (loc.i = 1; loc.i <= loc.iEnd; loc.i++)
+				{
+					loc.key = ListGetAt(loc.keyList, loc.i);
+					loc.str = ListAppend(loc.str, loc.key & "=" & arguments.value[loc.key]);
+				}
+				arguments.value = loc.str;
+				break;
+			case "binary":
+				arguments.value = ToString(arguments.value);
+				break;
+			case "float": case "integer": case "boolean":
+				arguments.value = Val(arguments.value);
+				break;
+			case "datetime":
+				// createdatetime will throw an error
+				if(IsDate(arguments.value))
+				{
+					arguments.value = CreateDateTime(year(arguments.value), month(arguments.value), day(arguments.value), hour(arguments.value), minute(arguments.value), second(arguments.value));
+				}
+				break;
+		}
 	</cfscript>
 	<cfreturn arguments.value>
 </cffunction>

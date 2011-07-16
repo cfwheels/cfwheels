@@ -365,10 +365,14 @@
 				{
 					// hehehehe... convert each datatype to a string
 					// for easier comparision
-					loc.a = $convertToString(this[loc.key]);
-					loc.b = $convertToString(variables.$persistedProperties[loc.key]);
+					loc.type = validationTypeForProperty(loc.key);
+					loc.a = $convertToString(this[loc.key], loc.type);
+					loc.b = $convertToString(variables.$persistedProperties[loc.key], loc.type);
+
 					if(Compare(loc.a, loc.b) neq 0)
+					{
 						return true;
+					}
 				}
 			}
 		}
