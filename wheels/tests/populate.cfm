@@ -451,8 +451,12 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 )>
 
 <!--- collisiontests --->
-<cfset model("CombiKey").create(
-	id1="1",
-	id2="1",
-	userId="1"
-)>
+<cfloop from="1" to="5" index="i">
+	<cfloop from="1" to="5" index="a">
+		<cfset model("CombiKey").create(
+			id1="#i#",
+			id2="#a#",
+			userId="#a#"
+		)>
+	</cfloop>
+</cfloop>
