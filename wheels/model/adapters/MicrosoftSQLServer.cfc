@@ -3,11 +3,11 @@
 	<cffunction name="$generatedKey" returntype="string" access="public" output="false">
 		<cfreturn "identitycol">
 	</cffunction>
-	
+
 	<cffunction name="$randomOrder" returntype="string" access="public" output="false">
 		<cfreturn "NEWID()">
 	</cffunction>
-	
+
 	<cffunction name="$getType" returntype="string" access="public" output="false">
 		<cfargument name="type" type="string" required="true">
 		<cfscript>
@@ -36,7 +36,7 @@
 		</cfscript>
 		<cfreturn loc.returnValue>
 	</cffunction>
-	
+
 	<cffunction name="$query" returntype="struct" access="public" output="false">
 		<cfargument name="sql" type="array" required="true">
 		<cfargument name="limit" type="numeric" required="false" default=0>
@@ -45,12 +45,12 @@
 		<cfargument name="$primaryKey" type="string" required="false" default="">
 		<cfscript>
 			var loc = {};
-	
+
 			if (arguments.limit + arguments.offset gt 0)
 			{
 				loc.containsGroup = false;
 				loc.afterWhere = "";
-	
+
 				if (IsSimpleValue(arguments.sql[ArrayLen(arguments.sql) - 1]) and FindNoCase("GROUP BY", arguments.sql[ArrayLen(arguments.sql) - 1]))
 					loc.containsGroup = true;
 				if (arguments.sql[ArrayLen(arguments.sql)] Contains ",")
@@ -75,16 +75,16 @@
 					}
 					arguments.sql[ArrayLen(arguments.sql)] = loc.newOrder;
 				}
-	
+
 				// select clause always comes first in the array, the order by clause last, remove the leading keywords leaving only the columns and set to the ones used in the inner most sub query
 				loc.thirdSelect = ReplaceNoCase(ReplaceNoCase(arguments.sql[1], "SELECT DISTINCT ", ""), "SELECT ", "");
 				loc.thirdOrder = ReplaceNoCase(arguments.sql[ArrayLen(arguments.sql)], "ORDER BY ", "");
 				if (loc.containsGroup)
 					loc.thirdGroup = ReplaceNoCase(arguments.sql[ArrayLen(arguments.sql) - 1], "GROUP BY ", "");
-	
+
 				// the first select is the outer most in the query and need to contain columns without table names and using aliases when they exist
 				loc.firstSelect = $columnAlias(list=$tableName(list=loc.thirdSelect, action="remove"), action="keep");
-	
+
 				// we need to add columns from the inner order clause to the select clauses in the inner two queries
 				loc.iEnd = ListLen(loc.thirdOrder);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -98,21 +98,21 @@
 							loc.thirdGroup = ListAppend(loc.thirdGroup, loc.iItem);
 					}
 				}
-	
+
 				// the second select also needs to contain columns without table names and using aliases when they exist (but now including the columns added above)
 				loc.secondSelect = $columnAlias(list=$tableName(list=loc.thirdSelect, action="remove"), action="keep");
-	
+
 				// first order also needs the table names removed, the column aliases can be kept since they are removed before running the query anyway
 				loc.firstOrder = $tableName(list=loc.thirdOrder, action="remove");
-	
+
 				// second order clause is the same as the first but with the ordering reversed
 				loc.secondOrder = Replace(ReReplace(ReReplace(loc.firstOrder, " DESC\b", chr(7), "all"), " ASC\b", " DESC", "all"), chr(7), " ASC", "all");
-	
+
 				// fix column aliases from order by clauses
 				loc.thirdOrder = $columnAlias(list=loc.thirdOrder, action="remove");
 				loc.secondOrder = $columnAlias(list=loc.secondOrder, action="keep");
 				loc.firstOrder = $columnAlias(list=loc.firstOrder, action="keep");
-	
+
 				// build new sql string and replace the old one with it
 				loc.beforeWhere = "SELECT " & loc.firstSelect & " FROM (SELECT TOP " & arguments.limit & " " & loc.secondSelect & " FROM (SELECT ";
 				if (ListRest(arguments.sql[2], " ") Contains " ")
@@ -128,7 +128,7 @@
 					ArrayDeleteAt(arguments.sql, ArrayLen(arguments.sql));
 				ArrayPrepend(arguments.sql, loc.beforeWhere);
 				ArrayAppend(arguments.sql, loc.afterWhere);
-	
+
 			}
 			else
 			{
@@ -137,11 +137,43 @@
 			// sql server doesn't support limit and offset in sql
 			StructDelete(arguments, "limit", false);
 			StructDelete(arguments, "offset", false);
+
+			// AJM: put square brackets around column names with hyphens eg [user-id] - stupid sql server
+			// hopefully there are only hypens in field names
+			loc.sqlServerSelect = '';
+			for (loc.i=1; loc.i LTE ListLen(arguments.sql[1]); loc.i=loc.i+1) {
+				loc.sqlServerColumn = ListgetAt(arguments.sql[1],loc.i);
+					if (Find('-',loc.sqlServerColumn) GT 0)
+					//fully scoped
+					if (ListLen(loc.sqlServerColumn, '.') EQ 2)
+						loc.sqlServerSelect = ListAppend(loc.sqlServerSelect, "#ListFirst(loc.sqlServerColumn, '.')#.[#ListLast(loc.sqlServerColumn, '.')#]");
+					else
+						loc.sqlServerSelect = ListAppend(loc.sqlServerSelect, "[#loc.sqlServerColumn#]");
+				else
+					loc.sqlServerSelect = ListAppend(loc.sqlServerSelect, loc.sqlServerColumn);
+			}
+			arguments.sql[1] = loc.sqlServerSelect;
+
+			loc.sqlServerFrom = '';
+			for (loc.i=1; loc.i LTE ListLen(arguments.sql[2], ' '); loc.i=loc.i+1) {
+				loc.sqlServerColumn = ListgetAt(arguments.sql[2],loc.i, ' ');
+					if (Find('-',loc.sqlServerColumn) GT 0)
+					//fully scoped
+					if (ListLen(loc.sqlServerColumn, '.') EQ 2)
+						loc.sqlServerFrom = ListAppend(loc.sqlServerFrom, "#ListFirst(loc.sqlServerColumn, '.')#.[#ListLast(loc.sqlServerColumn, '.')#]", ' ');
+					else
+						loc.sqlServerFrom = ListAppend(loc.sqlServerFrom, "[#loc.sqlServerColumn#]", ' ');
+				else
+					loc.sqlServerFrom = ListAppend(loc.sqlServerFrom, loc.sqlServerColumn, ' ');
+			}
+			arguments.sql[2] = loc.sqlServerFrom;
+
+			// AJM: END put square brackets around column names with hyphens
 			loc.returnValue = $performQuery(argumentCollection=arguments);
 		</cfscript>
 		<cfreturn loc.returnValue>
 	</cffunction>
-	
+
 	<cffunction name="$identitySelect" returntype="any" access="public" output="false">
 		<cfargument name="queryAttributes" type="struct" required="true">
 		<cfargument name="result" type="struct" required="true">
