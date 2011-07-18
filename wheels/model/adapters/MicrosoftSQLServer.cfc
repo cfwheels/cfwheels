@@ -143,13 +143,23 @@
 			loc.sqlServerSelect = '';
 			for (loc.i=1; loc.i LTE ListLen(arguments.sql[1]); loc.i=loc.i+1) {
 				loc.sqlServerColumn = ListgetAt(arguments.sql[1],loc.i);
-					if (Find('-',loc.sqlServerColumn) GT 0)
+					if (Find('-',loc.sqlServerColumn) GT 0) {
+
+						loc.sqlServerColumnAliasPos = Find(' AS ',loc.sqlServerColumn);
+						if (loc.sqlServerColumnAliasPos GT 0) {
+							loc.sqlServerColumnAlias = Mid(loc.sqlServerColumn,loc.sqlServerColumnAliasPos, 100);
+							loc.sqlServerColumn = Left(loc.sqlServerColumn, loc.sqlServerColumnAliasPos);
+						} else
+						 loc.sqlServerColumnAlias = '';
+
 					//fully scoped
 					if (ListLen(loc.sqlServerColumn, '.') EQ 2)
-						loc.sqlServerSelect = ListAppend(loc.sqlServerSelect, "#ListFirst(loc.sqlServerColumn, '.')#.[#ListLast(loc.sqlServerColumn, '.')#]");
+						loc.sqlServerSelectColumn = "#ListFirst(loc.sqlServerColumn, '.')#.[#ListLast(loc.sqlServerColumn, '.')#]";
 					else
-						loc.sqlServerSelect = ListAppend(loc.sqlServerSelect, "[#loc.sqlServerColumn#]");
-				else
+						loc.sqlServerSelectColumn = "[#loc.sqlServerColumn#]";
+
+					loc.sqlServerSelect = ListAppend(loc.sqlServerSelect, loc.sqlServerSelectColumn & loc.sqlServerColumnAlias);
+				} else
 					loc.sqlServerSelect = ListAppend(loc.sqlServerSelect, loc.sqlServerColumn);
 			}
 			arguments.sql[1] = loc.sqlServerSelect;
