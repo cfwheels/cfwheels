@@ -145,6 +145,7 @@
 				loc.sqlServerColumn = ListgetAt(arguments.sql[1],loc.i);
 					if (Find('-',loc.sqlServerColumn) GT 0) {
 
+						// check for column alias
 						loc.sqlServerColumnAliasPos = Find(' AS ',loc.sqlServerColumn);
 						if (loc.sqlServerColumnAliasPos GT 0) {
 							loc.sqlServerColumnAlias = Mid(loc.sqlServerColumn,loc.sqlServerColumnAliasPos, 100);
@@ -152,7 +153,7 @@
 						} else
 						 loc.sqlServerColumnAlias = '';
 
-					//fully scoped
+					// check scoped with table name/alias
 					if (ListLen(loc.sqlServerColumn, '.') EQ 2)
 						loc.sqlServerSelectColumn = "#ListFirst(loc.sqlServerColumn, '.')#.[#ListLast(loc.sqlServerColumn, '.')#]";
 					else
@@ -181,6 +182,7 @@
 			// AJM: END put square brackets around column names with hyphens
 			loc.returnValue = $performQuery(argumentCollection=arguments);
 		</cfscript>
+
 		<cfreturn loc.returnValue>
 	</cffunction>
 
