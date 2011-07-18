@@ -148,7 +148,7 @@
 						loc.sqlServerColumnAliasPos = Find(' AS ',loc.sqlServerColumn);
 						if (loc.sqlServerColumnAliasPos GT 0) {
 							loc.sqlServerColumnAlias = Mid(loc.sqlServerColumn,loc.sqlServerColumnAliasPos, 100);
-							loc.sqlServerColumn = Left(loc.sqlServerColumn, loc.sqlServerColumnAliasPos);
+							loc.sqlServerColumn = Left(loc.sqlServerColumn, loc.sqlServerColumnAliasPos-1);
 						} else
 						 loc.sqlServerColumnAlias = '';
 
