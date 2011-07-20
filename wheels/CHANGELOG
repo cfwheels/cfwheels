@@ -4,6 +4,7 @@ View Enhancements
 =================
 
 * Allow an array of structs to used for options in selectTag() - [Adam Chapman, Tony Petruzzi]
+* Added secondStep parameter to date/time select tags - [oxalto, Tony Petruzzi]
 
 Controller Enhancements
 =======================
@@ -15,6 +16,8 @@ Model Enhancements
 * You can pass an unlimited number properties when using dynamic finders - [Tony Petruzzi]
 * Dynamic finders now support passing in an array for values - [Tony Petruzzi]
 * Added the delimiter argument to dynamic finders, this allow you to change the delimiter - [Tony Petruzzi]
+* Added validationTypeForProperty() method - [Tony Petruzzi]
+
 
 Other Enhancements
 ==================
@@ -35,6 +38,9 @@ Bug Fixes
 * Allow commas in dynamic finders - #771 [Joshua, Tony Petruzzi]
 * AMPM select displaying twice - #768 [John Bliss, Tony Petruzzi]
 * $request argumentsCollection: should be argumentCollection - #772 [William Fisk, Tony Petruzzi]
+* Pagination pull incorrect number of results with compounded keys - #725 [Jeff Greenhouse, Tony Petruzzi]
+* Update hasChanged() to properly chech floats - [Andy Bellenie, Tony Petruzzi]
+* Date tags selected date throws out of range error - [Ben Garrett, Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
