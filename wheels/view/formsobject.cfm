@@ -610,8 +610,14 @@
 	<cfargument name="objectValue" type="string" required="true">
 	<cfargument name="optionValue" type="string" required="true">
 	<cfargument name="optionText" type="string" required="true">
+	<cfargument name="applyHtmlEditFormat" type="boolean" required="false" default="true" />
 	<cfscript>
 		var loc = {};
+		if (arguments.applyHtmlEditFormat)
+		{
+			arguments.optionValue = h(arguments.optionValue);
+			arguments.optionText = h(arguments.optionText);
+		}
 		loc.optionAttributes = {value=arguments.optionValue};
 		if (arguments.optionValue == arguments.objectValue || ListFindNoCase(arguments.objectValue, arguments.optionValue))
 			loc.optionAttributes.selected = "selected";
