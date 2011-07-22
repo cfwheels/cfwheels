@@ -74,4 +74,15 @@
 	    <cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
+	<cffunction name="test_htmlsafe">
+		<cfset loc.badValue = "<script>alert('hello');</script>">
+		<cfset loc.badName = "<script>alert('tony');</script>">
+		<cfset loc.goodValue = loc.controller.h(loc.badValue)>
+		<cfset loc.goodName = loc.controller.h(loc.badName)>
+		<cfset loc.options = []>
+		<cfset loc.options[1] = {value="#loc.badValue#", name="#loc.badName#"}>
+	    <cfset loc.r = loc.controller.select(objectName="user", property="firstname", options=loc.options, valueField="value", textField="name", label=false)>
+	    <cfset assert('loc.r CONTAINS loc.goodValue AND loc.r CONTAINS loc.goodName')>
+	</cffunction>
+
 </cfcomponent>
