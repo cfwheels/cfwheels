@@ -1,3 +1,17 @@
+WHEELS VERSION 1.1.5 (UNRELEASED)
+
+View Enhancements
+=================
+
+* escape html entities in text and value of select options - #767 [Richard Herbert, Tony Petruzzi]
+
+Bug Fixes
+=========
+
+* Fix plugins not loading when application is in a subdirectory - [mcraig, Tony Petruzzi]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 WHEELS VERSION 1.1.4 (07/20/2011)
 
 View Enhancements
