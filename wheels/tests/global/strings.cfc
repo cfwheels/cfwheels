@@ -68,18 +68,21 @@
 	<cffunction name="test_hyphenize_variable_with_abbreviation">
 		<cfset loc.result = hyphenize("aURLVariable")>
 		<cfset debug('loc.result', false)>
-		<cfset assert("NOT Compare(loc.result, 'a-url-variable')")>
+		<cfset assert("NOT Compare(loc.result, 'a-u-r-l-variable')")>
 	</cffunction>
 
 	<cffunction name="test_hyphenize_variable_with_abbreviation_starting_with_uppercase">
 		<cfset loc.result = hyphenize("URLVariable")>
 		<cfset debug('loc.result', false)>
-		<cfset assert("NOT Compare(loc.result, 'url-variable')")>
+		<cfset assert("NOT Compare(loc.result, 'u-r-l-variable')")>
 	</cffunction>
 	
-	<cffunction name="test_hyphenize_should_only_insert_hyphens_in_mixed_case">
-		<cfset loc.result = hyphenize("ERRORMESSAGE")>
-		<cfset assert("NOT Compare(loc.result, 'errormessage')")>
+	<cffunction name="test_hyphenize_variable_with_all_uppercase">
+		<cfset loc.result = hyphenize("URL")>
+		<cfset assert("NOT Compare(loc.result, 'u-r-l')")>
+	</cffunction>	
+	
+	<cffunction name="test_hyphenize_variable_with_all_lowercase">
 		<cfset loc.result = hyphenize("errormessage")>
 		<cfset assert("NOT Compare(loc.result, 'errormessage')")>
 	</cffunction>	
