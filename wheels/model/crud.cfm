@@ -997,6 +997,13 @@
 	<cfargument name="reload" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
+		
+		// if no changes, no need to perform update
+		if(!hasChanged())
+		{
+			return true;			
+		}
+		
 		if (variables.wheels.class.timeStampingOnUpdate)
 			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 		loc.sql = [];
