@@ -1,4 +1,4 @@
-                        ColdFusion on Wheels (CFWHeels)
+                        ColdFusion on Wheels (CFWheels)
 
 What is it?
 -----------
@@ -33,7 +33,7 @@ Compatible ColdFusion Interpreters
 ----------------------------------
 CFWheels has been tested and works with the following ColdFusion 
 language interpreters:
- * Adobe ColdFusion 8.x
+ * Adobe ColdFusion 9.x
  * Adobe ColdFusion 8.x
  * Railo 3.2.3
 
