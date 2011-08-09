@@ -1,0 +1,70 @@
+                        ColdFusion on Wheels (CFWHeels)
+
+What is it?
+-----------
+Coldfusion on Wheels (henceforth referred to simply as CFWheels)
+is a framework for ColdFusion interpreters (see interpreters below).
+It is heavily based on Ruby on Rails, but it's not a direct port.
+Some modifications have been made to better fit the CFML language.
+Some of the benefits to using CFWheels are:
+ * Convention Over Configuration to quickly get started
+ * Model-View-Controller (MVC) pattern
+ * Object Relational Mapping (ORM) for writing less SQL
+ * Clean code that's quick to read and easy to understand
+ * Encourages best practices, but does not require them.
+ * Plug-ins to enhance the framework functionality
+
+
+The Latest Version
+------------------
+The latest version of CFWheels can always be found at the project
+page, along with text and screencast examples, by going to
+http://www.cfwheels.org/
+
+
+Documentation
+-------------
+CFWheels has really excellent written documentation that is available
+both online and offline.  You can always find the most up-to-date 
+documentation by going to http://cfwheels.org/docs/
+
+
+Compatible ColdFusion Interpreters
+----------------------------------
+CFWheels has been tested and works with the following ColdFusion 
+language interpreters:
+ * Adobe ColdFusion 8.x
+ * Adobe ColdFusion 8.x
+ * Railo 3.2.3
+
+
+Installation (see below for upgrading)
+--------------------------------------
+CFWheels installation is quick and easy.  Copy the directories
+included in the ZIP file to your application server.  These
+can be placed within the webroot itself, or a folder off the
+webroot directory.
+
+Once copied, open your browser and navigate to the directory
+on your application server where you installed CFWheels. You
+should be presented with a welcome message telling you that
+CFWheels is running successfully.
+
+For more information you can watch a screencast on this at
+http://cfwheels.org/screencasts or read about it by going to
+http://cfwheels.org/docs/1-1/chapter/beginner-tutorial-hello-world
+
+
+Upgrading
+---------
+To upgrade an existing CFWheels application, just copy the 
+wheels folder from the new ZIP file and replace the current 
+wheels folder in your application.  Lastly, make sure to reload
+your application for all of the new awesomeness to start powering
+your app! 
+
+
+Licensing
+---------
+CFWheels is licensed under the Apache License, Version 2.0.  You can
+read this license at http://www.apache.org/licenses/LICENSE-2.0
