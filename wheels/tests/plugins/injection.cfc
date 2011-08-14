@@ -15,7 +15,7 @@
 		<cfset loc.m = model("authors").new()>
 		<cfset loc.params = {controller="test", action="index"}>	
 		<cfset loc.c = controller("test", loc.params)>
-		<cfset loc.d = $createObjectFromRoot(path="wheels", fileName="dispatch", method="$init")>
+		<cfset loc.d = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init")>
 	</cffunction>
 	
 	<cffunction name="teardown">
