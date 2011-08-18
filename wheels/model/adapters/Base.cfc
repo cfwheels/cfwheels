@@ -174,7 +174,7 @@
 		
 		if(!StructKeyExists(arguments.settings, "value"))
 		{
-			$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syantax error in the WHERE statement such as forgetting to quote strings.");
+			$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syntax error in the WHERE statement such as forgetting to quote strings.");
 		}
 		
 		loc.params = {};
