@@ -94,5 +94,16 @@
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
+	
+	<cffunction name="test_remove_height_width_attributes_when_set_to_false">
+		<cfset structdelete(loc.args, "alt")>
+		<cfset structdelete(loc.args, "class")>
+		<cfset structdelete(loc.args, "id")>
+		<cfset loc.args.height = false>
+		<cfset loc.args.width = false>
+		<cfset loc.r = '<img alt="Cfwheels logo" src="#loc.imagePath#/#loc.args.source#" />'>
+		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
 
 </cfcomponent>
