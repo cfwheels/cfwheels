@@ -190,6 +190,14 @@
 					arguments.width = loc.image.width;
 				if (!StructKeyExists(arguments, "height") and loc.image.height gt 0)
 					arguments.height = loc.image.height;
+			} else {
+				// remove height and width attributes if false
+				if (arguments.width EQ false) {
+					StructDelete(arguments, "width");
+				}
+				if (arguments.height EQ false) {
+					StructDelete(arguments,"height");
+				}
 			}
 			// only append a query string if the file is local
 			arguments.src = $assetDomain(arguments.src) & $appendQueryString();
