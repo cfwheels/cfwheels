@@ -252,4 +252,14 @@
 		<cfset loc.keys = QuotedValueList(loc.p.id)>
 	</cffunction>
 
+	<cffunction name="test_findAll_returnAs_structs_with_explicit_select_returns_incorrect_number_of_records">
+		<cfset loc.records = model("comment").findAll(where="postid = 1", select="comments.id AS cid, posts.id AS pid", include="post")>
+		<cfset loc.structs = model("comment").findAll(where="postid = 1", select="comments.id AS cid, posts.id AS pid", include="post", returnAs="structs")>
+		<cfset assert("ArrayLen(loc.structs) eq loc.records.RecordCount")>
+		<cfloop from="1" to="#loc.records.RecordCount#" index="loc.i">
+			<cfset assert('loc.structs[loc.i]["cid"] eq loc.records["cid"][loc.i]')>
+			<cfset assert('loc.structs[loc.i]["pid"] eq loc.records["pid"][loc.i]')>
+		</cfloop>
+	</cffunction>
+
 </cfcomponent>
