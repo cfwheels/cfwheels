@@ -14,6 +14,7 @@
 	<cfscript>
 		if (application.wheels.showDebugInformation)
 			$debugPoint("requestEnd");
+		$loadPluginEvents('onrequestend');
 		$include(template="#application.wheels.eventPath#/onrequestend.cfm");
 		if (application.wheels.showDebugInformation)
 			$debugPoint("requestEnd,total");
