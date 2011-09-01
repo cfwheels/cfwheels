@@ -931,5 +931,20 @@ Should now call bar() instead and marking foo() as deprecated
 	application.wheels.incompatiblePlugins = application.wheels.PluginObj.getIncompatiblePlugins();
 	application.wheels.dependantPlugins = application.wheels.PluginObj.getDependantPlugins();
 	application.wheels.mixins = application.wheels.PluginObj.getMixins();
+	application.wheels.pluginEvents = application.wheels.PluginObj.getEvents();
+	</cfscript>
+</cffunction>
+
+<cffunction name="$loadPluginEvents" returntype="void" access="public" output="false">
+	<cfargument name="event" type="string" required="true">
+	<cfscript>
+	var loc = {};
+
+	if ( StructKeyExists(application.wheels.pluginEvents, arguments.event) AND ArrayLen(application.wheels.pluginEvents[arguments.event]) ) {
+		loc.events = application.wheels.pluginEvents[arguments.event];
+		for( loc.iEvent = 1; loc.iEvent <= ArrayLen(loc.events); loc.iEvent++ ) {
+			$include(template=loc.events[loc.iEvent]);
+		}
+	}
 	</cfscript>
 </cffunction>

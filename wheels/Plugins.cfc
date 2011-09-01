@@ -6,6 +6,16 @@
 	<cfset variables.$class.mixableComponents = "application,dispatch,controller,model,cache,base,connection,microsoftsqlserver,mysql,oracle,postgresql,h2">
 	<cfset variables.$class.incompatiblePlugins = "">
 	<cfset variables.$class.dependantPlugins = "">
+	<cfset variables.$class.events = {
+		OnApplicationStart = ArrayNew(1),
+		OnApplicationEnd = ArrayNew(1),
+		OnRequestStart = ArrayNew(1),
+		OnRequestEnd = ArrayNew(1),
+		OnSessionStart = ArrayNew(1),
+		OnSessionEnd = ArrayNew(1),
+		OnError = ArrayNew(1),
+		OnMissingTemplate = ArrayNew(1)
+	}>
 
 
 	<cffunction name="init">
@@ -33,7 +43,7 @@
 		<!--- incompatibility --->
 		<cfset $determineIncompatible()>
 		<!--- dependancies --->
-		<cfset $determinDependancy()>
+		<cfset $determineDependancy()>
 
 		<cfreturn this>
 	</cffunction>
@@ -129,6 +139,11 @@
 					<cfset variables.$class.incompatiblePlugins = ListAppend(variables.$class.incompatiblePlugins, loc.iPlugins)>
 				</cfif>
 			</cfif>
+			<cfif StructKeyExists(loc.plugin, "events")>
+				<cfloop list="#loc.plugin.events#" index="event">
+					<cfset $registerPluginEvent(loc.iPlugins, event)>
+				</cfloop>
+			</cfif>
 		</cfloop>
 	</cffunction>
 	
@@ -154,7 +169,7 @@
 	</cffunction>
 	
 	
-	<cffunction name="$determinDependancy">
+	<cffunction name="$determineDependancy">
 		<cfset var loc = {}>
 
 		<cfloop collection="#variables.$class.plugins#" item="loc.iPlugins">
@@ -240,6 +255,10 @@
 		<cfreturn variables.$class.mixableComponents>
 	</cffunction>
 	
+	<cffunction name="getEvents">
+		<cfreturn variables.$class.events>
+	</cffunction>
+	
 	<cffunction name="inspect">
 		<cfreturn variables>
 	</cffunction>
@@ -277,6 +296,16 @@
 		</cfquery>
 		
 		<cfreturn q>
+	</cffunction>
+	
+	<cffunction name="$registerPluginEvent" returntype="void">
+		<cfargument name="plugin" type="string" required="true">
+		<cfargument name="event" type="string" required="true">
+		<cfscript>
+			var loc = {};
+			loc.path = [variables.$class.pluginPath, arguments.plugin, "events", arguments.event & ".cfm"];
+			ArrayAppend(variables.$class.events[event], ArrayToList(loc.path, "/"));
+		</cfscript>
 	</cffunction>
 
 </cfcomponent>
