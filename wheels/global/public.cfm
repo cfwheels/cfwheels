@@ -9,16 +9,14 @@
 	<cfargument name="category" type="string" required="true" />
 	<cfargument name="storage" type="string" required="true" hint="Could be memory, ehcache, or memcached." />
 	<cfargument name="strategy" type="string" required="false" default="age" />
-	<cfargument name="defaultCacheTime" type="numeric" required="false" default="60" />
-	<cfargument name="cacheCullPercentage" type="numeric" required="false" default="10" />
-	<cfargument name="cacheCullInterval" type="numeric" required="false" default="5" />
-	<cfargument name="maximumItemsToCache" type="numeric" required="false" default="5000" />
-	<cfargument name="cacheDatePart" type="string" required="false" default="n" />
+	<cfargument name="timeout" type="numeric" required="false" default="3600" hint="in seconds. default is 1 hour or 3600 seconds" />
+	<cfargument name="cullPercentage" type="numeric" required="false" default="10" />
+	<cfargument name="cullInterval" type="numeric" required="false" default="300" hint="in seconds. default is 5 minutes or 300 seconds" />
+	<cfargument name="maximumItems" type="numeric" required="false" default="5000" />
 	<cfscript>
-		var loc = {};
-		for (loc.item in arguments)
-			if (loc.item neq "category")
-				application.wheels.cacheSettings[arguments.category][loc.item] = arguments[loc.item];
+		application.wheels.cacheSettings[arguments.category] = {};
+		StructDelete(arguments, "category");
+		StructAppend(application.wheels.cacheSettings[arguments.category], arguments);
 	</cfscript>
 </cffunction>
 
