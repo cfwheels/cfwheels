@@ -191,21 +191,42 @@
 
 <cffunction name="$timeSpanForCache" returntype="any" access="public" output="false">
 	<cfargument name="cache" type="any" required="true">
-	<cfargument name="category" type="string" required="true">
-	<cfargument name="defaultCacheTime" type="numeric" required="false" default="#application.wheels.cacheSettings[arguments.category].defaultCacheTime#">
-	<cfargument name="cacheDatePart" type="string" required="false" default="#application.wheels.cacheSettings[arguments.category].cacheDatePart#">
+	<cfargument name="timeout" type="numeric" required="false">
+	<cfargument name="category" type="string" required="false">
 	<cfscript>
 		var loc = {};
-		loc.cache = arguments.defaultCacheTime;
-		if (IsNumeric(arguments.cache))
-			loc.cache = arguments.cache;
-		loc.list = "0,0,0,0";
-		loc.dateParts = "d,h,n,s";
-		loc.iEnd = ListLen(loc.dateParts);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			if (arguments.cacheDatePart == ListGetAt(loc.dateParts, loc.i))
-				loc.list = ListSetAt(loc.list, loc.i, loc.cache);
-		return CreateTimeSpan(ListGetAt(loc.list, 1),ListGetAt(loc.list, 2),ListGetAt(loc.list, 3),ListGetAt(loc.list, 4));
+		// if cache isn't a numeric value
+		if (IsBoolean(arguments.cache))
+		{
+			// if cache is true, then assign a timeout
+			if (arguments.cache)
+			{
+				// is a timeout supplied?
+				if (StructKeyExists(arguments, "timeout"))
+				{
+					arguments.cache = arguments.timeout;
+				}
+				else
+				{
+					// is a category supplied?
+					if (StructKeyExists(arguments, "category"))
+					{
+						arguments.cache = application.wheels.cacheSettings[arguments.category].timeout;
+					}
+					else
+					{
+						// default the timeout to 1 hour / 3600 seconds
+						arguments.cache = 3600;
+					}
+				}
+			}
+			else
+			{
+				// cache is false, don't cache
+				arguments.cache = 0;
+			}
+		}
+		return CreateTimeSpan(0,0,0,val(arguments.cache));
 	</cfscript>
 </cffunction>
 
