@@ -1,4 +1,4 @@
-<cfcomponent implements="AbstractStorage" output="false">
+<cfcomponent extends="Base" output="false">
 	
 	<cffunction name="init" access="public" output="false" returntype="any">
 		<cfscript>
@@ -44,17 +44,16 @@
 	<cffunction name="evict" access="public" output="false" returntype="numeric">
 		<cfargument name="keys" type="array" required="false" default="#ArrayNew(1)#">
 		<cfargument name="strategy" type="any" required="true">
-		<cfargument name="currentTime" type="date" required="true">
+		<cfargument name="currentTime" type="date" required="false" default="#now()#">
 		<cfscript>
 			var loc = {};
 			
-			if (ArrayIsEmpty(arguments.keys))
-				arguments.keys = ListToArray(StructKeyList(variables.$instance.cache));
-			
-			loc.expiredKeys = arguments.strategy.getExpired(keys=arguments.keys, storage=this, currentTime=arguments.currentTime);
+			loc.expiredKeys = arguments.strategy.expired(keys=arguments.keys, storage=this, currentTime=arguments.currentTime);
 			
 			for (loc.i = 1; loc.i lte ArrayLen(loc.expiredKeys); loc.i++)
+			{
 				delete(key=loc.expiredKeys[loc.i]);
+			}
 		</cfscript>
 		<cfreturn ArrayLen(loc.expiredKeys)>
 	</cffunction>
@@ -72,6 +71,10 @@
 	
 	<cffunction name="flush" access="public" output="false" returntype="void">
 		<cfset StructClear(variables.$instance.cache)>
+	</cffunction>
+	
+	<cffunction name="keys" access="public" output="false" returntype="array">
+		<cfreturn ListToArray(StructKeyList(variables.$instance.cache))>
 	</cffunction>
 	
 </cfcomponent>

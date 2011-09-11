@@ -1,4 +1,4 @@
-<cfcomponent implements="AbstractStorage" output="false">
+<cfcomponent extends="Base" output="false">
 	
 	<cffunction name="init" access="public" output="false" returntype="any">
 		<cfargument name="servers" type="string" required="false" default="127.0.0.1:11211" />
@@ -33,8 +33,10 @@
 			
 			loc.value = variables.$instance.cache.get(arguments.key);
 			
-			if (!StructKeyExists(loc, "value") || (IsSimpleValue(loc.value) && !Len(Trim(loc.value))))
+			if (!StructKeyExists(loc, "value"))
+			{
 				loc.value = false;
+			}
 		</cfscript>
 		<cfreturn loc.value>
 	</cffunction>
@@ -61,7 +63,10 @@
 			loc.totalItems = 0;
 			
 			for (loc.item in loc.stats)
-				loc.totalItems = loc.totalItems + (loc.stats[loc.item]["curr_items"] - 2); // for some reason memcached always shows two items in the cache over what there really is
+			{
+				// for some reason memcached always shows two items in the cache over what there really is
+				loc.totalItems = loc.totalItems + (loc.stats[loc.item]["curr_items"] - 2);
+			}
 		</cfscript>
 		<cfreturn loc.totalItems>
 	</cffunction>
@@ -78,17 +83,13 @@
 		<cfargument name="defaultUnit" type="string" required="false" default="#variables.$instance.timeunit#">
 		<cfscript>
 			var loc = {};
+
+			loc.factory = CreateObject("component", "wheelsMapping.vendor.memcached.MemcachedFactory").init(argumentCollection=arguments);
+			loc.memcached = loc.factory.getMemcached();
 			
-			try
+			if (!StructIsEmpty(loc.memcached.getVersions()))
 			{
-				loc.factory = CreateObject("component", "wheelsMapping.vendor.memcached.MemcachedFactory").init(argumentCollection=arguments);
-				loc.memcached = loc.factory.getMemcached();
-				
-				if (!StructIsEmpty(loc.memcached.getVersions()))
-					return loc.memcached;
-			}
-			catch (Any e)
-			{
+				return loc.memcached;
 			}
 		</cfscript>
 		<cfreturn false>

@@ -1,4 +1,4 @@
-<cfcomponent implements="AbstractStorage" output="false">
+<cfcomponent extends="Base" output="false">
 	
 	<cffunction name="init" access="public" output="false" returntype="any">
 		<cfargument name="defaultCacheTime" type="numeric" required="true">
@@ -29,7 +29,9 @@
 			var loc = {};
 			loc.value = CacheGet(arguments.key);
 			if (!StructKeyExists(loc, "value"))
+			{
 				loc.value = false;
+			}
 		</cfscript>
 		<cfreturn loc.value>
 	</cffunction>
@@ -42,12 +44,16 @@
 			var loc = {};
 			
 			if (ArrayIsEmpty(arguments.keys))
+			{
 				arguments.keys = CacheGetAllIds();
+			}
 			
 			loc.expiredKeys = arguments.strategy.getExpired(keys=arguments.keys, storage=this, currentTime=arguments.currentTime);
 			
 			for (loc.i = 1; loc.i lte ArrayLen(loc.expiredKeys); loc.i++)
+			{
 				delete(key=loc.expiredKeys[loc.i]);
+				}
 		</cfscript>
 		<cfreturn ArrayLen(loc.expiredKeys)>
 	</cffunction>
@@ -69,7 +75,9 @@
 			loc.keys = CacheGetAllIds();
 			
 			for (loc.i = 1; loc.i lte ArrayLen(loc.keys); loc.i++)
+			{
 				delete(loc.keys[loc.i]);
+			}
 		</cfscript>
 	</cffunction>
 	
