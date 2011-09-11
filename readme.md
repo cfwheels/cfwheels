@@ -14,7 +14,7 @@ We encourage you to contribute to ColdFusion on Wheels! Please check out the [Co
 
 ## License
 
-ColdFusion on Wheels is released under the MIT license.
+ColdFusion on Wheels is released under the Apache License Version 2.0.
  
  [1]: http://cfwheels.org/
  [2]: http://cfwheels.org/docs/1-1/chapter/beginner-tutorial-hello-world
