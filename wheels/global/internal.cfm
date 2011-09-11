@@ -593,13 +593,13 @@
 		loc.objectFileExists = false;
 
 		// if the name contains the delimiter let's capitalize the last element and append it back to the list
-		if (ListLen(arguments.name, "/") gt 1)
-			arguments.name = ListInsertAt(arguments.name, ListLen(arguments.name, "/"), capitalize(ListLast(arguments.name, "/")), "/");
+		if (ListLen(arguments.name, ".") gt 1)
+			arguments.name = ListSetAt(arguments.name, ListLen(arguments.name, "."), capitalize(ListLast(arguments.name, ".")), ".");
 		else
 			arguments.name = capitalize(arguments.name);
 
 		// we are going to store the full controller path in the existing / non-existing lists so we can have controllers in multiple places
-		loc.fullObjectPath = arguments.objectPath & "/" & arguments.name;
+		loc.fullObjectPath = arguments.objectPath & "/" & ListChangeDelims(arguments.name, "/", ".");
 
 		if (!ListFindNoCase(application.wheels.existingObjectFiles, loc.fullObjectPath) && !ListFindNoCase(application.wheels.nonExistingObjectFiles, loc.fullObjectPath))
 		{

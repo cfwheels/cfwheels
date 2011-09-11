@@ -64,7 +64,7 @@
 		loc.helperFileExists = false;
 		if (!ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) && !ListFindNoCase(application.wheels.nonExistingHelperFiles, arguments.name))
 		{
-			if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(arguments.name)#/helpers.cfm")))
+			if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(ListChangeDelims(arguments.name, '/', '.'))#/helpers.cfm")))
 				loc.helperFileExists = true;
 			if (application.wheels.cacheFileChecking)
 			{
@@ -75,7 +75,7 @@
 			}
 		}
 		if (ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) || loc.helperFileExists)
-			$include(template="#application.wheels.viewPath#/#arguments.name#/helpers.cfm");
+			$include(template="#application.wheels.viewPath#/#ListChangeDelims(arguments.name, '/', '.')#/helpers.cfm");
 
 		loc.executeArgs = {};
 		loc.executeArgs.name = arguments.name;

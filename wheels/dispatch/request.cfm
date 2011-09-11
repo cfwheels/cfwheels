@@ -378,7 +378,7 @@
 		}
 
 		// convert controller to upperCamelCase and action to normal camelCase
-		arguments.params.controller = REReplace(arguments.params.controller, "(^|-)([a-z])", "\u\2", "all");
+		arguments.params.controller = ListSetAt(arguments.params.controller, ListLen(arguments.params.controller, "."), REReplace(ListLast(arguments.params.controller, "."), "(^|-)([a-z])", "\u\2", "all"), ".");
 		arguments.params.action = REReplace(arguments.params.action, "-([a-z])", "\u\1", "all");
 	</cfscript>
 	<cfreturn arguments.params>
