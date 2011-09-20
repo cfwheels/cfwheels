@@ -38,7 +38,7 @@
 <cfset loc.tableList = ValueList(loc.dbinfo.table_name, chr(7))>
 
 <!--- list of tables to delete --->
-<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers">
+<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes">
 <cfloop list="#loc.tables#" index="loc.i">
 	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
 		<cftry>
@@ -190,6 +190,22 @@ CREATE TABLE shops
 	,citycode #loc.intColumnType# NULL
 	,name varchar(80) NOT NULL
 	,PRIMARY KEY(shopid)
+) #loc.storageEngine#
+</cfquery>
+
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
+CREATE TABLE sqltypes
+(
+	id #loc.identityColumnType#
+	,booleanType bit DEFAULT 0 NOT NULL
+	,binaryType #loc.binaryColumnType# NULL
+	,dateTimeType #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NOT NULL
+	,floatType #loc.floatColumnType# DEFAULT 1.25 NULL
+	,intType #loc.intColumnType# DEFAULT 1 NOT NULL
+	,stringType char(4) DEFAULT 'blah' NOT NULL
+	,stringVariableType varchar(80) NOT NULL
+	,textType #loc.textColumnType# NOT NULL
+	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
 
@@ -460,6 +476,12 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 		)>
 	</cfloop>
 </cfloop>
+
+<!--- sqltype --->
+<cfset model("sqltype").create(
+	stringVariableType="tony"
+	,textType="blah blah blah blah"
+)>
 
 <!--- assign posts for multiple join test --->
 <cfset loc.andy.update(favouritePostId=1, leastFavouritePostId=2)>
