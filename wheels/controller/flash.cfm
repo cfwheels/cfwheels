@@ -209,7 +209,7 @@
 	<cfargument name="keys" type="string" required="false" hint="The key (or list of keys) to show the value for. You can also use the `key` argument instead for better readability when accessing a single key.">
 	<cfargument name="class" type="string" required="false" hint="HTML `class` to set on the `div` element that contains the messages.">
 	<cfargument name="includeEmptyContainer" type="boolean" required="false" hint="Includes the DIV container even if the flash is empty.">
-	<cfargument name="lowerCaseDynamicClassValues" type="boolean" required="false" hint="Outputs all class attribute values in lower case (except the main one).">
+	<cfargument name="classFormat" type="string" required="false" hint="Outputs all class attribute values different formats: uppercase, lowercase, hyphenated, mixed, default.">
 	<cfscript>
 		// Initialization
 		var loc = {};
@@ -237,9 +237,17 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(loc.flashKeys, loc.i);
-			loc.class = lCase( loc.item ) & "Message";
-			if (arguments.lowerCaseDynamicClassValues)
-				loc.class = LCase(loc.class);
+			if (arguments.classFormat IS "uppercase") {
+				loc.class = uCase( loc.item ) & "MESSAGE";
+			} else if (arguments.classFormat IS "lowercase") {
+				loc.class = uCase( loc.item ) & "message";
+			} else if (arguments.classFormat IS "hyphenated") {
+				loc.class = lCase( loc.item ) & "-message";
+			} else if (arguments.classFormat IS "mixed") {
+				loc.class = lCase(loc.class) & "Message";
+			} else { // none/default
+				loc.class = lCase(loc.class) & "Message";
+			}
 			loc.attributes = {class=loc.class};
 			if (!StructKeyExists(arguments, "key") || arguments.key == loc.item)
 			{
@@ -253,7 +261,7 @@
 
 		if (Len(loc.listItems) || arguments.includeEmptyContainer)
 		{
-			loc.returnValue = $element(name="div", skip="key,keys,includeEmptyContainer,lowerCaseDynamicClassValues", content=loc.listItems, attributes=arguments);
+			loc.returnValue = $element(name="div", skip="key,keys,includeEmptyContainer,classFormat", content=loc.listItems, attributes=arguments);
 		}
 		return loc.returnValue;
 	</cfscript>
