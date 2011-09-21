@@ -244,7 +244,7 @@
 			} else if (arguments.classFormat IS "hyphenated") {
 				loc.class = lCase( loc.item ) & "-message";
 			} else if (arguments.classFormat IS "mixed") {
-				loc.class = lCase(loc.class) & "Message";
+				loc.class = loc.class & "Message";
 			} else { // none/default
 				loc.class = lCase(loc.class) & "Message";
 			}
