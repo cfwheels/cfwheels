@@ -185,7 +185,7 @@
 							for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 							{
 								loc.property = primaryKeys(loc.i);
-								ArrayAppend(loc.keyComboValues, "#tableName()#.#loc.property# = #variables.wheels.class.adapter.$quoteValue(loc.values[loc.property][loc.k])#");
+								ArrayAppend(loc.keyComboValues, "#tableName()#.#loc.property# = #variables.wheels.class.adapter.$quoteValue(str=loc.values[loc.property][loc.k], type=validationTypeForProperty(loc.property))#");
 							}
 							loc.paginationWhere = ListAppend(loc.paginationWhere, "(" & ArrayToList(loc.keyComboValues, " AND ") & ")", Chr(7));
  						}
