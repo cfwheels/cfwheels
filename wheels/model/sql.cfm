@@ -688,11 +688,9 @@
 			else 
 				loc.value = "";
 			loc.toAppend = loc.key & "=";
-			if (!IsNumeric(loc.value))
-				loc.toAppend = loc.toAppend & "'";
+			if (NOT ListFind("integer,float,boolean", validationTypeForProperty(loc.key)) OR loc.value EQ '')
+				loc.value = "'" & loc.value & "'";
 			loc.toAppend = loc.toAppend & loc.value;
-			if (!IsNumeric(loc.value))
-				loc.toAppend = loc.toAppend & "'";
 			loc.returnValue = ListAppend(loc.returnValue, loc.toAppend, " ");
 			if (loc.i < loc.iEnd)
 				loc.returnValue = ListAppend(loc.returnValue, "AND", " ");
