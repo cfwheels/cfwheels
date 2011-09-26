@@ -28,4 +28,10 @@
 		<cfset assert('loc.r.recordcount eq 1')>
 	</cffunction>
 
+	<cffunction name="test_numeric_value_for_string_property">
+		<cfset loc.expected = "title='1'">
+		<cfset loc.actual = model("Post").$keyWhereString(properties="title", values="1")>
+		<cfset assert('loc.actual EQ loc.expected')>
+	</cffunction>
+	
 </cfcomponent>
