@@ -33,7 +33,7 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = arguments.sources[loc.i];
-			if (ReFindNoCase("^(http:\/\/|https:\/\/|\/\/)", loc.item))
+			if (ReFindNoCase("^https?:\/\/", loc.item))
 			{
 				arguments.href = arguments.sources[loc.i];
 			}
@@ -86,7 +86,7 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = arguments.sources[loc.i];
-			if (ReFindNoCase("^(http:\/\/|https:\/\/|\/\/)", loc.item))
+			if (ReFindNoCase("^https?:\/\/", loc.item))
 			{
 				arguments.src = arguments.sources[loc.i];
 			}
