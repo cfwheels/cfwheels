@@ -31,5 +31,15 @@
 		<cfset debug(expression='htmleditformat(loc.r)', display=false, format="text")>
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
+	
+	<cffunction name="test_allow_specification_of_delimiter">
+		<cfset loc.args.source = "test|test.js|http://fonts.googleapis.com/css?family=Istok+Web:400,700">
+		<cfset loc.args.delim = "|">
+		<cfset loc.e = loc.controller.javaScriptIncludeTag(argumentcollection=loc.args)>
+		<cfset loc.r = '<script src="#application.wheels.webpath#javascripts/test.js" type="text/javascript"></script>#chr(10)#<script src="#application.wheels.webpath#javascripts/test.js" type="text/javascript"></script>#chr(10)#<script src="http://fonts.googleapis.com/css?family=Istok+Web:400,700" type="text/javascript"></script>#chr(10)#'>
+		<cfset debug(expression='htmleditformat(loc.e)', display=false, format="text")>
+		<cfset debug(expression='htmleditformat(loc.r)', display=false, format="text")>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
 
 </cfcomponent>
