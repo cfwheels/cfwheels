@@ -5,7 +5,7 @@ in order to run the build you will need at least version 3.3.0.007
 https://issues.jboss.org/browse/RAILO-1223
  --->
 <!--- set the release version --->
-<cfset release = "1.1.3">
+<cfparam name="url.version">
 
 <!--- do not modify anything pass here. you be sorry :) --->
 <cfset source = ExpandPath(".")>
@@ -30,10 +30,33 @@ your can't zip empty directories
 	</cfif>
 </cfloop>
 
-<cfzip action="zip" file="#source#/cfwheels.#release#.zip" source="#destination#" storePath="false"/>
+<!--- tag the version --->
+<cfset replaceMarkerInFile("{{VERSION}}", "#url.version#", "wheels/events/onapplicationstart.cfm")>
+<cfset replaceMarkerInFile("{{UNRELEASED}}", "#dateformat(now(), 'mm/dd/yyyy')#", "wheels/CHANGELOG")>
+
+<cfzip action="zip" file="#source#/cfwheels.#url.version#.zip" source="#destination#" storePath="false"/>
 
 <!--- need to delete the wheels/tests directory for the release --->
-<cfzip action="delete" file="#source#/cfwheels.#release#.zip" entrypath="wheels/tests" recurse="true" />
+<cfzip action="delete" file="#source#/cfwheels.#url.version#.zip" entrypath="wheels/tests" recurse="true" />
+
+<cffunction name="replaceMarkerInFile">
+	<cfargument name="marker" type="string" required="true">
+	<cfargument name="value" type="string" required="true">
+	<cfargument name="file" type="string" required="true" hint="relative path of the file. ex: wheels/CHANGELOG">
+	<cfset var loc = {}>
+	
+	<!--- build the full directory --->
+	<cfset loc.file = replace("#destination#/#arguments.file#", "\", "/", "all")>
+	<cfif !FileExists(loc.file)>
+		Cannot find file: <cfoutput>#loc.file#</cfoutput>
+		<cfabort>
+	</cfif>
+	
+	<cffile action="read" file="#loc.file#" variable="loc.str">
+	<cfset loc.str = ReplaceNoCase(loc.str, "#arguments.marker#", arguments.value, "one")>
+	<cffile action="write" file="#loc.file#" addnewline="false" output="#loc.str#">
+</cffunction>
+
 
 <!---
 Copies a directory.
