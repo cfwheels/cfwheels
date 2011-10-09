@@ -191,7 +191,7 @@
  						}
 						loc.paginationWhere = Replace(loc.paginationWhere, Chr(7), " OR ", "all");
  						if (Len(arguments.where) && Len(arguments.include)) // this can be improved to also check if the where clause checks on a joined table, if not we can use the simple where clause with just the ids
- 							arguments.where = "(" & arguments.where & ")" & " AND " & loc.paginationWhere;
+ 							arguments.where = "(#arguments.where#) AND (#loc.paginationWhere#)";
  						else
 						{
 							arguments.where = loc.paginationWhere;

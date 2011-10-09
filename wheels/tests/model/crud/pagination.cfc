@@ -119,5 +119,15 @@
 		<cfset loc.result = model("combikey").findAll(page=2, perPage=4, order="id2")>
 		<cfset assert('loc.result.recordCount eq 4')>
 	</cffunction>
+	
+	<cffunction name="test_incorrect_number_of_record_returned_when_where_clause_satisfies_records_beyond_the_first_identifier_value">
+		<cfset loc.q = model("author").findAll(
+			include="posts"
+			,where="posts.views > 2"
+			,page=1
+			,perpage=5
+		)>
+		<cfset assert('loc.q.recordcount eq 3')>
+	</cffunction>
 
 </cfcomponent>

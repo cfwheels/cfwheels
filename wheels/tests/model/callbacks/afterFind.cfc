@@ -15,22 +15,22 @@
 	
 	<cffunction name="test_setting_one_query_record">
 		<cfset loc.posts = model("post").findAll(maxRows=1, order="id DESC")>
-		<cfset assert("loc.posts.views[1] IS 103 AND loc.posts['title'][1] IS 'setTitle'")>
+		<cfset assert("loc.posts.views[1] IS 102 AND loc.posts['title'][1] IS 'setTitle'")>
 	</cffunction>
 
 	<cffunction name="test_setting_one_query_record_with_skipped_callback">
 		<cfset loc.posts = model("post").findAll(maxRows=1, order="id DESC")>
-		<cfset assert("loc.posts.views[1] IS 103 AND loc.posts['title'][1] IS 'setTitle'")>
+		<cfset assert("loc.posts.views[1] IS 102 AND loc.posts['title'][1] IS 'setTitle'")>
 	</cffunction>
 
 	<cffunction name="test_setting_multiple_query_records">
 		<cfset loc.posts = model("post").findAll(order="id DESC")>
-		<cfset assert("loc.posts.views[1] IS 103 AND loc.posts.views[2] IS 100 AND loc.posts['title'][1] IS 'setTitle'")>
+		<cfset assert("loc.posts.views[1] IS 102 AND loc.posts.views[2] IS 103 AND loc.posts['title'][1] IS 'setTitle'")>
 	</cffunction>
 
 	<cffunction name="test_setting_multiple_query_records_with_skipped_callback">
 		<cfset loc.posts = model("post").findAll(order="id DESC", callbacks=false)>
-		<cfset assert("loc.posts.views[1] IS '3' AND loc.posts.views[2] IS 0 AND loc.posts.title[1] IS 'Title for fourth test post'")>
+		<cfset assert("loc.posts.views[1] IS '2' AND loc.posts.views[2] IS '3' AND loc.posts.title[1] IS 'Title for fifth test post'")>
 	</cffunction>
 
 	<cffunction name="test_setting_property_on_one_object">
