@@ -23,12 +23,13 @@
 	<cfargument name="type" type="string" required="false" hint="The `type` attribute for the `link` tag.">
 	<cfargument name="media" type="string" required="false" hint="The `media` attribute for the `link` tag.">
 	<cfargument name="head" type="string" required="false" hint="Set to `true` to place the output in the `head` area of the HTML page instead of the default behavior, which is to place the output where the function is called from.">
+	<cfargument name="delim" type="string" required="false" default="," hint="the delimiter to use for the list of stylesheets">
 	<cfscript>
 		var loc = {};
 		$args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href,rel");
 		arguments.rel = "stylesheet";
 		loc.returnValue = "";
-		arguments.sources = $listClean(list=arguments.sources, returnAs="array");
+		arguments.sources = $listClean(list=arguments.sources, returnAs="array", delim=arguments.delim);
 		loc.iEnd = ArrayLen(arguments.sources);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
@@ -44,7 +45,7 @@
 					arguments.href = arguments.href & ".css";
 				arguments.href = $assetDomain(arguments.href) & $appendQueryString();
 			}
-			loc.returnValue = loc.returnValue & $tag(name="link", skip="sources,head", close=true, attributes=arguments) & chr(10);
+			loc.returnValue = loc.returnValue & $tag(name="link", skip="sources,head,delim", close=true, attributes=arguments) & chr(10);
 		}
 		if (arguments.head)
 		{
@@ -77,11 +78,12 @@
 	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many JavaScript files in the `javascripts` folder, minus the `.js` extension. (Can also be called with the `source` argument.) Pass a full URL to access an external JavaScript file.">
 	<cfargument name="type" type="string" required="false" hint="The `type` attribute for the `script` tag.">
 	<cfargument name="head" type="string" required="false" hint="See documentation for @styleSheetLinkTag.">
+	<cfargument name="delim" type="string" required="false" default="," hint="the delimiter to use for the list of stylesheets">
 	<cfscript>
 		var loc = {};
 		$args(name="javaScriptIncludeTag", args=arguments, combine="sources/source/!", reserved="src");
 		loc.returnValue = "";
-		arguments.sources = $listClean(list=arguments.sources, returnAs="array");
+		arguments.sources = $listClean(list=arguments.sources, returnAs="array", delim=arguments.delim);
 		loc.iEnd = ArrayLen(arguments.sources);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
@@ -97,7 +99,7 @@
 					arguments.src = arguments.src & ".js";
 				arguments.src = $assetDomain(arguments.src) & $appendQueryString();
 			}
-			loc.returnValue = loc.returnValue & $element(name="script", skip="sources,head", attributes=arguments) & chr(10);
+			loc.returnValue = loc.returnValue & $element(name="script", skip="sources,head,delim", attributes=arguments) & chr(10);
 		}
 		if (arguments.head)
 		{
