@@ -11,6 +11,7 @@
 		<cfset assert('request.wheels.pagination_test_1.CURRENTPAGE eq 1')>
 		<cfset assert('request.wheels.pagination_test_1.TOTALPAGES eq 0')>
 		<cfset assert('request.wheels.pagination_test_1.TOTALRECORDS eq 0')>
+		<cfset assert('request.wheels.pagination_test_1.ENDROW eq 1')>
 		<cfset assert("loc.e.recordcount eq 0")>
 	</cffunction>
 
@@ -22,6 +23,7 @@
 		<cfset assert('request.wheels.pagination_test_2.CURRENTPAGE eq 1')>
 		<cfset assert('request.wheels.pagination_test_2.TOTALPAGES eq 3')>
 		<cfset assert('request.wheels.pagination_test_2.TOTALRECORDS eq 5')>
+		<cfset assert('request.wheels.pagination_test_2.ENDROW eq 2')>
 		<cfset assert("loc.e.recordcount eq 2")>
 		<cfset assert('loc.e.id[1] eq loc.r.id[1]')>
 		<cfset assert('loc.e.id[2] eq loc.r.id[2]')>
@@ -31,6 +33,7 @@
 		<cfset assert('request.wheels.pagination_test_3.CURRENTPAGE eq 2')>
 		<cfset assert('request.wheels.pagination_test_3.TOTALPAGES eq 3')>
 		<cfset assert('request.wheels.pagination_test_3.TOTALRECORDS eq 5')>
+		<cfset assert('request.wheels.pagination_test_3.ENDROW eq 4')>
 		<cfset assert("loc.e.recordcount eq 2")>
 		<cfset assert('loc.e.id[1] eq loc.r.id[3]')>
 		<cfset assert('loc.e.id[2] eq loc.r.id[4]')>
@@ -40,6 +43,7 @@
 		<cfset assert('request.wheels.pagination_test_4.CURRENTPAGE eq 3')>
 		<cfset assert('request.wheels.pagination_test_4.TOTALPAGES eq 3')>
 		<cfset assert('request.wheels.pagination_test_4.TOTALRECORDS eq 5')>
+		<cfset assert('request.wheels.pagination_test_4.ENDROW eq 5')>
 		<cfset assert("loc.e.recordcount eq 1")>
 		<cfset assert('loc.e.id[1] eq loc.r.id[5]')>
 	</cffunction>
@@ -90,6 +94,7 @@
 		<cfset assert('request.wheels.pagination_order_test_1.CURRENTPAGE eq 1')>
 		<cfset assert('request.wheels.pagination_order_test_1.TOTALPAGES eq 13')>
 		<cfset assert('request.wheels.pagination_order_test_1.TOTALRECORDS eq 250')>
+		<cfset assert('request.wheels.pagination_order_test_1.ENDROW eq 20')>
 	</cffunction>
 
 	<cffunction name="test_with_renamed_primary_key">
@@ -106,6 +111,7 @@
 		<cfset assert('request.wheels.pagination_order_test_1.CURRENTPAGE eq 1')>
 		<cfset assert('request.wheels.pagination_order_test_1.TOTALPAGES eq 13')>
 		<cfset assert('request.wheels.pagination_order_test_1.TOTALRECORDS eq 250')>
+		<cfset assert('request.wheels.pagination_order_test_1.ENDROW eq 20')>
 	</cffunction>
 	
 	<cffunction name="test_with_parameterize_set_to_false_with_numeric">
@@ -113,6 +119,7 @@
 		<cfset assert('request.wheels.pagination_order_test_1.CURRENTPAGE eq 1')>
 		<cfset assert('request.wheels.pagination_order_test_1.TOTALPAGES eq 1')>
 		<cfset assert('request.wheels.pagination_order_test_1.TOTALRECORDS eq 1')>
+		<cfset assert('request.wheels.pagination_order_test_1.ENDROW eq 1')>
 	</cffunction>
 
 	<cffunction name="test_compound_keys">
