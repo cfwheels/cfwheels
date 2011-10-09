@@ -121,7 +121,7 @@
 			<cfset loc.coreResult = loc.author.postCount()>
 			<cftransaction action="rollback" />
 		</cftransaction>		
-		<cfset assert("loc.dynamicResult IS 0 AND loc.coreResult IS 0 AND loc.remainingCount IS 4")>
+		<cfset assert("loc.dynamicResult IS 0 AND loc.coreResult IS 0 AND loc.remainingCount IS 5")>
 	</cffunction>
 
 	<cffunction name="test_deleting_all_children">
@@ -137,7 +137,7 @@
 			<cfset loc.coreResult = loc.author.postCount()>
 			<cftransaction action="rollback" />
 		</cftransaction>		
-		<cfset assert("loc.dynamicResult IS 0 AND loc.coreResult IS 0 AND loc.remainingCount IS 1")>
+		<cfset assert("loc.dynamicResult IS 0 AND loc.coreResult IS 0 AND loc.remainingCount IS 2")>
 	</cffunction>
 
 	<cffunction name="test_creating_new_child">

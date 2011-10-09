@@ -4,7 +4,7 @@
 
 	<cffunction name="test_average_with_integer">
 		<cfset loc.result = model("post").average(property="views")>
-		<cfset assert("loc.result IS 3.25")>
+		<cfset assert("loc.result IS 3")>
 	</cffunction>
 
 	<cffunction name="test_average_with_integer_with_non_matching_where">
@@ -14,7 +14,7 @@
 
 	<cffunction name="test_average_with_integer_with_distinct">
 		<cfset loc.result = model("post").average(property="views", distinct="true")>
-		<cfset assert("DecimalFormat(loc.result) IS DecimalFormat(2.66666666667)")>
+		<cfset assert("DecimalFormat(loc.result) IS DecimalFormat(2.50)")>
 	</cffunction>
 
 	<cffunction name="test_average_with_integer_with_ifNull">
@@ -26,7 +26,7 @@
 
 	<cffunction name="test_average_with_float">
 		<cfset loc.result = model("post").average(property="averageRating")>
-		<cfset assert("DecimalFormat(loc.result) IS DecimalFormat(3.47)")>
+		<cfset assert("DecimalFormat(loc.result) IS DecimalFormat(3.50)")>
 	</cffunction>
 
 	<cffunction name="test_average_with_float_with_non_matching_where">
@@ -53,7 +53,7 @@
 			<cfset loc.average = model("Post").average(property="views", includeSoftDeletes=true)>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset assert('loc.average eq 3.25')>
+		<cfset assert('loc.average eq 3')>
 	</cffunction>
 
 </cfcomponent>

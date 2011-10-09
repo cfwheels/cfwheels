@@ -203,7 +203,7 @@
 			<cfset loc.allPosts = model("Post").findAll(includeSoftDeletes=true)>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset assert('loc.allPosts.recordcount eq 4')>
+		<cfset assert('loc.allPosts.recordcount eq 5')>
 	</cffunction>
 
 	<cffunction name="test_findOne_returns_empty_array_for_included_model_when_none_exist">

@@ -86,7 +86,7 @@
 			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true)>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset assert('loc.changedPosts.recordcount eq 4')>
+		<cfset assert('loc.changedPosts.recordcount eq 5')>
 	</cffunction>
 
    	<cffunction name="test_columns_that_are_not_null_should_allow_for_blank_string_during_update">

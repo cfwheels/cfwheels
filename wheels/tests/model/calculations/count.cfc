@@ -54,7 +54,7 @@
 			<cfset loc.count = model("Post").count(property="views", includeSoftDeletes=true)>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset assert('loc.count eq 4')>
+		<cfset assert('loc.count eq 5')>
 	</cffunction>	
 	
 </cfcomponent>

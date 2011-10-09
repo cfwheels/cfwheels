@@ -2,9 +2,9 @@
 
 	<cffunction name="test_distinct_works_with_group_by">
 		<cfset loc.r = model("post").findAll(select="views", distinct=true)>
-		<cfset assert('loc.r.recordcount eq 3')>
+		<cfset assert('loc.r.recordcount eq 4')>
 		<cfset loc.r = model("post").findAll(select="views", group="views")>
-		<cfset assert('loc.r.recordcount eq 3')>
+		<cfset assert('loc.r.recordcount eq 4')>
 	</cffunction>
 
 	<cffunction name="test_wrong_table_alias_in_group_by_throws_error">
@@ -14,7 +14,7 @@
 	
 	<cffunction name="test_max_works_with_group_functionality">
 		<cfset loc.r = model("post").findAll(select="id, authorid, title, MAX(posts.views) AS maxView", group="id, authorid, title")>
-		<cfset assert('loc.r.recordcount eq 4')>
+		<cfset assert('loc.r.recordcount eq 5')>
 	</cffunction>
 	
 	<cffunction name="test_group_functionality_works_with_pagination">
