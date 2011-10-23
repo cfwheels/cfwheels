@@ -1028,13 +1028,17 @@
 	<cfscript>
 		var loc = {};
 		if (variables.wheels.class.timeStampingOnCreate)
+		{
 			$timestampProperty(property=variables.wheels.class.timeStampOnCreateProperty);
+		}
 		if (application.wheels.setUpdatedAtOnCreate && variables.wheels.class.timeStampingOnUpdate)
+		{
 			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
+		}
+		
 		loc.sql = [];
 		loc.sql2 = [];
-		ArrayAppend(loc.sql, "INSERT INTO #tableName()# (");
-		ArrayAppend(loc.sql2, " VALUES (");
+		
 		for (loc.key in variables.wheels.class.properties)
 		{
 			if (StructKeyExists(this, loc.key))
@@ -1046,26 +1050,41 @@
 				ArrayAppend(loc.sql2, ",");
 			}
 		}
-		ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
-		ArrayDeleteAt(loc.sql2, ArrayLen(loc.sql2));
-		ArrayAppend(loc.sql, ")");
-		ArrayAppend(loc.sql2, ")");
-		loc.iEnd = ArrayLen(loc.sql);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			ArrayAppend(loc.sql, loc.sql2[loc.i]);
-
-		// map the primary keys down to the SQL columns before calling
-		loc.primaryKeys = ListToArray(primaryKeys());
-		loc.iEnd = ArrayLen(loc.primaryKeys);
-		for(loc.i = 1; loc.i LTE loc.iEnd; loc.i++)
-			loc.primaryKeys[loc.i] = variables.wheels.class.properties[loc.primaryKeys[loc.i]].column;
-
-		loc.ins = $adapter().$query(sql=loc.sql, parameterize=arguments.parameterize, $primaryKey=ArrayToList(loc.primaryKeys));
-		loc.generatedKey = $adapter().$generatedKey();
-		if (StructKeyExists(loc.ins.result, loc.generatedKey))
-			this[primaryKeys(1)] = loc.ins.result[loc.generatedKey];
-		if (arguments.reload)
-			this.reload();
+		
+		// don't do any if no properties were passed in
+		if (ArrayLen(loc.sql))
+		{
+			ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
+			ArrayDeleteAt(loc.sql2, ArrayLen(loc.sql2));
+			ArrayPrepend(loc.sql, "INSERT INTO #tableName()# (");
+			ArrayPrepend(loc.sql2, " VALUES (");
+			ArrayAppend(loc.sql, ")");
+			ArrayAppend(loc.sql2, ")");
+			loc.iEnd = ArrayLen(loc.sql);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				ArrayAppend(loc.sql, loc.sql2[loc.i]);
+			}
+	
+			// map the primary keys down to the SQL columns before calling
+			loc.primaryKeys = ListToArray(primaryKeys());
+			loc.iEnd = ArrayLen(loc.primaryKeys);
+			for(loc.i = 1; loc.i LTE loc.iEnd; loc.i++)
+			{
+				loc.primaryKeys[loc.i] = variables.wheels.class.properties[loc.primaryKeys[loc.i]].column;
+			}
+	
+			loc.ins = $adapter().$query(sql=loc.sql, parameterize=arguments.parameterize, $primaryKey=ArrayToList(loc.primaryKeys));
+			loc.generatedKey = $adapter().$generatedKey();
+			if (StructKeyExists(loc.ins.result, loc.generatedKey))
+			{
+				this[primaryKeys(1)] = loc.ins.result[loc.generatedKey];
+			}
+			if (arguments.reload)
+			{
+				this.reload();
+			}
+		}
 	</cfscript>
 	<cfreturn true>
 </cffunction>
