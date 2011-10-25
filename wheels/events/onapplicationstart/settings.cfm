@@ -253,4 +253,7 @@
 		,xls="application/excel"
 		,xlsx="application/excel"
 	};
+	
+	// plugin events
+	application.wheels.pluginEvents = {};
 </cfscript>
