@@ -257,6 +257,7 @@
 	'
 	categories="view-helper,text" functions="autoLink,excerpt,highlight,simpleFormat,truncate">
 	<cfargument name="word" type="string" required="true" hint="The text to turn into a title.">
+	<cfset arguments.word = LCase(arguments.word)>
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
