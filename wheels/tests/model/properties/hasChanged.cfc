@@ -20,4 +20,29 @@
 		<cfset assert('loc.sqltype.hasChanged("booleanType")')>
 	</cffunction>
 	
+	<cffunction name="test_integer_handled_properly">
+		<cfset loc.sqltype = model("Sqltype").findOne()>
+		<cfset loc.sqltype.intType = "1">
+		<cfset assert('!loc.sqltype.hasChanged("intType")')>
+ 		<cfset loc.sqltype.intType = 1>
+ 		<cfset assert('!loc.sqltype.hasChanged("intType")')>
+		<cfset loc.sqltype.intType = "0">
+		<cfset assert('loc.sqltype.hasChanged("intType")')>
+ 		<cfset loc.sqltype.intType = 0>
+		<cfset assert('loc.sqltype.hasChanged("intType")')>
+		<cfset loc.sqltype = model("Sqltypesnull").findOne()>
+		<cfset debug('loc.sqltype.intType')>
+ 		<cfset loc.sqltype.intType = "">
+		<cfset debug('loc.sqltype.intType')>
+		<cfset assert('!loc.sqltype.hasChanged("intType")')>
+		<cfset loc.sqltype.intType = "1">
+		<cfset assert('loc.sqltype.hasChanged("intType")')>
+		<cfset loc.sqltype.intType = 1>
+		<cfset assert('loc.sqltype.hasChanged("intType")')>
+ 		<cfset loc.sqltype.intType = "0">
+		<cfset assert('loc.sqltype.hasChanged("intType")')>
+ 		<cfset loc.sqltype.intType = 0>
+		<cfset assert('loc.sqltype.hasChanged("intType")')>
+	</cffunction>
+	
 </cfcomponent>

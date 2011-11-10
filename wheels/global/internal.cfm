@@ -95,7 +95,9 @@
 				arguments.value = ToString(arguments.value);
 				break;
 			case "float": case "integer":
-				arguments.value = Val(arguments.value);
+				if(len(arguments.value)){
+					arguments.value = Val(arguments.value);
+				}
 				break;
 			case "boolean":
 				arguments.value = ( arguments.value IS true );

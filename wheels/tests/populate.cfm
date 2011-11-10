@@ -38,7 +38,7 @@
 <cfset loc.tableList = ValueList(loc.dbinfo.table_name, chr(7))>
 
 <!--- list of tables to delete --->
-<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes">
+<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes,sqltypesnulls">
 <cfloop list="#loc.tables#" index="loc.i">
 	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
 		<cftry>
@@ -205,6 +205,22 @@ CREATE TABLE sqltypes
 	,stringType char(4) DEFAULT 'blah' NOT NULL
 	,stringVariableType varchar(80) NOT NULL
 	,textType #loc.textColumnType# NOT NULL
+	,PRIMARY KEY(id)
+) #loc.storageEngine#
+</cfquery>
+
+<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
+CREATE TABLE sqltypesnulls
+(
+	id #loc.identityColumnType#
+	,booleanType bit NULL
+	,binaryType #loc.binaryColumnType# NULL
+	,dateTimeType #loc.datetimeColumnType# NULL
+	,floatType #loc.floatColumnType# NULL
+	,intType #loc.intColumnType# NULL
+	,stringType char(4) NULL
+	,stringVariableType varchar(80) NULL
+	,textType #loc.textColumnType# NULL
 	,PRIMARY KEY(id)
 ) #loc.storageEngine#
 </cfquery>
@@ -482,6 +498,11 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 <cfset model("sqltype").create(
 	stringVariableType="tony"
 	,textType="blah blah blah blah"
+)>
+
+<!--- sqltypesnull --->
+<cfset model("sqltypesnull").create(
+	stringVariableType=""
 )>
 
 <!--- assign posts for multiple join test --->
