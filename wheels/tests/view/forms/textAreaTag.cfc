@@ -4,8 +4,10 @@
 		<cfset loc.controller = controller(name="dummy")>
 	</cffunction>
 
-	<cffunction name="test_x_textAreaTag_valid">
-		<cfset loc.controller.textAreaTag(name="description")>
+	<cffunction name="test_overload_properties">
+		<cfset loc.r = loc.controller.textAreaTag(name="TestingThisOut", rows=10, cols=20)>
+		<cfset assert('loc.r contains "rows=""10"""')>
+		<cfset assert('loc.r contains "cols=""20"""')>
 	</cffunction>
 
 </cfcomponent>
