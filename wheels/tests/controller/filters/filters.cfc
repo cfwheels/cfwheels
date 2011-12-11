@@ -10,6 +10,7 @@
 		<cfset loc.dispatcher.$runFilters(controller=loc.controller, actionname="index", type="before")>
 		<cfset loc.e = "Pass">
 		<cfset loc.r = trim(request.wheels.response)>
+		<cfset halt(false, 'request.wheels.response')>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
@@ -19,6 +20,7 @@
 		<cfset loc.dispatcher.$runFilters(controller=loc.controller, actionname="index", type="before")>
 		<cfset loc.e = "Pass">
 		<cfset loc.r = trim(request.wheels.response)>
+		<cfset halt(false, 'request.wheels.response')>
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
