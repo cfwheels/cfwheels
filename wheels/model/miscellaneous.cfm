@@ -35,7 +35,7 @@
 		<!--- update the properties of the model with the params struct containing the values of a form post --->
 		<cfset user = model("user").new(params)>
 		<cfset user.setProperties(params)>
-	'	
+	'
 	categories="model-object" chapters="" functions="properties">
 	<cfargument name="properties" type="struct" required="false" default="#structnew()#">
 	<cfscript>
@@ -55,13 +55,13 @@
 		<!--- Get a structure of all the properties for a given model --->
 		<cfset user = model("user").new()>
 		<cfset user.properties()>
-		
-	'		
-	categories="model-object" chapters="" functions="setProperties">	
+
+	'
+	categories="model-object" chapters="" functions="setProperties">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
-		
+
 		// loop through all properties and functions in the this scope
 		for (loc.key in this)
 		{
@@ -94,6 +94,7 @@
 	<cfargument name="name" type="string" required="true" hint="The name that you want to use for the column or SQL function result in the CFML code.">
 	<cfargument name="column" type="string" required="false" default="" hint="The name of the column in the database table to map the property to.">
 	<cfargument name="sql" type="string" required="false" default="" hint="An SQL function to use to calculate the property value.">
+	<cfargument name="defaultValue" type="string" required="false" hint="A default value for this property.">
 	<cfscript>
 		variables.wheels.class.mapping[arguments.name] = {};
 		if (Len(arguments.column))
@@ -106,6 +107,8 @@
 			variables.wheels.class.mapping[arguments.name].type = "sql";
 			variables.wheels.class.mapping[arguments.name].value = arguments.sql;
 		}
+		if (StructKeyExists(arguments, "defaultValue"))
+			variables.wheels.class.mapping[arguments.name].defaultValue = arguments.defaultValue;
 	</cfscript>
 </cffunction>
 
@@ -366,7 +369,7 @@
 							arguments.missingMethodArguments.key = $propertyValue(name=loc.info.foreignKey);
 						}
 					}
-					
+
 				}
 				if (Len(loc.method))
 					loc.returnValue = $invoke(componentReference=model(loc.info.class), method=loc.method, argumentCollection=arguments.missingMethodArguments);
@@ -398,11 +401,11 @@
 		loc.iEnd = ListLen(variables.wheels.class.propertyList);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.iItem = ListGetAt(variables.wheels.class.propertyList, loc.i);
-			if (Len(variables.wheels.class.properties[loc.iItem].defaultValue) && (!StructKeyExists(this, loc.iItem) || !Len(this[loc.iItem])))
+			loc.key = ListGetAt(variables.wheels.class.propertyList, loc.i);
+			if (StructKeyExists(variables.wheels.class.properties[loc.key], "defaultValue") && (!StructKeyExists(this, loc.key) || !Len(this[loc.key])))
 			{
 				// set the default value unless it is blank or a value already exists for that property on the object
-				this[loc.iItem] = variables.wheels.class.properties[loc.iItem].defaultValue;
+				this[loc.key] = variables.wheels.class.properties[loc.key].defaultValue;
 			}
 		}
 	</cfscript>
