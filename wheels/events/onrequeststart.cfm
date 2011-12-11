@@ -67,8 +67,6 @@
 			$simpleLock(name="modelLock", execute="$clearModelInitializationCache");
 		if (!application.wheels.cacheControllerInitialization)
 			$simpleLock(name="controllerLock", execute="$clearControllerInitializationCache");
-		if (!application.wheels.cachePlugins)
-			$loadPlugins();
 		if (!application.wheels.cacheRoutes)
 		{
 			ArrayClear(application.wheels.routes);
