@@ -161,6 +161,10 @@
 			loc.returnValue.controller = arguments.foundRoute.controller;
 		if (!StructKeyExists(loc.returnValue, "action"))
 			loc.returnValue.action = arguments.foundRoute.action;
+			
+		// filter out illegal characters from the controller and action arguments
+		loc.returnValue.controller = ReReplace(loc.returnValue.controller, "[^0-9A-Za-z-_]", "", "all");
+		loc.returnValue.action = ReReplace(loc.returnValue.action, "[^0-9A-Za-z-_]", "", "all");
 
 		// convert controller to upperCamelCase and action to normal camelCase
 		loc.returnValue.controller = REReplace(loc.returnValue.controller, "-([a-z])", "\u\1", "all");
