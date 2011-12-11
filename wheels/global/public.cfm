@@ -452,9 +452,3 @@
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
-
-<cffunction name="toXHTML" returntype="string" access="public" output="false" hint="returns an XHTML compliant string">
-	<cfargument name="str" type="string" required="true" hint="string to make XHTML compliant">
-	<cfset arguments.str = Replace(arguments.str, "&", "&amp;", "all")>
-	<cfreturn arguments.str>
-</cffunction>
