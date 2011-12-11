@@ -1205,13 +1205,11 @@
 	<cfargument name="$optionNames" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
-		loc.optionContent = "";
 		if (!Len(arguments.value) && (!IsBoolean(arguments.includeBlank) || !arguments.includeBlank))
 			arguments.value = Evaluate("#arguments.$type#(Now())");
+		arguments.$appendToFor = arguments.$type;
 		if (StructKeyExists(arguments, "order") && ListLen(arguments.order) > 1 && ListLen(arguments.label) > 1)
 			arguments.label = ListGetAt(arguments.label, ListFindNoCase(arguments.order, arguments.$type));
-		if (!StructKeyExists(arguments, "id"))
-			arguments.id = arguments.$id & "-" & arguments.$type;
 		loc.before = $formBeforeElement(argumentCollection=arguments);
 		loc.after = $formAfterElement(argumentCollection=arguments);
 		loc.content = "";
@@ -1221,49 +1219,29 @@
 			loc.args.value = "";
 			if (!IsBoolean(arguments.includeBlank))
 				loc.optionContent = arguments.includeBlank;
+			else
+				loc.optionContent = "";
 			loc.content = loc.content & $element(name="option", content=loc.optionContent, attributes=loc.args);
 		}
-
-		if(arguments.$loopFrom < arguments.$loopTo)
+		for (loc.i=arguments.$loopFrom; loc.i <= arguments.$loopTo; loc.i=loc.i+arguments.$step)
 		{
-			for (loc.i=arguments.$loopFrom; loc.i <= arguments.$loopTo; loc.i=loc.i+arguments.$step)
-			{
-				loc.args = Duplicate(arguments);
-				loc.args.counter = loc.i;
-				loc.args.optionContent = loc.optionContent;
-				loc.content = loc.content & $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=loc.args);
-			}
+			loc.args = {};
+			loc.args.value = loc.i;
+			if (arguments.value == loc.i)
+				loc.args.selected = "selected";
+			if (Len(arguments.$optionNames))
+				loc.optionContent = ListGetAt(arguments.$optionNames, loc.i);
+			else
+				loc.optionContent = loc.i;
+			if (arguments.$type == "minute" || arguments.$type == "second")
+				loc.optionContent = NumberFormat(loc.optionContent, "09");
+			loc.content = loc.content & $element(name="option", content=loc.optionContent, attributes=loc.args);
 		}
-		else
-		{
-			for (loc.i=arguments.$loopFrom; loc.i >= arguments.$loopTo; loc.i=loc.i-arguments.$step)
-			{
-				loc.args = Duplicate(arguments);
-				loc.args.counter = loc.i;
-				loc.args.optionContent = loc.optionContent;
-				loc.content = loc.content & $yearMonthHourMinuteSecondSelectTagContent(argumentCollection=loc.args);
-			}
-		}
+		if (!StructKeyExists(arguments, "id"))
+			arguments.id = arguments.$id & "-" & arguments.$type;
 		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,value,includeBlank,order,separator,startYear,endYear,monthDisplay,dateSeparator,dateOrder,timeSeparator,timeOrder,minuteStep", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="$yearMonthHourMinuteSecondSelectTagContent">
-	<cfscript>
-		var loc = {};
-		loc.args = {};
-		loc.args.value = arguments.counter;
-		if (arguments.value == arguments.counter)
-			loc.args.selected = "selected";
-		if (Len(arguments.$optionNames))
-			arguments.optionContent = ListGetAt(arguments.$optionNames, arguments.counter);
-		else
-			arguments.optionContent = arguments.counter;
-		if (arguments.$type == "minute" || arguments.$type == "second")
-			arguments.optionContent = NumberFormat(arguments.optionContent, "09");
-	</cfscript>
-	<cfreturn $element(name="option", content=arguments.optionContent, attributes=loc.args)>
 </cffunction>
 
 <cffunction name="$optionsForSelect" returntype="string" access="public" output="false">
