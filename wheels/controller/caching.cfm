@@ -10,10 +10,7 @@
 	<cfscript>
 		var loc = {};
 		if (StructKeyExists(arguments, "action"))
-		{
 			arguments.actions = arguments.action;
-		}
-		arguments.action = $listClean(arguments.action);
 
 		if (application.wheels.showErrorInformation)
 		{
@@ -24,7 +21,7 @@
 		loc.iEnd = ListLen(arguments.actions);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.item = ListGetAt(arguments.actions, loc.i);
+			loc.item = Trim(ListGetAt(arguments.actions, loc.i));
 			loc.thisAction = {action=loc.item, time=arguments.time};
 			ArrayAppend(variables.wheels.cachableActions, loc.thisAction);
 		}
