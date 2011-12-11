@@ -124,4 +124,12 @@
 		<cfset assert('Compare(loc.params.controller, "Wheels") eq 0')>
 	</cffunction>
 	
+	<cffunction name="test_sanitize_controller_and_action_params">
+		<cfset loc.args.formScope["controller"] = "../../../wheels%00">
+		<cfset loc.args.formScope["action"] = "../../../test*^&%()%00">
+		<cfset loc.params = loc.dispatch.$createParams(argumentCollection=loc.args)>
+		<cfset assert('Compare(loc.params.controller, "Wheels00") eq 0')>
+		<cfset assert('Compare(loc.params.action, "test00") eq 0')>
+	</cffunction>
+	
 </cfcomponent>
