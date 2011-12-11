@@ -5,7 +5,7 @@ in order to run the build you will need at least version 3.3.0.007
 https://issues.jboss.org/browse/RAILO-1223
  --->
 <!--- set the release version --->
-<cfset release = "1.1.3">
+<cfset release = "1.1.6">
 
 <!--- do not modify anything pass here. you be sorry :) --->
 <cfset source = ExpandPath(".")>
