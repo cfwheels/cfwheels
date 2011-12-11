@@ -6,6 +6,3 @@
 <!--- unload all plugins before running core tests --->
 <cfset application.wheels.plugins = {}>
 <cfset application.wheels.mixins = {}>
-
-<!--- turn off request query caching --->
-<cfset application.wheels.cacheQueriesDuringRequest = false>
