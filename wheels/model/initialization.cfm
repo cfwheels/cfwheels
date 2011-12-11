@@ -7,7 +7,7 @@
 		variables.wheels.class = {};
 		variables.wheels.class.name = arguments.name;
 		variables.wheels.class.RESQLOperators = "((?: LIKE)|(?:<>)|(?:<=)|(?:>=)|(?:!=)|(?:!<)|(?:!>)|=|<|>)";
-		variables.wheels.class.RESQLWhere = "(#variables.wheels.class.RESQLOperators# ?)(''|'.+?'()|(-?[0-9]|\.)+()|\(-?[0-9]+(,-?[0-9]+)*\))(($|\)| (AND|OR)))";
+		variables.wheels.class.RESQLWhere = "(#variables.wheels.class.RESQLOperators# ?)(''|'.+?'()|(-?[0-9]|\.)+()|\(-?[0-9]+(,-?[0-9]+)*\))(($|\)| (AND|OR)))";  
 		variables.wheels.class.mapping = {};
 		variables.wheels.class.properties = {};
 		variables.wheels.class.calculatedProperties = {};
@@ -22,7 +22,7 @@
 		loc.iEnd = ListLen(loc.validations);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			variables.wheels.class.validations[ListGetAt(loc.validations, loc.i)] = ArrayNew(1);
-
+		
 		// run developer's init method if it exists
 		if (StructKeyExists(variables, "init"))
 			init();
@@ -71,7 +71,7 @@
 			// set up properties and column mapping
 			if (!ListFind(loc.processedColumns, loc.columns["column_name"][loc.i]))
 			{
-				loc.property = loc.columns["column_name"][loc.i]; // default the column to map to a property with the same name
+				loc.property = loc.columns["column_name"][loc.i]; // default the column to map to a property with the same name 
 				for (loc.key in variables.wheels.class.mapping)
 				{
 					if (StructKeyExists(variables.wheels.class.mapping[loc.key], "type") && variables.wheels.class.mapping[loc.key].type == "column" && variables.wheels.class.mapping[loc.key].value == loc.property)
@@ -87,9 +87,7 @@
 				variables.wheels.class.properties[loc.property].column = loc.columns["column_name"][loc.i];
 				variables.wheels.class.properties[loc.property].scale = loc.columns["decimal_digits"][loc.i];
 				loc.defaultValue = loc.columns["column_default_value"][loc.i];
-				if (StructKeyExists(variables.wheels.class.mapping, loc.property) && StructKeyExists(variables.wheels.class.mapping[loc.property], "defaultValue"))
-					loc.defaultValue = variables.wheels.class.mapping[loc.property].defaultValue;
-				else if ((Left(loc.defaultValue,2) == "((" && Right(loc.defaultValue,2) == "))") || (Left(loc.defaultValue,2) == "('" && Right(loc.defaultValue,2) == "')"))
+				if ((Left(loc.defaultValue,2) == "((" && Right(loc.defaultValue,2) == "))") || (Left(loc.defaultValue,2) == "('" && Right(loc.defaultValue,2) == "')"))
 					loc.defaultValue = Mid(loc.defaultValue, 3, Len(loc.defaultValue)-4);
 				variables.wheels.class.properties[loc.property].defaultValue = loc.defaultValue;
 				if (loc.columns["is_primarykey"][loc.i])
@@ -101,7 +99,6 @@
 				loc.processedColumns = ListAppend(loc.processedColumns, loc.columns["column_name"][loc.i]);
 			}
 		}
-
 		if (!Len(variables.wheels.class.keys))
 			$throw(type="Wheels.NoPrimaryKey", message="No primary key exists on the `#variables.wheels.class.tableName#` table.", extendedInfo="Set an appropriate primary key on the `#variables.wheels.class.tableName#` table.");
 
