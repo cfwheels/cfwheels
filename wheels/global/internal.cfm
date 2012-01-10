@@ -10,7 +10,7 @@
 			application.wheels.vendor.stringEscapeUtils = loc.javaLoader.create("org.apache.commons.lang.StringEscapeUtils");
 		}
 	</cfscript>
-	<cfreturn application.wheels.vendor.stringEscapeUtils.escapeHtml(arguments.string) />
+	<cfreturn application.wheels.vendor.stringEscapeUtils.escapeHtml(ToString(arguments.string)) />
 </cffunction>
 
 <cffunction name="$initializeRequestScope" returntype="void" access="public" output="false">

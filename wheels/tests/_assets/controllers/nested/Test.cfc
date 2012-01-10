@@ -1,2 +1,2 @@
-<cfcomponent extends="wheels.tests._assets.controllers.Controller">
+<cfcomponent extends="wheelsMapping.tests._assets.controllers.Controller">
 </cfcomponent>
