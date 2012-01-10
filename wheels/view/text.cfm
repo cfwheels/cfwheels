@@ -79,7 +79,7 @@
 	<cfargument name="radius" type="numeric" required="false" hint="Number of characters to extract surrounding the phrase.">
 	<cfargument name="excerptString" type="string" required="false" hint="String to replace first and/or last characters with.">
 	<cfargument name="stripTags" type="boolean" required="false" hint="Should we remove all html tags before extracting the except">
-	<cfargument name="wholeWords" type="boolean" required="false" hint="when extracting the exceprt, span to to grab whole words.">
+	<cfargument name="wholeWords" type="boolean" required="false" hint="when extracting the excerpt, span to to grab whole words.">
 	<cfscript>
 	var loc = {};
 	$args(name="excerpt", args=arguments);
