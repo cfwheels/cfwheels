@@ -32,15 +32,14 @@
 </cffunction>
 
 <cffunction name="$simpleLock" returntype="any" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="type" type="string" required="true">
 	<cfargument name="execute" type="string" required="true">
 	<cfargument name="executeArgs" type="struct" required="false" default="#StructNew()#">
 	<cfargument name="timeout" type="numeric" required="false" default="30">
 	<cfset var loc = {}>
-	<cfset loc.lockArgs = Duplicate(arguments)>
-	<cfset StructDelete(loc.lockArgs, "execute")>
-	<cfset StructDelete(loc.lockArgs, "executeArgs")>
 	<cfset arguments.executeArgs.$locked = true>
-	<cflock attributeCollection="#loc.lockArgs#">
+	<cflock name="#arguments.name#" type="#arguments.type#" timeout="#arguments.timeout#">
 		<cfinvoke method="#arguments.execute#" argumentCollection="#arguments.executeArgs#" returnvariable="loc.returnValue">
 	</cflock>
 	<cfif StructKeyExists(loc, "returnValue")>
