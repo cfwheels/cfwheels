@@ -4,6 +4,20 @@
 		<cfset loc.controller = controller(name="dummy")>
 	</cffunction>
 
+	<cffunction name="test_link_url_inside_tag">
+		<cfset loc.str = '<strong>http://cfwheels.org</strong>'>
+		<cfset loc.r = loc.controller.autoLink(text=loc.str, link="URLs", relative=false)>
+		<cfset loc.e = '<strong><a href="http://cfwheels.org">http://cfwheels.org</a></strong>'>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+
+	<cffunction name="test_url_in_tag_attribute_should_not_be_linked">
+		<cfset loc.str = '<img src="http://cfwheels.org/img.png">'>
+		<cfset loc.r = loc.controller.autoLink(text=loc.str, link="URLs", relative=false)>
+		<cfset loc.e = '<img src="http://cfwheels.org/img.png">'>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+
 	<cffunction name="test_link_urls">
 		<cfset loc.str = 'blah blah <a href="http://cfwheels.org/download">http://cfwheels.org/download</a> Download Wheels from http://cfwheels.org/download blah blah'>
 		<cfset loc.r = loc.controller.autoLink(loc.str, "URLs")>

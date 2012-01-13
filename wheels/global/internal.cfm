@@ -565,7 +565,7 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="$fileExistsNoCase" returntype="boolean" access="public" output="false">
+<cffunction name="$fileExistsNoCase" returntype="any" access="public" output="false">
 	<cfargument name="absolutePath" type="string" required="true">
 	<cfscript>
 		var loc = {};
@@ -581,8 +581,11 @@
 		// loop through the file list and return true if the file exists regardless of case (the == operator is case insensitive)
 		loc.iEnd = ListLen(loc.fileList);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			if (ListGetAt(loc.fileList, loc.i) == loc.file)
-				return true;
+		{
+			loc.foundFile = ListGetAt(loc.fileList, loc.i);
+			if (loc.foundFile == loc.file)
+				return loc.foundFile;
+		}
 
 		// the file wasn't found in the directory so we return false
 		return false;
@@ -595,35 +598,42 @@
 	<cfargument name="type" type="string" required="true" hint="Can be either `controller` or `model`." />
 	<cfscript>
 		var loc = {};
-		loc.objectFileExists = false;
 
-		// if the name contains the delimiter let's capitalize the last element and append it back to the list
-		if (ListLen(arguments.name, ".") gt 1)
-			arguments.name = ListSetAt(arguments.name, ListLen(arguments.name, "."), capitalize(ListLast(arguments.name, ".")), ".");
-		else
-			arguments.name = capitalize(arguments.name);
-
-		// we are going to store the full controller path in the existing / non-existing lists so we can have controllers in multiple places
+		// we are going to store the full controller/model path in the existing / non-existing lists so we can have controllers/models in multiple places
 		loc.fullObjectPath = arguments.objectPath & "/" & ListChangeDelims(arguments.name, "/", ".");
-
+		
 		if (!ListFindNoCase(application.wheels.existingObjectFiles, loc.fullObjectPath) && !ListFindNoCase(application.wheels.nonExistingObjectFiles, loc.fullObjectPath))
 		{
-			if (FileExists(ExpandPath("#loc.fullObjectPath#.cfc")))
-				loc.objectFileExists = true;
-			if (application.wheels.cacheFileChecking)
+			// we have not yet checked if this file exists or not so let's do that here
+			// $fileExistsNoCase will return the file name with correct case if it exists, false if not
+			loc.file = $fileExistsNoCase(ExpandPath("#loc.fullObjectPath#.cfc"));
+			if (IsBoolean(loc.file) && !loc.file)
 			{
-				if (loc.objectFileExists)
-					application.wheels.existingObjectFiles = ListAppend(application.wheels.existingObjectFiles, loc.fullObjectPath);
-				else
+				// no file exists, let's store that if caching is on so we don't have to check it again
+				if (application.wheels.cacheFileChecking)
 					application.wheels.nonExistingObjectFiles = ListAppend(application.wheels.nonExistingObjectFiles, loc.fullObjectPath);
 			}
+			else
+			{				
+				// the file exists, let's store the proper case of the file if caching is turned on
+				loc.file = SpanExcluding(loc.file, ".");
+				loc.fullObjectPath = ListSetAt(loc.fullObjectPath, ListLen(loc.fullObjectPath, "/"), loc.file, "/");
+				if (application.wheels.cacheFileChecking)
+					application.wheels.existingObjectFiles = ListAppend(application.wheels.existingObjectFiles, loc.fullObjectPath);
+				return loc.file;
+			}
 		}
-		if (ListFindNoCase(application.wheels.existingObjectFiles, loc.fullObjectPath) || loc.objectFileExists)
-			loc.returnValue = arguments.name;
 		else
-			loc.returnValue = capitalize(arguments.type);
+		{
+			// if the file exists we return the file name in its proper case
+			loc.pos = ListFindNoCase(application.wheels.existingObjectFiles, loc.fullObjectPath);
+			if (loc.pos)
+				return ListLast(ListGetAt(application.wheels.existingObjectFiles, loc.pos), "/");
+		}
+
+		// by default we return "Model" or "Controller" so that the base component gets loaded
+		return capitalize(arguments.type);
 	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$createControllerClass" returntype="any" access="public" output="false">
