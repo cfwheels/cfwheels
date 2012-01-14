@@ -13,5 +13,27 @@
 		<cfset loc.foundCustomType = YesNoFormat(FindNoCase('type="search"', loc.textField)) />
 		<cfset assert('loc.foundCustomType eq true')>
 	</cffunction>
+
+	<cffunction name="test_hyphenized_data_attributes">
+		<cfset loc.hyphenizeAttributeNames = application.wheels.hyphenizeAttributeNames>
+		<cfset application.wheels.hyphenizeAttributeNames = true>
+		<cfset loc.args["dataDomCache"] = true>
+		<cfset loc.args["dataRole"] = "button">
+		<cfset loc.result = loc.controller.textFieldTag(name="num", type="range", min=5, max=10, argumentCollection=loc.args)>
+		<cfset loc.correct = '<input data-dom-cache="true" data-role="button" id="num" max="10" min="5" name="num" type="range" value="" />'>
+		<cfset assert('loc.result IS loc.correct')>
+		<cfset application.wheels.hyphenizeAttributeNames = loc.hyphenizeAttributeNames>
+	</cffunction>
+
+	<cffunction name="test_lowercased_attributes">
+		<cfset loc.hyphenizeAttributeNames = application.wheels.hyphenizeAttributeNames>
+		<cfset application.wheels.hyphenizeAttributeNames = false>
+		<cfset loc.args = StructNew()>
+		<cfset loc.args["CLASS"] = "x">
+		<cfset loc.result = loc.controller.textFieldTag(name="num", type="range", min=5, max=10, argumentCollection=loc.args)>
+		<cfset loc.correct = '<input class="x" id="num" max="10" min="5" name="num" type="range" value="" />'>
+		<cfset assert('loc.result IS loc.correct')>
+		<cfset application.wheels.hyphenizeAttributeNames = loc.hyphenizeAttributeNames>
+	</cffunction>
 	
 </cfcomponent>

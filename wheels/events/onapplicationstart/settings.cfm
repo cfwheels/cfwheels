@@ -76,6 +76,7 @@
 	application.wheels.controllerPath = "controllers";
 
 	// miscellaneous settings
+	application.wheels.hyphenizeAttributeNames = false;
 	application.wheels.tableNamePrefix = "";
 	application.wheels.obfuscateURLs = false;
 	application.wheels.reloadPassword = "";

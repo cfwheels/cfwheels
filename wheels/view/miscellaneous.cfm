@@ -295,7 +295,15 @@
 <cffunction name="$tagAttribute" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="value" type="string" required="true">
-	<cfreturn ' #LCase(arguments.name)#="#arguments.value#"'>
+	<cfscript>
+		var returnValue = " ";
+		if (get("hyphenizeAttributeNames"))
+			returnValue &= hyphenize(arguments.name);
+		else
+			returnValue &= LCase(arguments.name);
+		returnValue &= "=""" & arguments.value & """";
+	</cfscript>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="$element" returntype="string" access="public" output="false">
