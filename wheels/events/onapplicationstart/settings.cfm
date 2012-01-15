@@ -76,7 +76,7 @@
 	application.wheels.controllerPath = "controllers";
 
 	// miscellaneous settings
-	application.wheels.dataAttributeDelimiter = "A-Z";
+	application.wheels.dataAttributeDelimiter = "_";
 	application.wheels.tableNamePrefix = "";
 	application.wheels.obfuscateURLs = false;
 	application.wheels.reloadPassword = "";
