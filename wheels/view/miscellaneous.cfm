@@ -296,14 +296,24 @@
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="value" type="string" required="true">
 	<cfscript>
-		var returnValue = " ";
-		if (get("hyphenizeAttributeNames"))
-			returnValue &= hyphenize(arguments.name);
-		else
-			returnValue &= LCase(arguments.name);
-		returnValue &= "=""" & arguments.value & """";
+		var loc = {};
+		loc.name = arguments.name;
+		
+		// for custom data attributes we convert underscores / camelCase to hyphens to get around the issue with not being able to use a hyphen in an argument name in CFML
+		if (Left(arguments.name, 4) == "data")
+		{
+			loc.delim = get("dataAttributeDelimiter");
+			if (Len(loc.delim))
+				loc.name = Replace(REReplace(loc.name, "([a-z])([#loc.delim#])", "\1-\2", "all"), "-#loc.delim#", "-", "all");
+		}
+		loc.name = LCase(loc.name);
+		loc.returnValue = " " & loc.name;
+
+		// unless it's a custom data attribute we support the html5 boolean attribute by not including the value at all
+		if (Left(arguments.name, 4) == "data" || !IsBoolean(arguments.value) || CompareNoCase(arguments.value, "true"))
+			loc.returnValue &= "=""" & arguments.value & """";
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$element" returntype="string" access="public" output="false">

@@ -14,26 +14,39 @@
 		<cfset assert('loc.foundCustomType eq true')>
 	</cffunction>
 
-	<cffunction name="test_hyphenized_data_attributes">
-		<cfset loc.hyphenizeAttributeNames = application.wheels.hyphenizeAttributeNames>
-		<cfset application.wheels.hyphenizeAttributeNames = true>
-		<cfset loc.args["dataDomCache"] = true>
-		<cfset loc.args["dataRole"] = "button">
-		<cfset loc.result = loc.controller.textFieldTag(name="num", type="range", min=5, max=10, argumentCollection=loc.args)>
-		<cfset loc.correct = '<input data-dom-cache="true" data-role="button" id="num" max="10" min="5" name="num" type="range" value="" />'>
+	<cffunction name="test_data_attribute_underscore_conversion">
+		<cfset loc.delim = application.wheels.dataAttributeDelimiter>
+		<cfset application.wheels.dataAttributeDelimiter = "_">
+		<cfset loc.result = loc.controller.textFieldTag(name="num", type="range", min=5, max=10, data_dom_cache="cache", data_role="button")>
+		<cfset loc.correct = '<input data-dom-cache="cache" data-role="button" id="num" max="10" min="5" name="num" type="range" value="" />'>
 		<cfset assert('loc.result IS loc.correct')>
-		<cfset application.wheels.hyphenizeAttributeNames = loc.hyphenizeAttributeNames>
+		<cfset application.wheels.dataAttributeDelimiter = loc.delim>
 	</cffunction>
 
-	<cffunction name="test_lowercased_attributes">
-		<cfset loc.hyphenizeAttributeNames = application.wheels.hyphenizeAttributeNames>
-		<cfset application.wheels.hyphenizeAttributeNames = false>
+	<cffunction name="test_data_attribute_camelcase_conversion">
+		<cfset loc.delim = application.wheels.dataAttributeDelimiter>
+		<cfset application.wheels.dataAttributeDelimiter = "A-Z">
 		<cfset loc.args = StructNew()>
-		<cfset loc.args["CLASS"] = "x">
+		<cfset loc.args["dataDomCache"] = "cache">
+		<cfset loc.args["dataRole"] = "button">
 		<cfset loc.result = loc.controller.textFieldTag(name="num", type="range", min=5, max=10, argumentCollection=loc.args)>
-		<cfset loc.correct = '<input class="x" id="num" max="10" min="5" name="num" type="range" value="" />'>
+		<cfset loc.correct = '<input data-dom-cache="cache" data-role="button" id="num" max="10" min="5" name="num" type="range" value="" />'>
 		<cfset assert('loc.result IS loc.correct')>
-		<cfset application.wheels.hyphenizeAttributeNames = loc.hyphenizeAttributeNames>
+		<cfset application.wheels.dataAttributeDelimiter = loc.delim>
+	</cffunction>
+
+	<cffunction name="test_data_attribute_set_to_true">
+		<cfset loc.args = StructNew()>
+		<cfset loc.args["data-dom-cache"] = "true">
+		<cfset loc.result = loc.controller.textFieldTag(name="num", argumentCollection=loc.args)>
+		<cfset loc.correct = '<input data-dom-cache="true" id="num" name="num" type="text" value="" />'>
+		<cfset assert('loc.result IS loc.correct')>
+	</cffunction>
+
+	<cffunction name="test_boolean_attribute">
+		<cfset loc.result = loc.controller.textFieldTag(name="num", controls1=true, controls2="true")>
+		<cfset loc.correct = '<input controls1 controls2 id="num" name="num" type="text" value="" />'>
+		<cfset assert('loc.result IS loc.correct')>
 	</cffunction>
 	
 </cfcomponent>

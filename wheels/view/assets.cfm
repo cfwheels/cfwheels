@@ -27,6 +27,10 @@
 	<cfscript>
 		var loc = {};
 		$args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href,rel");
+		if (!Len(arguments.type))
+			StructDelete(arguments, "type");
+		if (!Len(arguments.media))
+			StructDelete(arguments, "media");
 		arguments.rel = "stylesheet";
 		loc.returnValue = "";
 		arguments.sources = $listClean(list=arguments.sources, returnAs="array", delim=arguments.delim);
@@ -82,6 +86,8 @@
 	<cfscript>
 		var loc = {};
 		$args(name="javaScriptIncludeTag", args=arguments, combine="sources/source/!", reserved="src");
+		if (!Len(arguments.type))
+			StructDelete(arguments, "type");
 		loc.returnValue = "";
 		arguments.sources = $listClean(list=arguments.sources, returnAs="array", delim=arguments.delim);
 		loc.iEnd = ArrayLen(arguments.sources);
