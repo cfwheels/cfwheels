@@ -286,7 +286,7 @@
 		}
 		if ($getFlashStorage() == "cookie")
 		{
-			cookie.flash = SerializeJSON(arguments.flash);
+			$cookie(name="flash", value=SerializeJSON(arguments.flash), httpOnly=true);
 		}
 		else
 		{
