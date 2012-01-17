@@ -14,7 +14,7 @@
 <cfset application.wheels.assetQueryString = false />
 <cfset application.wheels.assetPaths = false />
 
-<!--- redirections should always delay when testing --->
+<!--- redirections should always be delayed when testing --->
 <cfset application.wheels.functions.redirectTo.delay = true>
 
 <!--- turn off transactions by default --->
