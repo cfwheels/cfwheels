@@ -280,7 +280,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="radioButtonTagGroup" returntype="string" access="public" output="false" hint="Builds and returns a string for a group of radio buttons. If you pass in [value] to any of the arguments that get appplied to each individual radio button, such as `append` or `label` for example, it will be replaced by the real value in the current iteration. You can pass in different `labels`, `append` arguments by using a list."
+<cffunction name="radioButtonTagGroup" returntype="string" access="public" output="false" hint="Builds and returns a string for a group of radio buttons and labels. If you pass in [value] to any of the arguments that get appplied to each individual radio button (`append` for example), it will be replaced by the real value in the current iteration. You can pass in different `prepend`, `append` etc arguments by using a list."
 	examples=
 	'
 		<!--- Simple yes/no selection --->
@@ -300,9 +300,9 @@
 			##radioButtonTagGroup(name="type", values=values, checkedValue=params.type, prependToGroup="<div class=""clearfix""><label>Show:</label><div class=""input""><ul class=""inputs-list"">", appendToGroup="</ul></div></div>", prepend="<li><label>", append="<span>[value]</span></label></li>")##
 		</cfoutput>
 	'
-	categories="view-helper,forms-plain" chapters="" functions="radioButtonTag">
+	categories="view-helper,forms-plain" chapters="" functions="radioButtonTag,checkBoxTagGroup">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @textFieldTag.">
-	<cfargument name="values" type="struct" required="true" hint="Struct containing keys/values for the radio buttons to be created.">
+	<cfargument name="values" type="struct" required="true" hint="Struct containing keys/values for the radio buttons and labels to be created.">
 	<cfargument name="checkedValue" type="string" required="false" hint="The value of the radio button that should be checked.">
 	<cfargument name="order" type="string" required="false" hint="List of struct keys in the order you want them displayed (to override the alphabetical default).">
 	<cfargument name="prependToGroup" type="string" required="false" hint="String to prepend to the entire group of radio buttons.">
@@ -316,18 +316,65 @@
 	<cfscript>
 		var loc = {};
 		$args(name="radioButtonTagGroup", args=arguments);
+		arguments.input = "radioButtonTag";
+		arguments.checkedValues = arguments.checkedValue;
+		StructDelete(arguments, "checkedValue");
+		return $tagGroup(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="checkBoxTagGroup" returntype="string" access="public" output="false" hint="See documentation for @radioButtonTagGroup."
+	examples=
+	'
+		<cfset languages = StructNew()>
+		<cfset languages.js = "JavaScript">
+		<cfset languages.cfml = "ColdFusion">
+		<cfset languages.css = "CSS">
+		<cfset languages.html = "HTML">
+		<cfoutput>
+			##checkBoxTagGroup(name="lang", values=languages, checkedValues="cfml,css")##
+		</cfoutput>
+	'
+	categories="view-helper,forms-plain" chapters="" functions="checkBoxTag,radioButtonTagGroup">
+	<cfargument name="name" type="string" required="true" hint="See documentation for @radioButtonTagGroup.">
+	<cfargument name="values" type="struct" required="true" hint="See documentation for @textFieldTag.">
+	<cfargument name="checkedValues" type="string" required="false" hint="The values of the check boxes that should be checked.">
+	<cfargument name="order" type="string" required="false" hint="See documentation for @radioButtonTagGroup.">
+	<cfargument name="prependToGroup" type="string" required="false" hint="See documentation for @radioButtonTagGroup.">
+	<cfargument name="appendToGroup" type="string" required="false" hint="See documentation for @radioButtonTagGroup.">
+	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
+	<cfscript>
+		$args(name="checkBoxTagGroup", args=arguments);
+		arguments.input = "checkBoxTag";
+		return $tagGroup(argumentCollection=arguments);
+	</cfscript>
+</cffunction>
+
+<cffunction name="$tagGroup" returntype="string" access="public" output="false">
+	<cfargument name="input" type="string" required="true">
+	<cfscript>
+		var loc = {};
 		
+		loc.input = arguments.input;
+		StructDelete(arguments, "input");
+
 		// create a base struct that we'll pass along to the individual radio buttons removing the arguments that only apply to the group as a whole
 		loc.baseArgs = Duplicate(arguments);
 		StructDelete(loc.baseArgs, "values");
-		StructDelete(loc.baseArgs, "checkedValue");
+		StructDelete(loc.baseArgs, "checkedValues");
 		StructDelete(loc.baseArgs, "order");
 		StructDelete(loc.baseArgs, "prependToGroup");
 		StructDelete(loc.baseArgs, "appendToGroup");
 		
 		// sort keys alphabeticallty unless the developer has passed in the keys
 		if (!Len(arguments.order))
-			arguments.order = ArrayToList(StructSort(arguments.values));
+			arguments.order = ArrayToList(StructSort(arguments.values, "textnocase"));
 
 		loc.returnValue = arguments.prependToGroup;
 		loc.iEnd = ListLen(arguments.order);
@@ -337,7 +384,7 @@
 			
 			// create struct from the base struct but then apply the individual changes such as the value and if it should be checked
 			loc.args = Duplicate(loc.baseArgs);
-			if (loc.key == arguments.checkedValue)
+			if (ListFindNoCase(arguments.checkedValues,loc.key))
 				loc.args.checked = true;
 			else			
 				loc.args.checked = false;
@@ -357,7 +404,7 @@
 				loc.args[loc.item] = ReplaceNoCase(loc.args[loc.item], "[value]", arguments.values[loc.key], "all");
 			}
 
-			loc.returnValue &= radioButtonTag(argumentCollection=loc.args);
+			loc.returnValue &= $invoke(method=loc.input, invokeArgs=loc.args);
 		}
 		loc.returnValue &= arguments.appendToGroup;
 	</cfscript>

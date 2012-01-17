@@ -265,7 +265,12 @@
 		if (StructKeyExists(arguments, "id"))
 			loc.attributes.for = arguments.id;
 		loc.returnValue = loc.returnValue & $tag(name="label", attributes=loc.attributes);
-		loc.returnValue = loc.returnValue & arguments.label;
+		
+		// allow to output labels without text when coming from "Tag" functions
+		// objectName is always a struct when coming from those functions (otherwise it's a string pointing to an object)
+		if (!IsStruct(arguments.objectName) || CompareNoCase(arguments.label, "true"))
+			loc.returnValue = loc.returnValue & arguments.label;
+
 		loc.returnValue = loc.returnValue & "</label>";
 	</cfscript>
 	<cfreturn loc.returnValue>

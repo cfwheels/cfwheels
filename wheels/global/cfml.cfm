@@ -172,6 +172,13 @@
 	</cfif>
 	<cfif StructKeyExists(arguments, "invokeArgs")>
 		<cfset arguments.argumentCollection = arguments.invokeArgs>
+		<cfif StructCount(arguments.argumentCollection) IS NOT ListLen(StructKeyList(arguments.argumentCollection))>
+			<!--- work-around for fasthashremoved cf8 bug --->
+			<cfset arguments.argumentCollection = StructNew()>
+			<cfloop list="#StructKeyList(arguments.invokeArgs)#" index="loc.i">
+				<cfset arguments.argumentCollection[loc.i] = arguments.invokeArgs[loc.i]>
+			</cfloop>
+		</cfif>
 		<cfset StructDelete(arguments, "invokeArgs")>
 	</cfif>
 	<cfinvoke attributeCollection="#arguments#">

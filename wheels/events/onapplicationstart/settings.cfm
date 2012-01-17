@@ -144,6 +144,7 @@
 	application.wheels.functions.caches = {time=60, static=false};
 	application.wheels.functions.checkBox = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", checkedValue=1, unCheckedValue=0};
 	application.wheels.functions.checkBoxTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", value=1};
+	application.wheels.functions.checkBoxTagGroup = {checkedValues="", order="", prependToGroup="", appendToGroup="", label="[value]", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
 	application.wheels.functions.count = {parameterize=true};
 	application.wheels.functions.create = {parameterize=true, reload=false};
 	application.wheels.functions.dateSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names"};
@@ -187,7 +188,7 @@
 	application.wheels.functions.passwordFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
 	application.wheels.functions.radioButton = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
 	application.wheels.functions.radioButtonTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
-	application.wheels.functions.radioButtonTagGroup = {checkedValue="", order="", prependToGroup="", appendToGroup="", label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
+	application.wheels.functions.radioButtonTagGroup = {checkedValue="", order="", prependToGroup="", appendToGroup="", label="[value]", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
 	application.wheels.functions.redirectTo = {onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302, delay=false};
 	application.wheels.functions.renderPage = {layout=""};
 	application.wheels.functions.renderWith = {layout=""};
