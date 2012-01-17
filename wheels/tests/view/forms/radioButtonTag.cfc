@@ -18,4 +18,10 @@
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
+	<cffunction name="test_radioButtonTag_value_blank_and_not_checked">
+		<cfset loc.e = loc.controller.radioButtonTag(name="gender", value="", label="Male", checked=false)>
+		<cfset loc.r = '<label for="gender">Male<input id="gender" name="gender" type="radio" value="" /></label>'>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+
 </cfcomponent>

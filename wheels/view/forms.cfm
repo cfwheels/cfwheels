@@ -95,9 +95,13 @@
 	<cfargument name="value" type="string" required="false" hint="Message to display in the button form control.">
 	<cfargument name="image" type="string" required="false" hint="File name of the image file to use in the button form control.">
 	<cfargument name="disable" type="any" required="false" hint="Whether or not to disable the button upon clicking. (prevents double-clicking.)">
+	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField">
+	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
 	<cfscript>
 		var loc = {};
 		$args(name="submitTag", reserved="type,src", args=arguments);
+		loc.returnValue = arguments.prepend;
+		loc.append = arguments.append;
 		if (Len(arguments.disable))
 			arguments["data-disable-with"] = JSStringFormat(arguments.disable);
 		if (Len(arguments.image))
@@ -108,14 +112,17 @@
 			StructDelete(arguments, "value");
 			StructDelete(arguments, "image");
 			StructDelete(arguments, "disable");
-			loc.returnValue = imageTag(argumentCollection=arguments);
+			StructDelete(arguments, "append");
+			StructDelete(arguments, "prepend");
+			loc.returnValue &= imageTag(argumentCollection=arguments);
 			loc.returnValue = Replace(loc.returnValue, "<img", "<input");
 		}
 		else
 		{
 			arguments.type = "submit";
-			loc.returnValue = $tag(name="input", close=true, skip="image,disable", attributes=arguments);
+			loc.returnValue &= $tag(name="input", close=true, skip="image,disable,append,prepend", attributes=arguments);
 		}
+		loc.returnValue &= loc.append;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -134,9 +141,12 @@
 	categories="view-helper,forms-general" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="content" type="string" required="false" hint="Content to display inside the button.">
 	<cfargument name="type" type="string" required="false" hint="The type for the button: `button`, `reset`, or `submit`.">
-	<cfargument name="image" type="string" required="false" hint="File name of the image file to use in the button form control.">
 	<cfargument name="value" type="string" required="false" hint="The value of the button when submitted.">
+	<cfargument name="image" type="string" required="false" hint="File name of the image file to use in the button form control.">
 	<cfargument name="disable" type="any" required="false" hint="Whether or not to disable the button upon clicking. (Prevents double-clicking.)">
+	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField">
+	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
+
 	<cfscript>
 		var loc = {};
 		$args(name="buttonTag", args=arguments);
@@ -159,15 +169,18 @@
 			arguments.content = imageTag(argumentCollection=loc.args);
 		}
 
-		// save content and delete argument
+		// save necessary info from arguments and delete afterwards
 		loc.content = arguments.content;
-		StructDelete(arguments, "content", false);
-		// remove image argument
+		loc.prepend = arguments.prepend;
+		loc.append = arguments.append;
+		StructDelete(arguments, "content");
 		StructDelete(arguments, "image");
-		// remove disabled argument
 		StructDelete(arguments, "disable");
-		// create the buttom
-		loc.returnValue = $element(name="button", content="#loc.content#", attributes="#arguments#");
+		StructDelete(arguments, "prepend");
+		StructDelete(arguments, "append");
+
+		// create the button
+		loc.returnValue = loc.prepend & $element(name="button", content="#loc.content#", attributes="#arguments#") & loc.append;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -258,7 +271,12 @@
 		if (StructKeyExists(arguments, "id"))
 			loc.attributes.for = arguments.id;
 		loc.returnValue = loc.returnValue & $tag(name="label", attributes=loc.attributes);
-		loc.returnValue = loc.returnValue & arguments.label;
+		
+		// allow to output labels without text when coming from "Tag" functions
+		// objectName is always a struct when coming from those functions (otherwise it's a string pointing to an object)
+		if (!IsStruct(arguments.objectName) || CompareNoCase(arguments.label, "true"))
+			loc.returnValue = loc.returnValue & arguments.label;
+
 		loc.returnValue = loc.returnValue & "</label>";
 	</cfscript>
 	<cfreturn loc.returnValue>
