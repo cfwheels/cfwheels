@@ -17,7 +17,16 @@
 	</cffunction>
 
 	<cffunction name="test_blank_label_on_plain_helper">
+		<cfset loc.actual = textFieldTag(name="the-name", label=true)>
+		<cfset loc.expected = '<label for="the-name"><input id="the-name" name="the-name" type="text" value="" /></label>'>
+		<cfset assert('loc.actual eq loc.expected')>
+	</cffunction>
+
+	<cffunction name="test_no_label_on_plain_helper">
 		<cfset loc.actual = textFieldTag(name="the-name", label="")>
+		<cfset loc.expected = '<input id="the-name" name="the-name" type="text" value="" />'>
+		<cfset assert('loc.actual eq loc.expected')>
+		<cfset loc.actual = textFieldTag(name="the-name", label=false)>
 		<cfset loc.expected = '<input id="the-name" name="the-name" type="text" value="" />'>
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>

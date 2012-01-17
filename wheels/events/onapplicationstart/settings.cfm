@@ -76,6 +76,7 @@
 	application.wheels.controllerPath = "controllers";
 
 	// miscellaneous settings
+	application.wheels.dataAttributeDelimiter = "_";
 	application.wheels.tableNamePrefix = "";
 	application.wheels.obfuscateURLs = false;
 	application.wheels.reloadPassword = "";
@@ -139,10 +140,11 @@
 	application.wheels.functions.average = {distinct=false, parameterize=true, ifNull=""};
 	application.wheels.functions.belongsTo = {joinType="inner"};
 	application.wheels.functions.buttonTo = {onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable=""};
-	application.wheels.functions.buttonTag = {type="submit", value="save", content="Save changes", image="", disable=""};
+	application.wheels.functions.buttonTag = {type="submit", value="save", content="Save changes", image="", disable="", prepend="", append=""};
 	application.wheels.functions.caches = {time=60, static=false};
 	application.wheels.functions.checkBox = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", checkedValue=1, unCheckedValue=0};
 	application.wheels.functions.checkBoxTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", value=1};
+	application.wheels.functions.checkBoxTagGroup = {checkedValues="", order="", prependToGroup="", appendToGroup="", label="[value]", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
 	application.wheels.functions.count = {parameterize=true};
 	application.wheels.functions.create = {parameterize=true, reload=false};
 	application.wheels.functions.dateSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names"};
@@ -169,7 +171,7 @@
 	application.wheels.functions.hasMany = {joinType="outer", dependent=false};
 	application.wheels.functions.hasOne = {joinType="outer", dependent=false};
 	application.wheels.functions.hiddenField = {};
-	application.wheels.functions.highlight = {class="highlight"};
+	application.wheels.functions.highlight = {delimiter=",", tag="span", class="highlight"};
 	application.wheels.functions.hourSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
 	application.wheels.functions.imageTag = {};
 	application.wheels.functions.includePartial = {layout="", spacer="", dataFunction=true};
@@ -186,6 +188,7 @@
 	application.wheels.functions.passwordFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
 	application.wheels.functions.radioButton = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
 	application.wheels.functions.radioButtonTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
+	application.wheels.functions.radioButtonTagGroup = {checkedValue="", order="", prependToGroup="", appendToGroup="", label="[value]", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
 	application.wheels.functions.redirectTo = {onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302, delay=false};
 	application.wheels.functions.renderPage = {layout=""};
 	application.wheels.functions.renderWith = {layout=""};
@@ -200,7 +203,7 @@
 	application.wheels.functions.simpleFormat = {wrap=true, escapeHtml=false};
 	application.wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, spamProtection=false};
 	application.wheels.functions.styleSheetLinkTag = {type="text/css", media="all", head=false};
-	application.wheels.functions.submitTag = {value="Save changes", image="", disable=""};
+	application.wheels.functions.submitTag = {value="Save changes", image="", disable="", prepend="", append=""};
 	application.wheels.functions.sum = {distinct=false, parameterize=true, ifNull=""};
 	application.wheels.functions.textArea = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
 	application.wheels.functions.textAreaTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};

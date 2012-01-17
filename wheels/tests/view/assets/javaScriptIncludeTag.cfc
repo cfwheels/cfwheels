@@ -42,4 +42,12 @@
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
+	<cffunction name="test_removing_type_argument">
+		<cfset loc.args.source = "test.js">
+		<cfset loc.args.type = "">
+		<cfset loc.e = loc.controller.javaScriptIncludeTag(argumentcollection=loc.args)>
+		<cfset loc.r = '<script src="#application.wheels.webpath#javascripts/test.js"></script>#chr(10)#'>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
 </cfcomponent>

@@ -42,4 +42,13 @@
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
+<cffunction name="test_type_media_arguments">
+		<cfset loc.args.source = "test.css">
+		<cfset loc.args.media = "">
+		<cfset loc.args.type = "">
+		<cfset loc.e = loc.controller.styleSheetLinkTag(argumentcollection=loc.args)>
+		<cfset loc.r = '<link href="#application.wheels.webpath#stylesheets/test.css" rel="stylesheet" />#chr(10)#'>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
 </cfcomponent>

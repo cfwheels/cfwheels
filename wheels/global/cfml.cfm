@@ -1,3 +1,7 @@
+<cffunction name="$cookie" returntype="void" access="public" output="false">
+	<cfcookie attributeCollection="#arguments#">
+</cffunction>
+
 <cffunction name="$namedReadLock" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="object" type="any" required="true">
@@ -168,6 +172,13 @@
 	</cfif>
 	<cfif StructKeyExists(arguments, "invokeArgs")>
 		<cfset arguments.argumentCollection = arguments.invokeArgs>
+		<cfif StructCount(arguments.argumentCollection) IS NOT ListLen(StructKeyList(arguments.argumentCollection))>
+			<!--- work-around for fasthashremoved cf8 bug --->
+			<cfset arguments.argumentCollection = StructNew()>
+			<cfloop list="#StructKeyList(arguments.invokeArgs)#" index="loc.i">
+				<cfset arguments.argumentCollection[loc.i] = arguments.invokeArgs[loc.i]>
+			</cfloop>
+		</cfif>
 		<cfset StructDelete(arguments, "invokeArgs")>
 	</cfif>
 	<cfinvoke attributeCollection="#arguments#">
