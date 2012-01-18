@@ -2,19 +2,6 @@
 	<cfcookie attributeCollection="#arguments#">
 </cffunction>
 
-<cffunction name="$namedReadLock" returntype="any" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="object" type="any" required="true">
-	<cfargument name="method" type="string" required="true">
-	<cfargument name="args" type="struct" required="false" default="#StructNew()#">
-	<cfargument name="timeout" type="numeric" required="false" default="30">
-	<cfset var loc = {}>
-	<cflock name="#arguments.name#" type="readonly" timeout="#arguments.timeout#">
-		<cfset loc.returnValue = $invoke(componentReference=arguments.object, method=arguments.method, invokeArgs=arguments.args)>
-	</cflock>
-	<cfreturn loc.returnValue>
-</cffunction>
-
 <cffunction name="$doubleCheckedLock" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="condition" type="string" required="true">
@@ -42,10 +29,16 @@
 	<cfargument name="executeArgs" type="struct" required="false" default="#StructNew()#">
 	<cfargument name="timeout" type="numeric" required="false" default="30">
 	<cfset var loc = {}>
-	<cfset arguments.executeArgs.$locked = true>
-	<cflock name="#arguments.name#" type="#arguments.type#" timeout="#arguments.timeout#">
-		<cfinvoke method="#arguments.execute#" argumentCollection="#arguments.executeArgs#" returnvariable="loc.returnValue">
-	</cflock>
+	<cfif StructKeyExists(arguments, "object")>
+		<cflock name="#arguments.name#" type="#arguments.type#" timeout="#arguments.timeout#">
+			<cfinvoke component="#arguments.object#" method="#arguments.execute#" argumentCollection="#arguments.executeArgs#" returnvariable="loc.returnValue">
+		</cflock>
+	<cfelse>
+		<cfset arguments.executeArgs.$locked = true>
+		<cflock name="#arguments.name#" type="#arguments.type#" timeout="#arguments.timeout#">
+			<cfinvoke method="#arguments.execute#" argumentCollection="#arguments.executeArgs#" returnvariable="loc.returnValue">
+		</cflock>
+	</cfif>
 	<cfif StructKeyExists(loc, "returnValue")>
 		<cfreturn loc.returnValue>
 	</cfif>
@@ -110,7 +103,16 @@
 	<cfcontent attributeCollection="#arguments#">
 </cffunction>
 
+<cffunction name="$stripCRLF" returntype="void" access="public" output="false">
+	<cfargument name="args" type="struct" required="true">
+	<cfset var key = "">
+	<cfloop collection="#arguments.args#" item="key">
+		<cfset arguments.args[key] = REReplace(arguments.args[key], "[\r\n]", "", "all")>
+	</cfloop>
+</cffunction>
+
 <cffunction name="$header" returntype="void" access="public" output="false">
+	<cfset $stripCRLF(args=arguments)>
 	<cfheader attributeCollection="#arguments#">
 </cffunction>
 
@@ -152,13 +154,6 @@
 	<cfset var returnValue = "">
 	<cfset arguments.name = "returnValue">
 	<cfdirectory attributeCollection="#arguments#">
-	<cfreturn returnValue>
-</cffunction>
-
-<cffunction name="$file" returntype="any" access="public" output="false">
-	<cfset var returnValue = "">
-	<cfset arguments.variable = "returnValue">
-	<cffile attributeCollection="#arguments#">
 	<cfreturn returnValue>
 </cffunction>
 
@@ -246,13 +241,4 @@
 	<cfif StructKeyExists(loc, "output")>
 		<cfreturn loc.output>
 	</cfif>
-</cffunction>
-
-<cffunction name="$structDelete" returntype="void" access="public" output="false">
-	<cfargument name="myStruct" type="struct" required="true">
-	<cfargument name="keys" type="string" required="true">
-	<cfset var loc = {}>
-	<cfloop list="#arguments.keys#" index="loc.i">
-		<cfset StructDelete(arguments.myStruct, loc.i, false)>
-	</cfloop>
 </cffunction>
