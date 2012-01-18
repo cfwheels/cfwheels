@@ -4,6 +4,22 @@
 
 	<!--- plain helpers --->
 	
+	<cffunction name="test_label_to_the_left">
+		<cfset loc.actual = checkBoxTag(name="the-name", label="The Label:")>
+		<cfset loc.expected = '<label for="the-name-1">The Label:<input id="the-name-1" name="the-name" type="checkbox" value="1" /></label>'>
+		<cfset assert('loc.actual eq loc.expected')>
+		<cfset loc.actual = checkBoxTag(name="the-name", label="The Label:", labelPlacement="around")>
+		<cfset assert('loc.actual eq loc.expected')>
+		<cfset loc.actual = checkBoxTag(name="the-name", label="The Label:", labelPlacement="aroundLeft")>
+		<cfset assert('loc.actual eq loc.expected')>
+	</cffunction>
+
+	<cffunction name="test_label_to_the_right">
+		<cfset loc.actual = checkBoxTag(name="the-name", label="The Label", labelPlacement="aroundRight")>
+		<cfset loc.expected = '<label for="the-name-1"><input id="the-name-1" name="the-name" type="checkbox" value="1" />The Label</label>'>
+		<cfset assert('loc.actual eq loc.expected')>
+	</cffunction>
+
 	<cffunction name="test_custom_label_on_plain_helper">
 		<cfset loc.actual = checkBoxTag(name="the-name", label="The Label:")>
 		<cfset loc.expected = '<label for="the-name-1">The Label:<input id="the-name-1" name="the-name" type="checkbox" value="1" /></label>'>
