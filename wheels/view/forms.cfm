@@ -294,23 +294,35 @@
 	<cfargument name="errorElement" type="string" required="true">
 	<cfargument name="errorClass" type="string" required="true">
 	<cfscript>
-		var loc = {};
-		loc.returnValue = "";
-		if ($formHasError(argumentCollection=arguments) and Len(arguments.errorElement))
-			loc.returnValue = loc.returnValue & $tag(name=arguments.errorElement, class=arguments.errorClass);
+		var returnValue = "";
 		arguments.label = $getFieldLabel(argumentCollection=arguments);
+		if ($formHasError(argumentCollection=arguments) && Len(arguments.errorElement))
+		{
+			// the input has an error and should be wrapped in a tag so we need to start that wrapper tag
+			returnValue &= returnValue & $tag(name=arguments.errorElement, class=arguments.errorClass);
+		}
 		if (Len(arguments.label) && arguments.labelPlacement != "after")
 		{
-			loc.returnValue = loc.returnValue & $createLabel(argumentCollection=arguments);
-			if (arguments.labelPlacement == "around")
-				loc.returnValue = Replace(loc.returnValue, "</label>", "");
+			returnValue &= $createLabel(argumentCollection=arguments);
+			if (arguments.labelPlacement == "aroundRight")
+			{
+				// strip out both the label text and closing label tag since it will be placed after the form input
+				returnValue = Replace(returnValue, arguments.label & "</label>", "");
+			}
+			else if (arguments.labelPlacement == "before")
+			{
+				// since the entire label is created we can append to it
+				returnValue &= arguments.appendToLabel;
+			}
 			else
-				loc.returnValue = loc.returnValue & arguments.appendToLabel;
-
+			{
+				// the label argument is either "around" or "aroundLeft" so we only have to strip out the closing label tag
+				returnValue = Replace(returnValue, "</label>", "");
+			}
 		}
-		loc.returnValue = loc.returnValue & arguments.prepend;
+		returnValue &= arguments.prepend;
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="$formAfterElement" returntype="string" access="public" output="false">
@@ -324,21 +336,34 @@
 	<cfargument name="appendToLabel" type="string" required="true">
 	<cfargument name="errorElement" type="string" required="true">
 	<cfscript>
-		var loc = {};
-		loc.returnValue = arguments.append;
+		var returnValue = arguments.append;
 		arguments.label = $getFieldLabel(argumentCollection=arguments);
 		if (Len(arguments.label) && arguments.labelPlacement != "before")
 		{
 			if (arguments.labelPlacement == "after")
-				loc.returnValue = loc.returnValue & $createLabel(argumentCollection=arguments);
-			else if (arguments.labelPlacement == "around")
-				loc.returnValue = loc.returnValue & "</label>";
-			loc.returnValue = loc.returnValue & arguments.appendToLabel;
+			{
+				// if the label should be placed after the tag we return the entire label tag
+				returnValue &= $createLabel(argumentCollection=arguments);
+			}
+			else if (arguments.labelPlacement == "aroundRight")
+			{
+				// if the text should be placed to the right of the form input we return both the text and the closing tag
+				returnValue &= arguments.label & "</label>";
+			}
+			else
+			{
+				// the label argument is either "around" or "aroundLeft" so we only have to return the closing label tag
+				returnValue &= "</label>";
+			}
+			returnValue &= arguments.appendToLabel;
 		}
-		if ($formHasError(argumentCollection=arguments) and Len(arguments.errorElement))
-			loc.returnValue = loc.returnValue & "</" & arguments.errorElement & ">";
+		if ($formHasError(argumentCollection=arguments) && Len(arguments.errorElement))
+		{
+			// the input has an error and is wrapped in a tag so we need to close that wrapper tag
+			returnValue &= "</" & arguments.errorElement & ">";
+		}
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn returnValue>
 </cffunction>
 
 <cffunction name="$getFieldLabel" returntype="string" access="public" output="false">
