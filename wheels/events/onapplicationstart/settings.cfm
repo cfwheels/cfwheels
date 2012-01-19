@@ -76,7 +76,6 @@
 	application.wheels.controllerPath = "controllers";
 
 	// miscellaneous settings
-	application.wheels.stripFromSQL = "[^A-Za-z0-9 -_\.\,=()]";
 	application.wheels.dataAttributeDelimiter = "_";
 	application.wheels.tableNamePrefix = "";
 	application.wheels.obfuscateURLs = false;
