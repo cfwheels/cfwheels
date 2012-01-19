@@ -58,6 +58,7 @@
 				application.wheels.ipExceptions = URL.except;
 			if (!Len(application.wheels.ipExceptions) || !ListFind(application.wheels.ipExceptions, request.cgi.remote_addr))
 			{
+				$header(statusCode="503", statusText="Service Unavailable");
 				$includeAndOutput(template="#application.wheels.eventPath#/onmaintenance.cfm");
 				$abort();
 			}

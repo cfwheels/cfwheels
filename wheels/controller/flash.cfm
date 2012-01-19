@@ -280,17 +280,25 @@
 <cffunction name="$writeFlash" returntype="void" access="public" output="false">
 	<cfargument name="flash" type="struct" required="false" default="#StructNew()#">
 	<cfscript>
+		var loc = {};
+		loc.flashStorage = $getFlashStorage();
 		if (!StructKeyExists(arguments, "$locked"))
 		{
 			return $simpleLock(name="flashLock", type="exclusive", execute="$writeFlash", executeArgs=arguments);
 		}
-		if ($getFlashStorage() == "cookie")
+		if (loc.flashStorage == "session")
 		{
-			$cookie(name="flash", value=SerializeJSON(arguments.flash), httpOnly=true);
+			session.flash = arguments.flash;
 		}
 		else
 		{
-			session.flash = arguments.flash;
+			// flashStorage setting is either "cookie" or "secureCookie"
+			loc.args = {name="flash", value=SerializeJSON(arguments.flash), httpOnly=true};
+			if (loc.flashStorage == "secureCookie")
+			{
+				loc.args.secure = true;
+			}
+			$cookie(argumentCollection=loc.args);
 		}
 	</cfscript>
 </cffunction>
