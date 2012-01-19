@@ -49,7 +49,7 @@
 	{
 		loc.startPosition = loc.match.pos[1] + loc.match.len[1];
 		loc.str = Mid(arguments.text, loc.match.pos[1], loc.match.len[1]);
-		if (Left(loc.str, 2) != "<a" && Right(loc.str, 1) != ">")
+		if (Left(loc.str, 2) != "<a" && !ListFind(">,"",'", Right(loc.str, 1)))
 		{
 			arguments.text = RemoveChars(arguments.text, loc.match.pos[1], loc.match.len[1]);
 			// remove any sort of trailing puncuation
