@@ -22,7 +22,7 @@
 			}
 			else
 			{
-				arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.)[^\s\b]+)";
+				arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.)[^\s\b<]+)";
 			}
 			arguments.text = $autoLinkLoop(argumentCollection=arguments);
 		}
@@ -49,7 +49,7 @@
 	{
 		loc.startPosition = loc.match.pos[1] + loc.match.len[1];
 		loc.str = Mid(arguments.text, loc.match.pos[1], loc.match.len[1]);
-		if (Left(loc.str, 2) neq "<a")
+		if (Left(loc.str, 2) != "<a" && Right(loc.str, 1) != ">")
 		{
 			arguments.text = RemoveChars(arguments.text, loc.match.pos[1], loc.match.len[1]);
 			// remove any sort of trailing puncuation
