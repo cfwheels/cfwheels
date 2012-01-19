@@ -16,6 +16,10 @@
 		<cfset loc.r = loc.controller.autoLink(text=loc.str, link="URLs", relative=false)>
 		<cfset loc.e = '<img src="http://cfwheels.org/img.png">'>
 		<cfset assert('loc.e eq loc.r')>
+		<cfset loc.str = "<img src='http://cfwheels.org/img.png'>">
+		<cfset loc.r = loc.controller.autoLink(text=loc.str, link="URLs", relative=false)>
+		<cfset loc.e = "<img src='http://cfwheels.org/img.png'>">
+		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_link_urls">
