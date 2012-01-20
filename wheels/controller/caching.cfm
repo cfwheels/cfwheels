@@ -49,7 +49,7 @@
 </cffunction>
 
 <cffunction name="$hasCachableActions" returntype="boolean" access="public" output="false">
-	<cfreturn ArrayIsEmpty($cachableActions())>
+	<cfreturn !ArrayIsEmpty($cachableActions())>
 </cffunction>
 
 <cffunction name="$cacheSettingsForAction" returntype="any" access="public" output="false">
