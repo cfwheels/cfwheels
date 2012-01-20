@@ -261,19 +261,27 @@
 
 <cffunction name="$readFlash" returntype="struct" access="public" output="false">
 	<cfscript>
+		var loc = {};
+		loc.flash = {};
 		if (!StructKeyExists(arguments, "$locked"))
 		{
 			return $simpleLock(name="flashLock", type="readonly", execute="$readFlash", executeArgs=arguments);
 		}
 		if ($getFlashStorage() == "cookie" && StructKeyExists(cookie, "flash"))
 		{
-			return DeSerializeJSON(cookie.flash);
+			loc.flash = DeSerializeJSON(cookie.flash);
 		}
 		else if ($getFlashStorage() == "session" && StructKeyExists(session, "flash"))
 		{
-			return Duplicate(session.flash);
+			loc.flash = Duplicate(session.flash);
 		}
-		return StructNew();
+		if (StructKeyExists(request.wheels, "flash"))
+		{
+			// this is done so flash set can be read on the same page (i.e. when not doing a redirectTo)
+			// the reason for this is that cookies set through cfheader can only be read on the next request
+			StructAppend(loc.flash, request.wheels.flash);
+		}
+		return loc.flash;
 	</cfscript>
 </cffunction>
 
@@ -293,13 +301,22 @@
 		else
 		{
 			// flashStorage setting is either "cookie" or "secureCookie"
-			loc.args = {name="flash", value=SerializeJSON(arguments.flash), httpOnly=true};
-			if (loc.flashStorage == "secureCookie")
+			loc.domain = request.cgi.server_name;
+			if (loc.domain Contains ".")
 			{
-				loc.args.secure = true;
+				// exclude sub domains (e.g. wiki.cfwheels.org becomes cfwheels.org)
+				loc.domain = Reverse(ListGetAt(Reverse(loc.domain), 2,".")) & "." & Reverse(ListGetAt(Reverse(loc.domain), 1, "."));
 			}
-			$cookie(argumentCollection=loc.args);
+			loc.args = {};
+			loc.args.name = "Set-Cookie";
+			loc.args.value = "flash=" & SerializeJSON(arguments.flash) & ";Path=/;Domain=." & loc.domain & ";HttpOnly";
+			if (loc.flashStorage == "secureCookie" && isSecure())
+			{
+				loc.args.value &= ";Secure";
+			}
+			$header(argumentCollection=loc.args);
 		}
+		request.wheels.flash = arguments.flash;
 	</cfscript>
 </cffunction>
 
