@@ -1,7 +1,3 @@
-<cffunction name="$cookie" returntype="void" access="public" output="false">
-	<cfcookie attributeCollection="#arguments#">
-</cffunction>
-
 <cffunction name="$doubleCheckedLock" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="condition" type="string" required="true">
