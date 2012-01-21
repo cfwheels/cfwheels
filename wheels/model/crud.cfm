@@ -262,7 +262,7 @@
 						// for backwards compatability. turn minutes into seconds
 						arguments.cache = arguments.cache * 60;
 					}
-					loc.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache, "schemas");
+					loc.finderArgs.cachedWithin = $timeSpanForCache(cache=arguments.cache, category="schemas");
 				}
 				loc.findAll = $adapter().$query(argumentCollection=loc.finderArgs);
 				request.wheels[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
