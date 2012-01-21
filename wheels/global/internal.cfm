@@ -214,7 +214,7 @@
 				else
 				{
 					// is a category supplied?
-					if (StructKeyExists(arguments, "category"))
+					if (StructKeyExists(arguments, "category") && StructKeyExists(application.wheels.cacheSettings[arguments.category], "timeout"))
 					{
 						arguments.cache = application.wheels.cacheSettings[arguments.category].timeout;
 					}
