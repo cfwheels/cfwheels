@@ -287,12 +287,12 @@
 				{
 					loc.metaData = GetMetaData(variables[loc.dataFunction]);
 					if (IsStruct(loc.metaData) && StructKeyExists(loc.metaData, "returnType") && loc.metaData.returnType == "struct" && StructKeyExists(loc.metaData, "access") && loc.metaData.access == "private")
-						return $invoke(method=loc.dataFunction);
+						return $invoke(method=loc.dataFunction, invokeArgs=arguments);
 				}
 			}
 			else
 			{
-				return $invoke(method=arguments.$dataFunction);
+				return $invoke(method=arguments.$dataFunction, invokeArgs=arguments);
 			}
 		}
 		return StructNew();
