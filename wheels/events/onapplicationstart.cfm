@@ -119,6 +119,9 @@
 		for (loc.item in application.wheels.cacheSettings)
 			application.wheels.caches[loc.item] = $createObjectFromRoot(path="wheels", fileName="Cache", method="init", argumentCollection=application.wheels.cacheSettings[loc.item]);
 		
+		// run any plugin events	
+		$loadPluginEvents('onapplicationstart');
+		
 		// run the developer's on application start code
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
 	</cfscript>

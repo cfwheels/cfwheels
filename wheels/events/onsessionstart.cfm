@@ -7,6 +7,7 @@
 <cffunction name="$runOnSessionStart" returntype="void" access="public" output="false">
 	<cfscript>
 		$initializeRequestScope();
+		$loadPluginEvents('onsessionstart');
 		$include(template="#application.wheels.eventPath#/onsessionstart.cfm");
 	</cfscript>
 </cffunction>

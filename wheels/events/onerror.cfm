@@ -23,9 +23,12 @@
 	<cfargument name="eventName" type="any" required="true">
 	<cfscript>
 		var loc = {};
-
+		
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "initialized"))
 		{
+			
+			$loadPluginEvents('onerror');
+			
 			if (application.wheels.sendEmailOnError && Len(application.wheels.errorEmailAddress))
 			{
 				loc.mailArgs = {};

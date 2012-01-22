@@ -76,6 +76,7 @@
 			$simpleLock(name="controllerLock", execute="$clearControllerInitializationCache", type="exclusive");
 		if (!application.wheels.cacheRoutes)
 			$loadRoutes();
+		$loadPluginEvents('onrequeststart');
 		$include(template="#application.wheels.eventPath#/onrequeststart.cfm");
 		if (application.wheels.showDebugInformation)
 			$debugPoint("requestStart");

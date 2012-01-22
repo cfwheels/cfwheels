@@ -10,6 +10,7 @@
 	<cfargument name="sessionscope" type="any" required="true">
  	<cfargument name="applicationscope" type="any" required="true">
 	<cfscript>
+		$loadPluginEvents('onsessionend');
 		$include(template="#application.wheels.eventPath#/onsessionend.cfm");
 	</cfscript>
 </cffunction>
