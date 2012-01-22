@@ -31,7 +31,11 @@
 	</cffunction>
 	
 	<cffunction name="partialDataExplicitPublic" returnType="struct" access="public">
-		<cfreturn $dataForPartial()>
+		<cfset var data = $dataForPartial()>
+		<cfif StructKeyExists(arguments, "passThrough")>
+			<cfset data.passThroughWorked = true>
+		</cfif>
+		<cfreturn data>
 	</cffunction>
 
 </cfcomponent>
