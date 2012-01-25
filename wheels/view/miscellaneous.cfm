@@ -304,7 +304,9 @@
 		{
 			loc.delim = get("dataAttributeDelimiter");
 			if (Len(loc.delim))
-				loc.name = Replace(REReplace(loc.name, "([a-z])([#loc.delim#])", "\1-\2", "all"), "-#loc.delim#", "-", "all");
+			{
+				loc.name = Replace(REReplace(loc.name, "([a-zA-Z])([#loc.delim#])", "\1-\2", "all"), "-#loc.delim#", "-", "all");
+			}
 		}
 		loc.name = LCase(loc.name);
 		loc.returnValue = " " & loc.name;
