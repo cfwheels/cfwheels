@@ -68,7 +68,7 @@
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
-	<cfargument name="twelveHour" type="boolean" required="false" default="false" hint="See documentation for @timeSelect.">
+	<cfargument name="twelveHour" type="boolean" required="false" hint="See documentation for @timeSelect.">
 	<cfscript>
 		$args(name="timeSelectTags", args=arguments);
 		arguments.property = arguments.name;
@@ -115,7 +115,7 @@
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
-	<cfargument name="twelveHour" type="boolean" required="false" default="false" hint="See documentation for @timeSelect.">
+	<cfargument name="twelveHour" type="boolean" required="false" hint="See documentation for @timeSelect.">
 	<cfscript>
 		var loc = {};
 		$args(name="dateTimeSelectTags", args=arguments);
@@ -275,7 +275,7 @@
 	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="twelveHour" type="boolean" required="false" default="false" hint="See documentation for @timeSelect.">
+	<cfargument name="twelveHour" type="boolean" required="false" hint="See documentation for @timeSelect.">
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
 		$args(name="hourSelectTag", args=arguments);
