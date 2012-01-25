@@ -49,12 +49,7 @@
 		<cfargument name="$primaryKey" type="string" required="false" default="">
 		<cfscript>
 			var loc = {};
-			if (StructKeyExists(arguments, "maxrows") AND arguments.maxrows gt 0){
-				if (arguments.maxrows gt 0){
-					arguments.limit = arguments.maxrows;
-				}
-				StructDelete(arguments, "maxrows");
-			}
+			arguments = $convertMaxRowsToLimit(arguments);
 			arguments.sql = $removeColumnAliasesInOrderClause(arguments.sql);
 			arguments.sql = $addColumnsToSelectAndGroupBy(arguments.sql);
 			if (arguments.limit > 0)
