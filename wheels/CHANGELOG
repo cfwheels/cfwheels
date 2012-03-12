@@ -1,3 +1,17 @@
+WHEELS VERSION 1.1.8 (UNRELEASE)
+
+Model Enhancements
+==================
+
+* Add boolean type to validatesFormatOf() [Andy Bellenie]
+
+Bug Fixes
+=========
+
+* Filter controller and action params - [Pete Freitag, Andy Bellenie, Tony Petruzzi] 
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 WHEELS VERSION 1.1.7 (12/11/2011)
 
 Bug Fixes
