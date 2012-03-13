@@ -1,4 +1,6 @@
 <cffunction name="setup">
+	<cfset structClear(cookie)>
+	<cfset structClear(session)>
 	<!--- make sure we remove flashkeep from the request --->
 	<cfif structKeyExists(request, "wheels")>
 		<cfset structDelete(request.wheels, "flashkeep")>
