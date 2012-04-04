@@ -89,4 +89,9 @@
 		<cfset assert("NOT Compare(loc.result, 'address')")>
 	</cffunction>
 
+	<cffunction name="test_singularize_already_singularized_camel_case">
+		<cfset loc.result = singularize("camelCasedFailure")>
+		<cfset assert("NOT Compare(loc.result, 'camelCasedFailure')")>
+	</cffunction>
+
 </cfcomponent>
