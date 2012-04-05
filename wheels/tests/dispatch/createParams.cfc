@@ -129,7 +129,7 @@
 		<cfset loc.args.formScope["action"] = "../../../test*^&%()%00">
 		<cfset loc.params = loc.dispatch.$createParams(argumentCollection=loc.args)>
 		<cfset assert('Compare(loc.params.controller, "Wheels00") eq 0')>
-		<cfset assert('Compare(loc.params.action, "test00") eq 0')>
+		<cfset assert('Compare(loc.params.action, "......test00") eq 0')>
 	</cffunction>
 	
 </cfcomponent>
