@@ -595,7 +595,8 @@
 		if (arguments.$URLRewriting == "On")
 		{
 			loc.returnValue = Replace(loc.returnValue, application.wheels.rewriteFile, "");
-			loc.returnValue = Replace(loc.returnValue, "//", "/");
+			loc.returnValue = REReplace(loc.returnValue, "/{2,}", "/", "ALL");
+			loc.returnValue = REReplace(loc.returnValue, "(?!^/)/$", "");
 		}
 
 		if (Len(arguments.params))
