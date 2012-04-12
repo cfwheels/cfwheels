@@ -269,7 +269,10 @@
 		}
 		if ($getFlashStorage() == "cookie" && StructKeyExists(cookie, "flash"))
 		{
-			loc.flash = DeSerializeJSON(cookie.flash);
+			loc.flash = {};
+			if(len(cookie.flash)){
+				loc.flash = DeSerializeJSON(cookie.flash);
+			}
 		}
 		else if ($getFlashStorage() == "session" && StructKeyExists(session, "flash"))
 		{
