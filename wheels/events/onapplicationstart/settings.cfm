@@ -139,7 +139,6 @@
 	application.wheels.functions.autoLink = {link="all", relative="true"};
 	application.wheels.functions.average = {distinct=false, parameterize=true, ifNull=""};
 	application.wheels.functions.belongsTo = {joinType="inner"};
-	application.wheels.functions.buttonTo = {onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable=""};
 	application.wheels.functions.buttonTag = {type="submit", value="save", content="Save changes", image="", disable="", prepend="", append=""};
 	application.wheels.functions.caches = {time=60, static=false};
 	application.wheels.functions.checkBox = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", checkedValue=1, unCheckedValue=0};
@@ -177,7 +176,7 @@
 	application.wheels.functions.includePartial = {layout="", spacer="", dataFunction=true};
 	application.wheels.functions.javaScriptIncludeTag = {type="text/javascript", head=false};
 	application.wheels.functions.linkTo = {onlyPath=true, host="", protocol="", port=0};
-	application.wheels.functions.mailTo = {encode=false};
+	application.wheels.functions.mailTo = {};
 	application.wheels.functions.maximum = {parameterize=true, ifNull=""};
 	application.wheels.functions.minimum = {parameterize=true, ifNull=""};
 	application.wheels.functions.minuteSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, minuteStep=1};
