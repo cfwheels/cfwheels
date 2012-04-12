@@ -12,7 +12,7 @@
 <cffunction name="stripTags" returntype="string" access="public" output="false" hint="Removes all HTML tags from a string."
 	examples=
 	'
-		##stripTags("<strong>Wheels</strong> is a framework for <a href="http://www.adobe.com/products/coldfusion/">ColdFusion</a>.")##
+		##stripTags('<strong>Wheels</strong> is a framework for <a href="http://www.adobe.com/products/coldfusion/">ColdFusion</a>.')##
 		-> Wheels is a framework for ColdFusion.
 	'
 	categories="view-helper,sanitize" functions="stripLinks,h">
