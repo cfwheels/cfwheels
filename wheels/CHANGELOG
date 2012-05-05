@@ -22,7 +22,8 @@ Bug Fixes
 Other Enhancements
 ==================
 
-* update web.config to ignore favicon.ico - [Cathy Shapiro, Tony Petruzzi]
+* update web.config, htaccess to ignore favicon.ico - [Cathy Shapiro, Tony Petruzzi]
+
 
  
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
