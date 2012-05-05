@@ -9,6 +9,7 @@ Bug Fixes
 =========
 
 * Turned off URL rewriting in IIS 7 by default - [Per Djurner]
+* Add CFFileServlet to the pattern list, of the rewrite rules file, to…be able to display an image when using <cfimage action='writeToBrowser'> - [ellor1138]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
