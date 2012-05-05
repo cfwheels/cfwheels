@@ -18,6 +18,7 @@ Bug Fixes
 * Turned off URL rewriting in IIS 7 by default - [Per Djurner, Tony Petruzzi]
 * Add CFFileServlet to the pattern list, of the rewrite rules file, to…be able to display an image when using <cfimage action='writeToBrowser'> - [ellor1138]
 * radioButtonTag() checked attribute is ignored if value attribute is empty - #733 [Per Djurner, Tony Petruzzi]
+* make cached queries respect the 'maxrows' argument (findAll) - #824 [Per Djurner, Tony Petruzzi]
 
 Other Enhancements
 ==================
