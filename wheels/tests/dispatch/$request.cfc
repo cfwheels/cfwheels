@@ -3,7 +3,7 @@
 	<cffunction name="setup">
 		<cfset SavedRoutes = duplicate(application.wheels.routes)>
 		<cfset application.wheels.routes = []>
-		<cfset loc.dispatch = createobject("component", "wheelsMapping.Dispatch")> 
+		<cfset loc.dispatch = createobject("component", "wheelsMapping.Dispatch")>
 	</cffunction>
 
 	<cffunction name="teardown">
@@ -17,8 +17,23 @@
 			loc.args.pathinfo = "/users/foo.bar";
 			loc.args.urlScope["username"] = "foo.bar";
 			loc.params = loc.dispatch.$paramParser(argumentCollection=loc.args);
+			assert('loc.params.controller eq "Test"');
+			assert('loc.params.action eq "test"');
 			assert('loc.params.username eq "foo"');
 			assert('loc.params.format eq "bar"');
+		</cfscript>
+	</cffunction>
+	
+ 	<cffunction name="test_route_with_format_only">
+		<cfset addRoute(name="test", pattern="contact/export.[format]", controller="test", action="test")>
+		<cfscript>
+			loc.args = {};
+			loc.args.pathinfo = "/contact/export.csv";
+			loc.args.urlScope = {};
+			loc.params = loc.dispatch.$paramParser(argumentCollection=loc.args);
+			assert('loc.params.controller eq "Test"');
+			assert('loc.params.action eq "test"');
+			assert('loc.params.format eq "csv"');
 		</cfscript>
 	</cffunction>
 
@@ -40,6 +55,8 @@
 			loc.args.pathinfo = "/users/foo";
 			loc.args.urlScope["username"] = "foo";
 			loc.params = loc.dispatch.$paramParser(argumentCollection=loc.args);
+			assert('loc.params.controller eq "Test"');
+			assert('loc.params.action eq "test"');
 			assert('loc.params.username eq "foo"');
 			assert('loc.params.format eq ""');
 		</cfscript>
