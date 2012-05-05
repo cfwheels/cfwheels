@@ -23,8 +23,7 @@ Other Enhancements
 ==================
 
 * update web.config, htaccess to ignore favicon.ico - [Cathy Shapiro, Tony Petruzzi]
-
-
+* route with only format specified was throwing error - [jjallen, Tony Petruzzi]
  
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
