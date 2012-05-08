@@ -14,6 +14,10 @@ Before building:
 
  --->
 
+<!--- 
+is this a public build for release? (removes the tests directory)
+ --->
+<cfparam name="url.public" type="boolean" default="true">
 
 <!--- set the release version --->
 
@@ -64,17 +68,21 @@ your can't zip empty directories
 </p>
 
 <h4>Packaging build:</h4>
+
 <p>
 Creating ZIP file:
 <!--- zip build --->
 <cfzip action="zip" file="#source#/cfwheels.#release#.zip" source="#destination#" storePath="false"/>
 &nbsp;<strong>Done!</strong>
 </p>
-<p>Removing framework tests from ZIP:
-<!--- need to delete the wheels/tests directory for the release --->
-<cfzip action="delete" file="#source#/cfwheels.#release#.zip" entrypath="wheels/tests" recurse="true" />
-&nbsp;<strong>Done!</strong>
-</p>
+
+<cfif url.public>
+	<p>Removing framework tests from ZIP:
+	<!--- need to delete the wheels/tests directory for the release --->
+	<cfzip action="delete" file="#source#/cfwheels.#release#.zip" entrypath="wheels/tests" recurse="true" />
+	&nbsp;<strong>Done!</strong>
+	</p>
+</cfif>
 
 <h4>Build Finished!</h4>
 <p>Package location: <cfoutput>#source#/cfwheels.#release#.zip</cfoutput></p>
