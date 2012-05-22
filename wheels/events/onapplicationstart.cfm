@@ -23,6 +23,12 @@
 			application.wheels.serverVersion = server.railo.version;
 			loc.minimumServerVersion = "3.1.2.020";
 		}
+		else if (StructKeyExists(server, "bluedragon"))
+		{
+			application.wheels.serverName = "Open BlueDragon";
+			application.wheels.serverVersion = server.bluedragon.version;
+			loc.minimumServerVersion = "2.1";
+		}
 		else
 		{
 			application.wheels.serverName = "Adobe ColdFusion";
@@ -102,7 +108,7 @@
 
 		// load plugins
 		$loadPlugins();
-		
+
 		// allow developers to inject plugins into the application variables scope
 		if (!StructIsEmpty(application.wheels.mixins))
 			$include(template="wheels/plugins/injection.cfm");
@@ -115,10 +121,10 @@
 
 		// create the cache objects for each category
 		application.wheels.caches = {};
-		
+
 		for (loc.item in application.wheels.cacheSettings)
 			application.wheels.caches[loc.item] = $createObjectFromRoot(path="wheels", fileName="Cache", method="init", argumentCollection=application.wheels.cacheSettings[loc.item]);
-		
+
 		// run the developer's on application start code
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
 	</cfscript>
