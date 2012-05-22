@@ -1,4 +1,4 @@
-<cfif StructKeyExists(server, "railo")>
+<cfif StructKeyExists(server, "railo") || structKeyExists(server,"bluedragon")>
 	<cfinclude template="caching.cfm">
 	<cfinclude template="filters.cfm">
 	<cfinclude template="flash.cfm">
