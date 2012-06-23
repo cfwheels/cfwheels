@@ -12,6 +12,10 @@
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "reloadPassword"))
 			loc.oldReloadPassword = application.wheels.reloadPassword;
 		application.wheels = {};
+		
+		// include the version
+		$include(template="wheels/version.cfm");
+		
 		if (StructKeyExists(loc, "oldReloadPassword"))
 			application.wheels.reloadPassword = loc.oldReloadPassword;
 
@@ -39,7 +43,6 @@
 		request.cgi = $cgiScope();
 
 		// set up containers for routes, caches, settings etc
-		application.wheels.version = "1.2 Beta 1";
 		application.wheels.controllers = {};
 		application.wheels.models = {};
 		application.wheels.existingHelperFiles = "";
