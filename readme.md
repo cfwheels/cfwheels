@@ -17,7 +17,7 @@ We encourage you to contribute to ColdFusion on Wheels! Please check out the [Co
 _NOTE:_ CFWheels uses [RocketUnit][4] as it's testing framework.
 
 1. create a database on a supported database server name `wheelstestdb`. At this time the supported database servers are H2, Microsoft SQL Server, Oracle, PostgreSQL, MySQL
-2. create a datasource in your CFML engine's administrator named `wheelstestdb` pointing to the `wheelstestdb` database.
+2. create a datasource in your CFML engine's administrator named `wheelstestdb` pointing to the `wheelstestdb` database and make sure to give it CLOB and BLOB support.
 3. open your browser to the CFWheels Welcome Page.
 4. in the grey debug area at the bottom of the page, click the `Run Tests` link next the version number on the `Framework` line.
 
