@@ -23,14 +23,15 @@ _NOTE:_ CFWheels uses [RocketUnit][4] as it's testing framework.
 
 Please report any errors that you may encounter on our [issue tracker][5]. Please be sure to report the database engine (including version), CFML engine (including version), http server (including version).
 
-## Building
+## Building and Releasing
 
 _NOTE:_ the build script has only been tested against Railo 3.3.0.007 or higher at this time.
 
-1. open the build.cfm file in the root of the repo.
-2. set the `release` variable with the version number of the release
+1. open the wheels/version.cfm file and edit the version to correspond with the build
+2. update the wheels/CHANGELOG to reflect version and build date
 3. point your browser to the build.cfm file (ex: http://localhost/build.cfm)
-4. the build will create a zip file named `cfwheels.<release>.zip` in the root of the repo
+4. the build will create a zip file named `cfwheels.<version>.zip` in parent directory of the repo
+5. annouce and post the build to the [cfwheels core google group][6]
 
 ## License
 
@@ -41,3 +42,4 @@ ColdFusion on Wheels is released under the Apache License Version 2.0.
  [3]: http://cfwheels.org/docs/1-1/chapter/coding-guidelines
  [4]: http://rocketunit.riaforge.org/
  [5]: http://code.google.com/p/cfwheels/issues/list
+ [6]: http://groups.google.com/group/cfwheels-core
