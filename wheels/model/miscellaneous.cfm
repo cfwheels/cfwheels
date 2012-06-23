@@ -170,8 +170,11 @@
 </cffunction>
 
 <cffunction name="$alias" access="public" output="false" returntype="void">
+<!--- 	<cfargument name="associationName" type="string" required="true">
+	<cfset variables.wheels.class.aliases[arguments.associationName] = tableName() & StructCount(variables.wheels.class.aliases)> --->
 	<cfargument name="associationName" type="string" required="true">
-	<cfset variables.wheels.class.aliases[arguments.associationName] = tableName() & StructCount(variables.wheels.class.aliases)>
+	<cfargument name="alias" type="string" required="true">
+	<cfset variables.wheels.class.aliases[arguments.associationName] = arguments.alias>
 </cffunction>
 
 <cffunction name="$aliasName" access="public" output="false" returntype="string">

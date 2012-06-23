@@ -569,6 +569,10 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = [];
+		
+		// will keep track of the model names used for aliasing
+		// key = modelName, value = increment counter
+		loc.modelNames = {};
 
 		// add the current class name so that the levels list start at the lowest level
 		loc.levels = variables.wheels.class.modelName;
@@ -600,7 +604,7 @@
 			loc.class = model(loc.className);
 			loc.classData = loc.class.$classData();
 			loc.classAssociations = loc.classData.associations;
-
+			
 			// throw an error if the association was not found
 			if (application.wheels.showErrorInformation && !StructKeyExists(loc.classAssociations, loc.name))
 			{
@@ -608,80 +612,86 @@
 			}
 
 			// create a reference to the associated class
-			loc.associatedClass = model(loc.classAssociations[loc.name].modelName);
+			loc.association = loc.classAssociations[loc.name];
+			loc.associatedClass = model(loc.association.modelName);
 			loc.associatedClassData = loc.associatedClass.$classData();
+			
+			// add the associations model name to tracking
+			if (!StructKeyExists(loc.modelNames, loc.association.modelName))
+			{// if it doesn't exists create one
+				loc.modelNames[loc.association.modelName] = 0;
+			}
+			else
+			{// if it does exists, increment it's occurance counter by 1
+				loc.modelNames[loc.association.modelName]++;
+			}
 
 			// figure out the foreignKey for this association
-			if (!Len(loc.classAssociations[loc.name].foreignKey))
+			if (!Len(loc.association.foreignKey))
 			{
-				if (loc.classAssociations[loc.name].type == "belongsTo")
+				if (loc.association.type == "belongsTo")
 				{
-					loc.classAssociations[loc.name].foreignKey = loc.associatedClassData.modelName & Replace(loc.associatedClassData.keys, ",", ",#loc.associatedClassData.modelName#", "all");
+					loc.association.foreignKey = loc.associatedClassData.modelName & Replace(loc.associatedClassData.keys, ",", ",#loc.associatedClassData.modelName#", "all");
 				}
 				else
 				{
-					loc.classAssociations[loc.name].foreignKey = loc.classData.modelName & Replace(loc.classData.keys, ",", ",#loc.classData.modelName#", "all");
+					loc.association.foreignKey = loc.classData.modelName & Replace(loc.classData.keys, ",", ",#loc.classData.modelName#", "all");
 				}
 			}
 
 			// figure out the joinKey for this association
-			if (!Len(loc.classAssociations[loc.name].joinKey))
+			if (!Len(loc.association.joinKey))
 			{
-				if (loc.classAssociations[loc.name].type == "belongsTo")
+				if (loc.association.type == "belongsTo")
 				{
-					loc.classAssociations[loc.name].joinKey = loc.associatedClassData.keys;
+					loc.association.joinKey = loc.associatedClassData.keys;
 				}
 				else
 				{
-					loc.classAssociations[loc.name].joinKey = loc.classData.keys;
+					loc.association.joinKey = loc.classData.keys;
 				}
 			}
 			
-			// check to see if we have a self join and make the joining table name unique
-			// we have to only do this once per loop, otherwise selfjoins will fail
-			if (!StructKeyExists(loc.classAssociations[loc.name], "alias"))
+			// we should only do this if an association doesn't have an alias already
+			if (!StructKeyExists(loc.association, "alias"))
 			{
-				if (loc.classData.tableName == loc.associatedClassData.tableName)
+				if (loc.classData.tableName == loc.associatedClassData.tableName || loc.modelNames[loc.association.modelName] gt 0)
 				{
-					loc.associatedClass.$alias(associationName=loc.name);
-					loc.classAssociations[loc.name].alias = loc.associatedClass.$aliasName(associationName=loc.name);
+					loc.associatedClass.$alias(associationName=loc.name, alias="#loc.association.modelName##loc.modelNames[loc.association.modelName]#");
 				}
-				else
-				{
-					loc.classAssociations[loc.name].alias = loc.associatedClassData.tableName;
-				}
+				loc.association.alias = loc.associatedClass.$aliasName(associationName=loc.name);
 			}
 
 			// set our alias to the tableName if we do not have one
-			loc.classAssociations[loc.name].tableName = loc.associatedClassData.tableName;
-			loc.classAssociations[loc.name].columnList = loc.associatedClassData.columnList;
-			loc.classAssociations[loc.name].properties = loc.associatedClassData.properties;
-			loc.classAssociations[loc.name].propertyList = loc.associatedClassData.propertyList;
-			loc.classAssociations[loc.name].calculatedProperties = loc.associatedClassData.calculatedProperties;
-			loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClassData.calculatedPropertyList;
+			loc.association.tableName = loc.associatedClassData.tableName;
+			loc.association.columnList = loc.associatedClassData.columnList;
+			loc.association.properties = loc.associatedClassData.properties;
+			loc.association.propertyList = loc.associatedClassData.propertyList;
+			loc.association.calculatedProperties = loc.associatedClassData.calculatedProperties;
+			loc.association.calculatedPropertyList = loc.associatedClassData.calculatedPropertyList;
 
 			// create the join string if it hasn't already been done
 			loc.join = "";
-			if (!StructKeyExists(loc.classAssociations[loc.name], "join"))
+			if (!StructKeyExists(loc.association, "join"))
 			{
-				loc.joinType = ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one");
-				loc.join &= UCase(loc.joinType) & " JOIN " & $adapter().$tableAliasForJoin(loc.classAssociations[loc.name].tableName, loc.classAssociations[loc.name].alias) & " ON";
-				loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
+				loc.joinType = ReplaceNoCase(loc.association.joinType, "outer", "left outer", "one");
+				loc.join &= UCase(loc.joinType) & " JOIN " & $adapter().$tableAliasForJoin(loc.association.tableName, loc.association.alias) & " ON";
+				loc.jEnd = ListLen(loc.association.foreignKey);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
-					loc.key1 = ListGetAt(loc.classAssociations[loc.name].foreignKey, loc.j);
-					loc.key2 = ListFindNoCase(loc.classAssociations[loc.name].joinKey, loc.key1);
+					loc.key1 = ListGetAt(loc.association.foreignKey, loc.j);
+					loc.key2 = ListFindNoCase(loc.association.joinKey, loc.key1);
 
 					if (loc.key2)
 					{
-						loc.key2 = ListGetAt(loc.classAssociations[loc.name].joinKey, loc.key2);
+						loc.key2 = ListGetAt(loc.association.joinKey, loc.key2);
 					}
 					else
 					{
-						loc.key2 = ListGetAt(loc.classAssociations[loc.name].joinKey, loc.j);
+						loc.key2 = ListGetAt(loc.association.joinKey, loc.j);
 					}
 					
-					if (loc.classAssociations[loc.name].type == "belongsTo")
+					if (loc.association.type == "belongsTo")
 					{
 						loc.first = loc.key1;
 						loc.second = loc.key2;
@@ -692,12 +702,12 @@
 						loc.second = loc.key1;
 					}
 					
-					loc.join &= " #loc.class.$aliasName(associationname=loc.previousName)#.#loc.classData.properties[loc.first].column# = #loc.classAssociations[loc.name].alias#.#loc.associatedClassData.properties[loc.second].column#";
+					loc.join &= " #loc.class.$aliasName(associationname=loc.previousName)#.#loc.classData.properties[loc.first].column# = #loc.association.alias#.#loc.associatedClassData.properties[loc.second].column#";
 				}
 			}
 			else
 			{
-				loc.join = loc.classAssociations[loc.name].join;
+				loc.join = loc.association.join;
 			}
 			
 			// have to always check if wee need to including softdeletes
@@ -713,7 +723,7 @@
 				loc.join &= loc.appendAnd & loc.associatedClass.$aliasName(associationname=loc.previousName) & "." & loc.associatedClass.$softDeleteColumn() & " IS NULL";
 			}
 			
-			loc.classAssociations[loc.name].join = loc.join;
+			loc.association.join = loc.join;
 			
 
 			// loop over each character in the delimiter sequence and move up/down the levels as appropriate
@@ -722,7 +732,7 @@
 				loc.delimChar = Mid(loc.delimSequence, loc.x, 1);
 				if (loc.delimChar == "(")
 				{
-					loc.levels = ListAppend(loc.levels, loc.classAssociations[loc.name].modelName);
+					loc.levels = ListAppend(loc.levels, loc.association.modelName);
 				}
 				else if (loc.delimChar == ")")
 				{
@@ -731,7 +741,7 @@
 			}
 
 			// add info to the array that we will return
-			ArrayAppend(loc.returnValue, loc.classAssociations[loc.name]);
+			ArrayAppend(loc.returnValue, loc.association);
 		}
 		</cfscript>
 		<cfreturn loc.returnValue>
