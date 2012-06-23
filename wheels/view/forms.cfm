@@ -216,26 +216,40 @@
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
 		var loc = {};
-
-		// if the developer passed in a maxlength value, use it
-		if (StructKeyExists(arguments, "maxlength"))
-			return arguments.maxlength;
+		loc.maxlength = 0;
 
 		// explicity return void so the property does not get set
 		if (IsStruct(arguments.objectName))
+		{
 			return;
+		}
 
 		loc.object = $getObject(arguments.objectName);
 
 		// if objectName does not represent an object, explicity return void so the property does not get set
 		if (not IsObject(loc.object))
+		{
 			return;
+		}
 
 		loc.propertyInfo = loc.object.$propertyInfo(arguments.property);
 		if (StructCount(loc.propertyInfo) and ListFindNoCase("cf_sql_char,cf_sql_varchar", loc.propertyInfo.type))
-			return loc.propertyInfo.size;
+		{
+			loc.maxlength = loc.propertyInfo.size;
+		}
+			
+		// if the developer passed in a maxlength value, use it
+		if (StructKeyExists(arguments, "maxlength") && loc.maxlength GT 0 && arguments.maxlength lte loc.maxlength)
+		{
+			loc.maxlength = arguments.maxlength;
+		}
+		
+		if (loc.maxlength eq 0)
+		{
+			return;
+		}
 	</cfscript>
-	<cfreturn />
+	<cfreturn loc.maxlength>
 </cffunction>
 
 <cffunction name="$formHasError" returntype="boolean" access="public" output="false">

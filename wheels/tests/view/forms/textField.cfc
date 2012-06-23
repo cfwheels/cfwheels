@@ -13,5 +13,19 @@
 		<cfset loc.foundMaxLength = YesNoFormat(FindNoCase('maxlength="50"', loc.textField)) />
 		<cfset assert('loc.foundMaxLength eq true')>
 	</cffunction>
+	
+	<cffunction name="test_override_automaticvalidation">
+		<cfset loc.controller = controller(name="ControllerWithModelAutomaticValidations")>
+		<cfset loc.textField = loc.controller.textField(label="First Name", objectName="user", property="firstName", maxlength="30")>
+		<cfset loc.foundMaxLength = YesNoFormat(FindNoCase('maxlength="30"', loc.textField)) />
+		<cfset assert('loc.foundMaxLength eq true')>
+	</cffunction>
+	
+	<cffunction name="test_override_automaticvalidation_greater_then_column_length_not_allowed">
+		<cfset loc.controller = controller(name="ControllerWithModelAutomaticValidations")>
+		<cfset loc.textField = loc.controller.textField(label="First Name", objectName="user", property="firstName", maxlength="100")>
+		<cfset loc.foundMaxLength = YesNoFormat(FindNoCase('maxlength="50"', loc.textField)) />
+		<cfset assert('loc.foundMaxLength eq true')>
+	</cffunction>
 
 </cfcomponent>
