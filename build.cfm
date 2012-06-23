@@ -4,24 +4,52 @@ in order to run the build you will need at least version 3.3.0.007
 
 https://issues.jboss.org/browse/RAILO-1223
  --->
-<!--- set the release version --->
-<cfset release = "1.1.3">
+
+<!--- 
+
+Before building:
+
+1) Make sure to update the version in wheels/version.cfm
+2) Update the wheels/CHANGELOG to reflect version and build date
+
+ --->
 
 <!--- do not modify anything pass here. you be sorry :) --->
+<cfset release = application.wheels.version>
 <cfset source = ExpandPath(".")>
-<cfset destination = ExpandPath("../wheels-build-temp-dir")>
-<cfset ignore = "build.cfm,.project,.gitignore,.git,WEB-INF">
+<cfset buildtmp = ExpandPath("../wheels-build-temp-dir")>
+<cfset ignore = "build.cfm,.project,.gitignore,.git,WEB-INF,aspnet_client">
 <cfset folders = "files,images,javascripts,lib,plugins,stylesheets,tests">
+<cfset zipfile = "#ExpandPath('../cfwheels.#release#.zip')#">
+
+<!--- previous build --->
+<cfif DirectoryExists(buildtmp)>
+	<cfdirectory action="delete" directory="#buildtmp#" recurse="true">
+</cfif>
+
+<h1>Begin build of: <cfoutput>#release#</cfoutput></h1>
+<p>Make the following has been done:</p>
+<ol type="1">
+	<li>Make sure to update the version in wheels/events/onapplicationstart.cfm</li>
+	<li>Update the wheels/CHANGELOG to reflect version and build date</li>
+</ol>
 
 <!--- copy the current directory to the release directory --->
-<cfset directoryCopy(source, destination, ignore)>
+<h4>Copying build files and directories:</h4>
+<p>
+<cfset directoryCopy(source, buildtmp, ignore)>
+<strong>Done!</strong>
+</p>
 
 <!--- 
 create user directories. need to add a .gitignore to get around the fact that
 your can't zip empty directories
  --->
+<h4>Creating user application directories:</h4>
+<p>
 <cfloop list="#folders#" index="folder">
-	<cfset target = ListAppend(destination, folder, "/")>
+	<cfset target = ListAppend(buildtmp, folder, "/")>
+	<cfoutput>#target#<br/></cfoutput>
 	<cfif !DirectoryExists(target)>
 		<cfdirectory action="create" directory="#target#">
 	</cfif>
@@ -29,11 +57,24 @@ your can't zip empty directories
 		<cffile action="write" file="#target#/.gitignore" output="">
 	</cfif>
 </cfloop>
+<strong>Done!</strong>
+</p>
 
-<cfzip action="zip" file="#source#/cfwheels.#release#.zip" source="#destination#" storePath="false"/>
-
+<h4>Packaging build:</h4>
+<p>
+Creating ZIP file:
+<!--- zip build --->
+<cfzip action="zip" file="#zipfile#" source="#buildtmp#" storePath="false"/>
+&nbsp;<strong>Done!</strong>
+</p>
+<p>Removing framework tests from ZIP:
 <!--- need to delete the wheels/tests directory for the release --->
-<cfzip action="delete" file="#source#/cfwheels.#release#.zip" entrypath="wheels/tests" recurse="true" />
+<cfzip action="delete" file="#zipfile#" entrypath="wheels/tests" recurse="true" />
+&nbsp;<strong>Done!</strong>
+</p>
+
+<h4>Build Finished!</h4>
+<p>Package location: <cfoutput>#source#/cfwheels.#release#.zip</cfoutput></p>
 
 <!---
 Copies a directory.
@@ -61,7 +102,7 @@ Copies a directory.
     </cfif>
     
     <cfdirectory action="list" directory="#arguments.source#" name="contents">
-
+	
 	<cfif len(arguments.ignore)>
 		<cfquery dbtype="query" name="contents">
 		select * from contents where name not in(#ListQualify(arguments.ignore, "'")#)
@@ -70,6 +111,7 @@ Copies a directory.
     
     <cfloop query="contents">
         <cfif contents.type eq "file">
+			<cfoutput>#arguments.source#/#name# -> #arguments.destination#/#name#</cfoutput><br/>
             <cffile action="copy" source="#arguments.source#/#name#" destination="#arguments.destination#/#name#" nameconflict="#arguments.nameConflict#">
         <cfelseif contents.type eq "dir">
             <cfset directoryCopy(arguments.source & dirDelim & name, arguments.destination & dirDelim & name) />
