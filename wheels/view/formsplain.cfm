@@ -324,7 +324,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="checkBoxTagGroup" returntype="string" access="public" output="false" hint="See documentation for @radioButtonTagGroup."
+<cffunction name="checkBoxTagGroup" returntype="string" access="public" output="false" hint="Builds and returns a string for a group of check boxes and labels. If you pass in [value] to any of the arguments that get appplied to each individual check boxes (`append` for example), it will be replaced by the real value in the current iteration. You can pass in different `prepend`, `append` etc arguments by using a list."
 	examples=
 	'
 		<cfset languages = StructNew()>
@@ -338,7 +338,7 @@
 	'
 	categories="view-helper,forms-plain" chapters="" functions="checkBoxTag,radioButtonTagGroup">
 	<cfargument name="name" type="string" required="true" hint="See documentation for @radioButtonTagGroup.">
-	<cfargument name="values" type="struct" required="true" hint="See documentation for @textFieldTag.">
+	<cfargument name="values" type="struct" required="true" hint="Values to populate">
 	<cfargument name="checkedValues" type="string" required="false" hint="The values of the check boxes that should be checked.">
 	<cfargument name="order" type="string" required="false" hint="See documentation for @radioButtonTagGroup.">
 	<cfargument name="prependToGroup" type="string" required="false" hint="See documentation for @radioButtonTagGroup.">
