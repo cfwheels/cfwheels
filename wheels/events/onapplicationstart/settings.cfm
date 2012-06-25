@@ -27,7 +27,6 @@
 	application.wheels.cachePages = false;
 	application.wheels.cachePartials = false;
 	application.wheels.cacheQueries = false;
-	application.wheels.cacheFunctions = false;
 	application.wheels.cachePlugins = true;
 	if (application.wheels.environment != "design")
 	{
@@ -43,7 +42,6 @@
 		application.wheels.cachePages = true;
 		application.wheels.cachePartials = true;
 		application.wheels.cacheQueries = true;
-		application.wheels.cacheFunctions = true;
 	}
 
 	// debugging and error settings

@@ -471,24 +471,6 @@
 	<cfscript>
 		var loc = {};
 		
-		// if function result caching is enabled globally, the calling function is cachable and we're not coming from a recursive call we return the result from the cache (setting the cache first when necessary)
-		if (application.wheels.cacheFunctions && arguments.cachable && !StructKeyExists(arguments.args, "$recursive"))
-		{
-			// create a unique key based on the arguments passed in to the calling function
-			// we use the simple version of the $hashedKey function here for performance reasons (we know that we'll never have binary query data passed in anyway so we don't need to deal with that)
-			loc.functionHash = $simpleHashedKey(arguments.args);
-			
-			// if the function result is not already in the cache we'll call the function and place the result in the cache
-			loc.functionResult = $getFromCache(key=loc.functionHash, category="functions");
-			if (IsBoolean(loc.functionResult) && !loc.functionResult)
-			{
-				arguments.args.$recursive = true;
-				loc.functionResult = $invoke(method=arguments.name, invokeArgs=arguments.args);
-				$addToCache(key=loc.functionHash, value=loc.functionResult, category="functions");
-			}
-			return loc.functionResult;
-		}
-		
 		if (Len(arguments.combine))
 		{
 			loc.iEnd = ListLen(arguments.combine);
