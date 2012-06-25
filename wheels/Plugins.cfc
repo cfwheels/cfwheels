@@ -273,7 +273,7 @@
 		
 		<cfdirectory directory="#variables.$class.pluginPathFull#" action="list" filter="*.zip" type="file" sort="name DESC" name="q">
 		<cfquery name="q" dbtype="query">
-		select * from q where name not like '.%'
+		select * from q where name not like '.%' order by name
 		</cfquery>
 		
 		<cfreturn q>
