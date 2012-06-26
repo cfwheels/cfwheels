@@ -29,7 +29,7 @@ _NOTE:_ the build script has only been tested against Railo 3.3.0.007 or higher 
 
 1. open the wheels/version.cfm file and edit the version to correspond with the build
 2. update the wheels/CHANGELOG to reflect version and build date
-3. point your browser to the build.cfm file (ex: http://localhost/build.cfm)
+3. point your browser to the build.cfm file (ex: http://localhost/builders/build.cfm)
 4. the build will create a zip file named `cfwheels.<version>.zip` in parent directory of the repo
 5. annouce and post the build to the [cfwheels core google group][6]
 
