@@ -38,6 +38,7 @@ Bug Fixes
 * Transactions would not close when used with the dependent argument of hasMany() - #739 [Andy Bellenie]
 * Soft deletes now work correctly with outer joins - #762 [Andy Bellenie]
 * Pagination with compound keys - #725 [Andy Bellenie, jfeasel, Tony Petruzzi]
+* Prevent automatic validation from being set on user defined primary keys - #778 [Mike Henke, Tony Petruzzi] 
 
 Miscellaneous
 =============
