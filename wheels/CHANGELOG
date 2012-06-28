@@ -6,6 +6,7 @@ Model Enhancements
 * Allow for self joining tables in associations - #293 [James Gibson]
 * Added "joinKey" on belongsTo(), hasOne() and hasMany() which allows you to specify a column to join to on the opposite side of the relationship from the "foreignKey" - [James Gibson]
 * Added the ability to multijoin models - [Tony Petruzzi]
+* Support for tableless models - [Tony Petruzzi]
 
 View Enhancements
 =================
