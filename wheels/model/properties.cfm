@@ -58,7 +58,7 @@
 	<cfargument name="column" type="string" required="false" default="" hint="The name of the column in the database table to map the property to.">
 	<cfargument name="sql" type="string" required="false" default="" hint="A SQL expression to use to calculate the property value.">
 	<cfargument name="label" type="string" required="false" default="" hint="A custom label for this property to be referenced in the interface and error messages.">
-	<cfargument name="defaultValue" type="string" required="false" hint="A default value for this property.">
+	<cfargument name="defaultValue" type="any" required="false" hint="A default value for this property.">
 	<cfscript>
 		// validate setup
 		if (Len(arguments.column) and Len(arguments.sql))

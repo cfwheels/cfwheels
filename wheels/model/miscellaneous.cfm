@@ -18,6 +18,21 @@
 	</cfscript>
 </cffunction>
 
+<cffunction name="tableless" returntype="void" access="public" output="false" hint="allows this model to be used without a database"
+	examples=
+	'
+		<!--- In models/User.cfc --->
+		<cffunction name="init">
+			<!--- Tells wheels to not to use a database for this model --->
+  			<cfset tableless()>
+		</cffunction>
+	'
+	categories="model-initialization,miscellaneous" chapters="using-multiple-data-sources" functions="">
+	<cfscript>
+		variables.wheels.class.connection = {};
+	</cfscript>
+</cffunction>
+
 <cffunction name="getDataSource" returntype="struct" access="public" output="false" hint="returns the connection (datasource) information for the model."
 	examples=
 	'
