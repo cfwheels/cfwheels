@@ -109,6 +109,7 @@
 	<cfargument name="returnIncluded" type="boolean" required="false" hint="When `returnAs` is set to `objects`, you can set this argument to `false` to prevent returning objects fetched from associations specified in the `include` argument. This is useful when you only need to include associations for use in the `WHERE` clause only and want to avoid the performance hit that comes with object creation.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="You can set this argument to `false` to prevent running the execution of callbacks for a method call.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="You can set this argument to `true` to include soft-deleted records in the results.">
+	<cfargument name="includeSoftDeletesAssociations" type="boolean" required="false" default="false" hint="You can set this argument to `true` to include soft-deleted associations records in the results.">
 	<cfargument name="$limit" type="numeric" required="false" default=0>
 	<cfargument name="$offset" type="numeric" required="false" default=0>
 	<cfscript>
@@ -149,7 +150,7 @@
 			if (arguments.count gt 0)
 				loc.totalRecords = arguments.count;
 			else
-				loc.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes);
+				loc.totalRecords = this.count(where=arguments.where, include=arguments.include, reload=arguments.reload, cache=arguments.cache, distinct=loc.distinct, parameterize=arguments.parameterize, includeSoftDeletes=arguments.includeSoftDeletes, includeSoftDeletesAssociations=arguments.includeSoftDeletesAssociations);
 			loc.currentPage = arguments.page;
 			if (loc.totalRecords == 0)
 			{
@@ -185,7 +186,7 @@
 							for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 							{
 								loc.property = primaryKeys(loc.i);
-								ArrayAppend(loc.keyComboValues, "#tableName()#.#loc.property# = #$adapter().$quoteValue(str=loc.values[loc.property][loc.k], type=validationTypeForProperty(loc.property))#");
+								ArrayAppend(loc.keyComboValues, "#tableName()#.#loc.property# = #variables.wheels.class.adapter.$quoteValue(str=loc.values[loc.property][loc.k], type=validationTypeForProperty(loc.property))#");
 							}
 							loc.paginationWhere = ListAppend(loc.paginationWhere, "(" & ArrayToList(loc.keyComboValues, " AND ") & ")", Chr(7));
  						}
@@ -220,12 +221,12 @@
 
 			// get info from cache when available, otherwise create the generic select, from, where and order by clause
 			loc.queryShellKey = $hashedKey(variables.wheels.class.modelName, arguments);
-			loc.sql = $getFromCache(key=loc.queryShellKey, category="schemas");
+			loc.sql = $getFromCache(loc.queryShellKey, "sql");
 			if (!IsArray(loc.sql))
 			{
 				loc.sql = [];
-				ArrayAppend(loc.sql, $selectClause(select=arguments.select, include=arguments.include, returnAs=arguments.returnAs));
-				ArrayAppend(loc.sql, $fromClause(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes));
+				ArrayAppend(loc.sql, $selectClause(select=arguments.select, include=arguments.include, returnAs=arguments.returnAs, includeSoftDeletesAssociations=arguments.includeSoftDeletesAssociations));
+				ArrayAppend(loc.sql, $fromClause(include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes, includeSoftDeletesAssociations=arguments.includeSoftDeletesAssociations));
 				loc.sql = $addWhereClause(sql=loc.sql, where=loc.originalWhere, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 				loc.groupBy = $groupByClause(select=arguments.select, group=arguments.group, include=arguments.include, distinct=arguments.distinct, returnAs=arguments.returnAs);
 				if (Len(loc.groupBy))
@@ -233,8 +234,7 @@
 				loc.orderBy = $orderByClause(order=arguments.order, include=arguments.include);
 				if (Len(loc.orderBy))
 					ArrayAppend(loc.sql, loc.orderBy);
-				if (application.wheels.cacheModelInitialization)
-					$addToCache(key=loc.queryShellKey, value=loc.sql, category="schemas");
+				$addToCache(key=loc.queryShellKey, value=loc.sql, category="sql");
 			}
 
 			// add where clause parameters to the generic sql info
@@ -256,15 +256,8 @@
 				loc.finderArgs.offset = arguments.$offset;
 				loc.finderArgs.$primaryKey = primaryKeys();
 				if (application.wheels.cacheQueries && (IsNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
-				{
-					if (IsNumeric(arguments.cache))
-					{
-						// for backwards compatability. turn minutes into seconds
-						arguments.cache = arguments.cache * 60;
-					}
-					loc.finderArgs.cachedWithin = $timeSpanForCache(cache=arguments.cache, category="schemas");
-				}
-				loc.findAll = $adapter().$query(argumentCollection=loc.finderArgs);
+					loc.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache);
+				loc.findAll = variables.wheels.class.adapter.$query(argumentCollection=loc.finderArgs);
 				request.wheels[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
 			request.wheels[$hashedKey(loc.findAll.query)] = variables.wheels.class.modelName; // place an identifer in request scope so we can reference this query when passed in to view functions
@@ -401,76 +394,6 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="findFirst" returntype="any" access="public" output="false">
-	<cfargument name="property" type="string" required="false" default="#primaryKey()#">
-	<cfargument name="$sort" type="string" required="false" default="ASC">
-	<cfscript>
-	arguments.order = arguments.property & " " & arguments.$sort;
-	StructDelete(arguments, "property");
-	StructDelete(arguments, "$sort");
-	return findOne(argumentCollection=arguments);
-	</cfscript>
-</cffunction>
-
-<cffunction name="findLast" returntype="any" access="public" output="false">
-	<cfscript>
-	arguments.$sort = "DESC";
-	return findFirst(argumentCollection=arguments);
-	</cfscript>
-</cffunction>
-
-<cffunction name="findAllKeys" returntype="string" access="public" output="false">
-	<cfargument name="quoted" type="boolean" required="false" default="false">
-	<cfargument name="delimiter" type="string" required="false" default=",">
-	<cfscript>
-	var loc = {};
-	loc.quoted = arguments.quoted;
-	StructDelete(arguments, "quoted");
-	loc.delimiter = arguments.delimiter;
-	StructDelete(arguments, "delimiter");
-	arguments.select = primaryKey();
-	loc.query = findAll(argumentCollection=arguments);
-	if (loc.quoted)
-	{
-		loc.functionName = "QuotedValueList";
-	}
-	else
-	{
-		loc.functionName = "ValueList";
-	}
-	return Evaluate("#loc.functionName#(loc.query.#arguments.select#, '#loc.delimiter#')");
-	</cfscript>
-</cffunction>
-
-<cffunction name="$findOneOrCreateBy" returntype="any" access="public" output="false">
-	<cfscript>
-	var loc = {};
-	loc.property = ReplaceNoCase(arguments.missingMethodName, "findOneOrCreateBy", "");
-	if (StructKeyExists(arguments.missingMethodArguments, "1"))
-	{
-		arguments.missingMethodArguments[loc.property] = arguments.missingMethodArguments[1];
-		StructDelete(arguments.missingMethodArguments, "1");
-	}
-	loc.value = arguments.missingMethodArguments[loc.property];
-	StructDelete(arguments, "missingMethodName");
-	StructDelete(arguments.missingMethodArguments, loc.property);
-	StructAppend(arguments, arguments.missingMethodArguments);
-	StructDelete(arguments, "missingMethodArguments");
-	arguments[loc.property] = loc.value;
-	loc.object = findOne(where=$keyWhereString(loc.property, loc.value));
-	if (IsObject(loc.object))
-	{
-		//$dump("here");
-		return loc.object;
-	}
-	else
-	{
-		//$dump(arguments);
-		return create(argumentCollection=arguments);
-	}
-	</cfscript>
-</cffunction>
-
 <!--- update --->
 
 <cffunction name="updateAll" returntype="numeric" access="public" output="false" hint="Updates all properties for the records that match the `where` argument. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument. By default, objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in `instantiate=true`. This method returns the number of records that were updated."
@@ -533,7 +456,7 @@
 </cffunction>
 
 <cffunction name="$updateAll" returntype="numeric" access="public" output="false">
-	<cfset var update = $adapter().$query(sql=arguments.sql, parameterize=arguments.parameterize)>
+	<cfset var update = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize)>
 	<cfreturn update.result.recordCount>
 </cffunction>
 
@@ -689,7 +612,7 @@
 </cffunction>
 
 <cffunction name="$deleteAll" returntype="numeric" access="public" output="false">
-	<cfset var delete = $adapter().$query(sql=arguments.sql, parameterize=arguments.parameterize)>
+	<cfset var delete = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize)>
 	<cfreturn delete.result.recordCount>
 </cffunction>
 
@@ -830,7 +753,7 @@
 		if ($callback("beforeDelete", arguments.callbacks))
 		{
 			$deleteDependents(); // delete dependents before the main record in case of foreign key constraints
-			loc.del = $adapter().$query(sql=arguments.sql, parameterize=arguments.parameterize);
+			loc.del = variables.wheels.class.adapter.$query(sql=arguments.sql, parameterize=arguments.parameterize);
 			if (loc.del.result.recordCount eq 1 and $callback("afterDelete", arguments.callbacks))
 				loc.ret = true;
 		}
@@ -1010,7 +933,7 @@
 	<cfscript>
 		var loc = {};
 		loc.fileName = $objectFileName(name=variables.wheels.class.modelName, objectPath=variables.wheels.class.path, type="model");
-		loc.returnValue = $createObjectFromRoot(path=variables.wheels.class.path, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.modelName, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row, base=arguments.base, useFilterLists=(!arguments.persisted), callbacks=arguments.callbacks);
+		loc.returnValue = $createObjectFromRoot(path=variables.wheels.class.path, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.modelName, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row, base=arguments.base, useFilterLists=(!arguments.persisted));
 		// if the object should be persisted, call afterFind else call afterNew
 		if ((arguments.persisted && loc.returnValue.$callback("afterFind", arguments.callbacks)) || (!arguments.persisted && loc.returnValue.$callback("afterNew", arguments.callbacks)))
 			loc.returnValue.$callback("afterInitialization", arguments.callbacks);
@@ -1028,17 +951,13 @@
 	<cfscript>
 		var loc = {};
 		if (variables.wheels.class.timeStampingOnCreate)
-		{
 			$timestampProperty(property=variables.wheels.class.timeStampOnCreateProperty);
-		}
 		if (application.wheels.setUpdatedAtOnCreate && variables.wheels.class.timeStampingOnUpdate)
-		{
 			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
-		}
-		
 		loc.sql = [];
 		loc.sql2 = [];
-		
+		ArrayAppend(loc.sql, "INSERT INTO #tableName()# (");
+		ArrayAppend(loc.sql2, " VALUES (");
 		for (loc.key in variables.wheels.class.properties)
 		{
 			if (StructKeyExists(this, loc.key))
@@ -1050,41 +969,26 @@
 				ArrayAppend(loc.sql2, ",");
 			}
 		}
-		
-		// don't do any if no properties were passed in
-		if (ArrayLen(loc.sql))
-		{
-			ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
-			ArrayDeleteAt(loc.sql2, ArrayLen(loc.sql2));
-			ArrayPrepend(loc.sql, "INSERT INTO #tableName()# (");
-			ArrayPrepend(loc.sql2, " VALUES (");
-			ArrayAppend(loc.sql, ")");
-			ArrayAppend(loc.sql2, ")");
-			loc.iEnd = ArrayLen(loc.sql);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				ArrayAppend(loc.sql, loc.sql2[loc.i]);
-			}
-	
-			// map the primary keys down to the SQL columns before calling
-			loc.primaryKeys = ListToArray(primaryKeys());
-			loc.iEnd = ArrayLen(loc.primaryKeys);
-			for(loc.i = 1; loc.i LTE loc.iEnd; loc.i++)
-			{
-				loc.primaryKeys[loc.i] = variables.wheels.class.properties[loc.primaryKeys[loc.i]].column;
-			}
-	
-			loc.ins = $adapter().$query(sql=loc.sql, parameterize=arguments.parameterize, $primaryKey=ArrayToList(loc.primaryKeys));
-			loc.generatedKey = $adapter().$generatedKey();
-			if (StructKeyExists(loc.ins.result, loc.generatedKey))
-			{
-				this[primaryKeys(1)] = loc.ins.result[loc.generatedKey];
-			}
-			if (arguments.reload)
-			{
-				this.reload();
-			}
-		}
+		ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
+		ArrayDeleteAt(loc.sql2, ArrayLen(loc.sql2));
+		ArrayAppend(loc.sql, ")");
+		ArrayAppend(loc.sql2, ")");
+		loc.iEnd = ArrayLen(loc.sql);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			ArrayAppend(loc.sql, loc.sql2[loc.i]);
+
+		// map the primary keys down to the SQL columns before calling
+		loc.primaryKeys = ListToArray(primaryKeys());
+		loc.iEnd = ArrayLen(loc.primaryKeys);
+		for(loc.i = 1; loc.i LTE loc.iEnd; loc.i++)
+			loc.primaryKeys[loc.i] = variables.wheels.class.properties[loc.primaryKeys[loc.i]].column;
+
+		loc.ins = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize, $primaryKey=ArrayToList(loc.primaryKeys));
+		loc.generatedKey = variables.wheels.class.adapter.$generatedKey();
+		if (StructKeyExists(loc.ins.result, loc.generatedKey))
+			this[primaryKeys(1)] = loc.ins.result[loc.generatedKey];
+		if (arguments.reload)
+			this.reload();
 	</cfscript>
 	<cfreturn true>
 </cffunction>
@@ -1121,7 +1025,7 @@
 		{
 			ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
 			loc.sql = $addKeyWhereClause(sql=loc.sql);
-			loc.upd = $adapter().$query(sql=loc.sql, parameterize=arguments.parameterize);
+			loc.upd = variables.wheels.class.adapter.$query(sql=loc.sql, parameterize=arguments.parameterize);
 			if (arguments.reload)
 				this.reload();
 		}
