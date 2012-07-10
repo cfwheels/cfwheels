@@ -466,7 +466,6 @@
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="reserved" type="string" required="false" default="">
 	<cfargument name="combine" type="string" required="false" default="">
-	<cfargument name="cachable" type="boolean" required="false" default="false">
 	<cfargument name="required" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};

@@ -47,10 +47,7 @@
 	<cfargument name="remote" type="boolean" required="false" hint="Pass true if you wish to make this an asynchronous request">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = $args(name="linkTo", cachable=true, args=arguments);
-		// only run our linkTo code if we do not have a cached result
-		if (StructKeyExists(loc, "returnValue"))
-			return loc.returnValue;
+		loc.returnValue = $args(name="linkTo", args=arguments);
 			
 		if (Len(arguments.confirm))
 			arguments["data-confirm"] = JSStringFormat(arguments.confirm);

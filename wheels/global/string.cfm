@@ -128,7 +128,7 @@
 	<cfargument name="which" type="string" required="true" hint="Should be either `singularize` or `pluralize`.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = $args(name="$singularizeOrPluralizeWithCount", cachable=true, args=arguments);
+		loc.returnValue = $args(name="$singularizeOrPluralizeWithCount", args=arguments);
 		if (!StructKeyExists(loc, "returnValue"))
 		{
 			// run conversion unless count is passed in and its value means conversion is unnecessary
@@ -150,7 +150,7 @@
 	<cfargument name="which" type="string" required="true" hint="See documentation for @$singularizeOrPluralizeWithCount.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = $args(name="$singularizeOrPluralize", cachable=true, args=arguments);
+		loc.returnValue = $args(name="$singularizeOrPluralize", args=arguments);
 		if (!StructKeyExists(loc, "returnValue"))
 		{
 			// default to returning the same string when nothing can be converted

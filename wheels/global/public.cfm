@@ -488,10 +488,7 @@
 	<cfscript>
 		var loc = {};
 		
-		loc.returnValue = $args(name="URLFor", args=arguments, cachable=true);
-		// only run our URLFor code if we do not have a cached result
-		if (StructKeyExists(loc, "returnValue"))
-			return loc.returnValue;
+		loc.returnValue = $args(name="URLFor", args=arguments);
 		
 		loc.params = {};
 		if (StructKeyExists(variables, "params"))
