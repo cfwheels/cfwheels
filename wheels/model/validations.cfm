@@ -15,6 +15,7 @@
 	<cfargument name="condition" type="string" required="false" default="" hint="String expression to be evaluated that decides if validation will be run (if the expression returns `true` validation will run).">
 	<cfargument name="unless" type="string" required="false" default="" hint="String expression to be evaluated that decides if validation will be run (if the expression returns `false` validation will run).">
 	<cfif StructKeyExists(arguments, "if")>
+		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
@@ -37,6 +38,7 @@
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
+		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
@@ -66,6 +68,7 @@
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
+		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
@@ -95,6 +98,7 @@
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
+		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
@@ -126,6 +130,7 @@
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
+		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
@@ -159,6 +164,7 @@
 	<cfargument name="lessThan" type="numeric" required="false" hint="Specifies whether or not the value must be less than the supplied value.">
 	<cfargument name="lessThanOrEqualTo" type="numeric" required="false" hint="Specifies whether or not the value must be less than or equal the supplied value.">
 	<cfif StructKeyExists(arguments, "if")>
+		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
@@ -179,6 +185,7 @@
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
+		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
@@ -205,6 +212,7 @@
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="true" hint="whether to take softDeletes into account when performing uniqueness check">
 	<cfif StructKeyExists(arguments, "if")>
+		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
@@ -236,6 +244,7 @@
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for @validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
+		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
@@ -260,6 +269,7 @@
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
+		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
@@ -284,6 +294,7 @@
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
+		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
