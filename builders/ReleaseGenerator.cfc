@@ -13,7 +13,7 @@
 	<cfset variables.buildtmp = ExpandPath("../../wheels-build-temp-dir")>
 	<cfset variables.ignore = "build.cfm,.project,.gitignore,.git,WEB-INF,aspnet_client">
 	<cfset variables.folders = "files,images,javascripts,lib,plugins,stylesheets,tests">
-	<cfset variables.remove = "wheels/tests,builders">
+	<cfset variables.remove = "wheels/tests,wheels/docs,builders">
 	<cfset variables.zipfile = "#ExpandPath('../../cfwheels.#variables.release#.zip')#">
 	
 	<cffunction name="init">
