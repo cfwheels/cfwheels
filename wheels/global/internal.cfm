@@ -348,7 +348,7 @@
 			loc.returnValue.path_info = Replace(loc.returnValue.path_info,'/index.cfm','');
 			if (!Len(loc.returnValue.path_info))
 			{// add back the forward slash if path_info was "/index.cfm"
-				loc.returnValue.path_info = "/"	;
+				loc.returnValue.path_info = "/";
 			}
 		}
 	</cfscript>
