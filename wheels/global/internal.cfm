@@ -301,32 +301,56 @@
 </cffunction>
 
 <cffunction name="$cgiScope" returntype="struct" access="public" output="false" hint="This copies all the variables Wheels needs from the CGI scope to the request scope.">
-	<cfargument name="keys" type="string" required="false" default="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type">
+	<cfargument name="keys" type="string" required="false" default="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type,http_x_rewrite_url,http_x_original_url,request_uri,redirect_url">
+	<cfargument name="scope" type="struct" required="false" default="#cgi#">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
 		loc.iEnd = ListLen(arguments.keys);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			loc.returnValue[ListGetAt(arguments.keys, loc.i)] = cgi[ListGetAt(arguments.keys, loc.i)];
+		{
+			loc.key = ListGetAt(arguments.keys, loc.i);
+			loc.returnValue[loc.key] = "";
+			if (StructKeyExists(arguments.scope, loc.key))
+			{
+				loc.returnValue[loc.key] = arguments.scope[loc.key];
+			}
+		}
 
 		/* Fixes IIS issue that returns a blank cgi.path_info 
 		   Fix: http://www.giancarlogomez.com/2012/06/you-are-not-going-crazy-cgipathinfo-is.html
 		   Bug: https://bugbase.adobe.com/index.cfm?event=bug&id=3209090 
 		*/
-		if (structKeyExists(cgi,"http_x_rewrite_url") && len(cgi.http_x_rewrite_url)) // iis6 1/ IIRF (Ionics Isapi Rewrite Filter)
-			loc.returnValue.path_info = listFirst(cgi.http_x_rewrite_url,'?');
-			else if (structKeyExists(cgi,"http_x_original_url") && len(cgi.http_x_original_url)) // iis7 rewrite default
-			loc.returnValue.path_info = listFirst(cgi.http_x_original_url,"?");
-			else if (structKeyExists(cgi,"request_uri") && len(cgi.request_uri)) // apache default
-			loc.returnValue.path_info = listFirst(cgi.request_uri,'?');
-			else if (structKeyExists(cgi,"redirect_url") && len(cgi.redirect_url)) // apache fallback
-			loc.returnValue.path_info = listFirst(cgi.redirect_url,'?');
-			else // fallback to cgi.path_info
-			loc.returnValue.path_info = cgi.path_info;
+		if (!Len(loc.returnValue.path_info))
+		{
+			if (Len(loc.returnValue.http_x_rewrite_url))
+			{// iis6 1/ IIRF (Ionics Isapi Rewrite Filter)
+				loc.returnValue.path_info = ListFirst(loc.returnValue.http_x_rewrite_url,'?');
+			}
+			else if (Len(loc.returnValue.http_x_original_url))
+			{// iis7 rewrite default
+				loc.returnValue.path_info = ListFirst(loc.returnValue.http_x_original_url,"?");
+			}
+			else if (Len(loc.returnValue.request_uri))
+			{// apache default
+				loc.returnValue.path_info = ListFirst(loc.returnValue.request_uri,'?');
+			}
+			else if (Len(loc.returnValue.redirect_url))
+			{// apache fallback
+				loc.returnValue.path_info = ListFirst(loc.returnValue.redirect_url,'?');
+			}
+		}
 			
-			// finally lets remove the index.cfm because some of the custom cgi variables don't bring it back
-			// like this it means at the root we are working with / instead of /index.cfm
-			loc.returnValue.path_info = replace(loc.returnValue.path_info,'index.cfm',''); 	
+		// finally lets remove the index.cfm because some of the custom cgi variables don't bring it back
+		// like this it means at the root we are working with / instead of /index.cfm
+		if (Len(loc.returnValue.path_info) gte 10 && Right(loc.returnValue.path_info, 10)  eq "/index.cfm")
+		{// this will remove the index.cfm and the trailing slash
+			loc.returnValue.path_info = Replace(loc.returnValue.path_info,'/index.cfm','');
+			if (!Len(loc.returnValue.path_info))
+			{// add back the forward slash if path_info was "/index.cfm"
+				loc.returnValue.path_info = "/"	;
+			}
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
