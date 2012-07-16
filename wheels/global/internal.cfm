@@ -308,6 +308,25 @@
 		loc.iEnd = ListLen(arguments.keys);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			loc.returnValue[ListGetAt(arguments.keys, loc.i)] = cgi[ListGetAt(arguments.keys, loc.i)];
+
+		/* Fixes IIS issue that returns a blank cgi.path_info 
+		   Fix: http://www.giancarlogomez.com/2012/06/you-are-not-going-crazy-cgipathinfo-is.html
+		   Bug: https://bugbase.adobe.com/index.cfm?event=bug&id=3209090 
+		*/
+		if (structKeyExists(cgi,"http_x_rewrite_url") && len(cgi.http_x_rewrite_url)) // iis6 1/ IIRF (Ionics Isapi Rewrite Filter)
+			loc.returnValue.path_info = listFirst(cgi.http_x_rewrite_url,'?');
+			else if (structKeyExists(cgi,"http_x_original_url") && len(cgi.http_x_original_url)) // iis7 rewrite default
+			loc.returnValue.path_info = listFirst(cgi.http_x_original_url,"?");
+			else if (structKeyExists(cgi,"request_uri") && len(cgi.request_uri)) // apache default
+			loc.returnValue.path_info = listFirst(cgi.request_uri,'?');
+			else if (structKeyExists(cgi,"redirect_url") && len(cgi.redirect_url)) // apache fallback
+			loc.returnValue.path_info = listFirst(cgi.redirect_url,'?');
+			else // fallback to cgi.path_info
+			loc.returnValue.path_info = cgi.path_info;
+			
+			// finally lets remove the index.cfm because some of the custom cgi variables don't bring it back
+			// like this it means at the root we are working with / instead of /index.cfm
+			loc.returnValue.path_info = replace(loc.returnValue.path_info,'index.cfm',''); 	
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
