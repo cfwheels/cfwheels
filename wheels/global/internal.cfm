@@ -993,3 +993,31 @@ Should now call bar() instead and marking foo() as deprecated
 	application.wheels.mixins = application.wheels.PluginObj.getMixins();
 	</cfscript>
 </cffunction>
+
+<cffunction name="$loadLocales" returntype="struct" access="public" output="false">
+	<cfargument name="path" type="string" required="false" default="#expandPath('/wheelsMapping/locales')#">
+	<cfscript>
+	var loc = {};
+	loc.locales = {};
+	// scan the locales directory
+	loc.files = $directory(directory="#arguments.path#", action="list");
+	// loop through all locales and put into application variable
+	loc.count = loc.files.recordcount;
+	for(loc.i = 1; loc.i lte loc.count; loc.i++)
+	{
+		// make paths system agnostic
+		loc.path = ListChangeDelims(loc.files["directory"][loc.i], "/", "\");
+		// name of the locale file
+		loc.name = loc.files["name"][loc.i];
+		// name of the locale
+		loc.locale = ListFirst(loc.name, ".");
+		// read the locale file
+		loc.content = FileRead("#loc.path#/#loc.name#", "utf-8");
+		// deserialize the json
+		loc.content = DeserializeJSON(loc.content);
+		// add to application variable
+		loc.locales[loc.locale] = loc.content;
+	}
+	</cfscript>
+	<cfreturn loc.locales>
+</cffunction>

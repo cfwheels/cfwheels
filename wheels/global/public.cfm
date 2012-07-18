@@ -627,3 +627,15 @@
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
+
+<cffunction name="l" returntype="string" access="public" output="false" hint="returns the value for the given key of a locale"
+	examples=
+	'
+		<!--- Return all the names of the months for US English --->
+		<cfset monthNames = l("date.month_names", "en-US")>
+	'
+	categories="global,miscellaneous">
+	<cfargument name="key" type="string" required="true">
+	<cfargument name="locale" type="string" required="false" default="#application.wheels.locale#">
+	<cfreturn evaluate('application.wheels.locales["#arguments.locale#"].#arguments.key#')>
+</cffunction>

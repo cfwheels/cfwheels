@@ -41,6 +41,11 @@
 
 		// copy over the cgi variables we need to the request scope (since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example)
 		request.cgi = $cgiScope();
+		
+		// load locales
+		application.wheels.locales = $loadLocales();
+		// default locale
+		application.wheels.locale = "en-US";
 
 		// set up containers for routes, caches, settings etc
 		application.wheels.controllers = {};
