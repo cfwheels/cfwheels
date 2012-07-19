@@ -12,9 +12,11 @@ and/or DBMS configuration that's picky about things like case sensitivity.
 
 ## URLs
 
-Wheels uses a very flexible routing system to match your application's URLs to controllers, views, and parameters.
+Wheels uses a very flexible routing system to match your application's URLs to controllers, views, and
+parameters.
 
-Within this routing system is a _default route_ that handles many scenarios that you'll run across as a developer. The default route is mapped using the pattern `[controller]/[action]/[key]`.
+Within this routing system is a _default route_ that handles many scenarios that you'll run across as a
+developer. The default route is mapped using the pattern `[controller]/[action]/[key]`.
 
 Consider this example URL:
 
@@ -77,16 +79,20 @@ See [Using Routes][1] for instructions on overriding this behavior.
 
 Methods within the controllers, known as actions, should be named in `camelCase`.
 
-Like with controllers, any time a capital letter is used in `camelCase`, a hyphen will be used as a word delimiter in the corresponding URL. For example, a URL of `/site-map/search-engines` will reference the `searchEngines` action in the `SiteMap` controller.
+Like with controllers, any time a capital letter is used in `camelCase`, a hyphen will be used as a word
+delimiter in the corresponding URL. For example, a URL of `/site-map/search-engines` will reference the
+`searchEngines` action in the `SiteMap` controller.
 
 See [Using Routes][1] for instructions on overriding this behavior.
 
 ### Views
 
-By default, view files are named after the action names and are stored in folders that correspond to controller names. Both the folder names and view file names should be all lowercase, and there is no
+By default, view files are named after the action names and are stored in folders that correspond to
+controller names. Both the folder names and view file names should be all lowercase, and there is no
 word delimiter.
 
-In our `/site-map/search-engines` URL example, the corresponding view file would be stored at `views/sitemap/searchengines.cfm`.
+In our `/site-map/search-engines` URL example, the corresponding view file would be stored at
+`views/sitemap/searchengines.cfm`.
 
 For information on overriding this behavior, refer to documentation for the `renderPage()` function and
 read the [Pages][2] chapter.
@@ -110,7 +116,8 @@ For information on overriding the layout file to be loaded by an action, see the
 ## Naming Conventions for Models and Databases
 
 By default, the names of Wheels models, model properties, database tables, and database fields all
-relate to each other. Wheels even sets a sensible default for the CFML data source used for database interactions.
+relate to each other. Wheels even sets a sensible default for the CFML data source used for database
+interactions.
 
 ### Data Sources
 
@@ -131,7 +138,8 @@ singular word.
 For example, a `user` model represents a record from the `users` database table. Wheels also recognizes
 plural patterns like `binary`/`binaries`, `mouse`/`mice`, `child`/`children`, etc.
 
-Like controller files, models are also CFCs and are named `PascalCase`. They are stored in the `models` folder. So the `user` model would be stored at `models/User.cfc`.
+Like controller files, models are also CFCs and are named `PascalCase`. They are stored in the `models`
+folder. So the `user` model would be stored at `models/User.cfc`.
 
 For instructions on overriding database naming conventions, refer to documentation for the `table()`
 function and the chapter on [Object Relational Mapping][5].
@@ -141,9 +149,11 @@ function and the chapter on [Object Relational Mapping][5].
 In your database, both table names and column names should be lowercase. The `customersegments` table
 could have fields called `title`, `regionid`, and `incomelevel`, for example.
 
-Because of CFML's case insensitive nature, we recommend that you refer to model names and corresponding properties in `camelCase`. This makes for easier readability in your application code.
+Because of CFML's case insensitive nature, we recommend that you refer to model names and corresponding
+properties in `camelCase`. This makes for easier readability in your application code.
 
-In the `customersegments` example above, you could refer to the properties in your CFML as `title`, `regionId`, and `incomeLevel` to stick to CFML's Java-style roots. (Built-in CFML functions are often
+In the `customersegments` example above, you could refer to the properties in your CFML as `title`,
+`regionId`, and `incomeLevel` to stick to CFML's Java-style roots. (Built-in CFML functions are often
 written in `camelCase` and `PascalCase`, after all.)
 
 For information on overriding column and property names, refer to documentation for the `property()`

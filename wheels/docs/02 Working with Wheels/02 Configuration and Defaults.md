@@ -1,22 +1,31 @@
 # Configuration and Defaults
 
-*An overview of Wheels configuration and how is it used in your applications. Learn how to override a Wheels convention to make it your own.*
+*An overview of Wheels configuration and how is it used in your applications. Learn how to override a
+Wheels convention to make it your own.*
 
-We all love the "Convention over Configuration" motto of Wheels, but what about those two cases that pop into everyone's head? _What if I want to develop in my own way?_ Or, _What about an existing application that I need to port into Wheels?_ Gladly, that's what configuration and defaults are there for. Let's take a look at exactly how is this performed.
+We all love the "Convention over Configuration" motto of Wheels, but what about those two cases that pop
+into everyone's head? _What if I want to develop in my own way?_ Or, _What about an existing application
+that I need to port into Wheels?_ Gladly, that's what configuration and defaults are there for. Let's
+take a look at exactly how is this performed.
 
 ## Where Configurations Happen
 
-You will find configuration files in the `config` folder of your Wheels application. In general, most of your settings will go in `config/settings.cfm`.
+You will find configuration files in the `config` folder of your Wheels application. In general, most of
+your settings will go in `config/settings.cfm`.
 
-You can also set values based on what environment you have set. For example, you can have different values for your settings depending on whether you're in `design` mode or `production` mode. See the chapter on [Switching Environments][1] for more details.
+You can also set values based on what environment you have set. For example, you can have different
+values for your settings depending on whether you're in `design` mode or `production` mode. See the
+chapter on [Switching Environments][1] for more details.
 
 ## How to Set Configurations
 
-To change a Wheels application default, you generally use the `set()` function. With it, you can perform all sorts of tweaks to the framework's default behaviors.
+To change a Wheels application default, you generally use the `set()` function. With it, you can perform
+all sorts of tweaks to the framework's default behaviors.
 
 ## How to Access Configuration Values
 
-Use the `get()` function to access the value of a Wheels application setting. Just pass it the name of the setting.
+Use the `get()` function to access the value of a Wheels application setting. Just pass it the name of
+the setting.
 
 
 	<cfif get("environment") is "production">
@@ -25,7 +34,8 @@ Use the `get()` function to access the value of a Wheels application setting. Ju
 
 ## Setting CFML `application` Configurations
 
-In CFML's standard `Application.cfc`, you can normally set values for your application's properties in the `this` scope. Wheels still provides these options to you in the file at `config/app.cfm`.
+In CFML's standard `Application.cfc`, you can normally set values for your application's properties in
+the `this` scope. Wheels still provides these options to you in the file at `config/app.cfm`.
 
 Here is an example of what can go in `config/app.cfm`:
 
@@ -35,7 +45,8 @@ Here is an example of what can go in `config/app.cfm`:
 
 ## Types of Configurations Available
 
-There are several types of configurations that you can perform in Wheels to override all those default behaviors. In Wheels, you can find all these configuration options:
+There are several types of configurations that you can perform in Wheels to override all those default
+behaviors. In Wheels, you can find all these configuration options:
 
   * URL rewrite settings 
   * Data source settings
@@ -48,21 +59,28 @@ Let's take a closer look at each of these options.
 
 ### URL Rewrite Settings
 
-Sometimes it is useful for our applications to "force" URL rewriting. By default, Wheels will try to determinate what type of URL rewriting to perform and set it up for you. But you can force in or out this setting by using the example below:
+Sometimes it is useful for our applications to "force" URL rewriting. By default, Wheels will try to
+determinate what type of URL rewriting to perform and set it up for you. But you can force in or out
+this setting by using the example below:
 
 	<cfset set(urlRewriting="Off")>
 
-The code above will tell Wheels to skip its automatic detection of the URL Rewriting capabilities and just set it as "Off".
+The code above will tell Wheels to skip its automatic detection of the URL Rewriting capabilities and
+just set it as "Off".
 
-You can also set it to "Partial" if you believe that your web server is capable of rewriting the URL as folders after `index.cfm`.
+You can also set it to "Partial" if you believe that your web server is capable of rewriting the URL as
+folders after `index.cfm`.
 
 For more information, read the chapter about [URL Rewriting][2].
 
 ### Data Source Settings
 
-Probably the most important configuration of them all. What is an application without a database to store all of its precious data?
+Probably the most important configuration of them all. What is an application without a database to
+store all of its precious data?
 
-The data source configuration is what tells Wheels which database to use for all of its models. (This can be overridden on a per model basis, but that will be covered later.) To set this up in Wheels, it's just as easy as the previous example:
+The data source configuration is what tells Wheels which database to use for all of its models.
+(This can be overridden on a per model basis, but that will be covered later.) To set this up in Wheels,
+it's just as easy as the previous example:
 
 	<cfset set(dataSourceName="yourDataSourceName")>
 	<cfset set(dataSourceUserName="yourDataSourceUsername")>
@@ -70,9 +88,12 @@ The data source configuration is what tells Wheels which database to use for all
 
 ### Debugging and Error Settings
 
-Not only are the environments useful for separating your production settings from your "under development" settings, but they are also opportunities for you to override settings that will only take effect in a specified environment.
+Not only are the environments useful for separating your production settings from your
+"under development" settings, but they are also opportunities for you to override settings that will
+only take effect in a specified environment.
 
-For example, let's say that we want to disable debugging information in our `development` environment temporarily:
+For example, let's say that we want to disable debugging information in our `development` environment
+temporarily:
 
 	<!--- /config/development/settings.cfm --->
 	<cfset set(showDebugInformation=false)>
@@ -138,9 +159,12 @@ For more information, refer to the chapter about [Switching Environments][1].
 
 ### Caching Settings
 
-Wheels does a pretty good job at caching the framework and its output to speed up your application. But if personalization is key in your application, finer control over caching settings will become more important.
+Wheels does a pretty good job at caching the framework and its output to speed up your application. But
+if personalization is key in your application, finer control over caching settings will become more
+important.
 
-Let's say your application generates dynamic routes, and you need it to check the routes on each request. This task will be as simple as this line of code:
+Let's say your application generates dynamic routes, and you need it to check the routes on each request.
+This task will be as simple as this line of code:
 
 	<cfset set(cacheRoutes=false)>
 
@@ -253,23 +277,33 @@ For more information, refer to the chapter on [Caching][3].
 
 ### Function Settings
 
-OK, here it's where the fun begins! Wheels includes a lot of functions to make your life as a CFML developer easier. A lot of those functions have sensible default argument values to minimize the amount of code that you need to write. And yes, you guessed it, Wheels lets you override those default argument values application-wide.
+OK, here it's where the fun begins! Wheels includes a lot of functions to make your life as a CFML
+developer easier. A lot of those functions have sensible default argument values to minimize the amount
+of code that you need to write. And yes, you guessed it, Wheels lets you override those default argument
+values application-wide.
 
 Let's look at a little of example:
 
 	<cfset set(functionName="findAll", perPage=20)>
 
-That little line of code will make all calls to the `findAll()` method in Wheels return a maximum number of 20 record per page (if pagination is enabled for that `findAll()` call). How great is that? You don't need to set the `perPage` value for every single call to `findAll()` if you have a different requirement than the Wheels default of 10 records.
+That little line of code will make all calls to the `findAll()` method in Wheels return a maximum number
+of 20 record per page (if pagination is enabled for that `findAll()` call). How great is that? You don't
+need to set the `perPage` value for every single call to `findAll()` if you have a different requirement
+than the Wheels default of 10 records.
 
 ### ORM Settings
 
-The Wheels ORM provides many sensible conventions and defaults, but sometimes your data structure requires different column naming or behavior than what Wheels expects out of the box. Use these settings to change those naming conventions or behaviors across your entire application.
+The Wheels ORM provides many sensible conventions and defaults, but sometimes your data structure
+requires different column naming or behavior than what Wheels expects out of the box. Use these settings
+to change those naming conventions or behaviors across your entire application.
 
-For example, if we wanted to prefix all of the database table names in our application with `blog_` but didn't want to include that at the beginning of model names, we would do this:
+For example, if we wanted to prefix all of the database table names in our application with `blog_` but
+didn't want to include that at the beginning of model names, we would do this:
 
 	<cfset set(tableNamePrefix="blog_")>
 
-Now your `post` model will map to the `blog_posts` table, `comment` model will map to the `blog_comments` table, etc.
+Now your `post` model will map to the `blog_posts` table, `comment` model will map to the `blog_comments`
+table, etc.
 
 #### Full Listing of ORM Settings
 
@@ -342,9 +376,13 @@ Now your `post` model will map to the `blog_posts` table, `comment` model will m
 
 ### Plugin Settings
 
-There are several settings that make plugin development more convenient. We recommend only changing these settings in `design` or `development` modes so there aren't any deployment issues in `production`, `testing`, and `maintenance` modes. (At that point, your plugin should be properly packaged in a zip file.)
+There are several settings that make plugin development more convenient. We recommend only changing
+these settings in `design` or `development` modes so there aren't any deployment issues in `production`,
+`testing`, and `maintenance` modes. (At that point, your plugin should be properly packaged in a zip
+file.)
 
-If you want to keep what's stored in a plugin's zip file from overwriting changes that you made in its expanded folder, set this in `config/design/settings.cfm` and/or `config/development/settings.cfm`:
+If you want to keep what's stored in a plugin's zip file from overwriting changes that you made in its
+expanded folder, set this in `config/design/settings.cfm` and/or `config/development/settings.cfm`:
 
 	<cfset set(overwritePlugins=false)>
 
@@ -385,13 +423,15 @@ See the chapter on [Using and Creating Plugins][4] for more information.
 
 ### Miscellaneous Settings
 
-How about situations that don't fit into those previous 6 categories? Well, they all fall right into this miscellaneous section.
+How about situations that don't fit into those previous 6 categories? Well, they all fall right into
+this miscellaneous section.
 
 Let's say that you want to set a reload password for your environment:
 
 	<cfset set(reloadPassword="somepassword123")>
 
-This will prevent others from being able to reload your application or change environments with the `reload` URL argument without also providing a `password` URL argument of `somepassword123`.
+This will prevent others from being able to reload your application or change environments with the
+`reload` URL argument without also providing a `password` URL argument of `somepassword123`.
 
 #### Full Listing of Miscellaneous Settings
 
@@ -446,7 +486,8 @@ This will prevent others from being able to reload your application or change en
 
 ### Wrapping It Up
 
-There are literally hundreds of configurations options in Wheels for you to play around with. So go ahead and sink your teeth into Wheels configuration and defaults.
+There are literally hundreds of configurations options in Wheels for you to play around with. So go
+ahead and sink your teeth into Wheels configuration and defaults.
 
 [1]: Switching%20Environments.md
 [2]: URL%20Rewriting.md
