@@ -70,9 +70,11 @@
 7. [Miscellaneous Helpers](05 Displaying Views to Users/07 Date, Media, and Text Helpers.md)
 8. [Creating Your Own View Helpers](05 Displaying Views to Users/08 Creating Your Own View Helpers.md)
 
-## 6. Automated Testing
+## 6. Integrated Testing Framework
 
-1. [Overview of the Testing Framework](06 Automated Testing/01 Overview of the Testing Framework.md)
+1. [Overview of the Testing Framework](06 Integrated Testing Framework/01 Overview of the Testing Framework.md)
+2. [Testing Your Application](06 Integrated Testing Framework/02 Testing Your Application.md)
+3. [Running Tests](06 Integrated Testing Framework/03 Running Tests.md)
 
 ## 7. Contributing to Wheels
 
