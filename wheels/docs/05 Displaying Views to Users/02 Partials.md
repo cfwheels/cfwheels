@@ -230,7 +230,7 @@ It works very similar to passing in a query in that the partial is called on eac
 So far we've only talked about `includePartial()`, which is what you use from within your views to include
 other files. There is another similar function as well: `renderPartial()`. This one is used from your
 controller files when you want to render a partial instead of a full page. At first glance, this might not
-make much sense to do. There is one common usage of this though&mdash;AJAX requests.
+make much sense to do. There is one common usage of this though - AJAX requests.
 
 Let's say that you want to submit comments on your blog using AJAX. For example, the user will see all
 comments, enter their comment, submit it, and the comment will show up below the existing ones without a

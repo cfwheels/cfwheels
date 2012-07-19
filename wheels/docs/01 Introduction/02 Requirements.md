@@ -8,14 +8,14 @@ We can identify 3 different types of requirements that you should be aware of:
 
 ## 1. Project Requirements
 
-Before you start learning Wheels and making sure all the necessary software is installed on your computer
-you really need to take a moment and think about the project you intend to use Wheels on. Is it a ten
-page website that won't be updated very often? Is it a space flight simulator program for NASA? Is it
-something in between?
+Before you start learning Wheels and making sure all the necessary software is installed on your
+computer you really need to take a moment and think about the project you intend to use Wheels on. Is it
+a ten page website that won't be updated very often? Is it a space flight simulator program for NASA? Is
+it something in between?
 
 Most websites are, at their cores, simple data manipulation applications. You fetch a row, make some
 updates to it, stick it back in the database and so on. This is the "target market" for
-Wheels&mdash;simple CRUD (create, read, update, delete) website applications.
+Wheels - simple CRUD (create, read, update, delete) website applications.
 
 A simple ten page website won't do much data manipulation, so you don't need Wheels for that (or even
 ColdFusion in some cases). A flight simulator program will do so much more than simple CRUD work, so in
@@ -44,8 +44,8 @@ Don't worry though. You don't need to be an expert on any on of them. A basic un
 enough.
 
   * *CFML.* You should know CFML, the ColdFusion programming language. (Surprise!)
-  * *Object Oriented Programming.* You should grasp the concept of object oriented programming and how it
-	applies to ColdFusion.
+  * *Object Oriented Programming.* You should grasp the concept of object oriented programming and how
+  	it applies to ColdFusion.
   * *Model-View-Controller.* You should know the theory behind the Model-View-Controller development
 	pattern.
 
@@ -59,15 +59,15 @@ of choice.
 ### Object Oriented Programming (OOP)
 
 This is a programming methodology that uses constructs called _objects_ to design applications. Objects
-model real world entities in your application. OOP is based on several techniques including _inheritance_,
-_modularity_, _polymorphism_ and _encapsulation_. Most of these techniques are supported in ColdFusion,
-making it a fairly functional object oriented language. At the most basic level, a `.cfc` file in CFML is
-a class, and you create an instance of a class by using the `CreateObject` function or the `<cfobject>`
-tag.
+model real world entities in your application. OOP is based on several techniques including
+_inheritance_, _modularity_, _polymorphism_ and _encapsulation_. Most of these techniques are supported
+in ColdFusion, making it a fairly functional object oriented language. At the most basic level, a `.cfc`
+file in CFML is a class, and you create an instance of a class by using the `CreateObject` function or
+the `<cfobject>` tag.
 
 Trying to squeeze an explanation of object oriented programming and how it's used in CFML into a few
-sentences is impossible, and a detailed overview of it is outside the scope of this chapter. There is lots
-of high quality information online, so go ahead and Google it.
+sentences is impossible, and a detailed overview of it is outside the scope of this chapter. There is
+lots of high quality information online, so go ahead and Google it.
 
 ### Model-View-Controller
 
@@ -78,8 +78,8 @@ Model-View-Controller, or MVC for short, is a way to structure your code so that
   * *View.* What the user sees and interacts with (a web page in our case).
   * *Controller.* The behind-the-scenes guy that's coordinating everything.
 
-MVC is how Wheels structures your code for you. As you start working with Wheels applications, you'll see
-that most of the code you write is very nicely separated into one of these 3 categories.
+MVC is how Wheels structures your code for you. As you start working with Wheels applications, you'll
+see that most of the code you write is very nicely separated into one of these 3 categories.
 
 ## 3. System Requirements
 
@@ -89,23 +89,23 @@ Wheels requires that you use one of these CFML engines:
   * [Adobe ColdFusion 9][4]
   * [Railo] (version 3.1.2.020 or greater)
 
-Wheels makes heavy use of CFML's `OnMissingMethod` event, which wasn't available until the release of CF
-8.
+Wheels makes heavy use of CFML's `OnMissingMethod` event, which wasn't available until the release of
+CF 8.
 
 ### Operating Systems
 
-Your setup with Wheels can then can be installed on *Windows*, *Mac OS X*, *UNIX*, or *Linux*&mdash;they
+Your setup with Wheels can then can be installed on *Windows*, *Mac OS X*, *UNIX*, or *Linux* - they
 all work just fine.
 
 ### Web Servers
 
-You also need a web server. Wheels runs on all popular web servers including Apache, Microsoft IIS, Jetty,
-and the JRun web server that ships with Adobe ColdFusion. Some web servers support URL rewriting out of
-the box, some support the `cgi.path_info` variable which is used to achieve partial rewriting, and some
-don't have support for either.
+You also need a web server. Wheels runs on all popular web servers including Apache, Microsoft IIS,
+Jetty, and the JRun web server that ships with Adobe ColdFusion. Some web servers support URL rewriting
+out of the box, some support the `cgi.path_info` variable which is used to achieve partial rewriting,
+and some don't have support for either.
 
 Don't worry though. Wheels will adapt to your setup and run just fine regardless, but the URLs that it
-creates might differ a bit. You can read more about this in the [URLRewriting URL Rewriting] chapter.
+creates might differ a bit. You can read more about this in the [URL Rewriting][6] chapter.
 
 ### Database Engines
 
@@ -114,7 +114,7 @@ Currently supported databases are SQL Server 7 or later, Oracle 10g or later, My
 H2.
 
 Regarding MySQL, please note that MySQL 4 is not supported. We also recommend using the InnoDB engine if
-you want for [Transactions] to work.
+you want for [Transactions][7] to work.
 
 OK, hopefully this chapter didn't scare you too much. You can move on knowing that you have the basic
 knowledge needed, the software to run Wheels on, and a suitable project to start with.
@@ -124,3 +124,5 @@ knowledge needed, the software to run Wheels on, and a suitable project to start
 [3]: http://www.adobe.com/products/coldfusion/coldfusion8/
 [4]: http://www.adobe.com/products/coldfusion/
 [5]: http://www.getrailo.org/
+[6]: ../03%20Handling%20Requests%20with%20Controllers/11%20URL%20Rewriting.md
+[7]: ../04%20Database%20Interaction%20Through%20Models/14%20Transactions.md

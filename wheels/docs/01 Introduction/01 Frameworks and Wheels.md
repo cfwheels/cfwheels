@@ -1,39 +1,40 @@
 # Frameworks and Wheels
 
-<p class="intro">Learn the goals of ColdFusion on Wheels as well as web development frameworks in general.
-Then learn about Wheels's goals and some key concepts.</p>
+*Learn the goals of ColdFusion on Wheels as well as web development frameworks in general. Then learn
+about Wheels's goals and some key concepts.*
 
-This chapter will introduce you to frameworks in general and later specifically to ColdFusion on Wheels.
-We'll help you decide if you even need a framework at all and what common problems a framework tries to
-solve. If we're able to convince you that using a framework is the right thing for you, then we'll
-present our goals with creating Wheels and show you some key Wheels concepts.
+This chapter will introduce you to frameworks in general and later specifically to ColdFusion on
+Wheels. We'll help you decide if you even need a framework at all and what common problems a framework
+tries to solve. If we're able to convince you that using a framework is the right thing for you, then
+we'll present our goals with creating Wheels and show you some key Wheels concepts.
 
 So let's get started.
 
 ## Do I Really Need to Use a Framework?
 
-Short answer, no. If you don't mind doing the same thing over and over again and are getting paid by the
-hour to do so, then by all means keep doing that. ;)
+Short answer, no. If you don't mind doing the same thing over and over again and are getting paid by
+the hour to do so, then by all means keep doing that. ;)
 
 Slightly longer answer, no. If you're working on a highly customized project that does not fall within
-what 9 out of 10 web sites/applications normally do then you likely need a high percentage of custom code,
-and a framework will not help much.
+what 9 out of 10 web sites/applications normally do then you likely need a high percentage of custom
+code, and a framework will not help much.
 
-However, if you're like most of us and have noticed that for every new project you start on&mdash;or even
-every new feature you add to an existing project--you waste a lot of time re-creating the wheel, then you
-should read on because Wheels may just be the solution for you!
+However, if you're like most of us and have noticed that for every new project you start on - or even
+every new feature you add to an existing project--you waste a lot of time re-creating the wheel, then
+you should read on because Wheels may just be the solution for you!
 
-Wheels will make starting a new project or building a new feature quick and painless. You can get straight
-to solving business problems on day one! To understand how this is achieved, we figured that a little
-background info on frameworks in general may help you out.
+Wheels will make starting a new project or building a new feature quick and painless. You can get
+straight to solving business problems on day one! To understand how this is achieved, we figured that
+a little background info on frameworks in general may help you out.
 
-All good frameworks rise from the need to solve real problems in real world situations. Wheels is based
-heavily on the Rails framework for Ruby and also gets inspiration from Django and, though to a lesser
-extent, other frameworks in the ColdFusion space (like Fusebox, for example). Over the years the
-contributors to these frameworks have identified problems and tedious tasks in their own development
-processes, built a solution for it, and abstracted (made it more generic so it suits any project) the
-solution into the framework in question. Piggy-backing on what all these great programmers have already
-created and adding a few nice solutions of our own, Wheels stands on solid ground.
+All good frameworks rise from the need to solve real problems in real world situations. Wheels is
+based heavily on the Rails framework for Ruby and also gets inspiration from Django and, though to a
+lesser extent, other frameworks in the ColdFusion space (like Fusebox, for example). Over the years
+the contributors to these frameworks have identified problems and tedious tasks in their own
+development processes, built a solution for it, and abstracted (made it more generic so it suits any
+project) the solution into the framework in question. Piggy-backing on what all these great
+programmers have already created and adding a few nice solutions of our own, Wheels stands on solid
+ground.
 
 OK, so that was the high level overview of what frameworks are meant to do. But let's get a little more
 specific.

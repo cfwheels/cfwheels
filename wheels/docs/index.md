@@ -81,5 +81,10 @@
 1. [Coding Guidelines](07 Contributing to Wheels/01 Coding Guidelines.md)
 2. [Documentation Guidelines](07 Contributing to Wheels/02 Documentation Guidelines.md)
 3. [Testing Wheels Itself](07 Contributing to Wheels/03 Testing Wheels Itself.md)
- 
+
+## 8. Change Logs and Upgrading
+
+1. [Upgrading to Wheels 1.1.x](08 Change Logs and Upgrading/01 Upgrading to Wheels 1.1.x.md)
+2. [Upgrading to Wheels 1.2.x](08 Change Logs and Upgrading/02 Upgrading to Wheels 1.2.x.md)
+  
 [1]:http://cfwheels.org/docs

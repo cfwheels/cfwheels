@@ -10,13 +10,13 @@ A big part of a controller's task is to respond to the user. In Wheels you can r
 
 You can only respond once per request. If you do not explicitly call any of the response functions (`renderPage()`, `sendFile()`, etc.), then Wheels will assume that you want to show the view for the current controller and action and do it for you.
 
-This chapter covers the first method listed above&mdash;displaying content. The chapters about [Redirecting Users][1] and [Sending Files][2] cover the other two response methods.
+This chapter covers the first method listed above - displaying content. The chapters about [Redirecting Users][1] and [Sending Files][2] cover the other two response methods.
 
 ## Rendering a Page
 
 This is the most common way of responding to the user. It's done with the `renderPage()` function, but most often you probably won't call it yourself and instead let Wheels do it for you.
 
-Sometimes you will want to call it though and specify to show a view page for a controller/action other than the current one. One common technique for handling a form submission, for example, is to show the view page for the controller/action that contains the form (as opposed to the one that just handles the form submission and redirects the user afterwards). When doing this, it's very important to keep in mind that `renderPage()` will *not run the code* for the controller's action&mdash;all it does is process the view page for it.
+Sometimes you will want to call it though and specify to show a view page for a controller/action other than the current one. One common technique for handling a form submission, for example, is to show the view page for the controller/action that contains the form (as opposed to the one that just handles the form submission and redirects the user afterwards). When doing this, it's very important to keep in mind that `renderPage()` will *not run the code* for the controller's action - all it does is process the view page for it.
 
 You can also call `renderPage()` explicitly if you wish to cache the response or use a different layout than the default one.
 

@@ -1,6 +1,6 @@
 # Hello World
 
-<p class="intro">This is the obligatory Hello World tutorial.</p>
+*This is the obligatory Hello World tutorial.*
 
 In this tutorial, we'll be writing a simple application to make sure we have Wheels installed properly
 and that everything is working as it should. Along the way, you'll get to know some basics about how
@@ -112,8 +112,8 @@ _Hello World!_ application a little more.
 
 Oh, and by the way, if you think this was a lot of work just for creating one page then you should know
 that you can actually delete the entire `Say.cfc` file and this will still work. (As long as the
-`views/say/hello.cfm` file is still there, Wheels will find it and display it for you regardless of whether you
-have a corresponding controller file or not.)
+`views/say/hello.cfm` file is still there, Wheels will find it and display it for you regardless of
+whether you have a corresponding controller file or not.)
 
 ## Adding Dynamic Content to Your View
 

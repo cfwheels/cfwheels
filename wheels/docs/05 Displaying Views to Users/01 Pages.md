@@ -49,7 +49,7 @@ Also note that both `renderPage(template="thepage")` and `renderPage(template="t
 
 This is the output of your application: what the users will see in their browsers. Most often this will consist of HTML, but it can also be JavaScript, CSS, XML, etc. You are of course free to use any CFML tags and functions that you want to in the file as well. (This is a CFML application, right?)
 
-In addition to this normal code that you'll see in most ColdFusion applications&mdash;whether they are made for a framework or not&mdash;Wheels also gives you some nice constructs to help keep your code clean. The most important ones of these are [Layouts][2], [Partials][3], and [Helpers][4].
+In addition to this normal code that you'll see in most ColdFusion applications - whether they are made for a framework or not - Wheels also gives you some nice constructs to help keep your code clean. The most important ones of these are [Layouts][2], [Partials][3], and [Helpers][4].
 
 When writing your view code, you will have access to the variables you have set up in the controller file. The idea is that the variables you want to access in the view should be set unscoped (or in the `variables` scope if you prefer to set it explicitly) in the controller so that they are available to the view template.
 
