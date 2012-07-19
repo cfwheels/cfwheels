@@ -1,6 +1,6 @@
 # Reading Records
 
-<p class="intro">Returning records from your database tables as objects or queries.</p>
+*Returning records from your database tables as objects or queries.*
 
 Reading records from your database typically involves using one of the 3 finder methods available in Wheels: `findByKey()`, `findOne()`, and `findAll()`.
 

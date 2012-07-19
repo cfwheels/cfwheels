@@ -1,6 +1,6 @@
 # Sending Files
 
-<p class="intro">Use Wheels to send files to your users securely and with better control of the user experience.</p>
+*Use Wheels to send files to your users securely and with better control of the user experience.*
 
 Sending files?! Is that really a necessary feature of Wheels? Can't I just place the file on my web server and link to it? You are correct, there is absolutely no need to use Wheels to send files. Your web server will do a fine job of sending out files to your users.
 

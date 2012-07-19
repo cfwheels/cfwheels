@@ -1,6 +1,6 @@
 # Object Callbacks
 
-<p class="intro">Learn how to write code that runs every time a given object is created, updated, or deleted.</p>
+*Learn how to write code that runs every time a given object is created, updated, or deleted.*
 
 Callbacks in Wheels allow you to have code executed before and/or after certain operations on an object. This requires some further explanation, so let's go straight to an example of a real-world application: the e-commerce checkout.
 

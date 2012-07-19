@@ -1,6 +1,6 @@
 # Updating Records
 
-<p class="intro">Updating records in your database tables.</p>
+*Updating records in your database tables.*
 
 When you have created or retrieved an object, you can save it to the database by calling its `save()` method. This method returns `true` if the object passes all validations and the object was saved to the database. Otherwise, it returns `false`.
 

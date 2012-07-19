@@ -1,6 +1,6 @@
 # Object Validation
 
-<p class="intro">Wheels utilizes validation setup within the model to enforce appropriate data constraints and persistence. Validation may be performed for saves, creates, and updates.</p>
+*Wheels utilizes validation setup within the model to enforce appropriate data constraints and persistence. Validation may be performed for saves, creates, and updates.*
 
 ## Basic Setup
 

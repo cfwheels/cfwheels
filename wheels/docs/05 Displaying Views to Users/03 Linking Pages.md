@@ -1,6 +1,6 @@
 # Linking Pages
 
-<p class="intro">Wheels does some magic to help you link to other actions within your app. Read on to learn why you'll rarely use an <code>&lt;a&gt;</code> tag for linking to application actions ever again.</p>
+*Wheels does some magic to help you link to other actions within your app. Read on to learn why you'll rarely use an <code>&lt;a&gt;</code> tag for linking to application actions ever again.*
 
 ## `linkTo`, the Function for Linking to Other Pages
 

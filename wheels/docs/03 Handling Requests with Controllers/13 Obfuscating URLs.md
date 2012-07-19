@@ -1,6 +1,6 @@
 # Obfuscating URLs
 
-<p class="intro">Hide your primary key values from nosy users.</p>
+*Hide your primary key values from nosy users.*
 
 The Wheels convention of using primary key values when building links (as in the `key` argument to `linkTo()` for example) will lead to them being exposed to anyone interested in the browser's URL bar. Using the built-in URL obfuscation functionality in Wheels, you can hide the real primary key values from nosy users.
 

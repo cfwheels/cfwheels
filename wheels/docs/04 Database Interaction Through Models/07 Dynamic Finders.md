@@ -1,6 +1,6 @@
 # Dynamic Finders
 
-<p class="intro">Make your model calls more readable by using dynamic finders.</p>
+*Make your model calls more readable by using dynamic finders.*
 
 With the recent introduction of `OnMissingMethod` in ColdFusion 8 (Thanks, Adobe!), we have been able to port over the concept of _dynamic finders_ from Rails to Wheels.
 

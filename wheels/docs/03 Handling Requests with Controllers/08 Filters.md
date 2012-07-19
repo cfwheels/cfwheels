@@ -1,6 +1,6 @@
 # Filters
 
-<p class="intro">Stop repeating yourself with the use of before and after filters.</p>
+*Stop repeating yourself with the use of before and after filters.*
 
 If you find the need to run a piece of code before or after several controller actions, then you can use _filters_ to accomplish this without needing to explicitly call the code inside each action in question.
 

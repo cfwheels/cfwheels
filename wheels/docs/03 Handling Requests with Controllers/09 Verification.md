@@ -1,6 +1,6 @@
 # Verification
 
-<p class="intro">Verify the existence and type of variables before allowing for a given controller action to run.</p>
+*Verify the existence and type of variables before allowing for a given controller action to run.*
 
 Verification, through the `verifies()` function, is just a special type of filter that runs before actions. With verifications defined in your controller, you can eliminate the need for wrapping your entire actions in `<cfif>` blocks checking for the existence and types of variables. You also can limit your actions' scopes to specific request types like `post`, `get`, and AJAX requests.
 

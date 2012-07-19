@@ -1,6 +1,6 @@
 # Caching
 
-<p class="intro">How to speed up your website by caching content.</p>
+*How to speed up your website by caching content.*
 
 If your website doesn't get a whole lot of traffic, then you can probably skip this chapter completely. Just remember that it's here, waiting for your triumphant return.
 

@@ -1,6 +1,6 @@
 # Using Routes
 
-<p class="intro">The convention for URLs in Wheels works for most situations and helps to promote an easy-to-maintain code base. With routes, you have the flexibility to break this convention when needed.</p>
+*The convention for URLs in Wheels works for most situations and helps to promote an easy-to-maintain code base. With routes, you have the flexibility to break this convention when needed.*
 
 ## The Convention for URLs
 

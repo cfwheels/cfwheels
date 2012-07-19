@@ -1,6 +1,6 @@
 # Directory Structure
 
-<p class="intro">Finding your way around a Wheels application.</p>
+*Finding your way around a Wheels application.*
 
 After downloading and unzipping Wheels, here's the directory structure that you will see (plus signs indicate folders):
 

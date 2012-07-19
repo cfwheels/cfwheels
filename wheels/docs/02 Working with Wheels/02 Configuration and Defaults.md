@@ -1,6 +1,6 @@
 # Configuration and Defaults
 
-<p class="intro">An overview of Wheels configuration and how is it used in your applications. Learn how to override a Wheels convention to make it your own.</p>
+*An overview of Wheels configuration and how is it used in your applications. Learn how to override a Wheels convention to make it your own.*
 
 We all love the "Convention over Configuration" motto of Wheels, but what about those two cases that pop into everyone's head? _What if I want to develop in my own way?_ Or, _What about an existing application that I need to port into Wheels?_ Gladly, that's what configuration and defaults are there for. Let's take a look at exactly how is this performed.
 

@@ -1,6 +1,6 @@
 # Creating Your Own View Helpers
 
-<p class="intro">Clean up your views by moving common functionality into helper functions.</p>
+*Clean up your views by moving common functionality into helper functions.*
 
 As you probably know already, Wheels gives you a lot of helper functions that you can use in your view pages.
 

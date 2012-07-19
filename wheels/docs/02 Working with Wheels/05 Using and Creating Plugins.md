@@ -1,6 +1,6 @@
 # Using and Creating Plugins
 
-<p class="intro">Extend Wheels functionality by using plugins or creating your own.</p>
+*Extend Wheels functionality by using plugins or creating your own.*
 
 Wheels is a fairly lightweight framework, and we like to keep it that way. We won't be adding thousands of various features to Wheels just because a couple of developers find them "cool." ;)
 

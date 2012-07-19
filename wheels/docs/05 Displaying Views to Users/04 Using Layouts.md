@@ -1,6 +1,6 @@
 # Using Layouts
 
-<p class="intro">Use the concept of layouts to wrap your content.</p>
+*Use the concept of layouts to wrap your content.*
 
 Wheels allows you to create layouts so that you don't need to `<cfinclude>` header and footer code on every single view template. We'll show you how to setup default layouts, controller- and action-specific layouts, and layouts for your emails.
 

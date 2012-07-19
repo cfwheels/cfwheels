@@ -1,6 +1,6 @@
 # Responding with Multiple Formats
 
-<p class="intro">Wheels controllers provide some powerful mechanisms for responding to requests for content in XML, JSON, and other formats. Build an API with ease with these functions.</p>
+*Wheels controllers provide some powerful mechanisms for responding to requests for content in XML, JSON, and other formats. Build an API with ease with these functions.*
 
 If you've ever needed to create an XML or JSON API for your Wheels application, you may have needed to go down the path of creating a separate controller or separate actions for the new format. This introduces the need to duplicate model calls or even break them out into a super long list of before filters. With this, your controllers can get pretty hairy pretty fast.
 

@@ -1,6 +1,6 @@
 # Using the Flash
 
-<p class="intro">Using the Flash to pass data from one request to the next.</p>
+*Using the Flash to pass data from one request to the next.*
 
 The Flash is actually a very simple concept. And no, it has nothing to do with Adobe's Flash Player.
 

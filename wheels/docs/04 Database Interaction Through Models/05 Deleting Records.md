@@ -1,6 +1,6 @@
 # Deleting Records
 
-<p class="intro">Deleting records from your database tables.</p>
+*Deleting records from your database tables.*
 
 Deleting records in Wheels is simple. If you have fetched an object, you can just call its `delete()` method. If you don't have any callbacks specified for the class, all that will happen is that the record will be deleted from the table and `true` will be returned.
 

@@ -1,6 +1,6 @@
 # Column Statistics
 
-<p class="intro">Use Wheels to get statistics on the values in a column, like row counts, averages, highest values, lowest values, and sums.</p>
+*Use Wheels to get statistics on the values in a column, like row counts, averages, highest values, lowest values, and sums.*
 
 Because Wheels simplifies so much for you when you select, insert, update, and delete rows from the database, it would suck if you had to revert back to using `cfquery` and `COUNT(id) AS x` type queries when you wanted to get aggregate values, right?
 

@@ -1,6 +1,6 @@
 # Transactions
 
-<p class="intro">Wheels automatically wraps your database calls in transactions to assist your application in maintaining data integrity. Learn how to control this functionality.</p>
+*Wheels automatically wraps your database calls in transactions to assist your application in maintaining data integrity. Learn how to control this functionality.*
 
 Database transactions are a way of grouping multiple queries together. They are useful in case the outcome of one query depends on the completion of another. For example, if you want to take money from one person's bank account, and transfer it into someone else's, you probably want to make sure the debit completes before running the credit.
 

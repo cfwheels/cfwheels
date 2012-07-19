@@ -1,6 +1,6 @@
 # Object Relational Mapping
 
-<p class="intro">An overview of Object Relational Mapping (ORM) and how is it used in Wheels. Learn how ORM simplifies your database interaction code.</p>
+*An overview of Object Relational Mapping (ORM) and how is it used in Wheels. Learn how ORM simplifies your database interaction code.*
 
 Mapping objects in your application to records in your database tables is a key concept in Wheels. Let's take a look at exactly how this mapping is performed.
 

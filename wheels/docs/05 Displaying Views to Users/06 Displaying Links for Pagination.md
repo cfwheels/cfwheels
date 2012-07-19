@@ -1,6 +1,6 @@
 # Displaying Links for Pagination
 
-<p class="intro">How to create links to other pages to your paginated data in your views.</p>
+*How to create links to other pages to your paginated data in your views.*
 
 In the chapter titled [Getting Paginated Data][1], we talked about how to get pages of records from the database (records 11-20, for example). Now we'll show you how to create links to other pages in your view.
 

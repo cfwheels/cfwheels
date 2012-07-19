@@ -1,6 +1,6 @@
 # Date, Media, and Text Helpers
 
-<p class="intro">Wheels includes a plethora of view helpers to help you transform data into a format more easily consumed by your applications' users.</p>
+*Wheels includes a plethora of view helpers to help you transform data into a format more easily consumed by your applications' users.*
 
 Wheels's included view helper functions can help you out in those tricky little tasks that need to be performed in the front-end of your web applications. Although they are called miscellaneous, they are in fact categorized into 3 categories:
 

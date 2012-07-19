@@ -1,6 +1,6 @@
 # Rendering Content
 
-<p class="intro">Showing content to the user.</p>
+*Showing content to the user.*
 
 A big part of a controller's task is to respond to the user. In Wheels you can respond to the user in three different ways:
 

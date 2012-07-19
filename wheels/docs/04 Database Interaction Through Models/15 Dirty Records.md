@@ -1,6 +1,6 @@
 # Dirty Records
 
-<p class="intro">How to track changes to objects in your application.</p>
+*How to track changes to objects in your application.*
 
 Wheels provides some very useful methods for tracking changes to objects. You might think, _Why do I need that?  Won't I just know that I changed the object myself?_
 

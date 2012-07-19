@@ -1,6 +1,6 @@
 # Automatic Time Stamps
 
-<p class="intro">Let Wheels handle time stamping of records.</p>
+*Let Wheels handle time stamping of records.*
 
 When working with database tables, it is very common to have a column that holds the time that the record was added or last modified. If you have an e-commerce website with an `orders` table, you want to store the date and time the order was made; if you run a blog, you want to know when someone left a comment; and so on.
 

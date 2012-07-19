@@ -1,6 +1,6 @@
 # Request Handling
 
-<p class="intro">How Wheels handles an incoming request.</p>
+*How Wheels handles an incoming request.*
 
 Wheels is quite simple when it comes to figuring out how incoming requests map to code in your application. Let's look at a URL for an e-commerce website and dissect it a little. 
 

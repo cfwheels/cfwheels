@@ -1,6 +1,6 @@
 # Pages
 
-<p class="intro">Where to place your view files and what to put in them.</p>
+*Where to place your view files and what to put in them.*
 
 We've talked previously about how the controller is responsible for deciding which view files to render to the user. Read the [Rendering Content][1] chapter if you need to refresh your memory about that topic.
 

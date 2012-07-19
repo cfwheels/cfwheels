@@ -1,6 +1,6 @@
 # Using Multiple Data Sources
 
-<p class="intro">How to use more than one database in your Wheels application.</p>
+*How to use more than one database in your Wheels application.*
 
 Sometimes you need to pull data from more than one database, whether it's by choice (for performance or security reasons, perhaps) or because that's the way your infrastructure is set up. It's something you have to find a way to deal with.
 

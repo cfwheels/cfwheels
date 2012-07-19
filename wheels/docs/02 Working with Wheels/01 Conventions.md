@@ -1,7 +1,7 @@
 # Conventions
 
-<p class="intro">With a convention-over-configuration framework like Wheels, it's important to know
-these conventions. This is your guide.</p>
+*With a convention-over-configuration framework like Wheels, it's important to know
+these conventions. This is your guide.*
 
 There is a specific set of standards that Wheels follows when you run it in its default state. This is
 to save you time. With conventions in place, you can get started coding without worrying about

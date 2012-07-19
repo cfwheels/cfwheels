@@ -1,6 +1,6 @@
 # Nested Properties
 
-<p class="intro">Save data in associated model objects through the parent.</p>
+*Save data in associated model objects through the parent.*
 
 When you're starting out as a Wheels developer, you are probably amazed at the simplicity of a model's CRUD methods. But then it all gets quite a bit more complex when you need to update records in multiple database tables in a single transaction.
 

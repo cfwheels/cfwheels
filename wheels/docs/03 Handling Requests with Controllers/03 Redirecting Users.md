@@ -1,6 +1,6 @@
 # Redirecting Users
 
-<p class="intro">Use redirection to keep your application user friendly.</p>
+*Use redirection to keep your application user friendly.*
 
 When a user submits a form, you do *not* want to show any content on the page that handles the form submission! Why? Because if you do, and the user hits refresh in their browser, the form handling code could be triggered again, possibly causing duplicate entries in your database, multiple emails being sent, etc.
 

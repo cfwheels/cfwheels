@@ -1,6 +1,6 @@
 # Soft Delete
 
-<p class="intro">An easy way to keep deleted data in your database.</p>
+*An easy way to keep deleted data in your database.*
 
 "Soft delete" in database lingo means that you set a flag on an existing table that indicates that a record has been deleted, instead of actually deleting the record.
 

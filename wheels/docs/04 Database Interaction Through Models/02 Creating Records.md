@@ -1,6 +1,6 @@
 # Creating Records
 
-<p class="intro">How to create new objects and save them to the database.</p>
+*How to create new objects and save them to the database.*
 
 In Wheels, one way to create objects that represent records in our table is by calling the `new()` class-level method.
 

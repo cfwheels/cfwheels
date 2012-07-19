@@ -1,6 +1,6 @@
 # Calculated Properties
 
-<p class="intro">Generate extra properties in your models on the fly without needing to store redundant data in your database.</p>
+*Generate extra properties in your models on the fly without needing to store redundant data in your database.*
 
 ## Working within CFML's Constraints to Deliver OOP-like Functionality
 

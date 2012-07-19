@@ -1,6 +1,6 @@
 # Event Handlers
 
-<p class="intro">Use the standard CFML application events through the framework.</p>
+*Use the standard CFML application events through the framework.*
 
 Because the `Application.cfc` file in the root of your Wheels site just includes the `wheels/functions.cfm` file, which in turn includes a lot of framework specific code, you may wonder what the best way is to use CFML's `OnApplicationStart`, `OnRequestStart` and similar functions...
 

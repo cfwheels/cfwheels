@@ -1,6 +1,6 @@
 # Form Helpers and Showing Errors
 
-<p class="intro">Wheels ties your application's forms together with your model layer elegantly. With Wheels form conventions, you'll find yourself spending less time writing repetitive markup to display forms and error messages.</p>
+*Wheels ties your application's forms together with your model layer elegantly. With Wheels form conventions, you'll find yourself spending less time writing repetitive markup to display forms and error messages.*
 
 The majority of applications are not all about back-end. There is a great deal of work to perform on the front-end as well. It can be argued that most of your users will think of the interface _as_ the application.
 
