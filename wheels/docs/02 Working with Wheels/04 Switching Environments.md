@@ -1,6 +1,6 @@
 # Switching Environments
 
-<p class="introduction">Environments that match your development stages.</p>
+*Environments that match your development stages.*
 
 Wheels allows you to set up different _environments_ that match stages in your development cycle. That
 way you can configure different values that match what services to call and how your app behaves based

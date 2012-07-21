@@ -88,23 +88,23 @@ Here is an example of passing in a `title` to a partial for a form:
 
 Now you can reference the title variable as `arguments.title` inside the `_loginregisterform.cfm` file.
 
-If you prefer, you can still access the view variables that are set outside of the partial. The advantage
-with specifically passing them arguments instead is that they are then scoped in the `arguments` struct
-(which means less chance of strange bugs occurring due to variable conflicts). It also makes for more
-readable and maintainable code. (You can see the intent of the partial better when you see what is passed
-in to it).
+If you prefer, you can still access the view variables that are set outside of the partial. The 
+advantage with specifically passing them arguments instead is that they are then scoped in the 
+`arguments` struct (which means less chance of strange bugs occurring due to variable conflicts). It
+also makes for more readable and maintainable code. (You can see the intent of the partial better when
+you see what is passed in to it).
 
 ## Automatic Calls to a Data Function
 
 There is an even more elegant way of passing data to a partial though. When you start using a partial on
 several pages on a site spread across multiple controllers, it can get quite cumbersome to remember to
-first load the data in an appropriate function in the controller, setup a before filter for it, pass that
-data in to the partial, and so on.
+first load the data in an appropriate function in the controller, setup a before filter for it, pass 
+that data in to the partial, and so on.
 
 Wheels can automate this process for you. The convention is that a partial will always check if a
-function exists on the controller with the same name as the partial itself (and that it's set to `private`
-and will return a struct). If so, the partial will call the function and add the returned value to its
-`arguments` struct.
+function exists on the controller with the same name as the partial itself (and that it's set to
+`private` and will return a struct). If so, the partial will call the function and add the returned
+value to its `arguments` struct.
 
 Here is an example of what that function would look like for a partial called `rssarticle`:
 
@@ -114,8 +114,8 @@ Here is an example of what that function would look like for a partial called `r
 		<cfreturn loc.returnValues>
 	</cffunction>
 
-This way, the partial can be called from anywhere and acts more like a "black box." All communication with
-the model is kept in the controller as it should be.
+This way, the partial can be called from anywhere and acts more like a "black box." All communication 
+with the model is kept in the controller as it should be.
 
 If you don't want to load the data from a function with the same name as the partial (perhaps due to it
 clashing with another function name), you can specify the function to load data from with the
@@ -146,8 +146,8 @@ This opens up the possibility to nest layouts in complex ways.
 
 ## Caching a Partial
 
-Caching a partial is done the same way as caching a page. Pass in the number of minutes you want to cache
-the partial for to the `cache` argument.
+Caching a partial is done the same way as caching a page. Pass in the number of minutes you want to
+cache the partial for to the `cache` argument.
 
 Here's an example where we cache a partial for 15 minutes:
 
@@ -161,35 +161,35 @@ support for this too. Have a look at the code below, which passes in an object t
 	<cfset cust = model("customer").findByKey(params.key)>
 	<cfoutput>#includePartial(cust)#</cfoutput>
 
-That code will figure out that the `cust` variable contains a `customer` model object. It will then try to
-include a partial named `_customer.cfm` and pass in the object's properties as arguments to the partial.
-There will also be an `object` variable available in the `arguments` struct if you prefer to reference the
-object directly.
+That code will figure out that the `cust` variable contains a `customer` model object. It will then try
+to include a partial named `_customer.cfm` and pass in the object's properties as arguments to the
+partial. There will also be an `object` variable available in the `arguments` struct if you prefer to
+reference the object directly.
 
 Try that code and `<cfdump>` the `arguments` struct inside the partial file, and you'll see what's going
 on. Pretty cool stuff, huh?
 
 ## Using Partials with a Query
 
-Similar to passing in an object, you can also pass in a query result set to `includePartial()`. Here's how
-that looks:
+Similar to passing in an object, you can also pass in a query result set to `includePartial()`. Here's
+how that looks:
 
 	<cfset customers = model("customer").findAll()>
 	<cfoutput>#includePartial(customers)#</cfoutput>
 
-In this case, Wheels will iterate through the query and call the `_customer.cfm` partial on each iteration.
-Similar to the example with the object above, Wheels will pass in the objects' properties (in this case
-represented by records in the query) to the partial.
+In this case, Wheels will iterate through the query and call the `_customer.cfm` partial on each
+iteration. Similar to the example with the object above, Wheels will pass in the objects' properties (in
+this case represented by records in the query) to the partial.
 
 In addition to that, you will also see that a counter variable is available. It's named `current` and is
 available when passing in queries or arrays of objects to a partial.
 
-The way partials handle objects and queries makes it possible to use the exact same code inside the partial
-regardless of whether we're dealing with an object or query record at the time.
+The way partials handle objects and queries makes it possible to use the exact same code inside the
+partial regardless of whether we're dealing with an object or query record at the time.
 
-If you need to display some HTML in between each iteration (maybe each iteration should be a list item for
-example), then you can make use of the `spacer` argument. Anything passed in to that will be inserted
-between iterations. Here's an example:
+If you need to display some HTML in between each iteration (maybe each iteration should be a list item
+for example), then you can make use of the `spacer` argument. Anything passed in to that will be
+inserted between iterations. Here's an example:
 
 	<cfoutput>
 	
@@ -222,15 +222,15 @@ which contains the albums for the current artist in the loop.
 
 ## Using Partials with an Array of Objects
 
-As we've hinted previously in this chapter, it's also possible to pass in an array of objects to a partial.
-It works very similar to passing in a query in that the partial is called on each iteration.
+As we've hinted previously in this chapter, it's also possible to pass in an array of objects to a
+partial. It works very similar to passing in a query in that the partial is called on each iteration.
 
 ## Rendering or Including?
 
-So far we've only talked about `includePartial()`, which is what you use from within your views to include
-other files. There is another similar function as well: `renderPartial()`. This one is used from your
-controller files when you want to render a partial instead of a full page. At first glance, this might not
-make much sense to do. There is one common usage of this though - AJAX requests.
+So far we've only talked about `includePartial()`, which is what you use from within your views to
+include other files. There is another similar function as well: `renderPartial()`. This one is used from
+your controller files when you want to render a partial instead of a full page. At first glance, this
+might not make much sense to do. There is one common usage of this though - AJAX requests.
 
 Let's say that you want to submit comments on your blog using AJAX. For example, the user will see all
 comments, enter their comment, submit it, and the comment will show up below the existing ones without a

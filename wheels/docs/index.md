@@ -67,7 +67,7 @@
 4. [Using Layouts](05 Displaying Views to Users/04 Using Layouts.md)
 5. [Form Helpers and Showing Errors](05 Displaying Views to Users/05 Form Helpers and Showing Errors.md)
 6. [Displaying Links for Pagination](05 Displaying Views to Users/06 Displaying Links for Pagination.md)
-7. [Miscellaneous Helpers](05 Displaying Views to Users/07 Date, Media, and Text Helpers.md)
+7. [Date, Media, and Text Helpers](05 Displaying Views to Users/07 Date, Media, and Text Helpers.md)
 8. [Creating Your Own View Helpers](05 Displaying Views to Users/08 Creating Your Own View Helpers.md)
 
 ## 6. Integrated Testing Framework

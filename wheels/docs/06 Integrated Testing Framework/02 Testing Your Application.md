@@ -1,12 +1,17 @@
 # Testing Your Application
 
-In order to run tests against your application, you must first create a <tt>tests</tt> directory off the root of your Wheels application. All tests **MUST** reside in the <tt>tests</tt> directory or within a subdirectory thereof.
+In order to run tests against your application, you must first create a <tt>tests</tt> directory off the 
+root of your Wheels application. All tests **MUST** reside in the <tt>tests</tt> directory or within a 
+subdirectory thereof.
 
-When you run the tests for your application, Wheels recursively scans your application's <tt>tests</tt> directory and looks for any available valid tests to run, so feel free to organize the subdirectories and place whatever files needed to run your tests under the <tt>tests</tt> directory any way you like.
+When you run the tests for your application, Wheels recursively scans your application's <tt>tests</tt> 
+directory and looks for any available valid tests to run, so feel free to organize the subdirectories 
+and place whatever files needed to run your tests under the <tt>tests</tt> directory any way you like.
 
 ### Model Testing
 
-The first part of your application that you are going to want to test against are your models since this is where all the business logic of your application lives. Suppose that we have the following model:
+The first part of your application that you are going to want to test against are your models since this 
+is where all the business logic of your application lives. Suppose that we have the following model:
 
 	<cfcomponent extends="Model" output="false">
 	
@@ -55,9 +60,13 @@ The first part of your application that you are going to want to test against ar
 	
 	</cfcomponent>
 
-As you can see from the code above, our model has 4 properties (username, firstname, lastname and password). We have some validations against these properties and a callback that runs whenever a new model is created. Let's get started writing some tests against this model to make sure that these validations and callback work properly.
+As you can see from the code above, our model has 4 properties (username, firstname, lastname and 
+password). We have some validations against these properties and a callback that runs whenever a new 
+model is created. Let's get started writing some tests against this model to make sure that these 
+validations and callback work properly.
 
-First, create a test component and in the setup create an instance of the model that we can use in each test we write along with some default values for the properties of the model using a structure.
+First, create a test component and in the setup create an instance of the model that we can use in each 
+test we write along with some default values for the properties of the model using a structure.
 
 	<cfcomponent extends="wheelsMapping.Test">
 	
@@ -78,9 +87,11 @@ First, create a test component and in the setup create an instance of the model 
 	
 	</cfcomponent>
 
-As you can see we invoke our model by using the _model()_ method just like you would normally do in your controllers:
+As you can see we invoke our model by using the _model()_ method just like you would normally do in your 
+controllers:
 
-The first thing we want to test is that if we assign are default properties to the model that the model will pass validations:
+The first thing we want to test is that if we assign are default properties to the model that the model 
+will pass validations:
 
 	<cffunction name="test_user_valid">
 	
@@ -92,7 +103,8 @@ The first thing we want to test is that if we assign are default properties to t
 	
 	</cffunction>
 
-Next, we add a simple test to make sure that the validatons we add to our model work. Notice that we haven't assigned values to any of the properties of the model:
+Next, we add a simple test to make sure that the validatons we add to our model work. Notice that we 
+haven't assigned values to any of the properties of the model:
 
 	<cffunction name="test_user_not_valid">
 	
@@ -101,7 +113,9 @@ Next, we add a simple test to make sure that the validatons we add to our model 
 	
 	</cffunction>
 
-Now we write a more specific test against the validations. Why don't we want make sure that when a password and passwordConfirmation are passed to the model and they are different, the model becomes invalid:
+Now we write a more specific test against the validations. Why don't we want make sure that when a 
+password and passwordConfirmation are passed to the model and they are different, the model becomes 
+invalid:
 
 	<cffunction name="test_user_not_valid_password_confirmation">
 	
@@ -116,7 +130,8 @@ Now we write a more specific test against the validations. Why don't we want mak
 	
 	</cffunction>
 
-We now have tests to make sure that the validations in model work. Now it's time to make sure that the callback works propertly when a valid model is created:
+We now have tests to make sure that the validations in model work. Now it's time to make sure that the 
+callback works propertly when a valid model is created:
 
 	<cffunction name="test_password_secure_before_save_testing_a_callback">
 	
@@ -142,7 +157,8 @@ We now have tests to make sure that the validations in model work. Now it's time
 
 ### Controller Testing
 
-The next part of our application that we need to test is our controllers. Below is what a typically controller for our user model would contain for creating and dsiplaying a list of users:
+The next part of our application that we need to test is our controllers. Below is what a typically 
+controller for our user model would contain for creating and dsiplaying a list of users:
 
 	<cfcomponent extends="Controller" output="false">
 	
@@ -174,7 +190,17 @@ The next part of our application that we need to test is our controllers. Below 
 	
 	</cfcomponent>
 
-**Woa woa woa**, what in the world is that <tt>cfreturn</tt> doing in the <tt>create</tt> action and why doesn the <tt>redirectTo()</tt> method have a <tt>delay</tt> argument? First, I would like to say that I'm very proud of you for noticing that line :) Secondly the reason for this is quite simple, underneath the hood when you call <tt>redirectTo()</tt>, Wheels is using <tt>cflocation</tt>. As we all know, there is no way to intercept or stop a cflocation from happening. This can cause quite a number of problems when testing out a controller as you will never be able to get back any information about the redirection. To work around this, Wheels allow you to "delay" the execution of a redirect until after the controller has finished processing. This allow Wheels to gather and present some information to you about what redirection will occur. The drawback to this though is that the controller will continue processing and as such we need to explicitly exit out of the controller action on our own, thus the reason why we use <tt>cfreturn</tt>.
+**Woa woa woa**, what in the world is that <tt>cfreturn</tt> doing in the <tt>create</tt> action and why 
+does the <tt>redirectTo()</tt> method have a <tt>delay</tt> argument? First, I would like to say that 
+I'm very proud of you for noticing that line :) Secondly the reason for this is quite simple, underneath 
+the hood when you call <tt>redirectTo()</tt>, Wheels is using <tt>cflocation</tt>. As we all know, there 
+is no way to intercept or stop a cflocation from happening. This can cause quite a number of problems 
+when testing out a controller as you will never be able to get back any information about the 
+redirection. To work around this, Wheels allow you to "delay" the execution of a redirect until after 
+the controller has finished processing. This allow Wheels to gather and present some information to you 
+about what redirection will occur. The drawback to this though is that the controller will continue 
+processing and as such we need to explicitly exit out of the controller action on our own, thus the 
+reason why we use <tt>cfreturn</tt>.
 
 Now we can look at the test we will write to make sure the create action works as expected: 
 
@@ -211,13 +237,18 @@ Now we can look at the test we will write to make sure the create action works a
 	
 	</cfcomponent>
 
-Obviously a lot more goes into testing a controller then a model. The first step is setting up the params that will need to be passed to the controller. Next we have to create an instance of the controller. Finally we tell the controller to process the action that we want to test.
+Obviously a lot more goes into testing a controller then a model. The first step is setting up the 
+params that will need to be passed to the controller. Next we have to create an instance of the 
+controller. Finally we tell the controller to process the action that we want to test.
 
-After the controller is finished processing the action, we can get the information about the redirection that happened by using the $getRedirect() method. We use this information to make sure that the controller redirected the visitor to the <tt>index</tt> action once the action was completed.
+After the controller is finished processing the action, we can get the information about the redirection 
+that happened by using the $getRedirect() method. We use this information to make sure that the 
+controller redirected the visitor to the <tt>index</tt> action once the action was completed.
 
 ### View Testing
 
-The last part of your application that we will look at testing is the <tt>view</tt> layer. Below is the view for the code (new.cfm) that are controller's new action would call:
+The last part of your application that we will look at testing is the <tt>view</tt> layer. Below is the 
+view for the code (new.cfm) that are controller's new action would call:
 
 	<cfoutput>
 	<h1>Create a New user</h1>
@@ -245,7 +276,13 @@ The last part of your application that we will look at testing is the <tt>view</
 	</cfoutput>
 
 
-Testing the view layer is very simiailar to testing controllers, you will create an instance of the controller, passing in the params required for the controller's action to run. The main difference is we will be calling the <tt>response()</tt> action of the controller which will return to us the output that the view generated. Once we have this output, we can then search through it to make sure that whenever we wanted the view to display is presented to our visitor. In the test below, we want to make sure that if the visitor recieves an error when creating a new user, a flash message is displaying telling them that errors have occurred.
+Testing the view layer is very simiailar to testing controllers, you will create an instance of the 
+controller, passing in the params required for the controller's action to run. The main difference is we 
+will be calling the <tt>response()</tt> action of the controller which will return to us the output that 
+the view generated. Once we have this output, we can then search through it to make sure that whenever 
+we wanted the view to display is presented to our visitor. In the test below, we want to make sure that 
+if the visitor recieves an error when creating a new user, a flash message is displaying telling them 
+that errors have occurred.
 
 	<cfcomponent extends="wheelsMapping.Test">
 	

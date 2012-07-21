@@ -1,12 +1,20 @@
-#summary We know what volunteering is like, so we want to make it as efficient for everyone as possible. Here are the rules of the road for contributing documentation to the project.
+# Documentation Guidelines
 
-The Docs are as important as the code itself. How is anyone going to use Wheels if they can't learn how to? And the great docs by Allaire/Macromedia/Adobe are a big reason why you've always loved !ColdFusion, right?
+*summary We know what volunteering is like, so we want to make it as efficient for everyone as possible. 
+Here are the rules of the road for contributing documentation to the project.*
+
+The Docs are as important as the code itself. How is anyone going to use Wheels if they can't learn how 
+to? And the great docs by Allaire/Macromedia/Adobe are a big reason why you've always loved !ColdFusion, 
+right?
 
 ### Steve, Our Persona
 
-In hopes of keeping everyone in the same spirit, let's give the narrator of the website and documentation the name *Steve*. Let's pretend that we're Steve when writing in order to keep things interesting, friendly to our audience, and consistent.
+In hopes of keeping everyone in the same spirit, let's give the narrator of the website and 
+documentation the name *Steve*. Let's pretend that we're Steve when writing in order to keep things 
+interesting, friendly to our audience, and consistent.
 
-Here's a description of Steve's persona. Being a Wheels nerd, you'll probably find himself easy to relate to.
+Here's a description of Steve's persona. Being a Wheels nerd, you'll probably find himself easy to 
+relate to.
 
  * Snarky and not afraid to color outside of the lines of formalities a little bit.
  * Has a dry sense of humor but is still funny.
@@ -18,37 +26,51 @@ Here's a description of Steve's persona. Being a Wheels nerd, you'll probably fi
 
 ### Process
 
-All documentation should go through these processes. Let's not be a bunch of cowboys like !MySpace developers!
+All documentation should go through these processes. Let's not be a bunch of cowboys like !MySpace 
+developers!
 
- * First off, let the [Google Group][1] know what you're planning on doing! We would hate for you to spend hours writing a document that someone else is also working on. Plus the group would be glad to help out answering any questions that you may have.
- * Draft content in the [http://code.google.com/p/cfwheels/w/list Google Code Wiki]. Access to edit Wiki articles is public.
- * Label the Wiki article with the "chapter" tag for Reference Guide chapters and the "api" tag for API documentation.
+ * First off, let the [Google Group][1] know what you're planning on doing! We would hate for you to 
+ spend hours writing a document that someone else is also working on. Plus the group would be glad to 
+ help out answering any questions that you may have.
+ * Draft content in the [http://code.google.com/p/cfwheels/w/list Google Code Wiki]. Access to edit Wiki 
+ articles is public.
+ * Label the Wiki article with the "chapter" tag for Reference Guide chapters and the "api" tag for API 
+ documentation.
  * Post a request to review the content in the discussion group.
- * After you address any questions or issues that the group may bring up, a member of the core team will post the new documentation live on the website (if the Wiki entry applies to the current version). The core team member may also make minor stylistic edits to the content before posting as well. Please don't take offense to this; they're only trying to help!
+ * After you address any questions or issues that the group may bring up, a member of the core team will 
+ post the new documentation live on the website (if the Wiki entry applies to the current version). The 
+ core team member may also make minor stylistic edits to the content before posting as well. Please 
+ don't take offense to this; they're only trying to help!
  * Keep the documentation to a width of **105 columns**.
  
 
 ## Chapters in the Reference Guide
 
-The [http://www.cfwheels.com/docs reference guide] contains narrative chapters about using the framework. It should contain a wealth of code samples and should be written in clear, concise language.
+The Reference Guide[2] contains narrative chapters about using the framework. It should contain a wealth 
+of code samples and should be written in clear, concise language.
 
 ## Video Tutorials
 
-Video tutorials should cover an area of Wheels that hasn't been covered in previous videos. Please publish the video in Flash or Quicktime format at a maximum width of 720 pixels.
+Video tutorials should cover an area of Wheels that hasn't been covered in previous videos. Please 
+publish the video in Flash or Quicktime format at a maximum width of 720 pixels.
 
-The core team will make the final decision on whether or not the video will be published on the Wheels website, but you may post the video on your blog, !YouTube, or anywhere else that you please.
+The core team will make the final decision on whether or not the video will be published on the Wheels 
+website, but you may post the video on your blog, !YouTube, or anywhere else that you please.
 
 ## API Documentation
 
-The API documentation should be very clear and concise. Let's keep Steve out of it for the most part. He understands.
+The API documentation should be very clear and concise. Let's keep Steve out of it for the most part. He 
+understands.
 
 ### Example API Function Documentation
 
-Most descriptions of Wheels' functions should follow this general format, inspired by the CFML function reference in the [http://livedocs.adobe.com/coldfusion/8/htmldocs/index.html ColdFusion 8 Live Docs].
+Most descriptions of Wheels' functions should follow this general format, inspired by the CFML function 
+reference in the [ColdFusion 8 Live Docs][3].
 
 ### Description
  
- A concise description of what the function does. Also include any notes like what types of values that are supported and returned.
+ A concise description of what the function does. Also include any notes like what types of values that 
+ are supported and returned.
  
 ### Returns
  
@@ -75,9 +97,10 @@ Most descriptions of Wheels' functions should follow this general format, inspir
 
 ### Generating API Documentation in Core Source Code
 
-We will be generating all API documentation using attributes in the Wheels core code's `<cffunction>` and `<cfargument>` tags. This metadata will be parsed and imported into a database for use on the website.
+We will be generating all API documentation using attributes in the Wheels core code's `<cffunction>` 
+and `<cfargument>` tags. This metadata will be parsed and imported into a database for use on the website.
 
-Use [http://en.wikipedia.org/wiki/Textile_%28markup_language%29 Textile] and HTML formatting where appropriate.
+Use Markdown[4] and HTML formatting where appropriate.
 
 ###Function Documentation
 
@@ -91,9 +114,13 @@ Within each public function (those not beginning with a `$` character), use the 
 	|| `functions` || No || `[empty string]` || Related Wheels core functions. For example, `validatesPresenceOf`, `addRoute`, or `timeAgoInWords`. ||
 	|| `history` || No || || Bulleted list of how function behavior changes from version to version of Wheels. ||
 
-Note that you should use the `hint` attribute to clear up any ambiguities caused by the function's declaration. For example, if a function returns either an object or a string, this may only be indicated in the source code as `returntype="any"`. Clearly address this ambiguity in the `hint` attribute.
+Note that you should use the `hint` attribute to clear up any ambiguities caused by the function's 
+declaration. For example, if a function returns either an object or a string, this may only be indicated 
+in the source code as `returntype="any"`. Clearly address this ambiguity in the `hint` attribute.
 
-Here is an example of what the source code would look like for the [addRoute addRoute()] function declaration. Notice that clear indentation and proper choice of single quotes for the `examples` attribute.
+Here is an example of what the source code would look like for the [addRoute addRoute()] function 
+declaration. Notice that clear indentation and proper choice of single quotes for the `examples` 
+attribute.
 
 
 	<cffunction name="addRoute" returntype="void" access="public" output="false" hint="Adds a new route to your application."
@@ -122,7 +149,8 @@ Here is another example for the `new()` function:
 
 ### List of Categories
 
-Here is a current list of categories and subcategories that can be used in the `categories` attribute of the `cffunction` tags.
+Here is a current list of categories and subcategories that can be used in the `categories` attribute of 
+the `cffunction` tags.
 
  * `configuration`
  * `global`
@@ -165,12 +193,21 @@ Here is a current list of categories and subcategories that can be used in the `
 
 ### Argument Documentation
 
-Use all standard CFML attributes to document what is expected of function arguments. Much like the functions' documentation, the argument's `hint` attribute should be used to clear up any ambiguities associated with `type="any"` as an expected type.
+Use all standard CFML attributes to document what is expected of function arguments. Much like the 
+functions' documentation, the argument's `hint` attribute should be used to clear up any ambiguities 
+associated with `type="any"` as an expected type.
 
-One extra rule applies to argument documentation though. In some places of the source code, there are `hint`s that refer to other functions' versions of that argument. Take a look at the `defaults` argument of the `save()` function, for example:
+One extra rule applies to argument documentation though. In some places of the source code, there are 
+`hint`s that refer to other functions' versions of that argument. Take a look at the `defaults` argument 
+of the `save()` function, for example:
 
 	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.new.defaults#" hint="See documentation for @save.">
 
-In this case, the documentation in the website database will be copied from the `hint` attribute of the `save()` function's `defaults` argument. Prefix the associated function with the `@` character like in the example above.
+In this case, the documentation in the website database will be copied from the `hint` attribute of the 
+`save()` function's `defaults` argument. Prefix the associated function with the `@` character like in 
+the example above.
 
-[1]: http://groups.google.com/group/cfwheels discussion group
+[1]: http://groups.google.com/group/cfwheels
+[2]: http://www.cfwheels.com/docs
+[3]: http://livedocs.adobe.com/coldfusion/8/htmldocs/index.html
+[4]: http://en.wikipedia.org/wiki/Markdown

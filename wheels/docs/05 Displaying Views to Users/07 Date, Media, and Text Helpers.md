@@ -1,20 +1,25 @@
 # Date, Media, and Text Helpers
 
-*Wheels includes a plethora of view helpers to help you transform data into a format more easily consumed by your applications' users.*
+*Wheels includes a plethora of view helpers to help you transform data into a format more easily 
+consumed by your applications' users.*
 
-Wheels's included view helper functions can help you out in those tricky little tasks that need to be performed in the front-end of your web applications. Although they are called miscellaneous, they are in fact categorized into 3 categories:
+Wheels's included view helper functions can help you out in those tricky little tasks that need to be 
+performed in the front-end of your web applications. Although they are called miscellaneous, they are in 
+fact categorized into 3 categories:
 
   * Date Helpers
   * Media Helpers
   * Text Helpers
 
-We also have separate chapters about Wheels form helpers in [Form Helpers and Showing Errors][1] and creating your own helpers in [Creating Your Own View Helpers][2].
+We also have separate chapters about Wheels form helpers in [Form Helpers and Showing Errors][1] and 
+creating your own helpers in [Creating Your Own View Helpers][2].
 
 ## Date Helpers
 
 Wheels does a good job at simplifying the not so fun task of date and time transformations.
 
-Let's say that you have a comment section in your application, which shows the title, comment, and date/time of its publication. In the old days, your code would have looked something like this:
+Let's say that you have a comment section in your application, which shows the title, comment, and 
+date/time of its publication. In the old days, your code would have looked something like this:
 
     <cfoutput query="comments">
         <div class="comment">
@@ -26,9 +31,11 @@ Let's say that you have a comment section in your application, which shows the t
         </div>
     </cfoutput>
 
-That works, but it's pretty tedious. And if you think about it, the date will be formatted in a way that is not that meaningful to the end user.
+That works, but it's pretty tedious. And if you think about it, the date will be formatted in a way that 
+is not that meaningful to the end user.
 
-Instead of "April 27, 2009 10:10 pm," it may be more helpful to display "a few minutes ago" or "2 hours ago." This can be accomplished with a Wheels date helper called `timeAgoInWords()`.
+Instead of "April 27, 2009 10:10 pm," it may be more helpful to display "a few minutes ago" or "2 hours 
+ago." This can be accomplished with a Wheels date helper called `timeAgoInWords()`.
 
     <cfoutput query="comments">
         <div class="comment">
@@ -38,7 +45,8 @@ Instead of "April 27, 2009 10:10 pm," it may be more helpful to display "a few m
         </div>
     </cfoutput>
 
-With that minimal change, you have a prettier presentation for your end users. And most important of all, it didn't require you to do anything fancy in your code.
+With that minimal change, you have a prettier presentation for your end users. And most important of 
+all, it didn't require you to do anything fancy in your code.
 
 ## Media Helpers
 
@@ -53,9 +61,11 @@ First, to include CSS files in your layout, you can use the `styleSheetLinkTag()
         #styleSheetLinkTag("main")#
     </cfoutput>
 
-This will generate the `<link>` tag for you with everything needed to include the file at `stylesheets/main.css`.
+This will generate the `<link>` tag for you with everything needed to include the file at 
+`stylesheets/main.css`.
 
-If you need to include more than one style sheet and change the media type to "print" for another, there are arguments for that as well:
+If you need to include more than one style sheet and change the media type to "print" for another, there 
+are arguments for that as well:
 
     #styleSheetLinkTag(sources="main,blog")#
     #styleSheetLinkTag(source="printer", media="print")#
@@ -66,7 +76,8 @@ Lastly, you can also link to stylesheets at a different domain or subdomain by s
 
 ### JavaScript Files
 
-Including JavaScript files is just as simple with the `javaScriptIncludeTag()` helper. This time, files are referenced from the `javascripts` folder.
+Including JavaScript files is just as simple with the `javaScriptIncludeTag()` helper. This time, files 
+are referenced from the `javascripts` folder.
 
     #javaScriptIncludeTag("jquery")#
 
@@ -82,7 +93,9 @@ Wheels's `imageTag()` helper also provides some simple, yet powerful functionali
         #imageTag("logo.png")#
     </cfoutput>
 
-With this simple call, Wheels will generate the `<img>` tag for `images/logo.png` and also set the `width`, `height` and `alt` attributes automatically for you (based on image dimensions and the image file name). Wheels will also cache this information for later use in your application.
+With this simple call, Wheels will generate the `<img>` tag for `images/logo.png` and also set the 
+`width`, `height` and `alt` attributes automatically for you (based on image dimensions and the image 
+file name). Wheels will also cache this information for later use in your application.
 
 If you need to override the `alt` attribute for better accessibility, you can still do that too:
 
@@ -90,7 +103,8 @@ If you need to override the `alt` attribute for better accessibility, you can st
 
 ## Text Helpers
 
-To illustrate what the text helpers can help you with, let's see a piece of code that includes 2 of the text helpers in a simple search results page.
+To illustrate what the text helpers can help you with, let's see a piece of code that includes 2 of the 
+text helpers in a simple search results page.
 
     <!--- Query of search results --->
     <cfparam name="searchResults" type="query">
@@ -105,10 +119,13 @@ To illustrate what the text helpers can help you with, let's see a piece of code
         </p>
     </cfoutput>
 
-That code will highlight all occurrences of `params.q` and will pluralize the word "result" to "results" if the number of records in `searchResults` is greater than 1. How about them apples? No `<cfif>` statements, no extra lines, no nothing.
+That code will highlight all occurrences of `params.q` and will pluralize the word "result" to "results" 
+if the number of records in `searchResults` is greater than 1. How about them apples? No `<cfif>` 
+statements, no extra lines, no nothing.
 
-The functions we have shown in this chapter are only the tip of the iceberg when it comes to helper functions. There's plenty more, so don't forget to check out the [View Helper Functions][3] API.
+The functions we have shown in this chapter are only the tip of the iceberg when it comes to helper 
+functions. There's plenty more, so don't forget to check out the [View Helper Functions][3] API.
 
-[1]: Form%20Helpers%20and%20Showing%20Errors.md
-[2]: Creating%20Your%20Own%20View%20Helpers.md
+[1]: 05%20Form%20Helpers%20and%20Showing%20Errors.md
+[2]: 08%20Creating%20Your%20Own%20View%20Helpers.md
 [3]: http://cfwheels.org/docs/function/category/view-helper

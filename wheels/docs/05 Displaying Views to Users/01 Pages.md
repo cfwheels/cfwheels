@@ -2,13 +2,18 @@
 
 *Where to place your view files and what to put in them.*
 
-We've talked previously about how the controller is responsible for deciding which view files to render to the user. Read the [Rendering Content][1] chapter if you need to refresh your memory about that topic.
+We've talked previously about how the controller is responsible for deciding which view files to render 
+to the user. Read the [Rendering Content][1] chapter if you need to refresh your memory about that 
+topic.
 
 In this chapter, we'll explain exactly _where_ to place these files and _what_ to put in them.
 
 ## Where to Place the Files
 
-In the simplest case, your controller action (typically a function inside your controller CFC file) will have a view file associated with it. As explained in the [Rendering Content][1] chapter, this file will be included automatically at the end of the controller action code. So if you're running the `show` action in the `blog` controller, for example, Wheels will include the `views/blog/show.cfm` file.
+In the simplest case, your controller action (typically a function inside your controller CFC file) will 
+have a view file associated with it. As explained in the [Rendering Content][1] chapter, this file will 
+be included automatically at the end of the controller action code. So if you're running the `show` 
+action in the `blog` controller, for example, Wheels will include the `views/blog/show.cfm` file.
 
 Some rules can be spotted here:
 
@@ -25,43 +30,76 @@ There can be some exceptions to this process though, so let's go through some po
 
 ## Controller Actions Without Associated View Files
 
-Not all controller actions need a corresponding view file. Consider the case where you process a form submission. To make sure it's not possible for the user to refresh the page and cause multiple submissions, you may choose to perform the form processing and then send the user directly to another page using the `redirectTo()` function.
+Not all controller actions need a corresponding view file. Consider the case where you process a form 
+submission. To make sure it's not possible for the user to refresh the page and cause multiple 
+submissions, you may choose to perform the form processing and then send the user directly to another 
+page using the `redirectTo()` function.
 
 ## Rendering the View File for Another Action
 
-Sometimes you want the controller action to render the view file for a different action than the one currently executing. This is especially common when your application processes a form and the user makes an input error. In this case, you'll probably choose to have your application display the same form again for correction.
+Sometimes you want the controller action to render the view file for a different action than the one 
+currently executing. This is especially common when your application processes a form and the user makes 
+an input error. In this case, you'll probably choose to have your application display the same form 
+again for correction.
 
-In this case, you can use the `renderPage()` function and specify a different action in the `action` argument (which will include the view page for that action but *not* run the controller code for it).
+In this case, you can use the `renderPage()` function and specify a different action in the `action` 
+argument (which will include the view page for that action but *not* run the controller code for it).
 
 ## Sharing a View File Between Actions
 
-Sometimes it's useful to have a view file that can be called from several controller actions. For these cases, you'll typically call `renderPage()` with the `template` argument.
+Sometimes it's useful to have a view file that can be called from several controller actions. For these 
+cases, you'll typically call `renderPage()` with the `template` argument.
 
-When using the `template` argument, there are specific rules that Wheels will follow in order to locate the file you want to include:
+When using the `template` argument, there are specific rules that Wheels will follow in order to locate 
+the file you want to include:
 
-  * If the `template` argument starts with the `/` character, Wheels will start searching from the root of the `views` folder. Example: `renderPage(template="/common/page")` will include the `views/common/page.cfm` file.
-  * If it contains the `/` character elsewhere in the string, the search will start from the controller's view folder. Example: `renderPage(template="misc/page")` will include the `views/blog/misc/page.cfm` file if we're currently in the `blog` controller.
-  * In all other cases (i.e. when the `template` argument does not contain the `/` character at all), Wheels will just assume the file is in the controller's view folder and try to include it. Example: `renderPage(template="something")` will include the `views/blog/something.cfm` file if we're currently in the `blog` controller.
+  * If the `template` argument starts with the `/` character, Wheels will start searching from the root 
+  of the `views` folder. Example: `renderPage(template="/common/page")` will include the 
+  `views/common/page.cfm` file.
+  * If it contains the `/` character elsewhere in the string, the search will start from the 
+  controller's view folder. Example: `renderPage(template="misc/page")` will include the 
+  `views/blog/misc/page.cfm` file if we're currently in the `blog` controller.
+  * In all other cases (i.e. when the `template` argument does not contain the `/` character at all), 
+  Wheels will just assume the file is in the controller's view folder and try to include it. Example: 
+  `renderPage(template="something")` will include the `views/blog/something.cfm` file if we're currently 
+  in the `blog` controller.
 
-Also note that both `renderPage(template="thepage")` and `renderPage(template="thepage.cfm")` work fine. But most of the time, Wheels developers will tend to leave out the `.cfm` part.
+Also note that both `renderPage(template="thepage")` and `renderPage(template="thepage.cfm")` work fine. 
+But most of the time, Wheels developers will tend to leave out the `.cfm` part.
 
 ## What Goes in the Files?
 
-This is the output of your application: what the users will see in their browsers. Most often this will consist of HTML, but it can also be JavaScript, CSS, XML, etc. You are of course free to use any CFML tags and functions that you want to in the file as well. (This is a CFML application, right?)
+This is the output of your application: what the users will see in their browsers. Most often this will 
+consist of HTML, but it can also be JavaScript, CSS, XML, etc. You are of course free to use any CFML 
+tags and functions that you want to in the file as well. (This is a CFML application, right?)
 
-In addition to this normal code that you'll see in most ColdFusion applications - whether they are made for a framework or not - Wheels also gives you some nice constructs to help keep your code clean. The most important ones of these are [Layouts][2], [Partials][3], and [Helpers][4].
+In addition to this normal code that you'll see in most ColdFusion applications - whether they are made 
+for a framework or not - Wheels also gives you some nice constructs to help keep your code clean. The 
+most important ones of these are [Layouts][2], [Partials][3], and [Helpers][4].
 
-When writing your view code, you will have access to the variables you have set up in the controller file. The idea is that the variables you want to access in the view should be set unscoped (or in the `variables` scope if you prefer to set it explicitly) in the controller so that they are available to the view template.
+When writing your view code, you will have access to the variables you have set up in the controller 
+file. The idea is that the variables you want to access in the view should be set unscoped (or in the 
+`variables` scope if you prefer to set it explicitly) in the controller so that they are available to 
+the view template.
 
-In addition to the variables you have set yourself, you can also access the `params` struct. This contains anything passed in through the URL or with a form. If you want to follow MVC rules more closely though, we recommend only accessing the `params` struct in the controller and then setting new variables for the information you need access to in the view.
+In addition to the variables you have set yourself, you can also access the `params` struct. This 
+contains anything passed in through the URL or with a form. If you want to follow MVC rules more closely 
+though, we recommend only accessing the `params` struct in the controller and then setting new variables 
+for the information you need access to in the view.
 
-The most important thing to remember when creating your view is to be careful not to put too much code in there. Avoid code dealing with the incoming request (this can be moved to the controller) and code containing business logic (consider moving this to a model). If you have view-related code but too much of it, it may be beneficial to break it out into a helper or a partial.
+The most important thing to remember when creating your view is to be careful not to put too much code 
+in there. Avoid code dealing with the incoming request (this can be moved to the controller) and code 
+containing business logic (consider moving this to a model). If you have view-related code but too much 
+of it, it may be beneficial to break it out into a helper or a partial.
 
 ## Cleaning Up Output
 
-A view's job is also to clean up the values provided by the controller before being displayed. This is especially important when content from a data source is not HTML-escaped.
+A view's job is also to clean up the values provided by the controller before being displayed. This is 
+especially important when content from a data source is not HTML-escaped.
 
-For example, if the view is to display the `title` column from a query object called `posts`, it should escape HTML special characters using the Wheels `h()` view helper (which is basically a shortcut for the CFML `HtmlEditFormat()` function):
+For example, if the view is to display the `title` column from a query object called `posts`, it should 
+escape HTML special characters using the Wheels `h()` view helper (which is basically a shortcut for the 
+CFML `HtmlEditFormat()` function):
 
 	<ul>
 		<cfoutput query="posts">
@@ -69,7 +107,7 @@ For example, if the view is to display the `title` column from a query object ca
 		</cfoutput>
 	</ul>
 
-[1]: Rendering%20Content.md
-[2]: Using%20Layouts.md
-[3]: Partials.md
-[4]: Creating%20Your%20Own%20View%20Helpers.md
+[1]: ../03%20Handling%20Requests%20with%20Controllers/02%20Rendering%20Content.md
+[2]: 04%20Using%20Layouts.md
+[3]: 02%20Partials.md
+[4]: 08%20Creating%20Your%20Own%20View%20Helpers.md
