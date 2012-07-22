@@ -75,28 +75,28 @@ Let's show how the code for the `products` function could look to make it more c
 	<cfcomponent extends="Controller">
 	
 		<cffunction name="products">
-			<cfset renderPage(controller="shop", action="products")>
+			<cfset renderView(controller="shop", action="products")>
 		</cffunction>
 	
 	</cfcomponent>
 
-The only thing this does is specify the view page to render using the `renderPage()` function.
+The only thing this does is specify the view page to render using the `renderView()` function.
 
-The `renderPage()` function is available to you because the `shop` controller extends the main Wheels
+The `renderView()` function is available to you because the `shop` controller extends the main Wheels
 `Controller` component. Don't forget to include that `extends` attribute in your `<cfcomponent>` tags as
 you build your controllers!
 
-So, how does `renderPage()` work? Well, it accepts the arguments `controller` and `action`
+So, how does `renderView()` work? Well, it accepts the arguments `controller` and `action`
 (among others), and, based on these, it will try to include a view file. In our case, the view file is
 stored at `views/shop/products.cfm`.
 
-It's important to note that the `renderPage()` function does *not* cause any controller actions or
+It's important to note that the `renderView()` function does *not* cause any controller actions or
 functions to be executed. It just specifies what view files to get content from. Keep this in mind going
 forward because it's a common assumption that it does. (Especially when you want to include the view
 page for another action, it's easy to jump to the incorrect conclusion that the code for that action
 would also get executed.)
 
-You can read the chapter about [Rendering Content][2] for more information about the `renderPage()`
+You can read the chapter about [Rendering Content][2] for more information about the `renderView()`
 function.
 
 ## Wheels Conventions
@@ -105,7 +105,7 @@ Because Wheels favors convention over configuration, we can remove a lot of the 
 above, and it will still work because Wheels will just guess what your intention is. Let's have a quick
 look at exactly what code can be removed and why.
 
-The first thing Wheels assumes is that if you call `renderPage()` without arguments, you want to include
+The first thing Wheels assumes is that if you call `renderView()` without arguments, you want to include
 the view page for the *current* controller and action.
 
 Therefore, the code above can be changed to:
@@ -113,14 +113,14 @@ Therefore, the code above can be changed to:
 	<cfcomponent extends="Controller">
 	
 		<cffunction name="products">
-			<cfset renderPage()>
+			<cfset renderView()>
 		</cffunction>
 		
 	</cfcomponent>
 
 ... and it will still work just fine.
 
-Does Wheels assume anything else? Sure it does. You can actually remove the entire `renderPage()` call
+Does Wheels assume anything else? Sure it does. You can actually remove the entire `renderView()` call
 because Wheels will assume that you always want to call a view page when the processing in the
 controller is done. Wheels will call it for you behind the scenes.
 

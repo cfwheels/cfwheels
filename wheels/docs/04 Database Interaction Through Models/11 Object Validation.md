@@ -216,7 +216,7 @@ errors.
 				<cfset redirectTo(action="success")>
 			<!--- Handle errors --->
 			<cfelse>
-				<cfset renderPage(action="index")>
+				<cfset renderView(action="index")>
 			</cfif>
 		</cffunction>
 	
@@ -231,7 +231,7 @@ will be executed. But if any of the validations set up in the model fail, the `s
 `false`, and the `<cfelse>` will execute.
 
 The important step here is to recognize that the `<cfelse>` renders the original form input page using 
-the `renderPage()` function. When this happens, the view will use the `newUser` object defined in our 
+the `renderView()` function. When this happens, the view will use the `newUser` object defined in our 
 `save()` method. If a `redirectTo()` were used instead, the validation information loaded in our 
 `save()` method would be lost.
 

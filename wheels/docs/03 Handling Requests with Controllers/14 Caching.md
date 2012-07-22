@@ -196,7 +196,7 @@ This code specifies that you want to cache the view page for the `browseByUser` 
 	<cfcomponent extends="Controller">
 	
 		<cffunction name="browseByUser">
-			<cfset renderPage(cache=60)>
+			<cfset renderView(cache=60)>
 		</cffunction>
 		
 		<cffunction name="browseByTitle">

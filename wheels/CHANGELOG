@@ -46,6 +46,7 @@ Miscellaneous
 * Removed the "cacheDatabaseSchema" setting, "cacheModelInitialization" should now be used instead - [Per Djurner]
 * Added commented out settig for plugin development in design mode - #782 [Tony Petruzzi]
 * Added $inspect method to return the variables scope of objects - #820 [Tony Petruzzi]
+* Renamed `renderPage` to `renderView` - #363 [Andy Bellenie, Tony Petruzzi] 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

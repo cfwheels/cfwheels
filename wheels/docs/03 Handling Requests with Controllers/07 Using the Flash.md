@@ -23,7 +23,7 @@ submission.
 			<cfset flashInsert(success="The user was updated successfully.")>
 			<cfset redirectTo(action="edit")>
 		<cfelse>
-			<cfset renderPage(action="edit")>
+			<cfset renderView(action="edit")>
 		</cfif>
 	</cffunction>
 

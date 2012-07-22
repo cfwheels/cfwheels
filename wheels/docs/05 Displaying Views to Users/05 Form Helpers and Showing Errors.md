@@ -155,7 +155,7 @@ The `save` action may look something like this:
         
         <!--- If there were errors with the form submission, show the form again with errors --->
         <cfif profile.hasErrors()>
-            <cfset renderPage(template="profileForm")>
+            <cfset renderView(template="profileForm")>
         <!--- If everything validated, then send user to success message --->
         <cfelse>
             <cfset flashInsert(success="The user profile for #profile.firstName# #profile.lastName# was created successfully.")>

@@ -12,7 +12,7 @@
 	<cffunction name="testRedirect">
 		<cfset redirectTo(action="dummy")>
 		<cfset request.setInActionAfterRedirect = true>
-		<cfset renderPage(action="test")>
+		<cfset renderView(action="test")>
 	</cffunction>
 
 	<cffunction name="$dataForPartial" returnType="struct" access="private">

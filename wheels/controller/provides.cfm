@@ -82,13 +82,13 @@
 	'
 	categories="controller-request,provides" chapters="responding-with-multiple-formats" functions="provides,onlyProvides">
 	<cfargument name="data" required="true" type="any" hint="Data to format and render." />
-	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="See documentation for @renderPage.">
-	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for @renderPage.">
-	<cfargument name="template" type="string" required="false" default="" hint="See documentation for @renderPage.">
-	<cfargument name="layout" type="any" required="false" hint="See documentation for @renderPage.">
-	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPage.">
-	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for @renderPage.">
-	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false" hint="See documentation for @renderPage.">
+	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="See documentation for @renderView.">
+	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for @renderView.">
+	<cfargument name="template" type="string" required="false" default="" hint="See documentation for @renderView.">
+	<cfargument name="layout" type="any" required="false" hint="See documentation for @renderView.">
+	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderView.">
+	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for @renderView.">
+	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false" hint="See documentation for @renderView.">
 	<cfscript>
 		var loc = {};
 		$args(name="renderWith", args=arguments);
@@ -103,14 +103,14 @@
 		if (loc.contentType == "html")
 		{
 			StructDelete(arguments, "data", false); 
-			return renderPage(argumentCollection=arguments);
+			return renderView(argumentCollection=arguments);
 		}
 		
 		loc.templateName = $generateRenderWithTemplatePath(argumentCollection=arguments, contentType=loc.contentType);
 		loc.templatePathExists = $formatTemplatePathExists($name=loc.templateName);	
 		
 		if (loc.templatePathExists)
-			loc.content = renderPage(argumentCollection=arguments, template=loc.templateName, returnAs="string", layout=false, hideDebugInformation=true);
+			loc.content = renderView(argumentCollection=arguments, template=loc.templateName, returnAs="string", layout=false, hideDebugInformation=true);
 		
 		// throw an error if we rendered a pdf template and we got here, the cfdocument call should have stopped processing
 		if (loc.contentType == "pdf" && application.wheels.showErrorInformation && loc.templatePathExists)

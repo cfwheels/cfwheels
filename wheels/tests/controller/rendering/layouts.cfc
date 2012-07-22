@@ -6,7 +6,7 @@
 	<cfset loc.controller = controller("test", params)>
 
 	<cffunction name="test_rendering_without_layout">
-		<cfset loc.controller.renderPage(layout=false)>
+		<cfset loc.controller.renderView(layout=false)>
 		<cfset assert("loc.controller.response() IS 'view template content'")>
 	</cffunction>
 
@@ -14,7 +14,7 @@
 		<cfset tempFile = expandPath("/wheelsMapping/tests/_assets/views/test/layout.cfm")>
 		<cffile action="write" output="<cfoutput>start:controllerlayout##includeContent()##end:controllerlayout</cfoutput>" file="#tempFile#">
 		<cfset application.wheels.existingLayoutFiles = "test">
-		<cfset loc.controller.renderPage()>
+		<cfset loc.controller.renderView()>
 		<cfset loc.r = loc.controller.response()>
 		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'start:controllerlayout' AND loc.r Contains 'end:controllerlayout'")>
 		<cfset application.wheels.existingLayoutFiles = "">
@@ -22,44 +22,44 @@
 	</cffunction>
 
 	<cffunction name="test_rendering_with_default_layout_in_root">
-		<cfset loc.controller.renderPage()>
+		<cfset loc.controller.renderView()>
 		<cfset loc.r = loc.controller.response()>
 		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'start:defaultlayout' AND loc.r Contains 'end:defaultlayout'")>
 	</cffunction>
 
 	<cffunction name="test_rendering_with_specific_layout">
-		<cfset loc.controller.renderPage(layout="specificLayout")>
+		<cfset loc.controller.renderView(layout="specificLayout")>
 		<cfset loc.r = loc.controller.response()>
 		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'start:specificlayout' AND loc.r Contains 'end:specificlayout'")>
 	</cffunction>
 
 	<cffunction name="test_removing_cfm_file_extension_when_supplied">
-		<cfset loc.controller.renderPage(layout="specificLayout.cfm")>
+		<cfset loc.controller.renderView(layout="specificLayout.cfm")>
 		<cfset loc.r = loc.controller.response()>
 		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'start:specificlayout' AND loc.r Contains 'end:specificlayout'")>
 	</cffunction>
 
 	<cffunction name="test_rendering_with_specific_layout_in_root">
-		<cfset loc.controller.renderPage(layout="/rootLayout")>
+		<cfset loc.controller.renderView(layout="/rootLayout")>
 		<cfset loc.r = loc.controller.response()>
 		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'start:rootlayout' AND loc.r Contains 'end:rootlayout'")>
 	</cffunction>
 
 	<cffunction name="test_rendering_with_specific_layout_in_sub_folder">
-		<cfset loc.controller.renderPage(layout="sub/layout")>
+		<cfset loc.controller.renderView(layout="sub/layout")>
 		<cfset loc.r = loc.controller.response()>
 		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'start:sublayout' AND loc.r Contains 'end:sublayout'")>
 	</cffunction>
 
 	<cffunction name="test_rendering_with_specific_layout_from_folder_path">
-		<cfset loc.controller.renderPage(layout="/shared/layout")>
+		<cfset loc.controller.renderView(layout="/shared/layout")>
 		<cfset loc.r = loc.controller.response()>
 		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'start:sharedlayout' AND loc.r Contains 'end:sharedlayout'")>
 	</cffunction>
 
 	<cffunction name="test_view_variable_should_be_available_in_layout_file">
 		<cfset loc.controller.$callAction(action="test")>
-		<cfset loc.controller.renderPage()>
+		<cfset loc.controller.renderView()>
 		<cfset loc.r = loc.controller.response()>
 		<cfset assert("loc.r Contains 'view template content' AND loc.r Contains 'variableForLayoutContent' AND loc.r Contains 'start:defaultlayout' AND loc.r Contains 'end:defaultlayout'")>
 	</cffunction>

@@ -10,7 +10,7 @@ three different ways:
   * Sending a file
 
 You can only respond once per request. If you do not explicitly call any of the response functions
-(`renderPage()`, `sendFile()`, etc.), then Wheels will assume that you want to show the view for the
+(`renderView()`, `sendFile()`, etc.), then Wheels will assume that you want to show the view for the
 current controller and action and do it for you.
 
 This chapter covers the first method listed above - displaying content. The chapters about
@@ -18,21 +18,21 @@ This chapter covers the first method listed above - displaying content. The chap
 
 ## Rendering a Page
 
-This is the most common way of responding to the user. It's done with the `renderPage()` function, but
+This is the most common way of responding to the user. It's done with the `renderView()` function, but
 most often you probably won't call it yourself and instead let Wheels do it for you.
 
 Sometimes you will want to call it though and specify to show a view page for a controller/action other
 than the current one. One common technique for handling a form submission, for example, is to show the
 view page for the controller/action that contains the form (as opposed to the one that just handles the
 form submission and redirects the user afterwards). When doing this, it's very important to keep in mind
-that `renderPage()` will *not run the code* for the controller's action - all it does is process the
+that `renderView()` will *not run the code* for the controller's action - all it does is process the
 view page for it.
 
-You can also call `renderPage()` explicitly if you wish to cache the response or use a different layout
+You can also call `renderView()` explicitly if you wish to cache the response or use a different layout
 than the default one.
 
 If the `controller` and `action` arguments do not give you enough flexibility, you can use the `template`
-argument that is available for `renderPage()`.
+argument that is available for `renderView()`.
 
 Please refer to the [Pages][3] chapter for more details about rendering content. More specifically, that
 chapter describes where to place those files and what goes in them.
@@ -60,13 +60,13 @@ Normally when you call any of the rendering functions, the result is stored insi
 variable. This value is then output to the browser at the end of the request.
 
 Sometimes you may want to do some additional processing on the rendering result before outputting it
-though. This is where the `returnAs` argument comes in handy. It's available on both `renderPage()` and
+though. This is where the `returnAs` argument comes in handy. It's available on both `renderView()` and
 `renderPartial()`. Setting `returnAs` to `string` will return the result to you instead of placing it in
 the internal Wheels variable.
 
 ## Caching the Response
 
-Two of the functions listed above are capable of caching the content for you; `renderPage()` and
+Two of the functions listed above are capable of caching the content for you; `renderView()` and
 `renderPartial()`. Just pass in `cache=true` (to use the default cache time set in `config/settings.cfm`)
 or `cache=x` where `x` is the number of minutes you want to cache the content for. Keep in mind that
 this caching respects the global setting set for it in your configuration files so normally no pages
@@ -76,7 +76,7 @@ We cover caching in greater detail in the [Caching][4] chapter.
 
 ## Using a Layout
 
-The `renderPage()` function accepts an argument named `layout`. Using this you can wrap your content
+The `renderView()` function accepts an argument named `layout`. Using this you can wrap your content
 with common header/footer style code. This is such an important concept though so we'll cover all the
 details of it in the chapter called [Using Layouts][5].
 

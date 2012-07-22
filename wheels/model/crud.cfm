@@ -880,7 +880,7 @@
 			<cfset redirectTo(action="edit")>
 		<cfelse>
 			<cfset flashInsert(alert="Error, please correct!")>
-			<cfset renderPage(action="edit")>
+			<cfset renderView(action="edit")>
 		</cfif>
 	'
 	categories="model-object,crud" chapters="creating-records" functions="">

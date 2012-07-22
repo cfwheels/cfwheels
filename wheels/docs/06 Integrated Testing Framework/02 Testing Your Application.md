@@ -184,7 +184,7 @@ controller for our user model would contain for creating and dsiplaying a list o
 			<!--- Otherwise --->
 			<cfelse>
 				<cfset flashInsert(error="There was an error creating the user.")>
-				<cfset renderPage(action="new")>
+				<cfset renderView(action="new")>
 			</cfif>
 		</cffunction>
 	

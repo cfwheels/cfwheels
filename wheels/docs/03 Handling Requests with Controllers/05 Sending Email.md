@@ -87,7 +87,7 @@ folder path to the template file. In that case, just be sure to store the templa
 with the rest of the views for that controller.
 
 The logic for which template to include follows the same logic as the `template` argument to
-`renderPage()`.
+`renderView()`.
 
 Did you notice that we did not have to specify the `type` attribute of `cfmail`? Wheels is smart enough
 to figure out that you want to send as HTML since you have tags in the email body. (You can override
@@ -100,7 +100,7 @@ list of templates to the `templates` argument (notice the plural), and Wheels wi
 out which one is text and which one is HTML.
 
 Like the `template` argument, the logic for which file to include follows the same logic as the
-`template` argument to `renderPage()`.
+`template` argument to `renderView()`.
 
 ### Attaching Files
 

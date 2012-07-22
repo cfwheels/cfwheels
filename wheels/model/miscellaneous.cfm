@@ -172,7 +172,7 @@
 		<!--- Load a user requested in the URL/form and restrict access if it doesn''t match the user stored in the session --->
 		<cfset user = model("user").findByKey(params.key)>
 		<cfif not user.compareTo(session.user)>
-			<cfset renderPage(action="accessDenied")>
+			<cfset renderView(action="accessDenied")>
 		</cfif>
 	'
 	categories="model-object,miscellaneous" chapters="" functions="">

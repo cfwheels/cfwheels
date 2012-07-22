@@ -42,29 +42,29 @@ currently executing. This is especially common when your application processes a
 an input error. In this case, you'll probably choose to have your application display the same form 
 again for correction.
 
-In this case, you can use the `renderPage()` function and specify a different action in the `action` 
+In this case, you can use the `renderView()` function and specify a different action in the `action` 
 argument (which will include the view page for that action but *not* run the controller code for it).
 
 ## Sharing a View File Between Actions
 
 Sometimes it's useful to have a view file that can be called from several controller actions. For these 
-cases, you'll typically call `renderPage()` with the `template` argument.
+cases, you'll typically call `renderView()` with the `template` argument.
 
 When using the `template` argument, there are specific rules that Wheels will follow in order to locate 
 the file you want to include:
 
   * If the `template` argument starts with the `/` character, Wheels will start searching from the root 
-  of the `views` folder. Example: `renderPage(template="/common/page")` will include the 
+  of the `views` folder. Example: `renderView(template="/common/page")` will include the 
   `views/common/page.cfm` file.
   * If it contains the `/` character elsewhere in the string, the search will start from the 
-  controller's view folder. Example: `renderPage(template="misc/page")` will include the 
+  controller's view folder. Example: `renderView(template="misc/page")` will include the 
   `views/blog/misc/page.cfm` file if we're currently in the `blog` controller.
   * In all other cases (i.e. when the `template` argument does not contain the `/` character at all), 
   Wheels will just assume the file is in the controller's view folder and try to include it. Example: 
-  `renderPage(template="something")` will include the `views/blog/something.cfm` file if we're currently 
+  `renderView(template="something")` will include the `views/blog/something.cfm` file if we're currently 
   in the `blog` controller.
 
-Also note that both `renderPage(template="thepage")` and `renderPage(template="thepage.cfm")` work fine. 
+Also note that both `renderView(template="thepage")` and `renderView(template="thepage.cfm")` work fine. 
 But most of the time, Wheels developers will tend to leave out the `.cfm` part.
 
 ## What Goes in the Files?

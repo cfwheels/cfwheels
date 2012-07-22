@@ -12,12 +12,12 @@
 	</cffunction>
 	
 	<cffunction name="test_inclusion_of_global_helper_file">
-		<cfset loc.controller.renderPage()>
+		<cfset loc.controller.renderView()>
 		<cfset assert("StructKeyExists(request.test, 'globalHelperFunctionWasCalled')")>
 	</cffunction>
 	
 	<cffunction name="test_inclusion_of_controller_helper_file">
-		<cfset loc.controller.renderPage()>
+		<cfset loc.controller.renderView()>
 		<cfset assert("StructKeyExists(request.test, 'controllerHelperFunctionWasCalled')")>
 	</cffunction>
 

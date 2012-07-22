@@ -108,7 +108,7 @@ header as well.
 ### Providing the HTML Format
 
 Responding to requests for the HTML version is the same as you're already used to with 
-[Rendering Content][1]. `renderWith()` will accept the same arguments as `renderPage()`, and you create 
+[Rendering Content][1]. `renderWith()` will accept the same arguments as `renderView()`, and you create 
 just a view template in the `views` folder like normal.
 
 ### Automatic Generation of XML and JSON Formats

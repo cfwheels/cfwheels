@@ -189,16 +189,16 @@ function on each incoming request.
 
 ## Overriding the Default Layout at the Action Level
 
-Another option for overriding layouts is to use the `layout` argument of the `renderPage()` function.
+Another option for overriding layouts is to use the `layout` argument of the `renderView()` function.
 
-As you may already know, Wheels' `renderPage()`  function is the last thing called in your actions. This 
+As you may already know, Wheels' `renderView()`  function is the last thing called in your actions. This 
 function is run automatically by Wheels, so most of the time, you won't need to call it explicitly in 
 your code.
 
 Take a look at this example action, called `display`:
 
     <cffunction name="display">
-        <cfset renderPage(layout="visitorLayout")>
+        <cfset renderView(layout="visitorLayout")>
     </cffunction>
 
 This assumes that you want for your action to use the layout stored at `views/blog/visitorlayout.cfm`.
@@ -214,10 +214,10 @@ forward slash, `/`. By doing this Wheels will know you want to start the search 
 `layouts`, you can display one of them with the following code:
 
     <cffunction name="display">
-        <cfset renderPage(layout="/layouts/plain")>
+        <cfset renderView(layout="/layouts/plain")>
     </cffunction>
 
-Note that setting the `layout` argument on `renderPage()` will override any settings you may have made 
+Note that setting the `layout` argument on `renderView()` will override any settings you may have made 
 with the `usesLayout()` function. This gives you finer-grained control.
 
 ### Using No Layout
@@ -225,7 +225,7 @@ with the `usesLayout()` function. This gives you finer-grained control.
 If you don't want for a given template to be wrapped by a layout at all, you may want to consider 
 creating the page as a _partial_. See the chapter about [Partials][1] for more information.
 
-Another alternative is to use the `renderPage()` function and set the `layout` argument to `false`. 
+Another alternative is to use the `renderView()` function and set the `layout` argument to `false`. 
 
 You can also create a separate layout that only contains the call to the `includeContent()` function in 
 it and reference it as described above in _Using a Different Layout_.

@@ -91,7 +91,7 @@ you're used to.
 			<cfset flashInsert(success="The user was created successfully.")>
 			<cfset redirectTo(controller=params.controller)>
 		<cfelse>
-			<cfset renderPage(action="new")>
+			<cfset renderView(action="new")>
 		</cfif>
 	</cffunction>
 
@@ -113,7 +113,7 @@ For the edit scenario, this is what our `update` action would look like (which i
 			<cfset flashInsert(success="The user was updated successfully.")>
 			<cfset redirectTo(action="edit")>
 		<cfelse>
-			<cfset renderPage(action="edit")>
+			<cfset renderView(action="edit")>
 		</cfif>
 	</cffunction>
 
@@ -364,7 +364,7 @@ You'll notice that this example `update` action is fairly standard for a Wheels 
 			<cfset redirectTo(action="edit", key=customer.id)>
 		<!--- If update fails, show form with errors --->
 		<cfelse>
-			<cfset renderPage(action="edit")>
+			<cfset renderView(action="edit")>
 		</cfif>
 	</cffunction>
 

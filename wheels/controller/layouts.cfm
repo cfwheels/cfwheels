@@ -32,7 +32,7 @@
 			</cfif>
 		</cffunction>
 	'
-	categories="controller-initialization,rendering" chapters="rendering-layout" functions="renderPage">
+	categories="controller-initialization,rendering" chapters="rendering-layout" functions="renderView">
 	<cfargument name="template" required="true" type="string" hint="Name of the layout template or method name you want to use">
 	<cfargument name="ajax" required="false" type="string" default="" hint="Name of the layout template you want to use for AJAX requests">
 	<cfargument name="except" type="string" required="false" hint="List of actions that SHOULD NOT get the layout">

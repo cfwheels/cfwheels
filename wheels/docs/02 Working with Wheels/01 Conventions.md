@@ -94,7 +94,7 @@ word delimiter.
 In our `/site-map/search-engines` URL example, the corresponding view file would be stored at
 `views/sitemap/searchengines.cfm`.
 
-For information on overriding this behavior, refer to documentation for the `renderPage()` function and
+For information on overriding this behavior, refer to documentation for the `renderView()` function and
 read the [Pages][2] chapter.
 
 ### Layouts
@@ -111,7 +111,7 @@ When a controller-level layout is present, it overrides the default layout store
 folder.
 
 For information on overriding the layout file to be loaded by an action, see the chapter on
-[Using Layouts][3] and documentation for the `renderPage()` function.
+[Using Layouts][3] and documentation for the `renderView()` function.
 
 ## Naming Conventions for Models and Databases
 

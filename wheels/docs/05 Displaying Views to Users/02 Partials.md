@@ -27,7 +27,7 @@ though, right?
 
 You can place the partial file anywhere in the `views` folder. To make it clear that a file is a partial
 and not a full page, its filename must start with an underscore character. When locating partials,
-Wheels will use the same rules as it does for the `template` argument to `renderPage()`. This means that
+Wheels will use the same rules as it does for the `template` argument to `renderView()`. This means that
 if you save the partial in the current controller's view folder, you reference it simply by its name.
 
 For example, if you wanted to have a partial for a comment in your `comments` controller, you would save
