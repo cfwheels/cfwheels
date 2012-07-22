@@ -1,3 +1,7 @@
+# If you have any other rules for new cfwheels projects that would be beneficial
+# please consider adding them to the official CFWheels git ignore on github
+# https://github.com/github/gitignore/blob/master/CFWheels.gitignore
+
 # CFEclipse specific
 .project
 
