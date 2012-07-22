@@ -16,7 +16,8 @@ will wait for you.
 Okay, so you have Wheels installed and can see the Wheels "Congratulations!" page as shown in
 _Figure 1_ below. That wasn't that hard now, was it?
 
-<img src="../assets/images/hello-world/wheels-1.0-congratulations-screen.jpg?raw=true" alt="If everything's set up properly, you should see a &quot;Welcome to Wheels&quot; screen on your new Wheels site." />>
+<img src="../assets/images/hello-world/wheels-1.0-congratulations-screen.jpg?raw=true" alt="If everything's set up properly, you should see a &quot;Welcome to Wheels&quot; screen on your new Wheels site." />
+
 **Figure 1: Wheels congratulations screen.**
 
 ## Hello World: Your First Wheels App
@@ -51,7 +52,8 @@ configured. In my case I will be using the host name `cfwheels.1.0` so my URL wi
 If you did everything right, you will get the Wheels error shown below in _Figure 2_. (Ironic that
 getting an error is doing something right, huh? Don't get used to it, buddy!)
 
-<img src="images/hello-world/wheels-1.0-no-view-error-screen.jpg?raw=true" alt="You should get a ColdFusion error saying, &quot;There is no action named 'index'&quot;" />
+<img src="../assets/images/hello-world/wheels-1.0-no-view-error-screen.jpg?raw=true" alt="You should get a ColdFusion error saying, &quot;There is no action named 'index'&quot;" />
+
 **Figure 2: Wheels error after setting up your blank say controller.**
 
 The error says "Could not find the view page for the 'index' action in the 'say' controller." Where did
@@ -103,7 +105,8 @@ following line of code:
 Save your `hello.cfm` file, and let's call our `say/hello` action once again. You have your first working
 Wheels page if your browser looks like _Figure 3_ below.
 
-<img src="images/hello-world/wheels-1.0-hello-world-screen.jpg?raw=true" alt="The correctly working application will show a Header 1 with the word &quot;Hello!&quot;" />
+<img src="../assets/images/hello-world/wheels-1.0-hello-world-screen.jpg?raw=true" alt="The correctly working application will show a Header 1 with the word &quot;Hello!&quot;" />
+
 **Figure 3: Your first working Wheels action.**
 
 You have just created your first functional Wheels page, albeit it is a very simple one. Pat yourself on
@@ -153,7 +156,8 @@ do this, the value will be displayed in the browser.
 Now call your `say/hello` action again in your browser. Your browser should look like _Figure 4_
 below.
 
-<img src="images/hello-world/wheels-1.0-hello-world-dynamic-screen.jpg?raw=true" alt="Your application will now display the &quot;Hello&quot; message with the current date and time." />
+<img src="../assets/images/hello-world/wheels-1.0-hello-world-dynamic-screen.jpg?raw=true" alt="Your application will now display the &quot;Hello&quot; message with the current date and time." />
+
 **Figure 4: Hello World with the current date and time.**
 
 This simple example showed that any dynamic content created in a controller action is available to the
@@ -193,8 +197,9 @@ URL:
 
 Your browser should look like _Figure 5_ below:
 
-<p><img src="images/hello-world/wheels-1.0-goodbye-world-screen.jpg?raw=true" alt="Your browser should display a Header 1 with the text &quot;Goodbye&quot;" /><br />
-<em>Figure 5: Your new `goodbye` action.</em></p>
+<img src="../assets/images/hello-world/wheels-1.0-goodbye-world-screen.jpg?raw=true" alt="Your browser should display a Header 1 with the text &quot;Goodbye&quot;" />
+
+**Figure 5: Your new `goodbye` action.**
 
 ### Linking to Other Actions
 
@@ -220,7 +225,8 @@ you as long as you configure it correctly when you make infrastructure changes t
 Once you have added the additional line of code to the end of the `say/hello.cfm` view file, save your
 file and call the `say/hello` action from your browser. Your browser should look like _Figure 6_ below.
 
-<img src="images/hello-world/wheels-1.0-hello-world-linked-screen.jpg?raw=true" alt="Your application should now display a goodbye link." />
+<img src="../assets/images/hello-world/wheels-1.0-hello-world-linked-screen.jpg?raw=true" alt="Your application should now display a goodbye link." />
+
 **Figure 6: Your `say/hello` action with a link to the `goodbye` action.**
 
 You can see that Wheels created a link for us and added an appropriate URL for the `say/goodbye`
@@ -239,8 +245,9 @@ Open your `say/goodbye.cfm` view page and modify it so it looks like the code bl
 If you now call the `say/goodbye` action in your browser, your browser should look like _Figure 7_
 below.
 
-<p><img src="images/hello-world/wheels-1.0-goodbye-world-linked-screen.jpg?raw=true" alt="Your Goodbye page should now have a link to the Hello page." /><br />
-<em>Figure 7: Your `say/goodbye` action with a link to the `hello` action.</em></p>
+<img src="../assets/images/hello-world/wheels-1.0-goodbye-world-linked-screen.jpg?raw=true" alt="Your Goodbye page should now have a link to the Hello page." />
+
+**Figure 7: Your `say/goodbye` action with a link to the `hello` action.**
 
 ## Much More to Learn
 

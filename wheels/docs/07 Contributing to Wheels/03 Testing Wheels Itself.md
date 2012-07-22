@@ -43,6 +43,7 @@ On the Wheels welcome page (the page that comes up when you first install wheels
 debug area (that grey area at the bottom of the page):
 
 <img src="../assets/images/wheels-debug-area.jpg"/>
+
 **Figure 1: Wheels debug area, highlighting the link to run the framework tests**
 
 In the debug area you should see a `[Run Tests]` link on the `Framework` line, to the right of the
