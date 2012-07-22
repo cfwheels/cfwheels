@@ -20,6 +20,7 @@
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="ifNull" type="any" required="false" hint="The value returned if no records are found. Common usage is to set this to `0` to make sure a numeric value is always returned instead of a blank string.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
 		$args(name="average", args=arguments);
@@ -76,6 +77,7 @@
 	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @save.">
 	<cfscript>
 		var returnValue = "";
 		$args(name="count", args=arguments);
@@ -112,6 +114,7 @@
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @save.">
 	<cfscript>
 		$args(name="maximum", args=arguments);
 		arguments.type = "MAX";
@@ -138,6 +141,7 @@
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @save.">
 	<cfscript>
 		$args(name="minimum", args=arguments);
 		arguments.type = "MIN";
@@ -165,6 +169,7 @@
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+	<cfargument name="reload" type="boolean" required="false" hint="See documentation for @save.">
 	<cfscript>
 		$args(name="sum", args=arguments);
 		arguments.type = "SUM";
