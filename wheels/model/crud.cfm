@@ -1108,7 +1108,7 @@
 		for (loc.key in variables.wheels.class.properties)
 		{
 			// include all changed non-key values in the update
-			if (StructKeyExists(this, loc.key) && !ListFindNoCase(primaryKeys(), loc.key) && hasChanged(loc.key))
+			if (StructKeyExists(this, loc.key) && hasChanged(loc.key))
 			{
 				ArrayAppend(loc.sql, "#variables.wheels.class.properties[loc.key].column# = ");
 				loc.param = $buildQueryParamValues(loc.key);
