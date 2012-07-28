@@ -1,8 +1,5 @@
 <cfcomponent output="false" hint="compile the api documentation for the current release">
 
-	<!--- wheels directory --->
-	<cfset variables.wheelsDirectory = ExpandPath('../wheels')>
-
 	<!--- 
 	store the location of a function in a struct
 	used to translate '@' references in hints
@@ -54,13 +51,24 @@
 	<cfset variables.errors = []>
 	
 	<cffunction name="init">
+		<cfargument name="wheelsDirectory" type="string" required="true" hint="the full path to the wheels directory to process the classes and generate documentation for">
+		<cfargument name="overloads" type="struct" required="false" default="#StructNew()#" hint="overload to the documentation. sometimes we have parameters or other aspects of the documentation that we can't put in the code, but need to document. overloads allow us to do this.">
+		<cfset variables.wheelsDirectory = arguments.wheelsDirectory>
+		<cfset variables.overloads = arguments.overloads>
 		<cfreturn this>
 	</cffunction>
 
-	<cffunction name="build" access="public" returntype="array" output="false">
+	<cffunction name="build" access="public" returntype="struct" output="false">
 		<cfset var loc = {}>
+		<cfset loc.ret = {errors = "", data = ""}>
 		<cfset $processClasses()>
-		<cfreturn $expandMarkers()>
+		<cfset loc.ret.errors = $expandMarkers()>
+		<cfif ArrayIsEmpty(loc.ret.errors)>
+			<cfset $compactData()>
+			<cfset $overloadData()>
+			<cfset loc.ret.data = variables.data>
+		</cfif>
+		<cfreturn loc.ret>
 	</cffunction>
 
 
@@ -76,14 +84,19 @@
 				<cfif
 					left(loc.function.name, 1) neq "$"
 					and loc.function.access eq "public"
-					and StructKeyExists(loc.function, "chapters")
-					and StructKeyExists(loc.function, "categories")
 					and StructKeyExists(loc.function, "examples")
 				>
+					<cfloop list="categories,functions,chapters" index="loc.i">
+						<cfif !StructKeyExists(loc.function, loc.i)>
+							<cfset loc.function[loc.i] = "">
+						</cfif>
+					</cfloop>
+				
 					<cfset loc.temp = {}>
 					<cfset loc.temp.class = loc.class>
 					<cfset loc.temp.name = loc.function.name>
 					<cfset loc.temp.chapters = ListToArray(loc.function.chapters)>
+					<cfset loc.temp.functions = ListToArray(loc.function.functions)>>
 					<cfset loc.temp.categories = ListToArray(loc.function.categories)>
 					<cfset loc.temp.hint = loc.function.hint>
 					<cfset loc.temp.examples = loc.function.examples>
@@ -93,7 +106,7 @@
 							<cfset loc.temp1 = {}>
 							<cfset loc.temp1.name = loc.parameter.name>
 							<cfset loc.temp1.type = loc.parameter.type>
-							<cfset loc.temp1.required = loc.parameter.type>
+							<cfset loc.temp1.required = loc.parameter.required>
 							<cfset loc.temp1.default = "">
 							<cfset loc.temp1.hint = "">
 							<cfif StructKeyExists(loc.parameter, "default")>
@@ -140,6 +153,52 @@
 			</cfloop>
 		</cfloop>
 		<cfreturn loc.errors>
+	</cffunction>
+	
+	<cffunction name="$compactData" access="private" output="false" hint="compacts the data by removing duplicate function entries across the classes">
+		<cfset var loc = {}>
+		<cfset loc._data = {}>
+		<cfloop collection="#variables.data#" item="loc.f">
+			<cfset loc.function = duplicate(variables.data[loc.f])>
+			<cfif !StructKeyExists(loc._data, loc.function.name)>
+				<!--- remove the class key since we don't need it --->
+				<cfset StructDelete(loc.function, "class", false)>
+				<cfset loc._data[loc.function.name] = loc.function>
+			</cfif>
+		</cfloop>
+		<cfreturn variables.data = loc._data>
+	</cffunction>
+	
+	<cffunction name="$overloadData" access="private">
+		<cfset var loc = {}>
+		<cfloop collection="#variables.overloads#" item="loc.i">
+			<cfset loc.overload = variables.overloads[loc.i]>
+			<cfif StructKeyExists(variables.data, loc.i)>
+				<cfloop collection="#loc.overload#" item="loc.j">
+				<!--- 
+				see if this element of the overload is a string or array
+				for string we copy them over.
+				
+				for array we loop through them and see if they are a string, struct or empty
+				string we copy
+				struct we merge
+				empty we do nothing
+				 --->
+					<cfset loc.value = loc.overload[loc.j]>
+					<cfif IsSimpleValue(loc.value)>
+						<cfset variables.data[loc.i][loc.j] = loc.value>
+					<cfelseif IsArray(loc.value)>
+						<cfloop from="1" to="#ArrayLen(loc.value)#" index="loc.v">
+							<cfif IsSimpleValue(loc.value[loc.v]) AND len(loc.value[loc.v])>
+								<cfset variables.data[loc.i][loc.j][loc.v] = loc.value[loc.v]>
+							<cfelseif IsStruct(loc.value[loc.v])>
+								<cfset StructAppend(variables.data[loc.i][loc.j][loc.v], loc.value[loc.v], true)>
+							</cfif>
+						</cfloop>
+					</cfif>
+				</cfloop>
+			</cfif>
+		</cfloop>
 	</cffunction>
 
 </cfcomponent>
