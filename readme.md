@@ -33,6 +33,16 @@ _NOTE:_ the build script has only been tested against Railo 3.3.0.007 or higher 
 4. the build will create a zip file named `cfwheels.<version>.zip` in parent directory of the repo
 5. annouce and post the build to the [cfwheels core google group][6]
 
+## Generating API Docuemntation
+
+_NOTE:_ the api generation script has only been tested against Railo 3.3.0.007 or higher at this time.
+
+1. point your browser to the API Generator at http://localhost/builders/api/index.cfm
+2. the generator will create an XML file named `cfwheels-api.xml` in parent directory of the repo
+
+You may overload or overwrite any of the outputted api documentation by adding to the
+`builders/api/overload.cfm`. A diagram of the generated API structure is provided in the document.
+
 ## License
 
 ColdFusion on Wheels is released under the Apache License Version 2.0.
