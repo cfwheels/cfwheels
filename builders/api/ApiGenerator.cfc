@@ -51,10 +51,12 @@
 	 --->
 	<cfset variables.errors = []>
 	
-	<cffunction name="init">
+	<cffunction name="init" output="false">
 		<cfargument name="wheelsDirectory" type="string" required="true" hint="the full path to the wheels directory to process the classes and generate documentation for">
+		<cfargument name="wheelsAPIChapterDirectory" type="string" required="true" hint="the full path to the wheels api directory in the documentation root. Is used to generate chapters and function references.">
 		<cfargument name="overloads" type="struct" required="false" default="#StructNew()#" hint="overload to the documentation. sometimes we have parameters or other aspects of the documentation that we can't put in the code, but need to document. overloads allow us to do this.">
-		<cfset variables.wheelsDirectory = arguments.wheelsDirectory>
+		<cfset variables.wheelsDirectory = ListChangeDelims(arguments.wheelsDirectory, "/", "\")>
+		<cfset variables.wheelsAPIChapterDirectory = ListChangeDelims(arguments.wheelsAPIChapterDirectory, "/", "\")>
 		<cfset variables.overloads = arguments.overloads>
 		<cfreturn this>
 	</cffunction>
@@ -67,6 +69,11 @@
 		<cfif ArrayIsEmpty(loc.ret.errors)>
 			<cfset $compactData()>
 			<cfset $overloadData()>
+			<cfset loc.pageGenerator = createObject("component", "PageGenerator").init(
+				wheelsAPIChapterDirectory = variables.wheelsAPIChapterDirectory
+				,data = variables.data
+			)>
+			<cfset loc.pageGenerator.build()>
 			<cfset loc.ret.data = variables.data>
 		</cfif>
 		<cfreturn loc.ret>
@@ -105,7 +112,6 @@
 	<cffunction name="$processClasses" access="private" returntype="void" output="false">
 		<!--- loop through the main wheels directory and get a list of all the cfcs in it --->
 		<cfdirectory action="list" filter="*.cfc" directory="#variables.wheelsDirectory#" name="loc.classes">
-		<!--- <cfdump var="#classes#"><cfabort> --->
 		<cfloop query="loc.classes">
 			<cfset loc.class = ListFirst(name, '.')>
 			<cfset loc.meta = GetComponentMetaData("wheels.#loc.class#")>
@@ -162,7 +168,6 @@
 		</cfloop>
 	
 	</cffunction>
-	
 	
 	<cffunction name="$expandMarkers" access="private" returntype="array" output="false">
 		<cfset var loc = {}>
@@ -237,5 +242,5 @@
 			</cfif>
 		</cfloop>
 	</cffunction>
-
+	
 </cfcomponent>
