@@ -86,5 +86,10 @@
 
 1. [Upgrading to Wheels 1.1.x](08 Change Logs and Upgrading/01 Upgrading to Wheels 1.1.x.md)
 2. [Upgrading to Wheels 1.2.x](08 Change Logs and Upgrading/02 Upgrading to Wheels 1.2.x.md)
+
+## 9. Wheels API
+
+1. [Functions By Category](Wheels%20API/Functions%20By%20Category.md)
+2. [All Functions A-Z](Wheels%20API/All%20Functions.md)
   
 [1]:http://cfwheels.org/docs
