@@ -27,6 +27,7 @@
 	hint = the function hint (String)
 	examples = function example (String)
 	parameters = function arguments (Array of Structs)
+	returntype = return type of function (String)
 	
 	parameters array
 	----------------
@@ -70,7 +71,36 @@
 		</cfif>
 		<cfreturn loc.ret>
 	</cffunction>
-
+	
+	<cffunction name="toXML" access="public" returntype="string" output="false">
+		<cfset var loc = {}>
+		<cfset loc.functionNames = ListSort(StructKeyList(variables.data), "textNoCase")>
+		<cfoutput>
+		<cfxml variable="loc.xmldoc" casesensitive="yes">
+		<functions wheelsversion="#application.wheels.version#">
+			<cfloop list="#loc.functionNames#" index="loc.functionName">
+			<cfset loc._function = variables.data[loc.functionName]>
+			<function name="#loc.functionName#" categories="#ArrayToList(loc._function['categories'])#" chapters="#ArrayToList(loc._function['chapters'])#" related="#ArrayToList(loc._function['functions'])#">
+				<returntype>#loc._function["returntype"]#</returntype>
+				<description><![CDATA[#loc._function["hint"]#]]></description>
+				<examples><![CDATA[#loc._function["examples"]#]]></examples>
+		 		<arguments>
+					<cfloop array="#loc._function['parameters']#" index="loc.parameter">
+					<argument name="#loc.parameter.name#">
+						<type>#loc.parameter.type#</type>
+						<required>#loc.parameter.required#</required>
+						<defaultValue>#loc.parameter.default#</defaultValue>
+						<description><![CDATA[#loc.parameter.hint#]]></description>
+					</argument>
+					</cfloop>
+				</arguments>
+			</function>
+			</cfloop>
+		</functions>
+		</cfxml>
+		</cfoutput>
+		<cfreturn ToString(loc.xmldoc)>
+	</cffunction>
 
 	<cffunction name="$processClasses" access="private" returntype="void" output="false">
 		<!--- loop through the main wheels directory and get a list of all the cfcs in it --->
@@ -86,12 +116,16 @@
 					and loc.function.access eq "public"
 					and StructKeyExists(loc.function, "examples")
 				>
-					<cfloop list="categories,functions,chapters" index="loc.i">
+					<cfloop list="categories,functions,chapters,returntype" index="loc.i">
 						<cfif !StructKeyExists(loc.function, loc.i)>
 							<cfset loc.function[loc.i] = "">
 						</cfif>
 					</cfloop>
-				
+					
+					<cfif !len(loc.function.returntype)>
+						<cfset loc.function.returntype = "any">
+					</cfif>
+					
 					<cfset loc.temp = {}>
 					<cfset loc.temp.class = loc.class>
 					<cfset loc.temp.name = loc.function.name>
@@ -100,23 +134,26 @@
 					<cfset loc.temp.categories = ListToArray(loc.function.categories)>
 					<cfset loc.temp.hint = loc.function.hint>
 					<cfset loc.temp.examples = loc.function.examples>
+					<cfset loc.temp.returntype = loc.function.returntype>
 					<cfset loc.temp.parameters = []>
 					<cfif StructKeyExists(loc.function, "parameters")>
 						<cfloop array="#loc.function.parameters#" index="loc.parameter">
-							<cfset loc.temp1 = {}>
-							<cfset loc.temp1.name = loc.parameter.name>
-							<cfset loc.temp1.type = loc.parameter.type>
-							<cfset loc.temp1.required = loc.parameter.required>
-							<cfset loc.temp1.default = "">
-							<cfset loc.temp1.hint = "">
-							<cfif StructKeyExists(loc.parameter, "default")>
-								<cfset loc.temp1.default = loc.parameter.default>
+							<cfif Left(loc.parameter.name, 1) neq "$">
+								<cfset loc.temp1 = {}>
+								<cfset loc.temp1.name = loc.parameter.name>
+								<cfset loc.temp1.type = loc.parameter.type>
+								<cfset loc.temp1.required = loc.parameter.required>
+								<cfset loc.temp1.default = "">
+								<cfset loc.temp1.hint = "">
+								<cfif StructKeyExists(loc.parameter, "default")>
+									<cfset loc.temp1.default = loc.parameter.default>
+								</cfif>
+								<cfif StructKeyExists(loc.parameter, "hint")>
+									<cfset loc.temp1.hint = loc.parameter.hint>
+								</cfif>
+								<cfset ArrayAppend(loc.temp.parameters, loc.temp1)>
+								<cfset variables.parameterHints["#loc.function.name#|#loc.temp1.name#"] = loc.temp1.hint>
 							</cfif>
-							<cfif StructKeyExists(loc.parameter, "hint")>
-								<cfset loc.temp1.hint = loc.parameter.hint>
-							</cfif>
-							<cfset ArrayAppend(loc.temp.parameters, loc.temp1)>
-							<cfset variables.parameterHints["#loc.function.name#|#loc.temp1.name#"] = loc.temp1.hint>
 						</cfloop>
 					</cfif>
 					<cfset data["#loc.class#|#loc.function.name#"] = loc.temp>

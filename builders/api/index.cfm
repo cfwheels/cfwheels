@@ -28,11 +28,11 @@
 </cfif>
 
 <!--- convert to xml --->
-<cfset xmlObj = createObject("component", "wheels.vendor.toXml.toXML").init()>
-<cffile action="write" file="#ExpandPath('../../../cfwheels-api.xml')#" output="#xmlObj.toXML(results.data)#">
+<cffile action="write" file="#ExpandPath('../../../cfwheels-api.xml')#" output="#api.toXML()#">
 
 <h1>Api Documentation has been generated!</h1>
 <p>The outputted XML file can be found here:</p>
 <p><cfoutput>#ExpandPath('../../../cfwheels-api.xml')#</cfoutput></p>
 <h3>Below is a dump of the documentation structure. Overload any of the documentation in the `overloads.cfm` file.</h3>
+<cfflush>
 <cfdump var="#results.data#">
