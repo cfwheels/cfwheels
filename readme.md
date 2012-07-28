@@ -37,19 +37,33 @@ _NOTE:_ the build script has only been tested against Railo 3.3.0.007 or higher 
 
 _NOTE:_ the api generation script has only been tested against Railo 3.3.0.007 or higher at this time.
 
-1. point your browser to the API Generator at http://localhost/builders/api/index.cfm
-2. the generator will create an XML file named `cfwheels-api.xml` in parent directory of the repo
+1. point your browser to the API Generator at: http://localhost/builders/api/index.cfm
+2. the generator will automatically create all the pages for the Wheels API in `wheels/docs/Wheels API`
 
 You may overload or overwrite any of the outputted api documentation by adding to the
 `builders/api/overload.cfm`. A diagram of the generated API structure is provided in the document.
 
+If you are a developer building a syntax or code hinting library for Wheels for your favorite editor,
+you can automatically generate an XML formatted version of the API by passing a `?xml=true` to the
+API Generator url:
+
+	http://localhost/builders/api/index.cfm?xml=true
+
+This will create a file called `cfwheels-api.xml` in the directory above your wheels project.
+
+## View API Docuemntation
+
+You will need a Markdown viewer in order to view the documentation locally. If you use Google Chrome,
+you can install the [Mardown Preview][7] extension.
+
 ## License
 
-ColdFusion on Wheels is released under the Apache License Version 2.0.
+[ColdFusion on Wheels][1] is released under the Apache License Version 2.0.
  
- [1]: http://cfwheels.org/
- [2]: http://cfwheels.org/docs/1-1/chapter/beginner-tutorial-hello-world
- [3]: http://cfwheels.org/docs/1-1/chapter/coding-guidelines
- [4]: http://rocketunit.riaforge.org/
- [5]: http://code.google.com/p/cfwheels/issues/list
- [6]: http://groups.google.com/group/cfwheels-core
+[1]: http://cfwheels.org/
+[2]: http://cfwheels.org/docs/1-1/chapter/beginner-tutorial-hello-world
+[3]: http://cfwheels.org/docs/1-1/chapter/coding-guidelines
+[4]: http://rocketunit.riaforge.org/
+[5]: http://code.google.com/p/cfwheels/issues/list
+[6]: http://groups.google.com/group/cfwheels-core
+[7]: https://chrome.google.com/webstore/detail/jmchmkecamhbiokiopfpnfgbidieafmd
