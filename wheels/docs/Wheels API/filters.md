@@ -4,7 +4,7 @@
 Tells Wheels to run a function before an action is run or after an action has been run. You can also specify multiple functions and actions.
 
 ## Function Syntax
-filters( through, [ type, only, except ] )
+	filters( through, [ type, only, except ] )
 
 
 ## Parameters

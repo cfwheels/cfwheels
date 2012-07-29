@@ -4,7 +4,7 @@
 Returns the error message, if one exists, on the object's property. If multiple error messages exist, the first one is returned.
 
 ## Function Syntax
-errorMessageOn( objectName, property, [ prependText, appendText, wrapperElement, class ] )
+	errorMessageOn( objectName, property, [ prependText, appendText, wrapperElement, class ] )
 
 
 ## Parameters

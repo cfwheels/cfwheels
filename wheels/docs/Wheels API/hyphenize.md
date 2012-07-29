@@ -4,7 +4,7 @@
 Converts camelCase strings to lowercase strings with hyphens as word delimiters instead. Example: `myVariable` becomes `my-variable`.
 
 ## Function Syntax
-hyphenize( string )
+	hyphenize( string )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Registers method(s) that should be called after an existing object has been initialized (which is usually done with the @findByKey or @findOne method).
 
 ## Function Syntax
-afterFind( [ methods ] )
+	afterFind( [ methods ] )
 
 
 ## Parameters

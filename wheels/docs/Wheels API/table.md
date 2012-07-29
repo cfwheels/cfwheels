@@ -4,7 +4,7 @@
 Use this method to tell Wheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard Wheels convention of a singular object name mapping to a plural table name.
 
 ## Function Syntax
-table( name )
+	table( name )
 
 
 ## Parameters

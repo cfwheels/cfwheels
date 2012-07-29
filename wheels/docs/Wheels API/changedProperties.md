@@ -4,7 +4,7 @@
 Returns a list of the object properties that have been changed but not yet saved to the database.
 
 ## Function Syntax
-changedProperties(  )
+	changedProperties(  )
 
 
 

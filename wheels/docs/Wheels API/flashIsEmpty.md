@@ -4,7 +4,7 @@
 Returns whether or not the Flash is empty.
 
 ## Function Syntax
-flashIsEmpty(  )
+	flashIsEmpty(  )
 
 
 

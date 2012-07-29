@@ -4,7 +4,7 @@
 Fetches the requested record by primary key and returns it as an object. Returns `false` if no record is found. You can override this behavior to return a `cfquery` result set instead, similar to what's described in the documentation for @findOne.
 
 ## Function Syntax
-findByKey( key, [ select, include, cache, reload, parameterize, returnAs, callbacks, includeSoftDeletes ] )
+	findByKey( key, [ select, include, cache, reload, parameterize, returnAs, callbacks, includeSoftDeletes ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Returns a reference to the requested model so that class level methods can be called on it.
 
 ## Function Syntax
-model( name )
+	model( name )
 
 
 ## Parameters

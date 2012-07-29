@@ -4,7 +4,7 @@
 Registers method(s) that should be called to validate new objects before they are inserted.
 
 ## Function Syntax
-validateOnCreate( [ methods, condition, unless ] )
+	validateOnCreate( [ methods, condition, unless ] )
 
 
 ## Parameters

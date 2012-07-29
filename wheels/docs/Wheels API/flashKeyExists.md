@@ -4,7 +4,7 @@
 Checks if a specific key exists in the Flash.
 
 ## Function Syntax
-flashKeyExists( key )
+	flashKeyExists( key )
 
 
 ## Parameters

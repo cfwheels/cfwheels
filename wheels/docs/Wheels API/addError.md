@@ -4,7 +4,7 @@
 Adds an error on a specific property.
 
 ## Function Syntax
-addError( property, message, [ name ] )
+	addError( property, message, [ name ] )
 
 
 ## Parameters

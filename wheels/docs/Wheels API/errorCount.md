@@ -4,7 +4,7 @@
 Returns the number of errors this object has associated with it. Specify `property` or `name` if you wish to count only specific errors.
 
 ## Function Syntax
-errorCount( [ property, name ] )
+	errorCount( [ property, name ] )
 
 
 ## Parameters

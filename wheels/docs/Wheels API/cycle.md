@@ -4,7 +4,7 @@
 Cycles through list values every time it is called.
 
 ## Function Syntax
-cycle( values, [ name ] )
+	cycle( values, [ name ] )
 
 
 ## Parameters

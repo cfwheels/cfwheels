@@ -4,7 +4,7 @@
 returns the connection (datasource) information for the model.
 
 ## Function Syntax
-getDataSource(  )
+	getDataSource(  )
 
 
 

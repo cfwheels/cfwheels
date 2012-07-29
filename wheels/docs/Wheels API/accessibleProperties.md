@@ -4,7 +4,7 @@
 Use this method to specify which properties can be set through mass assignment.
 
 ## Function Syntax
-accessibleProperties( [ properties ] )
+	accessibleProperties( [ properties ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Tells Wheels to cache one or more actions.
 
 ## Function Syntax
-caches( [ action, time, static ] )
+	caches( [ action, time, static ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Returns the text with the first character converted to uppercase.
 
 ## Function Syntax
-capitalize( text )
+	capitalize( text )
 
 
 ## Parameters

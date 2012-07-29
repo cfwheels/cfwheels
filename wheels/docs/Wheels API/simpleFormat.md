@@ -4,7 +4,7 @@
 Replaces single newline characters with HTML break tags and double newline characters with HTML paragraph tags (properly closed to comply with XHTML standards).
 
 ## Function Syntax
-simpleFormat( text, [ wrap, escapeHtml ] )
+	simpleFormat( text, [ wrap, escapeHtml ] )
 
 
 ## Parameters

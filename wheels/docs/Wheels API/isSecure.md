@@ -4,7 +4,7 @@
 Returns whether Wheels is communicating over a secure port.
 
 ## Function Syntax
-isSecure(  )
+	isSecure(  )
 
 
 

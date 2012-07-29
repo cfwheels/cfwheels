@@ -4,7 +4,7 @@
 Returns a `link` tag for a stylesheet (or several) based on the supplied arguments.
 
 ## Function Syntax
-styleSheetLinkTag( [ sources, type, media, head, delim ] )
+	styleSheetLinkTag( [ sources, type, media, head, delim ] )
 
 
 ## Parameters

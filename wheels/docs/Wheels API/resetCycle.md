@@ -4,7 +4,7 @@
 Resets a cycle so that it starts from the first list value the next time it is called.
 
 ## Function Syntax
-resetCycle( [ name ] )
+	resetCycle( [ name ] )
 
 
 ## Parameters

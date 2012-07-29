@@ -4,7 +4,7 @@
 Builds and returns a string containing six select form controls (three for date selection and the remaining three for time selection) based on the supplied `objectName` and `property`.
 
 ## Function Syntax
-dateTimeSelect( objectName, property, [ association, position, dateOrder, dateSeparator, startYear, endYear, monthDisplay, timeOrder, timeSeparator, minuteStep, secondStep, separator, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, errorElement, errorClass, combine, twelveHour ] )
+	dateTimeSelect( objectName, property, [ association, position, dateOrder, dateSeparator, startYear, endYear, monthDisplay, timeOrder, timeSeparator, minuteStep, secondStep, separator, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, errorElement, errorClass, combine, twelveHour ] )
 
 
 ## Parameters

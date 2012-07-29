@@ -4,7 +4,7 @@
 Registers method(s) that should be called after a new object is created.
 
 ## Function Syntax
-afterCreate( [ methods ] )
+	afterCreate( [ methods ] )
 
 
 ## Parameters

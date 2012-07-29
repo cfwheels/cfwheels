@@ -4,7 +4,7 @@
 Use this method to check whether you are currently in an instance object.
 
 ## Function Syntax
-isInstance(  )
+	isInstance(  )
 
 
 

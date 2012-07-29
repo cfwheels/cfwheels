@@ -4,7 +4,7 @@
 Use this function if you need a more low level way of setting the entire filter chain for a controller.
 
 ## Function Syntax
-setFilterChain( chain )
+	setFilterChain( chain )
 
 
 ## Parameters

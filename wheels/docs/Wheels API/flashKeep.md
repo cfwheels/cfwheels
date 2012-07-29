@@ -4,7 +4,7 @@
 Make the entire Flash or specific key in it stick around for one more request.
 
 ## Function Syntax
-flashKeep( [ key ] )
+	flashKeep( [ key ] )
 
 
 ## Parameters

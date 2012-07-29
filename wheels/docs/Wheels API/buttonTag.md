@@ -4,7 +4,7 @@
 Builds and returns a string containing a button `form` control.
 
 ## Function Syntax
-buttonTag( [ content, type, value, image, disable, prepend, append ] )
+	buttonTag( [ content, type, value, image, disable, prepend, append ] )
 
 
 ## Parameters

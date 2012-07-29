@@ -4,7 +4,7 @@
 Use this method to override the data source connection information for this model.
 
 ## Function Syntax
-dataSource( datasource, [ username, password ] )
+	dataSource( datasource, [ username, password ] )
 
 
 ## Parameters

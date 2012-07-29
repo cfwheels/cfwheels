@@ -4,7 +4,7 @@
 Finds the record with the supplied key and deletes it. Returns `true` on successful deletion of the row, `false` otherwise.
 
 ## Function Syntax
-deleteByKey( key, [ reload, transaction, callbacks, includeSoftDeletes, softDelete ] )
+	deleteByKey( key, [ reload, transaction, callbacks, includeSoftDeletes, softDelete ] )
 
 
 ## Parameters

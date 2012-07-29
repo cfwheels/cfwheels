@@ -4,7 +4,7 @@
 Registers method(s) that should be called to validate existing objects before they are updated.
 
 ## Function Syntax
-validateOnUpdate( [ methods, condition, unless ] )
+	validateOnUpdate( [ methods, condition, unless ] )
 
 
 ## Parameters

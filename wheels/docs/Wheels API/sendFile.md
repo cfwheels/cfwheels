@@ -4,7 +4,7 @@
 Sends a file to the user (from the `files` folder or a path relative to it by default).
 
 ## Function Syntax
-sendFile( file, [ name, type, disposition, directory, deleteFile ] )
+	sendFile( file, [ name, type, disposition, directory, deleteFile ] )
 
 
 ## Parameters

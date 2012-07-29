@@ -4,7 +4,7 @@
 Builds and returns a string containing three select form controls (month, day, and year) based on a `name` and `value`.
 
 ## Function Syntax
-dateSelectTags( name, [ selected, order, separator, startYear, endYear, monthDisplay, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, combine ] )
+	dateSelectTags( name, [ selected, order, separator, startYear, endYear, monthDisplay, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, combine ] )
 
 
 ## Parameters

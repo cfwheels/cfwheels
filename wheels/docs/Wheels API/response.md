@@ -4,7 +4,7 @@
 Returns content that Wheels will send to the client in response to the request.
 
 ## Function Syntax
-response(  )
+	response(  )
 
 
 

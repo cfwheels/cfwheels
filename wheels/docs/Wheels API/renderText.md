@@ -4,7 +4,7 @@
 Instructs the controller to render specified text when it's finished processing the action.
 
 ## Function Syntax
-renderText( text )
+	renderText( text )
 
 
 ## Parameters

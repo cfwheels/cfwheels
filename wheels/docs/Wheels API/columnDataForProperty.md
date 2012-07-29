@@ -4,7 +4,7 @@
 Returns a struct with data for the named property.
 
 ## Function Syntax
-columnDataForProperty( property )
+	columnDataForProperty( property )
 
 
 ## Parameters

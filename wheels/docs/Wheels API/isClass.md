@@ -4,7 +4,7 @@
 Use this method within a model's method to check whether you are currently in a class-level object.
 
 ## Function Syntax
-isClass(  )
+	isClass(  )
 
 
 

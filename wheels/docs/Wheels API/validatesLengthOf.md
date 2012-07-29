@@ -4,7 +4,7 @@
 Validates that the value of the specified property matches the length requirements supplied. Use the `exactly`, `maximum`, `minimum` and `within` arguments to specify the length requirements.
 
 ## Function Syntax
-validatesLengthOf( properties, [ message, when, allowBlank, exactly, maximum, minimum, within, condition, unless ] )
+	validatesLengthOf( properties, [ message, when, allowBlank, exactly, maximum, minimum, within, condition, unless ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Returns readable text by capitalizing and converting camel casing to multiple words.
 
 ## Function Syntax
-humanize( text, [ except ] )
+	humanize( text, [ except ] )
 
 
 ## Parameters

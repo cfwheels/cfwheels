@@ -4,7 +4,7 @@
 Use this method to map an object property to either a table column with a different name than the property or to a SQL expression. You only need to use this method when you want to override the default object relational mapping that Wheels performs.
 
 ## Function Syntax
-property( name, [ column, sql, label, defaultValue ] )
+	property( name, [ column, sql, label, defaultValue ] )
 
 
 ## Parameters

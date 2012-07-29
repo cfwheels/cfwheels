@@ -4,7 +4,7 @@
 Allows you to pass in the name(s) of the property(s) that should be used as the primary key(s). Pass as a list if defining a composite primary key. Also aliased as `setPrimaryKeys()`.
 
 ## Function Syntax
-setPrimaryKey( property )
+	setPrimaryKey( property )
 
 
 ## Parameters

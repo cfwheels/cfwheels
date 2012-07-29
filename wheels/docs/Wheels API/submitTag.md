@@ -4,7 +4,7 @@
 Builds and returns a string containing a submit button `form` control. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
 
 ## Function Syntax
-submitTag( [ value, image, disable, prepend, append ] )
+	submitTag( [ value, image, disable, prepend, append ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Returns a structure of all the properties with their names as keys and the values of the property as values.
 
 ## Function Syntax
-properties(  )
+	properties(  )
 
 
 

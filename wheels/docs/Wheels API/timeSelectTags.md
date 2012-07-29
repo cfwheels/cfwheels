@@ -4,7 +4,7 @@
 Builds and returns a string containing three select form controls for hour, minute, and second based on `name`.
 
 ## Function Syntax
-timeSelectTags( name, [ selected, order, separator, minuteStep, secondStep, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, combine, twelveHour ] )
+	timeSelectTags( name, [ selected, order, separator, minuteStep, secondStep, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, combine, twelveHour ] )
 
 
 ## Parameters

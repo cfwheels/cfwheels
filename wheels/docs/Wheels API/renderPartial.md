@@ -4,7 +4,7 @@
 Instructs the controller to render a partial when it's finished processing the action.
 
 ## Function Syntax
-renderPartial( partial, [ cache, layout, returnAs, dataFunction ] )
+	renderPartial( partial, [ cache, layout, returnAs, dataFunction ] )
 
 
 ## Parameters

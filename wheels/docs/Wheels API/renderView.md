@@ -4,7 +4,7 @@
 Instructs the controller which view template and layout to render when it's finished processing the action. Note that when passing values for `controller` and/or `action`, this function does not load the actual action but rather just loads the corresponding view template.
 
 ## Function Syntax
-renderView( [ controller, action, template, layout, cache, returnAs, hideDebugInformation ] )
+	renderView( [ controller, action, template, layout, cache, returnAs, hideDebugInformation ] )
 
 
 ## Parameters

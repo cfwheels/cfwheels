@@ -4,7 +4,7 @@
 Returns `true` if this object hasn't been saved yet. (In other words, no matching record exists in the database yet.) Returns `false` if a record exists.
 
 ## Function Syntax
-isNew(  )
+	isNew(  )
 
 
 

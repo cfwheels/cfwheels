@@ -4,7 +4,7 @@
 Adds an error on the object as a whole (not related to any specific property).
 
 ## Function Syntax
-addErrorToBase( message, [ name ] )
+	addErrorToBase( message, [ name ] )
 
 
 ## Parameters

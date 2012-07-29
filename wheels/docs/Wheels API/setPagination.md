@@ -4,7 +4,7 @@
 Allows you to set a pagination handle for a custom query so you can perform pagination on it in your view with `paginationLinks()`.
 
 ## Function Syntax
-setPagination( totalRecords, [ currentPage, perPage, handle ] )
+	setPagination( totalRecords, [ currentPage, perPage, handle ] )
 
 
 ## Parameters

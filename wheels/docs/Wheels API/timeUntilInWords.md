@@ -4,7 +4,7 @@
 Pass in a date to this method, and it will return a string describing the approximate time difference between the current date and that date.
 
 ## Function Syntax
-timeUntilInWords( toTime, [ includeSeconds, fromTime ] )
+	timeUntilInWords( toTime, [ includeSeconds, fromTime ] )
 
 
 ## Parameters

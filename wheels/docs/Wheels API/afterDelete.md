@@ -4,7 +4,7 @@
 Registers method(s) that should be called after an object is deleted.
 
 ## Function Syntax
-afterDelete( [ methods ] )
+	afterDelete( [ methods ] )
 
 
 ## Parameters

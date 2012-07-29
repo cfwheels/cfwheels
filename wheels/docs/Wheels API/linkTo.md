@@ -4,7 +4,7 @@
 Creates a link to another page in your application. Pass in the name of a `route` to use your configured routes or a `controller`/`action`/`key` combination. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
 
 ## Function Syntax
-linkTo( [ text, confirm, route, controller, action, key, params, anchor, onlyPath, host, protocol, port, href, remote ] )
+	linkTo( [ text, confirm, route, controller, action, key, params, anchor, onlyPath, host, protocol, port, href, remote ] )
 
 
 ## Parameters

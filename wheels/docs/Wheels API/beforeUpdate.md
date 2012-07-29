@@ -4,7 +4,7 @@
 Registers method(s) that should be called before an existing object is updated.
 
 ## Function Syntax
-beforeUpdate( [ methods ] )
+	beforeUpdate( [ methods ] )
 
 
 ## Parameters

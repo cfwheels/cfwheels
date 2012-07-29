@@ -4,7 +4,7 @@
 Returns the singular form of the passed in word.
 
 ## Function Syntax
-singularize( word )
+	singularize( word )
 
 
 ## Parameters

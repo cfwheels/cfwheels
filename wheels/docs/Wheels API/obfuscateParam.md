@@ -4,7 +4,7 @@
 Obfuscates a value. Typically used for hiding primary key values when passed along in the URL.
 
 ## Function Syntax
-obfuscateParam( param )
+	obfuscateParam( param )
 
 
 ## Parameters

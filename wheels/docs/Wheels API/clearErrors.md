@@ -4,7 +4,7 @@
 Clears out all errors set on the object or only the ones set for a specific property or name.
 
 ## Function Syntax
-clearErrors( [ property, name ] )
+	clearErrors( [ property, name ] )
 
 
 ## Parameters

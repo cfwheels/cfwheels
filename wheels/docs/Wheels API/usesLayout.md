@@ -4,7 +4,7 @@
 Used within a controller's `init()` method to specify controller- or action-specific layouts.
 
 ## Function Syntax
-usesLayout( template, [ ajax, except, only, useDefault ] )
+	usesLayout( template, [ ajax, except, only, useDefault ] )
 
 
 ## Parameters

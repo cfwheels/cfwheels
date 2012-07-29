@@ -4,7 +4,7 @@
 Deletes all records that match the `where` argument. By default, objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in `instantiate=true`. Returns the number of records that were deleted.
 
 ## Function Syntax
-deleteAll( [ where, include, reload, parameterize, instantiate, transaction, callbacks, includeSoftDeletes, softDelete ] )
+	deleteAll( [ where, include, reload, parameterize, instantiate, transaction, callbacks, includeSoftDeletes, softDelete ] )
 
 
 ## Parameters

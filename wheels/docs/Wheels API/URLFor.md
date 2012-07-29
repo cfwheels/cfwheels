@@ -4,7 +4,7 @@
 Creates an internal URL based on supplied arguments.
 
 ## Function Syntax
-URLFor( [ route, controller, action, key, params, anchor, onlyPath, host, protocol, port ] )
+	URLFor( [ route, controller, action, key, params, anchor, onlyPath, host, protocol, port ] )
 
 
 ## Parameters

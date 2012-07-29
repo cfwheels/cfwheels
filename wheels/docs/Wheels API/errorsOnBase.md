@@ -4,7 +4,7 @@
 Returns an array of all errors associated with the object as a whole (not related to any specific property).
 
 ## Function Syntax
-errorsOnBase( [ name ] )
+	errorsOnBase( [ name ] )
 
 
 ## Parameters

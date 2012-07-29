@@ -4,7 +4,7 @@
 Alias for @setPrimaryKey. Use this for better readability when you're setting multiple properties as the primary key.
 
 ## Function Syntax
-setPrimaryKeys( property )
+	setPrimaryKeys( property )
 
 
 ## Parameters

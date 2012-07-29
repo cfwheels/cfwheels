@@ -4,7 +4,7 @@
 Returns whether the page was called from JavaScript or not.
 
 ## Function Syntax
-isAjax(  )
+	isAjax(  )
 
 
 

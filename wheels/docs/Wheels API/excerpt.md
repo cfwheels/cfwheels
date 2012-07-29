@@ -4,7 +4,7 @@
 Extracts an excerpt from text that matches the first instance of a given phrase.
 
 ## Function Syntax
-excerpt( text, phrase, [ radius, excerptString, stripTags, wholeWords ] )
+	excerpt( text, phrase, [ radius, excerptString, stripTags, wholeWords ] )
 
 
 ## Parameters

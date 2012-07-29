@@ -4,7 +4,7 @@
 Validates that the specified property exists and that its value is not blank.
 
 ## Function Syntax
-validatesPresenceOf( properties, [ message, when, condition, unless ] )
+	validatesPresenceOf( properties, [ message, when, condition, unless ] )
 
 
 ## Parameters

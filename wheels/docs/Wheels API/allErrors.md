@@ -4,7 +4,7 @@
 Returns an array of all the errors on the object.
 
 ## Function Syntax
-allErrors(  )
+	allErrors(  )
 
 
 

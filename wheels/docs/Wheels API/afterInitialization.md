@@ -4,7 +4,7 @@
 Registers method(s) that should be called after an object has been initialized.
 
 ## Function Syntax
-afterInitialization( [ methods ] )
+	afterInitialization( [ methods ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Builds and returns a string containing links to pages based on a paginated query. Uses @linkTo internally to build the link, so you need to pass in a `route` name or a `controller`/`action`/`key` combination. All other @linkTo arguments can be supplied as well, in which case they are passed through directly to @linkTo. If you have paginated more than one query in the controller, you can use the `handle` argument to reference them. (Don't forget to pass in a `handle` to the @findAll function in your controller first.)
 
 ## Function Syntax
-paginationLinks( [ windowSize, alwaysShowAnchors, anchorDivider, linkToCurrentPage, prepend, append, prependToPage, prependOnFirst, prependOnAnchor, appendToPage, appendOnLast, appendOnAnchor, classForCurrent, handle, name, showSinglePage, pageNumberAsParam ] )
+	paginationLinks( [ windowSize, alwaysShowAnchors, anchorDivider, linkToCurrentPage, prepend, append, prependToPage, prependOnFirst, prependOnAnchor, appendToPage, appendOnLast, appendOnAnchor, classForCurrent, handle, name, showSinglePage, pageNumberAsParam ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Highlights the phrase(s) everywhere in the text if found by wrapping it in a `span` tag.
 
 ## Function Syntax
-highlight( text, phrases, [ delimiter, tag, class ] )
+	highlight( text, phrases, [ delimiter, tag, class ] )
 
 
 ## Parameters

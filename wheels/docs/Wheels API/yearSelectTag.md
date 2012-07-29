@@ -4,7 +4,7 @@
 Builds and returns a string containing a select form control for a range of years based on the supplied `name`.
 
 ## Function Syntax
-yearSelectTag( name, [ selected, startYear, endYear, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
+	yearSelectTag( name, [ selected, startYear, endYear, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
 
 
 ## Parameters

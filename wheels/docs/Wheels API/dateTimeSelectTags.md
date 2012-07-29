@@ -4,7 +4,7 @@
 Builds and returns a string containing six select form controls (three for date selection and the remaining three for time selection) based on a `name`.
 
 ## Function Syntax
-dateTimeSelectTags( name, [ selected, dateOrder, dateSeparator, startYear, endYear, monthDisplay, timeOrder, timeSeparator, minuteStep, secondStep, separator, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, combine, twelveHour ] )
+	dateTimeSelectTags( name, [ selected, dateOrder, dateSeparator, startYear, endYear, monthDisplay, timeOrder, timeSeparator, minuteStep, secondStep, separator, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, combine, twelveHour ] )
 
 
 ## Parameters

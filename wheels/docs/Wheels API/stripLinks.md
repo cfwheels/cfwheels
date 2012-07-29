@@ -4,7 +4,7 @@
 Removes all links from an HTML string, leaving just the link text.
 
 ## Function Syntax
-stripLinks( html )
+	stripLinks( html )
 
 
 ## Parameters

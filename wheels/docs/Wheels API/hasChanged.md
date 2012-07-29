@@ -4,7 +4,7 @@
 Returns `true` if the specified property (or any if none was passed in) has been changed but not yet saved to the database. Will also return `true` if the object is new and no record for it exists in the database.
 
 ## Function Syntax
-hasChanged( [ property ] )
+	hasChanged( [ property ] )
 
 
 ## Parameters

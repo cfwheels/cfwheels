@@ -4,7 +4,7 @@
 Builds and returns a string containing a select form control for the months of the year based on the supplied `name`.
 
 ## Function Syntax
-monthSelectTag( name, [ selected, monthDisplay, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
+	monthSelectTag( name, [ selected, monthDisplay, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
 
 
 ## Parameters

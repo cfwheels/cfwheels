@@ -4,7 +4,7 @@
 Returns a struct with information about the specificed paginated query. The keys that will be included in the struct are `currentPage`, `totalPages` and `totalRecords`.
 
 ## Function Syntax
-pagination( [ handle ] )
+	pagination( [ handle ] )
 
 
 ## Parameters

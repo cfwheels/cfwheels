@@ -4,7 +4,7 @@
 Capitalizes all words in the text to create a nicer looking title.
 
 ## Function Syntax
-titleize( word )
+	titleize( word )
 
 
 ## Parameters

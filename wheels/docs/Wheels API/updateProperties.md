@@ -4,7 +4,7 @@
 Updates all the properties from the `properties` argument or other named arguments. If the object is invalid, the save will fail and `false` will be returned.
 
 ## Function Syntax
-updateProperties( [ properties, parameterize, validate, transaction, callbacks ] )
+	updateProperties( [ properties, parameterize, validate, transaction, callbacks ] )
 
 
 ## Parameters

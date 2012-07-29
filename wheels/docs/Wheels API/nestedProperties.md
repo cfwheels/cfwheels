@@ -4,7 +4,7 @@
 Allows for nested objects, structs, and arrays to be set from params and other generated data.
 
 ## Function Syntax
-nestedProperties( [ association, autoSave, allowDelete, sortProperty, rejectIfBlank ] )
+	nestedProperties( [ association, autoSave, allowDelete, sortProperty, rejectIfBlank ] )
 
 
 ## Parameters

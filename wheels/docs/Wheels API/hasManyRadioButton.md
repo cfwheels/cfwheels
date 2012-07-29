@@ -4,7 +4,7 @@
 Used as a shortcut to output the proper form elements for an association. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
 
 ## Function Syntax
-hasManyRadioButton( objectName, association, property, keys, tagValue, [ checkIfBlank, label ] )
+	hasManyRadioButton( objectName, association, property, keys, tagValue, [ checkIfBlank, label ] )
 
 
 ## Parameters

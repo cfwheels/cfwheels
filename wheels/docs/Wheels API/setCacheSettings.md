@@ -4,7 +4,7 @@
 Updates the settings for a cache category. Use this method in your settings files. You may also add specific arguments that you would like to pass to the storage component.
 
 ## Function Syntax
-setCacheSettings( category, storage, [ strategy, timeout, cullPercentage, cullInterval, maximumItems ] )
+	setCacheSettings( category, storage, [ strategy, timeout, cullPercentage, cullInterval, maximumItems ] )
 
 
 ## Parameters

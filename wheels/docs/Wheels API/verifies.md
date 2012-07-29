@@ -4,7 +4,7 @@
 Instructs Wheels to verify that some specific criterias are met before running an action. NOTE: All undeclared arguments will be passed to `redirectTo()` call if a handler is not specified.
 
 ## Function Syntax
-verifies( [ only, except, post, get, ajax, cookie, session, params, handler, cookieTypes, sessionTypes, paramsTypes ] )
+	verifies( [ only, except, post, get, ajax, cookie, session, params, handler, cookieTypes, sessionTypes, paramsTypes ] )
 
 
 ## Parameters

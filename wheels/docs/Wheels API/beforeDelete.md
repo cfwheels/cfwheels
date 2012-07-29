@@ -4,7 +4,7 @@
 Registers method(s) that should be called before an object is deleted.
 
 ## Function Syntax
-beforeDelete( [ methods ] )
+	beforeDelete( [ methods ] )
 
 
 ## Parameters

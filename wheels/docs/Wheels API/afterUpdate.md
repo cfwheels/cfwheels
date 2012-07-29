@@ -4,7 +4,7 @@
 Registers method(s) that should be called after an existing object is updated.
 
 ## Function Syntax
-afterUpdate( [ methods ] )
+	afterUpdate( [ methods ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Use to configure a global setting or set a default for a function.
 
 ## Function Syntax
-set(  )
+	set(  )
 
 
 

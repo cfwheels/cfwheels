@@ -4,7 +4,7 @@
 Checks if a record exists in the table. You can pass in either a primary key value to the `key` argument or a string to the `where` argument.
 
 ## Function Syntax
-exists( [ key, where, reload, parameterize ] )
+	exists( [ key, where, reload, parameterize ] )
 
 
 ## Parameters

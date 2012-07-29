@@ -4,7 +4,7 @@
 Used to store a section's output for rendering within a layout. This content store acts as a stack, so you can store multiple pieces of content for a given section.
 
 ## Function Syntax
-contentFor( [ position, overwrite ] )
+	contentFor( [ position, overwrite ] )
 
 
 ## Parameters

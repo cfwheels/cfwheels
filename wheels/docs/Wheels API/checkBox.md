@@ -4,7 +4,7 @@
 Builds and returns a string containing a check box form control based on the supplied `objectName` and `property`. In most cases, this function generates a form field that should represent a `boolean` style field in your data. Use @checkBoxTag or @hasManyCheckBox to generate check boxes for selecting multiple values. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
 
 ## Function Syntax
-checkBox( objectName, property, [ association, position, checkedValue, uncheckedValue, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, errorElement, errorClass ] )
+	checkBox( objectName, property, [ association, position, checkedValue, uncheckedValue, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, errorElement, errorClass ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Returns whether the request came from a form `POST` submission or not.
 
 ## Function Syntax
-isPost(  )
+	isPost(  )
 
 
 

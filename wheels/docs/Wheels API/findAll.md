@@ -4,7 +4,7 @@
 Returns records from the database table mapped to this model according to the arguments passed in. (Use the `where` argument to decide which records to get, use the `order` argument to set in what order those records should be returned, and so on). The records will be returned as either a `cfquery` result set or an array of objects (depending on what the `returnAs` argument is set to). Instead of using the `where` argument, you can create cleaner code by making use of a concept called dynamic finders.
 
 ## Function Syntax
-findAll( [ where, order, group, select, distinct, include, maxRows, page, perPage, count, handle, cache, reload, parameterize, returnAs, returnIncluded, callbacks, includeSoftDeletes ] )
+	findAll( [ where, order, group, select, distinct, include, maxRows, page, perPage, count, handle, cache, reload, parameterize, returnAs, returnIncluded, callbacks, includeSoftDeletes ] )
 
 
 ## Parameters

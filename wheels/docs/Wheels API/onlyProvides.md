@@ -4,7 +4,7 @@
 Use this in an individual controller action to define which formats the action will respond with. This can be used to define provides behavior in individual actions or to override a global setting set with @provides in the controller's `init()`.
 
 ## Function Syntax
-onlyProvides( [ formats, action ] )
+	onlyProvides( [ formats, action ] )
 
 
 ## Parameters

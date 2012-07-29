@@ -4,7 +4,7 @@
 Returns an array of all the verifications set on this controller in the order in which they will be executed.
 
 ## Function Syntax
-verificationChain(  )
+	verificationChain(  )
 
 
 

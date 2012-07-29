@@ -4,7 +4,7 @@
 Gets an object based on conditions and deletes it.
 
 ## Function Syntax
-deleteOne( [ where, order, reload, transaction, callbacks, includeSoftDeletes, softDelete ] )
+	deleteOne( [ where, order, reload, transaction, callbacks, includeSoftDeletes, softDelete ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Returns an array of all the filters set on this controller in the order in which they will be executed.
 
 ## Function Syntax
-filterChain( [ type ] )
+	filterChain( [ type ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Finds the object with the supplied key and saves it (if validation permits it) with the supplied properties and/or named arguments. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument. Returns `true` if the object was found and updated successfully, `false` otherwise.
 
 ## Function Syntax
-updateByKey( key, [ properties, reload, validate, transaction, callbacks, includeSoftDeletes ] )
+	updateByKey( key, [ properties, reload, validate, transaction, callbacks, includeSoftDeletes ] )
 
 
 ## Parameters

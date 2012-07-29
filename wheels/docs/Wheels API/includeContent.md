@@ -4,7 +4,7 @@
 Used to output the content for a particular section in a layout.
 
 ## Function Syntax
-includeContent( [ name, defaultValue ] )
+	includeContent( [ name, defaultValue ] )
 
 
 ## Parameters

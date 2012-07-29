@@ -4,7 +4,7 @@
 Validates that the value of the specified property is formatted correctly by matching it against a regular expression using the `regEx` argument and/or against a built-in CFML validation type using the `type` argument (`creditcard`, `date`, `email`, etc.).
 
 ## Function Syntax
-validatesFormatOf( properties, [ regEx, type, message, when, allowBlank, condition, unless ] )
+	validatesFormatOf( properties, [ regEx, type, message, when, allowBlank, condition, unless ] )
 
 
 ## Parameters

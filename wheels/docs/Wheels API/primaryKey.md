@@ -4,7 +4,7 @@
 Returns the name of the primary key for this model's table. This is determined through database introspection. If composite primary keys have been used, they will both be returned in a list. This function is also aliased as `primaryKeys()`.
 
 ## Function Syntax
-primaryKey( [ position ] )
+	primaryKey( [ position ] )
 
 
 ## Parameters

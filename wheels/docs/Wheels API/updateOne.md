@@ -4,7 +4,7 @@
 Gets an object based on the arguments used and updates it with the supplied properties. Returns `true` if an object was found and updated successfully, `false` otherwise.
 
 ## Function Syntax
-updateOne( [ where, order, properties, reload, validate, transaction, callbacks, includeSoftDeletes ] )
+	updateOne( [ where, order, properties, reload, validate, transaction, callbacks, includeSoftDeletes ] )
 
 
 ## Parameters

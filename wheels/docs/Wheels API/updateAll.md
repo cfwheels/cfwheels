@@ -4,7 +4,7 @@
 Updates all properties for the records that match the `where` argument. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument. By default, objects will not be instantiated and therefore callbacks and validations are not invoked. You can change this behavior by passing in `instantiate=true`. This method returns the number of records that were updated.
 
 ## Function Syntax
-updateAll( [ where, include, properties, reload, parameterize, instantiate, validate, transaction, callbacks, includeSoftDeletes ] )
+	updateAll( [ where, include, properties, reload, parameterize, instantiate, validate, transaction, callbacks, includeSoftDeletes ] )
 
 
 ## Parameters

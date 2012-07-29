@@ -4,7 +4,7 @@
 Saves the object if it passes validation and callbacks. Returns `true` if the object was saved successfully to the database, `false` if not.
 
 ## Function Syntax
-save( [ parameterize, reload, validate, transaction, callbacks ] )
+	save( [ parameterize, reload, validate, transaction, callbacks ] )
 
 
 ## Parameters

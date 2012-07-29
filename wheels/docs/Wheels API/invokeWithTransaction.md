@@ -4,7 +4,7 @@
 Runs the specified method within a single database transaction.
 
 ## Function Syntax
-invokeWithTransaction( method, [ transaction, isolation ] )
+	invokeWithTransaction( method, [ transaction, isolation ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Returns the previous value of a property that has changed. Returns an empty string if no previous value exists. Wheels will keep a note of the previous property value until the object is saved to the database.
 
 ## Function Syntax
-changedFrom( property )
+	changedFrom( property )
 
 
 ## Parameters

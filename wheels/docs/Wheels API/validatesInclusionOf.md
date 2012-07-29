@@ -4,7 +4,7 @@
 Validates that the value of the specified property exists in the supplied list.
 
 ## Function Syntax
-validatesInclusionOf( properties, list, [ message, when, allowBlank, condition, unless ] )
+	validatesInclusionOf( properties, list, [ message, when, allowBlank, condition, unless ] )
 
 
 ## Parameters

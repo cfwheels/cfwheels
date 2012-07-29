@@ -4,7 +4,7 @@
 Calculates the average value for a given property. Uses the SQL function `AVG`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.
 
 ## Function Syntax
-average( property, [ where, include, distinct, parameterize, ifNull, includeSoftDeletes, reload ] )
+	average( property, [ where, include, distinct, parameterize, ifNull, includeSoftDeletes, reload ] )
 
 
 ## Parameters

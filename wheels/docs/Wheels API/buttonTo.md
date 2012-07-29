@@ -4,7 +4,7 @@
 Creates a form containing a single button that submits to the URL. The URL is built the same way as the @linkTo function.
 
 ## Function Syntax
-buttonTo( [ text, confirm, image, disable, route, controller, action, key, params, anchor, onlyPath, host, protocol, port, remote ] )
+	buttonTo( [ text, confirm, image, disable, route, controller, action, key, params, anchor, onlyPath, host, protocol, port, remote ] )
 
 
 ## Parameters

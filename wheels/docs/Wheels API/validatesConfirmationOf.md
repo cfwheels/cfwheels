@@ -4,7 +4,7 @@
 Validates that the value of the specified property also has an identical confirmation value. (This is common when having a user type in their email address a second time to confirm, confirming a password by typing it a second time, etc.) The confirmation value only exists temporarily and never gets saved to the database. By convention, the confirmation property has to be named the same as the property with "Confirmation" appended at the end. Using the password example, to confirm our `password` property, we would create a property called `passwordConfirmation`.
 
 ## Function Syntax
-validatesConfirmationOf( properties, [ message, when, condition, unless ] )
+	validatesConfirmationOf( properties, [ message, when, condition, unless ] )
 
 
 ## Parameters

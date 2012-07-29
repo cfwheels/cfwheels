@@ -4,7 +4,7 @@
 Returns an associated MIME type based on a file extension.
 
 ## Function Syntax
-mimeTypes( extension, [ fallback ] )
+	mimeTypes( extension, [ fallback ] )
 
 
 ## Parameters

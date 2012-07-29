@@ -4,7 +4,7 @@
 Validates that the value of the specified property does not exist in the supplied list.
 
 ## Function Syntax
-validatesExclusionOf( properties, list, [ message, when, allowBlank, condition, unless ] )
+	validatesExclusionOf( properties, list, [ message, when, allowBlank, condition, unless ] )
 
 
 ## Parameters

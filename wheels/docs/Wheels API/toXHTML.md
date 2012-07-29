@@ -4,7 +4,7 @@
 Returns an XHTML-compliant string.
 
 ## Function Syntax
-toXHTML( text )
+	toXHTML( text )
 
 
 ## Parameters

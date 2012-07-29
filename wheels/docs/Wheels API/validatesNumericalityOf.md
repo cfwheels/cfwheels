@@ -4,7 +4,7 @@
 Validates that the value of the specified property is numeric.
 
 ## Function Syntax
-validatesNumericalityOf( properties, [ message, when, allowBlank, onlyInteger, condition, unless, odd, even, greaterThan, greaterThanOrEqualTo, equalTo, lessThan, lessThanOrEqualTo ] )
+	validatesNumericalityOf( properties, [ message, when, allowBlank, onlyInteger, condition, unless, odd, even, greaterThan, greaterThanOrEqualTo, equalTo, lessThan, lessThanOrEqualTo ] )
 
 
 ## Parameters

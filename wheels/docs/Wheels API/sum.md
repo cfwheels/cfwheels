@@ -4,7 +4,7 @@
 Calculates the sum of values for a given property. Uses the SQL function `SUM`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.
 
 ## Function Syntax
-sum( property, [ where, include, distinct, parameterize, ifNull, includeSoftDeletes, reload ] )
+	sum( property, [ where, include, distinct, parameterize, ifNull, includeSoftDeletes, reload ] )
 
 
 ## Parameters

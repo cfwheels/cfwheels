@@ -4,7 +4,7 @@
 Builds and returns a string containing one select form control for the seconds of a minute based on the supplied `name`.
 
 ## Function Syntax
-secondSelectTag( name, [ selected, secondStep, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
+	secondSelectTag( name, [ selected, secondStep, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
 
 
 ## Parameters

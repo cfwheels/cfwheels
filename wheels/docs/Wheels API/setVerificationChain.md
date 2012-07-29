@@ -4,7 +4,7 @@
 Use this function if you need a more low level way of setting the entire verification chain for a controller.
 
 ## Function Syntax
-setVerificationChain( chain )
+	setVerificationChain( chain )
 
 
 ## Parameters

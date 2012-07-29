@@ -4,7 +4,7 @@
 Inserts a new key/value into the Flash.
 
 ## Function Syntax
-flashInsert(  )
+	flashInsert(  )
 
 
 

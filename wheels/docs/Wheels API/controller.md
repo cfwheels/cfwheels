@@ -4,7 +4,7 @@
 Creates and returns a controller object with your own custom `name` and `params`. Used primarily for testing purposes.
 
 ## Function Syntax
-controller( name, [ params ] )
+	controller( name, [ params ] )
 
 
 ## Parameters

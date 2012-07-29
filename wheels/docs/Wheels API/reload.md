@@ -4,7 +4,7 @@
 Reloads the property values of this object from the database.
 
 ## Function Syntax
-reload(  )
+	reload(  )
 
 
 

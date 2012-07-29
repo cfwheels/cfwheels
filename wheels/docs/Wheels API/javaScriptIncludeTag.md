@@ -4,7 +4,7 @@
 Returns a `script` tag for a JavaScript file (or several) based on the supplied arguments.
 
 ## Function Syntax
-javaScriptIncludeTag( [ sources, type, head, delim ] )
+	javaScriptIncludeTag( [ sources, type, head, delim ] )
 
 
 ## Parameters

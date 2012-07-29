@@ -4,7 +4,7 @@
 Returns an `img` tag. If the image is stored in the local `images` folder, the tag will also set the `width`, `height`, and `alt` attributes for you. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
 
 ## Function Syntax
-imageTag( source )
+	imageTag( source )
 
 
 ## Parameters

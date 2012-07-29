@@ -4,7 +4,7 @@
 Calculates the maximum value for a given property. Uses the SQL function `MAX`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.
 
 ## Function Syntax
-maximum( property, [ where, include, parameterize, ifNull, includeSoftDeletes, reload ] )
+	maximum( property, [ where, include, parameterize, ifNull, includeSoftDeletes, reload ] )
 
 
 ## Parameters

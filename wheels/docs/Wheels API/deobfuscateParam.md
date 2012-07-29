@@ -4,7 +4,7 @@
 Deobfuscates a value.
 
 ## Function Syntax
-deobfuscateParam( param )
+	deobfuscateParam( param )
 
 
 ## Parameters

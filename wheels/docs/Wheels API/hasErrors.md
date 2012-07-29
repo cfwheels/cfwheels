@@ -4,7 +4,7 @@
 Returns `true` if the object has any errors. You can also limit to only check a specific property or name for errors.
 
 ## Function Syntax
-hasErrors( [ property, name ] )
+	hasErrors( [ property, name ] )
 
 
 ## Parameters

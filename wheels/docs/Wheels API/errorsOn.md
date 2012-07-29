@@ -4,7 +4,7 @@
 Returns an array of all errors associated with the supplied property (and error name if passed in).
 
 ## Function Syntax
-errorsOn( property, [ name ] )
+	errorsOn( property, [ name ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Builds and returns a string containing a select form control for the days of the week based on the supplied `name`.
 
 ## Function Syntax
-daySelectTag( name, [ selected, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
+	daySelectTag( name, [ selected, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
 
 
 ## Parameters

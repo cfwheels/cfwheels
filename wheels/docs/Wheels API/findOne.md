@@ -4,7 +4,7 @@
 Fetches the first record found based on the `WHERE` and `ORDER BY` clauses. With the default settings (i.e. the `returnAs` argument set to `object`), a model object will be returned if the record is found and the boolean value `false` if not. Instead of using the `where` argument, you can create cleaner code by making use of a concept called dynamic finders.
 
 ## Function Syntax
-findOne( [ where, order, select, include, cache, reload, parameterize, returnAs, includeSoftDeletes ] )
+	findOne( [ where, order, select, include, cache, reload, parameterize, returnAs, includeSoftDeletes ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Builds and returns a string containing a check box form control based on the supplied `name`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
 
 ## Function Syntax
-checkBoxTag( name, [ checked, value, uncheckedValue, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
+	checkBoxTag( name, [ checked, value, uncheckedValue, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
 
 
 ## Parameters

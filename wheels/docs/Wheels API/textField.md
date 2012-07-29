@@ -4,7 +4,7 @@
 Builds and returns a string containing a text field form control based on the supplied `objectName` and `property`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
 
 ## Function Syntax
-textField( objectName, property, [ association, position, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, errorElement, errorClass ] )
+	textField( objectName, property, [ association, position, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, errorElement, errorClass ] )
 
 
 ## Parameters

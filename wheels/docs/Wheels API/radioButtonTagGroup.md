@@ -4,7 +4,7 @@
 Builds and returns a string for a group of radio buttons and labels. If you pass in [value] to any of the arguments that get appplied to each individual radio button (`append` for example), it will be replaced by the real value in the current iteration. You can pass in different `prepend`, `append` etc arguments by using a list.
 
 ## Function Syntax
-radioButtonTagGroup( name, values, [ checkedValue, order, prependToGroup, appendToGroup, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
+	radioButtonTagGroup( name, values, [ checkedValue, order, prependToGroup, appendToGroup, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
 
 
 ## Parameters

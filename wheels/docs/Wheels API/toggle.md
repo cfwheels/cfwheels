@@ -4,7 +4,7 @@
 Assigns to the property specified the opposite of the property's current boolean value. Throws an error if the property cannot be converted to a boolean value. Returns this object if save called internally is `false`.
 
 ## Function Syntax
-toggle( property, [ save ] )
+	toggle( property, [ save ] )
 
 
 ## Parameters

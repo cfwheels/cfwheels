@@ -4,7 +4,7 @@
 Deletes a specific key from the Flash.
 
 ## Function Syntax
-flashDelete( key )
+	flashDelete( key )
 
 
 ## Parameters

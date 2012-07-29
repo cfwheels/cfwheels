@@ -4,7 +4,7 @@
 Pass in two dates to this method, and it will return a string describing the difference between them.
 
 ## Function Syntax
-distanceOfTimeInWords( fromTime, toTime, [ includeSeconds ] )
+	distanceOfTimeInWords( fromTime, toTime, [ includeSeconds ] )
 
 
 ## Parameters

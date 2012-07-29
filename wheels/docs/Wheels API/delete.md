@@ -4,7 +4,7 @@
 Deletes the object, which means the row is deleted from the database (unless prevented by a `beforeDelete` callback). Returns `true` on successful deletion of the row, `false` otherwise.
 
 ## Function Syntax
-delete( [ parameterize, transaction, callbacks, includeSoftDeletes, softDelete ] )
+	delete( [ parameterize, transaction, callbacks, includeSoftDeletes, softDelete ] )
 
 
 ## Parameters

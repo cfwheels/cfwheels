@@ -4,7 +4,7 @@
 Used as a shortcut to output the proper form elements for an association. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
 
 ## Function Syntax
-hasManyCheckBox( objectName, association, keys, [ label, labelPlacement, prepend, append, prependToLabel, appendToLabel, errorElement, errorClass ] )
+	hasManyCheckBox( objectName, association, keys, [ label, labelPlacement, prepend, append, prependToLabel, appendToLabel, errorElement, errorClass ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Used as a shortcut to check if the specified IDs are a part of the main form object. This method should only be used for `hasMany` associations.
 
 ## Function Syntax
-includedInObject( objectName, association, keys )
+	includedInObject( objectName, association, keys )
 
 
 ## Parameters

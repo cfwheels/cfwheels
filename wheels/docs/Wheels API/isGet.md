@@ -4,7 +4,7 @@
 Returns whether the request was a normal `GET` request or not.
 
 ## Function Syntax
-isGet(  )
+	isGet(  )
 
 
 

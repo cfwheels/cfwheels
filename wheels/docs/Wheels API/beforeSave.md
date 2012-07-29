@@ -4,7 +4,7 @@
 Registers method(s) that should be called before an object is saved.
 
 ## Function Syntax
-beforeSave( [ methods ] )
+	beforeSave( [ methods ] )
 
 
 ## Parameters

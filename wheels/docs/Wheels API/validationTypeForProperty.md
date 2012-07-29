@@ -4,7 +4,7 @@
 Returns the validation type for the property
 
 ## Function Syntax
-validationTypeForProperty( property )
+	validationTypeForProperty( property )
 
 
 ## Parameters

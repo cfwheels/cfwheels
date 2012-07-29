@@ -4,7 +4,7 @@
 Builds and returns a string containing one select form control for the hours of the day based on the supplied `name`.
 
 ## Function Syntax
-hourSelectTag( name, [ selected, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, twelveHour ] )
+	hourSelectTag( name, [ selected, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, twelveHour ] )
 
 
 ## Parameters

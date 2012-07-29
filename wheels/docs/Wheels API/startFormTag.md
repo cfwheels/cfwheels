@@ -4,7 +4,7 @@
 Builds and returns a string containing the opening form tag. The form's action will be built according to the same rules as `URLFor`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
 
 ## Function Syntax
-startFormTag( [ method, multipart, spamProtection, route, controller, action, key, params, anchor, onlyPath, host, protocol, port, remote ] )
+	startFormTag( [ method, multipart, spamProtection, route, controller, action, key, params, anchor, onlyPath, host, protocol, port, remote ] )
 
 
 ## Parameters

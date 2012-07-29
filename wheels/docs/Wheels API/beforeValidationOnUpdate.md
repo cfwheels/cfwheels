@@ -4,7 +4,7 @@
 Registers method(s) that should be called before an existing object is validated.
 
 ## Function Syntax
-beforeValidationOnUpdate( [ methods ] )
+	beforeValidationOnUpdate( [ methods ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Returns the current setting for the supplied Wheels setting or the current default for the supplied Wheels function argument.
 
 ## Function Syntax
-get( name, [ functionName ] )
+	get( name, [ functionName ] )
 
 
 ## Parameters

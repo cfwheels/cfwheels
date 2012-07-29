@@ -4,7 +4,7 @@
 Includes the contents of another layout file. This is usually used to include a parent layout from within a child layout.
 
 ## Function Syntax
-includeLayout( [ name ] )
+	includeLayout( [ name ] )
 
 
 ## Parameters

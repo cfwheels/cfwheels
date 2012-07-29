@@ -4,7 +4,7 @@
 Includes the specified partial file in the view. Similar to using `cfinclude` but with the ability to cache the result and use Wheels-specific file look-up. By default, Wheels will look for the file in the current controller's view folder. To include a file relative from the base `views` folder, you can start the path supplied to `name` with a forward slash.
 
 ## Function Syntax
-includePartial( partial, [ group, cache, layout, spacer, dataFunction ] )
+	includePartial( partial, [ group, cache, layout, spacer, dataFunction ] )
 
 
 ## Parameters

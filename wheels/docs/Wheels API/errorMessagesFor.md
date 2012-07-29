@@ -4,7 +4,7 @@
 Builds and returns a list (`ul` tag with a default class of `errorMessages`) containing all the error messages for all the properties of the object (if any). Returns an empty string otherwise.
 
 ## Function Syntax
-errorMessagesFor( objectName, [ class, showDuplicates ] )
+	errorMessagesFor( objectName, [ class, showDuplicates ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Turns all URLs and email addresses into hyperlinks.
 
 ## Function Syntax
-autoLink( text, [ link, relative ] )
+	autoLink( text, [ link, relative ] )
 
 
 ## Parameters

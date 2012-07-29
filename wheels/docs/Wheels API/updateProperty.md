@@ -4,7 +4,7 @@
 Updates a single property and saves the record without going through the normal validation procedure. This is especially useful for boolean flags on existing records.
 
 ## Function Syntax
-updateProperty( property, value, [ parameterize, transaction, callbacks ] )
+	updateProperty( property, value, [ parameterize, transaction, callbacks ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Returns a struct detailing all changes that have been made on the object but not yet saved to the database.
 
 ## Function Syntax
-allChanges(  )
+	allChanges(  )
 
 
 

@@ -4,7 +4,7 @@
 Sets up a `belongsTo` association between this model and the specified one. Use this association when this model contains a foreign key referencing another model.
 
 ## Function Syntax
-belongsTo( name, [ modelName, foreignKey, joinKey, joinType, join ] )
+	belongsTo( name, [ modelName, foreignKey, joinKey, joinType, join ] )
 
 
 ## Parameters

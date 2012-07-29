@@ -4,7 +4,7 @@
 Returns the value of a specific key in the Flash (or the entire Flash as a struct if no key is passed in).
 
 ## Function Syntax
-flash( [ key ] )
+	flash( [ key ] )
 
 
 ## Parameters

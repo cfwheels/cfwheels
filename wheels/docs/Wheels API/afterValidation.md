@@ -4,7 +4,7 @@
 Registers method(s) that should be called after an object is validated.
 
 ## Function Syntax
-afterValidation( [ methods ] )
+	afterValidation( [ methods ] )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Adds a new route to your application.
 
 ## Function Syntax
-addRoute( pattern, [ name, controller, action ] )
+	addRoute( pattern, [ name, controller, action ] )
 
 
 ## Parameters

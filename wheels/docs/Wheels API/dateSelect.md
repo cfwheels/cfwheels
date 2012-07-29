@@ -4,7 +4,7 @@
 Builds and returns a string containing three select form controls for month, day, and year based on the supplied `objectName` and `property`.
 
 ## Function Syntax
-dateSelect( [ objectName, property, association, position, order, separator, startYear, endYear, monthDisplay, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, errorElement, errorClass, combine ] )
+	dateSelect( [ objectName, property, association, position, order, separator, startYear, endYear, monthDisplay, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, errorElement, errorClass, combine ] )
 
 
 ## Parameters

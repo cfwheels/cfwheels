@@ -4,7 +4,7 @@
 Updates the object with the supplied properties and saves it to the database. Returns `true` if the object was saved successfully to the database and `false` otherwise.
 
 ## Function Syntax
-update( [ properties, parameterize, reload, validate, transaction, callbacks ] )
+	update( [ properties, parameterize, reload, validate, transaction, callbacks ] )
 
 
 ## Parameters

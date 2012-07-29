@@ -4,7 +4,7 @@
 Builds and returns a string containing a hidden field form control based on the supplied `name`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
 
 ## Function Syntax
-hiddenFieldTag( name, [ value ] )
+	hiddenFieldTag( name, [ value ] )
 
 
 ## Parameters

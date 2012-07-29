@@ -4,7 +4,7 @@
 Returns `true` if the specified property name exists on the model.
 
 ## Function Syntax
-hasProperty( property )
+	hasProperty( property )
 
 
 ## Parameters

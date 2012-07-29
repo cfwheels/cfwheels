@@ -4,7 +4,7 @@
 Builds and returns a string containing three select form controls for hour, minute, and second based on the supplied `objectName` and `property`.
 
 ## Function Syntax
-timeSelect( [ objectName, property, association, position, order, separator, minuteStep, secondStep, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, errorElement, errorClass, combine, twelveHour ] )
+	timeSelect( [ objectName, property, association, position, order, separator, minuteStep, secondStep, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, errorElement, errorClass, combine, twelveHour ] )
 
 
 ## Parameters

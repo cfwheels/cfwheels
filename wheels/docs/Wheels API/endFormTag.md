@@ -4,7 +4,7 @@
 Builds and returns a string containing the closing `form` tag.
 
 ## Function Syntax
-endFormTag(  )
+	endFormTag(  )
 
 
 

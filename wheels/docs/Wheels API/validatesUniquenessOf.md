@@ -4,7 +4,7 @@
 Validates that the value of the specified property is unique in the database table. Useful for ensuring that two users can't sign up to a website with identical screen names for example. When a new record is created, a check is made to make sure that no record already exists in the database with the given value for the specified property. When the record is updated, the same check is made but disregarding the record itself.
 
 ## Function Syntax
-validatesUniquenessOf( properties, [ message, when, allowBlank, scope, condition, unless, includeSoftDeletes ] )
+	validatesUniquenessOf( properties, [ message, when, allowBlank, scope, condition, unless, includeSoftDeletes ] )
 
 
 ## Parameters

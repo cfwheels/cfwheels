@@ -4,7 +4,7 @@
 Sends an email using a template and an optional layout to wrap it in. Besides the Wheels-specific arguments documented here, you can also pass in any argument that is accepted by the `cfmail` tag as well as your own arguments to be used by the view.
 
 ## Function Syntax
-sendEmail( [ template, from, to, subject, layout, file, detectMultipart ] )
+	sendEmail( [ template, from, to, subject, layout, file, detectMultipart ] )
 
 
 ## Parameters

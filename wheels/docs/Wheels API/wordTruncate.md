@@ -4,7 +4,7 @@
 Truncates text to the specified length of words and replaces the remaining characters with the specified truncate string (which defaults to "...").
 
 ## Function Syntax
-wordTruncate( text, [ length, truncateString ] )
+	wordTruncate( text, [ length, truncateString ] )
 
 
 ## Parameters

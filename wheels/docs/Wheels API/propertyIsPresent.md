@@ -4,7 +4,7 @@
 Returns `true` if the specified property exists on the model and is not a blank string.
 
 ## Function Syntax
-propertyIsPresent( property )
+	propertyIsPresent( property )
 
 
 ## Parameters

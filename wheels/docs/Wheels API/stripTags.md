@@ -4,7 +4,7 @@
 Removes all HTML tags from a string.
 
 ## Function Syntax
-stripTags( html )
+	stripTags( html )
 
 
 ## Parameters

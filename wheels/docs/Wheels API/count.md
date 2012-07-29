@@ -4,7 +4,7 @@
 Returns the number of rows that match the arguments (or all rows if no arguments are passed in). Uses the SQL function `COUNT`. If no records can be found to perform the calculation on, `0` is returned.
 
 ## Function Syntax
-count( [ where, include, parameterize, includeSoftDeletes, reload ] )
+	count( [ where, include, parameterize, includeSoftDeletes, reload ] )
 
 
 ## Parameters

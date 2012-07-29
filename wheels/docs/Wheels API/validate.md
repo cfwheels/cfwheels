@@ -4,7 +4,7 @@
 Registers method(s) that should be called to validate objects before they are saved.
 
 ## Function Syntax
-validate( [ methods, condition, unless, when ] )
+	validate( [ methods, condition, unless, when ] )
 
 
 ## Parameters

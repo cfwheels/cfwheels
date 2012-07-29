@@ -4,7 +4,7 @@
 Returns the table name prefix set for the table.
 
 ## Function Syntax
-getTableNamePrefix(  )
+	getTableNamePrefix(  )
 
 
 

@@ -4,7 +4,7 @@
 Adds a new MIME format to your Wheels application for use with responding to multiple formats.
 
 ## Function Syntax
-addFormat( extension, mimeType )
+	addFormat( extension, mimeType )
 
 
 ## Parameters

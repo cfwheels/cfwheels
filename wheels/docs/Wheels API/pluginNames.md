@@ -4,7 +4,7 @@
 Returns a list of all installed plugins' names.
 
 ## Function Syntax
-pluginNames(  )
+	pluginNames(  )
 
 
 

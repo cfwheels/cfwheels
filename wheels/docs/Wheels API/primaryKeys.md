@@ -4,7 +4,7 @@
 Alias for @primaryKey. Use this for better readability when you're accessing multiple primary keys.
 
 ## Function Syntax
-primaryKeys( [ position ] )
+	primaryKeys( [ position ] )
 
 
 ## Parameters

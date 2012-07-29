@@ -4,7 +4,7 @@
 Registers method(s) that should be called after an object is saved.
 
 ## Function Syntax
-afterSave( [ methods ] )
+	afterSave( [ methods ] )
 
 
 ## Parameters

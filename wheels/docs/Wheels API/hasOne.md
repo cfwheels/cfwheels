@@ -4,7 +4,7 @@
 Sets up a `hasOne` association between this model and the specified one.
 
 ## Function Syntax
-hasOne( name, [ modelName, foreignKey, joinKey, joinType, dependent, join ] )
+	hasOne( name, [ modelName, foreignKey, joinKey, joinType, dependent, join ] )
 
 
 ## Parameters

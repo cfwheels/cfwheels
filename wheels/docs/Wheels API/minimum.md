@@ -4,7 +4,7 @@
 Calculates the minimum value for a given property. Uses the SQL function `MIN`. If no records can be found to perform the calculation on you can use the `ifNull` argument to decide what should be returned.
 
 ## Function Syntax
-minimum( property, [ where, include, parameterize, ifNull, includeSoftDeletes, reload ] )
+	minimum( property, [ where, include, parameterize, ifNull, includeSoftDeletes, reload ] )
 
 
 ## Parameters

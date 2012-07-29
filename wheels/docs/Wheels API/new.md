@@ -4,7 +4,7 @@
 Creates a new object based on supplied properties and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.
 
 ## Function Syntax
-new( [ properties, callbacks ] )
+	new( [ properties, callbacks ] )
 
 
 ## Parameters

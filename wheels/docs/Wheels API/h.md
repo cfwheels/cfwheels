@@ -4,7 +4,7 @@
 Escapes unsafe HTML. Alias for your CFML engine's `XMLFormat()` function.
 
 ## Function Syntax
-h( content )
+	h( content )
 
 
 ## Parameters

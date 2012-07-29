@@ -4,7 +4,7 @@
 Returns the name of the database table that this model is mapped to.
 
 ## Function Syntax
-tableName(  )
+	tableName(  )
 
 
 

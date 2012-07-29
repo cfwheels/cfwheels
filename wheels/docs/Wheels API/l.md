@@ -4,7 +4,7 @@
 returns the value for the given key of a locale
 
 ## Function Syntax
-l( key, [ locale ] )
+	l( key, [ locale ] )
 
 
 ## Parameters

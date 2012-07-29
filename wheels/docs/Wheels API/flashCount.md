@@ -4,7 +4,7 @@
 Returns how many keys exist in the Flash.
 
 ## Function Syntax
-flashCount(  )
+	flashCount(  )
 
 
 

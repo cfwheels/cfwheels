@@ -4,7 +4,7 @@
 allows this model to be used without a database
 
 ## Function Syntax
-tableless(  )
+	tableless(  )
 
 
 

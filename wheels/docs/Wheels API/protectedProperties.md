@@ -4,7 +4,7 @@
 Use this method to specify which properties cannot be set through mass assignment.
 
 ## Function Syntax
-protectedProperties( [ properties ] )
+	protectedProperties( [ properties ] )
 
 
 ## Parameters

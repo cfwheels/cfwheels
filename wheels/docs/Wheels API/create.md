@@ -4,7 +4,7 @@
 Creates a new object, saves it to the database (if the validation permits it), and returns it. If the validation fails, the unsaved object (with errors added to it) is still returned. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.
 
 ## Function Syntax
-create( [ properties, parameterize, reload, transaction, callbacks ] )
+	create( [ properties, parameterize, reload, transaction, callbacks ] )
 
 
 ## Parameters

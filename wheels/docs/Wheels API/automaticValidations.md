@@ -4,7 +4,7 @@
 Whether or not to enable default validations for this model.
 
 ## Function Syntax
-automaticValidations( value )
+	automaticValidations( value )
 
 
 ## Parameters

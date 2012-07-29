@@ -4,7 +4,7 @@
 Builds and returns a string containing a select form control based on the supplied `name` and `options`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
 
 ## Function Syntax
-selectTag( name, options, [ selected, includeBlank, multiple, valueField, textField, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
+	selectTag( name, options, [ selected, includeBlank, multiple, valueField, textField, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
 
 
 ## Parameters

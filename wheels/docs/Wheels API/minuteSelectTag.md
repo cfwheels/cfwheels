@@ -4,7 +4,7 @@
 Builds and returns a string containing one select form control for the minutes of an hour based on the supplied `name`.
 
 ## Function Syntax
-minuteSelectTag( name, [ selected, minuteStep, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
+	minuteSelectTag( name, [ selected, minuteStep, includeBlank, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
 
 
 ## Parameters

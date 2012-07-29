@@ -4,7 +4,7 @@
 Sets up a `hasMany` association between this model and the specified one.
 
 ## Function Syntax
-hasMany( name, [ modelName, foreignKey, joinKey, joinType, dependent, shortcut, through, join ] )
+	hasMany( name, [ modelName, foreignKey, joinKey, joinType, dependent, shortcut, through, join ] )
 
 
 ## Parameters

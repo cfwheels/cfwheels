@@ -4,7 +4,7 @@
 Displays a marked-up listing of messages that exists in the Flash.
 
 ## Function Syntax
-flashMessages( [ keys, class, includeEmptyContainer, lowerCaseDynamicClassValues ] )
+	flashMessages( [ keys, class, includeEmptyContainer, lowerCaseDynamicClassValues ] )
 
 
 ## Parameters

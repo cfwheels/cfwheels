@@ -4,7 +4,7 @@
 Creates a `mailto` link tag to the specified email address, which is also used as the name of the link unless name is specified.
 
 ## Function Syntax
-mailTo( emailAddress, [ name, encode ] )
+	mailTo( emailAddress, [ name, encode ] )
 
 
 ## Parameters

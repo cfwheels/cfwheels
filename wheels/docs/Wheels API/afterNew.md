@@ -4,7 +4,7 @@
 Registers method(s) that should be called after a new object has been initialized (which is usually done with the @new method).
 
 ## Function Syntax
-afterNew( [ methods ] )
+	afterNew( [ methods ] )
 
 
 ## Parameters

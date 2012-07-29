@@ -4,7 +4,7 @@
 Sets a prefix to prepend to the table name when this model runs SQL queries.
 
 ## Function Syntax
-setTableNamePrefix( prefix )
+	setTableNamePrefix( prefix )
 
 
 ## Parameters

@@ -4,7 +4,7 @@
 Allows you to set all the properties of an object at once by passing in a structure with keys matching the property names.
 
 ## Function Syntax
-setProperties( [ properties ] )
+	setProperties( [ properties ] )
 
 
 ## Parameters

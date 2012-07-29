@@ -4,7 +4,7 @@
 Returns the column name mapped for the named model property.
 
 ## Function Syntax
-columnForProperty( property )
+	columnForProperty( property )
 
 
 ## Parameters

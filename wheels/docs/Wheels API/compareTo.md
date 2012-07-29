@@ -4,7 +4,7 @@
 Pass in another Wheels model object to see if the two objects are the same.
 
 ## Function Syntax
-compareTo( object )
+	compareTo( object )
 
 
 ## Parameters

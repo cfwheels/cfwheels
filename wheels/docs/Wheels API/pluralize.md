@@ -4,7 +4,7 @@
 Returns the plural form of the passed in word. Can also pluralize a word based on a value passed to the `count` argument.
 
 ## Function Syntax
-pluralize( word, [ count, returnCount ] )
+	pluralize( word, [ count, returnCount ] )
 
 
 ## Parameters
