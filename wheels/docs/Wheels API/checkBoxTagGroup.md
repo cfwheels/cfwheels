@@ -25,7 +25,7 @@ Builds and returns a string for a group of check boxes and labels. If you pass i
 			<td>string</td>
 			<td>true</td>
 			<td></td>
-			<td>See documentation for @textFieldTag.</td>
+			<td>Name to populate in tag's `name` attribute.</td>
 		</tr>
 		
 		<tr>
