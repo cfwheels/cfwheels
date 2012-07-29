@@ -21,6 +21,7 @@
 * [columnNames()](columnNames.md)
 * [columns()](columns.md)
 * [exists()](exists.md)
+* [getDataSource()](getDataSource.md)
 * [getTableNamePrefix()](getTableNamePrefix.md)
 * [primaryKey()](primaryKey.md)
 * [primaryKeys()](primaryKeys.md)
@@ -45,7 +46,7 @@
 * [minimum()](minimum.md)
 * [sum()](sum.md)
 			
-## Uncategorized Functions
+## Transactions Functions
 				
 				
 * [invokeWithTransaction()](invokeWithTransaction.md)

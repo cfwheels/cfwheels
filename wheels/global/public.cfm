@@ -198,7 +198,7 @@
 		<!--- in config/settings.cfm, set the caching for partials to use ehcache --->
 		<cfset setCacheSettings(category="partials", storage="ehcache") />
 	'
-	categories="configuration" chapters="caching" functions="">
+	categories="configuration,caching" chapters="caching" functions="">
 	<cfargument name="category" type="string" required="true" />
 	<cfargument name="storage" type="string" required="true" hint="Could be memory, ehcache, or memcached." />
 	<cfargument name="strategy" type="string" required="false" default="age" />
@@ -222,7 +222,7 @@
 		<cfset addFormat(extension="ppt", mimeType="application/vnd.ms-powerpoint")>
 		<cfset addFormat(extension="pptx", mimeType="application/vnd.ms-powerpoint")>
 	'
-	categories="configuration" chapters="responding-with-multiple-formats" functions="provides,renderWith">
+	categories="configuration,formats" chapters="responding-with-multiple-formats" functions="provides,renderWith">
 	<cfargument name="extension" type="string" required="true" hint="File extension to add." />
 	<cfargument name="mimeType" type="string" required="true" hint="Matching MIME type to associate with the file extension." />
 	<cfset application.wheels.formats[arguments.extension] = arguments.mimeType />
@@ -242,7 +242,7 @@
 		<!--- Example 3: Change the `home` route. This should be listed last because it is least specific --->
 		<cfset addRoute(name="home", pattern="", controller="main", action="index")>
 	'
-	categories="configuration" chapters="using-routes" functions="">
+	categories="configuration,routes" chapters="using-routes" functions="">
 	<cfargument name="name" type="string" required="false" default="" hint="Name for the route. This is referenced as the `name` argument in functions based on @URLFor like @linkTo, @startFormTag, etc.">
 	<cfargument name="pattern" type="string" required="true" hint="The URL pattern that the route will match.">
 	<cfargument name="controller" type="string" required="false" default="" hint="Controller to call when route matches (unless the controller name exists in the pattern).">
@@ -282,7 +282,7 @@
 		<!--- Adds the default routes to your application (done in `config/routes.cfm`) --->
 		<cfset addDefaultRoutes()>
 	'
-	categories="configuration" chapters="using-routes" functions="">
+	categories="configuration,routes" chapters="using-routes" functions="">
 	<cfscript>
 		addRoute(pattern="[controller]/[action]/[key]");
 		addRoute(pattern="[controller]/[action]");
@@ -302,7 +302,7 @@
 		<!--- Example 3: Set the default values for a form helper to get the form marked up to your preferences --->
 		<cfset set(functionName="textField", labelPlacement="before", prependToLabel="<div>", append="</div>", appendToLabel="<br />")>
 	'
-	categories="configuration" chapters="configuration-and-defaults" functions="get">
+	categories="configuration,defaults" chapters="configuration-and-defaults" functions="get">
 	<cfscript>
 		var loc = {};
 		if (ArrayLen(arguments) > 1)
@@ -395,7 +395,7 @@
 		<!--- Get the default for the `message` argument of the `validatesConfirmationOf` method  --->
 		<cfset setting = get(functionName="validatesConfirmationOf", name="message")>
 	'
-	categories="global,miscellaneous" chapters="configuration-and-defaults" functions="set">
+	categories="configuration,defaults" chapters="configuration-and-defaults" functions="set">
 	<cfargument name="name" type="string" required="true" hint="Variable name to get setting for.">
 	<cfargument name="functionName" type="string" required="false" default="" hint="Function name to get setting for.">
 	<cfscript>

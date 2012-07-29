@@ -1,10 +1,23 @@
 # Configuration Functions
 			
-## Uncategorized Functions
+## Caching Functions
+				
+				
+* [setCacheSettings()](setCacheSettings.md)
+			
+## Defaults Functions
+				
+				
+* [get()](get.md)
+* [set()](set.md)
+			
+## Formats Functions
+				
+				
+* [addFormat()](addFormat.md)
+			
+## Routes Functions
 				
 				
 * [addDefaultRoutes()](addDefaultRoutes.md)
-* [addFormat()](addFormat.md)
 * [addRoute()](addRoute.md)
-* [set()](set.md)
-* [setCacheSettings()](setCacheSettings.md)

@@ -7,5 +7,4 @@
 5. [Model Class Functions](Model Class Functions.md)
 6. [Model Initialization Functions](Model Initialization Functions.md)
 7. [Model Object Functions](Model Object Functions.md)
-8. [Uncategorized Functions](Uncategorized Functions.md)
-9. [View Helper Functions](View Helper Functions.md)
+8. [View Helper Functions](View Helper Functions.md)

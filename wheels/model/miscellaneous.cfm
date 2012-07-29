@@ -27,7 +27,7 @@
   			<cfset tableless()>
 		</cffunction>
 	'
-	categories="model-initialization,miscellaneous" chapters="using-multiple-data-sources" functions="">
+	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="">
 	<cfscript>
 		variables.wheels.class.connection = {};
 	</cfscript>
@@ -40,7 +40,8 @@
 		<cfquery name="q" datasource="##getDataSource().datasource##">
 		select * from mytable
 		</cfquery>
-	'>
+	'
+	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="">
 	<cfreturn variables.wheels.class.connection>
 </cffunction>
 

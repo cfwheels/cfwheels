@@ -5,7 +5,6 @@
 				
 * [controller()](controller.md)
 * [deobfuscateParam()](deobfuscateParam.md)
-* [get()](get.md)
 * [l()](l.md)
 * [mimeTypes()](mimeTypes.md)
 * [model()](model.md)
