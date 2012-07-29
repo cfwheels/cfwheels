@@ -38,22 +38,22 @@ This URL pattern works up the chain and will also handle the following example U
 		</thead>
 		<tbody>
 			<tr>
-				<td><code>http://localhost/users/edit/12</code></td>
-				<td><code>users</code></td>
-				<td><code>edit</code></td>
-				<td><code>12</code></td>
+				<td>`http://localhost/users/edit/12`</td>
+				<td>`users`</td>
+				<td>`edit`</td>
+				<td>`12`</td>
 			</tr>
 			<tr>
-				<td><code>http://localhost/users/add</code></td>
-				<td><code>users</code></td>
-				<td><code>add</code></td>
-				<td><code>Undefined</code></td>
+				<td>`http://localhost/users/add`</td>
+				<td>`users`</td>
+				<td>`add`</td>
+				<td>`Undefined`</td>
 			</tr>
 			<tr>
-				<td><code>http://localhost/users</code></td>
-				<td><code>users</code></td>
-				<td><code>index</code></td>
-				<td><code>Undefined</code></td>
+				<td>`http://localhost/users`</td>
+				<td>`users`</td>
+				<td>`index`</td>
+				<td>`Undefined`</td>
 			</tr>
 		</tbody>
 	</table>
@@ -94,7 +94,7 @@ word delimiter.
 In our `/site-map/search-engines` URL example, the corresponding view file would be stored at
 `views/sitemap/searchengines.cfm`.
 
-For information on overriding this behavior, refer to documentation for the `renderView()` function and
+For information on overriding this behavior, refer to documentation for the [`renderView()`][6] function and
 read the [Pages][2] chapter.
 
 ### Layouts
@@ -111,7 +111,7 @@ When a controller-level layout is present, it overrides the default layout store
 folder.
 
 For information on overriding the layout file to be loaded by an action, see the chapter on
-[Using Layouts][3] and documentation for the `renderView()` function.
+[Using Layouts][3] and documentation for the [`renderView()`][6] function.
 
 ## Naming Conventions for Models and Databases
 
@@ -141,7 +141,7 @@ plural patterns like `binary`/`binaries`, `mouse`/`mice`, `child`/`children`, et
 Like controller files, models are also CFCs and are named `PascalCase`. They are stored in the `models`
 folder. So the `user` model would be stored at `models/User.cfc`.
 
-For instructions on overriding database naming conventions, refer to documentation for the `table()`
+For instructions on overriding database naming conventions, refer to documentation for the [`table()`][7]
 function and the chapter on [Object Relational Mapping][5].
 
 ### Everything in the Database Is Lowercase
@@ -156,7 +156,7 @@ In the `customersegments` example above, you could refer to the properties in yo
 `regionId`, and `incomeLevel` to stick to CFML's Java-style roots. (Built-in CFML functions are often
 written in `camelCase` and `PascalCase`, after all.)
 
-For information on overriding column and property names, refer to documentation for the `property()`
+For information on overriding column and property names, refer to documentation for the [`property()`][8]
 function and the [Object Relational Mapping][5] chapter.
 
 ## Configuration and Defaults
@@ -172,3 +172,6 @@ For more details on what you can configure, read the [Configuration and Defaults
 [3]: Using%20Layouts.md
 [4]: Configuration%20and%20Defaults.md
 [5]: Object%20Relational%20Mapping.md
+[6]: ../Wheels%20API/renderView.md
+[7]: ../Wheels%20API/table.md
+[8]: ../Wheels%20API/property.md

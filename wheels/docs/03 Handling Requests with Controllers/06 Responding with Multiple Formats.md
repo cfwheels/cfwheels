@@ -133,28 +133,28 @@ so:
 	</thead>
 	<tbody>
 		<tr>
-			<td><code>html</code></td>
-			<td><code>views/products/index.cfm</code></td>
+			<td>`html`</td>
+			<td>`views/products/index.cfm`</td>
 		</tr>
 		<tr>
-			<td><code>xml</code></td>
-			<td><code>views/products/index.xml.cfm</code></td>
+			<td>`xml`</td>
+			<td>`views/products/index.xml.cfm`</td>
 		</tr>
 		<tr>
-			<td><code>json</code></td>
-			<td><code>views/products/index.json.cfm</code></td>
+			<td>`json`</td>
+			<td>`views/products/index.json.cfm`</td>
 		</tr>
 		<tr>
-			<td><code>csv</code></td>
-			<td><code>views/products/index.csv.cfm</code></td>
+			<td>`csv`</td>
+			<td>`views/products/index.csv.cfm`</td>
 		</tr>
 		<tr>
-			<td><code>pdf</code></td>
-			<td><code>views/products/index.pdf.cfm</code></td>
+			<td>`pdf`</td>
+			<td>`views/products/index.pdf.cfm`</td>
 		</tr>
 		<tr>
-			<td><code>xls</code></td>
-			<td><code>views/products/index.xls.cfm</code></td>
+			<td>`xls`</td>
+			<td>`views/products/index.xls.cfm`</td>
 		</tr>
 	</tbody>
 </table>

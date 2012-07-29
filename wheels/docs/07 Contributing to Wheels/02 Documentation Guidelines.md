@@ -168,6 +168,7 @@ the `cffunction` tags.
    * `miscellaneous`
    * `read`
    * `statistics`
+   * `transactions` 
    * `update`
  * `model-object`
    * `changes`

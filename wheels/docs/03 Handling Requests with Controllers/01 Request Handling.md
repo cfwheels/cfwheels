@@ -181,28 +181,28 @@ in the form. Your `params` struct would look like this:
 	</thead>
 	<tbody>
 		<tr>
-			<td><code>params.controller</code></td>
-			<td><code>account</code></td>
+			<td>`params.controller`</td>
+			<td>`account`</td>
 		</tr>
 		<tr>
-			<td><code>params.controller</code></td>
-			<td><code>account</code></td>
+			<td>`params.controller`</td>
+			<td>`account`</td>
 		</tr>
 		<tr>
-			<td><code>params.action</code></td>
-			<td><code>login</code></td>
+			<td>`params.action`</td>
+			<td>`login`</td>
 		</tr>
 		<tr>
-			<td><code>params.sendTo</code></td>
-			<td><code>dashboard</code></td>
+			<td>`params.sendTo`</td>
+			<td>`dashboard`</td>
 		</tr>
 		<tr>
-			<td><code>params.username</code></td>
-			<td><code>joe</code></td>
+			<td>`params.username`</td>
+			<td>`joe`</td>
 		</tr>
 		<tr>
-			<td><code>params.password</code></td>
-			<td><code>1234</code></td>
+			<td>`params.password`</td>
+			<td>`1234`</td>
 		</tr>
 	</tbody>
 </table>

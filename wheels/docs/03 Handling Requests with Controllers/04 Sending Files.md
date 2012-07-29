@@ -9,7 +9,7 @@ web server will do a fine job of sending out files to your users.
 However, if you want a little more control over the way the user's browser handles the download or be
 able to secure access to your files then you might find the `sendFile()` function useful.
 
-## Sending Files With the [sendFile sendFile()] Function
+## Sending Files With the sendFile() Function
 
 The convention in Wheels is to place all files you want users to be able to download in the `files`
 folder.
@@ -96,3 +96,5 @@ This assumes you've moved the folder two levels up in your file system and into 
 *A final note of warning:* Be careful to not allow just any parameters from the URL to get passed
 through to the `sendFile()` because then a user would be able to download any file from your server.
 Be wary of how you're using the `params` struct in this context!
+
+[1]: ../Wheels%20API/sendFile.md

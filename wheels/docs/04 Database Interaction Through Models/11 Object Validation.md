@@ -276,35 +276,35 @@ For your reference, here are the default error message formats for the different
 	</thead>
 	<tbody>
 		<tr>
-			<td><code>validatesConfirmationOf</code></td>
+			<td>`validatesConfirmationOf`</td>
 			<td>[property] should match confirmation</td>
 		</tr>
 		<tr>
-			<td><code>validatesExclusionOf</code></td>
+			<td>`validatesExclusionOf`</td>
 			<td>[property] is reserved</td>
 		</tr>
 		<tr>
-			<td><code>validatesFormatOf</code></td>
+			<td>`validatesFormatOf`</td>
 			<td>[property] is invalid</td>
 		</tr>
 		<tr>
-			<td><code>validatesInclusionOf</code></td>
+			<td>`validatesInclusionOf`</td>
 			<td>[property] is not included in the list</td>
 		</tr>
 		<tr>
-			<td><code>validatesLengthOf</code></td>
+			<td>`validatesLengthOf`</td>
 			<td>[property] is the wrong length</td>
 		</tr>
 		<tr>
-			<td><code>validatesNumericalityOf</code></td>
+			<td>`validatesNumericalityOf`</td>
 			<td>[property] is not a number</td>
 		</tr>
 		<tr>
-			<td><code>validatesPresenceOf</code></td>
+			<td>`validatesPresenceOf`</td>
 			<td>[property] can't be empty</td>
 		</tr>
 		<tr>
-			<td><code>validatesUniquenessOf</code></td>
+			<td>`validatesUniquenessOf`</td>
 			<td>[property] has already been taken</td>
 		</tr>
 	</tbody>

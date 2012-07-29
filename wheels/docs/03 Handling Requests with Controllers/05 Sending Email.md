@@ -40,11 +40,11 @@ Consider this example scenario:
 	<tbody>
 		<tr>
 			<th scope="row">Controller:</th>
-			<td><code>Membership</code></td>
+			<td>`Membership`</td>
 		</tr>
 		<tr>
 			<th scope="row">Email Template:</th>
-			<td><code>/views/membership/myemailtemplate.cfm</code></td>
+			<td>`/views/membership/myemailtemplate.cfm`</td>
 		</tr>
 	</tbody>
 </table>

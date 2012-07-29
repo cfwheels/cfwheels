@@ -36,7 +36,7 @@ That piece of code by itself will work just like you expect it to. When you clic
 load the `hello` action inside the `say` controller.
 
 But let's make it into an asynchronous request. Add this JavaScript (either on the page inside `script`
-tags or in a separate `.js` file included via `javaScriptIncludeTag()`):
+tags or in a separate `.js` file included via [`javaScriptIncludeTag()`][3]):
 
 	(function($){$(document).ready(function(){
 		// Listen to the "click" event of the "alert-button" link and make an AJAX request
@@ -59,7 +59,7 @@ With that code, we are listening to the `click` event of the hyperlink, which wi
 Note that the `success` block inserts keys from the `response` into the empty `h1` and `p` blocks in the calling view. (You may have been wondering about those when you saw the first example. Mystery solved.)
 
 The last thing that we need to do is implement the `say/hello` action. Note that the request expects a `dataType` of `JSON`. By default, Wheels controllers only generate HTML responses, but there is an easy
-way to generate JSON instead using Wheels's `provides()` and `renderWith()` functions:
+way to generate JSON instead using Wheels's [`provides()`][4] and [`renderWith()`][5] functions:
 
 	<!--- Controller code --->
 	<cffunction name="init">
@@ -76,16 +76,16 @@ way to generate JSON instead using Wheels's `provides()` and `renderWith()` func
 		<cfset renderWith(greeting)>
 	</cffunction>
 
-In this controller's `init()` method, we use the `provides()` function to indicate that we want all
+In this controller's `init()` method, we use the [`provides()`][4] function to indicate that we want all
 actions in the controller to be able to respond with the data in HTML or JSON formats. Note that the
 client calling the action can request the type by passing a URL parameter named `format` or by sending
 the format in the request header.
 
-The call to `renderWith()` in the `hello` action takes care of the translation to the requested format.
+The call to [`renderWith()`][5] in the `hello` action takes care of the translation to the requested format.
 Our JavaScript is requesting JSON, so Wheels will format the `greeting` struct as JSON automatically and
 send it back to the client. If the client requested HTML or the default of none, Wheels will process and
-serve the view template at `views/say/hello.cfm`. For more information about `provides()` and
-`renderWith()`, reference the chapter on [Responding with Multiple Formats][2].
+serve the view template at `views/say/hello.cfm`. For more information about [`provides()`][4] and
+[`renderWith()`][5], reference the chapter on [Responding with Multiple Formats][2].
 
 Lastly, notice the lines where we're setting `greeting["message"]` and `greeting["time"]`. Due to the case-insensitive nature of ColdFusion, we recommend setting variables to be consumed by JavaScript using bracket notation like that. If you do not use that notation (i.e., `greetings.message` and
 `greetings.time` instead), your JavaScript will need to reference those keys from the JSON as `MESSAGE`
@@ -103,7 +103,7 @@ This is where things get a lot simpler, Wheels implements a set of Unobtrusive J
 	
 First, to enable AJAX functionality in your application, you need to include the special JavaScript file located at `wheels/vendor/ajax-adapters/wheels.jquery.js`. Once we have done this, we are ready to start creating our AJAX-powered applications.
 
-Let's add a tiny bit of code to that `linkTo()` call from the first example:
+Let's add a tiny bit of code to that [`linkTo()`][6] call from the first example:
 
 	<cfoutput>
 	
@@ -158,3 +158,7 @@ Remember that either of the 2 examples work just fine. You have several ways to 
 
 [1]: http://jquery.com/
 [2]: Responding%20with%20Multiple%20Formats.md
+[3]: ../Wheels%20API/javaScriptIncludeTag.md
+[4]: ../Wheels%20API/provides.md
+[5]: ../Wheels%20API/renderWith.md
+[6]: ../Wheels%20API/linkTo.md

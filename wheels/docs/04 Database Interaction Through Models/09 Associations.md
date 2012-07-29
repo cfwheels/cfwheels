@@ -259,59 +259,59 @@ that we're using here).
 	</thead>
 	<tbody>
 		<tr>
-			<td><code>XXX()</code></td>
-			<td><code>post.comments()</code></td>
-			<td>Returns all comments where the foreign key matches the post's primary key value. Similar to calling <code>model("comment").findAll(where="postid=#post.id#")</code></td>
+			<td>`XXX()`</td>
+			<td>`post.comments()`</td>
+			<td>Returns all comments where the foreign key matches the post's primary key value. Similar to calling `model("comment").findAll(where="postid=#post.id#")`</td>
 		</tr>
 		<tr>
-			<td><code>addXXX()</code></td>
-			<td><code>post.addComment(comment)</code></td>
-			<td>Adds a comment to the post association by setting its foreign key to the post's primary key value. Similar to calling <code>model("comment").updateByKey(key=comment.id, postid=post.id)</code>.</td>
+			<td>`addXXX()`</td>
+			<td>`post.addComment(comment)`</td>
+			<td>Adds a comment to the post association by setting its foreign key to the post's primary key value. Similar to calling `model("comment").updateByKey(key=comment.id, postid=post.id)`.</td>
 		</tr>
 		<tr>
-			<td><code>removeXXX()</code></td>
-			<td><code>post.removeComment(comment)</code></td>
-			<td>Removes a comment from the post association by setting its foreign key value to <code>NULL</code>. Similar to calling <code>model("comment").updateByKey(key=comment.id, postid="")</code>.</td>
+			<td>`removeXXX()`</td>
+			<td>`post.removeComment(comment)`</td>
+			<td>Removes a comment from the post association by setting its foreign key value to `NULL`. Similar to calling `model("comment").updateByKey(key=comment.id, postid="")`.</td>
 		</tr>
 		<tr>
-			<td><code>deleteXXX()</code></td>
-			<td><code>post.deleteComment(comment)</code></td>
-			<td>Deletes the associated comment from the database table. Similar to calling <code>model("comment").deleteByKey(key=comment.id)</code>.</td>
+			<td>`deleteXXX()`</td>
+			<td>`post.deleteComment(comment)`</td>
+			<td>Deletes the associated comment from the database table. Similar to calling `model("comment").deleteByKey(key=comment.id)`.</td>
 		</tr>
 		<tr>
-			<td><code>removeAllXXX()</code></td>
-			<td><code>post.removeAllComments()</code></td>
-			<td>Removes all comments from the post association by setting their foreign key values to <code>NULL</code>. Similar to calling <code>model("comment").updateAll(postid="", where="postid=#post.id#")</code>.</td>
+			<td>`removeAllXXX()`</td>
+			<td>`post.removeAllComments()`</td>
+			<td>Removes all comments from the post association by setting their foreign key values to `NULL`. Similar to calling `model("comment").updateAll(postid="", where="postid=#post.id#")`.</td>
 		</tr>
 		<tr>
-			<td><code>deleteAllXXX()</code></td>
-			<td><code>post.deleteAllComments()</code></td>
-			<td>Deletes the associated comments from the database table. Similar to calling <code>model("comment").deleteAll(where="postid=#post.id#")</code>.</td>
+			<td>`deleteAllXXX()`</td>
+			<td>`post.deleteAllComments()`</td>
+			<td>Deletes the associated comments from the database table. Similar to calling `model("comment").deleteAll(where="postid=#post.id#")`.</td>
 		</tr>
 		<tr>
-			<td><code>XXXCount()</code></td>
-			<td><code>post.commentCount()</code></td>
-			<td>Returns the number of associated comments. Similar to calling <code>model("comment").count(where="postid=#post.id#")</code>.</td>
+			<td>`XXXCount()`</td>
+			<td>`post.commentCount()`</td>
+			<td>Returns the number of associated comments. Similar to calling `model("comment").count(where="postid=#post.id#")`.</td>
 		</tr>
 		<tr>
-			<td><code>newXXX()</code></td>
-			<td><code>post.newComment()</code></td>
-			<td>Creates a new comment object. Similar to calling <code>model("comment").new(postid=post.id)</code>.</td>
+			<td>`newXXX()`</td>
+			<td>`post.newComment()`</td>
+			<td>Creates a new comment object. Similar to calling `model("comment").new(postid=post.id)`.</td>
 		</tr>
 		<tr>
-			<td><code>createXXX()</code></td>
-			<td><code>post.createComment()</code></td>
-			<td>Creates a new comment object and saves it to the database. Similar to calling <code>model("comment").create(postid=post.id)</code>.</td>
+			<td>`createXXX()`</td>
+			<td>`post.createComment()`</td>
+			<td>Creates a new comment object and saves it to the database. Similar to calling `model("comment").create(postid=post.id)`.</td>
 		</tr>
 		<tr>
-			<td><code>hasXXX()</code></td>
-			<td><code>post.hasComments()</code></td>
-			<td>Returns <code>true</code> if the post has any comments associated with it. Similar to calling <code>model("comment").exists(where="postid=#post.id#")</code>.</td>
+			<td>`hasXXX()`</td>
+			<td>`post.hasComments()`</td>
+			<td>Returns `true` if the post has any comments associated with it. Similar to calling `model("comment").exists(where="postid=#post.id#")`.</td>
 		</tr>
 		<tr>
-			<td><code>findOneXXX()</code></td>
-			<td><code>post.findOneComment()</code></td>
-			<td>Returns one of the associated comments. Similar to calling <code>model("comment").findOne(where="postid=#post.id#")</code>.</td>
+			<td>`findOneXXX()`</td>
+			<td>`post.findOneComment()`</td>
+			<td>Returns one of the associated comments. Similar to calling `model("comment").findOne(where="postid=#post.id#")`.</td>
 		</tr>
 	</tbody>
 </table>
@@ -334,39 +334,39 @@ the methods that will be made available to you on the `author` model.
 	</thead>
 	<tbody>
 		<tr>
-			<td><code>XXX()</code></td>
-			<td><code>author.profile()</code>
-			<td>Returns the profile where the foreign key matches the author's primary key value. Similar to calling <code>model("profile").findOne(where="authorId=#author.id#")</code>.</td>
+			<td>`XXX()`</td>
+			<td>`author.profile()`
+			<td>Returns the profile where the foreign key matches the author's primary key value. Similar to calling `model("profile").findOne(where="authorId=#author.id#")`.</td>
 		</tr>
 		<tr>
-			<td><code>setXXX()</code></td>
-			<td><code>author.setProfile(profile)</code></td>
-			<td><code>Sets the profile to be associated with the author by setting its foreign key to the author's primary key value. You can pass in either a <code>profile</code> object or the primary key value of a <code>profile</code> object to this method. Similar to calling <code>model("profile").updateByKey(key=profile.id, authorId=author.id)</code>.
+			<td>`setXXX()`</td>
+			<td>`author.setProfile(profile)`</td>
+			<td>`Sets the profile to be associated with the author by setting its foreign key to the author's primary key value. You can pass in either a `profile` object or the primary key value of a `profile` object to this method. Similar to calling `model("profile").updateByKey(key=profile.id, authorId=author.id)`.
 		</tr>
 		<tr>
-			<td><code>removeXXX()</code></td>
-			<td><code>author.removeProfile()</code></td>
-			<td>Removes the profile from the author association by setting its foreign key to <code>NULL</code>. Similar to calling <code>model("profile").updateOne(where="authorId=#author.id#", authorId="")</code>.</td>
+			<td>`removeXXX()`</td>
+			<td>`author.removeProfile()`</td>
+			<td>Removes the profile from the author association by setting its foreign key to `NULL`. Similar to calling `model("profile").updateOne(where="authorId=#author.id#", authorId="")`.</td>
 		</tr>
 		<tr>
-			<td><code>deleteXXX()</code></td>
-			<td><code>author.deleteProfile()</code></td>
-			<td>Deletes the associated profile from the database table. Similar to calling <code>model("profile").deleteOne(where="authorId=#author.id#")</code>.</td>
+			<td>`deleteXXX()`</td>
+			<td>`author.deleteProfile()`</td>
+			<td>Deletes the associated profile from the database table. Similar to calling `model("profile").deleteOne(where="authorId=#author.id#")`.</td>
 		</tr>
 		<tr>
-			<td><code>newXXX()</code></td>
-			<td><code>author.newProfile()</code></td>
-			<td>Creates a new profile object. Similar to calling <code>model("profile").new(authorId=author.id)</code>.</td>
+			<td>`newXXX()`</td>
+			<td>`author.newProfile()`</td>
+			<td>Creates a new profile object. Similar to calling `model("profile").new(authorId=author.id)`.</td>
 		</tr>
 		<tr>
-			<td><code>createXXX()</code></td>
-			<td><code>author.createProfile()</code></td>
-			<td>Creates a new profile object and saves it to the database. Similar to calling <code>model("profile").create(authorId=author.id)</code>.</td>
+			<td>`createXXX()`</td>
+			<td>`author.createProfile()`</td>
+			<td>Creates a new profile object and saves it to the database. Similar to calling `model("profile").create(authorId=author.id)`.</td>
 		</tr>
 		<tr>
-			<td><code>hasXXX()</code></td>
-			<td><code>author.hasProfile()</code></td>
-			<td>Returns <code>true</code> if the author has an associated profile. Similar to calling <code>model("profile").exists(where="authorId=#author.id#")</code>.</td>
+			<td>`hasXXX()`</td>
+			<td>`author.hasProfile()`</td>
+			<td>Returns `true` if the author has an associated profile. Similar to calling `model("profile").exists(where="authorId=#author.id#")`.</td>
 		</tr>
 	</tbody>
 </table>
@@ -388,14 +388,14 @@ are the methods that will be made available to you on the `comment` model.
 	</thead>
 	<tbody>
 		<tr>
-			<td><code>XXX()</code></td>
-			<td><code>comment.post()</code></td>
-			<td>Returns the post where the primary key matches the comment's foreign key value. Similar to calling <code>model("post").findByKey(comment.postId)</code>.</td>
+			<td>`XXX()`</td>
+			<td>`comment.post()`</td>
+			<td>Returns the post where the primary key matches the comment's foreign key value. Similar to calling `model("post").findByKey(comment.postId)`.</td>
 		</tr>
 		<tr>
-			<td><code>hasXXX()</code></td>
-			<td><code>comment.hasPost()</code><td>
-			<td>Returns <code>true</code> if the comment has a post associated with it. Similar to calling <code>model("post").exists(comment.postId)</code>.</td>
+			<td>`hasXXX()`</td>
+			<td>`comment.hasPost()`<td>
+			<td>Returns `true` if the comment has a post associated with it. Similar to calling `model("post").exists(comment.postId)`.</td>
 		</tr>
 	</tbody>
 </table>

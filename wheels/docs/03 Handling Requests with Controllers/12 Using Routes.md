@@ -67,19 +67,19 @@ So now this route pattern will, for example, match for these URLs:
 	</thead>
 	<tbody>
 		<tr>
-			<td><code>http://www.domain.com/admin/user/edit</code></td>
-			<td><code>adminUser</code></td>
-			<td><code>edit</code></td>
+			<td>`http://www.domain.com/admin/user/edit`</td>
+			<td>`adminUser`</td>
+			<td>`edit`</td>
 		</tr>
 		<tr>
-			<td><code>http://www.domain.com/admin/user/add</code></td>
-			<td><code>adminUser</code></td>
-			<td><code>add</code></td>
+			<td>`http://www.domain.com/admin/user/add`</td>
+			<td>`adminUser`</td>
+			<td>`add`</td>
 		</tr>
 		<tr>
-			<td><code>http://www.domain.com/admin/user/delete</code></td>
-			<td><code>adminUser</code></td>
-			<td><code>delete</code></td>
+			<td>`http://www.domain.com/admin/user/delete`</td>
+			<td>`adminUser`</td>
+			<td>`delete`</td>
 		</tr>
 	</tbody>
 </table>

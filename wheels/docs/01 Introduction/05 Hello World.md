@@ -215,7 +215,7 @@ Open the `say/hello.cfm` view file. We are going to add a line of code to the en
 	<p>Current time: <cfoutput>#time#</cfoutput></p>
 	<p>Time to say <cfoutput>#linkTo(text="goodbye", action="goodbye")#?</cfoutput></p>
 
-The [linkTo linkTo()] function is a built-in Wheels function. In this case, we are passing 2 named
+The [`linkTo()`][3] function is a built-in Wheels function. In this case, we are passing 2 named
 parameters to it. The first parameter, `text`, is the text that will be displayed in the hyperlink.
 The second parameter, `action`, defines the action to point the link to. By using this built-in
 function, your application's main URL may change, and even controllers and actions may get shifted
@@ -256,3 +256,4 @@ to cover so browse over to some of the other chapters. We think you will enjoy i
 
 [1]: http://cfwheels.org/download
 [2]: Installation.markdown
+[3]: ../Wheels%20API/linkTo.md

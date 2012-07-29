@@ -89,37 +89,37 @@ letter should be capitalized as well. Refer to these examples.
   <tbody>
     <tr>
       <td>CFC Names</td>
-      <td><code>MyCfc.cfc</code>, <code>BlogEntry.cfc</code></td>
+      <td>`MyCfc.cfc`, `BlogEntry.cfc`</td>
       <td>PascalCase</td>
     </tr>
     <tr>
       <td>Variable Names</td>
-      <td><code>myVariable</code>, <code>storyId</code></td>
+      <td>`myVariable`, `storyId`</td>
       <td>camelCase</td>
     </tr>
     <tr>
       <td>UDF Names</td>
-      <td><code>myFunction()</code></td>
+      <td>`myFunction()`</td>
       <td>camelCase</td>
     </tr>
     <tr>
       <td>Built-in CF Variables</td>
-      <td><code>result.recordCount</code>, <code>cfhttp.fileContent</code></td>
+      <td>`result.recordCount`, `cfhttp.fileContent`</td>
       <td>camelCase</td>
     </tr>
     <tr>
       <td>Built-in CF Functions</td>
-      <td><code>IsNumeric()</code>, <code>Trim()</code></td>
+      <td>`IsNumeric()`, `Trim()`</td>
       <td>PascalCase</td>
     </tr>
     <tr>
       <td>Scopes</td>
-      <td><code>application.myVariable</code>, <code>session.userId</code></td>
+      <td>`application.myVariable`, `session.userId`</td>
       <td>lowercase.camelCase</td>
     </tr>
     <tr>
       <td>CGI Variables</td>
-      <td><code>cgi.remote_addr</code>, <code>cgi.server_name</code></td>
+      <td>`cgi.remote_addr`, `cgi.server_name`</td>
       <td>cgi.lowercase_underscored_name</td>
     </tr>
   </tbody>

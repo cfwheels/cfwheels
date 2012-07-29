@@ -56,22 +56,22 @@ That said, here's a quick look at a table that you'll need in your database:
 		<tbody>
 			<tr>
 				<td>id</td>
-				<td><code>int</code></td>
+				<td>`int`</td>
 				<td>auto increment, primary key</td>
 			</tr>
 			<tr>
 				<td>name</td>
-				<td><code>varchar(100)</code></td>
+				<td>`varchar(100)`</td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>email</td>
-				<td><code>varchar(255)</code></td>
+				<td>`varchar(255)`</td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>password</td>
-				<td><code>varchar(255)</code></td>
+				<td>`varchar(255)`</td>
 				<td></td>
 			</tr>
 		</tbody>
@@ -127,17 +127,17 @@ What we've done here is use _form helpers_ to generate all of the form fields ne
 new user in our database. It may feel a little strange using functions to generate form elements, but it
 will soon become clear why we're doing this. Trust us on this one... You'll love it!
 
-To generate the form tag's `action` attribute, the `startFormTag()` function takes parameters similar to
-the `linkTo()` function that we introduced in the [Hello World][1] tutorial. We can pass in `controller`,
-`action`, `key`, and other route- and parameter-defined URLs just like we do with `linkTo()`.
+To generate the form tag's `action` attribute, the [`startFormTag()`][3] function takes parameters similar to
+the [`linkTo()`][4] function that we introduced in the [Hello World][1] tutorial. We can pass in `controller`,
+`action`, `key`, and other route- and parameter-defined URLs just like we do with [`linkTo()`][4].
 
-To end the form, we use the `endFormTag()` function. Easy peasy, lemon squeezy.
+To end the form, we use the [`endFormTag()`][5] function. Easy peasy, lemon squeezy.
 
-The `textField()` and `passwordField()` helpers are similar. As you probably guessed, they create
-`<input>` elements with `type="text"` and `type="password"`, respectively. And the `submitTag()` function
+The [`textField()`][6] and [`passwordField()`][7] helpers are similar. As you probably guessed, they create
+`<input>` elements with `type="text"` and `type="password"`, respectively. And the [`submitTag()`][8] function
 creates an `<input type="submit" />` element.
 
-One thing you'll notice is the `textField()` and `passwordField()` functions accept arguments called
+One thing you'll notice is the [`textField()`][6] and [`passwordField()`][7] functions accept arguments called
 `objectName` and `property`. As it turns out, this particular view code will throw an error because these
 functions are expecting an object named `user`. Let's fix that.
 
@@ -150,10 +150,10 @@ Create a new ColdFusion component at `controllers/Users.cfc`. If you're using a 
 system like UNIX or Linux, then it is important to name the CFC with a capital letter.
 
 As it turns out, our controller needs to provide the view with a blank `user` object (whose instance
-variable will also be called `user` in this case). In our `new` action, we will use the `model()`
+variable will also be called `user` in this case). In our `new` action, we will use the [`model()`][9]
 function to generate a new instance of the `user` model.
 
-To get a blank set of properties in the model, we'll also call the generated model's `new()` method.
+To get a blank set of properties in the model, we'll also call the generated model's [`new()`][10] method.
 
 	<cfcomponent extends="Controller">
 	
@@ -197,7 +197,7 @@ So far we have a fairly well-formed, accessible form, without writing a bunch of
 Next, we'll code the `create` action in the controller to handle the form submission and save the new
 user to the database.
 
-A basic way of doing this is using the model object's `create()` method:
+A basic way of doing this is using the model object's [`create()`][11] method:
 
 	<cffunction name="create">
 		<cfset user = model("user").create(params.user)>
@@ -215,7 +215,7 @@ simple in this tutorial.
 
 ## Listing Users
 
-Notice that our `create` action above redirects the user to the `index` action using the `redirectTo()`
+Notice that our `create` action above redirects the user to the `index` action using the [`redirectTo()`][12]
 function. We'll use this action to list all `users` in the system with "Edit" links. We'll also provide
 a link to the create form that we just coded.
 
@@ -226,7 +226,7 @@ controller like so:
 		<cfset users = model("user").findAll(order="name")>
 	</cffunction>
 
-This call to the model's `findAll()` method will return a query object of all `users` in the system. By
+This call to the model's [`findAll()`][13] method will return a query object of all `users` in the system. By
 using the method's `order` argument, we're also telling the database to order the records by `name`.
 
 In the view at `views/users/index.cfm`, it's as simple as looping through the query and outputting the
@@ -345,7 +345,7 @@ updating the `user` object:
 		)>
 	</cffunction>
 
-To update the user, simply call its `update()` method with the `user` struct passed from the form via
+To update the user, simply call its [`update()`][14] method with the `user` struct passed from the form via
 `params`. It's that simple.
 
 After the update, we'll add a success message [Using the Flash][2] and send the end user back to the
@@ -353,7 +353,7 @@ edit form in case they want to make more changes.
 
 ## Deleting Users
 
-Notice in our listing above that we have a `delete` action. Our `linkTo()` call has an argument named
+Notice in our listing above that we have a `delete` action. Our [`linkTo()`][4] call has an argument named
 `confirm`, which will include some simple JavaScript to pop up a box asking the end user to confirm
 the deletion before running the `delete` action.
 
@@ -368,7 +368,7 @@ Here's what our `delete` action would look like:
 		)>
 	</cffunction>
 
-We simply load the user using the model's `findByKey()` method and then call the object's `delete()`
+We simply load the user using the model's [`findByKey()`][15] method and then call the object's [`delete()`][16]
 method. That's all there is to it.
 
 ## Database Says Hello
@@ -379,3 +379,17 @@ framework. There's plenty more.
 
 [1]: Hello%20World.md
 [2]: Using%20the%20Flash.md
+[3]: ../Wheels%20API/startForm.md
+[4]: ../Wheels%20API/linkTo.md
+[5]: ../Wheels%20API/endFormTag.md
+[6]: ../Wheels%20API/textField.md
+[7]: ../Wheels%20API/passwordField.md
+[8]: ../Wheels%20API/submitTag.md
+[9]: ../Wheels%20API/model.md
+[10]: ../Wheels%20API/new.md
+[11]: ../Wheels%20API/create.md
+[12]: ../Wheels%20API/redirectTo.md
+[13]: ../Wheels%20API/findAll.md
+[14]: ../Wheels%20API/update.md
+[15]: ../Wheels%20API/findByKey.md
+[16]: ../Wheels%20API/delete.md

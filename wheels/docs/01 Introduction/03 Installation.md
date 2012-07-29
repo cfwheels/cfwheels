@@ -53,7 +53,7 @@ for it in the ColdFusion/Railo Administrator, just as you'd normally do. Now ope
 If you don't want to be bothered by opening up a Wheels configuration file at all, there is a nice
 convention you can follow for the naming. Just name your data source with the same name as the folder you
 are running your website from (`mysite` in the example above), and Wheels will use that when you haven't
-set the `dataSourceName` variable using the `set()` function.
+set the `dataSourceName` variable using the [`set()`][5] function.
 
 This is all that you need to do before Wheels can connect to your database and start working its magic.
 
@@ -69,3 +69,4 @@ That's it. You're done. This is where the fun begins!
 [2]: http://www.github.com/cfwheels
 [3]: ../01%20Introduction/02%20Requirements.md
 [4]: ../03%20Handling%20Requests%20with%20Controllers/11%20URL%20Rewriting.md
+[5]: ../Wheels%20API/set.md
