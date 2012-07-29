@@ -30,13 +30,13 @@
 		<cfset validatesExclusionOf(property="coolLanguage", list="php,fortran", message="Haha, you can not be serious. Try again, please.")>
 	'
 	categories="model-initialization,validations" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesFormatOf,validatesInclusionOf,validatesLengthOf,validatesNumericalityOf,validatesPresenceOf,validatesUniquenessOf">
-	<cfargument name="properties" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="properties" type="string" required="false" default="" hint="@validatesConfirmationOf.">
 	<cfargument name="list" type="string" required="true" hint="Single value or list of values that should not be allowed.">
-	<cfargument name="message" type="string" required="false" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="message" type="string" required="false" hint="@validatesConfirmationOf.">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="@validatesConfirmationOf.">
 	<cfargument name="allowBlank" type="boolean" required="false" hint="If set to `true`, validation will be skipped if the property value is an empty string or doesn't exist at all. This is useful if you only want to run this validation after it passes the @validatesPresenceOf test, thus avoiding duplicate error messages if it doesn't.">
-	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="condition" type="string" required="false" default="" hint="@validatesConfirmationOf.">
+	<cfargument name="unless" type="string" required="false" default="" hint="@validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
 		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
@@ -59,14 +59,14 @@
 		<cfset validatesFormatOf(property="email", regEx="^.*@.*\.se$", condition="ipCheck()", unless="DayOfWeek() IS 1", message="Sorry, you must have a Swedish email address to use this website.")>
 	'
 	categories="model-initialization,validations" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesInclusionOf,validatesLengthOf,validatesNumericalityOf,validatesPresenceOf,validatesUniquenessOf">
-	<cfargument name="properties" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="properties" type="string" required="false" default="" hint="@validatesConfirmationOf.">
 	<cfargument name="regEx" type="string" required="false" default="" hint="Regular expression to verify against.">
 	<cfargument name="type" type="string" required="false" default="" hint="One of the following types to verify against: `creditcard`, `date`, `email`, `eurodate`, `guid`, `social_security_number`, `ssn`, `telephone`, `time`, `URL`, `USdate`, `UUID`, `variableName`, `zipcode` (will be passed through to your CFML engine's `IsValid()` function).">
-	<cfargument name="message" type="string" required="false" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="allowBlank" type="boolean" required="false" hint="See documentation for @validatesExclusionOf.">
-	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="message" type="string" required="false" hint="@validatesConfirmationOf.">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="@validatesConfirmationOf.">
+	<cfargument name="allowBlank" type="boolean" required="false" hint="@validatesExclusionOf.">
+	<cfargument name="condition" type="string" required="false" default="" hint="@validatesConfirmationOf.">
+	<cfargument name="unless" type="string" required="false" default="" hint="@validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
 		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
@@ -90,13 +90,13 @@
 		<cfset validatesInclusionOf(property="frameworkOfChoice", list="wheels,rails", message="Please try again, and this time, select a decent framework!")>
 	'
 	categories="model-initialization,validations" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesFormatOf,validatesLengthOf,validatesNumericalityOf,validatesPresenceOf,validatesUniquenessOf">
-	<cfargument name="properties" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="properties" type="string" required="false" default="" hint="@validatesConfirmationOf.">
 	<cfargument name="list" type="string" required="true" hint="List of allowed values.">
-	<cfargument name="message" type="string" required="false" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="allowBlank" type="boolean" required="false" hint="See documentation for @validatesExclusionOf.">
-	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="message" type="string" required="false" hint="@validatesConfirmationOf.">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="@validatesConfirmationOf.">
+	<cfargument name="allowBlank" type="boolean" required="false" hint="@validatesExclusionOf.">
+	<cfargument name="condition" type="string" required="false" default="" hint="@validatesConfirmationOf.">
+	<cfargument name="unless" type="string" required="false" default="" hint="@validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
 		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
@@ -119,16 +119,16 @@
 		<cfset validatesLengthOf(property="password", within="4,20", message="The password length must be between 4 and 20 characters.")>
 	'
 	categories="model-initialization,validations" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesFormatOf,validatesInclusionOf,validatesNumericalityOf,validatesPresenceOf,validatesUniquenessOf">
-	<cfargument name="properties" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="message" type="string" required="false" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="allowBlank" type="boolean" required="false" hint="See documentation for @validatesExclusionOf.">
+	<cfargument name="properties" type="string" required="false" default="" hint="@validatesConfirmationOf.">
+	<cfargument name="message" type="string" required="false" hint="@validatesConfirmationOf.">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="@validatesConfirmationOf.">
+	<cfargument name="allowBlank" type="boolean" required="false" hint="@validatesExclusionOf.">
 	<cfargument name="exactly" type="numeric" required="false" hint="The exact length that the property value must be.">
 	<cfargument name="maximum" type="numeric" required="false" hint="The maximum length that the property value can be.">
 	<cfargument name="minimum" type="numeric" required="false" hint="The minimum length that the property value can be.">
 	<cfargument name="within" type="string" required="false" hint="A list of two values (minimum and maximum) that the length of the property value must fall within.">
-	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="condition" type="string" required="false" default="" hint="@validatesConfirmationOf.">
+	<cfargument name="unless" type="string" required="false" default="" hint="@validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
 		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
@@ -149,13 +149,13 @@
 		<cfset validatesNumericalityOf(property="score", onlyInteger=true, allowBlank=true, message="Please enter a correct score.")>
 	'
 	categories="model-initialization,validations" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesFormatOf,validatesInclusionOf,validatesLengthOf,validatesPresenceOf,validatesUniquenessOf">
-	<cfargument name="properties" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="message" type="string" required="false" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="allowBlank" type="boolean" required="false" hint="See documentation for @validatesExclusionOf.">
+	<cfargument name="properties" type="string" required="false" default="" hint="@validatesConfirmationOf.">
+	<cfargument name="message" type="string" required="false" hint="@validatesConfirmationOf.">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="@validatesConfirmationOf.">
+	<cfargument name="allowBlank" type="boolean" required="false" hint="@validatesExclusionOf.">
 	<cfargument name="onlyInteger" type="boolean" required="false" hint="Specifies whether the property value must be an integer.">
-	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="condition" type="string" required="false" default="" hint="@validatesConfirmationOf.">
+	<cfargument name="unless" type="string" required="false" default="" hint="@validatesConfirmationOf.">
 	<cfargument name="odd" type="boolean" required="false" hint="Specifies whether or not the value must be an odd number.">
 	<cfargument name="even" type="boolean" required="false" hint="Specifies whether or not the value must be an even number.">
 	<cfargument name="greaterThan" type="numeric" required="false" hint="Specifies whether or not the value must be greater than the supplied value.">
@@ -179,11 +179,11 @@
 		<cfset validatesPresenceOf("emailAddress")>
 	'
 	categories="model-initialization,validations" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesFormatOf,validatesInclusionOf,validatesLengthOf,validatesNumericalityOf,validatesUniquenessOf">
-	<cfargument name="properties" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="message" type="string" required="false" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="properties" type="string" required="false" default="" hint="@validatesConfirmationOf.">
+	<cfargument name="message" type="string" required="false" hint="@validatesConfirmationOf.">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="@validatesConfirmationOf.">
+	<cfargument name="condition" type="string" required="false" default="" hint="@validatesConfirmationOf.">
+	<cfargument name="unless" type="string" required="false" default="" hint="@validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
 		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
@@ -203,13 +203,13 @@
 		<cfset validatesUniquenessOf(property="username", scope="accountId")>
 	'
 	categories="model-initialization,validations" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesFormatOf,validatesInclusionOf,validatesLengthOf,validatesNumericalityOf,validatesPresenceOf">
-	<cfargument name="properties" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="message" type="string" required="false" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="allowBlank" type="boolean" required="false" hint="See documentation for @validatesExclusionOf.">
+	<cfargument name="properties" type="string" required="false" default="" hint="@validatesConfirmationOf.">
+	<cfargument name="message" type="string" required="false" hint="@validatesConfirmationOf.">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="@validatesConfirmationOf.">
+	<cfargument name="allowBlank" type="boolean" required="false" hint="@validatesExclusionOf.">
 	<cfargument name="scope" type="string" required="false" default="" hint="One or more properties by which to limit the scope of the uniqueness constraint.">
-	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="condition" type="string" required="false" default="" hint="@validatesConfirmationOf.">
+	<cfargument name="unless" type="string" required="false" default="" hint="@validatesConfirmationOf.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="true" hint="whether to take softDeletes into account when performing uniqueness check">
 	<cfif StructKeyExists(arguments, "if")>
 		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
@@ -240,9 +240,9 @@
 	'
 	categories="model-initialization,validations" chapters="object-validation" functions="validateOnCreate,validateOnUpdate">
 	<cfargument name="methods" type="string" required="false" default="" hint="Method name or list of method names to call. (Can also be called with the `method` argument.)">
-	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="condition" type="string" required="false" default="" hint="@validatesConfirmationOf.">
+	<cfargument name="unless" type="string" required="false" default="" hint="@validatesConfirmationOf.">
+	<cfargument name="when" type="string" required="false" default="onSave" hint="@validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
 		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
@@ -265,9 +265,9 @@
 		</cffunction>
 	'
 	categories="model-initialization,validations" chapters="object-validation" functions="validate,validateOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @validate.">
-	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@validate.">
+	<cfargument name="condition" type="string" required="false" default="" hint="@validatesConfirmationOf.">
+	<cfargument name="unless" type="string" required="false" default="" hint="@validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
 		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
@@ -290,9 +290,9 @@
 		</cffunction>
 	'
 	categories="model-initialization,validations" chapters="object-validation" functions="validate,validateOnCreate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @validate.">
-	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@validate.">
+	<cfargument name="condition" type="string" required="false" default="" hint="@validatesConfirmationOf.">
+	<cfargument name="unless" type="string" required="false" default="" hint="@validatesConfirmationOf.">
 	<cfif StructKeyExists(arguments, "if")>
 		<cfset $deprecated("The `if` argument will be deprecated in a future version of Wheels, please use the `condition` argument instead")>
 		<cfset arguments.condition = arguments.if>
@@ -313,7 +313,7 @@
 		</cfif>
 	'
 	categories="model-object,errors" chapters="object-validation" functions="">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
+	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="@save.">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = false;

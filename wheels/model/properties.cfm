@@ -126,7 +126,7 @@
 		<cfset employee.columnForProperty("firstName")><!--- returns column name, in this case "firstname" if the convention is used --->
 	'
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="">
-	<cfargument name="property" type="string" required="true" hint="See documentation for @hasProperty." />
+	<cfargument name="property" type="string" required="true" hint="@hasProperty." />
 	<cfscript>
 		var columnName = false;
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
@@ -238,7 +238,7 @@
 		<cfreturn employee.propertyIsPresent("firstName")><!--- Returns false --->
 	'
 	categories="model-object,miscellaneous" chapters="" functions="">
-	<cfargument name="property" type="string" required="true" hint="See documentation for @hasProperty." />
+	<cfargument name="property" type="string" required="true" hint="@hasProperty." />
 	<cfscript>
 		var isPresent = false;
 		if (StructKeyExists(this, arguments.property) && !IsCustomFunction(this[arguments.property]) && IsSimpleValue(this[arguments.property]) && Len(this[arguments.property]))
@@ -310,7 +310,7 @@
 		<cfset user.setProperties(params.user)>
 	'
 	categories="model-object,miscellaneous" chapters="" functions="properties">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="@new.">
 	<cfset $setProperties(argumentCollection=arguments) />
 </cffunction>
 

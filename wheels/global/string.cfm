@@ -122,9 +122,9 @@
 <!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$singularizeOrPluralizeWithCount" returntype="string" access="public" output="false" hint="Decides if we need to convert the word based on the count value passed in and then adds the count to the string.">
-	<cfargument name="text" type="string" required="true" hint="See documentation for @pluralize.">
-	<cfargument name="count" type="numeric" required="false" default="-1" hint="See documentation for @pluralize.">
-	<cfargument name="returnCount" type="boolean" required="false" default="true" hint="See documentation for @pluralize.">
+	<cfargument name="text" type="string" required="true" hint="@pluralize.">
+	<cfargument name="count" type="numeric" required="false" default="-1" hint="@pluralize.">
+	<cfargument name="returnCount" type="boolean" required="false" default="true" hint="@pluralize.">
 	<cfargument name="which" type="string" required="true" hint="Should be either `singularize` or `pluralize`.">
 	<cfscript>
 		var loc = {};
@@ -146,8 +146,8 @@
 </cffunction>
 
 <cffunction name="$singularizeOrPluralize" returntype="string" access="public" output="false" hint="Converts a word to singular or plural form.">
-	<cfargument name="text" type="string" required="true" hint="See documentation for @pluralize.">
-	<cfargument name="which" type="string" required="true" hint="See documentation for @$singularizeOrPluralizeWithCount.">
+	<cfargument name="text" type="string" required="true" hint="@pluralize.">
+	<cfargument name="which" type="string" required="true" hint="@$singularizeOrPluralizeWithCount.">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = $args(name="$singularizeOrPluralize", args=arguments);

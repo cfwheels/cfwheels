@@ -82,13 +82,13 @@
 	'
 	categories="controller-request,provides" chapters="responding-with-multiple-formats" functions="provides,onlyProvides">
 	<cfargument name="data" required="true" type="any" hint="Data to format and render." />
-	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="See documentation for @renderView.">
-	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for @renderView.">
-	<cfargument name="template" type="string" required="false" default="" hint="See documentation for @renderView.">
-	<cfargument name="layout" type="any" required="false" hint="See documentation for @renderView.">
-	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderView.">
-	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for @renderView.">
-	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false" hint="See documentation for @renderView.">
+	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="@renderView.">
+	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="@renderView.">
+	<cfargument name="template" type="string" required="false" default="" hint="@renderView.">
+	<cfargument name="layout" type="any" required="false" hint="@renderView.">
+	<cfargument name="cache" type="any" required="false" default="" hint="@renderView.">
+	<cfargument name="returnAs" type="string" required="false" default="" hint="@renderView.">
+	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false" hint="@renderView.">
 	<cfscript>
 		var loc = {};
 		$args(name="renderWith", args=arguments);

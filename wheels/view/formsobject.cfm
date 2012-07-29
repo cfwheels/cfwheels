@@ -64,18 +64,18 @@
 		</fieldset>
 	'
 	categories="view-helper,forms-object" chapter="form-helpers-and-showing-errors,nested-properties" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
-	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
-	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
-	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField">
-	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="objectName" type="any" required="true" hint="@textField.">
+	<cfargument name="property" type="string" required="true" hint="@textField.">
+	<cfargument name="association" type="string" required="false" hint="@textfield.">
+	<cfargument name="position" type="string" required="false" hint="@textfield.">
+	<cfargument name="label" type="string" required="false" hint="@textField">
+	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
+	<cfargument name="prepend" type="string" required="false" hint="@textField.">
+	<cfargument name="append" type="string" required="false" hint="@textField.">
+	<cfargument name="prependToLabel" type="string" required="false" hint="@textField.">
+	<cfargument name="appendToLabel" type="string" required="false" hint="@textField.">
+	<cfargument name="errorElement" type="string" required="false" hint="@textField.">
+	<cfargument name="errorClass" type="string" required="false" hint="@textField.">
 	<cfscript>
 		var loc = {};
 		$args(name="passwordField", reserved="type,name,value", args=arguments);
@@ -104,10 +104,10 @@
 		</cfoutput>
 	'
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors,nested-properties" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
-	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
-	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
-	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
+	<cfargument name="objectName" type="any" required="true" hint="@textField.">
+	<cfargument name="property" type="string" required="true" hint="@textField.">
+	<cfargument name="association" type="string" required="false" hint="@textfield.">
+	<cfargument name="position" type="string" required="false" hint="@textfield.">
 	<cfscript>
 		var loc = {};
 		$args(name="hiddenField", reserved="type,name,value", args=arguments);
@@ -142,18 +142,18 @@
 		</fieldset>
 	'
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors,nested-properties" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,select,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
-	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
-	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
-	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="objectName" type="any" required="true" hint="@textField.">
+	<cfargument name="property" type="string" required="true" hint="@textField.">
+	<cfargument name="association" type="string" required="false" hint="@textfield.">
+	<cfargument name="position" type="string" required="false" hint="@textfield.">
+	<cfargument name="label" type="string" required="false" hint="@textField.">
+	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
+	<cfargument name="prepend" type="string" required="false" hint="@textField.">
+	<cfargument name="append" type="string" required="false" hint="@textField.">
+	<cfargument name="prependToLabel" type="string" required="false" hint="@textField.">
+	<cfargument name="appendToLabel" type="string" required="false" hint="@textField.">
+	<cfargument name="errorElement" type="string" required="false" hint="@textField.">
+	<cfargument name="errorClass" type="string" required="false" hint="@textField.">
 	<cfscript>
 		var loc = {};
 		$args(name="fileField", reserved="type,name", args=arguments);
@@ -187,18 +187,18 @@
 		</fieldset>
 	'
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,fileField,select,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
-	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
-	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
-	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="objectName" type="any" required="true" hint="@textField.">
+	<cfargument name="property" type="string" required="true" hint="@textField.">
+	<cfargument name="association" type="string" required="false" hint="@textfield.">
+	<cfargument name="position" type="string" required="false" hint="@textfield.">
+	<cfargument name="label" type="string" required="false" hint="@textField.">
+	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
+	<cfargument name="prepend" type="string" required="false" hint="@textField.">
+	<cfargument name="append" type="string" required="false" hint="@textField.">
+	<cfargument name="prependToLabel" type="string" required="false" hint="@textField.">
+	<cfargument name="appendToLabel" type="string" required="false" hint="@textField.">
+	<cfargument name="errorElement" type="string" required="false" hint="@textField.">
+	<cfargument name="errorClass" type="string" required="false" hint="@textField.">
 	<cfscript>
 		var loc = {};
 		$args(name="textArea", reserved="name", args=arguments);
@@ -240,19 +240,19 @@
 		</cfoutput>
 	'
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors,nested-properties" functions="URLFor,startFormTag,endFormTag,textField,submitTag,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
-	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
-	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
-	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
+	<cfargument name="objectName" type="any" required="true" hint="@textField.">
+	<cfargument name="property" type="string" required="true" hint="@textField.">
+	<cfargument name="association" type="string" required="false" hint="@textfield.">
+	<cfargument name="position" type="string" required="false" hint="@textfield.">
 	<cfargument name="tagValue" type="string" required="true" hint="The value of the radio button when `selected`.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="label" type="string" required="false" hint="@textField.">
+	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
+	<cfargument name="prepend" type="string" required="false" hint="@textField.">
+	<cfargument name="append" type="string" required="false" hint="@textField.">
+	<cfargument name="prependToLabel" type="string" required="false" hint="@textField.">
+	<cfargument name="appendToLabel" type="string" required="false" hint="@textField.">
+	<cfargument name="errorElement" type="string" required="false" hint="@textField.">
+	<cfargument name="errorClass" type="string" required="false" hint="@textField.">
 	<cfscript>
 		var loc = {};
 		$args(name="radioButton", reserved="type,name,value,checked", args=arguments);
@@ -297,20 +297,20 @@
 		</cfoutput>
 	'
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors,nested-properties" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
-	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
-	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
-	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
+	<cfargument name="objectName" type="any" required="true" hint="@textField.">
+	<cfargument name="property" type="string" required="true" hint="@textField.">
+	<cfargument name="association" type="string" required="false" hint="@textfield.">
+	<cfargument name="position" type="string" required="false" hint="@textfield.">
 	<cfargument name="checkedValue" type="string" required="false" hint="The value of the check box when it's in the `checked` state.">
 	<cfargument name="uncheckedValue" type="string" required="false" hint="The value of the check box when it's in the `unchecked` state.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="label" type="string" required="false" hint="@textField.">
+	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
+	<cfargument name="prepend" type="string" required="false" hint="@textField.">
+	<cfargument name="append" type="string" required="false" hint="@textField.">
+	<cfargument name="prependToLabel" type="string" required="false" hint="@textField.">
+	<cfargument name="appendToLabel" type="string" required="false" hint="@textField.">
+	<cfargument name="errorElement" type="string" required="false" hint="@textField.">
+	<cfargument name="errorClass" type="string" required="false" hint="@textField.">
 	<cfscript>
 		var loc = {};
 		$args(name="checkBox", reserved="type,name,value,checked", args=arguments);
@@ -365,22 +365,22 @@
 		</cfoutput>
 	'
 	categories="view-helper,forms-object" chapters="form-helpers-and-showing-errors,nested-properties" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,dateTimeSelect,dateSelect,timeSelect">
-	<cfargument name="objectName" type="any" required="true" hint="See documentation for @textField.">
-	<cfargument name="property" type="string" required="true" hint="See documentation for @textField.">
-	<cfargument name="association" type="string" required="false" hint="See documentation for @textfield.">
-	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
+	<cfargument name="objectName" type="any" required="true" hint="@textField.">
+	<cfargument name="property" type="string" required="true" hint="@textField.">
+	<cfargument name="association" type="string" required="false" hint="@textfield.">
+	<cfargument name="position" type="string" required="false" hint="@textfield.">
 	<cfargument name="options" type="any" required="true" hint="A collection to populate the select form control with. Can be a query recordset or an array of objects.">
 	<cfargument name="includeBlank" type="any" required="false" hint="Whether to include a blank option in the select form control. Pass `true` to include a blank line or a string that should represent what display text should appear for the empty value (for example, ""- Select One -"").">
 	<cfargument name="valueField" type="string" required="false" hint="The column or property to use for the value of each list element. Used only when a query or array of objects has been supplied in the `options` argument.">
 	<cfargument name="textField" type="string" required="false" hint="The column or property to use for the value of each list element that the end user will see. Used only when a query or array of objects has been supplied in the `options` argument.">
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="label" type="string" required="false" hint="@textField.">
+	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
+	<cfargument name="prepend" type="string" required="false" hint="@textField.">
+	<cfargument name="append" type="string" required="false" hint="@textField.">
+	<cfargument name="prependToLabel" type="string" required="false" hint="@textField.">
+	<cfargument name="appendToLabel" type="string" required="false" hint="@textField.">
+	<cfargument name="errorElement" type="string" required="false" hint="@textField.">
+	<cfargument name="errorClass" type="string" required="false" hint="@textField.">
 	<cfscript>
 		var loc = {};
 		$args(name="select", reserved="name", args=arguments);

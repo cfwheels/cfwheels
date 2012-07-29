@@ -65,15 +65,15 @@
 		<cfset hasMany("subscriptions")>
 	'
 	categories="model-initialization,associations" chapters="associations" functions="belongsTo,hasOne">
-	<cfargument name="name" type="string" required="true" hint="See documentation for @belongsTo.">
-	<cfargument name="modelName" type="string" required="false" default="" hint="See documentation for @belongsTo.">
-	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
-	<cfargument name="joinKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
-	<cfargument name="joinType" type="string" required="false" hint="See documentation for @belongsTo.">
+	<cfargument name="name" type="string" required="true" hint="@belongsTo.">
+	<cfargument name="modelName" type="string" required="false" default="" hint="@belongsTo.">
+	<cfargument name="foreignKey" type="string" required="false" default="" hint="@belongsTo.">
+	<cfargument name="joinKey" type="string" required="false" default="" hint="@belongsTo.">
+	<cfargument name="joinType" type="string" required="false" hint="@belongsTo.">
 	<cfargument name="dependent" type="string" required="false" hint="Defines how to handle dependent models when you delete a record from this model. Set to `delete` to instantiate associated models and call their @delete method, `deleteAll` to delete without instantiating, `removeAll` to remove the foreign key, or `false` to do nothing.">
 	<cfargument name="shortcut" type="string" required="false" default="" hint="Set this argument to create an additional dynamic method that gets the object(s) from the other side of a many-to-many association.">
 	<cfargument name="through" type="string" required="false" default="#singularize(arguments.shortcut)#,#arguments.name#" hint="Set this argument if you need to override Wheels conventions when using the `shortcut` argument. Accepts a list of two association names representing the chain from the opposite side of the many-to-many relationship to this model.">
-	<cfargument name="join" type="string" required="false" hint="See documentation for @belongsTo.">
+	<cfargument name="join" type="string" required="false" hint="@belongsTo.">
 	<cfscript>
 		var singularizeName = capitalize(singularize(arguments.name));
 		var capitalizeName = capitalize(arguments.name);
@@ -105,13 +105,13 @@
 		<cfset hasMany(name="comments", dependent="delete")>
 	'
 	categories="model-initialization,associations" chapters="associations" functions="belongsTo,hasMany">
-	<cfargument name="name" type="string" required="true" hint="See documentation for @belongsTo.">
-	<cfargument name="modelName" type="string" required="false" default="" hint="See documentation for @belongsTo.">
-	<cfargument name="foreignKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
-	<cfargument name="joinKey" type="string" required="false" default="" hint="See documentation for @belongsTo.">
-	<cfargument name="joinType" type="string" required="false" hint="See documentation for @belongsTo.">
-	<cfargument name="dependent" type="string" required="false" hint="See documentation for @hasMany.">
-	<cfargument name="join" type="string" required="false" hint="See documentation for @belongsTo.">
+	<cfargument name="name" type="string" required="true" hint="@belongsTo.">
+	<cfargument name="modelName" type="string" required="false" default="" hint="@belongsTo.">
+	<cfargument name="foreignKey" type="string" required="false" default="" hint="@belongsTo.">
+	<cfargument name="joinKey" type="string" required="false" default="" hint="@belongsTo.">
+	<cfargument name="joinType" type="string" required="false" hint="@belongsTo.">
+	<cfargument name="dependent" type="string" required="false" hint="@hasMany.">
+	<cfargument name="join" type="string" required="false" hint="@belongsTo.">
 	<cfscript>
 		var capitalizeName = capitalize(arguments.name);
 		$args(name="hasOne", args=arguments);

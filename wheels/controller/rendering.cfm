@@ -124,9 +124,9 @@
 	'
 	categories="controller-request,rendering" chapters="rendering-pages" functions="renderView,renderNothing,renderText">
 	<cfargument name="partial" type="string" required="true" hint="The name of the partial file to be used. Prefix with a leading slash `/` if you need to build a path from the root `views` folder. Do not include the partial filename's underscore and file extension.">
-	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderView.">
-	<cfargument name="layout" type="string" required="false" hint="See documentation for @renderView.">
-	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for @renderView.">
+	<cfargument name="cache" type="any" required="false" default="" hint="@renderView.">
+	<cfargument name="layout" type="string" required="false" hint="@renderView.">
+	<cfargument name="returnAs" type="string" required="false" default="" hint="@renderView.">
 	<cfargument name="dataFunction" type="any" required="false" hint="Name of a controller function to load data from.">
 	<cfscript>
 		var loc = {};

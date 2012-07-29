@@ -132,7 +132,7 @@
 	'
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="primaryKey"
 >
-	<cfargument name="position" type="numeric" required="false" default="0" hint="See documentation for @primaryKey.">
+	<cfargument name="position" type="numeric" required="false" default="0" hint="@primaryKey.">
 	<cfreturn primaryKey(argumentCollection=arguments)>
 </cffunction>
 

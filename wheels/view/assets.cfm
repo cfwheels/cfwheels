@@ -81,7 +81,7 @@
 	categories="view-helper,assets" chapters="miscellaneous-helpers" functions="styleSheetLinkTag,imageTag">
 	<cfargument name="sources" type="string" required="false" default="" hint="The name of one or many JavaScript files in the `javascripts` folder, minus the `.js` extension. (Can also be called with the `source` argument.) Pass a full URL to access an external JavaScript file.">
 	<cfargument name="type" type="string" required="false" hint="The `type` attribute for the `script` tag.">
-	<cfargument name="head" type="string" required="false" hint="See documentation for @styleSheetLinkTag.">
+	<cfargument name="head" type="string" required="false" hint="@styleSheetLinkTag.">
 	<cfargument name="delim" type="string" required="false" default="," hint="the delimiter to use for the list of stylesheets">
 	<cfscript>
 		var loc = {};

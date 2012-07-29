@@ -92,9 +92,9 @@
 		<cfoutput>##timeAgoInWords(aWhileAgo)##</cfoutput>
 	'
 	categories="view-helper,dates" chapters="miscellaneous-helpers" functions="distanceOfTimeInWords,timeUntilInWords">
-	<cfargument name="fromTime" type="date" required="true" hint="See documentation for @distanceOfTimeInWords.">
-	<cfargument name="includeSeconds" type="boolean" required="false" hint="See documentation for @distanceOfTimeInWords.">
-	<cfargument name="toTime" type="date" required="false" default="#now()#" hint="See documentation for @distanceOfTimeInWords.">
+	<cfargument name="fromTime" type="date" required="true" hint="@distanceOfTimeInWords.">
+	<cfargument name="includeSeconds" type="boolean" required="false" hint="@distanceOfTimeInWords.">
+	<cfargument name="toTime" type="date" required="false" default="#now()#" hint="@distanceOfTimeInWords.">
 	<cfset $args(name="timeAgoInWords", args=arguments)>
 	<cfreturn distanceOfTimeInWords(argumentCollection=arguments)>
 </cffunction>
@@ -105,9 +105,9 @@
 		<cfoutput>##timeUntilInWords(aLittleAhead)##</cfoutput>
 	'
 	categories="view-helper,dates" chapters="miscellaneous-helpers" functions="timeAgoInWords,distanceOfTimeInWords">
-	<cfargument name="toTime" type="date" required="true" hint="See documentation for @distanceOfTimeInWords.">
-	<cfargument name="includeSeconds" type="boolean" required="false" hint="See documentation for @distanceOfTimeInWords.">
-	<cfargument name="fromTime" type="date" required="false" default="#now()#" hint="See documentation for @distanceOfTimeInWords.">
+	<cfargument name="toTime" type="date" required="true" hint="@distanceOfTimeInWords.">
+	<cfargument name="includeSeconds" type="boolean" required="false" hint="@distanceOfTimeInWords.">
+	<cfargument name="fromTime" type="date" required="false" default="#now()#" hint="@distanceOfTimeInWords.">
 	<cfset $args(name="timeUntilInWords", args=arguments)>
 	<cfreturn distanceOfTimeInWords(argumentCollection=arguments)>
 </cffunction>

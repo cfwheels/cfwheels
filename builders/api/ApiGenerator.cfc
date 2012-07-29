@@ -44,7 +44,7 @@
 	so then we need to replace it with text from the references
 	method
 	 --->
-	<cfset variables.marker = "See documentation for @">
+	<cfset variables.marker = "@">
 
 	<!--- 
 	Used to collect any error for unreferenced methods

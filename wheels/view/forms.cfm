@@ -30,17 +30,17 @@
 	<cfargument name="method" type="string" required="false" hint="The type of method to use in the form tag. `get` and `post` are the options.">
 	<cfargument name="multipart" type="boolean" required="false" hint="Set to `true` if the form should be able to upload files.">
 	<cfargument name="spamProtection" type="boolean" required="false" hint="Set to `true` to protect the form against spammers (done with JavaScript).">
-	<cfargument name="route" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="action" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="params" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="onlyPath" type="boolean" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="remote" type="boolean" required="false" hint="See documentation for @linkTo.">
+	<cfargument name="route" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="controller" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="action" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="key" type="any" required="false" default="" hint="@URLFor.">
+	<cfargument name="params" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="anchor" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="onlyPath" type="boolean" required="false" hint="@URLFor.">
+	<cfargument name="host" type="string" required="false" hint="@URLFor.">
+	<cfargument name="protocol" type="string" required="false" hint="@URLFor.">
+	<cfargument name="port" type="numeric" required="false" hint="@URLFor.">
+	<cfargument name="remote" type="boolean" required="false" hint="@linkTo.">
 	<cfscript>
 		var loc = {};
 		$args(name="startFormTag", args=arguments);
@@ -95,8 +95,8 @@
 	<cfargument name="value" type="string" required="false" hint="Message to display in the button form control.">
 	<cfargument name="image" type="string" required="false" hint="File name of the image file to use in the button form control.">
 	<cfargument name="disable" type="any" required="false" hint="Whether or not to disable the button upon clicking. (prevents double-clicking.)">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
+	<cfargument name="prepend" type="string" required="false" hint="@textField">
+	<cfargument name="append" type="string" required="false" hint="@textField">
 	<cfscript>
 		var loc = {};
 		$args(name="submitTag", reserved="type,src", args=arguments);
@@ -144,8 +144,8 @@
 	<cfargument name="value" type="string" required="false" hint="The value of the button when submitted.">
 	<cfargument name="image" type="string" required="false" hint="File name of the image file to use in the button form control.">
 	<cfargument name="disable" type="any" required="false" hint="Whether or not to disable the button upon clicking. (Prevents double-clicking.)">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
+	<cfargument name="prepend" type="string" required="false" hint="@textField">
+	<cfargument name="append" type="string" required="false" hint="@textField">
 
 	<cfscript>
 		var loc = {};

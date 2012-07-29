@@ -197,7 +197,7 @@ One extra rule applies to argument documentation though. In some places of the s
 `hint`s that refer to other functions' versions of that argument. Take a look at the `defaults` argument 
 of the `save()` function, for example:
 
-	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.new.defaults#" hint="See documentation for @save.">
+	<cfargument name="defaults" type="boolean" required="false" default="#application.wheels.functions.new.defaults#" hint="@save.">
 
 In this case, the documentation in the website database will be copied from the `hint` attribute of the 
 `save()` function's `defaults` argument. Prefix the associated function with the `@` character like in 
