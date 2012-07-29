@@ -159,7 +159,7 @@
 #loc.data.hint#
 
 #### Function Syntax
-#loc.syntax#
+	#loc.syntax#
 
 <cfif !ArrayIsEmpty(loc.data.parameters)>
 #### Parameters
