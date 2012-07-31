@@ -19,7 +19,7 @@ guidelines about how to proceed. Join us!
 
 ## Running Tests
 
-_NOTE:_ CFWheels uses [RocketUnit][4] as its testing framework.
+_Note:_ CFWheels uses [RocketUnit][4] as its testing framework.
 
  1. Create a database on a supported database server name `wheelstestdb`. At this time the supported
     database servers are H2, Microsoft SQL Server, Oracle, PostgreSQL, MySQL.
