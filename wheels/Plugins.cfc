@@ -33,7 +33,7 @@
 		<!--- incompatibility --->
 		<cfset $determineIncompatible()>
 		<!--- dependancies --->
-		<cfset $determinDependancy()>
+		<cfset $determineDependancy()>
 
 		<cfreturn this>
 	</cffunction>
@@ -154,7 +154,7 @@
 	</cffunction>
 	
 	
-	<cffunction name="$determinDependancy">
+	<cffunction name="$determineDependancy">
 		<cfset var loc = {}>
 
 		<cfloop collection="#variables.$class.plugins#" item="loc.iPlugins">
