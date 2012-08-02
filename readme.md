@@ -61,7 +61,7 @@ API Generator URL:
 
 This will create a file called `cfwheels-api.xml` in the directory above your Wheels project.
 
-## View API Docuemntation
+## View API Documentation
 
 You will need a Markdown viewer in order to view the documentation locally. If you use Google Chrome,
 you can install the [Mardown Preview][6] extension.
