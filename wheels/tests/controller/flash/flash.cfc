@@ -67,6 +67,7 @@
 		<cfset run_no_key_provided_flash_empty()>
 		<cfset loc.controller.$setFlashStorage("cookie")>
 		<cfset run_no_key_provided_flash_empty()>
+		
 	</cffunction>
 	
 	<cffunction name="run_no_key_provided_flash_empty">

@@ -113,7 +113,7 @@
 			##includeLayout("/layout.cfm")##
 		</cfoutput>
 	'
-	categories="view-helper,miscellaneous" chapters="using-layouts" functions="usesLayout,renderPage">
+	categories="view-helper,miscellaneous" chapters="using-layouts" functions="usesLayout,renderView">
 	<cfargument name="name" type="string" required="false" default="layout" hint="Name of the layout file to include.">
 	<cfscript>
 		arguments.partial = arguments.name;
@@ -136,10 +136,10 @@
 		-> Wheels will include the file "views/shared/_button.cfm".
 	'
 	categories="view-helper,miscellaneous" chapters="pages,partials" functions="renderPartial">
-	<cfargument name="partial" type="any" required="true" hint="See documentation for @renderPartial.">
+	<cfargument name="partial" type="any" required="true" hint="@renderPartial.">
 	<cfargument name="group" type="string" required="false" default="" hint="If passing a query result set for the `partial` argument, use this to specify the field to group the query by. A new query will be passed into the partial template for you to iterate over.">
-	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPage.">
-	<cfargument name="layout" type="string" required="false" hint="See documentation for @renderPage.">
+	<cfargument name="cache" type="any" required="false" default="" hint="@renderView.">
+	<cfargument name="layout" type="string" required="false" hint="@renderView.">
 	<cfargument name="spacer" type="string" required="false" hint="HTML or string to place between partials when called using a query.">
 	<cfargument name="dataFunction" type="any" required="false" hint="Name of controller function to load data from.">
 	<cfargument name="$prependWithUnderscore" type="boolean" required="false" default="true">
@@ -295,7 +295,27 @@
 <cffunction name="$tagAttribute" returntype="string" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="value" type="string" required="true">
-	<cfreturn ' #LCase(arguments.name)#="#arguments.value#"'>
+	<cfscript>
+		var loc = {};
+		loc.name = arguments.name;
+		
+		// for custom data attributes we convert underscores / camelCase to hyphens to get around the issue with not being able to use a hyphen in an argument name in CFML
+		if (Left(arguments.name, 4) == "data")
+		{
+			loc.delim = get("dataAttributeDelimiter");
+			if (Len(loc.delim))
+			{
+				loc.name = Replace(REReplace(loc.name, "([a-zA-Z])([#loc.delim#])", "\1-\2", "all"), "-#loc.delim#", "-", "all");
+			}
+		}
+		loc.name = LCase(loc.name);
+		loc.returnValue = " " & loc.name;
+
+		// unless it's a custom data attribute we support the html5 boolean attribute by not including the value at all
+		if (Left(arguments.name, 4) == "data" || !IsBoolean(arguments.value) || CompareNoCase(arguments.value, "true"))
+			loc.returnValue &= "=""" & arguments.value & """";
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$element" returntype="string" access="public" output="false">

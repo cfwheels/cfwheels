@@ -46,7 +46,7 @@
 				loc.conditionArgs.key = loc.key;
 				loc.conditionArgs.category = loc.category;
 				loc.executeArgs = {};
-				loc.executeArgs.controller = loc.controller;
+				loc.executeArgs.controller = params.controller;
 				loc.executeArgs.action = params.action;
 				loc.executeArgs.key = loc.key;
 				loc.executeArgs.time = loc.time;
@@ -96,7 +96,7 @@
 		{
 			try
 			{
-				renderPage();
+				renderView();
 			}
 			catch(Any e)
 			{
@@ -131,7 +131,7 @@
 	<cfscript>
 		$callAction(action=arguments.action);
 		if (arguments.static)
-			$cache(action="serverCache", timeSpan=$timeSpanForCache(arguments.time, "main"));
+			$cache(action="serverCache", timeSpan=$timeSpanForCache(cache=arguments.time, category="main"));
 		else
 			$addToCache(key=arguments.key, value=variables.$instance.response, time=arguments.time, category=arguments.category);
 	</cfscript>

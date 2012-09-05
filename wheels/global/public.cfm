@@ -1,11 +1,204 @@
 <!--- PUBLIC CONFIGURATION FUNCTIONS --->
 
+<!--- TODO: move setPagination function to controller, it's only here for now to maintain backwards compatibility --->
+<cffunction name="setPagination" access="public" output="false" returntype="void" hint="Allows you to set a pagination handle for a custom query so you can perform pagination on it in your view with `paginationLinks()`."
+	examples=
+	'
+		<!---
+			Note that there are two ways to do pagination yourself using
+			a custom query.
+
+			1) Do a query that grabs everything that matches and then use
+			the `cfouput` or `cfloop` tag to page through the results.
+
+			2) Use your database to make 2 queries. The first query
+			basically does a count of the total number of records that match
+			the criteria and the second query actually selects the page of
+			records for retrieval.
+
+			In the example below, we will show how to write a custom query
+			using both of these methods. Note that the syntax where your
+			database performs the pagination will differ depending on the
+			database engine you are using. Plese consult your database
+			engine''s documentation for the correct syntax.
+
+			Also note that the view code will differ depending on the method
+			used.
+		--->
+
+		<!---
+			First method: Handle the pagination through your CFML engine
+		--->
+
+		<!--- Model code --->
+		<!--- In your model (ie. User.cfc), create a custom method for your custom query --->
+		<cffunction name="myCustomQuery">
+			<cfargument name="page" type="numeric">
+			<cfargument name="perPage" type="numeric" required="false" default="25">
+
+			<cfquery name="local.customQuery" datasource="##get(''dataSourceName'')##">
+				SELECT * FROM users
+			</cfquery>
+
+			<cfset setPagination(totalRecords=local.customQuery.RecordCount, currentPage=arguments.page, perPage=arguments.perPage, handle="myCustomQueryHandle")>
+			<cfreturn customQuery>
+		</cffunction>
+
+		<!--- Controller code --->
+		<cffunction name="list">
+			<cfparam name="params.page" default="1">
+			<cfparam name="params.perPage" default="25">
+
+			<cfset allUsers = model("user").myCustomQuery(page=params.page, perPage=params.perPage)>
+			<!---
+				Because we''re going to let `cfoutput`/`cfloop` handle the pagination,
+				we''re going to need to get some addition information about the
+				pagination.
+			 --->
+			<cfset paginationData = pagination("myCustomQueryHandle")>
+		</cffunction>
+
+		<!--- View code (using `cfloop`) --->
+		<!--- Use the information from `paginationData` to page through the records --->
+		<cfoutput>
+		<ul>
+		    <cfloop query="allUsers" startrow="##paginationData.startrow##" endrow="##paginationData.endrow##">
+		        <li>##allUsers.firstName## ##allUsers.lastName##</li>
+		    </cfloop>
+		</ul>
+		##paginationLinks(handle="myCustomQueryHandle")##
+		</cfoutput>
+
+		<!--- View code (using `cfoutput`) --->
+		<!--- Use the information from `paginationData` to page through the records --->
+		<ul>
+		    <cfoutput query="allUsers" startrow="##paginationData.startrow##" maxrows="##paginationData.maxrows##">
+		        <li>##allUsers.firstName## ##allUsers.lastName##</li>
+		    </cfoutput>
+		</ul>
+		<cfoutput>##paginationLinks(handle="myCustomQueryHandle")##</cfoutput>
+
+
+		<!---
+			Second method: Handle the pagination through the database
+		--->
+
+		<!--- Model code --->
+		<!--- In your model (ie. `User.cfc`), create a custom method for your custom query --->
+		<cffunction name="myCustomQuery">
+			<cfargument name="page" type="numeric">
+			<cfargument name="perPage" type="numeric" required="false" default="25">
+
+			<cfquery name="local.customQueryCount" datasource="##get(''dataSouceName'')##">
+				SELECT COUNT(*) AS theCount FROM users
+			</cfquery>
+
+			<cfquery name="local.customQuery" datasource="##get(''dataSourceName'')##">
+				SELECT * FROM users
+				LIMIT ##arguments.page## OFFSET ##arguments.perPage##
+			</cfquery>
+
+			<!--- Notice the we use the value from the first query for `totalRecords`  --->
+			<cfset setPagination(totalRecords=local.customQueryCount.theCount, currentPage=arguments.page, perPage=arguments.perPage, handle="myCustomQueryHandle")>
+			<!--- We return the second query --->
+			<cfreturn customQuery>
+		</cffunction>
+
+		<!--- Controller code --->
+		<cffunction name="list">
+			<cfparam name="params.page" default="1">
+			<cfparam name="params.perPage" default="25">
+			<cfset allUsers = model("user").myCustomQuery(page=params.page, perPage=params.perPage)>
+		</cffunction>
+
+		<!--- View code (using `cfloop`) --->
+		<cfoutput>
+		<ul>
+		    <cfloop query="allUsers">
+		        <li>##allUsers.firstName## ##allUsers.lastName##</li>
+		    </cfloop>
+		</ul>
+		##paginationLinks(handle="myCustomQueryHandle")##
+		</cfoutput>
+
+		<!--- View code (using `cfoutput`) --->
+		<ul>
+		    <cfoutput query="allUsers">
+		        <li>##allUsers.firstName## ##allUsers.lastName##</li>
+		    </cfoutput>
+		</ul>
+		<cfoutput>##paginationLinks(handle="myCustomQueryHandle")##</cfoutput>
+	'
+	categories="model-class,miscellaneous" chapters="getting-paginated-data" functions="findAll,paginationLinks">
+	<cfargument name="totalRecords" type="numeric" required="true" hint="Total count of records that should be represented by the paginated links.">
+	<cfargument name="currentPage" type="numeric" required="false" default="1" hint="Page number that should be represented by the data being fetched and the paginated links.">
+	<cfargument name="perPage" type="numeric" required="false" default="25" hint="Number of records that should be represented on each page of data.">
+	<cfargument name="handle" type="string" required="false" default="query" hint="Name of handle to reference in @paginationLinks.">
+	<cfscript>
+		var loc = {};
+
+		// all numeric values must be integers
+		arguments.totalRecords = fix(arguments.totalRecords);
+		arguments.currentPage = fix(arguments.currentPage);
+		arguments.perPage = fix(arguments.perPage);
+
+		// totalRecords cannot be negative
+		if (arguments.totalRecords lt 0)
+		{
+			arguments.totalRecords = 0;
+		}
+
+		// perPage less then zero
+		if (arguments.perPage lte 0)
+		{
+			arguments.perPage = 25;
+		}
+
+		// calculate the total pages the query will have
+		arguments.totalPages = Ceiling(arguments.totalRecords/arguments.perPage);
+
+		// currentPage shouldn't be less then 1 or greater then the number of pages
+		if (arguments.currentPage gte arguments.totalPages)
+		{
+			arguments.currentPage = arguments.totalPages;
+		}
+		if (arguments.currentPage lt 1)
+		{
+			arguments.currentPage = 1;
+		}
+
+		// as a convinence for cfquery and cfloop when doing oldschool type pagination
+		// startrow for cfquery and cfloop
+		arguments.startRow = (arguments.currentPage * arguments.perPage) - arguments.perPage + 1;
+
+		// maxrows for cfquery
+		arguments.maxRows = arguments.perPage;
+
+		// endrow for cfloop
+		arguments.endRow = (arguments.startRow - 1) + arguments.perPage;
+
+		// endRow shouldn't be greater then the totalRecords or less than startRow
+		if (arguments.endRow gte arguments.totalRecords)
+		{
+			arguments.endRow = arguments.totalRecords;
+		}
+		if (arguments.endRow lt arguments.startRow)
+		{
+			arguments.endRow = arguments.startRow;
+		}
+
+		loc.args = duplicate(arguments);
+		structDelete(loc.args, "handle", false);
+		request.wheels[arguments.handle] = loc.args;
+	</cfscript>
+</cffunction>
+
 <cffunction name="setCacheSettings" returntype="void" access="public" output="false" hint="Updates the settings for a cache category. Use this method in your settings files. You may also add specific arguments that you would like to pass to the storage component."
 	examples='
 		<!--- in config/settings.cfm, set the caching for partials to use ehcache --->
 		<cfset setCacheSettings(category="partials", storage="ehcache") />
 	'
-	categories="configuration" chapters="caching" functions="">
+	categories="configuration,caching" chapters="caching" functions="">
 	<cfargument name="category" type="string" required="true" />
 	<cfargument name="storage" type="string" required="true" hint="Could be memory, ehcache, or memcached." />
 	<cfargument name="strategy" type="string" required="false" default="age" />
@@ -29,7 +222,7 @@
 		<cfset addFormat(extension="ppt", mimeType="application/vnd.ms-powerpoint")>
 		<cfset addFormat(extension="pptx", mimeType="application/vnd.ms-powerpoint")>
 	'
-	categories="configuration" chapters="responding-with-multiple-formats" functions="provides,renderWith">
+	categories="configuration,formats" chapters="responding-with-multiple-formats" functions="provides,renderWith">
 	<cfargument name="extension" type="string" required="true" hint="File extension to add." />
 	<cfargument name="mimeType" type="string" required="true" hint="Matching MIME type to associate with the file extension." />
 	<cfset application.wheels.formats[arguments.extension] = arguments.mimeType />
@@ -49,7 +242,7 @@
 		<!--- Example 3: Change the `home` route. This should be listed last because it is least specific --->
 		<cfset addRoute(name="home", pattern="", controller="main", action="index")>
 	'
-	categories="configuration" chapters="using-routes" functions="">
+	categories="configuration,routes" chapters="using-routes" functions="">
 	<cfargument name="name" type="string" required="false" default="" hint="Name for the route. This is referenced as the `name` argument in functions based on @URLFor like @linkTo, @startFormTag, etc.">
 	<cfargument name="pattern" type="string" required="true" hint="The URL pattern that the route will match.">
 	<cfargument name="controller" type="string" required="false" default="" hint="Controller to call when route matches (unless the controller name exists in the pattern).">
@@ -89,7 +282,7 @@
 		<!--- Adds the default routes to your application (done in `config/routes.cfm`) --->
 		<cfset addDefaultRoutes()>
 	'
-	categories="configuration" chapters="using-routes" functions="">
+	categories="configuration,routes" chapters="using-routes" functions="">
 	<cfscript>
 		addRoute(pattern="[controller]/[action]/[key]");
 		addRoute(pattern="[controller]/[action]");
@@ -109,7 +302,7 @@
 		<!--- Example 3: Set the default values for a form helper to get the form marked up to your preferences --->
 		<cfset set(functionName="textField", labelPlacement="before", prependToLabel="<div>", append="</div>", appendToLabel="<br />")>
 	'
-	categories="configuration" chapters="configuration-and-defaults" functions="get">
+	categories="configuration,defaults" chapters="configuration-and-defaults" functions="get">
 	<cfscript>
 		var loc = {};
 		if (ArrayLen(arguments) > 1)
@@ -202,7 +395,7 @@
 		<!--- Get the default for the `message` argument of the `validatesConfirmationOf` method  --->
 		<cfset setting = get(functionName="validatesConfirmationOf", name="message")>
 	'
-	categories="global,miscellaneous" chapters="configuration-and-defaults" functions="set">
+	categories="configuration,defaults" chapters="configuration-and-defaults" functions="set">
 	<cfargument name="name" type="string" required="true" hint="Variable name to get setting for.">
 	<cfargument name="functionName" type="string" required="false" default="" hint="Function name to get setting for.">
 	<cfscript>
@@ -295,10 +488,7 @@
 	<cfscript>
 		var loc = {};
 		
-		loc.returnValue = $args(name="URLFor", args=arguments, cachable=true);
-		// only run our URLFor code if we do not have a cached result
-		if (StructKeyExists(loc, "returnValue"))
-			return loc.returnValue;
+		loc.returnValue = $args(name="URLFor", args=arguments);
 		
 		loc.params = {};
 		if (StructKeyExists(variables, "params"))
@@ -402,7 +592,8 @@
 		if (arguments.$URLRewriting == "On")
 		{
 			loc.returnValue = Replace(loc.returnValue, application.wheels.rewriteFile, "");
-			loc.returnValue = Replace(loc.returnValue, "//", "/");
+			loc.returnValue = REReplace(loc.returnValue, "/{2,}", "/", "ALL");
+			loc.returnValue = REReplace(loc.returnValue, "(?!^/)/$", "");
 		}
 
 		if (Len(arguments.params))
@@ -435,4 +626,16 @@
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="l" returntype="string" access="public" output="false" hint="returns the value for the given key of a locale"
+	examples=
+	'
+		<!--- Return all the names of the months for US English --->
+		<cfset monthNames = l("date.month_names", "en-US")>
+	'
+	categories="global,miscellaneous">
+	<cfargument name="key" type="string" required="true">
+	<cfargument name="locale" type="string" required="false" default="#application.wheels.locale#">
+	<cfreturn evaluate('application.wheels.locales["#arguments.locale#"].#arguments.key#')>
 </cffunction>

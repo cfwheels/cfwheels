@@ -14,6 +14,7 @@
 	</cffunction>
 	
 	<cffunction name="teardown">
+		<cfset application.wheels.mixins = {}>
 		<cfset $deleteTestFolders()>
 	</cffunction>
 
@@ -41,8 +42,18 @@
 		<cfloop query="loc.q">
 			<cfset loc.dirs = ListAppend(loc.dirs, name)>
 		</cfloop>
+		<cfset assert('ListLen(loc.dirs) eq 3')>
 		<cfset assert('ListFindNoCase(loc.dirs, "TestDefaultAssignMixins")')>
 		<cfset assert('ListFindNoCase(loc.dirs, "TestGlobalMixins")')>
+		<cfset assert('ListFindNoCase(loc.dirs, "TestUpdatedVersion")')>
+	</cffunction>
+	
+	<cffunction name="test_newest_version_should_unpack">
+		<cfset loc.PluginObj = $pluginObj(loc.config)>
+		<cfset application.wheels.mixins = loc.PluginObj.getMixins()>
+		<cfset loc.m = model("authors").new()>
+		<cfset assert('StructKeyExists(loc.m, "$UpdatedVersionTest")')>
+		<cfset assert('loc.m.$UpdatedVersionTest() eq 2')>
 	</cffunction>
 	
 </cfcomponent>

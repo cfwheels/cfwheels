@@ -25,7 +25,7 @@
 		</cffunction>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="afterFind", argumentCollection=arguments)>
 </cffunction>
 
@@ -36,7 +36,7 @@
 		<cfset afterInitialization("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="afterInitialization", argumentCollection=arguments)>
 </cffunction>
 
@@ -47,7 +47,7 @@
 		<cfset beforeValidation("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidationOnCreate,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="beforeValidation", argumentCollection=arguments)>
 </cffunction>
 
@@ -58,7 +58,7 @@
 		<cfset beforeValidationOnCreate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="beforeValidationOnCreate", argumentCollection=arguments)>
 </cffunction>
 
@@ -69,7 +69,7 @@
 		<cfset beforeValidationOnUpdate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="beforeValidationOnUpdate", argumentCollection=arguments)>
 </cffunction>
 
@@ -80,7 +80,7 @@
 		<cfset afterValidation("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="afterValidation", argumentCollection=arguments)>
 </cffunction>
 
@@ -91,7 +91,7 @@
 		<cfset afterValidationOnCreate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="afterValidationOnCreate", argumentCollection=arguments)>
 </cffunction>
 
@@ -102,7 +102,7 @@
 		<cfset afterValidationOnUpdate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="afterValidationOnUpdate", argumentCollection=arguments)>
 </cffunction>
 
@@ -113,7 +113,7 @@
 		<cfset beforeSave("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="beforeSave", argumentCollection=arguments)>
 </cffunction>
 
@@ -124,7 +124,7 @@
 		<cfset beforeCreate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="beforeCreate", argumentCollection=arguments)>
 </cffunction>
 
@@ -135,7 +135,7 @@
 		<cfset beforeUpdate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="beforeUpdate", argumentCollection=arguments)>
 </cffunction>
 
@@ -146,7 +146,7 @@
 		<cfset afterCreate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="afterCreate", argumentCollection=arguments)>
 </cffunction>
 
@@ -157,7 +157,7 @@
 		<cfset afterUpdate("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="afterUpdate", argumentCollection=arguments)>
 </cffunction>
 
@@ -168,7 +168,7 @@
 		<cfset afterSave("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="afterSave", argumentCollection=arguments)>
 </cffunction>
 
@@ -179,7 +179,7 @@
 		<cfset beforeDelete("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterDelete,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="beforeDelete", argumentCollection=arguments)>
 </cffunction>
 
@@ -190,7 +190,7 @@
 		<cfset afterDelete("fixObj")>
 	'
 	categories="model-initialization,callbacks" chapters="object-callbacks" functions="afterCreate,afterFind,afterInitialization,afterNew,afterSave,afterUpdate,afterValidation,afterValidationOnCreate,afterValidationOnUpdate,beforeCreate,beforeDelete,beforeSave,beforeUpdate,beforeValidation,beforeValidationOnCreate,beforeValidationOnUpdate">
-	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @afterNew.">
+	<cfargument name="methods" type="string" required="false" default="" hint="@afterNew.">
 	<cfset $registerCallback(type="afterDelete", argumentCollection=arguments)>
 </cffunction>
 
@@ -236,7 +236,7 @@
 </cffunction>
 
 <cffunction name="$callbacks" returntype="any" access="public" output="false" hint="Returns all registered callbacks for this model (as a struct). Pass in the `type` argument to only return callbacks for that specific type (as an array).">
-	<cfargument name="type" type="string" required="false" default="" hint="See documentation for @$clearCallbacks.">
+	<cfargument name="type" type="string" required="false" default="" hint="@$clearCallbacks.">
 	<cfscript>
 		if (Len(arguments.type))
 		{
@@ -252,7 +252,7 @@
 <!--- PRIVATE MODEL OBJECT METHODS --->
 
 <cffunction name="$callback" returntype="boolean" access="public" output="false" hint="Executes all callback methods for a specific type. Will stop execution on the first callback that returns `false`.">
-	<cfargument name="type" type="string" required="true" hint="See documentation for @$clearCallbacks.">
+	<cfargument name="type" type="string" required="true" hint="@$clearCallbacks.">
 	<cfargument name="execute" type="boolean" required="true" hint="A query is passed in here for `afterFind` callbacks.">
 	<cfargument name="collection" type="any" required="false" default="" hint="A query is passed in here for `afterFind` callbacks.">
 	<cfscript>
@@ -305,7 +305,7 @@
 
 <cffunction name="$queryCallback" returntype="boolean" access="public" output="false" hint="Loops over the passed in query, calls the callback method for each row and changes the query based on the arguments struct that is passed back.">
 	<cfargument name="method" type="string" required="true" hint="The method to call.">
-	<cfargument name="collection" type="query" required="true" hint="See documentation for @$callback.">
+	<cfargument name="collection" type="query" required="true" hint="@$callback.">
 	<cfscript>
 		var loc = {};
 

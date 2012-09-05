@@ -1,6 +1,6 @@
 <cfcomponent extends="wheelsMapping.Test">
 
-	<cfset cache = CreateObject("component", "wheels.Cache").init(storage="memory", strategy="age")>
+	<cfset cache = CreateObject("component", "wheelsMapping.Cache").init(storage="memory", strategy="age")>
 
 	<cffunction name="setup">
 		<cfset StructDelete(variables, "result")>

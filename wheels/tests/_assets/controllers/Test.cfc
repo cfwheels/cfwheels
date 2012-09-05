@@ -12,7 +12,7 @@
 	<cffunction name="testRedirect">
 		<cfset redirectTo(action="dummy")>
 		<cfset request.setInActionAfterRedirect = true>
-		<cfset renderPage(action="test")>
+		<cfset renderView(action="test")>
 	</cffunction>
 
 	<cffunction name="$dataForPartial" returnType="struct" access="private">
@@ -31,7 +31,11 @@
 	</cffunction>
 	
 	<cffunction name="partialDataExplicitPublic" returnType="struct" access="public">
-		<cfreturn $dataForPartial()>
+		<cfset var data = $dataForPartial()>
+		<cfif StructKeyExists(arguments, "passThrough")>
+			<cfset data.passThroughWorked = true>
+		</cfif>
+		<cfreturn data>
 	</cffunction>
 
 </cfcomponent>

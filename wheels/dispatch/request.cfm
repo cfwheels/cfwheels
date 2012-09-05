@@ -80,12 +80,12 @@
 				
 			loc.currentRoute = application.wheels.routes[loc.i].pattern;
 			if (loc.currentRoute == "*") {
-				loc.returnValue = application.wheels.routes[loc.i];
+				loc.returnValue = Duplicate(application.wheels.routes[loc.i]);
 				break;
 			} 
 			else if (arguments.path == "" && loc.currentRoute == "")
 			{
-				loc.returnValue = application.wheels.routes[loc.i];
+				loc.returnValue = Duplicate(application.wheels.routes[loc.i]);
 				break;
 			}
 			else if (ListLen(arguments.path, "/") gte ListLen(loc.currentRoute, "/") && loc.currentRoute != "")
@@ -102,7 +102,7 @@
 				}
 				if (loc.match)
 				{
-					loc.returnValue = application.wheels.routes[loc.i];
+					loc.returnValue = Duplicate(application.wheels.routes[loc.i]);
 					if (len(loc.format))
 					{
 						loc.returnValue[ReplaceList(loc.format, "[,]", "")] = $getFormatFromRequest(pathInfo=arguments.path);
@@ -339,10 +339,6 @@
 					loc.dates[loc.key].hour += 12;
 				}
 			}
-			if (!StructKeyExists(arguments.params, loc.key) || !IsArray(arguments.params[loc.key]))
-			{
-				arguments.params[loc.key] = [];
-			}
 			try
 			{
 				arguments.params[loc.key] = CreateDateTime(loc.dates[loc.key].year, loc.dates[loc.key].month, loc.dates[loc.key].day, loc.dates[loc.key].hour, loc.dates[loc.key].minute, loc.dates[loc.key].second);
@@ -379,7 +375,7 @@
 
 		// filter out illegal characters from the controller and action arguments
 		arguments.params.controller = ReReplace(arguments.params.controller, "[^0-9A-Za-z-_]", "", "all");
-		arguments.params.action = ReReplace(arguments.params.action, "[^0-9A-Za-z-_]", "", "all");
+		arguments.params.action = ReReplace(arguments.params.action, "[^0-9A-Za-z-_\.]", "", "all");
 
 		// convert controller to upperCamelCase and action to normal camelCase
 		arguments.params.controller = ListSetAt(arguments.params.controller, ListLen(arguments.params.controller, "."), REReplace(ListLast(arguments.params.controller, "."), "(^|-)([a-z])", "\u\2", "all"), ".");

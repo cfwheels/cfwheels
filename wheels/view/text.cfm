@@ -22,7 +22,7 @@
 			}
 			else
 			{
-				arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.)[^\s\b]+)";
+				arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.)[^\s\b<]+)";
 			}
 			arguments.text = $autoLinkLoop(argumentCollection=arguments);
 		}
@@ -49,14 +49,14 @@
 	{
 		loc.startPosition = loc.match.pos[1] + loc.match.len[1];
 		loc.str = Mid(arguments.text, loc.match.pos[1], loc.match.len[1]);
-		if (Left(loc.str, 2) neq "<a")
+		if (!FindOneOf("<>""'", ReplaceList(loc.str, "&lt;,&gt;,&quot;,&apos;", "<,>,"",'")))
 		{
 			arguments.text = RemoveChars(arguments.text, loc.match.pos[1], loc.match.len[1]);
 			// remove any sort of trailing puncuation
 			loc.punctuation = ArrayToList(ReMatchNoCase(loc.PunctuationRegEx, loc.str));
 			loc.str = REReplaceNoCase(loc.str, loc.PunctuationRegEx, "", "all");
 			arguments.href = arguments.protocol & loc.str;
-			loc.element = $element("a", arguments, loc.str, "text,regex,link,domains,protocol,relative") & loc.punctuation;
+			loc.element = $element("a", arguments, loc.str, "text,regex,link,protocol,relative") & loc.punctuation;
 			arguments.text = Insert(loc.element, arguments.text, loc.match.pos[1]-1);
 			loc.startPosition = loc.match.pos[1] + len(loc.element);
 		}
@@ -79,7 +79,7 @@
 	<cfargument name="radius" type="numeric" required="false" hint="Number of characters to extract surrounding the phrase.">
 	<cfargument name="excerptString" type="string" required="false" hint="String to replace first and/or last characters with.">
 	<cfargument name="stripTags" type="boolean" required="false" hint="Should we remove all html tags before extracting the except">
-	<cfargument name="wholeWords" type="boolean" required="false" hint="when extracting the exceprt, span to to grab whole words.">
+	<cfargument name="wholeWords" type="boolean" required="false" hint="when extracting the excerpt, span to to grab whole words.">
 	<cfscript>
 	var loc = {};
 	$args(name="excerpt", args=arguments);
@@ -158,7 +158,9 @@
 	categories="view-helper,text" functions="autoLink,excerpt,simpleFormat,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="Text to search.">
 	<cfargument name="phrases" type="string" required="true" hint="List of phrases to highlight.">
-	<cfargument name="class" type="string" required="false" hint="Class to use in `span` tags surrounding highlighted phrase(s).">
+	<cfargument name="delimiter" type="string" required="false" hint="Delimiter to use in `phrases` argument.">
+	<cfargument name="tag" type="string" required="false" hint="HTML tag to use to wrap the highlighted phrase(s).">
+	<cfargument name="class" type="string" required="false" hint="Class to use in the tags wrapping highlighted phrase(s).">
 	<cfscript>
 		var loc = {};
 		$args(name="highlight", args=arguments);
@@ -169,11 +171,11 @@
 		else
 		{
 			loc.origText = arguments.text;
-			loc.iEnd = ListLen(arguments.phrases);
+			loc.iEnd = ListLen(arguments.phrases, arguments.delimiter);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i=loc.i+1)
 			{
 				loc.newText = "";
-				loc.phrase = Trim(ListGetAt(arguments.phrases, loc.i));
+				loc.phrase = Trim(ListGetAt(arguments.phrases, loc.i, arguments.delimiter));
 				loc.pos = 1;
 				while (FindNoCase(loc.phrase, loc.origText, loc.pos))
 				{
@@ -181,7 +183,7 @@
 					loc.prevText = Mid(loc.origText, loc.pos, loc.foundAt-loc.pos);
 					loc.newText = loc.newText & loc.prevText;
 					if (Find("<", loc.origText, loc.foundAt) < Find(">", loc.origText, loc.foundAt) || !Find(">", loc.origText, loc.foundAt))
-						loc.newText = loc.newText & "<span class=""" & arguments.class & """>" & Mid(loc.origText, loc.foundAt, Len(loc.phrase)) & "</span>";
+						loc.newText = loc.newText & "<" & arguments.tag & " class=""" & arguments.class & """>" & Mid(loc.origText, loc.foundAt, Len(loc.phrase)) & "</" & arguments.tag & ">";
 					else
 						loc.newText = loc.newText & Mid(loc.origText, loc.foundAt, Len(loc.phrase));
 					loc.pos = loc.foundAt + Len(loc.phrase);

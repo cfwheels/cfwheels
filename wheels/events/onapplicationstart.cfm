@@ -12,6 +12,10 @@
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "reloadPassword"))
 			loc.oldReloadPassword = application.wheels.reloadPassword;
 		application.wheels = {};
+		
+		// include the version
+		$include(template="wheels/version.cfm");
+		
 		if (StructKeyExists(loc, "oldReloadPassword"))
 			application.wheels.reloadPassword = loc.oldReloadPassword;
 
@@ -37,9 +41,13 @@
 
 		// copy over the cgi variables we need to the request scope (since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example)
 		request.cgi = $cgiScope();
+		
+		// load locales
+		application.wheels.locales = $loadLocales();
+		// default locale
+		application.wheels.locale = "en-US";
 
 		// set up containers for routes, caches, settings etc
-		application.wheels.version = "1.2 Beta 1";
 		application.wheels.controllers = {};
 		application.wheels.models = {};
 		application.wheels.existingHelperFiles = "";

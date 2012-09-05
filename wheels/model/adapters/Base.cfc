@@ -155,6 +155,7 @@
 		<cfscript>
 		var loc = {};
 		loc.delim = ",";
+
 		if (Find("'", arguments.statement))
 		{
 			loc.delim = "','";
@@ -286,5 +287,18 @@
 		<cfreturn "#arguments.table# AS #arguments.alias#">
 	</cffunction>
 
+	<cffunction name="$convertMaxRowsToLimit" returntype="struct" access="public" output="false">
+		<cfargument name="argScope" type="struct" required="true">
+		<cfscript>
+		if (StructKeyExists(arguments.argScope, "maxrows") AND arguments.argScope.maxrows gt 0){
+			if (arguments.argScope.maxrows gt 0){
+				arguments.argScope.limit = arguments.argScope.maxrows;
+			}
+			StructDelete(arguments.argScope, "maxrows");
+		}
+		return arguments.argScope;
+		</cfscript>
+	</cffunction>
+	
 	<cfinclude template="../../plugins/injection.cfm">
 </cfcomponent>

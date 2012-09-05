@@ -33,7 +33,7 @@
 		<!--- incompatibility --->
 		<cfset $determineIncompatible()>
 		<!--- dependancies --->
-		<cfset $determinDependancy()>
+		<cfset $determineDependancy()>
 
 		<cfreturn this>
 	</cffunction>
@@ -154,7 +154,7 @@
 	</cffunction>
 	
 	
-	<cffunction name="$determinDependancy">
+	<cffunction name="$determineDependancy">
 		<cfset var loc = {}>
 
 		<cfloop collection="#variables.$class.plugins#" item="loc.iPlugins">
@@ -273,7 +273,7 @@
 		
 		<cfdirectory directory="#variables.$class.pluginPathFull#" action="list" filter="*.zip" type="file" sort="name DESC" name="q">
 		<cfquery name="q" dbtype="query">
-		select * from q where name not like '.%'
+		select * from q where name not like '.%' order by name
 		</cfquery>
 		
 		<cfreturn q>

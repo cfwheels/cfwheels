@@ -13,3 +13,7 @@
 	<cfinclude template="../../root.cfm">
 	<cfreturn returnValue>
 </cffunction>
+
+<cffunction name="$inspect">
+	<cfreturn variables>
+</cffunction>

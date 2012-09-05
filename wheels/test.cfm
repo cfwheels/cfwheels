@@ -474,103 +474,35 @@
 	<!--- save the original environment for overloaded --->
 	<cfset loc.savedenv = duplicate(application)>
 
-	<!--- by default we run all packages, however they can specify to run a specific package of tests --->
-	<cfset loc.package = "">
-
 	<!--- not only can we specify the package, but also the test we want to run --->
 	<cfset loc.test = "">
-
-	<!--- default test type --->
-	<cfset loc.type = "core">
-
-	<!--- if they specified a package we should only run that --->
-	<cfif structkeyexists(arguments.options, "package") and len(arguments.options.package)>
-		<cfset loc.package = arguments.options.package>
-		<cfif structkeyexists(arguments.options, "test") and len(arguments.options.test)>
-			<cfset loc.test = arguments.options.test>
-		</cfif>
+	<cfif structkeyexists(arguments.options, "test") and len(arguments.options.test)>
+		<cfset loc.test = arguments.options.test>
 	</cfif>
-
-	<!--- overwrite the default test type if passed --->
-	<cfif structkeyexists(arguments.options, "type") and len(arguments.options.type)>
-		<cfset loc.type = arguments.options.type>
-	</cfif>
-
-	<!--- which tests to run --->
-	<cfif loc.type eq "core">
-		<!--- core tests --->
-		<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = application.wheels.wheelsComponentPath>
-	<cfelseif loc.type eq "app">
-		<!--- app tests --->
-		<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = application.wheels.rootComponentPath>
-	<cfelse>
-		<!--- specific plugin tests --->
-		<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = application.wheels.rootComponentPath>
-		<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = ListAppend(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "#application.wheels.pluginComponentPath#.#loc.type#", ".")>
-	</cfif>
-
-	<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = ListAppend(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "tests", ".")>
-
-	<!--- add the package if specified --->
-	<cfset loc.test_path = listappend("#TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH#", loc.package, ".")>
-
-	<!--- clean up testpath --->
-	<cfset loc.test_path = listchangedelims(loc.test_path, ".", "./\")>
-
-	<!--- convert to regular path --->
-	<cfset loc.relative_root_test_path = "/" & listchangedelims(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "/", ".")>
-	<cfset loc.full_root_test_path = expandpath(loc.relative_root_test_path)>
-	<cfset loc.releative_test_path = "/" & listchangedelims(loc.test_path, "/", ".")>
-	<cfset loc.full_test_path = expandPath(loc.releative_test_path)>
-	<cfset loc.test_filter = "*">
-
-	<cfif not DirectoryExists(loc.full_test_path)>
-		<cfif FileExists(loc.full_test_path & ".cfc")>
-			<cfset loc.test_filter = reverse(listfirst(reverse(loc.test_path), "."))>
-			<cfset loc.test_path = reverse(listrest(reverse(loc.test_path), "."))>
-			<cfset loc.releative_test_path = "/" & listchangedelims(loc.test_path, "/", ".")>
-			<cfset loc.full_test_path = expandPath(loc.releative_test_path)>
-		<cfelse>
-			<!--- swap back the enviroment --->
-			<cfset application = loc.savedenv>
-			<cfthrow
-				type="Wheels.Testing"
-				message="Cannot find test package or single test"
-				detail="In order to run test you must supply a valid test package or single test file to run">
-		</cfif>
-	</cfif>
-
-	<cfdirectory directory="#loc.full_test_path#" action="list" recurse="true" name="q" filter="#loc.test_filter#.cfc" />
-
-	<!--- for test results display --->
-	<cfset TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH = loc.test_path>
+	
+	<!--- resolve paths --->
+	<cfset loc.paths = $resolvePaths(arguments.options)>
 
 	<!---
 	if env.cfm files exists, call to override enviroment settings so tests can run.
 	when overriding, save the original env so we can put it back later.
 	 --->
-	<cfif FileExists(loc.full_root_test_path & "/env.cfm")>
-		<cfinclude template="#loc.relative_root_test_path & '/env.cfm'#">
+	<cfif FileExists(loc.paths.full_root_test_path & "/env.cfm")>
+		<cfinclude template="#loc.paths.relative_root_test_path & '/env.cfm'#">
 	</cfif>
 
 	<!--- populate the test database only on reload --->
-	<cfif structkeyexists(arguments.options, "reload") && arguments.options.reload eq true && FileExists(loc.full_root_test_path & "/populate.cfm")>
-		<cfinclude template="#loc.relative_root_test_path & '/populate.cfm'#">
+	<cfif structkeyexists(arguments.options, "reload") && arguments.options.reload eq true && FileExists(loc.paths.full_root_test_path & "/populate.cfm")>
+		<cfinclude template="#loc.paths.relative_root_test_path & '/populate.cfm'#">
 	</cfif>
+	
+	<!--- tests to run --->
+	<cfset q = $listTestPackages(arguments.options)>
 
 	<!--- run tests --->
 	<cfloop query="q">
-		<cfset loc.testname = listchangedelims(removechars(directory, 1, len(loc.full_test_path)), ".", "\/")>
-		<!--- directories that begin with an underscore are ignored --->
-		<cfif not refindnocase("(^|\.)_", loc.testname)>
-			<cfset loc.testname = listprepend(loc.testname, loc.test_path, ".")>
-			<cfset loc.testname = listappend(loc.testname, listfirst(name, "."), ".")>
-			<!--- ignore invalid tests and test that begin with underscores --->
-			<cfif left(name, 1) neq "_" and $isValidTest(loc.testname)>
-				<cfset loc.instance = createObject("component", loc.testname)>
-				<cfset loc.instance.$runTest(loc.resultKey, loc.test)>
-			</cfif>
-		</cfif>
+		<cfset loc.instance = createObject("component", package)>
+		<cfset loc.instance.$runTest(loc.resultKey, loc.test)>
 	</cfloop>
 
 	<!--- swap back the enviroment --->
@@ -607,6 +539,104 @@
 <cffunction name="$cleanTestPath" returntype="string" output="false" hint="cleans up the test name so they are more readable">
 	<cfargument name="str" type="string" required="true" hint="test name to clean up">
 	<cfreturn listchangedelims(replace(arguments.str, TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, ""), ".", ".")>
+</cffunction>
+
+<cffunction name="$resolvePaths" returntype="struct" output="false" hint="this resolves all the paths needed to run the tests">
+	<cfargument name="options" type="struct" required="false" default="#structnew()#">
+	<cfset var loc = {}>
+
+	<!--- container for returning the paths --->	
+	<cfset loc.paths = {}>
+	
+	<!--- default test type --->
+	<cfset loc.type = "core">
+	
+	<!--- by default we run all packages, however they can specify to run a specific package of tests --->
+	<cfset loc.package = "">
+
+	<!--- if they specified a package we should only run that --->
+	<cfif structkeyexists(arguments.options, "package") and len(arguments.options.package)>
+		<cfset loc.package = arguments.options.package>
+	</cfif>
+
+	<!--- overwrite the default test type if passed --->
+	<cfif structkeyexists(arguments.options, "type") and len(arguments.options.type)>
+		<cfset loc.type = arguments.options.type>
+	</cfif>
+
+	<!--- which tests to run --->
+	<cfif loc.type eq "core">
+		<!--- core tests --->
+		<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = application.wheels.wheelsComponentPath>
+	<cfelseif loc.type eq "app">
+		<!--- app tests --->
+		<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = application.wheels.rootComponentPath>
+	<cfelse>
+		<!--- specific plugin tests --->
+		<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = application.wheels.rootComponentPath>
+		<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = ListAppend(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "#application.wheels.pluginComponentPath#.#loc.type#", ".")>
+	</cfif>
+	
+	<cfset TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH = ListAppend(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "tests", ".")>
+	
+	<!--- add the package if specified --->
+	<cfset loc.paths.test_path = listappend("#TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH#", loc.package, ".")>
+
+	<!--- clean up testpath --->
+	<cfset loc.paths.test_path = listchangedelims(loc.paths.test_path, ".", "./\")>
+
+	<!--- convert to regular path --->
+	<cfset loc.paths.relative_root_test_path = "/" & listchangedelims(TESTING_FRAMEWORK_VARS.ROOT_TEST_PATH, "/", ".")>
+	<cfset loc.paths.full_root_test_path = expandpath(loc.paths.relative_root_test_path)>
+	<cfset loc.paths.releative_test_path = "/" & listchangedelims(loc.paths.test_path, "/", ".")>
+	<cfset loc.paths.full_test_path = expandPath(loc.paths.releative_test_path)>
+
+	<cfif not DirectoryExists(loc.paths.full_test_path)>
+		<cfif FileExists(loc.paths.full_test_path & ".cfc")>
+			<cfset loc.paths.test_filter = reverse(listfirst(reverse(loc.paths.test_path), "."))>
+			<cfset loc.paths.test_path = reverse(listrest(reverse(loc.paths.test_path), "."))>
+			<cfset loc.paths.releative_test_path = "/" & listchangedelims(loc.paths.test_path, "/", ".")>
+			<cfset loc.paths.full_test_path = expandPath(loc.paths.releative_test_path)>
+		<cfelse>
+			<cfthrow
+				type="Wheels.Testing"
+				message="Cannot find test package or single test"
+				detail="In order to run test you must supply a valid test package or single test file to run">
+		</cfif>
+	</cfif>
+	
+	<!--- for test results display --->
+	<cfset TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH = loc.paths.test_path>
+	
+	<cfreturn loc.paths>
+</cffunction>
+
+<cffunction name="$listTestPackages" returntype="query" output="false" hint="returns a query containing all the test to run and their directory path">
+	<cfargument name="options" type="struct" required="false" default="#structnew()#">
+	<cfset var loc = {}>
+	<cfset var q = "">
+	<cfset var t = QueryNew("package","Varchar")>
+	
+	<cfset loc.paths = $resolvePaths(arguments.options)>
+	
+	<cfdirectory directory="#loc.paths.full_test_path#" action="list" recurse="true" name="q" filter="*.cfc" />
+
+	<!--- run tests --->
+	<cfloop query="q">
+		<cfset loc.testname = listchangedelims(removechars(directory, 1, len(loc.paths.full_test_path)), ".", "\/")>
+		<!--- directories that begin with an underscore are ignored --->
+		<cfif not refindnocase("(^|\.)_", loc.testname)>
+			<cfset loc.testname = listprepend(loc.testname, loc.paths.test_path, ".")>
+			<cfset loc.testname = listappend(loc.testname, listfirst(name, "."), ".")>
+			<!--- ignore invalid tests and test that begin with underscores --->
+			<cfif left(name, 1) neq "_" and $isValidTest(loc.testname)>
+				<cfset QueryAddRow(t)>
+				<cfset QuerySetCell(t, "package", loc.testname)>
+			</cfif>
+		</cfif>
+	</cfloop>
+
+	<cfreturn t>
 </cffunction>
 
 <cfinclude template="plugins/injection.cfm">

@@ -14,12 +14,13 @@
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="count,maximum,minimum,sum">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to calculate the average for.">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="where" type="string" required="false" default="" hint="@findAll.">
+	<cfargument name="include" type="string" required="false" default="" hint="@findAll.">
 	<cfargument name="distinct" type="boolean" required="false" hint="When `true`, `AVG` will be performed only on each unique instance of a value, regardless of how many times the value occurs.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
+	<cfargument name="parameterize" type="any" required="false" hint="@findAll.">
 	<cfargument name="ifNull" type="any" required="false" hint="The value returned if no records are found. Common usage is to set this to `0` to make sure a numeric value is always returned instead of a blank string.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="@findAll.">
+	<cfargument name="reload" type="boolean" required="false" hint="@save.">
 	<cfscript>
 		var loc = {};
 		$args(name="average", args=arguments);
@@ -72,10 +73,11 @@
 		<cfset amount = aPost.commentCount()>
 	'
 	categories="model-class,statistics" chapters="column-statistics,associations" functions="average,hasMany,maximum,minimum,sum">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+	<cfargument name="where" type="string" required="false" default="" hint="@findAll.">
+	<cfargument name="include" type="string" required="false" default="" hint="@findAll.">
+	<cfargument name="parameterize" type="any" required="false" hint="@findAll.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="@findAll.">
+	<cfargument name="reload" type="boolean" required="false" hint="@save.">
 	<cfscript>
 		var returnValue = "";
 		$args(name="count", args=arguments);
@@ -107,11 +109,12 @@
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="average,count,minimum,sum">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to get the highest value for (must be a property of a numeric data type).">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+	<cfargument name="where" type="string" required="false" default="" hint="@findAll.">
+	<cfargument name="include" type="string" required="false" default="" hint="@findAll.">
+	<cfargument name="parameterize" type="any" required="false" hint="@findAll.">
+	<cfargument name="ifNull" type="any" required="false" hint="@average.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="@findAll.">
+	<cfargument name="reload" type="boolean" required="false" hint="@save.">
 	<cfscript>
 		$args(name="maximum", args=arguments);
 		arguments.type = "MAX";
@@ -126,18 +129,19 @@
 		<cfset lowestSalary = model("employee").minimum("salary")>
 		
 		<!--- Get the amount of the lowest salary for employees in a given department --->
-		<cfset lowestSalary = model("employee").minimum(property="salary", where="departmentId=##params.id##")>
+		<cfset lowestSalary = model("employee").minimum(property="salary", where="departmentId=##params.key##")>
 		
 		<!--- Make sure a numeric amount is always returned, even when there were no records analyzed by the query --->
 		<cfset lowestSalary = model("employee").minimum(property="salary", where="salary BETWEEN ##params.min## AND ##params.max##", ifNull=0)>
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="average,count,maximum,sum">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to get the lowest value for (must be a property of a numeric data type).">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+	<cfargument name="where" type="string" required="false" default="" hint="@findAll.">
+	<cfargument name="include" type="string" required="false" default="" hint="@findAll.">
+	<cfargument name="parameterize" type="any" required="false" hint="@findAll.">
+	<cfargument name="ifNull" type="any" required="false" hint="@average.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="@findAll.">
+	<cfargument name="reload" type="boolean" required="false" hint="@save.">
 	<cfscript>
 		$args(name="minimum", args=arguments);
 		arguments.type = "MIN";
@@ -159,12 +163,13 @@
 	'
 	categories="model-class,statistics" chapters="column-statistics" functions="average,count,maximum,minimum">
 	<cfargument name="property" type="string" required="true" hint="Name of the property to get the sum for (must be a property of a numeric data type).">
-	<cfargument name="where" type="string" required="false" default="" hint="See documentation for @findAll.">
-	<cfargument name="include" type="string" required="false" default="" hint="See documentation for @findAll.">
+	<cfargument name="where" type="string" required="false" default="" hint="@findAll.">
+	<cfargument name="include" type="string" required="false" default="" hint="@findAll.">
 	<cfargument name="distinct" type="boolean" required="false" hint="When `true`, `SUM` returns the sum of unique values only.">
-	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
-	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
-	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
+	<cfargument name="parameterize" type="any" required="false" hint="@findAll.">
+	<cfargument name="ifNull" type="any" required="false" hint="@average.">
+	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="@findAll.">
+	<cfargument name="reload" type="boolean" required="false" hint="@save.">
 	<cfscript>
 		$args(name="sum", args=arguments);
 		arguments.type = "SUM";

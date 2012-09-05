@@ -33,24 +33,21 @@
 	categories="view-helper,links" chapters="linking-pages" functions="URLFor,buttonTo,mailTo">
 	<cfargument name="text" type="string" required="false" default="" hint="The text content of the link.">
 	<cfargument name="confirm" type="string" required="false" default="" hint="Pass a message here to cause a JavaScript confirmation dialog box to pop up containing the message.">
-	<cfargument name="route" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="action" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="params" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="onlyPath" type="boolean" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="route" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="controller" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="action" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="key" type="any" required="false" default="" hint="@URLFor.">
+	<cfargument name="params" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="anchor" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="onlyPath" type="boolean" required="false" hint="@URLFor.">
+	<cfargument name="host" type="string" required="false" hint="@URLFor.">
+	<cfargument name="protocol" type="string" required="false" hint="@URLFor.">
+	<cfargument name="port" type="numeric" required="false" hint="@URLFor.">
 	<cfargument name="href" type="string" required="false" hint="Pass a link to an external site here if you want to bypass the Wheels routing system altogether and link to an external URL.">
 	<cfargument name="remote" type="boolean" required="false" hint="Pass true if you wish to make this an asynchronous request">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = $args(name="linkTo", cachable=true, args=arguments);
-		// only run our linkTo code if we do not have a cached result
-		if (StructKeyExists(loc, "returnValue"))
-			return loc.returnValue;
+		loc.returnValue = $args(name="linkTo", args=arguments);
 			
 		if (Len(arguments.confirm))
 			arguments["data-confirm"] = JSStringFormat(arguments.confirm);
@@ -76,20 +73,20 @@
 	'
 	categories="view-helper,links" functions="URLFor,linkTo,mailTo">
 	<cfargument name="text" type="string" required="false" hint="The text content of the button.">
-	<cfargument name="confirm" type="string" required="false" hint="See documentation for @linkTo.">
+	<cfargument name="confirm" type="string" required="false" hint="@linkTo.">
 	<cfargument name="image" type="string" required="false" hint="If you want to use an image for the button pass in the link to it here (relative from the `images` folder).">
 	<cfargument name="disable" type="any" required="false" hint="Pass in `true` if you want the button to be disabled when clicked (can help prevent multiple clicks), or pass in a string if you want the button disabled and the text on the button updated (to ""please wait..."", for example).">
-	<cfargument name="route" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="controller" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="action" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="key" type="any" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="params" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="anchor" type="string" required="false" default="" hint="See documentation for @URLFor.">
-	<cfargument name="onlyPath" type="boolean" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
-	<cfargument name="remote" type="boolean" required="false" hint="See documentation for @linkTo.">
+	<cfargument name="route" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="controller" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="action" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="key" type="any" required="false" default="" hint="@URLFor.">
+	<cfargument name="params" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="anchor" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="onlyPath" type="boolean" required="false" hint="@URLFor.">
+	<cfargument name="host" type="string" required="false" hint="@URLFor.">
+	<cfargument name="protocol" type="string" required="false" hint="@URLFor.">
+	<cfargument name="port" type="numeric" required="false" hint="@URLFor.">
+	<cfargument name="remote" type="boolean" required="false" hint="@linkTo.">
 	<cfscript>
 		var loc = {};
 		$args(name="buttonTo", reserved="method", args=arguments);

@@ -2,7 +2,7 @@
 	<cfif application.wheels.environment IS "production">
 		<cfabort>
 	<cfelse>	
-		<cfinclude template="#params.view#.cfm">
+		<cfinclude template="#$fileForInclude(params.view)#">
 	</cfif>
 <cfelse>
 	<cfinclude template="congratulations.cfm">

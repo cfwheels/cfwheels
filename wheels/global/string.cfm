@@ -122,13 +122,13 @@
 <!--- PRIVATE FUNCTIONS --->
 
 <cffunction name="$singularizeOrPluralizeWithCount" returntype="string" access="public" output="false" hint="Decides if we need to convert the word based on the count value passed in and then adds the count to the string.">
-	<cfargument name="text" type="string" required="true" hint="See documentation for @pluralize.">
-	<cfargument name="count" type="numeric" required="false" default="-1" hint="See documentation for @pluralize.">
-	<cfargument name="returnCount" type="boolean" required="false" default="true" hint="See documentation for @pluralize.">
+	<cfargument name="text" type="string" required="true" hint="@pluralize.">
+	<cfargument name="count" type="numeric" required="false" default="-1" hint="@pluralize.">
+	<cfargument name="returnCount" type="boolean" required="false" default="true" hint="@pluralize.">
 	<cfargument name="which" type="string" required="true" hint="Should be either `singularize` or `pluralize`.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = $args(name="$singularizeOrPluralizeWithCount", cachable=true, args=arguments);
+		loc.returnValue = $args(name="$singularizeOrPluralizeWithCount", args=arguments);
 		if (!StructKeyExists(loc, "returnValue"))
 		{
 			// run conversion unless count is passed in and its value means conversion is unnecessary
@@ -146,15 +146,18 @@
 </cffunction>
 
 <cffunction name="$singularizeOrPluralize" returntype="string" access="public" output="false" hint="Converts a word to singular or plural form.">
-	<cfargument name="text" type="string" required="true" hint="See documentation for @pluralize.">
-	<cfargument name="which" type="string" required="true" hint="See documentation for @$singularizeOrPluralizeWithCount.">
+	<cfargument name="text" type="string" required="true" hint="@pluralize.">
+	<cfargument name="which" type="string" required="true" hint="@$singularizeOrPluralizeWithCount.">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = $args(name="$singularizeOrPluralize", cachable=true, args=arguments);
+		loc.returnValue = $args(name="$singularizeOrPluralize", args=arguments);
 		if (!StructKeyExists(loc, "returnValue"))
 		{
 			// default to returning the same string when nothing can be converted
 			loc.returnValue = arguments.text;
+			
+			// keep track of the success of any rule matches
+			loc.ruleMatched = false;
 			
 			// only pluralize/singularize the last part of a camelCased variable (e.g. in "websiteStatusUpdate" we only change the "update" part)
 			// also set a variable with the unchanged part of the string (to be prepended before returning final result)
@@ -171,6 +174,9 @@
 			{
 				// this word is the same in both plural and singular so it can just be returned as is
 				loc.returnValue = arguments.text;
+				
+				// note that we successfully matched a rule
+				loc.ruleMatched = true;
 			}
 			else if (ListFindNoCase(loc.irregulars, arguments.text))
 			{
@@ -182,6 +188,9 @@
 					loc.returnValue = ListGetAt(loc.irregulars, loc.pos+1);
 				else
 					loc.returnValue = arguments.text;
+				
+				// note that we successfully matched a rule
+				loc.ruleMatched = true;
 			}
 			else
 			{
@@ -208,6 +217,7 @@
 					if (REFindNoCase(loc.rules[loc.i][1], arguments.text))
 					{
 						loc.returnValue = REReplaceNoCase(arguments.text, loc.rules[loc.i][1], loc.rules[loc.i][2]);
+						loc.ruleMatched = true;
 						break;
 					}
 				}
@@ -217,7 +227,7 @@
 			}
 	
 			// if this is a camel cased string we need to prepend the unchanged part to the result
-			if (StructKeyExists(loc, "prepend"))
+			if (StructKeyExists(loc, "prepend") && loc.ruleMatched)
 				loc.returnValue = loc.prepend & loc.returnValue;
 		}
 		return loc.returnValue;

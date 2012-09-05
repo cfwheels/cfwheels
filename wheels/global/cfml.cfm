@@ -1,16 +1,3 @@
-<cffunction name="$namedReadLock" returntype="any" access="public" output="false">
-	<cfargument name="name" type="string" required="true">
-	<cfargument name="object" type="any" required="true">
-	<cfargument name="method" type="string" required="true">
-	<cfargument name="args" type="struct" required="false" default="#StructNew()#">
-	<cfargument name="timeout" type="numeric" required="false" default="30">
-	<cfset var loc = {}>
-	<cflock name="#arguments.name#" type="readonly" timeout="#arguments.timeout#">
-		<cfset loc.returnValue = $invoke(componentReference=arguments.object, method=arguments.method, invokeArgs=arguments.args)>
-	</cflock>
-	<cfreturn loc.returnValue>
-</cffunction>
-
 <cffunction name="$doubleCheckedLock" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="condition" type="string" required="true">
@@ -32,17 +19,22 @@
 </cffunction>
 
 <cffunction name="$simpleLock" returntype="any" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="type" type="string" required="true">
 	<cfargument name="execute" type="string" required="true">
 	<cfargument name="executeArgs" type="struct" required="false" default="#StructNew()#">
 	<cfargument name="timeout" type="numeric" required="false" default="30">
 	<cfset var loc = {}>
-	<cfset loc.lockArgs = Duplicate(arguments)>
-	<cfset StructDelete(loc.lockArgs, "execute")>
-	<cfset StructDelete(loc.lockArgs, "executeArgs")>
-	<cfset arguments.executeArgs.$locked = true>
-	<cflock attributeCollection="#loc.lockArgs#">
-		<cfinvoke method="#arguments.execute#" argumentCollection="#arguments.executeArgs#" returnvariable="loc.returnValue">
-	</cflock>
+	<cfif StructKeyExists(arguments, "object")>
+		<cflock name="#arguments.name#" type="#arguments.type#" timeout="#arguments.timeout#">
+			<cfinvoke component="#arguments.object#" method="#arguments.execute#" argumentCollection="#arguments.executeArgs#" returnvariable="loc.returnValue">
+		</cflock>
+	<cfelse>
+		<cfset arguments.executeArgs.$locked = true>
+		<cflock name="#arguments.name#" type="#arguments.type#" timeout="#arguments.timeout#">
+			<cfinvoke method="#arguments.execute#" argumentCollection="#arguments.executeArgs#" returnvariable="loc.returnValue">
+		</cflock>
+	</cfif>
 	<cfif StructKeyExists(loc, "returnValue")>
 		<cfreturn loc.returnValue>
 	</cfif>
@@ -59,6 +51,17 @@
 	<cfreturn returnValue>
 </cffunction>
 
+<cffunction name="$stripCRLF" returntype="void" access="public" output="false">
+	<cfargument name="args" type="struct" required="true">
+	<cfargument name="only" type="string" required="false" default="">
+	<cfset var key = "">
+	<cfloop collection="#arguments.args#" item="key">
+		<cfif NOT Len(arguments.only) OR ListFindNoCase(arguments.only, key)>
+			<cfset arguments.args[key] = REReplace(arguments.args[key], "[\r\n]", "", "all")>
+		</cfif>
+	</cfloop>
+</cffunction>
+
 <cffunction name="$mail" returntype="void" access="public" output="false">
 	<cfset var loc = {}>
 	<cfif StructKeyExists(arguments, "mailparts")>
@@ -73,9 +76,11 @@
 		<cfset loc.tagContent = arguments.tagContent>
 		<cfset StructDelete(arguments, "tagContent")>
 	</cfif>
+	<cfset $stripCRLF(args=arguments)>
 	<cfmail attributeCollection="#arguments#">
 		<cfif StructKeyExists(loc, "mailparams")>
 			<cfloop array="#loc.mailparams#" index="loc.i">
+				<cfset $stripCRLF(args=loc.i)>
 				<cfmailparam attributeCollection="#loc.i#">
 			</cfloop>
 		</cfif>
@@ -83,6 +88,7 @@
 			<cfloop array="#loc.mailparts#" index="loc.i">
 				<cfset loc.innerTagContent = loc.i.tagContent>
 				<cfset StructDelete(loc.i, "tagContent")>
+				<cfset $stripCRLF(args=loc.i)>
 				<cfmailpart attributeCollection="#loc.i#">
 					#loc.innerTagContent#
 				</cfmailpart>
@@ -94,6 +100,16 @@
 	</cfmail>
 </cffunction>
 
+<cffunction name="$content" returntype="any" access="public" output="false">
+	<cfset $stripCRLF(args=arguments, only="type")>
+	<cfcontent attributeCollection="#arguments#">
+</cffunction>
+
+<cffunction name="$header" returntype="void" access="public" output="false">
+	<cfset $stripCRLF(args=arguments)>
+	<cfheader attributeCollection="#arguments#">
+</cffunction>
+
 <cffunction name="$zip" returntype="any" access="public" output="false">
 	<cfzip attributeCollection="#arguments#">
 	</cfzip>
@@ -103,28 +119,26 @@
 	<cfcache attributeCollection="#arguments#">
 </cffunction>
 
-<cffunction name="$content" returntype="any" access="public" output="false">
-	<cfcontent attributeCollection="#arguments#">
-</cffunction>
-
-<cffunction name="$header" returntype="void" access="public" output="false">
-	<cfheader attributeCollection="#arguments#">
-</cffunction>
-
 <cffunction name="$abort" returntype="void" access="public" output="false">
 	<cfabort attributeCollection="#arguments#">
+</cffunction>
+
+<cffunction name="$fileForInclude" returntype="string" access="public" output="false">
+	<cfargument name="template" type="string" required="true">
+	<!--- for safety reasons only allow cfm files with normal characters to be included --->
+	<cfreturn REReplace(Replace(LCase(arguments.template), ".cfm", ""), "[^a-z_/.]", "", "all") & ".cfm">
 </cffunction>
 
 <cffunction name="$include" returntype="void" access="public" output="false">
 	<cfargument name="template" type="string" required="true">
 	<cfset var loc = {}>
-	<cfinclude template="../../#LCase(arguments.template)#">
+	<cfinclude template="../../#$fileForInclude(arguments.template)#">
 </cffunction>
 
 <cffunction name="$includeAndOutput" returntype="void" access="public" output="true">
 	<cfargument name="template" type="string" required="true">
 	<cfset var loc = {}>
-	<cfinclude template="../../#LCase(arguments.template)#">
+	<cfinclude template="../../#$fileForInclude(arguments.template)#">
 </cffunction>
 
 <cffunction name="$includeAndReturnOutput" returntype="string" access="public" output="false">
@@ -135,7 +149,7 @@
 		<cfset loc = arguments>
 	</cfif>
 	<!--- we prefix returnValue with "wheels" here to make sure the variable does not get overwritten in the included template --->
-	<cfsavecontent variable="loc.wheelsReturnValue"><cfinclude template="../../#LCase(arguments.$template)#"></cfsavecontent>
+	<cfsavecontent variable="loc.wheelsReturnValue"><cfinclude template="../../#$fileForInclude(arguments.$template)#"></cfsavecontent>
 	<cfreturn loc.wheelsReturnValue>
 </cffunction>
 
@@ -143,13 +157,6 @@
 	<cfset var returnValue = "">
 	<cfset arguments.name = "returnValue">
 	<cfdirectory attributeCollection="#arguments#">
-	<cfreturn returnValue>
-</cffunction>
-
-<cffunction name="$file" returntype="any" access="public" output="false">
-	<cfset var returnValue = "">
-	<cfset arguments.variable = "returnValue">
-	<cffile attributeCollection="#arguments#">
 	<cfreturn returnValue>
 </cffunction>
 
@@ -169,6 +176,13 @@
 	</cfif>
 	<cfif StructKeyExists(arguments, "invokeArgs")>
 		<cfset arguments.argumentCollection = arguments.invokeArgs>
+		<cfif StructCount(arguments.argumentCollection) IS NOT ListLen(StructKeyList(arguments.argumentCollection))>
+			<!--- work-around for fasthashremoved cf8 bug --->
+			<cfset arguments.argumentCollection = StructNew()>
+			<cfloop list="#StructKeyList(arguments.invokeArgs)#" index="loc.i">
+				<cfset arguments.argumentCollection[loc.i] = arguments.invokeArgs[loc.i]>
+			</cfloop>
+		</cfif>
 		<cfset StructDelete(arguments, "invokeArgs")>
 	</cfif>
 	<cfinvoke attributeCollection="#arguments#">
@@ -230,13 +244,4 @@
 	<cfif StructKeyExists(loc, "output")>
 		<cfreturn loc.output>
 	</cfif>
-</cffunction>
-
-<cffunction name="$structDelete" returntype="void" access="public" output="false">
-	<cfargument name="myStruct" type="struct" required="true">
-	<cfargument name="keys" type="string" required="true">
-	<cfset var loc = {}>
-	<cfloop list="#arguments.keys#" index="loc.i">
-		<cfset StructDelete(arguments.myStruct, loc.i, false)>
-	</cfloop>
 </cffunction>
