@@ -51,6 +51,8 @@ Miscellaneous
 * Case insensitive loading of controllers and models - [Per Djurner]
 * Allow placement of models in subfolder - [Tim Badolato, Tony Petruzzi]
 * External paths for imagePath - [andoradmiraal, Tony Petruzzi]
+* Removal of obfuscateParam and deobfuscateParam functionality - [Tony Petruzzi]
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WHEELS VERSION 1.1.2
