@@ -50,6 +50,7 @@ Miscellaneous
 * Renamed `renderPage` to `renderView` - #363 [Andy Bellenie, Tony Petruzzi]
 * Case insensitive loading of controllers and models - [Per Djurner]
 * Allow placement of models in subfolder - [Tim Badolato, Tony Petruzzi]
+* External paths for imagePath - [andoradmiraal, Tony Petruzzi]
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WHEELS VERSION 1.1.2

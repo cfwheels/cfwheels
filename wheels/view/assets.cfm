@@ -176,15 +176,22 @@
 	<cfscript>
 		var loc = {};
 		loc.localFile = true;
+		
+		loc.sourceProtocol = ListFirst(arguments.source, ":");
+		loc.imagePathProtocol = ListFirst(application.wheels.imagePath, ":");
 
-		if(Left(arguments.source, 7) == "http://" || Left(arguments.source, 8) == "https://")
-			loc.localFile = false;
-
-		if (!loc.localFile)
+		if (ReFindNoCase("^https?:\/\/", arguments.source))
 		{
+			loc.localFile = false;
 			arguments.src = arguments.source;
 		}
-		else
+		else if (ReFindNoCase("^https?:\/\/", application.wheels.imagePath))
+		{
+			loc.localFile = false;
+			arguments.src = ListChangeDelims(ListAppend(application.wheels.imagePath, arguments.source, "/"), "/", "/");
+		}
+
+		if (loc.localFile)
 		{
 			arguments.src = application.wheels.webPath & application.wheels.imagePath & "/" & arguments.source;
 			if (application.wheels.showErrorInformation)

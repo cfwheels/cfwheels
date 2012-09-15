@@ -1,6 +1,7 @@
 <cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
+		<cfset loc.oldViewPath = duplicate(application.wheels.imagePath)>
 		<cfset loc.controller = controller(name="dummy")>
 		<cfset loc.args = {}>
 		<cfset loc.args.source = "../wheels/tests/_assets/files/cfwheels-logo.png">
@@ -8,6 +9,10 @@
 		<cfset loc.args.class = "wheelstestlogoclass">
 		<cfset loc.args.id = "wheelstestlogoid">
 		<cfset loc.imagePath = application.wheels.webPath & application.wheels.imagePath>
+	</cffunction>
+	
+	<cffunction name="teardown">
+		<cfset application.wheels.imagePath = loc.oldViewPath>
 	</cffunction>
 
 	<cffunction name="test_just_source">
@@ -104,6 +109,14 @@
 		<cfset loc.r = '<img alt="Cfwheels logo" src="#loc.imagePath#/#loc.args.source#" />'>
 		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
 		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+	
+	<cffunction name="test_setting_imagePath_to_external_resource">
+		<cfset application.wheels.imagePath = "http://mycdn.example.com">
+		<cfset loc.args.source = "/some/client/folder/cfwheels-logo.png">
+		<cfset loc.r = '<img alt="wheelstestlogo" class="wheelstestlogoclass" src="http:/mycdn.example.com/some/client/folder/cfwheels-logo.png" id="wheelstestlogoid" />'>
+		<cfset loc.e = loc.controller.imageTag(argumentcollection=loc.args)>
+		<cfset assert("loc.r IS loc.e")>
 	</cffunction>
 
 </cfcomponent>
