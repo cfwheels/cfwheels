@@ -356,6 +356,35 @@
 	</cfscript>
 </cffunction>
 
+<cffunction name="labelTag" returntype="string" access="public" output="false" hint="Builds and returns a string containing a label. Note: Pass any additional arguments like `class` and `rel`, and the generated tag will also include those values as HTML attributes."
+	examples=
+	'
+		<!--- Basic usage usually involves a `label`, `name`, and `value` --->
+		<cfoutput>
+		    ##labelTag(for="search", value="")##
+		</cfoutput>
+	'
+	categories="view-helper,forms-plain" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,submitTag,radioButtonTag,checkBoxTag,passwordFieldTag,hiddenFieldTag,textAreaTag,fileFieldTag,selectTag,dateTimeSelectTags,dateSelectTags,timeSelectTags">
+	<cfargument name="for" type="string" required="true" hint="Name to populate in tag's `name` attribute.">
+	<cfargument name="value" type="string" required="false" default="" hint="Value to populate in tag's `value` attribute.">
+	<cfscript>
+		var loc = {};
+		$args(name="labelTag", args=arguments);
+		arguments.property = arguments.for;
+		arguments.objectName = {};
+		arguments.objectName[arguments.for] = arguments.value;
+		arguments.label = arguments.value;
+		if (!StructKeyExists(arguments, "id"))
+		{
+			arguments.id = arguments.for;	
+		}
+		StructDelete(arguments, "for");
+		StructDelete(arguments, "value");
+		loc.returnValue = label(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$tagGroup" returntype="string" access="public" output="false">
 	<cfargument name="input" type="string" required="true">
 	<cfscript>

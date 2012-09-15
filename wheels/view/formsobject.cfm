@@ -412,6 +412,53 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="label" returntype="string" access="public" output="false"  hint="Builds and returns a string containing a label. Note: Pass any additional arguments like `class` and `rel`, and the generated tag will also include those values as HTML attributes."
+	examples=
+	'
+		<!--- Display a `label` for the required `objectName` and `property` --->
+		<cfoutput>
+		    ##label(objectName="user", property="password")##
+		</cfoutput>
+
+		<!--- Display a label for passwords provided by the `passwords` association and nested properties --->
+		<fieldset>
+			<legend>Passwords</legend>
+			<cfloop from="1" to="##ArrayLen(user.passwords)##" index="i">
+				##label(objectName="user", association="passwords", position=i, property="password")##
+			</cfloop>
+		</fieldset>
+	'
+	categories="view-helper,forms-object" chapter="form-helpers-and-showing-errors,nested-properties" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
+	<cfargument name="objectName" type="any" required="true" hint="@textField.">
+	<cfargument name="property" type="string" required="true" hint="@textField.">
+	<cfargument name="association" type="string" required="false" hint="@textfield.">
+	<cfscript>
+		var loc = {};
+		if (!StructKeyExists(arguments, "label"))
+		{
+			arguments.label = "useDefaultLabel";
+		}
+		arguments.label = $getFieldLabel(argumentCollection=arguments);
+		arguments.prependToLabel = "";
+		if (!StructKeyExists(arguments, "id"))
+		{
+			arguments.id = $tagId(arguments.objectName, arguments.property);
+		}
+		// $createLabel expects overload arguments to be named label[argument]
+		loc.args = "objectName,property,association,label,prependToLabel,id";
+		for (loc.argument in arguments)
+		{
+			if (!ListFindNoCase(loc.args, loc.argument))
+			{
+				arguments["label#loc.argument#"] = arguments[loc.argument];
+				StructDelete(arguments, loc.argument);
+			}
+		}
+		loc.returnValue =  $createLabel(argumentCollection=arguments);
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$optionsForSelect" returntype="string" access="public" output="false">
 	<cfargument name="options" type="any" required="true">
 	<cfargument name="valueField" type="string" required="true">
