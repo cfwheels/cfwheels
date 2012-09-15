@@ -136,11 +136,4 @@
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>
 	
-	<cffunction name="test_automatic_label_on_object_helper_with_non_persisted_property">
-		<cfset tag = model("tag").findOne()>
-		<cfset loc.actual = textField(objectName="tag", property="virtual")>
-		<cfset loc.expected = '<label for="tag-virtual">Virtual property<input id="tag-virtual" name="tag[virtual]" type="text" value="" /></label>'>
-		<cfset assert('loc.actual eq loc.expected')>
-	</cffunction>
-
 </cfcomponent>
