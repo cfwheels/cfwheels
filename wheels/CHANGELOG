@@ -49,7 +49,7 @@ Miscellaneous
 * Added $inspect method to return the variables scope of objects - #820 [Tony Petruzzi]
 * Renamed `renderPage` to `renderView` - #363 [Andy Bellenie, Tony Petruzzi]
 * Case insensitive loading of controllers and models - [Per Djurner]
-
+* Allow placement of models in subfolder - [Tim Badolato, Tony Petruzzi]
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WHEELS VERSION 1.1.2
