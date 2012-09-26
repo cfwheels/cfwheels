@@ -349,7 +349,7 @@
 		<!--- Getting the most recent order as an object from the database --->
 		<cfset order = model("order").findOne(order="datePurchased DESC")>
 
-		<!--- Using a dynamic finder to get the first person with the last name `Smith`. Same as calling `model("user").findOne(where"lastName=''Smith''")` --->
+		<!--- Using a dynamic finder to get the first person with the last name `Smith`. Same as calling `model("user").findOne(where"lastName=''smith''")` --->
 		<cfset person = model("user").findOneByLastName("Smith")>
 
 		<!--- Getting a specific user using a dynamic finder. Same as calling `model("user").findOne(where"email=''someone@somewhere.com'' AND password=''mypass''")` --->
@@ -1029,11 +1029,11 @@
 		var loc = {};
 		if (variables.wheels.class.timeStampingOnCreate)
 		{
-			$timestampProperty(property=variables.wheels.class.timeStampOnCreateProperty);
+			this[variables.wheels.class.timeStampOnCreateProperty] = timestamp();
 		}
 		if (application.wheels.setUpdatedAtOnCreate && variables.wheels.class.timeStampingOnUpdate)
 		{
-			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
+			this[variables.wheels.class.timeStampOnUpdateProperty] = timestamp();
 		}
 		
 		loc.sql = [];
@@ -1102,7 +1102,7 @@
 		}
 		
 		if (variables.wheels.class.timeStampingOnUpdate)
-			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
+			this[variables.wheels.class.timeStampOnUpdateProperty] = timestamp();
 		loc.sql = [];
 		ArrayAppend(loc.sql, "UPDATE #tableName()# SET ");
 		for (loc.key in variables.wheels.class.properties)
@@ -1152,16 +1152,5 @@
 	{
 		$throw(type="Wheels.InvalidArgumentValue", message="The `key` argument contains an invalid value.", extendedInfo="The `key` argument contains a list, however this table doesn't have a composite key. A list of values is allowed for the `key` argument, but this only applies in the case when the table contains a composite key.");
 	}
-	</cfscript>
-</cffunction>
-
-
-<!---
-	developers can now override this method for localizing dates if they prefer.
---->
-<cffunction name="$timestampProperty" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="true" />
-	<cfscript>
-		this[arguments.property] = Now();
 	</cfscript>
 </cffunction>

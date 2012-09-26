@@ -22,7 +22,7 @@
 			database engine you are using. Plese consult your database
 			engine''s documentation for the correct syntax.
 
-			Also note that the view code will differ depending on the method
+			also note that the view code will differ depending on the method
 			used.
 		--->
 
@@ -628,14 +628,32 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="l" returntype="string" access="public" output="false" hint="returns the value for the given key of a locale"
+<cffunction name="l" returntype="string" access="public" output="false" hint="Returns the localised value for the given locale"
 	examples=
 	'
 		<!--- Return all the names of the months for US English --->
-		<cfset monthNames = l("date.month_names", "en-US")>
+		<cfset monthNames = l("date.month_names", "en_US")>
 	'
 	categories="global,miscellaneous">
 	<cfargument name="key" type="string" required="true">
 	<cfargument name="locale" type="string" required="false" default="#application.wheels.locale#">
 	<cfreturn evaluate('application.wheels.locales["#arguments.locale#"].#arguments.key#')>
+</cffunction>
+
+<cffunction name="timestamp" returntype="date" access="public" output="false" hint="Returns a UTC or local timestamp"
+	examples=
+	'
+		<!--- Return current locale time --->
+		<cfset currenttime = timestamp()>
+
+		<!--- Return current UTC time --->
+		<cfset currenttime = timestamp(utc=true)>
+
+	'
+	categories="global,miscellaneous">
+	<cfargument name="utc" type="boolean" required="false" default="#application.wheels.utcTimestamps#">
+	<cfif arguments.utc>
+		<cfreturn DateConvert("local2Utc", Now())>
+	</cfif>
+	<cfreturn Now()>
 </cffunction>

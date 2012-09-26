@@ -45,7 +45,8 @@
 		// load locales
 		application.wheels.locales = $loadLocales();
 		// default locale
-		application.wheels.locale = "en-US";
+		application.wheels.locale = "en_US";
+		application.wheels.utcTimestamps = false;
 
 		// set up containers for routes, caches, settings etc
 		application.wheels.controllers = {};
