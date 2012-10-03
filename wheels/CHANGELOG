@@ -8,6 +8,8 @@ Model Enhancements
 * Added the ability to multijoin models - [Tony Petruzzi]
 * Support for tableless models - [Tony Petruzzi]
 * Add findFirst, findLast, findAllKeys, findOneOrCreatedBy, findOrCreateBy - #745 [Mike Henke, Per Djurner, Tony Petruzzi]
+* Enables use of UTC for wheels timestamps [Andy Bellenie]
+
 
 View Enhancements
 =================
@@ -32,6 +34,7 @@ Other Enhancements
 * Added support for Unobstructive Javascript - [Raul Riera]
 * Added proper HTTP status headers - #705 [cfconcepts, Andy Bellenie]
 * Added favicon to URL rewrite exclusions [Troy Murray, Cathy Shapiro]
+* Adds helper for utc timestamps [Andy Bellenie]
 
 Bug Fixes
 =========
