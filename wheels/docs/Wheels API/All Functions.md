@@ -119,6 +119,8 @@
 * [javaScriptIncludeTag()](javaScriptIncludeTag.md)
 * [key()](key.md)
 * [l()](l.md)
+* [label()](label.md)
+* [labelTag()](labelTag.md)
 * [linkTo()](linkTo.md)
 * [mailTo()](mailTo.md)
 * [maximum()](maximum.md)

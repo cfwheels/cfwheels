@@ -9,12 +9,13 @@
 
 	<!--- do not modify anything pass here. you be sorry :) --->
 	<cfset variables.release = application.wheels.version>
+	<cfset variables.zipName = "cfwheels.#variables.release#.zip">
 	<cfset variables.source = ExpandPath("../")>
-	<cfset variables.buildtmp = ExpandPath("../../wheels-build-temp-dir")>
-	<cfset variables.ignore = "build.cfm,.project,.gitignore,.git,WEB-INF,aspnet_client">
+	<cfset variables.buildtmp = ExpandPath("../wheels-build-temp-dir")>
+	<cfset variables.ignore = "build.cfm,.project,.gitignore,.git,WEB-INF,aspnet_client,wheels-build-temp-dir,#variables.zipName#">
 	<cfset variables.folders = "files,images,javascripts,lib,plugins,stylesheets,tests">
 	<cfset variables.remove = "wheels/tests,wheels/docs,builders">
-	<cfset variables.zipfile = "#ExpandPath('../../cfwheels.#variables.release#.zip')#">
+	<cfset variables.zipfile = "#ExpandPath('../#variables.zipName#')#">
 	
 	<cffunction name="init">
 		<cfreturn this>
@@ -24,12 +25,13 @@
 		<cfset $cleanUp()>
 		<cfset $prepare()>
 		<cfset $createRelease()>
+		<cfset $cleanUp()>
 	</cffunction>
 	
 	<cffunction name="$cleanUp" access="private" returntype="void" output="false">
 		<cfif DirectoryExists(variables.buildtmp)>
 			<cfdirectory action="delete" directory="#variables.buildtmp#" recurse="true">
-		</cfif>	
+		</cfif>
 	</cffunction>
 	
 	<cffunction name="$prepare" access="private" returntype="void" output="false">

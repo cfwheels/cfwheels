@@ -16,7 +16,8 @@ View Enhancements
 * Default to the humanized property name for labels on calculated or non-persistent properties instead of throwing an error - [Andy Bellenie]
 * Added escapeHTML argument on simpleFormat() - [Chris Peters]
 * Made it possible to set global defaults on autoLink(), excerpt(), highlight() and simpleFormat() - [Chris Peters]
-* Added support for array of structs for select() and selectTag() - #680 [William Fisk, Tony Petruzzi] 
+* Added support for array of structs for select() and selectTag() - #680 [William Fisk, Tony Petruzzi]
+* Added label and labelTag view helpers - [Tony Petruzzi] 
 
 Controller Enhancements
 =======================
@@ -46,7 +47,11 @@ Miscellaneous
 * Removed the "cacheDatabaseSchema" setting, "cacheModelInitialization" should now be used instead - [Per Djurner]
 * Added commented out settig for plugin development in design mode - #782 [Tony Petruzzi]
 * Added $inspect method to return the variables scope of objects - #820 [Tony Petruzzi]
-* Renamed `renderPage` to `renderView` - #363 [Andy Bellenie, Tony Petruzzi] 
+* Renamed `renderPage` to `renderView` - #363 [Andy Bellenie, Tony Petruzzi]
+* Case insensitive loading of controllers and models - [Per Djurner]
+* Allow placement of models in subfolder - [Tim Badolato, Tony Petruzzi]
+* External paths for imagePath - [andoradmiraal, Tony Petruzzi]
+* Removal of obfuscateParam and deobfuscateParam functionality - [Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

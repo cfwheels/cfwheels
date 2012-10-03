@@ -4,7 +4,7 @@
 Builds and returns a string containing a check box form control based on the supplied `name`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
 
 ## Function Syntax
-	checkBoxTag( name, [ checked, value, uncheckedValue, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
+	checkBoxTag( name, [ checked, value, uncheckedValue, label, labelClass, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
 
 
 ## Parameters
@@ -58,6 +58,14 @@ Builds and returns a string containing a check box form control based on the sup
 			<td>false</td>
 			<td></td>
 			<td>The label text to use in the form control.</td>
+		</tr>
+		
+		<tr>
+			<td>labelClass</td>
+			<td>string</td>
+			<td>false</td>
+			<td></td>
+			<td>The class name for the label</td>
 		</tr>
 		
 		<tr>

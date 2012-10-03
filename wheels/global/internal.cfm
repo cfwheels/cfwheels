@@ -769,6 +769,10 @@
 		for (loc.i = 1; loc.i lte ListLen(arguments.modelPaths); loc.i++)
 		{
 			loc.modelPath = ListGetAt(arguments.modelPaths, loc.i);
+			arguments.name = ListChangeDelims(arguments.name, "/", ".\");
+			loc.extendedPath = Reverse(ListRest(Reverse(arguments.name), "/"));
+			loc.modelPath = ListAppend(loc.modelPath, loc.extendedPath, "/");
+			arguments.name = ListLast(arguments.name, "/");
 			loc.fileName = $objectFileName(name=arguments.name, objectPath=loc.modelPath, type=arguments.type);
 
 			if (loc.fileName != arguments.type || loc.i == ListLen(arguments.modelPaths))

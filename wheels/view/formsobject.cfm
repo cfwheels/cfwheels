@@ -20,6 +20,7 @@
 	<cfargument name="association" type="string" required="false" hint="The name of the association that the property is located on. Used for building nested forms that work with nested properties. If you are building a form with deep nesting, simply pass in a list to the nested object, and Wheels will figure it out.">
 	<cfargument name="position" type="string" required="false" hint="The position used when referencing a `hasMany` relationship in the `association` argument. Used for building nested forms that work with nested properties. If you are building a form with deep nestings, simply pass in a list of positions, and Wheels will figure it out.">
 	<cfargument name="label" type="string" required="false" hint="The label text to use in the form control.">
+	<cfargument name="labelClass" type="string" required="false" hint="The class name for the label">
 	<cfargument name="labelPlacement" type="string" required="false" hint="Whether to place the label `before`, `after`, or wrapped `around` the form control.">
 	<cfargument name="prepend" type="string" required="false" hint="String to prepend to the form control. Useful to wrap the form control with HTML tags.">
 	<cfargument name="append" type="string" required="false" hint="String to append to the form control. Useful to wrap the form control with HTML tags.">
@@ -69,6 +70,7 @@
 	<cfargument name="association" type="string" required="false" hint="@textfield.">
 	<cfargument name="position" type="string" required="false" hint="@textfield.">
 	<cfargument name="label" type="string" required="false" hint="@textField">
+	<cfargument name="labelClass" type="string" required="false" hint="@textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
 	<cfargument name="prepend" type="string" required="false" hint="@textField.">
 	<cfargument name="append" type="string" required="false" hint="@textField.">
@@ -147,6 +149,7 @@
 	<cfargument name="association" type="string" required="false" hint="@textfield.">
 	<cfargument name="position" type="string" required="false" hint="@textfield.">
 	<cfargument name="label" type="string" required="false" hint="@textField.">
+	<cfargument name="labelClass" type="string" required="false" hint="@textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
 	<cfargument name="prepend" type="string" required="false" hint="@textField.">
 	<cfargument name="append" type="string" required="false" hint="@textField.">
@@ -192,6 +195,7 @@
 	<cfargument name="association" type="string" required="false" hint="@textfield.">
 	<cfargument name="position" type="string" required="false" hint="@textfield.">
 	<cfargument name="label" type="string" required="false" hint="@textField.">
+	<cfargument name="labelClass" type="string" required="false" hint="@textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
 	<cfargument name="prepend" type="string" required="false" hint="@textField.">
 	<cfargument name="append" type="string" required="false" hint="@textField.">
@@ -246,6 +250,7 @@
 	<cfargument name="position" type="string" required="false" hint="@textfield.">
 	<cfargument name="tagValue" type="string" required="true" hint="The value of the radio button when `selected`.">
 	<cfargument name="label" type="string" required="false" hint="@textField.">
+	<cfargument name="labelClass" type="string" required="false" hint="@textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
 	<cfargument name="prepend" type="string" required="false" hint="@textField.">
 	<cfargument name="append" type="string" required="false" hint="@textField.">
@@ -304,6 +309,7 @@
 	<cfargument name="checkedValue" type="string" required="false" hint="The value of the check box when it's in the `checked` state.">
 	<cfargument name="uncheckedValue" type="string" required="false" hint="The value of the check box when it's in the `unchecked` state.">
 	<cfargument name="label" type="string" required="false" hint="@textField.">
+	<cfargument name="labelClass" type="string" required="false" hint="@textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
 	<cfargument name="prepend" type="string" required="false" hint="@textField.">
 	<cfargument name="append" type="string" required="false" hint="@textField.">
@@ -374,6 +380,7 @@
 	<cfargument name="valueField" type="string" required="false" hint="The column or property to use for the value of each list element. Used only when a query or array of objects has been supplied in the `options` argument.">
 	<cfargument name="textField" type="string" required="false" hint="The column or property to use for the value of each list element that the end user will see. Used only when a query or array of objects has been supplied in the `options` argument.">
 	<cfargument name="label" type="string" required="false" hint="@textField.">
+	<cfargument name="labelClass" type="string" required="false" hint="@textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
 	<cfargument name="prepend" type="string" required="false" hint="@textField.">
 	<cfargument name="append" type="string" required="false" hint="@textField.">
@@ -408,6 +415,53 @@
 			loc.content = $element(name="option", content=loc.blankOptionText, attributes=loc.blankOptionAttributes) & loc.content;
 		}
 		loc.returnValue = loc.before & $element(name="select", skip="objectName,property,options,includeBlank,valueField,textField,label,labelPlacement,prepend,append,prependToLabel,appendToLabel,errorElement,errorClass,association,position", skipStartingWith="label", content=loc.content, attributes=arguments) & loc.after;
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="label" returntype="string" access="public" output="false"  hint="Builds and returns a string containing a label. Note: Pass any additional arguments like `class` and `rel`, and the generated tag will also include those values as HTML attributes."
+	examples=
+	'
+		<!--- Display a `label` for the required `objectName` and `property` --->
+		<cfoutput>
+		    ##label(objectName="user", property="password")##
+		</cfoutput>
+
+		<!--- Display a label for passwords provided by the `passwords` association and nested properties --->
+		<fieldset>
+			<legend>Passwords</legend>
+			<cfloop from="1" to="##ArrayLen(user.passwords)##" index="i">
+				##label(objectName="user", association="passwords", position=i, property="password")##
+			</cfloop>
+		</fieldset>
+	'
+	categories="view-helper,forms-object" chapter="form-helpers-and-showing-errors,nested-properties" functions="URLFor,startFormTag,endFormTag,submitTag,textField,radioButton,checkBox,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
+	<cfargument name="objectName" type="any" required="true" hint="@textField.">
+	<cfargument name="property" type="string" required="true" hint="@textField.">
+	<cfargument name="association" type="string" required="false" hint="@textfield.">
+	<cfscript>
+		var loc = {};
+		if (!StructKeyExists(arguments, "label"))
+		{
+			arguments.label = "useDefaultLabel";
+		}
+		arguments.label = $getFieldLabel(argumentCollection=arguments);
+		arguments.prependToLabel = "";
+		if (!StructKeyExists(arguments, "id"))
+		{
+			arguments.id = $tagId(arguments.objectName, arguments.property);
+		}
+		// $createLabel expects overload arguments to be named label[argument]
+		loc.args = "objectName,property,association,label,prependToLabel,id";
+		for (loc.argument in arguments)
+		{
+			if (!ListFindNoCase(loc.args, loc.argument))
+			{
+				arguments["label#loc.argument#"] = arguments[loc.argument];
+				StructDelete(arguments, loc.argument);
+			}
+		}
+		loc.returnValue =  $createLabel(argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
