@@ -5,6 +5,9 @@ Model Enhancements
 * Fix to make sure the unique identifier in each new model object during a request is unique - [James Gibson]
 * Allow for self joining tables in associations - #293 [James Gibson]
 * Added "joinKey" on belongsTo(), hasOne() and hasMany() which allows you to specify a column to join to on the opposite side of the relationship from the "foreignKey" - [James Gibson]
+* Added the ability to multijoin models - [Tony Petruzzi]
+* Support for tableless models - [Tony Petruzzi]
+* Add findFirst, findLast, findAllKeys, findOneOrCreatedBy, findOrCreateBy - #745 [Mike Henke, Per Djurner, Tony Petruzzi]
 
 View Enhancements
 =================
@@ -13,12 +16,14 @@ View Enhancements
 * Default to the humanized property name for labels on calculated or non-persistent properties instead of throwing an error - [Andy Bellenie]
 * Added escapeHTML argument on simpleFormat() - [Chris Peters]
 * Made it possible to set global defaults on autoLink(), excerpt(), highlight() and simpleFormat() - [Chris Peters]
-* Added support for array of structs for select() and selectTag() - #680 [William Fisk, Tony Petruzzi] 
+* Added support for array of structs for select() and selectTag() - #680 [William Fisk, Tony Petruzzi]
+* Added label and labelTag view helpers - [Tony Petruzzi] 
 
 Controller Enhancements
 =======================
 * Speed improvement for finding routes when using a large amount of named routes - [James Gibson]
 * Wheels now compacts the output of the rendered content - [James Gibson]
+* RedirectTo() now respects anchors - #857 [Per Djurner]
 
 Other Enhancements
 ==================
@@ -35,10 +40,18 @@ Bug Fixes
 * Transactions would not close when used with the dependent argument of hasMany() - #739 [Andy Bellenie]
 * Soft deletes now work correctly with outer joins - #762 [Andy Bellenie]
 * Pagination with compound keys - #725 [Andy Bellenie, jfeasel, Tony Petruzzi]
+* Prevent automatic validation from being set on user defined primary keys - #778 [Mike Henke, Tony Petruzzi] 
 
 Miscellaneous
 =============
 * Removed the "cacheDatabaseSchema" setting, "cacheModelInitialization" should now be used instead - [Per Djurner]
+* Added commented out settig for plugin development in design mode - #782 [Tony Petruzzi]
+* Added $inspect method to return the variables scope of objects - #820 [Tony Petruzzi]
+* Renamed `renderPage` to `renderView` - #363 [Andy Bellenie, Tony Petruzzi]
+* Case insensitive loading of controllers and models - [Per Djurner]
+* Allow placement of models in subfolder - [Tim Badolato, Tony Petruzzi]
+* External paths for imagePath - [andoradmiraal, Tony Petruzzi]
+* Removal of obfuscateParam and deobfuscateParam functionality - [Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

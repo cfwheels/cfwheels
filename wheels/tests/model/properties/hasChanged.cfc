@@ -31,9 +31,9 @@
  		<cfset loc.sqltype.intType = 0>
 		<cfset assert('loc.sqltype.hasChanged("intType")')>
 		<cfset loc.sqltype = model("Sqltypesnull").findOne()>
-		<cfset debug('loc.sqltype.intType')>
+		<cfset debug('loc.sqltype.intType', false)>
  		<cfset loc.sqltype.intType = "">
-		<cfset debug('loc.sqltype.intType')>
+		<cfset debug('loc.sqltype.intType', false)>
 		<cfset assert('!loc.sqltype.hasChanged("intType")')>
 		<cfset loc.sqltype.intType = "1">
 		<cfset assert('loc.sqltype.hasChanged("intType")')>

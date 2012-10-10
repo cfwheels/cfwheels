@@ -96,7 +96,7 @@
 		{
 			try
 			{
-				renderPage();
+				renderView();
 			}
 			catch(Any e)
 			{

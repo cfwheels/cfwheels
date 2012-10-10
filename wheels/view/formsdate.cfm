@@ -27,9 +27,9 @@
 		arguments.$type = "month";
 		arguments.$step = 1;
 		if (arguments.monthDisplay == "abbreviations")
-			arguments.$optionNames = "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec";
+			arguments.$optionNames = l('date.abbr_month_names');
 		else if (arguments.monthDisplay == "names")
-			arguments.$optionNames = "January,February,March,April,May,June,July,August,September,October,November,December";
+			arguments.$optionNames = l('date.month_names');
 		StructDelete(arguments, "monthDisplay");
 	</cfscript>
 	<cfreturn $yearMonthHourMinuteSecondSelectTag(argumentCollection=arguments)>

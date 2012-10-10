@@ -1,25 +1,25 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
-<cffunction name="renderPage" returntype="any" access="public" output="false" hint="Instructs the controller which view template and layout to render when it's finished processing the action. Note that when passing values for `controller` and/or `action`, this function does not load the actual action but rather just loads the corresponding view template."
+<cffunction name="renderView" returntype="any" access="public" output="false" hint="Instructs the controller which view template and layout to render when it's finished processing the action. Note that when passing values for `controller` and/or `action`, this function does not load the actual action but rather just loads the corresponding view template."
 	examples=
 	'
 		<!--- Render a view page for a different action within the same controller --->
-		<cfset renderPage(action="edit")>
+		<cfset renderView(action="edit")>
 		
 		<!--- Render a view page for a different action within a different controller --->
-		<cfset renderPage(controller="blog", action="new")>
+		<cfset renderView(controller="blog", action="new")>
 		
 		<!--- Another way to render the blog/new template from within a different controller --->
-		<cfset renderPage(template="/blog/new")>
+		<cfset renderView(template="/blog/new")>
 
 		<!--- Render the view page for the current action but without a layout and cache it for 60 minutes --->
-		<cfset renderPage(layout=false, cache=60)>
+		<cfset renderView(layout=false, cache=60)>
 		
 		<!--- Load a layout from a different folder within `views` --->
-		<cfset renderPage(layout="/layouts/blog")>
+		<cfset renderView(layout="/layouts/blog")>
 		
 		<!--- Don''t render the view immediately but rather return and store in a variable for further processing --->
-		<cfset myView = renderPage(returnAs="string")>
+		<cfset myView = renderView(returnAs="string")>
 	'
 	categories="controller-request,rendering" chapters="rendering-pages" functions="renderNothing,renderText,renderPartial,usesLayout">
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="Controller to include the view page for.">
@@ -31,7 +31,7 @@
 	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false" hint="Set to `true` to hide the debug information at the end of the output. This is useful when you're testing XML output in an environment where the global setting for `showDebugInformation` is `true`.">
 	<cfscript>
 		var loc = {};
-		$args(name="renderPage", args=arguments);
+		$args(name="renderView", args=arguments);
 		$dollarify(arguments, "controller,action,template,layout,cache,returnAs,hideDebugInformation");
 		if (application.wheels.showDebugInformation)
 		{
@@ -46,7 +46,7 @@
 		if (isAjax())
 			arguments.$hideDebugInformation = true;	
 		
-		// if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
+		// if renderView was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
 		if (!arguments.$hideDebugInformation)
 			request.wheels.showDebugInformation = true;
 		
@@ -61,11 +61,11 @@
 			loc.executeArgs = arguments;
 			loc.executeArgs.category = loc.category;
 			loc.executeArgs.key = loc.key;
-			loc.page = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$renderPageAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			loc.page = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="renderViewAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 		}
 		else
 		{
-			loc.page = $renderPage(argumentCollection=arguments);
+			loc.page = $renderView(argumentCollection=arguments);
 		}
 		if (arguments.$returnAs == "string")
 			loc.returnValue = loc.page;
@@ -79,13 +79,18 @@
 	</cfif>
 </cffunction>
 
+<cffunction name="renderPage" returntype="any" access="public" output="false">
+	<cfset $deprecated("The `renderPage` method will be deprecated in a future version of Wheels, please use the `renderView` instead")>
+	<cfreturn renderView(argumentCollection=arguments)>
+</cffunction>
+
 <cffunction name="renderNothing" returntype="void" access="public" output="false" hint="Instructs the controller to render an empty string when it's finished processing the action. This is very similar to calling `cfabort` with the advantage that any after filters you have set on the action will still be run."
 	examples=
 	'
 		<!--- Render a blank white page to the client --->
 		<cfset renderNothing()>
 	'
-	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderText,renderPartial">
+	categories="controller-request,rendering" chapters="rendering-pages" functions="renderView,renderText,renderPartial">
 	<cfscript>
 		variables.$instance.response = "";
 	</cfscript>
@@ -101,7 +106,7 @@
 		<cfset products = model("product").findAll()>
 		<cfset renderText(SerializeJson(products))>
 	'
-	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderNothing,renderPartial">
+	categories="controller-request,rendering" chapters="rendering-pages" functions="renderView,renderNothing,renderPartial">
 	<cfargument name="text" type="any" required="true" hint="The text to be rendered.">
 	<cfscript>
 		variables.$instance.response = arguments.text;
@@ -117,11 +122,11 @@
 		<!--- Render the partial at `views/shared/_comment.cfm` --->
 		<cfset renderPartial("/shared/comment")>
 	'
-	categories="controller-request,rendering" chapters="rendering-pages" functions="renderPage,renderNothing,renderText">
+	categories="controller-request,rendering" chapters="rendering-pages" functions="renderView,renderNothing,renderText">
 	<cfargument name="partial" type="string" required="true" hint="The name of the partial file to be used. Prefix with a leading slash `/` if you need to build a path from the root `views` folder. Do not include the partial filename's underscore and file extension.">
-	<cfargument name="cache" type="any" required="false" default="" hint="See documentation for @renderPage.">
-	<cfargument name="layout" type="string" required="false" hint="See documentation for @renderPage.">
-	<cfargument name="returnAs" type="string" required="false" default="" hint="See documentation for @renderPage.">
+	<cfargument name="cache" type="any" required="false" default="" hint="@renderView.">
+	<cfargument name="layout" type="string" required="false" hint="@renderView.">
+	<cfargument name="returnAs" type="string" required="false" default="" hint="@renderView.">
 	<cfargument name="dataFunction" type="any" required="false" hint="Name of a controller function to load data from.">
 	<cfscript>
 		var loc = {};
@@ -239,10 +244,10 @@
 
 <!--- PRIVATE FUNCTIONS --->
 
-<cffunction name="$renderPageAndAddToCache" returntype="string" access="public" output="false">
+<cffunction name="$renderViewAndAddToCache" returntype="string" access="public" output="false">
 	<cfscript>
 		var returnValue = "";
-		returnValue = $renderPage(argumentCollection=arguments);
+		returnValue = $renderView(argumentCollection=arguments);
 		if (!IsNumeric(arguments.$cache))
 			arguments.$cache = application.wheels.cacheSettings[arguments.category].timeout;
 		$addToCache(key=arguments.key, value=returnValue, time=arguments.$cache, category=arguments.category);
@@ -250,7 +255,7 @@
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="$renderPage" returntype="string" access="public" output="false">
+<cffunction name="$renderView" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		if (!Len(arguments.$template))

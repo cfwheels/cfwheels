@@ -49,5 +49,15 @@
 		<cfset loc.r = '<script src="#application.wheels.webpath#javascripts/test.js"></script>#chr(10)#'>
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
+	
+	<cffunction name="test_overloaded_arguments">
+		<cfset loc.args.source = "test.js">
+		<cfset loc.args.type = "">
+		<cfset loc.args.async = "async">
+		<cfset loc.args.defer = "defer">
+		<cfset loc.e = loc.controller.javaScriptIncludeTag(argumentcollection=loc.args)>
+		<cfset loc.r = '<script async="async" defer="defer" src="#application.wheels.webpath#javascripts/test.js"></script>#chr(10)#'>
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
 
 </cfcomponent>

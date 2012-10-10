@@ -114,5 +114,26 @@
 		<cfset loc.errors = tag.errorsOn(property="virtual")>
 		<cfset assert('ArrayLen(loc.errors) eq 1 and loc.errors[1].message is "Virtual property can''t be empty"')>
 	</cffunction>
-
+	
+	<cffunction name="test_label_tag">
+		<cfset tag = model("tag").findOne()>
+		<cfset loc.actual = labelTag(for="tag", value="Virtual")>
+		<cfset loc.expected = '<label for="tag">Virtual</label>'>
+		<cfset assert('loc.actual eq loc.expected')>
+	</cffunction>
+	
+	<cffunction name="test_label">
+		<cfset tag = model("tag").findOne()>
+		<cfset loc.actual = label(objectName="tag", property="name")>
+		<cfset loc.expected = '<label for="tag-name">Tag name</label>'>
+		<cfset assert('loc.actual eq loc.expected')>
+	</cffunction>
+	
+	<cffunction name="test_label_attributes">
+		<cfset tag = model("tag").findOne()>
+		<cfset loc.actual = label(objectName="tag", property="name", class="blah")>
+		<cfset loc.expected = '<label class="blah" for="tag-name">Tag name</label>'>
+		<cfset assert('loc.actual eq loc.expected')>
+	</cffunction>
+	
 </cfcomponent>

@@ -18,6 +18,21 @@
 	</cfscript>
 </cffunction>
 
+<cffunction name="tableless" returntype="void" access="public" output="false" hint="allows this model to be used without a database"
+	examples=
+	'
+		<!--- In models/User.cfc --->
+		<cffunction name="init">
+			<!--- Tells wheels to not to use a database for this model --->
+  			<cfset tableless()>
+		</cffunction>
+	'
+	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="">
+	<cfscript>
+		variables.wheels.class.connection = {};
+	</cfscript>
+</cffunction>
+
 <cffunction name="getDataSource" returntype="struct" access="public" output="false" hint="returns the connection (datasource) information for the model."
 	examples=
 	'
@@ -25,7 +40,8 @@
 		<cfquery name="q" datasource="##getDataSource().datasource##">
 		select * from mytable
 		</cfquery>
-	'>
+	'
+	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="">
 	<cfreturn variables.wheels.class.connection>
 </cffunction>
 
@@ -116,7 +132,7 @@
 	'
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="primaryKey"
 >
-	<cfargument name="position" type="numeric" required="false" default="0" hint="See documentation for @primaryKey.">
+	<cfargument name="position" type="numeric" required="false" default="0" hint="@primaryKey.">
 	<cfreturn primaryKey(argumentCollection=arguments)>
 </cffunction>
 
@@ -157,7 +173,7 @@
 		<!--- Load a user requested in the URL/form and restrict access if it doesn''t match the user stored in the session --->
 		<cfset user = model("user").findByKey(params.key)>
 		<cfif not user.compareTo(session.user)>
-			<cfset renderPage(action="accessDenied")>
+			<cfset renderView(action="accessDenied")>
 		</cfif>
 	'
 	categories="model-object,miscellaneous" chapters="" functions="">
@@ -171,7 +187,8 @@
 
 <cffunction name="$alias" access="public" output="false" returntype="void">
 	<cfargument name="associationName" type="string" required="true">
-	<cfset variables.wheels.class.aliases[arguments.associationName] = tableName() & StructCount(variables.wheels.class.aliases)>
+	<cfargument name="alias" type="string" required="true">
+	<cfset variables.wheels.class.aliases[arguments.associationName] = arguments.alias>
 </cffunction>
 
 <cffunction name="$aliasName" access="public" output="false" returntype="string">

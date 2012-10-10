@@ -58,7 +58,7 @@
 	<cfargument name="column" type="string" required="false" default="" hint="The name of the column in the database table to map the property to.">
 	<cfargument name="sql" type="string" required="false" default="" hint="A SQL expression to use to calculate the property value.">
 	<cfargument name="label" type="string" required="false" default="" hint="A custom label for this property to be referenced in the interface and error messages.">
-	<cfargument name="defaultValue" type="string" required="false" hint="A default value for this property.">
+	<cfargument name="defaultValue" type="any" required="false" hint="A default value for this property.">
 	<cfscript>
 		// validate setup
 		if (Len(arguments.column) and Len(arguments.sql))
@@ -126,7 +126,7 @@
 		<cfset employee.columnForProperty("firstName")><!--- returns column name, in this case "firstname" if the convention is used --->
 	'
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="">
-	<cfargument name="property" type="string" required="true" hint="See documentation for @hasProperty." />
+	<cfargument name="property" type="string" required="true" hint="@hasProperty." />
 	<cfscript>
 		var columnName = false;
 		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
@@ -238,7 +238,7 @@
 		<cfreturn employee.propertyIsPresent("firstName")><!--- Returns false --->
 	'
 	categories="model-object,miscellaneous" chapters="" functions="">
-	<cfargument name="property" type="string" required="true" hint="See documentation for @hasProperty." />
+	<cfargument name="property" type="string" required="true" hint="@hasProperty." />
 	<cfscript>
 		var isPresent = false;
 		if (StructKeyExists(this, arguments.property) && !IsCustomFunction(this[arguments.property]) && IsSimpleValue(this[arguments.property]) && Len(this[arguments.property]))
@@ -310,7 +310,7 @@
 		<cfset user.setProperties(params.user)>
 	'
 	categories="model-object,miscellaneous" chapters="" functions="properties">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="See documentation for @new.">
+	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="@new.">
 	<cfset $setProperties(argumentCollection=arguments) />
 </cffunction>
 

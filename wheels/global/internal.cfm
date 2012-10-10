@@ -301,13 +301,56 @@
 </cffunction>
 
 <cffunction name="$cgiScope" returntype="struct" access="public" output="false" hint="This copies all the variables Wheels needs from the CGI scope to the request scope.">
-	<cfargument name="keys" type="string" required="false" default="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type">
+	<cfargument name="keys" type="string" required="false" default="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type,http_x_rewrite_url,http_x_original_url,request_uri,redirect_url">
+	<cfargument name="scope" type="struct" required="false" default="#cgi#">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
 		loc.iEnd = ListLen(arguments.keys);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			loc.returnValue[ListGetAt(arguments.keys, loc.i)] = cgi[ListGetAt(arguments.keys, loc.i)];
+		{
+			loc.key = ListGetAt(arguments.keys, loc.i);
+			loc.returnValue[loc.key] = "";
+			if (StructKeyExists(arguments.scope, loc.key))
+			{
+				loc.returnValue[loc.key] = arguments.scope[loc.key];
+			}
+		}
+
+		/* Fixes IIS issue that returns a blank cgi.path_info 
+		   Fix: http://www.giancarlogomez.com/2012/06/you-are-not-going-crazy-cgipathinfo-is.html
+		   Bug: https://bugbase.adobe.com/index.cfm?event=bug&id=3209090 
+		*/
+		if (!Len(loc.returnValue.path_info))
+		{
+			if (Len(loc.returnValue.http_x_rewrite_url))
+			{// iis6 1/ IIRF (Ionics Isapi Rewrite Filter)
+				loc.returnValue.path_info = ListFirst(loc.returnValue.http_x_rewrite_url,'?');
+			}
+			else if (Len(loc.returnValue.http_x_original_url))
+			{// iis7 rewrite default
+				loc.returnValue.path_info = ListFirst(loc.returnValue.http_x_original_url,"?");
+			}
+			else if (Len(loc.returnValue.request_uri))
+			{// apache default
+				loc.returnValue.path_info = ListFirst(loc.returnValue.request_uri,'?');
+			}
+			else if (Len(loc.returnValue.redirect_url))
+			{// apache fallback
+				loc.returnValue.path_info = ListFirst(loc.returnValue.redirect_url,'?');
+			}
+		}
+			
+		// finally lets remove the index.cfm because some of the custom cgi variables don't bring it back
+		// like this it means at the root we are working with / instead of /index.cfm
+		if (Len(loc.returnValue.path_info) gte 10 && Right(loc.returnValue.path_info, 10)  eq "/index.cfm")
+		{// this will remove the index.cfm and the trailing slash
+			loc.returnValue.path_info = Replace(loc.returnValue.path_info,'/index.cfm','');
+			if (!Len(loc.returnValue.path_info))
+			{// add back the forward slash if path_info was "/index.cfm"
+				loc.returnValue.path_info = "/";
+			}
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -466,28 +509,9 @@
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="reserved" type="string" required="false" default="">
 	<cfargument name="combine" type="string" required="false" default="">
-	<cfargument name="cachable" type="boolean" required="false" default="false">
 	<cfargument name="required" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
-		
-		// if function result caching is enabled globally, the calling function is cachable and we're not coming from a recursive call we return the result from the cache (setting the cache first when necessary)
-		if (application.wheels.cacheFunctions && arguments.cachable && !StructKeyExists(arguments.args, "$recursive"))
-		{
-			// create a unique key based on the arguments passed in to the calling function
-			// we use the simple version of the $hashedKey function here for performance reasons (we know that we'll never have binary query data passed in anyway so we don't need to deal with that)
-			loc.functionHash = $simpleHashedKey(arguments.args);
-			
-			// if the function result is not already in the cache we'll call the function and place the result in the cache
-			loc.functionResult = $getFromCache(key=loc.functionHash, category="functions");
-			if (IsBoolean(loc.functionResult) && !loc.functionResult)
-			{
-				arguments.args.$recursive = true;
-				loc.functionResult = $invoke(method=arguments.name, invokeArgs=arguments.args);
-				$addToCache(key=loc.functionHash, value=loc.functionResult, category="functions");
-			}
-			return loc.functionResult;
-		}
 		
 		if (Len(arguments.combine))
 		{
@@ -745,6 +769,10 @@
 		for (loc.i = 1; loc.i lte ListLen(arguments.modelPaths); loc.i++)
 		{
 			loc.modelPath = ListGetAt(arguments.modelPaths, loc.i);
+			arguments.name = ListChangeDelims(arguments.name, "/", ".\");
+			loc.extendedPath = Reverse(ListRest(Reverse(arguments.name), "/"));
+			loc.modelPath = ListAppend(loc.modelPath, loc.extendedPath, "/");
+			arguments.name = ListLast(arguments.name, "/");
 			loc.fileName = $objectFileName(name=arguments.name, objectPath=loc.modelPath, type=arguments.type);
 
 			if (loc.fileName != arguments.type || loc.i == ListLen(arguments.modelPaths))
@@ -968,4 +996,32 @@ Should now call bar() instead and marking foo() as deprecated
 	application.wheels.dependantPlugins = application.wheels.PluginObj.getDependantPlugins();
 	application.wheels.mixins = application.wheels.PluginObj.getMixins();
 	</cfscript>
+</cffunction>
+
+<cffunction name="$loadLocales" returntype="struct" access="public" output="false">
+	<cfargument name="path" type="string" required="false" default="#expandPath('/wheelsMapping/locales')#">
+	<cfscript>
+	var loc = {};
+	loc.locales = {};
+	// scan the locales directory
+	loc.files = $directory(directory="#arguments.path#", action="list");
+	// loop through all locales and put into application variable
+	loc.count = loc.files.recordcount;
+	for(loc.i = 1; loc.i lte loc.count; loc.i++)
+	{
+		// make paths system agnostic
+		loc.path = ListChangeDelims(loc.files["directory"][loc.i], "/", "\");
+		// name of the locale file
+		loc.name = loc.files["name"][loc.i];
+		// name of the locale
+		loc.locale = ListFirst(loc.name, ".");
+		// read the locale file
+		loc.content = FileRead("#loc.path#/#loc.name#", "utf-8");
+		// deserialize the json
+		loc.content = DeserializeJSON(loc.content);
+		// add to application variable
+		loc.locales[loc.locale] = loc.content;
+	}
+	</cfscript>
+	<cfreturn loc.locales>
 </cffunction>

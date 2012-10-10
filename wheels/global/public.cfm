@@ -198,7 +198,7 @@
 		<!--- in config/settings.cfm, set the caching for partials to use ehcache --->
 		<cfset setCacheSettings(category="partials", storage="ehcache") />
 	'
-	categories="configuration" chapters="caching" functions="">
+	categories="configuration,caching" chapters="caching" functions="">
 	<cfargument name="category" type="string" required="true" />
 	<cfargument name="storage" type="string" required="true" hint="Could be memory, ehcache, or memcached." />
 	<cfargument name="strategy" type="string" required="false" default="age" />
@@ -222,7 +222,7 @@
 		<cfset addFormat(extension="ppt", mimeType="application/vnd.ms-powerpoint")>
 		<cfset addFormat(extension="pptx", mimeType="application/vnd.ms-powerpoint")>
 	'
-	categories="configuration" chapters="responding-with-multiple-formats" functions="provides,renderWith">
+	categories="configuration,formats" chapters="responding-with-multiple-formats" functions="provides,renderWith">
 	<cfargument name="extension" type="string" required="true" hint="File extension to add." />
 	<cfargument name="mimeType" type="string" required="true" hint="Matching MIME type to associate with the file extension." />
 	<cfset application.wheels.formats[arguments.extension] = arguments.mimeType />
@@ -242,7 +242,7 @@
 		<!--- Example 3: Change the `home` route. This should be listed last because it is least specific --->
 		<cfset addRoute(name="home", pattern="", controller="main", action="index")>
 	'
-	categories="configuration" chapters="using-routes" functions="">
+	categories="configuration,routes" chapters="using-routes" functions="">
 	<cfargument name="name" type="string" required="false" default="" hint="Name for the route. This is referenced as the `name` argument in functions based on @URLFor like @linkTo, @startFormTag, etc.">
 	<cfargument name="pattern" type="string" required="true" hint="The URL pattern that the route will match.">
 	<cfargument name="controller" type="string" required="false" default="" hint="Controller to call when route matches (unless the controller name exists in the pattern).">
@@ -282,7 +282,7 @@
 		<!--- Adds the default routes to your application (done in `config/routes.cfm`) --->
 		<cfset addDefaultRoutes()>
 	'
-	categories="configuration" chapters="using-routes" functions="">
+	categories="configuration,routes" chapters="using-routes" functions="">
 	<cfscript>
 		addRoute(pattern="[controller]/[action]/[key]");
 		addRoute(pattern="[controller]/[action]");
@@ -302,7 +302,7 @@
 		<!--- Example 3: Set the default values for a form helper to get the form marked up to your preferences --->
 		<cfset set(functionName="textField", labelPlacement="before", prependToLabel="<div>", append="</div>", appendToLabel="<br />")>
 	'
-	categories="configuration" chapters="configuration-and-defaults" functions="get">
+	categories="configuration,defaults" chapters="configuration-and-defaults" functions="get">
 	<cfscript>
 		var loc = {};
 		if (ArrayLen(arguments) > 1)
@@ -351,39 +351,7 @@
 	'
 	categories="global,miscellaneous" chapters="obfuscating-urls" functions="obfuscateParam">
 	<cfargument name="param" type="string" required="true" hint="Value to deobfuscate.">
-	<cfscript>
-		var loc = {};
-		if (Val(SpanIncluding(arguments.param, "0,1,2,3,4,5,6,7,8,9")) != arguments.param)
-		{
-			try
-			{
-				loc.checksum = Left(arguments.param, 2);
-				loc.returnValue = Right(arguments.param, (Len(arguments.param)-2));
-				loc.z = BitXor(InputBasen(loc.returnValue,16),461);
-				loc.returnValue = "";
-				loc.iEnd = Len(loc.z)-1;
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-					loc.returnValue = loc.returnValue & Left(Right(loc.z, loc.i),1);
-				loc.checksumtest = "0";
-				loc.iEnd = Len(loc.returnValue);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-					loc.checksumtest = (loc.checksumtest + Left(Right(loc.returnValue, loc.i),1));
-				loc.c1 = ToString(FormatBaseN((loc.checksumtest+154),10));
-				loc.c2 = InputBasen(loc.checksum, 16);
-				if (loc.c1 != loc.c2)
-					loc.returnValue = arguments.param;
-			}
-			catch(Any e)
-			{
-		    	loc.returnValue = arguments.param;
-			}
-		}
-		else
-		{
-	    	loc.returnValue = arguments.param;
-		}
-	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn arguments.param>
 </cffunction>
 
 <cffunction name="get" returntype="any" access="public" output="false" hint="Returns the current setting for the supplied Wheels setting or the current default for the supplied Wheels function argument."
@@ -395,7 +363,7 @@
 		<!--- Get the default for the `message` argument of the `validatesConfirmationOf` method  --->
 		<cfset setting = get(functionName="validatesConfirmationOf", name="message")>
 	'
-	categories="global,miscellaneous" chapters="configuration-and-defaults" functions="set">
+	categories="configuration,defaults" chapters="configuration-and-defaults" functions="set">
 	<cfargument name="name" type="string" required="true" hint="Variable name to get setting for.">
 	<cfargument name="functionName" type="string" required="false" default="" hint="Function name to get setting for.">
 	<cfscript>
@@ -428,25 +396,7 @@
 	'
 	categories="global,miscellaneous" chapters="obfuscating-urls" functions="deobfuscateParam">
 	<cfargument name="param" type="any" required="true" hint="Value to obfuscate.">
-	<cfscript>
-		var loc = {};
-		if (IsValid("integer", arguments.param) && IsNumeric(arguments.param) && arguments.param > 0)
-		{
-			// railo strips leading zeros from integers so do this for both engines
-			arguments.param = Val(SpanIncluding(arguments.param, "0,1,2,3,4,5,6,7,8,9"));
-			loc.iEnd = Len(arguments.param);
-			loc.a = (10^loc.iEnd) + Reverse(arguments.param);
-			loc.b = "0";
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-				loc.b = (loc.b + Left(Right(arguments.param, loc.i), 1));
-			loc.returnValue = FormatBaseN((loc.b+154),16) & FormatBaseN(BitXor(loc.a,461),16);
-		}
-		else
-		{
-			loc.returnValue = arguments.param;
-		}
-	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn arguments.param>
 </cffunction>
 
 <cffunction name="pluginNames" returntype="string" access="public" output="false" hint="Returns a list of all installed plugins' names."
@@ -488,10 +438,7 @@
 	<cfscript>
 		var loc = {};
 		
-		loc.returnValue = $args(name="URLFor", args=arguments, cachable=true);
-		// only run our URLFor code if we do not have a cached result
-		if (StructKeyExists(loc, "returnValue"))
-			return loc.returnValue;
+		loc.returnValue = $args(name="URLFor", args=arguments);
 		
 		loc.params = {};
 		if (StructKeyExists(variables, "params"))
@@ -629,4 +576,16 @@
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="l" returntype="string" access="public" output="false" hint="returns the value for the given key of a locale"
+	examples=
+	'
+		<!--- Return all the names of the months for US English --->
+		<cfset monthNames = l("date.month_names", "en-US")>
+	'
+	categories="global,miscellaneous">
+	<cfargument name="key" type="string" required="true">
+	<cfargument name="locale" type="string" required="false" default="#application.wheels.locale#">
+	<cfreturn evaluate('application.wheels.locales["#arguments.locale#"].#arguments.key#')>
 </cffunction>

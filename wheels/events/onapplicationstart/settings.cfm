@@ -27,7 +27,6 @@
 	application.wheels.cachePages = false;
 	application.wheels.cachePartials = false;
 	application.wheels.cacheQueries = false;
-	application.wheels.cacheFunctions = false;
 	application.wheels.cachePlugins = true;
 	if (application.wheels.environment != "design")
 	{
@@ -43,7 +42,6 @@
 		application.wheels.cachePages = true;
 		application.wheels.cachePartials = true;
 		application.wheels.cacheQueries = true;
-		application.wheels.cacheFunctions = true;
 	}
 
 	// debugging and error settings
@@ -190,9 +188,8 @@
 	application.wheels.functions.radioButtonTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
 	application.wheels.functions.radioButtonTagGroup = {checkedValue="", order="", prependToGroup="", appendToGroup="", label="[value]", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
 	application.wheels.functions.redirectTo = {onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302, delay=false};
-	application.wheels.functions.renderPage = {layout=""};
+	application.wheels.functions.renderView = {layout=""};
 	application.wheels.functions.renderWith = {layout=""};
-	application.wheels.functions.renderPageToString = {layout=true};
 	application.wheels.functions.renderPartial = {layout="", dataFunction=true};
 	application.wheels.functions.save = {parameterize=true, reload=false};
 	application.wheels.functions.secondSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, secondStep=1};

@@ -136,5 +136,10 @@
 		)>
 		<cfset assert('loc.q.recordcount eq 3')>
 	</cffunction>
+	
+	<cffunction name="test_pagination_with_blank_where_specified_does_not_cause_crash">
+		<cfset loc.q = model("Post").findAll(where="", page=1)>
+		<cfset assert('IsQuery(loc.q)')>		
+	</cffunction>
 
 </cfcomponent>

@@ -22,8 +22,8 @@
 		<cfset this.addErrorToBase(message="Your email address must be the same as your domain name.")>
 	'
 	categories="model-object,errors" chapters="object-validation" functions="addError,allErrors,clearErrors,errorCount,errorsOn,errorsOnBase,hasErrors">
-	<cfargument name="message" type="string" required="true" hint="See documentation for @addError.">
-	<cfargument name="name" type="string" required="false" default="" hint="See documentation for @addError.">
+	<cfargument name="message" type="string" required="true" hint="@addError.">
+	<cfargument name="name" type="string" required="false" default="" hint="@addError.">
 	<cfscript>
 		arguments.property = "";
 		addError(argumentCollection=arguments);

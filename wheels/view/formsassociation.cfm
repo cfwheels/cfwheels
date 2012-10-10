@@ -17,7 +17,7 @@
 	<cfargument name="keys" type="string" required="true" hint="Primary keys associated with this form field. Note that these keys should be listed in the order that they appear in the database table." />
 	<cfargument name="tagValue" type="string" required="true" hint="The value of the radio button when `selected`." />
 	<cfargument name="checkIfBlank" type="boolean" required="false" default="false" hint="Whether or not to check this form field as a default if there is a blank value set for the property." />
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="label" type="string" required="false" hint="@textField.">
 	<cfscript>
 		var loc = {};
 		$args(name="hasManyRadioButton", args=arguments);
@@ -54,17 +54,17 @@
 		</cfloop>
 	'
 	categories="view-helper,forms-association" chapters="nested-properties" functions="hasMany,hasManyRadioButton,includedInObject,nestedProperties">
-	<cfargument name="objectName" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
-	<cfargument name="association" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
-	<cfargument name="keys" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
-	<cfargument name="label" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="labelPlacement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorElement" type="string" required="false" hint="See documentation for @textField.">
-	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="objectName" type="string" required="true" hint="@hasManyRadioButton." />
+	<cfargument name="association" type="string" required="true" hint="@hasManyRadioButton." />
+	<cfargument name="keys" type="string" required="true" hint="@hasManyRadioButton." />
+	<cfargument name="label" type="string" required="false" hint="@textField.">
+	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
+	<cfargument name="prepend" type="string" required="false" hint="@textField.">
+	<cfargument name="append" type="string" required="false" hint="@textField.">
+	<cfargument name="prependToLabel" type="string" required="false" hint="@textField.">
+	<cfargument name="appendToLabel" type="string" required="false" hint="@textField.">
+	<cfargument name="errorElement" type="string" required="false" hint="@textField.">
+	<cfargument name="errorClass" type="string" required="false" hint="@textField.">
 	<cfscript>
 		var loc = {};
 		$args(name="hasManyCheckBox", args=arguments);
@@ -99,9 +99,9 @@
 		</cfif>
 	'
 	categories="view-helper,forms-association" chapters="nested-properties" functions="hasMany,hasManyCheckBox,hasManyRadioButton,nestedProperties">
-	<cfargument name="objectName" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
-	<cfargument name="association" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
-	<cfargument name="keys" type="string" required="true" hint="See documentation for @hasManyRadioButton." />
+	<cfargument name="objectName" type="string" required="true" hint="@hasManyRadioButton." />
+	<cfargument name="association" type="string" required="true" hint="@hasManyRadioButton." />
+	<cfargument name="keys" type="string" required="true" hint="@hasManyRadioButton." />
 	<cfscript>
 		var loc = {};
 		loc.returnValue = false;
