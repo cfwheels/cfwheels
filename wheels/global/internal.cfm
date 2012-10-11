@@ -48,6 +48,7 @@
 <cffunction name="$convertToString" returntype="string" access="public" output="false">
 	<cfargument name="value" type="Any" required="true">
 	<cfargument name="type" type="string" required="false" default="">
+	<cfargument name="delim" type="string" required="false" default=",">
 	<cfscript>
 		var loc = {};
 		
@@ -87,7 +88,7 @@
 				for (loc.i = 1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.key = ListGetAt(loc.keyList, loc.i);
-					loc.str = ListAppend(loc.str, loc.key & "=" & arguments.value[loc.key]);
+					loc.str = ListAppend(loc.str, loc.key & "=" & $convertToString(value=arguments.value[loc.key], delim=arguments.delim), arguments.delim);
 				}
 				arguments.value = loc.str;
 				break;
@@ -1024,4 +1025,9 @@ Should now call bar() instead and marking foo() as deprecated
 	}
 	</cfscript>
 	<cfreturn loc.locales>
+</cffunction>
+
+<cffunction name="$paramsToString" access="public" returntype="string" output="false">
+	<cfargument name="params" type="any" required="true">
+	<cfreturn $convertToString(value=arguments.params, delim="&")>
 </cffunction>

@@ -428,7 +428,7 @@
 	<cfargument name="controller" type="string" required="false" default="" hint="Name of the controller to include in the URL.">
 	<cfargument name="action" type="string" required="false" default="" hint="Name of the action to include in the URL.">
 	<cfargument name="key" type="any" required="false" default="" hint="Key(s) to include in the URL.">
-	<cfargument name="params" type="string" required="false" default="" hint="Any additional params to be set in the query string.">
+	<cfargument name="params" type="any" required="false" default="" hint="Any additional params to be set in the query string.">
 	<cfargument name="anchor" type="string" required="false" default="" hint="Sets an anchor name to be appended to the path.">
 	<cfargument name="onlyPath" type="boolean" required="false" hint="If `true`, returns only the relative URL (no protocol, host name or port).">
 	<cfargument name="host" type="string" required="false" hint="Set this to override the current host.">
@@ -546,8 +546,10 @@
 			loc.returnValue = REReplace(loc.returnValue, "(?!^/)/$", "");
 		}
 
+
+		arguments.params = $paramsToString(arguments.params);
 		if (Len(arguments.params))
-			loc.returnValue = loc.returnValue & $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
+		loc.returnValue = loc.returnValue & $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
 		if (Len(arguments.anchor))
 			loc.returnValue = loc.returnValue & "##" & arguments.anchor;
 
