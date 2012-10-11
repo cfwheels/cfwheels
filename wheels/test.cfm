@@ -483,19 +483,6 @@
 	<!--- resolve paths --->
 	<cfset loc.paths = $resolvePaths(arguments.options)>
 
-	<!---
-	if env.cfm files exists, call to override enviroment settings so tests can run.
-	when overriding, save the original env so we can put it back later.
-	 --->
-	<cfif FileExists(loc.paths.full_root_test_path & "/env.cfm")>
-		<cfinclude template="#loc.paths.relative_root_test_path & '/env.cfm'#">
-	</cfif>
-
-	<!--- populate the test database only on reload --->
-	<cfif structkeyexists(arguments.options, "reload") && arguments.options.reload eq true && FileExists(loc.paths.full_root_test_path & "/populate.cfm")>
-		<cfinclude template="#loc.paths.relative_root_test_path & '/populate.cfm'#">
-	</cfif>
-	
 	<!--- tests to run --->
 	<cfset q = $listTestPackages(arguments.options)>
 
@@ -619,6 +606,8 @@
 	
 	<cfset loc.paths = $resolvePaths(arguments.options)>
 	
+	<cfset $loadTestEnvAndPopuplateDatabase(loc.paths, arguments.options)>
+	
 	<cfdirectory directory="#loc.paths.full_test_path#" action="list" recurse="true" name="q" filter="*.cfc" />
 
 	<!--- run tests --->
@@ -637,6 +626,21 @@
 	</cfloop>
 
 	<cfreturn t>
+</cffunction>
+
+<cffunction name="$loadTestEnvAndPopuplateDatabase">
+	<cfargument name="paths" type="struct" required="true">
+	<cfargument name="options" type="struct" required="true">
+	
+	<cfif FileExists(arguments.paths.full_root_test_path & "/env.cfm")>
+		<cfinclude template="#arguments.paths.relative_root_test_path & '/env.cfm'#">
+	</cfif>
+	
+	<!--- populate the test database only on reload --->
+	<cfif structkeyexists(arguments.options, "reload") && arguments.options.reload eq true && FileExists(arguments.paths.full_root_test_path & "/populate.cfm")>
+		<cfinclude template="#arguments.paths.relative_root_test_path & '/populate.cfm'#">
+	</cfif>
+
 </cffunction>
 
 <cfinclude template="plugins/injection.cfm">
