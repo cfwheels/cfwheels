@@ -31,7 +31,8 @@ Other Enhancements
 * Plugin functions can now be injected into base model adapter and model connection components - [Per Djurner]
 * Added support for Unobstructive Javascript - [Raul Riera]
 * Added proper HTTP status headers - #705 [cfconcepts, Andy Bellenie]
-* Added favicon to URL rewrite exclusions [Troy Murray, Cathy Shapiro]
+* Added favicon to URL rewrite exclusions - [Troy Murray, Cathy Shapiro]
+* Allow passing of any variable type as the params argument to urlFor() - [Tony Petruzzi]
 
 Bug Fixes
 =========
