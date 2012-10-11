@@ -162,6 +162,7 @@
 		{
 			arguments.currentPage = arguments.totalPages;
 		}
+
 		if (arguments.currentPage lt 1)
 		{
 			arguments.currentPage = 1;
@@ -182,6 +183,7 @@
 		{
 			arguments.endRow = arguments.totalRecords;
 		}
+
 		if (arguments.endRow lt arguments.startRow)
 		{
 			arguments.endRow = arguments.startRow;
@@ -252,9 +254,14 @@
 
 		// throw errors when controller or action is not passed in as arguments and not included in the pattern
 		if (!Len(arguments.controller) && arguments.pattern Does Not Contain "[controller]")
+		{
 			$throw(type="Wheels.IncorrectArguments", message="The `controller` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `controller` argument to specifically tell Wheels which controller to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
+		}
+
 		if (!Len(arguments.action) && arguments.pattern Does Not Contain "[action]")
+		{
 			$throw(type="Wheels.IncorrectArguments", message="The `action` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `action` argument to specifically tell Wheels which action to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
+		}
 
 		loc.thisRoute = Duplicate(arguments);
 		loc.thisRoute.variables = "";
@@ -264,13 +271,16 @@
 			loc.thisRoute.formatVariable = ReplaceList(loc.thisRoute.format, "[,]", "");
 			loc.thisRoute.pattern = ListFirst(loc.thisRoute.pattern, ".");
 		}
+
 		loc.iEnd = ListLen(loc.thisRoute.pattern, "/");
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(loc.thisRoute.pattern, loc.i, "/");
 
 			if (REFind("^\[", loc.item))
+			{
 				loc.thisRoute.variables = ListAppend(loc.thisRoute.variables, ReplaceList(loc.item, "[,]", ""));
+			}
 		}
 		ArrayAppend(application.wheels.routes, loc.thisRoute);
 	</cfscript>
@@ -310,9 +320,11 @@
 			for (loc.key in arguments)
 			{
 				if (loc.key != "functionName")
+				{
 					for (loc.i = 1; loc.i lte listlen(arguments.functionName); loc.i = loc.i + 1) {
 						application.wheels.functions[Trim(ListGetAt(arguments.functionName, loc.i))][loc.key] = arguments[loc.key];
 					}
+				}
 			}
 		}
 		else
@@ -369,9 +381,13 @@
 	<cfscript>
 		var loc = {};
 		if (Len(arguments.functionName))
+		{
 			loc.returnValue = application.wheels.functions[arguments.functionName][arguments.name];
+		}
 		else
+		{
 			loc.returnValue = application.wheels[arguments.name];
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -442,11 +458,16 @@
 		
 		loc.params = {};
 		if (StructKeyExists(variables, "params"))
+		{
 			StructAppend(loc.params, variables.params, true);
+		}
+
 		if (application.wheels.showErrorInformation)
 		{
 			if (arguments.onlyPath && (Len(arguments.host) || Len(arguments.protocol)))
+			{
 				$throw(type="Wheels.IncorrectArguments", message="Can't use the `host` or `protocol` arguments when `onlyPath` is `true`.", extendedInfo="Set `onlyPath` to `false` so that `linkTo` will create absolute URLs and thus allowing you to set the `host` and `protocol` on the link.");
+			}
 		}
 
 		// get primary key values if an object was passed in
@@ -465,23 +486,38 @@
 			{
 				loc.returnValue = loc.returnValue & "?controller=";
 				if (Len(arguments.controller))
+				{
 					loc.returnValue = loc.returnValue & hyphenize(arguments.controller);
+				}
 				else
+				{
 					loc.returnValue = loc.returnValue & hyphenize(loc.route.controller);
+				}
+
 				loc.returnValue = loc.returnValue & "&action=";
 				if (Len(arguments.action))
+				{
 					loc.returnValue = loc.returnValue & hyphenize(arguments.action);
+				}
 				else
+				{
 					loc.returnValue = loc.returnValue & hyphenize(loc.route.action);
+				}
+
 				// add it the format if it exists
 				if (StructKeyExists(loc.route, "formatVariable") && StructKeyExists(arguments, loc.route.formatVariable))
+				{
 					loc.returnValue = loc.returnValue & "&#loc.route.formatVariable#=#arguments[loc.route.formatVariable]#";
+				}
+
 				loc.iEnd = ListLen(loc.route.variables);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.property = ListGetAt(loc.route.variables, loc.i);
 					if (loc.property != "controller" && loc.property != "action")
+					{
 						loc.returnValue = loc.returnValue & "&" & loc.property & "=" & $URLEncode(arguments[loc.property]);
+					}
 				}
 			}
 			else
@@ -494,12 +530,19 @@
 					{
 						loc.property = Mid(loc.property, 2, Len(loc.property)-2);
 						if (application.wheels.showErrorInformation && !StructKeyExists(arguments, loc.property))
+						{
 							$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="The route chosen by Wheels `#loc.route.name#` requires the argument `#loc.property#`. Pass the argument `#loc.property#` or change your routes to reflect the proper variables needed.");
+						}
+
 						loc.param = $URLEncode(arguments[loc.property]);
 						if (loc.property == "controller" || loc.property == "action")
+						{
 							loc.param = hyphenize(loc.param);
+						}
 						else if (application.wheels.obfuscateUrls)
+						{
 							loc.param = obfuscateParam(loc.param);
+						}
 						loc.returnValue = loc.returnValue & "/" & loc.param; // get param from arguments
 					}
 					else
@@ -509,26 +552,42 @@
 				}
 				// add it the format if it exists
 				if (StructKeyExists(loc.route, "formatVariable") && StructKeyExists(arguments, loc.route.formatVariable))
+				{
 					loc.returnValue = loc.returnValue & ".#arguments[loc.route.formatVariable]#";
+				}
 			}
 		}
 		else // link based on controller/action/key
 		{
 			// when no controller or action was passed in we link to the current page (controller/action only, not query string etc) by default
 			if (!Len(arguments.controller) && !Len(arguments.action) && StructKeyExists(loc.params, "action"))
+			{
 				arguments.action = loc.params.action;
+			}
+
 			if (!Len(arguments.controller) && StructKeyExists(loc.params, "controller"))
+			{
 				arguments.controller = loc.params.controller;
+			}
+
 			if (Len(arguments.key) && !Len(arguments.action) && StructKeyExists(loc.params, "action"))
+			{
 				arguments.action = loc.params.action;
+			}
+
 			loc.returnValue = loc.returnValue & "?controller=" & hyphenize(arguments.controller);
 			if (Len(arguments.action))
+			{
 				loc.returnValue = loc.returnValue & "&action=" & hyphenize(arguments.action);
+			}
+
 			if (Len(arguments.key))
 			{
 				loc.param = $URLEncode(arguments.key);
 				if (application.wheels.obfuscateUrls)
+				{
 					loc.param = obfuscateParam(loc.param);
+				}
 				loc.returnValue = loc.returnValue & "&key=" & loc.param;
 			}
 		}
@@ -549,20 +608,35 @@
 
 		arguments.params = $paramsToString(arguments.params);
 		if (Len(arguments.params))
-		loc.returnValue = loc.returnValue & $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
+		{
+			loc.returnValue = loc.returnValue & $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
+		}
+
 		if (Len(arguments.anchor))
+		{
 			loc.returnValue = loc.returnValue & "##" & arguments.anchor;
+		}
 
 		if (!arguments.onlyPath)
 		{
 			if (arguments.port != 0)
+			{
 				loc.returnValue = ":" & arguments.port & loc.returnValue; // use the port that was passed in by the developer
+			}
 			else if (request.cgi.server_port != 80 && request.cgi.server_port != 443)
+			{
 				loc.returnValue = ":" & request.cgi.server_port & loc.returnValue; // if the port currently in use is not 80 or 443 we set it explicitly in the URL
+			}
+
 			if (Len(arguments.host))
+			{
 				loc.returnValue = arguments.host & loc.returnValue;
+			}
 			else
+			{
 				loc.returnValue = request.cgi.server_name & loc.returnValue;
+			}
+
 			if (Len(arguments.protocol))
 			{
 				loc.returnValue = arguments.protocol & "://" & loc.returnValue;
