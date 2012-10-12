@@ -9,6 +9,7 @@ Model Enhancements
 * Support for tableless models - [Tony Petruzzi]
 * Add findFirst, findLast, findAllKeys, findOneOrCreatedBy, findOrCreateBy - #745 [Mike Henke, Per Djurner, Tony Petruzzi]
 * Enables use of UTC for wheels timestamps [Andy Bellenie]
+* Allow models to be created when with no properties - #84 [rshakespear, Tony Petruzzi]
 
 
 View Enhancements
@@ -36,6 +37,9 @@ Other Enhancements
 * Added favicon to URL rewrite exclusions [Troy Murray, Cathy Shapiro]
 * Allow passing of any variable type as the params argument to urlFor() - [Tony Petruzzi]
 * Adds helper for utc timestamps [Andy Bellenie]
+* Allow custom mailparams to by passed to sendEmail() - #85 [forday, Tony Petruzzi]
+* Allow different form and to email addresses in sendEmail() - #95 [Andy Bellenie, Tony Petruzzi]
+* Allow any variable type to be passed as params to urlFor() - [Tony Petruzzi]
 
 Bug Fixes
 =========
@@ -44,7 +48,10 @@ Bug Fixes
 * Transactions would not close when used with the dependent argument of hasMany() - #739 [Andy Bellenie]
 * Soft deletes now work correctly with outer joins - #762 [Andy Bellenie]
 * Pagination with compound keys - #725 [Andy Bellenie, jfeasel, Tony Petruzzi]
-* Prevent automatic validation from being set on user defined primary keys - #778 [Mike Henke, Tony Petruzzi] 
+* Prevent automatic validation from being set on user defined primary keys - #778 [Mike Henke, Tony Petruzzi]
+* Calculated properties were not being returned when specifying the select on findAll - #69 [kapitaine, Tony Petruzzi]
+* Duplicate object ids could occur when adding nested properties - #76 [Sam Hakimi, Tony Petruzzi]
+* Incorrect pagination query with Oracle - #93 [crsedgar, Tony Petruzzi]
 
 Miscellaneous
 =============
@@ -56,6 +63,7 @@ Miscellaneous
 * Allow placement of models in subfolder - [Tim Badolato, Tony Petruzzi]
 * External paths for imagePath - [andoradmiraal, Tony Petruzzi]
 * Removal of obfuscateParam and deobfuscateParam functionality - [Tony Petruzzi]
+* Removed the ability to switch environment through the url - [Andy Bellenie, Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
