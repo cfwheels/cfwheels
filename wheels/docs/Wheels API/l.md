@@ -43,4 +43,4 @@ Returns the localised value for the given locale
 ## Examples
 	
 		<!--- Return all the names of the months for US English --->
-		<cfset monthNames = l("date.month_names", "en_US")>
+		<cfset monthNames = l("date.month_names", "en-US")>
