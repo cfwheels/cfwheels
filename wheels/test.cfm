@@ -484,7 +484,7 @@
 	<cfset loc.paths = $resolvePaths(arguments.options)>
 
 	<!--- tests to run --->
-	<cfset q = $listTestPackages(arguments.options)>
+	<cfset q = $listTestPackages(arguments.options, loc.paths.test_filter)>
 
 	<!--- run tests --->
 	<cfloop query="q">
@@ -537,6 +537,9 @@
 	
 	<!--- default test type --->
 	<cfset loc.type = "core">
+	
+	<!--- testfilter --->
+	<cfset loc.paths.test_filter = "*">
 	
 	<!--- by default we run all packages, however they can specify to run a specific package of tests --->
 	<cfset loc.package = "">
@@ -594,12 +597,13 @@
 	
 	<!--- for test results display --->
 	<cfset TESTING_FRAMEWORK_VARS.WHEELS_TESTS_BASE_COMPONENT_PATH = loc.paths.test_path>
-	
+
 	<cfreturn loc.paths>
 </cffunction>
 
 <cffunction name="$listTestPackages" returntype="query" output="false" hint="returns a query containing all the test to run and their directory path">
 	<cfargument name="options" type="struct" required="false" default="#structnew()#">
+	<cfargument name="filefilter" type="string" required="false" default="*">
 	<cfset var loc = {}>
 	<cfset var q = "">
 	<cfset var t = QueryNew("package","Varchar")>
@@ -608,7 +612,7 @@
 	
 	<cfset $loadTestEnvAndPopuplateDatabase(loc.paths, arguments.options)>
 	
-	<cfdirectory directory="#loc.paths.full_test_path#" action="list" recurse="true" name="q" filter="*.cfc" />
+	<cfdirectory directory="#loc.paths.full_test_path#" action="list" recurse="true" name="q" filter="#arguments.filefilter#.cfc" />
 
 	<!--- run tests --->
 	<cfloop query="q">
