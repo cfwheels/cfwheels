@@ -4,7 +4,7 @@
 Builds and returns a string containing a text field form control based on the supplied `name`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
 
 ## Function Syntax
-	textFieldTag( name, [ value, label, labelClass, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
+	textFieldTag( name, [ value, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, labelClass ] )
 
 
 ## Parameters
@@ -45,14 +45,6 @@ Builds and returns a string containing a text field form control based on the su
 		</tr>
 		
 		<tr>
-			<td>labelClass</td>
-			<td>string</td>
-			<td>false</td>
-			<td></td>
-			<td>The class name for the label</td>
-		</tr>
-		
-		<tr>
 			<td>labelPlacement</td>
 			<td>string</td>
 			<td>false</td>
@@ -90,6 +82,14 @@ Builds and returns a string containing a text field form control based on the su
 			<td>false</td>
 			<td></td>
 			<td>String to append to the form control's `label`. Useful to wrap the form control with HTML tags.</td>
+		</tr>
+		
+		<tr>
+			<td>labelClass</td>
+			<td>string</td>
+			<td>false</td>
+			<td></td>
+			<td>The class name for the label</td>
 		</tr>
 		
 	</tbody>

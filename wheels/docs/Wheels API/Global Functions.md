@@ -10,6 +10,7 @@
 * [model()](model.md)
 * [obfuscateParam()](obfuscateParam.md)
 * [pluginNames()](pluginNames.md)
+* [timestamp()](timestamp.md)
 * [URLFor()](URLFor.md)
 			
 ## String Functions

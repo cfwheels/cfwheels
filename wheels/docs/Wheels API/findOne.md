@@ -101,7 +101,7 @@ Fetches the first record found based on the `WHERE` and `ORDER BY` clauses. With
 		<!--- Getting the most recent order as an object from the database --->
 		<cfset order = model("order").findOne(order="datePurchased DESC")>
 
-		<!--- Using a dynamic finder to get the first person with the last name `Smith`. Same as calling `model("user").findOne(where"lastName='Smith'")` --->
+		<!--- Using a dynamic finder to get the first person with the last name `Smith`. Same as calling `model("user").findOne(where"lastName='smith'")` --->
 		<cfset person = model("user").findOneByLastName("Smith")>
 
 		<!--- Getting a specific user using a dynamic finder. Same as calling `model("user").findOne(where"email='someone@somewhere.com' AND password='mypass'")` --->

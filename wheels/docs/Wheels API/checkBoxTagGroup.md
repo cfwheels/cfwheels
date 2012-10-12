@@ -4,7 +4,7 @@
 Builds and returns a string for a group of check boxes and labels. If you pass in [value] to any of the arguments that get appplied to each individual check boxes (`append` for example), it will be replaced by the real value in the current iteration. You can pass in different `prepend`, `append` etc arguments by using a list.
 
 ## Function Syntax
-	checkBoxTagGroup( name, values, [ checkedValues, order, prependToGroup, appendToGroup, label, labelClass, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
+	checkBoxTagGroup( name, values, [ checkedValues, order, prependToGroup, appendToGroup, label, labelPlacement, prepend, append, prependToLabel, appendToLabel ] )
 
 
 ## Parameters
@@ -74,14 +74,6 @@ Builds and returns a string for a group of check boxes and labels. If you pass i
 			<td>false</td>
 			<td></td>
 			<td>The label text to use in the form control.</td>
-		</tr>
-		
-		<tr>
-			<td>labelClass</td>
-			<td>string</td>
-			<td>false</td>
-			<td></td>
-			<td>The class name for the label</td>
 		</tr>
 		
 		<tr>
