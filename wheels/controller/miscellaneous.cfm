@@ -21,6 +21,7 @@
 	<cfargument name="layout" type="any" required="false" hint="Layout(s) to wrap the email template in. This argument is also aliased as `layouts`.">
 	<cfargument name="file" type="string" required="false" default="" hint="A list of the names of the files to attach to the email. This will reference files stored in the `files` folder (or a path relative to it). This argument is also aliased as `files`.">
 	<cfargument name="detectMultipart" type="boolean" required="false" hint="When set to `true` and multiple values are provided for the `template` argument, Wheels will detect which of the templates is text and which one is HTML (by counting the `<` characters).">
+	<cfargument name="mailparams" type="array" required="false" default="#ArrayNew(1)#" hint="any addition mail parameters you would like to pass to the email. each element of the array must be a struct with keys corresponding to the attributes of the cfmailparam tag">
 	<cfargument name="$deliver" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
@@ -88,7 +89,6 @@
 		// attach files using the cfmailparam tag
 		if (Len(arguments.file))
 		{
-			arguments.mailparams = [];
 			loc.iEnd = ListLen(arguments.file);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
