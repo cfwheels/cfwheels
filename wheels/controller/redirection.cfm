@@ -25,7 +25,7 @@
 	<cfargument name="controller" type="string" required="false" default="" hint="@URLFor.">
 	<cfargument name="action" type="string" required="false" default="" hint="@URLFor.">
 	<cfargument name="key" type="any" required="false" default="" hint="@URLFor.">
-	<cfargument name="params" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="params" type="any" required="false" default="" hint="@URLFor.">
 	<cfargument name="anchor" type="string" required="false" default="" hint="@URLFor.">
 	<cfargument name="onlyPath" type="boolean" required="false" hint="@URLFor.">
 	<cfargument name="host" type="string" required="false" hint="@URLFor.">
@@ -73,6 +73,7 @@
 			{
 				// referrer exists and points to the same domain so it's ok to redirect to it
 				loc.url = request.cgi.http_referer;
+				arguments.params = $paramsToString(arguments.params);
 				if (Len(arguments.params))
 				{
 					// append params to the referrer url

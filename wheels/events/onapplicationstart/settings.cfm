@@ -61,6 +61,9 @@
 	}
 	if (application.wheels.environment != "design" && application.wheels.environment != "development")
 		application.wheels.showDebugInformation = false;
+	
+	application.wheels.errorEmailToAddress = application.wheels.errorEmailAddress;
+	application.wheels.errorEmailFromAddress = application.wheels.errorEmailAddress;
 
 	// asset path settings
 	// assetPaths can be struct with two keys,  http and https, if no https struct key, http is used for secure and non-secure

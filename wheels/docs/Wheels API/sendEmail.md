@@ -4,7 +4,7 @@
 Sends an email using a template and an optional layout to wrap it in. Besides the Wheels-specific arguments documented here, you can also pass in any argument that is accepted by the `cfmail` tag as well as your own arguments to be used by the view.
 
 ## Function Syntax
-	sendEmail( [ template, from, to, subject, layout, file, detectMultipart ] )
+	sendEmail( [ template, from, to, subject, layout, file, detectMultipart, mailparams ] )
 
 
 ## Parameters
@@ -74,6 +74,14 @@ Sends an email using a template and an optional layout to wrap it in. Besides th
 			<td>false</td>
 			<td></td>
 			<td>When set to `true` and multiple values are provided for the `template` argument, Wheels will detect which of the templates is text and which one is HTML (by counting the `<` characters).</td>
+		</tr>
+		
+		<tr>
+			<td>mailparams</td>
+			<td>array</td>
+			<td>false</td>
+			<td>[runtime expression]</td>
+			<td>any addition mail parameters you would like to pass to the email. each element of the array must be a struct with keys corresponding to the attributes of the cfmailparam tag</td>
 		</tr>
 		
 	</tbody>

@@ -16,6 +16,7 @@
 		<cfset validate("validateCalled")>
 		<cfset validateOnCreate("validateOnCreateCalled")>
 		<cfset validateOnUpdate("validateOnUpdateCalled")>
+		<cfset property(name="fullName", sql="users.firstname + ' ' + users.lastname")>
 	</cffunction>
 
 	<cffunction name="validateCalled">

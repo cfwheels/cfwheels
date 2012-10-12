@@ -78,12 +78,19 @@
 		application.wheels.pluginComponentPath = "plugins";
 		application.wheels.stylesheetPath = "stylesheets";
 		application.wheels.viewPath = "views";
+		
+		// can we switch from production environment through the url?
+		application.wheels.switchEnvironmentFromProduction = false;
 
 		// set environment either from the url or the developer's environment.cfm file
-		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(application.wheels, "reloadPassword") && (!Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
+		if (application.wheels.switchEnvironmentFromProduction && StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(application.wheels, "reloadPassword") && (!Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
+		{
 			application.wheels.environment = URL.reload;
+		}
 		else
+		{
 			$include(template="#application.wheels.configPath#/environment.cfm");
+		}
 
 		// load wheels settings
 		$include(template="wheels/events/onapplicationstart/settings.cfm");

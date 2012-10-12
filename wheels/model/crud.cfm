@@ -1050,9 +1050,14 @@
 				ArrayAppend(loc.sql2, ",");
 			}
 		}
-		
+
 		// don't do any if no properties were passed in
-		if (ArrayLen(loc.sql))
+		if (!ArrayLen(loc.sql))
+		{
+			ArrayAppend(loc.sql, "INSERT INTO #tableName()# default values");
+			loc.primaryKeys = "";
+		}
+		else
 		{
 			ArrayDeleteAt(loc.sql, ArrayLen(loc.sql));
 			ArrayDeleteAt(loc.sql2, ArrayLen(loc.sql2));
@@ -1073,18 +1078,20 @@
 			{
 				loc.primaryKeys[loc.i] = variables.wheels.class.properties[loc.primaryKeys[loc.i]].column;
 			}
-	
-			loc.ins = $adapter().$query(sql=loc.sql, parameterize=arguments.parameterize, $primaryKey=ArrayToList(loc.primaryKeys));
-			loc.generatedKey = $adapter().$generatedKey();
-			if (StructKeyExists(loc.ins.result, loc.generatedKey))
-			{
-				this[primaryKeys(1)] = loc.ins.result[loc.generatedKey];
-			}
-			if (arguments.reload)
-			{
-				this.reload();
-			}
+			loc.primaryKeys = ArrayToList(loc.primaryKeys);
 		}
+	
+		loc.ins = $adapter().$query(sql=loc.sql, parameterize=arguments.parameterize, $primaryKey=loc.primaryKeys);
+		loc.generatedKey = $adapter().$generatedKey();
+		if (StructKeyExists(loc.ins.result, loc.generatedKey))
+		{
+			this[primaryKeys(1)] = loc.ins.result[loc.generatedKey];
+		}
+		if (arguments.reload)
+		{
+			this.reload();
+		}
+
 	</cfscript>
 	<cfreturn true>
 </cffunction>

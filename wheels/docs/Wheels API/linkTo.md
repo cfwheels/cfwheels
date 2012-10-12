@@ -70,7 +70,7 @@ Creates a link to another page in your application. Pass in the name of a `route
 		
 		<tr>
 			<td>params</td>
-			<td>string</td>
+			<td>any</td>
 			<td>false</td>
 			<td></td>
 			<td>Any additional params to be set in the query string.</td>

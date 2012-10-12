@@ -181,6 +181,18 @@
 	<cfreturn Compare(this.$objectId(), arguments.object.$objectId()) eq 0 />
 </cffunction>
 
+<cffunction name="$assignObjectId" access="public" output="false" returntype="numeric">
+	<cfset var ret = "">
+	<cflock type="exclusive" name="AssignObjectIdLock" timeout="5" throwontimeout="true">
+		<cfif !StructKeyExists(request.wheels, "tickCountId")>
+			<cfset request.wheels.tickCountId = GetTickCount()>
+		</cfif>
+		<cfset request.wheels.tickCountId = request.wheels.tickCountId + 1>
+		<cfset ret = request.wheels.tickCountId>
+	</cflock>
+	<cfreturn ret>
+</cffunction>
+
 <cffunction name="$objectId" access="public" output="false" returntype="string">
 	<cfreturn variables.wheels.instance.tickCountId />
 </cffunction>

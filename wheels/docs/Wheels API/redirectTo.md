@@ -78,7 +78,7 @@ Redirects the browser to the supplied `controller`/`action`/`key`, `route` or ba
 		
 		<tr>
 			<td>params</td>
-			<td>string</td>
+			<td>any</td>
 			<td>false</td>
 			<td></td>
 			<td>Any additional params to be set in the query string.</td>
