@@ -658,7 +658,7 @@
 	examples=
 	'
 		<!--- Return all the names of the months for US English --->
-		<cfset monthNames = l("date.month_names", "en_US")>
+		<cfset monthNames = l("date.month_names", "en-US")>
 	'
 	categories="global,miscellaneous">
 	<cfargument name="key" type="string" required="true">
