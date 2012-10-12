@@ -51,14 +51,68 @@
 	 --->
 	<cfset variables.errors = []>
 	
+	<!--- 
+	overloads collection 
+	--->
+	<cfset variables.overloads = {}>
+	
 	<cffunction name="init" output="false">
 		<cfargument name="wheelsDirectory" type="string" required="true" hint="the full path to the wheels directory to process the classes and generate documentation for">
 		<cfargument name="wheelsAPIChapterDirectory" type="string" required="true" hint="the full path to the wheels api directory in the documentation root. Is used to generate chapters and function references.">
-		<cfargument name="overloads" type="struct" required="false" default="#StructNew()#" hint="overload to the documentation. sometimes we have parameters or other aspects of the documentation that we can't put in the code, but need to document. overloads allow us to do this.">
+		<cfargument name="additionalArguments" type="struct" required="false" default="#StructNew()#" hint="additional arguments to add the method documentation. sometimes we have arguments for the method's documentation that we can't put in the code, but need to document. additional arguments allow us to do this.">
 		<cfset variables.wheelsDirectory = ListChangeDelims(arguments.wheelsDirectory, "/", "\")>
 		<cfset variables.wheelsAPIChapterDirectory = ListChangeDelims(arguments.wheelsAPIChapterDirectory, "/", "\")>
-		<cfset variables.overloads = arguments.overloads>
 		<cfreturn this>
+	</cffunction>
+	
+	<cffunction name="overload" access="public" returntype="void" output="false"
+		hint="overloads to the documentation. sometimes we have parameters or other aspects of the documentation that we can't put in the code, but need to document. overloads allow us to do this.">
+		<cfargument name="method" type="string" required="true" hint="the method name the overload is targeting">
+		<cfargument name="part" type="string" required="true" hint="which part of the method the overload should target. valid parts are: categories, chapters, examples, functions, hint, parameters">
+		<cfargument name="value" type="any" required="true" hint="the value to overload with. all parts take a value of type sting EXCEPT parameters with take a struct which can contain the keys: default, hint, name, required, type">
+		<cfargument name="position" type="string" required="false" default="" hint="can either be a numeric for a position in an array or if targeting a parameter you may pass the name of the parameter. you can leave blank for an additions. ignored for hint and examples parts since they are strings.">
+		<cfset var loc = {}>
+		<cfset loc.value = "">
+		
+		<cfif !ListFindNoCase("categories,chapters,examples,functions,hint,parameters", arguments.part)>
+			<cfthrow type="WheelsApiGenerator" message="part is not valid. valid parts are: categories, chapters, example, functions, hint, name, parameters, returntype">
+		</cfif>
+		
+		<cfif arguments.part eq "parameters">
+			<cfif !IsStruct(arguments.value)>
+				<cfthrow type="WheelsApiGenerator" message="parameters take a struct as a value which can contain the keys: default, hint, name, required, type">
+			</cfif>
+			<cfset loc.value = {}>
+			<cfloop collection="#arguments.value#" item="loc.v">
+				<cfif ListFindNoCase("default,hint,name,required,type", loc.v)>
+					<cfset loc.value[loc.v] = arguments.value[loc.v]>
+				</cfif>
+			</cfloop>
+		<cfelseif ListFindNoCase("examples,hint", arguments.part)>
+			<cfset arguments.position = "">
+		<cfelseif ListFindNoCase("categories,chapters,functions", arguments.part) && Len(arguments.position) && !IsNumeric(arguments.position)>
+			<cfthrow type="WheelsApiGenerator" message="the position for categories, chapters or functions must be either a numeric or blank value">
+		</cfif>
+		
+		<!--- see if the method name exists in the overload structure --->
+		<cfif !StructKeyExists(variables.overloads, arguments.method)>
+			<cfset variables.overloads[arguments.method] = {}>
+		</cfif>
+		
+		<!--- see if the part is defined in the method overload structure --->
+		<cfif !StructKeyExists(variables.overloads[arguments.method], arguments.part)>
+			<cfset variables.overloads[arguments.method][arguments.part] = []>
+		</cfif>
+		
+		<cfset loc.temp = {}>
+		<cfset loc.temp.position = arguments.position>
+		<cfset loc.temp.value = loc.value>
+		
+		<cfif !ListFindNoCase("examples,hint", arguments.part)>
+			<cfset variables.overloads[arguments.method][arguments.part][1] = loc.temp>
+		<cfelse>
+			<cfset ArrayAppend(variables.overloads[arguments.method][arguments.part], loc.temp)>
+		</cfif>
 	</cffunction>
 
 	<cffunction name="build" access="public" returntype="struct" output="false">
@@ -211,7 +265,7 @@
 		<cfreturn variables.data = loc._data>
 	</cffunction>
 	
-	<cffunction name="$overloadData" access="private">
+<!--- 	<cffunction name="$overloadData" access="private">
 		<cfset var loc = {}>
 		<cfloop collection="#variables.overloads#" item="loc.i">
 			<cfset loc.overload = variables.overloads[loc.i]>
@@ -241,6 +295,68 @@
 				</cfloop>
 			</cfif>
 		</cfloop>
+	</cffunction> --->
+
+	
+	<cffunction name="$overloadData" access="private">
+		<cfset var loc = {}>
+		
+		<!--- loop through all the overloads --->
+		<cfloop collection="#variables.overloads#" item="loc.i">
+		
+			<!--- see if overload key exists in the data struct --->
+			<cfif StructKeyExists(variables.data, loc.i)>
+			
+				<!--- reference the current overload --->
+				<cfset loc.overload = variables.overloads[loc.i]>
+				
+				<!--- loop through the parts of the overload --->
+				<cfloop collection="#loc.overload#" item="loc.part">
+				
+					<!--- see if this part exists in the data struct --->
+					<cfif StructKeyExists(variables.data[loc.i], loc.part)>
+					
+						<cfloop array="#loc.overload[loc.part]#" index="loc.arr">
+
+	 						<cfif ListFindNoCase("examples,hint", loc.part)>
+							
+								<cfset variables.data[loc.i][loc.part] = loc.arr.value>
+	
+							<cfelseif loc.part eq "parameters" and len(loc.arr.position) and !IsNumeric(loc.arr.position)>
+								
+								<cfset loc.l = ArrayLen(variables.data[loc.i][loc.part])>
+								<cfloop from="1" to="#loc.l#" index="loc.parameter">
+									<cfif variables.data[loc.i][loc.part][loc.parameter].name eq loc.arr.position>
+										<cfset StructAppend(variables.data[loc.i][loc.part][loc.parameter], loc.arr.value, true)>
+									</cfif>
+								</cfloop>
+							
+							<cfelseif IsNumeric(loc.arr.position)>
+
+								<cfif ArrayIsDefined(variables.data[loc.i][loc.part], loc.arr.position)>
+									<cfif IsStruct(loc.arr.value)>
+										<cfset StructAppend(variables.data[loc.i][loc.part][loc.arr.position], loc.arr.value, true)>
+									<cfelse>
+										<cfset variables.data[loc.i][loc.part][loc.arr.position] = loc.arr.value>
+									</cfif>
+								</cfif>
+
+							<cfelse>
+							
+								<cfset ArrayAppend(variables.data[loc.i][loc.part], loc.arr.value)>
+							
+							</cfif>
+					
+						</cfloop>
+					
+					</cfif>
+
+				</cfloop>
+				
+			</cfif>
+			
+		</cfloop>
+
 	</cffunction>
 	
 </cfcomponent>
