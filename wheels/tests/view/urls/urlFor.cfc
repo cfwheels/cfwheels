@@ -94,7 +94,9 @@
 	<cffunction name="test_any_variable_type_can_be_used_as_params">
 		<cfset request.cgi.script_name = "/index.cfm">
 		<cfset loc.args.$URLRewriting = "Off">
-		<cfset loc.args.params = {"param1" = "foo1", "param2" = "bar2"}>
+		<cfset loc.args.params["param1"] = {}>
+		<cfset loc.args.params["param1"] = "foo1">
+		<cfset loc.args.params["param2"] = "bar2">
 		<cfset StructDelete(loc.args, "controller")>
 		<cfset StructDelete(loc.args, "action")>
 		<cfset loc.webRoot = Replace("#application.wheels.webpath##ListLast(request.cgi.script_name, '/')#", "//", "/")>
