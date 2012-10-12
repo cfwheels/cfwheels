@@ -12,6 +12,7 @@
 <cfset loc.floatColumnType = "float">
 <cfset loc.identityColumnType = "">
 <cfset loc.bitColumnType = "bit">
+<cfset loc.stringColumnType = "varchar">
 
 <cfif loc.db IS "microsoftsqlserver">
 	<cfset loc.identityColumnType = "int NOT NULL IDENTITY(1,1)">
@@ -28,6 +29,7 @@
 <cfelseif loc.db IS "oracle">
 	<cfset loc.identityColumnType = "number(38,0) NOT NULL">
 	<cfset loc.dateTimeColumnType = "timestamp">
+	<cfset loc.stringColumnType = "varchar2">
 	<cfset loc.textColumnType = "varchar2(4000)">
 	<cfset loc.intColumnType = "number(38,0)">
 	<cfset loc.floatColumnType = "number(38,2)">
@@ -74,8 +76,8 @@ create tables
 CREATE TABLE authors
 (
 	id #loc.identityColumnType#
-	,firstname varchar(100) NOT NULL
-	,lastname varchar(100) NOT NULL
+	,firstname #loc.stringColumnType#(100) NOT NULL
+	,lastname #loc.stringColumnType#(100) NOT NULL
 	,favouritePostId int NULL
 	,leastFavouritePostId int NULL
 	,PRIMARY KEY(id)
