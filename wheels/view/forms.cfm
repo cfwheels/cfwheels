@@ -280,7 +280,7 @@
 		loc.returnValue = arguments.prependToLabel;
 		loc.attributes = {};
 		for (loc.key in arguments)
-			if (CompareNoCase(Left(loc.key, 5), "label") eq 0 && Len(loc.key) gt 5 && loc.key != "labelPlacement")
+			if (CompareNoCase(Left(loc.key, 5), "label") eq 0 && Len(loc.key) gt 5 && loc.key != "labelPlacement" && len(arguments[loc.key]))
 				loc.attributes[ReplaceNoCase(loc.key, "label", "")] = arguments[loc.key];
 		if (StructKeyExists(arguments, "id"))
 			loc.attributes.for = arguments.id;
