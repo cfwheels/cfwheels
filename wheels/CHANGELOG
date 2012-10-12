@@ -2,7 +2,6 @@ WHEELS VERSION 1.2 BETA 1 (r5386)
 
 Model Enhancements
 ==================
-* Fix to make sure the unique identifier in each new model object during a request is unique - [James Gibson]
 * Allow for self joining tables in associations - #293 [James Gibson]
 * Added "joinKey" on belongsTo(), hasOne() and hasMany() which allows you to specify a column to join to on the opposite side of the relationship from the "foreignKey" - [James Gibson]
 * Added the ability to multijoin models - [Tony Petruzzi]
@@ -50,7 +49,7 @@ Bug Fixes
 * Pagination with compound keys - #725 [Andy Bellenie, jfeasel, Tony Petruzzi]
 * Prevent automatic validation from being set on user defined primary keys - #778 [Mike Henke, Tony Petruzzi]
 * Calculated properties were not being returned when specifying the select on findAll - #69 [kapitaine, Tony Petruzzi]
-* Duplicate object ids could occur when adding nested properties - #76 [Sam Hakimi, Tony Petruzzi]
+* Duplicate object ids could occur when adding nested properties - #76 [Sam Hakimi, [James Gibson, Tony Petruzzi]
 * Incorrect pagination query with Oracle - #93 [crsedgar, Tony Petruzzi]
 
 Miscellaneous
