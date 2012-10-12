@@ -10,7 +10,6 @@
 	<cfargument name="name" type="string" required="true" hint="Name to populate in tag's `name` attribute.">
 	<cfargument name="value" type="string" required="false" default="" hint="Value to populate in tag's `value` attribute.">
 	<cfargument name="label" type="string" required="false" hint="@textField.">
-	<cfargument name="labelClass" type="string" required="false" hint="@textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
 	<cfargument name="prepend" type="string" required="false" hint="@textField.">
 	<cfargument name="append" type="string" required="false" hint="@textField.">
@@ -41,7 +40,6 @@
 	<cfargument name="name" type="string" required="true" hint="@textFieldTag.">
 	<cfargument name="value" type="string" required="false" default="" hint="@textFieldTag.">
 	<cfargument name="label" type="string" required="false" hint="@textField.">
-	<cfargument name="labelClass" type="string" required="false" hint="@textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
 	<cfargument name="prepend" type="string" required="false" hint="@textField.">
 	<cfargument name="append" type="string" required="false" hint="@textField.">
@@ -124,7 +122,6 @@
 	<cfargument name="name" type="string" required="true" hint="@textFieldTag.">
 	<cfargument name="content" type="string" required="false" default="" hint="Content to display in `textarea` on page load.">
 	<cfargument name="label" type="string" required="false" hint="@textField.">
-	<cfargument name="labelClass" type="string" required="false" hint="@textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
 	<cfargument name="prepend" type="string" required="false" hint="@textField.">
 	<cfargument name="append" type="string" required="false" hint="@textField.">
@@ -160,7 +157,6 @@
 	<cfargument name="value" type="string" required="true" hint="@textFieldTag.">
 	<cfargument name="checked" type="boolean" required="false" default="false" hint="Whether or not to check the radio button by default.">
 	<cfargument name="label" type="string" required="false" hint="@textField.">
-	<cfargument name="labelClass" type="string" required="false" hint="@textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
 	<cfargument name="prepend" type="string" required="false" hint="@textField.">
 	<cfargument name="append" type="string" required="false" hint="@textField.">
@@ -212,7 +208,6 @@
 	<cfargument name="value" type="string" required="false" hint="Value of check box in its `checked` state.">
 	<cfargument name="uncheckedValue" type="string" required="false" default="" hint="The value of the check box when it's on the `unchecked` state.">
 	<cfargument name="label" type="string" required="false" hint="@textField.">
-	<cfargument name="labelClass" type="string" required="false" hint="@textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
 	<cfargument name="prepend" type="string" required="false" hint="@textField.">
 	<cfargument name="append" type="string" required="false" hint="@textField.">
@@ -268,7 +263,6 @@
 	<cfargument name="valueField" type="string" required="false" hint="@select.">
 	<cfargument name="textField" type="string" required="false" hint="@select.">
 	<cfargument name="label" type="string" required="false" hint="@textField.">
-	<cfargument name="labelClass" type="string" required="false" hint="@textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
 	<cfargument name="prepend" type="string" required="false" hint="@textField.">
 	<cfargument name="append" type="string" required="false" hint="@textField.">
@@ -315,7 +309,6 @@
 	<cfargument name="prependToGroup" type="string" required="false" hint="String to prepend to the entire group of radio buttons.">
 	<cfargument name="appendToGroup" type="string" required="false" hint="String to append to the entire group of radio buttons.">
 	<cfargument name="label" type="string" required="false" hint="@textField.">
-	<cfargument name="labelClass" type="string" required="false" hint="@textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
 	<cfargument name="prepend" type="string" required="false" hint="@textField.">
 	<cfargument name="append" type="string" required="false" hint="@textField.">
@@ -352,7 +345,6 @@
 	<cfargument name="prependToGroup" type="string" required="false" hint="@radioButtonTagGroup.">
 	<cfargument name="appendToGroup" type="string" required="false" hint="@radioButtonTagGroup.">
 	<cfargument name="label" type="string" required="false" hint="@textField.">
-	<cfargument name="labelClass" type="string" required="false" hint="@textField.">
 	<cfargument name="labelPlacement" type="string" required="false" hint="@textField.">
 	<cfargument name="prepend" type="string" required="false" hint="@textField.">
 	<cfargument name="append" type="string" required="false" hint="@textField.">
