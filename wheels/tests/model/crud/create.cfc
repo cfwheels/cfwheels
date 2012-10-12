@@ -47,5 +47,14 @@
 			<cftransaction action="rollback"/>
 		</cftransaction>
 	</cffunction>
+	
+	<cffunction name="test_saving_blank_string_to_a_nullable_integer_column_should_be_null">
+		<cftransaction action="begin">
+			<cfset loc.model = model("sqltypesnulls").new(intType='')>
+			<cfset loc.model.save(reload=true)>
+			<cfset assert('loc.model.intType eq ""')>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
 
 </cfcomponent>
