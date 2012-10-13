@@ -34,7 +34,7 @@
 	<cfargument name="controller" type="string" required="false" default="" hint="@URLFor.">
 	<cfargument name="action" type="string" required="false" default="" hint="@URLFor.">
 	<cfargument name="key" type="any" required="false" default="" hint="@URLFor.">
-	<cfargument name="params" type="string" required="false" default="" hint="@URLFor.">
+	<cfargument name="params" type="any" required="false" default="" hint="@URLFor.">
 	<cfargument name="anchor" type="string" required="false" default="" hint="@URLFor.">
 	<cfargument name="onlyPath" type="boolean" required="false" hint="@URLFor.">
 	<cfargument name="host" type="string" required="false" hint="@URLFor.">
@@ -280,7 +280,7 @@
 		loc.returnValue = arguments.prependToLabel;
 		loc.attributes = {};
 		for (loc.key in arguments)
-			if (CompareNoCase(Left(loc.key, 5), "label") eq 0 && Len(loc.key) gt 5 && loc.key != "labelPlacement")
+			if (CompareNoCase(Left(loc.key, 5), "label") eq 0 && Len(loc.key) gt 5 && loc.key != "labelPlacement" && len(arguments[loc.key]))
 				loc.attributes[ReplaceNoCase(loc.key, "label", "")] = arguments[loc.key];
 		if (StructKeyExists(arguments, "id"))
 			loc.attributes.for = arguments.id;

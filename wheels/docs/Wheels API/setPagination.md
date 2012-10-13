@@ -76,7 +76,7 @@ Allows you to set a pagination handle for a custom query so you can perform pagi
 			database engine you are using. Plese consult your database
 			engine's documentation for the correct syntax.
 
-			Also note that the view code will differ depending on the method
+			also note that the view code will differ depending on the method
 			used.
 		--->
 

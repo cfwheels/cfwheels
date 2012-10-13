@@ -1,10 +1,12 @@
 <cfparam name="url.xml" type="boolean" default="false">
-<cfinclude template="overloads.cfm">
+
 <cfset api = createObject("component", "ApiGenerator").init(
 	wheelsDirectory = "#ExpandPath('../../wheels')#"
 	,wheelsAPIChapterDirectory = "#ExpandPath('../../wheels/docs/Wheels API')#"
-	,overloads = overloads
 )>
+
+<cfinclude template="overloads.cfm">
+
 <cfset results = api.build()>
 
 <cfif ArrayLen(results.errors)>

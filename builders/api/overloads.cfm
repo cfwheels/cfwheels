@@ -35,12 +35,25 @@ example map of the doucmentation structure:
 </data>
  --->
 
-<cfset overloads = {}>
-
 <!--- the properties argument for validations should be set to true --->
 <cfloop list="validatesConfirmationOf,validatesExclusionOf,validatesFormatOf,validatesInclusionOf,validatesLengthOf,validatesNumericalityOf,validatesPresenceOf,validatesUniquenessOf" index="i">
-	<cfset overloads[i] = {}>
-	<cfset overloads[i].parameters = []>
-	<cfset overloads[i].parameters[1] = {}>
-	<cfset overloads[i].parameters[1].required = "true">
+	
+	<cfset temp = {}>
+	<cfset temp.required = "true">
+	
+	<cfset api.overload(i, "parameters", temp, "properties")>
+	
+</cfloop>
+
+<cfloop list="textFieldTag" index="i">
+	
+	<cfset temp = {}>
+	<cfset temp.default = "">
+	<cfset temp.hint = "The class name for the label">
+	<cfset temp.name = "labelClass">
+	<cfset temp.required = "false">
+	<cfset temp.type = "string">
+	
+	<cfset api.overload(i, "parameters", temp, "")>
+	
 </cfloop>

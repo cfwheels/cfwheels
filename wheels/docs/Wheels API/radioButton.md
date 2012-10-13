@@ -4,7 +4,7 @@
 Builds and returns a string containing a radio button form control based on the supplied `objectName` and `property`. Note: Pass any additional arguments like `class`, `rel`, and `id`, and the generated tag will also include those values as HTML attributes.
 
 ## Function Syntax
-	radioButton( objectName, property, tagValue, [ association, position, label, labelClass, labelPlacement, prepend, append, prependToLabel, appendToLabel, errorElement, errorClass ] )
+	radioButton( objectName, property, tagValue, [ association, position, label, labelPlacement, prepend, append, prependToLabel, appendToLabel, errorElement, errorClass ] )
 
 
 ## Parameters
@@ -66,14 +66,6 @@ Builds and returns a string containing a radio button form control based on the 
 			<td>false</td>
 			<td></td>
 			<td>The label text to use in the form control.</td>
-		</tr>
-		
-		<tr>
-			<td>labelClass</td>
-			<td>string</td>
-			<td>false</td>
-			<td></td>
-			<td>The class name for the label</td>
 		</tr>
 		
 		<tr>

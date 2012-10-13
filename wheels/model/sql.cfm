@@ -6,7 +6,7 @@
 		if (variables.wheels.class.softDeletion && arguments.softDelete)
 		{
 			ArrayAppend(arguments.sql, "UPDATE #tableName()# SET #variables.wheels.class.softDeleteColumn# = ");
-			loc.param = {value=Now(), type="cf_sql_timestamp"};
+			loc.param = {value=timestamp(), type="cf_sql_timestamp"};
 			ArrayAppend(arguments.sql, loc.param);
 		}
 		else
@@ -209,15 +209,21 @@
 		}
 
 		// go through the properties and map them to the database unless the developer passed in a table name or an alias in which case we assume they know what they're doing and leave the select clause as is
-		if (arguments.list Does Not Contain "." AND arguments.list Does Not Contain " AS ")
+
+		loc.list = "";
+		loc.addedProperties = "";
+		loc.addedPropertiesByModel = {};
+		loc.iEnd = ListLen(arguments.list);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.list = "";
-			loc.addedProperties = "";
-			loc.addedPropertiesByModel = {};
-			loc.iEnd = ListLen(arguments.list);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			loc.iItem = Trim(ListGetAt(arguments.list, loc.i));
+			
+			if (loc.iItem Contains "." || loc.iItem Contains " AS ")
 			{
-				loc.iItem = Trim(ListGetAt(arguments.list, loc.i));
+				loc.list = ListAppend(loc.list, loc.iItem);
+			}
+			else
+			{
 
 				// look for duplicates
 				loc.duplicateCount = ListValueCountNoCase(loc.addedProperties, loc.iItem);
@@ -294,62 +300,56 @@
 				else if (application.wheels.showErrorInformation && (not arguments.addCalculatedProperties && not ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)))
 					$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.iItem#` property but couldn't find it in the database table.", extendedInfo="Verify the `select` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
 			}
-
-			// let's replace eventual duplicates in the clause by prepending the class name
-			if (Len(arguments.include) && arguments.renameFields)
-			{
-				loc.newSelect = "";
-				loc.addedProperties = "";
-				loc.iEnd = ListLen(loc.list);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-				{
-					loc.iItem = ListGetAt(loc.list, loc.i);
-
-					// get the property part, done by taking everytyhing from the end of the string to a . or a space (which would be found when using " AS ")
-					loc.property = Reverse(SpanExcluding(Reverse(loc.iItem), ". "));
-
-					// check if this one has been flagged as a duplicate, we get the number of classes to skip and also remove the flagged info from the item
-					loc.duplicateCount = 0;
-					loc.matches = REFind("^\[\[duplicate\]\](\d+)(.+)$", loc.iItem, 1, true);
-					if (loc.matches.pos[1] gt 0)
-					{
-						loc.duplicateCount = Mid(loc.iItem, loc.matches.pos[2], loc.matches.len[2]);
-						loc.iItem = Mid(loc.iItem, loc.matches.pos[3], loc.matches.len[3]);
-					}
-
-					if (!loc.duplicateCount)
-					{
-						// this is not a duplicate so we can just insert it as is
-						loc.newItem = loc.iItem;
-						loc.newProperty = loc.property;
-					}
-					else
-					{
-						// this is a duplicate so we prepend the class name and then insert it unless a property with the resulting name already exist
-						loc.classData = loc.classes[loc.duplicateCount];
-
-						// prepend class name to the property
-						loc.newProperty = loc.classData.modelName & loc.property;
-
-						if (loc.iItem Contains " AS ")
-							loc.newItem = ReplaceNoCase(loc.iItem, " AS " & loc.property, " AS " & loc.newProperty);
-						else
-							loc.newItem = loc.iItem & " AS " & loc.newProperty;
-					}
-					if (!ListFindNoCase(loc.addedProperties, loc.newProperty))
-					{
-						loc.newSelect = ListAppend(loc.newSelect, loc.newItem);
-						loc.addedProperties = ListAppend(loc.addedProperties, loc.newProperty);
-					}
-				}
-				loc.list = loc.newSelect;
-			}
 		}
-		else
+
+		// let's replace eventual duplicates in the clause by prepending the class name
+		if (Len(arguments.include) && arguments.renameFields)
 		{
-			loc.list = arguments.list;
-			if (!arguments.renameFields && Find(" AS ", loc.list))
-				loc.list = REReplace(loc.list, variables.wheels.class.RESQLAs, "", "all");
+			loc.newSelect = "";
+			loc.addedProperties = "";
+			loc.iEnd = ListLen(loc.list);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				loc.iItem = ListGetAt(loc.list, loc.i);
+
+				// get the property part, done by taking everytyhing from the end of the string to a . or a space (which would be found when using " AS ")
+				loc.property = Reverse(SpanExcluding(Reverse(loc.iItem), ". "));
+
+				// check if this one has been flagged as a duplicate, we get the number of classes to skip and also remove the flagged info from the item
+				loc.duplicateCount = 0;
+				loc.matches = REFind("^\[\[duplicate\]\](\d+)(.+)$", loc.iItem, 1, true);
+				if (loc.matches.pos[1] gt 0)
+				{
+					loc.duplicateCount = Mid(loc.iItem, loc.matches.pos[2], loc.matches.len[2]);
+					loc.iItem = Mid(loc.iItem, loc.matches.pos[3], loc.matches.len[3]);
+				}
+
+				if (!loc.duplicateCount)
+				{
+					// this is not a duplicate so we can just insert it as is
+					loc.newItem = loc.iItem;
+					loc.newProperty = loc.property;
+				}
+				else
+				{
+					// this is a duplicate so we prepend the class name and then insert it unless a property with the resulting name already exist
+					loc.classData = loc.classes[loc.duplicateCount];
+
+					// prepend class name to the property
+					loc.newProperty = loc.classData.modelName & loc.property;
+
+					if (loc.iItem Contains " AS ")
+						loc.newItem = ReplaceNoCase(loc.iItem, " AS " & loc.property, " AS " & loc.newProperty);
+					else
+						loc.newItem = loc.iItem & " AS " & loc.newProperty;
+				}
+				if (!ListFindNoCase(loc.addedProperties, loc.newProperty))
+				{
+					loc.newSelect = ListAppend(loc.newSelect, loc.newItem);
+					loc.addedProperties = ListAppend(loc.addedProperties, loc.newProperty);
+				}
+			}
+			loc.list = loc.newSelect;
 		}
 	</cfscript>
 	<cfreturn loc.list />

@@ -78,7 +78,7 @@ Builds and returns a string containing the opening form tag. The form's action w
 		
 		<tr>
 			<td>params</td>
-			<td>string</td>
+			<td>any</td>
 			<td>false</td>
 			<td></td>
 			<td>Any additional params to be set in the query string.</td>

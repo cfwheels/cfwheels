@@ -209,13 +209,8 @@
 		variables.wheels = {};
 		variables.wheels.instance = {};
 		variables.wheels.instance.errors = [];
-		// keep a unique identifier for each model created in case we need it for nested properties
-		if (StructKeyExists(request.wheels, "tickCountId"))
-			request.wheels.tickCountId = PrecisionEvaluate(request.wheels.tickCountId + 1);
-		else
-			request.wheels.tickCountId = GetTickCount();
-		variables.wheels.instance.tickCountId = request.wheels.tickCountId.toString(); // make sure we have it in milliseconds
-
+		// assign an object id for the instance
+		variables.wheels.instance.tickCountId = $assignObjectId();
 		// copy class variables from the object in the application scope
 		if (!StructKeyExists(variables.wheels, "class"))
 			variables.wheels.class = $simpleLock(name="classLock", type="readOnly", object=application.wheels.models[arguments.name], execute="$classData");

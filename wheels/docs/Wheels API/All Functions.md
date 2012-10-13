@@ -193,6 +193,7 @@
 * [timeAgoInWords()](timeAgoInWords.md)
 * [timeSelect()](timeSelect.md)
 * [timeSelectTags()](timeSelectTags.md)
+* [timestamp()](timestamp.md)
 * [timeUntilInWords()](timeUntilInWords.md)
 * [titleize()](titleize.md)
 * [toggle()](toggle.md)

@@ -1,10 +1,10 @@
-# l()
+# timestamp()
 
 ## Description
-Returns the localised value for the given locale
+Returns a UTC or local timestamp
 
 ## Function Syntax
-	l( key, [ locale ] )
+	timestamp( [ utc ] )
 
 
 ## Parameters
@@ -21,16 +21,8 @@ Returns the localised value for the given locale
 	<tbody>
 		
 		<tr>
-			<td>key</td>
-			<td>string</td>
-			<td>true</td>
-			<td></td>
-			<td></td>
-		</tr>
-		
-		<tr>
-			<td>locale</td>
-			<td>string</td>
+			<td>utc</td>
+			<td>boolean</td>
 			<td>false</td>
 			<td>[runtime expression]</td>
 			<td></td>
@@ -42,5 +34,8 @@ Returns the localised value for the given locale
 
 ## Examples
 	
-		<!--- Return all the names of the months for US English --->
-		<cfset monthNames = l("date.month_names", "en-US")>
+		<!--- Return current locale time --->
+		<cfset currenttime = timestamp()>
+
+		<!--- Return current UTC time --->
+		<cfset currenttime = timestamp(utc=true)>
