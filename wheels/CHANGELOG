@@ -6,26 +6,39 @@ Model Enhancements
 * Added "joinKey" on belongsTo(), hasOne() and hasMany() which allows you to specify a column to join to on the opposite side of the relationship from the "foreignKey" - [James Gibson]
 * Added the ability to multijoin models - [Tony Petruzzi]
 * Support for tableless models - [Tony Petruzzi]
-* Add findFirst, findLast, findAllKeys, findOneOrCreatedBy, findOrCreateBy - #745 [Mike Henke, Per Djurner, Tony Petruzzi]
+* Add findFirst, findLast, findAllKeys, findOneOrCreateBy, findOrCreateBy - #745 [Mike Henke, Per Djurner, Tony Petruzzi]
 * Enables use of UTC for wheels timestamps [Andy Bellenie]
 * Allow models to be created when with no properties - #84 [rshakespear, Tony Petruzzi]
-
+* Added global setting ("stripFromSQL") to only include safe characters in raw SQL - [Per Djurner]
 
 View Enhancements
 =================
 * Added a better way to escape all HTML entities - [James Gibson]
-* Ability to use custom types (HTML 5) on textField and textFieldTag form helpers - [Raul Riera]
+* Ability to use custom types (HTML 5) on all form helpers - [Raul Riera, Per Djurner]
 * Default to the humanized property name for labels on calculated or non-persistent properties instead of throwing an error - [Andy Bellenie]
 * Added escapeHTML argument on simpleFormat() - [Chris Peters]
 * Made it possible to set global defaults on autoLink(), excerpt(), highlight() and simpleFormat() - [Chris Peters]
 * Added support for array of structs for select() and selectTag() - #680 [William Fisk, Tony Petruzzi]
 * Added label and labelTag view helpers - [Tony Petruzzi] 
+* Made it possible to set a global default for the "twelveHour" argument on form helpers - [Per Djurner]
+* Support for implicit protocol in JavaScriptIncludeTag() and styleSheetLinkTag() - [Per Djurner]
+* New form helpers radioButtonTagGroup() and checkBoxTagGroup() - [Chris Peters, Per Djurner]
+* New "aroundRight" option on "labelPlacement" argument that places label text to the right of the form input - [Per Djurner]
+* Added "prepend" / "append" arguments on buttonTag() and submitTag() - [Per Djurner]
+* Allow to show labels without text by specifying "label=true" from "Tag" type functions - [Per Djurner]
+* Support for boolean HTML5 attributes - [Per Djurner]
+* Ability to remove "media" / "type" attributes when using styleSheetLinkTag() and JavaScriptIncludeTag() - [Per Djurner]
+* Added global Setting ("dataAttributeDelimiter") to convert, for example, "dataDomCache" or "data_dom_cache" (the default) argument names to "data-dom-cache" attribute names - [Per Djurner]
+* Add delimiter argument to the highlight() function - [Per Djurner]
+* Provided an option to use the more semantically correct HTML5 "mark" tag in the highlight() function - [Per Djurner]
 
 Controller Enhancements
 =======================
 * Speed improvement for finding routes when using a large amount of named routes - [James Gibson]
 * Wheels now compacts the output of the rendered content - [James Gibson]
-* RedirectTo() now respects anchors - #857 [Per Djurner]
+* Added the ability to pass through arguments from the view to the Data Function in the controller - [Per Djurner]
+* Changed so that cookies (when using them as storage for the Flash) are HTTPOnly and secure (when applicable) - [Per Djurner]
+* Stripped line break characters from internal "cfheader" and "cfmail" usage for improved security - [Per Djurner]
 
 Other Enhancements
 ==================
@@ -34,11 +47,14 @@ Other Enhancements
 * Added support for Unobstructive Javascript - [Raul Riera]
 * Added proper HTTP status headers - #705 [cfconcepts, Andy Bellenie]
 * Added favicon to URL rewrite exclusions [Troy Murray, Cathy Shapiro]
-* Allow passing of any variable type as the params argument to urlFor() - [Tony Petruzzi]
 * Adds helper for utc timestamps [Andy Bellenie]
 * Allow custom mailparams to by passed to sendEmail() - #85 [forday, Tony Petruzzi]
 * Allow different form and to email addresses in sendEmail() - #95 [Andy Bellenie, Tony Petruzzi]
 * Allow any variable type to be passed as params to urlFor() - [Tony Petruzzi]
+* Pass along arguments to "onSessionEnd" so one can access the application and session scopes in the correct way inside "events/onsessionend.cfm" - [Per Djurner]
+* For security reasons, only allow .cfm files with normal characters to be included - [Per Djurner]
+* Improved performance by avoiding a Duplicate() call when sending error emails - [Per Djurner]
+* General performance improvement for internal locking - [Per Djurner]
 
 Bug Fixes
 =========
@@ -51,6 +67,12 @@ Bug Fixes
 * Calculated properties were not being returned when specifying the select on findAll - #69 [kapitaine, Tony Petruzzi]
 * Duplicate object ids could occur when adding nested properties - #76 [Sam Hakimi, [James Gibson, Tony Petruzzi]
 * Incorrect pagination query with Oracle - #93 [crsedgar, Tony Petruzzi]
+* Fixed so autoLink() does not link URLs in tag attributes when quoted - [Per Djurner]
+* Removed old bug fix to make redirectTo() respect anchors - #857 [Per Djurner]
+* Added work-around for "FastHashRemoved" struct bug found in ColdFusion 8 - [Per Djurner]
+* Cached queries did not respect the "maxRows" argument - [Per Djurner, Tony Petruzzi]
+* radioButtonTag() checked attribute was ignored if value attribute is empty - [Per Djurner]
+* Fixed error when using hyphenated attributes in linkTo() - [Per Djurner]
 
 Miscellaneous
 =============
@@ -63,6 +85,7 @@ Miscellaneous
 * External paths for imagePath - [andoradmiraal, Tony Petruzzi]
 * Removal of obfuscateParam and deobfuscateParam functionality - [Tony Petruzzi]
 * Removed the ability to switch environment through the url - [Andy Bellenie, Tony Petruzzi]
+* Turned off URL rewriting in IIS 7 by default since otherwise it will throw an error when the URL Rewrite Module is not installed - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
