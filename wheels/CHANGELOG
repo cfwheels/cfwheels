@@ -31,6 +31,7 @@ View Enhancements
 * Added global Setting ("dataAttributeDelimiter") to convert, for example, "dataDomCache" or "data_dom_cache" (the default) argument names to "data-dom-cache" attribute names - [Per Djurner]
 * Add delimiter argument to the highlight() function - [Per Djurner]
 * Provided an option to use the more semantically correct HTML5 "mark" tag in the highlight() function - [Per Djurner]
+* Changed so that when passing in an array of structs to select(), selectTag() it uses the struct key as the option tag value and the struct value as the option tag text instead of vice versa - [Per Djurner]
 
 Controller Enhancements
 =======================
