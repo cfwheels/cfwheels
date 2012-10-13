@@ -7,7 +7,7 @@ Model Enhancements
 * Added "joinKey" on belongsTo(), hasOne() and hasMany() which allows you to specify a column to join to on the opposite side of the relationship from the "foreignKey" - [James Gibson]
 * Added the ability to multijoin models - [Tony Petruzzi]
 * Support for tableless models - [Tony Petruzzi]
-* Add findFirst, findLast, findAllKeys, findOneOrCreateBy, findOrCreateBy - #745 [Mike Henke, Per Djurner, Tony Petruzzi]
+* Add findFirst, findLast, findAllKeys, findOneOrCreatedBy, findOrCreateBy - #745 [Mike Henke, Per Djurner, Tony Petruzzi]
 
 View Enhancements
 =================
@@ -23,7 +23,7 @@ Controller Enhancements
 =======================
 * Speed improvement for finding routes when using a large amount of named routes - [James Gibson]
 * Wheels now compacts the output of the rendered content - [James Gibson]
-* Removed old bug fix to make redirectTo() respect anchors - #857 [Per Djurner]
+* RedirectTo() now respects anchors - #857 [Per Djurner]
 
 Other Enhancements
 ==================
