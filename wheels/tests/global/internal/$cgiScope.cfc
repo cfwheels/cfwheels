@@ -26,7 +26,6 @@
 		<cfset assert('loc.cgi.path_info eq "/users/list/request_uri"')>
 		<cfset loc.cgi_scope.request_uri = "">
 		<cfset loc.cgi = $cgiScope(scope=loc.cgi_scope)>
-		<cfset debug('loc.cgi')>
 		<cfset assert('loc.cgi.path_info eq "/users/list/redirect_url"')>
 	</cffunction>
 	
