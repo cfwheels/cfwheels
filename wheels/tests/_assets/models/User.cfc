@@ -16,7 +16,11 @@
 		<cfset validate("validateCalled")>
 		<cfset validateOnCreate("validateOnCreateCalled")>
 		<cfset validateOnUpdate("validateOnUpdateCalled")>
-		<cfset property(name="fullName", sql="users.firstname + ' ' + users.lastname")>
+ 		<cfif application.wheels.dataAdapter eq "oracle">
+			<cfset property(name="fullName", sql="users.firstname || ' ' || users.lastname")>
+		<cfelse>
+			<cfset property(name="fullName", sql="users.firstname + ' ' + users.lastname")>
+		</cfif>
 	</cffunction>
 
 	<cffunction name="validateCalled">
