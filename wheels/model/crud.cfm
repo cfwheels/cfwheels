@@ -1027,6 +1027,7 @@
 	<cfargument name="reload" type="boolean" required="true">
 	<cfscript>
 		var loc = {};
+		
 		if (variables.wheels.class.timeStampingOnCreate)
 		{
 			this[variables.wheels.class.timeStampOnCreateProperty] = timestamp();
@@ -1054,8 +1055,12 @@
 		// don't do any if no properties were passed in
 		if (!ArrayLen(loc.sql))
 		{
-			ArrayAppend(loc.sql, "INSERT INTO #tableName()# default values");
-			loc.primaryKeys = "";
+			loc.statement = $adapter().insert_with_no_properties(#tableName()#);
+			if (len(loc.statement))
+			{
+				ArrayAppend(loc.sql, loc.statement);
+				loc.primaryKeys = "";
+			}
 		}
 		else
 		{
@@ -1080,18 +1085,20 @@
 			}
 			loc.primaryKeys = ArrayToList(loc.primaryKeys);
 		}
-	
-		loc.ins = $adapter().$query(sql=loc.sql, parameterize=arguments.parameterize, $primaryKey=loc.primaryKeys);
-		loc.generatedKey = $adapter().$generatedKey();
-		if (StructKeyExists(loc.ins.result, loc.generatedKey))
+		
+		if (ArrayLen(loc.sql))
 		{
-			this[primaryKeys(1)] = loc.ins.result[loc.generatedKey];
+			loc.ins = $adapter().$query(sql=loc.sql, parameterize=arguments.parameterize, $primaryKey=loc.primaryKeys);
+			loc.generatedKey = $adapter().$generatedKey();
+			if (StructKeyExists(loc.ins.result, loc.generatedKey))
+			{
+				this[primaryKeys(1)] = loc.ins.result[loc.generatedKey];
+			}
+			if (arguments.reload)
+			{
+				this.reload();
+			}
 		}
-		if (arguments.reload)
-		{
-			this.reload();
-		}
-
 	</cfscript>
 	<cfreturn true>
 </cffunction>

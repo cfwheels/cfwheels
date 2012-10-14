@@ -167,6 +167,12 @@
 		</cfif>
 	</cffunction>
 
+	<cffunction name="insert_with_no_properties" returntype="string" access="public" output="false"
+		hint="some databases allow you to do an insert without specifying any columns, thus inserting the default values. Overload this method if your database adapter supports this.">
+		<cfargument name="tablename" type="string" required="true" hint="table to insert into">
+		<cfreturn "INSERT INTO #arguments.tablename# default VALUES">
+	</cffunction>
+
 	<cfinclude template="../../plugins/injection.cfm">
 
 </cfcomponent>

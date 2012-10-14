@@ -57,4 +57,17 @@
 		</cftransaction>
 	</cffunction>
 
+	<cffunction name="test_saving_a_new_model_without_properties_should_insert_defaults_where_supported">
+		<cfif !ListFindNoCase("mssql", application.wheels.dataAdapter)>
+			<cfset assert('1 eq 1')>
+		<cfelse>
+			<cftransaction action="begin">
+				<cfset loc.model = model("sqltypesnulls").new()>
+				<cfset loc.model.save(reload=true)>
+				<cfset assert('loc.model.id gt 1')>
+				<cftransaction action="rollback"/>
+			</cftransaction>
+		</cfif>
+	</cffunction>
+
 </cfcomponent>
