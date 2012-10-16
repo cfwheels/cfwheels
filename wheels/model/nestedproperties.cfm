@@ -44,6 +44,7 @@
 	<cfscript>
 		var loc = {};
 		loc.associations = variables.wheels.class.associations;
+		loc.returnValue = true;
 		for (loc.association in loc.associations)
 		{
 			if (loc.associations[loc.association].nested.allow && loc.associations[loc.association].nested.autoSave && StructKeyExists(this, loc.association))
@@ -53,13 +54,17 @@
 				if (IsObject(this[loc.association]))
 					loc.array = [ this[loc.association] ];
 
-				if (IsArray(loc.array))
-					for (loc.i = 1; loc.i lte ArrayLen(loc.array); loc.i++)
-						$invoke(componentReference=loc.array[loc.i], method="valid");
+				if (IsArray(loc.array)) {
+					for (loc.i = 1; loc.i lte ArrayLen(loc.array); loc.i++) {
+						if(NOT $invoke(componentReference=loc.array[loc.i], method="valid")) {
+							loc.returnValue = false;
+						}
+					}
+				}
 			}
 		}
 	</cfscript>
-	<cfreturn true />
+	<cfreturn loc.returnValue />
 </cffunction>
 
 <cffunction name="$saveAssociations" returntype="boolean" access="public" output="false">
