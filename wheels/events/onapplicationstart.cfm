@@ -78,9 +78,15 @@
 		application.wheels.pluginComponentPath = "plugins";
 		application.wheels.stylesheetPath = "stylesheets";
 		application.wheels.viewPath = "views";
-
-		// load the environment
-		$include(template="#application.wheels.configPath#/environment.cfm");
+		
+		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(application.wheels, "reloadPassword") && (!Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
+		{
+			application.wheels.environment = URL.reload;
+		}
+		else
+		{
+			$include(template="#application.wheels.configPath#/environment.cfm");
+		}
 
 		// load wheels settings
 		$include(template="wheels/events/onapplicationstart/settings.cfm");
