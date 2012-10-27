@@ -1031,3 +1031,74 @@ Should now call bar() instead and marking foo() as deprecated
 	<cfargument name="params" type="any" required="true">
 	<cfreturn $convertToString(value=arguments.params, delim="&")>
 </cffunction>
+
+<cffunction name="$switchEnivronmentSecurity" access="public" returntype="string" output="false"
+	hint="if allowed to switch the environment through a reload, will return the environment name, otherwise returns a blank string">
+	<cfargument name="settings" type="struct" required="true" hint="a struct containing the settings for the wheels application">
+	<cfargument name="scope" type="struct" required="true" hint="a scope in which to find the scopeEnvironmentNamingKey parameter to use to switch the environment">
+	<cfargument name="settingAllowedToSwitchEnvironmentKey" type="string" required="false" default="allowedEnvironmentSwitchThroughURL" hint="the setting which tell us that we are allowed to switch environments. value of the setting must be a boolean">
+	<cfargument name="settingPasswordToSwitchEnvironmentKey" type="string" required="false" default="reloadPassword" hint="the setting that tell us the password for switching environments">
+	<cfargument name="scopeEnvironmentNamingKey" type="string" required="false" default="reload" hint="the key in the scope that gives us the environment name to switch to">
+	<cfargument name="scopeEnvironmentPasswordKey" type="string" required="false" default="password" hint="the key in the scope that gives us the password for switching environment">
+	<cfscript>
+	var loc = {};
+
+	// the new environment to switch to
+	loc.environment = "";
+	// setting: can they switch environments
+	loc.setting_allowed = false;
+	// setting: the password for switching environments
+	loc.setting_password = "";
+	// scope: the environment to switch to
+	loc.scope_environment = "";
+	// scope: the password
+	loc.scope_password = "";
+
+	if (StructKeyExists(arguments.settings, arguments.settingAllowedToSwitchEnvironmentKey) AND IsBoolean(arguments.settings[arguments.settingAllowedToSwitchEnvironmentKey]))
+	{
+		loc.setting_allowed = arguments.settings[arguments.settingAllowedToSwitchEnvironmentKey];
+	}
+	
+	if (StructKeyExists(arguments.settings, arguments.settingPasswordToSwitchEnvironmentKey) && Len(Trim(arguments.settings[arguments.settingPasswordToSwitchEnvironmentKey])))
+	{
+		loc.setting_password = arguments.settings[arguments.settingPasswordToSwitchEnvironmentKey];
+	}
+	
+	if (StructKeyExists(arguments.scope, arguments.scopeEnvironmentNamingKey))
+	{
+		loc.scope_environment = arguments.scope[arguments.scopeEnvironmentNamingKey];
+	}
+	
+	if (StructKeyExists(arguments.scope, arguments.scopeEnvironmentPasswordKey))
+	{
+		loc.scope_password = arguments.scope[arguments.scopeEnvironmentPasswordKey];
+	}
+	
+	if (loc.setting_allowed && Len(loc.scope_environment) && Len(loc.setting_password) && loc.setting_password eq loc.scope_password)
+	{
+		loc.environment = loc.scope_environment;
+	}
+	</cfscript>
+	
+	<cfreturn loc.environment>
+</cffunction>
+
+<cffunction name="$saveScopeSettings" access="public" returntype="struct" output="false"
+	hint="saves the requested key from scope into a new struct">
+	<cfargument name="scope" type="struct" required="true" hint="scope that you want to save the setting from">
+	<cfargument name="keys" type="any" required="true" hint="a list or array of keys to save">
+	<cfset var loc = {}>
+	<cfset loc.saved = {}>
+		
+	<cfif !IsArray(arguments.keys)>
+		<cfset arguments.keys = $listClean(list=arguments.keys, returnAs="array")>
+	</cfif>
+	
+	<cfloop array="#arguments.keys#" index="loc.key">
+		<cfif StructKeyExists(arguments.scope, loc.key)>
+			<cfset loc.saved[loc.key] = duplicate(arguments.scope[loc.key])>
+		</cfif>
+	</cfloop>
+	
+	<cfreturn loc.saved>
+</cffunction>
