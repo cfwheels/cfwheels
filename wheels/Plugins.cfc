@@ -1,5 +1,7 @@
 <cfcomponent output="false">
 
+	<cfinclude template="/wheelsMapping/global/internal.cfm">
+
 	<cfset variables.$class = {}>
 	<cfset variables.$class.plugins = {}>
 	<cfset variables.$class.mixins = {}>
@@ -120,12 +122,13 @@
 		<cfset var loc = {}>
 		
 		<cfset loc.plugins = $pluginFolders()>
-		<cfset loc.wheelsVersion = SpanExcluding(variables.$class.wheelsVersion, " ")>
+		<cfset loc.wheelsVersion = ListChangeDelims(variables.$class.wheelsVersion, " ", "- ")>
+		<cfset loc.wheelsVersion = SpanExcluding(loc.wheelsVersion, " ")>
 		<cfloop collection="#loc.plugins#" item="loc.iPlugins">
 			<cfset loc.plugin = createobject("component", $componentPathToPlugin(loc.iPlugins)).init()>
-			<cfif not StructKeyExists(loc.plugin, "version") OR ListFind(loc.plugin.version, loc.wheelsVersion) OR variables.$class.loadIncompatiblePlugins>
+			<cfif not StructKeyExists(loc.plugin, "version") OR $advancedVersioning(loc.plugin.version, loc.wheelsVersion) OR ListFind(loc.plugin.version, loc.wheelsVersion) OR variables.$class.loadIncompatiblePlugins>
 				<cfset variables.$class.plugins[loc.iPlugins] = loc.plugin>
-				<cfif StructKeyExists(loc.plugin, "version") AND not ListFind(loc.plugin.version, loc.wheelsVersion)>
+				<cfif StructKeyExists(loc.plugin, "version") AND not ListFind(loc.plugin.version, loc.wheelsVersion) AND !$advancedVersioning(loc.plugin.version, loc.wheelsVersion)>
 					<cfset variables.$class.incompatiblePlugins = ListAppend(variables.$class.incompatiblePlugins, loc.iPlugins)>
 				</cfif>
 			</cfif>
