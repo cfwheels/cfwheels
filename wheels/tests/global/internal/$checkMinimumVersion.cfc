@@ -18,9 +18,9 @@
 	</cffunction>
 
 	<cffunction name="test_adobe_valid">
-<!--- 		<cfset assert('$checkMinimumVersion("8,0,1,0", adobeVersion)')>
+		<cfset assert('$checkMinimumVersion("8,0,1,0", adobeVersion)')>
 		<cfset assert('$checkMinimumVersion("9,0,0,251028", adobeVersion)')>
-		<cfset assert('$checkMinimumVersion("8,0,1,195765", adobeVersion)')> --->
+		<cfset assert('$checkMinimumVersion("8,0,1,195765", adobeVersion)')>
 		<cfset assert('$checkMinimumVersion("10,0,0,277803", adobeVersion)')>
 	</cffunction>
 
