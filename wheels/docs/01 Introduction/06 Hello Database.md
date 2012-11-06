@@ -45,37 +45,37 @@ scenes that needs to be done to work with each DBMS.
 
 That said, here's a quick look at a table that you'll need in your database:
 
-	<table>
-		<thead>
-			<tr>
-				<th>Column Name</th>
-				<th>Data Type</th>
-				<th>Extra</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>id</td>
-				<td>`int`</td>
-				<td>auto increment, primary key</td>
-			</tr>
-			<tr>
-				<td>name</td>
-				<td>`varchar(100)`</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>email</td>
-				<td>`varchar(255)`</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>password</td>
-				<td>`varchar(255)`</td>
-				<td></td>
-			</tr>
-		</tbody>
-	</table>
+<table>
+	<thead>
+		<tr>
+			<th>Column Name</th>
+			<th>Data Type</th>
+			<th>Extra</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>id</td>
+			<td>int</td>
+			<td>auto increment, primary key</td>
+		</tr>
+		<tr>
+			<td>name</td>
+			<td>varchar(100)</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>email</td>
+			<td>varchar(255)</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>password</td>
+			<td>varchar(255)</td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>
 
 Note a couple things about this table:
 
@@ -377,8 +377,8 @@ We've shown you quite a few of the basics in getting a simple user database up a
 that this has whet your appetite to see some of the power packed into the ColdFusion on Wheels
 framework. There's plenty more.
 
-[1]: Hello%20World.md
-[2]: Using%20the%20Flash.md
+[1]: 05%20Hello%20World.md
+[2]: ../03%20Handling%20Requests%20with%20Controllers/07%20Using%20the%20Flash.md
 [3]: ../Wheels%20API/startForm.md
 [4]: ../Wheels%20API/linkTo.md
 [5]: ../Wheels%20API/endFormTag.md

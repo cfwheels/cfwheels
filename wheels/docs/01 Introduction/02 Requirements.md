@@ -1,5 +1,7 @@
 # Requirements
 
+*What you need to know and have installed before you start programming in Wheels.*
+
 We can identify 3 different types of requirements that you should be aware of:
 
   1. *Project Requirements.* Is Wheels a good fit for your project?
@@ -85,9 +87,8 @@ see that most of the code you write is very nicely separated into one of these 3
 
 Wheels requires that you use one of these CFML engines:
 
-  * [Adobe ColdFusion][3] 8.0.1
-  * [Adobe ColdFusion 9][4]
-  * [Railo] (version 3.1.2.020 or greater)
+  * [Adobe ColdFusion][4] (version 8.0.1 or greater)
+  * [Railo][5] (version 3.1.2.020 or greater)
 
 Wheels makes heavy use of CFML's `OnMissingMethod` event, which wasn't available until the release of
 CF 8.
@@ -121,7 +122,6 @@ knowledge needed, the software to run Wheels on, and a suitable project to start
 
 [1]: http://www.adobe.com/products/coldfusion
 [2]: http://www.forta.com/books/032151548x
-[3]: http://www.adobe.com/products/coldfusion/coldfusion8/
 [4]: http://www.adobe.com/products/coldfusion/
 [5]: http://www.getrailo.org/
 [6]: ../03%20Handling%20Requests%20with%20Controllers/11%20URL%20Rewriting.md

@@ -255,5 +255,5 @@ You now know enough to be dangerous with Wheels. Look out! But there are many mo
 to cover so browse over to some of the other chapters. We think you will enjoy it.
 
 [1]: http://cfwheels.org/download
-[2]: Installation.markdown
+[2]: 03%20Installation.md
 [3]: ../Wheels%20API/linkTo.md
