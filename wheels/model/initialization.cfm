@@ -3,19 +3,8 @@
 	<cfargument name="path" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		variables.wheels = {};
-		variables.wheels.class = {};
-		variables.wheels.class.alias = arguments.name;
-		variables.wheels.class.modelName = arguments.name;
-		variables.wheels.class.modelId = hash(GetMetaData(this).name);
-		variables.wheels.class.path = arguments.path;
-
-		// if our name has pathing in it, remove it and add it to the end of of the $class.path variable
-		if (Find("/", arguments.name))
-		{
-			variables.wheels.class.modelName = ListLast(arguments.name, "/");
-			variables.wheels.class.path = ListAppend(arguments.path, ListDeleteAt(arguments.name, ListLen(arguments.name, "/"), "/"), "/");
-		}
+		
+		super.$initModelClass(argumentCollection=arguments);
 
 		variables.wheels.class.RESQLAs = "[[:space:]]AS[[:space:]][A-Za-z1-9]+";
 		variables.wheels.class.RESQLOperators = "((?: (?:NOT )?LIKE)|(?: (?:NOT )?IN)|(?: IS(?: NOT)?)|(?:<>)|(?:<=)|(?:>=)|(?:!=)|(?:!<)|(?:!>)|=|<|>)";
@@ -23,11 +12,8 @@
 
 		variables.wheels.class.aliases = {};
 		variables.wheels.class.mapping = {};
-		variables.wheels.class.properties = {};
-		variables.wheels.class.accessibleProperties = {};
 		variables.wheels.class.calculatedProperties = {};
 		variables.wheels.class.associations = {};
-		variables.wheels.class.callbacks = {};
 		variables.wheels.class.keys = "";
 		// database connection settings
 		variables.wheels.class.connection = {datasource=application.wheels.dataSourceName, username=application.wheels.dataSourceUserName, password=application.wheels.dataSourcePassword};
@@ -37,16 +23,12 @@
 		setTableNamePrefix(get("tableNamePrefix"));
 		table(LCase(pluralize(variables.wheels.class.modelName)));
 
-		loc.callbacks = "afterNew,afterFind,afterInitialization,beforeDelete,afterDelete,beforeSave,afterSave,beforeCreate,afterCreate,beforeUpdate,afterUpdate,beforeValidation,afterValidation,beforeValidationOnCreate,afterValidationOnCreate,beforeValidationOnUpdate,afterValidationOnUpdate";
-		loc.iEnd = ListLen(loc.callbacks);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			variables.wheels.class.callbacks[ListGetAt(loc.callbacks, loc.i)] = ArrayNew(1);
-		loc.validations = "onSave,onCreate,onUpdate";
-		loc.iEnd = ListLen(loc.validations);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			variables.wheels.class.validations[ListGetAt(loc.validations, loc.i)] = ArrayNew(1);
+		loc.callbacks = "afterFind,beforeDelete,afterDelete,beforeSave,afterSave,beforeCreate,afterCreate,beforeUpdate,afterUpdate,beforeValidationOnCreate,afterValidationOnCreate,beforeValidationOnUpdate,afterValidationOnUpdate";
+		$initalizeCallBacks(loc.callbacks);
+		
+		loc.validations = "onCreate,onUpdate";
+		$initalizeValidations(loc.validations);
 			
-		variables.wheels.class.propertyList = "";
 		variables.wheels.class.columnList = "";
 		variables.wheels.class.calculatedPropertyList = "";
 
@@ -205,18 +187,8 @@
 	<cfargument name="callbacks" type="boolean" required="false" default="true">
 	<cfscript>
 		var loc = {};
-
-		variables.wheels = {};
-		variables.wheels.instance = {};
-		variables.wheels.instance.errors = [];
-		// assign an object id for the instance
-		variables.wheels.instance.tickCountId = $assignObjectId();
-		// copy class variables from the object in the application scope
-		if (!StructKeyExists(variables.wheels, "class"))
-			variables.wheels.class = $simpleLock(name="classLock", type="readOnly", object=application.wheels.models[arguments.name], execute="$classData");
-		// setup object properties in the this scope
-		if (IsQuery(arguments.properties) && arguments.properties.recordCount != 0)
-			arguments.properties = $queryRowToStruct(argumentCollection=arguments);
+		
+		super.$initModelObject(argumentCollection=arguments);
 
 		if (IsStruct(arguments.properties) && !StructIsEmpty(arguments.properties))
 			$setProperties(properties=arguments.properties, setOnModel=true, $useFilterLists=arguments.useFilterLists, callbacks=arguments.callbacks);
@@ -225,10 +197,6 @@
 			$updatePersistedProperties();
 	</cfscript>
 	<cfreturn this>
-</cffunction>
-
-<cffunction name="$classData" returntype="struct" access="public" output="false">
-	<cfreturn variables.wheels.class>
 </cffunction>
 
 <cffunction name="$adapter" returntype="any" access="public" output="false">

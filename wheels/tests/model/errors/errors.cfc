@@ -1,7 +1,7 @@
 <cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
-		<cfset loc.user = model("user").findOne()>
+		<cfset loc.user = model("UserTableless").new()>
 		<cfset loc.user.addErrorToBase(message="base error1")>
 		<cfset loc.user.addErrorToBase(message="base name error1", name="base_errors")>
 		<cfset loc.user.addErrorToBase(message="base name error2", name="base_errors")>

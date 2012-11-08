@@ -1,4 +1,4 @@
-<cfcomponent extends="wheelsMapping.tests._assets.models.Model">
+<cfcomponent extends="wheelsMapping.BaseModel">
 
 	<cffunction name="init">
 		<cfset tableless()>

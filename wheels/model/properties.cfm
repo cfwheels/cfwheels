@@ -1,43 +1,5 @@
 <!--- PUBLIC MODEL INITIALIZATION METHODS --->
 
-<cffunction name="accessibleProperties" returntype="void" access="public" output="false" hint="Use this method to specify which properties can be set through mass assignment."
-	examples='
-		<!--- In `models/User.cfc`, only `isActive` can be set through mass assignment operations like `updateAll()` --->
-		<cffunction name="init">
-			<cfset accessibleProperties("isActive")>
-		</cffunction>
-	'
-	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="protectedProperties">
-	<cfargument name="properties" type="string" required="false" default="" hint="Property name (or list of property names) that are allowed to be altered through mass assignment." />
-	<cfscript>
-		var loc = {};
-		if (StructKeyExists(arguments, "property"))
-			arguments.properties = ListAppend(arguments.properties, arguments.property);
-		// see if any associations should be included in the white list
-		for (loc.association in variables.wheels.class.associations)
-			if (variables.wheels.class.associations[loc.association].nested.allow)
-				arguments.properties = ListAppend(arguments.properties, loc.association);
-		variables.wheels.class.accessibleProperties.whiteList = $listClean(arguments.properties);
-	</cfscript>
-</cffunction>
-
-<cffunction name="protectedProperties" returntype="void" access="public" output="false" hint="Use this method to specify which properties cannot be set through mass assignment."
-	examples='
-		<!--- In `models/User.cfc`, `firstName` and `lastName` cannot be changed through mass assignment operations like `updateAll()` --->
-		<cffunction name="init">
-			<cfset protectedProperties("firstName,lastName")>
-		</cffunction>
-	'
-	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="accessibleProperties">
-	<cfargument name="properties" type="string" required="false" default="" hint="Property name (or list of property names) that are not allowed to be altered through mass assignment." />
-	<cfscript>
-		var loc = {};
-		if (StructKeyExists(arguments, "property"))
-			arguments.properties = ListAppend(arguments.properties, arguments.property);
-		variables.wheels.class.accessibleProperties.blackList = $listClean(arguments.properties);
-	</cfscript>
-</cffunction>
-
 <cffunction name="property" returntype="void" access="public" output="false" hint="Use this method to map an object property to either a table column with a different name than the property or to a SQL expression. You only need to use this method when you want to override the default object relational mapping that Wheels performs."
 	examples=
 	'
@@ -101,10 +63,12 @@
 	categories="model-class,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,table,tableName">
 	<cfscript>
 		var loc = {};
-		loc.returnValue = variables.wheels.class.propertyList;
+		loc.returnValue = super.propertyNames();
 		if (ListLen(variables.wheels.class.calculatedPropertyList))
+		{
 			loc.returnValue = ListAppend(loc.returnValue, variables.wheels.class.calculatedPropertyList);
-		</cfscript>
+		}
+	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 
@@ -205,48 +169,6 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="hasProperty" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified property name exists on the model."
-	examples=
-	'
-		<!--- Get an object, set a value and then see if the property exists --->
-		<cfset employee = model("employee").new()>
-		<cfset employee.firstName = "dude">
-		<cfset employee.hasProperty("firstName")><!--- returns true --->
-
-		<!--- This is also a dynamic method that you could do --->
-		<cfset employee.hasFirstName()>
-	'
-	categories="model-object,miscellaneous" chapters="" functions="">
-	<cfargument name="property" type="string" required="true" hint="Name of property to inspect." />
-	<cfscript>
-		var hasProperty = false;
-		if (StructKeyExists(this, arguments.property) && !IsCustomFunction(this[arguments.property]))
-			hasProperty = true;
-	</cfscript>
-	<cfreturn hasProperty />
-</cffunction>
-
-<cffunction name="propertyIsPresent" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified property exists on the model and is not a blank string."
-	examples=
-	'
-		<!--- Get an object, set a value and then see if the property exists --->
-		<cfset employee = model("employee").new()>
-		<cfset employee.firstName = "dude">
-		<cfreturn employee.propertyIsPresent("firstName")><!--- Returns true --->
-		
-		<cfset employee.firstName = "">
-		<cfreturn employee.propertyIsPresent("firstName")><!--- Returns false --->
-	'
-	categories="model-object,miscellaneous" chapters="" functions="">
-	<cfargument name="property" type="string" required="true" hint="@hasProperty." />
-	<cfscript>
-		var isPresent = false;
-		if (StructKeyExists(this, arguments.property) && !IsCustomFunction(this[arguments.property]) && IsSimpleValue(this[arguments.property]) && Len(this[arguments.property]))
-			isPresent = true;
-	</cfscript>
-	<cfreturn isPresent />
-</cffunction>
-
 <cffunction name="toggle" returntype="any" access="public" output="false" hint="Assigns to the property specified the opposite of the property's current boolean value. Throws an error if the property cannot be converted to a boolean value. Returns this object if save called internally is `false`."
 	examples=
 	'
@@ -272,234 +194,7 @@
 	<cfreturn this />
 </cffunction>
 
-<cffunction name="properties" returntype="struct" access="public" output="false" hint="Returns a structure of all the properties with their names as keys and the values of the property as values."
-	examples=
-	'
-		<!--- Get a structure of all the properties for an object --->
-		<cfset user = model("user").findByKey(1)>
-		<cfset props = user.properties()>
-	'
-	categories="model-object,miscellaneous" chapters="" functions="setProperties">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = {};
-
-		// loop through all properties and functions in the this scope
-		for (loc.key in this)
-		{
-			// we return anything that is not a function
-			if (!IsCustomFunction(this[loc.key]))
-			{
-				// try to get the property name from the list set on the object, this is just to avoid returning everything in ugly upper case which Adobe ColdFusion does by default
-				if (ListFindNoCase(propertyNames(), loc.key))
-					loc.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), loc.key));
-
-				// set property from the this scope in the struct that we will return
-				loc.returnValue[loc.key] = this[loc.key];
-			}
-		}
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="setProperties" returntype="void" access="public" output="false" hint="Allows you to set all the properties of an object at once by passing in a structure with keys matching the property names."
-	examples=
-	'
-		<!--- Update the properties of the object with the params struct containing the values of a form post --->
-		<cfset user = model("user").findByKey(1)>
-		<cfset user.setProperties(params.user)>
-	'
-	categories="model-object,miscellaneous" chapters="" functions="properties">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="@new.">
-	<cfset $setProperties(argumentCollection=arguments) />
-</cffunction>
-
-<!--- changes --->
-
-<cffunction name="hasChanged" returntype="boolean" access="public" output="false" hint="Returns `true` if the specified property (or any if none was passed in) has been changed but not yet saved to the database. Will also return `true` if the object is new and no record for it exists in the database."
-	examples=
-	'
-		<!--- Get a member object and change the `email` property on it --->
-		<cfset member = model("member").findByKey(params.memberId)>
-		<cfset member.email = params.newEmail>
-
-		<!--- Check if the `email` property has changed --->
-		<cfif member.hasChanged("email")>
-			<!--- Do something... --->
-		</cfif>
-
-		<!--- The above can also be done using a dynamic function like this --->
-		<cfif member.emailHasChanged()>
-			<!--- Do something... --->
-		</cfif>
-	'
-	categories="model-object,changes" chapters="dirty-records" functions="allChanges,changedFrom,changedProperties">
-	<cfargument name="property" type="string" required="false" default="" hint="Name of property to check for change.">
-	<cfscript>
-		var loc = {};
-
-		// always return true if $persistedProperties does not exists
-		if (!StructKeyExists(variables, "$persistedProperties"))
-		{
-			return true;
-		}
-
-		if (!Len(arguments.property))
-		{
-			// they haven't specified a particular property so loop through
-			// them all
-			arguments.property = StructKeyList(variables.wheels.class.properties);
-		}
-
-		arguments.property = ListToArray(arguments.property);
-
-		loc.iEnd = ArrayLen(arguments.property);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			loc.key = arguments.property[loc.i];
-			if (StructKeyExists(this, loc.key))
-			{
-				if (!StructKeyExists(variables.$persistedProperties, loc.key))
-				{
-					return true;
-				}
-				else
-				{
-					// hehehehe... convert each datatype to a string
-					// for easier comparision
-					loc.type = validationTypeForProperty(loc.key);
-					loc.a = $convertToString(this[loc.key], loc.type);
-					loc.b = $convertToString(variables.$persistedProperties[loc.key], loc.type);
-
-					if(Compare(loc.a, loc.b) neq 0)
-					{
-						return true;
-					}
-				}
-			}
-		}
-		// if we get here, it means that all of the properties that were checked had a value in
-		// $persistedProperties and it matched or some of the properties did not exist in the this scope
-	</cfscript>
-	<cfreturn false>
-</cffunction>
-
-<cffunction name="changedProperties" returntype="string" access="public" output="false" hint="Returns a list of the object properties that have been changed but not yet saved to the database."
-	examples=
-	'
-		<!--- Get an object, change it, and then ask for its changes (will return a list of the property names that have changed, not the values themselves) --->
-		<cfset member = model("member").findByKey(params.memberId)>
-		<cfset member.firstName = params.newFirstName>
-		<cfset member.email = params.newEmail>
-		<cfset changedProperties = member.changedProperties()>
-	'
-	categories="model-object,changes" chapters="dirty-records" functions="allChanges,changedFrom,hasChanged">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = "";
-		for (loc.key in variables.wheels.class.properties)
-			if (hasChanged(loc.key))
-				loc.returnValue = ListAppend(loc.returnValue, loc.key);
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
-<cffunction name="changedFrom" returntype="string" access="public" output="false" hint="Returns the previous value of a property that has changed. Returns an empty string if no previous value exists. Wheels will keep a note of the previous property value until the object is saved to the database."
-	examples=
-	'
-		<!--- Get a member object and change the `email` property on it --->
-		<cfset member = model("member").findByKey(params.memberId)>
-		<cfset member.email = params.newEmail>
-
-		<!--- Get the previous value (what the `email` property was before it was changed)--->
-		<cfset oldValue = member.changedFrom("email")>
-
-		<!--- The above can also be done using a dynamic function like this --->
-		<cfset oldValue = member.emailChangedFrom()>
-	'
-	categories="model-object,changes" chapters="dirty-records" functions="allChanges,changedProperties,hasChanged">
-	<cfargument name="property" type="string" required="true" hint="Name of property to get the previous value for.">
-	<cfscript>
-		var returnValue = "";
-		if (StructKeyExists(variables, "$persistedProperties") && StructKeyExists(variables.$persistedProperties, arguments.property))
-			returnValue = variables.$persistedProperties[arguments.property];
-	</cfscript>
-	<cfreturn returnValue>
-</cffunction>
-
-<cffunction name="allChanges" returntype="struct" access="public" output="false" hint="Returns a struct detailing all changes that have been made on the object but not yet saved to the database."
-	examples=
-	'
-		<!--- Get an object, change it, and then ask for its changes (will return a struct containing the changes, both property names and their values) --->
-		<cfset member = model("member").findByKey(params.memberId)>
-		<cfset member.firstName = params.newFirstName>
-		<cfset member.email = params.newEmail>
-		<cfset allChanges = member.allChanges()>
-	'
-	categories="model-object,changes" chapters="dirty-records" functions="changedFrom,changedProperties,hasChanged">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = {};
-		if (hasChanged())
-		{
-			loc.changedProperties = changedProperties();
-			loc.iEnd = ListLen(loc.changedProperties);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				loc.item = ListGetAt(loc.changedProperties, loc.i);
-				loc.returnValue[loc.item] = {};
-				loc.returnValue[loc.item].changedFrom = changedFrom(loc.item);
-				if (StructKeyExists(this, loc.item))
-					loc.returnValue[loc.item].changedTo = this[loc.item];
-				else
-					loc.returnValue[loc.item].changedTo = "";
-			}
-		}
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
 <!--- PRIVATE MODEL OBJECT METHODS --->
-
-<cffunction name="$setProperties" returntype="any" access="public" output="false" hint="I am the behind the scenes method to turn arguments into the properties argument.">
-	<cfargument name="properties" type="struct" required="true" />
-	<cfargument name="filterList" type="string" required="false" default="" />
-	<cfargument name="setOnModel" type="boolean" required="false" default="true" />
-	<cfargument name="$useFilterLists" type="boolean" required="false" default="true" />
-	<cfargument name="callbacks" type="boolean" required="false" default="true" />
-	<cfscript>
-		var loc = {};
-
-		loc.allowedProperties = {};
-
-		arguments.filterList = ListAppend(arguments.filterList, "properties,filterList,setOnModel,$useFilterLists");
-		
-		if (arguments.setOnModel)
-			arguments.filterList = ListAppend(arguments.filterList, "callbacks");
-
-		// add eventual named arguments to properties struct (named arguments will take precedence)
-		for (loc.key in arguments)
-			if (!ListFindNoCase(arguments.filterList, loc.key))
-				arguments.properties[loc.key] = arguments[loc.key];
-
-		for (loc.key in arguments.properties) // loop throug the properties and see if they can be set based off of the accessible properties lists
-		{
-			loc.accessible = true;
-			if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, loc.key))
-				loc.accessible = false;
-			if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "blackList") && ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, loc.key))
-				loc.accessible = false;
-			if (loc.accessible)
-				loc.allowedProperties[loc.key] = arguments.properties[loc.key];
-			if (loc.accessible && arguments.setOnModel)
-				$setProperty(property=loc.key, value=loc.allowedProperties[loc.key], callbacks=arguments.callbacks);
-		}
-
-		if (arguments.setOnModel)
-			return;
-	</cfscript>
-	<cfreturn loc.allowedProperties />
-</cffunction>
 
 <cffunction name="$setProperty" returntype="void" access="public" output="false">
 	<cfargument name="property" type="string" required="true" />
@@ -531,40 +226,15 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$setDefaultValues" returntype="any" access="public" output="false">
-	<cfscript>
-	var loc = {};
-	for (loc.key in variables.wheels.class.properties)
-	{
-		if (StructKeyExists(variables.wheels.class.properties[loc.key], "defaultValue") && (!StructKeyExists(this, loc.key) || !Len(this[loc.key])))
-		{
-			// set the default value unless it is blank or a value already exists for that property on the object
-			this[loc.key] = variables.wheels.class.properties[loc.key].defaultValue;
-		}
-	}
-	</cfscript>
-</cffunction>
-
-<cffunction name="$propertyInfo" returntype="struct" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfscript>
-		var returnValue = {};
-		if (StructKeyExists(variables.wheels.class.properties, arguments.property))
-			returnValue = variables.wheels.class.properties[arguments.property];
-	</cfscript>
-	<cfreturn returnValue />
-</cffunction>
-
 <cffunction name="$label" returntype="string" access="public" output="false">
 	<cfargument name="property" type="string" required="true">
 	<cfargument name="properties" type="struct" required="false" default="#variables.wheels.class.properties#">
 	<cfargument name="mapping" type="struct" required="false" default="#variables.wheels.class.mapping#">
 	<cfscript>
-		if (StructKeyExists(arguments.properties, arguments.property) && StructKeyExists(arguments.properties[arguments.property], "label"))
-			return arguments.properties[arguments.property].label;
-		else if (StructKeyExists(arguments.mapping, arguments.property) && StructKeyExists(arguments.mapping[arguments.property], "label"))
+		if (StructKeyExists(arguments.mapping, arguments.property) && StructKeyExists(arguments.mapping[arguments.property], "label"))
+		{
 			return arguments.mapping[arguments.property].label;
-		else
-			return Humanize(arguments.property);
+		}
+		return super.$label(argumentCollection=arguments);
 	</cfscript>
 </cffunction>

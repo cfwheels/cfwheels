@@ -1,7 +1,7 @@
-<cfcomponent extends="Model">
+<cfcomponent extends="wheelsMapping.BaseModel">
 
 	<cffunction name="init">
-		<cfset tableless()>
+
 		<cfset property(name="username")>
 		<cfset property(name="password")>
 		<cfset property(name="firstname")>

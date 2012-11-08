@@ -35,34 +35,6 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="new" returntype="any" access="public" output="false" hint="Creates a new object based on supplied properties and returns it. The object is not saved to the database; it only exists in memory. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument."
-	examples=
-	'
-		<!--- Create a new author in memory (not saved to the database) --->
-		<cfset newAuthor = model("author").new()>
-
-		<!--- Create a new author based on properties in a struct --->
-		<cfset newAuthor = model("author").new(params.authorStruct)>
-
-		<!--- Create a new author by passing in named arguments --->
-		<cfset newAuthor = model("author").new(firstName="John", lastName="Doe")>
-
-		<!--- If you have a `hasOne` or `hasMany` association setup from `customer` to `order`, you can do a scoped call. (The `newOrder` method below will call `model("order").new(customerId=aCustomer.id)` internally.) --->
-		<cfset aCustomer = model("customer").findByKey(params.customerId)>
-		<cfset anOrder = aCustomer.newOrder(shipping=params.shipping)>
-	'
-	categories="model-class,create" chapters="creating-records,associations" functions="create,hasMany,hasOne">
-	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="The properties you want to set on the object (can also be passed in as named arguments).">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="@save.">
-	<cfscript>
-		var loc = {};
-		arguments.properties = $setProperties(argumentCollection=arguments, filterList="properties,reload,transaction,callbacks", setOnModel=false);
-		loc.returnValue = $createInstance(properties=arguments.properties, persisted=false, callbacks=arguments.callbacks);
-		loc.returnValue.$setDefaultValues();
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
 <!--- read --->
 
 <cffunction name="findAll" returntype="any" access="public" output="false" hint="Returns records from the database table mapped to this model according to the arguments passed in. (Use the `where` argument to decide which records to get, use the `order` argument to set in what order those records should be returned, and so on). The records will be returned as either a `cfquery` result set or an array of objects (depending on what the `returnAs` argument is set to). Instead of using the `where` argument, you can create cleaner code by making use of a concept called dynamic finders."
@@ -996,27 +968,6 @@
 	</cfscript>
 </cffunction>
 
-
-<!--- PRIVATE MODEL CLASS METHODS --->
-
-<!--- other --->
-
-<cffunction name="$createInstance" returntype="any" access="public" output="false">
-	<cfargument name="properties" type="struct" required="true">
-	<cfargument name="persisted" type="boolean" required="true">
-	<cfargument name="row" type="numeric" required="false" default="1">
-	<cfargument name="base" type="boolean" required="false" default="true">
-	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="@save.">
-	<cfscript>
-		var loc = {};
-		loc.fileName = $objectFileName(name=variables.wheels.class.modelName, objectPath=variables.wheels.class.path, type="model");
-		loc.returnValue = $createObjectFromRoot(path=variables.wheels.class.path, fileName=loc.fileName, method="$initModelObject", name=variables.wheels.class.modelName, properties=arguments.properties, persisted=arguments.persisted, row=arguments.row, base=arguments.base, useFilterLists=(!arguments.persisted), callbacks=arguments.callbacks);
-		// if the object should be persisted, call afterFind else call afterNew
-		if ((arguments.persisted && loc.returnValue.$callback("afterFind", arguments.callbacks)) || (!arguments.persisted && loc.returnValue.$callback("afterNew", arguments.callbacks)))
-			loc.returnValue.$callback("afterInitialization", arguments.callbacks);
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
 
 <!--- PRIVATE MODEL OBJECT METHODS --->
 
