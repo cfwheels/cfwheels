@@ -9,7 +9,7 @@
 		$initializeRequestScope();
 		
 		// preserve the following setting between reloads
-		loc.savedSettings = {}
+		loc.savedSettings = {};
 		if (StructKeyExists(application, "wheels"))
 		{
 			loc.savedSettings = $saveScopeSettings(application.wheels, "reloadPassword,allowedEnvironmentSwitchThroughURL");
