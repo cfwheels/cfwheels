@@ -52,7 +52,7 @@
 	</cffunction>
 
 	<cffunction name="test_less_than_or_equals_to">
-		<cfset assert('$advancedVersioning("<= 1.2.1", "1.2.1", )')>
+		<cfset assert('$advancedVersioning("<= 1.2.1", "1.2.1")')>
 		<cfset assert('$advancedVersioning("<= 1.2", "1.2")')>
 		<cfset assert('!$advancedVersioning("<= 1.2", "1.2.5")')>
 		<cfset assert('$advancedVersioning("<= 0.0.2", "0.0.1")')>

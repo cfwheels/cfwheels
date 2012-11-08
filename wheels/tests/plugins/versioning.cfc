@@ -45,14 +45,14 @@
 		<cfset assert('!StructKeyExists(loc.plugins, "TestAdvancedVersioningGreaterThan")')>
 	</cffunction>
 	
-	<cffunction name="test_less_than_valid">
+	<cffunction name="test_less_than_valid_advanced_versioning">
 		<cfset loc.config.wheelsVersion = "1.1.5">
 		<cfset loc.PluginObj = $pluginObj(loc.config)>
 		<cfset loc.plugins = loc.PluginObj.getPlugins()>
 		<cfset assert('StructKeyExists(loc.plugins, "TestAdvancedVersioningLessThan")')>
 	</cffunction>
 	
-	<cffunction name="test_less_than_invalid">
+	<cffunction name="test_less_than_invalid_advanced_versioning">
 		<cfset loc.config.wheelsVersion = "1.2">
 		<cfset loc.PluginObj = $pluginObj(loc.config)>
 		<cfset loc.plugins = loc.PluginObj.getPlugins()>
