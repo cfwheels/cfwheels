@@ -5,6 +5,7 @@
 <cfset application.wheels.modelPath = "/wheelsMapping/tests/_assets/models">
 <cfset application.wheels.modelComponentPath = "wheelsMapping.tests._assets.models">
 
+<cfset application.wheels.dataAdapter = "mssql">
 <cfset application.wheels.dataSourceName = "wheelstestdb">
 
 <!--- unload all plugins before running core tests --->
