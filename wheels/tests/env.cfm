@@ -5,8 +5,7 @@
 <cfset application.wheels.modelPath = "/wheelsMapping/tests/_assets/models">
 <cfset application.wheels.modelComponentPath = "wheelsMapping.tests._assets.models">
 
-<cfset application.wheels.dataAdapter = "oracle">
-<cfset application.wheels.dataSourceName = "wheelstestdb-oracle">
+<cfset application.wheels.dataSourceName = "wheelstestdb">
 
 <!--- unload all plugins before running core tests --->
 <cfset application.wheels.plugins = {}>
