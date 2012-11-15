@@ -42,6 +42,7 @@
 				$mail(argumentCollection=loc.mailArgs);
 			}
 	
+			$header(statusCode=500, statusText="Internal Server Error");
 			if (application.wheels.showErrorInformation)
 			{
 				if (StructKeyExists(arguments.exception, "rootCause") && Left(arguments.exception.rootCause.type, 6) == "Wheels")
@@ -61,7 +62,6 @@
 			}
 			else
 			{
-				$header(statusCode=500, statusText="Internal Server Error");
 				loc.returnValue = $includeAndReturnOutput($template="#application.wheels.eventPath#/onerror.cfm", exception=arguments.exception, eventName=arguments.eventName);
 			}
 		}
