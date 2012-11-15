@@ -27,36 +27,36 @@ this will load a view for editing a user with a primary key value in the databas
 
 This URL pattern works up the chain and will also handle the following example URLs:
 
-	<table>
-		<thead>
-			<tr>
-				<th>URL</th>
-				<th>Controller</th>
-				<th>Action</th>
-				<th>Key</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>`http://localhost/users/edit/12`</td>
-				<td>`users`</td>
-				<td>`edit`</td>
-				<td>`12`</td>
-			</tr>
-			<tr>
-				<td>`http://localhost/users/add`</td>
-				<td>`users`</td>
-				<td>`add`</td>
-				<td>`Undefined`</td>
-			</tr>
-			<tr>
-				<td>`http://localhost/users`</td>
-				<td>`users`</td>
-				<td>`index`</td>
-				<td>`Undefined`</td>
-			</tr>
-		</tbody>
-	</table>
+<table>
+	<thead>
+		<tr>
+			<th>URL</th>
+			<th>Controller</th>
+			<th>Action</th>
+			<th>Key</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>http://localhost/users/edit/12</td>
+			<td>users</td>
+			<td>edit</td>
+			<td>12</td>
+		</tr>
+		<tr>
+			<td>http://localhost/users/add</td>
+			<td>users</td>
+			<td>add</td>
+			<td>Undefined</td>
+		</tr>
+		<tr>
+			<td>http://localhost/users</td>
+			<td>users</td>
+			<td>index</td>
+			<td>Undefined</td>
+		</tr>
+	</tbody>
+</table>
 
 See [Using Routes][1] for instructions on overriding this behavior.
 
@@ -167,11 +167,11 @@ argument defaults for built-in Wheels functions to keep your code DRYer.
 
 For more details on what you can configure, read the [Configuration and Defaults][4] chapter.
 
-[1]: Using%20Routes.md
-[2]: Pages.md
-[3]: Using%20Layouts.md
-[4]: Configuration%20and%20Defaults.md
-[5]: Object%20Relational%20Mapping.md
+[1]: ../03%20Handling%20Requests%20with%20Controllers/12%20Using%20Routes.md
+[2]: ../05%20Displaying%20Views%20to%20Users/01%20Pages.md
+[3]: ../05%20Displaying%20Views%20to%20Users/04%20Using%20Layouts.md
+[4]: ../02%20Working%20with%20Wheels/02%20Configuration%20and%20Defaults.md
+[5]: ../04%20Database%20Interaction%20Through%20Models/01%20Object%20Relational%20Mapping.md
 [6]: ../Wheels%20API/renderView.md
 [7]: ../Wheels%20API/table.md
 [8]: ../Wheels%20API/property.md

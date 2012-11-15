@@ -935,52 +935,9 @@ Should now call bar() instead and marking foo() as deprecated
 </cffunction>
 
 <cffunction name="$checkMinimumVersion" access="public" returntype="boolean" output="false">
-
 	<cfargument name="version" type="string" required="true">
 	<cfargument name="minversion" type="string" required="true">
-	<cfscript>
-	var loc = {};
-
-	arguments.version = ListChangeDelims(arguments.version, ".", ".,");
-	arguments.minversion = ListChangeDelims(arguments.minversion, ".", ".,");
-
-	arguments.version = ListToArray(arguments.version, ".");
-	arguments.minversion = ListToArray(arguments.minversion, ".");
-
-	// make version and minversion the same length pad zeros to the end
-	loc.minSize = max(ArrayLen(arguments.version), ArrayLen(arguments.minversion));
-
-	ArrayResize(arguments.version, loc.minSize);
-	ArrayResize(arguments.minversion, loc.minSize);
-
-	for(loc.i=1; loc.i LTE loc.minSize; loc.i++)
-	{
-		loc.version = 0;
-		if(ArrayIsDefined(arguments.version, loc.i))
-		{
-			loc.version = val(arguments.version[loc.i]);
-		}
-		
-		loc.minversion = 0;
-		if(ArrayIsDefined(arguments.minversion, loc.i))
-		{
-			loc.minversion = val(arguments.minversion[loc.i]);
-		}
-		
-		if(loc.version gt loc.minversion)
-		{
-			return true;
-		}
-		
-		if(loc.version lt loc.minversion)
-		{
-			return false;
-		}
-	}
-
-	return true;
-	</cfscript>
-	<cfreturn >
+	<cfreturn $advancedVersioning(">= #arguments.minversion#", arguments.version)>
 </cffunction>
 
 <cffunction name="$loadPlugins" returntype="void" access="public" output="false">
@@ -1030,4 +987,226 @@ Should now call bar() instead and marking foo() as deprecated
 <cffunction name="$paramsToString" access="public" returntype="string" output="false">
 	<cfargument name="params" type="any" required="true">
 	<cfreturn $convertToString(value=arguments.params, delim="&")>
+</cffunction>
+
+<cffunction name="$switchEnivronmentSecurity" access="public" returntype="string" output="false"
+	hint="if allowed to switch the environment through a reload, will return the environment name, otherwise returns a blank string">
+	<cfargument name="settings" type="struct" required="true" hint="a struct containing the settings for the wheels application">
+	<cfargument name="scope" type="struct" required="true" hint="a scope in which to find the scopeEnvironmentNamingKey parameter to use to switch the environment">
+	<cfargument name="settingAllowedToSwitchEnvironmentKey" type="string" required="false" default="allowedEnvironmentSwitchThroughURL" hint="the setting which tell us that we are allowed to switch environments. value of the setting must be a boolean">
+	<cfargument name="settingPasswordToSwitchEnvironmentKey" type="string" required="false" default="reloadPassword" hint="the setting that tell us the password for switching environments">
+	<cfargument name="scopeEnvironmentNamingKey" type="string" required="false" default="reload" hint="the key in the scope that gives us the environment name to switch to">
+	<cfargument name="scopeEnvironmentPasswordKey" type="string" required="false" default="password" hint="the key in the scope that gives us the password for switching environment">
+	<cfscript>
+	var loc = {};
+
+	// the new environment to switch to
+	loc.environment = "";
+	// setting: can they switch environments
+	loc.setting_allowed = false;
+	// setting: the password for switching environments
+	loc.setting_password = "";
+	// scope: the environment to switch to
+	loc.scope_environment = "";
+	// scope: the password
+	loc.scope_password = "";
+
+	if (StructKeyExists(arguments.settings, arguments.settingAllowedToSwitchEnvironmentKey) AND IsBoolean(arguments.settings[arguments.settingAllowedToSwitchEnvironmentKey]))
+	{
+		loc.setting_allowed = arguments.settings[arguments.settingAllowedToSwitchEnvironmentKey];
+	}
+	
+	if (StructKeyExists(arguments.settings, arguments.settingPasswordToSwitchEnvironmentKey) && Len(Trim(arguments.settings[arguments.settingPasswordToSwitchEnvironmentKey])))
+	{
+		loc.setting_password = arguments.settings[arguments.settingPasswordToSwitchEnvironmentKey];
+	}
+	
+	if (StructKeyExists(arguments.scope, arguments.scopeEnvironmentNamingKey))
+	{
+		loc.scope_environment = arguments.scope[arguments.scopeEnvironmentNamingKey];
+	}
+	
+	if (StructKeyExists(arguments.scope, arguments.scopeEnvironmentPasswordKey))
+	{
+		loc.scope_password = arguments.scope[arguments.scopeEnvironmentPasswordKey];
+	}
+	
+	if (loc.setting_allowed && Len(loc.scope_environment) && Len(loc.setting_password) && loc.setting_password eq loc.scope_password)
+	{
+		loc.environment = loc.scope_environment;
+	}
+	</cfscript>
+	
+	<cfreturn loc.environment>
+</cffunction>
+
+<cffunction name="$saveScopeSettings" access="public" returntype="struct" output="false"
+	hint="saves the requested key from scope into a new struct">
+	<cfargument name="scope" type="struct" required="true" hint="scope that you want to save the setting from">
+	<cfargument name="keys" type="any" required="true" hint="a list or array of keys to save">
+	<cfset var loc = {}>
+	<cfset loc.saved = {}>
+		
+	<cfif !IsArray(arguments.keys)>
+		<cfset arguments.keys = $listClean(list=arguments.keys, returnAs="array")>
+	</cfif>
+	
+	<cfloop array="#arguments.keys#" index="loc.key">
+		<cfif StructKeyExists(arguments.scope, loc.key)>
+			<cfset loc.saved[loc.key] = duplicate(arguments.scope[loc.key])>
+		</cfif>
+	</cfloop>
+	
+	<cfreturn loc.saved>
+</cffunction> 
+
+<cffunction name="$advancedVersioning" access="public" returntype="boolean" output="false"
+	hint='
+allows a developer to specify versions in an advanced way. valid syantax is:
+
+[operator] [version]
+
+The following operators are supported:
+
+=  Equals version
+!= Not equal to version
+>  Greater than version
+<  Less than version
+>= Greater than or equal to
+<= Less than or equal to
+~> Approximately greater than
+
+The first six operators are self explanitory. The Approximate operator `~>` can be thought
+of as a `between` operator. For example, if the developer wanted their plugin to support a
+wheels version that was between 1.1 and 1.2, they could do:
+
+<cffunction name="init">
+	<cfset this.version = "~> 1.1">
+	<cfreturn this>
+</cffunction>
+
+To use, you pass in the version and versioning strings:
+
+<cfset loc.passed = $advancedVersioning(this.version, application.wheels.version)>
+	'>
+	<cfargument name="versioning" type="string" required="true">
+	<cfargument name="version" type="string" required="true">
+	<cfscript>
+	var loc = {};
+
+	// supported operators
+	loc.operators = "=,!=,>,<,>=,<=,~>";
+	// return value
+	loc.ret = false;
+	
+	// first, split the string
+	loc.arr = ListToArray(arguments.versioning, " ");
+
+	// the array should only between two elements
+	if (ArrayLen(loc.arr) != 2)
+	{
+		return false;
+	}
+	
+	loc.operator = loc.arr[1];
+	loc.versioning = loc.arr[2];
+	
+	// the first element of the array should be an operator
+	if (
+		!ListFindNoCase(loc.operators, loc.operator)
+		OR !Len(Trim(arguments.version))
+		OR !Len(Trim(loc.versioning))
+	)
+	{
+		return false;
+	}
+
+	arguments.version = ListChangeDelims(arguments.version, ".", ".,");
+	loc.versioning = ListChangeDelims(loc.versioning, ".", ".,");
+	
+	// split the passed in version into array elements
+	loc.versionArr = $listClean(list=arguments.version, delim=".", returnAs="array");
+	// split the versioning string into array elements
+	loc.versioningArr = $listClean(list=loc.versioning, delim=".", returnAs="array");
+	
+	// cache the length of the arrays
+	loc.versionArrLen = ArrayLen(loc.versionArr);
+	loc.versioningArrLen = ArrayLen(loc.versioningArr);
+	
+	if (loc.operator eq "~>" AND loc.versioningArrLen GTE loc.versionArrLen)
+	{
+		loc.loops = loc.versioningArrLen;
+	}
+	else
+	{
+		loc.loops = max(loc.versionArrLen, loc.versioningArrLen);
+	}
+	
+	ArrayResize(loc.versionArr, loc.loops);
+	ArrayResize(loc.versioningArr, loc.loops);
+
+	// create string that will be transformed to floats for comparisions
+	loc.versionStr = "";
+	loc.versioningStr = "";
+	
+	for (loc.i = 1; loc.i lte loc.loops; loc.i++)
+	{
+
+		loc.versioningPart = "0";
+		if(ArrayIsDefined(loc.versioningArr, loc.i))
+		{
+			loc.versioningPart = loc.versioningArr[loc.i].toString();
+		}
+		
+		loc.versionPart = "0";
+		if(ArrayIsDefined(loc.versionArr, loc.i))
+		{
+			loc.versionPart = loc.versionArr[loc.i].toString();
+		}
+
+		if (loc.i EQ 2)
+		{
+			loc.versionStr &= ".";
+			loc.versioningStr &= ".";
+		}
+		else if (loc.i GT 2)
+		{
+			loc.size = max(Len(loc.versioningPart), Len(loc.versionPart));
+			loc.versionPart = loc.versionPart & RepeatString("0", loc.size - Len(loc.versionPart));
+			loc.versioningPart = loc.versioningPart & RepeatString("0", loc.size - Len(loc.versioningPart));
+		}
+
+		loc.versionStr &= loc.versionPart;
+		loc.versioningStr &= loc.versioningPart;
+	}
+
+	loc.versionStr = val(loc.versionStr);
+	loc.versioningStr = val(loc.versioningStr);
+
+	if (loc.operator eq "=" AND loc.versioningStr eq loc.versionStr)
+	{
+		return true;
+	}
+	else if (loc.operator eq "!=" AND loc.versioningStr neq loc.versionStr)
+	{
+		return true;
+	}
+	else if (loc.operator eq "<" AND loc.versionStr lt loc.versioningStr)
+	{
+		return true;
+	}
+	else if (loc.operator eq ">" AND loc.versionStr gt loc.versioningStr)
+	{
+		return true;
+	}
+	if (loc.operator eq "<=" AND loc.versionStr lte loc.versioningStr)
+	{
+		return true;
+	}
+	else if ((loc.operator eq ">=" OR loc.operator eq "~>") AND loc.versionStr gte loc.versioningStr)
+	{
+		return true;
+	}
+	</cfscript>
+	<cfreturn false>
 </cffunction>

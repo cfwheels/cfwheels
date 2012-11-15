@@ -7,10 +7,8 @@
 1. [Frameworks and Wheels](01 Introduction/01 Frameworks and Wheels.md)
 2. [Requirements](01 Introduction/02 Requirements.md)
 3. [Installation](01 Introduction/03 Installation.md)
-4. [Upgrading Wheels](01 Introduction/04 Upgrading to Wheels 1.1.x.md)
-5. [Hello World!](01 Introduction/05 Hello World.md)
-6. [Hello Database](01 Introduction/06 Hello Database.md)
-7. [Wheels, Ajax, and You](01 Introduction//07 Wheels, Ajax, and You.md)
+4. [Hello World!](01 Introduction/05 Hello World.md)
+5. [Hello Database](01 Introduction/06 Hello Database.md)
   
 ## 2. Working With Wheels
 
@@ -69,6 +67,7 @@
 6. [Displaying Links for Pagination](05 Displaying Views to Users/06 Displaying Links for Pagination.md)
 7. [Date, Media, and Text Helpers](05 Displaying Views to Users/07 Date, Media, and Text Helpers.md)
 8. [Creating Your Own View Helpers](05 Displaying Views to Users/08 Creating Your Own View Helpers.md)
+9. [Wheels, Ajax, and You](05 Displaying Views to Users/09 Wheels, Ajax, and You.md)
 
 ## 6. Integrated Testing Framework
 

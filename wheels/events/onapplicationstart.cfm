@@ -7,17 +7,18 @@
 
 		// setup the wheels storage struct for the current request
 		$initializeRequestScope();
-
-		// set or reset all settings but make sure to pass along the reload password between forced reloads with "reload=x"
-		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "reloadPassword"))
-			loc.oldReloadPassword = application.wheels.reloadPassword;
+		
+		// preserve the following setting between reloads
+		loc.savedSettings = {};
+		if (StructKeyExists(application, "wheels"))
+		{
+			loc.savedSettings = $saveScopeSettings(application.wheels, "reloadPassword,allowedEnvironmentSwitchThroughURL");
+		}
+			
 		application.wheels = {};
 		
 		// include the version
 		$include(template="wheels/version.cfm");
-		
-		if (StructKeyExists(loc, "oldReloadPassword"))
-			application.wheels.reloadPassword = loc.oldReloadPassword;
 
 		// check and store server engine name, throw error if using a version that we don't support
 		// really need to refactor this into a method
@@ -38,6 +39,9 @@
 		{
 			$throw(type="Wheels.EngineNotSupported", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Please upgrade to version #loc.minimumServerVersion# or higher.");
 		}
+		
+		// load any saved settings from the previous reload
+		StructAppend(application.wheels, loc.savedSettings, true);
 
 		// copy over the cgi variables we need to the request scope (since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example)
 		request.cgi = $cgiScope();
@@ -79,13 +83,17 @@
 		application.wheels.stylesheetPath = "stylesheets";
 		application.wheels.viewPath = "views";
 		
-		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(application.wheels, "reloadPassword") && (!Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
+		// see if they are switching environments
+		loc.environment = $switchEnivronmentSecurity(application.wheels, url);
+
+		if (Len(loc.environment))
 		{
-			application.wheels.environment = URL.reload;
+			application.wheels.environment = loc.environment;	
 		}
 		else
 		{
-			$include(template="#application.wheels.configPath#/environment.cfm");
+			// load the environment
+			$include(template="#application.wheels.configPath#/environment.cfm");	
 		}
 
 		// load wheels settings
