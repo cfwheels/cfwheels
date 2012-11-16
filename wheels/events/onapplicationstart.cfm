@@ -84,7 +84,7 @@
 		application.wheels.viewPath = "views";
 		
 		// see if they are switching environments
-		loc.environment = $switchEnivronmentSecurity(application.wheels, url);
+		loc.environment = $switchEnvironmentSecurity(application.wheels, url);
 
 		if (Len(loc.environment))
 		{

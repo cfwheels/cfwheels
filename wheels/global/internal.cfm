@@ -989,7 +989,7 @@ Should now call bar() instead and marking foo() as deprecated
 	<cfreturn $convertToString(value=arguments.params, delim="&")>
 </cffunction>
 
-<cffunction name="$switchEnivronmentSecurity" access="public" returntype="string" output="false"
+<cffunction name="$switchEnvironmentSecurity" access="public" returntype="string" output="false"
 	hint="if allowed to switch the environment through a reload, will return the environment name, otherwise returns a blank string">
 	<cfargument name="settings" type="struct" required="true" hint="a struct containing the settings for the wheels application">
 	<cfargument name="scope" type="struct" required="true" hint="a scope in which to find the scopeEnvironmentNamingKey parameter to use to switch the environment">
