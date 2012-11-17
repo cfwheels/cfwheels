@@ -713,6 +713,14 @@
 		To use, you pass in the version and versioning strings:
 
 		<cfset loc.passed = semanticVersioning(this.version, application.wheels.version)>
+
+		NOTE: to mentally perform the comparision swap the arguments.
+
+		<cfset loc.passed = semanticVersioning("> 1.3", "1.2.5")>
+
+		reads: is "1.2.5" greater or equal to "1.3"
+		
+
 	'
 	categories="global,miscellaneous">
 	<cfargument name="versioning" type="string" required="true">
@@ -725,7 +733,7 @@
 	// return value
 	loc.ret = false;
 	
-	// first, split the string
+	// split the string
 	loc.arr = ListToArray(arguments.versioning, " ");
 
 	// the array should only between two elements
@@ -747,8 +755,10 @@
 		return false;
 	}
 
-	arguments.version = ListChangeDelims(arguments.version, ".", ".,");
-	loc.versioning = ListChangeDelims(loc.versioning, ".", ".,");
+	// make sure the delims are `.`. ACF version uses `,`.
+	// also remove any `preview` versions which are designated by a `-`
+	arguments.version = ListFirst(ListChangeDelims(arguments.version, ".", ".,"), "-");
+	loc.versioning = ListFirst(ListChangeDelims(loc.versioning, ".", ".,"), "-");
 	
 	// split the passed in version into array elements
 	loc.versionArr = $listClean(list=arguments.version, delim=".", returnAs="array");
@@ -804,6 +814,7 @@
 
 		loc.versionStr &= loc.versionPart;
 		loc.versioningStr &= loc.versioningPart;
+
 	}
 
 	loc.versionStr = val(loc.versionStr);
