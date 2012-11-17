@@ -10,6 +10,7 @@
 * [model()](model.md)
 * [obfuscateParam()](obfuscateParam.md)
 * [pluginNames()](pluginNames.md)
+* [semanticVersioning()](semanticVersioning.md)
 * [timestamp()](timestamp.md)
 * [URLFor()](URLFor.md)
 			

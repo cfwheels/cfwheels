@@ -190,7 +190,7 @@
 					<cfset loc.temp.class = loc.class>
 					<cfset loc.temp.name = loc.function.name>
 					<cfset loc.temp.chapters = ListToArray(loc.function.chapters)>
-					<cfset loc.temp.functions = ListToArray(loc.function.functions)>>
+					<cfset loc.temp.functions = ListToArray(loc.function.functions)>
 					<cfset loc.temp.categories = ListToArray(loc.function.categories)>
 					<cfset loc.temp.hint = loc.function.hint>
 					<cfset loc.temp.examples = loc.function.examples>
