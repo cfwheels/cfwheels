@@ -380,7 +380,7 @@
 		}
 		StructDelete(arguments, "for");
 		StructDelete(arguments, "value");
-		loc.returnValue = label(argumentCollection=arguments);
+		loc.returnValue = this.label(argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
