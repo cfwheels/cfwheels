@@ -1,6 +1,6 @@
 <cfcomponent output="false">
 
-	<cfinclude template="/wheelsMapping/global/internal.cfm">
+	<cfinclude template="global/internal.cfm">
 
 	<cfset variables.$class = {}>
 	<cfset variables.$class.plugins = {}>
