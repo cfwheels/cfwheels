@@ -1,6 +1,7 @@
 <cfcomponent output="false">
 
 	<cfinclude template="global/internal.cfm">
+	<cfinclude template="global/public.cfm">
 
 	<cfset variables.$class = {}>
 	<cfset variables.$class.plugins = {}>
