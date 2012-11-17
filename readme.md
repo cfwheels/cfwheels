@@ -21,6 +21,9 @@ guidelines about how to proceed. Join us!
 
 _Note:_ CFWheels uses [RocketUnit][4] as its testing framework.
 
+**Before running tests, make sure that all debugging is turned OFF**. This could add a consideral amount
+of time for the tests to complete and may cause your engine to become unresponsive.
+
  1. Create a database on a supported database server name `wheelstestdb`. At this time the supported
     database servers are H2, Microsoft SQL Server, Oracle, PostgreSQL, MySQL.
  2. Create a datasource in your CFML engine's administrator named `wheelstestdb` pointing to the
