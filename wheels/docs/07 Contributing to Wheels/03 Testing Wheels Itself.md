@@ -1,8 +1,8 @@
-# Testing the Wheels Fraemwork Itself
+# Testing the Wheels Framework Itself
 
-Though the core team tests each new release of Wheels against a varity of environments, there is no
-possiable way for them to test against them all. This is where you can help them termendously! We
-encourage evryone to test each new release of Wheels against their current setup and
+Though the core team tests each new release of Wheels against a variety of environments, there is no
+possible way for them to test against them all. This is where you can help them tremendously! We
+encourage everyone to test each new release of Wheels against their current setup and
 [report any bugs][10] back to the core team.
 
 ## CFML and Database Engines
