@@ -80,7 +80,7 @@
 		</tr>
 		<tr>
 			<td valign="top"><strong>Framework:</strong></td>
-			<td>Wheels #get("version")#<cfif loc.hasFrameworkTests> [<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=core_test_packages.cfm&type=core&reload=true">Run Tests</a>]</cfif></td>
+			<td>Wheels #get("version")#<cfif loc.hasFrameworkTests> [<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=core_test_packages&type=core&reload=true">Run Tests</a>]</cfif></td>
 		</tr>
 		<tr>
 			<td valign="top"><strong>CFML Engine:</strong></td>
