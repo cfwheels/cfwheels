@@ -51,49 +51,49 @@
 	<!--- object based helpers --->
 
 	<cffunction name="test_custom_label_on_object_helper">
-		<cfset tag = model("tag").findOne()>
+		<cfset tag = model("tag").findOne(order="id")>
 		<cfset loc.actual = textField(objectName="tag", property="name", label="The Label:")>
 		<cfset loc.expected = '<label for="tag-name">The Label:<input id="tag-name" maxlength="50" name="tag[name]" type="text" value="releases" /></label>'>
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>
 
 	<cffunction name="test_custom_label_on_object_helper_and_overriding_id">
-		<cfset tag = model("tag").findOne()>
+		<cfset tag = model("tag").findOne(order="id")>
 		<cfset loc.actual = textField(objectName="tag", property="name", label="The Label:", id="the-id")>
 		<cfset loc.expected = '<label for="the-id">The Label:<input id="the-id" maxlength="50" name="tag[name]" type="text" value="releases" /></label>'>
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>
 
 	<cffunction name="test_blank_label_on_object_helper">
-		<cfset tag = model("tag").findOne()>
+		<cfset tag = model("tag").findOne(order="id")>
 		<cfset loc.actual = textField(objectName="tag", property="name", label="")>
 		<cfset loc.expected = '<input id="tag-name" maxlength="50" name="tag[name]" type="text" value="releases" />'>
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>
 	
 	<cffunction name="test_automatic_label_on_object_helper_with_around_placement">
-		<cfset tag = model("tag").findOne()>
+		<cfset tag = model("tag").findOne(order="id")>
 		<cfset loc.actual = textField(objectName="tag", property="name", labelPlacement="around")>
 		<cfset loc.expected = '<label for="tag-name">Tag name<input id="tag-name" maxlength="50" name="tag[name]" type="text" value="releases" /></label>'>
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>	
 
 	<cffunction name="test_automatic_label_on_object_helper_with_before_placement">
-		<cfset tag = model("tag").findOne()>
+		<cfset tag = model("tag").findOne(order="id")>
 		<cfset loc.actual = textField(objectName="tag", property="name", labelPlacement="before")>
 		<cfset loc.expected = '<label for="tag-name">Tag name</label><input id="tag-name" maxlength="50" name="tag[name]" type="text" value="releases" />'>
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>
 
 	<cffunction name="test_automatic_label_on_object_helper_with_after_placement">
-		<cfset tag = model("tag").findOne()>
+		<cfset tag = model("tag").findOne(order="id")>
 		<cfset loc.actual = textField(objectName="tag", property="name", labelPlacement="after")>
 		<cfset loc.expected = '<input id="tag-name" maxlength="50" name="tag[name]" type="text" value="releases" /><label for="tag-name">Tag name</label>'>
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>	
 	
 	<cffunction name="test_automatic_label_on_object_helper_with_non_persisted_property">
-		<cfset tag = model("tag").findOne()>
+		<cfset tag = model("tag").findOne(order="id")>
 		<cfset loc.actual = textField(objectName="tag", property="virtual")>
 		<cfset loc.expected = '<label for="tag-virtual">Virtual property<input id="tag-virtual" name="tag[virtual]" type="text" value="" /></label>'>
 		<cfset assert('loc.actual eq loc.expected')>
