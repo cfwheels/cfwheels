@@ -12,6 +12,7 @@
 <cfset loc.floatColumnType = "float">
 <cfset loc.identityColumnType = "">
 <cfset loc.bitColumnType = "bit">
+<cfset loc.bitColumnDefault = 0>
 <cfset loc.stringColumnType = "varchar">
 
 <cfif loc.db IS "microsoftsqlserver">
@@ -26,7 +27,8 @@
 	<cfset loc.identityColumnType = "SERIAL NOT NULL">
 	<cfset loc.dateTimeColumnType = "timestamp">
 	<cfset loc.binaryColumnType = "bytea">
-	<cfset loc.bitColumnType = "int">
+	<cfset loc.bitColumnType = "boolean">
+	<cfset loc.bitColumnDefault = "false">
 <cfelseif loc.db IS "oracle">
 	<cfset loc.identityColumnType = "number(38,0) NOT NULL">
 	<cfset loc.dateTimeColumnType = "timestamp">
@@ -196,7 +198,7 @@ CREATE TABLE shops
 CREATE TABLE sqltypes
 (
 	id #loc.identityColumnType#
-	,booleanType #loc.bitColumnType# DEFAULT 0 NOT NULL
+	,booleanType #loc.bitColumnType# DEFAULT #loc.bitColumnDefault# NOT NULL
 	,binaryType #loc.binaryColumnType# NULL
 	,dateTimeType #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NOT NULL
 	,floatType #loc.floatColumnType# DEFAULT 1.25 NULL
