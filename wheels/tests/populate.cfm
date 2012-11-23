@@ -26,6 +26,7 @@
 	<cfset loc.identityColumnType = "SERIAL NOT NULL">
 	<cfset loc.dateTimeColumnType = "timestamp">
 	<cfset loc.binaryColumnType = "bytea">
+	<cfset loc.bitColumnType = "int">
 <cfelseif loc.db IS "oracle">
 	<cfset loc.identityColumnType = "number(38,0) NOT NULL">
 	<cfset loc.dateTimeColumnType = "timestamp">
@@ -41,31 +42,25 @@
 <cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="tables">
 <cfset loc.tableList = ValueList(loc.dbinfo.table_name, chr(7))>
 
-<!--- list of tables to delete --->
-<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes,sqltypesnulls">
-<cfloop list="#loc.tables#" index="loc.i">
-	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
-		<cftry>
-			<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
-			DROP TABLE #loc.i#
-			</cfquery>
-			<cfcatch>
-			</cfcatch>
-		</cftry>
-	</cfif>
-</cfloop>
 
 <!--- list of views to delete --->
 <cfset loc.views = "userphotos">
 <cfloop list="#loc.views#" index="loc.i">
 	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
-		<cftry>
-			<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
-			DROP VIEW #loc.i#
-			</cfquery>
-			<cfcatch>
-			</cfcatch>
-		</cftry>
+		<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
+		DROP VIEW #loc.i#
+		</cfquery>
+	</cfif>
+</cfloop>
+
+
+<!--- list of tables to delete --->
+<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes,sqltypesnulls">
+<cfloop list="#loc.tables#" index="loc.i">
+	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
+		<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
+		DROP TABLE #loc.i#
+		</cfquery>
 	</cfif>
 </cfloop>
 
