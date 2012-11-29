@@ -7,10 +7,10 @@
 		<cfargument name="username" type="string" required="false" default="">
 		<cfargument name="password" type="string" required="false" default="">
 		<cfset variables.instance.connection = arguments>
-		<cfreturn $assignAdapter()>
+		<cfreturn this>
 	</cffunction>
-
-	<cffunction name="$assignAdapter" returntype="any" access="public" output="false">
+	
+	<cffunction name="name" returntype="string" access="public" output="false">
 		<cfscript>
 			var loc = {};
 
@@ -44,9 +44,12 @@
 				loc.adapterName = "H2";
 			else
 				$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by Wheels.", extendedInfo="Use Microsoft SQL Server, MySQL, Oracle or PostgreSQL.");
-			loc.returnValue = $createObjectFromRoot(path="wheels.model.adapters", fileName="#loc.adapterName#", method="init", argumentCollection=variables.instance.connection);
 		</cfscript>
-		<cfreturn loc.returnValue>
+		<cfreturn loc.adapterName>
+	</cffunction>
+
+	<cffunction name="$assignAdapter" returntype="any" access="public" output="false">
+		<cfreturn $createObjectFromRoot(path="wheels.model.adapters", fileName="#name()#", method="init", argumentCollection=variables.instance.connection)>
 	</cffunction>
 	
 	<cfinclude template="plugins/injection.cfm">
