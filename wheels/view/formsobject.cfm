@@ -392,9 +392,11 @@
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		if (StructKeyExists(arguments, "multiple") and IsBoolean(arguments.multiple))
 		{
-			if (arguments.multiple)
+			if (arguments.multiple) 
+			{
 				arguments.multiple = "multiple";
-			else
+				arguments.includeBlank = false;
+			} else 
 				StructDelete(arguments, "multiple");
 		}
 		loc.content = $optionsForSelect(argumentCollection=arguments);
