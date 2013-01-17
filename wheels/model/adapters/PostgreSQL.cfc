@@ -15,8 +15,7 @@
 			switch(arguments.type)
 			{
 				case "bigint": case "int8": case "bigserial": case "serial8": {loc.returnValue = "cf_sql_bigint"; break;}
-				case "bit": case "varbit": {loc.returnValue = "cf_sql_bit"; break;}
-				case "bool": case "boolean": {loc.returnValue = "cf_sql_varchar"; break;}
+				case "bool": case "boolean": case "bit": case "varbit": {loc.returnValue = "cf_sql_bit"; break;}
 				case "bytea": {loc.returnValue = "cf_sql_binary"; break;}
 				case "char": case "character": {loc.returnValue = "cf_sql_char"; break;}
 				case "date": case "timestamp": case "timestamptz": {loc.returnValue = "cf_sql_timestamp"; break;}

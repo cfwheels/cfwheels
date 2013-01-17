@@ -12,6 +12,7 @@
 <cfset loc.floatColumnType = "float">
 <cfset loc.identityColumnType = "">
 <cfset loc.bitColumnType = "bit">
+<cfset loc.bitColumnDefault = 0>
 <cfset loc.stringColumnType = "varchar">
 
 <cfif loc.db IS "microsoftsqlserver">
@@ -26,6 +27,8 @@
 	<cfset loc.identityColumnType = "SERIAL NOT NULL">
 	<cfset loc.dateTimeColumnType = "timestamp">
 	<cfset loc.binaryColumnType = "bytea">
+	<cfset loc.bitColumnType = "boolean">
+	<cfset loc.bitColumnDefault = "false">
 <cfelseif loc.db IS "oracle">
 	<cfset loc.identityColumnType = "number(38,0) NOT NULL">
 	<cfset loc.dateTimeColumnType = "timestamp">
@@ -41,31 +44,25 @@
 <cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="tables">
 <cfset loc.tableList = ValueList(loc.dbinfo.table_name, chr(7))>
 
-<!--- list of tables to delete --->
-<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes,sqltypesnulls">
-<cfloop list="#loc.tables#" index="loc.i">
-	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
-		<cftry>
-			<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
-			DROP TABLE #loc.i#
-			</cfquery>
-			<cfcatch>
-			</cfcatch>
-		</cftry>
-	</cfif>
-</cfloop>
 
 <!--- list of views to delete --->
 <cfset loc.views = "userphotos">
 <cfloop list="#loc.views#" index="loc.i">
 	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
-		<cftry>
-			<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
-			DROP VIEW #loc.i#
-			</cfquery>
-			<cfcatch>
-			</cfcatch>
-		</cftry>
+		<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
+		DROP VIEW #loc.i#
+		</cfquery>
+	</cfif>
+</cfloop>
+
+
+<!--- list of tables to delete --->
+<cfset loc.tables = "authors,cities,classifications,comments,galleries,photos,posts,profiles,shops,tags,users,collisiontests,combikeys,tblusers,sqltypes,sqltypesnulls">
+<cfloop list="#loc.tables#" index="loc.i">
+	<cfif ListFindNoCase(loc.tableList, loc.i, chr(7))>
+		<cfquery name="loc.query" datasource="#application.wheels.dataSourceName#">
+		DROP TABLE #loc.i#
+		</cfquery>
 	</cfif>
 </cfloop>
 
@@ -201,7 +198,7 @@ CREATE TABLE shops
 CREATE TABLE sqltypes
 (
 	id #loc.identityColumnType#
-	,booleanType #loc.bitColumnType# DEFAULT 0 NOT NULL
+	,booleanType #loc.bitColumnType# DEFAULT #loc.bitColumnDefault# NOT NULL
 	,binaryType #loc.binaryColumnType# NULL
 	,dateTimeType #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NOT NULL
 	,floatType #loc.floatColumnType# DEFAULT 1.25 NULL

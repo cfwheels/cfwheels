@@ -64,9 +64,10 @@
 			<cftransaction action="begin">
 				<cfset loc.model = model("sqltypesnulls").new()>
 				<cfset loc.model.save(reload=true)>
-				<cfset assert('loc.model.id gt 1')>
+				<cfset loc.p = loc.model.properties()>
 				<cftransaction action="rollback"/>
 			</cftransaction>
+			<cfset assert('loc.p.id gt 1')>
 		</cfif>
 	</cffunction>
 

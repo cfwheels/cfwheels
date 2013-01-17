@@ -310,13 +310,9 @@
 		loc.iEnd = ListLen(arguments.keys);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.key = ListGetAt(arguments.keys, loc.i);
-			loc.returnValue[loc.key] = "";
-			if (StructKeyExists(arguments.scope, loc.key))
-			{
-				loc.returnValue[loc.key] = arguments.scope[loc.key];
-			}
+			loc.returnValue[ListGetAt(arguments.keys, loc.i)] = arguments.scope[ListGetAt(arguments.keys, loc.i)];
 		}
+		
 
 		/* Fixes IIS issue that returns a blank cgi.path_info 
 		   Fix: http://www.giancarlogomez.com/2012/06/you-are-not-going-crazy-cgipathinfo-is.html
@@ -937,7 +933,7 @@ Should now call bar() instead and marking foo() as deprecated
 <cffunction name="$checkMinimumVersion" access="public" returntype="boolean" output="false">
 	<cfargument name="version" type="string" required="true">
 	<cfargument name="minversion" type="string" required="true">
-	<cfreturn $advancedVersioning(">= #arguments.minversion#", arguments.version)>
+	<cfreturn semanticVersioning(">= #arguments.minversion#", arguments.version)>
 </cffunction>
 
 <cffunction name="$loadPlugins" returntype="void" access="public" output="false">
@@ -1059,154 +1055,3 @@ Should now call bar() instead and marking foo() as deprecated
 	
 	<cfreturn loc.saved>
 </cffunction> 
-
-<cffunction name="$advancedVersioning" access="public" returntype="boolean" output="false"
-	hint='
-allows a developer to specify versions in an advanced way. valid syantax is:
-
-[operator] [version]
-
-The following operators are supported:
-
-=  Equals version
-!= Not equal to version
->  Greater than version
-<  Less than version
->= Greater than or equal to
-<= Less than or equal to
-~> Approximately greater than
-
-The first six operators are self explanitory. The Approximate operator `~>` can be thought
-of as a `between` operator. For example, if the developer wanted their plugin to support a
-wheels version that was between 1.1 and 1.2, they could do:
-
-<cffunction name="init">
-	<cfset this.version = "~> 1.1">
-	<cfreturn this>
-</cffunction>
-
-To use, you pass in the version and versioning strings:
-
-<cfset loc.passed = $advancedVersioning(this.version, application.wheels.version)>
-	'>
-	<cfargument name="versioning" type="string" required="true">
-	<cfargument name="version" type="string" required="true">
-	<cfscript>
-	var loc = {};
-
-	// supported operators
-	loc.operators = "=,!=,>,<,>=,<=,~>";
-	// return value
-	loc.ret = false;
-	
-	// first, split the string
-	loc.arr = ListToArray(arguments.versioning, " ");
-
-	// the array should only between two elements
-	if (ArrayLen(loc.arr) != 2)
-	{
-		return false;
-	}
-	
-	loc.operator = loc.arr[1];
-	loc.versioning = loc.arr[2];
-	
-	// the first element of the array should be an operator
-	if (
-		!ListFindNoCase(loc.operators, loc.operator)
-		OR !Len(Trim(arguments.version))
-		OR !Len(Trim(loc.versioning))
-	)
-	{
-		return false;
-	}
-
-	arguments.version = ListChangeDelims(arguments.version, ".", ".,");
-	loc.versioning = ListChangeDelims(loc.versioning, ".", ".,");
-	
-	// split the passed in version into array elements
-	loc.versionArr = $listClean(list=arguments.version, delim=".", returnAs="array");
-	// split the versioning string into array elements
-	loc.versioningArr = $listClean(list=loc.versioning, delim=".", returnAs="array");
-	
-	// cache the length of the arrays
-	loc.versionArrLen = ArrayLen(loc.versionArr);
-	loc.versioningArrLen = ArrayLen(loc.versioningArr);
-	
-	if (loc.operator eq "~>" AND loc.versioningArrLen GTE loc.versionArrLen)
-	{
-		loc.loops = loc.versioningArrLen;
-	}
-	else
-	{
-		loc.loops = max(loc.versionArrLen, loc.versioningArrLen);
-	}
-	
-	ArrayResize(loc.versionArr, loc.loops);
-	ArrayResize(loc.versioningArr, loc.loops);
-
-	// create string that will be transformed to floats for comparisions
-	loc.versionStr = "";
-	loc.versioningStr = "";
-	
-	for (loc.i = 1; loc.i lte loc.loops; loc.i++)
-	{
-
-		loc.versioningPart = "0";
-		if(ArrayIsDefined(loc.versioningArr, loc.i))
-		{
-			loc.versioningPart = loc.versioningArr[loc.i].toString();
-		}
-		
-		loc.versionPart = "0";
-		if(ArrayIsDefined(loc.versionArr, loc.i))
-		{
-			loc.versionPart = loc.versionArr[loc.i].toString();
-		}
-
-		if (loc.i EQ 2)
-		{
-			loc.versionStr &= ".";
-			loc.versioningStr &= ".";
-		}
-		else if (loc.i GT 2)
-		{
-			loc.size = max(Len(loc.versioningPart), Len(loc.versionPart));
-			loc.versionPart = loc.versionPart & RepeatString("0", loc.size - Len(loc.versionPart));
-			loc.versioningPart = loc.versioningPart & RepeatString("0", loc.size - Len(loc.versioningPart));
-		}
-
-		loc.versionStr &= loc.versionPart;
-		loc.versioningStr &= loc.versioningPart;
-	}
-
-	loc.versionStr = val(loc.versionStr);
-	loc.versioningStr = val(loc.versioningStr);
-
-	if (loc.operator eq "=" AND loc.versioningStr eq loc.versionStr)
-	{
-		return true;
-	}
-	else if (loc.operator eq "!=" AND loc.versioningStr neq loc.versionStr)
-	{
-		return true;
-	}
-	else if (loc.operator eq "<" AND loc.versionStr lt loc.versioningStr)
-	{
-		return true;
-	}
-	else if (loc.operator eq ">" AND loc.versionStr gt loc.versioningStr)
-	{
-		return true;
-	}
-	if (loc.operator eq "<=" AND loc.versionStr lte loc.versioningStr)
-	{
-		return true;
-	}
-	else if ((loc.operator eq ">=" OR loc.operator eq "~>") AND loc.versionStr gte loc.versioningStr)
-	{
-		return true;
-	}
-	</cfscript>
-	<cfreturn false>
-</cffunction>

@@ -140,7 +140,7 @@
 		}
 
 		loc.root = ExpandPath(loc.relativeRoot);
-		loc.folder = arguments.directory;
+		loc.folder = Replace(arguments.directory, "\", "/", "all");
 		if (!Len(loc.folder))
 		{
 			loc.folder = loc.relativeRoot & application.wheels.filePath; 
@@ -150,13 +150,13 @@
 		{
 			loc.folder = RemoveChars(loc.folder, 1, Len(loc.root));
 		}
-
-		loc.fullPath = Replace(loc.folder, "\", "/", "all");
-		loc.fullPath = ListAppend(loc.fullPath, arguments.file, "/");
-		loc.fullPath = ExpandPath(loc.fullPath);
-		loc.fullPath = Replace(loc.fullPath, "\", "/", "all");
-		loc.file = ListLast(loc.fullPath, "/");
-		loc.directory = Reverse(ListRest(Reverse(loc.fullPath), "/"));
+		
+		loc.filePath = Replace(arguments.file, "\", "/", "all");
+		loc.file = ListLast(loc.filePath, "/");
+		loc.filePath = Reverse(ListRest(Reverse(loc.filePath), "/"));
+		
+		loc.directory = Replace(ExpandPath(ListAppend(loc.folder, loc.filePath, "/")), "\", "/", "all");
+		loc.fullPath = ListAppend(loc.directory, loc.file, "/");
 
 		// if the file is not found, try searching for it
 		if (!FileExists(loc.fullPath))

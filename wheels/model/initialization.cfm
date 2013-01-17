@@ -62,7 +62,8 @@
 		if(StructKeyExists(variables.wheels.class.connection, "datasource"))
 		{
 			// load the database adapter
-			variables.wheels.class.adapter = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#", fileName="Connection", method="init", datasource="#variables.wheels.class.connection.datasource#", username="#variables.wheels.class.connection.username#", password="#variables.wheels.class.connection.password#");
+			loc.connectionObj = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#", fileName="Connection", method="init", datasource="#variables.wheels.class.connection.datasource#", username="#variables.wheels.class.connection.username#", password="#variables.wheels.class.connection.password#");
+			variables.wheels.class.adapter = loc.connectionObj.$assignAdapter();
 			
 			// get columns for the table
 			loc.columns = $adapter().$getColumns(tableName());

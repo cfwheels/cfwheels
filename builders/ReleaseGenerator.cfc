@@ -6,18 +6,32 @@
 	
 	https://issues.jboss.org/browse/RAILO-1223
 	 --->
-
-	<!--- do not modify anything pass here. you be sorry :) --->
-	<cfset variables.release = application.wheels.version>
-	<cfset variables.zipName = "cfwheels.#variables.release#.zip">
-	<cfset variables.source = ExpandPath("../")>
-	<cfset variables.buildtmp = ExpandPath("../wheels-build-temp-dir")>
-	<cfset variables.ignore = "build.cfm,.project,.gitignore,.git,WEB-INF,aspnet_client,wheels-build-temp-dir,#variables.zipName#">
-	<cfset variables.folders = "files,images,javascripts,lib,plugins,stylesheets,tests">
-	<cfset variables.remove = "wheels/tests,wheels/docs,builders">
-	<cfset variables.zipfile = "#ExpandPath('../#variables.zipName#')#">
 	
 	<cffunction name="init">
+		<cfargument name="version" type="string" required="true">
+		
+		<!--- 
+		see if this is a final release. Final release don't have contain a '-' which is used for labeling
+		preview/beta releases
+		--->
+		<cfset variables.version = arguments.version>
+		
+		<!--- zip name --->
+		<cfset variables.zipName = "cfwheels.#variables.version#.zip">
+		
+		<cfset variables.source = ExpandPath("../")>
+		<cfset variables.buildtmp = ExpandPath("../wheels-build-temp-dir")>
+		<cfset variables.ignore = "build.cfm,.project,.gitignore,.git,WEB-INF,aspnet_client,wheels-build-temp-dir,#variables.zipName#">
+		<cfset variables.folders = "files,images,javascripts,lib,plugins,stylesheets,tests">
+		<cfset variables.remove = "builders">
+		<cfset variables.zipfile = "#ExpandPath('../#variables.zipName#')#">
+		
+		<!--- for final release we remove the tests and docs --->
+		<cfif !FindNoCase("-", variables.version)>
+			<cfset variables.remove = ListAppend(variables.remove, "wheels/tests", ",")>
+			<cfset variables.remove = ListAppend(variables.remove, "wheels/docs", ",")>
+		</cfif>
+		
 		<cfreturn this>
 	</cffunction>
 	

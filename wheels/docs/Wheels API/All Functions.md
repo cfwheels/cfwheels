@@ -163,6 +163,7 @@
 * [secondSelectTag()](secondSelectTag.md)
 * [select()](select.md)
 * [selectTag()](selectTag.md)
+* [semanticVersioning()](semanticVersioning.md)
 * [sendEmail()](sendEmail.md)
 * [sendFile()](sendFile.md)
 * [set()](set.md)

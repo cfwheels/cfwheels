@@ -1,1 +1,1 @@
-<cfset application.wheels.version = "1.2-beta1">
+<cfset application.wheels.version = "1.2.0-preview2">

@@ -16,7 +16,11 @@
 		<cfset validate("validateCalled")>
 		<cfset validateOnCreate("validateOnCreateCalled")>
 		<cfset validateOnUpdate("validateOnUpdateCalled")>
- 		<cfif application.wheels.dataAdapter eq "oracle">
+ 		<cfif application.wheels.dataAdapter eq "Oracle">
+			<cfset property(name="fullName", sql="users.firstname || ' ' || users.lastname")>
+		<cfelseif application.wheels.dataAdapter eq "MySQL">
+			<cfset property(name="fullName", sql="concat(users.firstname, ' ', users.lastname)")>
+		<cfelseif application.wheels.dataAdapter eq "PostgreSQL">
 			<cfset property(name="fullName", sql="users.firstname || ' ' || users.lastname")>
 		<cfelse>
 			<cfset property(name="fullName", sql="users.firstname + ' ' + users.lastname")>

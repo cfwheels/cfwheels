@@ -1,4 +1,4 @@
-WHEELS VERSION 1.2 BETA 1 (r5386)
+WHEELS VERSION 1.2.0 PREVIEW 1 11/18/2012
 
 Model Enhancements
 ==================
@@ -85,7 +85,7 @@ Miscellaneous
 * Allow placement of models in subfolder - [Tim Badolato, Tony Petruzzi]
 * External paths for imagePath - [andoradmiraal, Tony Petruzzi]
 * Removal of obfuscateParam and deobfuscateParam functionality - [Tony Petruzzi]
-* Removed the ability to switch environment through the url - [Andy Bellenie, Tony Petruzzi]
+* Removed the ability to switch environment through the url unless specified in config/settings.cfm - [Andy Bellenie, Tony Petruzzi]
 * Turned off URL rewriting in IIS 7 by default since otherwise it will throw an error when the URL Rewrite Module is not installed - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

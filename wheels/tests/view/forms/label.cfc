@@ -51,49 +51,49 @@
 	<!--- object based helpers --->
 
 	<cffunction name="test_custom_label_on_object_helper">
-		<cfset tag = model("tag").findOne()>
+		<cfset tag = model("tag").findOne(order="id")>
 		<cfset loc.actual = textField(objectName="tag", property="name", label="The Label:")>
 		<cfset loc.expected = '<label for="tag-name">The Label:<input id="tag-name" maxlength="50" name="tag[name]" type="text" value="releases" /></label>'>
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>
 
 	<cffunction name="test_custom_label_on_object_helper_and_overriding_id">
-		<cfset tag = model("tag").findOne()>
+		<cfset tag = model("tag").findOne(order="id")>
 		<cfset loc.actual = textField(objectName="tag", property="name", label="The Label:", id="the-id")>
 		<cfset loc.expected = '<label for="the-id">The Label:<input id="the-id" maxlength="50" name="tag[name]" type="text" value="releases" /></label>'>
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>
 
 	<cffunction name="test_blank_label_on_object_helper">
-		<cfset tag = model("tag").findOne()>
+		<cfset tag = model("tag").findOne(order="id")>
 		<cfset loc.actual = textField(objectName="tag", property="name", label="")>
 		<cfset loc.expected = '<input id="tag-name" maxlength="50" name="tag[name]" type="text" value="releases" />'>
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>
 	
 	<cffunction name="test_automatic_label_on_object_helper_with_around_placement">
-		<cfset tag = model("tag").findOne()>
+		<cfset tag = model("tag").findOne(order="id")>
 		<cfset loc.actual = textField(objectName="tag", property="name", labelPlacement="around")>
 		<cfset loc.expected = '<label for="tag-name">Tag name<input id="tag-name" maxlength="50" name="tag[name]" type="text" value="releases" /></label>'>
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>	
 
 	<cffunction name="test_automatic_label_on_object_helper_with_before_placement">
-		<cfset tag = model("tag").findOne()>
+		<cfset tag = model("tag").findOne(order="id")>
 		<cfset loc.actual = textField(objectName="tag", property="name", labelPlacement="before")>
 		<cfset loc.expected = '<label for="tag-name">Tag name</label><input id="tag-name" maxlength="50" name="tag[name]" type="text" value="releases" />'>
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>
 
 	<cffunction name="test_automatic_label_on_object_helper_with_after_placement">
-		<cfset tag = model("tag").findOne()>
+		<cfset tag = model("tag").findOne(order="id")>
 		<cfset loc.actual = textField(objectName="tag", property="name", labelPlacement="after")>
 		<cfset loc.expected = '<input id="tag-name" maxlength="50" name="tag[name]" type="text" value="releases" /><label for="tag-name">Tag name</label>'>
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>	
 	
 	<cffunction name="test_automatic_label_on_object_helper_with_non_persisted_property">
-		<cfset tag = model("tag").findOne()>
+		<cfset tag = model("tag").findOne(order="id")>
 		<cfset loc.actual = textField(objectName="tag", property="virtual")>
 		<cfset loc.expected = '<label for="tag-virtual">Virtual property<input id="tag-virtual" name="tag[virtual]" type="text" value="" /></label>'>
 		<cfset assert('loc.actual eq loc.expected')>
@@ -133,6 +133,16 @@
 		<cfset tag = model("tag").findOne()>
 		<cfset loc.actual = label(objectName="tag", property="name", class="blah")>
 		<cfset loc.expected = '<label class="blah" for="tag-name">Tag name</label>'>
+		<cfset assert('loc.actual eq loc.expected')>
+	</cffunction>
+	
+	<cffunction name="test_make_sure_that_labels_respect_case">
+		<cfset author = model("author").findOne()>
+		<cfset loc.actual = label(objectName="author", property="firstname")>
+		<cfset loc.expected = '<label for="author-firstname">First Name(s)</label>'>
+		<cfset assert('loc.actual eq loc.expected')>
+		<cfset loc.actual = label(objectName="author", property="lastname")>
+		<cfset loc.expected = '<label for="author-lastname">Last name</label>'>
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>
 	
