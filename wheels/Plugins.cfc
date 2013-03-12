@@ -51,7 +51,7 @@
 		<cfloop query="loc.folders">
 			<cfset loc.temp = {}>
 			<cfset loc.temp.name = name>
-			<cfset loc.temp.folderPath = $fullPathToPlugin(lcase(name))>
+			<cfset loc.temp.folderPath = $fullPathToPlugin(name)>
 			<cfset loc.temp.componentName = lcase(name) & "." & name>
 			<cfset loc.plugins[name] = loc.temp>
 		</cfloop>
