@@ -362,7 +362,12 @@
 						another exception thrown
 					--->
 					<cfset status = "Error">
-					<cfset message = message & newline & listLast(cfcatch.tagContext[1].template, "/") & " line " & cfcatch.tagContext[1].line  & newline & newline & cfcatch.detail>
+                                                <cfif ArrayLen(cfcatch.tagContext)>
+                                                        <cfset template = listLast(cfcatch.tagContext[1].template, "/") & " line " & cfcatch.tagContext[1].line>
+                                                <cfelse>
+                                                        <cfset template = "[Unknown tagContext]">
+                                                </cfif>
+                                                <cfset message = message & newline & template  & newline & newline & cfcatch.detail>
 					<cfset request[resultkey].ok = false>
 					<cfset request[resultkey].numErrors = request[resultkey].numErrors + 1>
 					<cfset numTestErrors = numTestErrors + 1>
