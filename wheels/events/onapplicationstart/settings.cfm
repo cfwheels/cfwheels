@@ -137,6 +137,7 @@
 	application.wheels.formats.pdf = "application/pdf";
 	application.wheels.formats.xls = "application/vnd.ms-excel";
 	application.wheels.formats.js = "text/javascript";
+	application.wheels.formats.wddx = "text/xml";
 
 	// function defaults
 	application.wheels.functions = {};
