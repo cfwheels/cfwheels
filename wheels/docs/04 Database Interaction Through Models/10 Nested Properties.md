@@ -346,7 +346,8 @@ association.
 The `keys` argument accepts the foreign keys that should be associated together in the `subscriptions` 
 join table. Note that these keys should be listed in the order that they appear in the database table. 
 In this example, the `subscriptions` table in the database contains a composite primary key with columns 
-called `customerid` and `publicationid`, in that order.
+called `customerid` and `publicationid`, in that order. These two fields must be set as a composite primary 
+key in the database for this to work.
 
 ## How the Form Submission Works
 
