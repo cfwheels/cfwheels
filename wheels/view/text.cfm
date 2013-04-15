@@ -55,6 +55,10 @@
 			// remove any sort of trailing puncuation
 			loc.punctuation = ArrayToList(ReMatchNoCase(loc.PunctuationRegEx, loc.str));
 			loc.str = REReplaceNoCase(loc.str, loc.PunctuationRegEx, "", "all");
+			// If we're linking a www. URL prefix with hypertext transfer protocol.
+			if (arguments.protocol eq "" and Left(loc.str, 4) neq "http") {
+				arguments.protocol = "http://";
+			}
 			arguments.href = arguments.protocol & loc.str;
 			loc.element = $element("a", arguments, loc.str, "text,regex,link,protocol,relative") & loc.punctuation;
 			arguments.text = Insert(loc.element, arguments.text, loc.match.pos[1]-1);
