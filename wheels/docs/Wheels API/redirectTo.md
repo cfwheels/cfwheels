@@ -3,6 +3,8 @@
 ## Description
 Redirects the browser to the supplied `controller`/`action`/`key`, `route` or back to the referring page. Internally, this function uses the @URLFor function to build the link and the `cflocation` tag to perform the redirect.
 
+Additional arguments will be converted into flash messages.
+
 ## Function Syntax
 	redirectTo( [ back, addToken, statusCode, route, controller, action, key, params, anchor, onlyPath, host, protocol, port, delay ] )
 
@@ -138,9 +140,9 @@ Redirects the browser to the supplied `controller`/`action`/`key`, `route` or ba
 
 ## Examples
 	
-		<!--- Redirect to an action after successfully saving a user --->
+		<!--- Redirect to an action after successfully saving a user and create a flash message with the key 'success' --->
 		<cfif user.save()>
-		    <cfset redirectTo(action="saveSuccessful")>
+		    <cfset redirectTo(action="saveSuccessful", success="User saved successfully.")>
 		</cfif>
 
 		<!--- Redirect to a specific page on a secure server --->
