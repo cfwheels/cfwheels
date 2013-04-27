@@ -227,7 +227,7 @@
 	categories="configuration,formats" chapters="responding-with-multiple-formats" functions="provides,renderWith">
 		<cfargument name="extension" type="string" required="true" hint="File extension to add." />
 		<cfargument name="mimeType" type="string" required="true" hint="Matching MIME type to associate with the file extension." />
-		<cfset application.wheels.formats[arguments.extension] = arguments.mimeType />
+		<cfset application.wheels.formats[lcase(arguments.extension)] = arguments.mimeType />
 </cffunction>
 	
 <cffunction name="addRoute" returntype="void" access="public" output="false" hint="Adds a new route to your application."
