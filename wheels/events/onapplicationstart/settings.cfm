@@ -129,15 +129,17 @@
 	application.wheels.cacheQueriesDuringRequest = true;
 	
 	// possible formats for provides
-	application.wheels.formats = {};
-	application.wheels.formats.html = "text/html";
-	application.wheels.formats.xml = "text/xml";
-	application.wheels.formats.json = "application/json";
-	application.wheels.formats.csv = "text/csv";
-	application.wheels.formats.pdf = "application/pdf";
-	application.wheels.formats.xls = "application/vnd.ms-excel";
-	application.wheels.formats.js = "text/javascript";
-	application.wheels.formats.wddx = "text/xml";
+	// need to use a linked hash map so that the orders of the formats are considered
+	// this is important as both xml and wddx share the same content-type
+	application.wheels.formats = createObject("Java", "java.util.LinkedHashMap");
+	application.wheels.formats["html"] = "text/html";
+	application.wheels.formats["xml"] = "text/xml";
+	application.wheels.formats["json"] = "application/json";
+	application.wheels.formats["csv"] = "text/csv";
+	application.wheels.formats["pdf"] = "application/pdf";
+	application.wheels.formats["xls"] = "application/vnd.ms-excel";
+	application.wheels.formats["js"] = "text/javascript";
+	application.wheels.formats["wddx"] = "text/xml";
 
 	// function defaults
 	application.wheels.functions = {};
