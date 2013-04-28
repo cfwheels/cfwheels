@@ -1,11 +1,11 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
-<cffunction name="redirectTo" returntype="void" access="public" output="false" hint="Redirects the browser to the supplied `controller`/`action`/`key`, `route` or back to the referring page. Internally, this function uses the @URLFor function to build the link and the `cflocation` tag to perform the redirect."
+<cffunction name="redirectTo" returntype="void" access="public" output="false" hint="Redirects the browser to the supplied `controller`/`action`/`key`, `route` or back to the referring page. Internally, this function uses the @URLFor function to build the link and the `cflocation` tag to perform the redirect. Additional arguments will be converted into flash messages."
 	examples=
 	'
-		<!--- Redirect to an action after successfully saving a user --->
+		<!--- Redirect to an action after successfully saving a user and create a flash message with the key "success" --->
 		<cfif user.save()>
-		    <cfset redirectTo(action="saveSuccessful")>
+		    <cfset redirectTo(action="saveSuccessful", success="User saved successfully.")>
 		</cfif>
 
 		<!--- Redirect to a specific page on a secure server --->

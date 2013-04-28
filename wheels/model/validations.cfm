@@ -177,6 +177,15 @@
 	'
 		<!--- Make sure that the user data can not be saved to the database without the `emailAddress` property. (It must exist and not be an empty string) --->
 		<cfset validatesPresenceOf("emailAddress")>
+		
+		<!--- Basic use of condition --->
+		<cfset validatesPresenceOf(properties="userid")>
+		
+		<cfset validatesPresenceOf(properties="email", condition="isDefined(''this.userid'')")>
+		<cfset validatesPresenceOf(properties="email", condition="isDefined(''this.userid'') AND isNumeric(this.userid)")>
+		
+		<cfset validatesPresenceOf(properties="email", condition="StructKeyExists(this, ''userid'')")>
+		<cfset validatesPresenceOf(properties="email", condition="StructKeyExists(this, ''userid'') AND isNumeric(this.userid)")>
 	'
 	categories="model-initialization,validations" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesFormatOf,validatesInclusionOf,validatesLengthOf,validatesNumericalityOf,validatesUniquenessOf">
 	<cfargument name="properties" type="string" required="false" default="" hint="@validatesConfirmationOf.">
@@ -236,6 +245,20 @@
 		<cffunction name="checkPhoneNumber">
 			<!--- Make sure area code is `614` --->
 			<cfreturn Left(this.phoneNumber, 3) is "614">
+		</cffunction>
+		
+		<!--- Example 2: Custom validation of a hasMany relationship using hasManyCheckbox which requires a user to check at least one hasManyCheckbox for `TechSelections` --->
+		<cffunction name="init">
+			<cfset hasMany(name="Techselections")>
+			<!--- Register the `validateTechSelections` method below to be called to validate objects before they are saved --->
+			<cfset validate(method="validateTechSelections")>
+		</cffunction>
+		
+		<cffunction name="validateTechSelections" access="private">
+			<!--- If the `this.Techselections` array is empty add an error asking the user to select at least one techology --->
+			<cfif arrayIsEmpty(this.Techselections)>
+				<cfset addError(property="Techselections", message="Please select at least one technology.")>
+			</cfif>
 		</cffunction>
 	'
 	categories="model-initialization,validations" chapters="object-validation" functions="validateOnCreate,validateOnUpdate">
