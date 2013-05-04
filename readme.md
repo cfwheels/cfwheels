@@ -17,6 +17,13 @@ some basics about how applications built on top of Wheels work.
 We encourage you to contribute to ColdFusion on Wheels! Please check out the [Coding Guidelines][3] for
 guidelines about how to proceed. Join us! 
 
+If you would like to contribute or update doumentation, you can edit the guides located in `wheels/docs`.
+
+_NOTE:_ When writing or updating documentation for the API themselves, update the documentation directly
+in the associated method and _NOT_ in the `wheels/docs/Wheels API` directory. Afterwards, run the
+documentation generator (this will update the `wheels/docs/Wheels API` directory automatically) and
+commit your changes. See the `Generating API Documentation` section of this README for more information. 
+
 ## Running Tests
 
 _Note:_ CFWheels uses [RocketUnit][4] as its testing framework.
@@ -54,20 +61,11 @@ _Note:_ The API generation script has only been tested against Railo 3.3.0.007 o
  1. Make sure the URL rewriting is _**OFF**_
  2. Click the `Generate Documentation` on the Framework line in the `grey debug area`
  3. The generator will automatically create all the pages for the Wheels API in `wheels/docs/Wheels API`
- 4.	An XML file will be created in the `builders/output/docs` directory. This can be used to create
- 	code hinting for editors if desired.
+ 4.	A `cfwheels-api.xml` XML file will be created in the `builders/output/docs` directory. This can be used to create a
+ 	a syntax or code hinting library for Wheels for your favorite editor.
 	
-
 You may overload or overwrite any of the outputted API documentation by adding to the
 `builders/api/overload.cfm`. A diagram of the generated API structure is provided in the document.
-
-If you are a developer building a syntax or code hinting library for Wheels for your favorite editor,
-you can automatically generate an XML formatted version of the API by passing `?xml=true` to the
-API Generator URL:
-
-	http://localhost/builders/api/index.cfm?xml=true
-
-This will create a file called `cfwheels-api.xml` in the directory above your Wheels project.
 
 ## View API Documentation
 
