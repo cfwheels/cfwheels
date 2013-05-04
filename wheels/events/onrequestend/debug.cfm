@@ -17,6 +17,7 @@
 <cfset loc.baseReloadURL = loc.baseReloadURL & "reload=">
 <cfset loc.hasFrameworkTests = StructKeyExists(this, "mappings") && StructKeyExists(this.mappings, "/wheelsMapping") && DirectoryExists(expandPath("/wheelsMapping/tests"))>
 <cfset loc.hasAppTests = DirectoryExists(expandPath("#get('webPath')#/tests"))>
+<cfset loc.hasBuilders = DirectoryExists(expandPath("#get('webPath')#/builders"))>>
 
 <cfoutput>
 
@@ -80,7 +81,13 @@
 		</tr>
 		<tr>
 			<td valign="top"><strong>Framework:</strong></td>
-			<td>Wheels #get("version")#<cfif loc.hasFrameworkTests> [<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=core_test_packages&type=core&reload=true">Run Tests</a>]</cfif></td>
+			<td>Wheels #get("version")#
+				<cfif loc.hasFrameworkTests> [<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=core_test_packages&type=core&reload=true">Run Tests</a>]</cfif>
+				<cfif loc.hasBuilders>
+					[<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=documentation_generator&type=core&reload=true">Generate Documentation</a>]
+					[<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=release_generator&type=core&reload=true">Generate Release</a>]
+				</cfif>
+			</td>
 		</tr>
 		<tr>
 			<td valign="top"><strong>CFML Engine:</strong></td>

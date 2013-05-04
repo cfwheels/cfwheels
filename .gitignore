@@ -17,6 +17,9 @@ files
 # DBMigrate plugin: generated SQL
 db/sql
 
+# builder output
+builders/output/**/*
+
 # AssetBundler plugin: generated bundles
 javascripts/bundles
 stylesheets/bundles

@@ -59,9 +59,12 @@
 	<cffunction name="init" output="false">
 		<cfargument name="wheelsDirectory" type="string" required="true" hint="the full path to the wheels directory to process the classes and generate documentation for">
 		<cfargument name="wheelsAPIChapterDirectory" type="string" required="true" hint="the full path to the wheels api directory in the documentation root. Is used to generate chapters and function references.">
-		<cfargument name="additionalArguments" type="struct" required="false" default="#StructNew()#" hint="additional arguments to add the method documentation. sometimes we have arguments for the method's documentation that we can't put in the code, but need to document. additional arguments allow us to do this.">
+		<cfargument name="wheelsComponentPath" type="string" required="true" hint="the component path to the wheels directory">
+		<cfargument name="outputPath" type="string" required="true" hint="the path to the output directory">
 		<cfset variables.wheelsDirectory = ListChangeDelims(arguments.wheelsDirectory, "/", "\")>
 		<cfset variables.wheelsAPIChapterDirectory = ListChangeDelims(arguments.wheelsAPIChapterDirectory, "/", "\")>
+		<cfset variables.wheelsComponentPath = arguments.wheelsComponentPath>
+		<cfset variables.outputPath = ListChangeDelims(arguments.outputPath, "/", "\")>
 		<cfreturn this>
 	</cffunction>
 	
@@ -118,6 +121,7 @@
 	<cffunction name="build" access="public" returntype="struct" output="false">
 		<cfset var loc = {}>
 		<cfset loc.ret = {errors = "", data = ""}>
+		<cfset $cleanup()>
 		<cfset $processClasses()>
 		<cfset loc.ret.errors = $expandMarkers()>
 		<cfif ArrayIsEmpty(loc.ret.errors)>
@@ -130,8 +134,16 @@
 			<cfset loc.pageGenerator.build()>
 			<cfset loc.ret.data = variables.data>
 		</cfif>
+		<cfset $createOutputPath()>
+		<cfset $generateXML()>
 		<cfreturn loc.ret>
 	</cffunction>
+	
+	
+	<cffunction name="$generateXML">
+		<cffile action="write" file="#variables.outputPath#/cfwheels-api.xml" output="#toXML()#">
+	</cffunction>
+	
 	
 	<cffunction name="toXML" access="public" returntype="string" output="false">
 		<cfset var loc = {}>
@@ -168,7 +180,7 @@
 		<cfdirectory action="list" filter="*.cfc" directory="#variables.wheelsDirectory#" name="loc.classes">
 		<cfloop query="loc.classes">
 			<cfset loc.class = ListFirst(name, '.')>
-			<cfset loc.meta = GetComponentMetaData("wheels.#loc.class#")>
+			<cfset loc.meta = GetComponentMetaData("#variables.wheelsComponentPath#.#loc.class#")>
 			<cfloop array="#loc.meta.functions#" index="loc.function">
 				<!--- only process public API functions --->
 				<cfif
@@ -265,38 +277,6 @@
 		<cfreturn variables.data = loc._data>
 	</cffunction>
 	
-<!--- 	<cffunction name="$overloadData" access="private">
-		<cfset var loc = {}>
-		<cfloop collection="#variables.overloads#" item="loc.i">
-			<cfset loc.overload = variables.overloads[loc.i]>
-			<cfif StructKeyExists(variables.data, loc.i)>
-				<cfloop collection="#loc.overload#" item="loc.j">
-				<!--- 
-				see if this element of the overload is a string or array
-				for string we copy them over.
-				
-				for array we loop through them and see if they are a string, struct or empty
-				string we copy
-				struct we merge
-				empty we do nothing
-				 --->
-					<cfset loc.value = loc.overload[loc.j]>
-					<cfif IsSimpleValue(loc.value)>
-						<cfset variables.data[loc.i][loc.j] = loc.value>
-					<cfelseif IsArray(loc.value)>
-						<cfloop from="1" to="#ArrayLen(loc.value)#" index="loc.v">
-							<cfif IsSimpleValue(loc.value[loc.v]) AND len(loc.value[loc.v])>
-								<cfset variables.data[loc.i][loc.j][loc.v] = loc.value[loc.v]>
-							<cfelseif IsStruct(loc.value[loc.v])>
-								<cfset StructAppend(variables.data[loc.i][loc.j][loc.v], loc.value[loc.v], true)>
-							</cfif>
-						</cfloop>
-					</cfif>
-				</cfloop>
-			</cfif>
-		</cfloop>
-	</cffunction> --->
-
 	
 	<cffunction name="$overloadData" access="private">
 		<cfset var loc = {}>
@@ -357,6 +337,18 @@
 			
 		</cfloop>
 
+	</cffunction>
+	
+	<cffunction name="$cleanup">
+		<cfif DirectoryExists(variables.outputPath)>
+			<cfdirectory action="delete" directory="#variables.outputPath#" recurse="true">
+		</cfif>
+	</cffunction>
+	
+	<cffunction name="$createOutputPath">
+		<cfif !DirectoryExists(variables.outputPath)>
+			<cfdirectory action="create" directory="#variables.outputPath#">
+		</cfif>	
 	</cffunction>
 	
 </cfcomponent>
