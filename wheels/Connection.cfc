@@ -49,7 +49,7 @@
 	</cffunction>
 
 	<cffunction name="$assignAdapter" returntype="any" access="public" output="false">
-		<cfreturn $createObjectFromRoot(path="wheels.model.adapters", fileName="#name()#", method="init", argumentCollection=variables.instance.connection)>
+		<cfreturn $createObjectFromRoot(path="wheels.model.adapters", fileName="#this.name()#", method="init", argumentCollection=variables.instance.connection)>
 	</cffunction>
 	
 	<cfinclude template="plugins/injection.cfm">
