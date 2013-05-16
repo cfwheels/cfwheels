@@ -26,7 +26,7 @@
 
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "initialized"))
 		{
-			if (application.wheels.sendEmailOnError && Len(application.wheels.errorEmailAddress))
+			if (application.wheels.sendEmailOnError && Len(application.wheels.errorEmailToAddress) && Len(application.wheels.errorEmailFromAddress))
 			{
 				loc.mailArgs = {};
 				$args(name="sendEmail", args=loc.mailArgs);
