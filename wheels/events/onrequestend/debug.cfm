@@ -17,7 +17,7 @@
 <cfset loc.baseReloadURL = loc.baseReloadURL & "reload=">
 <cfset loc.hasFrameworkTests = StructKeyExists(this, "mappings") && StructKeyExists(this.mappings, "/wheelsMapping") && DirectoryExists(expandPath("/wheelsMapping/tests"))>
 <cfset loc.hasAppTests = DirectoryExists(expandPath("#get('webPath')#/tests"))>
-<cfset loc.hasBuilders = DirectoryExists(expandPath("#get('webPath')#/builders"))>>
+<cfset loc.hasBuilders = DirectoryExists(expandPath("#get('webPath')#/builders"))>
 
 <cfoutput>
 
