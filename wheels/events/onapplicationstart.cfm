@@ -26,7 +26,7 @@
 		{
 			application.wheels.serverName = "Railo";
 			application.wheels.serverVersion = server.railo.version;
-			loc.minimumServerVersion = "3.1.2.020";
+			loc.minimumServerVersion = "3.3.1.000";
 		}
 		else
 		{
