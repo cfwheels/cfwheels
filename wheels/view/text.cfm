@@ -18,17 +18,17 @@
 		{
 			if(arguments.relative)
 			{
-				arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.|\/)[^\s\b]+)";
+				arguments.regex = "(?:(?:<a\s[^>]+>)?(?:https?://|www\.|\/)[^\s\b]+)";
 			}
 			else
 			{
-				arguments.regex = "(?:(?:<a\s[^>]+)?(?:https?://|www\.)[^\s\b<]+)";
+				arguments.regex = "(?:(?:<a\s[^>]+>)?(?:https?://|www\.)[^\s\b<]+)";
 			}
 			arguments.text = $autoLinkLoop(argumentCollection=arguments);
 		}
 		if (arguments.link != "URLs")
 		{
-			arguments.regex = "(?:(?:<a\s[^>]+)?(?:[^@\s]+)@(?:(?:[-a-z0-9]+\.)+[a-z]{2,}))";
+			arguments.regex = "(?:(?:<a\s[^>]+>)?(?:[-a-z0-9\.]+)@(?:(?:[-a-z0-9]+\.)+[a-z]{2,}))";
 			arguments.protocol = "mailto:";
 			arguments.text = $autoLinkLoop(argumentCollection=arguments);
 		}
