@@ -35,5 +35,10 @@
 		</cftransaction>
 		<cfset assert("loc.resultOne.recordCount IS loc.resultTwo.recordCount")>
 	</cffunction>
+	
+	<cffunction name="test_property_name_used_in_order_clause_instead_of_column">
+		<cfset loc.q = model("photo").findAll(order="DESCRIPTION1 DESC", maxRows="10", include="gallery")>
+		<cfset assert('loc.q.recordCount IS 10')>
+	</cffunction>
 
 </cfcomponent>

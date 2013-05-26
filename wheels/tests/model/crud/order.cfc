@@ -34,5 +34,10 @@
 		<cfset loc.result = model("post").findAll(page=1, perPage=3, include="comments", order="posts.createdAt DESC,posts.id DESC,comments.createdAt")>
 		<cfset assert("loc.result['title'][1] IS 'Title for fifth test post'")>
 	</cffunction>
+	
+	<cffunction name="test_renamed_property_parent_model_with_included_child_models">
+		<cfset loc.q = model("photo").$orderByClause(order="DESCRIPTION1 DESC", include="gallery")>
+		<cfset assert('loc.q eq "ORDER BY DESCRIPTION1 DESC"')>
+	</cffunction>
 
 </cfcomponent>
