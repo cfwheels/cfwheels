@@ -131,7 +131,7 @@
 	// possible formats for provides
 	// need to use a linked hash map so that the orders of the formats are considered
 	// this is important as both xml and wddx share the same content-type
-	application.wheels.formats = createObject("Java", "java.util.LinkedHashMap");
+	application.wheels.formats = createObject("Java", "java.util.LinkedHashMap").init();
 	application.wheels.formats["html"] = "text/html";
 	application.wheels.formats["xml"] = "text/xml";
 	application.wheels.formats["json"] = "application/json";
