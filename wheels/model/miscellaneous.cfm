@@ -82,7 +82,9 @@
 	<cfargument name="property" type="string" required="true" hint="Property (or list of properties) to set as the primary key.">
 	<cfset var loc = {}>
 	<cfloop list="#arguments.property#" index="loc.i">
-		<cfset variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.i)>
+                <cfif !ListFindNoCase(variables.wheels.class.keys, loc.i)>
+		        <cfset variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.i)>
+                </cfif>
 	</cfloop>
 </cffunction>
 
