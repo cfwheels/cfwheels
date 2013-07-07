@@ -362,12 +362,32 @@
 						another exception thrown
 					--->
 					<cfset status = "Error">
-                                                <cfif ArrayLen(cfcatch.tagContext)>
-                                                        <cfset template = listLast(cfcatch.tagContext[1].template, "/") & " line " & cfcatch.tagContext[1].line>
-                                                <cfelse>
-                                                        <cfset template = "[Unknown tagContext]">
-                                                </cfif>
-                                                <cfset message = message & newline & template  & newline & newline & cfcatch.detail>
+                    <cfif ArrayLen(cfcatch.tagContext)>
+                    	<cfset template = "#ListLast(cfcatch.tagContext[1].template, "/")# line #cfcatch.tagContext[1].line#">
+                        <cfsavecontent variable="tagContext">
+                        	<ul>
+                        		<cfloop from="1" to="#ArrayLen(cfcatch.tagContext)#" index="i">
+                        			<li>#ListLast(cfcatch.tagContext[i].template, "/")# line #cfcatch.tagContext[i].line#</li>
+                        		</cfloop>
+                        	</ul>
+                        </cfsavecontent>
+                        <cfset tagContext = Replace(tagContext, Chr(10), "", "all")>
+                    <cfelse>
+                    	<cfset template = "">
+                        <cfset tagContext = "[Unknown tagContext]">
+                    </cfif>
+
+                    <cfif Len(template)>
+						<cfset message = message & newline & template>
+					</cfif>
+                    <cfif Len(cfcatch.extendedInfo)>
+						<cfset message = message & newline & newLine & cfcatch.extendedInfo>
+					</cfif>
+                    <cfset message = message & newline & newline & tagContext>
+                    <cfif Len(cfcatch.detail)>
+                    	<cfset message = message & newline & newline & cfcatch.detail>
+                    </cfif>
+
 					<cfset request[resultkey].ok = false>
 					<cfset request[resultkey].numErrors = request[resultkey].numErrors + 1>
 					<cfset numTestErrors = numTestErrors + 1>
