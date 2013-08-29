@@ -92,6 +92,7 @@
 	application.wheels.automaticValidations = true;
 	application.wheels.setUpdatedAtOnCreate = true;
 	application.wheels.useExpandedColumnAliases = false;
+	application.wheels.modelRequireInit = false;
 	
 	// are we allowed to switch environments through the url?
 	application.wheels.allowedEnvironmentSwitchThroughURL = false;
