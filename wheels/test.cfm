@@ -380,6 +380,9 @@
                     <cfif Len(template)>
 						<cfset message = message & newline & template>
 					</cfif>
+                    <cfif StructKeyExists(cfcatch, "sql") and Len(cfcatch.sql)>
+                    	<cfset message = message & newline & newline & cfcatch.sql>
+                    </cfif>
                     <cfif Len(cfcatch.extendedInfo)>
 						<cfset message = message & newline & newLine & cfcatch.extendedInfo>
 					</cfif>
