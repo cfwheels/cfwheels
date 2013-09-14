@@ -123,8 +123,6 @@
 								loc.toAdd = Replace(loc.classData.calculatedProperties[loc.property].sql, ",", "[[comma]]", "all");
 							if (Len(loc.toAdd))
 							{
-								if (!ListFindNoCase(loc.classData.columnList, loc.property))
-									loc.toAdd = loc.toAdd & " AS " & loc.property;
 								loc.toAdd = loc.toAdd & " " & UCase(ListLast(loc.iItem, " "));
 								if (!ListFindNoCase(loc.returnValue, loc.toAdd))
 								{
