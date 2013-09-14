@@ -27,6 +27,12 @@
 			application.wheels.serverName = "Railo";
 			application.wheels.serverVersion = server.railo.version;
 			loc.minimumServerVersion = "3.3.1.000";
+			
+			// Distinguish against Railo4 since it has changed a bunch of things
+			if(ListFirst(application.wheels.serverVersion, '.') eq 4)
+			{
+				application.wheels.serverName = "Railo4";
+			}
 		}
 		else
 		{
