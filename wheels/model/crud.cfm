@@ -588,7 +588,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="updateOne", args=arguments);
-		loc.object = findOne(where=arguments.where, order=arguments.order, reload=arguments.reload, includeSoftDeletes=arguments.includeSoftDeletes);
+		loc.object = findOne(argumentCollection=arguments);
 		StructDelete(arguments, "where");
 		StructDelete(arguments, "order");
 		if (IsObject(loc.object))
