@@ -37,7 +37,7 @@
 	
 	<cffunction name="test_renamed_property_parent_model_with_included_child_models">
 		<cfset loc.q = model("photo").$orderByClause(order="DESCRIPTION1 DESC", include="gallery")>
-		<cfset assert('loc.q eq "ORDER BY DESCRIPTION1 DESC"')>
+		<cfset assert('loc.q eq "ORDER BY photos.description DESC"')>
 	</cffunction>
 
 </cfcomponent>
