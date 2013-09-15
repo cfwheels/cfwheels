@@ -279,7 +279,7 @@
 		<cfset user = model("user").findByKey(1)>
 		<cfset props = user.properties()>
 	'
-	categories="model-object,miscellaneous" chapters="" functions="setProperties">
+	categories="model-object,miscellaneous" chapters="object-relational-mapping" functions="setProperties,propertyLabel">
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
@@ -309,7 +309,7 @@
 		<cfset user = model("user").findByKey(1)>
 		<cfset user.setProperties(params.user)>
 	'
-	categories="model-object,miscellaneous" chapters="" functions="properties">
+	categories="model-object,miscellaneous" chapters="object-relational-mapping" functions="properties,propertyLabel">
 	<cfargument name="properties" type="struct" required="false" default="#StructNew()#" hint="@new.">
 	<cfset $setProperties(argumentCollection=arguments) />
 </cffunction>
@@ -460,7 +460,7 @@
 </cffunction>
 
 <cffunction name="propertyLabel" returntype="string" access="public" output="false" hint="Return the label for the property"
-	exanples=
+	examples=
 	'
 		<!--- Setup a label for the firstname property in a User model''s init method --->
 		<cffunction name="init">
@@ -472,7 +472,7 @@
 		<!--- Get the label for the firstname property --->
 		<cfset myLabel = user.propertyLabel("firstname")>
 	'
->
+	categories="model-object,miscellaneous" chapters="object-relational-mapping" functions="setProperties,properties">
 	<cfargument name="property" type="string" required="true">
 	<cfreturn $label(argumentCollection=arguments)>
 </cffunction>
