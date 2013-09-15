@@ -10,6 +10,7 @@ Model Enhancements
 * Enables use of UTC for wheels timestamps [Andy Bellenie]
 * Allow models to be created when with no properties - #84 [rshakespear, Tony Petruzzi]
 * Added global setting ("stripFromSQL") to only include safe characters in raw SQL - [Per Djurner]
+* Added geometry and geography datatypes (SQLServer) - [Simon Allard]
 
 View Enhancements
 =================
