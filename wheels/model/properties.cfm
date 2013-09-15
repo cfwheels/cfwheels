@@ -459,6 +459,24 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="propertyLabel" returntype="string" access="public" output="false" hint="Return the label for the property"
+	exanples=
+	'
+		<!--- Setup a label for the firstname property in a User model''s init method --->
+		<cffunction name="init">
+			<cfset property(name="firstName", label="First name(s)")>
+		</cffunction>
+		
+		<!--- Create a user object --->
+		<cfset user = model("User").findOne()>
+		<!--- Get the label for the firstname property --->
+		<cfset myLabel = user.propertyLabel("firstname")>
+	'
+>
+	<cfargument name="property" type="string" required="true">
+	<cfreturn $label(argumentCollection=arguments)>
+</cffunction>
+
 <!--- PRIVATE MODEL OBJECT METHODS --->
 
 <cffunction name="$setProperties" returntype="any" access="public" output="false" hint="I am the behind the scenes method to turn arguments into the properties argument.">
