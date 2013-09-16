@@ -68,6 +68,7 @@ Returns a `link` tag for a stylesheet (or several) based on the supplied argumen
 	
 		<!--- view code --->
 		<head>
+			<cfoutput>
 			<!--- Includes `stylesheets/styles.css` --->
 		    #styleSheetLinkTag("styles")#
 			<!--- Includes `stylesheets/blog.css` and `stylesheets/comments.css` --->
@@ -76,9 +77,12 @@ Returns a `link` tag for a stylesheet (or several) based on the supplied argumen
 			#styleSheetLinkTag(source="print", media="print")#
 			<!--- Includes external style sheet --->
 			#styleSheetLinkTag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/cupertino/jquery-ui.css")#
+			</cfoutput>
 		</head>
 		
 		<body>
+			<cfoutput>
 			<!--- This will still appear in the `head` --->
 			#styleSheetLinkTag(source="tabs", head=true)#
+			</cfoutput>
 		</body>

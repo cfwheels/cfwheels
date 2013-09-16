@@ -3,6 +3,7 @@
 	'
 		<!--- view code --->
 		<head>
+			<cfoutput>
 			<!--- Includes `stylesheets/styles.css` --->
 		    ##styleSheetLinkTag("styles")##
 			<!--- Includes `stylesheets/blog.css` and `stylesheets/comments.css` --->
@@ -11,11 +12,14 @@
 			##styleSheetLinkTag(source="print", media="print")##
 			<!--- Includes external style sheet --->
 			##styleSheetLinkTag("http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/cupertino/jquery-ui.css")##
+			</cfoutput>
 		</head>
 		
 		<body>
+			<cfoutput>
 			<!--- This will still appear in the `head` --->
 			##styleSheetLinkTag(source="tabs", head=true)##
+			</cfoutput>
 		</body>
 	'
 	categories="view-helper,assets" chapters="miscellaneous-helpers" functions="javaScriptIncludeTag,imageTag">
@@ -65,17 +69,21 @@
 	'
 		<!--- view code --->
 		<head>
+			<cfoutput>
 			<!--- Includes `javascripts/main.js` --->
 		    ##javaScriptIncludeTag("main")##
 			<!--- Includes `javascripts/blog.js` and `javascripts/accordion.js` --->
 			##javaScriptIncludeTag("blog,accordion")##
 			<!--- Includes external JavaScript file --->
 			##javaScriptIncludeTag("https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js")##
+			</cfoutput>
 		</head>
 		
 		<body>
+			<cfoutput>
 			<!--- Will still appear in the `head` --->
 			##javaScriptIncludeTag(source="tabs", head=true)##
+			</cfoutput>
 		</body>
 	'
 	categories="view-helper,assets" chapters="miscellaneous-helpers" functions="styleSheetLinkTag,imageTag">
