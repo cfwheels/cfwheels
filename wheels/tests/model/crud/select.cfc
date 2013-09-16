@@ -29,5 +29,30 @@
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
+	<cffunction name="test_select_columns_with_same_name_from_different_tables">
+		<!--- not specifying the select clause --->
+		<cfset loc.q = model("author").findAll(include="posts,profile")>
+		<cfset loc.e = "profileauthorid,authorid">
+		<cfset loc.r = loc.q.columnlist>
+		<cfloop list="#loc.e#" index="loc.i">
+			<cfset assert('ListFindNoCase(loc.r, loc.i)')>
+		</cfloop>
+		
+		<!--- specifically selecting the two columns with the same name --->
+		<cfset loc.q = model("author").findAll(select="profiles.authorid, posts.authorid", include="posts,profile")>
+		<cfset loc.e = "profileauthorid,authorid">
+		<cfset loc.r = loc.q.columnlist>
+		<cfloop list="#loc.e#" index="loc.i">
+			<cfset assert('ListFindNoCase(loc.r, loc.i)')>
+		</cfloop>
+		
+		<!--- specifically selecting the two columns with the same name but providing our own alias --->
+		<cfset loc.q = model("author").findAll(select="profiles.authorid AS profileauthorid, posts.authorid", include="posts,profile")>
+		<cfset loc.e = "profileauthorid,authorid">
+		<cfset loc.r = loc.q.columnlist>
+		<cfloop list="#loc.e#" index="loc.i">
+			<cfset assert('ListFindNoCase(loc.r, loc.i)')>
+		</cfloop>
+	</cffunction>
 
 </cfcomponent>
