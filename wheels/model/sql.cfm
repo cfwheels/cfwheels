@@ -215,8 +215,8 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.iItem = Trim(ListGetAt(arguments.list, loc.i));
-			
-			if (loc.iItem Contains "." || loc.iItem Contains " AS ")
+
+			if (loc.iItem Contains "." || loc.iItem Contains " AS " || loc.iItem eq "*")
 			{
 				loc.list = ListAppend(loc.list, loc.iItem);
 			}
