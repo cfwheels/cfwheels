@@ -42,6 +42,7 @@ Controller Enhancements
 * Added the ability to pass through arguments from the view to the Data Function in the controller - [Per Djurner]
 * Changed so that cookies (when using them as storage for the Flash) are HTTPOnly and secure (when applicable) - [Per Djurner]
 * Stripped line break characters from internal "cfheader" and "cfmail" usage for improved security - [Per Djurner]
+* RedirectTo can now redirect to external urls via the `url` argument - [Adam Chapman, Tony Petruzzi]
 
 Other Enhancements
 ==================
