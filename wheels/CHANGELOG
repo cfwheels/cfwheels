@@ -76,6 +76,7 @@ Bug Fixes
 * Cached queries did not respect the "maxRows" argument - [Per Djurner, Tony Petruzzi]
 * radioButtonTag() checked attribute was ignored if value attribute is empty - [Per Djurner]
 * Fixed error when using hyphenated attributes in linkTo() - [Per Djurner]
+* Plugins with global mixin are ignored in unit tests - [schayono, Tony Petruzzi]
 
 Miscellaneous
 =============
