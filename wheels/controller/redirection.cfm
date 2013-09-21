@@ -35,7 +35,7 @@
 	<cfargument name="protocol" type="string" required="false" hint="@URLFor.">
 	<cfargument name="port" type="numeric" required="false" hint="@URLFor.">
 	<cfargument name="delay" type="boolean" required="false" hint="Set to `true` to delay the redirection until after the rest of your action code has executed.">
-	<cfargument name="url" type="string" required="false" default="" hint="See documentation for your CFML engine's implementation of `cflocation`.">
+	<cfargument name="url" type="string" required="false" default="" hint="An external address to redirect to. Must be a complete address, ie: http://www.cfwheels.org">
 	<cfscript>
 		var loc = {};
 		$args(name="redirectTo", args=arguments);
