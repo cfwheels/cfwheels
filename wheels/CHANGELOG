@@ -59,6 +59,7 @@ Other Enhancements
 * For security reasons, only allow .cfm files with normal characters to be included - [Per Djurner]
 * Improved performance by avoiding a Duplicate() call when sending error emails - [Per Djurner]
 * General performance improvement for internal locking - [Per Djurner]
+* Convert CFLOG to a global function - [Tony Petruzzi]
 
 Bug Fixes
 =========
