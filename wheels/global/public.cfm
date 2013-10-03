@@ -155,10 +155,10 @@
 		}
 
 		// calculate the total pages the query will have
-		arguments.totalPages = Ceiling(arguments.totalRecords/arguments.perPage);
+		arguments.totalPages = fix(arguments.totalRecords/arguments.perPage);
 
 		// currentPage shouldn't be less then 1 or greater then the number of pages
-		if (arguments.currentPage gte arguments.totalPages)
+		if (arguments.currentPage gt arguments.totalPages)
 		{
 			arguments.currentPage = arguments.totalPages;
 		}
