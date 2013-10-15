@@ -216,7 +216,7 @@
 		{
 			loc.iItem = Trim(ListGetAt(arguments.list, loc.i));
 
-			if (loc.iItem Contains "." || loc.iItem Contains " AS " || loc.iItem eq "*" || loc.iItem Contains "LEFT" || loc.iItem Contains "RIGHT")
+			if (loc.iItem Contains "." || loc.iItem Contains " AS " || loc.iItem eq "*" || loc.iItem Contains "LEFT" || loc.iItem Contains "RIGHT"  || loc.iItem Contains "ISNULL" )
 			{
 				loc.list = ListAppend(loc.list, loc.iItem);
 			}
