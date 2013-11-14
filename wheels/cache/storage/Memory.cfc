@@ -26,7 +26,7 @@
 			var loc = {};
 			loc.value = false;
 			
-			if (StructKeyExists(variables.$instance.cache, arguments.key))
+			if (StructKeyExists(variables.$instance.cache, arguments.key) && IsDefined("variables.$instance.cache[#arguments.key#]"))
 			{
 				if (IsSimpleValue(variables.$instance.cache[arguments.key]))
 				{
