@@ -60,6 +60,7 @@ Other Enhancements
 * Improved performance by avoiding a Duplicate() call when sending error emails - [Per Djurner]
 * General performance improvement for internal locking - [Per Djurner]
 * Convert CFLOG to a global function - [Tony Petruzzi]
+* SendEmail() can accept external link and full paths attachments - [Adam Chapman, Tony Petruzzi]
 
 Bug Fixes
 =========
