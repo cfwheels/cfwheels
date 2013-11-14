@@ -34,6 +34,9 @@
 	</cfif>
 	<p><strong>Method:</strong><br />#cgi.request_method#</p>
 	<p><strong>IP Address:</strong><br />#cgi.remote_addr#</p>
+	<cfset inet = CreateObject("java", "java.net.InetAddress")>
+	<cfset inetHostName = inet.getLocalHost().getHostName()>
+	<p><strong>Server hostname:</strong>#inetHostName#</p>
 	<p><strong>User Agent:</strong><br />#cgi.http_user_agent#</p>
 	<p><strong>Date & Time:</strong><br />#DateFormat(now(), "MMMM D, YYYY")# at #TimeFormat(now(), "h:MM TT")#</p>
 	<cfset loc.scopes = "CGI,Form,URL,Application,Session,Request,Cookie,Arguments.Exception">
