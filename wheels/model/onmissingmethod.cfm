@@ -199,7 +199,7 @@
 								arguments.missingMethodArguments.key = arguments.missingMethodArguments[1];
 								loc.method = "updateByKey";
 							}
-							StructDelete(arguments.missingMethodArguments, "1");
+							StructClear(arguments.missingMethodArguments);
 						}
 						// multiple arguments so ensure that either 'key' or the association name exists (loc.key)
 						else
