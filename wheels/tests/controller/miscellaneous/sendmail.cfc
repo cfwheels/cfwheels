@@ -64,11 +64,12 @@
 	
 	<cffunction name="test_send_with_attachments_external">
 		<cfset args.template = "plainEmailTemplate">
-		<cfset args.file = "cfwheels-logo.png,http://www.example.com/test.txt,c:\inetpub\wwwroot\cfwheels\something.pdf">
+		<cfset args.file = "cfwheels-logo.png,http://www.example.com/test.txt,c:\inetpub\wwwroot\cfwheels\something.pdf,relative/cfwheels-logo.png">
 		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
 		<cfset assert("result.mailparams[1].file Contains '_assets' AND result.mailparams[1].file Contains 'cfwheels-logo.png'")>
 		<cfset assert("result.mailparams[2].file eq 'http://www.example.com/test.txt'")>
 		<cfset assert("result.mailparams[3].file eq 'c:\inetpub\wwwroot\cfwheels\something.pdf'")>
+		<cfset assert("result.mailparams[4].file Contains '_assets' AND result.mailparams[4].file Contains 'relative/cfwheels-logo.png'")>
 	</cffunction>
 
 	<cffunction name="test_send_with_custom_argument">
