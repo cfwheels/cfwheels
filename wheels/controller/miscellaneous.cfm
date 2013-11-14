@@ -93,7 +93,13 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				arguments.mailparams[loc.i] = {};
-				arguments.mailparams[loc.i].file = ExpandPath(application.wheels.filePath) & "/" & ListGetAt(arguments.file, loc.i);
+				loc._file = ListGetAt(arguments.file, loc.i);
+				// only append the path if no directory delimiter is present
+				if(!ReFindNoCase("\\|/", loc._file))
+				{
+					loc._file = ExpandPath(application.wheels.filePath) & "/" & loc._file;
+				}
+				arguments.mailparams[loc.i].file = loc._file;
 			}
 		}
 
