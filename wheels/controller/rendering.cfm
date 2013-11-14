@@ -61,7 +61,7 @@
 			loc.executeArgs = arguments;
 			loc.executeArgs.category = loc.category;
 			loc.executeArgs.key = loc.key;
-			loc.page = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="renderViewAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+			loc.page = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$renderViewAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 		}
 		else
 		{
