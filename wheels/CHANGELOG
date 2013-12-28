@@ -80,6 +80,7 @@ Bug Fixes
 * radioButtonTag() checked attribute was ignored if value attribute is empty - [Per Djurner]
 * Fixed error when using hyphenated attributes in linkTo() - [Per Djurner]
 * Plugins with global mixin are ignored in unit tests - [Singgih Cahyono, Tony Petruzzi]
+* startFormTag, submitTag, linkTo, buttonTo now use unobtrusive javascript - [Raul Rivera]
 
 Miscellaneous
 =============

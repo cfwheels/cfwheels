@@ -16,7 +16,7 @@ plugins may stop working, throw errors, or cause unexpected behavior in your app
  	
 ## Application Seeting Changes
 
- *	the `errorEmailAddress` setting has been deprecated. Wheels now supports the  `errorEmailToAddress`
+ *  the `errorEmailAddress` setting has been deprecated. Wheels now supports the  `errorEmailToAddress`
 	and `errorEmailFromAddress` for better control when sending error emails. 
 
 
@@ -38,9 +38,36 @@ plugins may stop working, throw errors, or cause unexpected behavior in your app
 
 ### View Code
 
-	TODO
+  * We now use unobtrusive javascript provided by the rails/jquery-ujs adapter to replace hard-coded
+	javascript functionality in the following view functions:
+    
+      1. [startFormTag][3]
+      2. [submitTag][4]
+      3. [linkTo][5]
+      4. [buttonTo][6]
+      
+    In order to use the javascript functionality these functions provide, you must first download
+    the rails/jquery-ujs adapter from [https://github.com/rails/jquery-ujs][1] and place in your
+    application's `javascripts` directory. You then install it into by using the `javascript
+    your application using the [javaScriptIncludeTag][2]:
+    
+		<head>
+			<cfoutput>
+			<!--- Includes `rails.js` --->
+		    #javaScriptIncludeTag("rails")#
+			</cfoutput>
+		</head>
+		
 
 
 ### Controller Code
 
 	TODO
+
+
+[1]: https://github.com/rails/jquery-ujs/blob/master/src/rails.js
+[2]: ../Wheels%20API/javaScriptIncludeTag.md
+[3]: ../Wheels%20API/startFormTag.md
+[4]: ../Wheels%20API/submitTag.md
+[5]: ../Wheels%20API/linkTo.md
+[6]: ../Wheels%20API/buttonTo.md
