@@ -601,10 +601,16 @@
 	<cfargument name="mapping" type="struct" required="false" default="#variables.wheels.class.mapping#">
 	<cfscript>
 		if (StructKeyExists(arguments.properties, arguments.property) && StructKeyExists(arguments.properties[arguments.property], "label"))
+		{
 			return arguments.properties[arguments.property].label;
+		}
 		else if (StructKeyExists(arguments.mapping, arguments.property) && StructKeyExists(arguments.mapping[arguments.property], "label"))
+		{
 			return arguments.mapping[arguments.property].label;
+		}
 		else
+		{
 			return Humanize(arguments.property);
+		}
 	</cfscript>
 </cffunction>
