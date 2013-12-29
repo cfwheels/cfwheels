@@ -425,6 +425,7 @@
 	<cfargument name="message" type="string" required="true">
 	<cfscript>
 		var loc = {};
+
 		loc.returnValue = arguments.message;
 		// loop through each argument and replace bracketed occurance with
 		// argument value
@@ -439,13 +440,10 @@
 					loc.value = this.$label(loc.value);
 				}
 				loc.returnValue = Replace(loc.returnValue, "[[#loc.i#]]", "{{#chr(7)#}}", "all");
-				loc.returnValue = Replace(loc.returnValue, "[#loc.i#]", LCase(loc.value), "all");
+				loc.returnValue = Replace(loc.returnValue, "[#loc.i#]", loc.value, "all");
 				loc.returnValue = Replace(loc.returnValue, "{{#chr(7)#}}", "[#loc.i#]", "all");
 			}
 		}
-		// capitalize the first word in the property name if it comes first in the sentence
-		if (Left(arguments.message, 10) == "[property]")
-			loc.returnValue = capitalize(loc.returnValue);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

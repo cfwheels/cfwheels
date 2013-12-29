@@ -31,6 +31,22 @@
 		<cfset asset_test(loc.user, "Username must be between [minimum] and 20 characters.")>
 	</cffunction>
 	
+	<cffunction name="test_should_not_do_anything_with_the_case_of_a_property_in_an_error_message">
+		<cfset loc.obj = model("author").new()>
+		
+		<cfset loc.args.property = "lastname">
+		<cfset loc.args.minimum = "5">
+		<cfset loc.args.maximum = "20">
+		<cfset loc.args.message="[property] is the beginning of the sentence">
+		
+		<cfset loc.obj.validatesLengthOf(argumentCollection=loc.args)>
+		<cfset loc.obj.valid()>
+		<cfset loc.e = loc.obj.errorsOn("lastname")>
+		<cfset loc.r = "Last Name is the beginning of the sentence">
+		
+		<cfset assert('loc.e[1].message eq loc.r')>
+	</cffunction>
+	
 	<cffunction name="asset_test">
 		<cfargument name="obj" type="any" required="true">
 		<cfargument name="expected" type="string" required="true">
