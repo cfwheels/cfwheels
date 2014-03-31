@@ -94,7 +94,7 @@
 			{
 				arguments.mailparams[loc.i] = {};
 				loc._file = ListGetAt(arguments.file, loc.i);
-				loc._fullFilePath = ExpandPath(application.wheels.filePath) & "/" & loc._file
+				loc._fullFilePath = ExpandPath(application.wheels.filePath) & "/" & loc._file;
 				// only append the path if no directory delimiter is present
 				if(FileExists(loc._fullFilePath))
 				{
