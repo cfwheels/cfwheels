@@ -42,7 +42,10 @@
 
 <!--- get a listing of all the tables and view in the database --->
 <cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="tables">
-<cfset loc.tableList = ValueList(loc.dbinfo.table_name, chr(7))>
+<cfquery dbtype="query" name="loc.wheelstestdbinfo">
+	select * from loc.dbinfo where table_type <> 'SYSTEM TABLE'
+</cfquery>
+<cfset loc.tableList = ValueList(loc.wheelstestdbinfo.table_name, chr(7))>
 
 
 <!--- list of views to delete --->
