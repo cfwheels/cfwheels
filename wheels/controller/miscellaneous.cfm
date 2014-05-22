@@ -19,7 +19,7 @@
 	<cfargument name="to" type="string" required="false" default="" hint="List of email addresses to send the email to.">
 	<cfargument name="subject" type="string" required="false" default="" hint="The subject line of the email.">
 	<cfargument name="layout" type="any" required="false" hint="Layout(s) to wrap the email template in. This argument is also aliased as `layouts`.">
-	<cfargument name="file" type="string" required="false" default="" hint="A list of the names of the files to attach to the email. This will reference files stored in the `files` folder (or a path relative to it). This argument is also aliased as `files`.">
+	<cfargument name="file" type="string" required="false" default="" hint="A list of the names of the files to attach to the email. This will reference files stored in the `files` folder (or a path relative to it) when a full path or external link. This argument is also aliased as `files`.">
 	<cfargument name="detectMultipart" type="boolean" required="false" hint="When set to `true` and multiple values are provided for the `template` argument, Wheels will detect which of the templates is text and which one is HTML (by counting the `<` characters).">
 	<cfargument name="mailparams" type="array" required="false" default="#ArrayNew(1)#" hint="any addition mail parameters you would like to pass to the email. each element of the array must be a struct with keys corresponding to the attributes of the cfmailparam tag">
 	<cfargument name="$deliver" type="boolean" required="false" default="true">
@@ -93,7 +93,14 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				arguments.mailparams[loc.i] = {};
-				arguments.mailparams[loc.i].file = ExpandPath(application.wheels.filePath) & "/" & ListGetAt(arguments.file, loc.i);
+				loc._file = ListGetAt(arguments.file, loc.i);
+				loc._fullFilePath = ExpandPath(application.wheels.filePath) & "/" & loc._file;
+				// only append the path if no directory delimiter is present
+				if(FileExists(loc._fullFilePath))
+				{
+					loc._file = loc._fullFilePath;
+				}
+				arguments.mailparams[loc.i].file = loc._file;
 			}
 		}
 

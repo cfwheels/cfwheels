@@ -61,7 +61,7 @@
 					// get info about the key
 					loc.cacheItem = arguments.storage.get(loc.key);
 					// is the key passed it's TTL?
-					if (arguments.currentTime gte loc.cacheItem.expiresAt)
+					if (IsStruct(loc.cacheItem) AND StructKeyExists(loc.cacheItem,"expiresAt") AND arguments.currentTime gte loc.cacheItem.expiresAt)
 					{
 						ArrayAppend(loc.expiredKeys, loc.key);
 						// see if we have a cull percentage

@@ -16,6 +16,9 @@
 
 		<!--- Redirect back to the page the user came from --->
 		<cfset redirectTo(back=true)>
+
+		<!--- Redirect to a specific URL --->
+		<cfset redirectTo(url="http://www.cfwheels.org")>
 	'
 	categories="controller-request,miscellaneous" chapters="redirecting-users,using-routes" functions="">
 	<cfargument name="back" type="boolean" required="false" default="false" hint="Set to `true` to redirect back to the referring page.">
@@ -32,6 +35,7 @@
 	<cfargument name="protocol" type="string" required="false" hint="@URLFor.">
 	<cfargument name="port" type="numeric" required="false" hint="@URLFor.">
 	<cfargument name="delay" type="boolean" required="false" hint="Set to `true` to delay the redirection until after the rest of your action code has executed.">
+	<cfargument name="url" type="string" required="false" default="" hint="An external address to redirect to. Must be a complete address, ie: http://www.cfwheels.org">
 	<cfscript>
 		var loc = {};
 		$args(name="redirectTo", args=arguments);
@@ -97,6 +101,10 @@
 				else
 					loc.url = application.wheels.webPath;
 			}
+		}
+		else if (Len(arguments.url)) 
+		{
+			loc.url = arguments.url;
 		}
 		else
 		{

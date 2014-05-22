@@ -180,8 +180,14 @@
 		<cfdirectory action="list" filter="*.cfc" directory="#variables.wheelsDirectory#" name="loc.classes">
 		<cfloop query="loc.classes">
 			<cfset loc.class = ListFirst(name, '.')>
-			<cfset loc.meta = GetComponentMetaData("#variables.wheelsComponentPath#.#loc.class#")>
-			<cfloop array="#loc.meta.functions#" index="loc.function">
+			<cfset loc.component = CreateObject("component", "#variables.wheelsComponentPath#.#loc.class#")>
+			<cfset loc.functions = []>
+			<cfloop collection="#loc.component#" item="loc.i">
+				<cfif IsCustomFunction(loc.component[loc.i])>
+					<cfset ArrayAppend(loc.functions, getMetaData(loc.component[loc.i]))>
+				</cfif>
+			</cfloop>
+			<cfloop array="#loc.functions#" index="loc.function">
 				<!--- only process public API functions --->
 				<cfif
 					left(loc.function.name, 1) neq "$"

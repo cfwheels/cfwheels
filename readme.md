@@ -57,8 +57,7 @@ version).
 
 ## Generating API Documentation
 
-**_Note:_** The API generation script has only been tested against Railo 3.3.0.007 or higher at this
-time.
+**UPDATE 20130927** The API generation script can now work with both Railo and ACF
 
 It is important to repeat again that all documentation pertaining to methods should be done directly
 in the source code itself and **NOT** in the `wheels/docs/Wheels API` directly as any changes will be

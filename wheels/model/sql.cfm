@@ -216,18 +216,12 @@
 		{
 			loc.iItem = Trim(ListGetAt(arguments.list, loc.i));
 
-			if (loc.iItem Contains " AS " || loc.iItem eq "*")
+			if (loc.iItem Contains "." || loc.iItem Contains " AS " || loc.iItem eq "*" || loc.iItem Contains "LEFT" || loc.iItem Contains "RIGHT"  || loc.iItem Contains "ISNULL" )
 			{
 				loc.list = ListAppend(loc.list, loc.iItem);
 			}
 			else
 			{
-				// if the column name is multipart ie. profiles.authorid
-				// then strip the first part for duplicate detection
-				if (FindNoCase('.', loc.iItem))
-				{
-					loc.iItem = ListRest(loc.iItem, '.');
-				}
 
 				// look for duplicates
 				loc.duplicateCount = ListValueCountNoCase(loc.addedProperties, loc.iItem);

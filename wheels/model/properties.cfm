@@ -276,10 +276,15 @@
 	examples=
 	'
 		<!--- Get a structure of all the properties for an object --->
-		<cfset user = model("user").findByKey(1)>
+		<cfset user = model("User").findByKey(1)>
 		<cfset props = user.properties()>
+
+		<!--- Get a structure of all the simple properties for an object and any nested objects --->
+		<cfset user = model("User").findByKey(key=1, include="Galleries")>
+		<cfset props = user.properties(simpleValues=true)>
 	'
 	categories="model-object,miscellaneous" chapters="object-relational-mapping" functions="setProperties,propertyLabel">
+	<cfargument name="simpleValues" type="boolean" required="false" default="false" hint="Returns only simple values of this and nested object/s" />
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
@@ -294,8 +299,25 @@
 				if (ListFindNoCase(propertyNames(), loc.key))
 					loc.key = ListGetAt(propertyNames(), ListFindNoCase(propertyNames(), loc.key));
 
+				// if it's a nested property, apply this function recursively
+				if (arguments.simpleValues && IsObject(this[loc.key]))
+				{
+					loc.returnValue[loc.key] = this[loc.key].properties(argumentCollection=arguments);
+				}
+				// loop through the array and apply this function to each index
+				else if (arguments.simpleValues && IsArray(this[loc.key]))
+				{
+					loc.returnValue[loc.key] = [];
+					for (loc.i=1; loc.i <= ArrayLen(this[loc.key]); loc.i++) 
+					{
+						loc.returnValue[loc.key][loc.i] = this[loc.key][loc.i].properties(argumentCollection=arguments);
+					}
+				}
 				// set property from the this scope in the struct that we will return
-				loc.returnValue[loc.key] = this[loc.key];
+				else 
+				{
+					loc.returnValue[loc.key] = this[loc.key];
+				}
 			}
 		}
 	</cfscript>
@@ -579,10 +601,16 @@
 	<cfargument name="mapping" type="struct" required="false" default="#variables.wheels.class.mapping#">
 	<cfscript>
 		if (StructKeyExists(arguments.properties, arguments.property) && StructKeyExists(arguments.properties[arguments.property], "label"))
+		{
 			return arguments.properties[arguments.property].label;
+		}
 		else if (StructKeyExists(arguments.mapping, arguments.property) && StructKeyExists(arguments.mapping[arguments.property], "label"))
+		{
 			return arguments.mapping[arguments.property].label;
+		}
 		else
+		{
 			return Humanize(arguments.property);
+		}
 	</cfscript>
 </cffunction>

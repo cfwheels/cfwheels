@@ -39,7 +39,8 @@
 				loc.mailArgs.tagContent = $includeAndReturnOutput($template="wheels/events/onerror/cfmlerror.cfm", exception=arguments.exception);
 				StructDelete(loc.mailArgs, "layouts", false);
 				StructDelete(loc.mailArgs, "detectMultiPart", false);
-				$mail(argumentCollection=loc.mailArgs);
+				try{ $mail(argumentCollection=loc.mailArgs); } catch(e Any){}
+
 			}
 	
 			if (application.wheels.showErrorInformation)
