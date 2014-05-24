@@ -122,15 +122,19 @@
   <groupId>org.apache.maven.plugins</groupId>
   <artifactId>maven-war-plugin</artifactId>
   <configuration>
-    <webXml>src/main/xml/web.xml</webXml>        
     <webResources>
       <resource>
         <!-- this is relative to the pom.xml directory -->
         <directory>.</directory>
         <excludes>
-          <exclude>target</exclude>
-          <exclude>src</exclude>
-          <exclude>pom.xml</exclude>
+          <exclude>**/.settings/**</exclude>
+          <exclude>**/src/**</exclude>
+          <exclude>**/target/**</exclude>
+          <exclude>**/.classpath</exclude>
+          <exclude>**/.gitignore</exclude>
+          <exclude>**/.project</exclude>
+          <exclude>**/.travis.yml</exclude>
+          <exclude>**/pom.xml</exclude>
         </excludes>
 		</resource>
     </webResources>
