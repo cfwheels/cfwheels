@@ -26,3 +26,6 @@ stylesheets/bundles
 
 # a test file if needed
 test.cfm
+/target/
+/.settings/
+/.classpath
