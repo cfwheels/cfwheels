@@ -51,7 +51,7 @@ public class CFWheelsCoreIT {
 		for (File f : new File(path).listFiles()) {
     		if (!f.isDirectory()) continue;
 			if (f.getName().startsWith("_")) continue;
-			if (addSubDirectories(params, f.getName() + ".", f.getPath())) continue;
+			if (addSubDirectories(params, prefix + f.getName() + ".", f.getPath())) continue;
 			
 			Object[] arr = new Object[] { prefix + f.getName() };
     		params.add(arr);
