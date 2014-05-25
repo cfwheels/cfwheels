@@ -3,10 +3,13 @@ package eu.europa.ec.epso.talent.admin.coldfusion;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 import org.h2.tools.Server;
@@ -14,6 +17,9 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
@@ -22,9 +28,38 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
  * @author Singgih
  *
  */
+@RunWith(Parameterized.class)
 public class CFWheelsCoreIT {
 	static private WebDriver driver;
 	static private String baseUrl;
+	private String packageName;
+
+	public CFWheelsCoreIT(String packageName) {
+		super();
+		this.packageName = packageName;
+	}
+
+	@Parameters(name="package {0}")
+    public static Collection<Object[]> getDirectories() {
+    	Collection<Object[]> params = new ArrayList<Object[]>();
+    	addSubDirectories(params, "", "wheels/tests");
+    	return params;
+    }
+
+	private static boolean addSubDirectories(Collection<Object[]> params, String prefix, String path) {
+		boolean added = false;
+		for (File f : new File(path).listFiles()) {
+    		if (!f.isDirectory()) continue;
+			if (f.getName().startsWith("_")) continue;
+			if (addSubDirectories(params, f.getName() + ".", f.getPath())) continue;
+			
+			Object[] arr = new Object[] { prefix + f.getName() };
+    		params.add(arr);
+    		added = true;
+    	}
+		return added;
+	}
+    
 	private StringBuffer verificationErrors = new StringBuffer();
 	Server server;
 	
@@ -42,91 +77,7 @@ public class CFWheelsCoreIT {
 	}
 
 	@Test
-	public void testWheelsCache() throws Exception {
-		processWheelsPackage("cache");
-	}
-
-	@Test
-	public void testWheelsControllerCaching() throws Exception {
-		processWheelsPackage("controller.caching");
-	}
-
-	@Test
-	public void testWheelsControllerFilters() throws Exception {
-		processWheelsPackage("controller.filters");
-	}
-
-	@Test
-	public void testWheelsControllerFlash() throws Exception {
-		processWheelsPackage("controller.flash");
-	}
-
-	@Test
-	public void testWheelsControllerInitialization() throws Exception {
-		processWheelsPackage("controller.initialization");
-	}
-
-	@Test
-	public void testWheelsControllerMiscellaneous() throws Exception {
-		processWheelsPackage("controller.miscellaneous");
-	}
-
-	@Test
-	public void testWheelsControllerProvides() throws Exception {
-		processWheelsPackage("controller.provides");
-	}
-
-	@Test
-	public void testWheelsControllerRedirection() throws Exception {
-		processWheelsPackage("controller.redirection");
-	}
-
-	@Test
-	public void testWheelsControllerRendering() throws Exception {
-		processWheelsPackage("controller.rendering");
-	}
-
-	@Test
-	public void testWheelsControllerRequest() throws Exception {
-		processWheelsPackage("controller.request");
-	}
-
-	@Test
-	public void testWheelsDispatch() throws Exception {
-		processWheelsPackage("dispatch");
-	}
-
-	@Test
-	public void testWheelsGlobal() throws Exception {
-		processWheelsPackage("global");
-	}
-	
-	@Test
-	public void testWheelsInternal() throws Exception {
-		processWheelsPackage("internal");
-	}
-
-	@Test
-	public void testWheelsModel() throws Exception {
-		processWheelsPackage("model");
-	}
-
-	@Test
-	public void testWheelsPlugins() throws Exception {
-		processWheelsPackage("plugins");
-	}
-
-	@Test
-	public void testWheelsRouting() throws Exception {
-		processWheelsPackage("routing");
-	}
-
-	@Test
-	public void testWheelsView() throws Exception {
-		processWheelsPackage("view");
-	}
-
-	private void processWheelsPackage(String packageName) throws IOException {
+	public void testCFWheels() throws IOException {
 		driver.get(baseUrl + "index.cfm?controller=wheels&action=wheels&view=tests&type=core&package="+packageName);
         String pageSource = driver.getPageSource();
 		Files.write(Paths.get("target/failsafe-reports/cfwheels-" + packageName + ".html"), pageSource.getBytes());
