@@ -1,4 +1,4 @@
-package eu.europa.ec.epso.talent.admin.coldfusion;
+package org.cfwheels.cfwheels;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
