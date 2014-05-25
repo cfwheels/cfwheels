@@ -24,18 +24,24 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.Select;
 
-public class ColdFusionLoadedIT {
-	private WebDriver driver;
-	private String baseUrl;
+/**
+ * Integration Tests (IT) to run during Maven integration-test phase
+ * @author Singgih
+ *
+ */
+public class CFWheelsCoreIT {
+	static private WebDriver driver;
+	static private String baseUrl;
 	private StringBuffer verificationErrors = new StringBuffer();
 	Server server;
-	@Before
-	public void setUp() throws Exception {
+	
+	@BeforeClass
+	static public void setUpServices() throws Exception {
+		Class.forName("org.h2.Driver");
 //		String[] args = null;
 //		server = Server.startTcpServer(args);
 //		FileUtils.deleteDirectory(new File("target/db"));
-		Class.forName("org.h2.Driver");
-		execute("DROP ALL OBJECTS");
+//		execute("DROP ALL OBJECTS");
 //		execute("CREATE TABLE USERS(ID INT PRIMARY KEY, USERNAME VARCHAR(255))");
 
 		Path path = Paths.get("target/failsafe-reports");
@@ -43,6 +49,8 @@ public class ColdFusionLoadedIT {
 		driver = new HtmlUnitDriver();
 		baseUrl = "http://localhost:8080/";
 		driver.manage().timeouts().implicitlyWait(30000, TimeUnit.SECONDS);
+		//reset test database
+		driver.get(baseUrl + "index.cfm?controller=wheels&action=wheels&view=packages&type=core&reload=true");
 	}
 
 	private void execute(String sql) throws SQLException {
@@ -53,103 +61,107 @@ public class ColdFusionLoadedIT {
 	}
 
 	@Test
-	public void testWheelsCacheIT() throws Exception {
+	public void testWheelsCache() throws Exception {
 		processWheelsPackage("cache");
 	}
 
 	@Test
-	public void testWheelsControllerCachingIT() throws Exception {
+	public void testWheelsControllerCaching() throws Exception {
 		processWheelsPackage("controller.caching");
 	}
 
 	@Test
-	public void testWheelsControllerFiltersIT() throws Exception {
+	public void testWheelsControllerFilters() throws Exception {
 		processWheelsPackage("controller.filters");
 	}
 
 	@Test
-	public void testWheelsControllerFlashIT() throws Exception {
+	public void testWheelsControllerFlash() throws Exception {
 		processWheelsPackage("controller.flash");
 	}
 
 	@Test
-	public void testWheelsControllerInitializationIT() throws Exception {
+	public void testWheelsControllerInitialization() throws Exception {
 		processWheelsPackage("controller.initialization");
 	}
 
 	@Test
-	public void testWheelsControllerMiscellaneousIT() throws Exception {
+	public void testWheelsControllerMiscellaneous() throws Exception {
 		processWheelsPackage("controller.miscellaneous");
 	}
 
 	@Test
-	public void testWheelsControllerProvidesIT() throws Exception {
+	public void testWheelsControllerProvides() throws Exception {
 		processWheelsPackage("controller.provides");
 	}
 
 	@Test
-	public void testWheelsControllerRedirectionIT() throws Exception {
+	public void testWheelsControllerRedirection() throws Exception {
 		processWheelsPackage("controller.redirection");
 	}
 
 	@Test
-	public void testWheelsControllerRenderingIT() throws Exception {
+	public void testWheelsControllerRendering() throws Exception {
 		processWheelsPackage("controller.rendering");
 	}
 
 	@Test
-	public void testWheelsControllerRequestIT() throws Exception {
+	public void testWheelsControllerRequest() throws Exception {
 		processWheelsPackage("controller.request");
 	}
 
 	@Test
-	public void testWheelsDispatchIT() throws Exception {
+	public void testWheelsDispatch() throws Exception {
 		processWheelsPackage("dispatch");
 	}
 
 	@Test
-	public void testWheelsGlobalIT() throws Exception {
+	public void testWheelsGlobal() throws Exception {
 		processWheelsPackage("global");
 	}
 	
 	@Test
-	public void testWheelsInternalIT() throws Exception {
+	public void testWheelsInternal() throws Exception {
 		processWheelsPackage("internal");
 	}
 
 	@Test
-	public void testWheelsModelIT() throws Exception {
+	public void testWheelsModel() throws Exception {
 		processWheelsPackage("model");
 	}
 
 	@Test
-	public void testWheelsPluginsIT() throws Exception {
+	public void testWheelsPlugins() throws Exception {
 		processWheelsPackage("plugins");
 	}
 
 	@Test
-	public void testWheelsRoutingIT() throws Exception {
+	public void testWheelsRouting() throws Exception {
 		processWheelsPackage("routing");
 	}
 
 	@Test
-	public void testWheelsViewIT() throws Exception {
+	public void testWheelsView() throws Exception {
 		processWheelsPackage("view");
 	}
 
 	private void processWheelsPackage(String packageName) throws IOException {
-		driver.get(baseUrl + "index.cfm?controller=wheels&action=wheels&view=tests&type=core&reload=true&package="+packageName);
+		driver.get(baseUrl + "index.cfm?controller=wheels&action=wheels&view=tests&type=core&package="+packageName);
         String pageSource = driver.getPageSource();
 		Files.write(Paths.get("target/failsafe-reports/cfwheels-" + packageName + ".html"), pageSource.getBytes());
         assertTrue("The page should have results",pageSource.trim().length()>0);
         assertTrue("The page should have passed",pageSource.toLowerCase().contains("passed"));
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	@AfterClass
+	static public void tearDownServices() throws Exception {
 		driver.quit();
 //		execute("DROP TABLE USERS");
 //		server.stop();
+	}
+
+	@After
+	public void tearDown() throws Exception {
 		String verificationErrorString = verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
 			fail(verificationErrorString);
