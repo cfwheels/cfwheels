@@ -1,28 +1,21 @@
 package eu.europa.ec.epso.talent.admin.coldfusion;
 
-import java.io.File;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.io.FileUtils;
 import org.h2.tools.Server;
-import org.junit.*;
-
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-
-import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.support.ui.Select;
 
 /**
  * Integration Tests (IT) to run during Maven integration-test phase
@@ -38,11 +31,6 @@ public class CFWheelsCoreIT {
 	@BeforeClass
 	static public void setUpServices() throws Exception {
 		Class.forName("org.h2.Driver");
-//		String[] args = null;
-//		server = Server.startTcpServer(args);
-//		FileUtils.deleteDirectory(new File("target/db"));
-//		execute("DROP ALL OBJECTS");
-//		execute("CREATE TABLE USERS(ID INT PRIMARY KEY, USERNAME VARCHAR(255))");
 
 		Path path = Paths.get("target/failsafe-reports");
 		if (!Files.exists(path)) Files.createDirectory(path);
@@ -51,13 +39,6 @@ public class CFWheelsCoreIT {
 		driver.manage().timeouts().implicitlyWait(30000, TimeUnit.SECONDS);
 		//reset test database
 		driver.get(baseUrl + "index.cfm?controller=wheels&action=wheels&view=packages&type=core&reload=true");
-	}
-
-	private void execute(String sql) throws SQLException {
-		try (Connection conn = DriverManager.getConnection("jdbc:h2:./target/db/test;AUTO_SERVER=TRUE;MODE=MSSQLServer","sa","")) {
-			Statement statement = conn.createStatement();
-			statement.execute(sql);
-		}
 	}
 
 	@Test
@@ -156,8 +137,6 @@ public class CFWheelsCoreIT {
 	@AfterClass
 	static public void tearDownServices() throws Exception {
 		driver.quit();
-//		execute("DROP TABLE USERS");
-//		server.stop();
 	}
 
 	@After
@@ -168,12 +147,4 @@ public class CFWheelsCoreIT {
 		}
 	}
 
-	private boolean isElementPresent(By by) {
-		try {
-			driver.findElement(by);
-			return true;
-		} catch (NoSuchElementException e) {
-			return false;
-		}
-	}
 }
