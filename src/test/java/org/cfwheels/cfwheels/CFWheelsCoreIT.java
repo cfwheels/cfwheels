@@ -49,9 +49,18 @@ public class CFWheelsCoreIT {
 	private static boolean addSubDirectories(Collection<Object[]> params, String prefix, String path) {
 		boolean added = false;
 		for (File f : new File(path).listFiles()) {
-    		if (!f.isDirectory()) continue;
 			if (f.getName().startsWith("_")) continue;
-			if (addSubDirectories(params, prefix + f.getName() + ".", f.getPath())) continue;
+    		if (!f.isDirectory()) {
+    			if (!f.getName().endsWith(".cfc")) continue;
+    			Object[] arr = new Object[] { prefix + f.getName().replace(".cfc", "") };
+        		params.add(arr);
+        		added = true;
+    			continue;
+    		}
+			if (addSubDirectories(params, prefix + f.getName() + ".", f.getPath())) {
+	    		added = true;
+				continue;
+			}
 			
 			Object[] arr = new Object[] { prefix + f.getName() };
     		params.add(arr);
