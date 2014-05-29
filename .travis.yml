@@ -1,5 +1,7 @@
 language: java
-script: mvn verify && mvn verify -P postgresql && mvn verify -P mysql
+env:
+  - secure: "Wib+BiM5chr0MqOVFkPH0o19t7HZiX511JcxhlR11ciRm3Ef2KlyGvZmc6A8Ajt2nOX6YSZAtm/j+BRl+vOQ0L/DbdgkApl1cMA3EJLZGE+fieiOuOBV62iC32+bmWSOM27gnM8rMwD/5kvvkvZrQCMYTstyc4JQraTDrrUl+5w=" 
+script: mvn verify && mvn verify -P !railo,mssql && mvn verify -P postgresql && mvn verify -P mysql
 jdk:
   - oraclejdk7
 services:

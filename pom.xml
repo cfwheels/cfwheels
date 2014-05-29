@@ -9,18 +9,10 @@
 		<railoVersion>3.3.5.004</railoVersion>
 		<jettyVersion>8.1.15.v20140411</jettyVersion>
 		<railoConfig>railo-server.xml</railoConfig>
+		<testServer>http://localhost:8080</testServer>
+		<deployUrl></deployUrl>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.4.178</version>
-		</dependency>
-		<dependency>
-			<groupId>org.getrailo</groupId>
-			<artifactId>railo</artifactId>
-			<version>${railoVersion}</version>
-		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -31,14 +23,23 @@
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
 			<version>2.25.0</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-firefox-driver</artifactId>
 			<version>2.25.0</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>2.6</version>
+			</extension>
+		</extensions>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -50,60 +51,15 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>${jettyVersion}</version>
-				<configuration>
-					<!-- httpConnector> <idleTimeout>30000</idleTimeout> </httpConnector -->
-					<webAppSourceDirectory>${project.build.directory}/${project.build.finalName}</webAppSourceDirectory>
-					<scanIntervalSeconds>10</scanIntervalSeconds>
-					<contextPath>/</contextPath>
-					<stopPort>9966</stopPort>
-					<stopKey>STOP</stopKey>
-				</configuration>
-				<executions>
-					<execution>
-						<id>start-jetty</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<daemon>true</daemon>
-						</configuration>
-					</execution>
-					<execution>
-						<id>stop-jetty</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>stop</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<phase> validate </phase>
-						<configuration>
-							<target>
-								<copy file="src/main/xml/${railoConfig}" tofile="${settings.localRepository}/org/getrailo/railo/${railoVersion}/railo-server/context/railo-server.xml"
-									overwrite="false" />
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>2.12.4</version>
+				<configuration>
+					<systemPropertyVariables>
+						<testServer>${testServer}</testServer>
+						<deployUrl>${deployUrl}</deployUrl>
+					</systemPropertyVariables>
+				</configuration>
 				<executions>
 					<execution>
 						<id>integration-test</id>
@@ -177,6 +133,79 @@
 	</build>
 	<profiles>
 		<profile>
+			<id>railo</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<version>1.4.178</version>
+				</dependency>
+				<dependency>
+					<groupId>org.getrailo</groupId>
+					<artifactId>railo</artifactId>
+					<version>${railoVersion}</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.mortbay.jetty</groupId>
+						<artifactId>jetty-maven-plugin</artifactId>
+						<version>${jettyVersion}</version>
+						<configuration>
+							<!-- httpConnector> <idleTimeout>30000</idleTimeout> </httpConnector -->
+							<webAppSourceDirectory>${project.build.directory}/${project.build.finalName}</webAppSourceDirectory>
+							<scanIntervalSeconds>10</scanIntervalSeconds>
+							<contextPath>/</contextPath>
+							<stopPort>9966</stopPort>
+							<stopKey>STOP</stopKey>
+						</configuration>
+						<executions>
+							<execution>
+								<id>start-jetty</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<daemon>true</daemon>
+								</configuration>
+							</execution>
+							<execution>
+								<id>stop-jetty</id>
+								<phase>post-integration-test</phase>
+								<goals>
+									<goal>stop</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<phase> validate </phase>
+								<configuration>
+									<target>
+										<copy file="src/main/xml/${railoConfig}" tofile="${settings.localRepository}/org/getrailo/railo/${railoVersion}/railo-server/context/railo-server.xml"
+											overwrite="false" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>mysql</id>
 			<dependencies>
 				<dependency>
@@ -201,6 +230,47 @@
 			<properties>
 				<railoConfig>railo-server.postgresql.xml</railoConfig>
 			</properties>
+		</profile>
+		<profile>
+			<id>mssql</id>
+			<properties>
+				<testServer>http://cfwheels.cfmldeveloper.com</testServer>
+				<deployUrl>${testServer}/_deploy.cfm?build=${project.build.finalName}&#038;clean=true</deployUrl>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>wagon-maven-plugin</artifactId>
+						<version>1.0-beta-5</version>
+						<executions>
+							<execution>
+								<id>upload-code</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>upload</goal>
+								</goals>
+								<configuration>
+									<fromDir>${project.build.directory}</fromDir>
+									<includes>${project.build.finalName}.war</includes>
+									<url>${env.FTPSERVER}</url>
+								</configuration>
+							</execution>
+							<execution>
+								<id>upload-deploy</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>upload-single</goal>
+								</goals>
+								<configuration>
+									<fromFile>src/test/coldfusion/_deploy.cfm</fromFile>
+									<url>${env.FTPSERVER}</url>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 	<repositories>

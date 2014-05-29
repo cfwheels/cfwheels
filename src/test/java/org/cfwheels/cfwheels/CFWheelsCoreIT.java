@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
-import org.h2.tools.Server;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -33,6 +32,7 @@ public class CFWheelsCoreIT {
 	static private WebDriver driver;
 	static private String baseUrl;
 	private String packageName;
+	private StringBuffer verificationErrors = new StringBuffer();
 
 	public CFWheelsCoreIT(String packageName) {
 		super();
@@ -60,27 +60,27 @@ public class CFWheelsCoreIT {
 		return added;
 	}
     
-	private StringBuffer verificationErrors = new StringBuffer();
-	Server server;
-	
 	@BeforeClass
 	static public void setUpServices() throws Exception {
-		Class.forName("org.h2.Driver");
-
 		Path path = Paths.get("target/failsafe-reports");
 		if (!Files.exists(path)) Files.createDirectory(path);
 		driver = new HtmlUnitDriver();
 		baseUrl = "http://localhost:8080/";
+		if (null != System.getProperty("testServer")) baseUrl = System.getProperty("testServer") + "/";
 		driver.manage().timeouts().implicitlyWait(30000, TimeUnit.SECONDS);
 		//reset test database
-		driver.get(baseUrl + "index.cfm?controller=wheels&action=wheels&view=packages&type=core&reload=true");
+		if (null != System.getProperty("deployUrl")) {
+			driver.get(System.getProperty("deployUrl"));
+	        String pageSource = driver.getPageSource();
+			Files.write(Paths.get("target/failsafe-reports/_deploy.html"), pageSource.getBytes());
+		}
+//		driver.get(baseUrl + "index.cfm?controller=wheels&action=wheels&view=packages&type=core&reload=true");
+		driver.get(baseUrl + "index.cfm?controller=wheels&action=wheels&view=tests&type=core&reload=true&package=cache");
 	}
 
 	@Test
 	public void testCFWheels() throws IOException {
-		String testUrl = baseUrl + "index.cfm?controller=wheels&action=wheels&view=tests&type=core&package="+packageName;
-		if (testUrl.indexOf("cfmldeveloper")>0) testUrl += "&reload=true";
-		driver.get(testUrl);
+		driver.get(baseUrl + "index.cfm?controller=wheels&action=wheels&view=tests&type=core&package="+packageName);
         String pageSource = driver.getPageSource();
 		Files.write(Paths.get("target/failsafe-reports/cfwheels-" + packageName + ".html"), pageSource.getBytes());
         assertTrue("The page should have results",pageSource.trim().length()>0);
