@@ -157,6 +157,7 @@
 						<version>${jettyVersion}</version>
 						<configuration>
 							<!-- httpConnector> <idleTimeout>30000</idleTimeout> </httpConnector -->
+							<skip>${skipTests}</skip>
 							<webAppSourceDirectory>${project.build.directory}/${project.build.finalName}</webAppSourceDirectory>
 							<scanIntervalSeconds>10</scanIntervalSeconds>
 							<contextPath>/</contextPath>
