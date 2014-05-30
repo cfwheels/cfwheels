@@ -23,21 +23,22 @@
 						name eq "web.config" or
 						name eq "CFIDE" or
 						name eq "WEB-INF">
-						<cfcontinue>
-					</cfif>
-					<cfif type is "file">
-						<cfif fileExists("#directory#/#name#")>
-							DELETING FILE: "#directory#/#name#"<br/>
-							<cfset fileDelete("#directory#/#name#")>
-						</cfif>
+						<!--- do nothing, similar to cfcontinue in cf9--->
 					<cfelse>
-						DELETING DIR: "#directory#/#name#"<br/>
-						<cftry>
-							<cfdirectory action="delete" directory="#directory#/#name#" recurse="true">
-							<cfcatch type="any">
-							   FAILED DELETING DIR: "#directory#/#name#"<br/>
-							</cfcatch>
-						</cftry>
+						<cfif type is "file">
+							<cfif fileExists("#directory#/#name#")>
+								DELETING FILE: "#directory#/#name#"<br/>
+								<cfset fileDelete("#directory#/#name#")>
+							</cfif>
+						<cfelse>
+							DELETING DIR: "#directory#/#name#"<br/>
+							<cftry>
+								<cfdirectory action="delete" directory="#directory#/#name#" recurse="true">
+								<cfcatch type="any">
+								   FAILED DELETING DIR: "#directory#/#name#"<br/>
+								</cfcatch>
+							</cftry>
+						</cfif>
 					</cfif>
 				</cfloop>
 				== CLEANED ==

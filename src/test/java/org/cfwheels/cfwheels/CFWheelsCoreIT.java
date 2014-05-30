@@ -90,14 +90,15 @@ public class CFWheelsCoreIT {
 
 	@Test
 	public void testCFWheels() throws IOException {
-		driver.get(baseUrl + "index.cfm?controller=wheels&action=wheels&view=tests&type=core&package="+packageName);
+		String packageUrl = baseUrl + "index.cfm?controller=wheels&action=wheels&view=tests&type=core&package="+packageName;
+		driver.get(packageUrl);
         String pageSource = driver.getPageSource();
 		Files.write(Paths.get("target/failsafe-reports/cfwheels-" + packageName + ".html"), pageSource.getBytes());
         assertTrue("The page should have results",pageSource.trim().length()>0);
         for (String error:KNOWN_ERRORS) {
-        	if (pageSource.contains(error)) fail(error);
+        	if (pageSource.contains(error)) fail(error + " " + packageUrl);
         }
-        assertTrue("The page should have passed",pageSource.contains("Passed"));
+        assertTrue("The page should have passed " + packageUrl,pageSource.contains("Passed"));
 	}
 
 	@AfterClass
