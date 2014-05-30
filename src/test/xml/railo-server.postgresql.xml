@@ -35,7 +35,7 @@ Path placeholders:
 <!--	 - http://sourceforge.net 																		-->
 <!--	or ask your database distributor 																-->
 	<data-sources>
-		<data-source allow="511" blob="false" class="org.postgresql.Driver" clob="false" connectionLimit="-1" connectionTimeout="1" custom="" database="" dsn="jdbc:postgresql://localhost/test" host="" metaCacheTimeout="60000" name="wheelstestdb" password="" port="-1" username="postgres"/>
+		<data-source allow="511" blob="false" class="org.postgresql.Driver" clob="false" connectionLimit="-1" connectionTimeout="1" custom="" database="" dsn="jdbc:postgresql://localhost/travis_ci_test" host="" metaCacheTimeout="60000" name="wheelstestdb" password="" port="-1" username="postgres"/>
 	</data-sources>
 
 	<!--
