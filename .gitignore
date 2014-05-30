@@ -12,7 +12,7 @@ WEB-INF
 plugins/**/*
 
 # files directory where uploads go
-# files
+files
 
 # DBMigrate plugin: generated SQL
 db/sql
