@@ -68,3 +68,9 @@ allows a developer to specify versions in an semantic way.
 		To use, you pass in the version and versioning strings:
 
 		<cfset loc.passed = semanticVersioning(this.version, application.wheels.version)>
+
+		NOTE: to mentally perform the comparision swap the arguments.
+
+		<cfset loc.passed = semanticVersioning("> 1.3", "1.2.5")>
+
+		reads: is "1.2.5" greater or equal to "1.3"

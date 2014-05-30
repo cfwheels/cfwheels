@@ -57,7 +57,7 @@ Used as a shortcut to output the proper form elements for an association. Note: 
 			<td>string</td>
 			<td>false</td>
 			<td></td>
-			<td>Whether to place the label `before`, `after`, or wrapped `around` the form control.</td>
+			<td>Whether to place the label `before`, `after`, or wrapped `around` the form control. Label text placement can be controled using `aroundLeft` or `aroundRight`</td>
 		</tr>
 		
 		<tr>

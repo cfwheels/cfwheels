@@ -235,3 +235,15 @@
 		<cfreturn loc.output>
 	</cfif>
 </cffunction>
+
+<cffunction name="$log" returntype="void" access="public" output="false">
+	<cfargument name="text" type="any" required="true" hint="what to log. everything passed in gets converted to json format that isn't a string">
+	<cfargument name="type" type="string" required="false" default="information">
+	<cfif !IsSimpleValue(arguments.text)>
+		<cfset arguments.text = SerializeJSON(arguments.text)>
+	</cfif>
+	<cfset arguments.application = true>
+	<cfset arguments.file = "cfwheels">
+	<cfset StructDelete(arguments, "log", false)>
+	<cflog attributeCollection="#arguments#">
+</cffunction>

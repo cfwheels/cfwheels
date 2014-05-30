@@ -1,11 +1,11 @@
 <!--- PUBLIC CONTROLLER REQUEST FUNCTIONS --->
 
-<cffunction name="redirectTo" returntype="void" access="public" output="false" hint="Redirects the browser to the supplied `controller`/`action`/`key`, `route` or back to the referring page. Internally, this function uses the @URLFor function to build the link and the `cflocation` tag to perform the redirect."
+<cffunction name="redirectTo" returntype="void" access="public" output="false" hint="Redirects the browser to the supplied `controller`/`action`/`key`, `route` or back to the referring page. Internally, this function uses the @URLFor function to build the link and the `cflocation` tag to perform the redirect. Additional arguments will be converted into flash messages."
 	examples=
 	'
-		<!--- Redirect to an action after successfully saving a user --->
+		<!--- Redirect to an action after successfully saving a user and create a flash message with the key "success" --->
 		<cfif user.save()>
-		    <cfset redirectTo(action="saveSuccessful")>
+		    <cfset redirectTo(action="saveSuccessful", success="User saved successfully.")>
 		</cfif>
 
 		<!--- Redirect to a specific page on a secure server --->
@@ -16,6 +16,9 @@
 
 		<!--- Redirect back to the page the user came from --->
 		<cfset redirectTo(back=true)>
+
+		<!--- Redirect to a specific URL --->
+		<cfset redirectTo(url="http://www.cfwheels.org")>
 	'
 	categories="controller-request,miscellaneous" chapters="redirecting-users,using-routes" functions="">
 	<cfargument name="back" type="boolean" required="false" default="false" hint="Set to `true` to redirect back to the referring page.">
@@ -32,6 +35,7 @@
 	<cfargument name="protocol" type="string" required="false" hint="@URLFor.">
 	<cfargument name="port" type="numeric" required="false" hint="@URLFor.">
 	<cfargument name="delay" type="boolean" required="false" hint="Set to `true` to delay the redirection until after the rest of your action code has executed.">
+	<cfargument name="url" type="string" required="false" default="" hint="An external address to redirect to. Must be a complete address, ie: http://www.cfwheels.org">
 	<cfscript>
 		var loc = {};
 		$args(name="redirectTo", args=arguments);
@@ -97,6 +101,10 @@
 				else
 					loc.url = application.wheels.webPath;
 			}
+		}
+		else if (Len(arguments.url)) 
+		{
+			loc.url = arguments.url;
 		}
 		else
 		{

@@ -65,7 +65,7 @@ Sends an email using a template and an optional layout to wrap it in. Besides th
 			<td>string</td>
 			<td>false</td>
 			<td></td>
-			<td>A list of the names of the files to attach to the email. This will reference files stored in the `files` folder (or a path relative to it). This argument is also aliased as `files`.</td>
+			<td>A list of the names of the files to attach to the email. This will reference files stored in the `files` folder (or a path relative to it) when a full path or external link. This argument is also aliased as `files`.</td>
 		</tr>
 		
 		<tr>

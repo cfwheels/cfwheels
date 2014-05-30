@@ -62,13 +62,15 @@
 		if(StructKeyExists(variables.wheels.class.connection, "datasource"))
 		{
 			// load the database adapter
-			variables.wheels.class.adapter = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#", fileName="Connection", method="init", datasource="#variables.wheels.class.connection.datasource#", username="#variables.wheels.class.connection.username#", password="#variables.wheels.class.connection.password#");
+			loc.connectionObj = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#", fileName="Connection", method="init", datasource="#variables.wheels.class.connection.datasource#", username="#variables.wheels.class.connection.username#", password="#variables.wheels.class.connection.password#");
+			variables.wheels.class.adapter = loc.connectionObj.$assignAdapter();
 			
 			// get columns for the table
 			loc.columns = $adapter().$getColumns(tableName());
 			
 			loc.processedColumns = "";
 			loc.iEnd = loc.columns.recordCount;
+			
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				// set up properties and column mapping
@@ -109,16 +111,21 @@
 						if (StructKeyExists(variables.wheels.class.mapping[loc.property], "defaultValue"))
 							variables.wheels.class.properties[loc.property].defaultValue = variables.wheels.class.mapping[loc.property].defaultValue;
 					}
-	
-					if (loc.columns["is_primarykey"][loc.i])
+
+					if ( loc.columns["is_primarykey"][loc.i] )
 					{
 						setPrimaryKey(loc.property);
 					}
-					else if (variables.wheels.class.automaticValidations and not ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#,#application.wheels.softDeleteProperty#,#primaryKeys()#", loc.property))
+
+					if ( variables.wheels.class.automaticValidations and not ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#,#application.wheels.softDeleteProperty#", loc.property) )
 					{
-						// set nullable validations if the developer has not
 						loc.defaultValidationsAllowBlank = variables.wheels.class.properties[loc.property].nullable;
-						if (!variables.wheels.class.properties[loc.property].nullable and !Len(loc.columns["column_default_value"][loc.i]) and !$validationExists(property=loc.property, validation="validatesPresenceOf"))
+						// primary keys should be allowed to be blank
+						if( ListFindNoCase(primaryKeys(), loc.property) )
+						{
+							loc.defaultValidationsAllowBlank = true;
+						}
+						if ( !ListFindNoCase(primaryKeys(), loc.property) and  !variables.wheels.class.properties[loc.property].nullable and !Len(loc.columns["column_default_value"][loc.i]) and !$validationExists(property=loc.property, validation="validatesPresenceOf") )
 						{
 							validatesPresenceOf(properties=loc.property);
 						}
@@ -135,6 +142,8 @@
 						if (variables.wheels.class.properties[loc.property].validationtype eq "datetime" and !$validationExists(property=loc.property, validation="validatesFormatOf"))
 							validatesFormatOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, type="date");
 					}
+					
+
 	
 					variables.wheels.class.propertyList = ListAppend(variables.wheels.class.propertyList, loc.property);
 					variables.wheels.class.columnList = ListAppend(variables.wheels.class.columnList, variables.wheels.class.properties[loc.property].column);

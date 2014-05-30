@@ -278,8 +278,13 @@
 					}
 					loc.linkToArguments.text = loc.i;
 					if (Len(arguments.classForCurrent) && loc.currentPage == loc.i)
+						/* apply the classForCurrent class if specified and this is the current page */
 						loc.linkToArguments.class = arguments.classForCurrent;
-					else
+					else if (StructKeyExists(arguments, "class") && Len(arguments.class))
+						/* allow the class attribute to be applied to the anchor tag if specified */
+						loc.linkToArguments.class = arguments.class;
+					else 
+						/* clear the class argument if not provided */
 						StructDelete(loc.linkToArguments, "class");
 					if (Len(arguments.prependToPage))
 						loc.middle = loc.middle & arguments.prependToPage;

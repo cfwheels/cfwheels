@@ -10,8 +10,8 @@
 		<cfset belongsTo(name="user", foreignKey="firstName", joinKey="firstName")>
 		<cfset beforeSave("callbackThatReturnsTrue")>
 		<cfset beforeDelete("callbackThatReturnsTrue")>
-		<cfset property(name="firstName", label="First name(s)", defaultValue="Dave")>
-		<cfset property(name="lastName", label="Last name", defaultValue="")>
+		<cfset property(name="firstName", label="First Name(s)", defaultValue="Dave")>
+		<cfset property(name="lastName", label="Last Name", defaultValue="")>
 		<cfset nestedProperties(associations="profile", allowDelete=true)>
 	</cffunction>
 

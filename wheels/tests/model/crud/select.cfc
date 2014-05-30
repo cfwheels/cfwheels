@@ -22,4 +22,12 @@
 		<cfset assert('loc.columnList eq "authors.favouritePostId,authors.firstname,authors.id,authors.lastname,authors.leastFavouritePostId,posts.authorid,posts.averagerating,posts.body,posts.createdat,posts.deletedat,posts.id AS postid,posts.title,posts.updatedat,posts.views"')>
 	</cffunction>
 
+	<cffunction name="test_passing_start_without_table_name">
+		<cfset q = model("author").findAll(select="*", include="posts", order="id")>
+		<cfset loc.e = 10>
+		<cfset loc.r = q.recordcount>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+
+
 </cfcomponent>

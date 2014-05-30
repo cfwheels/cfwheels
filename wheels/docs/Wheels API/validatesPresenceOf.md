@@ -68,3 +68,12 @@ Validates that the specified property exists and that its value is not blank.
 	
 		<!--- Make sure that the user data can not be saved to the database without the `emailAddress` property. (It must exist and not be an empty string) --->
 		<cfset validatesPresenceOf("emailAddress")>
+		
+		<!--- Basic use of condition --->
+		<cfset validatesPresenceOf(properties="userid")>
+		
+		<cfset validatesPresenceOf(properties="email", condition="isDefined('this.userid')")>
+		<cfset validatesPresenceOf(properties="email", condition="isDefined('this.userid') AND isNumeric(this.userid)")>
+		
+		<cfset validatesPresenceOf(properties="email", condition="StructKeyExists(this, 'userid')")>
+		<cfset validatesPresenceOf(properties="email", condition="StructKeyExists(this, 'userid') AND isNumeric(this.userid)")>

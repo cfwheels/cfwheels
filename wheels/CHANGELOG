@@ -10,6 +10,8 @@ Model Enhancements
 * Enables use of UTC for wheels timestamps [Andy Bellenie]
 * Allow models to be created when with no properties - #84 [rshakespear, Tony Petruzzi]
 * Added global setting ("stripFromSQL") to only include safe characters in raw SQL - [Per Djurner]
+* Added geometry and geography datatypes (SQLServer) - [Simon Allard]
+* Automatic validation now valid that primary keys are the correct type when not blank - [Adam Chapman, Tony Petruzzi]
 
 View Enhancements
 =================
@@ -40,6 +42,7 @@ Controller Enhancements
 * Added the ability to pass through arguments from the view to the Data Function in the controller - [Per Djurner]
 * Changed so that cookies (when using them as storage for the Flash) are HTTPOnly and secure (when applicable) - [Per Djurner]
 * Stripped line break characters from internal "cfheader" and "cfmail" usage for improved security - [Per Djurner]
+* RedirectTo can now redirect to external urls via the `url` argument - [Adam Chapman, Tony Petruzzi]
 
 Other Enhancements
 ==================
@@ -56,6 +59,8 @@ Other Enhancements
 * For security reasons, only allow .cfm files with normal characters to be included - [Per Djurner]
 * Improved performance by avoiding a Duplicate() call when sending error emails - [Per Djurner]
 * General performance improvement for internal locking - [Per Djurner]
+* Convert CFLOG to a global function - [Tony Petruzzi]
+* SendEmail() can accept external link and full paths attachments - [Adam Chapman, Tony Petruzzi]
 
 Bug Fixes
 =========
@@ -74,9 +79,12 @@ Bug Fixes
 * Cached queries did not respect the "maxRows" argument - [Per Djurner, Tony Petruzzi]
 * radioButtonTag() checked attribute was ignored if value attribute is empty - [Per Djurner]
 * Fixed error when using hyphenated attributes in linkTo() - [Per Djurner]
+* Plugins with global mixin are ignored in unit tests - [Singgih Cahyono, Tony Petruzzi]
+* startFormTag, submitTag, linkTo, buttonTo now use unobtrusive javascript - [Raul Rivera]
 
 Miscellaneous
 =============
+* Railo minimum version is now 3.3.1.000
 * Removed the "cacheDatabaseSchema" setting, "cacheModelInitialization" should now be used instead - [Per Djurner]
 * Added commented out settig for plugin development in design mode - #782 [Tony Petruzzi]
 * Added $inspect method to return the variables scope of objects - #820 [Tony Petruzzi]
@@ -85,7 +93,7 @@ Miscellaneous
 * Allow placement of models in subfolder - [Tim Badolato, Tony Petruzzi]
 * External paths for imagePath - [andoradmiraal, Tony Petruzzi]
 * Removal of obfuscateParam and deobfuscateParam functionality - [Tony Petruzzi]
-* Removed the ability to switch environment through the url - [Andy Bellenie, Tony Petruzzi]
+* Removed the ability to switch environment through the url unless specified in config/settings.cfm - [Andy Bellenie, Tony Petruzzi]
 * Turned off URL rewriting in IIS 7 by default since otherwise it will throw an error when the URL Rewrite Module is not installed - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

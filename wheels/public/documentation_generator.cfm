@@ -1,11 +1,13 @@
-<cfparam name="url.xml" type="boolean" default="false">
+<cfset outputPath = 'builders/output/docs'>
 
-<cfset api = createObject("component", "ApiGenerator").init(
-	wheelsDirectory = "#ExpandPath('../../wheels')#"
-	,wheelsAPIChapterDirectory = "#ExpandPath('../../wheels/docs/Wheels API')#"
+<cfset api = createObject("component", "builders.api.ApiGenerator").init(
+	wheelsDirectory = "#ExpandPath('wheels')#"
+	,wheelsAPIChapterDirectory = "#ExpandPath('wheels/docs/Wheels API')#"
+	,wheelsComponentPath="wheels"
+	,outputPath=ExpandPath(outputPath)
 )>
 
-<cfinclude template="overloads.cfm">
+<cfinclude template="../../builders/api/overloads.cfm">
 
 <cfset results = api.build()>
 
@@ -32,16 +34,12 @@
 <cfabort>
 </cfif>
 
-<cfif url.xml>
-	<!--- output the api documentation to xml --->
-	<cffile action="write" file="#ExpandPath('../../../cfwheels-api.xml')#" output="#api.toXML()#">
-</cfif>
-
 <h1>Api Documentation has been generated!</h1>
-<cfif url.xml>
+
 <p>The outputted XML file can be found here:</p>
-<p><cfoutput>#ExpandPath('../../../cfwheels-api.xml')#</cfoutput></p>
-</cfif>
+<p><cfoutput>#outputPath#</cfoutput></p>
+<p>This can be used to create </p>
+
 <h3>Below is a dump of the documentation structure. Overload any of the documentation in the `overloads.cfm` file.</h3>
 <cfflush>
 <cfdump var="#results.data#">

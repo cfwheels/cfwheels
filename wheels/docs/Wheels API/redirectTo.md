@@ -1,10 +1,10 @@
 # redirectTo()
 
 ## Description
-Redirects the browser to the supplied `controller`/`action`/`key`, `route` or back to the referring page. Internally, this function uses the @URLFor function to build the link and the `cflocation` tag to perform the redirect.
+Redirects the browser to the supplied `controller`/`action`/`key`, `route` or back to the referring page. Internally, this function uses the @URLFor function to build the link and the `cflocation` tag to perform the redirect. Additional arguments will be converted into flash messages.
 
 ## Function Syntax
-	redirectTo( [ back, addToken, statusCode, route, controller, action, key, params, anchor, onlyPath, host, protocol, port, delay ] )
+	redirectTo( [ back, addToken, statusCode, route, controller, action, key, params, anchor, onlyPath, host, protocol, port, delay, url ] )
 
 
 ## Parameters
@@ -132,15 +132,23 @@ Redirects the browser to the supplied `controller`/`action`/`key`, `route` or ba
 			<td>Set to `true` to delay the redirection until after the rest of your action code has executed.</td>
 		</tr>
 		
+		<tr>
+			<td>url</td>
+			<td>string</td>
+			<td>false</td>
+			<td></td>
+			<td>An external address to redirect to. Must be a complete address, ie: http://www.cfwheels.org</td>
+		</tr>
+		
 	</tbody>
 </table>
 
 
 ## Examples
 	
-		<!--- Redirect to an action after successfully saving a user --->
+		<!--- Redirect to an action after successfully saving a user and create a flash message with the key "success" --->
 		<cfif user.save()>
-		    <cfset redirectTo(action="saveSuccessful")>
+		    <cfset redirectTo(action="saveSuccessful", success="User saved successfully.")>
 		</cfif>
 
 		<!--- Redirect to a specific page on a secure server --->
@@ -151,3 +159,6 @@ Redirects the browser to the supplied `controller`/`action`/`key`, `route` or ba
 
 		<!--- Redirect back to the page the user came from --->
 		<cfset redirectTo(back=true)>
+
+		<!--- Redirect to a specific URL --->
+		<cfset redirectTo(url="http://www.cfwheels.org")>

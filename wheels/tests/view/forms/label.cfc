@@ -136,4 +136,14 @@
 		<cfset assert('loc.actual eq loc.expected')>
 	</cffunction>
 	
+	<cffunction name="test_make_sure_that_labels_respect_case">
+		<cfset author = model("author").findOne()>
+		<cfset loc.actual = label(objectName="author", property="firstname")>
+		<cfset loc.expected = '<label for="author-firstname">First Name(s)</label>'>
+		<cfset assert('loc.actual eq loc.expected')>
+		<cfset loc.actual = label(objectName="author", property="lastname")>
+		<cfset loc.expected = '<label for="author-lastname">Last name</label>'>
+		<cfset assert('loc.actual eq loc.expected')>
+	</cffunction>
+	
 </cfcomponent>

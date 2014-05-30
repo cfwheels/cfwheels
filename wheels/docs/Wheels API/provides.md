@@ -25,7 +25,7 @@ Defines formats that the controller will respond with upon request. The format c
 			<td>string</td>
 			<td>false</td>
 			<td></td>
-			<td>Formats to instruct the controller to provide. Valid values are `html` (the default), `xml`, `json`, `csv`, `pdf`, and `xls`.</td>
+			<td>Formats to instruct the controller to provide. Valid values are `html` (the default), `xml`, `wddx`, `json`, `csv`, `pdf`, and `xls`.</td>
 		</tr>
 		
 	</tbody>

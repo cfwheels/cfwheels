@@ -1,9 +1,9 @@
 <cfcomponent extends="wheelsMapping.Test">
 
-	<cffunction name="test_table_not_found">
+	<cffunction name="test_base_adapter">
 		<cfset loc.e = raised("model('table_not_found')")>
 		<cfset debug("loc.e", false)>
-		<cfset loc.r = "Wheels.TableNotFound">
+		<cfset loc.r = "Wheels.ModelBaseAdapter">
 		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 

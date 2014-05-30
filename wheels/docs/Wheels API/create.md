@@ -4,7 +4,7 @@
 Creates a new object, saves it to the database (if the validation permits it), and returns it. If the validation fails, the unsaved object (with errors added to it) is still returned. Property names and values can be passed in either using named arguments or as a struct to the `properties` argument.
 
 ## Function Syntax
-	create( [ properties, parameterize, reload, transaction, callbacks ] )
+	create( [ properties, parameterize, reload, validate, transaction, callbacks ] )
 
 
 ## Parameters
@@ -42,6 +42,14 @@ Creates a new object, saves it to the database (if the validation permits it), a
 			<td>false</td>
 			<td></td>
 			<td>Set to `true` to reload the object from the database once an insert/update has completed.</td>
+		</tr>
+		
+		<tr>
+			<td>validate</td>
+			<td>boolean</td>
+			<td>false</td>
+			<td>true</td>
+			<td>See documentation for @save.</td>
 		</tr>
 		
 		<tr>

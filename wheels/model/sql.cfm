@@ -123,8 +123,6 @@
 								loc.toAdd = Replace(loc.classData.calculatedProperties[loc.property].sql, ",", "[[comma]]", "all");
 							if (Len(loc.toAdd))
 							{
-								if (!ListFindNoCase(loc.classData.columnList, loc.property))
-									loc.toAdd = loc.toAdd & " AS " & loc.property;
 								loc.toAdd = loc.toAdd & " " & UCase(ListLast(loc.iItem, " "));
 								if (!ListFindNoCase(loc.returnValue, loc.toAdd))
 								{
@@ -217,8 +215,8 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.iItem = Trim(ListGetAt(arguments.list, loc.i));
-			
-			if (loc.iItem Contains "." || loc.iItem Contains " AS ")
+
+			if (loc.iItem Contains "." || loc.iItem Contains " AS " || loc.iItem eq "*" || loc.iItem Contains "LEFT" || loc.iItem Contains "RIGHT"  || loc.iItem Contains "ISNULL" )
 			{
 				loc.list = ListAppend(loc.list, loc.iItem);
 			}

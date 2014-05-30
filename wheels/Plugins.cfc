@@ -6,7 +6,7 @@
 	<cfset variables.$class = {}>
 	<cfset variables.$class.plugins = {}>
 	<cfset variables.$class.mixins = {}>
-	<cfset variables.$class.mixableComponents = "application,dispatch,controller,model,cache,base,connection,microsoftsqlserver,mysql,oracle,postgresql,h2">
+	<cfset variables.$class.mixableComponents = "application,dispatch,controller,model,cache,base,connection,microsoftsqlserver,mysql,oracle,postgresql,h2,test">
 	<cfset variables.$class.incompatiblePlugins = "">
 	<cfset variables.$class.dependantPlugins = "">
 
@@ -51,7 +51,7 @@
 		<cfloop query="loc.folders">
 			<cfset loc.temp = {}>
 			<cfset loc.temp.name = name>
-			<cfset loc.temp.folderPath = $fullPathToPlugin(lcase(name))>
+			<cfset loc.temp.folderPath = $fullPathToPlugin(name)>
 			<cfset loc.temp.componentName = lcase(name) & "." & name>
 			<cfset loc.plugins[name] = loc.temp>
 		</cfloop>

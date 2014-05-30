@@ -83,4 +83,11 @@
 		<cfset assert("loc.r.url IS application.wheels.webPath")>
 	</cffunction>
 
+	<cffunction name="test_redirect_to_url">
+		<cfset loc.url = "http://www.google.com">
+		<cfset loc.controller.redirectTo(action="test", url=loc.url)>
+		<cfset loc.r = loc.controller.$getRedirect()>
+		<cfset assert("loc.r.url IS loc.url")>
+	</cffunction>
+
 </cfcomponent>

@@ -109,7 +109,7 @@
 				}
 				catch (Any e)
 				{
-					$throw(type="Wheels.TableNotFound", message="The `#arguments.tableName#` table could not be found in the database.", extendedInfo="Add a table named `#arguments.tableName#` to your database or tell Wheels to use a different table for this model. For example you can tell a `user` model to use a table called `tbl_users` by creating a `User.cfc` file in the `models` folder, creating an `init` method inside it and then calling `table(""tbl_users"")` from within it.");
+					$throw(type="Wheels.ModelBaseAdapter", message="#e.message#", extendedInfo="#e.detail#");
 				}
 			}
 			else

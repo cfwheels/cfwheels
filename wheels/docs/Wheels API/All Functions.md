@@ -144,6 +144,7 @@
 * [properties()](properties.md)
 * [property()](property.md)
 * [propertyIsPresent()](propertyIsPresent.md)
+* [propertyLabel()](propertyLabel.md)
 * [propertyNames()](propertyNames.md)
 * [protectedProperties()](protectedProperties.md)
 * [provides()](provides.md)

@@ -57,7 +57,7 @@ Builds and returns a string containing one select form control for the hours of 
 			<td>string</td>
 			<td>false</td>
 			<td></td>
-			<td>Whether to place the label `before`, `after`, or wrapped `around` the form control.</td>
+			<td>Whether to place the label `before`, `after`, or wrapped `around` the form control. Label text placement can be controled using `aroundLeft` or `aroundRight`</td>
 		</tr>
 		
 		<tr>
