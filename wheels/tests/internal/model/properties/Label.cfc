@@ -31,4 +31,13 @@
 		<cfset assert("result IS 'someMapLabel'")>
 	</cffunction>
 
+	<cffunction name="test_public_accessible_method_propertyLabel">
+		<cfset var loc = {}>
+		<cfset loc.properties = {}>
+		<cfset loc.properties.someProp = {}>
+		<cfset loc.properties.someProp.label = "someRegLabel">
+		<cfset result = variables.object.propertyLabel(property="someProp", properties=loc.properties)>
+		<cfset assert("result IS 'someRegLabel'")>
+	</cffunction>
+
 </cfcomponent>

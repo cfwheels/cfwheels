@@ -101,7 +101,9 @@
 				}
 				break;
 			case "boolean":
-				arguments.value = ( arguments.value IS true );
+				if(len(arguments.value)){
+					arguments.value = ( arguments.value IS true );
+				}
 				break;
 			case "datetime":
 				// createdatetime will throw an error
@@ -310,13 +312,9 @@
 		loc.iEnd = ListLen(arguments.keys);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.key = ListGetAt(arguments.keys, loc.i);
-			loc.returnValue[loc.key] = "";
-			if (StructKeyExists(arguments.scope, loc.key))
-			{
-				loc.returnValue[loc.key] = arguments.scope[loc.key];
-			}
+			loc.returnValue[ListGetAt(arguments.keys, loc.i)] = arguments.scope[ListGetAt(arguments.keys, loc.i)];
 		}
+		
 
 		/* Fixes IIS issue that returns a blank cgi.path_info 
 		   Fix: http://www.giancarlogomez.com/2012/06/you-are-not-going-crazy-cgipathinfo-is.html

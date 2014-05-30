@@ -19,12 +19,13 @@
 		<!--- zip name --->
 		<cfset variables.zipName = "cfwheels.#variables.version#.zip">
 		
-		<cfset variables.source = ExpandPath("../")>
-		<cfset variables.buildtmp = ExpandPath("../wheels-build-temp-dir")>
-		<cfset variables.ignore = "build.cfm,.project,.gitignore,.git,WEB-INF,aspnet_client,wheels-build-temp-dir,#variables.zipName#">
+		<cfset variables.source = ExpandPath(".")>
+		<cfset variables.buildtmp = ExpandPath("builders/output/release/wheels-build-temp-dir")>
+		<cfset variables.ignore = "builders,.project,.gitignore,.git,WEB-INF,aspnet_client,wheels-build-temp-dir,#variables.zipName#">
 		<cfset variables.folders = "files,images,javascripts,lib,plugins,stylesheets,tests">
 		<cfset variables.remove = "builders">
-		<cfset variables.zipfile = "#ExpandPath('../#variables.zipName#')#">
+		<cfset variables.release_zip = "builders/output/release/#variables.zipName#">
+		<cfset variables.zipfile = "#ExpandPath(variables.release_zip)#">
 		
 		<!--- for final release we remove the tests and docs --->
 		<cfif !FindNoCase("-", variables.version)>
@@ -111,6 +112,10 @@
 	            <cfset $directoryCopy(arguments.source & dirDelim & name, arguments.destination & dirDelim & name) />
 	        </cfif>
 	    </cfloop>
+	</cffunction>
+	
+	<cffunction name="getReleaseZipPath">
+		<cfreturn variables.release_zip>
 	</cffunction>
 	
 	<cffunction name="$writeGitIgnore" access="private" returntype="string" output="false">

@@ -60,15 +60,19 @@ Returns a `script` tag for a JavaScript file (or several) based on the supplied 
 	
 		<!--- view code --->
 		<head>
+			<cfoutput>
 			<!--- Includes `javascripts/main.js` --->
 		    #javaScriptIncludeTag("main")#
 			<!--- Includes `javascripts/blog.js` and `javascripts/accordion.js` --->
 			#javaScriptIncludeTag("blog,accordion")#
 			<!--- Includes external JavaScript file --->
 			#javaScriptIncludeTag("https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js")#
+			</cfoutput>
 		</head>
 		
 		<body>
+			<cfoutput>
 			<!--- Will still appear in the `head` --->
 			#javaScriptIncludeTag(source="tabs", head=true)#
+			</cfoutput>
 		</body>

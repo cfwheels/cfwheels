@@ -38,5 +38,6 @@
 * [key()](key.md)
 * [properties()](properties.md)
 * [propertyIsPresent()](propertyIsPresent.md)
+* [propertyLabel()](propertyLabel.md)
 * [reload()](reload.md)
 * [setProperties()](setProperties.md)

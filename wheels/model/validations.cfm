@@ -177,6 +177,15 @@
 	'
 		<!--- Make sure that the user data can not be saved to the database without the `emailAddress` property. (It must exist and not be an empty string) --->
 		<cfset validatesPresenceOf("emailAddress")>
+		
+		<!--- Basic use of condition --->
+		<cfset validatesPresenceOf(properties="userid")>
+		
+		<cfset validatesPresenceOf(properties="email", condition="isDefined(''this.userid'')")>
+		<cfset validatesPresenceOf(properties="email", condition="isDefined(''this.userid'') AND isNumeric(this.userid)")>
+		
+		<cfset validatesPresenceOf(properties="email", condition="StructKeyExists(this, ''userid'')")>
+		<cfset validatesPresenceOf(properties="email", condition="StructKeyExists(this, ''userid'') AND isNumeric(this.userid)")>
 	'
 	categories="model-initialization,validations" chapters="object-validation" functions="validatesConfirmationOf,validatesExclusionOf,validatesFormatOf,validatesInclusionOf,validatesLengthOf,validatesNumericalityOf,validatesUniquenessOf">
 	<cfargument name="properties" type="string" required="false" default="" hint="@validatesConfirmationOf.">
@@ -236,6 +245,20 @@
 		<cffunction name="checkPhoneNumber">
 			<!--- Make sure area code is `614` --->
 			<cfreturn Left(this.phoneNumber, 3) is "614">
+		</cffunction>
+		
+		<!--- Example 2: Custom validation of a hasMany relationship using hasManyCheckbox which requires a user to check at least one hasManyCheckbox for `TechSelections` --->
+		<cffunction name="init">
+			<cfset hasMany(name="Techselections")>
+			<!--- Register the `validateTechSelections` method below to be called to validate objects before they are saved --->
+			<cfset validate(method="validateTechSelections")>
+		</cffunction>
+		
+		<cffunction name="validateTechSelections" access="private">
+			<!--- If the `this.Techselections` array is empty add an error asking the user to select at least one techology --->
+			<cfif arrayIsEmpty(this.Techselections)>
+				<cfset addError(property="Techselections", message="Please select at least one technology.")>
+			</cfif>
 		</cffunction>
 	'
 	categories="model-initialization,validations" chapters="object-validation" functions="validateOnCreate,validateOnUpdate">
@@ -402,6 +425,7 @@
 	<cfargument name="message" type="string" required="true">
 	<cfscript>
 		var loc = {};
+
 		loc.returnValue = arguments.message;
 		// loop through each argument and replace bracketed occurance with
 		// argument value
@@ -416,13 +440,10 @@
 					loc.value = this.$label(loc.value);
 				}
 				loc.returnValue = Replace(loc.returnValue, "[[#loc.i#]]", "{{#chr(7)#}}", "all");
-				loc.returnValue = Replace(loc.returnValue, "[#loc.i#]", LCase(loc.value), "all");
+				loc.returnValue = Replace(loc.returnValue, "[#loc.i#]", loc.value, "all");
 				loc.returnValue = Replace(loc.returnValue, "{{#chr(7)#}}", "[#loc.i#]", "all");
 			}
 		}
-		// capitalize the first word in the property name if it comes first in the sentence
-		if (Left(arguments.message, 10) == "[property]")
-			loc.returnValue = capitalize(loc.returnValue);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
