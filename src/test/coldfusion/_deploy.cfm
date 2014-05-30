@@ -21,6 +21,7 @@
 						name eq "#url.build#.war" or
 						name eq "_deploy.cfm" or
 						name eq "web.config" or
+						name eq "CFIDE" or
 						name eq "WEB-INF">
 						<cfcontinue>
 					</cfif>

@@ -1,3 +1,10 @@
+<!--
+usage:
+  - "mvn install" or "mvn verify" runs all cfwheels tests on embedded railo and H2 database (use port 8080 for embedded HTTP server)
+  - "mvn -P mysql" or "mvn -P postgresql" runs all cfwheels tests on embedded railo and Travis-CI MySQL or PostgreSQL database server
+  - "mvn -P !railo,mssql" upload and runs all cfwheels tests on railo and Microsoft SQLServer on cfmldeveloper.org
+  - "mvn -P !railo,oracle" copy and runs all cfwheels tests on local ColdFusion8 and Oracle (or whatever locally configured database)   
+ -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cfwheels</groupId>
@@ -79,7 +86,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
-					<webXml>src/main/xml/web.xml</webXml>
+					<webXml>src/test/xml/web.xml</webXml>
 					<webResources>
 						<resource>
 							<!-- this is relative to the pom.xml directory -->
@@ -156,7 +163,6 @@
 						<artifactId>jetty-maven-plugin</artifactId>
 						<version>${jettyVersion}</version>
 						<configuration>
-							<!-- httpConnector> <idleTimeout>30000</idleTimeout> </httpConnector -->
 							<skip>${skipTests}</skip>
 							<webAppSourceDirectory>${project.build.directory}/${project.build.finalName}</webAppSourceDirectory>
 							<scanIntervalSeconds>10</scanIntervalSeconds>
@@ -193,7 +199,7 @@
 								<phase> validate </phase>
 								<configuration>
 									<target>
-										<copy file="src/main/xml/${railoConfig}" tofile="${settings.localRepository}/org/getrailo/railo/${railoVersion}/railo-server/context/railo-server.xml"
+										<copy file="src/test/xml/${railoConfig}" tofile="${settings.localRepository}/org/getrailo/railo/${railoVersion}/railo-server/context/railo-server.xml"
 											overwrite="false" />
 									</target>
 								</configuration>
@@ -267,6 +273,36 @@
 									<fromFile>src/test/coldfusion/_deploy.cfm</fromFile>
 									<url>${env.FTPSERVER}</url>
 								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>oracle</id>
+			<properties>
+				<testServer>http://localhost:8500</testServer>
+				<deployUrl>${testServer}/_deploy.cfm?build=${project.build.finalName}&#038;clean=true</deployUrl>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<phase>pre-integration-test</phase>
+								<configuration>
+									<target>
+										<copy file="${project.build.directory}/${project.build.finalName}.war" tofile="C:/ColdFusion8/wwwroot/${project.build.finalName}.war" overwrite="true" />
+										<copy file="src/test/coldfusion/_deploy.cfm" tofile="C:/ColdFusion8/wwwroot/_deploy.cfm" overwrite="true" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
 							</execution>
 						</executions>
 					</plugin>
