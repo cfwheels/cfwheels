@@ -1,9 +1,9 @@
 <!--
 usage:
   - "mvn install" or "mvn verify" runs all cfwheels tests on embedded railo and H2 database (use port 8080 for embedded HTTP server)
-  - "mvn -P mysql" or "mvn -P postgresql" runs all cfwheels tests on embedded railo and Travis-CI MySQL or PostgreSQL database server
-  - "mvn -P !railo,mssql" upload and runs all cfwheels tests on railo and Microsoft SQLServer on cfmldeveloper.org
-  - "mvn -P !railo,oracle" copy and runs all cfwheels tests on local ColdFusion8 and Oracle (or whatever locally configured database)   
+  - "mvn verify -P railo,mysql" or "mvn verify -P railo,postgresql" runs all cfwheels tests on embedded railo and Travis-CI MySQL or PostgreSQL database server
+  - "mvn verify -P mssql" upload and runs all cfwheels tests on railo and Microsoft SQLServer on cfmldeveloper.org (or whatever database/server configured there)
+  - "mvn verify -P oracle" copy and runs all cfwheels tests on local ColdFusion8 and Oracle (or whatever database configured locally)   
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>

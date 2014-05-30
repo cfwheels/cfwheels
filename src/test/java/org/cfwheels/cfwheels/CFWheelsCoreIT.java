@@ -29,6 +29,7 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
  */
 @RunWith(Parameterized.class)
 public class CFWheelsCoreIT {
+	static final private String[] KNOWN_ERRORS={"The data source could not be reached."};
 	static private WebDriver driver;
 	static private String baseUrl;
 	private String packageName;
@@ -93,7 +94,10 @@ public class CFWheelsCoreIT {
         String pageSource = driver.getPageSource();
 		Files.write(Paths.get("target/failsafe-reports/cfwheels-" + packageName + ".html"), pageSource.getBytes());
         assertTrue("The page should have results",pageSource.trim().length()>0);
-        assertTrue("The page should have passed",pageSource.toLowerCase().contains("passed"));
+        for (String error:KNOWN_ERRORS) {
+        	if (pageSource.contains(error)) fail(error);
+        }
+        assertTrue("The page should have passed",pageSource.contains("Passed"));
 	}
 
 	@AfterClass
