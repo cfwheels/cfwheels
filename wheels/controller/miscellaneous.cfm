@@ -165,6 +165,17 @@
 		loc.directory = Replace(ExpandPath(ListAppend(loc.folder, loc.filePath, "/")), "\", "/", "all");
 		loc.fullPath = ListAppend(loc.directory, loc.file, "/");
 
+		if (Find(loc.fullPath,":")>=0) {
+			loc.bugfix231 = Mid(loc.fullPath,Len(ExpandPath("."))+2,Len(loc.fullPath));
+			try {
+				if (FileExists(loc.bugfix231)) {
+					loc.fullPath = loc.bugfix231;
+				}
+			} catch (any e) {
+				//File does not exists
+			}
+		}
+
 		// if the file is not found, try searching for it
 		if (!FileExists(loc.fullPath))
 		{
