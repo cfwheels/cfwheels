@@ -5,7 +5,7 @@ usage:
   - "mvn verify -P railo,mysql" or "mvn verify -P railo,postgresql" runs all cfwheels tests on embedded railo and Travis-CI MySQL or PostgreSQL database server
   - "mvn clean verify -P mssql" upload and runs all cfwheels tests on railo and Microsoft SQLServer on cfmldeveloper.org (or whatever database/server configured there)
   - "mvn clean verify -P oracle" copy and runs all cfwheels tests on local ColdFusion8 and Oracle (or whatever database configured locally)
-  - "mvn jetty:run" start embedded web server to allow individual testing   
+  - "mvn jetty:run" start embedded web server to allow individual testing on http://localhost:8080   
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -20,6 +20,7 @@ usage:
 		<railoConfig>railo-server.xml</railoConfig>
 		<testServer>http://localhost:8080</testServer>
 		<deployUrl></deployUrl>
+		<folderGrouping>false</folderGrouping><!-- faster on remote server, but might cause false-positives -->
 	</properties>
 	<dependencies>
 		<dependency>
@@ -67,6 +68,7 @@ usage:
 					<systemPropertyVariables>
 						<testServer>${testServer}</testServer>
 						<deployUrl>${deployUrl}</deployUrl>
+						<folderGrouping>${folderGrouping}</folderGrouping>
 					</systemPropertyVariables>
 				</configuration>
 				<executions>
@@ -245,6 +247,7 @@ usage:
 			<properties>
 				<testServer>http://cfwheels.cfmldeveloper.com</testServer>
 				<deployUrl>${testServer}/_deploy.cfm?build=${project.build.finalName}&#038;clean=true</deployUrl>
+				<folderGrouping>true</folderGrouping><!-- about 30% faster on remote server -->
 			</properties>
 			<build>
 				<plugins>

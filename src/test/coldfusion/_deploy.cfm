@@ -53,6 +53,11 @@
 				/>
 			== DEPLOYED #url.build#.war ==
 			<br/>
+			<cffile action="append"
+				file="#ExpandPath('config/app.cfm')#"
+				output="<cfset this.secureJSON = false>">
+			== secureJSON successfully disabled on config/app.cfm ==
+			<br/>
 		</body>
 	</html>
 </cfoutput>
