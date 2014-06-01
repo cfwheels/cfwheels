@@ -21,7 +21,8 @@ usage:
 		<railoConfig>railo-server.xml</railoConfig>
 		<testServer>http://localhost:8080</testServer>
 		<deployUrl></deployUrl>
-		<folderGrouping>false</folderGrouping><!-- faster on remote server, but might cause false-positives -->
+		<folderGrouping>true</folderGrouping><!-- faster on remote server, but might cause false-positives -->
+		<folderGroupingExclusion>controller.flash</folderGroupingExclusion>
 		<emulateDatabase>fase</emulateDatabase>
 	</properties>
 	<dependencies>
@@ -72,6 +73,7 @@ usage:
 						<deployUrl>${deployUrl}</deployUrl>
 						<folderGrouping>${folderGrouping}</folderGrouping>
 						<emulateDatabase>${emulateDatabase}</emulateDatabase>
+						<folderGroupingExclusion>${folderGroupingExclusion}</folderGroupingExclusion>
 					</systemPropertyVariables>
 				</configuration>
 				<executions>

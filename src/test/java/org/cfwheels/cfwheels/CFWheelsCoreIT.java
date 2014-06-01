@@ -33,6 +33,7 @@ public class CFWheelsCoreIT {
 	static private WebDriver driver;
 	static private String baseUrl;
 	static private boolean folderGrouping;
+	static private String folderGroupingExclusion;
 	static private boolean emulateDatabase;
 	private String packageName;
 	private StringBuffer verificationErrors = new StringBuffer();
@@ -46,6 +47,8 @@ public class CFWheelsCoreIT {
     public static Collection<Object[]> getDirectories() {
     	folderGrouping = Boolean.valueOf(System.getProperty("folderGrouping"));
     	emulateDatabase = Boolean.valueOf(System.getProperty("emulateDatabase"));
+    	folderGroupingExclusion="";
+		if (null != System.getProperty("folderGroupingExclusion")) folderGroupingExclusion = System.getProperty("folderGroupingExclusion");
     	Collection<Object[]> params = new ArrayList<Object[]>();
     	addSubDirectories(params, "", "wheels/tests");
     	return params;
@@ -56,7 +59,7 @@ public class CFWheelsCoreIT {
 		for (File f : new File(path).listFiles()) {
 			if (f.getName().startsWith("_")) continue;
     		if (!f.isDirectory()) {
-    			if (!folderGrouping) {
+    			if (!folderGrouping || (folderGroupingExclusion+".").equals(prefix) ) {
         			if (!f.getName().endsWith(".cfc")) continue;
         			Object[] arr = new Object[] { prefix + f.getName().replace(".cfc", "") };
             		params.add(arr);
