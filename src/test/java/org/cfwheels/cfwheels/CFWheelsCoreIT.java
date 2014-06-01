@@ -33,6 +33,7 @@ public class CFWheelsCoreIT {
 	static private WebDriver driver;
 	static private String baseUrl;
 	static private boolean folderGrouping;
+	static private boolean emulateDatabase;
 	private String packageName;
 	private StringBuffer verificationErrors = new StringBuffer();
 
@@ -44,6 +45,7 @@ public class CFWheelsCoreIT {
 	@Parameters(name="package {0}")
     public static Collection<Object[]> getDirectories() {
     	folderGrouping = Boolean.valueOf(System.getProperty("folderGrouping"));
+    	emulateDatabase = Boolean.valueOf(System.getProperty("emulateDatabase"));
     	Collection<Object[]> params = new ArrayList<Object[]>();
     	addSubDirectories(params, "", "wheels/tests");
     	return params;
@@ -88,6 +90,12 @@ public class CFWheelsCoreIT {
 			driver.get(System.getProperty("deployUrl"));
 	        String pageSource = driver.getPageSource();
 			Files.write(Paths.get("target/failsafe-reports/_deploy.html"), pageSource.getBytes());
+		}
+		if (emulateDatabase) {
+			System.out.println("database emulate");
+			driver.get(baseUrl + "_emulateDatabase.cfm");
+	        String pageSource = driver.getPageSource();
+			Files.write(Paths.get("target/failsafe-reports/_emulateDatabase.html"), pageSource.getBytes());
 		}
 		System.out.println("test database re-create");
 		driver.get(baseUrl + "index.cfm?controller=wheels&action=wheels&view=tests&type=core&reload=true&package=cache.Add");

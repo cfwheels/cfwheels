@@ -21,6 +21,7 @@ usage:
 		<testServer>http://localhost:8080</testServer>
 		<deployUrl></deployUrl>
 		<folderGrouping>false</folderGrouping><!-- faster on remote server, but might cause false-positives -->
+		<emulateDatabase>fase</emulateDatabase>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -69,6 +70,7 @@ usage:
 						<testServer>${testServer}</testServer>
 						<deployUrl>${deployUrl}</deployUrl>
 						<folderGrouping>${folderGrouping}</folderGrouping>
+						<emulateDatabase>${emulateDatabase}</emulateDatabase>
 					</systemPropertyVariables>
 				</configuration>
 				<executions>
@@ -204,7 +206,7 @@ usage:
 								<configuration>
 									<target>
 										<copy file="src/test/xml/${railoConfig}" tofile="${settings.localRepository}/org/getrailo/railo/${railoVersion}/railo-server/context/railo-server.xml"
-											overwrite="false" />
+											overwrite="true" />
 									</target>
 								</configuration>
 								<goals>
@@ -241,6 +243,35 @@ usage:
 			<properties>
 				<railoConfig>railo-server.postgresql.xml</railoConfig>
 			</properties>
+		</profile>
+		<profile>
+			<id>oracle-emu</id>
+			<properties>
+				<railoConfig>railo-server.oracle-emu.xml</railoConfig>
+				<emulateDatabase>true</emulateDatabase>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<phase>pre-integration-test</phase>
+								<configuration>
+									<target>
+										<copy file="src/test/coldfusion/_emulateOracle.cfm" tofile="${project.build.directory}/${project.build.finalName}/_emulateDatabase.cfm" overwrite="true" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>mssql</id>
