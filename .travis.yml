@@ -16,4 +16,4 @@ jdk:
 
 services:
   - mysql  
-  - postgresql  
+  - postgresql

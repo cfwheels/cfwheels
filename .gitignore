@@ -10,7 +10,7 @@
 
 # Railo
 WEB-INF
-		
+
 # unpacked plugin folders
 plugins/**/*
 
