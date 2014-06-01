@@ -35,7 +35,7 @@ Path placeholders:
 <!--	 - http://sourceforge.net 																		-->
 <!--	or ask your database distributor 																-->
 	<data-sources>
-		<data-source allow="511" blob="false" class="org.h2.Driver" clob="false" connectionLimit="-1" connectionTimeout="1" custom="" database="" dsn="jdbc:h2:mem:test;MODE=Oracle" host="" metaCacheTimeout="60000" name="wheelstestdb" password="" port="-1" username="sa"/>
+		<data-source allow="511" blob="false" class="org.h2.Driver" clob="false" connectionLimit="-1" connectionTimeout="1" custom="" database="" dsn="jdbc:h2:./target/test-oracle-emu;MODE=Oracle" host="" metaCacheTimeout="60000" name="wheelstestdb" password="" port="-1" username="sa"/>
 	</data-sources>
 
 	<!--
