@@ -3,9 +3,10 @@ install Maven on linux: sudo apt-get install maven
 usage:
   - "mvn install" or "mvn verify" runs all cfwheels tests on embedded railo and H2 database (use port 8080 for embedded web server)
   - "mvn verify -P railo,mysql" or "mvn verify -P railo,postgresql" runs all cfwheels tests on embedded railo and Travis-CI MySQL or PostgreSQL database server
+  - "mvn verify -P railo,oracle-emu" runs all cfwheels tests on embedded railo and Oracle emulation via embedded H2 database
   - "mvn clean verify -P mssql" upload and runs all cfwheels tests on railo and Microsoft SQLServer on cfmldeveloper.org (or whatever database/server configured there)
   - "mvn clean verify -P oracle" copy and runs all cfwheels tests on local ColdFusion8 and Oracle (or whatever database configured locally)
-  - "mvn jetty:run" start embedded web server to allow individual testing   
+  - "mvn jetty:run" start embedded web server to allow individual testing on http://localhost:8080   
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -20,6 +21,9 @@ usage:
 		<railoConfig>railo-server.xml</railoConfig>
 		<testServer>http://localhost:8080</testServer>
 		<deployUrl></deployUrl>
+		<folderGrouping>true</folderGrouping><!-- faster on remote server, but might cause false-positives -->
+		<folderGroupingExclusion>controller.flash</folderGroupingExclusion>
+		<emulateDatabase>false</emulateDatabase>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -67,6 +71,9 @@ usage:
 					<systemPropertyVariables>
 						<testServer>${testServer}</testServer>
 						<deployUrl>${deployUrl}</deployUrl>
+						<folderGrouping>${folderGrouping}</folderGrouping>
+						<emulateDatabase>${emulateDatabase}</emulateDatabase>
+						<folderGroupingExclusion>${folderGroupingExclusion}</folderGroupingExclusion>
 					</systemPropertyVariables>
 				</configuration>
 				<executions>
@@ -202,7 +209,7 @@ usage:
 								<configuration>
 									<target>
 										<copy file="src/test/xml/${railoConfig}" tofile="${settings.localRepository}/org/getrailo/railo/${railoVersion}/railo-server/context/railo-server.xml"
-											overwrite="false" />
+											overwrite="true" />
 									</target>
 								</configuration>
 								<goals>
@@ -241,10 +248,40 @@ usage:
 			</properties>
 		</profile>
 		<profile>
+			<id>oracle-emu</id>
+			<properties>
+				<railoConfig>railo-server.oracle-emu.xml</railoConfig>
+				<emulateDatabase>true</emulateDatabase>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<phase>pre-integration-test</phase>
+								<configuration>
+									<target>
+										<copy file="src/test/coldfusion/_emulateOracle.cfm" tofile="${project.build.directory}/${project.build.finalName}/_emulateDatabase.cfm" overwrite="true" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>mssql</id>
 			<properties>
 				<testServer>http://cfwheels.cfmldeveloper.com</testServer>
 				<deployUrl>${testServer}/_deploy.cfm?build=${project.build.finalName}&#038;clean=true</deployUrl>
+				<folderGrouping>true</folderGrouping><!-- about 30% faster on remote server -->
 			</properties>
 			<build>
 				<plugins>

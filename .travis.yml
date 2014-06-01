@@ -5,7 +5,10 @@ cache: bundler #works only for private repo http://docs.travis-ci.com/user/cachi
 env: #ftp credential for remote test server, encrypted with repo specific key 
   - secure: "Wib+BiM5chr0MqOVFkPH0o19t7HZiX511JcxhlR11ciRm3Ef2KlyGvZmc6A8Ajt2nOX6YSZAtm/j+BRl+vOQ0L/DbdgkApl1cMA3EJLZGE+fieiOuOBV62iC32+bmWSOM27gnM8rMwD/5kvvkvZrQCMYTstyc4JQraTDrrUl+5w=" 
 
-script: mvn verify -P railo,mysql && mvn verify -P railo,postgresql && mvn verify
+before_script:
+  - psql -c 'create database test;' -U postgres
+
+script: mvn verify -P railo,oracle-emu && mvn verify -P railo,mysql && mvn verify -P railo,postgresql && mvn verify
 #see pom.xml for the explanation of the mvn commands above
 
 jdk:
@@ -14,4 +17,3 @@ jdk:
 services:
   - mysql  
   - postgresql  
-  
