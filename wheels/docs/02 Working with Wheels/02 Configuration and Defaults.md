@@ -481,6 +481,12 @@ reload URL argument without also providing a password URL argument of somepasswo
 			<td>[empty string]</td>
 			<td>Password to require when reloading the Wheels application from the URL. Leave empty to require no password.</td>
 		</tr>
+		<tr>
+			<td>modelRequireInit</td>
+			<td>boolean</td>
+			<td>false</td>
+			<td>Set to true to require an init function in each of your models.</td>
+		</tr>
 	</tbody>
 </table>
 

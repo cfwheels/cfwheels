@@ -55,6 +55,9 @@
 		{
 			init();
 		}
+		else if (get("modelRequireInit")){
+			$throw(type="Wheels.ModelInitMissing", message="An init function is required for Model: #variables.wheels.class.modelName#", extendedInfo="Create an init function in /models/#variables.wheels.class.modelName#");	
+		}
 		
 		// make sure that the tablename has the respected prefix
 		table(getTableNamePrefix() & tableName());
