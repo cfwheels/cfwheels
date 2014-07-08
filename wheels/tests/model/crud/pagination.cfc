@@ -142,4 +142,9 @@
 		<cfset assert('IsQuery(loc.q)')>		
 	</cffunction>
 
+	<cffunction name="test_pagination_has_all_columns_when_zero_records_found">
+		<cfset loc.q = model("Post").findAll(where="id=0", page=1)>
+		<cfset assert('ListLen(loc.q.columnList) eq 9')>
+	</cffunction>
+
 </cfcomponent>

@@ -370,7 +370,7 @@
 	<cfargument name="association" type="string" required="false" hint="@textfield.">
 	<cfargument name="position" type="string" required="false" hint="@textfield.">
 	<cfargument name="options" type="any" required="true" hint="A collection to populate the select form control with. Can be a query recordset or an array of objects.">
-	<cfargument name="includeBlank" type="any" required="false" hint="Whether to include a blank option in the select form control. Pass `true` to include a blank line or a string that should represent what display text should appear for the empty value (for example, ""- Select One -"").">
+	<cfargument name="includeBlank" type="any" required="false" hint="Whether to include a blank option in the select form control. Pass `true` to include a blank line or a string that should represent what display text should appear for the empty value (for example, ""- select one -"").">
 	<cfargument name="valueField" type="string" required="false" hint="The column or property to use for the value of each list element. Used only when a query or array of objects has been supplied in the `options` argument.">
 	<cfargument name="textField" type="string" required="false" hint="The column or property to use for the value of each list element that the end user will see. Used only when a query or array of objects has been supplied in the `options` argument.">
 	<cfargument name="label" type="string" required="false" hint="@textField.">
@@ -392,9 +392,11 @@
 		arguments.name = $tagName(arguments.objectName, arguments.property);
 		if (StructKeyExists(arguments, "multiple") and IsBoolean(arguments.multiple))
 		{
-			if (arguments.multiple)
+			if (arguments.multiple) 
+			{
 				arguments.multiple = "multiple";
-			else
+				arguments.includeBlank = false;
+			} else 
 				StructDelete(arguments, "multiple");
 		}
 		loc.content = $optionsForSelect(argumentCollection=arguments);
