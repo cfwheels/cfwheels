@@ -1,4 +1,11 @@
-WHEELS VERSION 1.1.8 (UNRELEASE)
+WHEELS VERSION 1.1.9 (UNRELEASE)
+
+Bug Fixes
+=========
+* Incorrect pagination query with Oracle - #93 [crsedgar, Tony Petruzzi, Singgih Cahyono]
+* Repair Oracle test failures #187 (Tony Petruzzi, Singgih Cahyono)
+
+WHEELS VERSION 1.1.8 (05/05/2012)
 
 Model Enhancements
 ==================
