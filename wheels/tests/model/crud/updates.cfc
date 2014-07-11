@@ -90,14 +90,27 @@
 	</cffunction>
 
    	<cffunction name="test_columns_that_are_not_null_should_allow_for_blank_string_during_update">
+		<cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="version">
+		<cfset loc.db = LCase(Replace(loc.dbinfo.database_productname, " ", "", "all"))>
 		<cftransaction action="begin">
-			<cfset loc.author = model("author").findOne(where="firstName='Tony'")>
-			<cfset loc.author.lastName = "">
-			<cfset loc.author.save()>
-			<cfset loc.author = model("author").findOne(where="firstName='Tony'")>
+			<cfif loc.db IS "oracle">
+				<cfset loc.author = model("author").findOne(where="firstName='Tony'")>
+				<cfset loc.author.lastName = " ">
+				<cfset loc.author.save()>
+				<cfset loc.author = model("author").findOne(where="firstName='Tony'")>
+			<cfelse>
+				<cfset loc.author = model("author").findOne(where="firstName='Tony'")>
+				<cfset loc.author.lastName = "">
+				<cfset loc.author.save()>
+				<cfset loc.author = model("author").findOne(where="firstName='Tony'")>
+			</cfif>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset assert("IsObject(loc.author) AND !len(loc.author.lastName)")>
+		<cfif loc.db IS "oracle">
+			<cfset assert("IsObject(loc.author) AND !len(trim(loc.author.lastName))")>
+		<cfelse>
+			<cfset assert("IsObject(loc.author) AND !len(loc.author.lastName)")>
+		</cfif>
 	</cffunction>
 
 </cfcomponent>
