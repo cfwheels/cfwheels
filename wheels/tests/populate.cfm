@@ -11,6 +11,8 @@
 <cfset loc.intColumnType = "int">
 <cfset loc.floatColumnType = "float">
 <cfset loc.identityColumnType = "">
+<cfset loc.bitColumnType = "bit">
+<cfset loc.bitColumnDefault = 0>
 
 <cfif loc.db IS "microsoftsqlserver">
 	<cfset loc.identityColumnType = "int NOT NULL IDENTITY(1,1)">
@@ -24,6 +26,8 @@
 	<cfset loc.identityColumnType = "SERIAL NOT NULL">
 	<cfset loc.dateTimeColumnType = "timestamp">
 	<cfset loc.binaryColumnType = "bytea">
+	<cfset loc.bitColumnType = "boolean">
+	<cfset loc.bitColumnDefault = "false">
 <cfelseif loc.db IS "oracle">
 	<cfset loc.identityColumnType = "number(38,0) NOT NULL">
 	<cfset loc.dateTimeColumnType = "timestamp">
@@ -31,6 +35,7 @@
 	<cfset loc.intColumnType = "number(38,0)">
 	<cfset loc.floatColumnType = "number(38,2)">
 	<cfset loc.dateTimeDefault = "to_timestamp(#loc.dateTimeDefault#,'yyyy-dd-mm hh24:mi:ss.FF')">
+	<cfset loc.bitColumnType = "number(1)">
 </cfif>
 
 <!--- get a listing of all the tables and view in the database --->
@@ -195,7 +200,7 @@ CREATE TABLE shops
 CREATE TABLE sqltypes
 (
 	id #loc.identityColumnType#
-	,booleanType bit DEFAULT 0 NOT NULL
+	,booleanType #loc.bitColumnType# DEFAULT #loc.bitColumnDefault# NOT NULL
 	,binaryType #loc.binaryColumnType# NULL
 	,dateTimeType #loc.datetimeColumnType# DEFAULT #PreserveSingleQuotes(loc.dateTimeDefault)# NOT NULL
 	,floatType #loc.floatColumnType# DEFAULT 1.25 NULL

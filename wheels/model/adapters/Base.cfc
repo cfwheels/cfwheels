@@ -87,8 +87,9 @@
 					loc.item = Trim(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(ListGetAt(loc.returnValue[ArrayLen(loc.returnValue)], loc.i), "ORDER BY ", ""), " ASC", ""), " DESC", ""));
 					if (!ListFindNoCase(ReplaceNoCase(loc.returnValue[ArrayLen(loc.returnValue)-1], "GROUP BY ", ""), loc.item))
 						loc.returnValue[ArrayLen(loc.returnValue)-1] = ListAppend(loc.returnValue[ArrayLen(loc.returnValue)-1], loc.item);
-					if (!ListFindNoCase(ReplaceNoCase(loc.returnValue[1], "SELECT ", ""), loc.item))
-						loc.returnValue[1] = ListAppend(loc.returnValue[1], loc.item);
+//					These two lines are removed	because they failed core tests with Oracle
+//					if (!ListFindNoCase(ReplaceNoCase(loc.returnValue[1], "SELECT ", ""), loc.item))
+//						loc.returnValue[1] = ListAppend(loc.returnValue[1], loc.item);
 				}
 			}
 		</cfscript>
@@ -171,12 +172,12 @@
 		<cfargument name="settings" type="struct" required="true">
 		<cfscript>
 		var loc = {};
-		
+
 		if(!StructKeyExists(arguments.settings, "value"))
 		{
 			$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syantax error in the WHERE statement such as forgetting to quote strings.");
 		}
-		
+
 		loc.params = {};
 		loc.params.cfsqltype = arguments.settings.type;
 		loc.params.value = arguments.settings.value;
