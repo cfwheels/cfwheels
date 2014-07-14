@@ -37,6 +37,7 @@
 	font: 12px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	line-height: 1.5em;
 	color: ##333;
+	padding-right: 10px;
 }
 
 ##wheels-debug-area a
@@ -75,7 +76,7 @@
 			</tr>
 		</cfif>
 		<tr>
-			<td valign="top" style="width:125px;"><strong>Application:</strong></td>
+			<td valign="top"><strong>Application:</strong></td>
 			<td>#application.applicationName#<cfif NOT Len(get("reloadPassword")) OR loc.hasAppTests> [<cfif NOT Len(get("reloadPassword"))><a href="#loc.baseReloadURL#true">Reload</a></cfif><cfif NOT Len(get("reloadPassword")) AND loc.hasAppTests>, </cfif><cfif loc.hasAppTests><a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=app&reload=true">Run Tests</a></cfif>]</cfif></td>
 		</tr>
 		<tr>
