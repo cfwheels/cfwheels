@@ -256,12 +256,16 @@
 
 <cffunction name="$abortInvalidRequest" returntype="void" access="public" output="false">
 	<cfscript>
-		var applicationPath = Replace(GetCurrentTemplatePath(), "\", "/", "all");
-		var callingPath = Replace(GetBaseTemplatePath(), "\", "/", "all");
-		if (ListLen(callingPath, "/") GT ListLen(applicationPath, "/") || GetFileFromPath(callingPath) == "root.cfm")
+		var loc = {};
+		loc.applicationPath = Replace(GetCurrentTemplatePath(), "\", "/", "all");
+		loc.callingPath = Replace(GetBaseTemplatePath(), "\", "/", "all");
+		if (ListLen(loc.callingPath, "/") > ListLen(loc.applicationPath, "/") || GetFileFromPath(loc.callingPath) == "root.cfm")
 		{
-			$header(statusCode="404", statusText="Not Found");
-			$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
+			if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "eventPath"))
+			{
+				$header(statusCode="404", statusText="Not Found");
+				$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
+			}
 			$abort();
 		}
 	</cfscript>
