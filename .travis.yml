@@ -8,7 +8,7 @@ env: #ftp credential for remote test server, encrypted with repo specific key
 before_script:
   - psql -c 'create database test;' -U postgres
 
-script: mvn verify && mvn verify -Prailo,mysql && mvn clean verify -Pmssql 
+script: mvn verify && mvn verify -Prailo,mysql && ($TRAVIS_PULL_REQUEST || mvn clean verify -Pmssql)
 #see pom.xml for the explanation of the mvn commands above
 #TODO restore && mvn verify -Prailo,postgresql && mvn verify -Prailo,oracle-emu&& mvn verify -Prailo,railo4
 
