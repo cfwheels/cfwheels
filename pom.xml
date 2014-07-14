@@ -1,0 +1,375 @@
+<!--
+installing Maven:
+  - on linux: sudo apt-get install maven
+  - other OS: the same as installing CFEclipse plugin on Eclipse IDE
+usage:
+  - "mvn verify" runs all cfwheels tests on embedded railo and H2 database (use port 8080 for embedded web server)
+     (on Eclipse, Run->Run As->9 Maven install)
+  - Execute "mvn jetty:run" to start the embedded web server to run individual tests
+    (In Eclipse, Run->Run As->6 Maven build...)
+  - Individual tests URL: http://localhost:8080/index.cfm?controller=wheels&action=wheels&view=tests&type=core  
+  - "mvn verify -P railo,oracle-emu" runs all cfwheels tests on Oracle emulation via embedded H2 database
+  - "mvn verify -P railo,mysql" runs all cfwheels tests on Travis-CI MySQL database
+  - "mvn verify -P railo,postgresal" runs all cfwheels tests on Travis-CI postgreSQL database
+  - "mvn clean verify -P mssql" upload and runs all cfwheels tests on railo and Microsoft SQLServer on cfmldeveloper.org (or whatever database/server configured there)
+  - "mvn clean verify -P oracle" copy and runs all cfwheels tests on local ColdFusion8 and Oracle (or whatever database configured locally)
+
+Benefits of embedded-container-test versus full-integration-test
+  #1 clean test data (data is not shared with nor contaminated by other processes)
+  #2 ready for continuous integration (no database or web server required on the CI server)
+  #3 secure (no password necessary to connect to external database server)
+  #4 fast and predictable (all tests run without external network connection)
+  #5 instant result (changes on source code is visible immediately without the need to upload to remote server)
+
+ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.cfwheels</groupId>
+	<artifactId>cfwheels</artifactId>
+	<version>1.1.9-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<!-- embedded CFML and web server version for easy upgrade -->
+		<railoVersion>3.3.5.004</railoVersion>
+		<jettyVersion>8.1.15.v20140411</jettyVersion>
+		<railoConfig>railo-server.xml</railoConfig>
+		<testServer>http://localhost:8080</testServer>
+		<deployUrl></deployUrl>
+		<!-- settings for Oracle emulation -->
+		<testOracleEmulation>false</testOracleEmulation>
+	</properties>
+	<dependencies>
+		<dependency>
+			<!-- test runtime -->
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<!-- embedded web client required for testing -->
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.25.0</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<extensions>
+			<!-- required to upload package into remote server -->
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>2.6</version>
+			</extension>
+		</extensions>
+		<plugins>
+			<plugin>
+				<!-- set jdk version -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.12.4</version>
+				<configuration>
+					<systemPropertyVariables>
+						<!-- pass all configuration into the integration test -->
+						<testServer>${testServer}</testServer>
+						<deployUrl>${deployUrl}</deployUrl>
+						<testOracleEmulation>${testOracleEmulation}</testOracleEmulation>
+					</systemPropertyVariables>
+				</configuration>
+				<executions>
+					<execution>
+						<!-- run the integration test -->
+						<id>integration-test</id>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+					</execution>
+					<execution>
+						<!-- verify the result of integration test -->
+						<id>verify</id>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<!-- web.xml is not necessary for final package, only during testing -->
+					<webXml>src/test/xml/web.dummy.xml</webXml>
+					<webResources>
+						<resource>
+							<!-- the sources are in the root, not under src/main/webapp -->
+							<directory>.</directory>
+							<excludes>
+								<exclude>.settings/**</exclude>
+								<exclude>src/**</exclude>
+								<exclude>target/**</exclude>
+								<exclude>WEB-INF/**</exclude>
+								<exclude>.*</exclude>
+								<exclude>pom.xml</exclude>
+							</excludes>
+						</resource>
+					</webResources>
+					<!-- exclude unnecessary binaries from final package -->
+			        <packagingExcludes>WEB-INF/**</packagingExcludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<!-- to activate, execute "mvn verify -Prailo,railo4" on Travis-CI -->
+			<id>railo4</id>
+			<properties>
+				<railoVersion>4.3.0.003</railoVersion>
+				<railoConfig>railo4-server.xml</railoConfig>
+			</properties>
+		</profile>
+		<profile>
+			<!-- embedded web and CFML server is activated by default -->
+			<id>railo</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<!-- embedded test database runtime, required by railo -->
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<version>1.4.178</version>
+				</dependency>
+				<dependency>
+					<!-- embedded test CFML server runtime -->
+					<groupId>org.getrailo</groupId>
+					<artifactId>railo</artifactId>
+					<version>${railoVersion}</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<!-- embedded web server for testing -->
+						<groupId>org.mortbay.jetty</groupId>
+						<artifactId>jetty-maven-plugin</artifactId>
+						<version>${jettyVersion}</version>
+						<configuration>
+							<!-- skip starting web server during package preparation phase on Travis-CI -->
+							<skip>${skipTests}</skip>
+							<!-- use root source folder. So, file changes can be seen instantly -->
+							<webAppSourceDirectory>.</webAppSourceDirectory>
+							<!-- web.xml required for railo -->
+							<webXml>src/test/xml/web.xml</webXml>
+							<webApp>
+								<!-- the URL context path -->
+								<contextPath>/</contextPath>
+							</webApp>
+							<!-- required to allow stopping the server -->
+							<stopPort>9966</stopPort>
+							<stopKey>STOP</stopKey>
+						</configuration>
+						<executions>
+							<execution>
+								<!-- start embedded web server before integration test -->
+								<!-- for manual testing, execute "mvn jetty:run" -->
+								<id>start-jetty</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<daemon>true</daemon>
+								</configuration>
+							</execution>
+							<execution>
+								<!-- stop embedded web server after integration test -->
+								<id>stop-jetty</id>
+								<phase>post-integration-test</phase>
+								<goals>
+									<goal>stop</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<!-- copy data source and other configuration during test file into local repo -->
+							    <id>copy railo config</id>
+								<phase>test</phase>
+								<configuration>
+									<target>
+										<copy file="src/test/xml/${railoConfig}" tofile="${settings.localRepository}/org/getrailo/railo/${railoVersion}/railo-server/context/railo-server.xml"
+											overwrite="true" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+							<execution>
+								<!-- force clean WEB-INF because it is outside the automatically clean up target folder-->
+								<id>clean railo runtime</id>
+								<phase>clean</phase>
+								<configuration>
+									<target>
+										<delete dir="WEB-INF"/>
+										<delete dir="wheels/tests/_assets/plugins/removing/TestGlobalMixins"/>
+										<delete dir="wheels/tests/_assets/plugins/unpacking/TestDefaultAssignMixins"/>
+										<delete dir="wheels/tests/_assets/plugins/unpacking/TestGlobalMixins"/>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!-- to activate, execute "mvn verify -Prailo,mysql" on Travis-CI -->
+			<id>mysql</id>
+			<dependencies>
+				<dependency>
+					<!-- jdbc database driver, required for railo datasource -->
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+					<version>5.1.30</version>
+				</dependency>
+			</dependencies>
+			<properties>
+				<railoConfig>railo-server-mysql.xml</railoConfig>
+			</properties>
+		</profile>
+		<profile>
+			<!-- to activate, execute "mvn verify -Prailo,postgresql" on Travis-CI -->
+			<id>postgresql</id>
+			<dependencies>
+				<dependency>
+					<!-- jdbc database driver, required for railo datasource -->
+					<groupId>postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+					<version>9.1-901-1.jdbc4</version>
+				</dependency>
+			</dependencies>
+			<properties>
+				<railoConfig>railo-server-postgresql.xml</railoConfig>
+			</properties>
+		</profile>
+		<profile>
+			<!-- to activate, execute "mvn verify -Prailo,oracle-emu" on Travis-CI or locally -->
+			<id>oracle-emu</id>
+			<properties>
+				<railoConfig>railo-server-oracle-emu.xml</railoConfig>
+				<testOracleEmulation>true</testOracleEmulation>
+			</properties>
+		</profile>
+		<profile>
+			<!-- to activate, execute "mvn clean verify -mssql" on Travis-CI or locally
+				require FTPSERVER credentials in environment variable (repo-specific encryption on Travis-CI)
+			-->
+			<id>mssql</id>
+			<properties>
+				<testServer>http://cfwheels.cfmldeveloper.com</testServer>
+				<deployUrl>${testServer}/_deploy.cfm?build=${project.build.finalName}&#038;clean=true</deployUrl>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>wagon-maven-plugin</artifactId>
+						<version>1.0-beta-5</version>
+						<executions>
+							<execution>
+								<!-- upload the zipped package into remote server -->
+								<id>upload-code</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>upload</goal>
+								</goals>
+								<configuration>
+									<fromDir>${project.build.directory}</fromDir>
+									<includes>${project.build.finalName}.war</includes>
+									<url>${env.FTPSERVER}</url>
+								</configuration>
+							</execution>
+							<execution>
+								<!-- upload the unzip deployment page into remote server -->
+								<id>upload-deploy</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>upload-single</goal>
+								</goals>
+								<configuration>
+									<fromFile>src/test/coldfusion/_deploy.cfm</fromFile>
+									<url>${env.FTPSERVER}</url>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!-- to activate, execute "mvn clean verify -Poracle" on locally
+				requires Oracle Express (any datasource) and ColdFusion installed on specific folder  
+			-->
+			<id>oracle</id>
+			<properties>
+				<testServer>http://localhost:8500</testServer>
+				<deployUrl>${testServer}/_deploy.cfm?build=${project.build.finalName}&#038;clean=true</deployUrl>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<!-- copy the zipped package and the unzip deployment page into local ColdFusion server -->
+								<phase>pre-integration-test</phase>
+								<configuration>
+									<target>
+										<copy file="${project.build.directory}/${project.build.finalName}.war" tofile="C:/ColdFusion8/wwwroot/${project.build.finalName}.war" overwrite="true" />
+										<copy file="src/test/coldfusion/_deploy.cfm" tofile="C:/ColdFusion8/wwwroot/_deploy.cfm" overwrite="true" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	<repositories>
+		<repository>
+			<!-- the embedded CFML server only available here to download -->
+			<id>cfmlprojects.org</id>
+			<url>http://cfmlprojects.org/artifacts</url>
+		</repository>
+	</repositories>
+</project>
