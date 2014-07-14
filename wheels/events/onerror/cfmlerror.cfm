@@ -9,7 +9,12 @@
 			A root cause was not provided.
 		</cfif>
 	</p>
-	<cfif StructKeyExists(arguments.exception.cause, "tagContext") && ArrayLen(arguments.exception.cause.tagContext)>
+	<cfif StructKeyExists(arguments.exception, "cause") && StructKeyExists(arguments.exception.cause, "tagContext") && ArrayLen(arguments.exception.cause.tagContext)>
+		<cfset loc.tagContext = arguments.exception.cause.tagContext>
+	<cfelseif StructKeyExists(arguments.exception, "rootCause") && StructKeyExists(arguments.exception.rootCause, "tagContext") && ArrayLen(arguments.exception.rootCause.tagContext)>
+		<cfset loc.tagContext = arguments.exception.rootCause.tagContext>
+	</cfif>
+	<cfif StructKeyExists(loc, "tagContext")>
 		<p><strong>Location:</strong><br />
 		<cfset loc.path = GetDirectoryFromPath(GetBaseTemplatePath())>
 		<cfset loc.pos = 0>

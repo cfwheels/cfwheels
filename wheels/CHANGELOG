@@ -3,7 +3,8 @@ WHEELS VERSION 1.x.x
 Bug Fixes
 =========
 
-* Do not trim primary key values - #213 [Per Djurner]
+* Get the error location from the correct exception struct - #223 [Adam Chapman, Per Djurner]
+* Do not trim primary key values - #213 [Jeremy Keczan, Per Djurner]
  
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
