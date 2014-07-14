@@ -1,0 +1,2 @@
+<cfcomponent extends="Wheels">
+</cfcomponent>
