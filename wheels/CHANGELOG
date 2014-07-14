@@ -1,5 +1,10 @@
 WHEELS VERSION 1.x.x
 
+Model Enhancements
+==================
+
+* New global "modelRequireInit" setting that you can set to "true" to require an init function specified in all models - [Jonathan Smith]
+
 Bug Fixes
 =========
 
