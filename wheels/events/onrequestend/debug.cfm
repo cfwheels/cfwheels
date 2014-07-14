@@ -16,7 +16,15 @@
 </cfif>
 <cfset loc.baseReloadURL = loc.baseReloadURL & "reload=">
 <cfset loc.hasFrameworkTests = StructKeyExists(this, "mappings") && StructKeyExists(this.mappings, "/wheelsMapping") && DirectoryExists(expandPath("/wheelsMapping/tests"))>
-<cfset loc.hasAppTests = DirectoryExists(expandPath("#get('webPath')#/tests"))>
+<cfset loc.appTestDir = get("webPath") & "/tests">
+<cfset loc.appTestDir = ExpandPath(loc.appTestDir)>
+<cfset loc.hasAppTests = DirectoryExists(loc.appTestDir)>
+<cfif loc.hasAppTests>
+	<cfdirectory action="list" directory="#loc.appTestDir#" name="loc.tests">
+	<cfif NOT loc.tests.recordCount>
+		<cfset loc.hasAppTests = false>
+	</cfif>
+</cfif>
 
 <cfoutput>
 
