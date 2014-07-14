@@ -34,6 +34,10 @@ Please report any errors that you may encounter on our [issue tracker][4]. Pleas
 database engine (including version), CFML engine (including version), and HTTP server (including
 version).
 
+## Code Status
+
+* [![Build Status](https://travis-ci.org/cfwheels/cfwheels.svg?branch=master)](https://travis-ci.org/cfwheels/cfwheels)
+
 ## License
 
 [ColdFusion on Wheels][1] is released under the Apache License Version 2.0.
