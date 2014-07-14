@@ -2,6 +2,7 @@
 
 	<cffunction name="setup">
 		<cfset loc.user = model("user")>
+		<cfset loc.shop = model("shop")>
 	</cffunction>
 
 	<cffunction name="test_select_distinct_addresses">
@@ -24,6 +25,11 @@
 		<cfset loc.e = loc.user.findOne(where="lastname = 'Petruzzi'")>
 		<cfset loc.q = loc.user.findByKey(loc.e.id)>
 		<cfset assert('loc.q.id eq loc.e.id')>
+	</cffunction>
+
+ 	<cffunction name="test_findByKey_returns_object_when_key_has_leading_space">
+		<cfset loc.e = loc.shop.findByKey(" shop6")>
+		<cfset assert('isobject(loc.e)')>
 	</cffunction>
 
  	<cffunction name="test_findByKey_returns_false_when_record_not_found">

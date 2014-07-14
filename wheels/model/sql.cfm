@@ -682,7 +682,7 @@
 		{
 			loc.key = Trim(ListGetAt(arguments.properties, loc.i));
 			if (Len(arguments.values))
-				loc.value = Trim(ListGetAt(arguments.values, loc.i));
+				loc.value = ListGetAt(arguments.values, loc.i);
 			else if (Len(arguments.keys))
 				loc.value = this[ListGetAt(arguments.keys, loc.i)];
 			else 

@@ -448,6 +448,8 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 	)>
 </cfloop>
 
+<cfset model("shop").create(shopid=" shop6", citycode=0, name="x")>
+
 <!--- tags --->
 <cfset loc.releases = model("tag").create(name="releases",description="testdesc")>
 <cfset model("tag").create(name="minor",description="a minor release", parentid=loc.releases.id)>
