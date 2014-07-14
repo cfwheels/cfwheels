@@ -11,13 +11,13 @@ before_script:
 script: "
 if [ $TRAVIS_SECURE_ENV_VARS == 'true' ];
 then 
-    mvn verify && mvn verify -Prailo,mysql && mvn clean verify -Pmssql; 
+    mvn verify && mvn verify -Prailo,mysql && mvn verify -Prailo,railo4 && mvn clean verify -Pmssql; 
 else 
-    mvn verify && mvn verify -Prailo,mysql;
+    mvn verify && mvn verify -Prailo,mysql && mvn verify -Prailo,railo4;
 fi"
 
 #see pom.xml for the explanation of the mvn commands above
-#TODO restore && mvn verify -Prailo,postgresql && mvn verify -Prailo,oracle-emu && mvn verify -Prailo,railo4
+#TODO restore && mvn verify -Prailo,postgresql && mvn verify -Prailo,oracle-emu
 
 jdk:
   - oraclejdk7

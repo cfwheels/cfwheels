@@ -101,7 +101,7 @@
 	<cffunction name="run_casing_of_class_attribute">
  		<cfset loc.controller.flashInsert(something="")>
 		<cfset loc.r = loc.controller.flashMessages()>
-		<cfif application.wheels.serverName eq "Railo">
+		<cfif application.wheels.serverName eq "Railo" and application.wheels.serverversion.startsWith("3.")>
 			<cfset loc.e = 'class="SOMETHINGMessage"'>
 		<cfelse>
 			<cfset loc.e = 'class="somethingMessage"'>
@@ -126,7 +126,7 @@
 		<cfset loc.controller.flashInsert(someThing="")>
 		<cfset loc.r = loc.controller.flashMessages()>
 		<cfset loc.r = loc.controller.flashMessages()>
-		<cfif application.wheels.serverName eq "Railo">
+		<cfif application.wheels.serverName eq "Railo" and application.wheels.serverversion.startsWith("3.")>
 			<cfset loc.e = 'class="SOMETHINGMessage"'>
 		<cfelse>
 			<cfset loc.e = 'class="someThingMessage"'>
@@ -157,7 +157,7 @@
 		<cfset loc.controller.flashInsert(success="test")>
 		<cfset loc.r = loc.controller.flashMessages(class="custom-class")>
 		<cfset loc.e = 'class="custom-class"'>
-		<cfif application.wheels.serverName eq "Railo">
+		<cfif application.wheels.serverName eq "Railo" and application.wheels.serverversion.startsWith("3.")>
 			<cfset loc.e2 = 'class="SUCCESSMessage"'>
 		<cfelse>
 			<cfset loc.e2 = 'class="successMessage"'>
