@@ -43,8 +43,12 @@
 			variables.wheels.class.validations[ListGetAt(loc.validations, loc.i)] = ArrayNew(1);
 
 		// run developer's init method if it exists
-		if (StructKeyExists(variables, "init"))
+		if (StructKeyExists(variables, "init")){
 			init();
+		}
+		else if (get("modelRequireInit")){
+			$throw(type="Wheels.ModelInitMissing", message="An init function is required for Model: #variables.wheels.class.modelName#", extendedInfo="Create an init function in /models/#variables.wheels.class.modelName#");	
+		}
 
 		// make sure that the tablename has the respected prefix
 		table(getTableNamePrefix() & tableName());
