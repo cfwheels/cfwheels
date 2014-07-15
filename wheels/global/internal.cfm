@@ -341,12 +341,20 @@
 	<cfargument name="$URLRewriting" type="string" required="false" default="#application.wheels.URLRewriting#">
 	<cfscript>
 		var loc = {};
-		arguments.params = Replace(arguments.params, "&amp;", "&", "all"); // change to using ampersand so we can use it as a list delim below and so we don't "double replace" the ampersand below
+
+		// change to using ampersand so we can use it as a list delim below and so we don't "double replace" it
+		arguments.params = Replace(arguments.params, "&amp;", "&", "all");
+		
 		// when rewriting is off we will already have "?controller=" etc in the url so we have to continue with an ampersand
 		if (arguments.$URLRewriting == "Off")
+		{
 			loc.delim = "&";
+		}
 		else
+		{
 			loc.delim = "?";
+		}
+
 		loc.returnValue = "";
 		loc.iEnd = ListLen(arguments.params, "&");
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
@@ -357,8 +365,16 @@
 			if (ArrayLen(loc.temp) == 2)
 			{
 				loc.param = $URLEncode(loc.temp[2]);
+
+				// correct double encoding of & and =
+				// since we parse the param string using & and = the developer has to url encode them on the input
+				loc.param = Replace(loc.param, "%2526", "%26", "all");
+				loc.param = Replace(loc.param, "%253D", "%3D", "all");
+				
 				if (application.wheels.obfuscateUrls && !ListFindNoCase("cfid,cftoken", loc.temp[1]))
+				{
 					loc.param = obfuscateParam(loc.param);
+				}
 				loc.returnValue = loc.returnValue & loc.param;
 			}
 		}
