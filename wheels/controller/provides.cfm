@@ -125,7 +125,7 @@
 		}
 				
 		// set our header based on our mime type
-		$header(name="content-type", value=application.wheels.formats[loc.contentType], charset="utf-8");
+		$header(name="content-type", value=application.wheels.formats[loc.contentType] & "; charset=UTF-8", charset="utf-8");
 		
 		// if we do not have the loc.content variable and we are not rendering html then try to create it
 		if (!StructKeyExists(loc, "content"))
