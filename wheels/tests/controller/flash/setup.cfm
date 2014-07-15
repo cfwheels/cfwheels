@@ -6,3 +6,7 @@
 	<cfset loc.controller.$setFlashStorage("session")>
 	<cfset loc.controller.flashClear()>
 </cffunction>
+
+<cffunction name="teardown">
+	<cfset loc.controller.flashClear()>
+</cffunction>

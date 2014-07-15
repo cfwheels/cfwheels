@@ -46,7 +46,7 @@
 				loc.conditionArgs.key = loc.key;
 				loc.conditionArgs.category = loc.category;
 				loc.executeArgs = {};
-				loc.executeArgs.controller = loc.controller;
+				loc.executeArgs.controller = params.controller;
 				loc.executeArgs.action = params.action;
 				loc.executeArgs.key = loc.key;
 				loc.executeArgs.time = loc.time;
