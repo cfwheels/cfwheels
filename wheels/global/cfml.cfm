@@ -182,10 +182,6 @@
 	<cfset StructDelete(arguments, "$args", false)>
 	<cfif NOT arguments.delay>
 		<cfset StructDelete(arguments, "delay", false)>
-		<cfif arguments.url Contains "?" AND arguments.url Contains "##">
-			<!--- fix for cflocation anchor bug --->
-			<cfset arguments.url = Replace(arguments.url, "##", "&##")>
-		</cfif>
 		<cflocation attributeCollection="#arguments#">
 	</cfif>
 </cffunction>
