@@ -1,20 +1,24 @@
-WHEELS VERSION 1.x.x
+WHEELS VERSION 1.2
 
 Model Enhancements
 ==================
 
 * New global "modelRequireInit" setting that you can set to "true" to require an init function specified in all models - [Jonathan Smith]
-* Added geometry and geography datatypes (SQLServer) - [Simon Allard]
 
 View Enhancements
 =================
 
 * Allow the class attribute for paginationLinks helper anchor tags - [Adam Chapman]
+
+Other Enhancements
+==================
+
 * Browse test packages for core, app and plugins - [Adam Chapman, Tony Petruzzi]
 
 Bug Fixes
 =========
 
+* Added geometry and geography datatypes (SQLServer) - [Simon Allard]
 * Allow blank values to be passed through when validating uniqueness - [Per Djurner]
 * Added work-around for "FastHashRemoved" struct bug found in ColdFusion 8 - [Per Djurner]
 * Removed old bug fix to make redirectTo() respect anchors - [Per Djurner]
