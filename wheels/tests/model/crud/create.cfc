@@ -29,8 +29,16 @@
 	</cffunction>
 	
    	<cffunction name="test_columns_that_are_not_null_should_allow_for_blank_string_during_create">
-		<cfset loc.author = model("author").create(firstName="Test", lastName="", transaction="rollback")>
-		<cfset assert("IsObject(loc.author) AND !len(loc.author.lastName)")>
+		<cfdbinfo name="loc.dbinfo" datasource="#application.wheels.dataSourceName#" type="version">
+		<cfset loc.db = LCase(Replace(loc.dbinfo.database_productname, " ", "", "all"))>
+		<cfif loc.db IS "oracle">
+			<!--- oracle treates empty strings as null --->
+			<cfset loc.author = model("author").create(firstName="Test", lastName=" ", transaction="rollback")>
+			<cfset assert("IsObject(loc.author) AND !len(trim(loc.author.lastName))")>
+		<cfelse>
+			<cfset loc.author = model("author").create(firstName="Test", lastName="", transaction="rollback")>
+			<cfset assert("IsObject(loc.author) AND !len(loc.author.lastName)")>
+		</cfif>
 	</cffunction>
 
 </cfcomponent>
