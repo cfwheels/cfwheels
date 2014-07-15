@@ -5,13 +5,23 @@ Model Enhancements
 
 * New global "modelRequireInit" setting that you can set to "true" to require an init function specified in all models - [Jonathan Smith]
 
+View Enhancements
+=================
+* Allow the class attribute for paginationLinks helper anchor tags - [Adam Chapman]
+* Browse test packages for core, app and plugins - [Adam Chapman, Tony Petruzzi]
+
 Bug Fixes
 =========
 
+* Fix for creating objects from the root folder on Railo 4 - [Adam Chapman]
+* Fix for detecting that Microsoft SQL Server is used - [Adam Chapman]
+* Don't assume null is false for boolean properties - [Adam Chapman]
 * Allow to pass in encoded versions of "&"" and "=" (%26 and %3D) to the params argument - #173 [Mark Gaulin, Per Djurner]
 * Avoid error when the first request to the app is an invalid one - #222 [Maxime de Visscher, Per Djurner]
 * Get the error location from the correct exception struct - #223 [Adam Chapman, Per Djurner]
 * Do not trim primary key values - #213 [Jeremy Keczan, Per Djurner]
+* Incorrect pagination query with Oracle - #93 [crsedgar, Tony Petruzzi, Singgih Cahyono]
+* Repair Oracle test failures #187 (Tony Petruzzi, Singgih Cahyono)
  
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
