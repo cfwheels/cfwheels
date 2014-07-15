@@ -28,6 +28,15 @@
 		<cfset assert("loc.result Does Not Contain '#loc.link#' AND loc.result Contains '2'")>
 	</cffunction>
 
+	<cffunction name="test_class_and_classForCurrent">
+		<cfset loc.authors = model("author").findAll(page=2, perPage=3, order="lastName")>
+		<cfset loc.defaultLink = loc.controller.linkTo(text="1", params="page=1", class="default")>
+		<cfset loc.currentLink = loc.controller.linkTo(text="2", params="page=2", class="current")>
+		<cfset loc.result = loc.controller.paginationLinks(linkToCurrentPage=true, class="default", classForCurrent="current")>
+		<cfset assert("loc.result Contains '#loc.defaultLink#'")>
+		<cfset assert("loc.result Contains '#loc.currentLink#'")>
+	</cffunction>
+	
 	<cffunction name="test_route">
 		<cfset loc.authors = model("author").findAll(page=2, perPage=3, order="lastName")>
 		<cfset loc.link = loc.controller.linkTo(route="pagination", special=99, text="3", params="page=3")>
