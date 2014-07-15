@@ -16,6 +16,7 @@
 		<cfset loc.params = {controller="test", action="index"}>	
 		<cfset loc.c = controller("test", loc.params)>
 		<cfset loc.d = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init")>
+		<cfset loc.t = createObject("component","wheelsMapping.Test")>
 	</cffunction>
 	
 	<cffunction name="teardown">
@@ -31,6 +32,7 @@
 		<cfset assert('StructKeyExists(loc.m, "$GlobalTestMixin")')>
 		<cfset assert('StructKeyExists(loc.c, "$GlobalTestMixin")')>
 		<cfset assert('StructKeyExists(loc.d, "$GlobalTestMixin")')>
+		<cfset assert('StructKeyExists(loc.t, "$GlobalTestMixin")')>
 	</cffunction>
 	
 	<cffunction name="test_component_specific">

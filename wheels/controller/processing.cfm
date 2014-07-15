@@ -3,20 +3,32 @@
 		var loc = {};
 		loc.debug = application.wheels.showDebugInformation;
 		if (loc.debug)
+		{
 			$debugPoint("beforeFilters");
-		// run verifications and before filters if they exist on the controller
+		}
+
+		// run verifications if they exist on the controller
 		this.$runVerifications(action=params.action, params=params);
-		// return immediately if an abort is issue from a verification
+		
+		// return immediately if an abort is issued from a verification
 		if ($abortIssued())
+		{
 			return true;
+		}
+
+		// run before filters if they exist on the controller
 		this.$runFilters(type="before", action=params.action);
 		
 		// check to see if the controller params has changed and if so, instantiate the new controller and re-run filters and verifications
 		if (params.controller != variables.$class.name)
+		{
 			return false;
-		
+		}
+
 		if (loc.debug)
+		{
 			$debugPoint("beforeFilters,action");
+		}
 
 		// only proceed to call the action if the before filter has not already rendered content
 		if (!$performedRenderOrRedirect())
@@ -46,12 +58,13 @@
 				loc.conditionArgs.key = loc.key;
 				loc.conditionArgs.category = loc.category;
 				loc.executeArgs = {};
-				loc.executeArgs.controller = loc.controller;
+				loc.executeArgs.controller = params.controller;
 				loc.executeArgs.action = params.action;
 				loc.executeArgs.key = loc.key;
 				loc.executeArgs.time = loc.time;
 				loc.executeArgs.static = loc.static;
 				loc.executeArgs.category = loc.category;
+				
 				// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, caling the controller action (which in turn sets the content to the request scope)
 				variables.$instance.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 			}
@@ -63,23 +76,29 @@
 
 		// run after filters with surrounding debug points (don't run the filters if a delayed redirect will occur though)
 		if (loc.debug)
+		{
 			$debugPoint("action,afterFilters");
+		}
 		if (!$performedRedirect())
+		{
 			$runFilters(type="after", action=params.action);
+		}
 		if (loc.debug)
+		{
 			$debugPoint("afterFilters");
+		}
 	</cfscript>
-	<cfreturn true />
+	<cfreturn true>
 </cffunction>
 
 <cffunction name="$callAction" returntype="void" access="public" output="false">
 	<cfargument name="action" type="string" required="true">
 	<cfscript>
 		var loc = {};
-
 		if (Left(arguments.action, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.action))
+		{
 			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.action#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels functions.");
-
+		}
 		if (StructKeyExists(this, arguments.action) && IsCustomFunction(this[arguments.action]))
 		{
 			$invoke(method=arguments.action);
@@ -91,7 +110,6 @@
 			loc.invokeArgs.missingMethodArguments = {};
 			$invoke(method="onMissingMethod", invokeArgs=loc.invokeArgs);
 		}
-
 		if (!$performedRenderOrRedirect())
 		{
 			try
@@ -131,9 +149,13 @@
 	<cfscript>
 		$callAction(action=arguments.action);
 		if (arguments.static)
+		{
 			$cache(action="serverCache", timeSpan=$timeSpanForCache(arguments.time, "main"));
+		}
 		else
+		{
 			$addToCache(key=arguments.key, value=variables.$instance.response, time=arguments.time, category=arguments.category);
+		}
 	</cfscript>
 	<cfreturn response()>
 </cffunction>
