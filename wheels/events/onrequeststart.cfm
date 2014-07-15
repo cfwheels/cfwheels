@@ -4,7 +4,7 @@
 		// abort if called from incorrect file
 		$abortInvalidRequest();
 
-		if(!StructKeyExists(application, "wheels"))
+		if(!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "eventpath"))
 		{
 			$simpleLock(execute="onApplicationStart", name="wheelsReloadLock", type="exclusive", timeout=180);
 		}
