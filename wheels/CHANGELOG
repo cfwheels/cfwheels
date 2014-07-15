@@ -13,8 +13,8 @@ View Enhancements
 Bug Fixes
 =========
 
-* Fix for creating objects from the root folder on Railo 4 - [Adam Chapman]
-* Fix for detecting that Microsoft SQL Server is used - [Adam Chapman]
+* Fix for creating objects from the root folder on Railo 4 - [Jordan Clark, Adam Chapman]
+* Fix for detecting that Microsoft SQL Server is used - [Tony Petruzzi, Adam Chapman]
 * Don't assume null is false for boolean properties - [Adam Chapman]
 * Allow to pass in encoded versions of "&"" and "=" (%26 and %3D) to the params argument - #173 [Mark Gaulin, Per Djurner]
 * Avoid error when the first request to the app is an invalid one - #222 [Maxime de Visscher, Per Djurner]
