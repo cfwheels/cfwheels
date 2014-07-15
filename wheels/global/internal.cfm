@@ -444,11 +444,11 @@
 	<cfargument name="method" type="string" required="true">
 	<cfscript>
 		var returnValue = "";
-		arguments.returnVariable = "returnValue";
-		arguments.component = ListChangeDelims(arguments.path, ".", "/") & "." & ListChangeDelims(arguments.fileName, ".", "/");
-		arguments.argumentCollection = Duplicate(arguments);
-		StructDelete(arguments, "path");
-		StructDelete(arguments, "fileName");
+		var loc = {};
+		loc.returnVariable = "returnValue";
+		loc.method = arguments.method;
+		loc.component = ListChangeDelims(arguments.path, ".", "/") & "." & ListChangeDelims(arguments.fileName, ".", "/");
+		loc.argumentCollection = arguments;
 	</cfscript>
 	<cfinclude template="../../root.cfm">
 	<cfreturn returnValue>
