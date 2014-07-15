@@ -25,7 +25,8 @@ Bug Fixes
 * Do not trim primary key values - #213 [Jeremy Keczan, Per Djurner]
 * Incorrect pagination query with Oracle - #93 [crsedgar, Tony Petruzzi, Singgih Cahyono]
 * Repair Oracle test failures #187 (Tony Petruzzi, Singgih Cahyono)
- 
+* Plugins with global mixin are ignored in unit tests - [Singgih Cahyono, Tony Petruzzi]
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WHEELS VERSION 1.1.8 (05/21/2012)
