@@ -4,6 +4,7 @@ Model Enhancements
 ==================
 
 * New global "modelRequireInit" setting that you can set to "true" to require an init function specified in all models - [Jonathan Smith]
+* Added geometry and geography datatypes (SQLServer) - [Simon Allard]
 
 View Enhancements
 =================
