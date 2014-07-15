@@ -8,6 +8,7 @@ Model Enhancements
 Bug Fixes
 =========
 
+* Avoid error when the first request to the app is an invalid one - #222 [Maxime de Visscher, Per Djurner]
 * Get the error location from the correct exception struct - #223 [Adam Chapman, Per Djurner]
 * Do not trim primary key values - #213 [Jeremy Keczan, Per Djurner]
  
