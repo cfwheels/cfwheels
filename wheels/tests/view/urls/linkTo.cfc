@@ -13,6 +13,12 @@
 		<cfset request.cgi.script_name = oldScriptName>
 	</cffunction>
 
+	<cffunction name="test_ampersand_and_equals_sign_encoding">
+		<cfset loc.e = '<a href="#application.wheels.webpath#x/x?a=cats%26dogs%3Dtrouble&amp;b=1">x</a>'>
+		<cfset loc.r = loc.controller.linkTo(text="x", controller="x", action="x", params="a=cats%26dogs%3Dtrouble&b=1")>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
+
 	<cffunction name="test_controller_action_only">
 		<cfset loc.e = '<a href="#application.wheels.webpath#account/logout">Log Out</a>'>
 		<cfset loc.r = loc.controller.linkTo(text="Log Out", controller="account", action="logout")>
