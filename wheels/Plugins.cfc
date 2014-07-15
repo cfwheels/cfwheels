@@ -3,7 +3,7 @@
 	<cfset variables.$class = {}>
 	<cfset variables.$class.plugins = {}>
 	<cfset variables.$class.mixins = {}>
-	<cfset variables.$class.mixableComponents = "application,dispatch,controller,model,cache,base,connection,microsoftsqlserver,mysql,oracle,postgresql,h2">
+	<cfset variables.$class.mixableComponents = "application,dispatch,controller,model,cache,base,connection,microsoftsqlserver,mysql,oracle,postgresql,h2,test">
 	<cfset variables.$class.incompatiblePlugins = "">
 	<cfset variables.$class.dependantPlugins = "">
 
