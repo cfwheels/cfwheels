@@ -15,7 +15,7 @@
 			switch(arguments.type)
 			{
 				case "bigint": {loc.returnValue = "cf_sql_bigint"; break;}
-				case "binary": case "timestamp": {loc.returnValue = "cf_sql_binary"; break;}
+				case "binary": case "geography": case "geometry": case "timestamp": {loc.returnValue = "cf_sql_binary"; break;}
 				case "bit": {loc.returnValue = "cf_sql_bit"; break;}
 				case "char": case "nchar": case "uniqueidentifier": {loc.returnValue = "cf_sql_char"; break;}
 				case "date": {loc.returnValue = "cf_sql_date"; break;}
