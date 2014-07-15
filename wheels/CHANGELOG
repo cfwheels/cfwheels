@@ -66,7 +66,7 @@ Other Enhancements
 
 Bug Fixes
 =========
-* Allow blank values to be passed through to validation - #638 [Per Djurner]
+[BACKPORTED] Allow blank values to be passed through to validation - #638 [Per Djurner]
 * Allow for encoding autodetection within provides - #674 [Raul Riera]
 [RELEASED IN 1.1.4] Transactions would not close when used with the dependent argument of hasMany() - #739 [Andy Bellenie]
 * Soft deletes now work correctly with outer joins - #762 [Andy Bellenie]
