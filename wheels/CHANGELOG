@@ -15,6 +15,7 @@ View Enhancements
 Bug Fixes
 =========
 
+* Allow blank values to be passed through when validating uniqueness - [Per Djurner]
 * Added work-around for "FastHashRemoved" struct bug found in ColdFusion 8 - [Per Djurner]
 * Removed old bug fix to make redirectTo() respect anchors - [Per Djurner]
 * Correct controller action caching - #153 [Tobias Reiter, Per Djurner]
