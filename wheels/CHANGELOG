@@ -7,12 +7,14 @@ Model Enhancements
 
 View Enhancements
 =================
+
 * Allow the class attribute for paginationLinks helper anchor tags - [Adam Chapman]
 * Browse test packages for core, app and plugins - [Adam Chapman, Tony Petruzzi]
 
 Bug Fixes
 =========
 
+* Correct controller action caching - #153 [Tobias Reiter, Per Djurner]
 * Fix for creating objects from the root folder on Railo 4 - [Jordan Clark, Adam Chapman]
 * Fix for detecting that Microsoft SQL Server is used - [Tony Petruzzi, Adam Chapman]
 * Don't assume null is false for boolean properties - [Adam Chapman]
@@ -86,7 +88,6 @@ Bug Fixes
 * Pagination clause wasn't enclosed - [Karl Deterville, Tony Petruzzi]
 * Pagination endrow was incorrectly calculated - [Karl Deterville, Tony Petruzzi]
 
-
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WHEELS VERSION 1.1.5 (08/01/2011)
@@ -99,7 +100,7 @@ View Enhancements
 Bug Fixes
 =========
 
-* Fix plugins not loading when application is in a subdirectory - [mcraig, Tony Petruzzi]
+* Fix plugins not loading when application is in a subdirectory - [Mike Craig, Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -109,7 +110,7 @@ View Enhancements
 =================
 
 * Allow an array of structs to used for options in selectTag() - [Adam Chapman, Tony Petruzzi]
-* Added secondStep parameter to date/time select tags - [oxalto, Tony Petruzzi]
+* Added secondStep parameter to date/time select tags - [Tom King, Tony Petruzzi]
 
 Controller Enhancements
 =======================
@@ -202,7 +203,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.1.1
+WHEELS VERSION 1.1.1 (11/21/2010)
 
 Bug Fixes
 =========
@@ -218,7 +219,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.1 FINAL
+WHEELS VERSION 1.1 FINAL (11/9/2010)
 
 Bug Fixes
 =========
@@ -232,7 +233,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.1 RC 1
+WHEELS VERSION 1.1 RC 1 (10/27/2010)
 
 Bug Fixes
 =========
@@ -259,7 +260,7 @@ Miscellaneous
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.1 BETA 2
+WHEELS VERSION 1.1 BETA 2 (10/5/2010)
 
 Bug Fixes
 =========
@@ -290,7 +291,7 @@ Miscellaneous
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.1 BETA 1
+WHEELS VERSION 1.1 BETA 1 (9/10/2010)
 
 Model Enhancements
 ==================
@@ -392,7 +393,7 @@ Miscellaneous
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.0.5
+WHEELS VERSION 1.0.5 (6/18/2010)
 
 Bug Fixes
 =========
@@ -422,7 +423,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.0.4
+WHEELS VERSION 1.0.4 (4/21/2010)
 
 Bug Fixes
 =========
@@ -439,7 +440,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.0.3
+WHEELS VERSION 1.0.3 (3/26/2010)
 
 Bug Fixes
 =========
@@ -459,7 +460,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.0.2
+WHEELS VERSION 1.0.2 (2/19/2010)
 
 Bug Fixes
 =========
@@ -468,7 +469,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.0.1
+WHEELS VERSION 1.0.1 (2/16/2010)
 
 Bug Fixes
 =========
@@ -501,7 +502,7 @@ Bug Fixes
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-WHEELS VERSION 1.0 FINAL
+WHEELS VERSION 1.0 FINAL (11/24/2009)
 
 Model Enhancements
 ==================
