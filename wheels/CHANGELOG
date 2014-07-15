@@ -15,6 +15,8 @@ View Enhancements
 Bug Fixes
 =========
 
+* Added work-around for "FastHashRemoved" struct bug found in ColdFusion 8 - [Per Djurner]
+* Removed old bug fix to make redirectTo() respect anchors - [Per Djurner]
 * Correct controller action caching - #153 [Tobias Reiter, Per Djurner]
 * Fix for creating objects from the root folder on Railo 4 - [Jordan Clark, Adam Chapman]
 * Fix for detecting that Microsoft SQL Server is used - [Tony Petruzzi, Adam Chapman]
