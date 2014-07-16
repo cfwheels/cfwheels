@@ -14,6 +14,7 @@ Other Enhancements
 ==================
 
 * Browse test packages for core, app and plugins - [Adam Chapman, Tony Petruzzi]
+* Refactored to avoid a Duplicate() call when sending error email - [Per Djurner]
 
 Bug Fixes
 =========
