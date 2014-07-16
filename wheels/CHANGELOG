@@ -13,7 +13,7 @@ Model Enhancements
 * Allow models to be created when with no properties - #84 [rshakespear, Tony Petruzzi]
 [DO NOT BACKPORT YET] Added global setting ("stripFromSQL") to only include safe characters in raw SQL - [Per Djurner]
 [BACKPORTED] Added geometry and geography datatypes (SQLServer) - [Simon Allard]
-* Automatic validation now valid that primary keys are the correct type when not blank - [Adam Chapman, Tony Petruzzi]
+[BACKPORTED] Automatic validation now valid that primary keys are the correct type when not blank - [Adam Chapman, Tony Petruzzi]
 
 View Enhancements
 =================
