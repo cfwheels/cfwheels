@@ -117,7 +117,10 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
-
+		
+		// Make all cache keys domain specific
+		StructInsert(arguments,ListLen(StructKeyList(arguments)) + 1,request.cgi.http_host,true);
+		
 		// we need to make sure we are looping through the passed in arguments in the same order everytime
 		loc.values = [];
 		loc.keyList = ListSort(StructKeyList(arguments), "textnocase", "asc");
