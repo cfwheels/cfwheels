@@ -32,6 +32,8 @@
 </cffunction>
 
 <cffunction name="$simpleLock" returntype="any" access="public" output="false">
+	<cfargument name="name" type="string" required="true">
+	<cfargument name="type" type="string" required="true">
 	<cfargument name="execute" type="string" required="true">
 	<cfargument name="executeArgs" type="struct" required="false" default="#StructNew()#">
 	<cfargument name="timeout" type="numeric" required="false" default="30">
