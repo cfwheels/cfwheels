@@ -32,7 +32,7 @@ Benefits of embedded-container-test versus full-integration-test
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- embedded CFML and web server version for easy upgrade -->
-		<railoVersion>3.3.5.004</railoVersion>
+		<railoVersion>4.2.1.000</railoVersion>
 		<jettyVersion>8.1.15.v20140411</jettyVersion>
 		<railoConfig>railo-server.xml</railoConfig>
 		<testServer>http://localhost:8080</testServer>
