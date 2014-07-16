@@ -33,6 +33,7 @@ Bug Fixes
 * Incorrect pagination query with Oracle - #93 [crsedgar, Tony Petruzzi, Singgih Cahyono]
 * Repair Oracle test failures #187 (Tony Petruzzi, Singgih Cahyono)
 * Plugins with global mixin are ignored in unit tests - [Singgih Cahyono, Tony Petruzzi]
+* Automatic validation should validate primary key - #143 [Adam Chapman, Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

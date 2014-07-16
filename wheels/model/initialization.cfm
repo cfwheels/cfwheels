@@ -107,11 +107,17 @@
 				{
 					setPrimaryKey(loc.property);
 				}
-				else if (variables.wheels.class.automaticValidations and not ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#,#application.wheels.softDeleteProperty#", loc.property))
+				
+
+				if ( variables.wheels.class.automaticValidations and not ListFindNoCase("#application.wheels.timeStampOnCreateProperty#,#application.wheels.timeStampOnUpdateProperty#,#application.wheels.softDeleteProperty#", loc.property) )
 				{
-					// set nullable validations if the developer has not
 					loc.defaultValidationsAllowBlank = variables.wheels.class.properties[loc.property].nullable;
-					if (!variables.wheels.class.properties[loc.property].nullable and !Len(loc.columns["column_default_value"][loc.i]) and !$validationExists(property=loc.property, validation="validatesPresenceOf"))
+					// primary keys should be allowed to be blank
+					if( ListFindNoCase(primaryKeys(), loc.property) )
+					{
+						loc.defaultValidationsAllowBlank = true;
+					}
+					if ( !ListFindNoCase(primaryKeys(), loc.property) and  !variables.wheels.class.properties[loc.property].nullable and !Len(loc.columns["column_default_value"][loc.i]) and !$validationExists(property=loc.property, validation="validatesPresenceOf") )
 					{
 						validatesPresenceOf(properties=loc.property);
 					}
