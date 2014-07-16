@@ -134,14 +134,6 @@ Benefits of embedded-container-test versus full-integration-test
 	</build>
 	<profiles>
 		<profile>
-			<!-- to activate, execute "mvn verify -Prailo,railo4" on Travis-CI -->
-			<id>railo4</id>
-			<properties>
-				<railoVersion>4.3.0.003</railoVersion>
-				<railoConfig>railo4-server.xml</railoConfig>
-			</properties>
-		</profile>
-		<profile>
 			<!-- embedded web and CFML server is activated by default -->
 			<id>railo</id>
 			<activation>
