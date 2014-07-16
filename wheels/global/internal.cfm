@@ -622,22 +622,31 @@
 			if (Now() > application.wheels.cache[arguments.category][arguments.key].expiresAt)
 			{
 				if (application.wheels.showDebugInformation)
-					request.wheels.cacheCounts.culls = request.wheels.cacheCounts.culls + 1;
+				{
+					request.wheels.cacheCounts.culls++;
+				}
 				$removeFromCache(key=arguments.key, category=arguments.category);
 			}
 			else
 			{
 				if (application.wheels.showDebugInformation)
-					request.wheels.cacheCounts.hits = request.wheels.cacheCounts.hits + 1;
+				{
+					request.wheels.cacheCounts.hits++;
+				}
 				if (IsSimpleValue(application.wheels.cache[arguments.category][arguments.key].value))
+				{
 					loc.returnValue = application.wheels.cache[arguments.category][arguments.key].value;
+				}
 				else
+				{
 					loc.returnValue = Duplicate(application.wheels.cache[arguments.category][arguments.key].value);
+				}
 			}
 		}
-
 		if (application.wheels.showDebugInformation && IsBoolean(loc.returnValue) && !loc.returnValue)
-			request.wheels.cacheCounts.misses = request.wheels.cacheCounts.misses + 1;
+		{
+			request.wheels.cacheCounts.misses++;
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -660,7 +669,9 @@
 		{
 			loc.returnValue = 0;
 			for (loc.key in application.wheels.cache)
-				loc.returnValue = loc.returnValue + StructCount(application.wheels.cache[loc.key]);
+			{
+				loc.returnValue += StructCount(application.wheels.cache[loc.key]);
+			}
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -693,7 +704,6 @@
 		{
 			loc.modelPath = ListGetAt(arguments.modelPaths, loc.i);
 			loc.fileName = $objectFileName(name=arguments.name, objectPath=loc.modelPath, type=arguments.type);
-
 			if (loc.fileName != arguments.type || loc.i == ListLen(arguments.modelPaths))
 			{
 				application.wheels.models[arguments.name] = $createObjectFromRoot(path=loc.modelPath, fileName=loc.fileName, method="$initModelClass", name=arguments.name);
@@ -703,110 +713,6 @@
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
-</cffunction>
-
-<!---
-Used to announce to the developer that a feature they are using will be removed at some point.
-DOES NOT work in production mode.
-
-To use call $deprecated() from within the method you want to deprecate. You may pass an optional
-custom message if desired. The method will return a structure containing the message and information
-about where the deprecation occurrs like the called method, line number, template name and shows the
-code that called the deprcated method.
-
-Example:
-
-Original foo()
-<cffunction name="foo" returntype="any" access="public" output="false">
-	<cfargument name="baz" type="numeric" required="true">
-	<cfreturn baz++>
-</cffunction>
-
-Should now call bar() instead and marking foo() as deprecated
-<cffunction name="foo" returntype="any" access="public" output="false">
-	<cfargument name="baz" type="numeric" required="true">
-	<cfset $deprecated("Calling foo is now deprecated, use bar() instead.")>
-	<cfreturn bar(argumentscollection=arguments)>
-</cffunction>
-
-<cffunction name="bar" returntype="any" access="public" output="false">
-	<cfargument name="baz" type="numeric" required="true">
-	<cfreturn ++baz>
-</cffunction>
- --->
-<cffunction name="$deprecated" returntype="struct" access="public" output="false">
-	<!--- a message to display instead of the default one. --->
-	<cfargument name="message" type="string" required="false" default="You are using deprecated behavior which will be removed from the next major or minor release.">
-	<!--- should you announce the deprecation. only used when writing tests. --->
-	<cfargument name="announce" type="boolean" required="false" default="true">
-	<cfset var loc = {}>
-	<cfset loc.ret = {}>
-	<cfset loc.tagcontext = []>
-	<cfif not application.wheels.showDebugInformation>
-		<cfreturn loc.ret>
-	</cfif>
-	<!--- set return value --->
-	<cfset loc.data = []>
-	<cfset loc.ret = {message=arguments.message, line="", method="", template="", data=loc.data}>
-	<!---
-	create an exception so we can get the TagContext and display what file and line number the
-	deprecated method is being called in
-	 --->
-	<cftry>
-		<cfthrow type="Expression">
-		<cfcatch type="any">
-			<cfset loc.exception = cfcatch>
-		</cfcatch>
-	</cftry>
-	<cfif StructKeyExists(loc.exception, "tagcontext")>
-		<cfset loc.tagcontext = loc.exception.tagcontext>
-	</cfif>
-	<!---
-	TagContext is an array. The first element of the array will always be the context for this
-	method announcing the deprecation. The second element will be the deprecated function that
-	is being called. We need to look at the third element of the array to get the method that
-	is calling the method marked for deprecation.
-	 --->
-	<cfif isArray(loc.tagcontext) and arraylen(loc.tagcontext) gte 3 and isStruct(loc.tagcontext[3])>
-		<!--- grab and parse the information from the tagcontext. --->
-		<cfset loc.context = loc.tagcontext[3]>
-		<!--- the line number --->
-		<cfset loc.ret.line = loc.context.line>
-		<!--- the deprecated method that was called --->
-		<cfif StructKeyExists(server, "railo")>
-			<cfset loc.ret.method = rereplacenocase(loc.context.codePrintPlain, '.*\<cffunction name="([^"]*)">.*', "\1")>
-		<cfelse>
-			<cfset loc.ret.method = rereplacenocase(loc.context.raw_trace, ".*\$func([^\.]*)\..*", "\1")>
-		</cfif>
-		<!--- the user template where the method called occurred --->
-		<cfset loc.ret.template = loc.context.template>
-		<!--- try to get the code --->
- 		<cfif len(loc.ret.template) and FileExists(loc.ret.template)>
-			<!--- grab a one line radius from where the deprecation occurred. --->
-			<cfset loc.startAt = loc.ret.line - 1>
-			<cfif loc.startAt lte 0>
-				<cfset loc.startAt = loc.ret.line>
-			</cfif>
-			<cfset loc.stopAt = loc.ret.line + 1>
-			<cfset loc.counter = 1>
-			<cfloop file="#loc.ret.template#" index="loc.i">
-				<cfif loc.counter gte loc.startAt and loc.counter lte loc.stopAt>
-					<cfset arrayappend(loc.ret.data, loc.i)>
-				</cfif>
-				<cfif loc.counter gt loc.stopAt>
-					<cfbreak>
-				</cfif>
-				<cfset loc.counter++>
-			</cfloop>
-		</cfif>
-		<!--- change template name from full to relative path. --->
-		<cfset loc.ret.template = listchangedelims(removechars(loc.ret.template, 1, len(expandpath(application.wheels.webpath))), "/", "\/")>
-	</cfif>
-	<!--- append --->
-	<cfif arguments.announce>
-		<cfset arrayappend(request.wheels.deprecation, loc.ret)>
-	</cfif>
-	<cfreturn loc.ret>
 </cffunction>
 
 <cffunction name="$loadRoutes" returntype="void" access="public" output="false">
@@ -820,7 +726,9 @@ Should now call bar() instead and marking foo() as deprecated
 
 		// add the wheels default routes at the end if requested
 		if (application.wheels.loadDefaultRoutes)
+		{
 			addDefaultRoutes();
+		}
 
 		// set lookup info for the named routes
 		$setNamedRoutePositions();
@@ -854,61 +762,50 @@ Should now call bar() instead and marking foo() as deprecated
 
 <cffunction name="$checkMinimumVersion" access="public" returntype="boolean" output="false">
 	<cfargument name="version" type="string" required="true">
-	<cfargument name="minversion" type="string" required="true">
+	<cfargument name="minVersion" type="string" required="true">
 	<cfscript>
 	var loc = {};
-
+	loc.returnValue = true;
 	arguments.version = ListChangeDelims(arguments.version, ".", ".,");
-	arguments.minversion = ListChangeDelims(arguments.minversion, ".", ".,");
-
+	arguments.minVersion = ListChangeDelims(arguments.minVersion, ".", ".,");
 	arguments.version = ListToArray(arguments.version, ".");
-	arguments.minversion = ListToArray(arguments.minversion, ".");
+	arguments.minVersion = ListToArray(arguments.minVersion, ".");
 
-	// make version and minversion the same length pad zeros to the end
-	loc.minSize = max(ArrayLen(arguments.version), ArrayLen(arguments.minversion));
+	// make version and minVersion the same length pad zeros to the end
+	loc.minSize = Max(ArrayLen(arguments.version), ArrayLen(arguments.minVersion));
 
 	ArrayResize(arguments.version, loc.minSize);
-	ArrayResize(arguments.minversion, loc.minSize);
-
-	for(loc.i=1; loc.i LTE loc.minSize; loc.i++)
+	ArrayResize(arguments.minVersion, loc.minSize);
+	for(loc.i=1; loc.i <= loc.minSize; loc.i++)
 	{
 		loc.version = 0;
-		if(ArrayIsDefined(arguments.version, loc.i))
+		if (ArrayIsDefined(arguments.version, loc.i))
 		{
-			loc.version = val(arguments.version[loc.i]);
+			loc.version = Val(arguments.version[loc.i]);
 		}
-		
-		loc.minversion = 0;
-		if(ArrayIsDefined(arguments.minversion, loc.i))
+		loc.minVersion = 0;
+		if (ArrayIsDefined(arguments.minVersion, loc.i))
 		{
-			loc.minversion = val(arguments.minversion[loc.i]);
+			loc.minVersion = Val(arguments.minVersion[loc.i]);
 		}
-		
-		if(loc.version gt loc.minversion)
+		if (loc.version > loc.minVersion)
 		{
-			return true;
+			loc.returnValue = true;
+			break;
 		}
-		
-		if(loc.version lt loc.minversion)
+		if (loc.version < loc.minVersion)
 		{
-			return false;
+			loc.returnValue = false;
+			break;
 		}
 	}
-
-	return true;
 	</cfscript>
-	<cfreturn >
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$loadPlugins" returntype="void" access="public" output="false">
 	<cfscript>
-	application.wheels.PluginObj = $createObjectFromRoot(
-		path="wheels"
-		,fileName="Plugins"
-		,method="init"
-		,pluginPath="#application.wheels.webPath & application.wheels.pluginPath#"
-	);
-	
+	application.wheels.PluginObj = $createObjectFromRoot(path="wheels", fileName="Plugins", method="init", pluginPath="#application.wheels.webPath & application.wheels.pluginPath#");
 	application.wheels.plugins = application.wheels.PluginObj.getPlugins();
 	application.wheels.incompatiblePlugins = application.wheels.PluginObj.getIncompatiblePlugins();
 	application.wheels.dependantPlugins = application.wheels.PluginObj.getDependantPlugins();
