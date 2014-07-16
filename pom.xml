@@ -32,7 +32,7 @@ Benefits of embedded-container-test versus full-integration-test
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- embedded CFML and web server version for easy upgrade -->
-		<railoVersion>3.3.5.004</railoVersion>
+		<railoVersion>4.2.1.000</railoVersion>
 		<jettyVersion>8.1.15.v20140411</jettyVersion>
 		<railoConfig>railo-server.xml</railoConfig>
 		<testServer>http://localhost:8080</testServer>
@@ -133,14 +133,6 @@ Benefits of embedded-container-test versus full-integration-test
 		</plugins>
 	</build>
 	<profiles>
-		<profile>
-			<!-- to activate, execute "mvn verify -Prailo,railo4" on Travis-CI -->
-			<id>railo4</id>
-			<properties>
-				<railoVersion>4.3.0.003</railoVersion>
-				<railoConfig>railo4-server.xml</railoConfig>
-			</properties>
-		</profile>
 		<profile>
 			<!-- embedded web and CFML server is activated by default -->
 			<id>railo</id>
@@ -269,7 +261,7 @@ Benefits of embedded-container-test versus full-integration-test
 					<!-- jdbc database driver, required for railo datasource -->
 					<groupId>postgresql</groupId>
 					<artifactId>postgresql</artifactId>
-					<version>9.1-901-1.jdbc4</version>
+					<version>8.3-606.jdbc4</version>
 				</dependency>
 			</dependencies>
 			<properties>
