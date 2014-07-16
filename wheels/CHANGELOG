@@ -1,4 +1,4 @@
-WHEELS VERSION 1.x.x
+WHEELS VERSION 1.3 Edge
 
 Model Enhancements
 ==================
@@ -9,11 +9,21 @@ View Enhancements
 =================
 
 * Allow the class attribute for paginationLinks helper anchor tags - [Adam Chapman]
+
+Other Enhancements
+==================
+
 * Browse test packages for core, app and plugins - [Adam Chapman, Tony Petruzzi]
+* Refactored to avoid a Duplicate() call when sending error email - [Per Djurner]
 
 Bug Fixes
 =========
 
+* Fixed race condition issue with caching - [Per Djurner]
+* Added geometry and geography datatypes (SQLServer) - [Simon Allard]
+* Allow blank values to be passed through when validating uniqueness - [Per Djurner]
+* Added work-around for "FastHashRemoved" struct bug found in ColdFusion 8 - [Per Djurner]
+* Removed old bug fix to make redirectTo() respect anchors - [Per Djurner]
 * Correct controller action caching - #153 [Tobias Reiter, Per Djurner]
 * Fix for creating objects from the root folder on Railo 4 - [Jordan Clark, Adam Chapman]
 * Fix for detecting that Microsoft SQL Server is used - [Tony Petruzzi, Adam Chapman]
@@ -24,7 +34,9 @@ Bug Fixes
 * Do not trim primary key values - #213 [Jeremy Keczan, Per Djurner]
 * Incorrect pagination query with Oracle - #93 [crsedgar, Tony Petruzzi, Singgih Cahyono]
 * Repair Oracle test failures #187 (Tony Petruzzi, Singgih Cahyono)
- 
+* Plugins with global mixin are ignored in unit tests - [Singgih Cahyono, Tony Petruzzi]
+* Automatic validation should validate primary key - #143 [Adam Chapman, Tony Petruzzi]
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 WHEELS VERSION 1.1.8 (05/21/2012)

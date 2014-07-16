@@ -180,7 +180,6 @@
 	<cfscript>
 		if (StructKeyExists(arguments, "default"))
 		{
-			$deprecated("The `default` argument will be deprecated in a future version of Wheels, please use the `defaultValue` argument instead");
 			arguments.defaultValue = arguments.default;
 			StructDelete(arguments, "default");
 		}

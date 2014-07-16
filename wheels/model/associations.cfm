@@ -20,7 +20,6 @@
 		// deprecate the class argument (change of name only)
 		if (StructKeyExists(arguments, "class"))
 		{
-			$deprecated("The `class` argument will be deprecated in a future version of Wheels, please use the `modelName` argument instead");
 			arguments.modelName = arguments.class;
 			StructDelete(arguments, "class");
 		}
@@ -79,7 +78,6 @@
 		// deprecate the class argument (change of name only)
 		if (StructKeyExists(arguments, "class"))
 		{
-			$deprecated("The `class` argument will be deprecated in a future version of Wheels, please use the `modelName` argument instead");
 			arguments.modelName = arguments.class;
 			StructDelete(arguments, "class");
 		}
@@ -115,7 +113,6 @@
 		// deprecate the class argument (change of name only)
 		if (StructKeyExists(arguments, "class"))
 		{
-			$deprecated("The `class` argument will be deprecated in a future version of Wheels, please use the `modelName` argument instead");
 			arguments.modelName = arguments.class;
 			StructDelete(arguments, "class");
 		}

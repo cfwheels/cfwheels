@@ -10,26 +10,28 @@
 
 		// set or reset all settings but make sure to pass along the reload password between forced reloads with "reload=x"
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "reloadPassword"))
+		{
 			loc.oldReloadPassword = application.wheels.reloadPassword;
+		}
 		application.wheels = {};
 		if (StructKeyExists(loc, "oldReloadPassword"))
+		{
 			application.wheels.reloadPassword = loc.oldReloadPassword;
+		}
 
 		// check and store server engine name, throw error if using a version that we don't support
-		// really need to refactor this into a method
 		if (StructKeyExists(server, "railo"))
 		{
 			application.wheels.serverName = "Railo";
 			application.wheels.serverVersion = server.railo.version;
-			loc.minimumServerVersion = "3.1.2.020";
+			loc.minimumServerVersion = "4.2.1.000";
 		}
 		else
 		{
 			application.wheels.serverName = "Adobe ColdFusion";
 			application.wheels.serverVersion = server.coldfusion.productversion;
-			loc.minimumServerVersion = "8,0,1,0";
+			loc.minimumServerVersion = "8.0.1.0";
 		}
-
 		if (!$checkMinimumVersion(application.wheels.serverVersion, loc.minimumServerVersion))
 		{
 			$throw(type="Wheels.EngineNotSupported", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Please upgrade to version #loc.minimumServerVersion# or higher.");
@@ -39,7 +41,7 @@
 		request.cgi = $cgiScope();
 
 		// set up containers for routes, caches, settings etc
-		application.wheels.version = "1.1.8";
+		application.wheels.version = "1.3 Edge";
 		application.wheels.controllers = {};
 		application.wheels.models = {};
 		application.wheels.existingHelperFiles = "";
@@ -80,9 +82,13 @@
 
 		// set environment either from the url or the developer's environment.cfm file
 		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(application.wheels, "reloadPassword") && (!Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
+		{
 			application.wheels.environment = URL.reload;
+		}
 		else
+		{
 			$include(template="#application.wheels.configPath#/environment.cfm");
+		}
 
 		// load wheels settings
 		$include(template="wheels/events/onapplicationstart/settings.cfm");
@@ -105,7 +111,9 @@
 		{
 			loc.method = ListGetAt(loc.protectedControllerMethods, loc.i);
 			if (Left(loc.method, 1) != "$" && !ListFindNoCase(loc.allowedGlobalMethods, loc.method))
+			{
 				application.wheels.protectedControllerMethods = ListAppend(application.wheels.protectedControllerMethods, loc.method);
+			}
 		}
 
 		// reload the plugins each time we reload the application
@@ -113,7 +121,9 @@
 		
 		// allow developers to inject plugins into the application variables scope
 		if (!StructIsEmpty(application.wheels.mixins))
+		{
 			$include(template="wheels/plugins/injection.cfm");
+		}
 
 		// load developer routes and adds the default wheels routes (unless the developer has specified not to)
 		$loadRoutes();
