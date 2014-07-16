@@ -8,11 +8,15 @@ Model Enhancements
 View Enhancements
 =================
 
+* Support for HTML5 boolean attributes - [Per Djurner]
+* Ability to remove media / type attributes when using styleSheetLinkTag and JavaScriptIncludeTag - [Per Djurner]
+* Setting to convert, for example, dataDomCache or data_dom_cache (default) view helper argument names to data-dom-cache attribute names - [Per Djurner]
 * Allow the class attribute for paginationLinks helper anchor tags - [Adam Chapman]
 
 Other Enhancements
 ==================
 
+* Performance improvement for locking - [Per Djurner]
 * Case insensitive loading of controllers and models - [Per Djurner]
 * Browse test packages for core, app and plugins - [Adam Chapman, Tony Petruzzi]
 * Refactored to avoid a Duplicate() call when sending error email - [Per Djurner]
