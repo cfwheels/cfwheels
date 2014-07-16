@@ -91,7 +91,7 @@ Miscellaneous
 [DO NOT BACKPORT YET] Added commented out settig for plugin development in design mode - #782 [Tony Petruzzi]
 [DO NOT BACKPORT YET] Added $inspect method to return the variables scope of objects - #820 [Tony Petruzzi]
 [DO NOT BACKPORT YET] Renamed `renderPage` to `renderView` - #363 [Andy Bellenie, Tony Petruzzi]
-* Case insensitive loading of controllers and models - [Per Djurner]
+[BACKPORTED] Case insensitive loading of controllers and models - [Per Djurner]
 [DO NOT BACKPORT YET] Allow placement of models in subfolder - [Tim Badolato, Tony Petruzzi]
 [DO NOT BACKPORT YET] External paths for imagePath - [andoradmiraal, Tony Petruzzi]
 [DO NOT BACKPORT YET] Removal of obfuscateParam and deobfuscateParam functionality - [Tony Petruzzi]
