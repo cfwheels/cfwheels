@@ -593,7 +593,9 @@
 						loc.deletedItems++;
 						loc.percentageDeleted = (loc.deletedItems / loc.cacheCount) * 100;
 						if (loc.percentageDeleted >= application.wheels.cacheCullPercentage)
+						{
 							break;
+						}
 					}
 				}
 			}
@@ -601,12 +603,17 @@
 		}
 		if ($cacheCount() < application.wheels.maximumItemsToCache)
 		{
-			application.wheels.cache[arguments.category][arguments.key] = {};
-			application.wheels.cache[arguments.category][arguments.key].expiresAt = DateAdd(application.wheels.cacheDatePart, arguments.time, Now());
+			loc.cacheItem = {};
+			loc.cacheItem.expiresAt = DateAdd(application.wheels.cacheDatePart, arguments.time, Now());
 			if (IsSimpleValue(arguments.value))
-				application.wheels.cache[arguments.category][arguments.key].value = arguments.value;
+			{
+				loc.cacheItem.value = arguments.value;
+			}
 			else
-				application.wheels.cache[arguments.category][arguments.key].value = duplicate(arguments.value);
+			{
+				loc.cacheItem.value = Duplicate(arguments.value);
+			}
+			application.wheels.cache[arguments.category][arguments.key] = loc.cacheItem;
 		}
 	</cfscript>
 </cffunction>
