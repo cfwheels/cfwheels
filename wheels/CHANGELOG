@@ -20,6 +20,7 @@ Other Enhancements
 Bug Fixes
 =========
 
+* Fixed so the "onSessionEnd" event fires and passes arguments through correctly - #172 [Per Djurner]
 * Fixed race condition issue with caching - [Per Djurner]
 * Added geometry and geography datatypes (SQLServer) - [Simon Allard]
 * Allow blank values to be passed through when validating uniqueness - [Per Djurner]
