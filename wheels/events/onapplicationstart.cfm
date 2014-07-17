@@ -13,106 +13,106 @@
 		{
 			loc.oldReloadPassword = application.wheels.reloadPassword;
 		}
-		application.wheels = {};
+		application._wheels = {};
 		if (StructKeyExists(loc, "oldReloadPassword"))
 		{
-			application.wheels.reloadPassword = loc.oldReloadPassword;
+			application._wheels.reloadPassword = loc.oldReloadPassword;
 		}
 
 		// check and store server engine name, throw error if using a version that we don't support
 		if (StructKeyExists(server, "railo"))
 		{
-			application.wheels.serverName = "Railo";
-			application.wheels.serverVersion = server.railo.version;
+			application._wheels.serverName = "Railo";
+			application._wheels.serverVersion = server.railo.version;
 			loc.minimumServerVersion = "4.2.1.000";
 		}
 		else
 		{
-			application.wheels.serverName = "Adobe ColdFusion";
-			application.wheels.serverVersion = server.coldfusion.productversion;
+			application._wheels.serverName = "Adobe ColdFusion";
+			application._wheels.serverVersion = server.coldfusion.productversion;
 			loc.minimumServerVersion = "8.0.1.0";
 		}
-		if (!$checkMinimumVersion(application.wheels.serverVersion, loc.minimumServerVersion))
+		if (!$checkMinimumVersion(application._wheels.serverVersion, loc.minimumServerVersion))
 		{
-			$throw(type="Wheels.EngineNotSupported", message="#application.wheels.serverName# #application.wheels.serverVersion# is not supported by Wheels.", extendedInfo="Please upgrade to version #loc.minimumServerVersion# or higher.");
+			$throw(type="Wheels.EngineNotSupported", message="#application._wheels.serverName# #application._wheels.serverVersion# is not supported by Wheels.", extendedInfo="Please upgrade to version #loc.minimumServerVersion# or higher.");
 		}
 
 		// copy over the cgi variables we need to the request scope (since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example)
 		request.cgi = $cgiScope();
 
 		// set up containers for routes, caches, settings etc
-		application.wheels.version = "1.3 Edge";
-		application.wheels.controllers = {};
-		application.wheels.models = {};
-		application.wheels.existingHelperFiles = "";
-		application.wheels.existingLayoutFiles = "";
-		application.wheels.existingObjectFiles = "";
-		application.wheels.nonExistingHelperFiles = "";
-		application.wheels.nonExistingLayoutFiles = "";
-		application.wheels.nonExistingObjectFiles = "";
-		application.wheels.routes = [];
-		application.wheels.namedRoutePositions = {};
-		application.wheels.mixins = {};
-		application.wheels.cache = {};
-		application.wheels.cache.sql = {};
-		application.wheels.cache.image = {};
-		application.wheels.cache.main = {};
-		application.wheels.cache.action = {};
-		application.wheels.cache.page = {};
-		application.wheels.cache.partial = {};
-		application.wheels.cache.query = {};
-		application.wheels.cacheLastCulledAt = Now();
+		application._wheels.version = "1.3 Edge";
+		application._wheels.controllers = {};
+		application._wheels.models = {};
+		application._wheels.existingHelperFiles = "";
+		application._wheels.existingLayoutFiles = "";
+		application._wheels.existingObjectFiles = "";
+		application._wheels.nonExistingHelperFiles = "";
+		application._wheels.nonExistingLayoutFiles = "";
+		application._wheels.nonExistingObjectFiles = "";
+		application._wheels.routes = [];
+		application._wheels.namedRoutePositions = {};
+		application._wheels.mixins = {};
+		application._wheels.cache = {};
+		application._wheels.cache.sql = {};
+		application._wheels.cache.image = {};
+		application._wheels.cache.main = {};
+		application._wheels.cache.action = {};
+		application._wheels.cache.page = {};
+		application._wheels.cache.partial = {};
+		application._wheels.cache.query = {};
+		application._wheels.cacheLastCulledAt = Now();
 
 		// set up paths to various folders in the framework
-		application.wheels.webPath = Replace(request.cgi.script_name, Reverse(spanExcluding(Reverse(request.cgi.script_name), "/")), "");
-		application.wheels.rootPath = "/" & ListChangeDelims(application.wheels.webPath, "/", "/");
-		application.wheels.rootcomponentPath = ListChangeDelims(application.wheels.webPath, ".", "/");
-		application.wheels.wheelsComponentPath = ListAppend(application.wheels.rootcomponentPath, "wheels", ".");
-		application.wheels.configPath = "config";
-		application.wheels.eventPath = "events";
-		application.wheels.filePath = "files";
-		application.wheels.imagePath = "images";
-		application.wheels.javascriptPath = "javascripts";
-		application.wheels.modelPath = "models";
-		application.wheels.modelComponentPath = "models";
-		application.wheels.pluginPath = "plugins";
-		application.wheels.pluginComponentPath = "plugins";
-		application.wheels.stylesheetPath = "stylesheets";
-		application.wheels.viewPath = "views";
+		application._wheels.webPath = Replace(request.cgi.script_name, Reverse(spanExcluding(Reverse(request.cgi.script_name), "/")), "");
+		application._wheels.rootPath = "/" & ListChangeDelims(application._wheels.webPath, "/", "/");
+		application._wheels.rootcomponentPath = ListChangeDelims(application._wheels.webPath, ".", "/");
+		application._wheels.wheelsComponentPath = ListAppend(application._wheels.rootcomponentPath, "wheels", ".");
+		application._wheels.configPath = "config";
+		application._wheels.eventPath = "events";
+		application._wheels.filePath = "files";
+		application._wheels.imagePath = "images";
+		application._wheels.javascriptPath = "javascripts";
+		application._wheels.modelPath = "models";
+		application._wheels.modelComponentPath = "models";
+		application._wheels.pluginPath = "plugins";
+		application._wheels.pluginComponentPath = "plugins";
+		application._wheels.stylesheetPath = "stylesheets";
+		application._wheels.viewPath = "views";
 
 		// set environment either from the url or the developer's environment.cfm file
-		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(application.wheels, "reloadPassword") && (!Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
+		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(application._wheels, "reloadPassword") && (!Len(application._wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application._wheels.reloadPassword)))
 		{
-			application.wheels.environment = URL.reload;
+			application._wheels.environment = URL.reload;
 		}
 		else
 		{
-			$include(template="#application.wheels.configPath#/environment.cfm");
+			$include(template="#application._wheels.configPath#/environment.cfm");
 		}
 
 		// load wheels settings
 		$include(template="wheels/events/onapplicationstart/settings.cfm");
 
 		// load general developer settings first, then override with environment specific ones
-		$include(template="#application.wheels.configPath#/settings.cfm");
-		$include(template="#application.wheels.configPath#/#application.wheels.environment#/settings.cfm");
+		$include(template="#application._wheels.configPath#/settings.cfm");
+		$include(template="#application._wheels.configPath#/#application._wheels.environment#/settings.cfm");
 
-		if(application.wheels.clearQueryCacheOnReload)
+		if(application._wheels.clearQueryCacheOnReload)
 		{
 			$objectcache(action="clear");
 		}
 
 		// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
 		loc.allowedGlobalMethods = "get,set,addroute,addDefaultRoutes";
-		loc.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application.wheels.controllerPath, fileName="Wheels", method="$initControllerClass"));
-		application.wheels.protectedControllerMethods = "";
+		loc.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application._wheels.controllerPath, fileName="Wheels", method="$initControllerClass"));
+		application._wheels.protectedControllerMethods = "";
 		loc.iEnd = ListLen(loc.protectedControllerMethods);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.method = ListGetAt(loc.protectedControllerMethods, loc.i);
 			if (Left(loc.method, 1) != "$" && !ListFindNoCase(loc.allowedGlobalMethods, loc.method))
 			{
-				application.wheels.protectedControllerMethods = ListAppend(application.wheels.protectedControllerMethods, loc.method);
+				application._wheels.protectedControllerMethods = ListAppend(application._wheels.protectedControllerMethods, loc.method);
 			}
 		}
 
@@ -120,7 +120,7 @@
 		$loadPlugins();
 		
 		// allow developers to inject plugins into the application variables scope
-		if (!StructIsEmpty(application.wheels.mixins))
+		if (!StructIsEmpty(application._wheels.mixins))
 		{
 			$include(template="wheels/plugins/injection.cfm");
 		}
@@ -129,7 +129,11 @@
 		$loadRoutes();
 
 		// create the dispatcher that will handle all incoming requests
-		application.wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
+		application._wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
+
+		// assign it all to the application scope in one atomic call
+		application.wheels = application._wheels;
+		StructDelete(application, "_wheels");
 
 		// run the developer's on application start code
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");

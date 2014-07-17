@@ -267,9 +267,9 @@
 		loc.callingPath = Replace(GetBaseTemplatePath(), "\", "/", "all");
 		if (ListLen(loc.callingPath, "/") > ListLen(loc.applicationPath, "/") || GetFileFromPath(loc.callingPath) == "root.cfm")
 		{
+			$header(statusCode="404", statusText="Not Found");
 			if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "eventPath"))
 			{
-				$header(statusCode="404", statusText="Not Found");
 				$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
 			}
 			$abort();
@@ -837,10 +837,17 @@
 
 <cffunction name="$loadPlugins" returntype="void" access="public" output="false">
 	<cfscript>
-	application.wheels.PluginObj = $createObjectFromRoot(path="wheels", fileName="Plugins", method="init", pluginPath="#application.wheels.webPath & application.wheels.pluginPath#");
-	application.wheels.plugins = application.wheels.PluginObj.getPlugins();
-	application.wheels.incompatiblePlugins = application.wheels.PluginObj.getIncompatiblePlugins();
-	application.wheels.dependantPlugins = application.wheels.PluginObj.getDependantPlugins();
-	application.wheels.mixins = application.wheels.PluginObj.getMixins();
+	var loc = {};
+	loc.appKey = "wheels";
+	if (StructKeyExists(application, "_wheels"))
+	{
+		loc.appKey = "_wheels";
+	}
+	loc.pluginPath = application[loc.appKey].webPath & application[loc.appKey].pluginPath;
+	application[loc.appKey].PluginObj = $createObjectFromRoot(path="wheels", fileName="Plugins", method="init", pluginPath=loc.pluginPath, deletePluginDirectories=application[loc.appKey].deletePluginDirectories, overwritePlugins=application[loc.appKey].overwritePlugins, loadIncompatiblePlugins=application[loc.appKey].loadIncompatiblePlugins, wheelsEnvironment=application[loc.appKey].environment, wheelsVersion=application[loc.appKey].version);
+	application[loc.appKey].plugins = application[loc.appKey].PluginObj.getPlugins();
+	application[loc.appKey].incompatiblePlugins = application[loc.appKey].PluginObj.getIncompatiblePlugins();
+	application[loc.appKey].dependantPlugins = application[loc.appKey].PluginObj.getDependantPlugins();
+	application[loc.appKey].mixins = application[loc.appKey].PluginObj.getMixins();
 	</cfscript>
 </cffunction>

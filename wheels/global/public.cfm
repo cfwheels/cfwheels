@@ -92,19 +92,28 @@
 	categories="configuration" chapters="configuration-and-defaults" functions="get">
 	<cfscript>
 		var loc = {};
+		loc.appKey = "wheels";
+		if (StructKeyExists(application, "_wheels"))
+		{
+			loc.appKey = "_wheels";
+		}
 		if (ArrayLen(arguments) > 1)
 		{
 			for (loc.key in arguments)
 			{
 				if (loc.key != "functionName")
-					for (loc.i = 1; loc.i lte listlen(arguments.functionName); loc.i = loc.i + 1) {
-						application.wheels.functions[Trim(ListGetAt(arguments.functionName, loc.i))][loc.key] = arguments[loc.key];
+				{
+					loc.iEnd = ListLen(arguments.functionName);
+					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					{
+						application[loc.appKey].functions[Trim(ListGetAt(arguments.functionName, loc.i))][loc.key] = arguments[loc.key];
 					}
+				}
 			}
 		}
 		else
 		{
-			application.wheels[StructKeyList(arguments)] = arguments[1];
+			application[loc.appKey][StructKeyList(arguments)] = arguments[1];
 		}
 	</cfscript>
 </cffunction>
@@ -188,10 +197,19 @@
 	<cfargument name="functionName" type="string" required="false" default="" hint="Function name to get setting for.">
 	<cfscript>
 		var loc = {};
+		loc.appKey = "wheels";
+		if (StructKeyExists(application, "_wheels"))
+		{
+			loc.appKey = "_wheels";
+		}
 		if (Len(arguments.functionName))
-			loc.returnValue = application.wheels.functions[arguments.functionName][arguments.name];
+		{
+			loc.returnValue = application[loc.appKey].functions[arguments.functionName][arguments.name];
+		}
 		else
-			loc.returnValue = application.wheels[arguments.name];
+		{
+			loc.returnValue = application[loc.appKey][arguments.name];
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
