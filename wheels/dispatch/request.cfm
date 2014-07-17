@@ -347,10 +347,6 @@
 					loc.dates[loc.key].hour += 12;
 				}
 			}
-			if (!StructKeyExists(arguments.params, loc.key) || !IsArray(arguments.params[loc.key]))
-			{
-				arguments.params[loc.key] = [];
-			}
 			try
 			{
 				arguments.params[loc.key] = CreateDateTime(loc.dates[loc.key].year, loc.dates[loc.key].month, loc.dates[loc.key].day, loc.dates[loc.key].hour, loc.dates[loc.key].minute, loc.dates[loc.key].second);

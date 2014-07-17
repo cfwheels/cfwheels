@@ -12,8 +12,14 @@ View Enhancements
 * New "aroundRight" option on the "labelPlacement" argument that places the label text to the right of the form input - [Adam Chapman, Per Djurner]
 * Support for HTML5 boolean attributes - [Per Djurner]
 * Ability to remove media / type attributes when using styleSheetLinkTag and JavaScriptIncludeTag - [Per Djurner]
+* Support for implicit protocol in JavaScriptIncludeTag and styleSheetLinkTag - [Per Djurner]
 * Setting to convert, for example, dataDomCache or data_dom_cache (default) view helper argument names to data-dom-cache attribute names - [Per Djurner]
 * Allow the class attribute for paginationLinks helper anchor tags - [Adam Chapman]
+
+Controller Enhancements
+=======================
+
+* Made setPagination() available from the controller layer - [Per Djurner]
 
 Other Enhancements
 ==================
@@ -29,7 +35,8 @@ Bug Fixes
 
 * Fixed issue with deleting plugins on case sensitive systems - [Mark Moran]
 * Make sure the latest version of a plugin is unpacked if multiple versions exists - [Tony Petruzzi]
-* Fixed so the "onSessionEnd" event fires and passes arguments through correctly - #172 [Per Djurner]
+* Fixed so the "onApplicationEnd" and "onSessionEnd" events pass through the arguments scope [Per Djurner]
+* Fixed so the "onSessionEnd" event fires correctly - #172 [Per Djurner]
 * Fixed race condition issue with caching - [Per Djurner]
 * Added geometry and geography datatypes (SQLServer) - [Simon Allard]
 * Allow blank values to be passed through when validating uniqueness - [Per Djurner]

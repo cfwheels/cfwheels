@@ -10,6 +10,6 @@
 	<cfargument name="sessionScope" type="any" required="true">
  	<cfargument name="applicationScope" type="any" required="true">
 	<cfscript>
-		$include(template="#arguments.applicationScope.wheels.eventPath#/onsessionend.cfm");
+		$include(template="#arguments.applicationScope.wheels.eventPath#/onsessionend.cfm", argumentCollection=arguments);
 	</cfscript>
 </cffunction>

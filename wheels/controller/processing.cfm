@@ -146,7 +146,7 @@
 		$callAction(action=arguments.action);
 		if (arguments.static)
 		{
-			$cache(action="serverCache", timeSpan=$timeSpanForCache(arguments.time, "main"));
+			$cache(action="serverCache", timeSpan=$timeSpanForCache(arguments.time));
 		}
 		else
 		{
