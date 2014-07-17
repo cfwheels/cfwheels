@@ -33,37 +33,42 @@ public class CFWheelsCoreIT {
 	static private CustomHtmlUnitDriver driver;
 	static private String baseUrl;
 	static private boolean testOracleEmulation;
+	private String contextPath;
 	private String packageName;
 
-	public CFWheelsCoreIT(String packageName) {
+	public CFWheelsCoreIT(String contextPath, String packageName) {
 		super();
+		this.contextPath = contextPath;
 		this.packageName = packageName;
 	}
 
 	/**
 	 * @return scan folder for cfwheels core unit tests and add them as parameterized jUnit tests
 	 */
-	@Parameters(name="package {0}")
+	@Parameters(name="package {0}{1}")
     public static Collection<Object[]> getDirectories() {
     	Collection<Object[]> params = new ArrayList<Object[]>();
-    	addSubDirectories(params, "", "wheels/tests");
+    	addSubDirectories(params, "", "", "wheels/tests");
+		if (null != System.getProperty("testSubfolder")) {
+	    	addSubDirectories(params, "temp/", "", "wheels/tests");
+		}
 
     	return params;
     }
 
-	private static boolean addSubDirectories(Collection<Object[]> params, String prefix, String path) {
+	private static boolean addSubDirectories(Collection<Object[]> params, String contextPath, String prefix, String path) {
 		boolean added = false;
 		for (File f : new File(path).listFiles()) {
 			if (f.getName().startsWith("_")) continue;
     		if (!f.isDirectory()) {
     			continue;
     		}
-			if (addSubDirectories(params, prefix + f.getName() + ".", f.getPath())) {
+			if (addSubDirectories(params, contextPath, prefix + f.getName() + ".", f.getPath())) {
 	    		added = true;
 				continue;
 			}
 			
-			Object[] arr = new Object[] {prefix + f.getName() };
+			Object[] arr = new Object[] {contextPath, prefix + f.getName() };
     		params.add(arr);
     		added = true;
     	}
@@ -96,7 +101,7 @@ public class CFWheelsCoreIT {
 
 		recreateTestDatabase();
 	}
-	
+
 	public static void main(String[] args) throws Exception {
 		System.setProperty("testOracleEmulation", "true");
 		setUpServices();
@@ -134,8 +139,9 @@ public class CFWheelsCoreIT {
 	 */
 	@Test
 	public void testCFWheels() throws IOException {
+		System.out.print(contextPath);
 		System.out.println(packageName);
-		String packageUrl = baseUrl + "index.cfm?controller=wheels&action=wheels&view=tests&type=core&package="+packageName;
+		String packageUrl = baseUrl + contextPath + "index.cfm?controller=wheels&action=wheels&view=tests&type=core&package="+packageName;
 		driver.get(packageUrl);
         String pageSource = driver.getPageSource();
         assertTrue("The page should have results",pageSource.trim().length()>0);

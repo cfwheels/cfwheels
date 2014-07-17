@@ -8,6 +8,7 @@ usage:
   - Execute "mvn jetty:run" to start the embedded web server to run individual tests
     (In Eclipse, Run->Run As->6 Maven build...)
   - Individual tests URL: http://localhost:8080/index.cfm?controller=wheels&action=wheels&view=tests&type=core  
+  - "mvn verify -P railo,subfolder" install cfwheels on subfolder and run all tests 
   - "mvn verify -P railo,oracle-emu" runs all cfwheels tests on Oracle emulation via embedded H2 database
   - "mvn verify -P railo,mysql" runs all cfwheels tests on Travis-CI MySQL database
   - "mvn verify -P railo,postgresal" runs all cfwheels tests on Travis-CI postgreSQL database
@@ -37,6 +38,7 @@ Benefits of embedded-container-test versus full-integration-test
 		<railoConfig>railo-server.xml</railoConfig>
 		<testServer>http://localhost:8080</testServer>
 		<deployUrl></deployUrl>
+		<testSubfolder>false</testSubfolder>
 		<!-- settings for Oracle emulation -->
 		<testOracleEmulation>false</testOracleEmulation>
 	</properties>
@@ -86,6 +88,7 @@ Benefits of embedded-container-test versus full-integration-test
 						<testServer>${testServer}</testServer>
 						<deployUrl>${deployUrl}</deployUrl>
 						<testOracleEmulation>${testOracleEmulation}</testOracleEmulation>
+						<testSubfolder>${testSubfolder}</testSubfolder>
 					</systemPropertyVariables>
 				</configuration>
 				<executions>
@@ -119,6 +122,7 @@ Benefits of embedded-container-test versus full-integration-test
 							<excludes>
 								<exclude>.settings/**</exclude>
 								<exclude>src/**</exclude>
+								<exclude>target/**</exclude>
 								<exclude>target/**</exclude>
 								<exclude>WEB-INF/**</exclude>
 								<exclude>.*</exclude>
@@ -223,6 +227,7 @@ Benefits of embedded-container-test versus full-integration-test
 								<phase>clean</phase>
 								<configuration>
 									<target>
+										<delete dir="temp"/>
 										<delete dir="WEB-INF"/>
 										<delete dir="wheels/tests/_assets/plugins/removing/TestGlobalMixins"/>
 										<delete dir="wheels/tests/_assets/plugins/unpacking/TestDefaultAssignMixins"/>
@@ -346,6 +351,47 @@ Benefits of embedded-container-test versus full-integration-test
 										<copy file="${project.build.directory}/${project.build.finalName}.war" tofile="C:/ColdFusion8/wwwroot/${project.build.finalName}.war" overwrite="true" />
 										<copy file="src/test/coldfusion/_deploy.cfm" tofile="C:/ColdFusion8/wwwroot/_deploy.cfm" overwrite="true" />
 									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!-- to activate, execute "mvn verify -Prailo,subfolder" -->
+			<id>subfolder</id>
+			<properties>
+				<testSubfolder>true</testSubfolder>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<!-- copy the zipped package and the unzip deployment page into local ColdFusion server -->
+								<phase>pre-integration-test</phase>
+								<configuration>
+									<target>
+									  <copy todir="temp">
+									    <fileset dir=".">
+									      <exclude name="**/*.java"/>
+											<exclude name=".settings/**"/>
+											<exclude name="src/**"/>
+											<exclude name="target/**"/>
+											<exclude name="target/**"/>
+											<exclude name="WEB-INF/**"/>
+											<exclude name=".*"/>
+											<exclude name="pom.xml"/>
+									    </fileset>
+									  </copy>
+  									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
