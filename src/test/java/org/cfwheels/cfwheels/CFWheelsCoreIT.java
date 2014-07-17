@@ -141,6 +141,7 @@ public class CFWheelsCoreIT {
 	private static class HitterThread extends Thread {
 		@Override
 		public void run() {
+			CustomHtmlUnitDriver driver = new CustomHtmlUnitDriver();
 			driver.get(baseUrl);
 			String postfix = "";
 	        String pageSource = driver.getPageSource();
@@ -153,6 +154,7 @@ public class CFWheelsCoreIT {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			driver.quit();
 		}
 	}
 	
