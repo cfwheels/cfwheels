@@ -126,7 +126,9 @@ public class CFWheelsCoreIT {
 					"ALTER TABLE #loc.i# MODIFY COLUMN <cfif loc.i IS \"photogalleries\">photogalleryid<cfelseif loc.i IS \"photogalleryphotos\">photogalleryphotoid<cfelse>id</cfif> #loc.identityColumnType# DEFAULT #loc.seq#.nextval");
 			Files.write(Paths.get("wheels/tests/populate.cfm"), content.getBytes());
 		}
-		hitHomepageWithParallelRequest();
+		if ("true".equals(System.getProperty("testParallelStart"))) {
+			hitHomepageWithParallelRequest();
+		}
 		System.out.println("test database re-create");
 		driver.get(baseUrl + "index.cfm?controller=wheels&action=wheels&view=tests&type=core&reload=true&package=controller.caching");
 		String postfix = "";
