@@ -117,7 +117,10 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
-
+		
+		// Make all cache keys domain specific
+		StructInsert(arguments,ListLen(StructKeyList(arguments)) + 1,request.cgi.http_host,true);
+		
 		// we need to make sure we are looping through the passed in arguments in the same order everytime
 		loc.values = [];
 		loc.keyList = ListSort(StructKeyList(arguments), "textnocase", "asc");
@@ -477,18 +480,23 @@
 
 <cffunction name="$cachedControllerClassExists" returntype="any" access="public" output="false">
 	<cfargument name="name" type="string" required="true">
-		<cfscript>
-			var returnValue = false;
-			if (StructKeyExists(application.wheels.controllers, arguments.name))
-				returnValue = application.wheels.controllers[arguments.name];
-		</cfscript>
+	<cfscript>
+		var returnValue = false;
+		if (StructKeyExists(application.wheels.controllers, arguments.name))
+		{
+			returnValue = application.wheels.controllers[arguments.name];
+		}
+	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
 
-<cffunction name="$fileExistsNoCase" returntype="boolean" access="public" output="false">
+<cffunction name="$fileExistsNoCase" returntype="any" access="public" output="false">
 	<cfargument name="absolutePath" type="string" required="true">
 	<cfscript>
 		var loc = {};
+
+		// return false by default when the file does not exist in the directory
+		loc.returnValue = false;
 
 		// break up the full path string in the path name only and the file name only
 		loc.path = GetDirectoryFromPath(arguments.absolutePath);
@@ -501,12 +509,16 @@
 		// loop through the file list and return true if the file exists regardless of case (the == operator is case insensitive)
 		loc.iEnd = ListLen(loc.fileList);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			if (ListGetAt(loc.fileList, loc.i) == loc.file)
-				return true;
-
-		// the file wasn't found in the directory so we return false
-		return false;
+		{
+			loc.foundFile = ListGetAt(loc.fileList, loc.i);
+			if (loc.foundFile == loc.file)
+			{
+				loc.returnValue = loc.foundFile;
+				break;
+			}
+		}
 	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$objectFileName" returntype="string" access="public" output="false">
@@ -515,33 +527,46 @@
 	<cfargument name="type" type="string" required="true" hint="Can be either `controller` or `model`." />
 	<cfscript>
 		var loc = {};
-		loc.objectFileExists = false;
+		
+		// by default we return Model or Controller so that the base component gets loaded
+		loc.returnValue = capitalize(arguments.type);
 
-		// if the name contains the delimiter let's capitalize the last element and append it back to the list
-		if (ListLen(arguments.name, "/") gt 1)
-			arguments.name = ListInsertAt(arguments.name, ListLen(arguments.name, "/"), capitalize(ListLast(arguments.name, "/")), "/");
-		else
-			arguments.name = capitalize(arguments.name);
-
-		// we are going to store the full controller path in the existing / non-existing lists so we can have controllers in multiple places
+		// we are going to store the full controller / model path in the existing / non-existing lists so we can have controllers / models in multiple places
 		loc.fullObjectPath = arguments.objectPath & "/" & arguments.name;
 
 		if (!ListFindNoCase(application.wheels.existingObjectFiles, loc.fullObjectPath) && !ListFindNoCase(application.wheels.nonExistingObjectFiles, loc.fullObjectPath))
 		{
-			if (FileExists(ExpandPath("#loc.fullObjectPath#.cfc")))
-				loc.objectFileExists = true;
-			if (application.wheels.cacheFileChecking)
+			// we have not yet checked if this file exists or not so let's do that here (the function below will return the file name with the correct case if it exists, false if not)
+			loc.file = $fileExistsNoCase(ExpandPath(loc.fullObjectPath & ".cfc"));
+			if (IsBoolean(loc.file) && !loc.file)
 			{
-				if (loc.objectFileExists)
-					application.wheels.existingObjectFiles = ListAppend(application.wheels.existingObjectFiles, loc.fullObjectPath);
-				else
+				// no file exists, let's store that if caching is on so we don't have to check it again
+				if (application.wheels.cacheFileChecking)
+				{
 					application.wheels.nonExistingObjectFiles = ListAppend(application.wheels.nonExistingObjectFiles, loc.fullObjectPath);
+				}
+			}
+			else
+			{
+				// the file exists, let's store the proper case of the file if caching is turned on
+				loc.file = SpanExcluding(loc.file, ".");
+				loc.fullObjectPath = ListSetAt(loc.fullObjectPath, ListLen(loc.fullObjectPath, "/"), loc.file, "/");
+				if (application.wheels.cacheFileChecking)
+				{
+					application.wheels.existingObjectFiles = ListAppend(application.wheels.existingObjectFiles, loc.fullObjectPath);
+				}
+				loc.returnValue = loc.file;
 			}
 		}
-		if (ListFindNoCase(application.wheels.existingObjectFiles, loc.fullObjectPath) || loc.objectFileExists)
-			loc.returnValue = arguments.name;
 		else
-			loc.returnValue = capitalize(arguments.type);
+		{
+			// if the file exists we return the file name in its proper case
+			loc.pos = ListFindNoCase(application.wheels.existingObjectFiles, loc.fullObjectPath);
+			if (loc.pos)
+			{
+				loc.returnValue = ListLast(ListGetAt(application.wheels.existingObjectFiles, loc.pos), "/");
+			}
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

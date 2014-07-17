@@ -261,7 +261,7 @@ Benefits of embedded-container-test versus full-integration-test
 					<!-- jdbc database driver, required for railo datasource -->
 					<groupId>postgresql</groupId>
 					<artifactId>postgresql</artifactId>
-					<version>9.1-901-1.jdbc4</version>
+					<version>8.3-606.jdbc4</version>
 				</dependency>
 			</dependencies>
 			<properties>

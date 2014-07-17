@@ -291,4 +291,5 @@
 		</cfscript>
 	</cffunction>
 
+	<cfinclude template="../../plugins/injection.cfm">
 </cfcomponent>
