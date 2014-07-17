@@ -3,17 +3,18 @@ installing Maven:
   - on linux: sudo apt-get install maven
   - other OS: the same as installing CFEclipse plugin on Eclipse IDE
 usage:
-  - "mvn verify" runs all cfwheels tests on embedded railo and H2 database (use port 8080 for embedded web server)
+  - "mvn verify" runs all CFWheels tests on embedded railo and H2 database (use port 8080 for embedded web server)
      (on Eclipse, Run->Run As->9 Maven install)
   - Execute "mvn jetty:run" to start the embedded web server to run individual tests
     (In Eclipse, Run->Run As->6 Maven build...)
   - Individual tests URL: http://localhost:8080/index.cfm?controller=wheels&action=wheels&view=tests&type=core  
-  - "mvn verify -P railo,subfolder" install cfwheels on subfolder and run all tests 
-  - "mvn verify -P railo,oracle-emu" runs all cfwheels tests on Oracle emulation via embedded H2 database
-  - "mvn verify -P railo,mysql" runs all cfwheels tests on Travis-CI MySQL database
-  - "mvn verify -P railo,postgresal" runs all cfwheels tests on Travis-CI postgreSQL database
-  - "mvn clean verify -P mssql" upload and runs all cfwheels tests on railo and Microsoft SQLServer on cfmldeveloper.org (or whatever database/server configured there)
-  - "mvn clean verify -P oracle" copy and runs all cfwheels tests on local ColdFusion8 and Oracle (or whatever database configured locally)
+  - "mvn verify -P railo,subfolder" install CFWheels also on subfolder and run all tests 
+  - "mvn verify -P railo,oracle-emu" runs all CFWheels tests on Oracle emulation via embedded H2 database
+  - "mvn verify -P railo,mysql" runs all CFWheels tests on Travis-CI MySQL database
+  - "mvn verify -P railo,postgresal" runs all CFWheels tests on Travis-CI postgreSQL database
+  - "mvn clean verify -P mssql" upload and runs all CFWheels tests on railo and Microsoft SQLServer on cfmldeveloper.org (or whatever database/server configured there)
+  - "mvn clean verify -P mssql,subfolder" upload and deploy CFWheels also on subfolder and run all tests 
+  - "mvn clean verify -P oracle" copy and runs all CFWheels tests on local ColdFusion8 and Oracle (or whatever database configured locally)
 
 Benefits of embedded-container-test versus full-integration-test
   #1 clean test data (data is not shared with nor contaminated by other processes)
@@ -384,7 +385,6 @@ Benefits of embedded-container-test versus full-integration-test
 									      <exclude name="**/*.java"/>
 											<exclude name=".settings/**"/>
 											<exclude name="src/**"/>
-											<exclude name="target/**"/>
 											<exclude name="target/**"/>
 											<exclude name="WEB-INF/**"/>
 											<exclude name=".*"/>
