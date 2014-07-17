@@ -375,8 +375,8 @@ Benefits of embedded-container-test versus full-integration-test
 						<version>1.7</version>
 						<executions>
 							<execution>
-								<!-- copy the zipped package and the unzip deployment page into local ColdFusion server -->
-								<phase>pre-integration-test</phase>
+								<!-- copy wheels also into sub folder -->
+								<phase>test</phase>
 								<configuration>
 									<target>
 									  <copy todir="temp">
