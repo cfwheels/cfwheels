@@ -66,7 +66,7 @@
 
 <div id="wheels-debug-area">
 	<table cellspacing="0" cellpadding="0">
-		<cfif Len(application.wheels.incompatiblePlugins) OR Len(application.wheels.dependantPlugins) OR NOT ArrayIsEmpty(request.wheels.deprecation)>
+		<cfif Len(application.wheels.incompatiblePlugins) OR Len(application.wheels.dependantPlugins)>
 			<tr>
 				<td valign="top"><strong><span style="color:red;">Warnings:</span></strong></td>
 				<td>
@@ -76,9 +76,6 @@
 						</cfif>
 						<cfif Len(application.wheels.dependantPlugins)>
 							<cfloop list="#application.wheels.dependantPlugins#" index="loc.i"><cfset needs = ListLast(loc.i, "|")>The #ListFirst(loc.i, "|")# plugin needs the following plugin<cfif ListLen(needs) GT 1>s</cfif> to work properly: #needs#<br /></cfloop>
-						</cfif>
-						<cfif NOT ArrayIsEmpty(request.wheels.deprecation)>
-							<cfloop array="#request.wheels.deprecation#" index="i">#i.message# (line #i.line# in #i.template#)<br /></cfloop>
 						</cfif>
 					</span>
 				</td>

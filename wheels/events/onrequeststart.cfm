@@ -23,57 +23,75 @@
 	<cfargument name="targetPage" type="any" required="true">
 	<cfscript>
 		var loc = {};
-	
 		if (application.wheels.showDebugInformation)
 		{
 			// if the first debug point has not already been set in a reload request we set it here
 			if (StructKeyExists(request.wheels, "execution"))
+			{
 				$debugPoint("reload");
+			}
 			else
+			{
 				$debugPoint("total");
+			}
 			$debugPoint("requestStart");
-			request.wheels.deprecation = [];
 		}
 
 		// copy over the cgi variables we need to the request scope unless it's already been done on application start
 		if (!StructKeyExists(request, "cgi"))
+		{
 			request.cgi = $cgiScope();
+		}
 		
 		// reload the plugins on each request if cachePlugins is set to false
 		if (!application.wheels.cachePlugins)
+		{
 			$loadPlugins();
+		}
 
 		// inject methods from plugins directly to Application.cfc
 		if (!StructIsEmpty(application.wheels.mixins))
+		{
 			$include(template="wheels/plugins/injection.cfm");
+		}
 
 		if (application.wheels.environment == "maintenance")
 		{
-			if (StructKeyExists(URL, "except"))
-				application.wheels.ipExceptions = URL.except;
+			if (StructKeyExists(url, "except"))
+			{
+				application.wheels.ipExceptions = url.except;
+			}
 			if (!Len(application.wheels.ipExceptions) || !ListFind(application.wheels.ipExceptions, request.cgi.remote_addr))
 			{
 				$includeAndOutput(template="#application.wheels.eventPath#/onmaintenance.cfm");
 				$abort();
 			}
 		}
-
 		if (Right(arguments.targetPage, 4) == ".cfc")
 		{
 			StructDelete(this, "onRequest");
 			StructDelete(variables, "onRequest");
 		}
-
 		if (!application.wheels.cacheModelInitialization)
+		{
 			$simpleLock(name="modelLock", execute="$clearModelInitializationCache", type="exclusive");
+		}
 		if (!application.wheels.cacheControllerInitialization)
+		{
 			$simpleLock(name="controllerLock", execute="$clearControllerInitializationCache", type="exclusive");
+		}
 		if (!application.wheels.cacheRoutes)
+		{
 			$loadRoutes();
+		}
 		if (!application.wheels.cacheDatabaseSchema)
+		{
 			$clearCache("sql");
+		}
 		$include(template="#application.wheels.eventPath#/onrequeststart.cfm");
 		if (application.wheels.showDebugInformation)
+		{
 			$debugPoint("requestStart");
+		}
 	</cfscript>
 </cffunction>
