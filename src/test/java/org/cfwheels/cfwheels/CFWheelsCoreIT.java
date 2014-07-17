@@ -49,7 +49,7 @@ public class CFWheelsCoreIT {
     public static Collection<Object[]> getDirectories() {
     	Collection<Object[]> params = new ArrayList<Object[]>();
     	addSubDirectories(params, "", "", "wheels/tests");
-		if (null != System.getProperty("testSubfolder")) {
+		if ("true".equals(System.getProperty("testSubfolder"))) {
 	    	addSubDirectories(params, "temp/", "", "wheels/tests");
 		}
 
