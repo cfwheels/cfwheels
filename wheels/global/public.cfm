@@ -474,7 +474,7 @@
 	<cfargument name="controller" type="string" required="false" default="" hint="Name of the controller to include in the URL.">
 	<cfargument name="action" type="string" required="false" default="" hint="Name of the action to include in the URL.">
 	<cfargument name="key" type="any" required="false" default="" hint="Key(s) to include in the URL.">
-	<cfargument name="params" type="string" required="false" default="" hint="Any additional params to be set in the query string.">
+	<cfargument name="params" type="string" required="false" default="" hint="Any additional parameters to be set in the query string (example: `wheels=cool&x=y`). Please note that Wheels uses the `&` and `=` characters to split the parameters and encode them properly for you (using `URLEncodedFormat()` internally). However, if you need to pass in `&` or `=` as part of the value, then you need to encode them (and only them), example: `a=cats%26dogs%3Dtrouble!&b=1`.">
 	<cfargument name="anchor" type="string" required="false" default="" hint="Sets an anchor name to be appended to the path.">
 	<cfargument name="onlyPath" type="boolean" required="false" hint="If `true`, returns only the relative URL (no protocol, host name or port).">
 	<cfargument name="host" type="string" required="false" hint="Set this to override the current host.">
