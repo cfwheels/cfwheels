@@ -376,7 +376,7 @@ Benefits of embedded-container-test versus full-integration-test
 						<executions>
 							<execution>
 								<!-- copy wheels also into sub folder -->
-								<phase>test</phase>
+								<phase>pre-integration-test</phase>
 								<configuration>
 									<target>
 									  <copy todir="temp">

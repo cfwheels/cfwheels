@@ -1,4 +1,5 @@
 <cfparam name="url.clean" default="false" type="boolean">
+<cfparam name="url.subfolder" default="false" type="boolean">
 <cfparam name="url.build">
 <cfoutput>
 	<html>
@@ -51,6 +52,13 @@
 				file="#ExpandPath( './#url.build#.war' )#"
 				destination="#ExpandPath( '.' )#"
 				/>
+			<cfif url.subfolder>
+				<cfzip
+					action="unzip"
+					file="#ExpandPath( './#url.build#.war' )#"
+					destination="#ExpandPath( 'temp' )#"
+					/>
+			</cfif>
 			== DEPLOYED #url.build#.war ==
 			<br/>
 			<cffile action="append"

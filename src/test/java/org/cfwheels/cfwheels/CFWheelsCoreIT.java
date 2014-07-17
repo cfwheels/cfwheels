@@ -94,7 +94,11 @@ public class CFWheelsCoreIT {
 
 		if (null != System.getProperty("deployUrl")) {
 			System.out.println("cfwheels deploy");
-			driver.get(System.getProperty("deployUrl"));
+			if ("true".equals(System.getProperty("testSubfolder"))) {
+				driver.get(System.getProperty("deployUrl") + "&subfolder=true");
+			} else {
+				driver.get(System.getProperty("deployUrl"));
+			}
 	        String pageSource = driver.getPageSource();
 			Files.write(Paths.get("target/failsafe-reports/_deploy.html"), pageSource.getBytes());
 		}
