@@ -750,18 +750,14 @@
 <cffunction name="$loadRoutes" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		loc.appKey = "wheels";
-		if (StructKeyExists(application, "_wheels"))
-		{
-			loc.appKey = "_wheels";
-		}
+		loc.appKey = $appKey();
 
 		// clear out the route info
 		ArrayClear(application[loc.appKey].routes);
 		StructClear(application[loc.appKey].namedRoutePositions);
 
 		// load developer routes first
-		$include(template="#application[loc.appKey].configPath#/routes.cfm");
+		$include(template="config/routes.cfm");
 
 		// add the wheels default routes at the end if requested
 		if (application[loc.appKey].loadDefaultRoutes)
@@ -771,17 +767,13 @@
 
 		// set lookup info for the named routes
 		$setNamedRoutePositions();
-		</cfscript>
+	</cfscript>
 </cffunction>
 
 <cffunction name="$setNamedRoutePositions" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		loc.appKey = "wheels";
-		if (StructKeyExists(application, "_wheels"))
-		{
-			loc.appKey = "_wheels";
-		}
+		loc.appKey = $appKey();
 		loc.iEnd = ArrayLen(application[loc.appKey].routes);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
@@ -852,11 +844,7 @@
 <cffunction name="$loadPlugins" returntype="void" access="public" output="false">
 	<cfscript>
 	var loc = {};
-	loc.appKey = "wheels";
-	if (StructKeyExists(application, "_wheels"))
-	{
-		loc.appKey = "_wheels";
-	}
+	loc.appKey = $appKey();
 	loc.pluginPath = application[loc.appKey].webPath & application[loc.appKey].pluginPath;
 	application[loc.appKey].PluginObj = $createObjectFromRoot(path="wheels", fileName="Plugins", method="init", pluginPath=loc.pluginPath, deletePluginDirectories=application[loc.appKey].deletePluginDirectories, overwritePlugins=application[loc.appKey].overwritePlugins, loadIncompatiblePlugins=application[loc.appKey].loadIncompatiblePlugins, wheelsEnvironment=application[loc.appKey].environment, wheelsVersion=application[loc.appKey].version);
 	application[loc.appKey].plugins = application[loc.appKey].PluginObj.getPlugins();
@@ -864,4 +852,16 @@
 	application[loc.appKey].dependantPlugins = application[loc.appKey].PluginObj.getDependantPlugins();
 	application[loc.appKey].mixins = application[loc.appKey].PluginObj.getMixins();
 	</cfscript>
+</cffunction>
+
+<cffunction name="$appKey" returntype="string" access="public" output="false">
+	<cfscript>
+	var loc = {};
+	loc.returnValue = "wheels";
+	if (StructKeyExists(application, "$wheels"))
+	{
+		loc.returnValue = "$wheels";
+	}
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>

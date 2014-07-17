@@ -36,11 +36,7 @@
 	<cfargument name="action" type="string" required="false" default="" hint="Action to call when route matches (unless the action name exists in the pattern).">
 	<cfscript>
 		var loc = {};
-		loc.appKey = "wheels";
-		if (StructKeyExists(application, "_wheels"))
-		{
-			loc.appKey = "_wheels";
-		}
+		loc.appKey = $appKey();
 
 		// throw errors when controller or action is not passed in as arguments and not included in the pattern
 		if (!Len(arguments.controller) && arguments.pattern Does Not Contain "[controller]")
@@ -102,11 +98,7 @@
 	categories="configuration" chapters="configuration-and-defaults" functions="get">
 	<cfscript>
 		var loc = {};
-		loc.appKey = "wheels";
-		if (StructKeyExists(application, "_wheels"))
-		{
-			loc.appKey = "_wheels";
-		}
+		loc.appKey = $appKey();
 		if (ArrayLen(arguments) > 1)
 		{
 			for (loc.key in arguments)
@@ -207,11 +199,7 @@
 	<cfargument name="functionName" type="string" required="false" default="" hint="Function name to get setting for.">
 	<cfscript>
 		var loc = {};
-		loc.appKey = "wheels";
-		if (StructKeyExists(application, "_wheels"))
-		{
-			loc.appKey = "_wheels";
-		}
+		loc.appKey = $appKey();
 		if (Len(arguments.functionName))
 		{
 			loc.returnValue = application[loc.appKey].functions[arguments.functionName][arguments.name];

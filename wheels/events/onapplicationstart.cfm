@@ -13,91 +13,330 @@
 		{
 			loc.oldReloadPassword = application.wheels.reloadPassword;
 		}
-		application._wheels = {};
+		application.$wheels = {};
 		if (StructKeyExists(loc, "oldReloadPassword"))
 		{
-			application._wheels.reloadPassword = loc.oldReloadPassword;
+			application.$wheels.reloadPassword = loc.oldReloadPassword;
 		}
 
 		// check and store server engine name, throw error if using a version that we don't support
 		if (StructKeyExists(server, "railo"))
 		{
-			application._wheels.serverName = "Railo";
-			application._wheels.serverVersion = server.railo.version;
+			application.$wheels.serverName = "Railo";
+			application.$wheels.serverVersion = server.railo.version;
 			loc.minimumServerVersion = "4.2.1.000";
 		}
 		else
 		{
-			application._wheels.serverName = "Adobe ColdFusion";
-			application._wheels.serverVersion = server.coldfusion.productversion;
+			application.$wheels.serverName = "Adobe ColdFusion";
+			application.$wheels.serverVersion = server.coldfusion.productversion;
 			loc.minimumServerVersion = "8.0.1.0";
 		}
-		if (!$checkMinimumVersion(application._wheels.serverVersion, loc.minimumServerVersion))
+		if (!$checkMinimumVersion(application.$wheels.serverVersion, loc.minimumServerVersion))
 		{
-			$throw(type="Wheels.EngineNotSupported", message="#application._wheels.serverName# #application._wheels.serverVersion# is not supported by Wheels.", extendedInfo="Please upgrade to version #loc.minimumServerVersion# or higher.");
+			$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by Wheels.", extendedInfo="Please upgrade to version #loc.minimumServerVersion# or higher.");
 		}
 
 		// copy over the cgi variables we need to the request scope (since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example)
 		request.cgi = $cgiScope();
 
 		// set up containers for routes, caches, settings etc
-		application._wheels.version = "1.3 Edge";
-		application._wheels.controllers = {};
-		application._wheels.models = {};
-		application._wheels.existingHelperFiles = "";
-		application._wheels.existingLayoutFiles = "";
-		application._wheels.existingObjectFiles = "";
-		application._wheels.nonExistingHelperFiles = "";
-		application._wheels.nonExistingLayoutFiles = "";
-		application._wheels.nonExistingObjectFiles = "";
-		application._wheels.routes = [];
-		application._wheels.namedRoutePositions = {};
-		application._wheels.mixins = {};
-		application._wheels.cache = {};
-		application._wheels.cache.sql = {};
-		application._wheels.cache.image = {};
-		application._wheels.cache.main = {};
-		application._wheels.cache.action = {};
-		application._wheels.cache.page = {};
-		application._wheels.cache.partial = {};
-		application._wheels.cache.query = {};
-		application._wheels.cacheLastCulledAt = Now();
+		application.$wheels.version = "1.3 Edge";
+		application.$wheels.controllers = {};
+		application.$wheels.models = {};
+		application.$wheels.existingHelperFiles = "";
+		application.$wheels.existingLayoutFiles = "";
+		application.$wheels.existingObjectFiles = "";
+		application.$wheels.nonExistingHelperFiles = "";
+		application.$wheels.nonExistingLayoutFiles = "";
+		application.$wheels.nonExistingObjectFiles = "";
+		application.$wheels.routes = [];
+		application.$wheels.namedRoutePositions = {};
+		application.$wheels.mixins = {};
+		application.$wheels.cache = {};
+		application.$wheels.cache.sql = {};
+		application.$wheels.cache.image = {};
+		application.$wheels.cache.main = {};
+		application.$wheels.cache.action = {};
+		application.$wheels.cache.page = {};
+		application.$wheels.cache.partial = {};
+		application.$wheels.cache.query = {};
+		application.$wheels.cacheLastCulledAt = Now();
 
 		// set up paths to various folders in the framework
-		application._wheels.webPath = Replace(request.cgi.script_name, Reverse(spanExcluding(Reverse(request.cgi.script_name), "/")), "");
-		application._wheels.rootPath = "/" & ListChangeDelims(application._wheels.webPath, "/", "/");
-		application._wheels.rootcomponentPath = ListChangeDelims(application._wheels.webPath, ".", "/");
-		application._wheels.wheelsComponentPath = ListAppend(application._wheels.rootcomponentPath, "wheels", ".");
-		application._wheels.configPath = "config";
-		application._wheels.eventPath = "events";
-		application._wheels.filePath = "files";
-		application._wheels.imagePath = "images";
-		application._wheels.javascriptPath = "javascripts";
-		application._wheels.modelPath = "models";
-		application._wheels.modelComponentPath = "models";
-		application._wheels.pluginPath = "plugins";
-		application._wheels.pluginComponentPath = "plugins";
-		application._wheels.stylesheetPath = "stylesheets";
-		application._wheels.viewPath = "views";
+		application.$wheels.webPath = Replace(request.cgi.script_name, Reverse(spanExcluding(Reverse(request.cgi.script_name), "/")), "");
+		application.$wheels.rootPath = "/" & ListChangeDelims(application.$wheels.webPath, "/", "/");
+		application.$wheels.rootcomponentPath = ListChangeDelims(application.$wheels.webPath, ".", "/");
+		application.$wheels.wheelsComponentPath = ListAppend(application.$wheels.rootcomponentPath, "wheels", ".");
 
 		// set environment either from the url or the developer's environment.cfm file
-		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(application._wheels, "reloadPassword") && (!Len(application._wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application._wheels.reloadPassword)))
+		if (StructKeyExists(URL, "reload") && !IsBoolean(URL.reload) && Len(url.reload) && StructKeyExists(application.$wheels, "reloadPassword") && (!Len(application.$wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.$wheels.reloadPassword)))
 		{
-			application._wheels.environment = URL.reload;
+			application.$wheels.environment = URL.reload;
 		}
 		else
 		{
-			$include(template="#application._wheels.configPath#/environment.cfm");
+			$include(template="config/environment.cfm");
 		}
 
-		// load wheels settings
-		$include(template="wheels/events/onapplicationstart/settings.cfm");
+		// rewrite settings based on web server rewrite capabilites
+		application.$wheels.rewriteFile = "rewrite.cfm";
+		if (Right(request.cgi.script_name, 12) == "/" & application.$wheels.rewriteFile)
+		{
+			application.$wheels.URLRewriting = "On";
+		}
+		else if (Len(request.cgi.path_info))
+		{
+			application.$wheels.URLRewriting = "Partial";
+		}
+		else
+		{
+			application.$wheels.URLRewriting = "Off";
+		}
+
+		// set datasource name to same as the folder the app resides in unless the developer has set it with the global setting already
+		if (StructKeyExists(this, "dataSource"))
+		{
+			application.$wheels.dataSourceName = this.dataSource;
+		}
+		else
+		{
+			application.$wheels.dataSourceName = LCase(ListLast(GetDirectoryFromPath(GetBaseTemplatePath()), Right(GetDirectoryFromPath(GetBaseTemplatePath()), 1)));
+		}
+		application.$wheels.dataSourceUserName = "";
+		application.$wheels.dataSourcePassword = "";
+		application.$wheels.transactionMode = "commit";
+
+		// cache settings
+		application.$wheels.cacheDatabaseSchema = false;
+		application.$wheels.cacheFileChecking = false;
+		application.$wheels.cacheImages = false;
+		application.$wheels.cacheModelInitialization = false;
+		application.$wheels.cacheControllerInitialization = false;
+		application.$wheels.cacheRoutes = false;
+		application.$wheels.cacheActions = false;
+		application.$wheels.cachePages = false;
+		application.$wheels.cachePartials = false;
+		application.$wheels.cacheQueries = false;
+		application.$wheels.cachePlugins = true;
+		if (application.$wheels.environment != "design")
+		{
+			application.$wheels.cacheDatabaseSchema = true;
+			application.$wheels.cacheFileChecking = true;
+			application.$wheels.cacheImages = true;
+			application.$wheels.cacheModelInitialization = true;
+			application.$wheels.cacheControllerInitialization = true;
+			application.$wheels.cacheRoutes = true;
+		}
+		if (application.$wheels.environment != "design" && application.$wheels.environment != "development")
+		{
+			application.$wheels.cacheActions = true;
+			application.$wheels.cachePages = true;
+			application.$wheels.cachePartials = true;
+			application.$wheels.cacheQueries = true;
+		}
+
+		// debugging and error settings
+		application.$wheels.showDebugInformation = true;
+		application.$wheels.showErrorInformation = true;
+		application.$wheels.sendEmailOnError = false;
+		application.$wheels.errorEmailSubject = "Error";
+		application.$wheels.excludeFromErrorEmail = "";
+		if (request.cgi.server_name Contains ".")
+		{
+			application.$wheels.errorEmailAddress = "webmaster@" & Reverse(ListGetAt(Reverse(request.cgi.server_name), 2,".")) & "." & Reverse(ListGetAt(Reverse(request.cgi.server_name), 1, "."));
+		}
+		else
+		{
+			application.$wheels.errorEmailAddress = "";
+		}
+		if (application.$wheels.environment == "production")
+		{
+			application.$wheels.showErrorInformation = false;
+			application.$wheels.sendEmailOnError = true;
+		}
+		if (application.$wheels.environment != "design" && application.$wheels.environment != "development")
+		{
+			application.$wheels.showDebugInformation = false;
+		}
+
+		// asset path settings
+		// assetPaths can be struct with two keys,  http and https, if no https struct key, http is used for secure and non-secure
+		// ex. {http="asset0.domain1.com,asset2.domain1.com,asset3.domain1.com", https="secure.domain1.com"}
+		application.$wheels.assetQueryString = false;
+		application.$wheels.assetPaths = false;
+		if (application.$wheels.environment != "design" && application.$wheels.environment != "development")
+		{
+			application.$wheels.assetQueryString = true;
+		}
+
+		// configurable paths
+		application.$wheels.eventPath = "events";
+		application.$wheels.filePath = "files";
+		application.$wheels.imagePath = "images";
+		application.$wheels.javascriptPath = "javascripts";
+		application.$wheels.modelPath = "models";
+		application.$wheels.modelComponentPath = "models";
+		application.$wheels.pluginPath = "plugins";
+		application.$wheels.pluginComponentPath = "plugins";
+		application.$wheels.stylesheetPath = "stylesheets";
+		application.$wheels.viewPath = "views";
+		application.$wheels.controllerPath = "controllers";
+
+		// miscellaneous settings
+		application.$wheels.dataAttributeDelimiter = "_";
+		application.$wheels.tableNamePrefix = "";
+		application.$wheels.obfuscateURLs = false;
+		application.$wheels.reloadPassword = "";
+		application.$wheels.softDeleteProperty = "deletedAt";
+		application.$wheels.timeStampOnCreateProperty = "createdAt";
+		application.$wheels.timeStampOnUpdateProperty = "updatedAt";
+		application.$wheels.ipExceptions = "";
+		application.$wheels.overwritePlugins = true;
+		application.$wheels.deletePluginDirectories = true;
+		application.$wheels.loadIncompatiblePlugins = true;
+		application.$wheels.loadDefaultRoutes = true;
+		application.$wheels.automaticValidations = true;
+		application.$wheels.setUpdatedAtOnCreate = true;
+		application.$wheels.useExpandedColumnAliases = false;
+		application.$wheels.modelRequireInit = false;
+	
+		// if session management is enabled in the application we default to storing flash data in the session scope, if not we use a cookie
+		if (StructKeyExists(this, "sessionManagement") && this.sessionManagement)
+		{
+			application.$wheels.sessionManagement = true;
+			application.$wheels.flashStorage = "session";
+		}
+		else
+		{
+			application.$wheels.sessionManagement = false;
+			application.$wheels.flashStorage = "cookie";
+		}
+
+		// caching settings
+		application.$wheels.maximumItemsToCache = 5000;
+		application.$wheels.cacheCullPercentage = 10;
+		application.$wheels.cacheCullInterval = 5;
+		application.$wheels.cacheDatePart = "n";
+		application.$wheels.defaultCacheTime = 60;
+		application.$wheels.clearQueryCacheOnReload = true;
+		application.$wheels.cacheQueriesDuringRequest = true;
+		
+		// possible formats for provides
+		application.$wheels.formats = {};
+		application.$wheels.formats.html = "text/html";
+		application.$wheels.formats.xml = "text/xml";
+		application.$wheels.formats.json = "application/json";
+		application.$wheels.formats.csv = "text/csv";
+		application.$wheels.formats.pdf = "application/pdf";
+		application.$wheels.formats.xls = "application/vnd.ms-excel";
+
+		// function defaults
+		application.$wheels.functions = {};
+		application.$wheels.functions.average = {distinct=false, parameterize=true, ifNull=""};
+		application.$wheels.functions.belongsTo = {joinType="inner"};
+		application.$wheels.functions.buttonTo = {onlyPath=true, host="", protocol="", port=0, text="", confirm="", image="", disable=""};
+		application.$wheels.functions.buttonTag = {type="submit", value="save", content="Save changes", image="", disable=""};
+		application.$wheels.functions.caches = {time=60, static=false};
+		application.$wheels.functions.checkBox = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", checkedValue=1, unCheckedValue=0};
+		application.$wheels.functions.checkBoxTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", value=1};
+		application.$wheels.functions.count = {parameterize=true};
+		application.$wheels.functions.create = {parameterize=true, reload=false};
+		application.$wheels.functions.dateSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names"};
+		application.$wheels.functions.dateSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="month,day,year", separator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names"};
+		application.$wheels.functions.dateTimeSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, secondStep=1, separator=" - "};
+		application.$wheels.functions.dateTimeSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, dateOrder="month,day,year", dateSeparator=" ", startYear=Year(Now())-5, endYear=Year(Now())+5, monthDisplay="names", timeOrder="hour,minute,second", timeSeparator=":", minuteStep=1, secondStep=1,separator=" - "};
+		application.$wheels.functions.daySelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
+		application.$wheels.functions.delete = {parameterize=true};
+		application.$wheels.functions.deleteAll = {reload=false, parameterize=true, instantiate=false};
+		application.$wheels.functions.deleteByKey = {reload=false};
+		application.$wheels.functions.deleteOne = {reload=false};
+		application.$wheels.functions.distanceOfTimeInWords = {includeSeconds=false};
+		application.$wheels.functions.errorMessageOn = {prependText="", appendText="", wrapperElement="span", class="errorMessage"};
+		application.$wheels.functions.errorMessagesFor = {class="errorMessages", showDuplicates=true};
+		application.$wheels.functions.exists = {reload=false, parameterize=true};
+		application.$wheels.functions.fileField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
+		application.$wheels.functions.fileFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
+		application.$wheels.functions.findAll = {reload=false, parameterize=true, perPage=10, order="", group="", returnAs="query", returnIncluded=true};
+		application.$wheels.functions.findByKey = {reload=false, parameterize=true, returnAs="object"};
+		application.$wheels.functions.findOne = {reload=false, parameterize=true, returnAs="object"};
+		application.$wheels.functions.flashKeep = {};
+		application.$wheels.functions.flashMessages = {class="flashMessages", includeEmptyContainer="false", lowerCaseDynamicClassValues=false};
+		application.$wheels.functions.hasMany = {joinType="outer", dependent=false};
+		application.$wheels.functions.hasOne = {joinType="outer", dependent=false};
+		application.$wheels.functions.hiddenField = {};
+		application.$wheels.functions.highlight = {delimiter=",", tag="span", class="highlight"};
+		application.$wheels.functions.hourSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false};
+		application.$wheels.functions.imageTag = {};
+		application.$wheels.functions.includePartial = {layout="", spacer="", dataFunction=true};
+		application.$wheels.functions.javaScriptIncludeTag = {type="text/javascript", head=false};
+		application.$wheels.functions.linkTo = {onlyPath=true, host="", protocol="", port=0};
+		application.$wheels.functions.mailTo = {encode=false};
+		application.$wheels.functions.maximum = {parameterize=true, ifNull=""};
+		application.$wheels.functions.minimum = {parameterize=true, ifNull=""};
+		application.$wheels.functions.minuteSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, minuteStep=1};
+		application.$wheels.functions.monthSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, monthDisplay="names"};
+		application.$wheels.functions.nestedProperties = {autoSave=true, allowDelete=false, sortProperty="", rejectIfBlank=""};
+		application.$wheels.functions.paginationLinks = {windowSize=2, alwaysShowAnchors=true, anchorDivider=" ... ", linkToCurrentPage=false, prepend="", append="", prependToPage="", prependOnFirst=true, prependOnAnchor=true, appendToPage="", appendOnLast=true, appendOnAnchor=true, classForCurrent="", name="page", showSinglePage=false, pageNumberAsParam=true};
+		application.$wheels.functions.passwordField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
+		application.$wheels.functions.passwordFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
+		application.$wheels.functions.radioButton = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
+		application.$wheels.functions.radioButtonTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
+		application.$wheels.functions.redirectTo = {onlyPath=true, host="", protocol="", port=0, addToken=false, statusCode=302, delay=false};
+		application.$wheels.functions.renderPage = {layout=""};
+		application.$wheels.functions.renderWith = {layout=""};
+		application.$wheels.functions.renderPageToString = {layout=true};
+		application.$wheels.functions.renderPartial = {layout="", dataFunction=true};
+		application.$wheels.functions.save = {parameterize=true, reload=false};
+		application.$wheels.functions.secondSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, secondStep=1};
+		application.$wheels.functions.select = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, valueField="", textField=""};
+		application.$wheels.functions.selectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, multiple=false, valueField="", textField=""};
+		application.$wheels.functions.sendEmail = {layout=false, detectMultipart=true, from="", to="", subject=""};
+		application.$wheels.functions.sendFile = {disposition="attachment"};
+		application.$wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, spamProtection=false};
+		application.$wheels.functions.styleSheetLinkTag = {type="text/css", media="all", head=false};
+		application.$wheels.functions.submitTag = {value="Save changes", image="", disable="", prepend="", append=""};
+		application.$wheels.functions.sum = {distinct=false, parameterize=true, ifNull=""};
+		application.$wheels.functions.textArea = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
+		application.$wheels.functions.textAreaTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
+		application.$wheels.functions.textField = {label="useDefaultLabel", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors"};
+		application.$wheels.functions.textFieldTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel=""};
+		application.$wheels.functions.timeAgoInWords = {includeSeconds=false};
+		application.$wheels.functions.timeSelect = {label=false, labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", errorElement="span", errorClass="fieldWithErrors", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1, secondStep=1};
+		application.$wheels.functions.timeSelectTags = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, order="hour,minute,second", separator=":", minuteStep=1, secondStep=1};
+		application.$wheels.functions.timeUntilInWords = {includeSeconds=false};
+		application.$wheels.functions.toggle = {save=true};
+		application.$wheels.functions.truncate = {length=30, truncateString="..."};
+		application.$wheels.functions.update = {parameterize=true, reload=false};
+		application.$wheels.functions.updateAll = {reload=false, parameterize=true, instantiate=false};
+		application.$wheels.functions.updateByKey = {reload=false};
+		application.$wheels.functions.updateOne = {reload=false};
+		application.$wheels.functions.updateProperty = {parameterize=true};
+		application.$wheels.functions.updateProperties = {parameterize=true};
+		application.$wheels.functions.URLFor = {onlyPath=true, host="", protocol="", port=0};
+		application.$wheels.functions.validatesConfirmationOf = {message="[property] should match confirmation"};
+		application.$wheels.functions.validatesExclusionOf = {message="[property] is reserved", allowBlank=false};
+		application.$wheels.functions.validatesFormatOf = {message="[property] is invalid", allowBlank=false};
+		application.$wheels.functions.validatesInclusionOf = {message="[property] is not included in the list", allowBlank=false};
+		application.$wheels.functions.validatesLengthOf = {message="[property] is the wrong length", allowBlank=false, exactly=0, maximum=0, minimum=0, within=""};
+		application.$wheels.functions.validatesNumericalityOf = {message="[property] is not a number", allowBlank=false, onlyInteger=false, odd="", even="", greaterThan="", greaterThanOrEqualTo="", equalTo="", lessThan="", lessThanOrEqualTo=""};
+		application.$wheels.functions.validatesPresenceOf = {message="[property] can't be empty"};
+		application.$wheels.functions.validatesUniquenessOf = {message="[property] has already been taken", allowBlank=false};
+		application.$wheels.functions.verifies = {handler=""};
+		application.$wheels.functions.wordTruncate = {length=5, truncateString="..."};
+		application.$wheels.functions.yearSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, startYear=Year(Now())-5, endYear=Year(Now())+5};
+
+		// mime types
+		application.$wheels.mimetypes = {txt="text/plain", gif="image/gif", jpg="image/jpg", jpeg="image/jpg", pjpeg="image/jpg", png="image/png", wav="audio/wav", mp3="audio/mpeg3", pdf="application/pdf", zip="application/zip", ppt="application/powerpoint", pptx="application/powerpoint", doc="application/word", docx="application/word", xls="application/excel", xlsx="application/excel"};
+
+		// set a flag to indicate that all wheels settings have been loaded
+		application.$wheels.initialized = true;
 
 		// load general developer settings first, then override with environment specific ones
-		$include(template="#application._wheels.configPath#/settings.cfm");
-		$include(template="#application._wheels.configPath#/#application._wheels.environment#/settings.cfm");
+		$include(template="config/settings.cfm");
+		$include(template="config/#application.$wheels.environment#/settings.cfm");
 
-		if(application._wheels.clearQueryCacheOnReload)
+		if(application.$wheels.clearQueryCacheOnReload)
 		{
 			$objectcache(action="clear");
 		}
@@ -106,7 +345,7 @@
 		$loadPlugins();
 		
 		// allow developers to inject plugins into the application variables scope
-		if (!StructIsEmpty(application._wheels.mixins))
+		if (!StructIsEmpty(application.$wheels.mixins))
 		{
 			$include(template="wheels/plugins/injection.cfm");
 		}
@@ -115,11 +354,11 @@
 		$loadRoutes();
 
 		// create the dispatcher that will handle all incoming requests
-		application._wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
+		application.$wheels.dispatch = $createObjectFromRoot(path="wheels", fileName="Dispatch", method="$init");
 
 		// assign it all to the application scope in one atomic call
-		application.wheels = application._wheels;
-		StructDelete(application, "_wheels");
+		application.wheels = application.$wheels;
+		StructDelete(application, "$wheels");
 
 		// run the developer's on application start code
 		$include(template="#application.wheels.eventPath#/onapplicationstart.cfm");
