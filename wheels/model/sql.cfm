@@ -112,9 +112,13 @@
 							loc.toAdd = "";
 							loc.classData = loc.classes[loc.j];
 							if (ListFindNoCase(loc.classData.propertyList, loc.property))
+							{
 								loc.toAdd = loc.classData.tableName & "." & loc.classData.properties[loc.property].column;
+							}
 							else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.property))
-								loc.toAdd = Replace(loc.classData.calculatedProperties[loc.property].sql, ",", "[[comma]]", "all");
+							{
+								loc.toAdd = "(" & Replace(loc.classData.calculatedProperties[loc.property].sql, ",", "[[comma]]", "all") & ")";
+							}
 							if (Len(loc.toAdd))
 							{
 								if (!ListFindNoCase(loc.classData.columnList, loc.property))
@@ -272,7 +276,7 @@
 						}
 						else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem) && arguments.addCalculatedProperties)
 						{
-							loc.toAppend = loc.toAppend & "(" & Replace(loc.classData.calculatedProperties[loc.iItem].sql, ",", "[[comma]]", "all") & ") AS " & loc.iItem;
+							loc.toAppend &= "(" & Replace(loc.classData.calculatedProperties[loc.iItem].sql, ",", "[[comma]]", "all") & ") AS " & loc.iItem;
 						}
 						loc.addedPropertiesByModel[loc.classData.modelName] = ListAppend(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem);
 						break;
@@ -417,7 +421,7 @@
 							}
 							else if (ListFindNoCase(loc.classData.calculatedPropertyList, ListLast(loc.param.property, ".")))
 							{
-								loc.param.column = loc.classData.calculatedProperties[ListLast(loc.param.property, ".")].sql;
+								loc.param.column = "(" & loc.classData.calculatedProperties[ListLast(loc.param.property, ".")].sql & ")";
 								break;
 							}
 						}
