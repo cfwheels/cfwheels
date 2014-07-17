@@ -36,12 +36,21 @@
 	<cfargument name="action" type="string" required="false" default="" hint="Action to call when route matches (unless the action name exists in the pattern).">
 	<cfscript>
 		var loc = {};
+		loc.appKey = "wheels";
+		if (StructKeyExists(application, "_wheels"))
+		{
+			loc.appKey = "_wheels";
+		}
 
 		// throw errors when controller or action is not passed in as arguments and not included in the pattern
 		if (!Len(arguments.controller) && arguments.pattern Does Not Contain "[controller]")
+		{
 			$throw(type="Wheels.IncorrectArguments", message="The `controller` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `controller` argument to specifically tell Wheels which controller to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
+		}
 		if (!Len(arguments.action) && arguments.pattern Does Not Contain "[action]")
+		{
 			$throw(type="Wheels.IncorrectArguments", message="The `action` argument is not passed in or included in the pattern.", extendedInfo="Either pass in the `action` argument to specifically tell Wheels which action to call or include it in the pattern to tell Wheels to determine it dynamically on each request based on the incoming URL.");
+		}
 
 		loc.thisRoute = Duplicate(arguments);
 		loc.thisRoute.variables = "";
@@ -55,11 +64,12 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(loc.thisRoute.pattern, loc.i, "/");
-
 			if (REFind("^\[", loc.item))
+			{
 				loc.thisRoute.variables = ListAppend(loc.thisRoute.variables, ReplaceList(loc.item, "[,]", ""));
+			}
 		}
-		ArrayAppend(application.wheels.routes, loc.thisRoute);
+		ArrayAppend(application[loc.appKey].routes, loc.thisRoute);
 	</cfscript>
 </cffunction>
 
