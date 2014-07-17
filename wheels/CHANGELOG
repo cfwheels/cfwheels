@@ -8,6 +8,7 @@ Model Enhancements
 View Enhancements
 =================
 
+* New "aroundRight" option on the "labelPlacement" argument that places the label text to the right of the form input - [Adam Chapman, Per Djurner]
 * Support for HTML5 boolean attributes - [Per Djurner]
 * Ability to remove media / type attributes when using styleSheetLinkTag and JavaScriptIncludeTag - [Per Djurner]
 * Setting to convert, for example, dataDomCache or data_dom_cache (default) view helper argument names to data-dom-cache attribute names - [Per Djurner]
