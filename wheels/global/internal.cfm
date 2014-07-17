@@ -749,15 +749,22 @@
 
 <cffunction name="$loadRoutes" returntype="void" access="public" output="false">
 	<cfscript>
+		var loc = {};
+		loc.appKey = "wheels";
+		if (StructKeyExists(application, "_wheels"))
+		{
+			loc.appKey = "_wheels";
+		}
+
 		// clear out the route info
-		ArrayClear(application.wheels.routes);
-		StructClear(application.wheels.namedRoutePositions);
+		ArrayClear(application[loc.appKey].routes);
+		StructClear(application[loc.appKey].namedRoutePositions);
 
 		// load developer routes first
-		$include(template="#application.wheels.configPath#/routes.cfm");
+		$include(template="#application[loc.appKey].configPath#/routes.cfm");
 
 		// add the wheels default routes at the end if requested
-		if (application.wheels.loadDefaultRoutes)
+		if (application[loc.appKey].loadDefaultRoutes)
 		{
 			addDefaultRoutes();
 		}
@@ -770,15 +777,22 @@
 <cffunction name="$setNamedRoutePositions" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		loc.iEnd = ArrayLen(application.wheels.routes);
+		loc.appKey = "wheels";
+		if (StructKeyExists(application, "_wheels"))
+		{
+			loc.appKey = "_wheels";
+		}
+		loc.iEnd = ArrayLen(application[loc.appKey].routes);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			loc.route = application.wheels.routes[loc.i];
+			loc.route = application[loc.appKey].routes[loc.i];
 			if (StructKeyExists(loc.route, "name") && len(loc.route.name))
 			{
-				if (!StructKeyExists(application.wheels.namedRoutePositions, loc.route.name))
-					application.wheels.namedRoutePositions[loc.route.name] = "";
-				application.wheels.namedRoutePositions[loc.route.name] = ListAppend(application.wheels.namedRoutePositions[loc.route.name], loc.i);
+				if (!StructKeyExists(application[loc.appKey].namedRoutePositions, loc.route.name))
+				{
+					application[loc.appKey].namedRoutePositions[loc.route.name] = "";
+				}
+				application[loc.appKey].namedRoutePositions[loc.route.name] = ListAppend(application[loc.appKey].namedRoutePositions[loc.route.name], loc.i);
 			}
 		}
 		</cfscript>
