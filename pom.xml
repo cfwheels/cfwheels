@@ -40,6 +40,7 @@ Benefits of embedded-container-test versus full-integration-test
 		<testServer>http://localhost:8080</testServer>
 		<deployUrl></deployUrl>
 		<testSubfolder>false</testSubfolder>
+		<testParallelStart>false</testParallelStart>
 		<!-- settings for Oracle emulation -->
 		<testOracleEmulation>false</testOracleEmulation>
 	</properties>
@@ -90,6 +91,7 @@ Benefits of embedded-container-test versus full-integration-test
 						<deployUrl>${deployUrl}</deployUrl>
 						<testOracleEmulation>${testOracleEmulation}</testOracleEmulation>
 						<testSubfolder>${testSubfolder}</testSubfolder>
+						<testParallelStart>${testParallelStart}</testParallelStart>
 					</systemPropertyVariables>
 				</configuration>
 				<executions>
