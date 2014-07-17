@@ -81,12 +81,12 @@
 				
 			loc.currentRoute = loc.route.pattern;
 			if (loc.currentRoute == "*") {
-				loc.returnValue = loc.route;
+				loc.returnValue = Duplicate(application.wheels.routes[loc.i]);
 				break;
 			} 
 			else if (arguments.path == "" && loc.currentRoute == "")
 			{
-				loc.returnValue = loc.route;
+				loc.returnValue = Duplicate(application.wheels.routes[loc.i]);
 				break;
 			}
 			else if (ListLen(arguments.path, "/") gte ListLen(loc.currentRoute, "/") && loc.currentRoute != "")
@@ -103,7 +103,7 @@
 				}
 				if (loc.match)
 				{
-					loc.returnValue = loc.route;
+					loc.returnValue = Duplicate(application.wheels.routes[loc.i]);
 					if (len(loc.format))
 					{
 						loc.returnValue[ReplaceList(loc.format, "[,]", "")] = $getFormatFromRequest(pathInfo=arguments.path);
