@@ -102,20 +102,6 @@
 			$objectcache(action="clear");
 		}
 
-		// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
-		loc.allowedGlobalMethods = "get,set,addroute,addDefaultRoutes";
-		loc.protectedControllerMethods = StructKeyList($createObjectFromRoot(path=application._wheels.controllerPath, fileName="Wheels", method="$initControllerClass"));
-		application._wheels.protectedControllerMethods = "";
-		loc.iEnd = ListLen(loc.protectedControllerMethods);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			loc.method = ListGetAt(loc.protectedControllerMethods, loc.i);
-			if (Left(loc.method, 1) != "$" && !ListFindNoCase(loc.allowedGlobalMethods, loc.method))
-			{
-				application._wheels.protectedControllerMethods = ListAppend(application._wheels.protectedControllerMethods, loc.method);
-			}
-		}
-
 		// reload the plugins each time we reload the application
 		$loadPlugins();
 		
