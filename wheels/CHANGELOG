@@ -24,6 +24,7 @@ Controller Enhancements
 Other Enhancements
 ==================
 
+* Fixes issue with running Wheels with strict scope cascading enabled in Railo - [Jason Weible]
 * Made application start-up thread safe - [Per Djurner]
 * Performance improvement for locking - [Per Djurner]
 * Case insensitive loading of controllers and models - [Per Djurner]
