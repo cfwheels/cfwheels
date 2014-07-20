@@ -35,22 +35,22 @@ View Enhancements
 [BACKPORTED] Added global Setting ("dataAttributeDelimiter") to convert, for example, "dataDomCache" or "data_dom_cache" (the default) argument names to "data-dom-cache" attribute names - [Per Djurner]
 [ALREADY RELEASED] Add delimiter argument to the highlight() function - [Per Djurner]
 [ALREADY RELEASED] Provided an option to use the more semantically correct HTML5 "mark" tag in the highlight() function - [Per Djurner]
-[DO NOT BACKPORT YET] Changed so that when passing in an array of structs to select(), selectTag() it uses the struct key as the option tag value and the struct value as the option tag text instead of vice versa - [Per Djurner]
+[BREAKING CHANGE = 2.0] Changed so that when passing in an array of structs to select(), selectTag() it uses the struct key as the option tag value and the struct value as the option tag text instead of vice versa - [Per Djurner]
 
 Controller Enhancements
 =======================
 [DO NOT BACKPORT YET] Speed improvement for finding routes when using a large amount of named routes - [James Gibson]
 [DO NOT BACKPORT YET] Wheels now compacts the output of the rendered content - [James Gibson]
-* Added the ability to pass through arguments from the view to the Data Function in the controller - [Per Djurner]
+[BACKPORTED] Added the ability to pass through arguments from the view to the Data Function in the controller - [Per Djurner]
 * Changed so that cookies (when using them as storage for the Flash) are HTTPOnly and secure (when applicable) - [Per Djurner]
 [DO NOT BACKPORT YET] Stripped line break characters from internal "cfheader" and "cfmail" usage for improved security - [Per Djurner]
 [DO NOT BACKPORT YET] RedirectTo can now redirect to external urls via the `url` argument - [Adam Chapman, Tony Petruzzi]
 
 Other Enhancements
 ==================
-[DO NOT BACKPORT YET] Added automatic caching in production mode of function results based on the arguments passed in - [Per Djurner]
+[DROP] Added automatic caching in production mode of function results based on the arguments passed in - [Per Djurner]
 [ALREADY RELEASED] Plugin functions can now be injected into base model adapter and model connection components - [Per Djurner]
-[DO NOT BACKPORT YET] Added support for Unobstructive Javascript - [Raul Riera]
+[DROP] Added support for Unobstructive Javascript - [Raul Riera]
 [ALREADY RELEASED] Added proper HTTP status headers - #705 [cfconcepts, Andy Bellenie]
 [ALREADY RELEASED] Added favicon to URL rewrite exclusions [Troy Murray, Cathy Shapiro]
 * Adds helper for utc timestamps [Andy Bellenie]
@@ -82,18 +82,18 @@ Bug Fixes
 [ALREADY RELEASED] radioButtonTag() checked attribute was ignored if value attribute is empty - [Per Djurner]
 * Fixed error when using hyphenated attributes in linkTo() - [Per Djurner]
 [BACKPORTED] Plugins with global mixin are ignored in unit tests - [Singgih Cahyono, Tony Petruzzi]
-[DO NOT BACKPORT YET] startFormTag, submitTag, linkTo, buttonTo now use unobtrusive javascript - [Raul Rivera]
+[DROP] startFormTag, submitTag, linkTo, buttonTo now use unobtrusive javascript - [Raul Rivera]
 
 Miscellaneous
 =============
 [BACKPORTED, BUT SET TO 4.2.1.000 INSTEAD] Railo minimum version is now 3.3.1.000
-[DO NOT BACKPORT YET] Removed the "cacheDatabaseSchema" setting, "cacheModelInitialization" should now be used instead - [Per Djurner]
-[DO NOT BACKPORT YET] Added commented out settig for plugin development in design mode - #782 [Tony Petruzzi]
-[DO NOT BACKPORT YET] Added $inspect method to return the variables scope of objects - #820 [Tony Petruzzi]
-[DO NOT BACKPORT YET] Renamed `renderPage` to `renderView` - #363 [Andy Bellenie, Tony Petruzzi]
+[DROP] Removed the "cacheDatabaseSchema" setting, "cacheModelInitialization" should now be used instead - [Per Djurner]
+[DROP] Added commented out settig for plugin development in design mode - #782 [Tony Petruzzi]
+[DROP] Added $inspect method to return the variables scope of objects - #820 [Tony Petruzzi]
+[BREAKING CHANGE = 2.0] Renamed `renderPage` to `renderView` - #363 [Andy Bellenie, Tony Petruzzi]
 [BACKPORTED] Case insensitive loading of controllers and models - [Per Djurner]
 [DO NOT BACKPORT YET] Allow placement of models in subfolder - [Tim Badolato, Tony Petruzzi]
 [DO NOT BACKPORT YET] External paths for imagePath - [andoradmiraal, Tony Petruzzi]
-[DO NOT BACKPORT YET] Removal of obfuscateParam and deobfuscateParam functionality - [Tony Petruzzi]
-[DO NOT BACKPORT YET] Removed the ability to switch environment through the url unless specified in config/settings.cfm - [Andy Bellenie, Tony Petruzzi]
+[DROP] Removal of obfuscateParam and deobfuscateParam functionality - [Tony Petruzzi]
+[DROP] Removed the ability to switch environment through the url unless specified in config/settings.cfm - [Andy Bellenie, Tony Petruzzi]
 [ALREADY RELEASED] Turned off URL rewriting in IIS 7 by default since otherwise it will throw an error when the URL Rewrite Module is not installed - [Per Djurner]
