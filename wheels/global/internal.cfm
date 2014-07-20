@@ -267,10 +267,16 @@
 		loc.callingPath = Replace(GetBaseTemplatePath(), "\", "/", "all");
 		if (ListLen(loc.callingPath, "/") > ListLen(loc.applicationPath, "/") || GetFileFromPath(loc.callingPath) == "root.cfm")
 		{
-			$header(statusCode="404", statusText="Not Found");
-			if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "eventPath"))
+			if (StructKeyExists(application, "wheels"))
 			{
-				$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
+				if (StructKeyExists(application.wheels, "showErrorInformation") && !application.wheels.showErrorInformation)
+				{
+					$header(statusCode=404, statustext="Not Found");
+				}
+				if (StructKeyExists(application.wheels, "eventPath"))
+				{
+					$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
+				}
 			}
 			$abort();
 		}

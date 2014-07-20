@@ -63,6 +63,7 @@
 			}
 			if (!Len(application.wheels.ipExceptions) || !ListFind(application.wheels.ipExceptions, request.cgi.remote_addr))
 			{
+				$header(statusCode=503, statustext="Service Unavailable");
 				$includeAndOutput(template="#application.wheels.eventPath#/onmaintenance.cfm");
 				$abort();
 			}

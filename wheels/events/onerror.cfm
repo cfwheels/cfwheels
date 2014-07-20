@@ -23,7 +23,6 @@
 	<cfargument name="eventName" type="any" required="true">
 	<cfscript>
 		var loc = {};
-
 		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "initialized"))
 		{
 			if (application.wheels.sendEmailOnError && Len(application.wheels.errorEmailAddress))
@@ -41,13 +40,16 @@
 				StructDelete(loc.mailArgs, "detectMultiPart", false);
 				$mail(argumentCollection=loc.mailArgs);
 			}
-	
 			if (application.wheels.showErrorInformation)
 			{
 				if (StructKeyExists(arguments.exception, "rootCause") && Left(arguments.exception.rootCause.type, 6) == "Wheels")
+				{
 					loc.wheelsError = arguments.exception.rootCause;
+				}
 				else if (StructKeyExists(arguments.exception, "cause") && StructKeyExists(arguments.exception.cause, "rootCause") && Left(arguments.exception.cause.rootCause.type, 6) == "Wheels") 
+				{
 					loc.wheelsError = arguments.exception.cause.rootCause;
+				}
 				if (StructKeyExists(loc, "wheelsError"))
 				{
 					loc.returnValue = $includeAndReturnOutput($template="wheels/styles/header.cfm");
