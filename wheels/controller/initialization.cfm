@@ -74,7 +74,7 @@
 					application.wheels.nonExistingHelperFiles = ListAppend(application.wheels.nonExistingHelperFiles, arguments.name);
 			}
 		}
-		if (ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) || loc.helperFileExists)
+		if (Len(arguments.name) && ListFindNoCase(application.wheels.existingHelperFiles, arguments.name) || loc.helperFileExists)
 			$include(template="#application.wheels.viewPath#/#arguments.name#/helpers.cfm");
 
 		loc.executeArgs = {};
