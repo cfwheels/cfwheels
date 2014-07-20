@@ -19,6 +19,7 @@ View Enhancements
 Controller Enhancements
 =======================
 
+* Added the ability to pass through arguments from the view to the data Function in the controller - [Per Djurner]
 * Made setPagination() available from the controller layer - [Per Djurner]
 
 Other Enhancements

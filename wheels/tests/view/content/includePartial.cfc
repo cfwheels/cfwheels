@@ -23,6 +23,11 @@
 		<cfset assert("result IS 'Apple,Banana,Kiwi'")>
 	</cffunction>
 
+	<cffunction name="test_including_partial_loading_data_allowed_from_explicit_public_method_with_arg">
+		<cfsavecontent variable="result"><cfoutput>#loc.controller.includePartial(partial="partialDataExplicitPublic", dataFunction="partialDataExplicitPublic", passThrough=1)#</cfoutput></cfsavecontent>
+		<cfset assert("result IS 'Apple,Banana,Kiwi,passThroughWorked'")>
+	</cffunction>
+
 	<cffunction name="test_including_partial_loading_data_not_allowed_from_implicit_public_method">
 		<cfset result = "">
 		<cftry>
