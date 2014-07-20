@@ -47,10 +47,10 @@
 		
 		<cfloop query="loc.folders">
 			<cfset loc.temp = {}>
-			<cfset loc.temp.name = name>
-			<cfset loc.temp.folderPath = $fullPathToPlugin(name)>
-			<cfset loc.temp.componentName = lcase(name) & "." & name>
-			<cfset loc.plugins[name] = loc.temp>
+			<cfset loc.temp.name = loc.folders.name>
+			<cfset loc.temp.folderPath = $fullPathToPlugin(loc.folders.name)>
+			<cfset loc.temp.componentName = lcase(loc.folders.name) & "." & loc.folders.name>
+			<cfset loc.plugins[loc.folders.name] = loc.temp>
 		</cfloop>
 		
 		<cfreturn loc.plugins>
@@ -67,8 +67,8 @@
 		<cfloop query="loc.files">
 			<cfset loc.name = ListFirst(name, "-")>
 			<cfset loc.temp = {}>
-			<cfset loc.temp.file = $fullPathToPlugin(name)>
-			<cfset loc.temp.name = name>
+			<cfset loc.temp.file = $fullPathToPlugin(loc.files.name)>
+			<cfset loc.temp.name = loc.files.name>
 			<cfset loc.temp.folderPath = $fullPathToPlugin(loc.name)>
 			<cfset loc.temp.folderExists = directoryExists(loc.temp.folderPath)>
 			<cfset loc.plugins[loc.name] = loc.temp>
