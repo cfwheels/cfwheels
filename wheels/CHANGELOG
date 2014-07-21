@@ -44,7 +44,7 @@ Controller Enhancements
 [DO NOT BACKPORT YET] Wheels now compacts the output of the rendered content - [James Gibson]
 [DO NOT BACKPORT YET] Stripped line break characters from internal "cfheader" and "cfmail" usage for improved security - [Per Djurner]
 [DROP] RedirectTo can now redirect to external urls via the `url` argument - [Adam Chapman, Tony Petruzzi]
-[BACKPORTED] Changed so that cookies (when using them as storage for the Flash) are HTTPOnly and secure (when applicable) - [Per Djurner]
+[DROP] Changed so that cookies (when using them as storage for the Flash) are HTTPOnly and secure (when applicable) - [Per Djurner]
 
 Other Enhancements
 ==================
