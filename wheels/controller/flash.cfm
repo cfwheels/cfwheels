@@ -29,9 +29,13 @@
 		if (StructKeyExists(arguments, "key"))
 		{
 			if (flashKeyExists(key=arguments.key, $flash=$flash))
+			{
 				$flash = $flash[arguments.key];
+			}
 			else
+			{
 				$flash = "";
+			}
 		}
 		// we can just return the flash since it is created at the beginning of the request
 		// this way we always return what is expected - a struct
@@ -211,23 +215,21 @@
 	<cfargument name="includeEmptyContainer" type="boolean" required="false" hint="Includes the DIV container even if the flash is empty.">
 	<cfargument name="lowerCaseDynamicClassValues" type="boolean" required="false" hint="Outputs all class attribute values in lower case (except the main one).">
 	<cfscript>
-		// Initialization
 		var loc = {};
 		loc.$flash = $readFlash();
 		loc.returnValue = "";
-
 		$args(name="flashMessages", args=arguments);
 		$combineArguments(args=arguments, combine="keys,key", required=false);
 
 		// If no keys are requested, populate with everything stored in the Flash and sort them
-		if(!StructKeyExists(arguments, "keys"))
+		if (!StructKeyExists(arguments, "keys"))
 		{
 			loc.flashKeys = StructKeyList(loc.$flash);
 			loc.flashKeys = ListSort(loc.flashKeys, "textnocase");
 		}
-		// Otherwise, generate list based on what was passed as `arguments.keys`
 		else
 		{
+			// Otherwise, generate list based on what was passed as "arguments.keys"
 			loc.flashKeys = arguments.keys;
 		}
 
@@ -239,14 +241,16 @@
 			loc.item = ListGetAt(loc.flashKeys, loc.i);
 			loc.class = loc.item & "Message";
 			if (arguments.lowerCaseDynamicClassValues)
+			{
 				loc.class = LCase(loc.class);
+			}
 			loc.attributes = {class=loc.class};
 			if (!StructKeyExists(arguments, "key") || arguments.key == loc.item)
 			{
 				loc.content = loc.$flash[loc.item];
 				if (IsSimpleValue(loc.content))
 				{
-					loc.listItems = loc.listItems & $element(name="p", content=loc.content, attributes=loc.attributes);
+					loc.listItems &= $element(name="p", content=loc.content, attributes=loc.attributes);
 				}
 			}
 		}
@@ -261,50 +265,78 @@
 
 <cffunction name="$readFlash" returntype="struct" access="public" output="false">
 	<cfscript>
+		var loc = {};
+		loc.flash = {};
 		if (!StructKeyExists(arguments, "$locked"))
 		{
 			return $simpleLock(name="flashLock", type="readonly", execute="$readFlash", executeArgs=arguments);
 		}
 		if ($getFlashStorage() == "cookie" && StructKeyExists(cookie, "flash"))
 		{
-			return DeSerializeJSON(cookie.flash);
+			loc.flash = DeSerializeJSON(cookie.flash);
 		}
 		else if ($getFlashStorage() == "session" && StructKeyExists(session, "flash"))
 		{
-			return Duplicate(session.flash);
+			loc.flash = Duplicate(session.flash);
 		}
-		return StructNew();
+		if (StructKeyExists(request.wheels, "flash"))
+		{
+			// this is done so flash set can be read on the same page (i.e. when not doing a redirectTo)
+			// the reason for this is that cookies set through cfheader can only be read on the next request
+			StructAppend(loc.flash, request.wheels.flash);
+		}
+		return loc.flash;
 	</cfscript>
 </cffunction>
 
 <cffunction name="$writeFlash" returntype="void" access="public" output="false">
 	<cfargument name="flash" type="struct" required="false" default="#StructNew()#">
 	<cfscript>
+		var loc = {};
+		loc.flashStorage = $getFlashStorage();
 		if (!StructKeyExists(arguments, "$locked"))
 		{
 			return $simpleLock(name="flashLock", type="exclusive", execute="$writeFlash", executeArgs=arguments);
 		}
-		if ($getFlashStorage() == "cookie")
+		if (loc.flashStorage == "session")
 		{
-			cookie.flash = SerializeJSON(arguments.flash);
+			session.flash = arguments.flash;;
 		}
 		else
 		{
-			session.flash = arguments.flash;
+			// flashStorage setting is either "cookie" or "secureCookie"
+			loc.domain = request.cgi.server_name;
+			if (loc.domain Contains ".")
+			{
+				// exclude sub domains (e.g. wiki.cfwheels.org becomes cfwheels.org)
+				loc.domain = Reverse(ListGetAt(Reverse(loc.domain), 2,".")) & "." & Reverse(ListGetAt(Reverse(loc.domain), 1, "."));
+			}
+			loc.args = {};
+			loc.args.name = "Set-Cookie";
+			loc.args.value = "flash=" & SerializeJSON(arguments.flash) & ";Path=/;Domain=." & loc.domain & ";HttpOnly";
+			if (loc.flashStorage == "secureCookie" && isSecure())
+			{
+				loc.args.value &= ";Secure";
+			}
+			$header(argumentCollection=loc.args);
 		}
+		request.wheels.flash = arguments.flash;
 	</cfscript>
 </cffunction>
 
 <cffunction name="$flashClear" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
+
 		// only save the old flash if they want to keep anything
 		if (StructKeyExists(request.wheels, "flashKeep"))
 		{
 			loc.$flash = $readFlash();
 		}
+
 		// clear the current flash
 		flashClear();
+		
 		// see if they wanted to keep anything
 		if (StructKeyExists(loc, "$flash"))
 		{
@@ -319,6 +351,7 @@
 					}
 				}
 			}
+			
 			// write to the flash
 			$writeFlash(loc.$flash);
 		}
