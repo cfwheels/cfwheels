@@ -37,6 +37,7 @@ Other Enhancements
 Bug Fixes
 =========
 
+* Added missing "validate" argument to create() - [Andy Bellenie]
 * Fixed issue with deleting plugins on case sensitive systems - [Mark Moran]
 * Make sure the latest version of a plugin is unpacked if multiple versions exists - [Tony Petruzzi]
 * Fixed so the "onApplicationEnd" and "onSessionEnd" events pass through the arguments scope [Per Djurner]
