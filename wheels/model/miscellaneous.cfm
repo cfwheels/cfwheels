@@ -53,10 +53,18 @@
 	'
 	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,table">
 	<cfargument name="property" type="string" required="true" hint="Property (or list of properties) to set as the primary key.">
-	<cfset var loc = {}>
-	<cfloop list="#arguments.property#" index="loc.i">
-		<cfset variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.i)>
-	</cfloop>
+	<cfscript>
+		var loc = {};
+		loc.iEnd = ListLen(arguments.property);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.element = ListGetAt(arguments.property, loc.i);
+			if (!ListFindNoCase(variables.wheels.class.keys, loc.element))
+			{
+				variables.wheels.class.keys = ListAppend(variables.wheels.class.keys, loc.element);
+			}
+		}
+	</cfscript>
 </cffunction>
 
 <cffunction name="setPrimaryKeys" returntype="void" access="public" output="false" hint="Alias for @setPrimaryKey. Use this for better readability when you're setting multiple properties as the primary key."

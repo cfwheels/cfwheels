@@ -5,6 +5,7 @@ Model Enhancements
 
 * New global "modelRequireInit" setting that you can set to "true" to require an init function specified in all models - [Jonathan Smith]
 * Place surrounding parentheses on calculated properties in "where" and "order by" clauses - [Andy Bellenie, Per Djurner]
+* Check to see if a given primary key already exists before adding it through setPrimaryKey() - [Mark Moran]
 
 View Enhancements
 =================
