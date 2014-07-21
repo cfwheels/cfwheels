@@ -26,4 +26,10 @@
 		<cfset assert('not loc.posts.Recordcount')>
 	</cffunction>
 
+ 	<cffunction name="test_pagination_with_blank_where">
+		<cfset loc.author = loc.authorModel.findOne(where="firstName = 'Per'")>
+		<cfset loc.posts = loc.author.posts(where="", page=1, perPage=2)>
+		<cfset assert('loc.posts.Recordcount IS 2')>
+	</cffunction>
+
 </cfcomponent>

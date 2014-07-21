@@ -81,7 +81,7 @@
 			
 			// construct where clause
 			loc.addToWhere = ArrayToList(loc.addToWhere, " AND ");
-			arguments.missingMethodArguments.where = IIf(StructKeyExists(arguments.missingMethodArguments, "where"), "'(' & arguments.missingMethodArguments.where & ') AND (' & loc.addToWhere & ')'", "loc.addToWhere");
+			arguments.missingMethodArguments.where = IIf(StructKeyExists(arguments.missingMethodArguments, "where") && Len(arguments.missingMethodArguments.where), "'(' & arguments.missingMethodArguments.where & ') AND (' & loc.addToWhere & ')'", "loc.addToWhere");
 
 			// remove uneeded arguments
 			StructDelete(arguments.missingMethodArguments, "delimiter");
@@ -146,7 +146,7 @@
 				if (loc.info.type == "hasOne")
 				{
 					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=primaryKeys());
-					if (StructKeyExists(arguments.missingMethodArguments, "where"))
+					if (StructKeyExists(arguments.missingMethodArguments, "where") && Len(arguments.missingMethodArguments.where))
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasProfile" becomes "hasObject")
 					if (loc.name == "object")
@@ -217,7 +217,7 @@
 				else if (loc.info.type == "hasMany")
 				{
 					loc.where = $keyWhereString(properties=loc.info.foreignKey, keys=primaryKeys());
-					if (StructKeyExists(arguments.missingMethodArguments, "where"))
+					if (StructKeyExists(arguments.missingMethodArguments, "where") && Len(arguments.missingMethodArguments.where))
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					loc.singularKey = singularize(loc.key);
 					loc.name = ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, loc.key, "objects"), loc.singularKey, "object"); // create a generic method name (example: "hasComments" becomes "hasObjects")
@@ -365,7 +365,7 @@
 				else if (loc.info.type == "belongsTo")
 				{
 					loc.where = $keyWhereString(keys=loc.info.foreignKey, properties=loc.componentReference.primaryKeys());
-					if (StructKeyExists(arguments.missingMethodArguments, "where"))
+					if (StructKeyExists(arguments.missingMethodArguments, "where") && Len(arguments.missingMethodArguments.where))
 						loc.where = "(#loc.where#) AND (#arguments.missingMethodArguments.where#)";
 					loc.name = ReplaceNoCase(arguments.missingMethodName, loc.key, "object"); // create a generic method name (example: "hasAuthor" becomes "hasObject")
 					if (loc.name == "object")
