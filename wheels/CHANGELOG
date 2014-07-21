@@ -28,7 +28,7 @@ View Enhancements
 [BACKPORTED] Support for implicit protocol in JavaScriptIncludeTag() and styleSheetLinkTag() - [Per Djurner]
 [DO NOT BACKPORT YET] New form helpers radioButtonTagGroup() and checkBoxTagGroup() - [Chris Peters, Per Djurner]
 [BACKPORTED] New "aroundRight" option on "labelPlacement" argument that places label text to the right of the form input - [Per Djurner]
-[ALREADY RELEASED] Added "prepend" / "append" arguments on buttonTag() and submitTag() - [Per Djurner]
+[BACKPORTED] Added "prepend" / "append" arguments on buttonTag() and submitTag() - [Per Djurner]
 [BACKPORTED] Allow to show labels without text by specifying "label=true" from "Tag" type functions - [Per Djurner]
 [BACKPORTED] Support for boolean HTML5 attributes - [Per Djurner]
 [BACKPORTED] Ability to remove "media" / "type" attributes when using styleSheetLinkTag() and JavaScriptIncludeTag() - [Per Djurner]
