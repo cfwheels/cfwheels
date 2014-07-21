@@ -11,8 +11,8 @@ Model Enhancements
 [DROP] Added global setting ("stripFromSQL") to only include safe characters in raw SQL - [Per Djurner]
 [DROP] Add findFirst, findLast, findAllKeys, findOneOrCreateBy, findOrCreateBy - #745 [Mike Henke, Per Djurner, Tony Petruzzi]
 [DROP] Added "joinKey" on belongsTo(), hasOne() and hasMany() which allows you to specify a column to join to on the opposite side of the relationship from the "foreignKey" - [James Gibson]
+[DROP] Enables use of UTC for wheels timestamps [Andy Bellenie]
 * Allow for self joining tables in associations - #293 [James Gibson]
-* Enables use of UTC for wheels timestamps [Andy Bellenie]
 * Allow models to be created when with no properties - #84 [rshakespear, Tony Petruzzi]
 
 View Enhancements
@@ -61,7 +61,7 @@ Other Enhancements
 [DROP] Convert CFLOG to a global function - [Tony Petruzzi]
 [DROP] Added automatic caching in production mode of function results based on the arguments passed in - [Per Djurner]
 [DROP] Added support for Unobstructive Javascript - [Raul Riera]
-* Adds helper for utc timestamps [Andy Bellenie]
+[DROP] Adds helper for utc timestamps [Andy Bellenie]
 * Allow custom mailparams to by passed to sendEmail() - #85 [forday, Tony Petruzzi]
 
 Bug Fixes
