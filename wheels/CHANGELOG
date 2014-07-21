@@ -37,6 +37,7 @@ Other Enhancements
 Bug Fixes
 =========
 
+* Prevent stack overflow error with named arguments on dynamic update - [Tony Petruzzi]
 * Fixes pagination bug when using association methods with a blank "where" clause - [Andy Bellenie]
 * Added missing "validate" argument to create() - [Andy Bellenie]
 * Fixed issue with deleting plugins on case sensitive systems - [Mark Moran]
