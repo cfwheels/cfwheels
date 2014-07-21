@@ -13,9 +13,13 @@
 	<cfargument name="targetpage" type="any" required="true">
 	<cfscript>
 		if (application.wheels.showDebugInformation)
+		{
 			$debugPoint("requestEnd");
+		}
 		$include(template="#application.wheels.eventPath#/onrequestend.cfm");
 		if (application.wheels.showDebugInformation)
+		{
 			$debugPoint("requestEnd,total");
+		}
 	</cfscript>
 </cffunction>

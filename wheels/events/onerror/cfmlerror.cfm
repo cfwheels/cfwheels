@@ -1,10 +1,10 @@
 <cfoutput>
 	<h1>Summary</h1>
 	<p>
-		<strong>Error:</strong><br />
+		<strong>Error:</strong><br>
 		<cfif StructKeyExists(arguments.exception, "rootcause") and StructKeyExists(arguments.exception.rootcause, "message")>
 			#arguments.exception.rootcause.message#
-			<cfif arguments.exception.rootcause.detail IS NOT ""><br />#arguments.exception.rootcause.detail#</cfif>
+			<cfif arguments.exception.rootcause.detail IS NOT ""><br>#arguments.exception.rootcause.detail#</cfif>
 		<cfelse>
 			A root cause was not provided.
 		</cfif>
@@ -15,7 +15,7 @@
 		<cfset loc.tagContext = arguments.exception.rootCause.tagContext>
 	</cfif>
 	<cfif StructKeyExists(loc, "tagContext")>
-		<p><strong>Location:</strong><br />
+		<p><strong>Location:</strong><br>
 		<cfset loc.path = GetDirectoryFromPath(GetBaseTemplatePath())>
 		<cfset loc.pos = 0>
 		<cfloop array="#arguments.exception.cause.tagContext#" index="loc.i">
@@ -23,25 +23,25 @@
 			<cfset loc.template = Replace(arguments.exception.cause.tagContext[loc.pos].template, loc.path, "")>
 			<!--- show all non wheels lines --->
 			<cfif loc.template Does Not Contain "wheels" AND FindOneOf("/\", loc.template) IS NOT 0>
-				Line #arguments.exception.cause.tagContext[loc.pos].line# in #loc.template#<br />
+				Line #arguments.exception.cause.tagContext[loc.pos].line# in #loc.template#<br>
 			</cfif>
 		</cfloop>
 		</p>
 	</cfif>
 	<cfif IsDefined("application.wheels.rewriteFile")>
 		<p>
-			<strong>URL:</strong><br />
+			<strong>URL:</strong><br>
 			#LCase(ListFirst(cgi.server_protocol, "/"))#://#cgi.server_name##Replace(cgi.script_name, "/#application.wheels.rewriteFile#", "")##cgi.path_info#<cfif cgi.query_string IS NOT "">?#cgi.query_string#</cfif>
 		</p>
 	</cfif>
 	<cfif Len(cgi.http_referer)>
-		<p><strong>Referrer:</strong><br />#cgi.http_referer#</p>
+		<p><strong>Referrer:</strong><br>#cgi.http_referer#</p>
 	</cfif>
-	<p><strong>Method:</strong><br />#cgi.request_method#</p>
-	<p><strong>IP Address:</strong><br />#cgi.remote_addr#</p>
-	<p><strong>Host Name:</strong><br />#get("hostName")#</p>
-	<p><strong>User Agent:</strong><br />#cgi.http_user_agent#</p>
-	<p><strong>Date & Time:</strong><br />#DateFormat(now(), "MMMM D, YYYY")# at #TimeFormat(now(), "h:MM TT")#</p>
+	<p><strong>Method:</strong><br>#cgi.request_method#</p>
+	<p><strong>IP Address:</strong><br>#cgi.remote_addr#</p>
+	<p><strong>Host Name:</strong><br>#get("hostName")#</p>
+	<p><strong>User Agent:</strong><br>#cgi.http_user_agent#</p>
+	<p><strong>Date & Time:</strong><br>#DateFormat(now(), "MMMM D, YYYY")# at #TimeFormat(now(), "h:MM TT")#</p>
 	<cfset loc.scopes = "CGI,Form,URL,Application,Session,Request,Cookie,Arguments.Exception">
 	<cfset loc.skip = get("excludeFromErrorEmail")>
 	<!--- always skip cause since it's just a copy of rootCause anyway --->

@@ -25,44 +25,42 @@
 		<cfset loc.hasAppTests = false>
 	</cfif>
 </cfif>
-<cfset loc.hasBuilders = DirectoryExists(expandPath("#get('webPath')#/builders"))>
-
+<cfset loc.hasBuilders = DirectoryExists(ExpandPath("#get('webPath')#/builders"))>
+<cfsavecontent variable="loc.css">
+	<style>
+	#wheels-debug-area
+	{
+		clear: both;
+		margin: 50px 0;
+		text-align: left;
+		background: #ececec;
+		padding: 10px;
+		border-top: 3px solid #999;
+		border-bottom: 3px solid #999;
+	}
+	#wheels-debug-area td
+	{
+		font: 12px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+		line-height: 1.5em;
+		color: #333;
+		padding-right: 10px;
+	}
+	#wheels-debug-area a
+	{
+		color: #333;
+		text-decoration: underline;
+		padding: 0 1px;
+	}
+	#wheels-debug-area a:hover
+	{
+		color: #fff;
+		background: #333;
+		text-decoration: none;
+	}
+	</style>	
+</cfsavecontent>
+<cfset $htmlhead(text=loc.css)>
 <cfoutput>
-
-<style type="text/css">
-##wheels-debug-area
-{
-	clear: both;
-	margin: 100px 0;
-	text-align: left;
-	background: ##ececec;
-	padding: 10px;
-	border-top: 3px solid ##999;
-	border-bottom: 3px solid ##999;
-}
-
-##wheels-debug-area td
-{
-	font: 12px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-	line-height: 1.5em;
-	color: ##333;
-	padding-right: 10px;
-}
-
-##wheels-debug-area a
-{
-	color: ##333;
-	text-decoration: underline;
-	padding: 0 1px;
-}
-
-##wheels-debug-area a:hover
-{
-	color: ##fff;
-	background: ##333;
-	text-decoration: none;
-}
-</style>
 
 <div id="wheels-debug-area">
 	<table cellspacing="0" cellpadding="0">
