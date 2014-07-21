@@ -9,6 +9,7 @@ Model Enhancements
 View Enhancements
 =================
 
+* Added server host name to debug info and error email - [Colin MacAllister]
 * Made it possible to set a global default for the "twelveHour" argument on date / time helpers - [Per Djurner]
 * Added "prepend / "append" arguments on buttonTag() - [Per Djurner]
 * New "aroundRight" option on the "labelPlacement" argument that places the label text to the right of the form input - [Adam Chapman, Per Djurner]

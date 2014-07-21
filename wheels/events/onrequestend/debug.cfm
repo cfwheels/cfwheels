@@ -96,6 +96,10 @@
 			</td>
 		</tr>
 		<tr>
+			<td valign="top"><strong>Host Name:</strong></td>
+			<td>#get("hostName")#</td>
+		</tr>
+		<tr>
 			<td valign="top"><strong>CFML Engine:</strong></td>
 			<td>#get("serverName")# #get("serverVersion")#</td>
 		</tr>
