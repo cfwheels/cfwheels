@@ -42,7 +42,7 @@ Controller Enhancements
 [BACKPORTED] Added the ability to pass through arguments from the view to the Data Function in the controller - [Per Djurner]
 [DO NOT BACKPORT YET] Speed improvement for finding routes when using a large amount of named routes - [James Gibson]
 [DO NOT BACKPORT YET] Wheels now compacts the output of the rendered content - [James Gibson]
-[DO NOT BACKPORT YET] Stripped line break characters from internal "cfheader" and "cfmail" usage for improved security - [Per Djurner]
+[DROP] Stripped line break characters from internal "cfheader" and "cfmail" usage for improved security - [Per Djurner]
 [DROP] RedirectTo can now redirect to external urls via the `url` argument - [Adam Chapman, Tony Petruzzi]
 [DROP] Changed so that cookies (when using them as storage for the Flash) are HTTPOnly and secure (when applicable) - [Per Djurner]
 
@@ -54,9 +54,9 @@ Other Enhancements
 [BACKPORTED] Improved performance by avoiding a Duplicate() call when sending error emails - [Per Djurner]
 [BACKPORTED] General performance improvement for internal locking - [Per Djurner]
 [BACKPORTED] Pass along arguments to "onSessionEnd" so one can access the application and session scopes in the correct way inside "events/onsessionend.cfm" - [Per Djurner]
-[DO NOT BACKPORT YET] For security reasons, only allow .cfm files with normal characters to be included - [Per Djurner]
 [DO NOT BACKPORT YET] SendEmail() can accept external link and full paths attachments - [Adam Chapman, Tony Petruzzi]
-[DO NOT BACKPORT YET] Allow any variable type to be passed as params to urlFor() - [Tony Petruzzi]
+[DROP]  Allow any variable type to be passed as params to urlFor() - [Tony Petruzzi]
+[DROP] For security reasons, only allow .cfm files with normal characters to be included - [Per Djurner]
 [DROP] Allow different form and to email addresses in sendEmail() - #95 [Andy Bellenie, Tony Petruzzi]
 [DROP] Convert CFLOG to a global function - [Tony Petruzzi]
 [DROP] Added automatic caching in production mode of function results based on the arguments passed in - [Per Djurner]
@@ -87,7 +87,7 @@ Bug Fixes
 Miscellaneous
 =============
 [ALREADY RELEASED] Turned off URL rewriting in IIS 7 by default since otherwise it will throw an error when the URL Rewrite Module is not installed - [Per Djurner]
-[BACKPORTED, BUT SET TO 4.2.1.000 INSTEAD] Railo minimum version is now 3.3.1.000
+[BACKPORTED] Railo minimum version is now 3.3.1.000
 [BACKPORTED] Case insensitive loading of controllers and models - [Per Djurner]
 [DO NOT BACKPORT YET] Allow placement of models in subfolder - [Tim Badolato, Tony Petruzzi]
 [ISSUE CREATED] Renamed `renderPage` to `renderView` - #363 [Andy Bellenie, Tony Petruzzi]
