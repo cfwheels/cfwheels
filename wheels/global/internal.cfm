@@ -512,7 +512,7 @@
 		loc.dirInfo = $directory(directory=loc.path);
 		loc.fileList = ValueList(loc.dirInfo.name);
 
-		// loop through the file list and return true if the file exists regardless of case (the == operator is case insensitive)
+		// loop through the file list and return the file name if exists regardless of case (the == operator is case insensitive)
 		loc.iEnd = ListLen(loc.fileList);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
