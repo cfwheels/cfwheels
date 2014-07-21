@@ -243,10 +243,7 @@
 				{
 					ArrayAppend(loc.sql, loc.orderBy);
 				}
-				if (application.wheels.cacheDatabaseSchema)
-				{
-					$addToCache(key=loc.queryShellKey, value=loc.sql, category="sql");
-				}
+				$addToCache(key=loc.queryShellKey, value=loc.sql, category="sql");
 			}
 
 			// add where clause parameters to the generic sql info
