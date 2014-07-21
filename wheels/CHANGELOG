@@ -25,7 +25,6 @@ Controller Enhancements
 
 * Added the ability to pass through arguments from the view to the data Function in the controller - [Per Djurner]
 * Made setPagination() available from the controller layer - [Per Djurner]
-* Changed so that cookies (when using them as storage for the Flash) are HTTPOnly and secure (when applicable) - [Per Djurner]
 
 Other Enhancements
 ==================

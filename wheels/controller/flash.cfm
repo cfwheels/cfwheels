@@ -37,6 +37,7 @@
 				$flash = "";
 			}
 		}
+		
 		// we can just return the flash since it is created at the beginning of the request
 		// this way we always return what is expected - a struct
 		return $flash;
@@ -91,7 +92,7 @@
 		loc.$flash = $readFlash();
 		loc.iEnd = StructCount(arguments);
 		loc.keys = StructKeyList(arguments);
-		for(loc.i=1; loc.i lte loc.iEnd; loc.i++)
+		for(loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.key = ListGetAt(loc.keys, loc.i);
 			StructInsert(loc.$flash, loc.key, arguments[loc.key], true);
@@ -265,75 +266,50 @@
 
 <cffunction name="$readFlash" returntype="struct" access="public" output="false">
 	<cfscript>
-		var loc = {};
-		loc.flash = {};
 		if (!StructKeyExists(arguments, "$locked"))
 		{
 			return $simpleLock(name="flashLock", type="readonly", execute="$readFlash", executeArgs=arguments);
 		}
 		if ($getFlashStorage() == "cookie" && StructKeyExists(cookie, "flash"))
 		{
-			loc.flash = DeSerializeJSON(cookie.flash);
+			return DeSerializeJSON(cookie.flash);
 		}
 		else if ($getFlashStorage() == "session" && StructKeyExists(session, "flash"))
 		{
-			loc.flash = Duplicate(session.flash);
+			return Duplicate(session.flash);
 		}
-		if (StructKeyExists(request.wheels, "flash"))
-		{
-			// this is done so flash set can be read on the same page (i.e. when not doing a redirectTo)
-			// the reason for this is that cookies set through cfheader can only be read on the next request
-			StructAppend(loc.flash, request.wheels.flash);
-		}
-		return loc.flash;
+		return StructNew();
 	</cfscript>
 </cffunction>
 
 <cffunction name="$writeFlash" returntype="void" access="public" output="false">
 	<cfargument name="flash" type="struct" required="false" default="#StructNew()#">
 	<cfscript>
-		var loc = {};
-		loc.flashStorage = $getFlashStorage();
 		if (!StructKeyExists(arguments, "$locked"))
 		{
 			return $simpleLock(name="flashLock", type="exclusive", execute="$writeFlash", executeArgs=arguments);
 		}
-		if (loc.flashStorage == "session")
+		if ($getFlashStorage() == "cookie")
 		{
-			session.flash = arguments.flash;;
+			cookie.flash = SerializeJSON(arguments.flash);
 		}
 		else
 		{
-			// flashStorage setting is either "cookie" or "secureCookie"
-			loc.domain = request.cgi.server_name;
-			if (loc.domain Contains ".")
-			{
-				// exclude sub domains (e.g. wiki.cfwheels.org becomes cfwheels.org)
-				loc.domain = Reverse(ListGetAt(Reverse(loc.domain), 2,".")) & "." & Reverse(ListGetAt(Reverse(loc.domain), 1, "."));
-			}
-			loc.args = {};
-			loc.args.name = "Set-Cookie";
-			loc.args.value = "flash=" & SerializeJSON(arguments.flash) & ";Path=/;Domain=." & loc.domain & ";HttpOnly";
-			if (loc.flashStorage == "secureCookie" && isSecure())
-			{
-				loc.args.value &= ";Secure";
-			}
-			$header(argumentCollection=loc.args);
+			session.flash = arguments.flash;
 		}
-		request.wheels.flash = arguments.flash;
 	</cfscript>
 </cffunction>
 
 <cffunction name="$flashClear" returntype="void" access="public" output="false">
 	<cfscript>
 		var loc = {};
-
+		
 		// only save the old flash if they want to keep anything
 		if (StructKeyExists(request.wheels, "flashKeep"))
 		{
 			loc.$flash = $readFlash();
 		}
-
+		
 		// clear the current flash
 		flashClear();
 		
