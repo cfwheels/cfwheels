@@ -7,13 +7,7 @@
 			request.wheels.cache = {};
 			
 			// create a structure to track the transaction status for all adapters
-			request.wheels.transactions = {};
-	
-			// store cache info for output in debug area
-			request.wheels.cacheCounts = {};
-			request.wheels.cacheCounts.hits = 0;
-			request.wheels.cacheCounts.misses = 0;
-			request.wheels.cacheCounts.culls = 0;
+			request.wheels.transactions = {};	
 		}
 	</cfscript>
 </cffunction>
@@ -659,18 +653,10 @@
 		{
 			if (Now() > application.wheels.cache[arguments.category][arguments.key].expiresAt)
 			{
-				if (application.wheels.showDebugInformation)
-				{
-					request.wheels.cacheCounts.culls++;
-				}
 				$removeFromCache(key=arguments.key, category=arguments.category);
 			}
 			else
 			{
-				if (application.wheels.showDebugInformation)
-				{
-					request.wheels.cacheCounts.hits++;
-				}
 				if (IsSimpleValue(application.wheels.cache[arguments.category][arguments.key].value))
 				{
 					loc.returnValue = application.wheels.cache[arguments.category][arguments.key].value;
@@ -680,10 +666,6 @@
 					loc.returnValue = Duplicate(application.wheels.cache[arguments.category][arguments.key].value);
 				}
 			}
-		}
-		if (application.wheels.showDebugInformation && IsBoolean(loc.returnValue) && !loc.returnValue)
-		{
-			request.wheels.cacheCounts.misses++;
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>

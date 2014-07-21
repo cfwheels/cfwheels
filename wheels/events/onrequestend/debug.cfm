@@ -101,7 +101,7 @@
 		</tr>
 		<tr>
 			<td valign="top"><strong>Default Data Source:</strong></td>
-			<td>#get("dataSourceName")#</td>
+			<td>#capitalize(get("dataSourceName"))#</td>
 		</tr>
 		<tr>
 			<td valign="top"><strong>Active Environment:</strong></td>
@@ -122,16 +122,16 @@
 		<cfif StructKeyExists(request.wheels.params, "route")>
 			<tr>
 				<td valign="top"><strong>Route:</strong></td>
-				<td>#request.wheels.params.route#</td>
+				<td>#capitalize(request.wheels.params.route)#</td>
 			</tr>
 		</cfif>
 		<tr>
 			<td valign="top"><strong>Controller:</strong></td>
-			<td>#request.wheels.params.controller#</td>
+			<td>#capitalize(request.wheels.params.controller)#</td>
 		</tr>
 		<tr>
 			<td valign="top"><strong>Action:</strong></td>
-			<td>#request.wheels.params.action#</td>
+			<td>#capitalize(request.wheels.params.action)#</td>
 		</tr>
 		<cfif StructKeyExists(request.wheels.params, "key")>
 			<tr>
@@ -140,7 +140,7 @@
 			</tr>
 		</cfif>
 		<tr>
-			<td valign="top"><strong>Additional Params:</strong></td>
+			<td valign="top"><strong>Parameters:</strong></td>
 			<td>
 			<cfset loc.additionalParamsExists = false>
 			<cfloop collection="#request.wheels.params#" item="loc.i">
@@ -161,12 +161,12 @@
 			</td>
 		</tr>
 		<tr>
-			<td valign="top"><strong>Caching Stats:</strong></td>
-			<td><cfset loc.keys = StructSort(request.wheels.cacheCounts, "textnocase")><cfloop from="1" to="#arrayLen(loc.keys)#" index="loc.i"><cfset loc.key = loc.keys[loc.i]>#LCase(loc.key)#: #request.wheels.cacheCounts[loc.key]#<cfif loc.i lt ArrayLen(loc.keys)>,</cfif> </cfloop></td>
-		</tr>
-		<tr>
 			<td valign="top"><strong>Execution Time:</strong></td>
 			<td>#request.wheels.execution.total#ms<cfif request.wheels.execution.total GT 0> (<cfset loc.keys = StructSort(request.wheels.execution, "numeric", "desc")><cfset loc.firstDone = false><cfloop from="1" to="#arrayLen(loc.keys)#" index="loc.i"><cfset loc.key = loc.keys[loc.i]><cfif loc.key IS NOT "total" AND request.wheels.execution[loc.key] GT 0><cfif loc.firstDone>, </cfif>#LCase(loc.key)# ~#request.wheels.execution[loc.key]#ms<cfset loc.firstDone = true></cfif></cfloop>)</cfif></td>
+		</tr>
+		<tr>
+			<td valign="top"><strong>Help Links:</strong></td>
+			<td><a href="http://cfwheels.org/docs/#Replace(Left(get("version"), 3), ".", "-")#" target="_blank">Documentation</a>, <a href="http://groups.google.com/group/cfwheels" target="_blank">Google Group</a>, <a href="https://github.com/cfwheels/cfwheels/issues" target="_blank">Issue Tracker</a></td>
 		</tr>
 	</table>
 </div>
