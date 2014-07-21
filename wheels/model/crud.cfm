@@ -206,11 +206,17 @@
 		if (StructKeyExists(loc, "returnValue") && !Len(loc.returnValue))
 		{
 			if (arguments.returnAs == "query")
+			{
 				loc.returnValue = QueryNew("");
+			}
 			else if (singularize(arguments.returnAs) == arguments.returnAs)
+			{
 				loc.returnValue = false;
+			}
 			else
+			{
 				loc.returnValue = ArrayNew(1);
+			}
 		}
 		else if (!StructKeyExists(loc, "returnValue"))
 		{
@@ -229,11 +235,18 @@
 				loc.sql = $addWhereClause(sql=loc.sql, where=loc.originalWhere, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 				loc.groupBy = $groupByClause(select=arguments.select, group=arguments.group, include=arguments.include, distinct=arguments.distinct, returnAs=arguments.returnAs);
 				if (Len(loc.groupBy))
+				{
 					ArrayAppend(loc.sql, loc.groupBy);
+				}
 				loc.orderBy = $orderByClause(order=arguments.order, include=arguments.include);
 				if (Len(loc.orderBy))
+				{
 					ArrayAppend(loc.sql, loc.orderBy);
-				$addToCache(key=loc.queryShellKey, value=loc.sql, category="sql");
+				}
+				if (application.wheels.cacheDatabaseSchema)
+				{
+					$addToCache(key=loc.queryShellKey, value=loc.sql, category="sql");
+				}
 			}
 
 			// add where clause parameters to the generic sql info
@@ -255,7 +268,9 @@
 				loc.finderArgs.offset = arguments.$offset;
 				loc.finderArgs.$primaryKey = primaryKeys();
 				if (application.wheels.cacheQueries && (IsNumeric(arguments.cache) || (IsBoolean(arguments.cache) && arguments.cache)))
+				{
 					loc.finderArgs.cachedWithin = $timeSpanForCache(arguments.cache);
+				}
 				loc.findAll = variables.wheels.class.adapter.$query(argumentCollection=loc.finderArgs);
 				request.wheels[loc.queryKey] = loc.findAll; // <- store in request cache so we never run the exact same query twice in the same request
 			}
