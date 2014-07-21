@@ -20,7 +20,12 @@
 		<cfset assert("NOT Compare(loc.result, 'fancyChristmasTree')")>
 	</cffunction>
 
-	<cffunction name="test_pluralize">
+	<cffunction name="test_singularize_already_singularized_camel_case">
+		<cfset loc.result = singularize("camelCasedFailure")>
+		<cfset assert("NOT Compare(loc.result, 'camelCasedFailure')")>
+	</cffunction>
+
+ 	<cffunction name="test_pluralize">
 		<cfset loc.result = pluralize("status")>
 		<cfset assert("NOT Compare(loc.result, 'statuses')")>
 	</cffunction>
