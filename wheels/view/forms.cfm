@@ -144,40 +144,48 @@
 	categories="view-helper,forms-general" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,endFormTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
 	<cfargument name="content" type="string" required="false" hint="Content to display inside the button.">
 	<cfargument name="type" type="string" required="false" hint="The type for the button: `button`, `reset`, or `submit`.">
-	<cfargument name="image" type="string" required="false" hint="File name of the image file to use in the button form control.">
 	<cfargument name="value" type="string" required="false" hint="The value of the button when submitted.">
-	<cfargument name="disable" type="any" required="false" hint="Whether or not to disable the button upon clicking. (Prevents double-clicking.)">
+	<cfargument name="image" type="string" required="false" hint="File name of the image file to use in the button form control.">
+	<cfargument name="disable" type="any" required="false" hint="Whether or not to disable the button upon clicking (prevents double-clicking).">
+	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField">
+	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
 	<cfscript>
 		var loc = {};
 		$args(name="buttonTag", args=arguments);
 
+		// add onclick attribute to disable the form button
 		if (Len(arguments.disable))
 		{
 			loc.onclick = "this.disabled=true;";
 			if (!Len(arguments.image) && !IsBoolean(arguments.disable))
-				loc.onclick = loc.onclick & "this.value='#JSStringFormat(arguments.disable)#';";
-			loc.onclick = loc.onclick & "this.form.submit();";
+			{
+				loc.onclick &= "this.value='#JSStringFormat(arguments.disable)#';";
+			}
+			loc.onclick &= "this.form.submit();";
 			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
 		}
 
+		// if image is specified then use that as the content
 		if (Len(arguments.image))
 		{
-			// if image is specified then use that as the content
 			loc.args = {};
 			loc.args.type = "image";
 			loc.args.source = arguments.image;
 			arguments.content = imageTag(argumentCollection=loc.args);
 		}
 
-		// save content and delete argument
+		// save necessary info from arguments and delete afterwards
 		loc.content = arguments.content;
-		StructDelete(arguments, "content", false);
-		// remove image argument
+		loc.prepend = arguments.prepend;
+		loc.append = arguments.append;
+		StructDelete(arguments, "content");
 		StructDelete(arguments, "image");
-		// remove disabled argument
 		StructDelete(arguments, "disable");
-		// create the buttom
-		loc.returnValue = $element(name="button", content="#loc.content#", attributes="#arguments#");
+		StructDelete(arguments, "prepend");
+		StructDelete(arguments, "append");
+
+		// create the button
+		loc.returnValue = loc.prepend & $element(name="button", content=loc.content, attributes=arguments) & loc.append;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

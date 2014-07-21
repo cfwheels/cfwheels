@@ -23,5 +23,10 @@
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
+	<cffunction name="test_append_prepend">
+		<cfset loc.r = loc.controller.buttonTag(append="a", prepend="p")>
+		<cfset loc.e = 'p<button type="submit" value="save">Save changes</button>a'>
+		<cfset assert('loc.e eq loc.r')>
+	</cffunction>
 
 </cfcomponent>
