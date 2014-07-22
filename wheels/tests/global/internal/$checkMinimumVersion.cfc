@@ -1,20 +1,22 @@
 <cfcomponent extends="wheelsMapping.Test">
 
-	<cfset railoVersion = "3.1.2.020">
-	<cfset adobeVersion = "8,0,1,0">
+	<cfset railoVersion = "4.2.1.000">
+	<cfset adobeVersion = "8.0.1.0">
 
 	<cffunction name="test_railo_valid">
-		<cfset assert('$checkMinimumVersion("3.1.2.020", railoVersion)')>
-		<cfset assert('$checkMinimumVersion("3.2.2.020", railoVersion)')>
-		<cfset assert('$checkMinimumVersion("3.1.2.022", railoVersion)')>
-		<cfset assert('$checkMinimumVersion("4.0.0.0", railoVersion)')>
+		<cfset assert('$checkMinimumVersion("4.3.0.003", railoVersion)')>
+		<cfset assert('$checkMinimumVersion("4.2.1.000", railoVersion)')>
 	</cffunction>
 
 	<cffunction name="test_railo_invalid">
+		<cfset assert('!$checkMinimumVersion("3.1.2.022", railoVersion)')>
+		<cfset assert('!$checkMinimumVersion("3.1.2.020", railoVersion)')>
+		<cfset assert('!$checkMinimumVersion("3.2.2.020", railoVersion)')>
 		<cfset assert('!$checkMinimumVersion("3.1.2.018", railoVersion)')>
 		<cfset assert('!$checkMinimumVersion("3.1.2.019", railoVersion)')>
 		<cfset assert('!$checkMinimumVersion("3", railoVersion)')>
 		<cfset assert('!$checkMinimumVersion("2.1.2.3", railoVersion)')>
+		<cfset assert('!$checkMinimumVersion("3.3.5.004", railoVersion)')>
 	</cffunction>
 
 	<cffunction name="test_adobe_valid">
@@ -29,6 +31,7 @@
 		<cfset assert('!$checkMinimumVersion("8,0,0,0", adobeVersion)')>
 		<cfset assert('!$checkMinimumVersion("8,0,0,195765", adobeVersion)')>
 		<cfset assert('!$checkMinimumVersion("7", adobeVersion)')>
+		<!--- <cfset assert('!$checkMinimumVersion("10,0,0,282462", adobeVersion)')> --->
 	</cffunction>
 
 </cfcomponent>
