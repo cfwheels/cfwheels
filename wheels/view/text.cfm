@@ -9,10 +9,11 @@
 	'
 	categories="view-helper,text" functions="excerpt,highlight,simpleFormat,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="The text to create links in.">
-	<cfargument name="link" type="string" required="false" default="all" hint="Whether to link URLs, email addresses or both. Possible values are: `all` (default), `URLs` and `emailAddresses`.">
+	<cfargument name="link" type="string" required="false" hint="Whether to link URLs, email addresses or both. Possible values are: `all` (default), `URLs` and `emailAddresses`.">
 	<cfargument name="relative" type="boolean" required="false" default="true" hint="Should we autolink relative urls">
 	<cfscript>
 		var loc = {};
+		$args(name="autoLink", args=arguments);
 		if (arguments.link != "emailAddresses")
 		{
 			if(arguments.relative)
@@ -41,23 +42,22 @@
 	<cfargument name="protocol" type="string" required="false" default="">
 	<cfscript>
 	var loc = {};
-	loc.PunctuationRegEx = "([^\w\/-]+)$";
+	loc.punctuationRegEx = "([^\w\/-]+)$";
 	loc.startPosition = 1;
 	loc.match = ReFindNoCase(arguments.regex, arguments.text, loc.startPosition, true);
-	while(loc.match.pos[1] gt 0)
+	while(loc.match.pos[1] > 0)
 	{
 		loc.startPosition = loc.match.pos[1] + loc.match.len[1];
 		loc.str = Mid(arguments.text, loc.match.pos[1], loc.match.len[1]);
-		if (Left(loc.str, 2) neq "<a")
+		if (Left(loc.str, 2) != "<a")
 		{
-			arguments.text = RemoveChars(arguments.text, loc.match.pos[1], loc.match.len[1]);
-			// remove any sort of trailing puncuation
-			loc.punctuation = ArrayToList(ReMatchNoCase(loc.PunctuationRegEx, loc.str));
-			loc.str = REReplaceNoCase(loc.str, loc.PunctuationRegEx, "", "all");
+			arguments.text = RemoveChars(arguments.text, loc.match.pos[1], loc.match.len[1]);			
+			loc.punctuation = ArrayToList(ReMatchNoCase(loc.punctuationRegEx, loc.str));
+			loc.str = REReplaceNoCase(loc.str, loc.punctuationRegEx, "", "all");
 			arguments.href = arguments.protocol & loc.str;
 			loc.element = $element("a", arguments, loc.str, "text,regex,link,protocol,relative") & loc.punctuation;
 			arguments.text = Insert(loc.element, arguments.text, loc.match.pos[1]-1);
-			loc.startPosition = loc.match.pos[1] + len(loc.element);
+			loc.startPosition = loc.match.pos[1] + Len(loc.element);
 		}
 		loc.startPosition++;
 		loc.match = ReFindNoCase(arguments.regex, arguments.text, loc.startPosition, true);
@@ -75,10 +75,11 @@
 	categories="view-helper,text" functions="autoLink,highlight,simpleFormat,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="The text to extract an excerpt from.">
 	<cfargument name="phrase" type="string" required="true" hint="The phrase to extract.">
-	<cfargument name="radius" type="numeric" required="false" default="100" hint="Number of characters to extract surrounding the phrase.">
-	<cfargument name="excerptString" type="string" required="false" default="..." hint="String to replace first and/or last characters with.">
+	<cfargument name="radius" type="numeric" required="false" hint="Number of characters to extract surrounding the phrase.">
+	<cfargument name="excerptString" type="string" required="false" hint="String to replace first and/or last characters with.">
 	<cfscript>
 	var loc = {};
+	$args(name="excerpt", args=arguments);
 	loc.pos = FindNoCase(arguments.phrase, arguments.text, 1);
 	if (loc.pos != 0)
 	{
@@ -144,14 +145,18 @@
 				{
 					loc.foundAt = FindNoCase(loc.phrase, loc.origText, loc.pos);
 					loc.prevText = Mid(loc.origText, loc.pos, loc.foundAt-loc.pos);
-					loc.newText = loc.newText & loc.prevText;
+					loc.newText &= loc.prevText;
 					if (Find("<", loc.origText, loc.foundAt) < Find(">", loc.origText, loc.foundAt) || !Find(">", loc.origText, loc.foundAt))
-						loc.newText = loc.newText & "<" & arguments.tag & " class=""" & arguments.class & """>" & Mid(loc.origText, loc.foundAt, Len(loc.phrase)) & "</" & arguments.tag & ">";
+					{
+						loc.newText &= "<" & arguments.tag & " class=""" & arguments.class & """>" & Mid(loc.origText, loc.foundAt, Len(loc.phrase)) & "</" & arguments.tag & ">";
+					}
 					else
-						loc.newText = loc.newText & Mid(loc.origText, loc.foundAt, Len(loc.phrase));
+					{
+						loc.newText &= Mid(loc.origText, loc.foundAt, Len(loc.phrase));
+					}
 					loc.pos = loc.foundAt + Len(loc.phrase);
 				}
-				loc.newText = loc.newText & Mid(loc.origText, loc.pos, Len(loc.origText) - loc.pos + 1);
+				loc.newText &= Mid(loc.origText, loc.pos, Len(loc.origText) - loc.pos + 1);
 				loc.origText = loc.newText;
 			}
 			loc.returnValue = loc.newText;
@@ -186,9 +191,10 @@
 	'
 	categories="view-helper,text" functions="autoLink,excerpt,highlight,titleize,truncate">
 	<cfargument name="text" type="string" required="true" hint="The text to format.">
-	<cfargument name="wrap" type="boolean" required="false" default="true" hint="Set to `true` to wrap the result in a paragraph.">
+	<cfargument name="wrap" type="boolean" required="false" hint="Set to `true` to wrap the result in a paragraph.">
 	<cfscript>
 		var loc = {};
+		$args(name="simpleFormat", args=arguments);
 		loc.returnValue = Trim(arguments.text);
 		loc.returnValue = Replace(loc.returnValue, "#Chr(13)#", "", "all");
 		loc.returnValue = Replace(loc.returnValue, "#Chr(10)##Chr(10)#", "</p><p>", "all");
@@ -200,7 +206,9 @@
 		loc.returnValue = Replace(loc.returnValue, "<br />", "<br />#Chr(10)#", "all");
 		
 		if (arguments.wrap)
+		{
 			loc.returnValue = "<p>" & loc.returnValue & "</p>";
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -241,10 +249,14 @@
 	<cfscript>
 		var loc = {};
 		$args(name="truncate", args=arguments);
-		if (Len(arguments.text) gt arguments.length)
+		if (Len(arguments.text) > arguments.length)
+		{
 			loc.returnValue = Left(arguments.text, arguments.length-Len(arguments.truncateString)) & arguments.truncateString;
+		}
 		else
+		{
 			loc.returnValue = arguments.text;
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -260,18 +272,20 @@
 	'
 	categories="view-helper,text" functions="autoLink,excerpt,highlight,simpleFormat,titleize">
 	<cfargument name="text" type="string" required="true" hint="The text to truncate.">
-	<cfargument name="length" type="numeric" required="false" default="5" hint="Number of words to truncate the text to.">
-	<cfargument name="truncateString" type="string" required="false" default="..." hint="String to replace the last characters with.">
+	<cfargument name="length" type="numeric" required="false" hint="Number of words to truncate the text to.">
+	<cfargument name="truncateString" type="string" required="false" hint="String to replace the last characters with.">
 	<cfscript>
 		var loc = {};
+		$args(name="wordTruncate", args=arguments);
 		loc.returnValue = "";
 		loc.wordArray = ListToArray(arguments.text, " ", false);
 		loc.wordLen = ArrayLen(loc.wordArray);
-		
-		if (loc.wordLen gt arguments.length)
+		if (loc.wordLen > arguments.length)
 		{
-			for (loc.i = 1; loc.i lte arguments.length; loc.i++)
+			for (loc.i=1; loc.i <= arguments.length; loc.i++)
+			{
 				loc.returnValue = ListAppend(loc.returnValue, loc.wordArray[loc.i], " ");
+			}
 			loc.returnValue = loc.returnValue & arguments.truncateString;
 		}
 		else

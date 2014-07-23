@@ -10,6 +10,7 @@ Model Enhancements
 View Enhancements
 =================
 
+* Made it possible to set global defaults on autoLink(), excerpt(), wordTruncate() and simpleFormat() - [Chris Peters]
 * Added server host name to debug info and error email - [Colin MacAllister]
 * Made it possible to set a global default for the "twelveHour" argument on date / time helpers - [Per Djurner]
 * Added "prepend / "append" arguments on buttonTag() - [Per Djurner]
