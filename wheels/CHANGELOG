@@ -28,13 +28,13 @@ View Enhancements
 [BACKPORTED] Added global Setting ("dataAttributeDelimiter") to convert, for example, "dataDomCache" or "data_dom_cache" (the default) argument names to "data-dom-cache" attribute names - [Per Djurner]
 [BACKPORTED] Support for implicit protocol in JavaScriptIncludeTag() and styleSheetLinkTag() - [Per Djurner]
 [BACKPORTED] Made it possible to set a global default for the "twelveHour" argument on form helpers - [Per Djurner]
+[BACKPORTED] Made it possible to set global defaults on autoLink(), excerpt(), highlight() and simpleFormat() - [Chris Peters]
 [DO NOT BACKPORT YET] Added a better way to escape all HTML entities - [James Gibson]
 [DROP] Added label and labelTag view helpers - [Tony Petruzzi] 
 [DROP] Added escapeHTML argument on simpleFormat() - [Chris Peters]
 [ISSUE CREATED] New form helpers radioButtonTagGroup() and checkBoxTagGroup() - [Chris Peters, Per Djurner]
 [ISSUE CREATED] Changed so that when passing in an array of structs to select(), selectTag() it uses the struct key as the option tag value and the struct value as the option tag text instead of vice versa - [Per Djurner]
 * Default to the humanized property name for labels on calculated or non-persistent properties instead of throwing an error - [Andy Bellenie]
-* Made it possible to set global defaults on autoLink(), excerpt(), highlight() and simpleFormat() - [Chris Peters]
 * Added support for array of structs for select() and selectTag() - #680 [William Fisk, Tony Petruzzi]
 
 Controller Enhancements
