@@ -9,15 +9,17 @@ Model Enhancements
 [BACKPORTED] Added the ability to multijoin models - [Tony Petruzzi]
 [BACKPORTED] Allow for self joining tables in associations - #293 [James Gibson]
 [BACKPORTED] Support for tableless models - [Tony Petruzzi]
-[CREATE ISSUE] Add findFirst, findLast, findAllKeys, findOneOrCreateBy, findOrCreateBy - #745 [Mike Henke, Per Djurner, Tony Petruzzi]
-[CREATE ISSUE] Enables use of UTC for wheels timestamps [Andy Bellenie]
+[ISSUE CREATED] Add findFirst, findLast, findAllKeys, findOneOrCreateBy, findOrCreateBy - #745 [Mike Henke, Per Djurner, Tony Petruzzi]
+[ISSUE CREATED] Enables use of UTC for wheels timestamps [Andy Bellenie]
+[ISSUE CREATED] Allow models to be created when with no properties - #84 [rshakespear, Tony Petruzzi]
+[PLUGIN] Added "joinKey" on belongsTo(), hasOne() and hasMany() which allows you to specify a column to join to on the opposite side of the relationship from the "foreignKey" - [James Gibson]
 [DROP] Added global setting ("stripFromSQL") to only include safe characters in raw SQL - [Per Djurner]
-[DROP] Added "joinKey" on belongsTo(), hasOne() and hasMany() which allows you to specify a column to join to on the opposite side of the relationship from the "foreignKey" - [James Gibson]
-* Allow models to be created when with no properties - #84 [rshakespear, Tony Petruzzi]
 
 View Enhancements
 =================
+[ALREADY RELEASED] Added support for array of structs for select() and selectTag() - #680 [William Fisk, Tony Petruzzi]
 [ALREADY RELEASED] Add delimiter argument to the highlight() function - [Per Djurner]
+[ALREADY RELEASED] Default to the humanized property name for labels on calculated or non-persistent properties instead of throwing an error - [Andy Bellenie]
 [ALREADY RELEASED] Provided an option to use the more semantically correct HTML5 "mark" tag in the highlight() function - [Per Djurner]
 [BACKPORTED] Ability to use custom types (HTML 5) on all form helpers - [Raul Riera, Per Djurner]
 [BACKPORTED] New "aroundRight" option on "labelPlacement" argument that places label text to the right of the form input - [Per Djurner]
@@ -29,22 +31,20 @@ View Enhancements
 [BACKPORTED] Support for implicit protocol in JavaScriptIncludeTag() and styleSheetLinkTag() - [Per Djurner]
 [BACKPORTED] Made it possible to set a global default for the "twelveHour" argument on form helpers - [Per Djurner]
 [BACKPORTED] Made it possible to set global defaults on autoLink(), excerpt(), highlight() and simpleFormat() - [Chris Peters]
-[DO NOT BACKPORT YET] Added a better way to escape all HTML entities - [James Gibson]
-[DROP] Added label and labelTag view helpers - [Tony Petruzzi] 
-[DROP] Added escapeHTML argument on simpleFormat() - [Chris Peters]
 [ISSUE CREATED] New form helpers radioButtonTagGroup() and checkBoxTagGroup() - [Chris Peters, Per Djurner]
 [ISSUE CREATED] Changed so that when passing in an array of structs to select(), selectTag() it uses the struct key as the option tag value and the struct value as the option tag text instead of vice versa - [Per Djurner]
-* Default to the humanized property name for labels on calculated or non-persistent properties instead of throwing an error - [Andy Bellenie]
-* Added support for array of structs for select() and selectTag() - #680 [William Fisk, Tony Petruzzi]
+[PLUGIN] Added label and labelTag view helpers - [Tony Petruzzi] 
+[PLUGIN] Added a better way to escape all HTML entities - [James Gibson]
+[PLUGIN] Added escapeHTML argument on simpleFormat() - [Chris Peters]
 
 Controller Enhancements
 =======================
 [BACKPORTED] Added the ability to pass through arguments from the view to the Data Function in the controller - [Per Djurner]
 [DO NOT BACKPORT YET] Speed improvement for finding routes when using a large amount of named routes - [James Gibson]
-[DO NOT BACKPORT YET] Wheels now compacts the output of the rendered content - [James Gibson]
-[DROP] Stripped line break characters from internal "cfheader" and "cfmail" usage for improved security - [Per Djurner]
 [DROP] RedirectTo can now redirect to external urls via the `url` argument - [Adam Chapman, Tony Petruzzi]
+[PLUGIN] Wheels now compacts the output of the rendered content - [James Gibson]
 [DROP] Changed so that cookies (when using them as storage for the Flash) are HTTPOnly and secure (when applicable) - [Per Djurner]
+[DROP] Stripped line break characters from internal "cfheader" and "cfmail" usage for improved security - [Per Djurner]
 
 Other Enhancements
 ==================
