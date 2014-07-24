@@ -95,6 +95,10 @@
 	<cfargument name="action" type="string" required="true">
 	<cfscript>
 		var loc = {};
+		if (Left(arguments.action, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.action))
+		{
+			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.action#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels functions.");
+		}
 		if (StructKeyExists(this, arguments.action) && IsCustomFunction(this[arguments.action]))
 		{
 			$invoke(method=arguments.action);
