@@ -147,10 +147,6 @@
 			else
 				arguments.modelName = associationName;
 		}
-
-		// set pluralized association name, to be used when aliasing the table
-		arguments.pluralizedName = pluralize(associationName);
-
 		// store all the settings for the association in the class struct (one struct per association with the name of the association as the key)
 		variables.wheels.class.associations[associationName] = arguments;
 	</cfscript>
