@@ -8,11 +8,11 @@ Model Enhancements
 [BACKPORTED] Automatic validation now valid that primary keys are the correct type when not blank - [Adam Chapman, Tony Petruzzi]
 [BACKPORTED] Added the ability to multijoin models - [Tony Petruzzi]
 [BACKPORTED] Allow for self joining tables in associations - #293 [James Gibson]
-[DO NOT BACKPORT YET] Support for tableless models - [Tony Petruzzi]
+[BACKPORTED] Support for tableless models - [Tony Petruzzi]
+[CREATE ISSUE] Add findFirst, findLast, findAllKeys, findOneOrCreateBy, findOrCreateBy - #745 [Mike Henke, Per Djurner, Tony Petruzzi]
+[CREATE ISSUE] Enables use of UTC for wheels timestamps [Andy Bellenie]
 [DROP] Added global setting ("stripFromSQL") to only include safe characters in raw SQL - [Per Djurner]
-[DROP] Add findFirst, findLast, findAllKeys, findOneOrCreateBy, findOrCreateBy - #745 [Mike Henke, Per Djurner, Tony Petruzzi]
 [DROP] Added "joinKey" on belongsTo(), hasOne() and hasMany() which allows you to specify a column to join to on the opposite side of the relationship from the "foreignKey" - [James Gibson]
-[DROP] Enables use of UTC for wheels timestamps [Andy Bellenie]
 * Allow models to be created when with no properties - #84 [rshakespear, Tony Petruzzi]
 
 View Enhancements
