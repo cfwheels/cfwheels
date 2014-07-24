@@ -815,7 +815,7 @@
 			loc.minimumMajor = "8";
 			loc.minimumMinor = "0";
 			loc.minimumPatch = "1";
-			loc.10 = {minimumMinor=0, minimumPatch=3};
+			loc.10 = {minimumMinor=0, minimumPatch=4};
 		}
 		if (loc.major < loc.minimumMajor || (loc.major == loc.minimumMajor && loc.minor < loc.minimumMinor) || (loc.major == loc.minimumMajor && loc.minor == loc.minimumMinor && loc.patch < loc.minimumPatch))
 		{
