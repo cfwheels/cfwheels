@@ -1,8 +1,9 @@
-WHEELS VERSION 1.3 Edge
+Edge 07/24/2014
 
 Model Enhancements
 ==================
 
+* Support for tableless models - [Tony Petruzzi]
 * Alias table names using the association name in the "FROM" clause of a query when needed - [James Gibson, Per Djurner]
 * New global "modelRequireInit" setting that you can set to "true" to require an init function specified in all models - [Jonathan Smith]
 * Place surrounding parentheses on calculated properties in "where" and "order by" clauses - [Andy Bellenie, Per Djurner]

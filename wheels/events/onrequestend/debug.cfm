@@ -26,6 +26,14 @@
 	</cfif>
 </cfif>
 <cfset loc.hasBuilders = DirectoryExists(ExpandPath("#get('webPath')#/builders"))>
+<cfset loc.version = get("version")>
+<cfif NOT Len(loc.version)>
+	<cfset loc.file = ExpandPath(get("webPath") & "/wheels/CHANGELOG")>
+	<cfloop file="#loc.file#" index="loc.i">
+		<cfset loc.version = loc.i>
+		<cfbreak>
+	</cfloop>
+</cfif>
 <cfsavecontent variable="loc.css">
 	<style>
 	#wheels-debug-area
@@ -85,7 +93,7 @@
 		</tr>
 		<tr>
 			<td valign="top"><strong>Framework:</strong></td>
-			<td>Wheels #get("version")#
+			<td>Wheels #loc.version#
 				<cfif loc.hasFrameworkTests> [<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=tests&type=core&reload=true">Run Tests</a>, <a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=packages&type=core&reload=true">View Tests</a>]</cfif>
 				<cfif loc.hasBuilders>
 					[<a href="#get('webPath')##ListLast(request.cgi.script_name, '/')#?controller=wheels&action=wheels&view=documentation_generator&type=core&reload=true">Generate Documentation</a>]

@@ -18,7 +18,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="table" returntype="void" access="public" output="false" hint="Use this method to tell Wheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard Wheels convention of a singular object name mapping to a plural table name."
+<cffunction name="table" returntype="void" access="public" output="false" hint="Use this method to tell Wheels what database table to connect to for this model. You only need to use this method when your table naming does not follow the standard Wheels convention of a singular object name mapping to a plural table name. To not use a table for your model at all, `call table(false)`."
 	examples=
 	'
 		<!--- In models/User.cfc --->
@@ -28,7 +28,7 @@
 		</cffunction>
 	'
 	categories="model-initialization,miscellaneous" chapters="object-relational-mapping" functions="columnNames,dataSource,property,propertyNames,tableName">
-	<cfargument name="name" type="string" required="true" hint="Name of the table to map this model to.">
+	<cfargument name="name" type="any" required="true" hint="Name of the table to map this model to.">
 	<cfset variables.wheels.class.tableName = arguments.name>
 </cffunction>
 

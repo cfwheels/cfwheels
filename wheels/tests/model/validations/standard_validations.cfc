@@ -380,7 +380,11 @@
 	<cffunction name="test_validatesUniquenessOf_valid">
 		<cfset loc.user.firstname = "Tony">
 		<cfset loc.user.validatesUniquenessOf(property="firstname")>
-		<cfset assert('!loc.user.valid()')>
+		<cfif NOT IsBoolean(loc.user.tableName()) OR loc.user.tableName()>
+			<cfset assert('!loc.user.valid()')>
+		<cfelse>
+			<cfset assert('loc.user.valid()')>
+		</cfif>
 	</cffunction>
 	
 	<cffunction name="test_validatesUniquenessOf_valids_when_updating_existing_record">
