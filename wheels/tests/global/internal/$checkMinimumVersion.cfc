@@ -1,37 +1,35 @@
 <cfcomponent extends="wheelsMapping.Test">
 
-	<cfset railoVersion = "4.2.1.000">
-	<cfset adobeVersion = "8.0.1.0">
-
 	<cffunction name="test_railo_valid">
-		<cfset assert('$checkMinimumVersion("4.3.0.003", railoVersion)')>
-		<cfset assert('$checkMinimumVersion("4.2.1.000", railoVersion)')>
+		<cfset assert('!Len($checkMinimumVersion(version="4.3.0.003", engine="Railo"))')>
+		<cfset assert('!Len($checkMinimumVersion(version="4.2.1.000", engine="Railo"))')>
 	</cffunction>
 
 	<cffunction name="test_railo_invalid">
-		<cfset assert('!$checkMinimumVersion("3.1.2.022", railoVersion)')>
-		<cfset assert('!$checkMinimumVersion("3.1.2.020", railoVersion)')>
-		<cfset assert('!$checkMinimumVersion("3.2.2.020", railoVersion)')>
-		<cfset assert('!$checkMinimumVersion("3.1.2.018", railoVersion)')>
-		<cfset assert('!$checkMinimumVersion("3.1.2.019", railoVersion)')>
-		<cfset assert('!$checkMinimumVersion("3", railoVersion)')>
-		<cfset assert('!$checkMinimumVersion("2.1.2.3", railoVersion)')>
-		<cfset assert('!$checkMinimumVersion("3.3.5.004", railoVersion)')>
+		<cfset assert('Len($checkMinimumVersion(version="3.1.2.022", engine="Railo"))')>
+		<cfset assert('Len($checkMinimumVersion(version="3.1.2.020", engine="Railo"))')>
+		<cfset assert('Len($checkMinimumVersion(version="3.2.2.020", engine="Railo"))')>
+		<cfset assert('Len($checkMinimumVersion(version="3.1.2.018", engine="Railo"))')>
+		<cfset assert('Len($checkMinimumVersion(version="3.1.2.019", engine="Railo"))')>
+		<cfset assert('Len($checkMinimumVersion(version="3", engine="Railo"))')>
+		<cfset assert('Len($checkMinimumVersion(version="2.1.2.3", engine="Railo"))')>
+		<cfset assert('Len($checkMinimumVersion(version="3.3.5.004", engine="Railo"))')>
 	</cffunction>
 
 	<cffunction name="test_adobe_valid">
-		<cfset assert('$checkMinimumVersion("8,0,1,0", adobeVersion)')>
-		<cfset assert('$checkMinimumVersion("9,0,0,251028", adobeVersion)')>
-		<cfset assert('$checkMinimumVersion("8,0,1,195765", adobeVersion)')>
-		<cfset assert('$checkMinimumVersion("10,0,0,277803", adobeVersion)')>
+		<cfset assert('!Len($checkMinimumVersion(version="8,0,1,0", engine="Adobe"))')>
+		<cfset assert('!Len($checkMinimumVersion(version="9,0,0,251028", engine="Adobe"))')>
+		<cfset assert('!Len($checkMinimumVersion(version="8,0,1,195765", engine="Adobe"))')>
+		<!--- <cfset assert('!Len()$checkMinimumVersion(version="10,0,3,277803", engine="Adobe"))')> --->
 	</cffunction>
 
 	<cffunction name="test_adobe_invalid">
-		<cfset assert('!$checkMinimumVersion("8,0", adobeVersion)')>
-		<cfset assert('!$checkMinimumVersion("8,0,0,0", adobeVersion)')>
-		<cfset assert('!$checkMinimumVersion("8,0,0,195765", adobeVersion)')>
-		<cfset assert('!$checkMinimumVersion("7", adobeVersion)')>
-		<!--- <cfset assert('!$checkMinimumVersion("10,0,0,282462", adobeVersion)')> --->
+		<cfset assert('Len($checkMinimumVersion(version="8,0", engine="Adobe"))')>
+		<cfset assert('Len($checkMinimumVersion(version="8,0,0,0", engine="Adobe"))')>
+		<cfset assert('Len($checkMinimumVersion(version="8,0,0,195765", engine="Adobe"))')>
+		<cfset assert('Len($checkMinimumVersion(version="7", engine="Adobe"))')>
+		<cfset assert('Len($checkMinimumVersion(version="10,0,0,282462", engine="Adobe"))')>
+		<cfset assert('Len($checkMinimumVersion(version="10,0,2,282462", engine="Adobe"))')>
 	</cffunction>
 
 </cfcomponent>

@@ -786,45 +786,49 @@
 	<cfset StructClear(application.wheels.controllers)>
 </cffunction>
 
-<cffunction name="$checkMinimumVersion" access="public" returntype="boolean" output="false">
+<cffunction name="$checkMinimumVersion" access="private" returntype="string" output="false">
+	<cfargument name="engine" type="string" required="true">
 	<cfargument name="version" type="string" required="true">
-	<cfargument name="minVersion" type="string" required="true">
 	<cfscript>
-	var loc = {};
-	loc.returnValue = true;
-	arguments.version = ListChangeDelims(arguments.version, ".", ".,");
-	arguments.minVersion = ListChangeDelims(arguments.minVersion, ".", ".,");
-	arguments.version = ListToArray(arguments.version, ".");
-	arguments.minVersion = ListToArray(arguments.minVersion, ".");
-
-	// make version and minVersion the same length pad zeros to the end
-	loc.minSize = Max(ArrayLen(arguments.version), ArrayLen(arguments.minVersion));
-
-	ArrayResize(arguments.version, loc.minSize);
-	ArrayResize(arguments.minVersion, loc.minSize);
-	for(loc.i=1; loc.i <= loc.minSize; loc.i++)
-	{
-		loc.version = 0;
-		if (ArrayIsDefined(arguments.version, loc.i))
+		var loc = {};
+		loc.returnValue = "";
+		loc.version = Replace(arguments.version, ".", ",", "all");
+		loc.major = ListGetAt(loc.version, 1);
+		loc.minor = 0;
+		loc.patch = 0;
+		if (ListLen(loc.version) > 1)
 		{
-			loc.version = Val(arguments.version[loc.i]);
+			loc.minor = ListGetAt(loc.version, 2);
 		}
-		loc.minVersion = 0;
-		if (ArrayIsDefined(arguments.minVersion, loc.i))
+		if (ListLen(loc.version) > 2)
 		{
-			loc.minVersion = Val(arguments.minVersion[loc.i]);
+			loc.patch = ListGetAt(loc.version, 3);
 		}
-		if (loc.version > loc.minVersion)
+		if (arguments.engine == "Railo")
 		{
-			loc.returnValue = true;
-			break;
+			loc.minimumMajor = "4";
+			loc.minimumMinor = "2";
+			loc.minimumPatch = "1";
 		}
-		if (loc.version < loc.minVersion)
+		else if (arguments.engine == "Adobe")
 		{
-			loc.returnValue = false;
-			break;
+			loc.minimumMajor = "8";
+			loc.minimumMinor = "0";
+			loc.minimumPatch = "1";
+			loc.10 = {minimumMinor=0, minimumPatch=3};
 		}
-	}
+		if (loc.major < loc.minimumMajor || (loc.major == loc.minimumMajor && loc.minor < loc.minimumMinor) || (loc.major == loc.minimumMajor && loc.minor == loc.minimumMinor && loc.patch < loc.minimumPatch))
+		{
+			loc.returnValue = loc.minimumMajor & "." & loc.minimumMinor & "." & loc.minimumPatch;
+		}
+		if (StructKeyExists(loc, loc.major))
+		{
+			// special requirements for having a specific minor or patch version within a major release exists
+			if (loc.minor < loc[loc.major].minimumMinor || (loc.minor == loc[loc.major].minimumMinor && loc.patch < loc[loc.major].minimumPatch))
+			{
+				loc.returnValue = loc.major & "." & loc[loc.major].minimumMinor & "." & loc[loc.major].minimumPatch;
+			}
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

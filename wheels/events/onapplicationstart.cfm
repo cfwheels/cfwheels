@@ -24,17 +24,16 @@
 		{
 			application.$wheels.serverName = "Railo";
 			application.$wheels.serverVersion = server.railo.version;
-			loc.minimumServerVersion = "4.2.1.000";
 		}
 		else
 		{
-			application.$wheels.serverName = "Adobe ColdFusion";
-			application.$wheels.serverVersion = server.coldfusion.productversion;
-			loc.minimumServerVersion = "8.0.1.0";
+			application.$wheels.serverName = "Adobe";
+			application.$wheels.serverVersion = server.coldfusion.productVersion;
 		}
-		if (!$checkMinimumVersion(application.$wheels.serverVersion, loc.minimumServerVersion))
+		loc.upgradeTo = $checkMinimumVersion(engine=application.$wheels.serverName, version=application.$wheels.serverVersion);
+		if (Len(loc.upgradeTo))
 		{
-			$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by Wheels.", extendedInfo="Please upgrade to version #loc.minimumServerVersion# or higher.");
+			$throw(type="Wheels.EngineNotSupported", message="#application.$wheels.serverName# #application.$wheels.serverVersion# is not supported by Wheels.", extendedInfo="Please upgrade to version #loc.upgradeTo# or higher.");
 		}
 
 		// copy over the cgi variables we need to the request scope (since we use some of these to determine URL rewrite capabilities we need to be able to access them directly on application start for example)
