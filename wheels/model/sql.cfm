@@ -709,7 +709,7 @@
 				// alias the table as the association name when joining to itself
 				if (ListFindNoCase(loc.tables, loc.classAssociations[loc.name].tableName))
 				{
-					loc.join &= " AS " & loc.name;
+					loc.join &= " AS " & pluralize(loc.name);
 				}
 
 				loc.join &= " ON ";
@@ -751,7 +751,7 @@
 					loc.tableName = loc.classAssociations[loc.name].tableName;
 					if (ListFindNoCase(loc.tables, loc.classAssociations[loc.name].tableName))
 					{
-						loc.tableName = loc.name;
+						loc.tableName = pluralize(loc.name);
 					}
 
 					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[loc.first].column# = #loc.tableName#.#loc.associatedClass.$classData().properties[loc.second].column#");
