@@ -12,7 +12,7 @@ Model Enhancements
 [ISSUE CREATED] Add findFirst, findLast, findAllKeys, findOneOrCreateBy, findOrCreateBy - #745 [Mike Henke, Per Djurner, Tony Petruzzi]
 [ISSUE CREATED] Enables use of UTC for wheels timestamps [Andy Bellenie]
 [ISSUE CREATED] Allow models to be created when with no properties - #84 [rshakespear, Tony Petruzzi]
-[PLUGIN] Added "joinKey" on belongsTo(), hasOne() and hasMany() which allows you to specify a column to join to on the opposite side of the relationship from the "foreignKey" - [James Gibson]
+[DROP] Added "joinKey" on belongsTo(), hasOne() and hasMany() which allows you to specify a column to join to on the opposite side of the relationship from the "foreignKey" - [James Gibson]
 [DROP] Added global setting ("stripFromSQL") to only include safe characters in raw SQL - [Per Djurner]
 
 View Enhancements
@@ -33,16 +33,16 @@ View Enhancements
 [BACKPORTED] Made it possible to set global defaults on autoLink(), excerpt(), highlight() and simpleFormat() - [Chris Peters]
 [ISSUE CREATED] New form helpers radioButtonTagGroup() and checkBoxTagGroup() - [Chris Peters, Per Djurner]
 [ISSUE CREATED] Changed so that when passing in an array of structs to select(), selectTag() it uses the struct key as the option tag value and the struct value as the option tag text instead of vice versa - [Per Djurner]
-[PLUGIN] Added label and labelTag view helpers - [Tony Petruzzi] 
-[PLUGIN] Added a better way to escape all HTML entities - [James Gibson]
-[PLUGIN] Added escapeHTML argument on simpleFormat() - [Chris Peters]
+[DROP] Added label and labelTag view helpers - [Tony Petruzzi] 
+[DROP] Added a better way to escape all HTML entities - [James Gibson]
+[DROP] Added escapeHTML argument on simpleFormat() - [Chris Peters]
 
 Controller Enhancements
 =======================
 [BACKPORTED] Added the ability to pass through arguments from the view to the Data Function in the controller - [Per Djurner]
-[DO NOT BACKPORT YET] Speed improvement for finding routes when using a large amount of named routes - [James Gibson]
-[DROP] RedirectTo can now redirect to external urls via the `url` argument - [Adam Chapman, Tony Petruzzi]
-[PLUGIN] Wheels now compacts the output of the rendered content - [James Gibson]
+[ISSUE CREATED] RedirectTo can now redirect to external urls via the `url` argument - [Adam Chapman, Tony Petruzzi]
+[DROP] Wheels now compacts the output of the rendered content - [James Gibson]
+[DROP] Speed improvement for finding routes when using a large amount of named routes - [James Gibson]
 [DROP] Changed so that cookies (when using them as storage for the Flash) are HTTPOnly and secure (when applicable) - [Per Djurner]
 [DROP] Stripped line break characters from internal "cfheader" and "cfmail" usage for improved security - [Per Djurner]
 
@@ -54,15 +54,15 @@ Other Enhancements
 [BACKPORTED] Improved performance by avoiding a Duplicate() call when sending error emails - [Per Djurner]
 [BACKPORTED] General performance improvement for internal locking - [Per Djurner]
 [BACKPORTED] Pass along arguments to "onSessionEnd" so one can access the application and session scopes in the correct way inside "events/onsessionend.cfm" - [Per Djurner]
-[DO NOT BACKPORT YET] SendEmail() can accept external link and full paths attachments - [Adam Chapman, Tony Petruzzi]
-[DROP]  Allow any variable type to be passed as params to urlFor() - [Tony Petruzzi]
+[ISSUE CREATED] SendEmail() can accept external link and full paths attachments - [Adam Chapman, Tony Petruzzi]
+[ISSUE CREATED] Adds helper for utc timestamps [Andy Bellenie]
+[ISSUE CREATED] Allow custom mailparams to by passed to sendEmail() - #85 [forday, Tony Petruzzi]
+[DROP] Allow any variable type to be passed as params to urlFor() - [Tony Petruzzi]
 [DROP] For security reasons, only allow .cfm files with normal characters to be included - [Per Djurner]
 [DROP] Allow different form and to email addresses in sendEmail() - #95 [Andy Bellenie, Tony Petruzzi]
 [DROP] Convert CFLOG to a global function - [Tony Petruzzi]
 [DROP] Added automatic caching in production mode of function results based on the arguments passed in - [Per Djurner]
 [DROP] Added support for Unobstructive Javascript - [Raul Riera]
-[DROP] Adds helper for utc timestamps [Andy Bellenie]
-* Allow custom mailparams to by passed to sendEmail() - #85 [forday, Tony Petruzzi]
 
 Bug Fixes
 =========
@@ -74,24 +74,24 @@ Bug Fixes
 [BACKPORTED] Added work-around for "FastHashRemoved" struct bug found in ColdFusion 8 - [Per Djurner]
 [BACKPORTED] Plugins with global mixin are ignored in unit tests - [Singgih Cahyono, Tony Petruzzi]
 [BACKPORTED] Allow blank values to be passed through to validation - #638 [Per Djurner]
+[ISSUE CREATED] Allow for encoding autodetection within provides - #674 [Raul Riera]
+[ISSUE CREATED] Soft deletes now work correctly with outer joins - #762 [Andy Bellenie]
+[ISSUE CREATED] Pagination with compound keys - #725 [Andy Bellenie, jfeasel, Tony Petruzzi]
+[ISSUE CREATED] Prevent automatic validation from being set on user defined primary keys - #778 [Mike Henke, Tony Petruzzi]
+[ISSUE CREATED] Calculated properties were not being returned when specifying the select on findAll - #69 [kapitaine, Tony Petruzzi]
+[ISSUE CREATED] Duplicate object ids could occur when adding nested properties - #76 [Sam Hakimi, [James Gibson, Tony Petruzzi]
 [DROP] startFormTag, submitTag, linkTo, buttonTo now use unobtrusive javascript - [Raul Rivera]
 [DROP] Fixed error when using hyphenated attributes in linkTo() - [Per Djurner]
 [DROP] Fixed so autoLink() does not link URLs in tag attributes when quoted - [Per Djurner]
-* Allow for encoding autodetection within provides - #674 [Raul Riera]
-* Soft deletes now work correctly with outer joins - #762 [Andy Bellenie]
-* Pagination with compound keys - #725 [Andy Bellenie, jfeasel, Tony Petruzzi]
-* Prevent automatic validation from being set on user defined primary keys - #778 [Mike Henke, Tony Petruzzi]
-* Calculated properties were not being returned when specifying the select on findAll - #69 [kapitaine, Tony Petruzzi]
-* Duplicate object ids could occur when adding nested properties - #76 [Sam Hakimi, [James Gibson, Tony Petruzzi]
 
 Miscellaneous
 =============
 [ALREADY RELEASED] Turned off URL rewriting in IIS 7 by default since otherwise it will throw an error when the URL Rewrite Module is not installed - [Per Djurner]
 [BACKPORTED] Railo minimum version is now 3.3.1.000
 [BACKPORTED] Case insensitive loading of controllers and models - [Per Djurner]
-[DO NOT BACKPORT YET] Allow placement of models in subfolder - [Tim Badolato, Tony Petruzzi]
+[ISSUE CREATED] Allow placement of models in subfolder - [Tim Badolato, Tony Petruzzi]
 [ISSUE CREATED] Renamed `renderPage` to `renderView` - #363 [Andy Bellenie, Tony Petruzzi]
-[DROP] External paths for imagePath - [andoradmiraal, Tony Petruzzi]
+[ISSUE CREATED] External paths for imagePath - [andoradmiraal, Tony Petruzzi]
 [DROP] Removed the "cacheDatabaseSchema" setting, "cacheModelInitialization" should now be used instead - [Per Djurner]
 [DROP] Added commented out settig for plugin development in design mode - #782 [Tony Petruzzi]
 [DROP] Added $inspect method to return the variables scope of objects - #820 [Tony Petruzzi]
