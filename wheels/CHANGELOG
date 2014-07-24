@@ -6,13 +6,13 @@ Model Enhancements
 ==================
 [BACKPORTED] Added geometry and geography datatypes (SQLServer) - [Simon Allard]
 [BACKPORTED] Automatic validation now valid that primary keys are the correct type when not blank - [Adam Chapman, Tony Petruzzi]
-[DO NOT BACKPORT YET] Added the ability to multijoin models - [Tony Petruzzi]
+[BACKPORTED] Added the ability to multijoin models - [Tony Petruzzi]
+[BACKPORTED] Allow for self joining tables in associations - #293 [James Gibson]
 [DO NOT BACKPORT YET] Support for tableless models - [Tony Petruzzi]
 [DROP] Added global setting ("stripFromSQL") to only include safe characters in raw SQL - [Per Djurner]
 [DROP] Add findFirst, findLast, findAllKeys, findOneOrCreateBy, findOrCreateBy - #745 [Mike Henke, Per Djurner, Tony Petruzzi]
 [DROP] Added "joinKey" on belongsTo(), hasOne() and hasMany() which allows you to specify a column to join to on the opposite side of the relationship from the "foreignKey" - [James Gibson]
 [DROP] Enables use of UTC for wheels timestamps [Andy Bellenie]
-* Allow for self joining tables in associations - #293 [James Gibson]
 * Allow models to be created when with no properties - #84 [rshakespear, Tony Petruzzi]
 
 View Enhancements
