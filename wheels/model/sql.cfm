@@ -35,7 +35,9 @@
 			// add join statement for each include separated by space
 			loc.iEnd = ArrayLen(loc.associations);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
 				loc.returnValue = ListAppend(loc.returnValue, loc.associations[loc.i].join, " ");
+			}
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -50,19 +52,29 @@
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.key = primaryKeys(loc.i);
-			ArrayAppend(arguments.sql, "#variables.wheels.class.properties[loc.key].column# = ");
+			ArrayAppend(arguments.sql, variables.wheels.class.properties[loc.key].column & " = ");
 			if (hasChanged(loc.key))
+			{
 				loc.value = changedFrom(loc.key);
+			}
 			else
+			{
 				loc.value = this[loc.key];
+			}
 			if (Len(loc.value))
+			{
 				loc.null = false;
+			}
 			else
+			{
 				loc.null = true;
+			}
 			loc.param = {value=loc.value, type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale, null=loc.null};
 			ArrayAppend(arguments.sql, loc.param);
 			if (loc.i < loc.iEnd)
+			{
 				ArrayAppend(arguments.sql, " AND ");
+			}
 		}
 	</cfscript>
 	<cfreturn arguments.sql>
@@ -80,7 +92,7 @@
 			{
 				loc.returnValue = variables.wheels.class.adapter.$randomOrder();
 			}
-			else if (arguments.order Contains "(")
+			else if (Find("(", arguments.order))
 			{
 				loc.returnValue = arguments.order;
 			}
@@ -89,7 +101,9 @@
 				// setup an array containing class info for current class and all the ones that should be included
 				loc.classes = [];
 				if (Len(arguments.include))
+				{
 					loc.classes = $expandedAssociations(include=arguments.include);
+				}
 				ArrayPrepend(loc.classes, variables.wheels.class);
 
 				loc.returnValue = "";
@@ -97,9 +111,11 @@
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.iItem = Trim(ListGetAt(arguments.order, loc.i));
-					if (!FindNoCase(" ASC", loc.iItem) && !FindNoCase(" DESC", loc.iItem))
-						loc.iItem = loc.iItem & " ASC";
-					if (loc.iItem Contains ".")
+					if (!Find(" ASC", loc.iItem) && !Find(" DESC", loc.iItem))
+					{
+						loc.iItem &= " ASC";
+					}
+					if (Find(".", loc.iItem))
 					{
 						loc.returnValue = ListAppend(loc.returnValue, loc.iItem);
 					}
@@ -122,8 +138,10 @@
 							if (Len(loc.toAdd))
 							{
 								if (!ListFindNoCase(loc.classData.columnList, loc.property))
-									loc.toAdd = loc.toAdd & " AS " & loc.property;
-								loc.toAdd = loc.toAdd & " " & UCase(ListLast(loc.iItem, " "));
+								{
+									loc.toAdd &= " AS " & loc.property;
+								}
+								loc.toAdd &= " " & UCase(ListLast(loc.iItem, " "));
 								if (!ListFindNoCase(loc.returnValue, loc.toAdd))
 								{
 									loc.returnValue = ListAppend(loc.returnValue, loc.toAdd);
@@ -132,7 +150,9 @@
 							}
 						}
 						if (application.wheels.showErrorInformation && !Len(loc.toAdd))
+						{
 							$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.property#` property but couldn't find it in the database table.", extendedInfo="Verify the `order` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
+						}
 					}
 				}
 			}
@@ -149,16 +169,24 @@
 	<cfargument name="distinct" type="boolean" required="true">
 	<cfargument name="returnAs" type="string" required="true">
 	<cfscript>
-		var returnValue = "";
+		var loc = {};
+		loc.returnValue = "";
+		
 		// if we want a distinct statement, we can do it grouping every field in the select
 		if (arguments.distinct)
-			returnValue = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
+		{
+			loc.returnValue = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
+		}
 		else if (Len(arguments.group))
-			returnValue = $createSQLFieldList(list=arguments.group, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
-		if (Len(returnValue))
-			returnValue = "GROUP BY " & returnValue;
+		{
+			loc.returnValue = $createSQLFieldList(list=arguments.group, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
+		}
+		if (Len(loc.returnValue))
+		{
+			loc.returnValue = "GROUP BY " & loc.returnValue;
+		}
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$selectClause" returntype="string" access="public" output="false">
@@ -166,11 +194,11 @@
 	<cfargument name="include" type="string" required="true">
 	<cfargument name="returnAs" type="string" required="true">
 	<cfscript>
-		var returnValue = "";
-		returnValue = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs);
-		returnValue = "SELECT " & returnValue;
+		var loc = {};
+		loc.returnValue = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs);
+		loc.returnValue = "SELECT " & loc.returnValue;
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$createSQLFieldList" returntype="string" access="public" output="false">
@@ -182,16 +210,20 @@
 	<cfargument name="useExpandedColumnAliases" type="boolean" required="false" default="#application.wheels.useExpandedColumnAliases#">
 	<cfscript>
 		var loc = {};
+
 		// setup an array containing class info for current class and all the ones that should be included
 		loc.classes = [];
 		if (Len(arguments.include))
+		{
 			loc.classes = $expandedAssociations(include=arguments.include);
+		}
 		ArrayPrepend(loc.classes, variables.wheels.class);
 
-		// if the develop passes in tablename.*, translate it into the list of fields for the developer
-		// this is so we don't get *'s in the group by
+		// if the developer passes in tablename.*, translate it into the list of fields for the developer, this is so we don't get *'s in the group by
 		if (Find(".*", arguments.list))
+		{
 			arguments.list = $expandProperties(list=arguments.list, classes=loc.classes);
+		}
 
 		// add properties to select if the developer did not specify any
 		if (!Len(arguments.list))
@@ -202,14 +234,16 @@
 				loc.classData = loc.classes[loc.i];
 				arguments.list = ListAppend(arguments.list, loc.classData.propertyList);
 				if (Len(loc.classData.calculatedPropertyList))
+				{
 					arguments.list = ListAppend(arguments.list, loc.classData.calculatedPropertyList);
+				}
 			}
 		}
 
 		// go through the properties and map them to the database unless the developer passed in a table name or an alias in which case we assume they know what they're doing and leave the select clause as is
-		if (arguments.list Does Not Contain "." AND arguments.list Does Not Contain " AS ")
+		if (!Find(".", arguments.list) && !Find(" AS ", arguments.list))
 		{
-			loc.list = "";
+			loc.returnValue = "";
 			loc.addedProperties = "";
 			loc.addedPropertiesByModel = {};
 			loc.iEnd = ListLen(arguments.list);
@@ -230,7 +264,9 @@
 
 					// create a struct for this model unless it already exists
 					if (!StructKeyExists(loc.addedPropertiesByModel, loc.classData.modelName))
+					{
 						loc.addedPropertiesByModel[loc.classData.modelName] = "";
+					}
 
 					// if we find the property in this model and it's not already added we go ahead and add it to the select clause
 					if ((ListFindNoCase(loc.classData.propertyList, loc.iItem) || ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)) && !ListFindNoCase(loc.addedPropertiesByModel[loc.classData.modelName], loc.iItem))
@@ -258,20 +294,24 @@
 								}
 							}
 						}						
-						if (loc.flagAsDuplicate )
-							loc.toAppend = loc.toAppend & "[[duplicate]]" & loc.j;
+						if (loc.flagAsDuplicate)
+						{
+							loc.toAppend &= "[[duplicate]]" & loc.j;
+						}
 						if (ListFindNoCase(loc.classData.propertyList, loc.iItem))
 						{
-							loc.toAppend = loc.toAppend & loc.classData.tableName & ".";
+							loc.toAppend &= loc.classData.tableName & ".";
 							if (ListFindNoCase(loc.classData.columnList, loc.iItem))
 							{
-								loc.toAppend = loc.toAppend & loc.iItem;
+								loc.toAppend &= loc.iItem;
 							}
 							else
 							{
-								loc.toAppend = loc.toAppend & loc.classData.properties[loc.iItem].column;
+								loc.toAppend &= loc.classData.properties[loc.iItem].column;
 								if (arguments.renameFields)
-									loc.toAppend = loc.toAppend & " AS " & loc.iItem;
+								{
+									loc.toAppend &= " AS " & loc.iItem;
+								}
 							}
 						}
 						else if (ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem) && arguments.addCalculatedProperties)
@@ -283,9 +323,13 @@
 					}
 				}
 				if (Len(loc.toAppend))
-					loc.list = ListAppend(loc.list, loc.toAppend);
-				else if (application.wheels.showErrorInformation && (not arguments.addCalculatedProperties && not ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)))
+				{
+					loc.returnValue = ListAppend(loc.returnValue, loc.toAppend);
+				}
+				else if (application.wheels.showErrorInformation && (!arguments.addCalculatedProperties && !ListFindNoCase(loc.classData.calculatedPropertyList, loc.iItem)))
+				{
 					$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.iItem#` property but couldn't find it in the database table.", extendedInfo="Verify the `select` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
+				}
 			}
 
 			// let's replace eventual duplicates in the clause by prepending the class name
@@ -293,10 +337,10 @@
 			{
 				loc.newSelect = "";
 				loc.addedProperties = "";
-				loc.iEnd = ListLen(loc.list);
+				loc.iEnd = ListLen(loc.returnValue);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
-					loc.iItem = ListGetAt(loc.list, loc.i);
+					loc.iItem = ListGetAt(loc.returnValue, loc.i);
 
 					// get the property part, done by taking everytyhing from the end of the string to a . or a space (which would be found when using " AS ")
 					loc.property = Reverse(SpanExcluding(Reverse(loc.iItem), ". "));
@@ -304,7 +348,7 @@
 					// check if this one has been flagged as a duplicate, we get the number of classes to skip and also remove the flagged info from the item
 					loc.duplicateCount = 0;
 					loc.matches = REFind("^\[\[duplicate\]\](\d+)(.+)$", loc.iItem, 1, true);
-					if (loc.matches.pos[1] gt 0)
+					if (loc.matches.pos[1] > 0)
 					{
 						loc.duplicateCount = Mid(loc.iItem, loc.matches.pos[2], loc.matches.len[2]);
 						loc.iItem = Mid(loc.iItem, loc.matches.pos[3], loc.matches.len[3]);
@@ -324,10 +368,14 @@
 						// prepend class name to the property
 						loc.newProperty = loc.classData.modelName & loc.property;
 
-						if (loc.iItem Contains " AS ")
+						if (Find(" AS ", loc.iItem))
+						{
 							loc.newItem = ReplaceNoCase(loc.iItem, " AS " & loc.property, " AS " & loc.newProperty);
+						}
 						else
+						{
 							loc.newItem = loc.iItem & " AS " & loc.newProperty;
+						}
 					}
 					if (!ListFindNoCase(loc.addedProperties, loc.newProperty))
 					{
@@ -335,17 +383,19 @@
 						loc.addedProperties = ListAppend(loc.addedProperties, loc.newProperty);
 					}
 				}
-				loc.list = loc.newSelect;
+				loc.returnValue = loc.newSelect;
 			}
 		}
 		else
 		{
-			loc.list = arguments.list;
-			if (!arguments.renameFields && Find(" AS ", loc.list))
-				loc.list = REReplace(loc.list, variables.wheels.class.RESQLAs, "", "all");
+			loc.returnValue = arguments.list;
+			if (!arguments.renameFields && Find(" AS ", loc.returnValue))
+			{
+				loc.returnValue = REReplace(loc.returnValue, variables.wheels.class.RESQLAs, "", "all");
+			}
 		}
 	</cfscript>
-	<cfreturn loc.list />
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$addWhereClause" returntype="array" access="public" output="false">
@@ -358,7 +408,9 @@
 		loc.whereClause = $whereClause(where=arguments.where, include=arguments.include, includeSoftDeletes=arguments.includeSoftDeletes);
 		loc.iEnd = ArrayLen(loc.whereClause);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
 			ArrayAppend(arguments.sql, loc.whereClause[loc.i]);
+		}
 	</cfscript>
 	<cfreturn arguments.sql>
 </cffunction>
@@ -375,27 +427,38 @@
 			// setup an array containing class info for current class and all the ones that should be included
 			loc.classes = [];
 			if (Len(arguments.include))
+			{
 				loc.classes = $expandedAssociations(include=arguments.include);
+			}
 			ArrayPrepend(loc.classes, variables.wheels.class);
+
 			ArrayAppend(loc.returnValue, "WHERE");
 			loc.wherePos = ArrayLen(loc.returnValue) + 1;
 			loc.params = ArrayNew(1);
-			loc.where = ReplaceList(REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all"), "AND,OR", "#chr(7)#AND,#chr(7)#OR");
+			loc.where = ReplaceList(REReplace(arguments.where, variables.wheels.class.RESQLWhere, "\1?\8" , "all"), "AND,OR", "#Chr(7)#AND,#Chr(7)#OR");
 			for (loc.i=1; loc.i <= ListLen(loc.where, Chr(7)); loc.i++)
 			{
 				loc.param = {};
 				loc.element = Replace(ListGetAt(loc.where, loc.i, Chr(7)), Chr(7), "", "one");
 				if (Find("(", loc.element) && Find(")", loc.element))
+				{
 					loc.elementDataPart = SpanExcluding(Reverse(SpanExcluding(Reverse(loc.element), "(")), ")");
+				}
 				else if (Find("(", loc.element))
+				{
 					loc.elementDataPart = Reverse(SpanExcluding(Reverse(loc.element), "("));
+				}
 				else if (Find(")", loc.element))
+				{
 					loc.elementDataPart = SpanExcluding(loc.element, ")");
+				}
 				else
+				{
 					loc.elementDataPart = loc.element;
+				}
 				loc.elementDataPart = Trim(ReplaceList(loc.elementDataPart, "AND,OR", ""));
 				loc.temp = REFind("^([a-zA-Z0-9-_\.]*) ?#variables.wheels.class.RESQLOperators#", loc.elementDataPart, 1, true);
-				if (ArrayLen(loc.temp.len) gt 1)
+				if (ArrayLen(loc.temp.len) > 1)
 				{
 					loc.where = Replace(loc.where, loc.element, Replace(loc.element, loc.elementDataPart, "?", "one"));
 					loc.param.property = Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]);
@@ -409,7 +472,7 @@
 						loc.param.list = false;
 
 						loc.classData = loc.classes[loc.j];
-						if (loc.param.property Does Not Contain "." || ListFirst(loc.param.property, ".") == loc.classData.tableName)
+						if (!Find(".", loc.param.property) || ListFirst(loc.param.property, ".") == loc.classData.tableName)
 						{
 							if (ListFindNoCase(loc.classData.propertyList, ListLast(loc.param.property, ".")))
 							{
@@ -427,40 +490,48 @@
 						}
 					}
 					if (application.wheels.showErrorInformation && !StructKeyExists(loc.param, "column"))
+					{
 						$throw(type="Wheels.ColumnNotFound", message="Wheels looked for the column mapped to the `#loc.param.property#` property but couldn't find it in the database table.", extendedInfo="Verify the `where` argument and/or your property to column mappings done with the `property` method inside the model's `init` method to make sure everything is correct.");
+					}
 					loc.temp = REFind("^[a-zA-Z0-9-_\.]* ?#variables.wheels.class.RESQLOperators#", loc.elementDataPart, 1, true);
 					loc.param.operator = Trim(Mid(loc.elementDataPart, loc.temp.pos[2], loc.temp.len[2]));
 					if (Right(loc.param.operator, 2) == "IN")
+					{
 						loc.param.list = true;
+					}
 					ArrayAppend(loc.params, loc.param);
 				}
 			}
 			loc.where = ReplaceList(loc.where, "#Chr(7)#AND,#Chr(7)#OR", "AND,OR");
 
 			// add to sql array
-			loc.where = " #loc.where# ";
+			loc.where = " " & loc.where & " ";
 			loc.iEnd = ListLen(loc.where, "?");
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.item = ListGetAt(loc.where, loc.i, "?");
 				if (Len(Trim(loc.item)))
+				{
 					ArrayAppend(loc.returnValue, loc.item);
+				}
 				if (loc.i < ListLen(loc.where, "?"))
 				{
 					loc.column = loc.params[loc.i].column;
-					ArrayAppend(loc.returnValue, "#loc.column# #loc.params[loc.i].operator#");
+					ArrayAppend(loc.returnValue, loc.column & " " & loc.params[loc.i].operator);
 					loc.param = {type=loc.params[loc.i].type, dataType=loc.params[loc.i].dataType, scale=loc.params[loc.i].scale, list=loc.params[loc.i].list};
 					ArrayAppend(loc.returnValue, loc.param);
 				}
 			}
 		}
 
-		// add softdelete sql
+		// add soft delete sql
 		if (!arguments.includeSoftDeletes)
 		{
 			loc.addToWhere = "";
 			if ($softDeletion())
-				loc.addToWhere = ListAppend(loc.addToWhere, tableName() & "." & this.$softDeleteColumn() & " IS NULL");
+			{
+				loc.addToWhere = ListAppend(loc.addToWhere, tableName() & "." & $softDeleteColumn() & " IS NULL");
+			}
 			loc.addToWhere = Replace(loc.addToWhere, ",", " AND ", "all");
 			if (Len(loc.addToWhere))
 			{
@@ -491,25 +562,26 @@
 		{
 			loc.start = 1;
 			loc.originalValues = [];
-			while (!StructKeyExists(loc, "temp") || ArrayLen(loc.temp.len) gt 1)
+			while (!StructKeyExists(loc, "temp") || ArrayLen(loc.temp.len) > 1)
 			{
 				loc.temp = REFind(variables.wheels.class.RESQLWhere, arguments.where, loc.start, true);
-				if (ArrayLen(loc.temp.len) gt 1)
+				if (ArrayLen(loc.temp.len) > 1)
 				{
 					loc.start = loc.temp.pos[4] + loc.temp.len[4];
 					ArrayAppend(loc.originalValues, ReplaceList(Chr(7) & Mid(arguments.where, loc.temp.pos[4], loc.temp.len[4]) & Chr(7), "#Chr(7)#(,)#Chr(7)#,#Chr(7)#','#Chr(7)#,#Chr(7)#"",""#Chr(7)#,#Chr(7)#", ",,,,,,"));
 				}
 			}
-
 			loc.pos = ArrayLen(loc.originalValues);
 			loc.iEnd = ArrayLen(arguments.sql);
-			for (loc.i=loc.iEnd; loc.i gt 0; loc.i--)
+			for (loc.i=loc.iEnd; loc.i > 0; loc.i--)
 			{
-				if (IsStruct(arguments.sql[loc.i]) && loc.pos gt 0)
+				if (IsStruct(arguments.sql[loc.i]) && loc.pos > 0)
 				{
 					arguments.sql[loc.i].value = loc.originalValues[loc.pos];
 					if (loc.originalValues[loc.pos] == "")
+					{
 						arguments.sql[loc.i].null = true;
+					}
 					loc.pos--;
 				}
 			}
@@ -523,32 +595,38 @@
 	<cfargument name="classes" type="array" required="true">
 	<cfscript>
 		var loc = {};
-		loc.matches = REMatch("[A-Za-z1-9]+\.\*", arguments.list);
+		loc.returnValue = arguments.list;
+		loc.matches = REMatch("[A-Za-z1-9]+\.\*", loc.returnValue);
 		loc.iEnd = ArrayLen(loc.matches);
-		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+		for (loc.i = 1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.match = loc.matches[loc.i];
 			loc.fields = "";
 			loc.tableName = ListGetAt(loc.match, 1, ".");
 			loc.jEnd = ArrayLen(arguments.classes);
-			for (loc.j = 1; loc.j lte loc.jEnd; loc.j++)
+			for (loc.j = 1; loc.j <= loc.jEnd; loc.j++)
 			{
 				loc.class = arguments.classes[loc.j];
 				if (loc.class.tableName == loc.tableName)
 				{
 					for (loc.item in loc.class.properties)
+					{
 						loc.fields = ListAppend(loc.fields, "#loc.class.tableName#.#loc.item#");
+					}
 					break;
 				}
 			}
-
 			if (Len(loc.fields))
-				arguments.list = Replace(arguments.list, loc.match, loc.fields, "all");
+			{
+				loc.returnValue = Replace(loc.returnValue, loc.match, loc.fields, "all");
+			}
 			else if (application.wheels.showErrorInformation)
+			{
 				$throw(type="Wheels.ModelNotFound", message="Wheels looked for the model mapped to table name `#loc.tableName#` but couldn't find it.", extendedInfo="Verify the `select` argument and/or your model association mappings are correct.");
+			}
 		}
 	</cfscript>
-	<cfreturn arguments.list />
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$expandedAssociations" returntype="array" access="public" output="false">
@@ -567,6 +645,9 @@
 		// clean up spaces in list and add a comma at the end to indicate end of string
 		loc.include = Replace(arguments.include, " ", "", "all") & ",";
 
+		// store all tables used in the query so we can alias them when needed
+		loc.tables = tableName();
+
 		loc.pos = 1;
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
@@ -584,7 +665,9 @@
 
 			// throw an error if the association was not found
 			if (application.wheels.showErrorInformation && !StructKeyExists(loc.classAssociations, loc.name))
+			{
 				$throw(type="Wheels.AssociationNotFound", message="An association named `#loc.name#` could not be found on the `#ListLast(loc.levels)#` model.", extendedInfo="Setup an association in the `init` method of the `models/#capitalize(ListLast(loc.levels))#.cfc` file and name it `#loc.name#`. You can use the `belongsTo`, `hasOne` or `hasMany` method to set it up.");
+			}
 
 			// create a reference to the associated class
 			loc.associatedClass = model(loc.classAssociations[loc.name].modelName);
@@ -600,7 +683,6 @@
 					loc.classAssociations[loc.name].foreignKey = loc.class.$classData().modelName & Replace(loc.class.$classData().keys, ",", ",#loc.class.$classData().modelName#", "all");
 				}
 			}
-
 			if (!Len(loc.classAssociations[loc.name].joinKey))
 			{
 				if (loc.classAssociations[loc.name].type == "belongsTo")
@@ -612,7 +694,6 @@
 					loc.classAssociations[loc.name].joinKey = loc.class.$classData().keys;
 				}
 			}
-
 			loc.classAssociations[loc.name].tableName = loc.associatedClass.$classData().tableName;
 			loc.classAssociations[loc.name].columnList = loc.associatedClass.$classData().columnList;
 			loc.classAssociations[loc.name].properties = loc.associatedClass.$classData().properties;
@@ -620,11 +701,18 @@
 			loc.classAssociations[loc.name].calculatedProperties = loc.associatedClass.$classData().calculatedProperties;
 			loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClass.$classData().calculatedPropertyList;
 
-			// create the join string if it hasn't already been done (no need to lock this code since when multiple requests process it they will end up setting the same value (no intermediate value is ever set on the join variable in the application scoped model object)
+			// create the join string if it hasn't already been done
 			if (!StructKeyExists(loc.classAssociations[loc.name], "join"))
 			{
-				loc.joinType = ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one");
-				loc.join = UCase(loc.joinType) & " JOIN #loc.classAssociations[loc.name].tableName# ON ";
+				loc.join = UCase(ReplaceNoCase(loc.classAssociations[loc.name].joinType, "outer", "left outer", "one")) & " JOIN " & loc.classAssociations[loc.name].tableName;
+				
+				// alias the table as the association name when joining to itself
+				if (ListFindNoCase(loc.tables, loc.classAssociations[loc.name].tableName))
+				{
+					loc.join &= " AS " & loc.name;
+				}
+
+				loc.join &= " ON ";
 				loc.toAppend = "";
 				loc.jEnd = ListLen(loc.classAssociations[loc.name].foreignKey);
 				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
@@ -634,9 +722,13 @@
 					{
 						loc.key2 = ListFindNoCase(loc.classAssociations[loc.name].joinKey, loc.key1);
 						if (loc.key2)
+						{
 							loc.key2 = ListGetAt(loc.classAssociations[loc.name].joinKey, loc.key2);
+						}
 						else
+						{
 							loc.key2 = ListGetAt(loc.classAssociations[loc.name].joinKey, loc.j);
+						}
 						loc.first = loc.key1;
 						loc.second = loc.key2;
 					}
@@ -644,28 +736,50 @@
 					{
 						loc.key2 = ListFindNoCase(loc.classAssociations[loc.name].joinKey, loc.key1);
 						if (loc.key2)
+						{
 							loc.key2 = ListGetAt(loc.classAssociations[loc.name].joinKey, loc.key2);
+						}
 						else
+						{
 							loc.key2 = ListGetAt(loc.classAssociations[loc.name].joinKey, loc.j);
+						}
 						loc.first = loc.key2;
 						loc.second = loc.key1;
 					}
-					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[loc.first].column# = #loc.classAssociations[loc.name].tableName#.#loc.associatedClass.$classData().properties[loc.second].column#");
-					if (!arguments.includeSoftDeletes and loc.associatedClass.$softDeletion())
+					
+					// alias the table as the association name when joining to itself
+					loc.tableName = loc.classAssociations[loc.name].tableName;
+					if (ListFindNoCase(loc.tables, loc.classAssociations[loc.name].tableName))
+					{
+						loc.tableName = loc.name;
+					}
+
+					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[loc.first].column# = #loc.tableName#.#loc.associatedClass.$classData().properties[loc.second].column#");
+					if (!arguments.includeSoftDeletes && loc.associatedClass.$softDeletion())
+					{
 						loc.toAppend = ListAppend(loc.toAppend, "#loc.associatedClass.tableName()#.#loc.associatedClass.$softDeleteColumn()# IS NULL");
+					}
 				}
 				loc.classAssociations[loc.name].join = loc.join & Replace(loc.toAppend, ",", " AND ", "all");
 			}
 
-			// loop over each character in the delimiter sequence and move up/down the levels as appropriate
-			for (loc.x=1; loc.x lte Len(loc.delimSequence); loc.x++)
+			// loop over each character in the delimiter sequence and move up / down the levels as appropriate
+			loc.jEnd = Len(loc.delimSequence);
+			for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 			{
-				loc.delimChar = Mid(loc.delimSequence, loc.x, 1);
+				loc.delimChar = Mid(loc.delimSequence, loc.j, 1);
 				if (loc.delimChar == "(")
+				{
 					loc.levels = ListAppend(loc.levels, loc.classAssociations[loc.name].modelName);
+				}
 				else if (loc.delimChar == ")")
+				{
 					loc.levels = ListDeleteAt(loc.levels, ListLen(loc.levels));
+				}
 			}
+
+			// add table name to the list of used ones so we know to alias it when used a second time
+			loc.tables = ListAppend(loc.tables, loc.classAssociations[loc.name].tableName);
 
 			// add info to the array that we will return
 			ArrayAppend(loc.returnValue, loc.classAssociations[loc.name]);

@@ -1,7 +1,10 @@
 <cfcomponent extends="Model">
 
 	<cffunction name="init">
-		<cfset beforeSave("callbackThatReturnsTrue")>
+		<cfset belongsTo(name="parent", modelName="tag", foreignKey="parentid", joinType="outer")>
+		<cfset hasMany(name="children", modelName="tag", foreignKey="parentid")>
+		<cfset hasMany(name="classifications")>
+ 		<cfset beforeSave("callbackThatReturnsTrue")>
 		<cfset property(name="name", label="Tag name")>
 		<cfset property(name="virtual", label="Virtual property")>
 	</cffunction>

@@ -457,9 +457,9 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 
 <!--- tags --->
 <cfset loc.releases = model("tag").create(name="releases",description="testdesc")>
-<cfset model("tag").create(name="minor",description="a minor release", parentid=loc.releases.id)>
-<cfset model("tag").create(name="major",description="a major release", parentid=loc.releases.id)>
-<cfset model("tag").create(name="point",description="a point release", parentid=loc.releases.id)>
+<cfset model("tag").create(name="minor",description="a minor release", parentid=3)>
+<cfset model("tag").create(name="major",description="a major release")>
+<cfset model("tag").create(name="point",description="a point release", parentid=2)>
 
 <cfset loc.fruit = model("tag").create(name="fruit",description="something to eat")>
 <cfset model("tag").create(name="apple",description="ummmmmm good", parentid=loc.fruit.id)>
