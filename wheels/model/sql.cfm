@@ -69,7 +69,12 @@
 			{
 				loc.null = true;
 			}
-			loc.param = {value=loc.value, type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale, null=loc.null};
+			loc.param = {};
+			loc.param.value = loc.value;
+			loc.param.type = variables.wheels.class.properties[loc.key].type;
+			loc.param.dataType = variables.wheels.class.properties[loc.key].dataType;
+			loc.param.scale = variables.wheels.class.properties[loc.key].scale;
+			loc.param.null = loc.null;
 			ArrayAppend(arguments.sql, loc.param);
 			if (loc.i < loc.iEnd)
 			{

@@ -456,7 +456,10 @@
 						// if the property does not exist or if it's blank we add an error on the object (for all other validation types we call corresponding methods below instead)
 						if (!StructKeyExists(this, loc.thisValidation.args.property) || (IsSimpleValue(this[loc.thisValidation.args.property]) && !Len(Trim(this[loc.thisValidation.args.property]))) || (IsStruct(this[loc.thisValidation.args.property]) && !StructCount(this[loc.thisValidation.args.property])))
 						{
-							addError(property=loc.thisValidation.args.property, message=$validationErrorMessage(loc.thisValidation.args.property, loc.thisValidation.args.message));
+							loc.args = {};
+							loc.args.property = loc.thisValidation.args.property;
+							loc.args.message = $validationErrorMessage(loc.thisValidation.args.property, loc.thisValidation.args.message);
+							addError(argumentCollection=loc.args);
 						}
 					}
 					else
@@ -464,7 +467,10 @@
 						// if the validation set does not allow blank values we can set an error right away, otherwise we call a method to run the actual check
 						if (StructKeyExists(loc.thisValidation.args, "property") && StructKeyExists(loc.thisValidation.args, "allowBlank") && !loc.thisValidation.args.allowBlank && (!StructKeyExists(this, loc.thisValidation.args.property) || (!Len(this[loc.thisValidation.args.property]) && loc.thisValidation.method != "$validatesUniquenessOf")))
 						{
-							addError(property=loc.thisValidation.args.property, message=$validationErrorMessage(loc.thisValidation.args.property, loc.thisValidation.args.message));
+							loc.args = {};
+							loc.args.property = loc.thisValidation.args.property;
+							loc.args.message = $validationErrorMessage(loc.thisValidation.args.property, loc.thisValidation.args.message);
+							addError(argumentCollection=loc.args);
 						}
 						else if (!StructKeyExists(loc.thisValidation.args, "property") || (StructKeyExists(this, loc.thisValidation.args.property) &&(Len(this[loc.thisValidation.args.property]) || loc.thisValidation.method == "$validatesUniquenessOf")))
 						{
@@ -502,7 +508,10 @@
 		loc.virtualConfirmProperty = arguments.property & "Confirmation";
 		if (StructKeyExists(this, loc.virtualConfirmProperty) && this[arguments.property] != this[loc.virtualConfirmProperty])
 		{
-			addError(property=loc.virtualConfirmProperty, message=$validationErrorMessage(argumentCollection=arguments));
+			loc.args = {};
+			loc.args.property = loc.virtualConfirmProperty;
+			loc.args.message = $validationErrorMessage(argumentCollection=arguments);
+			addError(argumentCollection=loc.args);
 		}
 	</cfscript>
 </cffunction>
@@ -511,7 +520,10 @@
 	<cfscript>
 		if (ListFindNoCase(arguments.list, this[arguments.property]))
 		{
-			addError(property=arguments.property, message=$validationErrorMessage(argumentCollection=arguments));
+			loc.args = {};
+			loc.args.property = arguments.property;
+			loc.args.message = $validationErrorMessage(argumentCollection=arguments);
+			addError(argumentCollection=loc.args);
 		}
 	</cfscript>
 </cffunction>
@@ -520,7 +532,10 @@
 	<cfscript>
 		if ((Len(arguments.regEx) && !REFindNoCase(arguments.regEx, this[arguments.property])) || (Len(arguments.type) && !IsValid(arguments.type, this[arguments.property])))
 		{
-			addError(property=arguments.property, message=$validationErrorMessage(argumentCollection=arguments));
+			loc.args = {};
+			loc.args.property = arguments.property;
+			loc.args.message = $validationErrorMessage(argumentCollection=arguments);
+			addError(argumentCollection=loc.args);
 		}
 	</cfscript>
 </cffunction>
@@ -529,7 +544,10 @@
 	<cfscript>
 		if (!ListFindNoCase(arguments.list, this[arguments.property]))
 		{
-			addError(property=arguments.property, message=$validationErrorMessage(argumentCollection=arguments));
+			loc.args = {};
+			loc.args.property = arguments.property;
+			loc.args.message = $validationErrorMessage(argumentCollection=arguments);
+			addError(argumentCollection=loc.args);
 		}
 	</cfscript>
 </cffunction>
@@ -542,7 +560,10 @@
 		// if the property does not exist or if it's blank we add an error on the object
 		if (!StructKeyExists(arguments.properties, arguments.property) || (IsSimpleValue(arguments.properties[arguments.property]) && !Len(Trim(arguments.properties[arguments.property]))) || (IsStruct(arguments.properties[arguments.property]) && !StructCount(arguments.properties[arguments.property])))
 		{
-			addError(property=arguments.property, message=$validationErrorMessage(argumentCollection=arguments));
+			loc.args = {};
+			loc.args.property = arguments.property;
+			loc.args.message = $validationErrorMessage(argumentCollection=arguments);
+			addError(argumentCollection=loc.args);
 		}
 	</cfscript>
 </cffunction>
@@ -568,7 +589,10 @@
 
 		if ((arguments.maximum && loc.lenValue > arguments.maximum) || (arguments.minimum && loc.lenValue < arguments.minimum) || (arguments.exactly && loc.lenValue != arguments.exactly))
 		{
-			addError(property=arguments.property, message=$validationErrorMessage(argumentCollection=arguments));
+			loc.args = {};
+			loc.args.property = arguments.property;
+			loc.args.message = $validationErrorMessage(argumentCollection=arguments);
+			addError(argumentCollection=loc.args);
 		}
 	</cfscript>
 </cffunction>
@@ -577,7 +601,10 @@
 	<cfscript>
 		if (!IsNumeric(this[arguments.property]) || (arguments.onlyInteger && Round(this[arguments.property]) != this[arguments.property]) || (IsNumeric(arguments.greaterThan) && this[arguments.property] <= arguments.greaterThan) || (IsNumeric(arguments.greaterThanOrEqualTo) && this[arguments.property] < arguments.greaterThanOrEqualTo) || (IsNumeric(arguments.equalTo) && this[arguments.property] != arguments.equalTo) || (IsNumeric(arguments.lessThan) && this[arguments.property] >= arguments.lessThan) || (IsNumeric(arguments.lessThanOrEqualTo) && this[arguments.property] > arguments.lessThanOrEqualTo) || (IsBoolean(arguments.odd) && arguments.odd && !BitAnd(this[arguments.property], 1)) || (IsBoolean(arguments.even) && arguments.even && BitAnd(this[arguments.property], 1)))
 		{
-			addError(property=arguments.property, message=$validationErrorMessage(argumentCollection=arguments));
+			loc.args = {};
+			loc.args.property = arguments.property;
+			loc.args.message = $validationErrorMessage(argumentCollection=arguments);
+			addError(argumentCollection=loc.args);
 		}
 	</cfscript>
 </cffunction>
@@ -618,7 +645,10 @@
 			// we add an error if an object was found in the database and the current object is either not saved yet or not the same as the one in the database
 			if (IsObject(loc.existingObject) && (isNew() || loc.existingObject.key() != key($persisted=true)))
 			{
-				addError(property=arguments.property, message=$validationErrorMessage(argumentCollection=arguments));
+				loc.args = {};
+				loc.args.property = arguments.property;
+				loc.args.message = $validationErrorMessage(argumentCollection=arguments);
+				addError(argumentCollection=loc.args);
 			}
 		}
 	</cfscript>

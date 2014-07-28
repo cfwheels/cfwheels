@@ -52,7 +52,9 @@
 				<cftry>
 					<cfset loc.returnValue = $invoke(method=arguments.method, componentReference=this, invokeArgs=loc.methodArgs)>
 					<cfif IsBoolean(loc.returnValue) and loc.returnValue>
-						<cftransaction action="#arguments.transaction#" />
+						<cfset loc.args = StructNew()>
+						<cfset loc.args.action = arguments.transaction>
+						<cftransaction attributeCollection="#loc.args#" />
 					<cfelse>
 						<cftransaction action="rollback" />
 					</cfif>
