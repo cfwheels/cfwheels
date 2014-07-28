@@ -839,23 +839,30 @@
 			loc.minimumMinor = "2";
 			loc.minimumPatch = "1";
 		}
+		else if (arguments.engine == "OpenBD")
+		{
+			loc.minimumMajor = "3";
+			loc.minimumMinor = "1";
+			loc.minimumPatch = "0";
+		}
 		else if (arguments.engine == "Adobe")
 		{
 			loc.minimumMajor = "8";
 			loc.minimumMinor = "0";
 			loc.minimumPatch = "1";
-			loc.10 = {minimumMinor=0, minimumPatch=4};
+			loc.v10 = {minimumMinor=0, minimumPatch=4};
 		}
 		if (loc.major < loc.minimumMajor || (loc.major == loc.minimumMajor && loc.minor < loc.minimumMinor) || (loc.major == loc.minimumMajor && loc.minor == loc.minimumMinor && loc.patch < loc.minimumPatch))
 		{
 			loc.returnValue = loc.minimumMajor & "." & loc.minimumMinor & "." & loc.minimumPatch;
 		}
-		if (StructKeyExists(loc, loc.major))
+		loc.key = "v" & loc.major;
+		if (StructKeyExists(loc, loc.key))
 		{
 			// special requirements for having a specific minor or patch version within a major release exists
-			if (loc.minor < loc[loc.major].minimumMinor || (loc.minor == loc[loc.major].minimumMinor && loc.patch < loc[loc.major].minimumPatch))
+			if (loc.minor < loc[loc.key].minimumMinor || (loc.minor == loc[loc.key].minimumMinor && loc.patch < loc[loc.key].minimumPatch))
 			{
-				loc.returnValue = loc.major & "." & loc[loc.major].minimumMinor & "." & loc[loc.major].minimumPatch;
+				loc.returnValue = loc.major & "." & loc[loc.key].minimumMinor & "." & loc[loc.key].minimumPatch;
 			}
 		}
 	</cfscript>

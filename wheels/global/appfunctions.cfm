@@ -1,4 +1,4 @@
-<cfif StructKeyExists(server, "railo")>
+<cfif StructKeyExists(server, "railo") OR StructKeyExists(server, "bluedragon")>
 	<cfinclude template="cfml.cfm">
 	<cfinclude template="internal.cfm">
 	<cfinclude template="public.cfm">

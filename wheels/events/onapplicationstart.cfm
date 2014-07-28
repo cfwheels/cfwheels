@@ -25,6 +25,11 @@
 			application.$wheels.serverName = "Railo";
 			application.$wheels.serverVersion = server.railo.version;
 		}
+		else if (StructKeyExists(server, "bluedragon"))
+		{
+			application.$wheels.serverName = "OpenBD";
+			application.$wheels.serverVersion = server.bluedragon.version;
+		}
 		else
 		{
 			application.$wheels.serverName = "Adobe";
