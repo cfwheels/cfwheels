@@ -7,8 +7,8 @@
 
 		// if the controller file exists we instantiate it, otherwise we instantiate the parent controller
 		// this is done so that an action's view page can be rendered without having an actual controller file for it
-		loc.controllerName = $objectFileName(name=variables.$class.name, objectPath=variables.$class.path, type="controller");
-		loc.returnValue = $createObjectFromRoot(path=variables.$class.path, fileName=loc.controllerName, method="$initControllerObject", name=variables.$class.name, params=arguments.params);
+		loc.controllerName = $objectFileName(name=variables.wheels.class.name, objectPath=variables.wheels.class.path, type="controller");
+		loc.returnValue = $createObjectFromRoot(path=variables.wheels.class.path, fileName=loc.controllerName, method="$initControllerObject", name=variables.wheels.class.name, params=arguments.params);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -17,27 +17,27 @@
 	<cfargument name="name" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
-		variables.$class.name = arguments.name;
-		variables.$class.path = arguments.path;
+		variables.wheels.class.name = arguments.name;
+		variables.wheels.class.path = arguments.path;
 
-		// if our name has pathing in it, remove it and add it to the end of of the $class.path variable
+		// if our name has pathing in it, remove it and add it to the end of of the class path variable
 		if (Find("/", arguments.name))
 		{
-			variables.$class.name = ListLast(arguments.name, "/");
-			variables.$class.path = ListAppend(arguments.path, ListDeleteAt(arguments.name, ListLen(arguments.name, "/"), "/"), "/");
+			variables.wheels.class.name = ListLast(arguments.name, "/");
+			variables.wheels.class.path = ListAppend(arguments.path, ListDeleteAt(arguments.name, ListLen(arguments.name, "/"), "/"), "/");
 		}
 
-		variables.$class.verifications = [];
-		variables.$class.filters = [];
-		variables.$class.cachableActions = [];
-		variables.$class.layout = {};
+		variables.wheels.class.verifications = [];
+		variables.wheels.class.filters = [];
+		variables.wheels.class.cachableActions = [];
+		variables.wheels.class.layout = {};
 		
 		// default the controller to only respond to html
-		variables.$class.formats = {};
-		variables.$class.formats.default = "html";
-		variables.$class.formats.actions = {};
-		variables.$class.formats.existingTemplates = "";
-		variables.$class.formats.nonExistingTemplates = "";
+		variables.wheels.class.formats = {};
+		variables.wheels.class.formats.default = "html";
+		variables.wheels.class.formats.actions = {};
+		variables.wheels.class.formats.existingTemplates = "";
+		variables.wheels.class.formats.nonExistingTemplates = "";
 		
 		$setFlashStorage(get("flashStorage"));
 		if (StructKeyExists(variables, "init"))
@@ -51,7 +51,7 @@
 
 <cffunction name="$setControllerClassData" returntype="void" access="public" output="false">
 	<cfscript>
-		variables.$class = application.wheels.controllers[arguments.name].$getControllerClassData();
+		variables.wheels.class = application.wheels.controllers[arguments.name].$getControllerClassData();
 	</cfscript>
 </cffunction>
 
@@ -99,5 +99,5 @@
 </cffunction>
 
 <cffunction name="$getControllerClassData" returntype="struct" access="public" output="false">
-	<cfreturn variables.$class>
+	<cfreturn variables.wheels.class>
 </cffunction>

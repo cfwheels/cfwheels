@@ -336,9 +336,9 @@
 
 <cffunction name="$setFlashStorage" returntype="void" access="public" output="false">
 	<cfargument name="storage" type="string" required="true">
-	<cfset variables.$class.flashStorage = arguments.storage>
+	<cfset variables.wheels.class.flashStorage = arguments.storage>
 </cffunction>
 
 <cffunction name="$getFlashStorage" returntype="string" access="public" output="false">
-	<cfreturn variables.$class.flashStorage>
+	<cfreturn variables.wheels.class.flashStorage>
 </cffunction>

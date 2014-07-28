@@ -661,7 +661,7 @@
 
 			// create a reference to current class in include string and get its association info
 			loc.class = model(ListLast(loc.levels));
-			loc.classAssociations = loc.class.$classData().associations;
+			loc.classAssociations = loc.class.$getModelClassData().associations;
 
 			// throw an error if the association was not found
 			if (application.wheels.showErrorInformation && !StructKeyExists(loc.classAssociations, loc.name))
@@ -676,30 +676,30 @@
 			{
 				if (loc.classAssociations[loc.name].type == "belongsTo")
 				{
-					loc.classAssociations[loc.name].foreignKey = loc.associatedClass.$classData().modelName & Replace(loc.associatedClass.$classData().keys, ",", ",#loc.associatedClass.$classData().modelName#", "all");
+					loc.classAssociations[loc.name].foreignKey = loc.associatedClass.$getModelClassData().modelName & Replace(loc.associatedClass.$getModelClassData().keys, ",", ",#loc.associatedClass.$getModelClassData().modelName#", "all");
 				}
 				else
 				{
-					loc.classAssociations[loc.name].foreignKey = loc.class.$classData().modelName & Replace(loc.class.$classData().keys, ",", ",#loc.class.$classData().modelName#", "all");
+					loc.classAssociations[loc.name].foreignKey = loc.class.$getModelClassData().modelName & Replace(loc.class.$getModelClassData().keys, ",", ",#loc.class.$getModelClassData().modelName#", "all");
 				}
 			}
 			if (!Len(loc.classAssociations[loc.name].joinKey))
 			{
 				if (loc.classAssociations[loc.name].type == "belongsTo")
 				{
-					loc.classAssociations[loc.name].joinKey = loc.associatedClass.$classData().keys;
+					loc.classAssociations[loc.name].joinKey = loc.associatedClass.$getModelClassData().keys;
 				}
 				else
 				{
-					loc.classAssociations[loc.name].joinKey = loc.class.$classData().keys;
+					loc.classAssociations[loc.name].joinKey = loc.class.$getModelClassData().keys;
 				}
 			}
-			loc.classAssociations[loc.name].tableName = loc.associatedClass.$classData().tableName;
-			loc.classAssociations[loc.name].columnList = loc.associatedClass.$classData().columnList;
-			loc.classAssociations[loc.name].properties = loc.associatedClass.$classData().properties;
-			loc.classAssociations[loc.name].propertyList = loc.associatedClass.$classData().propertyList;
-			loc.classAssociations[loc.name].calculatedProperties = loc.associatedClass.$classData().calculatedProperties;
-			loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClass.$classData().calculatedPropertyList;
+			loc.classAssociations[loc.name].tableName = loc.associatedClass.$getModelClassData().tableName;
+			loc.classAssociations[loc.name].columnList = loc.associatedClass.$getModelClassData().columnList;
+			loc.classAssociations[loc.name].properties = loc.associatedClass.$getModelClassData().properties;
+			loc.classAssociations[loc.name].propertyList = loc.associatedClass.$getModelClassData().propertyList;
+			loc.classAssociations[loc.name].calculatedProperties = loc.associatedClass.$getModelClassData().calculatedProperties;
+			loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClass.$getModelClassData().calculatedPropertyList;
 
 			// create the join string if it hasn't already been done
 			if (!StructKeyExists(loc.classAssociations[loc.name], "join"))
@@ -754,7 +754,7 @@
 						loc.tableName = loc.classAssociations[loc.name].pluralizedName;;
 					}
 
-					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[loc.first].column# = #loc.tableName#.#loc.associatedClass.$classData().properties[loc.second].column#");
+					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$getModelClassData().tableName#.#loc.class.$getModelClassData().properties[loc.first].column# = #loc.tableName#.#loc.associatedClass.$getModelClassData().properties[loc.second].column#");
 					if (!arguments.includeSoftDeletes && loc.associatedClass.$softDeletion())
 					{
 						loc.toAppend = ListAppend(loc.toAppend, "#loc.associatedClass.tableName()#.#loc.associatedClass.$softDeleteColumn()# IS NULL");

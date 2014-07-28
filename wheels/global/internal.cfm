@@ -1,5 +1,23 @@
+<cffunction name="$definedArguments" returntype="string" access="public" output="false">
+	<cfargument name="func" type="any" required="true" hint="Function.">
+	<cfscript>
+		var loc = {};
+
+		// return a list of the defined (named) argument names from the function supplied
+		loc.returnValue = "";
+		loc.metaData = GetMetaData(arguments.func);
+		loc.iEnd = ArrayLen(loc.metaData.parameters);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.returnValue = ListAppend(loc.returnValue, loc.metaData.parameters[loc.i].name);
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$initializeRequestScope" returntype="void" access="public" output="false">
 	<cfscript>
+		var loc = {};
 		if (!StructKeyExists(request, "wheels"))
 		{
 			request.wheels = {};
@@ -15,11 +33,17 @@
 <cffunction name="$toXml" returntype="xml" access="public" output="false">
 	<cfargument name="data" type="any" required="true">
 	<cfscript>
+		var loc = {};
+		
 		// only instantiate the toXml object once per request
 		if (!StructKeyExists(request.wheels, "toXml"))
-			request.wheels.toXml = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#.vendor.toXml", fileName="toXML", method="init");
+		{
+			loc.path = application.wheels.wheelsComponentPath & ".vendor.toXml";
+			request.wheels.toXml = $createObjectFromRoot(path=loc.path, fileName="toXML", method="init");
+		}
+		loc.returnValue = request.wheels.toXml.toXml(arguments.data);
 	</cfscript>
-	<cfreturn request.wheels.toXml.toXml(arguments.data) />
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$convertToString" returntype="string" access="public" output="false">
@@ -92,19 +116,24 @@
 	<cfreturn arguments.value>
 </cffunction>
 
-<cffunction name="$listClean" returntype="any" access="public" output="false" hint="removes whitespace between list elements. optional argument to return the list as an array.">
+<cffunction name="$listClean" returntype="any" access="public" output="false" hint="Remove white space between list elements.">
 	<cfargument name="list" type="string" required="true">
 	<cfargument name="delim" type="string" required="false" default=",">
 	<cfargument name="returnAs" type="string" required="false" default="string">
 	<cfscript>
 		var loc = {};
-		loc.list = ListToArray(arguments.list, arguments.delim);
-		for (loc.i = 1; loc.i lte ArrayLen(loc.list); loc.i++)
-			loc.list[loc.i] = Trim(loc.list[loc.i]);
-		if (arguments.returnAs == "array")
-			return loc.list;
+		loc.returnValue = ListToArray(arguments.list, arguments.delim);
+		loc.iEnd = ArrayLen(loc.returnValue);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.returnValue[loc.i] = Trim(loc.returnValue[loc.i]);
+		}
+		if (!arguments.returnAs == "array")
+		{
+			loc.returnValue = ArrayToList(loc.returnValue, arguments.delim);
+		}
 	</cfscript>
-	<cfreturn ArrayToList(loc.list, arguments.delim)>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$hashedKey" returntype="string" access="public" output="false" hint="Creates a unique string based on any arguments passed in (used as a key for caching mostly).">

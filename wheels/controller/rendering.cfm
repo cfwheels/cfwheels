@@ -345,12 +345,12 @@
 		}
 		else if (IsObject(arguments.$partial))
 		{
-			arguments.$name = arguments.$partial.$classData().modelName;
+			arguments.$name = arguments.$partial.$getModelClassData().modelName;
 			arguments.object = arguments.$partial;
 		}
 		else if (IsArray(arguments.$partial) && ArrayLen(arguments.$partial))
 		{
-			arguments.$name = arguments.$partial[1].$classData().modelName;
+			arguments.$name = arguments.$partial[1].$getModelClassData().modelName;
 			arguments.objects = arguments.$partial;
 		}
 		else if (IsSimpleValue(arguments.$partial))
@@ -529,7 +529,7 @@
 			}
 			else if (StructKeyExists(arguments, "object") && IsObject(arguments.object))
 			{
-				loc.modelName = arguments.object.$classData().modelName;
+				loc.modelName = arguments.object.$getModelClassData().modelName;
 				arguments[loc.modelName] = arguments.object;
 				StructDelete(arguments, "object");
 				StructAppend(arguments, arguments[loc.modelName].properties(), false);
@@ -539,7 +539,7 @@
 				loc.array = arguments.objects;
 				StructDelete(arguments, "objects");
 				loc.originalArguments = Duplicate(arguments);
-				loc.modelName = loc.array[1].$classData().modelName;
+				loc.modelName = loc.array[1].$getModelClassData().modelName;
 				loc.returnValue = "";
 				loc.iEnd = ArrayLen(loc.array);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)

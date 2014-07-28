@@ -20,7 +20,7 @@
 		this.$runFilters(type="before", action=params.action);
 		
 		// check to see if the controller params has changed and if so, instantiate the new controller and re-run filters and verifications
-		if (params.controller != variables.$class.name)
+		if (params.controller != variables.wheels.class.name)
 		{
 			return false;
 		}
@@ -52,7 +52,7 @@
 			if (loc.actionIsCachable)
 			{
 				loc.category = "action";
-				loc.key = $hashedKey(variables.$class.name, variables.params);
+				loc.key = $hashedKey(variables.wheels.class.name, variables.params);
 				loc.lockName = loc.category & loc.key;
 				loc.conditionArgs = {};
 				loc.conditionArgs.key = loc.key;
@@ -114,7 +114,7 @@
 			}
 			catch(Any e)
 			{
-				if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.$class.name)#/#LCase(arguments.action)#.cfm")))
+				if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.wheels.class.name)#/#LCase(arguments.action)#.cfm")))
 				{
 					$throw(object=e);
 				}
@@ -122,7 +122,7 @@
 				{
 					if (application.wheels.showErrorInformation)
 					{
-						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.action#` action in the `#variables.$class.name#` controller.", extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(variables.$class.name)#` directory (create the directory as well if it doesn't already exist).");
+						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.action#` action in the `#variables.wheels.class.name#` controller.", extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(variables.wheels.class.name)#` directory (create the directory as well if it doesn't already exist).");
 					}
 					else
 					{

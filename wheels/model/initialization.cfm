@@ -224,7 +224,6 @@
 	<cfscript>
 		var loc = {};
 		variables.wheels = {};
-		variables.wheels.instance = {};
 		variables.wheels.errors = [];
 		
 		// keep a unique identifier for each model created in case we need it for nested properties
@@ -233,7 +232,7 @@
 		// copy class variables from the object in the application scope
 		if (!StructKeyExists(variables.wheels, "class"))
 		{
-			variables.wheels.class = $simpleLock(name="classLock", type="readOnly", object=application.wheels.models[arguments.name], execute="$classData");
+			variables.wheels.class = $simpleLock(name="classLock", type="readOnly", object=application.wheels.models[arguments.name], execute="$getModelClassData");
 		}
 
 		// setup object properties in the this scope
@@ -254,7 +253,7 @@
 	<cfreturn this>
 </cffunction>
 
-<cffunction name="$classData" returntype="struct" access="public" output="false">
+<cffunction name="$getModelClassData" returntype="struct" access="public" output="false">
 	<cfreturn variables.wheels.class>
 </cffunction>
 

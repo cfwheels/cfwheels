@@ -32,24 +32,48 @@
 
 <cffunction name="$addCachableAction" returntype="void" access="public" output="false">
 	<cfargument name="action" type="struct" required="true">
-	<cfset ArrayAppend(variables.$class.cachableActions, arguments.action)>
+	<cfscript>
+		var loc = {};
+		ArrayAppend(variables.wheels.class.cachableActions, arguments.action);
+	</cfscript>
 </cffunction>
 
 <cffunction name="$clearCachableActions" returntype="void" access="public" output="false">
-	<cfset ArrayClear(variables.$class.cachableActions)>
+	<cfscript>
+		var loc = {};
+		ArrayClear(variables.wheels.class.cachableActions);
+	</cfscript>
 </cffunction>
 
 <cffunction name="$setCachableActions" returntype="void" access="public" output="false">
 	<cfargument name="actions" type="array" required="true">
-	<cfset variables.$class.cachableActions = arguments.actions>
+	<cfscript>
+		var loc = {};
+		variables.wheels.class.cachableActions = arguments.actions;
+	</cfscript>
 </cffunction>
 
 <cffunction name="$cachableActions" returntype="array" access="public" output="false">
-	<cfreturn variables.$class.cachableActions>
+	<cfscript>
+		var loc = {};
+		loc.returnValue = variables.wheels.class.cachableActions;
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$hasCachableActions" returntype="boolean" access="public" output="false">
-	<cfreturn !ArrayIsEmpty($cachableActions())>
+	<cfscript>
+		var loc = {};
+		if (ArrayIsEmpty($cachableActions()))
+		{
+			loc.returnValue = false;
+		}
+		else
+		{
+			loc.returnValue = true;
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$cacheSettingsForAction" returntype="any" access="public" output="false">

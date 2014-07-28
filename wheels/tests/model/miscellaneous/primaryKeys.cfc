@@ -2,7 +2,7 @@
 
 	<cffunction name="test_primarykey_returns_key">
 		<cfset loc.author = model("author")>
-		<cfset loc.e = loc.author.$classData().keys>
+		<cfset loc.e = loc.author.$getModelClassData().keys>
 		<cfset loc.r = "id">
 		<cfset assert("loc.e IS loc.r")>
 		<cfset loc.r = loc.author.primaryKey()>
@@ -14,7 +14,7 @@
 	<cffunction name="test_setprimarykey_appends_keys">
 		<cfset loc.author = model("author")>
 		<cfset loc.author = duplicate(loc.author)>
-		<cfset loc.e = loc.author.$classData().keys>
+		<cfset loc.e = loc.author.$getModelClassData().keys>
 		<cfset loc.r = "id">
 		<cfset assert("loc.e IS loc.r")>
 		<cfset loc.author.setprimaryKeys("id2,id3")>
@@ -26,7 +26,7 @@
 	<cffunction name="test_setprimarykey_not_append_duplicate_keys">
 		<cfset loc.author = model("author")>
 		<cfset loc.author = duplicate(loc.author)>
-		<cfset loc.e = loc.author.$classData().keys>
+		<cfset loc.e = loc.author.$getModelClassData().keys>
 		<cfset loc.r = "id">
 		<cfset assert("loc.e IS loc.r")>
 		<cfset loc.author.setprimaryKeys("id2")>

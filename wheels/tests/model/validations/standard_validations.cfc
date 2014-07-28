@@ -416,7 +416,7 @@
 		<cfset loc.user.firstname = "tony">
 		<cfset loc.user.validate(method="fakemethod")>
 		<cfset loc.user.validate(method="fakemethod2", when="onCreate")>
-		<cfset loc.v = loc.user.$classData().validations>
+		<cfset loc.v = loc.user.$getModelClassData().validations>
 		<cfset loc.onsave = loc.v["onsave"]>
 		<cfset loc.oncreate = loc.v["oncreate"]>
 		<cfset assert('arraylen(loc.onsave) eq 1')>

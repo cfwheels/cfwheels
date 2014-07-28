@@ -18,7 +18,7 @@
 				$throw(type="Wheels.invalidFormat"
 					, message="An invalid format of `#ListGetAt(arguments.formats, loc.i)#` has been specific. The possible values are #loc.possibleFormats#.");	
 		
-		variables.$class.formats.default = ListAppend(variables.$class.formats.default, $listClean(arguments.formats));
+		variables.wheels.class.formats.default = ListAppend(variables.wheels.class.formats.default, $listClean(arguments.formats));
 	</cfscript>
 	<cfreturn />
 </cffunction>
@@ -56,7 +56,7 @@
 				$throw(type="Wheels.invalidFormat"
 					, message="An invalid format of `#ListGetAt(arguments.formats, loc.i)#` has been specific. The possible values are #loc.possibleFormats#.");	
 		
-		variables.$class.formats.actions[arguments.action] = $listClean(arguments.formats);
+		variables.wheels.class.formats.actions[arguments.action] = $listClean(arguments.formats);
 	</cfscript>
 	<cfreturn />
 </cffunction>
@@ -148,9 +148,9 @@
 <cffunction name="$acceptableFormats" access="public" output="false" returntype="string" hint="">
 	<cfargument name="action" type="string" required="true">
 	<cfscript>
-		var returnValue = variables.$class.formats.default;
-		if (StructKeyExists(variables.$class.formats, arguments.action))
-			returnValue = variables.$class.formats[arguments.action];
+		var returnValue = variables.wheels.class.formats.default;
+		if (StructKeyExists(variables.wheels.class.formats, arguments.action))
+			returnValue = variables.wheels.class.formats[arguments.action];
 	</cfscript>
 	<cfreturn returnValue />
 </cffunction>
@@ -181,7 +181,7 @@
 		loc.templatePath = $generateIncludeTemplatePath($type="page", $name=arguments.$name, $template=arguments.$name);
 		loc.templatePathExists = false;
 		
-		if (!ListFindNoCase(variables.$class.formats.existingTemplates, arguments.$name) && !ListFindNoCase(variables.$class.formats.nonExistingTemplates, arguments.$name))
+		if (!ListFindNoCase(variables.wheels.class.formats.existingTemplates, arguments.$name) && !ListFindNoCase(variables.wheels.class.formats.nonExistingTemplates, arguments.$name))
 		{
 			if (FileExists(ExpandPath(loc.templatePath)))
 				loc.templatePathExists = true;
@@ -189,13 +189,13 @@
 			if (application.wheels.cacheFileChecking)
 			{
 				if (loc.templatePathExists)
-					variables.$class.formats.existingTemplates = ListAppend(variables.$class.formats.existingTemplates, arguments.$name);
+					variables.wheels.class.formats.existingTemplates = ListAppend(variables.wheels.class.formats.existingTemplates, arguments.$name);
 				else
-					variables.$class.formats.nonExistingTemplates = ListAppend(variables.$class.formats.nonExistingTemplates, arguments.$name);
+					variables.wheels.class.formats.nonExistingTemplates = ListAppend(variables.wheels.class.formats.nonExistingTemplates, arguments.$name);
 			}
 		}
 		
-		if (!loc.templatePathExists && ListFindNoCase(variables.$class.formats.existingTemplates, arguments.$name))
+		if (!loc.templatePathExists && ListFindNoCase(variables.wheels.class.formats.existingTemplates, arguments.$name))
 			loc.templatePathExists = true;
 	</cfscript>
 	<cfreturn loc.templatePathExists />

@@ -3,7 +3,7 @@
 	<cffunction name="test_table_name_with_star_translates_to_all_fields">
 		<cfset loc.model = model("post") />
 		<cfset loc.r = loc.model.$createSQLFieldList(list="posts.*", include="", returnAs="query") />
-		<cfset loc.properties = loc.model.$classData().properties />
+		<cfset loc.properties = loc.model.$getModelClassData().properties />
 		<cfset assert('ListLen(loc.r) eq StructCount(loc.properties)') />
 	</cffunction>
 
