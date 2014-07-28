@@ -625,7 +625,7 @@
 </cffunction>
 
 <cffunction name="$validationExists" returntype="boolean" access="public" output="false" hint="Checks to see if a validation has been created for a property.">
-	<cfargument name="property" type="string" required="true">
+	<cfargument name="propertyName" type="string" required="true">
 	<cfargument name="validation" type="string" required="true">
 	<cfscript>
 		var loc = {};
@@ -636,9 +636,9 @@
 			{
 				loc.eventArray = variables.wheels.class.validations[loc.when];
 				loc.iEnd = ArrayLen(loc.eventArray);
-				for (loc.i = 1; loc.i <= loc.iEnd; loc.i++)
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
-					if (StructKeyExists(loc.eventArray[loc.i].args, "property") && loc.eventArray[loc.i].args.property == arguments.property && loc.eventArray[loc.i].method == "$#arguments.validation#")
+					if (StructKeyExists(loc.eventArray[loc.i].args, "property") && loc.eventArray[loc.i].args.property == arguments.propertyName && loc.eventArray[loc.i].method == "$" & arguments.validation)
 					{
 						loc.returnValue = true;
 						break;

@@ -130,31 +130,31 @@
 						{
 							loc.defaultValidationsAllowBlank = true;
 						}
-						if (!ListFindNoCase(primaryKeys(), loc.property) && !variables.wheels.class.properties[loc.property].nullable && !Len(loc.columns["column_default_value"][loc.i]) && !$validationExists(property=loc.property, validation="validatesPresenceOf"))
+						if (!ListFindNoCase(primaryKeys(), loc.property) && !variables.wheels.class.properties[loc.property].nullable && !Len(loc.columns["column_default_value"][loc.i]) && !$validationExists(propertyName=loc.property, validation="validatesPresenceOf"))
 						{
 							validatesPresenceOf(properties=loc.property);
 						}
 						
 						// always allowblank if a database default or validatesPresenceOf() has been set
-						if (Len(loc.columns["column_default_value"][loc.i]) || $validationExists(property=loc.property, validation="validatesPresenceOf"))
+						if (Len(loc.columns["column_default_value"][loc.i]) || $validationExists(propertyName=loc.property, validation="validatesPresenceOf"))
 						{
 							loc.defaultValidationsAllowBlank = true;
 						}
 
 						// set length validations if the developer has not
-						if (variables.wheels.class.properties[loc.property].validationtype == "string" && !$validationExists(property=loc.property, validation="validatesLengthOf"))
+						if (variables.wheels.class.properties[loc.property].validationtype == "string" && !$validationExists(propertyName=loc.property, validation="validatesLengthOf"))
 						{
 							validatesLengthOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, maximum=variables.wheels.class.properties[loc.property].size);
 						}
 
 						// set numericality validations if the developer has not
-						if (ListFindNoCase("integer,float", variables.wheels.class.properties[loc.property].validationtype) && !$validationExists(property=loc.property, validation="validatesNumericalityOf"))
+						if (ListFindNoCase("integer,float", variables.wheels.class.properties[loc.property].validationtype) && !$validationExists(propertyName=loc.property, validation="validatesNumericalityOf"))
 						{
 							validatesNumericalityOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, onlyInteger=(variables.wheels.class.properties[loc.property].validationtype == "integer"));
 						}
 
 						// set date validations if the developer has not (checks both dates or times as per the IsDate() function)
-						if (variables.wheels.class.properties[loc.property].validationtype == "datetime" && !$validationExists(property=loc.property, validation="validatesFormatOf"))
+						if (variables.wheels.class.properties[loc.property].validationtype == "datetime" && !$validationExists(propertyName=loc.property, validation="validatesFormatOf"))
 						{
 							validatesFormatOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, type="date");
 						}
