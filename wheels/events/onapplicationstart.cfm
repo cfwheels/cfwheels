@@ -99,15 +99,7 @@
 			application.$wheels.URLRewriting = "Off";
 		}
 
-		// set datasource name to same as the folder the app resides in unless the developer has set it with the global setting already
-		if (StructKeyExists(this, "dataSource"))
-		{
-			application.$wheels.dataSourceName = this.dataSource;
-		}
-		else
-		{
-			application.$wheels.dataSourceName = LCase(ListLast(GetDirectoryFromPath(GetBaseTemplatePath()), Right(GetDirectoryFromPath(GetBaseTemplatePath()), 1)));
-		}
+		application.$wheels.dataSourceName = this.dataSource;
 		application.$wheels.dataSourceUserName = "";
 		application.$wheels.dataSourcePassword = "";
 		application.$wheels.transactionMode = "commit";
