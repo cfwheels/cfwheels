@@ -180,10 +180,8 @@
 		loc.params.value = arguments.settings.value;
 		if (StructKeyExists(arguments.settings, "null"))
 		{
-			if (!StructKeyExists(server, "bluedragon"))
-			{
-				loc.params.null = arguments.settings.null;
-			}
+			// need to use below syntax for compatibility with openbd
+			loc.params["null"] = arguments.settings["null"];
 		}
 		if (StructKeyExists(arguments.settings, "scale") AND arguments.settings.scale GT 0)
 		{
