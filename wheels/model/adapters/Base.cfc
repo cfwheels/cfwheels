@@ -180,7 +180,10 @@
 		loc.params.value = arguments.settings.value;
 		if (StructKeyExists(arguments.settings, "null"))
 		{
-			loc.params.null = arguments.settings.null;
+			if (!StructKeyExists(server, "bluedragon"))
+			{
+				loc.params.null = arguments.settings.null;
+			}
 		}
 		if (StructKeyExists(arguments.settings, "scale") AND arguments.settings.scale GT 0)
 		{
@@ -238,18 +241,25 @@
 		StructAppend(loc.args, loc.orgArgs, true);
 		</cfscript>
 
-		<cfquery attributeCollection="#loc.args#"><cfloop array="#arguments.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif StructKeyExists(loc.queryParamAttributes, "useNull")>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")><cfif arguments.parameterize>(<cfqueryparam attributeCollection="#loc.queryParamAttributes#">)<cfelse>(#PreserveSingleQuotes(loc.i.value)#)</cfif><cfelse><cfif arguments.parameterize><cfqueryparam attributeCollection="#loc.queryParamAttributes#"><cfelse>#$quoteValue(str=loc.i.value, sqlType=loc.i.type)#</cfif></cfif><cfelse><cfset loc.i = Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")>#PreserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif></cfquery>
+		<cfquery result="loc.result" name="query.name" attributeCollection="#loc.args#"><cfloop array="#arguments.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif StructKeyExists(loc.queryParamAttributes, "useNull")>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")><cfif arguments.parameterize>(<cfqueryparam value="#loc.queryParamAttributes.value#" cfsqltype="#loc.queryParamAttributes.cfsqltype#" attributeCollection="#loc.queryParamAttributes#">)<cfelse>(#PreserveSingleQuotes(loc.i.value)#)</cfif><cfelse><cfif arguments.parameterize><cfqueryparam value="#loc.queryParamAttributes.value#" cfsqltype="#loc.queryParamAttributes.cfsqltype#" attributeCollection="#loc.queryParamAttributes#"><cfelse>#$quoteValue(str=loc.i.value, sqlType=loc.i.type)#</cfif></cfif><cfelse><cfset loc.i = Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")>#PreserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif></cfquery>
 
 		<cfscript>
 		if (StructKeyExists(query, "name"))
+		{
 			loc.returnValue.query = query.name;
+		}
 
-		// get/set the primary key value if necessary
+		// get / set the primary key value if necessary
 		// will be done on insert statement involving auto-incremented primary keys when Railo/ACF cannot retrieve it for us
 		// this happens on non-supported databases (example: H2) and drivers (example: jTDS)
 		loc.$id = $identitySelect(queryAttributes=loc.args, result=loc.result, primaryKey=arguments.$primaryKey);
 		if (StructKeyExists(loc, "$id"))
-			StructAppend(loc.result, loc.$id);
+		{
+			if (!StructKeyExists(server, "bluedragon"))
+			{
+				StructAppend(loc.result, loc.$id);
+			}
+		}
 
 		loc.returnValue.result = loc.result;
 		</cfscript>

@@ -18,7 +18,7 @@
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
-	<cfset $args(name="validatesConfirmationOf", args=arguments)>
+	<cfset arguments = $args(name="validatesConfirmationOf", args=arguments)>
 	<cfset $registerValidation(methods="$validatesConfirmationOf", argumentCollection=arguments)>
 </cffunction>
 
@@ -41,7 +41,7 @@
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
 	<cfscript>
-		$args(name="validatesExclusionOf", args=arguments);
+		arguments = $args(name="validatesExclusionOf", args=arguments);
 		arguments.list = $listClean(arguments.list);
 		$registerValidation(methods="$validatesExclusionOf", argumentCollection=arguments);
 	</cfscript>
@@ -70,7 +70,7 @@
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
 	<cfscript>
-		$args(name="validatesFormatOf", args=arguments);
+		arguments = $args(name="validatesFormatOf", args=arguments);
 		if (application.wheels.showErrorInformation)
 		{
 			if (Len(arguments.type) && !ListFindNoCase("creditcard,date,email,eurodate,guid,social_security_number,ssn,telephone,time,URL,USdate,UUID,variableName,zipcode,boolean", arguments.type))
@@ -99,7 +99,7 @@
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
 	<cfscript>
-		$args(name="validatesInclusionOf", args=arguments);
+		arguments = $args(name="validatesInclusionOf", args=arguments);
 		arguments.list = $listClean(arguments.list);
 		$registerValidation(methods="$validatesInclusionOf", argumentCollection=arguments);
 	</cfscript>
@@ -130,7 +130,7 @@
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
 	<cfscript>
-		$args(name="validatesLengthOf", args=arguments);
+		arguments = $args(name="validatesLengthOf", args=arguments);
 		if (Len(arguments.within))
 			arguments.within = $listClean(list=arguments.within, returnAs="array");
 		$registerValidation(methods="$validatesLengthOf", argumentCollection=arguments);
@@ -162,7 +162,7 @@
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
-	<cfset $args(name="validatesNumericalityOf", args=arguments)>
+	<cfset arguments = $args(name="validatesNumericalityOf", args=arguments)>
 	<cfset $registerValidation(methods="$validatesNumericalityOf", argumentCollection=arguments)>
 </cffunction>
 
@@ -182,7 +182,7 @@
 		<cfset arguments.condition = arguments.if>
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
-	<cfset $args(name="validatesPresenceOf", args=arguments)>
+	<cfset arguments = $args(name="validatesPresenceOf", args=arguments)>
 	<cfset $registerValidation(methods="$validatesPresenceOf", argumentCollection=arguments)>
 </cffunction>
 
@@ -209,7 +209,7 @@
 		<cfset StructDelete(arguments, "if")>
 	</cfif>
 	<cfscript>
-		$args(name="validatesUniquenessOf", args=arguments);
+		arguments = $args(name="validatesUniquenessOf", args=arguments);
 		arguments.scope = $listClean(arguments.scope);
 		$registerValidation(methods="$validatesUniquenessOf", argumentCollection=arguments);
 	</cfscript>

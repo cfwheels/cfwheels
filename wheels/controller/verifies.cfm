@@ -27,7 +27,7 @@
 	<cfargument name="sessionTypes" type="string" required="false" default="" hint="List of types to check each list `session` value against (will be passed through to your CFML engine's `IsValid` function).">
 	<cfargument name="paramsTypes" type="string" required="false" default="" hint="List of types to check each `params` value against (will be passed through to your CFML engine's `IsValid` function).">
 	<cfscript>
-		$args(name="verifies", args=arguments);
+		arguments = $args(name="verifies", args=arguments);
 		ArrayAppend(variables.wheels.class.verifications, Duplicate(arguments));
 	</cfscript>
 </cffunction>

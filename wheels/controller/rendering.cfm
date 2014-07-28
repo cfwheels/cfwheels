@@ -31,15 +31,15 @@
 	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false" hint="Set to `true` to hide the debug information at the end of the output. This is useful when you're testing XML output in an environment where the global setting for `showDebugInformation` is `true`.">
 	<cfscript>
 		var loc = {};
-		$args(name="renderPage", args=arguments);
-		$dollarify(arguments, "controller,action,template,layout,cache,returnAs,hideDebugInformation");
+		arguments = $args(name="renderPage", args=arguments);
+		arguments = $dollarify(arguments, "controller,action,template,layout,cache,returnAs,hideDebugInformation");
 		if (application.wheels.showDebugInformation)
 		{
 			$debugPoint("view");
 		}
 		
 		// if no layout specific arguments were passed in use the this instance's layout
-		if(!Len(arguments.$layout))
+		if (!Len(arguments.$layout))
 		{
 			arguments.$layout = $useLayout(arguments.$action);
 		}
@@ -137,7 +137,7 @@
 	<cfargument name="dataFunction" type="any" required="false" hint="Name of a controller function to load data from.">
 	<cfscript>
 		var loc = {};
-		$args(name="renderPartial", args=arguments);
+		arguments = $args(name="renderPartial", args=arguments);
 		loc.partial = $includeOrRenderPartial(argumentCollection=$dollarify(arguments, "partial,cache,layout,returnAs,dataFunction"));
 		if (arguments.$returnAs == "string")
 		{

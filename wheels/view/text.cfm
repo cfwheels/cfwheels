@@ -13,7 +13,7 @@
 	<cfargument name="relative" type="boolean" required="false" default="true" hint="Should we autolink relative urls">
 	<cfscript>
 		var loc = {};
-		$args(name="autoLink", args=arguments);
+		arguments = $args(name="autoLink", args=arguments);
 		if (arguments.link != "emailAddresses")
 		{
 			if(arguments.relative)
@@ -79,7 +79,7 @@
 	<cfargument name="excerptString" type="string" required="false" hint="String to replace first and/or last characters with.">
 	<cfscript>
 	var loc = {};
-	$args(name="excerpt", args=arguments);
+	arguments = $args(name="excerpt", args=arguments);
 	loc.pos = FindNoCase(arguments.phrase, arguments.text, 1);
 	if (loc.pos != 0)
 	{
@@ -127,7 +127,7 @@
 	<cfargument name="class" type="string" required="false" hint="Class to use in the tags wrapping highlighted phrase(s).">
 	<cfscript>
 		var loc = {};
-		$args(name="highlight", args=arguments);
+		arguments = $args(name="highlight", args=arguments);
 		if (!Len(arguments.text) || !Len(arguments.phrases))
 		{
 			loc.returnValue = arguments.text;
@@ -194,7 +194,7 @@
 	<cfargument name="wrap" type="boolean" required="false" hint="Set to `true` to wrap the result in a paragraph.">
 	<cfscript>
 		var loc = {};
-		$args(name="simpleFormat", args=arguments);
+		arguments = $args(name="simpleFormat", args=arguments);
 		loc.returnValue = Trim(arguments.text);
 		loc.returnValue = Replace(loc.returnValue, "#Chr(13)#", "", "all");
 		loc.returnValue = Replace(loc.returnValue, "#Chr(10)##Chr(10)#", "</p><p>", "all");
@@ -248,7 +248,7 @@
 	<cfargument name="truncateString" type="string" required="false" hint="String to replace the last characters with.">
 	<cfscript>
 		var loc = {};
-		$args(name="truncate", args=arguments);
+		arguments = $args(name="truncate", args=arguments);
 		if (Len(arguments.text) > arguments.length)
 		{
 			loc.returnValue = Left(arguments.text, arguments.length-Len(arguments.truncateString)) & arguments.truncateString;
@@ -276,7 +276,7 @@
 	<cfargument name="truncateString" type="string" required="false" hint="String to replace the last characters with.">
 	<cfscript>
 		var loc = {};
-		$args(name="wordTruncate", args=arguments);
+		arguments = $args(name="wordTruncate", args=arguments);
 		loc.returnValue = "";
 		loc.wordArray = ListToArray(arguments.text, " ", false);
 		loc.wordLen = ArrayLen(loc.wordArray);

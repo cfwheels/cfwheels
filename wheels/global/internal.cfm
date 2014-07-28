@@ -189,7 +189,7 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$combineArguments" returntype="void" access="public" output="false">
+<cffunction name="$combineArguments" returntype="struct" access="public" output="false">
 	<cfargument name="args" type="struct" required="true">
 	<cfargument name="combine" type="string" required="true">
 	<cfargument name="required" type="boolean" required="false" default="false">
@@ -210,7 +210,9 @@
 				$throw(type="Wheels.IncorrectArguments", message="The `#loc.second#` or `#loc.first#` argument is required but was not passed in.", extendedInfo="#arguments.extendedInfo#");
 			}
 		}
+		loc.returnValue = arguments.args;
 	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <!--- helper method to recursively map a structure to build mapping paths and retrieve its values so you can have your way with a deeply nested structure --->
@@ -267,20 +269,21 @@
 </cffunction>
 
 <cffunction name="$dollarify" returntype="struct" access="public" output="false">
-	<cfargument name="input" type="struct" required="true">
+	<cfargument name="args" type="struct" required="true">
 	<cfargument name="on" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		for (loc.key in arguments.input)
+		for (loc.key in arguments.args)
 		{
 			if (ListFindNoCase(arguments.on, loc.key))
 			{
-				arguments.input["$"&loc.key] = arguments.input[loc.key];
-				StructDelete(arguments.input, loc.key);
+				arguments.args["$" & loc.key] = arguments.args[loc.key];
+				StructDelete(arguments.args, loc.key);
 			}
 		}
+		loc.returnValue = arguments.args;
 	</cfscript>
-	<cfreturn arguments.input>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$abortInvalidRequest" returntype="void" access="public" output="false">
@@ -417,7 +420,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$args" returntype="void" access="public" output="false">
+<cffunction name="$args" returntype="struct" access="public" output="false">
 	<cfargument name="args" type="struct" required="true">
 	<cfargument name="name" type="string" required="true">
 	<cfargument name="reserved" type="string" required="false" default="">
@@ -450,12 +453,24 @@
 				{
 					loc.item = ListGetAt(arguments.reserved, loc.i);
 					if (StructKeyExists(arguments.args, loc.item))
+					{
 						$throw(type="Wheels.IncorrectArguments", message="The `#loc.item#` argument cannot be passed in since it will be set automatically by Wheels.");
+					}
 				}
 			}
 		}
+		
+		// add global argument values when they exist and the developer did not pass anything in for it
 		if (StructKeyExists(application.wheels.functions, arguments.name))
-			StructAppend(arguments.args, application.wheels.functions[arguments.name], false);
+		{
+			for (loc.key in application.wheels.functions[arguments.name])
+			{
+				if (!StructKeyExists(arguments.args, loc.key))
+				{
+					arguments.args[loc.key] = application.wheels.functions[arguments.name][loc.key];
+				}
+			}
+		}
 
 		// make sure that the arguments marked as required exist
 		if (Len(arguments.required))
@@ -470,7 +485,9 @@
 				}
 			}
 		}
+		loc.returnValue = arguments.args;
 	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$createObjectFromRoot" returntype="any" access="public" output="false">

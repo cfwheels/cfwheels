@@ -219,7 +219,7 @@
 		var loc = {};
 		loc.$flash = $readFlash();
 		loc.returnValue = "";
-		$args(name="flashMessages", args=arguments);
+		arguments = $args(name="flashMessages", args=arguments);
 		$combineArguments(args=arguments, combine="keys,key", required=false);
 
 		// If no keys are requested, populate with everything stored in the Flash and sort them

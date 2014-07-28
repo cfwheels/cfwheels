@@ -34,7 +34,7 @@
 	<cfargument name="delay" type="boolean" required="false" hint="Set to `true` to delay the redirection until after the rest of your action code has executed.">
 	<cfscript>
 		var loc = {};
-		$args(name="redirectTo", args=arguments);
+		arguments = $args(name="redirectTo", args=arguments);
 
 		// set flash if passed in
 		loc.functionInfo = GetMetaData(variables.redirectTo);

@@ -110,10 +110,19 @@
 			loc.association = loc.associations[loc.item];
 			if (loc.association.nested.allow && loc.association.nested.autoSave && StructKeyExists(this, loc.item))
 			{
+				loc.args = {};
+				loc.args.property = loc.item;
+				loc.args.value = this[loc.item];
+				loc.args.association = loc.association;
+				loc.args.delete = true;
 				if (ListFindNoCase("belongsTo,hasOne", loc.association.type) && IsStruct(this[loc.item]))
-					$setOneToOneAssociationProperty(property=loc.item, value=this[loc.item], association=loc.association, delete=true);
+				{
+					$setOneToOneAssociationProperty(argumentCollection=loc.args);
+				}
 				else if (loc.association.type == "hasMany" && IsArray(this[loc.item]) && ArrayLen(this[loc.item]))
-					$setCollectionAssociationProperty(property=loc.item, value=this[loc.item], association=loc.association, delete=true);
+				{
+					$setCollectionAssociationProperty(argumentCollection=loc.args);
+				}
 			}
 		}
 	</cfscript>
@@ -153,11 +162,16 @@
 		{
 			for (loc.item in arguments.value)
 			{
+				loc.args = {};
+				loc.args.property = arguments.property;
+				loc.args.value = arguments.value[loc.item];
+				loc.args.association = arguments.association;
+				loc.args.delete = arguments.delete;
+
 				// check to see if the id is a tickcount, if so the object is new
 				if (IsNumeric(loc.item) && Ceiling(GetTickCount() / 900000000) == Ceiling(loc.item / 900000000))
 				{
-					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item], association=arguments.association, delete=arguments.delete));
-					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.item]);
+					ArrayAppend(this[arguments.property], $getAssociationObject(argumentCollection=loc.args));
 				}
 				else
 				{
@@ -165,11 +179,15 @@
 					loc.keys = loc.model.primaryKey();
 					loc.itemArray = ListToArray(loc.item, ",", true);
 					loc.iEnd = ListLen(loc.keys);
-					for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+					for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+					{
 						arguments.value[loc.item][ListGetAt(loc.keys, loc.i)] = loc.itemArray[loc.i];
-					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item], association=arguments.association, delete=arguments.delete));
-					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.item]);
+					}
+					ArrayAppend(this[arguments.property], $getAssociationObject(argumentCollection=loc.args));
 				}
+				StructDelete(loc.args, "association");
+				StructDelete(loc.args, "delete");
+				$updateCollectionObject(argumentCollection=loc.args);
 			}
 		}
 		else if (IsArray(arguments.value))
@@ -178,7 +196,12 @@
 			{
 				if (IsObject(arguments.value[loc.i]) && ArrayLen(this[arguments.property]) gte loc.i && IsObject(this[arguments.property][loc.i]) && this[arguments.property][loc.i].compareTo(arguments.value[loc.i]))
 				{
-					this[arguments.property][loc.i] = $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete);
+					loc.args = {};
+					loc.args.property = arguments.property;
+					loc.args.value = arguments.value[loc.i];
+					loc.args.association = arguments.association;
+					loc.args.delete = arguments.delete;
+					this[arguments.property][loc.i] = $getAssociationObject(argumentCollection=loc.args);
 					if (!IsStruct(this[arguments.property][loc.i]) && !this[arguments.property][loc.i])
 					{
 						ArrayDeleteAt(this[arguments.property], loc.i);
@@ -186,12 +209,21 @@
 					}
 					else
 					{
-						$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i], position=loc.i);
+						loc.args = {};
+						loc.args.property = arguments.property;
+						loc.args.value = arguments.value[loc.i];
+						loc.args.position = loc.i;
+						$updateCollectionObject(argumentCollection=loc.args);
 					}
 				}
 				else if (IsStruct(arguments.value[loc.i]) && ArrayLen(this[arguments.property]) gte loc.i && IsObject(this[arguments.property][loc.i]))
 				{
-					this[arguments.property][loc.i] = $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete);
+					loc.args = {};
+					loc.args.property = arguments.property;
+					loc.args.value = arguments.value[loc.i];
+					loc.args.association = arguments.association;
+					loc.args.delete = arguments.delete;
+					this[arguments.property][loc.i] = $getAssociationObject(argumentCollection=loc.args);
 					if (!IsStruct(this[arguments.property][loc.i]) && !this[arguments.property][loc.i])
 					{
 						ArrayDeleteAt(this[arguments.property], loc.i);
@@ -199,13 +231,24 @@
 					}
 					else
 					{
-						$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i], position=loc.i);
+						loc.args = {};
+						loc.args.property = arguments.property;
+						loc.args.value = arguments.value[loc.i];
+						loc.args.position = loc.i;
+						$updateCollectionObject(argumentCollection=loc.args);
 					}
 				}
 				else
 				{
-					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.i], association=arguments.association, delete=arguments.delete));
-					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.i]);
+					loc.args = {};
+					loc.args.property = arguments.property;
+					loc.args.value = arguments.value[loc.i];
+					loc.args.association = arguments.association;
+					loc.args.delete = arguments.delete;
+					ArrayAppend(this[arguments.property], $getAssociationObject(argumentCollection=loc.args));
+					StructDelete(loc.args, "association");
+					StructDelete(loc.args, "delete");
+					$updateCollectionObject(argumentCollection=loc.args);
 				}
 			}
 		}

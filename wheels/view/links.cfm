@@ -42,7 +42,7 @@
 	<cfargument name="href" type="string" required="false" hint="Pass a link to an external site here if you want to bypass the Wheels routing system altogether and link to an external URL.">
 	<cfscript>
 		var loc = {};
-		$args(name="linkTo", args=arguments);
+		arguments = $args(name="linkTo", args=arguments);
 		if (Len(arguments.confirm))
 		{
 			loc.onclick = "return confirm('#JSStringFormat(arguments.confirm)#');";
@@ -83,7 +83,7 @@
 	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
 	<cfscript>
 		var loc = {};
-		$args(name="buttonTo", reserved="method", args=arguments);
+		arguments = $args(name="buttonTo", reserved="method", args=arguments);
 		arguments.action = URLFor(argumentCollection=arguments);
 		arguments.action = toXHTML(arguments.action);
 		arguments.method = "post";
@@ -113,7 +113,7 @@
 	<cfargument name="encode" type="boolean" required="false" hint="Pass `true` here to encode the email address, making it harder for bots to harvest it for example.">
 	<cfscript>
 		var loc = {};
-		$args(name="mailTo", reserved="href", args=arguments);
+		arguments = $args(name="mailTo", reserved="href", args=arguments);
 		arguments.href = "mailto:#arguments.emailAddress#";
 		if (Len(arguments.name))
 			loc.content = arguments.name;
@@ -200,7 +200,7 @@
 
 	<cfscript>
 		var loc = {};
-		$args(name="paginationLinks", args=arguments);
+		arguments = $args(name="paginationLinks", args=arguments);
 		loc.skipArgs = "windowSize,alwaysShowAnchors,anchorDivider,linkToCurrentPage,prepend,append,prependToPage,prependOnFirst,prependOnAnchor,appendToPage,appendOnLast,appendOnAnchor,classForCurrent,handle,name,showSinglePage,pageNumberAsParam";
 		loc.linkToArguments = Duplicate(arguments);
 		loc.iEnd = ListLen(loc.skipArgs);

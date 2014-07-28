@@ -136,7 +136,6 @@
 <cffunction name="$throw" returntype="void" access="public" output="false">
 	<cfif StructKeyExists(server, "bluedragon")>
 		<cfdump var="#arguments#">
-		<cfabort>
 	<cfelse>
 		<cfthrow attributeCollection="#arguments#">
 	</cfif>

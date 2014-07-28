@@ -46,7 +46,7 @@
 	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
 	<cfscript>
 		var loc = {};
-		$args(name="startFormTag", args=arguments);
+		arguments = $args(name="startFormTag", args=arguments);
 
 		// sets a flag to indicate whether we use get or post on this form, used when obfuscating params
 		request.wheels.currentFormMethod = arguments.method;
@@ -112,7 +112,7 @@
 	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
 	<cfscript>
 		var loc = {};
-		$args(name="submitTag", reserved="type,src", args=arguments);
+		arguments = $args(name="submitTag", reserved="type,src", args=arguments);
 		loc.returnValue = arguments.prepend;
 		loc.append = arguments.append;
 		if (Len(arguments.disable))
@@ -169,7 +169,7 @@
 	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
 	<cfscript>
 		var loc = {};
-		$args(name="buttonTag", args=arguments);
+		arguments = $args(name="buttonTag", args=arguments);
 
 		// add onclick attribute to disable the form button
 		if (Len(arguments.disable))

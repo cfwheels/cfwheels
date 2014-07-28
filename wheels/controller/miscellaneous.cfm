@@ -132,7 +132,7 @@
 	<cfargument name="$testingMode" type="boolean" required="false" default="false">
 	<cfscript>
 		var loc = {};
-		$args(name="sendFile", args=arguments);
+		arguments = $args(name="sendFile", args=arguments);
 		loc.relativeRoot = application.wheels.rootPath;
 		if (Right(loc.relativeRoot, 1) != "/")
 		{

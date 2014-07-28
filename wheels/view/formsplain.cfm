@@ -17,7 +17,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		$args(name="textFieldTag", args=arguments);
+		arguments = $args(name="textFieldTag", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.value;
@@ -47,7 +47,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		$args(name="passwordFieldTag", args=arguments);
+		arguments = $args(name="passwordFieldTag", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.value;
@@ -99,7 +99,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		$args(name="fileFieldTag", args=arguments);
+		arguments = $args(name="fileFieldTag", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = "";
@@ -128,7 +128,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		$args(name="textAreaTag", args=arguments);
+		arguments = $args(name="textAreaTag", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.content;
@@ -163,7 +163,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		$args(name="radioButtonTag", args=arguments);
+		arguments = $args(name="radioButtonTag", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.tagValue = arguments.value;
@@ -214,7 +214,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		$args(name="checkBoxTag", args=arguments);
+		arguments = $args(name="checkBoxTag", args=arguments);
 		arguments.checkedValue = arguments.value;
 		arguments.property = arguments.name;
 		arguments.objectName = {};
@@ -269,7 +269,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		$args(name="selectTag", args=arguments);
+		arguments = $args(name="selectTag", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.selected;

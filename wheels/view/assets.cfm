@@ -26,7 +26,7 @@
 	<cfargument name="delim" type="string" required="false" default="," hint="the delimiter to use for the list of stylesheets">
 	<cfscript>
 		var loc = {};
-		$args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href,rel");
+		arguments = $args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href,rel");
 		if (!Len(arguments.type))
 		{
 			StructDelete(arguments, "type");
@@ -91,7 +91,7 @@
 	<cfargument name="delim" type="string" required="false" default="," hint="the delimiter to use for the list of stylesheets">
 	<cfscript>
 		var loc = {};
-		$args(name="javaScriptIncludeTag", args=arguments, combine="sources/source/!", reserved="src");
+		arguments = $args(name="javaScriptIncludeTag", args=arguments, combine="sources/source/!", reserved="src");
 		if (!Len(arguments.type))
 		{
 			StructDelete(arguments, "type");
@@ -142,7 +142,7 @@
 	<cfargument name="source" type="string" required="true" hint="The file name of the image if it's availabe in the local file system (i.e. ColdFusion will be able to access it). Provide the full URL if the image is on a remote server.">
 	<cfscript>
 		var loc = {};
-		$args(name="imageTag", reserved="src", args=arguments);
+		arguments = $args(name="imageTag", reserved="src", args=arguments);
 		// ugly fix due to the fact that id can't be passed along to cfinvoke
 		if (StructKeyExists(arguments, "id"))
 		{

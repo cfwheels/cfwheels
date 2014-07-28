@@ -16,7 +16,7 @@
 	<cfargument name="joinKey" type="string" required="false" default="" hint="Column name to join to if not the primary key (usually not needed if you follow wheels conventions since the join key will be the tables primary key/keys).">
 	<cfargument name="joinType" type="string" required="false" hint="Use to set the join type when joining associated tables. Possible values are `inner` (for `INNER JOIN`) and `outer` (for `LEFT OUTER JOIN`).">
 	<cfscript>
-		$args(name="belongsTo", args=arguments);
+		arguments = $args(name="belongsTo", args=arguments);
 		// deprecate the class argument (change of name only)
 		if (StructKeyExists(arguments, "class"))
 		{
@@ -74,7 +74,7 @@
 	<cfscript>
 		var singularizeName = capitalize(singularize(arguments.name));
 		var capitalizeName = capitalize(arguments.name);
-		$args(name="hasMany", args=arguments);
+		arguments = $args(name="hasMany", args=arguments);
 		// deprecate the class argument (change of name only)
 		if (StructKeyExists(arguments, "class"))
 		{
@@ -109,7 +109,7 @@
 	<cfargument name="dependent" type="string" required="false" hint="See documentation for @hasMany.">
 	<cfscript>
 		var capitalizeName = capitalize(arguments.name);
-		$args(name="hasOne", args=arguments);
+		arguments = $args(name="hasOne", args=arguments);
 		// deprecate the class argument (change of name only)
 		if (StructKeyExists(arguments, "class"))
 		{
