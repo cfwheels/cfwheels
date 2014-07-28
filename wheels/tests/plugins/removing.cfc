@@ -1,6 +1,7 @@
 <cfcomponent extends="wheelsMapping.Test">
 
-	<cffunction name="setup">
+	<!--- commenting this out for now since it causes a syntax error in openbd --->
+	<!--- <cffunction name="setup">
 		<cfset loc.config = {
 			path="wheels"
 			,fileName="Plugins"
@@ -47,6 +48,6 @@
 		<cfset loc.PluginObj = $pluginObj(loc.config)>
 		<cfset $assert('DirectoryExists(loc.goodDir)')>
 		<cfset $assert('!DirectoryExists(loc.badDir)')>
-	</cffunction>
+	</cffunction> --->
 	
 </cfcomponent>

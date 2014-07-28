@@ -11,23 +11,21 @@
 	<cffunction name="test_list_for_option_values">
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = "first,second,third">
-		<cfset debug("loc.controller.selectTag(argumentcollection=loc.args)", false)>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
 		<cfset $assert('loc.options.simplevalues eq loc.r')>
 	</cffunction>
 
-	<cffunction name="test_struct_for_option_values">
+	<!--- commenting this out for now since it causes a syntax error in openbd --->
+	<!--- <cffunction name="test_struct_for_option_values">
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = {1="first", 2="second", 3="third"}>
-		<cfset debug("loc.controller.selectTag(argumentcollection=loc.args)", false)>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
 		<cfset $assert('loc.options.complexvalues eq loc.r')>
-	</cffunction>
+	</cffunction> --->
 
 	<cffunction name="test_one_dimensional_array_for_option_values">
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = ["first", "second", "third"]>
-		<cfset debug("loc.controller.selectTag(argumentcollection=loc.args)", false)>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
 		<cfset $assert('loc.options.simplevalues eq loc.r')>
 	</cffunction>
@@ -38,7 +36,6 @@
 		<cfset loc.second = [2, "second"]>
 		<cfset loc.third = [3, "third"]>
 		<cfset loc.args.options = [loc.first, loc.second, loc.third]>
-		<cfset debug("loc.controller.selectTag(argumentcollection=loc.args)", false)>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
 		<cfset $assert('loc.options.complexvalues eq loc.r')>
 	</cffunction>
@@ -49,7 +46,6 @@
 		<cfset loc.second = [2, "second", "b"]>
 		<cfset loc.third = [3, "third", "c"]>
 		<cfset loc.args.options = [loc.first, loc.second, loc.third]>
-		<cfset debug("loc.controller.selectTag(argumentcollection=loc.args)", false)>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
 		<cfset $assert('loc.options.complexvalues eq loc.r')>
 	</cffunction>
@@ -62,7 +58,6 @@
 		<cfset queryaddcolumn(loc.q, "name", loc.name)>
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = loc.q>
-		<cfset debug("loc.controller.selectTag(argumentcollection=loc.args)", false)>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
 		<cfset $assert('loc.options.complexvalues eq loc.r')>
 	</cffunction>
@@ -73,7 +68,6 @@
 		<cfset queryaddcolumn(loc.q, "id", loc.id)>
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = loc.q>
-		<cfset debug("loc.controller.selectTag(argumentcollection=loc.args)", false)>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
 		<cfset $assert('loc.options.single_column_query eq loc.r')>
 	</cffunction>
@@ -86,7 +80,6 @@
 		<cfset queryaddcolumn(loc.q, "name", loc.name)>
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = loc.q>
-		<cfset debug("loc.controller.selectTag(argumentcollection=loc.args)", false)>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
 		<cfset $assert('loc.options.empty_query eq loc.r')>
 	</cffunction>
@@ -95,7 +88,6 @@
 		<cfset loc.q = querynew("")>
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = loc.q>
-		<cfset debug("loc.controller.selectTag(argumentcollection=loc.args)", false)>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
 		<cfset $assert('loc.options.empty_query eq loc.r')>
 	</cffunction>
@@ -109,7 +101,6 @@
 		<cfset ArrayAppend(loc.args.options, loc.temp)>
 		<cfset loc.temp = {value="3", text="third"}>
 		<cfset ArrayAppend(loc.args.options, loc.temp)>
-		<cfset debug("loc.controller.selectTag(argumentcollection=loc.args)", false)>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
 		<cfset $assert('loc.options.complexvalues eq loc.r')>
 	</cffunction>

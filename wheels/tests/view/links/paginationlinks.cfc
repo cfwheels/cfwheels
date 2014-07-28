@@ -1,7 +1,9 @@
 <cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
-		<cfset copies = Duplicate(application.wheels)>
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cfset copies = Duplicate(application.wheels)>
+		</cfif>
 		<cfset loc.params = {controller="dummy", action="dummy"}>
 		<cfset loc.controller = controller("dummy", loc.params)>
 		<cfset loc.route = StructNew()>
@@ -16,7 +18,9 @@
 	</cffunction>
 
 	<cffunction name="teardown">
-		<cfset application.wheels = copies>
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cfset application.wheels = copies>
+		</cfif>
 	</cffunction>
 	
 	<cffunction name="test_current_page">
