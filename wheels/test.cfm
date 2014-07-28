@@ -500,7 +500,9 @@
 	<cfset loc.resultKey = "WheelsTests">
 
 	<!--- save the original environment for overloaded --->
-	<cfset loc.savedenv = duplicate(application)>
+	<cfif NOT StructKeyExists(server, "bluedragon")>
+		<cfset loc.savedenv = duplicate(application)>
+	</cfif>
 
 	<!--- not only can we specify the package, but also the test we want to run --->
 	<cfset loc.test = "">
@@ -521,7 +523,9 @@
 	</cfloop>
 
 	<!--- swap back the enviroment --->
-	<cfset structappend(application, loc.savedenv, true)>
+	<cfif NOT StructKeyExists(server, "bluedragon")>
+		<cfset structappend(application, loc.savedenv, true)>
+	</cfif>
 
 	<!--- return the results --->
 	<cfreturn $results(loc.resultKey)>
