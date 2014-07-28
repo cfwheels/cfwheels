@@ -21,64 +21,64 @@
 		<cfset application.wheels.functions.sendEmail.to = "recipient@example.com">
 		<cfset application.wheels.functions.sendEmail.subject = "test email">
 		<cfset loc.r = default_args(template="")>
-		<cfset assert('loc.r.from eq "sender@example.com"')>
-		<cfset assert('loc.r.to eq "recipient@example.com"')>
-		<cfset assert('loc.r.subject eq "test email"')>
+		<cfset $assert('loc.r.from eq "sender@example.com"')>
+		<cfset $assert('loc.r.to eq "recipient@example.com"')>
+		<cfset $assert('loc.r.subject eq "test email"')>
 		<cfset loc.r = default_args(template="", from="custom_sender@example.com", to="custom_recipient@example.com", subject="custom suject")>
-		<cfset assert('loc.r.from eq "custom_sender@example.com"')>
-		<cfset assert('loc.r.to eq "custom_recipient@example.com"')>
-		<cfset assert('loc.r.subject eq "custom suject"')>
+		<cfset $assert('loc.r.from eq "custom_sender@example.com"')>
+		<cfset $assert('loc.r.to eq "custom_recipient@example.com"')>
+		<cfset $assert('loc.r.subject eq "custom suject"')>
 	</cffunction>
 
 	<cffunction name="test_send_plain">
 		<cfset args.template = "plainEmailTemplate">
 		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("ListLen(StructKeyList(result)) IS 5 AND StructKeyExists(result, 'to') AND StructKeyExists(result, 'from') AND StructKeyExists(result, 'subject') AND result.type IS 'text' AND result.tagContent IS 'dummy plain email body'")>
+		<cfset $assert("ListLen(StructKeyList(result)) IS 5 AND StructKeyExists(result, 'to') AND StructKeyExists(result, 'from') AND StructKeyExists(result, 'subject') AND result.type IS 'text' AND result.tagContent IS 'dummy plain email body'")>
 	</cffunction>
 
 	<cffunction name="test_send_html">
 		<cfset args.template = "HTMLEmailTemplate">
 		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.type IS 'html' AND result.tagContent IS '<p>dummy html email body</p>'")>
+		<cfset $assert("result.type IS 'html' AND result.tagContent IS '<p>dummy html email body</p>'")>
 	</cffunction>
 
 	<cffunction name="test_send_combined_in_correct_order">
 		<cfset args.templates = "HTMLEmailTemplate,plainEmailTemplate">
 		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.mailparts[1].type IS 'text' AND result.mailparts[2].tagContent IS '<p>dummy html email body</p>'")>
+		<cfset $assert("result.mailparts[1].type IS 'text' AND result.mailparts[2].tagContent IS '<p>dummy html email body</p>'")>
 	</cffunction>
 
 	<cffunction name="test_send_with_layout">
 		<cfset args.template = "HTMLEmailTemplate">
 		<cfset args.layout = "emailLayout">
 		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.tagContent Contains '<div>'")>
+		<cfset $assert("result.tagContent Contains '<div>'")>
 	</cffunction>
 
 	<cffunction name="test_send_with_attachment">
 		<cfset args.template = "plainEmailTemplate">
 		<cfset args.file = "cfwheels-logo.png">
 		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.mailparams[1].file Contains '_assets' AND result.mailparams[1].file Contains 'cfwheels-logo.png'")>
+		<cfset $assert("result.mailparams[1].file Contains '_assets' AND result.mailparams[1].file Contains 'cfwheels-logo.png'")>
 	</cffunction>
 
 	<cffunction name="test_send_with_custom_argument">
 		<cfset args.template = "plainEmailTemplate">
 		<cfset args.customArgument = "IPassedInThisAsACustomArgument">
 		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.tagContent Contains 'IPassedInThisAsACustomArgument'")>
+		<cfset $assert("result.tagContent Contains 'IPassedInThisAsACustomArgument'")>
 	</cffunction>
 
 	<cffunction name="test_send_from_different_path">
 		<cfset args.template = "/shared/anotherPlainEmailTemplate">
 		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.tagContent IS 'another dummy plain email body'")>
+		<cfset $assert("result.tagContent IS 'another dummy plain email body'")>
 	</cffunction>
 
 	<cffunction name="test_send_from_sub_folder">
 		<cfset args.template = "sub/anotherHTMLEmailTemplate">
 		<cfset result = loc.controller.sendEmail(argumentCollection=args)>
-		<cfset assert("result.tagContent IS '<p>another dummy html email body</p>'")>
+		<cfset $assert("result.tagContent IS '<p>another dummy html email body</p>'")>
 	</cffunction>
 
 	<cffunction name="teardown">

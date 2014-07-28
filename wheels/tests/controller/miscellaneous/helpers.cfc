@@ -13,12 +13,12 @@
 	
 	<cffunction name="test_inclusion_of_global_helper_file">
 		<cfset loc.controller.renderPage()>
-		<cfset assert("StructKeyExists(request.test, 'globalHelperFunctionWasCalled')")>
+		<cfset $assert("StructKeyExists(request.test, 'globalHelperFunctionWasCalled')")>
 	</cffunction>
 	
 	<cffunction name="test_inclusion_of_controller_helper_file">
 		<cfset loc.controller.renderPage()>
-		<cfset assert("StructKeyExists(request.test, 'controllerHelperFunctionWasCalled')")>
+		<cfset $assert("StructKeyExists(request.test, 'controllerHelperFunctionWasCalled')")>
 	</cffunction>
 
 	<cffunction name="teardown">

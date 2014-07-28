@@ -10,10 +10,10 @@
 
 		<cfset loc.e = loc.controller.$tagid(argumentcollection=loc.args)>
 		<cfset loc.r = "lastname">
-		<cfset assert("loc.e eq loc.r")>
+		<cfset $assert("loc.e eq loc.r")>
 
 		<cfset loc.e = loc.controller.$tagname(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset $assert("loc.e eq loc.r")>
 	</cffunction>
 
 	<cffunction name="test_with_string">
@@ -22,11 +22,11 @@
 
 		<cfset loc.e = loc.controller.$tagid(argumentcollection=loc.args)>
 		<cfset loc.r = "miscellaneous-lastname">
-		<cfset assert("loc.e eq loc.r")>
+		<cfset $assert("loc.e eq loc.r")>
 
 		<cfset loc.e = loc.controller.$tagname(argumentcollection=loc.args)>
 		<cfset loc.r = "miscellaneous[lastname]">
-		<cfset assert("loc.e eq loc.r")>
+		<cfset $assert("loc.e eq loc.r")>
 	</cffunction>
 
 	<cffunction name="test_with_array">
@@ -35,10 +35,10 @@
 
 		<cfset loc.e = loc.controller.$tagid(argumentcollection=loc.args)>
 		<cfset loc.r = "lastname">
-		<cfset assert("loc.e eq loc.r")>
+		<cfset $assert("loc.e eq loc.r")>
 
 		<cfset loc.e = loc.controller.$tagname(argumentcollection=loc.args)>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset $assert("loc.e eq loc.r")>
 	</cffunction>
 
 </cfcomponent>

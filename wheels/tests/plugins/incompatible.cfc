@@ -21,7 +21,7 @@
 		<cfset loc.config.pluginPath = "/wheelsMapping/tests/_assets/plugins/incompatible">
 		<cfset loc.e = "Wheels.IncompatiblePlugin">
 		<cfset loc.r = raised('$pluginObj(loc.config)')>
-		<cfset assert('loc.r eq loc.e')>
+		<cfset $assert('loc.r eq loc.e')>
 	</cffunction>
 	
 </cfcomponent>

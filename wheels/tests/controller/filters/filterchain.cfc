@@ -20,16 +20,16 @@
 		<cfset loc.after = loc.controller.filterChain("after")>
 		<cfset loc.all = loc.controller.filterChain()>
 
-		<cfset assert('ArrayLen(loc.before) eq 3')>
-		<cfset assert('loc.before[1].through eq "before1"')>
-		<cfset assert('loc.before[2].through eq "before2"')>
-		<cfset assert('loc.before[3].through eq "before3"')>
+		<cfset $assert('ArrayLen(loc.before) eq 3')>
+		<cfset $assert('loc.before[1].through eq "before1"')>
+		<cfset $assert('loc.before[2].through eq "before2"')>
+		<cfset $assert('loc.before[3].through eq "before3"')>
 
-		<cfset assert('ArrayLen(loc.after) eq 2')>
-		<cfset assert('loc.after[1].through eq "after1"')>
-		<cfset assert('loc.after[2].through eq "after2"')>
+		<cfset $assert('ArrayLen(loc.after) eq 2')>
+		<cfset $assert('loc.after[1].through eq "after1"')>
+		<cfset $assert('loc.after[2].through eq "after2"')>
 
-		<cfset assert('ArrayLen(loc.all) eq 5')>
+		<cfset $assert('ArrayLen(loc.all) eq 5')>
 	</cffunction>
 
 

@@ -17,7 +17,7 @@
 		<cfset loc.controller.$injectIntoVariablesScope = this.$injectIntoVariablesScope />
 		<cfset loc.controller.$injectIntoVariablesScope(name="query", data=query) />
 		<cfset loc.e = loc.controller.$argumentsForPartial($name="query", $dataFunction=true)>
-		<cfset assert('IsStruct(loc.e) and StructIsEmpty(loc.e)') />
+		<cfset $assert('IsStruct(loc.e) and StructIsEmpty(loc.e)') />
 	</cffunction>
 
 </cfcomponent>

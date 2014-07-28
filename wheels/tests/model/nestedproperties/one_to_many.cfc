@@ -9,24 +9,24 @@
 
 	<cffunction name="test_add_children_via_object_array">
 		<cftransaction>
-			<cfset assert("loc.testGallery.save()")>
+			<cfset $assert("loc.testGallery.save()")>
 			<cfset loc.testGallery = loc.gallery.findOneByTitle(value="Nested Properties Gallery", include="photos")>
-			<cfset assert("IsArray(loc.testGallery.photos)")>
-			<cfset assert("ArrayLen(loc.testGallery.photos) eq 3")>
+			<cfset $assert("IsArray(loc.testGallery.photos)")>
+			<cfset $assert("ArrayLen(loc.testGallery.photos) eq 3")>
 			<cftransaction action="rollback"/>
 		</cftransaction>
 	</cffunction>
 
 	<cffunction name="test_delete_children_via_object_array">
 		<cftransaction>
-			<cfset assert("loc.testGallery.save()")>
+			<cfset $assert("loc.testGallery.save()")>
 			<cfset loc.testGallery = loc.gallery.findOneByTitle(value="Nested Properties Gallery", include="photos")>
 			<cfloop array="#loc.testGallery.photos#" index="loc.i">
 				<cfset loc.i._delete = true>
 			</cfloop>
 			<cfset loc.testGallery.save()>
-			<cfset assert("IsArray(loc.testGallery.photos)")>
-			<cfset assert("ArrayLen(loc.testGallery.photos) eq 0")>
+			<cfset $assert("IsArray(loc.testGallery.photos)")>
+			<cfset $assert("ArrayLen(loc.testGallery.photos) eq 0")>
 			<cftransaction action="rollback"/>
 		</cftransaction>
 	</cffunction>

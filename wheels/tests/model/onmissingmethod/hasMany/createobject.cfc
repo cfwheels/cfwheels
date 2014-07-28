@@ -8,8 +8,8 @@
 		<cfset loc.author = loc.authorModel.findOne(where="firstName = 'James'")>
 		<cftransaction action="begin">
 			<cfset loc.post = loc.author.createPost(title="Title for first test post", body="Text for first test post", views=0) />
-			<cfset assert('IsObject(loc.post) eq true')>
-			<cfset assert('loc.post.authorid eq loc.author.id')>
+			<cfset $assert('IsObject(loc.post) eq true')>
+			<cfset $assert('loc.post.authorid eq loc.author.id')>
 			<cftransaction action="rollback" />
 		</cftransaction>
 	</cffunction>

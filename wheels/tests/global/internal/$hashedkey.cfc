@@ -5,7 +5,7 @@
 		<cfargument name="value2" type="string" required="false" /><!--- this creates an undefined value to test $hashedKey() --->
 		<cfset loc.e = raised('$hashedKey(argumentCollection=arguments)')>
 		<cfset loc.r = "">
-		<cfset assert('loc.e eq loc.r')>
+		<cfset $assert('loc.e eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_accepts_generated_query">
@@ -13,7 +13,7 @@
 		<cfargument name="b" type="query" required="false" default="#QueryNew('a,b,c,e')#" /><!--- this creates a query that does not have sql metadata --->
 		<cfset loc.e = raised('$hashedKey(argumentCollection=arguments)')>
 		<cfset loc.r = "">
-		<cfset assert('loc.e eq loc.r')>
+		<cfset $assert('loc.e eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_same_output">
@@ -44,7 +44,7 @@
 		<cfset arrayswap(loc.a, 1,3)>
 		<cfset arrayswap(loc.a, 4,5)>
 		<cfset loc.r = $hashedKey(argumentCollection=loc.args)>
-		<cfset assert('loc.e eq loc.r')>
+		<cfset $assert('loc.e eq loc.r')>
 	</cffunction>
 
 </cfcomponent>

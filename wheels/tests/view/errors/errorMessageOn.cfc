@@ -14,7 +14,7 @@
 		<cfset loc.args.wrapperElement = "div">
 		<cfset loc.e = loc.controller.errorMessageOn(argumentcollection=loc.args)>
 		<cfset loc.r = '<div class="errors-found">prepend firstname error1 append</div>'>
-		<cfset assert("loc.e eq loc.r")>
+		<cfset $assert("loc.e eq loc.r")>
 	</cffunction>
 
 </cfcomponent>

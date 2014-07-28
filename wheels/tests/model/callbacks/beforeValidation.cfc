@@ -12,26 +12,26 @@
 
 	<cffunction name="test_saving_object">
 		<cfset loc.obj.save()>
-		<cfset assert("StructKeyExists(loc.obj, 'setByCallback')")>
+		<cfset $assert("StructKeyExists(loc.obj, 'setByCallback')")>
 	</cffunction>
 
 	<cffunction name="test_saving_object_without_callbacks">
 		<cfset loc.obj.save(callbacks=false, transaction="rollback")>
-		<cfset assert("NOT StructKeyExists(loc.obj, 'setByCallback')")>
+		<cfset $assert("NOT StructKeyExists(loc.obj, 'setByCallback')")>
 	</cffunction>
 
 	<!--- Uncomment to test issue 284 --->
 	<!--- <cffunction name="test_validating_nested_property_object_should_register_callback">
 		<cfset loc.gallery = $setGalleryNestedProperties()>
 		<cfset loc.gallery.valid()>
-		<cfset assert("StructKeyExists(loc.gallery.photos[1].properties(), 'beforeValidationCallbackRegistered')")>
+		<cfset $assert("StructKeyExists(loc.gallery.photos[1].properties(), 'beforeValidationCallbackRegistered')")>
 	</cffunction> --->
 
 	<!--- Uncomment to test issue 284 --->
 	<!--- <cffunction name="test_saving_nested_property_object_should_register_callback_only_once">
 		<cfset loc.gallery = $setGalleryNestedProperties()>
 		<cfset loc.gallery.save()>
-		<cfset assert("loc.gallery.photos[1].beforeValidationCallbackCount IS 1")>
+		<cfset $assert("loc.gallery.photos[1].beforeValidationCallbackCount IS 1")>
 	</cffunction> --->
 
 	<!--- Uncomment to test issue 284 --->

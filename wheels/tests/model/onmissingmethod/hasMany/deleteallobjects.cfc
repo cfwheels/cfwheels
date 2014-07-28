@@ -9,8 +9,8 @@
 		<cftransaction action="begin">
 			<cfset loc.updated = loc.author.deleteAllPosts() />
 			<cfset loc.posts = loc.author.posts() />
-			<cfset assert('IsNumeric(loc.updated) and loc.updated eq 3')>
-			<cfset assert('IsQuery(loc.posts) eq true and not loc.posts.Recordcount')>
+			<cfset $assert('IsNumeric(loc.updated) and loc.updated eq 3')>
+			<cfset $assert('IsQuery(loc.posts) eq true and not loc.posts.Recordcount')>
 			<cftransaction action="rollback" />
 		</cftransaction>
 	</cffunction>

@@ -13,7 +13,7 @@
 		<cfset loc.controller.flashInsert(anotherKey="Test!")>
 		<cfset result = loc.controller.flashCount()>
 		<cfset compare = loc.controller.flashCount()>
-		<cfset assert("result IS compare")>
+		<cfset $assert("result IS compare")>
 	</cffunction>
 
 </cfcomponent>

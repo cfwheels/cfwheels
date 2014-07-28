@@ -9,8 +9,8 @@
 		<cftransaction action="begin">
 			<cfset loc.updated = loc.author.deleteProfile() />
 			<cfset loc.profile = loc.author.profile()>
-			<cfset assert('loc.updated eq true')>
-			<cfset assert('loc.profile eq false')>
+			<cfset $assert('loc.updated eq true')>
+			<cfset $assert('loc.profile eq false')>
 			<cftransaction action="rollback" />
 		</cftransaction>
 	</cffunction>

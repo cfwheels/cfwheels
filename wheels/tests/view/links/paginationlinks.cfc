@@ -23,9 +23,9 @@
 		<cfset loc.authors = model("author").findAll(page=2, perPage=3, order="lastName")>
 		<cfset loc.link = loc.controller.linkTo(text="2", params="page=2")>
 		<cfset loc.result = loc.controller.paginationLinks(linkToCurrentPage=true)>
-		<cfset assert("loc.result Contains '#loc.link#'")>
+		<cfset $assert("loc.result Contains '#loc.link#'")>
 		<cfset loc.result = loc.controller.paginationLinks(linkToCurrentPage=false)>
-		<cfset assert("loc.result Does Not Contain '#loc.link#' AND loc.result Contains '2'")>
+		<cfset $assert("loc.result Does Not Contain '#loc.link#' AND loc.result Contains '2'")>
 	</cffunction>
 
 	<cffunction name="test_class_and_classForCurrent">
@@ -33,25 +33,25 @@
 		<cfset loc.defaultLink = loc.controller.linkTo(text="1", params="page=1", class="default")>
 		<cfset loc.currentLink = loc.controller.linkTo(text="2", params="page=2", class="current")>
 		<cfset loc.result = loc.controller.paginationLinks(linkToCurrentPage=true, class="default", classForCurrent="current")>
-		<cfset assert("loc.result Contains '#loc.defaultLink#'")>
-		<cfset assert("loc.result Contains '#loc.currentLink#'")>
+		<cfset $assert("loc.result Contains '#loc.defaultLink#'")>
+		<cfset $assert("loc.result Contains '#loc.currentLink#'")>
 	</cffunction>
 	
 	<cffunction name="test_route">
 		<cfset loc.authors = model("author").findAll(page=2, perPage=3, order="lastName")>
 		<cfset loc.link = loc.controller.linkTo(route="pagination", special=99, text="3", params="page=3")>
 		<cfset loc.result = loc.controller.paginationLinks(route="pagination", special=99)>
-		<cfset assert("loc.result Contains '#loc.link#' AND loc.result Contains '?page='")>
+		<cfset $assert("loc.result Contains '#loc.link#' AND loc.result Contains '?page='")>
 	</cffunction>
 
 	<cffunction name="test_page_as_route_param_with_route_not_containing_page_parameter_in_variables">
 		<cfset loc.authors = model("author").findAll(page=2, perPage=3, order="lastName")>
 		
 		<cfset loc.result = loc.controller.paginationLinks(route="pagination", special=99)>
-		<cfset assert("loc.result Contains '/pag/ina/tion/99?page='")>
+		<cfset $assert("loc.result Contains '/pag/ina/tion/99?page='")>
 		
 		<cfset loc.result = loc.controller.paginationLinks(route="pagination", special=99, pageNumberAsParam="false")>
-		<cfset assert("loc.result Does Not Contain '/pag/ina/tion/99?page=' AND loc.result contains '/pag/ina/tion/99'")>		
+		<cfset $assert("loc.result Does Not Contain '/pag/ina/tion/99?page=' AND loc.result contains '/pag/ina/tion/99'")>		
 	</cffunction>
 	
 	<cffunction name="test_page_as_route_param_with_route_containing_page_parameter_in_variables">
@@ -63,10 +63,10 @@
 		<cfset application.wheels.routes[2].variables = application.wheels.routes[2].variables & loc.addToVariables>
 		
 		<cfset loc.result = loc.controller.paginationLinks(route="pagination", special=99)>
-		<cfset assert("loc.result Contains '/pag/ina/tion/99/3'")>
+		<cfset $assert("loc.result Contains '/pag/ina/tion/99/3'")>
 		
 		<cfset loc.result = loc.controller.paginationLinks(route="pagination", special=99, pageNumberAsParam="false")>
-		<cfset assert("loc.result Contains '/pag/ina/tion/99/3'")>
+		<cfset $assert("loc.result Contains '/pag/ina/tion/99/3'")>
 	</cffunction>
 	
 </cfcomponent>

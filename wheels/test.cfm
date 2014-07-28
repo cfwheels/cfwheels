@@ -121,7 +121,7 @@
 						failure message to help determine cause of failed
 						assertion.
 --->
-<cffunction name="assert" returntype="void" output="false" hint="evaluates an expression">
+<cffunction name="$assert" returntype="void" output="false" hint="evaluates an expression">
 	<cfargument type="string" name="expression" required=true>
 
 	<cfset var token = "">

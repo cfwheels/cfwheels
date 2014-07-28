@@ -43,10 +43,10 @@
 	</cffunction>
 
  	<cffunction name="test_remove_unused_plugin_directories">
-		<cfset assert('DirectoryExists(loc.badDir)')>
+		<cfset $assert('DirectoryExists(loc.badDir)')>
 		<cfset loc.PluginObj = $pluginObj(loc.config)>
-		<cfset assert('DirectoryExists(loc.goodDir)')>
-		<cfset assert('!DirectoryExists(loc.badDir)')>
+		<cfset $assert('DirectoryExists(loc.goodDir)')>
+		<cfset $assert('!DirectoryExists(loc.badDir)')>
 	</cffunction>
 	
 </cfcomponent>

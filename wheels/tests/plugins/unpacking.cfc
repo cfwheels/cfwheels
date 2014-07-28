@@ -41,8 +41,8 @@
 		<cfloop query="loc.q">
 			<cfset loc.dirs = ListAppend(loc.dirs, name)>
 		</cfloop>
-		<cfset assert('ListFindNoCase(loc.dirs, "TestDefaultAssignMixins")')>
-		<cfset assert('ListFindNoCase(loc.dirs, "TestGlobalMixins")')>
+		<cfset $assert('ListFindNoCase(loc.dirs, "TestDefaultAssignMixins")')>
+		<cfset $assert('ListFindNoCase(loc.dirs, "TestGlobalMixins")')>
 	</cffunction>
 	
 </cfcomponent>
