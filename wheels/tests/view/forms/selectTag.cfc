@@ -54,8 +54,8 @@
 		<cfset loc.q = querynew("")>
 		<cfset loc.id = [1,2,3]>
 		<cfset loc.name = ["first", "second", "third"]>
-		<cfset queryaddcolumn(loc.q, "id", loc.id)>
-		<cfset queryaddcolumn(loc.q, "name", loc.name)>
+		<cfset queryaddcolumn(loc.q, "id", "integer", loc.id)>
+		<cfset queryaddcolumn(loc.q, "name", "varchar", loc.name)>
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = loc.q>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
@@ -65,7 +65,7 @@
 	<cffunction name="test_one_column_query_for_options">
 		<cfset loc.q = querynew("")>
 		<cfset loc.id = ["first", "second", "third"]>
-		<cfset queryaddcolumn(loc.q, "id", loc.id)>
+		<cfset queryaddcolumn(loc.q, "id", "varchar", loc.id)>
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = loc.q>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
@@ -76,8 +76,8 @@
 		<cfset loc.q = querynew("")>
 		<cfset loc.id = []>
 		<cfset loc.name = []>
-		<cfset queryaddcolumn(loc.q, "id", loc.id)>
-		<cfset queryaddcolumn(loc.q, "name", loc.name)>
+		<cfset queryaddcolumn(loc.q, "id", "integer", loc.id)>
+		<cfset queryaddcolumn(loc.q, "name", "varchar", loc.name)>
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = loc.q>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>

@@ -88,6 +88,8 @@
 	</cfscript>
 	<cfif StructKeyExists(loc, "returnValue")>
 		<cfreturn loc.returnValue>
+	<cfelse>
+		<cfreturn>
 	</cfif>
 </cffunction>
 
@@ -150,6 +152,8 @@
 	</cfscript>
 	<cfif StructKeyExists(loc, "returnValue")>
 		<cfreturn loc.returnValue>
+	<cfelse>
+		<cfreturn>
 	</cfif>
 </cffunction>
 

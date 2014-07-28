@@ -37,6 +37,8 @@
 	</cfif>
 	<cfif StructKeyExists(loc, "returnValue")>
 		<cfreturn loc.returnValue>
+	<cfelse>
+		<cfreturn>
 	</cfif>
 </cffunction>
 
@@ -165,6 +167,8 @@
 	<cfinvoke attributeCollection="#arguments#">
 	<cfif StructKeyExists(loc, "returnValue")>
 		<cfreturn loc.returnValue>
+	<cfelse>
+		<cfreturn>
 	</cfif>
 </cffunction>
 
