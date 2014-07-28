@@ -454,7 +454,8 @@
 				loc.pos = loc.pos + 1;
 				ArrayAppend(arguments.sql, "#variables.wheels.class.properties[loc.key].column# = ");
 
-				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale, null=!len(arguments.properties[loc.key])};
+				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale};
+				loc.param.null = !Len(arguments.properties[loc.key]);
 				ArrayAppend(arguments.sql, loc.param);
 				if (StructCount(arguments.properties) gt loc.pos)
 					ArrayAppend(arguments.sql, ",");
@@ -963,9 +964,9 @@
 	<cfscript>
 		var loc = {};
 		if (variables.wheels.class.timeStampingOnCreate)
-			$timestampProperty(property=variables.wheels.class.timeStampOnCreateProperty);
+			$timestampProperty(name=variables.wheels.class.timeStampOnCreateProperty);
 		if (application.wheels.setUpdatedAtOnCreate && variables.wheels.class.timeStampingOnUpdate)
-			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
+			$timestampProperty(name=variables.wheels.class.timeStampOnUpdateProperty);
 		loc.sql = [];
 		loc.sql2 = [];
 		ArrayAppend(loc.sql, "INSERT INTO #tableName()# (");
@@ -1018,7 +1019,7 @@
 		}
 		
 		if (variables.wheels.class.timeStampingOnUpdate)
-			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
+			$timestampProperty(name=variables.wheels.class.timeStampOnUpdateProperty);
 		loc.sql = [];
 		ArrayAppend(loc.sql, "UPDATE #tableName()# SET ");
 		for (loc.key in variables.wheels.class.properties)
@@ -1076,8 +1077,8 @@
 	developers can now override this method for localizing dates if they prefer.
 --->
 <cffunction name="$timestampProperty" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="true" />
+	<cfargument name="name" type="string" required="true" />
 	<cfscript>
-		this[arguments.property] = Now();
+		this[arguments.name] = Now();
 	</cfscript>
 </cffunction>
