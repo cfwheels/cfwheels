@@ -47,10 +47,14 @@
 </cffunction>
 
 <cffunction name="$image" returntype="struct" access="public" output="false">
-	<cfset var returnValue = {}>
-	<cfset arguments.structName = "returnValue">
+	<cfset var cfimage = {}>
+	<cfif StructKeyExists(server, "bluedragon")>
+		<cfset arguments.srcFile = arguments.source>
+	<cfelse>
+		<cfset arguments.structName = "cfimage">
+	</cfif>
 	<cfimage attributeCollection="#arguments#">
-	<cfreturn returnValue>
+	<cfreturn cfimage>
 </cffunction>
 
 <cffunction name="$mail" returntype="void" access="public" output="false">

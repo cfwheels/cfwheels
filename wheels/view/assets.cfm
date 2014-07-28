@@ -201,8 +201,6 @@
 			{
 				if (loc.localFile && !FileExists(ExpandPath(arguments.src)))
 					$throw(type="Wheels.ImageFileNotFound", message="Wheels could not find `#expandPath('#arguments.src#')#` on the local file system.", extendedInfo="Pass in a correct relative path from the `images` folder to an image.");
-				else if (!IsImageFile(ExpandPath(arguments.src)))
-					$throw(type="Wheels.ImageFormatNotSupported", message="Wheels can't read image files with that format.", extendedInfo="Use one of these image types instead: #GetReadableImageFormats()#.");
 			}
 			// height and/or width arguments are missing so use cfimage to get them
 			if (!StructKeyExists(arguments, "width") or !StructKeyExists(arguments, "height"))
@@ -226,6 +224,10 @@
 		}
 		if (!StructKeyExists(arguments, "alt"))
 			arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
+		if (StructKeyExists(server, "bluedragon"))
+		{
+			StructDelete(arguments, "attributeCollection");
+		}
 		loc.returnValue = $tag(name="img", skip="source,key,category", close=true, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
