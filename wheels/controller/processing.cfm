@@ -18,12 +18,6 @@
 
 		// run before filters if they exist on the controller
 		this.$runFilters(type="before", action=params.action);
-		
-		// check to see if the controller params has changed and if so, instantiate the new controller and re-run filters and verifications
-		if (params.controller != variables.wheels.class.name)
-		{
-			return false;
-		}
 
 		if (loc.debug)
 		{
