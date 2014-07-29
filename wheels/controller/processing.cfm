@@ -89,42 +89,60 @@
 	<cfargument name="action" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(this, arguments.action) && IsCustomFunction(this[arguments.action]))
+
+		// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
+		if (!StructKeyExists(application.wheels, "protectedControllerMethods"))
 		{
-			$invoke(method=arguments.action);
+			application.wheels.protectedControllerMethods = StructKeyList($createObjectFromRoot(path="controllers", fileName="Wheels", method="$initControllerClass"));
 		}
-		else if (StructKeyExists(this, "onMissingMethod"))
+
+		if (!ListFindNoCase(application.wheels.protectedControllerMethods, arguments.action))
 		{
-			loc.invokeArgs = {};
-			loc.invokeArgs.missingMethodName = arguments.action;
-			loc.invokeArgs.missingMethodArguments = {};
-			$invoke(method="onMissingMethod", invokeArgs=loc.invokeArgs);
-		}
-		if (!$performedRenderOrRedirect())
-		{
-			try
+			if (StructKeyExists(this, arguments.action) && IsCustomFunction(this[arguments.action]))
 			{
-				renderPage();
+				$invoke(method=arguments.action);
 			}
-			catch(Any e)
+			else if (StructKeyExists(this, "onMissingMethod"))
 			{
-				if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.wheels.class.name)#/#LCase(arguments.action)#.cfm")))
+				loc.invokeArgs = {};
+				loc.invokeArgs.missingMethodName = arguments.action;
+				loc.invokeArgs.missingMethodArguments = {};
+				$invoke(method="onMissingMethod", invokeArgs=loc.invokeArgs);
+			}
+			if (!$performedRenderOrRedirect())
+			{
+				try
 				{
-					$throw(object=e);
+					renderPage();
 				}
-				else
+				catch(Any e)
 				{
-					if (application.wheels.showErrorInformation)
+					if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.wheels.class.name)#/#LCase(arguments.action)#.cfm")))
 					{
-						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.action#` action in the `#variables.wheels.class.name#` controller.", extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(variables.wheels.class.name)#` directory (create the directory as well if it doesn't already exist).");
+						$throw(object=e);
 					}
 					else
 					{
-						$header(statusCode=404, statustext="Not Found");
-						$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
-						$abort();
+						loc.viewNotFound = true;
 					}
 				}
+			}
+		}
+		else
+		{
+			loc.viewNotFound = true;
+		}
+		if (StructKeyExists(loc, "viewNotFound"))
+		{
+			if (application.wheels.showErrorInformation)
+			{
+				$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.action#` action in the `#variables.wheels.class.name#` controller.", extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(variables.wheels.class.name)#` directory (create the directory as well if it doesn't already exist).");
+			}
+			else
+			{
+				$header(statusCode=404, statustext="Not Found");
+				$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
+				$abort();
 			}
 		}
 	</cfscript>
