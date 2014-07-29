@@ -119,8 +119,8 @@
 				}
 			}
 		}
-		return loc.returnValue;
 	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <!--- PRIVATE FUNCTIONS --->
