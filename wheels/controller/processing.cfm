@@ -90,13 +90,22 @@
 	<cfscript>
 		var loc = {};
 
-		// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
-		if (!StructKeyExists(application.wheels, "protectedControllerMethods"))
+		// create a list of the controller / view functions that you should not be allowed to call as a controller action from the url
+		if (!StructKeyExists(application.wheels, "protectedMethods"))
 		{
-			application.wheels.protectedControllerMethods = StructKeyList($createObjectFromRoot(path="controllers", fileName="Wheels", method="$initControllerClass"));
+			application.wheels.protectedMethods = LCase(StructKeyList($createObjectFromRoot(path="controllers", fileName="Wheels", method="$initControllerClass")));
 		}
 
-		if (!ListFindNoCase(application.wheels.protectedControllerMethods, arguments.action))
+		// create a list of the filter methods for the current controller that you should not be allowed to call as a controller action from the url
+		loc.protectedMethods = "";
+		loc.filters = filterChain();
+		loc.iEnd = ArrayLen(loc.filters);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
+			loc.protectedMethods = ListAppend(loc.protectedMethods, loc.filters[loc.i].through);
+		}
+
+		if (!ListFindNoCase(application.wheels.protectedMethods, arguments.action) && !ListFindNoCase(loc.protectedMethods, arguments.action))
 		{
 			if (StructKeyExists(this, arguments.action) && IsCustomFunction(this[arguments.action]))
 			{
@@ -136,7 +145,18 @@
 		{
 			if (application.wheels.showErrorInformation)
 			{
-				$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.action#` action in the `#variables.wheels.class.name#` controller.", extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(variables.wheels.class.name)#` directory (create the directory as well if it doesn't already exist).");
+				if (ListFindNoCase(application.wheels.protectedMethods, arguments.action))
+				{
+					$throw(type="Wheels.ViewNotFound", message="The `#arguments.action#` action has the same name as a built-in Wheels function.", extendedInfo="Rename the `#arguments.action#` action to something else.");
+				}
+				else if (ListFindNoCase(loc.protectedMethods, arguments.action))
+				{
+					$throw(type="Wheels.ViewNotFound", message="The `#arguments.action#` action has the same name as one of your filter functions.", extendedInfo="Rename the `#arguments.action#` action or the filter function to something else.");
+				}
+				else
+				{
+					$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.action#` action in the `#variables.wheels.class.name#` controller.", extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(variables.wheels.class.name)#` directory (create the directory as well if it doesn't already exist).");
+				}
 			}
 			else
 			{
