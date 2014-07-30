@@ -99,6 +99,7 @@
 			application.$wheels.URLRewriting = "Off";
 		}
 
+		// database settings (data source name defaults to current folder name)
 		application.$wheels.dataSourceName = this.dataSource;
 		application.$wheels.dataSourceUserName = "";
 		application.$wheels.dataSourcePassword = "";
@@ -139,7 +140,7 @@
 		application.$wheels.sendEmailOnError = false;
 		application.$wheels.errorEmailSubject = "Error";
 		application.$wheels.excludeFromErrorEmail = "";
-		if (request.cgi.server_name Contains ".")
+		if (Find(".", request.cgi.server_name))
 		{
 			application.$wheels.errorEmailAddress = "webmaster@" & Reverse(ListGetAt(Reverse(request.cgi.server_name), 2,".")) & "." & Reverse(ListGetAt(Reverse(request.cgi.server_name), 1, "."));
 		}
@@ -157,8 +158,7 @@
 			application.$wheels.showDebugInformation = false;
 		}
 
-		// asset path settings
-		// assetPaths can be struct with two keys,  http and https, if no https struct key, http is used for secure and non-secure
+		// asset path settings, can be struct with two keys, http and https, if no https struct key, http is used for secure and non-secure
 		// ex. {http="asset0.domain1.com,asset2.domain1.com,asset3.domain1.com", https="secure.domain1.com"}
 		application.$wheels.assetQueryString = false;
 		application.$wheels.assetPaths = false;
@@ -195,7 +195,6 @@
 		application.$wheels.loadDefaultRoutes = true;
 		application.$wheels.automaticValidations = true;
 		application.$wheels.setUpdatedAtOnCreate = true;
-		application.$wheels.useExpandedColumnAliases = false;
 		application.$wheels.modelRequireInit = false;
 	
 		// if session management is enabled in the application we default to storing flash data in the session scope, if not we use a cookie
@@ -219,7 +218,7 @@
 		application.$wheels.clearQueryCacheOnReload = true;
 		application.$wheels.cacheQueriesDuringRequest = true;
 		
-		// possible formats for provides
+		// settings for provides functionality
 		application.$wheels.formats = {};
 		application.$wheels.formats.html = "text/html";
 		application.$wheels.formats.xml = "text/xml";
@@ -227,6 +226,7 @@
 		application.$wheels.formats.csv = "text/csv";
 		application.$wheels.formats.pdf = "application/pdf";
 		application.$wheels.formats.xls = "application/vnd.ms-excel";
+		application.$wheels.mimetypes = {txt="text/plain", gif="image/gif", jpg="image/jpg", jpeg="image/jpg", pjpeg="image/jpg", png="image/png", wav="audio/wav", mp3="audio/mpeg3", pdf="application/pdf", zip="application/zip", ppt="application/powerpoint", pptx="application/powerpoint", doc="application/word", docx="application/word", xls="application/excel", xlsx="application/excel"};
 
 		// function defaults
 		application.$wheels.functions = {};
@@ -327,12 +327,6 @@
 		application.$wheels.functions.wordTruncate = {length=5, truncateString="..."};
 		application.$wheels.functions.yearSelectTag = {label="", labelPlacement="around", prepend="", append="", prependToLabel="", appendToLabel="", includeBlank=false, startYear=Year(Now())-5, endYear=Year(Now())+5};
 
-		// mime types
-		application.$wheels.mimetypes = {txt="text/plain", gif="image/gif", jpg="image/jpg", jpeg="image/jpg", pjpeg="image/jpg", png="image/png", wav="audio/wav", mp3="audio/mpeg3", pdf="application/pdf", zip="application/zip", ppt="application/powerpoint", pptx="application/powerpoint", doc="application/word", docx="application/word", xls="application/excel", xlsx="application/excel"};
-
-		// set a flag to indicate that all wheels settings have been loaded
-		application.$wheels.initialized = true;
-
 		// load general developer settings first, then override with environment specific ones
 		$include(template="config/settings.cfm");
 		$include(template="config/#application.$wheels.environment#/settings.cfm");
@@ -341,6 +335,10 @@
 		{
 			$objectcache(action="clear");
 		}
+
+		// add built-in functions to a list that we check to make sure you cannot call them as controller actions from the url
+		// this is done by getting the function list from the base wheels controller (since the developer does not place their functions in there we know it will only contain built-in ones)
+		application.$wheels.protectedFunctions = StructKeyList($createObjectFromRoot(path=application.$wheels.controllerPath, fileName="Wheels", method="$initControllerClass"));
 
 		// reload the plugins each time we reload the application
 		$loadPlugins();

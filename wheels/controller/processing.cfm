@@ -89,23 +89,7 @@
 	<cfargument name="action" type="string" required="true">
 	<cfscript>
 		var loc = {};
-
-		// create a list of the controller / view functions that you should not be allowed to call as a controller action from the url
-		if (!StructKeyExists(application.wheels, "protectedMethods"))
-		{
-			application.wheels.protectedMethods = LCase(StructKeyList($createObjectFromRoot(path="controllers", fileName="Wheels", method="$initControllerClass")));
-		}
-
-		// create a list of the filter methods for the current controller that you should not be allowed to call as a controller action from the url
-		loc.protectedMethods = "";
-		loc.filters = filterChain();
-		loc.iEnd = ArrayLen(loc.filters);
-		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-		{
-			loc.protectedMethods = ListAppend(loc.protectedMethods, loc.filters[loc.i].through);
-		}
-
-		if (!ListFindNoCase(application.wheels.protectedMethods, arguments.action) && !ListFindNoCase(loc.protectedMethods, arguments.action))
+		if (!ListFindNoCase(application.wheels.protectedFunctions, arguments.action))
 		{
 			if (StructKeyExists(this, arguments.action) && IsCustomFunction(this[arguments.action]))
 			{
@@ -132,26 +116,22 @@
 					}
 					else
 					{
-						loc.viewNotFound = true;
+						loc.error = true;
 					}
 				}
 			}
 		}
 		else
 		{
-			loc.viewNotFound = true;
+			loc.error = true;
 		}
-		if (StructKeyExists(loc, "viewNotFound"))
+		if (StructKeyExists(loc, "error"))
 		{
 			if (application.wheels.showErrorInformation)
 			{
 				if (ListFindNoCase(application.wheels.protectedMethods, arguments.action))
 				{
-					$throw(type="Wheels.ViewNotFound", message="The `#arguments.action#` action has the same name as a built-in Wheels function.", extendedInfo="Rename the `#arguments.action#` action to something else.");
-				}
-				else if (ListFindNoCase(loc.protectedMethods, arguments.action))
-				{
-					$throw(type="Wheels.ViewNotFound", message="The `#arguments.action#` action has the same name as one of your filter functions.", extendedInfo="Rename the `#arguments.action#` action or the filter function to something else.");
+					$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.action#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels functions.");
 				}
 				else
 				{

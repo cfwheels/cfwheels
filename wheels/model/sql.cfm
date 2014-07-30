@@ -212,7 +212,6 @@
 	<cfargument name="returnAs" type="string" required="true">
 	<cfargument name="renameFields" type="boolean" required="false" default="true">
 	<cfargument name="addCalculatedProperties" type="boolean" required="false" default="true">
-	<cfargument name="useExpandedColumnAliases" type="boolean" required="false" default="#application.wheels.useExpandedColumnAliases#">
 	<cfscript>
 		var loc = {};
 
@@ -287,14 +286,9 @@
 							}
 							else if (loc.j > 1)
 							{
-								if (arguments.useExpandedColumnAliases)
+								if (arguments.returnAs != "query")
 								{
-									// when on included models and using the new setting we flag every property as a duplicate so that the model name always gets prepended
-									loc.flagAsDuplicate  = true;
-								}
-								else if (!arguments.useExpandedColumnAliases && arguments.returnAs != "query")
-								{
-									// with the old setting we only do it when we're returning object(s) since when creating instances on none base models we need the model name prepended
+									// when creating object instances on none base models we need the model name prepended
 									loc.flagAsDuplicate  = true;
 								}
 							}
