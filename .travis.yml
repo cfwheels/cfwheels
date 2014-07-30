@@ -6,17 +6,19 @@ env: #ftp credential for remote test server, encrypted with repo specific key
   - secure: "G4bImnNqg3/z01eqb5uC+9iZReuhdv8gsY6Mb+wadOSHmzGFUPmakWs5vTd2C4/tB/8WUwcu/4a0ef/vx5fLFCkTojX/vEKqcbi4ISGIuYM5fa/FeB2z+HoaMGq9Dg4slLCF7K1qdjM2YeCtruRTEg9CdCRL+fHKWguY3cAarH0="
 
 before_script:
+  - mysql -e 'create database test;'
   - psql -c 'create database test;' -U postgres
 
 script: "
 if [ $TRAVIS_SECURE_ENV_VARS == 'true' ];
 then 
-    mvn verify -Prailo,subfolder && mvn verify -Prailo,mysql && mvn verify -Prailo,postgresql && mvn verify -Prailo,oracle-emu && mvn clean verify -Pmssql; 
+    mvn verify -Prailo,subfolder && mvn verify -Prailo,mysql && mvn verify -Prailo,postgresql && mvn verify -Prailo,oracle-emu; 
 else 
     mvn verify -Prailo,subfolder && mvn verify -Prailo,mysql && mvn verify -Prailo,postgresql && mvn verify -Prailo,oracle-emu;
 fi"
 
 #see pom.xml for the explanation of the mvn commands above
+#TODO restore && mvn clean verify -Pmssql
 
 jdk:
   - oraclejdk7
