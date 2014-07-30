@@ -17,7 +17,7 @@ View Enhancements
 * Made it possible to set a global default for the "twelveHour" argument on date / time helpers - [Per Djurner]
 * Added "prepend / "append" arguments on buttonTag() - [Per Djurner]
 * New "aroundRight" option on the "labelPlacement" argument that places the label text to the right of the form input - [Adam Chapman, Per Djurner]
-* Support for HTML5 "type" argument in form field helpers - [Per Djurner
+* Support for HTML5 "type" argument in form field helpers - [Per Djurner]
 * Support for HTML5 boolean attributes - [Per Djurner]
 * Ability to remove media / type attributes when using styleSheetLinkTag and JavaScriptIncludeTag - [Per Djurner]
 * Support for implicit protocol in JavaScriptIncludeTag and styleSheetLinkTag - [Per Djurner]
@@ -414,7 +414,7 @@ Other Enhancements
 * New setting, "errorEmailSubject", that allows you to customize the subject line of error emails - #392 [Per Djurner]
 * New setting, "deletePluginDirectories" that tells Wheels whether to delete plugin directories if no corresponding ZIP file exists - #385 [Per Djurner]
 * Added a "cachePlugins" setting to allow developers to not cache plugins during the development of them - #304 [Andy Bellenie]
-* Allow setting multiple argument defaults at once, e.g. set(functionName="textField,textArea,select", labelPlacement="before"  - #426 [Raul Riera, Per Djurner]
+* Allow setting multiple argument defaults at once, e.g. set(functionName="textField,textArea,select", labelPlacement="before" - #426 [Raul Riera, Per Djurner]
 * A full testing framework is now included in Wheels, unit tests can be created in the "tests" folder - [Tony Petruzzi]
 
 Bug Fixes
