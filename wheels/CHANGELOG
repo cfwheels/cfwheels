@@ -1,4 +1,21 @@
-Edge (07/24/2014)
+Edge (07/30/2014)
+
+Other Enhancements
+==================
+
+* Experimental support for Open BD 3.1 [Per Djurner]
+
+Breaking Changes
+================
+
+* Removed the ability to instantiate a new controller from a before filter [Per Djurner]
+* Renamed assert() function to $assert() [Per Djurner]
+* Removed the possibility to name actions "get", "set", "addroute" and "addDefaultRoutes" [Per Djurner]
+* Removed the "useExpandedColumnAliases" setting.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.3 (08/??/2014)
 
 Model Enhancements
 ==================
