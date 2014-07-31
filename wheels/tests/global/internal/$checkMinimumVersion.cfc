@@ -3,17 +3,12 @@
 	<cffunction name="test_railo_valid">
 		<cfset assert('!Len($checkMinimumVersion(version="4.3.0.003", engine="Railo"))')>
 		<cfset assert('!Len($checkMinimumVersion(version="4.2.1.000", engine="Railo"))')>
+		<cfset assert('!Len($checkMinimumVersion(version="3.1.2", engine="Railo"))')>
+		<cfset assert('!Len($checkMinimumVersion(version="3.1.2.020", engine="Railo"))')>
 	</cffunction>
 
 	<cffunction name="test_railo_invalid">
-		<cfset assert('Len($checkMinimumVersion(version="3.1.2.022", engine="Railo"))')>
-		<cfset assert('Len($checkMinimumVersion(version="3.1.2.020", engine="Railo"))')>
-		<cfset assert('Len($checkMinimumVersion(version="3.2.2.020", engine="Railo"))')>
-		<cfset assert('Len($checkMinimumVersion(version="3.1.2.018", engine="Railo"))')>
-		<cfset assert('Len($checkMinimumVersion(version="3.1.2.019", engine="Railo"))')>
-		<cfset assert('Len($checkMinimumVersion(version="3", engine="Railo"))')>
-		<cfset assert('Len($checkMinimumVersion(version="2.1.2.3", engine="Railo"))')>
-		<cfset assert('Len($checkMinimumVersion(version="3.3.5.004", engine="Railo"))')>
+		<cfset assert('Len($checkMinimumVersion(version="3.0.2", engine="Railo"))')>
 	</cffunction>
 
 	<cffunction name="test_adobe_valid">

@@ -806,9 +806,9 @@
 		}
 		if (arguments.engine == "Railo")
 		{
-			loc.minimumMajor = "4";
-			loc.minimumMinor = "2";
-			loc.minimumPatch = "1";
+			loc.minimumMajor = "3";
+			loc.minimumMinor = "1";
+			loc.minimumPatch = "2";
 		}
 		else if (arguments.engine == "Adobe")
 		{
