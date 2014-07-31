@@ -155,6 +155,7 @@
 	<cfargument name="key" type="string" required="true">
 	<cfargument name="category" type="string" required="true">
 	<cfscript>
+		var loc = {};
 		$callAction(action=arguments.action);
 		if (arguments.static)
 		{
@@ -164,6 +165,7 @@
 		{
 			$addToCache(key=arguments.key, value=variables.$instance.response, time=arguments.time, category=arguments.category);
 		}
+		loc.returnValue = response();
 	</cfscript>
-	<cfreturn response()>
+	<cfreturn loc.returnValue>
 </cffunction>
