@@ -3,7 +3,7 @@ language: java
 cache: bundler #works only for private repo http://docs.travis-ci.com/user/caching/
 
 env: #ftp credential for remote test server, encrypted with repo specific key 
-  - secure: "G4bImnNqg3/z01eqb5uC+9iZReuhdv8gsY6Mb+wadOSHmzGFUPmakWs5vTd2C4/tB/8WUwcu/4a0ef/vx5fLFCkTojX/vEKqcbi4ISGIuYM5fa/FeB2z+HoaMGq9Dg4slLCF7K1qdjM2YeCtruRTEg9CdCRL+fHKWguY3cAarH0="
+  - secure: "QZdX3M+wYTejkwHLseV/LwhPOCvkbONJcElHjdsrwb4xiuzZSdHiRYmTc+9hzyIOTb1hrylKZ8udMzIuZZTUCa0Ze30sQmcC83vGIteM+uzQr0RV9asf/4hL83cBye50f1OWIJlyq5FLvD0KMkhP+BnTA7jTI5UD8a4FX+F2UUU="
 
 before_script:
   - mysql -e 'create database test;'
@@ -12,13 +12,12 @@ before_script:
 script: "
 if [ $TRAVIS_SECURE_ENV_VARS == 'true' ];
 then 
-    mvn verify -Prailo,subfolder && mvn verify -Prailo,mysql && mvn verify -Prailo,postgresql && mvn verify -Prailo,oracle-emu; 
+    mvn verify -Prailo,subfolder && mvn verify -Prailo,mysql && mvn verify -Prailo,postgresql && mvn verify -Prailo,oracle-emu && mvn clean verify -Pmssql; 
 else 
     mvn verify -Prailo,subfolder && mvn verify -Prailo,mysql && mvn verify -Prailo,postgresql && mvn verify -Prailo,oracle-emu;
 fi"
 
 #see pom.xml for the explanation of the mvn commands above
-#TODO restore && mvn clean verify -Pmssql
 
 jdk:
   - oraclejdk7
