@@ -286,7 +286,7 @@
 			{
 				loc.returnValue = ListAppend(loc.returnValue, loc.wordArray[loc.i], " ");
 			}
-			loc.returnValue = loc.returnValue & arguments.truncateString;
+			loc.returnValue &= arguments.truncateString;
 		}
 		else
 		{

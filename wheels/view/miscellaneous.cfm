@@ -394,7 +394,7 @@
 			loc.returnValue = ReplaceList(arguments.property, "[,($,],',"",)", "-,-,");
 		}
 		if (Len(arguments.valueToAppend))
-			loc.returnValue = loc.returnValue & "-" & arguments.valueToAppend;
+			loc.returnValue &= "-" & arguments.valueToAppend;
 	</cfscript>
 	<cfreturn REReplace(loc.returnValue, "-+", "-", "all")>
 </cffunction>
@@ -457,8 +457,8 @@
 		{
 			loc.returnValue = arguments.attributes[arguments.name];
 			if (Right(loc.returnValue, 1) != ";")
-				loc.returnValue = loc.returnValue & ";";
-			loc.returnValue = loc.returnValue & arguments.content;
+				loc.returnValue &= ";";
+			loc.returnValue &= arguments.content;
 		}
 		else
 		{

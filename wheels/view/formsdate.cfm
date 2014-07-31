@@ -144,8 +144,8 @@
 			}
 
 			if (loc.firstDone)
-				loc.returnValue = loc.returnValue & arguments.separator;
-			loc.returnValue = loc.returnValue & Evaluate("$#loc.item#SelectTag(argumentCollection=arguments)");
+				loc.returnValue &= arguments.separator;
+			loc.returnValue &= Evaluate("$#loc.item#SelectTag(argumentCollection=arguments)");
 			loc.firstDone = true;
 		}
 	</cfscript>
