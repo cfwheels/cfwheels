@@ -290,7 +290,7 @@ Benefits of embedded-container-test versus full-integration-test
 			-->
 			<id>mssql</id>
 			<properties>
-				<testServer>http://cfwheels.cfmldeveloper.com</testServer>
+				<testServer>http://zebrinny.viviotech.net</testServer>
 				<deployUrl>${testServer}/_deploy.cfm?build=${project.build.finalName}&#038;clean=true</deployUrl>
 			</properties>
 			<build>
