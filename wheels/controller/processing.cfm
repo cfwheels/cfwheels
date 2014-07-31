@@ -46,7 +46,7 @@
 			if (loc.actionIsCachable)
 			{
 				loc.category = "action";
-				loc.key = $hashedKey(variables.wheels.class.name, variables.params);
+				loc.key = $hashedKey(variables.params);
 				loc.lockName = loc.category & loc.key;
 				loc.conditionArgs = {};
 				loc.conditionArgs.key = loc.key;
