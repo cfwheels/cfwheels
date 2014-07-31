@@ -175,7 +175,7 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$timeSpanForCache" returntype="date" access="public" output="false">
+<cffunction name="$timeSpanForCache" returntype="numeric" access="public" output="false">
 	<cfargument name="cache" type="any" required="true">
 	<cfargument name="defaultCacheTime" type="numeric" required="false" default="#application.wheels.defaultCacheTime#">
 	<cfargument name="cacheDatePart" type="string" required="false" default="#application.wheels.cacheDatePart#">
