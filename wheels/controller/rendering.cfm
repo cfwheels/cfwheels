@@ -59,7 +59,7 @@
 		if (application.wheels.cachePages && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
 			loc.category = "action";
-			loc.key = $hashedKey(arguments, variables.params);
+			loc.key = $hashedKey(variables.params);
 			loc.lockName = loc.category & loc.key;
 			loc.conditionArgs = {};
 			loc.conditionArgs.category = loc.category;
