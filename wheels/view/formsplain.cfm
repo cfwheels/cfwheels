@@ -15,6 +15,7 @@
 	<cfargument name="append" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="prependToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
+	<cfargument name="type" type="string" required="false" default="text" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
 		$args(name="textFieldTag", args=arguments);
