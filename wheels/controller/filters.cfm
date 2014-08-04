@@ -146,7 +146,7 @@
 				loc.result = $invoke(method=loc.filter.through, invokeArgs=loc.filter.arguments);
 				
 				// if the filter function returned false or rendered content we skip the remaining filters in the chain
-				if ((StructKeyExists(loc, "result") && !loc.result) || $performedRenderOrRedirect())
+				if ((StructKeyExists(loc, "result") && IsBoolean(loc.result) && !loc.result) || $performedRenderOrRedirect())
 				{
 					break;
 				}
