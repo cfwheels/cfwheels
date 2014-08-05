@@ -134,22 +134,24 @@
 	</cffunction>
 
 	<cffunction name="test_binary_compare">
-		<cftransaction>
-			<cfset loc.photo = model("photo").findOne(order=model("photo").primaryKey())>
-			<cfset $assert("NOT loc.photo.hasChanged('fileData')")>
-			<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.png')#" variable="loc.binaryData">
-			<cfset loc.photo.fileData = loc.binaryData>
-			<cfset $assert("loc.photo.hasChanged('fileData')")>
-			<cfset loc.photo.galleryid = 99>
-			<cfset loc.photo.save()>
-			<cfset $assert("NOT loc.photo.hasChanged('fileData')")>
-			<cfset loc.photo = model("photo").findOne(where="galleryid=99")>
-			<cfset $assert("NOT loc.photo.hasChanged('fileData')")>
-			<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.txt')#" variable="loc.binaryData">
-			<cfset loc.photo.fileData = loc.binaryData>
-			<cfset $assert("loc.photo.hasChanged('fileData')")>
-			<cftransaction action="rollback" />
-		</cftransaction>
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cftransaction>
+				<cfset loc.photo = model("photo").findOne(order=model("photo").primaryKey())>
+				<cfset $assert("NOT loc.photo.hasChanged('fileData')")>
+				<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.png')#" variable="loc.binaryData">
+				<cfset loc.photo.fileData = loc.binaryData>
+				<cfset $assert("loc.photo.hasChanged('fileData')")>
+				<cfset loc.photo.galleryid = 99>
+				<cfset loc.photo.save()>
+				<cfset $assert("NOT loc.photo.hasChanged('fileData')")>
+				<cfset loc.photo = model("photo").findOne(where="galleryid=99")>
+				<cfset $assert("NOT loc.photo.hasChanged('fileData')")>
+				<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.txt')#" variable="loc.binaryData">
+				<cfset loc.photo.fileData = loc.binaryData>
+				<cfset $assert("loc.photo.hasChanged('fileData')")>
+				<cftransaction action="rollback">
+			</cftransaction>
+		</cfif>
 	</cffunction>
 	
 	<cffunction name="test_float_compare">
