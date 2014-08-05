@@ -10,13 +10,11 @@
 	</cffunction>
 
 	<cffunction name="test_existing_object">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cftransaction>
-				<cfset loc.obj.delete(transaction="none")>
-				<cftransaction action="rollback"/>
-			</cftransaction>
-			<cfset $assert("StructKeyExists(loc.obj, 'setByCallback')")>
-		</cfif>
+		<cftransaction>
+			<cfset loc.obj.delete(transaction="none")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+		<cfset $assert("StructKeyExists(loc.obj, 'setByCallback')")>
 	</cffunction>
 
 	<cffunction name="test_existing_object_with_skipped_callback">
