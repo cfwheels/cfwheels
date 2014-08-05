@@ -149,26 +149,25 @@
 
 <cffunction name="$invoke" returntype="any" access="public" output="false">
 	<cfset var loc = {}>
-	<cfset arguments.returnVariable = "loc.returnValue">
-	<cfif StructKeyExists(arguments, "componentReference")>
-		<cfset arguments.component = arguments.componentReference>
-		<cfset StructDelete(arguments, "componentReference")>
-	<cfelseif NOT StructKeyExists(variables, arguments.method)>
-		<!--- this is done so that we can call dynamic methods via "onMissingMethod" on the object (we need to pass in the object for this so it can call methods on the "this" scope instead) --->
-		<cfset arguments.component = this>
-	</cfif>
+	<cfset loc.argumentCollection = StructNew()>
 	<cfif StructKeyExists(arguments, "invokeArgs")>
-		<cfset arguments.argumentCollection = arguments.invokeArgs>
-		<cfif StructCount(arguments.argumentCollection) IS NOT ListLen(StructKeyList(arguments.argumentCollection))>
-			<!--- work-around for fasthashremoved cf8 bug --->
-			<cfset arguments.argumentCollection = StructNew()>
+		<cfset loc.argumentCollection = arguments.invokeArgs>
+		<!--- work-around for fasthashremoved cf8 bug --->
+		<cfif StructCount(loc.argumentCollection) IS NOT ListLen(StructKeyList(loc.argumentCollection))>
+			<cfset loc.argumentCollection = StructNew()>
 			<cfloop list="#StructKeyList(arguments.invokeArgs)#" index="loc.i">
-				<cfset arguments.argumentCollection[loc.i] = arguments.invokeArgs[loc.i]>
+				<cfset loc.argumentCollection[loc.i] = arguments.invokeArgs[loc.i]>
 			</cfloop>
 		</cfif>
-		<cfset StructDelete(arguments, "invokeArgs")>
 	</cfif>
-	<cfinvoke attributeCollection="#arguments#">
+	<cfif StructKeyExists(arguments, "componentReference")>
+		<cfinvoke component="#arguments.componentReference#" method="#arguments.method#" returnVariable="loc.returnValue" argumentCollection="#loc.argumentCollection#">
+	<cfelseif NOT StructKeyExists(variables, arguments.method)>
+		<!--- this is done so that we can call dynamic methods via "onMissingMethod" on the object (we need to pass in the object for this so it can call methods on the "this" scope instead) --->
+		<cfinvoke component="#this#" method="#arguments.method#" returnVariable="loc.returnValue" argumentCollection="#loc.argumentCollection#">
+	<cfelse>
+		<cfinvoke method="#arguments.method#" returnVariable="loc.returnValue" argumentCollection="#loc.argumentCollection#">
+	</cfif>
 	<cfif StructKeyExists(loc, "returnValue")>
 		<cfreturn loc.returnValue>
 	<cfelse>
