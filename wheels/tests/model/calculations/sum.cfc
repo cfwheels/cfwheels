@@ -1,14 +1,18 @@
 <cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="test_sum">
-		<cfset loc.result = model("post").sum(property="views")>
-		<cfset $assert("loc.result IS 15")>
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cfset loc.result = model("post").sum(property="views")>
+			<cfset $assert("loc.result IS 15")>
+		</cfif>
 	</cffunction>
 
 	<cffunction name="test_sum_with_where">
-		<cfset loc.author = model("author").findOne(where="lastName='Djurner'")>
-		<cfset loc.result = model("post").sum(property="views", where="authorid=#loc.author.id#")>
-		<cfset $assert("loc.result IS 10")>
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cfset loc.author = model("author").findOne(where="lastName='Djurner'")>
+			<cfset loc.result = model("post").sum(property="views", where="authorid=#loc.author.id#")>
+			<cfset $assert("loc.result IS 10")>
+		</cfif>
 	</cffunction>
 
 	<cffunction name="test_sum_with_non_matching_where">

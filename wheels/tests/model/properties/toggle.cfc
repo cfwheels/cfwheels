@@ -31,15 +31,19 @@
 	</cffunction>
 
 	<cffunction name="test_toggle_property_without_save_errors_when_not_existing">
-		<cfset loc.model = model("user").findOne(where="firstName='Chris'") />
-		<cfset loc.error = raised('loc.model.toggle("isMember", false)') />
-		<cfset $assert('loc.error eq "Wheels.PropertyDoesNotExist"') />
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cfset loc.model = model("user").findOne(where="firstName='Chris'") />
+			<cfset loc.error = raised('loc.model.toggle("isMember", false)') />
+			<cfset $assert('loc.error eq "Wheels.PropertyDoesNotExist"') />
+		</cfif>
 	</cffunction>
 
 	<cffunction name="test_toggle_property_without_save_errors_when_not_boolean">
-		<cfset loc.model = model("user").findOne(where="firstName='Chris'") />
-		<cfset loc.error = raised('loc.model.toggle("firstName", false)') />
-		<cfset $assert('loc.error eq "Wheels.PropertyIsIncorrectType"') />
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cfset loc.model = model("user").findOne(where="firstName='Chris'") />
+			<cfset loc.error = raised('loc.model.toggle("firstName", false)') />
+			<cfset $assert('loc.error eq "Wheels.PropertyIsIncorrectType"') />
+		</cfif>
 	</cffunction>
 
 </cfcomponent>

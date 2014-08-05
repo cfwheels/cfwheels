@@ -1,17 +1,19 @@
 <cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="test_proceeding_on_true_and_nothing">
-		<cfset model("tag").$registerCallback(type="beforeSave", methods="callbackThatReturnsTrue,callbackThatReturnsNothing")>
-		<cfset loc.obj = model("tag").findOne(order="id")>
-		<cfset loc.oldName = loc.obj.name>
-		<cfset loc.obj.name = "somethingElse">
-		<cfset loc.obj.save()>
-		<cfset loc.obj.reload()>
-		<cfset loc.name = loc.obj.name>
-		<cfset loc.obj.name = loc.oldName>
-		<cfset loc.obj.save()>
-		<cfset model("tag").$clearCallbacks(type="beforeSave")>
-		<cfset $assert("loc.name IS NOT loc.oldName")>
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cfset model("tag").$registerCallback(type="beforeSave", methods="callbackThatReturnsTrue,callbackThatReturnsNothing")>
+			<cfset loc.obj = model("tag").findOne(order="id")>
+			<cfset loc.oldName = loc.obj.name>
+			<cfset loc.obj.name = "somethingElse">
+			<cfset loc.obj.save()>
+			<cfset loc.obj.reload()>
+			<cfset loc.name = loc.obj.name>
+			<cfset loc.obj.name = loc.oldName>
+			<cfset loc.obj.save()>
+			<cfset model("tag").$clearCallbacks(type="beforeSave")>
+			<cfset $assert("loc.name IS NOT loc.oldName")>
+		</cfif>
 	</cffunction>
 
 	<cffunction name="test_aborting_on_false">
@@ -26,23 +28,27 @@
 	</cffunction>
 
 	<cffunction name="test_setting_property">
-		<cfset model("tag").$registerCallback(type="beforeSave", methods="callbackThatSetsProperty")>
-		<cfset loc.obj = model("tag").findOne(order="id")>
-		<cfset loc.existBefore = StructKeyExists(loc.obj, "setByCallback")>
-		<cfset loc.obj.save()>
-		<cfset loc.existAfter = StructKeyExists(loc.obj, "setByCallback")>
-		<cfset model("tag").$clearCallbacks(type="beforeSave")>
-		<cfset $assert("NOT loc.existBefore AND loc.existAfter")>
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cfset model("tag").$registerCallback(type="beforeSave", methods="callbackThatSetsProperty")>
+			<cfset loc.obj = model("tag").findOne(order="id")>
+			<cfset loc.existBefore = StructKeyExists(loc.obj, "setByCallback")>
+			<cfset loc.obj.save()>
+			<cfset loc.existAfter = StructKeyExists(loc.obj, "setByCallback")>
+			<cfset model("tag").$clearCallbacks(type="beforeSave")>
+			<cfset $assert("NOT loc.existBefore AND loc.existAfter")>
+		</cfif>
 	</cffunction>
 
 	<cffunction name="test_setting_property_with_skipped_callback">
-		<cfset model("tag").$registerCallback(type="beforeSave", methods="callbackThatSetsProperty")>
-		<cfset loc.obj = model("tag").findOne(order="id")>
-		<cfset loc.existBefore = StructKeyExists(loc.obj, "setByCallback")>
-		<cfset loc.obj.save(callbacks=false, transaction="rollback")>
-		<cfset loc.existAfter = StructKeyExists(loc.obj, "setByCallback")>
-		<cfset model("tag").$clearCallbacks(type="beforeSave")>
-		<cfset $assert("NOT loc.existBefore AND NOT loc.existAfter")>
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cfset model("tag").$registerCallback(type="beforeSave", methods="callbackThatSetsProperty")>
+			<cfset loc.obj = model("tag").findOne(order="id")>
+			<cfset loc.existBefore = StructKeyExists(loc.obj, "setByCallback")>
+			<cfset loc.obj.save(callbacks=false, transaction="rollback")>
+			<cfset loc.existAfter = StructKeyExists(loc.obj, "setByCallback")>
+			<cfset model("tag").$clearCallbacks(type="beforeSave")>
+			<cfset $assert("NOT loc.existBefore AND NOT loc.existAfter")>
+		</cfif>
 	</cffunction>
 
 	<cffunction name="test_execution_order">

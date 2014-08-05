@@ -140,11 +140,7 @@
 </cffunction>
 
 <cffunction name="$throw" returntype="void" access="public" output="false">
-	<cfif StructKeyExists(server, "bluedragon")>
-		<cfdump var="#arguments#">
-	<cfelse>
-		<cfthrow attributeCollection="#arguments#">
-	</cfif>
+	<cfthrow attributeCollection="#arguments#">
 </cffunction>
 
 <cffunction name="$invoke" returntype="any" access="public" output="false">

@@ -16,11 +16,13 @@
 	</cffunction>
 
 	<cffunction name="test_chain_when_saving_existing_object">
-		<cftransaction>
-			<cfset loc.obj.save(transaction="none")>
-			<cftransaction action="rollback"/>
-		</cftransaction>
-		<cfset $assert("loc.obj.callbackCount IS 4")>
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cftransaction>
+				<cfset loc.obj.save(transaction="none")>
+				<cftransaction action="rollback"/>
+			</cftransaction>
+			<cfset $assert("loc.obj.callbackCount IS 4")>
+		</cfif>
 	</cffunction>
 
 	<cffunction name="test_chain_when_saving_existing_object_with_all_callbacks_skipped">
