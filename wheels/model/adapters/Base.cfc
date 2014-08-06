@@ -251,12 +251,9 @@
 		// will be done on insert statement involving auto-incremented primary keys when Railo/ACF cannot retrieve it for us
 		// this happens on non-supported databases (example: H2) and drivers (example: jTDS)
 		loc.$id = $identitySelect(queryAttributes=loc.args, result=loc.result, primaryKey=arguments.$primaryKey);
-		if (StructKeyExists(loc, "$id"))
+		if (StructKeyExists(loc, "$id") && IsStruct(loc.$id))
 		{
-			if (!StructKeyExists(server, "bluedragon"))
-			{
-				StructAppend(loc.result, loc.$id);
-			}
+			StructAppend(loc.result, loc.$id);
 		}
 
 		loc.returnValue.result = loc.result;
