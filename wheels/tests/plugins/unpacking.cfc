@@ -1,19 +1,10 @@
 <cfcomponent extends="wheelsMapping.Test">
 
-	<!--- commenting this out for now since it causes a syntax error in openbd --->
-	<!--- <cffunction name="setup">
-		<cfset loc.config = {
-			path="wheels"
-			,fileName="Plugins"
-			,method="init"
-			,pluginPath="/wheelsMapping/tests/_assets/plugins/unpacking"
-			,deletePluginDirectories=false
-			,overwritePlugins=false
-			,loadIncompatiblePlugins=true
-		}>
+	<cffunction name="setup">
+		<cfset loc.config = {path="wheels", fileName="Plugins", method="init", pluginPath="/wheelsMapping/tests/_assets/plugins/unpacking", deletePluginDirectories=false, overwritePlugins=false, loadIncompatiblePlugins=true}>
 		<cfset $deleteTestFolders()>
 	</cffunction>
-	
+
 	<cffunction name="teardown">
 		<cfset $deleteTestFolders()>
 	</cffunction>
@@ -22,7 +13,7 @@
 		<cfargument name="config" type="struct" required="true">
 		<cfreturn $createObjectFromRoot(argumentCollection=arguments.config)>
 	</cffunction>
-	
+
 	<cffunction name="$deleteTestFolders">
 		<cfset var loc = {}>
 		<cfset var q = "">
@@ -36,14 +27,16 @@
 	</cffunction>
 
 	<cffunction name="test_unpacking_plugin">
-		<cfset loc.PluginObj = $pluginObj(loc.config)>
-		<cfdirectory action="list" directory="#expandPath(loc.config.pluginPath)#" type="dir" name="loc.q">
-		<cfset loc.dirs = "">
-		<cfloop query="loc.q">
-			<cfset loc.dirs = ListAppend(loc.dirs, name)>
-		</cfloop>
-		<cfset $assert('ListFindNoCase(loc.dirs, "TestDefaultAssignMixins")')>
-		<cfset $assert('ListFindNoCase(loc.dirs, "TestGlobalMixins")')>
-	</cffunction> --->
-	
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cfset loc.PluginObj = $pluginObj(loc.config)>
+			<cfdirectory action="list" directory="#expandPath(loc.config.pluginPath)#" type="dir" name="loc.q">
+			<cfset loc.dirs = "">
+			<cfloop query="loc.q">
+				<cfset loc.dirs = ListAppend(loc.dirs, name)>
+			</cfloop>
+			<cfset $assert('ListFindNoCase(loc.dirs, "TestDefaultAssignMixins")')>
+			<cfset $assert('ListFindNoCase(loc.dirs, "TestGlobalMixins")')>
+		</cfif>
+	</cffunction>
+
 </cfcomponent>

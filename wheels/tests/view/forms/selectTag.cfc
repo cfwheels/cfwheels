@@ -15,13 +15,15 @@
 		<cfset $assert('loc.options.simplevalues eq loc.r')>
 	</cffunction>
 
-	<!--- commenting this out for now since it causes a syntax error in openbd --->
-	<!--- <cffunction name="test_struct_for_option_values">
+	<cffunction name="test_struct_for_option_values">
 		<cfset loc.args.name = "testselect">
-		<cfset loc.args.options = {1="first", 2="second", 3="third"}>
+		<cfset loc.args.options = StructNew()>
+		<cfset StructInsert(loc.args.options, 1, "first")>
+		<cfset StructInsert(loc.args.options, 2, "second")>
+		<cfset StructInsert(loc.args.options, 3, "third")>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
 		<cfset $assert('loc.options.complexvalues eq loc.r')>
-	</cffunction> --->
+	</cffunction>
 
 	<cffunction name="test_one_dimensional_array_for_option_values">
 		<cfset loc.args.name = "testselect">
