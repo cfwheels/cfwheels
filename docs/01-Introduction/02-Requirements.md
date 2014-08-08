@@ -111,5 +111,5 @@ the software to run CFWheels, and a suitable project to start with.
 
 [1]: http://www.adobe.com/products/coldfusion/
 [2]: http://www.getrailo.org/
-[3]: ../03%20Handling%20Requests%20with%20Controllers.md
-[4]: ../04%20Database%20Interaction%20Through%20Models/Transactions.md
+[3]: ../03-Handling-Requests-with-Controllers/URL-Rewriting.md
+[4]: ../04-Database-Interaction-Through-Models/Transactions.md
