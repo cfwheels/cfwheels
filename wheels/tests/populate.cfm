@@ -217,7 +217,7 @@ CREATE TABLE tags
 (
 	id #loc.identityColumnType#
 	,parentid #loc.intColumnType# NULL
-	,name varchar(50) NOT NULL
+	,name varchar(50) NULL
 	,description varchar(50) NULL
 	,PRIMARY KEY(id)
 ) #loc.storageEngine#
