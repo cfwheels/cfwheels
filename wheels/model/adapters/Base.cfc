@@ -9,6 +9,10 @@
 		<cfreturn this>
 	</cffunction>
 
+	<cffunction name="$defaultValues" returntype="string" access="public" output="false">
+		<cfreturn " DEFAULT VALUES">
+	</cffunction>
+
 	<cffunction name="$tableName" returntype="string" access="public" output="false">
 		<cfargument name="list" type="string" required="true">
 		<cfargument name="action" type="string" required="true">
