@@ -51,22 +51,28 @@
 			}
 			if (loc.actionIsCachable)
 			{
-				loc.category = "action";
-				loc.key = $hashedKey(variables.$class.name, variables.params);
-				loc.lockName = loc.category & loc.key;
-				loc.conditionArgs = {};
-				loc.conditionArgs.key = loc.key;
-				loc.conditionArgs.category = loc.category;
-				loc.executeArgs = {};
-				loc.executeArgs.controller = params.controller;
-				loc.executeArgs.action = params.action;
-				loc.executeArgs.key = loc.key;
-				loc.executeArgs.time = loc.time;
-				loc.executeArgs.static = loc.static;
-				loc.executeArgs.category = loc.category;
-				
-				// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, caling the controller action (which in turn sets the content to the request scope)
-				variables.$instance.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+				if (loc.static)
+				{
+					$cache(action="serverCache", timeSpan=$timeSpanForCache(loc.time), useQueryString=true);
+					$callAction(action=params.action);
+				}
+				else
+				{
+					// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, calling the controller action (which in turn sets the content to the request scope)
+					loc.category = "action";
+					loc.key = $hashedKey(variables.$class.name, variables.params);
+					loc.lockName = loc.category & loc.key;
+					loc.conditionArgs = {};
+					loc.conditionArgs.key = loc.key;
+					loc.conditionArgs.category = loc.category;
+					loc.executeArgs = {};
+					loc.executeArgs.controller = params.controller;
+					loc.executeArgs.action = params.action;
+					loc.executeArgs.key = loc.key;
+					loc.executeArgs.time = loc.time;
+					loc.executeArgs.category = loc.category;					
+					variables.$instance.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
+				}
 			}
 			else
 			{
@@ -142,20 +148,12 @@
 
 <cffunction name="$callActionAndAddToCache" returntype="string" access="public" output="false">
 	<cfargument name="action" type="string" required="true">
-	<cfargument name="static" type="boolean" required="true">
 	<cfargument name="time" type="numeric" required="true">
 	<cfargument name="key" type="string" required="true">
 	<cfargument name="category" type="string" required="true">
 	<cfscript>
 		$callAction(action=arguments.action);
-		if (arguments.static)
-		{
-			$cache(action="serverCache", timeSpan=$timeSpanForCache(arguments.time));
-		}
-		else
-		{
-			$addToCache(key=arguments.key, value=variables.$instance.response, time=arguments.time, category=arguments.category);
-		}
+		$addToCache(key=arguments.key, value=variables.$instance.response, time=arguments.time, category=arguments.category);
 	</cfscript>
 	<cfreturn response()>
 </cffunction>
