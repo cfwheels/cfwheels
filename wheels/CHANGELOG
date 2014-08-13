@@ -3,9 +3,10 @@
 Bug Fixes
 =========
 
-* Added missing "prepend" and "append" arguments on startFormTag() and endFormTag() - [Per Djurner]
 * Fixed issue with calling addFormat() on application start-up - [Tom King, Per Djurner]
+* Fixed so that Railo outputs object ids as integers instead of exponents - [Jordan Clark]
 * Allow models to be created with no properties - [Tony Petruzzi]
+* Added missing "prepend" and "append" arguments on startFormTag() and endFormTag() - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

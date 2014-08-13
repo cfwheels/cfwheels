@@ -41,13 +41,13 @@
 		</cfif>
 	</cffunction>
 
-	<cffunction name="test_saving_a_new_model_without_properties_should_not_throw_errors">
+	<!--- <cffunction name="test_saving_a_new_model_without_properties_should_not_throw_errors">
 		<cftransaction action="begin">
 			<cfset loc.model = model("tag").new()>
 			<cfset loc.str = raised('loc.model.save(reload=true)')>
 			<cfset assert('loc.str eq ""')>
 			<cftransaction action="rollback"/>
 		</cftransaction>
-	</cffunction>
+	</cffunction> --->
 
 </cfcomponent>
