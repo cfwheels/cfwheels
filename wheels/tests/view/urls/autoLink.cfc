@@ -60,4 +60,11 @@
 		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
+	<cffunction name="test_link_www">
+		<cfset loc.str = "www.foo.uk">
+		<cfset loc.r = loc.controller.autoLink(loc.str)>
+		<cfset loc.e = "<a href=""http://www.foo.uk"">www.foo.uk</a>">
+		<cfset assert("loc.e eq loc.r")>
+	</cffunction>
+
 </cfcomponent>

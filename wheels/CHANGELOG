@@ -8,6 +8,7 @@ Bug Fixes
 * Allow models to be created with no properties - [Tony Petruzzi]
 * Added missing "prepend" and "append" arguments on startFormTag() and endFormTag() - [Per Djurner]
 * Fix for fetching inserted primary key value from an Oracle database when using Adobe ColdFusion - [Per Djurner]
+* When using autoLink(), make sure that links beginning with "www" have a protocol - [Benjamin Melançon, Tony Petruzzi]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
