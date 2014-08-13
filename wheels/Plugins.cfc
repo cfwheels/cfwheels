@@ -69,7 +69,7 @@
 			<cfset loc.temp = {}>
 			<cfset loc.temp.file = $fullPathToPlugin(loc.files.name)>
 			<cfset loc.temp.name = loc.files.name>
-			<cfset loc.temp.folderPath = $fullPathToPlugin(loc.name)>
+			<cfset loc.temp.folderPath = lcase($fullPathToPlugin(loc.name))>
 			<cfset loc.temp.folderExists = directoryExists(loc.temp.folderPath)>
 			<cfset loc.plugins[loc.name] = loc.temp>
 		</cfloop>

@@ -14,8 +14,7 @@
 		<cfset loc.dir = ListChangeDelims(loc.dir, "/", "\")>
 		
 		<cfset loc.badDir = ListAppend(loc.dir, "testing", "/")>
-		<cfset loc.goodDir = ListAppend(loc.dir, "TestGlobalMixins", "/")>
-		
+		<cfset loc.goodDir = ListAppend(loc.dir, "testglobalmixins", "/")>
 		<cfset $deleteDirs()>
 		<cfset $createDir()>
 	</cffunction>

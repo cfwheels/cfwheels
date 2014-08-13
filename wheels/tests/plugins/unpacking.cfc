@@ -12,7 +12,7 @@
 		}>
 		<cfset $deleteTestFolders()>
 	</cffunction>
-	
+
 	<cffunction name="teardown">
 		<cfset $deleteTestFolders()>
 	</cffunction>
@@ -21,7 +21,7 @@
 		<cfargument name="config" type="struct" required="true">
 		<cfreturn $createObjectFromRoot(argumentCollection=arguments.config)>
 	</cffunction>
-	
+
 	<cffunction name="$deleteTestFolders">
 		<cfset var loc = {}>
 		<cfset var q = "">
@@ -41,8 +41,8 @@
 		<cfloop query="loc.q">
 			<cfset loc.dirs = ListAppend(loc.dirs, name)>
 		</cfloop>
-		<cfset assert('ListFindNoCase(loc.dirs, "TestDefaultAssignMixins")')>
-		<cfset assert('ListFindNoCase(loc.dirs, "TestGlobalMixins")')>
+		<cfset assert('ListFind(loc.dirs, "testdefaultassignmixins")')>
+		<cfset assert('ListFind(loc.dirs, "testglobalmixins")')>
 	</cffunction>
-	
+
 </cfcomponent>

@@ -31,7 +31,7 @@
 	
 	<cffunction name="$testFile">
 		<cfset var theFile = "">
-		<cfset theFile = [loc.config.pluginPath, "TestGlobalMixins", "index.cfm"]>
+		<cfset theFile = [loc.config.pluginPath, "testglobalmixins", "index.cfm"]>
 		<cfset theFile = ExpandPath(ArrayToList(theFile, "/"))>
 		<cfreturn theFile>
 	</cffunction>
