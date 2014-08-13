@@ -32,7 +32,7 @@
 		}
 		else
 		{
-			application.$wheels.serverName = "Adobe";
+			application.$wheels.serverName = "Adobe ColdFusion";
 			application.$wheels.serverVersion = server.coldfusion.productVersion;
 		}
 		loc.upgradeTo = $checkMinimumVersion(engine=application.$wheels.serverName, version=application.$wheels.serverVersion);
@@ -250,6 +250,7 @@
 		application.$wheels.functions.deleteByKey = {reload=false};
 		application.$wheels.functions.deleteOne = {reload=false};
 		application.$wheels.functions.distanceOfTimeInWords = {includeSeconds=false};
+		application.$wheels.functions.endFormTag = {prepend="", append=""};
 		application.$wheels.functions.errorMessageOn = {prependText="", appendText="", wrapperElement="span", class="errorMessage"};
 		application.$wheels.functions.errorMessagesFor = {class="errorMessages", showDuplicates=true};
 		application.$wheels.functions.excerpt = {radius=100, excerptString="..."};
@@ -294,7 +295,7 @@
 		application.$wheels.functions.sendEmail = {layout=false, detectMultipart=true, from="", to="", subject=""};
 		application.$wheels.functions.sendFile = {disposition="attachment"};
 		application.$wheels.functions.simpleFormat = {wrap=true};
-		application.$wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, spamProtection=false};
+		application.$wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, spamProtection=false, prepend="", append=""};
 		application.$wheels.functions.styleSheetLinkTag = {type="text/css", media="all", head=false};
 		application.$wheels.functions.submitTag = {value="Save changes", image="", disable="", prepend="", append=""};
 		application.$wheels.functions.sum = {distinct=false, parameterize=true, ifNull=""};

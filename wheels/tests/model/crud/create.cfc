@@ -43,4 +43,15 @@
 		</cfif>
 	</cffunction>
 
+	<!--- <cffunction name="test_saving_a_new_model_without_properties_should_not_throw_errors">
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cftransaction action="begin">
+				<cfset loc.model = model("tag").new()>
+				<cfset loc.str = raised('loc.model.save(reload=true)')>
+				<cfset $assert('loc.str eq ""')>
+				<cftransaction action="rollback"/>
+			</cftransaction>
+		</cfif>
+	</cffunction> --->
+
 </cfcomponent>

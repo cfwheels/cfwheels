@@ -54,6 +54,13 @@
 			arguments.text = RemoveChars(arguments.text, loc.match.pos[1], loc.match.len[1]);			
 			loc.punctuation = ArrayToList(ReMatchNoCase(loc.punctuationRegEx, loc.str));
 			loc.str = REReplaceNoCase(loc.str, loc.punctuationRegEx, "", "all");
+
+			// make sure that links beginning with "www." have a protocol
+			if (Left(loc.str, 4) == "www." && !Len(arguments.protocol))
+			{
+				arguments.protocol = "http://";
+			}
+
 			arguments.href = arguments.protocol & loc.str;
 			loc.element = $element("a", arguments, loc.str, "text,regex,link,protocol,relative") & loc.punctuation;
 			arguments.text = Insert(loc.element, arguments.text, loc.match.pos[1]-1);

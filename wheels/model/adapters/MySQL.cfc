@@ -1,5 +1,9 @@
 <cfcomponent extends="Base" output="false">
 
+	<cffunction name="$defaultValues" returntype="string" access="public" output="false">
+		<cfreturn "() VALUES()">
+	</cffunction>
+
 	<cffunction name="$generatedKey" returntype="string" access="public" output="false">
 		<cfreturn "generated_key">
 	</cffunction>
