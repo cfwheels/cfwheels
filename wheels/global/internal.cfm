@@ -5,6 +5,7 @@
 			request.wheels = {};
 			request.wheels.params = {};
 			request.wheels.cache = {};
+			request.wheels.tickCountId = GetTickCount();
 			
 			// create a structure to track the transaction status for all adapters
 			request.wheels.transactions = {};	
