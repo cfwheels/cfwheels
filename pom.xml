@@ -441,7 +441,12 @@ Benefits of embedded-container-test versus full-integration-test
 									<target>
 										<get src="http://openbd.org/download/${openbdVersion}/openbd.war" dest="target/openbd.war" skipexisting="true"/>
 										<unzip src="target/openbd.war" dest="."
-											overwrite="false"/>
+											overwrite="false">
+										  <patternset>
+										    <include name="WEB-INF/**"/>
+										  </patternset>
+		  								</unzip>
+          								<mkdir dir="plugins"/>
 									</target>
 								</configuration>
 								<goals>
