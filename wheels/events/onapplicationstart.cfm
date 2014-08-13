@@ -27,7 +27,7 @@
 		}
 		else
 		{
-			application.$wheels.serverName = "Adobe";
+			application.$wheels.serverName = "Adobe ColdFusion";
 			application.$wheels.serverVersion = server.coldfusion.productVersion;
 		}
 		loc.upgradeTo = $checkMinimumVersion(engine=application.$wheels.serverName, version=application.$wheels.serverVersion);

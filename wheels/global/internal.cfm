@@ -810,7 +810,7 @@
 			loc.minimumMinor = "1";
 			loc.minimumPatch = "2";
 		}
-		else if (arguments.engine == "Adobe")
+		else if (arguments.engine == "Adobe ColdFusion")
 		{
 			loc.minimumMajor = "8";
 			loc.minimumMinor = "0";

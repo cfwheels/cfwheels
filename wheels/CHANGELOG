@@ -7,6 +7,7 @@ Bug Fixes
 * Fixed so that Railo outputs object ids as integers instead of exponents - [Jordan Clark]
 * Allow models to be created with no properties - [Tony Petruzzi]
 * Added missing "prepend" and "append" arguments on startFormTag() and endFormTag() - [Per Djurner]
+* Fix for fetching inserted primary key value from an Oracle database when using Adobe ColdFusion - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
