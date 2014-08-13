@@ -135,7 +135,7 @@
 		{
 			if (application.wheels.showErrorInformation)
 			{
-				if (ListFindNoCase(application.wheels.protectedMethods, arguments.action))
+				if (ListFindNoCase(application.wheels.protectedFunctions, arguments.action))
 				{
 					$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.action#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels functions.");
 				}
