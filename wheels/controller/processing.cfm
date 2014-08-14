@@ -1,14 +1,37 @@
 <cffunction name="$processAction" returntype="boolean" access="public" output="false">
 	<cfscript>
 		var loc = {};
-		loc.debug = application.wheels.showDebugInformation;
-		if (loc.debug)
+
+		// check if action should be cached and if so cache statically or set the time to use later when caching just the action
+		loc.cache = 0;
+		if ($hasCachableActions() && flashIsEmpty() && StructIsEmpty(form))
+		{
+			loc.cachableActions = $cachableActions();
+			loc.iEnd = ArrayLen(loc.cachableActions);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
+				if (loc.cachableActions[loc.i].action == params.action || loc.cachableActions[loc.i].action == "*")
+				{
+					if (loc.cachableActions[loc.i].static)
+					{
+						$cache(action="serverCache", timeSpan=$timeSpanForCache(loc.cachableActions[loc.i].time), useQueryString=true);
+					}
+					else
+					{
+						loc.cache = loc.cachableActions[loc.i].time;
+					}
+					break;
+				}
+			}
+		}
+
+		if (application.wheels.showDebugInformation)
 		{
 			$debugPoint("beforeFilters");
 		}
 
 		// run verifications if they exist on the controller
-		this.$runVerifications(action=params.action, params=params);
+		$runVerifications(action=params.action, params=params);
 		
 		// return immediately if an abort is issued from a verification
 		if ($abortIssued())
@@ -17,9 +40,9 @@
 		}
 
 		// run before filters if they exist on the controller
-		this.$runFilters(type="before", action=params.action);
+		$runFilters(type="before", action=params.action);
 
-		if (loc.debug)
+		if (application.wheels.showDebugInformation)
 		{
 			$debugPoint("beforeFilters,action");
 		}
@@ -27,55 +50,25 @@
 		// only proceed to call the action if the before filter has not already rendered content
 		if (!$performedRenderOrRedirect())
 		{
-			// call action on controller if it exists
-			loc.actionIsCachable = false;
-			if ($hasCachableActions() && flashIsEmpty() && StructIsEmpty(form))
+			if (loc.cache)
 			{
-				loc.cachableActions = $cachableActions();
-				loc.iEnd = ArrayLen(loc.cachableActions);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-				{
-					if (loc.cachableActions[loc.i].action == params.action || loc.cachableActions[loc.i].action == "*")
-					{
-						loc.actionIsCachable = true;
-						loc.time = loc.cachableActions[loc.i].time;
-						loc.static = loc.cachableActions[loc.i].static;
-					}
-				}
+				// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, calling the controller action (which in turn sets the content to the request scope)
+				loc.category = "action";
+				loc.key = $hashedKey(variables.params);
+				loc.lockName = loc.category & loc.key;
+				loc.conditionArgs = {key=loc.key, category=loc.category};
+				loc.executeArgs = {controller=params.controller, action=params.action, key=loc.key, time=loc.cache, category=loc.category};
+				variables.$instance.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
 			}
-			if (loc.actionIsCachable)
+			if (!$performedRender())
 			{
-				if (loc.static)
-				{
-					$cache(action="serverCache", timeSpan=$timeSpanForCache(loc.time), useQueryString=true);
-					$callAction(action=params.action);
-				}
-				else
-				{
-					// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, calling the controller action (which in turn sets the content to the request scope)
-					loc.category = "action";
-					loc.key = $hashedKey(variables.params);
-					loc.lockName = loc.category & loc.key;
-					loc.conditionArgs = {};
-					loc.conditionArgs.key = loc.key;
-					loc.conditionArgs.category = loc.category;
-					loc.executeArgs = {};
-					loc.executeArgs.controller = params.controller;
-					loc.executeArgs.action = params.action;
-					loc.executeArgs.key = loc.key;
-					loc.executeArgs.time = loc.time;
-					loc.executeArgs.category = loc.category;
-					variables.$instance.response = $doubleCheckedLock(name=loc.lockName, condition="$getFromCache", execute="$callActionAndAddToCache", conditionArgs=loc.conditionArgs, executeArgs=loc.executeArgs);
-				}			
-			}
-			else
-			{
+				// if we didn't render anything from a cached action we call the action here
 				$callAction(action=params.action);
 			}
 		}
 
 		// run after filters with surrounding debug points (don't run the filters if a delayed redirect will occur though)
-		if (loc.debug)
+		if (application.wheels.showDebugInformation)
 		{
 			$debugPoint("action,afterFilters");
 		}
@@ -83,7 +76,7 @@
 		{
 			$runFilters(type="after", action=params.action);
 		}
-		if (loc.debug)
+		if (application.wheels.showDebugInformation)
 		{
 			$debugPoint("afterFilters");
 		}
