@@ -216,6 +216,7 @@
 		application.$wheels.cacheDatePart = "n";
 		application.$wheels.defaultCacheTime = 60;
 		application.$wheels.clearQueryCacheOnReload = true;
+		application.$wheels.clearServerCacheOnReload = true;
 		application.$wheels.cacheQueriesDuringRequest = true;
 		
 		// settings for provides functionality
@@ -332,10 +333,15 @@
 		$include(template="config/settings.cfm");
 		$include(template="config/#application.$wheels.environment#/settings.cfm");
 
-		if(application.$wheels.clearQueryCacheOnReload)
+		// clear query (cfquery) and page (cfcache) caches
+		if (application.$wheels.clearQueryCacheOnReload)
 		{
 			$objectcache(action="clear");
 		}
+		if (application.$wheels.clearServerCacheOnReload)
+		{
+			$cache(action="flush");
+		}	
 
 		// add built-in functions to a list that we check to make sure you cannot call them as controller actions from the url
 		// this is done by getting the function list from the base wheels controller (since the developer does not place their functions in there we know it will only contain built-in ones)
