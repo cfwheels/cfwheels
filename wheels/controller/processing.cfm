@@ -9,7 +9,7 @@
 			<cfif loc.cachableActions[loc.i].action eq params.action or loc.cachableActions[loc.i].action eq "*">
 				<cfif loc.cachableActions[loc.i].static>
 					<!--- the cfcache call is required to be directly in the processing file (see issue #332) --->
-					<cfcache action="serverCache" timeSpan="#$timeSpanForCache(loc.cachableActions[loc.i].time)#" useQueryString="true">
+					<cfcache attributeCollection="#{action='serverCache', timeSpan=$timeSpanForCache(loc.cachableActions[loc.i].time), useQueryString=true}#">
 				<cfelse>
 					<cfset loc.cache = loc.cachableActions[loc.i].time>
 				</cfif>
