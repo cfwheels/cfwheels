@@ -417,7 +417,8 @@
 				
 				if (application.wheels.obfuscateUrls && !ListFindNoCase("cfid,cftoken", loc.temp[1]))
 				{
-					loc.param = obfuscateParam(loc.param);
+					// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
+					loc.param = obfuscateParam("#loc.param#");
 				}
 				loc.returnValue &= loc.param;
 			}
