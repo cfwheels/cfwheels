@@ -1,29 +1,24 @@
 <cffunction name="$processAction" returntype="boolean" access="public" output="false">
-	<cfscript>
-		var loc = {};
+	<cfset var loc = {}>
+	<!--- check if action should be cached and if so cache statically or set the time to use later when caching just the action --->
+	<cfset loc.cache = 0>
+	<cfif $hasCachableActions() && flashIsEmpty() && StructIsEmpty(form)>
+		<cfset loc.cachableActions = $cachableActions()>
+		<cfset loc.iEnd = ArrayLen(loc.cachableActions)>
+		<cfloop from="1" to="#loc.iEnd#" index="loc.i">
+			<cfif loc.cachableActions[loc.i].action eq params.action or loc.cachableActions[loc.i].action eq "*">
+				<cfif loc.cachableActions[loc.i].static>
+					<!--- the cfcache call is required to be directly in the processing file (see issue #332) --->
+					<cfcache action="serverCache" timeSpan="#$timeSpanForCache(loc.cachableActions[loc.i].time)#" useQueryString="true">
+				<cfelse>
+					<cfset loc.cache = loc.cachableActions[loc.i].time>
+				</cfif>
+				<cfbreak>
+			</cfif>
+		</cfloop>
+	</cfif>
 
-		// check if action should be cached and if so cache statically or set the time to use later when caching just the action
-		loc.cache = 0;
-		if ($hasCachableActions() && flashIsEmpty() && StructIsEmpty(form))
-		{
-			loc.cachableActions = $cachableActions();
-			loc.iEnd = ArrayLen(loc.cachableActions);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			{
-				if (loc.cachableActions[loc.i].action == params.action || loc.cachableActions[loc.i].action == "*")
-				{
-					if (loc.cachableActions[loc.i].static)
-					{
-						$cache(action="serverCache", timeSpan=$timeSpanForCache(loc.cachableActions[loc.i].time), useQueryString=true);
-					}
-					else
-					{
-						loc.cache = loc.cachableActions[loc.i].time;
-					}
-					break;
-				}
-			}
-		}
+	<cfscript>
 
 		if (application.wheels.showDebugInformation)
 		{
