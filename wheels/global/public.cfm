@@ -551,9 +551,14 @@
 							$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="The route chosen by Wheels `#loc.route.name#` requires the argument `#loc.property#`. Pass the argument `#loc.property#` or change your routes to reflect the proper variables needed.");
 						loc.param = $URLEncode(arguments[loc.property]);
 						if (loc.property == "controller" || loc.property == "action")
+						{
 							loc.param = hyphenize(loc.param);
+						}
 						else if (application.wheels.obfuscateUrls)
-							loc.param = obfuscateParam(loc.param);
+						{
+							// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
+							loc.param = obfuscateParam("#loc.param#");
+						}
 						loc.returnValue = loc.returnValue & "/" & loc.param; // get param from arguments
 					}
 					else
@@ -582,7 +587,10 @@
 			{
 				loc.param = $URLEncode(arguments.key);
 				if (application.wheels.obfuscateUrls)
-					loc.param = obfuscateParam(loc.param);
+				{
+					// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
+					loc.param = obfuscateParam("#loc.param#");
+				}
 				loc.returnValue = loc.returnValue & "&key=" & loc.param;
 			}
 		}
