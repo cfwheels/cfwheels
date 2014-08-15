@@ -220,6 +220,7 @@
 		application.$wheels.cacheDatePart = "n";
 		application.$wheels.defaultCacheTime = 60;
 		application.$wheels.clearQueryCacheOnReload = true;
+		application.$wheels.clearServerCacheOnReload = true;
 		application.$wheels.cacheQueriesDuringRequest = true;
 		
 		// possible formats for provides
@@ -340,9 +341,14 @@
 		$include(template="config/settings.cfm");
 		$include(template="config/#application.$wheels.environment#/settings.cfm");
 
-		if(application.$wheels.clearQueryCacheOnReload)
+		// clear query (cfquery) and page (cfcache) caches
+		if (application.$wheels.clearQueryCacheOnReload)
 		{
 			$objectcache(action="clear");
+		}
+		if (application.$wheels.clearServerCacheOnReload)
+		{
+			$cache(action="flush");
 		}
 
 		// add all public controller / view methods to a list of methods that you should not be allowed to call as a controller action from the url
