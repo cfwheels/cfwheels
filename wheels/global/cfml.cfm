@@ -93,7 +93,10 @@
 </cffunction>
 
 <cffunction name="$cache" returntype="any" access="public" output="false">
+	<!--- If cache is found only the function is aborted, not page. --->
+	<cfset variables.$instance.recache = false>
 	<cfcache attributeCollection="#arguments#">
+	<cfset variables.$instance.recache = true>
 </cffunction>
 
 <cffunction name="$content" returntype="any" access="public" output="false">

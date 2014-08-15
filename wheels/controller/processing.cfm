@@ -15,6 +15,10 @@
 					if (loc.cachableActions[loc.i].static)
 					{
 						$cache(action="serverCache", timeSpan=$timeSpanForCache(loc.cachableActions[loc.i].time), useQueryString=true);
+						if (!$recacheRequired())
+						{
+							$abort();
+						}
 					}
 					else
 					{
@@ -32,7 +36,7 @@
 
 		// run verifications if they exist on the controller
 		$runVerifications(action=params.action, params=params);
-		
+
 		// return immediately if an abort is issued from a verification
 		if ($abortIssued())
 		{
