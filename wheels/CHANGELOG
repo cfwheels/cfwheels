@@ -13,6 +13,7 @@ Bug Fixes
 * Plugin folder name should be lower case as per convention - #320 [Singgih Cahyono]
 * Clear statically cached pages on reload - [Per Djurner]
 * Do not run filters and verifications when caching actions statically - [Per Djurner]
+* Fixed a bug where trying to obfuscate a high number was throwing an error - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
