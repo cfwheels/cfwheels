@@ -8,7 +8,7 @@
 	categories="controller-initialization,caching" chapters="caching" functions="">
 	<cfargument name="action" type="string" required="false" default="" hint="Action(s) to cache. This argument is also aliased as `actions`. If you don't pass in an action to cache Wheels will cache all actions for the controller.">
 	<cfargument name="time" type="numeric" required="false" hint="Minutes to cache the action(s) for.">
-	<cfargument name="static" type="boolean" required="false" hint="Set to `true` to tell Wheels that this is a static page and that it can skip running the controller filters (before and after filters set on actions) and application events (onSessionStart, onRequestStart etc).">
+	<cfargument name="static" type="boolean" required="false" hint="Set to `true` to tell Wheels that this is a static page and that it can skip running the controller filters (before and after filters set on actions). Please note that the `onSessionStart` and `onRequestStart` events still execute though.">
 	<cfscript>
 		var loc = {};
 		$args(args=arguments, name="caches", combine="action/actions");
