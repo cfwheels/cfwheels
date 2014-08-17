@@ -213,7 +213,7 @@
 			return arguments.params.format;
 		
 		for (loc.item in application.wheels.formats)
-			if (arguments.httpAccept == application.wheels.formats[loc.item])
+			if (arguments.httpAccept contains application.wheels.formats[loc.item])
 				return loc.item;
 	</cfscript>
 	<cfreturn loc.format />

@@ -15,6 +15,7 @@ Bug Fixes
 * Do not run filters and verifications when caching actions statically - [Per Djurner]
 * Fixed a bug where trying to obfuscate a high number was throwing an error - [Per Djurner]
 * Fixed bug with static caching on Adobe ColdFusion 9 - #332 [Charley Contreras]
+* Allow for format auto-detection when HTTP ACCEPT contains multiple values - #297 [Raul Riera, Singgih Cahyono] 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
