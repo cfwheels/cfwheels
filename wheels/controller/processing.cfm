@@ -15,6 +15,10 @@
 					if (loc.cachableActions[loc.i].static)
 					{
 						$cache(action="serverCache", timeSpan=$timeSpanForCache(loc.cachableActions[loc.i].time), useQueryString=true);
+						if (!$recacheRequired())
+						{
+							$abort();
+						}
 					}
 					else
 					{

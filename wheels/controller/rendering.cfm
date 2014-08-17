@@ -583,6 +583,10 @@
 	<cfreturn StructKeyExists(variables.$instance, "abort")>
 </cffunction>
 
+<cffunction name="$recacheRequired" returntype="boolean" access="public" output="false">
+	<cfreturn StructKeyExists(variables.$instance, "recache") && variables.$instance.recache>
+</cffunction>
+
 <cffunction name="$getRedirect" returntype="struct" access="public" output="false">
 	<cfscript>
 		var loc = {};
