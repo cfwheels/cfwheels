@@ -1,11 +1,11 @@
 <cfcomponent extends="wheelsMapping.Test">
 
 	<cfset params = {controller="dummy", action="dummy"}>
-	
+
 	<cffunction name="setup">
 		<cfset $$oldCGIScope = request.cgi>
 	</cffunction>
-	
+
 	<cffunction name="teardown">
 		<cfset request.cgi = $$oldCGIScope>
 	</cffunction>
@@ -37,6 +37,12 @@
 	<cffunction name="test_$requestContentType_header_cgi_json">
 		<cfset loc.controller = controller("dummy", params)>
 		<cfset request.cgi.http_accept = "application/json">
+		<cfset $assert("loc.controller.$requestContentType() eq 'json'")>
+	</cffunction>
+
+	<cffunction name="test_$requestContentType_header_cgi_json_and_js">
+		<cfset loc.controller = controller("dummy", params)>
+		<cfset request.cgi.http_accept = "application/json, application/javascript">
 		<cfset $assert("loc.controller.$requestContentType() eq 'json'")>
 	</cffunction>
 
