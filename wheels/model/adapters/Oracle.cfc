@@ -1,7 +1,12 @@
 <cfcomponent extends="Base" output="false">
 
 	<cffunction name="$defaultValues" returntype="string" access="public" output="false">
-		<cfreturn " VALUES(default)">
+		<cfargument name="tableName" type="string" required="true" hint="the table to retrieve column information for">
+		<cfscript>
+			var loc = {};
+			loc.columns = $getColumns(tableName);
+			return "(#loc.columns.column_name#) VALUES(DEFAULT)";
+		</cfscript>
 	</cffunction>
 
 	<cffunction name="$generatedKey" returntype="string" access="public" output="false">
