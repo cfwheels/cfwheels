@@ -5,7 +5,7 @@
 <!--- handle differences in database for identity inserts, column types etc--->
 <cfset loc.storageEngine = "">
 <cfset loc.dateTimeColumnType = "datetime">
-<cfset loc.dateTimeDefault = "'2000-01-01 18:26:08.690'">
+<cfset loc.dateTimeDefault = "'2000-01-01 18:26:08.490'">
 <cfset loc.binaryColumnType = "blob">
 <cfset loc.textColumnType = "text">
 <cfset loc.intColumnType = "int">
