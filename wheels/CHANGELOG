@@ -23,7 +23,7 @@ Bug Fixes
 * Fixed issue with calling addFormat() on application start-up - #333 [Tom King, Per Djurner]
 * Fixed so that Railo outputs ids for nested properties as integers instead of exponents - [Jordan Clark]
 * Make sure that ids for nested properties are unique - [Sam Hakimi, Tony Petruzzi]
-* Allow models to be created with no properties - [Tony Petruzzi]
+* Allow models to be created with no properties - [Tony Petruzzi, Singgih Cahyono]
 * Added missing "prepend" and "append" arguments on startFormTag() and endFormTag() - [Per Djurner]
 * Fix for fetching inserted primary key value from an Oracle database when using Adobe ColdFusion - [Per Djurner]
 * When using autoLink(), make sure that links beginning with "www" have a protocol - [Benjamin Melançon, Tony Petruzzi]
@@ -34,7 +34,7 @@ Bug Fixes
 * Fixed bug with static caching on Adobe ColdFusion 9 - #332 [Charley Contreras]
 * Allow for format auto-detection when HTTP ACCEPT contains multiple values - #297 [Raul Riera, Singgih Cahyono] 
 * Fixed so that sendEmail() can use the "remove" attribute to delete attachments - #339 [Simon Allard]
-* Fixed default values SQL on Oracle and PostgreSQL - #337 [Singgih Cahyono]
+* Fixed issue with using group by with calculated properties - #89 [Adam Chapman, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

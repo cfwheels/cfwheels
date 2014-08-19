@@ -6,8 +6,8 @@
 	</cffunction>
 
 	<cffunction name="test_tablename_and_tablenameprefix_in_finders_fixes_issue_667">
-		<cfset loc.users = model("user2").findAll()>
-		<cfset $assert('loc.users.recordcount eq 0')>
+		<cfset loc.users = model("user2").findAll(select="id")>
+		<cfset $assert('loc.users.recordcount eq 3')>
 	</cffunction>
 
 </cfcomponent>
