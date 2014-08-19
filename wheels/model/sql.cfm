@@ -180,18 +180,15 @@
 		// if we want a distinct statement, we can do it grouping every field in the select
 		if (arguments.distinct)
 		{
-			loc.returnValue = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=true);
+			loc.returnValue = $createSQLFieldList(list=arguments.select, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
 		}
 		else if (Len(arguments.group))
 		{
-			loc.returnValue = $createSQLFieldList(list=arguments.group, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=true);
+			loc.returnValue = $createSQLFieldList(list=arguments.group, include=arguments.include, returnAs=arguments.returnAs, renameFields=false, addCalculatedProperties=false);
 		}
 		if (Len(loc.returnValue))
 		{
 			loc.returnValue = "GROUP BY " & loc.returnValue;
-			// this is a little ugly because I want to contain any possible issues to group by for 1.3.x releases
-			// for 2.0.x we should probably strip out the " AS x" part in the $createSQLFieldList function instead
-			loc.returnValue = REReplaceNoCase(loc.returnValue, " AS [a-z0-9-_]*", "", "all");
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
