@@ -1012,8 +1012,8 @@
 		else
 		{
 			// no properties were set on the object so we insert a record with only default values to the database
-			ArrayAppend(loc.sql, "INSERT INTO #tableName()#" & variables.wheels.class.adapter.$defaultValues());
-			loc.primaryKeys = "";
+			loc.primaryKeys = primaryKey(0);
+			ArrayAppend(loc.sql, "INSERT INTO #tableName()#" & variables.wheels.class.adapter.$defaultValues($primaryKey=loc.primaryKeys));
 		}
 
 		// run the insert sql statement and set the primary key value on the object (if one was returned from the database)
