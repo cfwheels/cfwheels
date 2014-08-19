@@ -421,6 +421,10 @@ FROM users u INNER JOIN galleries g ON u.id = g.userid
 	</cfloop>
 </cfloop>
 
+<cfset model("user2").create(username="Chris", password="x", firstName="x", lastName="x")>
+<cfset model("user2").create(username="Tim", password="x", firstName="x", lastName="x")>
+<cfset model("user2").create(username="Tom", password="x", firstName="x", lastName="x")>
+
 <!--- create a profile with an author --->
 <cfset model("profile").create(dateOfBirth="1/1/1970", bio="Unknown Author")>
 
