@@ -193,7 +193,7 @@
 
 <!--- PUBLIC CONFIGURATION FUNCTIONS --->
 
-<cffunction name="addFormat" returntype="void" access="public" output="false" hint="Adds a new MIME format to your Wheels application for use with responding to multiple formats."
+<cffunction name="addFormat" returntype="void" access="public" output="false" hint="Adds a new MIME format for use with responding to multiple formats."
 	examples='
 		<!--- Add the `js` format --->
 		<cfset addFormat(extension="js", mimeType="text/javascript")>
@@ -203,9 +203,13 @@
 		<cfset addFormat(extension="pptx", mimeType="application/vnd.ms-powerpoint")>
 	'
 	categories="configuration" chapters="responding-with-multiple-formats" functions="provides,renderWith">
-	<cfargument name="extension" type="string" required="true" hint="File extension to add." />
-	<cfargument name="mimeType" type="string" required="true" hint="Matching MIME type to associate with the file extension." />
-	<cfset application.wheels.formats[arguments.extension] = arguments.mimeType />
+	<cfargument name="extension" type="string" required="true" hint="File extension to add.">
+	<cfargument name="mimeType" type="string" required="true" hint="Matching MIME type to associate with the file extension.">
+	<cfscript>
+		var loc = {};
+		loc.appKey = $appKey();
+		application[loc.appKey].formats[arguments.extension] = arguments.mimeType;
+	</cfscript>
 </cffunction>
 
 <cffunction name="addRoute" returntype="void" access="public" output="false" hint="Adds a new route to your application."
@@ -335,49 +339,6 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="deobfuscateParam" returntype="string" access="public" output="false" hint="Deobfuscates a value."
-	examples=
-	'
-		<!--- Get the original value from an obfuscated one --->
-		<cfset originalValue = deobfuscateParam("b7ab9a50")>
-	'
-	categories="global,miscellaneous" chapters="obfuscating-urls" functions="obfuscateParam">
-	<cfargument name="param" type="string" required="true" hint="Value to deobfuscate.">
-	<cfscript>
-		var loc = {};
-		if (Val(SpanIncluding(arguments.param, "0,1,2,3,4,5,6,7,8,9")) != arguments.param)
-		{
-			try
-			{
-				loc.checksum = Left(arguments.param, 2);
-				loc.returnValue = Right(arguments.param, (Len(arguments.param)-2));
-				loc.z = BitXor(InputBasen(loc.returnValue,16),461);
-				loc.returnValue = "";
-				loc.iEnd = Len(loc.z)-1;
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-					loc.returnValue &= Left(Right(loc.z, loc.i),1);
-				loc.checksumtest = "0";
-				loc.iEnd = Len(loc.returnValue);
-				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-					loc.checksumtest = (loc.checksumtest + Left(Right(loc.returnValue, loc.i),1));
-				loc.c1 = ToString(FormatBaseN((loc.checksumtest+154),10));
-				loc.c2 = InputBasen(loc.checksum, 16);
-				if (loc.c1 != loc.c2)
-					loc.returnValue = arguments.param;
-			}
-			catch(Any e)
-			{
-		    	loc.returnValue = arguments.param;
-			}
-		}
-		else
-		{
-	    	loc.returnValue = arguments.param;
-		}
-	</cfscript>
-	<cfreturn loc.returnValue>
-</cffunction>
-
 <cffunction name="get" returntype="any" access="public" output="false" hint="Returns the current setting for the supplied Wheels setting or the current default for the supplied Wheels function argument."
 	examples=
 	'
@@ -426,20 +387,69 @@
 	<cfargument name="param" type="any" required="true" hint="Value to obfuscate.">
 	<cfscript>
 		var loc = {};
-		if (IsValid("integer", arguments.param) && IsNumeric(arguments.param) && arguments.param > 0)
+		loc.returnValue = arguments.param;
+		if (IsValid("integer", arguments.param) && IsNumeric(arguments.param) && arguments.param > 0 && Left(arguments.param, 1) != 0)
 		{
-			// railo strips leading zeros from integers so do this for both engines
-			arguments.param = Val(SpanIncluding(arguments.param, "0,1,2,3,4,5,6,7,8,9"));
 			loc.iEnd = Len(arguments.param);
 			loc.a = (10^loc.iEnd) + Reverse(arguments.param);
-			loc.b = "0";
+			loc.b = 0;
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-				loc.b = (loc.b + Left(Right(arguments.param, loc.i), 1));
-			loc.returnValue = FormatBaseN((loc.b+154),16) & FormatBaseN(BitXor(loc.a,461),16);
+			{
+				loc.b += Left(Right(arguments.param, loc.i), 1);
+			}
+			if (IsValid("integer", loc.a))
+			{
+				loc.returnValue = FormatBaseN(loc.b+154, 16) & FormatBaseN(BitXor(loc.a, 461), 16);
+			}
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
+<cffunction name="deobfuscateParam" returntype="string" access="public" output="false" hint="Deobfuscates a value."
+	examples=
+	'
+		<!--- Get the original value from an obfuscated one --->
+		<cfset originalValue = deobfuscateParam("b7ab9a50")>
+	'
+	categories="global,miscellaneous" chapters="obfuscating-urls" functions="obfuscateParam">
+	<cfargument name="param" type="string" required="true" hint="Value to deobfuscate.">
+	<cfscript>
+		var loc = {};
+		if (Val(arguments.param) != arguments.param)
+		{
+			try
+			{
+				loc.checksum = Left(arguments.param, 2);
+				loc.returnValue = Right(arguments.param, Len(arguments.param)-2);
+				loc.z = BitXor(InputBasen(loc.returnValue, 16), 461);
+				loc.returnValue = "";
+				loc.iEnd = Len(loc.z) - 1;
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					loc.returnValue &= Left(Right(loc.z, loc.i), 1);
+				}
+				loc.checkSumTest = 0;
+				loc.iEnd = Len(loc.returnValue);
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					loc.checkSumTest += Left(Right(loc.returnValue, loc.i), 1);
+				}
+				loc.c1 = ToString(FormatBaseN(loc.checkSumTest+154, 10));
+				loc.c2 = InputBasen(loc.checksum, 16);
+				if (loc.c1 != loc.c2)
+				{
+					loc.returnValue = arguments.param;
+				}
+			}
+			catch (any e)
+			{
+	    		loc.returnValue = arguments.param;
+			}
 		}
 		else
 		{
-			loc.returnValue = arguments.param;
+    		loc.returnValue = arguments.param;
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -541,9 +551,14 @@
 							$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="The route chosen by Wheels `#loc.route.name#` requires the argument `#loc.property#`. Pass the argument `#loc.property#` or change your routes to reflect the proper variables needed.");
 						loc.param = $URLEncode(arguments[loc.property]);
 						if (loc.property == "controller" || loc.property == "action")
+						{
 							loc.param = hyphenize(loc.param);
+						}
 						else if (application.wheels.obfuscateUrls)
-							loc.param = obfuscateParam(loc.param);
+						{
+							// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
+							loc.param = obfuscateParam("#loc.param#");
+						}
 						loc.returnValue &= "/" & loc.param; // get param from arguments
 					}
 					else
@@ -572,7 +587,10 @@
 			{
 				loc.param = $URLEncode(arguments.key);
 				if (application.wheels.obfuscateUrls)
-					loc.param = obfuscateParam(loc.param);
+				{
+					// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
+					loc.param = obfuscateParam("#loc.param#");
+				}
 				loc.returnValue &= "&key=" & loc.param;
 			}
 		}

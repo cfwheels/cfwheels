@@ -1,5 +1,9 @@
 <cfcomponent extends="Base" output="false">
 
+	<cffunction name="$defaultValues" returntype="string" access="public" output="false">
+		<cfreturn "() VALUES()">
+	</cffunction>
+
 	<cffunction name="$generatedKey" returntype="string" access="public" output="false">
 		<cfreturn "generated_key">
 	</cffunction>
@@ -57,7 +61,7 @@
 		<cfset var loc = {}>
 		<cfset var query = {}>
 		<cfset loc.sql = Trim(arguments.result.sql)>
-		<cfif Left(loc.sql, 11) IS "INSERT INTO" AND NOT StructKeyExists(arguments.result, $generatedKey())>
+		<cfif Left(loc.sql, 11) IS "INSERT INTO" AND (NOT StructKeyExists(arguments.result, $generatedKey()) OR NOT Len(arguments.result[$generatedKey()]))>
 			<cfset loc.startPar = Find("(", loc.sql) + 1>
 			<cfset loc.endPar = Find(")", loc.sql)>
 			<cfset loc.columnList = ReplaceList(Mid(loc.sql, loc.startPar, (loc.endPar-loc.startPar)), "#Chr(10)#,#Chr(13)#, ", ",,")>

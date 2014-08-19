@@ -11,14 +11,16 @@
 	</cffunction>
 
  	<cffunction name="test_dynamic_update_with_named_argument">
-		<cftransaction action="begin">
-			<cfset loc.author = model("author").findOne(where="firstName='Andy'")>
-			<cfset loc.profile = model("profile").findOne(where="bio LIKE 'ColdFusion Developer'")>
-			<cfset loc.author.setProfile(profile=loc.profile)>
-			<cfset loc.updatedProfile = model("profile").findByKey(loc.profile.id)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset $assert("loc.updatedProfile.authorId IS loc.author.id")>
+ 		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cftransaction action="begin">
+				<cfset loc.author = model("author").findOne(where="firstName='Andy'")>
+				<cfset loc.profile = model("profile").findOne(where="bio LIKE 'ColdFusion Developer'")>
+				<cfset loc.author.setProfile(profile=loc.profile)>
+				<cfset loc.updatedProfile = model("profile").findByKey(loc.profile.id)>
+				<cftransaction action="rollback" />
+			</cftransaction>
+			<cfset $assert("loc.updatedProfile.authorId IS loc.author.id")>
+		</cfif>
 	</cffunction>
 
  	<cffunction name="test_dynamic_update_with_unnamed_argument">
@@ -72,21 +74,25 @@
 	</cffunction>
 
  	<cffunction name="test_update_all">
-		<cftransaction action="begin">
-			<cfset model("Author").updateAll(firstName="Kermit", lastName="Frog")>
-			<cfset loc.allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'")>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset $assert('loc.allKermits.recordcount eq 7')>
+ 		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cftransaction action="begin">
+				<cfset model("Author").updateAll(firstName="Kermit", lastName="Frog")>
+				<cfset loc.allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'")>
+				<cftransaction action="rollback" />
+			</cftransaction>
+			<cfset $assert('loc.allKermits.recordcount eq 7')>
+		</cfif>
 	</cffunction>
 
  	<cffunction name="test_update_all_for_soft_deleted_records">
-		<cftransaction action="begin">
-			<cfset model("Post").updateAll(title="This is a new title", includeSoftDeletes=true)>
-			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset $assert('loc.changedPosts.recordcount eq 5')>
+ 		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cftransaction action="begin">
+				<cfset model("Post").updateAll(title="This is a new title", includeSoftDeletes=true)>
+				<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true)>
+				<cftransaction action="rollback" />
+			</cftransaction>
+			<cfset $assert('loc.changedPosts.recordcount eq 5')>
+		</cfif>
 	</cffunction>
 
    	<cffunction name="test_columns_that_are_not_null_should_allow_for_blank_string_during_update">

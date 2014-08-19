@@ -224,10 +224,6 @@
 		}
 		if (!StructKeyExists(arguments, "alt"))
 			arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
-		if (StructKeyExists(server, "bluedragon"))
-		{
-			StructDelete(arguments, "attributeCollection");
-		}
 		loc.returnValue = $tag(name="img", skip="source,key,category", close=true, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>

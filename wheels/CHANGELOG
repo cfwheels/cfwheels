@@ -1,4 +1,4 @@
-Edge (07/30/2014)
+2.0
 
 Other Enhancements
 ==================
@@ -12,6 +12,28 @@ Breaking Changes
 * Renamed assert() function to $assert() [Per Djurner]
 * Removed the possibility to name actions "get", "set", "addroute" and "addDefaultRoutes" [Per Djurner]
 * Removed the "useExpandedColumnAliases" setting.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1.3.1
+
+Bug Fixes
+=========
+
+* Fixed issue with calling addFormat() on application start-up - #333 [Tom King, Per Djurner]
+* Fixed so that Railo outputs ids for nested properties as integers instead of exponents - [Jordan Clark]
+* Make sure that ids for nested properties are unique - [Sam Hakimi, Tony Petruzzi]
+* Allow models to be created with no properties - [Tony Petruzzi]
+* Added missing "prepend" and "append" arguments on startFormTag() and endFormTag() - [Per Djurner]
+* Fix for fetching inserted primary key value from an Oracle database when using Adobe ColdFusion - [Per Djurner]
+* When using autoLink(), make sure that links beginning with "www" have a protocol - [Benjamin Melançon, Tony Petruzzi]
+* Plugin folder name should be lower case as per convention - #320 [Singgih Cahyono]
+* Clear statically cached pages on reload - [Per Djurner]
+* Do not run filters and verifications when caching actions statically - [Per Djurner]
+* Fixed a bug where trying to obfuscate a high number was throwing an error - [Per Djurner]
+* Fixed bug with static caching on Adobe ColdFusion 9 - #332 [Charley Contreras]
+* Allow for format auto-detection when HTTP ACCEPT contains multiple values - #297 [Raul Riera, Singgih Cahyono] 
+* Fixed so that sendEmail() can use the "remove" attribute to delete attachments - #339 [Simon Allard]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

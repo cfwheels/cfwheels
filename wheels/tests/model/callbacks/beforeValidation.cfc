@@ -16,8 +16,10 @@
 	</cffunction>
 
 	<cffunction name="test_saving_object_without_callbacks">
-		<cfset loc.obj.save(callbacks=false, transaction="rollback")>
-		<cfset $assert("NOT StructKeyExists(loc.obj, 'setByCallback')")>
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cfset loc.obj.save(callbacks=false, transaction="rollback")>
+			<cfset $assert("NOT StructKeyExists(loc.obj, 'setByCallback')")>
+		</cfif>
 	</cffunction>
 
 	<!--- Uncomment to test issue 284 --->

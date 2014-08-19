@@ -42,19 +42,23 @@
 	</cffunction>
 
 	<cffunction name="test_dynamic_count_with_where">
-		<cfset loc.author = model("author").findOne(where="lastName='Djurner'")>
-		<cfset loc.result = loc.author.postCount(where="title LIKE '%first%' OR title LIKE '%second%'")>
-		<cfset $assert("loc.result IS 2")>
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cfset loc.author = model("author").findOne(where="lastName='Djurner'")>
+			<cfset loc.result = loc.author.postCount(where="title LIKE '%first%' OR title LIKE '%second%'")>
+			<cfset $assert("loc.result IS 2")>
+		</cfif>
 	</cffunction>
 	
 	<cffunction name="test_count_with_include_soft_deletes">
-		<cftransaction action="begin">
-			<cfset loc.post = model("Post").findOne(where="views=0")>
-			<cfset loc.post.delete(transaction="none")>
-			<cfset loc.count = model("Post").count(property="views", includeSoftDeletes=true)>
-			<cftransaction action="rollback" />
-		</cftransaction>
-		<cfset $assert('loc.count eq 5')>
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cftransaction action="begin">
+				<cfset loc.post = model("Post").findOne(where="views=0")>
+				<cfset loc.post.delete(transaction="none")>
+				<cfset loc.count = model("Post").count(property="views", includeSoftDeletes=true)>
+				<cftransaction action="rollback" />
+			</cftransaction>
+			<cfset $assert('loc.count eq 5')>
+		</cfif>
 	</cffunction>	
 	
 </cfcomponent>

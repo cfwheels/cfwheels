@@ -23,6 +23,7 @@
 			request.wheels = {};
 			request.wheels.params = {};
 			request.wheels.cache = {};
+			request.wheels.tickCountId = GetTickCount();
 			
 			// create a structure to track the transaction status for all adapters
 			request.wheels.transactions = {};	
@@ -416,7 +417,8 @@
 				
 				if (application.wheels.obfuscateUrls && !ListFindNoCase("cfid,cftoken", loc.temp[1]))
 				{
-					loc.param = obfuscateParam(loc.param);
+					// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
+					loc.param = obfuscateParam("#loc.param#");
 				}
 				loc.returnValue &= loc.param;
 			}
@@ -878,7 +880,7 @@
 			loc.minimumMinor = "1";
 			loc.minimumPatch = "0";
 		}
-		else if (arguments.engine == "Adobe")
+		else if (arguments.engine == "Adobe ColdFusion")
 		{
 			loc.minimumMajor = "8";
 			loc.minimumMinor = "0";

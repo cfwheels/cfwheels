@@ -4,3 +4,5 @@ WEB-INF
 /.settings
 /.classpath
 /temp/
+/bluedragon/
+/manual/

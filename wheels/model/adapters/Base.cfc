@@ -9,6 +9,10 @@
 		<cfreturn this>
 	</cffunction>
 
+	<cffunction name="$defaultValues" returntype="string" access="public" output="false">
+		<cfreturn " DEFAULT VALUES">
+	</cffunction>
+
 	<cffunction name="$tableName" returntype="string" access="public" output="false">
 		<cfargument name="list" type="string" required="true">
 		<cfargument name="action" type="string" required="true">
@@ -172,7 +176,7 @@
 		
 		if(!StructKeyExists(arguments.settings, "value"))
 		{
-			$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syantax error in the WHERE statement such as forgetting to quote strings.");
+			$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syntax error in the WHERE statement such as forgetting to quote strings.");
 		}
 		
 		loc.params = {};
@@ -251,12 +255,9 @@
 		// will be done on insert statement involving auto-incremented primary keys when Railo/ACF cannot retrieve it for us
 		// this happens on non-supported databases (example: H2) and drivers (example: jTDS)
 		loc.$id = $identitySelect(queryAttributes=loc.args, result=loc.result, primaryKey=arguments.$primaryKey);
-		if (StructKeyExists(loc, "$id"))
+		if (StructKeyExists(loc, "$id") && IsStruct(loc.$id))
 		{
-			if (!StructKeyExists(server, "bluedragon"))
-			{
-				StructAppend(loc.result, loc.$id);
-			}
+			StructAppend(loc.result, loc.$id);
 		}
 
 		loc.returnValue.result = loc.result;

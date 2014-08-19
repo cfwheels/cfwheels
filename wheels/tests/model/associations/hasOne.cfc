@@ -40,17 +40,19 @@
 	</cffunction>
 
 	<cffunction name="test_removing_child_by_nullifying_foreign_key">
-		<cfset loc.author = model("author").findOne(order="id")>
-		<cftransaction>
-			<cfset loc.author.removeProfile(transaction="none")>
-			<cfset $assert("model('profile').findOne().authorId IS ''")>
-			<cftransaction action="rollback" />
-		</cftransaction>		
-		<cftransaction>
-			<cfset model("profile").updateOne(authorId="", where="authorId=#loc.author.id#", transaction="none")>
-			<cfset $assert("model('profile').findOne().authorId IS ''")>
-			<cftransaction action="rollback" />
-		</cftransaction>		
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cfset loc.author = model("author").findOne(order="id")>
+			<cftransaction>
+				<cfset loc.author.removeProfile(transaction="none")>
+				<cfset $assert("model('profile').findOne().authorId IS ''")>
+				<cftransaction action="rollback" />
+			</cftransaction>		
+			<cftransaction>
+				<cfset model("profile").updateOne(authorId="", where="authorId=#loc.author.id#", transaction="none")>
+				<cfset $assert("model('profile').findOne().authorId IS ''")>
+				<cftransaction action="rollback" />
+			</cftransaction>
+		</cfif>
 	</cffunction>
 
 	<cffunction name="test_deleting_child">

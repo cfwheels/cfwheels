@@ -5,19 +5,19 @@
 	'
 		<!--- Render a view page for a different action within the same controller --->
 		<cfset renderPage(action="edit")>
-		
+
 		<!--- Render a view page for a different action within a different controller --->
 		<cfset renderPage(controller="blog", action="new")>
-		
+
 		<!--- Another way to render the blog/new template from within a different controller --->
 		<cfset renderPage(template="/blog/new")>
 
 		<!--- Render the view page for the current action but without a layout and cache it for 60 minutes --->
 		<cfset renderPage(layout=false, cache=60)>
-		
+
 		<!--- Load a layout from a different folder within `views` --->
 		<cfset renderPage(layout="/layouts/blog")>
-		
+
 		<!--- Don''t render the view immediately but rather return and store in a variable for further processing --->
 		<cfset myView = renderPage(returnAs="string")>
 	'
@@ -37,25 +37,25 @@
 		{
 			$debugPoint("view");
 		}
-		
+
 		// if no layout specific arguments were passed in use the this instance's layout
 		if (!Len(arguments.$layout))
 		{
 			arguments.$layout = $useLayout(arguments.$action);
 		}
-		
+
 		// never show debugging out in ajax requests
 		if (isAjax())
 		{
 			arguments.$hideDebugInformation = true;
 		}
-		
+
 		// if renderPage was called with a layout set a flag to indicate that it's ok to show debug info at the end of the request
 		if (!arguments.$hideDebugInformation)
 		{
 			request.wheels.showDebugInformation = true;
 		}
-		
+
 		if (application.wheels.cachePages && (IsNumeric(arguments.$cache) || (IsBoolean(arguments.$cache) && arguments.$cache)))
 		{
 			loc.category = "action";
@@ -110,7 +110,7 @@
 	'
 		<!--- Render just the text "Done!" to the client --->
 		<cfset renderText("Done!")>
-		
+
 		<!--- Render serialized product data to the client --->
 		<cfset products = model("product").findAll()>
 		<cfset renderText(SerializeJson(products))>
@@ -127,7 +127,7 @@
 	'
 		<!--- Render the partial `_comment.cfm` located in the current controller''s view folder --->
 		<cfset renderPartial("comment")>
-		
+
 		<!--- Render the partial at `views/shared/_comment.cfm` --->
 		<cfset renderPartial("/shared/comment")>
 	'
@@ -164,24 +164,24 @@
 		<head>
 			<title>My Site</title>
 		</head>
-		
+
 		<body>
 		<cfoutput>##contentForLayout()##</cfoutput>
 		</body>
-		
+
 		</html>
 	'
 	categories="controller-request,layout" chapters="using-layouts" functions="">
 	<cfreturn includeContent("body")>
 </cffunction>
 
-<cffunction name="includeContent" returntype="string" access="public" output="false" hint="Used to output the content for a particular section in a layout."	
+<cffunction name="includeContent" returntype="string" access="public" output="false" hint="Used to output the content for a particular section in a layout."
 	examples=
 	'
 		<!--- In your view template, let''s say `views/blog/post.cfm --->
 		<cfset contentFor(head=''<meta name="robots" content="noindex,nofollow" />"'')>
 		<cfset contentFor(head=''<meta name="author" content="wheelsdude@wheelsify.com"'')>
-		
+
 		<!--- In `views/layout.cfm` --->
 		<html>
 		<head>
@@ -225,7 +225,7 @@
 		<cffunction name="init">
 			<cfset filters(type="after", through="translateResponse")>
 		</cffunction>
-		
+
 		<!--- After filter translates response and sets it --->
 		<cffunction name="translateResponse">
 			<cfset var wheelsResponse = response()>
@@ -254,7 +254,7 @@
 		<cffunction name="init">
 			<cfset filters(type="after", through="translateResponse")>
 		</cffunction>
-		
+
 		<!--- After filter translates response and sets it --->
 		<cffunction name="translateResponse">
 			<cfset var wheelsResponse = response()>
@@ -264,7 +264,7 @@
 	'
 	categories="controller-request,rendering" chapters="" functions="response">
 	<cfargument name="content" type="string" required="true" hint="The content to set as the response.">
-	<cfset variables.$instance.response = arguments.content>	
+	<cfset variables.$instance.response = arguments.content>
 </cffunction>
 
 <!--- PRIVATE FUNCTIONS --->
@@ -496,7 +496,7 @@
 							loc.returnValue &= loc.tempSpacer;
 						}
 					}
-					
+
 					// now remove the last temp spacer and replace the tempSpacer with $spacer
 					if (Right(loc.returnValue, 3) == loc.tempSpacer)
 					{
@@ -585,6 +585,10 @@
 
 <cffunction name="$abortIssued" returntype="boolean" access="public" output="false">
 	<cfreturn StructKeyExists(variables.$instance, "abort")>
+</cffunction>
+
+<cffunction name="$recacheRequired" returntype="boolean" access="public" output="false">
+	<cfreturn StructKeyExists(variables.$instance, "recache") && variables.$instance.recache>
 </cffunction>
 
 <cffunction name="$getRedirect" returntype="struct" access="public" output="false">

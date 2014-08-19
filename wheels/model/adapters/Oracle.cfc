@@ -1,5 +1,14 @@
 <cfcomponent extends="Base" output="false">
 
+	<cffunction name="$defaultValues" returntype="string" access="public" output="false">
+		<cfargument name="tableName" type="string" required="true" hint="the table to retrieve column information for">
+		<cfscript>
+			var loc = {};
+			loc.columns = $getColumns(tableName);
+			return "(#loc.columns.column_name#) VALUES(DEFAULT)";
+		</cfscript>
+	</cffunction>
+
 	<cffunction name="$generatedKey" returntype="string" access="public" output="false">
 		<cfreturn "rowid">
 	</cffunction>
@@ -85,7 +94,7 @@
 			<cfif NOT ListFindNoCase(loc.columnList, ListFirst(arguments.primaryKey))>
 				<cfset loc.returnValue = {}>
 				<cfset loc.tbl = SpanExcluding(Right(loc.sql, Len(loc.sql)-12), " ")>
-				<cfif !StructKeyExists(arguments.result, $generatedKey()) || application.wheels.serverName IS NOT "Adobe ColdFusion">
+				<cfif NOT StructKeyExists(arguments.result, $generatedKey()) OR NOT Len(arguments.result[$generatedKey()]) OR application.wheels.serverName IS NOT "Adobe">
 					<!---
 					there isn't a way in oracle to tell what (if any) sequences exists
 					on a table. hence we'll just have to perform a guess for now.

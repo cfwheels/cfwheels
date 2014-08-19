@@ -9,13 +9,16 @@
 		</cfoutput>
 	'
 	categories="view-helper,forms-general" chapters="form-helpers-and-showing-errors" functions="URLFor,startFormTag,submitTag,textField,radioButton,checkBox,passwordField,hiddenField,textArea,fileField,select,dateTimeSelect,dateSelect,timeSelect">
+	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField">
+	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
 	<cfscript>
 		var loc = {};
+		arguments = $args(name="endFormTag", args=arguments);
 		if (StructKeyExists(request.wheels, "currentFormMethod"))
 		{
 			StructDelete(request.wheels, "currentFormMethod");
 		}
-		loc.returnValue = "</form>";
+		loc.returnValue = arguments.prepend & "</form>" & arguments.append;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -44,6 +47,8 @@
 	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="prepend" type="string" required="false" hint="See documentation for @textField">
+	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
 	<cfscript>
 		var loc = {};
 		arguments = $args(name="startFormTag", args=arguments);
@@ -74,7 +79,7 @@
 			arguments.enctype = "multipart/form-data";
 		}
 
-		loc.skip = "multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port";
+		loc.skip = "multipart,spamProtection,route,controller,key,params,anchor,onlyPath,host,protocol,port,prepend,append";
 
 		// variables passed in as route arguments should not be added to the html element
 		if (Len(arguments.route))
@@ -88,7 +93,7 @@
 			loc.skip = ListDeleteAt(loc.skip, ListFind(loc.skip, "action"));
 		}
 
-		loc.returnValue = $tag(name="form", skip=loc.skip, attributes=arguments);
+		loc.returnValue = arguments.prepend & $tag(name="form", skip=loc.skip, attributes=arguments) & arguments.append;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

@@ -70,7 +70,7 @@
 				loc.invokeArgs = {};
 				loc.invokeArgs.action = arguments.$action;
 				loc.temp = $invoke(method=variables.wheels.class.layout[loc.layoutType], invokeArgs=loc.invokeArgs);
-				if (StructKeyExists(loc, "temp"))
+				if (StructKeyExists(loc, "temp") && Len(loc.temp))
 					loc.returnValue = loc.temp;
 			}
 			else if ((!StructKeyExists(variables.wheels.class.layout, "except") || !ListFindNoCase(variables.wheels.class.layout.except, arguments.$action)) && (!StructKeyExists(variables.wheels.class.layout, "only") || ListFindNoCase(variables.wheels.class.layout.only, arguments.$action)))

@@ -18,9 +18,11 @@
 	</cffunction>
  
 	<cffunction name="test_object_returns_false">
-		<cfset loc.profile = loc.profileModel.findByKey(key=2)>
-		<cfset loc.author = loc.profile.author()>
-		<cfset $assert("IsObject(loc.author) eq false") />
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cfset loc.profile = loc.profileModel.findByKey(key=2)>
+			<cfset loc.author = loc.profile.author()>
+			<cfset $assert("IsObject(loc.author) eq false") />
+		</cfif>
 	</cffunction>
 
 </cfcomponent>

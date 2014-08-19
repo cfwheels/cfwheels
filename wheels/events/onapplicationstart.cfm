@@ -32,7 +32,7 @@
 		}
 		else
 		{
-			application.$wheels.serverName = "Adobe";
+			application.$wheels.serverName = "Adobe ColdFusion";
 			application.$wheels.serverVersion = server.coldfusion.productVersion;
 		}
 		loc.upgradeTo = $checkMinimumVersion(engine=application.$wheels.serverName, version=application.$wheels.serverVersion);
@@ -45,7 +45,7 @@
 		request.cgi = $cgiScope();
 
 		// set up containers for routes, caches, settings etc
-		application.$wheels.version = "";
+		application.$wheels.version = "2.0";
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
 		application.$wheels.controllers = {};
 		application.$wheels.models = {};
@@ -216,6 +216,7 @@
 		application.$wheels.cacheDatePart = "n";
 		application.$wheels.defaultCacheTime = 60;
 		application.$wheels.clearQueryCacheOnReload = true;
+		application.$wheels.clearServerCacheOnReload = true;
 		application.$wheels.cacheQueriesDuringRequest = true;
 		
 		// settings for provides functionality
@@ -250,6 +251,7 @@
 		application.$wheels.functions.deleteByKey = {reload=false};
 		application.$wheels.functions.deleteOne = {reload=false};
 		application.$wheels.functions.distanceOfTimeInWords = {includeSeconds=false};
+		application.$wheels.functions.endFormTag = {prepend="", append=""};
 		application.$wheels.functions.errorMessageOn = {prependText="", appendText="", wrapperElement="span", class="errorMessage"};
 		application.$wheels.functions.errorMessagesFor = {class="errorMessages", showDuplicates=true};
 		application.$wheels.functions.excerpt = {radius=100, excerptString="..."};
@@ -294,7 +296,7 @@
 		application.$wheels.functions.sendEmail = {layout=false, detectMultipart=true, from="", to="", subject=""};
 		application.$wheels.functions.sendFile = {disposition="attachment"};
 		application.$wheels.functions.simpleFormat = {wrap=true};
-		application.$wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, spamProtection=false};
+		application.$wheels.functions.startFormTag = {onlyPath=true, host="", protocol="", port=0, method="post", multipart=false, spamProtection=false, prepend="", append=""};
 		application.$wheels.functions.styleSheetLinkTag = {type="text/css", media="all", head=false};
 		application.$wheels.functions.submitTag = {value="Save changes", image="", disable="", prepend="", append=""};
 		application.$wheels.functions.sum = {distinct=false, parameterize=true, ifNull=""};
@@ -331,10 +333,15 @@
 		$include(template="config/settings.cfm");
 		$include(template="config/#application.$wheels.environment#/settings.cfm");
 
-		if(application.$wheels.clearQueryCacheOnReload)
+		// clear query (cfquery) and page (cfcache) caches
+		if (application.$wheels.clearQueryCacheOnReload)
 		{
 			$objectcache(action="clear");
 		}
+		if (application.$wheels.clearServerCacheOnReload)
+		{
+			$cache(action="flush");
+		}	
 
 		// add built-in functions to a list that we check to make sure you cannot call them as controller actions from the url
 		// this is done by getting the function list from the base wheels controller (since the developer does not place their functions in there we know it will only contain built-in ones)

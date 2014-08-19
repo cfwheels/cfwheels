@@ -13,8 +13,10 @@
 	</cffunction>
 	
 	<cffunction name="test_max_works_with_group_functionality">
-		<cfset loc.r = model("post").findAll(select="id, authorid, title, MAX(posts.views) AS maxView", group="id, authorid, title")>
-		<cfset $assert('loc.r.recordcount eq 5')>
+		<cfif NOT StructKeyExists(server, "bluedragon")>
+			<cfset loc.r = model("post").findAll(select="id, authorid, title, MAX(posts.views) AS maxView", group="id, authorid, title")>
+			<cfset $assert('loc.r.recordcount eq 5')>
+		</cfif>
 	</cffunction>
 	
 	<cffunction name="test_group_functionality_works_with_pagination">

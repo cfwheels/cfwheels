@@ -57,11 +57,11 @@
 	examples=
 	'
 		// Set filter chain directly in an array
-		setFilterChain([
-			{through="restrictAccess"},
-			{through="isLoggedIn,checkIPAddress", except="home,login"},
-			{type="after", through="logConversion", only="thankYou"}
-		]);
+		local.filters = [];
+		local.filters[1] = {through="restrictAccess"};
+		local.filters[2] = {through="isLoggedIn,checkIPAddress", except="home,login"};
+		local.filters[3] = {type="after", through="logConversion", only="thankYou"};
+		setFilterChain(local.filters);
 	'
 	categories="controller-initialization,filtering" chapters="filters-and-verification" functions="filters,filterChain">
 	<cfargument name="chain" type="array" required="true" hint="An array of structs, each of which represent an `argumentCollection` that gets passed to the `filters` function. This should represent the entire filter chain that you want to use for this controller.">
@@ -146,7 +146,7 @@
 				loc.result = $invoke(method=loc.filter.through, invokeArgs=loc.filter.arguments);
 				
 				// if the filter function returned false or rendered content we skip the remaining filters in the chain
-				if ((StructKeyExists(loc, "result") && !loc.result) || $performedRenderOrRedirect())
+				if ((StructKeyExists(loc, "result") && IsBoolean(loc.result) && !loc.result) || $performedRenderOrRedirect())
 				{
 					break;
 				}

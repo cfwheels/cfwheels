@@ -8,13 +8,14 @@ usage:
   - Execute "mvn jetty:run" to start the embedded web server to run individual tests
     (In Eclipse, Run->Run As->6 Maven build...)
   - Individual tests URL: http://localhost:8080/index.cfm?controller=wheels&action=wheels&view=tests&type=core  
-  - "mvn verify -P railo,subfolder" install CFWheels also on subfolder and run all tests 
-  - "mvn verify -P railo,oracle-emu" runs all CFWheels tests on Oracle emulation via embedded H2 database
-  - "mvn verify -P railo,mysql" runs all CFWheels tests on Travis-CI MySQL database
-  - "mvn verify -P railo,postgresal" runs all CFWheels tests on Travis-CI postgreSQL database
+  - "mvn verify -P jetty,railo,subfolder" install CFWheels also on subfolder and run all tests 
+  - "mvn verify -P jetty,railo,oracle-emu" runs all CFWheels tests on Oracle emulation via embedded H2 database
+  - "mvn verify -P jetty,railo,mysql" runs all CFWheels tests on Travis-CI MySQL database
+  - "mvn verify -P jetty,railo,postgresal" runs all CFWheels tests on Travis-CI postgreSQL database
   - "mvn clean verify -P mssql" upload and runs all CFWheels tests on railo and Microsoft SQLServer on cfmldeveloper.org (or whatever database/server configured there)
   - "mvn clean verify -P mssql,subfolder" upload and deploy CFWheels also on subfolder and run all tests 
   - "mvn clean verify -P oracle" copy and runs all CFWheels tests on local ColdFusion8 and Oracle (or whatever database configured locally)
+  - "mvn clean verify -P jetty,openbd" donwload OpenBD and run all tests on it (preliminary support)
 
 Benefits of embedded-container-test versus full-integration-test
   #1 clean test data (data is not shared with nor contaminated by other processes)
@@ -28,12 +29,13 @@ Benefits of embedded-container-test versus full-integration-test
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cfwheels</groupId>
 	<artifactId>cfwheels</artifactId>
-	<version>1.1.9-SNAPSHOT</version>
+	<version>2.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- embedded CFML and web server version for easy upgrade -->
+		<openbdVersion>3.1</openbdVersion>
 		<railoVersion>4.2.1.000</railoVersion>
 		<jettyVersion>8.1.15.v20140411</jettyVersion>
 		<railoConfig>railo-server.xml</railoConfig>
@@ -43,6 +45,7 @@ Benefits of embedded-container-test versus full-integration-test
 		<testParallelStart>false</testParallelStart>
 		<!-- settings for Oracle emulation -->
 		<testOracleEmulation>false</testOracleEmulation>
+		<webXml>src/test/xml/web.xml</webXml>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -141,25 +144,11 @@ Benefits of embedded-container-test versus full-integration-test
 	</build>
 	<profiles>
 		<profile>
-			<!-- embedded web and CFML server is activated by default -->
-			<id>railo</id>
+			<!-- embedded web server is activated by default -->
+			<id>jetty</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
-			<dependencies>
-				<dependency>
-					<!-- embedded test database runtime, required by railo -->
-					<groupId>com.h2database</groupId>
-					<artifactId>h2</artifactId>
-					<version>1.4.178</version>
-				</dependency>
-				<dependency>
-					<!-- embedded test CFML server runtime -->
-					<groupId>org.getrailo</groupId>
-					<artifactId>railo</artifactId>
-					<version>${railoVersion}</version>
-				</dependency>
-			</dependencies>
 			<build>
 				<plugins>
 					<plugin>
@@ -173,7 +162,7 @@ Benefits of embedded-container-test versus full-integration-test
 							<!-- use root source folder. So, file changes can be seen instantly -->
 							<webAppSourceDirectory>.</webAppSourceDirectory>
 							<!-- web.xml required for railo -->
-							<webXml>src/test/xml/web.xml</webXml>
+							<webXml>${webXml}</webXml>
 							<webApp>
 								<!-- the URL context path -->
 								<contextPath>/</contextPath>
@@ -205,6 +194,31 @@ Benefits of embedded-container-test versus full-integration-test
 							</execution>
 						</executions>
 					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!-- embedded CFML server is activated by default -->
+			<id>railo</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<!-- embedded test database runtime, required by railo -->
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<version>1.4.178</version>
+				</dependency>
+				<dependency>
+					<!-- embedded test CFML server runtime -->
+					<groupId>org.getrailo</groupId>
+					<artifactId>railo</artifactId>
+					<version>${railoVersion}</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
@@ -230,6 +244,8 @@ Benefits of embedded-container-test versus full-integration-test
 								<phase>clean</phase>
 								<configuration>
 									<target>
+										<delete dir="bluedragon"/>
+										<delete dir="manual"/>
 										<delete dir="temp"/>
 										<delete dir="WEB-INF"/>
 										<delete dir="wheels/tests/_assets/plugins/removing/TestGlobalMixins"/>
@@ -394,6 +410,44 @@ Benefits of embedded-container-test versus full-integration-test
 									    </fileset>
 									  </copy>
   									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!-- to activate, execute "mvn clean verify -Popendb" -->
+			<id>openbd</id>
+			<properties>
+				<webXml>WEB-INF/web.xml</webXml>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<!-- download openbd -->
+							    <id>download openbd</id>
+								<phase>test</phase>
+								<configuration>
+									<target>
+										<get src="http://openbd.org/download/${openbdVersion}/openbd.war" dest="target/openbd.war" skipexisting="true"/>
+										<unzip src="target/openbd.war" dest="."
+											overwrite="false">
+										  <patternset>
+										    <include name="WEB-INF/**"/>
+										  </patternset>
+		  								</unzip>
+          								<mkdir dir="plugins"/>
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
