@@ -259,6 +259,14 @@
 			loc.item = ListGetAt(arguments.keys, loc.i);
 			loc.returnValue[loc.item] = cgi[loc.item];
 		}
+
+		// fix for non ascii characters not working in path_info (issue 138)
+		// if unencoded_url exists in the cgi scope and it contains non ascii characters we use it to fix the incorrect path_info
+		if (StructKeyExists(cgi, "unencoded_url") && Len(cgi.unencoded_url) && REFind("[^\0-\x80]", URLDecode(cgi.unencoded_url)))
+		{
+			// strip out the script_name and query_string leaving us with only the part of the string that should go in path_info
+			loc.returnValue["path_info"] = Replace(Replace(URLDecode(cgi.unencoded_url), cgi.script_name, ""), "?" & URLDecode(cgi.query_string), "");
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
