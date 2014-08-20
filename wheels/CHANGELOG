@@ -17,7 +17,6 @@ Bug Fixes
 * Fixed bug with static caching on Adobe ColdFusion 9 - #332 [Charley Contreras]
 * Allow for format auto-detection when HTTP ACCEPT contains multiple values - #297 [Raul Riera, Singgih Cahyono] 
 * Fixed so that sendEmail() can use the "remove" attribute to delete attachments - #339 [Simon Allard]
-* Fixed issue with using group by with calculated properties - #89 [Adam Chapman, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

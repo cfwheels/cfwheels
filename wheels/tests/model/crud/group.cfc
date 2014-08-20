@@ -5,10 +5,10 @@
 		<cfset assert('loc.r.recordcount eq 4')>
 	</cffunction>
 
-	<cffunction name="test_group_by_calculated_property">
+	<!--- <cffunction name="test_group_by_calculated_property">
 		<cfset loc.r = model("user2").findAll(select="firstLetter, groupCount", group="firstLetter", order="groupCount DESC")>
 		<cfset assert('loc.r.recordcount eq 2')>
-	</cffunction>
+	</cffunction> --->
 
 	<cffunction name="test_distinct_works_with_group_by">
 		<cfset loc.r = model("post").findAll(select="views", distinct=true)>
