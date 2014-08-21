@@ -6,7 +6,7 @@
 			loc.r = $cgiScope(keys="request_method,server_port");
 			$assert('loc.e.equals(loc.r)');
 		</cfscript>
-	</cffunction> --->
+	</cffunction>
 
 	<cffunction name="test_path_info">
 		<cfscript>
@@ -15,7 +15,7 @@
 			loc.r = $cgiScope(keys="request_method,server_port,path_info", cgiScope=loc.cgiScope);
 			$assert('loc.e.equals(loc.r)');
 		</cfscript>
-	</cffunction>
+	</cffunction> --->
 
 	<cffunction name="test_path_info_non_ascii">
 		<cfscript>
