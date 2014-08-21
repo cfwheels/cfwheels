@@ -88,7 +88,7 @@
 		<cfset loc.args.selected = loc.date>
 		<cfset loc.r = loc.controller.dateTimeSelectTags(argumentcollection=loc.args)>
 		<cfset loc.e = '<option selected="selected" value="30">30</option>'>
-		<cfset $assert("loc.r Contains loc.e")>
+		<cfset assert("loc.r Contains loc.e")>
 	</cffunction>
 
 </cfcomponent>
