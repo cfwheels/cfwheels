@@ -349,7 +349,7 @@
 				{
 					loc.dates[loc.key].hour = 0;
 				}
-				else if (loc.dates[loc.key].ampm == "PM")
+				else if (loc.dates[loc.key].ampm == "PM" && loc.dates[loc.key].hour != 12)
 				{
 					loc.dates[loc.key].hour += 12;
 				}
@@ -368,6 +368,7 @@
 			StructDelete(arguments.params, "#loc.key#($hour)", false);
 			StructDelete(arguments.params, "#loc.key#($minute)", false);
 			StructDelete(arguments.params, "#loc.key#($second)", false);
+			StructDelete(arguments.params, "#loc.key#($ampm)", false);
 		}
 	</cfscript>
 	<cfreturn arguments.params>
