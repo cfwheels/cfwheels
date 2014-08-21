@@ -17,6 +17,7 @@ Bug Fixes
 * Fixed bug with static caching on Adobe ColdFusion 9 - #332 [Charley Contreras]
 * Allow for format auto-detection when HTTP ACCEPT contains multiple values - #297 [Raul Riera, Singgih Cahyono] 
 * Fixed so that sendEmail() can use the "remove" attribute to delete attachments - #339 [Simon Allard]
+* Fixed bugs with using the "twelveHour" argument on form helpers - #342, #343 [Jeremy Keczan, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

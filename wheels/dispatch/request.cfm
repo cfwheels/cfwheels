@@ -342,7 +342,7 @@
 				{
 					loc.dates[loc.key].hour = 0;
 				}
-				else if (loc.dates[loc.key].ampm IS "PM")
+				else if (loc.dates[loc.key].ampm == "PM" && loc.dates[loc.key].hour != 12)
 				{
 					loc.dates[loc.key].hour += 12;
 				}
