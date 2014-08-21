@@ -126,7 +126,7 @@
 			arguments.value = loc.value;
 			if (Isdate(loc.value))
 			{
-				if (arguments.twelveHour)
+				if (arguments.twelveHour && ListFind("hour,ampm", loc.item))
 				{
 					if (loc.item IS "hour")
 					{

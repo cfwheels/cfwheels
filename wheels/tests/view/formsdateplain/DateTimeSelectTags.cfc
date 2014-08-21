@@ -81,4 +81,14 @@
 		<cfset $assert("loc.r contains loc.e1 && loc.r contains loc.e2 && loc.r contains loc.e3")>
 	</cffunction>
 
+	<cffunction name="test_dateTimeSelectTags_twelvehour">
+		<cfset loc.date = CreateDateTime(2014, 8, 4, 12, 30, 35)>
+		<cfset loc.args.name = "x">
+		<cfset loc.args.twelveHour = true>
+		<cfset loc.args.selected = loc.date>
+		<cfset loc.r = loc.controller.dateTimeSelectTags(argumentcollection=loc.args)>
+		<cfset loc.e = '<option selected="selected" value="30">30</option>'>
+		<cfset $assert("loc.r Contains loc.e")>
+	</cffunction>
+
 </cfcomponent>
