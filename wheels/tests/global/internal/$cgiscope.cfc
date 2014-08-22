@@ -17,13 +17,13 @@
 		</cfscript>
 	</cffunction> --->
 
-	<!--- <cffunction name="test_path_info_non_ascii">
+	<cffunction name="test_path_info_non_ascii">
 		<cfscript>
 			loc.e = {script_name="/index.cfm", path_info="/wheels/wheels/%E5%A5%B3%E5%A3%AB%E7%94%A8%E5%93%81", unencoded_url="/index.cfm/wheels/wheels/%E5%A5%B3%E5%A3%AB%E7%94%A8%E5%93%81?normal=1&chinese=%E5%A5%B3%E5%A3%AB%E7%94%A8%E5%93%81", query_string="normal=1&chinese=%E5%A5%B3%E5%A3%AB%E7%94%A8%E5%93%81"};
 			loc.cgiScope = {script_name="/index.cfm", path_info="/wheels/wheels/????", unencoded_url="/index.cfm/wheels/wheels/%E5%A5%B3%E5%A3%AB%E7%94%A8%E5%93%81?normal=1&chinese=%E5%A5%B3%E5%A3%AB%E7%94%A8%E5%93%81", query_string="normal=1&chinese=%E5%A5%B3%E5%A3%AB%E7%94%A8%E5%93%81"};
 			loc.r = $cgiScope(keys="script_name,path_info,unencoded_url,query_string", cgiScope=loc.cgiScope);
 			$assert('loc.r.path_info IS URLDecode(loc.e.path_info)');
 		</cfscript>
-	</cffunction> --->
+	</cffunction>
 
 </cfcomponent>
