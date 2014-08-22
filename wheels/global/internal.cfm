@@ -228,12 +228,34 @@
 
 <cffunction name="$cgiScope" returntype="struct" access="public" output="false" hint="This copies all the variables Wheels needs from the CGI scope to the request scope.">
 	<cfargument name="keys" type="string" required="false" default="request_method,http_x_requested_with,http_referer,server_name,path_info,script_name,query_string,remote_addr,server_port,server_port_secure,server_protocol,http_host,http_accept,content_type">
+	<cfargument name="cgiScope" type="struct" required="false" default="#cgi#">
 	<cfscript>
 		var loc = {};
+
+		// create a copy of the cgi scope (specified keys only)
 		loc.returnValue = {};
 		loc.iEnd = ListLen(arguments.keys);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
-			loc.returnValue[ListGetAt(arguments.keys, loc.i)] = cgi[ListGetAt(arguments.keys, loc.i)];
+		{
+			loc.item = ListGetAt(arguments.keys, loc.i);
+			loc.returnValue[loc.item] = arguments.cgiScope[loc.item];
+		}
+
+		// fix path_info if it contains any characters that are not ascii (see issue 138)
+		if (StructKeyExists(arguments.cgiScope, "unencoded_url") && Len(arguments.cgiScope.unencoded_url))
+		{
+			loc.requestUrl = URLDecode(arguments.cgiScope.unencoded_url);
+		}
+		else if (IsSimpleValue(getPageContext().getRequest().getRequestURL()))
+		{
+			// remove protocol, domain, port etc from the url
+			loc.requestUrl = "/" & ListDeleteAt(ListDeleteAt(URLDecode(getPageContext().getRequest().getRequestURL()), 1, "/"), 1, "/");
+		}
+		if (StructKeyExists(loc, "requestUrl") && REFind("[^\0-\x80]", loc.requestUrl))
+		{
+			// strip out the script_name and query_string leaving us with only the part of the string that should go in path_info
+			loc.returnValue["path_info"] = Replace(Replace(loc.requestUrl, arguments.cgiScope.script_name, ""), "?" & URLDecode(arguments.cgiScope.query_string), "");
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
