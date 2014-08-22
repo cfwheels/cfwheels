@@ -263,11 +263,20 @@
 			loc.returnValue[loc.item] = arguments.cgiScope[loc.item];
 		}
 
-		// if unencoded_url exists in the cgi scope and it contains non ascii characters we use it to fix the incorrect path_info (see issue 138 - non ascii characters not working in path_info)
-		if (StructKeyExists(arguments.cgiScope, "unencoded_url") && Len(arguments.cgiScope.unencoded_url) && REFind("[^\0-\x80]", URLDecode(arguments.cgiScope.unencoded_url)))
+		// fix path_info if it contains any characters that are not ascii (see issue 138)
+		if (StructKeyExists(arguments.cgiScope, "unencoded_url") && Len(arguments.cgiScope.unencoded_url))
+		{
+			loc.requestUrl = URLDecode(arguments.cgiScope.unencoded_url);
+		}
+		else if (IsSimpleValue(getPageContext().getRequest().getRequestURL()))
+		{
+			// remove protocol, domain, port etc from the url
+			loc.requestUrl = "/" & ListDeleteAt(ListDeleteAt(URLDecode(getPageContext().getRequest().getRequestURL()), 1, "/"), 1, "/");
+		}
+		if (StructKeyExists(loc, "requestUrl") && REFind("[^\0-\x80]", loc.requestUrl))
 		{
 			// strip out the script_name and query_string leaving us with only the part of the string that should go in path_info
-			loc.returnValue["path_info"] = Replace(Replace(URLDecode(arguments.cgiScope.unencoded_url), arguments.cgiScope.script_name, ""), "?" & URLDecode(arguments.cgiScope.query_string), "");
+			loc.returnValue["path_info"] = Replace(Replace(loc.requestUrl, arguments.cgiScope.script_name, ""), "?" & URLDecode(arguments.cgiScope.query_string), "");
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
