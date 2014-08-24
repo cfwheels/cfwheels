@@ -31,6 +31,12 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 
+	<cffunction name="$tableAlias" returntype="string" access="public" output="false">
+		<cfargument name="table" type="string" required="true">
+		<cfargument name="alias" type="string" required="true">
+		<cfreturn arguments.table & " AS " & arguments.alias>
+	</cffunction>
+
 	<cffunction name="$columnAlias" returntype="string" access="public" output="false">
 		<cfargument name="list" type="string" required="true">
 		<cfargument name="action" type="string" required="true">

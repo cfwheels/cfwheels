@@ -101,7 +101,7 @@
 		<cftransaction action="begin">
 			<cfif loc.db IS "oracle">
 				<cfset loc.author = model("author").findOne(where="firstName='Tony'")>
-				<cfset loc.author.lastName = "">
+				<cfset loc.author.lastName = " ">
 				<cfset loc.author.save()>
 				<cfset loc.author = model("author").findOne(where="firstName='Tony'")>
 			<cfelse>

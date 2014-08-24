@@ -708,7 +708,7 @@
 				// alias the table as the association name when joining to itself
 				if (ListFindNoCase(loc.tables, loc.classAssociations[loc.name].tableName))
 				{
-					loc.join &= " AS " & loc.classAssociations[loc.name].pluralizedName;;
+					loc.join = variables.wheels.class.adapter.$tableAlias(loc.join,loc.classAssociations[loc.name].pluralizedName);
 				}
 
 				loc.join &= " ON ";
