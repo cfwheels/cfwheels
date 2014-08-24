@@ -25,12 +25,10 @@
 	</cffunction>
 
 	<cffunction name="test_creation_of_new_column_and_property">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.posts = model("post").findAll(order="id DESC")>
-			<cfset $assert("loc.posts.something[1] eq 'hello world'")>
-			<cfset loc.posts = model("post").findAll(returnAs="objects")>
-			<cfset $assert("loc.posts[1].something eq 'hello world'")>
-		</cfif>
+		<cfset loc.posts = model("post").findAll(order="id DESC")>
+		<cfset $assert("loc.posts.something[1] eq 'hello world'")>
+		<cfset loc.posts = model("post").findAll(returnAs="objects")>
+		<cfset $assert("loc.posts[1].something eq 'hello world'")>
 	</cffunction>
 
 </cfcomponent>
