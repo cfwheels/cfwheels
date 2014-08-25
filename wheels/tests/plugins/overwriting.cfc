@@ -32,8 +32,8 @@
 			<cfset loc.fileContentBefore = $readTestFile()>
 			<cfset loc.PluginObj = $pluginObj(loc.config)>
 			<cfset loc.fileContentAfter = $readTestFile()>
-			<cfset $assert('loc.fileContentBefore eq "overwritten"')>
-			<cfset $assert('loc.fileContentAfter neq "overwritten"')>
+			<cfset assert('loc.fileContentBefore eq "overwritten"')>
+			<cfset assert('loc.fileContentAfter neq "overwritten"')>
 		</cfif>
 	</cffunction>
 
@@ -43,8 +43,8 @@
 			<cfset loc.fileContentBefore = $readTestFile()>
 			<cfset loc.PluginObj = $pluginObj(loc.config)>
 			<cfset loc.fileContentAfter = $readTestFile()>
-			<cfset $assert('loc.fileContentBefore eq "overwritten"')>
-			<cfset $assert('loc.fileContentAfter eq "overwritten"')>
+			<cfset assert('loc.fileContentBefore eq "overwritten"')>
+			<cfset assert('loc.fileContentAfter eq "overwritten"')>
 		</cfif>
 	</cffunction>
 

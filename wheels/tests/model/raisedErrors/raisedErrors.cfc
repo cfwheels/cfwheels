@@ -5,7 +5,7 @@
 			<cfset loc.e = raised("model('table_not_found')")>
 			<cfset debug("loc.e", false)>
 			<cfset loc.r = "Wheels.TableNotFound">
-			<cfset $assert("loc.e eq loc.r")>
+			<cfset assert("loc.e eq loc.r")>
 		</cfif>
 	</cffunction>
 
@@ -14,7 +14,7 @@
 			<cfset loc.e = raised("model('noPrimaryKey')")>
 			<cfset debug("loc.e", false)>
 			<cfset loc.r = "Wheels.NoPrimaryKey">
-			<cfset $assert("loc.e eq loc.r")>
+			<cfset assert("loc.e eq loc.r")>
 		</cfif>
 	</cffunction>
 
@@ -23,13 +23,13 @@
 			<cfset post = model("post")>
 			<cfset loc.e = raised('post.deleteByKey(key="1,2")')>
 			<cfset loc.r = "Wheels.InvalidArgumentValue">
-			<cfset $assert("loc.e eq loc.r")>
+			<cfset assert("loc.e eq loc.r")>
 			<cfset loc.e = raised('post.findByKey(key="1,2")')>
 			<cfset loc.r = "Wheels.InvalidArgumentValue">
-			<cfset $assert("loc.e eq loc.r")>
+			<cfset assert("loc.e eq loc.r")>
 			<cfset loc.e = raised('post.updateByKey(key="1,2", title="testing")')>
 			<cfset loc.r = "Wheels.InvalidArgumentValue">
-			<cfset $assert("loc.e eq loc.r")>
+			<cfset assert("loc.e eq loc.r")>
 		</cfif>
 	</cffunction>
 
@@ -37,7 +37,7 @@
 		<cfif NOT StructKeyExists(server, "bluedragon")>
 			<cfset loc.e = raised('model("user").count(where="username = tony")')>
 			<cfset loc.r = "Wheels.QueryParamValue">
-			<cfset $assert("loc.e eq loc.r")>
+			<cfset assert("loc.e eq loc.r")>
 		</cfif>
 	</cffunction>
 

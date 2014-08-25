@@ -13,7 +13,7 @@
 	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="endFormTag", args=arguments);
+		$args(name="endFormTag", args=arguments);
 		if (StructKeyExists(request.wheels, "currentFormMethod"))
 		{
 			StructDelete(request.wheels, "currentFormMethod");
@@ -51,7 +51,7 @@
 	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="startFormTag", args=arguments);
+		$args(name="startFormTag", args=arguments);
 
 		// sets a flag to indicate whether we use get or post on this form, used when obfuscating params
 		request.wheels.currentFormMethod = arguments.method;
@@ -117,7 +117,7 @@
 	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="submitTag", reserved="type,src", args=arguments);
+		$args(name="submitTag", reserved="type,src", args=arguments);
 		loc.returnValue = arguments.prepend;
 		loc.append = arguments.append;
 		if (Len(arguments.disable))
@@ -174,7 +174,7 @@
 	<cfargument name="append" type="string" required="false" hint="See documentation for @textField">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="buttonTag", args=arguments);
+		$args(name="buttonTag", args=arguments);
 
 		// add onclick attribute to disable the form button
 		if (Len(arguments.disable))

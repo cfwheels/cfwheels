@@ -7,7 +7,7 @@
 			<cfset loc.allAuthors = model("Author").findAll()>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.allAuthors.recordcount eq 6')>
+		<cfset assert('loc.allAuthors.recordcount eq 6')>
 	</cffunction>
 
  	<cffunction name="test_soft_delete">
@@ -19,7 +19,7 @@
 				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
 				<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 5')>
+			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 5')>
 		</cfif>
 	</cffunction>
 
@@ -32,7 +32,7 @@
 				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
 				<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
+			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
  		</cfif>
 	</cffunction>
 
@@ -47,7 +47,7 @@
 				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
 				<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
+			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
 		</cfif>
 	</cffunction>
 
@@ -58,7 +58,7 @@
 			<cfset loc.allAuthors = model("Author").findAll()>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.allAuthors.recordcount eq 6')>
+		<cfset assert('loc.allAuthors.recordcount eq 6')>
 	</cffunction>
 
  	<cffunction name="test_soft_delete_by_key">
@@ -70,7 +70,7 @@
 				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
 				<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 5')>
+			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 5')>
 		</cfif>
 	</cffunction>
 
@@ -83,7 +83,7 @@
 				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
 				<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
+			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
  		</cfif>
 	</cffunction>
 
@@ -97,7 +97,7 @@
 				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
 				<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
+			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
  		</cfif>
 	</cffunction>
  
@@ -107,7 +107,7 @@
 			<cfset loc.allAuthors = model("Author").findAll()>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.allAuthors.recordcount eq 6')>
+		<cfset assert('loc.allAuthors.recordcount eq 6')>
 	</cffunction>
 
  	<cffunction name="test_soft_delete_one">
@@ -118,7 +118,7 @@
 				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
 				<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 5')>
+			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 5')>
 		</cfif>
 	</cffunction>
 
@@ -130,7 +130,7 @@
 				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
 				<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
+			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
  		</cfif>
 	</cffunction>
 
@@ -144,7 +144,7 @@
 				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
 				<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
+			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
 		</cfif>
 	</cffunction>
 
@@ -154,7 +154,7 @@
 			<cfset loc.allAuthors = model("Author").findAll()>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.allAuthors.recordcount eq 0')>
+		<cfset assert('loc.allAuthors.recordcount eq 0')>
 	</cffunction>
 
  	<cffunction name="test_soft_delete_all">
@@ -165,7 +165,7 @@
 				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
 				<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert('loc.postsWithoutSoftDeletes.recordcount eq 0 AND loc.postsWithSoftDeletes.recordcount eq 5')>
+			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 0 AND loc.postsWithSoftDeletes.recordcount eq 5')>
 		</cfif>
 	</cffunction>
 
@@ -177,7 +177,7 @@
 				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
 				<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert('loc.postsWithoutSoftDeletes.recordcount eq 0 AND loc.postsWithSoftDeletes.recordcount eq 0')>
+			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 0 AND loc.postsWithSoftDeletes.recordcount eq 0')>
 		</cfif>
 	</cffunction>
 
@@ -189,7 +189,7 @@
 			<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.postsWithoutSoftDeletes.recordcount eq 0 AND loc.postsWithSoftDeletes.recordcount eq 0')>
+		<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 0 AND loc.postsWithSoftDeletes.recordcount eq 0')>
 	</cffunction>
 
 </cfcomponent>

@@ -30,7 +30,7 @@
 	<cfargument name="type" type="string" required="false" default="text" hint="Input `type` attribute. Common examples in HTML5 and later are `text` (default), `email`, `tel`, and `url`.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="textField", reserved="name,value", args=arguments);
+		$args(name="textField", reserved="name,value", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 		{
@@ -81,7 +81,7 @@
 	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="passwordField", reserved="type,name,value", args=arguments);
+		$args(name="passwordField", reserved="type,name,value", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = $tagId(arguments.objectName, arguments.property);
@@ -113,7 +113,7 @@
 	<cfargument name="position" type="string" required="false" hint="See documentation for @textfield.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="hiddenField", reserved="type,name,value", args=arguments);
+		$args(name="hiddenField", reserved="type,name,value", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		arguments.type = "hidden";
 		arguments.name = $tagName(arguments.objectName, arguments.property);
@@ -159,7 +159,7 @@
 	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="fileField", reserved="type,name", args=arguments);
+		$args(name="fileField", reserved="type,name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = $tagId(arguments.objectName, arguments.property);
@@ -204,7 +204,7 @@
 	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="textArea", reserved="name", args=arguments);
+		$args(name="textArea", reserved="name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = $tagId(arguments.objectName, arguments.property);
@@ -258,7 +258,7 @@
 	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="radioButton", reserved="type,name,value,checked", args=arguments);
+		$args(name="radioButton", reserved="type,name,value,checked", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		loc.valueToAppend = LCase(Replace(ReReplaceNoCase(arguments.tagValue, "[^a-z0-9- ]", "", "all"), " ", "-", "all"));
 		if (!StructKeyExists(arguments, "id"))
@@ -316,7 +316,7 @@
 	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="checkBox", reserved="type,name,value,checked", args=arguments);
+		$args(name="checkBox", reserved="type,name,value,checked", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = $tagId(arguments.objectName, arguments.property);
@@ -386,7 +386,7 @@
 	<cfargument name="errorClass" type="string" required="false" hint="See documentation for @textField.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="select", reserved="name", args=arguments);
+		$args(name="select", reserved="name", args=arguments);
 		arguments.objectName = $objectName(argumentCollection=arguments);
 		if (!StructKeyExists(arguments, "id"))
 			arguments.id = $tagId(arguments.objectName, arguments.property);

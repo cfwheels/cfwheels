@@ -12,8 +12,8 @@
 			<cfset loc.r = loc.u.save()>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.e eq true')>
-		<cfset $assert('loc.r eq true')>
+		<cfset assert('loc.e eq true')>
+		<cfset assert('loc.r eq true')>
 	</cffunction>
 
 	<cffunction name="test_cannot_create_new_record_validation_execute">
@@ -24,8 +24,8 @@
 			<cfset loc.r = loc.u.save()>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.e eq true')>
-		<cfset $assert('loc.r eq false')>
+		<cfset assert('loc.e eq true')>
+		<cfset assert('loc.r eq false')>
 	</cffunction>
 
 	<cffunction name="test_can_create_new_record_validation_skipped">
@@ -36,8 +36,8 @@
 			<cfset loc.r = loc.u.save(validate="false")>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.e eq true')>
-		<cfset $assert('loc.r eq true')>
+		<cfset assert('loc.e eq true')>
+		<cfset assert('loc.r eq true')>
 	</cffunction>
 
 	<cffunction name="test_can_update_existing_record_validation_execute">
@@ -49,8 +49,8 @@
 			<cfset loc.u.update(loc.p)>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.e eq false')>
-		<cfset $assert('loc.r eq true')>
+		<cfset assert('loc.e eq false')>
+		<cfset assert('loc.r eq true')>
 	</cffunction>
 
 	<cffunction name="test_cannot_update_existing_record_validation_execute">
@@ -63,8 +63,8 @@
 			<cfset loc.u.update(loc.p)>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.e eq false')>
-		<cfset $assert('loc.r eq false')>
+		<cfset assert('loc.e eq false')>
+		<cfset assert('loc.r eq false')>
 	</cffunction>
 
 	<cffunction name="test_cant_update_existing_record_validation_skipped">
@@ -78,8 +78,8 @@
 			<cfset loc.u.update(loc.p)>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.e eq false')>
-		<cfset $assert('loc.r eq true')>
+		<cfset assert('loc.e eq false')>
+		<cfset assert('loc.r eq true')>
 	</cffunction>
 
 </cfcomponent>

@@ -12,7 +12,7 @@
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = "first,second,third">
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
-		<cfset $assert('loc.options.simplevalues eq loc.r')>
+		<cfset assert('loc.options.simplevalues eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_struct_for_option_values">
@@ -22,14 +22,14 @@
 		<cfset StructInsert(loc.args.options, 2, "second")>
 		<cfset StructInsert(loc.args.options, 3, "third")>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
-		<cfset $assert('loc.options.complexvalues eq loc.r')>
+		<cfset assert('loc.options.complexvalues eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_one_dimensional_array_for_option_values">
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = ["first", "second", "third"]>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
-		<cfset $assert('loc.options.simplevalues eq loc.r')>
+		<cfset assert('loc.options.simplevalues eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_two_dimensional_array_for_option_values">
@@ -39,7 +39,7 @@
 		<cfset loc.third = [3, "third"]>
 		<cfset loc.args.options = [loc.first, loc.second, loc.third]>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
-		<cfset $assert('loc.options.complexvalues eq loc.r')>
+		<cfset assert('loc.options.complexvalues eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_three_dimensional_array_for_option_values">
@@ -49,7 +49,7 @@
 		<cfset loc.third = [3, "third", "c"]>
 		<cfset loc.args.options = [loc.first, loc.second, loc.third]>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
-		<cfset $assert('loc.options.complexvalues eq loc.r')>
+		<cfset assert('loc.options.complexvalues eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_query_for_option_values">
@@ -61,7 +61,7 @@
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = loc.q>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
-		<cfset $assert('loc.options.complexvalues eq loc.r')>
+		<cfset assert('loc.options.complexvalues eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_one_column_query_for_options">
@@ -71,7 +71,7 @@
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = loc.q>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
-		<cfset $assert('loc.options.single_column_query eq loc.r')>
+		<cfset assert('loc.options.single_column_query eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_query_with_no_records_for_option_values_">
@@ -83,7 +83,7 @@
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = loc.q>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
-		<cfset $assert('loc.options.empty_query eq loc.r')>
+		<cfset assert('loc.options.empty_query eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_query_with_no_records_or_columns_for_option_values_">
@@ -91,7 +91,7 @@
 		<cfset loc.args.name = "testselect">
 		<cfset loc.args.options = loc.q>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
-		<cfset $assert('loc.options.empty_query eq loc.r')>
+		<cfset assert('loc.options.empty_query eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_array_of_structs_for_option_values">
@@ -104,7 +104,7 @@
 		<cfset loc.temp = {value="3", text="third"}>
 		<cfset ArrayAppend(loc.args.options, loc.temp)>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
-		<cfset $assert('loc.options.complexvalues eq loc.r')>
+		<cfset assert('loc.options.complexvalues eq loc.r')>
 	</cffunction>
 
 </cfcomponent>

@@ -12,7 +12,7 @@
 		<cfset loc.controller.flashInsert(success="Congrats!")>
 		<cfset loc.controller.flashClear()>
 		<cfset result = StructKeyList(loc.controller.flash())>
-		<cfset $assert("result IS ''")>
+		<cfset assert("result IS ''")>
 	</cffunction>
 
 </cfcomponent>

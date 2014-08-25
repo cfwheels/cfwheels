@@ -11,7 +11,7 @@
 		<cfset loc.r = '<script src="#application.wheels.webpath#javascripts/test.js" type="text/javascript"></script>#chr(10)#<script src="#application.wheels.webpath#javascripts/test.js" type="text/javascript"></script>#chr(10)#<script src="#application.wheels.webpath#javascripts/jquery.dataTables.min.js" type="text/javascript"></script>#chr(10)#<script src="#application.wheels.webpath#javascripts/jquery.dataTables.min.js" type="text/javascript"></script>#chr(10)#'>
 		<cfset debug(expression='htmleditformat(loc.e)', display=false, format="text")>
 		<cfset debug(expression='htmleditformat(loc.r)', display=false, format="text")>
-		<cfset $assert("loc.e eq loc.r")>
+		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
 	<cffunction name="test_no_automatic_extention_when_cfm">
@@ -20,7 +20,7 @@
 		<cfset loc.r = '<script src="#application.wheels.webpath#javascripts/test.cfm" type="text/javascript"></script>#chr(10)#<script src="#application.wheels.webpath#javascripts/test.js.cfm" type="text/javascript"></script>#chr(10)#'>
 		<cfset debug(expression='htmleditformat(loc.e)', display=false, format="text")>
 		<cfset debug(expression='htmleditformat(loc.r)', display=false, format="text")>
-		<cfset $assert("loc.e eq loc.r")>
+		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
 	<cffunction name="test_support_external_links">
@@ -29,7 +29,7 @@
 		<cfset loc.r = '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>#chr(10)#<script src="#application.wheels.webpath#javascripts/test.js" type="text/javascript"></script>#chr(10)#<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>#chr(10)#'>
 		<cfset debug(expression='htmleditformat(loc.e)', display=false, format="text")>
 		<cfset debug(expression='htmleditformat(loc.r)', display=false, format="text")>
-		<cfset $assert("loc.e eq loc.r")>
+		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 	
 	<cffunction name="test_allow_specification_of_delimiter">
@@ -39,7 +39,7 @@
 		<cfset loc.r = '<script src="#application.wheels.webpath#javascripts/test.js" type="text/javascript"></script>#chr(10)#<script src="#application.wheels.webpath#javascripts/test.js" type="text/javascript"></script>#chr(10)#<script src="http://fonts.googleapis.com/css?family=Istok+Web:400,700" type="text/javascript"></script>#chr(10)#'>
 		<cfset debug(expression='htmleditformat(loc.e)', display=false, format="text")>
 		<cfset debug(expression='htmleditformat(loc.r)', display=false, format="text")>
-		<cfset $assert("loc.e eq loc.r")>
+		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
 	<cffunction name="test_removing_type_argument">
@@ -47,7 +47,7 @@
 		<cfset loc.args.type = "">
 		<cfset loc.e = loc.controller.javaScriptIncludeTag(argumentcollection=loc.args)>
 		<cfset loc.r = '<script src="#application.wheels.webpath#javascripts/test.js"></script>#chr(10)#'>
-		<cfset $assert("loc.e eq loc.r")>
+		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
 </cfcomponent>

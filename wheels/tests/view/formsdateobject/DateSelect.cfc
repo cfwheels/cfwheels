@@ -13,11 +13,11 @@
 		<cfset debug("loc.controller.dateSelect(argumentcollection=loc.args)", false)>
 		<cfset loc.e = dateSelect_month_str(loc.args.property)>
 		<cfset loc.r = loc.controller.dateSelect(argumentcollection=loc.args)>
-		<cfset $assert("loc.e eq loc.r")>
+		<cfset assert("loc.e eq loc.r")>
 		<cfset loc.args.property = "birthdaymonth">
 		<cfset loc.e = dateSelect_month_str(loc.args.property)>
 		<cfset loc.r = loc.controller.dateSelect(argumentcollection=loc.args)>
-		<cfset $assert("loc.e eq loc.r")>
+		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
 	<cffunction name="dateSelect_month_str">
@@ -33,11 +33,11 @@
 		<cfset debug("loc.controller.dateSelect(argumentcollection=loc.args)", false)>
 		<cfset loc.e = dateSelect_year_str(loc.args.property)>
 		<cfset loc.r = loc.controller.dateSelect(argumentcollection=loc.args)>
-		<cfset $assert("loc.e eq loc.r")>
+		<cfset assert("loc.e eq loc.r")>
 		<cfset loc.args.property = "birthdayyear">
 		<cfset loc.e = dateSelect_year_str(loc.args.property)>
 		<cfset loc.r = loc.controller.dateSelect(argumentcollection=loc.args)>
-		<cfset $assert("loc.e eq loc.r")>
+		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
 	<cffunction name="test_dateselect_year_is_less_than_startyear">
@@ -48,7 +48,7 @@
 		<cfset debug("loc.controller.dateSelect(argumentcollection=loc.args)", false)>
 		<cfset loc.e = '<select id="user-birthday-year" name="user[birthday]($year)"><option selected="selected" value="1975">1975</option><option value="1976">1976</option><option value="1977">1977</option><option value="1978">1978</option><option value="1979">1979</option><option value="1980">1980</option></select>'>
 		<cfset loc.r = loc.controller.dateSelect(argumentcollection=loc.args)>
-		<cfset $assert("loc.e eq loc.r")>
+		<cfset assert("loc.e eq loc.r")>
 	</cffunction>
 
 	<cffunction name="dateSelect_year_str">

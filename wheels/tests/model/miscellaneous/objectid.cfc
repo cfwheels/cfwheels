@@ -10,7 +10,7 @@
 		<cfloop array="#loc.gallery.photos#" index="loc.i">
 			<cfset loc.s[loc.i.$objectid()] = "">
 		</cfloop>
-		<cfset $assert('StructCount(loc.s) eq 30')>
+		<cfset assert('StructCount(loc.s) eq 30')>
 	</cffunction>
 
 </cfcomponent>

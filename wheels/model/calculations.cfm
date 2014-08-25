@@ -22,7 +22,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="average", args=arguments);
+		$args(name="average", args=arguments);
 		if (ListFindNoCase("cf_sql_integer,cf_sql_bigint,cf_sql_smallint,cf_sql_tinyint", variables.wheels.class.properties[arguments.property].type))
 		{
 			// this is an integer column so we get all the values from the database and do the calculation in ColdFusion since we can't run a query to get the average value without type casting it
@@ -78,7 +78,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var returnValue = "";
-		arguments = $args(name="count", args=arguments);
+		$args(name="count", args=arguments);
 		arguments.type = "COUNT";
 		arguments.property = ListFirst(primaryKey());
 		if (Len(arguments.include))
@@ -113,7 +113,7 @@
 	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
-		arguments = $args(name="maximum", args=arguments);
+		$args(name="maximum", args=arguments);
 		arguments.type = "MAX";
 	</cfscript>
 	<cfreturn $calculate(argumentCollection=arguments)>
@@ -139,7 +139,7 @@
 	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
-		arguments = $args(name="minimum", args=arguments);
+		$args(name="minimum", args=arguments);
 		arguments.type = "MIN";
 	</cfscript>
 	<cfreturn $calculate(argumentCollection=arguments)>
@@ -166,7 +166,7 @@
 	<cfargument name="ifNull" type="any" required="false" hint="See documentation for @average.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
-		arguments = $args(name="sum", args=arguments);
+		$args(name="sum", args=arguments);
 		arguments.type = "SUM";
 	</cfscript>
 	<cfreturn $calculate(argumentCollection=arguments)>

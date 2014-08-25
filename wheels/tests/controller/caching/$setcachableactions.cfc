@@ -14,7 +14,7 @@
 		<cfset loc.arr[2].static = true>
 		<cfset loc.controller.$setCachableActions(loc.arr)>
 		<cfset loc.r = loc.controller.$cachableActions()>
-		<cfset $assert("ArrayLen(loc.r) IS 2 AND loc.r[2].action IS 'dummy2'")>
+		<cfset assert("ArrayLen(loc.r) IS 2 AND loc.r[2].action IS 'dummy2'")>
 	</cffunction>
 	
 </cfcomponent>

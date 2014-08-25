@@ -16,7 +16,7 @@
 	<cfargument name="except" type="string" required="false" hint="Pass in a list of action names (or one action name) to tell Wheels that the filter function(s) should be run on all actions except the specified ones.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="filters", args=arguments);
+		$args(name="filters", args=arguments);
 		arguments.through = $listClean(arguments.through);
 		arguments.only = $listClean(arguments.only);
 		arguments.except = $listClean(arguments.except);

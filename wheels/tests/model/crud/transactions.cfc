@@ -12,7 +12,7 @@
 		<cftransaction>
 			<cfset loc.tag = model("tag").create(name="Kermit", description="The Frog", transaction="none")>
 			<cfset loc.tag = model("tag").findOne(where="name='Kermit'")>
-			<cfset $assert("IsObject(loc.tag)")>
+			<cfset assert("IsObject(loc.tag)")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 	</cffunction>
@@ -21,7 +21,7 @@
 		<cftransaction>
 			<cfset model("tag").deleteAll(instantiate=true, transaction="none")>
 			<cfset loc.results = model("tag").findAll()>
-			<cfset $assert("loc.results.recordcount IS 0")>
+			<cfset assert("loc.results.recordcount IS 0")>
 			<cftransaction action="rollback" />
 		</cftransaction>
 	</cffunction>
@@ -30,7 +30,7 @@
 		<cfif NOT StructKeyExists(server, "bluedragon")>			
 			<cfset loc.tag = model("tagFalseCallbacks").create(name="Kermit", description="The Frog")>
 			<cfset loc.tag = model("tagFalseCallbacks").findOne(where="name='Kermit'")>
-			<cfset $assert("loc.tag IS false")>
+			<cfset assert("loc.tag IS false")>
 		</cfif>
 	</cffunction>
 
@@ -39,7 +39,7 @@
 			<cfset loc.tag = model("tagFalseCallbacks").findOne(where="description='testdesc'")>
 			<cfset loc.tag.update(name="Kermit")>
 			<cfset loc.tag = model("tagFalseCallbacks").findOne(where="description='testdesc'")>
-			<cfset $assert("loc.tag.name IS 'releases'")>
+			<cfset assert("loc.tag.name IS 'releases'")>
 		</cfif>
 	</cffunction>
 
@@ -49,7 +49,7 @@
 			<cfset loc.tag.name = "Kermit">
 			<cfset loc.tag.save()>
 			<cfset loc.tag = model("tagFalseCallbacks").findOne(where="description='testdesc'")>
-			<cfset $assert("loc.tag.name IS 'releases'")>
+			<cfset assert("loc.tag.name IS 'releases'")>
 		</cfif>
 	</cffunction>
 
@@ -58,7 +58,7 @@
 			<cfset loc.tag = model("tagFalseCallbacks").findOne(where="description='testdesc'")>
 			<cfset loc.tag.delete()>
 			<cfset loc.tag = model("tagFalseCallbacks").findOne(where="description='testdesc'")>
-			<cfset $assert("IsObject(loc.tag)")>
+			<cfset assert("IsObject(loc.tag)")>
 		</cfif>
 	</cffunction>
 
@@ -66,7 +66,7 @@
 		<cfif NOT StructKeyExists(server, "bluedragon")>
 			<cfset model("tagFalseCallbacks").deleteAll(instantiate=true)>
 			<cfset loc.results = model("tagFalseCallbacks").findAll()>
-			<cfset $assert("loc.results.recordcount IS 8")>
+			<cfset assert("loc.results.recordcount IS 8")>
 		</cfif>
 	</cffunction>
 
@@ -74,7 +74,7 @@
 		<cfif NOT StructKeyExists(server, "bluedragon")>
 			<cfset model("tagFalseCallbacks").updateAll(name="Kermit", instantiate=true)>
 			<cfset loc.results = model("tagFalseCallbacks").findAll(where="name = 'Kermit'")>
-			<cfset $assert("loc.results.recordcount IS 0")>
+			<cfset assert("loc.results.recordcount IS 0")>
 		</cfif>
 	</cffunction>
 
@@ -82,7 +82,7 @@
 		<cfif NOT StructKeyExists(server, "bluedragon")>
 			<cfset loc.tag = model("tag").create(name="Kermit", description="The Frog", transaction="rollback")>
 			<cfset loc.tag = model("tag").findOne(where="name='Kermit'")>
-			<cfset $assert("not IsObject(loc.tag)")>
+			<cfset assert("not IsObject(loc.tag)")>
 		</cfif>
 	</cffunction>
 
@@ -91,7 +91,7 @@
 			<cfset loc.tag = model("tag").findOne(where="description='testdesc'")>
 			<cfset loc.tag.update(name="Kermit", transaction="rollback")>
 			<cfset loc.tag = model("tag").findOne(where="description='testdesc'")>
-			<cfset $assert("loc.tag.name IS 'releases'")>
+			<cfset assert("loc.tag.name IS 'releases'")>
 		</cfif>
 	</cffunction>
 
@@ -101,7 +101,7 @@
 			<cfset loc.tag.name = "Kermit">
 			<cfset loc.tag.save(transaction="rollback")>
 			<cfset loc.tag = model("tag").findOne(where="description='testdesc'")>
-			<cfset $assert("loc.tag.name IS 'releases'")>
+			<cfset assert("loc.tag.name IS 'releases'")>
 		</cfif>
 	</cffunction>
 
@@ -110,7 +110,7 @@
 			<cfset loc.tag = model("tag").findOne(where="description='testdesc'")>
 			<cfset loc.tag.delete(transaction="rollback")>
 			<cfset loc.tag = model("tag").findOne(where="description='testdesc'")>
-			<cfset $assert("IsObject(loc.tag)")>
+			<cfset assert("IsObject(loc.tag)")>
 		</cfif>
 	</cffunction>
 
@@ -118,7 +118,7 @@
 		<cfif NOT StructKeyExists(server, "bluedragon")>
 			<cfset model("tag").deleteAll(instantiate=true, transaction="rollback")>
 			<cfset loc.results = model("tag").findAll()>
-			<cfset $assert("loc.results.recordcount IS 8")>
+			<cfset assert("loc.results.recordcount IS 8")>
 		</cfif>
 	</cffunction>
 
@@ -126,7 +126,7 @@
 		<cfif NOT StructKeyExists(server, "bluedragon")>
 			<cfset model("tag").updateAll(name="Kermit", instantiate=true, transaction="rollback")>
 			<cfset loc.results = model("tag").findAll(where="name = 'Kermit'")>
-			<cfset $assert("loc.results.recordcount IS 0")>
+			<cfset assert("loc.results.recordcount IS 0")>
 		</cfif>
 	</cffunction>
 
@@ -136,7 +136,7 @@
 				<cfset loc.tag = model("tag").findOne(where="description='testdesc'")>
 				<cfset loc.tag.update(name="Kermit", transaction="none")>
 				<cfset loc.tag.reload()>
-				<cfset $assert("loc.tag.name IS 'Kermit'")>
+				<cfset assert("loc.tag.name IS 'Kermit'")>
 				<cftransaction action="rollback" />
 			</cftransaction>
 		</cfif>
@@ -149,7 +149,7 @@
 				<cfset loc.tag.name = "Kermit">
 				<cfset loc.tag.save(transaction="none")>
 				<cfset loc.tag.reload()>
-				<cfset $assert("loc.tag.name IS 'Kermit'")>
+				<cfset assert("loc.tag.name IS 'Kermit'")>
 				<cftransaction action="rollback" />
 			</cftransaction>
 		</cfif>
@@ -161,7 +161,7 @@
 				<cfset loc.tag = model("tag").findOne(where="description='testdesc'")>
 				<cfset loc.tag.delete(transaction="none")>
 				<cfset loc.tag = model("tag").findOne(where="description='testdesc'")>
-				<cfset $assert("not IsObject(loc.tag)")>
+				<cfset assert("not IsObject(loc.tag)")>
 				<cftransaction action="rollback" />
 			</cftransaction>
 		</cfif>
@@ -172,7 +172,7 @@
 			<cftransaction>
 				<cfset model("tag").updateAll(name="Kermit", instantiate=true, transaction="none")>
 				<cfset loc.results = model("tag").findAll(where="name = 'Kermit'")>
-				<cfset $assert("loc.results.recordcount IS 8")>
+				<cfset assert("loc.results.recordcount IS 8")>
 				<cftransaction action="rollback" />
 			</cftransaction>
 		</cfif>
@@ -183,8 +183,8 @@
 			<cfset loc.postsBefore = model('post').count(reload=true)>
 			<cfset loc.tag = model("tagWithDataCallbacks").create(name="Kermit", description="The Frog", transaction="rollback")>
 			<cfset loc.postsAfter = model('post').count(reload=true)>
-			<cfset $assert("IsObject(loc.tag)")>
-			<cfset $assert("loc.postsBefore eq loc.postsAfter")>
+			<cfset assert("IsObject(loc.tag)")>
+			<cfset assert("loc.postsBefore eq loc.postsAfter")>
 		</cfif>
 	</cffunction>
 
@@ -195,8 +195,8 @@
 				<cfset loc.results = model("tag").findAll(where="name = 'Kermit'")>
 	 			<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert("IsObject(loc.tag)")>
-			<cfset $assert("loc.results.recordcount IS 1")>
+			<cfset assert("IsObject(loc.tag)")>
+			<cfset assert("loc.results.recordcount IS 1")>
 		</cfif>
 	</cffunction>
 		
@@ -204,7 +204,7 @@
 		<cfif NOT StructKeyExists(server, "bluedragon")>
 			<cfset loc.hash = model("tag").$hashedConnectionArgs()>
 			<cfset loc.tag = model("tagWithDataCallbacks").create(name="Kermit", description="The Frog", transaction="rollback")>
-			<cfset $assert('request.wheels.transactions[loc.hash] is false')>
+			<cfset assert('request.wheels.transactions[loc.hash] is false')>
 		</cfif>
 	</cffunction>
 	
@@ -215,7 +215,7 @@
 				<cfset loc.tag = model("tagWithDataCallbacks").create(name="Kermit", description="The Frog", transaction="none")>
 				<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert('request.wheels.transactions[loc.hash] is false')>
+			<cfset assert('request.wheels.transactions[loc.hash] is false')>
 		</cfif>
 	</cffunction>
 
@@ -226,7 +226,7 @@
 				<cfset loc.tag = model("tag").create(id="", name="Kermit", description="The Frog", transaction="rollback")>
 				<cfcatch type="any"></cfcatch>
 			</cftry>
-			<cfset $assert('request.wheels.transactions[loc.hash] is false')>
+			<cfset assert('request.wheels.transactions[loc.hash] is false')>
 		</cfif>
 	</cffunction>
 
@@ -240,7 +240,7 @@
 					<cfset loc.results = model("tag").findAll(where="name = 'Kermit'")>
 				</cfcatch>
 			</cftry>
-			<cfset $assert("loc.results.recordcount IS 0")>
+			<cfset assert("loc.results.recordcount IS 0")>
 		</cfif>
 	</cffunction>
 

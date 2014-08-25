@@ -91,7 +91,7 @@
 	<cfargument name="hideDebugInformation" type="boolean" required="false" default="false" hint="See documentation for @renderPage.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="renderWith", args=arguments);
+		$args(name="renderWith", args=arguments);
 		loc.contentType = $requestContentType();
 		loc.acceptableFormats = $acceptableFormats(action=arguments.action);
 

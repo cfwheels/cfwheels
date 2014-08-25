@@ -37,7 +37,7 @@
 		<cfset loc.e = arguments.obj.errorsOn("username")>
 		<cfset loc.e = loc.e[1].message>
 		<cfset loc.r = arguments.expected>
-		<cfset $assert('loc.e eq loc.r')>
+		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
 </cfcomponent>

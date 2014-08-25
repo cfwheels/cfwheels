@@ -13,7 +13,7 @@
 				<cfset loc._binary = loc.photo.filedata>
 				<cftransaction action="rollback">
 			</cftransaction>
-			<cfset $assert('IsBinary(ToBinary(loc._binary))')>
+			<cfset assert('IsBinary(ToBinary(loc._binary))')>
 		</cfif>
 	</cffunction>
 
@@ -26,7 +26,7 @@
 				<cfset loc._binary = loc.photo.filedata>
 				<cftransaction action="rollback">
 			</cftransaction>
-			<cfset $assert('IsBinary(ToBinary(loc._binary))')>
+			<cfset assert('IsBinary(ToBinary(loc._binary))')>
 		</cfif>
 	</cffunction>
 

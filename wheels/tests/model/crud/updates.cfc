@@ -7,7 +7,7 @@
 			<cfset loc.allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'")>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.allKermits.recordcount eq 1')>
+		<cfset assert('loc.allKermits.recordcount eq 1')>
 	</cffunction>
 
  	<cffunction name="test_dynamic_update_with_named_argument">
@@ -19,7 +19,7 @@
 				<cfset loc.updatedProfile = model("profile").findByKey(loc.profile.id)>
 				<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert("loc.updatedProfile.authorId IS loc.author.id")>
+			<cfset assert("loc.updatedProfile.authorId IS loc.author.id")>
 		</cfif>
 	</cffunction>
 
@@ -31,7 +31,7 @@
 			<cfset loc.updatedProfile = model("profile").findByKey(loc.profile.id)>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert("loc.updatedProfile.authorId IS loc.author.id")>
+		<cfset assert("loc.updatedProfile.authorId IS loc.author.id")>
 	</cffunction>
 
  	<cffunction name="test_update_one">
@@ -40,7 +40,7 @@
 			<cfset loc.allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'")>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.allKermits.recordcount eq 1')>
+		<cfset assert('loc.allKermits.recordcount eq 1')>
 	</cffunction>
 
  	<cffunction name="test_update_one_for_soft_deleted_records">
@@ -50,7 +50,7 @@
 			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true)>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.changedPosts.recordcount eq 1')>
+		<cfset assert('loc.changedPosts.recordcount eq 1')>
 	</cffunction>
 
  	<cffunction name="test_update_by_key">
@@ -60,7 +60,7 @@
 			<cfset loc.allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'")>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.allKermits.recordcount eq 1')>
+		<cfset assert('loc.allKermits.recordcount eq 1')>
 	</cffunction>
 
  	<cffunction name="test_update_by_key_for_soft_deleted_records">
@@ -70,7 +70,7 @@
 			<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true)>
 			<cftransaction action="rollback" />
 		</cftransaction>
-		<cfset $assert('loc.changedPosts.recordcount eq 1')>
+		<cfset assert('loc.changedPosts.recordcount eq 1')>
 	</cffunction>
 
  	<cffunction name="test_update_all">
@@ -80,7 +80,7 @@
 				<cfset loc.allKermits = model("Author").findAll(where="firstName='Kermit' AND lastName='Frog'")>
 				<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert('loc.allKermits.recordcount eq 7')>
+			<cfset assert('loc.allKermits.recordcount eq 7')>
 		</cfif>
 	</cffunction>
 
@@ -91,7 +91,7 @@
 				<cfset loc.changedPosts = model("Post").findAll(where="title='This is a new title'", includeSoftDeletes=true)>
 				<cftransaction action="rollback" />
 			</cftransaction>
-			<cfset $assert('loc.changedPosts.recordcount eq 5')>
+			<cfset assert('loc.changedPosts.recordcount eq 5')>
 		</cfif>
 	</cffunction>
 
@@ -113,9 +113,9 @@
 			<cftransaction action="rollback" />
 		</cftransaction>
 		<cfif loc.db IS "oracle">
-			<cfset $assert("IsObject(loc.author) AND !len(trim(loc.author.lastName))")>
+			<cfset assert("IsObject(loc.author) AND !len(trim(loc.author.lastName))")>
 		<cfelse>
-			<cfset $assert("IsObject(loc.author) AND !len(loc.author.lastName)")>
+			<cfset assert("IsObject(loc.author) AND !len(loc.author.lastName)")>
 		</cfif>
 	</cffunction>
 
