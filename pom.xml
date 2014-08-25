@@ -12,8 +12,8 @@ usage:
   - "mvn verify -P jetty,railo,oracle-emu" runs all CFWheels tests on Oracle emulation via embedded H2 database
   - "mvn verify -P jetty,railo,mysql" runs all CFWheels tests on Travis-CI MySQL database
   - "mvn verify -P jetty,railo,postgresal" runs all CFWheels tests on Travis-CI postgreSQL database
-  - "mvn clean verify -P mssql" upload and runs all CFWheels tests on railo and Microsoft SQLServer on cfmldeveloper.org (or whatever database/server configured there)
-  - "mvn clean verify -P mssql,subfolder" upload and deploy CFWheels also on subfolder and run all tests 
+  - "mvn clean verify -P mssql" upload and runs all CFWheels tests on ACF11 and Microsoft SQLServer on VivioTech test server
+  - "mvn clean verify -P mssql,acf9oracle" upload and deploy CFWheels on test server and run all tests also on ACF9 Oracle database 
   - "mvn clean verify -P oracle" copy and runs all CFWheels tests on local ColdFusion8 and Oracle (or whatever database configured locally)
   - "mvn clean verify -P jetty,openbd" donwload OpenBD and run all tests on it (preliminary support)
 
@@ -40,6 +40,7 @@ Benefits of embedded-container-test versus full-integration-test
 		<jettyVersion>8.1.15.v20140411</jettyVersion>
 		<railoConfig>railo-server.xml</railoConfig>
 		<testServer>http://localhost:8080</testServer>
+		<testSecondPort></testSecondPort>
 		<deployUrl></deployUrl>
 		<testSubfolder>false</testSubfolder>
 		<testParallelStart>false</testParallelStart>
@@ -91,6 +92,7 @@ Benefits of embedded-container-test versus full-integration-test
 					<systemPropertyVariables>
 						<!-- pass all configuration into the integration test -->
 						<testServer>${testServer}</testServer>
+						<testSecondPort>${testSecondPort}</testSecondPort>
 						<deployUrl>${deployUrl}</deployUrl>
 						<testOracleEmulation>${testOracleEmulation}</testOracleEmulation>
 						<testSubfolder>${testSubfolder}</testSubfolder>
@@ -246,6 +248,7 @@ Benefits of embedded-container-test versus full-integration-test
 									<target>
 										<delete dir="bluedragon"/>
 										<delete dir="manual"/>
+										<delete dir="subfolder"/>
 										<delete dir="temp"/>
 										<delete dir="WEB-INF"/>
 										<delete dir="wheels/tests/_assets/plugins/removing/TestGlobalMixins"/>
@@ -275,6 +278,13 @@ Benefits of embedded-container-test versus full-integration-test
 			</dependencies>
 			<properties>
 				<railoConfig>railo-server-mysql.xml</railoConfig>
+			</properties>
+		</profile>
+		<profile>
+			<!-- to activate, execute "mvn verify -Pmssql,acf9oracle" on Travis-CI -->
+			<id>acf9oracle</id>
+			<properties>
+				<testSecondPort>8509</testSecondPort>
 			</properties>
 		</profile>
 		<profile>
@@ -398,7 +408,7 @@ Benefits of embedded-container-test versus full-integration-test
 								<phase>pre-integration-test</phase>
 								<configuration>
 									<target>
-									  <copy todir="temp">
+									  <copy todir="subfolder">
 									    <fileset dir=".">
 									      <exclude name="**/*.java"/>
 											<exclude name=".settings/**"/>
