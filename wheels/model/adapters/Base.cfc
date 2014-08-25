@@ -31,6 +31,12 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 
+	<cffunction name="$tableAlias" returntype="string" access="public" output="false">
+		<cfargument name="table" type="string" required="true">
+		<cfargument name="alias" type="string" required="true">
+		<cfreturn arguments.table & " AS " & arguments.alias>
+	</cffunction>
+
 	<cffunction name="$columnAlias" returntype="string" access="public" output="false">
 		<cfargument name="list" type="string" required="true">
 		<cfargument name="action" type="string" required="true">
@@ -176,7 +182,7 @@
 		
 		if(!StructKeyExists(arguments.settings, "value"))
 		{
-			$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syantax error in the WHERE statement such as forgetting to quote strings.");
+			$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syntax error in the WHERE statement such as forgetting to quote strings.");
 		}
 		
 		loc.params = {};
