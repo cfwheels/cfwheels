@@ -1,16 +1,12 @@
 <cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.orgEnv = duplicate(application)>
-		</cfif>
+		<cfset loc.orgEnv = duplicate(application)>
 		<cfset application.wheels.URLRewriting = "On">
 	</cffunction>
 
 	<cffunction name="teardown">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset application = loc.orgEnv>
-		</cfif>
+		<cfset application = loc.orgEnv>
 	</cffunction>
 
 	<cffunction name="test_links_are_properly_hyphenated">

@@ -40,53 +40,43 @@
 	</cffunction>
 
 	<cffunction name="test_unlimited_properties_for_dynamic_finders">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.post = model("Post").findOneByTitleAndAuthoridAndViews(values="Title for first test post|1|5", delimiter="|")>
-			<cfset assert('IsObject(loc.post)')>
-		</cfif>
+		<cfset loc.post = model("Post").findOneByTitleAndAuthoridAndViews(values="Title for first test post|1|5", delimiter="|")>
+		<cfset assert('IsObject(loc.post)')>
 	</cffunction>
 	
 	<cffunction name="test_passing_array">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.args = ["Title for first test post", 1, 5]>
-			<cfset loc.post = model("Post").findOneByTitleAndAuthoridAndViews(values=loc.args)>
-			<cfset assert('IsObject(loc.post)')>
-		</cfif>
+		<cfset loc.args = ["Title for first test post", 1, 5]>
+		<cfset loc.post = model("Post").findOneByTitleAndAuthoridAndViews(values=loc.args)>
+		<cfset assert('IsObject(loc.post)')>
 	</cffunction>
 	
 	<cffunction name="test_can_change_delimieter_for_dynamic_finders">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.title = "Testing to make, to make sure, commas work">
-			<cftransaction action="begin">
-				<cfset loc.post = model("Post").findOne(where="id = 1")>
-				<cfset loc.post.title = loc.title>
-				<cfset loc.post.save()>
-				<cfset loc.post = model("Post").findOneByTitleAndAuthorid(values="#loc.title#|1", delimiter="|")>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert('IsObject(loc.post)')>
-		</cfif>
+		<cfset loc.title = "Testing to make, to make sure, commas work">
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").findOne(where="id = 1")>
+			<cfset loc.post.title = loc.title>
+			<cfset loc.post.save()>
+			<cfset loc.post = model("Post").findOneByTitleAndAuthorid(values="#loc.title#|1", delimiter="|")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('IsObject(loc.post)')>
 	</cffunction>
 	
 	<cffunction name="test_passing_where_clause">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.post = model("Post").findOneByTitle(value="Title for first test post", where="authorid = 1 AND views = 5")>
-			<cfset assert('IsObject(loc.post)')>
-		</cfif>
+		<cfset loc.post = model("Post").findOneByTitle(value="Title for first test post", where="authorid = 1 AND views = 5")>
+		<cfset assert('IsObject(loc.post)')>
 	</cffunction>
 	
 	<cffunction name="test_can_pass_in_commas">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.title = "Testing to make, to make sure, commas work">
-			<cftransaction action="begin">
-				<cfset loc.post = model("Post").findOne(where="id = 1")>
-				<cfset loc.post.title = loc.title>
-				<cfset loc.post.save()>
-				<cfset loc.post = model("Post").findOneByTitle(values="#loc.title#")>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert('IsObject(loc.post)')>
-		</cfif>
+		<cfset loc.title = "Testing to make, to make sure, commas work">
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").findOne(where="id = 1")>
+			<cfset loc.post.title = loc.title>
+			<cfset loc.post.save()>
+			<cfset loc.post = model("Post").findOneByTitle(values="#loc.title#")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('IsObject(loc.post)')>
 	</cffunction>
 
 </cfcomponent>

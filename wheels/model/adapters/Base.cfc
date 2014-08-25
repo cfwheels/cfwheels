@@ -31,12 +31,6 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 
-	<cffunction name="$tableAlias" returntype="string" access="public" output="false">
-		<cfargument name="table" type="string" required="true">
-		<cfargument name="alias" type="string" required="true">
-		<cfreturn arguments.table & " AS " & arguments.alias>
-	</cffunction>
-
 	<cffunction name="$columnAlias" returntype="string" access="public" output="false">
 		<cfargument name="list" type="string" required="true">
 		<cfargument name="action" type="string" required="true">
@@ -182,7 +176,7 @@
 		
 		if(!StructKeyExists(arguments.settings, "value"))
 		{
-			$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syntax error in the WHERE statement such as forgetting to quote strings.");
+			$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syantax error in the WHERE statement such as forgetting to quote strings.");
 		}
 		
 		loc.params = {};
@@ -190,8 +184,7 @@
 		loc.params.value = arguments.settings.value;
 		if (StructKeyExists(arguments.settings, "null"))
 		{
-			// need to use below syntax for compatibility with openbd
-			loc.params["null"] = arguments.settings["null"];
+			loc.params.null = arguments.settings.null;
 		}
 		if (StructKeyExists(arguments.settings, "scale") AND arguments.settings.scale GT 0)
 		{
@@ -249,22 +242,18 @@
 		StructAppend(loc.args, loc.orgArgs, true);
 		</cfscript>
 
-		<cfquery result="loc.result" name="query.name" datasource="#loc.args.datasource#" attributeCollection="#loc.args#"><cfloop array="#arguments.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif StructKeyExists(loc.queryParamAttributes, "useNull")>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")><cfif arguments.parameterize>(<cfqueryparam value="#loc.queryParamAttributes.value#" cfsqltype="#loc.queryParamAttributes.cfsqltype#" attributeCollection="#loc.queryParamAttributes#">)<cfelse>(#PreserveSingleQuotes(loc.i.value)#)</cfif><cfelse><cfif arguments.parameterize><cfqueryparam value="#loc.queryParamAttributes.value#" cfsqltype="#loc.queryParamAttributes.cfsqltype#" attributeCollection="#loc.queryParamAttributes#"><cfelse>#$quoteValue(str=loc.i.value, sqlType=loc.i.type)#</cfif></cfif><cfelse><cfset loc.i = Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")>#PreserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif></cfquery>
+		<cfquery attributeCollection="#loc.args#"><cfloop array="#arguments.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif StructKeyExists(loc.queryParamAttributes, "useNull")>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")><cfif arguments.parameterize>(<cfqueryparam attributeCollection="#loc.queryParamAttributes#">)<cfelse>(#PreserveSingleQuotes(loc.i.value)#)</cfif><cfelse><cfif arguments.parameterize><cfqueryparam attributeCollection="#loc.queryParamAttributes#"><cfelse>#$quoteValue(str=loc.i.value, sqlType=loc.i.type)#</cfif></cfif><cfelse><cfset loc.i = Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")>#PreserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif></cfquery>
 
 		<cfscript>
 		if (StructKeyExists(query, "name"))
-		{
 			loc.returnValue.query = query.name;
-		}
 
-		// get / set the primary key value if necessary
+		// get/set the primary key value if necessary
 		// will be done on insert statement involving auto-incremented primary keys when Railo/ACF cannot retrieve it for us
 		// this happens on non-supported databases (example: H2) and drivers (example: jTDS)
 		loc.$id = $identitySelect(queryAttributes=loc.args, result=loc.result, primaryKey=arguments.$primaryKey);
-		if (StructKeyExists(loc, "$id") && IsStruct(loc.$id))
-		{
+		if (StructKeyExists(loc, "$id"))
 			StructAppend(loc.result, loc.$id);
-		}
 
 		loc.returnValue.result = loc.result;
 		</cfscript>

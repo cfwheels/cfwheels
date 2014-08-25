@@ -336,9 +336,9 @@
 			loc.hiddenAttributes.id = arguments.id & "-checkbox";
 			loc.hiddenAttributes.name = arguments.name & "($checkbox)";
 			loc.hiddenAttributes.value = arguments.uncheckedValue;
-			loc.returnValue &= $tag(name="input", close=true, attributes=loc.hiddenAttributes);
+			loc.returnValue = loc.returnValue & $tag(name="input", close=true, attributes=loc.hiddenAttributes);
 		}
-		loc.returnValue &= loc.after;
+		loc.returnValue = loc.returnValue & loc.after;
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -469,7 +469,7 @@
 			loc.iEnd = arguments.options.RecordCount;
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
-				loc.returnValue &= $option(objectValue=loc.value, optionValue=arguments.options[arguments.valueField][loc.i], optionText=arguments.options[arguments.textField][loc.i]);
+				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=arguments.options[arguments.valueField][loc.i], optionText=arguments.options[arguments.textField][loc.i]);
 			}
 		}
 		else if (IsStruct(arguments.options))
@@ -479,7 +479,7 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.key = ListGetAt(loc.sortedKeys, loc.i);
-				loc.returnValue &= $option(objectValue=loc.value, optionValue=LCase(loc.key), optionText=arguments.options[loc.key]);
+				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=LCase(loc.key), optionText=arguments.options[loc.key]);
 			}
 		}
 		else
@@ -558,7 +558,7 @@
 						}
 					}
 				}
-				loc.returnValue &= $option(objectValue=loc.value, optionValue=loc.optionValue, optionText=loc.optionText);
+				loc.returnValue = loc.returnValue & $option(objectValue=loc.value, optionValue=loc.optionValue, optionText=loc.optionText);
 			}
 		}
 	</cfscript>

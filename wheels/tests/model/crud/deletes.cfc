@@ -11,44 +11,38 @@
 	</cffunction>
 
  	<cffunction name="test_soft_delete">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cftransaction action="begin">
-				<cfset loc.post = model("Post").findOne()>
-				<cfset loc.post.delete()>
-				<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
-				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 5')>
-		</cfif>
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").findOne()>
+			<cfset loc.post.delete()>
+			<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
+			<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 5')>
 	</cffunction>
 
  	<cffunction name="test_permanent_delete">
- 		<cfif NOT StructKeyExists(server, "bluedragon")> 			
-			<cftransaction action="begin">
-				<cfset loc.post = model("Post").findOne()>
-				<cfset loc.post.delete(softDelete=false)>
-				<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
-				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
- 		</cfif>
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").findOne()>
+			<cfset loc.post.delete(softDelete=false)>
+			<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
+			<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
 	</cffunction>
 
  	<cffunction name="test_permanent_delete_of_soft_deleted_records">
- 		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cftransaction action="begin">
-				<cfset loc.post = model("Post").findOne()>
-				<cfset loc.post.delete()>
-				<cfset loc.softDeletedPost = model("Post").findByKey(key=loc.post.id, includeSoftDeletes=true)>
-				<cfset loc.softDeletedPost.delete(includeSoftDeletes=true, softDelete=false)>
-				<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
-				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
-		</cfif>
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").findOne()>
+			<cfset loc.post.delete()>
+			<cfset loc.softDeletedPost = model("Post").findByKey(key=loc.post.id, includeSoftDeletes=true)>
+			<cfset loc.softDeletedPost.delete(includeSoftDeletes=true, softDelete=false)>
+			<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
+			<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
 	</cffunction>
 
  	<cffunction name="test_delete_by_key">
@@ -62,43 +56,37 @@
 	</cffunction>
 
  	<cffunction name="test_soft_delete_by_key">
- 		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cftransaction action="begin">
-				<cfset loc.post = model("Post").findOne()>
-				<cfset model("Post").deleteByKey(loc.post.id)>
-				<cfset loc.postsWithoutSoftDeletes = model("Post").findAll(includeSoftDeletes=false)>
-				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 5')>
-		</cfif>
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").findOne()>
+			<cfset model("Post").deleteByKey(loc.post.id)>
+			<cfset loc.postsWithoutSoftDeletes = model("Post").findAll(includeSoftDeletes=false)>
+			<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 5')>
 	</cffunction>
 
  	<cffunction name="test_permanent_delete_by_key">
- 		<cfif NOT StructKeyExists(server, "bluedragon")> 			
-			<cftransaction action="begin">
-				<cfset loc.post = model("Post").findOne()>
-				<cfset model("Post").deleteByKey(key=loc.post.id, softDelete=false)>
-				<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
-				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
- 		</cfif>
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").findOne()>
+			<cfset model("Post").deleteByKey(key=loc.post.id, softDelete=false)>
+			<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
+			<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
 	</cffunction>
 
  	<cffunction name="test_permanent_delete_by_key_of_soft_deleted_records">
- 		<cfif NOT StructKeyExists(server, "bluedragon")> 			
-			<cftransaction action="begin">
-				<cfset loc.post = model("Post").findOne()>
-				<cfset model("Post").deleteOne(where="id=#loc.post.id#")>
-				<cfset model("Post").deleteOne(where="id=#loc.post.id#", includeSoftDeletes=true, softDelete=false)>
-				<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
-				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
- 		</cfif>
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").findOne()>
+			<cfset model("Post").deleteOne(where="id=#loc.post.id#")>
+			<cfset model("Post").deleteOne(where="id=#loc.post.id#", includeSoftDeletes=true, softDelete=false)>
+			<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
+			<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
 	</cffunction>
  
  	<cffunction name="test_delete_one">
@@ -111,41 +99,35 @@
 	</cffunction>
 
  	<cffunction name="test_soft_delete_one">
- 		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cftransaction action="begin">
-				<cfset model("Post").deleteOne()>
-				<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
-				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 5')>
-		</cfif>
+		<cftransaction action="begin">
+			<cfset model("Post").deleteOne()>
+			<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
+			<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 5')>
 	</cffunction>
 
  	<cffunction name="test_permanent_delete_one">
- 		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cftransaction action="begin">
-				<cfset model("Post").deleteOne(softDelete=false)>
-				<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
-				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
- 		</cfif>
+		<cftransaction action="begin">
+			<cfset model("Post").deleteOne(softDelete=false)>
+			<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
+			<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
 	</cffunction>
 
  	<cffunction name="test_permanent_delete_one_of_soft_deleted_records">
- 		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cftransaction action="begin">
-				<cfset loc.post = model("Post").findOne()>
-				<cfset model("Post").deleteOne(where="id=#loc.post.id#")>
-				<cfset model("Post").deleteOne(where="id=#loc.post.id#", includeSoftDeletes=true, softDelete=false)>
-				<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
-				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
-		</cfif>
+		<cftransaction action="begin">
+			<cfset loc.post = model("Post").findOne()>
+			<cfset model("Post").deleteOne(where="id=#loc.post.id#")>
+			<cfset model("Post").deleteOne(where="id=#loc.post.id#", includeSoftDeletes=true, softDelete=false)>
+			<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
+			<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 4 AND loc.postsWithSoftDeletes.recordcount eq 4')>
 	</cffunction>
 
  	<cffunction name="test_delete_all">
@@ -158,27 +140,23 @@
 	</cffunction>
 
  	<cffunction name="test_soft_delete_all">
- 		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cftransaction action="begin">
-				<cfset model("Post").deleteAll()>
-				<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
-				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 0 AND loc.postsWithSoftDeletes.recordcount eq 5')>
-		</cfif>
+		<cftransaction action="begin">
+			<cfset model("Post").deleteAll()>
+			<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
+			<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 0 AND loc.postsWithSoftDeletes.recordcount eq 5')>
 	</cffunction>
 
  	<cffunction name="test_permanent_delete_all">
- 		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cftransaction action="begin">
-				<cfset model("Post").deleteAll(softDelete=false)>
-				<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
-				<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 0 AND loc.postsWithSoftDeletes.recordcount eq 0')>
-		</cfif>
+		<cftransaction action="begin">
+			<cfset model("Post").deleteAll(softDelete=false)>
+			<cfset loc.postsWithoutSoftDeletes = model("Post").findAll()>
+			<cfset loc.postsWithSoftDeletes = model("Post").findAll(includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.postsWithoutSoftDeletes.recordcount eq 0 AND loc.postsWithSoftDeletes.recordcount eq 0')>
 	</cffunction>
 
  	<cffunction name="test_permanent_delete_all_of_soft_deleted_records">

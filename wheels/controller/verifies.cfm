@@ -28,7 +28,7 @@
 	<cfargument name="paramsTypes" type="string" required="false" default="" hint="List of types to check each `params` value against (will be passed through to your CFML engine's `IsValid` function).">
 	<cfscript>
 		$args(name="verifies", args=arguments);
-		ArrayAppend(variables.wheels.class.verifications, Duplicate(arguments));
+		ArrayAppend(variables.$class.verifications, Duplicate(arguments));
 	</cfscript>
 </cffunction>
 
@@ -40,7 +40,7 @@
 		<cfset setVerificationChain(myVerificationChain)>
 	'
 	categories="controller-initialization,verification" chapters="filters-and-verification" functions="verifies,setVerificationChain">
-	<cfreturn variables.wheels.class.verifications>
+	<cfreturn variables.$class.verifications>
 </cffunction>
 
 <cffunction name="setVerificationChain" returntype="void" access="public" output="false" hint="Use this function if you need a more low level way of setting the entire verification chain for a controller."
@@ -58,7 +58,7 @@
 		var loc = {};
 
 		// Clear current verification chain
-		variables.wheels.class.verifications = [];
+		variables.$class.verifications = [];
 		// Loop through chain passed in arguments and add each item to verification chain
 		for(loc.i = 1; loc.i <= ArrayLen(arguments.chain); loc.i++) {
 			verifies(argumentCollection=arguments.chain[loc.i]);

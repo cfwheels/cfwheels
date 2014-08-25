@@ -454,8 +454,7 @@
 				loc.pos = loc.pos + 1;
 				ArrayAppend(arguments.sql, "#variables.wheels.class.properties[loc.key].column# = ");
 
-				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale};
-				loc.param.null = !Len(arguments.properties[loc.key]);
+				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale, null=!len(arguments.properties[loc.key])};
 				ArrayAppend(arguments.sql, loc.param);
 				if (StructCount(arguments.properties) gt loc.pos)
 					ArrayAppend(arguments.sql, ",");
@@ -965,11 +964,11 @@
 		var loc = {};
 		if (variables.wheels.class.timeStampingOnCreate)
 		{
-			$timestampProperty(name=variables.wheels.class.timeStampOnCreateProperty);
+			$timestampProperty(property=variables.wheels.class.timeStampOnCreateProperty);
 		}
 		if (application.wheels.setUpdatedAtOnCreate && variables.wheels.class.timeStampingOnUpdate)
 		{
-			$timestampProperty(name=variables.wheels.class.timeStampOnUpdateProperty);
+			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 		}
 
 		// start by adding column names and values for the properties that exist on the object to two arrays
@@ -1046,7 +1045,7 @@
 		}
 		
 		if (variables.wheels.class.timeStampingOnUpdate)
-			$timestampProperty(name=variables.wheels.class.timeStampOnUpdateProperty);
+			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 		loc.sql = [];
 		ArrayAppend(loc.sql, "UPDATE #tableName()# SET ");
 		for (loc.key in variables.wheels.class.properties)
@@ -1078,22 +1077,14 @@
 <cffunction name="$buildQueryParamValues" returntype="struct" access="public" output="false">
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
-	var loc = {};
-	loc.returnValue = {};
-	loc.returnValue.value = this[arguments.property];
-	loc.returnValue.type = variables.wheels.class.properties[arguments.property].type;
-	loc.returnValue.dataType = variables.wheels.class.properties[arguments.property].dataType;
-	loc.returnValue.scale = variables.wheels.class.properties[arguments.property].scale;
-	if (!Len(this[arguments.property]) && variables.wheels.class.properties[arguments.property].nullable)
-	{
-		StructInsert(loc.returnValue, "null", true);
-	}
-	else
-	{
-		StructInsert(loc.returnValue, "null", false);
-	}	
+	var ret = {};
+	ret.value = this[arguments.property];
+	ret.type = variables.wheels.class.properties[arguments.property].type;
+	ret.dataType = variables.wheels.class.properties[arguments.property].dataType;
+	ret.scale = variables.wheels.class.properties[arguments.property].scale;
+	ret.null = (!len(this[arguments.property]) && variables.wheels.class.properties[arguments.property].nullable);
+	return ret;
 	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$keyLengthCheck" returntype="void" access="public" output="false"
@@ -1112,8 +1103,8 @@
 	developers can now override this method for localizing dates if they prefer.
 --->
 <cffunction name="$timestampProperty" returntype="void" access="public" output="false">
-	<cfargument name="name" type="string" required="true" />
+	<cfargument name="property" type="string" required="true" />
 	<cfscript>
-		this[arguments.name] = Now();
+		this[arguments.property] = Now();
 	</cfscript>
 </cffunction>

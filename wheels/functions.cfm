@@ -1,8 +1,7 @@
 <cfset this.name = Hash(GetDirectoryFromPath(GetBaseTemplatePath()))>
 <cfset this.mappings["/wheelsMapping"] = GetDirectoryFromPath(GetBaseTemplatePath()) & "wheels">
 <cfset this.sessionManagement = true>
-<cfset this.dataSource = LCase(ListLast(GetDirectoryFromPath(GetBaseTemplatePath()), Right(GetDirectoryFromPath(GetBaseTemplatePath()), 1)))>
-<cfif StructKeyExists(server, "railo") OR StructKeyExists(server, "bluedragon")>
+<cfif StructKeyExists(server, "railo")>
 	<cfinclude template="../config/app.cfm">
 	<cfinclude template="controller/appfunctions.cfm">
 	<cfinclude template="global/appfunctions.cfm">

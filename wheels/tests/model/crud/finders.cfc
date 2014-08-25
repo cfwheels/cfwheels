@@ -38,10 +38,8 @@
 	</cffunction>
 
  	<cffunction name="test_findByKey_returns_false_when_passed_blank_string">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.q = loc.user.findByKey("")>
-			<cfset assert('loc.q eq false')>
-		</cfif>
+		<cfset loc.q = loc.user.findByKey("")>
+		<cfset assert('loc.q eq false')>
 	</cffunction>
 
  	<cffunction name="test_findByKey_returns_empty_query_when_record_not_found_with_return_as_equal_query">
@@ -148,12 +146,10 @@
 	</cffunction>
 
 	<cffunction name="test_findAll_returnAs_invalid_throws_error">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.q = raised('loc.user.findAll(where="id = 1", returnas="notvalid")')>
-			<cfset loc.r = "Wheels.IncorrectArgumentValue">
-			<cfset debug('loc.q', false)>
-			<cfset assert('loc.q eq loc.r')>
-		</cfif>
+		<cfset loc.q = raised('loc.user.findAll(where="id = 1", returnas="notvalid")')>
+		<cfset loc.r = "Wheels.IncorrectArgumentValue">
+		<cfset debug('loc.q', false)>
+		<cfset assert('loc.q eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_exists_by_key_valid">
@@ -208,14 +204,12 @@
 	</cffunction>
 
 	<cffunction name="test_findAll_with_include_soft_deletes">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cftransaction action="begin">
-				<cfset model("Post").deleteAll()>
-				<cfset loc.allPosts = model("Post").findAll(includeSoftDeletes=true)>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert('loc.allPosts.recordcount eq 5')>
-		</cfif>
+		<cftransaction action="begin">
+			<cfset model("Post").deleteAll()>
+			<cfset loc.allPosts = model("Post").findAll(includeSoftDeletes=true)>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert('loc.allPosts.recordcount eq 5')>
 	</cffunction>
 
 	<cffunction name="test_findOne_returns_empty_array_for_included_model_when_none_exist">

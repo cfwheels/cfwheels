@@ -16,18 +16,14 @@
 
 	<cffunction name="test_in_operator_with_quoted_strings">
 		<cfset loc.values = QuotedValueList(loc.source.lastName)>
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.q = model("user").findAll(where="lastName IN (#loc.values#)")>
-			<cfset assert('loc.q.recordCount IS 3')>
-		</cfif>
+		<cfset loc.q = model("user").findAll(where="lastName IN (#loc.values#)")>
+		<cfset assert('loc.q.recordCount IS 3')>
 	</cffunction>
 
 	<cffunction name="test_in_operator_with_numbers">
 		<cfset loc.values = ValueList(loc.source.id)>
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.q = model("user").findAll(where="id IN (#loc.values#)")>
-			<cfset assert('loc.q.recordCount IS 3')>
-		</cfif>
+		<cfset loc.q = model("user").findAll(where="id IN (#loc.values#)")>
+		<cfset assert('loc.q.recordCount IS 3')>
 	</cffunction>
 
 	<cffunction name="test_custom_query_and_orm_query_in_transaction">

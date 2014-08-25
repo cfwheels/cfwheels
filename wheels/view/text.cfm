@@ -54,7 +54,7 @@
 			arguments.text = RemoveChars(arguments.text, loc.match.pos[1], loc.match.len[1]);			
 			loc.punctuation = ArrayToList(ReMatchNoCase(loc.punctuationRegEx, loc.str));
 			loc.str = REReplaceNoCase(loc.str, loc.punctuationRegEx, "", "all");
-
+			
 			// make sure that links beginning with "www." have a protocol
 			if (Left(loc.str, 4) == "www." && !Len(arguments.protocol))
 			{
@@ -293,7 +293,7 @@
 			{
 				loc.returnValue = ListAppend(loc.returnValue, loc.wordArray[loc.i], " ");
 			}
-			loc.returnValue &= arguments.truncateString;
+			loc.returnValue = loc.returnValue & arguments.truncateString;
 		}
 		else
 		{

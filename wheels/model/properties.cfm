@@ -260,30 +260,16 @@
 	<cfargument name="property" type="string" required="true" />
 	<cfargument name="save" type="boolean" required="false" hint="Argument to decide whether save the property after it has been toggled. Defaults to true." />
 	<cfscript>
-		var loc = {};
 		$args(name="toggle", args=arguments);
 		if (!StructKeyExists(this, arguments.property))
-		{
 			$throw(type="Wheels.PropertyDoesNotExist", message="Property Does Not Exist", extendedInfo="You may only toggle a property that exists on this model.");
-		}
 		if (!IsBoolean(this[arguments.property]))
-		{
 			$throw(type="Wheels.PropertyIsIncorrectType", message="Incorrect Arguments", extendedInfo="You may only toggle a property that evaluates to the boolean value.");
-		}
 		this[arguments.property] = !this[arguments.property];
 		if (arguments.save)
-		{
-			loc.args = {};
-			loc.args.property = arguments.property;
-			loc.args.value = this[arguments.property];
-			loc.returnValue = updateProperty(argumentCollection=loc.args);
-		}
-		else
-		{
-			loc.returnValue = this;
-		}
+			return updateProperty(property=arguments.property, value=this[arguments.property]);
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn this />
 </cffunction>
 
 <cffunction name="properties" returntype="struct" access="public" output="false" hint="Returns a structure of all the properties with their names as keys and the values of the property as values."
@@ -480,83 +466,52 @@
 	<cfargument name="$useFilterLists" type="boolean" required="false" default="true" />
 	<cfscript>
 		var loc = {};
+
 		loc.allowedProperties = {};
+
 		arguments.filterList = ListAppend(arguments.filterList, "properties,filterList,setOnModel,$useFilterLists");
 
 		// add eventual named arguments to properties struct (named arguments will take precedence)
 		for (loc.key in arguments)
-		{
 			if (!ListFindNoCase(arguments.filterList, loc.key))
-			{
 				arguments.properties[loc.key] = arguments[loc.key];
-			}
-		}
 
-		// loop throug the properties and see if they can be set based off of the accessible properties lists
-		for (loc.key in arguments.properties)
+		for (loc.key in arguments.properties) // loop throug the properties and see if they can be set based off of the accessible properties lists
 		{
 			loc.accessible = true;
 			if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "whiteList") && !ListFindNoCase(variables.wheels.class.accessibleProperties.whiteList, loc.key))
-			{
 				loc.accessible = false;
-			}
 			if (arguments.$useFilterLists && StructKeyExists(variables.wheels.class.accessibleProperties, "blackList") && ListFindNoCase(variables.wheels.class.accessibleProperties.blackList, loc.key))
-			{
 				loc.accessible = false;
-			}
 			if (loc.accessible)
-			{
 				loc.allowedProperties[loc.key] = arguments.properties[loc.key];
-			}
 			if (loc.accessible && arguments.setOnModel)
-			{
-				loc.args = {};
-				loc.args.property = loc.key;
-				loc.args.value = loc.allowedProperties[loc.key];
-				$setProperty(argumentCollection=loc.args);
-			}
+				$setProperty(property=loc.key, value=loc.allowedProperties[loc.key]);
 		}
+
 		if (arguments.setOnModel)
-		{
 			return;
-		}
 	</cfscript>
-	<cfreturn loc.allowedProperties>
+	<cfreturn loc.allowedProperties />
 </cffunction>
 
 <cffunction name="$setProperty" returntype="void" access="public" output="false">
-	<cfargument name="property" type="string" required="true">
-	<cfargument name="value" type="any" required="true">
-	<cfargument name="associations" type="struct" required="false" default="#variables.wheels.class.associations#">
+	<cfargument name="property" type="string" required="true" />
+	<cfargument name="value" type="any" required="true" />
+	<cfargument name="associations" type="struct" required="false" default="#variables.wheels.class.associations#" />
 	<cfscript>
-		var loc = {};
-		loc.args = {};
-		loc.args.property = arguments.property;
-		loc.args.value = arguments.value;
 		if (IsObject(arguments.value))
-		{
 			this[arguments.property] = arguments.value;
-		}
 		else if (IsStruct(arguments.value) && StructKeyExists(arguments.associations, arguments.property) && arguments.associations[arguments.property].nested.allow && ListFindNoCase("belongsTo,hasOne", arguments.associations[arguments.property].type))
-		{
-			loc.args.association = arguments.associations[arguments.property];
-			$setOneToOneAssociationProperty(argumentCollection=loc.args);
-		}
+			$setOneToOneAssociationProperty(property=arguments.property, value=arguments.value, association=arguments.associations[arguments.property]);
 		else if (IsStruct(arguments.value) && StructKeyExists(arguments.associations, arguments.property) && arguments.associations[arguments.property].nested.allow && arguments.associations[arguments.property].type == "hasMany")
-		{
-			loc.args.association = arguments.associations[arguments.property];
-			$setCollectionAssociationProperty(argumentCollection=loc.args);
-		}
+			$setCollectionAssociationProperty(property=arguments.property, value=arguments.value, association=arguments.associations[arguments.property]);
 		else if (IsArray(arguments.value) && ArrayLen(arguments.value) && !IsObject(arguments.value[1]) && StructKeyExists(arguments.associations, arguments.property) && arguments.associations[arguments.property].nested.allow && arguments.associations[arguments.property].type == "hasMany")
-		{
-			loc.args.association = arguments.associations[arguments.property];
-			$setCollectionAssociationProperty(argumentCollection=loc.args);
-		}
+			$setCollectionAssociationProperty(property=arguments.property, value=arguments.value, association=arguments.associations[arguments.property]);
 		else
-		{
 			this[arguments.property] = arguments.value;
-		}
 	</cfscript>
+	<cfreturn />
 </cffunction>
 
 <cffunction name="$updatePersistedProperties" returntype="void" access="public" output="false">

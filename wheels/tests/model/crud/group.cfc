@@ -23,10 +23,8 @@
 	</cffunction>
 	
 	<cffunction name="test_max_works_with_group_functionality">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.r = model("post").findAll(select="id, authorid, title, MAX(posts.views) AS maxView", group="id, authorid, title")>
-			<cfset assert('loc.r.recordcount eq 5')>
-		</cfif>
+		<cfset loc.r = model("post").findAll(select="id, authorid, title, MAX(posts.views) AS maxView", group="id, authorid, title")>
+		<cfset assert('loc.r.recordcount eq 5')>
 	</cffunction>
 	
 	<cffunction name="test_group_functionality_works_with_pagination">

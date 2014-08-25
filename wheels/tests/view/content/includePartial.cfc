@@ -37,6 +37,7 @@
 			</cfcatch>
 		</cftry>
 		<cfset assert("!issimplevalue(result)")>
+		<cfset assert("result.type eq 'expression'")>
 	</cffunction>
 
 	<cffunction name="test_including_partial_with_query">

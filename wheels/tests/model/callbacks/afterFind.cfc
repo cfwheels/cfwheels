@@ -14,24 +14,18 @@
 	</cffunction>
 	
 	<cffunction name="test_setting_one_query_record">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.posts = model("post").findAll(maxRows=1, order="id DESC")>
-			<cfset assert("loc.posts.views[1] IS 102 AND loc.posts['title'][1] IS 'setTitle'")>
-		</cfif>
+		<cfset loc.posts = model("post").findAll(maxRows=1, order="id DESC")>
+		<cfset assert("loc.posts.views[1] IS 102 AND loc.posts['title'][1] IS 'setTitle'")>
 	</cffunction>
 
 	<cffunction name="test_setting_one_query_record_with_skipped_callback">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.posts = model("post").findAll(maxRows=1, order="id DESC")>
-			<cfset assert("loc.posts.views[1] IS 102 AND loc.posts['title'][1] IS 'setTitle'")>
-		</cfif>
+		<cfset loc.posts = model("post").findAll(maxRows=1, order="id DESC")>
+		<cfset assert("loc.posts.views[1] IS 102 AND loc.posts['title'][1] IS 'setTitle'")>
 	</cffunction>
 
 	<cffunction name="test_setting_multiple_query_records">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.posts = model("post").findAll(order="id DESC")>
-			<cfset assert("loc.posts.views[1] IS 102 AND loc.posts.views[2] IS 103 AND loc.posts['title'][1] IS 'setTitle'")>
-		</cfif>
+		<cfset loc.posts = model("post").findAll(order="id DESC")>
+		<cfset assert("loc.posts.views[1] IS 102 AND loc.posts.views[2] IS 103 AND loc.posts['title'][1] IS 'setTitle'")>
 	</cffunction>
 
 	<cffunction name="test_setting_multiple_query_records_with_skipped_callback">
@@ -60,12 +54,10 @@
 	</cffunction>
 
 	<cffunction name="test_creation_of_new_column_and_property">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.posts = model("post").findAll(order="id DESC")>
-			<cfset assert("loc.posts.something[1] eq 'hello world'")>
-			<cfset loc.posts = model("post").findAll(returnAs="objects")>
-			<cfset assert("loc.posts[1].something eq 'hello world'")>
-		</cfif>
+		<cfset loc.posts = model("post").findAll(order="id DESC")>
+		<cfset assert("loc.posts.something[1] eq 'hello world'")>
+		<cfset loc.posts = model("post").findAll(returnAs="objects")>
+		<cfset assert("loc.posts[1].something eq 'hello world'")>
 	</cffunction>
 
 </cfcomponent>

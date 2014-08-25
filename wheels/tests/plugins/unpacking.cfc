@@ -1,7 +1,15 @@
 <cfcomponent extends="wheelsMapping.Test">
 
 	<cffunction name="setup">
-		<cfset loc.config = {path="wheels", fileName="Plugins", method="init", pluginPath="/wheelsMapping/tests/_assets/plugins/unpacking", deletePluginDirectories=false, overwritePlugins=false, loadIncompatiblePlugins=true}>
+		<cfset loc.config = {
+			path="wheels"
+			,fileName="Plugins"
+			,method="init"
+			,pluginPath="/wheelsMapping/tests/_assets/plugins/unpacking"
+			,deletePluginDirectories=false
+			,overwritePlugins=false
+			,loadIncompatiblePlugins=true
+		}>
 		<cfset $deleteTestFolders()>
 	</cffunction>
 
@@ -27,16 +35,14 @@
 	</cffunction>
 
 	<cffunction name="test_unpacking_plugin">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.PluginObj = $pluginObj(loc.config)>
-			<cfdirectory action="list" directory="#expandPath(loc.config.pluginPath)#" type="dir" name="loc.q">
-			<cfset loc.dirs = "">
-			<cfloop query="loc.q">
-				<cfset loc.dirs = ListAppend(loc.dirs, name)>
-			</cfloop>
-			<cfset assert('ListFind(loc.dirs, "testdefaultassignmixins")')>
-			<cfset assert('ListFind(loc.dirs, "testglobalmixins")')>
-		</cfif>
+		<cfset loc.PluginObj = $pluginObj(loc.config)>
+		<cfdirectory action="list" directory="#expandPath(loc.config.pluginPath)#" type="dir" name="loc.q">
+		<cfset loc.dirs = "">
+		<cfloop query="loc.q">
+			<cfset loc.dirs = ListAppend(loc.dirs, name)>
+		</cfloop>
+		<cfset assert('ListFind(loc.dirs, "testdefaultassignmixins")')>
+		<cfset assert('ListFind(loc.dirs, "testglobalmixins")')>
 	</cffunction>
 
 </cfcomponent>

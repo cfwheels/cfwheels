@@ -4,7 +4,7 @@
 		<cfscript>
 			loc.e = {request_method="GET", server_port=80};
 			loc.r = $cgiScope(keys="request_method,server_port");
-			assert('loc.e.equals(loc.r)');
+			$assert('loc.e.equals(loc.r)');
 		</cfscript>
 	</cffunction>
 
@@ -13,7 +13,7 @@
 			loc.e = {request_method="GET", server_port=80, path_info="test/test/1"};
 			loc.cgiScope = {request_method="GET", server_port=80, path_info="test/test/1"};
 			loc.r = $cgiScope(keys="request_method,server_port,path_info", cgiScope=loc.cgiScope);
-			assert('loc.e.equals(loc.r)');
+			$assert('loc.e.equals(loc.r)');
 		</cfscript>
 	</cffunction> --->
 

@@ -6,7 +6,7 @@
 		<cfset caches(actions="browseByUser,browseByTitle", time=30)>
 	'
 	categories="controller-initialization,caching" chapters="caching" functions="">
-	<cfargument name="action" type="string" required="false" default="" hint="Action(s) to cache. This argument is also aliased as `actions`. If you don't pass in an action to cache Wheels will cache all actions for the controller.">
+	<cfargument name="action" type="string" required="false" default="" hint="Action(s) to cache. This argument is also aliased as `actions`.">
 	<cfargument name="time" type="numeric" required="false" hint="Minutes to cache the action(s) for.">
 	<cfargument name="static" type="boolean" required="false" hint="Set to `true` to tell Wheels that this is a static page and that it can skip running the controller filters (before and after filters set on actions). Please note that the `onSessionStart` and `onRequestStart` events still execute though.">
 	<cfscript>
@@ -32,48 +32,24 @@
 
 <cffunction name="$addCachableAction" returntype="void" access="public" output="false">
 	<cfargument name="action" type="struct" required="true">
-	<cfscript>
-		var loc = {};
-		ArrayAppend(variables.wheels.class.cachableActions, arguments.action);
-	</cfscript>
+	<cfset ArrayAppend(variables.$class.cachableActions, arguments.action)>
 </cffunction>
 
 <cffunction name="$clearCachableActions" returntype="void" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		ArrayClear(variables.wheels.class.cachableActions);
-	</cfscript>
+	<cfset ArrayClear(variables.$class.cachableActions)>
 </cffunction>
 
 <cffunction name="$setCachableActions" returntype="void" access="public" output="false">
 	<cfargument name="actions" type="array" required="true">
-	<cfscript>
-		var loc = {};
-		variables.wheels.class.cachableActions = arguments.actions;
-	</cfscript>
+	<cfset variables.$class.cachableActions = arguments.actions>
 </cffunction>
 
 <cffunction name="$cachableActions" returntype="array" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		loc.returnValue = variables.wheels.class.cachableActions;
-	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn variables.$class.cachableActions>
 </cffunction>
 
 <cffunction name="$hasCachableActions" returntype="boolean" access="public" output="false">
-	<cfscript>
-		var loc = {};
-		if (ArrayIsEmpty($cachableActions()))
-		{
-			loc.returnValue = false;
-		}
-		else
-		{
-			loc.returnValue = true;
-		}
-	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn !ArrayIsEmpty($cachableActions())>
 </cffunction>
 
 <cffunction name="$cacheSettingsForAction" returntype="any" access="public" output="false">

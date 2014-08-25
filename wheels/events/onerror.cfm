@@ -25,7 +25,7 @@
 	<cfargument name="eventName" type="any" required="true">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(application, "wheels"))
+		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "initialized"))
 		{
 			if (application.wheels.sendEmailOnError && Len(application.wheels.errorEmailAddress))
 			{

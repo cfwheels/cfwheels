@@ -130,12 +130,12 @@
 		if (ListLen(loc.label) == 6)
 			arguments.label = ListGetAt(loc.label, 1) & "," & ListGetAt(loc.label, 2) & "," & ListGetAt(loc.label, 3);
 		if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect")
-			loc.returnValue &= dateSelect(argumentCollection=arguments);
+			loc.returnValue = loc.returnValue & dateSelect(argumentCollection=arguments);
 		else
-			loc.returnValue &= dateSelectTags(argumentCollection=arguments);
+			loc.returnValue = loc.returnValue & dateSelectTags(argumentCollection=arguments);
 
 		// separate date and time with a string ("-" by default)
-		loc.returnValue &= loc.separator;
+		loc.returnValue = loc.returnValue & loc.separator;
 
 		// create time portion
 		arguments.order = arguments.timeOrder;
@@ -144,9 +144,9 @@
 		if (ListLen(loc.label) == 6)
 			arguments.label = ListGetAt(loc.label, 4) & "," & ListGetAt(loc.label, 5) & "," & ListGetAt(loc.label, 6);
 		if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect")
-			loc.returnValue &= timeSelect(argumentCollection=arguments);
+			loc.returnValue = loc.returnValue & timeSelect(argumentCollection=arguments);
 		else
-			loc.returnValue &= timeSelectTags(argumentCollection=arguments);
+			loc.returnValue = loc.returnValue & timeSelectTags(argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

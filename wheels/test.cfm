@@ -500,9 +500,7 @@
 	<cfset loc.resultKey = "WheelsTests">
 
 	<!--- save the original environment for overloaded --->
-	<cfif NOT StructKeyExists(server, "bluedragon")>
-		<cfset loc.savedenv = duplicate(application)>
-	</cfif>
+	<cfset loc.savedenv = duplicate(application)>
 
 	<!--- not only can we specify the package, but also the test we want to run --->
 	<cfset loc.test = "">
@@ -523,9 +521,7 @@
 	</cfloop>
 
 	<!--- swap back the enviroment --->
-	<cfif NOT StructKeyExists(server, "bluedragon")>
-		<cfset structappend(application, loc.savedenv, true)>
-	</cfif>
+	<cfset structappend(application, loc.savedenv, true)>
 
 	<!--- return the results --->
 	<cfreturn $results(loc.resultKey)>
@@ -536,12 +532,10 @@
 	<cfargument name="component" type="string" required="true" hint="path to the component you want to check as a valid test">
 	<cfargument name="shouldExtend" type="string" required="false" default="Test" hint="if the component should extend a base component to be a valid test">
 	<cfset var loc = {}>
-	<cfif NOT StructKeyExists(server, "bluedragon")>
-		<cfif len(arguments.shouldExtend)>
-			<cfset loc.metadata = GetComponentMetaData(arguments.component)>
-			<cfif not structkeyexists(loc.metadata, "extends") or loc.metadata.extends.fullname does not contain arguments.shouldExtend>
-				<cfreturn false>
-			</cfif>
+	<cfif len(arguments.shouldExtend)>
+		<cfset loc.metadata = GetComponentMetaData(arguments.component)>
+		<cfif not structkeyexists(loc.metadata, "extends") or loc.metadata.extends.fullname does not contain arguments.shouldExtend>
+			<cfreturn false>
 		</cfif>
 	</cfif>
 	<cfreturn true>

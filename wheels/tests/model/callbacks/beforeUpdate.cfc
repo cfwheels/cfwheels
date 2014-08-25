@@ -16,10 +16,8 @@
 	</cffunction>
 
 	<cffunction name="test_existing_object_with_skipped_callback">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.obj.save(callbacks=false, transaction="rollback")>
-			<cfset assert("NOT StructKeyExists(loc.obj, 'setByCallback')")>
-		</cfif>
+		<cfset loc.obj.save(callbacks=false, transaction="rollback")>
+		<cfset assert("NOT StructKeyExists(loc.obj, 'setByCallback')")>
 	</cffunction>
 
 </cfcomponent>

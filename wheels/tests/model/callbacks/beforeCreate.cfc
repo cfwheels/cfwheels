@@ -14,10 +14,8 @@
 	</cffunction>
 
 	<cffunction name="test_new_object_with_skipped_callback">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.obj = model("tag").create(name="mustSetAtLeastOnePropertyOrCreateFails", transaction="rollback", callbacks=false)>
-			<cfset assert("NOT StructKeyExists(loc.obj, 'setByCallback')")>
-		</cfif>
+		<cfset loc.obj = model("tag").create(name="mustSetAtLeastOnePropertyOrCreateFails", transaction="rollback", callbacks=false)>
+		<cfset assert("NOT StructKeyExists(loc.obj, 'setByCallback')")>
 	</cffunction>
 
 </cfcomponent>

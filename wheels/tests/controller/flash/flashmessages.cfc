@@ -126,10 +126,8 @@
 		<cfset loc.controller.flashInsert(someThing="")>
 		<cfset loc.r = loc.controller.flashMessages()>
 		<cfset loc.r = loc.controller.flashMessages()>
-		<cfif application.wheels.serverName IS "Railo" and application.wheels.serverversion.startsWith("3.")>
+		<cfif application.wheels.serverName eq "Railo" and application.wheels.serverversion.startsWith("3.")>
 			<cfset loc.e = 'class="SOMETHINGMessage"'>
-		<cfelseif application.wheels.serverName IS "OpenBD">
-			<cfset loc.e = 'class="somethingMessage"'>
 		<cfelse>
 			<cfset loc.e = 'class="someThingMessage"'>
 		</cfif>
@@ -145,11 +143,7 @@
 	<cffunction name="run_casing_of_class_attribute_upper">
 		<cfset loc.controller.flashInsert(SOMETHING="")>
 		<cfset loc.r = loc.controller.flashMessages()>
-		<cfif application.wheels.serverName IS "OpenBD">
-			<cfset loc.e = 'class="somethingMessage"'>
-		<cfelse>
-			<cfset loc.e = 'class="SOMETHINGMessage"'>
-		</cfif>
+		<cfset loc.e = 'class="SOMETHINGMessage"'>
 		<cfset assert('Find(loc.e, loc.r)')>
 	</cffunction>
 

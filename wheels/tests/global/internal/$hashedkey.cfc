@@ -17,36 +17,34 @@
 	</cffunction>
 
 	<cffunction name="test_same_output">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.png')#" variable="loc.binaryData">
-			<cftransaction action="begin">
-				<cfset loc.photo = model("photo").findOne()>
-				<cfset loc.photo.update(filename="somefilename", fileData=loc.binaryData)>
-				<cfset loc.photo = model("photo").findAll(where="id = #loc.photo.id#")>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset loc.a = []>
-			<cfset loc.a[1] = "petruzzi">
-			<cfset loc.a[2] = "gibson">
-			<cfset loc.query = QueryNew('a,b,c,d,e')>
-			<cfset QueryAddRow(loc.query, 1)>
-			<cfset QuerySetCell(loc.query, "a", "tony")>
-			<cfset QuerySetCell(loc.query, "b", "per")>
-			<cfset QuerySetCell(loc.query, "c", "james")>
-			<cfset QuerySetCell(loc.query, "d", "chris")>
-			<cfset QuerySetCell(loc.query, "e", "raul")>
-			<cfset loc.a[3] = loc.query>
-			<cfset loc.a[4] = [1,2,3,4,5,6]>
-			<cfset loc.a[5] = {a=1,b=2,c=3,d=4}>
-			<cfset loc.a[6] = loc.photo>
-			<cfset loc.args = {}>
-			<cfset loc.args.a = loc.a>
-			<cfset loc.e = $hashedKey(argumentCollection=loc.args)>
-			<cfset arrayswap(loc.a, 1,3)>
-			<cfset arrayswap(loc.a, 4,5)>
-			<cfset loc.r = $hashedKey(argumentCollection=loc.args)>
-			<cfset assert('loc.e eq loc.r')>
-		</cfif>
+		<cffile action="readbinary" file="#expandpath('wheels/tests/_assets/files/cfwheels-logo.png')#" variable="loc.binaryData">
+		<cftransaction action="begin">
+			<cfset loc.photo = model("photo").findOne()>
+			<cfset loc.photo.update(filename="somefilename", fileData=loc.binaryData)>
+			<cfset loc.photo = model("photo").findAll(where="id = #loc.photo.id#")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset loc.a = []>
+		<cfset loc.a[1] = "petruzzi">
+		<cfset loc.a[2] = "gibson">
+		<cfset loc.query = QueryNew('a,b,c,d,e')>
+		<cfset QueryAddRow(loc.query, 1)>
+		<cfset QuerySetCell(loc.query, "a", "tony")>
+		<cfset QuerySetCell(loc.query, "b", "per")>
+		<cfset QuerySetCell(loc.query, "c", "james")>
+		<cfset QuerySetCell(loc.query, "d", "chris")>
+		<cfset QuerySetCell(loc.query, "e", "raul")>
+		<cfset loc.a[3] = loc.query>
+		<cfset loc.a[4] = [1,2,3,4,5,6]>
+		<cfset loc.a[5] = {a=1,b=2,c=3,d=4}>
+		<cfset loc.a[6] = loc.photo>
+		<cfset loc.args = {}>
+		<cfset loc.args.a = loc.a>
+		<cfset loc.e = $hashedKey(argumentCollection=loc.args)>
+		<cfset arrayswap(loc.a, 1,3)>
+		<cfset arrayswap(loc.a, 4,5)>
+		<cfset loc.r = $hashedKey(argumentCollection=loc.args)>
+		<cfset assert('loc.e eq loc.r')>
 	</cffunction>
 
 </cfcomponent>

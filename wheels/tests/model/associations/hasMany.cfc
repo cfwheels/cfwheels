@@ -62,31 +62,29 @@
 	</cffunction>
 
 	<cffunction name="test_removing_child_by_nullifying_foreign_key">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.author = model("author").findOne(order="id")>
-			<cfset loc.post = model("post").findOne(order="id DESC")>
-			<cftransaction>
-				<cfset loc.author.removePost(post=loc.post, transaction="none")>
-				<!--- we need to test if authorId is set to blank on the loc.post object as well and not just in the database! --->
-				<cfset loc.post.reload()>
-				<cftransaction action="rollback" />
-			</cftransaction>		
-			<cfset assert("loc.post.authorId IS ''")>
+		<cfset loc.author = model("author").findOne(order="id")>
+		<cfset loc.post = model("post").findOne(order="id DESC")>
+		<cftransaction>
+			<cfset loc.author.removePost(post=loc.post, transaction="none")>
+			<!--- we need to test if authorId is set to blank on the loc.post object as well and not just in the database! --->
 			<cfset loc.post.reload()>
-			<cftransaction>
-				<cfset loc.author.removePost(key=loc.post.id, transaction="none")>
-				<cfset loc.post.reload()>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert("loc.post.authorId IS ''")>
+			<cftransaction action="rollback" />
+		</cftransaction>		
+		<cfset assert("loc.post.authorId IS ''")>
+		<cfset loc.post.reload()>
+		<cftransaction>
+			<cfset loc.author.removePost(key=loc.post.id, transaction="none")>
 			<cfset loc.post.reload()>
-			<cftransaction>
-				<cfset model("post").updateByKey(key=loc.post.id, authorId="", transaction="none")>
-				<cfset loc.post.reload()>
-				<cftransaction action="rollback" />
-			</cftransaction>		
-			<cfset assert("loc.post.authorId IS ''")>
-		</cfif>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert("loc.post.authorId IS ''")>
+		<cfset loc.post.reload()>
+		<cftransaction>
+			<cfset model("post").updateByKey(key=loc.post.id, authorId="", transaction="none")>
+			<cfset loc.post.reload()>
+			<cftransaction action="rollback" />
+		</cftransaction>		
+		<cfset assert("loc.post.authorId IS ''")>
 	</cffunction>
 
 	<cffunction name="test_deleting_child">
@@ -111,21 +109,19 @@
 	</cffunction>
 
 	<cffunction name="test_removing_all_children_by_nullifying_foreign_keys">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cfset loc.author = model("author").findOne(order="id")>
-			<cftransaction>
-				<cfset loc.author.removeAllPosts(transaction="none")>
-				<cfset loc.dynamicResult = loc.author.postCount()>
-				<cfset loc.remainingCount = model("post").count()>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cftransaction>
-				<cfset model("post").updateAll(authorId="", where="authorId=#loc.author.id#", transaction="none")>
-				<cfset loc.coreResult = loc.author.postCount()>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert("loc.dynamicResult IS 0 AND loc.coreResult IS 0 AND loc.remainingCount IS 5")>
-		</cfif>
+		<cfset loc.author = model("author").findOne(order="id")>
+		<cftransaction>
+			<cfset loc.author.removeAllPosts(transaction="none")>
+			<cfset loc.dynamicResult = loc.author.postCount()>
+			<cfset loc.remainingCount = model("post").count()>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cftransaction>
+			<cfset model("post").updateAll(authorId="", where="authorId=#loc.author.id#", transaction="none")>
+			<cfset loc.coreResult = loc.author.postCount()>
+			<cftransaction action="rollback" />
+		</cftransaction>		
+		<cfset assert("loc.dynamicResult IS 0 AND loc.coreResult IS 0 AND loc.remainingCount IS 5")>
 	</cffunction>
 
 	<cffunction name="test_deleting_all_children">
@@ -193,17 +189,15 @@
 	</cffunction>
 
 	<cffunction name="test_dependency_removeAll">
-		<cfif NOT StructKeyExists(server, "bluedragon")>
-			<cftransaction>
-				<cfset loc.postWithAuthor = model("post").findOne(order="id")>
-				<cfset loc.author = model("author").findByKey(key=loc.postWithAuthor.authorId)>
-				<cfset loc.author.hasMany(name="posts", dependent="removeAll")>
-				<cfset loc.author.delete()>
-				<cfset loc.posts = model("post").findAll(where="authorId=#loc.author.id#")>
-				<cftransaction action="rollback" />
-			</cftransaction>
-			<cfset assert("loc.posts.recordcount eq 0")>
-		</cfif>
+		<cftransaction>
+			<cfset loc.postWithAuthor = model("post").findOne(order="id")>
+			<cfset loc.author = model("author").findByKey(key=loc.postWithAuthor.authorId)>
+			<cfset loc.author.hasMany(name="posts", dependent="removeAll")>
+			<cfset loc.author.delete()>
+			<cfset loc.posts = model("post").findAll(where="authorId=#loc.author.id#")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+		<cfset assert("loc.posts.recordcount eq 0")>
 	</cffunction>
 
 	<cffunction name="test_getting_children_with_join_key">
