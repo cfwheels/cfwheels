@@ -113,7 +113,7 @@ public class CFWheelsCoreIT {
 	
 	@Before
 	public void setUp() throws IOException {
-		if (! currentContextPath.equals(contextPath)) {
+		if (! currentContextPath.equals(contextPath) && ! contextPath.equals("/subfolder/")) {
 			recreateTestDatabase();
 			currentContextPath = contextPath;
 		}
