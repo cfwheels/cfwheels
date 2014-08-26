@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +34,7 @@ public class CFWheelsCoreIT {
 	static private CustomHtmlUnitDriver driver;
 	static private String baseUrl;
 	static private boolean testOracleEmulation;
+	static private String currentContextPath="";
 	private String contextPath;
 	private String packageName;
 
@@ -107,7 +109,14 @@ public class CFWheelsCoreIT {
 			Files.write(Paths.get("target/failsafe-reports/_deploy.html"), pageSource.getBytes());
 		}
 
-		recreateTestDatabase();
+	}
+	
+	@Before
+	public void setUp() throws IOException {
+		if (! currentContextPath.equals(contextPath) && ! contextPath.equals("/subfolder/")) {
+			recreateTestDatabase();
+			currentContextPath = contextPath;
+		}
 	}
 
 	public static void main(String[] args) throws Exception {
