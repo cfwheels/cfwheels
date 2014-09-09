@@ -112,7 +112,7 @@ public class CFWheelsCoreIT {
 	}
 	
 	@Before
-	public void setUp() throws IOException {
+	public void setUp() throws Exception {
 		if (! currentContextPath.equals(contextPath) && ! contextPath.equals("/subfolder/")) {
 			recreateTestDatabase();
 			currentContextPath = contextPath;
@@ -124,7 +124,7 @@ public class CFWheelsCoreIT {
 		setUpServices();
 	}
 
-	private static void recreateTestDatabase() throws IOException {
+	private static void recreateTestDatabase() throws Exception {
 		if (testOracleEmulation) {
 			String content = new String(Files.readAllBytes(Paths.get("wheels/Connection.cfc")));
 			content = content.replace("loc.adapterName = \"H2\"","loc.adapterName = 'Oracle'");
@@ -142,6 +142,7 @@ public class CFWheelsCoreIT {
 		if ("true".equals(System.getProperty("testParallelStart"))) {
 			hitHomepageWithParallelRequest();
 		}
+		driver.get(baseUrl);
 		System.out.println("test database re-create");
 		driver.get(baseUrl + "/index.cfm?controller=wheels&action=wheels&view=tests&type=core&reload=true&package=controller.caching");
 		String postfix = "";

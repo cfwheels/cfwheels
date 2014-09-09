@@ -12,10 +12,11 @@ usage:
   - "mvn verify -P jetty,railo,oracle-emu" runs all CFWheels tests on Oracle emulation via embedded H2 database
   - "mvn verify -P jetty,railo,mysql" runs all CFWheels tests on Travis-CI MySQL database
   - "mvn verify -P jetty,railo,postgresal" runs all CFWheels tests on Travis-CI postgreSQL database
+  - "mvn verify -P jetty,railo,plugins" donwload plugins and run all tests with it
   - "mvn clean verify -P mssql" upload and runs all CFWheels tests on ACF11 and Microsoft SQLServer on VivioTech test server
   - "mvn clean verify -P mssql,acf9oracle" upload and deploy CFWheels on test server and run all tests also on ACF9 Oracle database 
   - "mvn clean verify -P oracle" copy and runs all CFWheels tests on local ColdFusion8 and Oracle (or whatever database configured locally)
-  - "mvn clean verify -P jetty,openbd" donwload OpenBD and run all tests on it (preliminary support)
+  - "mvn clean verify -P jetty,openbd" download OpenBD and run all tests on it (preliminary support)
 
 Benefits of embedded-container-test versus full-integration-test
   #1 clean test data (data is not shared with nor contaminated by other processes)
@@ -47,6 +48,12 @@ Benefits of embedded-container-test versus full-integration-test
 		<!-- settings for Oracle emulation -->
 		<testOracleEmulation>false</testOracleEmulation>
 		<webXml>src/test/xml/web.xml</webXml>
+		<!-- plugins IDs -->
+		<scaffold>9</scaffold>
+		<pluginManager>8</pluginManager>
+		<dBMigrate>28</dBMigrate>
+		<localizator>89</localizator>
+		<multimodule>93</multimodule>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -254,7 +261,10 @@ Benefits of embedded-container-test versus full-integration-test
 										<delete dir="wheels/tests/_assets/plugins/removing/TestGlobalMixins"/>
 										<delete dir="wheels/tests/_assets/plugins/unpacking/TestDefaultAssignMixins"/>
 										<delete dir="wheels/tests/_assets/plugins/unpacking/TestGlobalMixins"/>
-									</target>
+									    <delete>
+										    <fileset dir="plugins" includes="**/*.zip"/>
+										</delete>
+  									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -462,6 +472,81 @@ Benefits of embedded-container-test versus full-integration-test
 								<goals>
 									<goal>run</goal>
 								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!-- to activate, execute mvn verify -Pjetty,railo,plugins -->
+			<id>plugins</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>wagon-maven-plugin</artifactId>
+						<version>1.0-beta-5</version>
+						<executions>
+							<execution>
+								<id>download-pluginmanager</id>
+								<phase>test</phase>
+								<goals>
+									<goal>download-single</goal>
+								</goals>
+								<configuration>
+									<fromFile>${pluginManager}</fromFile>
+									<url>http://cfwheels.org/plugins/download</url>
+									<toFile>plugins/PluginManager-${pluginManager}.zip</toFile>
+								</configuration>
+							</execution>
+							<execution>
+								<id>download-scaffold</id>
+								<phase>test</phase>
+								<goals>
+									<goal>download-single</goal>
+								</goals>
+								<configuration>
+									<fromFile>${scaffold}</fromFile>
+									<url>http://cfwheels.org/plugins/download</url>
+									<toFile>plugins/Scaffold-${scaffold}.zip</toFile>
+								</configuration>
+							</execution>
+							<execution>
+								<id>download-dbmigrate</id>
+								<phase>test</phase>
+								<goals>
+									<goal>download-single</goal>
+								</goals>
+								<configuration>
+									<fromFile>${dBMigrate}</fromFile>
+									<url>http://cfwheels.org/plugins/download</url>
+									<toFile>plugins/DBMigrate-${dBMigrate}.zip</toFile>
+								</configuration>
+							</execution>
+							<execution>
+								<id>download-localizator</id>
+								<phase>test</phase>
+								<goals>
+									<goal>download-single</goal>
+								</goals>
+								<configuration>
+									<fromFile>${localizator}</fromFile>
+									<url>http://cfwheels.org/plugins/download</url>
+									<toFile>plugins/Localizator-${localizator}.zip</toFile>
+								</configuration>
+							</execution>
+							<execution>
+								<id>download-multimodule</id>
+								<phase>test</phase>
+								<goals>
+									<goal>download-single</goal>
+								</goals>
+								<configuration>
+									<fromFile>${multimodule}</fromFile>
+									<url>http://cfwheels.org/plugins/download</url>
+									<toFile>plugins/MultiModule-${multimodule}.zip</toFile>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
