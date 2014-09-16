@@ -4,6 +4,12 @@
 		// abort if called from incorrect file
 		$abortInvalidRequest();
 
+		//fix for shared application name issue 359
+		if(!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "eventpath"))
+		{
+			$simpleLock(execute="onApplicationStart", name="wheelsReloadLock", type="exclusive", timeout=180);
+		}
+
 		// need to setup the wheels struct up here since it's used to store debugging info below if this is a reload request
 		$initializeRequestScope();
 
@@ -42,7 +48,7 @@
 		{
 			request.cgi = $cgiScope();
 		}
-		
+
 		// reload the plugins on each request if cachePlugins is set to false
 		if (!application.wheels.cachePlugins)
 		{
