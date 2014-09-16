@@ -86,7 +86,7 @@
 		margin-bottom: 15px;
 		background: #ffffe0;
 	}
-	#content code
+	#content code, #content tt
 	{
 		font-family: Courier;
 		font-size: 12px;
