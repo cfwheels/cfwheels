@@ -63,18 +63,13 @@
 			}
 			if (Len(loc.value))
 			{
-				loc["null"] = false;
+				loc.null = false;
 			}
 			else
 			{
-				loc["null"] = true;
+				loc.null = true;
 			}
-			loc.param = {};
-			loc.param.value = loc.value;
-			loc.param.type = variables.wheels.class.properties[loc.key].type;
-			loc.param.dataType = variables.wheels.class.properties[loc.key].dataType;
-			loc.param.scale = variables.wheels.class.properties[loc.key].scale;
-			loc.param["null"] = loc["null"];
+			loc.param = {value=loc.value, type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale, null=loc.null};
 			ArrayAppend(arguments.sql, loc.param);
 			if (loc.i < loc.iEnd)
 			{
@@ -212,6 +207,7 @@
 	<cfargument name="returnAs" type="string" required="true">
 	<cfargument name="renameFields" type="boolean" required="false" default="true">
 	<cfargument name="addCalculatedProperties" type="boolean" required="false" default="true">
+	<cfargument name="useExpandedColumnAliases" type="boolean" required="false" default="#application.wheels.useExpandedColumnAliases#">
 	<cfscript>
 		var loc = {};
 
@@ -286,9 +282,14 @@
 							}
 							else if (loc.j > 1)
 							{
-								if (arguments.returnAs != "query")
+								if (arguments.useExpandedColumnAliases)
 								{
-									// when creating object instances on none base models we need the model name prepended
+									// when on included models and using the new setting we flag every property as a duplicate so that the model name always gets prepended
+									loc.flagAsDuplicate  = true;
+								}
+								else if (!arguments.useExpandedColumnAliases && arguments.returnAs != "query")
+								{
+									// with the old setting we only do it when we're returning object(s) since when creating instances on none base models we need the model name prepended
 									loc.flagAsDuplicate  = true;
 								}
 							}
@@ -660,7 +661,7 @@
 
 			// create a reference to current class in include string and get its association info
 			loc.class = model(ListLast(loc.levels));
-			loc.classAssociations = loc.class.$getModelClassData().associations;
+			loc.classAssociations = loc.class.$classData().associations;
 
 			// throw an error if the association was not found
 			if (application.wheels.showErrorInformation && !StructKeyExists(loc.classAssociations, loc.name))
@@ -675,30 +676,30 @@
 			{
 				if (loc.classAssociations[loc.name].type == "belongsTo")
 				{
-					loc.classAssociations[loc.name].foreignKey = loc.associatedClass.$getModelClassData().modelName & Replace(loc.associatedClass.$getModelClassData().keys, ",", ",#loc.associatedClass.$getModelClassData().modelName#", "all");
+					loc.classAssociations[loc.name].foreignKey = loc.associatedClass.$classData().modelName & Replace(loc.associatedClass.$classData().keys, ",", ",#loc.associatedClass.$classData().modelName#", "all");
 				}
 				else
 				{
-					loc.classAssociations[loc.name].foreignKey = loc.class.$getModelClassData().modelName & Replace(loc.class.$getModelClassData().keys, ",", ",#loc.class.$getModelClassData().modelName#", "all");
+					loc.classAssociations[loc.name].foreignKey = loc.class.$classData().modelName & Replace(loc.class.$classData().keys, ",", ",#loc.class.$classData().modelName#", "all");
 				}
 			}
 			if (!Len(loc.classAssociations[loc.name].joinKey))
 			{
 				if (loc.classAssociations[loc.name].type == "belongsTo")
 				{
-					loc.classAssociations[loc.name].joinKey = loc.associatedClass.$getModelClassData().keys;
+					loc.classAssociations[loc.name].joinKey = loc.associatedClass.$classData().keys;
 				}
 				else
 				{
-					loc.classAssociations[loc.name].joinKey = loc.class.$getModelClassData().keys;
+					loc.classAssociations[loc.name].joinKey = loc.class.$classData().keys;
 				}
 			}
-			loc.classAssociations[loc.name].tableName = loc.associatedClass.$getModelClassData().tableName;
-			loc.classAssociations[loc.name].columnList = loc.associatedClass.$getModelClassData().columnList;
-			loc.classAssociations[loc.name].properties = loc.associatedClass.$getModelClassData().properties;
-			loc.classAssociations[loc.name].propertyList = loc.associatedClass.$getModelClassData().propertyList;
-			loc.classAssociations[loc.name].calculatedProperties = loc.associatedClass.$getModelClassData().calculatedProperties;
-			loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClass.$getModelClassData().calculatedPropertyList;
+			loc.classAssociations[loc.name].tableName = loc.associatedClass.$classData().tableName;
+			loc.classAssociations[loc.name].columnList = loc.associatedClass.$classData().columnList;
+			loc.classAssociations[loc.name].properties = loc.associatedClass.$classData().properties;
+			loc.classAssociations[loc.name].propertyList = loc.associatedClass.$classData().propertyList;
+			loc.classAssociations[loc.name].calculatedProperties = loc.associatedClass.$classData().calculatedProperties;
+			loc.classAssociations[loc.name].calculatedPropertyList = loc.associatedClass.$classData().calculatedPropertyList;
 
 			// create the join string if it hasn't already been done
 			if (!StructKeyExists(loc.classAssociations[loc.name], "join"))
@@ -708,7 +709,7 @@
 				// alias the table as the association name when joining to itself
 				if (ListFindNoCase(loc.tables, loc.classAssociations[loc.name].tableName))
 				{
-					loc.join &= " AS " & loc.classAssociations[loc.name].pluralizedName;;
+					loc.join = variables.wheels.class.adapter.$tableAlias(loc.join,loc.classAssociations[loc.name].pluralizedName);
 				}
 
 				loc.join &= " ON ";
@@ -753,7 +754,7 @@
 						loc.tableName = loc.classAssociations[loc.name].pluralizedName;;
 					}
 
-					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$getModelClassData().tableName#.#loc.class.$getModelClassData().properties[loc.first].column# = #loc.tableName#.#loc.associatedClass.$getModelClassData().properties[loc.second].column#");
+					loc.toAppend = ListAppend(loc.toAppend, "#loc.class.$classData().tableName#.#loc.class.$classData().properties[loc.first].column# = #loc.tableName#.#loc.associatedClass.$classData().properties[loc.second].column#");
 					if (!arguments.includeSoftDeletes && loc.associatedClass.$softDeletion())
 					{
 						loc.toAppend = ListAppend(loc.toAppend, "#loc.associatedClass.tableName()#.#loc.associatedClass.$softDeleteColumn()# IS NULL");

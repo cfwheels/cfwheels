@@ -61,11 +61,11 @@
 		// make sure that the tablename has the respected prefix
 		table(getTableNamePrefix() & tableName());
 
-		// load the database adapter
-		variables.wheels.class.adapter = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#", fileName="Connection", method="init", datasource="#variables.wheels.class.connection.datasource#", username="#variables.wheels.class.connection.username#", password="#variables.wheels.class.connection.password#");
-
 		if (!IsBoolean(variables.wheels.class.tableName) || variables.wheels.class.tableName)
 		{
+			// load the database adapter
+			variables.wheels.class.adapter = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#", fileName="Connection", method="init", datasource="#variables.wheels.class.connection.datasource#", username="#variables.wheels.class.connection.username#", password="#variables.wheels.class.connection.password#");
+
 			// get columns for the table
 			loc.columns = variables.wheels.class.adapter.$getColumns(tableName());
 
@@ -130,31 +130,31 @@
 						{
 							loc.defaultValidationsAllowBlank = true;
 						}
-						if (!ListFindNoCase(primaryKeys(), loc.property) && !variables.wheels.class.properties[loc.property].nullable && !Len(loc.columns["column_default_value"][loc.i]) && !$validationExists(propertyName=loc.property, validation="validatesPresenceOf"))
+						if (!ListFindNoCase(primaryKeys(), loc.property) && !variables.wheels.class.properties[loc.property].nullable && !Len(loc.columns["column_default_value"][loc.i]) && !$validationExists(property=loc.property, validation="validatesPresenceOf"))
 						{
 							validatesPresenceOf(properties=loc.property);
 						}
 						
 						// always allowblank if a database default or validatesPresenceOf() has been set
-						if (Len(loc.columns["column_default_value"][loc.i]) || $validationExists(propertyName=loc.property, validation="validatesPresenceOf"))
+						if (Len(loc.columns["column_default_value"][loc.i]) || $validationExists(property=loc.property, validation="validatesPresenceOf"))
 						{
 							loc.defaultValidationsAllowBlank = true;
 						}
 
 						// set length validations if the developer has not
-						if (variables.wheels.class.properties[loc.property].validationtype == "string" && !$validationExists(propertyName=loc.property, validation="validatesLengthOf"))
+						if (variables.wheels.class.properties[loc.property].validationtype == "string" && !$validationExists(property=loc.property, validation="validatesLengthOf"))
 						{
 							validatesLengthOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, maximum=variables.wheels.class.properties[loc.property].size);
 						}
 
 						// set numericality validations if the developer has not
-						if (ListFindNoCase("integer,float", variables.wheels.class.properties[loc.property].validationtype) && !$validationExists(propertyName=loc.property, validation="validatesNumericalityOf"))
+						if (ListFindNoCase("integer,float", variables.wheels.class.properties[loc.property].validationtype) && !$validationExists(property=loc.property, validation="validatesNumericalityOf"))
 						{
 							validatesNumericalityOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, onlyInteger=(variables.wheels.class.properties[loc.property].validationtype == "integer"));
 						}
 
 						// set date validations if the developer has not (checks both dates or times as per the IsDate() function)
-						if (variables.wheels.class.properties[loc.property].validationtype == "datetime" && !$validationExists(propertyName=loc.property, validation="validatesFormatOf"))
+						if (variables.wheels.class.properties[loc.property].validationtype == "datetime" && !$validationExists(property=loc.property, validation="validatesFormatOf"))
 						{
 							validatesFormatOf(properties=loc.property, allowBlank=loc.defaultValidationsAllowBlank, type="date");
 						}
@@ -224,6 +224,7 @@
 	<cfscript>
 		var loc = {};
 		variables.wheels = {};
+		variables.wheels.instance = {};
 		variables.wheels.errors = [];
 		
 		// assign an object id for the instance (only use the last 12 digits to avoid creating an exponent)
@@ -233,7 +234,7 @@
 		// copy class variables from the object in the application scope
 		if (!StructKeyExists(variables.wheels, "class"))
 		{
-			variables.wheels.class = $simpleLock(name="classLock", type="readOnly", object=application.wheels.models[arguments.name], execute="$getModelClassData");
+			variables.wheels.class = $simpleLock(name="classLock", type="readOnly", object=application.wheels.models[arguments.name], execute="$classData");
 		}
 
 		// setup object properties in the this scope
@@ -254,7 +255,7 @@
 	<cfreturn this>
 </cffunction>
 
-<cffunction name="$getModelClassData" returntype="struct" access="public" output="false">
+<cffunction name="$classData" returntype="struct" access="public" output="false">
 	<cfreturn variables.wheels.class>
 </cffunction>
 

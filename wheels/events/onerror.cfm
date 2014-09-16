@@ -25,12 +25,12 @@
 	<cfargument name="eventName" type="any" required="true">
 	<cfscript>
 		var loc = {};
-		if (StructKeyExists(application, "wheels"))
+		if (StructKeyExists(application, "wheels") && StructKeyExists(application.wheels, "initialized"))
 		{
 			if (application.wheels.sendEmailOnError && Len(application.wheels.errorEmailAddress))
 			{
 				loc.mailArgs = {};
-				arguments = $args(name="sendEmail", args=loc.mailArgs);
+				$args(name="sendEmail", args=loc.mailArgs);
 				if (StructKeyExists(application.wheels, "errorEmailServer") && Len(application.wheels.errorEmailServer))
 				{
 					loc.mailArgs.server = application.wheels.errorEmailServer;

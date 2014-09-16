@@ -493,7 +493,7 @@
 	<cfargument name="$URLRewriting" type="string" required="false" default="#application.wheels.URLRewriting#">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="URLFor", args=arguments);
+		$args(name="URLFor", args=arguments);
 		loc.params = {};
 		if (StructKeyExists(variables, "params"))
 			StructAppend(loc.params, variables.params, true);
@@ -517,25 +517,25 @@
 			loc.route = $findRoute(argumentCollection=arguments);
 			if (arguments.$URLRewriting == "Off")
 			{
-				loc.returnValue &= "?controller=";
+				loc.returnValue = loc.returnValue & "?controller=";
 				if (Len(arguments.controller))
-					loc.returnValue &= hyphenize(arguments.controller);
+					loc.returnValue = loc.returnValue & hyphenize(arguments.controller);
 				else
-					loc.returnValue &= hyphenize(loc.route.controller);
-				loc.returnValue &= "&action=";
+					loc.returnValue = loc.returnValue & hyphenize(loc.route.controller);
+				loc.returnValue = loc.returnValue & "&action=";
 				if (Len(arguments.action))
-					loc.returnValue &= hyphenize(arguments.action);
+					loc.returnValue = loc.returnValue & hyphenize(arguments.action);
 				else
-					loc.returnValue &= hyphenize(loc.route.action);
+					loc.returnValue = loc.returnValue & hyphenize(loc.route.action);
 				// add it the format if it exists
 				if (StructKeyExists(loc.route, "formatVariable") && StructKeyExists(arguments, loc.route.formatVariable))
-					loc.returnValue &= "&#loc.route.formatVariable#=#arguments[loc.route.formatVariable]#";
+					loc.returnValue = loc.returnValue & "&#loc.route.formatVariable#=#arguments[loc.route.formatVariable]#";
 				loc.iEnd = ListLen(loc.route.variables);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.property = ListGetAt(loc.route.variables, loc.i);
 					if (loc.property != "controller" && loc.property != "action")
-						loc.returnValue &= "&" & loc.property & "=" & $URLEncode(arguments[loc.property]);
+						loc.returnValue = loc.returnValue & "&" & loc.property & "=" & $URLEncode(arguments[loc.property]);
 				}
 			}
 			else
@@ -559,16 +559,16 @@
 							// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
 							loc.param = obfuscateParam("#loc.param#");
 						}
-						loc.returnValue &= "/" & loc.param; // get param from arguments
+						loc.returnValue = loc.returnValue & "/" & loc.param; // get param from arguments
 					}
 					else
 					{
-						loc.returnValue &= "/" & loc.property; // add hard coded param from route
+						loc.returnValue = loc.returnValue & "/" & loc.property; // add hard coded param from route
 					}
 				}
 				// add it the format if it exists
 				if (StructKeyExists(loc.route, "formatVariable") && StructKeyExists(arguments, loc.route.formatVariable))
-					loc.returnValue &= ".#arguments[loc.route.formatVariable]#";
+					loc.returnValue = loc.returnValue & ".#arguments[loc.route.formatVariable]#";
 			}
 		}
 		else // link based on controller/action/key
@@ -580,9 +580,9 @@
 				arguments.controller = loc.params.controller;
 			if (Len(arguments.key) && !Len(arguments.action) && StructKeyExists(loc.params, "action"))
 				arguments.action = loc.params.action;
-			loc.returnValue &= "?controller=" & hyphenize(arguments.controller);
+			loc.returnValue = loc.returnValue & "?controller=" & hyphenize(arguments.controller);
 			if (Len(arguments.action))
-				loc.returnValue &= "&action=" & hyphenize(arguments.action);
+				loc.returnValue = loc.returnValue & "&action=" & hyphenize(arguments.action);
 			if (Len(arguments.key))
 			{
 				loc.param = $URLEncode(arguments.key);
@@ -591,7 +591,7 @@
 					// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
 					loc.param = obfuscateParam("#loc.param#");
 				}
-				loc.returnValue &= "&key=" & loc.param;
+				loc.returnValue = loc.returnValue & "&key=" & loc.param;
 			}
 		}
 
@@ -608,9 +608,9 @@
 		}
 
 		if (Len(arguments.params))
-			loc.returnValue &= $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
+			loc.returnValue = loc.returnValue & $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
 		if (Len(arguments.anchor))
-			loc.returnValue &= "##" & arguments.anchor;
+			loc.returnValue = loc.returnValue & "##" & arguments.anchor;
 
 		if (!arguments.onlyPath)
 		{

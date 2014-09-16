@@ -13,7 +13,7 @@
 	<cfargument name="relative" type="boolean" required="false" default="true" hint="Should we autolink relative urls">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="autoLink", args=arguments);
+		$args(name="autoLink", args=arguments);
 		if (arguments.link != "emailAddresses")
 		{
 			if(arguments.relative)
@@ -54,7 +54,7 @@
 			arguments.text = RemoveChars(arguments.text, loc.match.pos[1], loc.match.len[1]);			
 			loc.punctuation = ArrayToList(ReMatchNoCase(loc.punctuationRegEx, loc.str));
 			loc.str = REReplaceNoCase(loc.str, loc.punctuationRegEx, "", "all");
-
+			
 			// make sure that links beginning with "www." have a protocol
 			if (Left(loc.str, 4) == "www." && !Len(arguments.protocol))
 			{
@@ -86,7 +86,7 @@
 	<cfargument name="excerptString" type="string" required="false" hint="String to replace first and/or last characters with.">
 	<cfscript>
 	var loc = {};
-	arguments = $args(name="excerpt", args=arguments);
+	$args(name="excerpt", args=arguments);
 	loc.pos = FindNoCase(arguments.phrase, arguments.text, 1);
 	if (loc.pos != 0)
 	{
@@ -134,7 +134,7 @@
 	<cfargument name="class" type="string" required="false" hint="Class to use in the tags wrapping highlighted phrase(s).">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="highlight", args=arguments);
+		$args(name="highlight", args=arguments);
 		if (!Len(arguments.text) || !Len(arguments.phrases))
 		{
 			loc.returnValue = arguments.text;
@@ -201,7 +201,7 @@
 	<cfargument name="wrap" type="boolean" required="false" hint="Set to `true` to wrap the result in a paragraph.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="simpleFormat", args=arguments);
+		$args(name="simpleFormat", args=arguments);
 		loc.returnValue = Trim(arguments.text);
 		loc.returnValue = Replace(loc.returnValue, "#Chr(13)#", "", "all");
 		loc.returnValue = Replace(loc.returnValue, "#Chr(10)##Chr(10)#", "</p><p>", "all");
@@ -255,7 +255,7 @@
 	<cfargument name="truncateString" type="string" required="false" hint="String to replace the last characters with.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="truncate", args=arguments);
+		$args(name="truncate", args=arguments);
 		if (Len(arguments.text) > arguments.length)
 		{
 			loc.returnValue = Left(arguments.text, arguments.length-Len(arguments.truncateString)) & arguments.truncateString;
@@ -283,7 +283,7 @@
 	<cfargument name="truncateString" type="string" required="false" hint="String to replace the last characters with.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="wordTruncate", args=arguments);
+		$args(name="wordTruncate", args=arguments);
 		loc.returnValue = "";
 		loc.wordArray = ListToArray(arguments.text, " ", false);
 		loc.wordLen = ArrayLen(loc.wordArray);
@@ -293,7 +293,7 @@
 			{
 				loc.returnValue = ListAppend(loc.returnValue, loc.wordArray[loc.i], " ");
 			}
-			loc.returnValue &= arguments.truncateString;
+			loc.returnValue = loc.returnValue & arguments.truncateString;
 		}
 		else
 		{

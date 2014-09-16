@@ -49,7 +49,7 @@
 			arguments.except = $listClean(arguments.except);
 		if (StructKeyExists(arguments, "only"))
 			arguments.only = $listClean(arguments.only);
-		variables.wheels.class.layout = arguments;
+		variables.$class.layout = arguments;
 	</cfscript>
 </cffunction>
 
@@ -59,23 +59,23 @@
 		var loc = {};
 		loc.returnValue = true;
 		loc.layoutType = "template";
-		if (isAjax() && StructKeyExists(variables.wheels.class.layout, "ajax") && Len(variables.wheels.class.layout.ajax))
+		if (isAjax() && StructKeyExists(variables.$class.layout, "ajax") && Len(variables.$class.layout.ajax))
 			loc.layoutType = "ajax";
-		if (!StructIsEmpty(variables.wheels.class.layout))
+		if (!StructIsEmpty(variables.$class.layout))
 		{
-			loc.returnValue = variables.wheels.class.layout.useDefault;
-			if ((StructKeyExists(this, variables.wheels.class.layout[loc.layoutType]) && IsCustomFunction(this[variables.wheels.class.layout[loc.layoutType]])) || IsCustomFunction(variables.wheels.class.layout[loc.layoutType]))
+			loc.returnValue = variables.$class.layout.useDefault;
+			if ((StructKeyExists(this, variables.$class.layout[loc.layoutType]) && IsCustomFunction(this[variables.$class.layout[loc.layoutType]])) || IsCustomFunction(variables.$class.layout[loc.layoutType]))
 			{
 				// if the developer doesn't return anything from the method or if they return a blank string it should use the default layout still
 				loc.invokeArgs = {};
 				loc.invokeArgs.action = arguments.$action;
-				loc.temp = $invoke(method=variables.wheels.class.layout[loc.layoutType], invokeArgs=loc.invokeArgs);
-				if (StructKeyExists(loc, "temp") && Len(loc.temp))
+				loc.temp = $invoke(method=variables.$class.layout[loc.layoutType], invokeArgs=loc.invokeArgs);
+				if (StructKeyExists(loc, "temp"))
 					loc.returnValue = loc.temp;
 			}
-			else if ((!StructKeyExists(variables.wheels.class.layout, "except") || !ListFindNoCase(variables.wheels.class.layout.except, arguments.$action)) && (!StructKeyExists(variables.wheels.class.layout, "only") || ListFindNoCase(variables.wheels.class.layout.only, arguments.$action)))
+			else if ((!StructKeyExists(variables.$class.layout, "except") || !ListFindNoCase(variables.$class.layout.except, arguments.$action)) && (!StructKeyExists(variables.$class.layout, "only") || ListFindNoCase(variables.$class.layout.only, arguments.$action)))
 			{
-				loc.returnValue = variables.wheels.class.layout[loc.layoutType];
+				loc.returnValue = variables.$class.layout[loc.layoutType];
 			}
 		}
 		return loc.returnValue;

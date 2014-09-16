@@ -7,7 +7,7 @@
 			<cfset post.update()>
 			<cfset post.reload()>
 			<cfset newUpdatedAt = post.properties().updatedAt>
-			<cfset $assert('orgUpdatedAt eq newUpdatedAt')>
+			<cfset assert('orgUpdatedAt eq newUpdatedAt')>
 			<cftransaction action="rollback"/>
 		</cftransaction>
 	</cffunction>

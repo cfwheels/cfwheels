@@ -12,12 +12,12 @@
 		<cfset loc.controller.flashInsert(tony="Petruzzi", per="Djurner", james="Gibson")>
 		<cfset loc.controller.flashKeep("per,james")>
 		<cfset loc.controller.$flashClear()>
-		<cfset $assert('loc.controller.flashCount() eq 2')>
-		<cfset $assert('!loc.controller.flashKeyExists("tony")')>
-		<cfset $assert('loc.controller.flashKeyExists("per")')>
-		<cfset $assert('loc.controller.flashKeyExists("james")')>
-		<cfset $assert('loc.controller.flash("per") eq "Djurner"')>
-		<cfset $assert('loc.controller.flash("james") eq "Gibson"')>
+		<cfset assert('loc.controller.flashCount() eq 2')>
+		<cfset assert('!loc.controller.flashKeyExists("tony")')>
+		<cfset assert('loc.controller.flashKeyExists("per")')>
+		<cfset assert('loc.controller.flashKeyExists("james")')>
+		<cfset assert('loc.controller.flash("per") eq "Djurner"')>
+		<cfset assert('loc.controller.flash("james") eq "Gibson"')>
 	</cffunction>
 	
 </cfcomponent>

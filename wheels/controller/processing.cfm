@@ -36,7 +36,7 @@
 
 		// run verifications if they exist on the controller
 		$runVerifications(action=params.action, params=params);
-
+		
 		// return immediately if an abort is issued from a verification
 		if ($abortIssued())
 		{
@@ -45,6 +45,12 @@
 
 		// run before filters if they exist on the controller
 		$runFilters(type="before", action=params.action);
+		
+		// check to see if the controller params has changed and if so, instantiate the new controller and re-run filters and verifications
+		if (params.controller != variables.$class.name)
+		{
+			return false;
+		}
 
 		if (application.wheels.showDebugInformation)
 		{
@@ -58,7 +64,7 @@
 			{
 				// get content from the cache if it exists there and set it to the request scope, if not the $callActionAndAddToCache function will run, calling the controller action (which in turn sets the content to the request scope)
 				loc.category = "action";
-				loc.key = $hashedKey(variables.params);
+				loc.key = $hashedKey(variables.$class.name, variables.params);
 				loc.lockName = loc.category & loc.key;
 				loc.conditionArgs = {key=loc.key, category=loc.category};
 				loc.executeArgs = {controller=params.controller, action=params.action, key=loc.key, time=loc.cache, category=loc.category};
@@ -92,60 +98,46 @@
 	<cfargument name="action" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		if (!ListFindNoCase(application.wheels.protectedFunctions, arguments.action))
+		if (Left(arguments.action, 1) == "$" || ListFindNoCase(application.wheels.protectedControllerMethods, arguments.action))
 		{
-			if (StructKeyExists(this, arguments.action) && IsCustomFunction(this[arguments.action]))
-			{
-				$invoke(method=arguments.action);
-			}
-			else if (StructKeyExists(this, "onMissingMethod"))
-			{
-				loc.invokeArgs = {};
-				loc.invokeArgs.missingMethodName = arguments.action;
-				loc.invokeArgs.missingMethodArguments = {};
-				$invoke(method="onMissingMethod", invokeArgs=loc.invokeArgs);
-			}
-			if (!$performedRenderOrRedirect())
-			{
-				try
-				{
-					renderPage();
-				}
-				catch(Any e)
-				{
-					if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.wheels.class.name)#/#LCase(arguments.action)#.cfm")))
-					{
-						$throw(object=e);
-					}
-					else
-					{
-						loc.error = true;
-					}
-				}
-			}
+			$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.action#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels functions.");
 		}
-		else
+		if (StructKeyExists(this, arguments.action) && IsCustomFunction(this[arguments.action]))
 		{
-			loc.error = true;
+			$invoke(method=arguments.action);
 		}
-		if (StructKeyExists(loc, "error"))
+		else if (StructKeyExists(this, "onMissingMethod"))
 		{
-			if (application.wheels.showErrorInformation)
+			loc.invokeArgs = {};
+			loc.invokeArgs.missingMethodName = arguments.action;
+			loc.invokeArgs.missingMethodArguments = {};
+			$invoke(method="onMissingMethod", invokeArgs=loc.invokeArgs);
+		}
+		if (!$performedRenderOrRedirect())
+		{
+			try
 			{
-				if (ListFindNoCase(application.wheels.protectedFunctions, arguments.action))
+				renderPage();
+			}
+			catch(Any e)
+			{
+				if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.$class.name)#/#LCase(arguments.action)#.cfm")))
 				{
-					$throw(type="Wheels.ActionNotAllowed", message="You are not allowed to execute the `#arguments.action#` method as an action.", extendedInfo="Make sure your action does not have the same name as any of the built-in Wheels functions.");
+					$throw(object=e);
 				}
 				else
 				{
-					$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.action#` action in the `#variables.wheels.class.name#` controller.", extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(variables.wheels.class.name)#` directory (create the directory as well if it doesn't already exist).");
+					if (application.wheels.showErrorInformation)
+					{
+						$throw(type="Wheels.ViewNotFound", message="Could not find the view page for the `#arguments.action#` action in the `#variables.$class.name#` controller.", extendedInfo="Create a file named `#LCase(arguments.action)#.cfm` in the `views/#LCase(variables.$class.name)#` directory (create the directory as well if it doesn't already exist).");
+					}
+					else
+					{
+						$header(statusCode=404, statustext="Not Found");
+						$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
+						$abort();
+					}
 				}
-			}
-			else
-			{
-				$header(statusCode=404, statustext="Not Found");
-				$includeAndOutput(template="#application.wheels.eventPath#/onmissingtemplate.cfm");
-				$abort();
 			}
 		}
 	</cfscript>
@@ -157,10 +149,8 @@
 	<cfargument name="key" type="string" required="true">
 	<cfargument name="category" type="string" required="true">
 	<cfscript>
-		var loc = {};
 		$callAction(action=arguments.action);
 		$addToCache(key=arguments.key, value=variables.$instance.response, time=arguments.time, category=arguments.category);
-		loc.returnValue = response();
 	</cfscript>
-	<cfreturn loc.returnValue>
+	<cfreturn response()>
 </cffunction>

@@ -1,21 +1,11 @@
 2.0
 
-Other Enhancements
-==================
+Bug Fixes
+=========
 
-* Experimental support for Open BD 3.1 [Per Djurner]
+* Tableless models should not require dataSourceName #351 [Jeremy Keczan, Singgih Cahyono]  
 
-Breaking Changes
-================
-
-* Removed the ability to instantiate a new controller from a before filter [Per Djurner]
-* Renamed assert() function to $assert() [Per Djurner]
-* Removed the possibility to name actions "get", "set", "addroute" and "addDefaultRoutes" [Per Djurner]
-* Removed the "useExpandedColumnAliases" setting.
-
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-1.3.1
+1.3.1 (08/25/2014)
 
 Bug Fixes
 =========
@@ -23,7 +13,7 @@ Bug Fixes
 * Fixed issue with calling addFormat() on application start-up - #333 [Tom King, Per Djurner]
 * Fixed so that Railo outputs ids for nested properties as integers instead of exponents - [Jordan Clark]
 * Make sure that ids for nested properties are unique - [Sam Hakimi, Tony Petruzzi]
-* Allow models to be created with no properties - [Tony Petruzzi]
+* Allow models to be created with no properties - [Tony Petruzzi, Singgih Cahyono]
 * Added missing "prepend" and "append" arguments on startFormTag() and endFormTag() - [Per Djurner]
 * Fix for fetching inserted primary key value from an Oracle database when using Adobe ColdFusion - [Per Djurner]
 * When using autoLink(), make sure that links beginning with "www" have a protocol - [Benjamin Melançon, Tony Petruzzi]
@@ -34,6 +24,8 @@ Bug Fixes
 * Fixed bug with static caching on Adobe ColdFusion 9 - #332 [Charley Contreras]
 * Allow for format auto-detection when HTTP ACCEPT contains multiple values - #297 [Raul Riera, Singgih Cahyono] 
 * Fixed so that sendEmail() can use the "remove" attribute to delete attachments - #339 [Simon Allard]
+* Fixed bugs with using the "twelveHour" argument on form helpers - #342, #343 [Jeremy Keczan, Per Djurner]
+* Fixed issue with using non-ascii characters in routes - #138 [Chris Ogden, Singgih Cahyono, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

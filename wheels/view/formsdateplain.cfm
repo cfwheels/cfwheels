@@ -29,7 +29,7 @@
 	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
-		arguments = $args(name="dateSelectTags", args=arguments);
+		$args(name="dateSelectTags", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.selected;
@@ -70,7 +70,7 @@
 	<cfargument name="combine" type="boolean" required="false" hint="See documentation for @dateSelect.">
 	<cfargument name="twelveHour" type="boolean" required="false" hint="See documentation for @timeSelect.">
 	<cfscript>
-		arguments = $args(name="timeSelectTags", args=arguments);
+		$args(name="timeSelectTags", args=arguments);
 		arguments.property = arguments.name;
 		arguments.objectName = {};
 		arguments.objectName[arguments.name] = arguments.selected;
@@ -118,7 +118,7 @@
 	<cfargument name="twelveHour" type="boolean" required="false" hint="See documentation for @timeSelect.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="dateTimeSelectTags", args=arguments);
+		$args(name="dateTimeSelectTags", args=arguments);
 		loc.returnValue = "";
 		loc.separator = arguments.separator;
 		loc.label = arguments.label;
@@ -130,12 +130,12 @@
 		if (ListLen(loc.label) == 6)
 			arguments.label = ListGetAt(loc.label, 1) & "," & ListGetAt(loc.label, 2) & "," & ListGetAt(loc.label, 3);
 		if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect")
-			loc.returnValue &= dateSelect(argumentCollection=arguments);
+			loc.returnValue = loc.returnValue & dateSelect(argumentCollection=arguments);
 		else
-			loc.returnValue &= dateSelectTags(argumentCollection=arguments);
+			loc.returnValue = loc.returnValue & dateSelectTags(argumentCollection=arguments);
 
 		// separate date and time with a string ("-" by default)
-		loc.returnValue &= loc.separator;
+		loc.returnValue = loc.returnValue & loc.separator;
 
 		// create time portion
 		arguments.order = arguments.timeOrder;
@@ -144,9 +144,9 @@
 		if (ListLen(loc.label) == 6)
 			arguments.label = ListGetAt(loc.label, 4) & "," & ListGetAt(loc.label, 5) & "," & ListGetAt(loc.label, 6);
 		if (StructKeyExists(arguments, "$functionName") && arguments.$functionName == "dateTimeSelect")
-			loc.returnValue &= timeSelect(argumentCollection=arguments);
+			loc.returnValue = loc.returnValue & timeSelect(argumentCollection=arguments);
 		else
-			loc.returnValue &= timeSelectTags(argumentCollection=arguments);
+			loc.returnValue = loc.returnValue & timeSelectTags(argumentCollection=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
@@ -180,7 +180,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
-		arguments = $args(name="yearSelectTag", args=arguments);
+		$args(name="yearSelectTag", args=arguments);
 		if (IsNumeric(arguments.selected))
 		{
 			arguments.selected = $dateForSelectTags("year", arguments.selected, arguments.$now);
@@ -212,7 +212,7 @@
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="monthSelectTag", args=arguments);
+		$args(name="monthSelectTag", args=arguments);
 		if (IsNumeric(arguments.selected) and IsValid("range", arguments.selected, 0, 12))
 		{
 			arguments.selected = $dateForSelectTags("month", arguments.selected, arguments.$now);
@@ -242,7 +242,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
-		arguments = $args(name="daySelectTag", args=arguments);
+		$args(name="daySelectTag", args=arguments);
 		if (IsNumeric(arguments.selected) and IsValid("range", arguments.selected, 0, 31))
 		{
 			arguments.selected = $dateForSelectTags("day", arguments.selected, arguments.$now);
@@ -278,7 +278,7 @@
 	<cfargument name="twelveHour" type="boolean" required="false" hint="See documentation for @timeSelect.">
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
-		arguments = $args(name="hourSelectTag", args=arguments);
+		$args(name="hourSelectTag", args=arguments);
 		if (IsNumeric(arguments.selected) and arguments.selected gte 0 and arguments.selected lt 60)
 			arguments.selected = createTime(arguments.selected, Minute(arguments.$now), Second(arguments.$now));
 		arguments.order = "hour";
@@ -312,7 +312,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
-		arguments = $args(name="minuteSelectTag", args=arguments);
+		$args(name="minuteSelectTag", args=arguments);
 		if (IsNumeric(arguments.selected) and arguments.selected gte 0 and arguments.selected lt 60)
 		{
 			arguments.selected = createTime(Hour(arguments.$now), arguments.selected, Second(arguments.$now));
@@ -348,7 +348,7 @@
 	<cfargument name="appendToLabel" type="string" required="false" hint="See documentation for @textField.">
 	<cfargument name="$now" type="date" required="false" default="#now()#">
 	<cfscript>
-		arguments = $args(name="secondSelectTag", args=arguments);
+		$args(name="secondSelectTag", args=arguments);
 		if (IsNumeric(arguments.selected) and arguments.selected gte 0 and arguments.selected lt 60)
 			arguments.selected = createTime(Hour(arguments.$now), Minute(arguments.$now), arguments.selected);
 		arguments.order = "second";

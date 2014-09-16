@@ -26,7 +26,7 @@
 	<cfargument name="delim" type="string" required="false" default="," hint="the delimiter to use for the list of stylesheets">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href,rel");
+		$args(name="styleSheetLinkTag", args=arguments, combine="sources/source/!", reserved="href,rel");
 		if (!Len(arguments.type))
 		{
 			StructDelete(arguments, "type");
@@ -91,7 +91,7 @@
 	<cfargument name="delim" type="string" required="false" default="," hint="the delimiter to use for the list of stylesheets">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="javaScriptIncludeTag", args=arguments, combine="sources/source/!", reserved="src");
+		$args(name="javaScriptIncludeTag", args=arguments, combine="sources/source/!", reserved="src");
 		if (!Len(arguments.type))
 		{
 			StructDelete(arguments, "type");
@@ -142,7 +142,7 @@
 	<cfargument name="source" type="string" required="true" hint="The file name of the image if it's availabe in the local file system (i.e. ColdFusion will be able to access it). Provide the full URL if the image is on a remote server.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="imageTag", reserved="src", args=arguments);
+		$args(name="imageTag", reserved="src", args=arguments);
 		// ugly fix due to the fact that id can't be passed along to cfinvoke
 		if (StructKeyExists(arguments, "id"))
 		{
@@ -201,6 +201,8 @@
 			{
 				if (loc.localFile && !FileExists(ExpandPath(arguments.src)))
 					$throw(type="Wheels.ImageFileNotFound", message="Wheels could not find `#expandPath('#arguments.src#')#` on the local file system.", extendedInfo="Pass in a correct relative path from the `images` folder to an image.");
+				else if (!IsImageFile(ExpandPath(arguments.src)))
+					$throw(type="Wheels.ImageFormatNotSupported", message="Wheels can't read image files with that format.", extendedInfo="Use one of these image types instead: #GetReadableImageFormats()#.");
 			}
 			// height and/or width arguments are missing so use cfimage to get them
 			if (!StructKeyExists(arguments, "width") or !StructKeyExists(arguments, "height"))

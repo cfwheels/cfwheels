@@ -12,9 +12,9 @@
 		<cfloop array="#loc.container#" index="loc.r">
 			<cfset loc.controller.cycle(argumentcollection=loc.args)>
 		</cfloop>
-		<cfset $assert("request.wheels.cycle[loc.args.name] eq 6")>
+		<cfset assert("request.wheels.cycle[loc.args.name] eq 6")>
 		<cfset loc.controller.resetcycle(loc.args.name)>
-		<cfset $assert("not structkeyexists(request.wheels.cycle, loc.args.name)")>
+		<cfset assert("not structkeyexists(request.wheels.cycle, loc.args.name)")>
 	</cffunction>
 
 	<cffunction name="test_not_named">
@@ -22,9 +22,9 @@
 		<cfloop array="#loc.container#" index="loc.r">
 			<cfset loc.controller.cycle(argumentcollection=loc.args)>
 		</cfloop>
-		<cfset $assert("request.wheels.cycle['default'] eq 6")>
+		<cfset assert("request.wheels.cycle['default'] eq 6")>
 		<cfset loc.controller.resetcycle()>
-		<cfset $assert("not isdefined('request.wheels.cycle.default')")>
+		<cfset assert("not isdefined('request.wheels.cycle.default')")>
 	</cffunction>
 
 </cfcomponent>

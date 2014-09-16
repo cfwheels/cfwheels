@@ -11,7 +11,7 @@
 	<cffunction name="run_flash_key_exists">
 		<cfset loc.controller.flashInsert(success="Congrats!")>
 		<cfset loc.r = loc.controller.flashKeyExists("success")>
-		<cfset $assert("loc.r IS true")>
+		<cfset assert("loc.r IS true")>
 	</cffunction>
 
 </cfcomponent>

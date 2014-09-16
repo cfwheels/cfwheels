@@ -9,8 +9,8 @@
 		<cfset loc.post = model("post").findOne()>
 		<cftransaction action="begin">
 			<cfset loc.updated = loc.author.addPost(loc.post) />
-			<cfset $assert('loc.updated eq true')>
-			<cfset $assert('loc.post.authorid eq loc.author.id')>
+			<cfset assert('loc.updated eq true')>
+			<cfset assert('loc.post.authorid eq loc.author.id')>
 			<cftransaction action="rollback" />
 		</cftransaction>
 	</cffunction>

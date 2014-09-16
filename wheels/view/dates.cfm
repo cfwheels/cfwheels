@@ -10,7 +10,7 @@
 	<cfargument name="includeSeconds" type="boolean" required="false" hint="Whether or not to include the number of seconds in the returned string.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="distanceOfTimeInWords", args=arguments);
+		$args(name="distanceOfTimeInWords", args=arguments);
 		loc.minuteDiff = DateDiff("n", arguments.fromTime, arguments.toTime);
 		loc.secondDiff = DateDiff("s", arguments.fromTime, arguments.toTime);
 		loc.hours = 0;
@@ -95,7 +95,7 @@
 	<cfargument name="fromTime" type="date" required="true" hint="See documentation for @distanceOfTimeInWords.">
 	<cfargument name="includeSeconds" type="boolean" required="false" hint="See documentation for @distanceOfTimeInWords.">
 	<cfargument name="toTime" type="date" required="false" default="#now()#" hint="See documentation for @distanceOfTimeInWords.">
-	<cfset arguments = $args(name="timeAgoInWords", args=arguments)>
+	<cfset $args(name="timeAgoInWords", args=arguments)>
 	<cfreturn distanceOfTimeInWords(argumentCollection=arguments)>
 </cffunction>
 
@@ -108,6 +108,6 @@
 	<cfargument name="toTime" type="date" required="true" hint="See documentation for @distanceOfTimeInWords.">
 	<cfargument name="includeSeconds" type="boolean" required="false" hint="See documentation for @distanceOfTimeInWords.">
 	<cfargument name="fromTime" type="date" required="false" default="#now()#" hint="See documentation for @distanceOfTimeInWords.">
-	<cfset arguments = $args(name="timeUntilInWords", args=arguments)>
+	<cfset $args(name="timeUntilInWords", args=arguments)>
 	<cfreturn distanceOfTimeInWords(argumentCollection=arguments)>
 </cffunction>

@@ -253,59 +253,52 @@
 
 <cffunction name="$callback" returntype="boolean" access="public" output="false" hint="Executes all callback methods for a specific type. Will stop execution on the first callback that returns `false`.">
 	<cfargument name="type" type="string" required="true" hint="See documentation for @$clearCallbacks.">
-	<cfargument name="execute" type="boolean" required="true" hint="Pass in `false` to not run any callbacks at all.">
+	<cfargument name="execute" type="boolean" required="true" hint="A query is passed in here for `afterFind` callbacks.">
 	<cfargument name="collection" type="any" required="false" default="" hint="A query is passed in here for `afterFind` callbacks.">
 	<cfscript>
 		var loc = {};
-		if (arguments.execute)
+
+		if (!arguments.execute)
+			return true;
+
+		// get all callbacks for the type and loop through them all until the end or one of them returns false
+		loc.callbacks = $callbacks(arguments.type);
+		loc.iEnd = ArrayLen(loc.callbacks);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			// get all callbacks for the type and loop through them all until the end or one of them returns false
-			loc.callbacks = $callbacks(arguments.type);
-			loc.iEnd = ArrayLen(loc.callbacks);
-			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			loc.method = loc.callbacks[loc.i];
+			if (arguments.type == "afterFind")
 			{
-				loc.method = loc.callbacks[loc.i];
-				if (arguments.type == "afterFind")
+				// since this is an afterFind callback we need to handle it differently
+				if (IsQuery(arguments.collection))
 				{
-					// since this is an afterFind callback we need to handle it differently
-					if (IsQuery(arguments.collection))
-					{
-						loc.returnValue = $queryCallback(method=loc.method, collection=arguments.collection);
-					}
-					else
-					{
-						loc.invokeArgs = properties();
-						loc.returnValue = $invoke(method=loc.method, invokeArgs=loc.invokeArgs);
-						if (StructKeyExists(loc, "returnValue") && IsStruct(loc.returnValue))
-						{
-							setProperties(loc.returnValue);
-							StructDelete(loc, "returnValue");
-						}
-					}
+					loc.returnValue = $queryCallback(method=loc.method, collection=arguments.collection);
 				}
 				else
 				{
-					// this is a regular callback so just call the method
-					loc.returnValue = $invoke(method=loc.method);
-				}
-
-				// break the loop if the callback returned false
-				if (StructKeyExists(loc, "returnValue") && IsBoolean(loc.returnValue) && !loc.returnValue)
-				{
-					break;
+					loc.invokeArgs = properties();
+					loc.returnValue = $invoke(method=loc.method, invokeArgs=loc.invokeArgs);
+					if (StructKeyExists(loc, "returnValue") && IsStruct(loc.returnValue))
+					{
+						setProperties(loc.returnValue);
+						StructDelete(loc, "returnValue");
+					}
 				}
 			}
-
-			// return true by default (happens when no callbacks are set or none of the callbacks returned a result)
-			if (!StructKeyExists(loc, "returnValue") || !Len(loc.returnValue))
+			else
 			{
-				loc.returnValue = true;
+				// this is a regular callback so just call the method
+				loc.returnValue = $invoke(method=loc.method);
 			}
+
+			// break the loop if the callback returned false
+			if (StructKeyExists(loc, "returnValue") && IsBoolean(loc.returnValue) && !loc.returnValue)
+				break;
 		}
-		else
-		{
+
+		// return true by default (happens when no callbacks are set or none of the callbacks returned a result)
+		if (!StructKeyExists(loc, "returnValue"))
 			loc.returnValue = true;
-		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

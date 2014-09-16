@@ -27,7 +27,7 @@
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="create", args=arguments);
+		$args(name="create", args=arguments);
 		loc.parameterize = arguments.parameterize;
 		StructDelete(arguments, "parameterize");
 		loc.returnValue = new(argumentCollection=arguments);
@@ -114,7 +114,7 @@
 	<cfargument name="$offset" type="numeric" required="false" default=0>
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="findAll", args=arguments);
+		$args(name="findAll", args=arguments);
 
 		// we only allow direct associations to be loaded when returning objects
 		if (application.wheels.showErrorInformation && Len(arguments.returnAs) && arguments.returnAs != "query" && Find("(", arguments.include) && arguments.returnIncluded)
@@ -335,7 +335,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var returnValue = "";
-		arguments = $args(name="findByKey", args=arguments);
+		$args(name="findByKey", args=arguments);
 		if (Len(arguments.key))
 		{
 			$keyLengthCheck(arguments.key);
@@ -380,7 +380,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var returnValue = "";
-		arguments = $args(name="findOne", args=arguments);
+		$args(name="findOne", args=arguments);
 		if (!Len(arguments.include) || (StructKeyExists(variables.wheels.class.associations, arguments.include) && variables.wheels.class.associations[arguments.include].type != "hasMany"))
 		{
 			// no joins will be done or the join will be done to a single record so we can safely get just one record from the database
@@ -431,7 +431,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="updateAll", args=arguments);
+		$args(name="updateAll", args=arguments);
 		arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,reload,parameterize,instantiate,validate,transaction,callbacks,includeSoftDeletes", setOnModel=false);
 
 		if (arguments.instantiate) // find and instantiate each object and call its update function
@@ -454,8 +454,7 @@
 				loc.pos = loc.pos + 1;
 				ArrayAppend(arguments.sql, "#variables.wheels.class.properties[loc.key].column# = ");
 
-				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale};
-				loc.param.null = !Len(arguments.properties[loc.key]);
+				loc.param = {value=arguments.properties[loc.key], type=variables.wheels.class.properties[loc.key].type, dataType=variables.wheels.class.properties[loc.key].dataType, scale=variables.wheels.class.properties[loc.key].scale, null=!len(arguments.properties[loc.key])};
 				ArrayAppend(arguments.sql, loc.param);
 				if (StructCount(arguments.properties) gt loc.pos)
 					ArrayAppend(arguments.sql, ",");
@@ -492,7 +491,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var returnValue = "";
-		arguments = $args(name="updateByKey", args=arguments);
+		$args(name="updateByKey", args=arguments);
 		$keyLengthCheck(arguments.key);
 		arguments.where = $keyWhereString(values=arguments.key);
 		StructDelete(arguments, "key");
@@ -522,7 +521,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="updateOne", args=arguments);
+		$args(name="updateOne", args=arguments);
 		loc.object = findOne(where=arguments.where, order=arguments.order, reload=arguments.reload, includeSoftDeletes=arguments.includeSoftDeletes);
 		StructDelete(arguments, "where");
 		StructDelete(arguments, "order");
@@ -548,7 +547,7 @@
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
-		arguments = $args(name="updateProperty", args=arguments);
+		$args(name="updateProperty", args=arguments);
 		arguments.validate = false;
 		this[arguments.property] = arguments.value;
 	</cfscript>
@@ -569,7 +568,7 @@
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfscript>
-		arguments = $args(name="updateProperties", args=arguments);
+		$args(name="updateProperties", args=arguments);
 		$setProperties(argumentCollection=arguments, filterList="properties,parameterize,validate,transaction,callbacks");
 	</cfscript>
 	<cfreturn save(parameterize=arguments.parameterize, reload=false, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks) />
@@ -600,7 +599,7 @@
 	<cfargument name="softDelete" type="boolean" required="false" default="true" hint="See documentation for @delete.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="deleteAll", args=arguments);
+		$args(name="deleteAll", args=arguments);
 
 		if (arguments.instantiate)
 		{
@@ -644,7 +643,7 @@
 	<cfargument name="softDelete" type="boolean" required="false" default="true" hint="See documentation for @delete.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="deleteByKey", args=arguments);
+		$args(name="deleteByKey", args=arguments);
 		$keyLengthCheck(arguments.key);
 		loc.where = $keyWhereString(values=arguments.key);
 		loc.returnValue = deleteOne(where=loc.where, reload=arguments.reload, transaction=arguments.transaction, callbacks=arguments.callbacks, includeSoftDeletes=arguments.includeSoftDeletes, softDelete=arguments.softDelete);
@@ -672,7 +671,7 @@
 	<cfargument name="softDelete" type="boolean" required="false" default="true" hint="See documentation for @delete.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="deleteOne", args=arguments);
+		$args(name="deleteOne", args=arguments);
 		loc.object = findOne(where=arguments.where, order=arguments.order, reload=arguments.reload, includeSoftDeletes=arguments.includeSoftDeletes);
 		if (IsObject(loc.object))
 			loc.returnValue = loc.object.delete(transaction=arguments.transaction, callbacks=arguments.callbacks, softDelete=arguments.softDelete);
@@ -714,7 +713,7 @@
 	<cfargument name="parameterize" type="any" required="false" hint="See documentation for @findAll.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="exists", args=arguments);
+		$args(name="exists", args=arguments);
 		if (application.wheels.showErrorInformation)
 			if (Len(arguments.key) && Len(arguments.where))
 				$throw(type="Wheels.IncorrectArguments", message="You cannot pass in both `key` and `where`.");
@@ -751,7 +750,7 @@
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="false" hint="See documentation for @findAll.">
 	<cfargument name="softDelete" type="boolean" required="false" default="true" hint="Set to `false` to permanently delete a record, even if it has a soft delete column.">
 	<cfscript>
-		arguments = $args(name="delete", args=arguments);
+		$args(name="delete", args=arguments);
 		arguments.sql = [];
 		arguments.sql = $addDeleteClause(sql=arguments.sql, softDelete=arguments.softDelete);
 		arguments.sql = $addKeyWhereClause(sql=arguments.sql, includeSoftDeletes=arguments.includeSoftDeletes);
@@ -825,7 +824,7 @@
 	<cfargument name="validate" type="boolean" required="false" default="true" hint="Set to `false` to skip validations for this operation.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="Set this to `commit` to update the database when the save has completed, `rollback` to run all the database queries but not commit them, or `none` to skip transaction handling altogether.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="Set to `false` to disable callbacks for this operation.">
-	<cfset arguments = $args(name="save", args=arguments)>
+	<cfset $args(name="save", args=arguments)>
 	<cfset clearErrors()>
 	<cfreturn invokeWithTransaction(method="$save", argumentCollection=arguments)>
 </cffunction>
@@ -905,7 +904,7 @@
 	<cfargument name="validate" type="boolean" required="false" default="true" hint="See documentation for @save.">
 	<cfargument name="transaction" type="string" required="false" default="#application.wheels.transactionMode#" hint="See documentation for @save.">
 	<cfargument name="callbacks" type="boolean" required="false" default="true" hint="See documentation for @save.">
-	<cfset arguments = $args(name="update", args=arguments)>
+	<cfset $args(name="update", args=arguments)>
 	<cfset $setProperties(argumentCollection=arguments, filterList="properties,parameterize,reload,validate,transaction,callbacks")>
 	<cfreturn save(parameterize=arguments.parameterize, reload=arguments.reload, validate=arguments.validate, transaction=arguments.transaction, callbacks=arguments.callbacks)>
 </cffunction>
@@ -965,11 +964,11 @@
 		var loc = {};
 		if (variables.wheels.class.timeStampingOnCreate)
 		{
-			$timestampProperty(name=variables.wheels.class.timeStampOnCreateProperty);
+			$timestampProperty(property=variables.wheels.class.timeStampOnCreateProperty);
 		}
 		if (application.wheels.setUpdatedAtOnCreate && variables.wheels.class.timeStampingOnUpdate)
 		{
-			$timestampProperty(name=variables.wheels.class.timeStampOnUpdateProperty);
+			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 		}
 
 		// start by adding column names and values for the properties that exist on the object to two arrays
@@ -1013,8 +1012,8 @@
 		else
 		{
 			// no properties were set on the object so we insert a record with only default values to the database
-			ArrayAppend(loc.sql, "INSERT INTO #tableName()#" & variables.wheels.class.adapter.$defaultValues(tableName()));
-			loc.primaryKeys = "";
+			loc.primaryKeys = primaryKey(0);
+			ArrayAppend(loc.sql, "INSERT INTO #tableName()#" & variables.wheels.class.adapter.$defaultValues($primaryKey=loc.primaryKeys));
 		}
 
 		// run the insert sql statement and set the primary key value on the object (if one was returned from the database)
@@ -1046,7 +1045,7 @@
 		}
 		
 		if (variables.wheels.class.timeStampingOnUpdate)
-			$timestampProperty(name=variables.wheels.class.timeStampOnUpdateProperty);
+			$timestampProperty(property=variables.wheels.class.timeStampOnUpdateProperty);
 		loc.sql = [];
 		ArrayAppend(loc.sql, "UPDATE #tableName()# SET ");
 		for (loc.key in variables.wheels.class.properties)
@@ -1078,22 +1077,14 @@
 <cffunction name="$buildQueryParamValues" returntype="struct" access="public" output="false">
 	<cfargument name="property" type="string" required="true">
 	<cfscript>
-	var loc = {};
-	loc.returnValue = {};
-	loc.returnValue.value = this[arguments.property];
-	loc.returnValue.type = variables.wheels.class.properties[arguments.property].type;
-	loc.returnValue.dataType = variables.wheels.class.properties[arguments.property].dataType;
-	loc.returnValue.scale = variables.wheels.class.properties[arguments.property].scale;
-	if (!Len(this[arguments.property]) && variables.wheels.class.properties[arguments.property].nullable)
-	{
-		StructInsert(loc.returnValue, "null", true);
-	}
-	else
-	{
-		StructInsert(loc.returnValue, "null", false);
-	}	
+	var ret = {};
+	ret.value = this[arguments.property];
+	ret.type = variables.wheels.class.properties[arguments.property].type;
+	ret.dataType = variables.wheels.class.properties[arguments.property].dataType;
+	ret.scale = variables.wheels.class.properties[arguments.property].scale;
+	ret.null = (!len(this[arguments.property]) && variables.wheels.class.properties[arguments.property].nullable);
+	return ret;
 	</cfscript>
-	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$keyLengthCheck" returntype="void" access="public" output="false"
@@ -1112,8 +1103,8 @@
 	developers can now override this method for localizing dates if they prefer.
 --->
 <cffunction name="$timestampProperty" returntype="void" access="public" output="false">
-	<cfargument name="name" type="string" required="true" />
+	<cfargument name="property" type="string" required="true" />
 	<cfscript>
-		this[arguments.name] = Now();
+		this[arguments.property] = Now();
 	</cfscript>
 </cffunction>

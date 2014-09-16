@@ -219,7 +219,7 @@
 		var loc = {};
 		loc.$flash = $readFlash();
 		loc.returnValue = "";
-		arguments = $args(name="flashMessages", args=arguments);
+		$args(name="flashMessages", args=arguments);
 		$combineArguments(args=arguments, combine="keys,key", required=false);
 
 		// If no keys are requested, populate with everything stored in the Flash and sort them
@@ -336,9 +336,9 @@
 
 <cffunction name="$setFlashStorage" returntype="void" access="public" output="false">
 	<cfargument name="storage" type="string" required="true">
-	<cfset variables.wheels.class.flashStorage = arguments.storage>
+	<cfset variables.$class.flashStorage = arguments.storage>
 </cffunction>
 
 <cffunction name="$getFlashStorage" returntype="string" access="public" output="false">
-	<cfreturn variables.wheels.class.flashStorage>
+	<cfreturn variables.$class.flashStorage>
 </cffunction>

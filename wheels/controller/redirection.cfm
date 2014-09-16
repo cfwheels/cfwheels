@@ -31,10 +31,11 @@
 	<cfargument name="host" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="protocol" type="string" required="false" hint="See documentation for @URLFor.">
 	<cfargument name="port" type="numeric" required="false" hint="See documentation for @URLFor.">
+	<cfargument name="url" type="string" required="false" default="" hint="Redirect to an external URL.">
 	<cfargument name="delay" type="boolean" required="false" hint="Set to `true` to delay the redirection until after the rest of your action code has executed.">
 	<cfscript>
 		var loc = {};
-		arguments = $args(name="redirectTo", args=arguments);
+		$args(name="redirectTo", args=arguments);
 
 		// set flash if passed in
 		loc.functionInfo = GetMetaData(variables.redirectTo);
@@ -97,6 +98,10 @@
 					loc.url = application.wheels.webPath;
 			}
 		}
+		else if (Len(arguments.url)) 
+ 		{
+ 			loc.url = arguments.url;
+ 		}
 		else
 		{
 			loc.url = URLFor(argumentCollection=arguments);
