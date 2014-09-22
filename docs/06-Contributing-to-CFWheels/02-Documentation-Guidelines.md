@@ -183,10 +183,6 @@ reference in the ColdFusion Wiki.
 > #### Function Syntax
 > `functionName(argument1, argument2, [optionalArgument])`
 >
-> #### History (for All Versions Past 1.0)
->
-> *  **1.1:** History of how function behavior changes from version to version of CFWheels.
->
 > #### Parameters
 > 
 > <table>
