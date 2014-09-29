@@ -26,6 +26,7 @@ Bug Fixes
 * Fixed so that sendEmail() can use the "remove" attribute to delete attachments - #339 [Simon Allard]
 * Fixed bugs with using the "twelveHour" argument on form helpers - #342, #343 [Jeremy Keczan, Per Djurner]
 * Fixed issue with using non-ascii characters in routes - #138 [Chris Ogden, Singgih Cahyono, Per Djurner]
+* Fixed issue with using group by with calculated properties - #89 [Adam Chapman, Per Djurner, Singgih Cahyono]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

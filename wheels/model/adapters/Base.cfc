@@ -84,6 +84,19 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 
+	<cffunction name="$isAggregateFunction" returntype="boolean" access="public" output="false">
+		<cfargument name="sql" type="string" required="true">
+		<cfscript>
+			if (sql.startsWith("(AVG(")) return true;
+			if (sql.startsWith("(COUNT(")) return true;
+			if (sql.startsWith("(MAX(")) return true;
+			if (sql.startsWith("(MIN(")) return true;
+			if (sql.startsWith("(SUM(")) return true;
+			
+			return false;
+		</cfscript>
+	</cffunction>
+
 	<cffunction name="$addColumnsToSelectAndGroupBy" returntype="array" access="public" output="false">
 		<cfargument name="sql" type="array" required="true">
 		<cfscript>
@@ -95,7 +108,7 @@
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.item = Trim(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(ListGetAt(loc.returnValue[ArrayLen(loc.returnValue)], loc.i), "ORDER BY ", ""), " ASC", ""), " DESC", ""));
-					if (!ListFindNoCase(ReplaceNoCase(loc.returnValue[ArrayLen(loc.returnValue)-1], "GROUP BY ", ""), loc.item))
+					if (!ListFindNoCase(ReplaceNoCase(loc.returnValue[ArrayLen(loc.returnValue)-1], "GROUP BY ", ""), loc.item) && !$isAggregateFunction(loc.item))
 						loc.returnValue[ArrayLen(loc.returnValue)-1] = ListAppend(loc.returnValue[ArrayLen(loc.returnValue)-1], loc.item);
 				}
 			}
