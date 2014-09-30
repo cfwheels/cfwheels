@@ -87,13 +87,20 @@
 	<cffunction name="$isAggregateFunction" returntype="boolean" access="public" output="false">
 		<cfargument name="sql" type="string" required="true">
 		<cfscript>
-			if (sql.startsWith("(AVG(")) return true;
-			if (sql.startsWith("(COUNT(")) return true;
-			if (sql.startsWith("(MAX(")) return true;
-			if (sql.startsWith("(MIN(")) return true;
-			if (sql.startsWith("(SUM(")) return true;
+			var loc = {};
+
+			// find "(FUNCTION(..." pattern inside the sql
+			loc.match = REFind("^\([A-Z]+\(", arguments.sql, 0, true);
 			
-			return false;
+			// guard against invalid match
+			if (ArrayLen(loc.match.pos) eq 0) return false;
+			if (loc.match.len[1] lte 2) return false;
+			
+			// extract and analyze the function name
+			loc.function = Mid(sql,loc.match.pos[1]+1,loc.match.len[1]-2);
+			loc.result = ListContains("AVG,COUNT,MAX,MIN,SUM",loc.function);
+			
+			return loc.result;
 		</cfscript>
 	</cffunction>
 
