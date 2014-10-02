@@ -84,6 +84,26 @@
 		<cfreturn loc.returnValue>
 	</cffunction>
 
+	<cffunction name="$isAggregateFunction" returntype="boolean" access="public" output="false">
+		<cfargument name="sql" type="string" required="true">
+		<cfscript>
+			var loc = {};
+
+			// find "(FUNCTION(..." pattern inside the sql
+			loc.match = REFind("^\([A-Z]+\(", arguments.sql, 0, true);
+			
+			// guard against invalid match
+			if (ArrayLen(loc.match.pos) eq 0) return false;
+			if (loc.match.len[1] lte 2) return false;
+			
+			// extract and analyze the function name
+			loc.function = Mid(sql,loc.match.pos[1]+1,loc.match.len[1]-2);
+			loc.result = ListContains("AVG,COUNT,MAX,MIN,SUM",loc.function);
+			
+			return loc.result;
+		</cfscript>
+	</cffunction>
+
 	<cffunction name="$addColumnsToSelectAndGroupBy" returntype="array" access="public" output="false">
 		<cfargument name="sql" type="array" required="true">
 		<cfscript>
@@ -95,7 +115,7 @@
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.item = Trim(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(ListGetAt(loc.returnValue[ArrayLen(loc.returnValue)], loc.i), "ORDER BY ", ""), " ASC", ""), " DESC", ""));
-					if (!ListFindNoCase(ReplaceNoCase(loc.returnValue[ArrayLen(loc.returnValue)-1], "GROUP BY ", ""), loc.item))
+					if (!ListFindNoCase(ReplaceNoCase(loc.returnValue[ArrayLen(loc.returnValue)-1], "GROUP BY ", ""), loc.item) && !$isAggregateFunction(loc.item))
 						loc.returnValue[ArrayLen(loc.returnValue)-1] = ListAppend(loc.returnValue[ArrayLen(loc.returnValue)-1], loc.item);
 				}
 			}
