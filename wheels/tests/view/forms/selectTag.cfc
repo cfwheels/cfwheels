@@ -4,6 +4,7 @@
 		<cfset loc.controller = controller(name="dummy")>
 		<cfset loc.options.simplevalues = '<select id="testselect" name="testselect"><option value="first">first</option><option value="second">second</option><option value="third">third</option></select>'>
 		<cfset loc.options.complexvalues = '<select id="testselect" name="testselect"><option value="1">first</option><option value="2">second</option><option value="3">third</option></select>'>
+		<cfset loc.options.single_key_struct = '<select id="testselect" name="testselect"><option value="firstKeyName">first Value</option><option value="secondKeyName">second Value</option></select>'>
 		<cfset loc.options.single_column_query = '<select id="testselect" name="testselect"><option value="first">first</option><option value="second">second</option><option value="third">third</option></select>'>
 		<cfset loc.options.empty_query = '<select id="testselect" name="testselect"></select>'>
 	</cffunction>
@@ -22,6 +23,18 @@
 		<cfset debug("loc.controller.selectTag(argumentcollection=loc.args)", false)>
 		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
 		<cfset assert('loc.options.complexvalues eq loc.r')>
+	</cffunction>
+
+	<cffunction name="test_array_of_structs_for_option_values_single_key">
+		<cfset loc.args.name = "testselect">
+		<cfset loc.args.options = []>
+		<cfset loc.temp = {firstKeyName="first Value"}>
+		<cfset ArrayAppend(loc.args.options, loc.temp)>
+		<cfset loc.temp = {secondKeyName="second Value"}>
+		<cfset ArrayAppend(loc.args.options, loc.temp)>
+		<cfset debug("loc.controller.selectTag(argumentcollection=loc.args)", false)>
+		<cfset loc.r = loc.controller.selectTag(argumentcollection=loc.args)>
+		<cfset assert('loc.options.single_key_struct eq loc.r')>
 	</cffunction>
 
 	<cffunction name="test_one_dimensional_array_for_option_values">

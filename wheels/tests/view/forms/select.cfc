@@ -55,11 +55,11 @@
 	<cffunction name="test_with_array_of_structs_as_options">
 		<cfset loc.options = []>
 		<cfset loc.options[1] = {}>
-		<cfset loc.options[1].tony = "petruzzi">
+		<cfset loc.options[1].tp = "tony petruzzi">
 		<cfset loc.options[2] = {}>
-		<cfset loc.options[2].per = "djurner">
+		<cfset loc.options[2].pd = "per djurner">
 	    <cfset loc.r = loc.controller.select(objectName="user", property="firstname", options=loc.options, label=false)>
-	    <cfset loc.e = '<select id="user-firstname" name="user[firstname]"><option value="petruzzi">tony</option><option value="djurner">per</option></select>'>
+	    <cfset loc.e = '<select id="user-firstname" name="user[firstname]"><option value="tp">tony petruzzi</option><option value="pd">per djurner</option></select>'>
 	    <cfset assert('loc.e eq loc.r')>
 	</cffunction>
 	
