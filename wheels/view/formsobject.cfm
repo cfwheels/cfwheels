@@ -543,8 +543,8 @@
 					if(StructCount(loc.object) eq 1)
 					{
 						loc.key = StructKeyList(loc.object);
-						loc.optionValue = loc.object[loc.key];
-						loc.optionText = LCase(loc.key);
+						loc.optionValue = LCase(loc.key);
+						loc.optionText = loc.object[loc.key];
 					}
 					else
 					{
