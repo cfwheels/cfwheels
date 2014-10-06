@@ -154,7 +154,7 @@
 			for (loc.item in arguments.value)
 			{
 				// check to see if the id is a tickcount, if so the object is new
-				if (IsNumeric(loc.item) && Ceiling(GetTickCount() / 900000000) == Ceiling(loc.item / 900000000))
+				if (IsNumeric(loc.item) && Ceiling(Right(GetTickCount(), 12) / 900000000) == Ceiling(loc.item / 900000000))
 				{
 					ArrayAppend(this[arguments.property], $getAssociationObject(property=arguments.property, value=arguments.value[loc.item], association=arguments.association, delete=arguments.delete));
 					$updateCollectionObject(property=arguments.property, value=arguments.value[loc.item]);
