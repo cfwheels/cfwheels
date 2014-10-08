@@ -1,6 +1,7 @@
 <cfcomponent extends="Model">
 
 	<cffunction name="init">
+		<cfset property(name="primary_key_id", sql="id")>
 		<cfset belongsTo("author")>
 		<cfset hasMany("comments")>
 		<cfset hasMany("classifications")>
