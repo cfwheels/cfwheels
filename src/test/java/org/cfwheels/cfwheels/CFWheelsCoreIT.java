@@ -139,6 +139,15 @@ public class CFWheelsCoreIT {
 					"ALTER TABLE #loc.i# MODIFY COLUMN <cfif loc.i IS \"photogalleries\">photogalleryid<cfelseif loc.i IS \"photogalleryphotos\">photogalleryphotoid<cfelse>id</cfif> #loc.identityColumnType# DEFAULT #loc.seq#.nextval");
 			Files.write(Paths.get("wheels/tests/populate.cfm"), content.getBytes());
 		}
+		if ("true".equals(System.getProperty("testSharedAppName"))) {
+			driver.get(baseUrl + "/wheels/tests/_assets/sharedappname/test.cfm");
+			driver.get(baseUrl);
+	        String pageSource = driver.getPageSource();
+	        if (pageSource.contains("Error")) {
+	        	fail("Shared App Name test failed");
+	    		Files.write(Paths.get("target/failsafe-reports/_databaseRecreateERROR.html"), pageSource.getBytes());
+	        }
+		}
 		if ("true".equals(System.getProperty("testParallelStart"))) {
 			hitHomepageWithParallelRequest();
 		}

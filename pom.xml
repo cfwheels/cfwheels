@@ -15,6 +15,8 @@ usage:
   - "mvn clean verify -P mssql" upload and runs all CFWheels tests on ACF11 and Microsoft SQLServer on VivioTech test server
   - "mvn clean verify -P mssql,acf9oracle" upload and deploy CFWheels on test server and run all tests also on ACF9 Oracle database 
   - "mvn clean verify -P oracle" copy and runs all CFWheels tests on local ColdFusion8 and Oracle (or whatever database configured locally)
+  - "mvn verify -DtestParallelStart=true" start with parallel request and then run all tests 
+  - "mvn verify -DtestSharedAppName=true" start with shared application name test and then run all tests 
 
 Benefits of embedded-container-test versus full-integration-test
   #1 clean test data (data is not shared with nor contaminated by other processes)
@@ -40,6 +42,7 @@ Benefits of embedded-container-test versus full-integration-test
 		<testServer>http://localhost:8080</testServer>
 		<testSecondPort></testSecondPort>
 		<deployUrl></deployUrl>
+		<testSharedAppName>false</testSharedAppName>
 		<testSubfolder>false</testSubfolder>
 		<testParallelStart>false</testParallelStart>
 		<!-- settings for Oracle emulation -->
@@ -92,6 +95,7 @@ Benefits of embedded-container-test versus full-integration-test
 						<testSecondPort>${testSecondPort}</testSecondPort>
 						<deployUrl>${deployUrl}</deployUrl>
 						<testOracleEmulation>${testOracleEmulation}</testOracleEmulation>
+						<testSharedAppName>${testSharedAppName}</testSharedAppName>
 						<testSubfolder>${testSubfolder}</testSubfolder>
 						<testParallelStart>${testParallelStart}</testParallelStart>
 					</systemPropertyVariables>

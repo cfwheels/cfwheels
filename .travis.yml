@@ -12,9 +12,9 @@ before_script:
 script: "
 if [ $TRAVIS_SECURE_ENV_VARS == 'true' ];
 then 
-    mvn verify -Prailo,subfolder -DtestParallelStart=true && mvn verify -Prailo,mysql && mvn verify -Prailo,postgresql && mvn verify -Prailo,oracle-emu && mvn clean verify -Pmssql,acf9oracle; 
+    mvn verify -Prailo,subfolder -DtestParallelStart=true && mvn verify -Prailo,mysql && mvn verify -Prailo,postgresql && mvn verify -Prailo,oracle-emu -DtestSharedAppName=true && mvn clean verify -Pmssql,acf9oracle; 
 else 
-    mvn verify -Prailo,subfolder -DtestParallelStart=true && mvn verify -Prailo,mysql && mvn verify -Prailo,postgresql && mvn verify -Prailo,oracle-emu;
+    mvn verify -Prailo,subfolder -DtestParallelStart=true && mvn verify -Prailo,mysql && mvn verify -Prailo,postgresql && mvn verify -Prailo,oracle-emu -DtestSharedAppName=true;
 fi"
 
 #see pom.xml for the explanation of the mvn commands above

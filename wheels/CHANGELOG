@@ -7,6 +7,7 @@ Bug Fixes
 * Fixed reversed usage for setting option text / value when passing in an array of structs to select() / selectTag() - [Per Djurner]
 * Tableless models should not require dataSourceName #351 [Jeremy Keczan, Singgih Cahyono]
 * Fixed issue with using group by with calculated properties - #89 [Adam Chapman, Per Djurner, Singgih Cahyono]
+* Fixed showdebuginformation undefined when sharing application name #359 [Singgih Cahyono] 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
