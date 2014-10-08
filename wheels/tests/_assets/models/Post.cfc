@@ -1,7 +1,7 @@
 <cfcomponent extends="Model">
 
 	<cffunction name="init">
-		<cfset property(name="primary_key_id", sql="id")>
+		<cfset property(name="primary_key_id", sql="posts.id")>
 		<cfset belongsTo("author")>
 		<cfset hasMany("comments")>
 		<cfset validatesUniquenessOf("title")>
