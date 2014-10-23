@@ -128,6 +128,15 @@
 
 			if (Len(arguments.order))
 			{
+				// insert primary keys to order clause unless they are already there, this guarantees that the ordering is unique which is required to make pagination work properly
+				loc.compareList = $listClean(ReplaceNoCase(ReplaceNoCase(arguments.order, " ASC", "", "all"), " DESC", "", "all"));
+				loc.iEnd = ListLen(primaryKeys());
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+				{
+					loc.iItem = primaryKeys(loc.i);
+					if (!ListFindNoCase(loc.compareList, loc.iItem) && !ListFindNoCase(loc.compareList, tableName() & "." & loc.iItem))
+						arguments.order = ListAppend(arguments.order, loc.iItem);
+				}
 			}
 			else
 			{

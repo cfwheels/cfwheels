@@ -36,7 +36,7 @@
 	</cffunction>
 
 	<cffunction name="test_order_clause_with_pagination_and_primary_key_alias">
-		<cfset loc.r = model("post").findAll(select="id, authorid, title", order="primary_key_id", page=1, perPage=2)>
+		<cfset loc.r = model("post").findAll(select="id, authorid, title", order="id", page=1, perPage=2)>
 		<cfset assert('loc.r.recordcount eq 2')>
 	</cffunction>
 
