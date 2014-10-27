@@ -5,9 +5,10 @@ Bug Fixes
 
 * Fixed regression bug with setting unique id for nested properties - [Simon Allard, Per Djurner]
 * Fixed reversed usage for setting option text / value when passing in an array of structs to select() / selectTag() - [Per Djurner]
-* Tableless models should not require dataSourceName #351 [Jeremy Keczan, Singgih Cahyono]
+* Tableless models should not require dataSourceName - #351 [Jeremy Keczan, Singgih Cahyono]
 * Fixed issue with using group by with calculated properties - #89 [Adam Chapman, Per Djurner, Singgih Cahyono]
-* Fixed showdebuginformation undefined when sharing application name #359 [Singgih Cahyono] 
+* Fixed ORM incorrectly parsing a property value as NULL - #209 [Chris Peters, Per Djurner]
+* Fix but with application scope when sharing name across applications - #359 [Singgih Cahyono]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
