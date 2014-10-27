@@ -4,6 +4,14 @@
 		<cfset results = {}>
 	</cffunction>
 
+	<cffunction name="test_save_null_strings">
+		<cftransaction>
+			<cfset results.author = model("author").create(firstName="Null", lastName="Null")>
+			<cfset assert("IsObject(results.author)")>
+			<cftransaction action="rollback" />
+		</cftransaction>
+	</cffunction>
+
 	<cffunction name="test_auto_incrementing_primary_key_should_be_set">
 		<cftransaction>
 			<cfset results.author = model("author").create(firstName="Test", lastName="Test")>
