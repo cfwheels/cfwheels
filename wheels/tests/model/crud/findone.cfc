@@ -15,4 +15,11 @@
 		<cfset assert("IsQuery(loc.post) and loc.post.recordcount")>
 	</cffunction>
 
+	<cffunction name="test_do_not_use_query_param_for_nulls">
+		<cfset result = model("author").findOne(where="lastName IS NULL")>
+		<cfset assert("NOT IsObject(result)")>
+		<cfset result = model("author").findOne(where="lastName IS NOT NULL")>
+		<cfset assert("IsObject(result)")>
+	</cffunction>
+
 </cfcomponent>

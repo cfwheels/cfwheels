@@ -222,10 +222,6 @@
 			loc.params.separator = chr(7);
 			loc.params.value = $cleanInStatmentValue(loc.params.value);
 		}
-		if (!IsBinary(loc.params.value) && loc.params.value eq "null")
-		{
-			loc.params.useNull = true;
-		}
 		</cfscript>
 		<cfreturn loc.params>
 	</cffunction>
@@ -268,7 +264,7 @@
 		StructAppend(loc.args, loc.orgArgs, true);
 		</cfscript>
 
-		<cfquery attributeCollection="#loc.args#"><cfloop array="#arguments.sql#" index="loc.i"><cfif IsStruct(loc.i)><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif StructKeyExists(loc.queryParamAttributes, "useNull")>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")><cfif arguments.parameterize>(<cfqueryparam attributeCollection="#loc.queryParamAttributes#">)<cfelse>(#PreserveSingleQuotes(loc.i.value)#)</cfif><cfelse><cfif arguments.parameterize><cfqueryparam attributeCollection="#loc.queryParamAttributes#"><cfelse>#$quoteValue(str=loc.i.value, sqlType=loc.i.type)#</cfif></cfif><cfelse><cfset loc.i = Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")>#PreserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif></cfquery>
+		<cfquery attributeCollection="#loc.args#"><cfset loc.pos = 0><cfloop array="#arguments.sql#" index="loc.i"><cfset loc.pos = loc.pos + 1><cfif IsStruct(loc.i)><cfset loc.queryParamAttributes = $CFQueryParameters(loc.i)><cfif NOT IsBinary(loc.i.value) AND loc.i.value IS "null" AND loc.pos GT 1 AND (Right(arguments.sql[loc.pos-1], 2) IS "IS" OR Right(arguments.sql[loc.pos-1], 6) IS "IS NOT")>NULL<cfelseif StructKeyExists(loc.queryParamAttributes, "list")><cfif arguments.parameterize>(<cfqueryparam attributeCollection="#loc.queryParamAttributes#">)<cfelse>(#PreserveSingleQuotes(loc.i.value)#)</cfif><cfelse><cfif arguments.parameterize><cfqueryparam attributeCollection="#loc.queryParamAttributes#"><cfelse>#$quoteValue(str=loc.i.value, sqlType=loc.i.type)#</cfif></cfif><cfelse><cfset loc.i = Replace(PreserveSingleQuotes(loc.i), "[[comma]]", ",", "all")>#PreserveSingleQuotes(loc.i)#</cfif>#chr(13)##chr(10)#</cfloop><cfif arguments.limit>LIMIT #arguments.limit#<cfif arguments.offset>#chr(13)##chr(10)#OFFSET #arguments.offset#</cfif></cfif></cfquery>
 
 		<cfscript>
 		if (StructKeyExists(query, "name"))
