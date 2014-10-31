@@ -8,7 +8,8 @@ Bug Fixes
 * Tableless models should not require dataSourceName - #351 [Jeremy Keczan, Singgih Cahyono]
 * Fixed issue with using group by with calculated properties - #89 [Adam Chapman, Per Djurner, Singgih Cahyono]
 * Fixed ORM incorrectly parsing a property value as NULL - #209 [Chris Peters, Per Djurner]
-* Fix but with application scope when sharing name across applications - #359 [Singgih Cahyono]
+* Fixed bug with application scope when sharing name across applications - #359 [Singgih Cahyono]
+* Fix for removing "AS" from ORDER BY clause in Microsoft SQL Server - #132 [Troy Murray, Tony Petruzzi, Charley Contreras, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

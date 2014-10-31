@@ -51,7 +51,7 @@
 				}
 				StructDelete(arguments, "maxrows");
 			}
-			else if (arguments.limit + arguments.offset gt 0)
+			if (arguments.limit + arguments.offset gt 0)
 			{
 				loc.containsGroup = false;
 				loc.afterWhere = "";
