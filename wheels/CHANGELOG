@@ -14,7 +14,8 @@ Bug Fixes
 * Fixed ORM incorrectly parsing a property value as NULL - #209 [Chris Peters, Per Djurner]
 * Fixed bug with application scope when sharing name across applications - #359 [Singgih Cahyono]
 * Fix for removing "AS" from ORDER BY clause in Microsoft SQL Server - #132 [Troy Murray, Tony Petruzzi, Charley Contreras, Per Djurner]
-* Calling valid() will now correctly validate associations set up using nested properties - #284 [Adam Chapman, Per Djurner]
+* Calling valid() will now correctly validate all associations when using nested properties - #284 [Adam Chapman, Per Djurner]
+* Fixed issue with save() causing callbacks to run twice when using nested properties - #284 [Adam Chapman, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

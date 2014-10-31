@@ -26,6 +26,15 @@
 		<cfset assert("StructKeyExists(loc.gallery.photos[1].properties(), 'beforeValidationCallbackRegistered')")>
 	</cffunction>
 
+	<cffunction name="test_saving_nested_property_object_should_register_callback_only_once">
+		<cftransaction>
+			<cfset loc = $setGalleryNestedProperties()>
+			<cfset loc.gallery.save()>
+			<cfset assert("loc.gallery.photos[1].beforeValidationCallbackCount IS 1")>
+			<cftransaction action="rollback"/>
+		</cftransaction>
+	</cffunction>
+
 	<cffunction name="$setGalleryNestedProperties" access="private">
 		<cfset var loc = {}>
 		<!--- User --->
