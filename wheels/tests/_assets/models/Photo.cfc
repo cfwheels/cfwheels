@@ -3,21 +3,18 @@
 	<cffunction name="init">
 		<cfset property(name="DESCRIPTION1", column="description")>
 		<cfset belongsTo(name="gallery", modelName="gallery", foreignKey="id")>
-		<!--- Uncomment to test issue 284 --->
-		<!--- <cfset beforeValidation("beforeValidationCallbackThatSetsProperty,beforeValidationCallbackThatIncreasesVariable")> --->
+		<cfset beforeValidation("beforeValidationCallbackThatSetsProperty,beforeValidationCallbackThatIncreasesVariable")>
 	</cffunction>
 
-	<!--- Uncomment to test issue 284 --->
-	<!--- <cffunction name="beforeValidationCallbackThatSetsProperty">
+	<cffunction name="beforeValidationCallbackThatSetsProperty">
 		<cfset this.beforeValidationCallbackRegistered = true>
-	</cffunction> --->
+	</cffunction>
 
-	<!--- Uncomment to test issue 284 --->
-	<!--- <cffunction name="beforeValidationCallbackThatIncreasesVariable">
+	<cffunction name="beforeValidationCallbackThatIncreasesVariable">
 		<cfif NOT StructKeyExists(this, "beforeValidationCallbackCount")>
 			<cfset this.beforeValidationCallbackCount = 0>
 		</cfif>
 		<cfset this.beforeValidationCallbackCount++>
-	</cffunction> --->
+	</cffunction>
 
 </cfcomponent>
