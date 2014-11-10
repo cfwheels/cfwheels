@@ -1,4 +1,4 @@
-1.3.2 (11/04/2014)
+1.3.2 (11/10/2014)
 
 Bug Fixes
 =========
@@ -12,6 +12,7 @@ Bug Fixes
 * Fix for removing "AS" from ORDER BY clause in Microsoft SQL Server - #132 [Troy Murray, Tony Petruzzi, Charley Contreras, Per Djurner]
 * Calling valid() will now correctly validate all associations when using nested properties - #284 [Adam Chapman, Per Djurner]
 * Fixed issue with save() causing callbacks to run twice when using nested properties - #284 [Adam Chapman, Per Djurner]
+* Fixed race condition issue with caching - #376 [Brian Parks, Tom King, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -92,7 +93,6 @@ Bug Fixes
 * Make sure the latest version of a plugin is unpacked if multiple versions exists - [Tony Petruzzi]
 * Fixed so the "onApplicationEnd" and "onSessionEnd" events pass through the arguments scope [Per Djurner]
 * Fixed so the "onSessionEnd" event fires correctly - #172 [Per Djurner]
-* Fixed race condition issue with caching - [Per Djurner]
 * Added geometry and geography datatypes (SQLServer) - [Simon Allard]
 * Allow blank values to be passed through when validating uniqueness - [Per Djurner]
 * Added work-around for "FastHashRemoved" struct bug found in ColdFusion 8 - [Per Djurner]
