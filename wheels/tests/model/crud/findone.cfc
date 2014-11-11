@@ -22,4 +22,15 @@
 		<cfset assert("IsObject(result)")>
 	</cffunction>
 
+	<cffunction name="test_parsing_numbers_in_where">
+		<cfset result = model("author").findOne(where="firstName = 1")>
+		<cfset assert("NOT IsObject(result)")>
+		<cfset result = model("author").findOne(where="firstName = 1.0")>
+		<cfset assert("NOT IsObject(result)")>
+		<cfset result = model("author").findOne(where="firstName = +1")>
+		<cfset assert("NOT IsObject(result)")>
+		<cfset result = model("author").findOne(where="firstName = -1")>
+		<cfset assert("NOT IsObject(result)")>
+	</cffunction>
+
 </cfcomponent>
