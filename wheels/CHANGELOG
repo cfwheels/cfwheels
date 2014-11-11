@@ -17,6 +17,7 @@ Bug Fixes
 * Calling valid() will now correctly validate all associations when using nested properties - #284 [Adam Chapman, Per Djurner]
 * Fixed issue with save() causing callbacks to run twice when using nested properties - #284 [Adam Chapman, Per Djurner]
 * Fixed race condition issue with caching - #376 [Brian Parks, Tom King, Per Djurner]
+* Fixed number parsing in WHERE strings - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
