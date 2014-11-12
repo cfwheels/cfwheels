@@ -13,7 +13,9 @@ All documentation should go through this process. Let's not be a bunch of cowboy
 1.  First off, [open an issue][2] to let project collaborators know what you're planning on doing. We would hate for you
     to spend hours writing a document that someone else is also working on. Plus core team members would be glad to help
     out answering any questions that you may have.
-2.  Draft content changes in the [`docs` folder][3]. Anyone can edit these files and submit a pull request.
+2.  If you're updating the [Reference Guide][6], draft content changes in the [`docs` folder][3]. If you're updating the
+    API documentation, draft content changes within the CFWheels core (see the _API Documentation_ section below).
+    Anyone can edit these files and submit a pull request.
 3.  Commit your changes and [reference the issue number][4] in the commit message. An example commit message would be,
     "Fixes #238 - Typo in documentation chapter."
 4.  Submit a [pull request][5] to have your fix included in core. Consider leaving a helpful message along with the
