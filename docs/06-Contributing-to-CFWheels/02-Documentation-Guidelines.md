@@ -101,6 +101,9 @@ the content to follow the guidelines.
     
     1.  Ordered lists use numerals followed by a period.
     2.  Numerals are followed by 2 spaces.
+        -   Nested lists follow the same ideas.
+        -   The bullet points match up with the content contained within the
+            parent list item.
     3.  Extra long content wraps to the next line and is indented to match the
         rest of the item.
     ```
