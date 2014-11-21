@@ -94,4 +94,4 @@ These are all needed for the framework to run. No changes should be done to thes
 
 You can add more directories if you want to, of course. Just remember to include a blank `Application.cfc` in those directories. Otherwise, Wheels will try to get itself involved with those requests as well.
 
-[1]: ../04-Database-Interaction-Through-Models/Transactions.md
+[1]: ../03-Handling-Requests-with-Controllers/11-URL-Rewriting.md
