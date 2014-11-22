@@ -60,7 +60,7 @@ To stay true to our ColdFusion and Java roots, all names must be camelCase. In s
 
 Everyone doing OOP with ColdFusion loves all of the the room for error that the **_var_** keyword allows! To help eliminate confusion, define a local struct at the top of CFC methods called **_loc_**. Any variable whose value should not persist for the life of the CFC instance should be stored in the loc struct. rsist for the life of the CFC instance should be stored in the **_loc_** struct. The only exception to this rule is when a function only uses one variable, in which case that variable alone can be declared with the var keyword.
 
-```
+```cfml
 <cffunction name="someMethod" access="public" returntype="void">
     <cfargument name="someArray" type="array" required="true">
     

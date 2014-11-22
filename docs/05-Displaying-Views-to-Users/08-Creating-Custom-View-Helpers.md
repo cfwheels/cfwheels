@@ -12,9 +12,11 @@ Once a UDF is placed in this file, it will be available for use in all your view
 Alternatively, if you only need a set of functions in a specific controller of your application, you can make them controller-specific. This is done by placing a `helpers.cfm` file inside the controller's view folder.
 
 So if we wanted a set of helpers to generally only be available for your users controller, you would store the UDFs in this file:
-```
+
+```cfml
 views/users/helpers.cfm
 ```
+
 Any functions in that file will now only be included for the view pages of that specific controller.
 
 #### When _not_ to Use Helper Functions

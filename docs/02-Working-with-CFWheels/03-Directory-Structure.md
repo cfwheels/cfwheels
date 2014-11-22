@@ -24,7 +24,7 @@ After downloading and unzipping Wheels, here's the directory structure that you 
 + :page_facing_up: root.cfm
 + :page_facing_up: web.config
 
-## Quick Summary
+### Quick Summary
 Your configuration settings will be done in the **_config_** directory.
 
 Your application code will end up in four of the folders, namely **_controllers_**, **_events_**, **_models_**, and **_views_**.
@@ -37,7 +37,7 @@ Place Wheels plugins in the **_plugins_** folder.
 
 And the last directory? That's the framework itself. It exists in the **_wheels_** directory. Please go in there and have a look around. If you find anything you can improve or new features that you want to add, let us know!
 
-## Detailed Overview
+### Detailed Overview
 Let's go through all of the files and directories now starting with the ones you'll spend most of your time in: the code directories.
 
 #### :open_file_folder: controllers
