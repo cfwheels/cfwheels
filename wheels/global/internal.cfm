@@ -72,9 +72,16 @@
 			case "binary":
 				arguments.value = ToString(arguments.value);
 				break;
-			case "float": case "integer":
+			case "float":
 				if ("true" eq arguments.value) return 1;
 				arguments.value = Val(arguments.value);
+				break;
+			case "integer":
+				if (isValid("regex", arguments.value, "^-{0,1}[1-9]+[\d]*")) {
+					arguments.value = Val(arguments.value);
+				} else {
+					arguments.value = arguments.value;
+				}
 				break;
 			case "boolean":
 				if(len(arguments.value))
