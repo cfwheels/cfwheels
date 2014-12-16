@@ -264,18 +264,7 @@
 			// place the attribute name and value in the string unless it should be skipped according to the arguments or if it's an internal argument (starting with a "$" sign)
 			if (!ListFindNoCase(arguments.skip, loc.key) && (!Len(arguments.skipStartingWith) || Left(loc.key, Len(arguments.skipStartingWith)) != arguments.skipStartingWith) && Left(loc.key, 1) != "$")
 			{
-				// replace boolean arguments for the disabled and readonly attributs with the key (if true) or skip putting it in the output altogether (if false)
-				if (ListFindNoCase("disabled,readonly", loc.key) and IsBoolean(arguments.attributes[loc.key]))
-				{
-					if (arguments.attributes[loc.key])
-					{
-						loc.returnValue &= $tagAttribute(loc.key, LCase(loc.key));
-					}
-				}
-				else
-				{
-					loc.returnValue &= $tagAttribute(loc.key, arguments.attributes[loc.key]);
-				}
+				loc.returnValue &= $tagAttribute(loc.key, arguments.attributes[loc.key]);
 			}
 		}
 
@@ -297,24 +286,38 @@
 	<cfargument name="value" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		loc.name = arguments.name;
 
 		// for custom data attributes we convert underscores / camelCase to hyphens to get around the issue with not being able to use a hyphen in an argument name in CFML
 		if (Left(arguments.name, 4) == "data")
 		{
-			loc.delim = get("dataAttributeDelimiter");
+			loc.delim = application.wheels.dataAttributeDelimiter;
 			if (Len(loc.delim))
 			{
-				loc.name = Replace(REReplace(loc.name, "([a-z])([#loc.delim#])", "\1-\2", "all"), "-#loc.delim#", "-", "all");
+				arguments.name = Replace(REReplace(arguments.name, "([a-z])([#loc.delim#])", "\1-\2", "all"), "-#loc.delim#", "-", "all");
 			}
 		}
-		loc.name = LCase(loc.name);
-		loc.returnValue = " " & loc.name;
+		arguments.name = LCase(arguments.name);
 
-		// unless it's a custom data attribute we support the html5 boolean attribute by not including the value at all
-		if (Left(arguments.name, 4) == "data" || !IsBoolean(arguments.value) || CompareNoCase(arguments.value, "true"))
+		// set standard attribute name / value to use as the default to return (e.g. name / value part of <input name="value">)
+		loc.returnValue = " " & arguments.name & "=""" & arguments.value & """";
+
+		// when attribute can be boolean we handle it accordingly and override the above return value
+		if ((!IsBoolean(application.wheels.booleanAttributes) && ListFindNoCase(application.wheels.booleanAttributes, arguments.name)) || (IsBoolean(application.wheels.booleanAttributes) && application.wheels.booleanAttributes))
 		{
-			loc.returnValue &= "=""" & arguments.value & """";
+			if (IsBoolean(arguments.value) || !CompareNoCase(arguments.value, "true") || !CompareNoCase(arguments.value, "false"))
+			{
+				// value passed in can be handled as a boolean
+				if (arguments.value)
+				{
+					// when value is true we just add the attribute name itself (e.g. <input type="checkbox" checked>)
+					loc.returnValue = " " & arguments.name;
+				}
+				else
+				{
+					// when value is false we do not add the attribute at all
+					loc.returnValue = "";
+				}
+			}
 		}
 	</cfscript>
 	<cfreturn loc.returnValue>
