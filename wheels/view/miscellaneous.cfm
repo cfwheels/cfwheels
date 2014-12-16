@@ -302,7 +302,7 @@
 		loc.returnValue = " " & arguments.name & "=""" & arguments.value & """";
 
 		// when attribute can be boolean we handle it accordingly and override the above return value
-		if (ListFindNoCase(application.wheels.booleanAttributes, arguments.name))
+		if ((!IsBoolean(application.wheels.booleanAttributes) && ListFindNoCase(application.wheels.booleanAttributes, arguments.name)) || (IsBoolean(application.wheels.booleanAttributes) && application.wheels.booleanAttributes))
 		{
 			if (IsBoolean(arguments.value) || !CompareNoCase(arguments.value, "true") || !CompareNoCase(arguments.value, "false"))
 			{
