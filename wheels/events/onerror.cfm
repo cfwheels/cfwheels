@@ -13,7 +13,7 @@
 		}
 		$setting(requestTimeout=loc.requestTimeout);
 
-		loc.returnValue = $simpleLock(execute="$runOnError", executeArgs=arguments, name="wheelsReloadLock", type="readOnly", timeout=180);
+		loc.returnValue = $simpleLock(name="reloadLock#application.applicationName#", execute="$runOnError", executeArgs=arguments, type="readOnly", timeout=180);
 	</cfscript>
 	<cfoutput>
 		#loc.returnValue#

@@ -92,7 +92,7 @@
 
 		loc.executeArgs = {};
 		loc.executeArgs.name = arguments.name;
-		$simpleLock(name="controllerLock", type="readonly", execute="$setControllerClassData", executeArgs=loc.executeArgs);
+		$simpleLock(name="controllerLock#application.applicationName#", type="readonly", execute="$setControllerClassData", executeArgs=loc.executeArgs);
 		variables.params = arguments.params;
 	</cfscript>
 	<cfreturn this>

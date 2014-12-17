@@ -3,10 +3,10 @@
 		//fix for shared application name issue 359
 		if(!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "eventpath"))
 		{
-			$simpleLock(execute="onApplicationStart", name="wheelsReloadLock", type="exclusive", timeout=180);
+			$simpleLock(name="reloadLock#application.applicationName#", execute="onApplicationStart", type="exclusive", timeout=180);
 		}
 
-		$simpleLock(execute="$runOnSessionStart", name="wheelsReloadLock", type="readOnly", timeout=180);
+		$simpleLock(name="reloadLock#application.applicationName#", execute="$runOnSessionStart", type="readOnly", timeout=180);
 	</cfscript>
 </cffunction>
 

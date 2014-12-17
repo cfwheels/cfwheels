@@ -332,7 +332,7 @@
 		var loc = {};
 		loc.args = {};
 		loc.args.name = arguments.name;
-		loc.returnValue = $doubleCheckedLock(name="controllerLock", condition="$cachedControllerClassExists", execute="$createControllerClass", conditionArgs=loc.args, executeArgs=loc.args);
+		loc.returnValue = $doubleCheckedLock(name="controllerLock#application.applicationName#", condition="$cachedControllerClassExists", execute="$createControllerClass", conditionArgs=loc.args, executeArgs=loc.args);
 		if (!StructIsEmpty(arguments.params))
 			loc.returnValue = loc.returnValue.$createControllerObject(arguments.params);
 		return loc.returnValue;
@@ -374,7 +374,7 @@
 	'
 	categories="global,miscellaneous" chapters="object-relational-mapping" functions="">
 	<cfargument name="name" type="string" required="true" hint="Name of the model to get a reference to.">
-	<cfreturn $doubleCheckedLock(name="modelLock", condition="$cachedModelClassExists", execute="$createModelClass", conditionArgs=arguments, executeArgs=arguments)>
+	<cfreturn $doubleCheckedLock(name="modelLock#application.applicationName#", condition="$cachedModelClassExists", execute="$createModelClass", conditionArgs=arguments, executeArgs=arguments)>
 </cffunction>
 
 <cffunction name="obfuscateParam" returntype="string" access="public" output="false" hint="Obfuscates a value. Typically used for hiding primary key values when passed along in the URL."

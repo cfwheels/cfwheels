@@ -7,7 +7,7 @@
 		//fix for shared application name issue 359
 		if(!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "eventpath"))
 		{
-			$simpleLock(execute="onApplicationStart", name="wheelsReloadLock", type="exclusive", timeout=180);
+			$simpleLock(name="reloadLock#application.applicationName#", execute="onApplicationStart", type="exclusive", timeout=180);
 		}
 
 		// need to setup the wheels struct up here since it's used to store debugging info below if this is a reload request
@@ -17,11 +17,11 @@
 		if (StructKeyExists(URL, "reload") && (!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "reloadPassword") || !Len(application.wheels.reloadPassword) || (StructKeyExists(URL, "password") && URL.password == application.wheels.reloadPassword)))
 		{
 			$debugPoint("total,reload");
-			$simpleLock(execute="onApplicationStart", name="wheelsReloadLock", type="exclusive", timeout=180);
+			$simpleLock(name="reloadLock#application.applicationName#", execute="onApplicationStart", type="exclusive", timeout=180);
 		}
 
 		// run the rest of the request start code
-		$simpleLock(execute="$runOnRequestStart", executeArgs=arguments, name="wheelsReloadLock", type="readOnly", timeout=180);
+		$simpleLock(name="reloadLock#application.applicationName#", execute="$runOnRequestStart", executeArgs=arguments, type="readOnly", timeout=180);
 	</cfscript>
 </cffunction>
 
@@ -81,11 +81,11 @@
 		}
 		if (!application.wheels.cacheModelInitialization)
 		{
-			$simpleLock(name="modelLock", execute="$clearModelInitializationCache", type="exclusive");
+			$simpleLock(name="modelLock#application.applicationName#", execute="$clearModelInitializationCache", type="exclusive");
 		}
 		if (!application.wheels.cacheControllerInitialization)
 		{
-			$simpleLock(name="controllerLock", execute="$clearControllerInitializationCache", type="exclusive");
+			$simpleLock(name="controllerLock#application.applicationName#", execute="$clearControllerInitializationCache", type="exclusive");
 		}
 		if (!application.wheels.cacheRoutes)
 		{

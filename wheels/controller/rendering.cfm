@@ -60,7 +60,7 @@
 		{
 			loc.category = "action";
 			loc.key = $hashedKey(arguments, variables.params);
-			loc.lockName = loc.category & loc.key;
+			loc.lockName = loc.category & loc.key & application.applicationName;
 			loc.conditionArgs = {};
 			loc.conditionArgs.category = loc.category;
 			loc.conditionArgs.key = loc.key;
@@ -376,7 +376,7 @@
 		{
 			loc.category = "partial";
 			loc.key = $hashedKey(arguments);
-			loc.lockName = loc.category & loc.key;
+			loc.lockName = loc.category & loc.key & application.applicationName;
 			loc.conditionArgs = {};
 			loc.conditionArgs.category = loc.category;
 			loc.conditionArgs.key = loc.key;

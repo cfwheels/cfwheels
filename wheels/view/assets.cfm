@@ -153,7 +153,7 @@
 		{
 			loc.category = "image";
 			loc.key = $hashedKey(arguments);
-			loc.lockName = loc.category & loc.key;
+			loc.lockName = loc.category & loc.key & application.applicationName;
 			loc.conditionArgs = {};
 			loc.conditionArgs.category = loc.category;
 			loc.conditionArgs.key = loc.key;

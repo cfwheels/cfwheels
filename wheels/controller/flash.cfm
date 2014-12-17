@@ -268,7 +268,7 @@
 	<cfscript>
 		if (!StructKeyExists(arguments, "$locked"))
 		{
-			return $simpleLock(name="flashLock", type="readonly", execute="$readFlash", executeArgs=arguments);
+			return $simpleLock(name="flashLock#application.applicationName#", type="readonly", execute="$readFlash", executeArgs=arguments);
 		}
 		if ($getFlashStorage() == "cookie" && StructKeyExists(cookie, "flash"))
 		{
@@ -287,7 +287,7 @@
 	<cfscript>
 		if (!StructKeyExists(arguments, "$locked"))
 		{
-			return $simpleLock(name="flashLock", type="exclusive", execute="$writeFlash", executeArgs=arguments);
+			return $simpleLock(name="flashLock#application.applicationName#", type="exclusive", execute="$writeFlash", executeArgs=arguments);
 		}
 		if ($getFlashStorage() == "cookie")
 		{
