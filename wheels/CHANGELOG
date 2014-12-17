@@ -4,6 +4,7 @@ Bug Fixes
 =========
 
 * Correct output of boolean HTML attributes using new global "booleanAttributes" setting - #377 [James Hayes, Per Djurner]
+* Make sure locks cannot be affected by other applications running on the same server - [Jonathan Smith, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
