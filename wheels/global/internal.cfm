@@ -73,6 +73,7 @@
 				arguments.value = ToString(arguments.value);
 				break;
 			case "float": case "integer":
+				if (!Len(arguments.value)) return "";
 				if ("true" eq arguments.value) return 1;
 				arguments.value = Val(arguments.value);
 				break;
