@@ -19,5 +19,18 @@
  		<cfset loc.sqltype.booleanType = "1">
 		<cfset assert('loc.sqltype.hasChanged("booleanType")')>
 	</cffunction>
-	
+
+	<cffunction name="test_should_be_able_to_update_integer_from_null_to_0">
+		<cfset loc.user = model("user").findByKey(1)>
+		<cftransaction>
+			<cfset loc.user.birthDayYear = "">
+			<cfset loc.user.save()>
+			<cfset loc.user.birthDayYear = 0>
+			<cfset loc.user.save()>
+			<cfset loc.user.reload()>
+			<cftransaction action="rollback">
+		</cftransaction>
+		<cfset assert("loc.user.birthDayYear IS 0")>
+	</cffunction>
+
 </cfcomponent>
