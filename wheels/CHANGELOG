@@ -1,4 +1,4 @@
-1.3.3 (01/11/2015)
+1.3.3 (01/23/2015)
 
 Bug Fixes
 =========
@@ -6,6 +6,7 @@ Bug Fixes
 * Correct output of boolean HTML attributes using new global "booleanAttributes" setting - #377 [James Hayes, Per Djurner]
 * Make sure locks cannot be affected by other applications running on the same server - [Jonathan Smith, Per Djurner]
 * Fixed bug with updating an integer column from NULL to 0 - #436 [Simon Allard, Per Djurner]
+* Fixed potential permissions issue when running on shared hosting - [John Bliss, Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
