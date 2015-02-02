@@ -25,6 +25,11 @@
 			application.$wheels.serverName = "Railo";
 			application.$wheels.serverVersion = server.railo.version;
 		}
+		else if(StructKeyExists(server, "lucee"))
+		{
+			application.$wheels.serverName = "Lucee";
+			application.$wheels.serverVersion = server.lucee.version;
+		}
 		else
 		{
 			application.$wheels.serverName = "Adobe ColdFusion";
@@ -201,7 +206,7 @@
 		application.$wheels.useExpandedColumnAliases = false;
 		application.$wheels.modelRequireInit = false;
 		application.$wheels.booleanAttributes = "allowfullscreen,async,autofocus,autoplay,checked,compact,controls,declare,default,defaultchecked,defaultmuted,defaultselected,defer,disabled,draggable,enabled,formnovalidate,hidden,indeterminate,inert,ismap,itemscope,loop,multiple,muted,nohref,noresize,noshade,novalidate,nowrap,open,pauseonexit,readonly,required,reversed,scoped,seamless,selected,sortable,spellcheck,translate,truespeed,typemustmatch,visible";
-	
+
 		// if session management is enabled in the application we default to storing flash data in the session scope, if not we use a cookie
 		if (StructKeyExists(this, "sessionManagement") && this.sessionManagement)
 		{
@@ -223,7 +228,7 @@
 		application.$wheels.clearQueryCacheOnReload = true;
 		application.$wheels.clearServerCacheOnReload = true;
 		application.$wheels.cacheQueriesDuringRequest = true;
-		
+
 		// possible formats for provides
 		application.$wheels.formats = {};
 		application.$wheels.formats.html = "text/html";
@@ -368,7 +373,7 @@
 
 		// reload the plugins each time we reload the application
 		$loadPlugins();
-		
+
 		// allow developers to inject plugins into the application variables scope
 		if (!StructIsEmpty(application.$wheels.mixins))
 		{

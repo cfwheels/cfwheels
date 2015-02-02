@@ -91,15 +91,15 @@
 
 			// find "(FUNCTION(..." pattern inside the sql
 			loc.match = REFind("^\([A-Z]+\(", arguments.sql, 0, true);
-			
+
 			// guard against invalid match
 			if (ArrayLen(loc.match.pos) eq 0) return false;
 			if (loc.match.len[1] lte 2) return false;
-			
+
 			// extract and analyze the function name
 			loc.function = Mid(sql,loc.match.pos[1]+1,loc.match.len[1]-2);
 			loc.result = ListContains("AVG,COUNT,MAX,MIN,SUM",loc.function);
-			
+
 			return loc.result;
 		</cfscript>
 	</cffunction>
@@ -199,12 +199,12 @@
 		<cfargument name="settings" type="struct" required="true">
 		<cfscript>
 		var loc = {};
-		
+
 		if(!StructKeyExists(arguments.settings, "value"))
 		{
 			$throw(type="Wheels.QueryParamValue", message="The value for cfqueryparam cannot be determined", extendedInfo="This is usually caused by a syntax error in the WHERE statement such as forgetting to quote strings.");
 		}
-		
+
 		loc.params = {};
 		loc.params.cfsqltype = arguments.settings.type;
 		loc.params.value = arguments.settings.value;
@@ -249,9 +249,9 @@
 		{
 			StructDelete(loc.args, "password", false);
 		}
-		// set queries in Railo to not preserve single quotes on the entire
+		// set queries in Railo/Lucee to not preserve single quotes on the entire
 		// cfquery block (we'll handle this individually in the SQL statement instead)
-		if (application.wheels.serverName == "Railo")
+		if (application.wheels.serverName == "Railo" OR application.wheels.serverName == "Lucee")
 			loc.args.psq = false;
 
 		// overloaded arguments are settings for the query

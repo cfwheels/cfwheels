@@ -11,6 +11,14 @@
 		<cfset assert('Len($checkMinimumVersion(version="3.0.2", engine="Railo"))')>
 	</cffunction>
 
+	<cffunction name="test_lucee_valid">
+		<cfset assert('!Len($checkMinimumVersion(version="4.5.0.42", engine="Lucee"))')>
+	</cffunction>
+
+	<cffunction name="test_lucee_invalid">
+		<cfset assert('Len($checkMinimumVersion(version="4.4.0", engine="Lucee"))')>
+	</cffunction>
+
 	<cffunction name="test_adobe_valid">
 		<cfset assert('!Len($checkMinimumVersion(version="8,0,1,0", engine="Adobe ColdFusion"))')>
 		<cfset assert('!Len($checkMinimumVersion(version="9,0,0,251028", engine="Adobe ColdFusion"))')>

@@ -6,9 +6,9 @@
 			request.wheels.params = {};
 			request.wheels.cache = {};
 			request.wheels.tickCountId = GetTickCount();
-			
+
 			// create a structure to track the transaction status for all adapters
-			request.wheels.transactions = {};	
+			request.wheels.transactions = {};
 		}
 	</cfscript>
 </cffunction>
@@ -28,7 +28,7 @@
 	<cfargument name="type" type="string" required="false" default="">
 	<cfscript>
 		var loc = {};
-		
+
 		if (!len(arguments.type))
 		{
 			if (IsArray(arguments.value))
@@ -52,7 +52,7 @@
 				arguments.type = "datetime";
 			}
 		}
-		
+
 		switch (arguments.type)
 		{
 			case "array":
@@ -114,10 +114,10 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
-		
+
 		// Make all cache keys domain specific
 		StructInsert(arguments,ListLen(StructKeyList(arguments)) + 1,request.cgi.http_host,true);
-		
+
 		// we need to make sure we are looping through the passed in arguments in the same order everytime
 		loc.values = [];
 		loc.keyList = ListSort(StructKeyList(arguments), "textnocase", "asc");
@@ -375,7 +375,7 @@
 
 		// change to using ampersand so we can use it as a list delim below and so we don't "double replace" it
 		arguments.params = Replace(arguments.params, "&amp;", "&", "all");
-		
+
 		// when rewriting is off we will already have "?controller=" etc in the url so we have to continue with an ampersand
 		if (arguments.$URLRewriting == "Off")
 		{
@@ -401,7 +401,7 @@
 				// since we parse the param string using & and = the developer has to url encode them on the input
 				loc.param = Replace(loc.param, "%2526", "%26", "all");
 				loc.param = Replace(loc.param, "%253D", "%3D", "all");
-				
+
 				if (application.wheels.obfuscateUrls && !ListFindNoCase("cfid,cftoken", loc.temp[1]))
 				{
 					// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
@@ -553,7 +553,7 @@
 	<cfargument name="type" type="string" required="true" hint="Can be either `controller` or `model`." />
 	<cfscript>
 		var loc = {};
-		
+
 		// by default we return Model or Controller so that the base component gets loaded
 		loc.returnValue = capitalize(arguments.type);
 
@@ -839,6 +839,12 @@
 			loc.minimumMajor = "3";
 			loc.minimumMinor = "1";
 			loc.minimumPatch = "2";
+		}
+		else if (arguments.engine == "Lucee")
+		{
+			loc.minimumMajor = "4";
+			loc.minimumMinor = "5";
+			loc.minimumPatch = "0";
 		}
 		else if (arguments.engine == "Adobe ColdFusion")
 		{

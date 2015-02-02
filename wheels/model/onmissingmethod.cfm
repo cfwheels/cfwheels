@@ -23,7 +23,7 @@
 		}
 		else if (Left(arguments.missingMethodName, 9) == "findOneBy" || Left(arguments.missingMethodName, 9) == "findAllBy")
 		{
-			if (StructKeyExists(server, "railo"))
+			if (StructKeyExists(server, "railo") OR StructKeyExists(server, "lucee"))
 			{
 				loc.finderProperties = ListToArray(LCase(ReplaceNoCase(ReplaceNoCase(ReplaceNoCase(arguments.missingMethodName, "And", "|", "all"), "findAllBy", "", "all"), "findOneBy", "", "all")), "|"); // since Railo passes in the method name in all upper case we have to do this here
 			}
@@ -53,7 +53,7 @@
 			{
 				loc.values = arguments.missingMethodArguments[1];
 			}
-			
+
 			if (!IsArray(loc.values))
 			{
 				if (ArrayLen(loc.finderProperties) eq 1)
@@ -71,14 +71,14 @@
 
 			// where clause
 			loc.addToWhere = [];
-	
+
 			// loop through all the properties they want to query and assign values
 			loc.iEnd = ArrayLen(loc.finderProperties);
 			for (loc.i = 1; loc.i LTE loc.iEnd; loc.i++)
 			{
 				ArrayAppend(loc.addToWhere, "#loc.finderProperties[loc.i]# #$dynamicFinderOperator(loc.finderProperties[loc.i])# #variables.wheels.class.adapter.$quoteValue(str=loc.values[loc.i], type=validationTypeForProperty(loc.finderProperties[loc.i]))#");
 			}
-			
+
 			// construct where clause
 			loc.addToWhere = ArrayToList(loc.addToWhere, " AND ");
 			arguments.missingMethodArguments.where = IIf(StructKeyExists(arguments.missingMethodArguments, "where") && Len(arguments.missingMethodArguments.where), "'(' & arguments.missingMethodArguments.where & ') AND (' & loc.addToWhere & ')'", "loc.addToWhere");
