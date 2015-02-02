@@ -20,14 +20,15 @@
 		}
 
 		// check and store server engine name, throw error if using a version that we don't support
-		if (StructKeyExists(server, "railo"))
-		{
-			application.$wheels.serverName = "Railo";
-			application.$wheels.serverVersion = server.railo.version;
-		}
-		else if(StructKeyExists(server, "lucee"))
+		// NB Lucee first as there seems to be some sort of alias in Lucee -> Railo which means server.railo exists
+		if (StructKeyExists(server, "lucee"))
 		{
 			application.$wheels.serverName = "Lucee";
+			application.$wheels.serverVersion = server.railo.version;
+		}
+		else if(StructKeyExists(server, "railo"))
+		{
+			application.$wheels.serverName = "Railo";
 			application.$wheels.serverVersion = server.lucee.version;
 		}
 		else
