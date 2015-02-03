@@ -40,7 +40,7 @@
 		request.cgi = $cgiScope();
 
 		// set up containers for routes, caches, settings etc
-		application.$wheels.version = "1.3.3";
+		application.$wheels.version = "1.3.4";
 		application.$wheels.hostName = CreateObject("java", "java.net.InetAddress").getLocalHost().getHostName();
 		application.$wheels.controllers = {};
 		application.$wheels.models = {};
