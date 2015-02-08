@@ -17,6 +17,7 @@ usage:
   - "mvn clean verify -P mssql,acf9oracle" upload and deploy CFWheels on test server and run all tests also on ACF9 Oracle database 
   - "mvn clean verify -P oracle" copy and runs all CFWheels tests on local ColdFusion8 and Oracle (or whatever database configured locally)
   - "mvn clean verify -P jetty,openbd" download OpenBD and run all tests on it (preliminary support)
+  - "mvn clean verify -P jetty,lucee" download Lucee and run all tests on it (preliminary support)
   - "mvn verify -DtestParallelStart=true" start with parallel request and then run all tests 
   - "mvn verify -DtestSharedAppName=true" start with shared application name test and then run all tests 
 
@@ -38,6 +39,7 @@ Benefits of embedded-container-test versus full-integration-test
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- embedded CFML and web server version for easy upgrade -->
+		<luceeVersion>4.5.0.042</luceeVersion>
 		<openbdVersion>3.1</openbdVersion>
 		<railoVersion>4.2.1.000</railoVersion>
 		<jettyVersion>8.1.15.v20140411</jettyVersion>
@@ -445,7 +447,7 @@ Benefits of embedded-container-test versus full-integration-test
 			</build>
 		</profile>
 		<profile>
-			<!-- to activate, execute "mvn clean verify -Popendb" -->
+			<!-- to activate, execute "mvn clean verify -P jetty,openbd" -->
 			<id>openbd</id>
 			<properties>
 				<webXml>WEB-INF/web.xml</webXml>
@@ -471,6 +473,46 @@ Benefits of embedded-container-test versus full-integration-test
 										  </patternset>
 		  								</unzip>
           								<mkdir dir="plugins"/>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!-- to activate, execute "mvn clean verify -P jetty,lucee" -->
+			<id>lucee</id>
+			<properties>
+				<webXml>WEB-INF/web.xml</webXml>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<!-- download lucee -->
+							    <id>download lucee</id>
+								<phase>test</phase>
+								<configuration>
+									<target>
+										<get src="https://bitbucket.org/lucee/lucee/downloads/lucee-${luceeVersion}.war" dest="target/lucee.war" skipexisting="true"/>
+										<unzip src="target/lucee.war" dest="."
+											overwrite="false">
+										  <patternset>
+										    <include name="WEB-INF/**"/>
+										  </patternset>
+		  								</unzip>
+          								<mkdir dir="plugins"/>
+										<copy file="src/test/xml/lucee-web.xml.cfm" tofile="WEB-INF/lucee/lucee-web.xml.cfm"
+											overwrite="true" />
 									</target>
 								</configuration>
 								<goals>
