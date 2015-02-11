@@ -57,10 +57,11 @@
 	<cfscript>
 		var loc = {};
 
-		// Clear current verification chain
+		// clear current verification chain and then re-add from the passed in chain
 		variables.$class.verifications = [];
-		// Loop through chain passed in arguments and add each item to verification chain
-		for(loc.i = 1; loc.i <= ArrayLen(arguments.chain); loc.i++) {
+		loc.iEnd = ArrayLen(arguments.chain);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
 			verifies(argumentCollection=arguments.chain[loc.i]);
 		}
 	</cfscript>
@@ -77,7 +78,9 @@
 		
 		// only access the session scope when session management is enabled in the app
 		if (StructIsEmpty(arguments.sessionScope) && application.wheels.sessionManagement)
+		{
 			arguments.sessionScope = session;
+		}
 		
 		loc.verifications = verificationChain();
 		loc.$args = "only,except,post,get,ajax,cookie,session,params,cookieTypes,sessionTypes,paramsTypes,handler";
@@ -89,17 +92,29 @@
 			if ((!Len(loc.verification.only) && !Len(loc.verification.except)) || (Len(loc.verification.only) && ListFindNoCase(loc.verification.only, arguments.action)) || (Len(loc.verification.except) && !ListFindNoCase(loc.verification.except, arguments.action)))
 			{
 				if (IsBoolean(loc.verification.post) && ((loc.verification.post && !isPost()) || (!loc.verification.post && isPost())))
+				{
 					loc.abort = true;
+				}
 				if (IsBoolean(loc.verification.get) && ((loc.verification.get && !isGet()) || (!loc.verification.get && isGet())))
+				{
 					loc.abort = true;
+				}
 				if (IsBoolean(loc.verification.ajax) && ((loc.verification.ajax && !isAjax()) || (!loc.verification.ajax && isAjax())))
+				{
 					loc.abort = true;
-				if(!$checkVerificationsVars(arguments.params, loc.verification.params, loc.verification.paramsTypes))
+				}
+				if (!$checkVerificationsVars(arguments.params, loc.verification.params, loc.verification.paramsTypes))
+				{
 					loc.abort = true;
-				if(!$checkVerificationsVars(arguments.sessionScope, loc.verification.session, loc.verification.sessionTypes))
+				}
+				if (!$checkVerificationsVars(arguments.sessionScope, loc.verification.session, loc.verification.sessionTypes))
+				{
 					loc.abort = true;
-				if(!$checkVerificationsVars(arguments.cookieScope, loc.verification.cookie, loc.verification.cookieTypes))
+				}
+				if (!$checkVerificationsVars(arguments.cookieScope, loc.verification.cookie, loc.verification.cookieTypes))
+				{
 					loc.abort = true;
+				}
 			}
 			if (loc.abort)
 			{
@@ -115,7 +130,9 @@
 					for(loc.key in loc.verification)
 					{
 						if (!ListFindNoCase(loc.$args, loc.key) && StructKeyExists(loc.verification, loc.key))
+						{
 							loc.redirectArgs[loc.key] = loc.verification[loc.key];
+						}
 					}
 					if (!StructIsEmpty(loc.redirectArgs))
 					{

@@ -50,8 +50,10 @@
 		if (application.wheels.showErrorInformation)
 		{
 			if (!StructKeyExists(request.wheels, arguments.handle))
+			{
 				$throw(type="Wheels.QueryHandleNotFound", message="Wheels couldn't find a query with the handle of `#arguments.handle#`.", extendedInfo="Make sure your `findAll` call has the `page` argument specified and matching `handle` argument if specified.");
+			}
 		}
-		return request.wheels[arguments.handle]; 
+		return request.wheels[arguments.handle];
 	</cfscript>
 </cffunction>

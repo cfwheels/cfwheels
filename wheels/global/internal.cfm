@@ -18,9 +18,11 @@
 	<cfscript>
 		// only instantiate the toXml object once per request
 		if (!StructKeyExists(request.wheels, "toXml"))
+		{
 			request.wheels.toXml = $createObjectFromRoot(path="#application.wheels.wheelsComponentPath#.vendor.toXml", fileName="toXML", method="init");
+		}
 	</cfscript>
-	<cfreturn request.wheels.toXml.toXml(arguments.data) />
+	<cfreturn request.wheels.toXml.toXml(arguments.data)>
 </cffunction>
 
 <cffunction name="$convertToString" returntype="string" access="public" output="false">
@@ -62,7 +64,7 @@
 				loc.str = "";
 				loc.keyList = ListSort(StructKeyList(arguments.value), "textnocase", "asc");
 				loc.iEnd = ListLen(loc.keyList);
-				for (loc.i = 1; loc.i <= loc.iEnd; loc.i++)
+				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.key = ListGetAt(loc.keyList, loc.i);
 					loc.str = ListAppend(loc.str, loc.key & "=" & arguments.value[loc.key]);
@@ -73,21 +75,27 @@
 				arguments.value = ToString(arguments.value);
 				break;
 			case "float": case "integer":
-				if (!Len(arguments.value)) return "";
-				if ("true" eq arguments.value) return 1;
+				if (!Len(arguments.value))
+				{
+					return "";
+				}
+				if (arguments.value == "true")
+				{
+					return 1;
+				}
 				arguments.value = Val(arguments.value);
 				break;
 			case "boolean":
-				if(len(arguments.value))
+				if (Len(arguments.value))
 				{
 					arguments.value = ( arguments.value IS true );
 				}
 				break;
 			case "datetime":
 				// createdatetime will throw an error
-				if(IsDate(arguments.value))
+				if (IsDate(arguments.value))
 				{
-					arguments.value = CreateDateTime(year(arguments.value), month(arguments.value), day(arguments.value), hour(arguments.value), minute(arguments.value), second(arguments.value));
+					arguments.value = CreateDateTime(year(arguments.value), Month(arguments.value), Day(arguments.value), Hour(arguments.value), Minute(arguments.value), Second(arguments.value));
 				}
 				break;
 		}
@@ -102,10 +110,15 @@
 	<cfscript>
 		var loc = {};
 		loc.list = ListToArray(arguments.list, arguments.delim);
-		for (loc.i = 1; loc.i lte ArrayLen(loc.list); loc.i++)
+		loc.iEnd = ArrayLen(loc.list);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
 			loc.list[loc.i] = Trim(loc.list[loc.i]);
+		}
 		if (arguments.returnAs == "array")
+		{
 			return loc.list;
+		}
 	</cfscript>
 	<cfreturn ArrayToList(loc.list, arguments.delim)>
 </cffunction>
@@ -122,8 +135,10 @@
 		loc.values = [];
 		loc.keyList = ListSort(StructKeyList(arguments), "textnocase", "asc");
 		loc.iEnd = ListLen(loc.keyList);
-		for (loc.i = 1; loc.i <= loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
 			ArrayAppend(loc.values, arguments[ListGetAt(loc.keyList, loc.i)]);
+		}
 
 		if (!ArrayIsEmpty(loc.values))
 		{
@@ -135,7 +150,7 @@
 				loc.returnValue = ReplaceList(loc.returnValue, "{,},[,]", ",,,");
 				loc.returnValue = ListSort(loc.returnValue, "text");
 			}
-			catch (Any e)
+			catch (any e)
 			{
 				loc.returnValue = $wddx(input=loc.values);
 			}
@@ -152,14 +167,20 @@
 		var loc = {};
 		loc.cache = arguments.defaultCacheTime;
 		if (IsNumeric(arguments.cache))
+		{
 			loc.cache = arguments.cache;
+		}
 		loc.list = "0,0,0,0";
 		loc.dateParts = "d,h,n,s";
 		loc.iEnd = ListLen(loc.dateParts);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
 			if (arguments.cacheDatePart == ListGetAt(loc.dateParts, loc.i))
+			{
 				loc.list = ListSetAt(loc.list, loc.i, loc.cache);
-		return CreateTimeSpan(ListGetAt(loc.list, 1),ListGetAt(loc.list, 2),ListGetAt(loc.list, 3),ListGetAt(loc.list, 4));
+			}
+		}
+		return CreateTimeSpan(ListGetAt(loc.list, 1), ListGetAt(loc.list, 2), ListGetAt(loc.list, 3), ListGetAt(loc.list, 4));
 	</cfscript>
 </cffunction>
 

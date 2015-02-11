@@ -47,10 +47,14 @@
 			// this includes arguments to the function itself or ones meant for a route
 			loc.nonFlashArgumentNames = "";
 			if (Len(arguments.route))
+			{
 				loc.nonFlashArgumentNames = ListAppend(loc.nonFlashArgumentNames, $findRoute(argumentCollection=arguments).variables);
+			}
 			loc.iEnd = ArrayLen(loc.functionInfo.parameters);
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+			{
 				loc.nonFlashArgumentNames = ListAppend(loc.nonFlashArgumentNames, loc.functionInfo.parameters[loc.i].name);
+			}
 
 			// loop through arguments and when the first flash argument is found we set it
 			loc.argumentNames = StructKeyList(arguments);
@@ -86,16 +90,20 @@
 					{
 						loc.params = Replace(loc.params, "&", "?", "one");
 					}
-					loc.url = loc.url & loc.params;
+					loc.url &= loc.params;
 				} 
 			}
 			else
 			{
 				// we can't redirect to the referrer so we either use a fallback route/controller/action combo or send to the root of the site
 				if (Len(arguments.route) || Len(arguments.controller) || Len(arguments.action))
+				{
 					loc.url = URLFor(argumentCollection=arguments);
+				}
 				else
+				{
 					loc.url = application.wheels.webPath;
+				}
 			}
 		}
 		else if (Len(arguments.url)) 

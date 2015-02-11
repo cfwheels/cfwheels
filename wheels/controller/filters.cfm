@@ -66,7 +66,8 @@
 		
 		// clear current filter chain and then re-add from the passed in chain
 		variables.$class.filters = [];
-		for(loc.i=1; loc.i <= ArrayLen(arguments.chain); loc.i++)
+		loc.iEnd = ArrayLen(arguments.chain);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			filters(argumentCollection=arguments.chain[loc.i]);
 		}

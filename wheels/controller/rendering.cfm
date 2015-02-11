@@ -472,19 +472,20 @@
 							arguments.group = QueryNew(loc.query.columnList);
 							loc.groupQueryCount = 1;
 						}
-						loc.dump = QueryAddRow(arguments.group);
+						QueryAddRow(arguments.group);
 						loc.jEnd = ListLen(loc.query.columnList);
 						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 						{
 							loc.property = ListGetAt(loc.query.columnList, loc.j);
 							arguments[loc.property] = loc.query[loc.property][loc.i];
-							loc.dump = QuerySetCell(arguments.group, loc.property, loc.query[loc.property][loc.i], loc.groupQueryCount);
+							QuerySetCell(arguments.group, loc.property, loc.query[loc.property][loc.i], loc.groupQueryCount);
 						}
-						arguments.current = (loc.i+1) - arguments.group.recordCount;
+						arguments.current = loc.i + 1 - arguments.group.recordCount;
 						loc.groupQueryCount++;
 					}
+
 					// if we have anything left at the end we need to render it too
-					if (arguments.group.RecordCount > 0)
+					if (arguments.group.recordCount)
 					{
 						loc.returnValue &= $includeAndReturnOutput(argumentCollection=arguments);
 						if (StructKeyExists(arguments, "$spacer") && loc.i < loc.iEnd)
@@ -514,7 +515,7 @@
 							{
 								arguments[loc.property] = loc.query[loc.property][loc.i];
 							}
-							catch (Any e)
+							catch (any e)
 							{
 								arguments[loc.property] = "";
 							}

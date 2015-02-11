@@ -4,7 +4,7 @@
 		// abort if called from incorrect file
 		$abortInvalidRequest();
 
-		//fix for shared application name issue 359
+		// fix for shared application name issue 359
 		if(!StructKeyExists(application, "wheels") || !StructKeyExists(application.wheels, "eventpath"))
 		{
 			$simpleLock(name="reloadLock#application.applicationName#", execute="onApplicationStart", type="exclusive", timeout=180);

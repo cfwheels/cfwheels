@@ -46,9 +46,13 @@
 			StructDelete(arguments, "only", false);
 		}
 		if (StructKeyExists(arguments, "except"))
+		{
 			arguments.except = $listClean(arguments.except);
+		}
 		if (StructKeyExists(arguments, "only"))
+		{
 			arguments.only = $listClean(arguments.only);
+		}
 		variables.$class.layout = arguments;
 	</cfscript>
 </cffunction>
@@ -60,7 +64,9 @@
 		loc.returnValue = true;
 		loc.layoutType = "template";
 		if (isAjax() && StructKeyExists(variables.$class.layout, "ajax") && Len(variables.$class.layout.ajax))
+		{
 			loc.layoutType = "ajax";
+		}
 		if (!StructIsEmpty(variables.$class.layout))
 		{
 			loc.returnValue = variables.$class.layout.useDefault;
@@ -71,7 +77,9 @@
 				loc.invokeArgs.action = arguments.$action;
 				loc.temp = $invoke(method=variables.$class.layout[loc.layoutType], invokeArgs=loc.invokeArgs);
 				if (StructKeyExists(loc, "temp"))
+				{
 					loc.returnValue = loc.temp;
+				}
 			}
 			else if ((!StructKeyExists(variables.$class.layout, "except") || !ListFindNoCase(variables.$class.layout.except, arguments.$action)) && (!StructKeyExists(variables.$class.layout, "only") || ListFindNoCase(variables.$class.layout.only, arguments.$action)))
 			{
@@ -100,13 +108,19 @@
 				if (!ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) && !ListFindNoCase(application.wheels.nonExistingLayoutFiles, variables.params.controller))
 				{
 					if (FileExists(ExpandPath("#application.wheels.viewPath#/#LCase(variables.params.controller)#/layout.cfm")))
+					{
 						loc.layoutFileExists = true;
+					}
 					if (application.wheels.cacheFileChecking)
 					{
 						if (loc.layoutFileExists)
+						{
 							application.wheels.existingLayoutFiles = ListAppend(application.wheels.existingLayoutFiles, variables.params.controller);
+						}
 						else
+						{
 							application.wheels.nonExistingLayoutFiles = ListAppend(application.wheels.nonExistingLayoutFiles, variables.params.controller);
+						}
 					}
 				}
 				if (ListFindNoCase(application.wheels.existingLayoutFiles, variables.params.controller) || loc.layoutFileExists)

@@ -32,7 +32,9 @@
 
 		// if two templates but only one layout was passed in we set the same layout to be used on both
 		if (ListLen(arguments.template) > 1 && ListLen(arguments.layout) == 1)
+		{
 			arguments.layout = ListAppend(arguments.layout, arguments.layout);
+		}
 
 		// set the variables that should be available to the email view template (i.e. the custom named arguments passed in by the developer)
 		for (loc.key in arguments)
@@ -63,9 +65,13 @@
 				loc.existingContentCount = ListLen(arguments.mailparts[1].tagContent, "<");
 				loc.newContentCount = ListLen(loc.content, "<");
 				if (loc.newContentCount < loc.existingContentCount)
+				{
 					ArrayPrepend(arguments.mailparts, loc.mailpart);
+				}
 				else
+				{
 					ArrayAppend(arguments.mailparts, loc.mailpart);
+				}
 				arguments.mailparts[1].type = "text";
 				arguments.mailparts[2].type = "html";
 			}
@@ -79,9 +85,13 @@
 			if (arguments.detectMultipart && !StructKeyExists(arguments, "type"))
 			{
 				if (Find("<", arguments.tagContent) && Find(">", arguments.tagContent))
+				{
 					arguments.type = "html";
+				}
 				else
+				{
 					arguments.type = "text";
+				}
 			}
 		}
 
@@ -100,13 +110,19 @@
 		// delete arguments that we don't want to pass through to the cfmail tag
 		loc.iEnd = ListLen(loc.nonPassThruArgs);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
 			StructDelete(arguments, ListGetAt(loc.nonPassThruArgs, loc.i));
+		}
 
 		// send the email using the cfmail tag
 		if (loc.deliver)
+		{
 			$mail(argumentCollection=arguments);
+		}
 		else
+		{
 			return arguments;
+		}
 	</cfscript>
 </cffunction>
 
@@ -179,11 +195,15 @@
 
 		// replace the display name for the file if supplied
 		if (Len(arguments.name))
+		{
 			loc.name = arguments.name;
+		}
 
 		loc.mime = arguments.type;
 		if (!Len(loc.mime))
+		{
 			loc.mime = mimeTypes(loc.extension);
+		}
 
 		// if testing, return the variables
 		if (arguments.$testingMode)
