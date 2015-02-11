@@ -1,9 +1,21 @@
 1.4
 
+Model Enhancements
+==================
+
+* Allow spaces in list passed in to the "include" argument on finders - #150 [Per Djurner]
+
 Controller Enhancements
 =======================
 
 * Ability to redirect to a specific URL - [Simon Allard]
+
+Miscellaneous
+=============
+
+* Made "development" the default environment mode - [Per Djurner]
+* Removed deprecation work-around for the "if" argument on validation helpers - [Per Djurner]
+* Removed the "lib" folder - [Per Djurner]
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

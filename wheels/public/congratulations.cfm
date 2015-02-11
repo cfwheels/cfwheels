@@ -1,11 +1,11 @@
 <cfoutput>
 
 <h1>Congratulations!</h1>
-<p><strong>You have successfully installed<cfif Len(get("version"))> version #get("version")# of</cfif> Wheels.</strong><br>
-Welcome to the wonderful world of Wheels. We hope you will enjoy it!</p>
+<p><strong>You have successfully installed<cfif Len(get("version"))> version #get("version")# of</cfif> CFWheels.</strong><br>
+Welcome to the wonderful world of CFWheels. We hope you will enjoy it!</p>
 
 <h2>Now What?</h2>
-<p>Now that you have a working installation of Wheels, you may be wondering what to do next. Here are some suggestions.</p>
+<p>Now that you have a working installation of CFWheels, you may be wondering what to do next. Here are some suggestions.</p>
 <ul>
 	<li><a href="http://cfwheels.org/docs/#Replace(Left(get("version"), 3), ".", "-")#/chapter/hello-world">View and code along with our "Hello World" tutorial.</a></li>
 	<li><a href="http://cfwheels.org/docs/#Replace(Left(get("version"), 3), ".", "-")#">Have a look at the rest of our documentation.</a></li>
@@ -28,7 +28,7 @@ Welcome to the wonderful world of Wheels. We hope you will enjoy it!</p>
 		<p>Simply change the <code>controller</code> and <code>action</code> arguments to a controller and action of your choosing.</p>
 	</li>
 	<li>
-		<p>Reload your Wheels application.</p>
+		<p>Reload your CFWheels application.</p>
 	</li>
 </ol>
 
