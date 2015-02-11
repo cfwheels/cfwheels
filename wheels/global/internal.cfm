@@ -208,28 +208,6 @@
 	</cfscript>
 </cffunction>
 
-<!--- helper method to recursively map a structure to build mapping paths and retrieve its values so you can have your way with a deeply nested structure --->
-<cffunction name="$mapStruct" returntype="void" access="public" output="false" mixin="dispatch">
-	<cfargument name="map" type="struct" required="true" />
-	<cfargument name="struct" type="struct" required="true" />
-	<cfargument name="path" type="string" required="false" default="" />
-	<cfscript>
-		var loc = {};
-		for (loc.item in arguments.struct)
-		{
-			if (IsStruct(arguments.struct[loc.item])) // go further down the rabit hole
-			{
-				$mapStruct(map=arguments.map, struct=arguments.struct[loc.item], path="#arguments.path#[#loc.item#]");
-			}
-			else // map our position and value
-			{
-				arguments.map["#arguments.path#[#loc.item#]"] = {};
-				arguments.map["#arguments.path#[#loc.item#]"].value = arguments.struct[loc.item];
-			}
-		}
-	</cfscript>
-</cffunction>
-
 <cffunction name="$structKeysExist" returntype="boolean" access="public" output="false" hint="Check to see if all keys in the list exist for the structure and have length.">
 	<cfargument name="struct" type="struct" required="true" />
 	<cfargument name="keys" type="string" required="false" default="" />
@@ -237,7 +215,7 @@
 		var loc = {};
 		loc.returnValue = true;
 		loc.iEnd = ListLen(arguments.keys);
-		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			if (!StructKeyExists(arguments.struct, ListGetAt(arguments.keys, loc.i)) || (IsSimpleValue(arguments.struct[ListGetAt(arguments.keys, loc.i)]) && !Len(arguments.struct[ListGetAt(arguments.keys, loc.i)])))
 			{
@@ -246,7 +224,7 @@
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue />
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$cgiScope" returntype="struct" access="public" output="false" hint="This copies all the variables Wheels needs from the CGI scope to the request scope.">
@@ -348,7 +326,9 @@
 
 		// throw an error if a route with this name has not been set by developer in the config/routes.cfm file
 		if (application.wheels.showErrorInformation && !StructKeyExists(application.wheels.namedRoutePositions, arguments.route))
+		{
 			$throw(type="Wheels.RouteNotFound", message="Could not find the `#arguments.route#` route.", extendedInfo="Create a new route in `config/routes.cfm` with the name `#arguments.route#`.");
+		}
 
 		loc.routePos = application.wheels.namedRoutePositions[arguments.route];
 		if (loc.routePos Contains ",")
@@ -364,10 +344,14 @@
 				{
 					loc.variable = ListGetAt(loc.returnValue.variables, loc.j);
 					if (!StructKeyExists(arguments, loc.variable) || !Len(arguments[loc.variable]))
+					{
 						loc.foundRoute = false;
+					}
 				}
 				if (loc.foundRoute)
+				{
 					break;
+				}
 			}
 		}
 		else
@@ -383,7 +367,9 @@
 	<cfscript>
 		var returnValue = false;
 		if (StructKeyExists(application.wheels.models, arguments.name))
+		{
 			returnValue = application.wheels.models[arguments.name];
+		}
 	</cfscript>
 	<cfreturn returnValue>
 </cffunction>
@@ -418,8 +404,7 @@
 			{
 				loc.param = $URLEncode(loc.temp[2]);
 
-				// correct double encoding of & and =
-				// since we parse the param string using & and = the developer has to url encode them on the input
+				// correct double encoding of & and = since we parse the param string using & and = the developer has to url encode them on the input
 				loc.param = Replace(loc.param, "%2526", "%26", "all");
 				loc.param = Replace(loc.param, "%253D", "%3D", "all");
 
@@ -468,12 +453,16 @@
 				{
 					loc.item = ListGetAt(arguments.reserved, loc.i);
 					if (StructKeyExists(arguments.args, loc.item))
+					{
 						$throw(type="Wheels.IncorrectArguments", message="The `#loc.item#` argument cannot be passed in since it will be set automatically by Wheels.");
+					}
 				}
 			}
 		}
 		if (StructKeyExists(application.wheels.functions, arguments.name))
+		{
 			StructAppend(arguments.args, application.wheels.functions[arguments.name], false);
+		}
 
 		// make sure that the arguments marked as required exist
 		if (Len(arguments.required))
@@ -482,7 +471,7 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.arg = ListGetAt(arguments.required, loc.i);
-				if(!StructKeyExists(arguments.args, loc.arg))
+				if (!StructKeyExists(arguments.args, loc.arg))
 				{
 					$throw(type="Wheels.IncorrectArguments", message="The `#loc.arg#` argument is required but not passed in.");
 				}
@@ -512,15 +501,21 @@
 	<cfscript>
 		var loc = {};
 		if (!StructKeyExists(request.wheels, "execution"))
+		{
 			request.wheels.execution = {};
+		}
 		loc.iEnd = ListLen(arguments.name);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.item = ListGetAt(arguments.name, loc.i);
 			if (StructKeyExists(request.wheels.execution, loc.item))
+			{
 				request.wheels.execution[loc.item] = GetTickCount() - request.wheels.execution[loc.item];
+			}
 			else
+			{
 				request.wheels.execution[loc.item] = GetTickCount();
+			}
 		}
 	</cfscript>
 </cffunction>
@@ -627,11 +622,11 @@
 
 		// let's allow for multiple controller paths so that plugins can contain controllers
 		// the last path is the one we will instantiate the base controller on if the controller is not found on any of the paths
-		for (loc.i = 1; loc.i lte ListLen(arguments.controllerPaths); loc.i++)
+		loc.iEnd = ListLen(arguments.controllerPaths);
+		for (loc.i = 1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.controllerPath = ListGetAt(arguments.controllerPaths, loc.i);
 			loc.fileName = $objectFileName(name=arguments.name, objectPath=loc.controllerPath, type=arguments.type);
-
 			if (loc.fileName != "Controller" || loc.i == ListLen(arguments.controllerPaths))
 			{
 				application.wheels.controllers[arguments.name] = $createObjectFromRoot(path=loc.controllerPath, fileName=loc.fileName, method="$initControllerClass", name=arguments.name);
@@ -725,7 +720,9 @@
 <cffunction name="$removeFromCache" returntype="void" access="public" output="false">
 	<cfargument name="key" type="string" required="true">
 	<cfargument name="category" type="string" required="false" default="main">
-	<cfset StructDelete(application.wheels.cache[arguments.category], arguments.key)>
+	<cfscript>
+		StructDelete(application.wheels.cache[arguments.category], arguments.key);
+	</cfscript>
 </cffunction>
 
 <cffunction name="$cacheCount" returntype="numeric" access="public" output="false">
@@ -769,9 +766,11 @@
 	<cfargument name="type" type="string" required="false" default="model" />
 	<cfscript>
 		var loc = {};
-		// let's allow for multiple controller paths so that plugins can contain controllers
-		// the last path is the one we will instantiate the base controller on if the controller is not found on any of the paths
-		for (loc.i = 1; loc.i lte ListLen(arguments.modelPaths); loc.i++)
+		
+		// let's allow for multiple model paths so that plugins can contain models
+		// the last path is the one we will instantiate the base model on if the model is not found on any of the paths
+		loc.iEnd = ListLen(arguments.modelPaths);
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.modelPath = ListGetAt(arguments.modelPaths, loc.i);
 			loc.fileName = $objectFileName(name=arguments.name, objectPath=loc.modelPath, type=arguments.type);

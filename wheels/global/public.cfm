@@ -334,7 +334,9 @@
 		loc.args.name = arguments.name;
 		loc.returnValue = $doubleCheckedLock(name="controllerLock#application.applicationName#", condition="$cachedControllerClassExists", execute="$createControllerClass", conditionArgs=loc.args, executeArgs=loc.args);
 		if (!StructIsEmpty(arguments.params))
+		{
 			loc.returnValue = loc.returnValue.$createControllerObject(arguments.params);
+		}
 		return loc.returnValue;
 	</cfscript>
 </cffunction>
@@ -496,11 +498,15 @@
 		$args(name="URLFor", args=arguments);
 		loc.params = {};
 		if (StructKeyExists(variables, "params"))
+		{
 			StructAppend(loc.params, variables.params, true);
+		}
 		if (application.wheels.showErrorInformation)
 		{
 			if (arguments.onlyPath && (Len(arguments.host) || Len(arguments.protocol)))
+			{
 				$throw(type="Wheels.IncorrectArguments", message="Can't use the `host` or `protocol` arguments when `onlyPath` is `true`.", extendedInfo="Set `onlyPath` to `false` so that `linkTo` will create absolute URLs and thus allowing you to set the `host` and `protocol` on the link.");
+			}
 		}
 
 		// get primary key values if an object was passed in
@@ -519,23 +525,35 @@
 			{
 				loc.returnValue = loc.returnValue & "?controller=";
 				if (Len(arguments.controller))
-					loc.returnValue = loc.returnValue & hyphenize(arguments.controller);
+				{
+					loc.returnValue &= hyphenize(arguments.controller);
+				}
 				else
-					loc.returnValue = loc.returnValue & hyphenize(loc.route.controller);
-				loc.returnValue = loc.returnValue & "&action=";
+				{
+					loc.returnValue &= hyphenize(loc.route.controller);
+				}
+				loc.returnValue &= "&action=";
 				if (Len(arguments.action))
-					loc.returnValue = loc.returnValue & hyphenize(arguments.action);
+				{
+					loc.returnValue &= hyphenize(arguments.action);
+				}
 				else
-					loc.returnValue = loc.returnValue & hyphenize(loc.route.action);
+				{
+					loc.returnValue &= hyphenize(loc.route.action);
+				}
 				// add it the format if it exists
 				if (StructKeyExists(loc.route, "formatVariable") && StructKeyExists(arguments, loc.route.formatVariable))
-					loc.returnValue = loc.returnValue & "&#loc.route.formatVariable#=#arguments[loc.route.formatVariable]#";
+				{
+					loc.returnValue &= "&#loc.route.formatVariable#=#arguments[loc.route.formatVariable]#";
+				}
 				loc.iEnd = ListLen(loc.route.variables);
 				for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 				{
 					loc.property = ListGetAt(loc.route.variables, loc.i);
 					if (loc.property != "controller" && loc.property != "action")
-						loc.returnValue = loc.returnValue & "&" & loc.property & "=" & $URLEncode(arguments[loc.property]);
+					{
+						loc.returnValue &= "&" & loc.property & "=" & $URLEncode(arguments[loc.property]);
+					}
 				}
 			}
 			else
@@ -548,7 +566,9 @@
 					{
 						loc.property = Mid(loc.property, 2, Len(loc.property)-2);
 						if (application.wheels.showErrorInformation && !StructKeyExists(arguments, loc.property))
+						{
 							$throw(type="Wheels", message="Incorrect Arguments", extendedInfo="The route chosen by Wheels `#loc.route.name#` requires the argument `#loc.property#`. Pass the argument `#loc.property#` or change your routes to reflect the proper variables needed.");
+						}
 						loc.param = $URLEncode(arguments[loc.property]);
 						if (loc.property == "controller" || loc.property == "action")
 						{
@@ -568,21 +588,32 @@
 				}
 				// add it the format if it exists
 				if (StructKeyExists(loc.route, "formatVariable") && StructKeyExists(arguments, loc.route.formatVariable))
-					loc.returnValue = loc.returnValue & ".#arguments[loc.route.formatVariable]#";
+				{
+					loc.returnValue &= ".#arguments[loc.route.formatVariable]#";
+				}
 			}
 		}
-		else // link based on controller/action/key
+		else
 		{
+			// link based on controller/action/key
 			// when no controller or action was passed in we link to the current page (controller/action only, not query string etc) by default
 			if (!Len(arguments.controller) && !Len(arguments.action) && StructKeyExists(loc.params, "action"))
+			{
 				arguments.action = loc.params.action;
+			}
 			if (!Len(arguments.controller) && StructKeyExists(loc.params, "controller"))
+			{
 				arguments.controller = loc.params.controller;
+			}
 			if (Len(arguments.key) && !Len(arguments.action) && StructKeyExists(loc.params, "action"))
+			{
 				arguments.action = loc.params.action;
-			loc.returnValue = loc.returnValue & "?controller=" & hyphenize(arguments.controller);
+			}
+			loc.returnValue &= "?controller=" & hyphenize(arguments.controller);
 			if (Len(arguments.action))
-				loc.returnValue = loc.returnValue & "&action=" & hyphenize(arguments.action);
+			{
+				loc.returnValue &= "&action=" & hyphenize(arguments.action);
+			}
 			if (Len(arguments.key))
 			{
 				loc.param = $URLEncode(arguments.key);
@@ -591,7 +622,7 @@
 					// wrap in double quotes because in railo we have to pass it in as a string otherwise leading zeros are stripped
 					loc.param = obfuscateParam("#loc.param#");
 				}
-				loc.returnValue = loc.returnValue & "&key=" & loc.param;
+				loc.returnValue &= "&key=" & loc.param;
 			}
 		}
 
@@ -608,20 +639,34 @@
 		}
 
 		if (Len(arguments.params))
-			loc.returnValue = loc.returnValue & $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
+		{
+			loc.returnValue &= $constructParams(params=arguments.params, $URLRewriting=arguments.$URLRewriting);
+		}
 		if (Len(arguments.anchor))
-			loc.returnValue = loc.returnValue & "##" & arguments.anchor;
+		{
+			loc.returnValue &= "##" & arguments.anchor;
+		}
 
 		if (!arguments.onlyPath)
 		{
 			if (arguments.port != 0)
-				loc.returnValue = ":" & arguments.port & loc.returnValue; // use the port that was passed in by the developer
+			{
+				// use the port that was passed in by the developer
+				loc.returnValue = ":" & arguments.port & loc.returnValue;
+			}
 			else if (request.cgi.server_port != 80 && request.cgi.server_port != 443)
-				loc.returnValue = ":" & request.cgi.server_port & loc.returnValue; // if the port currently in use is not 80 or 443 we set it explicitly in the URL
+			{
+				// if the port currently in use is not 80 or 443 we set it explicitly in the URL
+				loc.returnValue = ":" & request.cgi.server_port & loc.returnValue;
+			}
 			if (Len(arguments.host))
+			{
 				loc.returnValue = arguments.host & loc.returnValue;
+			}
 			else
+			{
 				loc.returnValue = request.cgi.server_name & loc.returnValue;
+			}
 			if (Len(arguments.protocol))
 			{
 				loc.returnValue = arguments.protocol & "://" & loc.returnValue;
@@ -674,13 +719,15 @@
 		if (Len(arguments.except))
 		{
 			loc.iEnd = ListLen(arguments.except, " ");
-			for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.a = ListGetAt(arguments.except, loc.i);
 				loc.returnValue = ReReplaceNoCase(loc.returnValue, "#loc.a#(?:\b)", "#loc.a#", "all");
 			}
 		}
-		loc.returnValue = Trim(capitalize(loc.returnValue)); // capitalize the first letter and trim final result (which removes the leading space that happens if the string starts with an upper case character)
+
+		// capitalize the first letter and trim final result (which removes the leading space that happens if the string starts with an upper case character)
+		loc.returnValue = Trim(capitalize(loc.returnValue));
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
