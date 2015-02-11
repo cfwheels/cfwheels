@@ -22,7 +22,7 @@ Welcome to the wonderful world of Wheels. We hope you will enjoy it!</p>
 	</li>
 	<li>
 		<p>You will see a line similar to this for a route named <code>home</code>:</p>
-		<pre><code>&lt;cfset addRoute(name="home", pattern="", controller="wheels", action="wheels")&gt;</code></pre>
+		<pre><code>addRoute(name="home", pattern="", controller="wheels", action="wheels");</code></pre>
 	</li>
 	<li>
 		<p>Simply change the <code>controller</code> and <code>action</code> arguments to a controller and action of your choosing.</p>
