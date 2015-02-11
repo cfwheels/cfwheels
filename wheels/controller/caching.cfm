@@ -8,7 +8,7 @@
 	categories="controller-initialization,caching" chapters="caching" functions="">
 	<cfargument name="action" type="string" required="false" default="" hint="Action(s) to cache. This argument is also aliased as `actions`.">
 	<cfargument name="time" type="numeric" required="false" hint="Minutes to cache the action(s) for.">
-	<cfargument name="static" type="boolean" required="false" hint="Set to `true` to tell Wheels that this is a static page and that it can skip running the controller filters (before and after filters set on actions). Please note that the `onSessionStart` and `onRequestStart` events still execute though.">
+	<cfargument name="static" type="boolean" required="false" hint="Set to `true` to tell CFWheels that this is a static page and that it can skip running the controller filters (before and after filters set on actions). Please note that the `onSessionStart` and `onRequestStart` events still execute though.">
 	<cfscript>
 		var loc = {};
 		$args(args=arguments, name="caches", combine="action/actions");
@@ -32,16 +32,22 @@
 
 <cffunction name="$addCachableAction" returntype="void" access="public" output="false">
 	<cfargument name="action" type="struct" required="true">
-	<cfset ArrayAppend(variables.$class.cachableActions, arguments.action)>
+	<cfscript>
+		ArrayAppend(variables.$class.cachableActions, arguments.action);
+	</cfscript>
 </cffunction>
 
 <cffunction name="$clearCachableActions" returntype="void" access="public" output="false">
-	<cfset ArrayClear(variables.$class.cachableActions)>
+	<cfscript>
+		ArrayClear(variables.$class.cachableActions);
+	</cfscript>
 </cffunction>
 
 <cffunction name="$setCachableActions" returntype="void" access="public" output="false">
 	<cfargument name="actions" type="array" required="true">
-	<cfset variables.$class.cachableActions = arguments.actions>
+	<cfscript>
+		variables.$class.cachableActions = arguments.actions;
+	</cfscript>
 </cffunction>
 
 <cffunction name="$cachableActions" returntype="array" access="public" output="false">
