@@ -14,10 +14,6 @@
 	<cfargument name="when" type="string" required="false" default="onSave" hint="Pass in `onCreate` or `onUpdate` to limit when this validation occurs (by default validation will occur on both create and update, i.e. `onSave`).">
 	<cfargument name="condition" type="string" required="false" default="" hint="String expression to be evaluated that decides if validation will be run (if the expression returns `true` validation will run).">
 	<cfargument name="unless" type="string" required="false" default="" hint="String expression to be evaluated that decides if validation will be run (if the expression returns `false` validation will run).">
-	<cfif StructKeyExists(arguments, "if")>
-		<cfset arguments.condition = arguments.if>
-		<cfset StructDelete(arguments, "if")>
-	</cfif>
 	<cfset $args(name="validatesConfirmationOf", args=arguments)>
 	<cfset $registerValidation(methods="$validatesConfirmationOf", argumentCollection=arguments)>
 </cffunction>
@@ -36,10 +32,6 @@
 	<cfargument name="allowBlank" type="boolean" required="false" hint="If set to `true`, validation will be skipped if the property value is an empty string or doesn't exist at all. This is useful if you only want to run this validation after it passes the @validatesPresenceOf test, thus avoiding duplicate error messages if it doesn't.">
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfif StructKeyExists(arguments, "if")>
-		<cfset arguments.condition = arguments.if>
-		<cfset StructDelete(arguments, "if")>
-	</cfif>
 	<cfscript>
 		$args(name="validatesExclusionOf", args=arguments);
 		arguments.list = $listClean(arguments.list);
@@ -65,10 +57,6 @@
 	<cfargument name="allowBlank" type="boolean" required="false" hint="See documentation for @validatesExclusionOf.">
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfif StructKeyExists(arguments, "if")>
-		<cfset arguments.condition = arguments.if>
-		<cfset StructDelete(arguments, "if")>
-	</cfif>
 	<cfscript>
 		$args(name="validatesFormatOf", args=arguments);
 		if (application.wheels.showErrorInformation)
@@ -94,10 +82,6 @@
 	<cfargument name="allowBlank" type="boolean" required="false" hint="See documentation for @validatesExclusionOf.">
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfif StructKeyExists(arguments, "if")>
-		<cfset arguments.condition = arguments.if>
-		<cfset StructDelete(arguments, "if")>
-	</cfif>
 	<cfscript>
 		$args(name="validatesInclusionOf", args=arguments);
 		arguments.list = $listClean(arguments.list);
@@ -125,10 +109,6 @@
 	<cfargument name="within" type="string" required="false" hint="A list of two values (minimum and maximum) that the length of the property value must fall within.">
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfif StructKeyExists(arguments, "if")>
-		<cfset arguments.condition = arguments.if>
-		<cfset StructDelete(arguments, "if")>
-	</cfif>
 	<cfscript>
 		$args(name="validatesLengthOf", args=arguments);
 		if (Len(arguments.within))
@@ -158,10 +138,6 @@
 	<cfargument name="equalTo" type="numeric" required="false" hint="Specifies whether or not the value must be equal to the supplied value.">
 	<cfargument name="lessThan" type="numeric" required="false" hint="Specifies whether or not the value must be less than the supplied value.">
 	<cfargument name="lessThanOrEqualTo" type="numeric" required="false" hint="Specifies whether or not the value must be less than or equal the supplied value.">
-	<cfif StructKeyExists(arguments, "if")>
-		<cfset arguments.condition = arguments.if>
-		<cfset StructDelete(arguments, "if")>
-	</cfif>
 	<cfset $args(name="validatesNumericalityOf", args=arguments)>
 	<cfset $registerValidation(methods="$validatesNumericalityOf", argumentCollection=arguments)>
 </cffunction>
@@ -178,10 +154,6 @@
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfif StructKeyExists(arguments, "if")>
-		<cfset arguments.condition = arguments.if>
-		<cfset StructDelete(arguments, "if")>
-	</cfif>
 	<cfset $args(name="validatesPresenceOf", args=arguments)>
 	<cfset $registerValidation(methods="$validatesPresenceOf", argumentCollection=arguments)>
 </cffunction>
@@ -204,10 +176,6 @@
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="includeSoftDeletes" type="boolean" required="false" default="true" hint="whether to take softDeletes into account when performing uniqueness check">
-	<cfif StructKeyExists(arguments, "if")>
-		<cfset arguments.condition = arguments.if>
-		<cfset StructDelete(arguments, "if")>
-	</cfif>
 	<cfscript>
 		$args(name="validatesUniquenessOf", args=arguments);
 		arguments.scope = $listClean(arguments.scope);
@@ -235,10 +203,6 @@
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="when" type="string" required="false" default="onSave" hint="See documentation for @validatesConfirmationOf.">
-	<cfif StructKeyExists(arguments, "if")>
-		<cfset arguments.condition = arguments.if>
-		<cfset StructDelete(arguments, "if")>
-	</cfif>
 	<cfset $registerValidation(argumentCollection=arguments)>
 </cffunction>
 
@@ -259,10 +223,6 @@
 	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @validate.">
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfif StructKeyExists(arguments, "if")>
-		<cfset arguments.condition = arguments.if>
-		<cfset StructDelete(arguments, "if")>
-	</cfif>
 	<cfset $registerValidation(when="onCreate", argumentCollection=arguments)>
 </cffunction>
 
@@ -283,10 +243,6 @@
 	<cfargument name="methods" type="string" required="false" default="" hint="See documentation for @validate.">
 	<cfargument name="condition" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
 	<cfargument name="unless" type="string" required="false" default="" hint="See documentation for @validatesConfirmationOf.">
-	<cfif StructKeyExists(arguments, "if")>
-		<cfset arguments.condition = arguments.if>
-		<cfset StructDelete(arguments, "if")>
-	</cfif>
 	<cfset $registerValidation(when="onUpdate", argumentCollection=arguments)>
 </cffunction>
 
