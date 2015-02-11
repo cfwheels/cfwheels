@@ -115,6 +115,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="findAll", args=arguments);
+		arguments.include = $listClean(arguments.include);
 
 		// we only allow direct associations to be loaded when returning objects
 		if (application.wheels.showErrorInformation && Len(arguments.returnAs) && arguments.returnAs != "query" && Find("(", arguments.include) && arguments.returnIncluded)
@@ -336,6 +337,7 @@
 	<cfscript>
 		var returnValue = "";
 		$args(name="findByKey", args=arguments);
+		arguments.include = $listClean(arguments.include);
 		if (Len(arguments.key))
 		{
 			$keyLengthCheck(arguments.key);
@@ -381,6 +383,7 @@
 	<cfscript>
 		var returnValue = "";
 		$args(name="findOne", args=arguments);
+		arguments.include = $listClean(arguments.include);
 		if (!Len(arguments.include) || (StructKeyExists(variables.wheels.class.associations, arguments.include) && variables.wheels.class.associations[arguments.include].type != "hasMany"))
 		{
 			// no joins will be done or the join will be done to a single record so we can safely get just one record from the database
@@ -432,6 +435,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="updateAll", args=arguments);
+		arguments.include = $listClean(arguments.include);
 		arguments.properties = $setProperties(argumentCollection=arguments, filterList="where,include,properties,reload,parameterize,instantiate,validate,transaction,callbacks,includeSoftDeletes", setOnModel=false);
 
 		if (arguments.instantiate) // find and instantiate each object and call its update function
@@ -600,6 +604,7 @@
 	<cfscript>
 		var loc = {};
 		$args(name="deleteAll", args=arguments);
+		arguments.include = $listClean(arguments.include);
 
 		if (arguments.instantiate)
 		{
