@@ -1,46 +1,51 @@
 <cffunction name="$serializeQueryToObjects" access="public" output="false" returntype="any">
-	<cfargument name="query" type="query" required="true" />
-	<cfargument name="include" type="string" required="false" default="" />
-	<cfargument name="callbacks" type="string" required="false" default="true" />
-	<cfargument name="returnIncluded" type="string" required="false" default="true" />
+	<cfargument name="query" type="query" required="true">
+	<cfargument name="include" type="string" required="false" default="">
+	<cfargument name="callbacks" type="string" required="false" default="true">
+	<cfargument name="returnIncluded" type="string" required="false" default="true">
 	<cfscript>
 		var loc = {};
+
 		// grab our objects as structs first so we don't waste cpu creating objects we don't need
-		loc.returnValue = $serializeQueryToStructs(argumentCollection=arguments);	
+		loc.returnValue = $serializeQueryToStructs(argumentCollection=arguments);
+		loc.returnValue = $serializeStructsToObjects(structs=loc.returnValue, argumentCollection=arguments);
 	</cfscript>
-	<cfreturn $serializeStructsToObjects(structs=loc.returnValue, argumentCollection=arguments) />
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$serializeStructsToObjects" access="public" output="false" returntype="any">
-	<cfargument name="structs" type="any" required="true" />
-	<cfargument name="include" type="string" required="true" />
-	<cfargument name="callbacks" type="string" required="true" />
-	<cfargument name="returnIncluded" type="string" required="true" />
+	<cfargument name="structs" type="any" required="true">
+	<cfargument name="include" type="string" required="true">
+	<cfargument name="callbacks" type="string" required="true">
+	<cfargument name="returnIncluded" type="string" required="true">
 	<cfscript>
 		var loc = {};
-		
 		if (IsStruct(arguments.structs))
-			loc.returnValue = [ arguments.structs ];
+		{
+			loc.returnValue = [arguments.structs];
+		}
 		else if (IsArray(arguments.structs))
+		{
 			loc.returnValue = arguments.structs;
-		
+		}
 		loc.iEnd = ArrayLen(loc.returnValue);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-		
 			if (Len(arguments.include) && arguments.returnIncluded)
 			{
 				// create each object from the assocations before creating our root object
-				loc.xEnd = ListLen(arguments.include);
-				for (loc.x = 1; loc.x lte loc.xEnd; loc.x++)
+				loc.jEnd = ListLen(arguments.include);
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 				{
-					loc.include = ListGetAt(arguments.include, loc.x);
+					loc.include = ListGetAt(arguments.include, loc.j);
 					loc.model = model(variables.wheels.class.associations[loc.include].modelName);
 					if (variables.wheels.class.associations[loc.include].type == "hasMany")
 					{
-						loc.jEnd = ArrayLen(loc.returnValue[loc.i][loc.include]);
-						for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
-							loc.returnValue[loc.i][loc.include][loc.j] = loc.model.$createInstance(properties=loc.returnValue[loc.i][loc.include][loc.j], persisted=true, base=false, callbacks=arguments.callbacks);
+						loc.kEnd = ArrayLen(loc.returnValue[loc.i][loc.include]);
+						for (loc.k=1; loc.k <= loc.kEnd; loc.k++)
+						{
+							loc.returnValue[loc.i][loc.include][loc.k] = loc.model.$createInstance(properties=loc.returnValue[loc.i][loc.include][loc.k], persisted=true, base=false, callbacks=arguments.callbacks);
+						}
 					}
 					else
 					{
@@ -49,12 +54,10 @@
 					}
 				}
 			}
-		
-			// create an instance
 			loc.returnValue[loc.i] = $createInstance(properties=loc.returnValue[loc.i], persisted=true, callbacks=arguments.callbacks);
 		}
 	</cfscript>
-	<cfreturn loc.returnValue />
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$serializeQueryToStructs" access="public" output="false" returntype="any">
@@ -68,7 +71,8 @@
 		loc.doneStructs = "";
 		
 		// loop through all of our records and create an object for each row in the query
-		for (loc.i=1; loc.i <= arguments.query.recordCount; loc.i++)
+		loc.iEnd = arguments.query.recordCount;
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			// create a new struct
 			loc.struct = $queryRowToStruct(properties=arguments.query, row=loc.i);
@@ -78,10 +82,10 @@
 				if (Len(arguments.include) && arguments.returnIncluded)
 				{
 					// loop through our assocations to build nested objects attached to the main object
-					loc.xEnd = ListLen(arguments.include);
-					for (loc.x = 1; loc.x lte loc.xEnd; loc.x++)
+					loc.jEnd = ListLen(arguments.include);
+					for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
 					{
-						loc.include = ListGetAt(arguments.include, loc.x);
+						loc.include = ListGetAt(arguments.include, loc.j);
 						if (variables.wheels.class.associations[loc.include].type == "hasMany")
 						{
 							// we have a hasMany assocation, so loop through all of the records again to find the ones that belong to our root object
@@ -91,25 +95,26 @@
 							// only get a reference to our model once per assocation
 							loc.model = model(variables.wheels.class.associations[loc.include].modelName); 
 							
-							for (loc.j=1; loc.j <= arguments.query.recordCount; loc.j++)
+							loc.kEnd = arguments.query.recordCount;
+							for (loc.k=1; loc.k <= loc.kEnd; loc.k++)
 							{
 								// is there anything we can do here to not instantiate an object if it is not going to be use or is already created
 								// this extra instantiation is really slowing things down
-								loc.hasManyStruct = loc.model.$queryRowToStruct(properties=arguments.query, row=loc.j, base=false);
+								loc.hasManyStruct = loc.model.$queryRowToStruct(properties=arguments.query, row=loc.k, base=false);
 								loc.hasManyStructHash = $hashedKey(loc.hasManyStruct);
-								
 								if (!ListFind(loc.hasManyDoneStructs, loc.hasManyStructHash, Chr(7)))
 								{
 									// create object instance from values in current query row if it belongs to the current object
 									loc.primaryKeyColumnValues = "";
-									loc.kEnd = ListLen(primaryKeys());
-									
-									for (loc.k=1; loc.k <= loc.kEnd; loc.k++)
-										loc.primaryKeyColumnValues = ListAppend(loc.primaryKeyColumnValues, arguments.query[primaryKeys(loc.k)][loc.j]);
-
+									loc.lEnd = ListLen(primaryKeys());
+									for (loc.l=1; loc.l <= loc.lEnd; loc.l++)
+									{
+										loc.primaryKeyColumnValues = ListAppend(loc.primaryKeyColumnValues, arguments.query[primaryKeys(loc.l)][loc.k]);
+									}
 									if (Len(loc.model.$keyFromStruct(loc.hasManyStruct)) && this.$keyFromStruct(loc.struct) == loc.primaryKeyColumnValues)
+									{
 										ArrayAppend(loc.struct[loc.include], loc.hasManyStruct);
-									
+									}
 									loc.hasManyDoneStructs = ListAppend(loc.hasManyDoneStructs, loc.hasManyStructHash, Chr(7));
 								}
 							}
@@ -126,7 +131,7 @@
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue />
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$queryRowToStruct" access="public" output="false" returntype="struct">
@@ -137,26 +142,30 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = {};
-		
 		loc.allProperties = ListAppend(variables.wheels.class.propertyList, variables.wheels.class.calculatedPropertyList);
 		loc.iEnd = ListLen(loc.allProperties);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			try // coldfusion has a problem with empty strings in queries for bit types
+			// wrap in try/catych because coldfusion has a problem with empty strings in queries for bit types
+			try
 			{
-				loc.iItem = ListGetAt(loc.allProperties, loc.i);
-				if (!arguments.base && ListFindNoCase(arguments.properties.columnList, arguments.name & loc.iItem))
-					loc.returnValue[loc.iItem] = arguments.properties[arguments.name & loc.iItem][arguments.row];
-				else if (ListFindNoCase(arguments.properties.columnList, loc.iItem))
-					loc.returnValue[loc.iItem] = arguments.properties[loc.iItem][arguments.row];
+				loc.item = ListGetAt(loc.allProperties, loc.i);
+				if (!arguments.base && ListFindNoCase(arguments.properties.columnList, arguments.name & loc.item))
+				{
+					loc.returnValue[loc.item] = arguments.properties[arguments.name & loc.item][arguments.row];
+				}
+				else if (ListFindNoCase(arguments.properties.columnList, loc.item))
+				{
+					loc.returnValue[loc.item] = arguments.properties[loc.item][arguments.row];
+				}
 			}
-			catch (Any e)
+			catch (any e)
 			{
-				loc.returnValue[loc.iItem] = "";
+				loc.returnValue[loc.item] = "";
 			}
-		}	
+		}
 	</cfscript>
-	<cfreturn loc.returnValue />
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$keyFromStruct" access="public" output="false" returntype="string">
@@ -169,7 +178,9 @@
 		{
 			loc.property = primaryKeys(loc.i);
 			if (StructKeyExists(arguments.struct, loc.property))
+			{
 				loc.returnValue = ListAppend(loc.returnValue, arguments.struct[loc.property]);
+			}
 		}
 		</cfscript>
 	<cfreturn loc.returnValue>
