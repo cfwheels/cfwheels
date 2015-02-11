@@ -6,7 +6,7 @@
 		</cffunction>
 	'
 	categories="controller-initialization,provides" chapters="responding-with-multiple-formats" functions="onlyProvides,renderWith">
-	<cfargument name="formats" required="false" default="" type="string" hint="Formats to instruct the controller to provide. Valid values are `html` (the default), `xml`, `json`, `csv`, `pdf`, and `xls`." />
+	<cfargument name="formats" required="false" default="" type="string" hint="Formats to instruct the controller to provide. Valid values are `html` (the default), `xml`, `json`, `csv`, `pdf`, and `xls`.">
 	<cfscript>
 		var loc = {};
 		$combineArguments(args=arguments, combine="formats,format", required=true);
@@ -15,12 +15,13 @@
 		loc.iEnd = ListLen(arguments.formats);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			if (application.wheels.showErrorInformation && !ListFindNoCase(loc.possibleFormats, ListGetAt(arguments.formats, loc.i)))
+			loc.item = ListGetAt(arguments.formats, loc.i);
+			if (get("showErrorInformation") && !ListFindNoCase(loc.possibleFormats, loc.item))
 			{
-				$throw(type="Wheels.invalidFormat", message="An invalid format of `#ListGetAt(arguments.formats, loc.i)#` has been specific. The possible values are #loc.possibleFormats#.");
+				$throw(type="Wheels.InvalidFormat", message="An invalid format of `#loc.item#` has been specified. The possible values are #loc.possibleFormats#.");
 			}
 		}
-		variables.$class.formats.default = ListAppend(variables.$class.formats.default, $listClean(arguments.formats));
+		variables.$class.formats.default = ListAppend(variables.$class.formats.default, arguments.formats);
 	</cfscript>
 	<cfreturn>
 </cffunction>
@@ -45,8 +46,8 @@
 		</cffunction>
 	'
 	categories="controller-request,provides" chapters="responding-with-multiple-formats" functions="provides,renderWith">
-	<cfargument name="formats" required="false" default="" type="string" />
-	<cfargument name="action" type="string" default="#variables.params.action#" />
+	<cfargument name="formats" required="false" default="" type="string">
+	<cfargument name="action" type="string" default="#variables.params.action#">
 	<cfscript>
 		var loc = {};
 		$combineArguments(args=arguments, combine="formats,format", required=true);
@@ -55,12 +56,13 @@
 		loc.iEnd = ListLen(arguments.formats);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			if (application.wheels.showErrorInformation && !ListFindNoCase(loc.possibleFormats, ListGetAt(arguments.formats, loc.i)))
+			loc.item = ListGetAt(arguments.formats, loc.i);
+			if (get("showErrorInformation") && !ListFindNoCase(loc.possibleFormats, loc.item))
 			{
-				$throw(type="Wheels.invalidFormat", message="An invalid format of `#ListGetAt(arguments.formats, loc.i)#` has been specific. The possible values are #loc.possibleFormats#.");
+				$throw(type="Wheels.invalidFormat", message="An invalid format of `#loc.item#` has been specified. The possible values are #loc.possibleFormats#.");
 			}
 		}
-		variables.$class.formats.actions[arguments.action] = $listClean(arguments.formats);
+		variables.$class.formats.actions[arguments.action] = arguments.formats;
 	</cfscript>
 	<cfreturn>
 </cffunction>
@@ -85,7 +87,7 @@
 		</cffunction>
 	'
 	categories="controller-request,provides" chapters="responding-with-multiple-formats" functions="provides,onlyProvides">
-	<cfargument name="data" required="true" type="any" hint="Data to format and render." />
+	<cfargument name="data" required="true" type="any" hint="Data to format and render.">
 	<cfargument name="controller" type="string" required="false" default="#variables.params.controller#" hint="See documentation for @renderPage.">
 	<cfargument name="action" type="string" required="false" default="#variables.params.action#" hint="See documentation for @renderPage.">
 	<cfargument name="template" type="string" required="false" default="" hint="See documentation for @renderPage.">
@@ -105,7 +107,7 @@
 			loc.contentType = "html";
 		}
 		
-		// call render page and exit if we are just rendering html
+		// call render page if we are just rendering html
 		if (loc.contentType == "html")
 		{
 			StructDelete(arguments, "data", false); 
@@ -121,15 +123,15 @@
 		}
 		
 		// throw an error if we rendered a pdf template and we got here, the cfdocument call should have stopped processing
-		if (loc.contentType == "pdf" && application.wheels.showErrorInformation && loc.templatePathExists)
+		if (loc.contentType == "pdf" && get("showErrorInformation") && loc.templatePathExists)
 		{
 			$throw(type="Wheels.PdfRenderingError", message="When rendering the a PDF file, don't specify the filename attribute. This will stream the PDF straight to the browser.");
 		}
 
 		// throw an error if we do not have a template to render the content type that we do not have defaults for
-		if (!ListFindNoCase("json,xml", loc.contentType) && !StructKeyExists(loc, "content") && application.wheels.showErrorInformation)
+		if (!ListFindNoCase("json,xml", loc.contentType) && !StructKeyExists(loc, "content") && get("showErrorInformation"))
 		{
-			$throw(type="Wheels.renderingError", message="To render the #loc.contentType# content type, create the template `#loc.templateName#.cfm` for the #arguments.controller# controller.");
+			$throw(type="Wheels.RenderingError", message="To render the #loc.contentType# content type, create the template `#loc.templateName#.cfm` for the #arguments.controller# controller.");
 		}
 				
 		// set our header based on our mime type
@@ -140,12 +142,8 @@
 		{
 			switch (loc.contentType)
 			{
-				case "json":
-					loc.content = SerializeJSON(arguments.data);
-					break;
-				case "xml":
-					loc.content = $toXml(arguments.data);
-					break;
+				case "json": loc.content = SerializeJSON(arguments.data); break;
+				case "xml": loc.content = $toXml(arguments.data); break;
 			}
 		}
 		
@@ -159,39 +157,41 @@
 	</cfscript>
 </cffunction>
 
-<cffunction name="$acceptableFormats" access="public" output="false" returntype="string" hint="">
+<cffunction name="$acceptableFormats" access="public" output="false" returntype="string">
 	<cfargument name="action" type="string" required="true">
 	<cfscript>
-		var returnValue = variables.$class.formats.default;
+		var loc = {};
+		loc.returnValue = variables.$class.formats.default;
 		if (StructKeyExists(variables.$class.formats, arguments.action))
 		{
-			returnValue = variables.$class.formats[arguments.action];
+			loc.returnValue = variables.$class.formats[arguments.action];
 		}
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.returnValue>
 </cffunction>
 
-<cffunction name="$generateRenderWithTemplatePath" access="public" output="false" returntype="string" hint="">
+<cffunction name="$generateRenderWithTemplatePath" access="public" output="false" returntype="string">
 	<cfargument name="controller" type="string" required="true">
 	<cfargument name="action" type="string" required="true">
 	<cfargument name="template" type="string" required="true">
 	<cfargument name="contentType" type="string" required="true">
 	<cfscript>
-		var templateName = "";
+		var loc = {};
+		loc.returnValue = "";
 		if (!Len(arguments.template))
 		{
-			templateName = "/" & arguments.controller & "/" & arguments.action;
+			loc.returnValue = "/" & arguments.controller & "/" & arguments.action;
 		}
 		else
 		{
-			templateName = arguments.template;
+			loc.returnValue = arguments.template;
 		}
 		if (Len(arguments.contentType))
 		{
-			templateName &= "." & arguments.contentType;
+			loc.returnValue &= "." & arguments.contentType;
 		}
 	</cfscript>
-	<cfreturn templateName>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$formatTemplatePathExists" access="public" output="false" returntype="boolean">
@@ -199,17 +199,16 @@
 	<cfscript>
 		var loc = {};
 		loc.templatePath = $generateIncludeTemplatePath($type="page", $name=arguments.$name, $template=arguments.$name);
-		loc.templatePathExists = false;
+		loc.returnValue = false;
 		if (!ListFindNoCase(variables.$class.formats.existingTemplates, arguments.$name) && !ListFindNoCase(variables.$class.formats.nonExistingTemplates, arguments.$name))
 		{
 			if (FileExists(ExpandPath(loc.templatePath)))
 			{
-				loc.templatePathExists = true;
-			}
-			
-			if (application.wheels.cacheFileChecking)
+				loc.returnValue = true;
+			}			
+			if (get("cacheFileChecking"))
 			{
-				if (loc.templatePathExists)
+				if (loc.returnValue)
 				{
 					variables.$class.formats.existingTemplates = ListAppend(variables.$class.formats.existingTemplates, arguments.$name);
 				}
@@ -219,34 +218,36 @@
 				}
 			}
 		}
-		if (!loc.templatePathExists && ListFindNoCase(variables.$class.formats.existingTemplates, arguments.$name))
+		if (!loc.returnValue && ListFindNoCase(variables.$class.formats.existingTemplates, arguments.$name))
 		{
-			loc.templatePathExists = true;
+			loc.returnValue = true;
 		}
 	</cfscript>
-	<cfreturn loc.templatePathExists>
+	<cfreturn loc.returnValue>
 </cffunction>
 	
 <cffunction name="$requestContentType" access="public" output="false" returntype="string">
-	<cfargument name="params" type="struct" required="false" default="#variables.params#" />
-	<cfargument name="httpAccept" type="string" required="false" default="#request.cgi.http_accept#" />
+	<cfargument name="params" type="struct" required="false" default="#variables.params#">
+	<cfargument name="httpAccept" type="string" required="false" default="#request.cgi.http_accept#">
 	<cfscript>
 		var loc = {};
-		loc.format = "html";
-		
-		// see if we have a format param
+		loc.returnValue = "html";
 		if (StructKeyExists(arguments.params, "format"))
 		{
-			return arguments.params.format;
+			loc.returnValue = arguments.params.format;
 		}
-
-		for (loc.item in application.wheels.formats)
+		else
 		{
-			if (arguments.httpAccept contains application.wheels.formats[loc.item])
+			loc.formats = get("formats");
+			for (loc.item in loc.formats)
 			{
-				return loc.item;
+				if (FindNoCase(loc.formats[loc.item], arguments.httpAccept))
+				{
+					loc.returnValue = loc.item;
+					break;
+				}
 			}
 		}
 	</cfscript>
-	<cfreturn loc.format>
+	<cfreturn loc.returnValue>
 </cffunction>
