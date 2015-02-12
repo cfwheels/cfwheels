@@ -242,7 +242,7 @@
 		loc.returnValue = "<" & arguments.name;
 		
 		// if named arguments are passed in we add these to the attributes argument instead so we can handle them all in the same code below
-		if (StructCount(arguments) gt 5)
+		if (StructCount(arguments) > 5)
 		{
 			for (loc.key in arguments)
 			{
@@ -257,8 +257,7 @@
 		// since the order of a struct can differ we sort the attributes in alphabetical order before placing them in the HTML tag (we could just place them in random order in the HTML but that would complicate testing for example)
 		loc.sortedKeys = ListSort(StructKeyList(arguments.attributes), "textnocase");
 		loc.iEnd = ListLen(loc.sortedKeys);
-
-		for (loc.i=1; loc.i lte loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
 			loc.key = ListGetAt(loc.sortedKeys, loc.i);
 			// place the attribute name and value in the string unless it should be skipped according to the arguments or if it's an internal argument (starting with a "$" sign)
@@ -346,26 +345,30 @@
 		var loc = {};
 		loc.currentModelObject = false;
 		loc.hasManyAssociationCount = 0;
+		
 		// combine our arguments
 		$combineArguments(args=arguments, combine="positions,position");
 		$combineArguments(args=arguments, combine="associations,association");
+		
 		// only try to create the object name if we have a simple value
 		if (IsSimpleValue(arguments.objectName) && ListLen(arguments.associations))
 		{
-			for (loc.i = 1; loc.i lte ListLen(arguments.associations); loc.i++)
+			loc.iEnd = ListLen(arguments.associations);
+			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.association = ListGetAt(arguments.associations, loc.i);
 				loc.currentModelObject = $getObject(arguments.objectName);
-				arguments.objectName = arguments.objectName & "['" & loc.association & "']";
+				arguments.objectName &= "['" & loc.association & "']";
 				loc.expanded = loc.currentModelObject.$expandedAssociations(include=loc.association);
 				loc.expanded = loc.expanded[1];
-				// is this assocication a hasMany?
 				if (loc.expanded.type == "hasMany")
 				{
 					loc.hasManyAssociationCount++;
-					if (loc.hasManyAssociationCount gt ListLen(arguments.positions) && application.wheels.showErrorInformation)
+					if (get("showErrorInformation") && loc.hasManyAssociationCount > ListLen(arguments.positions))
+					{
 						$throw(type="Wheels.InvalidArgument", message="You passed the hasMany association of `#loc.association#` but did not provide a corresponding position.");
-					arguments.objectName = arguments.objectName & "[" & ListGetAt(arguments.positions, loc.hasManyAssociationCount) & "]";
+					}
+					arguments.objectName &= "[" & ListGetAt(arguments.positions, loc.hasManyAssociationCount) & "]";
 				}
 			}
 		}
@@ -384,20 +387,30 @@
 			// form element for object(s)
 			loc.returnValue = ListLast(arguments.objectName, ".");
 			if (Find("[", loc.returnValue))
+			{
 				loc.returnValue = $swapArrayPositionsForIds(objectName=loc.returnValue);
+			}
 			if (Find("($", arguments.property))
+			{
 				arguments.property = ReplaceList(arguments.property, "($,)", "-,");
+			}
 			if (Find("[", arguments.property))
+			{
 				loc.returnValue = REReplace(REReplace(loc.returnValue & arguments.property, "[,\[]", "-", "all"), "[""'\]]", "", "all");
+			}
 			else
+			{
 				loc.returnValue = REReplace(REReplace(loc.returnValue & "-" & arguments.property, "[,\[]", "-", "all"), "[""'\]]", "", "all");
+			}
 		}
 		else
 		{
 			loc.returnValue = ReplaceList(arguments.property, "[,($,],',"",)", "-,-,");
 		}
 		if (Len(arguments.valueToAppend))
-			loc.returnValue = loc.returnValue & "-" & arguments.valueToAppend;
+		{
+			loc.returnValue &= "-" & arguments.valueToAppend;
+		}
 	</cfscript>
 	<cfreturn REReplace(loc.returnValue, "-+", "-", "all")>
 </cffunction>
@@ -411,11 +424,17 @@
 		{
 			loc.returnValue = ListLast(arguments.objectName, ".");
 			if (Find("[", loc.returnValue))
+			{
 				loc.returnValue = $swapArrayPositionsForIds(objectName=loc.returnValue);
+			}
 			if (Find("[", arguments.property))
+			{
 				loc.returnValue = ReplaceList(loc.returnValue & arguments.property, "',""", "");
+			}
 			else
+			{
 				loc.returnValue = ReplaceList(loc.returnValue & "[" & arguments.property & "]", "',""", "");
+			}
 		}
 		else
 		{
@@ -435,19 +454,23 @@
 		// swap all of the out for object ids
 		loc.array = ListToArray(ReplaceList(loc.returnValue, "],'", ""), "[", true);
 		loc.iEnd = ArrayLen(loc.array);
-		for (loc.i = 1; loc.i lte loc.iEnd; loc.i++)
+		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 		{
-			if (REFind("\d", loc.array[loc.i])) // if we find a digit, we need to replace it with an id
+			// if we find a digit, we need to replace it with an id
+			if (REFind("\d", loc.array[loc.i]))
 			{
 				// build our object reference
 				loc.objectReference = "";
-				for (loc.j = 1; loc.j lte loc.i; loc.j++)
+				loc.jEnd = loc.i;
+				for (loc.j=1; loc.j <= loc.jEnd; loc.j++)
+				{
 					loc.objectReference = ListAppend(loc.objectReference, ListGetAt(arguments.objectName, loc.j, "["), "[");
+				}
 				loc.returnValue = ListSetAt(loc.returnValue, loc.i, $getObject(loc.objectReference).key($returnTickCountWhenNew=true) & "]", "[");
 			}
 		}
 	</cfscript>
-	<cfreturn loc.returnValue />
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$addToJavaScriptAttribute" returntype="string" access="public" output="false">
@@ -460,8 +483,10 @@
 		{
 			loc.returnValue = arguments.attributes[arguments.name];
 			if (Right(loc.returnValue, 1) != ";")
-				loc.returnValue = loc.returnValue & ";";
-			loc.returnValue = loc.returnValue & arguments.content;
+			{
+				loc.returnValue &= ";";
+			}
+			loc.returnValue &= arguments.content;
 		}
 		else
 		{
@@ -476,21 +501,29 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = "";
-		
 		try
 		{
-			if (Find(".", arguments.objectName) or Find("[", arguments.objectName)) // we can't directly invoke objects in structure or arrays of objects so we must evaluate
+			if (Find(".", arguments.objectName) || Find("[", arguments.objectName))
+			{
+				// we can't directly invoke objects in structure or arrays of objects so we must evaluate
 				loc.returnValue = Evaluate(arguments.objectName);
+			}
 			else
+			{
 				loc.returnValue = variables[arguments.objectName];
+			}
 		}
-		catch (Any e)
+		catch (any e)
 		{
-			if (application.wheels.showErrorInformation)
-				$throw(type="Wheels.ObjectNotFound", message="Wheels tried to find the model object `#arguments.objectName#` for the form helper, but it does not exist.");
+			if (get("showErrorInformation"))
+			{
+				$throw(type="Wheels.ObjectNotFound", message="CFWheels tried to find the model object `#arguments.objectName#` for the form helper, but it does not exist.");
+			}
 			else
+			{
 				$throw(argumentCollection=e);
-		}	
+			}
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>

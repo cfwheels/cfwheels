@@ -143,12 +143,14 @@
 	<cfscript>
 		var loc = {};
 		$args(name="imageTag", reserved="src", args=arguments);
+
 		// ugly fix due to the fact that id can't be passed along to cfinvoke
 		if (StructKeyExists(arguments, "id"))
 		{
 			arguments.wheelsId = arguments.id;
 			StructDelete(arguments, "id");
 		}
+
 		if (application.wheels.cacheImages)
 		{
 			loc.category = "image";
@@ -166,30 +168,33 @@
 		{
 			loc.returnValue = $imageTag(argumentCollection=arguments);
 		}
+
 		// ugly fix continued
 		if (StructKeyExists(arguments, "wheelsId"))
+		{
 			loc.returnValue = ReplaceNoCase(loc.returnValue, "wheelsId", "id");
+		}
 	</cfscript>
 	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$addImageTagToCache" returntype="string" access="public" output="false">
 	<cfscript>
-		var returnValue = "";
-		returnValue = $imageTag(argumentCollection=arguments);
-		$addToCache(key=arguments.key, value=returnValue, category=arguments.category);
+		var loc = {};
+		loc.returnValue = $imageTag(argumentCollection=arguments);
+		$addToCache(key=arguments.key, value=loc.returnValue, category=arguments.category);
 	</cfscript>
-	<cfreturn returnValue>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$imageTag" returntype="string" access="public" output="false">
 	<cfscript>
 		var loc = {};
 		loc.localFile = true;
-
-		if(Left(arguments.source, 7) == "http://" || Left(arguments.source, 8) == "https://")
+		if (Left(arguments.source, 7) == "http://" || Left(arguments.source, 8) == "https://")
+		{
 			loc.localFile = false;
-
+		}
 		if (!loc.localFile)
 		{
 			arguments.src = arguments.source;
@@ -197,35 +202,49 @@
 		else
 		{
 			arguments.src = application.wheels.webPath & application.wheels.imagePath & "/" & arguments.source;
-			if (application.wheels.showErrorInformation)
+			if (get("showErrorInformation"))
 			{
 				if (loc.localFile && !FileExists(ExpandPath(arguments.src)))
-					$throw(type="Wheels.ImageFileNotFound", message="Wheels could not find `#expandPath('#arguments.src#')#` on the local file system.", extendedInfo="Pass in a correct relative path from the `images` folder to an image.");
+				{
+					$throw(type="Wheels.ImageFileNotFound", message="CFWheels could not find `#expandPath('#arguments.src#')#` on the local file system.", extendedInfo="Pass in a correct relative path from the `images` folder to an image.");
+				}
 				else if (!IsImageFile(ExpandPath(arguments.src)))
-					$throw(type="Wheels.ImageFormatNotSupported", message="Wheels can't read image files with that format.", extendedInfo="Use one of these image types instead: #GetReadableImageFormats()#.");
-			}
-			// height and/or width arguments are missing so use cfimage to get them
-			if (!StructKeyExists(arguments, "width") or !StructKeyExists(arguments, "height"))
+				{
+					$throw(type="Wheels.ImageFormatNotSupported", message="CFWheels can't read image files with that format.", extendedInfo="Use one of these image types instead: #GetReadableImageFormats()#.");
+				}
+			}		
+			if (!StructKeyExists(arguments, "width") || !StructKeyExists(arguments, "height"))
 			{
+				// height and / or width arguments are missing so use cfimage to get them
 				loc.image = $image(action="info", source=ExpandPath(arguments.src));
-				if (!StructKeyExists(arguments, "width") and loc.image.width gt 0)
+				if (!StructKeyExists(arguments, "width") && loc.image.width > 0)
+				{
 					arguments.width = loc.image.width;
-				if (!StructKeyExists(arguments, "height") and loc.image.height gt 0)
+				}
+				if (!StructKeyExists(arguments, "height") && loc.image.height > 0)
+				{
 					arguments.height = loc.image.height;
-			} else {
+				}
+			}
+			else
+			{
 				// remove height and width attributes if false
-				if (arguments.width EQ false) {
+				if (arguments.width EQ false)
+				{
 					StructDelete(arguments, "width");
 				}
-				if (arguments.height EQ false) {
-					StructDelete(arguments,"height");
+				if (arguments.height EQ false)
+				{
+					StructDelete(arguments, "height");
 				}
 			}
 			// only append a query string if the file is local
 			arguments.src = $assetDomain(arguments.src) & $appendQueryString();
 		}
 		if (!StructKeyExists(arguments, "alt"))
+		{
 			arguments.alt = capitalize(ReplaceList(SpanExcluding(Reverse(SpanExcluding(Reverse(arguments.src), "/")), "."), "-,_", " , "));
+		}
 		loc.returnValue = $tag(name="img", skip="source,key,category", close=true, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -233,17 +252,21 @@
 
 <cffunction name="$appendQueryString" returntype="string" access="public" output="false">
 	<cfscript>
-		var returnValue = "";
+		var loc = {};
+		loc.returnValue = "";
 		// if assetQueryString is a boolean value, it means we just reloaded, so create a new query string based off of now
 		// the only problem with this is if the app doesn't get used a lot and the application is left alone for a period longer than the application scope is allowed to exist
-		if (IsBoolean(application.wheels.assetQueryString) and YesNoFormat(application.wheels.assetQueryString) == "no")
-			return returnValue;
-
-		if (!IsNumeric(application.wheels.assetQueryString) and IsBoolean(application.wheels.assetQueryString))
+		if (IsBoolean(application.wheels.assetQueryString) && YesNoFormat(application.wheels.assetQueryString) == "no")
+		{
+			return loc.returnValue;
+		}
+		if (!IsNumeric(application.wheels.assetQueryString) && IsBoolean(application.wheels.assetQueryString))
+		{
 			application.wheels.assetQueryString = Hash(DateFormat(Now(), "yyyymmdd") & TimeFormat(Now(), "HHmmss"));
-		returnValue = returnValue & "?" & application.wheels.assetQueryString;
+		}
+		loc.returnValue &= "?" & application.wheels.assetQueryString;
 	</cfscript>
-	<cfreturn returnValue />
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="$assetDomain" returntype="string" access="public" output="false">
@@ -251,39 +274,43 @@
 	<cfscript>
 		var loc = {};
 		loc.returnValue = arguments.pathToAsset;
-		if (application.wheels.showErrorInformation)
+		if (get("showErrorInformation"))
 		{
 			if (!IsStruct(application.wheels.assetPaths) && !IsBoolean(application.wheels.assetPaths))
+			{
 				$throw(type="Wheels.IncorrectConfiguration", message="The setting `assetsPaths` must be false or a struct.");
+			}
 			if (IsStruct(application.wheels.assetPaths) && !ListFindNoCase(StructKeyList(application.wheels.assetPaths), "http"))
+			{
 				$throw(type="Wheels.IncorrectConfiguration", message="The `assetPaths` setting struct must contain the key `http`");
+			}
 		}
 
 		// return nothing if assetPaths is not a struct
 		if (!IsStruct(application.wheels.assetPaths))
+		{
 			return loc.returnValue;
+		}
 
 		loc.protocol = "http://";
 		loc.domainList = application.wheels.assetPaths.http;
-
 		if (isSecure())
 		{
 			loc.protocol = "https://";
 			if (StructKeyExists(application.wheels.assetPaths, "https"))
+			{
 				loc.domainList = application.wheels.assetPaths.https;
+			}
 		}
-
 		loc.domainLen = ListLen(loc.domainList);
-
-		if (loc.domainLen gt 1)
+		if (loc.domainLen > 1)
 		{
 			// now comes the interesting part, lets take the pathToAsset argument, hash it and create a number from it
 			// so that we can do mod based off the length of the domain list
 			// this is an easy way to apply the same sub-domain to each asset, so we do not create more work for the server
 			// at the same time we are getting a very random hash value to rotate the domains over the assets evenly
 			loc.pathNumber = Right(REReplace(Hash(arguments.pathToAsset), "[A-Za-z]", "", "all"), 5);
-
-			loc.position = (loc.pathNumber mod (loc.domainLen)) + 1;
+			loc.position = (loc.pathNumber % loc.domainLen) + 1;
 		}
 		else
 		{
@@ -291,5 +318,5 @@
 		}
 		loc.returnValue = loc.protocol & Trim(ListGetAt(loc.domainList, loc.position)) & arguments.pathToAsset;
 	</cfscript>
-	<cfreturn loc.returnValue />
+	<cfreturn loc.returnValue>
 </cffunction>

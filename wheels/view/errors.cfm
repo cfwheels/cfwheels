@@ -14,8 +14,10 @@
 		var loc = {};
 		$args(name="errorMessagesFor", args=arguments);
 		loc.object = $getObject(arguments.objectName);
-		if (application.wheels.showErrorInformation && !IsObject(loc.object))
+		if (get("showErrorInformation") && !IsObject(loc.object))
+		{
 			$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
+		}
 		loc.errors = loc.object.allErrors();
 		loc.returnValue = "";
 		if (!ArrayIsEmpty(loc.errors))
@@ -26,15 +28,15 @@
 			for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
 			{
 				loc.msg = loc.errors[loc.i].message;
-				if(arguments.showDuplicates)
+				if (arguments.showDuplicates)
 				{
-					loc.listItems = loc.listItems & $element(name="li", content=loc.msg);
+					loc.listItems &= $element(name="li", content=loc.msg);
 				}
 				else
 				{
-					if(!ListFind(loc.used, loc.msg, Chr(7)))
+					if (!ListFind(loc.used, loc.msg, Chr(7)))
 					{
-						loc.listItems = loc.listItems & $element(name="li", content=loc.msg);
+						loc.listItems &= $element(name="li", content=loc.msg);
 						loc.used = ListAppend(loc.used, loc.msg, Chr(7));
 					}
 				}
@@ -64,8 +66,10 @@
 		var loc = {};
 		$args(name="errorMessageOn", args=arguments);
 		loc.object = $getObject(arguments.objectName);
-		if (application.wheels.showErrorInformation && !IsObject(loc.object))
+		if (get("showErrorInformation") && !IsObject(loc.object))
+		{
 			$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
+		}
 		loc.error = loc.object.errorsOn(arguments.property);
 		loc.returnValue = "";
 		if (!ArrayIsEmpty(loc.error))

@@ -19,19 +19,31 @@
 		if (loc.minuteDiff <= 1)
 		{
 			if (loc.secondDiff < 60)
+			{
 				loc.returnValue = "less than a minute";
+			}
 			else
+			{
 				loc.returnValue = "1 minute";
+			}
 			if (arguments.includeSeconds)
 			{
 				if (loc.secondDiff < 5)
+				{
 					loc.returnValue = "less than 5 seconds";
+				}
 				else if (loc.secondDiff < 10)
+				{
 					loc.returnValue = "less than 10 seconds";
+				}
 				else if (loc.secondDiff < 20)
+				{
 					loc.returnValue = "less than 20 seconds";
+				}
 				else if (loc.secondDiff < 40)
+				{
 					loc.returnValue = "half a minute";
+				}
 			}
 		}
 		else if (loc.minuteDiff < 45)

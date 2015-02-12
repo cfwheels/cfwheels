@@ -45,7 +45,7 @@
 	loc.punctuationRegEx = "([^\w\/-]+)$";
 	loc.startPosition = 1;
 	loc.match = ReFindNoCase(arguments.regex, arguments.text, loc.startPosition, true);
-	while(loc.match.pos[1] > 0)
+	while (loc.match.pos[1] > 0)
 	{
 		loc.startPosition = loc.match.pos[1] + loc.match.len[1];
 		loc.str = Mid(arguments.text, loc.match.pos[1], loc.match.len[1]);
@@ -293,7 +293,7 @@
 			{
 				loc.returnValue = ListAppend(loc.returnValue, loc.wordArray[loc.i], " ");
 			}
-			loc.returnValue = loc.returnValue & arguments.truncateString;
+			loc.returnValue &= arguments.truncateString;
 		}
 		else
 		{

@@ -49,13 +49,20 @@
 			arguments.onclick = $addToJavaScriptAttribute(name="onclick", content=loc.onclick, attributes=arguments);
 		}
 		if (!StructKeyExists(arguments, "href"))
+		{
 			arguments.href = URLFor(argumentCollection=arguments);
+		}
 		arguments.href = toXHTML(arguments.href);
 		if (!Len(arguments.text))
+		{
 			arguments.text = arguments.href;
+		}
 		loc.skip = "text,confirm,route,controller,action,key,params,anchor,onlyPath,host,protocol,port";
 		if (Len(arguments.route))
-			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
+		{
+			// variables passed in as route arguments should not be added to the html element
+			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments));
+		}
 		loc.returnValue = $element(name="a", skip=loc.skip, content=arguments.text, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -95,7 +102,10 @@
 		loc.content = submitTag(value=arguments.text, image=arguments.image, disable=arguments.disable);
 		loc.skip = "disable,image,text,confirm,route,controller,key,params,anchor,onlyPath,host,protocol,port";
 		if (Len(arguments.route))
-			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments)); // variables passed in as route arguments should not be added to the html element
+		{
+			// variables passed in as route arguments should not be added to the html element
+			loc.skip = ListAppend(loc.skip, $routeVariables(argumentCollection=arguments));
+		}
 		loc.returnValue = $element(name="form", skip=loc.skip, content=loc.content, attributes=arguments);
 	</cfscript>
 	<cfreturn loc.returnValue>
@@ -116,9 +126,13 @@
 		$args(name="mailTo", reserved="href", args=arguments);
 		arguments.href = "mailto:#arguments.emailAddress#";
 		if (Len(arguments.name))
+		{
 			loc.content = arguments.name;
+		}
 		else
+		{
 			loc.content = arguments.emailAddress;
+		}
 		loc.returnValue = $element(name="a", skip="emailAddress,name,encode", content=loc.content, attributes=arguments);
 		if (arguments.encode)
 		{
@@ -127,7 +141,7 @@
 			loc.iEnd = Len(loc.js);
 			for (loc.i=1; loc.i LTE loc.iEnd; loc.i=loc.i+1)
 			{
-				loc.encoded = loc.encoded & "%" & Right("0" & FormatBaseN(Asc(Mid(loc.js,loc.i,1)),16),2);
+				loc.encoded &= "%" & Right("0" & FormatBaseN(Asc(Mid(loc.js,loc.i,1)),16),2);
 			}
 			loc.content = "eval(unescape('#loc.encoded#'))";
 			loc.returnValue = $element(name="script", content=loc.content, type="text/javascript");
@@ -197,7 +211,6 @@
 	<cfargument name="name" type="string" required="false" hint="The name of the param that holds the current page number.">
 	<cfargument name="showSinglePage" type="boolean" required="false" hint="Will show a single page when set to `true`. (The default behavior is to return an empty string when there is only one page in the pagination).">
 	<cfargument name="pageNumberAsParam" type="boolean" required="false" hint="Decides whether to link the page number as a param or as part of a route. (The default behavior is `true`).">
-
 	<cfscript>
 		var loc = {};
 		$args(name="paginationLinks", args=arguments);
@@ -205,13 +218,14 @@
 		loc.linkToArguments = Duplicate(arguments);
 		loc.iEnd = ListLen(loc.skipArgs);
 		for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+		{
 			StructDelete(loc.linkToArguments, ListGetAt(loc.skipArgs, loc.i));
+		}
 		loc.currentPage = pagination(arguments.handle).currentPage;
 		loc.totalPages = pagination(arguments.handle).totalPages;
 		loc.start = "";
 		loc.middle = "";
 		loc.end = "";
-		
 		if (StructKeyExists(arguments, "route"))
 		{
 			// when a route name is specified and the name argument is part
@@ -226,7 +240,9 @@
 		if (arguments.showSinglePage || loc.totalPages > 1)
 		{
 			if (Len(arguments.prepend))
-				loc.start = loc.start & arguments.prepend;
+			{
+				loc.start &= arguments.prepend;
+			}
 			if (arguments.alwaysShowAnchors)
 			{
 				if ((loc.currentPage - arguments.windowSize) > 1)
@@ -240,15 +256,21 @@
 					{
 						loc.linkToArguments.params = arguments.name & "=" & loc.pageNumber;
 						if (StructKeyExists(arguments, "params"))
-							loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
+						{
+							loc.linkToArguments.params &= "&" & arguments.params;
+						}
 					}
 					loc.linkToArguments.text = loc.pageNumber;
 					if (Len(arguments.prependToPage) && arguments.prependOnAnchor)
-						loc.start = loc.start & arguments.prependToPage;
-					loc.start = loc.start & linkTo(argumentCollection=loc.linkToArguments);
+					{
+						loc.start &= arguments.prependToPage;
+					}
+					loc.start &= linkTo(argumentCollection=loc.linkToArguments);
 					if (Len(arguments.appendToPage) && arguments.appendOnAnchor)
-						loc.start = loc.start & arguments.appendToPage;
-					loc.start = loc.start & arguments.anchorDivider;
+					{
+						loc.start &= arguments.appendToPage;
+					}
+					loc.start &= arguments.anchorDivider;
 				}
 			}
 			loc.middle = "";
@@ -264,33 +286,49 @@
 					{
 						loc.linkToArguments.params = arguments.name & "=" & loc.i;
 						if (StructKeyExists(arguments, "params"))
-							loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
+						{
+							loc.linkToArguments.params &= "&" & arguments.params;
+						}
 					}
 					loc.linkToArguments.text = loc.i;
 					if (Len(arguments.classForCurrent) && loc.currentPage == loc.i)
-						/* apply the classForCurrent class if specified and this is the current page */
+					{
+						// apply the classForCurrent class if specified and this is the current page
 						loc.linkToArguments.class = arguments.classForCurrent;
+					}
 					else if (StructKeyExists(arguments, "class") && Len(arguments.class))
-						/* allow the class attribute to be applied to the anchor tag if specified */
+					{
+						// allow the class attribute to be applied to the anchor tag if specified
 						loc.linkToArguments.class = arguments.class;
+					}
 					else 
-						/* clear the class argument if not provided */
+					{
+						// clear the class argument if not provided
 						StructDelete(loc.linkToArguments, "class");
+					}
 					if (Len(arguments.prependToPage))
-						loc.middle = loc.middle & arguments.prependToPage;
+					{
+						loc.middle &= arguments.prependToPage;
+					}
 					if (loc.currentPage != loc.i || arguments.linkToCurrentPage)
 					{
-						loc.middle = loc.middle & linkTo(argumentCollection=loc.linkToArguments);
+						loc.middle &= linkTo(argumentCollection=loc.linkToArguments);
 					}
 					else
 					{
 						if (Len(arguments.classForCurrent))
-							loc.middle = loc.middle & $element(name="span", content=loc.i, class=arguments.classForCurrent);
+						{
+							loc.middle &= $element(name="span", content=loc.i, class=arguments.classForCurrent);
+						}
 						else
-							loc.middle = loc.middle & loc.i;
+						{
+							loc.middle &= loc.i;
+						}
 					}
 					if (Len(arguments.appendToPage))
-						loc.middle = loc.middle & arguments.appendToPage;
+					{
+						loc.middle &= arguments.appendToPage;
+					}
 				}
 			}
 			if (arguments.alwaysShowAnchors)
@@ -305,26 +343,38 @@
 					{
 						loc.linkToArguments.params = arguments.name & "=" & loc.totalPages;
 						if (StructKeyExists(arguments, "params"))
-							loc.linkToArguments.params = loc.linkToArguments.params & "&" & arguments.params;
+						{
+							loc.linkToArguments.params &= "&" & arguments.params;
+						}
 					}
 					loc.linkToArguments.text = loc.totalPages;
-					loc.end = loc.end & arguments.anchorDivider;
+					loc.end &= arguments.anchorDivider;
 					if (Len(arguments.prependToPage) && arguments.prependOnAnchor)
-						loc.end = loc.end & arguments.prependToPage;
-					loc.end = loc.end & linkTo(argumentCollection=loc.linkToArguments);
+					{
+						loc.end &= arguments.prependToPage;
+					}
+					loc.end &= linkTo(argumentCollection=loc.linkToArguments);
 					if (Len(arguments.appendToPage) && arguments.appendOnAnchor)
-						loc.end = loc.end & arguments.appendToPage;
+					{
+						loc.end &= arguments.appendToPage;
+					}
 				}
 			}
 			if (Len(arguments.append))
-				loc.end = loc.end & arguments.append;
+			{
+				loc.end &= arguments.append;
+			}
 		}
 		if (Len(loc.middle))
 		{
 			if (Len(arguments.prependToPage) && !arguments.prependOnFirst)
+			{
 				loc.middle = Mid(loc.middle, Len(arguments.prependToPage)+1, Len(loc.middle)-Len(arguments.prependToPage));
+			}
 			if (Len(arguments.appendToPage) && !arguments.appendOnLast)
+			{
 				loc.middle = Mid(loc.middle, 1, Len(loc.middle)-Len(arguments.appendToPage));
+			}
 		}
 		loc.returnValue = loc.start & loc.middle & loc.end;
 	</cfscript>

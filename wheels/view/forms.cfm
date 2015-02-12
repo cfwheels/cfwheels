@@ -226,7 +226,7 @@
 		else
 		{
 			loc.object = $getObject(arguments.objectName);
-			if (application.wheels.showErrorInformation && !IsObject(loc.object))
+			if (get("showErrorInformation") && !IsObject(loc.object))
 			{
 				$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 			}
@@ -283,7 +283,7 @@
 		if (!IsStruct(arguments.objectName))
 		{
 			loc.object = $getObject(arguments.objectName);
-			if (application.wheels.showErrorInformation && !IsObject(loc.object))
+			if (get("showErrorInformation") && !IsObject(loc.object))
 			{
 				$throw(type="Wheels.IncorrectArguments", message="The `#arguments.objectName#` variable is not an object.");
 			}

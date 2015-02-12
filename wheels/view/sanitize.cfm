@@ -17,10 +17,12 @@
 	'
 	categories="view-helper,sanitize" functions="stripLinks,h">
 	<cfargument name="html" type="string" required="true" hint="The HTML to remove tag markup from.">
-	<cfset var returnValue = "">
-	<cfset returnValue = REReplaceNoCase(arguments.html, "<\ *[a-z].*?>", "", "all")>
-	<cfset returnValue = REReplaceNoCase(returnValue, "<\ */\ *[a-z].*?>", "", "all")>
-	<cfreturn returnValue>
+	<cfscript>
+		var loc = {};
+		loc.returnValue = REReplaceNoCase(arguments.html, "<\ *[a-z].*?>", "", "all");
+		loc.returnValue = REReplaceNoCase(loc.returnValue, "<\ */\ *[a-z].*?>", "", "all");
+	</cfscript>
+	<cfreturn loc.returnValue>
 </cffunction>
 
 <cffunction name="h" returntype="string" access="public" output="false" hint="Escapes unsafe HTML. Alias for your CFML engine's `XMLFormat()` function."
