@@ -12,6 +12,14 @@
 		<cfset $header(name="content-type", value="text/html" , charset="utf-8") />
 	</cffunction>
 
+	<cffunction name="test_json_integer">
+		<cfset params = {controller="dummy", action="dummy", format = "json"}>
+		<cfset loc.controller = controller("dummy", params)>
+		<cfset loc.controller.provides("json")>
+		<cfset user = model("user").findAll(where="username = 'tonyp'", returnAs="structs")>
+		<cfset loc.result = loc.controller.renderWith(data=user, zipCode="integer", returnAs="string")>
+		<cfset assert("loc.result Contains ':11111,'")>
+	</cffunction>
 	
 	<cffunction name="test_throws_error_without_data_argument">
 		<cfset loc.controller = controller("test", params)>

@@ -142,7 +142,22 @@
 		{
 			switch (loc.contentType)
 			{
-				case "json": loc.content = SerializeJSON(arguments.data); break;
+				case "json":
+					loc.content = SerializeJSON(arguments.data);
+					if (StructCount(arguments) > 8)
+					{
+						// data type settings were passed in so fix the data to respect those
+						loc.namedArgs = $namedArguments(argumentCollection=arguments, $defined="data,controller,action,template,layout,cache,returnAs,hideDebugInformation");
+						for (loc.key in loc.namedArgs)
+						{
+							if (loc.namedArgs[loc.key] == "integer")
+							{
+								// force to integer by removing the .0 part of the number
+								loc.content = REReplaceNoCase(loc.content, '([{|,]"' & loc.key & '":[0-9]*)\.0([}|,"])', "\1\2", "all");
+							}
+						}
+					}
+					break;
 				case "xml": loc.content = $toXml(arguments.data); break;
 			}
 		}

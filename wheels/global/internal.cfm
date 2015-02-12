@@ -261,6 +261,22 @@
 	<cfreturn loc.returnValue>
 </cffunction>
 
+<cffunction name="$namedArguments" returntype="struct" access="public" output="false" hint="Creates a struct of the named arguments passed in to a function (i.e. the ones not explicitly defined in the arguments list).">
+	<cfargument name="$defined" type="string" required="true" hint="List of already defined arguments that should not be added.">
+	<cfscript>
+		var loc = {};
+		loc.returnValue = {};
+		for (loc.key in arguments)
+		{
+			if (!ListFindNoCase(arguments.$defined, loc.key) && Left(loc.key, 1) != "$")
+			{
+				loc.returnValue[loc.key] = arguments[loc.key];	
+			}
+		}
+	</cfscript>
+	<cfreturn loc.returnValue>
+</cffunction>
+
 <cffunction name="$dollarify" returntype="struct" access="public" output="false">
 	<cfargument name="input" type="struct" required="true">
 	<cfargument name="on" type="string" required="true">
