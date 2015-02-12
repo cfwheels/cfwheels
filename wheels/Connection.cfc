@@ -18,7 +18,7 @@
 			var loc = {};
 			loc.args = Duplicate(variables.instance.connection);
 			loc.args.type = "version";
-			if (get("showErrorInformation"))
+			if (application.wheels.showErrorInformation)
 			{
 				try
 				{
@@ -45,7 +45,7 @@
 					break;
 				}
 			}
-			if (get("showErrorInformation") && !StructKeyExists(loc, "returnValue"))
+			if (application.wheels.showErrorInformation && !StructKeyExists(loc, "returnValue"))
 			{
 				$throw(type="Wheels.DatabaseNotSupported", message="#loc.info.database_productname# is not supported by CFWheels.", extendedInfo="Supported databases are: #loc.supportedDatabases#.");
 			}
