@@ -143,18 +143,37 @@
 			switch (loc.contentType)
 			{
 				case "json":
-					loc.content = SerializeJSON(arguments.data);
+					loc.namedArgs = {};
 					if (StructCount(arguments) > 8)
 					{
-						// data type settings were passed in so fix the data to respect those
 						loc.namedArgs = $namedArguments(argumentCollection=arguments, $defined="data,controller,action,template,layout,cache,returnAs,hideDebugInformation");
-						for (loc.key in loc.namedArgs)
+					}
+					for (loc.key in loc.namedArgs)
+					{
+						if (loc.namedArgs[loc.key] == "string")
 						{
-							if (loc.namedArgs[loc.key] == "integer")
+							if (IsArray(arguments.data))
 							{
-								// force to integer by removing the .0 part of the number
-								loc.content = REReplaceNoCase(loc.content, '([{|,]"' & loc.key & '":[0-9]*)\.0([}|,"])', "\1\2", "all");
+								loc.iEnd = ArrayLen(arguments.data);
+								for (loc.i=1; loc.i <= loc.iEnd; loc.i++)
+								{
+									// force to string by wrapping in non printable character (that we later remove again)
+									arguments.data[loc.i][loc.key] = Chr(7) & arguments.data[loc.i][loc.key] & Chr(7);
+								}
 							}
+						}
+					}
+					loc.content = SerializeJSON(arguments.data);
+					if (Find(Chr(7), loc.content))
+					{
+						loc.content = Replace(loc.content, Chr(7), "", "all");
+					}
+					for (loc.key in loc.namedArgs)
+					{
+						if (loc.namedArgs[loc.key] == "integer")
+						{
+							// force to integer by removing the .0 part of the number
+							loc.content = REReplaceNoCase(loc.content, '([{|,]"' & loc.key & '":[0-9]*)\.0([}|,"])', "\1\2", "all");
 						}
 					}
 					break;
