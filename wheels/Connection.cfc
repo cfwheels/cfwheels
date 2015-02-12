@@ -33,23 +33,23 @@
 			{
 				loc.info = $dbinfo(argumentCollection=loc.args);
 			}
-			if (loc.info.driver_name Contains "SQLServer" || loc.info.driver_name Contains "SQL Server")
+			if (FindNoCase("SQLServer", loc.info.driver_name) || FindNoCase("SQL Server", loc.info.driver_name))
 			{
 				loc.adapterName = "SQLServer";
 			}
-			else if (loc.info.driver_name Contains "MySQL")
+			else if (FindNoCase("MySQL", loc.info.driver_name))
 			{
 				loc.adapterName = "MySQL";
 			}
-			else if (loc.info.driver_name Contains "Oracle")
+			else if (FindNoCase("Oracle", loc.info.driver_name))
 			{
 				loc.adapterName = "Oracle";
 			}
-			else if (loc.info.driver_name Contains "PostgreSQL")
+			else if (FindNoCase("PostgreSQL", loc.info.driver_name))
 			{
 				loc.adapterName = "PostgreSQL";
 			}
-			else if (loc.info.driver_name Contains "H2")
+			else if (FindNoCase("H2", loc.info.driver_name))
 			{
 				loc.adapterName = "H2";
 			}
